@@ -154,7 +154,7 @@ in
         group = "ubridge";
         owner = "root";
         permissions = "u=rwx,g=rx,o=r";
-        source = lib.getExe cfg.ubridge.package;
+        source = cfg.ubridge.package.exe;
       };
 
       services.gns3-server.settings = lib.mkMerge [
@@ -178,10 +178,10 @@ in
           };
         })
         (lib.mkIf (cfg.vpcs.enable) {
-          VPCS.vpcs_path = lib.mkDefault (lib.getExe cfg.vpcs.package);
+          VPCS.vpcs_path = lib.mkDefault (cfg.vpcs.package.exe);
         })
         (lib.mkIf (cfg.dynamips.enable) {
-          Dynamips.dynamips_path = lib.mkDefault (lib.getExe cfg.dynamips.package);
+          Dynamips.dynamips_path = lib.mkDefault (cfg.dynamips.package.exe);
         })
       ];
 
@@ -230,7 +230,7 @@ in
             ConfigurationDirectoryMode = "0750";
             Environment = "HOME=%S/gns3";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-            ExecStart = "${lib.getExe cfg.package} ${commandArgs}";
+            ExecStart = "${cfg.package.exe} ${commandArgs}";
             Group = "gns3";
             LimitNOFILE = 16384;
             LoadCredential = lib.mkIf cfg.auth.enable [ "AUTH_PASSWORD:${cfg.auth.passwordFile}" ];

@@ -109,7 +109,7 @@ let
           propagatedBuildInputs = plugins;
         }
         ''
-          makeWrapper ${lib.getExe gepetto-viewer} $out/bin/gepetto-gui \
+          makeWrapper ${gepetto-viewer.exe} $out/bin/gepetto-gui \
             --set GEPETTO_GUI_PLUGIN_DIRS ${lib.makeLibraryPath plugins}
         '';
 

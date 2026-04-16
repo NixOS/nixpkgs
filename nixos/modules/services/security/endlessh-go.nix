@@ -96,7 +96,7 @@ in
             with cfg;
             lib.concatStringsSep " " (
               [
-                (lib.getExe cfg.package)
+                (cfg.package.exe)
                 "-logtostderr"
                 "-host=${listenAddress}"
                 "-port=${toString port}"

@@ -27,13 +27,13 @@ stdenv.mkDerivation {
   };
 
   preBuild = ''
-    substituteInPlace ./taktuk --replace-fail "/usr/bin/perl" "${lib.getExe buildPackages.perl}"
+    substituteInPlace ./taktuk --replace-fail "/usr/bin/perl" "${buildPackages.perl.exe}"
   '';
 
   enableParallelBuilding = true;
 
   preFixup = ''
-    substituteInPlace ./taktuk --replace-fail "${lib.getExe buildPackages.perl}" "/usr/bin/env perl"
+    substituteInPlace ./taktuk --replace-fail "${buildPackages.perl.exe}" "/usr/bin/env perl"
   '';
 
   meta = {

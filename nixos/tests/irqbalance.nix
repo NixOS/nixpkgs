@@ -11,7 +11,7 @@
 
       systemd.services.irqbalance.serviceConfig.ExecStart = [
         ""
-        "${lib.getExe config.services.irqbalance.package} --journal --debug"
+        "${config.services.irqbalance.package.exe} --journal --debug"
       ];
     };
 

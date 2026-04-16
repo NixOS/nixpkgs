@@ -284,7 +284,7 @@ in
             serviceConfig = {
               Type = "oneshot";
               EnvironmentFile = [ cfg.environmentFile ];
-              ExecStart = "${lib.getExe pkgs.envsubst} -i ${configFile} -o ${finalConfigFile}";
+              ExecStart = "${pkgs.envsubst.exe} -i ${configFile} -o ${finalConfigFile}";
             };
           }
         );

@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/bandcamp-collection-downloader
     cp build/libs/bandcamp-collection-downloader.jar $out/share/bandcamp-collection-downloader/bandcamp-collection-downloader.jar
 
-    makeWrapper ${lib.getExe jre} $out/bin/bandcamp-collection-downloader \
+    makeWrapper ${jre.exe} $out/bin/bandcamp-collection-downloader \
       --add-flags "-jar $out/share/bandcamp-collection-downloader/bandcamp-collection-downloader.jar"
 
     runHook postInstall

@@ -54,7 +54,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''
-        timezone="$(${lib.getExe cfg.package} --print-only)"
+        timezone="$(${cfg.package.exe} --print-only)"
         if [[ -n "$timezone" ]]; then
           echo "Setting timezone to '$timezone'"
           timedatectl set-timezone "$timezone"

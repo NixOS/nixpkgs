@@ -770,7 +770,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             # Use Bash from this stage to avoid propagating Bash from a previous stage to the final stdenv.
             ncurses = super.ncurses.override {
-              stdenv = self.darwin.bootstrapStdenv.override { shell = lib.getExe self.bashNonInteractive; };
+              stdenv = self.darwin.bootstrapStdenv.override { shell = self.bashNonInteractive.exe; };
             };
 
             darwin = super.darwin.overrideScope (

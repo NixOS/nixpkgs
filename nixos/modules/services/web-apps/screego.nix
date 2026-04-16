@@ -87,7 +87,7 @@ in
         environment = mergedConfig;
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${lib.getExe pkgs.screego} serve";
+          ExecStart = "${pkgs.screego.exe} serve";
           Restart = "on-failure";
           RestartSec = "5s";
         }

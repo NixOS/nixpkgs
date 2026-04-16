@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     generate-config =
       shell:
       runCommand "nix-your-shell-config" { } ''
-        ${lib.getExe nix-your-shell} ${lib.escapeShellArg shell} >> "$out"
+        ${nix-your-shell.exe} ${lib.escapeShellArg shell} >> "$out"
       '';
     updateScript = nix-update-script { };
   };

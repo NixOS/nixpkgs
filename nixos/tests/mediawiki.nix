@@ -89,7 +89,7 @@ in
           'QUERY_STRING=title=Main_Page',
           "REQUEST_METHOD=GET",
         );
-        page = machine.succeed(f"{' '.join(env)} ${lib.getExe nodes.machine.nixpkgs.pkgs.fcgi} -bind -connect ${nodes.machine.services.phpfpm.pools.mediawiki.socket}")
+        page = machine.succeed(f"{' '.join(env)} ${nodes.machine.nixpkgs.pkgs.fcgi.exe} -bind -connect ${nodes.machine.services.phpfpm.pools.mediawiki.socket}")
         assert "MediaWiki has been installed" in page, f"no 'MediaWiki has been installed' in:\n{page}"
       '';
   };

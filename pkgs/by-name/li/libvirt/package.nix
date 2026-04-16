@@ -198,7 +198,7 @@ stdenv.mkDerivation rec {
     in
     ''
       substituteInPlace src/secret/virt-secret-init-encryption.service.in \
-        --replace-fail /usr/bin/sh ${lib.getExe script}
+        --replace-fail /usr/bin/sh ${script.exe}
     ''
   );
 

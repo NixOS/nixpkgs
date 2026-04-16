@@ -85,7 +85,7 @@ let
         exit 1
       '';
 
-  jq = getExe pkgs.jq;
+  jq = pkgs.jq.exe;
 
   configFilesFromHome =
     if cfg.configHome != null then
@@ -264,11 +264,11 @@ in
       settings = {
         default_session = {
           user = "dms-greeter";
-          command = getExe greeterScript;
+          command = greeterScript.exe;
         };
         initial_session = mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
           inherit (cfgAutoLogin) user;
-          command = ''${getExe pkgs.bash} -lc "${pkgs.systemd}/bin/systemd-cat $(<${autoLoginCommand})"'';
+          command = ''${pkgs.bash.exe} -lc "${pkgs.systemd}/bin/systemd-cat $(<${autoLoginCommand})"'';
         };
       };
     };

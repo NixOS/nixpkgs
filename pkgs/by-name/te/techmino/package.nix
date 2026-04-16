@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit ccloader libcoldclear;
     updateScript = writeShellScript "update-script.sh" ''
-      if ${lib.getExe nix-update} techmino | grep "Packages updated"; then
-        ${lib.getExe nix-update} techmino.ccloader
+      if ${nix-update.exe} techmino | grep "Packages updated"; then
+        ${nix-update.exe} techmino.ccloader
       fi
     '';
   };

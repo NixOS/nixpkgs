@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
           for plugin in ${builtins.concatStringsSep " " selectedPlugins}; do
             export GNUCAP_PLUGPATH=$plugin/lib/gnucap:$GNUCAP_PLUGPATH
           done
-          ${lib.getExe gnucap}
+          ${gnucap.exe}
         '';
       in
       stdenv.mkDerivation {

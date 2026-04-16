@@ -39,7 +39,7 @@ in
       serviceConfig = {
         StateDirectory = "deepcool-digital-linux";
         WorkingDirectory = "/var/lib/deepcool-digital-linux";
-        ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${cfg.package.exe} ${lib.escapeShellArgs cfg.extraArgs}";
         Restart = "always";
       };
     };

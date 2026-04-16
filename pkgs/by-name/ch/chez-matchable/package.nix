@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ chez ];
 
   makeFlags = [
-    "CHEZ=${lib.getExe chez}"
+    "CHEZ=${chez.exe}"
     "PREFIX=$(out)"
   ];
 

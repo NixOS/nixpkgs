@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace doc/conf.py \
-      --replace-fail '"optipng"' '"${lib.getExe optipng}"'
+      --replace-fail '"optipng"' '"${optipng.exe}"'
     substituteInPlace mne/utils/config.py \
       --replace-fail '"free"'   '"${lib.getExe' procps "free"}"' \
       --replace-fail '"sysctl"' '"${lib.getExe' procps "sysctl"}"'

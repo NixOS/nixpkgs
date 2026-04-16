@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      command = "${lib.getExe finalAttrs.finalPackage} --version";
+      command = "${finalAttrs.finalPackage.exe} --version";
       package = finalAttrs.finalPackage;
     };
     updateScript = gitUpdater {

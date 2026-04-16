@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/share/copilot-language-server
     cp -r ./* $out/share/copilot-language-server/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/copilot-language-server \
+    makeWrapper ${nodejs.exe} $out/bin/copilot-language-server \
       --add-flags $out/share/copilot-language-server/main.js
 
     runHook postInstall

@@ -57,7 +57,7 @@ in
         serviceConfig.WorkingDirectory = "";
         serviceConfig.ExecStart = [
           ""
-          "${lib.getExe pkgs.auto-cpufreq} --daemon --config ${cfgFile}"
+          "${pkgs.auto-cpufreq.exe} --daemon --config ${cfgFile}"
         ];
       };
     };

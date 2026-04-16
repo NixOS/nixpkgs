@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dpython-path=${lib.getExe pythonEnv}"
+    "-Dpython-path=${pythonEnv.exe}"
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "xfce4-panel-profiles-"; };

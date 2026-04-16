@@ -62,7 +62,7 @@ buildNpmPackage (finalAttrs: {
     npm run build-release --offline --nodedir="${nodeSources}"
     rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
     find build -type f -exec \
-          ${lib.getExe removeReferencesTo} -t "${nodeSources}" {} \;
+          ${removeReferencesTo.exe} -t "${nodeSources}" {} \;
     popd
 
 
@@ -74,7 +74,7 @@ buildNpmPackage (finalAttrs: {
     rm $out/lib/node_modules/draupnir/node_modules/draupnir
 
     # Create wrapper executable
-    makeWrapper ${lib.getExe nodejs_24} $out/bin/draupnir \
+    makeWrapper ${nodejs_24.exe} $out/bin/draupnir \
       --add-flags "--enable-source-maps" \
       --add-flags "$out/lib/node_modules/draupnir/dist/index.js"
 

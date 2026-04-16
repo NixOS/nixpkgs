@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv package.json.new package.json
 
     # use tsx from nixpkgs instead of using pnpx to download it
-    substituteInPlace package.json --replace-fail 'pnpx tsx' '${lib.getExe tsx}'
+    substituteInPlace package.json --replace-fail 'pnpx tsx' '${tsx.exe}'
   '';
 
   nativeBuildInputs = [
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r node_modules $phome # TODO: exclude unnecessary files
     cp package.json $phome
 
-    makeWrapper ${lib.getExe electron} $out/bin/session-desktop \
+    makeWrapper ${electron.exe} $out/bin/session-desktop \
       --add-flags $phome \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set NODE_ENV production \

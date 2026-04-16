@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/@commitlint/root
     mv * $out/lib/node_modules/@commitlint/root/
 
-    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/commitlint \
+    makeBinaryWrapper ${nodejs.exe} $out/bin/commitlint \
       --add-flags "$out/lib/node_modules/@commitlint/root/@commitlint/cli/cli.js" \
       --set NODE_PATH "$out/lib/node_modules/@commitlint/root/node_modules"
 

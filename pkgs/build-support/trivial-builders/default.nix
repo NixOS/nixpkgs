@@ -309,9 +309,7 @@ rec {
           shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${
-              lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
-            } "$target"
+            ${shellcheck-minimal.exe} ${lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)} "$target"
           '';
         in
         if checkPhase == null then

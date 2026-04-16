@@ -22,7 +22,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace exiftool/constants.py \
       --replace-fail 'DEFAULT_EXECUTABLE = "exiftool"' \
-                     'DEFAULT_EXECUTABLE = "${lib.getExe exiftool}"'
+                     'DEFAULT_EXECUTABLE = "${exiftool.exe}"'
   '';
 
   nativeBuildInputs = [ setuptools ];

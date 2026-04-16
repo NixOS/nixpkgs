@@ -279,16 +279,16 @@ in
       script = ''
         cp "${configFile}" "''${RUNTIME_DIRECTORY}"/config.json
         ${lib.optionalString (cfg.clientSecretFile != null) ''
-          ${lib.getExe pkgs.jq} --arg client_secret "$(<"''${CREDENTIALS_DIRECTORY}"/client-secret)" \
+          ${pkgs.jq.exe} --arg client_secret "$(<"''${CREDENTIALS_DIRECTORY}"/client-secret)" \
             '. + { client_secret: $client_secret }' < "''${RUNTIME_DIRECTORY}"/config.json > "''${RUNTIME_DIRECTORY}"/config.json.tmp
           mv "''${RUNTIME_DIRECTORY}"/config.json.tmp "''${RUNTIME_DIRECTORY}"/config.json
         ''}
         ${lib.optionalString cfg.genUuid ''
-          ${lib.getExe pkgs.jq} --arg uuid "$(${lib.getExe' pkgs.util-linux "uuidgen"} --md5 -n @dns -N "${config.networking.fqdn}")" \
+          ${pkgs.jq.exe} --arg uuid "$(${lib.getExe' pkgs.util-linux "uuidgen"} --md5 -n @dns -N "${config.networking.fqdn}")" \
             '. + { uuid: $uuid }' < "''${RUNTIME_DIRECTORY}"/config.json > "''${RUNTIME_DIRECTORY}"/config.json.tmp
           mv "''${RUNTIME_DIRECTORY}"/config.json.tmp "''${RUNTIME_DIRECTORY}"/config.json
         ''}
-        ${lib.getExe cfg.package} --config "''${RUNTIME_DIRECTORY}"/config.json
+        ${cfg.package.exe} --config "''${RUNTIME_DIRECTORY}"/config.json
       '';
       wantedBy = [ "multi-user.target" ];
     };

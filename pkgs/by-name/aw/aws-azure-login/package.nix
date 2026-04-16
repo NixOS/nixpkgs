@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${nodejs}/bin/node" "$out/bin/aws-azure-login" \
       --add-flags "$out/lib/node_modules/aws-azure-login/lib/index.js" \
-      --set PUPPETEER_EXECUTABLE_PATH "${lib.getExe chromium}"
+      --set PUPPETEER_EXECUTABLE_PATH "${chromium.exe}"
 
     runHook postInstall
   '';

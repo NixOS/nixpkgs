@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./hardcode-rclone-path.patch {
-      rclone = lib.getExe rclone;
+      rclone = rclone.exe;
     })
   ];
 

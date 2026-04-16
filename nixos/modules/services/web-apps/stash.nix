@@ -517,7 +517,7 @@ in
                   password=$(< ${cfg.passwordFile}) \
                   jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
                   sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
-                  ${lib.getExe pkgs.yq-go} '
+                  ${pkgs.yq-go.exe} '
                     .jwt_secret_key = strenv(jwtSecretKeyFile) |
                     .session_store_key = strenv(sessionStoreKeyFile) |
                     (
@@ -536,7 +536,7 @@ in
               ls ${cfg.scrapers} | xargs -I{} ln -sf '${cfg.scrapers}/{}' ${cfg.settings.scrapers_path}
             ''
           );
-          ExecStart = getExe cfg.package;
+          ExecStart = cfg.package.exe;
 
           ProtectHome = "tmpfs";
           BindReadOnlyPaths = mkIf (cfg.settings != { }) (map (stash: "${stash.path}") cfg.settings.stash);

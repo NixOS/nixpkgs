@@ -187,7 +187,7 @@ in
         serviceConfig.RemainAfterExit = true;
 
         script = ''
-          ${lib.getExe cfg.package} -u
+          ${cfg.package.exe} -u
           chgrp resolvconf ${lib.escapeShellArgs cfg.subscriberFiles}
           chmod g=u ${lib.escapeShellArgs cfg.subscriberFiles}
           ${lib.getExe' pkgs.acl "setfacl"} -R \

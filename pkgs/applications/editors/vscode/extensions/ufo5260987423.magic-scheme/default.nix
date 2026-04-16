@@ -18,7 +18,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."magicScheme.scheme-langserver.serverPath".default = "${lib.getExe' akkuPackages.scheme-langserver "scheme-langserver"}" | .contributes.configuration.properties."magicScheme.scheme.path".default = "${lib.getExe' chez "scheme"}" | .contributes.configuration.properties."magicScheme.akku.path".default = "${lib.getExe akku}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ${jq.exe} '.contributes.configuration.properties."magicScheme.scheme-langserver.serverPath".default = "${lib.getExe' akkuPackages.scheme-langserver "scheme-langserver"}" | .contributes.configuration.properties."magicScheme.scheme.path".default = "${lib.getExe' chez "scheme"}" | .contributes.configuration.properties."magicScheme.akku.path".default = "${akku.exe}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
   '';
 
   meta = {

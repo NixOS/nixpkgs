@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # from nixpkgs during tests.
   preCheck = ''
     substituteInPlace src/core/process.rs \
-      --replace-fail "/usr/bin/which" "${lib.getExe which}"
+      --replace-fail "/usr/bin/which" "${which.exe}"
     substituteInPlace src/sampler/mod.rs \
-      --replace-fail "/usr/bin/which" "${lib.getExe which}"
+      --replace-fail "/usr/bin/which" "${which.exe}"
     substituteInPlace src/core/ruby_spy.rs \
-      --replace-fail "/usr/bin/ruby" "${lib.getExe ruby}"
+      --replace-fail "/usr/bin/ruby" "${ruby.exe}"
   '';
 
   checkFlags = [

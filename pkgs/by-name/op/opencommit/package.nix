@@ -18,7 +18,7 @@ buildNpmPackage rec {
     postFetch = ''
       cd $out
       # Fix lockfile issues with bundled dependencies
-      ${lib.getExe npm-lockfile-fix} package-lock.json
+      ${npm-lockfile-fix.exe} package-lock.json
     '';
   };
 

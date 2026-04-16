@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # provide correct executables for cross
-    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3.pythonOnBuildForHost))
+    (lib.cmakeFeature "Python3_EXECUTABLE" (python3.pythonOnBuildForHost.exe))
     # TODO: remove these once capnp cross is fixed properly
     (lib.cmakeFeature "CAPNP_EXECUTABLE" (lib.getExe' buildPackages.capnproto "capnp"))
     (lib.cmakeFeature "CAPNPC_CXX_EXECUTABLE" (lib.getExe' buildPackages.capnproto "capnpc-c++"))

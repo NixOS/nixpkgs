@@ -34,25 +34,26 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-geolite-legacy";
-      runtimeInputs = [
-        common-updater-scripts
-        pcre2
-      ];
-      text = ''
-        url=https://archive.archlinux.org/packages/g/geoip-database/
+    updateScript =
+      (writeShellApplication {
+        name = "update-geolite-legacy";
+        runtimeInputs = [
+          common-updater-scripts
+          pcre2
+        ];
+        text = ''
+          url=https://archive.archlinux.org/packages/g/geoip-database/
 
-        version=$(list-directory-versions --pname geoip-database --url $url |
-                  pcre2grep -o1 '^(\d{8})-1-any\.pkg\.tar\.zst$' |
-                  sort -n |
-                  tail -1)
+          version=$(list-directory-versions --pname geoip-database --url $url |
+                    pcre2grep -o1 '^(\d{8})-1-any\.pkg\.tar\.zst$' |
+                    sort -n |
+                    tail -1)
 
-        for key in geoip extra; do
-            update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" --source-key=$key --ignore-same-version
-        done
-      '';
-    });
+          for key in geoip extra; do
+              update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" --source-key=$key --ignore-same-version
+          done
+        '';
+      }).exe;
   };
 
   meta = {

@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     echo "Running postInstallhook"
     substituteInPlace usr/lib/udev/rules.d/* \
-      --replace-quiet "/bin/bash" "${lib.getExe bash}" \
-      --replace-quiet "/bin/sh" "${lib.getExe bash}"
+      --replace-quiet "/bin/bash" "${bash.exe}" \
+      --replace-quiet "/bin/sh" "${bash.exe}"
     install -Dm 0644 -t $out/etc/udev/rules.d usr/lib/udev/rules.d/*
   '';
 

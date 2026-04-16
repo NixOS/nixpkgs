@@ -134,7 +134,7 @@ in
     };
     serviceConfig = {
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-      ExecStart = lib.getExe pkgs.mqtt-exporter;
+      ExecStart = pkgs.mqtt-exporter.exe;
     };
   };
 }

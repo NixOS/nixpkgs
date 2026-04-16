@@ -317,7 +317,7 @@ in
               "~@swap:EPERM"
               "~@timer:EPERM"
             ];
-            ExecStart = lib.getExe cfg.package;
+            ExecStart = cfg.package.exe;
           };
         };
         gerbil = {
@@ -410,14 +410,14 @@ in
               "~@timer:EPERM"
             ];
             ExecStart = utils.escapeSystemdExecArgs [
-              (lib.getExe pkgs.fosrl-gerbil)
+              (pkgs.fosrl-gerbil.exe)
               "--reachableAt=http://localhost:${toString config.services.gerbil.port}"
               "--generateAndSaveKeyTo=${toString cfg.dataDir}/config/key"
               "--remoteConfig=http://localhost:${toString finalSettings.server.internal_port}/api/v1/gerbil/get-config"
             ];
             # will not work if the interface is renamed
             # https://github.com/fosrl/newt/issues/37#issuecomment-3193385911
-            ExecStartPost = lib.getExe gerbil-wg0-fix-script;
+            ExecStartPost = gerbil-wg0-fix-script.exe;
           };
         };
         traefik = {

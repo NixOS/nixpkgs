@@ -85,11 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
     UPDATE_NIX_ATTR_PATH="''${UPDATE_NIX_ATTR_PATH:-smartmontools}"
 
     # Update smartmontools
-    ${lib.getExe nix-update} "$UPDATE_NIX_ATTR_PATH" --version-regex 'RELEASE_(\d+)_(\d+)(?:_(\d+))?'
+    ${nix-update.exe} "$UPDATE_NIX_ATTR_PATH" --version-regex 'RELEASE_(\d+)_(\d+)(?:_(\d+))?'
 
     # Update drivedb.h
     branch="origin/$(nix-instantiate --eval --raw --attr "$UPDATE_NIX_ATTR_PATH.src.tag")_DRIVEDB"
-    ${lib.getExe nix-update} "$UPDATE_NIX_ATTR_PATH.drivedb" "--version=branch=$branch"
+    ${nix-update.exe} "$UPDATE_NIX_ATTR_PATH.drivedb" "--version=branch=$branch"
   '';
 
   meta = {

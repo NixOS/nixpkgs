@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''
-    ${lib.getExe finalAttrs.finalPackage} --help > $out
+    ${finalAttrs.finalPackage.exe} --help > $out
   '';
   passthru.updateScript = ./update.sh;
 

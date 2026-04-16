@@ -24,7 +24,7 @@ let
       if [[ "$USER" != govplan ]]; then
         SUDO="exec /run/wrappers/bin/sudo -u govplan"
       fi
-      $SUDO env ${lib.getExe pkg} "$@"
+      $SUDO env ${pkg.exe} "$@"
     '';
   };
 
@@ -202,8 +202,8 @@ in
             version=$(cat "$versionFile" 2>/dev/null || echo 0)
 
             if [[ $version != ${pkg.version} ]]; then
-              ${lib.getExe pkg} migrate --no-input
-              ${lib.getExe pkg} collectstatic --no-input --clear
+              ${pkg.exe} migrate --no-input
+              ${pkg.exe} collectstatic --no-input --clear
               echo ${pkg.version} > "$versionFile"
             fi
           '';

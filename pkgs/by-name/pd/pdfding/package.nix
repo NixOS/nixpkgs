@@ -119,7 +119,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     makeWrapper "$PDFDING_OUT_DIR/manage.py" $out/bin/pdfding-manage \
       $makeWrapperArgs
 
-    makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/pdfding-start \
+    makeWrapper ${python.pkgs.gunicorn.exe} $out/bin/pdfding-start \
       --add-flags '--bind ''${HOST_IP:-127.0.0.1}:''${HOST_PORT:-8080} core.wsgi:application' \
       $makeWrapperArgs
   '';

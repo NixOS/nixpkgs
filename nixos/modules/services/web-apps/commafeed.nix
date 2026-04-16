@@ -70,7 +70,7 @@ in
         _: v: if lib.isBool v then lib.boolToString v else toString v
       ) cfg.environment;
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} server ${cfg.package}/share/config.yml";
+        ExecStart = "${cfg.package.exe} server ${cfg.package}/share/config.yml";
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = baseNameOf cfg.stateDir;

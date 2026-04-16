@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    BPF_CLANG = lib.getExe llvmPackages.clang;
+    BPF_CLANG = llvmPackages.clang.exe;
     RUSTFLAGS = lib.concatStringsSep " " [
       "-C relocation-model=pic"
       "-C link-args=-lelf"

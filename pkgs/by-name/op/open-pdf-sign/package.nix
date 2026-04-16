@@ -44,7 +44,7 @@ maven.buildMavenPackage rec {
     mkdir -p $out/bin $out/share/open-pdf-sign
     mv target/openpdfsign-${version}-jar-with-dependencies.jar $out/share/open-pdf-sign/open-pdf-sign.jar
 
-    makeWrapper ${lib.getExe jre} $out/bin/open-pdf-sign \
+    makeWrapper ${jre.exe} $out/bin/open-pdf-sign \
       --add-flags "-jar $out/share/open-pdf-sign/open-pdf-sign.jar"
 
     runHook postInstall

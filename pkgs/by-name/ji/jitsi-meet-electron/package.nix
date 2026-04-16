@@ -83,7 +83,7 @@ buildNpmPackage rec {
       mkdir -p $out/share/jitsi-meet-electron
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/jitsi-meet-electron
 
-      makeWrapper ${lib.getExe electron} $out/bin/jitsi-meet-electron \
+      makeWrapper ${electron.exe} $out/bin/jitsi-meet-electron \
           --add-flags $out/share/jitsi-meet-electron/resources/app.asar \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --set-default ELECTRON_IS_DEV 0 \

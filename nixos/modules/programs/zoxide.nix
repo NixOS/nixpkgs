@@ -7,7 +7,6 @@
 let
   inherit (lib.options) mkEnableOption mkPackageOption mkOption;
   inherit (lib.modules) mkIf;
-  inherit (lib.meta) getExe;
   inherit (lib.types) listOf str;
   inherit (lib.strings) concatStringsSep;
 
@@ -53,16 +52,16 @@ in
 
     programs = {
       zsh.interactiveShellInit = mkIf cfg.enableZshIntegration ''
-        eval "$(${getExe cfg.package} init zsh ${cfgFlags} )"
+        eval "$(${cfg.package.exe} init zsh ${cfgFlags} )"
       '';
       bash.interactiveShellInit = mkIf cfg.enableBashIntegration ''
-        eval "$(${getExe cfg.package} init bash ${cfgFlags} )"
+        eval "$(${cfg.package.exe} init bash ${cfgFlags} )"
       '';
       fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
-        ${getExe cfg.package} init fish ${cfgFlags} | source
+        ${cfg.package.exe} init fish ${cfgFlags} | source
       '';
       xonsh.config = ''
-        execx($(${getExe cfg.package} init xonsh ${cfgFlags}), 'exec', __xonsh__.ctx, filename='zoxide')
+        execx($(${cfg.package.exe} init xonsh ${cfgFlags}), 'exec', __xonsh__.ctx, filename='zoxide')
       '';
     };
 

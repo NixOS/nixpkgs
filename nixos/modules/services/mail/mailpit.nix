@@ -95,7 +95,7 @@ in
           DynamicUser = true;
           StateDirectory = "mailpit";
           WorkingDirectory = "%S/mailpit";
-          ExecStart = "${getExe pkgs.mailpit} ${genCliFlags cfg}";
+          ExecStart = "${pkgs.mailpit.exe} ${genCliFlags cfg}";
           Restart = "on-failure";
         };
       }

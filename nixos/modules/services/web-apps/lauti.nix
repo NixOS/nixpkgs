@@ -71,7 +71,7 @@ in
       wants = [ "network-online.target" ];
       environment = cfg.settings;
       serviceConfig = {
-        ExecStart = lib.getExe pkgs.lauti;
+        ExecStart = pkgs.lauti.exe;
         WorkingDirectory = cfg.dataDir;
         StateDirectory = default;
         EnvironmentFile = [ cfg.secrets ];

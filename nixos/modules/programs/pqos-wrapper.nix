@@ -19,7 +19,7 @@ in
     security.wrappers.${cfg.package.meta.mainProgram} = {
       owner = "nobody";
       group = config.hardware.cpu.x86.msr.group;
-      source = lib.getExe cfg.package;
+      source = cfg.package.exe;
       capabilities = "cap_sys_rawio=eip";
     };
   };

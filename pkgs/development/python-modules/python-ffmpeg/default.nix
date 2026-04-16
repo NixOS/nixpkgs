@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace ffmpeg/{ffmpeg.py,asyncio/ffmpeg.py,protocol.py} \
-      --replace-fail 'executable: str = "ffmpeg"' 'executable: str = "${lib.getExe ffmpeg-headless}"'
+      --replace-fail 'executable: str = "ffmpeg"' 'executable: str = "${ffmpeg-headless.exe}"'
     substituteInPlace tests/helpers.py \
       --replace-fail '"ffprobe"' '"${lib.getExe' ffmpeg-headless "ffprobe"}"'
 

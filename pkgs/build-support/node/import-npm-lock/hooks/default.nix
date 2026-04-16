@@ -19,7 +19,7 @@
   linkNodeModulesHook = makeSetupHook {
     name = "node-modules-hook.sh";
     substitutions = {
-      nodejs = lib.getExe nodejs;
+      nodejs = nodejs.exe;
       script = ./link-node-modules.js;
       storePrefix = builtins.storeDir;
     };

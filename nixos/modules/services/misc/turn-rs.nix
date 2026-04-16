@@ -73,12 +73,12 @@ in
           configFile = format.generate "turn-rs-config.toml" cfg.settings;
         in
         ''
-          ${lib.getExe pkgs.envsubst} -i "${configFile}" -o /run/turn-rs/config.toml
+          ${pkgs.envsubst.exe} -i "${configFile}" -o /run/turn-rs/config.toml
         '';
       serviceConfig = {
         RuntimeDirectory = "turn-rs";
         EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStart = "${lib.getExe cfg.package} --config=/run/turn-rs/config.toml";
+        ExecStart = "${cfg.package.exe} --config=/run/turn-rs/config.toml";
         DynamicUser = true;
       };
     };

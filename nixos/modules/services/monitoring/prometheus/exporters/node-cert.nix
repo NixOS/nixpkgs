@@ -57,7 +57,7 @@ in
     serviceConfig = {
       User = cfg.user;
       ExecStart = ''
-        ${lib.getExe pkgs.prometheus-node-cert-exporter} \
+        ${pkgs.prometheus-node-cert-exporter.exe} \
           --listen ${toString cfg.listenAddress}:${toString cfg.port} \
           --path ${concatStringsSep "," cfg.paths} \
           --exclude-path "${concatStringsSep "," cfg.excludePaths}" \

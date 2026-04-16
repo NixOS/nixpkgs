@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp *.license.* "$out/share/doc/zvtm"
     cp -r target/* "$out/share/java/zvtm/"
     echo '#!${runtimeShell}' > "$out/bin/zgrviewer"
-    echo "${lib.getExe jre} -jar '$out/share/java/zvtm/zgrviewer-${finalAttrs.version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
+    echo "${jre.exe} -jar '$out/share/java/zvtm/zgrviewer-${finalAttrs.version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
 
     runHook postInstall

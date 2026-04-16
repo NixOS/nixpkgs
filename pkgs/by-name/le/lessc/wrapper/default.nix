@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     mkdir -p $out/bin
 
-    makeWrapper "${lib.getExe lessc}" "$out/bin/lessc" \
+    makeWrapper "${lessc.exe}" "$out/bin/lessc" \
       --prefix NODE_PATH : "${lib.makeSearchPath "/lib/node_modules" plugins}"
   '';
 

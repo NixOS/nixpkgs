@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
           }
           EOF
 
-          ${lib.getExe finalAttrs.finalPackage} hello.slang -target executable -o hello
+          ${finalAttrs.finalPackage.exe} hello.slang -target executable -o hello
           ./hello | grep "Hello, world!"
 
           touch $out

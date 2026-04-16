@@ -145,7 +145,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       script = ''
-        exec ${getExe cfg.package} -config ${settingsFile}
+        exec ${cfg.package.exe} -config ${settingsFile}
       '';
 
       serviceConfig = {

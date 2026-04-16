@@ -20,7 +20,6 @@ let
   fontsConf = makeFontsConf { fontDirectories = [ liberation_ttf_v2 ]; };
   jre' = libreoffice.unwrapped.jdk;
   libreoffice' = "${libreoffice}/lib/libreoffice/program/soffice.bin";
-  inherit (lib) getExe;
 in
 buildGo126Module (finalAttrs: {
   pname = "gotenberg";
@@ -64,12 +63,12 @@ buildGo126Module (finalAttrs: {
   ];
 
   preCheck = ''
-    export CHROMIUM_BIN_PATH=${getExe chromium}
-    export PDFTK_BIN_PATH=${getExe pdftk}
-    export QPDF_BIN_PATH=${getExe qpdf}
-    export UNOCONVERTER_BIN_PATH=${getExe unoconv}
-    export EXIFTOOL_BIN_PATH=${getExe exiftool}
-    export PDFCPU_BIN_PATH=${getExe pdfcpu}
+    export CHROMIUM_BIN_PATH=${chromium.exe}
+    export PDFTK_BIN_PATH=${pdftk.exe}
+    export QPDF_BIN_PATH=${qpdf.exe}
+    export UNOCONVERTER_BIN_PATH=${unoconv.exe}
+    export EXIFTOOL_BIN_PATH=${exiftool.exe}
+    export PDFCPU_BIN_PATH=${pdfcpu.exe}
     # LibreOffice needs all of these set to work properly
     export LIBREOFFICE_BIN_PATH=${libreoffice'}
     export FONTCONFIG_FILE=${fontsConf}
@@ -95,12 +94,12 @@ buildGo126Module (finalAttrs: {
   preFixup = ''
     wrapProgram $out/bin/gotenberg \
       --set CHROMIUM_HYPHEN_DATA_DIR_PATH "$hyphen" \
-      --set EXIFTOOL_BIN_PATH "${getExe exiftool}" \
+      --set EXIFTOOL_BIN_PATH "${exiftool.exe}" \
       --set JAVA_HOME "${jre'}" \
-      --set PDFCPU_BIN_PATH "${getExe pdfcpu}" \
-      --set PDFTK_BIN_PATH "${getExe pdftk}" \
-      --set QPDF_BIN_PATH "${getExe qpdf}" \
-      --set UNOCONVERTER_BIN_PATH "${getExe unoconv}"
+      --set PDFCPU_BIN_PATH "${pdfcpu.exe}" \
+      --set PDFTK_BIN_PATH "${pdftk.exe}" \
+      --set QPDF_BIN_PATH "${qpdf.exe}" \
+      --set UNOCONVERTER_BIN_PATH "${unoconv.exe}"
   '';
 
   passthru.updateScript = nix-update-script { };

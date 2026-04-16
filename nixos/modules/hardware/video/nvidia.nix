@@ -555,7 +555,7 @@ in
               gpuProviderName =
                 if igpuDriver == "amdgpu" then
                   # find the name of the provider if amdgpu
-                  "`${lib.getExe pkgs.xrandr} --listproviders | ${lib.getExe pkgs.gnugrep} -i AMD | ${lib.getExe pkgs.gnused} -n 's/^.*name://p'`"
+                  "`${pkgs.xrandr.exe} --listproviders | ${pkgs.gnugrep.exe} -i AMD | ${pkgs.gnused.exe} -n 's/^.*name://p'`"
                 else
                   igpuDriver;
               providerCmdParams =
@@ -565,8 +565,8 @@ in
               (syncCfg.enable || (reverseSyncCfg.enable && reverseSyncCfg.setupCommands.enable))
               ''
                 # Added by nvidia configuration module for Optimus/PRIME.
-                ${lib.getExe pkgs.xrandr} --setprovideroutputsource ${providerCmdParams}
-                ${lib.getExe pkgs.xrandr} --auto
+                ${pkgs.xrandr.exe} --setprovideroutputsource ${providerCmdParams}
+                ${pkgs.xrandr.exe} --auto
               '';
 
           environment.etc = {
@@ -634,7 +634,7 @@ in
                     Type = "forking";
                     Restart = "always";
                     PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                    ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                    ExecStart = "${nvidia_x11.persistenced.exe} --verbose";
                     ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
                   };
                 };
@@ -759,7 +759,7 @@ in
                           fabricManagerConfDefaults // cfg.datacenter.settings
                         );
                       in
-                      "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                      "${nvidia_x11.fabricmanager.exe} -c ${nv-fab-conf}";
                     LimitCORE = "infinity";
                   };
                 };
@@ -772,7 +772,7 @@ in
                     Type = "forking";
                     Restart = "always";
                     PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                    ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                    ExecStart = "${nvidia_x11.persistenced.exe} --verbose";
                     ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
                   };
                 };

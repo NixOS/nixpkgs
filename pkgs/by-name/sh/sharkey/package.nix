@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r tossface-emojis/dist $out/sharkey/tossface-emojis/
 
       # create a wrapper script for running sharkey commands (ie. alias for pnpm run)
-      makeWrapper ${lib.getExe pnpm} $out/bin/sharkey \
+      makeWrapper ${pnpm.exe} $out/bin/sharkey \
         --chdir $out/sharkey \
         --add-flags run \
         --set-default NODE_ENV production \

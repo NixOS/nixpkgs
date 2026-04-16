@@ -20,7 +20,7 @@ in
       owner = "root";
       group = "root";
       capabilities = "cap_net_admin+p";
-      source = lib.getExe cfg.package;
+      source = cfg.package.exe;
     };
   };
 }

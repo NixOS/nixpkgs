@@ -164,7 +164,7 @@ let
 
 in
 [
-  (lib.getExe updateScript)
+  (updateScript.exe)
   "--url=${toString url}"
   "--tag-format=${tagFormat}"
 ]

@@ -62,7 +62,7 @@ resholve.mkDerivation rec {
       };
       prologue =
         (writeText "prologue.sh" ''
-          NIX_DIRENV_FALLBACK_NIX=''${NIX_DIRENV_FALLBACK_NIX:-${lib.getExe nix}}
+          NIX_DIRENV_FALLBACK_NIX=''${NIX_DIRENV_FALLBACK_NIX:-${nix.exe}}
         '').outPath;
     };
   };

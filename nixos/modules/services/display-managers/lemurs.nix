@@ -78,7 +78,7 @@ in
         enable = true;
         generic = {
           enable = true;
-          execCmd = "exec ${lib.getExe cfg.package} --config ${settingsFormat.generate "config.toml" cfg.settings}";
+          execCmd = "exec ${cfg.package.exe} --config ${settingsFormat.generate "config.toml" cfg.settings}";
         };
         # set default settings
         lemurs.settings =

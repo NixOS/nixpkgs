@@ -31,10 +31,10 @@ mkKdeDerivation {
   patches = [
     (replaceVars ./dependency-paths.patch {
       fcMatch = lib.getExe' fontconfig "fc-match";
-      lsof = lib.getExe lsof;
+      lsof = lsof.exe;
       qdbus = lib.getExe' qttools "qdbus";
-      xmessage = lib.getExe xmessage;
-      xrdb = lib.getExe xrdb;
+      xmessage = xmessage.exe;
+      xrdb = xrdb.exe;
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })

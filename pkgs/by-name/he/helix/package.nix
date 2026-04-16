@@ -69,7 +69,7 @@ let
   grammarsFarm = runCommand "helix-grammars" { } (
     lib.concatMapAttrsStringSep "\n" (_: grammar: ''
       install -D ${grammar}/parser $out/${grammar.language}.so
-      ${lib.getExe removeReferencesTo} -t ${grammar} $out/${grammar.language}.so
+      ${removeReferencesTo.exe} -t ${grammar} $out/${grammar.language}.so
     '') (lib.filterAttrs (_: lib.isDerivation) tree-sitter-grammars)
   );
 

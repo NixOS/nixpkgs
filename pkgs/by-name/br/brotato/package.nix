@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/bin
 
-    makeWrapper ${lib.getExe godot3} $out/bin/brotato \
+    makeWrapper ${godot3.exe} $out/bin/brotato \
       --add-flags "--main-pack $src"
 
     cp $srcIcon brotato.icns

@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/bin/kmscon \
-      --replace-fail "awk" "${lib.getExe gawk}"
+      --replace-fail "awk" "${gawk.exe}"
     substituteInPlace $out/bin/kmscon-launch-gui \
       --replace-fail "inotifywait" "${lib.getExe' inotify-tools "inotifywait"}"
   '';

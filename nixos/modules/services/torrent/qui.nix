@@ -128,7 +128,7 @@ in
         ExecStartPre = ''
           ${pkgs.coreutils}/bin/install -m 600 '${configFile}' '%S/qui/config.toml'
         '';
-        ExecStart = "${getExe cfg.package} serve --config-dir %S/qui";
+        ExecStart = "${cfg.package.exe} serve --config-dir %S/qui";
         Restart = "on-failure";
 
         # Based on qbittorrent and nemorosa hardening settings

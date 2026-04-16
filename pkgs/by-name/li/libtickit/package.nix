@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   nativeCheckInputs = [ perl ];
 
   makeFlags = [
-    "LIBTOOL=${lib.getExe libtool}"
+    "LIBTOOL=${libtool.exe}"
   ];
 
   installFlags = [

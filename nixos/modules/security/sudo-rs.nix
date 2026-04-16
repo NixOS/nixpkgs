@@ -288,7 +288,7 @@ in
       in
       {
         sudo = {
-          source = lib.getExe cfg.package;
+          source = cfg.package.exe;
           inherit
             owner
             group

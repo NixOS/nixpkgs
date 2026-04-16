@@ -88,7 +88,7 @@ stdenvNoCC.mkDerivation {
     in
     ''
       cp $out/bin/steamtinkerlaunch $TMPDIR/steamtinkerlaunch
-      install ${lib.getExe header} -T $out/bin/steamtinkerlaunch
+      install ${header.exe} -T $out/bin/steamtinkerlaunch
       tail -n +2 $TMPDIR/steamtinkerlaunch >> $out/bin/steamtinkerlaunch
 
       # Create a fake steam dir, it checks this and reads a few values

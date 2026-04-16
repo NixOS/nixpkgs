@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm install --offline --prod --ignore-scripts --frozen-lockfile
     mv node_modules $out/lib/node_modules/@shopify/cli/node_modules
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/shopify \
+    makeWrapper ${nodejs.exe} $out/bin/shopify \
       --add-flags "$out/lib/node_modules/@shopify/cli/bin/run.js"
 
     runHook postInstall

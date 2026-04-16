@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/homepage/.next
     cp -r .next/static $out/share/homepage/.next/static
 
-    makeWrapper "${lib.getExe nodejs}" $out/bin/homepage \
+    makeWrapper "${nodejs.exe}" $out/bin/homepage \
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
       --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard \

@@ -19,7 +19,7 @@
           local-address = "127.0.0.1";
         };
         command."check-goss-version" = {
-          exec = "${lib.getExe pkgs.goss} --version";
+          exec = "${pkgs.goss.exe} --version";
           exit-status = 0;
         };
         dns.localhost.resolvable = true;

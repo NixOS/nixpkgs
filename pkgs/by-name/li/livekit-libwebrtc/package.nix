@@ -168,14 +168,14 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p buildtools/linux64
-    ln -sf ${lib.getExe gn} buildtools/linux64/gn
+    ln -sf ${gn.exe} buildtools/linux64/gn
     cp ${./libwebrtc.version} libwebrtc.version
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p buildtools/mac
-    ln -sf ${lib.getExe gn} buildtools/mac/gn
+    ln -sf ${gn.exe} buildtools/mac/gn
     chmod +x build/toolchain/apple/linker_driver.py
     patchShebangs build/toolchain/apple/linker_driver.py
     substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"

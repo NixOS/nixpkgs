@@ -142,7 +142,7 @@ in
         ProtectHome = "tmpfs";
         ExecStart = lib.concatStringsSep " " (
           [
-            (lib.getExe pkgs.https-dns-proxy)
+            (pkgs.https-dns-proxy.exe)
             "-a ${toString cfg.address}"
             "-p ${toString cfg.port}"
             "-l -"

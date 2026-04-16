@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      tecla = lib.getExe tecla;
+      tecla = tecla.exe;
     })
   ];
 

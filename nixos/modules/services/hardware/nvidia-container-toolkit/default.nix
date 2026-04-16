@@ -349,7 +349,7 @@
                 nvidia-driver = config.hardware.nvidia.package;
               };
             in
-            lib.getExe script;
+            script.exe;
           Type = "oneshot";
         };
       };

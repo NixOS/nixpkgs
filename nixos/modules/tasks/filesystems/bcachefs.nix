@@ -365,7 +365,7 @@ in
                   "sleep.target"
                 ];
 
-                script = "${lib.getExe cfg.package} data scrub ${fs}";
+                script = "${cfg.package.exe} data scrub ${fs}";
 
                 serviceConfig = {
                   Type = "oneshot";

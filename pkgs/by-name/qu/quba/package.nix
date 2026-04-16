@@ -14,7 +14,7 @@ let
   version = "1.5.0";
 
   passthru.updateScript = writeShellScript "update-quiet" ''
-    ${lib.getExe nix-update} --system=x86_64-linux quba
+    ${nix-update.exe} --system=x86_64-linux quba
     hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw --file . quba.src.url --system aarch64-darwin)))
     ${lib.getExe' common-updater-scripts "update-source-version"} quba $(nix eval --raw --file . quba.version) $hash --system=aarch64-darwin --ignore-same-version
   '';

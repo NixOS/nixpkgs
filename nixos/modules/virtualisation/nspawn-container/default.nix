@@ -150,7 +150,7 @@ in
         };
       in
       pkgs.writers.writeDashBin "run-${config.system.name}-nspawn" ''
-        exec ${lib.getExe run-nspawn} ${commandLineOptions} ${lib.escapeShellArgs config.virtualisation.systemd-nspawn.options} "$@"
+        exec ${run-nspawn.exe} ${commandLineOptions} ${lib.escapeShellArgs config.virtualisation.systemd-nspawn.options} "$@"
       '';
   };
 }

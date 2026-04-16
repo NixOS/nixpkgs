@@ -123,7 +123,7 @@ in
         Type = "simple";
         DynamicUser = true;
         ExecStart = toString [
-          (lib.getExe pkgs.icecast)
+          (pkgs.icecast.exe)
           "-c"
           configFile
         ];

@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/devcontainer" \
+    makeWrapper "${nodejs.exe}" "$out/bin/devcontainer" \
       --add-flags "$out/libexec/devcontainer.js" \
       --prefix PATH : ${
         lib.makeBinPath [

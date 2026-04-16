@@ -23,7 +23,7 @@
 }:
 
 let
-  inherit (lib) getExe getExe' genAttrs;
+  inherit (lib) getExe' genAttrs;
 
   # Define tool dependencies for script patches
   scriptDeps =
@@ -61,8 +61,8 @@ let
     // (mkTools rpm [ "rpm" ])
     // {
       # Single-tool packages
-      ssh = getExe openssh;
-      ipmitool = getExe ipmitool;
+      ssh = openssh.exe;
+      ipmitool = ipmitool.exe;
     };
 in
 

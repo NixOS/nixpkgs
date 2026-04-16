@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "xwayland" xwaylandSupport)
   ]
   ++ lib.optionals xwaylandSupport [
-    (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
+    (lib.mesonOption "xwayland-path" (xwayland.exe))
   ];
 
   passthru = {

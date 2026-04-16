@@ -23,7 +23,7 @@ in
       # mirror upstream chmod of 4755
       setuid = true;
       setgid = false;
-      source = lib.getExe cfg.package;
+      source = cfg.package.exe;
     };
   };
 

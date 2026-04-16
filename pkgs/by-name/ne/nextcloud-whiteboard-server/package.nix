@@ -22,7 +22,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    makeWrapper ${lib.getExe nodejs} "$out/bin/nextcloud-whiteboard-server" \
+    makeWrapper ${nodejs.exe} "$out/bin/nextcloud-whiteboard-server" \
       --add-flags "$out/lib/node_modules/whiteboard/websocket_server/main.js"
   '';
 

@@ -78,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     example = runCommand "mmseqs2-test" { } ''
-      ${lib.getExe finalAttrs.finalPackage} createdb ${finalAttrs.src}/examples/DB.fasta targetDB > $out
-      ${lib.getExe finalAttrs.finalPackage} createindex targetDB tmp >> $out
-      ${lib.getExe finalAttrs.finalPackage} easy-search ${finalAttrs.src}/examples/QUERY.fasta targetDB alnRes.m8 tmp >> $out
+      ${finalAttrs.finalPackage.exe} createdb ${finalAttrs.src}/examples/DB.fasta targetDB > $out
+      ${finalAttrs.finalPackage.exe} createindex targetDB tmp >> $out
+      ${finalAttrs.finalPackage.exe} easy-search ${finalAttrs.src}/examples/QUERY.fasta targetDB alnRes.m8 tmp >> $out
     '';
   };
 

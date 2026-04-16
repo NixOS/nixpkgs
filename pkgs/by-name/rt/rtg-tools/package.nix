@@ -47,10 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Use a location outside nix (must be writable)
     substituteInPlace installer/rtg \
       --replace-fail  '$THIS_DIR/rtg.cfg' '$HOME/.config/rtg-tools/rtg.cfg'  \
-       --replace-fail 'RTG_JAVA="java"' 'RTG_JAVA="${lib.getExe jdk}"' \
+       --replace-fail 'RTG_JAVA="java"' 'RTG_JAVA="${jdk.exe}"' \
       --replace-fail uname ${lib.getExe' coreutils "uname"} \
-      --replace-fail awk ${lib.getExe gawk} \
-      --replace-fail "hostname -s" "${lib.getExe hostname} -s"
+      --replace-fail awk ${gawk.exe} \
+      --replace-fail "hostname -s" "${hostname.exe} -s"
 
     sed -i '/USER_JAVA_OPTS=$RTG_JAVA_OPTS/a mkdir -p $HOME/.config/rtg-tools'  installer/rtg
   '';

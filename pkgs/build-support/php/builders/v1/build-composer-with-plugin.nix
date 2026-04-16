@@ -92,7 +92,7 @@ let
         previousAttrs.installPhase or ''
             runHook preInstall
 
-          makeWrapper ${lib.getExe composer} $out/bin/composer \
+          makeWrapper ${composer.exe} $out/bin/composer \
             --prefix COMPOSER_HOME : ${finalAttrs.vendor}
 
             runHook postInstall

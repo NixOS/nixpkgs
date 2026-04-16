@@ -78,7 +78,7 @@ buildGoModule (finalAttrs: {
 
       postInstall = ''
         # the dbmate-wrapper needs access to the original dbmate executable, wrap it so it can find it correctly.
-        wrapProgram $out/bin/dbmate-wrapper --set DBMATE_BIN ${lib.getExe dbmate}
+        wrapProgram $out/bin/dbmate-wrapper --set DBMATE_BIN ${dbmate.exe}
       '';
 
       subPackages = [ "." ];

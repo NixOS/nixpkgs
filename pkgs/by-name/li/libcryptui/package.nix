@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildInputs = [ dbus-glib ];
 
-  env.GNUPG = lib.getExe gnupg;
+  env.GNUPG = gnupg.exe;
   env.GPGME_CONFIG = lib.getExe' (lib.getDev gpgme) "gpgme-config";
 
   enableParallelBuilding = true;

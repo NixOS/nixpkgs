@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       allowedVersions = "\\.[02468]$";
     };
     tests.hello = runCommand "box64-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-      BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version 2>&1 | tee $out
+      BOX64_LOG=1 box64 ${hello-x86_64.exe} --version 2>&1 | tee $out
     '';
   };
 

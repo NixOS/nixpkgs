@@ -11,7 +11,7 @@ let
   opt = options.services.forgejo;
   format = pkgs.formats.ini { };
 
-  exe = lib.getExe cfg.package;
+  exe = cfg.package.exe;
 
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";

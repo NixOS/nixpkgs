@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs gnulib-tool.py
     substituteInPlace build-aux/{prefix-gnulib-mk,useless-if-before-free,update-copyright,gitlog-to-changelog,announce-gen} \
-    --replace-fail 'exec perl' 'exec ${lib.getExe perl}'
+    --replace-fail 'exec perl' 'exec ${perl.exe}'
   '';
 
   buildInputs = [ python3 ];

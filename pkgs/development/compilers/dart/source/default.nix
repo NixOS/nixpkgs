@@ -169,9 +169,9 @@ dart-bin.overrideAttrs (oldAttrs: {
   ''
   + ''
     ln --symbolic ${buildPackages.dart-bin} tools/sdks/dart-sdk
-    ln --symbolic --force ${lib.getExe buildPackages.gn} buildtools/gn
+    ln --symbolic --force ${buildPackages.gn.exe} buildtools/gn
     mkdir --parents buildtools/ninja
-    ln --symbolic --force ${lib.getExe buildPackages.samurai} buildtools/ninja/ninja
+    ln --symbolic --force ${buildPackages.samurai.exe} buildtools/ninja/ninja
     python3 tools/generate_package_config.py
     python3 tools/generate_sdk_version_file.py
     echo "" > tools/bots/dartdoc_footer.html
@@ -245,7 +245,7 @@ dart-bin.overrideAttrs (oldAttrs: {
 
   passthru = oldAttrs.passthru // {
     updateScript = writeShellScript "update-dart" ''
-      ${lib.getExe nix-update} --version=$(${lib.getExe curlMinimal} --fail --location --silent https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION | ${lib.getExe jq} --raw-output .version)
+      ${nix-update.exe} --version=$(${curlMinimal.exe} --fail --location --silent https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION | ${jq.exe} --raw-output .version)
     '';
   };
 

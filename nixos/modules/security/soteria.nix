@@ -37,7 +37,7 @@ in
       after = [ "graphical-session.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Type = "simple";
         Restart = "on-failure";
         RestartSec = 1;

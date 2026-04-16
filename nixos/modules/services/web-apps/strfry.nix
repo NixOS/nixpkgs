@@ -119,7 +119,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} --config=${configFile} relay";
+        ExecStart = "${cfg.package.exe} --config=${configFile} relay";
         User = "strfry";
         Group = "strfry";
         Restart = "on-failure";

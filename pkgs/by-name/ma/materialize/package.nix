@@ -113,7 +113,7 @@ rustPlatform.buildRustPackage rec {
   env = {
     MZ_DEV_BUILD_SHA = "000000000000000000000000000000000000000000000000000";
     # needed for internal protobuf c wrapper library
-    PROTOC = lib.getExe protobuf;
+    PROTOC = protobuf.exe;
     PROTOC_INCLUDE = "${protobuf}/include";
 
     # needed to dynamically link rdkafka

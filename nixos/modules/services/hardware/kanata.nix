@@ -112,7 +112,7 @@ let
       # at build time.  I think this is a good balance between module
       # complexity and functionality.
       checkPhase = ''
-        ${lib.getExe cfg.package} --cfg "$target" --check --debug
+        ${cfg.package.exe} --cfg "$target" --check --debug
       '';
     };
 
@@ -123,7 +123,7 @@ let
       serviceConfig = {
         Type = "notify";
         ExecStart = ''
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             --cfg ${keyboard.configFile} \
             --symlink-path ''${RUNTIME_DIRECTORY}/${name} \
             ${lib.optionalString (keyboard.port != null) "--port ${toString keyboard.port}"} \

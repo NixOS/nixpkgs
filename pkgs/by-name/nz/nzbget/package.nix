@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace daemon/util/Util.cpp \
-      --replace-fail "std::string(\"uname \")" "std::string(\"${lib.getExe deterministic-uname} \")"
+      --replace-fail "std::string(\"uname \")" "std::string(\"${deterministic-uname.exe} \")"
   '';
 
   postInstall = ''

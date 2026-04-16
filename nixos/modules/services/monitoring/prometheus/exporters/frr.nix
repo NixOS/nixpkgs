@@ -56,7 +56,7 @@ in
       RuntimeDirectory = "prometheus-frr-exporter";
       RestrictAddressFamilies = [ "AF_UNIX" ];
       ExecStart = ''
-        ${lib.getExe pkgs.prometheus-frr-exporter} \
+        ${pkgs.prometheus-frr-exporter.exe} \
           ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
           ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${concatStringsSep " " cfg.extraFlags}

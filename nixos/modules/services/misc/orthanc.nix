@@ -97,7 +97,7 @@ in
           config-json = settingsFormat.generate "orthanc-config.json" (cfg.settings);
         in
         {
-          ExecStart = "${lib.getExe cfg.package} ${config-json}";
+          ExecStart = "${cfg.package.exe} ${config-json}";
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = cfg.stateDir;
           BindReadOnlyPaths = [

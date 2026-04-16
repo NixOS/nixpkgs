@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
         "cp -r dist/linux-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
     }
     install -Dm644 build/icon.png $out/share/icons/cherry-studio.png
-    makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
+    makeWrapper ${electron.exe} $out/bin/cherry-studio \
       --inherit-argv0 \
       --add-flags $out/opt/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \

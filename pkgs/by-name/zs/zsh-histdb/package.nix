@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     substituteInPlace sqlite-history.zsh \
-      --replace-fail 'sqlite3' '"${lib.getExe sqlite}"'
+      --replace-fail 'sqlite3' '"${sqlite.exe}"'
   '';
 
   buildInputs = [

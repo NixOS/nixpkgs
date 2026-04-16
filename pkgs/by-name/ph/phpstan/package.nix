@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install -D ./phpstan.phar $out/libexec/phpstan/phpstan.phar
-    makeWrapper ${lib.getExe php} $out/bin/phpstan \
+    makeWrapper ${php.exe} $out/bin/phpstan \
       --add-flags "$out/libexec/phpstan/phpstan.phar" \
       --prefix PATH : ${
         lib.makeBinPath [

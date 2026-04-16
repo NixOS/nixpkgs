@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace radioactive/recorder.py \
-      --replace-fail '"ffmpeg",' '"${lib.getExe ffmpeg}",'
+      --replace-fail '"ffmpeg",' '"${ffmpeg.exe}",'
 
     substituteInPlace radioactive/ffplay.py \
       --replace-fail 'self.exe_path = which(self.program_name)' \

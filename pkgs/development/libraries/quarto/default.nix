@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     wrapProgram $out/bin/quarto \
-      --set-default QUARTO_DENO ${lib.getExe deno} \
-      --set-default QUARTO_PANDOC ${lib.getExe pandoc} \
-      --set-default QUARTO_ESBUILD ${lib.getExe esbuild} \
-      --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
-      --set-default QUARTO_TYPST ${lib.getExe typst} \
+      --set-default QUARTO_DENO ${deno.exe} \
+      --set-default QUARTO_PANDOC ${pandoc.exe} \
+      --set-default QUARTO_ESBUILD ${esbuild.exe} \
+      --set-default QUARTO_DART_SASS ${dart-sass.exe} \
+      --set-default QUARTO_TYPST ${typst.exe} \
       ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
       ${
         lib.optionalString (python3 != null) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"

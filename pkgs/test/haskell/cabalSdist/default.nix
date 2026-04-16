@@ -54,7 +54,7 @@ lib.recurseIntoAttrs rec {
         nativeBuildInputs = [ localPatchedFromCabalSdist ];
       }
       ''
-        ${lib.getExe localPatchedFromCabalSdist} | grep "Patched" >/dev/null
+        ${localPatchedFromCabalSdist.exe} | grep "Patched" >/dev/null
         touch $out
       '';
 
@@ -67,7 +67,7 @@ lib.recurseIntoAttrs rec {
         nativeBuildInputs = [ localPatchedFromSdist ];
       }
       ''
-        ${lib.getExe localPatchedFromSdist} | grep "Patched" >/dev/null
+        ${localPatchedFromSdist.exe} | grep "Patched" >/dev/null
         touch $out
       '';
 }

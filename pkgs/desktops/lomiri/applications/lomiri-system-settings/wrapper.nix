@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    ln -s ${lib.getExe lomiri-system-settings-unwrapped} $out/bin/${finalAttrs.meta.mainProgram}
+    ln -s ${lomiri-system-settings-unwrapped.exe} $out/bin/${finalAttrs.meta.mainProgram}
 
     for inheritedPath in share/lomiri-app-launch share/lomiri-url-dispatcher share/applications share/icons; do
       mkdir -p $out/$inheritedPath

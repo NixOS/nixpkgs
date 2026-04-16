@@ -112,21 +112,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "ruffle-update";
-      runtimeInputs = [
-        curl
-        jq
-        nix-update
-      ];
-      text = ''
-        version="$( \
-          curl https://api.github.com/repos/ruffle-rs/ruffle/releases?per_page=1 | \
-          jq -r ".[0].tag_name" \
-        )"
-        exec nix-update --version "0.2.0-$version" ruffle
-      '';
-    });
+    updateScript =
+      (writeShellApplication {
+        name = "ruffle-update";
+        runtimeInputs = [
+          curl
+          jq
+          nix-update
+        ];
+        text = ''
+          version="$( \
+            curl https://api.github.com/repos/ruffle-rs/ruffle/releases?per_page=1 | \
+            jq -r ".[0].tag_name" \
+          )"
+          exec nix-update --version "0.2.0-$version" ruffle
+        '';
+      }).exe;
   };
 
   meta = {

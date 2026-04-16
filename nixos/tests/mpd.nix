@@ -105,7 +105,7 @@ in
   };
 
   testScript = ''
-    mpc = "${lib.getExe pkgs.mpc} --wait"
+    mpc = "${pkgs.mpc.exe} --wait"
 
     # Connects to the given server and attempts to play a tune.
     def play_some_music(server):

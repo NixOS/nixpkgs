@@ -406,7 +406,7 @@ in
 
       serviceConfig = commonServiceConfig // {
         LoadCredential = secretsReplacement.credentials;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         Slice = "system-immich.slice";
         StateDirectory = "immich";
@@ -428,7 +428,7 @@ in
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
-        ExecStart = lib.getExe cfg.package.machine-learning;
+        ExecStart = cfg.package.machine-learning.exe;
         Slice = "system-immich.slice";
         CacheDirectory = "immich";
         User = cfg.user;

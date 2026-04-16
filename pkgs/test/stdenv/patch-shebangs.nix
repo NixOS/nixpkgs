@@ -117,7 +117,7 @@ let
       (derivation {
         name = "read-only-script";
         system = stdenv.buildPlatform.system;
-        builder = lib.getExe earlyBash;
+        builder = earlyBash.exe;
         initialPath = [
           earlyBash
           earlyCoreutils
@@ -139,7 +139,7 @@ let
             patchShebangs $out/bin/test
           ''
         ];
-        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${earlyBash.exe}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -149,7 +149,7 @@ let
       (derivation {
         name = "preserves-read-only";
         system = stdenv.buildPlatform.system;
-        builder = lib.getExe earlyBash;
+        builder = earlyBash.exe;
         initialPath = [
           earlyBash
           earlyCoreutils
@@ -176,7 +176,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${earlyBash.exe}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -187,7 +187,7 @@ let
       (derivation {
         name = "preserves-timestamp";
         system = stdenv.buildPlatform.system;
-        builder = lib.getExe earlyBash;
+        builder = earlyBash.exe;
         initialPath = [
           earlyBash
           earlyCoreutils
@@ -217,7 +217,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${earlyBash.exe}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -227,7 +227,7 @@ let
       (derivation {
         name = "preserves-binary-data";
         system = stdenv.buildPlatform.system;
-        builder = lib.getExe earlyBash;
+        builder = earlyBash.exe;
         initialPath = [
           earlyBash
           earlyCoreutils
@@ -259,7 +259,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${earlyBash.exe}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };

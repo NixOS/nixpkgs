@@ -68,7 +68,7 @@ bash.runCommand "${pname}-${version}"
 
     # Patch
     # https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a3-intermediate-musl.nix
-    sed -i 's|/bin/sh|${lib.getExe bash}|' \
+    sed -i 's|/bin/sh|${bash.exe}|' \
       tools/*.sh
     # patch popen/system to search in PATH instead of hardcoding /bin/sh
     sed -i 's|posix_spawn(&pid, "/bin/sh",|posix_spawnp(\&pid, "sh",|' \
@@ -89,7 +89,7 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install
-    sed -i 's|/bin/sh|${lib.getExe bash}|' $out/bin/*
+    sed -i 's|/bin/sh|${bash.exe}|' $out/bin/*
     ln -s ../lib/libc.so $out/bin/ldd
     ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
 

@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/share/freetube
     cp -r build/*-unpacked/{locales,resources{,.pak}} -t $out/share/freetube
 
-    makeWrapper ${lib.getExe electron} $out/bin/freetube \
+    makeWrapper ${electron.exe} $out/bin/freetube \
       --add-flags "$out/share/freetube/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 

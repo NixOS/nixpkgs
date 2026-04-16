@@ -30,7 +30,7 @@ let
       };
 
       postPatch = ''
-        ${lib.getExe buildPackages.jq} 'del(.scripts.preinstall)' package.json > package.json.tmp
+        ${buildPackages.jq.exe} 'del(.scripts.preinstall)' package.json > package.json.tmp
         mv -f package.json{.tmp,}
 
         substituteInPlace electron-builder.json \
@@ -83,7 +83,7 @@ in
       mkdir -p $out/share/bitwarden-directory-connector $out/bin
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/bitwarden-directory-connector
 
-      makeWrapper ${lib.getExe electron} $out/bin/bitwarden-directory-connector \
+      makeWrapper ${electron.exe} $out/bin/bitwarden-directory-connector \
         --add-flags $out/share/bitwarden-directory-connector/resources/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set-default ELECTRON_IS_DEV 0 \

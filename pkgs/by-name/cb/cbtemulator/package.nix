@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
         }
         ''
           # Start the emulator
-          ${lib.getExe cbtemulator} &
+          ${cbtemulator.exe} &
           EMULATOR_PID=$!
 
           cleanup() {

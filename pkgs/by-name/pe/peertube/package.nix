@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $dep/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
           --replace-fail \
             'compilerCommand = (() => {' \
-            'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+            'compilerCommand = (() => { return ["${dart-sass.exe}"];'
     done
   '';
 

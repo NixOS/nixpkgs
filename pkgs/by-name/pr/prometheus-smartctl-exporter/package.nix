@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace main.go README.md \
-      --replace-fail /usr/sbin/smartctl ${lib.getExe smartmontools}
+      --replace-fail /usr/sbin/smartctl ${smartmontools.exe}
   '';
 
   ldflags = [

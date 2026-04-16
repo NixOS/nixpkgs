@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/llef
     cp -r llef.py arch commands common handlers $out/share/llef
-    makeWrapper ${lib.getExe lldb} $out/bin/llef \
+    makeWrapper ${lldb.exe} $out/bin/llef \
       --add-flags "-o 'settings set stop-disassembly-display never'" \
       --add-flags "-o \"command script import $out/share/llef/llef.py\""
 

@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postConfigure = ''
     patchShebangs tests build.sh bashunit
     substituteInPlace Makefile \
-      --replace-fail "SHELL=/bin/bash" "SHELL=${lib.getExe bash}"
+      --replace-fail "SHELL=/bin/bash" "SHELL=${bash.exe}"
   '';
 
   buildPhase = ''

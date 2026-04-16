@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$out/bin/dbtpl"
         else
-          lib.getExe buildPackages.dbtpl;
+          buildPackages.dbtpl.exe;
     in
     ''
       installShellCompletion --cmd dbtpl \

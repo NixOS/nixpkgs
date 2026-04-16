@@ -38,7 +38,7 @@ in
       after = [ "graphical-session.target" ];
       environment.PATH = lib.mkForce null; # don't use the default PATH provided by NixOS
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} start";
+        ExecStart = "${cfg.package.exe} start";
         PassEnvironment = "PATH"; # inherit PATH from user environment
       };
     };

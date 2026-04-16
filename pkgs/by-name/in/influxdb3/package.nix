@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GIT_HASH = "000000000000000000000000000000000000000000000000000";
     GIT_HASH_SHORT = "0000000";
-    PYO3_PYTHON = lib.getExe python3;
+    PYO3_PYTHON = python3.exe;
   };
 
   postPatch = ''

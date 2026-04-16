@@ -49,7 +49,7 @@ buildNpmPackage rec {
     ln -rs $out/share/antimatter-dimensions/icon.png $out/share/icons/hicolor/256x256/apps/antimatter-dimensions.png
     cp ${dummyElectronApp} $out/share/antimatter-dimensions/app.js
 
-    makeWrapper ${lib.getExe electron} $out/bin/antimatter-dimensions \
+    makeWrapper ${electron.exe} $out/bin/antimatter-dimensions \
       --add-flags $out/share/antimatter-dimensions/app.js \
       --set ELECTRON_APP_NAME "${electronAppName}"
 

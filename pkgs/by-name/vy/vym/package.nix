@@ -36,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./patches/0000-fix-zip-paths.diff {
-      zipPath = "${lib.getExe zip}";
-      unzipPath = "${lib.getExe unzip}";
+      zipPath = "${zip.exe}";
+      unzipPath = "${unzip.exe}";
     })
   ];
 

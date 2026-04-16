@@ -117,7 +117,7 @@ in
 
         serviceConfig = {
           EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
-          ExecStart = getExe cfg.package;
+          ExecStart = cfg.package.exe;
           LimitNOFILE = "1048576";
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           WorkingDirectory = cfg.stateDir;

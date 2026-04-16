@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "CROSS=${stdenv.cc.targetPrefix}"
-    "CC=${lib.getExe stdenv.cc}"
+    "CC=${stdenv.cc.exe}"
   ];
 
   nativeBuildInputs = [ pkg-config ];

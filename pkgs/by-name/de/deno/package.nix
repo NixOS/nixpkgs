@@ -129,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     ''
       mkdir -p ./third_party/prebuilt/${platform}
-      cp ${lib.getExe esbuild} ./third_party/prebuilt/${platform}/esbuild-${arch}
+      cp ${esbuild.exe} ./third_party/prebuilt/${platform}/esbuild-${arch}
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Unset the env var defined by bintools-wrapper because it triggers Deno's sandbox protection in some tests.

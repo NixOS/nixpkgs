@@ -115,7 +115,7 @@ buildGoModule {
 
   postInstall = ''
     wrapProgram $out/bin/backrest \
-      --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
+      --set-default BACKREST_RESTIC_COMMAND "${restic.exe}"
   '';
 
   meta = {

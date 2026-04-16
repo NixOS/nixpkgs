@@ -20,7 +20,7 @@
         # Use: journalctl -b --since today --grep audit: | aa-logprof
         logfiles = /dev/stdin
 
-        parser = ${lib.getExe apparmor-parser}
+        parser = ${apparmor-parser.exe}
         ldd = ${lib.getExe' stdenv.cc.libc "ldd"}
         logger = ${util-linux}/bin/logger
 

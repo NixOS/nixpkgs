@@ -234,8 +234,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       # Have to be explicitly specified when cross.
       # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
-      "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
-      "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
+      "-DBWRAP_EXECUTABLE=${bubblewrap.exe}"
+      "-DDBUS_PROXY_EXECUTABLE=${xdg-dbus-proxy.exe}"
     ]
     ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
       "-DENABLE_GAMEPAD=OFF"

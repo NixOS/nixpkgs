@@ -42,7 +42,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
       # a bad path concatenation
       cp ${diagrams-as-code.src}/examples/all-fields.yaml .
 
-      ${lib.getExe diagrams-as-code} all-fields.yaml
+      ${diagrams-as-code.exe} all-fields.yaml
 
       cp web-services-architecture-aws.jpg $out
     '';

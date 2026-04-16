@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace zfs/replicate/compress/command.py \
       --replace-fail \
         '("/usr/bin/env - lz4 | ", "/usr/bin/env - lz4 -d | ")' \
-        '("${lib.getExe lz4}  | ", "/usr/bin/env - lz4 -d | ")'
+        '("${lz4.exe}  | ", "/usr/bin/env - lz4 -d | ")'
   '';
 
   build-system = with python3Packages; [

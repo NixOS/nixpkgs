@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
           mkdir -p $out/share/icons/hicolor/256x256/apps
           magick assets/images/app-icon.ico $out/share/icons/hicolor/256x256/apps/gitify.png
 
-          makeWrapper ${lib.getExe electron} $out/bin/gitify \
+          makeWrapper ${electron.exe} $out/bin/gitify \
               --add-flags $out/share/gitify/resources/app.asar \
               --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
               --inherit-argv0

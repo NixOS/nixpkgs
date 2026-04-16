@@ -217,12 +217,12 @@ let
         ${lib.optionalString (!withLibcxx) "--gcc-toolchain=${gcc-prefix}"}
         CFG
 
-        ${lib.getExe rdfind} -makesymlinks true ${
+        ${rdfind.exe} -makesymlinks true ${
           builtins.concatStringsSep " " (map (x: "${x}/lib") paths)
         } $out/ # create links *within* the sysroot to save space
 
         for i in $(cat $linkPathsPath); do
-          ${lib.getExe lndir} -silent $i $out
+          ${lndir.exe} -silent $i $out
         done
 
         echo 'export CC=clang' >> $out/nix-support/setup-hook

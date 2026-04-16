@@ -232,7 +232,7 @@ in
           wants = after;
           script = ''
             cscli=${lib.getExe' config.services.crowdsec.package "cscli"}
-            if $cscli bouncers list --output json | ${lib.getExe pkgs.jq} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
+            if $cscli bouncers list --output json | ${pkgs.jq.exe} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
               # Bouncer already registered. Verify the API key is still present
               if [ ! -f ${apiKeyFile} ]; then
                 echo "Bouncer registered but API key is not present"
@@ -299,7 +299,7 @@ in
               chmod 0600 ${final-config-file}
 
               # Replace the api_key placeholder with the secret
-              ${lib.getExe pkgs.replace-secret} '@API_KEY_FILE@' "$CREDENTIALS_DIRECTORY/API_KEY_FILE" ${final-config-file}
+              ${pkgs.replace-secret.exe} '@API_KEY_FILE@' "$CREDENTIALS_DIRECTORY/API_KEY_FILE" ${final-config-file}
             '';
 
             isIptables = (cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset");
@@ -327,10 +327,10 @@ in
               Type = "notify";
               ExecStartPre = [
                 generateConfig
-                "${lib.getExe cfg.package} -c ${final-config-file} -t"
+                "${cfg.package.exe} -c ${final-config-file} -t"
               ];
               ExecStart = [
-                "${lib.getExe cfg.package} -c ${final-config-file}"
+                "${cfg.package.exe} -c ${final-config-file}"
               ];
 
               # Same as upstream

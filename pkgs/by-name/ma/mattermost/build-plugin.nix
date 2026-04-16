@@ -50,7 +50,7 @@ let
 
   fake-golangci-lint = writeShellScriptBin "golangci-lint" ''
     set -uo pipefail
-    ${lib.getExe golangci-lint} "$@"
+    ${golangci-lint.exe} "$@"
     result=$?
     echo "golangci-lint returned: $result" >&2
     ${lib.optionalString ignoreGoLintWarnings ''
@@ -77,7 +77,7 @@ buildGoModule (
           hash = npmDepsHash;
           forceGitDeps = true;
           postFetch = ''
-            ${lib.getExe npm-lockfile-fix} package-lock.json
+            ${npm-lockfile-fix.exe} package-lock.json
           '';
         }
       else
@@ -131,8 +131,8 @@ buildGoModule (
       # These dependencies are ordinarily fetched via the Makefile, making
       # $(GO) install only echo means we still need to install them.
       mkdir -p bin
-      ln -sf ${lib.getExe fake-golangci-lint} bin/golangci-lint
-      ln -sf ${lib.getExe gotestsum} bin/gotestsum
+      ln -sf ${fake-golangci-lint.exe} bin/golangci-lint
+      ln -sf ${gotestsum.exe} bin/gotestsum
 
       # Do the build.
       make

@@ -308,15 +308,15 @@ in
             ${cmd}
           '';
         commands.pdfding-manage = ''
-          $sudo ${lib.getExe cfg.package} "$@"
+          $sudo ${cfg.package.exe} "$@"
         '';
         commands.consume-immediate = ''
           echo "from pdf.tasks import consume_function; consume_function(True)" | \
-            $sudo ${lib.getExe cfg.package} shell
+            $sudo ${cfg.package.exe} shell
         '';
         commands.backup-immediate = ''
           echo "from backup.tasks import backup_function; backup_function()" | \
-            $sudo ${lib.getExe cfg.package} shell
+            $sudo ${cfg.package.exe} shell
         '';
         packages = lib.genAttrs (lib.attrNames commands) (name: genWrapper name commands.${name});
       in

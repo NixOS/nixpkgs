@@ -60,13 +60,13 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ${lib.getExe asar} extract $out/lib/cider/resources/app.asar ./cider-build
+    ${asar.exe} extract $out/lib/cider/resources/app.asar ./cider-build
 
     # Patch login popup webview creation
     substituteInPlace ./cider-build/.vite/build/events-*.js \
       --replace-fail 'else if(c.includes(r))return{action:"allow"}' 'else if(c.includes(r))return{action:"allow",overrideBrowserWindowOptions:{webPreferences:{devTools:!0,nodeIntegration:!1,contextIsolation:!0,webSecurity:!1,sandbox:!1,experimentalFeatures:!0}}}'
 
-    ${lib.getExe asar} pack ./cider-build $out/lib/cider/resources/app.asar
+    ${asar.exe} pack ./cider-build $out/lib/cider/resources/app.asar
     rm -rf ./cider-build
 
     # Install Widevine CDM for DRM support

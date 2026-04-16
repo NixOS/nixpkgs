@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
+    patchShebangs src/emilua_gperf.awk --interpreter '${gawk.exe} -f'
   '';
 
   # io_uring is not allowed in Nix sandbox, that breaks the tests

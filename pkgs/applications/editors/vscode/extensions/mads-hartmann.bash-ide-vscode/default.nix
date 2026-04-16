@@ -21,8 +21,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   postInstall = ''
     cd "$out/$installPrefix"
     jq -e '
-      .contributes.configuration.properties."bashIde.shellcheckPath".default = "${lib.getExe shellcheck}" |
-      .contributes.configuration.properties."bashIde.shfmt.path".default = "${lib.getExe shfmt}"
+      .contributes.configuration.properties."bashIde.shellcheckPath".default = "${shellcheck.exe}" |
+      .contributes.configuration.properties."bashIde.shfmt.path".default = "${shfmt.exe}"
     ' package.json | sponge package.json
   '';
   meta = {

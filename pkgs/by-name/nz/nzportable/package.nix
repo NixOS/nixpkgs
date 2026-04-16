@@ -62,7 +62,7 @@ writeShellApplication {
       fi
     fi
 
-    exec ${lib.getExe fteqw} -basedir "$runDir" "$@"
+    exec ${fteqw.exe} -basedir "$runDir" "$@"
   '';
 
   derivationArgs = {

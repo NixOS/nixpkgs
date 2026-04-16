@@ -44,7 +44,7 @@ in
       EnvironmentFile = cfg.environmentFile;
       ExecStart = escapeSystemdExecArgs (
         [
-          (getExe pkgs.prometheus-fastly-exporter)
+          (pkgs.prometheus-fastly-exporter.exe)
           "-listen"
           "${cfg.listenAddress}:${toString cfg.port}"
         ]

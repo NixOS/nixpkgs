@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     runHook preInstall
     mkdir -p $out/{bin,share/pdfid}
     cp -a * $out/share/pdfid/
-    makeWrapper ${lib.getExe python3} $out/bin/pdfid \
+    makeWrapper ${python3.exe} $out/bin/pdfid \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --add-flags "$out/share/pdfid/pdfid.py"
     runHook postInstall

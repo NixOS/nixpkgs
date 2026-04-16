@@ -204,7 +204,7 @@ in
 
           serviceConfig = {
             ExecStart =
-              "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
+              "@${cfg.package.exe} consul agent -config-dir /etc/consul.d"
               + lib.concatMapStrings (n: " -config-file ${n}") configFiles;
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             PermissionsStartOnly = true;
@@ -213,7 +213,7 @@ in
             TimeoutStartSec = "infinity";
           }
           // (lib.optionalAttrs (cfg.leaveOnStop) {
-            ExecStop = "${lib.getExe cfg.package} leave";
+            ExecStop = "${cfg.package.exe} leave";
           });
 
           path = with pkgs; [
@@ -286,7 +286,7 @@ in
 
           serviceConfig = {
             ExecStart = ''
-              ${lib.getExe cfg.alerts.package} start \
+              ${cfg.alerts.package.exe} start \
                 --alert-addr=${cfg.alerts.listenAddr} \
                 --consul-addr=${cfg.alerts.consulAddr} \
                 ${lib.optionalString cfg.alerts.watchChecks "--watch-checks"} \

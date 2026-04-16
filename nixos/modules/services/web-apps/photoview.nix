@@ -204,7 +204,7 @@ in
 
       script = ''
         export ${dbUrl.${cfg.database.type}}
-        exec ${lib.getExe cfg.package}
+        exec ${cfg.package.exe}
       '';
 
       serviceConfig = {

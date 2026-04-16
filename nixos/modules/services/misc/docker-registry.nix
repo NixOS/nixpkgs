@@ -145,7 +145,7 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} serve ${configFile}";
+        ExecStart = "${cfg.package.exe} serve ${configFile}";
         User = "docker-registry";
         WorkingDirectory = cfg.storagePath;
         AmbientCapabilities = lib.mkIf (cfg.port < 1024) "cap_net_bind_service";

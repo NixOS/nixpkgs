@@ -93,18 +93,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = genericUpdater {
-    versionLister = lib.getExe (writeShellApplication {
-      name = "bombsquad-versionLister";
-      runtimeInputs = [
-        curl
-        gnugrep
-      ];
-      text = ''
-        curl -sL "https://files.ballistica.net/bombsquad/builds/CHANGELOG.md" \
-            | grep -oP '^### \K\d+\.\d+\.\d+' \
-            | head -n 1
-      '';
-    });
+    versionLister =
+      (writeShellApplication {
+        name = "bombsquad-versionLister";
+        runtimeInputs = [
+          curl
+          gnugrep
+        ];
+        text = ''
+          curl -sL "https://files.ballistica.net/bombsquad/builds/CHANGELOG.md" \
+              | grep -oP '^### \K\d+\.\d+\.\d+' \
+              | head -n 1
+        '';
+      }).exe;
   };
 
   meta = {

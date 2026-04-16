@@ -11,7 +11,7 @@ with lib;
 let
   cfg = config.services.gitea;
   opt = options.services.gitea;
-  exe = lib.getExe cfg.package;
+  exe = cfg.package.exe;
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";

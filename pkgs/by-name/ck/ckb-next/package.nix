@@ -66,7 +66,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace "$out/lib/udev/rules.d/99-ckb-next-daemon.rules" \
-      --replace-fail "/usr/bin/env sed" "${lib.getExe gnused}"
+      --replace-fail "/usr/bin/env sed" "${gnused.exe}"
   '';
 
   meta = {

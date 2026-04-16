@@ -145,7 +145,7 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
           ]
           ++ cfg.extraOptions
         );

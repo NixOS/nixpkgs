@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   preCheck = ''
-    export CHECKPOLICY=${lib.getExe checkpolicy}
+    export CHECKPOLICY=${checkpolicy.exe}
   '';
 
   meta = {

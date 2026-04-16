@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # build tools with a build compiler
     (replaceVars ./native-tools.patch {
-      cc_for_build = lib.getExe buildPackages.stdenv.cc;
+      cc_for_build = buildPackages.stdenv.cc.exe;
       # patch context
       FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT_TRUE = null;
       HAVE_RUNNABLE_TESTS_TRUE = null;

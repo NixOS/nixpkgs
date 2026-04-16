@@ -146,7 +146,7 @@ in
       serviceConfig = {
         Type = "simple";
 
-        ExecStart = "${getExe pkgs.wgautomesh} ${runtimeConfigFile}";
+        ExecStart = "${pkgs.wgautomesh.exe} ${runtimeConfigFile}";
         Restart = "always";
         RestartSec = "30";
         LoadCredential = mkIf cfg.enableGossipEncryption [ "gossip_secret:${cfg.gossipSecretFile}" ];

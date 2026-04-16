@@ -43,7 +43,7 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./clang.patch {
-      clang = lib.getExe clang;
+      clang = clang.exe;
       libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
 

@@ -25,7 +25,7 @@ let
   wrapper-to-env =
     wrapper:
     if lib.isDerivation wrapper then
-      lib.getExe wrapper
+      wrapper.exe
     else if wrapper != null then
       wrapper
     else
@@ -46,7 +46,7 @@ let
 
   miniinstaller-wrapper =
     if miniinstallerWrapper == null then
-      (writeShellScript "miniinstaller-wrapper" "exec ${lib.getExe miniinstaller-fhs} -c \"$@\"")
+      (writeShellScript "miniinstaller-wrapper" "exec ${miniinstaller-fhs.exe} -c \"$@\"")
     else
       (wrapper-to-env miniinstallerWrapper);
 

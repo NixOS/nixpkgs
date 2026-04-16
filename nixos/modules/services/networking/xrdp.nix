@@ -175,7 +175,7 @@ in
             if [ ! -s ${cfg.sslCert} -o ! -s ${cfg.sslKey} ]; then
               mkdir -p $(dirname ${cfg.sslCert}) || true
               mkdir -p $(dirname ${cfg.sslKey}) || true
-              ${lib.getExe pkgs.openssl} req -x509 -newkey rsa:2048 -sha256 -nodes -days 365 \
+              ${pkgs.openssl.exe} req -x509 -newkey rsa:2048 -sha256 -nodes -days 365 \
                 -subj /C=US/ST=CA/L=Sunnyvale/O=xrdp/CN=www.xrdp.org \
                 -config ${cfg.package}/share/xrdp/openssl.conf \
                 -keyout ${cfg.sslKey} -out ${cfg.sslCert}

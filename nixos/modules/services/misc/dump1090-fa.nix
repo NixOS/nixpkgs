@@ -30,7 +30,7 @@ in
       serviceConfig = {
         ExecStart = lib.escapeShellArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "--net"
             "--write-json"
             "%t/dump1090-fa"

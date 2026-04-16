@@ -328,12 +328,12 @@ in
                     buildCommand = concatStringsSep "\n" [
                       ''
                         mkdir -p "$out/bin"
-                        makeWrapper ${lib.getExe cfg.package} "$out/bin/${mkBin "netbird"}" \
+                        makeWrapper ${cfg.package.exe} "$out/bin/${mkBin "netbird"}" \
                           ${escapeShellArgs makeWrapperArgs}
                       ''
                       (optionalString cfg.ui.enable ''
                         # netbird-ui doesn't support envvars
-                        makeWrapper ${lib.getExe cfg.ui.package} "$out/bin/${mkBin "netbird-ui"}" \
+                        makeWrapper ${cfg.ui.package.exe} "$out/bin/${mkBin "netbird-ui"}" \
                           --add-flags '--daemon-addr=${client.environment.NB_DAEMON_ADDR}'
 
                         mkdir -p "$out/share/applications"
@@ -594,7 +594,7 @@ in
           path = optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
 
           serviceConfig = {
-            ExecStart = "${getExe client.wrapper} service run";
+            ExecStart = "${client.wrapper.exe} service run";
             Restart = "always";
 
             RuntimeDirectory = client.dir.baseName;
@@ -764,7 +764,7 @@ in
               set -x
 
               get_status() {
-                '${lib.getExe client.wrapper}' status 2>&1 || :
+                '${client.wrapper.exe}' status 2>&1 || :
               }
 
               main() {
@@ -777,7 +777,7 @@ in
                 if get_status | grep --quiet 'NeedsLogin' ; then
                   # setup key is in $NB_SETUP_KEY_FILE, and is
                   # automatically picked up by the cli
-                  '${lib.getExe client.wrapper}' up
+                  '${client.wrapper.exe}' up
                 fi
               }
 

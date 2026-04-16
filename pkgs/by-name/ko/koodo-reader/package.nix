@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # we use makeShellWrapper instead of the makeBinaryWrapper provided by wrapGAppsHook for proper shell variable expansion
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    makeShellWrapper ${lib.getExe electron} $out/bin/koodo-reader \
+    makeShellWrapper ${electron.exe} $out/bin/koodo-reader \
       --add-flags $out/share/lib/koodo-reader/resources/app.asar \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

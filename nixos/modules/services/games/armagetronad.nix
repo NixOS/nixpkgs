@@ -248,7 +248,7 @@ in
               {
                 Type = "simple";
                 StateDirectory = getStateDirectory serverName;
-                ExecStart = "${lib.getExe serverCfg.package} --daemon --input ${serverRoot}/input --userdatadir ${serverRoot}/data --userconfigdir ${serverRoot}/settings --vardir ${serverRoot}/var --autoresourcedir ${serverRoot}/resource";
+                ExecStart = "${serverCfg.package.exe} --daemon --input ${serverRoot}/input --userdatadir ${serverRoot}/data --userconfigdir ${serverRoot}/settings --vardir ${serverRoot}/var --autoresourcedir ${serverRoot}/resource";
                 Restart = "on-failure";
                 CapabilityBoundingSet = "";
                 LockPersonality = true;

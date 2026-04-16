@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation rec {
     install -D Minion-jfx.jar "$out/share/minion/Minion-jfx.jar"
     cp -r ./lib "$out/share/minion/"
 
-    makeWrapper ${lib.getExe openjdk} $out/bin/minion \
+    makeWrapper ${openjdk.exe} $out/bin/minion \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "${lib.concatStringsSep " " jvmArgs} -jar $out/share/minion/Minion-jfx.jar"
 

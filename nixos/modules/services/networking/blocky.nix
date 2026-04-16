@@ -48,7 +48,7 @@ in
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} --config ${configFile}";
+        ExecStart = "${cfg.package.exe} --config ${configFile}";
         LockPersonality = true;
         LogsDirectory = "blocky";
         MemoryDenyWriteExecute = true;
@@ -95,7 +95,7 @@ in
     };
     system.checks = lib.mkIf cfg.enableConfigCheck [
       (pkgs.runCommand "check-blocky-config" { } ''
-        ${lib.getExe cfg.package} --config ${configFile} validate && touch $out
+        ${cfg.package.exe} --config ${configFile} validate && touch $out
       '')
     ];
   };

@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "zerocallusedregs" ];
 
   postPatch = ''
-    substituteInPlace bpf/Makefile.defs --replace-fail '/bin/bash' '${lib.getExe bash}'
+    substituteInPlace bpf/Makefile.defs --replace-fail '/bin/bash' '${bash.exe}'
     substituteInPlace pkg/defaults/defaults.go --replace-fail '/var/lib/tetragon/' $out/lib/tetragon/bpf/
   '';
 

@@ -1120,7 +1120,7 @@ in
           ${loadSecretEnvironment "domain"}
 
           echo "Running migrations"
-          ${getExe cfg.domain.package} eval Domain.Release.migrate
+          ${cfg.domain.package.exe} eval Domain.Release.migrate
         '';
 
         # We use the domain environment to be able to run migrations
@@ -1140,7 +1140,7 @@ in
 
         script = ''
           ${loadSecretEnvironment "domain"}
-          exec ${getExe cfg.domain.package} start;
+          exec ${cfg.domain.package.exe} start;
         '';
 
         path = [ pkgs.curl ];
@@ -1163,7 +1163,7 @@ in
 
           ${loadSecretEnvironment "domain"}
           ln -sTf ${provisionStateJson} provision-state.json
-          ${getExe cfg.domain.package} rpc 'Code.eval_file("${./provision.exs}")'
+          ${cfg.domain.package.exe} rpc 'Code.eval_file("${./provision.exs}")'
         '';
 
         environment = collectEnvironment "domain";
@@ -1179,7 +1179,7 @@ in
 
         script = ''
           ${loadSecretEnvironment "web"}
-          exec ${getExe cfg.web.package} start;
+          exec ${cfg.web.package.exe} start;
         '';
 
         environment = collectEnvironment "web";
@@ -1195,7 +1195,7 @@ in
 
         script = ''
           ${loadSecretEnvironment "api"}
-          exec ${getExe cfg.api.package} start;
+          exec ${cfg.api.package.exe} start;
         '';
 
         environment = collectEnvironment "api";

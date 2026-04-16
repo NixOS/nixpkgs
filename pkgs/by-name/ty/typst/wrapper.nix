@@ -36,7 +36,7 @@ lib.makeOverridable (
 
       TYPST_FONT_PATHS=${lib.escapeShellArg (lib.concatStringsSep ":" fonts)}
 
-      makeWrapper "${lib.getExe typst}" "$out/bin/typst" \
+      makeWrapper "${typst.exe}" "$out/bin/typst" \
         --set TYPST_PACKAGE_CACHE_PATH $TYPST_LIB_DIR \
         ''${TYPST_FONT_PATHS:+--set TYPST_FONT_PATHS "$TYPST_FONT_PATHS"} \
         ${lib.escapeShellArgs extraWrapperArgs}

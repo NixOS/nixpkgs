@@ -29,7 +29,7 @@ in
       capabilities = "cap_dac_override+p";
       owner = "root";
       group = "root";
-      source = lib.getExe (cfg.package.override { securityWrapperPath = config.security.wrapperDir; });
+      source = (cfg.package.override { securityWrapperPath = config.security.wrapperDir; }).exe;
     };
     systemd.user.services.espanso = {
       description = "Espanso daemon";
@@ -38,7 +38,7 @@ in
           if (cfg.package.waylandSupport or false) then
             "${config.security.wrapperDir}/espanso"
           else
-            lib.getExe cfg.package
+            cfg.package.exe
         } daemon";
         Restart = "on-failure";
       };

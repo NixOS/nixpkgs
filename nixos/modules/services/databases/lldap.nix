@@ -271,13 +271,13 @@ in
         lib.optionalString (!cfg.settings ? jwt_secret) ''
           if [[ -z "$LLDAP_JWT_SECRET_FILE" ]] && [[ -z "$LLDAP_JWT_SECRET" ]]; then
             if [[ ! -e "./jwt_secret_file" ]]; then
-              ${lib.getExe pkgs.openssl} rand -base64 -out ./jwt_secret_file 32
+              ${pkgs.openssl.exe} rand -base64 -out ./jwt_secret_file 32
             fi
             export LLDAP_JWT_SECRET_FILE="./jwt_secret_file"
           fi
         ''
         + ''
-          exec ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
+          exec ${cfg.package.exe} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
         '';
       serviceConfig = {
         StateDirectory = "lldap";

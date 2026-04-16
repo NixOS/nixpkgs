@@ -41,7 +41,7 @@ in
       serviceConfig = {
         CapabilityBoundingSet = "";
         DynamicUser = true;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;

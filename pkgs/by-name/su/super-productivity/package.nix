@@ -29,7 +29,7 @@ buildNpmPackage rec {
     hash = "sha256-2NEhLYC13OYZqaLLLLyQHn5uDIDh40DVtUSuUAjCxgQ=";
 
     postFetch = ''
-      find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
+      find $out -name package-lock.json -exec ${npm-lockfile-fix.exe} -r {} \;
     '';
   };
 
@@ -129,7 +129,7 @@ buildNpmPackage rec {
           cp -r .tmp/app-builds/*-unpacked/resources/app.asar $out/share/super-productivity
           cp electron/assets/icons/ico-circled.svg $out/share/icons/hicolor/scalable/apps/super-productivity.svg
 
-          makeWrapper '${lib.getExe electron}' "$out/bin/super-productivity" \
+          makeWrapper '${electron.exe}' "$out/bin/super-productivity" \
             --add-flags "$out/share/super-productivity/app.asar" \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \

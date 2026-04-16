@@ -147,7 +147,7 @@ in
             "CRYPTPAD_CONFIG=${cryptpadConfigFile}"
             "HOME=%S/cryptpad"
           ];
-          ExecStart = lib.getExe cfg.package;
+          ExecStart = cfg.package.exe;
           Restart = "always";
           StateDirectory = "cryptpad";
           WorkingDirectory = "%S/cryptpad";

@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  env.PROTOC = lib.getExe buildPackages.protobuf_33;
+  env.PROTOC = buildPackages.protobuf_33.exe;
 
   meta = {
     homepage = "https://github.com/protobuf-c/protobuf-c/";

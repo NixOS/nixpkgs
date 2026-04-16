@@ -25,7 +25,7 @@ let
         ln -s ${file} ./config.toml
         export CRAB_HOLE_DIR=$(pwd)
 
-        ${lib.getExe cfg.package} validate-config
+        ${cfg.package.exe} validate-config
       '';
 in
 {
@@ -161,7 +161,7 @@ in
         StateDirectory = "crab-hole";
         WorkingDirectory = "/var/lib/crab-hole";
 
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
 
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";

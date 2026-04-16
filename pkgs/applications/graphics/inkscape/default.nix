@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-python-paths.patch {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
-      python3 = lib.getExe python3Env;
+      python3 = python3Env.exe;
     })
     (replaceVars ./fix-ps2pdf-path.patch {
       # Fix path to ps2pdf binary
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     shopt -s globstar
     for f in **/CMakeLists.txt; do
       substituteInPlace $f \
-        --replace-quiet "COMMAND python3" "COMMAND ${lib.getExe python3Env.pythonOnBuildForHost}"
+        --replace-quiet "COMMAND python3" "COMMAND ${python3Env.pythonOnBuildForHost.exe}"
     done
     shopt -u globstar
   '';

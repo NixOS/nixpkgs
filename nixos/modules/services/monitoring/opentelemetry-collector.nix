@@ -30,7 +30,7 @@ let
     if cfg.validateConfigFile then
       pkgs.runCommandLocal "config.yaml" { inherit generatedConf; } ''
         cp $generatedConf $out
-        ${getExe opentelemetry-collector} validate --config=file:$out
+        ${opentelemetry-collector.exe} validate --config=file:$out
       ''
     else
       generatedConf;
@@ -82,7 +82,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${getExe opentelemetry-collector} --config=file:${conf}";
+        ExecStart = "${opentelemetry-collector.exe} --config=file:${conf}";
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";

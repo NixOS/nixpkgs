@@ -99,9 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/node_modules/renovate}
     cp -r dist node_modules package.json renovate-schema.json $out/lib/node_modules/renovate
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/renovate" \
+    makeWrapper "${nodejs.exe}" "$out/bin/renovate" \
       --add-flags "$out/lib/node_modules/renovate/dist/renovate.js"
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/renovate-config-validator" \
+    makeWrapper "${nodejs.exe}" "$out/bin/renovate-config-validator" \
       --add-flags "$out/lib/node_modules/renovate/dist/config-validator.js"
 
     runHook postInstall

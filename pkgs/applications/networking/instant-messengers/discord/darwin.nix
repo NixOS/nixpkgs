@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     # wrap executable to $out/bin
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
-      --run ${lib.getExe disableBreakingUpdates} \
+      --run ${disableBreakingUpdates.exe} \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

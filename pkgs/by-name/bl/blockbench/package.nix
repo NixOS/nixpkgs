@@ -77,7 +77,7 @@ buildNpmPackage rec {
       magick icon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
     done
 
-    makeWrapper ${lib.getExe electron} $out/bin/blockbench \
+    makeWrapper ${electron.exe} $out/bin/blockbench \
       --add-flags $out/share/blockbench/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0

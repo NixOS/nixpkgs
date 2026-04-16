@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       )
     }
 
-    ${lib.getExe mdbook} build
+    ${mdbook.exe} build
     mkdir -p $out/share/doc
     mv public $out/share/doc/${finalAttrs.pname}
   '';

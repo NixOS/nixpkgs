@@ -57,7 +57,7 @@ let
         Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { } ''
           mkdir -p $out
           cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
-          ${lib.getExe cfg.package} fmt --overwrite $out/Caddyfile
+          ${cfg.package.exe} fmt --overwrite $out/Caddyfile
         '';
       in
       "${
@@ -474,13 +474,13 @@ in
           # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
           ExecStart = [
             ""
-            "${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}"
+            "${cfg.package.exe} run ${runOptions} ${optionalString cfg.resume "--resume"}"
           ];
           # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
           ExecReload = [
             ""
           ]
-          ++ lib.optional cfg.enableReload "${lib.getExe cfg.package} reload ${runOptions} --force";
+          ++ lib.optional cfg.enableReload "${cfg.package.exe} reload ${runOptions} --force";
           User = cfg.user;
           Group = cfg.group;
           ReadWritePaths = [ cfg.dataDir ];

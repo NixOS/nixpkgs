@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # There's only one substitution, no patch is needed.
   postPatch = ''
     substituteInPlace mkdocs_build_plantuml_plugin/plantuml.py \
-      --replace-fail '/usr/local/bin/plantuml' '${lib.getExe pkgs.plantuml}'
+      --replace-fail '/usr/local/bin/plantuml' '${pkgs.plantuml.exe}'
   '';
 
   build-system = [ setuptools ];

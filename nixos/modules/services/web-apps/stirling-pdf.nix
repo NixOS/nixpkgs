@@ -81,7 +81,7 @@ in
         CacheDirectory = "stirling-pdf";
         Environment = [ "HOME=%S/stirling-pdf" ];
         EnvironmentFile = cfg.environmentFiles;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         RuntimeDirectory = "stirling-pdf";
         StateDirectory = "stirling-pdf";
         SuccessExitStatus = 143;

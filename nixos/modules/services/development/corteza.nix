@@ -95,7 +95,7 @@ in
         WorkingDirectory = cfg.package;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${lib.getExe cfg.package} serve-api";
+        ExecStart = "${cfg.package.exe} serve-api";
       };
     };
 

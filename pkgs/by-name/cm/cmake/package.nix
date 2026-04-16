@@ -75,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./darwin-bsd-binary-paths.patch {
       # `ps(1)` is theoretically used on Linux too, but only when
       # `/proc` is inaccessible, so we can skip the dependency.
-      ps = lib.getExe ps;
-      sysctl = lib.getExe sysctl;
+      ps = ps.exe;
+      sysctl = sysctl.exe;
     })
   ]
   ++ [

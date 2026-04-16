@@ -134,7 +134,7 @@ in
           DynamicUser = true;
           # using the same user to simplify db connection
           User = cfg.database.user;
-          ExecStart = lib.getExe cfg.package;
+          ExecStart = cfg.package.exe;
           Restart = "always";
         }
         // lib.optionalAttrs useUrlPath {

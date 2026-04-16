@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       gsettings = lib.getExe' glib "gsettings";
       dbusLaunch = lib.getExe' dbus "dbus-launch";
-      bash = lib.getExe bash;
+      bash = bash.exe;
     })
   ];
 

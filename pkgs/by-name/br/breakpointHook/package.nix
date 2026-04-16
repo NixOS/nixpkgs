@@ -28,6 +28,6 @@ makeSetupHook {
     # The default interactive shell in case $debugShell is not set in the derivation.
     # Can be overridden to zsh or fish, etc.
     # This shell is also used to load the env variables before the $debugShell is started.
-    bashInteractive = lib.getExe bashInteractive;
+    bashInteractive = bashInteractive.exe;
   };
 } ./breakpoint-hook.sh

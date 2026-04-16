@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tabula/backend.py \
-      --replace-fail '"java"' '"${lib.getExe jre}"'
+      --replace-fail '"java"' '"${jre.exe}"'
   '';
 
   build-system = [

@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeBinaryWrapper '${lib.getExe electron_39}' "$out/bin/zulip" \
+    makeBinaryWrapper '${electron_39.exe}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
       --inherit-argv0
 

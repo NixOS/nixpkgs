@@ -60,7 +60,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         EnvironmentFile = cfg.environmentFiles;
-        ExecStart = "${lib.getExe cfg.package} -nobrowser -data='${cfg.dataDir}'";
+        ExecStart = "${cfg.package.exe} -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };

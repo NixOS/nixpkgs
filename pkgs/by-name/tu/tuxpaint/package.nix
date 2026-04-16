@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "COMPLETIONDIR=$(out)/share/bash-completion/completions"
-    "GPERF=${lib.getExe gperf}"
+    "GPERF=${gperf.exe}"
     "PREFIX=$(out)"
   ];
 

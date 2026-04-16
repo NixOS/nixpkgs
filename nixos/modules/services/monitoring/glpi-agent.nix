@@ -84,7 +84,7 @@ in
 
       serviceConfig = {
         ExecStart = lib.escapeShellArgs [
-          "${lib.getExe cfg.package}"
+          "${cfg.package.exe}"
           "--conf-file"
           "${configFile}"
           "--vardir"

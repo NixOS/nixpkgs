@@ -101,7 +101,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf dataDir;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
       };
     };
 

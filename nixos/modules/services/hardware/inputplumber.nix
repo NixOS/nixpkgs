@@ -26,7 +26,7 @@ in
       restartIfChanged = true;
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package}";
+        ExecStart = "${cfg.package.exe}";
         Restart = "on-failure";
         RestartSec = "5";
       };

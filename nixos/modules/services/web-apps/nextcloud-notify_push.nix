@@ -148,7 +148,7 @@ in
           Type = "oneshot";
           User = "nextcloud";
           Group = "nextcloud";
-          ExecStart = "${lib.getExe cfgN.occ} notify_push:setup ${cfg.nextcloudUrl}/push";
+          ExecStart = "${cfgN.occ.exe} notify_push:setup ${cfg.nextcloudUrl}/push";
           LoadCredential = config.systemd.services.nextcloud-cron.serviceConfig.LoadCredential;
           RestartMode = "direct";
           Restart = "on-failure";

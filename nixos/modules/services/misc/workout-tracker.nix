@@ -70,7 +70,7 @@ in
       }
       // cfg.settings;
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         DynamicUser = true;
         StateDirectory = stateDir;
         WorkingDirectory = "%S/${stateDir}";

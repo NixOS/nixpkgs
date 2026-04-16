@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
-    makeWrapper ${lib.getExe jre} $out/bin/KeY \
+    makeWrapper ${jre.exe} $out/bin/KeY \
       --prefix PATH : ${
         lib.makeBinPath [
           z3

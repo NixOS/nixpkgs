@@ -483,7 +483,7 @@ in
 
         script = ''
           fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
-          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
+          ${cfg.secureBoot.sbctl.exe} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
         '';
       };
 

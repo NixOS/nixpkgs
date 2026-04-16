@@ -119,7 +119,7 @@ buildDotnetModule (finalAttrs: {
   postFixup = ''
     rm -f $out/lib/$pname/${project}
     substituteInPlace $out/bin/${project} \
-      --replace-fail "$out/lib/$pname/${project}" "${lib.getExe dotnet-runtime}\" \"$out/lib/$pname/${project}.dll"
+      --replace-fail "$out/lib/$pname/${project}" "${dotnet-runtime.exe}\" \"$out/lib/$pname/${project}.dll"
   '';
 
   passthru = {

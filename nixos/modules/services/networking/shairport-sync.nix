@@ -167,7 +167,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${lib.getExe cfg.package} ${cfg.arguments}";
+        ExecStart = "${cfg.package.exe} ${cfg.arguments}";
         Restart = "on-failure";
         RuntimeDirectory = "shairport-sync";
       };

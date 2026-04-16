@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest_doctestplus/plugin.py \
-      --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
+      --replace-fail '"git"' '"${gitMinimal.exe}"'
   '';
 
   build-system = [

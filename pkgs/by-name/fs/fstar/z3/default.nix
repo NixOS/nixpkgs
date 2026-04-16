@@ -94,8 +94,8 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    ln -s ${lib.getExe fstarNewZ3} $out/bin/z3-${lib.escapeShellArg fstarNewZ3.version}
-    ln -s ${lib.getExe fstarOldZ3} $out/bin/z3-${lib.escapeShellArg fstarOldZ3.version}
+    ln -s ${fstarNewZ3.exe} $out/bin/z3-${lib.escapeShellArg fstarNewZ3.version}
+    ln -s ${fstarOldZ3.exe} $out/bin/z3-${lib.escapeShellArg fstarOldZ3.version}
   '';
 
   passthru = {

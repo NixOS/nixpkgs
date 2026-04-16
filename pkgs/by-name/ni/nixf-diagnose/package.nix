@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-vHW2AnUxBuG9mlpMB0f9eK4M1VlJPm5YtwjXksx/uik=";
   };
 
-  env.NIXF_TIDY_PATH = lib.getExe nixf;
+  env.NIXF_TIDY_PATH = nixf.exe;
 
   cargoHash = "sha256-L6wiYUzlzginjhu23EBPAteZ2nTIqUE6mC2q1yfKWs4=";
 

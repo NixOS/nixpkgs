@@ -57,7 +57,7 @@ maven.buildMavenPackage {
     runHook preInstall
 
     install -Dm644 target/jaxodraw-*-with-deps.jar $out/lib/jaxodraw/jaxodraw.jar
-    makeWrapper ${lib.getExe jre} $out/bin/jaxodraw \
+    makeWrapper ${jre.exe} $out/bin/jaxodraw \
       --add-flags "-jar $out/lib/jaxodraw/jaxodraw.jar"
 
     install -Dm644 src/site/resources/images/top.png $out/share/icons/hicolor/128x128/apps/jaxodraw.png

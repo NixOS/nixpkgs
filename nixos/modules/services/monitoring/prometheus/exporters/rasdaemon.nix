@@ -51,7 +51,7 @@ in
     serviceConfig = {
       ExecStart = escapeSystemdExecArgs (
         [
-          (getExe pkgs.prometheus-rasdaemon-exporter)
+          (pkgs.prometheus-rasdaemon-exporter.exe)
           "--address"
           cfg.listenAddress
           "--port"

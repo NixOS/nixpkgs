@@ -208,7 +208,7 @@ in
       bwrap = {
         owner = "root";
         group = "root";
-        source = lib.getExe pkgs.bubblewrap;
+        source = pkgs.bubblewrap.exe;
         setuid = true;
       };
     };

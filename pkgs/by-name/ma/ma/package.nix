@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    substituteInPlace ./build --replace-fail cc ${lib.getExe stdenv.cc}
+    substituteInPlace ./build --replace-fail cc ${stdenv.cc.exe}
   '';
 
   buildInputs = [

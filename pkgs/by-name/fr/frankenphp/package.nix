@@ -114,7 +114,7 @@ buildGoModule (finalAttrs: {
             '';
           }
           ''
-            ${lib.getExe finalAttrs.finalPackage} php-cli $phpScript > $out
+            ${finalAttrs.finalPackage.exe} php-cli $phpScript > $out
           '';
     };
   };

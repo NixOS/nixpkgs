@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     mv build/install/source/{lib,user-dictionaries} $out
 
-    makeWrapper ${lib.getExe jdk} $out/bin/marytts-server \
+    makeWrapper ${jdk.exe} $out/bin/marytts-server \
       --add-flags "-cp \"$out/lib/*\"" \
       --append-flags "marytts.server.Mary"
 

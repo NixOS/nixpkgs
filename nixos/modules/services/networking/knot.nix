@@ -355,7 +355,7 @@ in
           Type = "notify";
           ExecStart = escapeSystemdExecArgs (
             [
-              (lib.getExe cfg.package)
+              (cfg.package.exe)
               "--config=${configFile}"
               "--socket=${socketFile}"
             ]

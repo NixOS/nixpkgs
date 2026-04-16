@@ -19,13 +19,12 @@ in
     let
       runexec = lib.getExe' pkgs.benchexec "runexec";
       echo = toString pkgs.benchexec;
-      test = lib.getExe (
-        pkgs.writeShellApplication rec {
+      test =
+        (pkgs.writeShellApplication rec {
           name = "test";
           meta.mainProgram = name;
           text = "echo '${echo}'";
-        }
-      );
+        }).exe;
       wd = "/tmp";
       stdout = "${wd}/runexec.out";
       stderr = "${wd}/runexec.err";

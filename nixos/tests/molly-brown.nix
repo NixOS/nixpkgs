@@ -14,7 +14,7 @@ in
       let
         inherit (config.networking) hostName;
         cfg = config.services.molly-brown;
-        openssl = pkgs.lib.getExe pkgs.openssl;
+        openssl = pkgs.openssl.exe;
       in
       {
 

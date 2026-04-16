@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out kernel/x86/microcode
-    ${stdenvNoCC.hostPlatform.emulator buildPackages} ${lib.getExe iucode-tool} -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
+    ${stdenvNoCC.hostPlatform.emulator buildPackages} ${iucode-tool.exe} -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
     touch -d @$SOURCE_DATE_EPOCH kernel/x86/microcode/GenuineIntel.bin
     echo kernel/x86/microcode/GenuineIntel.bin | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- > $out/intel-ucode.img
 

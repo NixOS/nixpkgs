@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $electronDeps/node_modules $out/share/Sylk/app/node_modules
     ln -s $deps/node_modules $out/share/Sylk/node_modules
 
-    makeWrapper ${lib.getExe electron} $out/bin/sylk \
+    makeWrapper ${electron.exe} $out/bin/sylk \
       --add-flags $out/share/Sylk/app \
       --inherit-argv0
 

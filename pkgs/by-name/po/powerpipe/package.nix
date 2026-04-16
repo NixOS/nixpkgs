@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      command = "${lib.getExe powerpipe} --version";
+      command = "${powerpipe.exe} --version";
       package = powerpipe;
       version = "v${finalAttrs.version}";
     };

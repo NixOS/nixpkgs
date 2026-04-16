@@ -51,7 +51,7 @@ appimageTools.wrapType2 {
       exit 1
     else
       # Resize and install the icon
-      ${lib.getExe imagemagick} ${appimageContents}/capacities.png -resize 512x512 capacities_512.png
+      ${imagemagick.exe} ${appimageContents}/capacities.png -resize 512x512 capacities_512.png
       install -m 444 -D capacities_512.png $out/share/icons/hicolor/512x512/apps/capacities.png
     fi
   '';

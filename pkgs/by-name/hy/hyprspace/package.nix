@@ -33,9 +33,9 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.updateScript = writeShellScript "update" ''
-    ${lib.getExe nix-update} hyprspace
+    ${nix-update.exe} hyprspace
     nix () {
-      ${lib.getExe nix} --extra-experimental-features 'flakes nix-command' "$@"
+      ${nix.exe} --extra-experimental-features 'flakes nix-command' "$@"
     }
     cat "$(
       nix build --print-out-paths --no-link \

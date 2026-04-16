@@ -116,7 +116,7 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = getExe cfg.package;
+          ExecStart = cfg.package.exe;
 
           Type = "simple";
           Restart = "on-failure";

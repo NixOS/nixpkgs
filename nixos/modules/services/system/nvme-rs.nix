@@ -153,7 +153,7 @@ in
         in
         {
           ExecStart = lib.escapeShellArgs [
-            "${lib.getExe cfg.package}"
+            "${cfg.package.exe}"
             "daemon"
             "--config"
             "${configFile}"

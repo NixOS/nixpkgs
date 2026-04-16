@@ -69,7 +69,7 @@ in
       requires = [ "redis-lanraragi.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         DynamicUser = true;
         StateDirectory = "lanraragi";
         RuntimeDirectory = "lanraragi";
@@ -98,7 +98,7 @@ in
         EOF
       ''
       + lib.optionalString (cfg.passwordFile != null) ''
-        ${lib.getExe pkgs.redis} -h 127.0.0.1 -p ${toString cfg.redis.port} ${
+        ${pkgs.redis.exe} -h 127.0.0.1 -p ${toString cfg.redis.port} ${
           lib.optionalString (cfg.redis.passwordFile != null) ''-a "$(head -n1 ${cfg.redis.passwordFile})"''
         }<<EOF
           SELECT 2

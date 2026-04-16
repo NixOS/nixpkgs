@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/katex/
     mkdir $out/bin
     mv * $out/lib/node_modules/katex/
-    makeWrapper ${lib.getExe nodejs} $out/bin/katex \
+    makeWrapper ${nodejs.exe} $out/bin/katex \
       --add-flags "$out/lib/node_modules/katex/cli.js" \
       --set NODE_PATH "$out/lib/node_modules/katex/node_modules"
 

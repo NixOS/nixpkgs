@@ -96,7 +96,7 @@ in
 
           localTar = {
             dumpCommand = pkgs.writeScript "createTarArchive" ''
-              ${lib.getExe pkgs.gnutar} cf - ${dataDir}
+              ${pkgs.gnutar.exe} cf - ${dataDir}
             '';
             createCommand = "import-tar";
             repo = localTarRepo;

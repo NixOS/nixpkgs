@@ -36,7 +36,7 @@ in
       if [ -n "$SSH_CONNECTION" ]; then
         mkdir -p "''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
         export SSH_AUTH_SOCK="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/ssh-agent-switcher.sock"
-        ${lib.getExe cfg.package} --daemon --socket-path="$SSH_AUTH_SOCK" 2>/dev/null || true
+        ${cfg.package.exe} --daemon --socket-path="$SSH_AUTH_SOCK" 2>/dev/null || true
       fi
     '';
   };

@@ -47,7 +47,7 @@ in
         ExecStart = [
           (utils.escapeSystemdExecArgs (
             [
-              (lib.getExe cfg.package)
+              (cfg.package.exe)
               "--listen-address"
               url
               "--expiration"

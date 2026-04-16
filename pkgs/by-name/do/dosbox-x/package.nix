@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     # Version output on stderr, program returns status code 1
-    command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+    command = "${finalAttrs.finalPackage.exe} -version 2>&1 || true";
   };
 
   meta = {

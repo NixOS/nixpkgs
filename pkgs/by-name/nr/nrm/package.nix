@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/nrm
     mkdir $out/bin
     mv * $out/lib/node_modules/nrm/
-    makeWrapper ${lib.getExe nodejs} $out/bin/nrm \
+    makeWrapper ${nodejs.exe} $out/bin/nrm \
       --add-flags "$out/lib/node_modules/nrm/dist/index.js" \
       --set "NODE_PATH" "$out/lib/node_modules/nrm/node_modules"
 

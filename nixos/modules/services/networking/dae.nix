@@ -130,18 +130,18 @@ in
 
         systemd.services.dae =
           let
-            daeBin = lib.getExe cfg.package;
+            daeBin = cfg.package.exe;
 
             configPath =
               if cfg.configFile != null then cfg.configFile else pkgs.writeText "config.dae" cfg.config;
 
             TxChecksumIpGenericWorkaround =
               with lib;
-              (getExe pkgs.writeShellApplication {
+              (pkgs.writeShellApplication.exe {
                 name = "disable-tx-checksum-ip-generic";
                 text = with pkgs; ''
-                  iface=$(${iproute2}/bin/ip route | ${lib.getExe gawk} '/default/ {print $5}')
-                  ${lib.getExe ethtool} -K "$iface" tx-checksum-ip-generic off
+                  iface=$(${iproute2}/bin/ip route | ${gawk.exe} '/default/ {print $5}')
+                  ${ethtool.exe} -K "$iface" tx-checksum-ip-generic off
                 '';
               });
           in

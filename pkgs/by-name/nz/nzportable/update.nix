@@ -7,7 +7,7 @@
   common-updater-scripts,
 }:
 
-lib.getExe (writeShellApplication {
+(writeShellApplication {
   name = "nzp-updater";
   runtimeInputs = [
     jq
@@ -38,4 +38,4 @@ lib.getExe (writeShellApplication {
     update assets newest
     update quakec bleeding-edge
   '';
-})
+}).exe

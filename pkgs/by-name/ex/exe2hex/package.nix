@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace exe2hex.py \
-      --replace-fail "/usr/bin/expect" "${lib.getExe expect}"
+      --replace-fail "/usr/bin/expect" "${expect.exe}"
   '';
 
   postInstall = ''

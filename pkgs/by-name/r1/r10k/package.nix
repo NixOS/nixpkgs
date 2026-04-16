@@ -29,7 +29,7 @@ bundlerApp rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      command = "${lib.getExe r10k} version";
+      command = "${r10k.exe} version";
       package = r10k;
       version = (import ./gemset.nix).r10k.version;
     };

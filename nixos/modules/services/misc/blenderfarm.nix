@@ -93,7 +93,7 @@ in
           echo "nix-blender" > VersionCustom
         fi
         rm -f BlenderData/nix-blender-linux64/blender
-        ln -s ${lib.getExe cfg.blenderPackage} BlenderData/nix-blender-linux64/blender
+        ln -s ${cfg.blenderPackage.exe} BlenderData/nix-blender-linux64/blender
       ''
       + lib.optionalString (cfg.basicSecurityPasswordFile != null) ''
         BLENDFARM_PASSWORD=$(${pkgs.systemd}/bin/systemd-creds cat BLENDFARM_PASS_FILE)

@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
       -e 's|vcpkg_install_package(boost-filesystem boost-interprocess thrift)||' \
       -i CMakeLists.txt
 
-    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift20})|' -i remote/CMakeLists.txt
+    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${thrift20.exe})|' -i remote/CMakeLists.txt
 
     mkdir jcef_build
     cd jcef_build

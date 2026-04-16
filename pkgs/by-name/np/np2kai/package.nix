@@ -110,12 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater {
     # 0.86 version prefix is implied, add it back for our versioning
-    tagConverter = lib.getExe (writeShellApplication {
-      name = "update-np2kai";
-      text = ''
-        sed -e 's/^rev\./0.86rev/g'
-      '';
-    });
+    tagConverter =
+      (writeShellApplication {
+        name = "update-np2kai";
+        text = ''
+          sed -e 's/^rev\./0.86rev/g'
+        '';
+      }).exe;
   };
 
   meta = {

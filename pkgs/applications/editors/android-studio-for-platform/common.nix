@@ -163,7 +163,7 @@ runCommand "${pname}-${version}"
     inherit pname version;
     startScript = ''
       #!${bash}/bin/bash
-      ${lib.getExe fhsEnv} ${androidStudioForPlatform}/bin/studio.sh "$@"
+      ${fhsEnv.exe} ${androidStudioForPlatform}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;

@@ -286,7 +286,7 @@ let
                 unset ANDROID_HOME
               fi
             ''}
-            exec ${lib.getExe fhsEnv} ${lib.getExe androidStudio} "$@"
+            exec ${fhsEnv.exe} ${androidStudio.exe} "$@"
           '';
         preferLocalBuild = true;
         allowSubstitutes = false;

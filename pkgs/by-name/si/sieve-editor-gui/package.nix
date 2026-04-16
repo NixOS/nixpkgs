@@ -54,7 +54,7 @@ buildNpmPackage {
 
     install -D $out/electron/resources/libs/icons/linux.png $out/share/icons/hicolor/64x64/apps/sieve.png
 
-    makeWrapper ${lib.getExe electron} $out/bin/sieve-editor-gui \
+    makeWrapper ${electron.exe} $out/bin/sieve-editor-gui \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/electron/resources/main_esm.js
   ''

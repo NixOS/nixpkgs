@@ -53,11 +53,11 @@ buildPythonPackage rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $DST_PREFIX/common/macos
-    ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/macos/
+    ln -s ${selenium-manager.exe} $DST_PREFIX/common/macos/
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $DST_PREFIX/common/linux/
-    ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/linux/
+    ln -s ${selenium-manager.exe} $DST_PREFIX/common/linux/
   '';
 
   build-system = [ setuptools ];

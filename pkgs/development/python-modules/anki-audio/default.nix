@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     in
     ''
       mkdir -p mac/${archDir}/dist/audio/Resources
-      ln -s ${lib.getExe mpv-unwrapped} ${lib.getExe lame} mac/${archDir}/dist/audio/Resources/
+      ln -s ${mpv-unwrapped.exe} ${lame.exe} mac/${archDir}/dist/audio/Resources/
     '';
 
   pythonImportsCheck = [ "anki_audio" ];

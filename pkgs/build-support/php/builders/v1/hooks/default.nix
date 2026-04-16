@@ -24,7 +24,7 @@ in
       cacert
     ];
     substitutions = {
-      phpScriptUtils = lib.getExe php-script-utils;
+      phpScriptUtils = php-script-utils.exe;
     };
   } ./composer-repository-hook.sh;
 
@@ -40,7 +40,7 @@ in
       # Specify the stdenv's `diff` by abspath to ensure that the user's build
       # inputs do not cause us to find the wrong `diff`.
       cmp = "${lib.getBin buildPackages.diffutils}/bin/cmp";
-      phpScriptUtils = lib.getExe php-script-utils;
+      phpScriptUtils = php-script-utils.exe;
     };
   } ./composer-install-hook.sh;
 
@@ -56,7 +56,7 @@ in
       # Specify the stdenv's `diff` by abspath to ensure that the user's build
       # inputs do not cause us to find the wrong `diff`.
       cmp = "${lib.getBin buildPackages.diffutils}/bin/cmp";
-      phpScriptUtils = lib.getExe php-script-utils;
+      phpScriptUtils = php-script-utils.exe;
     };
   } ./composer-with-plugin-vendor-hook.sh;
 }

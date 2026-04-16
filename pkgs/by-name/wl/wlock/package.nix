@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-    ("WAYLAND_SCANNER=" + lib.getExe wayland-scanner)
+    ("WAYLAND_SCANNER=" + wayland-scanner.exe)
   ];
 
   doInstallCheck = true;

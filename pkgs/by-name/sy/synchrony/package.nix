@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       in
       runCommand "synchrony-test" { } ''
         mkdir -p $out
-        ${lib.getExe finalAttrs.finalPackage} deobfuscate ${obfuscated} -o $out/deobfuscated.js
+        ${finalAttrs.finalPackage.exe} deobfuscate ${obfuscated} -o $out/deobfuscated.js
       '';
 
     updateScript = nix-update-script { };

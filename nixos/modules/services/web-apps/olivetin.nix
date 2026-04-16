@@ -115,7 +115,7 @@ in
         shopt -s nullglob
 
         tmp="$(mktemp)"
-        ${lib.getExe pkgs.yq-go} eval-all '. as $item ireduce ({}; . *+ $item)' \
+        ${pkgs.yq-go.exe} eval-all '. as $item ireduce ({}; . *+ $item)' \
           ${settingsFormat.generate "olivetin-config.yaml" cfg.settings} \
           $CREDENTIALS_DIRECTORY/config-*.yaml > "$tmp"
         chmod -w "$tmp"
@@ -132,7 +132,7 @@ in
 
         LoadCredential = lib.imap0 (i: path: "config-${toString i}.yaml:${path}") cfg.extraConfigFiles;
 
-        ExecStart = "${lib.getExe cfg.package} -configdir /run/olivetin/config";
+        ExecStart = "${cfg.package.exe} -configdir /run/olivetin/config";
       };
     };
 

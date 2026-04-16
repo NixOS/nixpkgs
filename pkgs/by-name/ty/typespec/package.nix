@@ -86,9 +86,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       packages/compiler/package.json \
       "$out/lib/typespec"
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/tsp" \
+    makeWrapper "${nodejs.exe}" "$out/bin/tsp" \
       --add-flags "$out/lib/typespec/packages/compiler/cmd/tsp.js"
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/tsp-server" \
+    makeWrapper "${nodejs.exe}" "$out/bin/tsp-server" \
       --add-flags "$out/lib/typespec/packages/compiler/cmd/tsp-server.js"
 
     runHook postInstall

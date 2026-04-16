@@ -98,7 +98,7 @@ in
         ReadOnlyPaths = cfg.settings.filter-file or "";
         ExecStart = [
           ""
-          "${getExe cfg.package} ${settingsToArgs cfg.settings}"
+          "${cfg.package.exe} ${settingsToArgs cfg.settings}"
         ];
       };
     };

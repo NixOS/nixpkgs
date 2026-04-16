@@ -73,7 +73,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = elasticsearch-curator;
-      command = "${lib.getExe elasticsearch-curator} --version";
+      command = "${elasticsearch-curator.exe} --version";
     };
     updateScript = nix-update-script { };
   };

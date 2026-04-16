@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # cleanup
     find $out/lib/packages/shadcn -name '*.ts' -delete
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/shadcn \
+    makeWrapper ${nodejs.exe} $out/bin/shadcn \
       --inherit-argv0 \
       --add-flags $out/lib/packages/shadcn/dist/index.js
 

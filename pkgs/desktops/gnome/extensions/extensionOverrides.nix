@@ -121,7 +121,7 @@ lib.trivial.pipe super [
     # https://github.com/NixOS/nixpkgs/issues/136111
     postPatch = ''
       substituteInPlace "schemas/org.gnome.shell.extensions.display-brightness-ddcutil.gschema.xml" \
-        --replace-fail "/usr/bin/ddcutil" ${lib.getExe ddcutil}
+        --replace-fail "/usr/bin/ddcutil" ${ddcutil.exe}
     '';
     postFixup = ''
       rm "$out/share/gnome-shell/extensions/display-brightness-ddcutil@themightydeity.github.com/schemas/gschemas.compiled"

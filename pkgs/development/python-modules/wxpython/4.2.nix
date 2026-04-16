@@ -76,7 +76,7 @@ buildPythonPackage rec {
 
   # https://github.com/wxWidgets/Phoenix/issues/2575
   postPatch = ''
-    ln -s ${lib.getExe buildPackages.waf} bin/waf
+    ln -s ${buildPackages.waf.exe} bin/waf
     substituteInPlace build.py \
       --replace-fail "distutils.dep_util" "setuptools.modified" \
       --replace-fail "runcmd(cmd, fatal=False)" "runcmd(cmd, fatal=True)" # fail when pytest reports errors

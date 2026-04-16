@@ -163,7 +163,7 @@ in
         ++ attrValues (mapAttrs (name: value: name + "=" + toString value) cfg.extraConfig);
         EnvironmentFile = optional (cfg.secretsFile != null) cfg.secretsFile;
         ExecStartPre = "${lib.getExe' cfg.package "migrate"}";
-        ExecStart = "${getExe cfg.package} start";
+        ExecStart = "${cfg.package.exe} start";
         Restart = "on-failure";
       };
     };

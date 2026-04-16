@@ -1288,7 +1288,7 @@ in
               BridgeRelay = true;
               ExtORPort.port = lib.mkDefault "auto";
               ServerTransportPlugin.transports = lib.mkDefault [ "obfs4" ];
-              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe cfg.obfs4Package} managed";
+              ServerTransportPlugin.exec = lib.mkDefault "${cfg.obfs4Package.exe} managed";
             }
         // lib.optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;

@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication {
   postFixup = ''
     wrapProgram $out/bin/${pname} \
       --add-flags "--patterns ${allowedPatternsPath}" \
-      --add-flags "--nix-exe ${lib.getExe nix}" \
+      --add-flags "--nix-exe ${nix.exe}" \
       ${builtins.concatStringsSep " " extraWrapperArgs}
   '';
 

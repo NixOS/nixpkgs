@@ -9,8 +9,8 @@
 makeSetupHook {
   name = "memcached-test-hook";
   substitutions = {
-    memcached = lib.getExe memcached;
-    nc = lib.getExe netcat;
+    memcached = memcached.exe;
+    nc = netcat.exe;
   };
   passthru.tests = {
     simple = callPackage ./test.nix { };

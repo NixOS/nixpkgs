@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace flye/polishing/alignment.py \
-      --replace-fail "/bin/bash" "${lib.getExe bash}"
+      --replace-fail "/bin/bash" "${bash.exe}"
   '';
 
   build-system = [ python3Packages.setuptools ];

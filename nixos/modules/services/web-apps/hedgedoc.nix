@@ -308,7 +308,7 @@ in
         Group = name;
 
         Restart = "always";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         RuntimeDirectory = [ name ];
         StateDirectory = [ name ];
         WorkingDirectory = "/run/${name}";

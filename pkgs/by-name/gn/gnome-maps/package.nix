@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "--cross-file=${writeText "crossfile.ini" ''
       [binaries]
-      gjs = '${lib.getExe gjs}'
+      gjs = '${gjs.exe}'
     ''}"
   ];
 

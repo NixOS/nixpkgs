@@ -21,9 +21,9 @@ buildGhidraScripts {
 
   postPatch = ''
     # Replace subprocesses with store versions
-    substituteInPlace binwalk.py --replace-fail 'subprocess.call(["binwalk"' 'subprocess.call(["${lib.getExe binwalk}"'
-    substituteInPlace yara.py --replace-fail 'subprocess.check_output(["yara"' 'subprocess.check_output(["${lib.getExe yara}"'
-    substituteInPlace YaraSearch.py --replace-fail '"yara "' '"${lib.getExe yara} "'
+    substituteInPlace binwalk.py --replace-fail 'subprocess.call(["binwalk"' 'subprocess.call(["${binwalk.exe}"'
+    substituteInPlace yara.py --replace-fail 'subprocess.check_output(["yara"' 'subprocess.check_output(["${yara.exe}"'
+    substituteInPlace YaraSearch.py --replace-fail '"yara "' '"${yara.exe} "'
   ''
   + (
     if useSwift then

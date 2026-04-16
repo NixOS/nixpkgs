@@ -20,7 +20,7 @@ let
   launcher = writeShellScript "bisq2-webcam-app-launcher" ''
     ${socat}/bin/socat TCP-LISTEN:8000,keepalive,fork STDIO &
     socat_pid=$!
-    LD_LIBRARY_PATH=${libraryPath} "${lib.getExe jdk}" -classpath @out@/lib/app/webcam-app-${version}-all.jar:${bisq2}/lib/app/* bisq.webcam.WebcamAppLauncher "$@"
+    LD_LIBRARY_PATH=${libraryPath} "${jdk.exe}" -classpath @out@/lib/app/webcam-app-${version}-all.jar:${bisq2}/lib/app/* bisq.webcam.WebcamAppLauncher "$@"
     kill $socat_pid
   '';
 in

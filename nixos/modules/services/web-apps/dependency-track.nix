@@ -612,7 +612,7 @@ in
             export ALPINE_LDAP_BIND_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/ldap_bind_password")"
           ''}
 
-          exec ${lib.getExe pkgs.jre_headless} ${
+          exec ${pkgs.jre_headless.exe} ${
             lib.escapeShellArgs (
               cfg.javaArgs
               ++ [

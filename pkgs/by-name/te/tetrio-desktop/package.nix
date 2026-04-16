@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       '';
 
   postFixup = lib.optionalString (!isDarwin) ''
-    makeShellWrapper '${lib.getExe electron}' $out/bin/tetrio \
+    makeShellWrapper '${electron.exe}' $out/bin/tetrio \
       --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/share/TETR.IO/app.asar

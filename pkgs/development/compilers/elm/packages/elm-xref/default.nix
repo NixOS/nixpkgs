@@ -33,7 +33,7 @@ buildNpmPackage (finalAttrs: {
       registryDat = ./registry.dat;
     })
     + ''
-      ln -sf ${lib.getExe elmPackages.elm} node_modules/.bin/elm
+      ln -sf ${elmPackages.elm.exe} node_modules/.bin/elm
     '';
 
   passthru.updateScript = ./update.sh;

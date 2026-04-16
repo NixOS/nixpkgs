@@ -161,7 +161,7 @@ in
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         User = "miniflux";
         DynamicUser = true;
         RuntimeDirectory = "miniflux";

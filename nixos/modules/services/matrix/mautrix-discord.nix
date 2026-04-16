@@ -517,7 +517,7 @@ in
           RestartSec = 30;
           WorkingDirectory = dataDir;
           ExecStart = ''
-            ${lib.getExe cfg.package} \
+            ${cfg.package.exe} \
               --config='${settingsFile}'
           '';
           EnvironmentFile = cfg.environmentFile;

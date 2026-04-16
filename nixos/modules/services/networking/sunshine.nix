@@ -163,7 +163,7 @@ in
       owner = "root";
       group = "root";
       capabilities = "cap_sys_admin+p";
-      source = getExe cfg.package;
+      source = cfg.package.exe;
     };
 
     systemd.user.services.sunshine = {
@@ -183,7 +183,7 @@ in
         # only add configFile if an application or a setting other than the default port is set to allow configuration from web UI
         ExecStart = escapeSystemdExecArgs (
           [
-            (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${getExe cfg.package}")
+            (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${cfg.package.exe}")
           ]
           ++ optionals (
             cfg.applications.apps != [ ]

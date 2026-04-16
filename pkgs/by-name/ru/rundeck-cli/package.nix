@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/rundeck-cli/rundeck-cli.jar
 
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe jre11_minimal_headless} $out/bin/rd \
+    makeWrapper ${jre11_minimal_headless.exe} $out/bin/rd \
       --add-flags "-jar $out/share/rundeck-cli/rundeck-cli.jar"
 
     runHook postInstall

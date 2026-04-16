@@ -78,7 +78,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   buildFlags = [
     # Makefile variables which must be set explicitly
     "CUDA=${lib.getLib cuda_cudart}"
-    "NVCC=${lib.getExe cuda_nvcc}" # TODO: shoud be using cuda_nvcc from pkgsBuildHost
+    "NVCC=${cuda_nvcc.exe}" # TODO: shoud be using cuda_nvcc from pkgsBuildHost
 
     # Make targets
     # NOTE: We cannot use `all` because it includes the driver, which needs the driver source code.

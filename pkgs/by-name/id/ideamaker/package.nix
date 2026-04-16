@@ -127,21 +127,22 @@ stdenv.mkDerivation {
     })
   ];
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "ideamaker-update-script";
-    runtimeInputs = [
-      curl
-      common-updater-scripts
-      jq
-    ];
-    text = ''
-      update-source-version ideamaker "$(
-        curl 'https://api.raise3d.com/ideamakerio-v1.1/hq/ofpVersionControl/find' -X 'POST' \
-        | jq -r '.data.release_version.linux_64_deb_url' \
-        | sed -E 's#.*/release/([0-9]+\.[0-9]+\.[0-9]+)/ideaMaker_\1\.([0-9]+).*#\1.\2#'
-      )"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "ideamaker-update-script";
+      runtimeInputs = [
+        curl
+        common-updater-scripts
+        jq
+      ];
+      text = ''
+        update-source-version ideamaker "$(
+          curl 'https://api.raise3d.com/ideamakerio-v1.1/hq/ofpVersionControl/find' -X 'POST' \
+          | jq -r '.data.release_version.linux_64_deb_url' \
+          | sed -E 's#.*/release/([0-9]+\.[0-9]+\.[0-9]+)/ideaMaker_\1\.([0-9]+).*#\1.\2#'
+        )"
+      '';
+    }).exe;
 
   meta = {
     inherit description;

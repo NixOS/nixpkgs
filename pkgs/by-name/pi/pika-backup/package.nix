@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./borg-path.patch {
-      borg = lib.getExe borgbackup;
+      borg = borgbackup.exe;
     })
   ];
 

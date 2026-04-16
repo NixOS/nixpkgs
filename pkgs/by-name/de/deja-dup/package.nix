@@ -63,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # Check https://gitlab.gnome.org/World/deja-dup/-/blob/main/meson.options
-    (lib.mesonOption "borg_command" (lib.getExe borgbackup))
-    (lib.mesonOption "duplicity_command" (lib.getExe duplicity))
-    (lib.mesonOption "rclone_command" (lib.getExe rclone))
-    (lib.mesonOption "restic_command" (lib.getExe restic))
+    (lib.mesonOption "borg_command" (borgbackup.exe))
+    (lib.mesonOption "duplicity_command" (duplicity.exe))
+    (lib.mesonOption "rclone_command" (rclone.exe))
+    (lib.mesonOption "restic_command" (restic.exe))
     (lib.mesonEnable "packagekit" false) # packagekit-glib not packaged
   ];
 

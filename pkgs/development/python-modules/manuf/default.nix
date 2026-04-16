@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    ${lib.getExe wireshark-cli} -G manuf > manuf/manuf
+    ${wireshark-cli.exe} -G manuf > manuf/manuf
     cat ${wireshark-cli}/share/wireshark/wka >> manuf/manuf
   '';
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   passthru.tests = {
     testMacAddress = runCommand "${pname}-test" { } ''
-      ${lib.getExe manuf} BC:EE:7B:00:00:00 > $out
+      ${manuf.exe} BC:EE:7B:00:00:00 > $out
       [ "$(cat $out | tr -d '\n')" = "Vendor(manuf='ASUSTekC', manuf_long='ASUSTek COMPUTER INC.', comment=None)" ]
     '';
   };

@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace $out/bin/miriway-background \
-      --replace-fail 'exec swaybg' 'exec ${lib.getExe swaybg}'
+      --replace-fail 'exec swaybg' 'exec ${swaybg.exe}'
 
     substituteInPlace $out/bin/miriway-run \
       --replace-fail 'inotifywait -qq' '${lib.getExe' inotify-tools "inotifywait"} -qq'

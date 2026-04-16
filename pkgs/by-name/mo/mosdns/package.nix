@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
   passthru.tests = {
     version = testers.testVersion {
       package = mosdns;
-      command = "${lib.getExe mosdns} version";
+      command = "${mosdns.exe} version";
     };
   };
 

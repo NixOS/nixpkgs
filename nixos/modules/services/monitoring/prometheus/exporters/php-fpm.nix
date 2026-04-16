@@ -58,7 +58,7 @@ in
     serviceConfig = {
       EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       ExecStart = ''
-        ${lib.getExe cfg.package} server \
+        ${cfg.package.exe} server \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           ${lib.concatStringsSep " \\\n  " cfg.extraFlags}

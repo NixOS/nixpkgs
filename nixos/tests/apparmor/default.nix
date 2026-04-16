@@ -3,7 +3,7 @@ let
   helloProfileContents = ''
     abi <abi/4.0>,
     include <tunables/global>
-    profile hello ${lib.getExe pkgs.hello} {
+    profile hello ${pkgs.hello.exe} {
       include <abstractions/base>
     }
   '';
@@ -59,7 +59,7 @@ in
 
   testScript =
     let
-      inherit (lib) getExe getExe';
+      inherit (lib) getExe';
     in
     ''
       machine.wait_for_unit("multi-user.target")
@@ -83,14 +83,14 @@ in
                 pkgs.writeText "expected.rules" (import ./makeExpectedPolicies.nix { inherit pkgs; })
               } ${
                 pkgs.runCommand "actual.rules" { preferLocalBuild = true; } ''
-                  ${getExe pkgs.gnused} -e 's:^${builtins.storeDir}/[^,/-]*-\([^/, ]*\):\1 \0:' ${
+                  ${pkgs.gnused.exe} -e 's:^${builtins.storeDir}/[^,/-]*-\([^/, ]*\):\1 \0:' ${
                     pkgs.apparmorRulesFromClosure {
                       name = "ping";
                       additionalRules = [ "$path/foo/** x" ];
                     } [ pkgs.libcap ]
                   } |
                   LC_ALL=C ${getExe' pkgs.coreutils "sort"} |
-                  ${getExe pkgs.gnused} -e 's:^[^ ]* ::' >$out
+                  ${pkgs.gnused.exe} -e 's:^[^ ]* ::' >$out
                 ''
               }"
           )
@@ -98,8 +98,8 @@ in
       # Test apparmor profile states by using `diff` against `aa-status`
       with subtest("apparmorProfileStates"):
           machine.succeed("${getExe' pkgs.diffutils "diff"} -u \
-            <(${getExe' pkgs.apparmor-bin-utils "aa-status"} --json | ${getExe pkgs.jq} --sort-keys . ) \
-            <(${getExe pkgs.jq} --sort-keys . ${
+            <(${getExe' pkgs.apparmor-bin-utils "aa-status"} --json | ${pkgs.jq.exe} --sort-keys . ) \
+            <(${pkgs.jq.exe} --sort-keys . ${
               pkgs.writers.writeJSON "expectedStates.json" {
                 version = "2";
                 processes = { };
@@ -113,14 +113,14 @@ in
 
       # Test apparmor profile files in /etc/apparmor.d/<name> to be either a correct symlink (sl) or have the right file contents (hello)
       with subtest("apparmorProfileTargets"):
-          machine.succeed("${getExe' pkgs.diffutils "diff"} -u <(${getExe pkgs.file} /etc/static/apparmor.d/sl) ${pkgs.writeText "expected.link" ''
+          machine.succeed("${getExe' pkgs.diffutils "diff"} -u <(${pkgs.file.exe} /etc/static/apparmor.d/sl) ${pkgs.writeText "expected.link" ''
             /etc/static/apparmor.d/sl: symbolic link to ${./sl_profile}
           ''}")
           machine.succeed("${getExe' pkgs.diffutils "diff"} -u /etc/static/apparmor.d/hello ${pkgs.writeText "expected.content" helloProfileContents}")
 
 
       with subtest("apparmorProfileEnforce"):
-          machine.succeed("${getExe pkgs.hello} 1> /tmp/test-file")
+          machine.succeed("${pkgs.hello.exe} 1> /tmp/test-file")
           machine.fail("${lib.getExe' pkgs.util-linux "hexdump"} /tmp/test-file") # no access to /tmp/test-file granted by apparmor
     '';
 }

@@ -82,7 +82,7 @@ let
           ''
             # Expose PHP Composer for scripts
             mkdir -p $out/bin
-            echo "#!${lib.getExe pkgs.dash}" > $out/bin/movim-composer
+            echo "#!${pkgs.dash.exe}" > $out/bin/movim-composer
             echo "${finalAttrs.php.packages.composer}/bin/composer --working-dir="${appDir}" \"\$@\"" >> $out/bin/movim-composer
             chmod +x $out/bin/movim-composer
           '';
@@ -129,7 +129,7 @@ let
                 echo -n "Precompressing static files with Brotli …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
                   | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe brotli.package} --keep --quality=${toString brotli.compressionLevel} --output={}.br {}
+                      ${brotli.package.exe} --keep --quality=${toString brotli.compressionLevel} --output={}.br {}
                 echo " done."
               ''
             )
@@ -138,7 +138,7 @@ let
                 echo -n "Precompressing static files with Gzip …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
                   | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe gzip.package} -c -${toString gzip.compressionLevel} {} > {}.gz
+                      ${gzip.package.exe} -c -${toString gzip.compressionLevel} {} > {}.gz
                 echo " done."
               ''
             )
@@ -887,7 +887,7 @@ in
             );
           in
           ''
-            ${lib.getExe package} config ${podConfigFlags}
+            ${package.exe} config ${podConfigFlags}
           ''
         );
       };
@@ -929,7 +929,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = "${package}/share/php/movim";
-          ExecStart = "${lib.getExe package} start";
+          ExecStart = "${package.exe} start";
         };
       };
 

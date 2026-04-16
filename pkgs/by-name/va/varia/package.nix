@@ -56,8 +56,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      --add-flag "${lib.getExe aria2}"
-      --add-flag "${lib.getExe ffmpeg}"
+      --add-flag "${aria2.exe}"
+      --add-flag "${ffmpeg.exe}"
       --add-flag "NOSNAP"
     )
   '';

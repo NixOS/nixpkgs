@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    ${lib.getExe python} unit_testing.py
+    ${python.exe} unit_testing.py
   '';
 
   meta = {

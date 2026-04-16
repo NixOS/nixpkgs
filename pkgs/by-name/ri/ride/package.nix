@@ -99,7 +99,7 @@ buildNpmPackage rec {
 
       mkdir -p $out/share/ride
       cp -r locales resources{,.pak} $out/share/ride
-      makeShellWrapper ${lib.getExe electron} $out/bin/ride \
+      makeShellWrapper ${electron.exe} $out/bin/ride \
           --add-flags $out/share/ride/resources/app.asar \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0

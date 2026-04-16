@@ -72,7 +72,7 @@ in
               '';
         in
         {
-          ExecStart = "${lib.getExe cfg.package} --config ${
+          ExecStart = "${cfg.package.exe} --config ${
             if cfg.validateConfig then (validatedConfig conf) else conf
           }  --graceful-shutdown-limit-secs ${toString cfg.gracefulShutdownLimitSecs}";
           DynamicUser = true;

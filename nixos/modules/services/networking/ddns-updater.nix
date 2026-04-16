@@ -35,7 +35,7 @@ in
       };
       serviceConfig = {
         TimeoutSec = "5min";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         RestartSec = 30;
         DynamicUser = true;
         StateDirectory = "ddns-updater";

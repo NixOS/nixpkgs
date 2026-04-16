@@ -39,8 +39,8 @@ buildDartApplication rec {
       cp --recursive --no-preserve=mode $src/* $WORKDIR
       PACKAGE_DIR=$(dirname $(EDITOR=echo nix edit --file . protoc-gen-dart))
       pushd $WORKDIR
-      ${lib.getExe dart} pub update
-      ${lib.getExe yq-go} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
+      ${dart.exe} pub update
+      ${yq-go.exe} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
       popd
     '')
   ];

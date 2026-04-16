@@ -70,10 +70,10 @@ python3Packages.buildPythonPackage rec {
 
   makeFlags = [
     "PYTHONDIR=$(PREFIX)/${python3Packages.python.sitePackages}"
-    "PYTHON_INTERPRETER=${lib.getExe python3Packages.python}"
+    "PYTHON_INTERPRETER=${python3Packages.python.exe}"
     # Override RELEASEDIR to avoid running `git describe`
     "RELEASEDIR=${pname}-${version}"
-    "SHELL_INTERPRETER=${lib.getExe bash}"
+    "SHELL_INTERPRETER=${bash.exe}"
   ];
 
   disabledTests = [

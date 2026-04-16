@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.GAG_CPP = if stdenv.hostPlatform.isDarwin then "${gfortran.outPath}/bin/cpp" else "cpp";
 
   postPatch = ''
-    substituteInPlace utilities/main/gag-makedepend.pl --replace-fail '/usr/bin/perl' ${lib.getExe perl}
+    substituteInPlace utilities/main/gag-makedepend.pl --replace-fail '/usr/bin/perl' ${perl.exe}
   '';
 
   configurePhase = ''

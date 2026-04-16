@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = fancontrol-gui;
-      command = "env QT_QPA_PLATFORM=minimal ${lib.getExe fancontrol-gui} --version";
+      command = "env QT_QPA_PLATFORM=minimal ${fancontrol-gui.exe} --version";
     };
     updateScript = nix-update-script { };
   };

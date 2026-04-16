@@ -31,7 +31,7 @@
     "org.opencontainers.image.version" = nix.version;
     "org.opencontainers.image.description" = "Nix container image";
   },
-  Cmd ? [ (lib.getExe bashInteractive) ],
+  Cmd ? [ (bashInteractive.exe) ],
   # Default Packages
   nix ? pkgs.nix,
   bashInteractive ? pkgs.bashInteractive,
@@ -77,7 +77,7 @@ let
 
     root = {
       uid = 0;
-      shell = lib.getExe bashInteractive;
+      shell = bashInteractive.exe;
       home = "/root";
       gid = 0;
       groups = [ "root" ];
@@ -97,7 +97,7 @@ let
   // lib.optionalAttrs (uid != 0) {
     "${uname}" = {
       uid = uid;
-      shell = lib.getExe bashInteractive;
+      shell = bashInteractive.exe;
       home = "/home/${uname}";
       gid = gid;
       groups = [ "${gname}" ];
@@ -332,7 +332,7 @@ let
           # may get replaced by pkgs.dockerTools.binSh & pkgs.dockerTools.usrBinEnv
           mkdir -p $out/bin $out/usr/bin
           ln -s ${lib.getExe' coreutils-full "env"} $out/usr/bin/env
-          ln -s ${lib.getExe bashInteractive} $out/bin/sh
+          ln -s ${bashInteractive.exe} $out/bin/sh
 
         ''
         + (lib.optionalString (flake-registry-path != null) ''

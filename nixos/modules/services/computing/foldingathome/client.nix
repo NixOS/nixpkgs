@@ -78,7 +78,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        exec ${lib.getExe cfg.package} ${lib.escapeShellArgs args}
+        exec ${cfg.package.exe} ${lib.escapeShellArgs args}
       '';
       serviceConfig = {
         DynamicUser = true;

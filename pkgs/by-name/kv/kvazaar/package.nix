@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace tests/util.sh --replace-fail '../libtool' '${lib.getExe libtool}'
+    substituteInPlace tests/util.sh --replace-fail '../libtool' '${libtool.exe}'
     substituteInPlace tests/util.sh --replace-fail 'TAppDecoderStatic' '${lib.getExe' hm "TAppDecoder"}'
 
     chmod +x tests/util.sh

@@ -14,7 +14,7 @@
   xvfb-run,
 }:
 let
-  inherit (lib) getExe optionals optionalString;
+  inherit (lib) optionals optionalString;
   inherit (opencv4.passthru) cudaSupport;
   inherit (stdenv.hostPlatform) isAarch64 isDarwin;
 in
@@ -93,7 +93,7 @@ runCommand "opencv4-tests"
     ]
     ++ optionals (!isAarch64 && enableGStreamer) [ "gapi" ];
 
-    testRunner = optionalString (!isDarwin) "${getExe xvfb-run} -a ";
+    testRunner = optionalString (!isDarwin) "${xvfb-run.exe} -a ";
 
     requiredSystemFeatures = [ "big-parallel" ] ++ optionals cudaSupport [ "cuda" ];
   }

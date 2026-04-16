@@ -60,7 +60,7 @@ in
         User = "postgres";
         Group = "postgres";
         ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe cfg.package)
+          (cfg.package.exe)
           "--log-level=${cfg.logLevel}"
           "--config-file=${configFile}"
         ];

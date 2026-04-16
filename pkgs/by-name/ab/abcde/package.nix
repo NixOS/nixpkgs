@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
             s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
       "Makefile";
 
-    echo 'CDPARANOIA=${lib.getExe libcdio-paranoia}' >>abcde.conf
+    echo 'CDPARANOIA=${libcdio-paranoia.exe}' >>abcde.conf
     echo CDROMREADERSYNTAX=cdparanoia >>abcde.conf
 
     substituteInPlace "abcde" \

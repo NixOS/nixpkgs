@@ -34,7 +34,7 @@ runCommandLocal "racket-test-get-version-and-variant"
             output = "$(racket -e '(require launcher/launcher) (display (current-launcher-variant))')";
           }
           {
-            expectation = "${lib.getExe racket}";
+            expectation = "${racket.exe}";
             output = "$(racket -e '(require compiler/find-exe) (display (find-exe))')";
           }
         ]

@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/bin" "$out/opt/pkl"
     cp ./pkl-cli/build/executable/jpkl "$out/opt/pkl/jpkl.jar"
 
-    makeWrapper ${lib.getExe jdk} $out/bin/pkl --add-flags "-jar $out/opt/pkl/jpkl.jar"
+    makeWrapper ${jdk.exe} $out/bin/pkl --add-flags "-jar $out/opt/pkl/jpkl.jar"
 
     ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd pkl \

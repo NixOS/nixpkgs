@@ -50,7 +50,7 @@ buildNpmPackage (finalAttrs: {
     DIR="$out/lib/node_modules/@rescript/language-server/analysis_binaries/${platformDir}"
 
     mkdir -p "$DIR"
-    ln -s ${lib.getExe rescript-editor-analysis} "$DIR"/rescript-editor-analysis
+    ln -s ${rescript-editor-analysis.exe} "$DIR"/rescript-editor-analysis
   '';
 
   nativeInstallCheckInputs = [

@@ -22,11 +22,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     jq -e '
       .contributes.configuration.properties."craftos-pc.executablePath.linux".default =
-        "${lib.meta.getExe craftos-pc}" |
+        "${craftos-pc.exe}" |
       .contributes.configuration.properties."craftos-pc.executablePath.mac".default =
-        "${lib.meta.getExe craftos-pc}" |
+        "${craftos-pc.exe}" |
       .contributes.configuration.properties."craftos-pc.executablePath.windows".default =
-        "${lib.meta.getExe craftos-pc}"
+        "${craftos-pc.exe}"
     ' \
     < package.json \
     | sponge package.json

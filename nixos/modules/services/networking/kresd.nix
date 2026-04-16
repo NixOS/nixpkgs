@@ -159,7 +159,7 @@ in
           if [[ "$USER" != knot-resolver ]]; then
             exec='exec /run/wrappers/bin/sudo -u knot-resolver'
           fi
-          $exec ${lib.getExe pkgs.socat} - /run/knot-resolver/control/''${1:-1}
+          $exec ${pkgs.socat.exe} - /run/knot-resolver/control/''${1:-1}
         '')
       ];
     };

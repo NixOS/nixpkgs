@@ -181,7 +181,7 @@ in
                 type = with lib.types; either path str;
                 default =
                   if config.video_transcription.enabled then
-                    lib.getExe pkgs.whisper-ctranslate2
+                    pkgs.whisper-ctranslate2.exe
                   else
                     # This will be in the error message when someone enables
                     # transcription manually in the web UI and tries to run a
@@ -189,7 +189,7 @@ in
                     "Set `services.peertube.settings.video_transcription.enabled = true`.";
                 defaultText = lib.literalExpression ''
                   if config.services.peertube.settings.video_transcription.enabled then
-                    lib.getExe pkgs.whisper-ctranslate2
+                    pkgs.whisper-ctranslate2.exe
                   else
                     "Set `services.peertube.settings.video_transcription.enabled = true`."
                 '';

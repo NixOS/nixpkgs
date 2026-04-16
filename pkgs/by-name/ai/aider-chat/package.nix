@@ -159,7 +159,7 @@ let
       ./replace-importlib_resources.patch
 
       (replaceVars ./fix-flake8-invoke.patch {
-        flake8 = lib.getExe python3Packages.flake8;
+        flake8 = python3Packages.flake8.exe;
       })
 
       # https://github.com/Aider-AI/aider/pull/4671

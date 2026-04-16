@@ -15,7 +15,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."shfmt.executablePath".default = "${lib.getExe shfmt}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ${jq.exe} '.contributes.configuration.properties."shfmt.executablePath".default = "${shfmt.exe}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
   '';
 
   meta = {

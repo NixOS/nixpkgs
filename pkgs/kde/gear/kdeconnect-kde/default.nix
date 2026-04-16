@@ -18,7 +18,7 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./hardcode-sshfs-path.patch {
-      sshfs = lib.getExe sshfs;
+      sshfs = sshfs.exe;
     })
   ];
 

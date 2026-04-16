@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage {
         url = "https://chromium.googlesource.com/crosvm/crosvm.git";
         hardcodeZeroVersion = true;
       })}
-      exec ${lib.getExe nix-update} --version=skip
+      exec ${nix-update.exe} --version=skip
     '';
 
     tests = {

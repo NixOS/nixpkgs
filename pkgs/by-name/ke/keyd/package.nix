@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   # makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
 
   postInstall = ''
-    ln -sf ${lib.getExe appMap} $out/bin/${appMap.pname}
+    ln -sf ${appMap.exe} $out/bin/${appMap.pname}
     rm -rf $out/etc
   '';
 

@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace ydiff.py \
-      --replace-fail "['git'" "['${lib.getExe gitMinimal}'" \
-      --replace-fail "['hg'" "['${lib.getExe mercurial}'" \
-      --replace-fail "['svn'" "['${lib.getExe subversion}'" \
-      --replace-fail "['p4'" "['${lib.getExe p4}'" \
-      --replace-fail "['less'" "['${lib.getExe less}'" # doesn't support PAGER from env
+      --replace-fail "['git'" "['${gitMinimal.exe}'" \
+      --replace-fail "['hg'" "['${mercurial.exe}'" \
+      --replace-fail "['svn'" "['${subversion.exe}'" \
+      --replace-fail "['p4'" "['${p4.exe}'" \
+      --replace-fail "['less'" "['${less.exe}'" # doesn't support PAGER from env
     substituteInPlace tests/test_ydiff.py \
       --replace-fail /bin/rm rm \
       --replace-fail /bin/sh sh

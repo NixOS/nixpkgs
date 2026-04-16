@@ -162,7 +162,7 @@ in
             # https://github.com/home-assistant/addons/blob/master/piper/rootfs/etc/s6-overlay/s6-rc.d/piper/run
             ExecStart = escapeSystemdExecArgs (
               [
-                (lib.getExe cfg.package)
+                (cfg.package.exe)
                 "--data-dir"
                 "/var/lib/wyoming/piper"
                 "--uri"

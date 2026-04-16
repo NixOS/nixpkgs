@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
       UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
-      PYTHON_PEFILE = lib.getExe pythonWithPefile;
+      PYTHON_PEFILE = pythonWithPefile.exe;
       NIX_PATH = toString (lib.makeBinPath deps);
       MKOSI_SANDBOX = null; # will be replaced in postPatch
     })

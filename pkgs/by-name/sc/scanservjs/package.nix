@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
 
   postInstall = ''
     mkdir $out/bin
-    makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/scanservjs \
+    makeWrapper ${finalAttrs.nodejs.exe} $out/bin/scanservjs \
       --set NODE_ENV production \
       --add-flags "'$out/lib/node_modules/scanservjs/app-server/src/server.js'"
   '';

@@ -8,7 +8,7 @@ let
   inherit (lib) literalExpression types;
 
   cfg = config.services.ollama;
-  ollama = lib.getExe cfg.package;
+  ollama = cfg.package.exe;
 
   staticUser = cfg.user != null && cfg.group != null;
 in
@@ -305,7 +305,7 @@ in
 
       script =
         let
-          binaryInputs = lib.mapAttrs (_: lib.getExe) {
+          binaryInputs = lib.mapAttrs (_: x: x.exe) {
             parallel = pkgs.parallel;
             awk = pkgs.gawk;
             sed = pkgs.gnused;

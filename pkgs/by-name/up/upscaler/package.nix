@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace upscaler/window.py \
-      --replace-fail '"upscayl-bin",' '"${lib.getExe upscayl-ncnn}",'
+      --replace-fail '"upscayl-bin",' '"${upscayl-ncnn.exe}",'
   '';
 
   strictDeps = true;

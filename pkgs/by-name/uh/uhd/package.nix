@@ -137,7 +137,7 @@ stdenv'.mkDerivation (finalAttrs: {
       Hence we use upstream's provided cmake flag to control which python
       interpreter they will use to run the the python tests.
     */
-    "-DRUNTIME_PYTHON_EXECUTABLE=${lib.getExe finalAttrs.passthru.runtimePython}"
+    "-DRUNTIME_PYTHON_EXECUTABLE=${finalAttrs.passthru.runtimePython.exe}"
     (cmakeBool "ENABLE_DPDK" enableDpdk)
     # Devices
     (cmakeBool "ENABLE_OCTOCLOCK" enableOctoClock)

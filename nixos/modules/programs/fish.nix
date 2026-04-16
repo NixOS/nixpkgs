@@ -322,7 +322,7 @@ in
       {
         shells = [
           "/run/current-system/sw/bin/fish"
-          (lib.getExe cfg.package)
+          (cfg.package.exe)
         ];
       }
     ];

@@ -73,7 +73,7 @@ let
         DynamicUser = true;
         SupplementaryGroups = agentCfg.extraGroups;
         EnvironmentFile = agentCfg.environmentFile;
-        ExecStart = lib.getExe agentCfg.package;
+        ExecStart = agentCfg.package.exe;
         Restart = "on-failure";
         RestartSec = 15;
         CapabilityBoundingSet = "";

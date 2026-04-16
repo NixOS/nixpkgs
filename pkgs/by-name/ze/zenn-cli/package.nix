@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r node_modules $out/lib
     cp -r packages/zenn-cli $out/lib/packages/zenn-cli
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/zenn" \
+    makeWrapper "${nodejs.exe}" "$out/bin/zenn" \
       --add-flags "$out/lib/packages/zenn-cli/dist/server/zenn.js"
 
     runHook postInstall

@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--installman=${placeholder "out"}/share/man"
     "--installabsolute"
     "--enable-libffi"
-    "CC_FOR_BUILD=${lib.getExe buildPackages.stdenv.cc}"
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc.exe}"
     # Use Nixpkgs dependencies
     "ZUO=zuo"
     "ZLIB=${zlib}/lib/libz${extensions.sharedLibrary}"

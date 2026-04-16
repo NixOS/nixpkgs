@@ -345,7 +345,7 @@ in
       };
       commandbackup = {
         command = [
-          "\${lib.getExe pkgs.sudo}"
+          "\${pkgs.sudo.exe}"
           "-u postgres"
           "\${pkgs.postgresql}/bin/pg_dumpall"
         ];
@@ -398,7 +398,7 @@ in
           "--what='sleep'"
           "--why=${lib.escapeShellArg "Scheduled backup ${name}"} "
         ];
-        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}";
+        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${backup.package.exe}${extraOptions}";
         excludeFlags = lib.optional (
           backup.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
@@ -514,7 +514,7 @@ in
       name: backup:
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-        resticCmd = "${lib.getExe backup.package}${extraOptions}";
+        resticCmd = "${backup.package.exe}${extraOptions}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''
         set -a  # automatically export variables

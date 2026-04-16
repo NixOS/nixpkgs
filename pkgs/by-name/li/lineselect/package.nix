@@ -24,7 +24,7 @@ buildNpmPackage rec {
   ];
 
   postInstall = ''
-    makeWrapper ${lib.getExe nodejs} $out/bin/lineselect \
+    makeWrapper ${nodejs.exe} $out/bin/lineselect \
       --set FORCE_COLOR 2 \
       --add-flags $out/lib/node_modules/lineselect/dist/cli.js
   '';

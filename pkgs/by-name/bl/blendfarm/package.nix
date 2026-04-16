@@ -36,7 +36,7 @@ let
       BLENDFARM_HOME=${USERHOMEDIR}
     fi
     mkdir -p $BLENDFARM_HOME/BlenderData/nix-blender-linux64 > /dev/null 2>&1
-    ln -s ${lib.getExe blender} $BLENDFARM_HOME/BlenderData/nix-blender-linux64/blender > /dev/null 2>&1
+    ln -s ${blender.exe} $BLENDFARM_HOME/BlenderData/nix-blender-linux64/blender > /dev/null 2>&1
     echo "nix-blender" > $BLENDFARM_HOME/VersionCustom
     cd $BLENDFARM_HOME
     exec -a "$0" @out@/bin/LogicReinc.BlendFarm  "$@"

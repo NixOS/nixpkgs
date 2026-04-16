@@ -77,7 +77,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} --user ${cfg.user}";
+        ExecStart = "${cfg.package.exe} --user ${cfg.user}";
         Nice = "-12";
         Restart = "on-failure";
         RestartSec = "10";

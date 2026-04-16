@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove dangling symlinks to packages we didn't copy to $out
     find $out/lib/prisma/node_modules/.pnpm/node_modules -type l -exec test ! -e {} \; -delete
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/prisma" \
+    makeWrapper "${nodejs.exe}" "$out/bin/prisma" \
       --add-flags "$out/lib/prisma/packages/cli/build/index.js" \
       --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines_6}/bin/schema-engine \
       --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines_6}/bin/query-engine \

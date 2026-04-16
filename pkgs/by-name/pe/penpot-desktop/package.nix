@@ -70,7 +70,7 @@ buildNpmPackage rec {
     cp -r locales resources{,.pak} $out/opt/Penpot
     popd
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/penpot-desktop" \
+    makeWrapper '${electron.exe}' "$out/bin/penpot-desktop" \
       --add-flags $out/opt/Penpot/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \

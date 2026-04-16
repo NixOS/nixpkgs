@@ -37,7 +37,7 @@ buildPythonPackage rec {
     substituteInPlace src/webdataset/gopen.py \
       --replace-fail \
         '"curl"' \
-        '"${lib.getExe curl}"'
+        '"${curl.exe}"'
   '';
 
   build-system = [

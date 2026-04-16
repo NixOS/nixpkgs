@@ -50,7 +50,7 @@ buildNpmPackage rec {
     npmInstallHook
     cp -rf dist/* $out/lib/node_modules/antares
     find -name "*.ts" | xargs rm -f
-    makeWrapper ${lib.getExe electron} $out/bin/antares \
+    makeWrapper ${electron.exe} $out/bin/antares \
       --add-flags $out/lib/node_modules/antares/main.js
     runHook postInstall
 

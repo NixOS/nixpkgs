@@ -53,7 +53,7 @@ writeScriptBin "nvidia-cdi-generator" ''
     local containerPath="$2"
     local mountOptions="$3"
     if [ -e "$hostPath" ]; then
-      ${lib.getExe jq} ".containerEdits.mounts[.containerEdits.mounts | length] = { \"hostPath\": \"$hostPath\", \"containerPath\": \"$containerPath\", \"options\": $mountOptions }"
+      ${jq.exe} ".containerEdits.mounts[.containerEdits.mounts | length] = { \"hostPath\": \"$hostPath\", \"containerPath\": \"$containerPath\", \"options\": $mountOptions }"
     else
       echo "Mount $hostPath ignored: could not find path in the host machine" >&2
       cat

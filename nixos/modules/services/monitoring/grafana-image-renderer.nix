@@ -73,7 +73,7 @@ in
         "browser"
         "path"
       ]
-      (config: lib.getExe config.services.grafana-image-renderer.chromium)
+      (config: config.services.grafana-image-renderer.chromium.exe)
     )
     (lib.mkRemovedOptionModule
       [
@@ -169,8 +169,8 @@ in
           };
           browser.path = lib.mkOption {
             type = lib.types.path;
-            default = lib.getExe pkgs.chromium;
-            defaultText = lib.literalExpression "lib.getExe pkgs.chromium";
+            default = pkgs.chromium.exe;
+            defaultText = lib.literalExpression "pkgs.chromium.exe";
             description = ''
               Path to the executable of the chromium to use.
             '';
@@ -215,7 +215,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${lib.getExe pkgs.grafana-image-renderer} server ${format.generate cfg.settings}";
+        ExecStart = "${pkgs.grafana-image-renderer.exe} server ${format.generate cfg.settings}";
         Restart = "always";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";

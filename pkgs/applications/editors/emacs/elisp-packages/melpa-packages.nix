@@ -131,7 +131,7 @@ let
           age = super.age.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace age.el \
-                --replace-fail 'age-program (executable-find "age")' 'age-program "${lib.getExe pkgs.age}"'
+                --replace-fail 'age-program (executable-find "age")' 'age-program "${pkgs.age.exe}"'
             '';
           });
 
@@ -405,14 +405,14 @@ let
           gnuplot = super.gnuplot.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace gnuplot.el \
-                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${pkgs.gnuplot.exe}"'
             '';
           });
 
           gnuplot-mode = super.gnuplot-mode.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace gnuplot-mode.el \
-                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${pkgs.gnuplot.exe}"'
             '';
           });
 
@@ -488,7 +488,7 @@ let
           ormolu = super.ormolu.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace ormolu.el \
-                --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
+                --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${pkgs.ormolu.exe}"'
             '';
           });
 
@@ -497,7 +497,7 @@ let
           python-isort = super.python-isort.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace python-isort.el \
-                --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+                --replace '-isort-command "isort"' '-isort-command "${pkgs.isort.exe}"'
             '';
           });
 
@@ -516,7 +516,7 @@ let
           pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace pikchr-mode.el \
-                --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+                --replace '"pikchr")' '"${pkgs.pikchr.exe}")'
             '';
           });
 
@@ -584,14 +584,14 @@ let
           tokei = super.tokei.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace tokei.el \
-                --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
+                --replace 'tokei-program "tokei"' 'tokei-program "${pkgs.tokei.exe}"'
             '';
           });
 
           treemacs = super.treemacs.overrideAttrs (attrs: {
             postPatch = (attrs.postPatch or "") + ''
               substituteInPlace src/elisp/treemacs-customization.el \
-                --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
+                --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${pkgs.python3.exe}"'
             '';
           });
 
@@ -603,14 +603,14 @@ let
           typst-mode = super.typst-mode.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace typst-mode.el \
-                --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+                --replace 'typst-executable-location  "typst"' 'typst-executable-location "${pkgs.typst.exe}"'
             '';
           });
 
           units-mode = super.units-mode.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace units-mode.el \
-                --replace-fail 'units-binary-path "units"' 'units-binary-path "${lib.getExe pkgs.units}"'
+                --replace-fail 'units-binary-path "units"' 'units-binary-path "${pkgs.units.exe}"'
             '';
           });
 
@@ -621,7 +621,7 @@ let
           zig-mode = super.zig-mode.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace zig-mode.el \
-                --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
+                --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${pkgs.zig.exe}"'
             '';
           });
 
@@ -766,7 +766,7 @@ let
           wordnut = super.wordnut.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace wordnut.el \
-                --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+                --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${pkgs.wordnet.exe}"'
             '';
           });
 
@@ -1111,7 +1111,7 @@ let
           elfeed = super.elfeed.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace elfeed-curl.el \
-                --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${lib.getExe pkgs.curl}"'
+                --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${pkgs.curl.exe}"'
             '';
           });
 
@@ -1358,9 +1358,9 @@ let
           jq-mode = super.jq-mode.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace jq-mode.el \
-                --replace-fail 'jq-interactive-command "jq"' 'jq-interactive-command "${lib.getExe pkgs.jq}"'
+                --replace-fail 'jq-interactive-command "jq"' 'jq-interactive-command "${pkgs.jq.exe}"'
               substituteInPlace ob-jq.el \
-                --replace-fail 'org-babel-jq-command "jq"' 'org-babel-jq-command "${lib.getExe pkgs.jq}"'
+                --replace-fail 'org-babel-jq-command "jq"' 'org-babel-jq-command "${pkgs.jq.exe}"'
             '';
           });
 
@@ -1628,7 +1628,7 @@ let
               + "\n"
               + ''
                 substituteInPlace pdf-meta-edit.el \
-                    --replace-fail '(executable-find "pdftk")' '"${lib.getExe pkgs.pdftk}"'
+                    --replace-fail '(executable-find "pdftk")' '"${pkgs.pdftk.exe}"'
               '';
           });
 

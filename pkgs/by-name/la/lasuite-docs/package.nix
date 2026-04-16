@@ -139,9 +139,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
       makeWrapper $out/bin/.manage.py $out/bin/docs \
         --prefix PYTHONPATH : "${pythonPath}"
-      makeWrapper ${lib.getExe python3Packages.celery} $out/bin/celery \
+      makeWrapper ${python3Packages.celery.exe} $out/bin/celery \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
-      makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/gunicorn \
+      makeWrapper ${python3Packages.gunicorn.exe} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
 
       mkdir -p $out/${python3.sitePackages}/core/templates

@@ -133,7 +133,7 @@ in
     services.peertube-runner.settings = {
       transcription = lib.mkIf (lib.elem "video-transcription" cfg.enabledJobTypes) {
         engine = lib.mkDefault "whisper-ctranslate2";
-        enginePath = lib.mkDefault (lib.getExe pkgs.whisper-ctranslate2);
+        enginePath = lib.mkDefault (pkgs.whisper-ctranslate2.exe);
       };
     };
 
@@ -193,7 +193,7 @@ in
               # Kill the server
               kill $!
 
-              ${lib.getExe pkgs.yq-go} -e ".registeredInstances[0].runnerToken" \
+              ${pkgs.yq-go.exe} -e ".registeredInstances[0].runnerToken" \
                 $temp_config_file > $runner_token_file
               rm $temp_config_file
             fi

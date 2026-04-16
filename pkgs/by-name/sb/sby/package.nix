@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
-      --replace-fail '"/usr/bin/env", "bash"' '"${lib.getExe bash}"' \
+      --replace-fail '"/usr/bin/env", "bash"' '"${bash.exe}"' \
       --replace-fail ', "aigbmc"'             ', "${lib.getExe' aiger "aigbmc"}"'
 
     substituteInPlace sbysrc/sby_core.py \

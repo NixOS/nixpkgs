@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
           nativeBuildInputs = [ finalAttrs.finalPackage ];
         }
         ''
-          echo '#!${lib.getExe finalAttrs.finalPackage}' > helloI.bas;
+          echo '#!${finalAttrs.finalPackage.exe}' > helloI.bas;
           echo 'PRINT"Hello, World!"' >> helloI.bas;
           chmod +x helloI.bas
 

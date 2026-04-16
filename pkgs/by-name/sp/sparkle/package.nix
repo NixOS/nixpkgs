@@ -102,10 +102,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s ${dbip-country-lite.mmdb} $out/lib/sparkle/resources/files/country.mmdb
     ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/sparkle/resources/files/geoip.dat
     ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/sparkle/resources/files/geosite.dat
-    ln -s ${lib.getExe sparkle-service} $out/lib/sparkle/resources/files/sparkle-service
-    ln -s ${lib.getExe mihomo} $out/lib/sparkle/resources/sidecar/mihomo
+    ln -s ${sparkle-service.exe} $out/lib/sparkle/resources/files/sparkle-service
+    ln -s ${mihomo.exe} $out/lib/sparkle/resources/sidecar/mihomo
 
-    makeWrapper '${lib.getExe electron}' $out/bin/sparkle \
+    makeWrapper '${electron.exe}' $out/bin/sparkle \
       --add-flags $out/lib/sparkle/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \

@@ -57,7 +57,7 @@ in
         IPP_CONFIG = "${format.generate "config.json" cfg.settings}";
       };
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         SyslogIdentifier = "ipp";
         User = "ipp";
         Group = "ipp";

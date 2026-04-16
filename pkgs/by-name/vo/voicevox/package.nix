@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
-      electron_path = lib.getExe electron;
-      sevenzip_path = lib.getExe _7zz;
-      voicevox_engine_path = lib.getExe voicevox-engine;
+      electron_path = electron.exe;
+      sevenzip_path = _7zz.exe;
+      voicevox_engine_path = voicevox-engine.exe;
     })
   ];
 
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/share/voicevox
       cp -r dist_electron/*-unpacked/{locales,resources{,.pak}} $out/share/voicevox
 
-      makeWrapper ${lib.getExe electron} $out/bin/voicevox \
+      makeWrapper ${electron.exe} $out/bin/voicevox \
         --add-flags $out/share/voicevox/resources/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         --inherit-argv0

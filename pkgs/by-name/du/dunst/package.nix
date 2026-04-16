@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       $out/share/zsh/site-functions/_dunstctl \
       $out/share/bash-completion/completions/dunstctl \
       $out/share/fish/vendor_completions.d/{dunstctl,dunstify}.fish \
-      --replace-fail "jq" "${lib.getExe jq}"
+      --replace-fail "jq" "${jq.exe}"
   '';
 
   nativeInstallCheckInputs = [

@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     cp -r usr/share $out/share
     substituteInPlace $out/share/applications/*.desktop --replace-fail "/opt/apps/io.github.msojocs.bilibili/files/bin//bin/bilibili" "$out/bin/bilibili"
     cp -r opt/apps/io.github.msojocs.bilibili/files/bin/app $out/opt
-    makeWrapper ${lib.getExe electron} $out/bin/bilibili \
+    makeWrapper ${electron.exe} $out/bin/bilibili \
       --argv0 "bilibili" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libva ]} \
       --add-flags "$out/opt/app.asar" \

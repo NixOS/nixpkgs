@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{lib,bin}
     cp -r {apps,node_modules,packages,servers} $out/lib
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/docs-collaboration-server" \
+    makeWrapper ${nodejs.exe} "$out/bin/docs-collaboration-server" \
       --add-flags "$out/lib/servers/y-provider/dist/start-server.js" \
       --set NODE_PATH "$out/lib/node_modules"
 

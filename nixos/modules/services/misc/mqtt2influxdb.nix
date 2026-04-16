@@ -242,7 +242,7 @@ in
         '';
         serviceConfig = {
           EnvironmentFile = cfg.environmentFiles;
-          ExecStart = "${lib.getExe cfg.package} -dc ${finalConfig}";
+          ExecStart = "${cfg.package.exe} -dc ${finalConfig}";
           RuntimeDirectory = "mqtt2influxdb";
         };
       };

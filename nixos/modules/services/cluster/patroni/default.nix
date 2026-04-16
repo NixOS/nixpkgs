@@ -254,7 +254,7 @@ in
               lib.mapAttrs (name: path: ''export ${name}="$(< ${lib.escapeShellArg path})"'') cfg.environmentFiles
             )
           )}
-          exec ${lib.getExe pkgs.patroni} ${configFile}
+          exec ${pkgs.patroni.exe} ${configFile}
         '';
 
         serviceConfig = lib.mkMerge [

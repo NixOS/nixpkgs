@@ -59,7 +59,7 @@ appimageTools.wrapType2 rec {
     inherit src;
     updateScript = writeShellScript "update-xnviewmp" ''
       latestVersion=$(curl --fail --silent "http://www.xnview.com/update.txt" | awk -F= '/\[XnViewMP\]/{getline; if($1=="version") print $2}')
-      ${lib.getExe nix-update} xnviewmp --version $latestVersion
+      ${nix-update.exe} xnviewmp --version $latestVersion
     '';
   };
 

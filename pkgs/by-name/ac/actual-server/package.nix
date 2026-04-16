@@ -72,13 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable the postinstall script for `protoc-gen-js` because it tries to
     # use network in buildPhase. It's just used as a dev tool and the generated
     # protobuf code is committed in the repository.
-    cat <<< $(${lib.getExe jq} '.dependenciesMeta."protoc-gen-js".built = false' ./package.json) > ./package.json
+    cat <<< $(${jq.exe} '.dependenciesMeta."protoc-gen-js".built = false' ./package.json) > ./package.json
 
     # Disable building @swc/core from source - use the pre-built binaries instead
-    cat <<< $(${lib.getExe jq} '.dependenciesMeta."@swc/core".built = false' ./package.json) > ./package.json
+    cat <<< $(${jq.exe} '.dependenciesMeta."@swc/core".built = false' ./package.json) > ./package.json
 
     # Disable the install script for sharp to prevent it from trying to download binaries
-    cat <<< $(${lib.getExe jq} '.dependenciesMeta."sharp".built = false' ./package.json) > ./package.json
+    cat <<< $(${jq.exe} '.dependenciesMeta."sharp".built = false' ./package.json) > ./package.json
   '';
 
   buildPhase = ''
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
+    makeWrapper ${nodejs.exe} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 

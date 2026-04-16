@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags = [
-    "CHECKPOLICY=${lib.getExe checkpolicy}"
+    "CHECKPOLICY=${checkpolicy.exe}"
     "CHECKMODULE=${lib.getExe' checkpolicy "checkmodule"}"
     "SEMODULE=${lib.getExe' policycoreutils "semodule"}"
     "SEMOD_PKG=${lib.getExe' semodule-utils "semodule_package"}"

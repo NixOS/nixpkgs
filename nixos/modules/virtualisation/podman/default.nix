@@ -277,7 +277,7 @@ in
           Type = "oneshot";
           ExecStart = utils.escapeSystemdExecArgs (
             [
-              (lib.getExe cfg.package)
+              (cfg.package.exe)
               "system"
               "prune"
               "-f"

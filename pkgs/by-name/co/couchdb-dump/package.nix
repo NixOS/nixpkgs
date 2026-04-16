@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D couchdb-dump.sh $out/bin/couchdb-dump
 
     substituteInPlace $out/bin/couchdb-dump \
-      --subst-var-by sed_cmd ${lib.getExe gnused}
+      --subst-var-by sed_cmd ${gnused.exe}
 
     wrapProgram $out/bin/couchdb-dump --prefix PATH : ${
       lib.makeBinPath (

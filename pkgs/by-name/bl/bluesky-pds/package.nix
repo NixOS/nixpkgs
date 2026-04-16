@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     find build -type f -exec remove-references-to -t "${nodeSources}" {} \;
     popd
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/pds" \
+    makeWrapper "${nodejs.exe}" "$out/bin/pds" \
       --add-flags --enable-source-maps \
       --add-flags "$out/lib/pds/index.js" \
       --set-default NODE_ENV production

@@ -26,7 +26,7 @@ melpaBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace copilot.el \
       --replace-fail "defcustom copilot-server-executable \"copilot-language-server\"" \
-                     "defcustom copilot-server-executable \"${lib.getExe copilot-language-server}\""
+                     "defcustom copilot-server-executable \"${copilot-language-server.exe}\""
   '';
 
   packageRequires = [

@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p "$out/share/stoat-desktop"
       cp -r out/*/resources{,.pak} "$out/share/stoat-desktop"
 
-      makeWrapper ${lib.getExe electron} "$out/bin/stoat-desktop" \
+      makeWrapper ${electron.exe} "$out/bin/stoat-desktop" \
         --add-flag $out/share/stoat-desktop/resources/app.asar \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

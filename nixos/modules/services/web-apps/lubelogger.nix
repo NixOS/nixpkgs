@@ -101,7 +101,7 @@ in
         Group = cfg.group;
         StateDirectory = cfg.dataDir;
         WorkingDirectory = "/var/lib/${cfg.dataDir}";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         Restart = "on-failure";
 

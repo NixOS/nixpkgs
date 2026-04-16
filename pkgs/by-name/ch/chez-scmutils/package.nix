@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   lib-path = "lib/csv${lib.versions.majorMinor chez.version}-site";
 
   makeFlags = [
-    "CHEZ=${lib.getExe chez}"
+    "CHEZ=${chez.exe}"
     "PREFIX=$(out)"
     "CHEZSCHEMELIBDIRS=${chez-srfi}/${lib-path}:${chez-mit}/${lib-path}"
   ];

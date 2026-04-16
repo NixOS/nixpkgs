@@ -76,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       mkdir -p $out/{bin,share/java}
       cp build/libs/ATLauncher-${finalAttrs.version}.jar $out/share/java/ATLauncher.jar
 
-      makeWrapper ${lib.getExe jre} $out/bin/atlauncher \
+      makeWrapper ${jre.exe} $out/bin/atlauncher \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibraries}" \
         --add-flags "-jar $out/share/java/ATLauncher.jar" \
         --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \

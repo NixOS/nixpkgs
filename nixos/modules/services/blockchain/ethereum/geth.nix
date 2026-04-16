@@ -241,7 +241,7 @@ in
                     if cfg.authrpc.jwtsecret != "" then cfg.authrpc.jwtsecret else "${dataDir}/geth/jwtsecret";
                 };
               in
-              "${lib.getExe cfg.package} ${args} ${lib.escapeShellArgs cfg.extraArgs}";
+              "${cfg.package.exe} ${args} ${lib.escapeShellArgs cfg.extraArgs}";
 
             DynamicUser = true;
             Restart = "always";

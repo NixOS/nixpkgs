@@ -19,7 +19,7 @@ steam.buildRuntimeEnv {
     ;
 
   executableName = umu-launcher-unwrapped.meta.mainProgram;
-  runScript = lib.getExe umu-launcher-unwrapped;
+  runScript = umu-launcher-unwrapped.exe;
 
   # Legendary spawns UMU, doesn't wait for it to exit,
   # and immediately exits itself. This makes it so we can't

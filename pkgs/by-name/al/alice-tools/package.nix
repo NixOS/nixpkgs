@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       command =
         lib.optionalString withGUI "env QT_QPA_PLATFORM=minimal "
-        + "${lib.getExe finalAttrs.finalPackage} --version";
+        + "${finalAttrs.finalPackage.exe} --version";
     };
   };
 

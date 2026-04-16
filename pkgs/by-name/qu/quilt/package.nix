@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     # configure only looks in $PATH by default,
     # which does not include buildInputs if strictDeps is true
-    "--with-perl=${lib.getExe perl}"
+    "--with-perl=${perl.exe}"
   ];
 
   postInstall = ''

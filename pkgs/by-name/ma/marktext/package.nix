@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace node_modules/node-gyp/gyp/pylib/gyp/input.py \
       --replace-fail "from distutils.version import StrictVersion" "from packaging.version import Version as StrictVersion"
 
-    sed -i -e 's|path.join(.*);|"${lib.getExe ripgrep}";|' \
+    sed -i -e 's|path.join(.*);|"${ripgrep.exe}";|' \
       node_modules/vscode-ripgrep/lib/index.js
 
     runHook postConfigure
@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/opt/marktext
 
-    makeWrapper ${lib.getExe electron} $out/bin/marktext \
+    makeWrapper ${electron.exe} $out/bin/marktext \
       --add-flags $out/opt/marktext/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 

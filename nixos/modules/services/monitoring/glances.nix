@@ -75,7 +75,7 @@ in
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
-        ExecStart = "${getExe cfg.package} --port ${toString cfg.port} ${escapeSystemdExecArgs cfg.extraArgs}";
+        ExecStart = "${cfg.package.exe} --port ${toString cfg.port} ${escapeSystemdExecArgs cfg.extraArgs}";
         Restart = "on-failure";
 
         NoNewPrivileges = true;

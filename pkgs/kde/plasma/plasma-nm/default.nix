@@ -15,7 +15,7 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
-      openvpn = lib.getExe openvpn;
+      openvpn = openvpn.exe;
       ipsec = lib.getExe' strongswan "ipsec";
     })
   ];

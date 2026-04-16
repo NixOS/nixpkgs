@@ -215,7 +215,7 @@ in
             ''
           )
         ];
-        ExecStart = "${lib.getExe cfg.package} /run/biboumi/biboumi.cfg";
+        ExecStart = "${cfg.package.exe} /run/biboumi/biboumi.cfg";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         # Firewalls needing opening for output connections can still do that
         # selectively for biboumi with:

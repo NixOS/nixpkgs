@@ -12,7 +12,7 @@ let
   machine = evalSystem (
     { lib, ... }:
     let
-      hello' = lib.getExe hello;
+      hello' = hello.exe;
     in
     {
 

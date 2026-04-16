@@ -80,7 +80,7 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "GGML_CUDA" true)
     (lib.cmakeFeature "CUDAToolkit_ROOT" "${lib.getDev cudaPackages.cuda_nvcc}")
-    (lib.cmakeFeature "CMAKE_CUDA_COMPILER" "${lib.getExe cudaPackages.cuda_nvcc}")
+    (lib.cmakeFeature "CMAKE_CUDA_COMPILER" "${cudaPackages.cuda_nvcc.exe}")
   ];
 
   enableParallelBuilding = true;

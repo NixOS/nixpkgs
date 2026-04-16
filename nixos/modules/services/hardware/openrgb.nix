@@ -71,7 +71,7 @@ in
         WorkingDirectory = "/var/lib/OpenRGB";
         ExecStart = lib.escapeShellArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "--server"
             "--server-port"
             cfg.server.port

@@ -22,7 +22,7 @@ buildNpmPackage rec {
     runHook preInstall
     mkdir -p $out/{bin,lib}
     cp -R node_modules packages $out/lib
-    makeWrapper ${lib.getExe nodejs} $out/bin/twig-language-server \
+    makeWrapper ${nodejs.exe} $out/bin/twig-language-server \
       --inherit-argv0 \
       --prefix NODE_PATH : $out/lib/node_modules \
       --add-flags $out/lib/packages/language-server/out/index.js

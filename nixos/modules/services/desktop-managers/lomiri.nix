@@ -259,7 +259,7 @@ in
               Type = "dbus";
               BusName = "com.lomiri.MediaScanner2.Daemon";
               Restart = "on-failure";
-              ExecStart = "${lib.getExe pkgs.lomiri.mediascanner2}";
+              ExecStart = "${pkgs.lomiri.mediascanner2.exe}";
             };
           };
         };

@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ./src/meson.build \
       --replace-fail "conf.set('PYTHON', python.find_installation('python3').full_path())" "conf.set('PYTHON', '${
-        lib.getExe (python3.withPackages (pp: [ pp.pygobject3 ]))
+        (python3.withPackages (pp: [ pp.pygobject3 ])).exe
       }')"
   '';
 

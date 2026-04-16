@@ -26,7 +26,7 @@
     ''
       start_all()
 
-      machine.succeed('blint -i ${lib.getExe pkgs.ripgrep} -o /tmp/ripgrep')
+      machine.succeed('blint -i ${pkgs.ripgrep.exe} -o /tmp/ripgrep')
       machine.succeed('jq . /tmp/ripgrep/*.json')
     '';
 }

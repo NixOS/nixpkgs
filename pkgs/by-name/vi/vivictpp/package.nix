@@ -83,8 +83,8 @@ stdenv.mkDerivation {
   '';
 
   passthru.updateScript = writeShellScript "update-vivictpp" ''
-    ${lib.getExe nix-update} vivictpp.src
-    ${lib.getExe nix-update} vivictpp --version skip
+    ${nix-update.exe} vivictpp.src
+    ${nix-update.exe} vivictpp --version skip
   '';
 
   meta = {

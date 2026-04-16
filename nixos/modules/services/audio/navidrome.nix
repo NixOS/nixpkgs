@@ -88,7 +88,7 @@ in
 
   config =
     let
-      inherit (lib) mkIf optional getExe;
+      inherit (lib) mkIf optional;
       WorkingDirectory = "/var/lib/navidrome";
     in
     mkIf cfg.enable {
@@ -114,7 +114,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = ''
-              ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+              ${cfg.package.exe} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
             '';
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;

@@ -94,7 +94,7 @@ buildDotnetModule (finalAttrs: {
   postInstall = ''
     mkdir -p $out/lib/downkyicore/{aria2,ffmpeg}
 
-    ln -s ${lib.getExe aria2} $out/lib/downkyicore/aria2/aria2c
+    ln -s ${aria2.exe} $out/lib/downkyicore/aria2/aria2c
     ln -s ${lib.getExe' ffmpeg "ffmpeg"} $out/lib/downkyicore/ffmpeg/ffmpeg
     ln -s ${lib.getExe' ffmpeg "ffprobe"} $out/lib/downkyicore/ffmpeg/ffprobe
 

@@ -24,7 +24,7 @@ let
             for arg; do
               case "$arg" in
               -V|--version)
-                ${lib.getExe previousArgs.curl} "$arg"
+                ${previousArgs.curl.exe} "$arg"
                 exit "$?"
                 ;;
               --foo)

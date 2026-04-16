@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/application.cpp \
-      --replace '"yt-dlp"' '"${lib.getExe yt-dlp}"'
+      --replace '"yt-dlp"' '"${yt-dlp.exe}"'
   '';
 
   buildInputs = [

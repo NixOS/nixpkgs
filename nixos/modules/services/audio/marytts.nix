@@ -108,7 +108,7 @@ in
       # and it doesn't seem to actually read config files outside of precompiled JAR files.
       # Using system properties directly works for now, but this is really ugly.
       script = ''
-        ${lib.getExe pkgs.marytts} -classpath "${cfg.basePath}/lib/*:${cfg.package}/lib/*" ${
+        ${pkgs.marytts.exe} -classpath "${cfg.basePath}/lib/*:${cfg.package}/lib/*" ${
           lib.concatStringsSep " " (lib.mapAttrsToList (n: v: ''-D${n}="${v}"'') cfg.settings)
         }
       '';

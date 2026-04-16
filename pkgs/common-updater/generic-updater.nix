@@ -27,8 +27,8 @@ let
   # where to print git commands and debugging messages
   fileForGitCommands = "update-git-commits.txt";
 
-  grep = lib.getExe gnugrep;
-  sed = lib.getExe gnused;
+  grep = gnugrep.exe;
+  sed = gnused.exe;
 
   # shell script to update package
   updateScript = writeScript "generic-update-script.sh" ''

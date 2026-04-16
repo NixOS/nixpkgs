@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru.updateScript = writeShellScript "update-spectrwm" ''
-    latestVersion=$(${lib.getExe curl} ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --silent --fail --location https://api.github.com/repos/conformal/spectrwm/releases/latest | ${lib.getExe jq} --raw-output .tag_name | grep -oP '\d+' | paste -sd.)
-    ${lib.getExe nix-update} spectrwm --version=$latestVersion
+    latestVersion=$(${curl.exe} ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --silent --fail --location https://api.github.com/repos/conformal/spectrwm/releases/latest | ${jq.exe} --raw-output .tag_name | grep -oP '\d+' | paste -sd.)
+    ${nix-update.exe} spectrwm --version=$latestVersion
   '';
 
   meta = {

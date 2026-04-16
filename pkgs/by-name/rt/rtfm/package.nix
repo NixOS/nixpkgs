@@ -97,7 +97,7 @@ crystal.buildCrystalPackage {
       (_experimental-update-script-combinators.copyAttrOutputToFile "rtfm.shardLock" "./shard.lock")
       {
         command = [
-          (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}")
+          (writeShellScript "update-lock" "cd $1; ${crystal2nix.exe}")
           ./.
         ];
         supportedFeatures = [ "silent" ];

@@ -99,7 +99,7 @@ in
         serviceConfig = {
           DevicePolicy = "closed";
           DynamicUser = true;
-          ExecStart = "${getExe cfg.package} --provider ${cfg.provider}";
+          ExecStart = "${cfg.package.exe} --provider ${cfg.provider}";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
           PrivateDevices = true;

@@ -183,7 +183,7 @@ in
         # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
         serviceConfig = {
           ExecStart = toString [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "-config"
             "/etc/postfix-tlspol/config.yaml"
           ];

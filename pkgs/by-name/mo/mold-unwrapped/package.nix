@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
         helloTest =
           name: helloMold:
           let
-            command = "$READELF -p .comment ${lib.getExe helloMold}";
+            command = "$READELF -p .comment ${helloMold.exe}";
             emulator = stdenv.hostPlatform.emulator buildPackages;
           in
           runCommandCC "mold-${name}-test" { passthru = { inherit helloMold; }; } ''
             echo "Testing running the 'hello' binary which should be linked with 'mold'" >&2
-            ${emulator} ${lib.getExe helloMold}
+            ${emulator} ${helloMold.exe}
 
             echo "Checking for mold in the '.comment' section" >&2
             if output=$(${command} 2>&1); then

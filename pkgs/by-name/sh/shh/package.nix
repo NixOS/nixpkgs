@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    SHH_STRACE_BIN_PATH = lib.getExe strace;
+    SHH_STRACE_BIN_PATH = strace.exe;
     # RUST_BACKTRACE = 1;
   };
 

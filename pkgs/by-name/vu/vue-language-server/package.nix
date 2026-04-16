@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/language-tools}
     cp -r {node_modules,packages,extensions} $out/lib/language-tools/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/vue-language-server \
+    makeWrapper ${nodejs.exe} $out/bin/vue-language-server \
       --inherit-argv0 \
       --add-flags $out/lib/language-tools/packages/language-server/bin/vue-language-server.js
 

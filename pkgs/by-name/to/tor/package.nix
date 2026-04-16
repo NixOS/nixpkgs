@@ -124,9 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
     proxyHook = makeSetupHook {
       name = "tor-proxy-hook";
       substitutions = {
-        grep = lib.getExe gnugrep;
+        grep = gnugrep.exe;
         tee = lib.getExe' coreutils "tee";
-        tor = lib.getExe finalAttrs.finalPackage;
+        tor = finalAttrs.finalPackage.exe;
       };
     } ./proxy-hook.sh;
   };

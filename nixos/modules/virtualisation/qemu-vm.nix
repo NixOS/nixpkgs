@@ -136,7 +136,7 @@ let
             ''
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
-              BACKING_SIZE_MB=$(( $(${lib.getExe' qemu "qemu-img"} info ${systemImage}/nixos.qcow2 --output=json | ${lib.getExe hostPkgs.jq} -r '."virtual-size"') / 1024 / 1024 ))
+              BACKING_SIZE_MB=$(( $(${lib.getExe' qemu "qemu-img"} info ${systemImage}/nixos.qcow2 --output=json | ${hostPkgs.jq.exe} -r '."virtual-size"') / 1024 / 1024 ))
               DISK_SIZE_MB=${toString cfg.diskSize}
               if (( DISK_SIZE_MB < BACKING_SIZE_MB )); then
                 OVERLAY_SIZE_MB=$BACKING_SIZE_MB
@@ -236,7 +236,7 @@ let
     ${lib.optionalString cfg.tpm.enable ''
       NIX_SWTPM_DIR=$(readlink -f "''${NIX_SWTPM_DIR:-${config.system.name}-swtpm}")
       mkdir -p "$NIX_SWTPM_DIR"
-      ${lib.getExe cfg.tpm.package} \
+      ${cfg.tpm.package.exe} \
         socket \
         --tpmstate dir="$NIX_SWTPM_DIR" \
         --server type=unixio,path="$NIX_SWTPM_DIR"/socket \

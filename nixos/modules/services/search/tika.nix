@@ -87,7 +87,7 @@ in
         {
           Type = "simple";
 
-          ExecStart = "${getExe package} --host ${cfg.listenAddress} --port ${toString cfg.port} ${
+          ExecStart = "${package.exe} --host ${cfg.listenAddress} --port ${toString cfg.port} ${
             lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"
           }";
           DynamicUser = true;

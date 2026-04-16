@@ -8,7 +8,7 @@ makeSetupHook {
   name = "gitSetupHook";
 
   substitutions = {
-    gitMinimal = lib.getExe gitMinimal;
+    gitMinimal = gitMinimal.exe;
   };
 
 } ./gitSetupHook.sh

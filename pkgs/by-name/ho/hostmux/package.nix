@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace hostmux \
-      --replace "SSH_CMD=ssh" "SSH_CMD=${lib.getExe openssh}" \
-      --replace "TMUX_CMD=tmux" "TMUX_CMD=${lib.getExe tmux}"
+      --replace "SSH_CMD=ssh" "SSH_CMD=${openssh.exe}" \
+      --replace "TMUX_CMD=tmux" "TMUX_CMD=${tmux.exe}"
   '';
 
   installPhase = ''

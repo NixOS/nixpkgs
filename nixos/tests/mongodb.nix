@@ -7,7 +7,7 @@ let
     db.greetings.insertOne({ "greeting": "hello" });
     print(db.greetings.findOne().greeting);
   '';
-  mongoshExe = lib.getExe pkgs.mongosh;
+  mongoshExe = pkgs.mongosh.exe;
 in
 {
   name = "mongodb";

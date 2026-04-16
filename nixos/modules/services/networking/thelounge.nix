@@ -117,7 +117,7 @@ in
       serviceConfig = {
         User = "thelounge";
         StateDirectory = baseNameOf dataDir;
-        ExecStart = "${getExe cfg.package} start";
+        ExecStart = "${cfg.package.exe} start";
       };
     };
 

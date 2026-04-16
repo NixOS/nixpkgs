@@ -22,11 +22,11 @@ buildLua rec {
 
   postPatch = ''
     substituteInPlace utils/forvo.lua \
-      --replace-fail "'curl" "'${lib.getExe curl}"
+      --replace-fail "'curl" "'${curl.exe}"
     substituteInPlace platform/nix.lua \
-      --replace-fail "'curl" "'${lib.getExe curl}" \
+      --replace-fail "'curl" "'${curl.exe}" \
       --replace-fail "'wl-copy" "'${lib.getExe' wl-clipboard "wl-copy"}" \
-      --replace-fail "'xclip" "'${lib.getExe xclip}"
+      --replace-fail "'xclip" "'${xclip.exe}"
   '';
 
   installPhase = ''

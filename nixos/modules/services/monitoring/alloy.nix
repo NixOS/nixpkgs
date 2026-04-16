@@ -87,7 +87,7 @@ in
           # allow to read the systemd journal for loki log forwarding
           "systemd-journal"
         ];
-        ExecStart = "${lib.getExe cfg.package} run ${cfg.configPath} ${lib.escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${cfg.package.exe} run ${cfg.configPath} ${lib.escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         ConfigurationDirectory = "alloy";
         StateDirectory = "alloy";

@@ -29,7 +29,7 @@ maven.buildMavenPackage rec {
 
     mkdir -p $out/{bin,lib}
     cp lib/ki-shell.jar $out/lib/ki-shell.jar
-    makeWrapper ${lib.getExe jre} $out/bin/ki \
+    makeWrapper ${jre.exe} $out/bin/ki \
       --add-flags "-jar $out/lib/ki-shell.jar"
 
     runHook postInstall

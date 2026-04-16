@@ -19,7 +19,7 @@ runCommand "${package.pname}-tests"
     azure_default_remember_me=false
     EOF
 
-    ! ${lib.getExe package} --profile=my-profile 2> stderr
+    ! ${package.exe} --profile=my-profile 2> stderr
     [[ "$(cat stderr)" == 'Unable to recognize page state! A screenshot has been dumped to aws-azure-login-unrecognized-state.png. If this problem persists, try running with --mode=gui or --mode=debug' ]]
 
     touch $out

@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/hap.py \
        --set PATH ${lib.makeBinPath runtime} \
-       --add-flags "--engine-vcfeval-path=${lib.getExe rtg-tools}"
+       --add-flags "--engine-vcfeval-path=${rtg-tools.exe}"
   '';
 
   meta = {

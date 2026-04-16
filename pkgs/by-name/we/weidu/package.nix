@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     substitute sample.Configuration Configuration \
       --replace-fail /usr/bin ${lib.makeBinPath [ ocaml' ]} \
       --replace-fail /usr/local/bin ${lib.makeBinPath [ ocaml' ]} \
-      --replace-fail elkhound ${lib.getExe elkhound}
+      --replace-fail elkhound ${elkhound.exe}
 
     mkdir -p obj/{.depend,x86_LINUX}
 

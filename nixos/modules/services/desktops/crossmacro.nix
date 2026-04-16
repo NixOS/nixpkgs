@@ -94,7 +94,7 @@ in
         Type = "notify";
         User = "crossmacro";
         Group = "input";
-        ExecStart = lib.getExe cfg.daemonPackage;
+        ExecStart = cfg.daemonPackage.exe;
         Restart = "always";
         RestartSec = 5;
         RuntimeDirectory = "crossmacro";

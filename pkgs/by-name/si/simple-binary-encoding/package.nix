@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
         -v "Simple Binary Encoding" \
         > "$out/share/man/sbetool.1"
 
-    runtimeShell="${runtimeShell}" java="${lib.getExe jre}" \
+    runtimeShell="${runtimeShell}" java="${jre.exe}" \
       substituteAll ${./sbetool.sh} "$out/bin/sbetool"
 
     chmod +x "$out/bin/sbetool"

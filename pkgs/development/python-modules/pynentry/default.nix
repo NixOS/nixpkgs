@@ -22,7 +22,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace pynentry.py \
-      --replace-fail 'executable="pinentry"' 'executable="${lib.getExe pinentry-curses}"'
+      --replace-fail 'executable="pinentry"' 'executable="${pinentry-curses.exe}"'
   '';
 
   pythonImportsCheck = [ "pynentry" ];

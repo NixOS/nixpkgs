@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs src
     substituteInPlace src/nohang \
-      --replace-fail 'notify-send' '${lib.getExe libnotify}' \
-      --replace-fail 'sudo' '${lib.getExe sudo}' \
+      --replace-fail 'notify-send' '${libnotify.exe}' \
+      --replace-fail 'sudo' '${sudo.exe}' \
       --replace-fail "'env'" "'${lib.getExe' coreutils "env"}'"
   '';
 

@@ -94,7 +94,7 @@ in
       RestrictAddressFamilies = [ "AF_UNIX" ];
       SupplementaryGroups = mkIf cfg.systemd.enable [ "systemd-journal" ];
       ExecStart = ''
-        ${lib.getExe cfg.package} \
+        ${cfg.package.exe} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --postfix.showq_path ${escapeShellArg cfg.showqPath} \

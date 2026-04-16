@@ -17,8 +17,6 @@ let
     optionalString
     ;
 
-  inherit (lib.meta) getExe;
-
   inherit (lib.lists) singleton;
 
   inherit (lib.attrsets) mapAttrsToList recursiveUpdate optionalAttrs;
@@ -885,23 +883,23 @@ in
           fi
         ''
         + optionalString (!cfg.mutableConfig) ''
-          ${getExe pkgs.jq} -s '.[0] * .[1]' "$package/config/config.json" "$nixConfig" > "$configDir/config.json"
+          ${pkgs.jq.exe} -s '.[0] * .[1]' "$package/config/config.json" "$nixConfig" > "$configDir/config.json"
         ''
         + optionalString cfg.mutableConfig ''
           if [ ! -e "$configDir/.initial-created" ]; then
-            ${getExe pkgs.jq} -s '.[0] * .[1]' "$package/config/config.json" "$nixConfig" > "$configDir/config.json"
+            ${pkgs.jq.exe} -s '.[0] * .[1]' "$package/config/config.json" "$nixConfig" > "$configDir/config.json"
             touch "$configDir/.initial-created"
           fi
         ''
         + optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
-          echo "$(${getExe pkgs.jq} -s '.[0] * .[1]' "$configDir/config.json" "$nixConfig")" > "$configDir/config.json"
+          echo "$(${pkgs.jq.exe} -s '.[0] * .[1]' "$configDir/config.json" "$nixConfig")" > "$configDir/config.json"
         '';
 
         serviceConfig = mkMerge [
           {
             User = cfg.user;
             Group = cfg.group;
-            ExecStart = "${getExe cfg.package} --config ${cfg.configDir}/config.json";
+            ExecStart = "${cfg.package.exe} --config ${cfg.configDir}/config.json";
             ReadWritePaths = [
               cfg.dataDir
               cfg.logDir
@@ -982,7 +980,7 @@ in
         serviceConfig = {
           User = "nobody";
           Group = "nogroup";
-          ExecStart = "${getExe cfg.matterircd.package} ${escapeShellArgs cfg.matterircd.parameters}";
+          ExecStart = "${cfg.matterircd.package.exe} ${escapeShellArgs cfg.matterircd.parameters}";
           WorkingDirectory = "/tmp";
           PrivateTmp = true;
           Restart = "always";

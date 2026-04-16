@@ -179,7 +179,7 @@ in
       environment = cfg.extraEnvironment;
       serviceConfig = {
         ExecStart = ''
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             --accept-server-license-terms \
             --host=${cfg.host} \
             --port=${toString cfg.port} \

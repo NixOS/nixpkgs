@@ -47,31 +47,32 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "raycast-update-script";
-    runtimeInputs = [
-      cacert
-      curl
-      jq
-      openssl
-    ];
-    text = ''
-      url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
-      version=$(echo "$url" | jq -r '.version')
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "raycast-update-script";
+      runtimeInputs = [
+        cacert
+        curl
+        jq
+        openssl
+      ];
+      text = ''
+        url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
+        version=$(echo "$url" | jq -r '.version')
 
-      arm_url="https://releases.raycast.com/releases/$version/download?build=arm"
-      x86_url="https://releases.raycast.com/releases/$version/download?build=x86_64"
+        arm_url="https://releases.raycast.com/releases/$version/download?build=arm"
+        x86_url="https://releases.raycast.com/releases/$version/download?build=x86_64"
 
-      arm_hash="sha256-$(curl -sL "$arm_url" | openssl dgst -sha256 -binary | openssl base64)"
-      x86_hash="sha256-$(curl -sL "$x86_url" | openssl dgst -sha256 -binary | openssl base64)"
+        arm_hash="sha256-$(curl -sL "$arm_url" | openssl dgst -sha256 -binary | openssl base64)"
+        x86_hash="sha256-$(curl -sL "$x86_url" | openssl dgst -sha256 -binary | openssl base64)"
 
-      sed -i -E \
-        -e 's|(version = )"[0-9]+\.[0-9]+\.[0-9]+";|\1"'"$version"'";|' \
-        -e '/aarch64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
-        -e '/x86_64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$x86_hash"'";|' \
-        ./pkgs/by-name/ra/raycast/package.nix
-    '';
-  });
+        sed -i -E \
+          -e 's|(version = )"[0-9]+\.[0-9]+\.[0-9]+";|\1"'"$version"'";|' \
+          -e '/aarch64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
+          -e '/x86_64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$x86_hash"'";|' \
+          ./pkgs/by-name/ra/raycast/package.nix
+      '';
+    }).exe;
 
   meta = {
     description = "Control your tools with a few keystrokes";

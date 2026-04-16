@@ -245,7 +245,7 @@ in
         Type = "oneshot";
       };
       script = ''
-        ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
+        ${cfg.package.exe} set ${escapeShellArgs cfg.extraSetFlags}
       '';
     };
 

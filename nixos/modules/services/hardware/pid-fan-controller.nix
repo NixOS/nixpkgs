@@ -148,8 +148,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = [ (lib.getExe cfg.package) ];
-        ExecStopPost = [ "${lib.getExe cfg.package} disable" ];
+        ExecStart = [ (cfg.package.exe) ];
+        ExecStopPost = [ "${cfg.package.exe} disable" ];
         Restart = "always";
         #This service needs to run as root to write to /sys.
         #therefore it should operate with the least amount of privileges needed

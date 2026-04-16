@@ -45,7 +45,7 @@ in
       DynamicUser = true;
       ExecStart = utils.escapeSystemdExecArgs (
         [
-          (lib.getExe pkgs.prometheus-kea-exporter)
+          (pkgs.prometheus-kea-exporter.exe)
           "--address"
           cfg.listenAddress
           "--port"

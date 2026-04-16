@@ -24,9 +24,9 @@ let
       };
       passthru.updateScript = lib.optionalAttrs (language == "fr") (
         writeShellScript "vscode-language-packs-update-script" ''
-          ${lib.getExe vscode-extension-update} vscode-extensions.ms-ceintl.vscode-language-pack-fr --override-filename "pkgs/applications/editors/vscode/extensions/language-packs.nix"
+          ${vscode-extension-update.exe} vscode-extensions.ms-ceintl.vscode-language-pack-fr --override-filename "pkgs/applications/editors/vscode/extensions/language-packs.nix"
           for lang in cs de es it ja ko pl pt-br qps-ploc ru tr zh-hans zh-hant; do
-            ${lib.getExe nix-update} --version "skip" "vscode-extensions.ms-ceintl.vscode-language-pack-$lang" --override-filename "pkgs/applications/editors/vscode/extensions/language-packs.nix"
+            ${nix-update.exe} --version "skip" "vscode-extensions.ms-ceintl.vscode-language-pack-$lang" --override-filename "pkgs/applications/editors/vscode/extensions/language-packs.nix"
           done
         ''
       );

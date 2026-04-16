@@ -104,7 +104,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Remove symlinks pointing back to the build sandbox
     find $libdir/dist/extensions -type l -lname "$NIX_BUILD_TOP/*" -delete
 
-    makeWrapper ${lib.getExe nodejs_22} $out/bin/openclaw \
+    makeWrapper ${nodejs_22.exe} $out/bin/openclaw \
       --add-flags "$libdir/dist/index.js" \
       --set NODE_PATH "$libdir/node_modules"
     ln -s $out/bin/openclaw $out/bin/moltbot

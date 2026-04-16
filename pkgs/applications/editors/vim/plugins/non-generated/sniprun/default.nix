@@ -58,7 +58,7 @@ vimUtils.buildVimPlugin {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      sniprun = lib.getExe sniprun-bin;
+      sniprun = sniprun-bin.exe;
     })
   ];
 

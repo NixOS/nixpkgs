@@ -597,7 +597,7 @@ in
           MemoryDenyWriteExecute = true;
           LockPersonality = true;
           SystemCallArchitectures = "native";
-          ExecStart = "${lib.getExe pkgs.parsedmarc} -c /run/parsedmarc/parsedmarc.ini";
+          ExecStart = "${pkgs.parsedmarc.exe} -c /run/parsedmarc/parsedmarc.ini";
         };
       };
 

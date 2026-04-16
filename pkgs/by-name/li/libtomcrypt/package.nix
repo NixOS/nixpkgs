@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace makefile.shared \
       --replace-fail "LIBTOOL:=glibtool" "LIBTOOL:=libtool" \
-      --replace-fail libtool "${lib.getExe libtool}"
+      --replace-fail libtool "${libtool.exe}"
   '';
 
   preBuild = ''

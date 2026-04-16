@@ -263,7 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = writeShellScript "update-animeko" ''
-    ${lib.getExe nix-update} animeko
+    ${nix-update.exe} animeko
     $(nix-build -A animeko.mitmCache.updateScript)
   '';
 

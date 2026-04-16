@@ -28,7 +28,7 @@ let
     if [[ "$USER" != '${cfg.user}' ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
     fi
-    $sudo ${getExe cfg.piholePackage} "$@"
+    $sudo ${cfg.piholePackage.exe} "$@"
   '';
 
   settingsFormat = pkgs.formats.toml { };
@@ -332,7 +332,7 @@ in
               "CAP_CHOWN"
               "CAP_SYS_TIME"
             ];
-            ExecStart = "${getExe cfg.package} no-daemon";
+            ExecStart = "${cfg.package.exe} no-daemon";
             Restart = "on-failure";
             RestartSec = 1;
             # Hardening
@@ -441,7 +441,7 @@ in
             fi
 
             echo "Deleting query logs older than ${days} days"
-            ${getExe cfg.package} sqlite3 "${database}" "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"
+            ${cfg.package.exe} sqlite3 "${database}" "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"
           '';
       };
     };

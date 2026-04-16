@@ -16,7 +16,7 @@ buildNpmPackage rec {
     hash = "sha256-fH/gp7+MU7W8FESJTr4do6FIqXpxS4v6fAxa4xc+vKw=";
 
     postFetch = ''
-      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
+      ${npm-lockfile-fix.exe} $out/package-lock.json
     '';
   };
 

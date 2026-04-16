@@ -40,7 +40,7 @@
 
                 options = Options()
                 options.add_argument("--headless")
-                service = webdriver.FirefoxService(executable_path="${lib.getExe pkgs.geckodriver}")  # noqa: E501
+                service = webdriver.FirefoxService(executable_path="${pkgs.geckodriver.exe}")  # noqa: E501
 
                 driver = webdriver.Firefox(options=options, service=service)
                 driver.implicitly_wait(10)

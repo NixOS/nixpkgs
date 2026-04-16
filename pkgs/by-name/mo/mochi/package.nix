@@ -28,7 +28,7 @@ let
 
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
-      ${lib.getExe imagemagick} ${appimageContents}/${pname}.png -resize 512x512 ${pname}_512.png
+      ${imagemagick.exe} ${appimageContents}/${pname}.png -resize 512x512 ${pname}_512.png
       install -Dm444 ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=${pname}'

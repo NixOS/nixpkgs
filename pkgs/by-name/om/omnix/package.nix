@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Note: The ENVs below will have to be kept in sync with <https://github.com/juspay/omnix/blob/main/nix/envs/default.nix>
   env = {
     OMNIX_SOURCE = finalAttrs.src;
-    CACHIX_BIN = lib.getExe cachix;
+    CACHIX_BIN = cachix.exe;
     OM_INIT_REGISTRY = "path:${finalAttrs.src}/crates/omnix-init/registry";
     DEVOUR_FLAKE = fetchFromGitHub {
       owner = "srid";

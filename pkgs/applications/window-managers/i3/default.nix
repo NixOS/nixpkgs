@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     # patchShebangs can't replace a shebang in the middle of a file.
     if [ -f testcases/t/318-i3-dmenu-desktop.t ]; then
       substituteInPlace testcases/t/318-i3-dmenu-desktop.t \
-        --replace-fail "#!/usr/bin/env perl" "#!${lib.getExe perl}"
+        --replace-fail "#!/usr/bin/env perl" "#!${perl.exe}"
     fi
   '';
 

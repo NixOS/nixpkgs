@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$out/bin/dprint"
         else
-          lib.getExe buildPackages.dprint;
+          buildPackages.dprint.exe;
     in
     ''
       rm "$out/bin/test-process-plugin"

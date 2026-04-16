@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 build/dev.bambosh.UnofficialHomestuckCollection.desktop $out/share/applications/dev.bambosh.UnofficialHomestuckCollection.desktop
     install  -d $out/bin $out/share/unofficial-homestuck-collection
     cp -r dist_electron/*-unpacked/{locales,resources{,.pak}} $out/share/unofficial-homestuck-collection
-    makeWrapper ${lib.getExe electron} $out/bin/unofficial-homestuck-collection \
+    makeWrapper ${electron.exe} $out/bin/unofficial-homestuck-collection \
       --add-flags $out/share/unofficial-homestuck-collection/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags --no-sandbox \

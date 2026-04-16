@@ -64,7 +64,7 @@ buildNimPackage rec {
 
   postPatch = ''
     substituteInPlace src/log.nim \
-      --replace-fail '"yt-dlp"' '"${lib.getExe yt-dlp}"'
+      --replace-fail '"yt-dlp"' '"${yt-dlp.exe}"'
 
     # buildNimPackage hack
     substituteInPlace ae.nimble \

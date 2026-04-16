@@ -32,7 +32,7 @@ buildGo125Module (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$out/bin/usque"
         else
-          lib.getExe buildPackages.usque;
+          buildPackages.usque.exe;
     in
     ''
       installShellCompletion --cmd usque \

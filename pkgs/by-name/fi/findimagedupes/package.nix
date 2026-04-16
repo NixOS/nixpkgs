@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     # build findimagedupes.so
     # compile inline C code (perl Inline::C) on the first run
     # fix: Can't open $out/config-x86_64-linux-thread-multi-5.040000 for output. Read-only file system
-    ${lib.getExe perl} findimagedupes
+    ${perl.exe} findimagedupes
     # build manpage
     ${lib.getExe' perl "pod2man"} findimagedupes > findimagedupes.1
     runHook postBuild

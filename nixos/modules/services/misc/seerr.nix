@@ -57,7 +57,7 @@ in
         # Note: this should be a parent of configDir.
         StateDirectory = if useNewConfigLocation then "seerr" else "jellyseerr";
         DynamicUser = true;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";

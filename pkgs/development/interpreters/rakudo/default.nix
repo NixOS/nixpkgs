@@ -29,10 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./rakudo-plain-wrapper.patch
   ];
 
-  configureScript = "${lib.getExe perl} ./Configure.pl";
+  configureScript = "${perl.exe} ./Configure.pl";
   configureFlags = [
     "--backends=moar"
-    "--with-nqp=${lib.getExe nqp}"
+    "--with-nqp=${nqp.exe}"
   ];
 
   doInstallCheck = true;

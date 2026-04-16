@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 textidote.jar $out/share/textidote/textidote.jar
 
-    makeWrapper ${lib.getExe jdk} $out/bin/textidote \
+    makeWrapper ${jdk.exe} $out/bin/textidote \
       --add-flags "-jar $out/share/textidote/textidote.jar --name textidote"
 
     runHook postInstall

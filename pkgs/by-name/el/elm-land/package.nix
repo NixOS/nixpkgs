@@ -34,7 +34,7 @@ buildNpmPackage rec {
       registryDat = ./registry.dat;
     })
     + ''
-      ln -sf ${lib.getExe elmPackages.elm} node_modules/.bin/elm
+      ln -sf ${elmPackages.elm.exe} node_modules/.bin/elm
     '';
 
   nativeInstallCheckInputs = [
@@ -46,14 +46,14 @@ buildNpmPackage rec {
     set -eu -o pipefail
 
     # Update version, src and npm deps
-    ${lib.getExe nix-update} "$UPDATE_NIX_ATTR_PATH"
+    ${nix-update.exe} "$UPDATE_NIX_ATTR_PATH"
 
     # Update elm deps
     cp "$(nix-build -A "$UPDATE_NIX_ATTR_PATH".src)/projects/cli/src/codegen/elm.json" elm.json
     trap 'rm -rf elm.json registry.dat &> /dev/null' EXIT
-    ${lib.getExe elm2nix} convert > pkgs/by-name/el/elm-land/elm-srcs.nix
-    ${lib.getExe nixfmt} pkgs/by-name/el/elm-land/elm-srcs.nix
-    ${lib.getExe elm2nix} snapshot
+    ${elm2nix.exe} convert > pkgs/by-name/el/elm-land/elm-srcs.nix
+    ${nixfmt.exe} pkgs/by-name/el/elm-land/elm-srcs.nix
+    ${elm2nix.exe} snapshot
     cp registry.dat pkgs/by-name/el/elm-land/registry.dat
   '';
 

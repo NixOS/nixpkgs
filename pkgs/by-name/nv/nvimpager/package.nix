@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preBuild = ''
     patchShebangs nvimpager
-    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim}'
+    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${neovim.exe}'
   '';
 
   doCheck = true;

@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patchShebangs .
 
     substituteInPlace {gogh.sh,installs/*.sh} \
-      --replace-fail 'bash ' '${lib.getExe bashNonInteractive} '
+      --replace-fail 'bash ' '${bashNonInteractive.exe} '
 
     substituteInPlace apply-colors.sh \
       --replace-fail 'python3' '${lib.getExe' rustpython "rustpython"}'

@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -rL apps/oxfmt/node_modules $outPath/
     cp npm/oxfmt/configuration_schema.json $outPath/
 
-    makeWrapper ${lib.getExe nodejs-slim} $out/bin/oxfmt \
+    makeWrapper ${nodejs-slim.exe} $out/bin/oxfmt \
       --add-flags $outPath/dist/cli.js
 
     runHook postInstall

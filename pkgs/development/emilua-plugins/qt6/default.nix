@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
           dontWrapQtApps = true;
         }
         ''
-          makeWrapper ${lib.getExe emilua} payload \
+          makeWrapper ${emilua.exe} payload \
             ''${qtWrapperArgs[@]} \
             --add-flags ${./basic_test.lua}
           xvfb-run ./payload

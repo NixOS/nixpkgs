@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -rL packages/lib/utils $out/lib/vultisig-cli/node_modules/@vultisig/lib-utils
 
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe nodejs} $out/bin/vultisig \
+    makeWrapper ${nodejs.exe} $out/bin/vultisig \
       --add-flags "$out/lib/vultisig-cli/dist/index.js"
 
     runHook postInstall

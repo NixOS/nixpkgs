@@ -174,7 +174,7 @@ in
             export ${name}
           '') (lib.attrNames cfg.credentials)
         )}
-        exec ${lib.escapeShellArg (lib.getExe cfg.package)}
+        exec ${lib.escapeShellArg (cfg.package.exe)}
       '';
     };
   };

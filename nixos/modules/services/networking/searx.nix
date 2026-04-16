@@ -383,7 +383,7 @@ in
         serviceConfig = {
           User = "searx";
           Group = "searx";
-          ExecStart = lib.getExe cfg.package;
+          ExecStart = cfg.package.exe;
         }
         // optionalAttrs (cfg.environmentFile != null) {
           EnvironmentFile = cfg.environmentFile;

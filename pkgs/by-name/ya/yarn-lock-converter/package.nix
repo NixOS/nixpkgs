@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/bin
     mv * $out/lib/node_modules/yarn-lock-converter/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/yarn-lock-converter \
+    makeWrapper ${nodejs.exe} $out/bin/yarn-lock-converter \
       --add-flags "$out/lib/node_modules/yarn-lock-converter/index.js"
 
     runHook postInstall

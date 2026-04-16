@@ -56,7 +56,7 @@
         owner = "root";
         group = "root";
         capabilities = "cap_net_bind_service,cap_net_raw,cap_net_admin=+ep";
-        source = "${lib.getExe cfg.package}";
+        source = "${cfg.package.exe}";
       };
 
       systemd.services.clash-verge = lib.mkIf cfg.serviceMode {

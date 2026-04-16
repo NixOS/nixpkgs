@@ -132,7 +132,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.evremap} remap ${configFile}";
+        ExecStart = "${pkgs.evremap.exe} remap ${configFile}";
 
         DynamicUser = true;
         User = "evremap";

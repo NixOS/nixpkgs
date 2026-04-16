@@ -276,7 +276,7 @@ python.pkgs.buildPythonApplication rec {
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
         --prefix PYTHONPATH : "${pythonPath}" \
         --prefix PATH : "${path}"
-      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
+      makeWrapper ${python.pkgs.celery.exe} $out/bin/celery \
         --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
         --prefix PATH : "${path}"
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace-fail LIBTOOL=glibtool 'LIBTOOL=${lib.getExe libtool}'
+      --replace-fail LIBTOOL=glibtool 'LIBTOOL=${libtool.exe}'
 
     # Remove impurities
     substituteInPlace libxo/Makefile.am \

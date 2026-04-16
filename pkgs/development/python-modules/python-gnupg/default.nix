@@ -21,9 +21,9 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace gnupg.py \
-      --replace "gpgbinary='gpg'" "gpgbinary='${lib.getExe gnupg}'"
+      --replace "gpgbinary='gpg'" "gpgbinary='${gnupg.exe}'"
     substituteInPlace test_gnupg.py \
-      --replace "os.environ.get('GPGBINARY', 'gpg')" "os.environ.get('GPGBINARY', '${lib.getExe gnupg}')"
+      --replace "os.environ.get('GPGBINARY', 'gpg')" "os.environ.get('GPGBINARY', '${gnupg.exe}')"
   '';
 
   build-system = [ setuptools ];

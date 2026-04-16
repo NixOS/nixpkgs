@@ -72,7 +72,7 @@ in
         SupplementaryGroups = [ "docker" ];
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe pkgs.docuum)
+            (pkgs.docuum.exe)
             "--threshold"
             cfg.threshold
             "--deletion-chunk-size"

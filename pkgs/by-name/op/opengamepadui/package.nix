@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       versionAndRelease = lib.splitString "-" godot_4_6.version;
     in
     {
-      GODOT = lib.getExe godot_4_6;
+      GODOT = godot_4_6.exe;
       GODOT_VERSION = lib.elemAt versionAndRelease 0;
       GODOT_RELEASE = lib.elemAt versionAndRelease 1;
       EXPORT_TEMPLATE = "${godot_4_6.export-template}/share/godot/export_templates";

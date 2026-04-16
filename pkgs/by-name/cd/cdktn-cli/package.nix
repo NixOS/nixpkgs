@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib/node_modules/cdktn-cli"
     cp -rL node_modules packages/cdktn-cli/bundle packages/cdktn-cli/package.json "$out/lib/node_modules/cdktn-cli/"
 
-    makeWrapper "${lib.getExe nodejs_20}" "$out/bin/cdktn" \
+    makeWrapper "${nodejs_20.exe}" "$out/bin/cdktn" \
       --add-flags "$out/lib/node_modules/cdktn-cli/bundle/bin/cdktn.js"
 
     runHook postInstall

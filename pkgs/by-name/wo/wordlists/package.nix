@@ -29,7 +29,7 @@ let
 
   # A command to show the location of the links.
   wordlistsBin = writeShellScriptBin "wordlists" ''
-    ${lib.getExe tree} ${wordlistsCollection}/share/wordlists
+    ${tree.exe} ${wordlistsCollection}/share/wordlists
   '';
   # A command for easy access to the wordlists.
   wordlistsPathBin = writeShellScriptBin "wordlists_path" ''

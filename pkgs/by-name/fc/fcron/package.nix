@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    sed -i 's@/usr/bin/env perl@${lib.getExe buildPackages.perl}@g' configure script/*
+    sed -i 's@/usr/bin/env perl@${buildPackages.perl.exe}@g' configure script/*
     # Don't let fcron create the group fcron, nix(os) should do this
     sed -i '2s@.*@exit 0@' script/user-group
 

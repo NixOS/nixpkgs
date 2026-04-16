@@ -120,7 +120,7 @@ buildPythonPackage (finalAttrs: {
     updateScript = writeScript "update.sh" ''
       nix-update flax # does not --build by default
       nix-build . -A flax.src # src is essentially a passthru
-      nix-update flaxlib --version="$(${lib.getExe tomlq} <result/Cargo.toml .something.version)" --commit
+      nix-update flaxlib --version="$(${tomlq.exe} <result/Cargo.toml .something.version)" --commit
     '';
   };
 

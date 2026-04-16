@@ -23,7 +23,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."tinymist.serverPath".default = "${tinymist.exe}"' package.json | sponge package.json
   '';
 
   meta = {

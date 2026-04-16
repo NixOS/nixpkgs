@@ -251,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/logseq
     cp -r static/out/*/{locales,resources{,.pak}} $out/share/logseq
 
-    makeWrapper ${lib.getExe electron} $out/bin/logseq \
+    makeWrapper ${electron.exe} $out/bin/logseq \
         --add-flags $out/share/logseq/resources/app \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set-default LOCAL_GIT_DIRECTORY ${git} \

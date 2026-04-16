@@ -6025,10 +6025,10 @@ with pkgs;
     wrapBintoolsWith {
       bintools = wild-unwrapped;
       extraBuildCommands = ''
-        wrap wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
-        wrap ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
-        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
+        wrap wild ${ldWrapper} ${buildPackages.wild-unwrapped.exe}
+        wrap ld.wild ${ldWrapper} ${buildPackages.wild-unwrapped.exe}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${ldWrapper} ${buildPackages.wild-unwrapped.exe}
+        wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${buildPackages.wild-unwrapped.exe}
       '';
     };
 

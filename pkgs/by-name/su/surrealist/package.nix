@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe esbuild_21-5;
+    ESBUILD_BINARY_PATH = esbuild_21-5.exe;
     OPENSSL_NO_VENDOR = 1;
   };
 

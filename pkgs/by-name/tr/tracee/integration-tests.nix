@@ -20,7 +20,7 @@ tracee.overrideAttrs (old: {
       --replace-fail "/bin" "/run/current-system/sw/bin" \
       --replace-fail "/tmp/test" "/tmp/ls"
     substituteInPlace tests/testutils/tracee.go \
-      --replace-fail "../../dist/tracee" "${lib.getExe tracee}"
+      --replace-fail "../../dist/tracee" "${tracee.exe}"
   '';
   nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ makeWrapper ];
   buildPhase = ''

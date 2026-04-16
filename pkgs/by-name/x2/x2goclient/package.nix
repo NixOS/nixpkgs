@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/onmainwindow.cpp \
       --replace-fail "/usr/sbin/sshd" "${lib.getExe' openssh "sshd"}"
     substituteInPlace Makefile \
-      --replace-fail "SHELL=/bin/bash" "SHELL ?= ${lib.getExe bash}" \
+      --replace-fail "SHELL=/bin/bash" "SHELL ?= ${bash.exe}" \
       --replace-fail "lrelease-qt4" "${lib.getExe' libsForQt5.qttools.dev "lrelease"}" \
       --replace-fail "qmake-qt4" "${lib.getExe' libsForQt5.qtbase.dev "qmake"}" \
       --replace-fail "-o root -g root" ""

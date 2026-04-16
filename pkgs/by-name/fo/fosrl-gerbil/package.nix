@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
   # patch out the /usr/sbin/iptables
   postPatch = ''
     substituteInPlace main.go \
-      --replace-fail '/usr/sbin/iptables' '${lib.getExe iptables}'
+      --replace-fail '/usr/sbin/iptables' '${iptables.exe}'
   '';
 
   meta = {

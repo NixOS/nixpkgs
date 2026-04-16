@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     yarn install
 
     substituteInPlace node_modules/.bin/tsc \
-      --replace-fail '/usr/bin/env node' '${lib.getExe nodejs}'
+      --replace-fail '/usr/bin/env node' '${nodejs.exe}'
 
     substituteInPlace node_modules/.bin/webpack \
-      --replace-fail '/usr/bin/env node' '${lib.getExe nodejs}'
+      --replace-fail '/usr/bin/env node' '${nodejs.exe}'
 
     substituteInPlace node_modules/.bin/postject \
-      --replace-fail '/usr/bin/env node' '${lib.getExe nodejs}'
+      --replace-fail '/usr/bin/env node' '${nodejs.exe}'
 
     make VIV_VERSION=${finalAttrs.version} linux
 

@@ -106,7 +106,7 @@ in
         HOME = "/var/lib/private/newt";
       };
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${
+        ExecStart = "${cfg.package.exe} ${
           lib.cli.toCommandLineShellGNU { } (lib.recursiveUpdate cfg.settings { inherit blueprint-file; })
         }";
         DynamicUser = true;

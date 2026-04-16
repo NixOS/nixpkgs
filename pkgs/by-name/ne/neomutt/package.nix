@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   # https://github.com/neomutt/neomutt-contrib
   # Contains vim-keys, keybindings presets and more.
-  + lib.optionalString withContrib "${lib.getExe lndir} ${finalAttrs.passthru.contrib} $out/share/doc/neomutt";
+  + lib.optionalString withContrib "${lndir.exe} ${finalAttrs.passthru.contrib} $out/share/doc/neomutt";
 
   doCheck = true;
 

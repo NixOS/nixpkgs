@@ -18,7 +18,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     moreutils
   ];
   postInstall = ''
-    jq '.contributes.configuration.properties."markdown-pdf.executablePath".default = "${lib.getExe ungoogled-chromium}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
+    jq '.contributes.configuration.properties."markdown-pdf.executablePath".default = "${ungoogled-chromium.exe}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
   '';
   meta = {
     description = "Converts Markdown files to pdf, html, png or jpeg files";

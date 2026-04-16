@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" \
+    makeWrapper '${nodejs.exe}' "$out/bin/matrix-hookshot" \
       --set NODE_ENV "production" \
       --add-flags "$out/lib/node_modules/matrix-hookshot/App/BridgeApp.js"
   '';

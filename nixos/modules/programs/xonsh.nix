@@ -102,7 +102,7 @@ in
 
     environment.shells = [
       "/run/current-system/sw/bin/xonsh"
-      "${lib.getExe package}"
+      "${package.exe}"
     ];
   };
 }

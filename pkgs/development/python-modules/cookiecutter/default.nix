@@ -38,7 +38,7 @@ buildPythonPackage rec {
     patchShebangs tests/test-pyshellhooks/hooks tests/test-shellhooks/hooks
 
     substituteInPlace tests/test_hooks.py \
-      --replace-fail "/bin/bash" "${lib.getExe bash}"
+      --replace-fail "/bin/bash" "${bash.exe}"
   '';
 
   build-system = [ setuptools ];

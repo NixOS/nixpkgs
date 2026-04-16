@@ -19,10 +19,10 @@ mkYaziPlugin {
   postPatch = ''
     substituteInPlace main.lua --replace-fail \
       'set_state("cmdline", "jdupes")' \
-      'set_state("cmdline", "${lib.getExe jdupes}")'
+      'set_state("cmdline", "${jdupes.exe}")'
     substituteInPlace main.lua --replace-fail \
       'set_state("shell", "bash")' \
-      'set_state("shell", "${lib.getExe bash}")'
+      'set_state("shell", "${bash.exe}")'
   '';
 
   meta = {

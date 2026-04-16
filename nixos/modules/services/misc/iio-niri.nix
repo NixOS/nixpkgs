@@ -49,7 +49,7 @@ in
       after = [ cfg.niriUnit ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${getExe cfg.package} ${escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${cfg.package.exe} ${escapeShellArgs cfg.extraArgs}";
         Restart = "on-failure";
       };
     };

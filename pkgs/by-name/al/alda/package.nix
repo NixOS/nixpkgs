@@ -74,7 +74,7 @@ let
       mkdir -p $out/{bin,share}
       cp build/libs/alda-player-fat.jar $out/share
 
-      makeWrapper ${lib.getExe jre} $out/bin/alda-player \
+      makeWrapper ${jre.exe} $out/bin/alda-player \
         --add-flags "-jar $out/share/alda-player-fat.jar"
 
       runHook postInstall

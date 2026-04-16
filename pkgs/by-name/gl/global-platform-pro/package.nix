@@ -20,7 +20,7 @@ let
         export LD_LIBRARY_PATH="${lib.makeLibraryPath [ zlib ]}"
         # Give access to ELF interpreter under FHS path, to be able to run
         # prebuilt binaries.
-        "${lib.getExe proot}" -b "${stdenv.cc.libc}/lib:/lib64" mvn "$@"
+        "${proot.exe}" -b "${stdenv.cc.libc}/lib:/lib64" mvn "$@"
     }
   '';
 in

@@ -76,7 +76,7 @@ in
       serviceConfig = {
         EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         ExecStartPre = utils.escapeSystemdExecArgs [
-          (getExe pkgs.envsubst)
+          (pkgs.envsubst.exe)
           "-i"
           configFile
           "-o"
@@ -84,7 +84,7 @@ in
         ];
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe cfg.package)
+            (cfg.package.exe)
             "--config=/run/evcc/config.yaml"
           ]
           ++ cfg.extraArgs

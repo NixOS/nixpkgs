@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
 
   passthru.tests.version = testers.testVersion {
     package = mypy-protobuf;
-    command = "${lib.getExe mypy-protobuf} --version";
+    command = "${mypy-protobuf.exe} --version";
   };
 
   meta = {

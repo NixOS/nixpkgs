@@ -108,7 +108,7 @@ buildNpmPackage (finalAttrs: {
           cp -r dist/*-unpacked/resources/app.asar $out/share/repath-studio
           cp resources/public/img/icon.svg $out/share/icons/hicolor/scalable/apps/repath-studio.svg
 
-          makeWrapper '${lib.getExe electron}' "$out/bin/repath-studio" \
+          makeWrapper '${electron.exe}' "$out/bin/repath-studio" \
             --add-flags "$out/share/repath-studio/app.asar" \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \

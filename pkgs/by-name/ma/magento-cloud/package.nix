@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     install -D ${finalAttrs.src} $out/libexec/magento-cloud/magento-cloud.phar
-    makeWrapper ${lib.getExe php} $out/bin/magento-cloud \
+    makeWrapper ${php.exe} $out/bin/magento-cloud \
       --add-flags "$out/libexec/magento-cloud/magento-cloud.phar"
 
     runHook postInstall

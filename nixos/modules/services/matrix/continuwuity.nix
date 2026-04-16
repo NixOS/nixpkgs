@@ -13,7 +13,7 @@ let
   configFile = format.generate "continuwuity.toml" cfg.settings;
 
   conduwuitWrapper = pkgs.writeShellScriptBin "conduwuit" ''
-    exec ${lib.getExe cfg.package} --config ${configFile} "$@"
+    exec ${cfg.package.exe} --config ${configFile} "$@"
   '';
 in
 {
@@ -281,7 +281,7 @@ in
         RuntimeDirectory = "continuwuity";
         RuntimeDirectoryMode = "0750";
 
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
         RestartSec = 10;
       };

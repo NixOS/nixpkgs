@@ -47,7 +47,7 @@ let
       ++ lib.optionals stdenv.hostPlatform.isAarch64 [ fex ]
     ))
     "--add-flags"
-    "--execute-pre=${lib.getExe initScript}"
+    "--execute-pre=${initScript.exe}"
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {

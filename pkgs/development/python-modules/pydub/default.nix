@@ -31,7 +31,7 @@ buildPythonPackage rec {
     })
     # Fix paths to ffmpeg, ffplay and ffprobe
     (replaceVars ./ffmpeg-fix-path.patch {
-      ffmpeg = lib.getExe ffmpeg-full;
+      ffmpeg = ffmpeg-full.exe;
       ffplay = lib.getExe' ffmpeg-full "ffplay";
       ffprobe = lib.getExe' ffmpeg-full "ffprobe";
     })

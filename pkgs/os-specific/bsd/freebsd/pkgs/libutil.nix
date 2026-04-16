@@ -34,7 +34,7 @@ mkDerivation {
       null
     else
       ''
-        substituteInPlace lib/libutil/pw_util.c --replace-fail _PATH_PWD_MKDB '"${lib.getExe withPwdMkdb}"'
+        substituteInPlace lib/libutil/pw_util.c --replace-fail _PATH_PWD_MKDB '"${withPwdMkdb.exe}"'
       '';
 
   preBuild = ''

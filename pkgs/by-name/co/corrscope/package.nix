@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Tries writing to
     # - $HOME/.local/share/corrscope on Linux
     # - $HOME/Library/Application Support/corrscope on Darwin
-    command = "env HOME=$TMPDIR ${lib.getExe corrscope} --version";
+    command = "env HOME=$TMPDIR ${corrscope.exe} --version";
   };
 
   meta = {

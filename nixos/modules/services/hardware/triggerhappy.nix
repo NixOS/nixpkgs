@@ -90,7 +90,7 @@ in
         type = lib.types.listOf (lib.types.submodule bindingCfg);
         default = [ ];
         example = lib.literalExpression ''
-          [ { keys = ["PLAYPAUSE"];  cmd = "''${lib.getExe pkgs.mpc} -q toggle"; } ]
+          [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc.exe} -q toggle"; } ]
         '';
         description = ''
           Key bindings for {command}`triggerhappy`.

@@ -126,8 +126,8 @@ buildPythonPackage {
     )
     + ''
       substituteInPlace $out/bin/paddle \
-        --replace-fail "/bin/bash" "${lib.getExe bash}" \
-        --replace-fail "python -"  "${lib.getExe (python.withPackages (ps: with ps; [ distutils ]))} -"
+        --replace-fail "/bin/bash" "${bash.exe}" \
+        --replace-fail "python -"  "${(python.withPackages (ps: with ps; [ distutils ])).exe} -"
       sed -i '/# Check python lib installed or not./,/^fi$/d' $out/bin/paddle
       sed -i 's/^INSTALLED_VERSION=.*/INSTALLED_VERSION="${version}"/' $out/bin/paddle
     '';

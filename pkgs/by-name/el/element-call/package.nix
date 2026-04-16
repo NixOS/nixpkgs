@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    ${lib.getExe yarn-berry} build
+    ${yarn-berry.exe} build
     runHook postBuild
   '';
 

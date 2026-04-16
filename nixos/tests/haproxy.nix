@@ -77,7 +77,7 @@
         raise Exception(f"Command {command} failed with exit code {r}")
 
     def openssl(command):
-      cmd(f"${lib.getExe hostPkgs.openssl} {command}")
+      cmd(f"${hostPkgs.openssl.exe} {command}")
 
     # Generate CA.
     openssl("req -new -newkey rsa:4096 -nodes -x509 -days 7 -subj '/C=ZZ/ST=Cloud/L=Unspecified/O=NixOS/OU=Tests/CN=CA Certificate' -keyout cacert.key -out cacert.crt")

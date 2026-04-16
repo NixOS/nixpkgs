@@ -237,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + ''
     substituteInPlace share/functions/grep.fish \
-      --replace-fail "command grep" "command ${lib.getExe gnugrep}"
+      --replace-fail "command grep" "command ${gnugrep.exe}"
 
     substituteInPlace share/completions/{sudo.fish,doas.fish} \
       --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
@@ -254,7 +254,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     for cur in share/functions/*.fish; do
       substituteInPlace "$cur" \
-        --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
+        --replace-quiet '/usr/bin/getent' '${getent.exe}' \
         --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
     done
     for cur in share/completions/*.fish; do
@@ -403,17 +403,17 @@ stdenv.mkDerivation (finalAttrs: {
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no
             # tempfile to check)
-            ${lib.getExe gnused} -e 's@delete=True,@delete=False,@' -i webconfig.py
+            ${gnused.exe} -e 's@delete=True,@delete=False,@' -i webconfig.py
 
             # we delete everything after the fileurl is assigned
-            ${lib.getExe gnused} -e '/fileurl =/q' -i webconfig.py
+            ${gnused.exe} -e '/fileurl =/q' -i webconfig.py
             echo "print(fileurl)" >> webconfig.py
 
             # and check whether the message appears on the page
             # cannot test the http server because it needs a localhost port
             cat (${python3}/bin/python ./webconfig.py \
-              | tail -n1 | ${lib.getExe gnused} -e 's|file://||' \
-            ) | ${lib.getExe gnugrep} -q 'a href="http://localhost.*Start the Fish Web config'
+              | tail -n1 | ${gnused.exe} -e 's|file://||' \
+            ) | ${gnugrep.exe} -q 'a href="http://localhost.*Start the Fish Web config'
           '';
         in
         runCommand "test-web-config" { } ''

@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         };
     in
     ''
-      ${lib.getExe jq} \
+      ${jq.exe} \
         'del(.plugins.tauri.updater) | .build.frontendDist = "${cinny'}" | del(.build.beforeBuildCommand) | .bundle.createUpdaterArtifacts = false' tauri.conf.json \
         | ${lib.getExe' moreutils "sponge"} tauri.conf.json
     '';

@@ -1014,7 +1014,7 @@ in
           RuntimeDirectory = "prosody";
           PIDFile = "/run/prosody/prosody.pid";
           Environment = "PROSODY_CONFIG=/run/prosody/prosody.cfg.lua";
-          ExecStart = "${lib.getExe cfg.package} -F";
+          ExecStart = "${cfg.package.exe} -F";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-abnormal";
 

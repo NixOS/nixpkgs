@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://src.fedoraproject.org/rpms/mutter/pull-request/49
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
-    "-Dxwayland_path=${lib.getExe xwayland}"
+    "-Dxwayland_path=${xwayland.exe}"
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"

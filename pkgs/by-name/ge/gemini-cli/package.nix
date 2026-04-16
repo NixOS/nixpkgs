@@ -56,7 +56,7 @@ buildNpmPackage (finalAttrs: {
 
     # Fix ripgrep path for SearchText; ensureRgPath() on its own may return the path to a dynamically-linked ripgrep binary without required libraries
     substituteInPlace packages/core/src/tools/ripGrep.ts \
-      --replace-fail "await ensureRgPath();" "'${lib.getExe ripgrep}';"
+      --replace-fail "await ensureRgPath();" "'${ripgrep.exe}';"
 
     # Disable auto-update by changing default values in settings schema
     sed -i '/enableAutoUpdate:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
@@ -98,7 +98,7 @@ buildNpmPackage (finalAttrs: {
 
     rm -f $out/share/gemini-cli/docs/CONTRIBUTING.md
 
-    makeWrapper "${lib.getExe finalAttrs.nodejs}" "$out/bin/gemini" \
+    makeWrapper "${finalAttrs.nodejs.exe}" "$out/bin/gemini" \
       --add-flags "--no-warnings=DEP0040" \
       --add-flags "$out/share/gemini-cli/gemini.js"
 

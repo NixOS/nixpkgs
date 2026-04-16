@@ -411,10 +411,9 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      exeAttrs =
-        optionalAttrs (passthru ? meta.mainProgram && !(drv ? exe)) {
-          exe = "${lib.getBin commonAttrs}/bin/${passthru.meta.mainProgram}";
-        };
+      exeAttrs = optionalAttrs (passthru ? meta.mainProgram && !(drv ? exe)) {
+        exe = "${lib.getBin commonAttrs}/bin/${passthru.meta.mainProgram}";
+      };
 
       commonAttrs =
         drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // exeAttrs // passthru;

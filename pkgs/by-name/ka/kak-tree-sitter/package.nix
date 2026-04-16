@@ -18,7 +18,7 @@ symlinkJoin (finalAttrs: {
   # Use tinycc as cc to reduce closure size
   postBuild = ''
     mkdir -p $out/libexec/tinycc/bin
-    ln -s ${lib.getExe tinycc} $out/libexec/tinycc/bin/cc
+    ln -s ${tinycc.exe} $out/libexec/tinycc/bin/cc
     wrapProgram "$out/bin/ktsctl" \
       --suffix PATH : $out/libexec/tinycc/bin
   '';

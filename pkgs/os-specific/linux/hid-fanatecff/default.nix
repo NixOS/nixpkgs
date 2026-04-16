@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace fanatec.rules \
       --replace-fail '/usr/bin/evdev-joystick' '${lib.getExe' linuxConsoleTools "evdev-joystick"}' \
-      --replace-fail '/bin/sh' '${lib.getExe bashNonInteractive}'
+      --replace-fail '/bin/sh' '${bashNonInteractive.exe}'
   '';
 
   makeFlags = kernelModuleMakeFlags ++ [

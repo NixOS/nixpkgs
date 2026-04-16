@@ -178,7 +178,7 @@ in
     ++ lib.optionals cfg.analysis.enable [
       "d '${cfg.stateDir}/tools' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tools/klipper_estimator' - ${cfg.user} ${cfg.group} - -"
-      "L+ '${cfg.stateDir}/tools/klipper_estimator/klipper_estimator_linux' - - - - ${lib.getExe pkgs.klipper-estimator}"
+      "L+ '${cfg.stateDir}/tools/klipper_estimator/klipper_estimator_linux' - - - - ${pkgs.klipper-estimator.exe}"
     ];
 
     systemd.services.moonraker = {

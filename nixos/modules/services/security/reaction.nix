@@ -46,7 +46,7 @@ in
             description = ''
               Nixpkgs provides a `reaction-plugins` package set which includes both offical and community plugins for reaction.
 
-              To use the plugins in your module configuration, in `settings.plugins` you can use for e.g. `''${lib.getExe reaction-plugins.reaction-plugin-ipset}`
+              To use the plugins in your module configuration, in `settings.plugins` you can use for e.g. `''${reaction-plugins.reaction-plugin-ipset.exe}`
               See https://reaction.ppom.me/plugins/ to configure plugins.
             '';
             default = { };
@@ -234,7 +234,7 @@ in
         optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform)
           (
             pkgs.runCommand "reaction-config-validation" { } ''
-              ${getExe cfg.package} test-config -c ${settingsDir} >/dev/null
+              ${cfg.package.exe} test-config -c ${settingsDir} >/dev/null
               echo "reaction config ${settingsDir} is valid"
               touch $out
             ''
@@ -252,7 +252,7 @@ in
           KillMode = "mixed"; # for plugins
           User = if (!cfg.runAsRoot) then "reaction" else "root";
           ExecStart = ''
-            ${getExe cfg.package} start -c ${settingsDir}${
+            ${cfg.package.exe} start -c ${settingsDir}${
               optionalString (cfg.loglevel != null) " -l ${cfg.loglevel}"
             }
           '';

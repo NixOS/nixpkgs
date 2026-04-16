@@ -371,9 +371,9 @@ in
           tools = {
             pdftk = mkOption {
               type = types.path;
-              default = getExe pkgs.pdftk;
+              default = pkgs.pdftk.exe;
               defaultText = literalExpression ''
-                lib.getExe pkgs.pdftk
+                pkgs.pdftk.exe
               '';
               description = ''
                 Path to the pdftk executable.

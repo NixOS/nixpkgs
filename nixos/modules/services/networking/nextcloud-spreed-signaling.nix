@@ -456,7 +456,7 @@ in
             wantedBy = [ "multi-user.target" ];
             preStart =
               let
-                replaceSecretBin = lib.getExe pkgs.replace-secret;
+                replaceSecretBin = pkgs.replace-secret.exe;
               in
               ''
                 cp -f '${configFile}' '${runConfig}'
@@ -485,7 +485,7 @@ in
               Type = "simple";
               User = cfg.user;
               Group = cfg.group;
-              ExecStart = "${lib.getExe cfg.package} --config '${runConfig}'";
+              ExecStart = "${cfg.package.exe} --config '${runConfig}'";
               Restart = "on-failure";
               WorkingDirectory = cfg.stateDir;
               RuntimeDirectory = "nextcloud-spreed-signaling";

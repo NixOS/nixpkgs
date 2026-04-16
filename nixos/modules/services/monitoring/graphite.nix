@@ -384,7 +384,7 @@ in
         };
         serviceConfig = {
           ExecStart = ''
-            ${lib.getExe pkgs.python3Packages.waitress-django} \
+            ${pkgs.python3Packages.waitress-django.exe} \
               --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
           '';
           User = "graphite";
@@ -427,7 +427,7 @@ in
         ];
         environment = seyrenConfig;
         serviceConfig = {
-          ExecStart = "${lib.getExe pkgs.seyren} -httpPort ${toString cfg.seyren.port}";
+          ExecStart = "${pkgs.seyren.exe} -httpPort ${toString cfg.seyren.port}";
           WorkingDirectory = dataDir;
           User = "graphite";
           Group = "graphite";

@@ -214,7 +214,7 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = getExe cfgApi.package;
+          ExecStart = cfgApi.package.exe;
           Type = "simple";
           Restart = "on-failure";
 

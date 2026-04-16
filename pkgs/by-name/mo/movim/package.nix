@@ -153,8 +153,8 @@ php.buildComposerProject2 (finalAttrs: {
   postInstall = ''
     mkdir -p $out/bin
     cat << EOF > $out/bin/movim
-    #!${lib.getExe dash}
-    ${lib.getExe finalAttrs.php} $out/share/php/movim/daemon.php "\$@"
+    #!${dash.exe}
+    ${finalAttrs.php.exe} $out/share/php/movim/daemon.php "\$@"
     EOF
     chmod +x $out/bin/movim
 

@@ -114,12 +114,10 @@ in
                 map (state: ''
                   mkdir -p $out/${state}.d
                   ln -s ${
-                    lib.getExe (
-                      pkgs.writeShellApplication {
-                        inherit name;
-                        text = cfg.script;
-                      }
-                    )
+                    (pkgs.writeShellApplication {
+                      inherit name;
+                      text = cfg.script;
+                    }).exe
                   } $out/${state}.d/${name}
                 '') cfg.onState
               ))

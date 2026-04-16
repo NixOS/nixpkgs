@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "sysconfdir=$(out)/etc" ];
   postInstall = ''
     substituteInPlace $out/bin/rush-po \
-      --replace "exec perl" "exec ${lib.getExe perl}"
+      --replace "exec perl" "exec ${perl.exe}"
   '';
 
   doCheck = true;

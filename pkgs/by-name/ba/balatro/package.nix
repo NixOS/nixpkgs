@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Packaging the love file into the executable ensures lovely finds the game's name
     # https://github.com/ethangreen-dev/lovely-injector/pull/66#issuecomment-2319615509
-    cat ${lib.getExe love} $loveFile > $out/share/Balatro
+    cat ${love.exe} $loveFile > $out/share/Balatro
     chmod +x $out/share/Balatro
 
     makeWrapper $out/share/Balatro $out/bin/balatro ${lib.optionalString withMods ''

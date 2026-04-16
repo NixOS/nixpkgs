@@ -85,7 +85,7 @@ buildNpmPackage {
     export TERMINUSDB_LOG_LEVEL="ERROR"
 
     # Point test helpers at the packaged terminusdb binary
-    export TERMINUSDB_EXEC_PATH="${lib.getExe terminusdb}"
+    export TERMINUSDB_EXEC_PATH="${terminusdb.exe}"
 
     start_terminusdb
   '';

@@ -33,7 +33,7 @@ buildNpmPackage {
 
     mkdir -p $out/{bin,share/flaci}
     cp -r * $out/share/flaci/
-    makeWrapper ${lib.getExe electron} $out/bin/FLACI \
+    makeWrapper ${electron.exe} $out/bin/FLACI \
       --add-flags $out/share/flaci \
       --add-flags "--no-sandbox"
 

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/freerouting}
     cp build/libs/freerouting-executable.jar $out/share/freerouting
 
-    makeWrapper ${lib.getExe jre} $out/bin/freerouting \
+    makeWrapper ${jre.exe} $out/bin/freerouting \
       --add-flags "-jar $out/share/freerouting/freerouting-executable.jar"
 
     install -Dm644 ${finalAttrs.src}/design/icon/freerouting_icon_256x256_v1.png \

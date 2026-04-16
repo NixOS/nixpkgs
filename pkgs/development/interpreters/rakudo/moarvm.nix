@@ -38,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '`sw_vers -productVersion`' '"11.0"'
   '';
 
-  configureScript = "${lib.getExe perl} ./Configure.pl";
+  configureScript = "${perl.exe} ./Configure.pl";
   configureFlags = [
-    "--pkgconfig=${lib.getExe pkg-config}"
+    "--pkgconfig=${pkg-config.exe}"
   ];
 
   doInstallCheck = true;

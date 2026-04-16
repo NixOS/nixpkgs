@@ -139,7 +139,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace src/exo/utils/info_gatherer/info_gatherer.py \
       --replace-fail \
         'shutil.which("macmon")' \
-        '"${lib.getExe macmon}"'
+        '"${macmon.exe}"'
   '';
 
   build-system = with python3Packages; [

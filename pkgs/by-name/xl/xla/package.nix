@@ -104,10 +104,10 @@ in
   # Note: --python_bin_path only sets PYTHON_BIN_PATH; it does not disable
   # rules_python's hermetic Python download (triggered by python_init_toolchains).
   preConfigure = ''
-    ${lib.getExe pythonEnv} ./configure.py \
+    ${pythonEnv.exe} ./configure.py \
       --backend=CPU \
       --host_compiler=CLANG \
-      --clang_path=${lib.getExe clangStdenv.cc}
+      --clang_path=${clangStdenv.cc.exe}
   '';
 
   bazelTargets = [

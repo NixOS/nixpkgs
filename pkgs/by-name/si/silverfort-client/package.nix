@@ -89,7 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    makeBinaryWrapper "${lib.getExe electron}" $out/bin/silverfort-client \
+    makeBinaryWrapper "${electron.exe}" $out/bin/silverfort-client \
       --add-flags "$out/share/silverfort-client/resources/app.asar" \
       --set-default ELECTRON_IS_DEV 0 \
       "''${gappsWrapperArgs[@]}"

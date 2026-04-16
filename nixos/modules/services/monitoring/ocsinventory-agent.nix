@@ -118,7 +118,7 @@ in
         reloadTriggers = [ configFile ];
 
         serviceConfig = {
-          ExecStart = lib.getExe cfg.package;
+          ExecStart = cfg.package.exe;
           ConfigurationDirectory = "ocsinventory-agent";
           StateDirectory = "ocsinventory-agent";
         };

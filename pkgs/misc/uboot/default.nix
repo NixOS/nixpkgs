@@ -109,7 +109,7 @@ let
         enableParallelBuilding = true;
 
         makeFlags = [
-          "DTC=${lib.getExe buildPackages.dtc}"
+          "DTC=${buildPackages.dtc.exe}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
           "HOSTCFLAGS=-fcommon"
         ]

@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=unused-command-line-argument"
     ];
     # When cross compiling, configure prefers the unwrapped clang unless told otherwise.
-    CLANG = lib.getExe buildPackages.llvmPackages.clang;
+    CLANG = buildPackages.llvmPackages.clang.exe;
 
     PRODUCTION = 1;
     DYNAMIC_LIBXDP = 1;

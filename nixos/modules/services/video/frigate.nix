@@ -753,7 +753,7 @@ in
       serviceConfig = {
         ExecStartPre = [
           (pkgs.writeShellScript "frigate-clear-cache" ''
-            ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
+            ${pkgs.findutils.exe} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
             cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
@@ -762,7 +762,7 @@ in
         ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
           # Extract libavformat version to enable version-dependent flags in ffmpeg
           (pkgs.writeShellScript "frigate-libavformat-major-version" ''
-            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | ${lib.getExe pkgs.gnugrep} -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
+            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | ${pkgs.gnugrep.exe} -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
             echo "Detected $(cat /run/frigate/ffmpeg-env)"
           '')
         ];

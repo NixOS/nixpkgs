@@ -40,7 +40,7 @@ appimageTools.wrapType2 {
       VERSION=$(echo "$LATEST_YML" | grep -E '^version:' | awk '{print $2}')
       BUILD=$(echo "$LATEST_YML" | grep -E 'url: .*/volanta-app/' | sed -E 's/.*volanta-app\/[0-9.]+-([0-9a-f]+)\/.*/\1/' | head -n1)
       ${lib.getExe' common-updater-scripts "update-source-version"} volanta $BUILD --version-key=build || true
-      ${lib.getExe nix-update} volanta --version $VERSION
+      ${nix-update.exe} volanta --version $VERSION
     '';
   };
 

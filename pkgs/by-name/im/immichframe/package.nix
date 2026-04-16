@@ -71,7 +71,7 @@ writeShellApplication {
 
   text = ''
     cd ${frontend}
-    exec ${lib.getExe publishApi} "$@"
+    exec ${publishApi.exe} "$@"
   '';
 
   passthru.tests = { inherit (nixosTests) immichframe; };

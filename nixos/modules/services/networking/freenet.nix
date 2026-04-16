@@ -28,7 +28,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = lib.getExe pkgs.freenet;
+        ExecStart = pkgs.freenet.exe;
         User = "freenet";
         UMask = "0007";
         WorkingDirectory = varDir;

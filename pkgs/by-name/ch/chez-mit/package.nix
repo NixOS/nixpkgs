@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "CHEZ=${lib.getExe chez}"
+    "CHEZ=${chez.exe}"
     "PREFIX=$(out)"
     "CHEZSCHEMELIBDIRS=${chez-srfi}/lib/csv${lib.versions.majorMinor chez.version}-site"
   ];

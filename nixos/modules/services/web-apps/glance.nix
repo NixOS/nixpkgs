@@ -179,7 +179,7 @@ in
             ${utils.genJqSecretsReplacementSnippet cfg.settings settingsFile}
             chown $USER ${settingsFile}
           '';
-        ExecStart = "${getExe cfg.package} --config ${settingsFile}";
+        ExecStart = "${cfg.package.exe} --config ${settingsFile}";
         Restart = "on-failure";
         WorkingDirectory = "/var/lib/glance";
         EnvironmentFile = cfg.environmentFile;

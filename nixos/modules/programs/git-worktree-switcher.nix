@@ -12,11 +12,11 @@ let
     shell:
     if (shell == "fish") then
       ''
-        ${lib.getExe cfg.package} init ${shell} | source
+        ${cfg.package.exe} init ${shell} | source
       ''
     else
       ''
-        eval "$(${lib.getExe cfg.package} init ${shell})"
+        eval "$(${cfg.package.exe} init ${shell})"
       '';
 in
 {

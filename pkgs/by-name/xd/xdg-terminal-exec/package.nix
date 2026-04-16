@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     # use dash posix sh implementation as recommended by upstream
     substituteInPlace $out/bin/xdg-terminal-exec \
-      --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
+      --replace-fail '#!/bin/sh' '#!${dash.exe}'
 
     # add default config to XDG_DATA_DIRS
     wrapProgram $out/bin/xdg-terminal-exec \

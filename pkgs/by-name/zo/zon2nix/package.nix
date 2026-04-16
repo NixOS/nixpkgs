@@ -22,11 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   zigBuildFlags = [
-    "-Dnix=${lib.getExe nix}"
+    "-Dnix=${nix.exe}"
   ];
 
   zigCheckFlags = [
-    "-Dnix=${lib.getExe nix}"
+    "-Dnix=${nix.exe}"
   ];
 
   meta = {

@@ -61,7 +61,7 @@ maven.buildMavenPackage rec {
     done
 
     mkdir $out/bin
-    makeWrapper ${lib.getExe jre} $out/bin/${meta.mainProgram} \
+    makeWrapper ${jre.exe} $out/bin/${meta.mainProgram} \
       --add-flags "-jar $out/share/bytecode-viewer/bytecode-viewer.jar"
 
     runHook postInstall

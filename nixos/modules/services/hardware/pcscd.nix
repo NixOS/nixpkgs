@@ -133,7 +133,7 @@ in
       # https://github.com/NixOS/nixpkgs/issues/121088
       serviceConfig.ExecStart = [
         ""
-        "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
+        "${package.exe} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
       ];
     };
 

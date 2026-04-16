@@ -298,7 +298,7 @@ in
         if [ -f "$CREDENTIALS_DIRECTORY/pgpass" ]; then
             cp -f "$CREDENTIALS_DIRECTORY/pgpass" "$CACHE_DIRECTORY/pgpass"
         fi
-        exec ${lib.getExe pkgs.postgrest} ${configFile}
+        exec ${pkgs.postgrest.exe} ${configFile}
       '';
     };
   };

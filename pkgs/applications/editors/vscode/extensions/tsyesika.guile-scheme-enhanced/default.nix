@@ -16,7 +16,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."guileScheme.guileREPLCommand".default = "${lib.getExe' guile "guile"}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ${jq.exe} '.contributes.configuration.properties."guileScheme.guileREPLCommand".default = "${lib.getExe' guile "guile"}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
   '';
 
   meta = {

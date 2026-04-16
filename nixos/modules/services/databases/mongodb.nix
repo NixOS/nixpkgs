@@ -10,7 +10,7 @@ let
 
   mongodb = cfg.package;
 
-  mongoshExe = lib.getExe cfg.mongoshPackage;
+  mongoshExe = cfg.mongoshPackage.exe;
 
   mongoCnf =
     cfg:

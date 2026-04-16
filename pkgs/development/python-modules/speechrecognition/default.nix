@@ -39,7 +39,7 @@ buildPythonPackage rec {
     rm -r third-party
 
     substituteInPlace speech_recognition/audio.py \
-      --replace-fail 'shutil_which("flac")' '"${lib.getExe flac}"'
+      --replace-fail 'shutil_which("flac")' '"${flac.exe}"'
   '';
 
   build-system = [ setuptools ];

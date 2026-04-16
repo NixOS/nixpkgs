@@ -98,7 +98,7 @@ in
       description = "Websurfx, a metasearch engine";
 
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         DynamicUser = true;
         RuntimeDirectory = "websurfx";
         Environment = [ "HOME=%t/websurfx" ];

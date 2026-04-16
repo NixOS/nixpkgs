@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../script/* $out/libexec
     rm -r $out/libexec/tests
     rm $out/libexec/requirements.txt
-    makeWrapper ${lib.getExe python3} $out/bin/chameleon-cli \
+    makeWrapper ${python3.exe} $out/bin/chameleon-cli \
       --add-flags "$out/libexec/chameleon_cli_main.py" \
       --prefix PYTHONPATH : ${pythonPath}
 

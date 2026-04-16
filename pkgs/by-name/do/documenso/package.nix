@@ -83,8 +83,8 @@ buildNpmPackage (finalAttrs: {
     export PRISMA_QUERY_ENGINE_BINARY=${lib.getExe' prisma-engines_6 "query-engine"}
     export PRISMA_SCHEMA_ENGINE_BINARY=${prisma-engines_6}
     cd $out/apps/remix
-    ${lib.getExe prisma_6} migrate deploy --schema ../../packages/prisma/schema.prisma
-    ${lib.getExe nodejs} build/server/main.js
+    ${prisma_6.exe} migrate deploy --schema ../../packages/prisma/schema.prisma
+    ${nodejs.exe} build/server/main.js
     EOF
           chmod +x $out/bin/documenso
 

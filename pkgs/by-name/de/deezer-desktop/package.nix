@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp deezer-desktop-${version}-${archDir}/resources/dev.aunetx.deezer.svg $out/share/icons/hicolor/scalable/apps/deezer-desktop.svg
     cp -r deezer-desktop-${version}-${archDir}/resources/{app.asar,linux} $out/share/deezer-desktop/resources/
 
-    makeWrapper "${lib.getExe electron}" "$out/bin/deezer-desktop" \
+    makeWrapper "${electron.exe}" "$out/bin/deezer-desktop" \
       --inherit-argv0 \
       --add-flags "$out/share/deezer-desktop/resources/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \

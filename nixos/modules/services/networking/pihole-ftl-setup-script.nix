@@ -20,10 +20,10 @@ in
 ''
   # Can't use -u (unset) because api.sh uses API_URL before it is set
   set -eo pipefail
-  pihole="${lib.getExe pihole}"
-  jq="${lib.getExe pkgs.jq}"
+  pihole="${pihole.exe}"
+  jq="${pkgs.jq.exe}"
 
-  ${lib.getExe pkgs.curl} --retry 3 --retry-delay 5 "${macvendorURL}" -o "${cfg.settings.files.macvendor}" || echo "Failed to download MAC database from ${macvendorURL}"
+  ${pkgs.curl.exe} --retry 3 --retry-delay 5 "${macvendorURL}" -o "${cfg.settings.files.macvendor}" || echo "Failed to download MAC database from ${macvendorURL}"
 
   # If the database doesn't exist, it needs to be created with gravity.sh
   if [ ! -f '${cfg.settings.files.gravity}' ]; then

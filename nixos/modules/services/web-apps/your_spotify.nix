@@ -136,7 +136,7 @@ in
       script = ''
         export SPOTIFY_SECRET=$(< "$CREDENTIALS_DIRECTORY/SPOTIFY_SECRET")
         ${lib.getExe' cfg.package "your_spotify_migrate"}
-        exec ${lib.getExe cfg.package}
+        exec ${cfg.package.exe}
       '';
       serviceConfig = {
         User = "your_spotify";

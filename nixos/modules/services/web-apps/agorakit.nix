@@ -13,7 +13,7 @@ let
 
   user = cfg.user;
   group = cfg.group;
-  php = lib.getExe cfg.phpPackage;
+  php = cfg.phpPackage.exe;
 
   # shell script for local administration
   artisan = pkgs.writeScriptBin "agorakit" ''

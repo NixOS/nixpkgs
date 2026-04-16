@@ -235,7 +235,7 @@ in
               '';
           ExecStart = [
             ""
-            "${lib.getExe cfg.package} --config=${configFile}"
+            "${cfg.package.exe} --config=${configFile}"
           ];
           LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
 

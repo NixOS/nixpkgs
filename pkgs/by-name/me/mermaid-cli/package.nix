@@ -32,7 +32,7 @@ buildNpmPackage {
 
   npmBuildScript = "prepare";
 
-  makeWrapperArgs = lib.lists.optional (lib.meta.availableOn stdenv.hostPlatform chromium) "--set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}'";
+  makeWrapperArgs = lib.lists.optional (lib.meta.availableOn stdenv.hostPlatform chromium) "--set PUPPETEER_EXECUTABLE_PATH '${chromium.exe}'";
 
   passthru = {
     updateScript = nix-update-script { };

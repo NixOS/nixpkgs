@@ -380,7 +380,7 @@ let
             --ok-label='Continue to EDOPro'
         fi
 
-        exec ${lib.getExe edopro} -C "$EDOPRO_DIR" "$@"
+        exec ${edopro.exe} -C "$EDOPRO_DIR" "$@"
       '';
     };
 

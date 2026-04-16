@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./paths.patch {
-      xauth = lib.getExe xauth;
-      xdpyinfo = lib.getExe xdpyinfo;
+      xauth = xauth.exe;
+      xdpyinfo = xdpyinfo.exe;
     })
   ];
 

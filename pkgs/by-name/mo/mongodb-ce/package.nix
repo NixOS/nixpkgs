@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
         };
       in
       {
-        command = lib.getExe script;
+        command = script.exe;
       };
 
     tests = {

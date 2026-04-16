@@ -27,7 +27,7 @@ let
     rev = "v${version}";
     hash = "sha256-DQIRsqkH2zgIkb3yezuJEKJ99PS031GJ+bDAeHMLNUY=";
     postFetch = ''
-      ${lib.getExe npm-lockfile-fix} $out/assets/package-lock.json
+      ${npm-lockfile-fix.exe} $out/assets/package-lock.json
       sed -ie '
         /defp deps do/ {
           n
@@ -165,8 +165,8 @@ beamPackages.mixRelease rec {
     # Fix cross-compilation with buildPackages
     # since tailwindcss_3 is not available for RiscV
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe buildPackages.tailwindcss_3}"
-    config :esbuild, path: "${lib.getExe esbuild}"
+    config :tailwind, path: "${buildPackages.tailwindcss_3.exe}"
+    config :esbuild, path: "${esbuild.exe}"
     EOF
   '';
 

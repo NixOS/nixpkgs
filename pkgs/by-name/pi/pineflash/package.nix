@@ -59,12 +59,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/submodules/flash.rs \
-      --replace-fail 'let blisppath = "blisp";' 'let blisppath = "${lib.getExe blisp}";' \
+      --replace-fail 'let blisppath = "blisp";' 'let blisppath = "${blisp.exe}";' \
       --replace-fail 'let dfupath = "dfu-util";' 'let dfupath = "${lib.getExe' dfu-util "dfu-util"}";'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/submodules/flash.rs \
-      --replace-fail 'Command::new("blisp")' 'Command::new("${lib.getExe blisp}")' \
+      --replace-fail 'Command::new("blisp")' 'Command::new("${blisp.exe}")' \
       --replace-fail 'Command::new("dfu-util")' 'Command::new("${lib.getExe' dfu-util "dfu-util"}")'
   '';
 

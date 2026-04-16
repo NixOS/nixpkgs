@@ -8,4 +8,4 @@
   extraArgs ? [ ],
 }:
 
-[ "${lib.getExe nix-update}" ] ++ extraArgs ++ lib.optionals (attrPath != null) [ attrPath ]
+[ "${nix-update.exe}" ] ++ extraArgs ++ lib.optionals (attrPath != null) [ attrPath ]

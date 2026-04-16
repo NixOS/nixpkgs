@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         tmpdir=$(mktemp -d)
 
         # stellarium can't be run in headless mode, therefore we need xvfb-run.
-        HOME="$tmpdir" ${lib.getExe xvfb-run} stellarium --version
+        HOME="$tmpdir" ${xvfb-run.exe} stellarium --version
       '';
     };
     updateScript = gitUpdater { rev-prefix = "v"; };

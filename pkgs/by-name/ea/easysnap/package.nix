@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
     for i in $out/bin/*; do
       substituteInPlace $i \
-        --replace-fail zfs ${lib.getExe zfs}
+        --replace-fail zfs ${zfs.exe}
     done
 
     runHook postInstall

@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
   passthru.tests.version = testers.testVersion {
     package = container-structure-test;
     version = finalAttrs.version;
-    command = "${lib.getExe container-structure-test} version";
+    command = "${container-structure-test.exe} version";
   };
 
   meta = {

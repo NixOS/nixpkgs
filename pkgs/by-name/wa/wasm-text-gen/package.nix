@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv -t $out/lib/packages packages/**
     mv -t $out/lib/node_modules node_modules/**
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/wasmgen \
+    makeWrapper ${nodejs.exe} $out/bin/wasmgen \
       --add-flags "$out/lib/packages/wasm-text-gen/lib/cli.js" \
       --set NODE_PATH "$out/lib/node_modules"
     runHook postInstall

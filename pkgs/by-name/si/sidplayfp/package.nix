@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
             nativeBuildInputs = [ makeWrapper ];
           }
           ''
-            makeWrapper ${lib.getExe finalAttrs.finalPackage} $out/bin/${finalAttrs.finalPackage.meta.mainProgram} \
+            makeWrapper ${finalAttrs.finalPackage.exe} $out/bin/${finalAttrs.finalPackage.meta.mainProgram} \
               --append-flags '| head -n1'
           '';
     };

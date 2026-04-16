@@ -129,12 +129,12 @@ drv:
   ],
   extraFormats ? [ ],
   compressors ? {
-    br = "${lib.getExe brotli} --keep --no-copy-stat {}";
-    gz = "${lib.getExe zopfli} --keep {}";
+    br = "${brotli.exe} --keep --no-copy-stat {}";
+    gz = "${zopfli.exe} --keep {}";
     # --force is required to not fail on symlinks
     # for details on the compression level see
     # https://github.com/NixOS/nixpkgs/pull/332752#issuecomment-2275110390
-    zstd = "${lib.getExe zstd} --force --keep --quiet -19 {}";
+    zstd = "${zstd.exe} --force --keep --quiet -19 {}";
   },
   extraFindOperands ? "",
 }:

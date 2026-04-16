@@ -17,7 +17,7 @@ buildFishPlugin {
   };
 
   preInstall = ''
-    sed -i -e "s|bash|${lib.getExe bash}|" functions/fenv.main.fish
+    sed -i -e "s|bash|${bash.exe}|" functions/fenv.main.fish
   '';
 
   meta = {

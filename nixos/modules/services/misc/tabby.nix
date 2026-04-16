@@ -156,7 +156,7 @@ in
           serviceConfig = lib.mkMerge [
             serviceUser
             {
-              ExecStart = "${lib.getExe tabbyPackage} serve --model ${cfg.model} --host ${cfg.host} --port ${toString cfg.port} --device ${tabbyPackage.featureDevice}";
+              ExecStart = "${tabbyPackage.exe} serve --model ${cfg.model} --host ${cfg.host} --port ${toString cfg.port} --device ${tabbyPackage.featureDevice}";
             }
           ];
         };

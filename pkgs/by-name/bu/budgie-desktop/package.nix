@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/session/budgie-desktop.in \
-      --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}" \
+      --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${budgie-desktop-services.exe}" \
       --replace-fail "@libexecdirroot@/xdg-desktop-portal" "${xdg-desktop-portal}/libexec/xdg-desktop-portal" \
       --replace-fail "@gsd_libexecdir@/budgie-session-compositor-ready" "${budgie-session}/libexec/budgie-session-compositor-ready"
 

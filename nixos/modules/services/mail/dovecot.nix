@@ -902,7 +902,7 @@ in
       pipeBins = mkOption {
         default = [ ];
         example = literalExpression ''
-          map lib.getExe [
+          map (x: x.exe) [
             (pkgs.writeShellScriptBin "learn-ham.sh" "exec ''${pkgs.rspamd}/bin/rspamc learn_ham")
             (pkgs.writeShellScriptBin "learn-spam.sh" "exec ''${pkgs.rspamd}/bin/rspamc learn_spam")
           ]

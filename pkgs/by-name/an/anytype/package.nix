@@ -95,7 +95,7 @@ buildNpmPackage (finalAttrs: {
 
     cp LICENSE.md $out/share
 
-    makeWrapper '${lib.getExe electron}' $out/bin/anytype \
+    makeWrapper '${electron.exe}' $out/bin/anytype \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/anytype/ \

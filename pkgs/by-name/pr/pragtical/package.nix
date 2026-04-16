@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace subprojects/linenoise.wrap \
         --replace-fail 'revision = master' 'revision = ${finalAttrs.linenoiseRev}'
 
-      ${lib.getExe meson} subprojects download \
+      ${meson.exe} subprojects download \
           colors linenoise plugins ppm widget
 
       find subprojects -type d -name .git -prune -execdir rm -r {} +

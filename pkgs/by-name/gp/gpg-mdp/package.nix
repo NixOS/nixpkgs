@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "main()" "int main()"
 
     substituteInPlace ./src/config.c \
-      --replace-fail "/usr/bin/gpg" "${lib.getExe gnupg}" \
+      --replace-fail "/usr/bin/gpg" "${gnupg.exe}" \
       --replace-fail "/usr/bin/vi" "vi"
 
     substituteInPlace ./mdp.1 \
-      --replace-fail "/usr/bin/gpg" "${lib.getExe gnupg}"
+      --replace-fail "/usr/bin/gpg" "${gnupg.exe}"
   '';
 
   # we add symlinks to the binary and man page with the name 'gpg-mdp', in case

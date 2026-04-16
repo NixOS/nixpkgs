@@ -24,7 +24,7 @@ in
       description = "Netclient Daemon";
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} daemon";
+        ExecStart = "${cfg.package.exe} daemon";
         Restart = "on-failure";
         RestartSec = "15s";
       };

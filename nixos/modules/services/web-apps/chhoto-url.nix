@@ -170,7 +170,7 @@ in
         StateDirectory = "chhoto-url";
         EnvironmentFile = cfg.environmentFiles;
 
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
 
         # hardening
         AmbientCapabilities = "";

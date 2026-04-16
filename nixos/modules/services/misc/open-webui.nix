@@ -115,7 +115,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} serve --host \"${cfg.host}\" --port ${toString cfg.port}";
+        ExecStart = "${cfg.package.exe} serve --host \"${cfg.host}\" --port ${toString cfg.port}";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "open-webui";

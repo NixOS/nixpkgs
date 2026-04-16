@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # https://github.com/EnterpriseDB/barman/blob/release/3.14.1/barman/encryption.py#L214
   postPatch = ''
     substituteInPlace barman/encryption.py \
-      --replace-fail '"file"' '"${lib.getExe file}"'
+      --replace-fail '"file"' '"${file.exe}"'
   '';
 
   build-system = with python3Packages; [

@@ -15,7 +15,7 @@ let
     let
       writeShellApplicationArgs = removeAttrs args [ "expected" ];
       script = writeShellApplication writeShellApplicationArgs;
-      executable = lib.getExe script;
+      executable = script.exe;
       expected' = writeTextFile {
         name = "${name}-expected";
         text = expected;

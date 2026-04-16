@@ -45,13 +45,13 @@ stdenv.mkDerivation {
   postPatch = ''
     mkdir "$out"
     cp -r "$src/src" "$out/src"
-    substituteInPlace "$out/src/PakInspector.py" --replace 'possible_paths = _possible_parser_paths()' 'possible_paths = ["${lib.getExe parser}"]'
+    substituteInPlace "$out/src/PakInspector.py" --replace 'possible_paths = _possible_parser_paths()' 'possible_paths = ["${parser.exe}"]'
   '';
 
   buildPhase = ''
     runHook preBuild
     mkdir -p "$out/bin"
-    makeWrapper "${lib.getExe python}" "$out/bin/crosspatch" --add-flag "$out/src/CrossPatch.py"
+    makeWrapper "${python.exe}" "$out/bin/crosspatch" --add-flag "$out/src/CrossPatch.py"
     runHook postBuild
   '';
 

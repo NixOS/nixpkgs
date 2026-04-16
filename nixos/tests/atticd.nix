@@ -6,7 +6,7 @@ let
   s3Addr = "127.0.0.1:9000";
 
   environmentFile = pkgs.runCommand "atticd-env" { } ''
-    echo ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64="$(${lib.getExe pkgs.openssl} genrsa -traditional 4096 | ${pkgs.coreutils}/bin/base64 -w0)" > $out
+    echo ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64="$(${pkgs.openssl.exe} genrsa -traditional 4096 | ${pkgs.coreutils}/bin/base64 -w0)" > $out
   '';
 in
 

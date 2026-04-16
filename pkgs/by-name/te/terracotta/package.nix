@@ -102,7 +102,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail '@TERRACOTTA_BIN@' "$out/bin/terracotta"
     '';
 
-  passthru.updateScript = lib.getExe (callPackage ./update.nix { });
+  passthru.updateScript = (callPackage ./update.nix { }).exe;
 
   meta = {
     description = "Terracotta provides out-of-the-box multiplayer support for Minecraft";

@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     postFetch = ''
       # add missing integrity fields to lockfile
-      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
+      ${npm-lockfile-fix.exe} $out/package-lock.json
     '';
 
     hash = "sha256-7UwY+272JNqzQf1juOzDkiW2DNKHC5xg4cGguwAgwNc=";

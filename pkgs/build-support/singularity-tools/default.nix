@@ -101,7 +101,7 @@ lib.makeExtensible (final: {
 
             # Link /bin/sh
             if [ ! -e bin/sh ]; then
-              ln -s ${lib.getExe bashInteractive} bin/sh
+              ln -s ${bashInteractive.exe} bin/sh
             fi
             mkdir -p .singularity.d
 

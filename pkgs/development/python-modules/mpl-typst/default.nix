@@ -29,7 +29,7 @@ buildPythonPackage rec {
     substituteInPlace mpl_typst/config.py \
       --replace-fail \
         "get_typst_compiler(name: str, default=Path('typst'))" \
-        "get_typst_compiler(name: str, default=Path('${lib.getExe typst}'))"
+        "get_typst_compiler(name: str, default=Path('${typst.exe}'))"
   '';
 
   build-system = [

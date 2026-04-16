@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace keyring_pass/__init__.py \
-      --replace-fail 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
+      --replace-fail 'pass_binary = "pass"' 'pass_binary = "${pass.exe}"'
   '';
 
   build-system = [ poetry-core ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     EOF
 
     # configure password store
-    ${lib.getExe pass} init test@example.com
+    ${pass.exe} init test@example.com
 
     # Configure `keyring` CLI
     # first make sure `keyring-pass` is in "$PYTHONPATH"

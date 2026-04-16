@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace nupd/executables.py \
-      --replace-fail '"nurl"' '"${lib.getExe nurl}"' \
+      --replace-fail '"nurl"' '"${nurl.exe}"' \
       --replace-fail '"nix-prefetch-url"' '"${lib.getExe' nix "nix-prefetch-git"}"' \
       --replace-fail '"nix-prefetch-git"' '"${lib.getExe' nix-prefetch-git "nix-prefetch-git"}"'
   '';

@@ -215,7 +215,7 @@ in
         run-builder = hostPkgs.writeShellScriptBin "run-builder" ''
           set -euo pipefail
           KEYS="''${KEYS:-./keys}"
-          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
+          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${config.system.build.vm.exe}
         '';
 
       in
@@ -227,8 +227,8 @@ in
           #!${hostPkgs.runtimeShell}
           set -euo pipefail
           export KEYS="''${KEYS:-./keys}"
-          ${lib.getExe add-keys}
-          ${lib.getExe run-builder}
+          ${add-keys.exe}
+          ${run-builder.exe}
         '';
         checkPhase = ''
           ${hostPkgs.stdenv.shellDryRun} "$target"

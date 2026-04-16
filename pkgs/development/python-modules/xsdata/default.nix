@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./paths.patch {
-      ruff = lib.getExe ruff;
+      ruff = ruff.exe;
     })
   ];
 

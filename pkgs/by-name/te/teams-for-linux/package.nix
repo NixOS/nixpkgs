@@ -83,7 +83,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_41}' "$out/bin/teams-for-linux" \
+    makeWrapper '${electron_41.exe}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils

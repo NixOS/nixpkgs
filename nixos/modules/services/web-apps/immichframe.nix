@@ -126,7 +126,7 @@ in
           '';
         };
         serviceConfig = {
-          ExecStart = "${lib.getExe cfg.package} --urls=http://localhost:${toString cfg.port}";
+          ExecStart = "${cfg.package.exe} --urls=http://localhost:${toString cfg.port}";
           LoadCredential = lib.concatMapAttrsStringSep ":" (
             apiKeyFile: id: "${id}:${apiKeyFile}"
           ) apiKeyFileToId;

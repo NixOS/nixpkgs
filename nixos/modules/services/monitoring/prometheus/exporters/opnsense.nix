@@ -104,7 +104,7 @@ in
       RestrictNamespaces = true;
       RestrictRealtime = true;
       ExecStart = ''
-        ${lib.getExe pkgs.prometheus-opnsense-exporter} \
+        ${pkgs.prometheus-opnsense-exporter.exe} \
           ${concatMapStringsSep " " (x: "--exporter." + x) cfg.enabledExporter} \
           ${concatMapStringsSep " " (x: "--no-exporter." + x) cfg.disabledExporter} \
           --opnsense.address ${cfg.opnsenseServerAddress} \

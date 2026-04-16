@@ -225,7 +225,7 @@ in
       // cfg.extraEnvironment;
       serviceConfig = {
         ExecStart = ''
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             --auth=${cfg.auth} \
             --bind-addr=${cfg.host}:${toString cfg.port} \
         ''

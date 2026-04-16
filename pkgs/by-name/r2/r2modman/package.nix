@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${dart-sass.exe}"];'
 
     yarn quasar build --mode electron --skip-pkg
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
     )
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/r2modman" \
+    makeWrapper '${electron.exe}' "$out/bin/r2modman" \
       --inherit-argv0 \
       --add-flags "$out/share/r2modman" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

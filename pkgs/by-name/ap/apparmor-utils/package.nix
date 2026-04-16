@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication {
     wrapProgram $out/bin/aa-remove-unknown \
      --prefix PATH : ${lib.makeBinPath [ gawk ]}
 
-    ln -s ${lib.getExe apparmor-teardown} $out/bin/aa-teardown
+    ln -s ${apparmor-teardown.exe} $out/bin/aa-teardown
   '';
 
   meta = libapparmor.meta // {

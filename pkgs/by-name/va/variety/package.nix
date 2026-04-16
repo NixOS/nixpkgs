@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail 'check_output(script)' 'check_output(["${runtimeShell}", script])' \
       --replace-fail 'os.stat(path).st_mode | stat.S_IEXEC' 'os.stat(path).st_mode | stat.S_IEXEC | stat.S_IWUSR'
     substituteInPlace data/variety-autostart.desktop.template \
-      --replace-fail "/bin/bash" "${lib.getExe bash}" \
+      --replace-fail "/bin/bash" "${bash.exe}" \
       --replace-fail "{VARIETY_PATH}" "variety"
   '';
 

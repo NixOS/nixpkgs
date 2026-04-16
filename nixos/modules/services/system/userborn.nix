@@ -37,7 +37,7 @@ let
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
   userbornStaticFiles =
     pkgs.runCommand "static-userborn" { }
-      "mkdir -p $out; ${lib.getExe cfg.package} ${userbornConfigJson} $out";
+      "mkdir -p $out; ${cfg.package.exe} ${userbornConfigJson} $out";
   previousConfigPath = "/var/lib/userborn/previous-userborn.json";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
@@ -172,7 +172,7 @@ in
           TimeoutSec = "90s";
           StateDirectory = "userborn";
 
-          ExecStart = "${lib.getExe cfg.package} ${userbornConfigJson} ${cfg.passwordFilesLocation}";
+          ExecStart = "${cfg.package.exe} ${userbornConfigJson} ${cfg.passwordFilesLocation}";
 
           ExecStartPre = lib.mkMerge [
             (lib.mkIf (cfg.passwordFilesLocation != "/etc") [

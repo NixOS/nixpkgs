@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gradle =
         runCommand "gradle-exe-wrapper-${gradle.version}" { nativeBuildInputs = [ makeShellWrapper ]; }
           ''
-            makeShellWrapper ${lib.getExe gradle} $out \
+            makeShellWrapper ${gradle.exe} $out \
               --add-flags "\''${NIX_GRADLEFLAGS_COMPILE:-}"
           '';
     })
@@ -115,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   env = {
-    TURBO_BINARY_PATH = lib.getExe turbo;
+    TURBO_BINARY_PATH = turbo.exe;
   };
 
   preGradleUpdate = ''

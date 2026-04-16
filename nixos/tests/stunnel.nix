@@ -30,7 +30,7 @@ let
         unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";
         script = ''
-          ${lib.getExe pkgs.openssl} req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
+          ${pkgs.openssl.exe} req -batch -x509 -newkey rsa -nodes -out /test-cert.pem -keyout /test-key.pem -subj /CN=${config.networking.hostName}
           ( umask 077; cat /test-key.pem /test-cert.pem > /test-key-and-cert.pem )
           chown stunnel /test-key.pem /test-key-and-cert.pem
         '';

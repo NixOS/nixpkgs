@@ -33,7 +33,7 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
 
         # ephemeral root directory
         RuntimeDirectory = "photonvision";

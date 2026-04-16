@@ -254,7 +254,7 @@ in
         EnvironmentFile = cfg.environmentFiles;
         StateDirectory = "homepage-dashboard";
         CacheDirectory = "homepage-dashboard";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
 
         # hardening

@@ -164,7 +164,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    makeWrapper ${lib.getExe python3Packages.python} $out/bin/rcu \
+    makeWrapper ${python3Packages.python.exe} $out/bin/rcu \
       ''${makeWrapperArgs[@]} \
       --prefix PYTHONPATH : ${
         python3Packages.makePythonPath (propagatedBuildInputs ++ [ (placeholder "out") ])

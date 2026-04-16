@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # replace gcc with mcpp as preprocessor to reduce the closure size
   # see https://github.com/NixOS/nixpkgs/issues/9480
-  configureFlags = [ "--with-cpp=${lib.getExe mcpp}" ];
+  configureFlags = [ "--with-cpp=${mcpp.exe}" ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=xrdb-(.*)" ]; };
 

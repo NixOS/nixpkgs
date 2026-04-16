@@ -76,7 +76,7 @@ in
       environment = cfg.settings;
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         RuntimeDirectory = "zwave-js-ui";
         StateDirectory = "zwave-js-ui";
         RootDirectory = "%t/zwave-js-ui";

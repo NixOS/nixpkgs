@@ -97,7 +97,7 @@ buildNpmPackage (finalAttrs: {
 
     install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/shogihome" \
+    makeWrapper '${electron.exe}' "$out/bin/shogihome" \
       --add-flags "$out/share/lib/shogihome/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArgs commandLineArgs} \
@@ -135,7 +135,7 @@ buildNpmPackage (finalAttrs: {
           "--version-regex=^v([\\d\\.]+)$"
         ];
       })
-      (lib.getExe (writeShellApplication {
+      ((writeShellApplication {
         name = "${finalAttrs.pname}-electron-updater";
         runtimeInputs = [
           nix
@@ -151,7 +151,8 @@ buildNpmPackage (finalAttrs: {
           new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
           sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
         '';
-      }))
+      }).exe
+      )
     ];
   };
 

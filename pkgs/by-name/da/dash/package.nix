@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       "execute-simple-command" = runCommand "dash-execute-simple-command" { } ''
         mkdir $out
-        ${lib.getExe dash} -c 'echo "Hello World!" > $out/success'
+        ${dash.exe} -c 'echo "Hello World!" > $out/success'
         [ -s $out/success ]
         grep -q "Hello World" $out/success
       '';

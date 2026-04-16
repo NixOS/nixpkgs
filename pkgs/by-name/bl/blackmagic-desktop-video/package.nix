@@ -90,22 +90,24 @@ stdenv.mkDerivation (finalAttrs: {
           > $out
       '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    # mostly stolen from pkgs/by-name/da/davinci-resolve/package.nix :)
-    name = "update-blackmagic-desktop-video";
-    runtimeInputs = [
-      common-updater-scripts
-      curl
-      jq
-    ];
-    text = ''
-      set -o errexit
-      downloadsJSON="$(curl --fail --silent https://www.blackmagicdesign.com/api/support/us/downloads.json)"
-      latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("Desktop Video")) | .downloadTitle]' | grep -oP 'Desktop Video \K\d\d\.\d+(\.\d+)?' | sort | tail -n 1)"
+  passthru.updateScript = (
+    writeShellApplication {
+      # mostly stolen from pkgs/by-name/da/davinci-resolve/package.nix :).exe
+      name = "update-blackmagic-desktop-video";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        jq
+      ];
+      text = ''
+        set -o errexit
+        downloadsJSON="$(curl --fail --silent https://www.blackmagicdesign.com/api/support/us/downloads.json)"
+        latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("Desktop Video")) | .downloadTitle]' | grep -oP 'Desktop Video \K\d\d\.\d+(\.\d+)?' | sort | tail -n 1)"
 
-      update-source-version blackmagic-desktop-video "$latestLinuxVersion"
-    '';
-  });
+        update-source-version blackmagic-desktop-video "$latestLinuxVersion"
+      '';
+    }
+  );
 
   postUnpack =
     let

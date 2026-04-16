@@ -83,7 +83,7 @@ let
         CapabilityBoundingSet = "";
         NoNewPrivileges = true;
         ExecStart = ''
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             --server \
             --port ${toString cfg.port} \
             ${optionalString (cfg.affinity != null) "--affinity ${toString cfg.affinity}"} \

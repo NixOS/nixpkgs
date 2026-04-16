@@ -118,7 +118,7 @@ in
       map (
         instance:
         lib.nameValuePair instance.name {
-          command = lib.getExe instance.package;
+          command = instance.package.exe;
           config = instance.settings;
           config_env = "RADICLE_NATIVE_CI";
           env.PATH = lib.makeBinPath instance.runtimePackages;

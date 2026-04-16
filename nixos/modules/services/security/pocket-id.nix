@@ -215,7 +215,7 @@ in
 
         script = ''
           ${exportAllCredentials cfg.credentials}
-          exec ${getExe cfg.package}
+          exec ${cfg.package.exe}
         '';
 
         serviceConfig = {

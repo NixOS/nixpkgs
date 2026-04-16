@@ -60,7 +60,7 @@ in
           ${pkgs.kmod}/bin/modprobe uvcvideo
           sleep 1
         '';
-        script = "${lib.getExe cfg.package} --verbose run";
+        script = "${cfg.package.exe} --verbose run";
         serviceConfig.StateDirectory = "linux-enable-ir-emitter";
         serviceConfig.LogsDirectory = "linux-enable-ir-emitter";
 

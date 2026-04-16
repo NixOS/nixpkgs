@@ -165,7 +165,7 @@ in
           let
             argString = lib.strings.concatStringsSep " " (args cnf);
           in
-          "${lib.getExe cfg.package} -v ${cnf.logVerbosity} daemon ${argString}";
+          "${cfg.package.exe} -v ${cnf.logVerbosity} daemon ${argString}";
         serviceConfig = {
           CPUSchedulingPolicy = "rr";
           CPUSchedulingPriority = 49;

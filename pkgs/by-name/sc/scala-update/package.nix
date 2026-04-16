@@ -39,7 +39,7 @@ buildGraalvmNativeImage (finalAttrs: {
     name = "scala-update-deps-${finalAttrs.version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${lib.getExe coursier} fetch io.github.kitlangton:scala-update_2.13:${finalAttrs.version} > deps
+      ${coursier.exe} fetch io.github.kitlangton:scala-update_2.13:${finalAttrs.version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';

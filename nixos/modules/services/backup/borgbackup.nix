@@ -224,7 +224,7 @@ let
   mkBorgWrapper =
     name: cfg:
     lib.optional (cfg.wrapper != "" && cfg.wrapper != null) (mkWrapperDrv {
-      original = lib.getExe config.services.borgbackup.package;
+      original = config.services.borgbackup.package.exe;
       name = cfg.wrapper;
       set = {
         BORG_REPO = cfg.repo;

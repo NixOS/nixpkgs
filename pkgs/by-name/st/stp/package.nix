@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in stp stp_simple; do
       echo "(set-logic QF_BV) (assert (= (bvsdiv (_ bv3 2) (_ bv2 2)) (_ bv0 2))) (check-sat) (exit)" | tee /dev/stderr | $out/bin/$binary | grep "^sat$"
     done
-    PYTHONPATH=$out/${python3.sitePackages} ${lib.getExe python3} -c \
+    PYTHONPATH=$out/${python3.sitePackages} ${python3.exe} -c \
       "import stp; s = stp.Solver(); a, b, c = s.bitvec('a', 32), s.bitvec('b', 32), s.bitvec('c', 32); s.add(a == 5); s.add(b == 6); s.add(a + b == c); assert s.check(); print(s.model())" >&2
   '';
 

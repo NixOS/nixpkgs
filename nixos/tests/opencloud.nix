@@ -96,7 +96,7 @@ in
     machine.sleep(10)
 
     with subtest("opencloud bin works"):
-        machine.succeed("${lib.getExe pkgs.opencloud} version")
+        machine.succeed("${pkgs.opencloud.exe} version")
 
     with subtest("web interface presents start page"):
         machine.succeed("curl -sSf https://${domain}:9200 | grep '<title>OpenCloud</title>'")

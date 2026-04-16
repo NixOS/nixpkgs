@@ -45,7 +45,7 @@ stdenv.mkDerivation {
       mkdir -p $out/{bin,share/xrsh}
       cp -r -t $out/share/xrsh index.html src xrsh.js xrsh.ico xrsh.svg
 
-      makeWrapper ${lib.getExe launcher} $out/bin/xrsh \
+      makeWrapper ${launcher.exe} $out/bin/xrsh \
         --add-flags "${placeholder "out"}/share/xrsh/src"
 
       runHook postInstall

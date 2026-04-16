@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater-${pgd-updater-version}.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
-    makeWrapper ${lib.getExe java} $out/bin/irpf \
+    makeWrapper ${java.exe} $out/bin/irpf \
       --add-flags "-Dawt.useSystemAAFontSettings=gasp" \
       --add-flags "-Dswing.aatext=true" \
       --add-flags "-jar $BASEDIR/irpf.jar" \

@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
     substituteInPlace meson.build \
-      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+      --replace-fail "find_program('bwrap'"  "find_program('${bubblewrap.exe}'"
 
     patchShebangs src/generate-method-info.py
     patchShebangs tests/run-test.sh

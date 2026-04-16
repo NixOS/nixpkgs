@@ -104,7 +104,7 @@ in
           LoadCredential = "sessionSecret:${cfg.secretFile}";
           Environment = [ "AUTOBRR__SESSION_SECRET_FILE=%d/sessionSecret" ];
           StateDirectory = "autobrr";
-          ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
+          ExecStart = "${cfg.package.exe} --config %S/autobrr";
           Restart = "on-failure";
         };
       };

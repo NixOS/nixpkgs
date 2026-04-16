@@ -105,7 +105,7 @@ in
         ];
         ExecStart = lib.concatStringsSep " " (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             (
               if (cfg.keyFile != null) then
                 "--key-file \${CREDENTIALS_DIRECTORY}/keyfile"

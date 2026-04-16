@@ -194,7 +194,7 @@ in
 
           serviceConfig = {
             Type = "simple";
-            ExecStart = "${lib.getExe cfg.package} migrateandstart";
+            ExecStart = "${cfg.package.exe} migrateandstart";
             EnvironmentFile = cfg.environmentFiles;
             DynamicUser = true;
             TimeoutSec = 60;

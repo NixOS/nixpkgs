@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/core/judgingthread.cpp \
-      --replace-fail "/usr/bin/bwrap" "${lib.getExe bubblewrap}"
+      --replace-fail "/usr/bin/bwrap" "${bubblewrap.exe}"
     substituteInPlace unix/watcher_unix.cpp \
-      --replace-fail "bash" "${lib.getExe bash}"
+      --replace-fail "bash" "${bash.exe}"
     substituteInPlace src/base/settings.cpp \
       --replace-fail "/usr/bin/diff" "${diffutils}/bin/diff"
   '';

@@ -29,10 +29,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/bin/bash-env-json --replace-fail " env " " ${lib.getExe' coreutils "env"} "
-    substituteInPlace $out/bin/bash-env-json --replace-fail " jq " " ${lib.getExe jq} "
+    substituteInPlace $out/bin/bash-env-json --replace-fail " jq " " ${jq.exe} "
     substituteInPlace $out/bin/bash-env-json --replace-fail " mktemp " " ${lib.getExe' coreutils "mktemp"} "
     substituteInPlace $out/bin/bash-env-json --replace-fail " rm " " ${lib.getExe' coreutils "rm"} "
-    substituteInPlace $out/bin/bash-env-json --replace-fail " sed " " ${lib.getExe gnused} "
+    substituteInPlace $out/bin/bash-env-json --replace-fail " sed " " ${gnused.exe} "
     substituteInPlace $out/bin/bash-env-json --replace-fail " touch " " ${lib.getExe' coreutils "touch"} "
   '';
 

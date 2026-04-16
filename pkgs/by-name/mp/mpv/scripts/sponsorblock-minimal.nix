@@ -22,7 +22,7 @@ buildLua {
 
   preInstall = ''
     substituteInPlace sponsorblock_minimal.lua \
-      --replace-fail "curl" "${lib.getExe curl}" \
+      --replace-fail "curl" "${curl.exe}" \
       --replace-fail "sha256sum" "${lib.getExe' coreutils "sha256sum"}"
   '';
 

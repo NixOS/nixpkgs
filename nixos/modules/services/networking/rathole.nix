@@ -113,7 +113,7 @@ in
             + (pkgs.writeShellScript "rathole-prestart" ''
               DYNUSER_UID=$(stat -c %u ${runtimeDir})
               DYNUSER_GID=$(stat -c %g ${runtimeDir})
-              ${lib.getExe py-toml-merge} ${configFile} '${cfg.credentialsFile}' |
+              ${py-toml-merge.exe} ${configFile} '${cfg.credentialsFile}' |
                 install -m 600 -o $DYNUSER_UID -g $DYNUSER_GID /dev/stdin ${runtimeDir}/${mergedConfigName}
             '');
           mergedConfigName = "merged.toml";
@@ -123,7 +123,7 @@ in
           Restart = "on-failure";
           RestartSec = 5;
           ExecStartPre = ratholePrestart;
-          ExecStart = "${lib.getExe cfg.package} --${cfg.role} ${runtimeDir}/${mergedConfigName}";
+          ExecStart = "${cfg.package.exe} --${cfg.role} ${runtimeDir}/${mergedConfigName}";
           DynamicUser = true;
           LimitNOFILE = "1048576";
           RuntimeDirectory = name;

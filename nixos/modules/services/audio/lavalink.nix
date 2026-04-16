@@ -317,7 +317,7 @@ in
           ln -sf ${configFile} ${cfg.home}/application.yml
           export _JAVA_OPTIONS="${cfg.jvmArgs}"
 
-          ${lib.getExe cfg.package}
+          ${cfg.package.exe}
         '';
 
         serviceConfig = {

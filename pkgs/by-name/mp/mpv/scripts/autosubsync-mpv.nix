@@ -20,7 +20,7 @@ buildLua {
   patchPhase = ''
     runHook prePatch
     substituteInPlace autosubsync.lua                                            \
-      --replace-warn 'ffsubsync_path = ""' 'ffsubsync_path = "${lib.getExe ffsubsync}"'   \
+      --replace-warn 'ffsubsync_path = ""' 'ffsubsync_path = "${ffsubsync.exe}"'   \
       --replace-warn 'audio_subsync_tool = "ask"' 'audio_subsync_tool = "ffsubsync"' \
       --replace-warn 'altsub_subsync_tool = "ask"' 'altsub_subsync_tool = "ffsubsync"'
     runHook postPatch

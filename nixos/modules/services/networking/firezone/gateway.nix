@@ -95,7 +95,7 @@ in
         fi
 
         export FIREZONE_TOKEN=$(< "$CREDENTIALS_DIRECTORY/firezone-token")
-        exec ${getExe cfg.package}
+        exec ${cfg.package.exe}
       '';
 
       environment = {

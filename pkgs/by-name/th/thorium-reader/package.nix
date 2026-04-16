@@ -35,7 +35,7 @@ buildNpmPackage (finalAttrs: {
 
     cp -r dist/* $out/lib/node_modules/EDRLab.ThoriumReader/
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/thorium-reader" \
+    makeWrapper '${electron.exe}' "$out/bin/thorium-reader" \
       --add-flags $out/lib/node_modules/EDRLab.ThoriumReader \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \

@@ -113,7 +113,7 @@ in
         Group = "gatus";
         Type = "simple";
         Restart = "on-failure";
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         StateDirectory = "gatus";
         SyslogIdentifier = "gatus";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;

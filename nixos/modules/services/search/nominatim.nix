@@ -205,7 +205,7 @@ in
           db_exists=$(${pkgs.postgresql}/bin/psql --dbname postgres -tAc "$sql")
 
           if [ "$db_exists" == "0" ]; then
-            ${lib.getExe pkgs.nominatim} import --prepare-database
+            ${pkgs.nominatim.exe} import --prepare-database
           else
             echo "Database ${cfg.database.dbname} already exists. Skipping ..."
           fi

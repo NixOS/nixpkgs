@@ -24,7 +24,7 @@ let
   };
 
   passthru.updateScript = writeShellScript "update-quiet" ''
-    latestVersion=$(${lib.getExe curl} --fail --location --silent https://api.github.com/repos/TryQuiet/quiet/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("@quiet/desktop@")' --raw-output)
+    latestVersion=$(${curl.exe} --fail --location --silent https://api.github.com/repos/TryQuiet/quiet/releases/latest | ${jq.exe} '.tag_name | ltrimstr("@quiet/desktop@")' --raw-output)
     currentVersion=$(nix eval --raw --file . quiet.version)
     if [[ "$latestVersion" == "$currentVersion" ]]; then
       exit 0

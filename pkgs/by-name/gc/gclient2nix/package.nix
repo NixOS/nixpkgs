@@ -44,7 +44,7 @@ let
     makeSetupHook {
       name = "gclient-unpack-hook";
       substitutions = {
-        jq = lib.getExe buildPackages.jq;
+        jq = buildPackages.jq.exe;
       };
     } ./gclient-unpack-hook.sh
   ) { };

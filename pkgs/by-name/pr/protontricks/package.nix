@@ -38,9 +38,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     # Use steam-run to run Proton binaries
     (replaceVars ./steam-run.patch {
-      steamRun = lib.getExe steam-run;
+      steamRun = steam-run.exe;
       bash = writeShellScript "steam-run-bash" ''
-        exec ${lib.getExe steam-run} bash "$@"
+        exec ${steam-run.exe} bash "$@"
       '';
     })
 

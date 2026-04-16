@@ -94,7 +94,7 @@ let
 in
 buildFHSEnv {
   inherit pname version;
-  runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+  runScript = "${electron.exe} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"

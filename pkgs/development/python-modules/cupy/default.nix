@@ -78,7 +78,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
       # Fake libcuda.so (the real one is deployed impurely)
       "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
     ];
-    # NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
+    # NVCC = "${cudaPackages.cuda_nvcc.exe}"; # FIXME: splicing/buildPackages
     CUDA_PATH = "${cudatoolkit-joined}";
   };
 

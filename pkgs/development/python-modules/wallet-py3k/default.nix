@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./openssl-path.patch {
-      openssl = lib.getExe openssl;
+      openssl = openssl.exe;
     })
   ];
 

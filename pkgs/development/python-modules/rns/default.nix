@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
 
   patches = [
     (replaceVars ./unvendor-esptool.patch {
-      esptool = lib.getExe esptool;
+      esptool = esptool.exe;
     })
   ];
 

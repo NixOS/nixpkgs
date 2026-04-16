@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     updateScript = writeShellScript "update-yabai" ''
-      NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/asmvik/yabai/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
+      NEW_VERSION=$(${curl.exe} --silent https://api.github.com/repos/asmvik/yabai/releases/latest | ${jq.exe} '.tag_name | ltrimstr("v")' --raw-output)
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
         ${lib.getExe' common-updater-scripts "update-source-version"} "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done

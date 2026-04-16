@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # some boilerplate code to get Electron running
     cp ${./main.js} $phome/main.js
 
-    makeWrapper ${lib.getExe electron} $out/bin/pvzge \
+    makeWrapper ${electron.exe} $out/bin/pvzge \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags $phome \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

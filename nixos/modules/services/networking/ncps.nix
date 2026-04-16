@@ -40,7 +40,7 @@ let
       export CACHE_DATABASE_URL="$(cat "$CREDENTIALS_DIRECTORY/databaseURL")"
     ''}
 
-    exec ${lib.getExe cfg.package} --config "${configFile}" "$@"
+    exec ${cfg.package.exe} --config "${configFile}" "$@"
   '';
 
   settings = {

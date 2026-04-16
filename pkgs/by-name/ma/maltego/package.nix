@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace bin/maltego \
-      --replace-fail /usr/bin/awk ${lib.getExe gawk}
+      --replace-fail /usr/bin/awk ${gawk.exe}
   '';
 
   desktopItems = [

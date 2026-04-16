@@ -36,9 +36,9 @@ buildGoModule (finalAttrs: {
     # kubecolor re-uses the completions of kubectl for its own executable
 
     installShellCompletion --cmd kubecolor \
-      --bash <(${lib.getExe kubectl} completion bash) \
-      --fish <(${lib.getExe kubectl} completion fish) \
-      --zsh <(${lib.getExe kubectl} completion zsh)
+      --bash <(${kubectl.exe} completion bash) \
+      --fish <(${kubectl.exe} completion fish) \
+      --zsh <(${kubectl.exe} completion zsh)
 
     # https://kubecolor.github.io/setup/shells/bash/
     echo 'complete -o default -F __start_kubectl kubecolor' >> $out/share/bash-completion/completions/kubecolor.bash

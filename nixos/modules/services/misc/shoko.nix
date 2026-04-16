@@ -84,7 +84,7 @@ in
         StateDirectory = "shoko";
         StateDirectoryMode = 750;
 
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
       };
     };

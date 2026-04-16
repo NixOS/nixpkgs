@@ -527,7 +527,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           StateDirectory = cfg.stateDir;
-          ExecStart = "${lib.getExe cfg.package} -d -f ${iniPathQuoted}";
+          ExecStart = "${cfg.package.exe} -d -f ${iniPathQuoted}";
         };
       }
       // lib.optionalAttrs (cfg.configFile == null) {
@@ -543,7 +543,7 @@ in
 
           tmpfile=$(mktemp)
 
-          ${lib.getExe (pkgs.python3.withPackages (py: [ py.configobj ]))} \
+          ${(pkgs.python3.withPackages (py: [ py.configobj ])).exe} \
             ${./config_merge.py} \
             "''${files[@]}" \
             > "$tmpfile"

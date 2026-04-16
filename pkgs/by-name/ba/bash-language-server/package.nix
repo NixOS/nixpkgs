@@ -69,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r {node_modules,server} $out/lib/bash-language-server/
 
     # Create the executable, based upon what happens in npmHooks.npmInstallHook
-    makeWrapper ${lib.getExe nodejs} $out/bin/bash-language-server \
+    makeWrapper ${nodejs.exe} $out/bin/bash-language-server \
       --suffix PATH : ${lib.makeBinPath [ shellcheck ]} \
       --inherit-argv0 \
       --add-flags $out/lib/bash-language-server/server/out/cli.js

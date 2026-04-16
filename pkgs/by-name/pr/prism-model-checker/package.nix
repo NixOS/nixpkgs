@@ -84,7 +84,7 @@ stdenv'.mkDerivation (finalAttrs: {
     for f in $out/bin/*; do
       wrapProgram $f \
           --set JAVA_HOME ${jre.home} \
-          --set PRISM_JAVA ${lib.getExe jre} \
+          --set PRISM_JAVA ${jre.exe} \
           --prefix PATH: ${lib.makeBinPath [ jre ]}
     done
 

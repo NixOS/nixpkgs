@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   # Upstream builds in CI:
   # https://github.com/LibreTranslate/LexiLang/blob/ba49108a736b9c077ea45cbe61d54fa635fe25d5/.github/workflows/publish.yml#L30-L31
   postInstall = ''
-    ${lib.getExe python} -c "from lexilang.utils import compile_data; compile_data()"
+    ${python.exe} -c "from lexilang.utils import compile_data; compile_data()"
     rm -f lexilang/data/.gitignore
     cp -r lexilang/data $out/${python.sitePackages}/lexilang/data
   '';

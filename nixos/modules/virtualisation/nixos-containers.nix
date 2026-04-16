@@ -117,7 +117,7 @@ let
 
     if [ -n "''${FLAKE-}" ] && [ ! -e "/nix/var/nix/profiles/per-container/$INSTANCE/system" ]; then
       # we create the etc/nixos-container config file, then if we utilize the update function, we can then build all the necessary system files for the container
-      ${lib.getExe nixos-container} update "$INSTANCE"
+      ${nixos-container.exe} update "$INSTANCE"
     fi
 
     declare -a extraFlags

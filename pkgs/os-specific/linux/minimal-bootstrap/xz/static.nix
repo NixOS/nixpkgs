@@ -42,7 +42,7 @@ bash.runCommand "${pname}-${version}"
     passthru.tests.get-version =
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${lib.getExe result} --version
+        ${result.exe} --version
         mkdir $out
       '';
 

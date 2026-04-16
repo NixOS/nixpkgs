@@ -163,7 +163,7 @@ in
 
         LoadCredential = lib.imap0 (i: path: "config-${toString i}.yml:${path}") cfg.extraConfigFiles;
 
-        ExecStart = "${lib.getExe cfg.package} --configs ${configsArg}";
+        ExecStart = "${cfg.package.exe} --configs ${configsArg}";
 
         Restart = "always";
         RestartSec = 5;

@@ -77,7 +77,7 @@ in
           NEXT_PUBLIC_OLLAMA_URL = cfg.ollamaUrl;
         };
         serviceConfig = {
-          ExecStart = "${lib.getExe nextjs-ollama-llm-ui}";
+          ExecStart = "${nextjs-ollama-llm-ui.exe}";
           DynamicUser = true;
           CacheDirectory = "nextjs-ollama-llm-ui";
         };

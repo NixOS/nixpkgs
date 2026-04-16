@@ -22,9 +22,9 @@
 }:
 let
   tools = {
-    aha = lib.getExe aha;
-    clinfo = lib.getExe clinfo;
-    di_edid_decode = lib.getExe libdisplay-info;
+    aha = aha.exe;
+    clinfo = clinfo.exe;
+    di_edid_decode = libdisplay-info.exe;
     dmidecode = lib.getExe' dmidecode "dmidecode";
     eglinfo = lib.getExe' mesa-demos "eglinfo";
     glxinfo = lib.getExe' mesa-demos "glxinfo";
@@ -36,8 +36,8 @@ let
     qdbus = lib.getExe' qttools "qdbus";
     sensors = lib.getExe' lm_sensors "sensors";
     vulkaninfo = lib.getExe' vulkan-tools "vulkaninfo";
-    waylandinfo = lib.getExe wayland-utils;
-    xdpyinfo = lib.getExe xdpyinfo;
+    waylandinfo = wayland-utils.exe;
+    xdpyinfo = xdpyinfo.exe;
   };
 in
 mkKdeDerivation {
@@ -56,7 +56,7 @@ mkKdeDerivation {
 
   postPatch = ''
     substituteInPlace kcms/firmware_security/fwupdmgr.sh \
-      --replace-fail " aha " " ${lib.getExe aha} "
+      --replace-fail " aha " " ${aha.exe} "
   '';
 
   extraNativeBuildInputs = [ pkg-config ];

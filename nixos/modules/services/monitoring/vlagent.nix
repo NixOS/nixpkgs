@@ -10,7 +10,7 @@ let
   cfg = config.services.vlagent;
 
   startCLIList = [
-    (lib.getExe cfg.package)
+    (cfg.package.exe)
   ]
   ++ lib.optionals (cfg.remoteWrite.url != null) [
     "-remoteWrite.url=${cfg.remoteWrite.url}"

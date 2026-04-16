@@ -129,7 +129,7 @@ in
           [ "''${pkgs.shadow}/bin/login" ]
         '';
         example = lib.literalExpression ''
-          [ (lib.getExe pkgs.htop) ]
+          [ (pkgs.htop.exe) ]
         '';
         description = "Which command ttyd runs.";
         apply = lib.escapeShellArgs;

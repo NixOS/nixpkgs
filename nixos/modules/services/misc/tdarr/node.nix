@@ -214,7 +214,7 @@ in
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = lib.getExe nodeCfg.package;
+          ExecStart = nodeCfg.package.exe;
           Restart = "on-failure";
           RestartSec = 5;
           WorkingDirectory = toString nodeCfg.dataDir;

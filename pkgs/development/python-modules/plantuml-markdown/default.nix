@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace plantuml_markdown/plantuml_markdown.py \
-      --replace-fail '"plantuml_cmd": ["plantuml"' '"plantuml_cmd": ["${lib.getExe pkgs.plantuml}"'
+      --replace-fail '"plantuml_cmd": ["plantuml"' '"plantuml_cmd": ["${pkgs.plantuml.exe}"'
   '';
 
   propagatedBuildInputs = [

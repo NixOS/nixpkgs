@@ -28,7 +28,7 @@ maven.buildMavenPackage rec {
     mkdir -p $out/bin $out/share/jMc2Obj
     install -Dm644 JAR/jMc2Obj-${version}.jar $out/share/jMc2Obj
 
-    makeWrapper ${lib.getExe jre} $out/bin/jMc2Obj \
+    makeWrapper ${jre.exe} $out/bin/jMc2Obj \
       --add-flags "-jar $out/share/jMc2Obj/jMc2Obj-${version}.jar"
     runHook postInstall
   '';

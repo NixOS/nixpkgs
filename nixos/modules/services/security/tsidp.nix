@@ -177,7 +177,7 @@ in
                 debug-tsnet = cfg.settings.debugTsnet;
               };
             in
-            "${getExe cfg.package} ${args}";
+            "${cfg.package.exe} ${args}";
           Restart = "always";
           RestartSec = "15";
 

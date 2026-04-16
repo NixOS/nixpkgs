@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # Based on Mint's debian/rules.
     "-Dwayland_eglstream=true"
-    "-Dxwayland_path=${lib.getExe xwayland}"
+    "-Dxwayland_path=${xwayland.exe}"
   ];
 
   postPatch = ''

@@ -2804,7 +2804,7 @@ let
 
         postPatch = ''
           substituteInPlace R/onLoad.R \
-            --replace-fail 'system2("java",' 'system2("${lib.getExe pkgs.jre_headless}",'
+            --replace-fail 'system2("java",' 'system2("${pkgs.jre_headless.exe}",'
 
           # Misleading startup message, JARs are downloaded at build-time
           substituteInPlace R/onAttach.R \

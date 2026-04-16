@@ -64,7 +64,7 @@ buildNpmPackage (finalAttrs: {
 
     cp -r dist $out/share/figma-linux/resources/app
 
-    makeWrapper ${lib.getExe electron} $out/bin/figma-linux \
+    makeWrapper ${electron.exe} $out/bin/figma-linux \
       --add-flag $out/share/figma-linux/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}" \
       --prefix PATH : "${

@@ -105,7 +105,7 @@ in
 
   config = mkIf cfg.agent.enable {
     programs.gnupg.agent.settings = mkIf (cfg.agent.pinentryPackage != null) {
-      pinentry-program = lib.getExe cfg.agent.pinentryPackage;
+      pinentry-program = cfg.agent.pinentryPackage.exe;
     };
 
     environment.etc."gnupg/gpg-agent.conf".source =

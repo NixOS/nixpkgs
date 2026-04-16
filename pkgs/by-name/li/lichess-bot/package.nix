@@ -50,27 +50,28 @@ python3Packages.buildPythonApplication {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "lichess-bot-update-script";
+    updateScript =
+      (writeShellApplication {
+        name = "lichess-bot-update-script";
 
-      runtimeInputs = [
-        curl
-        jq
-        common-updater-scripts
-      ];
+        runtimeInputs = [
+          curl
+          jq
+          common-updater-scripts
+        ];
 
-      text = ''
-        commit_msg='^Auto update version to (?<ver>[0-9.]+)$'
-        commit="$(
-          curl -s 'https://api.github.com/repos/lichess-bot-devs/lichess-bot/commits?path=lib/versioning.yml' | \
-          jq -c "map(select(.commit.message | test(\"$commit_msg\"))) | first"
-        )"
-        rev="$(jq -r '.sha' <<< "$commit")"
-        version="$(jq -r ".commit.message | capture(\"$commit_msg\") | .ver" <<< "$commit")"
+        text = ''
+          commit_msg='^Auto update version to (?<ver>[0-9.]+)$'
+          commit="$(
+            curl -s 'https://api.github.com/repos/lichess-bot-devs/lichess-bot/commits?path=lib/versioning.yml' | \
+            jq -c "map(select(.commit.message | test(\"$commit_msg\"))) | first"
+          )"
+          rev="$(jq -r '.sha' <<< "$commit")"
+          version="$(jq -r ".commit.message | capture(\"$commit_msg\") | .ver" <<< "$commit")"
 
-        update-source-version lichess-bot "$version" --rev="$rev"
-      '';
-    });
+          update-source-version lichess-bot "$version" --rev="$rev"
+        '';
+      }).exe;
   };
 
   meta = {

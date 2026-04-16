@@ -182,10 +182,10 @@ in
           # First run a schema_version update on the existing configuration
           # This ensures that both the new config and the existing one have the same schema_version
           # Note: --check-config has the side effect of modifying the file at rest!
-          ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
+          ${cfg.package.exe} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
 
           # Writing directly to AdGuardHome.yaml results in empty file
-          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
+          ${pkgs.yaml-merge.exe} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
           mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
         else
           cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
@@ -195,7 +195,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} ${args}";
+        ExecStart = "${cfg.package.exe} ${args}";
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ] ++ lib.optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ] ++ lib.optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         Restart = "always";

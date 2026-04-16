@@ -109,7 +109,7 @@ in
           in
           lib.concatStringsSep " " (
             [
-              "${lib.getExe pkgs.sillytavern}"
+              "${pkgs.sillytavern.exe}"
             ]
             ++ f cfg.port "port"
             ++ f cfg.listen "listen"

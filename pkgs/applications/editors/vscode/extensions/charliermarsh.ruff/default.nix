@@ -42,7 +42,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
       echo "Update the package to the match the new path/behavior."
       exit 1
     }
-    ln -sf ${lib.getExe ruff} "$out/$installPrefix/bundled/libs/bin/ruff"
+    ln -sf ${ruff.exe} "$out/$installPrefix/bundled/libs/bin/ruff"
   '';
 
   passthru.updateScript = vscode-extension-update-script { };

@@ -440,7 +440,7 @@ in
             -i ${teeworldsConf} \
             -o /run/teeworlds/teeworlds.yaml
         '';
-        ExecStart = "${lib.getExe cfg.package} -f /run/teeworlds/teeworlds.yaml";
+        ExecStart = "${cfg.package.exe} -f /run/teeworlds/teeworlds.yaml";
 
         # Hardening
         CapabilityBoundingSet = false;

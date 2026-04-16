@@ -40,21 +40,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "mactracker-update-script";
-    runtimeInputs = [
-      curl
-      cacert
-      libxml2
-      xmlstarlet
-      common-updater-scripts
-    ];
-    text = ''
-      url="https://mactracker.ca/releasenotes-mac.html"
-      version=$(curl -s "$url" | xmllint -html -xmlout - | xmlstarlet sel -t -v "//faq/h5[1]")
-      update-source-version mactracker "$version"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "mactracker-update-script";
+      runtimeInputs = [
+        curl
+        cacert
+        libxml2
+        xmlstarlet
+        common-updater-scripts
+      ];
+      text = ''
+        url="https://mactracker.ca/releasenotes-mac.html"
+        version=$(curl -s "$url" | xmllint -html -xmlout - | xmlstarlet sel -t -v "//faq/h5[1]")
+        update-source-version mactracker "$version"
+      '';
+    }).exe;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''

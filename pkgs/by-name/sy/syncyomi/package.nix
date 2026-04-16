@@ -62,7 +62,7 @@ buildGoModule (finalAttrs: {
       pnpm_9
     ];
 
-    env.ESBUILD_BINARY_PATH = lib.getExe lockedEsbuild;
+    env.ESBUILD_BINARY_PATH = lockedEsbuild.exe;
 
     buildPhase = ''
       runHook preBuild

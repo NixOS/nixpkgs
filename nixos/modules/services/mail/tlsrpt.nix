@@ -223,9 +223,9 @@ in
 
             http_script = mkOption {
               type = with types; nullOr str;
-              default = "${lib.getExe pkgs.curl} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-";
+              default = "${pkgs.curl.exe} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-";
               defaultText = lib.literalExpression ''
-                ''${lib.getExe pkgs.curl} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-
+                ''${pkgs.curl.exe} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-
               '';
               description = ''
                 Call to an HTTPS client, that accepts the URL on the commandline and the request body from stdin.

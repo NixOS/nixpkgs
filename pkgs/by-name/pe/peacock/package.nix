@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp webui/dist/THIRDPARTYNOTICES.txt "$OUT_DIR"/webui/dist/THIRDPARTYNOTICES.txt
     cp options.ini "$OUT_DIR"
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/peacock" \
+    makeWrapper ${nodejs.exe} "$out/bin/peacock" \
       --add-flags "$OUT_DIR/chunk0.js"
 
     runHook postInstall

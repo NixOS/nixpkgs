@@ -116,7 +116,7 @@ in
             exit 1
           fi
 
-          exec ${lib.getExe cfg.package} ${toString args}
+          exec ${cfg.package.exe} ${toString args}
         '';
     }
     // lib.optionalAttrs (cfg.frequency != null) {

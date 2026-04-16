@@ -15,7 +15,7 @@
 # If you are reading this, you can test these writers by running: nix-build . -A tests.writers
 
 let
-  inherit (lib) getExe recurseIntoAttrs;
+  inherit (lib) recurseIntoAttrs;
 
   inherit (writers)
     makeFSharpWriter
@@ -66,7 +66,7 @@ let
   expectSuccessBin =
     test:
     runCommand "run-${test.name}" { } ''
-      if [[ "$(${getExe test})" != success ]]; then
+      if [[ "$(${test.exe})" != success ]]; then
         echo 'test ${test.name} failed'
         exit 1
       fi

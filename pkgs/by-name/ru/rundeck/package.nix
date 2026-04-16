@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/rundeck/rundeck.war
 
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe jdk17} $out/bin/rundeck \
+    makeWrapper ${jdk17.exe} $out/bin/rundeck \
       --add-flags "-jar $out/share/rundeck/rundeck.war" \
       --prefix PATH : ${
         lib.makeBinPath [

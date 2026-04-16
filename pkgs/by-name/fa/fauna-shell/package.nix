@@ -44,7 +44,7 @@ buildNpmPackage (finalAttrs: {
 
   npmFlags = [ "--ignore-scripts" ];
 
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  env.ESBUILD_BINARY_PATH = esbuild'.exe;
 
   # While this errors, it makes the build complete successfully. Therefore, ????
   preBuild = ''

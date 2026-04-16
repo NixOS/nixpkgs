@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mv {packages,node_modules} $out/lib/node_modules/svelte-language-server/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/svelteserver \
+    makeWrapper ${nodejs.exe} $out/bin/svelteserver \
       --add-flags "$out/lib/node_modules/svelte-language-server/packages/language-server/bin/server.js" \
       --set NODE_PATH "$out/lib/node_modules/svelte-language-server/packages/language-server/node_modules/"
 

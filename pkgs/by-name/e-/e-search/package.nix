@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       else
         "cp -r build/linux-unpacked/{resources,LICENSE*} $out/share/eSearch"
     }
-    makeWrapper ${lib.getExe electron} $out/bin/e-search \
+    makeWrapper ${electron.exe} $out/bin/e-search \
       --inherit-argv0 \
       --add-flags $out/share/eSearch/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \

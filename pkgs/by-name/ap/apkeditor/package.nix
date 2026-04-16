@@ -96,7 +96,7 @@ let
 
       postInstall = ''
         mkdir -p $out/bin
-        makeWrapper ${lib.getExe jre} $out/bin/APKEditor \
+        makeWrapper ${jre.exe} $out/bin/APKEditor \
           --add-flags "-jar $out/${apkeditor.outJar}"
       '';
 

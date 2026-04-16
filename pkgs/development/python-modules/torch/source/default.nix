@@ -268,7 +268,7 @@ let
       runCommand,
     }:
     assert version == "'"'$1'"'";"
-    ${lib.getExe git-unroll} https://github.com/pytorch/pytorch v$1
+    ${git-unroll.exe} https://github.com/pytorch/pytorch v$1
     echo
     echo "# Update using: unroll-src [version]"
   '';
@@ -338,7 +338,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
   + ''
     substituteInPlace torch/_inductor/codecache.py \
-      --replace-fail '"openssl"' '"${lib.getExe openssl}"'
+      --replace-fail '"openssl"' '"${openssl.exe}"'
   ''
   + ''
     substituteInPlace cmake/public/cuda.cmake \

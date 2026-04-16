@@ -63,13 +63,13 @@ let
   startupScript =
     arg:
     if cfg.secretFiles == { } then
-      "${lib.getExe cfg.package}" + arg
+      "${cfg.package.exe}" + arg
     else
       pkgs.writeShellScript "linkwarden-env" ''
         ${lib.strings.concatStringsSep "\n" (
           lib.attrsets.mapAttrsToList (key: path: "export ${key}=$(< \"${path}\")") cfg.secretFiles
         )}
-        ${lib.getExe cfg.package}${arg}
+        ${cfg.package.exe}${arg}
       '';
 in
 {

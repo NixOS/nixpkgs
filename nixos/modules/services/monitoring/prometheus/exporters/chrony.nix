@@ -85,7 +85,7 @@ in
       RestrictNamespaces = true;
       RestrictRealtime = true;
       ExecStart = ''
-        ${lib.getExe pkgs.prometheus-chrony-exporter} \
+        ${pkgs.prometheus-chrony-exporter.exe} \
           ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
           ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
           --chrony.address ${cfg.chronyServerAddress} \

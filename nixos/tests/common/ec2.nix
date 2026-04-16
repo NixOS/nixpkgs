@@ -76,7 +76,7 @@ in
         start_command = (
             "qemu-kvm -m 1024"
             + " -device virtio-net-pci,netdev=vlan0"
-            + " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${getExe imdsServer} ${metaData}'"
+            + " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${imdsServer.exe} ${metaData}'"
             + f" -drive file={disk_image},if=virtio,werror=report"
             + " $QEMU_OPTS"
         )

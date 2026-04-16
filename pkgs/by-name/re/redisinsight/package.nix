@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # force the sass npm dependency to use our own sass binary instead of the bundled one
     substituteInPlace node_modules/sass/dist/lib/src/compiler-path.js \
-      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${dart-sass.exe}"];'
 
     yarn --offline build:prod
 

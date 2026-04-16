@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace BeetService.vala \
-      --replace-fail '"beet"' '"${lib.getExe beets}"'
+      --replace-fail '"beet"' '"${beets.exe}"'
   '';
 
   preConfigure = ''

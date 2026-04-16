@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     version = testers.testVersion rec {
       package = arcanechat-tui;
       command = ''
-        HOME="$TEMP" ${lib.getExe package} --version
+        HOME="$TEMP" ${package.exe} --version
       '';
     };
   };

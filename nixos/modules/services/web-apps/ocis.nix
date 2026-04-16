@@ -166,7 +166,7 @@ in
         // cfg.environment;
         serviceConfig = {
           Type = "simple";
-          ExecStart = "${lib.getExe cfg.package} server";
+          ExecStart = "${cfg.package.exe} server";
           WorkingDirectory = cfg.stateDir;
           User = cfg.user;
           Group = cfg.group;

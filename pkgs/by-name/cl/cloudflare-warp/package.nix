@@ -179,31 +179,33 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit sources;
 
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-cloudflare-warp";
+    updateScript = (
+      writeShellApplication {
+        name = "update-cloudflare-warp";
 
-      runtimeInputs = [
-        curl
-        jq
-        ripgrep
-        common-updater-scripts
-      ];
+        runtimeInputs = [
+          curl
+          jq
+          ripgrep
+          common-updater-scripts
+        ];
 
-      text = ''
-        new_version="$(
-          curl --fail --silent -L ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-            -H 'Accept: application/vnd.github+json' \
-            -H 'X-GitHub-Api-Version: 2022-11-28' \
-            'https://api.github.com/repos/cloudflare/cloudflare-docs/git/trees/production?recursive=true' |
-            jq -r '[.tree[].path | select(startswith("src/content/warp-releases/linux/ga/"))] | max_by(split("/")[-1] | split(".") | map(tonumber?))' |
-            rg '([^/]+)\.yaml\b' --only-matching --replace '$1'
-        )"
+        text = ''
+          new_version="$(
+            curl --fail --silent -L ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              'https://api.github.com/repos/cloudflare/cloudflare-docs/git/trees/production?recursive=true' |
+              jq -r '[.tree[].path | select(startswith("src/content/warp-releases/linux/ga/"))] | max_by(split("/")[-1] | split(".") | map(tonumber?))' |
+              rg '([^/]+)\.yaml\b' --only-matching --replace '$1'
+          ).exe"
 
-        for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-          update-source-version "${finalAttrs.pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
-        done
-      '';
-    });
+          for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+            update-source-version "${finalAttrs.pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
+          done
+        '';
+      }
+    );
   };
 
   meta = {

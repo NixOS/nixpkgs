@@ -95,8 +95,7 @@ in
           Type = "simple";
           User = "zenohd";
           Group = "zenohd";
-          ExecStart =
-            "${lib.getExe cfg.package} -c ${cfgFile} " + (lib.concatStringsSep " " cfg.extraOptions);
+          ExecStart = "${cfg.package.exe} -c ${cfgFile} " + (lib.concatStringsSep " " cfg.extraOptions);
         };
       };
 

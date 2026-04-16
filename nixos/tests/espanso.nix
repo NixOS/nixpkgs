@@ -75,7 +75,7 @@ in
           let
             initial_session = {
               user = config.users.users.alice.name;
-              command = lib.getExe pkgs.sway;
+              command = pkgs.sway.exe;
             };
           in
           {

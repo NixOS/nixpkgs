@@ -17,7 +17,7 @@ buildNpmPackage rec {
 
     # Requested patch upstream: https://github.com/Unitech/pm2/pull/5985
     postFetch = ''
-      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
+      ${npm-lockfile-fix.exe} $out/package-lock.json
     '';
   };
 

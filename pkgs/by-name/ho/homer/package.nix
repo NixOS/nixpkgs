@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation rec {
 
     # force the sass npm dependency to use our own sass binary instead of the bundled one
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${dart-sass.exe}"];'
     pnpm build
 
     runHook postBuild

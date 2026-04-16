@@ -211,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postInstall = ''
-    cp ${lib.getExe lit} $out/bin/llvm-lit
+    cp ${lit.exe} $out/bin/llvm-lit
   ''
   + (lib.optionalString (!isNative) ''
     cp -a NATIVE/bin/llvm-config $out/bin/llvm-config-native

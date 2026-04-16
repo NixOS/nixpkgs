@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./bash-path.patch {
-      bash = lib.getExe bashInteractive;
+      bash = bashInteractive.exe;
     })
   ];
 

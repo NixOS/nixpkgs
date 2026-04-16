@@ -21,7 +21,7 @@
             inherit snakeOilPrivateKey;
           }
           ''
-            ${lib.getExe pkgs.openssl} req -x509 -key $snakeOilPrivateKey -out $out -days 3650 \
+            ${pkgs.openssl.exe} req -x509 -key $snakeOilPrivateKey -out $out -days 3650 \
               -addext subjectKeyIdentifier=hash \
               -addext authorityKeyIdentifier=keyid:always,issuer:always \
               -addext basicConstraints=CA:FALSE \
@@ -68,7 +68,7 @@
         '';
       };
       rauc-bundle-c = pkgs.runCommand "rauc_c.bundle" { } ''
-        ${lib.getExe rauc-mkimg} c 42 $out
+        ${rauc-mkimg.exe} c 42 $out
       '';
 
       rauc-do-update = pkgs.writeShellScriptBin "rauc-do-update" ''

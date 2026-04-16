@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication {
 
       updateScript = {
         command = [
-          (lib.getExe nixpkgs-openjdk-updater)
+          (nixpkgs-openjdk-updater.exe)
 
           "--source-file"
           sourceFile

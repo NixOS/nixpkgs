@@ -41,7 +41,7 @@ buildNpmPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/icons
     ln -s $out/lib/node_modules/slacky/build/icons/icon.png $out/share/icons/slacky.png
-    makeWrapper ${lib.getExe electron} $out/bin/slacky \
+    makeWrapper ${electron.exe} $out/bin/slacky \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/node_modules/slacky/
   '';

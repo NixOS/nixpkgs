@@ -73,19 +73,19 @@ buildGoModule rec {
       --replace-fail '"errors"' ' '
 
     substituteInPlace user/module/probe_bash.go \
-      --replace-fail '/bin/bash' '${lib.getExe bashInteractive}'
+      --replace-fail '/bin/bash' '${bashInteractive.exe}'
 
     substituteInPlace user/config/config_bash.go \
-      --replace-fail '/bin/bash' '${lib.getExe bashInteractive}'
+      --replace-fail '/bin/bash' '${bashInteractive.exe}'
 
     substituteInPlace user/config/config_nspr_linux.go \
       --replace-fail '/usr/lib/firefox/libnspr4.so' '${lib.getLib nspr}/lib/libnspr4.so'
 
     substituteInPlace user/config/config_zsh.go \
-      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
+      --replace-fail '/bin/zsh' '${zsh.exe}'
 
     substituteInPlace user/module/probe_zsh.go \
-      --replace-fail '/bin/zsh' '${lib.getExe zsh}'
+      --replace-fail '/bin/zsh' '${zsh.exe}'
 
     substituteInPlace cli/cmd/postgres.go \
       --replace-fail '/usr/bin/postgres' '${postgresql}/bin/postgres'
@@ -106,7 +106,7 @@ buildGoModule rec {
     sed -i '/git/d' variables.mk
 
     substituteInPlace Makefile \
-      --replace-fail '/bin/bash' '${lib.getExe bash}'
+      --replace-fail '/bin/bash' '${bash.exe}'
   ''
   + lib.optionalString withNonBTF ''
     substituteInPlace variables.mk \

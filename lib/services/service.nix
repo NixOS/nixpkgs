@@ -41,7 +41,7 @@ in
     process = {
       argv = lib.mkOption {
         type = types.listOf pathOrStr;
-        example = lib.literalExpression ''[ (lib.getExe config.package) "--nobackground" ]'';
+        example = lib.literalExpression ''[ (config.package.exe) "--nobackground" ]'';
         description = ''
           Command filename and arguments for starting this service.
           This is a raw command-line that should not contain any shell escaping.

@@ -35,22 +35,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "shottr-update-script";
-    runtimeInputs = [
-      cacert
-      common-updater-scripts
-      curl
-      pup
-    ];
-    text = ''
-      version="$(curl -s https://shottr.cc/newversion.html \
-        | pup 'a[href*="Shottr-"] attr{href}' \
-        | sed -E 's|/dl/Shottr-||' \
-        | sed -E 's|\.dmg||')"
-      update-source-version shottr "$version"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "shottr-update-script";
+      runtimeInputs = [
+        cacert
+        common-updater-scripts
+        curl
+        pup
+      ];
+      text = ''
+        version="$(curl -s https://shottr.cc/newversion.html \
+          | pup 'a[href*="Shottr-"] attr{href}' \
+          | sed -E 's|/dl/Shottr-||' \
+          | sed -E 's|\.dmg||')"
+        update-source-version shottr "$version"
+      '';
+    }).exe;
 
   meta = {
     changelog = "https://shottr.cc/newversion.html";

@@ -67,7 +67,7 @@ in
         RuntimeDirectory = "nginx-sso";
         RuntimeDirectoryMode = "0700"; # Contains secrets
         ExecStart = ''
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             --config ${configPath} \
             --frontend-dir ${lib.getBin cfg.package}/share/frontend
         '';

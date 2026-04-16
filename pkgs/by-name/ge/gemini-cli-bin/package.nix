@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # https://github.com/google-gemini/gemini-cli/issues/11438
       if grep -q 'await resolveExistingRgPath();' "$chunk"; then
         substituteInPlace "$chunk" \
-          --replace-fail 'const existingPath = await resolveExistingRgPath();' 'const existingPath = "${lib.getExe ripgrep}";'
+          --replace-fail 'const existingPath = await resolveExistingRgPath();' 'const existingPath = "${ripgrep.exe}";'
       fi
 
     done
@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p "$bundleDir"
     cp -aT . "$bundleDir"
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/gemini" \
+    makeWrapper "${nodejs.exe}" "$out/bin/gemini" \
       --add-flags "--no-warnings=DEP0040" \
       --add-flags "$bundleDir/gemini.js"
 

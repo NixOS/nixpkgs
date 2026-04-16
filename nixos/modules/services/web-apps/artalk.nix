@@ -100,15 +100,15 @@ in
       + (
         if cfg.allowModify then
           ''
-            [ -e "${cfg.configFile}" ] || ${lib.getExe cfg.package} gen config "${cfg.configFile}"
-            cat "${cfg.configFile}" | ${lib.getExe pkgs.yj} > "/run/artalk/old"
-            ${lib.getExe pkgs.jq} -s '.[0] * .[1]' "/run/artalk/old" "/run/artalk/new" > "/run/artalk/result"
-            cat "/run/artalk/result" | ${lib.getExe pkgs.yj} -r > "${cfg.configFile}"
+            [ -e "${cfg.configFile}" ] || ${cfg.package.exe} gen config "${cfg.configFile}"
+            cat "${cfg.configFile}" | ${pkgs.yj.exe} > "/run/artalk/old"
+            ${pkgs.jq.exe} -s '.[0] * .[1]' "/run/artalk/old" "/run/artalk/new" > "/run/artalk/result"
+            cat "/run/artalk/result" | ${pkgs.yj.exe} -r > "${cfg.configFile}"
             rm /run/artalk/{old,new,result}
           ''
         else
           ''
-            cat /run/artalk/new | ${lib.getExe pkgs.yj} -r > "${cfg.configFile}"
+            cat /run/artalk/new | ${pkgs.yj.exe} -r > "${cfg.configFile}"
             rm /run/artalk/new
           ''
       );
@@ -116,7 +116,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} server --config ${cfg.configFile} --workdir ${cfg.workdir} --host ${cfg.settings.host} --port ${toString cfg.settings.port}";
+        ExecStart = "${cfg.package.exe} server --config ${cfg.configFile} --workdir ${cfg.workdir} --host ${cfg.settings.host} --port ${toString cfg.settings.port}";
         Restart = "on-failure";
         RestartSec = "5s";
         ConfigurationDirectory = [ "artalk" ];

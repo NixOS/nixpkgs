@@ -93,7 +93,7 @@ in
             ++ (lib.optional cfg.followDelete "--follow-delete")
           );
         in
-        "${lib.getExe cfg.package} ${lib.concatStringsSep " " args}";
+        "${cfg.package.exe} ${lib.concatStringsSep " " args}";
       wantedBy = [
         "zfs-snapshot-daily.service"
         "zfs-snapshot-frequent.service"

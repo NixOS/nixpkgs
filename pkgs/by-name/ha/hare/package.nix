@@ -99,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./002-dont-build-haredoc.patch
     # Hardcode harec and qbe.
     (replaceVars ./003-hardcode-qbe-and-harec.patch {
-      harec_bin = lib.getExe harec;
-      qbe_bin = lib.getExe qbe;
+      harec_bin = harec.exe;
+      qbe_bin = qbe.exe;
     })
     # Use mailcap `/etc/mime.types` for Hare's mime module
     (replaceVars ./004-use-mailcap-for-mimetypes.patch {

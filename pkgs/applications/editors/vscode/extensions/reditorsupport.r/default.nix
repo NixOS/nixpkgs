@@ -25,8 +25,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     cd "$out/$installPrefix"
     jq '.contributes.configuration.properties."r.rpath.mac".default = "${lib.getExe' R "R"}"' package.json | sponge package.json
     jq '.contributes.configuration.properties."r.rpath.linux".default = "${lib.getExe' R "R"}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.rterm.mac".default = "${lib.getExe radian}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.rterm.linux".default = "${lib.getExe radian}"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."r.rterm.mac".default = "${radian.exe}"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."r.rterm.linux".default = "${radian.exe}"' package.json | sponge package.json
     jq '.contributes.configuration.properties."r.libPaths".default = [ "${languageserver}/library" ]' package.json | sponge package.json
   '';
   meta = {

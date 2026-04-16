@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
 
     # fzf-tmux depends on bc
     substituteInPlace bin/fzf-tmux \
-      --replace-fail "bc" "${lib.getExe bc}"
+      --replace-fail "bc" "${bc.exe}"
   '';
 
   postInstall = ''

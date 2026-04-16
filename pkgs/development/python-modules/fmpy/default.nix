@@ -208,7 +208,7 @@ buildPythonPackage rec {
       for fmu in $(find ${fmi-reference-fmus}/*.fmu ! -name "Clocks.fmu"); do
         name=$(basename $fmu)
         echo "--- START $name ---"
-        ${lib.getExe fmpy} simulate $fmu \
+        ${fmpy.exe} simulate $fmu \
           --fmi-logging \
           --output-file $out/$name.csv \
           | tee $out/$name.out

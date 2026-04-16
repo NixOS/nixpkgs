@@ -20,7 +20,7 @@ let
     destination = "/lib/cups/backend/cups-pdf";
     checkPhase = ''
       ${pkgs.stdenv.shellDryRun} "$target"
-      ${lib.getExe pkgs.shellcheck} "$target"
+      ${pkgs.shellcheck.exe} "$target"
     '';
     text = ''
       #! ${pkgs.runtimeShell}
@@ -88,8 +88,8 @@ let
     };
     options.GhostScript = lib.mkOption {
       type = with lib.types; nullOr path;
-      default = lib.getExe pkgs.ghostscript;
-      defaultText = lib.literalExpression "lib.getExe pkgs.ghostscript";
+      default = pkgs.ghostscript.exe;
+      defaultText = lib.literalExpression "pkgs.ghostscript.exe";
       example = lib.literalExpression "\${pkgs.ghostscript}/bin/ps2pdf";
       description = "location of GhostScript binary";
     };

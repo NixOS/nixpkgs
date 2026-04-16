@@ -16,7 +16,7 @@ mkTmuxPlugin {
 
   postPatch = ''
     substituteInPlace plugin.sh.tmux --replace-fail \
-      python3 "${lib.getExe (python3.withPackages (ps: with ps; [ pyyaml ]))}"
+      python3 "${(python3.withPackages (ps: with ps; [ pyyaml ])).exe}"
   '';
 
   preInstall = ''

@@ -147,7 +147,7 @@ in
         };
 
         serviceConfig = {
-          ExecStart = lib.getExe cfg.package;
+          ExecStart = cfg.package.exe;
           User = "harmonia";
           Group = "harmonia";
           Restart = "on-failure";

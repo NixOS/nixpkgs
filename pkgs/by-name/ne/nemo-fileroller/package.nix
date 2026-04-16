@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/nemo-fileroller.c \
-      --replace "file-roller" "${lib.getExe file-roller}" \
+      --replace "file-roller" "${file-roller.exe}" \
       --replace "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
   '';
 

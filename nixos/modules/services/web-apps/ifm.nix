@@ -66,7 +66,7 @@ in
         StandardOutput = "journal";
         BindPaths = "${cfg.dataDir}:/data";
         PrivateTmp = true;
-        ExecStart = "${lib.getExe pkgs.ifm-web} ${lib.escapeShellArg cfg.listenAddress} ${toString cfg.port} /data";
+        ExecStart = "${pkgs.ifm-web.exe} ${lib.escapeShellArg cfg.listenAddress} ${toString cfg.port} /data";
       };
     };
   };

@@ -366,7 +366,7 @@ in
       description = "Windows Azure Agent Service";
       unitConfig.ConditionPathExists = "/etc/waagent.conf";
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} -daemon";
+        ExecStart = "${cfg.package.exe} -daemon";
         Type = "simple";
         Restart = "always";
         Slice = "azure.slice";

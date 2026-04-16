@@ -33,19 +33,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "lastfm-update-script";
-    runtimeInputs = [
-      curl
-      xmlstarlet
-      common-updater-scripts
-    ];
-    text = ''
-      url=$(curl --silent "https://cdn.last.fm/client/Mac/updates.xml")
-      version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
-      update-source-version lastfm "$version"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "lastfm-update-script";
+      runtimeInputs = [
+        curl
+        xmlstarlet
+        common-updater-scripts
+      ];
+      text = ''
+        url=$(curl --silent "https://cdn.last.fm/client/Mac/updates.xml")
+        version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
+        update-source-version lastfm "$version"
+      '';
+    }).exe;
 
   meta = {
     description = "Music services manager";

@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      command = "${lib.getExe steampipe} --version";
+      command = "${steampipe.exe} --version";
       package = steampipe;
       version = "v${finalAttrs.version}";
     };

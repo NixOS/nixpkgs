@@ -151,7 +151,7 @@ buildNpmPackage rec {
       --run "cp -n --no-preserve=all $out/share/lanraragi/lrr.conf ./lrr.conf 2>/dev/null || true" \
       --add-flags "-f $out/share/lanraragi/script/lanraragi"
 
-    makeWrapper ${lib.getExe perl} $out/bin/helpers/lrr-make-password-hash \
+    makeWrapper ${perl.exe} $out/bin/helpers/lrr-make-password-hash \
       --prefix PERL5LIB : $out/share/lanraragi/lib:$PERL5LIB \
       --add-flags "-e 'use LANraragi::Controller::Config; print LANraragi::Controller::Config::make_password_hash(@ARGV[0])' 2>/dev/null"
 

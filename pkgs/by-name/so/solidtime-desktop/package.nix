@@ -38,7 +38,7 @@ buildNpmPackage (finalAttrs: {
     cp -a build/icon.png $out/share/icons/solidtime-desktop.png
     cp -a . $out/share/solidtime-desktop
 
-    makeWrapper ${lib.getExe electron} $out/bin/solidtime-desktop \
+    makeWrapper ${electron.exe} $out/bin/solidtime-desktop \
       --add-flags $out/share/solidtime-desktop
   '';
 

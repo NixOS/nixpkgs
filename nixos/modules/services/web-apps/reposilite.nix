@@ -408,7 +408,7 @@ in
         + ''
           export REPOSILITE_LOCAL_DATABASE="${dbString}"
 
-          ${lib.getExe cfg.package} --local-configuration ${configFile} --local-configuration-mode none --working-directory ${cfg.workingDirectory} ${lib.escapeShellArgs cfg.extraArgs}
+          ${cfg.package.exe} --local-configuration ${configFile} --local-configuration-mode none --working-directory ${cfg.workingDirectory} ${lib.escapeShellArgs cfg.extraArgs}
         '';
 
       serviceConfig = lib.mkMerge [

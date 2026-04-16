@@ -244,7 +244,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p $out/Applications $out/bin
     # Zed expects git next to its own binary
-    ln -s ${lib.getExe git} $app_path/Contents/MacOS/git
+    ln -s ${git.exe} $app_path/Contents/MacOS/git
     mv $release_target/cli $app_path/Contents/MacOS/cli
     mv $app_path $out/Applications/
 
@@ -268,7 +268,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       export APP_NAME="Zed"
       export APP_ARGS="%U"
       mkdir -p "$out/share/applications"
-      ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
+      ${envsubst.exe} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
     )
   ''
   + lib.optionalString buildRemoteServer ''

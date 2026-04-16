@@ -18,10 +18,10 @@ python3Packages.buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace tests/static/test_irr_queries_failover.py --replace-fail 'bgpq4 -h' '${lib.getExe bgpq4} -h'
+    substituteInPlace tests/static/test_irr_queries_failover.py --replace-fail 'bgpq4 -h' '${bgpq4.exe} -h'
 
     substituteInPlace pierky/arouteserver/builder.py pierky/arouteserver/config/program.py tests/static/test_cfg_program.py \
-      --replace-fail '"bgpq4"' '"${lib.getExe bgpq4}"'
+      --replace-fail '"bgpq4"' '"${bgpq4.exe}"'
   '';
 
   build-system = with python3Packages; [ setuptools ];

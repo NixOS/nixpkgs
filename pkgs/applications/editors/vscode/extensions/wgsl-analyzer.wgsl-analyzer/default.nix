@@ -21,7 +21,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postPatch = ''
     jq '(.contributes.configuration[] | select(.title == "server") | .properties."wgsl-analyzer.server.path".default) = $s' \
-      --arg s "${lib.getExe wgsl-analyzer}" \
+      --arg s "${wgsl-analyzer.exe}" \
       package.json | sponge package.json
   '';
 

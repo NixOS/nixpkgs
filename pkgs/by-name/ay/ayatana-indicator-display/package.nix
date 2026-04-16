@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Hardcode xsct path
     substituteInPlace src/service.cpp \
-      --replace-fail 'sCommand = g_strdup_printf ("xsct' 'sCommand = g_strdup_printf ("${lib.getExe xsct}'
+      --replace-fail 'sCommand = g_strdup_printf ("xsct' 'sCommand = g_strdup_printf ("${xsct.exe}'
   '';
 
   strictDeps = true;

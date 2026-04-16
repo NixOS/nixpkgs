@@ -155,7 +155,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # task tracing requires Tokio to be built with RUSTFLAGS="--cfg tokio_unstable"
     RUSTFLAGS = "--cfg tokio_unstable";
 
-    TUBRO_BINARY_PATH = lib.getExe turbo;
+    TUBRO_BINARY_PATH = turbo.exe;
     TURBO_TELEMETRY_DISABLED = 1;
 
     OPENSSL_NO_VENDOR = true;
@@ -165,7 +165,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = ''
     # force the sass npm dependency to use our own sass binary instead of the bundled one
     substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${dart-sass.exe}"];'
 
     turbo run --filter @gitbutler/svelte-comment-injector build
     pnpm build:desktop -- --mode production

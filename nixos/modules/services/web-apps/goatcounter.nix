@@ -57,7 +57,7 @@ in
       serviceConfig = {
         ExecStart = lib.escapeShellArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "serve"
             "-listen"
             "${cfg.address}:${toString cfg.port}"

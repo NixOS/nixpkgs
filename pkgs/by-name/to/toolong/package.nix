@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication {
 
   passthru.tests.version = testers.testVersion {
     package = toolong;
-    command = "${lib.getExe toolong} --version";
+    command = "${toolong.exe} --version";
   };
 
   meta = {

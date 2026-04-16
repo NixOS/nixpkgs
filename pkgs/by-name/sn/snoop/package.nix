@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook prePatch
 
     substituteInPlace build-aux/meson/postinstall.py \
-      --replace-fail "/usr/bin/env python3" "${lib.getExe python3}"
+      --replace-fail "/usr/bin/env python3" "${python3.exe}"
 
     sed -i '/gtk-update-icon-cache/d' build-aux/meson/postinstall.py
     sed -i '/update-desktop-database/d' build-aux/meson/postinstall.py

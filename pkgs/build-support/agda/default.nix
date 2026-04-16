@@ -68,7 +68,7 @@ let
       }
       ''
         mkdir -p $out/bin
-        makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
+        makeWrapper ${Agda.exe} $out/bin/${Agda.meta.mainProgram} \
           ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
           --add-flags "--library-file=${libraryFile}"
         if [ -e ${lib.getExe' Agda "agda-mode"} ]; then
@@ -119,7 +119,7 @@ let
         else
           ''
             runHook preBuild
-            ${lib.getExe agdaWithPkgs} --build-library
+            ${agdaWithPkgs.exe} --build-library
             runHook postBuild
           '';
 

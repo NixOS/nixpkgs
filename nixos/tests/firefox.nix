@@ -39,7 +39,7 @@
 
   testScript =
     let
-      exe = lib.getExe firefoxPackage;
+      exe = firefoxPackage.exe;
     in
     ''
       from contextlib import contextmanager

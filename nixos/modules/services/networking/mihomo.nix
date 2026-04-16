@@ -76,7 +76,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = lib.concatStringsSep " " [
-          (lib.getExe cfg.package)
+          (cfg.package.exe)
           "-d /var/lib/private/mihomo"
           "-f \${CREDENTIALS_DIRECTORY}/config.yaml"
           (lib.optionalString (cfg.webui != null) "-ext-ui ${cfg.webui}")

@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       (cd "$f" && (
       npm run build-release --offline --nodedir="${nodeSources}"
       find build -type f -exec \
-        ${lib.getExe removeReferencesTo} \
+        ${removeReferencesTo.exe} \
         -t "${nodeSources}" {} \;
       ))
     done
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build $out/bin/taler-helper-sqlite3
   '';
 
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  env.ESBUILD_BINARY_PATH = esbuild'.exe;
 
   meta = {
     homepage = "https://git.taler.net/wallet-core.git/";

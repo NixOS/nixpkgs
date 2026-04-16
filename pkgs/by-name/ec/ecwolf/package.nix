@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [
       updateScriptPkg
-      (lib.getExe nix-update)
+      (nix-update.exe)
     ];
 
   meta = {

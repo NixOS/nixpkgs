@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     # true is a PATHable call, bash a shebang
     substituteInPlace tests/Makefile.am \
       --replace '/bin/true' 'true' \
-      --replace '/bin/bash' '${lib.getExe bash}'
+      --replace '/bin/bash' '${bash.exe}'
   '';
 
   strictDeps = true;
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkFlags = [
-    "XVFB_RUN=${lib.getExe xvfb-run}"
+    "XVFB_RUN=${xvfb-run.exe}"
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

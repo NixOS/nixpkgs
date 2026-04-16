@@ -17,7 +17,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."biome.lsp.bin".oneOf[0].default = "${lib.getExe biome}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ${jq.exe} '.contributes.configuration.properties."biome.lsp.bin".oneOf[0].default = "${biome.exe}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
   '';
 
   passthru.updateScript = vscode-extension-update-script {

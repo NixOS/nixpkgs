@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     cp misc/db/open5gs-dbctl $out/bin
     substituteInPlace $out/bin/open5gs-dbctl \
-      --replace "mongosh" "${lib.getExe mongosh}"
+      --replace "mongosh" "${mongosh.exe}"
   '';
 
   meta = {

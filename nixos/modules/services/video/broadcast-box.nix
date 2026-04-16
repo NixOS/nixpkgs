@@ -221,7 +221,7 @@ in
           priviledgedPort = any (p: p > 0 && p < 1024) (udpPorts ++ tcpPorts ++ webPorts);
         in
         {
-          ExecStart = "${getExe cfg.package}";
+          ExecStart = "${cfg.package.exe}";
           Restart = "always";
           RestartSec = "10s";
 

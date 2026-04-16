@@ -94,9 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
-        --replace-fail '"zenity"' '"${lib.getExe zenity}"'
+        --replace-fail '"zenity"' '"${zenity.exe}"'
       substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
-        --replace-fail '"zenity"' '"${lib.getExe zenity}"'
+        --replace-fail '"zenity"' '"${zenity.exe}"'
     ''
     # https://github.com/libsdl-org/SDL/issues/14805
     + lib.optionalString vulkanSupport ''

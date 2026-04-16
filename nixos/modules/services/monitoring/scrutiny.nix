@@ -6,7 +6,6 @@
   ...
 }:
 let
-  inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
   inherit (lib.options)
     literalExpression
@@ -218,7 +217,7 @@ in
         '';
         postStart = ''
           for _ in $(seq 300); do
-              if "${lib.getExe pkgs.curl}" --fail --silent --head "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}" >/dev/null; then
+              if "${pkgs.curl.exe}" --fail --silent --head "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}" >/dev/null; then
                   echo "Scrutiny is ready (port is open)"
                   exit 0
               fi
@@ -230,7 +229,7 @@ in
         '';
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${getExe cfg.package} start --config /run/scrutiny/config.yaml";
+          ExecStart = "${cfg.package.exe} start --config /run/scrutiny/config.yaml";
           Restart = "always";
           RuntimeDirectory = "scrutiny";
           RuntimeDirectoryMode = "0700";
@@ -263,7 +262,7 @@ in
           '';
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${getExe cfg.collector.package} run --config /run/scrutiny-collector/config.yaml";
+            ExecStart = "${cfg.collector.package.exe} run --config /run/scrutiny-collector/config.yaml";
             RuntimeDirectory = "scrutiny-collector";
             RuntimeDirectoryMode = "0700";
           };

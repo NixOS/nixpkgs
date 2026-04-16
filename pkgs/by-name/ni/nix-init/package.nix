@@ -79,8 +79,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
     LIBGIT2_NO_VENDOR = true;
-    NIX = lib.getExe nix;
-    NURL = lib.getExe nurl;
+    NIX = nix.exe;
+    NURL = nurl.exe;
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 

@@ -89,7 +89,7 @@ maven.buildMavenPackage rec {
       let
         pkgFile = toString ./package.nix;
       in
-      lib.getExe (writeShellApplication {
+      (writeShellApplication {
         name = "update-${pname}";
         runtimeInputs = [
           curl
@@ -120,7 +120,7 @@ maven.buildMavenPackage rec {
           # use # instead of / as separator because the sha256 might contain the / character
           sed -i "0,/mvnHash *= *\"[^\"]*\"/{s#mvnHash = \"[^\"]*\"#mvnHash = \"$NEW_MVN_HASH\"#}" ${pkgFile}
         '';
-      });
+      }).exe;
   };
 
   meta = {

@@ -27,8 +27,8 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${lib.getExe cfg.package} 0";
-        ExecStop = "${lib.getExe cfg.package} 1";
+        ExecStart = "${cfg.package.exe} 0";
+        ExecStop = "${cfg.package.exe} 1";
       };
     };
 

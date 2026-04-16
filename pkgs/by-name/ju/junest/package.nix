@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
     cp -r $src/lib/ $out/
     # cp -r $src/VERSION $out/
     substituteInPlace $out/bin/junest --replace-fail '$(cat "$JUNEST_BASE"/VERSION)' ${version}
-    substituteInPlace $out/lib/core/common.sh --replace-fail "wget" ${lib.getExe wget}
+    substituteInPlace $out/lib/core/common.sh --replace-fail "wget" ${wget.exe}
 
     runHook postInstall
   '';

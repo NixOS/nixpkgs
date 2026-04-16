@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Hardcode p11-kit path used by Flatpak itself.
     # If disabled, will have to be on PATH.
     (replaceVars ./fix-paths.patch {
-      p11kit = lib.getExe p11-kit;
+      p11kit = p11-kit.exe;
     })
   ];
 
@@ -249,8 +249,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "systemd" withSystemd)
     (lib.mesonOption "dbus_config_dir" (placeholder "out" + "/share/dbus-1/system.d"))
     (lib.mesonOption "profile_dir" (placeholder "out" + "/etc/profile.d"))
-    (lib.mesonOption "system_bubblewrap" (lib.getExe bubblewrap))
-    (lib.mesonOption "system_dbus_proxy" (lib.getExe xdg-dbus-proxy))
+    (lib.mesonOption "system_bubblewrap" (bubblewrap.exe))
+    (lib.mesonOption "system_dbus_proxy" (xdg-dbus-proxy.exe))
     (lib.mesonOption "system_fusermount" "/run/wrappers/bin/fusermount3")
     (lib.mesonOption "system_install_dir" "/var/lib/flatpak")
     (lib.mesonOption "sysconfdir" "/etc")

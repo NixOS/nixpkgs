@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace platform/qt/MainWindow.cpp \
-      --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg-headless}"'
+      --replace-fail '"ffmpeg"' '"${ffmpeg-headless.exe}"'
   '';
 
   qmakeFlags = [ "MLVApp.pro" ];

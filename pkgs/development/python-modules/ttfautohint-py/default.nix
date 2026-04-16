@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/python/ttfautohint/__init__.py \
-      --replace-fail '_exe_full_path = None' '_exe_full_path = "${lib.getExe ttfautohint}"'
+      --replace-fail '_exe_full_path = None' '_exe_full_path = "${ttfautohint.exe}"'
   '';
 
   env.TTFAUTOHINTPY_BUNDLE_DLL = false;

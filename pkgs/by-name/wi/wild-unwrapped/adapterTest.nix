@@ -33,7 +33,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      makeWrapper ${lib.getExe gcc} $out/bin/gcc \
+      makeWrapper ${gcc.exe} $out/bin/gcc \
         --append-flag -B${binutils-unwrapped-all-targets}/bin
 
       runHook postBuild
@@ -63,12 +63,12 @@ let
   helloTest =
     name: helloWild:
     let
-      command = "$READELF -p .comment ${lib.getExe helloWild}";
+      command = "$READELF -p .comment ${helloWild.exe}";
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
     runCommandCC "wild-${name}-test" { passthru = { inherit helloWild; }; } ''
       echo "Testing running the 'hello' binary which should be linked with 'wild'" >&2
-      ${emulator} ${lib.getExe helloWild}
+      ${emulator} ${helloWild.exe}
 
       echo "Checking for wild in the '.comment' section" >&2
       if output=$(${command} 2>&1); then

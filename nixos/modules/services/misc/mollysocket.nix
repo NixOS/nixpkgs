@@ -18,7 +18,7 @@ let
   configuration = format.generate "mollysocket.conf" cfg.settings;
   format = pkgs.formats.toml { };
   package = pkgs.writeShellScriptBin "mollysocket" ''
-    MOLLY_CONF=${configuration} exec ${getExe pkgs.mollysocket} "$@"
+    MOLLY_CONF=${configuration} exec ${pkgs.mollysocket.exe} "$@"
   '';
 in
 {
@@ -99,7 +99,7 @@ in
       environment.RUST_LOG = cfg.logLevel;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFile;
-        ExecStart = "${getExe package} server";
+        ExecStart = "${package.exe} server";
         KillSignal = "SIGINT";
         Restart = "on-failure";
         StateDirectory = "mollysocket";

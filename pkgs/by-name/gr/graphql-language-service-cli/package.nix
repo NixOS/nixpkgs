@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     # copy package.json for --version command
     mv {out/graphql.js,package.json} $out/lib
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/graphql-lsp \
+    makeWrapper ${nodejs.exe} $out/bin/graphql-lsp \
       --add-flags $out/lib/graphql.js \
 
     popd

@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 $icon $out/share/icons/hicolor/$(basename ''${icon%.png})/apps/rocketchat-desktop.png
     done
 
-    makeWrapper '${lib.getExe electron}' $out/bin/rocketchat-desktop \
+    makeWrapper '${electron.exe}' $out/bin/rocketchat-desktop \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/share/rocketchat-desktop/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

@@ -57,14 +57,14 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { shallowClone = false; };
     tests = {
       simple = runCommand "rc-test" { } ''
-        ${lib.getExe rc-9front} -c 'nl=`{echo} && \
+        ${rc-9front.exe} -c 'nl=`{echo} && \
           res=`$nl{for(i in `{seq 1 10}) echo $i} && \
           echo -n $res' >$out
-        [ "$(wc -l $out | ${lib.getExe nawk} '{ print $1 }' )" = 10 ]
-        [ "$(${lib.getExe nawk} '{ a=a+$1 } END{ print a }' < $out)" = "$((10+9+8+7+6+5+4+3+2+1))" ]
+        [ "$(wc -l $out | ${nawk.exe} '{ print $1 }' )" = 10 ]
+        [ "$(${nawk.exe} '{ a=a+$1 } END{ print a }' < $out)" = "$((10+9+8+7+6+5+4+3+2+1))" ]
       '';
       path = runCommand "rc-path" { } ''
-        PATH='${coreutils}/bin:/a:/b:/c' ${lib.getExe rc-9front} -c 'echo $path(2-)' >$out
+        PATH='${coreutils}/bin:/a:/b:/c' ${rc-9front.exe} -c 'echo $path(2-)' >$out
         [ '/a /b /c' = "$(cat $out)" ]
       '';
     };

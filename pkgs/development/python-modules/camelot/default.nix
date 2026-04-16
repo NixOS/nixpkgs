@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace camelot/backends/ghostscript_backend.py \
-      --replace-fail '@ghostscript@' ${lib.getExe pkgs.ghostscript_headless}
+      --replace-fail '@ghostscript@' ${pkgs.ghostscript_headless.exe}
   '';
 
   pythonRelaxDeps = [ "pypdf" ];

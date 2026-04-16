@@ -262,7 +262,7 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package}";
+        ExecStart = "${cfg.package.exe}";
         Restart = "always";
         RuntimeMaxSec = cfg.maxRuntime;
         User = "mchprs";

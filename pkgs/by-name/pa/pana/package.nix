@@ -48,7 +48,7 @@ buildDartApplication rec {
   '';
 
   passthru = {
-    updateScript = lib.getExe (callPackage ./update.nix { });
+    updateScript = (callPackage ./update.nix { }).exe;
     tests = callPackage ./tests.nix { };
   };
 

@@ -57,7 +57,7 @@ in
       wants = [ "network-online.target" ];
       environment = cfg.settings;
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.nextcloud-whiteboard-server}";
+        ExecStart = "${pkgs.nextcloud-whiteboard-server.exe}";
         WorkingDirectory = "%S/whiteboard";
         StateDirectory = "whiteboard";
         EnvironmentFile = [ cfg.secrets ];

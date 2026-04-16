@@ -138,7 +138,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${lib.getExe config.services.tailscale.package} serve set-config --all ${configFile}";
+        ExecStart = "${config.services.tailscale.package.exe} serve set-config --all ${configFile}";
       };
     };
   };

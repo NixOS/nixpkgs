@@ -69,7 +69,7 @@ buildNpmPackage rec {
 
       install -Dm644 src/icons/icon.svg $out/share/icons/hicolor/scalable/apps/httptoolkit.svg
 
-      makeWrapper ${lib.getExe electron} $out/bin/httptoolkit \
+      makeWrapper ${electron.exe} $out/bin/httptoolkit \
           --add-flags $out/share/httptoolkit/resources/app.asar \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0

@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
     substituteInPlace daemon/service/platform/platform_linux_release.go \
       --replace-fail 'installDir := "/opt/ivpn"' "installDir := \"$out\"" \
       --replace-fail 'obfsproxyStartScript = path.Join(installDir, "obfsproxy/obfs4proxy")' \
-      'obfsproxyStartScript = "${lib.getExe obfs4}"' \
+      'obfsproxyStartScript = "${obfs4.exe}"' \
       --replace-fail 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
       'wgBinaryPath = "${wireguard-tools}/bin/wg-quick"' \
       --replace-fail 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \

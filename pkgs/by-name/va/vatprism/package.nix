@@ -88,7 +88,7 @@ maven.buildMavenPackage rec {
 
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${lib.getExe jdkWithFX} $out/bin/vatprism \
+    makeWrapper ${jdkWithFX.exe} $out/bin/vatprism \
         --add-flags --add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED \
         --add-flags --add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED \
         --add-flags --add-exports=javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED \

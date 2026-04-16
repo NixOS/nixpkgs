@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     in
     ''
-      makeWrapper '${lib.getExe electron}' $out/bin/gdlauncher-carbon \
+      makeWrapper '${electron.exe}' $out/bin/gdlauncher-carbon \
         --prefix GDL_JAVA_PATH : ${lib.makeSearchPath "" jdks} \
         --set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${libPath} \
         --suffix PATH : "${binPath}" \

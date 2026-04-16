@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     done
 
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/overseerr" \
+    makeWrapper "${nodejs.exe}" "$out/bin/overseerr" \
       --set NODE_ENV production \
       --chdir "$out/lib/node_modules/overseerr" \
       --add-flags "dist/index.js" \

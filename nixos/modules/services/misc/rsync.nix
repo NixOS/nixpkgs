@@ -162,7 +162,7 @@ in
 
                   args =
                     (lib.optionals (job.inhibit != [ ]) inhibitArgs)
-                    ++ [ (lib.getExe cfg.package) ]
+                    ++ [ (cfg.package.exe) ]
                     ++ (settingsToCommandLine job.settings)
                     ++ [ "--" ]
                     ++ job.sources

@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # Tests require network
   doCheck = false;
 
-  makeWrapperArgs = [ "--set-default GIT_AUTOSHARE_GIT_BIN ${lib.getExe git}" ];
+  makeWrapperArgs = [ "--set-default GIT_AUTOSHARE_GIT_BIN ${git.exe}" ];
 
   pythonImportsCheck = [ "git_autoshare" ];
 

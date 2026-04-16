@@ -56,7 +56,7 @@ in
 
       serviceConfig = {
         LoadCredential = [ "livekit-secrets:${cfg.keyFile}" ];
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         DynamicUser = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

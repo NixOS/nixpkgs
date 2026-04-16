@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/bin
     mv * $out/lib/node_modules/conventional-changelog/
 
-    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/conventional-changelog \
+    makeBinaryWrapper ${nodejs.exe} $out/bin/conventional-changelog \
       --add-flags "$out/lib/node_modules/conventional-changelog/packages/conventional-changelog/dist/cli/index.js" \
       --set NODE_PATH "$out/lib/node_modules/conventional-changelog/node_modules"
 

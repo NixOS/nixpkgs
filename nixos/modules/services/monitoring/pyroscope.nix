@@ -94,7 +94,7 @@ in
         {
           ExecStart = utils.escapeSystemdExecArgs (
             [
-              "${lib.getExe cfg.package}"
+              "${cfg.package.exe}"
               "--config.file=${conf}"
             ]
             ++ cfg.extraFlags

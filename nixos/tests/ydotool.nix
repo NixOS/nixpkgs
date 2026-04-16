@@ -5,7 +5,7 @@ let
   inputBox =
     pkgs:
     pkgs.writeShellScript "zenity-input" ''
-      ${lib.getExe pkgs.zenity} --entry --text '${inputBoxText}:' > /tmp/output &
+      ${pkgs.zenity.exe} --entry --text '${inputBoxText}:' > /tmp/output &
     '';
   asUser = ''
     def as_user(cmd: str):

@@ -32,20 +32,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "daisydisk-update-script";
-    runtimeInputs = [
-      curl
-      cacert
-      xmlstarlet
-      common-updater-scripts
-    ];
-    text = ''
-      url="https://daisydiskapp.com/downloads/appcastFeed.php"
-      version=$(curl -s "$url" |  xmlstarlet sel -t -v 'rss/channel/item[1]/enclosure/@sparkle:version' -n)
-      update-source-version daisydisk "$version"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "daisydisk-update-script";
+      runtimeInputs = [
+        curl
+        cacert
+        xmlstarlet
+        common-updater-scripts
+      ];
+      text = ''
+        url="https://daisydiskapp.com/downloads/appcastFeed.php"
+        version=$(curl -s "$url" |  xmlstarlet sel -t -v 'rss/channel/item[1]/enclosure/@sparkle:version' -n)
+        update-source-version daisydisk "$version"
+      '';
+    }).exe;
 
   meta = {
     description = "Find out what’s taking up your disk space and recover it in the most efficient and easy way";

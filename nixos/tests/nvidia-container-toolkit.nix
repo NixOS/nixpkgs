@@ -8,13 +8,13 @@ let
 
     check_file_referential_integrity() {
       echo "checking $1 referential integrity"
-      ( ${pkgs.glibc.bin}/bin/ldd "$1" | ${lib.getExe pkgs.gnugrep} "not found" &> /dev/null ) && return 1
+      ( ${pkgs.glibc.bin}/bin/ldd "$1" | ${pkgs.gnugrep.exe} "not found" &> /dev/null ) && return 1
       return 0
     }
 
     check_directory_referential_integrity() {
-      ${lib.getExe pkgs.findutils} "$1" -type f -print0 | while read -d $'\0' file; do
-        if [[ $(${lib.getExe pkgs.file} "$file" | ${lib.getExe pkgs.gnugrep} ELF) ]]; then
+      ${pkgs.findutils.exe} "$1" -type f -print0 | while read -d $'\0' file; do
+        if [[ $(${pkgs.file.exe} "$file" | ${pkgs.gnugrep.exe} ELF) ]]; then
           check_file_referential_integrity "$file" || exit 1
         else
           echo "skipping $file: not an ELF file"
@@ -30,7 +30,7 @@ let
     name = "cdi-test";
     tag = "latest";
     config = {
-      Cmd = [ (lib.getExe testCDIScript) ];
+      Cmd = [ (testCDIScript.exe) ];
     };
     copyToRoot = with pkgs.dockerTools; [
       usrBinEnv

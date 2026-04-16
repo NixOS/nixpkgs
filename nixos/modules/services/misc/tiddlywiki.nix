@@ -10,7 +10,7 @@ let
   listenParams = lib.concatStrings (
     lib.mapAttrsToList (n: v: " '${n}=${toString v}' ") cfg.listenOptions
   );
-  exe = lib.getExe pkgs.tiddlywiki;
+  exe = pkgs.tiddlywiki.exe;
   name = "tiddlywiki";
   dataDir = "/var/lib/" + name;
 

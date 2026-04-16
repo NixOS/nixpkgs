@@ -64,7 +64,7 @@ in
         in
         ''
           export SABNZBD_APIKEYS="${apiKeys}"
-          exec ${lib.getExe pkgs.prometheus-sabnzbd-exporter}
+          exec ${pkgs.prometheus-sabnzbd-exporter.exe}
         '';
     };
 }

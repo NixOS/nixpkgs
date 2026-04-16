@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./paths.patch {
-      deltachatrpcserver = lib.getExe deltachat-rpc-server;
+      deltachatrpcserver = deltachat-rpc-server.exe;
     })
   ];
 

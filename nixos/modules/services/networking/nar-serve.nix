@@ -68,7 +68,7 @@ in
       serviceConfig = {
         Restart = "always";
         RestartSec = "5s";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         DynamicUser = true;
       };
     };

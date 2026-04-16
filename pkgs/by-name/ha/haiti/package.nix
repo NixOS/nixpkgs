@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $out/lib/bin/*;
     do
       filename=$(basename $i)
-      makeWrapper ${lib.getExe ruby} $out/bin/$filename \
+      makeWrapper ${ruby.exe} $out/bin/$filename \
       --set GEM_PATH $out/lib \
       --add-flags $out/lib/bin/$filename
     done

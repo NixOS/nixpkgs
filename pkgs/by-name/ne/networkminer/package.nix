@@ -59,7 +59,7 @@ buildDotnetModule rec {
 
     mkdir -p $out/bin $out/share
     cp -r NetworkMiner/bin/Release $out/share/NetworkMiner
-    makeWrapper ${lib.getExe mono} $out/bin/NetworkMiner \
+    makeWrapper ${mono.exe} $out/bin/NetworkMiner \
       --add-flags "$out/share/NetworkMiner/NetworkMiner.exe" \
       --add-flags "--noupdatecheck" \
       --prefix LD_LIBRARY_PATH : ${

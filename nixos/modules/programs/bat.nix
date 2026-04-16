@@ -45,11 +45,11 @@ let
     }:
     if (shell != "fish") then
       ''
-        eval "$(${getExe program} ${toString flags})"
+        eval "$(${program.exe} ${toString flags})"
       ''
     else
       ''
-        ${getExe program} ${toString flags} | source
+        ${program.exe} ${toString flags} | source
       '';
 
   shellInit =

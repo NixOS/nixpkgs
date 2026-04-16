@@ -38,7 +38,7 @@ buildNpmPackage rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
   postPatch = ''
-    ${lib.getExe buildPackages.jq} '
+    ${buildPackages.jq.exe} '
       .scripts.postinstall |= empty |             # tries to install playwright, not necessary for build
       .scripts.build |= "gulp dapDebugServer" |   # there is no build script defined
       .bin |= "./dist/src/dapDebugServer.js"      # there is no bin output defined

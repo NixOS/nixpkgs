@@ -14,7 +14,7 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./encoder-paths.patch {
-      lame = lib.getExe lame;
+      lame = lame.exe;
       opusenc = "${opus-tools}/bin/opusenc";
     })
   ];

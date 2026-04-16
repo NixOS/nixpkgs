@@ -51,7 +51,7 @@
           source ${pkgs.buildPackages.makeWrapper}/nix-support/setup-hook
 
           mkdir $out/bin
-          ln -sf ${lib.getExe pkgs.switch-to-configuration-ng} $out/bin/switch-to-configuration
+          ln -sf ${pkgs.switch-to-configuration-ng.exe} $out/bin/switch-to-configuration
           wrapProgram $out/bin/switch-to-configuration \
             --set OUT $out \
             --set TOPLEVEL ''${!toplevelVar} \

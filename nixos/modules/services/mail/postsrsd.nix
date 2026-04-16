@@ -293,7 +293,7 @@ in
 
         serviceConfig = {
           ExecStart = utils.escapeSystemdExecArgs [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "-C"
             "/etc/postsrsd.conf"
           ];

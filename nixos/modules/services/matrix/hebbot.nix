@@ -70,7 +70,7 @@ in
 
       script = ''
         export BOT_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/bot-password-file)"
-        ${lib.getExe cfg.package}
+        ${cfg.package.exe}
       '';
 
       serviceConfig = {

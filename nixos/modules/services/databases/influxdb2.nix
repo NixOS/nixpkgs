@@ -123,7 +123,7 @@ let
       rm -f "$STATE_DIRECTORY/.first_startup"
     fi
 
-    provision_result=$(${getExe pkgs.influxdb2-provision} ${provisionState} "$INFLUX_HOST" "$(< "$CREDENTIALS_DIRECTORY/admin-token")")
+    provision_result=$(${pkgs.influxdb2-provision.exe} ${provisionState} "$INFLUX_HOST" "$(< "$CREDENTIALS_DIRECTORY/admin-token")")
     if [[ "$(jq '[.auths[] | select(.action == "created")] | length' <<< "$provision_result")" -gt 0 ]]; then
       echo "Created at least one new token, queueing service restart so we can manipulate secrets"
       touch "$STATE_DIRECTORY/.needs_restart"
@@ -540,7 +540,7 @@ in
             touch "$STATE_DIRECTORY/.first_startup"
           else
             # Manipulate provisioned api tokens if necessary
-            ${getExe pkgs.influxdb2-token-manipulator} "$STATE_DIRECTORY/influxd.bolt" ${tokenMappings}
+            ${pkgs.influxdb2-token-manipulator.exe} "$STATE_DIRECTORY/influxd.bolt" ${tokenMappings}
           fi
         '';
     };

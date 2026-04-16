@@ -766,7 +766,7 @@ in
       };
 
       # See the `xenBootBuilder` script in the main `let...in` statement of this file.
-      loader.systemd-boot.extraInstallCommands = "${getExe xenBootBuilder} ${cfg.boot.builderVerbosity}";
+      loader.systemd-boot.extraInstallCommands = "${xenBootBuilder.exe} ${cfg.boot.builderVerbosity}";
     };
 
     # Domain 0 requires a pvops-enabled kernel.

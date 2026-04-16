@@ -325,7 +325,7 @@ in
         ])
         + (lib.optionalString (cfg.extraSettingsFile != null) (
           "\necho ${lib.strings.escapeShellArg serverSettingsString}"
-          + " \"$(cat ${cfg.extraSettingsFile})\" | ${lib.getExe pkgs.jq} -s add"
+          + " \"$(cat ${cfg.extraSettingsFile})\" | ${pkgs.jq.exe} -s add"
           + " > ${stateDir}/server-settings.json"
         ));
 

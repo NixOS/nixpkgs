@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     export OWGUINOBUILD=${if withGUI then "0" else "1"}
     export OWNOBUILD=
     export OWDISTRBUILD=0
-    export OWDOSBOX=${lib.getExe dosbox}
+    export OWDOSBOX=${dosbox.exe}
     export OWVERBOSE=0
     export OWRELROOT=$out
 

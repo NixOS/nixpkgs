@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   patches = [
-    (replaceVars ./fix-shebang.patch { bash = lib.getExe bash; })
+    (replaceVars ./fix-shebang.patch { bash = bash.exe; })
   ];
 
   # redirect tests writing to /tmp

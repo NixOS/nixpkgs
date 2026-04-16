@@ -190,7 +190,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         EnvironmentFile = cfg.environmentFile;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
       };
     };
   };

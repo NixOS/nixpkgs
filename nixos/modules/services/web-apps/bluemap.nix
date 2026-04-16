@@ -300,7 +300,7 @@ in
         UMask = "026";
       };
       script = ''
-        ${lib.getExe pkgs.bluemap} -c ${configFolder} -gs -r
+        ${pkgs.bluemap.exe} -c ${configFolder} -gs -r
       '';
     };
 

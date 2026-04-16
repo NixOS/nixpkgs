@@ -34,20 +34,21 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$out/Applications/GrandPerspective.app/Contents/MacOS/GrandPerspective" "$out/bin/grandperspective"
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "grandperspective-update-script";
-    runtimeInputs = [
-      curl
-      cacert
-      gnugrep
-      common-updater-scripts
-    ];
-    text = ''
-      url="https://sourceforge.net/p/grandperspectiv/documentation/ci/master/tree/CHANGES.txt?format=raw"
-      version=$(curl -s "$url" | grep -oP 'Version \K[0-9.]+(?=,)' | head -n 1)
-      update-source-version grandperspective "$version"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "grandperspective-update-script";
+      runtimeInputs = [
+        curl
+        cacert
+        gnugrep
+        common-updater-scripts
+      ];
+      text = ''
+        url="https://sourceforge.net/p/grandperspectiv/documentation/ci/master/tree/CHANGES.txt?format=raw"
+        version=$(curl -s "$url" | grep -oP 'Version \K[0-9.]+(?=,)' | head -n 1)
+        update-source-version grandperspective "$version"
+      '';
+    }).exe;
 
   meta = {
     description = "Open-source macOS application to analyze disk usage";

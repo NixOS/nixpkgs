@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   # pass-through CLI args ($@) to the JVM.
   postPatch = ''
     substituteInPlace starsector.sh \
-      --replace-fail "./jre_linux/bin/java" "${lib.getExe openjdk}" \
+      --replace-fail "./jre_linux/bin/java" "${openjdk.exe}" \
       --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
       --replace-fail "./compiler_directives.txt" "$out/share/starsector/compiler_directives.txt" \
       --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \

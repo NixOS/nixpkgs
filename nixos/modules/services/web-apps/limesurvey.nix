@@ -332,8 +332,8 @@ in
         environment.LIMESURVEY_CONFIG = limesurveyConfig;
         script = ''
           # update or install the database as required
-          ${lib.getExe php} ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
-          ${lib.getExe php} ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+          ${php.exe} ${cfg.package}/share/limesurvey/application/commands/console.php updatedb || \
+          ${php.exe} ${cfg.package}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
         '';
         serviceConfig = {
           User = user;

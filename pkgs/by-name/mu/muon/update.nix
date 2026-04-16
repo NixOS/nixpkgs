@@ -6,7 +6,7 @@
   gnugrep,
 }:
 
-lib.getExe (writeShellApplication {
+(writeShellApplication {
   name = "update-muon";
 
   runtimeInputs = [
@@ -32,4 +32,4 @@ lib.getExe (writeShellApplication {
       --version-key=srcsAttrs.meson-tests.rev \
       --source-key=srcsAttrs.meson-tests
   '';
-})
+}).exe

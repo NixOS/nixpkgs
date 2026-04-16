@@ -47,10 +47,10 @@ stdenv.mkDerivation {
     substituteInPlace src/application/*.cpp \
       --replace '/usr/bin/pkexec' '${pkexecPath}' \
       --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl' \
-      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+      --replace '/usr/sbin/nvramtool' '${nvramtool.exe}'
 
     substituteInPlace src/resources/org.coreboot.nvramtool.policy \
-      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+      --replace '/usr/sbin/nvramtool' '${nvramtool.exe}'
 
     substituteInPlace src/resources/org.coreboot.reboot.policy \
       --replace '/usr/sbin/reboot' '${lib.getBin systemd}/reboot'

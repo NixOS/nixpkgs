@@ -42,15 +42,15 @@ flutter338.buildFlutterApplication {
   '';
 
   passthru.updateScript = writeShellScript "update-proxypin" ''
-    ${lib.getExe nix-update} --use-github-releases proxypin
+    ${nix-update.exe} --use-github-releases proxypin
     export HOME=$(mktemp -d)
     src=$(nix build --no-link --print-out-paths .#proxypin.src)
     WORKDIR=$(mktemp -d)
     cp --recursive --no-preserve=mode $src/* $WORKDIR
     PACKAGE_DIR=$(dirname $(EDITOR=echo nix edit --file . proxypin))
     pushd $WORKDIR
-    ${lib.getExe flutter338} pub get
-    ${lib.getExe yq-go} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
+    ${flutter338.exe} pub get
+    ${yq-go.exe} eval --output-format=json --prettyPrint pubspec.lock > $PACKAGE_DIR/pubspec.lock.json
     popd
     $(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json
   '';

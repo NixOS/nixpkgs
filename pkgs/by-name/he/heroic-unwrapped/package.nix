@@ -96,11 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$bin_dir/x64/linux/" "$bin_dir/x64/win32/"
 
     ln -s \
-      "${lib.getExe gogdl}" \
-      "${lib.getExe legendary}" \
-      "${lib.getExe nile}" \
-      "${lib.getExe comet-gog}" \
-      "${lib.getExe vulkan-helper}" \
+      "${gogdl.exe}" \
+      "${legendary.exe}" \
+      "${nile.exe}" \
+      "${comet-gog.exe}" \
+      "${vulkan-helper.exe}" \
       "$bin_dir/x64/linux/"
 
     # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       "${epic-integration}/EpicGamesLauncher.exe" \
       "$bin_dir/x64/win32/"
 
-    makeWrapper "${lib.getExe electron}" "$out/bin/heroic" \
+    makeWrapper "${electron.exe}" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --suffix PATH ":" "${umu-launcher}/bin" \

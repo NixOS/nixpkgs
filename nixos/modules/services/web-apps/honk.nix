@@ -17,7 +17,7 @@ let
       text = ''
         PW=$(cat "$CREDENTIALS_DIRECTORY/honk_passwordFile")
 
-        echo -e "${cfg.username}\n''$PW\n${cfg.host}:${toString cfg.port}\n${cfg.servername}" | ${lib.getExe cfg.package} -datadir "$STATE_DIRECTORY" init
+        echo -e "${cfg.username}\n''$PW\n${cfg.host}:${toString cfg.port}\n${cfg.servername}" | ${cfg.package.exe} -datadir "$STATE_DIRECTORY" init
       '';
     };
 in
@@ -112,7 +112,7 @@ in
         StateDirectory = "honk";
         DynamicUser = true;
         RemainAfterExit = true;
-        ExecStart = lib.getExe (honk-initdb-script cfg);
+        ExecStart = (honk-initdb-script cfg).exe;
         PrivateTmp = true;
       };
 
@@ -135,13 +135,13 @@ in
         ${lib.optionalString (
           cfg.extraCSS != null
         ) "ln -fs ${cfg.extraCSS} $STATE_DIRECTORY/views/local.css"}
-        ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk backup $STATE_DIRECTORY/backup
-        ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk upgrade
-        ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk cleanup
+        ${cfg.package.exe} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk backup $STATE_DIRECTORY/backup
+        ${cfg.package.exe} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk upgrade
+        ${cfg.package.exe} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk cleanup
       '';
       serviceConfig = {
         ExecStart = ''
-          ${lib.getExe cfg.package} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk
+          ${cfg.package.exe} -datadir $STATE_DIRECTORY -viewdir ${cfg.package}/share/honk
         '';
         StateDirectory = "honk";
         DynamicUser = true;

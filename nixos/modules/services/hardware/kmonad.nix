@@ -110,7 +110,7 @@ let
     pkgs.writeTextFile {
       name = "${mkName keyboard.name}.kbd";
       text = lib.optionalString keyboard.defcfg.enable (defcfg + "\n") + keyboard.config;
-      checkPhase = "${lib.getExe cfg.package} -d $out";
+      checkPhase = "${cfg.package.exe} -d $out";
     };
 
   # Build a systemd path config that starts the service below when a
@@ -143,7 +143,7 @@ let
       };
       serviceConfig = {
         ExecStart = ''
-          ${lib.getExe cfg.package} ${mkCfg keyboard} \
+          ${cfg.package.exe} ${mkCfg keyboard} \
             ${utils.escapeSystemdExecArgs cfg.extraArgs}
         '';
         Restart = "always";

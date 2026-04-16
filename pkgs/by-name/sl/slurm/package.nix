@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
-        --replace-fail '"/usr/bin/xauth"' '"${lib.getExe xauth}"'
+        --replace-fail '"/usr/bin/xauth"' '"${xauth.exe}"'
   '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'

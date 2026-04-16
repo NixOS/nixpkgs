@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/share/element/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
 
     # executable wrapper
-    makeWrapper '${lib.getExe electron}' "$out/bin/element-desktop" \
+    makeWrapper '${electron.exe}' "$out/bin/element-desktop" \
       --add-flags "$out/share/element/app.asar" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

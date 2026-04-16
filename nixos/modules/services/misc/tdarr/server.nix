@@ -126,7 +126,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = lib.getExe cfg.server.package;
+        ExecStart = cfg.server.package.exe;
         Restart = "on-failure";
         RestartSec = 5;
         WorkingDirectory = serverDataDir;

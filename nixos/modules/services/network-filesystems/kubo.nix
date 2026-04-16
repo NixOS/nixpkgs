@@ -381,7 +381,7 @@ in
           rm -vf "$IPFS_PATH/api"
       ''
       + lib.optionalString cfg.autoMigrate ''
-        '${lib.getExe cfg.package}' repo migrate '--to=${cfg.package.repoVersion}' --allow-downgrade
+        '${cfg.package.exe}' repo migrate '--to=${cfg.package.repoVersion}' --allow-downgrade
       ''
       + ''
         fi
@@ -417,7 +417,7 @@ in
       serviceConfig = {
         ExecStart = [
           ""
-          "${lib.getExe cfg.package} daemon ${kuboFlags}"
+          "${cfg.package.exe} daemon ${kuboFlags}"
         ];
         User = cfg.user;
         Group = cfg.group;

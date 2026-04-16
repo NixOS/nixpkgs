@@ -33,8 +33,8 @@ let
         substituteInPlace plugins-scripts/Makefile.am \
           --replace-fail /bin/cat  ${lib.getExe' coreutils "cat"} \
           --replace-fail /bin/echo ${lib.getExe' coreutils "echo"} \
-          --replace-fail /bin/grep ${lib.getExe gnugrep} \
-          --replace-fail /bin/sed  ${lib.getExe gnused}
+          --replace-fail /bin/grep ${gnugrep.exe} \
+          --replace-fail /bin/sed  ${gnused.exe}
       '';
 
       postInstall = ''

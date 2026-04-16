@@ -84,7 +84,7 @@ in
         DynamicUser = cfg.dynamicUser;
         StateDirectory = lib.mkIf (cfg.dataDir == defaultDir) "taskchampion-sync-server";
         ExecStart = ''
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             --listen "${cfg.host}:${toString cfg.port}" \
             --data-dir ${cfg.dataDir} \
             --snapshot-versions ${toString cfg.snapshot.versions} \

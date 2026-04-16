@@ -198,7 +198,7 @@ in
       nodejsInstallExecutables
     ];
     substitutions = {
-      jq = lib.getExe jq;
+      jq = jq.exe;
     };
     meta = {
       description = "Prune yarn dependencies and install files for packages using Yarn 1";

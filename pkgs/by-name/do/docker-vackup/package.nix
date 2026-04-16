@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   patchPhase = ''
-    substituteInPlace vackup --replace-fail "/bin/bash" "${lib.getExe bash}"
+    substituteInPlace vackup --replace-fail "/bin/bash" "${bash.exe}"
   '';
 
   installPhase = ''

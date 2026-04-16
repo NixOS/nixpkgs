@@ -148,7 +148,7 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         User = cfg.user;
         Group = cfg.group;
         UMask = "0077";

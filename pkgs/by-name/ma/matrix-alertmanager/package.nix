@@ -17,7 +17,7 @@ buildNpmPackage rec {
   };
 
   postPatch = ''
-    ${lib.getExe jq} '. += {"bin": "src/app.js"}' package.json > package.json.tmp
+    ${jq.exe} '. += {"bin": "src/app.js"}' package.json > package.json.tmp
     mv package.json.tmp package.json
   '';
 

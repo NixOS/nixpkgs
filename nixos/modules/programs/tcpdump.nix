@@ -28,7 +28,7 @@ in
       group = "pcap";
       capabilities = "cap_net_raw+p";
       permissions = "u+rx,g+x";
-      source = lib.getExe pkgs.tcpdump;
+      source = pkgs.tcpdump.exe;
     };
 
     users.groups.pcap = { };

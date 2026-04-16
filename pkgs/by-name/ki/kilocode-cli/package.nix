@@ -87,7 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patchShebangs node_modules
       if [ -d node_modules/@vscode/ripgrep ]; then
         mkdir -p node_modules/@vscode/ripgrep/bin
-        ln -s ${lib.getExe ripgrep} node_modules/@vscode/ripgrep/bin/rg
+        ln -s ${ripgrep.exe} node_modules/@vscode/ripgrep/bin/rg
       fi
       npm rebuild
     )

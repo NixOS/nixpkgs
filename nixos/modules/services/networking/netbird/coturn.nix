@@ -127,11 +127,11 @@ in
           dir = config.security.acme.certs.${cfg.domain}.directory;
           preStart' =
             (optionalString (cfg.passwordFile != null) ''
-              ${getExe pkgs.replace-secret} @password@ ${cfg.passwordFile} /run/coturn/turnserver.cfg
+              ${pkgs.replace-secret.exe} @password@ ${cfg.passwordFile} /run/coturn/turnserver.cfg
             '')
             + (optionalString cfg.useAcmeCertificates ''
-              ${getExe pkgs.replace-secret} @cert@ <(echo -n "$CREDENTIALS_DIRECTORY/cert.pem") /run/coturn/turnserver.cfg
-              ${getExe pkgs.replace-secret} @pkey@ <(echo -n "$CREDENTIALS_DIRECTORY/pkey.pem") /run/coturn/turnserver.cfg
+              ${pkgs.replace-secret.exe} @cert@ <(echo -n "$CREDENTIALS_DIRECTORY/cert.pem") /run/coturn/turnserver.cfg
+              ${pkgs.replace-secret.exe} @pkey@ <(echo -n "$CREDENTIALS_DIRECTORY/pkey.pem") /run/coturn/turnserver.cfg
             '');
         in
         (optionalAttrs (preStart' != "") { preStart = mkAfter preStart'; })

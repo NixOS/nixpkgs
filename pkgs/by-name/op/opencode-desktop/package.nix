@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -a ${finalAttrs.node_modules}/{node_modules,packages} .
     chmod -R u+w node_modules packages
     patchShebangs node_modules packages/desktop/node_modules
-    install -D ${lib.getExe opencode} \
+    install -D ${opencode.exe} \
       packages/desktop/src-tauri/sidecars/opencode-cli-${stdenvNoCC.hostPlatform.rust.rustcTarget}
   '';
 

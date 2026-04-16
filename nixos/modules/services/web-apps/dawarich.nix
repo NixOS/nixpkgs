@@ -185,7 +185,7 @@ let
       '';
   };
   dawarichConsole = pkgs.writeShellScriptBin "dawarich-console" ''
-    exec ${lib.getExe dawarichRails} console "$@"
+    exec ${dawarichRails.exe} console "$@"
   '';
 
   sidekiqUnits = lib.attrsets.mapAttrs' (

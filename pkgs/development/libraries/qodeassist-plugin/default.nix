@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     test-version = runCommand "${finalAttrs.pname}-test" { } ''
       QT_QPA_PLATFORM="offscreen" ${
-        lib.getExe (qtcreator.withPackages [ finalAttrs.finalPackage ])
+        (qtcreator.withPackages [ finalAttrs.finalPackage ]).exe
       } --version > $out
       cat $out | grep 'qodeassist ${finalAttrs.version}'
     '';

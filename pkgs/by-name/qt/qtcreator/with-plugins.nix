@@ -10,7 +10,7 @@ let
     acc: val: acc + "-pluginpath ${val.outPath}/lib/qtcreator/plugins/"
   ) "" f;
   qtcreator_runner = pkgs.writeShellScriptBin "qtcreator" ''
-    exec ${lib.getExe qtcreator} ${plugins_arg} "$@"
+    exec ${qtcreator.exe} ${plugins_arg} "$@"
   '';
 in
 pkgs.symlinkJoin {

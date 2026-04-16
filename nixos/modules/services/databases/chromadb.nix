@@ -73,7 +73,7 @@ in
         StateDirectory = "chromadb";
         WorkingDirectory = "/var/lib/chromadb";
         LogsDirectory = "chromadb";
-        ExecStart = "${lib.getExe cfg.package} run --path ${cfg.dbpath} --host ${cfg.host} --port ${toString cfg.port}";
+        ExecStart = "${cfg.package.exe} run --path ${cfg.dbpath} --host ${cfg.host} --port ${toString cfg.port}";
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";

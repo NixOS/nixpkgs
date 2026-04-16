@@ -57,7 +57,7 @@ buildGoModule (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$out/bin/avalanche"
         else
-          lib.getExe buildPackages.avalanche-cli;
+          buildPackages.avalanche-cli.exe;
     in
     ''
       mv $out/bin/avalanche-cli $out/bin/avalanche

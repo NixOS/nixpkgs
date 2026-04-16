@@ -139,7 +139,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       (cmakeFeature "NVSHMEM_PREFIX" (placeholder "out"))
 
       (cmakeFeature "CUDA_HOME" (getBin cuda_nvcc).outPath)
-      (cmakeFeature "CMAKE_CUDA_COMPILER" (getExe cuda_nvcc))
+      (cmakeFeature "CMAKE_CUDA_COMPILER" (cuda_nvcc.exe))
 
       (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
 

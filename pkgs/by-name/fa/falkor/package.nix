@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail "/opt/Falkor/" ""
     mv opt/Falkor/{resources,resources.pak,locales} $out/share/falkor
 
-    makeWrapper ${lib.getExe electron} $out/bin/falkor \
+    makeWrapper ${electron.exe} $out/bin/falkor \
       --argv0 "falkor" \
       --add-flags "$out/share/falkor/resources/app.asar" \
       --add-flags ${lib.escapeShellArg commandLineArgs}

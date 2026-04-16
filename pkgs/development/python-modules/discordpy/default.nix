@@ -40,7 +40,7 @@ buildPythonPackage {
       --replace-fail "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
 
     substituteInPlace "discord/player.py" \
-      --replace-fail "executable: str = 'ffmpeg'" "executable: str = '${lib.getExe ffmpeg}'"
+      --replace-fail "executable: str = 'ffmpeg'" "executable: str = '${ffmpeg.exe}'"
   '';
 
   # Only have integration tests with discord

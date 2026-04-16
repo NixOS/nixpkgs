@@ -26,13 +26,13 @@ buildGoModule (finalAttrs: {
         buildInputs = [ git ];
       }
       ''
-        ${lib.getExe git} init -b smoke
-        ${lib.getExe git} config --local user.name "Nick Spackages"
-        ${lib.getExe git} config --local user.email "nixbld@localhost"
+        ${git.exe} init -b smoke
+        ${git.exe} config --local user.name "Nick Spackages"
+        ${git.exe} config --local user.email "nixbld@localhost"
         echo "Read me please" > README
-        ${lib.getExe git} add README
-        ${lib.getExe git} commit -m "First commit"
-        ${lib.getExe pgit} -desc "The description" -revs smoke -repo . -out ./public
+        ${git.exe} add README
+        ${git.exe} commit -m "First commit"
+        ${pgit.exe} -desc "The description" -revs smoke -repo . -out ./public
         grep "The description" ./public/index.html
         grep "First commit" ./public/logs/smoke/index.html
         grep "Read me please" ./public/tree/smoke/item/README.html

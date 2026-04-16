@@ -27,7 +27,7 @@ beam27Packages.mixRelease rec {
       # This is necessary to allow sending mails via SMTP, as the default
       # SMTP adapter is current broken: https://github.com/swoosh/swoosh/issues/785
       postFetch = ''
-        ${lib.getExe gitMinimal} -C $out apply ${./0000-add-mua.patch}
+        ${gitMinimal.exe} -C $out apply ${./0000-add-mua.patch}
       '';
     }
   }/elixir";
@@ -43,8 +43,8 @@ beam27Packages.mixRelease rec {
 
   preBuild = ''
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss_3}"
-    config :esbuild, path: "${lib.getExe esbuild}"
+    config :tailwind, path: "${tailwindcss_3.exe}"
+    config :esbuild, path: "${esbuild.exe}"
     EOF
 
     cat >> config/runtime.exs <<EOF

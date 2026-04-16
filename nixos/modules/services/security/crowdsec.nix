@@ -553,56 +553,56 @@ in
       scriptArray = [
         "set -euo pipefail"
         "${lib.getExe' pkgs.coreutils "mkdir"} -p '${hubDir}'"
-        "${lib.getExe cscli} hub update"
+        "${cscli.exe} hub update"
       ]
       ++ lib.optionals (cfg.hub.collections != [ ]) [
-        "${lib.getExe cscli} collections install ${
+        "${cscli.exe} collections install ${
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.collections
         }"
       ]
       ++ lib.optionals (cfg.hub.scenarios != [ ]) [
-        "${lib.getExe cscli} scenarios install ${
+        "${cscli.exe} scenarios install ${
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.scenarios
         }"
       ]
       ++ lib.optionals (cfg.hub.parsers != [ ]) [
-        "${lib.getExe cscli} parsers install ${
+        "${cscli.exe} parsers install ${
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.parsers
         }"
       ]
       ++ lib.optionals (cfg.hub.postOverflows != [ ]) [
-        "${lib.getExe cscli} postoverflows install ${
+        "${cscli.exe} postoverflows install ${
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.postOverflows
         }"
       ]
       ++ lib.optionals (cfg.hub.appSecConfigs != [ ]) [
-        "${lib.getExe cscli} appsec-configs install ${
+        "${cscli.exe} appsec-configs install ${
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecConfigs
         }"
       ]
       ++ lib.optionals (cfg.hub.appSecRules != [ ]) [
-        "${lib.getExe cscli} appsec-rules install ${
+        "${cscli.exe} appsec-rules install ${
           lib.strings.concatMapStringsSep " " (x: lib.escapeShellArg x) cfg.hub.appSecRules
         }"
       ]
       ++ lib.optionals (cfg.settings.general.api.server.enable) [
         ''
           if [ ! -s "${cfg.settings.general.api.client.credentials_path}" ]; then
-            ${lib.getExe cscli} machine add "${cfg.name}" --auto
+            ${cscli.exe} machine add "${cfg.name}" --auto
           fi
         ''
       ]
       ++ lib.optionals (cfg.settings.capi.credentialsFile != null) [
         ''
-          if ! ${lib.getExe pkgs.gnugrep} -q password "${cfg.settings.capi.credentialsFile}" ]; then
-            ${lib.getExe cscli} capi register
+          if ! ${pkgs.gnugrep.exe} -q password "${cfg.settings.capi.credentialsFile}" ]; then
+            ${cscli.exe} capi register
           fi
         ''
       ]
       ++ lib.optionals (cfg.settings.console.tokenFile != null) [
         ''
           if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
-            ${lib.getExe cscli} console enroll "$(${lib.getExe' pkgs.coreutils "cat"} ${cfg.settings.console.tokenFile})" --name ${cfg.name}
+            ${cscli.exe} console enroll "$(${lib.getExe' pkgs.coreutils "cat"} ${cfg.settings.console.tokenFile})" --name ${cfg.name}
           fi
         ''
       ];
@@ -750,7 +750,7 @@ in
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
-            ExecStart = "${lib.getExe cscli} --error hub update";
+            ExecStart = "${cscli.exe} --error hub update";
             ExecStartPost = "systemctl reload crowdsec.service";
             DynamicUser = true;
           };
@@ -832,7 +832,7 @@ in
             ];
             ExecStartPre = [
               " " # This is needed to clear the ExecStartPre definitions from upstream
-              "${lib.getExe setupScript}"
+              "${setupScript.exe}"
               "${lib.getExe' cfg.package "crowdsec"} -c ${configFile} -t -error"
             ];
           };

@@ -63,7 +63,7 @@ in
       }
     }
     EOF
-    ${lib.getExe jdk} -Djava.library.path=${gdal}/lib/ -cp ${gdal}/share/java/gdal-${version}.jar main.java
+    ${jdk.exe} -Djava.library.path=${gdal}/lib/ -cp ${gdal}/share/java/gdal-${version}.jar main.java
     touch $out
   '';
 }

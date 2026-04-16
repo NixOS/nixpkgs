@@ -144,8 +144,8 @@ beamPackages.mixRelease rec {
     updateScript = writeScript "update-mobilizon" ''
       set -euo pipefail
 
-      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/by-name/mo/mobilizon/mix.nix
-      ${lib.getExe nixfmt} pkgs/by-name/mo/mobilizon/mix.nix
+      ${mix2nix.exe} '${src}/mix.lock' > pkgs/by-name/mo/mobilizon/mix.nix
+      ${nixfmt.exe} pkgs/by-name/mo/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
     inherit mixNixDeps;

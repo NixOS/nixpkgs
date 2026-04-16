@@ -330,9 +330,9 @@ rec {
   writeBash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; }) name
+      makeScriptWriter (argsOrScript // { interpreter = "${pkgs.bashNonInteractive.exe}"; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; } name argsOrScript;
+      makeScriptWriter { interpreter = "${pkgs.bashNonInteractive.exe}"; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to bash
@@ -403,9 +403,9 @@ rec {
   writeDash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.dash}"; }) name
+      makeScriptWriter (argsOrScript // { interpreter = "${pkgs.dash.exe}"; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.dash}"; } name argsOrScript;
+      makeScriptWriter { interpreter = "${pkgs.dash.exe}"; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to dash
@@ -478,14 +478,14 @@ rec {
       makeScriptWriter (
         argsOrScript
         // {
-          interpreter = "${lib.getExe pkgs.fish} --no-config";
-          check = "${lib.getExe pkgs.fish} --no-config --no-execute"; # syntax check only
+          interpreter = "${pkgs.fish.exe} --no-config";
+          check = "${pkgs.fish.exe} --no-config --no-execute"; # syntax check only
         }
       ) name
     else
       makeScriptWriter {
-        interpreter = "${lib.getExe pkgs.fish} --no-config";
-        check = "${lib.getExe pkgs.fish} --no-config --no-execute"; # syntax check only
+        interpreter = "${pkgs.fish.exe} --no-config";
+        check = "${pkgs.fish.exe} --no-config --no-execute"; # syntax check only
       } name argsOrScript;
 
   /**
@@ -595,7 +595,7 @@ rec {
     {
       makeWrapperArgs ? [ ],
       babashka ? pkgs.babashka-unwrapped,
-      check ? "${lib.getExe pkgs.clj-kondo} --lint",
+      check ? "${pkgs.clj-kondo.exe} --lint",
       ...
     }@args:
     makeScriptWriter (
@@ -603,7 +603,7 @@ rec {
         "babashka"
       ])
       // {
-        interpreter = "${lib.getExe babashka}";
+        interpreter = "${babashka.exe}";
       }
     ) name;
 
@@ -700,7 +700,7 @@ rec {
           "srfi"
         ])
         // {
-          interpreter = "${lib.getExe finalGuile} \\";
+          interpreter = "${finalGuile.exe} \\";
           makeWrapperArgs = [
             "--set"
             "GUILE_LOAD_PATH"
@@ -829,7 +829,7 @@ rec {
     makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.nim
-        ${lib.getExe nim} compile ${nimCompileCmdArgs} tmp.nim
+        ${nim.exe} compile ${nimCompileCmdArgs} tmp.nim
         mv tmp $out
       '';
       inherit makeWrapperArgs strip;
@@ -876,11 +876,9 @@ rec {
   writeNu =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (
-        argsOrScript // { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; }
-      ) name
+      makeScriptWriter (argsOrScript // { interpreter = "${pkgs.nushell.exe} --no-config-file"; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; } name argsOrScript;
+      makeScriptWriter { interpreter = "${pkgs.nushell.exe} --no-config-file"; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to nu
@@ -933,7 +931,7 @@ rec {
           if libraries == [ ] then "${ruby}/bin/ruby" else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
         # Rubocop doesn't seem to like running in this fashion.
         #check = (writeDash "rubocop.sh" ''
-        #  exec ${lib.getExe buildRubyPackages.rubocop} "$1"
+        #  exec ${buildRubyPackages.rubocop.exe} "$1"
         #'');
       }
     ) name;
@@ -1086,7 +1084,7 @@ rec {
     in
     writeDash name ''
       export NODE_PATH=${node-env}/lib/node_modules
-      exec ${lib.getExe pkgs.nodejs-slim} ${pkgs.writeText "js" content} "$@"
+      exec ${pkgs.nodejs-slim.exe} ${pkgs.writeText "js" content} "$@"
     '';
 
   /**
@@ -1142,7 +1140,7 @@ rec {
     makeScriptWriter (
       (removeAttrs args [ "libraries" ])
       // {
-        interpreter = "${lib.getExe (pkgs.perl.withPackages (p: libraries))}";
+        interpreter = "${(pkgs.perl.withPackages (p: libraries)).exe}";
       }
     ) name;
 
@@ -1329,10 +1327,10 @@ rec {
         export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1
         script="$1"; shift
         (
-          ${lib.getExe dotnet-sdk} new nugetconfig
-          ${lib.getExe dotnet-sdk} nuget disable source nuget
+          ${dotnet-sdk.exe} new nugetconfig
+          ${dotnet-sdk.exe} nuget disable source nuget
         ) > /dev/null
-        ${lib.getExe dotnet-sdk} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
+        ${dotnet-sdk.exe} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
       '';
 
     in

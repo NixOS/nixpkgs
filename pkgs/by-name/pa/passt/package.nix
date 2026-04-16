@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Makefile --replace-fail \
       'PAGE_SIZE=$(shell getconf PAGE_SIZE)' \
-      "PAGE_SIZE=$(${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe getconf} PAGE_SIZE)"
+      "PAGE_SIZE=$(${stdenv.hostPlatform.emulator buildPackages} ${getconf.exe} PAGE_SIZE)"
   '';
 
   makeFlags = [

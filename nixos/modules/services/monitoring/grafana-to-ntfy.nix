@@ -67,7 +67,7 @@ in
         ${lib.optionalString (cfg.settings.ntfyBAuthPass != null) ''
           export NTFY_BAUTH_PASS=$(${lib.getExe' config.systemd.package "systemd-creds"} cat NTFY_BAUTH_PASS_FILE)
         ''}
-        exec ${lib.getExe cfg.package}
+        exec ${cfg.package.exe}
       '';
 
       environment = {

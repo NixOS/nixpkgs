@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals (defaultEditor != null) [
-      ''-DGOT_DEFAULT_EDITOR="${lib.getExe defaultEditor}"''
+      ''-DGOT_DEFAULT_EDITOR="${defaultEditor.exe}"''
     ]
     ++ lib.optionals withSsh [
-      ''-DGOT_DIAL_PATH_SSH="${lib.getExe openssh}"''
+      ''-DGOT_DIAL_PATH_SSH="${openssh.exe}"''
       ''-DGOT_TAG_PATH_SSH_KEYGEN="${lib.getExe' openssh "ssh-keygen"}"''
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      ''-DGOT_TAG_PATH_SIGNIFY="${lib.getExe signify}"''
+      ''-DGOT_TAG_PATH_SIGNIFY="${signify.exe}"''
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=implicit-function-declaration"

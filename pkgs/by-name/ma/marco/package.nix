@@ -63,11 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/core/util.c \
-      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${lib.getExe zenity}"'
+      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${zenity.exe}"'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-  env.ZENITY = lib.getExe zenity;
+  env.ZENITY = zenity.exe;
 
   enableParallelBuilding = true;
 

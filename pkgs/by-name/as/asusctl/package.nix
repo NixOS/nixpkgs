@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail /usr/bin/asus-shutdown $out/bin/asus-shutdown
 
     substituteInPlace Makefile \
-      --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
+      --replace-fail /usr/bin/grep ${gnugrep.exe}
 
     substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/source-*/sg-*/build.rs \
       --replace-fail /usr/include ${lib.getDev glibc}/include

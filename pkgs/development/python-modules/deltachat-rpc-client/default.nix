@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/deltachat_rpc_client/rpc.py \
-      --replace-fail deltachat-rpc-server "${lib.getExe deltachat-rpc-server}"
+      --replace-fail deltachat-rpc-server "${deltachat-rpc-server.exe}"
   '';
 
   build-system = [ setuptools ];

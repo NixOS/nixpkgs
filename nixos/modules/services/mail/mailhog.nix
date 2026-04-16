@@ -19,7 +19,7 @@ let
   );
 
   mhsendmail = pkgs.writeShellScriptBin "mailhog-sendmail" ''
-    exec ${lib.getExe pkgs.mailhog} sendmail $@
+    exec ${pkgs.mailhog.exe} sendmail $@
   '';
 in
 {
@@ -87,7 +87,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "exec";
-        ExecStart = "${lib.getExe pkgs.mailhog} ${args}";
+        ExecStart = "${pkgs.mailhog.exe} ${args}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "mailhog";
@@ -96,7 +96,7 @@ in
 
     services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
       program = "sendmail";
-      source = lib.getExe mhsendmail;
+      source = mhsendmail.exe;
       # Communication happens through the network, no data is written to disk
       owner = "nobody";
       group = "nogroup";

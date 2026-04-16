@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = geo;
-      command = "${lib.getExe geo} --help";
+      command = "${geo.exe} --help";
       version = "v${finalAttrs.version}";
     };
   };

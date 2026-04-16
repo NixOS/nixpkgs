@@ -43,14 +43,14 @@ let
 
   passthru = {
     updateScript = writeShellScript "update-freelens-bin" ''
-      ${lib.getExe nix-update} freelens-bin --override-filename pkgs/by-name/fr/freelens-bin/package.nix
+      ${nix-update.exe} freelens-bin --override-filename pkgs/by-name/fr/freelens-bin/package.nix
       latestVersion=$(nix eval --log-format raw --raw --file default.nix freelens-bin.version)
       if [[ "$latestVersion" == "$UPDATE_NIX_OLD_VERSION" ]]; then
         exit 0
       fi
-      systems=$(nix eval --json -f . freelens-bin.meta.platforms | ${lib.getExe jq} --raw-output '.[]')
+      systems=$(nix eval --json -f . freelens-bin.meta.platforms | ${jq.exe} --raw-output '.[]')
       for system in $systems; do
-        hash=$(nix store prefetch-file --json $(nix eval --raw -f . freelens-bin.src.url --system "$system") | ${lib.getExe jq} --raw-output .hash)
+        hash=$(nix store prefetch-file --json $(nix eval --raw -f . freelens-bin.src.url --system "$system") | ${jq.exe} --raw-output .hash)
         ${lib.getExe' common-updater-scripts "update-source-version"} freelens-bin $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
       done
     '';

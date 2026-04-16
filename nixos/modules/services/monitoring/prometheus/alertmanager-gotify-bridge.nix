@@ -140,7 +140,7 @@ in
       description = "A bridge between Prometheus AlertManager and a Gotify server";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${lib.getExe pkg} ${optionalString cfg.debug "--debug"}";
+        ExecStart = "${pkg.exe} ${optionalString cfg.debug "--debug"}";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         User = "alertmanager-gotify";
         Group = "alertmanager-gotify";

@@ -66,7 +66,7 @@ buildGraalvmNativeImage (finalAttrs: {
       -fsL \
       "https://github.com/babashka/babashka/releases/download/''${latest_version}/babashka-''${latest_version/v/}-standalone.jar" \
       | bsdtar -qxOf - borkdude/deps.clj \
-      | ${lib.getExe finalAttrs.finalPackage} -I -o -e "(or (some->> *input* (filter #(= '(def version) (take 2 %))) first last last last) (throw (ex-info \"Couldn't find expected '(def version ...)' form in 'borkdude/deps.clj'.\" {})))")
+      | ${finalAttrs.finalPackage.exe} -I -o -e "(or (some->> *input* (filter #(= '(def version) (take 2 %))) first last last last) (throw (ex-info \"Couldn't find expected '(def version ...)' form in 'borkdude/deps.clj'.\" {})))")
 
     update-source-version babashka.clojure-tools "$clojure_tools_version" \
       --file="pkgs/development/interpreters/babashka/clojure-tools.nix"

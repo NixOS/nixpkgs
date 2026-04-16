@@ -1,6 +1,5 @@
 {
   writeShellApplication,
-  lib,
   nix,
   nix-prefetch-git,
   nix-update,
@@ -12,7 +11,7 @@
   yq,
 }:
 
-lib.getExe (writeShellApplication {
+(writeShellApplication {
   name = "update-vaultwarden";
   runtimeInputs = [
     curl
@@ -38,4 +37,4 @@ lib.getExe (writeShellApplication {
     WEBVAULT_TAG="$(curl --silent "$URL_VW_WEBVAULT_TAGS" | jq -r --arg rev "''${WEBVAULT_REV}" '.[] | select(.commit.sha == $rev) | .name')"
     nix-update "vaultwarden.webvault" --version "$WEBVAULT_TAG"
   '';
-})
+}).exe

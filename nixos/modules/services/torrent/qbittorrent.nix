@@ -179,7 +179,7 @@ in
 
           ExecStart = utils.escapeSystemdExecArgs (
             [
-              (getExe cfg.package)
+              (cfg.package.exe)
               "--profile=${cfg.profileDir}"
             ]
             ++ optionals (cfg.webuiPort != null) [ "--webui-port=${toString cfg.webuiPort}" ]

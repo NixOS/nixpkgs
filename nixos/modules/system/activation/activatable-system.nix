@@ -48,24 +48,26 @@ in
   };
   config =
     let
-      activationScript = lib.getExe (
-        (pkgs.writeShellApplication {
-          name = "activate";
-          text = config.system.activationScripts.script;
-          checkPhase = "";
-          bashOptions = [ ];
-        }).overrideAttrs
+      activationScript =
+        (
+          (pkgs.writeShellApplication {
+            name = "activate";
+            text = config.system.activationScripts.script;
+            checkPhase = "";
+            bashOptions = [ ];
+          }).overrideAttrs
           { preferLocalBuild = true; }
-      );
-      dryActivationScript = lib.getExe (
-        (pkgs.writeShellApplication {
-          name = "dry-activate";
-          text = config.system.dryActivationScript;
-          checkPhase = "";
-          bashOptions = [ ];
-        }).overrideAttrs
+        ).exe;
+      dryActivationScript =
+        (
+          (pkgs.writeShellApplication {
+            name = "dry-activate";
+            text = config.system.dryActivationScript;
+            checkPhase = "";
+            bashOptions = [ ];
+          }).overrideAttrs
           { preferLocalBuild = true; }
-      );
+        ).exe;
     in
     {
       system.activatableSystemBuilderCommands =
@@ -76,7 +78,7 @@ in
         ''
           cp ${activationScript} $out/activate
           cp ${dryActivationScript} $out/dry-activate
-          ${lib.getExe pkgs.buildPackages.gnused} --in-place --expression "s|@out@|''${!toplevelVar}|g" $out/activate $out/dry-activate
+          ${pkgs.buildPackages.gnused.exe} --in-place --expression "s|@out@|''${!toplevelVar}|g" $out/activate $out/dry-activate
         '';
 
       system.systemBuilderCommands = lib.mkIf config.system.activatable config.system.activatableSystemBuilderCommands;

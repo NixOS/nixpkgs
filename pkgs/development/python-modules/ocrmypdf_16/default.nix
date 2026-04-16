@@ -51,11 +51,11 @@ buildPythonPackage rec {
   patches = [
     ./use-pillow-heif.patch
     (replaceVars ./paths.patch {
-      gs = lib.getExe ghostscript_headless;
-      jbig2 = lib.getExe jbig2enc;
-      pngquant = lib.getExe pngquant;
-      tesseract = lib.getExe tesseract;
-      unpaper = lib.getExe unpaper;
+      gs = ghostscript_headless.exe;
+      jbig2 = jbig2enc.exe;
+      pngquant = pngquant.exe;
+      tesseract = tesseract.exe;
+      unpaper = unpaper.exe;
     })
   ];
 

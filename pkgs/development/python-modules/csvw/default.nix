@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/csvw/__main__.py \
-      --replace-fail "'frictionless'" "'${lib.getExe frictionless}'"
+      --replace-fail "'frictionless'" "'${frictionless.exe}'"
   '';
 
   build-system = [ setuptools ];

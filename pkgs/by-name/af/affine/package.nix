@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
         mv packages/frontend/apps/electron/out/${buildType}/${productName}-linux-${nodeArch}/{resources,LICENSE*} $out/lib/${binName}/
         install -Dm644 packages/frontend/apps/electron/resources/icons/icon_${buildType}_64x64.png $out/share/icons/hicolor/64x64/apps/${binName}.png
 
-        makeWrapper "${lib.getExe electron}" $out/bin/${binName} \
+        makeWrapper "${electron.exe}" $out/bin/${binName} \
           --inherit-argv0 \
           --add-flags $out/lib/${binName}/resources/app.asar \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

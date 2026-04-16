@@ -162,7 +162,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --chdir $out \
-      --run "${lib.getExe prisma'} migrate deploy" \
+      --run "${prisma'.exe} migrate deploy" \
       --add-flags "$out/server.js"
 
     runHook postInstall

@@ -141,7 +141,7 @@ in
     after = [ "pgbouncer.service" ];
     script = concatStringsSep " " (
       [
-        "exec -- ${escapeShellArg (getExe cfg.package)}"
+        "exec -- ${escapeShellArg (cfg.package.exe)}"
         "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
       ]
       ++ optionals (cfg.connectionString != null) [

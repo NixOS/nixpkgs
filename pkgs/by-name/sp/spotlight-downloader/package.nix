@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin $out/share
     cp -r SpotlightDownloader/bin/Release $out/share/SpotlightDownloader
-    makeWrapper ${lib.getExe mono} $out/bin/SpotlightDownloader \
+    makeWrapper ${mono.exe} $out/bin/SpotlightDownloader \
       --add-flags "$out/share/SpotlightDownloader/SpotlightDownloader.exe"
 
     runHook postInstall

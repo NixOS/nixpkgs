@@ -38975,7 +38975,7 @@ with self;
     ];
     postPatch = ''
       substituteInPlace Makefile.PL \
-        --replace-fail "\$(PERL)" "${lib.getExe perl.perlOnBuild}"
+        --replace-fail "\$(PERL)" "${perl.perlOnBuild.exe}"
     '';
     meta = {
       description = "Simple API for XML";

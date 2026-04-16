@@ -40,7 +40,7 @@ backendStdenv.mkDerivation {
     substituteInPlace Makefile \
       --replace-fail \
         '${"\${CUDAPATH}/bin/nvcc"}' \
-        '${lib.getExe cuda_nvcc}'
+        '${cuda_nvcc.exe}'
   '';
 
   nativeBuildInputs = [

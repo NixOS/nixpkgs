@@ -49,7 +49,7 @@ in
         UMask = "0077";
         RuntimeDirectory = "flaresolverr";
         WorkingDirectory = "/run/flaresolverr";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         TimeoutStopSec = 30;
 
         # Systemd hardening

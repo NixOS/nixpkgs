@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       -e "s@/usr/(s|)bin/sendmail@${sendmailPath}@g" \
       -e "s@/usr/bin/diff@${lib.getExe' diffutils "diff"}@g" \
       -e "s@/usr/bin/gpgv(2|)@${lib.getExe' gnupg "gpgv"}@g" \
-      -e "s@(command -v|/usr/bin/)curl@${lib.getExe curl}@g" \
+      -e "s@(command -v|/usr/bin/)curl@${curl.exe}@g" \
       -e "s@sensible-editor@${sensible-editor}@g" \
       -e "s@(^|\W)/bin/bash@\1${stdenv.shell}@g" \
       -i {} +

@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       --replace-fail "/bin/echo" "${lib.getExe' buildPackages.coreutils "echo"}"
 
     substituteInPlace testsuite/test_list.sh testsuite/findfailures.csh \
-      --replace-fail "bin/csh" "${lib.getExe buildPackages.tcsh}"
+      --replace-fail "bin/csh" "${buildPackages.tcsh.exe}"
 
     patchShebangs \
       testsuite/test_list.sh \

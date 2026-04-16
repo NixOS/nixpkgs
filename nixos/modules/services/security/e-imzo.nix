@@ -45,7 +45,7 @@ in
             done
           '')
         ];
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
 
         NoNewPrivileges = true;
         SystemCallArchitectures = "native";

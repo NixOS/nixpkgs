@@ -37,8 +37,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ugit \
-      --replace-fail "fzf " "${lib.getExe fzf} " \
-      --replace-fail "curl" "${lib.getExe curl}" \
+      --replace-fail "fzf " "${fzf.exe} " \
+      --replace-fail "curl" "${curl.exe}" \
       --replace-fail "tput " "${ncurses}/bin/tput "
   '';
 

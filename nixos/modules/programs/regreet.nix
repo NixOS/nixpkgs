@@ -154,7 +154,7 @@ in
 
     services.greetd = {
       enable = lib.mkDefault true;
-      settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.cage} ${lib.escapeShellArgs cfg.cageArgs} -- ${lib.getExe cfg.package}";
+      settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${pkgs.cage.exe} ${lib.escapeShellArgs cfg.cageArgs} -- ${cfg.package.exe}";
     };
 
     environment.etc = {

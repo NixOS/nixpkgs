@@ -72,15 +72,15 @@ stdenv.mkDerivation rec {
     # Replace all occurrences of node (and check that we actually removed them all)
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
     substituteInPlace recognize/lib/**/*.php \
-      --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${lib.getExe nodejs}'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'"
+      --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${nodejs.exe}'" \
+      --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${nodejs.exe}'" \
+      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${nodejs.exe}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
-    ln -s ${lib.getExe ffmpeg-headless} recognize/node_modules/ffmpeg-static/ffmpeg
+    ln -s ${ffmpeg-headless.exe} recognize/node_modules/ffmpeg-static/ffmpeg
 
     substituteInPlace recognize/lib/Classifiers/Classifier.php \
       --replace-fail \

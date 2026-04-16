@@ -285,7 +285,7 @@ in
       after = optional createLocalPostgresqlDb "postgresql.target";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
-        ExecStart = "${getExe finalPackage} install";
+        ExecStart = "${finalPackage.exe} install";
       };
     };
 
@@ -316,7 +316,7 @@ in
             });
           in
           ''
-            ${getExe gunicorn} \
+            ${gunicorn.exe} \
               --name=canaille \
               --bind='unix:///run/canaille.socket' \
               'canaille:create_app()'

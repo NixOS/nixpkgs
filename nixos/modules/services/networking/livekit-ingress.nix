@@ -142,7 +142,7 @@ in
 
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe cfg.package)
+          (cfg.package.exe)
           "--config=${format.generate "ingress.yaml" settings}"
         ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;

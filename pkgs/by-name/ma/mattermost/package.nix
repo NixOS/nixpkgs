@@ -100,14 +100,14 @@ buildMattermost rec {
       cd $out/webapp
 
       # Remove "+..." suffixes on versions.
-      ${lib.getExe jq} '
+      ${jq.exe} '
         def desuffix(version): version | gsub("^(?<prefix>[^\\+]+)\\+.*$"; "\(.prefix)");
         .packages |= map_values(if has("version") then .version = desuffix(.version) else . end)
       ' < package-lock.json > package-lock.fixed.json
 
       # Run the lockfile overlay, if present.
       ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
-        ${lib.getExe jq} ${lib.escapeShellArg ''
+        ${jq.exe} ${lib.escapeShellArg ''
           # Unlock a dependency and let npm-lockfile-fix relock it.
           def unlock(root; dependency; path):
             root | .packages[path] |= del(.resolved, .integrity)
@@ -116,7 +116,7 @@ buildMattermost rec {
         ''} < package-lock.fixed.json > package-lock.overlaid.json
         mv package-lock.overlaid.json package-lock.fixed.json
       ''}
-      ${lib.getExe npm-lockfile-fix} package-lock.fixed.json
+      ${npm-lockfile-fix.exe} package-lock.fixed.json
 
       rm -f package-lock.json
       mv package-lock.fixed.json package-lock.json

@@ -79,7 +79,7 @@ buildNpmPackage rec {
     popd
 
     rm $out/bin/zap
-    makeWrapper '${lib.getExe electron}' "$out/bin/zap" \
+    makeWrapper '${electron.exe}' "$out/bin/zap" \
       --add-flags $out/opt/zap-chip/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set-default ELECTRON_IS_DEV 0 \

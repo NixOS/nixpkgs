@@ -109,7 +109,7 @@ in
           "RECYCLARR_CONFIG_DIR=${stateDir}"
           "RECYCLARR_DATA_DIR=${stateDir}"
         ];
-        ExecStart = "${lib.getExe cfg.package} ${cfg.command} --config ${configPath}";
+        ExecStart = "${cfg.package.exe} ${cfg.command} --config ${configPath}";
         LoadCredential = secretsReplacement.credentials;
 
         ProtectSystem = "strict";

@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Make Meson use our Python version, not the one it was built with itself
       (
         replaceVars ./python-path.patch {
-          python_bin = lib.getExe python;
+          python_bin = python.exe;
         }
       );
 

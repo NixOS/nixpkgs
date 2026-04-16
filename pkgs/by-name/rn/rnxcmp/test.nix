@@ -55,7 +55,7 @@ let
       fi
     '';
   };
-  assert-dir-not-empty = lib.getExe assert-dir-not-empty-app;
+  assert-dir-not-empty = assert-dir-not-empty-app.exe;
 
   # unzip GZIP archives
   unzip =

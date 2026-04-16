@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DLIBMINC_DIR=${libminc}/lib/cmake"
-    (lib.cmakeFeature "PERL_EXECUTABLE" (lib.getExe perlPackages.perl))
+    (lib.cmakeFeature "PERL_EXECUTABLE" (perlPackages.perl.exe))
   ];
   # testing broken: './minc_wrapper: Permission denied' from Testing/ellipse0.mnc
 

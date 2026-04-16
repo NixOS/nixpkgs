@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace gcalcli/argparsers.py \
-      --replace-fail "'notify-send" "'${lib.getExe libnotify}"
+      --replace-fail "'notify-send" "'${libnotify.exe}"
   '';
 
   build-system = with python3Packages; [ setuptools-scm ];

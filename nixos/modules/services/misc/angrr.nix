@@ -223,7 +223,7 @@ let
   filteredSettings = lib.filterAttrsRecursive (name: value: value != null) cfg.settings;
   originalConfigFile = toml.generate "angrr.toml" filteredSettings;
   validatedConfigFile = pkgs.runCommand "angrr-config.toml" { } ''
-    ${lib.getExe cfg.package} validate --config "${originalConfigFile}" > $out
+    ${cfg.package.exe} validate --config "${originalConfigFile}" > $out
   '';
 
   configFileMigrationMsg = ''
@@ -336,7 +336,7 @@ in
         systemd.services.angrr = {
           description = "Auto Nix GC Roots Retention";
           script = ''
-            ${lib.getExe cfg.package} run \
+            ${cfg.package.exe} run \
               --log-level "${cfg.logLevel}" \
               --no-prompt \
               ${lib.escapeShellArgs cfg.extraArgs}

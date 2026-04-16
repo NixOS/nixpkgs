@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch =
     let
-      ruffBin = lib.getExe ruff;
+      ruffBin = ruff.exe;
     in
     ''
       substituteInPlace pylsp_ruff/plugin.py \

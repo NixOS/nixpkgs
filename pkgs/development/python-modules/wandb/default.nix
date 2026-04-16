@@ -119,7 +119,7 @@ let
       substituteInPlace internal/monitor/gpuresourcemanager.go \
         --replace-fail \
           'cmdPath, err := getGPUCollectorCmdPath()' \
-          'cmdPath, err := "${lib.getExe gpu-stats}", error(nil)'
+          'cmdPath, err := "${gpu-stats.exe}", error(nil)'
     '';
 
     vendorHash = null;
@@ -161,7 +161,7 @@ buildPythonPackage (finalAttrs: {
   patches = [
     # Replace git paths
     (replaceVars ./hardcode-git-path.patch {
-      git = lib.getExe gitMinimal;
+      git = gitMinimal.exe;
     })
 
     # https://github.com/wandb/wandb/pull/11552
@@ -183,7 +183,7 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace wandb/util.py \
         --replace-fail \
           'bin_path = pathlib.Path(__file__).parent / "bin" / "wandb-core"' \
-          'bin_path = pathlib.Path("${lib.getExe wandb-core}")'
+          'bin_path = pathlib.Path("${wandb-core.exe}")'
     '';
 
   env = {

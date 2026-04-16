@@ -96,11 +96,11 @@ buildPythonPackage rec {
 
     substituteInPlace \
       Lib/gftools/builder/operations/paintcompiler.py \
-      --replace-fail '"paintcompiler' '"${lib.getExe paintcompiler}'
+      --replace-fail '"paintcompiler' '"${paintcompiler.exe}'
 
     substituteInPlace \
       Lib/gftools/builder/operations/featureFreeze.py \
-      --replace-fail '"pyftfeatfreeze' '"${lib.getExe opentype-feature-freezer}'
+      --replace-fail '"pyftfeatfreeze' '"${opentype-feature-freezer.exe}'
 
     substituteInPlace \
       Lib/gftools/builder/operations/copy.py \

@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = gns3-gui;
-      command = "${lib.getExe gns3-gui} --version";
+      command = "${gns3-gui.exe} --version";
     };
     inherit (gns3-server.passthru) updateScript;
   };

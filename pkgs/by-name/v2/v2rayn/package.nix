@@ -46,9 +46,9 @@ buildDotnetModule (finalAttrs: {
     chmod +x v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
     patchShebangs v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
     substituteInPlace v2rayN/ServiceLib/Global.cs \
-      --replace-fail "/bin/bash" "${lib.getExe bash}"
+      --replace-fail "/bin/bash" "${bash.exe}"
     substituteInPlace v2rayN/ServiceLib/Manager/CoreAdminManager.cs \
-      --replace-fail "/bin/bash" "${lib.getExe bash}"
+      --replace-fail "/bin/bash" "${bash.exe}"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
       --replace-fail "Utils.GetExePath())" '"v2rayN")'
     substituteInPlace v2rayN/ServiceLib/Manager/CoreManager.cs \

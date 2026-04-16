@@ -114,7 +114,7 @@ in
         yq eval-all "select(fileIndex == 0) * select(fileIndex == 1)" ${configFile} $CREDENTIALS_DIRECTORY/SECRETS_FILE \
           > "$STATE_DIRECTORY/config.yml"
 
-        ${lib.getExe cfg.package} serve --config "$STATE_DIRECTORY/config.yml"
+        ${cfg.package.exe} serve --config "$STATE_DIRECTORY/config.yml"
       '';
 
       path = with pkgs; [

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/fish-lsp
     cp -r . $out/share/fish-lsp
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/fish-lsp" \
+    makeWrapper ${nodejs.exe} "$out/bin/fish-lsp" \
       --add-flags "$out/share/fish-lsp/dist/fish-lsp" \
       --prefix PATH : "${
         lib.makeBinPath [

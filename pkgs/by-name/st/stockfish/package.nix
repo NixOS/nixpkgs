@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       (nix-update-script {
         extraArgs = [ "--version-regex=^sf_([\\d.]+)$" ];
       })
-      (lib.getExe (writeShellApplication {
+      ((writeShellApplication {
         name = "${pname}-nnue-updater";
         runtimeInputs = [
           nix
@@ -98,7 +98,8 @@ stdenv.mkDerivation rec {
           NNUE_SMALL_HASH = nnueSmallHash;
         };
         text = builtins.readFile ./update.bash;
-      }))
+      }).exe
+      )
     ];
   };
 

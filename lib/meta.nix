@@ -497,7 +497,15 @@ rec {
     licstr: default: lowercaseLicenses.${lib.toLower licstr} or default;
 
   /**
-    Get the path to the main program of a package based on `meta.mainProgram`
+    Get the path to the main program of a package based on `meta.mainProgram`.
+
+    Packages with `meta.mainProgram` also have an `.exe` attribute that is
+    equivalent to `lib.getExe`:
+
+    ```nix
+    pkgs.hello.exe
+    => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+    ```
 
     # Inputs
 

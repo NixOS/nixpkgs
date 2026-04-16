@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # As it can be seen here: https://github.com/acheronfail/repgrep/blob/0.16.1/.github/workflows/release.yml#L206, the completions are just the same as ripgrep
     installShellCompletion --cmd rgr \
-      --bash <(${lib.getExe ripgrep} --generate complete-bash | sed 's/-c rg/-c rgr/') \
-      --zsh <(${lib.getExe ripgrep} --generate complete-zsh | sed 's/-c rg/-c rgr/') \
-      --fish <(${lib.getExe ripgrep} --generate complete-fish | sed 's/-c rg/-c rgr/')
+      --bash <(${ripgrep.exe} --generate complete-bash | sed 's/-c rg/-c rgr/') \
+      --zsh <(${ripgrep.exe} --generate complete-zsh | sed 's/-c rg/-c rgr/') \
+      --fish <(${ripgrep.exe} --generate complete-fish | sed 's/-c rg/-c rgr/')
   '';
 
   meta = {

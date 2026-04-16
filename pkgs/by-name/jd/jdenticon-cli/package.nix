@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
     install -D dist/jdenticon-node.js "$out/lib/jdenticon/dist/jdenticon-node.js"
     install -d "$out/lib/jdenticon/node_modules"
     cp -r node_modules/canvas-renderer  "$out/lib/jdenticon/node_modules"
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/jdenticon" \
+    makeWrapper "${nodejs.exe}" "$out/bin/jdenticon" \
       --add-flags "$out/lib/jdenticon/bin/jdenticon.js"
 
     runHook postInstall

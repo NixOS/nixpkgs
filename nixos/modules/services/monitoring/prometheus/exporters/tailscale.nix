@@ -36,7 +36,7 @@ in
       EnvironmentFile = cfg.environmentFile;
       ExecStart = escapeSystemdExecArgs (
         [
-          (getExe cfg.package)
+          (cfg.package.exe)
           "--listen-address"
           "${cfg.listenAddress}:${toString cfg.port}"
         ]

@@ -430,7 +430,7 @@ stdenv.mkDerivation (
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
       "-DPYTHON_LIB_PATH=${python3Packages.python.sitePackages}"
-      "-DWITH_JSONSCHEMABUILDER=${lib.getExe jsonSchemaBuilder}"
+      "-DWITH_JSONSCHEMABUILDER=${jsonSchemaBuilder.exe}"
       # When wrapped KODI_HOME will likely contain symlinks to static assets
       # that Kodi's built in webserver will cautiously refuse to serve up
       # (because their realpaths are outside of KODI_HOME and the other
@@ -442,7 +442,7 @@ stdenv.mkDerivation (
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-DWITH_TEXTUREPACKER=${lib.getExe texturePacker}"
+      "-DWITH_TEXTUREPACKER=${texturePacker.exe}"
     ];
 
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -

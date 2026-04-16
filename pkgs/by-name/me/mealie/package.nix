@@ -99,7 +99,7 @@ pythonpkgs.buildPythonApplication rec {
   postInstall =
     let
       start_script = writeShellScript "start-mealie" ''
-        ${lib.getExe pythonpkgs.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
+        ${pythonpkgs.gunicorn.exe} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
       '';
       init_db = writeShellScript "init-mealie-db" ''
         ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py

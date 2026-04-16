@@ -24,7 +24,7 @@ lib.extendMkDerivation {
       src = idris2-src;
       strictDeps = true;
 
-      makeFlags = "IDRIS2=${lib.getExe idris2-unwrapped}";
+      makeFlags = "IDRIS2=${idris2-unwrapped.exe}";
 
       enableParallelBuilding = true;
       preBuild = ''

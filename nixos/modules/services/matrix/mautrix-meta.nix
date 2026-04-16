@@ -568,7 +568,7 @@ in
               EnvironmentFile = cfg.environmentFile;
 
               ExecStart = lib.escapeShellArgs [
-                (lib.getExe upperCfg.package)
+                (upperCfg.package.exe)
                 "--config=${settingsFile cfg}"
               ];
             };

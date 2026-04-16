@@ -142,7 +142,7 @@ let
           };
         };
       in
-      "${getExe pkgs.weston} --shell=kiosk -c ${westonIni}";
+      "${pkgs.weston.exe} --shell=kiosk -c ${westonIni}";
   };
 
 in

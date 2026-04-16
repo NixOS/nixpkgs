@@ -83,7 +83,7 @@ in
     serviceConfig = {
       RuntimeDirectory = "prometheus-mongodb-exporter";
       ExecStart = ''
-        ${getExe pkgs.prometheus-mongodb-exporter} \
+        ${pkgs.prometheus-mongodb-exporter.exe} \
           --mongodb.uri="${cfg.uri}" \
           ${
             if cfg.collectAll then

@@ -51,7 +51,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."typos.path".default = "${lib.getExe typos-lsp}"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."typos.path".default = "${typos-lsp.exe}"' package.json | sponge package.json
   '';
 
   passthru.updateScript = vscode-extension-update-script { };

@@ -46,7 +46,7 @@ bundlerApp {
 
   passthru = {
     tests.version = testers.testVersion {
-      command = "${lib.getExe facter} --version";
+      command = "${facter.exe} --version";
       package = facter;
       version = (import ./gemset.nix).facter.version;
     };

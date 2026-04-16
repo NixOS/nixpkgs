@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -D "${icon}" "$out/share/icons/hicolor/128x128/apps/winbox.png"
 
-    makeWrapper ${lib.getExe wine} $out/bin/winbox \
+    makeWrapper ${wine.exe} $out/bin/winbox \
       --add-flags $src
 
     runHook postInstall

@@ -96,7 +96,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} -c ${cfg.configFile}";
+        ExecStart = "${cfg.package.exe} -c ${cfg.configFile}";
         Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;

@@ -21,7 +21,7 @@ python3Packages.buildPythonPackage rec {
      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
 
     substituteInPlace src/audiomatch/fingerprints.py \
-     --replace-fail 'fpcalc' '${lib.getExe chromaprint}'
+     --replace-fail 'fpcalc' '${chromaprint.exe}'
   '';
 
   build-system = [

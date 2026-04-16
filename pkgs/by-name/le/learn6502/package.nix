@@ -72,16 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = writeShellScript "update-learn6502" ''
-    ${lib.getExe nix-update} learn6502 || true
+    ${nix-update.exe} learn6502 || true
     export HOME=$(mktemp -d)
     src=$(nix build --no-link --print-out-paths .#learn6502.src)
     WORKDIR=$(mktemp -d)
     cp --recursive --no-preserve=mode $src/* $WORKDIR
     missingHashes=$(nix eval --file . learn6502.missingHashes)
     pushd $WORKDIR
-    ${lib.getExe yarn-berry.yarn-berry-fetcher} missing-hashes yarn.lock >$missingHashes
+    ${yarn-berry.yarn-berry-fetcher.exe} missing-hashes yarn.lock >$missingHashes
     popd
-    ${lib.getExe nix-update} learn6502 --version skip
+    ${nix-update.exe} learn6502 --version skip
   '';
 
   meta = {

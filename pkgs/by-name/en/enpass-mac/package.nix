@@ -55,20 +55,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "enpass-mac-update-script";
-    runtimeInputs = [
-      curl
-      cacert
-      gawk
-      common-updater-scripts
-    ];
-    text = ''
-      url="https://www.enpass.io/download/macos/website/stable"
-      version=$(curl -Ls -o /dev/null -w "%{url_effective}" "$url" | awk -F'/' '{print $7}')
-      update-source-version enpass-mac "$version"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "enpass-mac-update-script";
+      runtimeInputs = [
+        curl
+        cacert
+        gawk
+        common-updater-scripts
+      ];
+      text = ''
+        url="https://www.enpass.io/download/macos/website/stable"
+        version=$(curl -Ls -o /dev/null -w "%{url_effective}" "$url" | awk -F'/' '{print $7}')
+        update-source-version enpass-mac "$version"
+      '';
+    }).exe;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''

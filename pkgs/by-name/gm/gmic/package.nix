@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace CMakeLists.txt --replace-fail \
       'LD_LIBRARY_PATH=''${GMIC_BINARIES_PATH} ''${GMIC_BINARIES_PATH}/gmic' \
-      '${lib.getExe buildPackages.gmic}'
+      '${buildPackages.gmic.exe}'
   '';
 
   passthru = {

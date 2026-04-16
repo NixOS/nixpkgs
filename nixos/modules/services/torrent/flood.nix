@@ -51,7 +51,7 @@ in
         RestartSec = "3s";
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "--host"
             cfg.host
             "--port"

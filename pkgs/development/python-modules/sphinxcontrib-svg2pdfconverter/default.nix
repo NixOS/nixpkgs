@@ -34,7 +34,7 @@ buildPythonPackage rec {
     ''
     + lib.optionalString withInkscape ''
       substituteInPlace sphinxcontrib/inkscapeconverter.py \
-        --replace-fail "'inkscape_converter_bin', 'inkscape'" "'inkscape_converter_bin', '${lib.getExe inkscape}'"
+        --replace-fail "'inkscape_converter_bin', 'inkscape'" "'inkscape_converter_bin', '${inkscape.exe}'"
     '';
 
   build-system = [ setuptools ];

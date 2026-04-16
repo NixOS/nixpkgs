@@ -18,7 +18,7 @@ mkKdeDerivation {
       encfs = lib.getExe' encfs "encfs";
       encfsctl = lib.getExe' encfs "encfsctl";
       gocryptfs = lib.getExe' gocryptfs "gocryptfs";
-      lsof = lib.getExe lsof;
+      lsof = lsof.exe;
     })
   ];
 

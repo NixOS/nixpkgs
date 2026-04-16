@@ -20,7 +20,7 @@ let
     fi
 
     SERVE_DIR=$(dirname "$0")/../php/
-    IFM_ROOT_DIR="$3" ${lib.getExe php83} -S "$1:$2" -t "$SERVE_DIR"
+    IFM_ROOT_DIR="$3" ${php83.exe} -S "$1:$2" -t "$SERVE_DIR"
   '';
 in
 stdenv.mkDerivation {

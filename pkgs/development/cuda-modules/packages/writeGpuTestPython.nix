@@ -43,7 +43,7 @@ let
       ''
         mkdir -p "$out"/bin
         cat << EOF >"$out/bin/$name"
-        #!${lib.getExe interpreter}
+        #!${interpreter.exe}
         EOF
         cat "$contentPath" >>"$out/bin/$name"
         chmod +x "$out/bin/$name"

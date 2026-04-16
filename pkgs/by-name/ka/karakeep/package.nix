@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
 
     substituteInPlace apps/cli/src/commands/dump.ts \
-      --replace-fail 'spawn("tar"' 'spawn("${lib.getExe gnutar}"'
+      --replace-fail 'spawn("tar"' 'spawn("${gnutar.exe}"'
   '';
 
   nativeBuildInputs = [

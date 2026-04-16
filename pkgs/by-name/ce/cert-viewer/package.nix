@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$out/bin/cert-viewer"
         else
-          lib.getExe buildPackages.cert-viewer;
+          buildPackages.cert-viewer.exe;
     in
     ''
       ${prog} --help-man > cert-viewer.1

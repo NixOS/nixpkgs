@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace bin/nc_flash_window \
-      --replace-fail "nc" "${lib.getExe netcat-openbsd}"
+      --replace-fail "nc" "${netcat-openbsd.exe}"
 
     substituteInPlace src/flashfocus/util.py \
       --replace-fail "pidof" "${lib.getExe' procps "pidof"}"

@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace prctl.c \
-      --replace-fail '"/bin/bash"' '"${lib.getExe bash}"'
+      --replace-fail '"/bin/bash"' '"${bash.exe}"'
   '';
 
   doInstallCheck = true;

@@ -48,7 +48,7 @@ buildGoModule (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$out/bin/witness"
         else
-          lib.getExe buildPackages.witness;
+          buildPackages.witness.exe;
     in
     ''
       installShellCompletion --cmd witness \

@@ -94,7 +94,7 @@ in
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
         LoadCredential = [ "token:${cfg.tokenKeyFile}" ];
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "always";
         User = cfg.user;
       };

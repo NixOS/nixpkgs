@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
-      ${lib.getExe abpoa} ${abpoa.src}/test_data/seq.fa > $out
+      ${abpoa.exe} ${abpoa.src}/test_data/seq.fa > $out
     '';
   };
 

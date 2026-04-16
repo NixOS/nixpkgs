@@ -220,8 +220,8 @@ in
           ${lib.optionalString cfg.settings.server.basicAuthEnabled ''
             export TACHIDESK_SERVER_BASIC_AUTH_PASSWORD="$(<${cfg.settings.server.basicAuthPasswordFile})"
           ''}
-          ${lib.getExe pkgs.envsubst} -i ${configFile} -o ${cfg.dataDir}/.local/share/Tachidesk/server.conf
-          ${lib.getExe cfg.package} -Dsuwayomi.tachidesk.config.server.rootDir=${cfg.dataDir}
+          ${pkgs.envsubst.exe} -i ${configFile} -o ${cfg.dataDir}/.local/share/Tachidesk/server.conf
+          ${cfg.package.exe} -Dsuwayomi.tachidesk.config.server.rootDir=${cfg.dataDir}
         '';
 
         serviceConfig = {

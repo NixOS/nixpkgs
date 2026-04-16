@@ -377,7 +377,7 @@ in
             ''
           );
           ExecStart =
-            "${lib.getExe cfg.package}"
+            "${cfg.package.exe}"
             + " -f ${finalConfigFile}"
             + " -p ${pidFile}"
             + optionalString cfg.snmp.enable " --snmp";

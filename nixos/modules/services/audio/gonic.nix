@@ -64,7 +64,7 @@ in
               n: v: !((n == "tls-cert" || n == "tls-key") && v == null)
             ) cfg.settings;
           in
-          "${lib.getExe cfg.package} -config-path ${settingsFormat.generate "gonic" filteredSettings}";
+          "${cfg.package.exe} -config-path ${settingsFormat.generate "gonic" filteredSettings}";
         StateDirectory = "gonic";
         CacheDirectory = "gonic";
         WorkingDirectory = "/var/lib/gonic";

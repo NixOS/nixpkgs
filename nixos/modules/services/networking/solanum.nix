@@ -104,7 +104,7 @@ in
           ];
           serviceConfig = {
             ExecStart = toString [
-              (lib.getExe pkgs.solanum)
+              (pkgs.solanum.exe)
               "-foreground"
               "-logfile"
               "/dev/stdout"

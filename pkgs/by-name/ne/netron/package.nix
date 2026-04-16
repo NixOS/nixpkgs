@@ -61,7 +61,7 @@ buildNpmPackage (finalAttrs: {
     cp -r locales resources{,.pak} $out/opt/netron
     popd
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/netron" \
+    makeWrapper '${electron.exe}' "$out/bin/netron" \
       --add-flags $out/opt/netron/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \

@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_RUBY" false)
     (lib.cmakeBool "ENABLE_PYTHON" true)
-    (lib.cmakeOptionType "filepath" "PYTHON_EXECUTABLE" (lib.getExe python3))
+    (lib.cmakeOptionType "filepath" "PYTHON_EXECUTABLE" (python3.exe))
     (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python3.sitePackages)
   ];
 

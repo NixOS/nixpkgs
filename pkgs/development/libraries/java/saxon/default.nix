@@ -51,7 +51,7 @@ let
           mv doc $out/share
 
           mkdir -p $out/bin
-          makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+          makeWrapper ${jre.exe} $out/bin/${mainProgram} \
             --add-flags "-jar $out/share/java/${jar'}.jar"
 
           # Other distributions like debian distribute it as saxon*-xslt,
@@ -62,10 +62,10 @@ let
           mv lib $out/share/java
         ''
         + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
-          makeWrapper ${lib.getExe jre} $out/bin/transform \
+          makeWrapper ${jre.exe} $out/bin/transform \
             --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
 
-          makeWrapper ${lib.getExe jre} $out/bin/query \
+          makeWrapper ${jre.exe} $out/bin/query \
             --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
         ''
         + "runHook postInstall";

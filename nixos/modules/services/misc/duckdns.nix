@@ -117,7 +117,7 @@ in
         ${lib.optionalString (cfg.domainsFile != null) ''
           export DUCKDNS_DOMAINS=$(systemd-creds cat DUCKDNS_DOMAINS_FILE | sed -z 's/\n/,/g')
         ''}
-        exec ${lib.getExe duckdns}
+        exec ${duckdns.exe}
       '';
     };
   };

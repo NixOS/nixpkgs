@@ -54,28 +54,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-${finalAttrs.pname}";
+    updateScript =
+      (writeShellApplication {
+        name = "update-${finalAttrs.pname}";
 
-      runtimeInputs = [
-        curl
-        jq
-        nix-update
-        common-updater-scripts
-      ];
+        runtimeInputs = [
+          curl
+          jq
+          nix-update
+          common-updater-scripts
+        ];
 
-      runtimeEnv = {
-        PNAME = finalAttrs.pname;
-        PKG_FILE = toString ./package.nix;
-        GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
-        NNUE_BIG_FILE = nnueBigFile;
-        NNUE_BIG_HASH = nnueBigHash;
-        NNUE_SMALL_FILE = nnueSmallFile;
-        NNUE_SMALL_HASH = nnueSmallHash;
-      };
+        runtimeEnv = {
+          PNAME = finalAttrs.pname;
+          PKG_FILE = toString ./package.nix;
+          GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
+          NNUE_BIG_FILE = nnueBigFile;
+          NNUE_BIG_HASH = nnueBigHash;
+          NNUE_SMALL_FILE = nnueSmallFile;
+          NNUE_SMALL_HASH = nnueSmallHash;
+        };
 
-      text = builtins.readFile ./update.bash;
-    });
+        text = builtins.readFile ./update.bash;
+      }).exe;
   };
 
   meta = {

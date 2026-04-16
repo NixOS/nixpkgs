@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
       mkdir $out
       cp ${fastahack.src}/tests/* $out
-      grep -v ERROR <(${lib.getExe fastahack} $out/correct.fasta 2>&1)
-      grep -v ERROR <(${lib.getExe fastahack} $out/crlf.fasta 2>&1)
-      grep "ERROR: embedded newline " <(${lib.getExe fastahack} $out/embedded_newline.fasta 2>&1)
-      grep "ERROR: mismatched line lengths" <(${lib.getExe fastahack} $out/mismatched_lines.fasta 2>&1)
-      grep -v ERROR <(${lib.getExe fastahack} $out/trailing_newlines.fasta 2>&1)
+      grep -v ERROR <(${fastahack.exe} $out/correct.fasta 2>&1)
+      grep -v ERROR <(${fastahack.exe} $out/crlf.fasta 2>&1)
+      grep "ERROR: embedded newline " <(${fastahack.exe} $out/embedded_newline.fasta 2>&1)
+      grep "ERROR: mismatched line lengths" <(${fastahack.exe} $out/mismatched_lines.fasta 2>&1)
+      grep -v ERROR <(${fastahack.exe} $out/trailing_newlines.fasta 2>&1)
     '';
   };
 

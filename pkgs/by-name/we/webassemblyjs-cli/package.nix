@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
                     "wast-to-wasm-semantics")
     for c in "''${cmds[@]}"
     do
-      makeWrapper ${lib.getExe nodejs} $out/bin/$c \
+      makeWrapper ${nodejs.exe} $out/bin/$c \
         --add-flags "$out/lib/packages/cli/lib/$c.js" \
         --set NODE_PATH "$out/lib/node_modules"
     done

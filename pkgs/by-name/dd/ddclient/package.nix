@@ -37,7 +37,7 @@ perlPackages.buildPerlPackage rec {
   # Prevent ddclient from picking up build time perl which is implicitly added
   # by buildPerlPackage.
   configureFlags = [
-    "--with-perl=${lib.getExe myPerl}"
+    "--with-perl=${myPerl.exe}"
   ];
 
   installPhase = ''

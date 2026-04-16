@@ -55,7 +55,7 @@ lib.recurseIntoAttrs (
 
       postPatch = ''
         substituteInPlace scripts/encode.lua \
-            --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
+            --replace-fail '"ffmpeg"' '"${ffmpeg.exe}"'
       '';
     };
   }

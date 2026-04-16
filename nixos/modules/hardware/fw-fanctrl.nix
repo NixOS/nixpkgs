@@ -113,8 +113,8 @@ in
         serviceConfig = {
           Type = "simple";
           Restart = "always";
-          ExecStart = "${lib.getExe cfg.package} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
-          ExecStopPost = "${lib.getExe cfg.ectoolPackage} autofanctrl";
+          ExecStart = "${cfg.package.exe} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
+          ExecStopPost = "${cfg.ectoolPackage.exe} autofanctrl";
         };
         wantedBy = [ "multi-user.target" ];
       };

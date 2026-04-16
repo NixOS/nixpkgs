@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   };
 
   makeFlags = [
-    "CC=${lib.getExe stdenv.cc}"
+    "CC=${stdenv.cc.exe}"
     "PREFIX=${placeholder "out"}"
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/man1"

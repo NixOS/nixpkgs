@@ -50,34 +50,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       start-ok = runCommand "${finalAttrs.pname}-test" { } ''
-        ${lib.getExe angular-language-server} --stdio --help &> $out
+        ${angular-language-server.exe} --stdio --help &> $out
         cat $out | grep "Angular Language Service that implements the Language Server Protocol (LSP)"
       '';
     };
 
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-angular-language-server";
-      runtimeInputs = [
-        curl
-        common-updater-scripts
-        jq
-      ];
-      text = ''
-        if [ -z "''${GITHUB_TOKEN:-}" ]; then
-            echo "no GITHUB_TOKEN provided - you could meet API request limiting" >&2
-        fi
+    updateScript = (
+      writeShellApplication {
+        name = "update-angular-language-server";
+        runtimeInputs = [
+          curl
+          common-updater-scripts
+          jq
+        ];
+        text = ''
+          if [ -z "''${GITHUB_TOKEN:-}" ]; then
+              echo "no GITHUB_TOKEN provided - you could meet API request limiting" >&2
+          fi
 
-        LATEST_VERSION=$(curl -H "Accept: application/vnd.github+json" \
-            ''${GITHUB_TOKEN:+-H "Authorization: bearer $GITHUB_TOKEN"} \
-          -Lsf https://api.github.com/repos/angular/angular/releases | \
-          jq -r '.[] | select(.tag_name | startswith("vsix-")) | .tag_name' | \
-          sort | \
-          tail -n 1 | \
-          cut -d '"' -f 2 | \
-          cut -c 6-)
-        update-source-version angular-language-server "$LATEST_VERSION"
-      '';
-    });
+          LATEST_VERSION=$(curl -H "Accept: application/vnd.github+json" \
+              ''${GITHUB_TOKEN:+-H "Authorization: bearer $GITHUB_TOKEN"} \
+            -Lsf https://api.github.com/repos/angular/angular/releases | \
+            jq -r '.[] | select(.tag_name | startswith("vsix-")) | .tag_name' | \
+            sort | \
+            tail -n 1 | \
+            cut -d '"' -f 2 | \
+            cut -c 6-).exe
+          update-source-version angular-language-server "$LATEST_VERSION"
+        '';
+      }
+    );
   };
 
   meta = {

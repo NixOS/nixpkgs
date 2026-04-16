@@ -59,7 +59,7 @@ buildDotnetModule {
   # I assume --fused is so saves are properly made (https://love2d.org/wiki/love.filesystem).
   preInstall = ''
     mkdir -p ${phome}
-    makeWrapper ${lib.getExe love} ${phome}/find-love \
+    makeWrapper ${love.exe} ${phome}/find-love \
       --add-flags "--fused"
 
     install -Dm755 suppress-output.sh ${phome}/suppress-output

@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   postInstallCheck = ''
     export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
-    ${lib.getExe python3} -c "import omniidl_be.cxx"
+    ${python3.exe} -c "import omniidl_be.cxx"
   '';
 
   meta = {

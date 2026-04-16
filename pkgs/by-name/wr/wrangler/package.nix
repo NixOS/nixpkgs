@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin
     NODE_PATH_ARRAY=( "$out/lib/node_modules" "$out/lib/packages/wrangler/node_modules" )
-    makeWrapper ${lib.getExe nodejs} $out/bin/wrangler \
+    makeWrapper ${nodejs.exe} $out/bin/wrangler \
       --inherit-argv0 \
       --prefix-each NODE_PATH : "$${NODE_PATH_ARRAY[@]}" \
       --add-flags $out/lib/packages/wrangler/bin/wrangler.js \

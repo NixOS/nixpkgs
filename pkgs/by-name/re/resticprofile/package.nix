@@ -25,10 +25,10 @@ buildGoModule (finalAttrs: {
         --replace-fail "os.Executable()" "\"$out/bin/resticprofile\", nil"
 
     substituteInPlace shell/command.go \
-        --replace-fail '"bash"' '"${lib.getExe bash}"'
+        --replace-fail '"bash"' '"${bash.exe}"'
 
     substituteInPlace filesearch/filesearch.go \
-        --replace-fail 'paths := getSearchBinaryLocations()' 'return "${lib.getExe restic}", nil; paths := getSearchBinaryLocations()'
+        --replace-fail 'paths := getSearchBinaryLocations()' 'return "${restic.exe}", nil; paths := getSearchBinaryLocations()'
 
   '';
 

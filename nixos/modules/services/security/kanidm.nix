@@ -186,7 +186,7 @@ let
           exit 1
         fi
 
-        if ! KANIDM_IDM_ADMIN_PASSWORD=$(${getExe pkgs.jq} -r .output <<< "$recover_out"); then
+        if ! KANIDM_IDM_ADMIN_PASSWORD=$(${pkgs.jq.exe} -r .output <<< "$recover_out"); then
           echo "$recover_out" >&2
           echo "kanidm provision: Failed to parse password for idm_admin account" >&2
           exit 1
@@ -201,7 +201,7 @@ let
           exit 1
         fi
 
-        if ! KANIDM_IDM_ADMIN_PASSWORD=$(grep '{"password' <<< "$recover_out" | ${getExe pkgs.jq} -r .password); then
+        if ! KANIDM_IDM_ADMIN_PASSWORD=$(grep '{"password' <<< "$recover_out" | ${pkgs.jq.exe} -r .password); then
           echo "$recover_out" >&2
           echo "kanidm provision: Failed to parse password for idm_admin account" >&2
           exit 1
@@ -211,7 +211,7 @@ let
   finalJson =
     if cfg.provision.extraJsonFile != null then
       ''
-        <(${lib.getExe pkgs.yq-go} '. *+ load("${cfg.provision.extraJsonFile}") | (.. | select(type == "!!seq")) |= unique' ${provisionStateJson})
+        <(${pkgs.yq-go.exe} '. *+ load("${cfg.provision.extraJsonFile}") | (.. | select(type == "!!seq")) |= unique' ${provisionStateJson})
       ''
     else
       provisionStateJson;
@@ -221,7 +221,7 @@ let
 
     # Wait for the kanidm server to come online
     count=0
-    while ! ${getExe pkgs.curl} -L --silent --max-time 1 --connect-timeout 1 --fail \
+    while ! ${pkgs.curl.exe} -L --silent --max-time 1 --connect-timeout 1 --fail \
        ${optionalString cfg.provision.acceptInvalidCerts "--insecure"} \
        ${cfg.provision.instanceUrl} >/dev/null
     do
@@ -237,7 +237,7 @@ let
     ${maybeRecoverAdmin}
 
     KANIDM_PROVISION_IDM_ADMIN_TOKEN=$KANIDM_IDM_ADMIN_PASSWORD \
-      ${getExe pkgs.kanidm-provision} \
+      ${pkgs.kanidm-provision.exe} \
         ${optionalString (!cfg.provision.autoRemove) "--no-auto-remove"} \
         ${optionalString cfg.provision.acceptInvalidCerts "--accept-invalid-certs"} \
         --url "${cfg.provision.instanceUrl}" \

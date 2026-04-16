@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm --filter @immich/cli deploy --prod --no-optional "$packageOut"
 
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/immich" \
+    makeWrapper '${nodejs.exe}' "$out/bin/immich" \
       --add-flags "$packageOut/dist/index.js"
 
     runHook postInstall

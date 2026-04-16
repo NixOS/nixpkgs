@@ -84,7 +84,7 @@ buildPythonPackage (finalAttrs: {
         libclang = "${lib.getLib llvmPackages.libclang}/lib/libclang${libExtension}";
 
         # Use the unwrapped variant to enable the "native" features currently unavailable in the sandbox
-        clang = lib.getExe llvmPackages.clang-unwrapped;
+        clang = llvmPackages.clang-unwrapped.exe;
       })
     ]
     ++ lib.optionals cudaSupport [

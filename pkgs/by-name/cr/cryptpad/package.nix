@@ -220,10 +220,10 @@ buildNpmPackage {
     # one would normally want to re-run it after modifying config but since it
     # would overwrite user modifications only run it if there is no customize
     # directory.
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/cryptpad" \
+    makeWrapper "${nodejs.exe}" "$out/bin/cryptpad" \
       --add-flags "$out_cryptpad/server.js" \
       --run "for d in src customize.dist lib www scripts; do ${coreutils}/bin/ln -sf \"$out_cryptpad/\$d\" .; done" \
-      --run "if ! [ -d customize ]; then \"${lib.getExe nodejs}\" \"$out_cryptpad/scripts/build.js\"; fi"
+      --run "if ! [ -d customize ]; then \"${nodejs.exe}\" \"$out_cryptpad/scripts/build.js\"; fi"
   '';
 
   passthru.tests.cryptpad = nixosTests.cryptpad;

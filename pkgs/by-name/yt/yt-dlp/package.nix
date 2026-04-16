@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
       # This makes yt-dlp find deno even if it is used as a python dependency, i.e. in kodiPackages.sendtokodi.
       # Crafted so people can replace deno with one of the other JS runtimes.
       substituteInPlace yt_dlp/utils/_jsruntime.py \
-        --replace-fail "path = _determine_runtime_path(self._path, '${deno.meta.mainProgram}')" "path = '${lib.getExe deno}'"
+        --replace-fail "path = _determine_runtime_path(self._path, '${deno.meta.mainProgram}')" "path = '${deno.exe}'"
     ''}
   '';
 

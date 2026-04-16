@@ -34,9 +34,9 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     # we cant just substitute by matching `'git'` due to collisons
     substituteInPlace src/sphinx_last_updated_by_git.py \
-      --replace-fail "'git', 'ls-tree'" " '${lib.getExe gitMinimal}', 'ls-tree'" \
-      --replace-fail "'git', 'log'" "'${lib.getExe gitMinimal}', 'log'" \
-      --replace-fail "'git', 'rev-parse'" "'${lib.getExe gitMinimal}', 'rev-parse'" \
+      --replace-fail "'git', 'ls-tree'" " '${gitMinimal.exe}', 'ls-tree'" \
+      --replace-fail "'git', 'log'" "'${gitMinimal.exe}', 'log'" \
+      --replace-fail "'git', 'rev-parse'" "'${gitMinimal.exe}', 'rev-parse'" \
   '';
 
   propagatedBuildInputs = [ gitMinimal ];

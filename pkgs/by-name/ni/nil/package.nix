@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     CFG_RELEASE = finalAttrs.version;
-    CFG_DEFAULT_FORMATTER = lib.getExe nixfmt;
+    CFG_DEFAULT_FORMATTER = nixfmt.exe;
   };
 
   # might be related to https://github.com/NixOS/nix/issues/5884

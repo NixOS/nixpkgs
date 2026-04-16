@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   # In native builds, it will use the newly-compiled file instead.
   makeFlags = lib.optional (
     !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
-  ) "FILE_COMPILE=${lib.getExe buildPackages.file}";
+  ) "FILE_COMPILE=${buildPackages.file.exe}";
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

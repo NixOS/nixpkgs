@@ -198,7 +198,7 @@ in
             # during previous runs; normalize writability on each start.
             "${pkgs.runtimeShell} -euc 'chmod -R u+rwX ${cfg.stateDir}/ui'"
           ];
-          ExecStart = "${lib.getExe cfg.package} --host \"${cfg.host}\" --port ${toString cfg.port} --config ${configFile}";
+          ExecStart = "${cfg.package.exe} --host \"${cfg.host}\" --port ${toString cfg.port} --config ${configFile}";
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = cfg.stateDir;
           StateDirectory = [

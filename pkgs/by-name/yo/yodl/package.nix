@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace INSTALL.im \
       --replace-fail "/usr" "$out"
     substituteInPlace macros/rawmacros/startdoc.pl \
-      --replace-fail "/usr/bin/perl" "${lib.getExe perl}"
+      --replace-fail "/usr/bin/perl" "${perl.exe}"
     substituteInPlace scripts/yodl2whatever.in \
       --replace-fail "getopt" "${lib.getExe' util-linux "getopt"}"
     substituteInPlace icmake/stdcpp \

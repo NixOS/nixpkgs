@@ -39,6 +39,6 @@ let
   };
 in
 runCommand "zoom-us-test" { buildInputs = [ xvfb-run ]; } ''
-  HOME=$PWD xvfb-run ${lib.getExe testScript}
+  HOME=$PWD xvfb-run ${testScript.exe}
   touch ${placeholder "out"}
 ''

@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./0001-nix-use-terracotta-from-nix.patch {
-      TERRACOTTA_BIN = lib.getExe terracotta;
+      TERRACOTTA_BIN = terracotta.exe;
     })
     ./0002-nix-skip-terracotta-existence-check-on-darwin.patch
   ];
@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''${gappsWrapperArgs[@]}
   '';
 
-  passthru.updateScript = lib.getExe (callPackage ./update.nix { });
+  passthru.updateScript = (callPackage ./update.nix { }).exe;
 
   meta = {
     homepage = "https://hmcl.huangyuhui.net";

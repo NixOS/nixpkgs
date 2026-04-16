@@ -6,7 +6,7 @@ let
   port = "5232";
   filesystem_folder = "/data/radicale";
 
-  cli = "${lib.getExe pkgs.calendar-cli} --caldav-user ${user} --caldav-pass ${password}";
+  cli = "${pkgs.calendar-cli.exe} --caldav-user ${user} --caldav-pass ${password}";
 in
 {
   name = "radicale3";

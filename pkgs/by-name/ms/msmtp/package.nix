@@ -29,7 +29,7 @@
 }:
 
 let
-  inherit (lib) getBin getExe optionals;
+  inherit (lib) getBin optionals;
 
   version = "1.8.32";
 
@@ -116,7 +116,7 @@ let
     solutions = {
       msmtpq = {
         scripts = [ "bin/msmtpq" ];
-        interpreter = getExe bash;
+        interpreter = bash.exe;
         inputs = [
           binaries
           coreutils
@@ -148,7 +148,7 @@ let
 
       msmtp-queue = {
         scripts = [ "bin/msmtp-queue" ];
-        interpreter = getExe bash;
+        interpreter = bash.exe;
         inputs = [ "${placeholder "out"}/bin" ];
         execer = [ "cannot:${placeholder "out"}/bin/msmtpq" ];
       };

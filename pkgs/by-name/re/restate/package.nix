@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-LfLqScEqBJK9s+xRg2Ah1OnBEDQjXQ9LgJGusmxEDfk=";
 
   env = {
-    PROTOC = lib.getExe protobuf;
+    PROTOC = protobuf.exe;
     PROTOC_INCLUDE = "${protobuf}/include";
 
     VERGEN_GIT_SHA = "v${finalAttrs.version}";

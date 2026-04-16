@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv packages/ $out/lib/packages/
     mv node_modules/* $out/lib/node_modules/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/gatsby \
+    makeWrapper ${nodejs.exe} $out/bin/gatsby \
       --add-flags $out/lib/packages/gatsby-cli/cli.js \
       --set NODE_PATH $out/lib/node_modules
 

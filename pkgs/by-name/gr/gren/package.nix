@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 bin/compiler $out/bin/gren
 
     wrapProgram $out/bin/gren \
-      --set-default GREN_BIN ${lib.getExe finalAttrs.passthru.backend} \
+      --set-default GREN_BIN ${finalAttrs.passthru.backend.exe} \
       --suffix PATH : ${lib.makeBinPath [ git ]}
 
     runHook postInstall

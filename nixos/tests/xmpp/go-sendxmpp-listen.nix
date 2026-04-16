@@ -8,7 +8,7 @@
 
     serviceConfig = {
       ExecStart = ''
-        ${lib.getExe pkgs.go-sendxmpp} --username azurediamond@example.com --password hunter2 --listen
+        ${pkgs.go-sendxmpp.exe} --username azurediamond@example.com --password hunter2 --listen
       '';
       Environment = [
         "HOME=/var/lib/go-sendxmpp/"

@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln --symbolic ${dart}/bin flutter/prebuilts/${constants.hostConstants.alt-platform}/dart-sdk/bin
     echo "${dart.version}" > flutter/third_party/dart/sdk/version
     mkdir --parents flutter/third_party/gn/
-    ln --symbolic ${lib.getExe gn} flutter/third_party/gn/gn
+    ln --symbolic ${gn.exe} flutter/third_party/gn/gn
     mkdir --parents flutter/third_party/swiftshader/third_party
     ln --symbolic ${llvmPackages.llvm.monorepoSrc} flutter/third_party/swiftshader/third_party/llvm-project
     mkdir --parents flutter/buildtools/${constants.hostConstants.alt-platform}

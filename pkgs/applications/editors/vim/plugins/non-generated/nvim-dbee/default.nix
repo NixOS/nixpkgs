@@ -47,7 +47,7 @@ vimUtils.buildVimPlugin {
 
   preFixup = ''
     mkdir $target/bin
-    ln -s ${lib.getExe dbee-bin} $target/bin/dbee
+    ln -s ${dbee-bin.exe} $target/bin/dbee
   '';
 
   passthru = {

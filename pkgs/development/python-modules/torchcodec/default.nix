@@ -47,12 +47,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     substituteInPlace test/test_encoders.py \
       --replace-fail \
         '"ffmpeg"' \
-        '"${lib.getExe ffmpeg}"'
+        '"${ffmpeg.exe}"'
 
     substituteInPlace test/test_transform_ops.py \
       --replace-fail \
         'ffmpeg_cli = "ffmpeg"' \
-        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
+        'ffmpeg_cli = "${ffmpeg.exe}"'
   '';
 
   nativeBuildInputs = [

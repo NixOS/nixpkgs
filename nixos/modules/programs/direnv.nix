@@ -109,7 +109,7 @@ in
 
       zsh.interactiveShellInit = lib.mkIf cfg.enableZshIntegration ''
         if ${lib.boolToString cfg.loadInNixShell} || printenv PATH | grep -vqc '/nix/store'; then
-          eval "$(${lib.getExe cfg.package} hook zsh)"
+          eval "$(${cfg.package.exe} hook zsh)"
         fi
       '';
 
@@ -117,13 +117,13 @@ in
       #$IN_NIX_SHELL for "nix-shell"
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ''
         if ${lib.boolToString cfg.loadInNixShell} || [ -z "$IN_NIX_SHELL$NIX_GCROOT$(printenv PATH | grep '/nix/store')" ] ; then
-          eval "$(${lib.getExe cfg.package} hook bash)"
+          eval "$(${cfg.package.exe} hook bash)"
         fi
       '';
 
       fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration ''
         if ${lib.boolToString cfg.loadInNixShell}; or printenv PATH | grep -vqc '/nix/store';
-          ${lib.getExe cfg.package} hook fish | source
+          ${cfg.package.exe} hook fish | source
         end
       '';
 

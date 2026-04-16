@@ -76,7 +76,7 @@ in
       serviceConfig = {
         Type = "simple";
         User = "root";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
       };
     };

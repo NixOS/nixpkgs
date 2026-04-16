@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     if withPython then
       [
         "-DCLINGO_BUILD_WITH_PYTHON=ON"
-        "-DPYTHON_EXECUTABLE=${lib.getExe python.pythonOnBuildForHost}"
+        "-DPYTHON_EXECUTABLE=${python.pythonOnBuildForHost.exe}"
       ]
     else
       [ "-DCLINGO_BUILD_WITH_PYTHON=OFF" ];

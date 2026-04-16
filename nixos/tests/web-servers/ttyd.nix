@@ -8,7 +8,7 @@
     {
       services.ttyd = {
         enable = true;
-        entrypoint = [ (lib.getExe pkgs.htop) ];
+        entrypoint = [ (pkgs.htop.exe) ];
         writeable = false;
       };
     };

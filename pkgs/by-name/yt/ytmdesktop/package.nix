@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 src/assets/icons/ytmd.png "$out"/share/pixmaps/ytmdesktop.png
 
-    makeWrapper ${lib.getExe electron} "$out"/bin/ytmdesktop \
+    makeWrapper ${electron.exe} "$out"/bin/ytmdesktop \
       --add-flags "$out"/share/ytmdesktop/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}

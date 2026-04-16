@@ -168,7 +168,7 @@ in
       serviceConfig = {
         ExecStart = [
           ""
-          "${lib.getExe cfg.package} -c ${format.generate "acme-dns.toml" cfg.settings}"
+          "${cfg.package.exe} -c ${format.generate "acme-dns.toml" cfg.settings}"
         ];
         StateDirectory = "acme-dns";
         WorkingDirectory = "%S/acme-dns";

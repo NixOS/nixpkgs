@@ -34,7 +34,7 @@ in
     programs =
       let
         interactiveShellInit = lib.mkAfter ''
-          export LS_COLORS="$(${lib.getExe cfg.package} generate ${cfg.theme})"
+          export LS_COLORS="$(${cfg.package.exe} generate ${cfg.theme})"
         '';
         enableLsColors = lib.mkOverride 999 false;
       in

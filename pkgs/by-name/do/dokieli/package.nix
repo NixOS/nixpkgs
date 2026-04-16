@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    makeWrapper ${lib.getExe serve} $out/bin/dokieli \
+    makeWrapper ${serve.exe} $out/bin/dokieli \
       --prefix PATH : ${lib.makeBinPath [ xsel ]} \
       --chdir $out
   '';
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     updateScript = _experimental-update-script-combinators.sequence [
       finalAttrs.passthru.updateScriptSrc
-      (lib.getExe finalAttrs.passthru.updateScriptDeps)
+      (finalAttrs.passthru.updateScriptDeps.exe)
     ];
   };
 

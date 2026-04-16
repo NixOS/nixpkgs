@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    makeWrapper ${lib.getExe nodejs} $out/bin/rsshub \
+    makeWrapper ${nodejs.exe} $out/bin/rsshub \
       --set "NODE_ENV" "production" \
       --set "NO_LOGFILES" "true" \
       --add-flags "$out/lib/rsshub/dist/index.mjs"

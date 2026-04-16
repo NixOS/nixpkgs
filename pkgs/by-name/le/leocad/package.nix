@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
-      command = "env QT_QPA_PLATFORM=minimal ${lib.getExe finalAttrs.finalPackage} --version";
+      command = "env QT_QPA_PLATFORM=minimal ${finalAttrs.finalPackage.exe} --version";
     };
     updateScript = nix-update-script { };
   };

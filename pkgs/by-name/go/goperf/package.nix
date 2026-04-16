@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     oldhash="$(nix-instantiate . --eval --strict -A "goperf.goModules.drvAttrs.outputHash" | cut -d'"' -f2)"
     newhash="$(nix-build -A goperf.goModules --no-out-link 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
     fname="$(nix-instantiate --eval -E 'with import ./. {}; (builtins.unsafeGetAttrPos "version" goperf).file' | cut -d'"' -f2)"
-    ${lib.getExe sd} --string-mode "$oldhash" "$newhash" "$fname"
+    ${sd.exe} --string-mode "$oldhash" "$newhash" "$fname"
   '';
 
   meta = {

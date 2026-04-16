@@ -285,7 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 $icon $out/share/icons/hicolor/`basename ''${icon%.png}`/apps/signal-desktop.png
     done
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
+    makeWrapper '${electron.exe}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags ${lib.escapeShellArg commandLineArgs}

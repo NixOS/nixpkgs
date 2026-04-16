@@ -205,7 +205,7 @@ let
 
       script = ''
         mkdir -p socket
-        exec ${lib.getExe cfg.http3-ytproxy.package};
+        exec ${cfg.http3-ytproxy.package.exe};
       '';
 
       serviceConfig = {
@@ -228,7 +228,7 @@ let
     services.invidious.settings.signature_server = "tcp://${cfg.sig-helper.listenAddress}";
     systemd.services.invidious-sig-helper = {
       script = ''
-        exec ${lib.getExe cfg.sig-helper.package} --tcp "${cfg.sig-helper.listenAddress}"
+        exec ${cfg.sig-helper.package.exe} --tcp "${cfg.sig-helper.listenAddress}"
       '';
       wantedBy = [ "multi-user.target" ];
       before = [ "invidious.service" ];

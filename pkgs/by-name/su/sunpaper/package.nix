@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace sunpaper.sh \
-      --replace-fail "sunwait" "${lib.getExe sunwait}" \
+      --replace-fail "sunwait" "${sunwait.exe}" \
       --replace-fail "setwallpaper" "${lib.getExe' wallutils "setwallpaper"}" \
       --replace-fail '$HOME/sunpaper/images/' "$out/share/sunpaper/images/" \
       --replace-fail '/usr/share' '/etc'

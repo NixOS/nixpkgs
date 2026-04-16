@@ -90,7 +90,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       inherit (nixosTests) gns3-server;
       version = testers.testVersion {
         package = gns3-server;
-        command = "${lib.getExe gns3-server} --version";
+        command = "${gns3-server.exe} --version";
       };
     };
     updateScript = writeScript "update-gns3" ''

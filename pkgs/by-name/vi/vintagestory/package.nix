@@ -92,11 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
      makeWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$runtimeLibraryPath")
 
-     makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
+     makeWrapper ${dotnet-runtime_8.exe} $out/bin/vintagestory \
       "''${makeWrapperArgs[@]}" \
        --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+    makeWrapper ${dotnet-runtime_8.exe} $out/bin/vintagestory-server \
       "''${makeWrapperArgs[@]}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
 

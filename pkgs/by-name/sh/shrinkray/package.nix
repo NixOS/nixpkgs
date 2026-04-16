@@ -32,9 +32,9 @@ python3.pkgs.buildPythonApplication rec {
       tests/test_subprocess_worker.py \
       tests/test_tui.py \
       tests/test_validation.py \
-      --replace-fail '#!/bin/bash' '#!${lib.getExe bash}'
+      --replace-fail '#!/bin/bash' '#!${bash.exe}'
     substituteInPlace src/shrinkray/formatting.py \
-      --replace-fail 'find_python_command("black")' '"${lib.getExe black}"' \
+      --replace-fail 'find_python_command("black")' '"${black.exe}"' \
       --replace-fail 'which("clang-format")' '"${lib.getExe' clang-tools "clang-format"}"'
     substituteInPlace src/shrinkray/passes/clangdelta.py \
       --replace-fail 'which("clang_delta")' '"${cvise}/libexec/cvise/clang_delta"'

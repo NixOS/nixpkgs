@@ -48,10 +48,10 @@ buildNpmPackage rec {
     cp -r . $out/share/chatd
 
     for bin in ollama-darwin ollama-linux; do
-      makeWrapper ${lib.getExe ollama} $out/share/chatd/src/service/ollama/runners/$bin
+      makeWrapper ${ollama.exe} $out/share/chatd/src/service/ollama/runners/$bin
     done
 
-    makeWrapper ${lib.getExe electron} $out/bin/chatd \
+    makeWrapper ${electron.exe} $out/bin/chatd \
       --add-flags $out/share/chatd/src/index.js \
       --chdir $out/share/chatd \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1

@@ -80,7 +80,7 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe cfg.package)
+            (cfg.package.exe)
             "--systemd"
           ]
           ++ cfg.extraArgs

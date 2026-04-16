@@ -204,7 +204,7 @@ in
     machine.sleep(5)
 
     with subtest("ocis bin works"):
-        machine.succeed("${lib.getExe pkgs.ocis_5-bin} version")
+        machine.succeed("${pkgs.ocis_5-bin.exe} version")
 
     with subtest("use the web interface to log in with a demo user"):
         machine.succeed("PYTHONUNBUFFERED=1 systemd-cat -t test-runner test-runner ${demoUser} ${demoPassword}")

@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for f in scripts/*; do
       substituteInPlace $f \
-        --replace-quiet "@SHELL@" "${lib.getExe bash}" \
+        --replace-quiet "@SHELL@" "${bash.exe}" \
         --replace-quiet "@CHROOT@" "${lib.getExe' coreutils "chroot"}" \
         --replace-quiet "@ECHO@" "${lib.getExe' coreutils "echo"}" \
         --replace-quiet "@ENV@" "${lib.getExe' coreutils "env"}" \

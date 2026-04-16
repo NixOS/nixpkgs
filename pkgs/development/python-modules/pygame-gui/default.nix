@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
-      --replace-fail "xsel" "${lib.getExe pkgs.xsel}"
+      --replace-fail "xsel" "${pkgs.xsel.exe}"
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

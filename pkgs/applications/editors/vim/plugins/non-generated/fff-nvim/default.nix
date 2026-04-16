@@ -59,7 +59,7 @@ let
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
       RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
 
-      ZIG = lib.getExe zig; # zlob requires zig
+      ZIG = zig.exe; # zlob requires zig
     };
   };
 in

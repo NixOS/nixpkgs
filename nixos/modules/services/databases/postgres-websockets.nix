@@ -205,7 +205,7 @@ in
         if [ -f "$CREDENTIALS_DIRECTORY/pgpass" ]; then
             cp -f "$CREDENTIALS_DIRECTORY/pgpass" "$CACHE_DIRECTORY/pgpass"
         fi
-        exec ${lib.getExe pkgs.postgres-websockets}
+        exec ${pkgs.postgres-websockets.exe}
       '';
     };
   };

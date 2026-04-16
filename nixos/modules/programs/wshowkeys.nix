@@ -23,7 +23,7 @@ in
       setuid = true;
       owner = "root";
       group = "root";
-      source = lib.getExe cfg.package;
+      source = cfg.package.exe;
     };
   };
 

@@ -137,7 +137,7 @@ in
 
         ExecStart = [
           ""
-          "${lib.getExe cfg.package} ${args}"
+          "${cfg.package.exe} ${args}"
         ];
       }
       // (

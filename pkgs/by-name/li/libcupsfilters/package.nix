@@ -87,7 +87,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-cups-config=${lib.getExe' (lib.getDev cups) "cups-config"}"
     "--with-mutool-path=${lib.getExe' mupdf "mutool"}"
-    "--with-gs-path=${lib.getExe ghostscript}"
+    "--with-gs-path=${ghostscript.exe}"
     "--with-ippfind-path=${lib.getExe' cups "ippfind"}"
     "--enable-imagefilters"
     "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"

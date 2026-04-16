@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
-    (lib.getExe (writeShellApplication {
+    ((writeShellApplication {
       name = "podman-desktop-dependencies-updater";
       runtimeInputs = [
         nix
@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
         sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
         sed -i -E "s/pnpm_[0-9]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
       '';
-    }))
+    }).exe
+    )
     (nix-update-script {
       # Changing the pnpm version requires updating `pnpmDeps.hash`.
       extraArgs = [ "--version=skip" ];

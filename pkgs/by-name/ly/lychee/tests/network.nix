@@ -49,7 +49,7 @@ in
     client.succeed("""
         exec 1>&2
         r=0
-        ${lib.getExe check.online} || {
+        ${check.online.exe} || {
           r=$?
         }
         if [[ $r -ne 2 ]]; then
@@ -65,7 +65,7 @@ in
     """)
 
     client.succeed("""
-        ${lib.getExe check.online}
+        ${check.online.exe}
     """)
   '';
 }

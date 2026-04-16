@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/vite}
     cp -r {packages,node_modules} $out/lib/vite
 
-    makeWrapper ${lib.getExe nodejs_24} $out/bin/vite \
+    makeWrapper ${nodejs_24.exe} $out/bin/vite \
       --inherit-argv0 \
       --add-flags $out/lib/vite/packages/vite/bin/vite.js
 

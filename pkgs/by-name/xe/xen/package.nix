@@ -157,7 +157,7 @@ let
     ])
     // {
       awk = getExe' gawk "awk";
-      brctl = getExe bridge-utils;
+      brctl = bridge-utils.exe;
       diff = getExe' diffutils "diff";
       ifconfig = getExe' inetutils "ifconfig";
       iscsiadm = getExe' openiscsi "iscsiadm";
@@ -165,9 +165,9 @@ let
       multipath = getExe' multipath-tools "multipath";
       nbd-client = getExe' nbd "nbd-client";
       ovs-vsctl = getExe' openvswitch "ovs-vsctl";
-      sed = getExe gnused;
+      sed = gnused.exe;
       systemd-notify = getExe' systemd "systemd-notify";
-      which = getExe which;
+      which = which.exe;
     };
 in
 

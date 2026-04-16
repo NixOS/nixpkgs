@@ -52,7 +52,7 @@ buildNpmPackage (finalAttrs: {
 
     install -Dm644 $src/ui/References/Linux/ui/ivpnicon.svg $out/share/icons/hicolor/scalable/apps/ivpn-ui.svg
 
-    makeWrapper ${lib.getExe electron} $out/bin/ivpn-ui \
+    makeWrapper ${electron.exe} $out/bin/ivpn-ui \
       --prefix PATH : ${lib.makeBinPath [ ivpn-service ]} \
       --add-flags $out/share/ivpn-ui/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

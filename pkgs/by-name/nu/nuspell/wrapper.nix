@@ -18,7 +18,7 @@ lib.makeOverridable (
     nativeBuildInputs = [ makeBinaryWrapper ];
 
     postBuild = ''
-      makeWrapper ${lib.getExe nuspell} $out/bin/nuspell \
+      makeWrapper ${nuspell.exe} $out/bin/nuspell \
         --prefix DICPATH : $out/share/hunspell
     '';
 

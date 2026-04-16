@@ -81,7 +81,7 @@ in
       };
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} server start ${cfg.downloadDir}";
+        ExecStart = "${cfg.package.exe} server start ${cfg.downloadDir}";
         User = cfg.user;
         Group = cfg.group;
 

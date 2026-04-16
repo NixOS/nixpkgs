@@ -44,7 +44,7 @@ mkKdeDerivation rec {
 
   passthru.tests.version = testers.testVersion {
     package = glaxnimate;
-    command = "${lib.getExe xvfb-run} glaxnimate --version";
+    command = "${xvfb-run.exe} glaxnimate --version";
   };
 
   meta = {

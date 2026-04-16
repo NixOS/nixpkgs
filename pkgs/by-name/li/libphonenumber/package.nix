@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
-    (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
+    (lib.cmakeFeature "PROTOC_BIN" (buildPackages.protobuf.exe))
   ];
 
   meta = {

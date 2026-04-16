@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    PYO3_PYTHON = lib.getExe python3;
-    PROTOC = lib.getExe protobuf;
+    PYO3_PYTHON = python3.exe;
+    PROTOC = protobuf.exe;
   };
 
   # Tests require a running server

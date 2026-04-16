@@ -120,7 +120,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         StateDirectory = "actual";
         RuntimeDirectory = "actual";
         WorkingDirectory = cfg.settings.dataDir;

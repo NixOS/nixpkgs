@@ -51,7 +51,7 @@ in
       serviceConfig = {
         User = "slimserver";
         # Issue 40589: Disable broken image/video support (audio still works!)
-        ExecStart = "${lib.getExe cfg.package} --logdir ${cfg.dataDir}/logs --prefsdir ${cfg.dataDir}/prefs --cachedir ${cfg.dataDir}/cache --noimage --novideo";
+        ExecStart = "${cfg.package.exe} --logdir ${cfg.dataDir}/logs --prefsdir ${cfg.dataDir}/prefs --cachedir ${cfg.dataDir}/cache --noimage --novideo";
         # Allow only IPv4 since slimserver breaks with IPv6
         RestrictAddressFamilies = [
           "AF_INET"

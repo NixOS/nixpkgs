@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv -t $out/lib/packages packages/**
     mv -t $out/lib/node_modules node_modules/**
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/wasm \
+    makeWrapper ${nodejs.exe} $out/bin/wasm \
       --add-flags "$out/lib/packages/repl/lib/bin.js" \
       --set NODE_PATH "$out/lib/node_modules"
 

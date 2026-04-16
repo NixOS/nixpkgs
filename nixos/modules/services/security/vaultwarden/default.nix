@@ -275,7 +275,7 @@ in
           User = user;
           Group = group;
           EnvironmentFile = [ configFile ] ++ cfg.environmentFile;
-          ExecStart = lib.getExe vaultwarden;
+          ExecStart = vaultwarden.exe;
           LimitNOFILE = "1048576";
           CapabilityBoundingSet = [ "" ];
           DeviceAllow = [ "" ];

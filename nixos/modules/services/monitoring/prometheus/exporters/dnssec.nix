@@ -95,7 +95,7 @@ in
         }";
       in
       {
-        ExecStart = lib.getExe startScript;
+        ExecStart = startScript.exe;
       };
   };
 }

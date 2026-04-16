@@ -177,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-dev"
   ]
   ++ lib.optionals pythonSupport [
-    (lib.cmakeFeature "PYTHON_EXECUTABLE" (lib.getExe python3Packages.python))
+    (lib.cmakeFeature "PYTHON_EXECUTABLE" (python3Packages.python.exe))
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PYBIND11" "${python3Packages.pybind11.src}")
   ];
 

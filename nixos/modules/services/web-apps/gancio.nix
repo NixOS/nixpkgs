@@ -174,7 +174,7 @@ in
         if [[ "$USER" != ${cfg.user} ]]; then
           sudo="exec /run/wrappers/bin/sudo -u ${cfg.user}"
         fi
-        $sudo ${lib.getExe cfg.package} "''${@:--help}"
+        $sudo ${cfg.package.exe} "''${@:--help}"
         ' > $out/bin/gancio
         chmod +x $out/bin/gancio
       '')
@@ -239,7 +239,7 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${getExe cfg.package} start ${configFile}";
+          ExecStart = "${cfg.package.exe} start ${configFile}";
           # set umask so that nginx can write to the server socket
           # FIXME: upstream socket permission configuration in Nuxt
           UMask = "0002";

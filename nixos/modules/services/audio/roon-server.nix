@@ -47,7 +47,7 @@ in
       environment.ROON_ID_DIR = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package}";
+        ExecStart = "${cfg.package.exe}";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;

@@ -98,7 +98,7 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = lib.mkIf cfg.enableDebug { DRASL_DEBUG = "1"; };
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} -config ${settings}";
+        ExecStart = "${cfg.package.exe} -config ${settings}";
         DynamicUser = true;
         RuntimeDirectory = "drasl";
         RuntimeDirectoryMode = "0700";

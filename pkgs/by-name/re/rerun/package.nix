@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       includeDir = "${lib.getLib llvmPackages.libclang}/lib/clang/${majorVersion}/include";
     in
     {
-      CC_wasm32_unknown_unknown = lib.getExe clang-unwrapped;
+      CC_wasm32_unknown_unknown = clang-unwrapped.exe;
       CFLAGS_wasm32_unknown_unknown = "-isystem ${includeDir} -resource-dir ${resourceDir}";
     };
 

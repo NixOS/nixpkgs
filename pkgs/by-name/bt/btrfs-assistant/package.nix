@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = lib.optionalString enableSnapper ''
     substituteInPlace src/main.cpp \
-      --replace-fail '/usr/bin/snapper' "${lib.getExe snapper}"
+      --replace-fail '/usr/bin/snapper' "${snapper.exe}"
   '';
 
   postPatch = ''
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString enableSnapper ''
     substituteInPlace src/btrfs-assistant.conf \
-      --replace-fail '/usr/bin/snapper' "${lib.getExe snapper}"
+      --replace-fail '/usr/bin/snapper' "${snapper.exe}"
   '';
 
   passthru.updateScript = nix-update-script { };

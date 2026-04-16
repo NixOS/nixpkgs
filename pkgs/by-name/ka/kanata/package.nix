@@ -46,17 +46,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     darwinDriverVersion = "6.2.0"; # needs to be updated if karabiner-driverkit changes
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-script-kanata";
-      runtimeInputs = [
-        curl
-        gnused
-        yq
-        jq
-        nix-update
-      ];
-      text = builtins.readFile ./update.sh;
-    });
+    updateScript =
+      (writeShellApplication {
+        name = "update-script-kanata";
+        runtimeInputs = [
+          curl
+          gnused
+          yq
+          jq
+          nix-update
+        ];
+        text = builtins.readFile ./update.sh;
+      }).exe;
 
     darwinDriver =
       if stdenv.hostPlatform.isDarwin then

@@ -27,7 +27,7 @@ let
 
     buildCommand = ''
       mkdir -p "$out/include/sys"
-      '${lib.getExe AvailabilityVersions}' ${lib.getVersion apple-sdk} "$out"
+      '${AvailabilityVersions.exe}' ${lib.getVersion apple-sdk} "$out"
 
       install -D -t "$out/include/CFOpenDirectory" \
         '${OpenDirectory}/Core/CFOpenDirectoryPriv.h' \

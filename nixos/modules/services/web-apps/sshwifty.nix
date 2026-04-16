@@ -40,7 +40,7 @@ in
       script = ''
         ${lib.optionalString (cfg.sharedKeyFile != null || cfg.socks5PasswordFile != null) (
           lib.concatStringsSep " " [
-            (lib.getExe pkgs.jq)
+            (pkgs.jq.exe)
             "-s"
             "'.[0] * .[1]"
             (lib.optionalString (cfg.sharedKeyFile != null && cfg.socks5PasswordFile != null) "* .[2]")
@@ -61,7 +61,7 @@ in
         ${lib.optionalString (
           cfg.sharedKeyFile == null && cfg.socks5PasswordFile == null
         ) "export SSHWIFTY_CONFIG=${settings}"}
-        exec ${lib.getExe cfg.package}
+        exec ${cfg.package.exe}
       '';
       serviceConfig = {
         DynamicUser = true;

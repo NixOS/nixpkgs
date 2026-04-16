@@ -107,7 +107,7 @@ in
       };
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
+        ExecStart = "${cfg.package.exe} --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
 
         Restart = lib.mkIf cfg.restart "on-success";
 

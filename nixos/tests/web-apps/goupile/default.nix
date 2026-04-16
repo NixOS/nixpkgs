@@ -12,7 +12,7 @@ let
     ]
   );
 
-  runScript = "${lib.getExe python} ${./basic_interaction_test.py}";
+  runScript = "${python.exe} ${./basic_interaction_test.py}";
 
   run-goupile-test = pkgs.writeShellScriptBin "run-goupile-test" ''
     set -euo pipefail

@@ -294,7 +294,7 @@ in
       path = [ cfg.package ];
       environment = {
         LIBREOFFICE_BIN_PATH = "${cfg.libreoffice.package}/lib/libreoffice/program/soffice.bin";
-        CHROMIUM_BIN_PATH = lib.getExe cfg.chromium.package;
+        CHROMIUM_BIN_PATH = cfg.chromium.package.exe;
         FONTCONFIG_FILE = pkgs.makeFontsConf {
           fontDirectories = [ pkgs.liberation_ttf_v2 ] ++ cfg.extraFontPackages;
         };
@@ -306,7 +306,7 @@ in
         Type = "simple";
         # NOTE: disable to debug chromium crashes or otherwise no coredump is created and forbidden syscalls are not being logged
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs args}";
+        ExecStart = "${cfg.package.exe} ${lib.escapeShellArgs args}";
 
         # Needed for LibreOffice to work correctly.
         # See above issue comment.

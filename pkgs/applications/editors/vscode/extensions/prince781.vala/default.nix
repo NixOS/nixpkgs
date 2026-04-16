@@ -21,7 +21,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."vala.languageServerPath".default = "${lib.getExe vala-language-server}"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."vala.languageServerPath".default = "${vala-language-server.exe}"' package.json | sponge package.json
   '';
 
   meta = {

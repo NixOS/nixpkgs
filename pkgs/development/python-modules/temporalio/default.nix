@@ -52,7 +52,7 @@ buildPythonPackage rec {
     maturin
   ];
 
-  env.PROTOC = "${lib.getExe buildPackages.protobuf}";
+  env.PROTOC = "${buildPackages.protobuf.exe}";
 
   dependencies = [
     nexusrpc

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pretix_zugferd/invoice.py \
-      --replace-fail 'fallback="gs"' 'fallback="${lib.getExe ghostscript_headless}"'
+      --replace-fail 'fallback="gs"' 'fallback="${ghostscript_headless.exe}"'
   '';
 
   pythonRelaxDeps = [ "drafthorse" ];

@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
       mkdir $out
       cd ${finalAttrs.src}/test
-      ${lib.getExe mafft} sample > $out/test.fftns2
-      ${lib.getExe mafft} --maxiterate 100  sample > $out/test.fftnsi
-      ${lib.getExe mafft} --globalpair sample > $out/test.gins1
-      ${lib.getExe mafft} --globalpair --maxiterate 100  sample > $out/test.ginsi
-      ${lib.getExe mafft} --localpair sample > $out/test.lins1
-      ${lib.getExe mafft} --localpair --maxiterate 100  sample > $out/test.linsi
+      ${mafft.exe} sample > $out/test.fftns2
+      ${mafft.exe} --maxiterate 100  sample > $out/test.fftnsi
+      ${mafft.exe} --globalpair sample > $out/test.gins1
+      ${mafft.exe} --globalpair --maxiterate 100  sample > $out/test.ginsi
+      ${mafft.exe} --localpair sample > $out/test.lins1
+      ${mafft.exe} --localpair --maxiterate 100  sample > $out/test.linsi
       diff $out/test.fftns2 sample.fftns2
       diff $out/test.fftnsi sample.fftnsi
       diff $out/test.gins1 sample.gins1

@@ -166,7 +166,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r node_modules/.bin $out/share/linkwarden/node_modules/
     rm -r $out/share/linkwarden/node_modules/@linkwarden/{mobile,react-native-render-html}
 
-    echo "#!${lib.getExe bash} -e
+    echo "#!${bash.exe} -e
     export DATABASE_URL=\''${DATABASE_URL-"postgresql://\$DATABASE_USER:\$POSTGRES_PASSWORD@\$DATABASE_HOST:\$DATABASE_PORT/\$DATABASE_NAME"}
     export npm_config_cache="\$LINKWARDEN_CACHE_DIR/npm"
 
@@ -175,7 +175,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/worker
     else
       echo "Starting server"
-      ${lib.getExe prisma_6} migrate deploy --schema $out/share/linkwarden/packages/prisma/schema.prisma \
+      ${prisma_6.exe} migrate deploy --schema $out/share/linkwarden/packages/prisma/schema.prisma \
         && ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/web -- -H \$LINKWARDEN_HOST -p \$LINKWARDEN_PORT
     fi
     " > $out/bin/start.sh

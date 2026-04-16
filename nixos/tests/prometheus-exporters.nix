@@ -1242,8 +1242,8 @@ let
                   };
                 in
                 [
-                  "+${lib.getExe createDir}"
-                  "${lib.getExe createCerts}"
+                  "+${createDir.exe}"
+                  "${createCerts.exe}"
                 ];
             };
           };

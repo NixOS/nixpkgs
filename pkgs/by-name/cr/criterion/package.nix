@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     testers.testVersion {
       package = criterion;
-      command = "${lib.getExe tester} --version";
+      command = "${tester.exe} --version";
       version = "v${finalAttrs.version}";
     };
 

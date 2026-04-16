@@ -20,7 +20,7 @@ buildLua {
 
   postPatch = ''
     substituteInPlace slicing.lua \
-        --replace-fail ffmpeg ${lib.getExe ffmpeg}
+        --replace-fail ffmpeg ${ffmpeg.exe}
   '';
 
   passthru.scriptName = "slicing.lua";

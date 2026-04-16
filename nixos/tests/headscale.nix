@@ -100,6 +100,6 @@ in
     # Check that they are reachable from the tailnet
     peer1.wait_until_succeeds("tailscale ping peer2")
     peer2.wait_until_succeeds("tailscale ping peer1.tailnet")
-    assert (res := peer1.wait_until_succeeds("${lib.getExe pkgs.dig} +short foo.bar").strip()) == "100.64.0.2", f"Domain {res} did not match 100.64.0.2"
+    assert (res := peer1.wait_until_succeeds("${pkgs.dig.exe} +short foo.bar").strip()) == "100.64.0.2", f"Domain {res} did not match 100.64.0.2"
   '';
 }

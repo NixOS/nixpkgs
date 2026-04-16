@@ -43,7 +43,7 @@ mkAppleDerivation (finalAttrs: {
     cp -r availability.dsl templates "$out/share/availability/"
 
     substitute availability "$out/libexec/availability" \
-      --replace-fail '/usr/bin/env python3' '${lib.getExe python3}' \
+      --replace-fail '/usr/bin/env python3' '${python3.exe}' \
       --replace-fail 'f"{os.path.abspath(os.path.dirname(sys.argv[0]))}/' "\"$out/share/availability/"
     chmod a+x "$out/libexec/availability"
 
@@ -90,12 +90,12 @@ mkAppleDerivation (finalAttrs: {
       sdkMajor=\''${versionParts[1]}
       sdkMinor=\''${versionParts[2]:-0}
       for minor in \$(seq \$(("\$sdkMinor" + 1)) 9); do
-        ${lib.getExe gnused} \\
+        ${gnused.exe} \\
           -E "/VERSION_10_\''${sdkMajor}_\$minor/,/#endif/c\\ */" \\
           -i "\$dest/include/AvailabilityMacros.h"
       done
       for major in \$(seq \$(("\$sdkMajor" + 1)) 15); do
-        ${lib.getExe gnused} \\
+        ${gnused.exe} \\
           -E "/VERSION_10_\$major/,/#endif/c\\ */" \\
           -i "\$dest/include/AvailabilityMacros.h"
       done

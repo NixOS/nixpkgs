@@ -106,7 +106,7 @@ in
         UMask = "0077";
 
         ExecStart = ''
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             -db storage.db \
             -addr "${cfg.address}:${toString cfg.port}" \
             ${optionalString (cfg.baseUrl != null) "-base ${cfg.baseUrl}"} \

@@ -212,7 +212,7 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${lib.getExe cfg.package} daemon";
+          ExecStart = "${cfg.package.exe} daemon";
           User = cfg.user;
           Group = cfg.group;
 

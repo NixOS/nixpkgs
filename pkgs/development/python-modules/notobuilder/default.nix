@@ -33,7 +33,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace Lib/notobuilder/__main__.py \
-      --replace-fail '"ninja"' '"${lib.getExe ninja}"'
+      --replace-fail '"ninja"' '"${ninja.exe}"'
   '';
 
   build-system = [

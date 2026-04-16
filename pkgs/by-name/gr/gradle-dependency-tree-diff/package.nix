@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 build/dependency-tree-diff.jar \
       $out/share/dependency-tree-diff/dependency-tree-diff.jar
-    makeWrapper ${lib.getExe jre_headless} $out/bin/dependency-tree-diff \
+    makeWrapper ${jre_headless.exe} $out/bin/dependency-tree-diff \
       --add-flags "-jar $out/share/dependency-tree-diff/dependency-tree-diff.jar"
 
     runHook postInstall

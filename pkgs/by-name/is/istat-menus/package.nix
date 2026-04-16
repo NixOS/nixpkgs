@@ -30,18 +30,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "istatmenus-update-script";
-    runtimeInputs = [
-      curl
-      common-updater-scripts
-    ];
-    text = ''
-      redirect_url="$(curl -s -L -f "https://download.bjango.com/istatmenus${lib.versions.major finalAttrs.version}/" -o /dev/null -w '%{url_effective}')"
-      version="''${redirect_url##*/}"; version="''${version#iStatMenus}"; version="''${version%.zip}"
-      update-source-version istat-menus "$version"
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "istatmenus-update-script";
+      runtimeInputs = [
+        curl
+        common-updater-scripts
+      ];
+      text = ''
+        redirect_url="$(curl -s -L -f "https://download.bjango.com/istatmenus${lib.versions.major finalAttrs.version}/" -o /dev/null -w '%{url_effective}')"
+        version="''${redirect_url##*/}"; version="''${version#iStatMenus}"; version="''${version%.zip}"
+        update-source-version istat-menus "$version"
+      '';
+    }).exe;
 
   meta = {
     changelog = "https://bjango.com/mac/istatmenus/versionhistory/";

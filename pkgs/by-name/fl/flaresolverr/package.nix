@@ -46,10 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/utils.py \
       --replace-fail \
         'CHROME_EXE_PATH = None' \
-        'CHROME_EXE_PATH = "${lib.getExe chromium}"' \
+        'CHROME_EXE_PATH = "${chromium.exe}"' \
       --replace-fail \
         'PATCHED_DRIVER_PATH = None' \
-        'PATCHED_DRIVER_PATH = "${lib.getExe undetected-chromedriver}"'
+        'PATCHED_DRIVER_PATH = "${undetected-chromedriver.exe}"'
   '';
 
   installPhase = ''

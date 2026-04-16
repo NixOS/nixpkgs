@@ -141,7 +141,7 @@ in
   };
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
-      { nix.settings.pre-build-hook = lib.getExe cfg.package; }
+      { nix.settings.pre-build-hook = cfg.package.exe; }
       (lib.mkIf cfg.presets.nvidia-gpu.enable {
         hardware.graphics.enable = lib.mkDefault true;
         nix.settings.system-features = cfg.allowedPatterns.nvidia-gpu.onFeatures;

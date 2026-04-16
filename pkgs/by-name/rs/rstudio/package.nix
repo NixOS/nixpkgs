@@ -78,8 +78,8 @@ let
   # rstudio assumes quarto bundles pandoc into bin/tools/
   quartoWrapper = runCommand "quarto-wrapper" { } ''
     mkdir -p $out/bin/tools
-    ln -s ${lib.getExe pandoc} $out/bin/tools/pandoc
-    ln -s ${lib.getExe quarto} $out/bin/quarto
+    ln -s ${pandoc.exe} $out/bin/tools/pandoc
+    ln -s ${quarto.exe} $out/bin/quarto
     ln -s ${quarto}/share $out/share
   '';
 in
@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     src/node/desktop/src/main/gwt-callback.ts \
     src/cpp/session/modules/clang/CodeCompletion.cpp \
     src/cpp/core/system/PosixSystemTests.cpp \
-    --replace-fail "/usr/bin/which" "${lib.getExe which}"
+    --replace-fail "/usr/bin/which" "${which.exe}"
 
     # fix .desktop Exec field
     substituteInPlace src/node/desktop/resources/freedesktop/rstudio.desktop.in \
@@ -334,7 +334,7 @@ stdenv.mkDerivation (finalAttrs: {
     shopt -s extglob
     rm -r $out/lib/rstudio/!(locales|resources|resources.pak)
 
-    makeWrapper ${lib.getExe electron} "$out/bin/rstudio" \
+    makeWrapper ${electron.exe} "$out/bin/rstudio" \
       --add-flags "$out/lib/rstudio/resources/app/" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --suffix PATH : ${lib.makeBinPath [ gnumake ]}

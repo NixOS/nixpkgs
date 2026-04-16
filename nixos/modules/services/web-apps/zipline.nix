@@ -104,7 +104,7 @@ in
         DynamicUser = true;
         StateDirectory = "zipline";
         EnvironmentFile = cfg.environmentFiles;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
 
         # Hardening
         AmbientCapabilities = "";

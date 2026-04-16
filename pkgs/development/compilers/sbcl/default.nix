@@ -69,7 +69,7 @@ let
     else if (builtins.hasAttr stdenv.hostPlatform.system bootstrapBinaries) then
       "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
     else
-      "${lib.getExe ecl} --norc";
+      "${ecl.exe} --norc";
   posixUtils = if stdenv.hostPlatform.isDarwin then darwin.shell_cmds else coreutils;
 
 in

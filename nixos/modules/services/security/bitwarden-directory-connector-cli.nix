@@ -297,16 +297,16 @@ in
           set -eo pipefail
 
           # create the config file
-          ${lib.getExe cfg.package} data-file
+          ${cfg.package.exe} data-file
           touch /tmp/data.json.tmp
           chmod 600 /tmp/data.json{,.tmp}
 
-          ${lib.getExe cfg.package} config server ${cfg.domain}
+          ${cfg.package.exe} config server ${cfg.domain}
 
           # now login to set credentials
           export BW_CLIENTID="$(< ${escapeShellArg cfg.secrets.bitwarden.client_path_id})"
           export BW_CLIENTSECRET="$(< ${escapeShellArg cfg.secrets.bitwarden.client_path_secret})"
-          ${lib.getExe cfg.package} login
+          ${cfg.package.exe} login
 
           jq '.authenticatedAccounts[0] as $account
             | .[$account].directoryConfigurations.ldap |= $ldap_data
@@ -321,15 +321,15 @@ in
           mv -f /tmp/data.json.tmp /tmp/data.json
 
           # final config
-          ${lib.getExe cfg.package} config directory 0
-          ${lib.getExe cfg.package} config ldap.password --secretfile ${cfg.secrets.ldap}
+          ${cfg.package.exe} config directory 0
+          ${cfg.package.exe} config ldap.password --secretfile ${cfg.secrets.ldap}
         '';
 
         serviceConfig = {
           Type = "oneshot";
           User = "${cfg.user}";
           PrivateTmp = true;
-          ExecStart = "${lib.getExe cfg.package} sync";
+          ExecStart = "${cfg.package.exe} sync";
         };
       };
     };

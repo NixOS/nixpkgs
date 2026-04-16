@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cat >$out/bin/${finalAttrs.pname} <<EOF
     #!${runtimeShell} -eu
-    exec ${lib.getExe bubblewrap} \
+    exec ${bubblewrap.exe} \
       --dev-bind / / \
       --ro-bind "${debian}/lib" /lib \
       --ro-bind "${debian}/lib64" /lib64 \

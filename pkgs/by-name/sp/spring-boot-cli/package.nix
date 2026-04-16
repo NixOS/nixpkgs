@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
-      command = "${lib.getExe finalAttrs.finalPackage} --version";
+      command = "${finalAttrs.finalPackage.exe} --version";
       version = "v${finalAttrs.version}";
     };
     updateScript = gitUpdater {

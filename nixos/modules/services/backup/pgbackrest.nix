@@ -381,7 +381,7 @@ in
         services.pgbackrest.settings = {
           log-level-console = lib.mkDefault "info";
           log-level-file = lib.mkDefault "off";
-          cmd-ssh = lib.getExe pkgs.openssh;
+          cmd-ssh = pkgs.openssh.exe;
         };
 
         environment.systemPackages = [ pkgs.pgbackrest ];
@@ -415,8 +415,8 @@ in
               Group = "pgbackrest";
               Type = "oneshot";
               # stanza-create is idempotent, so safe to always run
-              ExecStartPre = "${lib.getExe pkgs.pgbackrest} --stanza='${stanza}' stanza-create";
-              ExecStart = "${lib.getExe pkgs.pgbackrest} --stanza='${stanza}' backup --type='${type}'";
+              ExecStartPre = "${pkgs.pgbackrest.exe} --stanza='${stanza}' stanza-create";
+              ExecStart = "${pkgs.pgbackrest.exe} --stanza='${stanza}' backup --type='${type}'";
             };
           }
         ) namedJobs;
@@ -447,7 +447,7 @@ in
       # It does not backup automatically, the systemd timer still needs to be set.
       (lib.mkIf config.services.postgresql.enable {
         services.pgbackrest.stanzas.default = {
-          settings.cmd = lib.getExe pkgs.pgbackrest;
+          settings.cmd = pkgs.pgbackrest.exe;
           instances.localhost = {
             path = config.services.postgresql.dataDir;
             user = "postgres";
@@ -463,7 +463,7 @@ in
         users.users.pgbackrest.extraGroups = [ "postgres" ];
 
         services.postgresql.settings = {
-          archive_command = ''${lib.getExe pkgs.pgbackrest} --stanza=default archive-push "%p"'';
+          archive_command = ''${pkgs.pgbackrest.exe} --stanza=default archive-push "%p"'';
           archive_mode = lib.mkDefault "on";
         };
         users.groups.pgbackrest.members = [ "postgres" ];

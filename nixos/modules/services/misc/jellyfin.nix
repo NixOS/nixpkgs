@@ -433,7 +433,7 @@ in
           Group = cfg.group;
           UMask = "0077";
           WorkingDirectory = cfg.dataDir;
-          ExecStart = "${getExe cfg.package} --datadir '${cfg.dataDir}' --configdir '${cfg.configDir}' --cachedir '${cfg.cacheDir}' --logdir '${cfg.logDir}'";
+          ExecStart = "${cfg.package.exe} --datadir '${cfg.dataDir}' --configdir '${cfg.configDir}' --cachedir '${cfg.cacheDir}' --logdir '${cfg.logDir}'";
           Restart = "on-failure";
           TimeoutSec = 15;
           SuccessExitStatus = [

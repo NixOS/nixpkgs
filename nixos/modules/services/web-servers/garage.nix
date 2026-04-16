@@ -103,7 +103,7 @@ in
         [ -f ${lib.escapeShellArg cfg.environmentFile} ] && . ${lib.escapeShellArg cfg.environmentFile}
 
         # exec the program with quoted args (also with shell arg escaping for the program path to avoid quoting issues there)
-        exec ${lib.escapeShellArg (lib.getExe cfg.package)} "$@"
+        exec ${lib.escapeShellArg (cfg.package.exe)} "$@"
       '')
     ];
 

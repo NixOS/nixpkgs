@@ -141,7 +141,7 @@ in
       example = lib.literalExpression ''
         {
           adapters.native = {
-            command = lib.getExe pkgs.radicle-native-ci;
+            command = pkgs.radicle-native-ci.exe;
             config = { };
             config_env = "RADICLE_NATIVE_CI";
             env.PATH = lib.makeBinPath (with pkgs; [ bash coreutils ]);

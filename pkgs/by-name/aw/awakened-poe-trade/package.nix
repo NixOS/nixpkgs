@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    makeWrapper ${lib.getExe electron} $out/bin/awakened-poe-trade \
+    makeWrapper ${electron.exe} $out/bin/awakened-poe-trade \
       --add-flags $out/share/awakened-poe-trade/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [

@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/nm-ssh-service.c \
-      --replace-fail /usr/bin/sshpass ${lib.getExe sshpass} \
-      --replace-fail /usr/bin/ssh ${lib.getExe openssh}
+      --replace-fail /usr/bin/sshpass ${sshpass.exe} \
+      --replace-fail /usr/bin/ssh ${openssh.exe}
   '';
 
   nativeBuildInputs = [

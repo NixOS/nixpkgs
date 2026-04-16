@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "systemd-inhibit" "${lib.getExe' systemd "systemd-inhibit"}"
 
     substituteInPlace src/hhd/plugins/overlay/x11.py \
-      --replace-fail "lsof" "${lib.getExe lsof}"
+      --replace-fail "lsof" "${lsof.exe}"
 
     substituteInPlace src/hhd/plugins/plugin.py \
       --replace-fail '"id"' '"${lib.getExe' coreutils "id"}"'

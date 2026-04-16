@@ -93,7 +93,7 @@ buildGoModule (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = lib.getExe (callPackage ./update.nix { });
+    updateScript = (callPackage ./update.nix { }).exe;
     webVersion = "3.57.0";
     web = fetchzip {
       url = "https://github.com/AlistGo/alist-web/releases/download/${finalAttrs.passthru.webVersion}/dist.tar.gz";

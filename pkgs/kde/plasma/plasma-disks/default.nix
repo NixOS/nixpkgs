@@ -9,7 +9,7 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./smartctl-path.patch {
-      smartctl = lib.getExe smartmontools;
+      smartctl = smartmontools.exe;
     })
   ];
 }

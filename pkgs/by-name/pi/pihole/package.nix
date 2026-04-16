@@ -96,7 +96,7 @@
           "${relativeScripts}/utils.sh"
           "${relativeScripts}/version.sh"
         ];
-      interpreter = lib.getExe bash;
+      interpreter = bash.exe;
       inputs = [
         # TODO: see if these inputs can help resholving
         "bin"

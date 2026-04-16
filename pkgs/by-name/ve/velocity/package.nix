@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/velocity
     cp proxy/build/libs/velocity-proxy-${builtins.head (builtins.split "-" finalAttrs.version)}-SNAPSHOT-all.jar $out/share/velocity/velocity.jar
 
-    makeWrapper ${lib.getExe jre_headless} "$out/bin/velocity" \
+    makeWrapper ${jre_headless.exe} "$out/bin/velocity" \
       --append-flags "-jar $out/share/velocity/velocity.jar"
 
     ${lib.optionalString withVelocityNative ''

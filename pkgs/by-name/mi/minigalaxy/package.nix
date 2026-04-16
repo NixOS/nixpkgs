@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     (replaceVars ./inject-launcher-steam-run.diff {
-      steamrun = lib.getExe steam-run;
+      steamrun = steam-run.exe;
     })
   ];
 

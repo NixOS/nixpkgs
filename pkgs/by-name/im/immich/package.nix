@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  env.ESBUILD_BINARY_PATH = esbuild'.exe;
   # fix for node-gyp, see https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919
   env.npm_config_nodedir = nodejs;
 
@@ -203,10 +203,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
 
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/immich-admin" \
+    makeWrapper '${nodejs.exe}' "$out/bin/immich-admin" \
       --add-flags "$packageOut/dist/main" \
       --add-flags immich-admin
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/server" \
+    makeWrapper '${nodejs.exe}' "$out/bin/server" \
       --add-flags "$packageOut/dist/main" \
       --chdir "$packageOut" \
       --set IMMICH_BUILD_DATA "$packageOut/build" \

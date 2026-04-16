@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
     # see https://github.com/NixOS/nixpkgs/issues/172583
-    makeShellWrapper "${lib.getExe electron}" "$out/bin/vikunja-desktop" \
+    makeShellWrapper "${electron.exe}" "$out/bin/vikunja-desktop" \
       --add-flags "$out/share/lib/vikunja-desktop/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \

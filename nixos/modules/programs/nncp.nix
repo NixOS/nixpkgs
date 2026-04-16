@@ -83,8 +83,8 @@ in
         rm -f ${nncpCfgFile}
         for f in ${jsonCfgFile} ${toString config.programs.nncp.secrets}
         do
-          ${lib.getExe pkgs.hjson-go} -c <"$f"
-        done |${lib.getExe pkgs.jq} --slurp 'reduce .[] as $x ({}; . * $x)' >${nncpCfgFile}
+          ${pkgs.hjson-go.exe} -c <"$f"
+        done |${pkgs.jq.exe} --slurp 'reduce .[] as $x ({}; . * $x)' >${nncpCfgFile}
         chgrp ${programCfg.group} ${nncpCfgFile}
       '';
     };

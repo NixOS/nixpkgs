@@ -73,7 +73,7 @@ stdenv.mkDerivation (
         # Fix FHS path assumptions
         (replaceVars ./fix-paths.patch {
           inherit retroArchAssetsPath retroArchCoresPath;
-          retroArchExePath = lib.getExe retroarch';
+          retroArchExePath = retroarch'.exe;
           parallelN64CorePath = "${retroArchCoresPath}/parallel_n64_next_libretro${suffix}";
           # Manually substituted later since we need to reference PL's $out
           sharePath = null;

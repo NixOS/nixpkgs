@@ -102,7 +102,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    export OMPI_MCA_plm_rsh_agent=${lib.getExe openssh}
+    export OMPI_MCA_plm_rsh_agent=${openssh.exe}
     mv sfepy sfepy.hidden
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc

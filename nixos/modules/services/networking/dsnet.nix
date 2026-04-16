@@ -160,12 +160,12 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        test ! -f /etc/dsnetconfig.json && ${lib.getExe cfg.package} init
-        ${lib.getExe cfg.package} patch < ${patchFile}
+        test ! -f /etc/dsnetconfig.json && ${cfg.package.exe} init
+        ${cfg.package.exe} patch < ${patchFile}
       '';
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} up";
-        ExecStop = "${lib.getExe cfg.package} down";
+        ExecStart = "${cfg.package.exe} up";
+        ExecStop = "${cfg.package.exe} down";
         Type = "oneshot";
         # consider the service to be active after process exits, so it can be
         # reloaded
@@ -173,8 +173,8 @@ in
       };
 
       reload = ''
-        ${lib.getExe cfg.package} patch < ${patchFile}
-        ${lib.getExe cfg.package} sync < ${patchFile}
+        ${cfg.package.exe} patch < ${patchFile}
+        ${cfg.package.exe} sync < ${patchFile}
       '';
 
       # reload _instead_ of restarting on change

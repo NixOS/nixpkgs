@@ -85,7 +85,7 @@ let
   extensionUpdateScript =
     { pname }:
     [
-      "${lib.getExe azure-cli.extensions-tool}"
+      "${azure-cli.extensions-tool.exe}"
       "--cli-version"
       "${azure-cli.version}"
       "--extension"
@@ -102,7 +102,7 @@ let
     in
     runCommand "test-az-with-extensions" { } ''
       export HOME=$TMPDIR
-      ${lib.getExe az} extension list > $out
+      ${az.exe} extension list > $out
       for ext in ${lib.concatStringsSep " " extensionNames}; do
         if ! grep -q $ext $out; then
           echo "Extension $ext not found in list"
@@ -410,7 +410,7 @@ py.pkgs.toPythonApplication (
           in
           runCommand "test-az-with-immutable-config" { } ''
             export HOME=$TMPDIR
-            ${lib.getExe az} --version || exit 1
+            ${az.exe} --version || exit 1
             touch $out
           '';
 
@@ -419,7 +419,7 @@ py.pkgs.toPythonApplication (
       };
 
       generate-extensions = writeShellScriptBin "${pname}-update-extensions" ''
-        ${lib.getExe azure-cli.extensions-tool} --cli-version ${azure-cli.version} --commit
+        ${azure-cli.extensions-tool.exe} --cli-version ${azure-cli.version} --commit
       '';
 
       extensions-tool =

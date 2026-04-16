@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
-    makeWrapper ${lib.getExe jre} $out/bin/Stirling-PDF \
+    makeWrapper ${jre.exe} $out/bin/Stirling-PDF \
       --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
 
     runHook postInstall

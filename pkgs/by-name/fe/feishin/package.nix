@@ -109,7 +109,7 @@ buildNpmPackage {
     # Code relies on checking app.isPackaged, which returns false if the executable is electron.
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
-    makeWrapper ${lib.getExe electron} $out/bin/feishin \
+    makeWrapper ${electron.exe} $out/bin/feishin \
       --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

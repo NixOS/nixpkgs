@@ -132,7 +132,7 @@ in
         CacheDirectory = "minidlna";
         RuntimeDirectory = "minidlna";
         PIDFile = "/run/minidlna/pid";
-        ExecStart = "${lib.getExe cfg.package} -S -P /run/minidlna/pid -f ${cfgfile}";
+        ExecStart = "${cfg.package.exe} -S -P /run/minidlna/pid -f ${cfgfile}";
       };
     };
   };

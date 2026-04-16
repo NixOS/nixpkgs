@@ -95,7 +95,7 @@ in
       '';
       postStart = ''
         # Delay signalling service readiness until it's actually up.
-        while ! "${lib.getExe pkgs.curl}" -sSfL -o /dev/null "http://${cfg.listenAddress}:${toString cfg.httpPort}"; do
+        while ! "${pkgs.curl.exe}" -sSfL -o /dev/null "http://${cfg.listenAddress}:${toString cfg.httpPort}"; do
             echo "Waiting for TCP port ${toString cfg.httpPort} to be open..."
             sleep 1
         done
@@ -106,7 +106,7 @@ in
       };
       serviceConfig = {
         ExecStart =
-          "${lib.getExe cfg.package}"
+          "${cfg.package.exe}"
           + " -platform minimal"
           + " --http-listen=${cfg.listenAddress}"
           + " --http-port=${toString cfg.httpPort}"

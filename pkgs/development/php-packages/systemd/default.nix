@@ -41,7 +41,7 @@ buildPecl {
   # php will exit with a non-zero exit code, if the extension is not loaded
   passthru.tests.smokeTest = runCommand "php-systemd-smoke-test" { } ''
     echo "<?php sd_journal_send('MESSAGE=Hello world.'); ?>" |
-      ${lib.getExe (php.withExtensions ({ all, ... }: [ all.systemd ]))}
+      ${(php.withExtensions ({ all, ... }: [ all.systemd ])).exe}
     echo ok > $out
   '';
 

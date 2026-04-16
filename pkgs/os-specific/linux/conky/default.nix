@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   # pkg-config doesn't detect wayland-scanner in cross-compilation for some reason
   postPatch = ''
     substituteInPlace cmake/ConkyPlatformChecks.cmake \
-      --replace-fail "pkg_get_variable(Wayland_SCANNER wayland-scanner wayland_scanner)" "set(Wayland_SCANNER ${lib.getExe buildPackages.wayland-scanner})"
+      --replace-fail "pkg_get_variable(Wayland_SCANNER wayland-scanner wayland_scanner)" "set(Wayland_SCANNER ${buildPackages.wayland-scanner.exe})"
   '';
 
   strictDeps = true;

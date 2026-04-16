@@ -100,7 +100,7 @@ let
 
   phpCli = lib.concatStringsSep " " (
     [
-      "${lib.getExe phpPackage}"
+      "${phpPackage.exe}"
     ]
     ++ lib.optionals (cfg.cli.memoryLimit != null) [
       "-dmemory_limit=${cfg.cli.memoryLimit}"
@@ -1386,12 +1386,12 @@ in
                 ''
                   ${mkExport dbpass}
                   ${lib.optionalString (adminpass != null) (mkExport adminpass)}
-                  ${lib.getExe occ} maintenance:install \
+                  ${occ.exe} maintenance:install \
                       ${installFlags}
                 '';
               occSetTrustedDomainsCmd = lib.concatStringsSep "\n" (
                 lib.imap0 (i: v: ''
-                  ${lib.getExe occ} config:system:set trusted_domains \
+                  ${occ.exe} config:system:set trusted_domains \
                     ${toString i} --value="${toString v}"
                 '') (lib.unique ([ cfg.hostName ] ++ cfg.settings.trusted_domains))
               );
@@ -1406,7 +1406,7 @@ in
               path = [ occ ];
               restartTriggers = [ overrideConfig ];
               script = ''
-                export OCC_BIN="${lib.getExe occ}"
+                export OCC_BIN="${occ.exe}"
 
                 ${lib.optionalString (c.dbpassFile != null) ''
                   if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
@@ -1486,7 +1486,7 @@ in
             after = [ "nextcloud-setup.service" ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = "${lib.getExe occ} app:update --all";
+              ExecStart = "${occ.exe} app:update --all";
               User = "nextcloud";
               LoadCredential = runtimeSystemdCredentials;
             };
@@ -1495,9 +1495,9 @@ in
           nextcloud-update-db = {
             after = [ "nextcloud-setup.service" ];
             script = ''
-              ${lib.getExe occ} db:add-missing-columns
-              ${lib.getExe occ} db:add-missing-indices
-              ${lib.getExe occ} db:add-missing-primary-keys
+              ${occ.exe} db:add-missing-columns
+              ${occ.exe} db:add-missing-indices
+              ${occ.exe} db:add-missing-primary-keys
             '';
             serviceConfig = {
               Type = "exec";

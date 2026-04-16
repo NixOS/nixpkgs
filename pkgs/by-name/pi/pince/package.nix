@@ -89,7 +89,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   patches = [
     (replaceVars ./set-gdb-path.patch {
-      gdb_exe_path = lib.getExe gdb';
+      gdb_exe_path = gdb'.exe;
     })
   ];
 

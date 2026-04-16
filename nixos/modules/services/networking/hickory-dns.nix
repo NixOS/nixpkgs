@@ -176,7 +176,7 @@ in
             flagsStr = builtins.concatStringsSep " " flags;
           in
           ''
-            ${lib.getExe cfg.package} --config ${cfg.configFile} ${flagsStr}
+            ${cfg.package.exe} --config ${cfg.configFile} ${flagsStr}
           '';
         Type = "simple";
         Restart = "on-failure";

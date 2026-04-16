@@ -59,7 +59,7 @@ in
         Type = "simple";
         DynamicUser = true;
         Restart = "always";
-        ExecStart = "${lib.getExe cfg.package} serve";
+        ExecStart = "${cfg.package.exe} serve";
         StateDirectory = "soft-serve";
         WorkingDirectory = stateDir;
         RuntimeDirectory = "soft-serve";

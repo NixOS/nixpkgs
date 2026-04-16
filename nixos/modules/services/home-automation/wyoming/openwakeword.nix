@@ -120,7 +120,7 @@ in
         # https://github.com/home-assistant/addons/blob/master/openwakeword/rootfs/etc/s6-overlay/s6-rc.d/openwakeword/run
         ExecStart = escapeSystemdExecArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "--uri"
             cfg.uri
             "--threshold"

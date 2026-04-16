@@ -117,7 +117,7 @@ in
       preStart = lib.optionalString (settings != null) ''
         if [ -e "$STATE_DIRECTORY/paisa.yaml" ] && [ "${toString cfg.mutableSettings}" = "1" ]; then
           # do not write directly to the config file
-          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/paisa.yaml" "${configFile}" > "$STATE_DIRECTORY/paisa.yaml.tmp"
+          ${pkgs.yaml-merge.exe} "$STATE_DIRECTORY/paisa.yaml" "${configFile}" > "$STATE_DIRECTORY/paisa.yaml.tmp"
           mv "$STATE_DIRECTORY/paisa.yaml.tmp" "$STATE_DIRECTORY/paisa.yaml"
         else
           cp --force "${configFile}" "$STATE_DIRECTORY/paisa.yaml"
@@ -127,7 +127,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} serve ${args}";
+        ExecStart = "${cfg.package.exe} serve ${args}";
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         Restart = "always";
         RestartSec = 5;

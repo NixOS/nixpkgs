@@ -117,7 +117,7 @@ in
               StateDirectory = "ytdl-sub/${utils.escapeSystemdPath name}";
               WorkingDirectory = "/var/lib/ytdl-sub/${utils.escapeSystemdPath name}";
 
-              ExecStart = "${lib.getExe cfg.package} --config ${configFile} sub ${subscriptionsFile}";
+              ExecStart = "${cfg.package.exe} --config ${configFile} sub ${subscriptionsFile}";
 
               # Hardening
               CapabilityBoundingSet = [ "" ];

@@ -40,7 +40,7 @@ buildFHSEnv {
   pname = "aws-workspaces";
   inherit (workspacesclient) version;
 
-  runScript = lib.getExe workspacesclient;
+  runScript = workspacesclient.exe;
 
   includeClosures = true;
 

@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
-        pandoc_path = lib.getExe pandoc;
+        pandoc_path = pandoc.exe;
       })
     ];
 
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/siyuan
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
-    makeWrapper ${lib.getExe electron} $out/bin/siyuan \
+    makeWrapper ${electron.exe} $out/bin/siyuan \
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \

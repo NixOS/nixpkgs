@@ -21,7 +21,7 @@
   # - to let `libqalculate` pick it from $PATH during runtime. See also:
   # https://github.com/Qalculate/libqalculate/issues/796
   gnuplot,
-  gnuplotBinary ? lib.getExe gnuplot,
+  gnuplotBinary ? gnuplot.exe,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

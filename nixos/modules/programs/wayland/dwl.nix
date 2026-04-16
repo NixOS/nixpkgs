@@ -65,7 +65,7 @@ in
         systemctl --user import-environment DISPLAY WAYLAND_DISPLAY
         systemctl --user start dwl-session.target
         # Start dwl
-        exec ${lib.getExe cfg.package}
+        exec ${cfg.package.exe}
       '';
       mode = "0755"; # Make it executable
     };

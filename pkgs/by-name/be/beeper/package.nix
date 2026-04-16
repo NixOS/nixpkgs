@@ -53,19 +53,20 @@ appimageTools.wrapAppImage {
   '';
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-beeper";
-      runtimeInputs = [
-        curl
-        common-updater-scripts
-      ];
-      text = ''
-        set -o errexit
-        latestLinux="$(curl --silent --output /dev/null --write-out "%{redirect_url}\n" https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop)"
-        version="$(echo "$latestLinux" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
-        update-source-version beeper "$version"
-      '';
-    });
+    updateScript =
+      (writeShellApplication {
+        name = "update-beeper";
+        runtimeInputs = [
+          curl
+          common-updater-scripts
+        ];
+        text = ''
+          set -o errexit
+          latestLinux="$(curl --silent --output /dev/null --write-out "%{redirect_url}\n" https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop)"
+          version="$(echo "$latestLinux" | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
+          update-source-version beeper "$version"
+        '';
+      }).exe;
 
     # needed for nix-update
     inherit src;

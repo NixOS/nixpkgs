@@ -60,7 +60,7 @@ in
       after = [ "network.target" ];
       environment = mapAttrs (_: toString) cfg.settings;
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         AmbientCapabilities = mkIf (cfg.settings.PORT < 1024) [
           "CAP_NET_BIND_SERVICE"
         ];

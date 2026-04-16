@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace Makefile.in \
-      --replace '$(DESTDIR)$(bindir)/parallel --shell-completion' '${lib.getExe buildPackages.parallel} --shell-completion'
+      --replace '$(DESTDIR)$(bindir)/parallel --shell-completion' '${buildPackages.parallel.exe} --shell-completion'
   '';
 
   preInstall = ''

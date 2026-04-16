@@ -72,7 +72,7 @@ let
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
   jq = "${pkgs.jq}/bin/jq";
-  grep = lib.getExe pkgs.gnugrep;
+  grep = pkgs.gnugrep.exe;
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (
     ''
       set -efu
@@ -1008,7 +1008,7 @@ in
                 ++ cfg.extraFlags
               );
             in
-            "${lib.getExe cfg.package} ${args}";
+            "${cfg.package.exe} ${args}";
           RuntimeDirectory = "syncthing";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;

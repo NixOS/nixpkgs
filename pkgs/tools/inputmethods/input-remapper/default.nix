@@ -101,7 +101,7 @@ in
     substituteInPlace data/input-remapper.service \
       --replace-fail "ExecStart=/usr/bin/input-remapper-service" "ExecStart=$out/bin/input-remapper-service"
     substituteInPlace data/input-remapper-autoload.desktop \
-      --replace-fail "bash" "${lib.getExe bash}"
+      --replace-fail "bash" "${bash.exe}"
 
     install -m644 -D -t $out/share/applications/ data/*.desktop
     install -m644 -D -t $out/share/polkit-1/actions/ data/input-remapper.policy

@@ -111,7 +111,7 @@ in
 
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "--bind-to-activated-sockets"
             "only"
           ]

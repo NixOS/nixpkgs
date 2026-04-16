@@ -22,7 +22,7 @@
 let
   environment = {
     NEXT_TELEMETRY_DISABLED = "1";
-    FFMPEG_PATH = lib.getExe ffmpeg;
+    FFMPEG_PATH = ffmpeg.exe;
     FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
     PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
     PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
-      makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
+      makeWrapper ${nodejs_24.exe} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
         --set NODE_ENV production \
         --set ZIPLINE_GIT_SHA "$(<$src/.git_head)" \

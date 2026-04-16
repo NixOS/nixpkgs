@@ -88,7 +88,7 @@ in
 
           serviceConfig = {
             ExecStart = ''
-              ${lib.getExe cfg.package} \
+              ${cfg.package.exe} \
                 ${lib.optionalString cfg.enableSandbox "--sandbox"} \
                 -C ${cfg.configFile}
             '';

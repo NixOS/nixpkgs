@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   + lib.optionalString (lib.versionAtLeast version "1.11") ''
     substituteInPlace deps/curl.mk \
       --replace-fail 'jxf $(notdir $<)' \
-                     'jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
+                     'jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${buildPackages.perl.exe}|" curl-$(CURL_VER)/scripts/cd2nroff'
   ''
   + lib.optionalString (lib.versionOlder version "1.12") ''
     substituteInPlace deps/tools/common.mk \
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   + lib.optionalString (lib.versionAtLeast version "1.12") ''
     substituteInPlace deps/openssl.mk \
       --replace-fail 'cd $(dir $<) && $(TAR) -zxf $<' \
-                     'cd $(dir $<) && $(TAR) -zxf $< && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" openssl-$(OPENSSL_VER)/Configure'
+                     'cd $(dir $<) && $(TAR) -zxf $< && sed -i "s|/usr/bin/env perl|${buildPackages.perl.exe}|" openssl-$(OPENSSL_VER)/Configure'
   '';
 
   preBuild = lib.optionalString (lib.versionAtLeast version "1.11") ''

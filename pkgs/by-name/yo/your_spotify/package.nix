@@ -54,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/share/your_spotify/node_modules/@your_spotify/{client,dev,server}
     cp -r ./apps/server/{lib,package.json} $out
     mkdir -p $out/bin
-    makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/your_spotify_migrate" \
+    makeWrapper ${lib.escapeShellArg (nodejs.exe)} "$out/bin/your_spotify_migrate" \
       --add-flags "$out/lib/migrations.js" --set NODE_PATH "$out/share/your_spotify/node_modules"
-    makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/your_spotify_server" \
+    makeWrapper ${lib.escapeShellArg (nodejs.exe)} "$out/bin/your_spotify_server" \
       --add-flags "$out/lib/index.js" --set NODE_PATH "$out/share/your_spotify/node_modules"
 
     runHook postInstall

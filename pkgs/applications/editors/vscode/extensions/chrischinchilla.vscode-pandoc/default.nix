@@ -18,7 +18,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     moreutils
   ];
   postInstall = ''
-    jq '.contributes.configuration.properties."pandoc.executable".default = "${lib.getExe pandoc}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
+    jq '.contributes.configuration.properties."pandoc.executable".default = "${pandoc.exe}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
   '';
   meta = {
     description = "Converts Markdown files to pdf, docx, or html files using pandoc";

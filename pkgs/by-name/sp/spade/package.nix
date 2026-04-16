@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage rec {
     # rust + gitlab + fetchgit is a rare combo
     (writeScript "update-spade" ''
       VERSION="$(
-        ${lib.getExe git} ls-remote --tags --sort -version:refname ${lib.escapeShellArg src.gitRepoUrl} \
+        ${git.exe} ls-remote --tags --sort -version:refname ${lib.escapeShellArg src.gitRepoUrl} \
           | cut -f2 | grep ^refs/tags/v | cut -d/ -f3- | cut -c2- \
           | sort --version-sort --reverse | head -n1
       )"
-      exec ${lib.getExe nix-update} spade --version "$VERSION" "$@" --commit
+      exec ${nix-update.exe} spade --version "$VERSION" "$@" --commit
     '')
     (nix-update-script {
       extraArgs = [

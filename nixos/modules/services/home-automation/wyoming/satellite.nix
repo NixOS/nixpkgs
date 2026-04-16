@@ -203,7 +203,7 @@ in
           export XDG_RUNTIME_DIR=/run/user/$UID
           ${escapeShellArgs (
             [
-              (getExe finalPackage)
+              (finalPackage.exe)
               "--uri"
               cfg.uri
               "--name"

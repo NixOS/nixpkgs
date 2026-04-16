@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     # dbus-run-session defaults to FHS path
     substituteInPlace meson.build --replace-fail \
       "exe_wrapper: dbus_run_session," \
-      "exe_wrapper: [dbus_run_session, '--config-file=${dbus}/share/dbus-1/session.conf'${lib.optionalString withTpm2Tss ", '${lib.getExe tpm-emu}'"}],"
+      "exe_wrapper: [dbus_run_session, '--config-file=${dbus}/share/dbus-1/session.conf'${lib.optionalString withTpm2Tss ", '${tpm-emu.exe}'"}],"
   '';
 
   preConfigure = lib.optionalString abrmdSupport ''

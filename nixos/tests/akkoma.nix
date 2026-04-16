@@ -239,7 +239,7 @@ in
     client_b.succeed('cmp {} <(curl -f -S -s {})'.format(quote(testMedia),
       quote(status['media_attachments'][0]['url'])))
 
-    client_a.succeed('${lib.getExe checkFe} akkoma-a.nixos.test')
-    client_b.succeed('${lib.getExe checkFe} akkoma-b.nixos.test')
+    client_a.succeed('${checkFe.exe} akkoma-a.nixos.test')
+    client_b.succeed('${checkFe.exe} akkoma-b.nixos.test')
   '';
 }

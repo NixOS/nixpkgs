@@ -88,7 +88,7 @@ stdenv.mkDerivation (
 
       # Fix Xwayland default
       substituteInPlace src/miral/x11_support.cpp \
-        --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
+        --replace-fail '/usr/bin/Xwayland' '${xwayland.exe}'
     ''
     + lib.optionalString (lib.strings.versionOlder version "2.18.0") ''
 

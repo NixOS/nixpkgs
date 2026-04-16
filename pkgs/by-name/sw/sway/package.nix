@@ -25,7 +25,6 @@ assert extraSessionCommands != "" -> withBaseWrapper;
 let
   inherit (builtins) replaceStrings;
   inherit (lib.lists) optional optionals;
-  inherit (lib.meta) getExe;
   inherit (lib.strings) concatMapStrings optionalString;
 
   sway = sway-unwrapped.overrideAttrs (old: {
@@ -40,9 +39,9 @@ let
     fi
     if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
       export DBUS_SESSION_BUS_ADDRESS
-      exec ${getExe sway} "$@"
+      exec ${sway.exe} "$@"
     else
-      exec ${optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${getExe sway} "$@"
+      exec ${optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${sway.exe} "$@"
     fi
   '';
 in

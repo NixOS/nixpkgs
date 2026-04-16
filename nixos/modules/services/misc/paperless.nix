@@ -62,7 +62,7 @@ let
           ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
       }
     fi
-    $sudo ${lib.getExe cfg.package} "$@"
+    $sudo ${cfg.package.exe} "$@"
   '';
 
   defaultServiceConfig = {
@@ -608,7 +608,7 @@ in
                 echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
                 exit 1
               fi
-              exec ${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws "paperless.asgi:application"
+              exec ${cfg.package.python.pkgs.granian.exe} --interface asginl --ws "paperless.asgi:application"
             '';
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;

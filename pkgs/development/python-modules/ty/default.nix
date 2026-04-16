@@ -22,7 +22,7 @@ buildPythonPackage {
       substituteInPlace python/ty/_find_ty.py \
         --replace-fail \
         'sysconfig.get_path("scripts", scheme=_user_scheme()),' \
-        'sysconfig.get_path("scripts", scheme=_user_scheme()), "${baseNameOf (lib.getExe ty)}",'
+        'sysconfig.get_path("scripts", scheme=_user_scheme()), "${baseNameOf (ty.exe)}",'
     ''
     # Sidestep the maturin build system in favour of reusing the binary already built by nixpkgs,
     # to avoid rebuilding the ty binary for every active python package set.
@@ -39,7 +39,7 @@ buildPythonPackage {
     '';
 
   postInstall = ''
-    mkdir -p $out/bin && ln -s ${lib.getExe ty} $out/bin/ty
+    mkdir -p $out/bin && ln -s ${ty.exe} $out/bin/ty
   '';
 
   pythonImportsCheck = [ "ty" ];

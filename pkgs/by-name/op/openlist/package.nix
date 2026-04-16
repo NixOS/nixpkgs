@@ -91,7 +91,7 @@ buildGoModule (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/OpenList";
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = lib.getExe (callPackage ./update.nix { });
+  passthru.updateScript = (callPackage ./update.nix { }).exe;
 
   meta = {
     description = "AList Fork to Anti Trust Crisis";

@@ -162,7 +162,7 @@ in
         script = ''
           set -xe
           mkdir -p ${incoming}
-          ${lib.getExe cfg.package} ${globalKeterConfigFile};
+          ${cfg.package.exe} ${globalKeterConfigFile};
         '';
         wantedBy = [
           "multi-user.target"

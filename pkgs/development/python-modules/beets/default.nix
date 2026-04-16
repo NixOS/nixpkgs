@@ -221,7 +221,7 @@ buildPythonPackage (finalAttrs: {
       | sort -u > plugins_available
     ${diffPlugins (lib.attrNames finalAttrs.finalPackage.passthru.plugins.builtins) "plugins_available"}
 
-    export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
+    export BEETS_TEST_SHELL="${bashInteractive.exe} --norc"
 
     env EDITOR="${writeScript "beetconfig.sh" ''
       #!${runtimeShell}

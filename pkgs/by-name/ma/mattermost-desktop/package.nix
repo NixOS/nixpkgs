@@ -72,7 +72,7 @@ buildNpmPackage rec {
 
     cp src/assets/linux/app_icon.png $out/share/icons/hicolor/512x512/apps/${pname}.png
 
-    makeWrapper '${lib.getExe electron}' $out/bin/${pname} \
+    makeWrapper '${electron.exe}' $out/bin/${pname} \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/share/${pname}/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace audit.bash \
-      --replace-fail python3 "${lib.getExe python3}"
+      --replace-fail python3 "${python3.exe}"
     rm Makefile
     patchShebangs audit.bash
   '';

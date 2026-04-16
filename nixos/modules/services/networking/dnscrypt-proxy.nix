@@ -102,7 +102,7 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} -config ${cfg.configFile}";
+        ExecStart = "${cfg.package.exe} -config ${cfg.configFile}";
         LockPersonality = true;
         LogsDirectory = "dnscrypt-proxy";
         MemoryDenyWriteExecute = true;

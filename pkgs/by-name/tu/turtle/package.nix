@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       patchPythonScript $nautilus_extensions
     done
     substituteInPlace $out/share/nautilus-python/extensions/turtle_nautilus_compare.py \
-      --replace-fail 'Popen(["meld"' 'Popen(["${lib.getExe meld}"'
+      --replace-fail 'Popen(["meld"' 'Popen(["${meld.exe}"'
   '';
 
   meta = {

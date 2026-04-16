@@ -69,7 +69,7 @@ in
         Group = "go-httpbin";
         DynamicUser = true;
 
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
 
         # hardening
         AmbientCapabilities = "";

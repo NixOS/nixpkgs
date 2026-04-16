@@ -238,7 +238,7 @@ in
         ''
           ${exportAllCredentials cfg.credentials}
           cd ${cfg.dataDir}
-          ${lib.getExe cfg.package}
+          ${cfg.package.exe}
         '';
       serviceConfig = {
         Type = "simple";

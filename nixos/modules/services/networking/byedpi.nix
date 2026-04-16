@@ -38,7 +38,7 @@ in
         "nss-lookup.target"
       ];
       serviceConfig = {
-        ExecStart = lib.escapeShellArgs ([ (lib.getExe cfg.package) ] ++ cfg.extraArgs);
+        ExecStart = lib.escapeShellArgs ([ (cfg.package.exe) ] ++ cfg.extraArgs);
         NoNewPrivileges = "yes";
         StandardOutput = "null";
         StandardError = "journal";

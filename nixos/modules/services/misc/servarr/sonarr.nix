@@ -81,7 +81,7 @@ in
         Group = cfg.group;
         EnvironmentFile = cfg.environmentFiles;
         ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe cfg.package)
+          (cfg.package.exe)
           "-nobrowser"
           "-data=${cfg.dataDir}"
         ];

@@ -23,7 +23,7 @@ buildNpmPackage {
   installPhase = ''
     runHook preInstall
     npmInstallHook
-    makeWrapper ${lib.getExe electron} $out/bin/openfortivpn-webview --add-flags $out/lib/node_modules/openfortivpn-webview
+    makeWrapper ${electron.exe} $out/bin/openfortivpn-webview --add-flags $out/lib/node_modules/openfortivpn-webview
     runHook postInstall
   '';
 

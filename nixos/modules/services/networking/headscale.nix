@@ -719,7 +719,7 @@ in
           export HEADSCALE_DATABASE_POSTGRES_PASS="$(head -n1 ${lib.escapeShellArg cfg.settings.database.postgres.password_file})"
         ''}
 
-        exec ${lib.getExe cfg.package} serve --config ${cfg.configFile}
+        exec ${cfg.package.exe} serve --config ${cfg.configFile}
       '';
 
       serviceConfig =

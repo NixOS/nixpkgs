@@ -80,7 +80,7 @@ in
       serviceConfig = rec {
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe cfg.package)
+            (cfg.package.exe)
             "-config=${configPath}"
             "-web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
           ]

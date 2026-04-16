@@ -78,7 +78,7 @@ buildNpmPackage (finalAttrs: {
 
     mkdir -p $out/share/cheating-daddy
     cp --recursive out/*/{locales,resources{,.pak}} $out/share/cheating-daddy
-    makeWrapper ${lib.getExe electron} $out/bin/cheating-daddy \
+    makeWrapper ${electron.exe} $out/bin/cheating-daddy \
       --add-flags $out/share/cheating-daddy/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --inherit-argv0

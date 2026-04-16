@@ -168,7 +168,7 @@ in
       description = "TabbyAPI - OAI compatible server for Exllama";
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} --config=${configFile}";
+        ExecStart = "${cfg.package.exe} --config=${configFile}";
         Restart = "on-failure";
         StateDirectory = "tabbyapi";
         WorkingDirectory = "/var/lib/tabbyapi";

@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export DUB=$NIX_BUILD_TOP/source/bin/dub
     export PATH=$PATH:$NIX_BUILD_TOP/source/bin/
-    export DC=${lib.getExe ldc}
+    export DC=${ldc.exe}
     export HOME=$TMP
 
     rm -rf test/issue502-root-import

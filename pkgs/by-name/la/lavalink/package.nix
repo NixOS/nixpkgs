@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    makeWrapper ${lib.getExe jdk} $out/bin/lavalink \
+    makeWrapper ${jdk.exe} $out/bin/lavalink \
       --add-flags "-jar $src"
 
     runHook postInstall

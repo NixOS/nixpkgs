@@ -26,24 +26,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installFonts ];
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "${finalAttrs.pname}-updater";
+    updateScript =
+      (writeShellApplication {
+        name = "${finalAttrs.pname}-updater";
 
-      runtimeInputs = [
-        curl
-        gnugrep
-        common-updater-scripts
-      ];
+        runtimeInputs = [
+          curl
+          gnugrep
+          common-updater-scripts
+        ];
 
-      text = ''
-        suffix="$(
-          curl --fail --silent 'https://forest.watch.impress.co.jp/library/software/ipamjfont/download_10750.html' | \
-            grep --perl-regexp --only-matching 'meta.+?ipamjm\K[0-9]+'
-        )"
-        version="''${suffix:0:3}.''${suffix:3:2}"
-        update-source-version '${finalAttrs.pname}' "$version" --ignore-same-version --print-changes
-      '';
-    });
+        text = ''
+          suffix="$(
+            curl --fail --silent 'https://forest.watch.impress.co.jp/library/software/ipamjfont/download_10750.html' | \
+              grep --perl-regexp --only-matching 'meta.+?ipamjm\K[0-9]+'
+          )"
+          version="''${suffix:0:3}.''${suffix:3:2}"
+          update-source-version '${finalAttrs.pname}' "$version" --ignore-same-version --print-changes
+        '';
+      }).exe;
   };
 
   meta = {

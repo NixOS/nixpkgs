@@ -85,29 +85,30 @@ stdenv.mkDerivation (
 
     passthru = {
       inherit srcs;
-      updateScript = lib.getExe (writeShellApplication {
-        name = "update-makemkv";
-        runtimeInputs = [
-          common-updater-scripts
-          curl
-          rubyPackages.nokogiri
-        ];
-        runtimeEnv.oldVersion = version;
-        text = ''
-          get_version() {
-            # shellcheck disable=SC2016
-            curl --fail --silent 'https://forum.makemkv.com/forum/viewtopic.php?f=3&t=224' \
-              | nokogiri -e 'puts $_.css("head title").first.text.match(/\bMakeMKV (\d+\.\d+\.\d+) /)[1]'
-          }
-          newVersion=$(get_version)
-          if [ "$oldVersion" == "$newVersion" ]; then
-            echo "$0: New version same as old version, nothing to do." >&2
-            exit
-          fi
-          update-source-version makemkv "$newVersion" --source-key=passthru.srcs.bin
-          update-source-version makemkv "$newVersion" --source-key=passthru.srcs.oss --ignore-same-version
-        '';
-      });
+      updateScript =
+        (writeShellApplication {
+          name = "update-makemkv";
+          runtimeInputs = [
+            common-updater-scripts
+            curl
+            rubyPackages.nokogiri
+          ];
+          runtimeEnv.oldVersion = version;
+          text = ''
+            get_version() {
+              # shellcheck disable=SC2016
+              curl --fail --silent 'https://forum.makemkv.com/forum/viewtopic.php?f=3&t=224' \
+                | nokogiri -e 'puts $_.css("head title").first.text.match(/\bMakeMKV (\d+\.\d+\.\d+) /)[1]'
+            }
+            newVersion=$(get_version)
+            if [ "$oldVersion" == "$newVersion" ]; then
+              echo "$0: New version same as old version, nothing to do." >&2
+              exit
+            fi
+            update-source-version makemkv "$newVersion" --source-key=passthru.srcs.bin
+            update-source-version makemkv "$newVersion" --source-key=passthru.srcs.oss --ignore-same-version
+          '';
+        }).exe;
     };
 
     meta = {

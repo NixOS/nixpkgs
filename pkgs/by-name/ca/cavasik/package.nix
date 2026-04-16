@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/cava.py \
-      --replace-fail '"cava"' '"${lib.getExe cava}"'
+      --replace-fail '"cava"' '"${cava.exe}"'
   '';
 
   nativeBuildInputs = [

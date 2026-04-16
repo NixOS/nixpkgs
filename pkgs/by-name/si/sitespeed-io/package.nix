@@ -64,12 +64,12 @@ buildNpmPackage (finalAttrs: {
   postFixup =
     let
       chromiumArgs = lib.concatStringsSep " " [
-        "--browsertime.chrome.chromedriverPath=${lib.getExe chromedriver}"
-        "--browsertime.chrome.binaryPath=${lib.getExe chromium}"
+        "--browsertime.chrome.chromedriverPath=${chromedriver.exe}"
+        "--browsertime.chrome.binaryPath=${chromium.exe}"
       ];
       firefoxArgs = lib.concatStringsSep " " [
-        "--browsertime.firefox.geckodriverPath=${lib.getExe geckodriver}"
-        "--browsertime.firefox.binaryPath=${lib.getExe firefox}"
+        "--browsertime.firefox.geckodriverPath=${geckodriver.exe}"
+        "--browsertime.firefox.binaryPath=${firefox.exe}"
         # Firefox crashes if the profile template dir is not writable
         "--browsertime.firefox.profileTemplate=$(mktemp -d)"
       ];

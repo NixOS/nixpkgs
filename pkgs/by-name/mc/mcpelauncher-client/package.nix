@@ -48,10 +48,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace mcpelauncher-client/src/jni/main_activity.cpp \
       --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open \
-      --replace-fail /usr/bin/zenity ${lib.getExe zenity}
+      --replace-fail /usr/bin/zenity ${zenity.exe}
 
     substituteInPlace file-picker/src/file_picker_zenity.cpp \
-      --replace-fail 'EXECUTABLE_NAME = "zenity"' 'EXECUTABLE_NAME = "${lib.getExe zenity}"'
+      --replace-fail 'EXECUTABLE_NAME = "zenity"' 'EXECUTABLE_NAME = "${zenity.exe}"'
   '';
 
   # FORTIFY_SOURCE breaks libc_shim and the project will fail to compile

@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules
     cp --recursive dist/prettier "$out/lib/node_modules/prettier"
 
-    makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
+    makeBinaryWrapper "${nodejs.exe}" "$out/bin/prettier" \
       --add-flags "$out/lib/node_modules/prettier/bin/prettier.cjs"
   ''
   + lib.optionalString (builtins.length plugins > 0) ''

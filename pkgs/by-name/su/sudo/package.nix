@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) sudo; };
     updateScript = genericUpdater {
       versionLister = writeShellScript "sudo-versionLister" ''
-        ${lib.getExe curl} -sL https://www.sudo.ws/dist | grep -Po 'href="sudo-\K[\w.]*(?=\.tar\.gz")'
+        ${curl.exe} -sL https://www.sudo.ws/dist | grep -Po 'href="sudo-\K[\w.]*(?=\.tar\.gz")'
       '';
     };
   };

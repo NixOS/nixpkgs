@@ -35,7 +35,7 @@ in
       {
         serviceConfig = {
           ExecStart = ''
-            ${lib.getExe cfg.package}
+            ${cfg.package.exe}
           '';
           EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
           RestartSec = "5s";

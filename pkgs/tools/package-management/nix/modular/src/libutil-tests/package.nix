@@ -49,7 +49,7 @@ mkMesonExecutable (finalAttrs: {
             ''
             + ''
               export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              ${stdenv.hostPlatform.emulator buildPackages} ${finalAttrs.finalPackage.exe}
               touch $out
             ''
           );

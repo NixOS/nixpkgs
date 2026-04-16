@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp --target-directory=$out/share/signaturepdf --recursive \
       app.php config locale public templates vendor lib
 
-    makeWrapper ${lib.getExe php} $out/bin/signaturepdf \
+    makeWrapper ${php.exe} $out/bin/signaturepdf \
       --inherit-argv0 \
       --chdir $out/share/signaturepdf \
       --prefix PATH : ${

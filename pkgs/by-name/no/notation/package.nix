@@ -48,7 +48,7 @@ buildGoModule (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}"
         else
-          lib.getExe buildPackages.notation;
+          buildPackages.notation.exe;
     in
     ''
       installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \

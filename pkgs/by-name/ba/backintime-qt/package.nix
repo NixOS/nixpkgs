@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     qt6.wrapQtAppsHook
   ];
 
-  configureFlags = [ "--python=${lib.getExe python'}" ];
+  configureFlags = [ "--python=${python'.exe}" ];
 
   preConfigure = ''
     patchShebangs --build updateversion.sh
@@ -62,9 +62,9 @@ stdenv.mkDerivation {
       --replace-fail "/usr/bin/backintime-qt" "backintime-qt"
 
     substituteInPlace "$out/share/backintime/qt/serviceHelper.py" \
-      --replace-fail "'which'" "'${lib.getExe which}'" \
+      --replace-fail "'which'" "'${which.exe}'" \
       --replace-fail "/bin/su" "${lib.getBin su}/bin/su" \
-      --replace-fail "/usr/bin/backintime" "${lib.getExe backintime-common}" \
+      --replace-fail "/usr/bin/backintime" "${backintime-common.exe}" \
       --replace-fail "/usr/bin/nice" "${lib.getBin coreutils}/bin/nice" \
       --replace-fail "/usr/bin/ionice" "${lib.getBin util-linux}/bin/ionice"
 

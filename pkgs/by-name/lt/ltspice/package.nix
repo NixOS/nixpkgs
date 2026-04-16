@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postPatch = ''
     cp ${./ltspice.sh} ./ltspice.sh
     substituteInPlace ./ltspice.sh \
-      --replace-fail wine ${lib.getExe wine64} \
+      --replace-fail wine ${wine64.exe} \
       --replace-fail @outpath@ $out
   '';
 

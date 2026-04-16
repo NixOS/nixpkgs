@@ -68,7 +68,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/Controller/Src/Scanner/Engine.cpp \
-      --replace-fail '@KILLALL@' ${lib.getExe killall}
+      --replace-fail '@KILLALL@' ${killall.exe}
 
     substituteInPlace src/Controller/Src/Filter/GetOrientation.cpp \
       --replace-fail '@OCR_ENGINE_GETROTATE@' $out/libexec/epsonscan2-ocr/ocr-engine-getrotate

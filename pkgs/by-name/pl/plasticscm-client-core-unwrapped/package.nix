@@ -42,23 +42,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "update-plasticscm-client-core-unwrapped";
-    runtimeInputs = [
-      common-updater-scripts
-      curl
-      dpkg
-      jc
-      jq
-    ];
-    text = ''
-      version="$(curl -sSL https://www.plasticscm.com/plasticrepo/stable/debian/Packages |
-        jc --pkg-index-deb |
-        jq -r '[.[] | select(.package == "plasticscm-client-core")] | sort_by(.version) | last | .version')"
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "update-plasticscm-client-core-unwrapped";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        dpkg
+        jc
+        jq
+      ];
+      text = ''
+        version="$(curl -sSL https://www.plasticscm.com/plasticrepo/stable/debian/Packages |
+          jc --pkg-index-deb |
+          jq -r '[.[] | select(.package == "plasticscm-client-core")] | sort_by(.version) | last | .version')"
 
-      update-source-version --ignore-same-hash plasticscm-client-core-unwrapped "$version"
-    '';
-  });
+        update-source-version --ignore-same-hash plasticscm-client-core-unwrapped "$version"
+      '';
+    }).exe;
 
   meta = {
     homepage = "https://www.plasticscm.com";

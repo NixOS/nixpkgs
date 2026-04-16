@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   # SSE is enabled by default
   cmakeFlags = [
-    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3Packages.python))
+    (lib.cmakeFeature "Python3_EXECUTABLE" (python3Packages.python.exe))
   ]
   ++ lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 

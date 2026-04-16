@@ -214,12 +214,12 @@ in
 
       # nftables implementation for temporarilyOpenFirewall
       nftablesSetup = pkgs.writeShellScript "agnos-fw-setup" ''
-        ${lib.getExe pkgs.nftables} add element inet nixos-fw temp-ports "{ tcp . ${toString port} }"
-        ${lib.getExe pkgs.nftables} add element inet nixos-fw temp-ports "{ udp . ${toString port} }"
+        ${pkgs.nftables.exe} add element inet nixos-fw temp-ports "{ tcp . ${toString port} }"
+        ${pkgs.nftables.exe} add element inet nixos-fw temp-ports "{ udp . ${toString port} }"
       '';
       nftablesTeardown = pkgs.writeShellScript "agnos-fw-teardown" ''
-        ${lib.getExe pkgs.nftables} delete element inet nixos-fw temp-ports "{ tcp . ${toString port} }"
-        ${lib.getExe pkgs.nftables} delete element inet nixos-fw temp-ports "{ udp . ${toString port} }"
+        ${pkgs.nftables.exe} delete element inet nixos-fw temp-ports "{ tcp . ${toString port} }"
+        ${pkgs.nftables.exe} delete element inet nixos-fw temp-ports "{ udp . ${toString port} }"
       '';
 
       # iptables implementation for temporarilyOpenFirewall

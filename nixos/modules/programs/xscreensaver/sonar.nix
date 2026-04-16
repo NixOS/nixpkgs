@@ -19,7 +19,7 @@ in
       owner = "root";
       group = "root";
       source = pkgs.writeShellScript "sonar-fakeroot" ''
-        exec ${lib.getExe pkgs.fakeroot} ${globalCfg.package}/libexec/xscreensaver/sonar "$@"
+        exec ${pkgs.fakeroot.exe} ${globalCfg.package}/libexec/xscreensaver/sonar "$@"
       '';
     };
   };

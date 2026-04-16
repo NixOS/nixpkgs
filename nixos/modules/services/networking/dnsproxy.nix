@@ -84,7 +84,7 @@ in
       ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} ${escapeShellArgs finalFlags}";
+        ExecStart = "${cfg.package.exe} ${escapeShellArgs finalFlags}";
         Restart = "always";
         RestartSec = 10;
         DynamicUser = true;

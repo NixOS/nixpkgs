@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     # Compress the 5ish GiB of yaml files so this .src is under output size limit
     postFetch = ''
-      find $out -name '*.yaml' -path '*/Tensile/Logic/*' -exec ${lib.getExe zstd} --rm {} \;
+      find $out -name '*.yaml' -path '*/Tensile/Logic/*' -exec ${zstd.exe} --rm {} \;
     '';
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipblaslt";

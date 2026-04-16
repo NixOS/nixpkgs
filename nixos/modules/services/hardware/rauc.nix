@@ -159,7 +159,7 @@ in
         serviceConfig = {
           Type = "dbus";
           BusName = "de.pengutronix.rauc";
-          ExecStart = "${lib.getExe cfg.package} --conf=${configFile} --mount=/run/rauc/mnt service";
+          ExecStart = "${cfg.package.exe} --conf=${configFile} --mount=/run/rauc/mnt service";
           RuntimeDirectory = "rauc/mnt";
           MountFlags = "slave";
           StateDirectory = baseNameOf cfg.dataDir;
@@ -186,7 +186,7 @@ in
         ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${lib.getExe cfg.package} --conf=${configFile} status mark-good";
+          ExecStart = "${cfg.package.exe} --conf=${configFile} status mark-good";
         };
       };
     })

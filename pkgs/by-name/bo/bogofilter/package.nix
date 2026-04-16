@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   # bogofilter's test-cases hard-code the search path for grep.
   postPatch = ''
     substituteInPlace ./src/tests/t.frame \
-      --replace-fail 'GREP=/bin/grep' 'GREP=${lib.getExe gnugrep}'
+      --replace-fail 'GREP=/bin/grep' 'GREP=${gnugrep.exe}'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

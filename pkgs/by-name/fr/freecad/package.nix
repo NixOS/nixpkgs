@@ -103,7 +103,7 @@ freecad-utils.makeCustomizable (
 
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
-        --replace-fail 'self.gmsh_bin = ""' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+        --replace-fail 'self.gmsh_bin = ""' 'self.gmsh_bin = "${gmsh.exe}"'
     '';
 
     cmakeFlags = [

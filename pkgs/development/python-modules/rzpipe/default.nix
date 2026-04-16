@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace rzpipe/open_sync.py \
-      --replace-fail "cmd = [rze," "cmd = ['${lib.getExe rizin}',"
+      --replace-fail "cmd = [rze," "cmd = ['${rizin.exe}',"
   '';
 
   build-system = [ setuptools ];

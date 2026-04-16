@@ -886,7 +886,7 @@ in
         {
           ExecStart = escapeSystemdExecArgs (
             [
-              (lib.getExe package)
+              (package.exe)
               "--config"
               cfg.configDir
             ]

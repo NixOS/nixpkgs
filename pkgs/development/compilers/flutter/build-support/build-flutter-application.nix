@@ -132,10 +132,10 @@ lib.extendMkDerivation {
 
         # https://github.com/flutter/flutter/blob/edada7c56edf4a183c1735310e123c7f923584f1/packages/flutter_tools/lib/src/dart/pub.dart#L804
         extraPackageConfigSetup = lib.optionalString (lib.versionOlder flutter.version "3.34.0") ''
-          if [ "$("${lib.getExe buildPackages.yq}" '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
-            if ! "${lib.getExe buildPackages.jq}" -e '.packages[] | select(.name == "flutter_gen")' "$out" >/dev/null 2>&1; then
+          if [ "$("${buildPackages.yq.exe}" '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
+            if ! "${buildPackages.jq.exe}" -e '.packages[] | select(.name == "flutter_gen")' "$out" >/dev/null 2>&1; then
               export TEMP_PACKAGES=$(mktemp)
-              "${lib.getExe buildPackages.jq}" '.packages |= . + [{
+              "${buildPackages.jq.exe}" '.packages |= . + [{
                 name: "flutter_gen",
                 rootUri: "flutter_gen",
                 languageVersion: "2.12"

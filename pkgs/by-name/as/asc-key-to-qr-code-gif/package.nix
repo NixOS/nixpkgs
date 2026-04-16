@@ -24,8 +24,8 @@ stdenvNoCC.mkDerivation {
   postPatch =
     let
       substitutions = [
-        ''--replace-fail "convert" "${lib.getExe imagemagick}"''
-        ''--replace-fail "qrencode" "${lib.getExe qrencode}"''
+        ''--replace-fail "convert" "${imagemagick.exe}"''
+        ''--replace-fail "qrencode" "${qrencode.exe}"''
       ]
       ++ lib.optionals testQR [
         ''--replace-fail "hash zbarimg" "true"'' # hash does not work on NixOS

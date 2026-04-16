@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "DOWNLOADER_TOOL=${lib.getExe wget}"
+    "DOWNLOADER_TOOL=${wget.exe}"
     "INSTALL=install"
   ];
 

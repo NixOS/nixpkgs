@@ -211,7 +211,7 @@ in
       + "\n"
       + ''
         substituteInPlace plz.el \
-          --replace-fail 'plz-curl-program "curl"' 'plz-curl-program "${lib.getExe pkgs.curl}"'
+          --replace-fail 'plz-curl-program "curl"' 'plz-curl-program "${pkgs.curl.exe}"'
       '';
     preInstall =
       old.preInstall or ""

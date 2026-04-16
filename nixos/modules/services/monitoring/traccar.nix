@@ -99,7 +99,7 @@ in
           # Perform envvars substition read from environmentFile
           old_umask=$(umask)
           umask 0177
-          ${lib.getExe pkgs.envsubst} \
+          ${pkgs.envsubst.exe} \
             -i ${configuration} \
             -o ${configFilePath}
           umask $old_umask
@@ -109,7 +109,7 @@ in
           DynamicUser = true;
           WorkingDirectory = "${pkgs.traccar}";
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-          ExecStart = "${lib.getExe pkgs.traccar} ${configFilePath}";
+          ExecStart = "${pkgs.traccar.exe} ${configFilePath}";
           LockPersonality = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

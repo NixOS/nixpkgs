@@ -28,9 +28,9 @@ buildLua {
       --replace-fail 'mkvmerge_exe = "mkvmerge"' \
                 'mkvmerge_exe = "${lib.getExe' mkvtoolnix-cli "mkvmerge"}"' \
       --replace-fail 'yad_exe = "yad"' \
-                'yad_exe = "${lib.getExe yad}"' \
+                'yad_exe = "${yad.exe}"' \
       --replace-fail 'notify_send_exe = "notify-send"' \
-                'notify_send_exe = "${lib.getExe libnotify}"' \
+                'notify_send_exe = "${libnotify.exe}"' \
   '';
 
   scriptPath = "convert_script.lua";

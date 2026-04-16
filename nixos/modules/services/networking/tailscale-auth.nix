@@ -71,7 +71,7 @@ in
       after = [ "tailscaled.service" ];
 
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         RuntimeDirectory = "tailscale-nginx-auth";
         User = cfg.user;
         Group = cfg.group;

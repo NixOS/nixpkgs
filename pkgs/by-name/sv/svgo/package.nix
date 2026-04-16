@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/bin" "$out/lib/svgo"
     cp -r bin lib node_modules package.json plugins "$out/lib/svgo"
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/svgo" \
+    makeWrapper '${nodejs.exe}' "$out/bin/svgo" \
       --add-flags "$out/lib/svgo/bin/svgo.js"
 
     runHook postInstall

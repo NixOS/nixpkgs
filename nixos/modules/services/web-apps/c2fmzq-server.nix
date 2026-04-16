@@ -104,7 +104,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${argsFormat.generate cfg.settings}";
+        ExecStart = "${cfg.package.exe} ${argsFormat.generate cfg.settings}";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         DynamicUser = true;

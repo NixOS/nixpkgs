@@ -33,19 +33,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "whatsapp-update-script";
-    runtimeInputs = [
-      curl
-      xmlstarlet
-      common-updater-scripts
-    ];
-    text = ''
-      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=master&configuration=Release")
-      version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
-      update-source-version whatsapp-for-mac "$version" --file=./pkgs/by-name/wh/whatsapp-for-mac/package.nix
-    '';
-  });
+  passthru.updateScript =
+    (writeShellApplication {
+      name = "whatsapp-update-script";
+      runtimeInputs = [
+        curl
+        xmlstarlet
+        common-updater-scripts
+      ];
+      text = ''
+        url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=master&configuration=Release")
+        version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
+        update-source-version whatsapp-for-mac "$version" --file=./pkgs/by-name/wh/whatsapp-for-mac/package.nix
+      '';
+    }).exe;
 
   meta = {
     description = "Native desktop client for WhatsApp";

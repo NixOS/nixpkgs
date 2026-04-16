@@ -81,7 +81,7 @@ in
         EnvironmentFile = cfg.environmentFiles;
         Restart = "always";
         DynamicUser = true;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
       };
     };
   };

@@ -245,7 +245,7 @@ in
           echo "aMule will fail with an error - this is expected and normal"
           rm -f ${cfg.dataDir}/lastversion
           set +e
-          ${getExe cfg.package} --config-dir ${cfg.dataDir}
+          ${cfg.package.exe} --config-dir ${cfg.dataDir}
           set -e
         fi
       ''
@@ -272,11 +272,11 @@ in
 
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (getExe cfg.package)
+            (cfg.package.exe)
             "--config-dir"
             cfg.dataDir
           ]
-          ++ optionals webServerEnabled [ "--use-amuleweb=${getExe cfg.amuleWebPackage}" ]
+          ++ optionals webServerEnabled [ "--use-amuleweb=${cfg.amuleWebPackage.exe}" ]
           ++ cfg.extraArgs
         );
 

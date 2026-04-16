@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       with stdenvNoCC.hostPlatform; (isDarwin && isx86_64)
     ) "-framework AppKit";
     OPENSSL_NO_VENDOR = true;
-    PROTOC = "${lib.getExe pkgsBuildHost.protobuf}";
+    PROTOC = "${pkgsBuildHost.protobuf.exe}";
   };
 
   useNextest = true;

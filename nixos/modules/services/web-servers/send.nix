@@ -217,7 +217,7 @@ in
         ${lib.optionalString (cfg.redis.passwordFile != null) ''
           export REDIS_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/redis-password)"
         ''}
-        ${lib.getExe cfg.package}
+        ${cfg.package.exe}
       '';
     };
   };

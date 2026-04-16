@@ -27,7 +27,7 @@ let
       }
       ''
         mkdir -p "$out/bin"
-        makeWrapper '${lib.getExe cfg.package}' "$out/bin/swapspace" \
+        makeWrapper '${cfg.package.exe}' "$out/bin/swapspace" \
           --add-flags "-c '${configFile}'"
       '';
 in
@@ -123,7 +123,7 @@ in
       serviceConfig = {
         ExecStart = [
           ""
-          "${lib.getExe cfg.package} -c ${configFile} ${utils.escapeSystemdExecArgs cfg.extraArgs}"
+          "${cfg.package.exe} -c ${configFile} ${utils.escapeSystemdExecArgs cfg.extraArgs}"
         ];
       };
     };

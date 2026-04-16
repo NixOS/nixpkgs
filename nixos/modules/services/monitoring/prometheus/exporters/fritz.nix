@@ -103,7 +103,7 @@ in
     serviceConfig = {
       ExecStart = utils.escapeSystemdExecArgs (
         [
-          (lib.getExe pkgs.fritz-exporter)
+          (pkgs.fritz-exporter.exe)
           "--config"
           configFile
         ]

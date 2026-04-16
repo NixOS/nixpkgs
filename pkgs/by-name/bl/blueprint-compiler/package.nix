@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     # its propagated inputs for basic functionality.
     # see https://github.com/NixOS/nixpkgs/pull/400415
     standalone = runCommand "blueprint-compiler-test-standalone" { } ''
-      ${lib.getExe finalAttrs.finalPackage} --help && touch $out
+      ${finalAttrs.finalPackage.exe} --help && touch $out
     '';
   };
 

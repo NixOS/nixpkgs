@@ -190,7 +190,7 @@ in
 
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${lib.getExe cfg.package} --config ${
+          ExecStart = "${cfg.package.exe} --config ${
             config.environment.etc."ifstate/ifstate.yaml".source
           } apply";
           # because oneshot services do not have a timeout by default
@@ -286,10 +286,10 @@ in
               # Otherwise systemd starts ifstate again, after the encryption password was entered by the user
               # and we are able to implement the cleanup using ExecStop rather than a separate unit.
               RemainAfterExit = true;
-              ExecStart = "${lib.getExe initrdCfg.package} --config ${
+              ExecStart = "${initrdCfg.package.exe} --config ${
                 config.environment.etc."ifstate/ifstate.initrd.yaml".source
               } apply";
-              ExecStop = "${lib.getExe initrdCfg.package} --config ${
+              ExecStop = "${initrdCfg.package.exe} --config ${
                 config.environment.etc."ifstate/ifstate.initrd-cleanup.yaml".source
               } apply";
               # because oneshot services do not have a timeout by default

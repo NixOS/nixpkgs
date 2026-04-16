@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postPatch = ''
     for i in $(find src/ -type f -print); do
       substituteInPlace $i \
-        --replace-warn " revolver " " ${lib.getExe revolver} "
+        --replace-warn " revolver " " ${revolver.exe} "
     done
   '';
 

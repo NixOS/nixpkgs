@@ -99,7 +99,7 @@ buildNpmPackage (finalAttrs: {
     mkdir -p $out/share/bs-manager
     cp -r release/build/*-unpacked/{locales,resources{,.pak}} $out/share/bs-manager
 
-    makeWrapper ${lib.getExe electron} $out/bin/bs-manager \
+    makeWrapper ${electron.exe} $out/bin/bs-manager \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags $out/share/bs-manager/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

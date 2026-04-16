@@ -81,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace plugins/editor/src/editor/NativeHelpers.cpp \
       --replace-fail \
         'auto glibPath = g_find_program_in_path("zenity");' \
-        'auto glibPath = g_strdup("${lib.getExe zenity}");'
+        'auto glibPath = g_strdup("${zenity.exe}");'
 
     # Hard code zenity path (2/2):
     substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
       --replace-fail \
         'zenitypath = "zenity"' \
-        'zenitypath = "${lib.getExe zenity}"'
+        'zenitypath = "${zenity.exe}"'
 
     # Fix compilation error in GCC 14:
     # https://github.com/sfztools/vstgui/pull/5

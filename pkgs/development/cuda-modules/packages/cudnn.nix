@@ -39,8 +39,8 @@ buildRedist (
     # exist in CuDNN 8.
     # NOTE: Versions from CUDNN releases have four components.
     postFixup = lib.optionalString (cudnnAtLeast "8" && cudnnOlder "9") ''
-      ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
-      ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
+      ${patchelf.exe} ''${!outputLib:?}/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+      ${patchelf.exe} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
 
     # CuDNN depends on libnvrtc.so at runtime, as mentioned here in one small error description

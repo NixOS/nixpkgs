@@ -124,7 +124,7 @@ stdenv.mkDerivation {
   src = subsurfaceSrc;
 
   postPatch = ''
-    install -m555 -t scripts ${lib.getExe get-version}
+    install -m555 -t scripts ${get-version.exe}
   '';
 
   buildInputs = [

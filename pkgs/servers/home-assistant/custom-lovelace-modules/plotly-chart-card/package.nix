@@ -43,7 +43,7 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
   makeCacheWritable = true;
 
   # custom pinned esbuild version
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild;
+  env.ESBUILD_BINARY_PATH = esbuild.exe;
 
   installPhase = ''
     install -d $out

@@ -34,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
     substituteInPlace Makefile \
       --replace "which" "ls" \
-      --replace "grim" "${lib.getExe grim}" \
-      --replace "slurp" "${lib.getExe slurp}" \
-      --replace "zenity" "${lib.getExe zenity}" \
+      --replace "grim" "${grim.exe}" \
+      --replace "slurp" "${slurp.exe}" \
+      --replace "zenity" "${zenity.exe}" \
       --replace "convert" "${lib.getExe' imagemagick "convert"}" \
       --replace "wl-copy" "${lib.getExe' wl-clipboard "wl-copy"}" \
       --replace "notify-send" "${lib.getExe' libnotify "notify-send"}"

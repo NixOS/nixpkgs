@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pushd packages/target-electron/dist/*-unpacked/resources/app.asar.unpacked
     rm node_modules/@deltachat/stdio-rpc-server-*/deltachat-rpc-server
-    ln -s ${lib.getExe deltachat-rpc-server'} node_modules/@deltachat/stdio-rpc-server-*
+    ln -s ${deltachat-rpc-server'.exe} node_modules/@deltachat/stdio-rpc-server-*
     popd
 
     runHook postBuild
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/opt/DeltaChat
     cp -r packages/target-electron/dist/*-unpacked/{locales,resources{,.pak}} $out/opt/DeltaChat
 
-    makeWrapper ${lib.getExe electron} $out/bin/${finalAttrs.meta.mainProgram} \
+    makeWrapper ${electron.exe} $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags $out/opt/DeltaChat/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0

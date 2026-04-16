@@ -91,7 +91,7 @@ in
         # See https://nixos.org/manual/nixos/stable#sec-logging.
         SupplementaryGroups = "systemd-journal";
         ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe cfg.package)
+          (cfg.package.exe)
           "--config"
           cfg.configurationFile
         ];

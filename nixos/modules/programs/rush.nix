@@ -75,7 +75,7 @@ in
           permissions = "u+rx,g+x,o+x";
           setgid = false;
           setuid = true;
-          source = lib.getExe cfg.package;
+          source = cfg.package.exe;
         };
       })
 

@@ -74,7 +74,7 @@ buildNpmPackage (finalAttrs: {
     install -Dm444 icons/winboat_logo.svg $out/share/icons/hicolor/256x256/apps/winboat.svg
 
     # copy the the winboat-guest-server executable and generate the zip
-    cp ${lib.getExe finalAttrs.guest-server} $out/share/winboat/resources/guest_server/winboat_guest_server.exe
+    cp ${finalAttrs.guest-server.exe} $out/share/winboat/resources/guest_server/winboat_guest_server.exe
     (cd $out/share/winboat/resources/guest_server/ && zip -r winboat_guest_server.zip .)
 
     # symlink data/ and guest_server/ into parent folder

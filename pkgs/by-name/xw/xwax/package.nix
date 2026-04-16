@@ -35,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # make paths to executed binaries hermetic:
     substituteInPlace import \
-      --replace-fail "exec cdparanoia" "exec ${lib.getExe cdparanoia}" \
-      --replace-fail "exec ffmpeg" "exec ${lib.getExe ffmpeg}"
+      --replace-fail "exec cdparanoia" "exec ${cdparanoia.exe}" \
+      --replace-fail "exec ffmpeg" "exec ${ffmpeg.exe}"
   '';
 
   buildInputs = [

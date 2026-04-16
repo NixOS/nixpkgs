@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 ${ini}            $out/etc/${ini.name}
     installShellCompletion --bash --name wp ${completion}
 
-    makeWrapper ${lib.getExe php} $out/bin/${finalAttrs.meta.mainProgram} \
+    makeWrapper ${php.exe} $out/bin/${finalAttrs.meta.mainProgram} \
       --run 'export XDG_CACHE_HOME=''${XDG_CACHE_HOME-"$HOME/.cache"}' \
       --run 'export XDG_CONFIG_HOME=''${XDG_CONFIG_HOME-"$HOME/.config"}' \
       --run 'export XDG_DATA_HOME=''${XDG_DATA_HOME-"$HOME/.local/share"}' \
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit completion;
     updateScript = writeScript "update-wp-cli" ''
-      ${lib.getExe nix-update}
+      ${nix-update.exe}
       version=$(nix-instantiate --eval -E "with import ./. {}; wp-cli.version or (lib.getVersion wp-cli)" | tr -d '"')
       ${lib.getExe' common-updater-scripts "update-source-version"} wp-cli $version --source-key=completion --ignore-same-version --ignore-same-hash
     '';

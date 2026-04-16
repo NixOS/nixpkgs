@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     # would pick up builder sed from $PATH
     substituteInPlace configure.ac \
       --replace-fail 'AC_DEFINE_UNQUOTED(SED_PATH, "''${sed}", [Path to sed])' \
-                     'AC_DEFINE_UNQUOTED(SED_PATH, "${lib.getExe gnused}", [Path to sed])'
+                     'AC_DEFINE_UNQUOTED(SED_PATH, "${gnused.exe}", [Path to sed])'
   '';
 
   preInstall = ''

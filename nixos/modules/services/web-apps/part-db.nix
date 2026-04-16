@@ -212,7 +212,7 @@ in
           ];
           script = ''
             set -euo pipefail
-            ${lib.getExe cfg.phpPackage} ${lib.getExe' cfg.package "console"} doctrine:migrations:migrate --no-interaction
+            ${cfg.phpPackage.exe} ${lib.getExe' cfg.package "console"} doctrine:migrations:migrate --no-interaction
           '';
         };
 

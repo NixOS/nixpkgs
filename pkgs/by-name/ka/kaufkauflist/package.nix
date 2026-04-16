@@ -39,7 +39,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-HDv6sW6FmKZpUjymrUjz/WG9XrKgLmM6qHMAxP6gBtU=";
 
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  env.ESBUILD_BINARY_PATH = esbuild'.exe;
 
   postInstall = ''
     mkdir -p $out/share/kaufkauflist $out/share/pocketbase

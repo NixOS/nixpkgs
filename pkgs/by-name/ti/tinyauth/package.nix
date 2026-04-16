@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
   '';
 
   postPatch = ''
-    ${lib.getExe git} apply --directory paerser/ patches/nested_maps.diff
+    ${git.exe} apply --directory paerser/ patches/nested_maps.diff
   '';
 
   frontend = stdenvNoCC.mkDerivation {
@@ -60,7 +60,7 @@ buildGoModule (finalAttrs: {
 
       bun install --no-progress --frozen-lockfile
       substituteInPlace node_modules/.bin/{tsc,vite} \
-        --replace-fail "/usr/bin/env node" "${lib.getExe bun}"
+        --replace-fail "/usr/bin/env node" "${bun.exe}"
 
       runHook postConfigure
     '';

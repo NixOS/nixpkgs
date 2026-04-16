@@ -342,7 +342,7 @@ in
         // n8nEnv.fileBasedTransformed;
       serviceConfig = {
         Type = "simple";
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
         StateDirectory = baseNameOf cfg.environment.N8N_USER_FOLDER;
 
@@ -401,7 +401,7 @@ in
       // runnersEnv.fileBasedTransformed;
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe runnersCfg.launcherPackage} ${lib.concatStringsSep " " runnerTypes}";
+        ExecStart = "${runnersCfg.launcherPackage.exe} ${lib.concatStringsSep " " runnerTypes}";
         Restart = "on-failure";
 
         StateDirectory = runnersStateDir;

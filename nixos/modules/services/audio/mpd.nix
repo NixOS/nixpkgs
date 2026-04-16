@@ -73,7 +73,7 @@ let
     );
     derivationArgs = {
       expectScript = ''
-        spawn ${lib.getExe pkgs.buildPackages.mpd} --no-daemon "$env(out)"
+        spawn ${pkgs.buildPackages.mpd.exe} --no-daemon "$env(out)"
         expect {
           "exception: Error in \"$env(out)\"" {
             puts "Config file invalid\n"
@@ -89,7 +89,7 @@ let
       ];
     };
     checkPhase = ''
-      ${lib.getExe pkgs.buildPackages.expect} -f "$expectScriptPath"
+      ${pkgs.buildPackages.expect.exe} -f "$expectScriptPath"
     '';
   };
 

@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create startup script
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe electron_40} $out/bin/picgo \
+    makeWrapper ${electron_40.exe} $out/bin/picgo \
       --add-flags "$out/lib/picgo/.launcher.cjs" \
       --add-flags "--name picgo" \
       --set NODE_ENV production \

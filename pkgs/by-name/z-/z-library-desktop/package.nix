@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $phome/resources
     cp -r opt/Z-Library/resources/app $phome/resources
 
-    makeWrapper ${lib.getExe electron} $out/bin/Z-Library \
+    makeWrapper ${electron.exe} $out/bin/Z-Library \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags $phome/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

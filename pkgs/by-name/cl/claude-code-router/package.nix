@@ -23,7 +23,7 @@ buildNpmPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace packages/cli/src/{cli.ts,utils/index.ts} \
-      --replace-fail '"node"' '"${lib.getExe nodejs}"'
+      --replace-fail '"node"' '"${nodejs.exe}"'
   '';
 
   npmDeps = null;
@@ -48,7 +48,7 @@ buildNpmPackage (finalAttrs: {
     cp -r dist $out/lib/claude-code-router
 
     mkdir -p $out/bin
-    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/ccr \
+    makeBinaryWrapper ${nodejs.exe} $out/bin/ccr \
       --add-flags "$out/lib/claude-code-router/dist/cli.js"
 
     runHook postInstall

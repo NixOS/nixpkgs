@@ -281,14 +281,14 @@ in
           before = [ "glitchtip-worker.service" ];
 
           preStart = ''
-            ${lib.getExe pkg} migrate
-            ${lib.getExe pkg} createcachetable
-            ${lib.getExe pkg} maintain_partitions
+            ${pkg.exe} migrate
+            ${pkg.exe} createcachetable
+            ${pkg.exe} maintain_partitions
           '';
 
           serviceConfig = commonServiceConfig // {
             ExecStart = ''
-              ${lib.getExe python.pkgs.granian} \
+              ${python.pkgs.granian.exe} \
                 --interface ${if cfg.settings.GLITCHTIP_ENABLE_MCP then "asgi" else "asginl"} \
                 glitchtip.asgi:application \
                 --host ${cfg.settings.GRANIAN_HOST} \
@@ -305,7 +305,7 @@ in
             IS_WORKER = "1";
           };
           serviceConfig = commonServiceConfig // {
-            ExecStart = "${lib.getExe pkg} runworker --scheduler";
+            ExecStart = "${pkg.exe} runworker --scheduler";
           };
         };
       };
@@ -351,7 +351,7 @@ in
         set -o allexport
         ${lib.toShellVars environment}
         ${lib.concatMapStringsSep "\n" (f: "source ${f}") cfg.environmentFiles}
-        ${config.security.wrapperDir}/sudo -E -u ${cfg.user} ${lib.getExe pkg} "$@"
+        ${config.security.wrapperDir}/sudo -E -u ${cfg.user} ${pkg.exe} "$@"
       '')
     ];
   };

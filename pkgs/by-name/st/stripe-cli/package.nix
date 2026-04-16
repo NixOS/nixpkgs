@@ -79,7 +79,7 @@ buildGoModule (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$out/bin/${mainProgram}"
         else
-          lib.getExe buildPackages.stripe-cli;
+          buildPackages.stripe-cli.exe;
     in
     ''
       # only outputs bash and zsh completion

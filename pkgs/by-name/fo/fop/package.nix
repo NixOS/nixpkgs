@@ -37,7 +37,7 @@ maven.buildMavenPackage rec {
 
     # There is a fop script in the source archive, but it has many impurities.
     # Instead of patching out 90 % of the script, we write our own.
-    makeWrapper ${lib.getExe jre} "$out/bin/fop" \
+    makeWrapper ${jre.exe} "$out/bin/fop" \
         --add-flags "-Djava.awt.headless=true" \
         --add-flags "-classpath $out/lib/\*" \
         --add-flags "org.apache.fop.cli.Main"

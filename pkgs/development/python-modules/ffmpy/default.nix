@@ -30,7 +30,7 @@ buildPythonPackage rec {
     substituteInPlace ffmpy/ffmpy.py \
       --replace-fail \
         'executable: str = "ffmpeg",' \
-        'executable: str = "${lib.getExe ffmpeg-headless}",'
+        'executable: str = "${ffmpeg-headless.exe}",'
   ''
   # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
   + ''

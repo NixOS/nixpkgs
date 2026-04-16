@@ -103,7 +103,7 @@ in
           UMask = "0077";
           StateDirectory = "ersatztv";
           WorkingDirectory = "/var/lib/ersatztv";
-          ExecStart = getExe cfg.package;
+          ExecStart = cfg.package.exe;
           Restart = "on-failure";
         };
 

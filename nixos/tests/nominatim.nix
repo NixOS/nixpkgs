@@ -62,8 +62,8 @@ in
         systemd.services.nominatim = {
           serviceConfig.ExecStartPre =
             let
-              createPasswordFile = lib.getExe (
-                pkgs.writeShellApplication {
+              createPasswordFile =
+                (pkgs.writeShellApplication {
                   name = "nominatim-pre-start";
                   text =
                     let
@@ -81,8 +81,7 @@ in
                       chown nominatim-api:nominatim-api /run/secrets/pgpass
                       chmod 0600 /run/secrets/pgpass
                     '';
-                }
-              );
+                }).exe;
             in
             [
               "+${createPasswordFile}"

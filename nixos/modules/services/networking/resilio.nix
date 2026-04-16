@@ -308,7 +308,7 @@ in
         RuntimeDirectory = "rslsync";
         ExecStartPre = "${createConfig}/bin/create-resilio-config";
         ExecStart = ''
-          ${lib.getExe cfg.package} --nodaemon --config ${runConfigPath}
+          ${cfg.package.exe} --nodaemon --config ${runConfigPath}
         '';
       };
     };

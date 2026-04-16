@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs --build .
     substituteInPlace ./config/configure \
-      --replace-fail 'bup_git=' 'bup_git="${lib.getExe git}" #'
+      --replace-fail 'bup_git=' 'bup_git="${git.exe}" #'
   '';
 
   dontAddPrefix = true;

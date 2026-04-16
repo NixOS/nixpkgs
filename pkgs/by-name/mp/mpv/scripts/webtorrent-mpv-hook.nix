@@ -79,7 +79,7 @@ buildNpmPackage rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
-    substituteInPlace src/webtorrent.ts --replace-fail "node_path: 'node'" "node_path: '${lib.getExe nodejs}'"
+    substituteInPlace src/webtorrent.ts --replace-fail "node_path: 'node'" "node_path: '${nodejs.exe}'"
     # This executable is just for telling non-Nix users how to install
     substituteInPlace package.json --replace-fail '"bin": "build/bin.mjs",' ""
     rm -rf src/bin.ts

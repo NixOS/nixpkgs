@@ -106,9 +106,9 @@ python.pkgs.buildPythonApplication rec {
 
       makeWrapper $out/bin/.manage.py $out/bin/meet \
         --prefix PYTHONPATH : "${pythonPath}"
-      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
+      makeWrapper ${python.pkgs.celery.exe} $out/bin/celery \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
-      makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
+      makeWrapper ${python.pkgs.gunicorn.exe} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
     '';
 

@@ -33,14 +33,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         version="''${BASH_REMATCH[1]}"
         break
       fi
-    done < <(${lib.getExe curl} -fsSL https://flatassembler.net/download.php)
+    done < <(${curl.exe} -fsSL https://flatassembler.net/download.php)
 
     if [[ -z "$version" ]]; then
       echo "Could not determine latest fasm version" >&2
       exit 1
     fi
 
-    ${lib.getExe nix-update} fasm-bin --version "$version"
+    ${nix-update.exe} fasm-bin --version "$version"
   '';
 
   meta = {

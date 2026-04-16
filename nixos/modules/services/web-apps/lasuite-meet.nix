@@ -341,7 +341,7 @@ in
           fi
         ''}
         if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
-          ${getExe cfg.backendPackage} migrate
+          ${cfg.backendPackage.exe} migrate
           echo -n "${cfg.backendPackage.version}" > .version
         fi
       '';

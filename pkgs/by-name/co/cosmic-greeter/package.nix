@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${orca.exe}'
   '';
 
   preFixup = ''

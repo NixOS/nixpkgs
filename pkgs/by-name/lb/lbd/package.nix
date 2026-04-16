@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
     mkdir -p $out/{bin,share/lbd}
     cp lbd $out/share/lbd/
-    makeWrapper ${lib.getExe bash} $out/bin/lbd \
+    makeWrapper ${bash.exe} $out/bin/lbd \
       --prefix PATH : "${
         lib.makeBinPath [
           coreutils

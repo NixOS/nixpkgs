@@ -109,7 +109,7 @@ in
 
         ExecStart = lib.escapeShellArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "server"
             "-config"
             (settingsFormat.generate "openbao.hcl.json" cfg.settings)

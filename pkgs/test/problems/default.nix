@@ -56,7 +56,7 @@ lib.mapAttrs (
       sed -i 's/^       //' $out/stderr
     '';
     checker = runCommand "test-problems-check-${name}" { } ''
-      if ! PAGER=cat ${lib.getExe gitMinimal} diff --no-index ${
+      if ! PAGER=cat ${gitMinimal.exe} diff --no-index ${
         ./cases + "/${name}/expected-stderr"
       } ${result}/stderr ; then
         echo "Output of $(< ${result}/command) does not match what was expected. To adapt:"

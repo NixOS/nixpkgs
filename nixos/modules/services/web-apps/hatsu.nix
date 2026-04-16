@@ -86,7 +86,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package}";
+        ExecStart = "${cfg.package.exe}";
         Restart = "on-failure";
         StateDirectory = "hatsu";
         Type = "simple";

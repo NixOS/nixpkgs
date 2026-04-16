@@ -19,7 +19,7 @@ let
   # shaka-packager provides `packager`.
   shaka-packager-wrapped = runCommand "shaka-packager-wrapped" { } ''
     mkdir -p $out/bin
-    ln -s ${lib.getExe shaka-packager} $out/bin/shaka-packager
+    ln -s ${shaka-packager.exe} $out/bin/shaka-packager
   '';
 in
 rustPlatform.buildRustPackage (finalAttrs: {

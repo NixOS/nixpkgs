@@ -48,7 +48,7 @@ in
           logLevel = lib.optionalString (cfg.logLevel != null) "--log-level ${cfg.logLevel}";
         in
         {
-          ExecStart = "${lib.getExe cfg.package} --noninteractive ${logLevel}";
+          ExecStart = "${cfg.package.exe} --noninteractive ${logLevel}";
           Restart = "always";
         };
 

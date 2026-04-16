@@ -115,7 +115,7 @@ in
 
       serviceConfig = {
         Type = "exec";
-        ExecStart = "${lib.getExe cfg.package} ${
+        ExecStart = "${cfg.package.exe} ${
           lib.escapeShellArgs (
             [
               "--listen=${cfg.listenAddress}:${toString cfg.port}"

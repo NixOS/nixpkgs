@@ -39,9 +39,9 @@ buildPythonPackage rec {
   patches = [
     # hardcode paths to some binaries
     (replaceVars ./paths.patch {
-      exiftool = lib.getExe exiftool;
-      ffmpeg = lib.getExe ffmpeg;
-      kdialog = if dolphinIntegration then lib.getExe kdePackages.kdialog else null;
+      exiftool = exiftool.exe;
+      ffmpeg = ffmpeg.exe;
+      kdialog = if dolphinIntegration then kdePackages.kdialog.exe else null;
       # replaced in postPatch
       mat2 = null;
       mat2svg = null;

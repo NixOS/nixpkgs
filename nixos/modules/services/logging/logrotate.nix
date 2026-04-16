@@ -316,7 +316,7 @@ in
 
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${lib.getExe pkgs.logrotate} ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
+        ExecStart = "${pkgs.logrotate.exe} ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
 
         # performance
         Nice = 19;

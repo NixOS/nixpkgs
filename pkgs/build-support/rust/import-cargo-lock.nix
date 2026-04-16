@@ -245,7 +245,7 @@ let
           # starting with lockfile version v4 the git source url contains encoded query parameters
           # our regex parser does not know how to unescape them to get the actual value, so we do it here
           ${lib.optionalString (lockFileVersion >= 4) ''
-            gitPartsValue=$(${lib.getExe python3Packages.python} -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))" "$gitPartsValue")
+            gitPartsValue=$(${python3Packages.python.exe} -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))" "$gitPartsValue")
           ''}
         ''}
 

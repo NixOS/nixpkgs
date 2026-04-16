@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
-    "PYTHON=${lib.getExe buildPackages.python3}"
+    "PYTHON=${buildPackages.python3.exe}"
   ];
 
   enableParallelBuilding = true;

@@ -496,7 +496,7 @@ in
 
       script =
         let
-          php = lib.getExe config.services.phpfpm.pools.dolibarr.phpPackage;
+          php = config.services.phpfpm.pools.dolibarr.phpPackage.exe;
         in
         ''
           # extract the 'main instance unique id' secret that the dolibarr installer generated for us, store it in a file for use by our own NixOS generated configuration file

@@ -26,7 +26,7 @@ in
             extraPackages = with pkgs; [ bash curl gawk gnutar gzip ];
             package = pkgs.buildFHSEnv {
               name = "pufferpanel-fhs";
-              runScript = lib.getExe pkgs.pufferpanel;
+              runScript = pkgs.pufferpanel.exe;
               targetPkgs = pkgs': with pkgs'; [ icu openssl zlib ];
             };
           };
@@ -133,7 +133,7 @@ in
               PUFFER_DAEMON_DATA_BINARIES = "$STATE_DIRECTORY/binaries";
             }
         )}
-        exec ${lib.getExe cfg.package} run --workDir "$STATE_DIRECTORY"
+        exec ${cfg.package.exe} run --workDir "$STATE_DIRECTORY"
       '';
 
       serviceConfig = {

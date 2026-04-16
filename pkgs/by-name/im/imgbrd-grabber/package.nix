@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # ensure the script uses the rsync package from nixpkgs
-    substituteInPlace ../scripts/package.sh --replace-fail "rsync" "${lib.getExe rsync}"
+    substituteInPlace ../scripts/package.sh --replace-fail "rsync" "${rsync.exe}"
 
     substituteInPlace gui/CMakeLists.txt \
       --replace-fail "find_package(Qt6 COMPONENTS " "find_package(Qt6 COMPONENTS NetworkAuth " \

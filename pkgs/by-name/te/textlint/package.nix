@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r packages/{textlint,@textlint} $out/lib/node_modules
     cp -r node_modules/.pnpm $out/lib/node_modules
 
-    makeWrapper "${lib.getExe nodejs-slim}" "$out/bin/textlint" \
+    makeWrapper "${nodejs-slim.exe}" "$out/bin/textlint" \
       --add-flags "$out/lib/node_modules/textlint/bin/textlint.js"
 
     # Remove dangling symlinks to packages we didn't copy to $out

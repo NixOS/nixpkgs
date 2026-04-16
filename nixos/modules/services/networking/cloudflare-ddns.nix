@@ -303,7 +303,7 @@ in
             (toEnvMaybeList (cfg.shoutrrr != null) "SHOUTRRR" (lib.concatStringsSep "\n" cfg.shoutrrr))
           ];
 
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
 
         Restart = "on-failure";
         RestartSec = "30s";

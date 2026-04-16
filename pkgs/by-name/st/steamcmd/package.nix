@@ -50,9 +50,7 @@ stdenvNoCC.mkDerivation {
       --subst-var out \
       --subst-var-by coreutils ${coreutils} \
       --subst-var-by steamRoot '${steamRoot}' \
-      --subst-var-by steamRun ${
-        if stdenvNoCC.hostPlatform.isLinux then (lib.getExe steam-run) else "exec"
-      }
+      --subst-var-by steamRun ${if stdenvNoCC.hostPlatform.isLinux then (steam-run.exe) else "exec"}
     chmod 0755 $out/bin/steamcmd
   '';
 

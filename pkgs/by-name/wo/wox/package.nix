@@ -163,7 +163,7 @@ buildGoModule {
     substituteInPlace plugin/host/host_python.go \
       --replace-fail 'n.findPythonPath(ctx), path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz")' '"env", "${plugin-host-python}/bin/run"'
     substituteInPlace plugin/host/host_nodejs.go \
-      --replace-fail "/usr/bin/node" "${lib.getExe nodejs}"
+      --replace-fail "/usr/bin/node" "${nodejs.exe}"
     substituteInPlace util/deeplink.go \
       --replace-fail "update-desktop-database" "${desktop-file-utils}/bin/update-desktop-database" \
       --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime" \

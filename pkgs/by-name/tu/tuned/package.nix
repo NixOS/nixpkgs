@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/sbin/tuned-gui" "tuned-gui"
 
     substituteInPlace experiments/powertop2tuned.py \
-      --replace-fail "/usr/sbin/powertop" "${lib.getExe powertop}"
+      --replace-fail "/usr/sbin/powertop" "${powertop.exe}"
 
     substituteInPlace \
       tuned/{gtk/tuned_dialog.py,consts.py} tuned-gui.py tuned-adm.bash \
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     "DESTDIR=${placeholder "out"}"
     "PREFIX="
 
-    "PYTHON=${lib.getExe python3Packages.python}"
+    "PYTHON=${python3Packages.python.exe}"
     "PYTHON_SITELIB=/${python3Packages.python.sitePackages}"
     "TMPFILESDIR=/lib/tmpfiles.d"
     "UNITDIR=/lib/systemd/system"

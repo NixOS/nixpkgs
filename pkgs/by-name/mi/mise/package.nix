@@ -48,17 +48,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./src/cli/generate/snapshots/*.snap
 
     substituteInPlace ./src/test.rs \
-      --replace-fail '/usr/bin/env bash' '${lib.getExe bash}'
+      --replace-fail '/usr/bin/env bash' '${bash.exe}'
 
     substituteInPlace ./src/git.rs \
-      --replace-fail '"git"' '"${lib.getExe git}"'
+      --replace-fail '"git"' '"${git.exe}"'
 
     substituteInPlace ./src/env_diff.rs \
-      --replace-fail '"bash"' '"${lib.getExe bash}"'
+      --replace-fail '"bash"' '"${bash.exe}"'
 
     substituteInPlace ./src/cli/direnv/exec.rs \
       --replace-fail '"env"' '"${lib.getExe' coreutils "env"}"' \
-      --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
+      --replace-fail 'cmd!("direnv"' 'cmd!("${direnv.exe}"'
   '';
 
   nativeCheckInputs = [
@@ -88,8 +88,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-p usage' '-p ${lib.getExe usage}' \
-      --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
+      --replace-fail '-p usage' '-p ${usage.exe}' \
+      --replace-fail 'usage complete-word' '${usage.exe} complete-word'
 
     installShellCompletion \
       --bash ./completions/mise.bash \

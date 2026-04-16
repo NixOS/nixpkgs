@@ -146,7 +146,7 @@ in
         Type = "exec";
         ExecStart = escapeSystemdExecArgs (
           [
-            (getExe cfg.package)
+            (cfg.package.exe)
             "--config=${
               settingsFormat.generate "routinator.conf" (filterAttrsRecursive (n: v: v != null) cfg.settings)
             }"

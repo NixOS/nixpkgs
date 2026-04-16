@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"' '-DPACKAGE_SYSCONF_DIR=\""/etc"\"'
 
     substituteInPlace src/**/*.c \
-      --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
+      --replace-quiet "/bin/sh" "${bashInteractive.exe}"
 
     # instruct users with problems to create a nixpkgs issue instead of nagging upstream directly
     substituteInPlace configure.ac \

@@ -59,8 +59,8 @@ let
       sqlite_databases = map (
         d:
         {
-          sqlite_command = lib.getExe pkgs.sqlite;
-          sqlite_restore_command = lib.getExe pkgs.sqlite;
+          sqlite_command = pkgs.sqlite.exe;
+          sqlite_restore_command = pkgs.sqlite.exe;
         }
         // d
       ) s.sqlite_databases;

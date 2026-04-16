@@ -92,10 +92,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/porn-vault" \
+    makeWrapper "${nodejs.exe}" "$out/bin/porn-vault" \
       --chdir "$out/share/porn-vault" \
       --add-flags "dist/index.js" \
-      --set-default IZZY_PATH "${lib.getExe izzy}" \
+      --set-default IZZY_PATH "${izzy.exe}" \
       --prefix PATH : "${
         lib.makeBinPath [
           ffmpeg

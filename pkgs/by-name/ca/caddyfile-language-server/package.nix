@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/caddyfile-language-server/
     mv packages/server/dist/* $out/lib/node_modules/caddyfile-language-server/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/caddyfile-language-server \
+    makeWrapper ${nodejs.exe} $out/bin/caddyfile-language-server \
       --add-flags "$out/lib/node_modules/caddyfile-language-server/index.js"
 
     runHook postInstall

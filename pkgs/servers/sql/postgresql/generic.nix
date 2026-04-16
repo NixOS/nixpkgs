@@ -325,8 +325,8 @@ let
         # This doesn't apply to us with Nix.
         NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
       }
-      // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
-      // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; }
+      // lib.optionalAttrs perlSupport { PERL = perl.exe; }
+      // lib.optionalAttrs pythonSupport { PYTHON = python3.exe; }
       // lib.optionalAttrs tclSupport { TCLSH = "${lib.getBin tcl}/bin/tclsh"; };
 
       configureFlags =

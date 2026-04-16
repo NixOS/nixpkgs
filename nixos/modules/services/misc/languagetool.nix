@@ -94,7 +94,7 @@ in
         ProtectHome = "yes";
         Restart = "on-failure";
         ExecStart = ''
-          ${lib.getExe cfg.package.jre} \
+          ${cfg.package.jre.exe} \
             -cp ${cfg.package}/share/languagetool-server.jar \
             ${toString cfg.jvmOptions} \
             org.languagetool.server.HTTPServer \

@@ -338,7 +338,7 @@ in
 
           script =
             let
-              tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
+              tarsnap = ''${gcfg.package.exe} --configfile "/etc/tarsnap/${name}.conf"'';
               run = ''
                 ${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
                                         ${lib.optionalString cfg.verbose "-v"} \
@@ -392,7 +392,7 @@ in
 
             script =
               let
-                tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
+                tarsnap = ''${gcfg.package.exe} --configfile "/etc/tarsnap/${name}.conf"'';
                 lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
                 run = ''${tarsnap} -x -f "${lastArchive}" ${lib.optionalString cfg.verbose "-v"}'';
                 cachedir = lib.escapeShellArg cfg.cachedir;

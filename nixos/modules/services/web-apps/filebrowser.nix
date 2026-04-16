@@ -97,7 +97,7 @@ in
           ExecStart =
             let
               args = [
-                (lib.getExe cfg.package)
+                (cfg.package.exe)
                 "--config"
                 (format.generate "config.json" cfg.settings)
               ];

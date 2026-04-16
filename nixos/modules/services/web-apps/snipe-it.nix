@@ -511,11 +511,11 @@ in
           fi
 
           # pruge and rebuild caches
-          ${lib.getExe artisan} optimize:clear
-          ${lib.getExe artisan} optimize
+          ${artisan.exe} optimize:clear
+          ${artisan.exe} optimize
 
           # migrate db
-          ${lib.getExe artisan} migrate --force
+          ${artisan.exe} migrate --force
 
           # A placeholder file for invalid barcodes
           invalid_barcode_location="${cfg.dataDir}/public/uploads/barcodes/invalid_barcode.gif"

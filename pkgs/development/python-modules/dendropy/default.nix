@@ -11,7 +11,7 @@
 }:
 
 let
-  paupPath = if paupIntegration then lib.getExe paup-cli else "NONE";
+  paupPath = if paupIntegration then paup-cli.exe else "NONE";
 in
 buildPythonPackage rec {
   pname = "dendropy";

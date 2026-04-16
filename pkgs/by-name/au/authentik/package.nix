@@ -276,7 +276,7 @@ let
       runHook postBuild
     '';
 
-    CHROMEDRIVER_FILEPATH = lib.getExe chromedriver;
+    CHROMEDRIVER_FILEPATH = chromedriver.exe;
 
     installPhase = ''
       runHook preInstall

@@ -645,7 +645,7 @@ in
         serviceConfig = {
           User = "oauth2-proxy";
           Restart = "always";
-          ExecStart = "${lib.getExe cfg.package} ${configString}";
+          ExecStart = "${cfg.package.exe} ${configString}";
           EnvironmentFile = lib.mkIf (cfg.keyFile != null) cfg.keyFile;
           LoadCredential =
             lib.optional (cfg.clientSecretFile != null) "client-secret:${cfg.clientSecretFile}"

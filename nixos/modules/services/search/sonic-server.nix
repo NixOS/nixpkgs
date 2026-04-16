@@ -69,7 +69,7 @@ in
       serviceConfig = {
         Type = "simple";
 
-        ExecStart = "${lib.getExe cfg.package} -c ${configFile}";
+        ExecStart = "${cfg.package.exe} -c ${configFile}";
         DynamicUser = true;
         Group = "sonic";
         LimitNOFILE = "infinity";

@@ -43,12 +43,12 @@ stdenv.mkDerivation {
     runHook preInstall
 
     substituteInPlace $out/opt/brother/Printers/${model}/lpd/filter_${model} \
-      --replace-fail /usr/bin/perl ${lib.getExe perl} \
+      --replace-fail /usr/bin/perl ${perl.exe} \
       --replace-fail "PRINTER =~" "PRINTER = \"${model}\"; #" \
       --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/${model}/\"; #"
 
     substituteInPlace $out/opt/brother/Printers/${model}/cupswrapper/brother_lpdwrapper_${model} \
-      --replace-fail /usr/bin/perl ${lib.getExe perl} \
+      --replace-fail /usr/bin/perl ${perl.exe} \
       --replace-fail "basedir =~ " "basedir = \"$out/opt/brother/Printers/${model}/\"; #" \
       --replace-fail "PRINTER =~ " "PRINTER = \"${model}\"; #" \
       --replace-fail "LPDCONFIGEXE=" "LPDCONFIGEXE=\"$out/usr/bin/brprintconf_\"; #"

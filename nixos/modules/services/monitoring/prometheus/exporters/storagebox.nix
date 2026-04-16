@@ -25,7 +25,7 @@ in
     wantedBy = [ "multi-user.target" ];
     script = ''
       export HETZNER_TOKEN=$(< "''${CREDENTIALS_DIRECTORY}/token")
-      exec ${lib.getExe cfg.package}
+      exec ${cfg.package.exe}
     '';
 
     environment = {

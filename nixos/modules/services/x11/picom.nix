@@ -371,7 +371,7 @@ in
       };
 
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} --config ${configFile}";
+        ExecStart = "${cfg.package.exe} --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };

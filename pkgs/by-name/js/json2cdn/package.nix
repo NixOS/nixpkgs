@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 build/libs/json2cdn-${finalAttrs.version}-all.jar $out/lib/json2cdn.jar
 
-    makeWrapper ${lib.getExe jre_headless} $out/bin/json2cdn --add-flags "-jar $out/lib/json2cdn.jar"
+    makeWrapper ${jre_headless.exe} $out/bin/json2cdn --add-flags "-jar $out/lib/json2cdn.jar"
 
     runHook postInstall
   '';

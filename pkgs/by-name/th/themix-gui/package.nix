@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace gui.sh packaging/bin/{oomox,themix}-gui --replace python3 ${lib.getExe py}
+    substituteInPlace gui.sh packaging/bin/{oomox,themix}-gui --replace python3 ${py.exe}
   '';
 
   dontBuild = true;

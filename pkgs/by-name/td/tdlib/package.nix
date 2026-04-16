@@ -92,7 +92,7 @@ stdenv.mkDerivation {
     sed -i "/vptr/d" test/CMakeLists.txt
   '';
 
-  passthru.updateScript = lib.getExe updateScript;
+  passthru.updateScript = updateScript.exe;
 
   meta = {
     description = "Cross-platform library for building Telegram clients";

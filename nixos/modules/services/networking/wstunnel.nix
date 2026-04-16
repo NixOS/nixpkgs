@@ -327,7 +327,7 @@ let
               };
             in
             ''
-              ${lib.getExe serverCfg.package} \
+              ${serverCfg.package.exe} \
                 server \
                 ${argsFormat.generate convertedSettings} \
                 ${lib.escapeShellArg "${
@@ -382,7 +382,7 @@ let
         RestartMaxDelaySec = "5min";
 
         ExecStart = ''
-          ${lib.getExe clientCfg.package} \
+          ${clientCfg.package.exe} \
             client \
             ${argsFormat.generate clientCfg.settings} \
             ${lib.escapeShellArg clientCfg.connectTo}

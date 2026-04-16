@@ -54,7 +54,7 @@ in
           DynamicUser = true;
           StateDirectory = "prowlarr";
           EnvironmentFile = cfg.environmentFiles;
-          ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
+          ExecStart = "${cfg.package.exe} -nobrowser -data=/var/lib/prowlarr";
           Restart = "on-failure";
         };
       };

@@ -211,7 +211,7 @@ in
             "$STATE_DIRECTORY/config.yml"
         ''}
 
-        ${lib.getExe cfg.package} listen --config "$STATE_DIRECTORY/config.yml"
+        ${cfg.package.exe} listen --config "$STATE_DIRECTORY/config.yml"
       '';
       after = [
         "network.target"
@@ -262,7 +262,7 @@ in
           if [[ "$USER" != ${cfg.user} ]]; then
             sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
           fi
-          $sudo ${lib.getExe cfg.package} "$@"
+          $sudo ${cfg.package.exe} "$@"
         '';
       in
       [ omnom-wrapped ];

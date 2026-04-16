@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
     params='-nogui "$@"'
     cat >$out/bin/necesse-server <<EOF
     #! $SHELL -e
-    exec ${lib.getExe jre} -jar $out/Server.jar $params
+    exec ${jre.exe} -jar $out/Server.jar $params
     EOF
     chmod +x $out/bin/necesse-server
 

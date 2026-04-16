@@ -92,8 +92,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         chmod -R +w $out
         ln -s ${externals} $out/third_party/externals
       '';
-    SKIA_GN_COMMAND = lib.getExe gn;
-    SKIA_NINJA_COMMAND = lib.getExe ninja;
+    SKIA_GN_COMMAND = gn.exe;
+    SKIA_NINJA_COMMAND = ninja.exe;
     SKIA_USE_SYSTEM_LIBRARIES = "1";
 
     NIX_CFLAGS_COMPILE = "-I${lib.getDev harfbuzz}/include/harfbuzz";

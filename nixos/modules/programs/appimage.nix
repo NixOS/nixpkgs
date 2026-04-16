@@ -27,7 +27,7 @@ in
       let
         appimage_common = {
           wrapInterpreterInShell = false;
-          interpreter = lib.getExe cfg.package;
+          interpreter = cfg.package.exe;
           recognitionType = "magic";
           offset = 0;
           mask = ''\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff'';

@@ -14,7 +14,7 @@
         security.audit = {
           enable = true;
           rules = [
-            "-a always,exit -F exe=${lib.getExe pkgs.hello} -k nixos-test"
+            "-a always,exit -F exe=${pkgs.hello.exe} -k nixos-test"
           ];
           backlogLimit = 512;
         };

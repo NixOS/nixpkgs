@@ -35,7 +35,7 @@ in
 
   config = {
     process.argv = [
-      "${lib.getExe config.python-http-server.package}"
+      "${config.python-http-server.package.exe}"
       "-m"
       "http.server"
       "${toString config.python-http-server.port}"

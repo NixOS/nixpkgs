@@ -22,7 +22,7 @@ let
       }
       ''
         install -m755 -D ${./systemd-boot-builder.py} $out
-        ${lib.getExe pkgs.buildPackages.mypy} \
+        ${pkgs.buildPackages.mypy.exe} \
           --no-implicit-optional \
           --disallow-untyped-calls \
           --disallow-untyped-defs \

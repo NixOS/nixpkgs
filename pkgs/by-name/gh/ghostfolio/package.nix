@@ -61,7 +61,7 @@ buildNpmPackage rec {
     cp -r dist/apps/{api,client} "$out/lib/node_modules/ghostfolio/"
 
     mkdir "$out/bin"
-    makeWrapper ${lib.getExe nodejs} "$out/bin/ghostfolio" \
+    makeWrapper ${nodejs.exe} "$out/bin/ghostfolio" \
       --add-flags "$out/lib/node_modules/ghostfolio/api/main" "''${user_args[@]}" \
       --prefix PATH : ${lib.makeBinPath [ openssl ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \

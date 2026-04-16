@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
   # Every update, the codebase should be checked for further instances of `ffmpeg` calls.
   postPatch = ''
     substituteInPlace whisperx/audio.py --replace-fail \
-      '"ffmpeg"' '"${lib.getExe ffmpeg}"'
+      '"ffmpeg"' '"${ffmpeg.exe}"'
   '';
 
   build-system = [ setuptools ];

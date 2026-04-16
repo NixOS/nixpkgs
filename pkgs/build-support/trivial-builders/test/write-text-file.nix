@@ -33,7 +33,7 @@ lib.recurseIntoAttrs {
       };
     in
     assert pkg.meta.mainProgram == "foo";
-    assert baseNameOf (lib.getExe pkg) == "foo";
+    assert baseNameOf (pkg.exe) == "foo";
     assert pkg.name == "bar";
     runCommand "test-writeTextFile-different-exe-name" { } ''
       PATH="${lib.makeBinPath [ pkg ]}:$PATH"

@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
         return IN.color;
     };
     EOF
-    ${lib.getExe finalAttrs.finalPackage} example.vert.hlsl -o example.spv
+    ${finalAttrs.finalPackage.exe} example.vert.hlsl -o example.spv
     touch $out
   '';
 

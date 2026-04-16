@@ -59,7 +59,7 @@ let
         curlVersion=$(${curl}/bin/curl -V | head -1 | cut -d' ' -f2)
 
         curl=(
-          ${lib.getExe curl}
+          ${curl.exe}
           --location
           --retry 3
           --user-agent "curl/$curlVersion Nixpkgs/${lib.trivial.release}"

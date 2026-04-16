@@ -975,7 +975,7 @@ stdenvNoCC.mkDerivation {
     # for substitution in utils.bash
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
     expandResponseParams = lib.optionalString (expand-response-params != "") (
-      lib.getExe expand-response-params
+      expand-response-params.exe
     );
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";

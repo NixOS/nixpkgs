@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
     # see https://github.com/NixOS/nixpkgs/issues/172583
-    makeShellWrapper "${lib.getExe electron}" "$out/bin/goofcord" \
+    makeShellWrapper "${electron.exe}" "$out/bin/goofcord" \
       --add-flags "$out/share/lib/goofcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \

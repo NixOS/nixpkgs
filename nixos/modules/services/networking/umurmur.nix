@@ -27,7 +27,7 @@ let
   configFile = pkgs.writeTextFile {
     name = "umurmur.conf";
     checkPhase = ''
-      ${lib.getExe cfg.package} -t -c "$target"
+      ${cfg.package.exe} -t -c "$target"
     '';
     text = "\n" + (dumpCfg configAttrs) + "\n";
   };
@@ -189,7 +189,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "exec";
-        ExecStart = "${lib.getExe cfg.package} -d -c ${cfg.configFile}";
+        ExecStart = "${cfg.package.exe} -d -c ${cfg.configFile}";
         Restart = "on-failure";
         DynamicUser = true;
         StateDirectory = "umurmur";

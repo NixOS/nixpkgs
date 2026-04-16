@@ -20,7 +20,7 @@ in
   serviceOpts = {
     serviceConfig = {
       ExecStart = ''
-        ${lib.getExe pkgs.prometheus-libvirt-exporter} \
+        ${pkgs.prometheus-libvirt-exporter.exe} \
         --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
         --libvirt.uri ${cfg.libvirtUri} ${lib.concatStringsSep " " cfg.extraFlags}
       '';

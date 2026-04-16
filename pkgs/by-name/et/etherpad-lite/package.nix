@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/{lib/etherpad-lite,bin}
     cp -r node_modules ui src doc admin $out/lib/etherpad-lite
-    makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
+    makeWrapper ${nodejs.exe} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
       --suffix PATH : "${lib.makeBinPath [ pnpm_9 ]}" \

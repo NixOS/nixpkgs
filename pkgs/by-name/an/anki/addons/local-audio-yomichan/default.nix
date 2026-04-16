@@ -26,7 +26,7 @@ anki-utils.buildAnkiAddon (finalAttrs: {
     PYTHONPATH=$temp \
     WO_ANKI=1 \
     XDG_DATA_HOME=$temp \
-    ${lib.getExe python3} -c \
+    ${python3.exe} -c \
       "from plugin import db_utils; \
        db_utils.init_db()"
   '';

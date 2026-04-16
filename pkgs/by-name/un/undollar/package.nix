@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bin
     mv undollar.js $out/bin/$
     substituteInPlace $out/bin/$ \
-      --replace-fail "/usr/bin/env node" "${lib.getExe nodejs}"
+      --replace-fail "/usr/bin/env node" "${nodejs.exe}"
     runHook postInstall
   '';
 

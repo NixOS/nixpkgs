@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preCheck = ''
     # cargo-typify depends on rustfmt-wrapper, which requires RUSTFMT:
-    export RUSTFMT="${lib.getExe rustfmt}"
+    export RUSTFMT="${rustfmt.exe}"
   '';
 
   postInstall = ''
     wrapProgram $out/bin/cargo-typify \
-      --set RUSTFMT "${lib.getExe rustfmt}"
+      --set RUSTFMT "${rustfmt.exe}"
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

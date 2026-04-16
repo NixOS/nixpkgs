@@ -76,7 +76,7 @@ in
       ''
         set -euo pipefail
         mkdir -p "$out"
-        "${lib.getExe drv}" | tee -a "$out/test.log" || {
+        "${drv.exe}" | tee -a "$out/test.log" || {
           nixErrorLog "command failed with exit code $?"
           exit 1
         }

@@ -640,7 +640,7 @@ rec {
       "--disable-debug"
     ];
 
-    GS = lib.getExe ghostscript_headless;
+    GS = ghostscript_headless.exe;
 
     enableParallelBuilding = true;
   };

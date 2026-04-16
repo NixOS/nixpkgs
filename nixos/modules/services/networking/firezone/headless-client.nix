@@ -80,7 +80,7 @@ in
           export FIREZONE_ID=$(< client_id)
         fi
 
-        exec ${getExe cfg.package}
+        exec ${cfg.package.exe}
       '';
 
       environment = {

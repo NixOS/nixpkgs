@@ -19,7 +19,7 @@ mkKdeDerivation {
     ./0001-gsettings-schemas-path.patch
     (replaceVars ./dependency-paths.patch {
       pgrep = lib.getExe' procps "pgrep";
-      xsettingsd = lib.getExe xsettingsd;
+      xsettingsd = xsettingsd.exe;
     })
   ];
 

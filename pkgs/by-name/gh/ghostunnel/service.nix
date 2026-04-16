@@ -186,7 +186,7 @@ in
 
     process = {
       argv = [
-        (getExe cfg.package)
+        (cfg.package.exe)
         "server"
         "--listen"
         cfg.listen

@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln -s ${finalAttrs.passthru.graph}/bin/* -t $out/lib/node_modules/graphest/dist
 
-    makeWrapper ${lib.getExe electron} $out/bin/Graphest \
+    makeWrapper ${electron.exe} $out/bin/Graphest \
       --add-flags $out/lib/node_modules/graphest \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0

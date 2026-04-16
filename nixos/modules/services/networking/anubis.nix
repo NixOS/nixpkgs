@@ -400,9 +400,7 @@ in
           Group = instance.group;
           DynamicUser = true;
 
-          ExecStart = lib.concatStringsSep " " (
-            (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
-          );
+          ExecStart = lib.concatStringsSep " " ((lib.singleton (cfg.package.exe)) ++ instance.extraFlags);
           RuntimeDirectory = if instanceUsesUnixSockets instance then "anubis/${instanceName name}" else null;
           # hardening
           NoNewPrivileges = true;

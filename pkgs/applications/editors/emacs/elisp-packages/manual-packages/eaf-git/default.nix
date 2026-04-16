@@ -40,11 +40,11 @@ melpaBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace eaf-git.el \
       --replace-fail "(defcustom eaf-git-delta-executable \"delta\"" \
-                     "(defcustom eaf-git-delta-executable \"${lib.getExe delta}\""
+                     "(defcustom eaf-git-delta-executable \"${delta.exe}\""
 
     substituteInPlace buffer.py \
       --replace-fail "command = \"rg '{}' {}" \
-                     "command = \"${lib.getExe ripgrep} '{}' {}"
+                     "command = \"${ripgrep.exe} '{}' {}"
   '';
 
   postBuild = ''

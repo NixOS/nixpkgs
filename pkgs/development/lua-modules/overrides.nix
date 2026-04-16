@@ -251,8 +251,8 @@ in
       # Dependencies needed in special location
       mkdir -p deps/{ripgrep,astgrep}
       mkdir {temp_test_dir,temp_history_dir}
-      ln -s ${lib.getExe ripgrep} deps/ripgrep/rg
-      ln -s ${lib.getExe ast-grep} deps/astgrep/ast-grep
+      ln -s ${ripgrep.exe} deps/ripgrep/rg
+      ln -s ${ast-grep.exe} deps/astgrep/ast-grep
       ln -s ${vimPlugins.mini-nvim} deps/mini.nvim
 
       # Update dependency check to respect packaged version

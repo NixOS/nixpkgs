@@ -65,7 +65,7 @@ in
           "+${script}";
         ExecStart = [
           ""
-          "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
+          "${cfg.package.exe} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
         ];
       };
       # After= is specified by upstream

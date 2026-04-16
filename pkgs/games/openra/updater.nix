@@ -10,7 +10,7 @@
 }:
 engine:
 
-lib.getExe (writeShellApplication {
+(writeShellApplication {
   name = "openra-updater";
   runtimeInputs = [
     curl
@@ -33,4 +33,4 @@ lib.getExe (writeShellApplication {
   ];
 
   text = lib.readFile ./updater.sh;
-})
+}).exe

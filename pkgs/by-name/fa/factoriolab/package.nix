@@ -32,7 +32,7 @@ buildNpmPackage rec {
   # which is difficult as said fonts are not actually stable.
   # This disables font inlining completely in which case the fonts will be loaded on demand by your browser
   postPatch = ''
-    ${lib.getExe jq} '.projects.factoriolab.architect.build.options += { "optimization": {"fonts": false } }' ./angular.json > angular.json.new
+    ${jq.exe} '.projects.factoriolab.architect.build.options += { "optimization": {"fonts": false } }' ./angular.json > angular.json.new
     mv -f angular.json.new angular.json
   '';
 

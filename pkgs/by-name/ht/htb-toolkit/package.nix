@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage {
       --replace-fail "\"base64\"" "\"${coreutils}/bin/base64\"" \
       --replace-fail "\"gunzip\"" "\"${gzip}/bin/gunzip\""
     substituteInPlace src/appkey.rs \
-      --replace-fail secret-tool ${lib.getExe libsecret}
+      --replace-fail secret-tool ${libsecret.exe}
     substituteInPlace src/vpn.rs \
       --replace-fail "arg(\"openvpn\")" "arg(\"${openvpn}/bin/openvpn\")" \
       --replace-fail "arg(\"killall\")" "arg(\"${killall}/bin/killall\")"

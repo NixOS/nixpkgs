@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./hardcode-git-path.patch {
-      git = lib.getExe gitMinimal;
+      git = gitMinimal.exe;
     })
   ];
 

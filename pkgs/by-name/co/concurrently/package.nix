@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/bin" "$out/lib/concurrently"
     cp -r dist node_modules "$out/lib/concurrently"
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/concurrently" \
+    makeWrapper "${nodejs.exe}" "$out/bin/concurrently" \
       --add-flags "$out/lib/concurrently/dist/bin/concurrently.js"
     ln -s "$out/bin/concurrently" "$out/bin/con"
     cp package.json "$out/lib/concurrently/"

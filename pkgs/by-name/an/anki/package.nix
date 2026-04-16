@@ -218,10 +218,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # https://github.com/ankitects/anki/blob/24.11/docs/linux.md#packaging-considerations
     OFFLINE_BUILD = "1";
-    NODE_BINARY = lib.getExe nodejs;
-    PROTOC_BINARY = lib.getExe protobuf_31;
-    PYTHON_BINARY = lib.getExe python3;
-    UV_BINARY = lib.getExe uv;
+    NODE_BINARY = nodejs.exe;
+    PROTOC_BINARY = protobuf_31.exe;
+    PYTHON_BINARY = python3.exe;
+    UV_BINARY = uv.exe;
     UV_NO_MANAGED_PYTHON = "1";
     UV_SYSTEM_PYTHON = true;
     UV_PYTHON_DOWNLOADS = "never";
@@ -259,7 +259,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # anki's build tooling expects python and protoc-gen-mypy in pyenv
     mkdir -p ./out/pyenv/bin
     ln -sf $PYTHON_BINARY ./out/pyenv/bin/python
-    ln -sf ${lib.getExe python3Packages.mypy-protobuf} ./out/pyenv/bin/protoc-gen-mypy
+    ln -sf ${python3Packages.mypy-protobuf.exe} ./out/pyenv/bin/protoc-gen-mypy
 
     mv node_modules out
 
@@ -269,7 +269,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
     # Necessary for yarn to not complain about 'corepack'
     jq 'del(.packageManager)' package.json > package.json.tmp && mv package.json.tmp package.json
-    YARN_BINARY="${lib.getExe noInstallYarn}" PIP_USER=1 \
+    YARN_BINARY="${noInstallYarn.exe}" PIP_USER=1 \
       ./ninja build wheels
   '';
 

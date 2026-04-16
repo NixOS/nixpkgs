@@ -8,7 +8,7 @@
 makeSetupHook {
   name = "auto-patchcil-hook";
   substitutions = {
-    shell = lib.getExe bash;
-    patchcil = lib.getExe patchcil;
+    shell = bash.exe;
+    patchcil = patchcil.exe;
   };
 } ./auto-patchcil.sh

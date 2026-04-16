@@ -200,7 +200,7 @@ in
           install -m 700 '${configFile}' "$RUNTIME_DIRECTORY/config.toml"
         ''
         (lib.mkIf (cfg.masterKeyFile != null) ''
-          ${lib.getExe pkgs.replace-secret} '${master-key-placeholder}' "$CREDENTIALS_DIRECTORY/master_key" "$RUNTIME_DIRECTORY/config.toml"
+          ${pkgs.replace-secret.exe} '${master-key-placeholder}' "$CREDENTIALS_DIRECTORY/master_key" "$RUNTIME_DIRECTORY/config.toml"
         '')
       ];
 
@@ -223,7 +223,7 @@ in
             secret: lib.mkIf (secret.setting != null) [ "${secret.name}:${secret.setting}" ]
           ) secrets-with-path
         );
-        ExecStart = "${lib.getExe cfg.package} --config-file-path \${RUNTIME_DIRECTORY}/config.toml";
+        ExecStart = "${cfg.package.exe} --config-file-path \${RUNTIME_DIRECTORY}/config.toml";
         StateDirectory = "meilisearch";
         WorkingDirectory = "%S/meilisearch";
         RuntimeDirectory = "meilisearch";

@@ -41,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
       mkdir $out
-      ${lib.getExe kssd} dist -L ${kssd.src}/shuf_file/L3K10.shuf -r ${kssd.src}/test_fna/seqs1 -o $out/reference
-      ${lib.getExe kssd} dist -L ${kssd.src}/shuf_file/L3K10.shuf -o $out/query ${kssd.src}/test_fna/seqs2
-      ${lib.getExe kssd} dist -r $out/reference -o $out/distout $out/query
+      ${kssd.exe} dist -L ${kssd.src}/shuf_file/L3K10.shuf -r ${kssd.src}/test_fna/seqs1 -o $out/reference
+      ${kssd.exe} dist -L ${kssd.src}/shuf_file/L3K10.shuf -o $out/query ${kssd.src}/test_fna/seqs2
+      ${kssd.exe} dist -r $out/reference -o $out/distout $out/query
     '';
   };
 

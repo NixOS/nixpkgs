@@ -36,7 +36,7 @@ symlinkJoin {
 
   postBuild = ''
     wrapProgram "$out/bin/idris2" \
-      --set CHEZ "${lib.getExe idris2-unwrapped.chez}" \
+      --set CHEZ "${idris2-unwrapped.chez.exe}" \
       --suffix IDRIS2_LIBS ':' "${supportLibrariesPath}" \
       --suffix IDRIS2_DATA ':' "${supportSharePath}" \
       --suffix IDRIS2_PACKAGE_PATH ':' ${packagePath} \

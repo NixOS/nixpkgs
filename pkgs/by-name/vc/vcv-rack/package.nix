@@ -212,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
+      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity.exe}"'
     # For some unknown reason __yield isn't available on aarch64-linux
     substituteInPlace src/engine/Engine.cpp \
       --replace-fail '__yield();' 'asm volatile("yield");'

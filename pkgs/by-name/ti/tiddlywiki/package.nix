@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/tiddlywiki/
     mv * $out/lib/node_modules/tiddlywiki/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/tiddlywiki \
+    makeWrapper ${nodejs.exe} $out/bin/tiddlywiki \
       --add-flags "$out/lib/node_modules/tiddlywiki/tiddlywiki.js"
   '';
 

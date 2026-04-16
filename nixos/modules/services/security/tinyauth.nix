@@ -181,7 +181,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.dataDir;
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "always";
 
         EnvironmentFile = [

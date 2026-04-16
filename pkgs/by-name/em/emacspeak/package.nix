@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a .  "$d"
     find "$d" \( -type d -or \( -type f -executable \) \) -execdir chmod 755 {} +
     find "$d" -type f -not -executable -execdir chmod 644 {} +
-    makeWrapper ${lib.getExe emacs} $out/bin/emacspeak \
+    makeWrapper ${emacs.exe} $out/bin/emacspeak \
         --set DTK_PROGRAM "${placeholder "out"}/share/emacs/site-lisp/emacspeak/servers/espeak" \
         --set TCLLIBPATH "${tclPackages.tclx}/lib" \
         --add-flags '-l "${placeholder "out"}/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.elc"'

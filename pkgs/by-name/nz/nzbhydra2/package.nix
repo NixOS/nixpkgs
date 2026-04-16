@@ -51,7 +51,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnFetchExtraArgs.postInstall = ''
-    ${lib.getExe xmlstarlet} ed -L -u "/metadata/versioning/lastUpdated" -v "0" $out/.m2/org/nzbhydra/github-release-plugin/maven-metadata-local.xml
+    ${xmlstarlet.exe} ed -L -u "/metadata/versioning/lastUpdated" -v "0" $out/.m2/org/nzbhydra/github-release-plugin/maven-metadata-local.xml
   '';
 
   mvnJdk = jdk;
@@ -73,7 +73,7 @@ maven.buildMavenPackage rec {
     touch "$out/lib/${pname}/readme.md"
     install -D -m 755 "other/wrapper/nzbhydra2wrapperPy3.py" "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py"
 
-    makeWrapper ${lib.getExe python3} "$out/bin/nzbhydra2" \
+    makeWrapper ${python3.exe} "$out/bin/nzbhydra2" \
       --add-flags "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py" \
       --prefix PATH ":" ${lib.getBin jdk}/bin
 

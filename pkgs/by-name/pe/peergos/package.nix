@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     install -Dvm644 ${tweetnacl}/lib/libtweetnacl.so $out/native-lib/libtweetnacl.so
 
     # --chdir as peergos expects to find `libtweetnacl.so` in `native-lib/`
-    makeWrapper ${lib.getExe jre} $out/bin/peergos \
+    makeWrapper ${jre.exe} $out/bin/peergos \
       --chdir $out \
       --add-flags "-Djava.library.path=native-lib -jar $out/share/java/peergos.jar"
 

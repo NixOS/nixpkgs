@@ -96,7 +96,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe pkgs.journaldriver;
+        ExecStart = pkgs.journaldriver.exe;
         Restart = "always";
         DynamicUser = true;
 

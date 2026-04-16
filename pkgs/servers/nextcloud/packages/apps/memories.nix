@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./memories-paths.diff {
-      exiftool = lib.getExe exiftool;
-      ffmpeg = lib.getExe ffmpeg-headless;
+      exiftool = exiftool.exe;
+      ffmpeg = ffmpeg-headless.exe;
       ffprobe = lib.getExe' ffmpeg-headless "ffprobe";
-      go-vod = lib.getExe go-vod;
+      go-vod = go-vod.exe;
     })
   ];
 

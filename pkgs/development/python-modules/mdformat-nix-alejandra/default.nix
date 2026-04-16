@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace mdformat_nix_alejandra/__init__.py \
-      --replace-fail '"alejandra"' '"${lib.getExe alejandra}"'
+      --replace-fail '"alejandra"' '"${alejandra.exe}"'
   '';
 
   build-system = [ poetry-core ];

@@ -64,7 +64,7 @@ in
           }:${toString cfg.port}";
         in
         ''
-          ${lib.getExe pkgs.prometheus-mailman3-exporter} \
+          ${pkgs.prometheus-mailman3-exporter.exe} \
             --log-level ${cfg.logLevel} \
             --web.listen ${addr} \
             --mailman.address ${cfg.mailman.addr} \

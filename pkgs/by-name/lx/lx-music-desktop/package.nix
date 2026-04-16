@@ -114,7 +114,7 @@ buildNpmPackage (finalAttrs: {
   '';
 
   postFixup = ''
-    makeWrapper ${lib.getExe electron} $out/bin/lx-music-desktop \
+    makeWrapper ${electron.exe} $out/bin/lx-music-desktop \
       --add-flags $out/opt/lx-music-desktop/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}

@@ -33,7 +33,7 @@ let
       x:
       "export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:${escapeShellArg x.user.password}"
     ) usersWithIndexesNoFile}
-    exec ${lib.getExe cfg.package}
+    exec ${cfg.package.exe}
   '';
 in
 {

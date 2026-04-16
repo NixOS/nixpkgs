@@ -39,10 +39,8 @@ let
   pythonPkgs = ps: builtins.concatLists (map (f: f ps) pythonPackageLists);
   pythonEnv = python3.withPackages pythonPkgs;
 
-  wmctrlExe = lib.getExe wmctrl;
-  xdotoolExe = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform xdotool) (
-    lib.getExe xdotool
-  );
+  wmctrlExe = wmctrl.exe;
+  xdotoolExe = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform xdotool) (xdotool.exe);
 
   appsDrv = symlinkJoin {
     name = "emacs-application-framework-apps";

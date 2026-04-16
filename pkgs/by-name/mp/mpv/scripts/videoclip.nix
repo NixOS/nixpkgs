@@ -21,10 +21,10 @@ buildLua {
 
   patchPhase = ''
     substituteInPlace platform.lua \
-    --replace \'curl\' \'${lib.getExe curl}\' \
+    --replace \'curl\' \'${curl.exe}\' \
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    --replace xclip ${lib.getExe xclip} \
+    --replace xclip ${xclip.exe} \
     --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
   '';
 

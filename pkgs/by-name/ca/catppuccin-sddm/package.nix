@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace justfile \
-      --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}'
+      --replace-fail '#!/usr/bin/env bash' '#!${bash.exe}'
   '';
 
   buildPhase = ''

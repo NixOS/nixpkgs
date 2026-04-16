@@ -137,7 +137,7 @@ buildNpmPackage (finalAttrs: {
     cp -ar $build_dir/res $phome
     find $phome/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
 
-    makeWrapper ${lib.getExe electron} $out/bin/MusicFree \
+    makeWrapper ${electron.exe} $out/bin/MusicFree \
       --add-flags $phome \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0

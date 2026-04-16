@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           36 kph
         '';
         actual = runCommand "actual" { } ''
-          ${lib.getExe fend} '(100 meters) / (10 seconds) to kph' > $out
+          ${fend.exe} '(100 meters) / (10 seconds) to kph' > $out
         '';
       };
     };

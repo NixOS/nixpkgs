@@ -46,9 +46,9 @@ let
   # Manage packages and their exe paths
   applicationAttr = head applicationList;
   applicationPackage = mkIf applicationCheck applicationAttr;
-  applicationPackageExe = getExe applicationAttr;
+  applicationPackageExe = applicationAttr.exe;
   serverPackageExe = (
-    if cfg.highPriority then "${config.security.wrapperDir}/wivrn-server" else getExe cfg.package
+    if cfg.highPriority then "${config.security.wrapperDir}/wivrn-server" else cfg.package.exe
   );
 
   # Manage strings
@@ -169,7 +169,7 @@ in
       owner = "root";
       group = "root";
       capabilities = "cap_sys_nice+eip";
-      source = getExe cfg.package;
+      source = cfg.package.exe;
     };
 
     systemd.user = {

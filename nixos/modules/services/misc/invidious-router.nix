@@ -100,7 +100,7 @@ in
 
       serviceConfig = {
         Restart = "on-failure";
-        ExecStart = "${lib.getExe cfg.package} --configfile ${configFile}";
+        ExecStart = "${cfg.package.exe} --configfile ${configFile}";
         DynamicUser = "yes";
       };
     };

@@ -18,7 +18,7 @@ let
 
       berryOfflinePatches = [
         (replaceVars ./berry-3-offline.patch {
-          yarnv1 = lib.getExe yarn;
+          yarnv1 = yarn.exe;
         })
       ];
 
@@ -39,7 +39,7 @@ let
 
       berryOfflinePatches = [
         (replaceVars ./berry-4-offline.patch {
-          yarnv1 = lib.getExe yarn;
+          yarnv1 = yarn.exe;
         })
       ];
 

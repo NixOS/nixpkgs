@@ -8,6 +8,4 @@
   extraArgs ? [ ],
 }:
 
-[ "${lib.getExe vscode-extension-update}" ]
-++ lib.optionals (attrPath != null) [ attrPath ]
-++ extraArgs
+[ "${vscode-extension-update.exe}" ] ++ lib.optionals (attrPath != null) [ attrPath ] ++ extraArgs

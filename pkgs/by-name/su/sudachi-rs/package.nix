@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # detects an error that sudachidict is not found
       cli = runCommand "${finalAttrs.pname}-cli-test" { } ''
         mkdir $out
-        echo "高輪ゲートウェイ駅" | ${lib.getExe sudachi-rs} > $out/result
+        echo "高輪ゲートウェイ駅" | ${sudachi-rs.exe} > $out/result
       '';
     };
   };

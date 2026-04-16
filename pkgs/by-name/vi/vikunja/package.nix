@@ -52,7 +52,7 @@ let
     postBuild = ''
       # Force sass-embedded to use our dart-sass instead of bundled binaries.
       substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${dart-sass.exe}"];'
       pnpm run build
     '';
 

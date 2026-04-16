@@ -207,7 +207,7 @@ in
       serviceConfig = {
         ExecStart = toString (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "--draupnir-config"
             configFile
           ]

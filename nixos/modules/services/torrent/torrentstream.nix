@@ -41,7 +41,7 @@ in
       description = "TorrentStream Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
         UMask = "077";
         StateDirectory = "torrentstream";

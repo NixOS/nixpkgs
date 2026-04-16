@@ -158,7 +158,7 @@ in
         };
 
         systemd.services.firezone-server-domain.postStart = lib.mkAfter ''
-          ${lib.getExe config.services.firezone.server.domain.package} rpc 'Code.eval_file("${./create-tokens.exs}")'
+          ${config.services.firezone.server.domain.package.exe} rpc 'Code.eval_file("${./create-tokens.exs}")'
         '';
       };
 

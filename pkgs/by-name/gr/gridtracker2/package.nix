@@ -87,7 +87,7 @@ buildNpmPackage (finalAttrs: {
     install -Dvm644 ./resources/icon.png \
       "$out/share/icons/hicolor/256x256/apps/gridtracker2.png"
 
-    makeWrapper ${lib.getExe electron} $out/bin/gridtracker2 \
+    makeWrapper ${electron.exe} $out/bin/gridtracker2 \
       --add-flags $out/share/gridtracker2/resources/app.asar \
       --add-flags "--no-sandbox --disable-gpu-sandbox" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

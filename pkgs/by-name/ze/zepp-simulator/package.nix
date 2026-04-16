@@ -129,7 +129,7 @@ stdenv.mkDerivation {
       $out/opt/simulator/resources/firmware/setup_for_linux.sh
 
     # Use system electron
-    makeWrapper ${lib.getExe electron} $out/bin/simulator \
+    makeWrapper ${electron.exe} $out/bin/simulator \
       --add-flags "--no-sandbox" \
       --add-flags $out/opt/simulator/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

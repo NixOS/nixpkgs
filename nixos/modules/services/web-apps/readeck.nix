@@ -66,7 +66,7 @@ in
         WorkingDirectory = "/var/lib/readeck";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} serve -config ${configFile}";
+        ExecStart = "${cfg.package.exe} serve -config ${configFile}";
         ProtectSystem = "full";
         SystemCallArchitectures = "native";
         MemoryDenyWriteExecute = true;

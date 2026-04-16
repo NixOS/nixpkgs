@@ -124,7 +124,7 @@ testers.runNixOSTest (
       };
     testScript = ''
       machine.succeed("""
-        ${lib.getExe guestTestScriptBin} 2>/dev/console
+        ${guestTestScriptBin.exe} 2>/dev/console
       """)
     '';
     passthru = {

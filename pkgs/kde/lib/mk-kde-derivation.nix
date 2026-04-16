@@ -83,7 +83,7 @@ let
     name = "qmllint-validate-hook";
     substitutions = {
       qmllint = "${qt6.qtdeclarative}/bin/qmllint";
-      jq = lib.getExe jq;
+      jq = jq.exe;
     };
   } ./qmllint-hook.sh;
 in

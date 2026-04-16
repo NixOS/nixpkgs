@@ -193,8 +193,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}/digikam)
     substituteInPlace $out/bin/digitaglinktree \
-      --replace "/usr/bin/perl" "${lib.getExe perl}" \
-      --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
+      --replace "/usr/bin/perl" "${perl.exe}" \
+      --replace "/usr/bin/sqlite3" "${sqlite.exe}"
   '';
 
   # over 3h in a normal build slot (2 cores

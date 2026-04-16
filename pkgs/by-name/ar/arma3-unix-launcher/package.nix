@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use steam-run when running the game directly
     (replaceVars ./steam-run.patch {
-      steamRun = lib.getExe steam-run;
+      steamRun = steam-run.exe;
     })
   ];
 

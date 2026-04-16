@@ -38,7 +38,7 @@ in
       partOf = [ "graphical-session.target" ];
 
       serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Restart = "on-failure";
         LoadCredential = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
       };

@@ -91,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = writeShellScript "update-kent" ''
-    latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/ucscGenomeBrowser/kent/releases/latest | ${lib.getExe jq} --raw-output .tag_name | grep -oP '(?<=v)\d+')
-    ${lib.getExe nix-update} kent --version $latestVersion
+    latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/ucscGenomeBrowser/kent/releases/latest | ${jq.exe} --raw-output .tag_name | grep -oP '(?<=v)\d+')
+    ${nix-update.exe} kent --version $latestVersion
   '';
 
   meta = {

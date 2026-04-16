@@ -177,7 +177,7 @@ in
         )
         metadata_net = (
             " -device virtio-net-pci,netdev=ec2meta"
-            + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
+            + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${imdsServer.exe} {metadata_dir}'"
         )
 
         start_command = (
@@ -341,7 +341,7 @@ in
             machine.succeed(
                 "systemd-run --unit=ipv6-imds --"
                 " socat TCP6-LISTEN:80,bind=[fd00:ec2::254],fork,reuseaddr"
-                " SYSTEM:'${lib.getExe imdsServer} /tmp/ipv6-metadata'"
+                " SYSTEM:'${imdsServer.exe} /tmp/ipv6-metadata'"
             )
 
             # Wait for IPv6 IMDS to become reachable (token endpoint doesn't require auth)

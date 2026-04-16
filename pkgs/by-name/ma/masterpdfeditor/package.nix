@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeShellScript "update-masterpdfeditor" ''
     latestVersion=$(curl -s https://code-industry.net/downloads/ | grep -A1 "fa-linux" | grep -oP 'Version\s+\K[\d.]+' | head -n 1)
-    ${lib.getExe nix-update} pkgsCross.gnu64.masterpdfeditor --version $latestVersion
+    ${nix-update.exe} pkgsCross.gnu64.masterpdfeditor --version $latestVersion
     ${lib.getExe' common-updater-scripts "update-source-version"} pkgsCross.aarch64-multiplatform.masterpdfeditor --ignore-same-version
   '';
 

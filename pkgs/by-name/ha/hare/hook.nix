@@ -29,8 +29,8 @@ let
   };
   hareWrapper = runCommand "hare-wrapper" { nativeBuildInputs = [ makeWrapper ]; } ''
     mkdir -p $out/bin
-    install ${lib.getExe hareWrappedScript} $out/bin/hare
-    makeWrapper ${lib.getExe hare} $out/bin/hare-native \
+    install ${hareWrappedScript.exe} $out/bin/hare
+    makeWrapper ${hare.exe} $out/bin/hare-native \
       --inherit-argv0 \
       --unset AR \
       --unset LD \

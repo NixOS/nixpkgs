@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
 
     # npm complains of "invalid package". shrug. we can give it a version.
     postPatch = ''
-      ${lib.getExe jq} '.version = "${finalAttrs.version}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+      ${jq.exe} '.version = "${finalAttrs.version}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
     '';
 
     installPhase = ''

@@ -102,7 +102,7 @@ in
         User = "tinyproxy";
         Group = "tinyproxy";
         Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} -d -c ${configFile}";
+        ExecStart = "${cfg.package.exe} -d -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";

@@ -81,8 +81,8 @@ in
       serviceConfig = {
         Type = "exec";
 
-        ExecStartPre = "${lib.getExe cfg.package} checkconfig --config ${configFile}";
-        ExecStart = "${lib.getExe cfg.package} --config ${configFile}";
+        ExecStartPre = "${cfg.package.exe} checkconfig --config ${configFile}";
+        ExecStart = "${cfg.package.exe} --config ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         Restart = "always";

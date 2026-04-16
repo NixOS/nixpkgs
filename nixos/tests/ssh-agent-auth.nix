@@ -46,7 +46,7 @@ in
 
         # faketty needed to ensure `sudo` doesn't write to the controlling PTY,
         #  which would break the test-driver's line-oriented protocol.
-        ${lib.getExe pkgs.faketty} sudo -u foo -- id -un
+        ${pkgs.faketty.exe} sudo -u foo -- id -un
       '';
     in
     ''

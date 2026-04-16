@@ -56,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use zenity from nix store
     substituteInPlace TheForceEngine/TFE_Ui/portable-file-dialogs.h \
-      --replace-fail "check_program(\"zenity\")" "check_program(\"${lib.getExe zenity}\")" \
-      --replace-fail "flags(flag::has_zenity) ? \"zenity\"" "flags(flag::has_zenity) ? \"${lib.getExe zenity}\""
+      --replace-fail "check_program(\"zenity\")" "check_program(\"${zenity.exe}\")" \
+      --replace-fail "flags(flag::has_zenity) ? \"zenity\"" "flags(flag::has_zenity) ? \"${zenity.exe}\""
   '';
 
   meta = {

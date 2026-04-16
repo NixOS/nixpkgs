@@ -39,9 +39,9 @@ melpaBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace buffer.py \
       --replace-fail "shutil.which(\"fd\")" \
-                     "shutil.which(\"${lib.getExe fd}\")" \
+                     "shutil.which(\"${fd.exe}\")" \
       --replace-fail "return \"fd\"" \
-                     "return \"${lib.getExe fd}\""
+                     "return \"${fd.exe}\""
   '';
 
   postBuild = ''

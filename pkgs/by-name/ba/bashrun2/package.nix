@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace \
       src/bashrun2 \
-      --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bashInteractive}'
+      --replace-fail '#!/usr/bin/env bash' '#!${bashInteractive.exe}'
 
     substituteInPlace \
       src/remote \

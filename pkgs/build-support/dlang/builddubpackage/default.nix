@@ -45,7 +45,7 @@ lib.extendMkDerivation {
 
       configurePhase = ''
         runHook preConfigure
-        dubFlags+=("--compiler=${lib.getExe compiler}")
+        dubFlags+=("--compiler=${compiler.exe}")
         runHook postConfigure
       '';
 

@@ -106,7 +106,7 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         DynamicUser = true;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         PrivateDevices = true;

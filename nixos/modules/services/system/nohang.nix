@@ -52,7 +52,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart =
-          "${lib.getExe cfg.package} --monitor --config "
+          "${cfg.package.exe} --monitor --config "
           + (
             if cfg.configPath == "basic" then
               "${cfg.package}/etc/nohang/nohang.conf"

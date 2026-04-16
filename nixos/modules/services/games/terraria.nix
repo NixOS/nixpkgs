@@ -29,7 +29,7 @@ let
     (boolFlag "noupnp" cfg.noUPnP)
   ];
 
-  tmuxCmd = "${lib.getExe pkgs.tmux} -S ${lib.escapeShellArg cfg.dataDir}/terraria.sock";
+  tmuxCmd = "${pkgs.tmux.exe} -S ${lib.escapeShellArg cfg.dataDir}/terraria.sock";
 
   stopScript = pkgs.writeShellScript "terraria-stop" ''
     if ! [ -d "/proc/$1" ]; then
@@ -182,7 +182,7 @@ in
         Type = "forking";
         GuessMainPID = true;
         UMask = 7;
-        ExecStart = "${tmuxCmd} new -d ${lib.getExe cfg.package} ${lib.concatStringsSep " " flags}";
+        ExecStart = "${tmuxCmd} new -d ${cfg.package.exe} ${lib.concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
     };

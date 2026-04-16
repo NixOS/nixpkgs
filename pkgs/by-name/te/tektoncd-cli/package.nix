@@ -65,7 +65,7 @@ buildGoModule (finalAttrs: {
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}"
         else
-          lib.getExe buildPackages.tektoncd-cli;
+          buildPackages.tektoncd-cli.exe;
     in
     ''
       installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \

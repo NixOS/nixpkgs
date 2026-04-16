@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed 1i'void timeout_init();' -i src/jwhois.c
 
     substituteInPlace example/jwhois.conf \
-        --replace-fail "/usr/bin/lynx" ${lib.getExe lynx}
+        --replace-fail "/usr/bin/lynx" ${lynx.exe}
   '';
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];

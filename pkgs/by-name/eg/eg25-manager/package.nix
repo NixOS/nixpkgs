@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace 'udev/80-modem-eg25.rules' \
-      --replace-fail '/bin/grep' '${lib.getExe gnugrep}'
+      --replace-fail '/bin/grep' '${gnugrep.exe}'
   '';
 
   depsBuildBuild = [ pkg-config ];

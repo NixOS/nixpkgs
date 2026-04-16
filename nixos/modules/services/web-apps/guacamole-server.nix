@@ -62,7 +62,7 @@ in
       }
       // cfg.extraEnvironment;
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} -f -b ${cfg.host} -l ${toString cfg.port}";
+        ExecStart = "${cfg.package.exe} -f -b ${cfg.host} -l ${toString cfg.port}";
         RuntimeDirectory = "guacamole-server";
         DynamicUser = true;
         PrivateTmp = "yes";

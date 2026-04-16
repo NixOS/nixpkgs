@@ -22,9 +22,9 @@ let
 
     # Get rid of the autoupdater
     postExtract = ''
-      ${lib.getExe asar} extract $out/resources/app.asar app
+      ${asar.exe} extract $out/resources/app.asar app
       sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
-      ${lib.getExe asar} pack app $out/resources/app.asar
+      ${asar.exe} pack app $out/resources/app.asar
     '';
   };
 in

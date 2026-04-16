@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       npm run build-release --offline --nodedir="${electron.headers}"
       rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
       find build -type f -exec \
-        ${lib.getExe removeReferencesTo} \
+        ${removeReferencesTo.exe} \
         -t "${electron.headers}" {} \;
       ))
     done
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -D public/icons/favicon-$_icons.png $out/share/icons/hicolor/$_icons/apps/splayer.png
     done
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/splayer" \
+    makeWrapper '${electron.exe}' "$out/bin/splayer" \
       --add-flags $out/share/splayer/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \

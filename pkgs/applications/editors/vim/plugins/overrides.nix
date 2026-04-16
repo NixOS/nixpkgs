@@ -1604,7 +1604,7 @@ assertNoAdditions {
 
       postPatch = ''
         substituteInPlace lua/kulala/config/defaults.lua \
-          --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
+          --replace-fail 'curl_path = "curl"' 'curl_path = "${curl.exe}"'
       '';
 
       nvimSkipModules = [
@@ -3788,8 +3788,8 @@ assertNoAdditions {
   typst-preview-nvim = super.typst-preview-nvim.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/typst-preview/config.lua \
-       --replace-fail "['tinymist'] = nil," "tinymist = '${lib.getExe tinymist}'," \
-       --replace-fail "['websocat'] = nil," "websocat = '${lib.getExe websocat}',"
+       --replace-fail "['tinymist'] = nil," "tinymist = '${tinymist.exe}'," \
+       --replace-fail "['websocat'] = nil," "websocat = '${websocat.exe}',"
     '';
 
   };

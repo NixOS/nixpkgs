@@ -74,7 +74,7 @@ let
         closureInfo { rootPaths = contentsList; }
       }/registration
       # Reset registration times to make the image reproducible
-      ${lib.getExe buildPackages.sqlite} nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
+      ${buildPackages.sqlite.exe} nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
       mkdir -p nix/var/nix/gcroots/docker/
       for i in ${lib.concatStringsSep " " contentsList}; do
@@ -564,7 +564,7 @@ rec {
         mkdir -p $out
         tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
                     tee -p $out/layer.tar |
-                    ${lib.getExe tarsum})
+                    ${tarsum.exe})
 
         cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
         # Indicate to docker that we're using schema version 1.0.
@@ -972,7 +972,7 @@ rec {
   # The use of bash (interactive) here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
-    ln -s ${lib.getExe bash} $out/bin/sh
+    ln -s ${bash.exe} $out/bin/sh
   '';
 
   # This provides the ca bundle in common locations
@@ -1267,7 +1267,7 @@ rec {
       #
       # https://github.com/NixOS/nix/issues/6379
       homeDirectory ? "/build",
-      shell ? lib.getExe bash,
+      shell ? bash.exe,
       command ? null,
       run ? null,
     }:

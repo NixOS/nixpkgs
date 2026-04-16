@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DEST=$(out)" ];
 
-  configureFlags = [ "--python=${lib.getExe python'}" ];
+  configureFlags = [ "--python=${python'.exe}" ];
 
   preConfigure = ''
     patchShebangs --build updateversion.sh

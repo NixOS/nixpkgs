@@ -21,7 +21,7 @@ runCommand "test-writeShellScriptBin" { } ''
 
   echo Testing with getExe...
 
-  target=${lib.getExe pkg}
+  target=${pkg.exe}
   expected=${lib.escapeShellArg output}
   got=$("$target")
   if [[ "$got" != "$expected" ]]; then

@@ -79,7 +79,7 @@ python.pkgs.buildPythonApplication rec {
   postInstall =
     let
       start_script = writeShellScript "umap-serve" ''
-        ${lib.getExe python3.pkgs.uvicorn} "$@" umap.asgi:application;
+        ${python3.pkgs.uvicorn.exe} "$@" umap.asgi:application;
       '';
     in
     ''

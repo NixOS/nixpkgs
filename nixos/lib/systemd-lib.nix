@@ -567,7 +567,7 @@ rec {
             name = "unit-script-${scriptName}";
           });
     in
-    lib.getExe out;
+    out.exe;
 
   unitConfig =
     {

@@ -72,7 +72,7 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} -c ${settingsFormat.generate "config.yaml" cfg.settings}";
+        ExecStart = "${cfg.package.exe} -c ${settingsFormat.generate "config.yaml" cfg.settings}";
         LoadCredential = cfg.loadCredential;
         Restart = "always";
         RestartSec = "2s";

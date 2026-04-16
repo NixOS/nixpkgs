@@ -20,10 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zEnUbVLrWCkRq28L6LFc7ryEZS6tFMy8sGnVlDTwkj8=";
   };
 
-  configureScript = "${lib.getExe perl} ./Configure.pl";
+  configureScript = "${perl.exe} ./Configure.pl";
   configureFlags = [
     "--backends=moar"
-    "--with-moar=${lib.getExe moarvm}"
+    "--with-moar=${moarvm.exe}"
   ];
 
   # Fix for issue where nqp expects to find files from moarvm in the same output:

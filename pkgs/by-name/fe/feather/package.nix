@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DProtobuf_INCLUDE_DIR=${lib.getDev protobuf}/include"
-    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe protobuf}"
+    "-DProtobuf_PROTOC_EXECUTABLE=${protobuf.exe}"
     "-DReadline_INCLUDE_DIR=${lib.getDev readline}/include/readline"
     "-DReadline_LIBRARY=${lib.getLib readline}/lib/libreadline.so"
     "-DReadline_ROOT_DIR=${lib.getDev readline}"

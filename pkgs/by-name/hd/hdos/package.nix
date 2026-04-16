@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${lib.getExe openjdk11} $out/bin/hdos \
+    makeWrapper ${openjdk11.exe} $out/bin/hdos \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --add-flags "-jar $src"
     runHook postInstall

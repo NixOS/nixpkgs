@@ -101,14 +101,14 @@ in
 
         preStart = ''
           if ! test -e "${replicaDataPath}"; then
-            ${lib.getExe cfg.package} format --cluster="${toString cfg.clusterId}" --replica="${toString cfg.replicaIndex}" --replica-count="${toString cfg.replicaCount}" "${replicaDataPath}"
+            ${cfg.package.exe} format --cluster="${toString cfg.clusterId}" --replica="${toString cfg.replicaIndex}" --replica-count="${toString cfg.replicaCount}" "${replicaDataPath}"
           fi
         '';
 
         serviceConfig = {
           DevicePolicy = "closed";
           DynamicUser = true;
-          ExecStart = "${lib.getExe cfg.package} start --cache-grid=${cfg.cacheGridSize} --addresses=${lib.escapeShellArg (builtins.concatStringsSep "," cfg.addresses)} ${replicaDataPath}";
+          ExecStart = "${cfg.package.exe} start --cache-grid=${cfg.cacheGridSize} --addresses=${lib.escapeShellArg (builtins.concatStringsSep "," cfg.addresses)} ${replicaDataPath}";
           LockPersonality = true;
           ProtectClock = true;
           ProtectControlGroups = true;

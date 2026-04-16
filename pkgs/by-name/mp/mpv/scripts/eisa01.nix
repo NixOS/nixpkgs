@@ -45,7 +45,7 @@ lib.recurseIntoAttrs (
     smart-copy-paste-2 = {
       scriptPath = "scripts/SmartCopyPaste_II.lua";
       prePatch = ''
-        substituteInPlace $scriptPath --replace-fail 'xclip' "${lib.getExe xclip}"
+        substituteInPlace $scriptPath --replace-fail 'xclip' "${xclip.exe}"
       '';
 
       meta = {

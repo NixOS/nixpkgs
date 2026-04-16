@@ -57,8 +57,8 @@ buildNpmPackage rec {
   # Also stop it from downloading ytdlp
   postPatch = ''
     substituteInPlace src/renderer.js \
-      --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg-headless}' \
-      --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${lib.getExe yt-dlp}`' \
+      --replace-fail $\{__dirname}/../ffmpeg '${ffmpeg-headless.exe}' \
+      --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${yt-dlp.exe}`' \
       --replace-fail 'let ytDlpIsPresent = false;' 'let ytDlpIsPresent = true;'
     # Disable auto-updates
     substituteInPlace src/preferences.js \

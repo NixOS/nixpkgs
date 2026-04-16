@@ -81,7 +81,7 @@ maven.buildMavenPackage rec {
     "-P embedded-jetty"
     "-Dservices.bom.merge.skip=false"
     "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
-    "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
+    "-Dcyclonedx-cli.path=${cyclonedx-cli.exe}"
   ];
 
   afterDepsSetup = ''

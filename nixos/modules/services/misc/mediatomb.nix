@@ -61,7 +61,7 @@ let
               <accept-url>yes</accept-url>
               <first-resource>yes</first-resource>
               <accept-ogg-theora>yes</accept-ogg-theora>
-              <agent command="${lib.getExe vlc}"
+              <agent command="${vlc.exe}"
                 arguments="-I dummy %in --sout #transcode{venc=ffmpeg,vcodec=mp2v,vb=4096,fps=25,aenc=ffmpeg,acodec=mpga,ab=192,samplerate=44100,channels=2}:standard{access=file,mux=ps,dst=%out} vlc:quit" />
               <buffer size="14400000" chunk-size="512000" fill-size="120000" />
             </profile>

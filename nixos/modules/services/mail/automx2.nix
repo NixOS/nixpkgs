@@ -69,7 +69,7 @@ in
       after = [ "network.target" ];
       postStart = ''
         sleep 3
-        ${lib.getExe pkgs.curl} -X POST --json @${format.generate "automx2.json" cfg.settings} http://127.0.0.1:${toString cfg.port}/initdb/
+        ${pkgs.curl.exe} -X POST --json @${format.generate "automx2.json" cfg.settings} http://127.0.0.1:${toString cfg.port}/initdb/
       '';
       serviceConfig = {
         Environment = [

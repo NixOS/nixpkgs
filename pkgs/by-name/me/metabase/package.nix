@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${lib.getExe jre} $out/bin/metabase --add-flags "-jar $src"
+    makeWrapper ${jre.exe} $out/bin/metabase --add-flags "-jar $src"
     runHook postInstall
   '';
 

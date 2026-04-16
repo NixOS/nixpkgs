@@ -300,10 +300,10 @@ in
           install -m0640 ${cfg.server.package.src}/config.yaml.dist ${cfg.dataDir}/config.yaml.dist
           touch ${cfg.dataDir}/config.yaml
           chmod 0640 ${cfg.dataDir}/config.yaml
-          ${lib.getExe pkgs.envsubst} -i ${configFile} -o ${cfg.dataDir}/config.yaml
+          ${pkgs.envsubst.exe} -i ${configFile} -o ${cfg.dataDir}/config.yaml
           sed 's|script_location = |script_location = ${cfg.server.package.src}/|' ${cfg.server.package.src}/alembic.ini > ${cfg.dataDir}/alembic.ini
-          ${lib.getExe cfg.server.package.alembic} upgrade head
-          ${lib.getExe cfg.server.package.waitress} --host ${cfg.server.host} --port ${toString cfg.server.port} --threads ${toString cfg.server.threads} szurubooru.facade:app
+          ${cfg.server.package.alembic.exe} upgrade head
+          ${cfg.server.package.waitress.exe} --host ${cfg.server.host} --port ${toString cfg.server.port} --threads ${toString cfg.server.threads} szurubooru.facade:app
         '';
 
         serviceConfig = {

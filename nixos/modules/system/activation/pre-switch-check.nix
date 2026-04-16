@@ -22,12 +22,11 @@ in
     type = lib.types.pathInStore;
     internal = true;
     readOnly = true;
-    default = lib.getExe (
-      pkgs.writeShellApplication {
+    default =
+      (pkgs.writeShellApplication {
         name = "pre-switch-checks";
         text = preSwitchCheckScript;
-      }
-    );
+      }).exe;
   };
 
   options.system.preSwitchChecks = lib.mkOption {

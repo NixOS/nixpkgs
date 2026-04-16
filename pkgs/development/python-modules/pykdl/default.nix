@@ -32,7 +32,7 @@ toPythonModule (
     ];
     propagatedBuildInputs = [ python ];
 
-    cmakeFlags = [ "-DPYTHON_EXECUTABLE=${lib.getExe python.pythonOnBuildForHost}" ];
+    cmakeFlags = [ "-DPYTHON_EXECUTABLE=${python.pythonOnBuildForHost.exe}" ];
 
     meta = {
       description = "Kinematics and Dynamics Library (Python bindings)";

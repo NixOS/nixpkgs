@@ -54,8 +54,8 @@ in
       after = [ "network.target" ];
       description = "XMRig Mining Software Service";
       serviceConfig = {
-        ExecStartPre = "${lib.getExe cfg.package} --config=${configFile} --dry-run";
-        ExecStart = "${lib.getExe cfg.package} --config=${configFile}";
+        ExecStartPre = "${cfg.package.exe} --config=${configFile} --dry-run";
+        ExecStart = "${cfg.package.exe} --config=${configFile}";
         # https://xmrig.com/docs/miner/randomx-optimization-guide/msr
         # If you use recent XMRig with root privileges (Linux) or admin
         # privileges (Windows) the miner configure all MSR registers

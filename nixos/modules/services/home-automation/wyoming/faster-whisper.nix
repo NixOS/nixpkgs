@@ -342,7 +342,7 @@ in
             # https://github.com/home-assistant/addons/blob/master/whisper/rootfs/etc/s6-overlay/s6-rc.d/whisper/run
             ExecStart = escapeSystemdExecArgs (
               [
-                (lib.getExe finalPackage)
+                (finalPackage.exe)
                 "--data-dir"
                 "/var/lib/wyoming/faster-whisper"
                 "--uri"

@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion {
-      command = "QT_QPA_PLATFORM=offscreen ${lib.getExe finalAttrs.finalPackage} --version";
+      command = "QT_QPA_PLATFORM=offscreen ${finalAttrs.finalPackage.exe} --version";
       package = finalAttrs.finalPackage;
       version = "${finalAttrs.version}-rel";
     };

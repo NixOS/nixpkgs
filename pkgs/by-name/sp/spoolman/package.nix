@@ -57,7 +57,7 @@ python.pkgs.buildPythonPackage rec {
   postInstall =
     let
       start_script = writeShellScript "start-spoolman" ''
-        ${lib.getExe python.pkgs.uvicorn} "$@" spoolman.main:app;
+        ${python.pkgs.uvicorn.exe} "$@" spoolman.main:app;
       '';
     in
     ''

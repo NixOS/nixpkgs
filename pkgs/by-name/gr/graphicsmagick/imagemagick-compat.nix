@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
         "montage"
       ];
       linkUtilityBin = utility: ''
-        ln -s ${lib.getExe graphicsmagick} "$out/bin/${utility}"
+        ln -s ${graphicsmagick.exe} "$out/bin/${utility}"
       '';
       linkUtilityMan = utility: ''
         ln -s ${lib.getMan graphicsmagick}/share/man/man1/gm.1.gz "$man/share/man/man1/${utility}.1.gz"

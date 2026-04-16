@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace bin/rancid-run.in \
       --replace '>$LOGDIR/$GROUP.`date +%Y%m%d.%H%M%S` 2>&1' ' ' \
-      --replace 'perl ' '${getExe perl} ' \
+      --replace 'perl ' '${perl.exe} ' \
       --replace 'sh ' '${runtimeShell} ' \
       --replace '"control_rancid ' '"${placeholder "out"}/bin/control_rancid ' \
 

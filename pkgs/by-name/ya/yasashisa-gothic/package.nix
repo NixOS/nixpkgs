@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation {
   unpackPhase = ''
     runHook preUnpack
 
-    ${lib.getExe unzrip} -O SHIFT_JIS "$src"
+    ${unzrip.exe} -O SHIFT_JIS "$src"
 
     runHook postUnpack
   '';

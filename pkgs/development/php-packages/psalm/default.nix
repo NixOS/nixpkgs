@@ -28,7 +28,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = runCommand "composer.lock" { } ''
-    ${lib.getExe php} -r '$phar = new Phar("${psalm-phar}"); $phar->extractTo(".", "composer.lock");'
+    ${php.exe} -r '$phar = new Phar("${psalm-phar}"); $phar->extractTo(".", "composer.lock");'
     cp composer.lock $out
   '';
   vendorHash = "sha256-2LlP0D7b07yXVGc/+pJUUWYXF8rsc4HiErBUt5SfZmw=";

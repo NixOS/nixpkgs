@@ -23,9 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     let
       cat = lib.getExe' coreutils "cat";
       compress = lib.getExe' ncompress "compress";
-      gzipExe = lib.getExe gzip;
+      gzipExe = gzip.exe;
       rm = lib.getExe' coreutils "rm";
-      sed = lib.getExe gnused;
+      sed = gnused.exe;
     in
     ''
       substituteInPlace front-end-tools/unix/CRZ2RNX --replace-fail \
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
           'set COMPRESS = ${compress}' \
 
       substituteInPlace front-end-tools/unix/* \
-        --replace-fail /bin/csh '${lib.getExe tcsh}' \
+        --replace-fail /bin/csh '${tcsh.exe}' \
         --replace-fail \
           'set CAT = cat;' \
           'set CAT = ${cat};' \

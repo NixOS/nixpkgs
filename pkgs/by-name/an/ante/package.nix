@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage {
       'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/release"
 
     substituteInPlace src/util/mod.rs \
-      --replace-fail '"gcc"' '"${lib.getExe llvmPackages_18.clang}"'
+      --replace-fail '"gcc"' '"${llvmPackages_18.clang.exe}"'
   '';
   preBuild =
     let

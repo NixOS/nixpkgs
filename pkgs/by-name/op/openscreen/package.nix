@@ -73,7 +73,7 @@ buildNpmPackage (finalAttrs: {
       mkdir -p $out/share/openscreen
       cp -r release/*/*-unpacked/{locales,resources{,.pak}} $out/share/openscreen
 
-      makeWrapper ${lib.getExe electron} $out/bin/openscreen \
+      makeWrapper ${electron.exe} $out/bin/openscreen \
           --add-flags $out/share/openscreen/resources/app.asar \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --set-default ELECTRON_IS_DEV 0 \

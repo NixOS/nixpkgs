@@ -52,7 +52,7 @@ buildNpmPackage (finalAttrs: {
 
     mkdir -p $out/share
     cp -r dist $out/share/sub-store
-    makeWrapper ${lib.getExe nodejs} $out/bin/sub-store \
+    makeWrapper ${nodejs.exe} $out/bin/sub-store \
       --add-flags "$out/share/sub-store/sub-store.bundle.js"
 
     runHook postInstall

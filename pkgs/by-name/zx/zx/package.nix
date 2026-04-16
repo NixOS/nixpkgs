@@ -52,7 +52,7 @@ buildNpmPackage (finalAttrs: {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  env.ESBUILD_BINARY_PATH = esbuild'.exe;
 
   doInstallCheck = true;
 

@@ -262,7 +262,7 @@ let
   );
 
   # Executing H2O with our generated configuration; `mode` added as needed
-  h2oExe = "${lib.getExe cfg.package} ${
+  h2oExe = "${cfg.package.exe} ${
     lib.strings.escapeShellArgs [
       "--conf"
       "${h2oConfig}"

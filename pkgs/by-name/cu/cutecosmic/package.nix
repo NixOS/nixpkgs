@@ -70,11 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = writeShellScript "update-cutecosmic" ''
       set -euo pipefail
 
-      ${lib.getExe nix-update} cutecosmic --version branch=HEAD
+      ${nix-update.exe} cutecosmic --version branch=HEAD
       src=$(nix-build -A cutecosmic.src --no-out-link)
 
       # Corrosion-rs dependency
-      tag=$(${lib.getExe ripgrep} --multiline --pcre2 --only-matching \
+      tag=$(${ripgrep.exe} --multiline --pcre2 --only-matching \
         'FetchContent_Declare\(\s*Corrosion[^)]*GIT_TAG\s+(v[\d.]+)' \
         --replace '$1' \
         "$src/bindings/CMakeLists.txt")

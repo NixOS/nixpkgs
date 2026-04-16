@@ -406,7 +406,7 @@ stdenv'.mkDerivation (finalAttrs: {
         for engine in BLENDER_EEVEE_NEXT CYCLES; do
           echo "Rendering with $engine..."
           # Beware that argument order matters
-          ${lib.getExe finalAttrs.finalPackage} \
+          ${finalAttrs.finalPackage.exe} \
             --background \
             -noaudio \
             --factory-startup \
@@ -421,7 +421,7 @@ stdenv'.mkDerivation (finalAttrs: {
         import subprocess
         subprocess.run([${
           lib.concatMapStringsSep ", " (x: ''"${x}"'') [
-            (lib.getExe (blender.override { cudaSupport = true; }))
+            ((blender.override { cudaSupport = true; }).exe)
             "--background"
             "-noaudio"
             "--python-exit-code"

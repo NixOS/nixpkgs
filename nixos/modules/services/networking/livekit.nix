@@ -156,7 +156,7 @@ in
       serviceConfig = {
         LoadCredential = [ "livekit-secrets:${cfg.keyFile}" ];
         ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe cfg.package)
+          (cfg.package.exe)
           "--config=${format.generate "livekit.json" settings}"
           "--key-file=/run/credentials/livekit.service/livekit-secrets"
         ];

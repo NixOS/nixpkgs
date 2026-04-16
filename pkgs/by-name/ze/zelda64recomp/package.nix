@@ -86,7 +86,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     ln -s ${baseRom} ./mm.us.rev1.rom.z64
-    ${lib.getExe z64decompress} mm.us.rev1.rom.z64 mm.us.rev1.rom_uncompressed.z64
+    ${z64decompress.exe} mm.us.rev1.rom.z64 mm.us.rev1.rom_uncompressed.z64
     cp ${n64recomp}/bin/* .
 
     ./N64Recomp us.rev1.toml

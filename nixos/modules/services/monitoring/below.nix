@@ -105,7 +105,7 @@ in
         serviceConfig.ExecStart = [
           ""
           (
-            "${lib.getExe pkgs.below} record "
+            "${pkgs.below.exe} record "
             + (lib.concatStringsSep " " (
               lib.optional (!cfg.collect.diskStats) "--disable-disk-stat"
               ++ lib.optional cfg.collect.ioStats "--collect-io-stat"

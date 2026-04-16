@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             ];
           }
           ''
-            makeWrapper ${lib.getExe finalAttrs.finalPackage} ./taplo-toml-test --add-flag toml-test
+            makeWrapper ${finalAttrs.finalPackage.exe} ./taplo-toml-test --add-flag toml-test
             toml-test test -decoder=./taplo-toml-test -toml=1.0 ${
               lib.concatMapStringsSep " " (a: "-skip ${a}") skips
             }

@@ -46,8 +46,8 @@ let
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
     setup_cmd = dmcfg.sessionData.wrapper;
-    brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
-    brightness_down_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s 10%-";
+    brightness_up_cmd = "${pkgs.brightnessctl.exe} -q -n s +10%";
+    brightness_down_cmd = "${pkgs.brightnessctl.exe} -q -n s 10%-";
   }
   // optionalAttrs dmcfg.autoLogin.enable {
     auto_login_service = "ly-autologin";

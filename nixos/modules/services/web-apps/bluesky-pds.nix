@@ -30,7 +30,7 @@ let
       env "PDS_ENV_FILE=$DUMMY_PDS_ENV_FILE"                                                   \
           ${escapeShellArgs cfgSystemd.Environment}                                            \
           ${concatMapStringsSep " " (envFile: "$(cat ${envFile})") cfgSystemd.EnvironmentFile} \
-          ${getExe pkgs.bluesky-pdsadmin} "$@"
+          ${pkgs.bluesky-pdsadmin.exe} "$@"
     '';
 in
 # All defaults are from https://github.com/bluesky-social/pds/blob/0b5cd1179f4fcf2643e5ead5cf4ac56c5cdeda3b/installer.sh
@@ -205,7 +205,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = cfg.package.exe;
         Environment = lib.mapAttrsToList (k: v: "${k}=${if builtins.isInt v then toString v else v}") (
           lib.filterAttrs (_: v: v != null) cfg.settings
         );

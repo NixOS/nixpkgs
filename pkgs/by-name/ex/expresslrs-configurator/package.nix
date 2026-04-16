@@ -67,7 +67,7 @@ stdenv.mkDerivation {
       --replace-fail '__dirname,"../../.erb/dll/preload.js"' '__dirname,"preload.js"'
     asar pack $TMPDIR/app $out/${resourcesPath}/app.asar
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/${pname}" \
+    makeWrapper '${electron.exe}' "$out/bin/${pname}" \
       --add-flags "$out/${resourcesPath}/app.asar" \
       --prefix PATH : ${lib.makeBinPath [ git ]} \
       --set ELECTRON_OVERRIDE_DIST_PATH "${electron}/lib/electron" \

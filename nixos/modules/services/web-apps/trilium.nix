@@ -135,7 +135,7 @@ in
           wantedBy = [ "multi-user.target" ];
           environment.TRILIUM_DATA_DIR = cfg.dataDir;
           serviceConfig = {
-            ExecStart = lib.getExe cfg.package;
+            ExecStart = cfg.package.exe;
             EnvironmentFile = cfg.environmentFile;
             User = "trilium";
             Group = "trilium";

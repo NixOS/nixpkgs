@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     fi
 
     substituteInPlace $out/share/appfire-cli/acli.sh \
-      --replace-fail 'java $' '${lib.getExe jre} $' \
-      --replace-fail '(find' '(${lib.getExe findutils}' \
+      --replace-fail 'java $' '${jre.exe} $' \
+      --replace-fail '(find' '(${findutils.exe}' \
       --replace-fail dirname ${lib.getExe' coreutils "dirname"} \
       --replace-fail uname ${lib.getExe' coreutils "uname"}
     makeBinaryWrapper $out/share/appfire-cli/acli.sh $out/bin/acli

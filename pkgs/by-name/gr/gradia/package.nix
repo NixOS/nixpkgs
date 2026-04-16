@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "/app/bin/tesseract" "${lib.getExe tesseract}"
+      --replace "/app/bin/tesseract" "${tesseract.exe}"
   '';
 
   dependencies = with python3Packages; [

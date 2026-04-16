@@ -307,7 +307,7 @@ python.pkgs.buildPythonApplication rec {
 
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
-      ffmpeg = "${lib.getExe ffmpeg-headless}";
+      ffmpeg = "${ffmpeg-headless.exe}";
     })
   ];
 

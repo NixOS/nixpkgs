@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-fpermissive -fcommon";
 
   passthru.updateScript = writeShellScript "update-yap" ''
-    ${lib.getExe nix-update} yap --version=branch
+    ${nix-update.exe} yap --version=branch
     version=$(nix eval --raw --file . yap.version)
     src=$(nix eval --raw --file . yap.src)
     latestVersion=$(grep -E '^[[:space:]]*set\(YAP_(MAJOR|MINOR|PATCH)_VERSION' "$src"/CMakeLists.txt | sed -E 's/.* ([0-9]+).*/\1/' | paste -sd.)

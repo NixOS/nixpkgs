@@ -237,7 +237,7 @@ in
         # make sure the chain data directory is created on first run
         mkdir -p ${cfg.beacon.dataDir}/${cfg.network}
 
-        ${lib.getExe cfg.package} beacon_node \
+        ${cfg.package.exe} beacon_node \
           --disable-upnp \
           ${lib.optionalString cfg.beacon.disableDepositContractSync "--disable-deposit-contract-sync"} \
           --port ${toString cfg.beacon.port} \
@@ -288,7 +288,7 @@ in
         # make sure the chain data directory is created on first run
         mkdir -p ${cfg.validator.dataDir}/${cfg.network}
 
-        ${lib.getExe cfg.package} validator_client \
+        ${cfg.package.exe} validator_client \
           --network ${cfg.network} \
           --beacon-nodes ${lib.concatStringsSep "," cfg.validator.beaconNodes} \
           --datadir ${cfg.validator.dataDir}/${cfg.network} \

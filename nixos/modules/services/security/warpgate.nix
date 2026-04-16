@@ -337,7 +337,7 @@ in
         CFGFILE=/var/lib/warpgate/config.yaml
         if [ ! -O $CFGFILE ] || [ ! -s $CFGFILE ]; then
           INITPWD=$(tr -dc 'A-Za-z0-9!?%=' </dev/urandom 2>/dev/null | head -c 16)
-          ${lib.getExe cfg.package} \
+          ${cfg.package.exe} \
             --config $CFGFILE unattended-setup \
             --data-path /var/lib/warpgate \
             --http-port 8888 \
@@ -386,7 +386,7 @@ in
             if cfg.databaseUrlFile != null then "databaseUrl:${cfg.databaseUrlFile}" else ""
           }";
           ExecStartPre = preStartScript;
-          ExecStart = "${lib.getExe cfg.package} --config /var/lib/warpgate/config.yaml run";
+          ExecStart = "${cfg.package.exe} --config /var/lib/warpgate/config.yaml run";
           DynamicUser = true;
           RestartSec = 3;
           Restart = "on-failure";

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib}
     cp -r $src/{src,LICENSE,README.md} $out/lib
-    makeWrapper ${lib.getExe deno} $out/bin/era \
+    makeWrapper ${deno.exe} $out/bin/era \
       --set DENO_NO_UPDATE_CHECK "1" \
       --add-flags "run -A $out/lib/src/main.ts"
 

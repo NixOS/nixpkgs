@@ -251,7 +251,7 @@ in
         in
         ''
           ${concatStringsSep "\n" loadCredentials}
-          ${getExe cfg.package}
+          ${cfg.package.exe}
         '';
 
       serviceConfig = {

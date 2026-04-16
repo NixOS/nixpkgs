@@ -161,7 +161,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} run";
+        ExecStart = "${cfg.package.exe} run";
         Environment = lib.mapAttrsToList (k: v: "${k}=${if builtins.isInt v then toString v else v}") (
           lib.filterAttrs (_: v: v != null) cfg.settings
         );

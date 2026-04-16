@@ -60,7 +60,7 @@ buildGoModule (finalAttrs: {
     };
     updateScript = _experimental-update-script-combinators.sequence [
       finalAttrs.passthru.updateScriptSrc.command
-      (lib.getExe finalAttrs.passthru.updateScriptVendor)
+      (finalAttrs.passthru.updateScriptVendor.exe)
     ];
   };
 

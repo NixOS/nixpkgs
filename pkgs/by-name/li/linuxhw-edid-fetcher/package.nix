@@ -30,20 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kdGUAbdlS736iB9oGo46HLK3ne3BV4LmUv/3fliyQBA=";
   };
 
-  fetch = lib.getExe (writeShellApplication {
-    name = "linuxhw-edid-fetch";
-    runtimeInputs = [
-      gawk
-      coreutils
-      unixtools.xxd
-      curl
-      gnutar
-    ];
-    text = ''
-      repo="''${repo:-"${finalAttrs.src}"}"
-      ${builtins.readFile ./linuxhw-edid-fetch.sh}
-    '';
-  });
+  fetch =
+    (writeShellApplication {
+      name = "linuxhw-edid-fetch";
+      runtimeInputs = [
+        gawk
+        coreutils
+        unixtools.xxd
+        curl
+        gnutar
+      ];
+      text = ''
+        repo="''${repo:-"${finalAttrs.src}"}"
+        ${builtins.readFile ./linuxhw-edid-fetch.sh}
+      '';
+    }).exe;
 
   configurePhase = lib.pipe displays [
     (lib.mapAttrsToList (

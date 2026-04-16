@@ -26,7 +26,7 @@ in
       owner = "root";
       group = "root";
       capabilities = "cap_net_raw+p";
-      source = lib.getExe pkgs.traceroute;
+      source = pkgs.traceroute.exe;
     };
   };
 }

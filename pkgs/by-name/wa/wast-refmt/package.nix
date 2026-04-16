@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv -t $out/lib/packages packages/**
     mv -t $out/lib/node_modules node_modules/**
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/wast-refmt \
+    makeWrapper ${nodejs.exe} $out/bin/wast-refmt \
       --add-flags "$out/lib/packages/wast-refmt/lib/cli.js" \
       --set NODE_PATH "$out/lib/node_modules"
 

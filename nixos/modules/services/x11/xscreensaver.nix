@@ -25,7 +25,7 @@ in
       example = lib.literalExpression ''
         # Reconfigure autorandr on screen wake up
         {
-          "RUN" = "''${lib.getExe pkgs.autorandr} --change --ignore-lid";
+          "RUN" = "''${pkgs.autorandr.exe} --change --ignore-lid";
         };
       '';
     };

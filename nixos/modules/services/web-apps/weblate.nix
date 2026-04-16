@@ -373,7 +373,7 @@ in
             });
           in
           ''
-            ${lib.getExe gunicorn} \
+            ${gunicorn.exe} \
               --name=weblate \
               --bind='unix:///run/weblate.socket' \
               --preload \

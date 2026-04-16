@@ -19,7 +19,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   ];
   postInstall = ''
     cd "$out/$installPrefix"
-    jq -e '.contributes.configuration.properties."direnv.path.executable".default = "${lib.getExe direnv}"' package.json | sponge package.json
+    jq -e '.contributes.configuration.properties."direnv.path.executable".default = "${direnv.exe}"' package.json | sponge package.json
   '';
   meta = {
     description = "direnv support for Visual Studio Code";

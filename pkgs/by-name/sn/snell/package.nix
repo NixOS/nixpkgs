@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeShellScript "update-snell-server" ''
     latestVersion=$(curl --fail --silent https://kb.nssurge.com/surge-knowledge-base/release-notes/snell | grep -oE 'snell-server-v[0-9]+\.[0-9]+\.[0-9]+' | sed 's/snell-server-v//' | sort -V | tail -n1)
     if [[ "$latestVersion" == "$UPDATE_NIX_OLD_VERSION" ]]; then exit 0; fi
-    ${lib.getExe nix-update} pkgsCross.gnu64.snell --version "$latestVersion"
-    ${lib.getExe nix-update} pkgsCross.aarch64-multiplatform.snell --version skip
+    ${nix-update.exe} pkgsCross.gnu64.snell --version "$latestVersion"
+    ${nix-update.exe} pkgsCross.aarch64-multiplatform.snell --version skip
   '';
 
   meta = {

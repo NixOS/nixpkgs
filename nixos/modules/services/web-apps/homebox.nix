@@ -132,7 +132,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;

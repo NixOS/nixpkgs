@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.fider;
-  fiderCmd = lib.getExe cfg.package;
+  fiderCmd = cfg.package.exe;
 in
 {
   options = {

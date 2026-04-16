@@ -241,7 +241,7 @@ in
         environment.CONFIG = "%t/${serviceConfig.RuntimeDirectory}/config.toml";
 
         script = ''
-          ${getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
+          ${pkgs.envsubst.exe} -i ${config} -o "$CONFIG"
           rosenpass exchange-config "$CONFIG"
         '';
       };

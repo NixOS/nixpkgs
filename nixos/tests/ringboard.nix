@@ -17,7 +17,7 @@
     test-support.displayManager.auto.user = "alice";
 
     services.xserver.displayManager.sessionCommands = ''
-      '${lib.getExe pkgs.gedit}' my_document &
+      '${pkgs.gedit.exe}' my_document &
     '';
 
     services.ringboard.x11.enable = true;

@@ -182,7 +182,7 @@ let
     serviceConfig = commonServiceConfig // {
       # This script runs with elevated privileges, denoted by the +
       # ExecStartPre is used instead of ExecStart so that the `script` continues to work.
-      ExecStartPre = "+${lib.getExe privilegedSetupScript}";
+      ExecStartPre = "+${privilegedSetupScript.exe}";
 
       # We don't want this to run every time a renewal happens
       RemainAfterExit = true;

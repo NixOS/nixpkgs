@@ -76,7 +76,7 @@ in
     systemd.services.cook-cli = {
       description = "cook-cli server";
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} server --host --port ${toString cfg.port} ${cfg.basePath}";
+        ExecStart = "${cfg.package.exe} server --host --port ${toString cfg.port} ${cfg.basePath}";
         WorkingDirectory = cfg.basePath;
         User = "cook-cli";
         Group = "cook-cli";

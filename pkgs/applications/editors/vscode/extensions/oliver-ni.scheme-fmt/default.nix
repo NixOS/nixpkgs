@@ -16,7 +16,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."scheme-fmt.pythonPath".default = "${lib.getExe python3}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ${jq.exe} '.contributes.configuration.properties."scheme-fmt.pythonPath".default = "${python3.exe}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
   '';
 
   meta = {

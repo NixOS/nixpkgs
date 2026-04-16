@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
           };
         in
         ''
-          find $out/Input_Fonts -type f -name '*.ttf' -print0 | ${lib.getExe parallel} -0 -j $NIX_BUILD_CORES ${lib.getExe ttf-fixup} {}
+          find $out/Input_Fonts -type f -name '*.ttf' -print0 | ${parallel.exe} -0 -j $NIX_BUILD_CORES ${ttf-fixup.exe} {}
         '';
     };
 

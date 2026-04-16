@@ -30,7 +30,7 @@ buildNpmPackage rec {
     hash = "sha256-lDsgAOCUrxhmlmYgObDwUR6gbms/q/rNIkTEwJckMyA=";
 
     postFetch = ''
-      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
+      ${npm-lockfile-fix.exe} $out/package-lock.json
     '';
   };
 
@@ -165,7 +165,7 @@ buildNpmPackage rec {
 
           cp -r packages/bruno-electron/dist/linux*-unpacked/{locales,resources{,.pak}} $out/opt/bruno
 
-          makeWrapper ${lib.getExe electron} $out/bin/bruno \
+          makeWrapper ${electron.exe} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
             --prefix LD_LIBRARY_PATH : ${

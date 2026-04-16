@@ -71,7 +71,7 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace exir/_serialize/_flatbuffer.py \
         --replace-fail \
           'flatc_path = "flatc"' \
-          'flatc_path = "${lib.getExe pkgs.flatbuffers}"'
+          'flatc_path = "${pkgs.flatbuffers.exe}"'
     ''
     # Relax build-system dependencies
     + ''

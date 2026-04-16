@@ -422,7 +422,7 @@ in
           fi
         ''}
         if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
-          ${getExe cfg.backendPackage} migrate
+          ${cfg.backendPackage.exe} migrate
           echo -n "${cfg.backendPackage.version}" > .version
         fi
       '';
@@ -485,7 +485,7 @@ in
       environment = cfg.collaborationServer.settings;
 
       serviceConfig = {
-        ExecStart = getExe cfg.collaborationServer.package;
+        ExecStart = cfg.collaborationServer.package.exe;
       }
       // commonServiceConfig;
     };

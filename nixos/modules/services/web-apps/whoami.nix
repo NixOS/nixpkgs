@@ -43,7 +43,7 @@ in
         DynamicUser = true;
         ExecStart = lib.escapeShellArgs (
           [
-            (lib.getExe cfg.package)
+            (cfg.package.exe)
             "-port"
             cfg.port
           ]

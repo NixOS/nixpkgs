@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
     # It is not only shebangs, some tests also write scripts dynamically
     # so it is easier to simply search and replace
-    sed -i "s|/bin/bash|${lib.getExe bash}|" ../Tests/test-*.sh
+    sed -i "s|/bin/bash|${bash.exe}|" ../Tests/test-*.sh
     make -C ../Tests
 
     runHook postCheck

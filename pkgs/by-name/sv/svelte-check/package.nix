@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mv {packages,node_modules} $out/lib/node_modules/svelte-check/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/svelte-check \
+    makeWrapper ${nodejs.exe} $out/bin/svelte-check \
       --add-flags "$out/lib/node_modules/svelte-check/packages/svelte-check/bin/svelte-check" \
       --set NODE_PATH "$out/lib/node_modules/svelte-check/packages/svelte-check/node_modules/"
 

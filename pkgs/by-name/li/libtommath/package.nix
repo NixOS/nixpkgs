@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace makefile.shared \
       --replace-fail glibtool libtool \
-      --replace-fail libtool "${lib.getExe (libtool.override { stdenv = stdenv; })}"
+      --replace-fail libtool "${(libtool.override { stdenv = stdenv; }).exe}"
     substituteInPlace makefile_include.mk \
       --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc"
   '';

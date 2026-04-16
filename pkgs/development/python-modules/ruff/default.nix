@@ -23,7 +23,7 @@ buildPythonPackage {
       substituteInPlace python/ruff/_find_ruff.py \
         --replace-fail \
           'ruff_exe = "ruff" + sysconfig.get_config_var("EXE")' \
-          'return "${lib.getExe ruff}"'
+          'return "${ruff.exe}"'
     ''
     # Sidestep the maturin build system in favour of reusing the binary already built by nixpkgs,
     # to avoid rebuilding the ruff binary for every active python package set.
@@ -40,7 +40,7 @@ buildPythonPackage {
     '';
 
   postInstall = ''
-    mkdir -p $out/bin && ln -s ${lib.getExe ruff} $out/bin/ruff
+    mkdir -p $out/bin && ln -s ${ruff.exe} $out/bin/ruff
   '';
 
   pythonImportsCheck = [ "ruff" ];

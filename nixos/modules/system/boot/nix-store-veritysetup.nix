@@ -26,7 +26,7 @@ in
     boot.initrd.systemd = {
       contents = {
         "/etc/systemd/system-generators/nix-store-veritysetup-generator".source =
-          "${lib.getExe pkgs.nix-store-veritysetup-generator}";
+          "${pkgs.nix-store-veritysetup-generator.exe}";
       };
 
       storePaths = [

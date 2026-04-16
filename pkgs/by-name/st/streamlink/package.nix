@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     (replaceVars ./ffmpeg-path.patch {
-      ffmpeg = lib.getExe ffmpeg;
+      ffmpeg = ffmpeg.exe;
     })
   ];
 

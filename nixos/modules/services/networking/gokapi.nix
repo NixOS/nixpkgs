@@ -92,8 +92,8 @@ in
       serviceConfig = {
         ExecStartPre =
           let
-            updateScript = lib.getExe (
-              pkgs.writeShellApplication {
+            updateScript =
+              (pkgs.writeShellApplication {
                 name = "merge-config";
                 runtimeInputs = with pkgs; [ jq ];
                 text = ''
@@ -118,8 +118,7 @@ in
                     echo "$merged" > "$statefulSettingsFile"
                   fi
                 '';
-              }
-            );
+              }).exe;
           in
           lib.strings.concatStringsSep " " [
             updateScript
@@ -127,7 +126,7 @@ in
             "${cfg.environment.GOKAPI_CONFIG_DIR}/${cfg.environment.GOKAPI_CONFIG_FILE}"
             (if (cfg.settingsFile == null) then "null" else cfg.settingsFile)
           ];
-        ExecStart = lib.getExe cfg.package;
+        ExecStart = cfg.package.exe;
         RestartSec = 30;
         DynamicUser = true;
         PrivateTmp = true;

@@ -24,7 +24,7 @@
         mode = "755";
         text = ''
           #! /bin/sh
-          exec ${lib.getExe config.programs.sway.package}
+          exec ${config.programs.sway.package.exe}
         '';
       };
     };

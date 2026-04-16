@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     #   we have our own driver build.
     (replaceVars ./driver-location.patch {
       driver = "${driver}/cli.js";
-      nodejs = lib.getExe nodejs;
+      nodejs = nodejs.exe;
     })
   ];
 

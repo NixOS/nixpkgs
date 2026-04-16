@@ -45,7 +45,7 @@ buildPerlPackage rec {
   passthru = {
     tests.version = testers.testVersion {
       inherit version;
-      command = "${lib.getExe pgbadger} --version";
+      command = "${pgbadger.exe} --version";
       package = pgbadger;
     };
     updateScript = nix-update-script { };

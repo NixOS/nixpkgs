@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     saveDirCreation = pkgs.runCommand "save-dir-creation" { } ''
-      HOME=$(pwd) ${lib.getExe pkgs.sil} --help
+      HOME=$(pwd) ${pkgs.sil.exe} --help
       test -d .sil && touch $out
     '';
   };

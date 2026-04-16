@@ -57,11 +57,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
-    SH4D0WUP_GCC_BINARY = lib.getExe gcc;
-    SH4D0WUP_GO_BINARY = lib.getExe go;
-    SH4D0WUP_PODMAN_BINARY = lib.getExe podman;
+    SH4D0WUP_GCC_BINARY = gcc.exe;
+    SH4D0WUP_GO_BINARY = go.exe;
+    SH4D0WUP_PODMAN_BINARY = podman.exe;
     SH4D0WUP_RUSTC_BINARY = lib.getExe' rustc "rustc";
-    SH4D0WUP_SQ_BINARY = lib.getExe sequoia-sq;
+    SH4D0WUP_SQ_BINARY = sequoia-sq.exe;
   };
 
   meta = {

@@ -160,7 +160,7 @@ let
       sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
       substituteInPlace 99-asi.rules \
         --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${lib.getExe bash}" \
+        --replace-fail "/bin/sh" "${bash.exe}" \
         --replace-fail "/bin/chmod" "${lib.getBin coreutils}/bin/chmod"
     '';
 
@@ -405,7 +405,7 @@ let
       sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
       substituteInPlace 99-player_one_astronomy.rules \
         --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${lib.getExe bash}"
+        --replace-fail "/bin/sh" "${bash.exe}"
     '';
 
     buildInputs = [

@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram "$out/bin/lighthouse" \
-      --set CHROME_PATH ${lib.getExe chromium}
+      --set CHROME_PATH ${chromium.exe}
   '';
 
   doDist = false;

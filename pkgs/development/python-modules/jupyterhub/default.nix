@@ -67,12 +67,12 @@ buildPythonPackage rec {
     substituteInPlace jupyterhub/proxy.py \
       --replace-fail \
         "'configurable-http-proxy'" \
-        "'${lib.getExe configurable-http-proxy}'"
+        "'${configurable-http-proxy.exe}'"
 
     substituteInPlace jupyterhub/tests/test_proxy.py \
       --replace-fail \
         "'configurable-http-proxy'" \
-        "'${lib.getExe configurable-http-proxy}'"
+        "'${configurable-http-proxy.exe}'"
   '';
 
   nativeBuildInputs = [

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
         color_auto=$(ls -1 --color=auto)
         color_always=$(ls -1 --color=always)
 
-        ${lib.getExe finalAttrs.finalPackage} \
+        ${finalAttrs.finalPackage.exe} \
           ls -1 --color=auto > $out
 
         [[ "$(cat $out)" == "$color_always" ]]

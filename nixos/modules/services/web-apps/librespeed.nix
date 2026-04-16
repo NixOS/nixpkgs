@@ -347,7 +347,7 @@ in
       librespeed-secrets = lib.mkIf (cfg.secrets != { }) {
         description = "LibreSpeed secret helper";
 
-        ExecStart = lib.getExe (
+        ExecStart = (
           pkgs.writeShellApplication {
             name = "librespeed-secrets";
             runtimeInputs = [ pkgs.coreutils ];
@@ -355,13 +355,13 @@ in
               cp ${configFile} ''${RUNTIME_DIRECTORY%%:*}/config.toml
             ''
             + lib.pipe cfg.secrets [
-              (lib.mapAttrs (
-                name: file: ''
+              (lib.mapAttrs
+                (name: file: ''
                   cat >>''${RUNTIME_DIRECTORY%%:*}/config.toml <<EOF
                   ${name}="$(<${lib.escapeShellArg file})"
                   EOF
-                ''
-              ))
+                '').exe
+              )
               (lib.concatLines lib.attrValues)
             ];
           }
@@ -406,8 +406,8 @@ in
             "key.pem:${cfg.tlsKey}"
           ];
 
-          ExecStartPre = lib.mkIf cfg.downloadIPDB "${lib.getExe cfg.package} --update-ipdb";
-          ExecStart = "${lib.getExe cfg.package} -c ${
+          ExecStartPre = lib.mkIf cfg.downloadIPDB "${cfg.package.exe} --update-ipdb";
+          ExecStart = "${cfg.package.exe} -c ${
             if (cfg.secrets == { }) then configFile else "\${RUNTIME_DIRECTORY%%:*}/config.toml"
           }";
           WorkingDirectory = "/var/cache/librespeed";

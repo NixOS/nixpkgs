@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'val jdkVersion: Int = 22' \
                      'val jdkVersion: Int = ${lib.versions.major jdk.version}' \
       --replace-fail 'val executable: Path get() = installDir.resolve(if (os.isWindows) "zig.exe" else "zig")' \
-                     'val executable: Path get() = java.nio.file.Path.of("${lib.getExe zig}")' \
+                     'val executable: Path get() = java.nio.file.Path.of("${zig.exe}")' \
 
     substituteInPlace build.gradle.kts \
       --replace-fail 'dependsOn(setupTreeSitterRepo)' "" \

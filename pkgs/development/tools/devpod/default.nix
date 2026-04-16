@@ -107,7 +107,7 @@ let
     ];
 
     postPatch = ''
-      ln -s ${lib.getExe devpod} src-tauri/bin/devpod-cli-${stdenv.hostPlatform.rust.rustcTarget}
+      ln -s ${devpod.exe} src-tauri/bin/devpod-cli-${stdenv.hostPlatform.rust.rustcTarget}
 
       # disable upstream updater
       jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
@@ -144,13 +144,13 @@ let
     postInstall =
       lib.optionalString stdenv.hostPlatform.isDarwin ''
         # replace sidecar binary with symlink
-        ln -sf ${lib.getExe devpod} "$out/Applications/DevPod.app/Contents/MacOS/devpod-cli"
+        ln -sf ${devpod.exe} "$out/Applications/DevPod.app/Contents/MacOS/devpod-cli"
 
         makeWrapper "$out/Applications/DevPod.app/Contents/MacOS/DevPod Desktop" "$out/bin/DevPod Desktop"
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
         # replace sidecar binary with symlink
-        ln -sf ${lib.getExe devpod} "$out/bin/devpod-cli"
+        ln -sf ${devpod.exe} "$out/bin/devpod-cli"
 
         # set up scheme handling
         desktop-file-edit "$out/share/applications/DevPod.desktop" \
@@ -167,7 +167,7 @@ let
       ''
       + ''
         # propagate the `devpod` command
-        ln -s ${lib.getExe devpod} "$out/bin/devpod"
+        ln -s ${devpod.exe} "$out/bin/devpod"
       '';
 
     # we only want to wrap the main binary

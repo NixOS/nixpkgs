@@ -106,7 +106,7 @@ buildNpmPackage.override { inherit nodejs; } rec {
 
       install -Dm644 assets/icons/icon.svg $out/share/icons/hicolor/scalable/apps/kando.svg
 
-      makeWrapper ${lib.getExe electron} $out/bin/kando \
+      makeWrapper ${electron.exe} $out/bin/kando \
           --add-flags $out/share/kando/resources/app \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0

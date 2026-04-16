@@ -46,7 +46,7 @@
         ];
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${lib.getExe pkgs.ffmpeg-headless} -re -f lavfi -i smptebars=size=1280x720:rate=5 -f mpegts -listen 1 http://0.0.0.0:8080";
+          ExecStart = "${pkgs.ffmpeg-headless.exe} -re -f lavfi -i smptebars=size=1280x720:rate=5 -f mpegts -listen 1 http://0.0.0.0:8080";
           Restart = "always";
         };
       };

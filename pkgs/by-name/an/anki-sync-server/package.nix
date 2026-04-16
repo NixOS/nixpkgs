@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  env.PROTOC = lib.getExe buildPackages.protobuf;
+  env.PROTOC = buildPackages.protobuf.exe;
 
   __darwinAllowLocalNetworking = true;
 
