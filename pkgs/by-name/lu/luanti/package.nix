@@ -155,5 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
       jk
     ];
     mainProgram = if buildClient then "luanti" else "luantiserver";
+    knownVulnerabilities = [
+      "GHSA-22c4-238c-m5j4: HTTP API and insecure environment access control bypass"
+      "GHSA-g596-mf82-w8c3: Mod security sandbox escape"
+    ];
   };
 })
