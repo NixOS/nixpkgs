@@ -3,6 +3,7 @@
   lib,
   buildGo125Module,
   fetchFromGitHub,
+  installShellFiles,
   fuse,
 }:
 buildGo125Module (finalAttrs: {
@@ -22,6 +23,10 @@ buildGo125Module (finalAttrs: {
     fuse
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   checkFlags =
     let
       skippedTests = [
@@ -34,6 +39,10 @@ buildGo125Module (finalAttrs: {
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  postInstall = ''
+    installManPage $(find $src -regex '.*\.[0-9]$')
+  '';
 
   meta = {
     mainProgram = "plakar";
