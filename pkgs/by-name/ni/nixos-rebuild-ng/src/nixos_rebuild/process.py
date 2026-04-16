@@ -4,14 +4,20 @@ import os
 import re
 import shlex
 import subprocess
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from dataclasses import dataclass
-from enum import Enum
 from ipaddress import AddressValueError, IPv6Address
-from typing import Final, Literal, Self, TextIO, TypedDict, Unpack, override
+from typing import Final, Self, TextIO, TypedDict, Unpack
 
 from . import tmpdir
-from .elevate import NO_ELEVATOR, Elevator
+from .elevate import (
+    NO_ELEVATOR,
+    PRESERVE_ENV,
+    Arg,
+    Args,
+    Elevator,
+    EnvValue,
+)
 
 logger: Final = logging.getLogger(__name__)
 
@@ -23,22 +29,6 @@ SSH_DEFAULT_OPTS: Final = [
     "-o",
     "ControlPersist=60",
 ]
-
-
-class _Env(Enum):
-    PRESERVE_ENV = "PRESERVE"
-
-    @override
-    def __repr__(self) -> str:
-        return self.value
-
-
-PRESERVE_ENV: Final = _Env.PRESERVE_ENV
-
-
-type Arg = str | bytes | os.PathLike[str] | os.PathLike[bytes]
-type Args = Sequence[Arg]
-type EnvValue = str | Literal[_Env.PRESERVE_ENV]
 
 
 @dataclass(frozen=True)
@@ -136,16 +126,9 @@ def run_wrapper(
     resolved_env = _resolve_env_local(normalized_env)
 
     if remote:
-        wrapped = elevate.wrap_remote()
-        process_input = wrapped.stdin
-        remote_run_args: list[Arg] = [
-            *wrapped.prefix,
-            "/bin/sh",
-            "-c",
-            _remote_shell_script(normalized_env),
-            "sh",
-            *run_args,
-        ]
+        rwrapped = elevate.wrap_remote(normalized_env, run_args)
+        process_input = rwrapped.stdin
+        remote_run_args: list[Arg] = rwrapped.argv
 
         ssh_args: list[Arg] = [
             "ssh",
@@ -246,7 +229,7 @@ def _resolve_env_local(env: dict[str, EnvValue]) -> dict[str, str]:
     return result
 
 
-def _prefix_env_cmd(cmd: Sequence[Arg], resolved_env: dict[str, str]) -> list[Arg]:
+def _prefix_env_cmd(cmd: Args, resolved_env: dict[str, str]) -> list[Arg]:
     """
     Prefix a command with `env -i K=V ... -- <cmd...>` to set vars for the
     command.
@@ -256,24 +239,6 @@ def _prefix_env_cmd(cmd: Sequence[Arg], resolved_env: dict[str, str]) -> list[Ar
 
     assigns = [f"{k}={v}" for k, v in resolved_env.items()]
     return ["env", "-i", *assigns, *cmd]
-
-
-def _remote_shell_script(env: Mapping[str, EnvValue]) -> str:
-    """
-    Build the POSIX shell wrapper used for remote execution over SSH.
-
-    SSH sends the remote command as a shell-interpreted command line, so we
-    need a wrapper to establish a clean environment before `exec`-ing the real
-    command. This wrapper is always run under `/bin/sh -c` so preserved
-    variables like `${PATH-}` do not depend on the remote user's login shell.
-    """
-    shell_assigns: list[str] = []
-    for k, v in env.items():
-        if v is PRESERVE_ENV:
-            shell_assigns.append(f'{k}="${{{k}-}}"')
-        else:
-            shell_assigns.append(f"{k}={shlex.quote(v)}")
-    return f'exec env -i {" ".join(shell_assigns)} "$@"'
 
 
 def _quote_remote_arg(arg: Arg) -> str:
