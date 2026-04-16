@@ -10,6 +10,7 @@
 , "co-authors-plus": "gpl2Plus"
 , "disable-xml-rpc": "gpl2Plus"
 , "embed-extended": "gpl2Plus"
+, "friends": "gpl2Only"
 , "gutenberg": "gpl2Plus"
 , "hcaptcha-for-forms-and-more": "gpl2Only"
 , "hello-dolly": "gpl2Plus"
