@@ -221,6 +221,10 @@ in
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
     )
+    (mkRemovedOptionModule [
+      "services"
+      "honk"
+    ] "The honk module has been removed.")
     (mkRemovedOptionModule
       [
         "services"
