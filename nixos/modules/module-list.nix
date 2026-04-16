@@ -729,6 +729,7 @@
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/homebridge.nix
   ./services/home-automation/matter-server.nix
+  ./services/home-automation/openthread-border-router.nix
   ./services/home-automation/wyoming/faster-whisper.nix
   ./services/home-automation/wyoming/openwakeword.nix
   ./services/home-automation/wyoming/piper.nix
@@ -1345,6 +1346,7 @@
   ./services/networking/pihole-ftl.nix
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
+  ./services/networking/porxie.nix
   ./services/networking/powerdns.nix
   ./services/networking/pppd.nix
   ./services/networking/pptpd.nix
@@ -1759,6 +1761,7 @@
   ./services/web-apps/reposilite.nix
   ./services/web-apps/rimgo.nix
   ./services/web-apps/rss-bridge.nix
+  ./services/web-apps/rsshub.nix
   ./services/web-apps/rutorrent.nix
   ./services/web-apps/screego.nix
   ./services/web-apps/selfoss.nix

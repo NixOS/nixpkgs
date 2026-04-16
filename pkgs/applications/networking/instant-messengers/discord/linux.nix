@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   nativeBuildInputs = [
-    alsa-lib
     autoPatchelfHook
     cups
     libdrm
@@ -122,13 +121,20 @@ stdenv.mkDerivation (finalAttrs: {
     libxtst
     libxcb
     libxshmfence
-    libgbm
-    nss
     wrapGAppsHook3
     makeShellWrapper
   ];
 
   dontWrapGApps = true;
+
+  buildInputs = [
+    alsa-lib
+    libgbm
+    nspr
+    nss
+  ];
+
+  strictDeps = true;
 
   libPath = lib.makeLibraryPath (
     [

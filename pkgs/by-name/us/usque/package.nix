@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   stdenv,
   nix-update-script,
@@ -8,7 +8,7 @@
   installShellFiles,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "usque";
   version = "2.0.1";
   src = fetchFromGitHub {

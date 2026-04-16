@@ -73,13 +73,13 @@
     "vendorHash": "sha256-FHBpTYSmVivoqz+Eaa/r5y1f/saIx4l6mjOtZhxZVRw="
   },
   "auth0_auth0": {
-    "hash": "sha256-1gtBZPyzYk3UqLrRKHeyLt/2KPPP6QlJYo042XNDWkY=",
+    "hash": "sha256-Ha+2Z0gVNJ7oOozSWmW9XVpwlZo2LpvET03pAvh/3Mo=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.42.0",
+    "rev": "v1.43.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-g1xtMHyQ1zD5dzfB2+MtVUo42RG95TX9uni3Hf8FiRQ="
+    "vendorHash": "sha256-E6NOuhalQ9bXwRp6UTS5t35K3lOmFr9krGdRWtdtjGI="
   },
   "aviatrixsystems_aviatrix": {
     "hash": "sha256-46djOfAj/5kfeoKLQHbeKefzdGbmlBATR+uN/IaAn8I=",
@@ -101,11 +101,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "baidubce_baiducloud": {
-    "hash": "sha256-zYWTDk905FpGvN2tsScXAH162TwTacU88G8aoZii83I=",
+    "hash": "sha256-5OwkxWisWpnPF0wwjmqb3OKBw+a9ypSQUKRSB06EC0I=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.22.22",
+    "rev": "v1.22.25",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -346,11 +346,11 @@
     "vendorHash": null
   },
   "dopplerhq_doppler": {
-    "hash": "sha256-ZqlakWqu9gOMxVLAFUzmho3hl+wbwPA5AXX8Z7XRsCc=",
+    "hash": "sha256-43NFvuKJ2QlCLoEq9N1RSv4BtF4s/GFzzakeIxw6V4Q=",
     "homepage": "https://registry.terraform.io/providers/DopplerHQ/doppler",
     "owner": "DopplerHQ",
     "repo": "terraform-provider-doppler",
-    "rev": "v1.21.1",
+    "rev": "v1.21.2",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-B8mYLd4VdADWoQLWiCM85VQrBfDdlYQ0wkCp9eUBQ4U="
   },
@@ -571,13 +571,13 @@
     "vendorHash": "sha256-xIagZvWtlNpz5SQfxbA7r9ojAeS3CW2pwV337ObKOwU="
   },
   "hashicorp_google": {
-    "hash": "sha256-g9O6ypO6e9KR2V/85vISHhZpjSdmk/y+FSFGMPlmEdY=",
+    "hash": "sha256-NEPyqlxtpxfpMCygkcN9d/vo/4rwKLJ7qx4WAxgdVPA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "repo": "terraform-provider-google",
-    "rev": "v7.26.0",
+    "rev": "v7.28.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-znm43JcwFf/NpGIaayyiOazAa7yCStrbuSNnGkyxzFA="
+    "vendorHash": "sha256-39r9+dFJYJrzL0EOK3vXLcftOSqyw/pR5q+zm2lipYY="
   },
   "hashicorp_google-beta": {
     "hash": "sha256-ySzZTmsiPEvgPsqxTi2FMclfp9zR97aaGfmZba2lScM=",
@@ -1031,13 +1031,13 @@
     "vendorHash": "sha256-ofzbDmivXgH1i1Gjhpyp0bk3FDs5SnxwoRuNAWyMqyI="
   },
   "opentelekomcloud_opentelekomcloud": {
-    "hash": "sha256-JSVznbwVTc9/c1q16hv76qJuOI8eRPzsEo0ozRR6oxw=",
+    "hash": "sha256-F8V/eLkKJCC5zPfNh0NC6Z6c3aZjnEoXXa+po3I1NDw=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.36.62",
+    "rev": "v1.36.63",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QFC9oFQ6NiQZiJCltMrwX8p9shm6vEfVnRpJBAtnPW4="
+    "vendorHash": "sha256-qtH6jjhzGRGaHYKjpJLPWjwRL5PQIyOPvI33BVf4cO4="
   },
   "opsgenie_opsgenie": {
     "hash": "sha256-Y67kcg/ovvZc22l1CBz0Mqu7DAIit5F0jQNfQrl2EGI=",
@@ -1049,11 +1049,11 @@
     "vendorHash": null
   },
   "oracle_oci": {
-    "hash": "sha256-lyIrdjvsII9LjoqTByXTlOZAO+fJU+AB0jOBG8nlN+c=",
+    "hash": "sha256-U4Laml29samuCVGCaLSH/nR/o9jbn8lK/c73OsDeE7c=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v8.8.0",
+    "rev": "v8.9.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1121,13 +1121,13 @@
     "vendorHash": "sha256-L1wufPa7LPPyOPTL+jFQgiWzJoJYS+fCdw3N0KZqKtc="
   },
   "rancher_rancher2": {
-    "hash": "sha256-w0ACYyXj3S5yw4ZZ59c0UpPVo2ZL8EOIheGvWQorYLE=",
+    "hash": "sha256-T7nX+sD3FOqXgoNzzGJfIKvMvJ5hkYoHCyzR5Sm08IE=",
     "homepage": "https://registry.terraform.io/providers/rancher/rancher2",
     "owner": "rancher",
     "repo": "terraform-provider-rancher2",
-    "rev": "v13.1.4",
+    "rev": "v14.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-33NOGIvqLpgndG68GxAeoiISjWV7ApR4jmvqyZHjPKo="
+    "vendorHash": "sha256-WpI4OZ7BUVgHwQY+7ct+K6CnwXFFuiRbI+iTFSJ8a5A="
   },
   "rootlyhq_rootly": {
     "hash": "sha256-OTXTCAeKsDtjtOqM6gP2/D1D5ZNblqf/1VtnZoEYNNI=",

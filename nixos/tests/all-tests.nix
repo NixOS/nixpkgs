@@ -1303,6 +1303,7 @@ in
   polaris = runTest ./polaris.nix;
   pomerium = handleTestOn [ "x86_64-linux" ] ./pomerium.nix { };
   portunus = runTest ./portunus.nix;
+  porxie = runTest ./porxie.nix;
   postfix = handleTest ./postfix.nix { };
   postfix-raise-smtpd-tls-security-level =
     handleTest ./postfix-raise-smtpd-tls-security-level.nix
@@ -1431,6 +1432,7 @@ in
   rspamd-trainer = runTest ./rspamd-trainer.nix;
   rss-bridge = handleTest ./web-apps/rss-bridge { };
   rss2email = handleTest ./rss2email.nix { };
+  rsshub = runTest ./web-apps/rsshub.nix;
   rstp = runTest ./rstp.nix;
   rstudio-server = runTest ./rstudio-server.nix;
   rsync = runTest ./rsync.nix;

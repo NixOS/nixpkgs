@@ -363,8 +363,8 @@ in
       "sha256-SAgpP1O6oGP8QIp6qoG4bu/axKZyVWgbdt8ZmZkrezY=";
 
   mypy-boto3-customer-profiles =
-    buildMypyBoto3Package "customer-profiles" "1.42.66"
-      "sha256-q+QcH2dYyQ4jf9CWfNG6hT+qZPFQ1mJCwPxzFVC3sCc=";
+    buildMypyBoto3Package "customer-profiles" "1.42.89"
+      "sha256-5Y2OYBWdbtFa2AnnlFQ5AaVuGi3IGqPSimFC/Izx7Og=";
 
   mypy-boto3-databrew =
     buildMypyBoto3Package "databrew" "1.42.3"
@@ -571,8 +571,8 @@ in
       "sha256-N0kQ7Fc44SFKXhl4V+oAclPNlWhluOs53NDokiXcSNM=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.42.70"
-      "sha256-1LdCLIL9olH9DiZFsWulOaFqc8UE9tK/+cDiCXohYFQ=";
+    buildMypyBoto3Package "glue" "1.42.89"
+      "sha256-U+NzY02OyhR/GbZy+2Ye3+FgAVzF/UTNhUH3fy9SmMc=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.42.51"
       "sha256-QHAuRJrioMD7ASgV1Wobm81Gb+Z87c78yBs9X1+Kz+E=";
@@ -830,8 +830,8 @@ in
       "sha256-mERVlNSjfxNqfyGRlNgfP1MrzhGrMYgIuZ0pZLPrfBQ=";
 
   mypy-boto3-macie2 =
-    buildMypyBoto3Package "macie2" "1.42.3"
-      "sha256-fzZHKPUXOh/tLGCx6xAHJd4jefApYtEwbt6BSakOLXA=";
+    buildMypyBoto3Package "macie2" "1.42.89"
+      "sha256-Y19V3g8CM4L2L5dWPjpokPNj6iX39OPxUP+H1blFaH0=";
 
   mypy-boto3-managedblockchain =
     buildMypyBoto3Package "managedblockchain" "1.42.3"
@@ -1218,8 +1218,8 @@ in
       "sha256-WrQvNc6TJ2XrsWhBRvR4qHzEuDvvlQ/Rqg4mi4jVnIE=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.42.58"
-      "sha256-svAuxOrTZz/fludiFZFolRVMQmS2qdaJBrfTlynb8oA=";
+    buildMypyBoto3Package "securityhub" "1.42.89"
+      "sha256-cXpUTYf1lt0Wtu39NzdaKjgJRyRsIOpJ+GJPvO7Iu/Y=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.42.3"

@@ -3,6 +3,13 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   backports-entry-points-selectable,
   click,
   deprecated,
@@ -11,8 +18,8 @@
   requests,
   sentry-sdk,
   tenacity,
-  setuptools,
-  setuptools-scm,
+
+  # tests
   aiohttp-utils,
   flask,
   hypothesis,
@@ -112,6 +119,13 @@ buildPythonPackage (finalAttrs: {
     types-requests
     unzip
     pkgs.zstd
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # shutil.RegistryError: .tar.zst is already registered for "zstdtar"
+    "swh/core/tests/test_cli_nar.py"
+    "swh/core/tests/test_nar.py"
+    "swh/core/tests/test_tarball.py"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

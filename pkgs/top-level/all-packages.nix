@@ -6761,10 +6761,6 @@ with pkgs;
     libprom
     ;
 
-  libpulsar = callPackage ../development/libraries/libpulsar {
-    protobuf = protobuf_21;
-  };
-
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
   libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
@@ -9546,12 +9542,6 @@ with pkgs;
     }
   );
 
-  librespot = callPackage ../applications/audio/librespot {
-    withALSA = stdenv.hostPlatform.isLinux;
-    withPulseAudio = config.pulseaudio or stdenv.hostPlatform.isLinux;
-    withPortAudio = stdenv.hostPlatform.isDarwin;
-  };
-
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
   deadd-notification-center = haskell.lib.compose.justStaticExecutables (
@@ -9771,10 +9761,6 @@ with pkgs;
   };
 
   jackmix_jack1 = jackmix.override { jack = jack1; };
-
-  jwm = callPackage ../applications/window-managers/jwm { };
-
-  jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
     k3s_1_33
@@ -10812,8 +10798,6 @@ with pkgs;
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
   wrapThunderbird = callPackage ../applications/networking/mailreaders/thunderbird/wrapper.nix { };
-
-  wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   x2gokdriveclient = libsForQt5.callPackage ../applications/networking/remote/x2gokdriveclient { };
 
