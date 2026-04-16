@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whodap";
   version = "0.1.15";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "whodap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PEKFO+mVGtagmH2rny8zorvi9/zadWh+fiJqBc/NA+E=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python RDAP utility for querying and parsing information about domain names";
     homepage = "https://github.com/pogzyb/whodap";
-    changelog = "https://github.com/pogzyb/whodap/releases/tag/${src.tag}";
+    changelog = "https://github.com/pogzyb/whodap/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
