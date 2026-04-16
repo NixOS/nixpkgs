@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   wrapQtAppsHook,
+  copyDesktopItems,
   makeDesktopItem,
   libxrender,
   libxrandr,
@@ -59,17 +60,22 @@ stdenv.mkDerivation rec {
     sha256 = "18syygnskl286kn8aqfzzdsyzq59d2w19y1h1ynyxsnrvkyv71h0";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "eagle";
-    exec = "eagle";
-    icon = "eagle";
-    comment = "Schematic capture and PCB layout";
-    desktopName = "Eagle";
-    genericName = "Schematic editor";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "eagle";
+      exec = "eagle";
+      icon = "eagle";
+      comment = "Schematic capture and PCB layout";
+      desktopName = "Eagle";
+      genericName = "Schematic editor";
+      categories = [ "Development" ];
+    })
+  ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     libxrender
@@ -120,9 +126,6 @@ stdenv.mkDerivation rec {
     rm -r "$out"/eagle-${version}/libexec
     rm -r "$out"/eagle-${version}/plugins
 
-    # Make desktop item
-    mkdir -p "$out"/share/applications
-    cp "$desktopItem"/share/applications/* "$out"/share/applications/
     mkdir -p "$out"/share/pixmaps
     ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/pixmaps/eagle.png
   '';

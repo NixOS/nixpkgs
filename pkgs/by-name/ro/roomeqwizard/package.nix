@@ -5,6 +5,7 @@
   gnused,
   jdk8,
   lib,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   stdenv,
@@ -26,14 +27,16 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    desktopName = "REW";
-    genericName = "Software for audio measurements";
-    categories = [ "AudioVideo" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      desktopName = "REW";
+      genericName = "Software for audio measurements";
+      categories = [ "AudioVideo" ];
+    })
+  ];
 
   responseFile = writeTextFile {
     name = "response.varfile";
@@ -54,7 +57,10 @@ stdenv.mkDerivation rec {
     SUBSYSTEM=="usb", ATTR{idVendor}=="2752", ATTR{idProduct}=="0007", TAG+="uaccess"
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -86,7 +92,6 @@ stdenv.mkDerivation rec {
         ]
       }
 
-    cp -r "$desktopItem/share/applications" $out/share/
     cp $out/share/roomeqwizard/.install4j/roomeqwizard.png "$out/share/icons/hicolor/256x256/apps/${pname}.png"
 
     ${lib.optionalString recommendedUdevRules ''echo "$udevRules" > $out/lib/udev/rules.d/90-roomeqwizard.rules''}

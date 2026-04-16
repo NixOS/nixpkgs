@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  makeDesktopItem,
   fetchurl,
   unzip,
   gdk-pixbuf,
@@ -91,16 +90,6 @@ stdenv.mkDerivation rec {
     libgbm
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "Avocode";
-    exec = "avocode";
-    icon = "avocode";
-    desktopName = "Avocode";
-    genericName = "Design Inspector";
-    categories = [ "Development" ];
-    comment = "The bridge between designers and developers";
-  };
-
   nativeBuildInputs = [
     makeWrapper
     wrapGAppsHook3
@@ -123,9 +112,9 @@ stdenv.mkDerivation rec {
       --replace /path/to/avocode-dir/Avocode $out/bin/avocode \
       --replace /path/to/avocode-dir/avocode.png avocode
 
-    mkdir -p share/applications share/pixmaps
+    mkdir -p share/applications share/icons
     mv avocode.desktop.in share/applications/avocode.desktop
-    mv avocode.png share/pixmaps/
+    mv avocode.png share/icons/
 
     rm resources/cjpeg
     cp -av . $out

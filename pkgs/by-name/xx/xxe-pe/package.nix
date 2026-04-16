@@ -5,6 +5,7 @@
   unzip,
   makeWrapper,
   openjdk11,
+  copyDesktopItems,
   makeDesktopItem,
   icoutils,
   config,
@@ -13,20 +14,6 @@
 
 let
   pkg_path = "$out/lib/xxe";
-
-  desktopItem = makeDesktopItem {
-    name = "XMLmind XML Editor Personal Edition";
-    exec = "xxe";
-    icon = "xxe";
-    desktopName = "xxe";
-    genericName = "XML Editor";
-    categories = [
-      "Development"
-      "IDE"
-      "TextEditor"
-      "Java"
-    ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "xxe-pe";
@@ -49,6 +36,7 @@ stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [
+    copyDesktopItems
     unzip
     makeWrapper
     icoutils
@@ -56,11 +44,26 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "XMLmind XML Editor Personal Edition";
+      exec = "xxe";
+      icon = "xxe";
+      desktopName = "xxe";
+      genericName = "XML Editor";
+      categories = [
+        "Development"
+        "IDE"
+        "TextEditor"
+        "Java"
+      ];
+    })
+  ];
+
   installPhase = ''
     mkdir -p "${pkg_path}"
     mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/bin/icon/xxe.ico"
     ls

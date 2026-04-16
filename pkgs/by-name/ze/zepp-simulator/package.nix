@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   makeWrapper,
-  copyDesktopItems,
   autoPatchelfHook,
 
   # Upstream is officially built with Electron 18
@@ -71,7 +70,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    copyDesktopItems
     makeWrapper
     dpkg
     asar
@@ -110,7 +108,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    # Create output file strucure
+    # Create output file structure
     mkdir -p $out/{bin,opt,share}
     cp -r opt/simulator $out/opt
     cp -r usr/share/* $out/share

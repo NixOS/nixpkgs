@@ -4,25 +4,11 @@
   fetchurl,
   unzip,
   makeWrapper,
+  copyDesktopItems,
   makeDesktopItem,
   icoutils,
   jre8,
 }:
-
-let
-  desktopItem = makeDesktopItem {
-    name = "groove-simulator";
-    exec = "groove-simulator";
-    icon = "groove";
-    desktopName = "GROOVE Simulator";
-    comment = "GRaphs for Object-Oriented VErification";
-    categories = [
-      "Science"
-      "ComputerScience"
-    ];
-  };
-
-in
 stdenv.mkDerivation rec {
   pname = "groove";
   version = "5.8.1";
@@ -35,12 +21,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     unzip
     makeWrapper
     icoutils
   ];
 
   dontBuild = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "groove-simulator";
+      exec = "groove-simulator";
+      icon = "groove";
+      desktopName = "GROOVE Simulator";
+      comment = "GRaphs for Object-Oriented VErification";
+      categories = [
+        "Science"
+        "ComputerScience"
+      ];
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/share/groove
@@ -54,9 +55,6 @@ stdenv.mkDerivation rec {
       makeWrapper ${jre8}/bin/java $out/bin/groove-''${bin,,} \
         --add-flags "-jar $out/share/groove/bin/$bin.jar"
     done
-
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
     mkdir -p $out/share/icons/hicolor/{16x16,32x32}/apps
     icotool -x -i 1 -o $out/share/icons/hicolor/32x32/apps/groove.png groove-green-g.ico

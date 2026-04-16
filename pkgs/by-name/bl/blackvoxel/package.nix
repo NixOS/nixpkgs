@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  copyDesktopItems,
   makeDesktopItem,
   imagemagick,
   glew_1_10,
@@ -20,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Uj3TfxAsLddsPiWDcLKjpduqvgVjnESZM4YPHT90YYY=";
   };
 
-  nativeBuildInputs = [ imagemagick ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    imagemagick
+  ];
 
   buildInputs = [
     glew_1_10

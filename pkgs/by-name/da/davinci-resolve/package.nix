@@ -189,6 +189,7 @@ let
           test -f $out/lib/udev/rules.d/99-BlackmagicDevices.rules
           test -f $out/lib/udev/rules.d/99-ResolveKeyboardHID.rules
           test -f $out/lib/udev/rules.d/99-DavinciPanel.rules
+
           runHook postInstall
         '';
 

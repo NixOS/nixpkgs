@@ -1,6 +1,7 @@
 {
   lib,
   alsa-lib,
+  copyDesktopItems,
   factorio-utils,
   fetchurl,
   libGL,
@@ -80,15 +81,6 @@ let
           factorio.src
         ];
     '';
-
-  desktopItem = makeDesktopItem {
-    name = "factorio";
-    desktopName = "Factorio";
-    comment = "A game in which you build and maintain factories.";
-    exec = "factorio";
-    icon = "factorio";
-    categories = [ "Game" ];
-  };
 
   branch = if experimental then "experimental" else "stable";
 
@@ -236,7 +228,10 @@ let
     headless = base;
     demo = base // {
 
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [
+        copyDesktopItems
+        makeWrapper
+      ];
       buildInputs = [ libpulseaudio ];
 
       libPath = lib.makeLibraryPath [
@@ -253,6 +248,17 @@ let
         libpulseaudio
         libxkbcommon
         wayland
+      ];
+
+      desktopItems = [
+        (makeDesktopItem {
+          name = "factorio";
+          desktopName = "Factorio";
+          comment = "A game in which you build and maintain factories.";
+          exec = "factorio";
+          icon = "factorio";
+          categories = [ "Game" ];
+        })
       ];
 
       installPhase = base.installPhase + ''
@@ -292,7 +298,6 @@ let
         mkdir -p $out/share/icons/hicolor/{64x64,128x128}/apps
         cp -a data/core/graphics/factorio-icon.png $out/share/icons/hicolor/64x64/apps/factorio.png
         cp -a data/core/graphics/factorio-icon@2x.png $out/share/icons/hicolor/128x128/apps/factorio.png
-        ln -s ${desktopItem}/share/applications $out/share/
       '';
     };
     alpha = demo // {

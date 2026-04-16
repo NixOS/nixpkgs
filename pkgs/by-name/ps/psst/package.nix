@@ -4,6 +4,7 @@
   cairo,
   dbus,
   fetchFromGitHub,
+  copyDesktopItems,
   gdk-pixbuf,
   glib,
   gtk3,
@@ -17,20 +18,6 @@
   stdenv,
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    categories = [
-      "Audio"
-      "AudioVideo"
-    ];
-    comment = "Spotify client with native GUI written in Rust, without Electron";
-    desktopName = "Psst";
-    exec = "psst-gui %U";
-    icon = "psst";
-    name = "Psst";
-    startupWMClass = "psst-gui";
-  };
-in
 rustPlatform.buildRustPackage {
   pname = "psst";
   version = "0-unstable-2025-11-16";
@@ -51,7 +38,10 @@ rustPlatform.buildRustPackage {
     LIBCLANG_PATH = "${lib.getLib libclang}/lib";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
 
   buildInputs = [
     atk
@@ -73,8 +63,22 @@ rustPlatform.buildRustPackage {
 
   postInstall = ''
     install -Dm644 psst-gui/assets/logo_512.png -t $out/share/icons/hicolor/512x512/apps/psst.png
-    install -Dm644 ${desktopItem}/share/applications/* -t $out/share/applications
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Audio"
+        "AudioVideo"
+      ];
+      comment = "Spotify client with native GUI written in Rust, without Electron";
+      desktopName = "Psst";
+      exec = "psst-gui %U";
+      icon = "psst";
+      name = "Psst";
+      startupWMClass = "psst-gui";
+    })
+  ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

@@ -34,17 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  desktopItem = (
-    makeDesktopItem {
+  desktopItems = [
+    (makeDesktopItem {
       name = "FastQC";
       exec = "fastqc";
       icon = "fastqc";
       desktopName = "FastQC";
       comment = finalAttrs.meta.description;
       categories = [ "Science" ];
-    }
-  );
-  desktopItems = [ finalAttrs.desktopItem ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -52,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,FastQC}
     cp -r $src/* $out/FastQC
 
-    # Create desktop item
-    mkdir -p $out/share/{applications,icons}
+    mkdir -p $out/share/icons
     # Freedesktop doesn't support windows ICO files. Use imagemagick to convert it to PNG
     convert $out/FastQC/fastqc_icon.ico $out/share/icons/fastqc.png
 

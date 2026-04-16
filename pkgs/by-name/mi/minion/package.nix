@@ -4,6 +4,7 @@
   fetchzip,
   openjfx21,
   openjdk21,
+  copyDesktopItems,
   makeDesktopItem,
   wrapGAppsHook3,
   makeBinaryWrapper,
@@ -37,6 +38,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     makeBinaryWrapper
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   dontWrapGApps = true;

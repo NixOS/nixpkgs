@@ -7,6 +7,7 @@
   desktopName,
   self,
   autoPatchelfHook,
+  copyDesktopItems,
   makeDesktopItem,
   lib,
   stdenv,
@@ -112,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     cups
     libdrm
     libuuid
@@ -213,8 +215,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
-    ln -s "$desktopItem/share/applications" $out/share/
-
     runHook postInstall
   '';
 
@@ -241,19 +241,21 @@ stdenv.mkDerivation (finalAttrs: {
       echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/opt/${binaryName}/resources/app/injector.js
     '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = binaryName;
-    icon = pname;
-    inherit desktopName;
-    genericName = meta.description;
-    categories = [
-      "Network"
-      "InstantMessaging"
-    ];
-    mimeTypes = [ "x-scheme-handler/discord" ];
-    startupWMClass = "discord";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = binaryName;
+      icon = pname;
+      inherit desktopName;
+      genericName = meta.description;
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
+      mimeTypes = [ "x-scheme-handler/discord" ];
+      startupWMClass = "discord";
+    })
+  ];
 
   passthru = {
     # make it possible to run disableBreakingUpdates standalone

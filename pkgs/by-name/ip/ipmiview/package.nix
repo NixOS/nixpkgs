@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   patchelf,
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     patchelf
     makeWrapper
   ];
@@ -61,21 +63,21 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
-    name = "IPMIView";
-    exec = "IPMIView";
-    desktopName = name;
-    genericName = "Supermicro BMC manager";
-    categories = [ "Network" ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "IPMIView";
+      exec = "IPMIView";
+      desktopName = name;
+      genericName = "Supermicro BMC manager";
+      categories = [ "Network" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
     cp -R . $out/
-
-    ln -s ${desktopItem}/share $out/share
 
     # LD_LIBRARY_PATH: fontconfig is used from java code
     # PATH: iputils is used for ping, and psmisc is for killall

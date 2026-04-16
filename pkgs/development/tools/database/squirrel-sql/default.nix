@@ -4,6 +4,7 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   unzip,
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
     unzip
   ];
@@ -61,20 +63,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/32x32/apps
     ln -s $out/share/squirrel-sql/icons/acorn.png \
       $out/share/icons/hicolor/32x32/apps/squirrel-sql.png
-    ln -s ${desktopItem}/share/applications $out/share
 
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "squirrel-sql";
-    exec = "squirrel-sql";
-    comment = meta.description;
-    desktopName = "SQuirreL SQL";
-    genericName = "SQL Client";
-    categories = [ "Development" ];
-    icon = "squirrel-sql";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "squirrel-sql";
+      exec = "squirrel-sql";
+      comment = meta.description;
+      desktopName = "SQuirreL SQL";
+      genericName = "SQL Client";
+      categories = [ "Development" ];
+      icon = "squirrel-sql";
+    })
+  ];
 
   meta = {
     description = "Universal SQL Client";

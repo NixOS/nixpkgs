@@ -3,36 +3,18 @@
   lib,
   fetchurl,
   unzip,
+  copyDesktopItems,
   makeDesktopItem,
   jre8,
 }:
 
 let
-  desktopItem = makeDesktopItem {
-    name = "jmol";
-    exec = "jmol";
-    desktopName = "JMol";
-    genericName = "Molecular Modeler";
-    mimeTypes = [
-      "chemical/x-pdb"
-      "chemical/x-mdl-molfile"
-      "chemical/x-mol2"
-      "chemical/seq-aa-fasta"
-      "chemical/seq-na-fasta"
-      "chemical/x-xyz"
-      "chemical/x-mdl-sdf"
-    ];
-    categories = [
-      "Graphics"
-      "Education"
-      "Science"
-      "Chemistry"
-    ];
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   version = "16.3.49";
   pname = "jmol";
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   src =
     let
@@ -53,9 +35,32 @@ stdenv.mkDerivation (finalAttrs: {
     ${unzip}/bin/unzip jsmol.zip -d "$out/share/"
 
     cp *.jar jmol.sh "$out/share/jmol"
-    cp -r ${desktopItem}/share/applications $out/share
     cp jmol $out/bin
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jmol";
+      exec = "jmol";
+      desktopName = "JMol";
+      genericName = "Molecular Modeler";
+      mimeTypes = [
+        "chemical/x-pdb"
+        "chemical/x-mdl-molfile"
+        "chemical/x-mol2"
+        "chemical/seq-aa-fasta"
+        "chemical/seq-na-fasta"
+        "chemical/x-xyz"
+        "chemical/x-mdl-sdf"
+      ];
+      categories = [
+        "Graphics"
+        "Education"
+        "Science"
+        "Chemistry"
+      ];
+    })
+  ];
 
   enableParallelBuilding = true;
 

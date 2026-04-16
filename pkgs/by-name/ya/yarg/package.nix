@@ -20,6 +20,7 @@
   udev,
   vulkan-loader,
   wayland, # (not used by default, enable with SDL_VIDEODRIVER=wayland - doesn't support HiDPI)
+  copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
 }:
@@ -34,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-l83tnEO9hHFiaks7D/y9D1HJKihU7+cvsvkbIKkNeuk=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
 
   buildInputs = [
     # Load-time libraries (loaded from DT_NEEDED section in ELF binary)
@@ -60,14 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "yarg";
-    desktopName = "YARG";
-    comment = finalAttrs.meta.description;
-    icon = "yarg";
-    exec = "yarg";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "yarg";
+      desktopName = "YARG";
+      comment = finalAttrs.meta.description;
+      icon = "yarg";
+      exec = "yarg";
+      categories = [ "Game" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -79,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r YARG_Data "$out/share/yarg"
     ln -s "$out/share/yarg" "$out/bin/yarg_Data"
     ln -s "$out/share/yarg/Resources/UnityPlayer.png" "$out/share/icons/hicolor/128x128/apps/yarg.png"
-    install -Dm644 "$desktopItem/share/applications/yarg.desktop" "$out/share/applications/yarg.desktop"
 
     runHook postInstall
   '';

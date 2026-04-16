@@ -3,6 +3,7 @@
   flutter335,
   lib,
   libsecret,
+  copyDesktopItems,
   makeDesktopItem,
 }:
 
@@ -18,6 +19,8 @@ flutter335.buildFlutterApplication rec {
   };
 
   sourceRoot = "${src.name}/apps/onyx";
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     libsecret

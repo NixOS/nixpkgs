@@ -2,6 +2,7 @@
   stdenv,
   fetchurl,
   lib,
+  copyDesktopItems,
   makeDesktopItem,
   makeShellWrapper,
   autoPatchelfHook,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     makeShellWrapper
   ];
 
@@ -75,24 +77,24 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/resources/assets/icons/256x256.png $out/share/pixmaps/osmium.png
     ln -s $out/opt/resources/assets/icons/256x256.png $out/share/icons/hicolor/256x256/apps/osmium.png
 
-    ln -s "$desktopItem/share/applications" $out/share
-
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "osmium";
-    exec = "osmium";
-    icon = "osmium";
-    desktopName = "Osmium";
-    genericName = "A globally distributed community messaging and voice/video platform.";
-    categories = [
-      "Network"
-      "InstantMessaging"
-    ];
-    mimeTypes = [ "x-scheme-handler/osmium" ];
-    startupWMClass = "Osmium";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "osmium";
+      exec = "osmium";
+      icon = "osmium";
+      desktopName = "Osmium";
+      genericName = "A globally distributed community messaging and voice/video platform.";
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
+      mimeTypes = [ "x-scheme-handler/osmium" ];
+      startupWMClass = "Osmium";
+    })
+  ];
 
   meta = {
     description = "Globally distributed community messaging and voice/video platform";

@@ -8,22 +8,6 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-
-let
-  # Based in desktop files from official packages:
-  # https://github.com/congard/nvidia-system-monitor-qt/tree/master/package
-  desktopItem = makeDesktopItem {
-    name = "nvidia-system-monitor-qt";
-    desktopName = "NVIDIA System Monitor";
-    icon = "qnvsm";
-    exec = "qnvsm";
-    categories = [
-      "System"
-      "Utility"
-      "Qt"
-    ];
-  };
-in
 stdenv.mkDerivation rec {
   pname = "nvidia-system-monitor-qt";
   version = "1.6-1";
@@ -56,7 +40,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = [ desktopItem ];
+  # Based in desktop files from official packages:
+  # https://github.com/congard/nvidia-system-monitor-qt/tree/master/package
+  desktopItems = [
+    (makeDesktopItem {
+      name = "nvidia-system-monitor-qt";
+      desktopName = "NVIDIA System Monitor";
+      icon = "qnvsm";
+      exec = "qnvsm";
+      categories = [
+        "System"
+        "Utility"
+        "Qt"
+      ];
+    })
+  ];
 
   meta = rec {
     description = "Task Manager for Linux for NVIDIA graphics cards";

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  copyDesktopItems,
   makeDesktopItem,
   boost186,
   cmake,
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     cmake
     pkg-config
     qt5.wrapQtAppsHook
@@ -111,23 +113,21 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-fpermissive"
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "monero-wallet-gui";
-    exec = "monero-wallet-gui";
-    icon = "monero";
-    desktopName = "Monero";
-    genericName = "Wallet";
-    categories = [
-      "Network"
-      "Utility"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "monero-wallet-gui";
+      exec = "monero-wallet-gui";
+      icon = "monero";
+      desktopName = "Monero";
+      genericName = "Wallet";
+      categories = [
+        "Network"
+        "Utility"
+      ];
+    })
+  ];
 
   postInstall = ''
-    # install desktop entry
-    install -Dm644 -t $out/share/applications \
-      ${desktopItem}/share/applications/*
-
     # install icons
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n

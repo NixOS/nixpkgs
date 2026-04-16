@@ -31,7 +31,6 @@
   libva,
   libx11,
   libxrandr,
-  makeDesktopItem,
   nix-update-script,
   nlohmann_json,
   opencomposite,
@@ -192,19 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]} \
       --prefix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
-
-  desktopItems = lib.optionals (!clientLibOnly) [
-    (makeDesktopItem {
-      name = "WiVRn Server";
-      desktopName = "WiVRn Server";
-      genericName = "WiVRn Server";
-      comment = "Play your PC VR games on a standalone headset";
-      icon = "io.github.wivrn.wivrn";
-      exec = "wivrn-dashboard";
-      type = "Application";
-      categories = [ "Network" ];
-    })
-  ];
 
   passthru.updateScript = nix-update-script { };
 

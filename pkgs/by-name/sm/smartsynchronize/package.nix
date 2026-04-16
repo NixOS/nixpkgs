@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   openjdk21,
   gtk3,
@@ -25,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-F+Yrr029nPnnCvFEhIxgeXloyt2JRKSw8uOmVySWKzo=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     jre
@@ -59,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -av ./lib $out/
     cp -av bin/smartsynchronize.sh $out/bin/smartsynchronize
 
-    cp -av $desktopItem/share/applications/* $out/share/applications/
     for icon_size in 32 48 64 128 256; do
         path=$icon_size'x'$icon_size
         icon=bin/smartsynchronize-$icon_size.png
@@ -72,20 +75,22 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "smartsynchronize";
-    exec = "smartsynchronize";
-    comment = finalAttrs.meta.description;
-    icon = "smartsynchronize";
-    desktopName = "SmartSynchronize";
-    categories = [ "Development" ];
-    startupNotify = true;
-    startupWMClass = "smartsynchronize";
-    keywords = [
-      "compare"
-      "file manager"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "smartsynchronize";
+      exec = "smartsynchronize";
+      comment = finalAttrs.meta.description;
+      icon = "smartsynchronize";
+      desktopName = "SmartSynchronize";
+      categories = [ "Development" ];
+      startupNotify = true;
+      startupWMClass = "smartsynchronize";
+      keywords = [
+        "compare"
+        "file manager"
+      ];
+    })
+  ];
 
   meta = {
     description = "File Manager, File/Directory Compare";

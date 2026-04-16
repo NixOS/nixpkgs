@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
   fetchurl,
@@ -20,31 +21,6 @@ let
       updateScript ? null,
       ...
     }@attrs:
-    let
-      desktopItem = makeDesktopItem {
-        categories = [
-          "Network"
-          "Development"
-          "WebDevelopment"
-          "Java"
-        ];
-        desktopName = "Charles";
-        exec = "charles %F";
-        genericName = "Web Debugging Proxy";
-        icon = "charles-proxy" + lib.optionalString (lib.versionAtLeast version "5.0") "5";
-        mimeTypes = [
-          "application/x-charles-savedsession"
-          "application/x-charles-savedsession+xml"
-          "application/x-charles-savedsession+json"
-          "application/har+json"
-          "application/vnd.tcpdump.pcap"
-          "application/x-charles-trace"
-        ];
-        name = "Charles";
-        startupNotify = true;
-      };
-
-    in
     stdenv.mkDerivation {
       pname = "charles";
       inherit version;
@@ -58,7 +34,35 @@ let
         inherit hash;
       };
 
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [
+        copyDesktopItems
+        makeWrapper
+      ];
+
+      desktopItems = [
+        (makeDesktopItem {
+          categories = [
+            "Network"
+            "Development"
+            "WebDevelopment"
+            "Java"
+          ];
+          desktopName = "Charles";
+          exec = "charles %F";
+          genericName = "Web Debugging Proxy";
+          icon = "charles-proxy" + lib.optionalString (lib.versionAtLeast version "5.0") "5";
+          mimeTypes = [
+            "application/x-charles-savedsession"
+            "application/x-charles-savedsession+xml"
+            "application/x-charles-savedsession+json"
+            "application/har+json"
+            "application/vnd.tcpdump.pcap"
+            "application/x-charles-trace"
+          ];
+          name = "Charles";
+          startupNotify = true;
+        })
+      ];
 
       installPhase = ''
         runHook preInstall
@@ -69,9 +73,6 @@ let
         for fn in lib/*.jar; do
           install -D -m644 $fn $out/share/java/$(basename $fn)
         done
-
-        mkdir -p $out/share/applications
-        ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
         ${
           if lib.versionOlder version "4.0" then

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
   pnpm_10_29_2,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
     nodejs
     pnpm_10_29_2
@@ -96,18 +98,20 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   # The desktop item properties should be kept in sync with data from upstream:
-  desktopItem = makeDesktopItem {
-    name = "vikunja-desktop";
-    exec = executableName;
-    icon = "vikunja";
-    desktopName = "Vikunja Desktop";
-    genericName = "To-Do list app";
-    comment = finalAttrs.meta.description;
-    categories = [
-      "ProjectManagement"
-      "Office"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "vikunja-desktop";
+      exec = executableName;
+      icon = "vikunja";
+      desktopName = "Vikunja Desktop";
+      genericName = "To-Do list app";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "ProjectManagement"
+        "Office"
+      ];
+    })
+  ];
 
   meta = {
     description = "Desktop App of the Vikunja to-do list app";

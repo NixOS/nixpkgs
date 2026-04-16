@@ -21,6 +21,7 @@
   libxcursor,
   libxi,
   libxscrnsaver,
+  copyDesktopItems,
   makeDesktopItem,
 }:
 
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    copyDesktopItems
     meson
     ninja
     python3
@@ -70,15 +72,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  desktopItem = makeDesktopItem {
-    name = "Apotris";
-    exec = "Apotris";
-    comment = "A block stacking game";
-    desktopName = "Apotris";
-    categories = [
-      "Game"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Apotris";
+      exec = "Apotris";
+      comment = "A block stacking game";
+      desktopName = "Apotris";
+      categories = [
+        "Game"
+      ];
+    })
+  ];
 
   meta = {
     description = "Block stacking game";
@@ -90,9 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
       plethora of settings, you can tailor the game to your preferences,
       ensuring a fresh and challenging experience every time you play. Whether
       you're a casual player or a hardcore enthusiast, Apotris has something for
-      everyone. You can even battle your friends using the Gameboy Advance Link
+      everyone. You can even battle your friends using the Game boy Advance Link
       Cable or Wireless Adapters in 2-Player Battle! While Apotris was
-      originally designed for Gameboy Advance, it now supports all kinds of
+      originally designed for Game boy Advance, it now supports all kinds of
       platforms, so between the ports and emulation you can play Apotris on
       almost anything.
     '';

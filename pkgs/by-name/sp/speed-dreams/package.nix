@@ -34,7 +34,6 @@
   cjson,
   minizip,
   rhash,
-  copyDesktopItems,
   makeWrapper,
 }:
 
@@ -128,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    copyDesktopItems
     makeWrapper
   ];
 

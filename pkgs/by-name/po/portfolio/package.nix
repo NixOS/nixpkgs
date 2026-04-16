@@ -1,5 +1,6 @@
 {
   autoPatchelfHook,
+  copyDesktopItems,
   fetchurl,
   glib,
   glib-networking,
@@ -15,16 +16,6 @@
   gitUpdater,
 }:
 let
-  desktopItem = makeDesktopItem {
-    name = "Portfolio";
-    exec = "portfolio";
-    icon = "portfolio";
-    comment = "Calculate Investment Portfolio Performance";
-    desktopName = "Portfolio Performance";
-    categories = [ "Office" ];
-    startupWMClass = "Portfolio Performance";
-  };
-
   runtimeLibs = lib.makeLibraryPath [
     glib
     glib-networking
@@ -44,6 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     wrapGAppsHook3
     imagemagick
   ];
@@ -94,13 +86,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix PATH : ${openjdk21}/bin
 
     # Create desktop item
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/icons/hicolor/256x256/apps
     magick $out/portfolio/icon.xpm $out/share/icons/hicolor/256x256/apps/portfolio.png
 
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Portfolio";
+      exec = "portfolio";
+      icon = "portfolio";
+      comment = "Calculate Investment Portfolio Performance";
+      desktopName = "Portfolio Performance";
+      categories = [ "Office" ];
+      startupWMClass = "Portfolio Performance";
+    })
+  ];
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };
 

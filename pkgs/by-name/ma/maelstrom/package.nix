@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   SDL2,
   SDL2_net,
@@ -24,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     # fix build with gcc14
     ./add-maelstrom-netd-include-time.diff
   ];
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     SDL2

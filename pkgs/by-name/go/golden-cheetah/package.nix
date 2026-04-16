@@ -10,20 +10,9 @@
   bison,
   flex,
   zlib,
+  copyDesktopItems,
   makeDesktopItem,
 }:
-
-let
-  desktopItem = makeDesktopItem {
-    name = "goldencheetah";
-    exec = "GoldenCheetah";
-    icon = "goldencheetah";
-    desktopName = "GoldenCheetah";
-    genericName = "GoldenCheetah";
-    comment = "Performance software for cyclists, runners and triathletes";
-    categories = [ "Utility" ];
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
   version = "3.8-DEV2603";
@@ -55,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ];
   nativeBuildInputs = [
+    copyDesktopItems
     bison
     flex
   ]
@@ -92,6 +82,18 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's,^#LIBUSB_LIBS.*,LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb,' src/gcconfig.pri
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "goldencheetah";
+      exec = "GoldenCheetah";
+      icon = "goldencheetah";
+      desktopName = "GoldenCheetah";
+      genericName = "GoldenCheetah";
+      comment = "Performance software for cyclists, runners and triathletes";
+      categories = [ "Utility" ];
+    })
+  ];
+
   installPhase =
     if stdenv.hostPlatform.isLinux then
       ''
@@ -99,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
 
         mkdir -p $out/bin
         cp src/GoldenCheetah $out/bin
-        install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
         install -Dm644 src/Resources/images/gc.png $out/share/icons/hicolor/512x512/apps/goldencheetah.png
 
         runHook postInstall

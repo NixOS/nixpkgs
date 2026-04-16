@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   openjdk17,
@@ -21,27 +22,31 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tiEq/xdC0gXiUInLS9xGR/vI/BpdSA+mSf5yukuejc4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
   buildInputs = [ jre ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ganttproject";
+      exec = "ganttproject";
+      icon = "ganttproject";
+      desktopName = "GanttProject";
+      genericName = "Schedule and manage projects";
+      comment = finalAttrs.meta.description;
+      categories = [ "Office" ];
+    })
+  ];
 
   installPhase =
     let
-
-      desktopItem = makeDesktopItem {
-        name = "ganttproject";
-        exec = "ganttproject";
-        icon = "ganttproject";
-        desktopName = "GanttProject";
-        genericName = "Shedule and manage projects";
-        comment = finalAttrs.meta.description;
-        categories = [ "Office" ];
-      };
-
       javaOptions = [
         "-Dawt.useSystemAAFontSettings=gasp"
       ];
-
     in
+    # bash
     ''
       mkdir -pv "$out/share/ganttproject"
       cp -rv *  "$out/share/ganttproject"
@@ -52,8 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix _JAVA_OPTIONS " " "${toString javaOptions}"
 
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
-
-      cp -rv "${desktopItem}/share/applications" "$out/share"
     '';
 
   meta = {

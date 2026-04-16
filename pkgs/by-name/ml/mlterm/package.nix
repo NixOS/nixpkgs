@@ -5,13 +5,14 @@
   fetchpatch,
   pkg-config,
   autoconf,
+  copyDesktopItems,
   makeDesktopItem,
   nixosTests,
   vte,
   harfbuzz, # can be replaced with libotf
   fribidi,
   m17n_lib,
-  libssh2, # build-in ssh
+  libssh2, # built-in ssh
   fcitx5,
   fcitx5-gtk,
   ibus,
@@ -122,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    copyDesktopItems
     pkg-config
     autoconf
   ]
@@ -188,16 +190,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gtk != null) [
     "--with-gtk=${lib.versions.major gtk.version}.0"
   ]
-  ++ (lib.mapAttrsToList (n: v: lib.enableFeature v n) enableFeatures)
-  ++ [
-  ];
+  ++ (lib.mapAttrsToList (n: v: lib.enableFeature v n) enableFeatures);
 
   enableParallelBuilding = true;
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
     install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
-    install -D -t $out/share/applications $desktopItem/share/applications/*
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications/
@@ -205,20 +204,22 @@ stdenv.mkDerivation (finalAttrs: {
     install $out/bin/mlterm -Dt $out/Applications/mlterm.app/Contents/MacOS/
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "mlterm";
-    exec = "${desktopBinary} %U";
-    icon = "mlterm";
-    type = "Application";
-    comment = "Multi Lingual TERMinal emulator";
-    desktopName = "mlterm";
-    genericName = "Terminal emulator";
-    categories = [
-      "System"
-      "TerminalEmulator"
-    ];
-    startupNotify = false;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mlterm";
+      exec = "${desktopBinary} %U";
+      icon = "mlterm";
+      type = "Application";
+      comment = "Multi Lingual TERMinal emulator";
+      desktopName = "mlterm";
+      genericName = "Terminal emulator";
+      categories = [
+        "System"
+        "TerminalEmulator"
+      ];
+      startupNotify = false;
+    })
+  ];
 
   passthru = {
     tests.test = nixosTests.terminal-emulators.mlterm;

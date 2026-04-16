@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
     perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
-  ''; # */
+  '';
 
   passthru.updateScript = ./update.sh;
 

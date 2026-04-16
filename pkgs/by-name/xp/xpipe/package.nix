@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
+  copyDesktopItems,
   makeDesktopItem,
   autoPatchelfHook,
   zlib,
@@ -57,6 +58,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     makeShellWrapper
   ];
 
@@ -86,15 +88,17 @@ stdenvNoCC.mkDerivation rec {
     socat
   ];
 
-  desktopItem = makeDesktopItem {
-    categories = [ "Network" ];
-    comment = "Your entire server infrastructure at your fingertips";
-    desktopName = displayname;
-    exec = "/opt/${pname}/bin/xpipe open %U";
-    genericName = "Shell connection hub";
-    icon = "/opt/${pname}/logo.png";
-    name = displayname;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [ "Network" ];
+      comment = "Your entire server infrastructure at your fingertips";
+      desktopName = displayname;
+      exec = "xpipe open %U";
+      genericName = "Shell connection hub";
+      icon = "logo";
+      name = displayname;
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -105,12 +109,6 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p "$out/bin"
     ln -s "$out/opt/$pkg/bin/xpipe" "$out/bin/$pkg"
-
-    mkdir -p "$out/share/applications"
-    cp -r "${desktopItem}/share/applications/" "$out/share/"
-
-    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Exec=" "Exec=$out"
-    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Icon=" "Icon=$out"
 
     mv "$out/opt/$pkg/bin/xpiped" "$out/opt/$pkg/bin/xpiped_raw"
     mv "$out/opt/$pkg/lib/app/xpiped.cfg" "$out/opt/$pkg/lib/app/xpiped_raw.cfg"

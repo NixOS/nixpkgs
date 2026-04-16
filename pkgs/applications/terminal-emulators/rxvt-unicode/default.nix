@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  copyDesktopItems,
   makeDesktopItem,
   libx11,
   libxt,
@@ -28,19 +29,6 @@ let
   version = "9.31";
   description = "Clone of the well-known terminal emulator rxvt";
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = "urxvt";
-    icon = "utilities-terminal";
-    comment = description;
-    desktopName = "URxvt";
-    genericName = pname;
-    categories = [
-      "System"
-      "TerminalEmulator"
-    ];
-  };
-
   fetchPatchFromAUR =
     {
       package,
@@ -64,7 +52,10 @@ stdenv.mkDerivation {
     sha256 = "qqE/y8FJ/g8/OR+TMnlYD3Spb9MS1u0GuP8DwtRmcug=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
   buildInputs = [
     libx11
     libxt
@@ -159,8 +150,22 @@ stdenv.mkDerivation {
   postInstall = ''
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-    cp -r ${desktopItem}/share/applications/ $out/share/
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = "urxvt";
+      icon = "utilities-terminal";
+      comment = description;
+      desktopName = "URxvt";
+      genericName = pname;
+      categories = [
+        "System"
+        "TerminalEmulator"
+      ];
+    })
+  ];
 
   passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 
