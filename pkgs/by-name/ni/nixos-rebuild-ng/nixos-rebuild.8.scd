@@ -21,7 +21,7 @@ nixos-rebuild - reconfigure a NixOS machine
 _nixos-rebuild_ \[--verbose] [--quiet] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format LOG_FORMAT] [--keep-going] [--keep-failed] [--fallback] [--repair] [--option OPTION OPTION] [--builders BUILDERS] [--include INCLUDE]++
 	\[--print-build-logs] [--show-trace] [--accept-flake-config] [--refresh] [--impure] [--offline] [--no-net] [--recreate-lock-file] [--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file]++
 	\[--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT] [--no-build-output] [--use-substitutes] [--help] [--debug] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader]++
-	\[--profile-name PROFILE_NAME] [--specialisation SPECIALISATION] [--rollback] [--store-path STORE_PATH] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
+	\[--profile-name PROFILE_NAME] [--specialisation SPECIALISATION] [--rollback] [--store-path STORE_PATH] [--upgrade] [--upgrade-all] [--json] [--elevate {none,sudo,run0}] [--ask-elevate-password] [--no-reexec]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST] [--no-build-nix] [--image-variant IMAGE_VARIANT]++
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
 
@@ -269,17 +269,41 @@ It must be one of the following:
 	target-host connection to cache.nixos.org is faster than the connection
 	between hosts.
 
+*--elevate* {none,sudo,run0}
+	Privilege-elevation method used for activation commands. Setting this
+	option allows deploying as a non-root user.
+
+	_sudo_ prefixes commands with *sudo*. Additional sudo options can be
+	passed via the NIX_SUDOOPTS environment variable.
+
+	_run0_ uses systemd's polkit-based elevation. Locally this runs *run0*
+	directly so the user's normal polkit agent handles any prompts. With
+	*--target-host* the equivalent _systemd-run --uid=0 --pipe_ form is
+	used (no remote TTY is allocated). Unless *--ask-elevate-password* is
+	also passed, the deploying user must be granted the polkit action
+	_org.freedesktop.systemd1.manage-units_ on the target host without
+	authentication, e.g. via _security.polkit.extraConfig_.
+
+*--ask-elevate-password*, *-S*
+	Prompt locally for a password and feed it to the elevation method.
+	Implies *--elevate=sudo* if *--elevate* is not given.
+
+	For _sudo_ this uses *sudo --stdin*. For _run0_ the command is wrapped
+	in *polkit-stdin-agent*, which registers a per-process polkit agent
+	and answers the PAM conversation from the supplied password. The
+	machine performing the elevation (the local host, or the target host
+	with *--target-host*) must set
+	_system.tools.nixos-rebuild.enableRun0Elevation = true_.
+	*--elevate=run0 --ask-elevate-password* is not usable otherwise.
+
 *--sudo*
-	When set, *nixos-rebuild* prefixes activation commands with sudo.
-	Setting this option allows deploying as a non-root user.
+	Alias for *--elevate=sudo*.
 
-	You can set sudo options by defining the NIX_SUDOOPTS environment
-	variable.
+*--ask-sudo-password*
+	Alias for *--elevate=sudo --ask-elevate-password*.
 
-*--ask-sudo-password*, *-S*
-	When set, *nixos-rebuild* will ask for sudo password for remote
-	activation (i.e.: on *--target-host*) at the start of the build process.
-	Implies *--sudo*.
+*--use-remote-sudo*
+	Deprecated, use *--elevate=sudo* instead.
 
 *--file* _path_, *-f* _path_
 	Build the NixOS system from the specified file. The file must
