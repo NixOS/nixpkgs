@@ -17,7 +17,7 @@ php83.buildComposerProject2 (finalAttrs: {
     hash = "sha256-IP1IffCDPPudtgwIv3gqPud9p7WjGbXrLlnoAZ56Gu8=";
   };
 
-  vendorHash = "sha256-Q7Qz/LwycyKjDuD6vBQY6z7CcT4H/i+9KaC13CgS6Fc=";
+  vendorHash = "sha256-zX8ej9p5+rgze7SkGELBf2QJy+402ckkQBBtHUsowog=";
 
   passthru = {
     phpPackage = php83;
