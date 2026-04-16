@@ -1,96 +1,54 @@
 {
   lib,
-  fetchPypi,
+  nix-update-script,
+  buildGoModule,
   fetchFromGitHub,
-  python3,
-
-  withE2BE ? true,
+  olm,
+  # This option enables the use of an experimental pure-Go implementation of
+  # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
+  # is not recommended by the mautrix developers, but they are interested in
+  # people trying it out in non-production-critical environments and reporting
+  # any issues they run into.
+  withGoolm ? false,
 }:
 
-let
-  tulir-telethon = python3.pkgs.telethon.overrideAttrs (
-    finalAttrs: previousAttrs: {
-      version = "1.99.0a6";
-      pname = "tulir_telethon";
-      src = fetchFromGitHub {
-        owner = "tulir";
-        repo = "Telethon";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-ulnA+xKbZDOTzXYmF9oBWNBNhgxSiF+mKx1ijoCyo/w=";
-      };
-      dontUsePytestCheck = true;
-    }
-  );
-in
-python3.pkgs.buildPythonApplication (finalAttrs: {
+buildGoModule rec {
   pname = "mautrix-telegram";
-  version = "0.15.3";
-  pyproject = true;
+  version = "26.04";
+  tag = "v0.2604.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-w3BqWyAJV/lZPoOFDzxhootpw451lYruwM9efwS6cEc=";
+    inherit tag;
+    hash = "sha256-i/eIvsqLAst9nuhZL4a+SlMcqtwy8c0iWHwe+5dYVlI=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  buildInputs = lib.optional (!withGoolm) olm;
+  tags = lib.optional withGoolm "goolm";
 
-  patches = [ ./0001-Re-add-entrypoint.patch ];
+  vendorHash = "sha256-mQ6zvEK6YcR71zLGD1n9xZzXqiXtKIs43rxeP278Ln0=";
 
-  pythonRelaxDeps = [
-    "mautrix"
-    "ruamel.yaml"
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "main.Tag=${tag}"
   ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      ruamel-yaml
-      python-magic
-      commonmark
-      aiohttp
-      yarl
-      (mautrix.override { withOlm = withE2BE; })
-      tulir-telethon
-      asyncpg
-      mako
-      setuptools
-      # speedups
-      cryptg
-      aiodns
-      brotli
-      # qr_login
-      pillow
-      qrcode
-      # formattednumbers
-      phonenumbers
-      # metrics
-      prometheus-client
-      # sqlite
-      aiosqlite
-      # proxy support
-      pysocks
-    ]
-    ++ lib.optionals withE2BE [
-      # e2be
-      python-olm
-      pycryptodome
-      unpaddedbase64
-    ];
+  passthru.updateScript = nix-update-script { };
 
-  # has no tests
+  # Some tests were failing, should be enabled in the future
   doCheck = false;
 
   meta = {
     homepage = "https://github.com/mautrix/telegram";
-    description = "Matrix-Telegram hybrid puppeting/relaybot bridge";
+    description = "Matrix-Telegram puppeting bridge";
     license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       nyanloutre
       nickcao
     ];
     mainProgram = "mautrix-telegram";
   };
-})
+}
