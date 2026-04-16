@@ -299,6 +299,7 @@ with lib.maintainers;
     ];
     scope = "Maintain GCC (GNU Compiler Collection) compilers";
     shortName = "GCC";
+    enableFeatureFreezePing = true;
   };
 
   geospatial = {

@@ -1,7 +1,5 @@
-diff --git a/samba/filepropertiesplugin/authhelper.cpp b/samba/filepropertiesplugin/authhelper.cpp
-index b45b25f..b71554f 100644
---- a/samba/filepropertiesplugin/authhelper.cpp
-+++ b/samba/filepropertiesplugin/authhelper.cpp
+--- a/samba/filepropertiesplugin/kauth/authhelper.cpp
++++ b/samba/filepropertiesplugin/kauth/authhelper.cpp
 @@ -50,7 +50,7 @@ ActionReply AuthHelper::isuserknown(const QVariantMap &args)
      }
  
@@ -29,8 +27,6 @@ index b45b25f..b71554f 100644
      p.setArguments({QStringLiteral("--append"), QStringLiteral("--groups"), group, user.value()});
  #else
  #error "Platform lacks group management support. Please add support."
-diff --git a/samba/filepropertiesplugin/groupmanager.cpp b/samba/filepropertiesplugin/groupmanager.cpp
-index 948f428..f25e549 100644
 --- a/samba/filepropertiesplugin/groupmanager.cpp
 +++ b/samba/filepropertiesplugin/groupmanager.cpp
 @@ -18,7 +18,7 @@ GroupManager::GroupManager(QObject *parent)
@@ -42,8 +38,6 @@ index 948f428..f25e549 100644
          proc->setArguments({QStringLiteral("--debuglevel=0"),
                              QStringLiteral("--suppress-prompt"),
                              QStringLiteral("--verbose"),
-diff --git a/samba/filepropertiesplugin/usermanager.cpp b/samba/filepropertiesplugin/usermanager.cpp
-index 3be3b8c..66fd965 100644
 --- a/samba/filepropertiesplugin/usermanager.cpp
 +++ b/samba/filepropertiesplugin/usermanager.cpp
 @@ -134,7 +134,7 @@ bool UserManager::canManageSamba() const
