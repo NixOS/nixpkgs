@@ -5,7 +5,7 @@ set -eou pipefail
 
 latestVersion=$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -sL https://api.github.com/repos/VSCodium/vscodium/releases/latest | jq -r ".tag_name")
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; vscodium.version or (lib.getVersion vscodium)" | tr -d '"')
-latestUpstream=$(curl -sL https://raw.githubusercontent.com/VSCodium/vscodium/refs/tags/$latestVersion/upstream/stable.json | jq -r ".tag")
+latestUpstream=$(curl -sL "https://raw.githubusercontent.com/VSCodium/vscodium/refs/tags/$latestVersion/upstream/stable.json" | jq -r ".tag")
 
 echo "latest  version: $latestVersion"
 echo "current version: $currentVersion"
