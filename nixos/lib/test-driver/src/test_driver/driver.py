@@ -27,8 +27,6 @@ from test_driver.machine import (
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
-SENTINEL = object()
-
 
 class AssertionTester(TestCase):
     """
