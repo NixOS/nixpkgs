@@ -3,7 +3,6 @@
   name = "rasdaemon";
   meta = {
     inherit (pkgs.rasdaemon.meta) maintainers;
-    broken = true; # test timed out
   };
 
   nodes.machine =
