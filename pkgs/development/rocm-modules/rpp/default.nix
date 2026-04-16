@@ -19,7 +19,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpp-${if useCPU then "cpu" else "hip"}";
 
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";

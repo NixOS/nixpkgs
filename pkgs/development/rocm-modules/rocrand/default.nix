@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocrand${clr.gpuArchSuffix}";
-  version = "7.2.1";
+  version = "7.2.2";
 
   outputs = [
     "out"

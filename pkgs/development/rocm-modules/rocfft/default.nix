@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
