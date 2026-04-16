@@ -8,6 +8,10 @@
   nix-update-script,
   installShellFiles,
   withQuic ? false, # with QUIC protocol support
+
+  formats,
+  bash,
+  iproute2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -46,8 +50,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false; # tests failed due to heavy rely on network
 
   passthru = {
-    tests = { inherit (nixosTests) easytier; };
+    tests = { inherit (nixosTests) easytier easytier-modular; };
     updateScript = nix-update-script { };
+  };
+
+  passthru.services.default = {
+    imports = [
+      (lib.modules.importApply ./service.nix { inherit formats bash iproute2; })
+    ];
+    easytier.package = finalAttrs.finalPackage;
   };
 
   meta = {
