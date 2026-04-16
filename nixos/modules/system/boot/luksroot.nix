@@ -214,7 +214,7 @@ let
 
                       # and try reading it from /dev/console with a timeout
                       IFS= read -t 1 -r passphrase
-                      if [ -n "$passphrase" ]; then
+                      if [ $? = 0 ]; then
                          ${
                            if luks.reusePassphrases then
                              ''
@@ -232,7 +232,7 @@ let
                   fi
               done
               echo -n "Verifying passphrase for ${dev.device}..."
-              echo -n "$passphrase" | ${csopen} --key-file=-
+              echo "$passphrase" | ${csopen}
               if [ $? == 0 ]; then
                   echo " - success"
                   ${

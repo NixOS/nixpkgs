@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pcre2,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ pcre2 ];
 
   buildFeatures = [ "pcre2-engine" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/brevity1swos/rgx";
