@@ -12,6 +12,7 @@ from ipaddress import AddressValueError, IPv6Address
 from typing import Final, Literal, Self, TextIO, TypedDict, Unpack, override
 
 from . import tmpdir
+from .elevate import NO_ELEVATOR, Elevator, SudoElevator
 
 logger: Final = logging.getLogger(__name__)
 
@@ -130,10 +131,16 @@ def run_wrapper(
     env: Mapping[str, EnvValue] | None = None,
     append_local_env: Mapping[str, str] | None = None,
     remote: Remote | None = None,
+    elevate: Elevator = NO_ELEVATOR,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
+    # Back-compat shim while callers are migrated to ``elevate=``;
+    # removed in the next commit.
+    if sudo:
+        elevate = SudoElevator(password=remote.sudo_password if remote else None)
+
     process_input = None
     run_args: list[Arg] = list(args)
     final_args: list[Arg]
@@ -142,27 +149,16 @@ def run_wrapper(
     resolved_env = _resolve_env_local(normalized_env)
 
     if remote:
+        wrapped = elevate.wrap_remote()
+        process_input = wrapped.stdin
         remote_run_args: list[Arg] = [
+            *wrapped.prefix,
             "/bin/sh",
             "-c",
             _remote_shell_script(normalized_env),
             "sh",
             *run_args,
         ]
-
-        if sudo:
-            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
-            if remote.sudo_password:
-                remote_run_args = [
-                    "sudo",
-                    "--prompt=",
-                    "--stdin",
-                    *sudo_args,
-                    *remote_run_args,
-                ]
-                process_input = remote.sudo_password + "\n"
-            else:
-                remote_run_args = ["sudo", *sudo_args, *remote_run_args]
 
         ssh_args: list[Arg] = [
             "ssh",
@@ -176,22 +172,19 @@ def run_wrapper(
         popen_env = None  # keep ssh's environment normal
 
     else:
-        if sudo:
-            # subprocess.run(env=...) would affect sudo, but sudo may drop env
-            # for the target command.
-            # So we inject env via `sudo env ... cmd`.
+        wrapped = elevate.wrap_local()
+        process_input = wrapped.stdin
+        if elevate.elevates:
+            # subprocess.run(env=...) would affect the elevator process,
+            # which may then drop env for the target command. Inject env
+            # via `env -i ... cmd` instead so it survives.
             if env is not None and resolved_env:
                 run_args = _prefix_env_cmd(run_args, resolved_env)
-
-            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
-            final_args = ["sudo", *sudo_args, *run_args]
-
-            # No need to pass env to subprocess.run; keep sudo's own env
-            # default.
+            final_args = [*wrapped.prefix, *run_args]
             popen_env = None
         else:
-            # Non-sudo local: we can fully control the environment with
-            # subprocess.run(env=...)
+            # Unprivileged local: we can fully control the environment
+            # with subprocess.run(env=...)
             final_args = run_args
             popen_env = None if env is None else resolved_env
 
@@ -225,16 +218,14 @@ def run_wrapper(
 
         return r
     except KeyboardInterrupt:
-        # sudo commands are activation only and unlikely to be long running
-        if remote and not sudo:
+        # elevated commands are activation only and unlikely to be long
+        # running
+        if remote and not elevate.elevates:
             _kill_long_running_ssh_process(args, remote)
         raise
     except subprocess.CalledProcessError:
-        if sudo and remote and remote.sudo_password is None:
-            logger.error(
-                "while running command with remote sudo, did you forget to use "
-                "--ask-sudo-password?"
-            )
+        if remote and (hint := elevate.on_remote_failure()):
+            logger.error(hint)
         raise
 
 
