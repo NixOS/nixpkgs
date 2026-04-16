@@ -13,6 +13,7 @@ from __future__ import annotations
 import os
 import shlex
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from enum import Enum
 from typing import Final, Self, override
@@ -184,6 +185,37 @@ class ElevatorKind(Enum):
                 f"unknown elevation method {name!r}; choose from: "
                 + ", ".join(cls.choices())
             ) from None
+
+    @classmethod
+    def resolve(
+        cls,
+        *,
+        name: str | None,
+        sudo: bool,
+        ask_password: bool,
+        warn: Callable[[str], None],
+    ) -> Elevator:
+        """Map the CLI flags onto an :class:`Elevator`.
+
+        *name* is the value of ``--elevate``; *sudo* covers the ``--sudo``
+        / ``--use-remote-sudo`` aliases; *ask_password* is
+        ``--ask-elevate-password``. The password itself is attached later
+        via :meth:`Elevator.with_password` once the target host (used in
+        the prompt) is known.
+        """
+        if name is not None:
+            return cls.from_name(name)
+        if sudo:
+            return cls.SUDO.make()
+        if ask_password:
+            # -S historically implied --sudo; keep that for muscle memory
+            # but be explicit now that there is more than one backend.
+            warn(
+                "--ask-elevate-password without --elevate, "
+                "falling back to --elevate=sudo"
+            )
+            return cls.SUDO.make()
+        return NO_ELEVATOR
 
 
 #: Singleton used as the default ``elevate=`` argument throughout.

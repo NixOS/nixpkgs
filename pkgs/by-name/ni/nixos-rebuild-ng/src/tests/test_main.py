@@ -21,6 +21,30 @@ DEFAULT_RUN_KWARGS = {
 }
 
 
+def test_parse_args_elevate() -> None:
+    r, _ = nr.parse_args(["nixos-rebuild", "switch"])
+    assert r.elevator is nr.elevate.NO_ELEVATOR
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--elevate=sudo"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    # back-compat aliases
+    for flag in ("--sudo", "--use-remote-sudo"):
+        r, _ = nr.parse_args(["nixos-rebuild", "switch", flag])
+        assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "--ask-sudo-password"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+    assert r.ask_elevate_password
+
+    # -S without --elevate implies sudo
+    r, _ = nr.parse_args(["nixos-rebuild", "switch", "-S"])
+    assert isinstance(r.elevator, nr.elevate.SudoElevator)
+
+    with pytest.raises(SystemExit):
+        nr.parse_args(["nixos-rebuild", "switch", "--elevate=doas"])
+
+
 def test_parse_args() -> None:
     with pytest.raises(SystemExit) as e:
         nr.parse_args(["nixos-rebuild", "unknown-action"])

@@ -48,3 +48,32 @@ def test_elevator_kind() -> None:
     with pytest.raises(e.ElevateError):
         e.ElevatorKind.from_name("doas")
     assert set(e.ElevatorKind.choices()) == {"none", "sudo"}
+
+
+def test_resolve() -> None:
+    warnings: list[str] = []
+
+    def w(msg: str) -> None:
+        warnings.append(msg)
+
+    resolve = e.ElevatorKind.resolve
+    assert resolve(name=None, sudo=False, ask_password=False, warn=w) is e.NO_ELEVATOR
+    assert isinstance(
+        resolve(name="none", sudo=False, ask_password=False, warn=w), e.NoElevator
+    )
+    assert isinstance(
+        resolve(name=None, sudo=True, ask_password=False, warn=w), e.SudoElevator
+    )
+    assert warnings == []
+
+    # --elevate wins over --sudo alias
+    assert isinstance(
+        resolve(name="none", sudo=True, ask_password=False, warn=w), e.NoElevator
+    )
+    assert warnings == []
+
+    # -S alone falls back to sudo with a warning
+    assert isinstance(
+        resolve(name=None, sudo=False, ask_password=True, warn=w), e.SudoElevator
+    )
+    assert len(warnings) == 1
