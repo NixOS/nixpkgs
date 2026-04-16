@@ -62,19 +62,20 @@
   pytest-xdist,
   pytest-watch,
   responses,
+  socksio,
   stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sentry-sdk";
-  version = "2.54.0";
+  version = "2.58.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = finalAttrs.version;
-    hash = "sha256-+NMOfOhzj7QAkwspI28wGNs6ATDzH6HWT479+7l9DBo=";
+    hash = "sha256-SdGzHeniLwP8i7iIax5FtCd/qNDLLtg9luWbwpKIoz8=";
   };
 
   postPatch = ''
@@ -95,6 +96,7 @@ buildPythonPackage (finalAttrs: {
     anthropic = [ anthropic ];
     # TODO: arq
     asyncpg = [ asyncpg ];
+    asyncio = [ httpcore ] ++ httpcore.optional-dependencies.asyncio;
     beam = [ apache-beam ];
     bottle = [ bottle ];
     celery = [ celery ];
@@ -164,7 +166,9 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytest-watch
     pytestCheckHook
+    socksio
   ]
+  ++ finalAttrs.finalPackage.optional-dependencies.asyncio
   ++ finalAttrs.finalPackage.optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;

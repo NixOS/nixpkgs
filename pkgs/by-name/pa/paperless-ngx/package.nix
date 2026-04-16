@@ -182,6 +182,7 @@ python.pkgs.buildPythonApplication rec {
     "scikit-learn"
     "tika-client"
     # requested by maintainer
+    "imap-tools"
     "ocrmypdf"
   ];
 
