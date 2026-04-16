@@ -16321,6 +16321,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tiny-cmdline-nvim = buildVimPlugin {
+    pname = "tiny-cmdline.nvim";
+    version = "0-unstable-2026-04-11";
+    src = fetchFromGitHub {
+      owner = "rachartier";
+      repo = "tiny-cmdline.nvim";
+      rev = "ad58747b955d0743ccfd56e97da1a4c1fac89f58";
+      hash = "sha256-tD1DrY4mpPf5Qo9jZEBqSxOOqzk2Ssl1srH4mu+cN5g=";
+    };
+    meta.homepage = "https://github.com/rachartier/tiny-cmdline.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   tiny-devicons-auto-colors-nvim = buildVimPlugin {
     pname = "tiny-devicons-auto-colors.nvim";
     version = "0-unstable-2025-01-03";
