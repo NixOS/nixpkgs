@@ -85,6 +85,7 @@ in
       };
     };
   };
+
   serviceOpts = {
     after = mkIf cfg.systemd.enable [ cfg.systemd.unit ];
     serviceConfig = {
@@ -95,7 +96,7 @@ in
       SupplementaryGroups = mkIf cfg.systemd.enable [ "systemd-journal" ];
       ExecStart = ''
         ${lib.getExe cfg.package} \
-          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --web.systemd-socket \
           --web.telemetry-path ${cfg.telemetryPath} \
           --postfix.showq_path ${escapeShellArg cfg.showqPath} \
           ${concatStringsSep " \\\n  " (
@@ -114,5 +115,9 @@ in
           )}
       '';
     };
+  };
+
+  socketOpts = {
+    socketConfig.ListenStream = "${cfg.listenAddress}:${toString cfg.port}";
   };
 }
