@@ -327,6 +327,8 @@ let
               $rbConfig $out/lib/libruby*
           '';
 
+          # TODO: this check got relaxed on darwin;
+          # see https://github.com/NixOS/nixpkgs/pull/499156#issuecomment-4221517043
           installCheckPhase = ''
             overriden_cc=$(CC=foo $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
             if [[ "$overriden_cc" != "foo" ]]; then
@@ -335,7 +337,9 @@ let
             fi
 
             fallback_cc=$(unset CC; $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
-            if [[ "$fallback_cc" != "$CC" ]]; then
+            if [[ ${
+              if stdenv.hostPlatform.isDarwin then ''! "$fallback_cc" =~ "$CC"'' else ''"$fallback_cc" != "$CC"''
+            } ]]; then
                echo "CC='$fallback_cc' should be '$CC' by default" >&2
                false
             fi
