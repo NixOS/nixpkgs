@@ -67,9 +67,8 @@ buildPythonApplication {
     tesseract4
   ];
 
-  passthru.tests = {
-    inherit (nixosTests.nixos-test-driver) driver-timeout;
-  };
+  # containers test requires extra nix features that are not available in ofborg.
+  passthru.tests = removeAttrs nixosTests.nixos-test-driver [ "containers" ];
 
   doCheck = true;
 
