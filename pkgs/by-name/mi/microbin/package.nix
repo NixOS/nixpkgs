@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # MicroBin returns wrong URLs on deployments with non-root URLs.
     (fetchpatch {
       name = "0001-fixup-explicit-urls.patch";
-      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..df062134cbaf3fd0ebcb67af8453a4c66844cd13.diff?full_index=1";
-      hash = "sha256-ssePgbVU5C04u9z+AWUyovccOPUSXqFpohRi5DYYCoE=";
+      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..df062134cbaf3fd0ebcb67af8453a4c66844cd13.patch";
+      hash = "sha256-h13FBuzu2O4AwdhRHF5EX5LaKyPeWJAcaV6SGTaYzTg=";
     })
 
     # Minor fixups by LuK1337
@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Fixup styling, password protected and private pastas.
     (fetchpatch {
       name = "0002-minor-fixups.patch";
-      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..3b0c025e9b6dc1ca69269541940bdb53032a048a.diff?full_index=1";
-      hash = "sha256-f+pn9dGcdCm+kCBDtxUpdbEEn7stgZMvAhZMOq46Tw8=";
+      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..3b0c025e9b6dc1ca69269541940bdb53032a048a.patch";
+      hash = "sha256-cZB/jx5d6F+C4xOn49TQ1at/Z4ov26efo9PTtWEdCHw=";
     })
 
     # Fix MICROBIN_ETERNAL_PASTA by SouthFox-D
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # MICROBIN_ETERNAL_PASTA config doesn't work without this.
     (fetchpatch {
       name = "0003-fix-microbin-eternal-pasta.patch";
-      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..c7c846c64344b8d51500aa9a4b2e9a92de8d09d8.diff?full_index=1";
+      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..c7c846c64344b8d51500aa9a4b2e9a92de8d09d8.patch";
       hash = "sha256-gCio73Jt0F7YCFtQxtf6pPBDLNcyOAcfSsiyjLFzEzY=";
     })
 
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Existing pastas return code 404 even when they exist.
     (fetchpatch {
       name = "0004-fix-raw-pastas-returning-404.patch";
-      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..e789901520824d4bf610d28923097affe85ead7d.diff?full_index=1";
+      url = "https://github.com/szabodanika/microbin/compare/b8a0c5490d681550d982ad02d67a1aaa0897f503..e789901520824d4bf610d28923097affe85ead7d.patch";
       hash = "sha256-R47ozwu/FD1kCu5nx4Gf1cOFeLVFdS67K8RNDygwoZM=";
     })
   ];

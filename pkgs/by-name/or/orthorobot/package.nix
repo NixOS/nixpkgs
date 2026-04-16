@@ -57,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/Stabyourself/orthorobot/pull/3
     (fetchpatch {
       name = "Stabyourself-orthorobot-pull-3.patch";
-      url = "https://github.com/Stabyourself/orthorobot/compare/48f07423950b29a94b04aefe268f2f951f55b62e...05856ba7dbf1bb86d0f16a5f511d8ee9f2176015.diff?full_index=1";
-      hash = "sha256-CMYfLV8PEoS6GjPXkZ8UuvLKjXwrHquW08IIwlDPz/w=";
+      url = "https://github.com/Stabyourself/orthorobot/compare/48f07423950b29a94b04aefe268f2f951f55b62e...05856ba7dbf1bb86d0f16a5f511d8ee9f2176015.patch";
+      sha256 = "sha256-WHHP6QM7R5eEkVF+J2pGNnds/OKRIRXyon85wjd3GXI=";
     })
   ];
 
