@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdbfixer";
   version = "1.12";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "pdbfixer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X2P5cWmdvAjY9dMFB+R21advkdYizR8PmevMPR0RR0o=";
   };
 
@@ -60,9 +60,9 @@ buildPythonPackage rec {
   meta = {
     description = "PDBFixer fixes problems in PDB files";
     homepage = "https://github.com/openmm/pdbfixer";
-    changelog = "https://github.com/openmm/pdbfixer/releases/tag/${src.tag}";
+    changelog = "https://github.com/openmm/pdbfixer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "pdbfixer";
   };
-}
+})

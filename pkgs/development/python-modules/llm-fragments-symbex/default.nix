@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-fragments-symbex";
   version = "0.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-fragments-symbex";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LECMHv4tGMCY60JU68y2Sfxp97Px7T/RJVhYVDSFCy4=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM fragment loader for Python symbols";
     homepage = "https://github.com/simonw/llm-fragments-symbex";
-    changelog = "https://github.com/simonw/llm-fragments-symbex/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-fragments-symbex/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})
