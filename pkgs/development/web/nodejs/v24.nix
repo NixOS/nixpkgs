@@ -58,6 +58,13 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+      # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+      # OpenSSL reports different errors
+      # https://github.com/nodejs/node/pull/62629
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/dd25d8f29d3ddadcf5a5ebfdf98ece55f9df96c6.patch?full_index=1";
+        hash = "sha256-6cxRN7TyWmJgUZt3jp2YXbVIjrDb2BNep5LxBOtT3Q0=";
+      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
