@@ -22389,6 +22389,12 @@
     githubId = 35229674;
     name = "Armin Rothfuss";
   };
+  r3lphi = {
+    name = "Ralph El Massih";
+    email = "ralphelmassih@gmail.com";
+    github = "Ralph367";
+    githubId = "110833744";
+  };
   r3n3gad3p3arl = {
     github = "r3n3gad3p3arl";
     githubId = 20760527;
