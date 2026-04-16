@@ -17,7 +17,7 @@ from colorama import Style
 
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
-from test_driver.logger import AbstractLogger
+from test_driver.logger import AbstractLogger, BufferLogger, CompositeLogger
 from test_driver.machine import (
     BaseMachine,
     NspawnMachine,
@@ -295,17 +295,36 @@ class Driver:
         """Group logs under a given test name"""
         reporter = self.reporter
         tc = reporter.start(name) if reporter else None
+
+        # Capture logs if we have a reporter and a composite logger
+        capture: BufferLogger | None = None
+        if reporter and isinstance(self.logger, CompositeLogger):
+            capture = BufferLogger()
+            self.logger.add_logger(capture)
+
         with self.logger.subtest(name):
             try:
                 yield
             except Exception as e:
                 if reporter and tc:
-                    reporter.finish(tc, str(e))
+                    reporter.finish(
+                        tc,
+                        failure_message=str(e),
+                        stdout=capture.buffer if capture else None,
+                        stderr=capture.errors if capture else None,
+                    )
                 self.logger.log_test_error(f'Test "{name}" failed with error: "{e}"')
                 raise e
             else:
                 if reporter and tc:
-                    reporter.finish(tc)
+                    reporter.finish(
+                        tc,
+                        stdout=capture.buffer if capture else None,
+                        stderr=capture.errors if capture else None,
+                    )
+            finally:
+                if capture and isinstance(self.logger, CompositeLogger):
+                    self.logger.remove_logger(capture)
 
     def test_symbols(self) -> dict[str, Any]:
         @contextmanager

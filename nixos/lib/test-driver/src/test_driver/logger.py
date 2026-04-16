@@ -1,4 +1,3 @@
-import codecs
 import sys
 import time
 import unicodedata
@@ -69,12 +68,60 @@ class AbstractLogger(ABC):
         pass
 
 
+class BufferLogger(AbstractLogger):
+    """A logger that captures output to a string buffer."""
+
+    def __init__(self) -> None:
+        self.buffer = ""
+        self.errors = ""
+
+    def log(self, message: str, attributes: dict[str, str] = {}) -> None:
+        self.buffer += message + "\n"
+
+    @contextmanager
+    def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+        self.buffer += f"subtest: {name}\n"
+        yield
+
+    @contextmanager
+    def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+        self.buffer += message + "\n"
+        yield
+
+    def debug(self, *args, **kwargs) -> None:
+        self.buffer += args[0] + "\n"
+
+    def info(self, *args, **kwargs) -> None:
+        self.buffer += args[0] + "\n"
+
+    def warning(self, *args, **kwargs) -> None:
+        self.buffer += args[0] + "\n"
+
+    def error(self, *args, **kwargs) -> None:
+        self.errors += args[0] + "\n"
+
+    def log_test_error(self, *args, **kwargs) -> None:
+        self.errors += args[0] + "\n"
+
+    def log_serial(self, message: str, machine: str) -> None:
+        self.buffer += f"{machine} # {message}\n"
+
+    def print_serial_logs(self, enable: bool) -> None:
+        pass
+
+    def set_log_level(self, level: LogLevel) -> None:
+        pass
+
+
 class CompositeLogger(AbstractLogger):
     def __init__(self, logger_list: list[AbstractLogger]) -> None:
         self.logger_list = logger_list
 
     def add_logger(self, logger: AbstractLogger) -> None:
         self.logger_list.append(logger)
+
+    def remove_logger(self, logger: AbstractLogger) -> None:
+        self.logger_list.remove(logger)
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:
         for logger in self.logger_list:
@@ -154,7 +201,10 @@ class TerminalLogger(AbstractLogger):
     def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
         self._eprint(
             self.maybe_prefix(
-                Style.BRIGHT + Fore.GREEN + message + Style.RESET_ALL,  # ty: ignore[unsupported-operator]
+                Style.BRIGHT
+                + Fore.GREEN
+                + message
+                + Style.RESET_ALL,  # ty: ignore[unsupported-operator]
                 attributes,
             )
         )
@@ -167,7 +217,9 @@ class TerminalLogger(AbstractLogger):
     def debug(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.DEBUG:
             self._eprint(
-                Style.DIM + self.maybe_prefix(args[0], kwargs) + Style.RESET_ALL  # ty: ignore[unsupported-operator]
+                Style.DIM
+                + self.maybe_prefix(args[0], kwargs)
+                + Style.RESET_ALL  # ty: ignore[unsupported-operator]
             )
 
     def info(self, *args, **kwargs) -> None:
@@ -191,7 +243,9 @@ class TerminalLogger(AbstractLogger):
         if not self._print_serial_logs:
             return
 
-        self._eprint(Style.DIM + f"{machine} # {message}" + Style.RESET_ALL)  # ty: ignore[unsupported-operator]
+        self._eprint(
+            Style.DIM + f"{machine} # {message}" + Style.RESET_ALL
+        )  # ty: ignore[unsupported-operator]
 
     def log_test_error(self, *args, **kwargs) -> None:
         prefix = Fore.RED + "!!! " + Style.RESET_ALL  # ty: ignore[unsupported-operator]

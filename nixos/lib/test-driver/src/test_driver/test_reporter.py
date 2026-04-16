@@ -21,10 +21,20 @@ class TestReporter:
         self._suite.add_testcase(tc)
         return tc
 
-    def finish(self, tc: TestCase, failure_message: str | None = None) -> None:
+    def finish(
+        self,
+        tc: TestCase,
+        failure_message: str | None = None,
+        stdout: str | None = None,
+        stderr: str | None = None,
+    ) -> None:
         tc.time = time.time() - tc.time
         if failure_message:
             tc.result = [Failure(failure_message)]
+        if stdout:
+            tc.system_out = stdout
+        if stderr:
+            tc.system_err = stderr
 
     def close(self) -> None:
         self._main.time = time.time() - self._main_start
@@ -32,5 +42,6 @@ class TestReporter:
 
         xml = JUnitXml()
         xml.add_testsuite(self._suite)
+        xml.update_statistics()
         self.outfile.parent.mkdir(parents=True, exist_ok=True)
-        xml.write(str(self.outfile))
+        xml.write(str(self.outfile), pretty=True)

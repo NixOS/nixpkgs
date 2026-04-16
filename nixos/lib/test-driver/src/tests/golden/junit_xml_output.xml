@@ -1,21 +1,17 @@
-<?xml version="1.0" ?>
-<testsuites disabled="0" errors="0" failures="1" tests="3" time="0.0">
-	<testsuite disabled="0" errors="0" failures="1" name="NixOS integration test" skipped="0" tests="3" time="0">
-		<testcase name="main">
-			<system-out>Starting test...
-Log message 1
-</system-out>
-		</testcase>
-		<testcase name="my subtest">
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites tests="3" failures="1" errors="0" skipped="0" time="0">
+	<testsuite name="NixOS integration test" tests="3" errors="0" failures="1" skipped="0" time="0">
+		<testcase name="my subtest" time="0">
 			<system-out>Subtest log
 </system-out>
 		</testcase>
-		<testcase name="failing subtest">
-			<failure type="failure" message="test case failed"/>
+		<testcase name="failing subtest" time="0">
+			<failure message="test case failed"/>
 			<system-out>Some output
 </system-out>
 			<system-err>Error occurred
 </system-err>
 		</testcase>
+		<testcase name="main" time="0"/>
 	</testsuite>
 </testsuites>

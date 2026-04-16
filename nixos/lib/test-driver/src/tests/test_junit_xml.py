@@ -1,38 +1,43 @@
+import atexit
+import re
 import tempfile
 from pathlib import Path
 
-from test_driver.logger import JunitXMLLogger
+from test_driver.test_reporter import TestReporter
 
 GOLDEN_DIR = Path(__file__).parent / "golden"
 
 
+def normalize_xml(xml: str) -> str:
+    """Remove time attributes since they vary between runs."""
+    return re.sub(r'\btime="[^"]*"', 'time="0"', xml)
+
+
 def test_junit_xml_output() -> None:
-    """Test that JunitXMLLogger produces expected JUnit XML output."""
+    """Test that TestReporter produces expected JUnit XML output."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".xml", delete=False) as f:
         outfile = Path(f.name)
 
-    logger = JunitXMLLogger(outfile)
+    reporter = TestReporter(outfile)
 
-    # Log some messages to main test case
-    logger.log("Starting test...")
-    logger.info("Log message 1")
+    # Create a passing subtest with stdout
+    tc1 = reporter.start("my subtest")
+    reporter.finish(tc1, stdout="Subtest log\n")
 
-    # Create a subtest
-    with logger.subtest("my subtest"):
-        logger.log("Subtest log")
-
-    # Create a failing subtest
-    with logger.subtest("failing subtest"):
-        logger.log("Some output")
-        logger.error("Error occurred")
+    # Create a failing subtest with stdout and stderr
+    tc2 = reporter.start("failing subtest")
+    reporter.finish(
+        tc2,
+        failure_message="test case failed",
+        stdout="Some output\n",
+        stderr="Error occurred\n",
+    )
 
     # Manually close to write the file (normally done via atexit)
-    import atexit
+    atexit.unregister(reporter.close)
+    reporter.close()
 
-    atexit.unregister(logger.close)
-    logger.close()
-
-    actual = outfile.read_text()
+    actual = normalize_xml(outfile.read_text())
     golden_file = GOLDEN_DIR / "junit_xml_output.xml"
 
     if not golden_file.exists():
@@ -43,7 +48,7 @@ def test_junit_xml_output() -> None:
             "Please verify the output and re-run the test."
         )
 
-    expected = golden_file.read_text()
+    expected = normalize_xml(golden_file.read_text())
     assert actual == expected, f"JUnit XML output differs from golden file:\n{actual}"
 
     outfile.unlink()
