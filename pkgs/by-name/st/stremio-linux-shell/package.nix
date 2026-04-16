@@ -135,6 +135,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # server.js is unfree
       unfree
     ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      obfuscatedCode # server.js
+    ];
     maintainers = with lib.maintainers; [ thunze ];
     platforms = lib.platforms.linux;
     mainProgram = "stremio";
