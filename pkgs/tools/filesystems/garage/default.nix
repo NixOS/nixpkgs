@@ -2,12 +2,15 @@
   lib,
   rustPlatform,
   fetchFromGitea,
+  fetchpatch2,
+  installShellFiles,
   openssl,
   pkg-config,
   protobuf,
   cacert,
   nix-update-script,
   nixosTests,
+  stdenv,
 }:
 let
   generic =
@@ -34,6 +37,7 @@ let
       inherit cargoHash cargoPatches;
 
       nativeBuildInputs = [
+        installShellFiles
         protobuf
         pkg-config
       ];
@@ -48,7 +52,7 @@ let
 
       OPENSSL_NO_VENDOR = true;
 
-      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.2.0/nix/compile.nix#L71-L78
+      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.3.0/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here
       buildFeatures = [
         "bundled-libs"
@@ -63,6 +67,16 @@ let
         "syslog"
         "telemetry-otlp"
       ];
+
+      postInstall =
+        lib.optionalString
+          ((lib.versionAtLeast version "2.3.0") && (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+          ''
+            installShellCompletion --cmd garage \
+              --bash <($out/bin/garage completions bash) \
+              --fish <($out/bin/garage completions fish) \
+              --zsh <($out/bin/garage completions zsh)
+          '';
 
       passthru = {
         tests = nixosTests."garage_${lib.versions.major version}";
@@ -99,9 +113,16 @@ rec {
   };
 
   garage_2 = generic {
-    version = "2.2.0";
-    hash = "sha256-UaWHZPV0/Jgeiwvvr9V9Gqthn5KXErLx8gL4JdBRDVs=";
-    cargoHash = "sha256-U6Wipvlw3XdKUBNZMznENJ9m+9fzP9Nb6217+Kytu7s=";
+    version = "2.3.0";
+    hash = "sha256-CqHcaVGgXL/jjqq7XN+kzEp6xoNgwBfGpMKYbTd78Ys=";
+    cargoHash = "sha256-ANh97G/2/KtCMN4gldteq6ROduk1AQJkI5zS9n97OJY=";
+    cargoPatches = [
+      (fetchpatch2 {
+        # fix: prevent depending on aws-lc via reqwest
+        url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/commit/7c18abb664d891cdb696b478058b7506e3d53f44.patch";
+        hash = "sha256-f/+vDOC+kcmJVLtx1Y6OepoJBZhX30DULwSLnyQN5aI=";
+      })
+    ];
   };
 
   garage = garage_1;
