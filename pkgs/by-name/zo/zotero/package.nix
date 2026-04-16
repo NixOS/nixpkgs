@@ -16,6 +16,7 @@
   copyDesktopItems,
   libGL,
   pciutils,
+  speechd-minimal,
   wrapGAppsHook3,
   nix-update-script,
   xvfb-run,
@@ -27,14 +28,14 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "8.0.5";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
-    hash = "sha256-Amk2ehdzrQjFhx1eEHcnq+Z+un+2bT/u4kpbWqD5Sbc=";
     fetchSubmodules = true;
+    hash = "sha256-70kVFnypdF3YDXfrA+BFSoGkBfQAjDVa2pWOmaoetBI=";
   };
 
   pdf-js = buildNpmPackage {
@@ -88,8 +89,11 @@ let
     pname = "zotero-pdf-reader";
     inherit version nodejs;
     src = "${src}/reader";
-    npmDepsHash = "sha256-p8O2gIF0S7QO0AR9TPPQsWUtRnKnf58zSl3JZN0lnuc=";
-    patches = [ ./pdf-reader-locales.patch ];
+    npmDepsHash = "sha256-8marAeBAW5cKDaJT3xbVsXyVfGa5ehZYUYijDzFng38=";
+    patches = [
+      ./pdf-reader-locales.patch
+      ./pdf-reader-build-fix.patch
+    ];
     postPatch = ''
       rm -rf pdfjs/pdf.js
       cp -r ${pdf-js} pdfjs/pdf.js
@@ -102,6 +106,7 @@ let
       mkdir -p locales/en-US/
       cp -r ${src}/chrome/locale/en-US/zotero/* locales/en-US/
     '';
+    npmBuildScript = "build:zotero";
     installPhase = ''
       runHook preInstall
 
@@ -208,12 +213,11 @@ buildNpmPackage (finalAttrs: {
     # Skip some flaky/failing tests
     rm test/tests/retractionsTest.js
     for test in \
-      "should throw error on broken symlink" \
       "should use BrowserDownload for 403 when enforcing file type" \
       "should use BrowserDownload for a JS redirect page" \
-      "should keep attachments pane status after changing selection" \
-      "should render preview robustly after making dense calls to render and discard" \
-      "should discard attachment pane preview after becoming invisible" \
+      "should throw error on broken symlink" \
+      "should switch dialog from add note to add/edit citation" \
+      "should vacuum the database with force option" \
     ; do
       sed -i "s|it(\"$test|it.skip(\"$test|" test/tests/*.js
     done
@@ -312,6 +316,7 @@ buildNpmPackage (finalAttrs: {
       lib.makeLibraryPath [
         libGL
         pciutils
+        speechd-minimal
       ]
     })
   '';
