@@ -420,18 +420,11 @@ class RepoGitHub(Repo):
         return sha256
 
     def prefetch_github(self, ref: str) -> str:
-        quoted_ref = quote(ref, safe="")
-        safe_name = re.sub(r"[^A-Za-z0-9._+-]", "-", f"{self.repo}-{ref}.tar.gz")
-        cmd = [
-            "nix-prefetch-url",
-            "--unpack",
-            "--name",
-            safe_name,
-            self.url(f"archive/{quoted_ref}.tar.gz"),
-        ]
+        cmd = ["nix-prefetch-github", self.owner, self.repo, "--rev", ref, "--json"]
         log.debug("Running %s", cmd)
         data = subprocess.check_output(cmd)
-        return data.strip().decode("utf-8")
+        loaded = json.loads(data)
+        return loaded["hash"]
 
     def as_nix(self, plugin: "Plugin") -> str:
         if plugin.has_submodules:
