@@ -3,12 +3,13 @@
   lib,
   fetchFromGitHub,
   unittestCheckHook,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "rtfunicode";
   version = "2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjpieters";
@@ -16,6 +17,13 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-dmPpMplCQIJMHhNFzOIjKwEHVio2mjFEbDmq1Y9UJkA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.26,<0.10.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   nativeBuildInputs = [ unittestCheckHook ];
 
