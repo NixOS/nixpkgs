@@ -14,25 +14,7 @@
   portaudio,
   imath,
   qt6,
-  fmt_10,
 }:
-
-let
-  # https://github.com/olive-editor/olive/issues/2284
-  # we patch support for 2.3+, but 2.5 fails
-  openimageio' = (openimageio.override { fmt = fmt_10; }).overrideAttrs (old: rec {
-    version = "2.4.15.0";
-    src = (
-      old.src.override {
-        tag = "v${version}";
-        hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
-      }
-    );
-
-    # robin-map headers require c++17
-    cmakeFlags = (old.cmakeFlags or [ ]) ++ [ (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") ];
-  });
-in
 
 stdenv.mkDerivation {
   pname = "olive-editor";
@@ -62,6 +44,10 @@ stdenv.mkDerivation {
     # https://github.com/KDAB/KDDockWidgets/pull/615
     # https://github.com/KDAB/KDDockWidgets/commit/f2b50fff29bd4b49acdfed3ed8fc42eb0a502032
     ./olive-editor-kddockwidgets-fix-build-with-qt-6_10.patch
+
+    # Fix build with OpenImageIO 3.x: read_image() now requires explicit
+    # subimage, miplevel, chbegin, and chend arguments.
+    ./olive-editor-openimageio-3.x-compat.patch
   ];
 
   # https://github.com/olive-editor/olive/issues/2200
