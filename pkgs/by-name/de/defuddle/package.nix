@@ -6,7 +6,7 @@
 }:
 
 buildNpmPackage rec {
-  pname = "defuddle-cli";
+  pname = "defuddle";
   version = "0.17.0";
 
   src = fetchFromGitHub {
@@ -23,6 +23,8 @@ buildNpmPackage rec {
   dontNpmPrune = true;
 
   passthru.updateScript = nix-update-script { };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Command line utility to extract clean html, markdown and metadata from web pages";
