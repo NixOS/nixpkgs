@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater {
       rev-prefix = "v";
-      ignoredVersions = "(a|rc)";
+      ignoredVersions = "[a-zA-Z]";
     };
   };
 
