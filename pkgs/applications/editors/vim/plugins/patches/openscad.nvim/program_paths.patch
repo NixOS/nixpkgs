@@ -1,8 +1,0 @@
-diff --git a/lua/openscad.lua b/lua/openscad.lua
-index f889463..dde5b97 100644
---- a/lua/openscad.lua
-+++ b/lua/openscad.lua
-@@ -147 +147 @@ function M.exec_openscad()
--        or  'openscad'
-+        or  '@openscad@'
--- 
