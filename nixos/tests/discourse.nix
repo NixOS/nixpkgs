@@ -85,7 +85,7 @@ in
     };
 
   nodes.client =
-    { nodes, ... }:
+    { config, nodes, ... }:
     {
       imports = [ common/user-account.nix ];
 
@@ -100,7 +100,14 @@ in
 
       services.dovecot2 = {
         enable = true;
-        protocols = [ "imap" ];
+        enablePAM = true;
+        settings = {
+          dovecot_config_version = "2.4.3";
+          dovecot_storage_version = config.services.dovecot2.package.version;
+          protocols.imap = true;
+          mail_driver = "maildir";
+          mail_path = "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
+        };
       };
 
       services.postfix = {
