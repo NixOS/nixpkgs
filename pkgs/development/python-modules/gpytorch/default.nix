@@ -9,7 +9,6 @@
   setuptools-scm,
 
   # dependencies
-  jaxtyping,
   linear-operator,
   mpmath,
   scikit-learn,
@@ -22,23 +21,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gpytorch";
-  version = "1.15.1";
+  version = "1.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = "gpytorch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ftiAY02K0EwVQZufk8xR+/21A+2ONWchuWPF3a5lRW0=";
+    hash = "sha256-1CavS+qrV8YqnsT87GjmJV2LOtvExFYQE5YpYZEw9ts=";
   };
-
-  # AttributeError: module 'numpy' has no attribute 'trapz'
-  postPatch = ''
-    substituteInPlace gpytorch/kernels/spectral_mixture_kernel.py \
-      --replace-fail \
-        "np.trapz(emp_spect, freq)" \
-        "np.trapezoid(emp_spect, freq)"
-  '';
 
   build-system = [
     setuptools
@@ -46,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    jaxtyping
     linear-operator
     mpmath
     scikit-learn
@@ -67,6 +57,11 @@ buildPythonPackage (finalAttrs: {
     "test_optimization_optimal_error"
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_dtype_value_context"
+    "test_half"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
