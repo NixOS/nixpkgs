@@ -6,7 +6,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtfunicode";
   version = "2.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjpieters";
     repo = "rtfunicode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dmPpMplCQIJMHhNFzOIjKwEHVio2mjFEbDmq1Y9UJkA=";
   };
 
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.lucasew ];
     license = lib.licenses.bsd2;
     homepage = "https://github.com/mjpieters/rtfunicode";
-    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${src.tag}";
+    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})
