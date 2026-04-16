@@ -29653,6 +29653,13 @@
     githubId = 117323435;
     name = "Andrés Pico";
   };
+  xeni = {
+    name = "xeni";
+    github = "Gernomaly";
+    githubId = 71495036;
+    email = "xeni@koeln.ccc.de";
+    matrix = "@xeni:koeln.ccc.de";
+  };
   xfnw = {
     email = "xfnw+nixos@riseup.net";
     github = "xfnw";
