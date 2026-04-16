@@ -18,17 +18,11 @@
     {
       imports = [ ../modules/image/repart.nix ];
 
-      virtualisation.fileSystems = lib.mkVMOverride {
+      virtualisation.fileSystems = lib.mkVMOverride { };
+      fileSystems = {
         "/" = {
           fsType = "tmpfs";
           options = [ "mode=0755" ];
-        };
-
-        # bind-mount the store
-        "/nix/store" = {
-          device = "/usr/nix/store";
-          fsType = "none";
-          options = [ "bind" ];
         };
       };
 

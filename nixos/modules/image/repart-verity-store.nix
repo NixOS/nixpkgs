@@ -89,6 +89,12 @@ in
       };
     };
 
+    fileSystems."/nix/store" = lib.mkDefault {
+      device = "/usr/nix/store";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+
     image.repart.partitions = {
       # dm-verity hash partition
       ${cfg.partitionIds.store-verity}.repartConfig = {
