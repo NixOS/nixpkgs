@@ -10,6 +10,7 @@ prefix and stdin.
 
 from __future__ import annotations
 
+import getpass
 import os
 import shlex
 from abc import ABC, abstractmethod
@@ -71,6 +72,20 @@ class Elevator(ABC):
         :class:`ElevateError` with a hint pointing at the alternative
         (e.g. a polkit rule).
         """
+
+    def with_prompted_password(self, *, ask: bool, host_label: str) -> Self:
+        """Prompt locally for a password and return a copy carrying it.
+
+        No-op when *ask* is false. Lives next to :meth:`with_password`
+        which it wraps so the CLI entry point stays a thin orchestrator
+        and all elevation-related plumbing is on this type. May raise
+        :class:`ElevateError` (e.g. on :class:`NoElevator`); the CLI's
+        top-level handler turns that into an error message.
+        """
+        if not ask:
+            return self
+        password = getpass.getpass(f"[{self.name}] password for {host_label}: ")
+        return self.with_password(password)
 
     def on_remote_failure(self) -> str | None:
         """Optional hint to print when a remote elevated command fails."""
@@ -200,8 +215,8 @@ class ElevatorKind(Enum):
         *name* is the value of ``--elevate``; *sudo* covers the ``--sudo``
         / ``--use-remote-sudo`` aliases; *ask_password* is
         ``--ask-elevate-password``. The password itself is attached later
-        via :meth:`Elevator.with_password` once the target host (used in
-        the prompt) is known.
+        via :meth:`Elevator.with_prompted_password` once the target host
+        (used in the prompt) is known.
         """
         if name is not None:
             return cls.from_name(name)

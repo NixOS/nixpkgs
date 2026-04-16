@@ -77,3 +77,25 @@ def test_resolve() -> None:
         resolve(name=None, sudo=False, ask_password=True, warn=w), e.SudoElevator
     )
     assert len(warnings) == 1
+
+
+def test_with_prompted_password(monkeypatch: MonkeyPatch) -> None:
+    prompts: list[str] = []
+
+    def fake_getpass(prompt: str) -> str:
+        prompts.append(prompt)
+        return "hunter2"
+
+    monkeypatch.setattr(e.getpass, "getpass", fake_getpass)
+
+    s = e.SudoElevator()
+    assert s.with_prompted_password(ask=False, host_label="x") is s
+    assert prompts == []
+
+    sp = s.with_prompted_password(ask=True, host_label="user@host")
+    assert isinstance(sp, e.SudoElevator)
+    assert sp.password == "hunter2"
+    assert prompts == ["[sudo] password for user@host: "]
+
+    with pytest.raises(e.ElevateError):
+        e.NoElevator().with_prompted_password(ask=True, host_label="localhost")

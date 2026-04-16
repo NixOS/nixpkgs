@@ -6,7 +6,7 @@ from typing import Final, assert_never
 
 from . import nix, services
 from .constants import EXECUTABLE, WITH_SHELL_FILES
-from .elevate import ElevateError, ElevatorKind
+from .elevate import ElevatorKind
 from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -358,13 +358,12 @@ def execute(argv: list[str]) -> None:
         services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
-    target_host = Remote.from_arg(args.target_host, args.ask_elevate_password)
-    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
-    if target_host and target_host.sudo_password:
-        try:
-            args.elevator = args.elevator.with_password(target_host.sudo_password)
-        except ElevateError as ex:
-            sys.exit(f"error: {ex}")
+    target_host = Remote.from_arg(args.target_host)
+    build_host = Remote.from_arg(args.build_host, validate_opts=False)
+    args.elevator = args.elevator.with_prompted_password(
+        ask=args.ask_elevate_password,
+        host_label=target_host.host if target_host else "localhost",
+    )
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 

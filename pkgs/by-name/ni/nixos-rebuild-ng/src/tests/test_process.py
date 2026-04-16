@@ -111,7 +111,7 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "some flags"],
         check=True,
-        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password", "ssh"),
+        remote=m.Remote("user@localhost", ["--ssh", "opt"], "ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -141,7 +141,7 @@ def test_run_wrapper(mock_run: Any) -> None:
         check=True,
         elevate=e.SudoElevator(password="password"),
         env={"FOO": "bar"},
-        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password", "ssh"),
+        remote=m.Remote("user@localhost", ["--ssh", "opt"], "ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -180,7 +180,7 @@ def test__kill_long_running_ssh_process(mock_run: Any) -> None:
             "build",
             "/nix/store/la0c8nmpr9xfclla0n4f3qq9iwgdrq4g-nixos-system-sankyuu-nixos-25.05.20250424.f771eb4.drv^*",
         ],
-        m.Remote("user@localhost", opts=[], sudo_password=None, store_type="ssh"),
+        m.Remote("user@localhost", opts=[], store_type="ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -203,21 +203,18 @@ def test__kill_long_running_ssh_process(mock_run: Any) -> None:
 
 def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setenv("NIX_SSHOPTS", "")
-    assert m.Remote.from_arg("user@localhost", None, False) == m.Remote(
+    assert m.Remote.from_arg("user@localhost", validate_opts=False) == m.Remote(
         "user@localhost",
         opts=[],
-        sudo_password=None,
         store_type="ssh",
     )
 
-    with patch("getpass.getpass", autospec=True, return_value="password"):
-        monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
-        assert m.Remote.from_arg("user@localhost", True, True) == m.Remote(
-            "user@localhost",
-            opts=["-f", "foo", "-b", "bar", "-t"],
-            sudo_password="password",
-            store_type="ssh",
-        )
+    monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
+    assert m.Remote.from_arg("user@localhost") == m.Remote(
+        "user@localhost",
+        opts=["-f", "foo", "-b", "bar", "-t"],
+        store_type="ssh",
+    )
 
 
 def test_ssh_host() -> None:
@@ -239,13 +236,13 @@ def test_ssh_host() -> None:
     }
 
     for host_input, expected in ssh_remotes.items():
-        remote = m.Remote.from_arg(host_input, None, False)
+        remote = m.Remote.from_arg(host_input, validate_opts=False)
         assert remote is not None
         assert remote.ssh_host() == expected
         assert remote.store_type == "ssh"
 
     for host_input, expected in ssh_ng_remotes.items():
-        remote = m.Remote.from_arg(host_input, None, False)
+        remote = m.Remote.from_arg(host_input, validate_opts=False)
         assert remote is not None
         assert remote.ssh_host() == expected
         assert remote.store_type == "ssh-ng"
@@ -287,7 +284,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
             ["test"],
             check=False,
             elevate=e.SudoElevator(),
-            remote=m.Remote("user@localhost", [], None, "ssh"),
+            remote=m.Remote("user@localhost", [], "ssh"),
         )
     mock_run.assert_called_with(
         [
