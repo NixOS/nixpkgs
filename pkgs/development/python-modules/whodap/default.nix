@@ -10,15 +10,21 @@
 
 buildPythonPackage rec {
   pname = "whodap";
-  version = "0.1.14";
+  version = "0.1.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "whodap";
     tag = "v${version}";
-    hash = "sha256-VSFtHjdG9pJAryGUgwI0NxxaW0JiXEHU7aVvXYxymtc=";
+    hash = "sha256-PEKFO+mVGtagmH2rny8zorvi9/zadWh+fiJqBc/NA+E=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "wheel==0.46.3" "wheel"
+  '';
 
   build-system = [ setuptools ];
 
