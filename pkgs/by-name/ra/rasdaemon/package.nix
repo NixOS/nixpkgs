@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rk4CZrWQRe2wsx8/eXP0BIeaU/Gxmcb+Kry5F8t4YKQ=";
   };
 
+  patches = [
+    # https://github.com/mchehab/rasdaemon/pull/246
+    ./ras-mc-ctl_fix_invalid_column_in_signal_events_query.patch
+  ];
+
   strictDeps = true;
 
   enableParallelBuilding = true;
