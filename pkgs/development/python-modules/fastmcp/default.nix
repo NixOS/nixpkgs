@@ -233,6 +233,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/PrefectHQ/fastmcp/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/PrefectHQ/fastmcp";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      squat
+    ];
   };
 })
