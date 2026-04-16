@@ -8827,6 +8827,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mellow-nvim = buildVimPlugin {
+    pname = "mellow.nvim";
+    version = "0-unstable-2026-03-30";
+    src = fetchFromGitHub {
+      owner = "mellow-theme";
+      repo = "mellow.nvim";
+      rev = "6273b7f0ddf6ac2b75021b3bc0bd8b3305cfeef1";
+      hash = "sha256-0w4gPMXz3ZlSgt9Pffjy1D5aplog6MD1aKvqObAhqOI=";
+    };
+    meta.homepage = "https://github.com/mellow-theme/mellow.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   messenger-nvim = buildVimPlugin {
     pname = "messenger.nvim";
     version = "0-unstable-2024-07-18";
@@ -11347,6 +11360,19 @@ final: prev: {
       hash = "sha256-hXfMfQ4jAnAQ+6MFTNdyJiFTVqivi5lSRvQotPoHrjY=";
     };
     meta.homepage = "https://github.com/jedrzejboczar/nvim-dap-cortex-debug/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-dap-docker = buildVimPlugin {
+    pname = "nvim-dap-docker";
+    version = "0.2.0-unstable-2026-04-15";
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "nvim-dap-docker";
+      rev = "a7a6d22b786bff09c382d721d2d065fdd64a58ee";
+      hash = "sha256-5uHdDTVdfdJk6WLM6gvVDgEndFkP9SmqrqhHzaalH/k=";
+    };
+    meta.homepage = "https://github.com/docker/nvim-dap-docker/";
     meta.hydraPlatforms = [ ];
   };
 

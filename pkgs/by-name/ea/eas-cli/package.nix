@@ -1,36 +1,50 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  yarn-berry_4,
   nodejs,
   jq,
   makeWrapper,
+  pkg-config,
+  python3,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "eas-cli";
-  version = "16.32.0";
-
+let
+  version = "18.7.0";
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FP3vZKiJeQmIh2zEMWJcgsJJfUI+YhB9IyQlfnbl7ys=";
+    rev = "v${version}";
+    hash = "sha256-Z+PtS88Rv9Vv6FA15KxSBWCmOtwmTqO1etgCV7WaTXo=";
   };
+  missingHashes = ./missing-hashes.json;
+in
+# cc is necessary because of building an npm package without a prebuilt binary
+#  for ARM. See comment in nativeBuildInputs below.
+stdenv.mkDerivation (finalAttrs: {
+  pname = "eas-cli";
+  inherit src version missingHashes;
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock"; # Point to the root lockfile
-    hash = "sha256-IG13BEOH7BUi1HTcXebMQjXZJgIaWJ7hgX3GcmRB8hA=";
+  yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    hash = "sha256-ZlbCHWEwVaYCfzowrm1qrM1MpLo5vNmEG5bWzWT/cTU=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
     nodejs
     jq
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # The version of utf-8-validate -> node-gyp -> bufferutil that this package
+    #  uses not have pre-built binary for ARM. It appears that this should be
+    #  fixed by the version of utf-8-validate that this depends on, so there
+    #  may be some underlying transitive dependency causing this.
+    #  https://github.com/websockets/utf-8-validate/issues/106
+    pkg-config
+    python3
   ];
 
   postPatch = ''

@@ -511,6 +511,30 @@ If set to `true`, `stdenv` will pass specific flags to `make` and other build to
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
+#### `__structuredAttrs` {#var-stdenv-__structuredAttrs}
+
+`__structuredAttrs` defines how derivation attributes are passed to the builder.
+
+If enabled, a shell script and a JSON representation of the derivation attributes are created.
+The environment variables {env}`NIX_ATTRS_SH_FILE` and {env}`NIX_ATTRS_JSON_FILE` point to the exact location of these files.
+
+Attributes intended to be _exported_ as environment variables must be defined in the `env` attribute.
+Attributes that are _local_ to the buildscript should be defined outside of `env`, to benefit from structured shell variables.
+
+::: {.important}
+`__structuredAttrs` is a complete replacement for the way attributes are handled currently, and is the preferred default.
+
+`passAsFile` is disabled when `__structuredAttrs` is enabled, since {env}`NIX_ATTRS_JSON_FILE` can be read from instead.
+
+All new top level packages must enable `__structuredAttrs`.
+
+:::
+
+See the upstream nix documentation for more detail:
+  - [Advanced Derivation Attributes](https://nix.dev/manual/nix/2.34/language/advanced-attributes.html#adv-attr-structuredAttrs)
+  - [Builder Execution](https://nix.dev/manual/nix/2.34/store/building.html#builder-execution)
+  - [Structured Attributes](https://nix.dev/manual/nix/2.34/store/derivation/#structured-attrs)
+
 ### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 
 If you pass a function to `mkDerivation`, it will call the function with an argument that represents the final state of the package: the return value of the function itself, with any overrides applied, as the function is reinvoked by any `overrideAttrs` calls. For example:

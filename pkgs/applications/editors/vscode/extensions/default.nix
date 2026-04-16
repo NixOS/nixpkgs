@@ -1492,8 +1492,8 @@ let
         mktplcRef = {
           publisher = "editorconfig";
           name = "editorconfig";
-          version = "0.18.1";
-          hash = "sha256-pFd1CTJL3xQ3HHzQs3f4R5f6xlCghNh8Kv+3AT/Qrqo=";
+          version = "0.18.2";
+          hash = "sha256-y8A3D/IEvBbYSj7mgwU2/AQ1WFb6DolasGThoDz8uEo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/EditorConfig.EditorConfig/changelog";
@@ -2308,8 +2308,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.73";
-          hash = "sha256-hQKkqZi8fQoxVzgpg/JE4zPFR+ldi5eBYpgiqbx7OXo=";
+          version = "1.1.75";
+          hash = "sha256-49svwafMoAErwX3K/37IJ8fKx+9FgSpOqj6QPc7jpKs=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";

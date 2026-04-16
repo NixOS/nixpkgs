@@ -29,6 +29,7 @@
   numpy,
   objsize,
   orjson,
+  pillow,
   proto-plus,
   protobuf,
   pyarrow,
@@ -65,14 +66,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.71.0";
+  version = "2.72.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pIuRaBN1lmC3EMuUnBovl/pBmNwsDZ/vh/OM/sD9SrI=";
+    hash = "sha256-HlpaKDX/w6g6q8nOB8G83q4/ffgymk/XyTpwYVpbd2U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/sdks/python";
@@ -120,6 +121,7 @@ buildPythonPackage (finalAttrs: {
     numpy
     objsize
     orjson
+    pillow
     proto-plus
     protobuf
     pyarrow
@@ -241,6 +243,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pip
+    "test_populate_requirements_cache_uses_find_links"
+
     # AssertionError: Lists differ:
     # ['pickled_main_session', 'submission_environment_dependencies.txt'] != ['pickled_main_session']
     "test_main_session_staged_when_using_cloudpickle"
