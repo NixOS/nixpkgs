@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
     tag = version;
-    hash = "sha256-Z6qzyT6tmQP2Y4q+hqvna7nRJmmLxEL6XKGrTJu9Ymw=";
+    hash = "sha256-HYRm3GdgGUZqi7sqe2wmni2t0t7Ox3qJAukGABKPoyY=";
   };
 
   patches = [

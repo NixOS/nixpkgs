@@ -73,10 +73,10 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.54.1";
+  version = "2.55.0";
   format = "wheel";
 
-  disabled = pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -90,19 +90,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-4JXf6cUhoE5ZMFILSoLqgtYZA9TNLzJw+8XfvbQbnHI=";
-          cp312 = "sha256-TG9+I92mKjL5QIMUHD+X6cQkbjrkrivEiLzY/QMR9Uo=";
-          cp313 = "sha256-DDrilDF257I5x4uCWlsr9BNdkCgAg6DhnAp1pdtNg28=";
+          cp311 = "sha256-UiSRRs/c92ns/+VPWyyvJVUb9up42d2JeIwKZpynabc=";
+          cp312 = "sha256-zUYL2/iopLt2iiDDixxTTYT+Y7wOXzWAxcDvcwK5hrM=";
+          cp313 = "sha256-8W3qMuXMWO1AbA7w3UvmnWDOd6B17bXwOANWpIv4WrM=";
+          cp314 = "sha256-6wpheWQbxCCmbuhcybOC5Y8i7/vTYpfjaDp5PlzcCJg=";
         };
         aarch64-linux = {
-          cp311 = "sha256-hsUer9PoTa1Zwe9M+Xs6yMCIrwcFeC7pFeMbyliAWXo=";
-          cp312 = "sha256-zUUrYa4uDa+ScfWlVGFDl0KcwnMWgbrhD+cjFtrcJ0k=";
-          cp313 = "sha256-J2bwIwgGSAw4qalFAgh/HUrqkZ84UhooeBaQYTsCkKQ=";
+          cp311 = "sha256-sf1zQnCT0a7x+3vTxUMKTmhtXhD6BAiXVxY6TCpRfes=";
+          cp312 = "sha256-t39AYHKsDOkEMaxDaCjzZMGDq1e6FcOg5oinSuPC0/M=";
+          cp313 = "sha256-zu6HqIRgKqs02xCUFeaDmm6RafR1DKtye36hYQ31uR8=";
+          cp314 = "sha256-t0OQ8gHyjwXI8lAGnf7VTW1qAQn/5IJCXXbBG+gg4wk=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-wCQElq8nSvfNOxsdAV8juI5f2v5Zv9wEDl8ingr/Xf8=";
-          cp312 = "sha256-ZF6/tzz9Mr1RCgXtnyc4oY1ttpkpyulwHXSfJ0Db/Zo=";
-          cp313 = "sha256-0F9HfRUYoA/ViAZE6Imno+r2SuXR+PI5poLQUq0qOD0=";
+          cp311 = "sha256-JCbpxFE8tIQr+vcKrt9LntwwL7Ad5cGQb2i5tCegwkM=";
+          cp312 = "sha256-bwuN+jcWzJvl/OO1Ppv9tzzqNgJb/m8dJ5KND4TP1pU=";
+          cp313 = "sha256-Hai4dVtuT94D23i2ziu87Pz70g05uTgz0kbFFdru3zw=";
+          cp314 = "sha256-1IvEUzs7dtWe0/nqsea3MipTp83vuPZX2bRu661W2+4=";
         };
       };
     in
