@@ -83,6 +83,7 @@ buildNpmPackage (finalAttrs: {
       malo
       markus1189
       omarjatoi
+      oskarwires
       xiaoxiangmoe
     ];
     mainProgram = "claude";

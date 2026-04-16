@@ -95,8 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [
-      xiaoxiangmoe
       mirkolenz
+      oskarwires
+      xiaoxiangmoe
     ];
     mainProgram = "claude";
   };
