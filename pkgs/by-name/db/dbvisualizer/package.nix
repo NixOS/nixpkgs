@@ -8,6 +8,12 @@
   stdenv,
 }:
 
+# nixpkgs-update: no auto update
+# NOTE: Do not update to interim patch versions. The download URL will get shut
+# down after a while. Dbvisualizer discontinues download
+# URLs for all but the last patch version per minor version.
+# Example: v25.3.2 gets shut down after v25.3.3 gets released.
+
 let
   pname = "dbvisualizer";
 in
