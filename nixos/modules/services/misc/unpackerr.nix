@@ -53,7 +53,7 @@ in
       };
 
       environmentFiles = mkOption {
-        type = lib.types.listOf lib.types.path;
+        type = types.listOf types.path;
         default = [ ];
         example = [ "/run/secrets/unpackerr.env" ];
         description = ''
@@ -80,49 +80,33 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.services.unpackerr = {
-      description = "Unpackerr - archive extraction daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
-        StateDirectory = "unpackerr";
-        LogsDirectory = "unpackerr";
-        ExecStart = utils.escapeSystemdExecArgs [
-          (getExe cfg.package)
-          "-c"
-          configFile
-        ];
-        Restart = "always";
-        RestartSec = 10;
-        UMask = "0002";
-        WorkingDirectory = "/tmp";
-
-        # Hardening
-        LockPersonality = true;
-        PrivateDevices = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        RestrictNamespaces = true;
-        RemoveIPC = true;
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectClock = true;
-        ProtectHostname = true;
-        ProtectControlGroups = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        NoNewPrivileges = true;
-        CapabilityBoundingSet = [ "" ];
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        SystemCallArchitectures = "native";
+    # Upstream service: https://github.com/Unpackerr/unpackerr/blob/main/init/systemd/unpackerr.service
+    systemd = {
+      tmpfiles.settings."10-unpackerr"."/var/lib/unpackerr/unpackerr.conf"."L+" = {
+        argument = "${configFile}";
+      };
+      services.unpackerr = {
+        description = "Unpackerr - archive extraction daemon";
+        wants = [ "network.target" ];
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ configFile ];
+        serviceConfig = {
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
+          StateDirectory = "unpackerr";
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStart = utils.escapeSystemdExecArgs [
+            (getExe cfg.package)
+            "-c"
+            "/var/lib/unpackerr/unpackerr.conf"
+          ];
+          Restart = "always";
+          RestartSec = 10;
+          UMask = "0002";
+          WorkingDirectory = "/tmp";
+        };
       };
     };
 
@@ -139,6 +123,6 @@ in
   };
 
   meta = with lib; {
-    maintainers = with lib.maintainers; [ Wekuz ];
+    maintainers = with maintainers; [ Wekuz ];
   };
 }

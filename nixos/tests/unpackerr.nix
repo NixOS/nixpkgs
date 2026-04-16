@@ -9,9 +9,11 @@
     {
       environment.systemPackages = with pkgs; [ zip ];
 
-      systemd.tmpfiles.rules = [
-        "d /srv/unpackerr 0775 unpackerr users -"
-      ];
+      systemd.tmpfiles.settings."10-unpackerr"."/srv/unpackerr".d = {
+        mode = "0775";
+        user = "unpackerr";
+        group = "users";
+      };
 
       services.unpackerr = {
         enable = true;
