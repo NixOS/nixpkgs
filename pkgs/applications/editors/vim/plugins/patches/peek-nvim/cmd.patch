@@ -1,16 +1,3 @@
-diff --git a/app/src/main.ts b/app/src/main.ts
-index c82d914..e8542f3 100644
---- a/app/src/main.ts
-+++ b/app/src/main.ts
-@@ -73,7 +73,7 @@ async function init(socket: WebSocket) {
-     const onListen: Deno.ServeOptions['onListen'] = ({ hostname, port }) => {
-       const serverUrl = `${hostname.replace('0.0.0.0', 'localhost')}:${port}`;
-       logger.info(`listening on ${serverUrl}`);
--      const webview = new Deno.Command('deno', {
-+      const webview = new Deno.Command('@deno@', {
-         cwd: dirname(fromFileUrl(Deno.mainModule)),
-         args: [
-           'run',
 diff --git a/lua/peek/app.lua b/lua/peek/app.lua
 index af5148e..5e67563 100644
 --- a/lua/peek/app.lua
@@ -22,7 +9,7 @@ index af5148e..5e67563 100644
 -    'deno',
 -    'task',
 -    '--quiet',
-+    '@deno@',
++    'deno',
      'run',
 +    '--allow-read',
 +    '--allow-write',
