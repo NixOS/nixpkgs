@@ -30,3 +30,5 @@ build cudatoolkit
 upload cudatoolkit
 build rocmPackages.rocm-smi
 upload rocmPackages.rocm-smi
+build lmstudio
+upload lmstudio
