@@ -38,6 +38,8 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     sh $src --target $name
 
     mkdir -p $out/lib/unigine/heaven/bin
@@ -63,6 +65,8 @@ stdenv.mkDerivation {
         mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
         convert $out/lib/unigine/heaven/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Heaven.png
     done
+
+    runHook postInstall
   '';
 
   desktopItems = [

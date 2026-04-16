@@ -29,6 +29,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/cyberchef"
     mkdir -p "$out/bin"
 
@@ -45,6 +47,8 @@ stdenv.mkDerivation {
     install -m 444 -D ${icon} $out/share/icons/hicolor/512x512/apps/cyberchef.png
 
     mkdir -p $out/share/applications/
+
+    runHook postInstall
   '';
 
   desktopItems = [

@@ -305,6 +305,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv $TMP/$dirname $out
     cd $out/$dirname
@@ -313,6 +315,8 @@ stdenv.mkDerivation (finalAttrs: {
     # icon
     mkdir -p "$out/share/icons/hicolor/isabelle/apps"
     cp "$out/Isabelle${finalAttrs.version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
+
+    runHook postInstall
   '';
 
   desktopItems = [

@@ -89,6 +89,8 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
+
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
       # The bundled jogl (required for 3D graphics) links to libxxf86vm, and loads libGL at runtime
@@ -107,6 +109,8 @@ let
 
       install -Dm644 "${srcIcon}" \
         "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
+
+      runHook postInstall
     '';
   };
 

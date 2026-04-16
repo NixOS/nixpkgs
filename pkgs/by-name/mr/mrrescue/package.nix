@@ -39,6 +39,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
@@ -47,6 +49,8 @@ stdenv.mkDerivation {
     makeWrapper ${lib.getExe love} $out/bin/mrrescue --add-flags $out/share/games/lovegames/mrrescue.love
 
     chmod +x $out/bin/mrrescue
+
+    runHook postInstall
   '';
 
   desktopItems =

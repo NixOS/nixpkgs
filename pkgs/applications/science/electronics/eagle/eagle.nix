@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     # Extract eagle tarball
     mkdir "$out"
     tar -xzf "$src" -C "$out"
@@ -128,6 +130,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out"/share/pixmaps
     ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/pixmaps/eagle.png
+
+    runHook postInstall
   '';
 
   meta = {

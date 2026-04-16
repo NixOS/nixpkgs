@@ -30,12 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/jmol" "$out/bin"
 
     ${unzip}/bin/unzip jsmol.zip -d "$out/share/"
 
     cp *.jar jmol.sh "$out/share/jmol"
     cp jmol $out/bin
+
+    runHook postInstall
   '';
 
   desktopItems = [

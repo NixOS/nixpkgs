@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
@@ -72,6 +74,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${lib.getExe love} $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
 
     chmod +x $out/bin/duckmarines
+
+    runHook postInstall
   '';
 
   meta = {

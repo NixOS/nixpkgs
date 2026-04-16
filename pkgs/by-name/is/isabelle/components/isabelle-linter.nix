@@ -19,15 +19,23 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ isabelle ];
 
   buildPhase = ''
+    runHook preBuild
+
     export HOME=$TMP
     isabelle components -u $(pwd)
     isabelle scala_build
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     dir=$out/Isabelle${isabelle.version}/contrib/${pname}-${version}
     mkdir -p $dir
     cp -r * $dir/
+
+    runHook postInstall
   '';
 
   meta = {

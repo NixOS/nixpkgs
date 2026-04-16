@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     in
     # bash
     ''
+      runHook preInstall
+
       mkdir -pv "$out/share/ganttproject"
       cp -rv *  "$out/share/ganttproject"
 
@@ -57,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix _JAVA_OPTIONS " " "${toString javaOptions}"
 
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
+
+      runHook postInstall
     '';
 
   meta = {

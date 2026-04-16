@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -R Write $out/
     # symlink the binary to bin/
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
+
+    runHook postInstall
   '';
 
   desktopItems = [

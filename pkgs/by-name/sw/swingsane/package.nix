@@ -34,7 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
     in
+    # bash
     ''
+      runHook preInstall
+
       install -v -m 755    -d $out/share/java/swingsane/
       install -v -m 644 *.jar $out/share/java/swingsane/
 
@@ -43,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       unzip -j swingsane-${finalAttrs.version}.jar "com/swingsane/images/*.png"
       install -v -D -m 644 swingsane_512x512.png $out/share/icons/hicolor/512x512/apps/swingsane.png
+
+      runHook postInstall
     '';
 
   desktopItems = [

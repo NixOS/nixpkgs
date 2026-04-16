@@ -39,6 +39,8 @@ let
 
   inherit (lib) importJSON;
 
+  removePostInstallHook = builtins.replaceStrings [ "runHook postInstall" ] [ "" ];
+
   mods = args.mods or [ ];
 
   helpMsg =
@@ -187,12 +189,16 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/{bin,share/factorio}
       cp -a data $out/share/factorio
       cp -a bin/${tarDirectory}/factorio $out/bin/factorio
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         $out/bin/factorio
+
+      runHook postInstall
     '';
 
     passthru.updateScript = ./update.py;
@@ -261,7 +267,7 @@ let
         })
       ];
 
-      installPhase = base.installPhase + ''
+      installPhase = (removePostInstallHook base.installPhase) + ''
         wrapProgram $out/bin/factorio                                \
           --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
           --run "$out/share/factorio/update-config.sh"               \
@@ -298,12 +304,16 @@ let
         mkdir -p $out/share/icons/hicolor/{64x64,128x128}/apps
         cp -a data/core/graphics/factorio-icon.png $out/share/icons/hicolor/64x64/apps/factorio.png
         cp -a data/core/graphics/factorio-icon@2x.png $out/share/icons/hicolor/128x128/apps/factorio.png
+
+        runHook postInstall
       '';
     };
     alpha = demo // {
 
-      installPhase = demo.installPhase + ''
+      installPhase = (removePostInstallHook demo.installPhase) + ''
         cp -a doc-html $out/share/factorio
+
+        runHook postInstall
       '';
     };
     expansion = alpha;

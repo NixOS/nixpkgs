@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/groove
     cp -r bin lib $out/share/groove/
 
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/{16x16,32x32}/apps
     icotool -x -i 1 -o $out/share/icons/hicolor/32x32/apps/groove.png groove-green-g.ico
     icotool -x -i 2 -o $out/share/icons/hicolor/16x16/apps/groove.png groove-green-g.ico
+
+    runHook postInstall
   '';
 
   meta = {

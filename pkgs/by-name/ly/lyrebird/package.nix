@@ -68,9 +68,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/{applications,lyrebird}}
     cp -at $out/share/lyrebird/ app icon.png
     install -Dm755 app.py $out/bin/lyrebird
+
+    runHook postInstall
   '';
 
   meta = {

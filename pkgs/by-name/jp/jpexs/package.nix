@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${jdk8}/bin/java $out/bin/ffdec \
       --add-flags "-jar $out/share/ffdec/ffdec.jar"
+
+    runHook postInstall
   '';
 
   desktopItems = [
