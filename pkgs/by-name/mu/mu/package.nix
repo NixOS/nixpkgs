@@ -3,14 +3,15 @@
   stdenv,
   fetchFromGitHub,
   glibcLocales,
+  tzdata,
   meson,
   ninja,
   pkg-config,
   python3,
   cld2,
   cli11,
-  fmt_11,
-  coreutils,
+  fmt,
+  guile,
   emacs,
   glib,
   gmime3,
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mu";
-  version = "1.12.13";
+  version = "1.14.0";
 
   outputs = [
     "out"
@@ -31,16 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "djcb";
     repo = "mu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rz0bxgJtz4qHrfHRjJhnvxtFFNM89A39YH9oJ2YGC5g=";
+    hash = "sha256-bgPbXoeU0dRK93sE1ahkFIvKGns6P9U+NM01i0q1Fro=";
   };
 
   postPatch = ''
-    substituteInPlace lib/utils/mu-utils-file.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/tests/bench-indexer.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/mu-maildir.cc \
-      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
     patchShebangs build-aux/date.py
   '';
 
@@ -67,9 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     cld2
     cli11
     emacs
-    fmt_11
+    fmt
     glib
     gmime3
+    guile
     texinfo
     xapian
   ];
@@ -87,12 +83,17 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
     glibcLocales
+    tzdata
   ];
 
   doCheck = true;
 
   # Tests need a UTF-8 aware locale configured
   env.LANG = "C.UTF-8";
+
+  # The Guile test calls (setenv "TZ" "Europe/Helsinki") / (tzset), which
+  # requires timezone data at TZDIR; without it tzset silently falls back to UTC
+  env.TZDIR = "${tzdata}/share/zoneinfo";
 
   meta = {
     description = "Collection of utilities for indexing and searching Maildirs";
