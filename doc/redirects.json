@@ -962,6 +962,9 @@
   "var-stdenv-enableParallelBuilding": [
     "index.html#var-stdenv-enableParallelBuilding"
   ],
+  "var-stdenv-__structuredAttrs": [
+    "index.html#var-stdenv-__structuredAttrs"
+  ],
   "mkderivation-recursive-attributes": [
     "index.html#mkderivation-recursive-attributes"
   ],
