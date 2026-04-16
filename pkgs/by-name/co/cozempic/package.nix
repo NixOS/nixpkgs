@@ -9,6 +9,8 @@ python3Packages.buildPythonApplication rec {
   version = "1.7.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-mHjKHg3d5ptHjWbwzgtNWrtJ7MEF9JPlH/+gpzhDaog=";
