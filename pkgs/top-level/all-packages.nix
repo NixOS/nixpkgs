@@ -11802,6 +11802,8 @@ with pkgs;
 
   apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
+  plotjuggler = libsForQt5.callPackage ../applications/science/robotics/plotjuggler { };
+
   ### MISC
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };

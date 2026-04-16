@@ -27648,6 +27648,12 @@
     githubId = 74688871;
     name = "Tochukwu Ahanonu";
   };
+  toel = {
+    email = "mail@thiesoelerich.com";
+    github = "Thieso";
+    githubId = 15210390;
+    name = "Thies Oelerich";
+  };
   tom94 = {
     email = "nix@94.me";
     github = "Tom94";
