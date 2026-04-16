@@ -83,8 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   configureFlags = [
-    "--enable-maintainer-mode"
-    "--enable-pluggable-dialogs"
     "--enable-sound-settings"
     (lib.enableFeature withXrandr "xrandr")
   ]
