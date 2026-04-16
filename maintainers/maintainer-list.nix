@@ -7977,6 +7977,12 @@
     github = "encode42";
     githubId = 34699884;
   };
+  enderfare = {
+    name = "ender.fare";
+    email = "ender.fare.md@gmail.com";
+    github = "enderfare";
+    githubId = 135335132;
+  };
   enderger = {
     email = "endergeryt@gmail.com";
     github = "enderger";

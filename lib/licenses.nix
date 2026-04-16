@@ -1260,6 +1260,13 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    polyFormShield = {
+      fullName = "PolyForm Shield License 1.0.0";
+      url = "https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt";
+      free = false;
+      redistributable = true;
+    };
+
     psfl = {
       spdxId = "Python-2.0";
       fullName = "Python Software Foundation License version 2";
