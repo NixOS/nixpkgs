@@ -3,6 +3,7 @@
   stdenv,
   zig_0_14,
   zig_0_15,
+  zig_0_16,
   fetchFromGitHub,
   callPackage,
 }:
@@ -10,6 +11,13 @@
 let
   common = finalAttrs: _: {
     pname = "zls";
+
+    strictDeps = true;
+
+    zigBuildFlags = [
+      "--system"
+      "${finalAttrs.deps}"
+    ];
 
     meta = {
       description = "Zig LSP implementation + Zig Language Server";
@@ -38,11 +46,9 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
       hash = "sha256-A5Mn+mfIefOsX+eNBRHrDVkqFDVrD3iXDNsUL4TPhKo=";
     };
 
-    nativeBuildInputs = [ zig_0_14 ];
+    deps = callPackage ./deps_0_14.nix { };
 
-    postConfigure = ''
-      ln -s ${callPackage ./deps_0_14.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-    '';
+    nativeBuildInputs = [ zig_0_14 ];
   };
 
   zls_0_15 = finalAttrs: {
@@ -56,10 +62,24 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
       hash = "sha256-6IkRtQkn+qUHDz00QvCV/rb2yuF6xWEXug41CD8LLw8=";
     };
 
-    nativeBuildInputs = [ zig_0_15 ];
+    deps = callPackage ./deps_0_15.nix { };
 
-    postConfigure = ''
-      ln -s ${callPackage ./deps_0_15.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-    '';
+    nativeBuildInputs = [ zig_0_15 ];
+  };
+
+  zls_0_16 = finalAttrs: {
+    version = "0.16.0";
+
+    src = fetchFromGitHub {
+      owner = "zigtools";
+      repo = "zls";
+      tag = finalAttrs.version;
+      fetchSubmodules = true;
+      hash = "sha256-k0xWObsw9K12BKfK+UB5TieWDFEFfBQhN1X1NO35fWk=";
+    };
+
+    deps = callPackage ./deps_0_16.nix { };
+
+    nativeBuildInputs = [ zig_0_16 ];
   };
 }
