@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pynordpool";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gjohansson-ST";
     repo = "pynordpool";
     tag = "v${version}";
-    hash = "sha256-3yMVhdfjl2l56WzI+uRMUwFuYafSH3YfabYqKSK25Y4=";
+    hash = "sha256-HDbYrwQ4v5cqej5aUat0gVzaRpJz5jaFHjWUC98gacg=";
   };
 
   build-system = [ poetry-core ];
