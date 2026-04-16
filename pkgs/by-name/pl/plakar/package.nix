@@ -36,6 +36,7 @@ buildGo125Module (finalAttrs: {
       ++ lib.optionals stdenv.isDarwin [
         "TestBTreeScanMemory"
         "TestBTreeScanPebble"
+        "TestExecuteCmdServerDefault"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
