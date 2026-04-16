@@ -247,9 +247,12 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [
-    bartoostveen
-    euxane
-    vskilet
-  ];
+  meta = {
+    doc = ./mautrix-telegram.md;
+    maintainers = with maintainers; [
+      bartoostveen
+      euxane
+      vskilet
+    ];
+  };
 }
