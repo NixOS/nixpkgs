@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "svinota";
     repo = "pyroute2";
     tag = version;
-    hash = "sha256-KPXDXRQWonuTyy1SsvgO7jXjawiRj1XJ3zte5ZHanRw=";
+    hash = "sha256-ZseZQFiR+btDsR+ozcd8DBp0vsNTb6tIzaArQfOk7CI=";
   };
 
   build-system = [ setuptools ];
