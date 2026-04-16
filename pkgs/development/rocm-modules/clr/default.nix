@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.2.1";
+  version = "7.2.2";
 
   outputs = [
     "out"
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       "projects/clr"
       "shared"
     ];
-    hash = "sha256-8V2WbyaJZbEcKZpF/xvg0p+3oX9f/zy/45rkKZT9R3o=";
+    hash = "sha256-Xfo6513ERdEoLy+iknQbEgPG7InLcU7E7ssZd4HMvpI=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/clr";
 
