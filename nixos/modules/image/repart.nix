@@ -209,6 +209,16 @@ in
         or 'auto' to determine the minimal size automatically";
     };
 
+    useUnshare = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Enables user namespace creation to simulate root-owned nodes during the
+        image building process, required by some filesystems like btrfs.
+        Disable if building in a restricted sandbox.
+      '';
+    };
+
     package = lib.mkPackageOption pkgs "systemd-repart" {
       # We use buildPackages so that repart images are built with the build
       # platform's systemd, allowing for cross-compiled systems to work.
@@ -426,6 +436,7 @@ in
             imageSize
             sectorSize
             finalPartitions
+            useUnshare
             ;
           inherit fileSystems definitionsDirectory mkfsEnv;
         };
