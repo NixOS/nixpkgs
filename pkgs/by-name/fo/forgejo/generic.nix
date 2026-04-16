@@ -83,14 +83,6 @@ buildGoModule rec {
 
   patches = [
     ./static-root-path.patch
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "14") [
-    # Backport fix for flaky TestBleveDeleteIssue test from v15.
-    # https://codeberg.org/forgejo/forgejo/pulls/11686
-    (fetchpatch {
-      url = "https://codeberg.org/forgejo/forgejo/commit/a32b0da87c10bb628a9d2203b700f0683e1ae966.patch";
-      hash = "sha256-mY1b35aKsiLNU56Ut/qiLrYj+IR8M2W8dZQiDqkDNxg=";
-    })
   ];
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
@@ -117,7 +109,7 @@ buildGoModule rec {
   # https://codeberg.org/forgejo/forgejo/src/tag/v11.0.6/Makefile#L128
   # https://codeberg.org/forgejo/forgejo/src/tag/v13.0.0/Makefile#L290
   preCheck = ''
-    echo -e 'show-backend-tests:${lib.optionalString (lib.versionAtLeast version "13") " | compute-go-test-packages"}\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    echo -e 'show-backend-tests: | compute-go-test-packages\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
     getGoDirs() {
       make show-backend-tests
     }
