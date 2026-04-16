@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from pytest import MonkeyPatch
 
+import nixos_rebuild.elevate as e
 import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
@@ -43,7 +44,7 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=False,
-        sudo=True,
+        elevate=e.SudoElevator(),
         env={"FOO": "bar"},
     )
     mock_run.assert_called_with(
@@ -67,7 +68,6 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=False,
-        sudo=False,
         append_local_env={"FOO": "bar"},
     )
     mock_run.assert_called_with(
@@ -89,7 +89,6 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=False,
-        sudo=False,
         env={"PATH": "/"},
         append_local_env={"FOO": "bar"},
     )
@@ -140,7 +139,7 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=True,
-        sudo=True,
+        elevate=e.SudoElevator(password="password"),
         env={"FOO": "bar"},
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password", "ssh"),
     )
@@ -262,7 +261,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
         p.run_wrapper(
             ["test"],
             check=False,
-            sudo=True,
+            elevate=e.SudoElevator(),
         )
     mock_run.assert_called_with(
         [
@@ -287,7 +286,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
         p.run_wrapper(
             ["test"],
             check=False,
-            sudo=True,
+            elevate=e.SudoElevator(),
             remote=m.Remote("user@localhost", [], None, "ssh"),
         )
     mock_run.assert_called_with(
