@@ -38,7 +38,7 @@ buildGoModule rec {
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  doCheck = false;
+  doCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
