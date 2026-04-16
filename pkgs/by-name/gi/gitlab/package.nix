@@ -136,7 +136,7 @@ let
             cp Cargo.lock $out
           '';
 
-          hash = "sha256-YQEldpT1pCJe5hBJmLTVyvOjnilH10mGhgYfKDSOY3k=";
+          hash = "sha256-KIMs5Zed6mcbq06oxA2eVHLfifSlcfJvACZMblDQC3M=";
         };
 
         postPatch = ''
@@ -334,6 +334,9 @@ let
       pushd node_modules/vue-demi
       yarn run postinstall
       popd
+
+      # Creates a `infection_scanner.json` needed for the assets compiler to succeed.
+      node scripts/frontend/infection_scanner/infection_scanner.mjs
 
       bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
