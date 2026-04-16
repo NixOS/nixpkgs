@@ -10,12 +10,12 @@
   pnpm,
 }:
 let
-  version = "0.26.1";
+  version = "0.26.2";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    hash = "sha256-DnUrrBB6f6Y77uiiGRc/lcPAGfP+qlNsN5KWIlB+lzY=";
+    hash = "sha256-TDsqxLgBJyTvxs1UHyv2FHUUx6eqzRBCJG+/sY0pNLg=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -49,7 +49,7 @@ buildGoModule {
   pname = "memos";
   inherit version src memos-web;
 
-  vendorHash = "sha256-bQA+3IRgcjlYHpPdJNl/rfWHk25xsclFW5kNM/zO4/Y=";
+  vendorHash = "sha256-ZUSl0PY9uMQK/NgZVGOxCVMDt6TEBmr84JsuJ2ndW6s=";
 
   preBuild = ''
     rm -rf server/router/frontend/dist
