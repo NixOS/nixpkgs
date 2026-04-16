@@ -193,10 +193,8 @@ assertNoAdditions {
   };
 
   aider-nvim = super.aider-nvim.overrideAttrs {
-    patches = [
-      (replaceVars ./patches/aider-nvim/bin.patch {
-        aider = lib.getExe aider-chat;
-      })
+    runtimeDeps = [
+      aider-chat
     ];
   };
 
@@ -243,10 +241,8 @@ assertNoAdditions {
   };
 
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
-    patches = [
-      (replaceVars ./patches/aw-watcher-vim/program_paths.patch {
-        curl = lib.getExe curl;
-      })
+    runtimeDeps = [
+      curl
     ];
   };
 
@@ -1392,10 +1388,8 @@ assertNoAdditions {
   };
 
   gx-nvim = super.gx-nvim.overrideAttrs {
-    patches = lib.optionals stdenv.hostPlatform.isLinux [
-      (replaceVars ./patches/gx-nvim/fix-paths.patch {
-        inherit xdg-utils;
-      })
+    runtimeDeps = [
+      xdg-utils
     ];
 
     nvimRequireCheck = "gx";
@@ -1932,10 +1926,8 @@ assertNoAdditions {
       };
     in
     super.markdown-preview-nvim.overrideAttrs {
-      patches = [
-        (replaceVars ./patches/markdown-preview-nvim/fix-node-paths.patch {
-          node = "${nodejs}/bin/node";
-        })
+      runtimeDeps = [
+        nodejs
       ];
       postInstall = ''
         cp -r ${nodeDep} $out/app/node_modules
@@ -2975,6 +2967,10 @@ assertNoAdditions {
   # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
   # avoid choosing one of them and leave it to the user
   openscad-nvim = super.openscad-nvim.overrideAttrs {
+    runtimeDeps = [
+      openscad
+    ];
+
     buildInputs = [
       zathura
       openscad
@@ -2985,11 +2981,6 @@ assertNoAdditions {
       "openscad"
       "openscad.snippets.openscad"
       "openscad.utilities"
-    ];
-    patches = [
-      (replaceVars ./patches/openscad.nvim/program_paths.patch {
-        openscad = lib.getExe openscad;
-      })
     ];
   };
 
@@ -3075,12 +3066,14 @@ assertNoAdditions {
   };
 
   peek-nvim = super.peek-nvim.overrideAttrs (old: {
+    runtimeDeps = [
+      deno
+    ];
+
     patches = [
       # Patch peek-nvim to run using nixpkgs deno
       # This means end-users have to build peek-nvim the first time they use it...
-      (replaceVars ./patches/peek-nvim/cmd.patch {
-        deno = lib.getExe deno;
-      })
+      ./patches/peek-nvim/cmd.patch
     ];
   });
 
@@ -3125,10 +3118,8 @@ assertNoAdditions {
   };
 
   Preview-nvim = super.Preview-nvim.overrideAttrs {
-    patches = [
-      (replaceVars ./patches/preview-nvim/hardcode-mdt-binary-path.patch {
-        mdt = lib.getExe md-tui;
-      })
+    runtimeDeps = [
+      md-tui
     ];
   };
 
@@ -3195,11 +3186,9 @@ assertNoAdditions {
   };
 
   ranger-nvim = super.ranger-nvim.overrideAttrs {
-    patches = [ ./patches/ranger.nvim/fix-paths.patch ];
-
-    postPatch = ''
-      substituteInPlace lua/ranger-nvim.lua --replace-fail '@ranger@' ${ranger}/bin/ranger
-    '';
+    runtimeDeps = [
+      ranger
+    ];
   };
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
