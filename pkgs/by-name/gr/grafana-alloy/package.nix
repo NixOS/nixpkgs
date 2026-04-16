@@ -13,6 +13,11 @@
   lld,
   useLLD ? stdenv.hostPlatform.isArmv7,
 }:
+
+let
+  beylaVersion = "v3.6.0";
+in
+
 buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
   version = "1.15.1";
@@ -49,6 +54,12 @@ buildGoModule (finalAttrs: {
 
   patchPhase = ''
     cp -av ${finalAttrs.frontend}/share internal/web/ui/dist
+
+    goSumBeylaVersion="$(grep beyla go.sum | head -1 | cut -d ' ' -f2)"
+    if [[ "$goSumBeylaVersion" != "${beylaVersion}" ]];then
+      echo "beyla version in go.sum ($goSumBeylaVersion) doesn't match the one set in the expression (${beylaVersion}), needs updating."
+      exit 1
+    fi
   '';
 
   modRoot = "collector";
@@ -66,6 +77,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/grafana/alloy/internal/build.Revision=v${finalAttrs.version}"
     "-X github.com/grafana/alloy/internal/build.BuildUser=nix@nixpkgs"
     "-X github.com/grafana/alloy/internal/build.BuildDate=1970-01-01T00:00:00Z"
+    "-X github.com/grafana/beyla/pkg/buildinfo=${beylaVersion}"
   ];
 
   tags = [
