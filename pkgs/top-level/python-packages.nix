@@ -7979,6 +7979,8 @@ self: super: with self; {
 
   jsonable = callPackage ../development/python-modules/jsonable { };
 
+  jsonalias = callPackage ../development/python-modules/jsonalias { };
+
   jsonargparse = callPackage ../development/python-modules/jsonargparse { };
 
   jsonconversion = callPackage ../development/python-modules/jsonconversion { };
@@ -16283,6 +16285,8 @@ self: super: with self; {
 
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
+  pywebtransport = callPackage ../development/python-modules/pywebtransport { };
+
   pywebview = callPackage ../development/python-modules/pywebview { };
 
   pywemo = callPackage ../development/python-modules/pywemo { };
@@ -18067,6 +18071,8 @@ self: super: with self; {
   solax = callPackage ../development/python-modules/solax { };
 
   solc-select = callPackage ../development/python-modules/solc-select { };
+
+  solders = callPackage ../development/python-modules/solders { };
 
   solidpython2 = callPackage ../development/python-modules/solidpython2 { };
 

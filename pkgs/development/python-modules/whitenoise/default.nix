@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.11.0";
+  version = "6.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evansd";
     repo = "whitenoise";
     tag = version;
-    hash = "sha256-pcU4qa2dlyPfMgyi1O8zME4GukIvKN4MQhFtJJjdn9w=";
+    hash = "sha256-qNya/3oI9413VUGaLPq4vtuLvq9mIGhaYBt+4OhrkOw=";
   };
 
   __darwinAllowLocalNetworking = true;

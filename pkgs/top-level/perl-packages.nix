@@ -116,11 +116,11 @@ with self;
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.8.2";
+    version = "3.9.0";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-pSOfWiwS4Me05DL/1+k2/u+UWpYhpBWRx307DPRYVgs=";
+      hash = "sha256-lO1Hfjs/lNEmzscynw6DmfHQzoLHxNiCqUrbFQ5//JA=";
     };
 
     outputs = [
@@ -25710,10 +25710,10 @@ with self;
 
   NetIPXS = buildPerlPackage {
     pname = "Net-IP-XS";
-    version = "0.22";
+    version = "0.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.22.tar.gz";
-      hash = "sha256-JZe0aDizgur3S6XJnD9gpqC1poHsNqFBchJL9E9LGSA=";
+      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.23.tar.gz";
+      hash = "sha256-c7E+E68xWC/whLgNUK+LOeGStGc6wvfWj+4Mpa9txX8=";
     };
     propagatedBuildInputs = [
       IOCapture

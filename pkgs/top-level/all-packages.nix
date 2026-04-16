@@ -6759,10 +6759,6 @@ with pkgs;
     libprom
     ;
 
-  libpulsar = callPackage ../development/libraries/libpulsar {
-    protobuf = protobuf_21;
-  };
-
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
   libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
