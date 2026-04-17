@@ -133,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset";
     longDescription = ''
