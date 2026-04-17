@@ -121,6 +121,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # Needs to be non-empty during build
   env.DATABASE_URL = "postgresql://";
+  # No DB is available during build
+  env.SKIP_DB_CHECK = "1";
+
+  # Geocities is handled manually
+  env.SKIP_BUILD_GEO = "1";
 
   # Allow prisma-cli to find prisma-engines without having to download them
   # Only needed at build time for `prisma generate`.
@@ -130,10 +135,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pnpm build-db-client # prisma generate
-
-    pnpm build-tracker
-    pnpm build-app
+    pnpm build
 
     runHook postBuild
   '';
@@ -161,8 +163,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail "import 'dotenv/config';" "" \
       --replace-fail "from 'prisma/config';" "from '${finalAttrs.passthru.prisma}/lib/prisma/packages/config';"
 
-    ln -s ${finalAttrs.passthru.geocities} $out/geo
-
     mkdir -p $out/bin
     # Run database migrations before starting umami.
     # Add openssl to PATH since it is required for prisma to make SSL connections.
@@ -170,6 +170,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper ${nodejs}/bin/node $out/bin/umami-server  \
       --set NODE_ENV production \
       --set NEXT_TELEMETRY_DISABLED 1 \
+      --set GEOLITE_DB_PATH ${lib.escapeShellArg "${finalAttrs.passthru.geocities}/GeoLite2-City.mmdb"} \
       --prefix PATH : ${
         lib.makeBinPath [
           openssl
