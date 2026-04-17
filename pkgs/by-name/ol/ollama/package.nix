@@ -7,6 +7,7 @@
   stdenv,
   addDriverRunpath,
   nix-update-script,
+  coreutils,
 
   cmake,
   gitMinimal,
@@ -94,7 +95,7 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.20.6/CMakePresets.json#L21-L47
+    # - https://github.com/ollama/ollama/blob/v0.21.0/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
@@ -140,13 +141,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.20.7";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a08TZMzoRg1YzqIU6l1Z8JOBh6VSK5lhfA8ggoMl/ss=";
+    hash = "sha256-DtrYopNtndQXq9Xjriw5Bqell9A8RHPOvgDF8BlKtdU=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
@@ -187,9 +188,17 @@ goBuild (finalAttrs: {
     ++ lib.optionals enableVulkan vulkanLibs;
 
   # replace inaccurate version number with actual release version
+  # and replace core utils tools from their FHS location to nix store
   postPatch = ''
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
+    substituteInPlace cmd/launch/openclaw_test.go \
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat'
+    substituteInPlace cmd/launch/hermes_test.go \
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
     rm -r app
   ''
   # disable tests that fail in sandbox due to Metal init failure
@@ -232,7 +241,7 @@ goBuild (finalAttrs: {
     '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.20.5/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.21.0/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
@@ -263,8 +272,6 @@ goBuild (finalAttrs: {
       skippedTests = [
         "TestPushHandler/unauthorized_push" # Writes to $HOME, see https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
         "TestPiRun_InstallAndWebSearchLifecycle" # Requires network access to install npm packages
-        "TestOpenclawRun_ChannelSetupHappensBeforeGatewayRestart" # /bin/mkdir and /bin/cat are unavailable on NixOS
-        "TestOpenclawChannelSetupPreflight" # /bin/mkdir and /bin/cat are unavailable on NixOS
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
