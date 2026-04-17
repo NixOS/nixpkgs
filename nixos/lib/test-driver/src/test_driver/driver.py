@@ -62,6 +62,14 @@ def pythonize_name(name: str) -> str:
     return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 
+def in_nix_sandbox() -> bool:
+    # There seems to be no better method at the time
+    typical_nix_env_vars = "NIX_BUILD_TOP" in os.environ
+    nix_shell_marker = "IN_NIX_SHELL" in os.environ
+
+    return typical_nix_env_vars and not nix_shell_marker
+
+
 @dataclass
 class VsockPair:
     guest: Path
@@ -189,7 +197,7 @@ class Driver:
             for name, vm_start_script in self.vm_start_scripts.items()
         ]
 
-        if len(self.container_start_scripts) > 0:
+        if len(self.container_start_scripts) > 0 and in_nix_sandbox():
             self._init_nspawn_environment()
 
         self.machines_nspawn = [
