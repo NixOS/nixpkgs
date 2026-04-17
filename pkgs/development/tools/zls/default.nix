@@ -19,6 +19,8 @@ let
       "${finalAttrs.deps}"
     ];
 
+    __structuredAttrs = true;
+
     meta = {
       description = "Zig LSP implementation + Zig Language Server";
       mainProgram = "zls";
