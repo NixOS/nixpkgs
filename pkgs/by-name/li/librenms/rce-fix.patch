@@ -1,0 +1,541 @@
+From 5839646fb82549504f91f88a479deb6ce9de2158 Mon Sep 17 00:00:00 2001
+From: Tony Murray <murraytony@gmail.com>
+Date: Sun, 1 Mar 2026 16:21:19 -0600
+Subject: [PATCH] Remove netcmd ajax (#19131)
+
+* Remove netcmd ajax
+Unfixable security vulnerabilites and little value.
+
+* Remove unused binary settings
+---
+ app/Http/Controllers/Ajax/NetCommand.php      | 97 -------------------
+ lang/de/settings.php                          |  9 --
+ lang/en/settings.php                          | 11 +--
+ lang/fr/settings.php                          |  9 --
+ lang/it/settings.php                          |  9 --
+ lang/ka/settings.php                          |  6 --
+ lang/pt-BR/settings.php                       |  6 --
+ lang/ru/settings.php                          |  9 --
+ lang/uk/settings.php                          |  9 --
+ lang/zh-CN/settings.php                       |  9 --
+ lang/zh-TW/settings.php                       |  6 --
+ resources/definitions/config_definitions.json | 35 ++-----
+ .../tabs/ports/includes/port_row.blade.php    |  4 +-
+ routes/web.php                                |  1 -
+ 14 files changed, 13 insertions(+), 207 deletions(-)
+ delete mode 100644 app/Http/Controllers/Ajax/NetCommand.php
+
+diff --git a/app/Http/Controllers/Ajax/NetCommand.php b/app/Http/Controllers/Ajax/NetCommand.php
+deleted file mode 100644
+index 111678b59..000000000
+--- a/app/Http/Controllers/Ajax/NetCommand.php
++++ /dev/null
+@@ -1,97 +0,0 @@
+-<?php
+-
+-/**
+- * NetCommand.php
+- *
+- * -Description-
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+- *
+- * @link       https://www.librenms.org
+- *
+- * @copyright  2019 Tony Murray
+- * @author     Tony Murray <murraytony@gmail.com>
+- */
+-
+-namespace App\Http\Controllers\Ajax;
+-
+-use App\Facades\LibrenmsConfig;
+-use App\Http\Controllers\Controller;
+-use Illuminate\Http\Request;
+-use Illuminate\Support\Str;
+-use Symfony\Component\HttpFoundation\StreamedResponse;
+-use Symfony\Component\Process\Process;
+-
+-class NetCommand extends Controller
+-{
+-    public function run(Request $request)
+-    {
+-        $this->validate($request, [
+-            'cmd' => 'in:whois,ping,tracert,nmap',
+-            'query' => 'ip_or_hostname',
+-        ]);
+-
+-        ini_set('allow_url_fopen', '0');
+-
+-        switch ($request->get('cmd')) {
+-            case 'whois':
+-                $cmd = [LibrenmsConfig::get('whois', 'whois'), $request->get('query')];
+-                break;
+-            case 'ping':
+-                $cmd = [LibrenmsConfig::get('ping', 'ping'), '-c', '5', $request->get('query')];
+-                break;
+-            case 'tracert':
+-                $cmd = [LibrenmsConfig::get('mtr', 'mtr'), '-r', '-c', '5', $request->get('query')];
+-                break;
+-            case 'nmap':
+-                if (! $request->user()->isAdmin()) {
+-                    return response('Insufficient privileges');
+-                } else {
+-                    $cmd = [LibrenmsConfig::get('nmap', 'nmap'), $request->get('query')];
+-                }
+-                break;
+-            default:
+-                return response('Invalid command');
+-        }
+-
+-        $proc = new Process($cmd);
+-        $proc->setTimeout(240);
+-
+-        //stream output
+-        return (new StreamedResponse(
+-            function () use ($proc, $request) {
+-                // a bit dirty, bust browser initial cache
+-                $ua = $request->header('User-Agent');
+-                if (Str::contains($ua, ['Chrome', 'Trident'])) {
+-                    $char = "\f"; // line feed
+-                } else {
+-                    $char = '';
+-                }
+-                echo str_repeat($char, 4096);
+-                echo PHP_EOL; // avoid first line mess ups due to line feed
+-
+-                $proc->run(function ($type, $buffer) {
+-                    echo $buffer;
+-                    ob_flush();
+-                    flush();
+-                });
+-            },
+-            200,
+-            [
+-                'Content-Type' => 'text/plain; charset=utf-8',
+-                'X-Accel-Buffering' => 'no',
+-            ]
+-        ))->send();
+-    }
+-}
+diff --git a/lang/de/settings.php b/lang/de/settings.php
+index 79d7b5890..aebebd602 100644
+--- a/lang/de/settings.php
++++ b/lang/de/settings.php
+@@ -543,9 +543,6 @@ return [
+             'description' => 'Dateinamensuffix',
+             'help' => 'Dies ist sehr wichtig da Gerätenamen in NfSen auf 21 Zeichen limitiert sind. Dies bedeutet das es problematisch werden kann full domain names zu kürzen, daher wird unnützes gewöhnlich entfernt.',
+         ],
+-        'nmap' => [
+-            'description' => 'Pfad zu nmap',
+-        ],
+         'own_hostname' => [
+             'description' => 'LibreNMS hostname',
+             'help' => 'Sollte auf den hostname/ip des LibreNMS Servers gesetzt werden',
+@@ -580,9 +577,6 @@ return [
+                 'help' => 'Aktiviere PeeringDB lookup (Daten werden mit daily.sh heruntergeladen)',
+             ],
+         ],
+-        'ping' => [
+-            'description' => 'Pfad zu ping',
+-        ],
+         'ports_fdb_purge' => [
+             'description' => 'Port FDB Einträge älter als',
+             'help' => 'Bereinigung wird erledigt durch daily.sh',
+@@ -783,9 +777,6 @@ return [
+                 'help' => 'Minimale Graphen Höhe (Standard: 300)',
+             ],
+         ],
+-        'whois' => [
+-            'description' => 'Pfad zu whois',
+-        ],
+     ],
+     'twofactor' => [
+         'description' => 'Aktiviere Zweifaktor Authentifizierung',
+diff --git a/lang/en/settings.php b/lang/en/settings.php
+index 76dd1498a..5c812152a 100644
+--- a/lang/en/settings.php
++++ b/lang/en/settings.php
+@@ -1498,9 +1498,6 @@ return [
+             'description' => 'File name suffix',
+             'help' => 'This is a very important bit as device names in NfSen are limited to 21 characters. This means full domain names for devices can be very problematic to squeeze in, so therefor this chunk is usually removed.',
+         ],
+-        'nmap' => [
+-            'description' => 'Path to nmap',
+-        ],
+         'no_proxy' => [
+             'description' => 'Proxy Exceptions',
+             'help' => 'Set this as a fallback if no_proxy environment variable is not available. Comma seperated list of IPs, hosts or domains to ignore.',
+@@ -1618,9 +1615,6 @@ return [
+             'description' => 'Bad Interface ifType',
+             'help' => 'Network interface IF-MIB:!:ifType which should be ignored',
+         ],
+-        'ping' => [
+-            'description' => 'Path to ping',
+-        ],
+         'ping_rrd_step' => [
+             'description' => 'Ping Frequency',
+             'help' => 'How often to check. Sets the default value for all nodes. Warning! If you change this you must make additional changes.  Check the Fast Ping docs.',
+@@ -2337,8 +2331,9 @@ return [
+             'description' => 'Show devices dependecies on location map',
+             'help' => 'Show links between devices on the location map based on parent dependencies',
+         ],
+-        'whois' => [
+-            'description' => 'Path to whois',
++        'device_stats_avg_factor' => [
++            'description' => 'Averaging factor',
++            'help' => 'We calculate a moving average using an exponential weighted moving average function.  This is the factor used by the function to control how much the current value affects the average.  Values closer to 1 will make the average change quicker.',
+         ],
+         'smokeping.integration' => [
+             'description' => 'Enable',
+diff --git a/lang/fr/settings.php b/lang/fr/settings.php
+index 0262929ac..a072cb6b1 100644
+--- a/lang/fr/settings.php
++++ b/lang/fr/settings.php
+@@ -719,9 +719,6 @@ return [
+             'description' => 'Suffixe de nom de fichier',
+             'help' => 'This is a very important bit as device names in NfSen are limited to 21 characters. This means full domain names for devices can be very problematic to squeeze in, so therefor this chunk is usually removed.',
+         ],
+-        'nmap' => [
+-            'description' => 'Chemin vers `nmap`',
+-        ],
+         'own_hostname' => [
+             'description' => 'Nom d\'hôte LibreNMS',
+             'help' => 'Doit être configuré avec le nom d\'hôte/IP du serveur LibreNMS.',
+@@ -763,9 +760,6 @@ return [
+                 ],
+             ],
+         ],
+-        'ping' => [
+-            'description' => 'Chemin vers `ping`',
+-        ],
+         'poller_modules' => [
+             'unix-agent' => [
+                 'description' => 'Unix Agent',
+@@ -1118,9 +1112,6 @@ return [
+                 'help' => 'Hauteur minimale des graphes (défaut: 300)',
+             ],
+         ],
+-        'whois' => [
+-            'description' => 'Chemin vers `whois`',
+-        ],
+     ],
+     'twofactor' => [
+         'description' => 'Activer l\'Autentification à deux facteurs',
+diff --git a/lang/it/settings.php b/lang/it/settings.php
+index ff9c46beb..f1714367e 100644
+--- a/lang/it/settings.php
++++ b/lang/it/settings.php
+@@ -948,9 +948,6 @@ return [
+             'description' => 'File name suffix',
+             'help' => 'This is a very important bit as device names in NfSen are limited to 21 characters. This means full domain names for devices can be very problematic to squeeze in, so therefor this chunk is usually removed.',
+         ],
+-        'nmap' => [
+-            'description' => 'Path to nmap',
+-        ],
+         'opentsdb' => [
+             'enable' => [
+                 'description' => 'Enable',
+@@ -1032,9 +1029,6 @@ return [
+             'description' => 'Bad Interfaces',
+             'help' => 'Network Interface Types which should be ignored',
+         ],
+-        'ping' => [
+-            'description' => 'Path to ping',
+-        ],
+         'ping_rrd_step' => [
+             'description' => 'Ping Frequency',
+             'help' => 'How often to check. Sets the default value for all nodes. Warning! If you change this you must make additional changes.  Check the Fast Ping docs.',
+@@ -1539,9 +1533,6 @@ return [
+             'description' => 'Location Map open',
+             'help' => 'Location Map is shown by default',
+         ],
+-        'whois' => [
+-            'description' => 'Path to whois',
+-        ],
+         'smokeping.integration' => [
+             'description' => 'Enable',
+             'help' => 'Enable smokeping integration',
+diff --git a/lang/ka/settings.php b/lang/ka/settings.php
+index 39834ee8a..681a27fe3 100644
+--- a/lang/ka/settings.php
++++ b/lang/ka/settings.php
+@@ -1219,9 +1219,6 @@ return [
+             'description' => 'ფაილის სახელის სუფიქსი',
+             'help' => 'ეს ძალიან მნიშვნელოვანი ნაწილია, რადგან მოწყობილობის სახელები NfSen-ში შეზღუდულია 21 სიმბოლოზე. ეს ნიშნავს, რომ სრული დომენის სახელები მოწყობილობებისთვის შეიძლება, პრობლემატური იყოს, ჩაატიოთ. ასე რომ ეს ნაწილი ჩვეულებრივ იშლება.',
+         ],
+-        'nmap' => [
+-            'description' => 'ბილიკი nmap-მდე',
+-        ],
+         'no_proxy' => [
+             'description' => 'პროქსის გამონაკლისები',
+             'help' => 'დააყენეთ, თუ გარემოს ცვლადი no_proxy ხელმისაწვდომი არაა. წარმოადგენს მძიმით გამოყოფილ სიას IP მისამართების, ჰოსტების და დომენების, რომლებიც გნებავთ, გამოტოვებული იყოს.',
+@@ -1981,9 +1978,6 @@ return [
+             'description' => 'მოწყობილობის დამოკიდებულებების ჩვენება მდებარეობის რუკაზე',
+             'help' => 'მოწყობილობებს შორის ბმულების ჩვენება მდებარეობის რუკაზე მშობელი დამოკიდებულებების მიხედვით',
+         ],
+-        'whois' => [
+-            'description' => 'ბილიკი პროგრამამდე whois',
+-        ],
+         'smokeping.integration' => [
+             'description' => 'ჩართვა',
+             'help' => 'smokeping-ის ინტეგრაციის ჩართვა',
+diff --git a/lang/pt-BR/settings.php b/lang/pt-BR/settings.php
+index 62a2f8e02..c7211ffd9 100644
+--- a/lang/pt-BR/settings.php
++++ b/lang/pt-BR/settings.php
+@@ -1317,9 +1317,6 @@ return [
+             'description' => 'Sufixo do Nome do Arquivo',
+             'help' => 'Isso é muito importante, pois os nomes dos dispositivos no NfSen são limitados a 21 caracteres. Isso significa que nomes de domínio completos para dispositivos podem ser muito problemáticos para encaixar, então, geralmente, esse pedaço é removido.',
+         ],
+-        'nmap' => [
+-            'description' => 'Caminho para nmap',
+-        ],
+         'no_proxy' => [
+             'description' => 'Exceções de Proxy',
+             'help' => 'Defina isso como fallback se a variável de ambiente no_proxy não estiver disponível. Lista separada por vírgulas de IPs, hosts ou domínios a serem ignorados.',
+@@ -2035,9 +2032,6 @@ return [
+             'description' => 'Exibir dependências dos dispositivos no mapa de localização',
+             'help' => 'Exibir links entre dispositivos no mapa de localização com base nas dependências dos pais',
+         ],
+-        'whois' => [
+-            'description' => 'Caminho para whois',
+-        ],
+         'smokeping.integration' => [
+             'description' => 'Habilitar',
+             'help' => 'Habilitar integração com Smokeping',
+diff --git a/lang/ru/settings.php b/lang/ru/settings.php
+index 66bf6d871..5bb8b6283 100644
+--- a/lang/ru/settings.php
++++ b/lang/ru/settings.php
+@@ -1170,9 +1170,6 @@ return [
+             'description' => 'Суффикс имени файла',
+             'help' => 'Это очень важный момент, так как имена устройств в NfSen ограничены 21 символом. Это означает, что полные доменные имена для устройств могут быть проблематичными для втиснуть, поэтому этот фрагмент обычно удаляется.',
+         ],
+-        'nmap' => [
+-            'description' => 'Путь к nmap',
+-        ],
+         'no_proxy' => [
+             'description' => 'Исключения прокси',
+             'help' => 'Установите это в качестве резервного варианта, если переменная окружения no_proxy недоступна. Список IP, хостов или доменов, которые следует игнорировать, разделенный запятыми.',
+@@ -1270,9 +1267,6 @@ return [
+             'description' => 'Плохие типы интерфейсов',
+             'help' => 'Сетевой интерфейс IF-MIB:!:ifType, который следует игнорировать',
+         ],
+-        'ping' => [
+-            'description' => 'Путь к ping',
+-        ],
+         'ping_rrd_step' => [
+             'description' => 'Частота пинга',
+             'help' => 'Как часто проверять. Устанавливает значение по умолчанию для всех узлов. Внимание! Если вы измените это, вам нужно будет внести дополнительные изменения. Ознакомьтесь с документацией по Fast Ping.',
+@@ -1888,9 +1882,6 @@ return [
+             'description' => 'Показать зависимости устройств на карте местоположения',
+             'help' => 'Показать связи между устройствами на карте местоположения на основе родительских зависимостей',
+         ],
+-        'whois' => [
+-            'description' => 'Путь к whois',
+-        ],
+         'smokeping.integration' => [
+             'description' => 'Включить',
+             'help' => 'Включить интеграцию smokeping',
+diff --git a/lang/uk/settings.php b/lang/uk/settings.php
+index 4cc5dfbad..a8bf7f8c2 100644
+--- a/lang/uk/settings.php
++++ b/lang/uk/settings.php
+@@ -939,9 +939,6 @@ return [
+             'description' => 'Суфікс імені файлу',
+             'help' => 'Важливе налаштування та як імена пристроїв в NfSen обмежені 21 символом. Це значить що повні доменні імена пристроїв можуть не вміщатися, тому дане налаштування зазвичай не використовується.',
+         ],
+-        'nmap' => [
+-            'description' => 'Шлях до nmap',
+-        ],
+         'opentsdb' => [
+             'enable' => [
+                 'description' => 'Увімкнути',
+@@ -1023,9 +1020,6 @@ return [
+             'description' => 'Погані інтерфейси',
+             'help' => 'Типи мережевих інтерфейсів щр мають бути проігноровані',
+         ],
+-        'ping' => [
+-            'description' => 'Шлях до ping',
+-        ],
+         'ping_rrd_step' => [
+             'description' => 'Частота Ping',
+             'help' => 'Частота перевірок. Є значенням за замовчуванням для всіх пристроїв. Увага! При зміні цього значення необхідно ввести додаткоі зміни.  Зверніться до документації Fast Ping.',
+@@ -1522,9 +1516,6 @@ return [
+             'description' => 'Відкрита мапа місцезнаходження',
+             'help' => 'Мапа місцезнаходження показана за замовчуванням',
+         ],
+-        'whois' => [
+-            'description' => 'Шлях до whois',
+-        ],
+         'smokeping.integration' => [
+             'description' => 'Увімкнути',
+             'help' => 'Увімкнути інтеграцію зі smokeping',
+diff --git a/lang/zh-CN/settings.php b/lang/zh-CN/settings.php
+index 78399dab4..6ccac1edf 100644
+--- a/lang/zh-CN/settings.php
++++ b/lang/zh-CN/settings.php
+@@ -544,9 +544,6 @@ return [
+             'description' => '文件名称前缀',
+             'help' => '这是非常关键的一点，因为在NfSen中，设备名称被限制为21个字符。这意味着设备的完整域名可能很难压缩进去，因此通常会移除这一部分。',
+         ],
+-        'nmap' => [
+-            'description' => 'nmap 路径',
+-        ],
+         'own_hostname' => [
+             'description' => 'LibreNMS 主机名称',
+             'help' => '应设置为librenms服务器添加时使用的主机名/IP地址',
+@@ -587,9 +584,6 @@ return [
+                 'help' => '起用 PeeringDB lookup (资料将于由 daily.sh 进行下载)',
+             ],
+         ],
+-        'ping' => [
+-            'description' => 'ping 路径',
+-        ],
+         'ports_fdb_purge' => [
+             'description' => '连接端口 FDB 项目大于',
+             'help' => '由 daily.sh 脚本完成的日常清理工作',
+@@ -798,9 +792,6 @@ return [
+                 'help' => '图表最小高度 (预设: 300)',
+             ],
+         ],
+-        'whois' => [
+-            'description' => 'whois 路径',
+-        ],
+     ],
+     'twofactor' => [
+         'description' => '启用双因素验证',
+diff --git a/lang/zh-TW/settings.php b/lang/zh-TW/settings.php
+index 216e46a47..f609ab8ac 100644
+--- a/lang/zh-TW/settings.php
++++ b/lang/zh-TW/settings.php
+@@ -660,9 +660,6 @@ return [
+             'description' => '檔案名稱首碼',
+             'help' => 'This is a very important bit as device names in NfSen are limited to 21 characters. This means full domain names for devices can be very problematic to squeeze in, so therefor this chunk is usually removed.',
+         ],
+-        'nmap' => [
+-            'description' => 'nmap 路徑',
+-        ],
+         'own_hostname' => [
+             'description' => 'LibreNMS 主機名稱',
+             'help' => 'Should be set to the hostname/ip the librenms server is added as',
+@@ -979,9 +976,6 @@ return [
+             'description' => '開啟位置圖',
+             'help' => 'Location Map is shown by default',
+         ],
+-        'whois' => [
+-            'description' => 'whois 路徑',
+-        ],
+         'smokeping.integration' => [
+             'description' => '啟用',
+             'help' => 'Enable smokeping integration',
+diff --git a/resources/definitions/config_definitions.json b/resources/definitions/config_definitions.json
+index 7b5d3778a..0698f9d60 100644
+--- a/resources/definitions/config_definitions.json
++++ b/resources/definitions/config_definitions.json
+@@ -5191,12 +5191,14 @@
+             "default": "DejaVuSansMono",
+             "type": "text"
+         },
+-        "mtr": {
+-            "default": "/usr/bin/mtr",
+-            "group": "external",
+-            "section": "binaries",
+-            "order": 4,
+-            "type": "executable"
++        "mtu_options.bytes": {
++            "group": "poller",
++            "section": "mtu",
++            "order": 1,
++            "type": "integer",
++            "validate": {
++                "value": "int|nullable|between:9,65535"
++            }
+         },
+         "mydomain": {
+             "type": "text",
+@@ -5453,13 +5455,6 @@
+             "order": 13,
+             "type": "text"
+         },
+-        "nmap": {
+-            "default": "/usr/bin/nmap",
+-            "group": "external",
+-            "section": "binaries",
+-            "order": 5,
+-            "type": "executable"
+-        },
+         "no_proxy": {
+             "group": "system",
+             "default": "localhost,127.0.0.1,::1",
+@@ -5785,13 +5780,6 @@
+             "default": null,
+             "type": "integer"
+         },
+-        "ping": {
+-            "default": "/bin/ping",
+-            "group": "external",
+-            "section": "binaries",
+-            "order": 6,
+-            "type": "executable"
+-        },
+         "plugin_dir": {
+             "type": "directory"
+         },
+@@ -7177,13 +7165,6 @@
+             "order": 0,
+             "type": "integer"
+         },
+-        "whois": {
+-            "default": "/usr/bin/whois",
+-            "group": "external",
+-            "section": "binaries",
+-            "order": 16,
+-            "type": "executable"
+-        },
+         "xirrus_disable_stations": {
+             "default": false,
+             "type": "boolean"
+diff --git a/resources/views/device/tabs/ports/includes/port_row.blade.php b/resources/views/device/tabs/ports/includes/port_row.blade.php
+index 55bb05900..a4f403a23 100644
+--- a/resources/views/device/tabs/ports/includes/port_row.blade.php
++++ b/resources/views/device/tabs/ports/includes/port_row.blade.php
+@@ -35,10 +35,10 @@
+         </div>
+         @if($data['tab'] != 'basic')
+             @foreach($port->ipv4 as $ipv4)
+-                <div><a class="tw:text-base" href="javascript:popUp('{{ url('ajax/netcmd?cmd=whois&query=' . $ipv4->ipv4_address) }}')">{{ $ipv4->ipv4_address }}/{{ $ipv4->ipv4_prefixlen }}</a></div>
++                <div class="tw:text-base">{{ $ipv4->ipv4_address }}/{{ $ipv4->ipv4_prefixlen }}</div>
+             @endforeach
+             @foreach($port->ipv6 as $ipv6)
+-                <div><a class="tw:text-base" href="javascript:popUp('{{ url('ajax/netcmd?cmd=whois&query=' . $ipv6->ipv6_compressed) }}')">{{ $ipv6->ipv6_compressed }}/{{ $ipv6->ipv6_prefixlen }}</a></div>
++                <div class="tw:text-base">{{ $ipv6->ipv6_compressed }}/{{ $ipv6->ipv6_prefixlen }}</div>
+             @endforeach
+         @endif
+         @if($port->portSecurity)
+diff --git a/routes/web.php b/routes/web.php
+index fa5364de9..417d45ded 100644
+--- a/routes/web.php
++++ b/routes/web.php
+@@ -244,7 +244,6 @@ Route::middleware(['auth'])->group(function () {
+         Route::post('set_map_view', [Ajax\AvailabilityMapController::class, 'setView']);
+         Route::post('set_resolution', [Ajax\SessionController::class, 'resolution']);
+         Route::post('set_style', [Ajax\SessionController::class, 'style']);
+-        Route::get('netcmd', [Ajax\NetCommand::class, 'run']);
+         Route::post('ripe/raw', [Ajax\RipeNccApiController::class, 'raw']);
+         Route::get('snmp/capabilities', Ajax\SnmpCapabilities::class)->name('snmp.capabilities');
+ 
+-- 
+2.51.2
+

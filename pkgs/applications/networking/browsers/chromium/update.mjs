@@ -72,7 +72,11 @@ for (const attr_path of Object.keys(lockfile)) {
       DEPS: {},
     }
 
-    const depot_tools = await fetch_depot_tools(chromium_rev, lockfile_initial[attr_path].deps.depot_tools)
+    // The DEPS schema was modified in https://chromium-review.googlesource.com/c/chromium/tools/depot_tools/+/7007552
+    // and https://chromium-review.googlesource.com/c/chromium/src/+/7683270. And while the breaking change itself got
+    // backported to M147 (and M146 fwiw), the necessary depot_tools roll was not.
+    // So for now we simply resort to whatever depot_tools is currently pinned on chromium's main branch.
+    const depot_tools = await fetch_depot_tools(/* chromium_rev */ 'main', lockfile_initial[attr_path].deps.depot_tools)
     lockfile[attr_path].deps.depot_tools = {
       rev: depot_tools.rev,
       hash: depot_tools.hash,
