@@ -29,7 +29,7 @@
 }:
 
 let
-  version = "3.11.4";
+  version = "3.11.5";
 
   getArchInfo =
     platform:
@@ -78,7 +78,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-y2F+wB0M5dq6koxGpCs9BExGU7p8tFOIiRqfdf8ip+8=";
+    outputHash = "sha256-QAtOthIE5k6xj2PQ0UM51K5HcAx70jTko20ZYebWSq4=";
 
     buildCommand = ''
       mkdir source
