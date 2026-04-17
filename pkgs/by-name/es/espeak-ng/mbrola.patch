@@ -7,7 +7,7 @@ index e3e4b702..de06dd21 100644
  
  		snprintf(charbuf, sizeof(charbuf), "%g", mbr_volume);
 -		execlp("mbrola", "mbrola", "-e", "-v", charbuf,
-+		execlp("@mbrola/bin/mbrola@", "mbrola", "-e", "-v", charbuf,
++		execlp("@mbrola@/bin/mbrola", "mbrola", "-e", "-v", charbuf,
  		       voice_path, "-", "-.wav", (char *)NULL);
  		/* if execution reaches this point then the exec() failed */
  		snprintf(mbr_errorbuf, sizeof(mbr_errorbuf),
