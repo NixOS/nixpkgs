@@ -423,8 +423,8 @@ in
       "sha256-lELlqGCIpJDadB4McePclQ56IyVBo7s9B05mBI3vWdY=";
 
   mypy-boto3-drs =
-    buildMypyBoto3Package "drs" "1.42.86"
-      "sha256-Gs2IKLV8vnT9M1fT2v16WlgjjfgAUfeGh9DubBwjtBk=";
+    buildMypyBoto3Package "drs" "1.42.90"
+      "sha256-oTKndZ70tzTxlniyg8hcXtEMWWGPHpS46RBFGNiZ0l0=";
 
   mypy-boto3-ds =
     buildMypyBoto3Package "ds" "1.42.3"
