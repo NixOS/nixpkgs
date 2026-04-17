@@ -33,40 +33,6 @@ let
           };
 
           patches = [ ];
-
-          cmakeFlags =
-            lib.subtractLists [
-              # no real reason to have snappy or zlib, no one uses this
-              (lib.cmakeBool "WITH_SNAPPY" true)
-              (lib.cmakeBool "ZLIB" true)
-              (lib.cmakeBool "WITH_ZLIB" true)
-              # we dont need to use ldb or sst_dump (core_tools)
-              (lib.cmakeBool "WITH_CORE_TOOLS" true)
-              # we dont need to build rocksdb tests
-              (lib.cmakeBool "WITH_TESTS" true)
-              # we use rust-rocksdb via C interface and dont need C++ RTTI
-              (lib.cmakeBool "USE_RTTI" true)
-              # this doesn't exist in RocksDB
-              (lib.cmakeBool "FORCE_SSE43" true)
-            ] old.cmakeFlags
-            ++ [
-              # no real reason to have snappy, no one uses this
-              (lib.cmakeBool "WITH_SNAPPY" false)
-              (lib.cmakeBool "ZLIB" false)
-              (lib.cmakeBool "WITH_ZLIB" false)
-              # we dont need to use ldb or sst_dump (core_tools)
-              (lib.cmakeBool "WITH_CORE_TOOLS" false)
-              # we dont need to build rocksdb tests
-              (lib.cmakeBool "WITH_TESTS" false)
-              # we use rust-rocksdb via C interface and dont need C++ RTTI
-              (lib.cmakeBool "USE_RTTI" false)
-              (lib.cmakeBool "WITH_TRACE_TOOLS" false)
-            ];
-          outputs = [ "out" ];
-
-          # We aren't building tools, the original package uses this to make sure rocksdb
-          # tools work as expected. Hence we override this and make it empty.
-          preInstall = "";
         }
       );
 in
