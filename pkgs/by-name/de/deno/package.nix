@@ -273,6 +273,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       jk
       ofalvai
+      mynacol
     ];
     platforms = [
       "x86_64-linux"
