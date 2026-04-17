@@ -8,7 +8,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bidsschematools";
   version = "1.2.2";
   pyproject = true;
@@ -16,11 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bids-standard";
     repo = "bids-specification";
-    tag = "schema-${version}";
+    tag = "schema-${finalAttrs.version}";
     hash = "sha256-6s5j+aHMiLzDK5X48sD6hVzXpGYWSRX9J3sljt4iqZw=";
   };
 
-  sourceRoot = "${src.name}/tools/schemacode";
+  sourceRoot = "${finalAttrs.src.name}/tools/schemacode";
 
   build-system = [
     pdm-backend
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})
