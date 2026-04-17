@@ -13598,6 +13598,8 @@ self: super: with self; {
 
   pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
 
+  pydantic-monty = callPackage ../development/python-modules/pydantic-monty { };
+
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
