@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
-, fastfetch
 }:
 
 stdenv.mkDerivation rec {
@@ -13,20 +12,16 @@ stdenv.mkDerivation rec {
     owner = "areofyl";
     repo = "fetch";
     rev = "master";
-    hash = "sha256-ybqmVtCAtP0Pg8ZmrW/boVUMnTfe4o+D9eAy/unqZ1w=";
+    sha256 = "08ky9k6l6pd5di0caj3a3naz2bafpjf4rqyvh0bnl6czww6632p4";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = [ fastfetch ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
     make install PREFIX=$out
-    
-    wrapProgram $out/bin/fetch \
-      --prefix PATH : ${lib.makeBinPath [ fastfetch ]}
+
     runHook postInstall
   '';
 
