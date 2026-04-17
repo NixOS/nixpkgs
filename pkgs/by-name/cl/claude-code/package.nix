@@ -32,6 +32,11 @@ buildNpmPackage (finalAttrs: {
     # https://github.com/anthropics/claude-code/issues/15195
     substituteInPlace cli.js \
           --replace-fail '#!/bin/sh' '#!/usr/bin/env sh'
+
+    # The npm tarball ships apply-seccomp as mode 0644, causing
+    # sandbox failures when bash tries to exec it
+    # https://github.com/anthropics/claude-code/issues/43367
+    chmod +x vendor/seccomp/*/apply-seccomp
   '';
 
   dontNpmBuild = true;
