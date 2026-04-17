@@ -4,15 +4,16 @@
   stdenvNoCC,
   writeText,
   conf ? { },
+  pname ? "cinny",
 }:
 let
-  configOverrides = writeText "cinny-config-overrides.json" (builtins.toJSON conf);
+  configOverrides = writeText "${pname}-config-overrides.json" (builtins.toJSON conf);
 in
 if (conf == { }) then
   cinny-unwrapped
 else
   stdenvNoCC.mkDerivation {
-    pname = "cinny";
+    inherit pname;
     inherit (cinny-unwrapped) version meta;
 
     dontUnpack = true;
