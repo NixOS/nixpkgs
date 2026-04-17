@@ -113,8 +113,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # Allow prisma-cli to find prisma-engines without having to download them
   # Only needed at build time for `prisma generate`.
-  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
-  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
+  env.PRISMA_QUERY_ENGINE_LIBRARY = "${finalAttrs.passthru.prisma-engines}/lib/libquery_engine.node";
+  env.PRISMA_SCHEMA_ENGINE_BINARY = "${finalAttrs.passthru.prisma-engines}/bin/schema-engine";
 
   buildPhase = ''
     runHook preBuild
@@ -146,7 +146,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -R public $out/public
     cp -R prisma $out/prisma
 
-    ln -s ${geocities} $out/geo
+    ln -s ${finalAttrs.passthru.geocities} $out/geo
 
     mkdir -p $out/bin
     # Run database migrations before starting umami.
@@ -162,7 +162,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --chdir $out \
-      --run "${lib.getExe prisma'} migrate deploy" \
+      --run "${lib.getExe finalAttrs.passthru.prisma} migrate deploy" \
       --add-flags "$out/server.js"
 
     runHook postInstall
