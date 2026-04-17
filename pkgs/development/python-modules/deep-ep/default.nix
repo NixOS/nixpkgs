@@ -64,13 +64,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     {
       TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep " " cudaCapabilities'}";
 
-      DISABLE_SM90_FEATURES =
-        if disableSm90Features then
-          lib.warn ''
-            python3Packages.deepep: Disabling SM90 features as the provided `cudaCapabilities` list include '${minCudaCapability}'
-          '' "1"
-        else
-          "0";
+      DISABLE_SM90_FEATURES = if disableSm90Features then "1" else "0";
 
       CUDA_HOME = symlinkJoin {
         name = "cuda-redist";

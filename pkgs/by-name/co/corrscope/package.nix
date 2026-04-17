@@ -61,6 +61,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
   );
 
+  pythonRelaxDeps = [
+    "ruamel-yaml"
+  ];
+
   dontWrapQtApps = true;
 
   preFixup = ''

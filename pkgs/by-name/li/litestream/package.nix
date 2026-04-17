@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "litestream";
-  version = "0.5.10";
+  version = "0.5.11";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = "litestream";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xp1Ic7sF3yzpR4FgMOfx/uRp/jv/qzTgSlItOIrl2pI=";
+    hash = "sha256-LGlcc/FoBiZ7YiZUyqdYmAoV9BgUm4h2/n/KQ3NzFa4=";
   };
 
   ldflags = [
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-e2fsgK/fZNIos5W/Gc3u72uzoT2igs6BgzYtz1PyI10=";
+  vendorHash = "sha256-Zf7BdL0mljGFrRTx4JJxAUXUm6Uh/sVJP/zOJ4ef/CU=";
 
   passthru.tests = { inherit (nixosTests) litestream; };
 
