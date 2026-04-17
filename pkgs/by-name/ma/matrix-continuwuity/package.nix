@@ -122,6 +122,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://forgejo.ellis.link/continuwuation/continuwuity/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      bartoostveen
       nyabinary
       snaki
     ];
