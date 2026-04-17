@@ -1,0 +1,58 @@
+diff --git a/src/createClient.ts b/src/createClient.ts
+index fbcc612..d3bef87 100644
+--- a/src/createClient.ts
++++ b/src/createClient.ts
+@@ -84,6 +84,7 @@ export interface CreateClientArgs {
+   yes?: boolean;
+   host?: string;
+   port?: number;
++  foreground?: boolean;
+ }
+ 
+ export interface CreateClientOpts {}
+@@ -145,7 +146,7 @@ export async function createClient(
+   }
+   if (port === undefined && host === "127.0.0.1") {
+     // Use shared helper to find or start llmster
+-    const serverStatus = await findOrStartLlmster({ logger });
++    const serverStatus = await findOrStartLlmster({ logger, foreground: args.foreground });
+ 
+     if (serverStatus !== null) {
+       const baseUrl = `ws://${host}:${serverStatus.port}`;
+diff --git a/src/subcommands/server.ts b/src/subcommands/server.ts
+index cdb133b..48c675a 100644
+--- a/src/subcommands/server.ts
++++ b/src/subcommands/server.ts
+@@ -23,6 +23,7 @@ type ServerStartCommandOptions = OptionValues &
+     port?: number;
+     bind?: string;
+     cors?: boolean;
++    foreground?: boolean;
+   };
+ 
+ type ServerStopCommandOptions = OptionValues & CreateClientArgs & LogLevelArgs;
+@@ -92,14 +93,22 @@ const start = new Command<[], ServerStartCommandOptions>()
+       Enable CORS on the server. Allows any website you visit to access the server. This is
+       required if you are developing a web application.
+     `,
++  )
++  .option(
++    "--foreground",
++    text`
++      Run the daemon in the foreground instead of detaching it. The process will block until the
++      daemon exits. Useful for process supervisors (systemd, launchd, etc.) that need to own the
++      daemon lifecycle.
++    `,
+   );
+ 
+ addLogLevelOptions(start);
+ 
+ start.action(async options => {
+-  const { port, bind, cors = false, ...logArgs } = options;
++  const { port, bind, cors = false, foreground = false, ...logArgs } = options;
+   const logger = createLogger(logArgs);
+-  await using client = await createClient(logger, logArgs);
++  await using client = await createClient(logger, { ...logArgs, foreground });
+   if (cors) {
+     logger.warnText`
+       CORS is enabled. This means any website you visit can use the LM Studio server.
