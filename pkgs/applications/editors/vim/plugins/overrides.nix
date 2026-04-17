@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   # nixpkgs functions
   buildGoModule,
   callPackage,
@@ -2805,7 +2806,10 @@ assertNoAdditions {
         callPackage ./nvim-treesitter-legacy/overrides.nix { } self super
       );
     in
-    lib.warnOnInstantiate "nvim-treesitter-legacy is deprecated, please migrate to the new version. This will become an error in 26.11" drv;
+    if config.allowAliases then
+      lib.warnOnInstantiate "nvim-treesitter-legacy is deprecated, please migrate to the new version. This will become an error in 26.11" drv
+    else
+      drv;
 
   nvim-treesitter-pairs = super.nvim-treesitter-pairs.overrideAttrs {
     dependencies = [ self.nvim-treesitter-legacy ];
