@@ -92,10 +92,10 @@ buildPythonPackage rec {
     "test_jupyter_widget"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Core tools for using VegaFusion from Python";
     homepage = "https://github.com/hex-inc/vegafusion";
     license = lib.licenses.bsd3;
-    maintainers = with maintainers; [ wariuccio ];
+    maintainers = with lib.maintainers; [ wariuccio ];
   };
 }

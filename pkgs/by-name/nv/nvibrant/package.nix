@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonBuildType = "release";
 
-  meta = with lib; {
+  meta = {
     description = "Configure NVIDIA's Digital Vibrance on Wayland";
     homepage = "https://github.com/Tremeschin/nvibrant";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.mikaeladev ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.mikaeladev ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "nvibrant";
   };

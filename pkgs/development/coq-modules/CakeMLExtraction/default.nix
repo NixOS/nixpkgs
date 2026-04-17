@@ -50,9 +50,9 @@
   ];
   propagatedBuildInputs = [ coq.ocamlPackages.findlib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://peregrine-project.github.io/";
     description = "CakeML backend for Peregrine";
-    maintainers = with maintainers; [ _4ever2 ];
+    maintainers = with lib.maintainers; [ _4ever2 ];
   };
 })
