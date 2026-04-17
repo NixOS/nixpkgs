@@ -7,16 +7,16 @@
   fpc,
   libx11,
 
-  # GTK2/3
+  # GTK3
   harfbuzz,
   pango,
   cairo,
   glib,
   atk,
-  gtk2,
   gtk3,
   gdk-pixbuf,
   python3,
+  wrapGAppsHook3,
 
   # Qt5
   libsForQt5,
@@ -27,7 +27,6 @@
 }:
 
 assert builtins.elem widgetset [
-  "gtk2"
   "gtk3"
   "qt5"
 ];
@@ -66,21 +65,21 @@ stdenv.mkDerivation (finalAttrs: {
     lazarus
     fpc
   ]
+  ++ lib.optional (widgetset == "gtk3") wrapGAppsHook3 # required for FileChooser
   ++ lib.optional (widgetset == "qt5") libsForQt5.wrapQtAppsHook;
 
   buildInputs = [
     libx11
   ]
-  ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
+  ++ lib.optionals (widgetset == "gtk3") [
     harfbuzz
     pango
     cairo
     glib
     atk
     gdk-pixbuf
+    gtk3
   ]
-  ++ lib.optional (widgetset == "gtk2") gtk2
-  ++ lib.optional (widgetset == "gtk3") gtk3
   ++ lib.optional (widgetset == "qt5") libsForQt5.libqtpas;
 
   env.NIX_LDFLAGS = toString [
@@ -143,6 +142,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux;
     mainProgram = "cudatext";
-    broken = widgetset == "gtk2"; # https://wiki.freepascal.org/CudaText#Linux_error_on_ATSynEdit_compiling
   };
 })
