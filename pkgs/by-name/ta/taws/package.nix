@@ -13,6 +13,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
   pname = "taws";
   version = "1.2.1";
 
