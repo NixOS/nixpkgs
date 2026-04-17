@@ -285,8 +285,6 @@ goBuild (finalAttrs: {
       skippedTests = [
         "TestPushHandler/unauthorized_push" # Writes to $HOME, see https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
         "TestPiRun_InstallAndWebSearchLifecycle" # Requires network access to install npm packages
-        "TestOpenclawRun_ChannelSetupHappensBeforeGatewayRestart" # Uses hardcoded /bin/mkdir and /bin/cat
-        "TestOpenclawChannelSetupPreflight" # Uses hardcoded /bin/mkdir and /bin/cat
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
