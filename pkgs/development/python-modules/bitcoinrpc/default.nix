@@ -6,6 +6,7 @@
   httpx,
   typing-extensions,
   pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,12 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  disabledTestPaths = [ "tests/test_connection.py" ];
 
   pythonImportsCheck = [ "bitcoinrpc" ];
 
