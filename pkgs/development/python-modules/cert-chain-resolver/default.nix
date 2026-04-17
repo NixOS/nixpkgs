@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   cryptography,
   fetchFromGitHub,
   pytestCheckHook,
@@ -28,10 +29,13 @@ buildPythonPackage rec {
     six
   ];
 
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
   disabledTests = [
     # Tests require network access
     "test_cert_returns_completed_chain"
     "test_display_flag_is_properly_formatted"
+    "test_display_flag_includes_warning_when_root_was_requested_but_not_found"
   ];
 
   pythonImportsCheck = [ "cert_chain_resolver" ];
