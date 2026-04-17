@@ -10,16 +10,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "okapi-ed";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "nk9";
     repo = "okapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xnckb3CMB8lE1oaEbmy8etRGJB5BuSoHts0phXm48uM=";
+    hash = "sha256-1cfnEhJiCtESp+a7vEANocPgxQVr88FJf3EYLjuaIDI=";
   };
 
-  cargoHash = "sha256-g+JbSph5Fplq7SYKnWUpMQdoT989+qOe+kRUK3K+bDk=";
+  cargoHash = "sha256-+vb0ju5FUOWAUTysUYh95d0o8fzdaPlfwszGcTUPQzo=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
