@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
+    changelog = "https://github.com/acpica/acpica/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       iasl
       gpl2Only
