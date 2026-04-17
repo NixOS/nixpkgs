@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   electron_40,
-  nodejs,
+  nodejs-slim,
   pnpm_10_29_2,
   pnpmConfigHook,
   makeWrapper,
@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs
-    (nodejs.python.withPackages (ps: with ps; [ setuptools ]))
+    nodejs-slim
+    (nodejs-slim.python.withPackages (ps: with ps; [ setuptools ]))
     pnpm
     pnpmConfigHook
     makeWrapper

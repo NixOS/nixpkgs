@@ -8,7 +8,7 @@
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodejs_22,
+  nodejs-slim_22,
   pkg-config,
 
   vips,
@@ -21,7 +21,7 @@
 let
   # The latest nodejs is always used in yarn, leading to build issues when it's
   # different from the pinned one.
-  nodejs = nodejs_22;
+  nodejs = nodejs-slim_22;
   yarnConfigHook' = yarnConfigHook.override {
     yarn = yarn.override { inherit nodejs; };
   };
