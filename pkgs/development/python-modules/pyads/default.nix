@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyads";
-  version = "3.5.2";
+  version = "3.6.0.dev1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = "pyads";
     tag = version;
-    hash = "sha256-mXWLVWzgdWIDpzfBLITLz5olhitkcp/QDrlFj2YMYLw=";
+    hash = "sha256-lKU8Y7GkznlP1ecvMsELXpmlmFHL9/cTQGQNM1t6v8Y=";
   };
 
   build-system = [ setuptools ];
