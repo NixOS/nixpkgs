@@ -209,7 +209,7 @@ let
       pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
       mv nodegit-x64-ubuntu-20.node nodegit-x64-ubuntu-20-ssl-1.1.1.node
       mv nodegit-x64-ubuntu-20-ssl-static.node nodegit-x64-ubuntu-20.node
-      chmod 755 nodegit-ubuntu-20.node
+      chmod 755 nodegit-x64-ubuntu-20.node
       popd
 
       # Devendor bundled git
