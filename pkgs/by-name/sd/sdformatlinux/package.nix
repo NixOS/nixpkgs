@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "sdformat";
+  pname = "sdformatlinux";
   version = "0.2.0";
 
   __structuredAttrs = true;
