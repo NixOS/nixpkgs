@@ -219,6 +219,8 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "LIBDIR" "/does-not-exist")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     (lib.cmakeFeature "SSE2NEON_INCLUDE_DIR" "${sse2neon}/include")
   ];
 
@@ -310,9 +312,9 @@ stdenv'.mkDerivation (finalAttrs: {
         apple-sdk_15
         brotli
         llvmPackages.openmp
-        sse2neon
       ]
   )
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ sse2neon ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
   ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ]
   ++ lib.optionals waylandSupport [
