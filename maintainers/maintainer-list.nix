@@ -11401,6 +11401,11 @@
     githubId = 39416660;
     name = "Mladen Branković";
   };
+  imcvampire = {
+    github = "imcvampire";
+    githubId = 9426721;
+    name = "Quoc-Anh Nguyen";
+  };
   imgabe = {
     email = "gabrielpmonte@hotmail.com";
     github = "ImGabe";
@@ -14963,6 +14968,12 @@
     github = "LamprosPitsillos";
     githubId = 61395246;
     name = "Lampros Pitsillos";
+  };
+  landreussi = {
+    email = "lucasandreussi@gmail.com";
+    github = "landreussi";
+    githubId = 5938518;
+    name = "Lucas Andreussi";
   };
   langsjo = {
     name = "langsjo";

@@ -1519,6 +1519,7 @@ in
   step-ca = handleTestOn [ "x86_64-linux" ] ./step-ca.nix { };
   stirling-pdf-desktop = runTest ./stirling-pdf-desktop.nix;
   stratis = handleTest ./stratis { };
+  strichliste = runTest ./web-apps/strichliste.nix;
   strongswan-swanctl = runTest ./strongswan-swanctl.nix;
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix { };
   stunnel = import ./stunnel.nix { inherit runTest; };
