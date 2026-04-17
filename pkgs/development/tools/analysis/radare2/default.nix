@@ -21,6 +21,7 @@
   python3,
   readline,
   ruby,
+  versionCheckHook,
   vte,
   xxHash,
   zlib,
@@ -133,6 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
+
   passthru.updateScript = ./update.sh;
 
   meta = {
@@ -165,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       mic92
       raskin
     ];
-    mainProgram = "radare2";
+    mainProgram = "r2";
     platforms = lib.platforms.unix;
   };
 })
