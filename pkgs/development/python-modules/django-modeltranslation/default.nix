@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-modeltranslation";
-  version = "0.20.2";
+  version = "0.20.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
     tag = "v${version}";
-    hash = "sha256-zjCasSZzIviCBDHyKwQlS0lR5S01AmMjBnWG/iEEJO4=";
+    hash = "sha256-DlghTCh2bcY+jHOYhQWVzMRGNKRIiQkLt4ZHDLVxUUs=";
   };
 
   build-system = [

@@ -217,7 +217,7 @@ buildGoModule {
   ];
 
   postInstall = ''
-    install -Dm644 ../assets/app.png $out/share/icons/hicolor/1024x1024/apps/wox.png
+    install -Dm644 ../assets/app.png $out/share/icons/wox.png
   '';
 
   meta = metaCommon // {

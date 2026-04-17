@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.03.03";
+  version = "26.04.04";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9peDC4NCa/cJ3eljs/2eyM9yMTBa7w2ddcuQOKjX5Ts=";
+    hash = "sha256-B3UOCcEWPt+kejK6mJZkYnVoSfzx1m28DM+Oco6iFJ8=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-NWxop42zsSGtI2H2itwRdgkgbOBXe3po5MKb47BWbcQ=";
+    hash = "sha256-1BUBOBOsQ+I3bKUMnzwtqCd/uh/gEWW9THhjaDXWWeg=";
   };
 
   nativeBuildInputs = [
@@ -83,12 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "SchildiChatRevenge";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
+    homepage = "https://schildi.chat/revenge";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
     ];
     maintainers = with lib.maintainers; [
       _71rd
+      xeni
     ];
   };
 })

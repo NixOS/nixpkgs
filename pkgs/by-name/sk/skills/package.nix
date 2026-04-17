@@ -11,19 +11,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "skills";
-  version = "1.4.6";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "skills";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H2ZUOjYbG2I2OBV4J8dil84cAhSh+j9ovJFbT88JVEo=";
+    hash = "sha256-cdundZSbWn8wXByYeXI4lQ3gWtBj3DkPQ37Py0bL3IY=";
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-pwPJ4CRHEtCXpt5b6g/7EbDsUc2KCjOtpiVED0tqoMk=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-0CS6BTjTj/TAnMNahTk4Vt/0/2eMxmCGUV9PwI8l4Ao=";
   };
 
   nativeBuildInputs = [
@@ -47,9 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm -rf node_modules
+    pnpm install --force --offline --production --ignore-scripts
+
     mkdir -p $out/lib/node_modules/skills/
     mkdir $out/bin
-    cp -r dist bin package.json $out/lib/node_modules/skills
+    cp -r dist bin node_modules package.json $out/lib/node_modules/skills
 
     ln -s $out/lib/node_modules/skills/bin/cli.mjs $out/bin/skills
     chmod +x $out/bin/skills

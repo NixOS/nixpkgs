@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.99.3";
+  version = "1.99.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     tag = finalAttrs.version;
-    hash = "sha256-zSpgcOiudt1UIsW5tRGA5AmguJn2q4+XR/G8UCqxePk=";
+    hash = "sha256-gVRaM4pnQlfwRKYVsXk4wO79FgNJ60QBn0X2QZE+8a4=";
   };
 
   outputs = [
