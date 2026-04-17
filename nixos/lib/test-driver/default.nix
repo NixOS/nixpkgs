@@ -6,7 +6,7 @@
   coreutils,
   imagemagick_light,
   ipython,
-  junit-xml,
+  junitparser,
   ptpython,
   python,
   remote-pdb,
@@ -44,7 +44,7 @@ buildPythonApplication {
   dependencies = [
     colorama
     ipython
-    junit-xml
+    junitparser
     ptpython
     remote-pdb
   ]
@@ -74,6 +74,7 @@ buildPythonApplication {
   doCheck = true;
 
   nativeCheckInputs = [
+    python.pkgs.pytest
     ruff
     ty
   ];
@@ -85,5 +86,7 @@ buildPythonApplication {
     ruff check .
     echo -e "\x1b[32m## run ruff format\x1b[0m"
     ruff format --check --diff .
+    echo -e "\x1b[32m## run pytest\x1b[0m"
+    pytest
   '';
 }

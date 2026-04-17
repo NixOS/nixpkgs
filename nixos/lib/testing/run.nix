@@ -98,6 +98,11 @@ in
       {
         name = "vm-test-run-${config.name}";
 
+        outputs = [
+          "out"
+          "junitXmlReport"
+        ];
+
         requiredSystemFeatures = [
           "nixos-test"
         ]
@@ -126,7 +131,11 @@ in
 
           ${config.driver}/bin/nixos-test-driver \
             -o $out \
-            ${lib.optionalString config.enableDebugHook "--debug-hook=${hostPkgs.breakpointHook.attach}"}
+            ${lib.optionalString config.enableDebugHook "--debug-hook=${hostPkgs.breakpointHook.attach}"} \
+            --junit-xml results.xml
+
+          mkdir -p $junitXmlReport
+          cp $out/results.xml $junitXmlReport/
         '';
 
         passthru = config.passthru;
@@ -137,6 +146,10 @@ in
       # lazyDerivation improves performance when only passthru items and/or meta are used.
       derivation = lib.asserts.checkAssertWarn config.assertions config.warnings config.rawTestDerivation;
       inherit (config) passthru meta;
+      outputs = [
+        "out"
+        "junitXmlReport"
+      ];
     };
 
     # useful for inspection (debugging / exploration)

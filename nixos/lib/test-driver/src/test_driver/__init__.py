@@ -11,11 +11,11 @@ from test_driver.debug import Debug, DebugAbstract, DebugNop
 from test_driver.driver import Driver
 from test_driver.logger import (
     CompositeLogger,
-    JunitXMLLogger,
     LogLevel,
     TerminalLogger,
     XMLLogger,
 )
+from test_driver.test_reporter import TestReporter
 
 
 class EnvDefault(argparse.Action):
@@ -176,8 +176,9 @@ def main() -> None:
     if "LOGFILE" in os.environ.keys():
         logger.add_logger(XMLLogger(os.environ["LOGFILE"]))
 
-    if args.junit_xml:
-        logger.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
+    reporter = (
+        TestReporter(output_directory / args.junit_xml) if args.junit_xml else None
+    )
 
     if args.log_level:
         logger.set_log_level(log_level_map[args.log_level])
@@ -211,6 +212,7 @@ def main() -> None:
         global_timeout=args.global_timeout,
         debug=debugger,
         enable_ssh_backdoor=args.enable_ssh_backdoor,
+        reporter=reporter,
     ) as driver:
         if args.enable_ssh_backdoor:
             driver.dump_machine_ssh()

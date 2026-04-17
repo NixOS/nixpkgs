@@ -17,7 +17,7 @@ from colorama import Style
 
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
-from test_driver.logger import AbstractLogger
+from test_driver.logger import AbstractLogger, BufferLogger, CompositeLogger
 from test_driver.machine import (
     BaseMachine,
     NspawnMachine,
@@ -25,6 +25,7 @@ from test_driver.machine import (
     retry,
 )
 from test_driver.polling_condition import PollingCondition
+from test_driver.test_reporter import TestReporter
 from test_driver.vlan import VLan
 
 
@@ -117,6 +118,7 @@ class Driver:
     vlan_ids: list[int]
     keep_machine_state: bool
     logger: AbstractLogger
+    reporter: TestReporter | None
     debug: DebugAbstract
     vhost_vsock: VHostDeviceVsock | None = None
     enable_ssh_backdoor: bool
@@ -135,11 +137,13 @@ class Driver:
         global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
         enable_ssh_backdoor: bool = False,
+        reporter: TestReporter | None = None,
     ):
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
         self.logger = logger
+        self.reporter = reporter
         self.debug = debug
         self.vlan_ids = list(set(vlans))
         self.polling_conditions = []
@@ -287,12 +291,38 @@ class Driver:
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
+        reporter = self.reporter
+        tc = reporter.start(name) if reporter else None
+
+        # Capture logs if we have a reporter and a composite logger
+        capture: BufferLogger | None = None
+        if reporter and isinstance(self.logger, CompositeLogger):
+            capture = BufferLogger()
+            self.logger.add_logger(capture)
+
         with self.logger.subtest(name):
             try:
                 yield
             except Exception as e:
+                if reporter and tc:
+                    reporter.finish(
+                        tc,
+                        failure_message=str(e),
+                        stdout=capture.buffer if capture else None,
+                        stderr=capture.errors if capture else None,
+                    )
                 self.logger.log_test_error(f'Test "{name}" failed with error: "{e}"')
                 raise e
+            else:
+                if reporter and tc:
+                    reporter.finish(
+                        tc,
+                        stdout=capture.buffer if capture else None,
+                        stderr=capture.errors if capture else None,
+                    )
+            finally:
+                if capture and isinstance(self.logger, CompositeLogger):
+                    self.logger.remove_logger(capture)
 
     def test_symbols(self) -> dict[str, Any]:
         @contextmanager

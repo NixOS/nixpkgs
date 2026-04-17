@@ -1,5 +1,3 @@
-import atexit
-import os
 import sys
 import time
 import unicodedata
@@ -7,14 +5,12 @@ from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from enum import IntEnum
-from pathlib import Path
 from queue import Empty, Queue
 from typing import Any
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 
 from colorama import Fore, Style
-from junit_xml import TestCase, TestSuite
 
 
 class LogLevel(IntEnum):
@@ -72,87 +68,49 @@ class AbstractLogger(ABC):
         pass
 
 
-class JunitXMLLogger(AbstractLogger):
-    class TestCaseState:
-        def __init__(self) -> None:
-            self.stdout = ""
-            self.stderr = ""
-            self.failure = False
+class BufferLogger(AbstractLogger):
+    """A logger that captures output to a string buffer."""
 
-    def __init__(self, outfile: Path) -> None:
-        self.tests: dict[str, JunitXMLLogger.TestCaseState] = {
-            "main": self.TestCaseState()
-        }
-        self.currentSubtest = "main"
-        self.outfile: Path = outfile
-        self._print_serial_logs = True
-        self._log_level = LogLevel.INFO
-        atexit.register(self.close)
+    def __init__(self) -> None:
+        self.buffer = ""
+        self.errors = ""
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:
-        self.tests[self.currentSubtest].stdout += message + os.linesep
+        self.buffer += message + "\n"
 
     @contextmanager
     def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
-        old_test = self.currentSubtest
-        self.tests.setdefault(name, self.TestCaseState())
-        self.currentSubtest = name
-
+        self.buffer += f"subtest: {name}\n"
         yield
-
-        self.currentSubtest = old_test
 
     @contextmanager
     def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
-        self.log(message)
+        self.buffer += message + "\n"
         yield
 
     def debug(self, *args, **kwargs) -> None:
-        if self._log_level <= LogLevel.DEBUG:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+        self.buffer += args[0] + "\n"
 
     def info(self, *args, **kwargs) -> None:
-        if self._log_level <= LogLevel.INFO:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+        self.buffer += args[0] + "\n"
 
     def warning(self, *args, **kwargs) -> None:
-        if self._log_level <= LogLevel.WARNING:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+        self.buffer += args[0] + "\n"
 
     def error(self, *args, **kwargs) -> None:
-        self.tests[self.currentSubtest].stderr += args[0] + os.linesep
-        self.tests[self.currentSubtest].failure = True
+        self.errors += args[0] + "\n"
 
     def log_test_error(self, *args, **kwargs) -> None:
-        self.error(*args, **kwargs)
+        self.errors += args[0] + "\n"
 
     def log_serial(self, message: str, machine: str) -> None:
-        if not self._print_serial_logs:
-            return
-
-        self.log(f"{machine} # {message}")
+        self.buffer += f"{machine} # {message}\n"
 
     def print_serial_logs(self, enable: bool) -> None:
-        self._print_serial_logs = enable
+        pass
 
     def set_log_level(self, level: LogLevel) -> None:
-        self._log_level = level
-
-    def close(self) -> None:
-        with open(self.outfile, "w") as f:
-            test_cases = []
-            for name, test_case_state in self.tests.items():
-                tc = TestCase(
-                    name,
-                    stdout=test_case_state.stdout,
-                    stderr=test_case_state.stderr,
-                )
-                if test_case_state.failure:
-                    tc.add_failure_info("test case failed")
-
-                test_cases.append(tc)
-            ts = TestSuite("NixOS integration test", test_cases)
-            f.write(TestSuite.to_xml_string([ts]))
+        pass
 
 
 class CompositeLogger(AbstractLogger):
@@ -161,6 +119,9 @@ class CompositeLogger(AbstractLogger):
 
     def add_logger(self, logger: AbstractLogger) -> None:
         self.logger_list.append(logger)
+
+    def remove_logger(self, logger: AbstractLogger) -> None:
+        self.logger_list.remove(logger)
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:
         for logger in self.logger_list:
@@ -240,7 +201,10 @@ class TerminalLogger(AbstractLogger):
     def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
         self._eprint(
             self.maybe_prefix(
-                Style.BRIGHT + Fore.GREEN + message + Style.RESET_ALL,  # ty: ignore[unsupported-operator]
+                Style.BRIGHT
+                + Fore.GREEN
+                + message
+                + Style.RESET_ALL,  # ty: ignore[unsupported-operator]
                 attributes,
             )
         )
@@ -253,7 +217,9 @@ class TerminalLogger(AbstractLogger):
     def debug(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.DEBUG:
             self._eprint(
-                Style.DIM + self.maybe_prefix(args[0], kwargs) + Style.RESET_ALL  # ty: ignore[unsupported-operator]
+                Style.DIM
+                + self.maybe_prefix(args[0], kwargs)
+                + Style.RESET_ALL  # ty: ignore[unsupported-operator]
             )
 
     def info(self, *args, **kwargs) -> None:
@@ -277,7 +243,9 @@ class TerminalLogger(AbstractLogger):
         if not self._print_serial_logs:
             return
 
-        self._eprint(Style.DIM + f"{machine} # {message}" + Style.RESET_ALL)  # ty: ignore[unsupported-operator]
+        self._eprint(
+            Style.DIM + f"{machine} # {message}" + Style.RESET_ALL
+        )  # ty: ignore[unsupported-operator]
 
     def log_test_error(self, *args, **kwargs) -> None:
         prefix = Fore.RED + "!!! " + Style.RESET_ALL  # ty: ignore[unsupported-operator]

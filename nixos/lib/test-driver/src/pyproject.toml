@@ -22,3 +22,6 @@ line-length = 88
 
 lint.select = ["E", "F", "I", "U", "N"]
 lint.ignore = ["E501", "N818"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
