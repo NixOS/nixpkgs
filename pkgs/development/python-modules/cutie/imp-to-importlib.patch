@@ -1,0 +1,22 @@
+diff --git a/setup.py b/setup.py
+index 525b7ab..1f1806e 100755
+--- a/setup.py
++++ b/setup.py
+@@ -1,7 +1,7 @@
+ """Setup module for PyPI / pip integration.
+ """
+ 
+-import imp
++import types
+ 
+ import setuptools
+ 
+@@ -12,7 +12,7 @@ with open("cutie.py", encoding="utf-8") as file:
+     # only go to first import since that module is not yet installed
+     CUTIE_CONTENTS = file.read().split("import")[0]
+ 
+-cutie = imp.new_module("cutie")
++cutie = types.ModuleType("cutie")
+ exec(CUTIE_CONTENTS, cutie.__dict__)
+ 
+ setuptools.setup(
