@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "google";
     name = "colab";
-    version = "0.5.0";
-    hash = "sha256-os1wdxun6HHZKZ7IjObn88mGX0Kr/A1zqeMXW/7lIr4=";
+    version = "0.7.3";
+    hash = "sha256-+YhPF2SMOIA95VMiew/tiCf//xqGgmJyW7Bpn39geJ8=";
   };
 
   meta = {

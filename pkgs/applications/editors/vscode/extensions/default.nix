@@ -1109,6 +1109,22 @@ let
         };
       };
 
+      cuelangorg.vscode-cue = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-cue";
+          publisher = "cuelangorg";
+          version = "0.0.19";
+          hash = "sha256-Ktefsmgs/p6aV6meEMxuzRizIh4xfjTI9z9pqewyvpg=";
+        };
+        meta = {
+          description = "The offical CUE extension for VS Code, providing syntax highlighting and language server integration (LSP)";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=cuelangorg.vscode-cue";
+          homepage = "https://github.com/cue-lang/vscode-cue";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.karaolidis ];
+        };
+      };
+
       cweijan.dbclient-jdbc = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dbclient-jdbc";
@@ -3783,8 +3799,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "31.8.0";
-          hash = "sha256-xSkT6VlRrC36jnuB16V+eDozDutrv2ksqxatU/KIgS0=";
+          version = "31.9.0";
+          hash = "sha256-ubUVFFfjrtoz+hI8/epCcbrU4WfQdVYy4dPHighFpK0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
