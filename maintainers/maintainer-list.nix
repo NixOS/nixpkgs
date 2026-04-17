@@ -26363,6 +26363,13 @@
     githubId = 36695359;
     name = "Vasyl Solovei";
   };
+  swaggeroo = {
+    email = "swaggerooo@pm.me";
+    github = "swaggeroo";
+    githubId = 57057662;
+    name = "Swaggeroo";
+    keys = [ { fingerprint = "D221 99EC 4FFF EF4D F29D  2435 5208 74E7 3291 4E0B"; } ];
+  };
   swarren83 = {
     email = "shawn.w.warren@gmail.com";
     github = "swarren83";
