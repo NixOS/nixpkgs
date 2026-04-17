@@ -25,7 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-62Pk1RRx0eErGWNCYEyw0jFoNp97a+1kn5brgd81P5k=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
   buildInputs = [ openssl ];
 
@@ -33,7 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/taws \
       --prefix PATH : ${lib.makeBinPath [ ssm-session-manager-plugin ]}
   '';
-
 
   passthru = {
     tests.version = testers.testVersion {
