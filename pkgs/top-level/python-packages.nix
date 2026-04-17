@@ -1497,6 +1497,10 @@ self: super: with self; {
     callPackage ../development/python-modules/azure-mgmt-containerregistry
       { };
 
+  azure-mgmt-containerregistrytasks =
+    callPackage ../development/python-modules/azure-mgmt-containerregistrytasks
+      { };
+
   azure-mgmt-containerservice =
     callPackage ../development/python-modules/azure-mgmt-containerservice
       { };
@@ -8586,6 +8590,8 @@ self: super: with self; {
   ldfparser = callPackage ../development/python-modules/ldfparser { };
 
   leanblueprint = callPackage ../development/python-modules/leanblueprint { };
+
+  leanclient = callPackage ../development/python-modules/leanclient { };
 
   leaone-ble = callPackage ../development/python-modules/leaone-ble { };
 

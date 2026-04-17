@@ -313,9 +313,9 @@
 
   ssh = mkAzExtension rec {
     pname = "ssh";
-    version = "2.0.6";
+    version = "2.0.7";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
-    hash = "sha256-PSIGtOa91WxpzFCauZ5d5tx/ZtCRsBhbejtVfY3Bgss=";
+    hash = "sha256-H/CwitltPFB6E2FK9HsDEEjmn2NOD9/O4BOdBlRQAwY=";
     description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
     propagatedBuildInputs = with python3Packages; [
       oras
@@ -359,6 +359,16 @@
     ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
+  workload-orchestration = mkAzExtension {
+    pname = "workload-orchestration";
+    version = "5.1.1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/workload_orchestration-5.1.1-py3-none-any.whl";
+    hash = "sha256-mtmFRd6K2uOpzgKezdAoBDD7mGFh7blkUGvMqSajdSQ=";
+    description = "Microsoft Azure Command-Line Tools WorkloadOperations Extension";
+    propagatedBuildInputs = with python3Packages; [
+      kubernetes
+    ];
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   # Removed extensions
@@ -373,6 +383,7 @@
   hdinsightonaks = throw "The 'hdinsightonaks' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/8956
   logz = throw "The 'logz' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8459
   mobile-network = throw "The 'mobile-network' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/9453
+  neon = throw "The 'neon' extension for azure-cli was removed upstream"; # Added 2026-04-13, https://github.com/Azure/azure-cli-extensions/pull/9661
   pinecone = throw "The 'pinecone' extension for azure-cli was removed upstream"; # Added 2025-06-03, https://github.com/Azure/azure-cli-extensions/pull/8763
   playwright-cli-extension = throw "The 'playwright-cli-extension' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/9156
   sap-hana = throw "The 'sap-hana' extension for azure-cli was deprecated upstream"; # Added 2025-07-01, https://github.com/Azure/azure-cli-extensions/pull/8904

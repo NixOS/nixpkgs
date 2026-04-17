@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       See the user guide for info on how to use miracle-wm: https://wiki.miracle-wm.org/v${finalAttrs.version}/
     '';
-    homepage = "https://github.com/mattkae/miracle-wm";
+    homepage = "https://miracle-wm.org";
     changelog = "https://github.com/miracle-wm-org/miracle-wm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "miracle-wm";
