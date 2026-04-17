@@ -1,22 +1,22 @@
-diff --git i/CMakeLists.txt w/CMakeLists.txt
-index a1928ee3..26157e56 100644
---- i/CMakeLists.txt
-+++ w/CMakeLists.txt
-@@ -126,10 +126,6 @@ message(STATUS "Static Go: ${HAS_STATICGOLIB}")
+diff --git c/CMakeLists.txt i/CMakeLists.txt
+index bc227885..d37cafe9 100644
+--- c/CMakeLists.txt
++++ i/CMakeLists.txt
+@@ -182,10 +182,6 @@ message(STATUS "Static Go: ${HAS_STATICGOLIB}")
  
  # Check Golang version for whatsmeow minimum requirement
  set(GO_VERSION_MIN 1.23)
 -execute_process(COMMAND bash "-c" "go version 2> /dev/null | cut -c14- | cut -d' ' -f1 | tr -d '\n'" OUTPUT_VARIABLE GO_VERSION)
 -if((HAS_WHATSAPP OR HAS_SIGNAL) AND (NOT GO_VERSION VERSION_GREATER_EQUAL GO_VERSION_MIN))
--  message(FATAL_ERROR "Go version ${GO_VERSION} (need >= ${GO_VERSION_MIN} to build WhatsApp or Signal).")
+-  message(FATAL_ERROR "Go version ${GO_VERSION} (need >= ${GO_VERSION_MIN} to build WhatsApp or Signal)")
 -endif()
  
  # Check Little/Big Endian for tdlib requirement
  test_big_endian(IS_BIG_ENDIAN)
-diff --git i/lib/tgchat/ext/td/CMakeLists.txt w/lib/tgchat/ext/td/CMakeLists.txt
-index 795f1f4b..7e41549c 100644
---- i/lib/tgchat/ext/td/CMakeLists.txt
-+++ w/lib/tgchat/ext/td/CMakeLists.txt
+diff --git c/lib/tgchat/ext/td/CMakeLists.txt i/lib/tgchat/ext/td/CMakeLists.txt
+index f65c6e45..46b08fdd 100644
+--- c/lib/tgchat/ext/td/CMakeLists.txt
++++ i/lib/tgchat/ext/td/CMakeLists.txt
 @@ -140,7 +140,6 @@ if (CLANG OR GCC)
  endif()
  
@@ -25,10 +25,10 @@ index 795f1f4b..7e41549c 100644
  message(STATUS "Git state: ${TD_GIT_COMMIT_HASH}")
  
  configure_file("${CMAKE_CURRENT_SOURCE_DIR}/td/telegram/GitCommitHash.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/td/telegram/GitCommitHash.cpp" @ONLY)
-diff --git i/lib/wmchat/CMakeLists.txt w/lib/wmchat/CMakeLists.txt
+diff --git c/lib/wmchat/CMakeLists.txt i/lib/wmchat/CMakeLists.txt
 index 84a42ef9..556df050 100644
---- i/lib/wmchat/CMakeLists.txt
-+++ w/lib/wmchat/CMakeLists.txt
+--- c/lib/wmchat/CMakeLists.txt
++++ i/lib/wmchat/CMakeLists.txt
 @@ -20,8 +20,8 @@ install(TARGETS wmchat DESTINATION ${CMAKE_INSTALL_LIBDIR})
  target_common_config(wmchat)
  

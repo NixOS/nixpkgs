@@ -138,11 +138,22 @@ example:
           DynamicUser = false;
           ExecStart = ''
             ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
-              --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+              --web.systemd-socket \
               --web.telemetry-path ${cfg.telemetryPath} \
               ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
           '';
         };
+      };
+
+      # `socketOpts` is an optional attribute set describing a
+      # `systemd.sockets.prometheus-${name}-exporter` unit that
+      # accompanies the exporter's service. When set, it is merged
+      # with a default definition that includes
+      # `wantedBy = [ "sockets.target" ]`, enabling socket activation
+      # for exporters that support it.
+      # Note that this attribute is optional.
+      socketOpts = {
+        socketConfig.ListenStream = "${cfg.listenAddress}:${toString cfg.port}";
       };
     }
     ```
