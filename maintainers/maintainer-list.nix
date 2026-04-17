@@ -22763,9 +22763,9 @@
     name = "Redhawk";
   };
   redhood = {
-     name = "Alice Liddell"
-     github = "red-hood-woods"
-     githubId = "258934709"
+     name = "Alice Liddell";
+     github = "red-hood-woods";
+     githubId = "258934709";
   };
   redianthus = {
     github = "redianthus";
