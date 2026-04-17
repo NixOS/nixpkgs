@@ -7,18 +7,20 @@
   pkg-config,
   rustPlatform,
   rustc,
-  wrapQtAppsHook,
   fcitx5,
   ibus,
-  qtbase,
+  libsForQt5,
   zstd,
   withFcitx5Support ? false,
-  withIbusSupport ? false,
+  withIbusSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openbangla-keyboard";
   version = "2.0.0-unstable-2025-08-19";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "openbangla";
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustc
     rustPlatform.cargoSetupHook
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs =
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       ibus
     ]
     ++ [
-      qtbase
+      libsForQt5.qtbase
       zstd
     ];
 

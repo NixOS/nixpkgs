@@ -2042,10 +2042,6 @@ with pkgs;
     mozc = mozc.override { withIbus = true; };
     mozc-ut = mozc-ut.override { withIbus = true; };
 
-    openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
-      withIbusSupport = true;
-    };
-
     pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -2275,10 +2271,6 @@ with pkgs;
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
 
   fcitx5-m17n = callPackage ../tools/inputmethods/fcitx5/fcitx5-m17n.nix { };
-
-  fcitx5-openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
-    withFcitx5Support = true;
-  };
 
   fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
 
@@ -11474,10 +11466,7 @@ with pkgs;
     lapack = lapack-ilp64;
   };
 
-  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
-    inherit (llvmPackages) openmp;
-  };
-  suitesparse = suitesparse_5_3;
+  suitesparse = callPackage ../development/libraries/science/math/suitesparse { };
 
   trilinos-mpi = trilinos.override { withMPI = true; };
 

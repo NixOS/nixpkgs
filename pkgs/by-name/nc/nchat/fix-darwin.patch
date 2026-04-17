@@ -1,34 +1,95 @@
-diff --git i/CMakeLists.txt w/CMakeLists.txt
-index ceff715b..143659fb 100644
---- i/CMakeLists.txt
-+++ w/CMakeLists.txt
-@@ -31,30 +31,6 @@ endif()
+diff --git c/CMakeLists.txt i/CMakeLists.txt
+index bc227885..143382b3 100644
+--- c/CMakeLists.txt
++++ i/CMakeLists.txt
+@@ -30,91 +30,6 @@ endif()
+ # Platform specifics
  if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    add_definitions(-D_XOPEN_SOURCE_EXTENDED)
- 
+-
 -  # ncurses
--  execute_process(COMMAND sh "-c"
--                  "command -v brew &> /dev/null && brew --prefix ncurses 2> /dev/null | tr -d '\n'"
--                  OUTPUT_VARIABLE NCURSES_ROOT_DIR)
--  if (EXISTS "${NCURSES_ROOT_DIR}")
--    message(STATUS "Ncurses cmake prefix '${NCURSES_ROOT_DIR}' (detected).")
+-  if (DEFINED NCURSES_ROOT_DIR AND EXISTS "${NCURSES_ROOT_DIR}")
+-    message(STATUS "Ncurses cmake prefix '${NCURSES_ROOT_DIR}' (user-specified)")
 -  else()
--    set(NCURSES_ROOT_DIR /opt/local)
--    message(STATUS "Ncurses cmake prefix '${NCURSES_ROOT_DIR}' (default).")
+-    execute_process(COMMAND sh "-c"
+-                    "command -v brew &> /dev/null && brew --prefix ncurses 2> /dev/null | tr -d '\n'"
+-                    OUTPUT_VARIABLE NCURSES_ROOT_DIR)
+-    if (EXISTS "${NCURSES_ROOT_DIR}")
+-      message(STATUS "Ncurses cmake prefix '${NCURSES_ROOT_DIR}' (homebrew)")
+-    else()
+-      foreach(FALLBACK_DIR /opt/homebrew/opt/ncurses /usr/local/opt/ncurses)
+-        if (EXISTS "${FALLBACK_DIR}")
+-          set(NCURSES_ROOT_DIR "${FALLBACK_DIR}")
+-          break()
+-        endif()
+-      endforeach()
+-      if (EXISTS "${NCURSES_ROOT_DIR}")
+-        message(STATUS "Ncurses cmake prefix '${NCURSES_ROOT_DIR}' (fallback)")
+-      elseif (EXISTS "/opt/local")
+-        set(NCURSES_ROOT_DIR "/opt/local")
+-        message(STATUS "Ncurses cmake prefix '${NCURSES_ROOT_DIR}' (macports)")
+-      endif()
+-    endif()
 -  endif()
--  list(APPEND CMAKE_PREFIX_PATH ${NCURSES_ROOT_DIR})
+-  if (EXISTS "${NCURSES_ROOT_DIR}")
+-    list(APPEND CMAKE_PREFIX_PATH ${NCURSES_ROOT_DIR})
+-  endif()
 -
 -  # openssl
--  execute_process(COMMAND sh "-c"
--                  "command -v brew &> /dev/null && brew --prefix openssl 2> /dev/null | tr -d '\n'"
--                  OUTPUT_VARIABLE OPENSSL_ROOT_DIR)
--  if (EXISTS "${OPENSSL_ROOT_DIR}")
--    message(STATUS "OpenSSL cmake prefix '${OPENSSL_ROOT_DIR}' (detected).")
+-  if (DEFINED OPENSSL_ROOT_DIR AND EXISTS "${OPENSSL_ROOT_DIR}")
+-    message(STATUS "OpenSSL cmake prefix '${OPENSSL_ROOT_DIR}' (user-specified)")
 -  else()
--    set(OPENSSL_ROOT_DIR /opt/local)
--    message(STATUS "OpenSSL cmake prefix '${OPENSSL_ROOT_DIR}' (default).")
+-    execute_process(COMMAND sh "-c"
+-                    "command -v brew &> /dev/null && brew --prefix openssl 2> /dev/null | tr -d '\n'"
+-                    OUTPUT_VARIABLE OPENSSL_ROOT_DIR)
+-    if (EXISTS "${OPENSSL_ROOT_DIR}")
+-      message(STATUS "OpenSSL cmake prefix '${OPENSSL_ROOT_DIR}' (homebrew)")
+-    else()
+-      foreach(FALLBACK_DIR /opt/homebrew/opt/openssl /usr/local/opt/openssl)
+-        if (EXISTS "${FALLBACK_DIR}")
+-          set(OPENSSL_ROOT_DIR "${FALLBACK_DIR}")
+-          break()
+-        endif()
+-      endforeach()
+-      if (EXISTS "${OPENSSL_ROOT_DIR}")
+-        message(STATUS "OpenSSL cmake prefix '${OPENSSL_ROOT_DIR}' (fallback)")
+-      elseif (EXISTS "/opt/local")
+-        set(OPENSSL_ROOT_DIR "/opt/local")
+-        message(STATUS "OpenSSL cmake prefix '${OPENSSL_ROOT_DIR}' (macports)")
+-      endif()
+-    endif()
 -  endif()
--  list(APPEND CMAKE_PREFIX_PATH ${OPENSSL_ROOT_DIR})
+-  if (EXISTS "${OPENSSL_ROOT_DIR}")
+-    list(APPEND CMAKE_PREFIX_PATH ${OPENSSL_ROOT_DIR})
+-  endif()
+-
+-  # sqlite
+-  if (DEFINED SQLITE_ROOT_DIR AND EXISTS "${SQLITE_ROOT_DIR}")
+-    message(STATUS "SQLite cmake prefix '${SQLITE_ROOT_DIR}' (user-specified)")
+-  else()
+-    execute_process(COMMAND sh "-c"
+-                    "command -v brew &> /dev/null && brew --prefix sqlite 2> /dev/null | tr -d '\n'"
+-                    OUTPUT_VARIABLE SQLITE_ROOT_DIR)
+-    if (EXISTS "${SQLITE_ROOT_DIR}")
+-      message(STATUS "SQLite cmake prefix '${SQLITE_ROOT_DIR}' (homebrew)")
+-    else()
+-      foreach(FALLBACK_DIR /opt/homebrew/opt/sqlite /usr/local/opt/sqlite)
+-        if (EXISTS "${FALLBACK_DIR}")
+-          set(SQLITE_ROOT_DIR "${FALLBACK_DIR}")
+-          break()
+-        endif()
+-      endforeach()
+-      if (EXISTS "${SQLITE_ROOT_DIR}")
+-        message(STATUS "SQLite cmake prefix '${SQLITE_ROOT_DIR}' (fallback)")
+-      elseif (EXISTS "/opt/local")
+-        set(SQLITE_ROOT_DIR "/opt/local")
+-        message(STATUS "SQLite cmake prefix '${SQLITE_ROOT_DIR}' (macports)")
+-      endif()
+-    endif()
+-  endif()
+-  if (EXISTS "${SQLITE_ROOT_DIR}")
+-    list(APPEND CMAKE_PREFIX_PATH ${SQLITE_ROOT_DIR})
+-  endif()
 -
  elseif (${CMAKE_SYSTEM_NAME} MATCHES "Android")
    add_compile_definitions(_XOPEN_SOURCE_EXTENDED)

@@ -20,7 +20,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "iotas";
-  version = "2026.5";
+  version = "2026.6";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "iotas";
     tag = finalAttrs.version;
-    hash = "sha256-HTwhlbTc+s7eZVMLA/fYrhwwrmfDkdExARoJghLchls=";
+    hash = "sha256-Zsfp5O6k8VMjF6Hl3lT+u9JingGq3XgCzc8h9PVAhLg=";
   };
 
   nativeBuildInputs = [

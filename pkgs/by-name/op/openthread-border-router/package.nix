@@ -17,7 +17,7 @@
   buildNpmPackage,
 }:
 let
-  pname = "ot-br-posix";
+  pname = "openthread-border-router";
   version = "0-unstable-2025-06-12";
 
   src = fetchFromGitHub {
@@ -74,9 +74,7 @@ stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    mkdir -p $out/bin
-    cp ../script/otbr-firewall $out/bin/
-    chmod +x $out/bin/otbr-firewall
+    install -Dm555 -t $out/bin ../script/otbr-firewall
   '';
 
   cmakeFlags = [

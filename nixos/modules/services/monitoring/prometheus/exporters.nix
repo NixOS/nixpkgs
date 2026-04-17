@@ -36,10 +36,15 @@ let
   #   - extraOpts   (types.attrs): extra configuration options to
   #                                configure the exporter with, which
   #                                are appended to the default options
+  #   - socketOpts  (types.attrs): optional config that is merged with
+  #                                the default definition of the
+  #                                exporter's systemd socket unit. When
+  #                                set, a `prometheus-${name}-exporter.socket`
+  #                                unit is created, enabling socket activation.
   #
-  #  Note that `extraOpts` is optional, but a script for the exporter's
-  #  systemd service must be provided by specifying either
-  #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
+  #  Note that `extraOpts` and `socketOpts` are optional, but a script
+  #  for the exporter's systemd service must be provided by specifying
+  #  either `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
   exporterOpts =
     (genAttrs
@@ -311,6 +316,7 @@ let
       name,
       conf,
       serviceOpts,
+      socketOpts,
     }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
@@ -368,6 +374,12 @@ let
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
+      systemd.sockets."prometheus-${name}-exporter" = mkIf (socketOpts != null) (mkMerge [
+        {
+          wantedBy = [ "sockets.target" ];
+        }
+        socketOpts
+      ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge [
         {
           wantedBy = [ "multi-user.target" ];
@@ -603,6 +615,7 @@ in
       mkExporterConf {
         inherit name;
         inherit (conf) serviceOpts;
+        socketOpts = conf.socketOpts or null;
         conf = cfg.${name};
       }
     ) exporterOpts)
