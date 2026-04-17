@@ -12,7 +12,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "finvizfinance";
   version = "1.3.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lit26";
     repo = "finvizfinance";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M/EyQgINdJLLfOFNm/RhqONz3slb4ukugHLdiozDY0s=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Finviz Finance information downloader";
     homepage = "https://github.com/lit26/finvizfinance";
-    changelog = "https://github.com/lit26/finvizfinance/releases/tag/${src.tag}";
+    changelog = "https://github.com/lit26/finvizfinance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ icyrockcom ];
   };
-}
+})
