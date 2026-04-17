@@ -109,6 +109,8 @@ buildDunePackage {
       ]
   );
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Embeddable λProlog Interpreter";
     license = lib.licenses.lgpl21Plus;
