@@ -16,6 +16,9 @@
   qtbase,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmenuharness";
   version = "0.1.5";
@@ -43,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake-extras
     glib
     lomiri-api
-    qtbase
   ];
 
   nativeCheckInputs = [
@@ -54,10 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     gtest
     libqtdbustest
+    qtbase
   ];
 
   cmakeFlags = [
-    "-Denable_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+    (lib.strings.cmakeBool "enable_tests" finalAttrs.finalPackage.doCheck)
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    (lib.strings.cmakeBool "ENABLE_QT6" withQt6)
   ];
 
   dontWrapQtApps = true;
