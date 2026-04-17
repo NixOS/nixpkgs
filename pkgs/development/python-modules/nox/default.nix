@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2026.02.09";
+  version = "2026.04.10";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = "nox";
     tag = version;
-    hash = "sha256-RaB0q9gCoYqKAI8IzNh5qUd0SrzsPeOa3C6IGxpcbwE=";
+    hash = "sha256-ArSA9I86hTKM+fkTdzOeheYVxpdjweMs2I0mUwR14sQ=";
   };
 
   build-system = [ hatchling ];
