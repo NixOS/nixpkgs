@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "geniushub-client";
-  version = "0.7.3";
+  version = "0.7.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "manzanotti";
     repo = "geniushub-client";
     tag = "v${version}";
-    hash = "sha256-9/LOybFJdVxImr/i/RIbrYSPZ7vA5ffdSBxzg51UM8s=";
+    hash = "sha256-0qHmTq/nOPruivU5R8r0abmMAhxy0w5zILKFPxtL2Mc=";
   };
 
   postPatch = ''
