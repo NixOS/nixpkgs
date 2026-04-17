@@ -5,6 +5,7 @@
   dolt,
   fetchFromGitHub,
   gitMinimal,
+  nix-update-script,
   icu,
   installShellFiles,
   makeBinaryWrapper,
@@ -84,6 +85,8 @@ buildGoModule (finalAttrs: {
   ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight memory system for AI coding agents with graph-based issue tracking";
