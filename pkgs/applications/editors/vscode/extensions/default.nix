@@ -4175,8 +4175,8 @@ let
         mktplcRef = {
           publisher = "seatonjiang";
           name = "gitmoji-vscode";
-          version = "1.3.0";
-          hash = "sha256-vr6UKd+7g6J8XEY57sCqPpLuxNC4KOvf7nddDKaceaU=";
+          version = "2026.3.6";
+          hash = "sha256-9SeXoMbZFjRL4vXoior76WaLmgnxfrDa3X4zXu/RMaI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/seatonjiang.gitmoji-vscode/changelog";
