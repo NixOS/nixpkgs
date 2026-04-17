@@ -10,7 +10,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   rustPlatform,
 
   # nativeBuildInputs
@@ -28,25 +27,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tectonic";
-  version = "0.16.8";
+  version = "0.16.9";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${finalAttrs.version}";
-    sha256 = "sha256-drQ8hCe5vJHewUTFJTfVOotFvuUX19dHQLu2nVIWKbQ=";
+    sha256 = "sha256-5yphhmrrfgFwQ952eWpToyGfIJVJfV6y5w0BgznSOe0=";
   };
 
-  patches = [
-    # Fixes a substantial MacOS arm64 bug, see:
-    # https://github.com/tectonic-typesetting/tectonic/pull/1346
-    (fetchpatch2 {
-      url = "https://github.com/tectonic-typesetting/tectonic/commit/5d95f47720e6518daa7164b097f207b772d565ac.patch";
-      hash = "sha256-GQPRwP9vljDIzs1uEBlnCdAGcvG/mLpw0WtM5wqobWg=";
-    })
-  ];
-
-  cargoHash = "sha256-Hh2w8c/K+AXdX4p620fqVUttQPY33eVIAf0/VIFhHiY=";
+  cargoHash = "sha256-22Hy51zCzY2DRytcYHgwkI9+e/g52o1jy4eosvEm3KY=";
 
   nativeBuildInputs = [
     pkg-config
