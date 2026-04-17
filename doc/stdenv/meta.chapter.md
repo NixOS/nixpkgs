@@ -337,7 +337,9 @@ A readonly attribute containing the list of guesses for what CPE for this packag
 
 ### Package URL {#sec-meta-identifiers-purl}
 
-[Package-URL](https://github.com/package-url/purl-spec) (PURL) is a specification to reliably identify and locate software packages. Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management. Package URL's shall default to the mkDerivation.src, as the original consumed software package is the single point of truth.
+[Package-URL](https://github.com/package-url/purl-spec) (PURL) is a specification to reliably identify and locate software packages.
+Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management.
+Package-URLs shall default to the `mkDerivation.src`, as the original consumed software package is the single source of truth.
 
 #### `meta.identifiers.purlParts` {#var-meta-identifiers-purlParts}
 
@@ -348,8 +350,14 @@ This attribute contains an attribute set of all parts of the PURL for this packa
 
 #### `meta.identifiers.purl` {#var-meta-identifiers-purl}
 
-An extendable attribute which is built based on purlParts. It is the main identifier, consumers should consider using the PURL's list interface to be prepared for edge cases.
+An extendable attribute which is built based on `purlParts`.
+This is the main identifier of the software package.
+For handling edge cases, consider using the list interface [`meta.identifiers.purls`](#var-meta-identifiers-purls).
 
 #### `meta.identifiers.purls` {#var-meta-identifiers-purls}
 
-An extendable attribute list which defaults to a single element equal to the main PURL. It provides an interface for additional identifiers of mkDerivation.src and / or vendored dependencies inside mkDerivation.src, which maintainers can consciously decide to use on top. Identifiers different to the default src identifier are not recommended by default as they might cause maintenance overhead or may diverge (e.g. differences between source distribution pkg:github and binary distribution like pkg:pypi).
+An extendable list attribute which defaults to a single element equal to [`meta.identifiers.purl`](#var-meta-identifiers-purl).
+It provides an interface for additional identifiers of `mkDerivation.src` or for identifiers of vendored dependencies inside `mkDerivation.src`, which maintainers may carefully consider to specify as well.
+
+Additional identifiers are generally not recommended, as they might cause maintenance overhead or diverge.
+For example, a source distribution `pkg:github` may be hard to keep correctly aligned with the corresponding binary distribution `pkg:pypi`.
