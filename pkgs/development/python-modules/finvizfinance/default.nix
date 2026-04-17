@@ -45,13 +45,15 @@ buildPythonPackage rec {
     # Tests require network access
     "test_finvizfinance_calendar"
     "test_finvizfinance_crypto"
-    "test_forex_performance_percentage"
-    "test_group_overview"
+    "test_finvizfinance_finvizfinance"
     "test_finvizfinance_insider"
     "test_finvizfinance_news"
-    "test_finvizfinance_finvizfinance"
-    "test_statements"
+    "test_forex_performance_percentage"
+    "test_group_overview"
     "test_screener_overview"
+    "test_statements"
+    "test_ticker_etf_holders_returns_list"
+    "test_ticker_peer_returns_list"
   ];
 
   meta = {
