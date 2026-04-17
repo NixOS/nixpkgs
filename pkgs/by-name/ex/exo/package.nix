@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   replaceVars,
   macmon,
 
@@ -18,55 +18,14 @@
   nix-update-script,
 }:
 let
-  version = "1.0.69";
+  version = "1.0.70";
   src = fetchFromGitHub {
     name = "exo";
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-xHEvjztTSDMwfxdNt16Yo/hX1Fhpwz/zF7mnQsIOteY=";
+    hash = "sha256-ytxP5x8PyAPVne2c6OIvhdCuF68zffxypXSTlDAFnro=";
   };
-
-  python = python3.override {
-    packageOverrides = _final: prev: {
-      # https://github.com/exo-explore/exo/blob/v1.0.69/pyproject.toml#L63
-      mlx = prev.mlx.overridePythonAttrs (old: {
-        version = "custom";
-
-        src = fetchFromGitHub {
-          owner = "rltakashige";
-          repo = "mlx-jaccl-fix-small-recv";
-          rev = "address-rdma-gpu-locks";
-          hash = "sha256-GosFIWxIB48Egb1MqJrR3xhsUsQeWdRk5rV93USY6wQ=";
-        };
-
-        # mlx.meta.changelog fails to evaluate as it depends on mlx.src.tag which is not defined in
-        # this override
-        meta = old.meta // {
-          changelog = "";
-        };
-      });
-
-      # https://github.com/exo-explore/exo/blob/v1.0.69/pyproject.toml#L64
-      mlx-lm = prev.mlx-lm.overridePythonAttrs (old: {
-        version = "custom";
-
-        src = fetchFromGitHub {
-          owner = "rltakashige";
-          repo = "mlx-lm";
-          rev = "leo/fix-deepseek-v32-indexer";
-          hash = "sha256-sRMykX0hd15VF8tdO5MCjuVxkQvpjeluaS8U+wQvP4Q=";
-        };
-
-        # mlx-lm.meta.changelog fails to evaluate as it depends on mlx-lm.src.tag which is not
-        # defined in this override
-        meta = old.meta // {
-          changelog = "";
-        };
-      });
-    };
-  };
-  python3Packages = python.pkgs;
 
   pyo3-bindings = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "exo-pyo3-bindings";
@@ -107,7 +66,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 3;
-      hash = "sha256-eMmzWwsebwvrpNLqs+4iyiPsDFvwRlk+LaiKQ0SZmt8=";
+      hash = "sha256-gBWJP0dF2zDEWLYxfKYQSn9O5hVRkcviDv9oP267pQQ=";
     };
   });
 in
@@ -171,6 +130,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mflux
       mlx
       mlx-lm
+      mlx-vlm
       msgspec
       nvidia-ml-py
       openai
@@ -196,7 +156,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # 'resources' are not getting copied to the installation directory, so we do it manually
   # FileNotFoundError: Unable to locate resources. Did you clone the repo properly?
   postInstall = ''
-    cp -r resources $out/${python.sitePackages}/exo/
+    cp -r resources $out/${python3Packages.python.sitePackages}/exo/
   '';
 
   pythonImportsCheck = [
@@ -225,6 +185,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_both_formats_produce_identical_tool_calls"
     "test_format_a_yields_tool_call"
     "test_format_b_yields_tool_call"
+    "test_thinking_then_text_counts_reasoning_tokens"
     "test_thinking_then_tool_call"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
