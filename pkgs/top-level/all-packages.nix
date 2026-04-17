@@ -9834,10 +9834,6 @@ with pkgs;
     withFonts = true;
   };
 
-  luminanceHDR = callPackage ../applications/graphics/luminance-hdr {
-    openexr = openexr_2;
-  };
-
   luddite = with python3Packages; toPythonApplication luddite;
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
