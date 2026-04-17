@@ -225,6 +225,11 @@ in
       [ "services" "openssh" "forwardX11" ]
       [ "services" "openssh" "settings" "X11Forwarding" ]
     )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "openssh"
+      "banner"
+    ] "Use services.openssh.settings.Banner instead.")
   ];
 
   ###### interface
@@ -402,14 +407,6 @@ in
           don't want to enable the SSH daemon.
         '';
         example = true;
-      };
-
-      banner = lib.mkOption {
-        type = lib.types.nullOr lib.types.lines;
-        default = null;
-        description = ''
-          Message to display to the remote user before authentication is allowed.
-        '';
       };
 
       enableRecommendedAlgorithms = lib.mkOption {
@@ -722,6 +719,14 @@ in
               PrintMotd = lib.mkEnableOption "printing /etc/motd when a user logs in interactively" // {
                 type = lib.types.nullOr lib.types.bool;
               };
+              Banner = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
+                default = null;
+                description = ''
+                  The file whose contents are sent to the remote user before authentication.
+                '';
+                example = "/etc/ssh/banner";
+              };
             };
           }
         );
@@ -886,7 +891,6 @@ in
       services.openssh.extraConfig = lib.mkOrder 0 (
         lib.concatStringsSep "\n" (
           [
-            "Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}"
             "AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}"
           ]
           ++ lib.map (port: "Port ${toString port}") cfg.ports

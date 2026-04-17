@@ -16,7 +16,6 @@ import sys
 import time
 import traceback
 import urllib.error
-import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
@@ -26,7 +25,7 @@ from multiprocessing.dummy import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any, Callable
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, urlsplit
 
 import git
 from packaging.version import InvalidVersion, parse as parse_version
@@ -407,7 +406,7 @@ class RepoGitHub(Repo):
         response_url = req.geturl()
         if url != response_url:
             new_owner, new_name = (
-                urllib.parse.urlsplit(response_url).path.strip("/").split("/")[:2]
+                urlsplit(response_url).path.strip("/").split("/")[:2]
             )
 
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self.branch)
@@ -421,10 +420,11 @@ class RepoGitHub(Repo):
         return sha256
 
     def prefetch_github(self, ref: str) -> str:
-        cmd = ["nix-prefetch-url", "--unpack", self.url(f"archive/{ref}.tar.gz")]
+        cmd = ["nix-prefetch-github", self.owner, self.repo, "--rev", ref, "--json"]
         log.debug("Running %s", cmd)
         data = subprocess.check_output(cmd)
-        return data.strip().decode("utf-8")
+        loaded = json.loads(data)
+        return loaded["hash"]
 
     def as_nix(self, plugin: "Plugin") -> str:
         if plugin.has_submodules:

@@ -8,7 +8,7 @@
   copyDesktopItems,
   cctools,
   makeWrapper,
-  nodejs,
+  nodejs-slim,
   yarnConfigHook,
   yarnBuildHook,
   wrapGAppsHook3,
@@ -44,8 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs
-    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+    nodejs-slim
+    nodejs-slim.npm
+    (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
     yarnConfigHook
     yarnBuildHook
   ]
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     # we need to build cpu-features with the non-electron headers first
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs-slim}
     npm rebuild --verbose cpu-features
 
     export npm_config_nodedir=${electron.headers}

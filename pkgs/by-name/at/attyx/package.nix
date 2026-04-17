@@ -5,7 +5,7 @@
   callPackage,
 
   pkg-config,
-  zig,
+  zig_0_15,
 
   fontconfig,
   freetype,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    zig
+    zig_0_15
   ];
 
   buildInputs = [
