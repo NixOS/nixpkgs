@@ -85,6 +85,8 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Lightweight memory system for AI coding agents with graph-based issue tracking";
     homepage = "https://github.com/gastownhall/beads";
