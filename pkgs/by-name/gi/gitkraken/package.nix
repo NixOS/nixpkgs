@@ -211,9 +211,9 @@ let
       if [ -e nodegit-x64-ubuntu-20.node ]; then
         nodegitBinary=nodegit-x64-ubuntu-20
       fi
-      mv ''${nodegitBinary}.node ''${nodegitBinary}-ssl-1.1.1.node
-      mv ''${nodegitBinary}-ssl-static.node ''${nodegitBinary}.node
-      chmod 755 ''${nodegitBinary}.node
+      mv $nodegitBinary.node $nodegitBinary-ssl-1.1.1.node
+      mv $nodegitBinary-ssl-static.node $nodegitBinary.node
+      chmod 755 $nodegitBinary.node
       popd
 
       # Devendor bundled git
