@@ -7,6 +7,8 @@
 let
   pname = "lmstudio";
 
+  lms = callPackage ./lms.nix { };
+
   version_aarch64-linux = "0.4.13-1";
   hash_aarch64-linux = "sha256-3Z+wt8H8QdFiz190Pa+33fkKHf1Df7nzWoUNYz2TrYw=";
   version_aarch64-darwin = "0.4.13-1";
@@ -30,7 +32,7 @@ let
 in
 if stdenv.hostPlatform.system == "aarch64-darwin" then
   callPackage ./darwin.nix {
-    inherit pname meta;
+    inherit pname meta lms;
     passthru.updateScript = ./update.sh;
     version = version_aarch64-darwin;
     url =
@@ -40,7 +42,7 @@ if stdenv.hostPlatform.system == "aarch64-darwin" then
   }
 else if stdenv.hostPlatform.system == "aarch64-linux" then
   callPackage ./linux.nix {
-    inherit pname meta;
+    inherit pname meta lms;
     passthru.updateScript = ./update.sh;
     version = version_aarch64-linux;
     url =
@@ -50,7 +52,7 @@ else if stdenv.hostPlatform.system == "aarch64-linux" then
   }
 else
   callPackage ./linux.nix {
-    inherit pname meta;
+    inherit pname meta lms;
     passthru.updateScript = ./update.sh;
     version = version_x86_64-linux;
     url =

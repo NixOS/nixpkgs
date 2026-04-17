@@ -9,6 +9,7 @@
   url,
   hash,
   passthru,
+  lms,
 }:
 stdenv.mkDerivation {
   inherit meta pname version;
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -r *.app $out/Applications
 
     # Bypass the /Applications path check in the main index.js
@@ -38,10 +39,11 @@ stdenv.mkDerivation {
     local indexJs="$out/Applications/LM Studio.app/Contents/Resources/app/.webpack/main/index.js"
     substituteInPlace "$indexJs" --replace-quiet "'/Applications'" "'/'"
 
-    # Re-sign the main executable, otherwise macOS reports the app as damaged
-    appBundle="$out/Applications/LM Studio.app"
-    mainExe="$appBundle/Contents/MacOS/LM Studio"
-    codesign --force --sign - "$mainExe"
+    # lms cli tool — built from source via lms.nix
+    install -m 755 ${lms}/bin/lms $out/bin/
+
+    # Re-sign the app bundle after patching, otherwise macOS reports it as damaged
+    codesign --force --deep --sign - "$out/Applications/LM Studio.app"
 
     runHook postInstall
   '';
