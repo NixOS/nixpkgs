@@ -9,7 +9,7 @@
   copyDesktopItems,
   dart-sass,
   makeWrapper,
-  nodejs_20,
+  nodejs-slim_20,
   pkg-config,
   yarnConfigHook,
 
@@ -19,7 +19,7 @@
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs-slim_20;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";

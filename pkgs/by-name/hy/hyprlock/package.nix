@@ -28,13 +28,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qxR0w0wC6Bv96C/Kzx3mL1bUS8ejwhIm7eVVR9AA88c=";
+    hash = "sha256-/r7jqBLcm3NSkqVYk8AE8b/qWKo8AKgzX3y2yLZeGvg=";
   };
 
   nativeBuildInputs = [

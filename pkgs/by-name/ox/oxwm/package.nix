@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig,
+  zig_0_15,
   pkg-config,
   libx11,
   libxft,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig_0_15.hook
     pkg-config
   ];
 
