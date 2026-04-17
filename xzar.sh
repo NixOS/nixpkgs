@@ -24,9 +24,11 @@ build nix
 upload nix
 build mcporter
 upload mcporter
-build cudatoolkit
-upload cudatoolkit
-build rocmPackages.rocm-smi
-upload rocmPackages.rocm-smi
+if [ "$(uname)" != "Darwin" ]; then
+  build cudatoolkit
+  upload cudatoolkit
+  build rocmPackages.rocm-smi
+  upload rocmPackages.rocm-smi
+fi
 build lmstudio
 upload lmstudio
