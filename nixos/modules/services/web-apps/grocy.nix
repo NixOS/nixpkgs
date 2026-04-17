@@ -44,7 +44,7 @@ in
         "pm" = "dynamic";
         "php_admin_value[error_log]" = "stderr";
         "php_admin_flag[log_errors]" = true;
-        "listen.owner" = "nginx";
+        "listen.owner" = config.services.nginx.user;
         "catch_workers_output" = true;
         "pm.max_children" = "32";
         "pm.start_servers" = "2";
@@ -52,6 +52,20 @@ in
         "pm.max_spare_servers" = "4";
         "pm.max_requests" = "500";
       };
+      defaultText = lib.literalExpression ''
+        {
+          "pm" = "dynamic";
+          "php_admin_value[error_log]" = "stderr";
+          "php_admin_flag[log_errors]" = true;
+          "listen.owner" = config.services.nginx.user;
+          "catch_workers_output" = true;
+          "pm.max_children" = "32";
+          "pm.start_servers" = "2";
+          "pm.min_spare_servers" = "2";
+          "pm.max_spare_servers" = "4";
+          "pm.max_requests" = "500";
+        }
+      '';
 
       description = ''
         Options for grocy's PHPFPM pool.
