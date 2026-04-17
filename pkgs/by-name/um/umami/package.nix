@@ -3,14 +3,15 @@
   stdenvNoCC,
   fetchFromGitHub,
   fetchurl,
+  inter,
   makeWrapper,
   nixosTests,
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
-  prisma_6,
-  prisma-engines_6,
+  prisma_7,
+  prisma-engines_7,
   openssl,
   rustPlatform,
   # build variables
@@ -41,39 +42,40 @@ let
 
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
-  prisma-engines' = prisma-engines_6.overrideAttrs (old: rec {
-    version = "6.19.0";
+  prisma-engines' = prisma-engines_7.overrideAttrs (old: rec {
+    version = "7.6.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma-engines";
       tag = version;
-      hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
+      hash = "sha256-NMoAaiTa68i51lR6iMCyHyCAsFuuhPx2+tHFSSoqWqA=";
     };
-    cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
+    cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) pname;
       inherit src version;
+      patches = old.cargoDeps.vendorStaging.patches or [ ];
       hash = cargoHash;
     };
   });
-  prisma' = (prisma_6.override { prisma-engines_6 = prisma-engines'; }).overrideAttrs (old: rec {
-    version = "6.19.0";
+  prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (old: rec {
+    version = "7.6.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma";
       tag = version;
-      hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
+      hash = "sha256-BesX2ySfgew6+9Q6fnhZ8gMnnxh4D4fefaA5BhehlHE=";
     };
     pnpmDeps = old.pnpmDeps.override {
       inherit src version;
-      hash = "sha256-9v30vhclD+sPcui/VG8dwaC8XGU6QFs/Gu8rjjoQy/w=";
+      hash = "sha256-ZOpNt+W5b1troicfkCi4wCCDtwhTB4VlPgxYMZetcs0=";
     };
   });
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.0.3";
+  version = "3.1.0";
 
   nativeBuildInputs = [
     makeWrapper
@@ -86,8 +88,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rkOD52suE6bihJqKvMdIvqHRIcWhSxXzUkCfmdNbC40=";
+    hash = "sha256-EH3ebwTbajcNasn25ets2w068ZmCQRYUY2XON39J5HA=";
   };
+
+  # Umami uses next/font/google, which tries to download from Google Fonts at build time.
+  # Replace that code with a copy of the required font(s) from nixpkgs instead.
+  postPatch = ''
+    substituteInPlace ./src/app/layout.tsx \
+      --replace-fail "import { Inter } from 'next/font/google';" "import localFont from 'next/font/local';" \
+      --replace-fail 'const inter = Inter({' "const inter = localFont({ src: './Inter.ttf',"
+
+    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+  '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -96,7 +108,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       ;
     fetcherVersion = 3;
-    hash = "sha256-GFN94oySPCZA5K13XR8f/tByuHS571ohlYTFqaVw/Ns=";
+    hash = "sha256-QNWmCsVFh8xpsO4ZPTaKGszwuRaxTrWLMVh/6VV5oIw=";
   };
 
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -144,6 +156,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cp -R public $out/public
     cp -R prisma $out/prisma
+    cp prisma.config.ts $out/prisma.config.ts
+    substituteInPlace $out/prisma.config.ts \
+      --replace-fail "import 'dotenv/config';" "" \
+      --replace-fail "from 'prisma/config';" "from '${finalAttrs.passthru.prisma}/lib/prisma/packages/config';"
 
     ln -s ${finalAttrs.passthru.geocities} $out/geo
 
