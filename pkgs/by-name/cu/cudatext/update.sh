@@ -19,8 +19,8 @@ url="https://github.com/Alexey-T/CudaText/archive/refs/tags/${version}.tar.gz"
 hash=$(nix-prefetch-url --quiet --unpack --type sha256 $url)
 sriHash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $hash)
 
-sed -i "s#version = \".*\"#version = \"$version\"#" default.nix
-sed -i "s#hash = \".*\"#hash = \"$sriHash\"#" default.nix
+sed -i "s#version = \".*\"#version = \"$version\"#" package.nix
+sed -i "s#hash = \".*\"#hash = \"$sriHash\"#" package.nix
 
 while IFS=$'\t' read repo owner rev; do
   latest=$(curl -s https://api.github.com/repos/${owner}/${repo}/releases/latest | jq -r '.tag_name')
