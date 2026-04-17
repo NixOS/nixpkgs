@@ -98,6 +98,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Test fails due to tectonic bundle missing and can't be downloaded in the
     # sandbox
     "--skip=tests::no_segfault_after_failed_compilation"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test Panics only on Darwin, see:
+    # https://github.com/tectonic-typesetting/tectonic/issues/1352
+    "--skip=v2_watch_succeeds"
   ];
   doCheck = true;
 
