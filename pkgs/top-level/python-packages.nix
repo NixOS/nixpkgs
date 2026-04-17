@@ -14374,8 +14374,6 @@ self: super: with self; {
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
 
-  pymystem3 = callPackage ../development/python-modules/pymystem3 { };
-
   pynac = callPackage ../development/python-modules/pynac { };
 
   pynacl = callPackage ../development/python-modules/pynacl { };
