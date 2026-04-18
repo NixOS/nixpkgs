@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/wasm-bindgen/wasm-pack/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/wasm-bindgen/wasm-pack/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Utility that builds rust-generated WebAssembly package";
     mainProgram = "wasm-pack";
     homepage = "https://github.com/wasm-bindgen/wasm-pack";
@@ -40,6 +40,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = [ lib.maintainers.dhkl ];
+    maintainers = with lib.maintainers; [
+      dhkl
+      hythera
+    ];
   };
 })
