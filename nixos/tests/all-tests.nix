@@ -735,6 +735,7 @@ in
   hibernate-systemd-stage-1 = handleTestOn [ "x86_64-linux" ] ./hibernate.nix {
     systemdStage1 = true;
   };
+  hickory-dns = runTest ./hickory-dns.nix;
   hitch = handleTest ./hitch { };
   hledger-web = runTest ./hledger-web.nix;
   hockeypuck = runTest ./hockeypuck.nix;
