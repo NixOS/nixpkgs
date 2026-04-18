@@ -7516,6 +7516,12 @@
     githubId = 757125;
     name = "Dzmitry Lahoda";
   };
+  e1618033 = {
+    email  = "dev@ronapa.com";
+    github = "e1618033";
+    githubId = 277340975;
+    name   = "Emiliano Panaro";
+  };
   e-v-o-l-v-e = {
     email = "oss@imp-network.com";
     github = "e-v-o-l-v-e";

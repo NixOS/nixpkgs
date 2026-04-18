@@ -16,9 +16,9 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     description = "PDF editor";
-    homepage    = "https://example.com";
+    homepage    = "https://revpdf.com";
     license     = licenses.unfree; # o la licenza corretta
     platforms   = [ "x86_64-linux" ];
-    maintainers = [ maintainers.B1os1618]; # solo se contribuisci a nixpkgs
+    maintainers = [ maintainers.e1618033]; # solo se contribuisci a nixpkgs
   };
 }
