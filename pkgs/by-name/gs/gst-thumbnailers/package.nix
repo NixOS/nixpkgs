@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
