@@ -43,7 +43,14 @@ stdenv.mkDerivation {
     install -m 755 ${lms}/bin/lms $out/bin/
 
     # Re-sign the app bundle after patching, otherwise macOS reports it as damaged
-    codesign --force --deep --sign - "$out/Applications/LM Studio.app"
+    # Re-sign every Mach-O in the bundle so macOS doesn't flag it as damaged.
+    # nix's sigtool only handles individual Mach-O files (no --deep, no bundles),
+    # so sign each binary individually.
+    find "$out/Applications/LM Studio.app" -type f -perm /111 | while read -r f; do
+      if file "$f" | grep -q Mach-O; then
+        codesign --force --sign - "$f" || true
+      fi
+    done
 
     runHook postInstall
   '';
