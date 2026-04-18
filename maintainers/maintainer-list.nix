@@ -29487,6 +29487,12 @@
     githubId = 1595132;
     name = "Kranium Gikos Mendoza";
   };
+  wondermr = {
+    email = "alexey.zhuchkov@gmail.com";
+    github = "WonderMr";
+    githubId = 5370211;
+    name = "Alexey Zhuchkov";
+  };
   workflow = {
     email = "4farlion@gmail.com";
     github = "workflow";
