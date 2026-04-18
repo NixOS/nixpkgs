@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  __structuredAttrs = true;
+
   zigBuildFlags = finalAttrs.zigCheckFlags ++ [
     "-Doptimize=ReleaseSafe"
   ];
