@@ -1,22 +1,15 @@
 {
   lib,
   openssl,
+  emmylua-ls,
   pkg-config,
-  fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emmylua_check";
-  version = "0.22.0";
-
-  src = fetchFromGitHub {
-    owner = "EmmyLuaLs";
-    repo = "emmylua-analyzer-rust";
-    tag = finalAttrs.version;
-    hash = "sha256-Zj5nLeTH/4sVElYP+erg6bSTX8jFqF7sqiXfaMam8pE=";
-  };
+  inherit (emmylua-ls) version src;
 
   nativeBuildInputs = [
     pkg-config
