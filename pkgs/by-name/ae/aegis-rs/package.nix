@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aegis-rs";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Granddave";
     repo = "aegis-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V6b9CDLjpyRb/MlbAswQ2kJFGeYDu9r2Y/8lBB+kLGc=";
+    hash = "sha256-XJmStg3SoT+vYVz7twCPjVLr0ayvF08h4WJfwY1qsYk=";
   };
-  cargoHash = "sha256-QYTmTJiwqslFM1VT+B+HtA8idvhKOPY4+ip/FqQGZ34=";
+  cargoHash = "sha256-4Uzar6NHC4RwnHvn9c/u+uU45EzXFvMBwjP60JOwcog=";
 
   passthru.updateScript = nix-update-script { };
 

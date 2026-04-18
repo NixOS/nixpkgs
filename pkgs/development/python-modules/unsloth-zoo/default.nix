@@ -39,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unsloth-zoo";
-  version = "2026.4.2";
+  version = "2026.4.7";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
     inherit (finalAttrs) version;
-    hash = "sha256-l0OTaZjPrNnrxVYIfZcf6pYr1tJS9EGj+iguU6S+D28=";
+    hash = "sha256-jJ58d2+5lEALEaASELZtQkY2YxNWaLrfLvOCUGnwrh4=";
   };
 
   postPatch = ''
@@ -59,12 +59,10 @@ buildPythonPackage (finalAttrs: {
         "setuptools-scm"
   '';
 
-  # Upstream constrains datasets/torch more tightly than the versions
-  # currently shipped in nixpkgs, but the package still builds and works with
-  # the newer dependency set here.
   pythonRelaxDeps = [
     "datasets"
     "torch"
+    "transformers"
   ];
 
   patches = [

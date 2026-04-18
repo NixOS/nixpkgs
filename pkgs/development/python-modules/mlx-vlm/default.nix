@@ -93,8 +93,5 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    platforms = [
-      "aarch64-darwin"
-    ];
   };
 })

@@ -11,8 +11,8 @@
   },
   {
     "pname": "AudibleApi",
-    "version": "10.1.4.1",
-    "hash": "sha256-5sHQ7IwVTL+GsX0bp7H3imKxIAfngM9SiNC65hc3+8Y="
+    "version": "10.1.5.1",
+    "hash": "sha256-XSLNUNXlOj0YCqe4Ix+mvbR64Mr/mQgeXTif0q+OSCo="
   },
   {
     "pname": "Avalonia",
@@ -766,8 +766,8 @@
   },
   {
     "pname": "Tmds.DBus.Protocol",
-    "version": "0.21.2",
-    "hash": "sha256-gaK/5aAummyin6ptnhaJbnA0ih4+2xADrtrLfFbHwYI="
+    "version": "0.21.3",
+    "hash": "sha256-HVEIHSeSe29ergHxsNvWYu3o7Ai8VZKo09yFn+miTnI="
   },
   {
     "pname": "WebViewControlAvaloniaFree",

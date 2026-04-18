@@ -1544,6 +1544,21 @@
   "module-services-emacs-man-pages": [
     "index.html#module-services-emacs-man-pages"
   ],
+  "module-services-ente": [
+    "index.html#module-services-ente"
+  ],
+  "module-services-ente-quickstart": [
+    "index.html#module-services-ente-quickstart"
+  ],
+  "module-services-ente-registering-users": [
+    "index.html#module-services-ente-registering-users"
+  ],
+  "module-services-ente-increasing-storage-limit": [
+    "index.html#module-services-ente-increasing-storage-limit"
+  ],
+  "module-services-ente-ios-background-sync": [
+    "index.html#module-services-ente-ios-background-sync"
+  ],
   "module-services-livebook": [
     "index.html#module-services-livebook"
   ],
