@@ -8,6 +8,8 @@
 stdenv.mkDerivation {
   pname = "quadprogpp";
   version = "1.2.2-unstable-2025-12-03";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "liuq";
