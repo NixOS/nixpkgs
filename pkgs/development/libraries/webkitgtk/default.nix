@@ -85,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.52.2";
+  version = "2.52.3";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -100,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Bd4rRIdLotraV1X4mM+1N4PDFz+RtGNo+i3MxYSXKrs=";
+    hash = "sha256-Wz4NF05j3MKISLEZTg50SNWUjDwkJ+zZMcLFvlJhrrs=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -116,13 +116,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
       hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
       name = "fix_ftbfs_riscv64.patch";
-    })
-
-    # Fix FTBFS on platforms that don't use Skia
-    # https://bugs.webkit.org/show_bug.cgi?id=312160
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/36df921c686c07f2b20e3eed20afad5471b96897.patch";
-      hash = "sha256-iYOs1V/p02XHtytw+r1+TyW08pk6PgUH76U1fXG8w34=";
     })
   ];
 
