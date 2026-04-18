@@ -5,7 +5,7 @@
   fetchurl,
 }:
 
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
   pname = "revpdf-editor";
   version = "1.0";
 
@@ -28,6 +28,7 @@ appimageTools.wrapType2 rec {
     homepage = "https://revpdf.com";
     license = licenses.unfree; # o la licenza corretta
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.e1618033 ]; # solo se contribuisci a nixpkgs
+    maintainers = with maintainers; [ e1618033 ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }
