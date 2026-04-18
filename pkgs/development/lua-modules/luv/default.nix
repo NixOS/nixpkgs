@@ -43,30 +43,18 @@ buildLuarocksPackage rec {
   buildInputs = [ libuv ];
   nativeBuildInputs = [ cmake ];
 
-  # Need to specify WITH_SHARED_LIBUV=ON cmake flag, but
-  # Luarocks doesn't take cmake variables from luarocks config.
-  # Need to specify it in rockspec. See https://github.com/luarocks/luarocks/issues/1160.
-  knownRockspec = runCommand "luv-${version}.rockspec" { } ''
-    patch ${src}/luv-scm-0.rockspec -o - > $out <<'EOF'
-    --- a/luv-scm-0.rockspec
-    +++ b/luv-scm-0.rockspec
-    @@ -1,5 +1,5 @@
-     package = "luv"
-    -version = "scm-0"
-    +version = "${version}"
-     source = {
-       url = 'git://github.com/luvit/luv.git'
-     }
-    @@ -24,6 +24,7 @@
-     build =
-       type = 'cmake',
-       variables = {
-    +     WITH_SHARED_LIBUV="ON",
-          CMAKE_C_FLAGS="$(CFLAGS)",
-          CMAKE_MODULE_LINKER_FLAGS="$(LIBFLAG)",
-          LUA_LIBDIR="$(LUA_LIBDIR)",
-    EOF
+  rockspecFilename = "luv-scm-0.rockspec";
+
+  postConfigure = ''
+    mv "$rockspecFilename" "$generatedRockspecFilename"
+    rockspecFilename="$generatedRockspecFilename"
+    substituteInPlace "$rockspecFilename" \
+      --replace-fail 'version = "scm-0"' "version = \"$version\""
   '';
+
+  luarocksConfig.variables = {
+    WITH_SHARED_LIBUV = "ON";
+  };
 
   __darwinAllowLocalNetworking = true;
 
