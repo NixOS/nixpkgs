@@ -22,6 +22,7 @@ let
   inherit (lib)
     literalExpression
     mapAttrs
+    optionalAttrs
     optionalString
     optionals
     versionAtLeast
@@ -280,25 +281,15 @@ in
     services.phpfpm.pools.zabbix = {
       inherit user;
       group = config.services.${cfg.frontend}.group;
-      phpOptions = ''
-        # https://www.zabbix.com/documentation/current/manual/installation/install
-        memory_limit = 128M
-        post_max_size = 16M
-        upload_max_filesize = 2M
-        max_execution_time = 300
-        max_input_time = 300
-        session.auto_start = 0
-        mbstring.func_overload = 0
-        always_populate_raw_post_data = -1
-        # https://bbs.archlinux.org/viewtopic.php?pid=1745214#p1745214
-        session.save_path = ${stateDir}/session
-      ''
-      + optionalString (config.time.timeZone != null) ''
-        date.timezone = "${config.time.timeZone}"
-      ''
-      + optionalString (cfg.database.type == "oracle") ''
-        extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
-      '';
+      phpOptions = {
+        "session.save_path" = "${stateDir}/session";
+      }
+      // optionalAttrs (config.time.timeZone != null) {
+        "date.timezone" = config.time.timeZone;
+      }
+      // optionalAttrs (cfg.database.type == "oracle") {
+        extension = "${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so";
+      };
       phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
       settings = {
         "listen.owner" =

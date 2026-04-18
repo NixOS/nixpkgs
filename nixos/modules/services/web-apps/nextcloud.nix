@@ -91,11 +91,7 @@ let
         ++ lib.optional (cfg.settings.log_type == "systemd") systemd
       )
       ++ cfg.phpExtraExtensions all; # Enabled by user
-    extraConfig = toKeyValue cfg.phpOptions;
-  };
-
-  toKeyValue = lib.generators.toKeyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
+    extraConfig = cfg.phpOptions;
   };
 
   phpCli = lib.concatStringsSep " " (
