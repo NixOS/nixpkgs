@@ -174,7 +174,11 @@ def generate_driver_symbols() -> None:
             vlans=[],
             global_timeout=0,
             enable_ssh_backdoor=False,
-            test_script=Path("testScriptWithTypes"),
+            test_script=(
+                Path("testScriptWithTypes")
+                if (Path("testScriptWithTypes").is_file())
+                else Path("testScriptFile")
+            ),
         ),
         out_dir=Path(),
         logger=CompositeLogger([]),
