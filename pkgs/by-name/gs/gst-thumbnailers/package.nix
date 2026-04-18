@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     glycin-loaders
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   doCheck = true;
 
   nativeCheckInputs = [
