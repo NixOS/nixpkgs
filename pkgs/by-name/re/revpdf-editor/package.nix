@@ -1,11 +1,10 @@
-# /etc/nixos/pkgs/revpdf-editor/default.nix
 {
   lib,
   appimageTools,
   fetchurl,
 }:
 
-appimageTools.wrapType2 {
+(appimageTools.wrapType2 {
   pname = "revpdf-editor";
   version = "1.0";
 
@@ -24,11 +23,15 @@ appimageTools.wrapType2 {
     ];
 
   meta = with lib; {
-    description = "PDF editor";
+    description = "PDF editor for viewing and editing PDF files";
     homepage = "https://revpdf.com";
-    license = licenses.unfree; # o la licenza corretta
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ e1618033 ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
-}
+}).overrideAttrs
+  (_: {
+    strictDeps = true;
+    __structuredAttrs = true;
+  })
