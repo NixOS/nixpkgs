@@ -23,6 +23,7 @@ let
           submodules = value.src.fetchSubmodules or false;
           sha256 = value.src.outputHash;
           inherit (value.src) rev;
+          tag = value.src.tag or null;
         }
       else
         null;
