@@ -502,9 +502,9 @@ in
       # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
+          ./3.6/use-etc-ssl-certs-darwin.patch
         else
-          ./3.5/use-etc-ssl-certs.patch
+          ./3.6/use-etc-ssl-certs.patch
       )
     ];
 
