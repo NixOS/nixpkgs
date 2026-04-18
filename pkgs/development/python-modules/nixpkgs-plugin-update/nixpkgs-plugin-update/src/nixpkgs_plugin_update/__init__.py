@@ -38,6 +38,8 @@ GIT_TAGS_PREFIX = "refs/tags/"
 
 VERSION_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})$")
 VERSION_TAG_PATTERN = re.compile(r"^(.+?)-unstable-")
+NON_RELEASE_TAG_PREFIXES = ("pre-",)
+RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@-]*)$")
 
 LOG_LEVELS = {
     logging.getLevelName(level): level
@@ -197,9 +199,12 @@ class Repo:
         return loaded["sha256"]
 
     def as_nix(self, plugin: "Plugin") -> str:
+        ref_attr = (
+            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+        )
         return f"""fetchgit {{
       url = "{self.uri}";
-      rev = "{plugin.commit}";
+      {ref_attr}
       hash = "{plugin.to_sri_hash()}";
     }}"""
 
@@ -295,8 +300,6 @@ class RepoGitHub(Repo):
                 )
                 return super().get_latest_tag()
 
-            # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
-            # an ancestor of the default branch.
             query = """
             query GetLatestVersionInfo($owner: String!, $name: String!) {
               repository(owner: $owner, name: $name) {
@@ -432,10 +435,14 @@ class RepoGitHub(Repo):
         else:
             submodule_attr = ""
 
+        ref_attr = (
+            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+        )
+
         return f"""fetchFromGitHub {{
       owner = "{self.owner}";
       repo = "{self.repo}";
-      rev = "{plugin.commit}";
+      {ref_attr}
       hash = "{plugin.to_sri_hash()}";{submodule_attr}
     }}"""
 
@@ -484,8 +491,10 @@ class Plugin:
     commit: str
     has_submodules: bool
     sha256: str
+    version: str
     date: datetime | None = None
     last_tag: str | None = None
+    tag: str | None = None
 
     @property
     def normalized_name(self) -> str:
@@ -508,28 +517,11 @@ class Plugin:
         result = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
         return result.decode("utf-8").strip()
 
-    @property
-    def version(self) -> str:
-        assert self.date is not None
-        date_str = self.date.strftime("%Y-%m-%d")
-
-        tag_part = "0"
-        if self.last_tag:
-            tag = (
-                self.last_tag[1:]
-                if self.last_tag.startswith(("v", "V"))
-                else self.last_tag
-            )
-            if tag and tag[0].isdigit():
-                tag_part = tag
-
-        return f"{tag_part}-unstable-{date_str}"
-
     @staticmethod
     def parse_version_string(version_str: str) -> tuple[datetime, str | None]:
         date_match = VERSION_DATE_PATTERN.search(version_str)
         if not date_match:
-            raise ValueError(f"Cannot parse date from version: {version_str}")
+            raise ValueError(f"Cannot parse unstable version: {version_str}")
         date = datetime.fromisoformat(date_match.group(1))
 
         tag_match = VERSION_TAG_PATTERN.search(version_str)
@@ -543,6 +535,31 @@ class Plugin:
         copy = self.__dict__.copy()
         del copy["date"]
         return copy
+
+
+def normalize_release_version(tag: str) -> str | None:
+    normalized_tag = tag.strip()
+    lowered_tag = normalized_tag.lower()
+    if any(lowered_tag.startswith(prefix) for prefix in NON_RELEASE_TAG_PREFIXES):
+        return None
+
+    match = RELEASE_VERSION_PATTERN.match(normalized_tag)
+    if match is not None:
+        return match.group(1)
+
+    return None
+
+
+def make_unstable_version(date: datetime, last_tag: str | None) -> str:
+    date_str = date.strftime("%Y-%m-%d")
+
+    tag_part = "0"
+    if last_tag:
+        normalized_tag = normalize_release_version(last_tag)
+        if normalized_tag is not None:
+            tag_part = normalized_tag
+
+    return f"{tag_part}-unstable-{date_str}"
 
 
 def load_plugins_from_csv(
@@ -672,8 +689,12 @@ class Editor:
         for name, attr in data.items():
             checksum = attr["checksum"]
             version_str = attr["version"]
+            source_tag = checksum.get("tag")
 
-            date, last_tag = Plugin.parse_version_string(version_str)
+            if source_tag is not None:
+                date, last_tag = None, None
+            else:
+                date, last_tag = Plugin.parse_version_string(version_str)
 
             pdesc = PluginDesc.load_from_string(config, f"{attr['homePage']} as {name}")
             p = Plugin(
@@ -681,8 +702,10 @@ class Editor:
                 checksum["rev"],
                 checksum["submodules"],
                 checksum["sha256"],
+                version_str,
                 date,
                 last_tag=last_tag,
+                tag=source_tag,
             )
 
             plugins.append((pdesc, p))
@@ -790,7 +813,6 @@ class Editor:
             # Track version changes for commit message generation
             updated_plugins = []
             current_plugin_map = {p.normalized_name: p for _, p in current_plugins}
-
             for _, new_plugin in plugins:
                 old_plugin = current_plugin_map.get(new_plugin.normalized_name)
                 if old_plugin and old_plugin.version != new_plugin.version:
@@ -989,8 +1011,7 @@ def prefetch_plugin(
     p: PluginDesc,
     cache: "Cache | None" = None,
 ) -> tuple[Plugin, Repo | None]:
-    commit = None
-    log.info(f"Fetching last commit for plugin {p.name} from {p.repo.uri}@{p.branch}")
+    log.info(f"Fetching source for plugin {p.name} from {p.repo.uri}@{p.branch}")
     commit, date = p.repo.latest_commit()
 
     latest_tag = p.repo.get_latest_tag()
@@ -999,20 +1020,37 @@ def prefetch_plugin(
     else:
         log.debug("No tags found for %s, will use '0' prefix", p.name)
 
+    version = make_unstable_version(date, latest_tag)
+    source_tag = None
+
     cached_plugin = cache[commit] if cache else None
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
         cached_plugin.name = p.name
+        cached_plugin.commit = commit
+        cached_plugin.version = version
         cached_plugin.date = date
         cached_plugin.last_tag = latest_tag
+        cached_plugin.tag = source_tag
         return cached_plugin, p.repo.redirect
 
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
-    sha256 = p.repo.prefetch(commit)
+    sha256 = (
+        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}") if source_tag else p.repo.prefetch(commit)
+    )
 
     return (
-        Plugin(p.name, commit, has_submodules, sha256, date=date, last_tag=latest_tag),
+        Plugin(
+            p.name,
+            commit,
+            has_submodules,
+            sha256,
+            version,
+            date=date,
+            last_tag=latest_tag,
+            tag=source_tag,
+        ),
         p.repo.redirect,
     )
 
@@ -1101,7 +1139,9 @@ class Cache:
                     attr["commit"],
                     attr["has_submodules"],
                     attr["sha256"],
+                    attr.get("version", ""),
                     last_tag=attr.get("last_tag"),
+                    tag=attr.get("tag"),
                 )
                 downloads[attr["commit"]] = p
         return downloads
@@ -1125,7 +1165,8 @@ class Cache:
 
 
 def prefetch(
-    pluginDesc: PluginDesc, cache: Cache
+    pluginDesc: PluginDesc,
+    cache: Cache,
 ) -> tuple[PluginDesc, Exception | Plugin, Repo | None]:
     try:
         plugin, redirect = prefetch_plugin(pluginDesc, cache)
