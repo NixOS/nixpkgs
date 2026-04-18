@@ -9,17 +9,18 @@
   pnpmConfigHook,
   geist-font,
   nix-update-script,
+  which,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.25.4";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${version}";
-    hash = "sha256-2Dv+ZY9cvcz6EIpI+gkV9w5eqQzpAD2N+yf4dJrmdwg=";
+    hash = "sha256-q3UcFTB8OMOrfx5xcNPtBBAwOxoscwrjGg+y8tdETm0=";
   };
 
   # The Rust CLI embeds the dashboard UI via RustEmbed at compile time.
@@ -46,8 +47,8 @@ let
 
     pnpmWorkspaces = [ "dashboard" ];
 
-    # Replace Google Fonts fetch with a local font from nixpkgs since
-    # the nix sandbox has no network access.
+    # Replace Google Fonts fetch with a local font from nixpkgs since the
+    # Nix sandbox has no network access.
     postPatch = ''
       substituteInPlace packages/dashboard/src/app/layout.tsx --replace-fail \
         '{ Geist } from "next/font/google"' \
@@ -80,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-3vzVVHFo13ZLsbbXw7n9BE/YXBJwoxzhvfjuqOQwdfg=";
+  cargoHash = "sha256-ENIGFhZ+pXIZvEFUA0No3HpeHtxgJohMgx6F0wNpmO0=";
 
   # Place the pre-built dashboard where RustEmbed expects it
   postUnpack = ''
@@ -88,7 +89,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r ${dashboard} source/packages/dashboard/out
   '';
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  # `which_exists` spawns the external `which` binary at runtime to probe
+  # for optional tools; pin it to an absolute store path.
+  postPatch = ''
+    substituteInPlace src/doctor/helpers.rs src/install.rs --replace-fail \
+      '"which"' '"${lib.getExe which}"'
+  '';
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   __darwinAllowLocalNetworking = true;
 
