@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "m17n-db";
-  version = "1.8.10";
+  version = "1.8.11";
 
   src = fetchurl {
     url = "mirror://savannah/m17n/m17n-db-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MQJOBRNTNEi5sx6jKU01pkJuZpDrRGKGgHMaqVXAwWw=";
+    hash = "sha256-tXkfOOZtCkUnMDMeAnrJtS1cQ8bYcJKJ22QAafaEh/Q=";
   };
 
   nativeBuildInputs = [ gettext ];
