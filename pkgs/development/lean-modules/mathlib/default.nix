@@ -14,13 +14,13 @@
 
 buildLakePackage {
   pname = "lean4-mathlib";
-  version = "4.29.0";
+  version = "4.29.1";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "mathlib4";
-    tag = "v4.29.0";
-    hash = "sha256-fe+qS7gNxdLnACX3/jqToa9m7r1gbskY6kDJbm1ZefE=";
+    tag = "v4.29.1";
+    hash = "sha256-K/QPTOytsV+OX25xyKlspeB9G0a28IjmJxcUAKXFP9U=";
   };
 
   leanPackageName = "mathlib";
