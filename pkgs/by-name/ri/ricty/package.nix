@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    google-fonts
+    google-fonts.inconsolata
     migu
     fontforge
     which
   ];
 
   buildPhase = ''
-    inconsolata=${google-fonts} migu=${migu} ./ricty_generator.sh auto
+    inconsolata=${google-fonts.inconsolata} migu=${migu} ./ricty_generator.sh auto
   '';
 
   installPhase = ''
