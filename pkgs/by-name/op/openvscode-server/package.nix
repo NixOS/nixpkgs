@@ -11,6 +11,7 @@
   pkg-config,
   runCommand,
   nodejs_22,
+  nodejs-slim_22,
   node-gyp,
   libsecret,
   libkrb5,
@@ -100,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   nativeBuildInputs = [
     nodejs
-    nodejs.python
+    nodejs-slim_22.python
     pkg-config
     makeWrapper
     git
