@@ -2189,9 +2189,6 @@
   "test-opt-sshBackdoor.enable": [
     "index.html#test-opt-sshBackdoor.enable"
   ],
-  "test-opt-sshBackdoor.vsockOffset": [
-    "index.html#test-opt-sshBackdoor.vsockOffset"
-  ],
   "test-opt-enableDebugHook": [
     "index.html#test-opt-enableDebugHook"
   ],
@@ -2221,6 +2218,9 @@
   ],
   "test-opt-interactive": [
     "index.html#test-opt-interactive"
+  ],
+  "test-opt-logLevel": [
+    "index.html#test-opt-logLevel"
   ],
   "test-opt-meta": [
     "index.html#test-opt-meta"
@@ -2257,6 +2257,9 @@
   ],
   "test-opt-passthru": [
     "index.html#test-opt-passthru"
+  ],
+  "test-opt-qemu.forceAccel": [
+    "index.html#test-opt-qemu.forceAccel"
   ],
   "test-opt-qemu.package": [
     "index.html#test-opt-qemu.package"

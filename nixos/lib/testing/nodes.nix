@@ -13,6 +13,7 @@ let
     mapAttrs
     mkIf
     mkMerge
+    mkRemovedOptionModule
     mkOption
     optionalAttrs
     types
@@ -71,7 +72,9 @@ let
       config.nodeDefaults
       {
         key = "base-qemu";
-        virtualisation.qemu.package = testModuleArgs.config.qemu.package;
+        virtualisation.qemu = {
+          inherit (testModuleArgs.config.qemu) package forceAccel;
+        };
         virtualisation.host.pkgs = hostPkgs;
       }
       testModuleArgs.config.extraBaseNodeModules
@@ -128,6 +131,12 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "sshBackdoor" "vsockOffset" ] ''
+      The option `sshBackdoor.vsockOffset` has been removed from the testing framework.
+      The functionality provided by it is not needed anymore.
+    '')
+  ];
 
   options = {
     sshBackdoor = {
@@ -136,22 +145,6 @@ in
         defaultText = lib.literalExpression "config.enableDebugHook";
         type = types.bool;
         description = "Whether to turn on the VSOCK-based access to all VMs. This provides an unauthenticated access intended for debugging.";
-      };
-      vsockOffset = mkOption {
-        default = 2;
-        type = types.ints.between 2 4294967296;
-        description = ''
-          This field is only relevant when multiple users run the (interactive)
-          driver outside the sandbox and with the SSH backdoor activated.
-          The typical symptom for this being a problem are error messages like this:
-          `vhost-vsock: unable to set guest cid: Address already in use`
-
-          This option allows to assign an offset to each vsock number to
-          resolve this.
-
-          This is a 32bit number. The lowest possible vsock number is `3`
-          (i.e. with the lowest node number being `1`, this is 2+1).
-        '';
       };
     };
 
@@ -317,10 +310,6 @@ in
     passthru.nodes = config.nodesCompat;
     passthru.containers = config.containers;
 
-    extraDriverArgs = mkIf config.sshBackdoor.enable [
-      "--dump-vsocks=${toString config.sshBackdoor.vsockOffset}"
-    ];
-
     defaults = mkMerge [
       (mkIf config.node.pkgsReadOnly {
         nixpkgs.pkgs = config.node.pkgs;
@@ -340,20 +329,6 @@ in
         };
       })
     ];
-
-    nodeDefaults = mkIf config.sshBackdoor.enable (
-      let
-        inherit (config.sshBackdoor) vsockOffset;
-      in
-      { config, ... }:
-      {
-        virtualisation.qemu.options = [
-          "-device vhost-vsock-pci,guest-cid=${
-            toString (config.virtualisation.test.nodeNumber + vsockOffset)
-          }"
-        ];
-      }
-    );
 
     # Docs: nixos/doc/manual/development/writing-nixos-tests.section.md
     /**

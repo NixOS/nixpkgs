@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -83,39 +84,133 @@ in
     environment.etc."plasmalogin.conf.d/99-user.conf".source = userConfigFile;
 
     security.pam.services = {
-      plasmalogin.text = ''
-        auth      substack      login
-        account   include       login
-        password  substack      login
-        session   include       login
-      '';
+      plasmalogin = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          account = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+          password = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          session = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
+      };
 
-      plasmalogin-autologin.text = ''
-        auth     requisite pam_nologin.so
-        auth     required  pam_permit.so
+      plasmalogin-autologin = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "nologin";
+              control = "requisite";
+              modulePath = "pam_nologin.so";
+            }
+            {
+              name = "permit";
+              control = "required";
+              modulePath = "pam_permit.so";
+            }
+          ];
 
-        account  include   plasmalogin
-        password include   plasmalogin
-        session  include   plasmalogin
-      '';
+          account = utils.pam.autoOrderRules [
+            {
+              name = "plasmalogin";
+              control = "include";
+              modulePath = "plasmalogin";
+            }
+          ];
+          password = utils.pam.autoOrderRules [
+            {
+              name = "plasmalogin";
+              control = "include";
+              modulePath = "plasmalogin";
+            }
+          ];
+          session = utils.pam.autoOrderRules [
+            {
+              name = "plasmalogin";
+              control = "include";
+              modulePath = "plasmalogin";
+            }
+          ];
+        };
+      };
 
-      plasmalogin-greeter.text = ''
-        # Load environment from /etc/environment and ~/.pam_environment
-        auth		required pam_env.so conffile=/etc/pam/environment readenv=0
+      plasmalogin-greeter = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              # Load environment from /etc/environment and ~/.pam_environment
+              name = "env";
+              control = "required";
+              modulePath = "pam_env.so";
+              settings.conffile = "/etc/pam/environment";
+              settings.readenv = 0;
+            }
+            {
+              # Always let the greeter start without authentication
+              name = "permit";
+              control = "required";
+              modulePath = "pam_permit.so";
+            }
+          ];
 
-        # Always let the greeter start without authentication
-        auth		required pam_permit.so
+          account = utils.pam.autoOrderRules [
+            {
+              # No action required for account management
+              name = "permit";
+              control = "required";
+              modulePath = "pam_permit.so";
+            }
+          ];
 
-        # No action required for account management
-        account		required pam_permit.so
+          password = utils.pam.autoOrderRules [
+            {
+              # Can't change password
+              name = "deny";
+              control = "required";
+              modulePath = "pam_deny.so";
+            }
+          ];
 
-        # Can't change password
-        password	required pam_deny.so
-
-        # Setup session
-        session		required pam_unix.so
-        session		optional ${config.systemd.package}/lib/security/pam_systemd.so
-      '';
+          session = utils.pam.autoOrderRules [
+            {
+              # Setup session
+              name = "unix";
+              control = "required";
+              modulePath = "pam_unix.so";
+            }
+            {
+              name = "systemd";
+              control = "optional";
+              modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
+            }
+          ];
+        };
+      };
     };
 
     # FIXME: use upstream sysusers
