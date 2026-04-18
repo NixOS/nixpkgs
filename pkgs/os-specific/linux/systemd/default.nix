@@ -5,7 +5,6 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
-  fetchzip,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -14,10 +13,8 @@
   pkg-config,
   coreutils,
   gperf,
-  getent,
   glibcLocales,
   autoPatchelfHook,
-  fetchpatch,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -41,8 +38,6 @@
   libgpg-error,
   libidn2,
   curl,
-  gnutar,
-  gnupg,
   zlib,
   xz,
   zstd,
@@ -393,6 +388,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
+    (lib.mesonOption "ntp-servers" "0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
@@ -563,135 +559,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gshadow" false)
     (lib.mesonBool "idn" false)
   ];
-  preConfigure =
-    let
-      # A list of all the runtime binaries referenced by the source code (plus
-      # scripts and unit files) of systemd executables, tests and libraries.
-      # As soon as a dependency is lo longer required we should remove it from
-      # the list.
-      # The `where` attribute for each of the replacement patterns must be
-      # exhaustive. If another (unhandled) case is found in the source code the
-      # build fails with an error message.
-      binaryReplacements = [
-        {
-          search = "/sbin/mkswap";
-          replacement = "${lib.getBin util-linux}/sbin/mkswap";
-          where = [
-            "man/systemd-makefs@.service.xml"
-          ];
-        }
-        {
-          search = "/bin/echo";
-          replacement = "${coreutils}/bin/echo";
-          where = [
-            "man/systemd-analyze.xml"
-            "man/systemd.service.xml"
-            "man/systemd-run.xml"
-            "src/analyze/test-verify.c"
-            "src/test/test-env-file.c"
-            "src/test/test-load-fragment.c"
-          ];
-        }
-        {
-          search = "/bin/cat";
-          replacement = "${coreutils}/bin/cat";
-          where = [
-            "test/test-execute/exec-noexecpaths-simple.service"
-          ];
-        }
-        {
-          search = "/usr/lib/systemd/systemd-fsck";
-          replacement = "$out/lib/systemd/systemd-fsck";
-          where = [ "man/systemd-fsck@.service.xml" ];
-        }
-      ]
-      ++ lib.optionals withImportd [
-        {
-          search = "\"gpg\"";
-          replacement = "\\\"${gnupg}/bin/gpg\\\"";
-          where = [ "src/import/pull-common.c" ];
-        }
-        {
-          search = "\"tar\"";
-          replacement = "\\\"${gnutar}/bin/tar\\\"";
-          where = [
-            "src/import/export-tar.c"
-            "src/import/import-tar.c"
-          ];
-          ignore = [
-            # occurrences here refer to the tar sub command
-            "src/sysupdate/sysupdate-resource.c"
-            "src/sysupdate/sysupdate-transfer.c"
-            "src/import/pull.c"
-            "src/import/export.c"
-            "src/import/import.c"
-            "src/import/importd.c"
-            # runs `tar` but also creates a temporary directory with the string
-            "src/import/pull-tar.c"
-            # pull-oci.c has tar references handled in postPatch
-            "src/import/pull-oci.c"
-            # tar referenced as file suffix
-            "src/shared/import-util.c"
-          ];
-        }
-      ]
-      ++ lib.optionals withKmod [
-        {
-          search = "ExecStart=-modprobe";
-          replacement = "ExecStart=-${lib.getBin kmod}/bin/modprobe";
-          where = [ "units/modprobe@.service" ];
-        }
-      ];
-
-      # { replacement, search, where, ignore } -> List[str]
-      mkSubstitute =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        let
-          ignore' = lib.concatStringsSep "|" (
-            ignore
-            ++ [
-              "^test"
-              "NEWS"
-            ]
-          );
-        in
-        ''
-          set +e
-          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-          set -e
-          if [[ -n "$search" ]]; then
-            echo "Not all references to '${search}' have been replaced. Found the following matches:"
-            echo "$search"
-            exit 1
-          fi
-        '';
-    in
-    ''
-      mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-      export LC_ALL="en_US.UTF-8";
-
-      ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
-      ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
-
-      substituteInPlace src/libsystemd/sd-journal/catalog.c \
-        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-
-      substituteInPlace src/import/pull-tar.c src/import/pull-oci.c \
-        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
-    '';
+  preConfigure = ''
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
+      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+  '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
   # warning messages
@@ -743,12 +614,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       # For compatibility with dependents that use sbin instead of bin.
       ln -s bin "$out/sbin"
-
-      rm -rf $out/etc/rpm
-    ''
-    + lib.optionalString (!withKernelInstall) ''
-      # "kernel-install" shouldn't be used on NixOS.
-      find $out -name "*kernel-install*" -exec rm {} \;
     ''
     + lib.optionalString (!withDocumentation) ''
       rm -rf $out/share/doc

@@ -8732,11 +8732,6 @@ with pkgs;
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
-    # provide a super minimal gnupg used for systemd-machined
-    gnupg = gnupg.override {
-      enableMinimal = true;
-      guiSupport = false;
-    };
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
