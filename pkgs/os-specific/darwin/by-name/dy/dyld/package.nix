@@ -1,15 +1,15 @@
 {
   lib,
-  apple-sdk,
-  ld64,
-  mkAppleDerivation,
   cmake,
-  llvm,
-  openssl,
-  pkgsBuildHost,
-  pkg-config,
-  stdenvNoCC,
   fetchurl,
+  ld64,
+  llvm,
+  mkAppleDerivation,
+  openssl,
+  pkg-config,
+  pkgsBuildHost,
+  pkgs,
+  stdenvNoCC,
 }:
 
 let
@@ -20,11 +20,19 @@ let
     hash = "sha256-0ybVcwHuGEdThv0PPjYQc3SW0YVOyrM3/L9zG/l1Vtk=";
   };
 
-  launchd = apple-sdk.sourceRelease "launchd";
-  Libc = apple-sdk.sourceRelease "Libc";
-  libplatform = apple-sdk.sourceRelease "libplatform";
-  libpthread = apple-sdk.sourceRelease "libpthread";
-  xnu = apple-sdk.sourceRelease "xnu";
+  f =
+    pkgs: prev:
+    if !pkgs.stdenv.hostPlatform.isDarwin || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin" then
+      prev.darwin.sourceRelease
+    else
+      f pkgs.stdenv.__bootPackages pkgs;
+  bootstrapSourceRelease = f pkgs pkgs;
+  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
+  launchd = bootstrapSourceRelease "launchd";
+  Libc = bootstrapSourceRelease "Libc";
+  libplatform = bootstrapSourceRelease "libplatform";
+  libpthread = bootstrapSourceRelease "libpthread";
+  xnu = bootstrapSourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "dyld-deps-private-headers";
