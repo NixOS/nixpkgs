@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     makeWrapper
     nodejs
+    nodejs.npm
     (nodejs.python.withPackages (ps: [ ps.setuptools ]))
     pkg-config
     yarnConfigHook
