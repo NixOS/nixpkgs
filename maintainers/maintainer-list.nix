@@ -19796,6 +19796,12 @@
     github = "0xnook";
     githubId = 88323754;
   };
+  noow33 = {
+    name = "Sven van der Pol";
+    email = "svenpol8@gmail.com";
+    github = "svenpol08";
+    githubId = 55053958;
+  };
   norbertwnuk = {
     name = "Norbert Wnuk";
     email = "norbert.wnuk@gmail.com";
