@@ -82,14 +82,6 @@ let
       mv ./include $out/
 
       cat ./CREDITS.html | ${xz}/bin/xz -9 -e -c > $out/CREDITS.html.xz
-
-      echo '${
-        builtins.toJSON {
-          type = "minimal";
-          name = builtins.baseNameOf finalAttrs.src.url;
-          sha1 = "";
-        }
-      }' > $out/archive.json
     '';
   });
 in
@@ -130,6 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir branding
     cp -r ${branding}/* branding
     cp $src/.branding branding/.branding
+
+    substituteInPlace $cargoDepsCopy/*/cef-dll-sys-*/build.rs \
+      --replace-fail \
+        'download_cef::check_archive_json(&package_version, &path.to_string_lossy())?;' \
+        ""
   '';
 
   postConfigure = ''
