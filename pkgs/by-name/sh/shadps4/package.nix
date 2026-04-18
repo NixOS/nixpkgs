@@ -178,6 +178,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ryand56
       liberodark
+      noow33
     ];
     mainProgram = "shadps4";
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
