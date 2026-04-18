@@ -8,20 +8,21 @@
   mcp,
   primp,
   setuptools,
+  trio,
   uvicorn,
   versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ddgs";
-  version = "9.13.1";
+  version = "9.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PCw6P8bYFmdRzDGyOsJ5vOBR8oEQkOSbvy5lGmkzdMQ=";
+    hash = "sha256-KA8MIuzArdkP/nlkaKdqJd/15Lb36Q7ePbVUf81iY6M=";
   };
 
   build-system = [ setuptools ];
@@ -39,6 +40,11 @@ buildPythonPackage (finalAttrs: {
     ];
     mcp = [
       mcp
+    ];
+    dht = [
+      fastapi
+      uvicorn
+      trio
     ];
   };
 
