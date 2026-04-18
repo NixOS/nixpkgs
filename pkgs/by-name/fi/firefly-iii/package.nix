@@ -26,6 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs-slim
+    nodejs-slim.npm
     nodejs-slim.python
     buildPackages.npmHooks.npmConfigHook
     php84.packages.composer
