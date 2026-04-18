@@ -29,6 +29,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-NbqoGJixX5NXPi3spQ0RrArkB+u2iCmdOlITJlAzcSw=";
   };
 
+  patches = [
+    # oopenapi-core changed their API, which breaks jupyterlab-server
+    ./fix-openapi-core-compat.patch
+  ];
+
   postPatch = ''
     sed -i "/timeout/d" pyproject.toml
   '';
