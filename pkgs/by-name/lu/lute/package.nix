@@ -18,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   # We use multiple sources instead of linkFarm or other solutions
   # because the dependencies need to be writable during build
   srcs = [
+    ###_SOURCES_START_###
     (fetchFromGitHub {
       owner = "luau-lang";
       repo = "lute";
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-TkPLWSN5QcPlL9D0kc/yhH0/puE9bFND24aj5NVDKYs=";
       name = "zlib";
     })
+    ###_SOURCES_END_###
   ];
 
   env = {
@@ -179,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib
     cp -r ../batteries $out/lib
   '';
+
+  passthru.updateScript = ./update.nu;
 
   meta = {
     description = "Standalone Luau runtime for general-purpose programming";
