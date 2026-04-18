@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  config,
   fetchFromGitHub,
   fetchurl,
   fetchpatch,
@@ -9,16 +10,17 @@
   gflags,
   glog,
   hdf5-cpp,
-  opencv4,
+  opencv4WithoutCuda,
+  opencv4 ? opencv4WithoutCuda, # Used only for image loading
   protobuf,
   doxygen,
-  blas,
-  lmdbSupport ? true,
+  openblas,
+  lmdbSupport ? config.caffe.lmdbSupport or true,
   lmdb,
-  leveldbSupport ? true,
+  leveldbSupport ? config.caffe.leveldbSupport or true,
   leveldb,
   snappy,
-  pythonSupport ? false,
+  pythonSupport ? config.caffe.pythonSupport or false,
   python ? null,
   numpy ? null,
   replaceVars,
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
     protobuf
     hdf5-cpp
     opencv4
-    blas
+    openblas
   ]
   ++ lib.optional lmdbSupport lmdb
   ++ lib.optionals leveldbSupport [
