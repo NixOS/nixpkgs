@@ -840,9 +840,7 @@ class Editor:
         current_plugins = self.get_current_plugins(config, self.nixpkgs)
         current_plugin_specs = self.load_plugin_spec(config, input_file)
 
-        cache: Cache = Cache(
-            [plugin for _description, plugin in current_plugins], self.cache_file
-        )
+        cache: Cache = Cache(current_plugins, self.cache_file)
         current_plugin_map = {
             plugin.normalized_name: plugin for _description, plugin in current_plugins
         }
@@ -1107,7 +1105,7 @@ def prefetch_plugin(
         latest_tag,
     )
 
-    cached_plugin = cache[commit] if cache else None
+    cached_plugin = cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
         cached_plugin.name = p.name
@@ -1200,13 +1198,27 @@ def get_cache_path(cache_file_name: str) -> Path | None:
     return Path(xdg_cache, cache_file_name)
 
 
+def plugin_cache_key(repo_uri: str, plugin: "Plugin") -> str:
+    ref = f"{GIT_TAGS_PREFIX}{plugin.tag}" if plugin.tag is not None else plugin.commit
+    return f"{repo_uri}@{ref}"
+
+
+def target_cache_key(repo_uri: str, commit: str, source_tag: str | None) -> str:
+    ref = f"{GIT_TAGS_PREFIX}{source_tag}" if source_tag is not None else commit
+    return f"{repo_uri}@{ref}"
+
+
 class Cache:
-    def __init__(self, initial_plugins: list[Plugin], cache_file_name: str) -> None:
+    def __init__(
+        self,
+        initial_plugins: list[tuple[PluginDesc, Plugin]],
+        cache_file_name: str,
+    ) -> None:
         self.cache_file = get_cache_path(cache_file_name)
 
         downloads = {}
-        for plugin in initial_plugins:
-            downloads[plugin.commit] = plugin
+        for plugin_desc, plugin in initial_plugins:
+            downloads[plugin_cache_key(plugin_desc.repo.uri, plugin)] = plugin
         downloads.update(self.load())
         self.downloads = downloads
 
@@ -1217,7 +1229,7 @@ class Cache:
         downloads: dict[str, Plugin] = {}
         with open(self.cache_file) as f:
             data = json.load(f)
-            for attr in data.values():
+            for cache_key, attr in data.items():
                 p = Plugin(
                     attr["name"],
                     attr["commit"],
@@ -1227,7 +1239,7 @@ class Cache:
                     last_tag=attr.get("last_tag"),
                     tag=attr.get("tag"),
                 )
-                downloads[attr["commit"]] = p
+                downloads[cache_key] = p
         return downloads
 
     def store(self) -> None:
@@ -1237,8 +1249,8 @@ class Cache:
         os.makedirs(self.cache_file.parent, exist_ok=True)
         with open(self.cache_file, "w+") as f:
             data = {}
-            for name, attr in self.downloads.items():
-                data[name] = attr.as_json()
+            for cache_key, attr in self.downloads.items():
+                data[cache_key] = attr.as_json()
             json.dump(data, f, indent=4, sort_keys=True)
 
     def __getitem__(self, key: str) -> Plugin | None:
@@ -1258,7 +1270,7 @@ def prefetch(
         if current_plugins is not None:
             current_plugin = current_plugins.get(pluginDesc.name.replace(".", "-"))
         plugin, redirect = prefetch_plugin(pluginDesc, cache, current_plugin)
-        cache[plugin.commit] = plugin
+        cache[target_cache_key(pluginDesc.repo.uri, plugin.commit, plugin.tag)] = plugin
         return (pluginDesc, plugin, redirect)
     except Exception as e:
         return (pluginDesc, e, None)
