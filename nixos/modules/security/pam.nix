@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -171,6 +172,28 @@ let
           type = lib.types.submodule {
             options = lib.genAttrs [ "account" "auth" "password" "session" ] mkRulesTypeOption;
           };
+        };
+
+        useDefaultRules = lib.mkOption {
+          # This option is experimental and subject to breaking changes without notice.
+          visible = false;
+          default = true;
+          type = lib.types.bool;
+          description = ''
+            Whether to set up the default NixOS rule stack for this service.
+
+            Set this to `false` if you want to define the entire rule stack for this service.
+
+            ::: {.warning}
+            This option is experimental and subject to breaking changes without notice.
+
+            If you use this option in your system configuration, you will need to manually monitor this module for any changes. Otherwise, failure to adjust your configuration properly could lead to you being locked out of your system, or worse, your system could be left wide open to attackers.
+
+            If you share configuration examples that use this option, you MUST include this warning so that users are informed.
+
+            You may freely use this option within `nixpkgs`, and future changes will account for those use sites.
+            :::
+          '';
         };
 
         unixAuth = lib.mkOption {
@@ -899,16 +922,9 @@ let
         # !!! TODO: move the LDAP stuff to the LDAP module, and the
         # Samba stuff to the Samba module.  This requires that the PAM
         # module provides the right hooks.
-        rules =
-          let
-            autoOrderRules = lib.flip lib.pipe [
-              (lib.imap1 (index: rule: rule // { order = lib.mkDefault (10000 + index * 100); }))
-              (map (rule: lib.nameValuePair rule.name (removeAttrs rule [ "name" ])))
-              lib.listToAttrs
-            ];
-          in
-          {
-            account = autoOrderRules [
+        rules = (
+          lib.optionalAttrs cfg.useDefaultRules {
+            account = utils.pam.autoOrderRules [
               {
                 name = "ldap";
                 enable = use_ldap;
@@ -989,7 +1005,7 @@ let
 
             ];
 
-            auth = autoOrderRules (
+            auth = utils.pam.autoOrderRules (
               [
                 {
                   name = "oslogin_login";
@@ -1362,7 +1378,7 @@ let
               ]
             );
 
-            password = autoOrderRules [
+            password = utils.pam.autoOrderRules [
               {
                 name = "systemd_home";
                 enable = config.services.homed.enable;
@@ -1447,7 +1463,7 @@ let
               }
             ];
 
-            session = autoOrderRules [
+            session = utils.pam.autoOrderRules [
               {
                 name = "env";
                 enable = cfg.setEnvironment;
@@ -1679,7 +1695,8 @@ let
                 modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so";
               }
             ];
-          };
+          }
+        );
       };
 
     };
@@ -2554,16 +2571,30 @@ in
         };
 
     security.pam.services = {
-      other.text = ''
-        auth     required pam_warn.so
-        auth     required pam_deny.so
-        account  required pam_warn.so
-        account  required pam_deny.so
-        password required pam_warn.so
-        password required pam_deny.so
-        session  required pam_warn.so
-        session  required pam_deny.so
-      '';
+      other = {
+        useDefaultRules = false;
+        rules =
+          let
+            rules = utils.pam.autoOrderRules [
+              {
+                name = "warn";
+                control = "required";
+                modulePath = "${package}/lib/security/pam_warn.so";
+              }
+              {
+                name = "deny";
+                control = "required";
+                modulePath = "${package}/lib/security/pam_deny.so";
+              }
+            ];
+          in
+          {
+            auth = rules;
+            account = rules;
+            password = rules;
+            session = rules;
+          };
+      };
 
       # Most of these should be moved to specific modules.
       i3lock.enable = lib.mkDefault config.programs.i3lock.enable;

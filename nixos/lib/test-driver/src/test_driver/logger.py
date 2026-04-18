@@ -6,6 +6,7 @@ import unicodedata
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
+from enum import IntEnum
 from pathlib import Path
 from queue import Empty, Queue
 from typing import Any
@@ -14,6 +15,13 @@ from xml.sax.xmlreader import AttributesImpl
 
 from colorama import Fore, Style
 from junit_xml import TestCase, TestSuite
+
+
+class LogLevel(IntEnum):
+    DEBUG = 1
+    INFO = 2
+    WARNING = 3
+    ERROR = 4
 
 
 class AbstractLogger(ABC):
@@ -29,6 +37,10 @@ class AbstractLogger(ABC):
     @abstractmethod
     @contextmanager
     def nested(self, message: str, attributes: dict[str, str] = {}) -> Iterator[None]:
+        pass
+
+    @abstractmethod
+    def debug(self, *args, **kwargs) -> None:
         pass
 
     @abstractmethod
@@ -55,6 +67,10 @@ class AbstractLogger(ABC):
     def print_serial_logs(self, enable: bool) -> None:
         pass
 
+    @abstractmethod
+    def set_log_level(self, level: LogLevel) -> None:
+        pass
+
 
 class JunitXMLLogger(AbstractLogger):
     class TestCaseState:
@@ -70,6 +86,7 @@ class JunitXMLLogger(AbstractLogger):
         self.currentSubtest = "main"
         self.outfile: Path = outfile
         self._print_serial_logs = True
+        self._log_level = LogLevel.INFO
         atexit.register(self.close)
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:
@@ -90,11 +107,17 @@ class JunitXMLLogger(AbstractLogger):
         self.log(message)
         yield
 
+    def debug(self, *args, **kwargs) -> None:
+        if self._log_level <= LogLevel.DEBUG:
+            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+
     def info(self, *args, **kwargs) -> None:
-        self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+        if self._log_level <= LogLevel.INFO:
+            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def warning(self, *args, **kwargs) -> None:
-        self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+        if self._log_level <= LogLevel.WARNING:
+            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def error(self, *args, **kwargs) -> None:
         self.tests[self.currentSubtest].stderr += args[0] + os.linesep
@@ -111,6 +134,9 @@ class JunitXMLLogger(AbstractLogger):
 
     def print_serial_logs(self, enable: bool) -> None:
         self._print_serial_logs = enable
+
+    def set_log_level(self, level: LogLevel) -> None:
+        self._log_level = level
 
     def close(self) -> None:
         with open(self.outfile, "w") as f:
@@ -154,6 +180,10 @@ class CompositeLogger(AbstractLogger):
                 stack.enter_context(logger.nested(message, attributes))
             yield
 
+    def debug(self, *args, **kwargs) -> None:
+        for logger in self.logger_list:
+            logger.debug(*args, **kwargs)
+
     def info(self, *args, **kwargs) -> None:
         for logger in self.logger_list:
             logger.info(*args, **kwargs)
@@ -179,10 +209,15 @@ class CompositeLogger(AbstractLogger):
         for logger in self.logger_list:
             logger.log_serial(message, machine)
 
+    def set_log_level(self, level: LogLevel) -> None:
+        for logger in self.logger_list:
+            logger.set_log_level(level)
+
 
 class TerminalLogger(AbstractLogger):
     def __init__(self) -> None:
         self._print_serial_logs = True
+        self._log_level = LogLevel.INFO
 
     def maybe_prefix(self, message: str, attributes: dict[str, str]) -> str:
         if "machine" in attributes:
@@ -215,17 +250,28 @@ class TerminalLogger(AbstractLogger):
         toc = time.time()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
+    def debug(self, *args, **kwargs) -> None:
+        if self._log_level <= LogLevel.DEBUG:
+            self._eprint(
+                Style.DIM + self.maybe_prefix(args[0], kwargs) + Style.RESET_ALL  # ty: ignore[unsupported-operator]
+            )
+
     def info(self, *args, **kwargs) -> None:
-        self.log(*args, **kwargs)
+        if self._log_level <= LogLevel.INFO:
+            self.log(*args, **kwargs)
 
     def warning(self, *args, **kwargs) -> None:
-        self.log(*args, **kwargs)
+        if self._log_level <= LogLevel.WARNING:
+            self.log(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:
         self.log(*args, **kwargs)
 
     def print_serial_logs(self, enable: bool) -> None:
         self._print_serial_logs = enable
+
+    def set_log_level(self, level: LogLevel) -> None:
+        self._log_level = level
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:
@@ -246,6 +292,7 @@ class XMLLogger(AbstractLogger):
         self.queue: Queue[dict[str, str]] = Queue()
 
         self._print_serial_logs = True
+        self._log_level = LogLevel.INFO
 
         self.xml.startDocument()
         self.xml.startElement("logfile", attrs=AttributesImpl({}))
@@ -268,11 +315,17 @@ class XMLLogger(AbstractLogger):
         self.xml.characters(message)
         self.xml.endElement("line")
 
+    def debug(self, *args, **kwargs) -> None:
+        if self._log_level <= LogLevel.DEBUG:
+            self.log(*args, **kwargs)
+
     def info(self, *args, **kwargs) -> None:
-        self.log(*args, **kwargs)
+        if self._log_level <= LogLevel.INFO:
+            self.log(*args, **kwargs)
 
     def warning(self, *args, **kwargs) -> None:
-        self.log(*args, **kwargs)
+        if self._log_level <= LogLevel.WARNING:
+            self.log(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:
         self.log(*args, **kwargs)
@@ -286,6 +339,9 @@ class XMLLogger(AbstractLogger):
 
     def print_serial_logs(self, enable: bool) -> None:
         self._print_serial_logs = enable
+
+    def set_log_level(self, level: LogLevel) -> None:
+        self._log_level = level
 
     def log_serial(self, message: str, machine: str) -> None:
         if not self._print_serial_logs:

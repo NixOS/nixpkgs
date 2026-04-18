@@ -378,6 +378,9 @@ let
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+      strictDeps = lib.versionAtLeast version "4.0";
+      __structuredAttrs = lib.versionAtLeast version "4.0";
+
       meta = {
         homepage = "https://www.openssl.org/";
         changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
@@ -498,6 +501,35 @@ in
   openssl_3_6 = common {
     version = "3.6.2";
     hash = "sha256-qvUaH+BkOE+BHa6utOxNznNA7IvYkwJ+7mdq8x6DoE8=";
+
+    patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      # Look up SSL certificates in /etc rather than the immutable installation directory
+      (
+        if stdenv.hostPlatform.isDarwin then
+          ./3.5/use-etc-ssl-certs-darwin.patch
+        else
+          ./3.5/use-etc-ssl-certs.patch
+      )
+    ];
+
+    withDocs = true;
+
+    extraMeta = {
+      license = lib.licenses.asl20;
+    };
+  };
+
+  openssl_4_0 = common {
+    version = "4.0.0";
+    hash = "sha256-wyz0mpWcTzRflgaYLdNufSj3xYsZwuJddWJNKz0veaw=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:

@@ -8,12 +8,14 @@
   ipython,
   junit-xml,
   ptpython,
+  pydantic,
   python,
   remote-pdb,
   ruff,
   ty,
 
   netpbm,
+  vhost-device-vsock,
   nixosTests,
   qemu_pkg ? qemu_test,
   qemu_test,
@@ -45,6 +47,7 @@ buildPythonApplication {
     ipython
     junit-xml
     ptpython
+    pydantic
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;
@@ -56,6 +59,7 @@ buildPythonApplication {
     socat
     util-linux
     vde2
+    vhost-device-vsock
   ]
   ++ lib.optionals enableNspawn [
     systemd
@@ -65,9 +69,8 @@ buildPythonApplication {
     tesseract4
   ];
 
-  passthru.tests = {
-    inherit (nixosTests.nixos-test-driver) driver-timeout;
-  };
+  # containers test requires extra nix features that are not available in ofborg.
+  passthru.tests = removeAttrs nixosTests.nixos-test-driver [ "containers" ];
 
   doCheck = true;
 
