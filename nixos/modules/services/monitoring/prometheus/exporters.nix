@@ -386,7 +386,7 @@ let
           after = [ "network.target" ];
           serviceConfig.Restart = mkDefault "always";
           serviceConfig.PrivateTmp = mkDefault true;
-          serviceConfig.WorkingDirectory = mkDefault /tmp;
+          serviceConfig.WorkingDirectory = mkDefault "/tmp";
           serviceConfig.DynamicUser = mkDefault enableDynamicUser;
           serviceConfig.User = mkDefault conf.user;
           serviceConfig.Group = conf.group;
