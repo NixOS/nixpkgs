@@ -1256,6 +1256,7 @@ builtins.intersectAttrs super {
     in
     overrideCabal
       (drv: {
+        strictDeps = false;
         executableSystemDepends = runtimeExecDeps;
         enableSharedExecutables = false;
 
