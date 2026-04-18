@@ -2,7 +2,6 @@
   stdenv,
   stdenvNoCC,
   lib,
-  writeText,
   testers,
   runCommand,
   runCommandWith,
@@ -10,6 +9,7 @@
   expect,
   curl,
   installShellFiles,
+  makeWrapper,
   callPackage,
   zlib,
   swiftPackages,
@@ -47,13 +47,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     replaceVars ./dotnet-sdk-setup-hook.sh {
       inherit lndir xmlstarlet;
     }
+  )
+  ++ lib.optional (unwrapped ? passthru && unwrapped.passthru ? workloadPackRoot) (
+    replaceVars ./dotnet-workload-hook.sh {
+      workloadPackRoot = unwrapped.passthru.workloadPackRoot;
+    }
   );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
   propagatedBuildInputs = lib.optional (type == "sdk") nugetPackageHook;
 
-  nativeBuildInputs = [ installShellFiles ];
+  hasWorkloads = unwrapped ? passthru && unwrapped.passthru ? workloadPackRoot;
+
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional finalAttrs.hasWorkloads makeWrapper;
 
   outputs = [ "out" ] ++ lib.optional (unwrapped ? man) "man";
 
@@ -71,6 +78,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --bash ${./completions/dotnet.bash} \
       --zsh ${./completions/dotnet.zsh} \
       --fish ${./completions/dotnet.fish}
+  ''
+  + lib.optionalString finalAttrs.hasWorkloads ''
+    # Make workload packs discoverable for direct SDK usage (nix shell,
+    # environment.systemPackages) where setup hooks aren't sourced.
+    wrapProgram "$out"/bin/dotnet \
+      --prefix DOTNETSDK_WORKLOAD_PACK_ROOTS : "${unwrapped.passthru.workloadPackRoot}/share/dotnet"
   '';
 
   doInstallCheck = true;
@@ -87,6 +100,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = unwrapped.passthru // {
     inherit unwrapped;
+    withWorkloads =
+      workloadIds: callPackage (import ./with-workloads.nix finalAttrs.finalPackage workloadIds) { };
     tests =
       let
         mkDotnetTest =
@@ -304,6 +319,41 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           cs = mkWebTest "C#" "cs";
           fs = mkWebTest "F#" "fs";
         };
-      };
+      }
+      //
+        lib.optionalAttrs
+          (
+            type == "sdk"
+            && unwrapped.passthru ? workloadIds
+            && builtins.elem "wasm-tools" (unwrapped.passthru.workloadIds or [ ])
+          )
+          {
+            wasm = mkDotnetTest {
+              name = "wasm-build";
+              template = "web";
+              usePackageSource = true;
+              build = ''
+                # Override the project to target browser-wasm via the wasm-tools workload
+                cat > test.csproj <<'EOF'
+                <Project Sdk="Microsoft.NET.Sdk">
+                  <PropertyGroup>
+                    <TargetFramework>net${lib.concatStringsSep "." (lib.take 2 (lib.splitVersion unwrapped.version))}</TargetFramework>
+                    <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+                    <WasmMainJSPath>main.mjs</WasmMainJSPath>
+                    <OutputType>Exe</OutputType>
+                  </PropertyGroup>
+                </Project>
+                EOF
+                cat > Program.cs <<'EOF'
+                System.Console.WriteLine("Hello from wasm-tools!");
+                EOF
+                cat > main.mjs <<'EOF'
+                import { dotnet } from './_framework/dotnet.js';
+                const { getAssemblyExports } = await dotnet.create();
+                EOF
+                dotnet build -o $out
+              '';
+            };
+          };
   };
 })
