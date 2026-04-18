@@ -1,0 +1,82 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 87a24860..83023c26 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -31,67 +31,6 @@ set(LUAU_BUILD_TESTS OFF)
+ 
+ add_subdirectory(extern/luau)
+ 
+-# libuv setup
+-set(LIBUV_BUILD_SHARED OFF)
+-set(BUILD_SHARED_LIBS OFF) # why does an option for LIBUV_BUILD_SHARED exist separately
+-set(LIBUV_BUILD_TESTS OFF)
+-set(LIBUV_BUILD_BENCH OFF)
+-add_subdirectory(extern/libuv)
+-
+-# Define libuv include directory here, before it's needed by other subdirectories
+-set(LIBUV_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/libuv/include)
+-
+-# zlib setup
+-#
+-set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "Do not build examples" FORCE)
+-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static zlib" FORCE)
+-add_subdirectory(extern/zlib)
+-
+-set(ZLIB_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/extern/zlib")
+-
+-set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
+-
+-if(MSVC)
+-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+-        set(ZLIB_LIBRARY "${ZLIB_OUTPUT_DIR}/zlibstaticd.lib")
+-    else()
+-        set(ZLIB_LIBRARY "${ZLIB_OUTPUT_DIR}/zlibstatic.lib")
+-    endif()
+-else()
+-    set(ZLIB_LIBRARY "${ZLIB_OUTPUT_DIR}/libz.a")
+-endif()
+-set(ZLIB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/zlib;${ZLIB_OUTPUT_DIR})
+-set(ZLIB_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR} CACHE STRING "" FORCE)
+-
+-# boringssl setup
+-add_subdirectory(extern/boringssl)
+-set(BORINGSSL_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/extern/boringssl")
+-set(BORINGSSL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/boringssl/include)
+-
+-# Suppress frame-size warnings in boringssl when sanitizers are enabled
+-if (LUTE_ENABLE_SANITIZERS AND NOT MSVC)
+-    target_compile_options(crypto PRIVATE -Wno-frame-larger-than)
+-endif()
+-
+-# curl setup
+-
+-set(USE_LIBIDN2 OFF)
+-set(USE_NGHTTP2 OFF)
+-set(CURL_USE_LIBPSL OFF)
+-set(CURL_USE_LIBSSH2 OFF)
+-set(CURL_ZLIB ON)
+-SET(CURL_ZSTD OFF CACHE STRING "Disable ZSTD" FORCE)
+-set(CURL_BROTLI OFF CACHE STRING "Disable brotli support" FORCE)
+-set(CURL_ENABLE_SSL ON)
+-set(CURL_USE_OPENSSL ON)
+-set(BUILD_EXAMPLES OFF)
+-set(BUILD_CURL_EXE OFF)
+-set(BUILD_SHARED_LIBS OFF)
+-set(BUILD_STATIC_LIBS ON)
+-
+-set(HAVE_BORINGSSL ON)
+-add_subdirectory(extern/curl)
+-
+ # uWebSockets setup
+ set(WITH_BORINGSSL ON)
+ set(WITH_LIBUV ON)
+@@ -105,9 +44,6 @@ include(uWebSockets)
+ # Define include directories for uWebSockets and uSockets
+ set(UWEBSOCKETS_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/extern/uWebSockets/src)
+ 
+-# libsodium for `pwhash`
+-include(libsodium)
+-
+ # Lute
+ set(LUTE_OPTIONS)
+ 
