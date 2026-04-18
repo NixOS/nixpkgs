@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   vala,
+  json-glib,
   libadwaita,
   libgee,
   libgtop,
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     fwupd
     granite7
     gtk4
+    json-glib
     libadwaita
     libgee
     libgtop
