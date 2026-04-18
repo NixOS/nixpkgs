@@ -8954,6 +8954,13 @@
     matrix = "@flandweber:envs.net";
     name = "Finn Landweber";
   };
+  flashonfire = {
+    email = "flashonfire@proton.me";
+    github = "flashonfire";
+    githubId = 26602207;
+    matrix = "@flashonfire:lithium.ovh";
+    name = "Guillaume Calderon";
+  };
   fleaz = {
     email = "mail@felixbreidenstein.de";
     matrix = "@fleaz:rainbownerds.de";
