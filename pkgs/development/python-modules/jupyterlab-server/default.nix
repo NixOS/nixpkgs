@@ -2,7 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   babel,
   jinja2,
   json5,
@@ -10,12 +14,18 @@
   jupyter-server,
   packaging,
   requests,
+
+  # optional-dependencies
   openapi-core,
+  ruamel-yaml,
+
+  # tests
   pytest-jupyter,
+  pytest-timeout,
   pytestCheckHook,
   requests-mock,
-  ruamel-yaml,
   strict-rfc3339,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -35,11 +45,9 @@ buildPythonPackage (finalAttrs: {
     ./fix-openapi-core-compat.patch
   ];
 
-  postPatch = ''
-    sed -i "/timeout/d" pyproject.toml
-  '';
-
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+  ];
 
   dependencies = [
     babel
@@ -58,29 +66,21 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
+  pythonImportsCheck = [ "jupyterlab_server" ];
+
   nativeCheckInputs = [
     pytest-jupyter
+    pytest-timeout
     pytestCheckHook
     requests-mock
     strict-rfc3339
+    writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.openapi;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
-  ];
 
   disabledTestPaths = [
     # require optional language pack packages for tests
     "tests/test_translation_api.py"
-  ];
-
-  pythonImportsCheck = [
-    "jupyterlab_server"
   ];
 
   __darwinAllowLocalNetworking = true;
