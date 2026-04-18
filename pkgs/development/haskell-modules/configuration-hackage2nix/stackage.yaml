@@ -2673,7 +2673,6 @@ default-package-overrides:
   - sourcemap ==0.1.7
   - sox ==0.2.3.2
   - soxlib ==0.0.3.2
-  - spacecookie ==1.0.0.3
   - spdx ==1.1
   - special-values ==0.1.0.0
   - speculate ==0.4.20
