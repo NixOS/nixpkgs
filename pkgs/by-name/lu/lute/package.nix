@@ -127,6 +127,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../batteries $out/share
   '';
 
+  passthru.updateScript = ./update.nu;
+
   meta = {
     description = "Standalone Luau runtime for general-purpose programming";
     homepage = "https://lute.luau.org";
