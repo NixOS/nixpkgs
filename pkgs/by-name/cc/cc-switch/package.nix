@@ -27,7 +27,7 @@ let
   src = fetchFromGitHub {
     owner = "farion1231";
     repo = "cc-switch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+gHxOAumI/ZUukFNc9ks22bkqbOky6F7MYZzGwrXRRc=";
   };
 
