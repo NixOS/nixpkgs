@@ -3,16 +3,15 @@
   buildGo126Module,
   fetchFromGitHub,
 }:
-
 buildGo126Module (finalAttrs: {
   pname = "hyprmon";
-  version = "0.0.14";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "erans";
     repo = "hyprmon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ObOvC2cIoLTBaGmpTAkm2y4vzqg61z+JZotEnmef1eE=";
+    hash = "sha256-dcjEnxSQwXUPJ44gj7pVPQtZUkBXbqLvQgmhYvANz8o=";
   };
 
   vendorHash = "sha256-n4RZxpsrlSUD3B/GLVoM2CPckvDkbyaMyg6h4QNbuH0=";
