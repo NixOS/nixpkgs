@@ -28,15 +28,15 @@ let
     '';
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phonetisaurus";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "AdolfVonKleist";
     repo = "phonetisaurus";
-    rev = version;
-    sha256 = "1b18s5zz0l0fhqh9n9jnmgjz2hzprwzf6hx5a12zibmmam3qyriv";
+    tag = finalAttrs.version;
+    hash = "sha256-Lt7xKLrpcLw8ouLfCJZdWDb0XfrmW+LM+fe8st3B8ow=";
   };
 
   enableParallelBuilding = true;
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Framework for Grapheme-to-phoneme models for speech recognition using the OpenFst framework";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.unix;
   };
-}
+})
