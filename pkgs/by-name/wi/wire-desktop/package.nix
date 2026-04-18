@@ -189,7 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
       arianvp
       ern775
       korkutkardes7
-      toonn
     ];
     platforms = [
       "x86_64-linux"
