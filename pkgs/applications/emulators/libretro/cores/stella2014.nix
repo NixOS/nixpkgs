@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "stella2014";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2026-04-12";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "stella2014-libretro";
-    rev = "3cc89f0d316d6c924a5e3f4011d17421df58e615";
-    hash = "sha256-2gnFWau7F45SdzoqDUlqYXfXVE1EUPozHZv7BhyRRIA=";
+    rev = "eed47e154d1bbda3305e9ef2d486b6710c8973f4";
+    hash = "sha256-QpPjVnFCkn6xlB7LxpE6bsNfYe3HSsEKUjqmEf2yTvA=";
   };
 
   makefile = "Makefile";
