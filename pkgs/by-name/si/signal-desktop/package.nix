@@ -347,6 +347,7 @@ stdenv.mkDerivation (finalAttrs: {
       iamanaws
       marcin-serwin
       teutat3s
+      ncfavier
     ];
     mainProgram = "signal-desktop";
     platforms = [
