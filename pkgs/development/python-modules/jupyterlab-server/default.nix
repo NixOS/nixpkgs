@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   babel,
   jinja2,
@@ -23,10 +23,11 @@ buildPythonPackage (finalAttrs: {
   version = "2.28.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "jupyterlab_server";
-    inherit (finalAttrs) version;
-    hash = "sha256-NbqoGJixX5NXPi3spQ0RrArkB+u2iCmdOlITJlAzcSw=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyterlab_server";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/h25HBKt6maaxuZRK+VMVA0AqTZhQkDnGVDgBisQcCw=";
   };
 
   patches = [
@@ -87,7 +88,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://github.com/jupyterlab/jupyterlab_server";
-    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
