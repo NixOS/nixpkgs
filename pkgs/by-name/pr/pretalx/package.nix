@@ -16,20 +16,20 @@ let
     };
   };
 
-  version = "2026.1.0";
+  version = "2026.1.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     tag = "v${version}";
-    hash = "sha256-oSqeqVQ/L6DBI2ZP0h+qz2QBB4evt7V99tLMTkXvAic=";
+    hash = "sha256-qkItCF7MOtJQ8NKdB9ImIRKP8g+dzjddElUC4RvLW+s=";
   };
 
   meta = {
     description = "Conference planning tool: CfP, scheduling, speaker management";
     mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
-    changelog = "https://docs.pretalx.org/changelog/#${version}";
+    changelog = "https://docs.pretalx.org/changelog/v${version}/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       hexa
