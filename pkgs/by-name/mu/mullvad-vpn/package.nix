@@ -172,8 +172,7 @@ stdenv.mkDerivation {
     mainProgram = "mullvad-vpn";
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
-    maintainers = with lib.maintainers; [
-      ymarkus
+    maintainers = [
     ];
   };
 }

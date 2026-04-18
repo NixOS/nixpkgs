@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pretalx-pages";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx-pages";
     tag = "v${version}";
-    hash = "sha256-iRmDYjq08UkA/2pyUUK/DUuNbLNn/KSNQGiU1o1gTWw=";
+    hash = "sha256-2xrkUxOXLR8ccdpkTpDQOV75vkPzkKqodTGf9aqVU0Q=";
   };
 
   build-system = [ setuptools ];

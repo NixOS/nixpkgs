@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "tinytuya";
-  version = "1.17.6";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jasonacox";
     repo = "tinytuya";
     tag = "v${version}";
-    hash = "sha256-iX16Hqlvp0YIlhSFLa3MYAKOr+Z2ubPBPwI1883m5p4=";
+    hash = "sha256-0tY2O8OQ6hYZKF/2I6DehYygtNfZCJKIZiyW0iI8VQc=";
   };
 
   build-system = [ setuptools ];
