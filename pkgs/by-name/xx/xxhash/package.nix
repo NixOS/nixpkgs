@@ -8,6 +8,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "xxhash";
   version = "0.8.3";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
@@ -35,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Cyan4973/xxHash";
     license = with lib.licenses; [
       bsd2
-      gpl2
+      gpl2Plus
     ];
     mainProgram = "xxhsum";
     maintainers = [ ];
