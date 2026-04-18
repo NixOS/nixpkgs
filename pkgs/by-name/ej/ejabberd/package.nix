@@ -17,11 +17,9 @@
   gd,
   autoreconfHook,
   gawk,
-  applyPatches,
   fetchFromGitHub,
   fetchgit,
   fetchNpmDeps,
-  fetchpatch2,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -146,7 +144,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "26.03";
+  version = "26.04";
 
   nativeBuildInputs = [
     makeWrapper
@@ -178,16 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   npmDeps = lib.optionalDrvAttr npmToolingUsed (fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    src =
-      if builtins.isNull finalAttrs.patches || builtins.length finalAttrs.patches <= 0 then
-        finalAttrs.src
-      else
-        # A bit of a hack, but if the package*.json files are patched,
-        # fetchNpmDeps will be out of sync
-        applyPatches {
-          inherit (finalAttrs) src patches;
-          name = "${finalAttrs.pname}-${finalAttrs.version}-patched";
-        };
+    src = finalAttrs.src;
     hash = "sha256-MTyoc8ozrCi3W0CXmxyLpyU8v+vlUjcbLnv/1ev/Qqo=";
   });
 
@@ -195,17 +184,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-M38niXEW++SPAvqQ2cqEd23+w7lBDO5EPgu/QRdYbXo=";
+    hash = "sha256-PF65TgHvKeSEudEqqJVEotu2zgiWgGtRuNvbiyE0nwc=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # Makes Bootstrap optional, drops jQuery
-      # https://github.com/processone/ejabberd/pull/4558
-      url = "https://patch-diff.githubusercontent.com/raw/processone/ejabberd/pull/4558.patch";
-      hash = "sha256-ETl2Zf7O6roxtf7DthJqL+tj4RvEfW94735sGM8x/GM=";
-    })
-  ];
 
   passthru.tests = {
     inherit (nixosTests) ejabberd;

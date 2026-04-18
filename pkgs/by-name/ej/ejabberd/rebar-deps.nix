@@ -24,11 +24,11 @@ let
     };
     xmpp = builder {
       name = "xmpp";
-      version = "1.13.1";
+      version = "1.13.3";
       src = fetchHex {
         pkg = "xmpp";
-        version = "1.13.1";
-        sha256 = "sha256-oCTu98y094uftS431jhaV73RUL515Q1Ru8uvOamriD0=";
+        version = "1.13.3";
+        sha256 = "sha256-BWSKpNvM/uYqqnlLKSowWEY50DyR9cCGa+jDQ0tqb0g=";
       };
       beamDeps = [
         ezlib
@@ -188,11 +188,11 @@ let
     };
     fast_xml = builder {
       name = "fast_xml";
-      version = "1.1.58";
+      version = "1.1.60";
       src = fetchHex {
         pkg = "fast_xml";
-        version = "1.1.58";
-        sha256 = "sha256-o21uA6OYxTuhiekSv0x1WaNwSsY8UFDxJtR0FAGLTKA=";
+        version = "1.1.60";
+        sha256 = "sha256-z54nSd1HIEcCy3oEq1BFZC+gCW/fyc/y6cptPyq9N8U=";
       };
       beamDeps = [ p1_utils ];
     };
