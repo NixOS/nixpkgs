@@ -327,15 +327,50 @@ class RepoGitHub(Repo):
             return json.load(response)
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def _get_recent_tags_from_atom(self) -> list[str]:
+        tags_url = self.url("tags.atom")
+        tags_req = make_request(tags_url, self.token)
+        with urllib.request.urlopen(tags_req, timeout=10) as response:
+            xml = response.read()
+
+        root = ET.fromstring(xml)
+        tags = []
+        for entry in root.findall(ATOM_ENTRY):
+            link = entry.find(ATOM_LINK)
+            if link is None:
+                continue
+
+            href = link.get("href")
+            if not href:
+                continue
+
+            tag_name = Path(urlparse(href).path).name
+            if tag_name:
+                tags.append(tag_name)
+
+        return tags
+
+    def _get_latest_tag_from_fallbacks(self) -> str | None:
+        try:
+            recent_tags = self._get_recent_tags_from_atom()
+            if recent_tags:
+                latest_tag = first_release_tag(recent_tags)
+                return latest_tag if latest_tag is not None else recent_tags[0]
+        except (urllib.error.URLError, ET.ParseError) as e:
+            log.warning(
+                "Failed to fetch GitHub tag feed for %s/%s: %s",
+                self.owner,
+                self.repo,
+                e,
+            )
+
+        return super().get_latest_tag()
+
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def get_latest_tag(self) -> str | None:
         try:
             if not self.token or self.token == "":
-                log.info(
-                    "No GitHub token available for %s/%s, using git ls-remote fallback",
-                    self.owner,
-                    self.repo,
-                )
-                return super().get_latest_tag()
+                return self._get_latest_tag_from_fallbacks()
 
             query = """
             query GetRecentTags($owner: String!, $name: String!) {
@@ -354,17 +389,28 @@ class RepoGitHub(Repo):
             )
 
             if "errors" in data:
+                if any(
+                    error.get("code") == "graphql_rate_limit"
+                    or error.get("type") == "RATE_LIMIT"
+                    for error in data["errors"]
+                ):
+                    log.warning(
+                        "GitHub GraphQL rate limit hit for %s/%s, falling back to tag feeds",
+                        self.owner,
+                        self.repo,
+                    )
+                    return self._get_latest_tag_from_fallbacks()
                 log.warning(
                     "GraphQL errors for %s/%s: %s",
                     self.owner,
                     self.repo,
                     data["errors"],
                 )
-                return None
+                return self._get_latest_tag_from_fallbacks()
 
             repo = data.get("data", {}).get("repository")
             if not repo:
-                return None
+                return self._get_latest_tag_from_fallbacks()
 
             recent_tags = [node["name"] for node in repo["refs"]["nodes"]]
             if not recent_tags:
@@ -373,6 +419,13 @@ class RepoGitHub(Repo):
             latest_tag = first_release_tag(recent_tags)
             return latest_tag if latest_tag is not None else recent_tags[0]
 
+        except urllib.error.HTTPError as e:
+            if e.code in (401, 403):
+                raise RuntimeError(
+                    "GitHub GraphQL auth failed for "
+                    f"{self.owner}/{self.repo} ({e.code}); refresh GITHUB_TOKEN"
+                ) from e
+            raise
         except Exception as e:
             log.warning(
                 "Error fetching version info for %s/%s: %s",
@@ -381,7 +434,7 @@ class RepoGitHub(Repo):
                 e,
                 exc_info=True,
             )
-            return None
+            return self._get_latest_tag_from_fallbacks()
 
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
