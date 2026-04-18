@@ -172,6 +172,13 @@ lib.mapAttrs mkLicense (
       fullName = "Apache License 2.0";
     };
 
+    babble1 = {
+      fullName = "Babble Software Distribution License 1.0";
+      url = "https://raw.githubusercontent.com/Project-Babble/Baballonia/b8eb227f9e2da9f7cbf7d673c8549f8a0bb60620/LICENSE";
+      free = false;
+      redistributable = true;
+    };
+
     baekmuk = {
       spdxId = "Baekmuk";
       fullName = "Baekmuk License";
