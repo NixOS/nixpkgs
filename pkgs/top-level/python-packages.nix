@@ -5190,6 +5190,8 @@ self: super: with self; {
 
   ewmhlib = callPackage ../development/python-modules/ewmhlib { };
 
+  exa-py = callPackage ../development/python-modules/exa-py { };
+
   example-robot-data = callPackage ../development/python-modules/example-robot-data {
     inherit (pkgs) example-robot-data;
   };
