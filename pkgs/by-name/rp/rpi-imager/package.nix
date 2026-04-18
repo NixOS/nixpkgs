@@ -123,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "rpi-imager";
     maintainers = with lib.maintainers; [
-      ymarkus
       anthonyroussel
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
