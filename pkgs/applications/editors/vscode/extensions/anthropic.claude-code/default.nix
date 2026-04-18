@@ -9,7 +9,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "claude-code";
     publisher = "anthropic";
     version = "2.1.114";
-    hash = "sha256-rcEbeYsyhbhh5wj6Mo3kz2+K3uZe5XMBKpwmSaB9Pgc=";
+    hash = "sha256-TfVradC9ZjfLBp8QvZ0AptCS9j2ogzSlsRXxksp+N9I=";
   };
 
   postInstall = ''
