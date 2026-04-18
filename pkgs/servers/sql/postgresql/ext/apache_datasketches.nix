@@ -23,8 +23,8 @@ let
     name = "datasketches-cpp";
     owner = "apache";
     repo = "datasketches-cpp";
-    tag = "5.0.2";
-    hash = "sha256-yGk1OckYipAgLTQK6w6p6EdHMxBIQSjPV/MMND3cDks=";
+    tag = "5.2.0";
+    hash = "sha256-h4+cln01jqLV0EpIqScpCyw8jxZgoVtdfBEjdvyUuVk=";
   };
 in
 
