@@ -35,15 +35,15 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caffe";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "BVLC";
     repo = "caffe";
-    rev = version;
-    sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
+    tag = finalAttrs.version;
+    hash = "sha256-Q6aWb5ck6gp/bbUMr/l6/hxqpNUPHngbG3EIVNm4koA=";
   };
 
   nativeBuildInputs = [
@@ -185,4 +185,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
