@@ -18215,6 +18215,12 @@
     github = "mohe2015";
     githubId = 13287984;
   };
+  mohitmishra786 = {
+    name = "Mohit Mishra";
+    email = "mohitmishra786687@gmail.com";
+    github = "mohitmishra786";
+    githubId = 71754779;
+  };
   momeemt = {
     name = "Mutsuha Asada";
     email = "me@momee.mt";
