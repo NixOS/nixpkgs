@@ -125,6 +125,14 @@ def select_latest_tag(
     return None
 
 
+def first_release_tag(tags: list[str]) -> str | None:
+    for tag in tags:
+        if normalize_release_version(tag) is not None:
+            return tag
+
+    return None
+
+
 class Repo:
     def __init__(self, uri: str, branch: str) -> None:
         self.uri = uri
@@ -318,17 +326,6 @@ class RepoGitHub(Repo):
         with urllib.request.urlopen(req, timeout=10) as response:
             return json.load(response)
 
-    def _extract_commit_date(self, target: dict) -> datetime | None:
-        commit_date_str = None
-        if "committedDate" in target:
-            commit_date_str = target["committedDate"]
-        elif "target" in target and "committedDate" in target["target"]:
-            commit_date_str = target["target"]["committedDate"]
-
-        if commit_date_str:
-            return datetime.fromisoformat(commit_date_str.replace("Z", "+00:00"))
-        return None
-
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def get_latest_tag(self) -> str | None:
         try:
@@ -341,23 +338,11 @@ class RepoGitHub(Repo):
                 return super().get_latest_tag()
 
             query = """
-            query GetLatestVersionInfo($owner: String!, $name: String!) {
+            query GetRecentTags($owner: String!, $name: String!) {
               repository(owner: $owner, name: $name) {
-                refs(refPrefix: "refs/tags/", first: 5, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) {
+                refs(refPrefix: "refs/tags/", first: 20, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) {
                   nodes {
                     name
-                    target {
-                      ... on Commit {
-                        committedDate
-                      }
-                      ... on Tag {
-                        target {
-                          ... on Commit {
-                            committedDate
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -377,63 +362,16 @@ class RepoGitHub(Repo):
                 )
                 return None
 
-            if "data" not in data or not data["data"]:
-                log.warning(
-                    "No data in GraphQL response for %s/%s", self.owner, self.repo
-                )
-                return None
-
-            repo = data["data"]["repository"]
+            repo = data.get("data", {}).get("repository")
             if not repo:
-                log.debug(
-                    "Repository %s/%s not found or inaccessible", self.owner, self.repo
-                )
                 return None
 
-            valid_versions = []
-            invalid_tags = []
-            for ref_node in repo["refs"]["nodes"]:
-                tag_name = ref_node["name"]
-                commit_date = self._extract_commit_date(ref_node["target"])
-                if not commit_date:
-                    continue
-
-                try:
-                    version = parse_version(tag_name)
-                    valid_versions.append((tag_name, version, commit_date))
-                except InvalidVersion:
-                    invalid_tags.append((tag_name, None, commit_date))
-
-            def get_version(tag_tuple):
-                _, version, _ = tag_tuple
-                return version
-
-            def get_date(tag_tuple):
-                _, _, date = tag_tuple
-                return date or datetime.min
-
-            def get_max_versions(versions, sort_key):
-                return max(versions, key=sort_key, default=(None, None, None))
-
-            max_valid_tag, _, max_valid_date = get_max_versions(
-                valid_versions, get_version
-            )
-            max_invalid_tag, _, max_invalid_date = get_max_versions(
-                invalid_tags, get_date
-            )
-            if max_valid_tag and max_invalid_tag:
-                return (
-                    max_invalid_tag
-                    if (max_invalid_date or datetime.min)
-                    > (max_valid_date or datetime.min)
-                    else max_valid_tag
-                )
-            elif max_valid_tag:
-                return max_valid_tag
-            elif max_invalid_tag:
-                return max_invalid_tag
-            else:
+            recent_tags = [node["name"] for node in repo["refs"]["nodes"]]
+            if not recent_tags:
                 return None
+
+            latest_tag = first_release_tag(recent_tags)
+            return latest_tag if latest_tag is not None else recent_tags[0]
 
         except Exception as e:
             log.warning(
