@@ -18,7 +18,7 @@ import traceback
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, date
 from functools import wraps
 from multiprocessing.dummy import Pool
@@ -1108,13 +1108,18 @@ def prefetch_plugin(
     cached_plugin = cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
-        cached_plugin.name = p.name
-        cached_plugin.commit = commit
-        cached_plugin.version = version
-        cached_plugin.date = date
-        cached_plugin.last_tag = latest_tag
-        cached_plugin.tag = source_tag
-        return cached_plugin, p.repo.redirect
+        return (
+            replace(
+                cached_plugin,
+                name=p.name,
+                commit=commit,
+                version=version,
+                date=date,
+                last_tag=latest_tag,
+                tag=source_tag,
+            ),
+            p.repo.redirect,
+        )
 
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
