@@ -1,19 +1,25 @@
 {
   lib,
-  apple-sdk,
+  fetchFromGitHub,
   mkAppleDerivation,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  configd = apple-sdk.sourceRelease "configd";
-  dyld = apple-sdk.sourceRelease "dyld";
-  Libinfo = apple-sdk.sourceRelease "Libinfo";
-  Libnotify = apple-sdk.sourceRelease "Libnotify";
-  xnu = apple-sdk.sourceRelease "xnu";
+  configd = sourceRelease "configd";
+  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
+  dyld = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "dyld";
+    rev = "dyld-1160.6";
+    hash = "sha256-6P/Da6xP19vmaCROoYv9pl7DaW3/U+qZBJT8PD33bn0=";
+  };
+  Libinfo = sourceRelease "Libinfo";
+  Libnotify = sourceRelease "Libnotify";
 
   # `arpa/nameser_compat.h` is included in the Libc source release instead of libresolv.
-  Libc = apple-sdk.sourceRelease "Libc";
+  Libc = sourceRelease "Libc";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "libresolv-deps-private-headers";

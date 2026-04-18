@@ -66,7 +66,7 @@ in
         "qcow2"
         "vpc"
       ];
-      default = "raw";
+      default = "vpc";
       description = "The image format to output";
     };
   };
