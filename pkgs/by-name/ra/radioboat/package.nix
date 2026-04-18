@@ -2,38 +2,40 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
-  mpv,
-  makeWrapper,
   installShellFiles,
+  makeWrapper,
+  mpv,
   nix-update-script,
-  testers,
-  radioboat,
+  rustPlatform,
+  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radioboat";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-4k+WK2Cxu1yBWgvEW9LMD2RGfiY7XDAe0qqph82zvlI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mPktliuWyrXuNzMCdMFZk5Q7lIkRk+y4nX3IBnCc5Mc=";
   };
 
-  vendorHash = "sha256-H2vo5gngXUcrem25tqz/1MhOgpNZcN+IcaQHZrGyjW8=";
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'version = "0.4.0"' 'version = "${finalAttrs.version}"'
+  '';
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/slashformotion/radioboat/internal/buildinfo.Version=${finalAttrs.version}"
-  ];
+  __structuredAttrs = true;
+
+  cargoHash = "sha256-fRF1FvwtvVJSTCK8DcZib6wMLpo73YtV7j+kjt4nVTo=";
 
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   preFixup = ''
     wrapProgram $out/bin/radioboat --prefix PATH ":" "${lib.makeBinPath [ mpv ]}";
@@ -46,20 +48,17 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/radioboat completion zsh)
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = radioboat;
-      command = "radioboat version";
-    };
-  };
+  passthru.updateScript = nix-update-script { };
+
+  doInstallCheck = true;
 
   meta = {
     description = "Terminal web radio client";
-    mainProgram = "radioboat";
     homepage = "https://github.com/slashformotion/radioboat";
+    changelog = "https://github.com/slashformotion/radioboat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
+    mainProgram = "radioboat";
+    platforms = lib.platforms.linux;
   };
 })
