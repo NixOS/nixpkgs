@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Rofi plugin which adds a mode that will list available games for launch along with their box art";
     homepage = "https://github.com/Rolv-Apneseth/rofi-games";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      koffydrop
+    ];
     platforms = lib.platforms.linux;
   };
 })
