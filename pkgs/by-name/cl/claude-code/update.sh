@@ -1,15 +1,12 @@
 #!/usr/bin/env nix
-#!nix shell --ignore-environment .#cacert .#nodejs .#git .#nix-update .#nix .#gnused .#findutils .#bash --command bash
+#!nix shell --ignore-environment .#cacert .#coreutils .#curl .#bash --command bash
 
 set -euo pipefail
 
-version=$(npm view @anthropic-ai/claude-code version)
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
-# Update version and hashes
-AUTHORIZED=1 NIXPKGS_ALLOW_UNFREE=1 nix-update claude-code --version="$version" --generate-lockfile
+BASE_URL="https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases"
 
-# nix-update can't update package-lock.json along with npmDepsHash
-# TODO: Remove this workaround if nix-update can update package-lock.json along with npmDepsHash.
-(nix-build --expr '((import ./.) { system = builtins.currentSystem; }).claude-code.npmDeps.overrideAttrs { outputHash = ""; outputHashAlgo = "sha256"; }' 2>&1 || true) \
-| sed -nE '$s/ *got: *(sha256-[A-Za-z0-9+/=-]+).*/\1/p' \
-| xargs -I{} sed -i 's|npmDepsHash = "sha256-[^"]*";|npmDepsHash = "{}";|' pkgs/by-name/cl/claude-code/package.nix
+VERSION="${1:-$(curl -fsSL "$BASE_URL/latest")}"
+
+curl -fsSL "$BASE_URL/$VERSION/manifest.json" --output manifest.json
