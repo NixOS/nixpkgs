@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.3.4";
+  version = "2.4.4";
 
   bundler = bundler.override { ruby = ruby_3_4; };
 
@@ -24,16 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-JKV0xAtEbGETprC5zYEcmCVcUFrW4h/+lbYayzWefKs=";
+    hash = "sha256-GjWR0jxVRTs5KNbFDEcgCbG/HTJlJGYpbKf8+0YBSmk=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
-
-  patches = [
-    # Drop setxid calls in non-root mode (fails under strict seccomp).
-    # https://github.com/docusealco/docuseal/pull/593
-    ./only-switch-uid-when-root.patch
-  ];
 
   rubyEnv = bundlerEnv {
     name = "docuseal-gems";
@@ -52,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     offlineCache = fetchYarnDeps {
       inherit (finalAttrs) src;
-      hash = "sha256-AvdaSIXO31t15wWysTvFISqmKCAi1Q8CJgO0J2DqM6M=";
+      hash = "sha256-62nI/QUzlpI1VyZ6PWPz2kSp4S2GUIQDaf4jUwzyj24=";
     };
 
     nativeBuildInputs = [
