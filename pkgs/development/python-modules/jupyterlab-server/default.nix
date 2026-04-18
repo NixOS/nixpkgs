@@ -18,14 +18,14 @@
   strict-rfc3339,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-server";
   version = "2.28.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_server";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-NbqoGJixX5NXPi3spQ0RrArkB+u2iCmdOlITJlAzcSw=";
   };
 
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     requests-mock
     strict-rfc3339
   ]
-  ++ optional-dependencies.openapi;
+  ++ finalAttrs.passthru.optional-dependencies.openapi;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -82,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "Set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://github.com/jupyterlab/jupyterlab_server";
-    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})
