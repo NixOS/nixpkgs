@@ -635,7 +635,6 @@ in
       type = types.listOf types.str;
       default = [
         "aes"
-        "aes_generic"
         "blowfish"
         "twofish"
         "serpent"
