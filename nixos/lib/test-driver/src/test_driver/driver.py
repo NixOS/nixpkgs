@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import signal
@@ -14,6 +15,7 @@ from typing import Any
 from unittest import TestCase
 
 from colorama import Style
+from pydantic import BaseModel
 
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
@@ -26,6 +28,26 @@ from test_driver.machine import (
 )
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
+
+
+class NodeConfiguration(BaseModel):
+    name: str
+    start_script: Path
+
+
+class DriverConfiguration(BaseModel):
+    vms: dict[str, NodeConfiguration]
+    containers: dict[str, NodeConfiguration]
+    vlans: list[int]
+    global_timeout: int
+    enable_ssh_backdoor: bool
+    test_script: Path
+
+
+def load_driver_configuration(file_path: str) -> DriverConfiguration:
+    with open(file_path) as f:
+        data = json.load(f)
+    return DriverConfiguration.model_validate(data)
 
 
 class AssertionTester(TestCase):
@@ -113,71 +135,55 @@ class Driver:
     """A handle to the driver that sets up the environment
     and runs the tests"""
 
+    config: DriverConfiguration
     tests: str
     vlans: list[VLan] = []
     machines_qemu: list[QemuMachine] = []
     machines_nspawn: list[NspawnMachine] = []
     polling_conditions: list[PollingCondition]
-    global_timeout: int
     race_timer: threading.Timer
-    vm_start_scripts: dict[str, str]
-    container_start_scripts: dict[str, str]
-    vlan_ids: list[int]
     keep_machine_state: bool
     logger: AbstractLogger
     debug: DebugAbstract
     vhost_vsock: VHostDeviceVsock | None = None
-    enable_ssh_backdoor: bool
 
     def __init__(
         self,
-        vm_names: list[str],
-        vm_start_scripts: list[str],
-        container_names: list[str],
-        container_start_scripts: list[str],
-        vlans: list[int],
-        tests: str,
+        config: DriverConfiguration,
         out_dir: Path,
         logger: AbstractLogger,
         keep_machine_state: bool = False,
-        global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
-        enable_ssh_backdoor: bool = False,
     ):
-        self.tests = tests
+        self.config = config
+        self.tests = config.test_script.read_text()
         self.out_dir = out_dir
-        self.global_timeout = global_timeout
         self.logger = logger
         self.debug = debug
-        self.vlan_ids = list(set(vlans))
         self.polling_conditions = []
         self.keep_machine_state = keep_machine_state
-        self.global_timeout = global_timeout
-        self.vm_start_scripts = dict(zip(vm_names, vm_start_scripts))
-        self.container_start_scripts = dict(
-            zip(container_names, container_start_scripts)
-        )
-        self.enable_ssh_backdoor = enable_ssh_backdoor
 
     def __enter__(self) -> "Driver":
-        self.race_timer = threading.Timer(self.global_timeout, self.terminate_test)
+        self.race_timer = threading.Timer(
+            self.config.global_timeout, self.terminate_test
+        )
         tmp_dir = get_tmp_dir()
 
         with self.logger.nested("start all VLans"):
-            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in self.vlan_ids]
+            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in self.config.vlans]
 
         self.polling_conditions = []
 
-        if self.enable_ssh_backdoor and self.vm_start_scripts:
+        if self.config.enable_ssh_backdoor and self.config.vms:
             with self.logger.nested("start vhost-device-vsock"):
                 self.vhost_vsock = VHostDeviceVsock(
-                    tmp_dir, list(self.vm_start_scripts.keys())
+                    tmp_dir, list(self.config.vms.keys())
                 )
 
         self.machines_qemu = [
             QemuMachine(
                 name=name,
-                start_command=vm_start_script,
+                start_command=vm_config.start_script.as_posix(),
                 keep_machine_state=self.keep_machine_state,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
@@ -194,23 +200,23 @@ class Driver:
                     else None
                 ),
             )
-            for name, vm_start_script in self.vm_start_scripts.items()
+            for name, vm_config in self.config.vms.items()
         ]
 
-        if len(self.container_start_scripts) > 0 and in_nix_sandbox():
+        if self.config.containers and in_nix_sandbox():
             self._init_nspawn_environment()
 
         self.machines_nspawn = [
             NspawnMachine(
                 name=name,
-                start_command=container_start_script,
+                start_command=container_config.start_script.as_posix(),
                 tmp_dir=tmp_dir,
                 logger=self.logger,
                 keep_machine_state=self.keep_machine_state,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
             )
-            for name, container_start_script in self.container_start_scripts.items()
+            for name, container_config in self.config.containers.items()
         ]
 
         return self
@@ -285,7 +291,7 @@ class Driver:
                 except Exception as e:
                     self.logger.error(f"Error during cleanup of vlan{vlan.nr}: {e}")
 
-            if self.enable_ssh_backdoor:
+            if self.config.enable_ssh_backdoor:
                 try:
                     del self.vhost_vsock
                 except Exception as e:
@@ -309,7 +315,7 @@ class Driver:
 
         general_symbols = dict(
             start_all=self.start_all,
-            test_script=self.test_script,
+            test_script=self.config.test_script,
             machines=self.machines,
             machines_qemu=self.machines_qemu,
             machines_nspawn=self.machines_nspawn,
@@ -351,7 +357,7 @@ class Driver:
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
     def dump_machine_ssh(self) -> None:
-        if not self.enable_ssh_backdoor:
+        if not self.config.enable_ssh_backdoor:
             return
 
         assert self.vhost_vsock is not None
@@ -417,7 +423,7 @@ class Driver:
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""
         self.logger.info(
-            f"Test will time out and terminate in {self.global_timeout} seconds"
+            f"Test will time out and terminate in {self.config.global_timeout} seconds"
         )
         self.race_timer.start()
         self.test_script()
@@ -489,7 +495,7 @@ class Driver:
         """
         tmp_dir = get_tmp_dir()
 
-        if self.enable_ssh_backdoor:
+        if self.config.enable_ssh_backdoor:
             self.logger.warning(
                 f"create_machine({name}): not enabling SSH backdoor, this is not supported for VMs created with create_machine!"
             )
