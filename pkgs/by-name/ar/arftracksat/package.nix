@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "arftracksat";
-  version = "unstable-2025-09-15";
+  version = "unstable-2026-02-19";
 
   src = fetchFromGitHub {
     owner = "arf20";
     repo = "arftracksat";
-    rev = "5c9b3866b6fcd95382ff56c68cdd38f3d08c1372";
-    hash = "sha256-inCgsxrJkBNGmdGPd28XnOJYCiatL35TxDcfvZjA2cY=";
+    rev = "a9b86878e2ee6f332dc1df07685b7d20970c2f7e";
+    hash = "sha256-guDgy4H0pnQCihYwG7HoKApOlEcDtcaRaj6fRuVdLlc=";
   };
 
   nativeBuildInputs = [
@@ -35,11 +35,13 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     nlohmann_json
+    curlpp
+    glm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     freeglut
     libGL
     libGLU
-    curlpp
-    glm
   ];
 
   meta = {
