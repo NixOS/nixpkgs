@@ -6,8 +6,8 @@
   },
   {
     "pname": "CodeFileSanity",
-    "version": "0.0.37",
-    "hash": "sha256-+BoA4FdDUfeREdc42xbnonh3IBLOjzyrrBosaswbSg4="
+    "version": "0.0.41",
+    "hash": "sha256-DJ0FeoxkwsywOl/yms1l2IW1YeHm6T3H7IMIMx3kksg="
   },
   {
     "pname": "DiffPlex",
@@ -616,8 +616,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2026.318.0",
-    "hash": "sha256-LKRgb7Qiuap13zPB14+StllK52Oz/VN35bGnymqek4s="
+    "version": "2026.416.0",
+    "hash": "sha256-moHhHajj0WlcA0hHdLTw4MoKLdnHJdw8+EhSrCcbUVY="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -631,8 +631,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2026.404.0",
-    "hash": "sha256-ZMWNLcxY3WqfsYomDAQKBU7X179tkdMV1LdUk5jilxU="
+    "version": "2026.411.0",
+    "hash": "sha256-cc4GkPDnw22X2fPKSyULCflgvxS4cLqzx45j+KrZuiI="
   },
   {
     "pname": "ppy.osuTK.NS20",
