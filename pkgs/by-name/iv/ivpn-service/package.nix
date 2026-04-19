@@ -29,6 +29,9 @@ buildGoModule (finalAttrs: {
     hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   modRoot = "daemon";
   vendorHash = "sha256-DVKSCcEeE7vI8aOYuEwk22n0wtF7MMDOyAgYoXYadwI=";
 
