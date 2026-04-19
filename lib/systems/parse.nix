@@ -284,6 +284,12 @@ rec {
         family = "m68k";
       };
 
+      sh4 = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "sh";
+      };
+
       powerpc = {
         bits = 32;
         significantByte = bigEndian;

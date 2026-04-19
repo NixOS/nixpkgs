@@ -171,6 +171,7 @@ lib.runTests (
       "i686-linux"
       "loongarch64-linux"
       "m68k-linux"
+      "sh4-linux"
       "microblaze-linux"
       "microblazeel-linux"
       "mips-linux"
