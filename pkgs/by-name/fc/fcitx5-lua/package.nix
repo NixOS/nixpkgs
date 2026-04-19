@@ -5,9 +5,13 @@
   cmake,
   extra-cmake-modules,
   fcitx5,
-  lua,
+  lua5_3,
   gettext,
 }:
+
+let
+  lua = lua5_3;
+in
 stdenv.mkDerivation rec {
   pname = "fcitx5-lua";
   version = "5.0.16";
