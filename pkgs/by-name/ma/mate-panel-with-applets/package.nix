@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    lib.forEach selectedApplets (x: x.buildInputs)
+    lib.concatMap (x: x.buildInputs) selectedApplets
     ++ selectedApplets
     ++ [ mate-panel ]
     ++ mate-panel.buildInputs
