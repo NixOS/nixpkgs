@@ -632,6 +632,15 @@ rec {
     else if platform.isPower64 then
       if platform.isLittleEndian then powernv else ppc64
 
+    else if platform.isSh4 then
+      {
+        linux-kernel = {
+          target = "vmlinux";
+          # SH arch doesn't have a 'make install' target.
+          installTarget = "vmlinux";
+        };
+      }
+
     else
       { };
 }
