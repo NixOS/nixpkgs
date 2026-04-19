@@ -346,7 +346,7 @@ class Driver:
         vlan_symbols = {
             f"vlan{v.nr}": self.vlans[idx] for idx, v in enumerate(self.vlans)
         }
-        print(
+        self.logger.debug(
             "additionally exposed symbols:\n    "
             + ", ".join(map(lambda m: m.name, self.machines))
             + ",\n    "
