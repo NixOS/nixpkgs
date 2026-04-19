@@ -152,6 +152,7 @@ in
     ssh-backdoor = runTestOn [ "x86_64-linux" ] ./nixos-test-driver/ssh-backdoor.nix;
     console-log = runTest ./nixos-test-driver/console-log.nix;
     containers = runTest ./nixos-test-driver/containers.nix;
+    skip-typecheck = runTest ./nixos-test-driver/skip-typecheck.nix;
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
         {

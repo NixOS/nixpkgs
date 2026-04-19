@@ -121,6 +121,7 @@ buildVscode {
       jefflabonte
       wetrustinprize
       oenu
+      yuannan
     ];
     platforms = [
       "x86_64-linux"

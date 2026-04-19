@@ -1,7 +1,8 @@
 {
   lib,
-  flutter338,
+  flutter341,
   fetchFromGitHub,
+  fetchurl,
   imagemagick,
   alsa-lib,
   libass,
@@ -13,24 +14,41 @@
   dart,
 }:
 
-let
+flutter341.buildFlutterApplication (finalAttrs: {
   pname = "interstellar";
-
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "interstellar-app";
     repo = "interstellar";
-    tag = "v${version}";
-    hash = "sha256-ZhZBy/KECz/Gs3RSuuXmTtI5pKPBMFQNG/kS8JvEaFc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WprvuIN7yS5yLR4eUF/M9yG25ZU1Sf1I1myujclF4oM=";
   };
-in
-flutter338.buildFlutterApplication {
-  inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = lib.importJSON ./git-hashes.json;
+
+  patches = [ ./emoji_builder.patch ];
+
+  postPatch = ''
+    substituteInPlace lib/src/widgets/emoji_picker/emoji_builder.dart \
+        --replace-fail "@compact.raw.json@" "${
+          fetchurl {
+            url = "https://raw.githubusercontent.com/milesj/emojibase/a5fc630a91ca42cddf3f4a66492965600fd3bce8/packages/data/en/compact.raw.json";
+            hash = "sha256-OivCYjiBEooRx3zni9jAr3lR0rzpoa3HX2l/a0UwDpE=";
+          }
+        }" \
+        --replace-fail "@messages.raw.json@" "${
+          fetchurl {
+            url = "https://raw.githubusercontent.com/milesj/emojibase/a5fc630a91ca42cddf3f4a66492965600fd3bce8/packages/data/en/messages.raw.json";
+            hash = "sha256-ZQWXZJ5jXxDNQHaOAsxApAt6oanvaEwZ6VXbDA0YeMs=";
+          }
+        }"
+    substituteInPlace lib/src/controller/database/database.dart \
+      --replace-fail "const Color.from(alpha: 1, red: 1, green: 1, blue: 1).value32bit" "0xFFFFFFFF" \
+      --replace-fail "const Color.from(alpha: 1, red: 0, green: 0, blue: 0).value32bit" "0xFF000000"
+  '';
 
   nativeBuildInputs = [ imagemagick ];
 
@@ -54,14 +72,14 @@ flutter338.buildFlutterApplication {
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/${pname}/lib
+    --prefix LD_LIBRARY_PATH : $out/app/${finalAttrs.pname}/lib
   '';
 
   passthru = {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -96,4 +114,4 @@ flutter338.buildFlutterApplication {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ JollyDevelopment ];
   };
-}
+})
