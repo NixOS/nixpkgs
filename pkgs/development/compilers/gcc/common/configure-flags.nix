@@ -227,6 +227,9 @@ let
         ]
       else
         [ "--disable-multilib" ]
+        # SH targets need m4 and m4-nofpu variants (the kernel uses -m4-nofpu).
+        # An empty list disables -m4-nofpu entirely.
+        ++ lib.optional targetPlatform.isSh4 "--with-multilib-list=m4,m4-nofpu"
     )
     ++ lib.optional (!enableShared) "--disable-shared"
     ++ lib.singleton (lib.enableFeature enablePlugin "plugin")
