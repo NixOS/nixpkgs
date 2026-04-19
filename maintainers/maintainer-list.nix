@@ -27723,6 +27723,12 @@
     githubId = 7727887;
     name = "Tomas Kala";
   };
+  tomasrivera = {
+    email = "tomas.riveral@icloud.com";
+    github = "tomasriveral";
+    githubId = 137088692;
+    name = "Tomás Rivera";
+  };
   tomberek = {
     email = "tomberek@gmail.com";
     matrix = "@tomberek:matrix.org";
