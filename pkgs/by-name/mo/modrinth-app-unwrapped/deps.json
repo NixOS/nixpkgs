@@ -126,10 +126,10 @@
    "jar": "sha256-hSTqyQ9+jg8TZog/LGyCDJO/ph3z12hXyNPoA89nMV0=",
    "pom": "sha256-e2qAtqLSZ2oEIvaWg4EyMVQlUfYbMgxochz7nh9ZCdA="
   },
-  "org/jetbrains/kotlin#kotlin-stdlib/2.0.21": {
-   "jar": "sha256-8xzFPxBafkjAk2g7vVQ3Vh0SM5IFE3dLRwgFZBvtvAk=",
-   "module": "sha256-gf1tGBASSH7jJG7/TiustktYxG5bWqcpcaTd8b0VQe0=",
-   "pom": "sha256-/LraTNLp85ZYKTVw72E3UjMdtp/R2tHKuqYFSEA+F9o="
+  "org/jetbrains/kotlin#kotlin-stdlib/2.3.0": {
+   "jar": "sha256-iHWHyRcTJQrVL+FK2RZtBCwzg1BJiQ6UN/NV/8WhlbE=",
+   "module": "sha256-CRCoo7aWD8eSxFxWqR18Oj8mKG8DKVVUtRnP83h1baI=",
+   "pom": "sha256-TVJW0+SETmVrDKQF9jUNbyF5XCQ3WzRSUmxUZ92ZtaI="
   },
   "org/junit#junit-bom/5.11.4": {
    "module": "sha256-qaTye+lOmbnVcBYtJGqA9obSd9XTGutUgQR89R2vRuQ=",
