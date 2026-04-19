@@ -1172,6 +1172,13 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    obdevProprietaryFreeware = {
+      fullName = "Little Snitch for Linux daemon and command line tool — Proprietary Freeware License";
+      url = "https://obdev.at/products/littlesnitch-linux/license.html";
+      free = false;
+      redistributable = true;
+    };
+
     obsidian = {
       fullName = "Obsidian End User Agreement";
       url = "https://obsidian.md/eula";
