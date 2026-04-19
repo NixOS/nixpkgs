@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Templatized Header Only C++ Implementation of the Python NumPy Library";
     homepage = "https://github.com/dpilger26/NumCpp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ spalf ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

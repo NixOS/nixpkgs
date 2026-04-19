@@ -25744,12 +25744,6 @@
     githubId = 44814450;
     name = "spaghetti-stack";
   };
-  spalf = {
-    email = "tom@tombarrett.xyz";
-    name = "tom barrett";
-    github = "70m6";
-    githubId = 105207964;
-  };
   spease = {
     email = "peasteven@gmail.com";
     github = "spease";
