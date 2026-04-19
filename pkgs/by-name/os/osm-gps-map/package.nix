@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-require-libsoup.patch
   ];
 
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+  ];
+
   outputs = [
     "out"
     "dev"
