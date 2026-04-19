@@ -20387,6 +20387,8 @@ self: super: with self; {
 
   types-openpyxl = callPackage ../development/python-modules/types-openpyxl { };
 
+  types-paramiko = callPackage ../development/python-modules/types-paramiko { };
+
   types-pillow = callPackage ../development/python-modules/types-pillow { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
