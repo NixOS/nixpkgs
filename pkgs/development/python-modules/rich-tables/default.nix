@@ -2,7 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   coloraide,
   humanize,
   multimethod,
@@ -10,6 +14,8 @@
   rich,
   sqlparse,
   typing-extensions,
+
+  # passthru
   rgbxy ? null,
 }:
 buildPythonPackage (finalAttrs: {
