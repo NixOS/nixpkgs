@@ -8,14 +8,14 @@
   wrapt,
 }:
 
-buildPythonPackage (finalAttrs: rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-insta";
   version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vberlier";
-    repo = pname;
+    repo = "pytest-insta";
     tag = "v${finalAttrs.version}";
     hash = "sha256-zOhWDaCGkE/Ke2MLRyttDH85t+I9kfBZZwVDRN1sprs=";
   };
