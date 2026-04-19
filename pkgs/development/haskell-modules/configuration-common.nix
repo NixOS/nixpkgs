@@ -1432,6 +1432,8 @@ with haskellLib;
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
 
+  # Too strict bound on QuickCheck <2.15
+  hgmp = doJailbreak super.hgmp;
 
   # Z3 removed aliases for boolean types in 4.12
   inherit
