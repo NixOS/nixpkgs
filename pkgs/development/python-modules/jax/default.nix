@@ -6,7 +6,6 @@
   lapack,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   cudaSupport ? config.cudaSupport,
 
   # build-system
@@ -41,24 +40,17 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${finalAttrs.version}";
-    hash = "sha256-/vLCTAF46M1H0Q64RLM7+IFMofmjZmZ4IFzvm/y7zkg=";
+    hash = "sha256-/RCihrjONN/+QwyQRNEmlIa7JsCLzz+SkBe5sd+ThgU=";
   };
-
-  patches = [
-    # https://github.com/jax-ml/jax/pull/32840
-    (fetchpatch2 {
-      url = "https://github.com/Prince213/jax/commit/af5c211d49f3b99447db2252d2cc2b8e0fb54d1c.patch?full_index=1";
-      hash = "sha256-ijEd+MDe91qyYfE+aMzR5rNmTeGadin6Io8PIfJWc3o=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
