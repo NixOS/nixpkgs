@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xtxPQg4Hsu7PzbXdjf0MlEaOYeAZaMG3gSNsa6l9RiM=";
+    hash = "sha256-Vtlj6aK4o7rjhWeTaso/RBZWZFdoZy54AlTrYWUoGfE=";
   };
 
   build-system = [
