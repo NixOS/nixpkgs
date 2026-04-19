@@ -3,33 +3,35 @@
   boto3,
   botocore,
   buildPythonPackage,
-  dateparser,
   fetchFromGitHub,
-  matplotlib,
-  numpy,
-  pandas,
   poetry-core,
   prometheus-api-client,
   pydantic,
+  pythonAtLeast,
   requests,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage {
   pname = "prometrix";
-  version = "0.1.18-unstable-2024-04-30";
+  version = "0.2.11-unstable-2026-03-11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robusta-dev";
     repo = "prometrix";
-    # https://github.com/robusta-dev/prometrix/issues/19
-    rev = "35128847d46016b88455e0a98f0eeec08d042107";
-    hash = "sha256-g8ZqgL9ETVwpKLMQS7s7A4GpSGfaFEDLOr8JBvFl2C4=";
+    rev = "e84d6639226aea5f9ef1ea565d1932bf29807344";
+    hash = "sha256-V4lG47vn+nXa1H8Tp/RsZ2KUk7HhojrzNZQBlnWL1eE=";
   };
 
-  pythonRelaxDeps = [
-    "pydantic"
-    "urllib3"
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    # Transitive dependency version pins for CVE patches, not direct imports
+    "fonttools"
+    "idna"
+    "pillow"
+    "zipp"
   ];
 
   build-system = [ poetry-core ];
@@ -37,10 +39,6 @@ buildPythonPackage {
   dependencies = [
     boto3
     botocore
-    dateparser
-    matplotlib
-    numpy
-    pandas
     prometheus-api-client
     pydantic
     requests
@@ -52,6 +50,8 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "prometrix" ];
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = {
     description = "Unified Prometheus client";
     longDescription = ''
@@ -61,8 +61,5 @@ buildPythonPackage {
     homepage = "https://github.com/robusta-dev/prometrix";
     license = lib.licenses.mit;
     maintainers = [ ];
-    # prometheus-api-client 0.5.5 is not working
-    # https://github.com/robusta-dev/prometrix/issues/14
-    broken = lib.versionAtLeast prometheus-api-client.version "0.5.3";
   };
 }
