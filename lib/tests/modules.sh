@@ -686,6 +686,8 @@ checkConfigOutput "\[\]" config.unique ./defaults.nix
 checkConfigOutput "\[\]" config.coercedTo ./defaults.nix
 # These types don't have empty values
 checkConfigError 'The option .int. was accessed but has no value defined. Try setting the option.' config.int ./defaults.nix
+## submodule emptyValue must evaluate sub-option defaults
+checkConfigOutput "ok" config.result ./defaults.nix
 
 # types.unique
 #   requires a single definition
