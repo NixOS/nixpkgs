@@ -584,6 +584,16 @@ builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Wrap the generated binaries to include their run-time dependencies in $PATH.
+  cryptol = overrideCabal (drv: {
+    buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = drv.postInstall or "" + ''
+      for b in $out/bin/cryptol $out/bin/cryptol-html; do
+        wrapProgram $b --prefix 'PATH' ':' "${lib.getBin pkgs.z3}/bin"
+      done
+    '';
+  }) super.cryptol;
+
   # Some test cases require network access
   hpack_0_39_1 = doDistribute (
     overrideCabal (drv: {

@@ -1453,17 +1453,6 @@ with haskellLib;
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
 
-  # Wrap the generated binaries to include their run-time dependencies in
-  # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
-  # in LTS-13.x.
-  cryptol = overrideCabal (drv: {
-    buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
-    postInstall = drv.postInstall or "" + ''
-      for b in $out/bin/cryptol $out/bin/cryptol-html; do
-        wrapProgram $b --prefix 'PATH' ':' "${lib.getBin pkgs.z3}/bin"
-      done
-    '';
-  }) super.cryptol;
 
   # Z3 removed aliases for boolean types in 4.12
   inherit
