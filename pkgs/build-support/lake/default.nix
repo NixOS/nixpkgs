@@ -190,6 +190,10 @@ lib.extendMkDerivation {
                 mv "$out/.lake/config/[anonymous]" "$out/.lake/config/${leanPackageName}"
               fi
 
+              if [ -d "$out/.lake/build/ir" ]; then
+                find "$out/.lake/build/ir" -name '*.setup.json' -delete
+              fi
+
               # Setup hook propagates LEAN_PATH to downstream packages.
               mkdir -p "$out/nix-support"
               cp ${./setup-hook.sh} "$out/nix-support/setup-hook"
