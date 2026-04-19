@@ -42,11 +42,16 @@ wrapGApp() {
     wrapProgram "$program" "${gappsWrapperArgs[@]}" "$@"
 }
 
+wrapGAppsHookHasRunForOutput=()
+
 # Note: $gappsWrapperArgs still gets defined even if ${dontWrapGApps-} is set.
 wrapGAppsHook() {
-    # guard against running multiple times (e.g. due to propagation)
-    [ -z "$wrapGAppsHookHasRun" ] || return 0
-    wrapGAppsHookHasRun=1
+    # guard against running multiple times for the same output (e.g. due to propagation)
+    local o
+    for o in "${wrapGAppsHookHasRunForOutput[@]}"; do
+        [ "$o" = "$output" ] || return 0
+    done
+    wrapGAppsHookHasRunForOutput+=("$output")
 
     if [[ -z "${dontWrapGApps:-}" ]]; then
         targetDirsThatExist=()
