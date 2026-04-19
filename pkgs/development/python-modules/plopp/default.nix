@@ -75,7 +75,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # RuntimeError: There is no current event loop in thread 'MainThread'
+    # https://github.com/scipp/plopp/issues/508
     "test_move_cut"
     "test_value_cuts"
   ];
