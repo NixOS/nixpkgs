@@ -58,8 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Broken as make target `polyimport.o` requires running code
     # compiled by the cross-compiler
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
-    maintainers = with lib.maintainers; [
-      kovirobi
-    ];
+    maintainers = with lib.maintainers; [ sempiternal-aurora ];
   };
 })
