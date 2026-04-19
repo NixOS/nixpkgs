@@ -5,6 +5,8 @@
   ...
 }:
 let
+  inherit (lib) types mkOption;
+
   configFormat = pkgs.formats.json { };
   cfg = config.hardware.fw-fanctrl;
 in
@@ -16,72 +18,71 @@ in
 
     ectoolPackage = lib.mkPackageOption pkgs "fw-ectool" { };
 
-    disableBatteryTempCheck = lib.mkOption {
-      type = lib.types.bool;
+    disableBatteryTempCheck = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Disable checking battery temperature sensor
       '';
     };
 
-    config = lib.mkOption {
+    config = mkOption {
       default = { };
       description = ''
         Additional config entries for the fw-fanctrl service (documentation: <https://github.com/TamtamHero/fw-fanctrl/blob/main/doc/configuration.md>)
       '';
-      type = lib.types.submodule {
-        freeformType = lib.types.attrsOf configFormat.type;
+      type = types.submodule {
+        freeformType = types.attrsOf configFormat.type;
         options = {
-          defaultStrategy = lib.mkOption {
-            type = lib.types.str;
+          defaultStrategy = mkOption {
+            type = types.str;
             default = "lazy";
             description = "Default strategy to use";
           };
 
-          strategyOnDischarging = lib.mkOption {
-            type = lib.types.str;
+          strategyOnDischarging = mkOption {
+            type = types.str;
             default = "";
             description = "Default strategy on discharging";
           };
 
-          strategies = lib.mkOption {
+          strategies = mkOption {
             default = { };
             description = ''
               Additional strategies which can be used by fw-fanctrl
             '';
-            type = lib.types.attrsOf (
-              lib.types.submodule {
+            type = types.attrsOf (
+              types.submodule {
                 options = {
-                  fanSpeedUpdateFrequency = lib.mkOption {
-                    type = lib.types.ints.unsigned;
+                  fanSpeedUpdateFrequency = mkOption {
+                    type = types.ints.unsigned;
                     default = 5;
                     description = "How often the fan speed should be updated in seconds";
                   };
 
-                  movingAverageInterval = lib.mkOption {
-                    type = lib.types.ints.unsigned;
+                  movingAverageInterval = mkOption {
+                    type = types.ints.unsigned;
                     default = 25;
                     description = "Interval (seconds) of the last temperatures to use to calculate the average temperature";
                   };
 
-                  speedCurve = lib.mkOption {
+                  speedCurve = mkOption {
                     default = [ ];
                     description = "How should the speed curve look like";
-                    type = lib.types.listOf (
-                      lib.types.submodule {
+                    type = types.listOf (
+                      types.submodule {
                         options = {
-                          temp = lib.mkOption {
-                            type = lib.types.int;
+                          temp = mkOption {
+                            type = types.int;
                             default = 0;
                             description = "Temperature in °C at which the fan speed should be changed";
                           };
 
-                          speed = lib.mkOption {
-                            type = lib.types.ints.between 0 100;
+                          speed = mkOption {
+                            type = types.ints.between 0 100;
                             default = 0;
                             description = "Percent how fast the fan should run at";
                           };
-
                         };
                       }
                     );
