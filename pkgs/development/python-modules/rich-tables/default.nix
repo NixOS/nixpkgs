@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   poetry-core,
@@ -23,10 +23,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.8.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "rich_tables";
-    inherit (finalAttrs) version;
-    hash = "sha256-MN8QH6kLyogbcQ0VE9U034cwSFnaFDB2/Rnvy1DYyl4=";
+  src = fetchFromGitHub {
+    owner = "snejus";
+    repo = "rich-tables";
+    tag = finalAttrs.version;
+    hash = "sha256-rqzqquVs0zWcAmwmsmw7BLgeyXpzFI6pAhY+K1l/fL4=";
   };
 
   build-system = [
