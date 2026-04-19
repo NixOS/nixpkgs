@@ -1385,6 +1385,8 @@ assertNoAdditions {
     nvimSkipModules = [
       # lua module '.init' not found
       "fzy.fzy-lua-native"
+      # Requires removed Neovim internal module vim.treesitter._highlight
+      "guihua.ts_obsolete.highlight"
     ];
   };
 
@@ -1830,6 +1832,16 @@ assertNoAdditions {
     meta = old.meta // {
       license = lib.licenses.gpl3Only;
     };
+  });
+
+  live-share-nvim = super.live-share-nvim.overrideAttrs (old: {
+    nvimSkipModules = (old.nvimSkipModules or [ ]) ++ [
+      # These modules unconditionally load OpenSSL via LuaJIT FFI and abort in
+      # the headless require check on Darwin.
+      "live-share.host"
+      "live-share.guest"
+      "live-share.collab.crypto"
+    ];
   });
 
   lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
@@ -3138,14 +3150,29 @@ assertNoAdditions {
     ];
   };
 
-  python-mode = super.python-mode.overrideAttrs {
-    postPatch = ''
+  python-mode = super.python-mode.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
       # NOTE: Fix broken symlink - the pytoolconfig directory was moved to src/
       # https://github.com/python-mode/python-mode/pull/1189#issuecomment-3109528360
       rm -f pymode/libs/pytoolconfig
       ln -sf ../../submodules/pytoolconfig/src/pytoolconfig pymode/libs/pytoolconfig
+
+      # The current source tarball only ships a subset of the historical
+      # submodules, so drop the now-dangling vendored linter symlinks.
+      rm -f \
+        pymode/libs/appdirs.py \
+        pymode/libs/astroid \
+        pymode/libs/mccabe.py \
+        pymode/libs/pycodestyle.py \
+        pymode/libs/pydocstyle \
+        pymode/libs/pyflakes \
+        pymode/libs/pylama \
+        pymode/libs/pylint \
+        pymode/libs/snowballstemmer \
+        pymode/libs/toml \
+        pymode/autopep8.py
     '';
-  };
+  });
 
   pywal-nvim = super.pywal-nvim.overrideAttrs {
     # Optional feline integration
