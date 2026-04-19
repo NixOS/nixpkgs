@@ -37,6 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "okapi";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ toelke ];
+    maintainers = with lib.maintainers; [
+      toelke
+      nadir-ishiguro
+    ];
   };
 })
