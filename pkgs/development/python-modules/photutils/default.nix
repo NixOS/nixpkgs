@@ -17,10 +17,9 @@
   setuptools,
   shapely,
   tqdm,
-  wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "photutils";
   version = "3.0.0";
   pyproject = true;
@@ -28,14 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "photutils";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jfmC3pAQa/PrdEUa7QSYGW5zWzX43ghYCpmgRYup/Ks=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeBuildInputs = [
@@ -71,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Astropy package for source detection and photometry";
     homepage = "https://github.com/astropy/photutils";
-    changelog = "https://github.com/astropy/photutils/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/astropy/photutils/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
