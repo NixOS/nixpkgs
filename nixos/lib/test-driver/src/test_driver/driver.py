@@ -22,6 +22,7 @@ from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import (
     BaseMachine,
+    MachineDeprecationWrapper,
     NspawnMachine,
     QemuMachine,
     retry,
@@ -338,11 +339,17 @@ class Driver:
             debug=self.debug,
             dump_machine_ssh=self.dump_machine_ssh,
         )
-        machine_symbols = {pythonize_name(m.name): m for m in self.machines}
+        machine_symbols: dict[
+            str, QemuMachine | NspawnMachine | MachineDeprecationWrapper
+        ] = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
         # "machine", even if it's not called that.
-        if len(self.machines) == 1:
-            (machine_symbols["machine"],) = self.machines
+        if len(self.machines) == 1 and "machine" not in machine_symbols:
+            only_machine_name = next(iter(machine_symbols))
+            machine_symbols["machine"] = MachineDeprecationWrapper(
+                f"It's deprecated to use the `machine` variable when the only machine is called {only_machine_name}. This behavior will no longer work in NixOS 27.05.",
+                self.machines[0],
+            )
         vlan_symbols = {
             f"vlan{v.nr}": self.vlans[idx] for idx, v in enumerate(self.vlans)
         }
