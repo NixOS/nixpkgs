@@ -840,6 +840,8 @@ in
   knot = runTest ./knot.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
+  kratos = runTest ./kratos.nix;
+  kratos-abstractions = runTest ./kratos-abstractions.nix;
   krb5 = discoverTests (import ./krb5);
   ksm = runTest ./ksm.nix;
   kthxbye = runTest ./kthxbye.nix;
