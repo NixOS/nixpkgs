@@ -12,15 +12,16 @@
   tests,
 }:
 
-buildLakePackage {
+buildLakePackage (finalAttrs: {
   pname = "lean4-mathlib";
-  version = "4.29.0";
+  # nixpkgs-update: no auto update
+  version = "4.29.1";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "mathlib4";
-    tag = "v4.29.0";
-    hash = "sha256-fe+qS7gNxdLnACX3/jqToa9m7r1gbskY6kDJbm1ZefE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K/QPTOytsV+OX25xyKlspeB9G0a28IjmJxcUAKXFP9U=";
   };
 
   leanPackageName = "mathlib";
@@ -44,6 +45,10 @@ buildLakePackage {
     description = "Mathematical library for Lean 4";
     homepage = "https://github.com/leanprover-community/mathlib4";
     license = lib.licenses.asl20;
+    # Output exceeds Hydra's 4 GiB NAR size limit. Oleans compress well with
+    # zstd (~70% ratio); a squashfs-packaged output would fit, pending upstream
+    # support or a raised limit.
+    hydraPlatforms = [ ];
     maintainers = with lib.maintainers; [ nadja-y ];
   };
-}
+})

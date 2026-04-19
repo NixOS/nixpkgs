@@ -17,7 +17,7 @@
 let
   lean4 = stdenv.mkDerivation (finalAttrs: {
     pname = "lean4";
-    version = "4.29.0";
+    version = "4.29.1";
 
     mimalloc-src = fetchFromGitHub {
       owner = "microsoft";
@@ -30,7 +30,7 @@ let
       owner = "leanprover";
       repo = "lean4";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-0v4OTrCLdHBbWJUq7hIjJonqget9SvsG3izGlOwhwyU=";
+      hash = "sha256-pdhRPjSic2H8zPJXLmyfN8umKDoafjmSo4OQSRxIbyE=";
     };
 
     # Vendor mimalloc. Upstream has since partially adopted FetchContent:
