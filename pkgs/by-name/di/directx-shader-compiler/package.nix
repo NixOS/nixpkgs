@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "directx-shader-compiler";
-  version = "1.8.2505.1";
+  version = "1.9.2602";
 
   # Put headers in dev, there are lot of them which aren't necessary for
   # using the compiler binary.
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "microsoft";
     repo = "DirectXShaderCompiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d8qJ9crS5CStbsGOe/OSHtUEV4vr3sLCQp+6KsEq/A4=";
+    hash = "sha256-S3ar1LTV/9fYU2B5y8x0ESB20lMnAx8XQw9n3G4z0nk=";
     fetchSubmodules = true;
   };
 
@@ -34,7 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags = [ "-C../cmake/caches/PredefinedParams.cmake" ];
+  cmakeFlags = [
+    "-C../cmake/caches/PredefinedParams.cmake"
+    # Tries to download prebuilt dxcs
+    (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
+    (lib.cmakeBool "HLSL_INCLUDE_TESTS" false)
+  ];
 
   # The default install target installs heaps of LLVM stuff.
   #
