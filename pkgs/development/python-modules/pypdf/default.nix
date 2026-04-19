@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "6.9.2";
+  version = "6.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-1oiwQf9N6et/o81CyCAFX9UWG2sXC3a50++cGfvXdE4=";
+    hash = "sha256-eAbA6vIRJ/wX5r/X218UG2yEqtGTuDAKFpLB702HvM0=";
   };
 
   outputs = [
