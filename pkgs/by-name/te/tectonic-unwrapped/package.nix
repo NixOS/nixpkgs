@@ -79,8 +79,8 @@ buildRustPackage (finalAttrs: {
   + lib.optionalString clangStdenv.hostPlatform.isLinux ''
     substituteInPlace dist/appimage/tectonic.desktop \
       --replace Exec=tectonic Exec=$out/bin/tectonic
-    install -D dist/appimage/tectonic.desktop -t $out/share/applications/
-    install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+    install -Dm644 dist/appimage/tectonic.desktop -t $out/share/applications/
+    install -Dm644 dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
 
   doCheck = true;
