@@ -63,13 +63,13 @@ rec {
   firebird_3 = stdenv.mkDerivation (
     base
     // rec {
-      version = "3.0.13";
+      version = "3.0.14";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-ti3cFfByM2wxOLkAebwtFe25B5W7jOwi3f7MPYo/yUA=";
+        hash = "sha256-X6Jv32VniAefIWjLTPwEipsQVRl7HBb4EKyi2IL1VWM=";
       };
 
       patches = [
