@@ -2886,6 +2886,21 @@ with haskellLib;
   # Too strict bounds on hspec < 2.11
   fuzzyset_0_2_4 = doJailbreak super.fuzzyset_0_2_4;
 
+  # The following all have too strict bounds on hs-opentelemtry-api < 0.3
+  # https://github.com/iand675/hs-opentelemetry/issues/203
+  hs-opentelemetry-exporter-handle = doJailbreak super.hs-opentelemetry-exporter-handle;
+  hs-opentelemetry-exporter-in-memory = doJailbreak super.hs-opentelemetry-exporter-in-memory;
+  hs-opentelemetry-instrumentation-cloudflare = doJailbreak super.hs-opentelemetry-instrumentation-cloudflare;
+  hs-opentelemetry-instrumentation-conduit = doJailbreak super.hs-opentelemetry-instrumentation-conduit;
+  hs-opentelemetry-instrumentation-hspec = doJailbreak super.hs-opentelemetry-instrumentation-hspec;
+  hs-opentelemetry-instrumentation-http-client = doJailbreak super.hs-opentelemetry-instrumentation-http-client;
+  hs-opentelemetry-instrumentation-persistent = doJailbreak super.hs-opentelemetry-instrumentation-persistent;
+  hs-opentelemetry-instrumentation-postgresql-simple = doJailbreak super.hs-opentelemetry-instrumentation-postgresql-simple;
+  hs-opentelemetry-instrumentation-tasty = doJailbreak super.hs-opentelemetry-instrumentation-tasty;
+  hs-opentelemetry-instrumentation-wai = doJailbreak super.hs-opentelemetry-instrumentation-wai;
+  hs-opentelemetry-instrumentation-yesod = doJailbreak super.hs-opentelemetry-instrumentation-yesod;
+  hs-opentelemetry-utils-exceptions = doJailbreak super.hs-opentelemetry-utils-exceptions;
+
   html-charset = dontCheck super.html-charset;
 
   # bytestring <0.11.0, optparse-applicative <0.13.0

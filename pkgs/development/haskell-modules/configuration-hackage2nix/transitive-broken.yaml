@@ -1584,7 +1584,6 @@ dont-distribute-packages:
  - hoppy-runtime
  - hoppy-std
  - horde-ad
- - hotel-california
  - hotswap
  - hp2any-graph
  - hp2any-manager
@@ -1626,10 +1625,6 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
- - hs-opentelemetry-instrumentation-cloudflare
- - hs-opentelemetry-instrumentation-http-client
- - hs-opentelemetry-instrumentation-persistent-mysql
- - hs-opentelemetry-instrumentation-yesod
  - hs-profunctors
  - hs-sdl-term-emulator
  - hs2ats
