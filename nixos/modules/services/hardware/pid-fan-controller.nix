@@ -6,131 +6,34 @@
 }:
 let
   cfg = config.services.pid-fan-controller;
-  heatSource = {
-    options = {
-      name = lib.mkOption {
-        type = lib.types.uniq lib.types.nonEmptyStr;
-        description = "Name of the heat source.";
-      };
-      wildcardPath = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-        description = ''
-          Path of the heat source's `hwmon` `temp_input` file.
-          This path can contain multiple wildcards, but has to resolve to
-          exactly one result.
-        '';
-      };
-      pidParams = {
-        setPoint = lib.mkOption {
-          type = lib.types.ints.unsigned;
-          description = "Set point of the controller in °C.";
-        };
-        P = lib.mkOption {
-          description = "K_p of PID controller.";
-          type = lib.types.float;
-        };
-        I = lib.mkOption {
-          description = "K_i of PID controller.";
-          type = lib.types.float;
-        };
-        D = lib.mkOption {
-          description = "K_d of PID controller.";
-          type = lib.types.float;
-        };
-      };
-    };
-  };
-
-  fan = {
-    options = {
-      wildcardPath = lib.mkOption {
-        type = lib.types.str;
-        description = ''
-          Wildcard path of the `hwmon` `pwm` file.
-          If the fans are not to be found in `/sys/class/hwmon/hwmon*` the corresponding
-          kernel module (like `nct6775`) needs to be added to `boot.kernelModules`.
-          See the [`hwmon` Documentation](https://www.kernel.org/doc/html/latest/hwmon/index.html).
-        '';
-      };
-      minPwm = lib.mkOption {
-        default = 0;
-        type = lib.types.ints.u8;
-        description = "Minimum PWM value.";
-      };
-      maxPwm = lib.mkOption {
-        default = 255;
-        type = lib.types.ints.u8;
-        description = "Maximum PWM value.";
-      };
-      cutoff = lib.mkOption {
-        default = false;
-        type = lib.types.bool;
-        description = "Whether to stop the fan when `minPwm` is reached.";
-      };
-      heatPressureSrcs = lib.mkOption {
-        type = lib.types.nonEmptyListOf lib.types.str;
-        description = "Heat pressure sources affected by the fan.";
-      };
-    };
-  };
+  settingsFormat = pkgs.formats.json { };
 in
 {
   options.services.pid-fan-controller = {
     enable = lib.mkEnableOption "the PID fan controller, which controls the configured fans by running a closed-loop PID control loop";
     package = lib.mkPackageOption pkgs "pid-fan-controller" { };
-    settings = {
-      interval = lib.mkOption {
-        default = 500;
-        type = lib.types.int;
-        description = "Interval between controller cycles in milliseconds.";
+    settings = lib.mkOption {
+      type = lib.types.submodule {
+        freeformType = lib.types.either settingsFormat.type (lib.types.listOf settingsFormat.type);
       };
-      heatSources = lib.mkOption {
-        type = lib.types.listOf (lib.types.submodule heatSource);
-        description = "List of heat sources to be monitored.";
-        example = ''
-          [
-            {
-              name = "cpu";
-              wildcardPath = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon*/temp1_input";
-              pidParams = {
-                setPoint = 60;
-                P = -5.0e-3;
-                I = -2.0e-3;
-                D = -6.0e-3;
-              };
-            }
-          ];
-        '';
-      };
-      fans = lib.mkOption {
-        type = lib.types.listOf (lib.types.submodule fan);
-        description = "List of fans to be controlled.";
-        example = ''
-          [
-            {
-              wildcardPath = "/sys/devices/platform/nct6775.2592/hwmon/hwmon*/pwm1";
-              minPwm = 60;
-              maxPwm = 255;
-              heatPressureSrcs = [
-                "cpu"
-                "gpu"
-              ];
-            }
-          ];
-        '';
-      };
+      default = { };
+      description = ''
+        Configuration for pid-fan-controller, see
+        <https://github.com/zimward/pid-fan-controller>
+        for supported values.
+      '';
     };
   };
+
   config =
     let
-      configFile =
-        pkgs.writeText "pid-fan-settings.json"
-          #map camel cased attrs into snake case for config
-          builtins.toJSON
+      oldConfig = cfg.settings ? heatSources;
+      configFile = settingsFormat.generate "pid-fan-settings.json" (
+        if oldConfig then
           {
-            interval = cfg.settings.interval;
+            interval = cfg.settings.interval or 500;
             heat_srcs = map (heatSrc: {
-              name = heatSrc.name;
+              name = heatSrc.name or "";
               wildcard_path = heatSrc.wildcardPath;
               PID_params = {
                 set_point = heatSrc.pidParams.setPoint;
@@ -143,16 +46,30 @@ in
               wildcard_path = fan.wildcardPath;
               min_pwm = fan.minPwm;
               max_pwm = fan.maxPwm;
-              cutoff = fan.cutoff;
+              cutoff = fan.cutoff or false;
               heat_pressure_srcs = fan.heatPressureSrcs;
             }) cfg.settings.fans;
-          };
+          }
+        else
+          cfg.settings
+      );
     in
     lib.mkIf cfg.enable {
       systemd.packages = [ cfg.package ];
       systemd.services.pid-fan-controller.environment.PID_FAN_CONFIG = toString configFile;
       systemd.services.pid-fan-controller.wantedBy = [ "multi-user.target" ];
       systemd.services.pid-fan-controller-sleep.wantedBy = [ "sleep.target" ];
+
+      warnings =
+        if oldConfig then
+          [
+            ''
+              The configuration of `pid-fan-controller` is no longer deeply configured and the rewriting will be removed in 26.11!
+              Please switch to using underscore case as shown in the upstream documentation.
+            ''
+          ]
+        else
+          [ ];
     };
   meta.maintainers = with lib.maintainers; [ zimward ];
 }
