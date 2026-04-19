@@ -64,26 +64,29 @@ stdenv.mkDerivation (
         }))
       else
         luapkgs.lpeg;
-    requiredLuaPkgs =
+    runtimeLuaPkgs = ps: [
+      (nvim-lpeg-dylib ps)
+      ps.luabitop
+      ps.mpack
+    ];
+    checkLuaPkgs =
       ps:
-      (
-        with ps;
-        [
-          (nvim-lpeg-dylib ps)
-          luabitop
-          mpack
-        ]
-        ++ lib.optionals finalAttrs.finalPackage.doCheck [
-          luv
-          coxpcall
-          busted
-          luafilesystem
-          penlight
-          inspect
-        ]
-      );
-    neovimLuaEnv = lua.withPackages requiredLuaPkgs;
-    neovimLuaEnvOnBuild = lua.luaOnBuild.withPackages requiredLuaPkgs;
+      runtimeLuaPkgs ps
+      ++ (with ps; [
+        luv
+        coxpcall
+        busted
+        luafilesystem
+        penlight
+        inspect
+      ]);
+    # neovimLuaEnv ends up in buildInputs and its lib path is baked into the
+    # nvim binary, so it must only contain runtime modules; otherwise
+    # busted -> luarocks -> cmake leak into the runtime closure.
+    neovimLuaEnv = lua.withPackages runtimeLuaPkgs;
+    neovimLuaEnvOnBuild = lua.luaOnBuild.withPackages (
+      if finalAttrs.finalPackage.doCheck then checkLuaPkgs else runtimeLuaPkgs
+    );
     codegenLua =
       if lua.luaOnBuild.pkgs.isLuaJIT then
         let
@@ -207,7 +210,15 @@ stdenv.mkDerivation (
         -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
     # check that the above patching actually works
-    disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
+    disallowedRequisites = [
+      stdenv.cc
+    ]
+    ++ lib.optional (lua != codegenLua) codegenLua
+    # Ensure test-only lua modules (busted, ...) don't leak into the
+    # runtime closure via LUA_PRG. When doCheck is off (and we're not
+    # cross-compiling) the two envs are the same derivation, hence the
+    # guard.
+    ++ lib.optional (neovimLuaEnvOnBuild != neovimLuaEnv) neovimLuaEnvOnBuild;
 
     cmakeFlags = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
