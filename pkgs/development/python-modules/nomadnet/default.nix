@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, rns
-, lxmf
-, urwid
-, qrcode
-, msgpack
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  rns,
+  lxmf,
+  urwid,
+  qrcode,
+  msgpack,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname   = "nomadnet";
+  pname = "nomadnet";
   version = "0.9.9";
-  format  = "setuptools";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,11 +37,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Off-grid, resilient mesh communication with strong encryption";
-    homepage    = "https://github.com/markqvist/NomadNet";
-    changelog   = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
-    license     = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/markqvist/NomadNet";
+    changelog = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
+    license = licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = platforms.unix;
     mainProgram = "nomadnet";
   };
 }
