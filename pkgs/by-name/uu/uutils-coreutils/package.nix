@@ -86,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+    # Upstream uses hardlinks for the multicall aliases by default, but NAR
+    # serialization does not preserve hardlinks, exploding the closure to
+    # ~100 copies of the 14 MiB binary.
+    LN = "ln -sf";
   }
   // lib.optionalAttrs selinuxSupport {
     SELINUX_INCLUDE_DIR = "${lib.getInclude libselinux}/include";
