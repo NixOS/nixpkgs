@@ -165,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
+    "CFLAGS=-std=gnu17"
     "--with-system-libtiff"
     "--without-tesseract"
   ]
