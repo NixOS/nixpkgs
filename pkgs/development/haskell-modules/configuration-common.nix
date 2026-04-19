@@ -1089,11 +1089,6 @@ with haskellLib;
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
-  # https://github.com/NixOS/nixpkgs/issues/6350
-  paypal-adaptive-hoops = overrideCabal (drv: {
-    testTargets = [ "local" ];
-  }) super.paypal-adaptive-hoops;
-
   # Avoid "QuickCheck >=2.3 && <2.10" dependency we cannot fulfill in lts-11.x.
   test-framework = dontCheck super.test-framework;
 

@@ -584,6 +584,11 @@ builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # https://github.com/NixOS/nixpkgs/issues/6350 krank:ignore-line
+  paypal-adaptive-hoops = overrideCabal (drv: {
+    testTargets = [ "local" ];
+  }) super.paypal-adaptive-hoops;
+
   # Wrap the generated binaries to include their run-time dependencies in $PATH.
   cryptol = overrideCabal (drv: {
     buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
