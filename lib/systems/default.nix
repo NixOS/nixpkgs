@@ -206,6 +206,7 @@ let
               windows = "Windows";
               cygwin = "CYGWIN_NT";
               darwin = "Darwin";
+              ios = "Darwin";
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
               openbsd = "OpenBSD";
@@ -354,10 +355,24 @@ let
         darwinPlatform =
           if final.isMacOS then
             "macos"
+          else if final.isiOSSimulator then
+            "ios-simulator"
           else if final.isiOS then
             "ios"
           else
             null;
+
+        xcodePlatform =
+          args.xcodePlatform or (
+            if final.isMacOS then
+              "MacOSX"
+            else if final.isiOSSimulator then
+              "iPhoneSimulator"
+            else if final.isiOS then
+              "iPhoneOS"
+            else
+              null
+          );
         # The canonical name for this attribute is darwinSdkVersion, but some
         # platforms define the old name "sdkVer".
         darwinSdkVersion = final.sdkVer or "14.4";
@@ -507,6 +522,8 @@ let
                 # TODO: Somehow ensure that Rust actually *uses* the correct ABI, and not just a libc-based default.
                 if (lib.strings.hasPrefix "powerpc" cpu.name) && (lib.strings.hasPrefix "gnuabielfv" abi.name) then
                   "gnu"
+                else if abi.name == "simulator" then
+                  "sim"
                 else
                   abi.name;
 
