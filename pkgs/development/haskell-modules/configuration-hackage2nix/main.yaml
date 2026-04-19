@@ -43,6 +43,8 @@ default-package-overrides:
   - hnix-store-remote < 0.7
   # 2025-08-03: need to match stackage version of hosc
   - hsc3 >= 0.21 && < 0.22
+  # 2026-04-19: needs to match tls and crypton-x509-store from Stackage LTS 24
+  - http2-tls < 0.4.6
   # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
   - liquid-fixpoint == 0.9.6.3.2
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
