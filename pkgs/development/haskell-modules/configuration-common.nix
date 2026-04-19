@@ -1502,18 +1502,8 @@ with haskellLib;
   # Work around https://github.com/haskell/c2hs/issues/192.
   c2hs = dontCheck super.c2hs;
 
-  # Needs pginit to function and pgrep to verify.
-  tmp-postgres = overrideCabal (drv: {
-    # Flaky tests: https://github.com/jfischoff/tmp-postgres/issues/274
-    doCheck = false;
-
-    preCheck = ''
-      export HOME="$TMPDIR"
-    ''
-    + (drv.preCheck or "");
-    libraryToolDepends = drv.libraryToolDepends or [ ] ++ [ pkgs.buildPackages.postgresql ];
-    testToolDepends = drv.testToolDepends or [ ] ++ [ pkgs.procps ];
-  }) super.tmp-postgres;
+  # Flaky tests: https://github.com/jfischoff/tmp-postgres/issues/274
+  tmp-postgres = dontCheck super.tmp-postgres;
 
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
