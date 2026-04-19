@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "pdf";
-    repo = pname;
+    repo = "zfs_exporter";
     rev = "v" + version;
     hash = "sha256-4nuZhPqBqGOR5zM1yyxPD0M4bVZNaIm72uSus6CvCrU=";
   };
@@ -28,7 +28,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} *.md
+    install -Dm444 -t $out/share/doc/zfs_exporter *.md
   '';
 
   meta = {
