@@ -15,6 +15,11 @@
   sqlparse,
   typing-extensions,
 
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
+  freezegun,
+
   # passthru
   rgbxy,
 }:
@@ -43,6 +48,13 @@ buildPythonPackage (finalAttrs: {
     sqlparse
     typing-extensions
   ];
+
+  nativeBuildInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    freezegun
+  ]
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.hue;
 
   optional-dependencies = {
     hue = [
