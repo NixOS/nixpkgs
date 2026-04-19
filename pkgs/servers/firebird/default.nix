@@ -95,13 +95,13 @@ rec {
   firebird_4 = stdenv.mkDerivation (
     base
     // rec {
-      version = "4.0.6";
+      version = "4.0.7";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-65wfG6huDzvG/tEVllA58OfZqoL4U/ilw5YIDqQywTs=";
+        hash = "sha256-EnD0cTQSOh1fARjKdoOCR5UjpvVA96EZVVWfqlH+m48=";
       };
 
       nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];
