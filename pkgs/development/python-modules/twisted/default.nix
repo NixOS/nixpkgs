@@ -191,6 +191,9 @@ buildPythonPackage rec {
           # https://github.com/twisted/twisted/blob/twisted-25.5.0/src/twisted/internet/test/test_tcp.py
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbortLater"
+          # reactor hangs on darwin with a full TCP write buffer
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBuffer"
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange"
         ];
       };
     in
