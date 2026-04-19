@@ -10,13 +10,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ledger-bitcoin";
   version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ledger_bitcoin";
     hash = "sha256-IkJFLnjPS1fIuNNQnoMYYP1IUbChv6uV8vXj9H1NFQA=";
   };
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/LedgerHQ/app-bitcoin-new/tree/develop/bitcoin_client/ledger_bitcoin";
     license = lib.licenses.asl20;
   };
-}
+})
