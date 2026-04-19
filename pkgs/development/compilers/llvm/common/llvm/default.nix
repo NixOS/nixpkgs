@@ -351,10 +351,13 @@ stdenv.mkDerivation (
         rm test/tools/llvm-objcopy/MachO/universal-object.test
       ''
       +
-        # Seems to require certain floating point hardware (NEON?)
-        optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
-          rm test/ExecutionEngine/frem.ll
-        ''
+        # Seems to require certain floating point hardware (NEON?). Tests were
+        # reorganized in LLVM 20.
+        optionalString
+          (stdenv.hostPlatform.system == "armv6l-linux" && lib.versionOlder release_version "20")
+          ''
+            rm test/ExecutionEngine/frem.ll
+          ''
       +
         # 1. TODO: Why does this test fail on FreeBSD?
         # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
