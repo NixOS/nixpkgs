@@ -33,8 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "LDCC=g++" "LDCC=${stdenv.cc.targetPrefix}c++"
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     makeWrapper
+  ];
+
+  buildInputs = [
     mupdf
     SDL2
     re2c
