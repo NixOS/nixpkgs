@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   flit-core,
@@ -32,6 +33,18 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-lJ9+kvG7dRtfDVgvkcJ9/jtnX0lMfxY4mmZ290y/74U=";
   };
+
+  patches = [
+    # jax.device_put_replicated is removed in jax 0.10.0
+    # This fix was merged upstream -> remove when updating to the next release
+    (fetchpatch {
+      url = "https://github.com/google-deepmind/chex/commit/5fbd2c9a9936799daf92354e0307b9e88b9cc163.patch";
+      excludes = [
+        "chex/_src/variants.py"
+      ];
+      hash = "sha256-ZTimSq7/yt2UEiWmLcfFBadX8+VcaxuPhkQJEyiEZlE=";
+    })
+  ];
 
   build-system = [
     flit-core
