@@ -275,10 +275,12 @@ builtins.intersectAttrs super {
   # jni needs help finding libjvm.so because it's in a weird location.
   jni = overrideCabal (drv: {
     preConfigure = ''
-      local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
-      appendToVar configureFlags "--extra-lib-dir=''${libdir[0]}"
+      local libdir=( "${lib.getLib pkgs.jdk}/lib/openjdk/lib/server" )
+      appendToVar configureFlags "--extra-lib-dirs=''${libdir[0]}"
     '';
   }) super.jni;
+
+  inline-java = addBuildDepend pkgs.jdk super.inline-java;
 
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;

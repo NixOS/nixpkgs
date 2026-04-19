@@ -865,8 +865,6 @@ with haskellLib;
     '';
   }) super.inline-c-cpp;
 
-  inline-java = addBuildDepend pkgs.jdk super.inline-java;
-
   # Too strict upper bound on unicode-transforms
   # <https://gitlab.com/ngua/ipa-hs/-/issues/1>
   ipa = doJailbreak super.ipa;
