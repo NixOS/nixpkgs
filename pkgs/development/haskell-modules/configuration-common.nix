@@ -75,7 +75,7 @@ with haskellLib;
 
   # Needs matching version of Cabal
   Cabal-hooks = super.Cabal-hooks.override {
-    Cabal = self.Cabal_3_14_2_0;
+    Cabal = self.Cabal_3_16_1_0;
   };
 
   # Needs Cabal>=3.14

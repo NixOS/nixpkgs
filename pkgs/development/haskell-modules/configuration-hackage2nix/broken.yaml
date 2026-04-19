@@ -666,7 +666,6 @@ broken-packages:
   - cabal-ghci # failure in job https://hydra.nixos.org/build/233239354 at 2023-09-02
   - cabal-graphdeps # failure in job https://hydra.nixos.org/build/233221966 at 2023-09-02
   - cabal-helper # failure in job https://hydra.nixos.org/build/252732588 at 2024-03-16
-  - Cabal-hooks # failure in job https://hydra.nixos.org/build/307515931 at 2025-09-19
   - Cabal-ide-backend # failure in job https://hydra.nixos.org/build/233258880 at 2023-09-02
   - cabal-info # failure in job https://hydra.nixos.org/build/233225001 at 2023-09-02
   - cabal-install-bundle # failure in job https://hydra.nixos.org/build/233194629 at 2023-09-02
