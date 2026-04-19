@@ -477,6 +477,7 @@ stdenvNoCC.mkDerivation {
       darwinMinVersion
       darwinMinVersionVariable
       ;
+    xcodePlatform = targetPlatform.xcodePlatform or "MacOSX";
   }
   // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
     # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
