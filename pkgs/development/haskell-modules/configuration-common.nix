@@ -1131,46 +1131,11 @@ with haskellLib;
   # https://github.com/theam/require/pull/31
   require = doJailbreak super.require;
 
-  # Byte-compile elisp code for Emacs.
-  ghc-mod = overrideCabal (drv: {
-    preCheck = "export HOME=$TMPDIR";
-    testToolDepends = drv.testToolDepends or [ ] ++ [ self.cabal-install ];
-    doCheck = false; # https://github.com/kazu-yamamoto/ghc-mod/issues/335
-    executableToolDepends = drv.executableToolDepends or [ ] ++ [ pkgs.buildPackages.emacs ];
-    postInstall = ''
-      local lispdir=( "$data/share/${self.ghc.targetPrefix}${self.ghc.haskellCompilerName}/*/${drv.pname}-${drv.version}/elisp" )
-      make -C $lispdir
-      mkdir -p $data/share/emacs/site-lisp
-      ln -s "$lispdir/"*.el{,c} $data/share/emacs/site-lisp/
-    '';
-  }) super.ghc-mod;
-
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
 
   # 2024-03-10: Getting the test suite to run requires a correctly crafted GHC_ENVIRONMENT variable.
   graphql-client = dontCheck super.graphql-client;
-
-  # Build the latest git version instead of the official release. This isn't
-  # ideal, but Chris doesn't seem to make official releases any more.
-  structured-haskell-mode = overrideCabal (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner = "projectional-haskell";
-      repo = "structured-haskell-mode";
-      rev = "7f9df73f45d107017c18ce4835bbc190dfe6782e";
-      sha256 = "1jcc30048j369jgsbbmkb63whs4wb37bq21jrm3r6ry22izndsqa";
-    };
-    version = "20170205-git";
-    editedCabalFile = null;
-    # Make elisp files available at a location where people expect it. We
-    # cannot easily byte-compile these files, unfortunately, because they
-    # depend on a new version of haskell-mode that we don't have yet.
-    postInstall = ''
-      local lispdir=( "$data/share/${self.ghc.targetPrefix}${self.ghc.haskellCompilerName}/"*"/${drv.pname}-"*"/elisp" )
-      mkdir -p $data/share/emacs
-      ln -s $lispdir $data/share/emacs/site-lisp
-    '';
-  }) super.structured-haskell-mode;
 
   # Make elisp files available at a location where people expect it.
   hindent = (
@@ -2637,17 +2602,6 @@ with haskellLib;
     (warnAfterVersion "1.2.1")
     doJailbreak
   ];
-
-  # Use recent git version as the hackage version is outdated and not building on recent GHC versions
-  haskell-to-elm = overrideSrc {
-    version = "unstable-2023-12-02";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell-to-elm";
-      repo = "haskell-to-elm";
-      rev = "52ab086a320a14051aa38d0353d957fb6b2525e9";
-      hash = "sha256-j6F4WplJy7NyhTAuiDd/tHT+Agk1QdyPjOEkceZSxq8=";
-    };
-  } super.haskell-to-elm;
 
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
