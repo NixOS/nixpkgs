@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -215,7 +216,13 @@ buildPythonPackage (finalAttrs: {
     # KeyError: 'sentry.release'
     "test_logs_attributes"
     "test_logger_with_all_attributes"
-  ];
+  ]
+  ++
+    lib.optionals (pythonAtLeast "3.14" && stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin)
+      [
+        # profiler_id not populated on darwin
+        "test_segment_span_has_profiler_id"
+      ];
 
   pythonImportsCheck = [ "sentry_sdk" ];
 
