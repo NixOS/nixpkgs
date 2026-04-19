@@ -75,6 +75,11 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
+    # Widen ObjectDescriptionType to `int` so modern clang accepts the
+    # static_cast of VisualizationType as a constant expression.
+    substituteInPlace phonon/objectdescription.h \
+      --replace-fail 'enum ObjectDescriptionType' 'enum ObjectDescriptionType : int'
+
     sed -i PhononConfig.cmake.in \
         -e "/get_filename_component(rootDir/ s/^.*$//" \
         -e "/^set(PHONON_INCLUDE_DIR/ s|\''${rootDir}/||" \
