@@ -68,18 +68,23 @@ buildLuarocksPackage rec {
   disabled = luaOlder "5.1";
 
   passthru = {
-    tests.test =
-      runCommand "luv-${version}-test"
-        {
-          nativeBuildInputs = [ (lua.withPackages (ps: [ ps.luv ])) ];
-        }
-        ''
-          lua <<EOF
-          local uv = require("luv")
-          assert(uv.fs_mkdir(assert(uv.os_getenv("out")), 493))
-          print(uv.version_string())
-          EOF
-        '';
+    tests = {
+      test =
+        runCommand "luv-${version}-test"
+          {
+            nativeBuildInputs = [ (lua.withPackages (ps: [ ps.luv ])) ];
+          }
+          ''
+            lua <<EOF
+            local uv = require("luv")
+            assert(uv.fs_mkdir(assert(uv.os_getenv("out")), 493))
+            print(uv.version_string())
+            EOF
+          '';
+
+      # Test libluv too
+      inherit (lua.pkgs) libluv;
+    };
 
     updateScript = nix-update-script { };
   };
