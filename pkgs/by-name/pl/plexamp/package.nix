@@ -7,12 +7,12 @@
 
 let
   pname = "plexamp";
-  version = "4.13.0";
+  version = "4.13.1";
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    hash = "sha512-3Blgl3t21hH6lgDe5u3vy3I/3k9b4VM1CvoZg2oashkGXSDwV8q7MATN9YjsBgWysNXwdm7nQ/yrFQ7DiRfdYg==";
+    hash = "sha512-HgF0+ojb0wOWO1DuiifiYMb0kSiRLvvMcteC89zZ4IYOflzOw+vNKoU+eyRo1Yl6irIL/Pg32eK4xRn5wyB46g==";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -38,7 +38,7 @@ appimageTools.wrapType2 {
   meta = {
     description = "Beautiful Plex music player for audiophiles, curators, and hipsters";
     homepage = "https://plexamp.com/";
-    changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/82";
+    changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/83";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       killercup
