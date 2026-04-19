@@ -85,6 +85,8 @@ let
                 testScriptWithTypes
         ''}
 
+        echo -n "$testScript" > testScriptFile
+
         cp "${config.driverConfiguration.test_script}" $out/test-script
 
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver

@@ -28,7 +28,7 @@
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosendspin";
   version = "4.4.0";
   pyproject = true;
@@ -36,14 +36,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7edFCGNbECW5rrTbF7vJ4lJUc2IrQZD9VTR3IxJRP08=";
   };
 
   # https://github.com/Sendspin/aiosendspin/blob/4.4.0/pyproject.toml#L7
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -79,10 +79,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Sendspin/aiosendspin/releases/tag/${src.tag}";
+    changelog = "https://github.com/Sendspin/aiosendspin/releases/tag/${finalAttrs.src.tag}";
     description = "Async Python library implementing the Sendspin Protocol";
     homepage = "https://github.com/Sendspin/aiosendspin";
     license = lib.licenses.asl20;
     inherit (music-assistant.meta) maintainers;
   };
-}
+})

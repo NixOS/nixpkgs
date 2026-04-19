@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarnBuildHook
     yarnInstallHook
     nodejs
+    nodejs.npm
     (nodejs.python.withPackages (ps: [ ps.setuptools ]))
     pkg-config
   ];

@@ -510,6 +510,8 @@ self: super: with self; {
 
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
+  aiosendspin-mpris = callPackage ../development/python-modules/aiosendspin-mpris { };
+
   aioserial = callPackage ../development/python-modules/aioserial { };
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
@@ -7957,6 +7959,8 @@ self: super: with self; {
 
   json-flatten = callPackage ../development/python-modules/json-flatten { };
 
+  json-handler-registry = callPackage ../development/python-modules/json-handler-registry { };
+
   json-home-client = callPackage ../development/python-modules/json-home-client { };
 
   json-logging = callPackage ../development/python-modules/json-logging { };
@@ -10281,6 +10285,8 @@ self: super: with self; {
   mpltoolbox = callPackage ../development/python-modules/mpltoolbox { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
+
+  mpris-api = callPackage ../development/python-modules/mpris-api { };
 
   mprisify = callPackage ../development/python-modules/mprisify { };
 
@@ -17499,6 +17505,8 @@ self: super: with self; {
 
   sendgrid = callPackage ../development/python-modules/sendgrid { };
 
+  sendspin = callPackage ../development/python-modules/sendspin { };
+
   senf = callPackage ../development/python-modules/senf { };
 
   sensai-utils = callPackage ../development/python-modules/sensai-utils { };
@@ -19869,6 +19877,8 @@ self: super: with self; {
   tuf = callPackage ../development/python-modules/tuf { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
+
+  tunit = callPackage ../development/python-modules/tunit { };
 
   turnt = callPackage ../development/python-modules/turnt { };
 
