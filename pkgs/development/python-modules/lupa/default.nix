@@ -8,12 +8,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lupa";
-  version = "2.7";
+  version = "2.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-c6ZM5dyM2Vt1ozDBUT5G4JjUD87tP+pRbAn2WV6t6Ik=";
+    hash = "sha256-2AImQbnsjs8sXsvp9H5acOC4fEta6SG5LLAqY44KzQg=";
   };
 
   build-system = [
