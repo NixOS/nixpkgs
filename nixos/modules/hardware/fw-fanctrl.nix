@@ -9,6 +9,11 @@ let
 
   settingsFormat = pkgs.formats.json { };
   cfg = config.hardware.fw-fanctrl;
+
+  userConfig = settingsFormat.generate "user.json" cfg.settings;
+  finalConfig = pkgs.runCommand "config.json" { } ''
+    ${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${cfg.package}/share/fw-fanctrl/config.json ${userConfig} >$out
+  '';
 in
 {
   imports = [
@@ -105,34 +110,28 @@ in
     };
   };
 
-  config =
-    let
-      defaultConfig = builtins.fromJSON (builtins.readFile "${cfg.package}/share/fw-fanctrl/config.json");
-      finalConfig = lib.attrsets.recursiveUpdate defaultConfig cfg.settings;
-      configFile = settingsFormat.generate "custom.json" finalConfig;
-    in
-    lib.mkIf cfg.enable {
-      environment.systemPackages = [
-        cfg.package
-        cfg.ectoolPackage
-      ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.package
+      cfg.ectoolPackage
+    ];
 
-      systemd.services.fw-fanctrl = {
-        description = "Framework Fan Controller";
-        after = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          ExecStart = "${lib.getExe cfg.package} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
-          ExecStopPost = "${lib.getExe cfg.ectoolPackage} autofanctrl";
-        };
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.fw-fanctrl = {
+      description = "Framework Fan Controller";
+      after = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStart = "${lib.getExe cfg.package} --output-format JSON run --config ${finalConfig} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
+        ExecStopPost = "${lib.getExe cfg.ectoolPackage} autofanctrl";
       };
-
-      # Create suspend config
-      environment.etc."systemd/system-sleep/fw-fanctrl-suspend.sh".source =
-        "${cfg.package}/share/fw-fanctrl/fw-fanctrl-suspend";
+      wantedBy = [ "multi-user.target" ];
     };
+
+    # Create suspend config
+    environment.etc."systemd/system-sleep/fw-fanctrl-suspend.sh".source =
+      "${cfg.package}/share/fw-fanctrl/fw-fanctrl-suspend";
+  };
 
   meta = {
     maintainers = [ lib.maintainers.Svenum ];
