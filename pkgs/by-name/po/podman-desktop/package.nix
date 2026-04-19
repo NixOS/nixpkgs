@@ -4,8 +4,8 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   copyDesktopItems,
-  electron_39,
-  nodejs,
+  electron_41,
+  nodejs_24,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -21,12 +21,14 @@
 }:
 
 let
-  electron = electron_39;
+  nodejs = nodejs_24;
+  pnpm = pnpm_10.override { inherit nodejs; };
+  electron = electron_41;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.23.1";
+  version = "1.26.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -59,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-08boCPsuT09OileZUWhB8awXWHrlJzoER2Bx0WXeOHU=";
+    hash = "sha256-VVyKC1z7YECZlbTaFaq2OwGg0k22qBbn/HEOYiJ8fcw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    inherit pnpm;
     fetcherVersion = 2;
-    hash = "sha256-nBjAmXzjR0qGCM91UAonQKP0NG7+DXImueSbhbnMK/k=";
+    hash = "sha256-tCp5qLZVo93H8VIToU3mkmwNsVXOAd1IEsL6RlazPXo=";
   };
 
   patches = [
@@ -74,13 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./extension-no-download-podman.patch
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    ELECTRON_OVERRIDE_DIST_PATH = electron.dist;
+  };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
+    pnpm
     pnpmConfigHook
-    pnpm_10
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
