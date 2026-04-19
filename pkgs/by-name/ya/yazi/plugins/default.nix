@@ -14,6 +14,7 @@ let
       src,
       meta ? { },
       installPhase ? null,
+      dependencies ? [ ],
       ...
     }:
     let
@@ -23,6 +24,8 @@ let
     stdenvNoCC.mkDerivation (
       args
       // {
+        propagatedBuildInputs = args.propagatedBuildInputs or [ ] ++ dependencies;
+
         installPhase =
           if installPhase != null then
             installPhase
