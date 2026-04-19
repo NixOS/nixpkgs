@@ -49,10 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
       hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
     })
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
-    ./dynamic-lookup-darwin.patch
   ];
 
   nativeBuildInputs = [
