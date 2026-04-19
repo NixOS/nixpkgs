@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluidsynth";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k8IHS6Mh1b1iMSuBg3svlf7A2dsg6VHEKqlDhvyJnbo=";
+    hash = "sha256-uL9K2Bc5PA6qm/QVFvEUDyGBst9L/sNP0+HculCWCZk=";
     fetchSubmodules = true;
   };
 
