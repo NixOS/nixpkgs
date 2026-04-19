@@ -10886,14 +10886,6 @@ with pkgs;
 
   zed-editor-fhs = zed-editor.fhs;
 
-  zgv = callPackage ../applications/graphics/zgv {
-    # Enable the below line for terminal display. Note
-    # that it requires sixel graphics compatible terminals like mlterm
-    # or xterm -ti 340
-    SDL = SDL_sixel;
-    SDL_image = SDL_image.override { SDL = SDL_sixel; };
-  };
-
   zynaddsubfx-fltk = zynaddsubfx.override {
     guiModule = "fltk";
   };
