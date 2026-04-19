@@ -1,170 +1,92 @@
 {
   config,
-  uthash,
   lib,
   stdenv,
-  ninja,
   nv-codec-headers-12,
-  fetchFromGitHub,
-  fetchpatch2,
-  fetchurl,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
-  cmake,
   fdk_aac,
-  ffmpeg,
-  jansson,
-  libjack2,
   libxkbcommon,
   libpthread-stubs,
   libxdmcp,
-  qtbase,
-  qtsvg,
-  speex,
   libv4l,
-  x264,
-  curl,
   wayland,
   libx11,
-  pkg-config,
   libvlc,
   libGL,
-  mbedtls,
   wrapGAppsHook3,
   scriptingSupport ? true,
   luajit,
-  swig,
   python3,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   browserSupport ? true,
-  cef-binary,
   pciutils,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   withFdk ? true,
   pipewire,
   libdrm,
-  librist,
-  cjson,
   libva,
   srt,
   qtwayland,
-  wrapQtAppsHook,
-  nlohmann_json,
-  websocketpp,
-  asio,
   decklinkSupport ? false,
   blackmagic-desktop-video,
-  libdatachannel,
   libvpl,
-  qrcodegencpp,
-  simde,
-  nix-update-script,
   extra-cmake-modules,
-  pname,
-  version,
-  meta,
+  mkObsCefPackage,
 }:
 
 let
   inherit (lib) optional optionals;
 
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
-
-  cef = cef-binary.overrideAttrs (
-    oldAttrs:
-    let
-      version = "6533";
-      revision = "6";
-    in
-    {
-      inherit version;
-
-      src = fetchurl {
-        url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_${version}_linux_${
-          selectSystem {
-            aarch64-linux = "aarch64";
-            x86_64-linux = "x86_64";
-          }
-        }_v${revision}.tar.xz";
-        hash = selectSystem {
-          aarch64-linux = "sha256-ZCUURp6qKaXIh4kQhNLnP33C10Bfffp3JrLbwkswmZk=";
-          x86_64-linux = "sha256-eWMzVRmhnM3FIz9zNMWrAjAm4vPpoMxBcAfAnYZggUY=";
-        };
-      };
-    }
-  );
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
-
-  src = fetchFromGitHub {
-    owner = "obsproject";
-    repo = "obs-studio";
-    rev = finalAttrs.version;
-    hash = "sha256-OiLlYnHaW+ehHtz4N20ctkfL4WmCzI45+VUG5hHOga4=";
-    fetchSubmodules = true;
+  cef = mkObsCefPackage {
+    version = "6533";
+    revision = "6";
+    platformMap = {
+      aarch64-linux = "linux_aarch64";
+      x86_64-linux = "linux_x86_64";
+    };
+    hashes = {
+      aarch64-linux = "sha256-ZCUURp6qKaXIh4kQhNLnP33C10Bfffp3JrLbwkswmZk=";
+      x86_64-linux = "sha256-eWMzVRmhnM3FIz9zNMWrAjAm4vPpoMxBcAfAnYZggUY=";
+    };
   };
+in
+{
+  preset = "nixpkgs-linux";
 
   separateDebugInfo = true;
 
   patches = [
     ./fix-nix-plugin-path.patch
-    # Fix build with Qt 6.10 https://github.com/obsproject/obs-studio/pull/12328
-    (fetchpatch2 {
-      url = "https://github.com/obsproject/obs-studio/commit/26dfacbd4f5217258a2f1c5472a544c65a182d10.patch?full_index=1";
-      hash = "sha256-gEWDzZ+GPCR+rmytXcbiBcvzLg8VwZCveMKkvho3COI=";
-    })
   ];
 
-  nativeBuildInputs = [
+  extraNativeBuildInputs = [
     addDriverRunpath
-    cmake
-    ninja
-    pkg-config
     wrapGAppsHook3
-    wrapQtAppsHook
     extra-cmake-modules
   ]
-  ++ optional scriptingSupport swig
   ++ optional cudaSupport autoAddDriverRunpath;
 
-  buildInputs = [
-    curl
-    ffmpeg
-    jansson
-    libjack2
+  extraBuildInputs = [
+    libGL
     libv4l
+    libvlc
     libxkbcommon
     libpthread-stubs
     libxdmcp
-    qtbase
-    qtsvg
-    speex
-    wayland
-    x264
-    libvlc
-    mbedtls
-    pciutils
-    librist
-    cjson
-    libva
-    srt
-    qtwayland
-    nlohmann_json
-    websocketpp
-    asio
-    libdatachannel
     libvpl
-    qrcodegencpp
-    uthash
+    libva
     nv-codec-headers-12
+    pciutils
+    qtwayland
+    srt
+    wayland
   ]
+  ++ optional browserSupport cef
   ++ optionals scriptingSupport [
     luajit
     python3
@@ -175,40 +97,19 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     libdrm
   ]
-  ++ optional browserSupport cef
   ++ optional withFdk fdk_aac;
 
-  propagatedBuildInputs = [ simde ];
-
-  # Copied from the obs-linuxbrowser
-  postUnpack = lib.optionalString browserSupport ''
-    ln -s ${cef} cef
-  '';
-
-  postPatch = ''
-    cp ${./CMakeUserPresets.json} ./CMakeUserPresets.json
-  '';
-
   cmakeFlags = [
-    "--preset"
-    "nixpkgs-${if stdenv.hostPlatform.isDarwin then "darwin" else "linux"}"
-    "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
-    "-Wno-dev" # kill dev warnings that are useless for packaging
     "-DENABLE_JACK=ON"
-    "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
-    (lib.cmakeBool "ENABLE_SCRIPTING" scriptingSupport)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
-    (lib.cmakeBool "ENABLE_BROWSER" browserSupport)
-  ]
-  ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=deprecated-declarations"
+  nixCflagsCompile = [
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
     "-Wno-error=stringop-overflow="
   ];
@@ -251,10 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     '')
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    inherit (meta) description longDescription homepage;
     maintainers = with lib.maintainers; [
       jb55
       materus
@@ -266,6 +164,5 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "aarch64-linux"
     ];
-    mainProgram = "obs";
   };
-})
+}

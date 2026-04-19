@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>OBS Studio</string>
+	<key>CFBundleExecutable</key>
+	<string>OBS</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.obsproject.obs-studio</string>
+	<key>CFBundleName</key>
+	<string>OBS</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>32.1.1</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSAppNapIsDisabled</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>OBS needs to access background events to enable hotkeys while not in focus.</string>
+	<key>NSCameraReactionEffectGesturesEnabledDefault</key>
+	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>OBS needs to access the camera to enable camera sources to work.</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>(c) 2012-2026 Lain Bailey</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>OBS needs to access the microphone to enable audio input.</string>
+	<key>SUFeedURL</key>
+	<string></string>
+	<key>SUPublicEDKey</key>
+	<string></string>
+	<key>SUScheduledCheckInterval</key>
+	<integer>0</integer>
+</dict>
+</plist>
