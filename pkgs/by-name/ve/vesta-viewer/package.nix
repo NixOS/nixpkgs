@@ -6,9 +6,10 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
+  wrapGAppsHook3,
   _7zz,
-
   glib,
+  gsettings-desktop-schemas,
   libGL,
   libGLU,
   libgcc,
@@ -32,7 +33,10 @@ let
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [ ulysseszhan ];
+    maintainers = with lib.maintainers; [
+      ulysseszhan
+      layzyoldman
+    ];
     mainProgram = "VESTA";
   };
 
@@ -40,9 +44,11 @@ let
     nativeBuildInputs = [
       copyDesktopItems
       autoPatchelfHook
+      wrapGAppsHook3
     ];
     buildInputs = [
       glib
+      gsettings-desktop-schemas
       libGL
       libGLU
       libgcc
@@ -67,6 +73,15 @@ let
       mkdir -p $out/bin
       ln -s $out/lib/VESTA/VESTA{,-core,-gui} -t $out/bin
 
+      # VESTA resolves resources (img/, *.ini, *.dat) relative to argv[0].
+      # wrapProgram replaces the binary with a wrapper script, changing argv[0].
+      # Symlinking data files into $out/bin/ ensures they are found correctly.
+      for f in $out/lib/VESTA/*.ini $out/lib/VESTA/*.dat $out/lib/VESTA/asfdc; do
+        ln -s $f $out/bin/$(basename $f)
+      done
+
+      ln -s $out/lib/VESTA/img $out/bin/img
+
       mkdir -p $out/share/icons/hicolor/{128x128,256x256}/apps
       ln -s $out/lib/VESTA/img/logo.png $out/share/icons/hicolor/128x128/apps/VESTA.png
       ln -s $out/lib/VESTA/img/logo@2x.png $out/share/icons/hicolor/256x256/apps/VESTA.png
@@ -83,14 +98,18 @@ let
         exec = "VESTA %u";
         icon = "VESTA";
         categories = [ "Science" ];
-        mimeTypes = [ "application/x-vesta" ];
+        mimeTypes = [
+          "chemical/x-cif"
+          "chemical/x-pdb"
+          "chemical/x-xyz"
+        ];
       })
     ];
   };
 
   darwinArgs = {
     nativeBuildInputs = [
-      _7zz # instead of undmg because of APFS
+      _7zz
     ];
     src = fetchurl {
       url = "https://jp-minerals.org/vesta/archives/${version}/VESTA.dmg";
@@ -111,7 +130,7 @@ stdenvNoCC.mkDerivation (
   {
     inherit pname version meta;
     # I could've written an update script here,
-    # but I didn't bother because the stable version hasn't been updated for years.
+    # but I didn't bother because the stable version hasn't been updated foryears.
   }
   // {
     "x86_64-linux" = linuxArgs;
