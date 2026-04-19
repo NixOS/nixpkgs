@@ -538,6 +538,10 @@ builtins.intersectAttrs super {
   # Wants to execute cabal-install
   ghci-quickfix = dontCheck super.ghci-quickfix;
 
+  # * doctests don't work without cabal-install
+  #   https://github.com/noinia/hgeometry/issues/132 krank:ignore-line
+  hgeometry-combinatorial = dontCheck super.hgeometry-combinatorial;
+
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;

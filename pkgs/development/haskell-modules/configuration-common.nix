@@ -2091,15 +2091,9 @@ with haskellLib;
   # test suite doesn't compile anymore due to changed hunit/tasty APIs
   fullstop = dontCheck super.fullstop;
 
-  # * doctests don't work without cabal
-  #   https://github.com/noinia/hgeometry/issues/132
   # * Too strict version bound on vector-builder
   #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
-  hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
-
-  # Too strict bounds on containers
-  # https://github.com/jswebtools/language-ecmascript-analysis/issues/1
-  language-ecmascript-analysis = doJailbreak super.language-ecmascript-analysis;
+  hgeometry-combinatorial = doJailbreak super.hgeometry-combinatorial;
 
   cli-git = addBuildTool pkgs.git super.cli-git;
 
