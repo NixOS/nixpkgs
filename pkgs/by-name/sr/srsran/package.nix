@@ -12,7 +12,7 @@
   pcsclite,
   uhd,
   soapysdr-with-plugins,
-  libbladeRF,
+  libbladerf,
   zeromq,
   enableLteRates ? false,
   enableAvx ? stdenv.hostPlatform.avxSupport,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcsclite
     uhd
     soapysdr-with-plugins
-    libbladeRF
+    libbladerf
     zeromq
   ];
 

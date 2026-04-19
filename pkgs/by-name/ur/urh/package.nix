@@ -8,7 +8,7 @@
   airspy,
   limesuite,
   libiio,
-  libbladeRF,
+  libbladerf,
   makeDesktopItem,
   copyDesktopItems,
   qt5,
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     airspy
     limesuite
     libiio
-    libbladeRF
+    libbladerf
   ]
   ++ lib.optional USRPSupport uhd
   ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;

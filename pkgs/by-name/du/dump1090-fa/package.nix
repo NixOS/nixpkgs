@@ -5,7 +5,7 @@
   fetchpatch2,
   pkg-config,
   hackrf,
-  libbladeRF,
+  libbladerf,
   libusb1,
   limesuite,
   ncurses,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hackrf
-    libbladeRF
+    libbladerf
     libusb1
     ncurses
     rtl-sdr

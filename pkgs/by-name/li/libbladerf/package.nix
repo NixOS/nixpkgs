@@ -15,7 +15,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libbladeRF";
+  pname = "libbladerf";
   version = "2025.10";
 
   src = fetchFromGitHub {
