@@ -27,7 +27,7 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 3;
-      hash = "sha256-Atb6m5ZD9NKjYezFnYLnQqnlr72g5dz7ROfOF9fsqto=";
+      hash = "sha256-dewYYPO2wmNyYiQadoEKWJ10cghm6Lv7UE1iVlyNiEY=";
     };
 
     nativeBuildInputs = [
@@ -48,18 +48,18 @@ let
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.25.5";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${gitea.version}";
-    hash = "sha256-EDj/n4dOZsdJx4zdP8GwUavZNK145Q8ENXmIL+81MY4=";
+    hash = "sha256-BzO4VHyOShU8QB8re/2MzP+4vNGebY874aB9NQD8KVA=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-o7OIVo0/gunGMIDd0r6c9KDtku6pWwzmgm1X9qVbx4w=";
+  vendorHash = "sha256-JSyjJIdRePbSnKL6GHdjx5Xbnsniq6KHOlEFsYvMmbw=";
 
   outputs = [
     "out"
@@ -71,10 +71,17 @@ buildGoModule rec {
   # go-modules derivation doesn't provide $data
   # so we need to wait until it is built, and then
   # at that time we can then apply the substituteInPlace
-  overrideModAttrs = _: { postPatch = null; };
+  overrideModAttrs = _: {
+    postPatch = ''
+      substituteInPlace go.mod \
+        --replace-fail "go 1.26.2" "go 1.26"
+    '';
+  };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
+    substituteInPlace go.mod \
+      --replace-fail "go 1.26.2" "go 1.26"
   '';
 
   subPackages = [ "." ];
