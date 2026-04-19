@@ -1,0 +1,38 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+}:
+
+buildGoModule rec {
+  pname = "sbb-tui";
+  version = "1.13.4";
+  __structuredAttrs = true;
+  src = fetchFromGitHub {
+    owner = "Necrom4";
+    repo = "sbb-tui";
+    rev = "v${version}";
+    sha256 = "sha256-JLjAhs5UbqgNYqpA3cDucrAS6ell+0JiDJNf7G33Nhs=";
+  };
+
+  vendorHash = "sha256-K4DOu3rfSlKAa5JNKCzWWpnWZlXXxtN5Po7p1Spqe1w=";
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
+    description = "TUI client for Switzerland's public transport timetables, inspired by SBB/CFF/FFS app";
+    homepage = "https://github.com/Necrom4/sbb-tui";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ tomasrivera ];
+    mainProgram = "sbb-tui";
+  };
+}
