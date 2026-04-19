@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import signal
@@ -8,11 +9,13 @@ import threading
 import traceback
 from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 from unittest import TestCase
 
 from colorama import Style
+from pydantic import BaseModel
 
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
@@ -26,7 +29,25 @@ from test_driver.machine import (
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
-SENTINEL = object()
+
+class NodeConfiguration(BaseModel):
+    name: str
+    start_script: Path
+
+
+class DriverConfiguration(BaseModel):
+    vms: dict[str, NodeConfiguration]
+    containers: dict[str, NodeConfiguration]
+    vlans: list[int]
+    global_timeout: int
+    enable_ssh_backdoor: bool
+    test_script: Path
+
+
+def load_driver_configuration(file_path: str) -> DriverConfiguration:
+    with open(file_path) as f:
+        data = json.load(f)
+    return DriverConfiguration.model_validate(data)
 
 
 class AssertionTester(TestCase):
@@ -63,80 +84,142 @@ def pythonize_name(name: str) -> str:
     return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 
+def in_nix_sandbox() -> bool:
+    # There seems to be no better method at the time
+    typical_nix_env_vars = "NIX_BUILD_TOP" in os.environ
+    nix_shell_marker = "IN_NIX_SHELL" in os.environ
+
+    return typical_nix_env_vars and not nix_shell_marker
+
+
+@dataclass
+class VsockPair:
+    guest: Path
+    host: Path
+    cid: int
+
+
+class VHostDeviceVsock:
+    def __init__(self, tmp_dir: Path, machines: list[str]):
+        self.temp_dir_handle = tempfile.TemporaryDirectory(dir=tmp_dir)
+        self.temp_dir = Path(self.temp_dir_handle.name)
+        self.sockets = {
+            machine: VsockPair(
+                self.temp_dir / f"{machine}_guest.socket",
+                self.temp_dir / f"{machine}_host.socket",
+                cid,
+            )
+            for cid, machine in enumerate(machines, start=3)
+        }
+
+        self.vhost_proc = subprocess.Popen(
+            [
+                "vhost-device-vsock",
+                *(
+                    arg
+                    for vsock_pair in self.sockets.values()
+                    for arg in (
+                        "--vm",
+                        f"guest-cid={vsock_pair.cid},socket={vsock_pair.guest},uds-path={vsock_pair.host}",
+                    )
+                ),
+            ]
+        )
+
+    def __del__(self) -> None:
+        self.vhost_proc.kill()
+        self.temp_dir_handle.cleanup()
+
+
 class Driver:
     """A handle to the driver that sets up the environment
     and runs the tests"""
 
+    config: DriverConfiguration
     tests: str
-    vlans: list[VLan]
-    machines_qemu: list[QemuMachine]
-    machines_nspawn: list[NspawnMachine]
+    vlans: list[VLan] = []
+    machines_qemu: list[QemuMachine] = []
+    machines_nspawn: list[NspawnMachine] = []
     polling_conditions: list[PollingCondition]
-    global_timeout: int
     race_timer: threading.Timer
+    keep_machine_state: bool
     logger: AbstractLogger
     debug: DebugAbstract
+    vhost_vsock: VHostDeviceVsock | None = None
 
     def __init__(
         self,
-        vm_names: list[str],
-        vm_start_scripts: list[str],
-        container_names: list[str],
-        container_start_scripts: list[str],
-        vlans: list[int],
-        tests: str,
+        config: DriverConfiguration,
         out_dir: Path,
         logger: AbstractLogger,
         keep_machine_state: bool = False,
-        global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
     ):
-        self.tests = tests
+        self.config = config
+        self.tests = config.test_script.read_text()
         self.out_dir = out_dir
-        self.global_timeout = global_timeout
-        self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
         self.debug = debug
+        self.polling_conditions = []
+        self.keep_machine_state = keep_machine_state
 
+    def __enter__(self) -> "Driver":
+        self.race_timer = threading.Timer(
+            self.config.global_timeout, self.terminate_test
+        )
         tmp_dir = get_tmp_dir()
 
         with self.logger.nested("start all VLans"):
-            vlans = list(set(vlans))
-            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
+            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in self.config.vlans]
 
         self.polling_conditions = []
+
+        if self.config.enable_ssh_backdoor and self.config.vms:
+            with self.logger.nested("start vhost-device-vsock"):
+                self.vhost_vsock = VHostDeviceVsock(
+                    tmp_dir, list(self.config.vms.keys())
+                )
 
         self.machines_qemu = [
             QemuMachine(
                 name=name,
-                start_command=vm_start_script,
-                keep_machine_state=keep_machine_state,
+                start_command=vm_config.start_script.as_posix(),
+                keep_machine_state=self.keep_machine_state,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
                 logger=self.logger,
+                vsock_host=(
+                    self.vhost_vsock.sockets[name].host
+                    if self.vhost_vsock is not None
+                    else None
+                ),
+                vsock_guest=(
+                    self.vhost_vsock.sockets[name].guest
+                    if self.vhost_vsock is not None
+                    else None
+                ),
             )
-            for name, vm_start_script in zip(vm_names, vm_start_scripts)
+            for name, vm_config in self.config.vms.items()
         ]
 
-        if len(container_start_scripts) > 0:
+        if self.config.containers and in_nix_sandbox():
             self._init_nspawn_environment()
 
         self.machines_nspawn = [
             NspawnMachine(
                 name=name,
-                start_command=container_start_script,
+                start_command=container_config.start_script.as_posix(),
                 tmp_dir=tmp_dir,
                 logger=self.logger,
-                keep_machine_state=keep_machine_state,
+                keep_machine_state=self.keep_machine_state,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
             )
-            for name, container_start_script in zip(
-                container_names,
-                container_start_scripts,
-            )
+            for name, container_config in self.config.containers.items()
         ]
+
+        return self
 
     def _init_nspawn_environment(self) -> None:
         assert os.geteuid() == 0, (
@@ -193,9 +276,6 @@ class Driver:
         machines.sort(key=lambda machine: machine.name)
         return machines
 
-    def __enter__(self) -> "Driver":
-        return self
-
     def __exit__(self, *_: Any) -> None:
         with self.logger.nested("cleanup"):
             self.race_timer.cancel()
@@ -210,6 +290,14 @@ class Driver:
                     vlan.stop()
                 except Exception as e:
                     self.logger.error(f"Error during cleanup of vlan{vlan.nr}: {e}")
+
+            if self.config.enable_ssh_backdoor:
+                try:
+                    del self.vhost_vsock
+                except Exception as e:
+                    self.logger.error(
+                        f"Error during cleanup of vhost-device-vsock process: {e}"
+                    )
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
@@ -227,7 +315,7 @@ class Driver:
 
         general_symbols = dict(
             start_all=self.start_all,
-            test_script=self.test_script,
+            test_script=self.config.test_script,
             machines=self.machines,
             machines_qemu=self.machines_qemu,
             machines_nspawn=self.machines_nspawn,
@@ -248,6 +336,7 @@ class Driver:
             NspawnMachine=NspawnMachine,  # for typing
             t=AssertionTester(),
             debug=self.debug,
+            dump_machine_ssh=self.dump_machine_ssh,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -267,18 +356,28 @@ class Driver:
         )
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
-    def dump_machine_ssh(self, offset: int) -> None:
-        print("SSH backdoor enabled, the machines can be accessed like this:")
-        print(
-            f"{Style.BRIGHT}Note:{Style.RESET_ALL} vsocks require {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
-        )
-        longest_name = len(max((machine.name for machine in self.machines), key=len))
-        for index, machine in enumerate(self.machines, start=offset + 1):
-            name = machine.name
-            spaces = " " * (longest_name - len(name) + 2)
+    def dump_machine_ssh(self) -> None:
+        if not self.config.enable_ssh_backdoor:
+            return
+
+        assert self.vhost_vsock is not None
+
+        if self.machines:
+            print("SSH backdoor enabled, the machines can be accessed like this:")
             print(
-                f"    {name}:{spaces}{Style.BRIGHT}{machine.ssh_backdoor_command(index)}{Style.RESET_ALL}"
+                f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
             )
+            longest_name = len(
+                max((machine.name for machine in self.machines), key=len)
+            )
+            for index, machine in enumerate(self.machines):
+                name = machine.name
+                spaces = " " * (longest_name - len(name) + 2)
+                print(
+                    f"    {name}:{spaces}{Style.BRIGHT}{machine.ssh_backdoor_command()}{Style.RESET_ALL}"
+                )
+        else:
+            print("SSH backdoor enabled, but no machines defined")
 
     def test_script(self) -> None:
         """Run the test script"""
@@ -324,7 +423,7 @@ class Driver:
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""
         self.logger.info(
-            f"Test will time out and terminate in {self.global_timeout} seconds"
+            f"Test will time out and terminate in {self.config.global_timeout} seconds"
         )
         self.race_timer.start()
         self.test_script()
@@ -336,16 +435,34 @@ class Driver:
     def start_all(self) -> None:
         """Start all machines"""
         with self.logger.nested("start all VMs"):
+            errors: list[tuple[str, BaseException]] = []
+
+            def start_machine(machine: BaseMachine) -> None:
+                try:
+                    machine.start()
+                except Exception as e:
+                    errors.append((machine.name, e))
+
             threads = []
             for machine in self.machines:
                 # Create a thread for each machine's start method
-                t = threading.Thread(target=machine.start, name=f"start-{machine.name}")
+                t = threading.Thread(
+                    target=start_machine,
+                    args=(machine,),
+                    name=f"start-{machine.name}",
+                )
                 threads.append(t)
                 t.start()
 
             # Wait for all startup threads to complete before proceeding
             for t in threads:
                 t.join()
+
+            if errors:
+                messages = [f"{name}: {e}" for name, e in errors]
+                raise MachineError(
+                    "Failed to start the following machines:\n" + "\n".join(messages)
+                )
 
     def join_all(self) -> None:
         """Wait for all machines to shut down"""
@@ -378,6 +495,10 @@ class Driver:
         """
         tmp_dir = get_tmp_dir()
 
+        if self.config.enable_ssh_backdoor:
+            self.logger.warning(
+                f"create_machine({name}): not enabling SSH backdoor, this is not supported for VMs created with create_machine!"
+            )
         return QemuMachine(
             tmp_dir=tmp_dir,
             out_dir=self.out_dir,
@@ -418,7 +539,7 @@ class Driver:
             def __enter__(self) -> None:
                 driver.polling_conditions.append(self.condition)
 
-            def __exit__(self, a, b, c) -> None:  # type: ignore
+            def __exit__(self, a, b, c) -> None:
                 res = driver.polling_conditions.pop()
                 assert res is self.condition
 

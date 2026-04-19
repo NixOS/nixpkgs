@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "15rvrnszdy3db8s0dmb696l4isb3x2cpj7wcl4j09pdi59pc8p37";
   };
 
+  postPatch = ''
+    substituteInPlace include/types.h \
+      --replace-fail "typedef unsigned char bool;" ""
+  '';
+
   configureFlags = [
     "--with-alsa=${lib.getLib alsa-lib}/lib/libasound.so"
     "--with-pulse=${lib.getLib libpulseaudio}/lib/libpulse.so"

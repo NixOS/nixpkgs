@@ -5485,6 +5485,16 @@
     githubId = 32609395;
     name = "B YI";
   };
+  coolGi = {
+    email = "me@coolgi.dev";
+    github = "coolGi69";
+    githubId = 57488297;
+    name = "coolGi";
+    matrix = "@me:coolgi.dev";
+    keys = [
+      { fingerprint = "1E3E C960 F2C0 9128 5398  A4A9 28B0 7544 198A DB06"; }
+    ];
+  };
   corbanr = {
     email = "corban@raunco.co";
     github = "CorbanR";
@@ -16247,6 +16257,12 @@
     name = "M0ustach3";
     github = "M0ustach3";
     githubId = 37956764;
+  };
+  m1-s = {
+    email = "michael@m1-s.com";
+    github = "m1-s";
+    githubId = 94642227;
+    name = "Michael Schneider";
   };
   m1cr0man = {
     email = "lucas+nix@m1cr0man.com";
@@ -30012,12 +30028,6 @@
     github = "ylwghst";
     githubId = 26011724;
     name = "Burim Augustin Berisa";
-  };
-  ymarkus = {
-    name = "Yannick Markus";
-    email = "nixpkgs@ymarkus.dev";
-    github = "ymarkus";
-    githubId = 62380378;
   };
   ymatsiuk = {
     name = "Yurii Matsiuk";
