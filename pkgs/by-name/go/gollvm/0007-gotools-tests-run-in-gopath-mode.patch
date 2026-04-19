@@ -1,0 +1,29 @@
+From 10c1af4d0e464e6db84a1f802e01eb7630df258e Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 21:09:00 -0500
+Subject: [PATCH 7/10] gotools: force GOPATH mode in gotestprogram
+
+`gotestprogram.sh` builds a synthetic GOPATH-style tree and then runs
+`go test` inside it. Modern Go defaults to module mode, which makes the
+helper abort before the actual tests start because there is no `go.mod`
+file in that temporary tree.
+
+Force GOPATH mode inside the helper so the gotools tests run in the
+environment they were written for.
+---
+ gotools/gotestprogram.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gotools/gotestprogram.sh b/gotools/gotestprogram.sh
+--- a/gotools/gotestprogram.sh
++++ b/gotools/gotestprogram.sh
+@@ -163,6 +163,7 @@ if [ ! -z "${CC}" ]; then
+   setenv CC="${CC}"
+ fi
+ setenv GOROOT=${LIBDIR}
++setenv GO111MODULE=off
+ HERE=`pwd`
+ cd $WORKDIR
+ #
+-- 
+2.50.1
