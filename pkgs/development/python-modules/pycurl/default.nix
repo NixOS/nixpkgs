@@ -51,12 +51,15 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ curl ];
-
   buildInputs = [
     curl
     openssl
   ];
+
+  # Make it so only curl-config is provided, without accidentally providing
+  # the wrong .so files when cross compiling, which is what happens if you use
+  # nativeBuildInputs instead.
+  env.PYCURL_CURL_CONFIG = "${lib.getExe' (lib.getDev curl) "curl-config"}";
 
   pythonImportsCheck = [ "pycurl" ];
 
