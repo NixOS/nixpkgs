@@ -803,8 +803,10 @@ rec {
       substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
     };
 
-  attrListOf =
-    elemType:
+  attrListOf = elemType: attrListWith { inherit elemType; };
+
+  attrListWith =
+    { elemType }:
     mkOptionType rec {
       name = "attrListOf";
       description = "attribute list of ${
