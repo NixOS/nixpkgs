@@ -1,8 +1,11 @@
 {
   fetchFromGitHub,
+  fetchPnpmDeps,
   lib,
   makeBinaryWrapper,
   nodejs,
+  pnpmConfigHook,
+  pnpm_9,
   stdenv,
   versionCheckHook,
   yarn-berry,
@@ -68,7 +71,64 @@ let
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
+
   yarnHash = "sha256-WncAReGKs9cZvPTf87bKKOrmte5ORyHOb5pTAgHsb8M=";
+
+  prettier-oxc-wasm-parser = stdenv.mkDerivation (finalAttrs: {
+    pname = "binding-wasm32-wasi";
+    version = "0.99.0";
+
+    src = builtins.fetchTarball {
+      url = "https://registry.npmjs.org/@oxc-parser/${finalAttrs.pname}/-/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+      sha256 = "05ndf32qlx5qnrp0r4jrgb8219mihvha68b1jcvk24ys76gpmxpm";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm_9
+    ];
+
+    prePnpmInstall = ''
+      install --mode=644 -T ${./pnpm-lock_prettier-oxc-wasm-parser.yaml} ./pnpm-lock.yaml
+    '';
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        prePnpmInstall
+        ;
+
+      pnpm = pnpm_9;
+      fetcherVersion = 2;
+      hash = "sha256-i3zxUTy8vRo+Scn+ZQkZ2/j9emjurCNR4Cz8C8XsHjQ=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp -r . $out/
+
+      runHook postInstall
+    '';
+
+    doCheck = false;
+    doInstallCheck = false;
+
+    meta = {
+      description = "Oxc Parser Node API";
+      homepage = "https://oxc.rs/docs/guide/usage/parser";
+      license = "MIT";
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
@@ -98,6 +158,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     yarn install --immutable
+
+    mkdir -p .tmp/prettier-oxc-wasm-parser/node_modules/@oxc-parser
+
+    cp -r ${prettier-oxc-wasm-parser.out} .tmp/prettier-oxc-wasm-parser/node_modules/@oxc-parser/binding-wasm32-wasi
+
+    find .tmp/prettier-oxc-wasm-parser -type f -exec chmod u+w {} \;
+    find .tmp/prettier-oxc-wasm-parser -type d -exec chmod u+w {} \;
+
+    sed --in-place --expression '/^\s\+const installDirectory = await install(version);$/ {
+      s#await install(version)#new URL("../../.tmp/prettier-oxc-wasm-parser", import.meta.url)#;
+    }' scripts/build/build-oxc-wasm-parser.js
+
     yarn build --clean
 
     mkdir -p $out/lib/node_modules
