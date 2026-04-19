@@ -62,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1Z65rNsUNeaeSJmxwpEHPbiU4KEDvyrWL9LyAWFsR1c=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postPatch = ''
     # The CMake tries to find out the version via git.
     # Since we're not in a clone, git describe won't work.
