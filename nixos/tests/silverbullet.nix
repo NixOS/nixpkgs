@@ -17,7 +17,7 @@
 
       services.silverbullet = {
         enable = true;
-        package = pkgs.silverbullet;
+        package = pkgs.silverbullet-server;
         listenPort = 3001;
         listenAddress = "localhost";
         spaceDir = "/home/test/silverbullet";

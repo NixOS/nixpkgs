@@ -15,7 +15,7 @@ in
     services.silverbullet = {
       enable = lib.mkEnableOption "Silverbullet, an open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
 
-      package = lib.mkPackageOption pkgs "silverbullet" { };
+      package = lib.mkPackageOption pkgs "silverbullet-server" { };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;

@@ -9,7 +9,7 @@
   writeShellScript,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "silverbullet";
+  pname = "silverbullet-server";
   version = "2.6.1";
 
   src =
@@ -51,10 +51,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = writeShellScript "update-silverbullet" ''
+    updateScript = writeShellScript "update-silverbullet-server" ''
       NEW_VERSION="$1"
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        ${lib.getExe' common-updater-scripts "update-source-version"} "silverbullet" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+        ${lib.getExe' common-updater-scripts "update-source-version"} "silverbullet-server" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
 
