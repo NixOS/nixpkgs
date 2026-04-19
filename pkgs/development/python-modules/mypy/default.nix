@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.20.0";
+  version = "1.20.1";
   pyproject = true;
 
   # relies on several CPython internals
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-QkUk7Y8mJSJtttfSiA7m4JL2Q4XFXEYs5irI8/FygaQ=";
+    hash = "sha256-MQZZyGu6xFh3wO+0lWED+mingjK92v/onljtp9gylmM=";
   };
 
   passthru.updateScript = gitUpdater {
