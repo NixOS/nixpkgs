@@ -16,7 +16,7 @@
   typing-extensions,
 
   # passthru
-  rgbxy ? null,
+  rgbxy,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "rich-tables";
