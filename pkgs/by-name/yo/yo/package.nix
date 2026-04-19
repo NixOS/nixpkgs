@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "yo";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "yeoman";
     repo = "yo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tTT+KjJ8Fol2IjPzuWpkd3SymODe8Jmge9sreSxBU5M=";
+    hash = "sha256-Xj8rz7YQMbCW2Dzyojiz0r6fgEkNG8D7xsf3KqE2tX4=";
   };
 
-  npmDepsHash = "sha256-bBGGZ5O4Nkw+nMZ5VAz7wjm8tIrCCvtv6TaXTwUCLPk=";
+  npmDepsHash = "sha256-sBQLgiVEIrgKDgFdDfFqm8kRyiiPw2tOpHhA7ah5UVw=";
 
   dontNpmBuild = true;
 
