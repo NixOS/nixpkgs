@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-dOdJ4f98smCYdskp3BwtQG6aOyK+2a73+x580FKRWDk=";
   };
 
+  postPatch = ''
+    substituteInPlace _mypyc_hook/backend.py \
+      --replace-fail "mypy>=1.4.1,<=1.20" "mypy"
+  '';
+
   build-system = [
     setuptools
   ]
