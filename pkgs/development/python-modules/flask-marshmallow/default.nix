@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
     tag = version;
-    hash = "sha256-YyXsCyIJmXb1p1J5wvGg57bGbsAbz83vW6hxpnbpOSw=";
+    hash = "sha256-IzeVVkyf4BRxtUVQIfzAvyjaKG+BLwhruXZHFJ6iGmw=";
   };
 
   build-system = [ flit-core ];
