@@ -42,6 +42,27 @@ in
       );
     };
 
+    # asAttrs: value is a merged attrset, ordered list in valueMeta
+    asAttrs = mkOption {
+      type = types.lazyAttrsOf (
+        types.attrListWith {
+          elemType = types.str;
+          asAttrs = true;
+          mergeAttrValues = _name: values: lib.last values;
+        }
+      );
+    };
+
+    # asAttrs with default mergeAttrValues: duplicates collected into lists
+    asAttrsDefault = mkOption {
+      type = types.lazyAttrsOf (
+        types.attrListWith {
+          elemType = types.int;
+          asAttrs = true;
+        }
+      );
+    };
+
     # Strict wrappers that force deep evaluation, for testing error cases
     attrListStrict = mkOption {
       type = types.lazyAttrsOf types.raw;
@@ -379,6 +400,53 @@ in
           host = "dbhost";
         };
       }
+    ];
+
+    # asAttrs: unique keys — value is a plain attrset
+    asAttrs.unique = [
+      { a = "alpha"; }
+      { b = "beta"; }
+    ];
+
+    # asAttrs: duplicate keys — last in order wins
+    asAttrs.duplicateKeys = mkMerge [
+      { x = mkOrder 500 "first"; }
+      { x = mkOrder 1500 "last"; }
+      { y = "only"; }
+    ];
+
+    # asAttrs: with ordering — value is attrset, ordered list in valueMeta
+    asAttrs.ordered = {
+      z = mkOrder 200 "z-val";
+      a = mkOrder 100 "a-val";
+    };
+
+    # asAttrs: with mkForce — forced key overrides
+    asAttrs.withForce = mkMerge [
+      { x = "unused: overridden by mkForce"; }
+      {
+        x = mkForce "forced";
+        y = "kept";
+      }
+    ];
+
+    # asAttrs: empty
+    asAttrs.empty = [ ];
+
+    # asAttrsDefault: unique keys
+    asAttrsDefault.unique = [
+      { a = 1; }
+      { b = 2; }
+    ];
+
+    # asAttrsDefault: duplicate keys — default collects into lists
+    asAttrsDefault.duplicates = mkMerge [
+      { x = mkOrder 500 10; }
+      { x = mkOrder 1500 30; }
+      { y = 99; }
+      [
+        { x = 20; }
+      ]
     ];
 
     # either: attrList branch matches for list input
@@ -721,6 +789,79 @@ in
       assert
         cfg.eitherIntOrAttrListFallback == [
           { a = "hello"; }
+        ];
+
+      # asAttrs: unique keys — value is a plain attrset
+      assert
+        cfg.asAttrs.unique == {
+          a = "alpha";
+          b = "beta";
+        };
+      # ordered list preserved in valueMeta
+      assert
+        c.options.asAttrs.valueMeta.attrs.unique.attrListValue == [
+          { a = "alpha"; }
+          { b = "beta"; }
+        ];
+
+      # asAttrs: duplicate keys — last in order wins
+      assert
+        cfg.asAttrs.duplicateKeys == {
+          x = "last";
+          y = "only";
+        };
+      assert
+        c.options.asAttrs.valueMeta.attrs.duplicateKeys.attrListValue == [
+          { x = "first"; }
+          { y = "only"; }
+          { x = "last"; }
+        ];
+
+      # asAttrs: ordered — value is attrset (unordered), list in valueMeta preserves order
+      assert
+        cfg.asAttrs.ordered == {
+          a = "a-val";
+          z = "z-val";
+        };
+      assert
+        c.options.asAttrs.valueMeta.attrs.ordered.attrListValue == [
+          { a = "a-val"; }
+          { z = "z-val"; }
+        ];
+
+      # asAttrs: mkForce — forced key overrides, value is attrset
+      assert
+        cfg.asAttrs.withForce == {
+          x = "forced";
+          y = "kept";
+        };
+
+      # asAttrs: empty — value is empty attrset
+      assert cfg.asAttrs.empty == { };
+
+      # asAttrsDefault: unique keys — each value wrapped in singleton list
+      assert
+        cfg.asAttrsDefault.unique == {
+          a = [ 1 ];
+          b = [ 2 ];
+        };
+
+      # asAttrsDefault: duplicate keys — values collected into list in order
+      assert
+        cfg.asAttrsDefault.duplicates == {
+          x = [
+            10
+            20
+            30
+          ];
+          y = [ 99 ];
+        };
+      assert
+        c.options.asAttrsDefault.valueMeta.attrs.duplicates.attrListValue == [
+          { x = 10; }
+          { y = 99; }
+          { x = 20; }
+          { x = 30; }
         ];
 
       # Error cases are tested via checkConfigError in modules.sh
