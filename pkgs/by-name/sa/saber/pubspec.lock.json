@@ -2050,16 +2050,6 @@
       "source": "hosted",
       "version": "2.4.1"
     },
-    "simplytranslate": {
-      "dependency": "direct dev",
-      "description": {
-        "name": "simplytranslate",
-        "sha256": "3137b221b088c589cd68d26192d753a3a6fe314b83d95fc9c96cd0a40b270772",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.2.2"
-    },
     "sky_engine": {
       "dependency": "transitive",
       "description": "flutter",
