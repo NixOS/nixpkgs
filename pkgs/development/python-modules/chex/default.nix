@@ -20,15 +20,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chex";
   version = "0.1.91";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lJ9+kvG7dRtfDVgvkcJ9/jtnX0lMfxY4mmZ290y/74U=";
   };
 
@@ -36,9 +37,6 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  pythonRelaxDeps = [
-    "typing_extensions"
-  ];
   dependencies = [
     absl-py
     jax
@@ -69,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";
-    changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/chex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})
