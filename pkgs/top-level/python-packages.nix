@@ -10990,6 +10990,8 @@ self: super: with self; {
 
   netio = callPackage ../development/python-modules/netio { };
 
+  netket = callPackage ../development/python-modules/netket { };
+
   netmap = callPackage ../development/python-modules/netmap { };
 
   netmiko = callPackage ../development/python-modules/netmiko { };
