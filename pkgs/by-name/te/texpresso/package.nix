@@ -1,19 +1,25 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   makeWrapper,
-  writeScript,
-  mupdf,
-  SDL2,
-  re2c,
+
+  # buildInputs
   freetype,
-  jbig2dec,
-  harfbuzz,
-  openjpeg,
   gumbo,
+  harfbuzz,
+  jbig2dec,
   libjpeg,
+  mupdf,
+  openjpeg,
+  re2c,
+  SDL2,
+
+  # passthru
   callPackage,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,28 +46,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    mupdf
-    SDL2
-    re2c
     freetype
-    jbig2dec
-    harfbuzz
-    openjpeg
     gumbo
+    harfbuzz
+    jbig2dec
     libjpeg
+    mupdf
+    openjpeg
+    re2c
+    SDL2
   ];
 
-  buildFlags = [ "texpresso" ];
+  buildFlags = [
+    "texpresso"
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-function-declaration"
-    ]
-  );
+    ];
+  };
 
   installPhase = ''
     runHook preInstall
-    install -Dm0755 -t "$out/bin/" "build/texpresso"
+    install -D -t "$out/bin/" "build/texpresso"
     runHook postInstall
   '';
 
