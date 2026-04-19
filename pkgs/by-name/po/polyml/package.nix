@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgsHostTarget,
   fetchFromGitHub,
   autoreconfHook,
   gmp,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libffi
     gmp
+    pkgsHostTarget.stdenv.cc
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -44,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-libffi"
     "--with-gmp"
   ];
+
+  preInstall = ''
+    substituteInPlace polyc \
+      --replace-fail "LINK=\"$CXX\"" "LINK=\"${lib.getExe' pkgsHostTarget.stdenv.cc "c++"}\""
+  '';
 
   doCheck = true;
 
