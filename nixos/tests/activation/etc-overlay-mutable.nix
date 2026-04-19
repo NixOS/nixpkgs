@@ -122,6 +122,10 @@
         machine.succeed("mkdir -p /.rw-etc/upper/pam.d")
         machine.succeed("setfattr -h -n trusted.overlay.opaque -v y /.rw-etc/upper/pam.d")
         machine.succeed("getfattr -h -n trusted.overlay.opaque /.rw-etc/upper/pam.d")
+        # Also create a non-opaque upperdir directory that exists in the
+        # metadata layer, to ensure clear-etc-opaque tolerates the
+        # already-clear case.
+        machine.succeed("mkdir -p /.rw-etc/upper/systemd")
 
         # Reboot and verify the initrd rw-etc service cleared the opaque marker.
         machine.shutdown()
