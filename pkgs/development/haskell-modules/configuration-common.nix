@@ -1302,10 +1302,6 @@ with haskellLib;
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
-  # This package can't be built on non-Windows systems.
-  inline-c-win32 = dontDistribute super.inline-c-win32;
-  Southpaw = dontDistribute super.Southpaw;
-
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal (drv: {
     broken = pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isi686;
