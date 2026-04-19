@@ -16914,6 +16914,8 @@ self: super: with self; {
 
   rflink = callPackage ../development/python-modules/rflink { };
 
+  rgbxy = callPackage ../development/python-modules/rgbxy { };
+
   rgpio = toPythonModule (
     pkgs.lgpio.override {
       inherit buildPythonPackage;
