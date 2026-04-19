@@ -247,7 +247,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/skypilot-org/skypilot";
     changelog = "https://github.com/skypilot-org/skypilot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ seanrmurphy ];
+    maintainers = with lib.maintainers; [
+      seanrmurphy
+      daspk04
+    ];
     mainProgram = "sky";
   };
 })
