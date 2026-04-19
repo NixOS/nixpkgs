@@ -8217,6 +8217,7 @@ with pkgs;
     openssl_1_1
     openssl_3
     openssl_3_6
+    openssl_4_0
     ;
 
   pcre = callPackage ../development/libraries/pcre { };
