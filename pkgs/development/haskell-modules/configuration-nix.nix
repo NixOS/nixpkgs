@@ -214,6 +214,18 @@ builtins.intersectAttrs super {
     '';
   }) super.cuda;
 
+  # Compiles some C or C++ source which requires these headers
+  VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
+  vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
+
+  # Requires wrapQtAppsHook
+  qtah-cpp-qt5 = overrideCabal (drv: {
+    buildDepends = [ pkgs.qt5.wrapQtAppsHook ];
+  }) super.qtah-cpp-qt5;
+
+  # https://github.com/evanrinehart/mikmod/issues/1
+  mikmod = addExtraLibrary pkgs.libmikmod super.mikmod;
+
   nvvm = overrideCabal (drv: {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
@@ -383,6 +395,9 @@ builtins.intersectAttrs super {
   double-conversion = disableCabalFlag "embedded_double_conversion" (
     addBuildDepends [ pkgs.double-conversion ] super.double-conversion
   );
+
+  # library dependency declaration hidden behind conditional
+  bindings-levmar = addExtraLibrary pkgs.blas super.bindings-levmar;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
   gio = lib.pipe super.gio [

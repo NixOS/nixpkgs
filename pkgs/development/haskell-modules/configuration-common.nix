@@ -835,13 +835,6 @@ with haskellLib;
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
 
-  bindings-levmar = addExtraLibrary pkgs.blas super.bindings-levmar;
-
-  # Requires wrapQtAppsHook
-  qtah-cpp-qt5 = overrideCabal (drv: {
-    buildDepends = [ pkgs.qt5.wrapQtAppsHook ];
-  }) super.qtah-cpp-qt5;
-
   # The Haddock phase fails for one reason or another.
   deepseq-magic = dontHaddock super.deepseq-magic;
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
@@ -1211,9 +1204,6 @@ with haskellLib;
   # https://github.com/pixbi/duplo/issues/25
   duplo = doJailbreak super.duplo;
 
-  # https://github.com/evanrinehart/mikmod/issues/1
-  mikmod = addExtraLibrary pkgs.libmikmod super.mikmod;
-
   # Missing module.
   rematch = dontCheck super.rematch; # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text; # https://github.com/tcrayford/rematch/issues/6
@@ -1518,10 +1508,6 @@ with haskellLib;
     testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.which ];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   }) super.alex;
-
-  # Compiles some C or C++ source which requires these headers
-  VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
-  vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
 
   # Generate cli completions for dhall.
   dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
