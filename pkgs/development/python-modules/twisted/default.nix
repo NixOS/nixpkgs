@@ -191,7 +191,8 @@ buildPythonPackage rec {
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbortLater"
-          # Times out in Hydra on x86_64-darwin
+          # reactor hangs on darwin with a full TCP write buffer
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBuffer"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange"
         ];
       };
