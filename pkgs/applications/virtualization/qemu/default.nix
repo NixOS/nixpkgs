@@ -444,7 +444,7 @@ stdenv.mkDerivation (finalAttrs: {
     // lib.optionalAttrs (!toolsOnly && !userOnly) {
       mainProgram = "qemu-kvm";
     }
-    # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
+    # userOnly: https://qemu.readthedocs.io/en/master/user/main.html#supported-operating-systems
     // lib.optionalAttrs userOnly {
       platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
       description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
