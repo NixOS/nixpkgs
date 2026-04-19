@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "utitools";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "utitools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oI+a+sc9+qi7aFP0dLINAQekib/9pZm10A5jhVIHWvo=";
+    hash = "sha256-mx9vcMCeDTJyWJKm0Ci9IEAPCNfx9NvPGC8cuNYnH1M=";
   };
 
   build-system = [ flit-core ];
