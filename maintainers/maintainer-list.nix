@@ -25508,6 +25508,12 @@
     githubId = 12636891;
     name = "Akhil Indurti";
   };
+  smayzy = {
+    email = "smayzy@smayzy.ovh";
+    github = "Smayzy";
+    githubId = 121962775;
+    name = "Baptiste Maylin";
+  };
   smissingham = {
     email = "sean@missingham.com";
     github = "smissingham";
