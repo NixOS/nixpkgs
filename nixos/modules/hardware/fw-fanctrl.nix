@@ -7,10 +7,17 @@
 let
   inherit (lib) types mkOption;
 
-  configFormat = pkgs.formats.json { };
+  settingsFormat = pkgs.formats.json { };
   cfg = config.hardware.fw-fanctrl;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "hardware" "fw-fanctrl" "config" ]
+      [ "hardware" "fw-fanctrl" "settings" ]
+    )
+  ];
+
   options.hardware.fw-fanctrl = {
     enable = lib.mkEnableOption "the fw-fanctrl systemd service and install the needed packages";
 
@@ -26,13 +33,13 @@ in
       '';
     };
 
-    config = mkOption {
+    settings = mkOption {
       default = { };
       description = ''
         Additional config entries for the fw-fanctrl service (documentation: <https://github.com/TamtamHero/fw-fanctrl/blob/main/doc/configuration.md>)
       '';
       type = types.submodule {
-        freeformType = types.attrsOf configFormat.type;
+        freeformType = types.attrsOf settingsFormat.type;
         options = {
           defaultStrategy = mkOption {
             type = types.str;
@@ -53,6 +60,7 @@ in
             '';
             type = types.attrsOf (
               types.submodule {
+                freeformType = types.attrsOf settingsFormat.type;
                 options = {
                   fanSpeedUpdateFrequency = mkOption {
                     type = types.ints.unsigned;
@@ -71,6 +79,7 @@ in
                     description = "How should the speed curve look like";
                     type = types.listOf (
                       types.submodule {
+                        freeformType = types.attrsOf settingsFormat.type;
                         options = {
                           temp = mkOption {
                             type = types.int;
@@ -99,8 +108,8 @@ in
   config =
     let
       defaultConfig = builtins.fromJSON (builtins.readFile "${cfg.package}/share/fw-fanctrl/config.json");
-      finalConfig = lib.attrsets.recursiveUpdate defaultConfig cfg.config;
-      configFile = configFormat.generate "custom.json" finalConfig;
+      finalConfig = lib.attrsets.recursiveUpdate defaultConfig cfg.settings;
+      configFile = settingsFormat.generate "custom.json" finalConfig;
     in
     lib.mkIf cfg.enable {
       environment.systemPackages = [
