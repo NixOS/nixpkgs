@@ -9,6 +9,20 @@ let
 
   settingsFormat = pkgs.formats.json { };
   cfg = config.hardware.fw-fanctrl;
+
+  userConfig = settingsFormat.generate "user.json" cfg.settings;
+  finalConfig =
+    if cfg.keepDefaultStrategies then
+      pkgs.runCommand "config.json" { } ''
+        ${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${cfg.package}/share/fw-fanctrl/config.json ${userConfig} >$out
+      ''
+    else
+      userConfig;
+  fw-fanctrl =
+    if cfg.frameworkToolPackage == pkgs.framework-tool then
+      cfg.package
+    else
+      cfg.package.override { inherit (cfg) frameworkToolPackage; };
 in
 {
   imports = [
@@ -48,6 +62,7 @@ in
         Set this to false if you only want to see your own strategies defined with `hardware.fw-fanctrl.config.strategies`
       '';
     };
+
     settings = mkOption {
       default = { };
       description = ''
@@ -120,59 +135,43 @@ in
     };
   };
 
-  config =
-    let
-      defaultConfig =
-        if cfg.keepDefaultStrategies then
-          builtins.fromJSON (builtins.readFile "${cfg.package}/share/fw-fanctrl/config.json")
-        else
-          { };
-      finalConfig = lib.attrsets.recursiveUpdate defaultConfig cfg.config;
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      fw-fanctrl
+      cfg.frameworkToolPackage
+    ];
 
-      fw-fanctrl =
-        if cfg.frameworkToolPackage == pkgs.framework-tool then
-          cfg.package
-        else
-          cfg.package.override { inherit (cfg) frameworkToolPackage; };
-      configFile = settingsFormat.generate "custom.json" finalConfig;
-    in
-    lib.mkIf cfg.enable {
-      environment.systemPackages = [
-        fw-fanctrl
-        cfg.frameworkToolPackage
-      ];
-
-      systemd.services = {
-        fw-fanctrl = {
-          description = "Framework Fan Controller";
-          after = [ "multi-user.target" ];
-          serviceConfig = {
-            Type = "simple";
-            Restart = "always";
-            ExecStart = "${lib.getExe fw-fanctrl} --output-format JSON run --config ${configFile} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
-            ExecStopPost = "${lib.getExe cfg.frameworkToolPackage} --autofanctrl";
-          };
-          wantedBy = [ "multi-user.target" ];
+    systemd.services = {
+      fw-fanctrl = {
+        description = "Framework Fan Controller";
+        after = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "simple";
+          Restart = "always";
+          ExecStart = "${lib.getExe fw-fanctrl} --output-format JSON run --config ${finalConfig} --silent ${lib.optionalString cfg.disableBatteryTempCheck "--no-battery-sensors"}";
+          ExecStopPost = "${lib.getExe cfg.frameworkToolPackage} --autofanctrl";
         };
+        wantedBy = [ "multi-user.target" ];
+      };
 
-        fw-fanctrl-suspend = {
-          description = "Framework Fan Controller sleep hook";
-          before = [ "sleep.target" ];
-          unitConfig = {
-            StopWhenUnneeded = "yes";
-          };
-          requires = [ "fw-fanctrl.service" ];
-          after = [ "fw-fanctrl.service" ];
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = "yes";
-            ExecStart = "${lib.getExe fw-fanctrl} pause";
-            ExecStop = "${lib.getExe fw-fanctrl} resume";
-          };
-          wantedBy = [ "sleep.target" ];
+      fw-fanctrl-suspend = {
+        description = "Framework Fan Controller sleep hook";
+        before = [ "sleep.target" ];
+        unitConfig = {
+          StopWhenUnneeded = "yes";
         };
+        requires = [ "fw-fanctrl.service" ];
+        after = [ "fw-fanctrl.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = "yes";
+          ExecStart = "${lib.getExe fw-fanctrl} pause";
+          ExecStop = "${lib.getExe fw-fanctrl} resume";
+        };
+        wantedBy = [ "sleep.target" ];
       };
     };
+  };
 
   meta = {
     maintainers = [ lib.maintainers.Svenum ];
