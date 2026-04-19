@@ -1,60 +1,39 @@
-{
-  lib,
-  bleak,
-  buildPythonPackage,
-  cryptography,
-  esptool,
-  fetchFromGitHub,
-  netifaces,
-  pyserial,
-  replaceVars,
-  setuptools,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, cryptography
+, pyserial
+, pytestCheckHook
 }:
 
-buildPythonPackage (finalAttrs: {
-  pname = "rns";
-  version = "1.1.5";
-  pyproject = true;
+buildPythonPackage rec {
+  pname   = "rns";
+  version = "1.1.6";
+  format  = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "markqvist";
-    repo = "Reticulum";
-    tag = finalAttrs.version;
-    hash = "sha256-cgDL27KyDS8wPgyZ1ez6k9DRD2m9cJxms6w76Haalkg=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-RAXRlzJICFzoR3O4RPOyYWCOB65bSIVubdttpTuZz/4=";
   };
 
-  patches = [
-    (replaceVars ./unvendor-esptool.patch {
-      esptool = lib.getExe esptool;
-    })
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [
-    bleak
+  propagatedBuildInputs = [
     cryptography
-    netifaces
     pyserial
   ];
 
+  doCheck = false;
+
   pythonImportsCheck = [ "RNS" ];
 
-  nativeCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgram = "${placeholder "out"}/bin/rncp";
-
-  meta = {
-    description = "Cryptography-based networking stack for wide-area networks";
-    homepage = "https://reticulum.network";
-    changelog = "https://github.com/markqvist/Reticulum/blob/${finalAttrs.src.tag}/Changelog.md";
-    # Reticulum License
-    # https://github.com/markqvist/Reticulum/blob/master/LICENSE
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
-      fab
-      qbit
-    ];
+  meta = with lib; {
+    description = "Self-configuring, encrypted and resilient mesh networking stack";
+    homepage    = "https://reticulum.network";
+    changelog   = "https://github.com/markqvist/Reticulum/releases/tag/${version}";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ ];
+    platforms   = platforms.unix;
   };
-})
+}

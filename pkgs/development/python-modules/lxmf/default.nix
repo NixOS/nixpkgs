@@ -1,40 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rns,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchurl
+, rns
+, pytestCheckHook
 }:
 
-buildPythonPackage (finalAttrs: {
-  pname = "lxmf";
+buildPythonPackage rec {
+  pname   = "lxmf";
   version = "0.9.4";
-  pyproject = true;
+  format  = "wheel";
 
-  src = fetchFromGitHub {
-    owner = "markqvist";
-    repo = "lxmf";
-    tag = finalAttrs.version;
-    hash = "sha256-WeEGwdbW2hmN7sdMl8tR5pmaXGqRb6y5Zb536ty3eiY=";
+  src = fetchurl {
+    url = "https://files.pythonhosted.org/packages/3b/b1/1f06fdfe6e6366781625802102b77180645fc9c04a358bc899ace7a07e31/lxmf-0.9.4-py3-none-any.whl";
+    hash = "sha256-ct66zoAd7IsshB7jR1/ONrewDqjiWYIuFVV9393B5GQ=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ rns ];
 
-  dependencies = [ rns ];
-
-  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "LXMF" ];
 
-  meta = {
-    description = "Lightweight Extensible Message Format for Reticulum";
-    homepage = "https://github.com/markqvist/lxmf";
-    changelog = "https://github.com/markqvist/LXMF/releases/tag/${finalAttrs.src.tag}";
-    # Reticulum License
-    # https://github.com/markqvist/LXMF/blob/master/LICENSE
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "lxmd";
+  meta = with lib; {
+    description = "Lightweight Extensible Message Format over Reticulum";
+    homepage    = "https://github.com/markqvist/LXMF";
+    changelog   = "https://github.com/markqvist/LXMF/releases/tag/${version}";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ ];
+    platforms   = platforms.unix;
   };
-})
+}

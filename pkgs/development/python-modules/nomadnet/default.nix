@@ -1,48 +1,46 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxmf,
-  msgpack,
-  qrcode,
-  rns,
-  setuptools,
-  urwid,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, rns
+, lxmf
+, urwid
+, qrcode
+, msgpack
+, pytestCheckHook
 }:
 
-buildPythonPackage (finalAttrs: {
-  pname = "nomadnet";
+buildPythonPackage rec {
+  pname   = "nomadnet";
   version = "0.9.9";
-  pyproject = true;
+  format  = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "markqvist";
-    repo = "NomadNet";
-    tag = finalAttrs.version;
-    hash = "sha256-qLe9fnIE9kY9JerAAH318dq1SOshP9xX3l/2c91fnSA=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Dl0+L/qmbnc0zFVPTy2tJj94Do9tJEiYeimNKr0pDVw=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     rns
     lxmf
-    msgpack
     urwid
     qrcode
+    msgpack
   ];
 
-  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "nomadnet" ];
 
-  meta = {
-    description = "Off-grid, resilient mesh communication";
-    homepage = "https://github.com/markqvist/NomadNet";
-    changelog = "https://github.com/markqvist/NomadNet/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+  meta = with lib; {
+    description = "Off-grid, resilient mesh communication with strong encryption";
+    homepage    = "https://github.com/markqvist/NomadNet";
+    changelog   = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
+    license     = licenses.gpl3Only;
+    maintainers = with maintainers; [ ];
+    platforms   = platforms.unix;
     mainProgram = "nomadnet";
   };
-})
+}
