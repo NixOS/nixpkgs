@@ -22,16 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  # canfigger has asan and ubsan enabled by default, disable it here
-  mesonFlags = [
-    "-Dcanfigger:b_sanitize=none"
-  ];
-
   meta = {
     description = "Lightweight library designed to parse configuration files";
     homepage = "https://github.com/andy5995/canfigger";
     changelog = "https://github.com/andy5995/canfigger/blob/${finalAttrs.src.rev}/ChangeLog.txt";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "canfigger";
     platforms = lib.platforms.all;
