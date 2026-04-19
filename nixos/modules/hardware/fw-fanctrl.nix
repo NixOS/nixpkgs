@@ -6,15 +6,23 @@
 }:
 let
   inherit (lib) types mkOption;
+  settingsFormat = pkgs.formats.json { };
   cfg = config.hardware.fw-fanctrl;
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [
-      "hardware"
-      "fw-fanctrl"
-      "ectoolPackage"
-    ] "This option was removed. Use `hardware.fw-fanctrl.frameworkToolPackage` instead.")
+    (lib.mkRemovedOptionModule
+      [
+        "hardware"
+        "fw-fanctrl"
+        "ectoolPackage"
+      ]
+      "This option was removed due to depency changes. Use `hardware.fw-fanctrl.frameworkToolPackage` instead."
+    )
+    (lib.mkRenamedOptionModule
+      [ "hardware" "fw-fanctrl" "config" ]
+      [ "hardware" "fw-fanctrl" "settings" ]
+    )
   ];
 
   options.hardware.fw-fanctrl = {
@@ -39,8 +47,7 @@ in
         Set this to false if you only want to see your own strategies defined with `hardware.fw-fanctrl.config.strategies`
       '';
     };
-
-    config = mkOption {
+    settings = mkOption {
       default = { };
       description = ''
         Additional config entries for the fw-fanctrl service (documentation: <https://github.com/TamtamHero/fw-fanctrl/blob/main/doc/configuration.md>)
@@ -67,6 +74,7 @@ in
             '';
             type = types.attrsOf (
               types.submodule {
+                freeformType = types.attrsOf settingsFormat.type;
                 options = {
                   fanSpeedUpdateFrequency = mkOption {
                     type = types.ints.unsigned;
@@ -85,6 +93,7 @@ in
                     description = "How should the speed curve look like";
                     type = types.listOf (
                       types.submodule {
+                        freeformType = types.attrsOf settingsFormat.type;
                         options = {
                           temp = mkOption {
                             type = types.either types.float types.int;
@@ -112,7 +121,6 @@ in
 
   config =
     let
-
       userConfig = settingsFormat.generate "user.json" cfg.settings;
       finalConfig =
         if cfg.keepDefaultStrategies then
