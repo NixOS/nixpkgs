@@ -512,7 +512,7 @@ Composed types are types that take a type as parameter. `listOf
     Multiple definitions of the same option are concatenated and then sorted by priority.
     Entries at the same priority level preserve their definition order.
 
-`types.attrListWith` { *`elemType`* }
+`types.attrListWith` { *`elemType`*, *`asAttrs`* ? false, *`mergeAttrValues`* ? _name: values: values }
 
 :   An ordered list of single-attribute attribute sets, where each value is of *`elemType`* type.
 
@@ -520,6 +520,17 @@ Composed types are types that take a type as parameter. `listOf
 
     `elemType` (Required)
     : Specifies the type of each value in the attribute list.
+
+    `asAttrs`
+    : When `true`, the option value is an attribute set instead of a list.
+      Duplicate keys are merged using `mergeAttrValues`.
+      The ordered list is always available via `valueMeta.attrListValue`.
+
+    `mergeAttrValues`
+    : A function `name: values: mergedValue` that controls how duplicate keys
+      are combined when `asAttrs = true`. This is passed as the callback to
+      `lib.zipAttrsWith`. The `values` list is in order of priority.
+      By default, all values are collected into a list.
 
     **Behavior**
 

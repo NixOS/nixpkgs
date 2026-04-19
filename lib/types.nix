@@ -806,7 +806,11 @@ rec {
   attrListOf = elemType: attrListWith { inherit elemType; };
 
   attrListWith =
-    { elemType }:
+    {
+      elemType,
+      asAttrs ? false,
+      mergeAttrValues ? _name: values: values,
+    }:
     mkOptionType rec {
       name = "attrListOf";
       description = "attribute list of ${
@@ -925,21 +929,37 @@ rec {
                 ];
               }) items
             );
+
+            attrListValue = map (e: { ${e.key} = e.eval.optionalValue.value or e.eval.mergedValue; }) evals;
           in
           {
             headError = checkDefsForError check loc defs;
-            value = map (e: { ${e.key} = e.eval.optionalValue.value or e.eval.mergedValue; }) evals;
+            value = if asAttrs then zipAttrsWith mergeAttrValues attrListValue else attrListValue;
             valueMeta.attrList = map (e: e.eval.checkedAndMerged.valueMeta) evals;
+            /**
+              The ordered list representation, especially useful when asAttrs is set.
+            */
+            valueMeta.attrListValue = attrListValue;
           };
       };
       emptyValue = {
-        value = [ ];
+        value = if asAttrs then { } else [ ];
       };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" ]);
       getSubModules = elemType.getSubModules;
-      substSubModules = m: attrListOf (elemType.substSubModules m);
+      substSubModules =
+        m:
+        attrListWith {
+          inherit asAttrs mergeAttrValues;
+          elemType = elemType.substSubModules m;
+        };
       functor = elemTypeFunctor name { inherit elemType; } // {
-        type = payload: types.attrListOf payload.elemType;
+        type =
+          payload:
+          types.attrListWith {
+            inherit asAttrs mergeAttrValues;
+            inherit (payload) elemType;
+          };
       };
       nestedTypes.elemType = elemType;
     };
