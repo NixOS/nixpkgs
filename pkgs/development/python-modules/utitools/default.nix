@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Utilities for working with Uniform Type Identifiers";
     homepage = "https://github.com/RhetTbull/utitools";
-    changelog = "https://github.com/RhetTbull/osxphotos/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/utitools/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
