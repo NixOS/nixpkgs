@@ -11,7 +11,6 @@
   coreutils,
   iproute2,
   iptables,
-  nix-update-script,
 }:
 let
   binPath = lib.makeBinPath [
@@ -82,12 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "geph5-client-v(.*)"
-    ];
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
