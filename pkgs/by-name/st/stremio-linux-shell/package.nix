@@ -95,6 +95,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.CEF_PATH = "${cef}";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postInstall = ''
     mkdir -p $out/share/applications
     cp data/com.stremio.Stremio.desktop $out/share/applications/com.stremio.Stremio.desktop
