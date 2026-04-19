@@ -455,19 +455,17 @@ rec {
       (b == armv5tel && isCompatible a armv6l)
 
       # ARMv6
-      (b == armv6l && isCompatible a armv6m)
-      (b == armv6m && isCompatible a armv7l)
+      (b == armv6m && isCompatible a armv6l)
+      (b == armv6l && isCompatible a armv7l)
 
       # ARMv7
       (b == armv7l && isCompatible a armv7a)
       (b == armv7l && isCompatible a armv7r)
-      (b == armv7l && isCompatible a armv7m)
+      (b == armv7m && isCompatible a armv7a)
+      (b == armv7m && isCompatible a armv7r)
 
       # ARMv8
-      (b == aarch64 && a == armv8a)
       (b == armv8a && isCompatible a aarch64)
-      (b == armv8r && isCompatible a armv8a)
-      (b == armv8m && isCompatible a armv8a)
 
       # PowerPC
       (b == powerpc && isCompatible a powerpc64)
@@ -477,14 +475,8 @@ rec {
       (b == mips && isCompatible a mips64)
       (b == mipsel && isCompatible a mips64el)
 
-      # RISCV
-      (b == riscv32 && isCompatible a riscv64)
-
       # SPARC
       (b == sparc && isCompatible a sparc64)
-
-      # WASM
-      (b == wasm32 && isCompatible a wasm64)
 
       # identity
       (b == a)
