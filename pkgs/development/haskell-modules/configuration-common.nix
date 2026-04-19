@@ -2520,6 +2520,12 @@ with haskellLib;
   # 2025-01-07: unreleased upstream supports hedgehog 1.5 but drifted quite a bit from hackage revisions so hard to patch
   hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
 
+  # 2026-04-19: Too strict upper bound on doctest (excluding 0.24)
+  # https://github.com/haskell-works/hw-hedgehog/issues/51
+  hw-hedgehog = doJailbreak super.hw-hedgehog;
+  # https://github.com/haskell-works/hw-string-parse/issues/43
+  hw-string-parse = doJailbreak super.hw-string-parse;
+
   # 2025-09-03: allow QuickCheck 2.15
   # https://github.com/haskell-works/hw-prim/issues/150
   hw-prim = lib.pipe super.hw-prim [

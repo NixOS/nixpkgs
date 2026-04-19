@@ -3218,7 +3218,6 @@ broken-packages:
   - hw-dsv # failure in job https://hydra.nixos.org/build/233252280 at 2023-09-02
   - hw-dump # failure in job https://hydra.nixos.org/build/233208818 at 2023-09-02
   - hw-fingertree-strict # failure in job https://hydra.nixos.org/build/252718249 at 2024-03-16
-  - hw-hedgehog # failure in job https://hydra.nixos.org/build/307519553 at 2025-09-19
   - hw-kafka-conduit # failure in job https://hydra.nixos.org/build/252714760 at 2024-03-16
   - hw-lazy # failure in job https://hydra.nixos.org/build/252722974 at 2024-03-16
   - hw-packed-vector # failure in job https://hydra.nixos.org/build/252735800 at 2024-03-16
@@ -3228,7 +3227,6 @@ broken-packages:
   - hw-prim-bits # failure in job https://hydra.nixos.org/build/233246627 at 2023-09-02
   - hw-rankselect-base # failure in job https://hydra.nixos.org/build/295122851 at 2025-04-22
   - hw-simd-cli # failure in job https://hydra.nixos.org/build/233223251 at 2023-09-02
-  - hw-string-parse # failure in job https://hydra.nixos.org/build/307519565 at 2025-09-19
   - hw-tar # failure in job https://hydra.nixos.org/build/233219650 at 2023-09-02
   - hw-xml # failure in job https://hydra.nixos.org/build/233197758 at 2023-09-02
   - hwall-auth-iitk # failure in job https://hydra.nixos.org/build/233217629 at 2023-09-02
