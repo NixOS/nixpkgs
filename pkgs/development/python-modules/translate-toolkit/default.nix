@@ -9,25 +9,26 @@
   # dependencies
   lxml,
   unicode-segmentation-rs,
-  urllib3,
 
   # optional-dependencies
-  tomlkit,
-
-  # tests
-  aeidon,
   charset-normalizer,
-  cheroot,
   fluent-syntax,
-  gettext,
+  vobject,
   iniparse,
+  rapidfuzz,
   mistletoe,
   phply,
   pyparsing,
-  pytestCheckHook,
+  pyenchant,
+  aeidon,
+  tomlkit,
   ruamel-yaml,
-  syrupy,
-  vobject,
+
+  # tests
+  pytestCheckHook,
+  addBinToPathHook,
+  pytest-xdist,
+  gettext,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -47,36 +48,40 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     lxml
     unicode-segmentation-rs
-    urllib3
   ];
 
   optional-dependencies = {
+    chardet = [ charset-normalizer ];
+    fluent = [ fluent-syntax ];
+    ical = [ vobject ];
+    ini = [ iniparse ];
+    levenshtein = [ rapidfuzz ];
+    markdown = [ mistletoe ];
+    php = [ phply ];
+    rc = [ pyparsing ];
+    spellcheck = [ pyenchant ];
+    subtitles = [ aeidon ];
     toml = [ tomlkit ];
+    yaml = [ ruamel-yaml ];
   };
 
   nativeCheckInputs = [
-    aeidon
-    charset-normalizer
-    cheroot
-    fluent-syntax
-    gettext
-    iniparse
-    mistletoe
-    phply
-    pyparsing
     pytestCheckHook
-    ruamel-yaml
-    syrupy
-    tomlkit
-    vobject
-  ];
+    addBinToPathHook
+    pytest-xdist
+    gettext
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
+  ];
 
-    # Requires network
-    "test_xliff_conformance"
+  disabledTestPaths = [
+    # Require pytest-snapshot but there are no snapshots checked in
+    "tests/translate/tools/test_pocount.py"
+    "tests/translate/tools/test_junitmsgfmt.py"
   ];
 
   pythonImportsCheck = [ "translate" ];
