@@ -27,11 +27,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-eUcve2KPcLjKKWU7AxQEZ0mokP185E43Xjm4b+4hQzA=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "==" ">="
-  '';
-
   build-system = [ setuptools ];
 
   buildInputs = [ django ];
@@ -49,6 +44,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    pytest-django
     djangorestframework-simplejwt
     pytestCheckHook
     pytest-django

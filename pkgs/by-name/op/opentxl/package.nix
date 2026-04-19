@@ -1,68 +1,69 @@
 {
   lib,
   stdenv,
-  callPackage,
-  fetchurl,
-  nix-update-script,
+  makeWrapper,
+  opentxl-unwrapped,
+  targetPackages,
 }:
+let
+  inherit (targetPackages.stdenv.cc) targetPrefix;
+
+  crossCompiling = stdenv.hostPlatform != stdenv.targetPlatform;
+  targetOpentxl = if !crossCompiling then opentxl-unwrapped else targetPackages.opentxl-unwrapped;
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "opentxl";
-  version = "11.3.7";
+  pname = "${targetPrefix}opentxl-wrapper";
+  inherit (opentxl-unwrapped) version;
+  preferLocalBuild = true;
+  strictDeps = true;
 
-  # The code generation part of the upstream build system relies on an x86-only binary,
-  # so the generated code is fetched from the GitHub release instead
-  src = fetchurl {
-    url = "https://github.com/CordyJ/OpenTxl/releases/download/v${finalAttrs.version}/OpenTxl-${finalAttrs.version}-csrc.tar.gz";
-    hash = "sha256-qIvxQqo1yCVJImjUvNNinzhoywVgaq9s0E+Ab+QStc0=";
-  };
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
-  # Using -std=gnu89 to prevent errors that occur with default args
-  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-int-conversion";
-
-  postPatch = ''
-    # Replace hardcoded FHS paths in various files
-    find . -type f -exec sed -i \
-      -e 's#/bin/mv#mv#g' \
-      -e 's#/bin/rm#rm#g' \
-      -e "s#/usr/local/bin#$out/bin#g" \
-      -e "s#/usr/local/lib/txl#$out/lib#g" \
-      {} +
-
-    # Replace hardcoded gcc references
-    substituteInPlace scripts/unix/{txlc,txl2c} \
-      --replace-fail gcc '${stdenv.cc}/bin/cc'
-  '';
-
-  preBuild = ''
-    makeFlagsArray+=(
-      CC="$CC"
-      LD="$CC"
-    )
-  '';
-
-  checkFlags = [ "-C test" ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
-    cp bin/* $out/bin/
-    cp lib/* $out/lib/
+    mkdir -p $out/bin
+
+    # Wrap compiler
+    makeWrapper ${opentxl-unwrapped}/bin/txlc \
+      $out/bin/${targetPrefix}txlc \
+      --set TXLLIB ${opentxl-unwrapped}/lib \
+      --set BUILD_TXLLIB ${opentxl-unwrapped}/lib \
+      --set TARGET_TXLLIB ${targetOpentxl}/lib \
+      --set CC ${targetPackages.stdenv.cc}/bin/${targetPrefix}cc \
+      --set OS ${opentxl-unwrapped.osOption stdenv.targetPlatform}
+    ${
+      # For convenience, if there is a target prefix, create a symlink named txlc
+      lib.optionalString (targetPrefix != "") ''
+        ln -s $out/bin/${targetPrefix}txlc $out/bin/txlc
+      ''
+    }
+
+    # Wrap other scripts
+    for name in txl2c txlp; do
+      makeWrapper "${opentxl-unwrapped}/bin/$name" \
+        "$out/bin/$name" \
+        --set-default TXLLIB ${opentxl-unwrapped}/lib
+    done
+
+    # Link to binaries that don't need wrapping
+    for name in txl txldb; do
+      ln -s "${opentxl-unwrapped}/bin/$name" "$out/bin/$name"
+    done
 
     runHook postInstall
   '';
 
-  passthru.tests.factorial = callPackage ./factorial-test.nix { opentxl = finalAttrs.finalPackage; };
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    unwrapped = opentxl-unwrapped;
+    inherit (opentxl-unwrapped.passthru) tests;
+  };
 
-  meta = {
-    description = "Open-source compiler for the Txl language";
-    mainProgram = "txl";
+  meta = opentxl-unwrapped.meta // {
     platforms = lib.platforms.unix;
-    homepage = "https://github.com/CordyJ/OpenTxl";
-    downloadPage = "https://github.com/CordyJ/OpenTxl/releases";
-    changelog = "https://github.com/CordyJ/OpenTxl/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ MysteryBlokHed ];
   };
 })

@@ -4,13 +4,20 @@
   fetchurl,
   fetchpatch,
   pkg-config,
-  SDL,
+  SDL_sixel,
   SDL_image,
   libjpeg,
   libpng,
   libtiff,
 }:
 
+let
+  # Enable terminal display. Note that it requires sixel graphics compatible
+  # terminals like mlterm or xterm -ti 340
+  SDL_image_sixel = SDL_image.override {
+    SDL = SDL_sixel;
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zgv";
   version = "5.9";
@@ -21,14 +28,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    SDL
-    SDL_image
+    SDL_sixel
+    SDL_image_sixel
     libjpeg
     libpng
     libtiff
   ];
 
   hardeningDisable = [ "format" ];
+
+  # gcc15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   makeFlags = [
     "BACKEND=SDL"

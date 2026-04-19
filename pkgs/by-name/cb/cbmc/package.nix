@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.8.0";
+  version = "6.9.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-PT6AYiwkplCeyMREZnGZA0BKl4ZESRC02/9ibKg7mYU=";
+    hash = "sha256-SMJBnzoyTwcwJa9L2X1iX2W4Z/Mwoirf8EXfoyG0dRI=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   srccadical =
     (cadical.override {
-      version = "2.0.0";
+      version = "3.0.0";
     }).src;
 
   nativeBuildInputs = [

@@ -2,27 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   azure-core,
   azure-identity,
   isodate,
   msrest,
+
+  # tests
   aioresponses,
   pytest-asyncio,
   pytestCheckHook,
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydo";
-  version = "0.27.0";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "pydo";
-    tag = "v${version}";
-    hash = "sha256-2vJ/yOOJuil1oFWIYU2yV29RG/j92kpz0ubmJpyzS4U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tLw34aQ9gmKSQ/cy3Rz3eKqaw/Kv4lgS1saMYMCHPxo=";
   };
 
   build-system = [ poetry-core ];
@@ -52,9 +58,9 @@ buildPythonPackage rec {
   meta = {
     description = "Official DigitalOcean Client based on the DO OpenAPIv3 specification";
     homepage = "https://github.com/digitalocean/pydo";
-    changelog = "https://github.com/digitalocean/pydo/releases/tag/v${version}";
+    changelog = "https://github.com/digitalocean/pydo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})
