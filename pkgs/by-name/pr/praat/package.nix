@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.62";
+  version = "6.4.63";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat.github.io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AyjCbTKPj3OemJCr3aTAtQhwnXFTA/EGcbBwARMIiWU=";
+    hash = "sha256-96fw5WRk1/zex65hcRdmx0wq2FTVett3FRDPhmsZr6g=";
   };
 
   strictDeps = true;
