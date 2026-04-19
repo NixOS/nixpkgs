@@ -10,16 +10,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "0.66.1";
+  version = "0.67.68";
 
   src = fetchFromGitHub {
     owner = "badlogic";
     repo = "pi-mono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZLa4IU7WpXixn9q158m17AvsofE43qj11JoaHCA1BWI=";
+    hash = "sha256-1k9tHb5Dle37a5qHm8xT14vI5cQZOb8ASGQ1KxzPCr4=";
   };
 
-  npmDepsHash = "sha256-ZR9KAu9zKqYw7Kduf2lkijNVJ03iGzUhty8txSSliD4=";
+  npmDepsHash = "sha256-xQQZECkDuiCdu0FlKbAKgk6EatLf2jMIXKDfRRwN/gA=";
 
   npmWorkspace = "packages/coding-agent";
 
