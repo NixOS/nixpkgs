@@ -11,41 +11,44 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   writeScriptBin,
+  buildPackages,
+  newScope,
 }:
 
-let
-  scope = makeScopeWithSplicing' {
-    otherSplices = generateSplicesForMkScope "dotnetCorePackages";
-    f = (
-      self:
-      let
-        callPackage = self.callPackage;
+makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "dotnetCorePackages";
+  f = (
+    self:
+    let
+      callPackage = self.callPackage;
 
-        fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
+      fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
 
-        buildDotnetSdk =
-          let
-            buildDotnet = attrs: callPackage (import ./binary/build-dotnet.nix attrs) { };
-          in
-          version:
-          import version {
-            inherit fetchNupkg;
-            buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
-            buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
-            buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
-          };
-
-        runtimeIdentifierMap = {
-          "x86_64-linux" = "linux-x64";
-          "aarch64-linux" = "linux-arm64";
-          "x86_64-darwin" = "osx-x64";
-          "aarch64-darwin" = "osx-arm64";
-          "x86_64-windows" = "win-x64";
-          "i686-windows" = "win-x86";
+      buildDotnetSdk =
+        let
+          buildDotnet = attrs: callWithUtils (import ./binary/build-dotnet.nix attrs) { };
+        in
+        version:
+        import version {
+          inherit fetchNupkg;
+          buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
+          buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
+          buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
         };
 
-      in
-      {
+      runtimeIdentifierMap = {
+        "x86_64-linux" = "linux-x64";
+        "aarch64-linux" = "linux-arm64";
+        "x86_64-darwin" = "osx-x64";
+        "aarch64-darwin" = "osx-arm64";
+        "x86_64-windows" = "win-x64";
+        "i686-windows" = "win-x86";
+      };
+
+      # used to break cycle in attribute names
+      callWithUtils = newScope (utils // { callPackage = callWithUtils; });
+
+      utils = {
         inherit
           callPackage
           fetchNupkg
@@ -63,7 +66,7 @@ let
 
         combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) { };
 
-        patchNupkgs = callPackage ./patch-nupkgs.nix { };
+        patchNupkgs = buildPackages.callPackage ./patch-nupkgs.nix { };
         nugetPackageHook = callPackage ./nuget-package-hook.nix { };
         autoPatchcilHook = callPackage ../../../build-support/dotnet/auto-patchcil-hook { };
 
@@ -73,39 +76,35 @@ let
         mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
         mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
         addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
-      }
-    );
-  };
+      };
 
-  callPackage = scope.callPackage;
-
-  pkgs =
-    scope
+    in
+    utils
     // (
       let
-        dotnet_6 = callPackage ./dotnet.nix {
+        dotnet_6 = callWithUtils ./dotnet.nix {
           channel = "6.0";
           withVMR = false;
         };
 
-        dotnet_7 = callPackage ./dotnet.nix {
+        dotnet_7 = callWithUtils ./dotnet.nix {
           channel = "7.0";
           withVMR = false;
         };
 
-        dotnet_8 = callPackage ./dotnet.nix {
+        dotnet_8 = callWithUtils ./dotnet.nix {
           channel = "8.0";
         };
 
-        dotnet_9 = callPackage ./dotnet.nix {
+        dotnet_9 = callWithUtils ./dotnet.nix {
           channel = "9.0";
         };
 
-        dotnet_10 = callPackage ./dotnet.nix {
+        dotnet_10 = callWithUtils ./dotnet.nix {
           channel = "10.0";
         };
 
-        dotnet_11 = callPackage ./dotnet.nix {
+        dotnet_11 = callWithUtils ./dotnet.nix {
           channel = "11.0";
         };
       in
@@ -125,6 +124,6 @@ let
         dotnet_10
         dotnet_11
       ]
-    );
-in
-pkgs
+    )
+  );
+}
