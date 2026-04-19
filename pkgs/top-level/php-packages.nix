@@ -717,7 +717,10 @@ lib.makeScope pkgs.newScope (
             }
             { name = "sysvmsg"; }
             { name = "sysvsem"; }
-            { name = "sysvshm"; }
+            {
+              name = "sysvshm";
+              configureFlags = [ "CFLAGS=-std=gnu17" ];
+            }
             {
               name = "tidy";
               configureFlags = [ "--with-tidy=${html-tidy}" ];
