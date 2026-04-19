@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
     "--enable-login"
     "--enable-shared"
   ]
+  ++ lib.optional stdenv.cc.isClang "CFLAGS=-std=gnu17"
   ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
   ++ lib.optionals enableMySQL [
     # https://github.com/cyrusimap/cyrus-sasl/blob/ac0c278817a082c625c496ec812318c019e0b96f/docsrc/sasl/installation.rst#build-configuration
