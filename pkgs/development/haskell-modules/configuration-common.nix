@@ -2701,7 +2701,7 @@ with haskellLib;
 
   # Test failure after libxcrypt migration, reported upstream at
   # https://github.com/phadej/crypt-sha512/issues/13
-  crypt-sha512 = dontCheck super.crypt-sha512;
+  crypt-sha512 = dontCheck (doJailbreak super.crypt-sha512);
 
   # Latest release depends on crypton-connection ==0.3.2 https://github.com/ndmitchell/hoogle/issues/435
   hoogle = overrideSrc {

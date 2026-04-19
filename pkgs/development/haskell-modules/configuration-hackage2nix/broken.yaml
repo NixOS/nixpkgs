@@ -1129,7 +1129,6 @@ broken-packages:
   - crucible-llvm # failure in job https://hydra.nixos.org/build/315095700 at 2025-11-29
   - cruncher-types # failure in job https://hydra.nixos.org/build/233229024 at 2023-09-02
   - crunghc # failure in job https://hydra.nixos.org/build/233193295 at 2023-09-02
-  - crypt-sha512 # failure in job https://hydra.nixos.org/build/307517616 at 2025-09-19
   - Crypto # failure in job https://hydra.nixos.org/build/252738609 at 2024-03-16
   - crypto-cipher-benchmarks # failure in job https://hydra.nixos.org/build/233195297 at 2023-09-02
   - crypto-enigma # failure in job https://hydra.nixos.org/build/252722224 at 2024-03-16
