@@ -12,17 +12,14 @@
   typing-extensions,
   rgbxy ? null,
 }:
-let
-  version = "0.8.0";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "rich-tables";
-  inherit version;
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "rich_tables";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-MN8QH6kLyogbcQ0VE9U034cwSFnaFDB2/Rnvy1DYyl4=";
   };
 
@@ -63,4 +60,4 @@ buildPythonPackage {
     ];
     mainProgram = "table";
   };
-}
+})
