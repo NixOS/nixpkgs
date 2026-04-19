@@ -8009,6 +8009,7 @@ with pkgs;
   dovecot_pigeonhole_2_4 = dovecot_pigeonhole;
 
   inherit (callPackages ../servers/firebird { })
+    firebird_5
     firebird_4
     firebird_3
     firebird

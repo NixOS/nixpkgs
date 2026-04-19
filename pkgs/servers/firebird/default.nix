@@ -5,6 +5,7 @@
   fetchDebianPatch,
   libedit,
   autoreconfHook,
+  cmake,
   zlib,
   unzip,
   libtommath,
@@ -47,6 +48,9 @@ let
     ++ (lib.optional superServer "--enable-superserver");
 
     enableParallelBuilding = true;
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     installPhase = ''
       runHook preInstall
@@ -113,5 +117,32 @@ rec {
     }
   );
 
-  firebird = firebird_4;
+  firebird_5 = stdenv.mkDerivation (
+    base
+    // rec {
+      version = "5.0.4";
+
+      src = fetchFromGitHub {
+        owner = "FirebirdSQL";
+        repo = "firebird";
+        rev = "v${version}";
+        hash = "sha256-wAiOyCVS7fjVqrDlJJwDFxw5ZD5spnXlYKCAQ8gctHI=";
+      };
+
+      # CMake is just used for libcds
+      dontUseCmakeConfigure = true;
+
+      nativeBuildInputs = base.nativeBuildInputs ++ [
+        cmake
+        unzip
+      ];
+      buildInputs = base.buildInputs ++ [
+        zlib
+        libtommath
+        libtomcrypt
+      ];
+    }
+  );
+
+  firebird = firebird_5;
 }
