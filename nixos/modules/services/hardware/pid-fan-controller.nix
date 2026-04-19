@@ -121,68 +121,38 @@ in
       };
     };
   };
-  config = lib.mkIf cfg.enable {
-    #map camel cased attrs into snake case for config
-    environment.etc."pid-fan-settings.json".text = builtins.toJSON {
-      interval = cfg.settings.interval;
-      heat_srcs = map (heatSrc: {
-        name = heatSrc.name;
-        wildcard_path = heatSrc.wildcardPath;
-        PID_params = {
-          set_point = heatSrc.pidParams.setPoint;
-          P = heatSrc.pidParams.P;
-          I = heatSrc.pidParams.I;
-          D = heatSrc.pidParams.D;
-        };
-      }) cfg.settings.heatSources;
-      fans = map (fan: {
-        wildcard_path = fan.wildcardPath;
-        min_pwm = fan.minPwm;
-        max_pwm = fan.maxPwm;
-        cutoff = fan.cutoff;
-        heat_pressure_srcs = fan.heatPressureSrcs;
-      }) cfg.settings.fans;
+  config =
+    let
+      configFile =
+        pkgs.writeText "pid-fan-settings.json"
+          #map camel cased attrs into snake case for config
+          builtins.toJSON
+          {
+            interval = cfg.settings.interval;
+            heat_srcs = map (heatSrc: {
+              name = heatSrc.name;
+              wildcard_path = heatSrc.wildcardPath;
+              PID_params = {
+                set_point = heatSrc.pidParams.setPoint;
+                P = heatSrc.pidParams.P;
+                I = heatSrc.pidParams.I;
+                D = heatSrc.pidParams.D;
+              };
+            }) cfg.settings.heatSources;
+            fans = map (fan: {
+              wildcard_path = fan.wildcardPath;
+              min_pwm = fan.minPwm;
+              max_pwm = fan.maxPwm;
+              cutoff = fan.cutoff;
+              heat_pressure_srcs = fan.heatPressureSrcs;
+            }) cfg.settings.fans;
+          };
+    in
+    lib.mkIf cfg.enable {
+      systemd.packages = [ cfg.package ];
+      systemd.services.pid-fan-controller.environment.PID_FAN_CONFIG = toString configFile;
+      systemd.services.pid-fan-controller.wantedBy = [ "multi-user.target" ];
+      systemd.services.pid-fan-controller-sleep.wantedBy = [ "sleep.target" ];
     };
-
-    systemd.services.pid-fan-controller = {
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = [ (lib.getExe cfg.package) ];
-        ExecStopPost = [ "${lib.getExe cfg.package} disable" ];
-        Restart = "always";
-        #This service needs to run as root to write to /sys.
-        #therefore it should operate with the least amount of privileges needed
-        ProtectHome = "yes";
-        #strict is not possible as it needs /sys
-        ProtectSystem = "full";
-        ProtectProc = "invisible";
-        PrivateNetwork = "yes";
-        NoNewPrivileges = "yes";
-        MemoryDenyWriteExecute = "yes";
-        RestrictNamespaces = "~user pid net uts mnt";
-        ProtectKernelModules = "yes";
-        RestrictRealtime = "yes";
-        SystemCallFilter = "@system-service";
-        CapabilityBoundingSet = "~CAP_KILL CAP_WAKE_ALARM CAP_IPC_LOC CAP_BPF CAP_LINUX_IMMUTABLE CAP_BLOCK_SUSPEND CAP_MKNOD";
-      };
-      # restart unit if config changed
-      restartTriggers = [ config.environment.etc."pid-fan-settings.json".source ];
-    };
-    #sleep hook to restart the service as it breaks otherwise
-    systemd.services.pid-fan-controller-sleep = {
-      before = [ "sleep.target" ];
-      wantedBy = [ "sleep.target" ];
-      unitConfig = {
-        StopWhenUnneeded = "yes";
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = [ "systemctl stop pid-fan-controller.service" ];
-        ExecStop = [ "systemctl restart pid-fan-controller.service" ];
-      };
-    };
-  };
   meta.maintainers = with lib.maintainers; [ zimward ];
 }
