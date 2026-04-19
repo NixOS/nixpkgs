@@ -7,9 +7,8 @@
   extra-cmake-modules,
   gettext,
   fcitx5,
-  fcitx5-qt,
+  qt6Packages,
   libskk,
-  qtbase,
   skkDictionaries,
   enableQt ? false,
 }:
@@ -37,8 +36,8 @@ stdenv.mkDerivation rec {
     libskk
   ]
   ++ lib.optionals enableQt [
-    fcitx5-qt
-    qtbase
+    qt6Packages.fcitx5-qt
+    qt6Packages.qtbase
   ];
 
   cmakeFlags = [
