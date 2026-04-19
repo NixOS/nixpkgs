@@ -512,6 +512,19 @@ Composed types are types that take a type as parameter. `listOf
     Multiple definitions of the same option are concatenated and then sorted by priority.
     Entries at the same priority level preserve their definition order.
 
+`types.attrListWith` { *`elemType`* }
+
+:   An ordered list of single-attribute attribute sets, where each value is of *`elemType`* type.
+
+    **Parameters**
+
+    `elemType` (Required)
+    : Specifies the type of each value in the attribute list.
+
+    **Behavior**
+
+    - `attrListWith { elemType = t; }` is equivalent to `attrListOf t`
+
 `types.uniq` *`t`*
 
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
