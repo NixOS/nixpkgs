@@ -8,6 +8,7 @@
 
   # dependencies
   coloraide,
+  decorator,
   humanize,
   multimethod,
   platformdirs,
@@ -25,14 +26,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "rich-tables";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snejus";
     repo = "rich-tables";
     tag = finalAttrs.version;
-    hash = "sha256-rqzqquVs0zWcAmwmsmw7BLgeyXpzFI6pAhY+K1l/fL4=";
+    hash = "sha256-6sXWrFP8TDBcFaGCymsZfHL8bfsRbj63VZCeY1H6h/Y=";
   };
 
   build-system = [
@@ -41,6 +42,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     coloraide
+    decorator
     humanize
     multimethod
     platformdirs
