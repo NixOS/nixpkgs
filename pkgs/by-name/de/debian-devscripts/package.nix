@@ -20,6 +20,8 @@
   help2man,
   nix-update-script,
   sendmailPath ? "/run/wrappers/bin/sendmail",
+  coreutils,
+  util-linux,
 }:
 
 let
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace scripts/annotate-output.sh \
+      --replace-fail '/usr/bin/printf' '${lib.getExe' coreutils "printf"}'
     substituteInPlace scripts/debrebuild.pl \
       --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
     patchShebangs scripts
@@ -63,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -92,7 +97,18 @@ stdenv.mkDerivation (finalAttrs: {
     FileDirList
     FileTouch
     IOString
+    StringShellQuote
+    YAMLLibYAML
   ]);
+
+  pythonPath = with python3Packages; [
+    junit-xml
+    magic
+    python-apt
+    python-debian
+    requests
+    unidiff
+  ];
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -123,17 +139,29 @@ stdenv.mkDerivation (finalAttrs: {
     "PERLMOD_DIR=/share/devscripts"
   ];
 
-  postInstall = ''
+  preFixup = ''
+    buildPythonPath "$out ''${pythonPath[*]}"
+    patchPythonScript "$out/bin/deb-check-file-conflicts"
+    patchPythonScript "$out/bin/deb-janitor"
+    patchPythonScript "$out/bin/debbisect"
+    patchPythonScript "$out/bin/debdiff-apply"
+    patchPythonScript "$out/bin/debftbfs"
+    patchPythonScript "$out/bin/debootsnap"
+    patchPythonScript "$out/bin/reproducible-check"
+    patchPythonScript "$out/bin/sadt"
+    patchPythonScript "$out/bin/suspicious-source"
+    patchPythonScript "$out/bin/wrap-and-sort"
     sed -re 's@(^|[ !`"])/bin/bash@\1${stdenv.shell}@g' -i "$out/bin"/*
-    for i in "$out/bin"/*; do
-      wrapProgram "$i" \
+    ln -s debchange $out/bin/dch
+    ln -s deb2apptainer $out/bin/deb2singularity
+    ln -s pts-subscribe $out/bin/pts-unsubscribe
+    mv "$out/bin" "$out/.bin-wrapped"
+    for i in "$out/.bin-wrapped"/*; do
+      makeWrapper "$i" "$out/bin/''${i#$out/.bin-wrapped/}" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/${python.sitePackages}" \
-        --prefix PATH : "${dpkg}/bin"
+        --prefix PATH : "${curl}/bin:${dpkg}/bin:${gnupg}/bin:${util-linux}/bin"
     done
-    ln -s debchange $out/bin/dch
-    ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
   passthru.updateScript = nix-update-script {
