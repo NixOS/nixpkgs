@@ -65,4 +65,14 @@ update_subproject binaryninja Vector35 binaryninja-api binaryninja.wrap rev
 update_subproject sdb radareorg sdb sdb.wrap tag
 update_subproject qjs quickjs-ng quickjs qjs.wrap rev
 
-echo "Update complete. Please verify with: nix build .#radare2"
+echo "Update iaito to follow new radare2 version '$LATEST_VERSION'"
+IAITO_UPDATE_SCRIPT="$(readlink -f "$(dirname "$SCRIPT_DIR")/../../../by-name/ia/iaito/update.sh")"
+if "$IAITO_UPDATE_SCRIPT" "$LATEST_VERSION";then
+    echo "iaito updated to $LATEST_VERSION"
+else
+    # iaito release may not have been published yet, release dates are not in sync
+    # sometimes, iaito is released earlier than radare2
+    echo "failed to update iaito to $LATEST_VERSION, continuing"
+fi
+
+echo "Update complete. Please verify with: nix build .#radare2 .#iaito"
