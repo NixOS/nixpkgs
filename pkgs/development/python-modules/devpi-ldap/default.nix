@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-ldap";
-  version = "2.1.1-unstable-2026-01-22";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
