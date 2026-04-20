@@ -590,7 +590,16 @@ rec {
           );
         }
         //
-          optionalAttrs (opt ? defaultText || opt ? default || ((opt.type or { }).emptyValue or { }) ? value)
+          optionalAttrs
+            (
+              opt ? defaultText
+              || opt ? default
+              # Render emptyValue-based defaults, but only for types without
+              # submodules (e.g. types.submodule). Submodules may evaluate to
+              # error without user defs, and their sub-options are documented
+              # individually, so best to skip those here.
+              || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
+            )
             {
               default =
                 builtins.addErrorContext

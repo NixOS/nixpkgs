@@ -1320,7 +1320,7 @@ rec {
           };
       };
       emptyValue = {
-        value = { };
+        value = base.config;
       };
       getSubOptions =
         prefix:
