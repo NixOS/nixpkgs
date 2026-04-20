@@ -8659,8 +8659,6 @@ with pkgs;
 
   cygwin = recurseIntoAttrs (callPackages ../os-specific/cygwin { });
 
-  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
-
   inherit
     ({
       zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
