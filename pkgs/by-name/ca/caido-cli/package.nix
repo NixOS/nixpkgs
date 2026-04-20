@@ -35,9 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   nativeBuildInputs =
-    lib.optionals stdenv.isLinux [ autoPatchelfHook ] ++ lib.optionals stdenv.isDarwin [ unzip ];
+    lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ libgcc ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libgcc ];
 
   sourceRoot = ".";
 

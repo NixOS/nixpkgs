@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
 
   # Tests crash with Abort trap: 6 on Darwin due to tokio runtime
   # initialization in PyInit_pyo3_async_runtimes being blocked by the sandbox.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "primp" ];
 

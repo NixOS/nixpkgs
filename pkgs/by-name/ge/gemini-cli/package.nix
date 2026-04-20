@@ -28,14 +28,14 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-T3fxNFvkLR7f49GQjzzTnl3VM+VUUgJfFF5d2GGe7L4=";
 
-  dontPatchElf = stdenv.isDarwin;
+  dontPatchElf = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     jq
     pkg-config
     makeWrapper
   ]
-  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
 
   buildInputs = [
     ripgrep

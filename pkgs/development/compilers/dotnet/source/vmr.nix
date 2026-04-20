@@ -508,10 +508,11 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  ${if stdenv.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null} = ''
-    mkdir -p "$out"/nix-support
-    echo ${sigtool} > "$out"/nix-support/manual-sdk-deps
-  '';
+  ${if stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null} =
+    ''
+      mkdir -p "$out"/nix-support
+      echo ${sigtool} > "$out"/nix-support/manual-sdk-deps
+    '';
 
   # stripping dlls results in:
   # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)

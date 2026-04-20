@@ -28,7 +28,7 @@ deployAndroidPackage {
       libxrender
       libxext
     ])
-    ++ lib.optionals (os == "linux" && stdenv.isx86_64) (
+    ++ lib.optionals (os == "linux" && stdenv.hostPlatform.isx86_64) (
       with pkgsi686Linux;
       [
         glibc

@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
   # skip tests on darwin due to some local networking failures
   # `__darwinAllowLocalNetworking = true;` wasn't sufficient for
   # aarch64 or x86_64
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     # some test data include SOURCE_DATE_EPOCH (which is different from our default)
     # and the default version info which we get by unsetting our ldflags

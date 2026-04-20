@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vGvpjRJr4ez322JWUwboVml22vnRVRlwpZ9W4F5wATA=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ mold ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ mold ];
 
   passthru.updateScript = nix-update-script { };
 

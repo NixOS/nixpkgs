@@ -139,9 +139,11 @@ stdenv.mkDerivation (finalAttrs: {
     export systemdsystemunitdir=$out/etc/systemd/system
   '';
 
-  preBuild = lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
-  '';
+  preBuild =
+    lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.hostPlatform.isDarwin)
+      ''
+        export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
+      '';
 
   # We need this for sysconfdir, see remark below.
   installFlags = [ "DESTDIR=$(out)" ];

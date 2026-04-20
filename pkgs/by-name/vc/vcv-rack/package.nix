@@ -249,13 +249,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     zstd
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
     imagemagick
     libicns
     wrapGAppsHook3
   ]
-  ++ lib.optionals stdenv.isDarwin [ rsync ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ];
 
   buildInputs = [
     curl
@@ -320,7 +320,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
     done;
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{bin,Applications}
     mv dist/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app' \
       $out/Applications

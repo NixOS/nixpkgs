@@ -34,7 +34,7 @@ let
     };
     makeCacheWritable = true;
 
-    buildInputs = lib.optionals stdenv.isLinux [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       libsecret
     ];
     nativeBuildInputs = [
@@ -42,10 +42,10 @@ let
       nodejs-slim.python
       npmHooks.npmConfigHook
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools.libtool
       clang_20 # clang_21 breaks @vscode/vsce's optional dependency keytar
     ];
