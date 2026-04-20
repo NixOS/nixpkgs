@@ -10,6 +10,7 @@
   hash,
   passthru,
   lms,
+  jq,
 }:
 stdenv.mkDerivation {
   inherit meta pname version;
@@ -40,7 +41,48 @@ stdenv.mkDerivation {
     substituteInPlace "$indexJs" --replace-quiet "'/Applications'" "'/'"
 
     # lms cli tool — built from source via lms.nix
-    install -m 755 ${lms}/bin/lms $out/bin/
+    install -m 755 ${lms}/bin/lms $out/bin/.lms-unwrapped
+
+    # Wrap lms so it can find the LM Studio app from the Nix store.
+    # The lms CLI discovers LM Studio via ~/.lmstudio/.internal/app-install-location.json.
+    # When LM Studio is installed via Nix this file does not exist, so lms cannot find
+    # or start the daemon.  The wrapper ensures the file points to the Nix-packaged app.
+    cat > $out/bin/lms <<'WRAPPER'
+#!/bin/sh
+# Determine LM Studio home the same way the JS code does
+if [ -f "$HOME/.lmstudio-home-pointer" ]; then
+  LMSTUDIO_HOME=$(cat "$HOME/.lmstudio-home-pointer")
+elif [ -d "$HOME/.cache/lm-studio" ]; then
+  LMSTUDIO_HOME="$HOME/.cache/lm-studio"
+else
+  LMSTUDIO_HOME="$HOME/.lmstudio"
+fi
+
+install_file="$LMSTUDIO_HOME/.internal/app-install-location.json"
+
+# Only write if the file is missing or points to a non-existent path
+needs_update=0
+if [ ! -f "$install_file" ]; then
+  needs_update=1
+elif ! @jq@ -e '.path' "$install_file" >/dev/null 2>&1; then
+  needs_update=1
+elif [ ! -e "$(@jq@ -r '.path' "$install_file")" ]; then
+  needs_update=1
+fi
+
+if [ "$needs_update" = 1 ]; then
+  mkdir -p "$(dirname "$install_file")"
+  printf '{"path":"%s","argv":[],"cwd":"%s"}\n' "@lm_studio@" "@bindir@" > "$install_file"
+fi
+
+exec @lms_unwrapped@ "$@"
+WRAPPER
+    substituteInPlace $out/bin/lms \
+      --replace-fail '@jq@' '${jq}/bin/jq' \
+      --replace-fail '@lm_studio@' "$out/Applications/LM Studio.app/Contents/MacOS/LM Studio" \
+      --replace-fail '@bindir@' "$out/Applications/LM Studio.app/Contents/MacOS" \
+      --replace-fail '@lms_unwrapped@' "$out/bin/.lms-unwrapped"
+    chmod 755 $out/bin/lms
 
     # Re-sign the app bundle after patching, otherwise macOS reports it as damaged
     # Re-sign every Mach-O in the bundle so macOS doesn't flag it as damaged.
