@@ -1812,6 +1812,7 @@
   ./services/web-servers/hitch/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/keter
+  ./services/web-servers/lakefs.nix
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/collectd.nix
   ./services/web-servers/lighttpd/default.nix
