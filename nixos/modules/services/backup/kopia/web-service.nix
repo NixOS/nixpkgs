@@ -86,7 +86,7 @@ in
         {
           assertion =
             backup.web.enable -> (backup.web.serverPassword != null || backup.web.serverPasswordFile != null);
-          message = "services.kopia.backups.${name}: one of web.serverPassword or web.serverPasswordFile must be set when web.enable is true";
+          message = "services.kopia.backups.${name}: web.serverPassword or web.serverPasswordFile must be set when web.enable is true";
         }
         {
           assertion = backup.web.serverPassword == null || backup.web.serverPasswordFile == null;
