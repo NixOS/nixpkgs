@@ -242,12 +242,12 @@ in
 
   dotbar = mkTmuxPlugin rec {
     pluginName = "dotbar";
-    version = "0.3.0";
+    version = "0.3.2";
     src = fetchFromGitHub {
       owner = "vaaleyard";
       repo = "tmux-dotbar";
       tag = version;
-      hash = "sha256-n9k18pJnd5mnp9a7VsMBmEHDwo3j06K6/G6p7/DTyIY=";
+      hash = "sha256-WaRKepmPqiE+W8Tm0dBc6hGiqqZP122eXjrG0rJnt0w=";
     };
     meta = {
       homepage = "https://github.com/vaaleyard/tmux-dotbar";
