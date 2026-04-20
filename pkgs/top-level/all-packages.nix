@@ -2766,12 +2766,12 @@ with pkgs;
   nodejs_24 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_24; };
   corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_24; };
 
-  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { };
-  nodejs_25 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_25; };
+  nodejs-slim_26 = callPackage ../development/web/nodejs/v26.nix { };
+  nodejs_26 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_26; };
 
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_25;
-  nodejs-slim_latest = nodejs-slim_25;
+  nodejs_latest = nodejs_26;
+  nodejs-slim_latest = nodejs-slim_26;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
