@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitea-actions-runner";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "act_runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D3/vJUQuNAgUWNyfL9QWmByZ9A/F4+pfA6GR0SDcMpQ=";
+    hash = "sha256-trKp5tIhvvb6VJ04iIpFD4Q/VK/V1urkbXEpGMwaEsE=";
   };
 
-  vendorHash = "sha256-XRXoChH2ApQS65xnzeGP4NIUL0RKovLWvVIAnBncT7Y=";
+  vendorHash = "sha256-dUUe4BbBmRP9MImq/PYTGssv3M2Zn84oCxH5BKf9btg=";
 
   ldflags = [
     "-s"
