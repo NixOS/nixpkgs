@@ -87,6 +87,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/codingjoe/django-health-check";
     changelog = "https://github.com/codingjoe/django-health-check/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ onny ];
+    maintainers = with lib.maintainers; [
+      onny
+      dav-wolff
+    ];
   };
 }
