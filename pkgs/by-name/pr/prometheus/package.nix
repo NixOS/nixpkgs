@@ -92,6 +92,10 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
+  patches = [
+    ./prometheus-pr18519-fix-TestFsType.patch
+  ];
+
   outputs = [
     "out"
     "doc"
