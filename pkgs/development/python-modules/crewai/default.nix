@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   hatchling,
@@ -534,6 +535,9 @@ buildPythonPackage (finalAttrs: {
     "test_azure_agent_with_native_tool_calling"
     "test_azure_agent_kickoff_with_tools_mocked"
     "test_azure_streaming_emits_tool_call_events"
+
+    # Tests time dependent
+    "test_older_than"
   ];
 
   nativeCheckInputs = [
@@ -555,6 +559,13 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     "--override-ini=addopts="
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
+  };
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";
