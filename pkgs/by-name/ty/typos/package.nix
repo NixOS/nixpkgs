@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typos";
-  version = "1.45.0";
+  version = "1.45.1";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "typos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sgu6zCWwdqZW+HW9i/rujViL/jvDTzdkEm257OMQarg=";
+    hash = "sha256-v051wBxAgTlsFOAlysRlUOz/VoSSxbm3rqRJBxLOPuI=";
   };
 
-  cargoHash = "sha256-NTbmLAUSz3CjQtf0s5Hu3OFvGw6D8jw0gmIt4kaQbwM=";
+  cargoHash = "sha256-S7koGmH6C8wigRD+/ldDltTziHQ3uadHGfeI+Vk/Wak=";
 
   passthru.updateScript = nix-update-script { };
 
