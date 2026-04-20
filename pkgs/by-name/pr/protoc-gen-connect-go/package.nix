@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "protoc-gen-connect-go";
-  version = "1.19.1";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VW7FHZk7FAux2Jn03gGm9gdkjCzvofC/ukXOWaplWBo=";
+    hash = "sha256-tPaP3y6FlN4QrLJeqdrpMvfYXXb0CwTnbAZqD1oWcO0=";
   };
 
   vendorHash = "sha256-oAcAE9t4mz0HrkqO8lh5Ex2nakKj5FKy2lKTP8X/9Gg=";
