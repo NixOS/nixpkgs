@@ -1,18 +1,18 @@
 {
   lib,
   python3,
-  fetchFromGitHub,
+  fetchFromCodeberg,
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
   version = "0.4.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "foresto";
+  src = fetchFromCodeberg {
+    owner = "forestix";
     repo = "joystickwake";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
+    hash = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
   };
 
   build-system = with python3.pkgs; [
