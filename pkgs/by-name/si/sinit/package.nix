@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchgit,
-  rcinit ? null,
-  rcshutdown ? null,
+  rcinit ? "/etc/rc.d/rc.init",
+  rcshutdown ? "/etc/rc.d/rc.shutdown",
   rcreboot ? null,
 }:
 
