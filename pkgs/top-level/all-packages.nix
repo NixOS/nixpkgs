@@ -6521,7 +6521,6 @@ with pkgs;
     icu64
     icu66
     icu67
-    icu69
     icu70
     icu71
     icu72
