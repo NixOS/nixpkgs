@@ -271,6 +271,18 @@ class BaseMachine(ABC):
         """
         self.logger.log(msg, {"machine": self.name})
 
+    def debug(self, msg: str) -> None:
+        """
+        Log a message to console with log level for debug.
+        """
+        self.logger.debug(msg, {"machine": self.name})
+
+    def error(self, msg: str) -> None:
+        """
+        Log a message to console with log level for error.
+        """
+        self.logger.error(msg, {"machine": self.name})
+
     def log_serial(self, msg: str) -> None:
         self.logger.log_serial(msg, self.name)
 
@@ -855,7 +867,7 @@ class QemuMachine(BaseMachine):
         def tty_matches(last_try: bool) -> bool:
             text = self.get_tty_text(tty)
             if last_try:
-                self.log(
+                self.debug(
                     f"Last chance to match /{regexp}/ on TTY{tty}, "
                     f"which currently contains: {text}"
                 )
@@ -1061,8 +1073,8 @@ class QemuMachine(BaseMachine):
 
             toc = time.time()
 
-            self.log("connected to guest root shell")
-            self.log(f"(connecting took {toc - tic:.2f} seconds)")
+            self.debug("connected to guest root shell")
+            self.debug(f"(connecting took {toc - tic:.2f} seconds)")
             self.connected = True
 
     @contextmanager
@@ -1225,7 +1237,7 @@ class QemuMachine(BaseMachine):
         if self.booted:
             return
 
-        self.log("starting vm")
+        self.debug("starting vm")
 
         def clear(path: Path) -> Path:
             if path.exists():
@@ -1299,7 +1311,7 @@ class QemuMachine(BaseMachine):
         self.pid = self.process.pid
         self.booted = True
 
-        self.log(f"QEMU running (pid {self.pid})")
+        self.debug(f"QEMU running (pid {self.pid})")
 
     def shutdown(self) -> None:
         """
@@ -1402,7 +1414,7 @@ class QemuMachine(BaseMachine):
     def release(self) -> None:
         if self.pid is None:
             return
-        self.logger.info(f"kill QemuMachine (pid {self.pid})")
+        self.logger.debug(f"kill QemuMachine (pid {self.pid})")
         assert self.process
         assert self.shell
         assert self.monitor
@@ -1492,7 +1504,7 @@ class NspawnMachine(BaseMachine):
         if self.machine_sock:
             self.machine_sock.close()
 
-        self.logger.info(f"kill NspawnMachine (pid {self.pid})")
+        self.logger.debug(f"kill NspawnMachine (pid {self.pid})")
         assert self.process is not None
         self.process.terminate()
         self.process = None
@@ -1610,7 +1622,7 @@ class NspawnMachine(BaseMachine):
         proc = self.process
 
         # 1. Wait for the directory to actually be created by the container
-        self.log(f"Waiting for journal at {journal_path}...")
+        self.debug(f"Waiting for journal at {journal_path}...")
         max_attempts = 10
         attempts = 0
         while not journal_path.exists() and attempts < max_attempts:
@@ -1647,7 +1659,7 @@ class NspawnMachine(BaseMachine):
                         if proc.poll() is not None:
                             break
                 except Exception as e:
-                    self.log(f"Error while reading journalctl output: {e}")
+                    self.error(f"Error while reading journalctl output: {e}")
                 finally:
                     log_proc.terminate()
                     log_proc.wait()
@@ -1685,7 +1697,7 @@ class NspawnMachine(BaseMachine):
 
         self.pid = self.process.pid
 
-        self.log(f"systemd-nspawn running (pid {self.pid})")
+        self.debug(f"systemd-nspawn running (pid {self.pid})")
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
