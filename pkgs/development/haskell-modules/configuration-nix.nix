@@ -1480,6 +1480,9 @@ builtins.intersectAttrs super {
   # integration-tests suite needs docker/testcontainers; run only unit-tests.
   postgresql-types = overrideCabal { testTargets = [ "unit-tests" ]; } super.postgresql-types;
 
+  # only test suite is testcontainers/docker-based
+  postgresql-simple-postgresql-types = dontCheck super.postgresql-simple-postgresql-types;
+
   users-postgresql-simple = lib.pipe super.users-postgresql-simple [
     (addTestToolDepends [
       pkgs.postgresql
