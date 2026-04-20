@@ -820,10 +820,10 @@
   };
 
   git-rebase = {
-    version = "0-unstable-2024-07-22";
+    version = "1.0.0-unstable-2026-04-20";
     url = "github:the-mikedavis/tree-sitter-git-rebase";
-    rev = "bff4b66b44b020d918d67e2828eada1974a966aa";
-    hash = "sha256-k4C7dJUkvQxIxcaoVmG2cBs/CeYzVqrip2+2mRvHtZc=";
+    rev = "3db1f61fb928433381253bc5159c40f7d10c57b1";
+    hash = "sha256-EV/Ecfzu3jZ5BQynRxn8NJ+lfi9i5ixs+u1e72uZBJA=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
