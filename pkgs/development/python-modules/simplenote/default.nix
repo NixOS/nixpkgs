@@ -16,8 +16,6 @@ buildPythonPackage rec {
     sha256 = "1grvvgzdybhxjydalnsgh2aaz3f48idv5lqs48gr0cn7n18xwhd5";
   };
 
-  propagatedBuildInputs = [ ];
-
   meta = {
     description = "Python library for the simplenote.com web service";
     homepage = "http://readthedocs.org/docs/simplenotepy/en/latest/api.html";
