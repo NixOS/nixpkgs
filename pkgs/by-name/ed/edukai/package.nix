@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-${finalAttrs.version}.zip";
-    sha256 = "sha256-B4TwTPX1dsq6rB4YunY6q2yx2OJhNhmn3an/dJwDPJc=";
+    hash = "sha256-B4TwTPX1dsq6rB4YunY6q2yx2OJhNhmn3an/dJwDPJc=";
   };
 
   nativeBuildInputs = [ installFonts ];
