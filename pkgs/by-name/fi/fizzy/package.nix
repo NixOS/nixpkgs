@@ -181,7 +181,7 @@ stdenv.mkDerivation (
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [ philocalyst ];
       mainProgram = "fizzy-server";
-      platforms = lib.platforms.unix; # Builds on Darwin but explicitly only enabled for Linux
+      platforms = lib.platforms.unix; # Builds on Darwin but explicitly only enabled for Linux internally
     };
   }
 )
