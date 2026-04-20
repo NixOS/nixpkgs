@@ -41,47 +41,29 @@
       default = { };
       example = lib.literalExpression ''
         {
-          # Simple filesystem backup.
-          localbackup = {
-            repository.filesystem.path = "/mnt/backup";
-            passwordFile = "/run/secrets/kopia-password";
-            paths = [ "/home" "/var/lib/postgresql" ];
-            policy.retention.keepDaily = 7;
-            policy.retention.keepWeekly = 4;
-            policy.compression = "zstd";
-          };
-
-          # SFTP example: backs up to a remote server over SSH/SFTP.
-          # Key-based authentication is preferred for security.
-          sftp-backup = {
-            repository.sftp = {
-              # Use host for a plain hostname, or hostFile to read it from a file
-              # at runtime (e.g. for secrets management). They are mutually exclusive.
-              host = "backup.example.com";
-              path = "/backup/kopia-repo";
-              username = "kopia";
-              keyFile = "/root/.ssh/id_ed25519";
-              knownHostsFile = "/root/.ssh/known_hosts";
+          s3-backup = {
+            repository.s3 = {
+              bucket = "your bucket name";
+              endpoint = "s3.region.amazonaws.com";
+              accessKeyIdFile = "/run/secrets/s3-access-key";
+              secretAccessKeyFile = "/run/secrets/s3-secret-access-key";
             };
             passwordFile = "/run/secrets/kopia-password";
-            paths = [ "/home" "/var/lib" ];
-            policy.retention.keepDaily = 7;
-            policy.retention.keepWeekly = 4;
-            policy.compression = "zstd";
-          };
-
-          # WebDAV example: backs up to a WebDAV server.
-          webdav-backup = {
-            repository.webdav = {
-              url = "https://webdav.example.com/backup/kopia";
-              # Use passwordFile to read credentials from a file at runtime.
-              usernameFile = "/run/secrets/webdav-username";
-              passwordFile = "/run/secrets/webdav-password";
+            web = {
+              enable = true;
+              serverPasswordFile = "/run/secrets/kopia-server-password";
             };
-            passwordFile = "/run/secrets/kopia-password";
-            paths = [ "/home" ];
-            policy.retention.keepDaily = 7;
-            policy.compression = "zstd";
+            paths = [ "/persistent" ];
+            policy = {
+              retention = {
+                keepLatest = 5;
+                keepDaily = 30;
+                keepWeekly = 4;
+                keepMonthly = 3;
+                keepAnnual = 0;
+              };
+              compression = "pgzip";
+            };
           };
         }
       '';
