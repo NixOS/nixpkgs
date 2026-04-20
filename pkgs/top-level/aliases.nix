@@ -927,6 +927,7 @@ mapAliases {
   i3-gaps = throw "'i3-gaps' has been renamed to/replaced by 'i3'"; # Converted to throw 2025-10-27
   i3lock-pixeled = throw "'i3lock-pixeled' has been unmaintained for several years now."; # Converted to throw 2026-01-24
   ibm-sw-tpm2 = throw "ibm-sw-tpm2 has been removed, as it was broken"; # Added 2025-08-25
+  icu69 = throw "ICU 69 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
   igvm-tooling = throw "'igvm-tooling' has been removed as it is poorly maintained upstream and a dependency has been marked insecure."; # Added 2025-09-03
   ikos = throw "ikos has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   imagemagick6 = throw "'imagemagick6' was removed because it is outdated. Use 'imagemagick' instead."; # added 2026-02-27
