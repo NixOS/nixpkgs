@@ -48,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Debian/devscripts/pull/2/commits/c6a018e0ef50a1b0cb4962a2f96dae7c6f21f1d4.patch";
       hash = "sha256-UpS239JiAM1IYxNuJLdILq2h0xlR5t0Tzhj47xiMHww=";
     })
+    # Write to stdout and exit 0 for --help, --version
+    # https://salsa.debian.org/debian/devscripts/-/merge_requests/637
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/devscripts/-/commit/dbb258ea17749e2d102d4d181fe2709bda5584e7.patch";
+      hash = "sha256-+/E1UhxKk4PYD1bO1kI0qjfBpcMoFbo3xiY45IQ/FWU=";
+    })
   ];
 
   postPatch = ''
