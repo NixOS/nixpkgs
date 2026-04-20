@@ -3,8 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  plasma5Packages,
-  gnome-icon-theme,
+  kdePackages,
   hicolor-icon-theme,
   nix-update-script,
   folder-color ? "plasma", # Supported colors: black blue caramel citron firebrick gold green grey highland jade lavender lime olive orange pistachio plasma pumpkin purple red rust sapphire tomato violet white yellow
@@ -26,8 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
-    plasma5Packages.breeze-icons
-    gnome-icon-theme
+    kdePackages.breeze-icons
     hicolor-icon-theme
   ];
 
@@ -48,6 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontDropIconThemeCache = true;
   dontBuild = true;
   dontConfigure = true;
+  dontWrapQtApps = true;
 
   passthru.updateScript = nix-update-script { };
 
