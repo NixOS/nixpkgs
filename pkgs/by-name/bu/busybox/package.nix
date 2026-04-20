@@ -54,7 +54,7 @@ let
     owner = "installer-team";
     repo = "busybox";
     rev = "debian/1%${debianVersion}";
-    sha256 = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
+    hash = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
   };
   debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
@@ -65,20 +65,18 @@ let
       overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
     else
       stdenv;
-
-  pname = "busybox";
-  version = "1.37.0";
 in
 
 stdenv'.mkDerivation (finalAttrs: {
-  inherit pname version;
+  pname = "busybox";
+  version = "1.37.0";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
-    url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
+    url = "https://busybox.net/downloads/busybox-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
   };
 
   hardeningDisable = [
@@ -295,6 +293,6 @@ stdenv'.mkDerivation (finalAttrs: {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" finalAttrs.version;
   };
 })
