@@ -16547,6 +16547,12 @@
     githubId = 93316844;
     name = "Manaiki Laut";
   };
+  mandar1jn = {
+    email = "marijnkneppers@gmail.com";
+    github = "mandar1jn";
+    githubId = 49076509;
+    name = "Marijn Kneppers";
+  };
   mandos = {
     email = "marek.maksimczyk@mandos.net.pl";
     github = "mandos";
