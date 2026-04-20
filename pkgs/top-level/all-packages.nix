@@ -7573,7 +7573,9 @@ with pkgs;
       zig_0_13 = zigPackages."0.13";
       zig_0_14 = zigPackages."0.14";
       zig_0_15 = zigPackages."0.15";
-      zig_0_16 = zigPackages."0.16";
+      zig_0_16 = zigPackages."0.16".overrideAttrs (_: {
+        __structuredAttrs = true;
+      });
     })
     zigPackages
     zig_0_13
