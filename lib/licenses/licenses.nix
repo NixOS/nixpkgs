@@ -1495,6 +1495,11 @@ lib.mapAttrs mkLicense (
       fullName = "Unicode Terms of Use";
     };
 
+    universalFOSSException-10 = {
+      spdxId = "Universal-FOSS-exception-1.0";
+      fullName = "Universal FOSS Exception, Version 1.0";
+    };
+
     unlicense = {
       spdxId = "Unlicense";
       fullName = "The Unlicense";

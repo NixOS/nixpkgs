@@ -4,9 +4,10 @@
   cctools,
   fetchFromGitHub,
   jq,
-  makeWrapper,
+  makeBinaryWrapper,
   nodejs_22,
   python3,
+  xcbuild,
   yarn-berry_4,
   nixosTests,
 }:
@@ -44,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     (yarn-berry.yarnBerryConfigHook.override { inherit nodejs; })
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
-    makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
+    xcbuild
   ];
 
   env = {
@@ -121,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
+    makeBinaryWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 
@@ -141,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
     license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag
