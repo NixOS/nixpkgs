@@ -359,7 +359,7 @@ It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnp
 +let
 +  # Optionally override pnpm to use a custom nodejs version
 +  # Make sure that the same nodejs version is referenced in nativeBuildInputs
-+  # pnpm = pnpm_10.override { nodejs = nodejs_20; };
++  # pnpm = pnpm_10.override { nodejs = nodejs-slim_22; };
 +in
  stdenv.mkDerivation (finalAttrs: {
    pname = "foo";
