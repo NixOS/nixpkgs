@@ -11,7 +11,7 @@
   graphviz,
   mscgen,
   asciidoc,
-  sourceHighlight,
+  source-highlight,
   pythonSupport ? false,
   swig ? null,
   python ? null,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
     mscgen
     asciidoc
-    sourceHighlight
+    source-highlight
   ]
   ++ lib.optional pythonSupport swig;
 

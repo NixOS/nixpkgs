@@ -18,7 +18,7 @@
   perl,
   python3,
   babeltrace,
-  sourceHighlight,
+  source-highlight,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocdbgapi
     python3
     babeltrace
-    sourceHighlight
+    source-highlight
   ];
 
   configureFlags = [
