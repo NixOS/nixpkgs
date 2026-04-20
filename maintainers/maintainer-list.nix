@@ -29380,6 +29380,12 @@
     githubId = 78392041;
     name = "Winter";
   };
+  winterec = {
+    github = "winterec";
+    githubId = 9159652;
+    name = "Edward";
+    keys = [ { fingerprint = "0BC2F3C6AE5D73DAE870CB0E8AE4DE0EFB6CC443"; } ];
+  };
   wirew0rm = {
     email = "alex@wirew0rm.de";
     github = "wirew0rm";
