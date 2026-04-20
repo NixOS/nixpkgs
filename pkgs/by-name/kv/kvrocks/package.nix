@@ -1,4 +1,5 @@
 {
+  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -318,6 +319,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/kvrocks.conf -t $out/etc
     runHook postInstall
   '';
+
+  passthru = {
+    hook = callPackage ./hook.nix { kvrocks = finalAttrs.finalPackage; };
+    tests = {
+      hook = callPackage ./hook-test.nix { kvrocks = finalAttrs.finalPackage; };
+    };
+  };
 
   meta = {
     description = "Distributed key value NoSQL database that uses RocksDB as storage engine and is compatible with Redis protocol";
