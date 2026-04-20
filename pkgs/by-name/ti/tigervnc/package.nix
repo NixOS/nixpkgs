@@ -24,17 +24,23 @@
   ffmpeg,
   autoconf,
   automake,
+  libuuid,
+  libxkbcommon,
+  pipewire,
+  wayland,
+  wayland-scanner,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.15.0";
+  version = "1.16.2";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZuuvRJe/lAqULWObPxGHVJrDPCTK4IVSqX0K1rWOctw=";
+    hash = "sha256-yyJCtv48gKftyYND0v18qvh4gimxJt22vxiZBSNZ07U=";
   };
 
   postPatch =
@@ -42,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
       fontPath=
       substituteInPlace vncviewer/vncviewer.cxx \
-         --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
+         --replace-fail '"/usr/bin/ssh' '"${openssh}/bin/ssh'
       source_top="$(pwd)"
     ''
     + ''
@@ -54,9 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
-    "-DCMAKE_INSTALL_SBINDIR=${placeholder "out"}/bin"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
+    (lib.cmakeFeature "CMAKE_INSTALL_SBINDIR" "${placeholder "out"}/bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "${placeholder "out"}/bin")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -157,6 +166,12 @@ stdenv.mkDerivation (finalAttrs: {
       libXdamage
     ]
     ++ xorg.xorgserver.buildInputs
+    ++ lib.optionals waylandSupport [
+      libuuid
+      libxkbcommon
+      pipewire
+      wayland
+    ]
   );
 
   nativeBuildInputs = [
@@ -175,6 +190,9 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ xorg.xorgserver.nativeBuildInputs
+    ++ lib.optionals waylandSupport [
+      wayland-scanner
+    ]
   );
 
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg.xorgserver.propagatedBuildInputs;

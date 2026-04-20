@@ -18,6 +18,8 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-EpszwgYzobRA7LohtJJtgTefFAEmCXvcP3ilfsu+obo=";
   };
 
+  patches = [ ./CVE-2025-62166.patch ];
+
   postPatch = ''
     patchShebangs cli/*.php app/actualize_script.php
   '';

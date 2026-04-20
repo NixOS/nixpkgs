@@ -45,6 +45,10 @@ let
     maintainers = with lib.maintainers; [ hexa ];
     teams = [ lib.teams.c3d2 ];
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "https://github.com/pretalx/pretalx/security/advisories/GHSA-cjcx-jfp2-f7m2"
+      "https://github.com/pretalx/pretalx/security/advisories/GHSA-jm8c-9f3j-4378"
+    ];
   };
 
   pretix-schedule-editor = buildNpmPackage {
