@@ -1477,6 +1477,9 @@ builtins.intersectAttrs super {
     (dontCheckIf (!pkgs.postgresql.doInstallCheck || !self.testcontainers.doCheck))
   ];
 
+  # integration-tests suite needs docker/testcontainers; run only unit-tests.
+  postgresql-types = overrideCabal { testTargets = [ "unit-tests" ]; } super.postgresql-types;
+
   users-postgresql-simple = lib.pipe super.users-postgresql-simple [
     (addTestToolDepends [
       pkgs.postgresql

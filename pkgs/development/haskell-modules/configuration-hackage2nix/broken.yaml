@@ -4988,7 +4988,6 @@ broken-packages:
   - postgresql-tx-monad-logger # failure in job https://hydra.nixos.org/build/233227034 at 2023-09-02
   - postgresql-tx-simple # failure in job https://hydra.nixos.org/build/233242850 at 2023-09-02
   - postgresql-typed-lifted # failure in job https://hydra.nixos.org/build/233215141 at 2023-09-02
-  - postgresql-types # failure in job https://hydra.nixos.org/build/326308328 at 2026-04-12
   - postgrest-ws # failure in job https://hydra.nixos.org/build/233247807 at 2023-09-02
   - postie # failure in job https://hydra.nixos.org/build/233259075 at 2023-09-02
   - postmark-streams # failure in job https://hydra.nixos.org/build/233233210 at 2023-09-02
