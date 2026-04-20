@@ -12,6 +12,7 @@
   libmirage,
   fetchurl,
   lib,
+  writeScript,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "image-analyzer";
@@ -49,6 +50,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = writeScript "update-image-analyzer" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Fetch the latest version from the SourceForge RSS feed for image-analyzer
+      newVersion="$(curl -s "https://sourceforge.net/projects/cdemu/rss?path=/image-analyzer" | pcre2grep -o1 'image-analyzer-([0-9.]+)\.tar\.xz' | head -n 1)"
+
+      update-source-version image-analyzer "$newVersion"
+    '';
+  };
 
   meta = {
     description = "Suite of tools for emulating optical drives and discs";
