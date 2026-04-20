@@ -6,19 +6,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cozempic";
-  version = "1.8.0";
+  version = "1.8.2";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EEBnR3isXLTTeVeihk/UEj4BIGa4lCMYUR0LdWue3Qo=";
+    hash = "sha256-7/dZMOmod6gJHXJFwtPsUf4JsySTlq6sMX0BckoWFR0=";
   };
 
   build-system = [ python3Packages.setuptools ];
 
-  # Zero runtime dependencies — Python stdlib only.
   pythonImportsCheck = [ "cozempic" ];
 
   meta = {
