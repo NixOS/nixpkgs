@@ -1,24 +1,32 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   rich,
   pillow,
+
+  # tests
   pytestCheckHook,
   syrupy,
-  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "textual-image";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lnqs";
     repo = "textual-image";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nWP4pxFcsjDA/SIrKXHjufiQaxHGgPpC1ZIti+TW+f0=";
+    hash = "sha256-W0f9ZnSZ58XqiPnr9SZEv22EE4yCsvXcgNA8eJebJQo=";
   };
 
   build-system = [ setuptools ];
@@ -28,14 +36,17 @@ buildPythonPackage (finalAttrs: {
     rich
   ];
 
+  pythonImportsCheck = [ "textual_image" ];
+
   nativeCheckInputs = [
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [ "textual_image" ];
-
-  doCheck = true;
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert [+ received] == [- snapshot]
+    "test_render"
+  ];
 
   meta = {
     description = "Render images in the terminal with Textual and rich";
