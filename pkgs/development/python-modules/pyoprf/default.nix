@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyoprf";
   pyproject = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
         --replace-fail "or ctypes.util.find_library('liboprf-noiseXK')" ""
     '';
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [ setuptools ];
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
       teams
       ;
   };
-}
+})

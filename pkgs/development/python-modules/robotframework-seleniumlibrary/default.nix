@@ -13,7 +13,7 @@
   robotstatuschecker,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robotframework-seleniumlibrary";
   version = "6.8.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TyYlcmoV5q3mfV4II/7P/SApfSNd3yC1EFYcuHllcyQ=";
   };
 
@@ -49,10 +49,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.tag}/docs/SeleniumLibrary-${version}.rst";
+    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${finalAttrs.src.tag}/docs/SeleniumLibrary-${finalAttrs.version}.rst";
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/SeleniumLibrary";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

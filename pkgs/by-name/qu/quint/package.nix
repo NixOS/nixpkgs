@@ -14,12 +14,13 @@
   gnugrep,
   nix-update,
   common-updater-scripts,
+  libiconv,
 }:
 
 let
-  version = "0.30.0";
+  version = "0.31.0";
   apalacheVersion = "0.51.1";
-  evaluatorVersion = "0.4.0";
+  evaluatorVersion = "0.5.0";
 
   metaCommon = {
     description = "Formal specification language with TLA+ semantics";
@@ -33,7 +34,7 @@ let
     owner = "informalsystems";
     repo = "quint";
     tag = "v${version}";
-    hash = "sha256-4gZUGw5T4iVbg7IWkXXIpSib/dPVXhK6Srt1kNewPGA=";
+    hash = "sha256-d1iCkpUh5z+Gr2AbjpyfwiR4XZ6vYk96UHCeippC6iw=";
   };
 
   # Build the Quint CLI from source
@@ -43,7 +44,7 @@ let
 
     sourceRoot = "${src.name}/quint";
 
-    npmDepsHash = "sha256-qmekskqCePyI/k1AaBRVfc6q6SQNCA4K61E6GxfsAUI=";
+    npmDepsHash = "sha256-UZbATCXqyAulEX+oxLEsT5VPm7y4NiCgnAwyugbzc9g=";
 
     npmBuildScript = "compile";
 
@@ -75,7 +76,11 @@ let
     # Skip tests during build, as many rust tests rely on the Quint CLI
     doCheck = false;
 
-    cargoHash = "sha256-beWqUDaWWCbGL+V1LNtf35wZrIqWCCbFLYo5HCZF7FI=";
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
+
+    cargoHash = "sha256-aGVs/J+lAPHOsi01xShfZHBeUjd6eONpraNuMkaVfO8=";
 
     meta = metaCommon // {
       description = "Evaluator for the Quint formal specification language";
@@ -132,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       })
       (writeShellScript "update" ''
         src=$(nix build --print-out-paths --no-link .#quint.src)
-        QUINT_EVALUATOR_VERSION=$(${lib.getExe gnugrep} -m1 "const QUINT_EVALUATOR_VERSION" $src/quint/src/quintRustWrapper.ts | sed -E "s/.*= 'v?([^']+)'.*/\1/")
+        QUINT_EVALUATOR_VERSION=$(${lib.getExe gnugrep} -m1 "const QUINT_EVALUATOR_VERSION" $src/quint/src/rust/binaryManager.ts | sed -E "s/.*= 'v?([^']+)'.*/\1/")
         ${lib.getExe nix-update} quint.quint-evaluator --version $QUINT_EVALUATOR_VERSION
         DEFAULT_APALACHE_VERSION_TAG=$(${lib.getExe gnugrep} "DEFAULT_APALACHE_VERSION_TAG" $src/quint/src/apalache.ts | sed -E "s/.*= '([^']+)'.*/\1/")
         ${lib.getExe' common-updater-scripts "update-source-version"} quint $DEFAULT_APALACHE_VERSION_TAG --version-key=apalacheVersion --source-key=apalacheDist --ignore-same-version --ignore-same-hash

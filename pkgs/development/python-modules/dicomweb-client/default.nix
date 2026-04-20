@@ -13,7 +13,7 @@
   retrying,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dicomweb-client";
   version = "0.60.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ImagingDataCommons";
     repo = "dicomweb-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZxeZiCw8I5+Bf266PQ6WQA8mBRC7K3/kZrmuW4l6kQU=";
   };
 
@@ -48,9 +48,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for DICOMweb RESTful services";
     homepage = "https://dicomweb-client.readthedocs.io";
-    changelog = "https://github.com/ImagingDataCommons/dicomweb-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/ImagingDataCommons/dicomweb-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "dicomweb_client";
   };
-}
+})

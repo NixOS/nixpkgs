@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
+  python3Packages,
   versionCheckHook,
 }:
 
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    python-bindings = python3Packages.pdf-oxide;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fastest PDF library for text extraction, image extraction, and markdown conversion";
