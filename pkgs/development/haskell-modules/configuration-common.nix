@@ -3905,3 +3905,42 @@ with haskellLib;
     ];
   }
 )
+
+# 2026-04-01: IHP packages need hasql >= 1.10 (via hasql-mapping).
+# hasql-mapping is still broken in broken.yaml; other tweaks for the hasql 1.10 stack
+# (dontCheck for tests that need a live PostgreSQL) live in configuration-nix.nix.
+// {
+  hasql-mapping = unmarkBroken super.hasql-mapping;
+}
+
+# 2026-04-01: IHP packages need hasql >= 1.10 (via hasql-mapping).
+# The scope only renames attributes to the hasql 1.10 line.
+// (
+  let
+    ihpHasqlScope = self: super: {
+      hasql = doDistribute super.hasql_1_10_3;
+      hasql-dynamic-statements = doDistribute super.hasql-dynamic-statements_0_5_1;
+      hasql-notifications = doDistribute super.hasql-notifications_0_2_5_0;
+      hasql-pool = doDistribute super.hasql-pool_1_4_2;
+      hasql-transaction = doDistribute super.hasql-transaction_1_2_2;
+      postgresql-binary = doDistribute super.postgresql-binary_0_15_0_1;
+      text-builder = doDistribute super.text-builder_1_0_0_5;
+    };
+
+    ihpPackages = [
+      "ihp"
+      "ihp-datasync"
+      "ihp-graphql"
+      "ihp-hspec"
+      "ihp-ide"
+      "ihp-job-dashboard"
+      "ihp-migrate"
+      "ihp-pglistener"
+      "ihp-ssc"
+      "ihp-typed-sql"
+    ];
+  in
+  lib.genAttrs ihpPackages (
+    name: haskellLib.doDistribute (haskellLib.unmarkBroken (super.${name}.overrideScope ihpHasqlScope))
+  )
+)

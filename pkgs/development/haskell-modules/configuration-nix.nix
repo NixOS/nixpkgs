@@ -1483,6 +1483,14 @@ builtins.intersectAttrs super {
   # only test suite is testcontainers/docker-based
   postgresql-simple-postgresql-types = dontCheck super.postgresql-simple-postgresql-types;
 
+  # hasql 1.10 stack used by IHP — tests need a live PostgreSQL / docker
+  hasql_1_10_3 = dontCheck super.hasql_1_10_3;
+  hasql-dynamic-statements_0_5_1 = dontCheck super.hasql-dynamic-statements_0_5_1;
+  hasql-notifications_0_2_5_0 = dontCheck super.hasql-notifications_0_2_5_0;
+  hasql-pool_1_4_2 = dontCheck super.hasql-pool_1_4_2;
+  hasql-transaction_1_2_2 = dontCheck super.hasql-transaction_1_2_2;
+  postgresql-binary_0_15_0_1 = dontCheck super.postgresql-binary_0_15_0_1;
+
   users-postgresql-simple = lib.pipe super.users-postgresql-simple [
     (addTestToolDepends [
       pkgs.postgresql
