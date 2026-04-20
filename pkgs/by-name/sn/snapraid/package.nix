@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/amadvance/snapraid/releases";
     changelog = "https://github.com/amadvance/snapraid/blob/v${finalAttrs.version}/HISTORY";
     description = "Backup program for disk arrays";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;
     mainProgram = "snapraid";
