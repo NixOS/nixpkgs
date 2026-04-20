@@ -27683,8 +27683,8 @@
           {
             "arch": "all",
             "os": "macosx",
-            "sha1": "ff8facde137e57994112672a0d0f411a3ca7b201",
-            "size": 16442198,
+            "sha1": "8c4c926d0ca192376b2a04b0318484724319e67c",
+            "size": 16442240,
             "url": "https://dl.google.com/android/repository/platform-tools_r37.0.0-darwin.zip"
           },
           {
