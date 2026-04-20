@@ -11201,8 +11201,8 @@ with pkgs;
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
 
-  steam-run = steam.run;
-  steam-run-free = steam.run-free;
+  steam-run = if stdenv.hostPlatform.isLinux then steam.run else null;
+  steam-run-free = if stdenv.hostPlatform.isLinux then steam.run-free else null;
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
