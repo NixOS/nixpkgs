@@ -14,9 +14,6 @@
 let
   # The officially recommended version is Java 17
   java = jdk17;
-
-  # It's not clear yet if this version follows the app version, further updates will probably solve this question
-  pgd-updater-version = "1.0.0";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
@@ -59,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
 
-    install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater-${pgd-updater-version}.jar "$BASEDIR"
+    install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater-*.*.*.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
     makeWrapper ${lib.getExe java} $out/bin/irpf \
