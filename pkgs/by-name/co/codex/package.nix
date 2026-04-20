@@ -38,6 +38,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-zpQ0vg9XuarLfdZYiRIhcwLHUOdunNbOb5xLW3MPzp8=";
 
+  # Match upstream's release build (codex only, no fat LTO) to cut build time.
+  cargoBuildFlags = [
+    "--package"
+    "codex-cli"
+    "--config"
+    ''profile.release.lto="off"''
+  ];
+  cargoCheckFlags = [
+    "--package"
+    "codex-cli"
+  ];
+
   postPatch = ''
     # webrtc-sys asks rustc to link libwebrtc statically by default,
     # but nixpkgs provides libwebrtc as a shared library.
