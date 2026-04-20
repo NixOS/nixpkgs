@@ -1915,6 +1915,7 @@
   ./system/boot/nix-store-veritysetup.nix
   ./system/boot/plymouth-tpm2-totp.nix
   ./system/boot/plymouth.nix
+  ./system/boot/ramoops.nix
   ./system/boot/resolved.nix
   ./system/boot/shutdown.nix
   ./system/boot/stage-1.nix
