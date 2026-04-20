@@ -132,54 +132,53 @@ stdenv.mkDerivation (rec {
     DYLD_FALLBACK_LIBRARY_PATH = runtimeLibPath;
   };
 
-    buildPhase = ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      patchShebangs bin/
+    patchShebangs bin/
 
-      bundle exec bootsnap precompile --gemfile app/ lib/
-      SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+    bundle exec bootsnap precompile --gemfile app/ lib/
+    SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
-      runHook postBuild
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp -r --no-preserve=ownership . "$out"/
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    makeWrapper $out/bin/thrust $out/bin/fizzy-server \
+      ${lib.escapeShellArgs commonWrapArgs} \
+      --add-flags "$out/bin/rails server"
+
+    for exe in rails rake thrust; do
+      wrapProgram $out/bin/$exe ${lib.escapeShellArgs commonWrapArgs}
+    done
+  '';
+
+  passthru = {
+    updateScript = bundlerUpdateScript "fizzy";
+  };
+
+  meta = {
+    description = "Kanban tracking tool for issues and ideas";
+    longDescription = ''
+      Fizzy is an open-source Kanban tracking tool for issues and ideas,
+      originally built and used by 37signals. It supports multi-tenancy,
+      SQLite and MySQL, web push notifications (VAPID), and deployment
+      via Kamal or Docker.
     '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r --no-preserve=ownership . "$out"/
-
-      runHook postInstall
-    '';
-
-    postInstall = ''
-      makeWrapper $out/bin/thrust $out/bin/fizzy-server \
-        ${lib.escapeShellArgs commonWrapArgs} \
-        --add-flags "$out/bin/rails server"
-
-      for exe in rails rake thrust; do
-        wrapProgram $out/bin/$exe ${lib.escapeShellArgs commonWrapArgs}
-      done
-    '';
-
-    passthru = {
-      updateScript = bundlerUpdateScript "fizzy";
-    };
-
-    meta = {
-      description = "Kanban tracking tool for issues and ideas";
-      longDescription = ''
-        Fizzy is an open-source Kanban tracking tool for issues and ideas,
-        originally built and used by 37signals. It supports multi-tenancy,
-        SQLite and MySQL, web push notifications (VAPID), and deployment
-        via Kamal or Docker.
-      '';
-      homepage = "https://fizzy.do/";
-      changelog = "https://github.com/basecamp/fizzy/releases";
-      license = lib.licenses.unfree;
-      maintainers = with lib.maintainers; [ philocalyst ];
-      mainProgram = "fizzy-server";
-      platforms = lib.platforms.unix; # Builds on Darwin but explicitly only enabled for Linux
-    };
-  }
-)
+    homepage = "https://fizzy.do/";
+    changelog = "https://github.com/basecamp/fizzy/releases";
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ philocalyst ];
+    mainProgram = "fizzy-server";
+    platforms = lib.platforms.unix; # Builds on Darwin but explicitly only enabled for Linux internally
+  };
+})
