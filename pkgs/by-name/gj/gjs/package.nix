@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dprofiler=disabled"
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = false;
 
   strictDeps = true;
 

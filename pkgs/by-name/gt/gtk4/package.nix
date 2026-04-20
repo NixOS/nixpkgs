@@ -64,6 +64,7 @@
   broadwaySupport ? true,
   testers,
   darwinMinVersionHook,
+    desktop-file-utils,
 }:
 
 let
@@ -77,7 +78,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.20.3";
+  version = "4.22.2";
 
   outputs = [
     "out"
@@ -93,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KHPykDCIpmxxFz6i7YX/riZqZrlyw6SEK7svbxh+wVM=";
+    hash = "sha256-scmHNwoMMHgM3jUb2+4C7vgWco8cHC7HyAkygcBwnug=";
   };
 
   # TODO: make it unconditional on rebuild, drop on version >= 4.20.4
@@ -118,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     gi-docgen
     libxml2 # for xmllint
+    desktop-file-utils
+    shared-mime-info
   ]
   ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
