@@ -16,6 +16,7 @@
   pythonOlder,
   rich,
   setuptools,
+  stdenv,
   textual,
 }:
 
@@ -36,13 +37,17 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     cython
-    pkgs.elfutils # for `-ldebuginfod`
     pkgs.libunwind
     pkgs.lz4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkgs.elfutils # for `-ldebuginfod`
   ];
 
   dependencies = [
@@ -87,7 +92,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/bloomberg/memray/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "memray";
   };
 })

@@ -8,13 +8,13 @@
 
 with python3.pkgs;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyperkitty";
   version = "1.3.12";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
+    url = "https://gitlab.com/mailman/hyperkitty/-/releases/${finalAttrs.version}/downloads/hyperkitty-${finalAttrs.version}.tar.gz";
     hash = "sha256-3rWCk37FvJ6pwdXYa/t2pNpCm2Dh/qb9aWTnxmfPFh0=";
   };
 
@@ -94,4 +94,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ qyliss ];
   };
-}
+})

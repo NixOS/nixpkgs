@@ -187,7 +187,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://www.davisr.me/projects/rcu/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
-      OPNA2608
       m0streng0
     ];
     hydraPlatforms = [ ]; # requireFile used as src

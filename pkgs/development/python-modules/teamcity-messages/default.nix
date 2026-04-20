@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "teamcity-messages";
   version = "1.33";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "teamcity-messages";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BAwAfe54J+gbbiz03Yiu3eC/9RnI7P0mfR3nfM1oKZw=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python unit test reporting to TeamCity";
     homepage = "https://github.com/JetBrains/teamcity-messages";
-    changelog = "https://github.com/JetBrains/teamcity-messages/releases/tag/v${src.tag}";
+    changelog = "https://github.com/JetBrains/teamcity-messages/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

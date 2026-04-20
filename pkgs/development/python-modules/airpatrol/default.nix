@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "airpatrol";
   version = "0.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "antondalgren";
     repo = "airpatrol";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KPch1GsJ5my43d9SVpwGA2EmrkmeBGJWAkY51rDofTk=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

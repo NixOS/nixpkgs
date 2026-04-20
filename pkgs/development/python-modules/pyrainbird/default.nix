@@ -22,7 +22,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrainbird";
   version = "6.1.2";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "pyrainbird";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ac/QzhdfvOpqKi8tjz2Udge2+AIg/yEQBmbYCu0i/0A=";
   };
 
@@ -66,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Rainbird controllers";
     homepage = "https://github.com/allenporter/pyrainbird";
-    changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${version}";
+    changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

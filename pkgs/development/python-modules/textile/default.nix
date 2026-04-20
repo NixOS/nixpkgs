@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textile";
   version = "4.0.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "textile";
     repo = "python-textile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KVDppsvX48loV9OJ70yqmQ5ZSypzcxrjH1j31DcyfM8=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "MOdule for generating web text";
     homepage = "https://github.com/textile/python-textile";
-    changelog = "https://github.com/textile/python-textile/blob/${version}/CHANGELOG.textile";
+    changelog = "https://github.com/textile/python-textile/blob/${finalAttrs.version}/CHANGELOG.textile";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytextile";
   };
-}
+})

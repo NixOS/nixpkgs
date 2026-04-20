@@ -589,6 +589,8 @@ let
     in
     modulesPath: initialModules: args: {
       modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      # Intentionally not shared with `modules` above: this allows `collected`
+      # to be garbage collected after `filterModules` returns.
       graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
     };
 
@@ -783,7 +785,7 @@ let
     prefix: modules: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = zipAttrsWith (n: v: v) (
+      declsByName = zipAttrs (
         map (
           module:
           let
@@ -838,7 +840,7 @@ let
         ) checkedConfigs
       );
       # extract the definitions for each loc
-      rawDefinitionsByName = zipAttrsWith (n: v: v) (
+      rawDefinitionsByName = zipAttrs (
         map (
           module:
           mapAttrs (n: value: {
@@ -1439,7 +1441,7 @@ let
         def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in
     {
-      values = concatMap (def: if getPrio def == highestPrio then [ (strip def) ] else [ ]) defs;
+      values = map strip (filter (def: getPrio def == highestPrio) defs);
       inherit highestPrio;
     };
 

@@ -8,7 +8,7 @@
   napalm,
   django,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-napalm-plugin";
   version = "0.3.4";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-napalm-plugin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PdX69SS0SAeUuN2zwcv54Ooih1hyR9a19e7sc5tJvuQ=";
   };
 
@@ -45,9 +45,9 @@ buildPythonPackage rec {
   meta = {
     description = "Netbox plugin for Napalm integration";
     homepage = "https://github.com/netbox-community/netbox-napalm-plugin";
-    changelog = "https://github.com/netbox-community/netbox-napalm-plugin/releases/tag/${src.tag}";
+    changelog = "https://github.com/netbox-community/netbox-napalm-plugin/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})
