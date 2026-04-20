@@ -86,7 +86,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.52.1";
+  version = "2.52.3";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -101,7 +101,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-I459UyBbFABK3X7rQpPJTW+/cJez7+987lUZ5cEhqQQ=";
+    hash = "sha256-Wz4NF05j3MKISLEZTg50SNWUjDwkJ+zZMcLFvlJhrrs=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -117,14 +117,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
       hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
       name = "fix_ftbfs_riscv64.patch";
-    })
-
-    # Fix webkitgtk_4_1 build
-    # WebKitDOMDOMWindow.cpp:1085:10: error: variable has incomplete type 'void'
-    # https://bugs.webkit.org/show_bug.cgi?id=310915
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/40c315ca7b3ad6ae5c98d72a6927b3a75b43cb46.patch";
-      hash = "sha256-xGPi5p2XhDxpd4NtZMrd1JbHvV2fey6V3eH0fgy6ifY=";
     })
   ];
 
