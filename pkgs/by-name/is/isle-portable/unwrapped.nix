@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace packaging/macos/CMakeLists.txt \
       --replace-fail "fixup_bundle" "#fixup_bundle"
   '';

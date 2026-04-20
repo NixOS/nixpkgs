@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     vulkan-loader
     zstd
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
   ];
 

@@ -19,7 +19,7 @@ let
     {
       enableJavaFX = true;
     }
-    // lib.optionalAttrs stdenv.isLinux {
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       openjfx_jdk = openjfx21.override { withWebKit = true; };
     }
   );

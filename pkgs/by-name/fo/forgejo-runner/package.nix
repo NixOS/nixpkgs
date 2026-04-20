@@ -45,7 +45,7 @@ let
     # Timeouts
     "TestRunJob_WithConnectionFromCommandOptions"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Uses docker-specific options, unsupported on Darwin
     "TestMergeJobOptions"
   ];
