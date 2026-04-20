@@ -386,31 +386,27 @@ in
                 assertion = s3.accessKeyId != null || s3.accessKeyIdFile != null;
                 message = "${prefix}: one of repository.s3.accessKeyId or repository.s3.accessKeyIdFile must be set";
               }
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.s3.accessKeyId";
-                optionB = "repository.s3.accessKeyIdFile";
-                valueA = s3.accessKeyId;
-                valueB = s3.accessKeyIdFile;
-              })
               {
                 assertion = s3.secretAccessKey != null || s3.secretAccessKeyFile != null;
                 message = "${prefix}: one of repository.s3.secretAccessKey or repository.s3.secretAccessKeyFile must be set";
               }
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.s3.secretAccessKey";
-                optionB = "repository.s3.secretAccessKeyFile";
-                valueA = s3.secretAccessKey;
-                valueB = s3.secretAccessKeyFile;
-              })
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.s3.sessionToken";
-                optionB = "repository.s3.sessionTokenFile";
-                valueA = s3.sessionToken;
-                valueB = s3.sessionTokenFile;
-              })
+              # mutual exclusive options
+              {
+                assertion = s3.accessKeyId == null || s3.accessKeyIdFile == null;
+                message = "services.kopia.backups.${name}: repository.s3.accessKeyId and repository.s3.accessKeyIdFile are mutually exclusive";
+              }
+              {
+                assertion = s3.accessKeyId == null || s3.accessKeyIdFile == null;
+                message = "services.kopia.backups.${name}: repository.s3.accessKeyId and repository.s3.accessKeyIdFile are mutually exclusive";
+              }
+              {
+                assertion = s3.secretAccessKey == null || s3.secretAccessKeyFile == null;
+                message = "services.kopia.backups.${name}: repository.s3.secretAccessKey and repository.s3.secretAccessKeyFile are mutually exclusive";
+              }
+              {
+                assertion = s3.sessionToken == null || s3.sessionTokenFile == null;
+                message = "services.kopia.backups.${name}: repository.s3.sessionToken and repository.s3.sessionTokenFile are mutually exclusive";
+              }
             ]
           )
           ++ lib.optionals (repo ? sftp) (
@@ -418,60 +414,51 @@ in
               sftp = repo.sftp;
             in
             [
+              # assert required options
               {
                 assertion = sftp.host != null || sftp.hostFile != null;
                 message = "${prefix}: one of repository.sftp.host or repository.sftp.hostFile must be set";
               }
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.sftp.host";
-                optionB = "repository.sftp.hostFile";
-                valueA = sftp.host;
-                valueB = sftp.hostFile;
-              })
               {
                 assertion = sftp.keyFile != null || sftp.password != null || sftp.passwordFile != null;
                 message = "${prefix}: at least one of repository.sftp.keyFile, repository.sftp.password, or repository.sftp.passwordFile must be set";
               }
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.sftp.password";
-                optionB = "repository.sftp.passwordFile";
-                valueA = sftp.password;
-                valueB = sftp.passwordFile;
-              })
+
+              # assert mutualExclusion options, mainly for secret handling
+              {
+                assertion = sftp.host == null || sftp.hostFile == null;
+                message = "services.kopia.backups.${name}: repository.sftp.host and repository.sftp.hostFile are mutually exclusive";
+              }
+              {
+                assertion = sftp.password == null || sftp.passwordFile == null;
+                message = "services.kopia.backups.${name}: repository.sftp.password and repository.sftp.passwordFile are mutually exclusive";
+              }
             ]
           )
           ++ lib.optionals (repo ? webdav) (
             let
-              dav = repo.webdav;
+              webdav = repo.webdav;
             in
             [
+              # assert required options
               {
-                assertion = dav.url != null || dav.urlFile != null;
+                assertion = webdav.url != null || webdav.urlFile != null;
                 message = "${prefix}: one of repository.webdav.url or repository.webdav.urlFile must be set";
               }
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.webdav.url";
-                optionB = "repository.webdav.urlFile";
-                valueA = dav.url;
-                valueB = dav.urlFile;
-              })
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.webdav.username";
-                optionB = "repository.webdav.usernameFile";
-                valueA = dav.username;
-                valueB = dav.usernameFile;
-              })
-              (helpers.mkMutualExclusionAssertion {
-                inherit name;
-                optionA = "repository.webdav.password";
-                optionB = "repository.webdav.passwordFile";
-                valueA = dav.password;
-                valueB = dav.passwordFile;
-              })
+
+              # assert mutualExclusion options, mainly for secret handling
+              {
+                assertion = webdav.url == null || webdav.urlFile == null;
+                message = "services.kopia.backups.${name}: repository.webdav.url and repository.webdav.urlFile are mutually exclusive";
+              }
+              {
+                assertion = webdav.username == null || webdav.usernameFile == null;
+                message = "services.kopia.backups.${name}: repository.webdav.username and repository.webdav.usernameFile are mutually exclusive";
+              }
+              {
+                assertion = webdav.password == null || webdav.passwordFile == null;
+                message = "services.kopia.backups.${name}: repository.webdav.password and repository.webdav.passwordFile are mutually exclusive";
+              }
             ]
           )
         ) cfg.backups
@@ -487,40 +474,27 @@ in
             let
               s3 = repo.s3;
             in
-            helpers.mkPlainTextWarning {
-              inherit name;
-              option = "repository.s3.accessKeyId";
-              value = s3.accessKeyId;
-              fileOption = "repository.s3.accessKeyIdFile";
-            }
-            ++ helpers.mkPlainTextWarning {
-              inherit name;
-              option = "repository.s3.secretAccessKey";
-              value = s3.secretAccessKey;
-              fileOption = "repository.s3.secretAccessKeyFile";
-            }
-            ++ helpers.mkPlainTextWarning {
-              inherit name;
-              option = "repository.s3.sessionToken";
-              value = s3.sessionToken;
-              fileOption = "repository.s3.sessionTokenFile";
-            }
+
+            (lib.optional (s3.accessKeyId != null)
+              "services.kopia.backups.${name}: repository.s3.accessKeyId is set as plain text and will be world-readable in the Nix store. Consider using repository.s3.accessKeyIdFile instead."
+            )
+            ++ (lib.optional (s3.secretAccessKey != null)
+              "services.kopia.backups.${name}: repository.s3.secretAccessKey is set as plain text and will be world-readable in the Nix store. Consider using repository.s3.secretAccessKeyFile instead."
+            )
+            ++ (lib.optional (s3.sessionToken != null)
+              "services.kopia.backups.${name}: repository.s3.sessionToken is set as plain text and will be world-readable in the Nix store. Consider using repository.s3.sessionTokenFile instead."
+            )
           )
           ++ lib.optionals (repo ? sftp) (
-            helpers.mkPlainTextWarning {
-              inherit name;
-              option = "repository.sftp.password";
-              value = repo.sftp.password;
-              fileOption = "repository.sftp.passwordFile";
-            }
+
+            (lib.optional (repo.sftp.password != null)
+              "services.kopia.backups.${name}: repository.sftp.password is set as plain text and will be world-readable in the Nix store. Consider using repository.sftp.passwordFile instead."
+            )
           )
           ++ lib.optionals (repo ? webdav) (
-            helpers.mkPlainTextWarning {
-              inherit name;
-              option = "repository.webdav.password";
-              value = repo.webdav.password;
-              fileOption = "repository.webdav.passwordFile";
-            }
+            (lib.optional (repo.webdav.password != null)
+              "services.kopia.backups.${name}: repository.webdav.password is set as plain text and will be world-readable in the Nix store. Consider using repository.webdav.passwordFile instead."
+            )
           )
         ) cfg.backups
       );

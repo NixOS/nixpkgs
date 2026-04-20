@@ -21,32 +21,6 @@
     ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
   };
 
-  # Assert two options are mutually exclusive (both can be null).
-  mkMutualExclusionAssertion =
-    {
-      name,
-      optionA,
-      optionB,
-      valueA,
-      valueB,
-    }:
-    {
-      assertion = valueA == null || valueB == null;
-      message = "services.kopia.backups.${name}: ${optionA} and ${optionB} are mutually exclusive";
-    };
-
-  # Generate a warning when a plain text secret is used instead of a file reference.
-  # Returns a list with zero or one warning string.
-  mkPlainTextWarning =
-    {
-      name,
-      option,
-      value,
-      fileOption,
-    }:
-    lib.optional (value != null)
-      "services.kopia.backups.${name}: ${option} is set as plain text and will be world-readable in the Nix store. Consider using ${fileOption} instead.";
-
   hasPolicySet =
     backup:
     let

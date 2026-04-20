@@ -88,13 +88,10 @@ in
             backup.web.enable -> (backup.web.serverPassword != null || backup.web.serverPasswordFile != null);
           message = "services.kopia.backups.${name}: one of web.serverPassword or web.serverPasswordFile must be set when web.enable is true";
         }
-        (helpers.mkMutualExclusionAssertion {
-          inherit name;
-          optionA = "web.serverPassword";
-          optionB = "web.serverPasswordFile";
-          valueA = backup.web.serverPassword;
-          valueB = backup.web.serverPasswordFile;
-        })
+        {
+          assertion = backup.web.serverPassword == null || backup.web.serverPasswordFile == null;
+          message = "services.kopia.backups.${name}: web.serverPassword and web.serverPasswordFile are mutually exclusive";
+        }
         {
           assertion = (backup.web.tlsCertFile != null) == (backup.web.tlsKeyFile != null);
           message = "services.kopia.backups.${name}: both web.tlsCertFile and web.tlsKeyFile must be set";
@@ -105,12 +102,8 @@ in
     warnings = lib.flatten (
       lib.mapAttrsToList (
         name: backup:
-        helpers.mkPlainTextWarning {
-          inherit name;
-          option = "web.serverPassword";
-          value = backup.web.serverPassword;
-          fileOption = "web.serverPasswordFile";
-        }
+        lib.optional (backup.web.serverPassword != null)
+          "services.kopia.backups.${name}: web.serverPassword is set as plain text and will be world-readable in the Nix store. Consider using web.serverPasswordFile instead."
       ) cfg.backups
     );
 
