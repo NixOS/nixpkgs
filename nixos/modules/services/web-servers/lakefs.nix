@@ -179,7 +179,7 @@ in
               File containing the value for `auth.encrypt.secret_key`.
 
               When left as `null`, a random key is generated on first startup at
-              `${cfg.stateDir}/auth_encrypt_secret_key`.
+              `/var/lib/lakefs/auth_encrypt_secret_key` by default.
             '';
           };
 
@@ -191,7 +191,7 @@ in
               File containing the value for `blockstore.signing.secret_key`.
 
               When left as `null`, a random key is generated on first startup at
-              `${cfg.stateDir}/blockstore_signing_secret_key`.
+              `/var/lib/lakefs/blockstore_signing_secret_key` by default.
             '';
           };
         };
