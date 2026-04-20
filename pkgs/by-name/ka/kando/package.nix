@@ -26,16 +26,20 @@ let
 in
 buildNpmPackage.override { inherit nodejs; } rec {
   pname = "kando";
-  version = "2.1.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-x+emk0N5AL5Nfk9d1+RehdLoEvqVe5DafZL1WRPFdrc=";
+    hash = "sha256-eCR+CL3EMV3eLXzpzKFGuec3YBWDnFjNyTEHpG51PLQ=";
   };
 
-  npmDepsHash = "sha256-zbPrQpm2IgIMqGvMzj6fzEV/lV/FszfU3fnFx3kPHr4=";
+  patches = [
+    ./add-deep-link-note.patch
+  ];
+
+  npmDepsHash = "sha256-VsWmM+CSAv3yFVelFNb3kUAeh4t+k04NFXVRz4AwFkI=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -130,6 +134,7 @@ buildNpmPackage.override { inherit nodejs; } rec {
       genericName = "Pie Menu";
       comment = "The Cross-Platform Pie Menu";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/kando" ];
     })
   ];
 
