@@ -684,6 +684,7 @@ in
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
   grub = runTest ./grub.nix;
+  gs1200-exporter = handleTest ./gs1200-exporter.nix { };
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;

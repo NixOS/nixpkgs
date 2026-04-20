@@ -6590,6 +6590,12 @@
     githubId = 90097;
     name = "Derek Collison";
   };
+  DerGrumpf = {
+    email = "phil.keier@hotmail.com";
+    github = "DerGrumpf";
+    githubId = 17272572;
+    name = "Phil Keier";
+  };
   DerGuteMoritz = {
     email = "moritz@twoticketsplease.de";
     github = "DerGuteMoritz";
