@@ -63,6 +63,8 @@ let
 
     env.CI = true;
 
+    __darwinAllowLocalNetworking = true;
+
     doCheck = true;
     checkPhase = ''
       runHook preCheck
