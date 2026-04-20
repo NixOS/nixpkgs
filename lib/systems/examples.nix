@@ -243,6 +243,10 @@ rec {
     config = "arc-unknown-linux-gnu";
   };
 
+  hppa = {
+    config = "hppa-unknown-linux-gnu";
+  };
+
   s390 = {
     config = "s390-unknown-linux-gnu";
   };

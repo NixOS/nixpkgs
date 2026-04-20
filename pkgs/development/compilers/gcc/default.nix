@@ -404,6 +404,8 @@ pipe
             !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")
           ) "shadowstack"
           ++ optional (!(targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
+          # HPPA has an upward-growing stack, so -fstack-clash-protection is not supported
+          ++ optional targetPlatform.isHppa "stackclashprotection"
           ++ optionals langFortran [
             "fortify"
             "format"

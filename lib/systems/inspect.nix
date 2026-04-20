@@ -234,6 +234,11 @@ rec {
         family = "arc";
       };
     };
+    isHppa = {
+      cpu = {
+        family = "pa";
+      };
+    };
     isS390 = {
       cpu = {
         family = "s390";

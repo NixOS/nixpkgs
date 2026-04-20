@@ -305,6 +305,18 @@ stdenv.mkDerivation (
         libc_cv_c_cleanup=yes
         libc_cv_gnu89_inline=yes
         EOF
+      ''
+      # HPPA's function descriptors (plabels) cause a false positive on the
+      # alias attribute check. PIE_UNSUPPORTED was set due to a binutils bug
+      # (https://sourceware.org/bugzilla/show_bug.cgi?id=28672) fixed in 2.38;
+      # we remove it since HPPA requires position-independent code.
+      + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isHppa) ''
+        cat >> config.cache << "EOF"
+        libc_cv_broken_alias_attribute=no
+        EOF
+        sed -i 's/#define PIE_UNSUPPORTED 1//' ../sysdeps/hppa/configure
+      ''
+      + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
 
         # ./configure has logic like
         #

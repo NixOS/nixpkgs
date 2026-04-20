@@ -300,6 +300,8 @@ let
             "powerpc"
           else if final.isRiscV then
             "riscv"
+          else if final.isHppa then
+            "parisc"
           else if final.isS390 then
             "s390"
           else if final.isLoongArch64 then
