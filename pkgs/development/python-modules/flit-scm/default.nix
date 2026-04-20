@@ -6,7 +6,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flit-scm";
   version = "1.7.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "WillDaSilva";
     repo = "flit_scm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2nx9kWq/2TzauOW+c67g9a3JZ2dhBM4QzKyK/sqWOPo=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

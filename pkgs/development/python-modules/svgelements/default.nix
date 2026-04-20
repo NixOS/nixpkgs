@@ -14,7 +14,7 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "svgelements";
   version = "1.9.6";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = "svgelements";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nx2sGXeeh8S17TfRDFifQbdSxc4YGsDNnrPSSbxv7S4=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

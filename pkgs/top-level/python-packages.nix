@@ -7641,6 +7641,8 @@ self: super: with self; {
 
   ioctl-opt = callPackage ../development/python-modules/ioctl-opt { };
 
+  iocx = callPackage ../development/python-modules/iocx { };
+
   iodata = callPackage ../development/python-modules/iodata { };
 
   iometer = callPackage ../development/python-modules/iometer { };
@@ -12251,6 +12253,8 @@ self: super: with self; {
 
   pdbfixer = callPackage ../development/python-modules/pdbfixer { };
 
+  pdf-oxide = callPackage ../development/python-modules/pdf-oxide { };
+
   pdf2docx = callPackage ../development/python-modules/pdf2docx { };
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
@@ -13595,6 +13599,8 @@ self: super: with self; {
   pydantic-extra-types = callPackage ../development/python-modules/pydantic-extra-types { };
 
   pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
+
+  pydantic-monty = callPackage ../development/python-modules/pydantic-monty { };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 

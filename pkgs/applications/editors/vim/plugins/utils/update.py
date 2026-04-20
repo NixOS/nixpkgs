@@ -50,9 +50,9 @@ class VimEditor(nixpkgs_plugin_update.Editor):
         self, plugins: List[Tuple[PluginDesc, nixpkgs_plugin_update.Plugin]], outfile: str
     ):
         log.info("Generating nix code")
-        log.debug("Loading nvim-treesitter revision from nix...")
-        nvim_treesitter_rev = nixpkgs_plugin_update.run_nix_expr(
-            "(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev",
+        log.debug("Loading nvim-treesitter source reference from nix...")
+        nvim_treesitter_ref = nixpkgs_plugin_update.run_nix_expr(
+            "(let src = (import <localpkgs> { }).vimPlugins.nvim-treesitter.src; in if src.tag != null then src.tag else src.rev)",
             self.nixpkgs,
             timeout=10,
         )
@@ -93,10 +93,7 @@ class VimEditor(nixpkgs_plugin_update.Editor):
             for pdesc, plugin in plugins:
                 content = self.plugin2nix(pdesc, plugin, _isNeovimPlugin(plugin))
                 f.write(content)
-                if (
-                    plugin.name == "nvim-treesitter"
-                    and plugin.commit != nvim_treesitter_rev
-                ):
+                if plugin.name == "nvim-treesitter" and (plugin.tag or plugin.commit) != nvim_treesitter_ref:
                     self.nvim_treesitter_updated = True
             f.write("}\n")
         print(f"updated {outfile}")
