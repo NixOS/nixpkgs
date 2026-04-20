@@ -9,17 +9,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "sqlc";
-  version = "1.30.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "sqlc-dev";
     repo = "sqlc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ns0FIGu+aOuRFBYHrAqWUiYCwHE5XQqlR3AFKy5lq4E=";
+    hash = "sha256-1HQXj3rmfPyOw3Cex3jRByEwzXhcYpWpj8w4Z2Cylp8=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-jivqXwuq6wbNQFW8BlBZIKBLpIotA2MMR5iywODycpY=";
+  vendorHash = "sha256-SVc7XZERh47hhfTr9bExjZcZrNz0FO/OVEQYbPVqSWM=";
 
   subPackages = [ "cmd/sqlc" ];
 
