@@ -7,18 +7,19 @@
   python3,
   qt6Packages,
   radare2,
+  versionCheckHook,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "iaito";
-  version = "6.1.0";
+  version = "6.1.4";
 
   srcs = [
     (fetchFromGitHub {
       owner = "radareorg";
       repo = "iaito";
       tag = finalAttrs.version;
-      hash = "sha256-nvMx0zbfsphfBgxdQnk+EhRpQnJ2Qv05rF7w+zQUUQg=";
+      hash = "sha256-HKh5D96Dwo6YttWcOMlFy4H9OS3FbQvQ5RK+aOY4V5s=";
       name = "main";
     })
     (fetchFromGitHub {
@@ -78,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "Official radare2 GUI";
