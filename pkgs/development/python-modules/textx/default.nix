@@ -16,8 +16,8 @@ let
     pyproject = true;
 
     src = fetchFromGitHub {
-      owner = pname;
-      repo = pname;
+      owner = "textx";
+      repo = "textx";
       tag = version;
       hash = "sha256-2sRMMbWJN9H34zD++9T499Y4+wv5ZSSkN6xevH2fuVs=";
     };
@@ -33,7 +33,7 @@ let
 
     postInstall = ''
       # FileNotFoundError: [Errno 2] No such file or directory: '$out/lib/python3.10/site-packages/textx/textx.tx
-      cp "$src/textx/textx.tx" "$out/${python.sitePackages}/${pname}/"
+      cp "$src/textx/textx.tx" "$out/${python.sitePackages}/textx/"
 
       # Install tests as the tests output.
       mkdir $testout

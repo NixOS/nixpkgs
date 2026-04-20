@@ -8,7 +8,7 @@
   rustfmt,
   makeWrapper,
   esbuild,
-  wasm-bindgen-cli_0_2_114,
+  wasm-bindgen-cli_0_2_118,
   testers,
   dioxus-cli,
   withTelemetry ? false,
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --suffix PATH : ${
         lib.makeBinPath [
           esbuild
-          wasm-bindgen-cli_0_2_114
+          wasm-bindgen-cli_0_2_118
         ]
       }
   '';
