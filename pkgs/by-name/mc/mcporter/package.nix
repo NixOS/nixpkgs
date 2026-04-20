@@ -13,19 +13,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcporter";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "steipete";
     repo = "mcporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I7UqHsi4pw4wQB4bb8XObo4aUOVtYpF17aYzEHzgCrg=";
+    hash = "sha256-IH0jYDkmEPPvy/g5+YfkNBwG2QUMwkuVCnSeSTsNHNw=";
   };
 
+  # Fix lockfile specifier mismatch: package.json overrides vite to exact
+  # "8.0.8" but the lockfile still records specifier as "^8.0.8"
+  postPatch = ''
+    substituteInPlace pnpm-lock.yaml \
+      --replace-fail 'specifier: ^8.0.8' 'specifier: 8.0.8'
+  '';
+
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      postPatch
+      ;
     fetcherVersion = 2;
-    hash = "sha256-OJhlpKwRCE7IqstwIzj1dBJMbMyPVA/w3RVnYfjz764=";
+    hash = "sha256-dCue5Id5gcddoqoHKeB3uwxR4jtoBJx/mUzHLnb8o14=";
   };
 
   nativeBuildInputs = [
