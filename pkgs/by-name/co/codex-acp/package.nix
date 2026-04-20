@@ -1,37 +1,23 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
-  fetchurl,
   rustPlatform,
   pkg-config,
   openssl,
   libcap,
-  librusty_v8 ? fetchurl {
-    name = "librusty_v8-146.4.0";
-    url = "https://github.com/denoland/rusty_v8/releases/download/v146.4.0/librusty_v8_release_${stdenv.hostPlatform.rust.rustcTarget}.a.gz";
-    hash =
-      {
-        x86_64-linux = "sha256-5ktNmeSuKTouhGJEqJuAF4uhA4LBP7WRwfppaPUpEVM=";
-        aarch64-linux = "sha256-2/FlsHyBvbBUvARrQ9I+afz3vMGkwbW0d2mDpxBi7Ng=";
-        x86_64-darwin = "sha256-YwzSQPG77NsHFBfcGDh6uBz2fFScHFFaC0/Pnrpke7c=";
-        aarch64-darwin = "sha256-v+LJvjKlbChUbw+WWCXuaPv2BkBfMQzE4XtEilaM+Yo=";
-      }
-      .${stdenv.hostPlatform.system};
-    meta = {
-      version = "146.4.0";
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    };
-  },
+  librusty_v8 ? callPackage ./librusty_v8.nix { },
 }:
 let
   # codex-acp 0.12.0 pins openai/codex rust-v0.124.0 in Cargo.lock.
   codexRev = "e9fb49366c93a1478ec71cc41ecee415a197d036";
+  codexHash = "sha256-YFnzzwCm9/b30qLDMbkf/rEizuTjeqdCgoBZeS0wNBo=";
   codexSrc = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     rev = codexRev;
-    hash = "sha256-YFnzzwCm9/b30qLDMbkf/rEizuTjeqdCgoBZeS0wNBo=";
+    hash = codexHash;
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -72,6 +58,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doCheck = false;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "An ACP-compatible coding agent powered by Codex";
