@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.8.2";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-sqlalchemy";
     tag = "v${version}";
-    hash = "sha256-HxETZOHGfVcjopnoi8h37qanJa4pbjAmBk08u7HLRvA=";
+    hash = "sha256-6Zw8RqhhY1YGws7THRcBfatP5hCHjE07lncKlSDIIZ0=";
   };
 
   build-system = [ hatchling ];
