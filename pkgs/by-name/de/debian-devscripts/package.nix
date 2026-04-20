@@ -20,6 +20,7 @@
   help2man,
   nix-update-script,
   sendmailPath ? "/run/wrappers/bin/sendmail",
+  runCommand,
   coreutils,
   util-linux,
 }:
@@ -176,6 +177,105 @@ stdenv.mkDerivation (finalAttrs: {
       "^v([0-9.]+)$"
     ];
   };
+
+  passthru.tests.helpVersion =
+    runCommand "debian-devscripts-test-help-version"
+      {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      }
+      ''
+        export HOME=/tmp
+
+        for cmd in ${finalAttrs.finalPackage}/bin/*; do
+            echo "Running $cmd"
+
+            case "''${cmd##*/}" in
+
+            # Fails with an error from python-apt
+            debootsnap | \
+            mk-origtargz | \
+            reproducible-check)
+                ! output=$("$cmd" --help 2>&1)
+                case "$output" in
+                *'
+        apt_pkg.Error: E:Unable to determine a suitable packaging system type')
+                    ;;
+                *)
+                    "$cmd" --help
+                    ;;
+                esac
+                ! "$cmd" --version
+                ;;
+
+            # Supports neither -h, --help, nor --version
+            add-patch | \
+            archpath | \
+            debrsign | \
+            dscextract | \
+            edit-patch | \
+            list-unreleased | \
+            namecheck | \
+            salsa | \
+            svnpath)
+                ! "$cmd" -h
+                ! "$cmd" --help
+                ! "$cmd" --version
+                ;;
+
+            # Supports -h but neither --help nor --version
+            deb2apptainer | \
+            deb2docker | \
+            deb2singularity)
+               "$cmd" -h
+               ! "$cmd" --help
+               ! "$cmd" --version
+               ;;
+
+            # Supports --help but not --version
+            annotate-output | \
+            dd-list | \
+            deb-check-file-conflicts | \
+            deb-janitor | \
+            debbisect | \
+            debcheckout | \
+            debdiff-apply | \
+            debftbfs | \
+            debrebuild | \
+            debrepro | \
+            hardening-check | \
+            ltnu | \
+            origtargz | \
+            sadt | \
+            suspicious-source | \
+            who-permits-upload | \
+            wrap-and-sort)
+                "$cmd" --help
+                ! "$cmd" --version
+                ;;
+
+            # Everything else supports --help and --version
+            *)
+                "$cmd" --help
+                output=$("$cmd" --version)
+                case "$output" in
+                *'version ${finalAttrs.version}
+        '* | *'version ${finalAttrs.version}.
+        '* | *'version
+        ${finalAttrs.version} '* | *'v. ${finalAttrs.version}
+        '* | *'devscripts ${finalAttrs.version}.'* | *'(devscripts ${finalAttrs.version})'*)
+                    ;;
+                *)
+                    echo "$cmd --version did not output the expected version ${finalAttrs.version}:" >&2
+                    "$cmd" --version
+                    false
+                esac
+                ;;
+
+            esac
+        done
+
+        : >"$out"
+      '';
 
   meta = {
     description = "Debian package maintenance scripts";
