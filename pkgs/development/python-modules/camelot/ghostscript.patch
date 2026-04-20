@@ -1,0 +1,13 @@
+diff --git a/camelot/backends/ghostscript_backend.py b/camelot/backends/ghostscript_backend.py
+index 1de7da1..1179e87 100644
+--- a/camelot/backends/ghostscript_backend.py
++++ b/camelot/backends/ghostscript_backend.py
+@@ -36,7 +36,7 @@ def convert(self, pdf_path, png_path, resolution=300):
+         import ghostscript
+ 
+         gs_command = [
+-            "gs",
++            "@ghostscript@",
+             "-q",
+             "-sDEVICE=png16m",
+             "-o",

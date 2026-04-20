@@ -1,0 +1,59 @@
+diff --git a/intern/dualcon/intern/octree.cpp b/intern/dualcon/intern/octree.cpp
+index aac041848c..1544667e44 100644
+--- a/intern/dualcon/intern/octree.cpp
++++ b/intern/dualcon/intern/octree.cpp
+@@ -2183,9 +2183,7 @@
+ /* from http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257 */
+ static void pseudoInverse(const Eigen::Matrix3f &a, Eigen::Matrix3f &result, float tolerance)
+ {
+-  const int Options = Eigen::ComputeFullU | Eigen::ComputeFullV;
+-  Eigen::JacobiSVD<Eigen::Matrix3f, Options> svd = a.jacobiSvd<Options>();
+-
++  Eigen::JacobiSVD<Eigen::Matrix3f> svd = a.jacobiSvd(Eigen::ComputeFullU | Eigen::ComputeFullV);
+   result = svd.matrixV() *
+            Eigen::Vector3f((svd.singularValues().array().abs() > tolerance)
+                                .select(svd.singularValues().array().inverse(), 0))
+diff --git a/intern/libmv/libmv/multiview/euclidean_resection.cc b/intern/libmv/libmv/multiview/euclidean_resection.cc
+index 7d20e9d518..7b3144991c 100644
+--- a/intern/libmv/libmv/multiview/euclidean_resection.cc
++++ b/intern/libmv/libmv/multiview/euclidean_resection.cc
+@@ -107,7 +107,7 @@
+ 
+   // Find the unit quaternion q that maximizes qNq. It is the eigenvector
+   // corresponding to the lagest eigenvalue.
+-  Vec4 q = N.jacobiSvd<Eigen::ComputeFullU>().matrixU().col(0);
++  Vec4 q = N.jacobiSvd(Eigen::ComputeFullU).matrixU().col(0);
+ 
+   // Retrieve the 3x3 rotation matrix.
+   Vec4 qq = q.array() * q.array();
+@@ -246,7 +246,7 @@
+   }
+ 
+   int num_lambda = num_points + 1;  // Dimension of the null space of M.
+-  Mat V = M.jacobiSvd<Eigen::ComputeFullV>().matrixV().block(
++  Mat V = M.jacobiSvd(Eigen::ComputeFullU).matrixV().block(
+       0, num_m_rows, num_m_columns, num_lambda);
+ 
+   // TODO(vess): The number of constraint equations in K (num_k_rows) must be
+@@ -303,7 +303,7 @@
+     }
+   }
+   Vec L_sq =
+-      K.jacobiSvd<Eigen::ComputeFullV>().matrixV().col(num_k_columns - 1);
++      K.jacobiSvd(Eigen::ComputeFullU).matrixV().col(num_k_columns - 1);
+ 
+   // Pivot on the largest element for numerical stability. Afterwards recover
+   // the sign of the lambda solution.
+diff --git a/intern/libmv/libmv/tracking/track_region.cc b/intern/libmv/libmv/tracking/track_region.cc
+index ec808ac9ac..620367a455 100644
+--- a/intern/libmv/libmv/tracking/track_region.cc
++++ b/intern/libmv/libmv/tracking/track_region.cc
+@@ -940,7 +940,7 @@
+     }
+ 
+     // TODO(keir): Check solution quality.
+-    Vec4 a = Q1.jacobiSvd<Eigen::ComputeThinU | Eigen::ComputeThinV>().solve(Q2);
++    Vec4 a = Q1.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Q2);
+     parameters[2] = a[0];
+     parameters[3] = a[1];
+     parameters[4] = a[2];

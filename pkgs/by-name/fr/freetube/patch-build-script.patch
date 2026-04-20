@@ -1,0 +1,13 @@
+diff --git a/_scripts/ebuilder.config.mjs b/_scripts/ebuilder.config.mjs
+index bef1f6f1d..d2ee86611 100644
+--- a/_scripts/ebuilder.config.mjs
++++ b/_scripts/ebuilder.config.mjs
+@@ -2,6 +2,8 @@ import packageDetails from '../package.json' with { type: 'json' }
+ 
+ /** @type {import('electron-builder').Configuration} */
+ export default {
++  electronVersion: "@electron-version@",
++  electronDist: "electron-dist",
+   appId: `io.freetubeapp.${packageDetails.name}`,
+   copyright: 'Copyleft © 2020-2026 freetubeapp@protonmail.com',
+   // asar: false,

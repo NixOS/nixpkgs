@@ -1,0 +1,10 @@
+--- ./build_ui.sh	2025-10-22 23:32:08.739188520 +0100
++++ ./build_ui.sh	2025-10-22 23:32:23.753242986 +0100
+@@ -50,7 +50,6 @@ for i in "$@"; do
+   case ${i} in
+   --all)
+     buildModule
+-    buildReactApp
+     buildMantineUI
+     shift
+     ;;

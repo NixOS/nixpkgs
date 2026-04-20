@@ -1,0 +1,44 @@
+diff --git a/wandb/cli/cli.py b/wandb/cli/cli.py
+index a87b17c96..21c851992 100644
+--- a/wandb/cli/cli.py
++++ b/wandb/cli/cli.py
+@@ -2672,7 +2672,7 @@ def restore(ctx, run, no_git, branch, project, entity):
+     commit, json_config, patch_content, metadata = api.run_config(
+         project, run=run, entity=entity
+     )
+-    repo = metadata.get("git", {}).get("repo")
++    repo = metadata.get("@git@", {}).get("repo")
+     image = metadata.get("docker")
+     restore_message = f"""`wandb restore` needs to be run from the same git repository as the original run.
+ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+@@ -2691,7 +2691,7 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+ 
+     if commit and git.enabled:
+         wandb.termlog(f"Fetching origin and finding commit: {commit}")
+-        subprocess.check_call(["git", "fetch", "--all"])
++        subprocess.check_call(["@git@", "fetch", "--all"])
+         try:
+             git.repo.commit(commit)
+         except ValueError:
+@@ -2744,7 +2744,7 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+             # --reject is necessary or else this fails any time a binary file
+             # occurs in the diff
+             exit_code = subprocess.call(
+-                ["git", "apply", "--reject", patch_rel_path], cwd=root
++                ["@git@", "apply", "--reject", patch_rel_path], cwd=root
+             )
+             if exit_code == 0:
+                 wandb.termlog("Applied patch")
+diff --git a/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py b/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py
+index 47d439145..16118feb0 100644
+--- a/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py
++++ b/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py
+@@ -69,7 +69,7 @@ def get_git_changeset():
+     repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+     try:
+         git_log = subprocess.Popen(
+-            "git log --pretty=format:%ct --quiet -1 HEAD",
++            "@git@ log --pretty=format:%ct --quiet -1 HEAD",
+             stdout=subprocess.PIPE,
+             stderr=subprocess.PIPE,
+             shell=True,

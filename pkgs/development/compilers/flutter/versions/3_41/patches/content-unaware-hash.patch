@@ -1,0 +1,12 @@
+--- a/bin/internal/content_aware_hash.sh
++++ b/bin/internal/content_aware_hash.sh
+@@ -13,6 +13,9 @@
+ 
+ set -e
+ 
++echo '0000000000000000000000000000000000000000'
++exit 0
++
+ FLUTTER_ROOT="$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")"
+ 
+ unset GIT_DIR

@@ -1,0 +1,22 @@
+diff --git i/app/CMakeLists.txt w/app/CMakeLists.txt
+index 1ab415ea..23792435 100644
+--- i/app/CMakeLists.txt
++++ w/app/CMakeLists.txt
+@@ -872,17 +872,6 @@ elseif(WIN32)
+   set(deploy_tool_options_arg "-force-openssl --release --no-translations --no-compiler-runtime")
+ endif()
+ 
+-qt_generate_deploy_qml_app_script(
+-  TARGET ${PROJECT_EXECUTABLE}
+-  OUTPUT_SCRIPT deploy_script
+-  MACOS_BUNDLE_POST_BUILD
+-  NO_UNSUPPORTED_PLATFORM_ERROR
+-  DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+-  DEPLOY_TOOL_OPTIONS ${deploy_tool_options_arg}
+-)
+-
+-install(SCRIPT ${deploy_script})
+-
+ #---------------------------------------------------------------------------------------------------
+ # CPack installer/package generation
+ #---------------------------------------------------------------------------------------------------

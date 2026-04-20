@@ -1,0 +1,27 @@
+From 3c0038576173103e8aaa5286f853046b619c35fe Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 04/18] Removed unused `Blob::clone` method
+
+Fixes a compiler error due to a missing `BlobCore::clone` method.
+---
+ src/ld/code-sign-blobs/blob.h | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/ld/code-sign-blobs/blob.h b/src/ld/code-sign-blobs/blob.h
+index 19c63a9..2ac0aa8 100644
+--- a/src/ld/code-sign-blobs/blob.h
++++ b/src/ld/code-sign-blobs/blob.h
+@@ -179,9 +179,6 @@ public:
+ 			return p;
+ 		return NULL;
+ 	}
+-	
+-	BlobType *clone() const
+-	{ assert(validateBlob()); return specific(this->BlobCore::clone());	}
+ 
+ 	static BlobType *readBlob(int fd)
+ 	{ return specific(BlobCore::readBlob(fd, _magic, sizeof(BlobType), 0), true); }
+-- 
+2.47.2
+

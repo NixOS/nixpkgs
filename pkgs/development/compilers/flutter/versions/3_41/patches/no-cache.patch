@@ -1,0 +1,51 @@
+--- a/packages/flutter_tools/lib/src/cache.dart
++++ b/packages/flutter_tools/lib/src/cache.dart
+@@ -318,7 +319,7 @@
+   var fatalStorageWarning = true;
+ 
+   static RandomAccessFile? _lock;
+-  static var _lockEnabled = true;
++  static var _lockEnabled = false;
+ 
+   /// Turn off the [lock]/[releaseLock] mechanism.
+   ///
+@@ -721,7 +722,6 @@
+   }
+ 
+   void setStampFor(String artifactName, String version) {
+-    getStampFileFor(artifactName).writeAsStringSync(version);
+   }
+ 
+   File getStampFileFor(String artifactName) {
+@@ -1010,31 +1010,6 @@
+   }
+ 
+   Future<bool> checkForArtifacts(String? engineVersion) async {
+-    engineVersion ??= version;
+-    final url = '${cache.storageBaseUrl}/flutter_infra_release/flutter/$engineVersion/';
+-
+-    var exists = false;
+-    for (final String pkgName in getPackageDirs()) {
+-      exists = await cache.doesRemoteExist(
+-        'Checking package $pkgName is available...',
+-        Uri.parse('$url$pkgName.zip'),
+-      );
+-      if (!exists) {
+-        return false;
+-      }
+-    }
+-
+-    for (final List<String> toolsDir in getBinaryDirs()) {
+-      final String cacheDir = toolsDir[0];
+-      final String urlPath = toolsDir[1];
+-      exists = await cache.doesRemoteExist(
+-        'Checking $cacheDir tools are available...',
+-        Uri.parse(url + urlPath),
+-      );
+-      if (!exists) {
+-        return false;
+-      }
+-    }
+     return true;
+   }
+ 

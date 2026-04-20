@@ -1,0 +1,198 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  filelock,
+  freeze-core,
+  packaging,
+
+  distutils,
+  ncurses,
+  patchelf,
+  dmgbuild,
+
+  # tests
+  anyio,
+  bcrypt,
+
+  python,
+  pytest-mock,
+  pytestCheckHook,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage rec {
+  pname = "cx-freeze";
+  version = "8.5.3";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "marcelotduarte";
+    repo = "cx_Freeze";
+    tag = version;
+    hash = "sha256-tV2i0o6D/Cz0ePYgJN+c4VgMkhVhO/2xhPX8vsasFPs=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<81" "setuptools"
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  buildInputs = [ ncurses ];
+
+  pythonRelaxDeps = [ "setuptools" ];
+
+  pythonRemoveDeps = [ "patchelf" ];
+
+  dependencies = [
+    distutils
+    filelock
+    freeze-core
+    packaging
+    setuptools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    dmgbuild
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ patchelf ])
+  ];
+
+  pythonImportsCheck = [
+    "cx_Freeze"
+  ];
+
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/cxfreeze";
+
+  preCheck = ''
+    rm -rf cx_Freeze
+
+    substituteInPlace tests/conftest.py \
+      --replace-fail \
+        "Path(pytest.__file__).parent.parent.relative_to(prefix).as_posix()" \
+        "'python/lib/python${lib.versions.majorMinor python.version}/site-packages/'"
+  '';
+
+  disabledTests = [
+    # Require internet access
+    "test_bdist_appimage_download_appimagetool"
+    "test_bdist_appimage_target_name"
+    "test_bdist_appimage_target_name_and_version"
+    "test_bdist_appimage_target_name_and_version_none"
+    "test_bdist_appimage_download_runtime"
+
+    # Try to install a module: ValueError: ZIP does not support timestamps before 1980
+    "test___main__"
+    "test_bdist_appimage_simple"
+    "test_bdist_appimage_skip_build"
+    "test_bdist_deb_simple_pyproject"
+    "test_bdist_rpm_simple_pyproject"
+    "test_build"
+    "test_build_constants"
+    "test_build_exe_advanced"
+    "test_build_exe_asmodule"
+    "test_ctypes"
+    "test_cxfreeze"
+    "test_cxfreeze_debug_verbose"
+    "test_cxfreeze_deprecated_behavior"
+    "test_cxfreeze_deprecated_option"
+    "test_cxfreeze_include_path"
+    "test_cxfreeze_target_name_not_isidentifier"
+    "test_excludes"
+    "test_executable_namespace"
+    "test_executable_rename"
+    "test_executables"
+    "test_freezer_zip_filename"
+    "test_install"
+    "test_install_pyproject"
+    "test_multiprocessing"
+    "test_not_found_icon"
+    "test_parser"
+    "test_sqlite"
+    "test_ssl"
+    "test_tz"
+    "test_valid_icon"
+    "test_zip_exclude_packages"
+    "test_zip_include_packages"
+
+    # Permission denied .lock
+    "test_anyio"
+    "test_av"
+    "test_argon2"
+    "test_bcrypt"
+    "test_crypto"
+    "test_cryptography"
+    "test_multiprocess"
+    "test_matplotlib"
+    "test_pandas"
+    "test_rasterio"
+    "test_shapely"
+    "test_vtk"
+    "test_ortools"
+    "test_pillow"
+    "test_pyarrow"
+    "test_pymupdf"
+    "test_pyproj"
+    "test_pytz"
+    "test_pyzmq"
+    "test_qt"
+    "test_scipy"
+    "test_skimage"
+    "test_sklearn"
+    "test_setuptools"
+    "test_zoneinfo"
+    "test_zoneinfo_and_tzdata"
+    "test_zeroconf"
+    "test_zstd"
+    "test_bdist_appimage_implicit_skip_build"
+    "test_bdist_deb_simple"
+    "test_bdist_deb"
+    "test_bdist_rpm_simple"
+    "test_bdist_rpm"
+    "test_verify_patchelf_older"
+    "test_egg_info"
+    "test_editable_packages"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # error: Path /nix/store/xzjghvsg4fhr2vv6h4scihsdrgk4i76w-python3-3.12.9/lib/libpython3.12.dylib
+    # is not a path referenced from DarwinFile
+    "test_bdist_dmg"
+    "test_bdist_dmg_custom_layout"
+    "test_bdist_mac"
+    "test_plist_items"
+
+    # AssertionError: assert names != []
+    "test_freezer_default_bin_includes"
+  ];
+
+  meta = {
+    description = "Set of scripts and modules for freezing Python scripts into executables";
+    homepage = "https://marcelotduarte.github.io/cx_Freeze";
+    changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${src.tag}";
+    license = lib.licenses.psfl;
+    maintainers = [ ];
+    mainProgram = "cxfreeze";
+  };
+}

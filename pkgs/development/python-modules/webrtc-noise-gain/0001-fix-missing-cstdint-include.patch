@@ -1,0 +1,24 @@
+From 54b34a4a58d305ad9f40aceaf333486bc4e59706 Mon Sep 17 00:00:00 2001
+From: Alex Martens <alex@thinglab.org>
+Date: Tue, 7 Apr 2026 19:56:25 -0700
+Subject: [PATCH] Fix missing cstdint include in task_queue_base.h
+
+---
+ .../webrtc-audio-processing-1/api/task_queue/task_queue_base.h   | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/webrtc-audio-processing/webrtc-audio-processing-1/api/task_queue/task_queue_base.h b/webrtc-audio-processing/webrtc-audio-processing-1/api/task_queue/task_queue_base.h
+index 90b1efd..7403ee9 100644
+--- a/webrtc-audio-processing/webrtc-audio-processing-1/api/task_queue/task_queue_base.h
++++ b/webrtc-audio-processing/webrtc-audio-processing-1/api/task_queue/task_queue_base.h
+@@ -11,6 +11,7 @@
+ #define API_TASK_QUEUE_TASK_QUEUE_BASE_H_
+ 
+ #include <memory>
++#include <cstdint>
+ 
+ #include "api/task_queue/queued_task.h"
+ #include "rtc_base/system/rtc_export.h"
+-- 
+2.53.0
+
