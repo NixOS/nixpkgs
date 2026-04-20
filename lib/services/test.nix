@@ -5,12 +5,14 @@ let
 
   inherit (lib) mkOption types;
 
-  portable-lib = import ./lib.nix { inherit lib; };
+  portable-lib = lib.services;
 
   configured = portable-lib.configure {
-    serviceManagerPkgs = throw "do not use pkgs in this test";
-    extraRootModules = [ ];
-    extraRootSpecialArgs = { };
+    baseModules = [
+      (lib.modules.importApply ./service.nix {
+        pkgs = throw "do not use pkgs in this test";
+      })
+    ];
   };
 
   dummyPkg =

@@ -15,7 +15,7 @@ let
     mapAttrsToList
     ;
 
-  portable-lib = import ../../../../../lib/services/lib.nix { inherit lib; };
+  portable-lib = lib.services;
 
   dash =
     before: after:
@@ -61,7 +61,9 @@ let
     ) service.services;
 
   modularServiceConfiguration = portable-lib.configure {
-    serviceManagerPkgs = pkgs;
+    baseModules = [
+      (lib.modules.importApply ../../../../../lib/services/service.nix { inherit pkgs; })
+    ];
     extraRootModules = [
       ./service.nix
       ./config-data-path.nix

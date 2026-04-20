@@ -43,9 +43,9 @@ rec {
 
     # Inputs
 
-    `serviceManagerPkgs`: A Nixpkgs instance which will be used for built-in logic such as converting `configData.<path>.text` to a store path.
+    `baseModules`: The portable service base modules (typically `service.nix` via `importApply`). These are loaded into the "root" service submodule and must handle propagation to sub-`services` themselves.
 
-    `extraRootModules`: Modules to be loaded into the "root" service submodule, but not into its sub-`services`. That's the modules' own responsibility.
+    `extraRootModules`: Additional modules to be loaded into the "root" service submodule, but not into its sub-`services`. That's the modules' own responsibility.
 
     `extraRootSpecialArgs`: Fixed module arguments that are provided in a similar manner to `extraRootModules`.
 
@@ -57,17 +57,14 @@ rec {
   */
   configure =
     {
-      serviceManagerPkgs,
+      baseModules ? [ ],
       extraRootModules ? [ ],
       extraRootSpecialArgs ? { },
     }:
     let
-      modules = [
-        (lib.modules.importApply ./service.nix { pkgs = serviceManagerPkgs; })
-      ];
       serviceSubmodule = types.submoduleWith {
         class = "service";
-        modules = modules ++ extraRootModules;
+        modules = baseModules ++ extraRootModules;
         specialArgs = extraRootSpecialArgs;
       };
     in
