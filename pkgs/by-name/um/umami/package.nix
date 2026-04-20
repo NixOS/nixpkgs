@@ -42,36 +42,40 @@ let
 
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
-  prisma-engines' = prisma-engines_7.overrideAttrs (old: rec {
-    version = "7.6.0";
-    src = fetchFromGitHub {
-      owner = "prisma";
-      repo = "prisma-engines";
-      tag = version;
-      hash = "sha256-NMoAaiTa68i51lR6iMCyHyCAsFuuhPx2+tHFSSoqWqA=";
-    };
-    cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
+  prisma-engines' = prisma-engines_7.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "7.6.0";
+      src = fetchFromGitHub {
+        owner = "prisma";
+        repo = "prisma-engines";
+        tag = finalAttrs.version;
+        hash = "sha256-NMoAaiTa68i51lR6iMCyHyCAsFuuhPx2+tHFSSoqWqA=";
+      };
+      cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
 
-    cargoDeps = rustPlatform.fetchCargoVendor {
-      inherit (old) pname;
-      inherit src version;
-      patches = old.cargoDeps.vendorStaging.patches or [ ];
-      hash = cargoHash;
-    };
-  });
-  prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (old: rec {
-    version = "7.6.0";
-    src = fetchFromGitHub {
-      owner = "prisma";
-      repo = "prisma";
-      tag = version;
-      hash = "sha256-BesX2ySfgew6+9Q6fnhZ8gMnnxh4D4fefaA5BhehlHE=";
-    };
-    pnpmDeps = old.pnpmDeps.override {
-      inherit src version;
-      hash = "sha256-ZOpNt+W5b1troicfkCi4wCCDtwhTB4VlPgxYMZetcs0=";
-    };
-  });
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (prevAttrs) pname;
+        inherit (finalAttrs) src version;
+        patches = prevAttrs.cargoDeps.vendorStaging.patches or [ ];
+        hash = finalAttrs.cargoHash;
+      };
+    }
+  );
+  prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "7.6.0";
+      src = fetchFromGitHub {
+        owner = "prisma";
+        repo = "prisma";
+        tag = finalAttrs.version;
+        hash = "sha256-BesX2ySfgew6+9Q6fnhZ8gMnnxh4D4fefaA5BhehlHE=";
+      };
+      pnpmDeps = prevAttrs.pnpmDeps.override {
+        inherit (finalAttrs) src version;
+        hash = "sha256-ZOpNt+W5b1troicfkCi4wCCDtwhTB4VlPgxYMZetcs0=";
+      };
+    }
+  );
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
