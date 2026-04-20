@@ -6099,7 +6099,6 @@ with pkgs;
       callPackage ../os-specific/linux/bionic-prebuilt { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost177
     boost178
     boost179
     boost180
