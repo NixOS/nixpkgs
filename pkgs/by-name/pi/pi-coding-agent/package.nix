@@ -85,7 +85,10 @@ buildNpmPackage (finalAttrs: {
     downloadPage = "https://www.npmjs.com/package/@mariozechner/pi-coding-agent";
     changelog = "https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ munksgaard ];
+    maintainers = with lib.maintainers; [
+      munksgaard
+      bryanhonof
+    ];
     mainProgram = "pi";
   };
 })
