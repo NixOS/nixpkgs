@@ -11729,13 +11729,6 @@ with pkgs;
 
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
-  maxima = callPackage ../applications/science/math/maxima {
-    lisp-compiler = sbcl;
-  };
-  maxima-ecl = maxima.override {
-    lisp-compiler = ecl;
-  };
-
   yacas-gui = yacas.override {
     enableGui = true;
     enableJupyter = false;

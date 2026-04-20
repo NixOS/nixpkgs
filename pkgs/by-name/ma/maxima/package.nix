@@ -8,10 +8,11 @@
   python3,
   makeWrapper,
   autoreconfHook,
+  sbcl,
   rlwrap ? null,
   tk ? null,
   gnuplot ? null,
-  lisp-compiler,
+  lisp-compiler ? sbcl,
 }:
 
 let
