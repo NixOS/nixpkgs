@@ -7738,7 +7738,6 @@ with pkgs;
       else
         stdenv;
   };
-  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { };
 
   conky = callPackage ../os-specific/linux/conky (
     {
