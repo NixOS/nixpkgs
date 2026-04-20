@@ -90,6 +90,7 @@
   # tests
   pytestCheckHook,
   pytest-cov-stub,
+  pytest-factoryboy,
   pytest-flask,
   mock,
   rarfile,
@@ -112,12 +113,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.9.0";
+  version = "2.10.0";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dJhWKZwhKXyFQVO9xt2v/NSa7bSg0e78zga/t9dlTyE=";
+    hash = "sha256-DbZV8n+2nbILLIi7niXohcIynwza+w5LVo/jy4wmTbw=";
   };
   pyproject = true;
 
@@ -181,6 +182,7 @@ buildPythonPackage (finalAttrs: {
     ffmpeg
     pytestCheckHook
     pytest-cov-stub
+    pytest-factoryboy
     pytest-flask
     mock
     rarfile
