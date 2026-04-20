@@ -2694,7 +2694,6 @@ dont-distribute-packages:
  - postgresql-common-persistent
  - postgresql-pure
  - postgresql-simple-ltree
- - postgresql-simple-postgresql-types
  - postgresql-simple-queue
  - postgresql-simple-typed
  - postgresql-tx-query
