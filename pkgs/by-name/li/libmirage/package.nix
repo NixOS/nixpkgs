@@ -17,6 +17,7 @@
   libsepol,
   fetchurl,
   lib,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +57,20 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     libsepol
   ];
+
+  passthru = {
+    updateScript = writeScript "update-libmirage" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Fetch the latest version from the SourceForge RSS feed for libmirage
+      newVersion="$(curl -s "https://sourceforge.net/projects/cdemu/rss?path=/libmirage" | pcre2grep -o1 'libmirage-([0-9.]+)\.tar\.xz' | head -n 1)"
+
+      update-source-version libmirage "$newVersion"
+    '';
+  };
 
   meta = {
     maintainers = with lib.maintainers; [ bendlas ];
