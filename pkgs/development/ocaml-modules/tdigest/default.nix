@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "SGrondin";
-    repo = pname;
+    repo = "tdigest";
     rev = version;
     sha256 = "sha256-faJ8ZQ7AWDHWfyQ2jq6+8TMe4G4NLjqHxYzLzt2LGh4=";
   };
@@ -31,7 +31,7 @@ buildDunePackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/SGrondin/${pname}";
+    homepage = "https://github.com/SGrondin/tdigest";
     description = "OCaml implementation of the T-Digest algorithm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ niols ];

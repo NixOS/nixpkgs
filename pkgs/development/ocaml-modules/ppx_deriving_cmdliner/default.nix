@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "hammerlab";
-    repo = pname;
+    repo = "ppx_deriving_cmdliner";
     rev = "v${version}";
     sha256 = "sha256-/22KLQnxu3e2ZSca6ZLxTJDfv/rsmgCUkJnZC0RwRi8";
   };

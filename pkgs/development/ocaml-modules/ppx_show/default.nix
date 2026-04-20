@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "thierry-martinez";
-    repo = pname;
+    repo = "ppx_show";
     rev = "v${version}";
     sha256 = "sha256-YwWAdOtb0zg2hqNkGRiigz/Pci8Jy/QD+WyUEohEsns=";
   };
@@ -23,7 +23,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/thierry-martinez/${pname}";
+    homepage = "https://github.com/thierry-martinez/ppx_show";
     description = "OCaml PPX deriver for deriving show based on ppxlib";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ niols ];

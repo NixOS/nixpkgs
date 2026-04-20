@@ -11,7 +11,7 @@ buildDunePackage rec {
 
   src = fetchFromGitLab {
     owner = "gadmm";
-    repo = pname;
+    repo = "memprof-limits";
     rev = "v${version}";
     hash = "sha256-Pmuln5TihPoPZuehZlqPfERif6lf7O+0454kW9y3aKc=";
   };

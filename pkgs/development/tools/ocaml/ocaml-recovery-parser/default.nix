@@ -18,7 +18,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "serokell";
-    repo = pname;
+    repo = "ocaml-recovery-parser";
     rev = version;
     sha256 = "gOKvjmlcHDOgsTllj2sPL/qNtW/rlNlEVIrosahNsAQ=";
   };

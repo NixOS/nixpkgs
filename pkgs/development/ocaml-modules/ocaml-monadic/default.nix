@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "zepalmer";
-    repo = pname;
+    repo = "ocaml-monadic";
     rev = version;
     sha256 = "1ynv3yhdqmkhkgnz6c5kv6ryjcc934sdvw9rhh8rjg2dlzlffgbw";
   };

@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "Lysxia";
-    repo = pname;
+    repo = "pure-splitmix";
     rev = version;
     sha256 = "RUnsAB4hMV87ItCyGhc47bHGY1iOwVv9kco2HxnzqbU=";
   };
