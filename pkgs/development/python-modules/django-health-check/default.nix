@@ -2,16 +2,22 @@
   lib,
   stdenv,
   buildPythonPackage,
+  celery,
   fetchFromGitHub,
   flit-core,
   flit-scm,
   pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
+  redis,
   psutil,
   dnspython,
   pytest-asyncio,
   libredirect,
+  confluent-kafka,
+  aio-pika,
+  httpx,
+  feedparser,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +40,19 @@ buildPythonPackage rec {
   dependencies = [
     dnspython
   ];
+
+  optional-dependencies = {
+    psutil = [ psutil ];
+    celery = [ celery ];
+    kafka = [ confluent-kafka ];
+    rabbitmq = [ aio-pika ];
+    redis = [ redis ];
+    rss = [
+      httpx
+      feedparser
+    ];
+    atlassian = [ httpx ];
+  };
 
   nativeCheckInputs = [
     pytest-cov-stub
