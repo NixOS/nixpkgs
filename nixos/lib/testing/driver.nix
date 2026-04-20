@@ -36,7 +36,7 @@ let
   theOnlyMachine =
     let
       exactlyOneMachine = lib.length (lib.attrValues config.nodes) == 1;
-      allMachineNames = map (c: c.system.name) (lib.attrValues config.allMachines);
+      allMachineNames = lib.attrNames config.allMachines;
     in
     lib.optional (exactlyOneMachine && !lib.elem "machine" allMachineNames) "machine";
 
