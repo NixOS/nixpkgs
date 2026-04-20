@@ -403,8 +403,6 @@ with pkgs;
 
   enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
 
-  inherit (gridlock) nyarr;
-
   lshw-gui = lshw.override { withGUI = true; };
 
   kdePackages = callPackage ../kde { };
