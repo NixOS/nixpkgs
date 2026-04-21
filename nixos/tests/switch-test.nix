@@ -776,6 +776,9 @@ in
           assert_contains(out, "baz")
           # Confirm that we can set that same generation as the new boot default
           switch_to_specialisation("${machine}", "inhibitors_changed", action="boot")
+          # Confirm that dry-activate is not blocked by inhibitors
+          out = switch_to_specialisation("${machine}", "inhibitors_changed", action="dry-activate")
+          assert_contains(out, "Not checking switch inhibitors")
           # Check that we can switch into a new generation with new inhibitors, but same values for existing ones
           switch_to_specialisation("${machine}", "inhibitors_new", action="switch")
           # Check that we can switch back into a generation without inhibitors
