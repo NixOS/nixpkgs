@@ -8451,8 +8451,6 @@ with pkgs;
 
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
 
-  drbd = callPackage ../os-specific/linux/drbd/utils.nix { };
-
   # unstable until the first 1.x release
   fwts = callPackage ../os-specific/linux/fwts { };
 
