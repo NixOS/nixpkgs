@@ -1746,6 +1746,7 @@
   ./services/web-apps/freescout.nix
   ./services/web-apps/freshrss.nix
   ./services/web-apps/froide-govplan.nix
+  ./services/web-apps/funkwhale.nix
   ./services/web-apps/galene-stt.nix
   ./services/web-apps/galene.nix
   ./services/web-apps/gancio.nix
