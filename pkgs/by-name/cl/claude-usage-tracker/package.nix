@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hamed-elfayome/Claude-Usage-Tracker";
     changelog = "https://github.com/hamed-elfayome/Claude-Usage-Tracker/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-darwin", "x86_64-darwin" ];
+    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ myzel394 ];
   };
