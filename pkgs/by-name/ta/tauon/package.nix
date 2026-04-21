@@ -48,14 +48,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "8.2.2";
+  version = "9.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-d7bEC68ZJthJE/AlcUqBSNM4L4YAjwHXTiWDCtKf598=";
+    hash = "sha256-Z/+8UCtwvY9000b1Y+HaTIehK8axzyR+eeeBPhllS4U=";
   };
 
   postUnpack = ''
@@ -74,6 +74,8 @@ python3Packages.buildPythonApplication rec {
   pythonRemoveDeps = [
     "opencc"
     "tekore"
+    # Whether or not it is enabled (withDiscordRPC), it isn't present during build.
+    "pypresence"
   ];
 
   nativeBuildInputs = [
@@ -101,6 +103,7 @@ python3Packages.buildPythonApplication rec {
     opusfile
     pango
     pipewire
+    python3Packages.pyopengl
     wavpack
   ];
 
@@ -121,6 +124,7 @@ python3Packages.buildPythonApplication rec {
       pychromecast
       pylast
       pygobject3
+      pyopengl
       pysdl3
       requests
       send2trash
