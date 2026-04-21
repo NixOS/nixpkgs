@@ -11137,8 +11137,7 @@ with pkgs;
     enableServer = true;
   };
 
-  minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
-  minecraft-server = minecraftServers.vanilla; # backwards compatibility
+  minecraft-server = pkgs.minecraftServers.vanilla; # backwards compatibility
 
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
