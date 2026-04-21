@@ -78,8 +78,8 @@ let
             name = "acme";
             owner = "nginx";
             repo = "nginx-acme";
-            tag = "v0.3.1";
-            hash = "sha256-0oxpEI/+vQFgavjieqtgTabem78Y9ibCu/gK41tlaco=";
+            tag = "v0.4.0";
+            hash = "sha256-FWb+4JxWcD10ruAdJNj+x3YAFN5DBK9y8PL62sJBy4Y=";
           };
           combined =
             runCommand "vendored-repo"
