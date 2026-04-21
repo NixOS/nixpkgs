@@ -263,6 +263,7 @@ let
     ++ formatFreeform { prefix = "auth_opt_"; } plugin.options;
 
   freeformListenerKeys = {
+    accept_protocol_versions = 1;
     allow_anonymous = 1;
     allow_zero_length_clientid = 1;
     auto_id_prefix = 1;
@@ -274,13 +275,18 @@ let
     "ciphers_tls1.3" = 1;
     crlfile = 1;
     dhparamfile = 1;
+    disable_client_cert_date_checks = 1;
+    enable_proxy_protocol = 1;
     http_dir = 1;
     keyfile = 1;
+    listener_allow_anonymous = 1;
+    listener_auto_id_prefix = 1;
     max_connections = 1;
     max_qos = 1;
     max_topic_alias = 1;
     mount_point = 1;
     protocol = 1;
+    proxy_protocol_v2_require_tls = 1;
     psk_file = 1;
     psk_hint = 1;
     require_certificate = 1;
@@ -292,6 +298,7 @@ let
     use_identity_as_username = 1;
     use_subject_as_username = 1;
     use_username_as_clientid = 1;
+    websockets_origin = 1;
   };
 
   listenerOptions =
@@ -413,7 +420,11 @@ let
     bridge_outgoing_retain = 1;
     bridge_protocol_version = 1;
     bridge_psk = 1;
+    bridge_receive_maximum = 1;
+    bridge_reload_type = 1;
     bridge_require_ocsp = 1;
+    bridge_session_expiry_interval = 1;
+    bridge_tls_use_os_certs = 1;
     bridge_tls_version = 1;
     cleansession = 1;
     idle_timeout = 1;
@@ -512,6 +523,9 @@ let
     autosave_on_changes = 1;
     check_retain_source = 1;
     connection_messages = 1;
+    enable_control_api = 1;
+    global_max_clients = 1;
+    global_max_connections = 1;
     log_facility = 1;
     log_timestamp = 1;
     log_timestamp_format = 1;
