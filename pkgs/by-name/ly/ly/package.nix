@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Denable_x11_support=${lib.boolToString x11Support}"
   ];
 
+  postInstall = ''
+    install -Dm0644 res/config.ini "$out/etc/config.ini"
+    install -Dm0755 res/setup.sh "$out/etc/setup.sh"
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
