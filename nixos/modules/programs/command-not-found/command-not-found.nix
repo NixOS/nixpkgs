@@ -61,7 +61,7 @@ in
   config = lib.mkMerge [
     {
       programs.command-not-found = {
-        enable = lib.mkOptionDefault (builtins.pathExists cfg.dbPath);
+        enable = lib.mkDefault (builtins.pathExists cfg.dbPath);
         dbPath = pkgs.path + "/programs.sqlite";
       };
     }
