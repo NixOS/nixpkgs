@@ -15,7 +15,7 @@
   ppx_deriving_0_15,
   ppx_deriving_0_33,
   ppx_optcomp,
-  coqPackages,
+  rocqPackages,
   version ?
     if lib.versionAtLeast ocaml.version "4.13" then
       "3.4.2"
@@ -33,7 +33,7 @@ let
 in
 
 let
-  fetched = coqPackages.metaFetch {
+  fetched = rocqPackages.metaFetch {
     release."3.7.1".sha256 = "sha256-AQn0T9bAj17tAcVZdl3PTj4ri0fCXQJvAVN1dFn19GY=";
     release."3.6.2".sha256 = "sha256-BDE4L5qYZfaMt+6JivNBJIaJGeDSf5E+Kw1Wera/WFk=";
     release."3.6.1".sha256 = "sha256-zoVgRqNAXeCgk3zGntVkkZxIiQrCU5+ONeI97BiT674=";
