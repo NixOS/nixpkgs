@@ -4154,6 +4154,8 @@ self: super: with self; {
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
+  django-decorator-include = callPackage ../development/python-modules/django-decorator-include { };
+
   django-dynamic-preferences =
     callPackage ../development/python-modules/django-dynamic-preferences
       { };
@@ -4363,6 +4365,8 @@ self: super: with self; {
   django-scopes = callPackage ../development/python-modules/django-scopes { };
 
   django-sekizai = callPackage ../development/python-modules/django-sekizai { };
+
+  django-select2 = callPackage ../development/python-modules/django-select2 { };
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
@@ -16829,6 +16833,8 @@ self: super: with self; {
       { };
 
   requests-ratelimiter = callPackage ../development/python-modules/requests-ratelimiter { };
+
+  requests-ratelimiter_0_8 = callPackage ../development/python-modules/requests-ratelimiter_0_8 { };
 
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 

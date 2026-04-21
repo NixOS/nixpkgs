@@ -1797,6 +1797,7 @@ in
   xss-lock = runTest ./xss-lock.nix;
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
+  yamtrack = runTest ./web-apps/yamtrack.nix;
   yarr = runTest ./yarr.nix;
   ydotool = import ./ydotool.nix {
     inherit (pkgs) lib;
