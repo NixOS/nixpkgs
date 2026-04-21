@@ -1,0 +1,12 @@
+--- a/src/components/auth/SignupForm.vue
++++ b/src/components/auth/SignupForm.vue
+@@ -195,7 +195,7 @@
+     />
+     <div
+       v-for="(field, idx) in
+-      ( formCustomization && (formCustomization.fields.length ?? 0) > 0
++      ( formCustomization && (formCustomization.fields?.length ?? 0) > 0
+         ? formCustomization.fields
+         : []
+       )"
+
