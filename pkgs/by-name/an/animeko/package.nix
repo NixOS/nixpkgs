@@ -282,5 +282,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
     ];
+    # Mark broken due to a breaking change in JetBrains JCEF
+    # https://github.com/NixOS/nixpkgs/pull/485812#issuecomment-4211365591
+    broken = true;
   };
 })
