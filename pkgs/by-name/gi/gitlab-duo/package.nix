@@ -71,7 +71,6 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp/-/blob/main/CHANGELOG.md";
     description = "CLI for GitLab AI assistant";
     downloadPage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp";
