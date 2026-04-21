@@ -305,6 +305,7 @@ stdenv.mkDerivation rec {
       felschr
       panicgh
       sigmasquadron
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
