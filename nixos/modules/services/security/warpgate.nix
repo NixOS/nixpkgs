@@ -349,8 +349,13 @@ in
                   "json"
                 ];
               };
+              audit_retention = mkOption {
+                description = "How long Warpgate keeps its audit logs.";
+                default = "1year";
+                type = str;
+              };
               retention = mkOption {
-                description = "How long Warpgate keep its logs.";
+                description = "How long Warpgate keeps its non-audit logs and session recordings.";
                 default = "7days";
                 type = str;
               };
