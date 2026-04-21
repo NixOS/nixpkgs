@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-n9TlmmRRB618cXCOmo5CYqeMog7I7VxURN9mlDhljWw=";
+    hash = "sha256-2CVSKPZXZ74KUU5xVYSVIZLSPSyIudUcKR0CSfSpJyw=";
   };
 
   outputs = [

@@ -443,8 +443,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.85"
-      "sha256-YYfuAmvVS4IKnqROoCzUjd2O0KyshgnVIQ0nBUh8KhQ=";
+    buildMypyBoto3Package "ec2" "1.42.92"
+      "sha256-gwR4f9HgMN8f1geH2aL8ez1ws+uuHeJVnE0tfffLARg=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -590,8 +590,8 @@ in
       "sha256-mzSkLSIQyrcPyU+LhrlRJtjWbkpLXM8/iOpAH0lA6zA=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.42.84"
-      "sha256-5sa/UWt6MAEl6zmsmohWZHc0iokmccLa4JgbXDYe/Rs=";
+    buildMypyBoto3Package "guardduty" "1.42.92"
+      "sha256-MVLmiiL5/PWk5KGwQffzd5bex6Cx6tEu/1DMnzv8g9I=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.42.59"
@@ -706,8 +706,8 @@ in
       "sha256-eAzIwmz5eZKf2NBGSMw4NopdHqAR5TcF9/0KQqVWr0s=";
 
   mypy-boto3-kafka =
-    buildMypyBoto3Package "kafka" "1.42.65"
-      "sha256-H7VAzW6c3HYxvKOG8H3hNbJepywDCqDLK5oeKGMqNTg=";
+    buildMypyBoto3Package "kafka" "1.42.92"
+      "sha256-c04LS1KMpksoxtA82xxRoERCvYrEabLF25iu9Oz0C34=";
 
   mypy-boto3-kafkaconnect =
     buildMypyBoto3Package "kafkaconnect" "1.42.47"
@@ -802,8 +802,8 @@ in
       "sha256-3XrmddaaOKkdaYOMguNWZ3k18yiOtUF23xMVtZ7n8gQ=";
 
   mypy-boto3-location =
-    buildMypyBoto3Package "location" "1.42.3"
-      "sha256-VGQzgnrUynTDjfYpEk+FR+PrljbULl0UpbeqbaPKqSc=";
+    buildMypyBoto3Package "location" "1.42.92"
+      "sha256-UBSxl5YmYh3m4gl4iKdDU2McetKuDcLkiR73Yvf0AQQ=";
 
   mypy-boto3-logs =
     buildMypyBoto3Package "logs" "1.42.90"
