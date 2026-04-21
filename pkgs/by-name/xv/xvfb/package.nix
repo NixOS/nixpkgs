@@ -99,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Ddtrace=false"
+    "-Dxquartz=false"
   ];
 
   meta = {
