@@ -105,6 +105,7 @@ in
               description = ''
                 Configure the domain name of this Warpgate instance.
                 See [HTTP domain binding](https://warpgate.null.page/http-domain-binding/).
+                This option is considered legacy, please use protocol specific `external_host` instead.
               '';
               default = null;
               type = nullOr str;
@@ -127,6 +128,11 @@ in
                 description = "Listen endpoint of SSH listener.";
                 default = "[::]:2222";
                 type = str;
+              };
+              external_host = mkOption {
+                description = "The SSH listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
               };
               external_port = mkOption {
                 description = "The SSH listener is reachable via this port externally.";
@@ -163,6 +169,11 @@ in
                 description = "Listen endpoint of HTTP listener.";
                 default = "[::]:8888";
                 type = str;
+              };
+              external_host = mkOption {
+                description = "The HTTP listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
               };
               external_port = mkOption {
                 description = "The HTTP listener is reachable via this port externally.";
@@ -239,6 +250,11 @@ in
                 default = "[::]:33306";
                 type = str;
               };
+              external_host = mkOption {
+                description = "The MySQL listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
               external_port = mkOption {
                 description = "The MySQL listener is reachable via this port externally.";
                 default = null;
@@ -266,6 +282,11 @@ in
                 default = "[::]:55432";
                 type = str;
               };
+              external_host = mkOption {
+                description = "The PostgreSQL listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
+              };
               external_port = mkOption {
                 description = "The PostgreSQL listener is reachable via this port externally.";
                 default = null;
@@ -292,6 +313,11 @@ in
                 description = "Listen endpoint of Kubernetes listener.";
                 default = "[::]:8443";
                 type = str;
+              };
+              external_host = mkOption {
+                description = "The Kubernetes listener is reachable via this domain name externally.";
+                default = null;
+                type = nullOr str;
               };
               external_port = mkOption {
                 description = "The Kubernetes listener is reachable via this port externally.";
