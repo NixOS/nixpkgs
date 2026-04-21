@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A reasoning system for large knowledge bases. ";
+    description = "A reasoning system for large knowledge bases";
     homepage = "https://github.com/tammet/gkc";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.thngz ];
