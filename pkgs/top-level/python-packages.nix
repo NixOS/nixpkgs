@@ -16830,6 +16830,8 @@ self: super: with self; {
 
   requests-ratelimiter = callPackage ../development/python-modules/requests-ratelimiter { };
 
+  requests-sse = callPackage ../development/python-modules/requests-sse { };
+
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
