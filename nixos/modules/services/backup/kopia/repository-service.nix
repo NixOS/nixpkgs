@@ -375,11 +375,11 @@ in
           name: backup:
           let
             prefix = "services.kopia.backups.${name}";
-            repo = backup.repository;
+
           in
-          lib.optionals (repo ? s3) (
+          lib.optionals (backup.repository ? s3) (
             let
-              s3 = repo.s3;
+              s3 = backup.repository.s3;
             in
             [
               {
@@ -409,9 +409,9 @@ in
               }
             ]
           )
-          ++ lib.optionals (repo ? sftp) (
+          ++ lib.optionals (backup.repository ? sftp) (
             let
-              sftp = repo.sftp;
+              sftp = backup.repository.sftp;
             in
             [
               # assert required options
@@ -435,9 +435,9 @@ in
               }
             ]
           )
-          ++ lib.optionals (repo ? webdav) (
+          ++ lib.optionals (backup.repository ? webdav) (
             let
-              webdav = repo.webdav;
+              webdav = backup.repository.webdav;
             in
             [
               # assert required options
@@ -467,12 +467,9 @@ in
       warnings = lib.flatten (
         lib.mapAttrsToList (
           name: backup:
-          let
-            repo = backup.repository;
-          in
-          lib.optionals (repo ? s3) (
+          lib.optionals (backup.repository ? s3) (
             let
-              s3 = repo.s3;
+              s3 = backup.repository.s3;
             in
 
             (lib.optional (s3.accessKeyId != null)
@@ -485,14 +482,14 @@ in
               "services.kopia.backups.${name}: repository.s3.sessionToken is set as plain text and will be world-readable in the Nix store. Consider using repository.s3.sessionTokenFile instead."
             )
           )
-          ++ lib.optionals (repo ? sftp) (
+          ++ lib.optionals (backup.repository ? sftp) (
 
-            (lib.optional (repo.sftp.password != null)
+            (lib.optional (backup.repository.sftp.password != null)
               "services.kopia.backups.${name}: repository.sftp.password is set as plain text and will be world-readable in the Nix store. Consider using repository.sftp.passwordFile instead."
             )
           )
-          ++ lib.optionals (repo ? webdav) (
-            (lib.optional (repo.webdav.password != null)
+          ++ lib.optionals (backup.repository ? webdav) (
+            (lib.optional (backup.repository.webdav.password != null)
               "services.kopia.backups.${name}: repository.webdav.password is set as plain text and will be world-readable in the Nix store. Consider using repository.webdav.passwordFile instead."
             )
           )
