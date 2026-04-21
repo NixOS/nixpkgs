@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapina-cli";
   version = "0.11.0";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     inherit (finalAttrs) pname version;
     hash = "sha256-zdhyXJUSg8wU65YMXZBqDIkkGTh9DjSbc7b63pU2nuo=";
@@ -24,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://userapina.com";
     changelog = "https://github.com/rapina-rs/rapina/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ apetrovic6 ];
+    maintainers = with lib.maintainers; [ apetrovic ];
     mainProgram = "rapina";
   };
 })
