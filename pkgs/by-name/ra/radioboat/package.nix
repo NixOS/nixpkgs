@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radioboat";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mPktliuWyrXuNzMCdMFZk5Q7lIkRk+y4nX3IBnCc5Mc=";
+    hash = "sha256-1fTXXT0HxGOoy+oNK1ixzgFgjapreQEOoVlQlJwqbrA=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-fRF1FvwtvVJSTCK8DcZib6wMLpo73YtV7j+kjt4nVTo=";
+  cargoHash = "sha256-ibDOUgprr5VziIvTpvDFISGVpVH5ZyQ1ZZ5tIQirPP8=";
 
   nativeBuildInputs = [
     makeWrapper
