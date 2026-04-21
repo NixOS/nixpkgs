@@ -31,6 +31,15 @@ let
       substituteInPlace "$out/include/mach-o/dyld_priv.h" \
         --replace-fail ', bridgeos(3.0)' "" \
         --replace-fail '//@VERSION_DEFS@' 'const dyld_build_version_t dyld_2024_SU_E_os_versions = { 1 /* macOS */, 150400 };'
+
+      # dyld_priv.h references TARGET_OS_EXCLAVEKIT (added in newer Xcode) under
+      # -Werror=undef-prefix=TARGET_OS_. SDKs in nixpkgs don't define it yet.
+      # Default to 0 (not an ExclaveKit target) to satisfy the compile.
+      {
+        printf '#ifndef TARGET_OS_EXCLAVEKIT\n#define TARGET_OS_EXCLAVEKIT 0\n#endif\n'
+        cat "$out/include/mach-o/dyld_priv.h"
+      } > "$out/include/mach-o/dyld_priv.h.new"
+      mv "$out/include/mach-o/dyld_priv.h.new" "$out/include/mach-o/dyld_priv.h"
     '';
   };
 in
