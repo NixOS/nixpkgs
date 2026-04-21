@@ -7,7 +7,8 @@
   ncurses,
   pkg-config,
   abiVersion ? "6",
-  enableStatic ? stdenv.hostPlatform.isStatic,
+  # iOS: configure rejects apple-ios triples for shared libs; default to static.
+  enableStatic ? stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isiOS,
   # Disabled for static FreeBSD: libc++ headers come after C library headers,
   # breaking C++ compilation. No current consumers need the C++ bindings.
   withCxx ?
@@ -70,6 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!withCxx) "--without-cxx"
   ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
   ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
+  # iOS: SDK marks system(3) unavailable (skip progs/tests) and doesn't ship
+  # <sys/ttydev.h> (--with-ospeed=int turns off NCURSES_OSPEED_COMPAT which
+  # is the only consumer of that header).
+  ++ lib.optionals stdenv.hostPlatform.isiOS [
+    "--without-progs"
+    "--without-tests"
+    "--with-ospeed=int"
+  ]
   ++ lib.optional withTermlib "--with-termlib"
   ++ lib.optionals stdenv.hostPlatform.isWindows [
     "--enable-sp-funcs"
