@@ -2608,6 +2608,11 @@
     githubId = 574938;
     name = "Jonathan Glines";
   };
+  auscaster = {
+    github = "auscaster";
+    githubId = 100876;
+    name = "Kam Low";
+  };
   auscyber = {
     email = "ivyp@outlook.com.au";
     github = "auscyber";
