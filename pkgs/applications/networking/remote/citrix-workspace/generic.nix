@@ -145,6 +145,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
+  strictDeps = true;
+  __structuredAttrs = true;
   sourceRoot = ".";
   preferLocalBuild = true;
   passthru.icaroot = "${placeholder "out"}/opt/citrix-icaclient";
@@ -243,19 +245,36 @@ stdenv.mkDerivation rec {
         program:
         if (builtins.match "selfservice(.*)" program) != null then
           "--icaroot"
-        else if (builtins.match "wfica(.*)" program != null) then
+        else if (builtins.match "wfica(.*)" program) != null then
           null
         else
           "-icaroot";
+
+      ldLibraryPath =
+        program:
+        lib.concatStringsSep ":" (
+          lib.optional (builtins.match "wfica(.*)" program != null) "$ICAInstDir"
+          ++ [
+            "$ICAInstDir/lib"
+            "$ICAInstDir/usr/lib/x86_64-linux-gnu"
+            "$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle"
+          ]
+        );
+
+      # Only the ICA engine needs the top-level client directory on the library
+      # path. Leaving it enabled for UI helpers exposes Citrix's session-only
+      # libproxy.so to the embedded web stack, which then fails to resolve CGP
+      # symbols.
       wrap = program: ''
         wrapProgram $out/opt/citrix-icaclient/${program} \
           ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
           --set ICAROOT "$ICAInstDir" \
           --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
-          --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib:$ICAInstDir/usr/lib/x86_64-linux-gnu:$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle" \
+          --prefix LD_LIBRARY_PATH : "${ldLibraryPath program}" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
           --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"
       '';
+
       wrapLink = program: ''
         ${wrap program}
         ln -sf $out/opt/citrix-icaclient/${program} $out/bin/${baseNameOf program}
@@ -283,9 +302,22 @@ stdenv.mkDerivation rec {
       export HOME=$(mktemp -d)
 
       # Run upstream installer in the store-path.
-      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' -e 's, -C / , -C . ,g' ./linuxx64/hinst
+      sed -i \
+        -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' \
+        -e 's,/bin/true,true,g' \
+        -e 's, -C / , -C . ,g' \
+        -e 's,^[[:space:]]*install_deviceTrust "\$ICAInstDir",      :,' \
+        -e 's,^[[:space:]]*install_EPA_with_prompt "\$ICAInstDir",      :,' \
+        -e 's,^[[:space:]]*install_fido2Service "\$CDSourceDir" "\$ICAInstDir",  :,' \
+        ./linuxx64/hinst
       source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
       faketime -f "$source_date" ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
+
+      mkdir -p "$ICAInstDir/usr"
+      tar -xzf ./linuxx64/linuxx64.cor/Webkit2gtk4.0/webkit2gtk-4.0.tar.gz \
+        --strip-components=2 \
+        -C "$ICAInstDir/usr" \
+        webkit2gtk-4.0-package/usr/lib
 
       if [ -f "$ICAInstDir/util/setlog" ]; then
         chmod +x "$ICAInstDir/util/setlog"
@@ -362,6 +394,9 @@ stdenv.mkDerivation rec {
     ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
       $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37.56.4
 
+    addAutoPatchelfSearchPath --no-recurse "$out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu"
+    addAutoPatchelfSearchPath "$out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle"
+    addAutoPatchelfSearchPath "$out/opt/citrix-icaclient/lib"
     autoPatchelf -- "$out"
 
     $out/opt/citrix-icaclient/util/ctx_rehash

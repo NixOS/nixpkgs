@@ -1963,9 +1963,10 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
+    citrix_workspace_26_01_0
     citrix_workspace_25_08_10
     ;
-  citrix_workspace = citrix_workspace_25_08_10;
+  citrix_workspace = citrix_workspace_26_01_0;
 
   colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 
