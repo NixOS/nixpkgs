@@ -295,14 +295,12 @@ rec {
     config = "arm64-apple-ios";
     darwinSdkVersion = "14.3";
     darwinMinVersion = "14";
-    xcodeVer = "12.3";
     # useiOSPrebuilt = true;
   };
 
   iphone64-simulator = {
     config = "aarch64-apple-ios-simulator";
     darwinSdkVersion = "14.3";
-    xcodeVer = "12.3";
     # useiOSPrebuilt = true;
   };
 
