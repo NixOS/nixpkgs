@@ -246,14 +246,13 @@ in
       systemd.services = lib.mapAttrs' (
         name: backup:
         let
-          kopiaExe = lib.getExe cfg.package;
           policyArgs = lib.concatStringsSep " " (mkPolicyArgs backup);
-          policyScript = ''
+          policyScript = pkgs.writeShellScript "kopia-policy-${name}" ''
             set -euo pipefail
             export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
 
             ${lib.concatMapStringsSep "\n" (path: ''
-              ${kopiaExe} policy set ${lib.escapeShellArg path} ${policyArgs}
+              ${lib.getExe cfg.package} policy set ${lib.escapeShellArg path} ${policyArgs}
             '') backup.paths}
           '';
         in
