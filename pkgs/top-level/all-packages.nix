@@ -10898,9 +10898,6 @@ with pkgs;
 
   bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
     withGui = true;
-    sqlite = sqlite.override {
-      zlib = null;
-    };
     zeromq = zeromq.override {
       enableCurve = false;
       enableDrafts = false;
