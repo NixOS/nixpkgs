@@ -8,7 +8,6 @@
   ucx,
   numactl,
   level-zero,
-  pkg-config,
   libdrm,
   elfutils,
   libxxf86vm,
@@ -43,7 +42,7 @@
   fontconfig,
   libuuid,
   sqlite,
-
+  libffi,
   # The list of components to install;
   # Either [ "all" ], [ "default" ], or a custom list of components.
   # If you want to install all default components plus an extra one, pass [ "default" <your extra components here> ]
@@ -56,13 +55,7 @@
     "intel.oneapi.lin.vtune"
     "intel.oneapi.lin.mkl.devel"
   ],
-
   intel-oneapi,
-
-  # For tests
-  runCommand,
-  libffi,
-  stdenv,
 }:
 intel-oneapi.mkIntelOneApi (finalAttrs: {
   pname = "intel-oneapi-base-toolkit";
@@ -192,62 +185,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
 
   passthru.stdenv = callPackage ./stdenv.nix { kit = intel-oneapi.base; };
 
-  passthru.tests = {
-    mkl-libs = stdenv.mkDerivation {
-      name = "intel-oneapi-test-mkl-libs";
-      unpackPhase = ''
-        cp ${./test.c} test.c
-      '';
-
-      nativeBuildInputs = [
-        pkg-config
-      ];
-      buildInputs = [ intel-oneapi.base ];
-
-      buildPhase = ''
-        # This will fail if no libs with mkl- in their name are found
-        libs="$(pkg-config --list-all | cut -d\  -f1 | grep mkl-)"
-        for lib in $libs; do
-          echo "Testing that the build succeeds with $lib" >&2
-          gcc test.c -o test-with-$lib $(pkg-config --cflags --libs $lib)
-        done
-      '';
-
-      doCheck = true;
-
-      checkPhase = ''
-        for lib in $libs; do
-          echo "Testing that the executable built with $lib runs" >&2
-          ./test-with-$lib
-        done
-      '';
-
-      installPhase = ''
-        touch "$out"
-      '';
-    };
-
-    all-binaries-run = runCommand "intel-oneapi-test-all-binaries-run" { } ''
-      # .*-32: 32-bit executables can't be properly patched by patchelf
-      # IMB-.*: all fail with a weird "bad file descriptor" error
-      # fi_info, fi_pingpong: exits with 1 even if ran with `--help`
-      # gdb-openapi: Python not initialized
-      # hydra_bstrap_proxy, hydra_nameserver, hydra_pmi_proxy: doesn't respect --help
-      # mpirun: can't find mpiexec.hydra for some reason
-      # sycl-ls, sycl-trace: doesn't respect --help
-      regex_skip="(.*-32)|(IMB-.*)|fi_info|fi_pingpong|gdb-oneapi|hydra_bstrap_proxy|hydra_nameserver|hydra_pmi_proxy|mpirun|sycl-ls|sycl-trace"
-      export I_MPI_ROOT="${intel-oneapi.base}/mpi/latest"
-      for bin in "${intel-oneapi.base}"/bin/*; do
-        if [[ "$bin" =~ $regex_skip ]] || [ ! -f "$bin" ] || [[ ! -x "$bin" ]]; then
-          echo "skipping $bin"
-          continue
-        fi
-        echo "trying to run $bin --help or -help"
-        "$bin" --help || "$bin" -help
-      done
-      touch "$out"
-    '';
-  };
+  passthru.tests = callPackage ./tests.nix { kit = intel-oneapi.base; };
 
   meta = {
     description = "Intel oneAPI Base Toolkit";
