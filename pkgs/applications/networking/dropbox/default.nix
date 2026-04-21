@@ -11,7 +11,7 @@
 let
   version =
     {
-      x86_64-linux = "217.4.4417";
+      x86_64-linux = "246.4.3513";
       i686-linux = "206.3.6386";
     }
     .${stdenv.hostPlatform.system} or "";
