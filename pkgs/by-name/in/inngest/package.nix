@@ -69,6 +69,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "inngest";
     platforms = lib.attrNames sources;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ darwin67 ];
   };
 })

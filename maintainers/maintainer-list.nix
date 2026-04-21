@@ -6070,6 +6070,11 @@
     github = "darkyzhou";
     githubId = 7220778;
   };
+  darwin67 = {
+    name = "Darwin D Wu";
+    github = "darwin67";
+    githubId = 5746693;
+  };
   daru-san = {
     name = "Daru";
     email = "zadarumaka@proton.me";
