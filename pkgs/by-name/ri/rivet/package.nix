@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-fastjet=${fastjet}"
+    "--with-fjcontrib=${fastjet-contrib}"
     "--with-yoda=${yoda}"
     "--with-hepmc3=${hepmc3}"
     "--with-highfive=${highfive}"

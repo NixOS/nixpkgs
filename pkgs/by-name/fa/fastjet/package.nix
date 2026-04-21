@@ -2,39 +2,39 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
+  cmake,
   python ? null,
   withPython ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastjet";
-  version = "3.4.3";
+  version = "3.5.1";
 
   src = fetchurl {
     url = "https://fastjet.fr/repo/fastjet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
+    hash = "sha256-mkFUFj5yBB3uP93pyyToFGJeF4CRqHNKatU3XlNxtCM=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/fastjet/fastjet/-/commit/57ff0184c7cf578bbcdee3667aeaa64288cbae1a.diff";
-      hash = "sha256-uz8q7s+YAmbB4oXB+wyaSLo4gWSbEEPdATGDBrxT0vg=";
-    })
+  nativeBuildInputs = [
+    cmake
   ];
-
-  postPatch = ''
-    patchShebangs --build fastjet-config.in
-  '';
-
   buildInputs = lib.optional withPython python;
 
-  configureFlags = [
-    "--enable-allcxxplugins"
-  ]
-  ++ lib.optional withPython "--enable-pyext";
+  postPatch = ''
+    # HAS_SHARED is never set in the current fastjet's CMakeLists.txt
+    # Remove for 3.5.2
+    substituteInPlace fastjet-config.in \
+      --replace-fail '@HAS_SHARED@' 'yes'
+  '';
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    (lib.cmakeBool "FASTJET_ENABLE_ALLCXXPLUGINS" true)
+    # These are substituted in .pc files, and can't be absolute paths
+    (lib.cmakeOptionType "STRING" "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeOptionType "STRING" "CMAKE_INSTALL_INCLUDEDIR" "include")
+  ]
+  ++ lib.optional withPython (lib.cmakeBool "FASTJET_ENABLE_PYTHON" true);
 
   meta = {
     description = "Software package for jet finding in pp and e+e− collisions";
