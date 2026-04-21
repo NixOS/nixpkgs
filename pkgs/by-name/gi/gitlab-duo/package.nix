@@ -30,9 +30,19 @@ buildNpmPackage (finalAttrs: {
     ./missing-hashes.patch
   ];
 
-  # PATCH: Only build for the current platform, not all targets
+  # PATCH:
+  # 1. Only build for the current platform, not all targets.
+  # 2. Compile from pre-bundled dist instead of raw source, to work around a Bun
+  #    bundler issue where re-bundling produces code in turn cannot be parsed:
+  #
+  #        SyntaxError: Cannot declare a function that shadows a let/const/class/function variable '_init'.
+  #              at <parse> (/$bunfs/root/duo-darwin-arm64:323006:1)
+  #              at native:11:43
   postPatch = ''
-    sed -i 's/SUPPORTED_TARGETS=".\+"/SUPPORTED_TARGETS="bun-$TARGET"/' packages/cli/scripts/compile_executables.sh
+    sed -i \
+      -e 's/SUPPORTED_TARGETS=".\+"/SUPPORTED_TARGETS="bun-$TARGET"/' \
+      -e 's|SOURCE_FILE="./src/index.tsx"|SOURCE_FILE="./dist/index.js"|' \
+      packages/cli/scripts/compile_executables.sh
   '';
 
   npmFlags = [ "--install-links" ];
@@ -69,7 +79,6 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp/-/blob/main/CHANGELOG.md";
     description = "CLI for GitLab AI assistant";
     downloadPage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp";
