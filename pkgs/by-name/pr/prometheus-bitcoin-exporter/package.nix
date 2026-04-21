@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "jvstein";
-    repo = pname;
+    repo = "bitcoin-prometheus-exporter";
     tag = "v${version}";
     sha256 = "sha256-08QG/5Kj++rjWz7OciqKSJUk00lSJCbfB5XwwP+h4so=";
   };
@@ -31,8 +31,8 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/bin
     cp bitcoind-monitor.py $out/bin/
 
-    mkdir -p $out/share/${pname}
-    cp -r dashboard README.md $out/share/${pname}/
+    mkdir -p $out/share/bitcoin-prometheus-exporter
+    cp -r dashboard README.md $out/share/bitcoin-prometheus-exporter/
   '';
 
   meta = {
