@@ -6200,14 +6200,6 @@ self: super: with self; {
 
   geotorch = callPackage ../development/python-modules/geotorch { };
 
-  gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
-
-  gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
-
-  gepetto-viewer-corba = toPythonModule (
-    pkgs.gepetto-viewer-corba.override { python3Packages = self; }
-  );
-
   gerbonara = callPackage ../development/python-modules/gerbonara { };
 
   get-video-properties = callPackage ../development/python-modules/get-video-properties { };
