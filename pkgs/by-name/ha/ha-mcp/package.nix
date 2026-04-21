@@ -39,7 +39,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
+    extraArgs = [
+      "--version=stable"
+      "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
   };
 
   pythonImportsCheck = [ "ha_mcp" ];
