@@ -1,0 +1,36 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 23453fe10..05c15eeed 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -187,7 +187,7 @@ env = [
+ ]
+ 
+ [tool.coverage.run]
+-plugins = ["django_coverage_plugin"]
++plugins = ["django_coverage_plugin", "pyfakefs"]
+ source = ["funkwhale_api"]
+ omit = [
+   "*migrations*",
+diff --git a/tests/music/test_views.py b/tests/music/test_views.py
+index 3fb2b3341..1a0fef505 100644
+--- a/tests/music/test_views.py
++++ b/tests/music/test_views.py
+@@ -20,6 +20,10 @@ from funkwhale_api.users import authentication as users_authentication
+ 
+ DATA_DIR = os.path.dirname(os.path.abspath(__file__))
+ 
++@pytest.fixture
++def fake_fs(fs):
++    fs.add_real_directory(DATA_DIR)
++    yield fs
+ 
+ def test_artist_list_serializer(api_request, factories, logged_in_api_client):
+     tags = ["tag1", "tag2"]
+@@ -290,6 +294,7 @@ def test_serve_file_in_place_utf8(
+     assert path == expected.encode("utf-8")
+ 
+ 
++@pytest.mark.usefixtures("fake_fs")
+ @pytest.mark.parametrize(
+     "proxy,serve_path,expected",
+     [

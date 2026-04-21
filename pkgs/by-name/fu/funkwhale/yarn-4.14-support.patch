@@ -1,0 +1,21 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+index 3186f3f07..1825743b7 100644
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -1 +1,3 @@
+ nodeLinker: node-modules
++
++enableScripts: true
+diff --git a/yarn.lock b/yarn.lock
+index 915e7ea16..7938d1d8d 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2,7 +2,7 @@
+ # Manual changes might be lost - proceed with caution!
+
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10c0
+
+ "@ai-sdk/anthropic@npm:1.1.15":

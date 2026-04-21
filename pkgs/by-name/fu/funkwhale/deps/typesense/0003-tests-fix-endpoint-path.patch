@@ -1,0 +1,170 @@
+From 4bd4350d6978fe7846b3af827c2a02de416b052f Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 25 Mar 2026 19:02:46 +0530
+Subject: [PATCH 3/5] tests fix endpoint path
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ tests/override_test.py  | 17 ++++++++++++-----
+ tests/overrides_test.py |  8 ++++----
+ tests/synonym_test.py   |  4 ++--
+ tests/synonyms_test.py  |  8 ++++----
+ 4 files changed, 22 insertions(+), 15 deletions(-)
+
+diff --git a/tests/override_test.py b/tests/override_test.py
+index 89526c7..5135d3e 100644
+--- a/tests/override_test.py
++++ b/tests/override_test.py
+@@ -1,6 +1,5 @@
+ """Tests for the Override class."""
+ 
+-
+ import pytest
+ 
+ from tests.utils.object_assertions import (
+@@ -47,7 +46,7 @@ def test_init(fake_api_call: ApiCall) -> None:
+         fake_api_call.config.nearest_node,
+     )
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+@@ -104,7 +103,7 @@ def test_init_async(fake_async_api_call: AsyncApiCall) -> None:
+         fake_async_api_call.config.nearest_node,
+     )
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+@@ -115,7 +114,11 @@ async def test_actual_retrieve_async(
+     create_override: None,
+ ) -> None:
+     """Test that the AsyncOverride object can retrieve an override from Typesense Server."""
+-    response = await actual_async_collections["companies"].overrides["company_override"].retrieve()
++    response = (
++        await actual_async_collections["companies"]
++        .overrides["company_override"]
++        .retrieve()
++    )
+ 
+     assert response["rule"] == {
+         "match": "exact",
+@@ -140,6 +143,10 @@ async def test_actual_delete_async(
+     create_override: None,
+ ) -> None:
+     """Test that the AsyncOverride object can delete an override from Typesense Server."""
+-    response = await actual_async_collections["companies"].overrides["company_override"].delete()
++    response = (
++        await actual_async_collections["companies"]
++        .overrides["company_override"]
++        .delete()
++    )
+ 
+     assert response == {"id": "company_override"}
+diff --git a/tests/overrides_test.py b/tests/overrides_test.py
+index a9376b5..c7ecee1 100644
+--- a/tests/overrides_test.py
++++ b/tests/overrides_test.py
+@@ -1,6 +1,5 @@
+ """Tests for the Overrides class."""
+ 
+-
+ import pytest
+ 
+ from tests.utils.object_assertions import (
+@@ -61,7 +60,7 @@ def test_get_missing_override(fake_overrides: Overrides) -> None:
+     )
+     assert override.collection_name == "companies"
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+@@ -178,7 +177,8 @@ def test_get_missing_override_async(fake_async_overrides) -> None:
+     assert override.override_id == "company_override"
+     assert_match_object(override.api_call, fake_async_overrides.api_call)
+     assert_object_lists_match(
+-        override.api_call.node_manager.nodes, fake_async_overrides.api_call.node_manager.nodes
++        override.api_call.node_manager.nodes,
++        fake_async_overrides.api_call.node_manager.nodes,
+     )
+     assert_match_object(
+         override.api_call.config.nearest_node,
+@@ -186,7 +186,7 @@ def test_get_missing_override_async(fake_async_overrides) -> None:
+     )
+     assert override.collection_name == "companies"
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+diff --git a/tests/synonym_test.py b/tests/synonym_test.py
+index cfe6e51..d9affd9 100644
+--- a/tests/synonym_test.py
++++ b/tests/synonym_test.py
+@@ -45,7 +45,7 @@ def test_init(fake_api_call: ApiCall) -> None:
+         fake_api_call.config.nearest_node,
+     )
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+@@ -99,7 +99,7 @@ def test_init_async(fake_async_api_call: AsyncApiCall) -> None:
+         fake_async_api_call.config.nearest_node,
+     )
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+diff --git a/tests/synonyms_test.py b/tests/synonyms_test.py
+index 3402493..4fbc283 100644
+--- a/tests/synonyms_test.py
++++ b/tests/synonyms_test.py
+@@ -1,6 +1,5 @@
+ """Tests for the Synonyms class."""
+ 
+-
+ import pytest
+ 
+ from tests.utils.object_assertions import (
+@@ -62,7 +61,7 @@ def test_get_missing_synonym(fake_synonyms: Synonyms) -> None:
+     )
+     assert synonym.collection_name == "companies"
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+@@ -166,7 +165,8 @@ def test_get_missing_synonym_async(fake_async_synonyms) -> None:
+     assert synonym.synonym_id == "company_synonym"
+     assert_match_object(synonym.api_call, fake_async_synonyms.api_call)
+     assert_object_lists_match(
+-        synonym.api_call.node_manager.nodes, fake_async_synonyms.api_call.node_manager.nodes
++        synonym.api_call.node_manager.nodes,
++        fake_async_synonyms.api_call.node_manager.nodes,
+     )
+     assert_match_object(
+         synonym.api_call.config.nearest_node,
+@@ -174,7 +174,7 @@ def test_get_missing_synonym_async(fake_async_synonyms) -> None:
+     )
+     assert synonym.collection_name == "companies"
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+-- 
+2.53.0
+
