@@ -3,7 +3,13 @@
   stdenv,
   pkgs,
   buildPythonPackage,
+
+  # build-system
+  cmake,
+  ninja,
   setuptools,
+
+  # dependencies
   numpy,
   pip,
 
@@ -17,26 +23,28 @@ buildPythonPackage {
     pname
     version
     src
-    nativeBuildInputs
     buildInputs
     ;
   pyproject = true;
+  __structuredAttrs = true;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "cmake<=3.30.0" \
+        "cmake"
+  '';
 
   # Needed for cmake to find openmpi
   strictDeps = false;
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail \
-        "'-j2'" \
-        "f'-j{os.environ.get(\"NIX_BUILD_CORES\")}'"
-  '';
 
   dontUseCmakeConfigure = true;
 
   env.ENABLE_MPI = mpiSupport;
 
   build-system = [
+    cmake
+    ninja
     setuptools
   ];
 
