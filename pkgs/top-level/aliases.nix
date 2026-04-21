@@ -396,6 +396,7 @@ mapAliases {
   blueberry = throw "'blueberry' has been removed as it is unmaintained upstream. Consider using blueman instead"; # Added 2026-03-09
   bmap-tools = throw "'bmap-tools' has been renamed to/replaced by 'bmaptool'"; # Converted to throw 2025-10-27
   bob = throw "'bob' has been removed as it is unmaintained upstream and has vulnerable dependencies."; # Added 2025-12-29
+  boost177 = throw "Boost 1.77 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
   botan2 = throw "botan2 has been removed as it is EOL"; # Added 2025-10-20
   bower2nix = throw "bower2nix has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   brasero-original = throw "'brasero-original' has been renamed to/replaced by 'brasero-unwrapped'"; # Converted to throw 2025-10-27
@@ -575,6 +576,7 @@ mapAliases {
   curl-impersonate-chrome = warnAlias "curl-impersonate-chrome has been renamed to curl-impersonate" curl-impersonate; # Added 2025-11-02
   curl-impersonate-ff = throw "curl-impersonate-ff has been removed because it is unmaintained upstream and has vulnerable dependencies. Use curl-impersonate instead."; # Added 2025-11-02
   curlHTTP3 = warnAlias "'curlHTTP3' has been removed, as 'curl' now has HTTP/3 support enabled by default" curl; # Added 2025-08-22
+  cvemap = vulnx; # Added 2026-04-19
   cwe-client-cli = throw "cwe-client-cli has been removed because it is archived and has unclear licensing"; # Added 2026-01-10
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
@@ -926,6 +928,7 @@ mapAliases {
   i3-gaps = throw "'i3-gaps' has been renamed to/replaced by 'i3'"; # Converted to throw 2025-10-27
   i3lock-pixeled = throw "'i3lock-pixeled' has been unmaintained for several years now."; # Converted to throw 2026-01-24
   ibm-sw-tpm2 = throw "ibm-sw-tpm2 has been removed, as it was broken"; # Added 2025-08-25
+  icu69 = throw "ICU 69 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
   igvm-tooling = throw "'igvm-tooling' has been removed as it is poorly maintained upstream and a dependency has been marked insecure."; # Added 2025-09-03
   ikos = throw "ikos has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   imagemagick6 = throw "'imagemagick6' was removed because it is outdated. Use 'imagemagick' instead."; # added 2026-02-27
@@ -1583,8 +1586,10 @@ mapAliases {
   pell = throw "'pell' has been removed as it is unused and unmaintained upstream"; # Added 2025-12-18
   pentablet-driver = throw "'pentablet-driver' has been renamed to/replaced by 'xp-pen-g430-driver'"; # Converted to throw 2025-10-27
   perceptual-diff = throw "perceptual-diff was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
+  percona-server_8_0 = throw "'percona-server_8_0' reaches end of life on 2026-04-30 and has been removed. Use 'percona-server_8_4'"; # Added 2026-04-09
   percona-server_innovation = throw "'percona-server_innovation' has been renamed to/replaced by 'percona-server'"; # Converted to throw 2025-10-27
   percona-server_lts = throw "'percona-server_lts' has been renamed to/replaced by 'percona-server'"; # Converted to throw 2025-10-27
+  percona-xtrabackup_8_0 = throw "'percona-xtrabackup_8_0' reaches end of life on 2026-04-30 and has been removed. Use 'percona-xtrabackup_8_4'"; # Added 2026-04-09
   percona-xtrabackup_innovation = throw "'percona-xtrabackup_innovation' has been renamed to/replaced by 'percona-xtrabackup'"; # Converted to throw 2025-10-27
   percona-xtrabackup_lts = throw "'percona-xtrabackup_lts' has been renamed to/replaced by 'percona-xtrabackup'"; # Converted to throw 2025-10-27
   peruse = throw "'peruse' has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20

@@ -27,6 +27,7 @@
   libxkbcommon,
   wayland,
   fontconfig,
+  dbus,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   jackSupport ? stdenv.hostPlatform.isLinux,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
@@ -99,6 +100,7 @@ buildDotnetModule rec {
     libxkbcommon
     wayland
     fontconfig.lib
+    dbus
   ]
   ++ lib.optional alsaSupport alsa-lib
   ++ lib.optional jackSupport libjack2
