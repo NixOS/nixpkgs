@@ -12417,6 +12417,10 @@ with pkgs;
 
   radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
 
+  obsidianPlugins = recurseIntoAttrs (callPackage ../by-name/ob/obsidian/plugins { });
+
+  obsidianThemes = recurseIntoAttrs (callPackage ../by-name/ob/obsidian/themes { });
+
   olivetin-3k = callPackage ../by-name/ol/olivetin/3k.nix { };
 
   newlib-nano = newlib.override {
