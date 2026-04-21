@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "pescea";
-  version = "1.0.12";
+  version = "1.0.11";
   format = "setuptools";
 
   src = fetchFromGitHub {
