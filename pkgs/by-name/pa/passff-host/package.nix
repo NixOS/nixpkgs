@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passff-host";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromCodeberg {
     owner = "PassFF";
     repo = "passff-host";
     tag = finalAttrs.version;
-    hash = "sha256-P5h0B5ilwp3OVyDHIOQ23Zv4eLjN4jFkdZF293FQnNE=";
+    hash = "sha256-8EThigW6uD5I4YmZYB2uNqdRzqqAHbULNY1UGA0vfAY=";
   };
 
   buildInputs = [ python3 ];
