@@ -13,7 +13,6 @@
   librsvg,
   libsoup_3,
   makeBinaryWrapper,
-  nodejs,
   opencode,
   openssl,
   pkg-config,
@@ -35,9 +34,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (opencode)
     version
     src
-    node_modules
     patches
     ;
+
+  bunWorkspaces = [ "./packages/desktop" ];
+  bunDeps = bun.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      bunWorkspaces
+      ;
+    hash = "";
+  };
 
   cargoRoot = "packages/desktop/src-tauri";
   cargoHash = "sha256-WI48iYdxmizF1YgOQtk05dvrBEMqFjHP9s3+zBFAat0=";
@@ -46,8 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cargo-tauri.hook
-    bun
-    nodejs # for patchShebangs node_modules
+    bun.configHook
     cargo
     rustc
     jq
@@ -83,9 +91,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    cp -a ${finalAttrs.node_modules}/{node_modules,packages} .
-    chmod -R u+w node_modules packages
-    patchShebangs node_modules packages/desktop/node_modules
     install -D ${lib.getExe opencode} \
       packages/desktop/src-tauri/sidecars/opencode-cli-${stdenvNoCC.hostPlatform.rust.rustcTarget}
   '';
