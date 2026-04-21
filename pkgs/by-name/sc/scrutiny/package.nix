@@ -8,13 +8,13 @@
 }:
 let
   pname = "scrutiny";
-  version = "0.8.6";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
     tag = "v${version}";
-    hash = "sha256-0NgAdgtlsAetXfFqJdYpvzEXL4Ibh4yzAjOaOFoMvrs=";
+    hash = "sha256-N6CYVhdA0BWewGUxyHtkW1ZFDGBYI7QfUo5er7xRcFw=";
   };
 
   frontend = buildNpmPackage {
@@ -22,7 +22,7 @@ let
     pname = "${pname}-webapp";
     src = "${src}/webapp/frontend";
 
-    npmDepsHash = "sha256-EgIM3iu/dGQhzanWjjBFmLHU3EOy2riScXCDSwAvAZc=";
+    npmDepsHash = "sha256-1lOskHEU/3CmhQkUkQExryK6eMOSWvMI+Y+cX4Dlj98=";
 
     buildPhase = ''
       runHook preBuild
@@ -46,7 +46,7 @@ buildGoModule rec {
 
   subPackages = "webapp/backend/cmd/scrutiny";
 
-  vendorHash = "sha256-4qjKGjCvB0ggf6Cda7LfMeqbbBbhGcxB2ZfymUhajq8=";
+  vendorHash = "sha256-fyHWy1TwwzFMIFzwilu4osfl/iI+2KqI6Bjr1UYUS68=";
 
   env.CGO_ENABLED = 0;
 
