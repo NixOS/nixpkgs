@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.8.12";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-ynWv/X4IBKO09+ira+NUwbzw51MK9aEvGkeaHzCngd0=";
+    hash = "sha256-INUxpLGN+Jn2oYggA9kkp1zGY+LPQNXuRop4DaOi9Ps=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-UeoU7UGQ+0ViEIjK/Ze7KazB/JCyFYljHyTmxuza4v8=";
+    npmDepsHash = "sha256-tn76LGDLRaR87VM0pHgkutsbg4X4Kco04HwgGSS8Uug=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -92,12 +92,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       aiocache
       aiofiles
       aiohttp
+      aiosqlite
       alembic
       anthropic
       apscheduler
       argon2-cffi
       asgiref
       async-timeout
+      asyncpg
       authlib
       azure-ai-documentintelligence
       azure-identity
@@ -156,7 +158,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pandas
       peewee
       peewee-migrate
-      pgvector
       pillow
       psutil
       pyarrow
@@ -188,7 +189,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       starsessions
       tiktoken
       transformers
-      unstructured
       uvicorn
       validators
       xlrd
@@ -205,6 +205,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     mariadb = [
       mariadb
+    ];
+
+    unstructured = [
+      unstructured
     ];
 
     all = [
@@ -224,6 +228,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ finalAttrs.passthru.optional-dependencies.mariadb
     ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ finalAttrs.passthru.optional-dependencies.unstructured
     ++ moto.optional-dependencies.s3;
   };
 
