@@ -67,7 +67,6 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      katexochen
       charludo
     ];
     mainProgram = "envoy";
