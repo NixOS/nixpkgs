@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-xserver=${xorg-server.out}/bin/X"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-launchd=yes"
     "--with-bundle-id-prefix=org.nixos.xquartz"
     "--with-launchdaemons-dir=${placeholder "out"}/LaunchDaemons"
     "--with-launchagents-dir=${placeholder "out"}/LaunchAgents"
