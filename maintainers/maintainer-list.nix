@@ -7234,12 +7234,6 @@
     githubId = 187309685;
     name = "Drew Council";
   };
-  dritter = {
-    email = "dritter03@googlemail.com";
-    github = "dritter";
-    githubId = 1544760;
-    name = "Dominik Ritter";
-  };
   drperceptron = {
     github = "drperceptron";
     githubId = 92106371;
