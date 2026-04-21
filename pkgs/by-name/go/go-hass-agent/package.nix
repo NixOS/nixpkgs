@@ -2,92 +2,51 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  writeShellScriptBin,
-  installShellFiles,
-  mage,
-  pkg-config,
-  writableTmpDirAsHomeHook,
-  libglvnd,
-  libxxf86vm,
-  libxrandr,
-  libxi,
-  libxinerama,
-  libxcursor,
-  go,
+  nodejs,
+  npmHooks,
+  fetchNpmDeps,
   nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "go-hass-agent";
-  version = "11.1.2";
+  version = "14.10.3";
 
   src = fetchFromGitHub {
     owner = "joshuar";
     repo = "go-hass-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ahEeZdVTL9psd+TurRxDCz7EG4AK/xW94pYImYIMsrw=";
+    hash = "sha256-7F4zxxMKNrUiKonfO7dQQuODEnFgaFRM7Rzb7n1Erys=";
   };
 
-  vendorHash = "sha256-02sWRWWadZFMaLjJV181bAioNyuN7mG0ZzrkrTdUTqU=";
+  vendorHash = "sha256-WPglpc8xqCW51LmdhGLAuB4jg96T72eRuaS61zagoNw=";
 
-  nativeBuildInputs =
-    let
-      # dont need to pull in actual git just need the build script
-      # to have this info
-      fakeGit = writeShellScriptBin "git" ''
-        if [[ $@ = "describe --tags --always --dirty" ]]; then
-            echo "v${finalAttrs.version}"
-        elif [[ $@ = "rev-parse --short HEAD" ]]; then
-            echo ""
-        elif [[ $@ = "log --date=iso8601-strict -1 --pretty=%ct" ]]; then
-            echo "0"
-        else
-            >&2 echo "Unknown command: $@"
-            exit 1
-        fi
-      '';
-    in
-    [
-      fakeGit
-      installShellFiles
-      mage
-      pkg-config
-      writableTmpDirAsHomeHook
-    ];
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-baO2S+NNgNgGjMNPrtmgaiiNTHv3vScOXQIVx1Xaxow=";
+  };
 
-  buildInputs = [
-    libglvnd
-    libxcursor
-    libxi
-    libxinerama
-    libxrandr
-    libxxf86vm
+  overrideModAttrs = oldAttrs: {
+    nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
+    preBuild = "";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
-  desktopItems = [ "assets/go-hass-agent.desktop" ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    mage -d build/magefiles -w . build:full
-
-    runHook postBuild
+  preBuild = ''
+    npm run build:js
+    npm run build:css
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/joshuar/go-hass-agent/config.AppVersion=v${finalAttrs.version}"
+  ];
 
-    mage -d build/magefiles -w . tests:test
-
-    runHook postCheck
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    installBin dist/go-hass-agent-${go.GOARCH}
-
-    runHook postInstall
-  '';
+  desktopItems = [ "assets/start-go-hass-agent.desktop" ];
 
   passthru.updateScript = nix-update-script { };
 
