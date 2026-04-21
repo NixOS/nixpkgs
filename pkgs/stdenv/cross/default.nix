@@ -99,8 +99,9 @@ lib.init bootStages
         let
           inherit (stdenvNoCC) hostPlatform targetPlatform;
           baseStdenv = stdenvNoCC.override {
-            # Old ones run on wrong platform
-            extraBuildInputs = lib.optionals hostPlatform.isDarwin [
+            # Old ones run on wrong platform. Skipped for useiOSPrebuilt —
+            # iosSdkPkgs.clang wires the SDK without the apple-sdk bootstrap.
+            extraBuildInputs = lib.optionals (hostPlatform.isDarwin && !hostPlatform.useiOSPrebuilt) [
               buildPackages.targetPackages.apple-sdk
             ];
 
