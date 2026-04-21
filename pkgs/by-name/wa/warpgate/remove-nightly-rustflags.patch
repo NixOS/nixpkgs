@@ -1,0 +1,26 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 0e92acb..d187ebc 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -100,21 +100,3 @@ strip = "debuginfo"
+ [profile.coverage]
+ inherits = "dev"
+ # rustflags = ["-Cinstrument-coverage"]
+-
+-[profile.dev.package.aws-sdk-ec2]
+-rustflags = ["-Zhint-mostly-unused"]
+-
+-[profile.release.package.aws-sdk-ec2]
+-rustflags = ["-Zhint-mostly-unused"]
+-
+-[profile.dev.package.aws-sdk-rds]
+-rustflags = ["-Zhint-mostly-unused"]
+-
+-[profile.release.package.aws-sdk-rds]
+-rustflags = ["-Zhint-mostly-unused"]
+-
+-[profile.dev.package.aws-sdk-eks]
+-rustflags = ["-Zhint-mostly-unused"]
+-
+-[profile.release.package.aws-sdk-eks]
+-rustflags = ["-Zhint-mostly-unused"]
