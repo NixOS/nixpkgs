@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "distrax";
-  version = "0.1.7";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "distrax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R6rGGNzup3O6eZ2z4vygYWTjroE/Irt3aog8Op+0hco=";
+    hash = "sha256-MZGaK55FHQPVwgzZ2RPOohYgotw+o1ca0k6bLd/sjFQ=";
   };
 
   build-system = [
