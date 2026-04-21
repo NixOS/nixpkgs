@@ -22,14 +22,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "datasets";
-  version = "4.5.0";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
     tag = finalAttrs.version;
-    hash = "sha256-K8JqIbYz3ZfT1t1h5dRGCo9kBQp0E+kElqzaw2InaOI=";
+    hash = "sha256-/xhu0cDKfCEwrp9IzKd0+AeQky1198f9sba/pdutvAk=";
   };
 
   build-system = [
@@ -77,6 +77,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/huggingface/datasets";
     changelog = "https://github.com/huggingface/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      malteneuss
+    ];
   };
 })
