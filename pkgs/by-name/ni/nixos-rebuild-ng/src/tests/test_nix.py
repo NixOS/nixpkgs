@@ -892,11 +892,13 @@ def test_switch_to_configuration_with_systemd_run(
     ],
 )
 @patch("pathlib.Path.is_dir", autospec=True, return_value=True)
+@patch("pathlib.Path.exists", autospec=True, return_value=False)
 @patch("os.geteuid", autospec=True, return_value=1000)
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_upgrade_channels(
     mock_run: Mock,
     mock_geteuid: Mock,
+    mock_exists: Mock,
     mock_is_dir: Mock,
     mock_glob: Mock,
 ) -> None:
@@ -912,7 +914,11 @@ def test_upgrade_channels(
         ["nix-channel", "--update", "nixos"], check=False, sudo=True
     )
 
+    # root check
     mock_geteuid.return_value = 0
+    # (channel_path / ".update-on-nixos-rebuild").exists()
+    mock_exists.return_value = True
+
     n.upgrade_channels(all_channels=True, sudo=False)
     mock_run.assert_has_calls(
         [
