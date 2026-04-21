@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   fetchurl,
   zlib,
   rdma-core,
@@ -188,6 +189,8 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
     file = "base.nix";
     downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&oneapi-toolkit-os=linux&oneapi-lin=offline";
   };
+
+  passthru.stdenv = callPackage ./stdenv.nix { kit = intel-oneapi.base; };
 
   passthru.tests = {
     mkl-libs = stdenv.mkDerivation {
