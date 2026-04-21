@@ -24,6 +24,7 @@
     buildPhase = ''
       # This will fail if no libs with mkl- in their name are found
       libs="$(pkg-config --list-all | cut -d\  -f1 | grep mkl-)"
+      [ -n "$libs" ] || { echo "No MKL libs found via pkg-config" >&2; exit 1; }
       for lib in $libs; do
         echo "Testing that the build succeeds with $lib" >&2
         gcc $src -o test-with-$lib $(pkg-config --cflags --libs $lib)
