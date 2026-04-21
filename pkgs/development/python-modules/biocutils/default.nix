@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "biocutils";
-  version = "0.3.4";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BiocPy";
     repo = "BiocUtils";
     tag = version;
-    hash = "sha256-G7g+jjXoKtnp+d7a5NoEtVBEN5Di1P/pWjgiJJv6fHA=";
+    hash = "sha256-aVJIeSHs90X6xjVkFfEs9UZR5cEPuUJx2QA6hHYrmjI=";
   };
 
   build-system = [
