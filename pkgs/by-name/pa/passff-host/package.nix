@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromCodeberg,
+  nix-update-script,
   python3,
   pass,
 }:
@@ -44,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $out/share/passff-host/passff.json $out$manifestDir/
     done
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Host app for the WebExtension PassFF";
