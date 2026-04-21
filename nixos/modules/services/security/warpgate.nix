@@ -51,7 +51,10 @@ in
           freeformType = yaml.type;
           options = {
             sso_providers = mkOption {
-              description = "Configure OIDC single sign-on providers.";
+              description = ''
+                Configure OIDC single sign-on providers.
+                Main documentation can be found [here](https://warpgate.null.page/sso).
+              '';
               default = [ ];
               type = listOf (submodule {
                 freeformType = yaml.type;
@@ -62,11 +65,39 @@ in
                   };
                   label = mkOption {
                     description = "SSO provider name displayed on login page.";
-                    type = str;
+                    default = null;
+                    type = nullOr str;
+                  };
+                  auto_create_users = mkOption {
+                    description = "Whether to create user automatically at first SSO login.";
+                    default = false;
+                    type = bool;
                   };
                   provider = mkOption {
-                    description = "SSO provider configurations.";
+                    description = ''
+                      SSO provider configurations.
+                      See [here](https://github.com/warp-tech/warpgate/blob/main/config-schema.json#L430) for all acceptable options.
+                    '';
                     type = attrsOf yaml.type;
+                  };
+                  return_domain_whitelist = mkOption {
+                    description = ''
+                      Controls the SSO return URL supplied to SSO provider.
+                      This will also required you to connect to this instance via whitelisted domain when doing SSO login.
+                    '';
+                    default = null;
+                    type = nullOr (listOf str);
+                  };
+                  return_url_prefix = mkOption {
+                    description = ''
+                      Controls the SSO return URL supplied to SSO provider.
+                      Useful for providers that do not allow the @ sign in the URL (e.g. Azure).
+                    '';
+                    default = "@";
+                    type = enum [
+                      "@"
+                      "_"
+                    ];
                   };
                 };
               });
