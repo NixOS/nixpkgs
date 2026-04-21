@@ -9,6 +9,7 @@
   makeBinaryWrapper,
   pkg-config,
   versionCheckHook,
+  nixosTests,
 }:
 
 let
@@ -83,6 +84,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit frontend;
+    tests = { inherit (nixosTests) hister; };
   };
 
   meta = {
