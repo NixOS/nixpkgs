@@ -63,7 +63,9 @@ lib.checkListOfEnum "${pname}: color variants" colorVariantList colorVariants
     meta = {
       description = "Material Black Colors icons";
       homepage = "https://github.com/rtlewis88/rtl88-Themes/tree/material-black-COLORS";
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [
+        bigboggle
+      ];
       platforms = lib.platforms.all;
       license = with lib.licenses; [
         gpl3Plus

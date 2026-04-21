@@ -3480,6 +3480,12 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  bigboggle = {
+    email = "zekeboggs10@gmail.com";
+    github = "BigBoggle";
+    githubId = 94147496;
+    name = "Zeke Boggs";
+  };
   billewanick = {
     email = "bill@ewanick.com";
     github = "billewanick";
