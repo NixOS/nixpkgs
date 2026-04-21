@@ -137,6 +137,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    # propagate the stdenv so that the python API can consume it directly
+    stdenv = effectiveStdenv;
+
+    pythonPackage = python3Packages.nixl;
   };
 
   meta = {
