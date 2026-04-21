@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   python3,
   pass,
 }:
@@ -10,11 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "passff-host";
   version = "1.2.4";
 
-  src = fetchFromGitHub {
-    owner = "passff";
+  src = fetchFromCodeberg {
+    owner = "PassFF";
     repo = "passff-host";
-    rev = finalAttrs.version;
-    sha256 = "sha256-P5h0B5ilwp3OVyDHIOQ23Zv4eLjN4jFkdZF293FQnNE=";
+    tag = finalAttrs.version;
+    hash = "sha256-P5h0B5ilwp3OVyDHIOQ23Zv4eLjN4jFkdZF293FQnNE=";
   };
 
   buildInputs = [ python3 ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Host app for the WebExtension PassFF";
-    homepage = "https://github.com/passff/passff-host";
+    homepage = "https://codeberg.org/PassFF/passff-host";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
