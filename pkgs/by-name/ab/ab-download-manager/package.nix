@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/include("android:app")/d' settings.gradle.kts
     sed -i '/include("common-android")/d' compositeBuilds/plugins/settings.gradle.kts
     sed -i '/ir.amirab.plugin:common-android/d' buildSrc/build.gradle.kts
+    sed -i '/^installerPlugin {$/,/^\/\/ ======= end of GitHub action stuff$/d' desktop/app/build.gradle.kts
 
     # Add mac target formats so JetBrains compose registers the task on Darwin
     sed -i 's/targetFormats(Msi, Deb)/targetFormats(Msi, Deb, Dmg, Pkg)/' desktop/app/build.gradle.kts
@@ -72,7 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dorg.gradle.java.home=${pkgs.openjdk}"
   ];
 
-  gradleBuildTask = "createReleaseDistributable";
+  preConfigure = ''
+    export HOME="$TMPDIR/home"
+    export ANDROID_USER_HOME="$HOME/.android"
+    export XDG_CONFIG_HOME="$TMPDIR/.config"
+    export JAVA_TOOL_OPTIONS="-Duser.home=$HOME"
+    mkdir -p "$HOME" "$ANDROID_USER_HOME" "$XDG_CONFIG_HOME"
+  '';
+
+  gradleBuildTask = "createDistributable";
   gradleUpdateTask = finalAttrs.gradleBuildTask;
 
   nativeBuildInputs = [
@@ -131,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
-          local appDir=desktop/app/build/compose/binaries/main-release/app/ABDownloadManager.app
+          local appDir=desktop/app/build/compose/binaries/main/app/ABDownloadManager.app
 
           mkdir -p $out/Applications
           cp -r "$appDir" $out/Applications/
@@ -141,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          local appDir=desktop/app/build/compose/binaries/main-release/app/ABDownloadManager
+          local appDir=desktop/app/build/compose/binaries/main/app/ABDownloadManager
 
           mkdir -p $out/lib/ab-download-manager
           cp -r "$appDir"/. $out/lib/ab-download-manager/
