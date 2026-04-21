@@ -19,6 +19,7 @@
   glib,
   glib-networking,
   gnome2,
+  gst_all_1,
   gtk2,
   gtk2-x11,
   gtk3,
@@ -77,6 +78,7 @@
   xprop,
   xdpyinfo,
   libxcb,
+  x264,
   zlib,
 
   homepage,
@@ -87,6 +89,18 @@
 }:
 
 let
+  gstPackages = [
+    gst_all_1.gstreamer
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-vaapi
+  ];
+
+  gstPluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstPackages;
+
   fuse3' = symlinkJoin {
     name = "fuse3-backwards-compat";
     paths = [ (lib.getLib fuse3) ];
@@ -216,8 +230,10 @@ stdenv.mkDerivation rec {
     libxaw
     libxmu
     libxtst
+    x264
     zlib
-  ];
+  ]
+  ++ gstPackages;
 
   runtimeDependencies = [
     glib
@@ -241,11 +257,14 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
+      isSelfservice = program: (builtins.match "selfservice(.*)" program) != null;
+      isWfica = program: (builtins.match "wfica(.*)" program) != null;
+
       icaFlag =
         program:
-        if (builtins.match "selfservice(.*)" program) != null then
+        if isSelfservice program then
           "--icaroot"
-        else if (builtins.match "wfica(.*)" program) != null then
+        else if isWfica program then
           null
         else
           "-icaroot";
@@ -253,7 +272,7 @@ stdenv.mkDerivation rec {
       ldLibraryPath =
         program:
         lib.concatStringsSep ":" (
-          lib.optional (builtins.match "wfica(.*)" program != null) "$ICAInstDir"
+          lib.optional (isWfica program) "$ICAInstDir"
           ++ [
             "$ICAInstDir/lib"
             "$ICAInstDir/usr/lib/x86_64-linux-gnu"
@@ -265,19 +284,33 @@ stdenv.mkDerivation rec {
       # path. Leaving it enabled for UI helpers exposes Citrix's session-only
       # libproxy.so to the embedded web stack, which then fails to resolve CGP
       # symbols.
+      wrapperArgs =
+        program:
+        lib.concatStringsSep " \\\n          " (
+          lib.optional (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''
+          ++ [
+            ''--set ICAROOT "$ICAInstDir"''
+            ''--prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"''
+            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${gstPluginPath}"''
+            ''--prefix LD_LIBRARY_PATH : "${ldLibraryPath program}"''
+            ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
+            ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"''
+          ]
+        );
+
       wrap = program: ''
         wrapProgram $out/opt/citrix-icaclient/${program} \
-          ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
-          --set ICAROOT "$ICAInstDir" \
-          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
-          --prefix LD_LIBRARY_PATH : "${ldLibraryPath program}" \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
-          --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"
+          ${wrapperArgs program}
       '';
 
       wrapLink = program: ''
         ${wrap program}
         ln -sf $out/opt/citrix-icaclient/${program} $out/bin/${baseNameOf program}
+      '';
+
+      makeBinWrapper = program: wrapperName: ''
+        makeWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
+          ${wrapperArgs program}
       '';
 
       copyCert = path: ''
@@ -324,6 +357,7 @@ stdenv.mkDerivation rec {
         ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
       fi
       ${mkWrappers wrapLink toWrap}
+      ${makeBinWrapper "wfica" "wfica"}
       ${mkWrappers wrap [
         "PrimaryAuthManager"
         "ServiceRecord"
@@ -346,6 +380,9 @@ stdenv.mkDerivation rec {
       rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so} || true
       ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
       ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
+      # `hinst` disables multimedia when it cannot link into FHS plugin
+      # directories. In Nix we provide the plugin path via wrappers instead.
+      sed -i 's/^MultiMedia=Off$/MultiMedia=On/' "$ICAInstDir/config/module.ini"
 
       echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
       echo UTC > "$ICAInstDir/timezone"
