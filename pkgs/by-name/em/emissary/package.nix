@@ -42,9 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  postInstall = lib.optionalString stdenv.targetPlatform.isLinux ''
-    wrapProgram $out/bin/emissary-cli \
-      --prefix LD_LIBRARY_PATH : ${
+  postFixup = lib.optionalString stdenv.targetPlatform.isLinux ''
+    patchelf $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-rpath ${
         lib.makeLibraryPath [
           wayland
           libxkbcommon
