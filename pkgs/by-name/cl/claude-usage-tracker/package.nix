@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "claude-usage-tracker";
-  version = "3.0.3";
+  version = "3.1.1";
 
   src = fetchzip {
     url = "https://github.com/hamed-elfayome/Claude-Usage-Tracker/releases/download/v${finalAttrs.version}/Claude-Usage.zip";
-    hash = "sha256-Yc4SukriyiLI/8U+rdhc3Jh/mD2V/0EF57rsVV0J3s4=";
+    hash = "";
     stripRoot = false;
   };
 
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hamed-elfayome/Claude-Usage-Tracker";
     changelog = "https://github.com/hamed-elfayome/Claude-Usage-Tracker/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ myzel394 ];
   };
