@@ -59,6 +59,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://eepnet.github.io/emissary/";
     license = lib.licenses.mit; # https://github.com/eepnet/emissary/blob/master/LICENSE (found an apache2 as well but thats for https://github.com/altonen/emissary/commit/c4a1c849ebfceba892adce53f512f1f099721de2)
     mainProgram = "emissary-cli";
-    maintainers = [ lib.maintainers.N4CH723HR3R ];
+    maintainers = [
+      lib.maintainers.N4CH723HR3R
+      lib.maintainers.cappuccinocosmico
+    ];
   };
 })

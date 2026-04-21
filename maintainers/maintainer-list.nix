@@ -4428,6 +4428,12 @@
     github = "caperren";
     githubId = 4566591;
   };
+  cappuccinocosmico = {
+    name = "Nicole Venner";
+    email = "nvenner@protonmail.ch";
+    github = "cappuccinocosmico";
+    githubId = 12666459;
+  };
   CaptainJawZ = {
     email = "CaptainJawZ@outlook.com";
     name = "Danilo Reyes";
