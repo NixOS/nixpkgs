@@ -6,10 +6,10 @@
   glib,
   glib-networking,
   gst_all_1,
-  gtk3,
+  gtk4,
   jq,
   lib,
-  libappindicator-gtk3,
+  libappindicator,
   librsvg,
   libsoup_3,
   makeBinaryWrapper,
@@ -25,8 +25,7 @@
 }:
 
 let
-  gtk = gtk3;
-  libappindicator-gtk = libappindicator-gtk3;
+  gtk = gtk4;
   libsoup = libsoup_3;
   webkitgtk = webkitgtk_4_1;
 in
@@ -61,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       glib
       glib-networking
       gtk
-      libappindicator-gtk
+      libappindicator
       librsvg
       libsoup
       openssl
