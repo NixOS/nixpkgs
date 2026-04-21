@@ -355,6 +355,7 @@ stdenv.mkDerivation rec {
       hax404
       joachifm
       panicgh
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
