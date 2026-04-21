@@ -12,6 +12,7 @@
   curl,
 
   nix-update-script,
+  nixosTests,
 }:
 let
   python = python3;
@@ -178,6 +179,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python;
+    tests = { inherit (nixosTests) funkwhale; };
 
     static = runCommand "funkwhale-static" { } ''
       FUNKWHALE_URL="https://example.com" \
