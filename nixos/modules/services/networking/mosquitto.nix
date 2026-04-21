@@ -239,8 +239,8 @@ let
         options = lib.mkOption {
           type = attrsOf optionType;
           description = ''
-            Options for the auth plugin. Each key turns into a `auth_opt_*`
-             line in the config.
+            Options for the plugin. Each key turns into a `plugin_opt_*`
+            line in the config.
           '';
           default = { };
         };
@@ -257,10 +257,10 @@ let
   formatAuthPlugin =
     plugin:
     [
-      "auth_plugin ${plugin.plugin}"
+      "plugin ${plugin.plugin}"
       "auth_plugin_deny_special_chars ${optionToString plugin.denySpecialChars}"
     ]
-    ++ formatFreeform { prefix = "auth_opt_"; } plugin.options;
+    ++ formatFreeform { prefix = "plugin_opt_"; } plugin.options;
 
   freeformListenerKeys = {
     accept_protocol_versions = 1;
