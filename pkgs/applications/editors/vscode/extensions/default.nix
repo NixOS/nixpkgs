@@ -1260,8 +1260,8 @@ let
         mktplcRef = {
           name = "languagetool-linter";
           publisher = "davidlday";
-          version = "0.25.5";
-          hash = "sha256-/ZSxaxiv76aJ+KmDlR5h8PrkEo0pPMvb9C3KGdKCNK8=";
+          version = "0.25.7";
+          hash = "sha256-XLW49YkgDuojNEzqWRztK8mKWKbVU5OeGOjHl0heH/w=";
         };
         meta = {
           description = "LanguageTool integration for VS Code";
@@ -1744,8 +1744,8 @@ let
         mktplcRef = {
           name = "vscode-jest-runner";
           publisher = "firsttris";
-          version = "0.4.144";
-          hash = "sha256-gKs0DNloispkKb7F6V38W5LoPk4OFPayv7MX9bQLJ2k=";
+          version = "0.4.147";
+          hash = "sha256-gMlGU6XSvWEufaaszFJ7VmPM9q5oI5K/hFzIwQGTSCE=";
         };
         meta = {
           description = "Simple way to run or debug a single (or multiple) tests from context-menu";
@@ -1760,8 +1760,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.35.0";
-          hash = "sha256-5tjSXwjiNMC8NlGAa0NQ5uWw+wTEPePL1GgRhnBAtUo=";
+          version = "0.38.0";
+          hash = "sha256-SJozi2AlV+wHD0wuhpgkG6Ve5AGIhsVDC37eE8/bnKM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -1998,8 +1998,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.72.0";
-          hash = "sha256-QqoGCxGJ0l69Q6P+L/AsEIN99xP9ReYzRC2AJVpk/gU=";
+          version = "6.74.3";
+          hash = "sha256-2G/dyedhmjN8630yMccY58ZtNwPPtBB8HFFkZ0dLYDA=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2486,8 +2486,8 @@ let
         mktplcRef = {
           name = "gruvbox";
           publisher = "jdinhlife";
-          version = "1.29.0";
-          hash = "sha256-LDbeCwuUxvyuacuvikZbV25iEtXWPRJ/ihnqpuM8Ky4=";
+          version = "1.29.1";
+          hash = "sha256-FGZx/R3hLgYlC2BdQkcJ+puQtgNYm2iPbJJJmjEzLS0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jdinhlife.gruvbox/changelog";
@@ -2648,8 +2648,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.189.2";
-          hash = "sha256-ydnE34xD2u5cwPOJezXtSbC/JXrGz4j1QL26YaWjfoU=";
+          version = "1.209.2";
+          hash = "sha256-uS0KYSqJJ1IXEcDy1Y3Fl0GHpEpq6eskgBCoBZqYuUo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -3877,8 +3877,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.53.0";
-          hash = "sha256-4gMFV6uMpExqZgWwcPYLxOnHJBQtT02LY3VqfzRLoaQ=";
+          version = "1.54.0";
+          hash = "sha256-G1L8fSRXj4rmyGFyvPuz7zoQ367Lc5PoyVOZnHPHcu0=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -4218,8 +4218,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.22";
-          hash = "sha256-3yABYp50iyk6nJO6xXmyhWLgMtA+fuqiEq6uFOJhWdU=";
+          version = "0.8.24";
+          hash = "sha256-SKDg0AVzlDFPq3ZHE65vX6OUPWeZGTJb5DaVs/y14UY=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -5076,8 +5076,8 @@ let
         mktplcRef = {
           name = "vscode-gradle";
           publisher = "vscjava";
-          version = "3.17.2";
-          hash = "sha256-oBtUDkuGMu7/CvxiHxvbiHHTQ2dG85VY08es9u3xKJk=";
+          version = "3.17.3";
+          hash = "sha256-heFcGOe10r7y23xyFc/nFKk/nsrX4wc5fT9e4GKGhW0=";
         };
 
         meta = {

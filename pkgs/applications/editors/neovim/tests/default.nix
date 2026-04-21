@@ -91,7 +91,6 @@ let
     neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}"
       {
-        nativeBuildInputs = [ ];
         meta.platforms = neovim-drv.meta.platforms;
       }
       (

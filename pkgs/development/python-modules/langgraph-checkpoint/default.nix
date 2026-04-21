@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${finalAttrs.version}";
-    hash = "sha256-NJSmpVshj/x6ws+jFYXGarNKNztbk5OIIMA1neFOyIY=";
+    hash = "sha256-k0V+/kZlpMttgVId+mLgEMvK+l20NEmf8S1ylPWjjsU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/checkpoint";
