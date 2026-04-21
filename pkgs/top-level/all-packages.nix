@@ -3489,9 +3489,7 @@ with pkgs;
 
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
-  openconnectPackages = callPackage ../tools/networking/openconnect { };
-
-  inherit (openconnectPackages) openconnect openconnect_openssl;
+  openconnect_openssl = openconnect.override { useOpenSSL = true; };
 
   globalprotect-openconnect =
     libsForQt5.callPackage ../tools/networking/globalprotect-openconnect
