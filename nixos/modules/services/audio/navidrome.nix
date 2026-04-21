@@ -231,5 +231,8 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
-  meta.maintainers = with maintainers; [ fsnkty ];
+  meta.maintainers = with maintainers; [
+    fsnkty
+    tebriel
+  ];
 }
