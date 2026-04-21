@@ -5,16 +5,16 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "17.2.17";
+  version = "17.9.1";
   source =
     {
       x86_64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-        hash = "sha256-9elOokCY1bxzG2iL4iOODC/7qavwn77a0zOEBpAtT8Q=";
+        hash = "sha256-94Zk7onepdNVEeDb+Vn4h680UoXCZPeZW+eGpaUrnwI=";
       };
       aarch64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-arm64.tar.xz";
-        hash = "sha256-jk8BKmp3VNvCYK6kgGouFOBECoDaGiWQ8EzZvBwL7cc=";
+        hash = "sha256-o9kJvxqHICzuFItPj6r76D8aEEF/8QsRwJvE4oxphfA=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");
