@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  nix-update-script,
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
@@ -36,6 +37,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 frida-core.h -t $out/include
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Frida core library intended for static linking into bindings";
