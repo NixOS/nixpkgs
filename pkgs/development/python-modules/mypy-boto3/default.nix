@@ -590,8 +590,8 @@ in
       "sha256-mzSkLSIQyrcPyU+LhrlRJtjWbkpLXM8/iOpAH0lA6zA=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.42.84"
-      "sha256-5sa/UWt6MAEl6zmsmohWZHc0iokmccLa4JgbXDYe/Rs=";
+    buildMypyBoto3Package "guardduty" "1.42.92"
+      "sha256-MVLmiiL5/PWk5KGwQffzd5bex6Cx6tEu/1DMnzv8g9I=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.42.59"
