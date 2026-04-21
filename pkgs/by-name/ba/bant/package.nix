@@ -73,6 +73,9 @@ buildBazelPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Bazel/Build Analysis and Navigation Tool";
     homepage = "http://bant.build/";
