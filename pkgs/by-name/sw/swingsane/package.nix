@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   unzip,
   jre,
@@ -17,7 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/swingsane/swingsane-${finalAttrs.version}-bin.zip";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    unzip
+  ];
 
   dontConfigure = true;
 
@@ -29,18 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
         exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${finalAttrs.version}.jar "$@"
       '';
 
-      desktopItem = makeDesktopItem {
-        name = "swingsane";
-        exec = "swingsane";
-        icon = "swingsane";
-        desktopName = "SwingSane";
-        genericName = "Scan from local or remote SANE servers";
-        comment = finalAttrs.meta.description;
-        categories = [ "Office" ];
-      };
-
     in
+    # bash
     ''
+      runHook preInstall
+
       install -v -m 755    -d $out/share/java/swingsane/
       install -v -m 644 *.jar $out/share/java/swingsane/
 
@@ -50,8 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
       unzip -j swingsane-${finalAttrs.version}.jar "com/swingsane/images/*.png"
       install -v -D -m 644 swingsane_512x512.png $out/share/icons/hicolor/512x512/apps/swingsane.png
 
-      cp -v -r ${desktopItem}/share/applications $out/share
+      runHook postInstall
     '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "swingsane";
+      exec = "swingsane";
+      icon = "swingsane";
+      desktopName = "SwingSane";
+      genericName = "Scan from local or remote SANE servers";
+      comment = finalAttrs.meta.description;
+      categories = [ "Office" ];
+    })
+  ];
 
   meta = {
     description = "Java GUI for SANE scanner servers (saned)";
@@ -60,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       using both local and remote Scanner Access Now Easy (SANE) servers.
       The most powerful feature is its ability to query back-ends for scanner
       specific options which can be set by the user as a scanner profile.
-      It also has support for authentication, mutlicast DNS discovery,
+      It also has support for authentication, multicast DNS discovery,
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';

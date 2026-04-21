@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  copyDesktopItems,
   love,
   lua,
   makeWrapper,
@@ -10,25 +11,6 @@
   strip-nondeterminism,
   zip,
 }:
-
-let
-  icon = fetchurl {
-    url = "http://tangramgames.dk/img/thumb/mrrescue.png";
-    sha256 = "1y5ahf0m01i1ch03axhvp2kqc6lc1yvh59zgvgxw4w7y3jryw20k";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "mrrescue";
-    exec = "mrrescue";
-    icon = icon;
-    comment = "Arcade-style fire fighting game";
-    desktopName = "Mr. Rescue";
-    genericName = "mrrescue";
-    categories = [ "Game" ];
-  };
-
-in
-
 stdenv.mkDerivation {
   pname = "mrrescue";
   version = "1.02d-unstable-2018-08-18";
@@ -41,6 +23,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     lua
     love
     makeWrapper
@@ -56,6 +39,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
@@ -64,9 +49,28 @@ stdenv.mkDerivation {
     makeWrapper ${lib.getExe love} $out/bin/mrrescue --add-flags $out/share/games/lovegames/mrrescue.love
 
     chmod +x $out/bin/mrrescue
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+
+    runHook postInstall
   '';
+
+  desktopItems =
+    let
+      icon = fetchurl {
+        url = "http://tangramgames.dk/img/thumb/mrrescue.png";
+        sha256 = "1y5ahf0m01i1ch03axhvp2kqc6lc1yvh59zgvgxw4w7y3jryw20k";
+      };
+    in
+    [
+      (makeDesktopItem {
+        name = "mrrescue";
+        exec = "mrrescue";
+        icon = icon;
+        comment = "Arcade-style fire fighting game";
+        desktopName = "Mr. Rescue";
+        genericName = "mrrescue";
+        categories = [ "Game" ];
+      })
+    ];
 
   meta = {
     description = "Arcade-style fire fighting game";

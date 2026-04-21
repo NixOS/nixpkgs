@@ -3,6 +3,7 @@
   fetchurl,
   fetchFromGitHub,
   buildNpmPackage,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   unstableGitUpdater,
@@ -36,16 +37,6 @@ let
     installPhase = ''
       cp -r . $out
     '';
-  };
-
-  desktopItem = makeDesktopItem {
-    desktopName = "Icestudio";
-    comment = "Visual editor for open FPGA boards";
-    name = "icestudio";
-    exec = "icestudio";
-    icon = "icestudio";
-    terminal = false;
-    categories = [ "Development" ];
   };
 in
 buildNpmPackage rec {
@@ -84,6 +75,18 @@ buildNpmPackage rec {
     runHook postBuild
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Icestudio";
+      comment = "Visual editor for open FPGA boards";
+      name = "icestudio";
+      exec = "icestudio";
+      icon = "icestudio";
+      terminal = false;
+      categories = [ "Development" ];
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
@@ -93,8 +96,6 @@ buildNpmPackage rec {
       install -Dm644 docs/resources/icons/"$size"x"$size"/apps/icon.png \
         $out/share/icons/hicolor/"$size"x"$size"/apps/icestudio.png
     done
-
-    install -Dm644 ${desktopItem}/share/applications/icestudio.desktop -t $out/share/applications
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} \
         --add-flags $out \
@@ -106,7 +107,10 @@ buildNpmPackage rec {
     tagPrefix = "v";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   buildInputs = [ python3 ];
 

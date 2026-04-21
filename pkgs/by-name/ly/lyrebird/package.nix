@@ -2,6 +2,7 @@
   python3Packages,
   lib,
   fetchFromGitHub,
+  copyDesktopItems,
   makeDesktopItem,
   wrapGAppsHook3,
   gtk3,
@@ -9,19 +10,6 @@
   sox,
   pulseaudio,
 }:
-let
-  desktopItem = makeDesktopItem {
-    name = "lyrebird";
-    exec = "lyrebird";
-    icon = "${placeholder "out"}/share/lyrebird/icon.png";
-    desktopName = "Lyrebird";
-    genericName = "Voice Changer";
-    categories = [
-      "AudioVideo"
-      "Audio"
-    ];
-  };
-in
 python3Packages.buildPythonApplication rec {
   pname = "lyrebird";
   version = "1.2.0";
@@ -42,6 +30,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
+    copyDesktopItems
     wrapGAppsHook3
     gobject-introspection
   ];
@@ -64,11 +53,28 @@ python3Packages.buildPythonApplication rec {
     ''"''${gappsWrapperArgs[@]}"''
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "lyrebird";
+      exec = "lyrebird";
+      icon = "${placeholder "out"}/share/lyrebird/icon.png";
+      desktopName = "Lyrebird";
+      genericName = "Voice Changer";
+      categories = [
+        "AudioVideo"
+        "Audio"
+      ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/{applications,lyrebird}}
     cp -at $out/share/lyrebird/ app icon.png
-    cp -at $out/share/applications/ ${desktopItem}
     install -Dm755 app.py $out/bin/lyrebird
+
+    runHook postInstall
   '';
 
   meta = {

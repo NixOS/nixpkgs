@@ -2,6 +2,7 @@
   autoPatchelfHook,
   dpkg,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   udev,
@@ -15,19 +16,6 @@
   libxtst,
   libxscrnsaver,
 }:
-let
-  desktopItem = makeDesktopItem {
-    desktopName = "HakuNeko Desktop";
-    genericName = "Manga & Anime Downloader";
-    categories = [
-      "Network"
-      "FileTransfer"
-    ];
-    exec = "hakuneko";
-    icon = "hakuneko-desktop";
-    name = "hakuneko-desktop";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hakuneko";
   version = "6.1.7";
@@ -53,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     dpkg
     makeWrapper
     wrapGAppsHook3
@@ -74,10 +63,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     cp -R usr "$out"
-    # Overwrite existing .desktop file.
-    cp "${desktopItem}/share/applications/hakuneko-desktop.desktop" \
-       "$out/share/applications/hakuneko-desktop.desktop"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "HakuNeko Desktop";
+      genericName = "Manga & Anime Downloader";
+      categories = [
+        "Network"
+        "FileTransfer"
+      ];
+      exec = "hakuneko";
+      icon = "hakuneko-desktop";
+      name = "hakuneko-desktop";
+    })
+  ];
 
   runtimeDependencies = [
     (lib.getLib udev)

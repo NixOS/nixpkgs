@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   crystal,
-  copyDesktopItems,
   gtk3,
   libxkbcommon,
   libxinerama,
@@ -77,7 +76,6 @@ crystal.buildCrystalPackage {
     libnotify
   ];
   nativeBuildInputs = [
-    copyDesktopItems
     gobject-introspection
   ];
   nativeCheckInputs = [

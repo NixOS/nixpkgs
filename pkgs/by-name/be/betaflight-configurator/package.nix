@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
+  copyDesktopItems,
   makeDesktopItem,
   nwjs,
   wrapGAppsHook3,
@@ -12,14 +13,6 @@
 
 let
   pname = "betaflight-configurator";
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = "Betaflight configuration tool";
-    desktopName = "Betaflight Configurator";
-    genericName = "Flight controller configuration tool";
-  };
 in
 stdenv.mkDerivation rec {
   inherit pname;
@@ -35,6 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    copyDesktopItems
     wrapGAppsHook3
     unzip
   ];
@@ -44,6 +38,17 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = "Betaflight configuration tool";
+      desktopName = "Betaflight Configurator";
+      genericName = "Flight controller configuration tool";
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin \
@@ -51,7 +56,6 @@ stdenv.mkDerivation rec {
 
     cp -r . $out/opt/${pname}/
     install -m 444 -D icon/bf_icon_128.png $out/share/icons/hicolor/128x128/apps/${pname}.png
-    cp -r ${desktopItem}/share/applications $out/share/
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/${pname}
     runHook postInstall

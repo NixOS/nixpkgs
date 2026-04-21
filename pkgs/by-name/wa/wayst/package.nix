@@ -16,27 +16,9 @@
 
   libnotify,
   xdg-utils,
+  copyDesktopItems,
   makeDesktopItem,
 }:
-
-let
-  desktopItem = makeDesktopItem {
-    desktopName = "Wayst";
-    name = "wayst";
-    genericName = "Terminal";
-    exec = "wayst";
-    icon = "wayst";
-    categories = [
-      "System"
-      "TerminalEmulator"
-    ];
-    keywords = [
-      "wayst"
-      "terminal"
-    ];
-    comment = "A simple terminal emulator";
-  };
-in
 stdenv.mkDerivation {
   pname = "wayst";
   version = "0-unstable-2023-07-16";
@@ -50,7 +32,10 @@ stdenv.mkDerivation {
 
   makeFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
 
   buildInputs = [
     fontconfig
@@ -76,9 +61,25 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Wayst";
+      name = "wayst";
+      genericName = "Terminal";
+      exec = "wayst";
+      icon = "wayst";
+      categories = [
+        "System"
+        "TerminalEmulator"
+      ];
+      keywords = [
+        "wayst"
+        "terminal"
+      ];
+      comment = "A simple terminal emulator";
+    })
+  ];
   postInstall = ''
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
     install -D icons/wayst.svg $out/share/icons/hicolor/scalable/apps/wayst.svg
   '';
 

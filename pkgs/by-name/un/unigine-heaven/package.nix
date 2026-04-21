@@ -14,6 +14,7 @@
   libglvnd,
   openal,
   imagemagick,
+  copyDesktopItems,
   makeDesktopItem,
 }:
 let
@@ -26,14 +27,6 @@ let
       "x86"
     else
       throw "Unsupported platform ${stdenv.hostPlatform.system}";
-
-  desktopItem = makeDesktopItem {
-    name = "Heaven";
-    exec = "heaven";
-    genericName = "A GPU Stress test tool from the UNIGINE";
-    icon = "Heaven";
-    desktopName = "Heaven Benchmark";
-  };
 in
 stdenv.mkDerivation {
   pname = "unigine-heaven";
@@ -45,6 +38,8 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     sh $src --target $name
 
     mkdir -p $out/lib/unigine/heaven/bin
@@ -71,10 +66,21 @@ stdenv.mkDerivation {
         convert $out/lib/unigine/heaven/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Heaven.png
     done
 
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    runHook postInstall
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Heaven";
+      exec = "heaven";
+      genericName = "A GPU Stress test tool from the UNIGINE";
+      icon = "Heaven";
+      desktopName = "Heaven Benchmark";
+    })
+  ];
+
   nativeBuildInputs = [
+    copyDesktopItems
     autoPatchelfHook
     makeWrapper
     imagemagick

@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
+  copyDesktopItems,
   makeDesktopItem,
   cmake,
   python3Packages,
@@ -20,29 +21,6 @@ let
   pname = "pymol";
   description = "Python-enhanced molecular graphics tool";
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    desktopName = "PyMol Molecular Graphics System";
-    genericName = "Molecular Modeler";
-    comment = description;
-    icon = pname;
-    mimeTypes = [
-      "chemical/x-pdb"
-      "chemical/x-mdl-molfile"
-      "chemical/x-mol2"
-      "chemical/seq-aa-fasta"
-      "chemical/seq-na-fasta"
-      "chemical/x-xyz"
-      "chemical/x-mdl-sdf"
-    ];
-    categories = [
-      "Graphics"
-      "Education"
-      "Science"
-      "Chemistry"
-    ];
-  };
 in
 python3Packages.buildPythonApplication rec {
   inherit pname;
@@ -90,6 +68,7 @@ python3Packages.buildPythonApplication rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
+    copyDesktopItems
     cmake
     qt5.wrapQtAppsHook
   ];
@@ -115,23 +94,42 @@ python3Packages.buildPythonApplication rec {
 
   env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
-  postInstall =
-    with python3Packages;
-    ''
-      wrapProgram $out/bin/pymol \
-        --prefix PYTHONPATH : ${
-          lib.makeSearchPathOutput "lib" python3Packages.python.sitePackages [
-            pyqt5
-            pyqt5.pyqt5-sip
-          ]
-        }
+  postInstall = with python3Packages; ''
+    wrapProgram $out/bin/pymol \
+      --prefix PYTHONPATH : ${
+        lib.makeSearchPathOutput "lib" python3Packages.python.sitePackages [
+          pyqt5
+          pyqt5.pyqt5-sip
+        ]
+      }
 
-      mkdir -p "$out/share/icons/"
-      ln -s $out/${python3Packages.python.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp -r "${desktopItem}/share/applications/" "$out/share/"
-    '';
+    mkdir -p "$out/share/icons/"
+    ln -s $out/${python3Packages.python.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
+  '';
+
+  desktopItems = lib.lists.optional stdenv.hostPlatform.isLinux (makeDesktopItem {
+    name = pname;
+    exec = pname;
+    desktopName = "PyMol Molecular Graphics System";
+    genericName = "Molecular Modeler";
+    comment = description;
+    icon = pname;
+    mimeTypes = [
+      "chemical/x-pdb"
+      "chemical/x-mdl-molfile"
+      "chemical/x-mol2"
+      "chemical/seq-aa-fasta"
+      "chemical/seq-na-fasta"
+      "chemical/x-xyz"
+      "chemical/x-mdl-sdf"
+    ];
+    categories = [
+      "Graphics"
+      "Education"
+      "Science"
+      "Chemistry"
+    ];
+  });
 
   pythonImportsCheck = [ "pymol" ];
 

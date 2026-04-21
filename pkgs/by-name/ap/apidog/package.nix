@@ -52,9 +52,9 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/apidog.png \
       $out/share/icons/hicolor/512x512/apps/apidog.png
+    install -Dm444 ${desktopItem}/share/applications/apidog.desktop \
+      $out/share/applications/apidog.desktop
   '';
-
-  desktopItems = [ desktopItem ];
 
   meta = with lib; {
     description = "All-in-one API design, test, mock and documentation platform";

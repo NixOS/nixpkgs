@@ -6,6 +6,7 @@
   fftw,
   liblo,
   libsndfile,
+  copyDesktopItems,
   makeDesktopItem,
   portaudio,
   libsForQt5,
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = with libsForQt5; [
+    copyDesktopItems
     qmake
     wrapQtAppsHook
   ];
@@ -43,20 +45,26 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtbase
   ];
 
-  desktopItem = makeDesktopItem {
-    type = "Application";
-    desktopName = "samplebrain";
-    name = "samplebrain";
-    comment = "A sample masher designed by Aphex Twin";
-    exec = "samplebrain";
-    icon = "samplebrain";
-    categories = [ "Audio" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      desktopName = "samplebrain";
+      name = "samplebrain";
+      comment = "A sample masher designed by Aphex Twin";
+      exec = "samplebrain";
+      icon = "samplebrain";
+      categories = [ "Audio" ];
+    })
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp samplebrain $out/bin
     install -m 444 -D desktop/samplebrain.svg $out/share/icons/hicolor/scalable/apps/samplebrain.svg
+
+    runHook postInstall
   '';
 
   meta = {

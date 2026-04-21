@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildNpmPackage,
+  copyDesktopItems,
   fetchFromGitHub,
   makeDesktopItem,
   desktopToDarwinBundle,
@@ -16,24 +17,6 @@ let
   packageName = "filen-desktop";
   packageVersion = "3.0.47";
   desktopName = "Filen Desktop";
-  desktopItem = makeDesktopItem {
-    name = packageName;
-    exec = packageName;
-    icon = packageName;
-    startupWMClass = packageName;
-    desktopName = desktopName;
-    comment = "Encrypted Cloud Storage";
-    categories = [
-      "Network"
-      "FileTransfer"
-      "Utility"
-    ];
-    keywords = [
-      "cloud"
-      "storage"
-      "encrypted"
-    ];
-  };
 
   iconPrefix = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
   iconSuffix = if stdenv.hostPlatform.isDarwin then "icns" else "png";
@@ -59,6 +42,7 @@ buildNpmPackage {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     pkg-config
     electron
     makeWrapper
@@ -85,17 +69,35 @@ buildNpmPackage {
     install -D $src/assets/icons/app/${iconPrefix}Notification.${iconSuffix} $out/share/icons/hicolor/128x128/apps/${packageName}-notification.${iconSuffix}
   '';
 
-  # Create binary wrapper and desktopItem
-  # desktopItem auto-creates the .app bundle for Darwin
+  # Create binary wrapper
   postInstall = ''
     makeWrapper ${electron}/bin/electron $out/bin/${packageName} \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/lib/node_modules/@filen/desktop/dist/index.js \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
-
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
   '';
+
+  # desktopItem auto-creates the .app bundle for Darwin
+  desktopItems = [
+    (makeDesktopItem {
+      name = packageName;
+      exec = packageName;
+      icon = packageName;
+      startupWMClass = packageName;
+      desktopName = desktopName;
+      comment = "Encrypted Cloud Storage";
+      categories = [
+        "Network"
+        "FileTransfer"
+        "Utility"
+      ];
+      keywords = [
+        "cloud"
+        "storage"
+        "encrypted"
+      ];
+    })
+  ];
 
   # Write correct darwin icons to .app contents
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -2,14 +2,12 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  makeDesktopItem,
   wxwidgets_3_1,
   prusa-slicer,
   libspnav,
   opencascade-occt_7_6,
 }:
 let
-  appname = "SuperSlicer";
   pname = "super-slicer";
   description = "PrusaSlicer fork with more features and faster development cycle";
 
@@ -115,18 +113,6 @@ let
 
       buildInputs = super.buildInputs ++ [
         libspnav
-      ];
-
-      desktopItems = [
-        (makeDesktopItem {
-          name = "superslicer";
-          exec = "superslicer";
-          icon = appname;
-          comment = description;
-          desktopName = appname;
-          genericName = "3D printer tool";
-          categories = [ "Development" ];
-        })
       ];
 
       meta = {

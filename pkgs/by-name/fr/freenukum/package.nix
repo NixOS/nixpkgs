@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitLab,
+  copyDesktopItems,
   makeDesktopItem,
   installShellFiles,
   dejavu_fonts,
@@ -13,21 +14,6 @@
 let
   pname = "freenukum";
   description = "Clone of the original Duke Nukum 1 Jump'n Run game";
-
-  desktopItem = makeDesktopItem {
-    desktopName = pname;
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = description;
-    categories = [
-      "Game"
-      "ArcadeGame"
-      "ActionGame"
-    ];
-    genericName = pname;
-  };
-
 in
 rustPlatform.buildRustPackage rec {
   inherit pname;
@@ -44,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-lQZ9Z/1tbL7BeLmGxJXNUvrXsOGtgzGXNt6WYGezxi0=";
 
   nativeBuildInputs = [
+    copyDesktopItems
     installShellFiles
   ];
 
@@ -58,6 +45,22 @@ rustPlatform.buildRustPackage rec {
       --replace /usr $out
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = pname;
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = description;
+      categories = [
+        "Game"
+        "ArcadeGame"
+        "ActionGame"
+      ];
+      genericName = pname;
+    })
+  ];
+
   postInstall = ''
     mkdir -p $out/share/fonts/truetype/dejavu
     ln -sf \
@@ -66,7 +69,6 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/doc/freenukum
     install -Dm644 README.md CHANGELOG.md $out/share/doc/freenukum/
     installManPage doc/freenukum.6
-    install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
   '';
 
   meta = {

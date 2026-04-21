@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
+  copyDesktopItems,
   makeDesktopItem,
   SDL2,
   pkg-config,
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [

@@ -3,7 +3,6 @@
   lib,
   stdenv,
   cmake,
-  copyDesktopItems,
   pkg-config,
   qt6Packages,
   linyaps-box,
@@ -91,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];

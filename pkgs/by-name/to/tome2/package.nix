@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  copyDesktopItems,
   makeDesktopItem,
   ncurses,
   libx11,
@@ -12,20 +13,6 @@
 let
   pname = "tome2";
   description = "Dungeon crawler similar to Angband, based on the works of Tolkien";
-
-  desktopItem = makeDesktopItem {
-    desktopName = pname;
-    name = pname;
-    exec = "${pname}-x11";
-    icon = pname;
-    comment = description;
-    type = "Application";
-    categories = [
-      "Game"
-      "RolePlaying"
-    ];
-    genericName = pname;
-  };
 
 in
 stdenv.mkDerivation {
@@ -45,16 +32,30 @@ stdenv.mkDerivation {
     boost
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+  ];
 
   cmakeFlags = [
     "-DSYSTEM_INSTALL=ON"
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/*.desktop $out/share/applications
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = pname;
+      name = pname;
+      exec = "${pname}-x11";
+      icon = pname;
+      comment = description;
+      type = "Application";
+      categories = [
+        "Game"
+        "RolePlaying"
+      ];
+      genericName = pname;
+    })
+  ];
 
   meta = {
     inherit description;

@@ -6,25 +6,13 @@
   autoPatchelfHook,
   openjdk21,
   pam,
+  copyDesktopItems,
   makeDesktopItem,
   icoutils,
 }:
 
 let
-
   pkg_path = "$out/lib/ghidra";
-
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-    terminal = false;
-    startupWMClass = "ghidra-Ghidra";
-  };
-
 in
 stdenv.mkDerivation rec {
   pname = "ghidra";
@@ -36,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
     icoutils
   ]
@@ -48,11 +37,25 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+      terminal = false;
+      startupWMClass = "ghidra-Ghidra";
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "${pkg_path}"
     mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
@@ -61,6 +64,8 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/share/icons/hicolor/$res/apps"
       mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
     done;
+
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -1,6 +1,7 @@
 {
   lib,
   buildDotnetModule,
+  copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -34,6 +35,7 @@ buildDotnetModule rec {
   mapNuGetDependencies = true;
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
     desktop-file-utils
   ];
@@ -55,8 +57,6 @@ buildDotnetModule rec {
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
       --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
 
-    install -D $desktopItem/share/applications/* -t $out/share/applications
-
     runHook postInstall
   '';
 
@@ -64,13 +64,15 @@ buildDotnetModule rec {
     rm $out/bin/*.{so,dylib}
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "wheelwizard";
-    exec = "WheelWizard";
-    comment = "WheelWizard, Retro Rewind Launcher";
-    desktopName = "Wheel Wizard";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "wheelwizard";
+      exec = "WheelWizard";
+      comment = "WheelWizard, Retro Rewind Launcher";
+      desktopName = "Wheel Wizard";
+      categories = [ "Game" ];
+    })
+  ];
 
   passthru.updateScript = nix-update-script { };
 

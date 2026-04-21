@@ -3,6 +3,7 @@
   fetchzip,
   lib,
   makeWrapper,
+  copyDesktopItems,
   makeDesktopItem,
   jdk,
 }:
@@ -18,18 +19,25 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-xEqzSNM5Mkt9SQ+23Edb2NMN/o8koBjhQWTGuyZ/0m4=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "visualvm";
-    exec = "visualvm";
-    comment = "Java Troubleshooting Tool";
-    desktopName = "VisualVM";
-    genericName = "Java Troubleshooting Tool";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "visualvm";
+      exec = "visualvm";
+      comment = "Java Troubleshooting Tool";
+      desktopName = "VisualVM";
+      genericName = "Java Troubleshooting Tool";
+      categories = [ "Development" ];
+    })
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     find . -type f -name "*.dll" -o -name "*.exe"  -delete;
 
     substituteInPlace etc/visualvm.conf \
@@ -37,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/path/to/jdk" "${jdk.home}" \
 
     cp -r . $out
+
+    runHook postInstall
   '';
 
   meta = {

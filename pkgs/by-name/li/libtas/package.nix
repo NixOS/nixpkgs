@@ -14,6 +14,7 @@
   libxi,
   file,
   binutils,
+  copyDesktopItems,
   makeDesktopItem,
 
   # Forces libTAS to run in X11.
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    copyDesktopItems
     qt5.wrapQtAppsHook
     pkg-config
   ];

@@ -6,22 +6,9 @@
   libx11,
   libxi,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
 }:
-let
-  desktopItem = makeDesktopItem {
-    name = "Write";
-    exec = "Write";
-    comment = "A word processor for handwriting";
-    icon = "write_stylus";
-    desktopName = "Write";
-    genericName = "Write";
-    categories = [
-      "Office"
-      "Graphics"
-    ];
-  };
-in
 stdenv.mkDerivation rec {
   pname = "styluslabs-write-bin";
   version = "300";
@@ -35,18 +22,37 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -R Write $out/
     # symlink the binary to bin/
     ln -s $out/Write/Write $out/bin/Write
 
-    # Create desktop item
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Write";
+      exec = "Write";
+      comment = "A word processor for handwriting";
+      icon = "write_stylus";
+      desktopName = "Write";
+      genericName = "Write";
+      categories = [
+        "Office"
+        "Graphics"
+      ];
+    })
+  ];
+
   preFixup =
     let
       libPath = lib.makeLibraryPath [

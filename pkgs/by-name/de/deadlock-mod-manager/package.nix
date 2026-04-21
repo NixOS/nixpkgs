@@ -21,7 +21,6 @@
   openssl,
   bzip2,
   gst_all_1,
-  makeDesktopItem,
   fontconfig,
   nix-update-script,
 }:
@@ -102,22 +101,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --add-flags "--disable-auto-update"
     )
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      desktopName = "deadlock-mod-manager";
-      name = "Deadlock Mod Manager";
-      exec = "deadlock-mod-manager %u";
-      terminal = false;
-      type = "Application";
-      icon = "deadlock-mod-manager";
-      mimeTypes = [ "x-scheme-handler/deadlock-mod-manager" ];
-      categories = [
-        "Utility"
-        "Game"
-      ];
-    })
-  ];
 
   passthru = {
     updateScript = nix-update-script { };

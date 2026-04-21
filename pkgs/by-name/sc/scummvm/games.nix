@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   unzip,
   writeText,
@@ -10,21 +11,6 @@
 }:
 
 let
-  desktopItem =
-    name: short: long: description:
-    makeDesktopItem {
-      categories = [
-        "Game"
-        "AdventureGame"
-      ];
-      comment = description;
-      desktopName = long;
-      exec = "@out@/bin/${short}";
-      genericName = description;
-      icon = "scummvm";
-      name = name;
-    };
-
   run =
     name: short: code:
     writeText "${short}.sh" ''
@@ -63,7 +49,10 @@ let
       {
         inherit pname version;
 
-        nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [
+          copyDesktopItems
+          unzip
+        ];
 
         dontBuild = true;
         dontFixup = true;
@@ -78,15 +67,26 @@ let
 
           substitute ${run pname pshort pcode} $out/bin/${pshort} \
             --subst-var out
-          substitute ${
-            desktopItem pname pshort plong description
-          }/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop \
-            --subst-var out
 
           chmod 0755 $out/bin/${pshort}
 
           runHook postInstall
         '';
+
+        desktopItems = [
+          (makeDesktopItem {
+            categories = [
+              "Game"
+              "AdventureGame"
+            ];
+            comment = description;
+            desktopName = plong;
+            exec = pshort;
+            genericName = description;
+            icon = "scummvm";
+            name = pname;
+          })
+        ];
 
         meta = {
           homepage = "https://www.scummvm.org";

@@ -1,6 +1,7 @@
 {
   lib,
   alsa-lib,
+  copyDesktopItems,
   factorio-utils,
   fetchurl,
   libGL,
@@ -37,6 +38,8 @@ assert
 let
 
   inherit (lib) importJSON;
+
+  removePostInstallHook = builtins.replaceStrings [ "runHook postInstall" ] [ "" ];
 
   mods = args.mods or [ ];
 
@@ -80,15 +83,6 @@ let
           factorio.src
         ];
     '';
-
-  desktopItem = makeDesktopItem {
-    name = "factorio";
-    desktopName = "Factorio";
-    comment = "A game in which you build and maintain factories.";
-    exec = "factorio";
-    icon = "factorio";
-    categories = [ "Game" ];
-  };
 
   branch = if experimental then "experimental" else "stable";
 
@@ -195,12 +189,16 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/{bin,share/factorio}
       cp -a data $out/share/factorio
       cp -a bin/${tarDirectory}/factorio $out/bin/factorio
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         $out/bin/factorio
+
+      runHook postInstall
     '';
 
     passthru.updateScript = ./update.py;
@@ -236,7 +234,10 @@ let
     headless = base;
     demo = base // {
 
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [
+        copyDesktopItems
+        makeWrapper
+      ];
       buildInputs = [ libpulseaudio ];
 
       libPath = lib.makeLibraryPath [
@@ -255,7 +256,18 @@ let
         wayland
       ];
 
-      installPhase = base.installPhase + ''
+      desktopItems = [
+        (makeDesktopItem {
+          name = "factorio";
+          desktopName = "Factorio";
+          comment = "A game in which you build and maintain factories.";
+          exec = "factorio";
+          icon = "factorio";
+          categories = [ "Game" ];
+        })
+      ];
+
+      installPhase = (removePostInstallHook base.installPhase) + ''
         wrapProgram $out/bin/factorio                                \
           --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
           --run "$out/share/factorio/update-config.sh"               \
@@ -292,13 +304,16 @@ let
         mkdir -p $out/share/icons/hicolor/{64x64,128x128}/apps
         cp -a data/core/graphics/factorio-icon.png $out/share/icons/hicolor/64x64/apps/factorio.png
         cp -a data/core/graphics/factorio-icon@2x.png $out/share/icons/hicolor/128x128/apps/factorio.png
-        ln -s ${desktopItem}/share/applications $out/share/
+
+        runHook postInstall
       '';
     };
     alpha = demo // {
 
-      installPhase = demo.installPhase + ''
+      installPhase = (removePostInstallHook demo.installPhase) + ''
         cp -a doc-html $out/share/factorio
+
+        runHook postInstall
       '';
     };
     expansion = alpha;

@@ -3,6 +3,7 @@
   stdenv,
   unzip,
   fetchurl,
+  copyDesktopItems,
   electron,
   makeWrapper,
   geogebra,
@@ -12,7 +13,6 @@ let
   version = "6-0-794-0";
 
   srcIcon = geogebra.srcIcon;
-  desktopItem = geogebra.desktopItem;
 
   meta = {
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
@@ -37,6 +37,7 @@ let
 
   linuxPkg = stdenv.mkDerivation {
     inherit pname version meta;
+    inherit (geogebra) desktopItems;
 
     src = fetchurl {
       urls = [
@@ -50,6 +51,7 @@ let
     dontBuild = true;
 
     nativeBuildInputs = [
+      copyDesktopItems
       unzip
       makeWrapper
     ];
@@ -59,16 +61,18 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/libexec/geogebra/ $out/bin
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
       makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra \
         --add-flags "$out/resources/app" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-      install -Dm644 "${desktopItem}/share/applications/"* \
-        -t $out/share/applications/
 
       install -Dm644 "${srcIcon}" \
         "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
+
+      runHook postInstall
     '';
   };
 

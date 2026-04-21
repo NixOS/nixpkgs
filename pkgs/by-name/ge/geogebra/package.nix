@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  copyDesktopItems,
   fetchurl,
   libGL,
   libxxf86vm,
@@ -17,24 +18,6 @@ let
   srcIcon = fetchurl {
     url = "https://web.archive.org/web/20200227000442if_/https://static.geogebra.org/images/geogebra-logo.svg";
     hash = "sha256-Vd7Wteya04JJT4WNirXe8O1sfVKUgc0hKGOy7d47Xgc=";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "geogebra";
-    exec = "geogebra";
-    icon = "geogebra";
-    desktopName = "Geogebra";
-    genericName = "Geogebra";
-    comment = meta.description;
-    categories = [
-      "Education"
-      "Science"
-      "Math"
-    ];
-    mimeTypes = [
-      "application/vnd.geogebra.file"
-      "application/vnd.geogebra.tool"
-    ];
   };
 
   meta = {
@@ -68,7 +51,6 @@ let
       version
       meta
       srcIcon
-      desktopItem
       ;
 
     preferLocalBuild = true;
@@ -81,9 +63,34 @@ let
       hash = "sha256-cL4ERKZpE9Y6IdOjvYiX3nIIW3E2qoqkpMyTszvFseM=";
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      copyDesktopItems
+      makeWrapper
+    ];
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "geogebra";
+        exec = "geogebra";
+        icon = "geogebra";
+        desktopName = "Geogebra";
+        genericName = "Geogebra";
+        comment = meta.description;
+        categories = [
+          "Education"
+          "Science"
+          "Math"
+        ];
+        mimeTypes = [
+          "application/vnd.geogebra.file"
+          "application/vnd.geogebra.tool"
+        ];
+      })
+    ];
 
     installPhase = ''
+      runHook preInstall
+
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
       # The bundled jogl (required for 3D graphics) links to libxxf86vm, and loads libGL at runtime
@@ -100,11 +107,10 @@ let
         --set GG_PATH "$out/libexec/geogebra" \
         --add-flags "--language=${language}"
 
-      install -Dm644 "${desktopItem}/share/applications/"* \
-        -t $out/share/applications/
-
       install -Dm644 "${srcIcon}" \
         "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
+
+      runHook postInstall
     '';
   };
 

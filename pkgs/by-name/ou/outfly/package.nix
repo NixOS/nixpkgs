@@ -2,6 +2,7 @@
   lib,
   fetchFromCodeberg,
   rustPlatform,
+  copyDesktopItems,
   makeDesktopItem,
   pkg-config,
   libxkbcommon,
@@ -41,7 +42,10 @@ rustPlatform.buildRustPackage rec {
     wayland
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
   doCheck = false; # no meaningful tests
 
   postFixup = ''

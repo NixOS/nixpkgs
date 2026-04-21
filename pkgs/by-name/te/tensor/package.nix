@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libsForQt5,
+  copyDesktopItems,
   makeDesktopItem,
 }:
 
@@ -22,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
   ];
@@ -31,19 +33,21 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtquickcontrols
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "tensor";
-    exec = "@bin@";
-    icon = "tensor.png";
-    comment = finalAttrs.meta.description;
-    desktopName = "Tensor Matrix Client";
-    genericName = finalAttrs.meta.description;
-    categories = [
-      "Chat"
-      "Utility"
-    ];
-    mimeTypes = [ "application/x-chat" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "tensor";
+      exec = "tensor";
+      icon = "tensor.png";
+      comment = finalAttrs.meta.description;
+      desktopName = "Tensor Matrix Client";
+      genericName = finalAttrs.meta.description;
+      categories = [
+        "Chat"
+        "Utility"
+      ];
+      mimeTypes = [ "application/x-chat" ];
+    })
+  ];
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then
@@ -62,11 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
         install -Dm755 tensor $out/bin/tensor
         install -Dm644 client/logo.png \
                        $out/share/icons/hicolor/512x512/apps/tensor.png
-        install -Dm644 ${finalAttrs.desktopItem}/share/applications/tensor.desktop \
-                       $out/share/applications/tensor.desktop
-
-        substituteInPlace $out/share/applications/tensor.desktop \
-          --subst-var-by bin $out/bin/tensor
 
         runHook postInstall
       '';

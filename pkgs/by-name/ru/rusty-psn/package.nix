@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
     mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
   '';
 
-  desktopItem = lib.optionalString withGui (makeDesktopItem {
+  desktopItems = lib.lists.optional withGui (makeDesktopItem {
     name = "rusty-psn";
     desktopName = "rusty-psn";
     exec = "rusty-psn-gui";
@@ -92,7 +92,6 @@ rustPlatform.buildRustPackage rec {
       "update"
     ];
   });
-  desktopItems = lib.optionals withGui [ desktopItem ];
 
   meta = {
     description = "Simple tool to grab updates for PS3 games, directly from Sony's servers using their updates API";

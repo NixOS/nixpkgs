@@ -4,6 +4,7 @@
   fetchurl,
   jre,
   pcsclite,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
 }:
@@ -33,28 +34,34 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    desktopName = "Open eCard App";
-    genericName = "eCard App";
-    comment = "Client side implementation of the eCard-API-Framework";
-    icon = "oec_logo_bg-transparent.svg";
-    exec = pname;
-    categories = [
-      "Utility"
-      "Security"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Open eCard App";
+      genericName = "eCard App";
+      comment = "Client side implementation of the eCard-API-Framework";
+      icon = "oec_logo_bg-transparent.svg";
+      exec = pname;
+      categories = [
+        "Utility"
+        "Security"
+      ];
+    })
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp ${srcs.richclient} $out/share/java/richclient-${version}.jar
     cp ${srcs.cifs} $out/share/java/cifs-${version}.jar
 
-    mkdir -p $out/share/applications $out/share/pixmaps
-    cp $desktopItem/share/applications/* $out/share/applications
+    mkdir -p $out/share/pixmaps
     cp ${srcs.logo} $out/share/pixmaps/oec_logo_bg-transparent.svg
 
     mkdir -p $out/bin
@@ -62,6 +69,8 @@ stdenv.mkDerivation rec {
       --add-flags "-cp $out/share/java/cifs-${version}.jar" \
       --add-flags "-jar $out/share/java/richclient-${version}.jar" \
       --suffix LD_LIBRARY_PATH ':' ${lib.getLib pcsclite}/lib
+
+    runHook postInstall
   '';
 
   meta = {

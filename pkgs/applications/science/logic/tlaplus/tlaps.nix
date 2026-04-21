@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv "$out"
     export HOME="$TMPDIR"
     export PATH=$out/bin:$PATH
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     ./configure --prefix $out
     make all
     make install
+
+    runHook postInstall
   '';
 
   meta = {

@@ -29,6 +29,7 @@
   libxcb,
   zlib,
   pciutils,
+  copyDesktopItems,
   makeDesktopItem,
   xkeyboard-config,
   dbus,
@@ -73,19 +74,26 @@ stdenv.mkDerivation rec {
     sha256 = "0lhair2vsg8sjvzicvfcjfmvy30q7i01xj4z02iqh7pgzpb025h8";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "saleae-logic";
-    exec = "saleae-logic";
-    icon = ""; # the package contains no icon
-    comment = "Software for Saleae logic analyzers";
-    desktopName = "Saleae Logic";
-    genericName = "Logic analyzer";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "saleae-logic";
+      exec = "saleae-logic";
+      icon = ""; # the package contains no icon
+      comment = "Software for Saleae logic analyzers";
+      desktopName = "Saleae Logic";
+      genericName = "Logic analyzer";
+      categories = [ "Development" ];
+    })
+  ];
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    unzip
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     # Copy prebuilt app to $out
     mkdir "$out"
     cp -r * "$out"
@@ -117,13 +125,11 @@ stdenv.mkDerivation rec {
     EOF
     chmod a+x "$out"/bin/saleae-logic
 
-    # Copy the generated .desktop file
-    mkdir -p "$out/share/applications"
-    cp "$desktopItem"/share/applications/* "$out/share/applications/"
-
     # Install provided udev rules
     mkdir -p "$out/etc/udev/rules.d"
     cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
+
+    runHook postInstall
   '';
 
   meta = {

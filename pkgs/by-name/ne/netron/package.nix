@@ -5,6 +5,7 @@
   electron_39,
   fetchFromGitHub,
   jq,
+  copyDesktopItems,
   makeDesktopItem,
 }:
 
@@ -27,7 +28,10 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-HyqfrkO9Cbo6KVY1QuA4i6od6M7ZQaIfkUWA2P/bvfI=";
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    jq
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

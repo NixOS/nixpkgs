@@ -4,6 +4,7 @@
   fetchurl,
   makeWrapper,
   electron,
+  copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
 }:
@@ -22,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tO0cNKopG/recQus7KDUTyGpApvR5/tpmF5C4V14DnI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -30,23 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/stretchly/
     mv resources/app.asar* $out/share/stretchly/
 
-    mkdir -p $out/share/applications
-    ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
-
     makeWrapper ${electron}/bin/electron $out/bin/stretchly \
       --add-flags $out/share/stretchly/app.asar
 
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "stretchly";
-    exec = "stretchly";
-    icon = finalAttrs.icon;
-    desktopName = "Stretchly";
-    genericName = "Stretchly";
-    categories = [ "Utility" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "stretchly";
+      exec = "stretchly";
+      icon = finalAttrs.icon;
+      desktopName = "Stretchly";
+      genericName = "Stretchly";
+      categories = [ "Utility" ];
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

@@ -4,6 +4,7 @@
   lib,
   makeWrapper,
   electron_39, # as in upstream bundle, see https://github.com/NixOS/nixpkgs/pull/510075
+  copyDesktopItems,
   makeDesktopItem,
   imagemagick,
   autoPatchelfHook,
@@ -53,27 +54,17 @@ let
     hash = "sha256-EZsBuWyZ9zYJh0LDKfRAMTtnY70q6iLK/ggXlplDEoA=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "obsidian";
-    desktopName = "Obsidian";
-    comment = "Knowledge base";
-    icon = "obsidian";
-    exec = "obsidian %u";
-    categories = [ "Office" ];
-    mimeTypes = [ "x-scheme-handler/obsidian" ];
-  };
-
   linux = stdenv.mkDerivation {
     inherit
       pname
       version
       src
-      desktopItem
       icon
       meta
       ;
     nativeBuildInputs = [
       autoPatchelfHook
+      copyDesktopItems
       makeWrapper
       imagemagick
     ];
@@ -87,14 +78,24 @@ let
       install -m 755 -D obsidian-cli $out/bin/obsidian-cli
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
-      install -m 444 -D "${desktopItem}/share/applications/"* \
-        -t $out/share/applications/
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
         magick -background none ${icon} -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
       done
       runHook postInstall
     '';
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "obsidian";
+        desktopName = "Obsidian";
+        comment = "Knowledge base";
+        icon = "obsidian";
+        exec = "obsidian %u";
+        categories = [ "Office" ];
+        mimeTypes = [ "x-scheme-handler/obsidian" ];
+      })
+    ];
 
     passthru.updateScript = writeScript "updater" ''
       #!/usr/bin/env nix-shell

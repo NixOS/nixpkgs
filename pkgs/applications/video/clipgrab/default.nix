@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   ffmpeg,
   qmake,
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     qtwebengine
   ];
   nativeBuildInputs = [
+    copyDesktopItems
     qmake
     qttools
     wrapQtAppsHook
@@ -58,26 +60,27 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "clipgrab.pro" ];
 
-  desktopItem = makeDesktopItem rec {
-    name = "clipgrab";
-    exec = name;
-    icon = name;
-    desktopName = "ClipGrab";
-    comment = meta.description;
-    genericName = "Web video downloader";
-    categories = [
-      "Qt"
-      "AudioVideo"
-      "Audio"
-      "Video"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "clipgrab";
+      exec = name;
+      icon = name;
+      desktopName = "ClipGrab";
+      comment = meta.description;
+      genericName = "Web video downloader";
+      categories = [
+        "Qt"
+        "AudioVideo"
+        "Audio"
+        "Video"
+      ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
     install -Dm755 clipgrab $out/bin/clipgrab
     install -Dm644 icon.png $out/share/pixmaps/clipgrab.png
-    cp -r ${desktopItem}/share/applications $out/share
     runHook postInstall
   '';
 

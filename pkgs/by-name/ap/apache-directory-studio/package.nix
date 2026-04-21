@@ -5,6 +5,7 @@
   jdk,
   makeWrapper,
   autoPatchelfHook,
+  copyDesktopItems,
   makeDesktopItem,
   glib,
   libsecret,
@@ -26,30 +27,35 @@ stdenv.mkDerivation (finalAttrs: {
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  desktopItem = makeDesktopItem {
-    name = "apache-directory-studio";
-    exec = "ApacheDirectoryStudio";
-    icon = "apache-directory-studio";
-    comment = "Eclipse-based LDAP browser and directory client";
-    desktopName = "Apache Directory Studio";
-    genericName = "Apache Directory Studio";
-    categories = [
-      "Java"
-      "Network"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "apache-directory-studio";
+      exec = "ApacheDirectoryStudio";
+      icon = "apache-directory-studio";
+      comment = "Eclipse-based LDAP browser and directory client";
+      desktopName = "Apache Directory Studio";
+      genericName = "Apache Directory Studio";
+      categories = [
+        "Java"
+        "Network"
+      ];
+    })
+  ];
 
   buildInputs = [
     glib
     libsecret
   ];
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
     autoPatchelfHook
     imagemagick
   ];
 
   installPhase = ''
+    runHook preInstall
+
     dest="$out/libexec/ApacheDirectoryStudio"
     mkdir -p "$dest"
     cp -r . "$dest"
@@ -74,7 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
         --run "mkdir -p /tmp/SWT-GDBusServer"
     mkdir -p $out/share/icons/hicolor/48x48/apps
     magick icon.xpm $out/share/icons/hicolor/48x48/apps/apache-directory-studio.png
-    install -D -t "$out/share/applications" ${finalAttrs.desktopItem}/share/applications/*
+
+    runHook postInstall
   '';
 
   meta = {

@@ -3,6 +3,7 @@
 {
   stdenv,
   lib,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   patchelf,
@@ -64,22 +65,11 @@ lib.extendMkDerivation {
           ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
         ];
 
-      desktopItem = makeDesktopItem {
-        name = finalAttrs.pname;
-        exec = finalAttrs.meta.mainProgram;
-        comment = lib.trim (lib.replaceString "\n" " " finalAttrs.meta.longDescription);
-        desktopName = product;
-        genericName = finalAttrs.meta.description;
-        categories = [ "Development" ];
-        icon = pname;
-        startupWMClass = wmClass;
-      };
-
       vmoptsIDE = if hiName == "WEBSTORM" then "WEBIDE" else hiName;
       vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
     in
     {
-      inherit desktopItem vmoptsIDE vmoptsFile;
+      inherit vmoptsIDE vmoptsFile;
 
       buildInputs = buildInputs ++ [
         stdenv.cc.cc
@@ -89,6 +79,7 @@ lib.extendMkDerivation {
       ];
 
       nativeBuildInputs = nativeBuildInputs ++ [
+        copyDesktopItems
         makeWrapper
         patchelf
         unzip
@@ -125,6 +116,19 @@ lib.extendMkDerivation {
       ''
       + postPatch;
 
+      desktopItems = [
+        (makeDesktopItem {
+          name = finalAttrs.pname;
+          exec = finalAttrs.meta.mainProgram;
+          comment = lib.trim (lib.replaceString "\n" " " finalAttrs.meta.longDescription);
+          desktopName = product;
+          genericName = finalAttrs.meta.description;
+          categories = [ "Development" ];
+          icon = pname;
+          startupWMClass = wmClass;
+        })
+      ];
+
       installPhase = ''
         runHook preInstall
 
@@ -136,7 +140,6 @@ lib.extendMkDerivation {
         cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
         jdk=${jdk.home}
-        item=${desktopItem}
 
         needsWrapping=()
 
@@ -181,7 +184,6 @@ lib.extendMkDerivation {
         echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
         chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
         ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server
-        ln -s "$item/share/applications" $out/share
 
         runHook postInstall
       '';

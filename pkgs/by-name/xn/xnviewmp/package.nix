@@ -4,7 +4,6 @@
   runCommand,
   lib,
   makeDesktopItem,
-  copyDesktopItems,
   imagemagick,
   writeShellScript,
   nix-update,
@@ -22,6 +21,15 @@ let
       ''
         magick $src -resize 512x512 $out
       '';
+
+  desktopItem = makeDesktopItem {
+    name = "xnviewmp";
+    desktopName = "XnView MP";
+    exec = "xnviewmp %F";
+    icon = "xnviewmp";
+    comment = "An efficient multimedia viewer, browser and converter";
+    categories = [ "Graphics" ];
+  };
 in
 appimageTools.wrapType2 rec {
   pname = "xnviewmp";
@@ -32,27 +40,14 @@ appimageTools.wrapType2 rec {
     hash = "sha256-BGdjVwinH2P9vG3aiWeUpFTIftmbYjdJEmcrXXi7XFw=";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "xnviewmp";
-      desktopName = "XnView MP";
-      exec = "xnviewmp %F";
-      icon = "xnviewmp";
-      comment = "An efficient multimedia viewer, browser and converter";
-      categories = [ "Graphics" ];
-    })
-  ];
-
   extraPkgs = pkgs: [
     pkgs.qt5.qtbase
   ];
 
   extraInstallCommands = ''
     install -m 444 -D ${icon} $out/share/icons/hicolor/512x512/apps/xnviewmp.png
+    install -m 444 -D ${desktopItem}/share/applications/xnviewmp.desktop \
+      $out/share/applications/xnviewmp.desktop
   '';
 
   passthru = {

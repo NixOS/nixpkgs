@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  copyDesktopItems,
   fetchFromGitHub,
   fetchurl,
   love,
@@ -20,15 +21,17 @@ stdenv.mkDerivation rec {
     sha256 = "07ypbwqcgqc5f117yxy9icix76wlybp1cmykc8f3ivdps66hl0k5";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "duckmarines";
-    exec = "duckmarines";
-    icon = icon;
-    comment = "Duck-themed action puzzle video game";
-    desktopName = "Duck Marines";
-    genericName = "duckmarines";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "duckmarines";
+      exec = "duckmarines";
+      icon = icon;
+      comment = "Duck-themed action puzzle video game";
+      desktopName = "Duck Marines";
+      genericName = "duckmarines";
+      categories = [ "Game" ];
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "SimonLarsen";
@@ -43,6 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
     strip-nondeterminism
     zip
@@ -60,6 +64,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
@@ -68,8 +74,8 @@ stdenv.mkDerivation rec {
     makeWrapper ${lib.getExe love} $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
 
     chmod +x $out/bin/duckmarines
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+
+    runHook postInstall
   '';
 
   meta = {

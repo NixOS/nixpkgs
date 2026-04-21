@@ -2,6 +2,7 @@
   autoPatchelfHook,
   dpkg,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   stdenv,
@@ -95,21 +96,23 @@ let
       inherit hash;
     };
 
-    desktopItem = makeDesktopItem {
-      categories = [
-        "Network"
-        "InstantMessaging"
-        "Chat"
-        "VideoConference"
-      ];
-      comment = "Secure messenger for everyone";
-      desktopName = "Wire";
-      exec = "wire-desktop %U";
-      genericName = "Secure messenger";
-      icon = "wire-desktop";
-      name = "wire-desktop";
-      startupWMClass = "Wire";
-    };
+    desktopItems = [
+      (makeDesktopItem {
+        categories = [
+          "Network"
+          "InstantMessaging"
+          "Chat"
+          "VideoConference"
+        ];
+        comment = "Secure messenger for everyone";
+        desktopName = "Wire";
+        exec = "wire-desktop %U";
+        genericName = "Secure messenger";
+        icon = "wire-desktop";
+        name = "wire-desktop";
+        startupWMClass = "Wire";
+      })
+    ];
 
     dontBuild = true;
     dontConfigure = true;
@@ -119,6 +122,7 @@ let
     # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
+      copyDesktopItems
       dpkg
       makeWrapper
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
@@ -139,10 +143,6 @@ let
       cp -R "opt" "$out"
       cp -R "usr/share" "$out/share"
       chmod -R g-w "$out"
-
-      # Desktop file
-      mkdir -p "$out/share/applications"
-      cp "${desktopItem}/share/applications/"* "$out/share/applications"
 
       runHook postInstall
     '';
