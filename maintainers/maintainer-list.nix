@@ -7795,6 +7795,11 @@
     github = "eliandoran";
     githubId = 21236836;
   };
+  elias-graf = {
+    github = "Elias-Graf";
+    githubId = 46671625;
+    name = "Elias Graf";
+  };
   eliasp = {
     email = "mail@eliasprobst.eu";
     matrix = "@eliasp:kde.org";
