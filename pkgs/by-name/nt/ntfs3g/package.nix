@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
-  version = "2022.10.3";
+  version = "2026.2.25";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "tuxera";
     repo = "ntfs-3g";
     rev = version;
-    sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
+    sha256 = "sha256-uiVh87ExLXq94NVqR8MEg7Lrvamm6MrH+qP3Nosii5c=";
   };
 
   buildInputs = [
