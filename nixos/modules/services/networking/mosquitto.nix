@@ -7,6 +7,8 @@
 let
   cfg = config.services.mosquitto;
 
+  pluginLibDir = "${lib.getLib cfg.package}/lib";
+
   # note that mosquitto config parsing is very simplistic as of may 2021.
   # often times they'll e.g. strtok() a line, check the first two tokens, and ignore the rest.
   # there's no escaping available either, so we have to prevent any being necessary.
@@ -400,10 +402,16 @@ let
     idx: listener:
     [
       "listener ${toString listener.port} ${toString listener.address}"
-      "acl_file ${cfg.dataDir}/acl-${toString idx}.conf"
     ]
-    ++ lib.optional (!listener.omitPasswordAuth) "password_file ${cfg.dataDir}/passwd-${toString idx}"
     ++ formatFreeform { } listener.settings
+    ++ [
+      "plugin ${pluginLibDir}/mosquitto_acl_file.so"
+      "plugin_opt_acl_file ${cfg.dataDir}/acl-${toString idx}.conf"
+    ]
+    ++ lib.optionals (!listener.omitPasswordAuth) [
+      "plugin ${pluginLibDir}/mosquitto_password_file.so"
+      "plugin_opt_password_file ${cfg.dataDir}/passwd-${toString idx}"
+    ]
     ++ lib.concatMap formatAuthPlugin listener.authPlugins;
 
   freeformBridgeKeys = {
@@ -648,6 +656,13 @@ let
   globalAsserts =
     prefix: cfg:
     lib.flatten [
+      {
+        assertion = lib.versionAtLeast cfg.package.version "2.1";
+        message = ''
+          ${prefix}.package must be at least version 2.1, since the generated
+          configuration relies on the acl-file and password-file plugins.
+        '';
+      }
       (assertKeysValid "${prefix}.settings" freeformGlobalKeys cfg.settings)
       (lib.imap0 (n: l: listenerAsserts "${prefix}.listener.${toString n}" l) cfg.listeners)
       (lib.mapAttrsToList (n: b: bridgeAsserts "${prefix}.bridge.${n}" b) cfg.bridges)
