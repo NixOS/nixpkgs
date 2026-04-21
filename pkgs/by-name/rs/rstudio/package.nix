@@ -17,7 +17,7 @@
   git,
   jdk,
   makeWrapper,
-  nodejs-slim,
+  nodejs,
   npmHooks,
   xcbuild,
   yarn,
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
 
-    nodejs-slim
+    nodejs
     yarn
     yarnConfigHook
     zip
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!server) [
     makeWrapper
-    (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
+    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
     npmHooks.npmConfigHook
   ];
 
@@ -289,8 +289,8 @@ stdenv.mkDerivation (finalAttrs: {
     RSTUDIO_INSTALLED_NODE_VERSION="22.21.1"
 
     mkdir -p dependencies/common/node
-    ln -s ${nodejs-slim} dependencies/common/node/$RSTUDIO_NODE_VERSION
-    ln -s ${nodejs-slim} dependencies/common/node/$RSTUDIO_INSTALLED_NODE_VERSION-installed
+    ln -s ${nodejs} dependencies/common/node/$RSTUDIO_NODE_VERSION
+    ln -s ${nodejs} dependencies/common/node/$RSTUDIO_INSTALLED_NODE_VERSION-installed
 
   ''
   + lib.optionalString (!server) ''
