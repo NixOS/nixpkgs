@@ -7,6 +7,7 @@
   yt-dlp,
   makeBinaryWrapper,
   pkg-config,
+  nixosTests,
 }:
 
 let
@@ -79,6 +80,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit frontend;
+    tests = { inherit (nixosTests) hister; };
   };
 
   meta = {
