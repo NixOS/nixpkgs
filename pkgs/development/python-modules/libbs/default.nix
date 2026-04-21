@@ -2,6 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   filelock,
   networkx,
   platformdirs,
@@ -10,10 +15,12 @@
   psutil,
   pycparser,
   pyghidra,
-  pytestCheckHook,
-  setuptools,
+  pyhidra,
   toml,
   tqdm,
+
+  # tests
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -28,18 +35,26 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "libbs";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xe47JZPkbROHFlqc2o/htqvZWjknsv5KekJBqXA44O4=";
+    hash = "";
   };
 
   build-system = [ setuptools ];
 
+  env = {
+    TEST_BINARIES_DIR = binaries.outPath;
+  };
+
+  pythonRelaxDeps = [
+    "pycparser"
+  ];
   dependencies = [
     filelock
     networkx
@@ -49,6 +64,7 @@ buildPythonPackage (finalAttrs: {
     psutil
     pycparser
     pyghidra
+    pyhidra
     toml
     tqdm
   ];
@@ -58,19 +74,15 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # Place test binaries in place
-  preCheck = ''
-    export HOME=$TMPDIR
-    mkdir -p $HOME/bs-artifacts/binaries
-    cp -r ${binaries} $HOME/bs-artifacts/binaries
-    export TEST_BINARIES_DIR=$HOME/bs-artifacts/binaries
-  '';
-
   pythonImportsCheck = [ "libbs" ];
 
   disabledTests = [
+    # Require running ghidra
     "test_change_watcher_plugin_cli"
     "test_ghidra_artifact_watchers"
+
+    # Require decompiler backends (ida, angr, ghidra) and pycparser.ply
+    "TestClientServer"
     "TestHeadlessInterfaces"
   ];
 
