@@ -130,10 +130,10 @@ in
           exec ${kopiaExe} server start ${tlsArgs} --address ${lib.escapeShellArg backup.web.address}
         '';
       in
-      lib.nameValuePair (helpers.mkUnitBaseName "web" name) {
+      lib.nameValuePair "kopia-web-${name}" {
         description = "Kopia web UI for ${name}";
-        requires = [ (helpers.mkUnitQualifiedName "repository" name) ];
-        after = [ (helpers.mkUnitQualifiedName "repository" name) ];
+        requires = [ "kopia-repository-${name}.service" ];
+        after = [ "kopia-repository-${name}.service" ];
         wantedBy = [ "multi-user.target" ];
         environment = helpers.mkKopiaEnvironment name;
         serviceConfig = helpers.mkBaseServiceConfig name backup // {

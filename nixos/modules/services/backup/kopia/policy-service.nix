@@ -256,12 +256,12 @@ in
             '') backup.paths}
           '';
         in
-        lib.nameValuePair (helpers.mkUnitBaseName "policy" name) {
+        lib.nameValuePair "kopia-policy-${name}" {
           description = "Kopia policy for ${name}";
-          requires = [ (helpers.mkUnitQualifiedName "repository" name) ];
-          after = [ (helpers.mkUnitQualifiedName "repository" name) ];
-          before = lib.mkIf (backup.paths != [ ]) [ (helpers.mkUnitQualifiedName "snapshot" name) ];
-          wantedBy = lib.mkIf (backup.paths != [ ]) [ (helpers.mkUnitQualifiedName "snapshot" name) ];
+          requires = [ "kopia-policy-${name}".service ];
+          after = [ "kopia-repository-${name}".service ];
+          before = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}" ];
+          wantedBy = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}" ];
           environment = helpers.mkKopiaEnvironment name;
           restartIfChanged = false;
           serviceConfig = helpers.mkBaseServiceConfig name backup;

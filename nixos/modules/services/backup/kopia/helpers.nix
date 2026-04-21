@@ -1,9 +1,6 @@
 { lib }:
 {
   # Generate systemd service/unit names for kopia services
-  mkUnitBaseName = type: name: "kopia-${type}-${name}";
-  mkUnitQualifiedName = type: name: "kopia-${type}-${name}.service";
-
   mkKopiaEnvironment = name: {
     KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
   };

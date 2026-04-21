@@ -136,11 +136,11 @@ in
           '') backup.paths}
         '';
       in
-      lib.nameValuePair (helpers.mkUnitBaseName "snapshot" name) (
+      lib.nameValuePair "kopia-snapshot-${name}" (
         {
           description = "Kopia snapshot for ${name}";
-          requires = [ (helpers.mkUnitQualifiedName "repository" name) ];
-          after = [ (helpers.mkUnitQualifiedName "repository" name) ];
+          requires = [ "kopia-repository-${name}.service" ];
+          after = [ "kopia-repository-${name}.service" ];
           environment = helpers.mkKopiaEnvironment name;
           restartIfChanged = false;
           script = snapshotScript;

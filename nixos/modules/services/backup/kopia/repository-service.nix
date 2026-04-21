@@ -600,7 +600,7 @@ in
             ${mkScriptBody}
           '';
         in
-        lib.nameValuePair (helpers.mkUnitBaseName "repository" name) {
+        lib.nameValuePair "kopia-repository-${name}" {
           description = "Kopia repository connection for ${name}";
           restartIfChanged = false;
           wants = lib.mkIf needsNetwork [ "network-online.target" ];
