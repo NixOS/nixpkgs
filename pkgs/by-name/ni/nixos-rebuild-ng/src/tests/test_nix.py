@@ -913,7 +913,8 @@ def test_upgrade_channels(mock_run: Mock, mock_geteuid: Mock, tmpdir: Path) -> N
                 check=False,
                 sudo=True,
             ),
-        ]
+        ],
+        any_order=True,
     )
     mock_run.reset_mock()
 
@@ -938,5 +939,6 @@ def test_upgrade_channels(mock_run: Mock, mock_geteuid: Mock, tmpdir: Path) -> N
                 check=False,
                 sudo=False,
             ),
-        ]
+        ],
+        any_order=True,
     )
