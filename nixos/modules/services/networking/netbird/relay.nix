@@ -112,6 +112,16 @@ in
       description = "Domain name for nginx virtual host configuration.";
     };
 
+    metricsPort = mkOption {
+      type = port;
+      default = 9091;
+      description = ''
+        Port for the relay metrics endpoint.
+        Defaults to 9091 to avoid conflict with the management server's
+        metrics port (9090).
+      '';
+    };
+
     extraOptions = mkOption {
       type = listOf str;
       default = [ ];
@@ -160,6 +170,10 @@ in
                 cfg.logLevel
                 "--log-file"
                 "console"
+              ]
+              ++ [
+                "--metrics-port"
+                (toString cfg.metricsPort)
               ]
               ++ optionals cfg.stun.enable [
                 "--enable-stun"
