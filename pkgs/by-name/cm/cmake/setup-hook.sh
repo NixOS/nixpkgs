@@ -223,6 +223,11 @@ cmakeConfigurePhase() {
     concatCMakeEntryFlagsTo flagsArray cmakeEntries
     concatTo flagsArray cmakeFlags cmakeFlagsArray
 
+    # TODO(@ShamrockLee): Default separateCMakeEntries to 1 in future releases.
+    if [[ -n "$dontExecuteCMake" ]]; then
+        nop "${separateCMakeEntries=${dontExecuteCMake-}}"
+    fi
+
     # Redefine cmakeFlags for backward compatibility purposes.
     # Some packages may still expect cmakeConfigurePhase
     # to add the full list of flags into cmakeFlags.
@@ -237,7 +242,9 @@ cmakeConfigurePhase() {
 
     echoCmd 'cmake flags' "${flagsArray[@]}"
 
-    cmake "$cmakeDir" "${flagsArray[@]}"
+    if [[ -z "${dontExecuteCMake-}" ]]; then
+        cmake "$cmakeDir" "${flagsArray[@]}"
+    fi
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
