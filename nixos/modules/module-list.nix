@@ -58,6 +58,7 @@
   ./hardware/coral.nix
   ./hardware/corectrl.nix
   ./hardware/cpu/amd-microcode.nix
+  ./hardware/cpu/amd-pstate.nix
   ./hardware/cpu/amd-ryzen-smu.nix
   ./hardware/cpu/amd-sev.nix
   ./hardware/cpu/intel-microcode.nix
