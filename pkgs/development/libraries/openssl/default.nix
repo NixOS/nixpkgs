@@ -148,6 +148,7 @@ let
             if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"
           }";
           riscv64-linux = "./Configure linux64-riscv64";
+          s390x-linux = "./Configure linux64-s390x -march=z13";
         }
         .${stdenv.hostPlatform.system} or (
           if stdenv.hostPlatform == stdenv.buildPlatform then
