@@ -6,20 +6,29 @@
   versionCheckHook,
   cacert,
   gitMinimal,
+  pkg-config,
+  z3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openshell";
-  version = "0.0.22";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "OpenShell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-98wmBhj1Bqkod9DWh4qhkT3287c56ZKRDf/Z3QCYf4Q=";
+    hash = "sha256-wchygUeSYbHXVgq5mR3nObPiEygREgvIk579gnPVMvM=";
   };
 
-  cargoHash = "sha256-lzS8V8e+wMX8KUfgrftNLdbyivoj0wtRWOThBRS1IdM=";
+  cargoHash = "sha256-ovg7IZL022wsj5EUjySCWsf0KrUCZLwQrjvvWld8Owo=";
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [ z3 ];
 
   nativeCheckInputs = [
     cacert
