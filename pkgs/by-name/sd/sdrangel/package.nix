@@ -101,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtspeech
     qt6Packages.qttools
     qt6Packages.qtwebsockets
-    qt6Packages.qtwebengine
     rtl-sdr
     serialdv
     sgp4
@@ -109,7 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
     uhd
     zlib
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6Packages.qtwayland
+  ]
+  # FIX: Conditionally include WebEngine only on non-Darwin systems
+  ++ lib.optionals (!stdenv.isDarwin) [
+    qt6Packages.qtwebengine
+  ]
   ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
@@ -120,6 +125,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-dev"
     "-DENABLE_QT6=ON"
   ];
+
+  # FIX: Force macOS linker to globally resolve FLAC symbols for all compiled plugins
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lFLAC";
 
   meta = {
     description = "Software defined radio (SDR) software";
