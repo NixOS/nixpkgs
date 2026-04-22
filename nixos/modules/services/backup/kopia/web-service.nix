@@ -135,8 +135,22 @@ in
         requires = [ "kopia-repository-${name}.service" ];
         after = [ "kopia-repository-${name}.service" ];
         wantedBy = [ "multi-user.target" ];
-        environment = helpers.mkKopiaEnvironment name;
-        serviceConfig = helpers.mkBaseServiceConfig name backup // {
+        environment = {
+          KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          User = backup.user;
+          StateDirectory = "kopia/${name}";
+          PrivateTmp = true;
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ReadWritePaths = [
+            "/var/lib/kopia/${name}"
+          ]
+          ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+        }
+        // {
           Type = "simple";
           Restart = "on-failure";
           RestartSec = 30;

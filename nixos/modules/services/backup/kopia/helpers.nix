@@ -1,10 +1,5 @@
 { lib }:
 {
-  # Generate systemd service/unit names for kopia services
-  mkKopiaEnvironment = name: {
-    KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
-  };
-
   mkBaseServiceConfig = name: backup: {
     Type = "oneshot";
     User = backup.user;

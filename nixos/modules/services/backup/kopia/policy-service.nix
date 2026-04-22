@@ -262,7 +262,9 @@ in
           after = [ "kopia-repository-${name}".service ];
           before = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}" ];
           wantedBy = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}" ];
-          environment = helpers.mkKopiaEnvironment name;
+          environment = {
+            KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
+          };
           restartIfChanged = false;
           serviceConfig = helpers.mkBaseServiceConfig name backup;
           script = policyScript;

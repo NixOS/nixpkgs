@@ -605,7 +605,9 @@ in
           restartIfChanged = false;
           wants = lib.mkIf needsNetwork [ "network-online.target" ];
           after = lib.mkIf needsNetwork [ "network-online.target" ];
-          environment = helpers.mkKopiaEnvironment name;
+          environment = {
+            KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
+          };
           serviceConfig = helpers.mkBaseServiceConfig name backup // {
             RemainAfterExit = true;
             ExecStart = startScript;

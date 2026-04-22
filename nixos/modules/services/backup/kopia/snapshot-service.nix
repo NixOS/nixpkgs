@@ -141,7 +141,9 @@ in
           description = "Kopia snapshot for ${name}";
           requires = [ "kopia-repository-${name}.service" ];
           after = [ "kopia-repository-${name}.service" ];
-          environment = helpers.mkKopiaEnvironment name;
+          environment = {
+            KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
+          };
           restartIfChanged = false;
           script = snapshotScript;
           serviceConfig =
