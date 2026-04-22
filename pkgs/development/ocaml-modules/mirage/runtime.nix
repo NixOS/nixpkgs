@@ -11,10 +11,10 @@
 
 buildDunePackage (finalAttrs: {
   pname = "mirage-runtime";
-  version = "4.10.2";
+  version = "4.10.6";
   src = fetchurl {
     url = "https://github.com/mirage/mirage/releases/download/v${finalAttrs.version}/mirage-${finalAttrs.version}.tbz";
-    hash = "sha256:4184cbc7e51b0dcdcf4345c98818c34129ff42879ef091e54849faa57b29d397";
+    hash = "sha256:sha256-xTTGt0Xw0Fas5+E4AkPPP36C4/+BmmRggKV1SkBt9zI=";
   };
 
   minimalOCamlVersion = "4.08";
