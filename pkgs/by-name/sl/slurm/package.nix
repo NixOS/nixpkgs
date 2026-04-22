@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-json=${lib.getDev json_c}"
     "--with-jwt=${libjwt}"
     "--with-lz4=${lib.getDev lz4}"
-    "--with-munge=${munge}"
+    "--with-munge=${lib.getDev munge}"
     "--with-yaml=${lib.getDev libyaml}"
     "--with-ofed=${lib.getDev rdma-core}"
     "--sysconfdir=/etc/slurm"
