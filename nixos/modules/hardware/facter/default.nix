@@ -8,6 +8,7 @@
     ./boot.nix
     ./bluetooth.nix
     ./camera
+    ./cpu.nix
     ./debug.nix
     ./disk.nix
     ./fingerprint
