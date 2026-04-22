@@ -133,4 +133,16 @@
       inherit clang;
     };
   } ./rust-bindgen-hook.sh;
+
+  cargoDocHook = makeSetupHook {
+    name = "cargo-doc-hook.sh";
+    substitutions = {
+      inherit (stdenv.targetPlatform.rust) rustcTarget;
+      inherit (rust.envVars) setEnv;
+      targetSubdirectory = target;
+    };
+    passthru.tests = {
+      test = tests.rust-hooks.cargoDocHook;
+    };
+  } ./cargo-doc-hook.sh;
 }

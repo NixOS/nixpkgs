@@ -71,6 +71,7 @@
         cargoSetupHook
         maturinBuildHook
         bindgenHook
+        cargoDocHook
         ;
     };
 })
