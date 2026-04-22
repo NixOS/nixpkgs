@@ -25,10 +25,6 @@ buildGoModule {
     "cmd/tomltestgen"
   ];
 
-  # allowGoReference adds the flag `-trimpath` which is also denoted by, go-toml's goreleaser config
-  #  <https://github.com/pelletier/go-toml/blob/a3d5a0bb530b5206c728eed9cb57323061922bcb/.goreleaser.yaml#L13>
-  allowGoReference = true;
-
   ldflags = [
     "-s"
     "-w"
