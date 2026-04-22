@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "speedscope";
   version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "jlfwong";
     repo = "speedscope";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2kBgOMWSr3XEkcfzetA4njIE2co+mHoPPUFmKn0tMVk=";
 
     # scripts/prepack.sh wants to extract the git commit from .git
@@ -50,4 +50,4 @@ buildNpmPackage rec {
     mainProgram = "speedscope";
     maintainers = with lib.maintainers; [ thomasjm ];
   };
-}
+})
