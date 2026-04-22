@@ -56,10 +56,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-RrqxAum+OEmuh/f2PfPFDulmU3LhTqUtwww8Nb+F7NI=",
+                    "hash": "sha256-y2aqNUsE8XmM+SoLThECL2J5b4NVydj0WAoy7t4AiJg=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v39.8.7"
+                    "tag": "v39.8.9"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1345,7 +1345,7 @@
         "electron_yarn_hash": "sha256-HCnJJqfgcilB+Cl2OaezL9Uu1xk0ZBdVEXg2VDR1dwU=",
         "modules": "140",
         "node": "22.22.1",
-        "version": "39.8.7"
+        "version": "39.8.9"
     },
     "40": {
         "chrome": "144.0.7559.236",
