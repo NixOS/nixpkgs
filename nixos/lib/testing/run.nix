@@ -3,6 +3,7 @@
   hostPkgs,
   lib,
   containers,
+  nodes,
   options,
   ...
 }:
@@ -28,9 +29,62 @@ let
     */
     f:
     lib.mkOverride (opt.highestPrio - 1) (f opt.value);
+
+  requiredFeaturesModuleType = {
+    freeformType = types.attrsOf types.bool;
+    options = {
+      devnet = mkOption {
+        type = types.bool;
+        default =
+          builtins.length (lib.attrNames containers) > 0 && builtins.length (lib.attrNames nodes) > 0;
+        defaultText = lib.literalMD "`true` if both VMs and containers are present.";
+        description = ''
+          This heuristic setting that assumes that the majority of tests requires VMs and containers
+          to communicate over network. To support such tests, adding "/dev/net" to `nix.settings.extra-sandbox-paths` is necessary.
+
+          Override this to `false` if the heuristic is wrong in some cases.
+        '';
+      };
+      nixos-test = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Standard requirement for NixOS integration tests";
+      };
+      uid-range = mkOption {
+        type = types.bool;
+        default = builtins.length (lib.attrNames containers) > 0;
+        defaultText = lib.literalMD "`true` if containers are present.";
+        description = "Containers use systemd-nspawn, which requires pid 0 inside of the sandbox. `uid-range` enables that.";
+      };
+      kvm = mkOption {
+        type = types.bool;
+        default = isLinux;
+        defaultText = lib.literalMD "`true` if built to run on Linux.";
+        description = "Whether Linux KVM virtualization is required when running this test. Can be disabled to allow emulated execution.";
+      };
+      apple-virt = mkOption {
+        type = types.bool;
+        default = isDarwin;
+        defaultText = lib.literalMD "`true` if built to run on Darwin.";
+        description = "Whether Apple virtualization functionality is required for running this test.";
+      };
+    };
+  };
 in
 {
   options = {
+    requiredFeatures = mkOption {
+      description = "Builder features that are required for running this test.";
+      example = lib.literalExpression ''
+        {
+          cuda = true;
+          devnet = mkForce false;
+        }
+      '';
+      type = types.submodule requiredFeaturesModuleType;
+      default = { }; # this is necessary due to a bug in the module system.
+    };
+
     passthru = mkOption {
       type = types.lazyAttrsOf types.raw;
       description = ''
@@ -98,13 +152,7 @@ in
       {
         name = "vm-test-run-${config.name}";
 
-        requiredSystemFeatures = [
-          "nixos-test"
-        ]
-        # Containers use systemd-nspawn, which requires pid 0 inside of the sandbox.
-        ++ lib.optional (builtins.length (lib.attrNames containers) > 0) "uid-range"
-        ++ lib.optional isLinux "kvm"
-        ++ lib.optional isDarwin "apple-virt";
+        requiredSystemFeatures = lib.attrNames (lib.filterAttrs (_: v: v) config.requiredFeatures);
 
         nativeBuildInputs = lib.optionals config.enableDebugHook [
           hostPkgs.openssh
