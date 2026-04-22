@@ -708,6 +708,41 @@ runBuildTests {
     '';
   };
 
+  # Regression test for https://github.com/NixOS/nixpkgs/issues/511970
+  # yj crashes on arrays mixing scalars and attrsets (heterogeneous arrays),
+  # e.g. Helix language-server configs like ["bash-ls", {name = "ts-ls"; ...}].
+  # TOML 1.0 allows mixed-type arrays; the converter must emit them as
+  # inline arrays with inline tables.
+  tomlHeterogeneousArray = shouldPass {
+    format = formats.toml { };
+    input = {
+      language-server = [
+        "bash-language-server"
+        {
+          name = "typescript-language-server";
+          except-features = [ "diagnostics" ];
+        }
+      ];
+    };
+    expected = ''
+      language-server = ['bash-language-server', {except-features = ['diagnostics'], name = 'typescript-language-server'}]
+    '';
+  };
+
+  # Regression test for https://github.com/sclevine/yj/issues/52
+  # yj truncates keys at the first comma because it stores TOML keys in Go
+  # struct tags, where commas are option separators.
+  # e.g. "stack(x,n)" is emitted as "stack(x" — silently losing data.
+  tomlCommaInKey = shouldPass {
+    format = formats.toml { };
+    input = {
+      "stack(x,n)" = "foobar";
+    };
+    expected = ''
+      'stack(x,n)' = 'foobar'
+    '';
+  };
+
   cdnAtoms = shouldPass {
     format = formats.cdn { };
     input = {
