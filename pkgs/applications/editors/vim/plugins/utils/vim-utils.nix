@@ -218,6 +218,8 @@ let
             paths = allGrammars;
           };
 
+          allAndOptPluginNames = map (plugin: plugin.pname) (allPlugins ++ opt);
+
           packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" (
             if allGrammars != [ ] then allPlugins ++ [ allGrammarsSymlinked ] else allPlugins
           );
@@ -234,8 +236,8 @@ let
 
         assert
           (
-            builtins.elem vimPlugins.nvim-treesitter (opt ++ allPlugins)
-            && builtins.elem vimPlugins.nvim-treesitter-legacy (opt ++ allPlugins)
+            builtins.elem "nvim-treesitter" allAndOptPluginNames
+            && builtins.elem "nvim-treesitter-legacy" allAndOptPluginNames
           )
           -> throw "You cannot include two different versions of nvim-treesitter, perhaps you included a legacy plugin together with a new one?";
 

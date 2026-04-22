@@ -5,13 +5,13 @@
   docbook_xsl,
   docbook_xsl_ns,
   gettext,
+  libxml2,
   libxslt,
   glibcLocales,
   docbook_xml_dtd_45,
   docbook_sgml_dtd_41,
   opensp,
   bash,
-  fetchpatch,
   perl,
   buildPerlPackage,
   ModuleBuild,
@@ -27,12 +27,20 @@
 
 buildPerlPackage rec {
   pname = "po4a";
-  version = "0.73";
+  version = "0.74";
 
   src = fetchurl {
     url = "https://github.com/mquinson/po4a/releases/download/v${version}/po4a-${version}.tar.gz";
-    hash = "sha256-bxj4LYyyo3c5QTfqOWzD6BldbNbkVP4CGKoPDjYDjqA=";
+    hash = "sha256-JfwyPyuje71Iw68Ov0mVJkSw5GgmH5hjPpEhmoOP58I=";
   };
+
+  patches = [
+    # Fix compatibility with gettext >= 1.0, whose msginit merges into
+    # existing files instead of overwriting, producing broken PO headers
+    # when the output file already exists but is empty.
+    # https://github.com/mquinson/po4a/issues/636
+    ./gettext-1.0-msginit-compat.patch
+  ];
 
   strictDeps = true;
 
@@ -40,12 +48,17 @@ buildPerlPackage rec {
     # the tests for the tex-format use kpsewhich -- texlive's file finding utility.
     # We don't want to depend on texlive here, so we replace it with a minimal
     # shellscript that suffices for the tests in t/fmt/tex/, i.e. it looks up
-    # article.cls to an existing file, but doesn't find article-wrong.cls.
+    # subtext.tex and article.cls to appropriate files, but doesn't find article-wrong.cls.
     let
-      kpsewhich-stub = writeShellScriptBin "kpsewhich" ''[[ $1 = "article.cls" ]] && echo /dev/null'';
+      kpsewhich-stub = writeShellScriptBin "kpsewhich" ''
+        srcdir="$NIX_BUILD_TOP/${lib.strings.removeSuffix ".tar.gz" src.name}"
+        [[ $1 = "article.cls" ]] && echo /dev/null
+        [[ $1 = "subtext.tex" ]] && echo "$srcdir/t/fmt/tex/subtext.tex"
+      '';
     in
     [
       gettext
+      libxml2
       libxslt
       docbook_xsl
       docbook_xsl_ns
@@ -56,18 +69,6 @@ buildPerlPackage rec {
       kpsewhich-stub
       glibcLocales
     ];
-  patches = [
-    # Needs a patch for 5.40 until the next release
-    (fetchpatch {
-      url = "https://github.com/mquinson/po4a/commit/28fe52651eb8096d97d6bd3a97b3168522ba5306.patch";
-      hash = "sha256-QUXxkSzcnwRvU+2y2KoBXmtfE8qTZ2BV0StkJHqZehQ=";
-    })
-    (fetchpatch {
-      name = "gettext-0.25.patch";
-      url = "https://github.com/mquinson/po4a/commit/7d88a5e59606a9a29ffe73325fff4a5ddb865d5c.patch";
-      hash = "sha256-5x+EX++v7DxOHOZgRM2tv5eNN1Gy28f+qaqH27emZhk=";
-    })
-  ];
 
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
   propagatedBuildInputs =

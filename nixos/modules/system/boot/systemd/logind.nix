@@ -47,7 +47,6 @@
   config = lib.mkIf config.services.logind.enable {
     systemd.additionalUpstreamSystemUnits = [
       "systemd-logind.service"
-      "autovt@.service"
       "systemd-user-sessions.service"
     ]
     ++ lib.optionals config.systemd.package.withImportd [

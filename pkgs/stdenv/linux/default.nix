@@ -847,7 +847,6 @@ in
               findutils
               gawk
               gnused
-              gnutar
               gnugrep
               gnupatch
               patchelf

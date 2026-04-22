@@ -626,7 +626,7 @@ buildPythonPackage {
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
       -e "/'keras[^']*')\?,/d" \
-      -e "s/'protobuf[^']*',/'protobuf',/" \
+      -e "s/'protobuf[^']*',/'protobuf',/"
   '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow

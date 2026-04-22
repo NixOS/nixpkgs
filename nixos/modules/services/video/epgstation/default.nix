@@ -306,7 +306,7 @@ in
       group = config.users.groups.epgstation.name;
       isSystemUser = true;
 
-      # NPM insists on creating ~/.npm
+      # npm insists on creating ~/.npm
       home = "/var/cache/epgstation";
     };
 

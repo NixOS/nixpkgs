@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     wrapProgram $out/bin/supertuxkart \
       --set-default SUPERTUXKART_ASSETS_DIR "${assets}" \
-      --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart" \
+      --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart"
   '';
 
   meta = {

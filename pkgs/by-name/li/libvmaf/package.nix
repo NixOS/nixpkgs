@@ -1,5 +1,6 @@
 {
   lib,
+  buildPackages,
   stdenv,
   fetchFromGitHub,
   ffmpeg-full,
@@ -8,7 +9,6 @@
   nasm,
   ninja,
   testers,
-  xxd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     nasm
-    xxd
+    (buildPackages.callPackage ./xxd.nix { })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''

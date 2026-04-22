@@ -4175,7 +4175,10 @@ let
           "systemd-networkd.service"
           "systemd-networkd.socket"
           "systemd-networkd-persistent-storage.service"
+          "systemd-networkd-varlink-metrics.socket"
         ];
+
+        systemd.sockets.systemd-networkd-varlink-metrics.wantedBy = [ "sockets.target" ];
 
         environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 

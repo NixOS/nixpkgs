@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   libpg_query,
-  xxHash,
+  xxhash,
   testers,
 }:
 
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     libpg_query
-    xxHash
+    xxhash
   ];
 
   ldflags = [

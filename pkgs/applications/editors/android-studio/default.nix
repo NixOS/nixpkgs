@@ -26,9 +26,9 @@ let
     url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.5/android-studio-panda4-rc1-linux.tar.gz";
   };
   latestVersion = {
-    version = "2025.3.4.4"; # "Android Studio Panda 4 | 2025.3.4 Canary 4"
-    sha256Hash = "sha256-sPGJuOm5T7EZV5hhOJsZc7P8CTXyv9A6k82hM1GZGpY=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.4/android-studio-panda4-canary4-linux.tar.gz";
+    version = "2026.1.1.1"; # "Android Studio Quail 1 | 2026.1.1 Canary 1"
+    sha256Hash = "sha256-Nr7V6B4sEZrcwkMdKoevLEkyIHawxUx/ejN0nBL4KW0=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.1.1/android-studio-quail1-canary1-linux.tar.gz";
   };
 in
 {

@@ -8,7 +8,7 @@
   dbus,
   libsodium,
   openssl,
-  xxHash,
+  xxhash,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     openssl
     libsodium
-    xxHash
+    xxhash
   ]
   ++ (lib.optionals gitImportSupport [ libgit2 ]);
 

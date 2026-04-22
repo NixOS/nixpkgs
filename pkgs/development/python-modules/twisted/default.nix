@@ -191,6 +191,8 @@ buildPythonPackage rec {
           # https://github.com/twisted/twisted/blob/twisted-25.5.0/src/twisted/internet/test/test_tcp.py
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort"
           "AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbortLater"
+          # Times out in Hydra on x86_64-darwin
+          "AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange"
         ];
       };
     in

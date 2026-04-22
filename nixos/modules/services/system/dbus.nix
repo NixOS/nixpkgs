@@ -68,7 +68,7 @@ in
           "dbus"
           "broker"
         ];
-        default = "dbus";
+        default = "broker";
         description = ''
           The implementation to use for the message bus defined by the D-Bus specification.
           Can be either the classic dbus daemon or dbus-broker, which aims to provide high

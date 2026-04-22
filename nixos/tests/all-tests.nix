@@ -891,6 +891,8 @@ in
   lighttpd = runTest ./lighttpd.nix;
   limesurvey = runTest ./limesurvey.nix;
   limine = import ./limine { inherit runTest; };
+  linkding = runTest ./web-apps/linkding.nix;
+  linkding-postgres = runTest ./web-apps/linkding-postgres.nix;
   linkwarden = runTest ./web-apps/linkwarden.nix;
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
   litellm = runTest ./litellm.nix;
@@ -1590,6 +1592,7 @@ in
   };
   systemd-initrd-simple = runTest ./systemd-initrd-simple.nix;
   systemd-initrd-swraid = runTest ./systemd-initrd-swraid.nix;
+  systemd-initrd-terminfo = runTest ./systemd-initrd-terminfo.nix;
   systemd-initrd-vconsole = runTest ./systemd-initrd-vconsole.nix;
   systemd-initrd-vlan = runTest ./systemd-initrd-vlan.nix;
   systemd-journal = runTest ./systemd-journal.nix;

@@ -17,7 +17,7 @@
   libice,
   stb,
   openssl,
-  xxHash,
+  xxhash,
   pugixml,
 }:
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     stb
     openssl
-    xxHash
+    xxhash
     pugixml
   ];
 

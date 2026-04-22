@@ -26,7 +26,7 @@ appimageTools.wrapType2 rec {
       install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
       install -Dm444 ${contents}/lunarclient.png -t $out/share/pixmaps/
       substituteInPlace $out/share/applications/lunarclient.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient' \
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient'
     '';
 
   passthru.updateScript = ./update.sh;

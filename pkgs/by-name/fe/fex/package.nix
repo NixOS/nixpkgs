@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   nix-update-script,
-  xxHash,
+  xxhash,
   fmt,
   libxml2,
   openssl,
@@ -192,7 +192,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withQt qt6.wrapQtAppsHook;
 
   buildInputs = [
-    xxHash
+    xxhash
     fmt
     libxml2
     openssl

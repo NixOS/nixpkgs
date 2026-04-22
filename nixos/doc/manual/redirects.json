@@ -1466,6 +1466,24 @@
   "module-services-mailman-other-mtas": [
     "index.html#module-services-mailman-other-mtas"
   ],
+  "test-opt-requiredFeatures": [
+    "index.html#test-opt-requiredFeatures"
+  ],
+  "test-opt-requiredFeatures.apple-virt": [
+    "index.html#test-opt-requiredFeatures.apple-virt"
+  ],
+  "test-opt-requiredFeatures.devnet": [
+    "index.html#test-opt-requiredFeatures.devnet"
+  ],
+  "test-opt-requiredFeatures.kvm": [
+    "index.html#test-opt-requiredFeatures.kvm"
+  ],
+  "test-opt-requiredFeatures.nixos-test": [
+    "index.html#test-opt-requiredFeatures.nixos-test"
+  ],
+  "test-opt-requiredFeatures.uid-range": [
+    "index.html#test-opt-requiredFeatures.uid-range"
+  ],
   "trezor": [
     "index.html#trezor"
   ],

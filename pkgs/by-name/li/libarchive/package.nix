@@ -32,13 +32,13 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.4";
+  version = "3.8.6";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qNz7BAvi3dTNg6Bz2cfqaYGKFJlM4C+y/GARsQRRYsY=";
+    hash = "sha256-XNFw0h++7B3ODnEi50zd7q/j1bYQzL1IKB2q3p4IzB4=";
   };
 
   outputs = [
@@ -111,6 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isCygwin "fortify";
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # macOS iconv implementation is slightly broken since Sonoma
+    # https://github.com/Homebrew/homebrew-core/pull/199639
+    # https://savannah.gnu.org/bugs/index.php?66541
+    am_cv_func_iconv_works = "yes";
+  };
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;

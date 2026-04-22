@@ -22,7 +22,7 @@
   readline,
   ruby,
   vte,
-  xxHash,
+  xxhash,
   zlib,
   useX11 ? false,
   rubyBindings ? false,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     # radare2 exposes r_lib which depends on these libraries
     file # for its list of magic numbers (`libmagic`)
     libzip
-    xxHash
+    xxhash
   ];
 
   postUnpack = ''

@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
+  separateDebugInfo = true;
+
   outputs = [
     "out"
     "dev"

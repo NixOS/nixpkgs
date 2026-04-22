@@ -51,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     gtk-doc

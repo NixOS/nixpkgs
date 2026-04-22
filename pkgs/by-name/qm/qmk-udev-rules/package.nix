@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmk-udev-rules";
-  version = "0.27.13";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "qmk";
-    repo = "qmk_firmware";
-    tag = finalAttrs.version;
-    hash = "sha256-Zs508OQ0RYCg0f9wqR+VXUmVvhP/jCA3piwRq2ZpR84=";
+    repo = "qmk_udev";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sxwvyMniEXTnmHEs8ldsBjwReKUT5FlqYxcUULV0cpI=";
   };
 
   dontBuild = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D util/udev/50-qmk.rules $out/lib/udev/rules.d/50-qmk.rules
+    install -D 50-qmk.rules $out/lib/udev/rules.d/50-qmk.rules
 
     runHook postInstall
   '';

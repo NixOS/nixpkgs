@@ -356,6 +356,13 @@ in
                 It is suggested to use the open source kernel modules on Turing or later GPUs (RTX series, GTX 16xx), and the closed source modules otherwise.
               '';
             }
+            {
+              assertion = !cfg.open || (nvidia_x11.open != null);
+              message = ''
+                The selected NVIDIA package does not provide open kernel modules.
+                Set hardware.nvidia.open = false or choose a package branch with open module support.
+              '';
+            }
           ];
           boot = {
             blacklistedKernelModules = [

@@ -73,6 +73,7 @@
     x11Support
     && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
     && lib.meta.availableOn stdenv.hostPlatform ffado,
+  ldacBtDecodeSupport ? false,
   ffado,
   libselinux,
   libebur128,
@@ -88,7 +89,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.6.2";
+  version = "1.6.3";
 
   outputs = [
     "out"
@@ -104,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-PG1S70wnyGz9H3TP3gJ2/O+3XnaAyyB4XRM2NFnCWwY=";
+    hash = "sha256-zD0PYtZsiU+tZUpVBKofjGVQyO/68eIZP7DqBQHUGJk=";
   };
 
   patches = [
@@ -166,10 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optionals ldacbtSupport [
-    ldacbt
-    libldac-dec
-  ]
+  ++ lib.optional ldacbtSupport ldacbt
+  ++ lib.optional (ldacBtDecodeSupport && ldacbtSupport) libldac-dec
   ++ lib.optional libcameraSupport libcamera
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
@@ -238,6 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
+    (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport && ldacBtDecodeSupport))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)

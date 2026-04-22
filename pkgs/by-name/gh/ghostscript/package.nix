@@ -168,6 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-libtiff"
     "--without-tesseract"
   ]
+  ++ lib.optional stdenv.cc.isClang "CFLAGS=-std=gnu17" # FIXME: make it unconditional
   ++ lib.optionals dynamicDrivers [
     "--enable-dynamic"
     "--disable-hidden-visibility"

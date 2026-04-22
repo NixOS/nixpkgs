@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "24.14.0";
-  sha256 = "9fe025ef4028aba95d16e7810518bf4a5e8abfb0bdc07d8a3fdbb0afd538d77f";
+  version = "24.14.1";
+  sha256 = "7822507713f202cf2a551899d250259643f477b671706db421a6fb55c4aa0991";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -62,6 +62,11 @@ buildNodejs {
         url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
         hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
         includes = [ "test/*" ];
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/59a522af24173b244cb86829de145d46b143a45c.patch?full_index=1";
+        hash = "sha256-mjxl4rIio8lgjvxqfKrVwdhOUHUUDH2PMh0n8BowXIQ=";
+        includes = [ "src/*" ];
       })
     ]
     ++ gypPatches

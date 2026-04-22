@@ -15,7 +15,7 @@
   enableOpenSSL ? true,
   openssl,
   enableXXHash ? true,
-  xxHash,
+  xxhash,
   enableZstd ? true,
   zstd,
   nixosTests,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableZstd zstd
   ++ lib.optional enableLZ4 lz4
   ++ lib.optional enableOpenSSL openssl
-  ++ lib.optional enableXXHash xxHash;
+  ++ lib.optional enableXXHash xxhash;
 
   configureFlags = [
     (lib.enableFeature enableLZ4 "lz4")

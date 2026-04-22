@@ -22,7 +22,7 @@
   lapack,
   lua,
   libsodium,
-  xxHash,
+  xxhash,
   zstd,
   libarchive,
   # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     jemalloc
     libsodium
-    xxHash
+    xxhash
     zstd
     libarchive
   ]

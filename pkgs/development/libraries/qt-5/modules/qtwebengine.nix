@@ -115,7 +115,7 @@ qtModule (
       (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
       pkg-config-wrapped-without-prefix
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       bootstrap_cmds
       xcbuild
     ];
@@ -330,10 +330,12 @@ qtModule (
       "--"
       "-system-ffmpeg"
     ]
-    ++ lib.optional (
-      pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
-    ) "-webengine-webrtc-pipewire"
-    ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
+    ++ lib.optionals (pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform) [
+      "-webengine-webrtc-pipewire"
+    ]
+    ++ lib.optionals enableProprietaryCodecs [
+      "-proprietary-codecs"
+    ];
 
     propagatedBuildInputs = [
       qtdeclarative
@@ -402,7 +404,9 @@ qtModule (
 
     # FIXME These dependencies shouldn't be needed but can't find a way
     # around it. Chromium pulls this in while bootstrapping GN.
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools.libtool
+    ];
 
     buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       cups

@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   meta = {
     description = "Extra tools for Ogg-Vorbis audio codec";
     longDescription = ''

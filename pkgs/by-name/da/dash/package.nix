@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dash";
-  version = "0.5.13.1";
+  version = "0.5.13.2";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/dash-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2ScbzgnBJ9mGbiXAEVgt3HWrmIlYoEvE2FU6O48w43A=";
+    hash = "sha256-5xNoJrHu1s4xk+iv+i9wsbK5Fo3ZH/p9209G6eYgVP4=";
   };
 
   strictDeps = true;

@@ -318,6 +318,17 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       url = "https://github.com/pytorch/pytorch/commit/39565a7dcf8f93ea22cedeaa20088b24ff6d2634.patch";
       hash = "sha256-Au5fVbs7i33d9c4Xj8koiBP7lGnsTGTaX4VlE2gAfy8=";
     })
+
+    # pybind11 3.0.3 changes led to ambiguous deduction in some return types
+    # that used `py::make_tuple`, so the type is explicitly specified where
+    # needed.
+    # Merged pull request: https://github.com/pytorch/pytorch/pull/179277
+    # TODO: remove at the next release
+    (fetchpatch {
+      name = "pybind11-3.0.3-ambiguous-return-type.patch";
+      url = "https://github.com/pytorch/pytorch/commit/b248ebc17075c0c3ad2b2532970d2ada32b2cf94.patch";
+      hash = "sha256-HY5JFGNoroFsfuUOO5j6WNP6gMHWUcIJFmWLqV8PV94=";
+    })
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch

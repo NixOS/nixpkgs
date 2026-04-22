@@ -61,6 +61,7 @@ lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
+  context-legacy.scriptsFolder = "context/ruby";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -257,11 +258,6 @@ lib.recursiveUpdate orig rec {
     "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
   };
 
-  context-legacy.binlinks = {
-    texexec = tl.context-legacy.tex + "/scripts/context/ruby/texexec.rb";
-    texmfstart = tl.context-legacy.tex + "/scripts/context/ruby/texmfstart.rb";
-  };
-
   dvipdfmx.binlinks = {
     # even though 'ebb' was removed from the Makefile, this symlink is still
     # part of the binary container of dvipdfmx
@@ -310,6 +306,10 @@ lib.recursiveUpdate orig rec {
 
   cjk-gs-integrate.postFixup = ''
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath cjk-gs-integrate.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/cjk-gs-integrate
+  '';
+
+  context-legacy.postFixup = ''
+    sed -i 's!File.dirname(\$0)!'"'"'${tl.context-legacy.tex}/scripts/context/ruby'"'"'!' "$out"/bin/*
   '';
 
   cyrillic-bin.postFixup = ''

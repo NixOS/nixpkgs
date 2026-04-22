@@ -142,6 +142,16 @@ let
           };
         } ./tcl-package-hook.sh
       ) { };
+      tclRequiresCheckHook = callPackage (
+        { buildPackages }:
+        makeSetupHook {
+          name = "tcl-requires-check-hook";
+          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+          meta = {
+            inherit (meta) maintainers platforms;
+          };
+        } ./tcl-requires-check-hook.sh
+      ) { };
       # verify that Tcl's clock library can access tzdata
       tests.tzdata = runCommand "${pname}-test-tzdata" { } ''
         ${baseInterp}/bin/tclsh <(echo "set t [clock scan {2004-10-30 05:00:00} \

@@ -77,7 +77,7 @@
       + lib.optionalString (rustTargetPlatform != rustHostPlatform) ''
         "CC_${stdenv.targetPlatform.rust.cargoEnvVarTarget}=${ccForTarget}" \
         "CXX_${stdenv.targetPlatform.rust.cargoEnvVarTarget}=${cxxForTarget}" \
-        "CARGO_TARGET_${stdenv.targetPlatform.rust.cargoEnvVarTarget}_LINKER=${ccForTarget}" \
+        "CARGO_TARGET_${stdenv.targetPlatform.rust.cargoEnvVarTarget}_LINKER=${ccForTarget}"
       '';
     };
 }
