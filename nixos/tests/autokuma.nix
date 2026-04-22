@@ -30,7 +30,14 @@ in
 
         autokuma = {
           enable = true;
-          inherit kumaUrl kumaUser kumaPassword;
+          settings = {
+            kuma = {
+              url = kumaUrl;
+              username = kumaUser;
+              password = kumaPassword;
+            };
+            docker.enabled = true;
+          };
           staticMonitors.config = [
             {
               name = "uptime-kuma itself";
@@ -38,7 +45,6 @@ in
               type = "http";
             }
           ];
-          docker.enable = true;
         };
       };
 
