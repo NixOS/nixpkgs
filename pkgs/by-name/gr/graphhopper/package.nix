@@ -2,6 +2,7 @@
   fetchFromGitHub,
   fetchurl,
   lib,
+  nixosTests,
   stdenv,
   testers,
 
@@ -144,11 +145,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = ./update.nu;
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      # `graphhopper --version` does not work as the source does not specify `Implementation-Version`
-      command = "graphhopper --help";
-      version = "graphhopper-web-${version.major}-SNAPSHOT.jar";
+    tests = {
+      nixos = nixosTests.graphhopper;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        # `graphhopper --version` does not work as the source does not specify `Implementation-Version`
+        command = "graphhopper --help";
+        version = "graphhopper-web-${version.major}-SNAPSHOT.jar";
+      };
     };
   };
 })
