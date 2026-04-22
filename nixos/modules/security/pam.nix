@@ -1854,6 +1854,17 @@ in
 
   options = {
 
+    security.pam.enable = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+
+      description = ''
+        Whether to enable PAM, or entirely disable it.
+
+        Unless you're building a container image, you probably don't want to disable PAM.
+      '';
+    };
+
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
 
     security.pam.loginLimits = lib.mkOption {
@@ -2475,7 +2486,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = lib.mkIf config.security.pam.enable {
     assertions = [
       {
         assertion = config.users.motd == "" || config.users.motdFile == null;
