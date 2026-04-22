@@ -13,22 +13,16 @@
   tracee,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbpf";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
-    rev = "v${version}";
-    hash = "sha256-poLBZDogSL2ip90Es0xJ7X/xJ8+g9FJHnXSX0+N15es=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-F92msxkYp4yZA3qUoSwS5GKUhcEO6DrYNln7w6U+jt0=";
   };
-
-  patches = [
-    # Fix redefinition when using linux/netlink.h from libbpf with musl
-    # https://github.com/libbpf/libbpf/pull/919
-    ./sync-uapi-move-constants-from-linux-kernel-h-to-linux-const-h.patch
-  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -75,6 +69,6 @@ stdenv.mkDerivation rec {
       martinetd
     ];
     platforms = lib.platforms.linux;
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libbpf_project" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libbpf_project" finalAttrs.version;
   };
-}
+})
