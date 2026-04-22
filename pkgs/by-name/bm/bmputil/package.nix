@@ -1,30 +1,31 @@
 {
   blackmagic,
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   rustPlatform,
   versionCheckHook,
   udevCheckHook,
   pkg-config,
   openssl,
+  udev,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bmputil";
-  version = "1.0.0";
+  version = "1.1.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "blackmagic-debug";
     repo = "bmputil";
     tag = "v${version}";
-    hash = "sha256-5BHnh1/6DqjvT0ptOoGqDqVGU0coVPdnZPDQPT9fVFk=";
+    hash = "sha256-ZD/JXsx52U+O3FazRc9xnShx34fxTXcD2zhW5mgSYtU=";
   };
 
-  cargoHash = "sha256-JoqNEesozr4ahyenZeeAMf0m8M+sxvbF+A6t23Gcz+4=";
+  cargoHash = "sha256-/I1chzqnhgky/+cKGhFrdgZvoLGM9P75ga5UDTMOI3Q=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    openssl # can be removed once https://github.com/blackmagic-debug/bmputil/commit/5fa01c20902a3f2570fed58ee66f2241546dd6d7 is released
+    udev
   ];
 
   postInstall = ''
