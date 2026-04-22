@@ -10460,6 +10460,12 @@
     github = "HarisDotParis";
     githubId = 67912527;
   };
+  harryfinbow = {
+    email = "nixpkgs.7iuby@a.finbow.dev";
+    github = "harryfinbow";
+    githubId = 64917871;
+    name = "Harry Finbow";
+  };
   harryposner = {
     email = "nixpkgs@harryposner.com";
     github = "harryposner";
