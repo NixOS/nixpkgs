@@ -114,12 +114,8 @@ in
 
     metricsPort = mkOption {
       type = port;
-      default = 9091;
-      description = ''
-        Port for the relay metrics endpoint.
-        Defaults to 9091 to avoid conflict with the management server's
-        metrics port (9090).
-      '';
+      default = 9092;
+      description = "Port for the relay metrics endpoint.";
     };
 
     extraOptions = mkOption {
