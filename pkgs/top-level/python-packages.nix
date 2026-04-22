@@ -17263,6 +17263,10 @@ self: super: with self; {
 
   samplerate = callPackage ../development/python-modules/samplerate { inherit (pkgs) libsamplerate; };
 
+  samplerate-ledfx = callPackage ../development/python-modules/samplerate-ledfx {
+    inherit (pkgs) libsamplerate;
+  };
+
   samsungctl = callPackage ../development/python-modules/samsungctl { };
 
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
