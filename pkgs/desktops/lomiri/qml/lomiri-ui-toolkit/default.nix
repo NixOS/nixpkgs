@@ -128,6 +128,18 @@ stdenv.mkDerivation (finalAttrs: {
       tests/unit/visual/tst_imageprovider.11.qml \
       --replace-fail '/usr/share' '${suru-icon-theme}/share'
   ''
+  # Adjust to Qt 6.11, TODO report & submit upstream
+  + lib.optionalString withQt6 ''
+    substituteInPlace apicheck/apicheck.cpp \
+      --replace-fail \
+        'attachedPropertiesType(QQmlEnginePrivate::get(currentEngine))' \
+        'attachedPropertiesType(QQmlTypeLoader::get(currentEngine))'
+
+    substituteInPlace src/LomiriToolkit/ucstylehints.cpp \
+      --replace-fail \
+        'QQmlEnginePrivate::getV4Engine(qmlEngine(this))' \
+        'qmlEngine(this)->handle()'
+  ''
   + lib.optionalString (!withQt6) ''
     for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
       substituteInPlace $subproject/$subproject.pro \
