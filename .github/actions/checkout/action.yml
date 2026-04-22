@@ -103,14 +103,14 @@ runs:
             await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
           }
 
-          // Create all worktrees in parallel.
-          await Promise.all(
-            commits.map(async ({ sha, path }) => {
-              await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
-              await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
-              await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
-            })
-          )
+          // Git worktree setup can race when multiple worktrees are created and
+          // initialized at the same time against one repository. See #511286.
+          // Keep the setup sequential so shared repo config updates cannot contend.
+          for (const { sha, path } of commits) {
+            await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
+            await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
+            await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
+          }
 
           // Apply pin bump to untrusted worktree
           if (pin_bump_sha) {
