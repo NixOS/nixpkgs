@@ -169,10 +169,10 @@ in
           };
         }
         // lib.optionalAttrs (backup.backupPrepareCommand != null) {
-          preStart = toString (pkgs.writeScript "kopia-backup-prepare-${name}" backup.backupPrepareCommand);
+          preStart = backup.backupPrepareCommand;
         }
         // lib.optionalAttrs (backup.backupCleanupCommand != null) {
-          postStop = toString (pkgs.writeScript "kopia-backup-cleanup-${name}" backup.backupCleanupCommand);
+          postStop = backup.backupCleanupCommand;
         }
       )
     ) (lib.filterAttrs (_: b: b.paths != [ ]) cfg.backups);
