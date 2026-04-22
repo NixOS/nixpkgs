@@ -10,7 +10,7 @@ use std::{
     path::{Path, PathBuf},
     rc::Rc,
     str::FromStr,
-    sync::OnceLock,
+    sync::{LazyLock, OnceLock},
     time::Duration,
 };
 
@@ -93,6 +93,19 @@ const DAEMON_RELOAD_TIMEOUT: Duration = Duration::from_secs(180);
 // Used during times of waiting for D-Bus to process messages.
 const DBUS_PROCESS_TIME: Duration = Duration::from_millis(500);
 
+// Matches a templated unit instance (e.g. `foo@bar.service`), capturing the
+// template name and the unit-type suffix.
+// FIXME: instance names may contain `.`; this regex predates this file and is
+// kept as-is to avoid behaviour changes here. Revisit separately.
+static TEMPLATE_UNIT_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^(.*)@[^\.]*\.(.*)$").expect("systemd template-unit regex is valid")
+});
+
+// Matches a unit name, capturing everything up to the type suffix.
+static UNIT_NAME_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"^(.*)\.[[:lower:]]*$").expect("systemd unit-name regex is valid")
+});
+
 #[derive(Debug, Clone, PartialEq)]
 enum Action {
     Switch,
@@ -126,6 +139,62 @@ impl From<&Action> for &'static str {
             Action::DryActivate => "dry-activate",
             Action::Check => "check",
         }
+    }
+}
+
+/// Scope of systemd unit management. System units live in /etc/systemd/system and
+/// are managed via the system bus; user units live in /etc/systemd/user and are
+/// managed via each logged-in user's session bus.
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum UnitScope {
+    System,
+    User,
+}
+
+impl UnitScope {
+    /// Path relative to a toplevel (or to /) where this scope's NixOS-managed
+    /// unit files live.
+    fn etc_dir(&self) -> &'static str {
+        match self {
+            UnitScope::System => "etc/systemd/system",
+            UnitScope::User => "etc/systemd/user",
+        }
+    }
+
+    /// Absolute path to the currently-active unit directory for this scope.
+    fn current_dir(&self) -> &'static Path {
+        Path::new(match self {
+            UnitScope::System => "/etc/systemd/system",
+            UnitScope::User => "/etc/systemd/user",
+        })
+    }
+
+    /// Directory where unit action lists are persisted for
+    /// resume-after-interrupt. The user scope uses XDG_RUNTIME_DIR so the
+    /// unprivileged child can write to it.
+    fn list_dir(&self) -> PathBuf {
+        match self {
+            UnitScope::System => PathBuf::from("/run/nixos"),
+            UnitScope::User => {
+                // The parent always sets XDG_RUNTIME_DIR when spawning the
+                // user-scope child.
+                let runtime_dir = std::env::var("XDG_RUNTIME_DIR")
+                    .ok()
+                    .filter(|d| !d.is_empty())
+                    .expect("XDG_RUNTIME_DIR must be set and non-empty for the user scope");
+                PathBuf::from(runtime_dir).join("nixos")
+            }
+        }
+    }
+
+    fn start_list_file(&self) -> PathBuf {
+        self.list_dir().join("start-list")
+    }
+    fn restart_list_file(&self) -> PathBuf {
+        self.list_dir().join("restart-list")
+    }
+    fn reload_list_file(&self) -> PathBuf {
+        self.list_dir().join("reload-list")
     }
 }
 
@@ -559,6 +628,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
 // figures out of what units are to be stopped, restarted, reloaded, started, and skipped.
 fn handle_modified_unit(
     toplevel: &Path,
+    scope: UnitScope,
     unit: &str,
     base_name: &str,
     new_unit_file: &Path,
@@ -571,6 +641,9 @@ fn handle_modified_unit(
     units_to_restart: &mut HashMap<String, ()>,
     units_to_skip: &mut HashMap<String, ()>,
 ) -> Result<()> {
+    let start_list = scope.start_list_file();
+    let restart_list = scope.restart_list_file();
+    let reload_list = scope.reload_list_file();
     let use_restart_as_stop_and_start = new_unit_info.is_none();
 
     if matches!(
@@ -591,10 +664,10 @@ fn handle_modified_unit(
         // crashing it.
         if unit == "-.mount" || unit == "nix.mount" {
             units_to_reload.insert(unit.to_string(), ());
-            record_unit(RELOAD_LIST_FILE, unit);
+            record_unit(&reload_list, unit);
         } else {
             units_to_restart.insert(unit.to_string(), ());
-            record_unit(RESTART_LIST_FILE, unit);
+            record_unit(&restart_list, unit);
         }
     } else if unit.ends_with(".socket") {
         // FIXME: do something?
@@ -618,7 +691,7 @@ fn handle_modified_unit(
             })
         {
             units_to_reload.insert(unit.to_string(), ());
-            record_unit(RELOAD_LIST_FILE, unit);
+            record_unit(&reload_list, unit);
         } else if !parse_systemd_bool(new_unit_info, "Service", "X-RestartIfChanged", true)
             || parse_systemd_bool(new_unit_info, "Unit", "RefuseManualStop", false)
             || parse_systemd_bool(new_unit_info, "Unit", "X-OnlyManualStart", false)
@@ -632,11 +705,11 @@ fn handle_modified_unit(
             {
                 // This unit should be restarted instead of stopped and started.
                 units_to_restart.insert(unit.to_string(), ());
-                record_unit(RESTART_LIST_FILE, unit);
+                record_unit(&restart_list, unit);
                 // Remove from units to reload so we don't restart and reload
                 if units_to_reload.contains_key(unit) {
                     units_to_reload.remove(unit);
-                    unrecord_unit(RELOAD_LIST_FILE, unit);
+                    unrecord_unit(&reload_list, unit);
                 }
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
@@ -673,13 +746,13 @@ fn handle_modified_unit(
                             }
 
                             // Only restart sockets that actually exist in new configuration:
-                            if toplevel.join("etc/systemd/system").join(socket).exists() {
+                            if toplevel.join(scope.etc_dir()).join(socket).exists() {
                                 if use_restart_as_stop_and_start {
                                     units_to_restart.insert(socket.to_string(), ());
-                                    record_unit(RESTART_LIST_FILE, socket);
+                                    record_unit(&restart_list, socket);
                                 } else {
                                     units_to_start.insert(socket.to_string(), ());
-                                    record_unit(START_LIST_FILE, socket);
+                                    record_unit(&start_list, socket);
                                 }
 
                                 socket_activated = true;
@@ -688,7 +761,7 @@ fn handle_modified_unit(
                             // Remove from units to reload so we don't restart and reload
                             if units_to_reload.contains_key(unit) {
                                 units_to_reload.remove(unit);
-                                unrecord_unit(RELOAD_LIST_FILE, unit);
+                                unrecord_unit(&reload_list, unit);
                             }
                         }
                     }
@@ -706,10 +779,10 @@ fn handle_modified_unit(
                 if !socket_activated {
                     if use_restart_as_stop_and_start {
                         units_to_restart.insert(unit.to_string(), ());
-                        record_unit(RESTART_LIST_FILE, unit);
+                        record_unit(&restart_list, unit);
                     } else {
                         units_to_start.insert(unit.to_string(), ());
-                        record_unit(START_LIST_FILE, unit);
+                        record_unit(&start_list, unit);
                     }
                 }
 
@@ -721,7 +794,7 @@ fn handle_modified_unit(
                 // Remove from units to reload so we don't restart and reload
                 if units_to_reload.contains_key(unit) {
                     units_to_reload.remove(unit);
-                    unrecord_unit(RELOAD_LIST_FILE, unit);
+                    unrecord_unit(&reload_list, unit);
                 }
             }
         }
@@ -925,6 +998,174 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
     }
 }
 
+/// Iterate over currently active units in the given scope, compare the unit
+/// file in `old_unit_dir` against the one in `new_unit_dir`, and populate the
+/// action maps accordingly.
+///
+/// Units whose FragmentPath does not live under the scope's NixOS-managed
+/// directory (`scope.current_dir()`) are skipped; this avoids touching
+/// generated units and, for the user scope, units that are shadowed by files
+/// in the user's home directory (e.g. those managed by home-manager).
+///
+/// `old_unit_dir` and `new_unit_dir` are taken explicitly rather than derived
+/// from the scope because by the time the user-scope child runs, /etc has
+/// already been switched to the new configuration, so the caller must supply
+/// a captured reference to the pre-switch unit directory.
+fn collect_unit_changes(
+    toplevel: &Path,
+    scope: UnitScope,
+    old_unit_dir: &Path,
+    new_unit_dir: &Path,
+    current_active_units: &HashMap<String, UnitState>,
+    units_to_stop: &mut HashMap<String, ()>,
+    units_to_start: &mut HashMap<String, ()>,
+    units_to_reload: &mut HashMap<String, ()>,
+    units_to_restart: &mut HashMap<String, ()>,
+    units_to_skip: &mut HashMap<String, ()>,
+    units_to_filter: &mut HashMap<String, ()>,
+) -> Result<()> {
+    let fragment_prefix = scope
+        .current_dir()
+        .to_str()
+        .expect("scope dir is valid UTF-8");
+    let start_list = scope.start_list_file();
+    let reload_list = scope.reload_list_file();
+
+    for (unit, unit_state) in current_active_units {
+        // Don't touch units that are not loaded from the NixOS-managed
+        // directory. For system scope this skips generator output; for user
+        // scope it additionally skips units shadowed by ~/.config/systemd/user.
+        if !unit_state
+            .proxy
+            .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+            .map(|fragment_path: String| fragment_path.starts_with(fragment_prefix))
+            .unwrap_or_default()
+        {
+            continue;
+        }
+
+        let current_unit_file = old_unit_dir.join(unit);
+        let new_unit_file = new_unit_dir.join(unit);
+
+        let mut base_unit = unit.clone();
+        let mut current_base_unit_file = current_unit_file.clone();
+        let mut new_base_unit_file = new_unit_file.clone();
+
+        // Detect template instances
+        if let Some((Some(template_name), Some(template_instance))) =
+            TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
+                (
+                    captures.get(1).map(|c| c.as_str()),
+                    captures.get(2).map(|c| c.as_str()),
+                )
+            })
+        {
+            if !current_unit_file.exists() && !new_unit_file.exists() {
+                base_unit = format!("{template_name}@.{template_instance}");
+                current_base_unit_file = old_unit_dir.join(&base_unit);
+                new_base_unit_file = new_unit_dir.join(&base_unit);
+            }
+        }
+
+        let mut base_name = base_unit.as_str();
+        if let Some(Some(new_base_name)) = UNIT_NAME_RE
+            .captures(&base_unit)
+            .map(|capture| capture.get(1).map(|first| first.as_str()))
+        {
+            base_name = new_base_name;
+        }
+
+        if current_base_unit_file.exists()
+            && (unit_state.state == "active" || unit_state.state == "activating")
+        {
+            if new_base_unit_file
+                .canonicalize()
+                .map(|full_path| full_path == Path::new("/dev/null"))
+                .unwrap_or(true)
+            {
+                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
+                if parse_systemd_bool(Some(&current_unit_info), "Unit", "X-StopOnRemoval", true) {
+                    _ = units_to_stop.insert(unit.to_string(), ());
+                }
+            } else if unit.ends_with(".target") {
+                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
+
+                // Cause all active target units to be restarted below. This should start most
+                // changed units we stop here as well as any new dependencies (including new mounts
+                // and swap devices).  FIXME: the suspend target is sometimes active after the
+                // system has resumed, which probably should not be the case.  Just ignore it.
+                if !(matches!(
+                    unit.as_str(),
+                    "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
+                ) || parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "RefuseManualStart",
+                    false,
+                ) || parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "X-OnlyManualStart",
+                    false,
+                )) {
+                    units_to_start.insert(unit.to_string(), ());
+                    record_unit(&start_list, unit);
+                    // Don't spam the user with target units that always get started.
+                    if std::env::var("STC_DISPLAY_ALL_UNITS").as_deref() != Ok("1") {
+                        units_to_filter.insert(unit.to_string(), ());
+                    }
+                }
+
+                // Stop targets that have X-StopOnReconfiguration set. This is necessary to respect
+                // dependency orderings involving targets: if unit X starts after target Y and
+                // target Y starts after unit Z, then if X and Z have both changed, then X should
+                // be restarted after Z.  However, if target Y is in the "active" state, X and Z
+                // will be restarted at the same time because X's dependency on Y is already
+                // satisfied.  Thus, we need to stop Y first. Stopping a target generally has no
+                // effect on other units (unless there is a PartOf dependency), so this is just a
+                // bookkeeping thing to get systemd to do the right thing.
+                if parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "X-StopOnReconfiguration",
+                    false,
+                ) {
+                    units_to_stop.insert(unit.to_string(), ());
+                }
+            } else {
+                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
+                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
+                match compare_units(&current_unit_info, &new_unit_info) {
+                    UnitComparison::UnequalNeedsRestart => {
+                        handle_modified_unit(
+                            toplevel,
+                            scope,
+                            unit,
+                            base_name,
+                            &new_unit_file,
+                            &new_base_unit_file,
+                            Some(&new_unit_info),
+                            current_active_units,
+                            units_to_stop,
+                            units_to_start,
+                            units_to_reload,
+                            units_to_restart,
+                            units_to_skip,
+                        )?;
+                    }
+                    UnitComparison::UnequalNeedsReload if !units_to_restart.contains_key(unit) => {
+                        units_to_reload.insert(unit.clone(), ());
+                        record_unit(&reload_list, unit);
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    Ok(())
+}
+
 /// Performs switch-to-configuration functionality for a single non-root user
 fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     if Path::new(&parent_exe)
@@ -939,10 +1180,37 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         die();
     }
 
+    let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
+    let old_toplevel = PathBuf::from(required_env("OLD_TOPLEVEL")?);
+    let action = Action::from_str(&required_env("NIXOS_ACTION")?)?;
+    let action = ACTION.get_or_init(|| action);
+    let dry_run = *action == Action::DryActivate;
+
+    let scope = UnitScope::User;
+    let list_dir = scope.list_dir();
+    std::fs::create_dir_all(&list_dir)
+        .with_context(|| format!("Failed to create {}", list_dir.display()))?;
+    let perms = std::fs::Permissions::from_mode(0o700);
+    std::fs::set_permissions(&list_dir, perms)
+        .with_context(|| format!("Failed to set permissions on {}", list_dir.display()))?;
+    let start_list = scope.start_list_file();
+    let restart_list = scope.restart_list_file();
+    let reload_list = scope.reload_list_file();
+
     let dbus_conn = LocalConnection::new_session().context("Failed to open dbus connection")?;
     let systemd = systemd1_proxy(&dbus_conn);
 
+    systemd
+        .subscribe()
+        .context("Failed to subscribe to systemd dbus messages")?;
+
+    let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
+    let finished_jobs: Rc<RefCell<HashMap<dbus::Path, (String, Job, String)>>> =
+        Rc::new(RefCell::new(HashMap::new()));
     let nixos_activation_done = Rc::new(RefCell::new(false));
+
+    let _submitted_jobs = submitted_jobs.clone();
+    let _finished_jobs = finished_jobs.clone();
     let _nixos_activation_done = nixos_activation_done.clone();
     let jobs_token = systemd
         .match_signal(
@@ -952,32 +1220,284 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 if signal.unit.as_str() == "nixos-activation.service" {
                     *_nixos_activation_done.borrow_mut() = true;
                 }
-
+                if let Some(old) = _submitted_jobs.borrow_mut().remove(&signal.job) {
+                    _finished_jobs
+                        .borrow_mut()
+                        .insert(signal.job, (signal.unit, old, signal.result));
+                }
                 true
             },
         )
         .context("Failed to add signal match for systemd removed jobs")?;
 
+    // Plan the user unit changes before touching anything. By the time this
+    // child runs, /etc (and /run/current-system) have already been switched to
+    // the new configuration. The parent captured the old toplevel path before
+    // activation and passed it to us so we can still compare old vs new.
+    let mut units_to_stop = HashMap::new();
+    let mut units_to_skip = HashMap::new();
+    let mut units_to_filter = HashMap::new();
+
+    // Seed from any previous interrupted run so that we continue where we left
+    // off, like the system scope does.
+    let mut units_to_start = map_from_list_file(&start_list);
+    let mut units_to_restart = map_from_list_file(&restart_list);
+    let mut units_to_reload = map_from_list_file(&reload_list);
+
+    let current_active_units = get_active_units(&systemd)?;
+
+    let new_unit_dir = toplevel.join(scope.etc_dir());
+    let fragment_prefix = scope
+        .current_dir()
+        .to_str()
+        .expect("scope dir is valid UTF-8");
+
+    // Units that are currently running from a non-/etc location (typically
+    // ~/.config/systemd/user, i.e. home-manager) but that the new NixOS
+    // configuration also defines. Pass 1 will skip these because of the
+    // FragmentPath filter; if the per-user activation (sd-switch) later drops
+    // its copy, we need a second pass to bring the NixOS-owned definition up.
+    let migration_candidates: Vec<String> = current_active_units
+        .iter()
+        .filter(|(unit, _)| new_unit_dir.join(unit).exists())
+        .filter(|(_, unit_state)| {
+            !unit_state
+                .proxy
+                .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+                .map(|p: String| p.starts_with(fragment_prefix))
+                .unwrap_or(false)
+        })
+        .map(|(unit, _)| unit.clone())
+        .collect();
+
+    collect_unit_changes(
+        &toplevel,
+        scope,
+        &old_toplevel.join(scope.etc_dir()),
+        &new_unit_dir,
+        &current_active_units,
+        &mut units_to_stop,
+        &mut units_to_start,
+        &mut units_to_reload,
+        &mut units_to_restart,
+        &mut units_to_skip,
+        &mut units_to_filter,
+    )?;
+
+    let print_units = |verb: &str, units: &HashMap<String, ()>| {
+        if units.is_empty() {
+            return;
+        }
+        let mut names: Vec<&str> = units.keys().map(String::as_str).collect();
+        names.sort_by_key(|n| n.to_lowercase());
+        eprintln!("{verb} the following user units: {}", names.join(", "));
+    };
+
+    if dry_run {
+        print_units("would stop", &units_to_stop);
+        if !units_to_skip.is_empty() {
+            print_units("would NOT restart", &units_to_skip);
+        }
+        print_units("would reload", &units_to_reload);
+        print_units("would restart", &units_to_restart);
+        print_units(
+            "would start",
+            &filter_units(&units_to_filter, &units_to_start),
+        );
+        return Ok(());
+    }
+
+    let mut exit_code = 0;
+
+    // Stop units before reexec so that ExecStop runs with the old definition.
+    print_units("stopping", &units_to_stop);
+    for unit in units_to_stop.keys() {
+        if let Ok(job_path) = systemd.stop_unit(unit, "replace") {
+            submitted_jobs.borrow_mut().insert(job_path, Job::Stop);
+        }
+    }
+    block_on_jobs(&dbus_conn, &submitted_jobs);
+
+    if !units_to_skip.is_empty() {
+        print_units("NOT restarting", &units_to_skip);
+    }
+
     // The systemd user session seems to not send a Reloaded signal, so we don't have anything to
     // wait on here.
     _ = systemd.reexecute();
 
-    systemd
-        .restart_unit("nixos-activation.service", "replace")
-        .context("Failed to restart nixos-activation.service")?;
+    // Reset failed and reload so that subsequent starts use the new unit files.
+    _ = systemd.reset_failed();
+    _ = systemd.reload();
 
-    log::debug!("waiting for nixos activation to finish");
-    while !*nixos_activation_done.borrow() {
-        _ = dbus_conn
-            .process(DBUS_PROCESS_TIME)
-            .context("Failed to process dbus messages")?;
+    print_units("reloading", &units_to_reload);
+    for unit in units_to_reload.keys() {
+        match systemd.reload_unit(unit, "replace") {
+            Ok(job_path) => {
+                submitted_jobs.borrow_mut().insert(job_path, Job::Reload);
+            }
+            Err(err) => {
+                eprintln!("Failed to reload user unit {unit}: {err}");
+                exit_code = 4;
+            }
+        }
+    }
+    block_on_jobs(&dbus_conn, &submitted_jobs);
+    remove_file_if_exists(&reload_list)
+        .with_context(|| format!("Failed to remove {}", reload_list.display()))?;
+
+    print_units("restarting", &units_to_restart);
+    for unit in units_to_restart.keys() {
+        match systemd.restart_unit(unit, "replace") {
+            Ok(job_path) => {
+                submitted_jobs.borrow_mut().insert(job_path, Job::Restart);
+            }
+            Err(err) => {
+                eprintln!("Failed to restart user unit {unit}: {err}");
+                exit_code = 4;
+            }
+        }
+    }
+    block_on_jobs(&dbus_conn, &submitted_jobs);
+    remove_file_if_exists(&restart_list)
+        .with_context(|| format!("Failed to remove {}", restart_list.display()))?;
+
+    let start_filtered = filter_units(&units_to_filter, &units_to_start);
+    print_units("starting", &start_filtered);
+    for unit in units_to_start.keys() {
+        match systemd.start_unit(unit, "replace") {
+            Ok(job_path) => {
+                submitted_jobs.borrow_mut().insert(job_path, Job::Start);
+            }
+            Err(err) => {
+                eprintln!("Failed to start user unit {unit}: {err}");
+                exit_code = 4;
+            }
+        }
+    }
+    block_on_jobs(&dbus_conn, &submitted_jobs);
+    remove_file_if_exists(&start_list)
+        .with_context(|| format!("Failed to remove {}", start_list.display()))?;
+
+    // Run per-user activation (home-manager etc.) after NixOS-level user units
+    // have been brought up to date. This matches the system → user layering.
+    // Toplevels with system.activatable = false do not ship this unit; mirror
+    // the system scope's tolerance for a missing activate script.
+    if new_unit_dir.join("nixos-activation.service").exists() {
+        match systemd.restart_unit("nixos-activation.service", "replace") {
+            Ok(_) => {
+                log::debug!("waiting for nixos activation to finish");
+                while !*nixos_activation_done.borrow() {
+                    _ = dbus_conn
+                        .process(DBUS_PROCESS_TIME)
+                        .context("Failed to process dbus messages")?;
+                }
+            }
+            Err(err) => {
+                eprintln!("Failed to restart nixos-activation.service: {err}");
+                exit_code = 4;
+            }
+        }
+    }
+
+    // Second pass: handle units that migrated from another manager to NixOS.
+    // The per-user activation may have removed ~/.config/systemd/user/<unit>
+    // and stopped it (sd-switch); now that the /etc copy is no longer
+    // shadowed, take ownership.
+    if !migration_candidates.is_empty() {
+        // Ensure systemd's view reflects any unit-file removals done by the
+        // per-user activation, in case it did not daemon-reload itself.
+        _ = systemd.reload();
+
+        let active_after = get_active_units(&systemd)?;
+
+        let mut to_restart = HashMap::new();
+        let mut to_start = HashMap::new();
+
+        for unit in &migration_candidates {
+            match active_after.get(unit) {
+                Some(unit_state) => {
+                    let now_etc = unit_state
+                        .proxy
+                        .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+                        .map(|p: String| p.starts_with(fragment_prefix))
+                        .unwrap_or(false);
+                    if now_etc {
+                        // Still running with the previous manager's binary;
+                        // restart so the /etc definition takes effect.
+                        to_restart.insert(unit.clone(), ());
+                    }
+                    // else: still shadowed by ~/.config, leave it alone.
+                }
+                None => {
+                    // Stopped by the previous manager; start the /etc copy.
+                    to_start.insert(unit.clone(), ());
+                }
+            }
+        }
+
+        // Re-start active targets so any other newly-unmasked dependencies are
+        // pulled in as well.
+        for unit in units_to_start.keys() {
+            if unit.ends_with(".target") {
+                to_start.insert(unit.clone(), ());
+            }
+        }
+
+        print_units("restarting (post-activation)", &to_restart);
+        for unit in to_restart.keys() {
+            match systemd.restart_unit(unit, "replace") {
+                Ok(job_path) => {
+                    submitted_jobs.borrow_mut().insert(job_path, Job::Restart);
+                }
+                Err(err) => {
+                    eprintln!("Failed to restart user unit {unit}: {err}");
+                    exit_code = 4;
+                }
+            }
+        }
+        block_on_jobs(&dbus_conn, &submitted_jobs);
+
+        let to_start_filtered = filter_units(&units_to_filter, &to_start);
+        print_units("starting (post-activation)", &to_start_filtered);
+        for unit in to_start.keys() {
+            match systemd.start_unit(unit, "replace") {
+                Ok(job_path) => {
+                    submitted_jobs.borrow_mut().insert(job_path, Job::Start);
+                }
+                Err(err) => {
+                    eprintln!("Failed to start user unit {unit}: {err}");
+                    exit_code = 4;
+                }
+            }
+        }
+        block_on_jobs(&dbus_conn, &submitted_jobs);
+    }
+
+    let finished = finished_jobs.borrow();
+    let mut failed_units = Vec::new();
+    for (unit, job, result) in finished.values() {
+        if matches!(result.as_str(), "timeout" | "failed" | "dependency") {
+            eprintln!("Failed to {job} user unit {unit}");
+            failed_units.push(unit.as_str());
+            exit_code = 4;
+        }
+    }
+    if !failed_units.is_empty() {
+        failed_units.sort_by_key(|name| name.to_lowercase());
+        eprintln!(
+            "warning: the following user units failed: {}\n\
+             See `systemctl --user status {}` for details.",
+            failed_units.join(", "),
+            failed_units.join(" "),
+        );
     }
 
     dbus_conn
         .remove_match(jobs_token)
         .context("Failed to remove jobs token")?;
 
-    Ok(())
+    std::process::exit(exit_code);
 }
 
 fn usage(argv0: &str) -> ! {
@@ -999,6 +1519,12 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
 
     let out = PathBuf::from(required_env("OUT")?);
     let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
+    // Capture the old toplevel before the activation script updates
+    // /run/current-system. We pass this to the per-user switch child so it can
+    // compare old vs new user unit files after /etc has already been switched.
+    let old_toplevel = Path::new("/run/current-system")
+        .canonicalize()
+        .unwrap_or_else(|_| PathBuf::from("/run/current-system"));
     let distro_id = required_env("DISTRO_ID")?;
     let pre_switch_check = required_env("PRE_SWITCH_CHECK")?;
     let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
@@ -1173,140 +1699,19 @@ won't take effect until you reboot the system.
 
     let current_active_units = get_active_units(&systemd)?;
 
-    let template_unit_re = Regex::new(r"^(.*)@[^\.]*\.(.*)$")
-        .context("Invalid regex for matching systemd template units")?;
-    let unit_name_re = Regex::new(r"^(.*)\.[[:lower:]]*$")
-        .context("Invalid regex for matching systemd unit names")?;
-
-    for (unit, unit_state) in &current_active_units {
-        // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
-        // /run/systemd/generator*)
-        if !unit_state
-            .proxy
-            .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-            .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
-            .unwrap_or_default()
-        {
-            continue;
-        }
-
-        let current_unit_file = Path::new("/etc/systemd/system").join(unit);
-        let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
-
-        let mut base_unit = unit.clone();
-        let mut current_base_unit_file = current_unit_file.clone();
-        let mut new_base_unit_file = new_unit_file.clone();
-
-        // Detect template instances
-        if let Some((Some(template_name), Some(template_instance))) =
-            template_unit_re.captures(unit).map(|captures| {
-                (
-                    captures.get(1).map(|c| c.as_str()),
-                    captures.get(2).map(|c| c.as_str()),
-                )
-            })
-        {
-            if !current_unit_file.exists() && !new_unit_file.exists() {
-                base_unit = format!("{template_name}@.{template_instance}");
-                current_base_unit_file = Path::new("/etc/systemd/system").join(&base_unit);
-                new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
-            }
-        }
-
-        let mut base_name = base_unit.as_str();
-        if let Some(Some(new_base_name)) = unit_name_re
-            .captures(&base_unit)
-            .map(|capture| capture.get(1).map(|first| first.as_str()))
-        {
-            base_name = new_base_name;
-        }
-
-        if current_base_unit_file.exists()
-            && (unit_state.state == "active" || unit_state.state == "activating")
-        {
-            if new_base_unit_file
-                .canonicalize()
-                .map(|full_path| full_path == Path::new("/dev/null"))
-                .unwrap_or(true)
-            {
-                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
-                if parse_systemd_bool(Some(&current_unit_info), "Unit", "X-StopOnRemoval", true) {
-                    _ = units_to_stop.insert(unit.to_string(), ());
-                }
-            } else if unit.ends_with(".target") {
-                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
-
-                // Cause all active target units to be restarted below. This should start most
-                // changed units we stop here as well as any new dependencies (including new mounts
-                // and swap devices).  FIXME: the suspend target is sometimes active after the
-                // system has resumed, which probably should not be the case.  Just ignore it.
-                if !(matches!(
-                    unit.as_str(),
-                    "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
-                ) || parse_systemd_bool(
-                    Some(&new_unit_info),
-                    "Unit",
-                    "RefuseManualStart",
-                    false,
-                ) || parse_systemd_bool(
-                    Some(&new_unit_info),
-                    "Unit",
-                    "X-OnlyManualStart",
-                    false,
-                )) {
-                    units_to_start.insert(unit.to_string(), ());
-                    record_unit(START_LIST_FILE, unit);
-                    // Don't spam the user with target units that always get started.
-                    if std::env::var("STC_DISPLAY_ALL_UNITS").as_deref() != Ok("1") {
-                        units_to_filter.insert(unit.to_string(), ());
-                    }
-                }
-
-                // Stop targets that have X-StopOnReconfiguration set. This is necessary to respect
-                // dependency orderings involving targets: if unit X starts after target Y and
-                // target Y starts after unit Z, then if X and Z have both changed, then X should
-                // be restarted after Z.  However, if target Y is in the "active" state, X and Z
-                // will be restarted at the same time because X's dependency on Y is already
-                // satisfied.  Thus, we need to stop Y first. Stopping a target generally has no
-                // effect on other units (unless there is a PartOf dependency), so this is just a
-                // bookkeeping thing to get systemd to do the right thing.
-                if parse_systemd_bool(
-                    Some(&new_unit_info),
-                    "Unit",
-                    "X-StopOnReconfiguration",
-                    false,
-                ) {
-                    units_to_stop.insert(unit.to_string(), ());
-                }
-            } else {
-                let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
-                let new_unit_info = parse_unit(&new_unit_file, &new_base_unit_file)?;
-                match compare_units(&current_unit_info, &new_unit_info) {
-                    UnitComparison::UnequalNeedsRestart => {
-                        handle_modified_unit(
-                            &toplevel,
-                            unit,
-                            base_name,
-                            &new_unit_file,
-                            &new_base_unit_file,
-                            Some(&new_unit_info),
-                            &current_active_units,
-                            &mut units_to_stop,
-                            &mut units_to_start,
-                            &mut units_to_reload,
-                            &mut units_to_restart,
-                            &mut units_to_skip,
-                        )?;
-                    }
-                    UnitComparison::UnequalNeedsReload if !units_to_restart.contains_key(unit) => {
-                        units_to_reload.insert(unit.clone(), ());
-                        record_unit(RELOAD_LIST_FILE, unit);
-                    }
-                    _ => {}
-                }
-            }
-        }
-    }
+    collect_unit_changes(
+        &toplevel,
+        UnitScope::System,
+        UnitScope::System.current_dir(),
+        &toplevel.join(UnitScope::System.etc_dir()),
+        &current_active_units,
+        &mut units_to_stop,
+        &mut units_to_start,
+        &mut units_to_reload,
+        &mut units_to_restart,
+        &mut units_to_skip,
+        &mut units_to_filter,
+    )?;
 
     // Compare the previous and new fstab to figure out which filesystems need a remount or need to
     // be unmounted. New filesystems are mounted automatically by starting local-fs.target.
@@ -1447,7 +1852,7 @@ won't take effect until you reboot the system.
 
             // Detect template instances.
             if let Some((Some(template_name), Some(template_instance))) =
-                template_unit_re.captures(unit).map(|captures| {
+                TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
                     (
                         captures.get(1).map(|c| c.as_str()),
                         captures.get(2).map(|c| c.as_str()),
@@ -1461,7 +1866,7 @@ won't take effect until you reboot the system.
             }
 
             let mut base_name = base_unit.as_str();
-            if let Some(Some(new_base_name)) = unit_name_re
+            if let Some(Some(new_base_name)) = UNIT_NAME_RE
                 .captures(&base_unit)
                 .map(|capture| capture.get(1).map(|first| first.as_str()))
             {
@@ -1476,6 +1881,7 @@ won't take effect until you reboot the system.
 
             handle_modified_unit(
                 &toplevel,
+                UnitScope::System,
                 unit,
                 base_name,
                 &new_unit_file,
@@ -1617,7 +2023,7 @@ won't take effect until you reboot the system.
 
         // Detect template instances.
         if let Some((Some(template_name), Some(template_instance))) =
-            template_unit_re.captures(unit).map(|captures| {
+            TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
                 (
                     captures.get(1).map(|c| c.as_str()),
                     captures.get(2).map(|c| c.as_str()),
@@ -1631,7 +2037,7 @@ won't take effect until you reboot the system.
         }
 
         let mut base_name = base_unit.as_str();
-        if let Some(Some(new_base_name)) = unit_name_re
+        if let Some(Some(new_base_name)) = UNIT_NAME_RE
             .captures(&base_unit)
             .map(|capture| capture.get(1).map(|first| first.as_str()))
         {
@@ -1647,6 +2053,7 @@ won't take effect until you reboot the system.
 
         handle_modified_unit(
             &toplevel,
+            UnitScope::System,
             unit,
             base_name,
             &new_unit_file,
@@ -1761,16 +2168,23 @@ won't take effect until you reboot the system.
                     .context("Failed to get full path to /proc/self/exe")?;
 
                 log::debug!("Performing user switch for {name}");
-                std::process::Command::new(&myself)
+                let status = std::process::Command::new(&myself)
                     .uid(uid)
                     .gid(gid)
                     .env_clear()
                     .env("XDG_RUNTIME_DIR", runtime_path)
                     .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
+                    .env("TOPLEVEL", &toplevel)
+                    .env("OLD_TOPLEVEL", &old_toplevel)
+                    .env("NIXOS_ACTION", Into::<&'static str>::into(action))
                     .spawn()
                     .with_context(|| format!("Failed to spawn user activation for {name}"))?
                     .wait()
                     .with_context(|| format!("Failed to run user activation for {name}"))?;
+                if !status.success() {
+                    eprintln!("warning: user activation for {name} failed");
+                    exit_code = 4;
+                }
             }
         }
     }

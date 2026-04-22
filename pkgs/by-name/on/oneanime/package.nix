@@ -57,13 +57,13 @@ let
     };
   });
 
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-4EieR+Wys7vK+0/pWF5MkA71EeChThVGJ8J5x/8k8nA=";
+    hash = "sha256-kVg6lqJF8kT2TgwiK8aKUWW6yEdQUrJKzw2h4DHN+iw=";
   };
 in
 flutter338.buildFlutterApplication {
