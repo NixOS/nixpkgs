@@ -9343,10 +9343,6 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
-  fossil = callPackage ../applications/version-management/fossil {
-    sqlite = sqlite.override { enableDeserialize = true; };
-  };
-
   fvwm = fvwm2;
 
   gaucheBootstrap = callPackage ../development/interpreters/gauche/boot.nix { };

@@ -13,7 +13,6 @@
   sqlite,
   ed,
   which,
-  tclPackages,
   withJson ? true,
 }:
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     ed
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
-  ++ lib.optional (!withInternalSqlite) sqlite;
+  ++ lib.optional (!withInternalSqlite) (sqlite.override { enableDeserialize = true; });
 
   enableParallelBuilding = true;
 
