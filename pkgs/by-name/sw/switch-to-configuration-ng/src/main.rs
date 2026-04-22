@@ -410,6 +410,14 @@ fn parse_systemd_ini(data: &mut UnitInfo, mut unit_file: impl Read) -> Result<()
     Ok(())
 }
 
+/// Glob for `<unit_path>.d/*.conf`, escaping any glob metacharacters in the
+/// path prefix so unit names containing e.g. `\` (from systemd-escape) are
+/// matched literally.
+fn unit_dropin_glob(unit_path: &Path) -> Result<glob::Paths> {
+    let prefix = glob::Pattern::escape(&format!("{}.d", unit_path.display()));
+    glob(&format!("{prefix}/*.conf")).context("Invalid glob pattern")
+}
+
 // This function takes the path to a systemd configuration file (like a unit configuration) and
 // parses it into a UnitInfo structure.
 //
@@ -428,9 +436,7 @@ fn parse_unit(unit_file: &Path, base_unit_path: &Path) -> Result<UnitInfo> {
         )
     })?;
 
-    for entry in
-        glob(&format!("{}.d/*.conf", base_unit_path.display())).context("Invalid glob pattern")?
-    {
+    for entry in unit_dropin_glob(base_unit_path)? {
         let Ok(entry) = entry else {
             continue;
         };
@@ -442,9 +448,7 @@ fn parse_unit(unit_file: &Path, base_unit_path: &Path) -> Result<UnitInfo> {
 
     // Handle drop-in template-unit instance overrides
     if unit_file != base_unit_path {
-        for entry in
-            glob(&format!("{}.d/*.conf", unit_file.display())).context("Invalid glob pattern")?
-        {
+        for entry in unit_dropin_glob(unit_file)? {
             let Ok(entry) = entry else {
                 continue;
             };
@@ -1076,12 +1080,8 @@ fn collect_unit_changes(
 
                 // Handle instances defined as drop-ins
                 let mut current_dropins =
-                    glob(&format!("{}.d/*.conf", current_unit_file.display()))
-                        .context("Invalid glob pattern")?
-                        .filter_map(|v| v.ok());
-                let mut new_dropins = glob(&format!("{}.d/*.conf", new_unit_file.display()))
-                    .context("Invalid glob pattern")?
-                    .filter_map(|v| v.ok());
+                    unit_dropin_glob(&current_unit_file)?.filter_map(|v| v.ok());
+                let mut new_dropins = unit_dropin_glob(&new_unit_file)?.filter_map(|v| v.ok());
 
                 // When the unit is disabled, the override files will be a symlink to /dev/null instead.
                 dropins_removed =
