@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
+  postPatch = ''
+    substituteInPlace kernel/linux/ena/configure.sh --replace-fail '^HOSTCC' '^CC'
+  '';
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
