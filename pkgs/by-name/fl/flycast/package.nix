@@ -13,18 +13,19 @@
   lua,
   miniupnpc,
   SDL2,
+  systemdLibs,
   vulkan-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flycast";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OnlSkwPDUrpj9uEPEAxZO1iSgd5ZiQUJLneu14v9pKQ=";
+    hash = "sha256-Lq6Oj+U4mpwNlL/t3ZB9gjE5NAVQyhdvBwLUGu1C+j0=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     lua
     miniupnpc
     SDL2
+    systemdLibs
   ];
 
   cmakeFlags = [
