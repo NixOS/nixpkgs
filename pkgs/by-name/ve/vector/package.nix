@@ -16,6 +16,7 @@
   coreutils,
   tzdata,
   cmake,
+  cyrus_sasl,
   perl,
   git,
   nixosTests,
@@ -27,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.54.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XEQN6Dk72Yn3FZoqvQk4mj+ME68hJuN7zHpiSLY9iNo=";
+    hash = "sha256-1t0fHBYBBfG8oFbo1QPXb5y8+lyIPPve4bDtry+KF5Q=";
   };
 
-  cargoHash = "sha256-Jlw8mCPV5TU85VHN8UTXPsxvoSlxTfYzL7k/5Sb3U/M=";
+  cargoHash = "sha256-/a/KnZEXBeAtYS0yXCmI+07acol0/UBwauIKTi/QF1k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,6 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Provides the mig command used by the build scripts
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
   buildInputs = [
+    cyrus_sasl
     oniguruma
     openssl
     protobuf
