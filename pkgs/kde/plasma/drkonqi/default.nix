@@ -9,7 +9,7 @@
 }:
 let
   gdb' = gdb.override {
-    hostCpuOnly = true;
+    targetCpuOnly = true;
     python3 = python3.withPackages (ps: [
       ps.psutil
       ps.pygdbmi
