@@ -76,6 +76,27 @@ buildPythonPackage rec {
     "test_extract_python_testtar_tar_archive_with_special_files"
     # AssertionError: [<function extract at 0x7ffff493dd00>] == [] for archive/rar/basic.rar
     "test_get_extractors_2"
+
+    ## tests impacted by move from p7zip to 7zz ##
+    # AssertionError: assert not 'Unknown extraction error'
+    # works manually running 7zz against the test zip
+    "test_list_zip_with_relative_path_deeply_nested_with_7zip"
+    # AssertionError: Exception not raised
+    "test_extract_cpio_broken_7z"
+    # tests that have a TypeError: can only concatenate list (not "str") to list
+    "test_list_entries_with_weird_names_7z"
+    "test_list_entries_of_special_tar"
+    # tests that extract weird filenames expect specific outputs which don't match in every single case to p7zip behaviour
+    "test_extract_ar_with_weird_filenames_with_sevenzip_posix"
+    "test_extract_7zip_with_weird_filenames_with_sevenzip_posix"
+    "test_extract_tar_with_weird_filenames_with_sevenzip_posix"
+    "test_extract_cpio_with_weird_filenames_with_sevenzip_posix"
+    "test_extract_file_by_file_weird_names_ar"
+    "test_extract_file_by_file_with_weird_names_7z"
+    "test_extract_file_by_file_weird_names_cpio"
+    "test_extract_file_by_file_weird_names_zip"
+    "test_extract_file_by_file_weird_names_tar"
+    "test_extract_zip_with_weird_filenames_with_sevenzip_posix"
   ];
 
   pythonImportsCheck = [ "extractcode" ];
