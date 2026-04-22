@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   libsForQt5,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     cd Src/
   '';
+
+  passthru.tests = {
+    veroroute = nixosTests.veroroute;
+  };
 
   meta = {
     description = "Qt based Veroboard/Perfboard/PCB layout and routing application";
