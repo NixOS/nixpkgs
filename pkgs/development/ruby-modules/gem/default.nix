@@ -39,12 +39,7 @@ lib.makeOverridable (
     platform ? "ruby",
     ruby ? defs.ruby,
     stdenv ? ruby.stdenv,
-    namePrefix ? (
-      let
-        rubyName = builtins.parseDrvName ruby.name;
-      in
-      "${rubyName.name}${lib.versions.majorMinor rubyName.version}-"
-    ),
+    namePrefix ? "${ruby.pname}${lib.versions.majorMinor (toString ruby.version)}-",
     nativeBuildInputs ? [ ],
     buildInputs ? [ ],
     meta ? { },

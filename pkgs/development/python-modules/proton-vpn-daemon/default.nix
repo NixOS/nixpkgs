@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-daemon";
-  version = "0.13.5";
+  version = "0.13.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-daemon";
     tag = "v${version}";
-    hash = "sha256-pLLMXRMzPyfEA3YVNRHfhQAbK4YdwTWbVpeVkSeqAiI=";
+    hash = "sha256-HlRxTBLiuboKvMTL3NgX7i/fMBvJqIB4O12tJX1Lv9U=";
   };
 
   build-system = [

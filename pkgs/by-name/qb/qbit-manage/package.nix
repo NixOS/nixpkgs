@@ -8,22 +8,20 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "qbit-manage";
-  version = "4.6.5";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
     tag = "v${version}";
-    hash = "sha256-JCsbf2mPRhs7Mbekl946G/y/CSNSSvQBLvlwVy/Avcg=";
+    hash = "sha256-cPN4GhB7TuhiGau8Nb9hVNubF6fppyS2tuFGJ+spPaI=";
   };
 
   pyproject = true;
   build-system = [ python3Packages.setuptools ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "==" ">=" \
-      --replace "bencodepy" "bencode.py"
+    substituteInPlace pyproject.toml --replace "==" ">="
   '';
 
   dependencies = with python3Packages; [
@@ -43,10 +41,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "croniter"
     "fastapi"
-    "gitpython"
-    "humanize"
-    "ruamel.yaml"
+    "requests"
     "uvicorn"
   ];
 

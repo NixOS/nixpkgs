@@ -437,9 +437,5 @@ in
     ]
   );
 
-  meta.maintainers = with lib.maintainers; [
-    defelo
-    julm
-    lorenzleutgeb
-  ];
+  meta.teams = [ lib.teams.radicle ];
 }

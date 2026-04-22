@@ -81,6 +81,7 @@ let
     "nativeBuildInputs"
     "nativeOctavePkgTestInputs"
     "passthru"
+    "env"
   ];
 in
 stdenv.mkDerivation (
@@ -96,7 +97,9 @@ stdenv.mkDerivation (
     # packages are installed into octave during the environment building phase.
     isOctavePackage = true;
 
-    OCTAVE_HISTFILE = "/dev/null";
+    env = attrs.env or { } // {
+      OCTAVE_HISTFILE = "/dev/null";
+    };
 
     inherit src;
 

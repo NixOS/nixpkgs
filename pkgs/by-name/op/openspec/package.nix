@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openspec";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Fission-AI";
     repo = "OpenSpec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DIMMOEVQ2FQj48WAF4S1IhxX5ChrFZll51CZ3bZNGHE=";
+    hash = "sha256-yLzndbXdPoIv7xWHd23FOtMlPmWWz3+H7WODWQYylJc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -70,11 +70,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --zsh <($out/bin/openspec completion generate zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "AI-native system for spec-driven development";
     homepage = "https://github.com/Fission-AI/OpenSpec";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ superherointj ];
+    maintainers = with lib.maintainers; [
+      kalbasit
+      superherointj
+    ];
     platforms = lib.platforms.all;
     mainProgram = "openspec";
   };

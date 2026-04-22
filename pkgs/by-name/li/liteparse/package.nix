@@ -10,16 +10,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "liteparse";
-  version = "1.2.0";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "liteparse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6oG/ajH1roGkzRYAtAuJDniKwpBYF92NL1erYwQ4XPc=";
+    hash = "sha256-GUtqJsmAOrbxLc/aAIre95QD6aaFsj5ClqZfo7jdwB4=";
   };
 
-  npmDepsHash = "sha256-lgqrXGbFuHbwQMXPbhHFdOabfPdVhghmg5v+aE4Og2k=";
+  npmDepsHash = "sha256-Wz46n7BbubC3Cq1CHOHM2q/dVOvOVNQTloHZfkAwzpg=";
   npmBuildScript = "build";
 
   nativeBuildInputs = [ makeBinaryWrapper ];

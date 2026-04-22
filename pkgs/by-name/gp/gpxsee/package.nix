@@ -9,17 +9,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "15.11";
+  version = "16.3";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     tag = finalAttrs.version;
-    hash = "sha256-OZC4ClQUbOKb1nZD6kmZ2s6oHudhkLLW0HSrYiFCJfg=";
+    hash = "sha256-24kfNtjD4zV2eTufDErPDt2O9ON1hvhWOPRaPBCxxEI=";
   };
 
   buildInputs = [
     qt6.qtbase
+    qt6.qtmultimedia
     qt6.qtpositioning
     qt6.qtserialport
     qt6.qtsvg

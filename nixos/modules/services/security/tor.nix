@@ -771,6 +771,15 @@ in
                         }
                       ))
                     ]);
+                  example = [
+                    {
+                      port = 9000;
+                      target = {
+                        addr = "127.0.0.1";
+                        port = 9123;
+                      };
+                    }
+                  ];
                   apply = map (
                     v:
                     if lib.isInt v then

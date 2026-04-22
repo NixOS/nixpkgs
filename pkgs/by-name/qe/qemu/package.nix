@@ -92,6 +92,8 @@
   fuse3,
   canokeySupport ? false,
   canokey-qemu,
+  u2fEmuSupport ? false,
+  libu2f-emu,
   capstoneSupport ? !minimal,
   capstone,
   valgrindSupport ? false,
@@ -245,6 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals uringSupport [ liburing ]
   ++ lib.optionals fuseSupport [ fuse3 ]
   ++ lib.optionals canokeySupport [ canokey-qemu ]
+  ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
   ++ lib.optionals valgrindSupport [ valgrind-light ];
 
@@ -329,6 +332,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional uringSupport "--enable-linux-io-uring"
   ++ lib.optional fuseSupport "--enable-fuse"
   ++ lib.optional canokeySupport "--enable-canokey"
+  ++ lib.optional u2fEmuSupport "--enable-u2f"
   ++ lib.optional capstoneSupport "--enable-capstone"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
@@ -447,7 +451,7 @@ stdenv.mkDerivation (finalAttrs: {
     // lib.optionalAttrs (!toolsOnly && !userOnly) {
       mainProgram = "qemu-kvm";
     }
-    # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
+    # userOnly: https://qemu.readthedocs.io/en/master/user/main.html#supported-operating-systems
     // lib.optionalAttrs userOnly {
       platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
       description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";

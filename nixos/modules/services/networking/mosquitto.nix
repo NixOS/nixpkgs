@@ -378,11 +378,22 @@ let
     ++ userAsserts prefix listener.users
     ++ lib.imap0 (i: v: authAsserts "${prefix}.authPlugins.${toString i}" v) listener.authPlugins;
 
+  makeACLFile =
+    idx: listener:
+    pkgs.writeText "mosquitto-acl-${toString idx}.conf" (
+      lib.concatStringsSep "\n" (
+        lib.flatten [
+          listener.acl
+          (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
+        ]
+      )
+    );
+
   formatListener =
     idx: listener:
     [
       "listener ${toString listener.port} ${toString listener.address}"
-      "acl_file /etc/mosquitto/acl-${toString idx}.conf"
+      "acl_file ${cfg.dataDir}/acl-${toString idx}.conf"
     ]
     ++ lib.optional (!listener.omitPasswordAuth) "password_file ${cfg.dataDir}/passwd-${toString idx}"
     ++ formatFreeform { } listener.settings
@@ -762,31 +773,12 @@ in
         UMask = "0077";
       };
       preStart = lib.concatStringsSep "\n" (
-        lib.imap0 (
-          idx: listener:
-          makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"
-        ) cfg.listeners
+        lib.imap0 (idx: listener: ''
+          ${makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"}
+          install -m 0700 ${makeACLFile idx listener} ${cfg.dataDir}/acl-${toString idx}.conf
+        '') cfg.listeners
       );
     };
-
-    environment.etc = lib.listToAttrs (
-      lib.imap0 (idx: listener: {
-        name = "mosquitto/acl-${toString idx}.conf";
-        value = {
-          user = config.users.users.mosquitto.name;
-          group = config.users.users.mosquitto.group;
-          mode = "0400";
-          text = (
-            lib.concatStringsSep "\n" (
-              lib.flatten [
-                listener.acl
-                (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
-              ]
-            )
-          );
-        };
-      }) cfg.listeners
-    );
 
     users.users.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon owner";

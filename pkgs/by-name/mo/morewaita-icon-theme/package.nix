@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  adwaita-icon-theme,
   gtk3,
   xdg-utils,
   nix-update-script,
@@ -24,6 +25,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gtk3
     xdg-utils
+  ];
+
+  propagatedBuildInputs = [
+    adwaita-icon-theme
   ];
 
   installPhase = ''

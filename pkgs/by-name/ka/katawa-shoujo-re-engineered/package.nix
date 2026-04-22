@@ -5,7 +5,7 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  renpy,
+  renpyMinimal,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-    renpy
+    renpyMinimal
   ];
 
   postPatch = ''
@@ -45,6 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preBuild
 
     renpy . compile
+    rm -r game/saves
 
     runHook postBuild
   '';
@@ -56,7 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $phome
     cp -r game $phome
     find $phome -type f -name "*.rpy" -delete
-    makeWrapper ${lib.getExe renpy} $out/bin/katawa-shoujo-re-engineered \
+    makeWrapper ${lib.getExe renpyMinimal} $out/bin/katawa-shoujo-re-engineered \
       --add-flags $phome --add-flags run
     install -D $src/web-icon.png $out/share/icons/hicolor/512x512/apps/katawa-shoujo-re-engineered.png
 
@@ -80,6 +81,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       rapiteanu
       ulysseszhan
     ];
-    platforms = renpy.meta.platforms;
+    platforms = renpyMinimal.meta.platforms;
   };
 })

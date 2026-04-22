@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocgdb";
-  version = "7.2.0";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -101,11 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.CFLAGS = "-Wno-switch -Wno-format-nonliteral -I${zstd.dev}/include -I${zlib.dev}/include -I${expat.dev}/include -I${ncurses.dev}/include";
   env.CXXFLAGS = finalAttrs.env.CFLAGS;
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm source-level debugger for Linux, based on GDB";

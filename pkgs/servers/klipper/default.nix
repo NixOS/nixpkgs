@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  python3Packages,
   extraPythonPackages ? ps: [ ],
   unstableGitUpdater,
   makeWrapper,
@@ -11,20 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.13.0-unstable-2026-03-09";
+  version = "0.13.0-unstable-2026-03-21";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "644cda5ecaa39d0dcf797624c19d5425cb8121ec";
-    sha256 = "sha256-ono0+6pyjJDexaDOH/vYNFNyh636iNfjBMxmWNbgVik=";
+    rev = "594ec7e1205450ff0753d19f0724bbe8b380465d";
+    sha256 = "sha256-a496Ayas2IsP3K320EXc/7VDAtrqUzF8OaKNKBWf8lQ=";
   };
 
   sourceRoot = "${src.name}/klippy";
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
-    (python3.withPackages (p: with p; [ cffi ]))
+    python3Packages.cffi
     makeWrapper
   ];
 
@@ -61,6 +62,11 @@ stdenv.mkDerivation rec {
     substituteInPlace ./chelper/__init__.py \
       --replace 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
   '';
+
+  patches = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # https://github.com/Klipper3d/klipper/pull/7254
+    ./cross-ffi.patch
+  ];
 
   pythonInterpreter =
     (python3.withPackages (

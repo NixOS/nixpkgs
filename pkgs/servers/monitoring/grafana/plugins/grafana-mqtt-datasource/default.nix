@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-mqtt-datasource";
-  version = "1.1.0-beta.3";
+  version = "1.3.1";
   zipHash = {
-    x86_64-linux = "sha256-/0hZc0lFV1LXl6532nLJmJ6fJPdRx+sMt7Uep4GTeX0=";
-    aarch64-linux = "sha256-KPIa/yYkzbKm4/mB84/DdIsdqfQBOc0+LGxl2GHDVGk=";
-    x86_64-darwin = "sha256-7gGw/RCuzHmj/vaIAweXLPqQYAl0EMSXXjPCtjRC4vU=";
-    aarch64-darwin = "sha256-i2/lE7QickowFSvHoo7CuaZ1ChFVpsQgZjvuBTQapq4=";
+    x86_64-linux = "sha256-/a/15VPcRr37QL7ZN5VgTXqioqC9dWMODdigLJTPkr8=";
+    aarch64-linux = "sha256-kSzyQkC+fHZVJPA3xBtfDD2i4rszlbu+gCMDbzZmlL0=";
+    x86_64-darwin = "sha256-MKMDXsk+5cfohl7Dx4BwjjbPn3aXsQ4d917GmdBkwZI=";
+    aarch64-darwin = "sha256-tWNkGZebMTMmoNtB7WevoWIEAYyOcba9PETaLwz8chI=";
   };
   meta = {
     description = "Visualize streaming MQTT data from within Grafana";

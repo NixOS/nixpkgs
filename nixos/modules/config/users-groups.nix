@@ -1143,6 +1143,16 @@ in
           '';
         }
       ]
+      ++ flip mapAttrsToList config.boot.initrd.systemd.users (
+        name: user: {
+          assertion = config.boot.initrd.systemd.enable -> (baseNameOf user.shell != "cryptsetup-askpass");
+          message = ''
+            cryptsetup-askpass is not available in systemd stage 1. Please remove it from: boot.initrd.systemd.users.${name}.shell
+
+            Use `systemctl default` instead; see the NixOS 26.05 release notes for details. If you want to continue restricting the command for SSH login, you can use `command="systemctl default"` in SSH authorized keys instead; see `sshd(8)`.
+          '';
+        }
+      )
       ++ flatten (
         flip mapAttrsToList cfg.users (
           name: user:

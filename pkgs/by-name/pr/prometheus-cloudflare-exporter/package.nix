@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "lablabs";
-    repo = pname;
+    repo = "cloudflare-exporter";
     tag = "cloudflare-exporter-${version}";
     sha256 = "sha256-rfnAGBuY6HoWzZkYp9u+Ee3xhWb6Se2RkkSIWBvjUYY=";
   };

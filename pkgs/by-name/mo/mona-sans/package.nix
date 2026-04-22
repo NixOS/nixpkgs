@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,10 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sha256 = "sha256-L1KlduItf1jBrw08NwbJvZFemLY8JHRXq2UDl9Wlq70=";
   };
 
-  installPhase = ''
-    install -D -m444 -t $out/share/fonts/opentype fonts/static/otf/*.otf
-    install -D -m444 -t $out/share/fonts/truetype fonts/static/ttf/*.ttf fonts/variable/*.ttf
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Variable font from GitHub";

@@ -1,25 +1,37 @@
 {
-  lib,
-  stdenv,
   buildNpmPackage,
+  cctools,
   fetchFromGitHub,
   fetchpatch,
-  python3,
-  cctools,
+  lib,
+  nix-update-script,
+  nodejs_22,
+  python3Minimal,
+  stdenvNoCC,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "dl-librescore";
-  version = "0.35.34";
+  version = "0.35.40";
 
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
-    rev = "v${version}";
-    hash = "sha256-IuHX4wFhilSK09WWNopHtkAfd9Mm2oo5M2m4KcRkCBE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jCwySndc3ZeEoKVA9Ne2PLStyM73hDPO1vaNeVShwQ0=";
   };
 
-  npmDepsHash = "sha256-DCjN9x6sjw66UIATxhRclJpz6v/1ZVUiGqlbZUDMpBY=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-8x1WuzIaxzaEgM9hu2cCtXr4GLCE6DHt3F7lvnbcMgk=";
+  npmDepsFetcherVersion = 2;
+
+  makeCacheWritable = true;
+
+  nativeBuildInputs = [
+    python3Minimal
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ cctools ];
 
   patches = [
     # https://github.com/LibreScore/dl-librescore/pull/144
@@ -30,20 +42,20 @@ buildNpmPackage rec {
     })
   ];
 
-  makeCacheWritable = true;
+  postPatch = ''
+    for file in src/i18n/*.json; do
+      substituteInPlace "$file" --replace-quiet \
+        'Run npm i -g dl-librescore@{{latest}} to update' ""
+    done
+  '';
 
-  nativeBuildInputs = [
-    python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Download sheet music";
     homepage = "https://github.com/LibreScore/dl-librescore";
     license = lib.licenses.mit;
     mainProgram = "dl-librescore";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ yiyu ];
   };
-}
+})

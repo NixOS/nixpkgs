@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -105,17 +106,58 @@ in
       };
     }
     // optionalAttrs dmcfg.autoLogin.enable {
-      ly-autologin.text = ''
-        auth      requisite pam_nologin.so
-        auth      required  pam_succeed_if.so uid >= 1000 quiet
-        auth      required  pam_permit.so
+      ly-autologin = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "nologin";
+              control = "requisite";
+              modulePath = "pam_nologin.so";
+            }
+            {
+              name = "ly-normal-user";
+              control = "required";
+              modulePath = "pam_succeed_if.so";
+              settings.quiet = true;
+              args = lib.mkBefore [
+                "uid"
+                ">="
+                "1000"
+              ];
+            }
+            {
+              name = "permit";
+              control = "required";
+              modulePath = "pam_permit.so";
+            }
+          ];
 
-        account   include   ly
+          account = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
 
-        password  include   ly
+          password = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
 
-        session   include   ly
-      '';
+          session = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
+        };
+      };
     };
 
     environment = {

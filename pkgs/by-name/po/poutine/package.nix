@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "poutine";
-  version = "1.0.8";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "boostsecurityio";
     repo = "poutine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YctbFSFSbq/LZiS5WDv7a0NYRjDU/He0OMRG6h1gaqE=";
+    hash = "sha256-kQGq6AzU/M/8mxZMS/ExwN8356sVWCyPmfnRnfpqFAk=";
   };
 
-  vendorHash = "sha256-qp3Ko+01kk9AH0oCT2Si/si+74gT5KFtPFslwih/IBE=";
+  vendorHash = "sha256-Ktsk01YqBHVZDOu+Xp1p3sVDwqozl35iLYbVavpiWq0=";
 
   ldflags = [
     "-s"

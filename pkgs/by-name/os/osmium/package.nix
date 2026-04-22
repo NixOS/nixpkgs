@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "osmium";
-  version = "0.0.16";
+  version = "0.0.19";
 
   src = fetchurl {
     url = "https://updater.osmium.chat/Osmium-${version}-alpha-x64.tar.gz";
-    hash = "sha256-dMOyZ9oPVnLt6MHeQwsMJ03wgvaKzalynwAL/PRfI28=";
+    hash = "sha256-Qwh6K2QlJJapqR0BkaA0LvwLEsqktnLzOnyJg+7sMFo=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
 
     ln -s $out/opt/resources/assets/icons/256x256.png $out/share/pixmaps/osmium.png
     ln -s $out/opt/resources/assets/icons/256x256.png $out/share/icons/hicolor/256x256/apps/osmium.png
+
+    ln -s "$desktopItem/share/applications" $out/share
 
     runHook postInstall
   '';

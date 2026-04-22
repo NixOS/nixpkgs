@@ -72,6 +72,11 @@ let
   );
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "wivrn" "defaultRuntime" ] ''
+      WiVRn now manages the active runtime itself, so this option has been removed.
+    '')
+  ];
   options = {
     services.wivrn = {
       enable = mkEnableOption "WiVRn, an OpenXR streaming application";

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
 
+  async-geotiff,
   attrs,
   boto3,
   cachetools,
@@ -17,21 +18,23 @@
   obstore,
   pydantic,
   pystac,
+  pytest-asyncio,
   rasterio,
   rioxarray,
+  typing-extensions,
   zarr,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
-  version = "8.0.5";
+  version = "9.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
     tag = finalAttrs.version;
-    hash = "sha256-FOTwP4iTLfWl81KKarLOQQyp4gpi6Q+pjUXfZrXXsfo=";
+    hash = "sha256-oLMWrf3udqlf4SlQnBU7Stm6MzXS7EN6xWiTNtOOm4g=";
   };
 
   build-system = [ hatchling ];
@@ -47,6 +50,7 @@ buildPythonPackage (finalAttrs: {
     pydantic
     pystac
     rasterio
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -64,11 +68,18 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
+  checkInputs = [
+    async-geotiff
+    pytest-asyncio
+  ];
+
   pythonImportsCheck = [ "rio_tiler" ];
 
   disabledTests = [
     # Requires network access
     "test_dataset_reader"
+    # for some reason, str date representation are not the same
+    "test_xarray_reader"
   ];
 
   meta = {

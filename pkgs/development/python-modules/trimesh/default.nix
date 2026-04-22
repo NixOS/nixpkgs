@@ -25,16 +25,16 @@
   mapbox-earcut,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trimesh";
-  version = "4.11.3";
+  version = "4.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
-    tag = version;
-    hash = "sha256-0GIeCNqNjV7BlhjHxEpdwgdiX+diq4keM2PvjSI1FdM=";
+    tag = finalAttrs.version;
+    hash = "sha256-LF7tjthYtsEZJLqBiQZBe4urLjSD3Vbi3g1ZJ++0Tyk=";
   };
 
   build-system = [ setuptools ];
@@ -92,11 +92,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for loading and using triangular meshes";
     homepage = "https://trimesh.org/";
-    changelog = "https://github.com/mikedh/trimesh/releases/tag/${src.tag}";
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "trimesh";
     maintainers = with lib.maintainers; [
       pbsds
     ];
   };
-}
+})

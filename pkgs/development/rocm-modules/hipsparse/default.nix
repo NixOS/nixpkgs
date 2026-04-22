@@ -19,7 +19,7 @@
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "7.2.0";
+  version = "7.2.2";
 
   outputs = [
     "out"
@@ -33,10 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "hipSPARSE";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-DmanHHlDny/SweYrSes4xQeWoF6TV+AoThyDHQpz+hQ=";
+    sparseCheckout = [
+      "projects/hipsparse"
+      "shared"
+    ];
+    hash = "sha256-E1chG+giFtf02fjutoV4yM2XvrQKjgXRSvxs0NBBkvI=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/hipsparse";
 
   nativeBuildInputs = [
     cmake
@@ -131,15 +136,11 @@ stdenv.mkDerivation (finalAttrs: {
       } $sample/bin/example_*
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm SPARSE marshalling library";
-    homepage = "https://github.com/ROCm/hipSPARSE";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsparse";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

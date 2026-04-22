@@ -97,7 +97,7 @@ buildDotnetModule (finalAttrs: {
     mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
     mv $out/bin/OpenTabletDriver.UX.Gtk $out/bin/otd-gui
 
-    install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
+    install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/icons
 
     # Generate udev rules from source
     mkdir -p $out/lib/udev/rules.d

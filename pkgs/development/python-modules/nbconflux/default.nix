@@ -64,6 +64,6 @@ buildPythonPackage rec {
     mainProgram = "nbconflux";
     homepage = "https://github.com/Valassis-Digital-Media/nbconflux";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.arnoldfarkas ];
+    maintainers = [ ];
   };
 }

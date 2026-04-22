@@ -1,11 +1,12 @@
 {
   lib,
+  aioboto3,
+  aiohttp,
   asn1crypto,
   buildPythonPackage,
   boto3,
   botocore,
   certifi,
-  cffi,
   charset-normalizer,
   cryptography,
   cython,
@@ -20,10 +21,12 @@
   pyarrow,
   pyjwt,
   pyopenssl,
+  pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
   pytz,
   requests,
+  responses,
   setuptools,
   sortedcontainers,
   tomlkit,
@@ -32,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${version}";
-    hash = "sha256-u2DIgW0W9oXSif2lIDqhlIopaXzQRS0x6tyHiYPGFLM=";
+    hash = "sha256-bJK6U5lomcPMGeKEmv+9m+uM5+3GJKKUA3dEwP/ynVo=";
   };
 
   build-system = [
@@ -49,10 +52,7 @@ buildPythonPackage rec {
 
   dependencies = [
     asn1crypto
-    boto3
-    botocore
     certifi
-    cffi
     charset-normalizer
     cryptography
     filelock
@@ -69,11 +69,14 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "cffi"
     "pyopenssl"
   ];
 
   optional-dependencies = {
+    boto = [
+      boto3
+      botocore
+    ];
     pandas = [
       pandas
       pyarrow
@@ -86,10 +89,15 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    aioboto3
+    aiohttp
     numpy
+    pytest-asyncio
     pytest-xdist
     pytestCheckHook
-  ];
+    responses
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Tests require encrypted secrets, see
@@ -107,6 +115,21 @@ buildPythonPackage rec {
     # AssertionError: /build/source/.wiremock/wiremock-standalone.jar does not exist
     "test/unit/test_programmatic_access_token.py"
     "test/unit/test_oauth_token.py"
+    "test/unit/test_proxies.py"
+    "test/unit/aio/test_programmatic_access_token_async.py"
+    "test/unit/aio/test_oauth_token_async.py"
+    "test/unit/aio/test_proxies_async.py"
+    # aio tests that connect to the internet
+    "test/unit/aio/test_connection_async_unit.py::test_invalid_backoff_policy"
+    "test/unit/aio/test_ocsp.py"
+    "test/unit/aio/test_s3_util_async.py::test_download_retry_exceeded_error"
+    "test/unit/aio/test_s3_util_async.py::test_accelerate_in_china_endpoint"
+    "test/unit/aio/test_s3_util_async.py::test_get_header_expiry_error"
+    "test/unit/aio/test_s3_util_async.py::test_upload_expiry_error"
+    "test/unit/aio/test_s3_util_async.py::test_download_expiry_error"
+    # snowflake.connector.errors.ProgrammingError: 251008: 251008: Failed to load private key:
+    # argument 'password': Cannot convert "<class 'int'>" instance to a buffer.
+    "test/unit/aio/test_auth_keypair_async.py::test_auth_keypair"
   ];
 
   disabledTests = [
@@ -116,6 +139,8 @@ buildPythonPackage rec {
     # Missing .wiremock/wiremock-standalone.jar
     "test_wiremock"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "snowflake"

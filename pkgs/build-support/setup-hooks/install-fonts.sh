@@ -38,9 +38,16 @@ installFonts() {
   installFont 'ttf' "$out/share/fonts/truetype"
   installFont 'ttc' "$out/share/fonts/truetype"
   installFont 'otf' "$out/share/fonts/opentype"
+  installFont 'otc' "$out/share/fonts/opentype"
+  installFont 'pfa' "$out/share/fonts/type1"
+  installFont 'pfb' "$out/share/fonts/type1"
+  installFont 'pfm' "$out/share/fonts/type1"
+  installFont 'afm' "$out/share/fonts/type1"
   installFont 'bdf' "$out/share/fonts/misc"
+  installFont 'pcf' "$out/share/fonts/misc"
   installFont 'otb' "$out/share/fonts/misc"
   installFont 'psf' "$out/share/consolefonts"
+  installFont 'psfu' "$out/share/consolefonts"
 
   if [ -n "${webfont-}" ]; then
     installFont 'woff' "$webfont/share/fonts/woff"

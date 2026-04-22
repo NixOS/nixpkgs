@@ -13,7 +13,7 @@
 let
   srcInfo = lib.importJSON ./src-info.json;
   description = "Third-party Bilibili client developed in Flutter";
-  version = "2.0.1.1";
+  version = "2.0.4";
 in
 flutter341.buildFlutterApplication {
   pname = "piliplus";

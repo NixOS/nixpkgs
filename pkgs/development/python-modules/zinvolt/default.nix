@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zinvolt";
-  version = "0.3.0";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-zinvolt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4p+2zzBDuS6N6b+FhE6mWRFBzCzzkxApVlQai7sG/HM=";
+    hash = "sha256-psZ9/V/bBGGvKdKxuvncJzJOB1jolYTeNw2XOJmxfco=";
   };
 
   build-system = [ poetry-core ];

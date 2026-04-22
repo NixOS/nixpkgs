@@ -1,48 +1,63 @@
 {
   lib,
   stdenv,
-  rocm-runtime,
-  rocprofiler,
   numactl,
   libpciaccess,
   libxml2,
   elfutils,
+  glog,
+  fmt,
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
   clang,
-  clr,
   python3Packages,
-  gpuTargets ? clr.gpuTargets,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-register";
-  version = "7.2.0";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocprofiler-register";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6jr6dfmCjeP5PCNfLDMmh8IO9Hxz6RvLlacNwIWQduQ=";
-    fetchSubmodules = true;
+    sparseCheckout = [
+      "projects/rocprofiler-register"
+      "shared"
+    ];
+    hash = "sha256-XhxED3LHIjxBcSVyyEC3pgg0fyKyfKtHkF7umExSboM=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocprofiler-register";
+
+  patches = [
+    (fetchpatch {
+      # [rocprofiler-sdk][rocprofiler-register] add CPackComponent
+      url = "https://github.com/ROCm/rocm-systems/commit/ef7253365c420ca486f074b9e9119a222e30fea0.patch";
+      hash = "sha256-dwqvZ4AaTcOk2mSnxgHp/NbhjlD8W6KVz1H5ZF4i/Tw=";
+      relative = "projects/rocprofiler-register";
+    })
+    (fetchpatch {
+      # [rocprofiler-register] Fix compilation with system fmt/glog
+      url = "https://github.com/ROCm/rocm-systems/commit/c8ad2522083c6e00539ce5c1c22df766c20084fb.patch";
+      hash = "sha256-VloRKV6kUzIfIInltx/bV1EM0FUfeQZrVAx6qgdsLyg=";
+      relative = "projects/rocprofiler-register";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     clang
-    clr
   ];
 
-  # TODO(@LunNova): use system fmt&glog once upstream fixes flag to not vendor
   buildInputs = [
     numactl
     libpciaccess
     libxml2
     elfutils
-    rocm-runtime
-
-    rocprofiler.rocmtoolkit-merged
+    glog
+    fmt
 
     python3Packages.lxml
     python3Packages.cppheaderparser
@@ -51,12 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pandas
   ];
   cmakeFlags = [
-    "-DCMAKE_MODULE_PATH=${clr}/lib/cmake/hip"
-    "-DHIP_ROOT_DIR=${clr}"
-    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    "-DBUILD_TEST=OFF"
-    "-DROCPROFILER_BUILD_TESTS=0"
-    "-DROCPROFILER_BUILD_SAMPLES=0"
+    "-DROCPROFILER_REGISTER_BUILD_TESTS=0"
+    "-DROCPROFILER_REGISTER_BUILD_SAMPLES=0"
+    "-DROCPROFILER_REGISTER_BUILD_GLOG=OFF"
+    "-DROCPROFILER_REGISTER_BUILD_FMT=OFF"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -64,15 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = "rocprofiler-register";
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm/rocprofiler";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocprofiler-register";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

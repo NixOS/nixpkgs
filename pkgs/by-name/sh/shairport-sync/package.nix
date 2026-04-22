@@ -27,6 +27,7 @@
   soxr,
   alac,
   sndio,
+  enableAvahi ? true,
   enableAirplay2 ? false,
   enableStdout ? true,
   enableAlsa ? true,
@@ -45,6 +46,7 @@
   enableAlac ? true,
   enableConvolution ? true,
   enableLibdaemon ? false,
+  enableTinySVCmDNS ? true,
 }:
 
 let
@@ -53,13 +55,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-/VvAGoS4tpYvnie0jkJvNwuLmLoMy+vOVcQs8K/Qi/0=";
+    hash = "sha256-tmnAVO9XpVNOwS8ze/23v4TV5Gq+goaVNnA9INf17wk=";
   };
 
   nativeBuildInputs = [
@@ -79,10 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    avahi
     popt
     libconfig
   ]
+  ++ optional enableAvahi avahi
   ++ optional enableLibdaemon libdaemon
   ++ optional enableAlsa alsa-lib
   ++ optional enableSndio sndio
@@ -115,11 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-configfiles"
     "--sysconfdir=/etc"
     "--with-ssl=openssl"
-    "--with-stdout"
-    "--with-avahi"
   ]
-  ++ optional enablePulse "--with-pa"
-  ++ optional enablePipewire "--with-pw"
+  ++ optional enableAvahi "--with-avahi"
+  ++ optional enablePulse "--with-pulseaudio"
+  ++ optional enablePipewire "--with-pipewire"
   ++ optional enableAlsa "--with-alsa"
   ++ optional enableSndio "--with-sndio"
   ++ optional enableAo "--with-ao"
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableMetadata "--with-metadata"
   ++ optional enableMpris "--with-mpris-interface"
   ++ optional enableMqttClient "--with-mqtt-client"
+  ++ optional enableTinySVCmDNS "--with-tinysvcmdns"
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
 

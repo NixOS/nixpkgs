@@ -3,32 +3,39 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  click,
+  setuptools-scm,
+  cryptography,
+  pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "satel-integra";
-  version = "0.3.7";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "c-soft";
     repo = "satel_integra";
     tag = version;
-    hash = "sha256-nCFb8NaZQ6TO4aXCSpbbHGkJr3nJVkt1R4hi9mts070=";
+    hash = "sha256-haSCSWLHEvd4AUXMvopYjFdEXQ2u6IGrT7q3sY711PQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
-  '';
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  build-system = [ setuptools ];
+  dependencies = [
+    cryptography
+  ];
 
-  dependencies = [ click ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "satel_integra" ];
 

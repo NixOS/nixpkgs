@@ -8,7 +8,6 @@
 
   # for passthru.tests
   django,
-  django_4,
   django-silk,
   pgadmin4,
 }:
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   passthru.tests = {
     inherit
       django
-      django_4
       django-silk
       pgadmin4
       ;

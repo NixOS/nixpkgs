@@ -8,16 +8,17 @@
   qt6,
   pcsclite,
   gitUpdater,
+  llhttp,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
     rev = finalAttrs.version;
-    hash = "sha256-cLKF5QYDPngvN6+3p7B8YO/MYvDfD1fbnyEMZPmjj8w=";
+    hash = "sha256-R+2swDzIHlgE0kVonoYQih8r8p38RN7bqkbb+WB1hCc=";
   };
 
   postPatch = ''
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
+    llhttp
     pcsclite
     qt6.qtscxml
     qt6.qtsvg

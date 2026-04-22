@@ -17,13 +17,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "${finalAttrs.passthru.prettyName}-unwrapped";
   # nixpkgs-update: no auto update
-  version = "0-unstable-2025-11-15";
+  version = "0-unstable-2026-04-11";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "fe2ddbd2e5833a85d9ccd3937b304f3f41e44f98";
-    hash = "sha256-jv7d5DopGZDnVFQX/t0D9cZSTwgMvcb4kqCnLJSWmNI=";
+    rev = "e724d4a0e7cc1593ae2430e07a62352b7852dd68";
+    hash = "sha256-Xu0oCNO8WyIwe12CjDWXP+2LUzexZcw6Rgzpb80M5cA=";
   };
 
   postPatch = ''
@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace build/mif/local.mif \
       --replace-fail '-static' ""
   '';
+
+  # https://github.com/open-watcom/open-watcom-v2/issues/1608
+  hardeningDisable = [ "strictflexarrays1" ];
 
   nativeBuildInputs = lib.optionals withDocs [
     dosbox # running prebuilt WGML tool to create docs

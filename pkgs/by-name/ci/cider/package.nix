@@ -37,5 +37,6 @@ appimageTools.wrapType2 rec {
     mainProgram = "cider";
     maintainers = [ lib.maintainers.cigrainger ];
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 }

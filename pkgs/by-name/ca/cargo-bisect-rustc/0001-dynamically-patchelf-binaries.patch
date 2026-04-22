@@ -1,17 +1,19 @@
 diff --git a/src/toolchains.rs b/src/toolchains.rs
-index 53a7ddb..795a711 100644
+index a4be8cdcfe..b3e4dc3cee 100644
 --- a/src/toolchains.rs
 +++ b/src/toolchains.rs
-@@ -206,6 +206,8 @@ impl Toolchain {
+@@ -208,7 +208,9 @@
              })?;
          }
  
-+        nix_patchelf(tmpdir.path().to_path_buf())
-+            .expect("failed to patch toolchain for NixOS");
-         fs::rename(tmpdir.into_path(), dest).map_err(InstallError::Move)
+-        fs::rename(tmpdir.keep(), dest).map_err(InstallError::Move)
++        let tmpdir = tmpdir.keep();
++        nix_patchelf(tmpdir.clone()).expect("failed to patch toolchain for NixOS");
++        fs::rename(tmpdir, dest).map_err(InstallError::Move)
      }
  
-@@ -533,3 +535,42 @@ fn download_tarball(
+     pub(crate) fn remove(&self, dl_params: &DownloadParams) -> io::Result<()> {
+@@ -564,3 +566,46 @@
          res => res,
      }
  }
@@ -25,8 +27,10 @@ index 53a7ddb..795a711 100644
 +            continue;
 +        }
 +
-+        eprintln!("info: you seem to be running NixOS. Attempting to patch {}",
-+                  entry.path().to_str().unwrap());
++        eprintln!(
++            "info: you seem to be running NixOS. Attempting to patch {}",
++            entry.path().to_str().unwrap()
++        );
 +        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
 +            .arg("--set-interpreter")
 +            .arg("@dynamicLinker@")
@@ -43,8 +47,10 @@ index 53a7ddb..795a711 100644
 +            continue;
 +        }
 +
-+        eprintln!("info: you seem to be running NixOS. Attempting to patch {}",
-+                  entry.path().to_str().unwrap());
++        eprintln!(
++            "info: you seem to be running NixOS. Attempting to patch {}",
++            entry.path().to_str().unwrap()
++        );
 +        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
 +            .arg("--set-rpath")
 +            .arg("@libPath@")

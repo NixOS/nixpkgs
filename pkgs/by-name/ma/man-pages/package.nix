@@ -4,6 +4,7 @@
   fetchurl,
   directoryListingUpdater,
   gawk,
+  groff,
   man,
   pcre2,
   nixosTests,
@@ -26,6 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
     hash = "sha256-0Y8hpgKwl3ilqQlr8b6EQbdzPpmBUEdKzPcD0WX06/Q=";
   };
+
+  # See https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man/man7/man.7,
+  # https://github.com/NixOS/nixpkgs/issues/498875
+  postPatch = ''
+    substituteInPlace man/man7/man.7 \
+      --replace-fail '.so man7/groff_man.7' '.so ${lib.getMan groff}/share/man/man7/groff_man.7'
+  '';
 
   nativeInstallCheckInputs = [
     gawk

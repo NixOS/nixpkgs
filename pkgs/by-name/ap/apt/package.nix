@@ -30,18 +30,19 @@
   zstd,
   withDocs ? true,
   withNLS ? true,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "3.1.15";
+  version = "3.2.0";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
     rev = finalAttrs.version;
-    hash = "sha256-PnI7Ggqc/Go5p+eXf93d5qhG61TKO2/8ZSjML37pyzY=";
+    hash = "sha256-ATNwI3MAxXIJpnKJvzO3Sfmd18GXSeoMvIxJYro1VWE=";
   };
 
   # cycle detection; lib can't be split
@@ -101,13 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_DOC" withDocs)
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://salsa.debian.org/apt-team/apt";
     description = "Command-line package management tools used on Debian-based systems";
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${finalAttrs.version}/debian/changelog";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "apt";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ VZstless ];
     platforms = lib.platforms.linux;
   };
 })

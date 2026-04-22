@@ -41,6 +41,9 @@ let
     # These tests rely on outbound IP address
     "TestHandler"
     "TestHandler_gcCache"
+
+    # Timeouts
+    "TestRunJob_WithConnectionFromCommandOptions"
   ]
   ++ lib.optionals stdenv.isDarwin [
     # Uses docker-specific options, unsupported on Darwin
@@ -49,17 +52,17 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "12.7.3";
+  version = "12.9.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HVkyn2MYGAFv0eTDnjs9qB1Kd2v98+hQkNNVFs7KrWs=";
+    hash = "sha256-yhcD+FiRuo+WAvKFtgAI+36/uIci9O1s9RtXT0Q75Uo=";
   };
 
-  vendorHash = "sha256-8L3bJtV3kgxRILV7mIY3r77VQuaPn7whwMNWwq5NGN4=";
+  vendorHash = "sha256-CCUyL6ZxLRQy30TQUj1yOAuR7Ctp06/0jG8Q3De6/oo=";
 
   nativeBuildInputs = [ makeWrapper ];
 

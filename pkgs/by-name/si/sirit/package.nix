@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "eden-emulator";
     repo = "sirit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eiuAdnPBJAMCRbkwJkqjyaskBCa2/Cm0F3gqFwe3ePg=";
+    hash = "sha256-T4f1C33rh8KEXPyxPiIbdDUQLGT3ufTIt4XmgSsLRpA=";
   };
 
   nativeBuildInputs = [

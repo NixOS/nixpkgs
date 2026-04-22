@@ -5,7 +5,7 @@
   fetchPypi,
   libredirect,
   nodejs,
-  python312,
+  python3,
   gettext,
   nixosTests,
   pretix,
@@ -13,10 +13,10 @@
 }:
 
 let
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      django = super.django_4;
+      django = super.django_5;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
         version = "2.3.0";
@@ -25,6 +25,12 @@ let
           tag = "v${version}";
           hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
         };
+        disabledTests = [
+          # error message mismatch
+          "test_validation_failed_message"
+          # fails dns resolution
+          "test_response_when_auth_server_response_return_404"
+        ];
       });
 
       stripe = super.stripe.overridePythonAttrs rec {
@@ -45,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2026.2.0";
+  version = "2026.3.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${version}";
-    hash = "sha256-S8HcCtTBTU9oU7X+XD6avSZVtlRkXeF7pIqnggqJRPs=";
+    hash = "sha256-E/WJRuugcfy/r6USS37G73PiHg8DuYRFSq0e19XIRJg=";
   };
 
   npmDeps = buildNpmPackage {
@@ -59,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-n4Gd4DKdP4b6LT34uy9aJDWcTz9okk4imq6vtw1cC+k=";
+    npmDepsHash = "sha256-+84WFNs0iPhMb4YIKfHYByYeFQHITyWeF5yIM8pvQSs=";
 
     dontBuild = true;
 
@@ -90,13 +96,14 @@ python.pkgs.buildPythonApplication rec {
     "css-inline"
     "django-bootstrap3"
     "django-compressor"
+    "django-filter"
     "django-formset-js-improved"
     "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
     "drf_ujson2"
-    "importlib-metadata"
+    "importlib_metadata"
     "kombu"
     "markdown"
     "oauthlib"

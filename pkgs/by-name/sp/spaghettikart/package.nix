@@ -124,13 +124,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
-  version = "0.9.9.1-unstable-2025-12-23";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "SpaghettiKart";
-    rev = "b0582b5c32914a815fe6a2ffc41f3eb9c24a3a2b";
-    hash = "sha256-TTsW49jo8yNxuL5GFStiQRWOBw/X8Pt2hMKmDZPpEVI=";
+    tag = finalAttrs.version;
+    hash = "sha256-XEsOtt2Xg/HyYw07YGXTIBOCtIDbh3hmaBEQpbFVFYc=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -279,7 +279,6 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "spaghettikart";
       exec = "Spaghettify";
       comment = finalAttrs.meta.description;
-      genericName = "spaghettikart";
       desktopName = "spaghettikart";
       categories = [ "Game" ];
     })

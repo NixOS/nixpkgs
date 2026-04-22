@@ -16,19 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2026-03-17";
+  version = "0-unstable-2026-04-20";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "ea9e0b4a4d374a87abc76365b44e7d24017206a6";
-    hash = "sha256-KJbnXRSUvKGm6q8koZYoNGMaSO5u8xCoA3hDWOCgIx4=";
+    rev = "01714c999c7b2390ae15f092ef5b7b4d6cc9c3e8";
+    hash = "sha256-PRU4X3lVRnPvvVPzabJ/J2ly4eyFwCxSsKuL0yuRy2I=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-fhwuF0ELHw2avw8pnZUXPVkq+MJjuynFTBAU6O92mLM=";
+    hash = "sha256-3FyctNQ8pDvJ559SJvAJZjn49wptfB5Q5Takk51oqMQ=";
   };
 
   buildPhase = ''

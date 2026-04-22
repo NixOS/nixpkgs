@@ -24,8 +24,8 @@ let
 in
 {
   icu78 = make-icu {
-    version = "78.1";
-    hash = "sha256-Yhf1jKObIxJ2Bc/Gx+DTR1/ksNYxVwETg9cWy0FheIY=";
+    version = "78.2";
+    hash = "sha256-Pploe1xDXUsgljDi0uu3mQbJhGheeGNQeLZy4DyJ3zU=";
   };
   icu77 = make-icu {
     version = "77.1";
@@ -58,10 +58,6 @@ in
   icu70 = make-icu {
     version = "70.1";
     hash = "sha256-jSBUKMF78Tu1NTAGae0oszihV7HAGuZtMdDT4tR8P9U=";
-  };
-  icu69 = make-icu {
-    version = "69.1";
-    hash = "sha256-TLp7es0dPELES7DBS+ZjcJjH+vKzMM6Ha8XzuRXQl0U=";
   };
   icu67 = make-icu {
     version = "67.1";

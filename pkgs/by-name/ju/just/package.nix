@@ -17,7 +17,7 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  version = "1.48.0";
+  version = "1.49.0";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-U/o9MyT/DMybfV/LHi50KL7sh6ZqJ6rvqAY5pzlJAA8=";
+    hash = "sha256-4vUcKHoQto4TQce4y4/MwdES0+PPlSjNvzLW77FodWs=";
   };
 
-  cargoHash = "sha256-1cSk7dGuh5ZX4XrYgOvqM89e54o8yrr13VpTtdFbtEA=";
+  cargoHash = "sha256-5hhwzkNgF+i5aCUoVh1VNfkNJFttyy5cLhBwu8uHmAQ=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage {
     export USER=just-user
     export USERNAME=just-user
     export JUST_CHOOSER="${coreutils}/bin/cat"
+    export XDG_RUNTIME_DIR=$(mktemp -d)
 
     # Prevent string.rs from being changed
     cp tests/string.rs $TMPDIR/string.rs

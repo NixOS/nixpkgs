@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocrand${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  version = "7.2.2";
 
   outputs = [
     "out"
@@ -29,10 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocRAND";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-BX1A74ZBXE0fqYqA7WijezCezUOpEciUm6k2vhFQlA4=";
+    sparseCheckout = [
+      "projects/rocrand"
+      "shared"
+    ];
+    hash = "sha256-tl++h7LSEXf0jWe007+RIRwYHdB6TKPDpzipj1Emew8=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocrand";
 
   nativeBuildInputs = [
     cmake
@@ -81,15 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Generate pseudo-random and quasi-random numbers";
-    homepage = "https://github.com/ROCm/rocRAND";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocrand";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

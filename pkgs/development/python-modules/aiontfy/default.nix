@@ -14,19 +14,23 @@
 
 buildPythonPackage rec {
   pname = "aiontfy";
-  version = "0.8.1";
+  version = "0.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "aiontfy";
     tag = "v${version}";
-    hash = "sha256-pwlPtFeMBvSc1keFvDv5hzB/WIxHJSuTspKKQrAowiA=";
+    hash = "sha256-mj2wYsmA+CI0y4WykP7CLPUFfSCISCdinajkIHDdAZs=";
   };
 
   build-system = [
     hatch-regex-commit
     hatchling
+  ];
+
+  pythonRelaxDeps = [
+    "orjson"
   ];
 
   dependencies = [

@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rattler-build";
-  version = "0.61.0";
+  version = "0.62.2";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "rattler-build";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IuCfWhj3MQVJghJYkmLxV//VOZ9SSNTbIiyo3KsRbLc=";
+    hash = "sha256-nFXtbY2gVrS7zLTcCMOJLyL79Xi7Zw463OtoGL4zUYI=";
   };
 
-  cargoHash = "sha256-dgjCTHq0HHv5GX7BrZgH4oUXWbnb8SRBU13Qf9f4Qt0=";
+  cargoHash = "sha256-dOXCwbasxqbcInm3YeYxDOckEDrQte9NESKUjf9zslk=";
 
   doCheck = false; # test requires network access
 

@@ -1,30 +1,31 @@
 {
-  fetchPypi,
   lib,
-  nb-cli,
+  fetchFromGitHub,
   python3,
+  nb-cli,
   testers,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nb-cli";
-  version = "1.6.0";
+  version = "1.7.3";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "nb_cli";
-    inherit (finalAttrs) version;
-    hash = "sha256-IbYyPZuhTkr4RInIR1lpMzl2+VYzu4IFQt2pOko92ZQ=";
+  src = fetchFromGitHub {
+    owner = "nonebot";
+    repo = "nb-cli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/OZHDMfwaajePiQ7Nb6BsQcpUPybP5SDWHWG/tVUxCo=";
   };
 
-  pythonRelaxDeps = [
-    "watchfiles"
-    "noneprompt"
-  ];
+  pythonRemoveDeps = [ "pip" ];
 
-  build-system = [
-    python3.pkgs.babel
-    python3.pkgs.pdm-backend
+  # too strict
+  pythonRelaxDeps = true;
+
+  build-system = with python3.pkgs; [
+    babel
+    pdm-backend
   ];
 
   dependencies = with python3.pkgs; [

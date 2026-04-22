@@ -190,6 +190,7 @@ in
             priority = 1100;
             extraConfig = ''
               add_header Cache-Control 'public, max-age=604800, must-revalidate';
+              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
           locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {
@@ -255,8 +256,8 @@ in
         upload_max_filesize = ${cfg.maxAttachmentSize}
       '';
       settings = lib.mapAttrs (name: lib.mkDefault) {
-        "listen.owner" = "nginx";
-        "listen.group" = "nginx";
+        "listen.owner" = config.services.nginx.user;
+        "listen.group" = config.services.nginx.group;
         "listen.mode" = "0660";
         "pm" = "dynamic";
         "pm.max_children" = 75;

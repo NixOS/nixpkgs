@@ -19,6 +19,7 @@
   extraMakeWrapperArgs ? [ ],
   dbusVerify ? stdenv.hostPlatform.isLinux,
   dbus,
+  unixodbc,
 }:
 
 let
@@ -28,6 +29,10 @@ let
 
   makeWrapperArgs = builtins.concatStringsSep " " (
     [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${lib.getLib unixodbc}/lib"
       "--set"
       "GDK_PIXBUF_MODULE_FILE"
       "${librsvg}/${gdk-pixbuf.moduleDir}.cache"

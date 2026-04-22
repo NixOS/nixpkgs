@@ -34,16 +34,14 @@ let
 in
 stdenv.mkDerivation {
   pname = "${mate-panel.pname}-with-applets";
-  inherit (mate-panel) version outputs;
+  inherit (mate-panel) version;
 
   src = null;
 
   paths = [
-    mate-panel.out
-    mate-panel.man
+    mate-panel
   ]
   ++ selectedApplets;
-  passAsFile = [ "paths" ];
 
   nativeBuildInputs = [
     glib
@@ -51,7 +49,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    lib.forEach selectedApplets (x: x.buildInputs)
+    lib.concatMap (x: x.buildInputs) selectedApplets
     ++ selectedApplets
     ++ [ mate-panel ]
     ++ mate-panel.buildInputs
@@ -68,7 +66,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-    for i in $(cat $pathsPath); do
+    for i in "''${paths[@]}"; do
       ${lndir}/bin/lndir -silent $i $out
     done
 
@@ -84,5 +82,15 @@ stdenv.mkDerivation {
     )
   '';
 
-  inherit (mate-panel) meta;
+  __structuredAttrs = true;
+
+  meta = {
+    inherit (mate-panel.meta)
+      description
+      homepage
+      license
+      teams
+      platforms
+      ;
+  };
 }

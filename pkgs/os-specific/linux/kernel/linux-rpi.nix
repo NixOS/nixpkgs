@@ -9,8 +9,8 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "6.12.62";
-  hash = "sha256-jcSzPoCCnmZU1GDBUWAljIUjZRzbfdh2aQB9/GOc5mQ=";
+  modDirVersion = "6.12.75";
+  hash = "sha256-qrljd20n4tj/7C7gzNnxw7JIyEF2Ppf1PWm2a7vxh1w=";
 in
 lib.overrideDerivation
   (buildLinux (
@@ -23,8 +23,8 @@ lib.overrideDerivation
       src = fetchFromGitHub {
         owner = "raspberrypi";
         repo = "linux";
-        # https://github.com/RPi-Distro/linux-packaging/raw/refs/tags/pios/1%256.12.62-1+rpt1/debian/changelog
-        rev = "a1073743767f9e7fdc7017ababd2a07ea0c97c1c";
+        # https://github.com/RPi-Distro/linux-packaging/raw/refs/tags/pios/1%256.12.75-1+rpt1/debian/changelog
+        rev = "89050b1059997d38d55462b323b099a6436dc10d";
         inherit hash;
       };
 

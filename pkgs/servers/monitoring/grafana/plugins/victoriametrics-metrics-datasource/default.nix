@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "victoriametrics-metrics-datasource";
-  version = "0.23.1";
-  zipHash = "sha256-SjQ71hRzjTnfxopspx2su29J6rBh2LT+hpzfM9EX7S8=";
+  version = "0.23.4";
+  zipHash = "sha256-a0EJB+A+Rlfrpd2m1HZ2nw2sh4QuWe1O2oueVi4xPZE=";
   meta = {
     description = "VictoriaMetrics metrics datasource for Grafana";
     license = lib.licenses.agpl3Only;

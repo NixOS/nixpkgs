@@ -1,24 +1,21 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   swift,
-  swiftformat,
   swiftpm,
-  testers,
   versionCheckHook,
   nix-update-script,
 }:
 
 swift.stdenv.mkDerivation rec {
   pname = "swiftformat";
-  version = "0.60.1";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
     rev = version;
-    sha256 = "sha256-IOtp+TBcWPb6RR47AoITtR+7xAulP+ZQcWukX5YYnVc=";
+    sha256 = "sha256-+57Cuok7hIXaTZi699sIoqORFgFWEXfzl8P4sJkwFNE=";
   };
 
   nativeBuildInputs = [

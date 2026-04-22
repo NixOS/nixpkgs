@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomlc17";
-  version = "250712";
+  version = "260414";
 
   src = fetchFromGitHub {
     owner = "cktan";
     repo = "tomlc17";
     tag = "R${finalAttrs.version}";
-    hash = "sha256-0if07Zj7Og+DBc/gxmAEHQh7QwAo8C/4S+x9IttEUjI=";
+    hash = "sha256-NtytkrRdIGMIYMSfnNkWHdeu78+ac7EL361OZoTK9BI=";
   };
 
   doCheck = false; # tries to download toml-test suite
@@ -22,7 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=${placeholder "out"}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^R(.*)" ];
+  };
 
   meta = {
     homepage = "https://github.com/cktan/tomlc17";

@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-13BscKZU/wzjstEQ8ffTGFJaDXO+p8IxNqNsyoEjQUc=";
+    hash = "sha256-FGg89bluN2IJJtkjwPa6dC83CBLdOr+LW5ArUKp4awk=";
   };
 
   nativeBuildInputs = [

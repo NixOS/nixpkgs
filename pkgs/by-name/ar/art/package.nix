@@ -33,7 +33,6 @@
   exiftool,
   mimalloc,
   openexr,
-  ilmbase,
   opencolorio,
   color-transformation-language,
 }:
@@ -92,7 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra-gtk3
     mimalloc
     openexr
-    ilmbase
     opencolorio
     color-transformation-language
   ];

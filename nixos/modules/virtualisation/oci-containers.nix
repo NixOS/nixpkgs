@@ -197,7 +197,7 @@ let
             Override the username or UID (and optionally groupname or GID) used
             in the container.
           '';
-          example = "nobody:nogroup";
+          example = "alice:users";
         };
 
         volumes = mkOption {

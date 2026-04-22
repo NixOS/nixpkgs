@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.332.0";
+  version = "2.333.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jxeuyomWBzynwYHvmNi5CcP9+z2odl7W3uXOGVgv2PY=";
+    hash = "sha256-5hSnveIebRQhvIHZc8sN9/8e9W1rlfITIB2uNMsQM6k=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -157,7 +157,9 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = true;
 
+  # tests fail with sandboxing under darwin
   __darwinAllowLocalNetworking = true;
+  __noChroot = stdenv.hostPlatform.isDarwin;
 
   # Fully qualified name of disabled tests
   disabledTests = [

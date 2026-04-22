@@ -221,6 +221,17 @@ in
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
     )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "promtail"
+      ]
+      ''
+        The promtail module has been removed, as promtail reached its end of life.
+        Consider migrating to `grafana-alloy` (`services.alloy.enable`), or, if you are looking for something light-weight, `fluent-bit` (`services.fluent-bit.enable`).
+        See <https://grafana.com/docs/alloy/latest/set-up/migrate/> or <https://docs.fluentbit.io/manual/data-pipeline/outputs/loki>.
+      ''
+    )
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
     )
@@ -485,6 +496,9 @@ in
     '')
     (mkRemovedOptionModule [ "programs" "spacefm" ] ''
       spacefm has been removed since it was unmaintained upstream.
+    '')
+    (mkRemovedOptionModule [ "services" "pyload" ] ''
+      services.pyload has been removed since the pyload-ng package had vulnerabilities and was unmaintained in nixpkgs.
     '')
     # Do NOT add any option renames here, see top of the file
   ];

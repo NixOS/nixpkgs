@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-openai";
-  version = "1.1.10";
+  version = "1.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${finalAttrs.version}";
-    hash = "sha256-k0JpzgF+2UaYUbtzOB+NFxq7Ge/eRbT8M4PgvDpRG2g=";
+    hash = "sha256-lmEnkwX1tL88xHTrQRe96ZCvU5bM6iwzJ46exI+gfSI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/openai";
@@ -87,6 +87,7 @@ buildPythonPackage (finalAttrs: {
     "test_load_openai_llm"
     "test_loads_openai_chat"
     "test_load_openai_chat"
+    "test_format_message_content"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];

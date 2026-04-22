@@ -36,6 +36,12 @@ buildPythonPackage (finalAttrs: {
     pyobjc-framework-Cocoa
   ];
 
+  # It's called pyobjc-core instead of pyobjc in nixpkgs.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace setup.py \
+      --replace-fail 'pyobjc' 'pyobjc-core'
+  '';
+
   # requires x session (use ewmhlib)
   pythonImportsCheck = [ ];
   doCheck = false;

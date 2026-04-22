@@ -1,25 +1,7 @@
 {
-  enableArchLinuxPkgs ? false,
-  enableDnfPackages ? false,
-  enable1password ? false,
-  enableBitwarden ? true,
-  enableBluetooth ? true,
-  enableBookmarks ? true,
-  enableCalc ? true,
-  enableClipboard ? true,
-  enableDesktopApplications ? true,
-  enableFiles ? true,
-  enableMenus ? true,
-  enableNiriActions ? true,
-  enableNiriSessions ? true,
-  enableProviderList ? true,
-  enableRunner ? true,
-  enableSnippets ? true,
-  enableSymbols ? true,
-  enableTodo ? true,
-  enableUnicode ? true,
-  enableWebsearch ? true,
-  enableWindows ? true,
+  # list of providers to enable, all are enabled by default
+  # e.g. enabledProviders = ["files"] will only install the files provider
+  enabledProviders ? null,
 
   bluez,
   buildGoModule,
@@ -35,38 +17,13 @@
   wl-clipboard,
 }:
 let
-  providerMap = {
-    "1password" = enable1password;
-    "archlinuxpkgs" = enableArchLinuxPkgs;
-    "bitwarden" = enableBitwarden;
-    "bluetooth" = enableBluetooth;
-    "bookmarks" = enableBookmarks;
-    "calc" = enableCalc;
-    "clipboard" = enableClipboard;
-    "desktopapplications" = enableDesktopApplications;
-    "dnfpackages" = enableDnfPackages;
-    "files" = enableFiles;
-    "menus" = enableMenus;
-    "niriactions" = enableNiriActions;
-    "nirisessions" = enableNiriSessions;
-    "providerlist" = enableProviderList;
-    "runner" = enableRunner;
-    "snippets" = enableSnippets;
-    "symbols" = enableSymbols;
-    "todo" = enableTodo;
-    "unicode" = enableUnicode;
-    "websearch" = enableWebsearch;
-    "windows" = enableWindows;
-  };
-
-  enabledProviders = lib.filterAttrs (_: enabled: enabled) providerMap;
-  enabledProvidersList = lib.concatStringsSep " " (lib.attrNames enabledProviders);
+  providerEnabled = provider: (enabledProviders == null) || lib.elem provider enabledProviders;
 
   runtimeDeps =
-    lib.optionals enableFiles [ fd ]
-    ++ lib.optionals enableBluetooth [ bluez ]
-    ++ lib.optionals enableCalc [ libqalculate ]
-    ++ lib.optionals enableClipboard [
+    lib.optionals (providerEnabled "files") [ fd ]
+    ++ lib.optionals (providerEnabled "bluetooth") [ bluez ]
+    ++ lib.optionals (providerEnabled "calc") [ libqalculate ]
+    ++ lib.optionals (providerEnabled "clipboard") [
       wl-clipboard
       imagemagick
     ];
@@ -74,16 +31,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "elephant";
-  version = "2.20.2";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "elephant";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RvCzINnVISBT3d0F1DoIcQFbQsbRJISW9qZeKTzmNaA=";
+    hash = "sha256-h7Rw0vlb0n0Jsk21WJPm7H+1T1bG+PEuxE5cJ2TZl8A=";
   };
 
-  vendorHash = "sha256-tO+5x2FIY1UBvWl9x3ZSpHwTWUlw1VNDTi9+2uY7xdU=";
+  vendorHash = "sha256-EWXZ+9/QDRpidpVHBcfJgp0xoc3YtRsiC/UTk1R+FSY=";
 
   buildInputs = [ protobuf ];
   nativeBuildInputs = [
@@ -93,18 +50,31 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/elephant" ];
 
-  postBuild = ''
-    echo "Building providers: ${enabledProvidersList}"
-
-    mkdir -p $out/lib/elephant/providers
-    for provider in ${enabledProvidersList}; do
-      [ -z "$provider" ] && continue
-      if [ -d "internal/providers/$provider" ]; then
-        echo "Building provider: $provider"
-        go build -buildmode=plugin -o "$out/lib/elephant/providers/$provider.so" ./internal/providers/"$provider" || exit 1
-      fi
-    done
-  '';
+  postBuild =
+    (
+      if enabledProviders == null then
+        ''
+          PROVIDERS=()
+          for x in internal/providers/*/; do
+            PROVIDERS+=("$(basename "$x")")
+          done
+        ''
+      else
+        ''
+          PROVIDERS=(${lib.escapeShellArgs enabledProviders})
+        ''
+    )
+    + ''
+      echo "Installing providers"
+      mkdir -p $out/lib/elephant/providers
+      for provider in "''${PROVIDERS[@]}"; do
+        [ -z "$provider" ] && continue
+        if [ -d "internal/providers/$provider" ]; then
+          echo "Building provider: $provider"
+          go build -buildmode=plugin -o "$out/lib/elephant/providers/$provider.so" ./internal/providers/"$provider" || exit 1
+        fi
+      done
+    '';
 
   postInstall = ''
     wrapProgram $out/bin/elephant \

@@ -1,0 +1,89 @@
+diff --git a/audiosource b/audiosource
+index e2f034c..787076e 100755
+--- a/audiosource
++++ b/audiosource
+@@ -2,15 +2,7 @@
+ 
+ set -eu
+ 
+-AUDIOSOURCE_PROFILE=${AUDIOSOURCE_PROFILE:-debug}
+-
+-if [ "$AUDIOSOURCE_PROFILE" = 'release' ]; then
+-	AUDIOSOURCE_DEFAULT_APK=app/build/outputs/apk/release/app-release.apk
+-else
+-	AUDIOSOURCE_DEFAULT_APK=app/build/outputs/apk/debug/app-debug.apk
+-fi
+-
+-AUDIOSOURCE_APK=${AUDIOSOURCE_APK:-"$AUDIOSOURCE_DEFAULT_APK"}
++AUDIOSOURCE_APK=${AUDIOSOURCE_APK:-"@apkPath@"}
+ AUDIOSOURCE_PKG='fr.dzx.audiosource'
+ ANDROID_SERIAL=${ANDROID_SERIAL:-}
+ 
+@@ -57,14 +49,6 @@ if __name__ == '__main__':
+ EOF
+ )"
+ 
+-build() {
+-	if [ "$AUDIOSOURCE_PROFILE" = 'release' ]; then
+-		./gradlew assembleRelease
+-	else
+-		./gradlew assembleDebug
+-	fi
+-}
+-
+ install() {
+ 	if ! command -v adb &> /dev/null; then
+ 		echo "Error: adb not found"
+@@ -88,16 +72,6 @@ install() {
+ 	}
+ }
+ 
+-_release() {
+-	AUDIOSOURCE_PROFILE=release
+-	AUDIOSOURCE_APK=app/build/outputs/apk/release/app-release.apk
+-
+-	build
+-
+-	cp -a "$AUDIOSOURCE_APK" audiosource.apk
+-	sha256sum audiosource.apk > audiosource.apk.sha256
+-}
+-
+ _unload() {
+ 	for id in `pactl list modules short | sed -n "/module-pipe-source\tsource_name=$AUDIOSOURCE_NAME/p" | cut -f1`; do
+ 		pactl unload-module "$id"
+@@ -189,7 +163,7 @@ volume() {
+ 
+ main_help() {
+ 	cat <<-EOF
+-		Usage: ./audiosource [-s SERIAL] COMMAND [ARGS...]
++		Usage: audiosource [-s SERIAL] COMMAND [ARGS...]
+ 
+ 		Options:
+ 
+@@ -197,7 +171,6 @@ main_help() {
+ 
+ 		Commands:
+ 
+-		   build         Build Audio Source APK
+ 		   install       Install Audio Source to Android device
+ 		   run [-r]      Run Audio Source and start forwarding
+ 		                 (-r will automatically restart)
+@@ -205,8 +178,7 @@ main_help() {
+ 
+ 		Environment:
+ 
+-		   AUDIOSOURCE_APK      APK path (default: app/build/outputs/apk/\$profile/app-\$profile.apk)
+-		   AUDIOSOURCE_PROFILE  Build profile (debug or release, default: build)
++		   AUDIOSOURCE_APK      APK path (default: @apkPath@)
+ 		   AUDIOSOURCE_NAME     Name of the PulseAudio source (default: android-<serial-hash>)
+ 		   ANDROID_SERIAL       Device serial number to connect to (default: unset)
+ 	EOF
+@@ -244,7 +216,7 @@ main() {
+ 	shift
+ 
+ 	case "$cmd" in
+-		build|install|run|volume|_release)
++		install|run|volume)
+ 			"$cmd" "$@"
+ 			;;
+ 		*)

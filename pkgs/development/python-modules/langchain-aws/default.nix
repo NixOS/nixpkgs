@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.4.0";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${finalAttrs.version}";
-    hash = "sha256-1zeZsLff0dcn9rJZu6zR6l/oXvXPXNTqKo0Ma+cXafo=";
+    hash = "sha256-QXWODYzyQTVAAIHL4h2cgEqSBl4lBByoT1+DWMatYWE=";
   };
 
   postPatch = ''

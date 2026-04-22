@@ -12,14 +12,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.2.2";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
     tag = version;
-    hash = "sha256-hJt2BU8Z0XF94skgK5x1TJUZ9bwEt+VJvaeLLyykpsE=";
+    hash = "sha256-hreEjMrD6mRapgrSDPRWcmqfLxfsOpK7dC8lHJkAY7Y=";
   };
 
   build-system = with python.pkgs; [
@@ -107,7 +107,10 @@ python.pkgs.buildPythonApplication rec {
       scim2-client
       scim2-models
     ];
-    ldap = [ python-ldap ];
+    ldap = [
+      ldappool
+      python-ldap
+    ];
     sentry = [ sentry-sdk ];
     postgresql = [
       flask-alembic

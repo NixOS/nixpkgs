@@ -30,6 +30,7 @@
   gnugrep,
   nixosTests,
   dedicatedServer ? false,
+  ...
 }:
 
 let
@@ -71,8 +72,8 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/trunk/?ref_type=heads
       ${unstableVersionMajor} =
         let
-          rev = "3675f21cd5be4932a7a168b321576e0b09e64aaf";
-          hash = "sha256-d2vPFAyx6LhEIxtEUdhrlqqYeCY0NnETlq7TVvX5vVo=";
+          rev = "ec0dbb09ce081be2879acf67bebcd2a2987fd0a4";
+          hash = "sha256-8fH0Q0N2bKCO0t+lOs8EamThpiial2CfEcVP3cZbHX0=";
         in
         dedicatedServer: {
           version = "${unstableVersionMajor}-${lib.substring 0 8 rev}";
@@ -93,13 +94,19 @@ let
             SDL2_mixer
           ];
           extraNativeBuildInputs = [ bison ];
+          # `label()` was removed in protobuf 34
+          # <https://github.com/protocolbuffers/protobuf/commit/b76faa921fdd244f374c7be0bddd4050fc42c292>
+          postPatch = ''
+            substituteInPlace src/network/nProtoBuf.cpp \
+              --replace-fail 'field->label() == FieldDescriptor::LABEL_REPEATED' 'field->is_repeated()'
+          '';
         };
 
       # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
       "${latestVersionMajor}-sty+ct+ap" =
         let
-          rev = "22fdbee08ca301c09ae4dee7210ccef02536670d";
-          hash = "sha256-F+nnQxI2TTTa+gJYWjQPFjd8tQLCh/dEu/oTV0ie8BI=";
+          rev = "b74df624eae13e919b4b04f9b18043bce9d04431";
+          hash = "sha256-tjEcgyYxaGgHiIH8y9xYM7HEpgZa7DEWIVqK8r0dmaY=";
         in
         dedicatedServer: {
           version = "${latestVersionMajor}-sty+ct+ap-${lib.substring 0 8 rev}";
@@ -144,6 +151,8 @@ let
     stdenv.mkDerivation {
       pname = mainProgram;
       inherit (resolvedParams) version src;
+
+      postPatch = resolvedParams.postPatch or "";
 
       # Build works fine; install has a race.
       enableParallelBuilding = true;

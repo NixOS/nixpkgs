@@ -6,10 +6,10 @@
 
 let
   pname = "fflogs";
-  version = "9.0.24";
+  version = "9.0.33";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-9L9eNpK2MI3P+mhUDCAzfi3YDdWpHGjiUS5LjksUjqo=";
+    hash = "sha256-gUIETMc0JQXONBt0+Pw52y37Pw4Wh5CHo1uY6IBhvkc=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -18,11 +18,13 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
-    cp -r ${extracted}/usr/share/icons $out/share/
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    cp -r ${extracted}/usr/share/icons/hicolor/512x512/apps/'FF Logs Uploader.png' $out/share/icons/hicolor/512x512/apps/fflogs.png
     chmod -R +w $out/share/
     test ! -e $out/share/icons/hicolor/0x0 # check for regression of https://github.com/electron-userland/electron-builder/issues/5294
     cp ${extracted}/'FF Logs Uploader.desktop' $out/share/applications/fflogs.desktop
     sed -i 's@^Exec=AppRun --no-sandbox@Exec=fflogs@g' $out/share/applications/fflogs.desktop
+    sed -i 's@^Icon=FF Logs Uploader@Icon=fflogs@g' $out/share/applications/fflogs.desktop
   '';
 
   meta = {

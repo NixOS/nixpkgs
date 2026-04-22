@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gams.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.Scriptkiddi ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

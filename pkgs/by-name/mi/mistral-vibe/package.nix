@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python3Packages,
+  python3,
   fetchFromGitHub,
 
   # tests
@@ -10,16 +10,32 @@
   writableTmpDirAsHomeHook,
 }:
 
+let
+  python = python3.override {
+    packageOverrides = _final: prev: {
+      # Many tests fail with the current version of opentelemetry we have in nixpkgs
+      # vibe.acp.exceptions.InternalError: module '...' has no attribute 'GEN_AI_PROVIDER_NAME'
+      opentelemetry-api = prev.opentelemetry-api.overridePythonAttrs (old: rec {
+        version = "1.40.0";
+        src = old.src.override {
+          tag = "v${version}";
+          hash = "sha256-1KVy9s+zjlB4w7E45PMCWRxPus24bgBmmM3k2R9d+Jg=";
+        };
+      });
+    };
+  };
+  python3Packages = python.pkgs;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.5.0";
+  version = "2.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5su0Qfg3M+Yq4pkptDOJhvM8VFGCaOLeeDijeFeywP4=";
+    hash = "sha256-XRBrBd7X8HewrUJ7K8wQMcVJz3ITPKzyKpyCi7detsE=";
   };
 
   build-system = with python3Packages; [
@@ -33,6 +49,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "cryptography"
     "gitpython"
     "mistralai"
+    "opentelemetry-exporter-otlp-proto-http"
+    "opentelemetry-sdk"
+    "opentelemetry-semantic-conventions"
     "pydantic-settings"
     "zstandard"
   ];
@@ -46,9 +65,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     google-auth
     httpx
     keyring
-    mcp
     markdownify
+    mcp
     mistralai
+    opentelemetry-api
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-sdk
+    opentelemetry-semantic-conventions
     packaging
     pexpect
     pydantic
@@ -89,21 +112,41 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_audio_stream_yields_chunks"
     "test_auto_stops_after_max_duration"
     "test_buffer_mode_audio_stream_yields_nothing"
+    "test_callback_feeds_audio_data"
+    "test_callback_pads_silence_at_end"
+    "test_can_play_multiple_times"
     "test_can_record_multiple_times"
     "test_cancel_discards_audio"
+    "test_creates_stream_with_correct_params"
+    "test_finished_callback_resets_state"
     "test_manual_stop_prevents_on_expire"
     "test_on_expire_receives_audio"
+    "test_on_finished_called_after_natural_completion"
     "test_peak_clamps_to_one"
     "test_peak_updates_from_callback"
+    "test_play_sets_playing_state"
+    "test_play_when_already_playing_raises"
     "test_silent_audio_has_zero_peak"
     "test_start_sets_recording_state"
     "test_start_when_already_recording_raises"
+    "test_stop_closes_stream"
     "test_stop_from_event_loop_does_not_block"
     "test_stop_returns_empty_data_in_stream_mode"
     "test_stop_returns_positive_duration"
     "test_stop_returns_valid_wav"
+    "test_stop_triggers_on_finished_via_callback"
     "test_stop_without_drain_returns_promptly"
     "test_stream_audio_does_not_leak_into_buffer_recording"
+    "test_unsupported_format_raises"
+
+    # AssertionError: assert True is False
+    #  +  where True = VibeApp(title='VibeApp', ...)._rewind_mode
+    "test_rewind_confirm_edits_message_and_prefills_input"
+    "test_rewind_option_selection_with_number_keys"
+
+    # AssertionError: assert 3 == 1
+    # +  where 3 = len([UserMessage(classes='user-message'), UserMessage(classes='...
+    "test_rewind_removes_messages_after_selected"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError
@@ -125,6 +168,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # ACP tests require network access
     "tests/acp/test_acp.py"
+    "tests/acp/test_acp_entrypoint_smoke.py"
   ];
 
   meta = {

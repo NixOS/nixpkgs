@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   rustPlatform,
+  blueprint-compiler,
   cargo,
   desktop-file-utils,
   appstream-glib,
@@ -23,20 +24,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amberol";
-  version = "2025.1";
+  version = "2026.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "amberol";
     tag = finalAttrs.version;
-    hash = "sha256-vF6O7+cQFoYpO4MHHHuacwjP7AUqFQCVUivCSZO7v3o=";
+    hash = "sha256-d4lhfWqg6EZeXGL1kHGS7oWrqI3c9bpDCKUdGp31OpI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "amberol-${finalAttrs.version}";
-    hash = "sha256-j/xkdLcmu02e+b8skx5U3uG2R2rIxwSJsYzyJ5tn5uU=";
+    hash = "sha256-OFZd9nKRqXJMHSIIP8tlSNtFAQzk/f/6SBeEvbdPVK0=";
   };
 
   postPatch = ''
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     appstream-glib
+    blueprint-compiler
     cargo
     desktop-file-utils
     m4

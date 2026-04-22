@@ -5,7 +5,7 @@ set -euo pipefail
 
 gh_curl() { curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -sf "$@"; }
 
-version="${1:-$(gh_curl "https://api.github.com/repos/ROCm/MIOpen/releases?per_page=4" \
+version="${1:-$(gh_curl "https://api.github.com/repos/ROCm/rocm-libraries/releases?per_page=4" \
   | jq -re 'map(.tag_name // .name)
     | map(select(test("^rocm-[0-9]+\\.[0-9]+(\\.[0-9]+)?$")))
     | first | ltrimstr("rocm-")')}"
@@ -19,7 +19,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 bucket="https://therock-dvc.s3.amazonaws.com/rocm-libraries/files/md5"
 
 # Fetch directory listing; extract name + download_url for .dvc files
-dvc_entries=$(gh_curl "https://api.github.com/repos/ROCm/MIOpen/contents/src/kernels?ref=rocm-${version}" \
+dvc_entries=$(gh_curl "https://api.github.com/repos/ROCm/rocm-libraries/contents/projects/miopen/src/kernels?ref=rocm-${version}" \
   | jq -r '.[] | select(.name | endswith(".kdb.bz2.dvc")) | "\(.name)\t\(.download_url)"')
 
 [[ -n "$dvc_entries" ]] || { echo "No .kdb.bz2.dvc files found, upstream likely changed packaging again" >&2; exit 1; }

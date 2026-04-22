@@ -4,24 +4,28 @@
   fetchFromGitHub,
   pkg-config,
   libsecret,
+  libfido2,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "protonmail-bridge";
-  version = "3.21.2";
+  version = "3.24.1";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IQgP+eWUCyViEBi0WFIOW2rXZLtoyVlrQrtAaqaLOv0=";
+    hash = "sha256-olDmpTs4U9EFInYjuD4WjGmHWQIdNoq6dg9jr/2wjA0=";
   };
 
-  vendorHash = "sha256-aW7N6uacoP99kpvw9E5WrHaQ0fZ4P5WGsNvR/FAZ+cA=";
+  vendorHash = "sha256-jGFefDKPrYZ7QB3R/fRiEC6FPp6U77mJ2E/RXeylsvI=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libsecret ];
+  buildInputs = [
+    libsecret
+    libfido2
+  ];
 
   preBuild = ''
     patchShebangs ./utils/

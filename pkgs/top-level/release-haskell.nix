@@ -574,6 +574,56 @@ let
         compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
+
+      # MicroHs core packages
+      ghc-compat = [
+        compilerNames.microhs
+      ];
+      MicroCabal = [
+        compilerNames.microhs
+      ];
+
+      # MicroHs-specific replacement packages
+      array = [
+        compilerNames.microhs
+      ];
+
+      # GHC boot packages known to be compatible with MicroHs
+      containers = [
+        compilerNames.microhs
+      ];
+      exceptions = [
+        compilerNames.microhs
+      ];
+      filepath = [
+        compilerNames.microhs
+      ];
+      mtl = [
+        compilerNames.microhs
+      ];
+      os-string = [
+        compilerNames.microhs
+      ];
+      parsec = [
+        compilerNames.microhs
+      ];
+      terminfo = [
+        compilerNames.microhs
+      ];
+      time = [
+        compilerNames.microhs
+      ];
+      transformers = [
+        compilerNames.microhs
+      ];
+
+      # MicroHs upstream tested
+      hscolour = [
+        compilerNames.microhs
+      ];
+      random = [
+        compilerNames.microhs
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {

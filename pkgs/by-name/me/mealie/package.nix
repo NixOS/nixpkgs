@@ -1,28 +1,29 @@
 {
   lib,
+  pkgs,
   callPackage,
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  python3Packages,
+  python3,
   nltk-data,
   writeShellScript,
   nix-update-script,
 }:
 
 let
-  version = "3.9.2";
+  version = "3.12.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-jR9NGguxobUenjnvh6vhZztntxNM2rkwkWcq/DeB4JY=";
+    hash = "sha256-HjXEoLrjmf4ZfBm6/7f5SJzH7nHSKiMOOMRVrYW0vKY=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages;
-  python = pythonpkgs.python;
+  python = python3;
+  pythonpkgs = python.pkgs;
 in
 pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
@@ -50,6 +51,7 @@ pythonpkgs.buildPythonApplication rec {
       beautifulsoup4
       extruct
       fastapi
+      freezegun
       html2text
       httpx
       ingredient-parser-nlp
@@ -88,7 +90,7 @@ pythonpkgs.buildPythonApplication rec {
     rm -rf dev # Do not need dev scripts & code
 
     substituteInPlace pyproject.toml \
-     --replace-fail '"setuptools==80.9.0"' '"setuptools"'
+     --replace-fail '"setuptools==82.0.0"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
@@ -147,11 +149,12 @@ pythonpkgs.buildPythonApplication rec {
       the UI editor.
     '';
     homepage = "https://mealie.io";
-    changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
+    changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       litchipi
       anoa
+      esch
     ];
     mainProgram = "mealie";
   };

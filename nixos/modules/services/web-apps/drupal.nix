@@ -10,6 +10,7 @@ let
     any
     attrValues
     flatten
+    getExe
     literalExpression
     mapAttrs
     mapAttrs'
@@ -22,7 +23,12 @@ let
     mkPackageOption
     nameValuePair
     optionalAttrs
+    optionalString
     types
+    ;
+  inherit (lib.strings)
+    removePrefix
+    removeSuffix
     ;
   inherit (pkgs)
     mariadb
@@ -41,22 +47,67 @@ let
       name = "drupal-${hostName}";
       src = cfg.package;
 
+      buildInputs = [ pkgs.rsync ];
+
       installPhase = ''
         runHook preInstall
 
         mkdir -p $out
-        cp -r * $out/
+        EXCLUDES="--exclude=${removePrefix "/" cfg.webRoot}/sites --exclude=sites"
+
+        if [ ! -z "${cfg.configRoot}" ]; then
+          EXCLUDES="$EXCLUDES --exclude=${removePrefix "/" cfg.configRoot}"
+        fi
+
+        rsync -aq * $out/ $EXCLUDES
 
         runHook postInstall
       '';
 
       postInstall = ''
-        ln -s ${cfg.filesDir} $out/share/php/${cfg.package.pname}/sites/default/files
-        ln -s ${cfg.stateDir}/sites/default/settings.php $out/share/php/${cfg.package.pname}/sites/default/settings.php
-        ln -s ${cfg.modulesDir} $out/share/php/${cfg.package.pname}/modules
-        ln -s ${cfg.themesDir} $out/share/php/${cfg.package.pname}/themes
+        ln -s ${cfg.stateDir}/sites $out/share/php/${cfg.package.pname}${cfg.webRoot}
+        ln -s ${cfg.modulesDir} $out/share/php/${cfg.package.pname}${cfg.webRoot}/modules/nixos-modules
+        ln -s ${cfg.themesDir} $out/share/php/${cfg.package.pname}${cfg.webRoot}/themes/nixos-themes
       '';
     });
+
+  sites =
+    hostName: cfg:
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "drupal-sites-${hostName}";
+      name = "drupal-sites-${hostName}";
+      src = cfg.package;
+      buildInputs = with pkgs; [ rsync ];
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/sites
+        rsync -a ./share/php/${cfg.package.pname}${cfg.webRoot}/sites/* $out/sites/
+
+        runHook postInstall
+      '';
+    });
+
+  configSync =
+    hostName: cfg:
+    optionalString (cfg.configRoot != "") (
+      stdenv.mkDerivation (finalAttrs: {
+        pname = "drupal-config-${hostName}";
+        name = "drupal-config-${hostName}";
+        src = cfg.package;
+        buildInputs = with pkgs; [ rsync ];
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p $out/config
+          rsync -a ./share/php/${cfg.package.pname}${cfg.configRoot}/* $out/config/
+
+          runHook postInstall
+        '';
+      })
+    );
 
   drupalSettings =
     hostName: cfg:
@@ -87,6 +138,86 @@ let
       '';
     };
 
+  # Required .htaccess for private files directory
+  # See: https://www.drupal.org/docs/getting-started/installing-drupal/securing-drupal-file-directories
+  privateFilesHtAccess = pkgs.writeTextFile {
+    name = "private-files-htaccess";
+    text = ''
+      # Turn off all options we don't need.
+      Options -Indexes -ExecCGI -Includes -MultiViews
+
+      # Set the catch-all handler to prevent scripts from being executed.
+      SetHandler Drupal_Security_Do_Not_Remove_See_SA_2006_006
+      <Files *>
+        # Override the handler again if we're run later in the evaluation list.
+        SetHandler Drupal_Security_Do_Not_Remove_See_SA_2013_003
+      </Files>
+
+      # If we know how to do it safely, disable the PHP engine entirely.
+      <IfModule mod_php.c>
+        php_flag engine off
+      </IfModule>
+    '';
+  };
+
+  stateDirManage =
+    hostName: cfg:
+    pkgs.writeShellApplication {
+      name = "drupal-state-init-${hostName}";
+      excludeShellChecks = [
+        "SC2194"
+        "SC2157"
+      ];
+      runtimeInputs = with pkgs; [ rsync ];
+      text = ''
+        echo "Updating the sites directory for ${hostName}..."
+        rsync -auq "${sites hostName cfg}/sites/" "${cfg.stateDir}/sites/" \
+          --exclude "*/files" \
+          --delete-before
+
+        if [ ! -z "${cfg.configRoot}" ]; then
+          echo "Updating config sync directory for ${hostName}..."
+          rsync -auq "${configSync hostName cfg}/config/" "${removeSuffix "/sync" cfg.configSyncDir}" \
+            --delete-before
+        fi
+
+        if [ ! -d "${cfg.filesDir}" ]; then
+          echo "Preparing files directory..."
+          mkdir -p "${cfg.filesDir}"
+          chown -R ${user}:${webserver.group} ${cfg.filesDir}
+        fi
+
+        case ${cfg.filesDir} in
+          ${cfg.stateDir}/sites*) echo "Files directory is in sites directory. Skipping optional link!";;
+          *) ln -sf "${cfg.filesDir}" "${cfg.stateDir}/sites/default/files";;
+        esac
+
+        if [ ! -f "${cfg.privateFilesDir}/.htaccess" ]; then
+          echo "Linking .htaccess file for private files directory..."
+          ln -s "${privateFilesHtAccess}" "${cfg.privateFilesDir}/.htaccess"
+        fi
+
+        echo "Preparing settings.php for ${hostName}..."
+        settings_file="${cfg.stateDir}/sites/default/settings.php"
+
+        if [ ! -f "$settings_file" ]; then
+          default_settings_file="${cfg.stateDir}/sites/default/default.settings.php";
+          cp "$default_settings_file" "$settings_file"
+        fi
+
+        if ! grep -qF "require dirname(__FILE__) . '/settings.nixos-${hostName}.php';" ${cfg.stateDir}/sites/default/settings.php; then
+          echo "Appending NixOS generated settings..."
+          cat < ${appendSettings hostName} >> "$settings_file"
+        fi
+
+        # Link the NixOS-managed settings file to the state directory.
+        ln -sf ${drupalSettings hostName cfg} ${cfg.stateDir}/sites/default/settings.nixos-${hostName}.php
+
+        # Set or reset file permissions so that the web user and webserver owns them.
+        chown -R ${user}:${webserver.group} ${cfg.stateDir}
+      '';
+    };
+
   siteOpts =
     {
       options,
@@ -106,6 +237,9 @@ let
           defaultText = "/var/lib/drupal/<name>/sites/default/files";
           description = ''
             The location of the Drupal files directory.
+
+            Many of the files in this directory are variable, so they must be located
+            in a location writeable by users of the webgroup.
           '';
         };
 
@@ -120,7 +254,46 @@ let
           type = types.path;
           default = "/var/lib/drupal/${name}/config/sync";
           defaultText = "/var/lib/drupal/<name>/config/sync";
-          description = "The location of the Drupal config sync directory.";
+          description = ''
+            The location of the user-managed Drupal config sync directory.
+            Drupal will both read from and write to this directory when executing
+            configuration management operations.
+
+            This option differs from the `configRoot` option,
+            which this service uses to discover
+            the location of the config sync directory in the package's source code.
+          '';
+        };
+
+        webRoot = mkOption {
+          type = types.str;
+          default = "";
+          description = ''
+            An optional path string with a leading slash
+            indicating the location of the Drupal webroot
+            in your package's source code.
+
+            The path relative to the project root directory.
+          '';
+          example = "/web";
+        };
+
+        configRoot = mkOption {
+          type = types.str;
+          default = "";
+          description = ''
+            An optional path string with a leading slash
+            indicating the location of the config sync directory on
+            the Drupal package. Your package will probably have a config sync
+            directory if it has been significantly customized.
+
+            The path must be relative to the project root directory.
+
+            This option differs from the `configSyncDir` option, which
+            tells this service where to create a user-writeable config directory
+            on NixOS.
+          '';
+          example = "/config";
         };
 
         extraConfig = mkOption {
@@ -140,21 +313,41 @@ let
           type = types.path;
           default = "/var/lib/drupal/${name}";
           defaultText = "/var/lib/drupal/<name>";
-          description = "The location of the Drupal site state directory.";
+          description = ''
+            The location of the user-managed Drupal site state directory.
+            This directory will contain the settings and configuration files for
+            your Drupal instance. It may also contain your files directory if the
+            `filesDir` option remains unchanged.
+
+            Many of the files in this directory are variable, so they must be located
+            in a location writeable by users of the webgroup.
+          '';
         };
 
         modulesDir = mkOption {
           type = types.path;
           default = "/var/lib/drupal/${name}/modules";
           defaultText = "/var/lib/drupal/<name>/modules";
-          description = "The location for users to install Drupal modules.";
+          description = ''
+            The location for users to manually install Drupal modules.
+
+            Note: in most instances, it is preferable to install modules using
+            composer, or to package them with your source code repository, if
+            you are using a custom Drupal.
+          '';
         };
 
         themesDir = mkOption {
           type = types.path;
           default = "/var/lib/drupal/${name}/themes";
           defaultText = "/var/lib/drupal/<name>/themes";
-          description = "The location for users to install Drupal themes.";
+          description = ''
+            The location for users to manually install Drupal themes.
+
+            Note: in most instances, it is preferable to install themes using
+            composer, or to package them with your source code repository, if
+            you are using a custom Drupal.
+          '';
         };
 
         phpOptions = mkOption {
@@ -357,6 +550,8 @@ in
           "d '${cfg.themesDir}' 0750 ${user} ${webserver.group} - -"
           "Z '${cfg.themesDir}' 0750 ${user} ${webserver.group} - -"
           "d '${cfg.privateFilesDir}' 0750 ${user} ${webserver.group} - -"
+          "d '${cfg.filesDir}' 0750 ${user} ${webserver.group} - -"
+          "Z '${cfg.filesDir}' 0750 ${user} ${webserver.group} - -"
           "d '${cfg.configSyncDir}' 0750 ${user} ${webserver.group} - -"
         ]) eachSite
       );
@@ -382,42 +577,15 @@ in
               User = "root";
               RemainAfterExit = true;
 
-              ExecStart = writeShellScript "drupal-state-init-${hostName}" ''
-                set -e
-
-                if [ ! -d "${cfg.stateDir}/sites" ]; then
-                  echo "Preparing sites directory..."
-                  cp -r "${cfg.package}/share/php/${cfg.package.pname}/sites" "${cfg.stateDir}"
-                fi
-
-                if [ ! -d "${cfg.filesDir}" ]; then
-                  echo "Preparing files directory..."
-                  mkdir -p "${cfg.filesDir}"
-                  chown -R ${user}:${webserver.group} ${cfg.filesDir}
-                fi
-
-                settings_file="${cfg.stateDir}/sites/default/settings.php"
-                default_settings="${cfg.package}/share/php/${cfg.package.pname}/sites/default/default.settings.php"
-
-                if [ ! -f "$settings_file" ]; then
-                  echo "Preparing settings.php for ${hostName}..."
-                  cp "$default_settings" "$settings_file"
-                  cat < ${appendSettings hostName} >> "$settings_file"
-                  chmod 644 "$settings_file"
-                fi
-
-                # Link the NixOS-managed settings file to the state directory.
-                ln -sf ${drupalSettings hostName cfg} ${cfg.stateDir}/sites/default/settings.nixos-${hostName}.php
-
-                # Set or reset file permissions so that the web user and webserver owns them.
-                chown -R ${user}:${webserver.group} ${cfg.stateDir}
-              '';
+              ExecStart = getExe (stateDirManage hostName cfg);
             };
 
             # Rerun this service if certain settings were updated
             reloadTriggers = [
               cfg.extraConfig
               cfg.privateFilesDir
+              cfg.filesDir
+              cfg.stateDir
               cfg.configSyncDir
             ];
           })
@@ -434,9 +602,9 @@ in
         enable = true;
         virtualHosts = mapAttrs (hostName: cfg: {
           serverName = mkDefault hostName;
-          root = "${pkg hostName cfg}/share/php/${cfg.package.pname}";
+          root = "${pkg hostName cfg}/share/php/${cfg.package.pname}${cfg.webRoot}";
           extraConfig = ''
-            index index.php;
+            index index.php index.htm index.html;
           '';
           locations = {
             "~ '\\.php$|^/update\\.php'" = {
@@ -515,11 +683,19 @@ in
             };
             "~ ^/sites/.*/files/styles/" = {
               extraConfig = ''
+                alias ${cfg.filesDir}/;
+                try_files $uri @rewrite;
+              '';
+            };
+            "^~ /sites/.*/files/" = {
+              extraConfig = ''
+                alias ${cfg.filesDir}/;
                 try_files $uri @rewrite;
               '';
             };
             "~ ^(/[a-z\\-]+)?/system/files/" = {
               extraConfig = ''
+                alias ${cfg.privateFilesDir}/;
                 try_files $uri /index.php?$query_string;
               '';
             };
@@ -535,8 +711,9 @@ in
           hostName: cfg:
           (nameValuePair hostName {
             extraConfig = ''
-              root * ${pkg hostName cfg}/share/php/${cfg.package.pname}
+              root * ${pkg hostName cfg}/share/php/${cfg.package.pname}${cfg.webRoot}
               file_server
+              root /sites/*/files ${cfg.filesDir}
 
               encode zstd gzip
               php_fastcgi unix/${config.services.phpfpm.pools."drupal-${hostName}".socket}

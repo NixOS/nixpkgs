@@ -13,16 +13,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "holidays";
-  version = "0.85";
+  version = "0.94";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
-    tag = "v${version}";
-    hash = "sha256-ExleK66foB2Q/KK7zcPJ16q4ucz3gOkntB2SQETfHqk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PJV1hIrj8Lblmzzqob3pmNpfkvl/9kwvc4od5rxZbk0=";
   };
 
   build-system = [
@@ -36,6 +36,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     patchShebangs scripts/l10n/*.py
+
+    substituteInPlace holidays/version.py \
+      --replace-fail 'version("holidays")' '"${finalAttrs.version}"'
   '';
 
   preBuild = ''
@@ -59,11 +62,11 @@ buildPythonPackage rec {
   meta = {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/vacanza/python-holidays";
-    changelog = "https://github.com/vacanza/holidays/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/vacanza/holidays/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       jluttine
     ];
   };
-}
+})

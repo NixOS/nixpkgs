@@ -1,4 +1,5 @@
 {
+  stdenv,
   rustPlatform,
   pnpm_10,
   fetchPnpmDeps,
@@ -12,26 +13,23 @@
   gtk3,
   librsvg,
   openssl,
+  glib-networking,
   autoPatchelfHook,
   lib,
   nix-update-script,
   moreutils,
   jq,
   gst_all_1,
-
-  # NOTE: this is enabled by default for better compatibility, but it may slow
-  # down performance.
-  withNvidiaFix ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.100";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GsIOMfNqjcdtVRZ0XwCkxpQoIonivLJVT4GmZyB86M0=";
+    hash = "sha256-48POUgO6torvLJLXpVzDQLF5sZ2Ws+vhiI1x84+exAw=";
     fetchSubmodules = true;
   };
 
@@ -48,11 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-/bzjOdpvuPLBMvX/q1WaO3lFg5/jLz5Ypr5OojssXUI=";
+    hash = "sha256-4CO0ouas6TAZDaL2J8zr9wR28QB/DVN4y1Cqe8m1FEg=";
   };
 
   cargoRoot = "../..";
-  cargoHash = "sha256-qYBHYjwfGkKmGXN8caamZ6/XGtnxe+lmy6dIpdMwS/I=";
+  cargoHash = "sha256-7wmqDGhtBHU9iOvLrsqGifCEuVdymdljlETkW7dThHA=";
 
   buildAndTestSubdir = "src-tauri";
 
@@ -64,6 +62,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/services/constants.ts \
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
+
+    mkdir -p src-tauri/plugins/tauri-plugin-turso/dist-js
+    cp -r ${finalAttrs.passthru.tursoPlugin} src-tauri/plugins/tauri-plugin-turso/dist-js
+    jq '.scripts.build = "true"' \
+      src-tauri/plugins/tauri-plugin-turso/package.json | \
+      sponge src-tauri/plugins/tauri-plugin-turso/package.json
   '';
 
   nativeBuildInputs = [
@@ -83,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     librsvg
     openssl
+    glib-networking
     # TTS
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -93,18 +98,49 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = ''
     # set up pdfjs and simplecc
     pnpm setup-vendors
-  '';
 
-  preFixup = lib.optionalString withNvidiaFix ''
-    # fix Nvidia issues with Tauri
-    # https://github.com/tauri-apps/tauri/issues/9394
-    # https://github.com/tauri-apps/tauri/issues/9304
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
-    )
+    # `tauri-plugin-turso` expects frontend files to exist before the build, else it fails with:
+    #
+    # > > tauri-plugin-turso-api@0.1.0 build /build/source/apps/readest-app/src-tauri/plugins/tauri-plugin-turso
+    # > > true
+    # >
+    # >   Error Unable to find your web assets, did you forget to build your web app?
+    #     Your frontendDist is set to "../out" (which is `/build/source/apps/readest-app/out`).
+    pnpm --filter @readest/readest-app build
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tursoPluginDeps = fetchPnpmDeps {
+    pname = "tauri-plugin-turso";
+    version = finalAttrs.version;
+    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-Jf/UaEaLUg/v9ZRInBCEfkDY4d6nwyAIegCMKZe0iAQ=";
+  };
+
+  passthru.tursoPlugin = stdenv.mkDerivation {
+    pname = "tauri-plugin-turso";
+    version = finalAttrs.version;
+    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
+
+    nativeBuildInputs = [
+      pnpm_10
+      pnpmConfigHook
+      nodejs
+    ];
+
+    pnpmDeps = finalAttrs.passthru.tursoPluginDeps;
+
+    buildPhase = ''
+      pnpm build
+    '';
+
+    installPhase = ''
+      cp -r dist-js $out
+    '';
+  };
 
   meta = {
     description = "Modern, feature-rich ebook reader";
@@ -112,7 +148,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/readest/readest/releases/tag/v${finalAttrs.version}";
     mainProgram = "readest";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ eljamm ];
+    maintainers = with lib.maintainers; [
+      eljamm
+      kasifrasi
+    ];
     platforms = lib.platforms.linux;
   };
 })

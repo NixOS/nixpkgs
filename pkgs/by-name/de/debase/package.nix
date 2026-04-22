@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  fetchpatch, # Delete at next version bump.
   lib,
   libgit2,
   stdenv,
@@ -28,6 +27,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace-fail 'git rev-parse HEAD' 'echo aa083074d67938d50336bd3737c960b038d91134' \
       --replace-fail '$(GITHASHHEADER): .git/HEAD .git/index' '$(GITHASHHEADER):'
+
+    # fix build with gcc15
+    substituteInPlace lib/Makefile \
+      --replace-fail './configure' './configure cf_cv_type_of_bool=bool'
   '';
 
   patches = [

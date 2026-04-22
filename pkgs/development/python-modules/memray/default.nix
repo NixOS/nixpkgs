@@ -16,19 +16,20 @@
   pythonOlder,
   rich,
   setuptools,
+  stdenv,
   textual,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "memray";
-  version = "1.19.2";
+  version = "1.19.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z9/6BKVhaaZwu/MvIXI4LsgVO73zVaiCYGJekzWW1mk=";
+    hash = "sha256-A9XbVpuW/MlMNdFq5bbpg90GFh5c1aEWQOvGAOXyUgc=";
   };
 
   build-system = [
@@ -36,13 +37,17 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     cython
-    pkgs.elfutils # for `-ldebuginfod`
     pkgs.libunwind
     pkgs.lz4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkgs.elfutils # for `-ldebuginfod`
   ];
 
   dependencies = [
@@ -87,7 +92,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/bloomberg/memray/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "memray";
   };
 })

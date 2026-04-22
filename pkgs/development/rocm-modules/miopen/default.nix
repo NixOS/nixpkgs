@@ -23,6 +23,7 @@
   half,
   boost,
   sqlite,
+  symlinkJoin,
   bzip2,
   lbzip2,
   nlohmann_json,
@@ -43,7 +44,7 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.2.0";
+  version = "7.2.2";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -65,14 +66,6 @@ let
     "gfx1201"
   ] gpuTargets;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "MIOpen";
-    rev = "rocm-${version}";
-    hash = "sha256-OwBFzUruHHeJD7n3zLs/NsU5cNEjwkwFgim4m2/1hR0=";
-    fetchSubmodules = true;
-  };
-
   latex = lib.optionalAttrs buildDocs (
     texliveSmall.withPackages (
       ps: with ps; [
@@ -90,6 +83,15 @@ let
     )
   );
 
+  # for hiprtcCompileProgram (dropout kernels require rocrand in -I at runtime)
+  hiprtcCompileRocmPath = symlinkJoin {
+    name = "miopen-hiprtc-compile-rocm-path";
+    paths = [
+      clr
+      rocrand
+    ];
+  };
+
   # Kernel databases moved from Git LFS to DVC (anonymous s3 bucket s3://therock-dvc/rocm-libraries)
   fetchKdb =
     name:
@@ -103,7 +105,9 @@ let
       } > $out
     '';
 
-  kdbs = lib.mapAttrs fetchKdb (import ./kdbs.nix);
+  kdbs = lib.mapAttrs fetchKdb (
+    lib.filterAttrs (name: _: lib.elem name supportedTargets) (import ./kdbs.nix)
+  );
 
   linkKDBsTo =
     targetPath:
@@ -114,8 +118,21 @@ let
     );
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit version src;
+  inherit version;
   pname = "miopen";
+
+  src = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "rocm-libraries";
+    rev = "rocm-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/miopen"
+      "shared"
+    ];
+    fetchSubmodules = true;
+    hash = "sha256-plZpBTbEBVMa5CasjfbUsu45xP/BYstrEpWKK2H7QQ4=";
+  };
+  sourceRoot = "${finalAttrs.src.name}/projects/miopen";
 
   env.CFLAGS = cFlags;
   env.CXXFLAGS = cFlags;
@@ -196,7 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" supportedTargets}"
     "-DGPU_TARGETS=${lib.concatStringsSep ";" supportedTargets}"
     "-DGPU_ARCHS=${lib.concatStringsSep ";" supportedTargets}"
-    "-DMIOPEN_USE_SQLITE_PERFDB=ON"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
     "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
     "-DCMAKE_BUILD_TYPE=Release"
@@ -237,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
 
     substituteInPlace src/comgr.cpp \
-      --replace-fail '"/opt/rocm"' '"${clr}"'
+      --replace-fail '"/opt/rocm"' '"${hiprtcCompileRocmPath}"'
   ''
   + linkKDBsTo "src/kernels"
   + ''
@@ -278,11 +294,21 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.impureTests = {
-    # bash $(nix-build -A rocmPackages.miopen.passthru.impureTests.conv)
+    # bash $(nix-build -A rocmPackages.miopen.passthru.impureTests.conv) etc
+    bnorm = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "bnorm";
+      testScript = "MIOpenDriver bnorm -n 16 -c 16 -H 512 -W 512 -m 1 -F 1 -s 1 -r 1";
+    };
     conv = callPackage ./test-runtime-compilation.nix {
       miopen = finalAttrs.finalPackage;
       name = "conv";
       testScript = "MIOpenDriver conv -n 1 -c 1 -H 4 -W 4 -k 1 -y 3 -x 3 -p 0 -q 0 -V 0";
+    };
+    dropout = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "dropout";
+      testScript = "MIOpenDriver dropout -d 64,32,14,14";
     };
     pool = callPackage ./test-runtime-compilation.nix {
       miopen = finalAttrs.finalPackage;
@@ -305,7 +331,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Machine intelligence library for ROCm";
-    homepage = "https://github.com/ROCm/MIOpen";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/miopen";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

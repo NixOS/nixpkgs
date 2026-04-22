@@ -22,16 +22,16 @@
 }:
 
 # FIXME: Move to rocmPackages_common
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rocm-docs-core";
-  version = "1.31.3";
+  version = "1.33.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-docs-core";
-    rev = "v${version}";
-    hash = "sha256-N9wqu83fPQGgOSDdb4yXmfxfDxkevk6QA31vLl5sYHo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eHX5Vz3MmIHi6n90hgBm4Ik+MGhxmniw2Me6pyZVC+k=";
   };
 
   buildInputs = [ setuptools ];
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-}
+})

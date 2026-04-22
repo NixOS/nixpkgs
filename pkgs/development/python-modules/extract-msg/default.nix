@@ -31,13 +31,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-n/v3ubgzWlWqLXZfy1O7+FvTJoLMtgL7DFPL39SZnfM=";
   };
 
-  build-system = [
-    setuptools
-  ];
-
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "ebcdic"
   ];
+
+  build-system = [ setuptools ];
+
   dependencies = [
     beautifulsoup4
     compressed-rtf

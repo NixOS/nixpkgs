@@ -15,12 +15,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "garth";
-  version = "0.7.9";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-vLNoLl6Z5w7n6u//desPqtgRCqEx66T/EiLXcFDN6Z4=";
+    hash = "sha256-9y7fvv4YwQgeWJjKj8FlSKc6CfyrQ2S4SSIXzjP3SeM=";
   };
 
   pythonRelaxDeps = [ "requests-oauthlib" ];

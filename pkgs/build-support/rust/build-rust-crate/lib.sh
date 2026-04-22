@@ -10,7 +10,7 @@ build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
 
-  noisily rustc \
+  noisily env "${CARGO_BIN_EXE_ENV[@]}" rustc \
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
@@ -36,17 +36,18 @@ build_bin() {
   local crate_name=$1
   local crate_name_=$(echo $crate_name | tr '-' '_')
   local main_file=""
+  local out_dir="${3:-target/bin}"
 
   if [[ ! -z $2 ]]; then
     main_file=$2
   fi
-  echo_build_heading $@
-  noisily rustc \
+  echo_build_heading $crate_name $main_file
+  noisily env "${CARGO_BIN_EXE_ENV[@]}" rustc \
     --crate-name $crate_name_ \
     $main_file \
     --crate-type bin \
     $BIN_RUSTC_OPTS \
-    --out-dir target/bin \
+    --out-dir "$out_dir" \
     -L dependency=target/deps \
     $LINK \
     $EXTRA_LINK_ARGS \
@@ -60,10 +61,10 @@ build_bin() {
     --color ${colors} \
 
   if [ "$crate_name_" != "$crate_name" ]; then
-    if [ -f "target/bin/$crate_name_.wasm" ]; then
-      mv target/bin/$crate_name_.wasm target/bin/$crate_name.wasm
+    if [ -f "$out_dir/$crate_name_.wasm" ]; then
+      mv "$out_dir/$crate_name_.wasm" "$out_dir/$crate_name.wasm"
     else
-      mv target/bin/$crate_name_ target/bin/$crate_name
+      mv "$out_dir/$crate_name_" "$out_dir/$crate_name"
     fi
   fi
 }

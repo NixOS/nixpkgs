@@ -11,6 +11,7 @@
   gnupg,
   gpgme,
   merge3,
+  nix-update-script,
   openssh,
   paramiko,
   pytestCheckHook,
@@ -97,6 +98,13 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "dulwich" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^dulwich-([1-9][0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Implementation of the Git file formats and protocols";

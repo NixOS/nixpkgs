@@ -7,7 +7,7 @@
   doxygen,
   dynarmic,
   enet,
-  fetchzip,
+  fetchFromGitHub,
   fmt,
   ffmpeg_6-headless,
   glslang,
@@ -19,6 +19,7 @@
   libusb1,
   moltenvk,
   nlohmann_json,
+  oaknut,
   openal,
   openssl,
   pipewire,
@@ -30,6 +31,7 @@
   soundtouch,
   stdenv,
   vulkan-headers,
+  vulkan-memory-allocator,
   xbyak,
   libxext,
   libx11,
@@ -47,6 +49,7 @@
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
   darwinMinVersionHook,
+  fetchpatch,
 }:
 let
   inherit (lib)
@@ -58,11 +61,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2124.3";
+  version = "2125.1";
 
-  src = fetchzip {
-    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JpqEJIKdmSJ5D9Q+a6YbHMJNTCK3+vDaSCSI23i60pk=";
+  src = fetchFromGitHub {
+    owner = "azahar-emu";
+    repo = "azahar";
+    tag = finalAttrs.version;
+    postCheckout = ''
+      git -C "$out/externals" submodule update --init \
+        teakra zstd discord-rpc spirv-headers spirv-tools sirit xxHash \
+        faad2/faad2 lodepng/lodepng dds-ktx nihstro "$out/dist/compatibility_list"
+      echo "${finalAttrs.version}" > "$out/GIT-TAG"
+      git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
+    '';
+    hash = "sha256-F5v52axQ4+vH6ZqEEuuMtV5PVahWmnS3PixZHqywhtM=";
   };
 
   strictDeps = true;
@@ -100,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     soundtouch
     SDL2
     vulkan-headers
-    xbyak
+    vulkan-memory-allocator
 
     # https://github.com/azahar-emu/azahar/issues/1283
     # spirv-tools
@@ -109,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Azahar uses zstd_seekable which is not currently packaged in nixpkgs
     # zstd
   ]
+  ++ optionals stdenv.hostPlatform.isx86_64 [ xbyak ]
+  ++ optionals stdenv.hostPlatform.isAarch64 [ oaknut ]
   ++ optionals enableQtTranslations [ qt6.qttools ]
   ++ optionals enableCubeb [ cubeb ]
   ++ optionals useDiscordRichPresence [ rapidjson ]

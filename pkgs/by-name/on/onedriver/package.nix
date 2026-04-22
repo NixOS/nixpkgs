@@ -13,18 +13,18 @@
 }:
 let
   pname = "onedriver";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "jstaf";
     repo = "onedriver";
     rev = "v${version}";
-    hash = "sha256-mA5otgqXQAw2UYUOJaC1zyJuzEu2OS/pxmjJnWsVdxs=";
+    hash = "sha256-DCxF52CtA9KAP+yz5Rgzc/nUAXtZwfYAVU7oHREJlRY=";
   };
 in
 buildGoModule {
   inherit pname version src;
-  vendorHash = "sha256-OOiiKtKb+BiFkoSBUQQfqm4dMfDW3Is+30Kwcdg8LNA=";
+  vendorHash = "sha256-Ifcmf9AtZnrjgTPQnof/ap0TY19zHVftm5N4JgvbAgs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,19 +51,19 @@ buildGoModule {
     install -Dm644 ./pkg/resources/onedriver.png $out/share/icons/onedriver/onedriver.png
     install -Dm644 ./pkg/resources/onedriver-128.png $out/share/icons/onedriver/onedriver-128.png
 
-    install -Dm644 ./pkg/resources/onedriver.desktop $out/share/applications/onedriver.desktop
+    install -Dm644 ./pkg/resources/onedriver-launcher.desktop $out/share/applications/onedriver-launcher.desktop
     install -Dm644 ./pkg/resources/onedriver@.service $out/lib/systemd/user/onedriver@.service
 
     mkdir -p $out/share/man/man1
     installManPage ./pkg/resources/onedriver.1
 
-    substituteInPlace $out/share/applications/onedriver.desktop \
-      --replace "/usr/bin/onedriver-launcher" "$out/bin/onedriver-launcher" \
-      --replace "/usr/share/icons" "$out/share/icons"
+    substituteInPlace $out/share/applications/onedriver-launcher.desktop \
+      --replace-fail "/usr/bin/onedriver-launcher" "$out/bin/onedriver-launcher" \
+      --replace-fail "/usr/share/icons" "$out/share/icons"
 
     substituteInPlace $out/lib/systemd/user/onedriver@.service \
-      --replace "/usr/bin/onedriver" "$out/bin/onedriver" \
-      --replace "/usr/bin/fusermount" "${wrapperDir}/fusermount"
+      --replace-fail "/usr/bin/onedriver" "$out/bin/onedriver" \
+      --replace-fail "/usr/bin/fusermount" "${wrapperDir}/fusermount"
   '';
 
   meta = {
@@ -76,7 +76,10 @@ buildGoModule {
     '';
     inherit (src.meta) homepage;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.massimogengarelli ];
+    maintainers = [
+      lib.maintainers.massimogengarelli
+      lib.maintainers.lnk3
+    ];
     platforms = lib.platforms.linux;
   };
 }

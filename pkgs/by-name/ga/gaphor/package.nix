@@ -13,14 +13,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gaphor";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gaphor";
     repo = "gaphor";
     tag = finalAttrs.version;
-    hash = "sha256-0Z0RFQrN2g0beV2konZBfMroeNtbT+sPRsWlRvQFYBk=";
+    hash = "sha256-bgcri0mgFKz4jtGJSWtlStS3f4FzYH+ZPE1BsK+S1DI=";
   };
 
   pythonRelaxDeps = [

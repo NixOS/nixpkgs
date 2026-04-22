@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-e4k3W+FkdydqPy3DuhH6MbC+IilLZfqOb7FAbIiv/kM=";
   };
 
+  postPatch = ''
+    substituteInPlace ../../src/common/archive.cpp \
+      --replace-fail "#include <zip.h>" "#include <minizip/zip.h>" \
+      --replace-fail "#include <unzip.h>" "#include <minizip/unzip.h>"
+  '';
+
   sourceRoot = "${finalAttrs.src.name}/build/${platformName}";
 
   nativeBuildInputs = [ pkg-config ];

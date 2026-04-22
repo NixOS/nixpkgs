@@ -46,14 +46,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain";
-  version = "1.2.12";
+  version = "1.2.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${finalAttrs.version}";
-    hash = "sha256-Z0noVsSu0OZchynlJSkIe0p076/0nay+1uS2ZXnztns=";
+    hash = "sha256-aRiU8UwzotSybfgjexV9hYXsm5Ub3PFTz0k0hz1p2lk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langchain_v1";
@@ -117,12 +117,16 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Depends on shell's truncation style
     "test_truncation_indicator_present"
+    "test_truncation_by_bytes"
     # Depends on the sleep shell command
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
     # Timing sensitive tests
     "test_tool_retry_constant_backoff"
+    # AttributeError: 'ImportErrorProfileModel' object has no attribute 'profile'
+    # https://github.com/langchain-ai/langchain/issues/36312
+    "test_summarization_middleware_missing_profile"
   ];
 
   disabledTestPaths = [

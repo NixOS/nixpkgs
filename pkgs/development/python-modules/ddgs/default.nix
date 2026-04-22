@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ddgs";
-  version = "9.11.4";
+  version = "9.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+UefNpWKq1Rcm90M+hQavEORYZF4FWC1FzH7TfAH6WA=";
+    hash = "sha256-PCw6P8bYFmdRzDGyOsJ5vOBR8oEQkOSbvy5lGmkzdMQ=";
   };
 
   build-system = [ setuptools ];
@@ -35,8 +35,10 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     api = [
       fastapi
-      mcp
       uvicorn
+    ];
+    mcp = [
+      mcp
     ];
   };
 

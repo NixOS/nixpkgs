@@ -54,14 +54,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     tag = finalAttrs.version;
-    hash = "sha256-ml5364D3qvd6VNhF2JyGoCzxbdO0DBkaBMoD38O5x8o=";
+    hash = "sha256-WAKZe1m6EaNE+y2B/1/k8qZsEftLfAVPVEvIkh2N/4g=";
   };
 
   pythonRelaxDeps = [

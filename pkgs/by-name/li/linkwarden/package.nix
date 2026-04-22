@@ -69,13 +69,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.13.5";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S6MjWXiB3eJLy5V1kQsGD1zzce/trIGUwadDlDxZMiE=";
+    hash = "sha256-mcdLOHGm0UyNDCBA5aheUAfsUONL/Q/KeVtwXTVcsxQ=";
   };
 
   patches = [
@@ -94,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-TCjTG3nbS7uTJA9eVe0imR6+s73yu2FU8Vk3nwRKd4c=";
+    hash = "sha256-4Qo87kZ0eKHDL4K4yd7rfJwQ5rO1ho2JOvup4nIDMoQ=";
   };
 
   nativeBuildInputs = [
@@ -143,7 +143,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postBuild = ''
     substituteInPlace node_modules/next/dist/server/image-optimizer.js \
-      --replace-fail 'this.cacheDir = (0, _path.join)(distDir, "cache", "images");' 'this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, "cache", "images");'
+      --replace-fail "this.cacheDir = (0, _path.join)(distDir, 'cache', 'images');" "this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, 'cache', 'images');"
   '';
 
   installPhase = ''

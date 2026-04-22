@@ -68,13 +68,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noctalia-shell";
-  version = "4.7.1";
+  version = "4.7.6";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h5jMVGjgrfVPufMG3AMj/HGfU/EqU/4WEK7HCKhMN2E=";
+    hash = "sha256-oGMYWsP0qthxQisirZc/r/vpdGTZrInwkh75AC714AE=";
   };
 
   nativeBuildInputs = [

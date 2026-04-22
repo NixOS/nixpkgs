@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ov";
-  version = "0.50.2";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tmGOyafVocbeEfHQcvysBuX/LJO62xRuclQ6Xy+Q1Gs=";
+    hash = "sha256-Wt7XF1/l5WwdlrnFLyJPYoXyaWhE+uF1RAN68iol3qM=";
   };
 
-  vendorHash = "sha256-Y+rNTJoSbTccHVPA/TTQGkkYpYr72WB8gqwzWfqPRH0=";
+  vendorHash = "sha256-rfUE38Wfo29s9GRsg/F/FCIto9yikE4b9QwLxYjvSg8=";
 
   ldflags = [
     "-s"
@@ -73,9 +73,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://noborus.github.io/ov";
     changelog = "https://github.com/noborus/ov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      farcaller
-    ];
+    maintainers = [ ];
     mainProgram = "ov";
   };
 })

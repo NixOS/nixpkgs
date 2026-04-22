@@ -329,13 +329,9 @@ in
           '';
         };
 
-      videoAcceleration =
-        (lib.mkEnableOption ''
-          Whether video acceleration (VA-API) should be enabled.
-        '')
-        // {
-          default = true;
-        };
+      videoAcceleration = lib.mkEnableOption "video acceleration (VA-API)" // {
+        default = true;
+      };
     };
   };
 

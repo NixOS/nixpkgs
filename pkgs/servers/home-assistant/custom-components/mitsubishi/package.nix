@@ -24,10 +24,19 @@ buildHomeAssistantComponent rec {
     pymitsubishi
   ];
 
+  ignoreVersionRequirement = [ "pymitsubishi" ];
+
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
     pytest-homeassistant-custom-component
+  ];
+
+  disabledTests = [
+    # tests try to open sockets
+    "test_form_success"
+    "test_form_already_configured"
+    "test_form_with_options"
   ];
 
   meta = {

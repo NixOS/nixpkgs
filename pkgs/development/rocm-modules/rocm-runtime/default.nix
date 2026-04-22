@@ -8,6 +8,7 @@
   cmake,
   xxd,
   rocm-device-libs,
+  rocprofiler-register,
   elfutils,
   libdrm,
   numactl,
@@ -16,14 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.2.0";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "ROCR-Runtime";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6xELKQ/uqAoorsCR/H7d8iNK7LsVNsW2DRRZo5cU7UM=";
+    sparseCheckout = [
+      "projects/rocr-runtime"
+      "shared"
+    ];
+    hash = "sha256-hcyjOLMtoBX/p6r6R9Bl9635DuvI6rTn1KziHMeyYM0=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocr-runtime";
 
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;
@@ -43,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
     libdrm
     numactl
+    rocprofiler-register
   ];
 
   cmakeFlags = [
@@ -67,19 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/ROCR-Runtime/commit/41bfc66aef437a5b349f71105fa4b907cc7e17d5.patch";
       hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
     })
-    (fetchpatch {
-      # [PATCH] hsakmt: Expose and use CWSR and Control stack sizes (#2200)
-      # Fixes potential mismatches between stack sizes configured in amdgpu kernel module
-      # and userspace by relying on kernel value when available
-      # Falls back to hardcoded size based on ISA if kernel is too old. For gfx1151, also prints:
-      # WARNING: KFD ABI 1.20+ is recommended … This may result in faults, crashes and other application instability
-      # This allows new kernels to work with this runtime detection mechanism
-      # Only gfx1151 warns loudly because only it has had the size updated in kernel…
-      name = "rocr-runtime-kernel-stack-size.patch";
-      url = "https://github.com/ROCm/rocm-systems/commit/7037a71f311c021974fafd13727dfefd8a1cc79d.patch";
-      relative = "projects/rocr-runtime";
-      hash = "sha256-EbDxuEvNu0fyQJZmqq0fbcCdNtaEWUbmyPLvcfqDPjc=";
-    })
     # This causes a circular dependency, aqlprofile relies on hsa-runtime64
     # which is part of rocm-runtime
     # Worked around by having rocprofiler load aqlprofile directly
@@ -102,15 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Platform runtime for ROCm";
-    homepage = "https://github.com/ROCm/ROCR-Runtime";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocr-runtime";
     license = with lib.licenses; [ ncsa ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

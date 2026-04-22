@@ -10,11 +10,9 @@
 let
   inherit (lib)
     concatStrings
-    foldl
     foldl'
     genAttrs
     literalExpression
-    maintainers
     mapAttrs
     mapAttrsToList
     mkDefault
@@ -22,9 +20,7 @@ let
     mkIf
     mkMerge
     mkOption
-    optional
     types
-    mkOptionDefault
     flip
     attrNames
     xor
@@ -40,10 +36,15 @@ let
   #   - extraOpts   (types.attrs): extra configuration options to
   #                                configure the exporter with, which
   #                                are appended to the default options
+  #   - socketOpts  (types.attrs): optional config that is merged with
+  #                                the default definition of the
+  #                                exporter's systemd socket unit. When
+  #                                set, a `prometheus-${name}-exporter.socket`
+  #                                unit is created, enabling socket activation.
   #
-  #  Note that `extraOpts` is optional, but a script for the exporter's
-  #  systemd service must be provided by specifying either
-  #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
+  #  Note that `extraOpts` and `socketOpts` are optional, but a script
+  #  for the exporter's systemd service must be provided by specifying
+  #  either `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
   exporterOpts =
     (genAttrs
@@ -66,6 +67,7 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "fail2ban"
         "fastly"
         "flow"
         "fritz"
@@ -114,7 +116,6 @@ let
         "rasdaemon"
         "redis"
         "restic"
-        "rspamd"
         "rtl_433"
         "sabnzbd"
         "scaphandre"
@@ -315,6 +316,7 @@ let
       name,
       conf,
       serviceOpts,
+      socketOpts,
     }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
@@ -328,6 +330,7 @@ let
           description = "Prometheus ${name} exporter service user";
           isSystemUser = true;
           inherit (conf) group;
+          extraGroups = mkIf (name == "libvirt") [ "libvirtd" ];
         }
       );
       users.groups = mkMerge [
@@ -341,11 +344,42 @@ let
       services.udev.extraRules = mkIf (name == "smartctl") ''
         ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
       '';
+      systemd.services.prometheus-fail2ban-exporter-setup =
+        mkIf (config.services.fail2ban.enable && name == "fail2ban")
+          {
+            description = "Set fail2ban socket ACLs";
+            after = [ "fail2ban.service" ];
+            requires = [ "fail2ban.service" ];
+            before = [ "prometheus-fail2ban-exporter.service" ];
+            wantedBy = [ "prometheus-fail2ban-exporter.service" ];
+            path = [
+              pkgs.acl
+              pkgs.coreutils
+            ];
+            script = ''
+              while [ ! -S ${conf.fail2banSocket} ]; do
+                sleep 0.1
+              done
+
+              setfacl -m u:${conf.user}:x $(dirname ${conf.fail2banSocket})
+              setfacl -m u:${conf.user}:rwx ${conf.fail2banSocket}
+            '';
+            serviceConfig = {
+              Type = "oneshot";
+              User = "root";
+            };
+          };
       networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
+      systemd.sockets."prometheus-${name}-exporter" = mkIf (socketOpts != null) (mkMerge [
+        {
+          wantedBy = [ "sockets.target" ];
+        }
+        socketOpts
+      ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge [
         {
           wantedBy = [ "multi-user.target" ];
@@ -400,6 +434,10 @@ in
         '')
         (lib.mkRemovedOptionModule [ "tor" ] ''
           The Tor exporter has been removed, as it was broken and unmaintained.
+        '')
+        (lib.mkRemovedOptionModule [ "rspamd" ] ''
+          The Rspamd exporter has been removed. You can use the Rspamd /metrics endpoint directly instead:
+          https://docs.rspamd.com/developers/protocol#controller-http-endpoints
         '')
       ];
     };
@@ -577,6 +615,7 @@ in
       mkExporterConf {
         inherit name;
         inherit (conf) serviceOpts;
+        socketOpts = conf.socketOpts or null;
         conf = cfg.${name};
       }
     ) exporterOpts)

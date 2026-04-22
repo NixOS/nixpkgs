@@ -71,6 +71,6 @@ maven.buildMavenPackage {
     mainProgram = "java-language-server";
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hqurve ];
+    maintainers = [ ];
   };
 }

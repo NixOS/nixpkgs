@@ -42,7 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)" \
       --replace-fail "CMAKE_POLICY(VERSION 2.8.7)" "CMAKE_POLICY(VERSION 3.10)" \
-      --replace-fail "CMAKE_POLICY(SET CMP0045 OLD)" ""
+      --replace-fail "CMAKE_POLICY(SET CMP0045 OLD)" "" \
+      --replace-fail "FIND_PACKAGE(Boost REQUIRED COMPONENTS filesystem system)" \
+                     "FIND_PACKAGE(Boost REQUIRED COMPONENTS filesystem)"
   '';
 
   meta = {

@@ -40,6 +40,7 @@
       allowAliases = false;
       allowUnfree = false;
       inHydra = true;
+      recursionMode = "hydra";
       # Exceptional unsafe packages that we still build and distribute,
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [

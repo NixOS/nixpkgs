@@ -171,6 +171,8 @@ checkConfigError() {
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
+checkConfigError "In module .*test-push-down-non-attrs.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config ./test-push-down-non-attrs.nix
+
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 
 # Check that a module argument is passed, also when a default is available
@@ -684,6 +686,8 @@ checkConfigOutput "\[\]" config.unique ./defaults.nix
 checkConfigOutput "\[\]" config.coercedTo ./defaults.nix
 # These types don't have empty values
 checkConfigError 'The option .int. was accessed but has no value defined. Try setting the option.' config.int ./defaults.nix
+## submodule emptyValue must evaluate sub-option defaults
+checkConfigOutput "ok" config.result ./defaults.nix
 
 # types.unique
 #   requires a single definition
@@ -715,6 +719,10 @@ checkConfigError 'In module .*/options-type-error-configuration.nix: expected an
 # Check that that merging of option collisions doesn't depend on type being set
 checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
 
+# types.optionDeclaration
+checkConfigOutput '^10$' config.anOption ./option.nix
+checkConfigError 'A definition for option .aBadOptionDef. is not of type .option declaration.' config.aBadOptionDef ./option.nix
+
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
 checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
@@ -728,6 +736,8 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 # Test that specifying both functor.wrapped and functor.payload isn't allowed
 checkConfigError 'Type foo defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.' config.result ./default-type-merge-both.nix
 
+# Test that not including functor.wrapped is allowed
+checkConfigOutput 'ok' config.result ./default-type-merge-payload.nix
 
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.

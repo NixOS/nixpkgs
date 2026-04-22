@@ -6,16 +6,16 @@
   nix-update-script,
   versionCheckHook,
   writeShellScript,
-  xcbuild,
+  re-plistbuddy,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "betterdisplay";
-  version = "4.0.4";
+  version = "4.2.3";
 
   src = fetchurl {
     url = "https://github.com/waydabber/BetterDisplay/releases/download/v${finalAttrs.version}/BetterDisplay-v${finalAttrs.version}.dmg";
-    hash = "sha256-njk1epuekOiBN8Exkxs9J2OHVP4xu4on42F+TPlW75M=";
+    hash = "sha256-keJkdMDO213DUl2LAVqtx1joAmcUpU336Tj8AldCoKo=";
   };
 
   dontPatch = true;
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''
-    ${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1"
+    ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleShortVersionString" "$1"
   '';
   versionCheckProgramArg = [
     "${placeholder "out"}/Applications/BetterDisplay.app/Contents/Info.plist"

@@ -27,20 +27,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "identity";
-  version = "25.10.1";
+  version = "26.03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ThccOze4BkqAprk1Yt+Ughts0DFbBwLDYd4iE8ZMwxo=";
+    hash = "sha256-CVSUk0xhfsMM47L0BVQj69Jw2MhsElBI3mxETCWBqcU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Do+20wh9F8xE+fA9Sg+8uyRojOF7Ih4taL/pZszU6xc=";
+    hash = "sha256-AuIAfk6BipUHkIfRiLJf0tjadVxsEIKKvpZgKA11oJE=";
   };
+
+  # The crate can't find our provided gstreamer-gl-egl-1.0.pc in the PKG_CONFIG_PATH otherwise.
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/*/gstreamer-gl-egl-sys-*/Cargo.toml \
+      --replace-fail 'gstreamer-gl-egl-1.0' 'gstreamer-gl-1.0'
+  '';
 
   strictDeps = true;
 

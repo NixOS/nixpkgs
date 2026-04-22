@@ -321,20 +321,34 @@
       ]
 
       # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
-      ++ [ ./ghc-9.6-or-later-docs-sphinx-9.patch ]
+      ++
+        lib.optionals
+          (
+            lib.versionOlder version "9.12.4"
+            || (lib.versionAtLeast version "9.14" && lib.versionOlder version "9.15.20260129")
+          )
+          [
+            ./ghc-9.6-or-later-docs-sphinx-9.patch
+          ]
 
       # Fixes rts/Types.h missing from the install when targeting javascript
       # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15740, krank:ignore-line
       # https://gitlab.haskell.org/ghc/ghc/-/issues/27033. krank:ignore-line
-      # TODO(@sternenseemann): patch likely included in 9.12.4
-      ++ lib.optionals (lib.versionAtLeast version "9.12.3" && lib.versionOlder version "9.15") [
-        (fetchpatch {
-          name = "ghc-9.12.3-ghcjs-install-rts-types.h.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/5b1be555be4f0989d78c274991c5046d7ac6d25e.patch";
-          hash = "sha256-pv4NDyQ6FlZgmTYZ4Ghis4qggt7nCDMhqGaFxTxVPac=";
-          includes = [ "rts/rts.cabal" ];
-        })
-      ]
+      ++
+        lib.optionals
+          (
+            version == "9.12.3"
+            # TODO(@sternenseemann): 9.14.2 will likely also have this patch
+            || (lib.versionAtLeast version "9.14" && lib.versionOlder version "9.15.20260127")
+          )
+          [
+            (fetchpatch {
+              name = "ghc-9.12.3-ghcjs-install-rts-types.h.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/5b1be555be4f0989d78c274991c5046d7ac6d25e.patch";
+              hash = "sha256-pv4NDyQ6FlZgmTYZ4Ghis4qggt7nCDMhqGaFxTxVPac=";
+              includes = [ "rts/rts.cabal" ];
+            })
+          ]
 
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
@@ -374,7 +388,7 @@ assert !enableNativeBignum -> gmp != null;
 assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 # It is currently impossible to cross-compile GHC with Hadrian.
-assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
+assert lib.assertMsg (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
   "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
 let

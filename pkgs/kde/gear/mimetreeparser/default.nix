@@ -4,6 +4,7 @@
   qtdeclarative,
   qgpgme,
   kirigami,
+  kirigami-addons,
   qtwebengine,
 }:
 mkKdeDerivation {
@@ -17,6 +18,7 @@ mkKdeDerivation {
 
   extraPropagatedBuildInputs = [
     kirigami
+    kirigami-addons
     qtwebengine
   ];
 }

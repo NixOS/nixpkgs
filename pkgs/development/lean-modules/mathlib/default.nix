@@ -14,13 +14,13 @@
 
 buildLakePackage {
   pname = "lean4-mathlib";
-  version = "4.28.0";
+  version = "4.29.0";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "mathlib4";
-    tag = "v4.28.0";
-    hash = "sha256-7kR0WvEDey5kEdqKKVEO/JgQd1VyB6a+zwPvIV5E5Pg=";
+    tag = "v4.29.0";
+    hash = "sha256-fe+qS7gNxdLnACX3/jqToa9m7r1gbskY6kDJbm1ZefE=";
   };
 
   leanPackageName = "mathlib";
@@ -33,6 +33,8 @@ buildLakePackage {
     LeanSearchClient
     importGraph
   ];
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.tests = {
     inherit (tests.lake) weak-minimax;

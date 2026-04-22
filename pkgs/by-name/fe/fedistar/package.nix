@@ -62,13 +62,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = false; # This version's tests do not pass
 
-  # A fix for a problem with Tauri (tauri-apps/tauri#9304)
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
-    )
-  '';
-
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--subpackage"

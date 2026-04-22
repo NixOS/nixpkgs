@@ -9,13 +9,12 @@
   protobuf,
   installShellFiles,
   makeBinaryWrapper,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
+  librusty_v8 ? callPackage ./librusty_v8.nix { },
   libffi,
   sqlite,
   lld,
   writableTmpDirAsHomeHook,
+  fetchpatch,
 
   # Test deps
   curl,
@@ -30,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.6.10";
+  version = "2.7.12";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-youaF9YERkGUwN0sg6IzV8OAyahSDbFt0psn/p4iOVY=";
+    hash = "sha256-e1G1y9aGWhFDhsvzmLFD6VIfxU8BseWOa8bBcCC255Y=";
   };
 
-  cargoHash = "sha256-goaqxj8Y5Gqo4et4AkyZ3Uv74Q3M3V0VExUA/AMYNMI=";
+  cargoHash = "sha256-YahHLz4ykAcFNrh/GFVJ0fZtCNHKG9RzdCUprQDfOUo=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -179,6 +178,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
     "--skip=sqlite_extension_test"
+
+    # Needs deno in $PATH
+    "--skip=tests::test_rebuild_async_stubs"
+
+    # Causes SIGTRAP
+    "--skip=external::tests::test_external_deref_after_take"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
@@ -237,7 +242,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update/update.ts;
+    updateScript = ./update.sh;
     tests = callPackage ./tests { };
     inherit librusty_v8;
   };
@@ -260,6 +265,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       jk
       ofalvai
+      mynacol
     ];
     platforms = [
       "x86_64-linux"

@@ -170,6 +170,7 @@ in
           kconfig # required for xdg-terminal from xdg-utils
           qtbase # for qtpaths which is required for xdg-mime from xdg-utils
         ]
+        ++ lib.optional config.networking.networkmanager.enable qrca
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6
           qtsensors
@@ -300,7 +301,7 @@ in
     services.orca.enable = mkDefault true;
 
     services.displayManager = {
-      sessionPackages = [ kdePackages.plasma-workspace ];
+      sessionPackages = [ kdePackages.plasma-workspace.sessions ];
       defaultSession = mkDefault "plasma";
     };
     services.displayManager.sddm = {

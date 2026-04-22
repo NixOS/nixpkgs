@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rbspy";
-  version = "0.44.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5oCSrKtNmvleJwkJN2Sz/1i7MpaiNTD9i0whlFLHSgg=";
+    hash = "sha256-o4YSvPOVi+Q6Nf3PfT0ZqKnC+VQadiCkmVtb8q/os54=";
   };
 
-  cargoHash = "sha256-3AK/No9rbPvS2QhUwVDl7OsvUzWaW9DCkNlf3PSp1Ic=";
+  cargoHash = "sha256-s5MeEEGuz+kCJJ7XAKNbJHfJlqsh/oUCcXw1590CHrc=";
 
   doCheck = true;
 

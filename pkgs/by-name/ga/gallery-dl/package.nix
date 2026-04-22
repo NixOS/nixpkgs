@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   nix-update-script,
   yt-dlp,
   python3Packages,
@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gallery-dl";
-  version = "1.31.9";
+  version = "1.31.10";
   pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "mikf";
     repo = "gallery-dl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dq4SSj78CEZ4hq3jCgzcJK/+KPgn7h52HMfFNDQXQPY=";
+    hash = "sha256-npt9jbBBHgjURmayhNgkSTQZYLC1aysDR83dLOm2Z/s=";
   };
 
   build-system = [ python3Packages.setuptools ];

@@ -1,5 +1,4 @@
 {
-  abseil-cpp,
   cmake,
   cmark-gfm,
   coreutils,
@@ -14,7 +13,6 @@
   nodejs,
   npmHooks,
   pkg-config,
-  protobuf,
   qt6,
   stdenv,
   wayland,
@@ -23,23 +21,23 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.20.8";
+  version = "0.20.13";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G+ibcIvOaPE3qot4zLmHUo7cmNFNU1kw2Zhn08D26Ts=";
+    hash = "sha256-zRoOKeQ4ne7o7mILwb+5PKE75FhoqkG/HizWs7bKrDo=";
   };
 
   apiDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/src/typescript/api";
-    hash = "sha256-Tr+m8MLaWR8wq+cYpQwZTIzRt2tgDIyc8vVda2x+k4k=";
+    hash = "sha256-lIXhMBJHujs6d9fXEK8Q+sfjkKyFJEMEtKrQorkfPeU=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/src/typescript/extension-manager";
-    hash = "sha256-8ONawCmKxHwWS0Tx04MCpQmtWfIpJYU8RcqMtQiT/Sw=";
+    hash = "sha256-gpbS6MIHOSuHIfd4zDEB4EcMi9LHk9tPdnxwT0S0nbA=";
   };
 
   cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
@@ -61,12 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     nodejs
     pkg-config
-    protobuf
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    abseil-cpp
     cmark-gfm
     glaze
     kdePackages.layer-shell-qt
@@ -75,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     libqalculate
     minizip
     nodejs
-    protobuf
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland

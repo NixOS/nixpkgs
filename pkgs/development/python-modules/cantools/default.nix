@@ -16,14 +16,14 @@
   textparser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cantools";
-  version = "41.2.1";
+  version = "41.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HxdoK91A9oALjuiW0aGFM/5mRdbeb8j8T3J2n/uuLR4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Y5ZbAorAKrG0yGeqIH7Zn5D1WziuEHq+KH19ZtVDXZ8=";
   };
 
   build-system = [
@@ -47,16 +47,16 @@ buildPythonPackage rec {
     pytest-freezegun
     pytestCheckHook
   ]
-  ++ optional-dependencies.plot;
+  ++ finalAttrs.passthru.optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 
   meta = {
     description = "Tools to work with CAN bus";
     homepage = "https://github.com/cantools/cantools";
-    changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
+    changelog = "https://github.com/cantools/cantools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gray-heron ];
     mainProgram = "cantools";
   };
-}
+})

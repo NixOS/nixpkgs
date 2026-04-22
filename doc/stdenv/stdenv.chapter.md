@@ -431,7 +431,7 @@ Overall, the unifying theme here is that propagation shouldn’t be introducing 
 
 ##### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
 
-A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc`, the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
+A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc` (the compiler for `buildPackages`, which means that it's from the package set `buildPackages.buildPackages = pkgsBuildBuild`), the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
 
 Since these packages are able to be run at build-time, they are always added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
@@ -510,6 +510,30 @@ A number between 0 and 7 indicating how much information to log. If set to 1 or 
 If set to `true`, `stdenv` will pass specific flags to `make` and other build tools to enable parallel building with up to `build-cores` workers.
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
+
+#### `__structuredAttrs` {#var-stdenv-__structuredAttrs}
+
+`__structuredAttrs` defines how derivation attributes are passed to the builder.
+
+If enabled, a shell script and a JSON representation of the derivation attributes are created.
+The environment variables {env}`NIX_ATTRS_SH_FILE` and {env}`NIX_ATTRS_JSON_FILE` point to the exact location of these files.
+
+Attributes intended to be _exported_ as environment variables must be defined in the `env` attribute.
+Attributes that are _local_ to the buildscript should be defined outside of `env`, to benefit from structured shell variables.
+
+::: {.important}
+`__structuredAttrs` is a complete replacement for the way attributes are handled currently, and is the preferred default.
+
+`passAsFile` is disabled when `__structuredAttrs` is enabled, since {env}`NIX_ATTRS_JSON_FILE` can be read from instead.
+
+All new top level packages must enable `__structuredAttrs`.
+
+:::
+
+See the upstream nix documentation for more detail:
+  - [Advanced Derivation Attributes](https://nix.dev/manual/nix/2.34/language/advanced-attributes.html#adv-attr-structuredAttrs)
+  - [Builder Execution](https://nix.dev/manual/nix/2.34/store/building.html#builder-execution)
+  - [Structured Attributes](https://nix.dev/manual/nix/2.34/store/derivation/#structured-attrs)
 
 ### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 

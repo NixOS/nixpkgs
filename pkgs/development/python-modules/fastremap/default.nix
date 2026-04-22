@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "fastremap";
-  version = "1.17.7";
+  version = "1.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seung-lab";
     repo = "fastremap";
     tag = version;
-    hash = "sha256-k3MneLLpClx0hkOqm+botD/LozyoUJW89qf0VJ3P05M=";
+    hash = "sha256-nVnOdxDSVM7Qe/peALgV035OknOUm0B1dzpTIq3HEMs=";
   };
 
   build-system = [
@@ -37,6 +37,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  preCheck = "rm -r fastremap/";
 
   pythonImportsCheck = [
     "fastremap"

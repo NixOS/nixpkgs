@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "3.0.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zlD6jHMpgk4gvMjBizZP2VV0zM6iKaatIq6PbBKWaJ8=";
+    hash = "sha256-Z7lgK7sIeZCL8VXfmwC8G1f7cBqG2nfFM3oyJZfmNQ4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-+4UVY4JjQsVT+S5+j9PEXoFuiZhrrelSEfY8EvXp/Sk=";
+    hash = "sha256-hZEcTo4B3+viRwWExkaguq+c7DejjaouNf0+L96rms4=";
   };
 
   nativeBuildInputs = [
@@ -151,6 +151,9 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
     "test_merge_insert_large"
+
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_index_cast_centroids"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Build hangs after all the tests are run due to a torch subprocess not exiting

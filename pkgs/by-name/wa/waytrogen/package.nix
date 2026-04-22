@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytrogen";
-  version = "0.9.1";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = finalAttrs.version;
-    hash = "sha256-airVCuwwh+FujJqBHXnRcwooUJWO/mrANbmzX9HciIM=";
+    hash = "sha256-+1HiTmJAkhd+zbLAyRRk9tHDbR7qcslkfJ2HyGipZCo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-FHLyVgBrTWOWyfILm7Gv9B6/WudvrwCNKoRJybKJBTM=";
+    hash = "sha256-UKd/h/O9EE7gZ8B+QtFVGJEit0BIQ0OC0CG/GLYzMEo=";
   };
 
   nativeBuildInputs = [

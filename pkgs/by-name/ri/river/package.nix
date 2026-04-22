@@ -16,7 +16,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   xwayland,
   zig_0_15,
   withManpages ? true,
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.1";
+  version = "0.4.2";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EGWLJY9VPdoc4LrXkWi8cNLkahorvDeAIfSOc5yDfbU=";
+    hash = "sha256-Nufonz39XphxPW1lERq2acVgE5mGmW+x1yimyS6O4tc=";
   };
 
   strictDeps = true;
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wayland-scanner
-    wlroots_0_19
+    wlroots_0_20
   ]
   ++ lib.optionals xwaylandSupport [
     libx11
@@ -74,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";
+
+  postInstall = ''
+    install contrib/river.desktop -Dt $out/share/wayland-sessions
+  '';
 
   passthru = {
     providedSessions = [ "river" ];

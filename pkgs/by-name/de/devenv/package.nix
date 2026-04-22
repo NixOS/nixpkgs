@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  applyPatches,
   gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
@@ -27,18 +29,30 @@ let
   devenvNixVersion = "2.32";
   devenvNixRev = "e127c1c94cefe02d8ca4cca79ef66be4c527510e";
 
-  nix_components =
-    (nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
+  devenvNixSrc = applyPatches {
+    name = "devenv-nix-${devenvNixVersion}-source";
+    src = fetchFromGitHub {
       owner = "cachix";
       repo = "nix";
       rev = devenvNixRev;
       hash = "sha256-MRNVInSmvhKIg3y0UdogQJXe+omvKijGszFtYpd5r9k=";
-    })).overrideScope
-      (
-        finalScope: prevScope: {
-          version = devenvNixVersion;
-        }
-      );
+    };
+    patches = [
+      # Lowdown 3.0 compatibility; devenv's nix fork (2.32-based) predates
+      # the upstream fix.
+      (fetchpatch {
+        name = "nix-lowdown-3.0-support.patch";
+        url = "https://github.com/NixOS/nix/commit/472c35c561bd9e8db1465e0677f1efe2cb88c568.patch";
+        hash = "sha256-ZCQgI/euBN8t9rgdCsGRgrcEWG3T5MUc+bQc4tIcHuI=";
+      })
+    ];
+  };
+
+  nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
+    finalScope: prevScope: {
+      version = devenvNixVersion;
+    }
+  );
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -52,6 +66,11 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-p5kI7HlG6RVxCCEb/J0L2gh36jkm/atAV98ny3h4vqo=";
+
+  # Upstream tagged v2.0.6 with Cargo.toml already bumped to 2.0.7
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail 'version = "2.0.7"' 'version = "${version}"'
+  '';
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "semchunk";
-  version = "3.2.5";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "isaacus-dev";
     repo = "semchunk";
     tag = "v${version}";
-    hash = "sha256-LUMpERJ8bZkpRn0Tay0BoDXmRgPaV7z0LulpTILHgjk=";
+    hash = "sha256-8bceOMMnQ4JsbX7zU5zAoyP8esTm83m/a3VwwnUzCAA=";
   };
 
   build-system = [

@@ -26,10 +26,10 @@
 
 # Libraries
 /lib                        @infinisil @hsjobeki
-/lib/generators.nix         @infinisil @hsjobeki @Profpatsch
-/lib/cli.nix                @infinisil @hsjobeki @Profpatsch
-/lib/debug.nix              @infinisil @hsjobeki @Profpatsch
-/lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
+/lib/generators.nix         @infinisil @hsjobeki
+/lib/cli.nix                @infinisil @hsjobeki
+/lib/debug.nix              @infinisil @hsjobeki
+/lib/asserts.nix            @infinisil @hsjobeki
 /lib/path/*                 @infinisil @hsjobeki
 /lib/fileset                @infinisil @hsjobeki
 /maintainers/github-teams.json @infinisil
@@ -75,7 +75,7 @@
 /pkgs/pkgs-lib                                   @Stunkymonkey @h7x4
 
 # Nixpkgs build-support
-/pkgs/build-support/writers @lassulus @Profpatsch
+/pkgs/build-support/writers @lassulus
 
 # Nixpkgs make-disk-image
 /doc/build-helpers/images/makediskimage.section.md  @raitobezarius
@@ -268,7 +268,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais @emilazy @jopejoe1
+/lib/licenses @alyssais @emilazy @jopejoe1
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
@@ -294,9 +294,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/databases/mysql.nix     @6543
 /nixos/modules/services/backup/mysql-backup.nix @6543
 
-# Hardened profile & related modules
-/pkgs/os-specific/linux/kernel/hardened/        @fabianhjr
-
 # Home Automation
 /nixos/modules/services/home-automation/home-assistant.nix @mweinelt
 /nixos/modules/services/home-automation/zigbee2mqtt.nix @mweinelt
@@ -306,8 +303,14 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/es/esphome @mweinelt
 
 # Linux kernel
-/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
+/doc/packages/linux.section.md @NixOS/linux-kernel
+/lib/kernel.nix @NixOS/linux-kernel
+/nixos/doc/manual/configuration/linux-kernel.chapter.md @NixOS/linux-kernel
+/nixos/modules/system/boot/kernel.nix @NixOS/linux-kernel
+/nixos/tests/kernel-generic/ @NixOS/linux-kernel
+/pkgs/build-support/kernel/ @NixOS/linux-kernel
 /pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
+/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
@@ -335,8 +338,8 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/dlang @jtbx @TomaSajt
 
 # Dhall
-/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch
-/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch
+/pkgs/development/dhall-modules      @Gabriella439
+/pkgs/development/interpreters/dhall @Gabriella439
 
 # Agda
 /pkgs/build-support/agda                  @NixOS/agda
@@ -348,9 +351,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Idris
 /pkgs/development/idris-modules @Infinisil
 /pkgs/development/compilers/idris2 @mattpolzin
-
-# Bazel
-/pkgs/by-name/ba/bazel_7 @Profpatsch
 
 # NixOS modules for e-mail and dns services
 /nixos/modules/services/mail/mailman.nix    @peti
@@ -376,6 +376,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # VimPlugins
 /pkgs/applications/editors/vim/plugins         @NixOS/neovim
+## nvim-treesitter
+/pkgs/applications/editors/vim/plugins/nvim-treesitter/overrides.nix @figsoda
+/pkgs/applications/editors/vim/plugins/utils/nvim-treesitter         @figsoda
 
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions
@@ -472,9 +475,8 @@ nixos/tests/incus/                      @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 
-# ExpidusOS, Flutter
+# Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy
-/pkgs/desktops/expidus              @RossComputerGuy
 
 # GNU Tar & Zip
 /pkgs/tools/archivers/gnutar        @RossComputerGuy
@@ -492,7 +494,7 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 
 # Darwin
 /pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
-/pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
+/pkgs/os-specific/darwin                       @NixOS/darwin-core
 /pkgs/stdenv/darwin                            @NixOS/darwin-core
 
 # BEAM
@@ -519,3 +521,7 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
 /pkgs/build-support/build-nim-package.nix @NixOS/nim
 /pkgs/build-support/build-nim-sbom.nix    @NixOS/nim
 /pkgs/top-level/nim-overrides.nix         @NixOS/nim
+
+# Radicle
+/pkgs/build-support/fetchradicle/      @NixOS/radicle
+/pkgs/build-support/fetchradiclepatch/ @NixOS/radicle

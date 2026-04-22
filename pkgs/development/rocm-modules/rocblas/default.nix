@@ -40,14 +40,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocBLAS";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oY6yELFnpnDDksu63Go88TGLAgC64tUaPIbaRgD2qus=";
+    sparseCheckout = [
+      "projects/rocblas"
+      "shared"
+    ];
+    hash = "sha256-wrjcr2ASSF+bk5atjvKfIYSbg+vevo/a2W2ca9Nft/4=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocblas";
 
   outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
 
@@ -187,11 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     amdgpu_targets = gpuTargets';
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
   };
 
   enableParallelBuilding = true;
@@ -199,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "BLAS implementation for ROCm platform";
-    homepage = "https://github.com/ROCm/rocBLAS";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocblas";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

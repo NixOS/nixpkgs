@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
 }:
 
@@ -10,15 +12,30 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "0.20.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
+  src = fetchFromGitHub {
+    owner = "lucc";
+    repo = "khard";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5ZKLOwoAzY36htMzMLpdwn1Xo34rGe56+TFuHRfFB9Q=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lucc/khard/commit/4e07412b8870f210409077a925d74ae47152a80c.patch";
+      hash = "sha256-tApB1xYLBHV/XQ73ITJjKxCjOz6DNPDsKXn8f7KQZRc=";
+    })
+  ];
 
   build-system = with python3.pkgs; [
     setuptools
     setuptools-scm
+    sphinxHook
+    sphinx-argparse
+    sphinx-autoapi
+    sphinx-autodoc-typehints
   ];
+
+  sphinxBuilders = [ "man" ];
 
   dependencies = with python3.pkgs; [
     configobj
@@ -40,6 +57,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     versionCheckHook
+    python3.pkgs.pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # Nixpkgs' default is `--capture=fd`, and with it, 2 command mock tests
+    # fail, see: https://github.com/lucc/khard/issues/353
+    "--capture=no"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/lucc/khard/issues/354
+    "test/test_khard.py::TestSortContacts::test_sorting_of_korean_names"
   ];
 
   meta = {

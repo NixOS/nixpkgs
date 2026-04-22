@@ -23,9 +23,14 @@ rec {
       patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
 
+    rm toolkit/components/ml/content/backends/OpenAIPipeline.mjs
+    rm -rf toolkit/components/ml/vendor/openai
+
     cp -r ${source}/themes/browser .
     cp ${source}/assets/search-config.json services/settings/dumps/main/search-config.json
     sed -i '/MOZ_SERVICES_HEALTHREPORT/ s/True/False/' browser/moz.configure
+
+    sed -i '/# This must remain last./i gkrust_features += ["glean_disable_upload"]\'$'\n' toolkit/library/rust/gkrust-features.mozbuild
 
     cp ${source}/patches/pref-pane/category-librewolf.svg browser/themes/shared/preferences
     cp ${source}/patches/pref-pane/librewolf.css browser/themes/shared/preferences
@@ -40,8 +45,8 @@ rec {
     echo "patching appstrings.properties"
     find . -path '*/appstrings.properties' -exec sed -i s/Firefox/LibreWolf/ {} \;
 
-    for fn in $(find "${source}/l10n/en-US/browser" -type f -name '*.inc.ftl'); do
-      target_fn=$(echo "$fn" | sed "s,${source}/l10n,browser/locales," | sed "s,\.inc\.ftl$,.ftl,")
+    for fn in $(find "${source}/l10n/en-US/browser" -type f -name '*.inc.*'); do
+      target_fn=$(echo "$fn" | sed "s,${source}/l10n/en-US/browser,browser/locales/en-US," | sed "s,\.inc,,")
       cat "$fn" >> "$target_fn"
     done
   '';

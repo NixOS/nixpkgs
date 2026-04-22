@@ -151,6 +151,9 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
+  "sec-boot-problems-scripted-stage-1": [
+    "index.html#sec-boot-problems-scripted-stage-1"
+  ],
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],
@@ -1541,6 +1544,21 @@
   "module-services-emacs-man-pages": [
     "index.html#module-services-emacs-man-pages"
   ],
+  "module-services-ente": [
+    "index.html#module-services-ente"
+  ],
+  "module-services-ente-quickstart": [
+    "index.html#module-services-ente-quickstart"
+  ],
+  "module-services-ente-registering-users": [
+    "index.html#module-services-ente-registering-users"
+  ],
+  "module-services-ente-increasing-storage-limit": [
+    "index.html#module-services-ente-increasing-storage-limit"
+  ],
+  "module-services-ente-ios-background-sync": [
+    "index.html#module-services-ente-ios-background-sync"
+  ],
   "module-services-livebook": [
     "index.html#module-services-livebook"
   ],
@@ -2171,9 +2189,6 @@
   "test-opt-sshBackdoor.enable": [
     "index.html#test-opt-sshBackdoor.enable"
   ],
-  "test-opt-sshBackdoor.vsockOffset": [
-    "index.html#test-opt-sshBackdoor.vsockOffset"
-  ],
   "test-opt-enableDebugHook": [
     "index.html#test-opt-enableDebugHook"
   ],
@@ -2203,6 +2218,9 @@
   ],
   "test-opt-interactive": [
     "index.html#test-opt-interactive"
+  ],
+  "test-opt-logLevel": [
+    "index.html#test-opt-logLevel"
   ],
   "test-opt-meta": [
     "index.html#test-opt-meta"
@@ -2239,6 +2257,9 @@
   ],
   "test-opt-passthru": [
     "index.html#test-opt-passthru"
+  ],
+  "test-opt-qemu.forceAccel": [
+    "index.html#test-opt-qemu.forceAccel"
   ],
   "test-opt-qemu.package": [
     "index.html#test-opt-qemu.package"

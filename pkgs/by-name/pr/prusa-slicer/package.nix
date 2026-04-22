@@ -19,7 +19,6 @@
   gmp,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
   libpng,
   mpfr,
   nanosvg,
@@ -78,6 +77,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/415703
     # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
     ./allow_wayland.patch
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./no-ilmbase.patch
   ];
 
   # (not applicable to super-slicer fork)
@@ -93,6 +94,18 @@ clangStdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
         --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
+    ''
+    # Make PrusaSlicer handle the url "prusaslicer://"
+    + ''
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'Exec=prusa-slicer %F' \
+        'Exec=prusa-slicer %U'
+
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;' \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;x-scheme-handler/prusaslicer;'
     ''
   );
 
@@ -119,7 +132,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     gmp
     gtk3
     hicolor-icon-theme
-    ilmbase
     libpng
     mpfr
     nanosvg-fltk

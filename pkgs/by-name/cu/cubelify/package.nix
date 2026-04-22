@@ -6,11 +6,11 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "cubelify";
-  version = "1.25.9";
+  version = "1.25.10";
 
   src = fetchurl {
     url = "https://storage.cubelify.com/overlay/v1/Cubelify%20Overlay-${version}.AppImage";
-    hash = "sha512-2Kkd8nH//UBYL7K01bZWlOUBTfHpp8GjtB0LwYxp/+/yJJfGq+3eTQGJnlt0mHcnIauVy1ep4IKlPSJQqtigKA==";
+    hash = "sha512-JgiyrcKJneihOAywZom2YQLNOejb0IidicSGVCwVHMJeUEwyFOQtUrhM4vvXwqradnogPK3LAez/dQJ58reGfA==";
   };
 
   nativeBuildInputs = [ makeWrapper ];

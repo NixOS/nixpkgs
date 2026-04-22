@@ -8,11 +8,11 @@
 
 let
   pname = "fiddler-everywhere";
-  version = "7.7.1";
+  version = "7.7.3";
 
   src = fetchurl {
     url = "https://downloads.getfiddler.com/linux/fiddler-everywhere-${version}.AppImage";
-    hash = "sha256-mwHtT7GAR7CdOVvFPpzqF6j1Ed5kBlJ39RyITg1BgAs=";
+    hash = "sha256-Nn84vBrXTNRFS94YTKH32p8VVXqBi5lc6t7K424Mes4=";
   };
 
   appimageContents = appimageTools.extract {

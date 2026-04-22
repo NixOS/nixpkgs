@@ -14,9 +14,14 @@
   pam,
   apacheHttpd,
   pamtester,
-  xscreensaver,
   coreutils,
   makeWrapper,
+
+  # boolean flags
+  withXscreensaver ? true,
+  xscreensaver ? null,
+  withDocs ? false,
+  pandoc ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     makeWrapper
+  ]
+  ++ lib.optionals withDocs [
+    pandoc
   ];
 
   buildInputs = [
@@ -51,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-pam-service-name=login"
+  ]
+  ++ lib.optionals withXscreensaver [
     "--with-xscreensaver=${xscreensaver}/libexec/xscreensaver"
   ];
 

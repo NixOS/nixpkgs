@@ -57,7 +57,6 @@ let
       attrs
       // {
 
-        name = "${pname}-${version}";
         inherit version pname;
 
         buildInputs =

@@ -27,27 +27,37 @@
   pytestCheckHook,
   parameterized,
   tabulate,
+  torchvision,
   transformers,
   unittest-xml-reporting,
 }:
-
+let
+  inherit (stdenv.hostPlatform)
+    isDarwin
+    isLinux
+    isAarch64
+    isx86_64
+    ;
+  isAarch64Darwin = isDarwin && isAarch64;
+  isAarch64Linux = isLinux && isAarch64;
+in
 buildPythonPackage (finalAttrs: {
   pname = "torchao";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FyBsIVb3zdKtA8Vqjt301bRrGIoyeqiOUADVFGxiRPY=";
+    hash = "sha256-Mry6jsZKkoC8dq3fYNsRyGbL4+S8ZYuHpkETNDy5qsg=";
   };
 
   # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
   # new attributes. Did you mean: '__reduce__'?
   disabled = pythonAtLeast "3.14";
 
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  patches = lib.optionals isAarch64Darwin [
     ./use-system-cpuinfo.patch
     (replaceVars ./use-llvm-openmp.patch {
       inherit (llvmPackages) openmp;
@@ -58,16 +68,16 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
-  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  nativeBuildInputs = lib.optionals isAarch64Darwin [
     cmake
   ];
   dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  buildInputs = lib.optionals isAarch64Darwin [
     cpuinfo
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  propagatedBuildInputs = lib.optionals isDarwin [
     # Otherwise, torch will fail to include `omp.h`:
     # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
     # OpenMP support not found.
@@ -97,6 +107,7 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     tabulate
+    torchvision
     transformers
     unittest-xml-reporting
   ];
@@ -160,7 +171,7 @@ buildPythonPackage (finalAttrs: {
     # execnet.gateway_base.DumpError: can't serialize <class 'torch.dtype'>
     "test_numerical_consistency_per_tensor"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals isAarch64Linux [
     # AssertionError: tensor(False) is not true
     "test_quantize_per_token_cpu"
 
@@ -177,7 +188,7 @@ buildPythonPackage (finalAttrs: {
     "test_save_load_int8woqtensors_0_cpu"
     "test_save_load_int8woqtensors_1_cpu"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals isDarwin [
     # AssertionError: Scalars are not equal!
     "test_comm"
     "test_fsdp2"
@@ -237,6 +248,13 @@ buildPythonPackage (finalAttrs: {
     "test_optim_smoke_optim_name_AdamFp8_float32_device_mps"
     "test_subclass_slice_subclass0_shape1_device_mps"
 
+    # RuntimeError: Expected to find "triton_per_fused" but did not find it
+    "test_available_gpu_kernels_device_mps"
+
+    # RuntimeError: quantized engine NoQEngine is not supported
+    "test_qat_mobilenet_v2"
+    "test_qat_resnet18"
+
     # Crash (Trace/BPT trap: 5)
     "test_copy__mismatch_metadata_apply_quant0"
     "test_copy__mismatch_metadata_apply_quant1"
@@ -278,7 +296,7 @@ buildPythonPackage (finalAttrs: {
     "test_workflow_e2e_numerics_config4"
     "test_workflow_e2e_numerics_config5"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  ++ lib.optionals (isDarwin && isx86_64) [
     # Flaky: [gw0] node down: keyboard-interrupt
     "test_int8_weight_only_quant_with_freeze_0_cpu"
     "test_int8_weight_only_quant_with_freeze_1_cpu"
@@ -296,7 +314,7 @@ buildPythonPackage (finalAttrs: {
     # ImportError: cannot import name 'fp8_blockwise_weight_dequant' from 'torchao.kernel.blockwise_quantization'
     "test/kernel/test_blockwise_triton.py"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals isDarwin [
     # Require unpackaged 'coremltools'
     "test/prototype/test_groupwise_lowbit_weight_lut_quantizer.py"
 
@@ -316,6 +334,8 @@ buildPythonPackage (finalAttrs: {
     "test/test_low_bit_optim.py::TestQuantize::test_bf16_stochastic_round_dtensor_device_mps_compile_True"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "PyTorch native quantization and sparsity for training and inference";
     homepage = "https://github.com/pytorch/ao";
@@ -324,6 +344,10 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       GaetanLepage
       sarahec
+    ];
+    badPlatforms = [
+      # Many tests failing and hanging indefinitely
+      "aarch64-linux"
     ];
   };
 })

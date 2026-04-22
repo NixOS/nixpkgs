@@ -5,6 +5,7 @@
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
+  nixosTests,
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
@@ -15,12 +16,12 @@
 
 let
   pname = "autobrr";
-  version = "1.74.0";
+  version = "1.76.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-iIKEF3b5mLKPiyR/2CqQiZz1e3M8H7HjtC0GWNSsJu8=";
+    hash = "sha256-MGqsRRN73L6i/lhdhnoi3ehnDIRDQpgFYluO6ZeOPT0=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -45,7 +46,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 3;
-      hash = "sha256-euDGtNERNq3IgxggiHoLmcq2+e2SslXLSfY8TTFnqoE=";
+      hash = "sha256-BEsYcS0SiWLQyQc7CRadoQ146VAnq0zmHxdd838H6iI=";
     };
 
     postBuild = ''
@@ -65,7 +66,7 @@ buildGoModule (finalAttrs: {
     src
     ;
 
-  vendorHash = "sha256-kxly/+7wnPbxs1LKzoSFRYcPBWqZg4tgzV3uYJji+yA=";
+  vendorHash = "sha256-HjHRT/PAZdMM/2JWmNMK/I9Gc0ThTAFDSxWW/ATYxW8=";
 
   preBuild = ''
     cp -r ${autobrr-web}/* web/dist
@@ -86,11 +87,14 @@ buildGoModule (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/autobrrctl";
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "autobrr-web"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "autobrr-web"
+      ];
+    };
+    tests.testService = nixosTests.autobrr;
   };
 
   meta = {

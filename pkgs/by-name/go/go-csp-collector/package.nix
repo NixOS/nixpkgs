@@ -1,5 +1,6 @@
 {
   lib,
+  go_1_26,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -7,18 +8,18 @@
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule.override { go = go_1_26; } (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.17-unstable-2025-11-24";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
-    rev = "c997e31172ed2d785fc960296b826a9587bd5de9";
-    hash = "sha256-ZfE8xa+og14dlUmvYfatecSdrhmuMbFFNTw5RZ3ZHXU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NuJM7MneCptlmX0NV7c/7T1E5xhzM8Z59xNwEEGVuHM=";
   };
 
-  vendorHash = "sha256-SrQahSHO5ZIkcLR3BR5CR5BTStW1pH1Ij1Eql0b3tuU=";
+  vendorHash = "sha256-YbpBZhXTlSEKkCRDzFeDWRT8HEsCG2905WVGjxvW6oY=";
 
   ldflags = [
     "-s"
@@ -45,7 +46,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "A content security policy violation collector written in Golang";
     homepage = "https://github.com/jacobbednarz/go-csp-collector";
-    changelog = "https://github.com/jacobbednarz/go-csp-collector/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jacobbednarz/go-csp-collector/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "go-csp-collector";
     maintainers = with lib.maintainers; [ stepbrobd ];

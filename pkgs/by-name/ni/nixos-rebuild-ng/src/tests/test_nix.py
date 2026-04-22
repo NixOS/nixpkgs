@@ -770,6 +770,7 @@ def test_switch_to_configuration_without_systemd_run(
         },
         sudo=False,
         remote=None,
+        stdout=sys.stderr,
     )
 
     with pytest.raises(m.NixOSRebuildError) as e:
@@ -811,6 +812,7 @@ def test_switch_to_configuration_without_systemd_run(
         },
         sudo=True,
         remote=target_host,
+        stdout=sys.stderr,
     )
 
 
@@ -846,6 +848,7 @@ def test_switch_to_configuration_with_systemd_run(
         },
         sudo=False,
         remote=None,
+        stdout=sys.stderr,
     )
 
     target_host = m.Remote("user@localhost", [], None, "ssh")
@@ -875,6 +878,7 @@ def test_switch_to_configuration_with_systemd_run(
         },
         sudo=True,
         remote=target_host,
+        stdout=sys.stderr,
     )
 
 

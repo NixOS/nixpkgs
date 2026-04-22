@@ -589,6 +589,8 @@ let
     in
     modulesPath: initialModules: args: {
       modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      # Intentionally not shared with `modules` above: this allows `collected`
+      # to be garbage collected after `filterModules` returns.
       graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
     };
 
@@ -783,7 +785,7 @@ let
     prefix: modules: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = zipAttrsWith (n: v: v) (
+      declsByName = zipAttrs (
         map (
           module:
           let
@@ -838,7 +840,7 @@ let
         ) checkedConfigs
       );
       # extract the definitions for each loc
-      rawDefinitionsByName = zipAttrsWith (n: v: v) (
+      rawDefinitionsByName = zipAttrs (
         map (
           module:
           mapAttrs (n: value: {
@@ -1121,11 +1123,16 @@ let
     let
       # Add in the default value for this option, if any.
       defs' =
-        (optional (opt ? default) {
-          file = head opt.declarations;
-          value = mkOptionDefault opt.default;
-        })
-        ++ defs;
+        if opt ? default then
+          [
+            {
+              file = head opt.declarations;
+              value = mkOptionDefault opt.default;
+            }
+          ]
+          ++ defs
+        else
+          defs;
 
       # Handle properties, check types, and merge everything together.
       res =
@@ -1223,10 +1230,33 @@ let
           else
             defsFiltered.values;
       in
-      {
-        values = defsSorted;
-        inherit (defsFiltered) highestPrio;
-      };
+      # Fast path: the overwhelming majority of options have exactly one
+      # definition whose value carries no property wrapper
+      # (mkIf/mkMerge/mkOverride/mkOrder/definition). In that case the
+      # discharge/filter/sort pipeline above is a no-op but still allocates
+      # several intermediate lists and closures. Detect it up front and hand
+      # the original singleton straight to the type merge. The let-bindings
+      # above are lazy and thus never forced on this branch.
+      if
+        length defs == 1
+        && (
+          let
+            d = head defs;
+          in
+          addErrorContext "while evaluating definitions from `${d.file}':" (
+            !(isAttrs d.value && d.value ? _type)
+          )
+        )
+      then
+        {
+          values = defs;
+          highestPrio = defaultOverridePriority;
+        }
+      else
+        {
+          values = defsSorted;
+          inherit (defsFiltered) highestPrio;
+        };
     defsFinal = defsFinal'.values;
 
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
@@ -1322,13 +1352,24 @@ let
     : 1\. Function argument
   */
   pushDownProperties =
+    let
+      mapAttrsIfAttrs =
+        f: val:
+        if isAttrs val then
+          mapAttrs f val
+        else
+          # This does not actually work, since arriving here means we have e.g.
+          # (lib.mkIf cond nonAttrs), while an attrset is expected. However,
+          # avoiding the mapAttrs call here gives better errors later.
+          val;
+    in
     cfg:
     if cfg._type or "" == "merge" then
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
-      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
-      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     # FIXME: handle mkOrder?
     else
       [ cfg ];
@@ -1400,7 +1441,7 @@ let
         def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in
     {
-      values = concatMap (def: if getPrio def == highestPrio then [ (strip def) ] else [ ]) defs;
+      values = map strip (filter (def: getPrio def == highestPrio) defs);
       inherit highestPrio;
     };
 
@@ -1571,7 +1612,7 @@ let
   # mkDefault properties of the previous option.
   #
   mkAliasDefinitions = mkAliasAndWrapDefinitions id;
-  mkAliasAndWrapDefinitions = wrap: option: mkAliasIfDef option (wrap (mkMerge option.definitions));
+  mkAliasAndWrapDefinitions = wrap: option: mkIf option.isDefined (wrap (mkMerge option.definitions));
 
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
@@ -1583,9 +1624,11 @@ let
       prio = option.highestPrio or defaultOverridePriority;
       defsWithPrio = map (mkOverride prio) option.definitions;
     in
-    mkAliasIfDef option (wrap (mkMerge defsWithPrio));
+    mkIf option.isDefined (wrap (mkMerge defsWithPrio));
 
-  mkAliasIfDef = option: mkIf (isOption option && option.isDefined);
+  mkAliasIfDef =
+    lib.warn "Usage of 'mkAliasIfDef' has been deprecated. Use 'mkIf option.isDefined' instead."
+      (option: mkIf option.isDefined);
 
   /**
     Compatibility.

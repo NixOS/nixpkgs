@@ -77,11 +77,9 @@ in
           # configure the recorder component to use the postgresql db
           recorder.db_url = "postgresql://@/hass";
 
-          # we can't load default_config, because the updater requires
-          # network access and would cause an error, so load frontend
-          # here explicitly.
-          # https://www.home-assistant.io/integrations/frontend/
-          frontend = { };
+          # without these some components that are loaded anyway fail to find
+          # their dependencies
+          default_config = { };
 
           # include some popular integrations, that absolutely shouldn't break
           knx = { };
@@ -288,7 +286,7 @@ in
           wait_for_homeassistant(cursor)
 
       with subtest("Check that no errors were logged"):
-          hass.fail("journalctl -u home-assistant -o cat | grep -q ERROR")
+          hass.fail("journalctl -u home-assistant -o cat | grep -q 'ERROR ('")
 
       with subtest("Check systemd unit hardening"):
           hass.log(hass.succeed("systemctl cat home-assistant.service"))

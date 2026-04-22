@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "octodns-gandi";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-gandi";
     tag = "v${version}";
-    hash = "sha256-0wtG/W5pkatLQ0rXTnbHDoycWOUzOK3fcDQzt93opCc=";
+    hash = "sha256-HUAWGJ4/v1YxaCskgIqh53M4nH9AlK9xHyGQhe5P6UE=";
   };
 
   build-system = [

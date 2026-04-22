@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   replaceVars,
   macmon,
 
@@ -18,34 +18,14 @@
   nix-update-script,
 }:
 let
-  version = "1.0.68";
+  version = "1.0.70";
   src = fetchFromGitHub {
     name = "exo";
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-ryaz68vXS/SjPxGsWxtUSlzZrLBxV1tbBmJVraZu3RI=";
+    hash = "sha256-ytxP5x8PyAPVne2c6OIvhdCuF68zffxypXSTlDAFnro=";
   };
-
-  python = python3.override {
-    packageOverrides = _final: prev: {
-      # https://github.com/exo-explore/exo/blob/ba611f9cd0e21d3e63e2327b18fbc888fd085269/pyproject.toml#L67
-      mlx = prev.mlx.overridePythonAttrs (old: {
-        version = "custom";
-
-        src = fetchFromGitHub {
-          owner = "rltakashige";
-          repo = "mlx-jaccl-fix-small-recv";
-          rev = "address-rdma-gpu-locks";
-          hash = "sha256-GosFIWxIB48Egb1MqJrR3xhsUsQeWdRk5rV93USY6wQ=";
-        };
-        meta = old.meta // {
-          changelog = "";
-        };
-      });
-    };
-  };
-  python3Packages = python.pkgs;
 
   pyo3-bindings = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "exo-pyo3-bindings";
@@ -56,7 +36,7 @@ let
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-Ga3/Yhg2Wn2w8cnNtq11/AN7K4nht4chSEIVOkYEI/U=";
+      hash = "sha256-gwOdA2sHz8n4GfNjK+OYmttXUTle4WYmAE2Y0KXYrwg=";
     };
 
     # Bypass rust nightly features not being available on rust stable
@@ -86,7 +66,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 3;
-      hash = "sha256-eMmzWwsebwvrpNLqs+4iyiPsDFvwRlk+LaiKQ0SZmt8=";
+      hash = "sha256-gBWJP0dF2zDEWLYxfKYQSn9O5hVRkcviDv9oP267pQQ=";
     };
   });
 in
@@ -150,6 +130,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mflux
       mlx
       mlx-lm
+      mlx-vlm
       msgspec
       nvidia-ml-py
       openai
@@ -175,7 +156,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # 'resources' are not getting copied to the installation directory, so we do it manually
   # FileNotFoundError: Unable to locate resources. Did you clone the repo properly?
   postInstall = ''
-    cp -r resources $out/${python.sitePackages}/exo/
+    cp -r resources $out/${python3Packages.python.sitePackages}/exo/
   '';
 
   pythonImportsCheck = [
@@ -200,9 +181,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Require internet access:
     # openai_harmony.HarmonyError: error downloading or loading vocab file: failed to download or load vocab file
+    "TestParseGptOssMaxTokensTruncation"
     "test_both_formats_produce_identical_tool_calls"
     "test_format_a_yields_tool_call"
     "test_format_b_yields_tool_call"
+    "test_thinking_then_text_counts_reasoning_tokens"
     "test_thinking_then_tool_call"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

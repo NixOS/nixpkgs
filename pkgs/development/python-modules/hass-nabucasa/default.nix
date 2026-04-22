@@ -2,7 +2,6 @@
   lib,
   acme,
   aiohttp,
-  async-timeout,
   atomicwrites-homeassistant,
   attrs,
   buildPythonPackage,
@@ -32,16 +31,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hass-nabucasa";
-  version = "1.15.0";
+  version = "2.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = finalAttrs.version;
-    hash = "sha256-WwpCAIfl/2fp01v9Rq4tQW70aoVlvhEJl31XQTAENmA=";
+    hash = "sha256-+HRyXdl/gw/dhZ+T3peinD5FMm0O/M87Uu/wyLU1eJs=";
   };
 
   postPatch = ''
@@ -54,7 +53,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     acme
     aiohttp
-    async-timeout
     atomicwrites-homeassistant
     attrs
     ciso8601
@@ -90,7 +88,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab
-      Scriptkiddi
     ];
   };
 })

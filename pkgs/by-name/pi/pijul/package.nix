@@ -5,6 +5,7 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
+  dbus,
   libsodium,
   openssl,
   xxHash,
@@ -14,14 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pijul";
-  version = "1.0.0-beta.9";
+  version = "1.0.0-beta.11";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
+    hash = "sha256-+rMMqo2LBYlCFQJv8WFCSEJgDUbMi8DnVDKXIWm3tIk=";
   };
 
-  cargoHash = "sha256-d2IlBtR3j6SF8AAagUQftCOqTqN70rDMlHkA9byxXyk=";
+  cargoHash = "sha256-IhArTiReUdj49bA+XseQpOiszK801xX5LdLj8vXD8rs=";
+
+  patches = [ ./fix-rand-0.9-sanakirja-imports.patch ];
 
   doCheck = false;
   nativeBuildInputs = [
@@ -29,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
+    dbus
     openssl
     libsodium
     xxHash

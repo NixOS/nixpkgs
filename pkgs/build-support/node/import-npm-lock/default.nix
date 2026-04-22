@@ -52,9 +52,17 @@ let
                 // fetcherOpts
               ))
             else if lib.hasPrefix "git" module.resolved then
+              let
+                url = elemAt mUrl 1;
+                urlParts = lib.splitString "#" url;
+                commit = if builtins.length urlParts == 2 then elemAt urlParts 1 else null;
+              in
               (fetchGit (
                 {
-                  url = module.resolved;
+                  url = "${scheme}://${elemAt urlParts 0}";
+                }
+                // lib.optionalAttrs (commit != null) {
+                  rev = commit;
                 }
                 // fetcherOpts
               ))

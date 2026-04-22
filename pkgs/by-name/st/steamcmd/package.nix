@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   steam-run,
   coreutils,
@@ -24,12 +24,13 @@ let
       };
     };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "steamcmd";
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
 
   src =
-    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    srcs.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   # The source tarball does not have a single top-level directory.
   preUnpack = ''
@@ -49,7 +50,9 @@ stdenv.mkDerivation {
       --subst-var out \
       --subst-var-by coreutils ${coreutils} \
       --subst-var-by steamRoot '${steamRoot}' \
-      --subst-var-by steamRun ${if stdenv.hostPlatform.isLinux then (lib.getExe steam-run) else "exec"}
+      --subst-var-by steamRun ${
+        if stdenvNoCC.hostPlatform.isLinux then (lib.getExe steam-run) else "exec"
+      }
     chmod 0755 $out/bin/steamcmd
   '';
 

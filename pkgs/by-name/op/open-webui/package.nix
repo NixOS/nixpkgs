@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.8.10";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-wXkU3j0Bzpd2H5aVkqmKyUHxukRamBYQh8HBXB8tLpM=";
+    hash = "sha256-ynWv/X4IBKO09+ira+NUwbzw51MK9aEvGkeaHzCngd0=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-ZiIEGeKee/qEhe44SGlPTDhwP+vL9K8RkFEOeUdzUI8=";
+    npmDepsHash = "sha256-UeoU7UGQ+0ViEIjK/Ze7KazB/JCyFYljHyTmxuza4v8=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -110,6 +110,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       chardet
       chromadb
       cryptography
+      datasets_3
       ddgs
       docx2txt
       einops

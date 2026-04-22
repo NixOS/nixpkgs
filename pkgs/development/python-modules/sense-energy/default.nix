@@ -13,21 +13,21 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sense-energy";
-  version = "0.13.8";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scottbonline";
     repo = "sense";
-    tag = version;
-    hash = "sha256-hIE7wjKP+JcXQZ1lGbKCaKKK2ZlCF5BbJu3H7gqrsKU=";
+    tag = finalAttrs.version;
+    hash = "sha256-xHI4HuPZFVqBNCC9+bILRVLoZ1LFBW9N0tVT8UzYClw=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
+      --replace-fail "{{VERSION_PLACEHOLDER}}" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "API for the Sense Energy Monitor";
     homepage = "https://github.com/scottbonline/sense";
-    changelog = "https://github.com/scottbonline/sense/releases/tag/${src.tag}";
+    changelog = "https://github.com/scottbonline/sense/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

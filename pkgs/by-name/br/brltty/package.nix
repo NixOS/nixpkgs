@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brltty";
-  version = "6.9";
+  version = "6.9.1";
 
   src = fetchurl {
     url = "https://brltty.app/archive/brltty-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-KiWymWeI5RqRq++m23SJKnZYowqIbdBSrmffZ59FDaQ=";
+    sha256 = "sha256-gi3iyHtECf3wLWFU0bRoVsNTnT6onGWu80MPJ3Nnf3Y=";
   };
 
   depsBuildBuild = [ pkg-config ];

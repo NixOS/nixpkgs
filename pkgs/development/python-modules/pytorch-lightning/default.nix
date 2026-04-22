@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-lightning";
-  version = "2.6.1";
+  version = "2.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     tag = finalAttrs.version;
-    hash = "sha256-zOSV2X3yZy0uh1lJ2yNl/hHBvfIDcIrATHtiRwThsQA=";
+    hash = "sha256-AUTCeRC0BvFmu+nDQ9ROecfk4Ifphe3x7Kv3cXPsACQ=";
   };
 
   env.PACKAGE_NAME = "pytorch";
@@ -67,6 +67,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Lightning-AI/pytorch-lightning";
     changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

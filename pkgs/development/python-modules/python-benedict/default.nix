@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.35.0";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
     tag = version;
-    hash = "sha256-b9tAK500Hr2flYI82weNMCM88d6b5+Oz9HgvBDaqNZw=";
+    hash = "sha256-FIajPROnyuMhM2YzlqJm5A5eRp6v39VHb8RJZjmXqxQ=";
   };
 
   pythonRelaxDeps = [ "boto3" ];

@@ -24,14 +24,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "1.105.0";
+  version = "50.2.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zd+YUFnklu6JbytT/oS8hUU+IcqMfF4f/u6OKmg8uT4=";
+    hash = "sha256-djC4v2OTRA/UEiI3foiEvRo6gVN5eS2+eENueQzdkds=";
   };
 
   nativeBuildInputs = [

@@ -39,9 +39,15 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/cheusov/lua-alt-getopt";
-        description = "Process application arguments the same way as getopt_long";
         maintainers = with lib.maintainers; [ arobyn ];
         license.fullName = "MIT/X11";
+        description = "Process application arguments the same way as getopt_long";
+        longDescription = ''
+          alt-getopt is a module for Lua programming language for processing
+          application's arguments the same way BSD/GNU getopt_long(3) functions do.
+          The main goal is compatibility with SUS "Utility Syntax Guidelines"
+          guidelines 3-13.
+        '';
       };
     }
   ) { };
@@ -69,9 +75,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/kikito/ansicolors.lua";
-        description = "Library for color Manipulation.";
         maintainers = with lib.maintainers; [ Freed-Wu ];
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "Library for color Manipulation.";
+        longDescription = ''
+          Ansicolors is a simple Lua function for printing to the console in color.
+        '';
       };
     }
   ) { };
@@ -101,8 +110,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/luarocks/argparse";
-        description = "A feature-rich command-line argument parser";
         license.fullName = "MIT";
+        description = "A feature-rich command-line argument parser";
+        longDescription = "Argparse supports positional arguments, options, flags, optional arguments, subcommands and more. Argparse automatically generates usage, help, and error messages, and can generate shell completion scripts.";
       };
     }
   ) { };
@@ -130,8 +140,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/aiq/basexx";
-        description = "A base2, base16, base32, base64 and base85 library for Lua";
         license.fullName = "MIT";
+        description = "A base2, base16, base32, base64 and base85 library for Lua";
+        longDescription = "A Lua library which provides base2(bitfield), base16(hex), base32(crockford/rfc), base64(rfc/url), base85(z85) decoding and encoding.";
       };
     }
   ) { };
@@ -162,9 +173,9 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/mikejsavage/lua-bcrypt";
-        description = "A Lua wrapper for bcrypt";
         maintainers = with lib.maintainers; [ ulysseszhan ];
         license.fullName = "ISC";
+        description = "A Lua wrapper for bcrypt";
       };
     }
   ) { };
@@ -192,9 +203,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/Tieske/binaryheap.lua";
-        description = "Binary heap implementation in pure Lua";
         maintainers = with lib.maintainers; [ vcunat ];
         license.fullName = "MIT/X11";
+        description = "Binary heap implementation in pure Lua";
+        longDescription = ''
+          Binary heaps are an efficient sorting algorithm. This module
+                implements a plain binary heap (without reverse lookup) and a
+                'unique' binary heap (with unique payloads and reverse lookup).
+        '';
       };
     }
   ) { };
@@ -224,9 +240,13 @@ final: prev: {
 
       meta = {
         homepage = "http://www.lua.org/manual/5.2/manual.html#6.7";
-        description = "Lua 5.2 bit manipulation library";
         maintainers = with lib.maintainers; [ lblasc ];
         license.fullName = "MIT";
+        description = "Lua 5.2 bit manipulation library";
+        longDescription = ''
+          bit32 is the native Lua 5.2 bit manipulation library, in the version
+                from Lua 5.3; it is compatible with Lua 5.1, 5.2, 5.3 and 5.4.
+        '';
       };
     }
   ) { };
@@ -275,8 +295,16 @@ final: prev: {
 
       meta = {
         homepage = "https://lunarmodules.github.io/busted/";
-        description = "Elegant Lua unit testing";
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "Elegant Lua unit testing";
+        longDescription = ''
+          An elegant, extensible, testing framework.
+              Ships with a large amount of useful asserts,
+              plus the ability to write your own. Output
+              in pretty or plain terminal format, JSON,
+              or TAP for CI integration. Great for TDD
+              and unit, integration, and functional tests.
+        '';
       };
     }
   ) { };
@@ -304,9 +332,15 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/hishamhm/busted-htest";
-        description = "A pretty output handler for Busted";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "A pretty output handler for Busted";
+        longDescription = ''
+          This is an alternative output handler for Busted,
+                a unit testing framework for Lua.
+                It is based on the gtest output handler that
+                is bundled with Busted.
+        '';
       };
     }
   ) { };
@@ -339,9 +373,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/sile-typesetter/cassowary.lua";
-        description = "The cassowary constraint solver";
         maintainers = with lib.maintainers; [ alerque ];
         license.fullName = "Apache 2";
+        description = "The cassowary constraint solver";
+        longDescription = ''
+          This is a Lua port of the Cassowary constraint solving toolkit.
+                It allows you to use Lua to solve algebraic equations and inequalities
+                and find the values of unknown variables which satisfy those
+                inequalities.'';
       };
     }
   ) { };
@@ -374,9 +413,10 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/alerque/cldr-lua";
-        description = "Lua interface to Unicode CLDR data";
         maintainers = with lib.maintainers; [ alerque ];
         license.fullName = "MIT/ICU";
+        description = "Lua interface to Unicode CLDR data";
+        longDescription = "Unicode CLDR (Common Locale Data Repository) data and Lua interface.";
       };
     }
   ) { };
@@ -405,9 +445,9 @@ final: prev: {
 
       meta = {
         homepage = "https://linrongbin16.github.io/commons.nvim/";
-        description = "The commons lua library for Neovim plugin project.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "The commons lua library for Neovim plugin project.";
       };
     }
   ) { };
@@ -437,9 +477,15 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/lua-compat-5.3";
-        description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
         maintainers = with lib.maintainers; [ vcunat ];
         license.fullName = "MIT";
+        description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
+        longDescription = ''
+          This is a small module that aims to make it easier to write Lua
+                code in a Lua-5.3-style that runs on Lua 5.1+.
+                It does *not* make Lua 5.2 (or even 5.1) entirely compatible
+                with Lua 5.3, but it brings the API closer to that of Lua 5.3.
+        '';
       };
     }
   ) { };
@@ -470,8 +516,13 @@ final: prev: {
 
       meta = {
         homepage = "http://cosmo.luaforge.net";
-        description = "Safe templates for Lua";
         license.fullName = "MIT/X11";
+        description = "Safe templates for Lua";
+        longDescription = ''
+          Cosmo is a "safe templates" engine. It allows you to fill nested templates,
+          providing many of the advantages of Turing-complete template engines,
+          without without the downside of allowing arbitrary code in the templates.
+        '';
       };
     }
   ) { };
@@ -499,8 +550,13 @@ final: prev: {
 
       meta = {
         homepage = "http://keplerproject.github.io/coxpcall";
-        description = "Coroutine safe xpcall and pcall";
         license.fullName = "MIT/X11";
+        description = "Coroutine safe xpcall and pcall";
+        longDescription = ''
+          Encapsulates the protected calls with a coroutine based loop, so errors can
+           be handled without the usual Lua 5.x pcall/xpcall issues with coroutines
+           yielding inside the call to pcall or xpcall.
+        '';
       };
     }
   ) { };
@@ -528,9 +584,9 @@ final: prev: {
 
       meta = {
         homepage = "http://25thandclement.com/~william/projects/cqueues.html";
-        description = "Continuation Queues: Embeddable asynchronous networking, threading, and notification framework for Lua on Unix.";
         maintainers = with lib.maintainers; [ vcunat ];
         license.fullName = "MIT/X11";
+        description = "Continuation Queues: Embeddable asynchronous networking, threading, and notification framework for Lua on Unix.";
       };
     }
   ) { };
@@ -569,8 +625,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/teal-language/cyan";
-        description = "A build system for the Teal language";
         license.fullName = "MIT";
+        description = "A build system for the Teal language";
+        longDescription = "A build system for the Teal language along with an api for external tooling to work with Teal";
       };
     }
   ) { };
@@ -601,8 +658,12 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/hishamhm/datafile";
-        description = "A library for handling paths when loading data files";
         license.fullName = "MIT/X11";
+        description = "A library for handling paths when loading data files";
+        longDescription = ''
+          datafile is a library for avoiding hardcoded paths
+                when loading resource files in Lua modules.
+        '';
       };
     }
   ) { };
@@ -639,8 +700,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/astoff/digestif/";
-        description = "A code analyzer for TeX";
         license.fullName = "GPLv3+ and other free licenses";
+        description = "A code analyzer for TeX";
+        longDescription = ''
+          A code analyzer for TeX documents, including LaTeX and BibTeX.  It
+              comes with a Language Server Protocol implementation, so it can
+              run as a plug-in to many different text editors.
+        '';
       };
     }
   ) { };
@@ -669,8 +735,17 @@ final: prev: {
 
       meta = {
         homepage = "https://dkolf.de/dkjson-lua/";
-        description = "David Kolf's JSON module for Lua";
         license.fullName = "MIT/X11";
+        description = "David Kolf's JSON module for Lua";
+        longDescription = ''
+          dkjson is a module for encoding and decoding JSON data. It supports UTF-8.
+
+          JSON (JavaScript Object Notation) is a format for serializing data based
+          on the syntax for JavaScript data structures.
+
+          dkjson is written in Lua without any dependencies, but
+          when LPeg is available dkjson can use it to speed up decoding.
+        '';
       };
     }
   ) { };
@@ -701,9 +776,12 @@ final: prev: {
 
       meta = {
         homepage = "http://leafo.net/lua-enet";
-        description = "A library for doing network communication in Lua";
         maintainers = with lib.maintainers; [ ulysseszhan ];
         license.fullName = "MIT";
+        description = "A library for doing network communication in Lua";
+        longDescription = ''
+          Binding to ENet, network communication layer on top of UDP.
+        '';
       };
     }
   ) { };
@@ -734,9 +812,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/leafo/etlua";
-        description = "Embedded templates for Lua";
         maintainers = with lib.maintainers; [ ulysseszhan ];
         license.fullName = "MIT";
+        description = "Embedded templates for Lua";
+        longDescription = ''
+          Allows you to render ERB style templates but with Lua. Supports <% %>, <%=
+              %> and <%- %> tags (with optional newline slurping) for embedding code.
+        '';
       };
     }
   ) { };
@@ -767,9 +849,10 @@ final: prev: {
 
       meta = {
         homepage = "https://fennel-lang.org";
-        description = "A lisp that compiles to Lua";
         maintainers = with lib.maintainers; [ misterio77 ];
         license.fullName = "MIT";
+        description = "A lisp that compiles to Lua";
+        longDescription = "Get your parens on--write macros and homoiconic code on the Lua runtime!";
       };
     }
   ) { };
@@ -798,9 +881,18 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/j-hui/fidget.nvim";
-        description = "Extensible UI for Neovim notifications and LSP progress messages.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "Extensible UI for Neovim notifications and LSP progress messages.";
+        longDescription = ''
+          Fidget is an unintrusive window in the corner of your editor that manages its own lifetime.
+          Its goals are:
+          - to provide a UI for Neovim's $/progress handler
+          - to provide a configurable vim.notify() backend
+          - to support basic ASCII animations (Fidget spinners!) to indicate signs of life
+          - to be easy to configure, sane to maintain, and fun to hack on
+          There's only so much information one can stash into the status line.
+          Besides, who doesn't love a little bit of terminal eye candy, as a treat?'';
       };
     }
   ) { };
@@ -826,8 +918,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/daurnimator/fifo.lua";
-        description = "A lua library/'class' that implements a FIFO";
         license.fullName = "MIT/X11";
+        description = "A lua library/'class' that implements a FIFO";
       };
     }
   ) { };
@@ -866,9 +958,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/alerque/fluent-lua";
-        description = "Lua implementation of Project Fluent";
         maintainers = with lib.maintainers; [ alerque ];
         license.fullName = "MIT";
+        description = "Lua implementation of Project Fluent";
+        longDescription = ''
+          A Lua port of Project Fluent, a localization paradigm designed to unleash
+                the entire expressive power of natural language translations.'';
       };
     }
   ) { };
@@ -897,9 +992,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/aikooo7/funnyfiles.nvim";
-        description = "This plugin is a way of creating/deleting files/folders without needing to open a file explorer.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "This plugin is a way of creating/deleting files/folders without needing to open a file explorer.";
       };
     }
   ) { };
@@ -913,24 +1008,24 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2545-1";
+      version = "0.0.2615-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2545-1.rockspec";
-          sha256 = "0hinizjvfw1ana0wkjqvrn8d3nvmcvhczda144jj6kf7y96xwazr";
+          url = "mirror://luarocks/fzf-lua-0.0.2615-1.rockspec";
+          sha256 = "04y7lh9mm7lj605xpsrb6p142mpmnnisf781slfmcsgl2zbm4pk9";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/8a79ee54d6216d10b2f153921a12b152be0c1a20.zip";
-        sha256 = "128slx673pgpyf9cpkl58gp0b1bgbv7fc23a8hn74n90r628pg4i";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/cebf88881a4fab2c20a2a950269953417af1c3e8.zip";
+        sha256 = "13b4zrx4j2pnl9sh6mcyx120gm29flk7zr03vkik2difpcpdi518";
       };
 
       disabled = luaOlder "5.1";
 
       meta = {
         homepage = "https://github.com/ibhagwan/fzf-lua";
-        description = "Improved fzf.vim written in lua";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "AGPL-3.0";
+        description = "Improved fzf.vim written in lua";
       };
     }
   ) { };
@@ -959,9 +1054,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/swarn/fzy-lua";
-        description = "A lua implementation of the fzy fuzzy matching algorithm";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "A lua implementation of the fzy fuzzy matching algorithm";
+        longDescription = ''
+          A Lua port of fzy's fuzzy string matching algorithm.
+          This includes both a pure Lua implementation and a compiled C implementation with a Lua wrapper.
+          fzy tries to find the result the user wants by favoring consecutive
+          matches, and matches at the beginnings of words.'';
       };
     }
   ) { };
@@ -975,23 +1075,23 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "gitsigns.nvim";
-      version = "2.0.0-1";
+      version = "2.1.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/gitsigns.nvim-2.0.0-1.rockspec";
-          sha256 = "0k4670aqxa6npyxnw7drsi0jic9vrl5izf5wwpbp2i8v1c702w80";
+          url = "mirror://luarocks/gitsigns.nvim-2.1.0-1.rockspec";
+          sha256 = "13w10vblahrqn3cahcj6f9wz1kcna93825zy01dspl3s058920yj";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/lewis6991/gitsigns.nvim/archive/42d6aed4e94e0f0bbced16bbdcc42f57673bd75e.zip";
-        sha256 = "0vz3y2kx9ljw8rryypq1s59l8q1l5vwmr3b6p6a2qa4fgpv73krg";
+        url = "https://github.com/lewis6991/gitsigns.nvim/archive/a462f416e2ce4744531c6256252dee99a7d34a83.zip";
+        sha256 = "06d7pl9h1y8v7pmlyhlxs21z17pb7ikg4yipjag2i60panp6cd8i";
       };
 
       disabled = luaOlder "5.1";
 
       meta = {
         homepage = "https://github.com/lewis6991/gitsigns.nvim";
-        description = "Git integration for buffers";
         license.fullName = "MIT";
+        description = "Git integration for buffers";
       };
     }
   ) { };
@@ -1005,24 +1105,24 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "grug-far.nvim";
-      version = "1.6.63-1";
+      version = "1.6.67-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/grug-far.nvim-1.6.63-1.rockspec";
-          sha256 = "14hmd8i604bfiv51fbpm4xw5f6b750bmxac4ghc5w36wdzg1cl7y";
+          url = "mirror://luarocks/grug-far.nvim-1.6.67-1.rockspec";
+          sha256 = "1bjkfzi6l7mzsz5345jh0a69rmsk16xmp94dx47iidrflqpqmbd8";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/MagicDuck/grug-far.nvim/archive/dc4684e163971bb1f5bfb93fbd4bb3e892bf9b15.zip";
-        sha256 = "1225sn36wqy8bdlyhbhajivhjhp936kbq307d4p94lcagvrvf7vp";
+        url = "https://github.com/MagicDuck/grug-far.nvim/archive/21604255d0e8f9968322f61f2b6c09e5efe1285a.zip";
+        sha256 = "1vc4c0wdj3il8ig8jdb56870zwkriw3ql306vyjfl5ii7z4jbrnz";
       };
 
       disabled = luaOlder "5.1";
 
       meta = {
         homepage = "https://github.com/MagicDuck/grug-far.nvim";
-        description = "Find And Replace plugin for neovim";
         maintainers = with lib.maintainers; [ teto ];
         license.fullName = "MIT";
+        description = "Find And Replace plugin for neovim";
       };
     }
   ) { };
@@ -1036,24 +1136,28 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "haskell-tools.nvim";
-      version = "7.0.3-1";
+      version = "9.0.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/haskell-tools.nvim-7.0.3-1.rockspec";
-          sha256 = "0zmarh3ypsfnh22zm3mqr4padjkzmlz622jnm2s5n5xkvfqjc4q8";
+          url = "mirror://luarocks/haskell-tools.nvim-9.0.1-1.rockspec";
+          sha256 = "0gjwv0hijxzb8hmdv6ana77adyvwszx4j4lr8dddikpggd3i6iw0";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v7.0.3.zip";
-        sha256 = "0hdd2qnhy0vki0qcj7xzs29xla0a1ccwmym163py45lhwlgnjxvw";
+        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v9.0.1.zip";
+        sha256 = "1sfwm86zz9pdk9w937knlm9dj4ai29rx0zx0r59accgl0rzaav7j";
       };
 
       disabled = luaOlder "5.1";
 
       meta = {
         homepage = "https://github.com/mrcjkb/haskell-tools.nvim";
-        description = "🦥 Supercharge your Haskell experience in neovim!";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-2.0";
+        description = " 🦥 Supercharge your Haskell experience in neovim!";
+        longDescription = ''
+          This plugin automatically configures the haskell-language-server builtin LSP client
+          and integrates with other Haskell tools. See the README's #features section
+          for more info.'';
       };
     }
   ) { };
@@ -1102,9 +1206,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/daurnimator/lua-http";
-        description = "HTTP library for Lua";
         maintainers = with lib.maintainers; [ vcunat ];
         license.fullName = "MIT";
+        description = "HTTP library for Lua";
       };
     }
   ) { };
@@ -1132,8 +1236,11 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/kikito/inspect.lua";
-        description = "Lua table visualizer, ideal for debugging";
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "Lua table visualizer, ideal for debugging";
+        longDescription = ''
+          inspect will print out your lua tables nicely so you can debug your programs quickly. It sorts keys by type and name and handles recursive tables properly.
+        '';
       };
     }
   ) { };
@@ -1164,8 +1271,11 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/kmarius/jsregexp";
-        description = "javascript (ECMA19) regular expressions for lua";
         license.fullName = "MIT";
+        description = "javascript (ECMA19) regular expressions for lua";
+        longDescription = ''
+          Provides ECMAScript regular expressions for Lua 5.1, 5.2, 5.3, 5.4 and LuaJit. Uses libregexp from Fabrice Bellard's QuickJS.
+          	'';
       };
     }
   ) { };
@@ -1197,8 +1307,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/daurnimator/ldbus";
-        description = "A Lua library to access dbus.";
         license.fullName = "MIT/X11";
+        description = "A Lua library to access dbus.";
       };
     }
   ) { };
@@ -1233,8 +1343,14 @@ final: prev: {
 
       meta = {
         homepage = "http://lunarmodules.github.io/ldoc";
-        description = "A Lua Documentation Tool";
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "A Lua Documentation Tool";
+        longDescription = ''
+          LDoc is a LuaDoc-compatible documentation generator which can also
+                process C extension source. Markdown may be optionally used to
+                render comments, as well as integrated readme documentation and
+                pretty-printed example files
+        '';
       };
     }
   ) { };
@@ -1265,8 +1381,13 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/pavouk/lgi";
-        description = "Lua bindings to GObject libraries";
         license.fullName = "MIT/X11";
+        description = "Lua bindings to GObject libraries";
+        longDescription = ''
+          Dynamic Lua binding to any library which is introspectable
+          	 using gobject-introspection.  Allows using GObject-based libraries
+          	 directly from Lua.
+        '';
       };
     }
   ) { };
@@ -1290,8 +1411,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/hoelzro/lua-linenoise";
-        description = "A binding for the linenoise command line library";
         license.fullName = "MIT/X11";
+        description = "A binding for the linenoise command line library";
       };
     }
   ) { };
@@ -1319,9 +1440,9 @@ final: prev: {
 
       meta = {
         homepage = "http://www.myriabit.com/ljsyscall/";
-        description = "LuaJIT Linux syscall FFI";
         maintainers = with lib.maintainers; [ lblasc ];
         license.fullName = "MIT";
+        description = "LuaJIT Linux syscall FFI";
       };
     }
   ) { };
@@ -1364,9 +1485,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/jeffzi/llscheck";
-        description = "Human-friendly Lua code analysis powered by Lua Language Server";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "Human-friendly Lua code analysis powered by Lua Language Server";
+        longDescription = ''
+          LLSCheck runs Lua Language Server diagnostics and formats results for humans.
+                Returns non-zero on errors for CI integration. Also usable as a Lua module.
+        '';
       };
     }
   ) { };
@@ -1388,9 +1513,13 @@ final: prev: {
 
       meta = {
         homepage = "http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/#lmathx";
-        description = "C99 extensions for the math library";
         maintainers = with lib.maintainers; [ alexshpilkin ];
         license.fullName = "Public domain";
+        description = "C99 extensions for the math library";
+        longDescription = ''
+          An extension of the Lua math library with the functions
+                available in C99.
+        '';
       };
     }
   ) { };
@@ -1419,9 +1548,10 @@ final: prev: {
 
       meta = {
         homepage = "http://www.circuitwizard.de/lmpfrlib/lmpfrlib.html";
-        description = "Lua API for the GNU MPFR library";
         maintainers = with lib.maintainers; [ alexshpilkin ];
         license.fullName = "LGPL";
+        description = "Lua API for the GNU MPFR library";
+        longDescription = "The MPFR library is a C library for multi-precision floating-point computations with correct rounding. This extension allows the use of the MPFR library from within Lua.";
       };
     }
   ) { };
@@ -1452,9 +1582,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/leafo/loadkit";
-        description = "Loadkit allows you to load arbitrary files within the Lua package path";
         maintainers = with lib.maintainers; [ alerque ];
         license.fullName = "MIT";
+        description = "Loadkit allows you to load arbitrary files within the Lua package path";
+        longDescription = ''
+          Loadkit lets you register new file extension handlers that can be opened
+          		with require, or you can just search for files of any extension using the
+          		current search path.
+        '';
       };
     }
   ) { };
@@ -1482,8 +1617,16 @@ final: prev: {
 
       meta = {
         homepage = "https://www.inf.puc-rio.br/~roberto/lpeg.html";
-        description = "Parsing Expression Grammars For Lua";
         license.fullName = "MIT/X11";
+        description = "Parsing Expression Grammars For Lua";
+        longDescription = ''
+          LPeg is a new pattern-matching library for Lua, based on Parsing
+                Expression Grammars (PEGs). The nice thing about PEGs is that it
+                has a formal basis (instead of being an ad-hoc set of features),
+                allows an efficient and simple implementation, and does most things
+                we expect from a pattern-matching library (and more, as we can
+                define entire grammars).
+        '';
       };
     }
   ) { };
@@ -1512,8 +1655,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/daurnimator/lpeg_patterns/archive/v0.5.zip";
-        description = "a collection of LPEG patterns";
         license.fullName = "MIT";
+        description = "a collection of LPEG patterns";
       };
     }
   ) { };
@@ -1541,8 +1684,16 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/sqmedeiros/lpeglabel/";
-        description = "Parsing Expression Grammars For Lua with Labeled Failures";
         license.fullName = "MIT/X11";
+        description = "Parsing Expression Grammars For Lua with Labeled Failures";
+        longDescription = ''
+          LPegLabel is a conservative extension of the LPeg library that provides
+               an implementation of Parsing Expression Grammars (PEGs) with labeled failures.
+               By using labeled failures we can properly report syntactical errors.
+               We can also recover from such errors by describing a grammar rule with
+               the same name of a given label.
+               LPegLabel also reports the farthest failure position in case of an ordinary failure.
+        '';
       };
     }
   ) { };
@@ -1573,8 +1724,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/rrthomas/lrexlib";
-        description = "Regular expression library binding (GNU flavour).";
         license.fullName = "MIT/X11";
+        description = "Regular expression library binding (GNU flavour).";
+        longDescription = ''
+          Lrexlib is a regular expression library for Lua 5.1-5.4, which
+          provides bindings for several regular expression libraries.
+          This rock provides the GNU bindings.'';
       };
     }
   ) { };
@@ -1605,9 +1760,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/rrthomas/lrexlib";
-        description = "Regular expression library binding (oniguruma flavour).";
         maintainers = with lib.maintainers; [ junestepp ];
         license.fullName = "MIT/X11";
+        description = "Regular expression library binding (oniguruma flavour).";
+        longDescription = ''
+          Lrexlib is a regular expression library for Lua 5.1-5.4, which
+          provides bindings for several regular expression libraries.
+          This rock provides the oniguruma bindings.'';
       };
     }
   ) { };
@@ -1638,8 +1797,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/rrthomas/lrexlib";
-        description = "Regular expression library binding (PCRE flavour).";
         license.fullName = "MIT/X11";
+        description = "Regular expression library binding (PCRE flavour).";
+        longDescription = ''
+          Lrexlib is a regular expression library for Lua 5.1-5.4, which
+          provides bindings for several regular expression libraries.
+          This rock provides the PCRE bindings.'';
       };
     }
   ) { };
@@ -1670,8 +1833,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/rrthomas/lrexlib";
-        description = "Regular expression library binding (POSIX flavour).";
         license.fullName = "MIT/X11";
+        description = "Regular expression library binding (POSIX flavour).";
+        longDescription = ''
+          Lrexlib is a regular expression library for Lua 5.1-5.4, which
+          provides bindings for several regular expression libraries.
+          This rock provides the POSIX bindings.'';
       };
     }
   ) { };
@@ -1700,9 +1867,9 @@ final: prev: {
 
       meta = {
         homepage = "https://linrongbin16.github.io/lsp-progress.nvim/";
-        description = "A performant lsp progress status for Neovim.";
         maintainers = with lib.maintainers; [ gepbird ];
         license.fullName = "MIT";
+        description = "A performant lsp progress status for Neovim.";
       };
     }
   ) { };
@@ -1732,8 +1899,75 @@ final: prev: {
 
       meta = {
         homepage = "http://lua.sqlite.org/";
-        description = "A binding for Lua to the SQLite3 database library";
         license.fullName = "MIT";
+        description = "A binding for Lua to the SQLite3 database library";
+        longDescription = ''
+          lsqlite3 is a thin wrapper around the public domain SQLite3 database engine. SQLite3 is
+                  dynamically linked to lsqlite3. The statically linked alternative is lsqlite3complete.
+                  The lsqlite3 module supports the creation and manipulation of SQLite3 databases.
+                  Most sqlite3 functions are called via an object-oriented interface to either
+                  database or SQL statement objects.
+        '';
+      };
+    }
+  ) { };
+
+  ltreesitter = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+    }:
+    buildLuarocksPackage {
+      pname = "ltreesitter";
+      version = "0.3.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/ltreesitter-0.3.0-1.rockspec";
+          sha256 = "1vb8jbdl36syqmd4sjqswsqy42rq59kchxk4sx0ns9va4c0kim4v";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "euclidianAce";
+        repo = "ltreesitter";
+        tag = "v0.3.0";
+        hash = "sha256-tiNcc/1hnY8GWgpdlBfOTA7400916tqiAXeXJLfgtNE=";
+      };
+
+      meta = {
+        homepage = "https://github.com/euclidianAce/ltreesitter";
+        license.fullName = "MIT";
+        description = "Treesitter bindings to Lua";
+        longDescription = "Standalone Lua bindings to the Treesitter api (with full type definitions for Teal).";
+      };
+    }
+  ) { };
+
+  ltreesitter-ts = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+    }:
+    buildLuarocksPackage {
+      pname = "ltreesitter-ts";
+      version = "0.0.1-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/ltreesitter-ts-0.0.1-1.rockspec";
+          sha256 = "064nn3h6wi8z5ply35ig78jjkpy527nc5qxisbkvv8s3s345h82r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "ltreesitter-ts";
+        tag = "0.0.1";
+        hash = "sha256-HFBOYFadw+lwQYk39vrFtAn/HGjfXzCxjN1RLBp4yKA=";
+      };
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/ltreesitter-ts";
+        license.fullName = "MIT";
+        description = "Treesitter parsing library bindings for Lua";
+        longDescription = "This combines [ltreesitter](https://github.com/EuclidianAce/ltreesitter) and the [tree-sitter](https://github.com/tree-sitter/tree-sitter) library together to have an easy LuaRocks based install for tree sitter parsing. There are no other enhancements to either library. It can be imported as just `ltreesitter`.";
       };
     }
   ) { };
@@ -1764,8 +1998,16 @@ final: prev: {
 
       meta = {
         homepage = "http://www.kyne.com.au/~mark/software/lua-cjson.php";
-        description = "A fast JSON encoding/parsing module";
         license.fullName = "MIT";
+        description = "A fast JSON encoding/parsing module";
+        longDescription = ''
+          The Lua CJSON module provides JSON support for Lua. It features:
+                  - Fast, standards compliant encoding/parsing routines
+                  - Full support for JSON with UTF-8, including decoding surrogate pairs
+                  - Optional run-time support for common exceptions to the JSON specification
+                    (infinity, NaN,..)
+                  - No dependencies on other libraries
+        '';
       };
     }
   ) { };
@@ -1796,8 +2038,8 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/antirez/lua-cmsgpack";
-        description = "MessagePack C implementation and bindings for Lua 5.1/5.2/5.3";
         license.fullName = "Two-clause BSD";
+        description = "MessagePack C implementation and bindings for Lua 5.1/5.2/5.3";
       };
     }
   ) { };
@@ -1827,8 +2069,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/Lua-cURL";
-        description = "Lua binding to libcurl";
         license.fullName = "MIT/X11";
+        description = "Lua binding to libcurl";
+        longDescription = "";
       };
     }
   ) { };
@@ -1887,8 +2130,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/lua-iconv/";
-        description = "Lua binding to the iconv";
         license.fullName = "MIT/X11";
+        description = "Lua binding to the iconv";
+        longDescription = ''
+          Lua binding to the POSIX 'iconv' library, which converts a sequence of
+               characters from one codeset into a sequence of corresponding characters
+               in another codeset.
+        '';
       };
     }
   ) { };
@@ -1928,8 +2176,19 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/Alloyed/lua-lsp";
-        description = "A Language Server implementation for lua, the language";
         license.fullName = "MIT";
+        description = "A Language Server implementation for lua, the language";
+        longDescription = ''
+          A Language Server for Lua code, written in Lua.
+          It's still a work in progress, but it's usable for day-to-day. It currently
+          supports:
+
+          * Limited autocompletion
+          * Goto definition
+          * As you type linting and syntax checking
+          * Code formatting
+          * Supports Lua 5.1-5.3 and Luajit
+        '';
       };
     }
   ) { };
@@ -1957,8 +2216,13 @@ final: prev: {
 
       meta = {
         homepage = "https://fperrad.frama.io/lua-MessagePack/";
-        description = "a pure Lua implementation of the MessagePack serialization format";
         license.fullName = "MIT/X11";
+        description = "a pure Lua implementation of the MessagePack serialization format";
+        longDescription = ''
+          MessagePack is an efficient binary serialization format.
+
+                  It lets you exchange data among multiple languages like JSON but it's faster and smaller.
+        '';
       };
     }
   ) { };
@@ -1989,9 +2253,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/starwing/lua-protobuf";
-        description = "protobuf data support for Lua";
         maintainers = with lib.maintainers; [ lockejan ];
         license.fullName = "MIT";
+        description = "protobuf data support for Lua";
+        longDescription = ''
+          This project offers a simple C library for basic protobuf wire format encode/decode.
+        '';
       };
     }
   ) { };
@@ -2022,8 +2289,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/ledgetech/lua-resty-http";
-        description = "Lua HTTP client cosocket driver for OpenResty / ngx_lua.";
         license.fullName = "2-clause BSD";
+        description = "Lua HTTP client cosocket driver for OpenResty / ngx_lua.";
       };
     }
   ) { };
@@ -2056,8 +2323,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/cdbattags/lua-resty-jwt";
-        description = "JWT for ngx_lua and LuaJIT.";
         license.fullName = "Apache License Version 2";
+        description = "JWT for ngx_lua and LuaJIT.";
+        longDescription = ''
+          This library requires an nginx build
+              with OpenSSL, the ngx_lua module,
+              the LuaJIT 2.0, the lua-resty-hmac,
+              and the lua-resty-string,
+        '';
       };
     }
   ) { };
@@ -2096,8 +2369,19 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/zmartzone/lua-resty-openidc";
-        description = "A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality";
         license.fullName = "Apache 2.0";
+        description = "A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality";
+        longDescription = ''
+          lua-resty-openidc is a library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality.
+
+                  When used as an OpenID Connect Relying Party it authenticates users against an OpenID Connect Provider using OpenID Connect Discovery and the Basic Client Profile (i.e. the Authorization Code flow). When used as an OAuth 2.0 Resource Server it can validate OAuth 2.0 Bearer Access Tokens against an Authorization Server or, in case a JSON Web Token is used for an Access Token, verification can happen against a pre-configured secret/key .
+
+                  It maintains sessions for authenticated users by leveraging lua-resty-session thus offering a configurable choice between storing the session state in a client-side browser cookie or use in of the server-side storage mechanisms shared-memory|memcache|redis.
+
+                  It supports server-wide caching of resolved Discovery documents and validated Access Tokens.
+
+                  It can be used as a reverse proxy terminating OAuth/OpenID Connect in front of an origin server so that the origin server/services can be protected with the relevant standards without implementing those on the server itself.
+        '';
       };
     }
   ) { };
@@ -2125,8 +2409,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/fffonion/lua-resty-openssl";
-        description = "No summary";
         license.fullName = "BSD";
+        description = "No summary";
+        longDescription = "FFI-based OpenSSL binding for LuaJIT.";
       };
     }
   ) { };
@@ -2163,8 +2448,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/bungle/lua-resty-session";
-        description = "Session Library for OpenResty - Flexible and Secure";
         license.fullName = "BSD";
+        description = "Session Library for OpenResty - Flexible and Secure";
+        longDescription = "lua-resty-session is a secure, and flexible session library for OpenResty.";
       };
     }
   ) { };
@@ -2178,13 +2464,13 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-rtoml";
-      version = "0.2-0";
+      version = "0.3-0";
 
       src = fetchFromGitHub {
         owner = "lblasc";
         repo = "lua-rtoml";
-        rev = "c83f56b9519d85968d663308e303f384c55c7b18";
-        hash = "sha256-PRoaUQSSvzl9VFK+aGHbJqCW37AsO+oFXNYgM0OdIoY=";
+        rev = "aedc4030912e1c86a1490428dc547f35a1a99be6";
+        hash = "sha256-Ge2Acy1XuAQENhoJpuRudazY2D8HSiVv1Ab+jqMjo0U=";
       };
 
       disabled = luaOlder "5.1";
@@ -2193,9 +2479,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lblasc/lua-rtoml";
-        description = "Lua bindings for the Rust toml crate.";
         maintainers = with lib.maintainers; [ lblasc ];
         license.fullName = "MIT";
+        description = "Lua bindings for the Rust toml crate.";
       };
     }
   ) { };
@@ -2221,9 +2507,10 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/xlq/lua-subprocess";
-        description = "A Lua module written in C that allows you to create child processes and communicate with them.";
         maintainers = with lib.maintainers; [ scoder12 ];
         license.fullName = "MIT";
+        description = "A Lua module written in C that allows you to create child processes and communicate with them.";
+        longDescription = "A Lua module written in C that allows you to create child processes and communicate with them. The API is based on the Python subprocess module, but is not yet as complete.";
       };
     }
   ) { };
@@ -2245,8 +2532,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/hoelzro/lua-term";
-        description = "Terminal functions for Lua";
         license.fullName = "MIT/X11";
+        description = "Terminal functions for Lua";
       };
     }
   ) { };
@@ -2277,8 +2564,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/jonstoler/lua-toml";
-        description = "toml decoder/encoder for Lua";
         license.fullName = "MIT";
+        description = "toml decoder/encoder for Lua";
+        longDescription = "TOML 0.4.0 compliant Lua library with tests. Serializes TOML into a Lua table, and serlaizes Lua tables into TOML.";
       };
     }
   ) { };
@@ -2307,9 +2595,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-neorg/lua-utils.nvim";
-        description = "A set of utility functions for Neovim plugins.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "A set of utility functions for Neovim plugins.";
+        longDescription = ''
+          This repository contains a small set of nicities for performing repetitive tasks within Neovim.
+          This set may shrink further as the features are included in other, larger "utility kits".
+          The code you see in this repository is primarily used within Neorg.
+          All functions are annotated using LuaCATS.'';
       };
     }
   ) { };
@@ -2340,9 +2633,9 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/brimworks/lua-yajl";
-        description = "Integrate the yajl JSON library with Lua.";
         maintainers = with lib.maintainers; [ pstn ];
         license.fullName = "MIT/X11";
+        description = "Integrate the yajl JSON library with Lua.";
       };
     }
   ) { };
@@ -2373,9 +2666,15 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/brimworks/lua-zlib";
-        description = "Simple streaming interface to zlib for Lua.";
         maintainers = with lib.maintainers; [ koral ];
         license.fullName = "MIT";
+        description = "Simple streaming interface to zlib for Lua.";
+        longDescription = ''
+          Simple streaming interface to zlib for Lua.
+                Consists of two functions: inflate and deflate.
+                Both functions return "stream functions" (takes a buffer of input and returns a buffer of output).
+                This project is hosted on github.
+        '';
       };
     }
   ) { };
@@ -2406,8 +2705,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/lua_cliargs.git";
-        description = "A command-line argument parsing module for Lua";
         license.fullName = "MIT";
+        description = "A command-line argument parsing module for Lua";
+        longDescription = ''
+          This module adds support for accepting CLI arguments easily using multiple
+                notations and argument types.
+
+                cliargs allows you to define required, optional, and flag arguments.
+        '';
       };
     }
   ) { };
@@ -2434,8 +2739,12 @@ final: prev: {
 
       meta = {
         homepage = "http://bitop.luajit.org/";
-        description = "Lua Bit Operations Module";
         license.fullName = "MIT/X license";
+        description = "Lua Bit Operations Module";
+        longDescription = ''
+          Lua BitOp is a C extension module for Lua 5.1 which adds bitwise operations on numbers. 
+          Lua BitOp is Copyright © 2008 Mike Pall. Lua BitOp is free software, released under the MIT/X license (same license as the Lua core).
+        '';
       };
     }
   ) { };
@@ -2472,8 +2781,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/luacheck";
-        description = "A static analyzer and a linter for Lua";
         license.fullName = "MIT";
+        description = "A static analyzer and a linter for Lua";
+        longDescription = ''
+          Luacheck is a command-line tool for linting and static analysis of Lua
+                code. It is able to spot usage of undefined global variables, unused
+                local variables and a few other typical problems within Lua programs.
+        '';
       };
     }
   ) { };
@@ -2505,9 +2819,17 @@ final: prev: {
       propagatedBuildInputs = [ datafile ];
 
       meta = {
-        homepage = "https://lunarmodules.github.io/luacov/";
-        description = "Coverage analysis tool for Lua scripts";
+        homepage = "https://lunarmodules.github.ioluacov/";
         license.fullName = "MIT";
+        description = "Coverage analysis tool for Lua scripts";
+        longDescription = ''
+          LuaCov is a simple coverage analysis tool for Lua scripts.
+                When a Lua script is run with the luacov module, it
+                generates a stats file. The luacov command-line script then
+                processes this file generating a report indicating which code
+                paths were not traversed, which is useful for verifying the
+                effectiveness of a test suite.
+        '';
       };
     }
   ) { };
@@ -2538,9 +2860,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/daurnimator/luacov-reporter-lcov";
-        description = "A luacov reporter for use with lcov";
         maintainers = with lib.maintainers; [ ulysseszhan ];
         license.fullName = "MIT";
+        description = "A luacov reporter for use with lcov";
       };
     }
   ) { };
@@ -2572,8 +2894,18 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mwild1/luadbi";
-        description = "Database abstraction layer";
         license.fullName = "MIT/X11";
+        description = "Database abstraction layer";
+        longDescription = ''
+          LuaDBI is a database interface library for Lua. It is designed 
+          		to provide a RDBMS agnostic API for handling database 
+          		operations. LuaDBI also provides support for prepared statement 
+          		handles, placeholders and bind parameters for all database 
+          		operations.
+          		
+          		This rock is the front end DBI module. You will need one or 
+          		more backend DBD drivers to use this software.
+          	'';
       };
     }
   ) { };
@@ -2607,8 +2939,18 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mwild1/luadbi";
-        description = "Database abstraction layer";
         license.fullName = "MIT/X11";
+        description = "Database abstraction layer";
+        longDescription = ''
+          LuaDBI is a database interface library for Lua. It is designed 
+          		to provide a RDBMS agnostic API for handling database 
+          		operations. LuaDBI also provides support for prepared statement 
+          		handles, placeholders and bind parameters for all database 
+          		operations.
+          		
+          		This rock is the MySQL DBD module. You will also need the
+          		base DBI module to use this software.
+          	'';
       };
     }
   ) { };
@@ -2642,8 +2984,18 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mwild1/luadbi";
-        description = "Database abstraction layer";
         license.fullName = "MIT/X11";
+        description = "Database abstraction layer";
+        longDescription = ''
+          LuaDBI is a database interface library for Lua. It is designed 
+          		to provide a RDBMS agnostic API for handling database 
+          		operations. LuaDBI also provides support for prepared statement 
+          		handles, placeholders and bind parameters for all database 
+          		operations.
+          		
+          		This rock is the PostgreSQL DBD module. You will also need the
+          		base DBI module to use this software.
+          	'';
       };
     }
   ) { };
@@ -2677,8 +3029,18 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mwild1/luadbi";
-        description = "Database abstraction layer";
         license.fullName = "MIT/X11";
+        description = "Database abstraction layer";
+        longDescription = ''
+          LuaDBI is a database interface library for Lua. It is designed 
+          		to provide a RDBMS agnostic API for handling database 
+          		operations. LuaDBI also provides support for prepared statement 
+          		handles, placeholders and bind parameters for all database 
+          		operations.
+          		
+          		This rock is the Sqlite3 DBD module. You will also need the
+          		base DBI module to use this software.
+          	'';
       };
     }
   ) { };
@@ -2712,8 +3074,12 @@ final: prev: {
 
       meta = {
         homepage = "http://siffiejoe.github.io/lua-luaepnf/";
-        description = "Extended PEG Notation Format (easy grammars for LPeg)";
         license.fullName = "MIT";
+        description = "Extended PEG Notation Format (easy grammars for LPeg)";
+        longDescription = ''
+          This Lua module provides sugar for writing grammars/parsers using
+              the LPeg library. It simplifies error reporting and AST building.
+        '';
       };
     }
   ) { };
@@ -2741,8 +3107,11 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/harningt/luaevent";
-        description = "libevent binding for Lua";
         license.fullName = "MIT";
+        description = "libevent binding for Lua";
+        longDescription = ''
+          This is a binding of libevent to Lua
+        '';
       };
     }
   ) { };
@@ -2773,12 +3142,16 @@ final: prev: {
 
       meta = {
         homepage = "https://lunarmodules.github.io/luaexpat";
-        description = "XML Expat parsing";
         maintainers = with lib.maintainers; [
           arobyn
           flosse
         ];
         license.fullName = "MIT/X11";
+        description = "XML Expat parsing";
+        longDescription = ''
+          LuaExpat is a SAX (Simple API for XML) XML parser based on the
+          		Expat library.
+          	'';
       };
     }
   ) { };
@@ -2809,8 +3182,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/facebook/luaffifb";
-        description = "FFI library for calling C functions from lua";
         license.fullName = "BSD";
+        description = "FFI library for calling C functions from lua";
+        longDescription = "";
       };
     }
   ) { };
@@ -2841,9 +3215,15 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/luafilesystem";
-        description = "File System Library for the Lua Programming Language";
         maintainers = with lib.maintainers; [ flosse ];
         license.fullName = "MIT/X11";
+        description = "File System Library for the Lua Programming Language";
+        longDescription = ''
+          LuaFileSystem is a Lua library developed to complement the set of
+                functions related to file systems offered by the standard Lua
+                distribution. LuaFileSystem offers a portable way to access the
+                underlying directory structure and file attributes.
+        '';
       };
     }
   ) { };
@@ -2874,9 +3254,16 @@ final: prev: {
 
       meta = {
         homepage = "https://lualdap.github.io/lualdap/";
-        description = "A Lua interface to the OpenLDAP library";
         maintainers = with lib.maintainers; [ aanderse ];
         license.fullName = "MIT";
+        description = "A Lua interface to the OpenLDAP library";
+        longDescription = ''
+          LuaLDAP is a simple interface from Lua to an LDAP client, in
+                 fact it is a bind to OpenLDAP. It enables a Lua program to
+                 connect to an LDAP server; execute any operation (search, add,
+                 compare, delete, modify and rename); retrieve entries and
+                 references of the search result.
+        '';
       };
     }
   ) { };
@@ -2890,25 +3277,25 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lualine.nvim";
-      version = "scm-1";
+      version = "scm-3";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lualine.nvim-scm-1.rockspec";
-          sha256 = "01cqa4nvpq0z4230szwbcwqb0kd8cz2dycrd764r0z5c6vivgfzs";
+          url = "mirror://luarocks/lualine.nvim-scm-3.rockspec";
+          sha256 = "1d2wxz9qvczy9l3rislaiwgiwdsvphws0s5y59gcpdnvfl353scx";
         }).outPath;
       src = fetchFromGitHub {
         owner = "nvim-lualine";
         repo = "lualine.nvim";
-        rev = "47f91c416daef12db467145e16bed5bbfe00add8";
-        hash = "sha256-OpLZH+sL5cj2rcP5/T+jDOnuxd1QWLHCt2RzloffZOA=";
+        rev = "a905eeebc4e63fdc48b5135d3bf8aea5618fb21c";
+        hash = "sha256-PHunrG0yd3pDw3c1S9w1AXQx5/1nT68M+mjxT53enmM=";
       };
 
       disabled = luaOlder "5.1";
 
       meta = {
         homepage = "https://github.com/nvim-lualine/lualine.nvim";
-        description = "A blazing fast and easy to configure neovim statusline plugin written in pure lua.";
         license.fullName = "MIT";
+        description = "A blazing fast and easy to configure neovim statusline plugin written in pure lua.";
       };
     }
   ) { };
@@ -2939,8 +3326,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/lualogging";
-        description = "A simple API to use logging features";
         license.fullName = "MIT/X11";
+        description = "A simple API to use logging features";
+        longDescription = ''
+          LuaLogging provides a simple API to use logging features in Lua. Its design was
+              based on log4j. LuaLogging currently supports, through the use of appenders,
+              console, file, rolling file, email, socket and SQL outputs.
+        '';
       };
     }
   ) { };
@@ -2966,8 +3358,8 @@ final: prev: {
 
       meta = {
         homepage = "http://25thandclement.com/~william/projects/luaossl.html";
-        description = "Most comprehensive OpenSSL module in the Lua universe.";
         license.fullName = "MIT/X11";
+        description = "Most comprehensive OpenSSL module in the Lua universe.";
       };
     }
   ) { };
@@ -2997,9 +3389,13 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/luaposix/luaposix/";
-        description = "Lua bindings for POSIX";
         maintainers = with lib.maintainers; [ lblasc ];
         license.fullName = "MIT/X11";
+        description = "Lua bindings for POSIX";
+        longDescription = ''
+          A library binding various POSIX APIs. POSIX is the IEEE Portable
+                Operating System Interface standard. luaposix is based on lposix.
+        '';
       };
     }
   ) { };
@@ -3032,9 +3428,41 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/dpapavas/luaprompt";
-        description = "A Lua command prompt with pretty-printing and auto-completion";
         maintainers = with lib.maintainers; [ Freed-Wu ];
         license.fullName = "MIT/X11";
+        description = "A Lua command prompt with pretty-printing and auto-completion";
+        longDescription = ''
+          luaprompt is both an interactive Lua prompt that can be used instead
+          of the official interpreter, as well as module that provides a Lua
+          command prompt that can be embedded in a host application.  As a
+          standalone interpreter it provides many conveniences that are missing
+          from the official Lua interpreter.  As an embedded prompt, it's meant
+          for applications that use Lua as a configuration or interface language
+          and can therefore benefit from an interactive prompt for debugging or
+          regular use.
+
+          luaprompt features:
+
+          * Readline-based input with history and completion: In particular all
+            keywords, global variables and table accesses (with string or
+            integer keys) can be completed in addition to readline's standard
+            file completion.  Module names are also completed, for modules
+            installed in the standard directories, and completed modules can
+            optionally be loaded.
+
+          * Persistent command history (retained across sessions), as well as
+            recording of command results for future reference.
+
+          * Proper value pretty-printing for interactive use: When an expression
+            is entered at the prompt, all returned values are printed
+            (prepending with an equal sign is not required).  Values are printed
+            in a descriptive way that tries to be as readable as possible.  The
+            formatting tries to mimic Lua code (this is done to minimize
+            ambiguities and no guarantees are made that it is valid code).
+            Additionally, each value is stored in a table for future reference.
+
+          * Color highlighting of error messages and variable printouts.
+        '';
       };
     }
   ) { };
@@ -3062,8 +3490,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/hoelzro/lua-repl";
-        description = "A reusable REPL component for Lua, written in Lua";
         license.fullName = "MIT/X11";
+        description = "A reusable REPL component for Lua, written in Lua";
       };
     }
   ) { };
@@ -3091,12 +3519,21 @@ final: prev: {
 
       meta = {
         homepage = "http://www.luarocks.org";
-        description = "A package manager for Lua modules.";
         maintainers = with lib.maintainers; [
           mrcjkb
           teto
         ];
         license.fullName = "MIT";
+        description = "A package manager for Lua modules.";
+        longDescription = ''
+          LuaRocks allows you to install Lua modules as self-contained
+                packages called "rocks", which also contain version dependency
+                information. This information is used both during installation,
+                so that when one rock is requested all rocks it depends on are
+                installed as well, and at run time, so that when a module is
+                required, the correct version is loaded. LuaRocks supports both
+                local and remote repositories, and multiple local rocks trees.
+        '';
       };
     }
   ) { };
@@ -3124,9 +3561,42 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mlua-rs/luarocks-build-rust-mlua";
-        description = "A LuaRocks build backend for Lua modules written in Rust using mlua";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "A LuaRocks build backend for Lua modules written in Rust using mlua";
+      };
+    }
+  ) { };
+
+  luarocks-build-tree-sitter-cli = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "luarocks-build-tree-sitter-cli";
+      version = "0.0.3-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luarocks-build-tree-sitter-cli-0.0.3-1.rockspec";
+          sha256 = "0yy04svrll85zn334mhhnzzdqymsbiqymnr6iaj23h436v3gcq38";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "luarocks-build-tree-sitter-cli";
+        tag = "0.0.3";
+        hash = "sha256-Chc0eKvKyL9JM6MNX5GcRes1YA2+W842NDrX1nNMQ+E=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/luarocks-build-tree-sitter-cli";
+        license.fullName = "MIT";
+        description = "A LuaRocks build backend to install the tree-sitter CLI";
+        longDescription = "luarocks-build-tree-sitter-cli is a LuaRocks build.type that allows installing tree-sitter CLI binaries via LuaRocks directly. It works similarly to the npm install option for tree-sitter, but uses LuaRocks instead.";
       };
     }
   ) { };
@@ -3157,9 +3627,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lumen-oss/luarocks-build-treesitter-parser";
-        description = "A luarocks build backend for tree-sitter parsers.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "A luarocks build backend for tree-sitter parsers.";
       };
     }
   ) { };
@@ -3190,9 +3660,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lumen-oss/luarocks-build-treesitter-parser-cpp";
-        description = "A luarocks build backend for tree-sitter parsers written in C++.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "A luarocks build backend for tree-sitter parsers written in C++.";
       };
     }
   ) { };
@@ -3225,9 +3695,10 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/brunoos/luasec/wiki";
-        description = "A binding for OpenSSL library to provide TLS/SSL communication over LuaSocket.";
         maintainers = with lib.maintainers; [ flosse ];
         license.fullName = "MIT";
+        description = "A binding for OpenSSL library to provide TLS/SSL communication over LuaSocket.";
+        longDescription = "This version delegates to LuaSocket the TCP connection establishment between the client and server. Then LuaSec uses this connection to start a secure TLS/SSL session.";
       };
     }
   ) { };
@@ -3242,15 +3713,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luasnip";
-      version = "2.4.1-1";
+      version = "2.5.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luasnip-2.4.1-1.rockspec";
-          sha256 = "03cl2qybqa06q41vxckamr46s7ij9igqz59ak0wshhzp7yysn2xr";
+          url = "mirror://luarocks/luasnip-2.5.0-1.rockspec";
+          sha256 = "1qgd4536yglz0v21bpia3q2xbjcakxh4jhphhficm7nqb82xfsap";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/L3MON4D3/LuaSnip/archive/v2.4.1.zip";
-        sha256 = "1vjn0fwxv89p4dxycwn5lf7c0fgspzymbjp76n27rqnkab6v1qzy";
+        url = "https://github.com/L3MON4D3/LuaSnip/archive/v2.5.0.zip";
+        sha256 = "16cirbi0zjg874858yqd36p3kbrmlpfii3bvx6lm9bpli7b4w9kn";
       };
 
       disabled = luaOlder "5.1";
@@ -3258,8 +3729,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/L3MON4D3/LuaSnip";
-        description = "Snippet Engine for Neovim written in Lua.";
         license.fullName = "Apache-2.0";
+        description = "Snippet Engine for Neovim written in Lua.";
       };
     }
   ) { };
@@ -3290,8 +3761,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/luasocket";
-        description = "Network support for the Lua language";
         license.fullName = "MIT";
+        description = "Network support for the Lua language";
+        longDescription = ''
+          LuaSocket is a Lua extension library composed of two parts: a set of C
+                modules that provide support for the TCP and UDP transport layers, and a
+                set of Lua modules that provide functions commonly needed by applications
+                that deal with the Internet.
+        '';
       };
     }
   ) { };
@@ -3322,8 +3799,13 @@ final: prev: {
 
       meta = {
         homepage = "https://lunarmodules.github.io/luasql/";
-        description = "Database connectivity for Lua (SQLite3 driver)";
         license.fullName = "MIT/X11";
+        description = "Database connectivity for Lua (SQLite3 driver)";
+        longDescription = ''
+          LuaSQL is a simple interface from Lua to a DBMS. It enables a
+                Lua program to connect to databases, execute arbitrary SQL statements
+                and retrieve results in a row-by-row cursor fashion.
+        '';
       };
     }
   ) { };
@@ -3356,8 +3838,12 @@ final: prev: {
 
       meta = {
         homepage = "https://lunarmodules.github.io/busted/";
-        description = "Lua assertions extension";
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "Lua assertions extension";
+        longDescription = ''
+          Adds a framework that allows registering new assertions
+              without compromising builtin assertion functionality.
+        '';
       };
     }
   ) { };
@@ -3388,8 +3874,11 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/luasystem";
-        description = "Platform independent system calls for Lua.";
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "Platform independent system calls for Lua.";
+        longDescription = ''
+          Adds a Lua API for making platform independent system calls.
+        '';
       };
     }
   ) { };
@@ -3420,8 +3909,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/f4z3r/luatext/tree/main";
-        description = "A small library to print colored text";
         license.fullName = "MIT";
+        description = "A small library to print colored text";
+        longDescription = ''
+          A libary providing an abstaction over ANSI escape codes
+                that allow to print text to terminals in different colors
+                and with various modifiers.
+        '';
       };
     }
   ) { };
@@ -3435,23 +3929,23 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaunbound";
-      version = "1.0.0-1";
+      version = "1.1.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaunbound-1.0.0-1.rockspec";
-          sha256 = "1zlkibdwrj5p97nhs33cz8xx0323z3kiq5x7v0h3i7v6j0h8ppvn";
+          url = "mirror://luarocks/luaunbound-1.1.0-1.rockspec";
+          sha256 = "0d0qybfl309yqnl8h35m6xynj4wnwmvm1cxl31jqrnahym30w5d8";
         }).outPath;
       src = fetchurl {
-        url = "https://code.zash.se/dl/luaunbound/luaunbound-1.0.0.tar.gz";
-        sha256 = "1lsh0ylp5xskygxl5qdv6mhkm1x8xp0vfd5prk5hxkr19jk5mr3d";
+        url = "https://code.zash.se/dl/luaunbound/luaunbound-1.1.0.tar.gz";
+        sha256 = "0i02m7ivbjgj3271yvpac5pvm01nrynsff1pgp6d8qfc3r35jq93";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+      disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
         homepage = "https://www.zash.se/luaunbound.html";
-        description = "A binding to libunbound";
         license.fullName = "MIT";
+        description = "A binding to libunbound";
       };
     }
   ) { };
@@ -3466,24 +3960,42 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaunit";
-      version = "3.4-1";
+      version = "3.5-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaunit-3.4-1.rockspec";
-          sha256 = "111435fa8p2819vcvg76qmknj0wqk01gy9d1nh55c36616xnj54n";
+          url = "mirror://luarocks/luaunit-3.5-1.rockspec";
+          sha256 = "0rn0d9ng91rhrhvzq965przpxz5xx9vfyyakscfggf8xhg9g8s9p";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/bluebird75/luaunit/releases/download/LUAUNIT_V3_4/rock-luaunit-3.4.zip";
-        sha256 = "0qf07y3229lq3qq1mfkv83gzbc7dgyr67hysqjb5bbk333flv56r";
+        url = "https://github.com/bluebird75/luaunit/releases/download/LUAUNIT_V3_5/rock-luaunit-3.5.zip";
+        sha256 = "0qxk89c14s8gmzm7ka5caxn2qr3y4bxs1jqcni1hwfzkjh5jmyzk";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+      disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
         homepage = "http://github.com/bluebird75/luaunit";
-        description = "A unit testing framework for Lua";
         maintainers = with lib.maintainers; [ lockejan ];
         license.fullName = "BSD";
+        description = "A unit testing framework for Lua";
+        longDescription = ''
+          LuaUnit is a popular unit-testing framework for Lua, with an interface typical
+          		of xUnit libraries (Python unittest, Junit, NUnit, ...). It supports 
+          		several output formats (Text, TAP, JUnit, ...) to be used directly or work with Continuous Integration platforms
+          		(Jenkins, Hudson, ...).
+
+          		For simplicity, LuaUnit is contained into a single-file and has no external dependency. 
+
+          		Tutorial and reference documentation is available on
+          		[read-the-docs](http://luaunit.readthedocs.org/en/latest/)
+
+          		LuaUnit may also be used as an assertion library, to validate assertions inside a running program. In addition, it provides
+          		a pretty stringifier which converts any type into a nicely formatted string (including complex nested or recursive tables).
+
+          		To install LuaUnit from LuaRocks, you need at least LuaRocks version 2.4.4 (due to old versions of wget being incompatible
+          		with GitHub https downloading)
+
+          	'';
       };
     }
   ) { };
@@ -3511,9 +4023,12 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/starwing/luautf8";
-        description = "A UTF-8 support module for Lua";
         maintainers = with lib.maintainers; [ pstn ];
         license.fullName = "MIT";
+        description = "A UTF-8 support module for Lua";
+        longDescription = ''
+          This module adds UTF-8 support to Lua. It's compatible with Lua "string" module.
+        '';
       };
     }
   ) { };
@@ -3545,8 +4060,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mpeterv/luazip";
-        description = "Library for reading files inside zip files";
         license.fullName = "MIT";
+        description = "Library for reading files inside zip files";
+        longDescription = ''
+          LuaZip is a lightweight Lua extension library used to read files
+          stored inside zip files. The API is very similar to the standard
+          Lua I/O library API.
+        '';
       };
     }
   ) { };
@@ -3579,8 +4099,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/svermeulen/lusc_luv";
-        description = "Structured Async/Concurrency for Lua using Luv";
         license.fullName = "MIT";
+        description = "Structured Async/Concurrency for Lua using Luv";
+        longDescription = "Structured Async/Concurrency for Lua using Luv";
       };
     }
   ) { };
@@ -3612,9 +4133,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/rktjmp/lush.nvim";
-        description = "Define Neovim themes as a DSL in lua, with real-time feedback.";
         maintainers = with lib.maintainers; [ teto ];
         license.fullName = "MIT/X11";
+        description = "Define Neovim themes as a DSL in lua, with real-time feedback.";
+        longDescription = ''
+          Lush is a colorscheme creation aid, written in Lua, for Neovim.
+          	'';
       };
     }
   ) { };
@@ -3643,8 +4167,12 @@ final: prev: {
 
       meta = {
         homepage = "http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/#luuid";
-        description = "A library for UUID generation";
         license.fullName = "Public domain";
+        description = "A library for UUID generation";
+        longDescription = ''
+          A library for generating universally unique identifiers based on
+                libuuid, which is part of e2fsprogs.
+        '';
       };
     }
   ) { };
@@ -3674,9 +4202,10 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/gvvaughan/lyaml";
-        description = "libYAML binding for Lua";
         maintainers = with lib.maintainers; [ lblasc ];
         license.fullName = "MIT/X11";
+        description = "libYAML binding for Lua";
+        longDescription = "Read and write YAML format files with Lua.";
       };
     }
   ) { };
@@ -3705,9 +4234,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-neorocks/lz.n";
-        description = "🦥 A dead simple lazy-loading Lua library for Neovim plugins.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-2+";
+        description = "🦥 A dead simple lazy-loading Lua library for Neovim plugins.";
+        longDescription = ''
+          It is intended to be used
+          - by users or plugin managers that don't provide a convenient API for lazy-loading.
+          - by plugin managers, to provide a convenient API for lazy-loading.'';
       };
     }
   ) { };
@@ -3736,9 +4269,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/BirdeeHub/lze";
-        description = "A lazy-loading library for neovim, inspired by, but different from, nvim-neorocks/lz.n";
         maintainers = with lib.maintainers; [ birdee ];
         license.fullName = "GPL-2+";
+        description = "A lazy-loading library for neovim, inspired by, but different from, nvim-neorocks/lz.n";
+        longDescription = ''
+          It is intended to be used
+          - by users of plugin managers that don't provide a convenient API for lazy-loading.
+          - by plugin managers, to provide a convenient API for lazy-loading.'';
       };
     }
   ) { };
@@ -3767,9 +4304,10 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/BirdeeHub/lzextras";
-        description = "A collection of utilities and handlers for BirdeeHub/lze";
         maintainers = with lib.maintainers; [ birdee ];
         license.fullName = "GPL-2+";
+        description = "A collection of utilities and handlers for BirdeeHub/lze";
+        longDescription = "A collection of extensions for BirdeeHub/lze";
       };
     }
   ) { };
@@ -3800,9 +4338,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/horriblename/lzn-auto-require";
-        description = "Auto load optional plugins via lua modules with lz.n";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-2.0";
+        description = "Auto load optional plugins via lua modules with lz.n";
       };
     }
   ) { };
@@ -3833,9 +4371,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/leafo/magick.git";
-        description = "Lua bindings to ImageMagick & GraphicsMagick for LuaJIT using FFI";
         maintainers = with lib.maintainers; [ donovanglover ];
         license.fullName = "MIT";
+        description = "Lua bindings to ImageMagick & GraphicsMagick for LuaJIT using FFI";
       };
     }
   ) { };
@@ -3867,8 +4405,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mpeterv/markdown";
-        description = "Markdown text-to-html markup system.";
         license.fullName = "MIT/X11";
+        description = "Markdown text-to-html markup system.";
+        longDescription = "A pure-lua implementation of the Markdown text-to-html markup system.";
       };
     }
   ) { };
@@ -3896,8 +4435,9 @@ final: prev: {
 
       meta = {
         homepage = "http://keplerproject.github.io/md5/";
-        description = "Checksum library";
         license.fullName = "MIT/X11";
+        description = "Checksum library";
+        longDescription = "MD5 offers checksum facilities for Lua 5.X: a hash (digest) function, a pair crypt/decrypt based on MD5 and CFB, and a pair crypt/decrypt based on DES with 56-bit keys.";
       };
     }
   ) { };
@@ -3925,8 +4465,14 @@ final: prev: {
 
       meta = {
         homepage = "http://olivinelabs.com/mediator_lua/";
-        description = "Event handling through channels";
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "Event handling through channels";
+        longDescription = ''
+          mediator_lua allows you to subscribe and publish to a central object so
+              you can decouple function calls in your application. It's as simple as
+              mediator:subscribe("channel", function). Supports namespacing, predicates,
+              and more.
+        '';
       };
     }
   ) { };
@@ -3954,8 +4500,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/kikito/middleclass";
-        description = "A simple OOP library for Lua";
         license.fullName = "MIT";
+        description = "A simple OOP library for Lua";
+        longDescription = "It has inheritance, metamethods (operators), class variables and weak mixin support";
       };
     }
   ) { };
@@ -3986,8 +4533,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lunarmodules/lua-mimetypes";
-        description = "A simple library for looking up the MIME types of files.";
         license.fullName = "MIT/X11";
+        description = "A simple library for looking up the MIME types of files.";
+        longDescription = ''
+          This is a simple library for guessing a file's MIME type. It includes
+              a (hopefully) comprehensive database of MIME types, but it allows you
+              to create your own should you have specific requirements. It can
+              guess types both by extension and by the complete filename.
+        '';
       };
     }
   ) { };
@@ -4016,8 +4569,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/echasnovski/mini.test";
-        description = "Test neovim plugins. Part of the mini.nvim suite.";
         license.fullName = "MIT";
+        description = "Test neovim plugins. Part of the mini.nvim suite.";
       };
     }
   ) { };
@@ -4051,9 +4604,10 @@ final: prev: {
 
       meta = {
         homepage = "http://moonscript.org";
-        description = "A programmer friendly language that compiles to Lua";
         maintainers = with lib.maintainers; [ arobyn ];
         license.fullName = "MIT";
+        description = "A programmer friendly language that compiles to Lua";
+        longDescription = "A programmer friendly language that compiles to Lua";
       };
     }
   ) { };
@@ -4075,8 +4629,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/libmpack/libmpack-lua";
-        description = "Lua binding to libmpack";
         license.fullName = "MIT";
+        description = "Lua binding to libmpack";
       };
     }
   ) { };
@@ -4091,19 +4645,20 @@ final: prev: {
       nui-nvim,
       nvim-nio,
       pathlib-nvim,
-      plenary-nvim,
+      tree-sitter-norg,
+      tree-sitter-norg-meta,
     }:
     buildLuarocksPackage {
       pname = "neorg";
-      version = "9.4.0-1";
+      version = "9.6.4-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neorg-9.4.0-1.rockspec";
-          sha256 = "0gm91iv0a5lpch6n92cnrcbpn525gxl735cgqwlldbrdfjwxv4y2";
+          url = "mirror://luarocks/neorg-9.6.4-1.rockspec";
+          sha256 = "11k7qwr7430wk3j5kf7isn3d9i4y0drmq6d0dwdx62s4cy9c3pvm";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neorg/neorg/archive/d4e6b3665504baa88685c9d2e79446d336dc0594.zip";
-        sha256 = "0gjyn9csw3rngnjxq6hyh7zl20ks6ibqvb5kggmkr9qhi3a8kiaj";
+        url = "https://github.com/nvim-neorg/neorg/archive/1f14d72aad7165eac307a2a2f6be0fb97a04b3c2.zip";
+        sha256 = "0l7hc1w4j00csv8i6dgbdhx0jcf0017b7hhs8gcldvsyka50xkx5";
       };
 
       disabled = luaOlder "5.1";
@@ -4112,14 +4667,15 @@ final: prev: {
         nui-nvim
         nvim-nio
         pathlib-nvim
-        plenary-nvim
+        tree-sitter-norg
+        tree-sitter-norg-meta
       ];
 
       meta = {
         homepage = "https://github.com/nvim-neorg/neorg";
-        description = "Modernity meets insane extensibility. The future of organizing your life in Neovim.";
         maintainers = with lib.maintainers; [ GaetanLepage ];
         license.fullName = "GPL-3.0";
+        description = "Modernity meets insane extensibility. The future of organizing your life in Neovim.";
       };
     }
   ) { };
@@ -4134,15 +4690,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "neorg-interim-ls";
-      version = "2.1.1-1";
+      version = "2.1.4-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neorg-interim-ls-2.1.1-1.rockspec";
-          sha256 = "0kx8ql89yadlhnw2jl7ck950vrzs0ihjm079mg0vlnklriw4zw5v";
+          url = "mirror://luarocks/neorg-interim-ls-2.1.4-1.rockspec";
+          sha256 = "16c6b4in826fnv2wgxl1b7qsxvj62qq2xjnbik7z0hiij2vwc52x";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/benlubas/neorg-interim-ls/archive/v2.1.1.zip";
-        sha256 = "1vszvmsy27n68ivi6bmk1hifi00dg33mc9iz66nv2gfmwcfwbsfz";
+        url = "https://github.com/benlubas/neorg-interim-ls/archive/v2.1.4.zip";
+        sha256 = "0fpzfjpamb4amlnqf89zy9hdg95qh0mzdfrzh7qw13yvh4273z27";
       };
 
       disabled = luaOlder "5.1";
@@ -4150,8 +4706,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/benlubas/neorg-interim-ls";
-        description = "Temporarily providing a limited set of LSP features to neorg";
         license.fullName = "MIT";
+        description = "Temporarily providing a limited set of LSP features to neorg";
       };
     }
   ) { };
@@ -4167,15 +4723,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "neotest";
-      version = "5.13.4-1";
+      version = "5.15.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neotest-5.13.4-1.rockspec";
-          sha256 = "0rv4m9qjpn6ckaqim49vy932765p9di4r563w684wz0ficdwjch3";
+          url = "mirror://luarocks/neotest-5.15.0-1.rockspec";
+          sha256 = "0kp8ybvnrlaisrra9lrwmqk9ll6qs2vddck2449b9k2prjhmfm3q";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neotest/neotest/archive/deadfb1af5ce458742671ad3a013acb9a6b41178.zip";
-        sha256 = "0qiff2cg7dz96mvfihgb9rgmg0zsjf95nvxnfnzw0pnp65ch4bnh";
+        url = "https://github.com/nvim-neotest/neotest/archive/fd0b7986dd0ae04e38ec7dc0c78a432e3820839c.zip";
+        sha256 = "0lkck8pb5d65v2xhbg0hbxinzii9yzg4g10dbanq0j7wbpbwximm";
       };
 
       disabled = luaOlder "5.1";
@@ -4186,9 +4742,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-neotest/neotest";
-        description = "An extensible framework for interacting with tests within NeoVim.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "An extensible framework for interacting with tests within NeoVim.";
       };
     }
   ) { };
@@ -4219,9 +4775,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/knyar/nginx-lua-prometheus";
-        description = "Prometheus metric library for Nginx";
         maintainers = with lib.maintainers; [ ulysseszhan ];
         license.fullName = "MIT";
+        description = "Prometheus metric library for Nginx";
       };
     }
   ) { };
@@ -4250,9 +4806,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mfussenegger/nlua";
-        description = "Neovim as Lua interpreter";
         maintainers = with lib.maintainers; [ teto ];
         license.fullName = "GPL-3.0";
+        description = "Neovim as Lua interpreter";
+        longDescription = ''
+          Neovim embeds a Lua interpreter, but it doesn't expose the same command line interface as plain lua.
+              nlua is a script which emulates Lua's command line interface, using Neovim's -l option under the hood.
+        '';
       };
     }
   ) { };
@@ -4280,9 +4840,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/MunifTanjim/nui.nvim";
-        description = "UI Component Library for Neovim.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "UI Component Library for Neovim.";
+        longDescription = ''
+          UI Component Library for Neovim.
+        '';
       };
     }
   ) { };
@@ -4301,16 +4864,19 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "hrsh7th";
         repo = "nvim-cmp";
-        rev = "da88697d7f45d16852c6b2769dc52387d1ddc45f";
-        hash = "sha256-/jk8pM7VmZ6mr7BspZjslMHNmCGZ8K/csmALo/Cj1hQ=";
+        rev = "a1d504892f2bc56c2e79b65c6faded2fd21f3eca";
+        hash = "sha256-uzfM8DLRKshESsYmUAbSfXtos9COWpe/fVkxNJPIUFw=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.4";
 
       meta = {
         homepage = "https://github.com/hrsh7th/nvim-cmp";
-        description = "A completion plugin for neovim";
         license.fullName = "MIT";
+        description = "A completion plugin for neovim";
+        longDescription = ''
+          A completion engine plugin for neovim written in Lua. Completion sources are installed from external repositories and "sourced".
+        '';
       };
     }
   ) { };
@@ -4339,9 +4905,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-neotest/nvim-nio";
-        description = "A library for asynchronous IO in Neovim";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "A library for asynchronous IO in Neovim";
       };
     }
   ) { };
@@ -4370,8 +4936,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-tree/nvim-web-devicons";
-        description = "Nerd Font icons for neovim";
         license.fullName = "MIT";
+        description = "Nerd Font icons for neovim";
+        longDescription = ''
+          Coloured Nerd Font file icons for neovim.
+          Dark and light background variants.
+          https://www.nerdfonts.com/'';
       };
     }
   ) { };
@@ -4402,8 +4972,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/stevearc/oil.nvim";
-        description = "Neovim file explorer: edit your filesystem like a buffer";
         license.fullName = "MIT";
+        description = "Neovim file explorer: edit your filesystem like a buffer";
       };
     }
   ) { };
@@ -4432,8 +5002,8 @@ final: prev: {
 
       meta = {
         homepage = "https://nvim-orgmode.github.io";
-        description = "Orgmode clone written in Lua for Neovim 0.11.0+.";
         license.fullName = "MIT";
+        description = "Orgmode clone written in Lua for Neovim 0.11.0+.";
       };
     }
   ) { };
@@ -4468,9 +5038,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/jghauser/papis.nvim";
-        description = "Manage your bibliography from within your favourite editor";
         maintainers = with lib.maintainers; [ GaetanLepage ];
         license.fullName = "GPL-3.0";
+        description = "Manage your bibliography from within your favourite editor";
+        longDescription = ''
+          Papis.nvim is a neovim companion plugin for the bibliography manager papis. 
+          It's meant for all those who do academic and other writing in neovim and who 
+          want quick access to their bibliography from within the comfort of their editor.'';
       };
     }
   ) { };
@@ -4501,8 +5075,11 @@ final: prev: {
 
       meta = {
         homepage = "https://pysan3.github.io/pathlib.nvim/";
-        description = "OS Independent, ultimate solution to path handling in neovim.";
         license.fullName = "MPL-2.0";
+        description = "OS Independent, ultimate solution to path handling in neovim.";
+        longDescription = ''
+          This plugin aims to decrease the difficulties of path management across mutliple OSs in neovim.
+          The plugin API is heavily inspired by Python's `pathlib.Path` with tweaks to fit neovim usage.'';
       };
     }
   ) { };
@@ -4533,9 +5110,14 @@ final: prev: {
 
       meta = {
         homepage = "https://lunarmodules.github.io/penlight";
-        description = "Lua utility libraries loosely based on the Python standard libraries";
         maintainers = with lib.maintainers; [ alerque ];
         license.fullName = "MIT/X11";
+        description = "Lua utility libraries loosely based on the Python standard libraries";
+        longDescription = ''
+          Penlight is a set of pure Lua libraries for making it easier to work with common tasks like
+          iterating over directories, reading configuration files and the like. Provides functional operations
+          on tables and sequences.
+        '';
       };
     }
   ) { };
@@ -4555,8 +5137,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-lua";
         repo = "plenary.nvim";
-        rev = "b9fd5226c2f76c951fc8ed5923d85e4de065e509";
-        hash = "sha256-9Un7ekhBxcnmFE1xjCCFTZ7eqIbmXvQexpnhduAg4M0=";
+        rev = "74b06c6c75e4eeb3108ec01852001636d85a932b";
+        hash = "sha256-nkfETDkPiE+Kd2BWYZijgUp9bP8RgFwRmvqJz2BMuq4=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.4";
@@ -4564,8 +5146,11 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/nvim-lua/plenary.nvim";
-        description = "lua functions you don't want to write ";
         license.fullName = "MIT/X11";
+        description = "lua functions you don't want to write ";
+        longDescription = ''
+          plenary: full; complete; entire; absolute; unqualified. All the lua functions I don't want to write twice.
+        '';
       };
     }
   ) { };
@@ -4591,8 +5176,20 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/daurnimator/lua-psl";
-        description = "Bindings to libpsl, a C library that handles the Public Suffix List (PSL)";
         license.fullName = "MIT";
+        description = "Bindings to libpsl, a C library that handles the Public Suffix List (PSL)";
+        longDescription = ''
+          Bindings to libpsl, a C library that handles the Public Suffix List (PSL).
+
+          The PSL is a list of domains where there may be sub-domains outside of the administrator's control.
+          e.g. the administrator of '.com' does not manage 'github.com'.
+
+          This list has found use in many internet technologies including:
+
+            - preventing cross-domain cookie leakage
+            - allowance of issuing wildcard TLS certificates
+
+          More information can be found at https://publicsuffix.org/'';
       };
     }
   ) { };
@@ -4625,8 +5222,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/xpol/lua-rapidjson";
-        description = "Json module based on the very fast RapidJSON.";
         license.fullName = "MIT";
+        description = "Json module based on the very fast RapidJSON.";
+        longDescription = "A json module for Lua 5.1/5.2/5.3 and LuaJIT based on the very fast RapidJSON.";
       };
     }
   ) { };
@@ -4667,9 +5265,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/rest-nvim/rest.nvim";
-        description = "A very fast, powerful, extensible and asynchronous Neovim HTTP client written in Lua.";
         maintainers = with lib.maintainers; [ teto ];
         license.fullName = "GPL-3.0";
+        description = "A very fast, powerful, extensible and asynchronous Neovim HTTP client written in Lua.";
+        longDescription = ''
+          A very fast, powerful, extensible and asynchronous Neovim HTTP client written in Lua.
+          rest.nvim by default makes use of its own `curl` wrapper to make requests and a tree-sitter parser to parse http files.'';
       };
     }
   ) { };
@@ -4700,9 +5301,16 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lumen-oss/rocks-config.nvim";
-        description = "Allow rocks.nvim to help configure your plugins.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-3.0";
+        description = "Allow rocks.nvim to help configure your plugins.";
+        longDescription = ''
+          rocks-config.nvim is a rocks.nvim utility module for helping to configure
+          your Neovim setup.
+          Features:
+          - Execute a specific Lua file per plugin
+          - Automatically invoke the setup() function for every installed plugin
+          - Statically configure a plugin using TOML syntax directly from within your rocks.toml'';
       };
     }
   ) { };
@@ -4739,9 +5347,14 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-neorocks/rocks-dev.nvim";
-        description = "A swiss-army knife for testing and developing rocks.nvim modules.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-3.0";
+        description = "A swiss-army knife for testing and developing rocks.nvim modules.";
+        longDescription = ''
+          rocks-dev.nvim is a rocks.nvim utility module, serving as a swiss army knife
+          for developing and testing new rocks.nvim extensions.
+          Features:
+          - Install plugins from the local filesystem'';
       };
     }
   ) { };
@@ -4776,9 +5389,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lumen-oss/rocks-git.nvim";
-        description = "Use rocks.nvim to install plugins from git!";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-3.0";
+        description = "Use rocks.nvim to install plugins from git!";
       };
     }
   ) { };
@@ -4798,15 +5411,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rocks.nvim";
-      version = "2.47.4-1";
+      version = "2.47.5-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rocks.nvim-2.47.4-1.rockspec";
-          sha256 = "0wc3ddd926qq186yvsh5ylyxygr1wg5a72p1ch4d8hrgnddpb3ii";
+          url = "mirror://luarocks/rocks.nvim-2.47.5-1.rockspec";
+          sha256 = "1zxywv6sa6cwzf072fz7cdhq96zw420kzc7dczrb50r7jh7sczxx";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/lumen-oss/rocks.nvim/archive/v2.47.4.zip";
-        sha256 = "1gzy55m1d86wg5skf6pczd9d6wxrmh9bly32asw6rbs6k4fz0lpb";
+        url = "https://github.com/lumen-oss/rocks.nvim/archive/v2.47.5.zip";
+        sha256 = "1a109916ldarqxc1sfi7n0a2ifslhcwlhf6hp6jsisx3gm8v2nv9";
       };
 
       disabled = lua.luaversion != "5.1";
@@ -4821,9 +5434,23 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lumen-oss/rocks.nvim";
-        description = "🌒 Neovim plugin management inspired by Cargo, powered by luarocks";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-3.0";
+        description = "🌒 Neovim plugin management inspired by Cargo, powered by luarocks";
+        longDescription = ''
+          rocks.nvim is an all in one solution for installing and managing
+          Neovim plugins through the luarocks package manager.
+          It supports dependency management, build scripts,
+          all defined from a single rocks.toml file.
+          Features:
+          - Cargo-like rocks.toml file for declaring all your plugins.
+          - Name-based installation ("nvim-neorg/neorg" becomes :Rocks install neorg instead).
+          - Automatic dependency and build script management.
+          - True semver versioning!
+          - Minimal, non-intrusive UI.
+          - Async execution.
+          - Extensible, with a Lua API.
+          - Command completions for plugins on luarocks.org.'';
       };
     }
   ) { };
@@ -4852,9 +5479,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-neorocks/rtp.nvim";
-        description = "Source plugin and ftdetect directories on the Neovim runtimepath.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-3.0";
+        description = "Source plugin and ftdetect directories on the Neovim runtimepath.";
       };
     }
   ) { };
@@ -4868,24 +5495,24 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rustaceanvim";
-      version = "8.0.4-2";
+      version = "9.0.2-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rustaceanvim-8.0.4-2.rockspec";
-          sha256 = "12c711xrr0chsmx86w0zf4z3fg10nn53cv1dqdhq64a6vi5gjd4g";
+          url = "mirror://luarocks/rustaceanvim-9.0.2-2.rockspec";
+          sha256 = "09vq53b68a9ywilb7fa1bsn52wmdzdvbflih0p8ppjzsk1lyilsv";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.4.zip";
-        sha256 = "0nhbl28bxgbkd2jlhb5v9na29972djgmhd9kczma66mf0bwfwi7d";
+        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.2.zip";
+        sha256 = "0kmd12d234fwrikhz33y7npdmyi7ahldb9mjdwlvl3kgq0lkpg74";
       };
 
       disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.4.zip";
-        description = "🦀 Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
+        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.0.2.zip";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-2.0-only";
+        description = "🦀 Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
       };
     }
   ) { };
@@ -4916,8 +5543,11 @@ final: prev: {
 
       meta = {
         homepage = "https://lunarmodules.github.io/say";
-        description = "Lua string hashing/indexing library";
         license.fullName = "MIT";
+        description = "Lua string hashing/indexing library";
+        longDescription = ''
+          Useful for internationalization.
+        '';
       };
     }
   ) { };
@@ -4949,9 +5579,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/pkulchenko/serpent";
-        description = "Lua serializer and pretty printer";
         maintainers = with lib.maintainers; [ lockejan ];
         license.fullName = "MIT";
+        description = "Lua serializer and pretty printer";
       };
     }
   ) { };
@@ -4993,9 +5623,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/f4z3r/sofa";
-        description = "A command execution engine powered by rofi.";
         maintainers = with lib.maintainers; [ f4z3r ];
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "A command execution engine powered by rofi.";
+        longDescription = ''
+          A tool to organise and execute your commands, so convenient you can
+              run it from your sofa.
+        '';
       };
     }
   ) { };
@@ -5026,8 +5660,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/tami5/sqlite.lua";
-        description = "SQLite/LuaJIT binding and a highly opinionated wrapper for storing, retrieving, caching, and persisting [SQLite] databases";
         license.fullName = "MIT";
+        description = "SQLite/LuaJIT binding and a highly opinionated wrapper for storing, retrieving, caching, and persisting [SQLite] databases";
       };
     }
   ) { };
@@ -5057,8 +5691,11 @@ final: prev: {
 
       meta = {
         homepage = "http://lua-stdlib.github.io/_debug";
-        description = "Debug Hints Library";
         license.fullName = "MIT/X11";
+        description = "Debug Hints Library";
+        longDescription = ''
+          Manage an overall debug state, and associated hint substates.
+        '';
       };
     }
   ) { };
@@ -5090,8 +5727,16 @@ final: prev: {
 
       meta = {
         homepage = "https://lua-stdlib.github.io/normalize";
-        description = "Normalized Lua Functions";
         license.fullName = "MIT/X11";
+        description = "Normalized Lua Functions";
+        longDescription = ''
+          This module can inject deterministic versions of core Lua
+                functions that do not behave identically across all supported Lua
+                implementations into your module's lexical environment.   Each
+                function is as thin and fast a version as is possible in each Lua
+                implementation, evaluating to the Lua C implementation with no
+                overhead when semantics allow.
+        '';
       };
     }
   ) { };
@@ -5121,8 +5766,9 @@ final: prev: {
 
       meta = {
         homepage = "http://lua-stdlib.github.io/lua-stdlib";
-        description = "General Lua Libraries";
         license.fullName = "MIT/X11";
+        description = "General Lua Libraries";
+        longDescription = "stdlib is a library of modules for common programming tasks, including list, table and functional operations, objects, pickling, pretty-printing and command-line option parsing.";
       };
     }
   ) { };
@@ -5131,44 +5777,53 @@ final: prev: {
     {
       argparse,
       buildLuarocksPackage,
-      dkjson,
       fetchFromGitHub,
       fetchurl,
       inspect,
+      ltreesitter-ts,
+      lua-cjson,
       luafilesystem,
+      luarocks-build-treesitter-parser,
       lusc_luv,
       luv,
       tl,
+      tree-sitter-cli,
+      tree-sitter-teal,
     }:
     buildLuarocksPackage {
       pname = "teal-language-server";
-      version = "0.0.5-1";
+      version = "0.1.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/teal-language-server-0.0.5-1.rockspec";
-          sha256 = "11ps1hgkgli4sf9gcj7pin4kbc5w0yck0daig1ghqssn2q9m2x5l";
+          url = "mirror://luarocks/teal-language-server-0.1.1-1.rockspec";
+          sha256 = "1dhhqm2dwl1i27dni8yd6l7qjd1xhz16b772jp96aj66rizhkvcr";
         }).outPath;
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "teal-language-server";
-        rev = "main";
-        hash = "sha256-TbNvYG2aRt27+sfXvZOlq/F7Gy6sQtoDz6satC+Qqss=";
+        tag = "0.1.1";
+        hash = "sha256-UgN3BOdsxUIsn1HAXEmAzHns1ZKylxUo7owI2uYsNlA=";
       };
 
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
       propagatedBuildInputs = [
         argparse
-        dkjson
         inspect
+        ltreesitter-ts
+        lua-cjson
         luafilesystem
         lusc_luv
         luv
         tl
+        tree-sitter-cli
+        tree-sitter-teal
       ];
 
       meta = {
         homepage = "https://github.com/teal-language/teal-language-server";
-        description = "A language server for the Teal language";
         license.fullName = "MIT";
+        description = "A language server for the Teal language";
+        longDescription = "A language server for the Teal language";
       };
     }
   ) { };
@@ -5199,8 +5854,11 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/mrcjkb/telescope-manix";
-        description = "A telescope.nvim extension for Manix - A fast documentation searcher for Nix";
         license.fullName = "GPL-2.0";
+        description = "A telescope.nvim extension for Manix - A fast documentation searcher for Nix";
+        longDescription = ''
+          Manix is a fast documentation searcher for nix.
+          This plugin provides a telescope.nvim extension for manix.'';
       };
     }
   ) { };
@@ -5224,8 +5882,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-telescope";
         repo = "telescope.nvim";
-        rev = "5255aa27c422de944791318024167ad5d40aad20";
-        hash = "sha256-dOU6nQaq4W3KZrC2o2wv0NJ2LNWJgvuoNyWOYP2i4vo=";
+        rev = "028d9a0695a0cc4cfa893889f8c408ed7ccc8adc";
+        hash = "sha256-xU/lozREXuXkjBq8L94sLwyEE6f7k8Q3y0BkjPssB1Y=";
       };
 
       disabled = lua.luaversion != "5.1";
@@ -5233,8 +5891,13 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-telescope/telescope.nvim";
-        description = "Find, Filter, Preview, Pick. All lua, all the time.";
         license.fullName = "MIT";
+        description = "Find, Filter, Preview, Pick. All lua, all the time.";
+        longDescription = ''
+          A highly extendable fuzzy finder over lists.
+            Built on the latest awesome features from neovim core.
+            Telescope is centered around modularity, allowing for easy customization.
+        '';
       };
     }
   ) { };
@@ -5268,9 +5931,12 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/gptlang/lua-tiktoken";
-        description = "An experimental port of OpenAI's Tokenizer to lua";
         maintainers = with lib.maintainers; [ natsukium ];
         license.fullName = "MIT";
+        description = "An experimental port of OpenAI's Tokenizer to lua";
+        longDescription = ''
+          The Lua module written in Rust that provides Tiktoken support for Lua.
+        '';
       };
     }
   ) { };
@@ -5305,9 +5971,9 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/teal-language/tl";
-        description = "Teal, a typed dialect of Lua";
         maintainers = with lib.maintainers; [ mephistophiles ];
         license.fullName = "MIT";
+        description = "Teal, a typed dialect of Lua";
       };
     }
   ) { };
@@ -5338,9 +6004,45 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/lumen-oss/toml-edit.lua";
-        description = "TOML Parser + Formatting and Comment-Preserving Editor";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "TOML Parser + Formatting and Comment-Preserving Editor";
+        longDescription = ''
+          `toml-edit` is a library to parse and edit `.toml` files as if they were lua tables, all while preserving formatting and comments.
+          Based on rust's `toml-edit`.'';
+      };
+    }
+  ) { };
+
+  tree-sitter-cli = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luarocks-build-tree-sitter-cli,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-cli";
+      version = "0.26.5-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-cli-0.26.5-1.rockspec";
+          sha256 = "1bd9lz72gvi7djzcy0z6yja045ycm4byiyjpwa3m6zgh1h4mp30r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "FourierTransformer";
+        repo = "tree-sitter-cli";
+        rev = "d8e1eb4ae406b75db0f50fae8be5dff636dbb4da";
+        hash = "sha256-J73buMI+DzrQ4Qx7G6rW2xFxiOYJBy4rGVDsnfNEgzQ=";
+      };
+
+      nativeBuildInputs = [ luarocks-build-tree-sitter-cli ];
+
+      meta = {
+        homepage = "https://github.com/FourierTransformer/tree-sitter-cli";
+        license.fullName = "MIT";
+        description = "Install tree-sitter CLI binaries";
+        longDescription = "An option to install the tree-sitter CLI via LuaRocks";
       };
     }
   ) { };
@@ -5371,8 +6073,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/rest-nvim/tree-sitter-http";
-        description = "tree-sitter parser for http";
         license.fullName = "UNKNOWN";
+        description = "tree-sitter parser for http";
       };
     }
   ) { };
@@ -5401,9 +6103,39 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-neorg/tree-sitter-norg";
-        description = "The official tree-sitter parser for Norg documents.";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "MIT";
+        description = "The official tree-sitter parser for Norg documents.";
+      };
+    }
+  ) { };
+
+  tree-sitter-norg-meta = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luarocks-build-treesitter-parser,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-norg-meta";
+      version = "0.1.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-norg-meta-0.1.0-1.rockspec";
+          sha256 = "0vngnyvdad6n36r37sc96asl7h5mph691a0638523mffbg8zdfvr";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/nvim-neorg/tree-sitter-norg-meta/archive/v0.1.0.zip";
+        sha256 = "1vz74wc5yy5fykl9c3b16k6fsvskxp93acsy81p337jzg709v97j";
+      };
+
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+      meta = {
+        homepage = "https://github.com/nvim-neorg/tree-sitter-norg-meta";
+        license.fullName = "MIT";
+        description = "Treesitter parser for Norg's `@document.meta` blocks.";
       };
     }
   ) { };
@@ -5432,8 +6164,40 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/nvim-orgmode/tree-sitter-org";
-        description = "A fork of tree-sitter-org, for use with the orgmode Neovim plugin";
         license.fullName = "MIT";
+        description = "A fork of tree-sitter-org, for use with the orgmode Neovim plugin";
+      };
+    }
+  ) { };
+
+  tree-sitter-teal = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      luarocks-build-treesitter-parser,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-teal";
+      version = "0.0.35-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-teal-0.0.35-1.rockspec";
+          sha256 = "06g2i3y3gmyz17v9gxwswa9db544nyhd5mx4zq3lihrshbbf6r10";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/euclidianAce/tree-sitter-teal/archive/05d276e737055e6f77a21335b7573c9d3c091e2f.zip";
+        sha256 = "1g1zk47a8jcwac0j60mlfv56mhlhbf6f77vjkx4vsfbrryprcfi4";
+      };
+
+      disabled = luaOlder "5.1";
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+      meta = {
+        homepage = "https://github.com/euclidianAce/tree-sitter-teal";
+        license.fullName = "UNKNOWN";
+        description = "tree-sitter parser for teal";
       };
     }
   ) { };
@@ -5464,8 +6228,11 @@ final: prev: {
 
       meta = {
         homepage = "http://github.com/starwing/luautf8";
-        description = "A UTF-8 support module for Lua";
         license.fullName = "MIT";
+        description = "A UTF-8 support module for Lua";
+        longDescription = ''
+          This module adds UTF-8 support to Lua. It's compatible with Lua "string" module.
+        '';
       };
     }
   ) { };
@@ -5531,8 +6298,8 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/notomo/vusted";
-        description = "`busted` wrapper for testing neovim plugin";
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+        description = "`busted` wrapper for testing neovim plugin";
       };
     }
   ) { };
@@ -5563,9 +6330,13 @@ final: prev: {
 
       meta = {
         homepage = "http://manoelcampos.github.io/xml2lua/";
-        description = "An XML Parser written entirely in Lua that works for Lua 5.1+";
         maintainers = with lib.maintainers; [ teto ];
         license.fullName = "MIT";
+        description = "An XML Parser written entirely in Lua that works for Lua 5.1+";
+        longDescription = ''
+          Enables parsing a XML string into a Lua Table and
+             converting a Lua Table to an XML string.
+        '';
       };
     }
   ) { };

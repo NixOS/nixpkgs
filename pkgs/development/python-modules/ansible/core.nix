@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ansible-core";
-  version = "2.20.3";
+  version = "2.20.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -41,12 +41,9 @@ buildPythonPackage (finalAttrs: {
     owner = "ansible";
     repo = "ansible";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WLfLbQYYJOdMHApNnFZYiET4es3z2SeeLP0jbrFqxrU=";
+    hash = "sha256-7KsxZH1d5FfdnsYfKSNGCmdYuBi8KzZxyZbG2WNAM9Y=";
   };
 
-  # ansible_connection is already wrapped, so don't pass it through
-  # the python interpreter again, as it would break execution of
-  # connection plugins.
   postPatch = ''
     patchShebangs --build packaging/cli-doc/build.py
 
@@ -96,6 +93,10 @@ buildPythonPackage (finalAttrs: {
     export HOME="$(mktemp -d)"
     packaging/cli-doc/build.py man --output-dir=man
     installManPage man/*
+  '';
+
+  postFixup = ''
+    patchPythonScript $out/${python.sitePackages}/ansible/cli/scripts/ansible_connection_cli_stub.py
   '';
 
   # internal import errors, missing dependencies

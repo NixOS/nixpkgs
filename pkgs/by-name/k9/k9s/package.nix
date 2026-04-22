@@ -73,7 +73,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "k9s";
     maintainers = with lib.maintainers; [
-      Gonzih
       markus1189
       qjoly
       devusb

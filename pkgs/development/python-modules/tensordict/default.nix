@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   pybind11,
@@ -30,14 +29,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.11.0";
+  version = "0.12.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PUPDKv10Ks4B1kpgbRcnmfWFUkpFEdxMmTNztFVfdK4=";
+    hash = "sha256-H01/z0bVjD4ORBQpNIomN8EvAuAVWsh4kHnW4RDFGTY=";
   };
 
   postPatch = ''
@@ -86,10 +86,15 @@ buildPythonPackage (finalAttrs: {
 
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
+
     # AssertionError: assert 'a string!' == 'a metadata!'
     "test_save_load_memmap"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_cast_to"
+    "test_casts"
+    "test_td_params_cast"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs due to the use of a pool

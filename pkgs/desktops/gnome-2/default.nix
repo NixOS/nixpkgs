@@ -25,7 +25,7 @@ lib.makeScope pkgs.newScope (
     libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
     # for git-head builds
-    gnome-common = callPackage platform/gnome-common { };
+    gnome-common = callPackage ./platform/gnome-common { };
 
     gnome_mime_data = callPackage ./platform/gnome-mime-data { };
 

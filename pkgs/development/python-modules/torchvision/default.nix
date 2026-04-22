@@ -26,16 +26,16 @@ let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
 
 in
-buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchvision";
-  version = "0.25.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oktJHcT6T4f58pUO+HSBpbyS1ISH3zDlTsXQh6PcMy4=";
+    hash = "sha256-FOdDGY3v8yWBhtNo9tZP79/xwrc7AoIY5Y1ZABzWe6g=";
   };
 
   nativeBuildInputs = [

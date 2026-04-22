@@ -8,9 +8,9 @@
   django,
   netaddr,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-attachments";
-  version = "11.0.0b2";
+  version = "11.0.1";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kani999";
     repo = "netbox-attachments";
-    tag = "v${version}";
-    hash = "sha256-TaEzYUhuBBXYoCmB6bY/1n8KzyaXNbOMRGiDbMDroLw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8wZeHLt8Hx8hghsliKtKxCI/2dQh/EQitZ4YXPSj/Qs=";
   };
 
   build-system = [ setuptools ];
@@ -39,9 +39,9 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin to manage attachments for any model";
     homepage = "https://github.com/Kani999/netbox-attachments";
-    changelog = "https://github.com/Kani999/netbox-attachments/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kani999/netbox-attachments/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

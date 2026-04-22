@@ -736,6 +736,35 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+### Compiling `wasm32-wasip1` package {#compiling-wasm32-wasip1-package}
+
+```nix
+pkgsCross.wasi32.callPackage (
+  {
+    fetchFromGitHub,
+    rustPlatform,
+    lld,
+  }:
+  rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "zellij-harpoon";
+    version = "0.3.0";
+
+    src = fetchFromGitHub {
+      owner = "Nacho114";
+      repo = "harpoon";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-JmYcbzxIF6qZs2/RKuspHqNpyDibGp9CVQJj47y/BOQ=";
+    };
+
+    cargoHash = "sha256-lsv5Wssakni18jif++fPo3Z5WyBtvPsGpWwG3abR7jQ=";
+
+    # these two lines are currently required
+    env.RUSTFLAGS = "-C linker=wasm-ld";
+    nativeBuildInputs = [ lld ];
+  })
+) { }
+```
+
 ## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
 
 ### Simple operation {#simple-operation}
@@ -842,15 +871,36 @@ general. A number of other parameters can be overridden:
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
-- The lint level cap passed to `rustc` (`allow` by default, which
-  silences all lints). Because `rustc` only honours the first
-  `--cap-lints` it receives, this cannot be changed via
-  `extraRustcOpts`; use this attribute instead. Useful when overriding
-  the `rust` attribute to point at `clippy-driver`, since clippy lints
-  are also capped by this flag:
+- The lint level cap passed to `rustc`. Defaults to `null`, which
+  auto-resolves to `"allow"` (silences all lints) when `lints` is
+  empty, or `"forbid"` (no cap) when `lints` is set. Because `rustc`
+  only honours the first `--cap-lints` it receives, this cannot be
+  changed via `extraRustcOpts`; use this attribute instead. Useful
+  when overriding the `rust` attribute to point at `clippy-driver`,
+  since clippy lints are also capped by this flag:
 
   ```nix
   (hello { }).override { capLints = "warn"; }
+  ```
+
+- Lint configuration mirroring Cargo.toml's `[lints]` table. Keys are
+  tool names (`rust`, `clippy`, `rustdoc`); values map lint names to
+  either a level string (`"allow"`, `"warn"`, `"deny"`, `"forbid"`) or
+  `{ level = "..."; priority = <int>; }`. Lower priorities are emitted
+  first so that more specific lints can override them. Setting a
+  non-empty `lints` raises the default `capLints` to `"forbid"` so the
+  lints actually apply:
+
+  ```nix
+  (hello { }).override {
+    lints.rust = {
+      unsafe_code = "forbid";
+      unused = {
+        level = "deny";
+        priority = -1;
+      };
+    };
+  }
   ```
 
 - Phases, just like in any other derivation, can be specified using

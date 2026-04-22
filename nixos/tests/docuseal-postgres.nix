@@ -2,7 +2,6 @@
 {
   name = "docuseal";
   meta.maintainers = with lib.maintainers; [
-    etu
     stunkymonkey
   ];
 

@@ -7,6 +7,7 @@
   stdenv,
   addDriverRunpath,
   nix-update-script,
+  coreutils,
 
   cmake,
   gitMinimal,
@@ -94,14 +95,14 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.4.4/llama/Makefile#L17-L18
+    # - https://github.com/ollama/ollama/blob/v0.21.0/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
 
-    # cuda_ccl and cuda_cudart both have a LICENSE file in their output
+    # cuda_cccl and cuda_cudart both have a LICENSE file in their output
     ignoreCollisions = true;
   };
 
@@ -123,7 +124,7 @@ let
   ]
   ++ lib.optionals enableVulkan [
     "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib vulkanLibs)}'"
-    "--set-default OLLAMA_VULKAN : '1'"
+    "--set-default OLLAMA_VULKAN '1'"
   ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
@@ -140,13 +141,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.18.2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BDCYczTZO6LKwD8+LY625pZwvJVMYUE0VwVG5pVYfGk=";
+    hash = "sha256-DtrYopNtndQXq9Xjriw5Bqell9A8RHPOvgDF8BlKtdU=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
@@ -187,9 +188,17 @@ goBuild (finalAttrs: {
     ++ lib.optionals enableVulkan vulkanLibs;
 
   # replace inaccurate version number with actual release version
+  # and replace core utils tools from their FHS location to nix store
   postPatch = ''
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
+    substituteInPlace cmd/launch/openclaw_test.go \
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat'
+    substituteInPlace cmd/launch/hermes_test.go \
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
     rm -r app
   ''
   # disable tests that fail in sandbox due to Metal init failure
@@ -232,7 +241,7 @@ goBuild (finalAttrs: {
     '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.5.11/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.21.0/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
@@ -261,7 +270,8 @@ goBuild (finalAttrs: {
     let
       # Skip tests that require network access
       skippedTests = [
-        "TestPushHandler/unauthorized_push" # Writes to $HOME, se https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+        "TestPushHandler/unauthorized_push" # Writes to $HOME, see https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+        "TestPiRun_InstallAndWebSearchLifecycle" # Requires network access to install npm packages
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

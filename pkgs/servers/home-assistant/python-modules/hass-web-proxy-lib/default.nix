@@ -22,7 +22,7 @@
   home-assistant-custom-components,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hass-web-proxy-lib";
   version = "0.0.7";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   # no tags on git
   src = fetchPypi {
     pname = "hass_web_proxy_lib";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-bhz71tNOpZ+4tSlndS+UbC3w2WW5+dAMtpk7TnnFpuQ=";
   };
 
@@ -74,4 +74,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = home-assistant-custom-components.frigate.meta.maintainers;
   };
-}
+})

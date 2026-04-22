@@ -3,8 +3,6 @@
   config,
   callPackage,
   newScope,
-  symlinkJoin,
-  fetchFromGitHub,
   boost179,
   opencv,
   python3Packages,
@@ -89,6 +87,9 @@ let
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
+      rocprofiler-sdk = self.callPackage ./rocprofiler-sdk { };
+
+      rocprof-compute-viewer = self.callPackage ./rocprof-compute-viewer { };
 
       rocprof-trace-decoder = self.callPackage ./rocprof-trace-decoder { };
 

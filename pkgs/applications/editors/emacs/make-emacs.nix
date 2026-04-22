@@ -97,9 +97,10 @@
   withXwidgets ?
     !noGui
     && (withGTK3 || withPgtk || withNS || variant == "macport")
-    && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30"),
+    && (stdenv.hostPlatform.isDarwin || lib.versions.major version != "30"),
   # XXX: - upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
   # XXX: - Apple_SDK WebKit is compatible with Emacs.
+  # XXX: - upstream bug 80728 lifts the webkit2gtk version check added in upstream bug 66068
   withSmallJaDic ? false,
   withCompressInstall ? true,
 
@@ -505,11 +506,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken =
-      (withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) || withWebkitgtk;
-    knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
-      "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
-    ];
+    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   }
   // meta;
 })

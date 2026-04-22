@@ -2,7 +2,7 @@
 # and verifies that an alice peer can host a repository on the seed,
 # and that a bob peer can send alice a patch via the seed.
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   # The Node ID depends on nodes.seed.services.radicle.privateKeyFile
@@ -63,13 +63,7 @@ in
 {
   name = "radicle";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [
-      defelo
-      julm
-      lorenzleutgeb
-    ];
-  };
+  meta.maintainers = lib.teams.radicle.members;
 
   nodes = {
     seed =

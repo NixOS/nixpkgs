@@ -8,8 +8,7 @@
 let
   cfg = config.services.autobrr;
   configFormat = pkgs.formats.toml { };
-  configTemplate = configFormat.generate "autobrr.toml" cfg.settings;
-  templaterCmd = ''${lib.getExe pkgs.dasel} put -f '${configTemplate}' -v "$(${config.systemd.package}/bin/systemd-creds cat sessionSecret)" -o %S/autobrr/config.toml "sessionSecret"'';
+  configFile = configFormat.generate "autobrr.toml" cfg.settings;
 in
 {
   options = {
@@ -28,13 +27,31 @@ in
       };
 
       settings = lib.mkOption {
-        type = lib.types.submodule { freeformType = configFormat.type; };
-        default = {
-          host = "127.0.0.1";
-          port = 7474;
-          checkForUpdates = true;
+        type = lib.types.submodule {
+          freeformType = configFormat.type;
+          options = {
+            host = lib.mkOption {
+              type = lib.types.str;
+              default = "127.0.0.1";
+              description = "The host address autobrr listens on.";
+            };
+
+            port = lib.mkOption {
+              type = lib.types.port;
+              default = 7474;
+              description = "The port autobrr listens on.";
+            };
+
+            checkForUpdates = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Whether autobrr needs to check for updates.";
+            };
+          };
         };
+        default = { };
         example = {
+          port = 7654;
           logLevel = "DEBUG";
         };
         description = ''
@@ -61,26 +78,40 @@ in
       }
     ];
 
-    systemd.services.autobrr = {
-      description = "Autobrr";
-      after = [
-        "syslog.target"
-        "network-online.target"
-      ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+    systemd = {
+      tmpfiles.settings = {
+        "10-autobrr" = {
+          # DynamicUser uses /var/lib/private/
+          "/var/lib/private/autobrr/config.toml"."L+" = {
+            argument = "${configFile}";
+          };
+        };
+      };
 
-      serviceConfig = {
-        Type = "simple";
-        DynamicUser = true;
-        LoadCredential = "sessionSecret:${cfg.secretFile}";
-        StateDirectory = "autobrr";
-        ExecStartPre = "${lib.getExe pkgs.bash} -c '${templaterCmd}'";
-        ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
-        Restart = "on-failure";
+      services.autobrr = {
+        description = "Autobrr";
+        after = [
+          "syslog.target"
+          "network-online.target"
+        ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ configFile ];
+
+        serviceConfig = {
+          Type = "simple";
+          DynamicUser = true;
+          LoadCredential = "sessionSecret:${cfg.secretFile}";
+          Environment = [ "AUTOBRR__SESSION_SECRET_FILE=%d/sessionSecret" ];
+          StateDirectory = "autobrr";
+          ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
+          Restart = "on-failure";
+        };
       };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
   };
+
+  meta.maintainers = with lib.maintainers; [ av-gal ];
 }

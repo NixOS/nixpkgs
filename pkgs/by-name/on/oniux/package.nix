@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oniux";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     owner = "tpo/core";
     repo = "oniux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IfCUq2TnG6y5zC2qT4wU5Pq9PLuPsi4Qd8ts4uib4f0=";
+    hash = "sha256-ys6RjLyfhoAIiIlf8pv971txPubobY627jhk84HZhsw=";
   };
 
-  cargoHash = "sha256-bSBl+IBuBfqU6QowikS7Gan2k3o1OqK7shGB4gCvPRw=";
+  cargoHash = "sha256-4sXCZ2P4HFsW3g/CSIB2gwBMSddNXzdIav1tSWWOO9A=";
 
   nativeBuildInputs = [
     perl

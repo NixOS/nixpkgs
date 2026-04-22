@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "0.84.0";
+  version = "0.94.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-03nvs97JNQrOu2rxOXWpJiUj+DCI5I/PTcKLuZUZ3t0=";
+    hash = "sha256-Gh7My8ftI2o0CxrwuVsbr8tdZ2MtKdRw0mfQxb7REJk=";
   };
 
   postPatch = ''
@@ -90,7 +90,8 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     respx
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "anthropic" ];
 

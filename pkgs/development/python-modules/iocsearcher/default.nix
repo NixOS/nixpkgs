@@ -17,18 +17,19 @@
   python-magic,
   readabilipy,
   setuptools,
+  solders,
 }:
 
 buildPythonPackage rec {
   pname = "iocsearcher";
-  version = "2.5.7";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "malicialab";
     repo = "iocsearcher";
     tag = "v${version}";
-    hash = "sha256-qykPMtdGjys6d1cdP6cM/lmtU5WR/jk9tc9g+8uc31E=";
+    hash = "sha256-XoBb3V/2ZMrGV+i0abt7+/xEFqv6f0y99scaw8aav04=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     phonenumbers
     python-magic
     readabilipy
+    solders
   ]
   ++ eth-hash.optional-dependencies.pycryptodome;
 

@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.BazeliskVersion=${finalAttrs.version}"
+    "-X github.com/bazelbuild/bazelisk/core.BazeliskVersion=v${finalAttrs.version}"
   ];
 
   meta = {

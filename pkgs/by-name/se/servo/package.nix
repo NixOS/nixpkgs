@@ -69,13 +69,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.0.5";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XBaILyWIM1BecnJrkoFy4Q/zf7+n65Mv/wOxT4OheiU=";
+    hash = "sha256-DnjtKizYwadBYDqafFDuE/DRIjCqnK/L95zV0Fv0Xhc=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-iGS56vh4tgpJDLoXp7ou0/4+9onb3W3MEBzjcEOXjsw=";
+  cargoHash = "sha256-TJXWscTnsXxaWTfn7BugVMPamXOsyHXQhJskX04X7Zw=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
   buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "servo_allocator/use-system-allocator"
+    "servo-allocator/use-system-allocator"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -159,7 +159,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/resources
     cp -r ./resources $out/
 
-    wrapProgram $out/bin/servo \
+    wrapProgram $out/bin/servoshell \
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
@@ -178,7 +178,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       hexa
     ];
     teams = with lib.teams; [ ngi ];
-    mainProgram = "servo";
+    mainProgram = "servoshell";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

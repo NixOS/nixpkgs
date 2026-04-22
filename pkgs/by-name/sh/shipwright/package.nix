@@ -117,12 +117,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "9.1.2";
+  version = "9.2.3";
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-kFi5yo+CGH67NU7haDAbzWCURzsUYMlRzx66XGvh0a0=";
+    hash = "sha256-hQxYKZi6YJPittwes3sUZySChPBdGTz0GADbqgfjP5M=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -239,7 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/bin
       ln -s $out/lib/soh.elf $out/bin/soh
-      install -Dm644 ../soh/macosx/sohIcon.png $out/share/icons/hicolor/1024x1024/apps/soh.png
+      install -Dm644 ../soh/macosx/sohIcon.png $out/share/icons/soh.png
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Recreate the macOS bundle (without using cpack)

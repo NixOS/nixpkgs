@@ -23,6 +23,7 @@
   gnulib,
   gnum4,
   gobject-introspection,
+  icu,
   imagemagick,
   installShellFiles,
   lib,
@@ -108,7 +109,9 @@ in
       "${date}-${rev}";
     __intentionallyOverridingVersion = true;
 
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.5";
+    };
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
       gnum4
@@ -237,7 +240,13 @@ in
     checkPhase = ''
       runHook preCheck
       # feel free to disable/adjust the tests
-      rm tests/base/test_apply.lua tests/base/test_vimscript_interpreter.lua
+      rm \
+        tests/base/test_apply.lua \
+        tests/base/test_vimscript_interpreter.lua
+
+      # screenshot tests are brittle, as they are meant to be run against very
+      # specific Neovim/ripgrep/ast-grep versions.
+      rm -rf tests/screenshots/*
 
       # Dependencies needed in special location
       mkdir -p deps/{ripgrep,astgrep}
@@ -248,8 +257,8 @@ in
 
       # Update dependency check to respect packaged version
       substituteInPlace lua/grug-far/test/dependencies.lua \
-        --replace-fail "local RG_VERSION = '14.1.0'" "local RG_VERSION = '${lib.getVersion ripgrep}'" \
-        --replace-fail "local SG_VERSION = '0.35.0'" "local SG_VERSION = '${lib.getVersion ast-grep}'"
+        --replace-fail "local RG_VERSION = '15.1.0'" "local RG_VERSION = '${lib.getVersion ripgrep}'" \
+        --replace-fail "local SG_VERSION = '0.41.1'" "local SG_VERSION = '${lib.getVersion ast-grep}'"
 
       make test dir=base
       runHook postCheck
@@ -316,7 +325,9 @@ in
 
     # Lua 5.4 support is experimental at the moment, see
     # https://github.com/lgi-devs/lgi/pull/249
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
   });
 
   ljsyscall = prev.ljsyscall.overrideAttrs (old: rec {
@@ -333,7 +344,9 @@ in
     preConfigure = ''
       sed -i 's/lua == 5.1/lua >= 5.1, < 5.3/' ${knownRockspec}
     '';
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.3";
+    };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
   });
@@ -402,7 +415,9 @@ in
     buildInputs = old.buildInputs ++ [
       gnulib
     ];
-    meta.broken = isLuaJIT;
+    meta = (old.meta or { }) // {
+      broken = isLuaJIT;
+    };
   });
 
   lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs {
@@ -434,10 +449,45 @@ in
     buildInputs = old.buildInputs ++ [ sqlite.dev ];
   });
 
-  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
+  ltreesitter = prev.ltreesitter.overrideAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [
+      tree-sitter
+    ];
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail '"tree-sitter/lib/src/lib.c",' "" \
+        --replace-fail '"tree-sitter/lib/include",' '"${tree-sitter}/include"' \
+        --replace-fail '"tree-sitter/lib/src"' ""
+    '';
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-I${tree-sitter}/include";
+      NIX_LDFLAGS = "-L${tree-sitter}/lib -ltree-sitter";
+    };
+  });
+
+  ltreesitter-ts = prev.ltreesitter-ts.overrideAttrs (old: {
+    # Upstream package relies on git submodules (ltreesitter + tree-sitter),
+    # but the default source fetch misses those files.
+    src = fetchFromGitHub {
+      owner = "FourierTransformer";
+      repo = "ltreesitter-ts";
+      rev = "0.0.1";
+      fetchSubmodules = true;
+      hash = "sha256-hKM5HQU7A08mA004ZMV7hIVq/2WR3KocMatnTplM8uU=";
+    };
+    nativeBuildInputs = old.nativeBuildInputs ++ [ icu ];
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev icu}/include";
+      NIX_LDFLAGS = "-L${lib.getLib icu}/lib -licuuc -licui18n -licudata";
+    };
+  });
+
+  lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs (old: {
     strictDeps = false;
-    meta.broken = isLuaJIT;
-  };
+    meta = (old.meta or { }) // {
+      broken = isLuaJIT;
+    };
+  });
 
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -474,7 +524,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
-      hash = "sha256-7mFn4dLgaxfAxtPFCc3VzcBx2HuywcZTYqCGTbaGS0k=";
+      hash = "sha256-nkWQOjqShgDcLfQDOGsB9CMHZxI/Lrx/+tC4ZeUl/Ak=";
     };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -484,12 +534,16 @@ in
 
     # ld: symbol(s) not found for architecture arm64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    meta.broken = stdenv.hostPlatform.isDarwin || luaAtLeast "5.5";
+    meta = (old.meta or { }) // {
+      broken = stdenv.hostPlatform.isDarwin || luaAtLeast "5.5";
+    };
   });
 
-  lua-subprocess = prev.lua-subprocess.overrideAttrs {
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
-  };
+  lua-subprocess = prev.lua-subprocess.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
+  });
 
   lua-yajl = prev.lua-yajl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
@@ -565,7 +619,9 @@ in
         dep = libevent;
       }
     ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
   });
 
   luaexpat = prev.luaexpat.overrideAttrs (_: {
@@ -577,7 +633,7 @@ in
     ];
   });
 
-  luaffi = prev.luaffi.overrideAttrs {
+  luaffi = prev.luaffi.overrideAttrs (old: {
     # TODO Somehow automatically amend buildInputs for things that need luaffi
     # but are in luajitPackages?
 
@@ -589,8 +645,10 @@ in
       sha256 = "1nwx6sh56zfq99rcs7sph0296jf6a9z72mxknn0ysw9fd7m1r8ig";
     };
     knownRockspec = with prev.luaffi; "${pname}-${version}.rockspec";
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
-  };
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
+    };
+  });
 
   lualdap = prev.lualdap.overrideAttrs (_: {
     externalDeps = [
@@ -796,24 +854,6 @@ in
     ];
   };
 
-  lze = prev.lze.overrideAttrs {
-    doCheck = lua.luaversion == "5.1";
-    nativeCheckInputs = [
-      final.nlua
-      final.bustedCheckHook
-      writableTmpDirAsHomeHook
-    ];
-  };
-
-  lzextras = prev.lzextras.overrideAttrs {
-    doCheck = lua.luaversion == "5.1";
-    nativeCheckInputs = [
-      final.nlua
-      lua.pkgs.bustedCheckHook
-      final.lze
-    ];
-  };
-
   magick = prev.magick.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
       imagemagick
@@ -830,7 +870,9 @@ in
     '';
 
     # Requires ffi
-    meta.broken = !isLuaJIT;
+    meta = (old.meta or { }) // {
+      broken = !isLuaJIT;
+    };
   });
 
   mpack = prev.mpack.overrideAttrs (drv: {
@@ -843,13 +885,25 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs {
+
+    doCheck = true;
+    nativeCheckInputs = [
+      final.nlua
+      final.bustedCheckHook
+      writableTmpDirAsHomeHook
+    ];
+
+    nvimSkipModules = [
+      "neorg.modules.core.dirman.tests"
+      "neorg.modules.core.ui.module"
+      "neorg.modules.core.concealer.module"
+    ];
+
     # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
-        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
-        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim'," \
-        --replace-fail ", 'nvim-treesitter-legacy-api == 0.9.2'" ""
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
     '';
   };
 
@@ -993,10 +1047,12 @@ in
     '';
   };
 
-  rest-nvim = prev.rest-nvim.overrideAttrs {
+  rest-nvim = prev.rest-nvim.overrideAttrs (old: {
     strictDeps = false;
-    meta.broken = luaAtLeast "5.5";
-  };
+    meta = (old.meta or { }) // {
+      broken = luaAtLeast "5.5";
+    };
+  });
 
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs {
 
@@ -1099,6 +1155,48 @@ in
     '';
   };
 
+  teal-language-server = prev.teal-language-server.overrideAttrs (old: {
+    # TODO: Remove this prerelease override once upstream publishes a release
+    # or rockspec that the luarocks updater can consume directly.
+    version = "0.1.2-pre-1";
+    knownRockspec =
+      (fetchurl {
+        url = "https://raw.githubusercontent.com/teal-language/teal-language-server/0.1.2-pre-1/teal-language-server-0.1.2-1.rockspec";
+        sha256 = "1z7nbzhdqh2w7k635hbbfba2s37rxbcphaxq7dfsjfj3sgkj9snf";
+      }).outPath;
+    src = fetchFromGitHub {
+      owner = "teal-language";
+      repo = "teal-language-server";
+      tag = "0.1.2-pre-1";
+      hash = "sha256-1ssgt+/e28TJ+1G1TWAPbZe5DiUYOafsSbc9exttesk=";
+    };
+    strictDeps = false;
+    # Relax lockfile-pinned deps (e.g. luafilesystem 1.8.0-1) so nixpkgs
+    # packaged versions can satisfy dependencies.
+    preConfigure = (old.preConfigure or "") + ''
+      rm -f luarocks.lock
+    '';
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail 'tag = "0.1.2"' 'tag = "0.1.2-pre-1"' \
+        --replace-fail '"ltreesitter == 0.1.0",' '"ltreesitter >= 0.2.0",' \
+        --replace-fail '"luv == 1.51.0",' '"luv >= 1.51.0",' \
+        --replace-fail '"tree-sitter-cli == 0.24.7",' "" \
+        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",' \
+        --replace-fail '"tree-sitter-teal == 0.0.34",' '"tree-sitter-teal >= 0.0.34",'
+    '';
+    propagatedBuildInputs =
+      (lib.filter (
+        drv:
+        !(lib.elem (lib.getName drv) [
+          "ltreesitter-ts"
+        ])
+      ) (old.propagatedBuildInputs or [ ]))
+      ++ [
+        final.ltreesitter
+      ];
+  });
+
   tiktoken_core = prev.tiktoken_core.overrideAttrs (old: {
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
@@ -1142,6 +1240,17 @@ in
     ];
   });
 
+  tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {
+    # Keep this package hermetic: provide the already-packaged tree-sitter
+    # binary instead of using the LuaRocks backend that downloads from GitHub.
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin
+      ln -s ${lib.getExe tree-sitter} $out/bin/tree-sitter
+      runHook postInstall
+    '';
+  });
+
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       tree-sitter
@@ -1150,7 +1259,16 @@ in
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
-    meta.broken = lua.luaversion != "5.1";
+    meta = (old.meta or { }) // {
+      broken = lua.luaversion != "5.1";
+    };
+  });
+
+  tree-sitter-norg-meta = prev.tree-sitter-norg-meta.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      writableTmpDirAsHomeHook
+      tree-sitter
+    ];
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
@@ -1160,7 +1278,16 @@ in
     ];
 
     # should be fixed upstream
-    meta.broken = lua.luaversion != "5.1";
+    meta = (old.meta or { }) // {
+      broken = lua.luaversion != "5.1";
+    };
+  });
+
+  tree-sitter-teal = prev.tree-sitter-teal.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
   });
 
   utf8 = prev.utf8.overrideAttrs {
@@ -1173,8 +1300,10 @@ in
     '';
   };
 
-  vstruct = prev.vstruct.overrideAttrs (_: {
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+  vstruct = prev.vstruct.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = luaOlder "5.1" || luaAtLeast "5.4";
+    };
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
@@ -1184,9 +1313,11 @@ in
     '';
   });
 
-  xml2lua = prev.xml2lua.overrideAttrs {
-    meta.broken = luaAtLeast "5.5";
-  };
+  xml2lua = prev.xml2lua.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = luaAtLeast "5.5";
+    };
+  });
 
   # keep-sorted end
 }

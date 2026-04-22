@@ -61,7 +61,7 @@ jobs:
 
       - name: Find commit that touched ci/pinned.json
         id: find-pinned-commit
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           TARGET_SHA: ${{ inputs.targetSha }}
           HEAD_SHA: ${{ inputs.headSha }}
@@ -132,7 +132,7 @@ jobs:
             core.info(`Found pinned.json commit: ${ciPinBumpCommit}`)
 
       - name: Install Nix
-        uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - name: Load supported versions
         id: versions
@@ -154,7 +154,7 @@ jobs:
     # to not interrupt main Eval's compare step.
     continue-on-error: ${{ matrix.version != '' }}
     name: ${{ matrix.system }}${{ matrix.version && format(' @ {0} ({1})', matrix.version, needs.versions.outputs.ciPinBumpCommitShort) || '' }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       # This is not supposed to be used and just acts as a fallback.
       # Without swap, when Eval runs OOM, it will fail badly with a
@@ -180,7 +180,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
         continue-on-error: true
@@ -238,7 +238,7 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
@@ -270,7 +270,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - name: Combine all output paths and eval stats
         run: |
@@ -279,7 +279,7 @@ jobs:
             --out-link combined
 
       - name: Upload the maintainer list
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-prefix }}maintainers
           path: combined/maintainers.json
@@ -300,18 +300,24 @@ jobs:
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the comparison results
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-prefix }}comparison
           path: comparison/*
 
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const { readFile } = require('node:fs/promises')
             const changed = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8'))
+            const removedByKernel = Object.fromEntries(
+              Object.entries(changed.attrdiffByKernel ?? {}).map(([kernel, diff]) => [
+                kernel,
+                diff.removed.length,
+              ]),
+            )
             const description =
               'Package: ' + [
                 `added ${changed.attrdiff.added.length}`,
@@ -321,7 +327,15 @@ jobs:
               ' — Rebuild: ' + [
                 `linux ${changed.rebuildCountByKernel.linux}`,
                 `darwin ${changed.rebuildCountByKernel.darwin}`
-              ].join(', ')
+              ].join(', ') +
+              (
+                Object.values(removedByKernel).some((count) => count > 0)
+                  ? ' — Removed: ' + [
+                      `linux ${removedByKernel.linux ?? 0}`,
+                      `darwin ${removedByKernel.darwin ?? 0}`
+                    ].join(', ')
+                  : ''
+              )
 
             const { serverUrl, repo, runId, payload } = context
             const target_url =
@@ -337,7 +351,7 @@ jobs:
             })
       - name: Request changes if PR is against an inappropriate branch
         if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             require('./nixpkgs/trusted/ci/github-script/check-target-branch.js')({
@@ -359,7 +373,7 @@ jobs:
           path: versions
 
       - name: Add version comparison table to job summary
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           ARTIFACT_PREFIX: ${{ inputs.artifact-prefix }}
           SYSTEMS: ${{ inputs.systems }}
@@ -451,7 +465,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
+        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
 
       - name: Ensure flake outputs on all systems still evaluate
         run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'

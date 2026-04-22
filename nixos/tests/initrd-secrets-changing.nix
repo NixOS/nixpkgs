@@ -24,14 +24,19 @@ testing.makeTest {
 
       boot.initrd.secrets = {
         "/test" = secret1InStore;
-        "/run/keys/test" = secret1InStore;
+        "/run/test" = secret1InStore;
       };
-      boot.initrd.postMountCommands = "cp /test /mnt-root/secret-from-initramfs";
+      boot.initrd.systemd = {
+        enable = true;
+        tmpfiles.settings."00-copy-secret" = {
+          "/sysroot/secret-from-initramfs".C.argument = "/test";
+        };
+      };
 
       specialisation.secrets2System.configuration = {
         boot.initrd.secrets = lib.mkForce {
           "/test" = secret2InStore;
-          "/run/keys/test" = secret2InStore;
+          "/run/test" = secret2InStore;
         };
       };
     };
@@ -40,21 +45,23 @@ testing.makeTest {
     start_all()
 
     machine.wait_for_unit("multi-user.target")
-    print(machine.succeed("cat /run/keys/test"))
+    print(machine.succeed("cat /run/test"))
     machine.succeed(
         "cmp ${secret1InStore} /secret-from-initramfs",
-        "cmp ${secret1InStore} /run/keys/test",
+        "cmp ${secret1InStore} /run/test",
     )
     # Select the second boot entry corresponding to the specialisation secrets2System.
     machine.succeed("grub-reboot 1")
+    # Remove the rootfs secret so tmpfiles will copy the new one next time
+    machine.succeed("rm /secret-from-initramfs")
     machine.shutdown()
 
     with subtest("Check that the specialisation's secrets are distinct despite identical kernels"):
         machine.wait_for_unit("multi-user.target")
-        print(machine.succeed("cat /run/keys/test"))
+        print(machine.succeed("cat /run/test"))
         machine.succeed(
             "cmp ${secret2InStore} /secret-from-initramfs",
-            "cmp ${secret2InStore} /run/keys/test",
+            "cmp ${secret2InStore} /run/test",
         )
         machine.shutdown()
   '';

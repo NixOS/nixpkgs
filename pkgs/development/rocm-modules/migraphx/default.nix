@@ -59,7 +59,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "7.2.0";
+  version = "7.2.2";
 
   outputs = [
     "out"
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-FBAVsk4x3ATLDYtfzcPUPnUTwe36maIAY1/FwqG6jD0=";
+    hash = "sha256-jHAdlqRhEiBtU4h76k0NTGUABiOmb3xKADr5sWme4+8=";
   };
 
   nativeBuildInputs = [
@@ -190,11 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
       migraphx = finalAttrs.finalPackage;
     };
   };
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "AMD's graph optimization engine";

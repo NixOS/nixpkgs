@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  fetchDebianPatch,
   pkg-config,
   libjack2,
   gettext,
@@ -26,14 +27,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "denemo";
-  version = "2.6.43";
+  version = "2.6.49";
 
   src = fetchgit {
     url = "https://git.savannah.gnu.org/git/denemo.git";
-    rev = "b04ead1d3efeee036357cf36898b838a96ec5332";
-    hash = "sha256-XMFbPk70JqUHWBPEK8rjr70iMs49RNyaaCUGnYlLf2E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TUdaGOChqwK3fAmdaP9Lg2FGrEWF0yjwqsRXK7h/83Y=";
   };
 
   buildInputs = [
@@ -58,6 +59,30 @@ stdenv.mkDerivation {
   # error by default in GCC 14
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
+  patches = [
+    (fetchDebianPatch {
+      pname = "denemo";
+      version = "2.6.49";
+      debianRevision = "0.2";
+      patch = "0002-Prevent-incompatible-pointer-types.patch";
+      hash = "sha256-l1eXjQieH5ySqwaTJAE8lUq/FsB//cl02Wgt0TRQBMo=";
+    })
+    (fetchDebianPatch {
+      pname = "denemo";
+      version = "2.6.49";
+      debianRevision = "0.2";
+      patch = "0013-Fix-FTBFS-with-GCC-14.patch";
+      hash = "sha256-H3hRmAPazYRkwQI97vNR9kpV0lYpIiAXyMfrnJl+lNo=";
+    })
+    (fetchDebianPatch {
+      pname = "denemo";
+      version = "2.6.49";
+      debianRevision = "0.2";
+      patch = "0014-Fix-FTBFS-with-GCC-15.patch";
+      hash = "sha256-UG/YZWp+twJdvqiXR4NfB3knm04lAyICh5/LHN2pm54=";
+    })
+  ];
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PATH : "${lilypond}/bin"
@@ -80,4 +105,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.olynch ];
   };
-}
+})

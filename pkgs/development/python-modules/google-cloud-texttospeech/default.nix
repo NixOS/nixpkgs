@@ -13,13 +13,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-texttospeech";
-  version = "2.34.0";
+  version = "2.36.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_texttospeech";
     inherit (finalAttrs) version;
-    hash = "sha256-ZYN8O8co83KQAJ2++JLfh+rkWtgJBVWQltEQeCIHT2I=";
+    hash = "sha256-bGBa9+R3TBusmfyq9FOPFSsQu6dziiP0IYRVf0RNxrc=";
   };
 
   build-system = [ setuptools ];

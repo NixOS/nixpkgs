@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "5.3.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-utils";
     tag = "v${version}";
-    hash = "sha256-uyUsX9jX2KumrERrIc6nXloH0G+rQeKzFMwex+Mh3eM=";
+    hash = "sha256-U1RSKaLw/gDg4lMjkTwR/Wfb5wqQctML9CDZBILMBys=";
   };
 
   build-system = [ setuptools ];

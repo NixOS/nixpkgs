@@ -10,15 +10,15 @@
   prefetch-npm-deps,
   rsync,
   stdenv,
-  nodejs_22,
+  nodejs_24,
 }:
 let
   electron = electron_39;
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "17.2.1";
+  version = "18.1.3";
 
   inherit nodejs;
 
@@ -26,7 +26,7 @@ buildNpmPackage rec {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-yt3HXOhpy2uzzpFInZbTHCWA9LfHB2bqEFCHzHwIv70=";
+    hash = "sha256-2NEhLYC13OYZqaLLLLyQHn5uDIDh40DVtUSuUAjCxgQ=";
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -69,7 +69,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-hNmM8Ln0klZBnC5TwtL7Bog82MlC4D0sCb9+uMqB0D0=";
+      hash = "sha256-AnAiPjxl5MbQchCPPHmtRFEojClseHFul+w5FEEUdwY=";
     }
   );
 

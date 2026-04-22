@@ -49,7 +49,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "executorch";
-  version = "1.0.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -62,7 +62,7 @@ buildPythonPackage (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-h+nmipFDO/cdPTQXrjM5EkH//wHKBAvlDIp6SBbGN/8=";
+    hash = "sha256-Rkw6+keOygQaf6iOCpGoW9JgXiCimgx8gsxLEH3bxME=";
   };
 
   postPatch =
@@ -77,7 +77,7 @@ buildPythonPackage (finalAttrs: {
     + ''
       substituteInPlace pyproject.toml \
         --replace-fail '"pip>=23",' "" \
-        --replace-fail "cmake>=3.29,<4.0.0" "cmake"
+        --replace-fail "cmake>=3.24,<4.0.0" "cmake"
     ''
     # CMake 4 dropped support of versions lower than 3.5, versions lower than 3.10 are deprecated.
     # https://github.com/NixOS/nixpkgs/issues/445447
@@ -95,10 +95,19 @@ buildPythonPackage (finalAttrs: {
           'static char hexdigits[17] = "0123456789ABCDEF";'
 
       sed -i "1i #include <cstdint>" backends/apple/coreml/runtime/inmemoryfs/memory_buffer.hpp
+      sed -i "1i #include <cstdint>" extension/llm/tokenizers/third-party/sentencepiece/src/sentencepiece_processor.h
     '';
 
   env = {
     BUILD_VERSION = finalAttrs.version;
+
+    # Can't use cmakeFlags since we do not control invocation of cmake.
+    # But the build script is sensitive to this env variable.
+    # Fixes:
+    #  Some binaries contain forbidden references to /build/. Check the error above!
+    CMAKE_ARGS = lib.concatStringsSep " " [
+      (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+    ];
   };
 
   build-system = [
@@ -186,6 +195,7 @@ buildPythonPackage (finalAttrs: {
     # AssertionError (Numerical comparison fails)
     "test_sdpa_with_cache_seq_len_13"
     "test_sdpa_with_custom_quantized_seq_len_130_gqa"
+    "test_within_transformer"
 
     # Try to download models from the internet
     "test_all_models_with_recipes"
@@ -199,6 +209,9 @@ buildPythonPackage (finalAttrs: {
     "test_resnet18_export_to_executorch"
     "test_resnet50_export_to_executorch"
     "test_vit_export_to_executorch"
+
+    # RuntimeError: Failed to compile /build/tmplb6i266d/data.json to /build/tmplb6i266d/data.pte
+    "test_flatbuffer_paths_match"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: Error in dlopen:

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgedoc";
-  version = "1.10.7";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     tag = finalAttrs.version;
-    hash = "sha256-9HbvnnvC1eWoOxPE6yW2GcULgIrXDZ4B+mt7ZYz4j/Q=";
+    hash = "sha256-9gKpjmE8z/9PUILCiVK1utNYKD8kscbCBKxerqTO3z4=";
   };
 
   # Generate this file with:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-7QJu6HSXCNameGq/NZpq7V0VHam7qRWzQQfzkzvARs4=";
+    hash = "sha256-HbrkmuL1OBZZoA6o438GePId50lJrYfI7M2FsP00YGc=";
   };
 
   nativeBuildInputs = [

@@ -377,39 +377,72 @@ in
       }
     ) { };
 
-    boot.postBootCommands =
+    systemd.services.expand-root-partition = lib.mkIf config.sdImage.expandOnBoot {
+      description = "Grow the root partition and filesystem to fill the SD card";
+      unitConfig = {
+        DefaultDependencies = false;
+        ConditionPathExists = config.sdImage.nixPathRegistrationFile;
+      };
+      wantedBy = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "register-nix-paths.service"
+      ];
+      after = [ "local-fs.target" ];
+      conflicts = [ "shutdown.target" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        # Figure out device names for the boot device and root filesystem.
+        rootPart=$(${lib.getExe' pkgs.util-linux "findmnt"} -n -o SOURCE /)
+        bootDevice=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo PKNAME $rootPart)
+        partNum=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo MAJ:MIN $rootPart | ${lib.getExe pkgs.gawk} -F: '{print $2}')
+
+        # Resize the root partition and the filesystem to fit the disk
+        echo ",+," | ${lib.getExe' pkgs.util-linux "sfdisk"} -N$partNum --no-reread $bootDevice
+        ${lib.getExe' pkgs.parted "partprobe"}
+        ${lib.getExe' pkgs.e2fsprogs "resize2fs"} $rootPart
+      '';
+    };
+
+    systemd.services.register-nix-paths =
       let
-        expandOnBoot = lib.optionalString config.sdImage.expandOnBoot ''
-          # Figure out device names for the boot device and root filesystem.
-          rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
-          bootDevice=$(lsblk -npo PKNAME $rootPart)
-          partNum=$(lsblk -npo MAJ:MIN $rootPart | ${pkgs.gawk}/bin/awk -F: '{print $2}')
-
-          # Resize the root partition and the filesystem to fit the disk
-          echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
-          ${pkgs.parted}/bin/partprobe
-          ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
-        '';
-        nixPathRegistrationFile = config.sdImage.nixPathRegistrationFile;
+        inherit (config.sdImage) nixPathRegistrationFile;
       in
-      ''
-        # On the first boot do some maintenance tasks
-        if [ -f ${nixPathRegistrationFile} ]; then
-          set -euo pipefail
-          set -x
-
-          ${expandOnBoot}
-
-          # Register the contents of the initial Nix store
-          ${config.nix.package.out}/bin/nix-store --load-db < ${nixPathRegistrationFile}
+      {
+        description = "Register Nix Store Paths";
+        unitConfig = {
+          DefaultDependencies = false;
+          ConditionPathExists = nixPathRegistrationFile;
+        };
+        wantedBy = [ "sysinit.target" ];
+        before = [
+          "sysinit.target"
+          "shutdown.target"
+          "nix-daemon.socket"
+          "nix-daemon.service"
+        ];
+        after = [ "local-fs.target" ];
+        conflicts = [ "shutdown.target" ];
+        restartIfChanged = false;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          ${lib.getExe' config.nix.package.out "nix-store"} --load-db < ${nixPathRegistrationFile}
 
           # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
           touch /etc/NIXOS
-          ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+          ${lib.getExe' config.nix.package.out "nix-env"} -p /nix/var/nix/profiles/system --set /run/current-system
 
           # Prevents this from running on later boots.
           rm -f ${nixPathRegistrationFile}
-        fi
-      '';
+        '';
+      };
   };
 }

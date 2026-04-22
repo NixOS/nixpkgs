@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "amass";
-  version = "5.0.1";
+  version = "5.1.1";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpostalWithData ];
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "OWASP";
     repo = "Amass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uAuBWzEwppnmYacfPI7MZUW+7PdSs3EqYm1WQI4fthQ=";
+    hash = "sha256-d4zy64W5cIseOVAaekN5Q4I5WuLz+M/cP7FXQ3CQ+mk=";
   };
 
-  vendorHash = "sha256-/AowoZfOk2tib996oC2hsMnzbe/CVbCBesTWXp6xE6Y=";
+  vendorHash = "sha256-3MpE61ixMps4IRIZkqjzG225zk4fsERkssoNoItUXbQ=";
 
   # https://github.com/OWASP/Amass/issues/640
   doCheck = false;

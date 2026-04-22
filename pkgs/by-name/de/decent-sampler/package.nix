@@ -16,7 +16,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.16.0";
+  version = "1.18.1";
 
   icon = fetchurl {
     url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
@@ -29,7 +29,7 @@ let
     src = fetchzip {
       # Download page: https://store.decentsamples.com/downloads/decent-sampler/versions
       url = "https://cdn.decentsamples.com/production/builds/ds/${version}/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
-      hash = "sha256-KeHWdlrPEAt45YeivmPjA645x+F2cKLYNGJBToEHAok=";
+      hash = "sha256-wL9L4I2iw9r3r69TOr37XXEs3iECMuNGX9Ez63P/f8w=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
