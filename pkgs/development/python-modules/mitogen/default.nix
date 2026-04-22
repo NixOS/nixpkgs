@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mitogen";
-  version = "0.3.45";
+  version = "0.3.47";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitogen-hq";
     repo = "mitogen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PwvtniLqy8gSHqN0NxMQqh9Jf8zj7PaVTFot61w4LPM=";
+    hash = "sha256-vCfGig2Sc4NpDl2lEM5FkFAsA/+EFd8Sv643onkMWqQ=";
   };
 
   build-system = [ setuptools ];
