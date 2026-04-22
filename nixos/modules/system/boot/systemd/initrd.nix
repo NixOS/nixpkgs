@@ -640,6 +640,10 @@ in
           ) cfg.automounts
         );
 
+      services."modprobe@" = lib.mkIf (config.system.build.kernel.config.isYes "MODULES") {
+        serviceConfig.ExecSearchPath = lib.makeBinPath [ cfg.package.kmod ];
+      };
+
       services.initrd-find-nixos-closure = lib.mkIf (!config.system.nixos-init.enable) {
         description = "Find NixOS closure";
 
