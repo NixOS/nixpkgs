@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Run pre-commit.com before `jj git push`";
     homepage = "https://github.com/acarapetis/jj-pre-push";
-    changelog = "https://github.com/acarapetis/jj-pre-push/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/acarapetis/jj-pre-push/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xanderio ];
     mainProgram = "jj-pre-push";
