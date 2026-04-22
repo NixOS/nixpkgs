@@ -2,13 +2,13 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
 
 let
   inherit (lib)
     concatStringsSep
+    escapeShellArgs
     getExe'
     mkEnableOption
     mkIf
@@ -27,8 +27,6 @@ let
     port
     str
     ;
-
-  inherit (utils) escapeSystemdExecArgs;
 
   cfg = config.services.netbird.server.relay;
   stateDir = "/var/lib/netbird-relay";
@@ -148,30 +146,32 @@ in
         ];
 
         serviceConfig = {
-          # Secret handling: write EnvironmentFile in preStart from LoadCredential,
-          # then ExecStart reads it. This avoids exposing the secret in /proc
-          # and gives systemd proper process tracking (unlike a script wrapper).
           LoadCredential = [ "auth-secret:${cfg.authSecretFile}" ];
 
-          ExecStart = escapeSystemdExecArgs (
-            [
-              (getExe' cfg.package "netbird-relay")
-              "--listen-address"
-              ":${toString cfg.port}"
-              "--exposed-address"
-              cfg.exposedAddress
-              "--log-level"
-              cfg.logLevel
-              "--log-file"
-              "console"
-            ]
-            ++ optionals cfg.stun.enable [
-              "--enable-stun"
-              "--stun-ports"
-              (concatStringsSep "," (map toString cfg.stun.ports))
-            ]
-            ++ cfg.extraOptions
-          );
+          ExecStart =
+            let
+              args = [
+                (getExe' cfg.package "netbird-relay")
+                "--listen-address"
+                ":${toString cfg.port}"
+                "--exposed-address"
+                cfg.exposedAddress
+                "--log-level"
+                cfg.logLevel
+                "--log-file"
+                "console"
+              ]
+              ++ optionals cfg.stun.enable [
+                "--enable-stun"
+                "--stun-ports"
+                (concatStringsSep "," (map toString cfg.stun.ports))
+              ]
+              ++ cfg.extraOptions;
+            in
+            "${pkgs.writeShellScript "netbird-relay" ''
+              export NB_AUTH_SECRET=$(< "$CREDENTIALS_DIRECTORY/auth-secret")
+              exec ${escapeShellArgs args}
+            ''}";
 
           Restart = "always";
           RuntimeDirectory = "netbird-relay";
@@ -205,19 +205,8 @@ in
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         };
 
-        # Inject the auth secret via EnvironmentFile.
-        # LoadCredential makes the file available at $CREDENTIALS_DIRECTORY/auth-secret,
-        # then preStart writes an EnvironmentFile that ExecStart picks up.
-        # The relay binary reads NB_AUTH_SECRET from the environment via setFlagsFromEnvVars().
-        preStart = ''
-          umask 077
-          echo "NB_AUTH_SECRET=$(< "$CREDENTIALS_DIRECTORY/auth-secret")" > "$RUNTIME_DIRECTORY/env"
-        '';
-
         stopIfChanged = false;
       };
-
-      systemd.services.netbird-relay.serviceConfig.EnvironmentFile = "/run/netbird-relay/env";
     }
 
     (mkIf cfg.openFirewall {

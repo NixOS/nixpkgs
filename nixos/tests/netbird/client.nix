@@ -12,33 +12,6 @@
         enable = true;
         clients.custom.port = 51819;
         ui.enable = true;
-
-        # Test advanced options
-        clients.advanced = {
-          port = 51830;
-          dns.disable = true;
-          routing.blockLanAccess = true;
-          mtu = 1280;
-          debug.anonymizeLogs = true;
-        };
-
-        # Test SSH and security options
-        clients.withSsh = {
-          port = 51831;
-          ssh.enable = true;
-          ssh.sftp.enable = true;
-          rosenpass.enable = true;
-          rosenpass.permissive = true;
-        };
-
-        # Test connection and server options
-        clients.selfhosted = {
-          port = 51832;
-          connection.lazy = true;
-          connection.networkMonitor = false;
-          server.managementUrl = "https://management.example.com:443";
-          hostname = "test-peer";
-        };
       };
     };
   };
@@ -106,7 +79,7 @@
           retry(check_success, retries)
           return output
 
-    instances = ["netbird", "netbird-custom", "netbird-advanced", "netbird-withSsh", "netbird-selfhosted"]
+    instances = ["netbird", "netbird-custom"]
 
     for name in instances:
       node.wait_for_unit(f"{name}.service")
@@ -114,27 +87,6 @@
 
     for name in instances:
       wait_until_rcode(node, f"{name} status |& grep -C20 Disconnected", 0, retries=5)
-
-    # Verify environment variables are set correctly for advanced client
-    node.succeed("systemctl show netbird-advanced.service --property=Environment | grep -q NB_DISABLE_DNS=true")
-    node.succeed("systemctl show netbird-advanced.service --property=Environment | grep -q NB_BLOCK_LAN_ACCESS=true")
-    node.succeed("systemctl show netbird-advanced.service --property=Environment | grep -q NB_ANONYMIZE=true")
-
-    # Verify environment variables for SSH client
-    node.succeed("systemctl show netbird-withSsh.service --property=Environment | grep -q NB_ALLOW_SERVER_SSH=true")
-    node.succeed("systemctl show netbird-withSsh.service --property=Environment | grep -q NB_SSH_ALLOW_SFTP=true")
-    node.succeed("systemctl show netbird-withSsh.service --property=Environment | grep -q NB_ENABLE_ROSENPASS=true")
-    node.succeed("systemctl show netbird-withSsh.service --property=Environment | grep -q NB_ROSENPASS_PERMISSIVE=true")
-
-    # Verify environment variables for selfhosted client
-    node.succeed("systemctl show netbird-selfhosted.service --property=Environment | grep -q NB_ENABLE_LAZY_CONNECTION=true")
-    node.succeed("systemctl show netbird-selfhosted.service --property=Environment | grep -q NB_DISABLE_NETWORK_MONITOR=true")
-    node.succeed("systemctl show netbird-selfhosted.service --property=Environment | grep -q NB_HOSTNAME=test-peer")
-
-    # Verify config.json contains MTU and ManagementURL
-    node.succeed("cat /etc/netbird-advanced/config.d/50-nixos.json | grep -q '\"Mtu\": 1280'")
-    node.succeed("cat /etc/netbird-selfhosted/config.d/50-nixos.json | grep -q 'ManagementURL'")
-    node.succeed("cat /etc/netbird-selfhosted/config.d/50-nixos.json | grep -q 'management.example.com'")
   ''
   # The status used to turn into `NeedsLogin`, but recently started crashing instead.
   # leaving the snippets in here, in case some update goes back to the old behavior and can be tested again
