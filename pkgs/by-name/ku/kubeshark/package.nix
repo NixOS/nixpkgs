@@ -75,6 +75,7 @@ buildGoModule (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [
       qjoly
+      miniharinn
     ];
   };
 })
