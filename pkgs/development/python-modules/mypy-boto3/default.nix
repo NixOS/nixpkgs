@@ -1278,8 +1278,8 @@ in
       "sha256-wNuzufARcqJ8liqDq2uSLxf6OvHt6ILm4uwi2mZ22rM=";
 
   mypy-boto3-snowball =
-    buildMypyBoto3Package "snowball" "1.42.3"
-      "sha256-hRI6ESK7/wbcKYo5aB2W5QXQ0hDrfKIHTTyN/RpEYrA=";
+    buildMypyBoto3Package "snowball" "1.42.93"
+      "sha256-SUWzgGwyfU5afIs2m2LHdiRX0D1vYGdQUrOEHe498Z8=";
 
   mypy-boto3-sns =
     buildMypyBoto3Package "sns" "1.42.3"
