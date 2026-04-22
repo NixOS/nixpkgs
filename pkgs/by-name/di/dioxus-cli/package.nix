@@ -16,15 +16,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxus-cli";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchCrate {
     pname = "dioxus-cli";
     version = finalAttrs.version;
-    hash = "sha256-iAwR43SwmOBvuHa9qZBJLCjyhQSj/XgDx0jkWR+lgrE=";
+    hash = "sha256-PKidohK85wv/ZN9WcNS+HTlVGgR5o07gWLshZhzyg5k=";
   };
 
-  cargoHash = "sha256-JS5/7hQhgN2gbMmLY2zD2GE/Ony8AAHAzj7Ituj6l90=";
+  cargoHash = "sha256-T6xLlu8XeJPm+ULgpTALTT93X55ExJhDMuhpal2QLhg=";
   buildFeatures = [
     "no-downloads"
   ]
