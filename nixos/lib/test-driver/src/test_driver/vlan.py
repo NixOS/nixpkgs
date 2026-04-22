@@ -35,6 +35,9 @@ def readline_with_timeout(
             # works if the file descriptor is in non-blocking mode!
             while line := readable.readline():
                 yield line
+            else:
+                raise Exception("no lines found. perhaps the process has died?")
+
     finally:
         fcntl.fcntl(fd, fcntl.F_SETFL, og_flags)
 
@@ -120,6 +123,7 @@ class VLan:
         for line in readline_with_timeout(
             self.process.stdout, timeout=dt.timedelta(seconds=5)
         ):
+            self.logger.debug(f"vde_switch[{self.nr}]: {line.rstrip()}")
             if "1000 Success" in line:
                 break
 
