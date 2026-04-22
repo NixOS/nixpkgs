@@ -6,25 +6,28 @@
   _7zz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "extractcode-7z";
-  version = "21.5.31";
+  version = "1.0.1-unstable-2026-04-13";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aboutcode-org";
     repo = "scancode-plugins";
-    tag = "v${version}";
-    hash = "sha256-nGgFjp1N1IM/Sm4xLJw5WiZncc369/LqNcwFJBS1EQs=";
+    rev = "9fcc50df36afdeb7b876eea4ec46fd2d2332772f";
+    hash = "sha256-uLWk3iclOkaEiaqXWu9oori2yq383xaQhJSf53ORpjU=";
   };
 
-  sourceRoot = "${src.name}/builtins/extractcode_7z-linux";
+  patches = [
+    ./0001-extractcode-7z-nix-7z-dir.patch
+  ];
 
   propagatedBuildInputs = [ plugincode ];
 
-  preBuild = ''
-    rm src/extractcode_7z/bin/7z{,.so}
-    ln -s ${_7zz}/bin/7zz src/extractcode_7z/bin/7z
+  preConfigure = ''
+    cd builtins/extractcode_7z_system_provided
+    substituteInPlace ./src/extractcode_7z/__init__.py \
+      --replace-fail "nix_7z_dir = None" "nix_7z_dir = '${_7zz}/bin'"
   '';
 
   # no tests
@@ -34,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
-    homepage = "https://github.com/aboutcode-org/scancode-plugins/tree/main/builtins/extractcode_7z-linux";
+    homepage = "https://github.com/aboutcode-org/scancode-plugins/tree/main/builtins/extractcode_7z_system_provided";
     license = with lib.licenses; [
       asl20
       lgpl21
