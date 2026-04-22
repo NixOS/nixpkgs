@@ -104,39 +104,21 @@ let
       OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
     };
 
-    IdpManagerConfig =
-      if cfg.idp.embedded.enable then
-        {
-          ManagerType = "integrated";
-          ClientConfig = {
-            Issuer = "https://${cfg.domain}/oauth2";
-            TokenEndpoint = "";
-            ClientID = "netbird";
-            ClientSecret = "";
-            GrantType = "client_credentials";
-          };
-          ExtraConfig = { };
-          Auth0ClientCredentials = null;
-          AzureClientCredentials = null;
-          KeycloakClientCredentials = null;
-          ZitadelClientCredentials = null;
-        }
-      else
-        {
-          ManagerType = "none";
-          ClientConfig = {
-            Issuer = "";
-            TokenEndpoint = "";
-            ClientID = "netbird";
-            ClientSecret = "";
-            GrantType = "client_credentials";
-          };
-          ExtraConfig = { };
-          Auth0ClientCredentials = null;
-          AzureClientCredentials = null;
-          KeycloakClientCredentials = null;
-          ZitadelClientCredentials = null;
-        };
+    IdpManagerConfig = {
+      ManagerType = "none";
+      ClientConfig = {
+        Issuer = if cfg.idp.embedded.enable then "https://${cfg.domain}/oauth2" else "";
+        TokenEndpoint = "";
+        ClientID = "netbird";
+        ClientSecret = "";
+        GrantType = "client_credentials";
+      };
+      ExtraConfig = { };
+      Auth0ClientCredentials = null;
+      AzureClientCredentials = null;
+      KeycloakClientCredentials = null;
+      ZitadelClientCredentials = null;
+    };
 
     DeviceAuthorizationFlow = {
       Provider = "none";
@@ -165,11 +147,13 @@ let
     };
   }
   // optionalAttrs cfg.idp.embedded.enable {
-    ProviderConfig = {
+    EmbeddedIdP = {
+      Enabled = true;
       Issuer = "https://${cfg.domain}/oauth2";
+      LocalAddress = "127.0.0.1:${toString cfg.port}";
       Storage = {
         Type = "sqlite3";
-        File = "${stateDir}/idp.db";
+        Config.File = "${stateDir}/idp.db";
       };
       DashboardRedirectURIs = [
         "https://${cfg.domain}/nb-auth"
@@ -354,10 +338,10 @@ in
     # Embedded IDP
     idp.embedded.enable = mkEnableOption ''
       the embedded identity provider.
-      When enabled, sets IdpManagerConfig.ManagerType to "integrated" and provides
-      default ProviderConfig values derived from the domain.
+      When enabled, configures the EmbeddedIdP section and provides
+      default EmbeddedIdP values derived from the domain.
       Customize the embedded IDP via the `settings` freeform option
-      (e.g. `settings.ProviderConfig.Owner.Email = "admin@example.com"`)
+      (e.g. `settings.EmbeddedIdP.Owner.Email = "admin@example.com"`)
     '';
 
     # Database backend configuration
