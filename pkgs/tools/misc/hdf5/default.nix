@@ -23,10 +23,6 @@
   python3,
 }:
 
-# cpp and mpi options are mutually exclusive
-# "-DALLOW_UNSUPPORTED=ON" could be used to force the build.
-assert !cppSupport || !mpiSupport;
-
 let
   inherit (lib) optional optionals;
 in
