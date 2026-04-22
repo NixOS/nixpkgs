@@ -695,16 +695,16 @@ runBuildTests {
       float = 3.141
       int = 10
       list = [1, 2]
-      str = "foo"
+      str = 'foo'
       true = true
 
       [attrs]
-      foo = "foo"
+      foo = 'foo'
 
       [level1]
       [level1.level2]
       [level1.level2.level3]
-      level4 = "deep"
+      level4 = 'deep'
     '';
   };
 
