@@ -69,7 +69,7 @@ class VLan:
     def __init__(self, nr: int, tmp_dir: Path, logger: AbstractLogger):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
-        self.tap_name = f"vde-tap{self.nr}"
+        bridge_name = f"br{self.nr}"
         self.logger = logger
 
         # TODO: don't side-effect environment here
@@ -136,11 +136,13 @@ class VLan:
         )
         self._stdout_thread.start()
 
-        # This is needed to allow systemd-nspawn containers to communicate
+        # TODO: Only do this if necessary (it fails if we don't have pid 0 inside the sandbox).
+        #       refs: <https://github.com/NixOS/nixpkgs/pull/511413#discussion_r3108252527>
+        # This allows systemd-nspawn containers to communicate
         # with VMs connected to the VLAN.
-        self.logger.debug(f"creating tap interface {self.tap_name}")
+        self._create_bridge(bridge_name)
         self.plug_process = subprocess.Popen(
-            ["vde_plug2tap", "-s", self.socket_dir, self.tap_name],
+            ["vde_plug2tapless", self.socket_dir, bridge_name],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -149,7 +151,7 @@ class VLan:
         assert self.plug_process.stdout is not None
         self._plug_stdout_thread = threading.Thread(
             target=self._log_stream,
-            args=(self.plug_process.stdout, f"vde_plug2tap[{self.nr}]"),
+            args=(self.plug_process.stdout, f"vde_plug2tapless[{self.nr}]"),
             daemon=True,
         )
         self._plug_stdout_thread.start()
@@ -164,3 +166,17 @@ class VLan:
             self.plug_process.terminate()
             self.plug_process.wait()
         self.process.terminate()
+
+    def _create_bridge(self, bridge_name) -> None:
+        self.logger.debug(f"creating bridge {bridge_name}")
+        subprocess.run(["ip", "link", "add", bridge_name, "type", "bridge"], check=True)
+        subprocess.run(["ip", "link", "set", bridge_name, "up"], check=True)
+        # The bridge won't actually appear up until it has a member interface
+        # that is up. Creating a dummy interface is one way to make that happen.
+        # We need the interface to be up for `vde_plug2tapless` to work.
+        dummy_name = f"dummy{self.nr}"
+        subprocess.run(["ip", "link", "add", dummy_name, "type", "dummy"], check=True)
+        subprocess.run(
+            ["ip", "link", "set", dummy_name, "master", bridge_name], check=True
+        )
+        subprocess.run(["ip", "link", "set", dummy_name, "up"], check=True)

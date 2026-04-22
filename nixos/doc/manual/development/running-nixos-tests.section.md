@@ -50,15 +50,3 @@ See the documentation of the settings
 [`uid-range`](https://nix.dev/manual/nix/stable/command-ref/conf-file.html?highlight=uid-range#conf-system-features), and
 [`cgroups`](https://nix.dev/manual/nix/stable/development/experimental-features#xp-feature-cgroups)
 for more information.
-
-If the test uses both `systemd-nspawn` [`containers`](#test-opt-containers) and QEMU virtual machine [`nodes`](#test-opt-nodes)
-and requires them share a common VLAN,
-`/dev/net` must be present in the sandbox.
-This allows them to be bridged over a TAP interface.
-To make this path available, set the following option:
-
-```nix
-{
-  nix.settings.sandbox-paths = [ "/dev/net" ];
-}
-```
