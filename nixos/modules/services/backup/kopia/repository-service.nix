@@ -608,7 +608,19 @@ in
           environment = {
             KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
           };
-          serviceConfig = helpers.mkBaseServiceConfig name backup // {
+          serviceConfig = {
+            Type = "oneshot";
+            User = backup.user;
+            StateDirectory = "kopia/${name}";
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [
+              "/var/lib/kopia/${name}"
+            ]
+            ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+          }
+          // {
             RemainAfterExit = true;
             ExecStart = startScript;
             ExecStop = "${kopiaExe} repository disconnect";

@@ -266,7 +266,18 @@ in
             KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
           };
           restartIfChanged = false;
-          serviceConfig = helpers.mkBaseServiceConfig name backup;
+          serviceConfig = {
+            Type = "oneshot";
+            User = backup.user;
+            StateDirectory = "kopia/${name}";
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [
+              "/var/lib/kopia/${name}"
+            ]
+            ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+          };
           script = policyScript;
         }
       ) (lib.filterAttrs (_: b: helpers.hasPolicySet b) cfg.backups);

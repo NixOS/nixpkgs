@@ -146,17 +146,27 @@ in
           };
           restartIfChanged = false;
           script = snapshotScript;
-          serviceConfig =
-            helpers.mkBaseServiceConfig name backup
-            // {
-              Nice = backup.nice;
-            }
-            // lib.optionalAttrs (backup.ioSchedulingClass != "none") {
-              IOSchedulingClass = backup.ioSchedulingClass;
-            }
-            // lib.optionalAttrs (backup.ioWeight != null) {
-              IOWeight = backup.ioWeight;
-            };
+          serviceConfig = {
+            Type = "oneshot";
+            User = backup.user;
+            StateDirectory = "kopia/${name}";
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [
+              "/var/lib/kopia/${name}"
+            ]
+            ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
+          }
+          // {
+            Nice = backup.nice;
+          }
+          // lib.optionalAttrs (backup.ioSchedulingClass != "none") {
+            IOSchedulingClass = backup.ioSchedulingClass;
+          }
+          // lib.optionalAttrs (backup.ioWeight != null) {
+            IOWeight = backup.ioWeight;
+          };
         }
         // lib.optionalAttrs (backup.backupPrepareCommand != null) {
           preStart = toString (pkgs.writeScript "kopia-backup-prepare-${name}" backup.backupPrepareCommand);

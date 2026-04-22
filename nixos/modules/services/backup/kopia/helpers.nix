@@ -1,18 +1,5 @@
 { lib }:
 {
-  mkBaseServiceConfig = name: backup: {
-    Type = "oneshot";
-    User = backup.user;
-    StateDirectory = "kopia/${name}";
-    PrivateTmp = true;
-    NoNewPrivileges = true;
-    ProtectSystem = "strict";
-    ReadWritePaths = [
-      "/var/lib/kopia/${name}"
-    ]
-    ++ lib.optional (backup.repository ? filesystem) backup.repository.filesystem.path;
-  };
-
   hasPolicySet =
     backup:
     let
