@@ -18,6 +18,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = "source/fonts";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   nativeBuildInputs = [ installFonts ];
 
   meta = {
