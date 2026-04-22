@@ -461,16 +461,16 @@ optionalAttrs allowAliases aliases
       generate =
         name: value:
         pkgs.callPackage (
-          { runCommand, yj }:
+          { runCommand, yq-go }:
           runCommand name
             {
-              nativeBuildInputs = [ yj ];
+              nativeBuildInputs = [ yq-go ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
               preferLocalBuild = true;
             }
             ''
-              yj -jt < "$valuePath" > "$out"
+              ${lib.getExe yq-go} -p=json -o=toml < "$valuePath" > "$out"
             ''
         ) { };
 

@@ -689,22 +689,18 @@ runBuildTests {
         2
       ];
       level1.level2.level3.level4 = "deep";
+      "x(y,z)" = "special key";
     };
     expected = ''
+      attrs = { foo = "foo" }
       false = false
       float = 3.141
       int = 10
+      level1 = { level2 = { level3 = { level4 = "deep" } } }
       list = [1, 2]
       str = "foo"
       true = true
-
-      [attrs]
-      foo = "foo"
-
-      [level1]
-      [level1.level2]
-      [level1.level2.level3]
-      level4 = "deep"
+      x(y,z) = "special key"
     '';
   };
 
