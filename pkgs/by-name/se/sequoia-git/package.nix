@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-git";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-git";
     rev = "v${version}";
-    hash = "sha256-7ynaz48j/ebQAZ2QxeWwkf7kFP70HKtHCv4/wGxxaVY=";
+    hash = "sha256-1nSFzpz0Rl9uoE59teP3o7PduSmA20QEhe+fvTM6JGA=";
   };
 
-  cargoHash = "sha256-+sIH4zFLewNNkpd42co2B0rLrIsde5gsBDsqSSc0HZQ=";
+  cargoHash = "sha256-/9/nTqCRi74TMToWQjtnnzQ8en+nqKT8gUipNcHTxvs=";
 
   buildInputs = [
     openssl.dev
