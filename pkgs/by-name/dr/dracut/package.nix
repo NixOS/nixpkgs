@@ -5,7 +5,7 @@
   gitUpdater,
   makeBinaryWrapper,
   pkg-config,
-  asciidoc,
+  asciidoctor,
   libxslt,
   docbook_xsl,
   bash,
@@ -29,16 +29,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dracut";
-  version = "059";
+  version = "110";
 
   src = fetchFromGitHub {
-    owner = "dracutdevs";
-    repo = "dracut";
-    rev = finalAttrs.version;
-    hash = "sha256-zSyC2SnSQkmS/mDpBXG2DtVVanRRI9COKQJqYZZCPJM=";
+    owner = "dracut-ng";
+    repo = "dracut-ng";
+    tag = finalAttrs.version;
+    hash = "sha256-BSH8mTuYPYzycbuENHfi7I030JrNilksVbvntoOwlx8=";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   buildInputs = [
     bash
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
-    asciidoc
+    asciidoctor
     libxslt
     docbook_xsl
   ];
@@ -110,10 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    homepage = "https://github.com/dracutdevs/dracut/wiki";
+    homepage = "https://dracut-ng.github.io/";
     description = "Event driven initramfs infrastructure";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.linux;
   };
 })
