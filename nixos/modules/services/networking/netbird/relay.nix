@@ -36,7 +36,7 @@ in
   options.services.netbird.server.relay = {
     enable = mkEnableOption "NetBird Relay Server";
 
-    package = mkPackageOption pkgs "netbird" { };
+    package = mkPackageOption pkgs "netbird-relay" { };
 
     port = mkOption {
       type = port;
