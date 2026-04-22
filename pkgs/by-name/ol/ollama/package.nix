@@ -212,9 +212,9 @@ goBuild (finalAttrs: {
       --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
     substituteInPlace cmd/launch/kimi_test.go \
-       --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
-       --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
-       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
     rm -r app
   ''
   # disable tests that fail in sandbox due to Metal init failure
