@@ -131,13 +131,20 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (!withQt6) ''
     for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
       substituteInPlace $subproject/$subproject.pro \
-        --replace-fail "\''$\''$[QT_INSTALL_PREFIX]" "$out" \
-        --replace-warn "\''$\''$[QT_INSTALL_LIBS]" "$out/lib"
+        --replace-fail '$$[QT_INSTALL_PREFIX]' "$out"
     done
 
     # Install apicheck tool into bin
     substituteInPlace apicheck/apicheck.pro \
-      --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
+      --replace-fail '$$[QT_INSTALL_LIBS]/lomiri-ui-toolkit' "$out/bin"
+
+    substituteInPlace \
+      src/LomiriMetrics/LomiriMetrics.pro \
+      src/LomiriMetrics/lttng/lttng.pro \
+      --replace-fail '$$[QT_INSTALL_PLUGINS]' "$out/${qtbase.qtPluginPrefix}"
+
+    substituteInPlace features/lomiri_qml_plugin.prf \
+      --replace-fail '$$[QT_INSTALL_QML]' "$out/${qtbase.qtQmlPrefix}"
 
     substituteInPlace documentation/documentation.pro \
       --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
