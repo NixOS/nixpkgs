@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace Makefile \
       --replace-fail "target/release" \
-                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
   installFlags = [

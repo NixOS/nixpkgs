@@ -9,7 +9,7 @@
   pkg-config,
   rapidjson,
   testers,
-  xxHash,
+  xxhash,
   zstd,
   postgresqlPackages,
   suggestSupport ? false,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     rapidjson
-    xxHash
+    xxhash
     zstd
     mecab
     kytea

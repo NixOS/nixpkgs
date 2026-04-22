@@ -15,7 +15,7 @@
   libx11,
   libunwind,
   libdovi,
-  xxHash,
+  xxhash,
   fast-float,
   vulkanSupport ? true,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libunwind
     libdovi
-    xxHash
+    xxhash
     vulkan-headers
   ]
   ++ lib.optionals vulkanSupport [

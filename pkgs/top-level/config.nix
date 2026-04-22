@@ -149,7 +149,7 @@ let
     npmRegistryOverrides = mkOption {
       type = types.attrsOf types.str;
       description = ''
-        The default NPM registry overrides for all `fetchNpmDeps` calls, as an attribute set.
+        The default npm registry overrides for all `fetchNpmDeps` calls, as an attribute set.
 
         For each attribute, all files fetched from the host corresponding to the name will instead be fetched from the host (and sub-path) specified in the value.
 
@@ -172,7 +172,7 @@ let
         lib.isAttrs j && lib.all builtins.isString (builtins.attrValues j)
       );
       description = ''
-        A string containing a string with a JSON representation of NPM registry overrides for `fetchNpmDeps`.
+        A string containing a string with a JSON representation of npm registry overrides for `fetchNpmDeps`.
 
         This overrides the [`npmRegistryOverrides`](#opt-npmRegistryOverrides) option, see its documentation for more details.
       '';

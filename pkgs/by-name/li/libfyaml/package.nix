@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
   testers,
@@ -9,14 +10,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfyaml";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "pantoniou";
     repo = "libfyaml";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2cbw67gDcp5ufsSp+QQg8vOQx0cFcM2rTkAQ/53XB8I=";
+    hash = "sha256-mRQQe+J5wtLt/bI/Wer9TVGdU3a1zp3zFCm4oNQON8M=";
   };
+
+  # backport 32-bit build fixes
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pantoniou/libfyaml/commit/0982fcefc6a16d4c8cb5b06747d3fc8e630de3ae.diff";
+      hash = "sha256-aDubIn+et+1fWE7XU7a5AGZVacVFbAbC1PoSDrA6hXw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/pantoniou/libfyaml/commit/9192deaac095f9881cc1e5756dede683f36b09d6.diff";
+      hash = "sha256-cNL9wQtxIRg/ShZLJP4qHYNFRrYo9kRG+/U+3FiUeaI=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

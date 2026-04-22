@@ -9,7 +9,7 @@
   perl,
   fmt,
   hiredis,
-  xxHash,
+  xxhash,
   zstd,
   bashInteractive,
   doctest,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fmt
     hiredis
-    xxHash
+    xxhash
     zstd
   ];
 

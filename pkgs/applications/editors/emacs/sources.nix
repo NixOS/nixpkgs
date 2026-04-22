@@ -115,6 +115,9 @@ in
         name = "inhibit-lexical-cookie-warning-67916.patch";
         path = ./inhibit-lexical-cookie-warning-67916-30.patch;
       })
+      # tree-sitter 0.26 compatibility fix, from FreeBSD
+      # https://cgit.freebsd.org/ports/plain/editors/emacs/files/patch-src_treesit.c
+      ./tree-sitter-0.26.patch
     ];
   });
 

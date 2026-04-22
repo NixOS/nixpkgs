@@ -3,7 +3,7 @@
   fetchzip,
   libblake3,
   libmd,
-  xxHash,
+  xxhash,
   zlib,
   zstd,
   buildTopkgPackage,
@@ -26,7 +26,7 @@ buildTopkgPackage rec {
   buildInputs = [
     libblake3
     libmd
-    xxHash
+    xxhash
     zlib
     zstd
   ];

@@ -63,6 +63,8 @@ buildPythonPackage (finalAttrs: {
       libcudaStubsDir =
         if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
     })
+    # Backport of https://github.com/triton-lang/triton/pull/9628 (does not apply cleanly)
+    ./0005-add-gcn5-gfx906-target.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./0003-nvidia-cudart-a-systempath.patch {

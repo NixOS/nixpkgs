@@ -54,6 +54,23 @@ stdenv.mkDerivation rec {
     # the repository and do not need to be regenerated. See:
     # https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.3.0 below "Requirement changes".
     "-DGEN_FILES=off"
+  ]
+  ++ lib.optionals stdenv.cc.isGNU [
+    # mbedtls widely uses a pattern of starting unions with an
+    # unsigned int dummy member, and then initializing those unions to
+    # { 0 }.  The problem with this is that it only initializes that
+    # first union member, so in the common case where the non-dummy
+    # members are larger than the dummy member, they will only be
+    # partially initialized since GCC 15[1].  Upstream has added
+    # ad-hoc memset calls to mitigate this issue, but initializers are
+    # also still widely used.  To avoid the risk of using
+    # uninitialized memory, force the compiler to zero all bits of
+    # unions, not just the first element, until upstream has a
+    # systemic fix in place[2].
+    #
+    # [1]: https://gcc.gnu.org/gcc-15/changes.html
+    # [2]: https://github.com/Mbed-TLS/mbedtls/issues/9885
+    "-DCMAKE_C_FLAGS=-fzero-init-padding-bits=unions"
   ];
 
   doCheck = true;

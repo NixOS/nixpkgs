@@ -27,7 +27,7 @@ index 25e229bf3e..b9af1c3b13 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 46f208824a..3a625ad2a6 100644
+index 7729a1d415..744abeee23 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
 @@ -178,8 +178,10 @@ int mount_points_list_get(FILE *f, MountPoint **head) {

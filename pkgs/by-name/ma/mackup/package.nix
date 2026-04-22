@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/mackup/utils.py \
-      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"' \
+      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"'
   '';
 
   build-system = with python3Packages; [ hatchling ];

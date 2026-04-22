@@ -185,6 +185,8 @@ in
 
   nixosOptionsDoc = recurseIntoAttrs (callPackage ../../nixos/lib/make-options-doc/tests.nix { });
 
+  buildenv = callPackage ./buildenv.nix { };
+
   overriding = callPackage ./overriding.nix { };
 
   texlive = recurseIntoAttrs (callPackage ./texlive { });
