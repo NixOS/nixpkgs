@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "openttd-nml";
-  version = "0.8.1";
+  version = "0.9.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
     repo = "nml";
     tag = finalAttrs.version;
-    hash = "sha256-swAkUhduIhcfbAvKsPaJNBXcv8T6GDaxk3KKLLa9GQ8=";
+    hash = "sha256-FVGjXh04uHZM9vZNzjdYEk4ClMR9t0kl44JePrUGx84=";
   };
 
   postPatch = ''
