@@ -14,8 +14,10 @@ let
       boot.loader.efi.canTouchEfiVariables = true;
       environment.systemPackages = [ pkgs.efibootmgr ];
       system.switch.enable = true;
-      # Needed for machine-id to be persisted between reboots
-      environment.etc."machine-id".text = "00000000000000000000000000000000";
+      # Needed for machine-id to be persisted between reboots.
+      # Must be a valid (non-zero) ID, otherwise sd_id128_get_machine()
+      # returns -ENOMEDIUM and dbus-broker refuses to start.
+      environment.etc."machine-id".text = "1234567890abcdef1234567890abcdef\n";
     };
 
   commonXbootldr =
