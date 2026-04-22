@@ -127,6 +127,8 @@ class VLan:
             if "1000 Success" in line:
                 break
 
+        assert (self.socket_dir / "ctl").exists(), "cannot start vde_switch"
+
         self._stdout_thread = threading.Thread(
             target=self._log_stream,
             args=(self.process.stdout, f"vde_switch[{self.nr}]"),
@@ -151,8 +153,6 @@ class VLan:
             daemon=True,
         )
         self._plug_stdout_thread.start()
-
-        assert (self.socket_dir / "ctl").exists(), "cannot start vde_switch"
 
         self.logger.debug(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
 
