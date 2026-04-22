@@ -24,7 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/erikdkennedy/figtree";
     description = "Simple and friendly geometric sans serif font";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mrcjkb ];
+    maintainers = with lib.maintainers; [
+      mrcjkb
+      ners
+    ];
     license = lib.licenses.ofl;
   };
 })
