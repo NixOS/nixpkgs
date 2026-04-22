@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.16";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "pjsip";
     repo = "pjproject";
     tag = finalAttrs.version;
-    hash = "sha256-WDKkC/M8khhPaRLsAh6FXoUSTgCBK+RAFpEcB9+MBHc=";
+    hash = "sha256-n7J7+l+DVNSHZdmoBTYN6Lx++3CXwtUwvgzPiR2+Teg=";
   };
 
   postPatch = ''
