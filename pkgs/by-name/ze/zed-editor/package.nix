@@ -330,6 +330,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       GaetanLepage
       niklaskorz
+      mjm
       schembriaiden
     ];
     mainProgram = "zeditor";

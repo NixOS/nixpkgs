@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Modern iperf3 alternative with a live TUI, multi-client server, and QUIC support.";
     mainProgram = "xfr";
-    homepage = "https://github.com/lance0/xfs";
+    homepage = "https://github.com/lance0/xfr";
     changelog = "https://github.com/lance0/xfr/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       _0x4A6F

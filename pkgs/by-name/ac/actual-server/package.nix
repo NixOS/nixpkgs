@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     NODE_JQ_SKIP_INSTALL_BINARY = "true";
     SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
   };
+  # during build, vite tries to access localhost
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     ln -sv ../../../${translations.name} ./packages/desktop-client/locale

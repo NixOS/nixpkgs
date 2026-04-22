@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  python3Packages,
   extraPythonPackages ? ps: [ ],
   unstableGitUpdater,
   makeWrapper,
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
-    (python3.withPackages (p: with p; [ cffi ]))
+    python3Packages.cffi
     makeWrapper
   ];
 
@@ -61,6 +62,11 @@ stdenv.mkDerivation rec {
     substituteInPlace ./chelper/__init__.py \
       --replace 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
   '';
+
+  patches = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # https://github.com/Klipper3d/klipper/pull/7254
+    ./cross-ffi.patch
+  ];
 
   pythonInterpreter =
     (python3.withPackages (
