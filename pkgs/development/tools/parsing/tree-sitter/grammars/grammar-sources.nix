@@ -183,9 +183,9 @@
   };
 
   c = {
-    version = "0.24.1";
+    version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-c";
-    hash = "sha256-gmzbdwvrKSo6C1fqTJFGxy8x0+T+vUTswm7F5sojzKc=";
+    hash = "sha256-Juuf57GQI7OAP6O03KtSzyKJAoXtGKjyYJ+sTM1A4mU=";
   };
 
   c-sharp = {
