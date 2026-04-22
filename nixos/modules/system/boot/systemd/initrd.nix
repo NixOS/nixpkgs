@@ -248,7 +248,7 @@ in
       '';
       example = literalExpression ''
         {
-          umount = ''${pkgs.util-linux}/bin/umount;
+          umount = "''${pkgs.util-linux}/bin/umount";
         }
       '';
       type = types.attrsOf types.path;
