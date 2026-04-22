@@ -485,7 +485,9 @@ cmakeConfigurePhase() {
 
     echoCmd 'cmake flags' "${flagsArray[@]}"
 
-    cmake "$cmakeDir" "${flagsArray[@]}"
+    if [[ -z "${dontExecuteCMake-}" ]]; then
+        cmake "$cmakeDir" "${flagsArray[@]}"
+    fi
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
