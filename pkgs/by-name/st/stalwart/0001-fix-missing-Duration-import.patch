@@ -1,0 +1,45 @@
+--- a/crates/jmap/src/registry/get.rs	2026-04-22 14:58:54.693000885 +0200
++++ b/crates/jmap/src/registry/get.rs	2026-04-22 14:59:12.035883748 +0200
+@@ -347,6 +347,10 @@
+                 .await
+                 .map(|get| get.into_response()),
+             // SPDX-SnippetEnd
++            #[cfg(not(feature = "enterprise"))]
++            ObjectType::ArchivedItem | ObjectType::Metric | ObjectType::Trace => {
++                Ok(get.not_found_any().into_response())
++            }
+             ObjectType::SpamTrainingSample => {
+                 spam_sample_get(get).await.map(|get| get.into_response())
+             }
+--- a/crates/jmap/src/registry/set.rs	2026-04-22 14:58:54.698000851 +0200
++++ b/crates/jmap/src/registry/set.rs	2026-04-22 14:59:21.124822404 +0200
+@@ -681,6 +681,13 @@
+                 .await
+                 .map(|set| set.into_response()),
+             // SPDX-SnippetEnd
++            #[cfg(not(feature = "enterprise"))]
++            ObjectType::ArchivedItem => {
++                set.fail_all_create("Enterprise feature not available");
++                set.fail_all_update("Enterprise feature not available");
++                set.fail_all_destroy("Enterprise feature not available");
++                Ok(set.into_response())
++            }
+             ObjectType::SpamTrainingSample => {
+                 spam_sample_set(set).await.map(|set| set.into_response())
+             }
+--- a/crates/services/src/task_manager/scheduler.rs	2026-04-22 14:58:54.703000817 +0200
++++ b/crates/services/src/task_manager/scheduler.rs	2026-04-22 14:59:03.492941435 +0200
+@@ -4,12 +4,10 @@
+  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-SEL
+  */
+
+-#[cfg(feature = "enterprise")]
+-use std::time::Duration;
+ use std::{
+     collections::BinaryHeap,
+     sync::Arc,
+-    time::{Instant, SystemTime},
++    time::{Duration, Instant, SystemTime},
+ };
+
+ use common::{
