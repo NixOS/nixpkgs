@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "usbvfiod";
     maintainers = with lib.maintainers; [
       lbeierlieb
+      snu
     ];
     platforms = [
       "aarch64-linux"
