@@ -5497,6 +5497,8 @@ self: super: with self; {
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
+  fica = callPackage ../development/python-modules/fica { };
+
   fickling = callPackage ../development/python-modules/fickling { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
