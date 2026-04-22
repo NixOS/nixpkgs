@@ -6,13 +6,16 @@
   makeWrapper,
   flex,
   bison,
-  perl,
-  TextFormat,
+  perlPackages,
   libminc,
   libjpeg,
   nifticlib,
   zlib,
 }:
+
+let
+  inherit (perlPackages) perl TextFormat;
+in
 
 stdenv.mkDerivation {
   pname = "minc-tools";
@@ -30,6 +33,16 @@ stdenv.mkDerivation {
   # Upstream issue: https://github.com/BIC-MNI/minc-tools/issues/123
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail "SET CMP0026 OLD" "SET CMP0026 NEW"
+
+    # FIX: Rename the colliding NAN token to MINC_NAN in the flex/bison parser files
+    sed -i 's/\bNAN\b/MINC_NAN/g' progs/minccalc/gram.y progs/minccalc/lex.l
+
+    # FIX: Rename the colliding fdiv function to avoid glibc 2.42 <math.h> conflicts
+    sed -i 's/\bfdiv\b/minc_fdiv/g' progs/mincblob/mincblob.c
+
+    # FIX: Remove legacy unprototyped C declarations that break under GCC 15 strictness
+    sed -i 's/, \*mat_create()//g' conversion/minctoecat/ecat_write.c
+    sed -i 's/\*fopen(), //g' conversion/minctoecat/ecat_write.c
   '';
 
   nativeBuildInputs = [
