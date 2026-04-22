@@ -11,19 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdutf";
-  version = "8.2.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0eERD9/ZgaEStbeCiM3gi6IDPRU7ZwrSnGl+SL0Zcfc=";
+    hash = "sha256-psMMF26+nTwdbtPfFFE3fXkatrh9Bp9qMsrdI/FmrDg=";
   };
-
-  # Fix build on darwin
-  postPatch = ''
-    substituteInPlace tools/CMakeLists.txt --replace "-Wl,--gc-sections" ""
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
