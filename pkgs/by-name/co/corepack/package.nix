@@ -103,6 +103,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     NOCK_ENV=replay yarn test --reporter tap --exclude tests/config.test.ts --exclude tests/Use.test.ts
   '';
   doInstallCheck = true;
+  # vitest needs to bind to `localhost` during installCheck; allow that in the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 
