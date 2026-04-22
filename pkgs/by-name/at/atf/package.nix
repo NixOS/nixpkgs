@@ -7,6 +7,7 @@
   autoreconfHook,
   kyua,
   gitUpdater,
+  bash,
 }:
 
 let
@@ -43,6 +44,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  buildInputs = lib.optional (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) bash;
+
   nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
@@ -50,6 +53,16 @@ stdenv'.mkDerivation (finalAttrs: {
   makeFlags = [
     # ATF isn’t compatible with C++17, which is the default on current clang and GCC.
     "CXXFLAGS=-std=c++14"
+  ];
+
+  # Needed for cross compilation to avoid check errors:
+  # https://github.com/NixOS/nixpkgs/issues/413910
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    "ATF_SHELL=${lib.getExe bash}"
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "kyua_cv_getopt_plus=yes"
+    "kyua_cv_attribute_noreturn=yes"
+    "kyua_cv_getcwd_works=yes"
   ];
 
   doInstallCheck = true;
@@ -69,6 +82,10 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook preInstallCheck
     HOME=$TMPDIR PATH=$out/bin:$PATH kyua test
     runHook postInstallCheck
+  '';
+
+  postInstall = ''
+    HOST_PATH="$out/bin" patchShebangs --host "$out/bin" "$out/libexec"
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "atf-"; };
