@@ -1,7 +1,7 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron_39,
+  electron_41,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -13,7 +13,7 @@
   nodejs_24,
 }:
 let
-  electron = electron_39;
+  electron = electron_41;
   nodejs = nodejs_24;
 in
 buildNpmPackage rec {
