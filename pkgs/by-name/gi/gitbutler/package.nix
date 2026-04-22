@@ -30,13 +30,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
-  version = "0.19.7";
+  version = "0.19.9";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-ppl1noikPwTvG/XT7iYG41+9ZZO8i0x2L+odeEzRP1s=";
+    hash = "sha256-hUxtvCxLB++33gKc+UNOAns3UFozWTETYJvEr+HcOgU=";
   };
 
   # Let Tauri know what version we're building and deactivate the built-in updater
@@ -54,12 +54,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'checkUpdate = tauriCheck;' 'checkUpdate = () => null;'
   '';
 
-  cargoHash = "sha256-xW/eO+AQQUBN2MrixNx3LKhwMookkKuX5LF4DSWQKKY=";
+  cargoHash = "sha256-7dF865YPcVp/g6PUs5QRaU3wZ0UmlAgaPGhHsIjIZPY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-eRiFA5lXpPHQwlyFmKMx1zmHH2zLCHB+3s708g6srg4=";
+    hash = "sha256-hC4e0xgbGrOpO2pQGPIULlNyP/Kh5+A8+61taxM2DQ0=";
   };
 
   nativeBuildInputs = [
@@ -112,6 +112,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "gitbutler-branch-actions"
     "gitbutler-stack"
     "gitbutler-edit-mode"
+    "gitbutler-operating-modes"
+    "gitbutler-project"
     "but-cherry-apply"
     "but-worktrees"
   ]
