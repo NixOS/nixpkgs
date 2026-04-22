@@ -15,14 +15,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "inky";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimoroni";
     repo = "inky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1z2AZr6mlrl1O071iWS+tbWopUEUzLZe/QTmvl2atxQ=";
+    hash = "sha256-wHAAfTAJ0MEmGrZypH/YOkyMzC+sav8fBEXnk/Q2ed0=";
   };
 
   build-system = [
