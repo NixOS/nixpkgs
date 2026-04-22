@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "async-cache";
-  version = "1.1.1";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
