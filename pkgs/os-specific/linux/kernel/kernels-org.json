@@ -40,8 +40,8 @@
         "lts": false
     },
     "7.0": {
-        "version": "7.0",
-        "hash": "sha256:1w4i705i0nl1xqv7fdhdbhy7j3xrzhl31fabs6vmgiw7nf06szxv",
+        "version": "7.0.1",
+        "hash": "sha256:1gw7v1j0pp2w6fm5y1n0krhnfvgab2jkrvcvwl8hx614dnikbjdj",
         "lts": false
     }
 }
