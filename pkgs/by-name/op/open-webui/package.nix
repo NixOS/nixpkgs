@@ -24,11 +24,9 @@ let
 
     # the backend for run-on-client-browser python execution
     # must match lock file in open-webui
-    # TODO: should we automate this?
-    # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.2";
+    pyodideVersion = "0.28.3";
     pyodide = fetchurl {
-      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
+      hash = "sha256-fcqubT8VmGoJ8PnmxHE6DA8kv/DJDHToWoFyPxvGCUA=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
