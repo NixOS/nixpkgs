@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veroroute";
-  version = "2.39";
+  version = "2.40";
 
   src = fetchurl {
     url = "mirror://sourceforge/veroroute/veroroute-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+qX8NFkPkQGW29uQUEuetgW3muDP56lMJgrGCAo+5pc=";
+    hash = "sha256-4Wmvstjq0u8u5EFlvcGRb+UshZbtzAfRShQS2NFCllA=";
   };
 
   nativeBuildInputs = [
