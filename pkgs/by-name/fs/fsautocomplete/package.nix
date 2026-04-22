@@ -24,7 +24,7 @@ buildDotnetModule (finalAttrs: {
     rm global.json
 
     substituteInPlace src/FsAutoComplete/FsAutoComplete.fsproj \
-      --replace-fail TargetFrameworks TargetFramework \
+      --replace-fail TargetFrameworks TargetFramework
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

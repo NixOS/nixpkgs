@@ -486,6 +486,10 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
+
+      # Don't cause ELF ABI mismatch on powerpc64
+      # https://github.com/openssl/openssl/issues/29815
+      ./3.5/openssl-aes-gcm-ppc-remove-localentry-directive.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./3.5/fix-mingw-linking.patch
@@ -522,6 +526,10 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
+
+      # Don't cause ELF ABI mismatch on powerpc64
+      # https://github.com/openssl/openssl/issues/29815
+      ./3.5/openssl-aes-gcm-ppc-remove-localentry-directive.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       # Fix from https://github.com/openssl/openssl/pull/29826

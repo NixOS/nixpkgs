@@ -66,9 +66,7 @@ let
     ghc948
     ghc967
     ghc984
-    ghc9102
     ghc9103
-    ghc9122 # TODO(@sternenseemann): drop
     ghc9123
   ];
 
@@ -527,7 +525,6 @@ let
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       Cabal_3_12_1_0 = released;
@@ -536,12 +533,12 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      haskell-debugger = [
+        compilerNames.ghc9141
+      ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
-        compilerNames.ghc9102
-        compilerNames.ghc9103
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       hpack = released;
@@ -554,24 +551,22 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       ghc-tags = lib.subtractLists [
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       hashable = released;
       primitive = released;
+      scrod = [
+        compilerNames.ghc9141
+      ];
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
         compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
-        compilerNames.ghc9102
-        compilerNames.ghc9103
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
 

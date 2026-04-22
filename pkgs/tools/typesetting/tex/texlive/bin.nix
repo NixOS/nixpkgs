@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  fetchzip,
   fetchFromGitHub,
   fetchpatch,
+  unzip,
   buildPackages,
   texlive,
   zlib,
@@ -42,7 +42,7 @@
   clisp,
   biber,
   woff2,
-  xxHash,
+  xxhash,
   makeWrapper,
   useFixedHashes ? true,
   asymptote,
@@ -139,12 +139,19 @@ let
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
+    # initial TeX Live 2025 release
+    # src = fetchurl {
+    #   urls = [
+    #     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #     "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #   ];
+    #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+    # };
+
+    # 2025.2 update
     src = fetchurl {
-      urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-        "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-      ];
-      hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+      url = "https://github.com/TeX-Live/texlive-source/archive/refs/tags/svn74917.tar.gz";
+      hash = "sha256-QgUN5LOFeD6Jt0ENF6Uwi516D8PH+TXZ+MCO8bCTHqE=";
     };
 
     prePatch = ''
@@ -537,25 +544,21 @@ rec {
   # https://github.com/gucci-on-fleek/context-packaging
   context =
     let
-      # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
-      # https://github.com/gucci-on-fleek/context-packaging
-      context_packaging_release = "2026-01-08-23-30-A";
+      version = "2.11.08";
+      level = "20260217";
     in
     stdenv.mkDerivation {
       pname = "luametatex";
-      version = "2.11.08";
+      version = "${version}-${level}";
 
-      src = fetchzip {
-        name = "luametatex.src.zip";
-        url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
-        hash = "sha256-PY1rrgLFAXR7YRcJMx1ob9dQc1PFoBSpi1xLQGM4Lko=";
-        stripRoot = false;
-      };
+      src = texlive.pkgs.context.texsource + "/source/context/base/luametatex-${level}.src.zip";
+      sourceRoot = ".";
 
       enableParallelBuilding = true;
       nativeBuildInputs = [
         cmake
         ninja
+        unzip
       ];
 
       meta = {
@@ -602,7 +605,7 @@ rec {
       ttfautohint
       woff2
       potrace
-      xxHash
+      xxhash
       mupdf-headless
     ];
 
@@ -685,24 +688,32 @@ rec {
     };
   };
 
-  asymptote = args.asymptote.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = texlive.pkgs.asymptote.version;
+  asymptote =
+    let
+      version = "3.09";
+    in
+    args.asymptote.overrideAttrs (
+      finalAttrs: prevAttrs: {
+        version =
+          assert lib.assertMsg (version == texlive.pkgs.asymptote.version)
+            "asymptote: TeX Live version (${texlive.pkgs.asymptote.version}) different from source in bin.nix (${version}), please update it";
+          version;
 
-      # keep local src and patches even if duplicated in the top level asymptote
-      # so that top level updates do not break texlive
-      src = fetchurl {
-        url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
-      };
+        # keep local src and patches even if duplicated in the top level asymptote
+        # so that top level updates do not break texlive
+        src = fetchurl {
+          url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
+          hash = "sha256-unM6mfyq8MCajo8wtG/ksr4E6mQNK/A03gGIa9Fxeuc=";
+        };
 
-      texContainer = texlive.pkgs.asymptote.tex;
-      texdocContainer = texlive.pkgs.asymptote.texdoc;
+        texContainer = texlive.pkgs.asymptote.tex;
+        texdocContainer = texlive.pkgs.asymptote.texdoc;
 
-      # build issue with asymptote 2.95 has been fixed
-      postConfigure = "";
-    }
-  );
+        preConfigure = prevAttrs.preConfigure + ''
+          substituteInPlace Makefile.in --replace-fail '/bin/ls' 'ls'
+        '';
+      }
+    );
 
   inherit biber;
   inherit biber-ms;

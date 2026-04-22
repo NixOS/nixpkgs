@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnetfilter_conntrack";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/libnetfilter_conntrack/files/libnetfilter_conntrack-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Z+3LTrgmwvjcmK8I2r/2jzs9D+b7fZ0Kwe5+zOD+aU4=";
+    hash = "sha256-dp0+r1f6T72wXdEoc7bLmlvnhE2JN+Iitkc4HUQoSCA=";
   };
 
   hardeningDisable = [ "trivialautovarinit" ];

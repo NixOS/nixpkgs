@@ -29,6 +29,7 @@
 
 let
   inherit (pkgs) lib;
+  canExecute = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
 in
 
 with haskellLib;
@@ -56,10 +57,18 @@ builtins.intersectAttrs super {
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
 
-  cabal-add = overrideCabal (drv: {
-    # tests depend on executable
-    preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
-  }) super.cabal-add;
+  cabal-add =
+    # Can't find executable without https://github.com/haskell/cabal/pull/9912
+    if lib.versionOlder self.ghc.version "9.12" then
+      overrideCabal (drv: {
+        # tests depend on executable
+        preCheck = ''
+          ${drv.preCheck or ""}
+          export PATH="$PWD/dist/build/cabal-add:$PATH"
+        '';
+      }) super.cabal-add
+    else
+      super.cabal-add;
 
   haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
@@ -95,6 +104,16 @@ builtins.intersectAttrs super {
 
   # ghcide-bench tests need network
   ghcide-bench = dontCheck super.ghcide-bench;
+
+  # Test suite scredit-test uses `cabal run`.
+  screp = overrideCabal {
+    testTargets = [ "screp-test" ];
+  } super.screp;
+
+  # `integration` test suite requires a running MySQL server (?)
+  mysql-haskell = overrideCabal {
+    testTargets = [ "test" ];
+  } super.mysql-haskell;
 
   # 2023-04-01: TODO: Either reenable at least some tests or remove the preCheck override
   ghcide = overrideCabal (drv: {
@@ -317,6 +336,9 @@ builtins.intersectAttrs super {
     ];
   }) super.arbtt;
 
+  # Needs to execute `git` while compiling the test suite?!
+  quick-process = addTestToolDepends [ pkgs.buildPackages.git ] super.quick-process;
+
   hzk = appendConfigureFlag "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" super.hzk;
 
   # Foreign dependency name clashes with another Haskell package.
@@ -324,6 +346,26 @@ builtins.intersectAttrs super {
 
   # Heist's test suite requires system pandoc
   heist = addTestToolDepend pkgs.pandoc super.heist;
+
+  pandoc = lib.pipe super.pandoc [
+    # pandoc can't do I/O (including reading data files). See
+    # <https://pandoc.org/pandoc-server.html#description>.
+    # It's simpler to just enable this globally rather than building multiple pandocs.
+    (enableCabalFlag "embed_data_files")
+    # pandoc still references these data files and we can't prevent their installation.
+    # pkgs.pandoc removes the reference to $out, so having everything in one place is best.
+    (overrideCabal { enableSeparateDataOutput = false; })
+  ];
+
+  # So pandoc-server can be used:
+  # https://pandoc.org/MANUAL.html#running-pandoc-as-a-web-server
+  # TODO(@sternenseemann): provide pandoc-server.cgi symlink?
+  pandoc-cli = overrideCabal (drv: {
+    postInstall = ''
+      ${drv.postInstall or ""}
+      ln -s "''${!outputBin}/bin/pandoc" "''${!outputBin}/bin/pandoc-server"
+    '';
+  }) super.pandoc-cli;
 
   # Use Nixpkgs' double-conversion library
   double-conversion = disableCabalFlag "embedded_double_conversion" (
@@ -425,6 +467,14 @@ builtins.intersectAttrs super {
           )
       );
 
+  # Requires postgresql with postgis and predefined geometry type
+  esqueleto-postgis = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/roundtrip xy geometry/ && !/roundtrip xyz geometry/ && !/roundtryp xyzm geometry/ && !/function bindings/"
+    ];
+  }) super.esqueleto-postgis;
+
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
     preCheck = drv.preCheck or "" + ''
@@ -477,6 +527,7 @@ builtins.intersectAttrs super {
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   oidc-client = dontCheck super.oidc-client; # the spec runs openid against google.com
   persistent-migration = dontCheck super.persistent-migration; # spec requires pg_ctl binary
+  notion-client = dontCheck super.notion-client;
   pipes-mongodb = dontCheck super.pipes-mongodb; # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   riak = dontCheck super.riak; # http://hydra.cryp.to/build/498763/log/raw
@@ -655,7 +706,7 @@ builtins.intersectAttrs super {
   # Wants to check against a real DB, Needs freetds
   odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
 
-  # Tests attempt to use NPM to install from the network into
+  # Tests attempt to use npm to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
@@ -1002,6 +1053,13 @@ builtins.intersectAttrs super {
       "func-test"
     ];
   }) super.lsp-test;
+
+  lsp_2_8_0_0 = doDistribute (
+    super.lsp_2_8_0_0.override {
+      lsp-types = self.lsp-types_2_4_0_0;
+    }
+  );
+  lsp-types_2_4_0_0 = doDistribute super.lsp-types_2_4_0_0;
 
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
@@ -1817,11 +1875,16 @@ builtins.intersectAttrs super {
   inherit
     (
       let
-        fourmoluTestFix = overrideCabal (drv: {
-          preCheck = drv.preCheck or "" + ''
-            export PATH="$PWD/dist/build/fourmolu:$PATH"
-          '';
-        });
+        fourmoluTestFix =
+          # Can't find executable without https://github.com/haskell/cabal/pull/9912
+          if lib.versionOlder self.ghc.version "9.12" then
+            overrideCabal (drv: {
+              preCheck = drv.preCheck or "" + ''
+                export PATH="$PWD/dist/build/fourmolu:$PATH"
+              '';
+            })
+          else
+            lib.id;
       in
       builtins.mapAttrs (_: fourmoluTestFix) super
     )
@@ -1956,15 +2019,19 @@ builtins.intersectAttrs super {
     ]
     ++ old.buildTools or [ ];
     postInstall = old.postInstall + ''
-      mkdir -p "$out/share/man/man1"
-      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
-
+      ${lib.optionalString canExecute ''
+        mkdir -p "$out/share/man/man1"
+        "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+      ''}
       wrapProgram "$out/bin/cabal" \
         --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
     '';
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
   }) super.cabal-install;
+
+  # lots of errors
+  haskell-debugger = dontCheck super.haskell-debugger;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 

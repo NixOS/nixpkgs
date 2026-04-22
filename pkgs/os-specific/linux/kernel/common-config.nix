@@ -1231,6 +1231,7 @@ let
         EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" yes; # initrd kernel parameter for EFI
+        EFI_VARS_PSTORE = yes;
 
         # Generic compression support for EFI payloads
         # Add new platforms only after they have been verified to build and boot.

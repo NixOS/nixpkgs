@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Queries QMake for QML install location, returns QtBase build path
     substituteInPlace src/*/PushNotifications/CMakeLists.txt \
-      --replace-fail 'qmake -query QT_INSTALL_QML' 'echo ''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}' \
+      --replace-fail 'qmake -query QT_INSTALL_QML' 'echo ''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}'
   '';
 
   strictDeps = true;

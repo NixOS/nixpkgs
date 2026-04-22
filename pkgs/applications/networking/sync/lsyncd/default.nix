@@ -17,7 +17,11 @@
 let
   f =
     pkgs: prev:
-    if !pkgs.stdenv.hostPlatform.isDarwin || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin" then
+    if
+      !pkgs.stdenv.hostPlatform.isDarwin
+      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
+      || !(pkgs.stdenv ? __bootPackages)
+    then
       prev.darwin.sourceRelease
     else
       f pkgs.stdenv.__bootPackages pkgs;

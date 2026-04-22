@@ -41,6 +41,8 @@
   pango,
   libtiffSupport ? true,
   libtiff,
+  libultrahdrSupport ? true,
+  libultrahdr,
   libxml2Support ? true,
   libxml2,
   openjpegSupport ? !stdenv.hostPlatform.isMinGW,
@@ -86,13 +88,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-17";
+  version = "7.1.2-19";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-niqHdNrFMwIr+9560vceRn0LyJPi6DIp6qCn5GlcVjY=";
+    hash = "sha256-4uASM+GRTe0ES6FdshUMMkVof4IlLV+CMm2l+v5qZN0=";
   };
 
   outputs = [
@@ -115,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
+    (lib.withFeature libultrahdrSupport "uhdr")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
     (lib.withFeature fftwSupport "fftw")
@@ -141,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libraqmSupport libraqm
   ++ lib.optional librawSupport libraw
   ++ lib.optional libtiffSupport libtiff
+  ++ lib.optional libultrahdrSupport libultrahdr
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional libheifSupport libheif
   ++ lib.optional djvulibreSupport djvulibre

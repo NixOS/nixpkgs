@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     cctools.libtool
   ];
 
-  # Required for `sharp` NPM dependency
+  # Required for `sharp` npm dependency
   buildInputs = [ vips ];
 
   pnpmDeps = fetchPnpmDeps {

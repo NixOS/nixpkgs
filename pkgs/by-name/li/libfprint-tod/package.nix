@@ -39,7 +39,7 @@ libfprint.overrideAttrs (
       patchShebangs \
         ./libfprint/tod/tests/*.sh \
         ./tests/*.py \
-        ./tests/*.sh \
+        ./tests/*.sh
     '';
 
     meta = {

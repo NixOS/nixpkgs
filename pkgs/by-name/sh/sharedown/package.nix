@@ -59,7 +59,7 @@ buildNpmPackage (finalAttrs: {
       --add-flags $out/lib/node_modules/sharedown/app.js \
       --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium \
       --prefix PATH : ${lib.makeBinPath finalAttrs.finalPackage.passthru.wrapperPaths} \
-      --add-flags "--no-sandbox" \
+      --add-flags "--no-sandbox"
   '';
 
   desktopItems = [

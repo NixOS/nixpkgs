@@ -9,7 +9,7 @@
   openssh,
   openssl,
   python3,
-  xxHash,
+  xxhash,
   zstd,
   installShellFiles,
   nixosTests,
@@ -62,7 +62,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   buildInputs = [
     libb2
     lz4
-    xxHash
+    xxhash
     zstd
     openssl
   ]

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KarlsruheGraphGeneration";
     repo = "kagen";
     tag = "v${finalAttrs.version}";
-    # use vendor libmorton and xxHash
+    # use vendor libmorton and xxhash
     fetchSubmodules = true;
     hash = "sha256-VLQxeI9EzeJEp1krlLPRSct3SQmAF8cj34u3fkmppQg=";
   };
