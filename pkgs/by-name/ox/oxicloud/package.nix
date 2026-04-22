@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxicloud";
-  version = "0.5.5";
+  version = "0.5.6";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "DioCrafts";
     repo = "OxiCloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nn8qgLdiw7w4PZIMCiI+UHZGNW64fjWZ5mErTJifRZU=";
+    hash = "sha256-+jtFA6SWHcTTEjc+am2oFqJ1cC2bmKb5oppchpAN0SE=";
   };
 
-  cargoHash = "sha256-4KfrKL2AKkTt3cOXdl9Xr2qed+qy8WSWuqYfN8WJ0bQ=";
+  cargoHash = "sha256-PxygWzlOhpAKGnP2dT4tDtAJ6AJ2duRcwWZTjHks1lg=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
