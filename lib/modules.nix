@@ -360,7 +360,11 @@ let
               throw ''
                 ${baseMsg}
 
-                It seems as if you're trying to declare an option by placing it into `config' rather than `options'!
+                It seems that your are providing `config` definitions in a module when no options are declared!
+
+                To resolve this, verify that:
+                - The option is declared in `options' (as options.${showOption (prefix ++ firstDef.prefix)})
+                - All modules that declare the option are included in `imports'.
               ''
             else
               throw ''
