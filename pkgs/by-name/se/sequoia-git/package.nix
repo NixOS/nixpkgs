@@ -12,14 +12,14 @@
   libfaketime,
   ...
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (final: {
   pname = "sequoia-git";
   version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-git";
-    rev = "v${version}";
+    rev = "v${final.version}";
     hash = "sha256-1nSFzpz0Rl9uoE59teP3o7PduSmA20QEhe+fvTM6JGA=";
   };
 
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage rec {
   env.ASSET_OUT_DIR = "target";
 
   postInstall = ''
-    installManPage ${env.ASSET_OUT_DIR}/man-pages/*.1
-    installShellCompletion --bash ${env.ASSET_OUT_DIR}/shell-completions/${meta.mainProgram}.bash
-    installShellCompletion --zsh ${env.ASSET_OUT_DIR}/shell-completions/_${meta.mainProgram}
-    installShellCompletion --fish ${env.ASSET_OUT_DIR}/shell-completions/${meta.mainProgram}.fish
+    installManPage ${final.env.ASSET_OUT_DIR}/man-pages/*.1
+    installShellCompletion --bash ${final.env.ASSET_OUT_DIR}/shell-completions/${final.meta.mainProgram}.bash
+    installShellCompletion --zsh ${final.env.ASSET_OUT_DIR}/shell-completions/_${final.meta.mainProgram}
+    installShellCompletion --fish ${final.env.ASSET_OUT_DIR}/shell-completions/${final.meta.mainProgram}.fish
   '';
 
   meta = {
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "sq-git";
   };
-}
+})
