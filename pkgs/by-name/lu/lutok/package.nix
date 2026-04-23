@@ -36,7 +36,7 @@ lib.fix (
   in
   stdenv.mkDerivation (finalAttrs: {
     pname = "lutok";
-    version = "0.4";
+    version = "0.5";
 
     outputs = [
       "out"
@@ -47,7 +47,7 @@ lib.fix (
       owner = "freebsd";
       repo = "lutok";
       rev = "lutok-${finalAttrs.version}";
-      hash = "sha256-awAFxx9q8dZ6JO1/mShjhJnOPTLn1wCT4VrB4rlgWyg=";
+      hash = "sha256-HVGMmVVSVTb1zkM6kzrleTgi52x4CF0O2Za52N/f26c=";
     };
 
     strictDeps = true;
