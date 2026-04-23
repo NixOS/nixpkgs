@@ -14,6 +14,7 @@
   ruff,
   ty,
 
+  iproute2,
   netpbm,
   vhost-device-vsock,
   nixosTests,
@@ -25,6 +26,7 @@
   tesseract4,
   util-linux,
   vde2,
+  vde_plug2tapless,
 
   enableNspawn ? false,
   enableOCR ? false,
@@ -59,6 +61,8 @@ buildPythonApplication {
     socat
     util-linux
     vde2
+    iproute2
+    vde_plug2tapless
     vhost-device-vsock
   ]
   ++ lib.optionals enableNspawn [
