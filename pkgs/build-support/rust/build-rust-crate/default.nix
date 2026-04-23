@@ -255,6 +255,21 @@ lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
       extraRustcOptsForBuildRs,
+      # A list of extra options to pass to rustc when this crate is a
+      # proc-macro. Proc-macro crates are compiled as host dylibs that
+      # rustc loads via `dlopen`; flags that emit references to a
+      # sanitizer or coverage runtime (e.g. `-Zsanitizer=address`,
+      # `-Cpasses=sancov-module`, `-Cinstrument-coverage`) will leave
+      # unresolved symbols in the dylib and break compilation. Cargo
+      # avoids this by not applying `RUSTFLAGS` to host artifacts;
+      # this attribute provides the same opt-out for buildRustCrate.
+      #
+      # When `null`, falls back to `extraRustcOpts` so that existing
+      # callers see no behaviour change.
+      #
+      # Example: [ ]  # opt the proc-macro out of all extraRustcOpts
+      # Default: null (inherit `extraRustcOpts`)
+      extraRustcOptsForProcMacro,
       # The lint level cap passed to rustc via `--cap-lints`.
       # See <https://doc.rust-lang.org/rustc/lints/levels.html#capping-lints>.
       #
@@ -352,7 +367,12 @@ lib.makeOverridable
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
       extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
+      extraRustcOptsForProcMacro_ = extraRustcOptsForProcMacro;
       buildTests_ = buildTests;
+      procMacro = lib.attrByPath [ "procMacro" ] false crate;
+      # When neither the override nor the crate sets a proc-macro-specific
+      # list, keep today's behaviour (proc-macros receive `extraRustcOpts`).
+      hasProcMacroOpts = extraRustcOptsForProcMacro_ != null || crate ? extraRustcOptsForProcMacro;
       resolvedLints = crate.lints or lints;
       lintFlags = lintsToRustcFlags resolvedLints;
       resolvedCapLints =
@@ -474,7 +494,7 @@ lib.makeOverridable
         crateRustVersion = crate.rust-version or "";
         crateVersion = crate.version;
         crateType =
-          if lib.attrByPath [ "procMacro" ] false crate then
+          if procMacro then
             [ "proc-macro" ]
           else if lib.attrByPath [ "plugin" ] false crate then
             [ "dylib" ]
@@ -485,8 +505,13 @@ lib.makeOverridable
         edition = crate.edition or null;
         codegenUnits = if crate ? codegenUnits then crate.codegenUnits else defaultCodegenUnits;
         extraRustcOpts =
-          lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
-          ++ extraRustcOpts_
+          (
+            if procMacro && hasProcMacroOpts then
+              (crate.extraRustcOptsForProcMacro or [ ])
+              ++ lib.optionals (extraRustcOptsForProcMacro_ != null) extraRustcOptsForProcMacro_
+            else
+              lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts ++ extraRustcOpts_
+          )
           ++ lintFlags
           ++ (lib.optional (edition != null) "--edition ${edition}");
         extraRustcOptsForBuildRs =
@@ -586,6 +611,7 @@ lib.makeOverridable
     verbose = crate_.verbose or true;
     extraRustcOpts = [ ];
     extraRustcOptsForBuildRs = [ ];
+    extraRustcOptsForProcMacro = null;
     capLints = null;
     lints = { };
     features = [ ];

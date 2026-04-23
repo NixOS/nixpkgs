@@ -836,6 +836,40 @@ rec {
             ];
           };
         };
+        # `extraRustcOptsForProcMacro` defaults to `null`, meaning
+        # proc-macro crates inherit `extraRustcOpts`. This case sets only
+        # `extraRustcOpts` and the source requires `--cfg=target_only` to
+        # compile, so it succeeds iff the inherited list reaches rustc.
+        procMacroExtraOptsInherit = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(not(target_only))]
+            compile_error!("extraRustcOpts not inherited by proc-macro");
+            use proc_macro as _;
+          '';
+        };
+        # When `extraRustcOptsForProcMacro` is set, it REPLACES
+        # `extraRustcOpts` for proc-macro crates. This is the cargo-like
+        # opt-out for instrumentation flags (sanitizers, sancov,
+        # `-Cinstrument-coverage`) that would otherwise leave unresolved
+        # runtime symbols in the host dylib. The source fails if either
+        # the target-only flag leaks through or the proc-macro flag is
+        # absent.
+        procMacroExtraOptsOverride = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          extraRustcOptsForProcMacro = [ "--cfg=host_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(target_only)]
+            compile_error!("extraRustcOpts leaked into proc-macro");
+            #[cfg(not(host_only))]
+            compile_error!("extraRustcOptsForProcMacro not applied");
+            use proc_macro as _;
+          '';
+        };
         # The `lints` attr mirrors Cargo.toml's `[lints]` table and is
         # translated to rustc `-A`/`-W`/`-D`/`-F` flags. Lower-priority
         # entries are emitted first so that higher-priority specific lints
