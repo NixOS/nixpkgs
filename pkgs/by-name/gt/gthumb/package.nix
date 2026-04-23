@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.8.1";
+  version = "3.12.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-JzYvwRylxYHzFoIjDJUCDlofzd9M/+vnVVeCjGF021s=";
+    sha256 = "sha256-MiI0RlPNb7XXmBtzlRrj2QxBT3QiCoschmWyVXQoTHU=";
   };
 
   strictDeps = true;
@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs data/gschemas/make-enums.py \
       gthumb/make-gthumb-h.py \
       po/make-potfiles-in.py \
-      postinstall.py \
       gthumb/make-authors-tab.py
   '';
 

@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo126Module rec {
   pname = "zvm";
-  version = "0.8.8";
+  version = "0.8.14";
 
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
     tag = "v${version}";
-    hash = "sha256-M1xpE2Lq6XZgvH9J0c2Xj1BJNN+4TTGwp4iluVyVAJs=";
+    hash = "sha256-MAE7zs60DFIicYRtMhstzsOiS2flVv+dyPJVmcyAEio=";
   };
 
-  vendorHash = "sha256-wo+vA9AYXIjv6SGb7hNY6ZIVMyJ5enMd8gpQ6u3F7To=";
+  vendorHash = "sha256-29hFuQnLPdLkAG4x5QWqXqBIGtppi/rj3OuTfMBgTAI=";
 
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
