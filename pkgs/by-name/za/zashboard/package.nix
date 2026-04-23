@@ -11,13 +11,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "zashboard";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S5NrXjD34UwbsYQrHWMAgLc10/R1U2ZZ1gW0zkUXg6w=";
+    hash = "sha256-yTLkfNhfmhJ/2oopKQ+F6ycYYwUXpbyz4SSE3IIpTgc=";
   };
 
   npmDeps = null;
