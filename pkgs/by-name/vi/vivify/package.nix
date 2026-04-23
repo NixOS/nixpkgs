@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       serve as a directory browser and let you view code files with syntax highlighting.
     '';
     homepage = "https://github.com/jannis-baum/Vivify";
-    changelog = "https://github.com/jannis-baum/Vivify/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/jannis-baum/Vivify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ skohtv ];
     platforms = lib.platforms.linux;

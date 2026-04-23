@@ -97,7 +97,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.232.3";
+  version = "0.233.5";
 
   outputs = [
     "out"
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bi7iGZpgFET+QXYZcG6Ye2F39FSb2X/rV+ACkkuOfUc=";
+    hash = "sha256-sMjl0WRLYIshN9TIBqu6wFnTohIKGyxalT6+vmVwX+E=";
   };
 
   postPatch = ''
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-p9QR7AxF4dAADv/FfHxG5OUaAcS3xy4DWVO8HpOBAbE=";
+  cargoHash = "sha256-RAgCFV7AzeW+ois529+rqHOjVxH42bZ6/ju7Dmh/FWg=";
 
   __structuredAttrs = true;
 
@@ -224,14 +224,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
-  ];
-
-  # These two tests trigger GUI prompts that hang in the headless Nix build sandbox.
-  checkFlags = [
-    "--skip"
-    "zed::open_listener::tests::test_e2e_prompt_user_picks_existing_window"
-    "--skip"
-    "zed::open_listener::tests::test_e2e_prompt_user_picks_new_window"
   ];
 
   useNextest = true;

@@ -11662,6 +11662,11 @@
     github = "IsotoxalDev";
     githubId = 62714538;
   };
+  issai = {
+    name = "Issai";
+    github = "TheLimifiedLime";
+    githubId = 69121493;
+  };
   istoph = {
     email = "chr@istoph.de";
     name = "Christoph Hüffelmann";

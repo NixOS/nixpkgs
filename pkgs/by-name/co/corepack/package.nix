@@ -16,13 +16,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
-  version = "0.34.6";
+  version = "0.34.7";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "corepack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wht1w6irfjj4cG4O1mWaP+uWvi794CsxoQPhk3uoKcw=";
+    hash = "sha256-mAiYRDQ9nh4FN8nY0FKC38b1fKRVq0D4dojcAynezas=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patches
       src
       ;
-    hash = "sha256-kngfdPGent5u231BFOzDLZFLp+EueDrm88iLbSoo5+g=";
+    hash = "sha256-cmY6e29ryLs0psZ/TEqRfs4RdB7eCzfXU7aUH+yCE/s=";
   };
 
   postPatch = ''
@@ -103,6 +103,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     NOCK_ENV=replay yarn test --reporter tap --exclude tests/config.test.ts --exclude tests/Use.test.ts
   '';
   doInstallCheck = true;
+  # vitest needs to bind to `localhost` during installCheck; allow that in the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 
