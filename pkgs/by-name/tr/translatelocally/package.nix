@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./version_without_git.patch
+    ./add_missing_include.patch
   ];
 
   postPatch = ''
