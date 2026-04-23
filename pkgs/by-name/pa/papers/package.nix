@@ -122,6 +122,20 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
       --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    appDir="$out/Applications/Papers.app/Contents"
+
+    mkdir -p "$appDir"/{MacOS,Resources}
+
+    install -Dm444 "$NIX_BUILD_TOP/$sourceRoot/build-aux/macos/Info.plist" "$appDir/Info.plist"
+    install -Dm444 "$NIX_BUILD_TOP/$sourceRoot/build-aux/macos/Papers.icns" "$appDir/Resources/Papers.icns"
+
+    substituteInPlace "$appDir/Info.plist" \
+      --replace-fail "<string>1.0</string>" "<string>${finalAttrs.version}</string>" \
+      --replace-fail "<string>1</string>" "<string>${finalAttrs.version}</string>"
+
+    ln -s "$out/bin/papers" "$appDir/MacOS/Papers"
   '';
 
   preFixup = ''
