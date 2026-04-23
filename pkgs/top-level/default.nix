@@ -115,13 +115,13 @@ let
     in
     if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
 
-  # Allow both:
-  # { /* the config */ } and
-  # { lib, pkgs, ... } : { /* the config */ }
-  config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
-
   configEval = lib.evalModules {
     modules = [
+      {
+        _module.args = {
+          inherit pkgs lib;
+        };
+      }
       ./config.nix
     ] ++ (
       if _configDefinitions != null then
@@ -133,10 +133,7 @@ let
         }) _configDefinitions
       else
         [
-          {
-            _file = "nixpkgs.config";
-            config = config1;
-          }
+          (lib.modules.setDefaultModuleLocation "nixpkgs.config" config0)
         ]
     );
     class = "nixpkgsConfig";
