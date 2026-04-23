@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://store.kde.org/p/2136963";
     description = "Automatic color scheme generator from your wallpaper for KDE Plasma powered by Material You";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ issai ];
     mainProgram = "kde-material-you-colors";
   };
 })
