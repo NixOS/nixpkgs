@@ -66,6 +66,8 @@ buildPythonPackage rec {
   pythonRemoveDeps = [
     # We use pytest-cov-stub instead (and it is not a runtime dependency anyways)
     "pytest-cov"
+    # Upper bound on setuptools is too strict for nixpkgs
+    "setuptools"
   ];
 
   meta = {
