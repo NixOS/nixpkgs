@@ -255,6 +255,12 @@ lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
       extraRustcOptsForBuildRs,
+      # Extra rustc options for proc-macro crates, replacing
+      # `extraRustcOpts`. Lets callers keep instrumentation flags
+      # (sanitizers, coverage) off host dylibs, mirroring Cargo's
+      # behaviour of not applying RUSTFLAGS to host artifacts.
+      # Default: null (inherit `extraRustcOpts`)
+      extraRustcOptsForProcMacro,
       # The lint level cap passed to rustc via `--cap-lints`.
       # See <https://doc.rust-lang.org/rustc/lints/levels.html#capping-lints>.
       #
@@ -352,7 +358,21 @@ lib.makeOverridable
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
       extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
+      extraRustcOptsForProcMacro_ = extraRustcOptsForProcMacro;
       buildTests_ = buildTests;
+      procMacro = lib.attrByPath [ "procMacro" ] false crate;
+      # For proc-macros, prefer the *ForProcMacro variant at each level
+      # (crate attr, override arg) and fall back to extraRustcOpts.
+      crateExtraRustcOpts =
+        if procMacro && crate ? extraRustcOptsForProcMacro then
+          crate.extraRustcOptsForProcMacro
+        else
+          crate.extraRustcOpts or [ ];
+      overrideExtraRustcOpts =
+        if procMacro && extraRustcOptsForProcMacro_ != null then
+          extraRustcOptsForProcMacro_
+        else
+          extraRustcOpts_;
       resolvedLints = crate.lints or lints;
       lintFlags = lintsToRustcFlags resolvedLints;
       resolvedCapLints =
@@ -474,7 +494,7 @@ lib.makeOverridable
         crateRustVersion = crate.rust-version or "";
         crateVersion = crate.version;
         crateType =
-          if lib.attrByPath [ "procMacro" ] false crate then
+          if procMacro then
             [ "proc-macro" ]
           else if lib.attrByPath [ "plugin" ] false crate then
             [ "dylib" ]
@@ -485,8 +505,8 @@ lib.makeOverridable
         edition = crate.edition or null;
         codegenUnits = if crate ? codegenUnits then crate.codegenUnits else defaultCodegenUnits;
         extraRustcOpts =
-          lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
-          ++ extraRustcOpts_
+          crateExtraRustcOpts
+          ++ overrideExtraRustcOpts
           ++ lintFlags
           ++ (lib.optional (edition != null) "--edition ${edition}");
         extraRustcOptsForBuildRs =
@@ -586,6 +606,7 @@ lib.makeOverridable
     verbose = crate_.verbose or true;
     extraRustcOpts = [ ];
     extraRustcOptsForBuildRs = [ ];
+    extraRustcOptsForProcMacro = null;
     capLints = null;
     lints = { };
     features = [ ];
