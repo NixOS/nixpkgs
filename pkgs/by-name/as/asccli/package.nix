@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "asccli";
-  version = "1.2.2";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "rudrankriyam";
     repo = "App-Store-Connect-CLI";
     tag = "${finalAttrs.version}";
-    hash = "sha256-pwfsjVaZaYLLOaIRameDIDZPlwHS6IJrgnTtZqZFwio=";
+    hash = "sha256-9zGLR+lXxR0ku758wmNlglgUYLXa9p/fsZ4p7a7/+E4=";
   };
 
   vendorHash = "sha256-712Q7KiFQyTDjX4Srhukv3eQ84MRjnQxrpgBfqK2xa4=";
