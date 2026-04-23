@@ -79,12 +79,29 @@ in
 
   config = {
 
-    environment.sessionVariables.TZDIR = "/etc/zoneinfo";
+    environment.sessionVariables = {
+      TZDIR = "/etc/zoneinfo";
+    } // lib.optionalAttrs (config.time.timeZone != null) {
+      # TZ is set to prevent glibc from calling stat() every time localtime() is called,
+      # which can be a significant performance problem if /etc is on an NFS filesystem.
+      #
+      # We point to the /etc/localtime symlink so that we don't have to re-login to pick
+      # up a time zone change.
+      TZ = ":/etc/localtime";
+    };
 
     services.geoclue2.enable = lib.mkIf (lcfg.provider == "geoclue2") true;
 
-    # This way services are restarted when tzdata changes.
-    systemd.globalEnvironment.TZDIR = tzdir;
+    systemd.globalEnvironment = {
+      # This way services are restarted when tzdata changes.
+      TZDIR = tzdir;
+    } // lib.optionalAttrs (config.time.timeZone != null) {
+      # See comment above about TZ.
+      # Here, we point to the actual time zone file, instead of the /etc/localtime
+      # symlink, so that systemd services are restarted automatically when the time
+      # zone changes.
+      TZ = ":/etc/zoneinfo/${config.time.timeZone}";
+    };
 
     systemd.services.systemd-timedated.environment = lib.optionalAttrs (config.time.timeZone != null) {
       NIXOS_STATIC_TIMEZONE = "1";
