@@ -4473,6 +4473,10 @@ self: super: with self; {
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
+  djangorestframework-api-key =
+    callPackage ../development/python-modules/djangorestframework-api-key
+      { };
+
   djangorestframework-camel-case =
     callPackage ../development/python-modules/djangorestframework-camel-case
       { };
