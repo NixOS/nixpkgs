@@ -29,13 +29,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "textlint";
-  version = "15.2.1";
+  version = "15.5.4";
 
   src = fetchFromGitHub {
     owner = "textlint";
     repo = "textlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xjtmYz+O+Sn697OrBkPddv1Ma5UsOkO5v4SGlhsaYWA=";
+    hash = "sha256-5B6JfvYz0sYzjQJrbI2DotHuNyJXN2MnyadzzUibLyY=";
   };
 
   patches = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_9;
     fetcherVersion = 1;
-    hash = "sha256-TyKtH4HjCDTydVd/poG05Yh5nRSfcrSPzFLEE3Oq2uo=";
+    hash = "sha256-RqtSkofS8Xk+7FUGhLtfxlV/THFNy4SHmWcZbruQnno=";
   };
 
   nativeBuildInputs = [
