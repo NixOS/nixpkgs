@@ -9,6 +9,8 @@ let
 
   inherit (config) sshBackdoor;
 
+  inherit (hostPkgs.stdenv.hostPlatform) isLinux;
+
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
   testDriver = config.pythonTestDriverPackage.override {
@@ -251,7 +253,7 @@ in
         # depending on whether debugging is enabled.
         #
         # If needed, this can still be turned off.
-        virtualisation.qemu.enableSharedMemory = lib.mkDefault true;
+        virtualisation.qemu.enableSharedMemory = lib.mkDefault isLinux;
 
         assertions = [
           {
