@@ -21,8 +21,8 @@ let
     };
     # ./update-xanmod.sh main
     main = {
-      version = "6.19.13";
-      hash = "sha256-r3CXmgMiZtD5ZHmGDsk2O1TwUR01iCX4m06royJMf68=";
+      version = "6.19.14";
+      hash = "sha256-xp5IBA4epb+3SCJIkbxqzymwvz4T9p7NOP9y6iy6DZk=";
     };
   };
 
