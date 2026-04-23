@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libsForQt5,
+  qt6,
   nixosTests,
 }:
 
@@ -16,11 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    libsForQt5.qtbase
+    qt6.qtbase
   ];
 
   preConfigure = ''
