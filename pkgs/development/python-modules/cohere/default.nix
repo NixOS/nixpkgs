@@ -9,13 +9,17 @@
   # dependencies
   fastavro,
   httpx,
-  httpx-sse,
   pydantic,
   pydantic-core,
   requests,
   tokenizers,
   types-requests,
   typing-extensions,
+
+  # optional-dependencies
+  aiohttp,
+  httpx-aiohttp,
+  oci,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +39,6 @@ buildPythonPackage rec {
   dependencies = [
     fastavro
     httpx
-    httpx-sse
     pydantic
     pydantic-core
     requests
@@ -44,7 +47,13 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonRelaxDeps = [ "httpx-sse" ];
+  optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
+    oci = [ oci ];
+  };
 
   # tests require CO_API_KEY
   doCheck = false;
