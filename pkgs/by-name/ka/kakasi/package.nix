@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   env = lib.optionalAttrs (!stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
