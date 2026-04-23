@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     mainProgram = "abaddon";
     homepage = "https://github.com/uowuo/abaddon";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ choco98 ];
     platforms = lib.platforms.linux;
   };
 }
