@@ -75,8 +75,8 @@ buildGoModule (finalAttrs: {
       attack vectors and can be used as a framework for automated governance.
     '';
     mainProgram = "witness";
-    homepage = "https://github.com/testifysec/witness";
-    changelog = "https://github.com/testifysec/witness/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/in-toto/witness";
+    changelog = "https://github.com/in-toto/witness/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fkautz
