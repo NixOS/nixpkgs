@@ -1,0 +1,4 @@
+module MASShortcut {
+    header "Shortcut.h"
+    export *
+}

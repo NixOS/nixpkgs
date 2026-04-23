@@ -1,0 +1,24 @@
+diff -Naur renameutils-0.12.0-orig/src/Makefile.am renameutils-0.12.0/src/Makefile.am
+--- renameutils-0.12.0-orig/src/Makefile.am	2012-04-23 12:10:43.000000000 +0100
++++ renameutils-0.12.0/src/Makefile.am	2013-03-25 11:13:21.605447377 +0000
+@@ -49,7 +49,7 @@
+ 	@[ -f icp ] || (echo $(LN_S) icmd icp ; $(LN_S) icmd icp)
+ 
+ install-exec-local:
+-	$(mkdir_p) $(DESTDIR)($bindir)
++	$(mkdir_p) $(DESTDIR)$(bindir)
+ 	@[ -f $(DESTDIR)$(bindir)/qmv ] || (echo $(LN_S) qcmd $(DESTDIR)$(bindir)/qmv ; $(LN_S) qcmd $(DESTDIR)$(bindir)/qmv)
+ 	@[ -f $(DESTDIR)$(bindir)/qcp ] || (echo $(LN_S) qcmd $(DESTDIR)$(bindir)/qcp ; $(LN_S) qcmd $(DESTDIR)$(bindir)/qcp)
+ 	@[ -f $(DESTDIR)$(bindir)/imv ] || (echo $(LN_S) icmd $(DESTDIR)$(bindir)/imv ; $(LN_S) icmd $(DESTDIR)$(bindir)/imv)
+diff -Naur renameutils-0.12.0-orig/src/Makefile.in renameutils-0.12.0/src/Makefile.in
+--- renameutils-0.12.0-orig/src/Makefile.in	2012-04-23 12:24:10.000000000 +0100
++++ renameutils-0.12.0/src/Makefile.in	2013-03-25 11:13:40.549847891 +0000
+@@ -1577,7 +1577,7 @@
+ 	@[ -f icp ] || (echo $(LN_S) icmd icp ; $(LN_S) icmd icp)
+ 
+ install-exec-local:
+-	$(mkdir_p) $(DESTDIR)($bindir)
++	$(mkdir_p) $(DESTDIR)$(bindir)
+ 	@[ -f $(DESTDIR)$(bindir)/qmv ] || (echo $(LN_S) qcmd $(DESTDIR)$(bindir)/qmv ; $(LN_S) qcmd $(DESTDIR)$(bindir)/qmv)
+ 	@[ -f $(DESTDIR)$(bindir)/qcp ] || (echo $(LN_S) qcmd $(DESTDIR)$(bindir)/qcp ; $(LN_S) qcmd $(DESTDIR)$(bindir)/qcp)
+ 	@[ -f $(DESTDIR)$(bindir)/imv ] || (echo $(LN_S) icmd $(DESTDIR)$(bindir)/imv ; $(LN_S) icmd $(DESTDIR)$(bindir)/imv)

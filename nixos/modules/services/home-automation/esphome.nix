@@ -1,0 +1,187 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  inherit (lib)
+    maintainers
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
+
+  cfg = config.services.esphome;
+
+  stateDir = "/var/lib/esphome";
+
+  esphomeParams =
+    if cfg.enableUnixSocket then
+      "--socket /run/esphome/esphome.sock"
+    else
+      "--address ${cfg.address} --port ${toString cfg.port}";
+in
+{
+  meta.maintainers = with maintainers; [ oddlama ];
+
+  options.services.esphome = {
+    enable = mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";
+
+    package = lib.mkPackageOption pkgs "esphome" { };
+
+    enableUnixSocket = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
+    };
+
+    address = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = "esphome address";
+    };
+
+    port = mkOption {
+      type = types.port;
+      default = 6052;
+      description = "esphome port";
+    };
+
+    openFirewall = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to open the firewall for the specified port.";
+    };
+
+    allowedDevices = mkOption {
+      default = [
+        "char-ttyS"
+        "char-ttyUSB"
+      ];
+      example = [
+        "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"
+      ];
+      description = ''
+        A list of device nodes to which {command}`esphome` has access to.
+        Refer to DeviceAllow in {manpage}`systemd.resource-control(5)` for more information.
+        Beware that if a device is referred to by an absolute path instead of a device category,
+        it will only allow devices that already are plugged in when the service is started.
+      '';
+      type = types.listOf types.str;
+    };
+
+    usePing = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Use ping to check online status of devices instead of mDNS";
+    };
+
+    environment = mkOption {
+      default = { };
+      type = types.attrsOf types.str;
+      description = ''
+        Extra environment variables to pass to ESPHome. Secrets should be passed
+        using the {option}`services.esphome.environmentFile` option.
+      '';
+      example = {
+        USERNAME = "reimu";
+        PASSWORD = "gensokyo9";
+      };
+    };
+
+    environmentFile = mkOption {
+      default = null;
+      type = types.nullOr types.path;
+      description = ''
+        Path to an environment file.
+        Use this option for setting the dashboard password.
+      '';
+    };
+  };
+
+  config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [ cfg.port ];
+
+    # Use a static system user instead of DynamicUser.
+    # DynamicUser creates a /var/lib/esphome -> /var/lib/private/esphome symlink
+    # which breaks PlatformIO's path resolution during firmware compilation.
+    # See: https://github.com/NixOS/nixpkgs/issues/339557
+    users.users.esphome = {
+      isSystemUser = true;
+      home = stateDir;
+      group = "esphome";
+    };
+
+    users.groups.esphome = { };
+
+    systemd.services.esphome = {
+      description = "ESPHome dashboard";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ cfg.package ];
+
+      environment = {
+        # Set PLATFORMIO_CORE_DIR to a real path (not a symlink) so PlatformIO
+        # and its downloaded toolchains can resolve paths correctly.
+        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+        # platformio needs a writable HOME for its configuration
+        HOME = stateDir;
+      }
+      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; }
+      // cfg.environment;
+
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
+        User = "esphome";
+        Group = "esphome";
+        WorkingDirectory = stateDir;
+        StateDirectory = "esphome";
+        StateDirectoryMode = "0750";
+        Restart = "on-failure";
+        RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
+        RuntimeDirectoryMode = "0750";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ReadWritePaths = [ stateDir ];
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        DevicePolicy = "closed";
+        DeviceAllow = map (d: "${d} rw") cfg.allowedDevices;
+        SupplementaryGroups = [ "dialout" ];
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = false; # breaks bwrap
+        ProtectKernelLogs = false; # breaks bwrap
+        ProtectKernelModules = true;
+        ProtectKernelTunables = false; # breaks bwrap
+        ProtectProc = "invisible";
+        ProcSubset = "all"; # Using "pid" breaks bwrap
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = false; # Required by platformio for chroot
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@mount" # Required by platformio for chroot
+        ];
+        UMask = "0077";
+      };
+    };
+  };
+}

@@ -1,0 +1,12 @@
+tests: Remove bogus test for unsorted file listing
+
+Minimized from what Debian applies:
+https://git.hadrons.org/cgit/debian/pkgs/inetutils.git/tree/debian/patches/local/0006-tests-Remove-bogus-test-for-unsorted-file-listing.patch?id=8ab7f49fe5cf194e989ae6ae6a78eb65397c5778
+--- a/tests/libls.sh
++++ b/tests/libls.sh
+@@ -91,1 +91,0 @@
+-REPLY_Cf=`$LS -Cf $LSDIR`
+@@ -130,3 +129,0 @@
+-test x"$REPLY_C" != x"$REPLY_Cf" ||
+-  { errno=1; echo >&2 'Failed to disable sorting with "-f".'; }
+-

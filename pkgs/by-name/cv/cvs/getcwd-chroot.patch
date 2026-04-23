@@ -1,0 +1,302 @@
+Fix Gnulib's getcwd in chroots.
+From Debian bug #456164, http://bugs.debian.org/456164 .
+
+--- cvs-1.12.13.orig/debian/patches/20_readdir_errno
++++ cvs-1.12.13/debian/patches/20_readdir_errno
+@@ -0,0 +1,121 @@
++# From Gnulib:
++#   http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=0b78641d85af3b72e3b9d94cb7b94e45f3c08ee5
++# We don't need this directly, but it's required so that 21_getcwd_chroot
++# applies cleanly.
++#
++# 2005-10-29  Paul Eggert  <eggert@cs.ucla.edu>
++#
++# 	* getcwd.c (__getcwd): Don't assume that system calls after readdir
++# 	leave errno alone.  Problem reported by Dmitry V. Levin.
++
++--- cvs-1.12.13-old/lib/getcwd.c
+++++ cvs-1.12.13/lib/getcwd.c
++@@ -201,6 +201,8 @@ __getcwd (char *buf, size_t size)
++       ino_t dotino;
++       bool mount_point;
++       int parent_status;
+++      size_t dirroom;
+++      size_t namlen;
++ 
++       /* Look at the parent directory.  */
++ #ifdef AT_FDCWD
++@@ -241,11 +243,20 @@ __getcwd (char *buf, size_t size)
++ 	goto lose;
++       dotlist[dotlen++] = '/';
++ #endif
++-      /* Clear errno to distinguish EOF from error if readdir returns
++-	 NULL.  */
++-      __set_errno (0);
++-      while ((d = __readdir (dirstream)) != NULL)
+++      for (;;)
++ 	{
+++	  /* Clear errno to distinguish EOF from error if readdir returns
+++	     NULL.  */
+++	  __set_errno (0);
+++	  d = __readdir (dirstream);
+++	  if (d == NULL)
+++	    {
+++	      if (errno == 0)
+++		/* EOF on dirstream, which means that the current directory
+++		   has been removed.  */
+++		__set_errno (ENOENT);
+++	      goto lose;
+++	    }
++ 	  if (d->d_name[0] == '.' &&
++ 	      (d->d_name[1] == '\0' ||
++ 	       (d->d_name[1] == '.' && d->d_name[2] == '\0')))
++@@ -303,48 +314,38 @@ __getcwd (char *buf, size_t size)
++ 		break;
++ 	    }
++ 	}
++-      if (d == NULL)
++-	{
++-	  if (errno == 0)
++-	    /* EOF on dirstream, which means that the current directory
++-	       has been removed.  */
++-	    __set_errno (ENOENT);
++-	  goto lose;
++-	}
++-      else
++-	{
++-	  size_t dirroom = dirp - dir;
++-	  size_t namlen = _D_EXACT_NAMLEN (d);
++ 
++-	  if (dirroom <= namlen)
+++      dirroom = dirp - dir;
+++      namlen = _D_EXACT_NAMLEN (d);
+++
+++      if (dirroom <= namlen)
+++	{
+++	  if (size != 0)
++ 	    {
++-	      if (size != 0)
++-		{
++-		  __set_errno (ERANGE);
++-		  goto lose;
++-		}
++-	      else
++-		{
++-		  char *tmp;
++-		  size_t oldsize = allocated;
+++	      __set_errno (ERANGE);
+++	      goto lose;
+++	    }
+++	  else
+++	    {
+++	      char *tmp;
+++	      size_t oldsize = allocated;
++ 
++-		  allocated += MAX (allocated, namlen);
++-		  if (allocated < oldsize
++-		      || ! (tmp = realloc (dir, allocated)))
++-		    goto memory_exhausted;
+++	      allocated += MAX (allocated, namlen);
+++	      if (allocated < oldsize
+++		  || ! (tmp = realloc (dir, allocated)))
+++		goto memory_exhausted;
++ 
++-		  /* Move current contents up to the end of the buffer.
++-		     This is guaranteed to be non-overlapping.  */
++-		  dirp = memcpy (tmp + allocated - (oldsize - dirroom),
++-				 tmp + dirroom,
++-				 oldsize - dirroom);
++-		  dir = tmp;
++-		}
+++	      /* Move current contents up to the end of the buffer.
+++		 This is guaranteed to be non-overlapping.  */
+++	      dirp = memcpy (tmp + allocated - (oldsize - dirroom),
+++			     tmp + dirroom,
+++			     oldsize - dirroom);
+++	      dir = tmp;
++ 	    }
++-	  dirp -= namlen;
++-	  memcpy (dirp, d->d_name, namlen);
++-	  *--dirp = '/';
++ 	}
+++      dirp -= namlen;
+++      memcpy (dirp, d->d_name, namlen);
+++      *--dirp = '/';
++ 
++       thisdev = dotdev;
++       thisino = dotino;
+--- cvs-1.12.13.orig/debian/patches/21_getcwd_chroot
++++ cvs-1.12.13/debian/patches/21_getcwd_chroot
+@@ -0,0 +1,172 @@
++# From Gnulib:
++#  http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=79c0a43808d9ca85acd04600149fc1a9b75bd1b9
++#
++# 2006-07-03  Paul Eggert  <eggert@cs.ucla.edu>
++#
++# 	Merge from coreutils.
++#
++# 	2006-03-19  Jim Meyering  <jim@meyering.net>
++#
++# 	Work even in a chroot where d_ino values for entries in "/"
++# 	don't match the stat.st_ino values for the same names.
++# 	* getcwd.c (__getcwd): When no d_ino value matches the target inode
++# 	number, iterate through all entries again, using lstat instead.
++# 	Reported by Kenshi Muto in http://bugs.debian.org/355810, and by
++# 	Zouhir Hafidi in https://bugzilla.redhat.com/bugzilla/190656.
++#
++# 	* getcwd.c (__getcwd): Clarify a comment.
++# 	Use memcpy in place of a call to strcpy.
++
++--- cvs-1.12.13-old/lib/getcwd.c
+++++ cvs-1.12.13/lib/getcwd.c
++@@ -211,6 +211,7 @@ __getcwd (char *buf, size_t size)
++       int parent_status;
++       size_t dirroom;
++       size_t namlen;
+++      bool use_d_ino = true;
++ 
++       /* Look at the parent directory.  */
++ #ifdef AT_FDCWD
++@@ -257,11 +258,26 @@ __getcwd (char *buf, size_t size)
++ 	     NULL.  */
++ 	  __set_errno (0);
++ 	  d = __readdir (dirstream);
+++
+++	  /* When we've iterated through all directory entries without finding
+++	     one with a matching d_ino, rewind the stream and consider each
+++	     name again, but this time, using lstat.  This is necessary in a
+++	     chroot on at least one system (glibc-2.3.6 + linux 2.6.12), where
+++	     .., ../.., ../../.., etc. all had the same device number, yet the
+++	     d_ino values for entries in / did not match those obtained
+++	     via lstat.  */
+++	  if (d == NULL && errno == 0 && use_d_ino)
+++	    {
+++	      use_d_ino = false;
+++	      rewinddir (dirstream);
+++	      d = __readdir (dirstream);
+++	    }
+++
++ 	  if (d == NULL)
++ 	    {
++ 	      if (errno == 0)
++-		/* EOF on dirstream, which means that the current directory
++-		   has been removed.  */
+++		/* EOF on dirstream, which can mean e.g., that the current
+++		   directory has been removed.  */
++ 		__set_errno (ENOENT);
++ 	      goto lose;
++ 	    }
++@@ -269,58 +285,65 @@ __getcwd (char *buf, size_t size)
++ 	      (d->d_name[1] == '\0' ||
++ 	       (d->d_name[1] == '.' && d->d_name[2] == '\0')))
++ 	    continue;
++-	  if (MATCHING_INO (d, thisino) || mount_point)
+++
+++	  if (use_d_ino)
++ 	    {
++-	      int entry_status;
+++	      bool match = (MATCHING_INO (d, thisino) || mount_point);
+++	      if (! match)
+++		continue;
+++	    }
+++
+++	  {
+++	    int entry_status;
++ #ifdef AT_FDCWD
++-	      entry_status = fstatat (fd, d->d_name, &st, AT_SYMLINK_NOFOLLOW);
+++	    entry_status = fstatat (fd, d->d_name, &st, AT_SYMLINK_NOFOLLOW);
++ #else
++-	      /* Compute size needed for this file name, or for the file
++-		 name ".." in the same directory, whichever is larger.
++-	         Room for ".." might be needed the next time through
++-		 the outer loop.  */
++-	      size_t name_alloc = _D_ALLOC_NAMLEN (d);
++-	      size_t filesize = dotlen + MAX (sizeof "..", name_alloc);
++-
++-	      if (filesize < dotlen)
++-		goto memory_exhausted;
++-
++-	      if (dotsize < filesize)
++-		{
++-		  /* My, what a deep directory tree you have, Grandma.  */
++-		  size_t newsize = MAX (filesize, dotsize * 2);
++-		  size_t i;
++-		  if (newsize < dotsize)
++-		    goto memory_exhausted;
++-		  if (dotlist != dots)
++-		    free (dotlist);
++-		  dotlist = malloc (newsize);
++-		  if (dotlist == NULL)
++-		    goto lose;
++-		  dotsize = newsize;
++-
++-		  i = 0;
++-		  do
++-		    {
++-		      dotlist[i++] = '.';
++-		      dotlist[i++] = '.';
++-		      dotlist[i++] = '/';
++-		    }
++-		  while (i < dotlen);
++-		}
++-
++-	      strcpy (dotlist + dotlen, d->d_name);
++-	      entry_status = __lstat (dotlist, &st);
+++	    /* Compute size needed for this file name, or for the file
+++	       name ".." in the same directory, whichever is larger.
+++	       Room for ".." might be needed the next time through
+++	       the outer loop.  */
+++	    size_t name_alloc = _D_ALLOC_NAMLEN (d);
+++	    size_t filesize = dotlen + MAX (sizeof "..", name_alloc);
+++
+++	    if (filesize < dotlen)
+++	      goto memory_exhausted;
+++
+++	    if (dotsize < filesize)
+++	      {
+++		/* My, what a deep directory tree you have, Grandma.  */
+++		size_t newsize = MAX (filesize, dotsize * 2);
+++		size_t i;
+++		if (newsize < dotsize)
+++		  goto memory_exhausted;
+++		if (dotlist != dots)
+++		  free (dotlist);
+++		dotlist = malloc (newsize);
+++		if (dotlist == NULL)
+++		  goto lose;
+++		dotsize = newsize;
+++
+++		i = 0;
+++		do
+++		  {
+++		    dotlist[i++] = '.';
+++		    dotlist[i++] = '.';
+++		    dotlist[i++] = '/';
+++		  }
+++		while (i < dotlen);
+++	      }
+++
+++	    memcpy (dotlist + dotlen, d->d_name, _D_ALLOC_NAMLEN (d));
+++	    entry_status = __lstat (dotlist, &st);
++ #endif
++-	      /* We don't fail here if we cannot stat() a directory entry.
++-		 This can happen when (network) file systems fail.  If this
++-		 entry is in fact the one we are looking for we will find
++-		 out soon as we reach the end of the directory without
++-		 having found anything.  */
++-	      if (entry_status == 0 && S_ISDIR (st.st_mode)
++-		  && st.st_dev == thisdev && st.st_ino == thisino)
++-		break;
++-	    }
+++	    /* We don't fail here if we cannot stat() a directory entry.
+++	       This can happen when (network) file systems fail.  If this
+++	       entry is in fact the one we are looking for we will find
+++	       out soon as we reach the end of the directory without
+++	       having found anything.  */
+++	    if (entry_status == 0 && S_ISDIR (st.st_mode)
+++		&& st.st_dev == thisdev && st.st_ino == thisino)
+++	      break;
+++	  }
++ 	}
++ 
++       dirroom = dirp - dir;

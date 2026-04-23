@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    oauth (0.5.6)
+    twurl (0.9.6)
+      oauth (~> 0.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  twurl
+
+BUNDLED WITH
+   2.1.4

@@ -1,0 +1,58 @@
+diff --git a/jupyterlab_server/spec.py b/jupyterlab_server/spec.py
+index 94347b9..6e0d7d4 100644
+--- a/jupyterlab_server/spec.py
++++ b/jupyterlab_server/spec.py
+@@ -9,17 +9,17 @@ import typing
+ from pathlib import Path
+ 
+ if typing.TYPE_CHECKING:
+-    from openapi_core.spec.paths import Spec
++    from jsonschema_path import SchemaPath
+ 
+ HERE = Path(os.path.dirname(__file__)).resolve()
+ 
+ 
+-def get_openapi_spec() -> Spec:
++def get_openapi_spec() -> SchemaPath:
+     """Get the OpenAPI spec object."""
+-    from openapi_core.spec.paths import Spec
++    from jsonschema_path import SchemaPath
+ 
+     openapi_spec_dict = get_openapi_spec_dict()
+-    return Spec.from_dict(openapi_spec_dict)  # type:ignore[arg-type]
++    return SchemaPath.from_dict(openapi_spec_dict)
+ 
+ 
+ def get_openapi_spec_dict() -> dict[str, typing.Any]:
+diff --git a/jupyterlab_server/test_utils.py b/jupyterlab_server/test_utils.py
+index c1d8956..337bb53 100644
+--- a/jupyterlab_server/test_utils.py
++++ b/jupyterlab_server/test_utils.py
+@@ -13,8 +13,8 @@ from urllib.parse import parse_qs, urlparse
+ 
+ import tornado.httpclient
+ import tornado.web
++from jsonschema_path import SchemaPath
+ from openapi_core import V30RequestValidator, V30ResponseValidator
+-from openapi_core.spec.paths import Spec
+ from openapi_core.validation.request.datatypes import RequestParameters
+ from tornado.httpclient import HTTPRequest, HTTPResponse
+ from werkzeug.datastructures import Headers, ImmutableMultiDict
+@@ -32,7 +32,7 @@ class TornadoOpenAPIRequest:
+     Converts a torando request to an OpenAPI one
+     """
+ 
+-    def __init__(self, request: HTTPRequest, spec: Spec):
++    def __init__(self, request: HTTPRequest, spec: SchemaPath):
+         """Initialize the request."""
+         self.request = request
+         self.spec = spec
+@@ -76,7 +76,7 @@ class TornadoOpenAPIRequest:
+         # https://github.com/OAI/OpenAPI-Specification/issues/892
+         url = None
+         o = urlparse(self.request.url)
+-        for path_ in self.spec["paths"]:
++        for path_ in self.spec["paths"].keys():
+             if url:
+                 continue  # type:ignore[unreachable]
+             has_arg = "{" in path_

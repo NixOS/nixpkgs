@@ -1,0 +1,63 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
+  numpy,
+  py7zr,
+  pytestCheckHook,
+  stdlib-list,
+  torch,
+  torchvision,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "fickling";
+  version = "0.1.10";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "trailofbits";
+    repo = "fickling";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hpVcYWoIH9sCQDha2aX0kzYHwpNcZ6US+4N/q70tQyA=";
+  };
+
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
+    stdlib-list
+  ];
+
+  pythonRelaxDeps = [ "stdlib-list" ];
+
+  optional-dependencies = {
+    torch = [
+      numpy
+      torch
+      torchvision
+    ];
+  };
+
+  nativeCheckInputs = [
+    py7zr
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  # Tests fail upstream in pytorch under python 3.14
+  doCheck = pythonOlder "3.14";
+
+  pythonImportsCheck = [ "fickling" ];
+
+  meta = {
+    description = "Python pickling decompiler and static analyzer";
+    homepage = "https://github.com/trailofbits/fickling";
+    changelog = "https://github.com/trailofbits/fickling/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ sarahec ];
+  };
+})

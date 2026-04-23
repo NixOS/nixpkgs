@@ -1,0 +1,25 @@
+diff --git a/src/lpart.c b/src/lpart.c
+index 1234567..abcdefg 100644
+--- a/src/lpart.c
++++ b/src/lpart.c
+@@ -485,7 +485,7 @@ dump_part(char *partition)
+ 	return 0;
+ }
+
+-main(int argc, char *argv[])
++int main(int argc, char *argv[])
+ {
+ 	char *partition;
+ 	int ret;
+diff --git a/tools/decode_lmfl.c b/tools/decode_lmfl.c
+index 1234567..abcdefg 100644
+--- a/tools/decode_lmfl.c
++++ b/tools/decode_lmfl.c
+@@ -33,6 +33,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <sys/stat.h>
++#include <ctype.h>
+
+ /* Globals */
+ FILE *ifile;
