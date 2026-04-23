@@ -618,22 +618,25 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
 
     // A section was introduced that was missing in the previous unit
     if !section_cmp.is_empty() {
-        if section_cmp.keys().len() == 1
-            && (section_cmp.contains_key("Unit") || section_cmp.contains_key("Service"))
-        {
-            if let Some(new_unit_unit) = new_unit.get("Unit") {
-                for ini_key in new_unit_unit.keys() {
-                    if !unit_section_ignores.contains_key(ini_key.as_str()) {
-                        return UnitComparison::UnequalNeedsRestart;
-                    } else if ini_key == "X-Reload-Triggers" {
-                        ret = UnitComparison::UnequalNeedsReload;
+        if section_cmp.keys().len() == 1 {
+            // Dispatch on which section is actually new.
+            if section_cmp.contains_key("Unit") {
+                if let Some(new_unit_unit) = new_unit.get("Unit") {
+                    for ini_key in new_unit_unit.keys() {
+                        if !unit_section_ignores.contains_key(ini_key.as_str()) {
+                            return UnitComparison::UnequalNeedsRestart;
+                        } else if ini_key == "X-Reload-Triggers" {
+                            ret = UnitComparison::UnequalNeedsReload;
+                        }
                     }
                 }
-            } else if let Some(new_unit_service) = new_unit.get("Service") {
-                if new_unit_service.len() == 1 && new_unit_service.contains_key("ExecReload") {
-                    ret = UnitComparison::UnequalNeedsReload;
-                } else {
-                    return UnitComparison::UnequalNeedsRestart;
+            } else if section_cmp.contains_key("Service") {
+                if let Some(new_unit_service) = new_unit.get("Service") {
+                    if new_unit_service.len() == 1 && new_unit_service.contains_key("ExecReload") {
+                        ret = UnitComparison::UnequalNeedsReload;
+                    } else {
+                        return UnitComparison::UnequalNeedsRestart;
+                    }
                 }
             } else {
                 return UnitComparison::UnequalNeedsRestart;
@@ -2665,6 +2668,45 @@ invalid
                         "Service".to_string(),
                         HashMap::from([("ExecReload".to_string(), vec!["barfoo".to_string()])])
                     )])
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            // New [Service] section while [Unit] already existed: must inspect
+            // the [Service] section, not the (unchanged) [Unit] one.
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Unit".to_string(),
+                        HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                    )]),
+                    &HashMap::from([
+                        (
+                            "Unit".to_string(),
+                            HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                        ),
+                        (
+                            "Service".to_string(),
+                            HashMap::from([("ExecStart".to_string(), vec!["y".to_string()])])
+                        ),
+                    ]),
+                ) == super::UnitComparison::UnequalNeedsRestart
+            );
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Unit".to_string(),
+                        HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                    )]),
+                    &HashMap::from([
+                        (
+                            "Unit".to_string(),
+                            HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                        ),
+                        (
+                            "Service".to_string(),
+                            HashMap::from([("ExecReload".to_string(), vec!["y".to_string()])])
+                        ),
+                    ]),
                 ) == super::UnitComparison::UnequalNeedsReload
             );
 
