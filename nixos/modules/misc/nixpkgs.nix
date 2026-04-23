@@ -34,6 +34,8 @@ let
     ++ lib.optional (opt.localSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.localSystem
     ++ lib.optional (opt.crossSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.crossSystem;
 
+  _configDefinitions = opt.config.definitionsWithLocations;
+
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
@@ -51,14 +53,15 @@ let
       in
       import ../../.. (
         {
-          inherit (cfg) config overlays;
+          inherit _configDefinitions;
+          inherit (cfg) overlays;
         }
         // systemArgs
       )
     else
       import ../../.. {
+        inherit _configDefinitions;
         inherit (cfg)
-          config
           overlays
           localSystem
           crossSystem
@@ -126,13 +129,12 @@ in
       example = lib.literalExpression ''
         { allowBroken = true; allowUnfree = true; }
       '';
-      type = lib.types.submoduleWith {
-        modules = [ ../../../pkgs/top-level/config.nix ];
-        specialArgs = {
-          docPrefix = "https://nixos.org/manual/nixpkgs/unstable/";
-        };
-        shorthandOnlyDefinesConfig = true;
+      type = lib.types.deferredModuleWith {
+        staticModules = [ ../../../pkgs/top-level/config.nix ];
       };
+      # Returns pkgs.config instead of nixpkgs.config
+      # This shadows the deferredModule to make it look like a submodule
+      apply = _: finalPkgs.config;
       description = ''
         Global configuration for Nixpkgs.
         The complete list of [Nixpkgs configuration options](https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference) is in the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig).
