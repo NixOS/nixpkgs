@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) atuin;
+      inherit (nixosTests) atuin atuin-programs;
     };
     updateScript = nix-update-script { };
   };
