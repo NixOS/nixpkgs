@@ -3,12 +3,20 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
+  srcOnly,
+  removeReferencesTo,
+  node-gyp,
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
+  python3,
+  cctools,
 }:
 
+let
+  nodeSources = srcOnly nodejs;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obsidian-headless";
   version = "0.0.9";
@@ -37,16 +45,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
+    node-gyp
     pnpmConfigHook
     pnpm_9
     makeWrapper
+    python3
+    removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
   ];
 
   postPatch = ''
     cp ${./pnpm-lock.yaml} ./pnpm-lock.yaml
   '';
 
-  dontBuild = true;
+  buildPhase = ''
+    runHook preBuild
+
+    pushd node_modules/better-sqlite3
+    npm run build-release --offline "--nodedir=${nodeSources}"
+    find build -type f -exec remove-references-to -t "${nodeSources}" {} \;
+    popd
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
