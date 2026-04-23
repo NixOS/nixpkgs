@@ -45,6 +45,7 @@ let
     "rustaceanvim"
     "telescope-manix"
     "telescope-nvim"
+    "yalms"
     # keep-sorted end
   ];
 in

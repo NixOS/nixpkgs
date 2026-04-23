@@ -6304,6 +6304,41 @@ final: prev: {
     }
   ) { };
 
+  yalms = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "yalms";
+      version = "0.0.2-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/yalms-0.0.2-1.rockspec";
+          sha256 = "100nz8rp268arqmagg5wzdslm39g6gvbapsmqc537axyy4n4217j";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "ar-at-localhost";
+        repo = "yalms";
+        tag = "v0.0.2";
+        hash = "sha256-Rm2D1/sAWNY5Qy4xR1ITXXbZ8sE6StXeQNh4XLRBYZc=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/ar-at-localhost/yalms";
+        license.fullName = "GPL-3.0";
+        description = "A library of reusable Lua modules and Neovim plugins for developer experience";
+        longDescription = ''
+          Yalms is a library of reusable Lua modules and high-value Neovim plugins oriented towards user and developer experience. Upcoming plugins include Nixvim Manager to manage Nixvim instances, 
+          Orgonomic to enhance Nvim orgmode, NeoForms to build forms as a buffer, NeoProcess to create and run (visualize) recipes and more. The library will keep growing as new modules are added.'';
+      };
+    }
+  ) { };
+
   xml2lua = callPackage (
     {
       buildLuarocksPackage,
