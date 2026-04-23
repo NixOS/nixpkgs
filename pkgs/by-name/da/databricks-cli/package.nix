@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.290.1";
+  version = "0.290.2";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KSwgEju6RRFV0B0dbnutZ/xgnBeSnPW6pyIQwBYg8Ew=";
+    hash = "sha256-kIliLlOd6/1lddWK3VtxoXvP30SajDWB6zVO4gKe9Fo=";
   };
 
   # Otherwise these tests fail asserting that the version is 0.0.0-dev
