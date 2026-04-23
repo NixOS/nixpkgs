@@ -13808,6 +13808,8 @@ self: super: with self; {
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
 
+  pyflac = callPackage ../development/python-modules/pyflac { };
+
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
   pyflexit = callPackage ../development/python-modules/pyflexit { };
