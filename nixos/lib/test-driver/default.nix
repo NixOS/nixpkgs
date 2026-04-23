@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
 
   buildPythonApplication,
   colorama,
@@ -59,6 +60,8 @@ buildPythonApplication {
     socat
     util-linux
     vde2
+  ]
+  ++ lib.optionals stdenv.isLinux [
     vhost-device-vsock
   ]
   ++ lib.optionals enableNspawn [

@@ -111,6 +111,11 @@ in
     rev = "emacs-30.2";
     hash = "sha256-W2eZ+cNQhi/fMeRkwOqSKU7Vzvp43WUOpiwaLLNEXtg=";
     patches = fetchpatch: [
+      (fetchpatch {
+        name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8f535370b9efbc91673b20c6987a5cae4f6dc562";
+        hash = "sha256-ny44eIi8DUa9pQhVGzhGz4H6FXU4+ki86SITLXhkwpw=";
+      })
       (builtins.path {
         name = "inhibit-lexical-cookie-warning-67916.patch";
         path = ./inhibit-lexical-cookie-warning-67916-30.patch;
@@ -127,5 +132,12 @@ in
     variant = "macport";
     rev = "emacs-mac-30.2";
     hash = "sha256-i/W2Xa6Vk1+T1fs6fa4wJVMLLB6BK8QAPcdmPrU8NwM=";
+    patches = fetchpatch: [
+      (fetchpatch {
+        name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8f535370b9efbc91673b20c6987a5cae4f6dc562";
+        hash = "sha256-ny44eIi8DUa9pQhVGzhGz4H6FXU4+ki86SITLXhkwpw=";
+      })
+    ];
   });
 }

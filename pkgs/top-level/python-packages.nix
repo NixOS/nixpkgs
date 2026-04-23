@@ -7154,8 +7154,6 @@ self: super: with self; {
 
   housekeeping = callPackage ../development/python-modules/housekeeping { };
 
-  howdoi = callPackage ../development/python-modules/howdoi { };
-
   hpack = callPackage ../development/python-modules/hpack { };
 
   hpccm = callPackage ../development/python-modules/hpccm { };
@@ -10197,8 +10195,6 @@ self: super: with self; {
   monitorcontrol = callPackage ../development/python-modules/monitorcontrol { };
 
   monkeyhex = callPackage ../development/python-modules/monkeyhex { };
-
-  monkeytype = callPackage ../development/python-modules/monkeytype { };
 
   monosat = callPackage pkgs.monosat.python { };
 
