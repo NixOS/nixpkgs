@@ -9,6 +9,7 @@
   fetchFromGitHub,
   lib,
   _experimental-update-script-combinators,
+  nixosTests,
   nix-update-script,
 }:
 let
@@ -107,6 +108,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) web;
+    tests = { inherit (nixosTests) daed; };
     updateScript = _experimental-update-script-combinators.sequence [
       (nix-update-script {
         attrPath = "daed.web";
