@@ -10,7 +10,11 @@ cargoSetupPostUnpackHook() {
     if [ -z $cargoVendorDir ]; then
         if [ -d "$cargoDeps" ]; then
             local dest=$(stripHash "$cargoDeps")
-            cp -Lr --reflink=auto -- "$cargoDeps" "$dest"
+            if [ -e "$cargoDeps/bin/unpack-vendor" ]; then
+                "$cargoDeps/bin/unpack-vendor" "$dest"
+            else
+                cp -Lr --reflink=auto -- "$cargoDeps" "$dest"
+            fi
             chmod -R +644 -- "$dest"
         else
             unpackFile "$cargoDeps"
