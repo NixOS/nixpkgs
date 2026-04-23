@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "itch-dl";
     homepage = "https://github.com/DragoonAethis/itch-dl";
     changelog = "https://github.com/DragoonAethis/itch-dl/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })
