@@ -13,7 +13,9 @@
   patchelf,
   mariadb-connector-c,
   libpq,
+  protobuf,
   zlib,
+  ctestCheckHook,
   tzdata,
   # Databases
   withMysql ? true,
@@ -25,18 +27,19 @@
   withNotification ? true,
   withPerfdata ? true,
   withIcingadb ? true,
+  withOtel ? true,
   nameSuffix ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icinga2${nameSuffix}";
-  version = "2.15.1";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-w/eD07yzBm3x4G74OuGwkmpBzj63UoklmcKxVi5lx8E=";
+    hash = "sha256-Znpm7wMrTfth1VmZM1gQFCUV0bIS747lLK4PHYOzCRs=";
   };
 
   patches = [
@@ -68,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       (mkFeatureFlag "NOTIFICATION" withNotification)
       (mkFeatureFlag "PERFDATA" withPerfdata)
       (mkFeatureFlag "ICINGADB" withIcingadb)
+      (mkFeatureFlag "OPENTELEMETRY" withOtel)
       # Misc.
       "-DICINGA2_USER=icinga2"
       "-DICINGA2_GROUP=icinga2"
@@ -86,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     systemd
   ]
+  ++ lib.optional withOtel protobuf
   ++ lib.optional withPostgresql libpq;
 
   nativeBuildInputs = [
@@ -96,7 +101,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ tzdata ]; # legacytimeperiod/dst needs this
+
+  # https://github.com/Icinga/icinga2/issues/10722#issuecomment-4178294982
+  ctestFlags = [
+    "-LE"
+    "network"
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook # ctestFlags needs this
+    tzdata # legacytimeperiod/dst needs this
+  ];
 
   postFixup = ''
     rm -r $out/etc/logrotate.d $out/etc/sysconfig $out/lib/icinga2/prepare-dirs
@@ -126,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source monitoring system";
     homepage = "https://www.icinga.com";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       das_j

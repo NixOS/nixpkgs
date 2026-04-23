@@ -5,4 +5,5 @@ icinga2.override {
   withNotification = false;
   withIcingadb = false;
   withPerfdata = false;
+  withOtel = false;
 }
