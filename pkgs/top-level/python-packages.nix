@@ -16526,6 +16526,8 @@ self: super: with self; {
 
   quickjs = callPackage ../development/python-modules/quickjs { };
 
+  quickjs-ng = callPackage ../development/python-modules/quickjs-ng { };
+
   quil = callPackage ../development/python-modules/quil { };
 
   quixote = callPackage ../development/python-modules/quixote { };
