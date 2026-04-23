@@ -133,6 +133,7 @@ else
       sed -i '/Change Log/d' "$out/share/applications/typora.desktop"
 
       makeShellWrapper $out/opt/typora/Typora $out/bin/typora \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
 
       runHook postInstall
