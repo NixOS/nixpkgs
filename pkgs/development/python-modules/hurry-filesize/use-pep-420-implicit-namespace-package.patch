@@ -1,0 +1,24 @@
+diff --git a/setup.py b/setup.py
+index 9ec6f2e..607b680 100644
+--- a/setup.py
++++ b/setup.py
+@@ -29,7 +29,6 @@ setup(
+     license='ZPL 2.1',
+     packages=find_packages('src'),
+     package_dir= {'':'src'},
+-    namespace_packages=['hurry'],
+     include_package_data=True,
+     zip_safe=False,
+     install_requires=[
+diff --git a/src/hurry/__init__.py b/src/hurry/__init__.py
+index 2e2033b..e69de29 100644
+--- a/src/hurry/__init__.py
++++ b/src/hurry/__init__.py
+@@ -1,7 +0,0 @@
+-# this is a namespace package
+-try:
+-    import pkg_resources
+-    pkg_resources.declare_namespace(__name__)
+-except ImportError:
+-    import pkgutil
+-    __path__ = pkgutil.extend_path(__path__, __name__)

@@ -1,0 +1,144 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Tue, 3 Sep 2024 08:57:26 +0200
+Subject: [PATCH] Use wrapped binaries instead of Python interpreter
+
+Rather than calling ukify and mkosi with sys.executable, which doesn't use the Python wrappers for PATH and PYTHONPATH, we call the wrapped binaries directly.
+
+Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+---
+ mkosi/__init__.py   | 17 +++++++----------
+ mkosi/bootloader.py |  3 +--
+ mkosi/run.py        |  6 +++---
+ 3 files changed, 11 insertions(+), 15 deletions(-)
+
+diff --git a/mkosi/__init__.py b/mkosi/__init__.py
+index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a73579ea8 100644
+--- a/mkosi/__init__.py
++++ b/mkosi/__init__.py
+@@ -613,7 +613,7 @@ def finalize_host_scripts(
+         if context.config.find_binary(binary):
+             scripts[binary] = (binary, "--root", "/buildroot")
+     if ukify := context.config.find_binary("ukify"):
+-        scripts["ukify"] = (python_binary(context.config), ukify)
++        scripts["ukify"] = (ukify,)
+     return finalize_scripts(context.config, scripts | dict(helpers))
+ 
+ 
+@@ -755,7 +755,7 @@ def script_maybe_chroot_sandbox(
+ 
+     helpers = {
+         "mkosi-chroot": [
+-            finalize_interpreter(bool(context.config.tools_tree)), "-SI", "/sandbox.py",
++            @MKOSI_SANDBOX@,
+             "--bind", "/buildroot", "/",
+             "--bind", "/var/tmp", "/var/tmp",
+             *apivfs_options(root=Path("/")),
+@@ -1587,7 +1587,7 @@ def run_ukify(
+     sign: bool = True,
+     json_out: bool = False,
+ ) -> dict[str, Any]:
+-    ukify = context.config.find_binary("ukify", "/usr/lib/systemd/ukify")
++    ukify = context.config.find_binary("ukify", "@UKIFY@")
+     if not ukify:
+         die("Could not find ukify")
+ 
+@@ -1599,7 +1599,6 @@ def run_ukify(
+     (context.workspace / "cmdline").write_text(f"{' '.join(cmdline)}\x00")
+ 
+     cmd = [
+-        python_binary(context.config),
+         ukify,
+         "build",
+         *arguments,
+@@ -1694,7 +1693,7 @@ def build_uki(
+     profiles: Sequence[Path],
+     output: Path,
+ ) -> dict[str, Any]:
+-    if not (ukify := context.config.find_binary("ukify", "/usr/lib/systemd/ukify")):
++    if not (ukify := context.config.find_binary("ukify", "@UKIFY@")):
+         die("Could not find ukify")
+ 
+     json_out = False
+@@ -1755,7 +1754,6 @@ def build_uki(
+ 
+         if (
+             systemd_tool_version(
+-                python_binary(context.config),
+                 ukify,
+                 sandbox=context.sandbox,
+             )
+@@ -1815,7 +1813,6 @@ def build_uki(
+         # new .ucode section support?
+         if (
+             systemd_tool_version(
+-                python_binary(context.config),
+                 ukify,
+                 sandbox=context.sandbox,
+             )
+@@ -1883,7 +1880,7 @@ def want_uki(context: Context) -> bool:
+         or (
+             context.config.unified_kernel_images == UnifiedKernelImage.auto
+             and systemd_stub_binary(context).exists()
+-            and context.config.find_binary("ukify", "/usr/lib/systemd/ukify") is not None
++            and context.config.find_binary("ukify", "@UKIFY@") is not None
+         )
+     )
+ 
+@@ -2799,9 +2796,9 @@ def check_ukify(
+     reason: str,
+     hint: Optional[str] = None,
+ ) -> None:
+-    ukify = check_tool(config, "ukify", "/usr/lib/systemd/ukify", reason=reason, hint=hint)
++    ukify = check_tool(config, "ukify", "@UKIFY@", reason=reason, hint=hint)
+ 
+-    v = systemd_tool_version(python_binary(config), ukify, sandbox=config.sandbox)
++    v = systemd_tool_version(ukify, sandbox=config.sandbox)
+     if v < version:
+         die(
+             f"Found '{ukify}' with version {v} but version {version} or newer is required to {reason}.",
+diff --git a/mkosi/bootloader.py b/mkosi/bootloader.py
+index 7d434bb4776980c6fa58ae8f7795f3ffc319baeb..8960a6d17d153b06b029f9072a464a12f5cafe65 100644
+--- a/mkosi/bootloader.py
++++ b/mkosi/bootloader.py
+@@ -316,8 +316,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
+ def python_binary(config: Config) -> PathString:
+     # If there's no tools tree, prefer the interpreter from MKOSI_INTERPRETER. If there is a tools
+     # tree, just use the default python3 interpreter.
+-    exe = Path(sys.executable)
+-    return "python3" if config.tools_tree or not exe.is_relative_to("/usr") else exe
++    return "python3" if config.tools_tree else "@PYTHON_PEFILE@"
+ 
+ 
+ def extract_pe_section(context: Context, binary: Path, section: str, output: Path) -> Path:
+diff --git a/mkosi/run.py b/mkosi/run.py
+index 159b75c1af1b5d84e409426e566e098571086c8e..7ade34fc6a9d53e010f5f45cce53a9c92407f49d 100644
+--- a/mkosi/run.py
++++ b/mkosi/run.py
+@@ -238,7 +238,7 @@ def spawn(
+             module = stack.enter_context(resource_path(sys.modules[__package__ or __name__]))
+             prefix = [
+                 *(["strace", "--detach-on=execve", "--string-limit=256"] if ARG_DEBUG_SANDBOX.get() else []),
+-                sys.executable, "-SI", os.fspath(module / "sandbox.py"),
++                @MKOSI_SANDBOX@,
+                 *sbx,
+             ]  # fmt: skip
+ 
+@@ -321,7 +321,7 @@ def finalize_path(
+         # Make sure that /usr/bin and /usr/sbin are always in $PATH.
+         path += [s for s in ("/usr/bin", "/usr/sbin") if s not in path]
+     else:
+-        path += ["/usr/bin", "/usr/sbin"]
++        path += ["/usr/bin", "/usr/sbin", "@NIX_PATH@"]
+ 
+     if prefix_usr:
+         path = [os.fspath(root / s.lstrip("/")) if s in ("/usr/bin", "/usr/sbin") else s for s in path]
+@@ -690,7 +690,7 @@ def chroot_options() -> list[PathString]:
+         "--unshare-ipc",
+         "--setenv", "container", "mkosi",
+         "--setenv", "HOME", "/",
+-        "--setenv", "PATH", "/usr/bin:/usr/sbin",
++        "--setenv", "PATH", "/usr/bin:/usr/sbin:@NIX_PATH@",
+         "--setenv", "BUILDROOT", "/",
+     ]  # fmt: skip
+ 

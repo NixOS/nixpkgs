@@ -1,0 +1,77 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9d9f92932246ebec8ab5d1cc462366a17818d014..ce27390bd754a33986188dd2bf29cd0c818c2d58 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -398,36 +398,6 @@ if(BUILD_LIB_TESTS)
+ 
+ 	file(COPY tests/fixtures DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+ 
+-	add_executable(client_api tests/client_api.cpp)
+-	target_link_libraries(client_api
+-		MatrixClient::MatrixClient
+-		GTest::GTest
+-		GTest::Main)
+-	target_include_directories(client_api PRIVATE
+-		${CMAKE_CURRENT_SOURCE_DIR}/tests)
+-
+-	add_executable(media_api tests/media_api.cpp)
+-	target_link_libraries(media_api
+-		MatrixClient::MatrixClient
+-		GTest::GTest
+-		GTest::Main)
+-	target_include_directories(media_api PRIVATE
+-		${CMAKE_CURRENT_SOURCE_DIR}/tests)
+-
+-	add_executable(e2ee tests/e2ee.cpp)
+-	target_link_libraries(e2ee
+-		MatrixClient::MatrixClient
+-		GTest::GTest
+-		GTest::Main)
+-	target_include_directories(e2ee PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+-
+-	add_executable(device tests/device.cpp)
+-	target_link_libraries(device
+-		MatrixClient::MatrixClient
+-		GTest::GTest
+-		GTest::Main)
+-	target_include_directories(device PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+-
+ 	add_executable(utils tests/utils.cpp)
+ 	target_link_libraries(utils
+ 		MatrixClient::MatrixClient
+@@ -435,21 +405,6 @@ if(BUILD_LIB_TESTS)
+ 		GTest::Main)
+ 	target_include_directories(utils PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+ 
+-	add_executable(pushrules tests/pushrules.cpp)
+-	target_link_libraries(pushrules
+-		MatrixClient::MatrixClient
+-		GTest::GTest
+-		GTest::Main)
+-	target_include_directories(pushrules PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+-
+-	add_executable(connection tests/connection.cpp)
+-	target_link_libraries(connection
+-		MatrixClient::MatrixClient
+-		GTest::GTest
+-		GTest::Main)
+-	target_include_directories(connection PRIVATE
+-		${CMAKE_CURRENT_SOURCE_DIR}/tests)
+-
+ 	add_executable(identifiers tests/identifiers.cpp)
+ 	target_link_libraries(identifiers
+ 		MatrixClient::MatrixClient
+@@ -498,13 +453,7 @@ if(BUILD_LIB_TESTS)
+ 		GTest::GTest
+ 		GTest::Main)
+ 
+-	add_test(BasicConnectivity connection)
+-	add_test(ClientAPI client_api)
+-	add_test(MediaAPI media_api)
+-	add_test(Encryption e2ee)
+-	add_test(Devices device)
+ 	add_test(Utilities utils)
+-	add_test(Pushrules pushrules)
+ 	add_test(Identifiers identifiers)
+ 	add_test(Errors errors)
+ 	add_test(CryptoStructs crypto)

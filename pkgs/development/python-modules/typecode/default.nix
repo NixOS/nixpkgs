@@ -1,0 +1,73 @@
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  attrs,
+  pdfminer-six,
+  commoncode,
+  plugincode,
+  binaryornot,
+  typecode-libmagic,
+  pytestCheckHook,
+  pytest-xdist,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "typecode";
+  version = "30.1.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "aboutcode-org";
+    repo = "typecode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OAQX39f6chM+xSY41rCBYsv4RDhLuBlu2WLcCt7vw0w=";
+  };
+
+  dontConfigure = true;
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    attrs
+    pdfminer-six
+    commoncode
+    plugincode
+    binaryornot
+    typecode-libmagic
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  disabledTests = [
+    "TestFileTypesDataDriven"
+
+    # Many of the failures below are reported in:
+    # https://github.com/aboutcode-org/typecode/issues/36
+
+    # AssertionError: assert 'application/x-bytecode.python'...
+    "test_package_json"
+
+    # fails due to change in file (libmagic) 5.45
+    "test_doc_postscript_eps"
+    "test_package_debian"
+  ];
+
+  pythonImportsCheck = [ "typecode" ];
+
+  meta = {
+    description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";
+    homepage = "https://github.com/aboutcode-org/typecode";
+    changelog = "https://github.com/aboutcode-org/typecode/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+  };
+})

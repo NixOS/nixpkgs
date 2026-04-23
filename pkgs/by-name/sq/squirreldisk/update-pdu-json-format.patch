@@ -1,0 +1,77 @@
+diff --git a/src/components/FileLine.tsx b/src/components/FileLine.tsx
+index e55f3bd..bd722d7 100644
+--- a/src/components/FileLine.tsx
++++ b/src/components/FileLine.tsx
+@@ -65,7 +65,7 @@ export const FileLine = ({
+             {/* {JSON.stringify(item.data)} */}
+             {item &&
+               item.data &&
+-              (item.data.data / mul / mul / mul).toFixed(2)}{" "}
++              (item.data.size / mul / mul / mul).toFixed(2)}{" "}
+             GB
+           </div>
+         </div>
+diff --git a/src/d3chart.ts b/src/d3chart.ts
+index 855886b..d85c682 100644
+--- a/src/d3chart.ts
++++ b/src/d3chart.ts
+@@ -191,7 +191,7 @@ const updateData = (
+           isDirectory: false,
+           name: "Smaller Items",
+           value: item.value || 0,
+-          data: item.value || 0,
++          size: item.value || 0,
+           children: [],
+         };
+         accumulator = d3.hierarchy(v) as D3HierarchyDiskItem;
+@@ -248,7 +248,7 @@ const updateData = (
+               .ancestors()
+               .map((d) => d.data.name)
+               .reverse()
+-              .join("/")}\n${((d.data.data || 0) / mul / mul / mul).toFixed(
++              .join("/")}\n${((d.data.size || 0) / mul / mul / mul).toFixed(
+               2
+             )} GB`
+         );
+diff --git a/src/index.d.ts b/src/index.d.ts
+index daa7233..81b5243 100644
+--- a/src/index.d.ts
++++ b/src/index.d.ts
+@@ -5,7 +5,7 @@ interface DiskItem {
+   id: string;
+   name: string;
+   value: number;
+-  data: number;
++  size: number;
+   isDirectory: boolean;
+   children: Array<DiskItem>;
+ }
+diff --git a/src/pruneData.ts b/src/pruneData.ts
+index 37e70d8..040e227 100644
+--- a/src/pruneData.ts
++++ b/src/pruneData.ts
+@@ -18,7 +18,7 @@ export const itemMap = (obj: any, parent: any = null) => {
+     //recursive call to scan property
+     if (obj["children"].length > 0) {
+       obj.isDirectory = true;
+-      obj.value = obj.data;
++      obj.value = obj.size;
+       obj["children"].forEach((element: any) => {
+         itemMap(element, obj);
+       });
+@@ -31,13 +31,13 @@ const partition = (data: DiskItem) => {
+   const hierarchy = d3
+     .hierarchy(data)
+     .sum(function (d) {
+-      return !d.children || d.children.length === 0 ? d.data : 0;
++      return !d.children || d.children.length === 0 ? d.size : 0;
+     })
+ 
+     // .sum(d => d.value)
+     // .sum((d: DiskItem) => (d.children ? d.data : d.data))
+     // .sum(d => d.data ? 0 : d.value)
+-    .sort((a: any, b: any) => (b.data || 0) - (a.data || 0));
++    .sort((a: any, b: any) => (b.size || 0) - (a.size || 0));
+   // debugger;
+   const partition = d3
+     .partition<DiskItem>()

@@ -1,0 +1,101 @@
+diff --git a/onnxruntime/core/framework/graph_partitioner.cc b/onnxruntime/core/framework/graph_partitioner.cc
+index 43caf4766d..fabc2a26a0 100644
+--- a/onnxruntime/core/framework/graph_partitioner.cc
++++ b/onnxruntime/core/framework/graph_partitioner.cc
+@@ -957,7 +957,7 @@
+ 
+     AllocatorPtr allocator = output_buffer_holder->buffer_allocator;
+     IAllocatorUniquePtr<void> buffer = IAllocator::MakeUniquePtr<void>(allocator, buffer_size);
+-    model_proto.SerializeToArray(buffer.get(), static_cast<int>(buffer_size));
++    ORT_RETURN_IF_NOT(model_proto.SerializeToArray(buffer.get(), static_cast<int>(buffer_size)), "Failed to serialize to array");
+ 
+     *output_buffer_holder->buffer_size_ptr = buffer_size;
+     *output_buffer_holder->buffer_ptr = buffer.release();
+@@ -970,7 +970,7 @@
+     auto out_stream_buf = std::make_unique<epctx::OutStreamBuf>(*output_write_func_holder);
+     std::ostream out_stream(out_stream_buf.get());
+ 
+-    model_proto.SerializeToOstream(&out_stream);
++    ORT_RETURN_IF_NOT(model_proto.SerializeToOstream(&out_stream), "Failed to serialize to out stream");
+     out_stream.flush();
+     ORT_RETURN_IF_ERROR(out_stream_buf->GetStatus());
+   } else {
+diff --git a/onnxruntime/python/onnxruntime_pybind_schema.cc b/onnxruntime/python/onnxruntime_pybind_schema.cc
+index cd1d2a8da1..05da1a1447 100644
+--- a/onnxruntime/python/onnxruntime_pybind_schema.cc
++++ b/onnxruntime/python/onnxruntime_pybind_schema.cc
+@@ -169,7 +169,7 @@
+           "_default_value",
+           [](ONNX_NAMESPACE::OpSchema::Attribute* attr) -> py::bytes {
+             std::string out;
+-            attr->default_value.SerializeToString(&out);
++            (void)attr->default_value.SerializeToString(&out);
+             return out;
+           })
+       .def_readonly("required", &ONNX_NAMESPACE::OpSchema::Attribute::required);
+diff --git a/onnxruntime/test/ep_graph/test_ep_graph.cc b/onnxruntime/test/ep_graph/test_ep_graph.cc
+index 7e6d157799..f08b09990d 100644
+--- a/onnxruntime/test/ep_graph/test_ep_graph.cc
++++ b/onnxruntime/test/ep_graph/test_ep_graph.cc
+@@ -232,7 +232,7 @@
+                                                         handle_initializer_data));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+@@ -357,7 +357,7 @@
+                                                         handle_initializer_data));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+@@ -487,7 +487,7 @@
+                                                         handle_initializer_data));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+@@ -552,7 +552,7 @@
+     ASSERT_CXX_ORTSTATUS_OK(OrtEpUtils::OrtGraphToProto(test_graph->GetOrtGraph(), model_proto));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+diff --git a/onnxruntime/test/optimizer/graph_transform_test_builder.cc b/onnxruntime/test/optimizer/graph_transform_test_builder.cc
+index 756cc4159e..8323851385 100644
+--- a/onnxruntime/test/optimizer/graph_transform_test_builder.cc
++++ b/onnxruntime/test/optimizer/graph_transform_test_builder.cc
+@@ -158,7 +158,7 @@
+ 
+   // Serialize the model to a string.
+   std::string model_data;
+-  model.ToProto().SerializeToString(&model_data);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&model_data));
+   std::shared_ptr<IExecutionProvider> ep_shared = ep ? std::move(ep) : nullptr;
+ 
+   auto run_model = [&](TransformerLevel level, std::vector<OrtValue>& fetches,
+diff --git a/onnxruntime/test/optimizer/nchwc_optimizer_test.cc b/onnxruntime/test/optimizer/nchwc_optimizer_test.cc
+index 538f600404..111692d4ca 100644
+--- a/onnxruntime/test/optimizer/nchwc_optimizer_test.cc
++++ b/onnxruntime/test/optimizer/nchwc_optimizer_test.cc
+@@ -185,7 +185,7 @@
+ 
+   // Serialize the model to a string.
+   std::string model_data;
+-  model.ToProto().SerializeToString(&model_data);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&model_data));
+ 
+   auto run_model = [&](TransformerLevel level, std::vector<OrtValue>& fetches) {
+     SessionOptions session_options;

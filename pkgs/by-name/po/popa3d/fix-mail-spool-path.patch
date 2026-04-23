@@ -1,0 +1,12 @@
+diff -ubr popa3d-1.0.2-orig/params.h popa3d-1.0.2/params.h
+--- popa3d-1.0.2-orig/params.h	2012-09-19 01:19:56.698098130 +0200
++++ popa3d-1.0.2/params.h	2012-09-19 01:21:13.748065132 +0200
+@@ -191,7 +191,7 @@
+  *
+  * #undef this for qmail-style $HOME/Mailbox mailboxes.
+  */
+-#define MAIL_SPOOL_PATH			"/var/mail"
++#define MAIL_SPOOL_PATH			"/var/spool/mail"
+ 
+ #ifndef MAIL_SPOOL_PATH
+ /*

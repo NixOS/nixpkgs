@@ -1,0 +1,11 @@
+diff -ruN nqc-3.1.r6-old/compiler/lexer.cpp nqc-3.1.r6-new/compiler/lexer.cpp
+--- nqc-3.1.r6-old/compiler/lexer.cpp	2007-06-06 20:19:10.000000000 +0200
++++ nqc-3.1.r6-new/compiler/lexer.cpp	2022-10-13 07:57:08.247213954 +0200
+@@ -11,6 +11,7 @@
+ #define YY_FLEX_MINOR_VERSION 5
+ 
+ #include <stdio.h>
++#include <unistd.h>
+ 
+ #if defined(__MWERKS__) && !__MACH__ && !YY_NEVER_INTERACTIVE
+ #include <unix.h>

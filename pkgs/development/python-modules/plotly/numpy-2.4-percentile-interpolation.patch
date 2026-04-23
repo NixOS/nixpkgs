@@ -1,0 +1,17 @@
+diff --git a/plotly/figure_factory/_violin.py b/plotly/figure_factory/_violin.py
+index 55924e692..e89db0e11 100644
+--- a/plotly/figure_factory/_violin.py
++++ b/plotly/figure_factory/_violin.py
+@@ -17,9 +17,9 @@ def calc_stats(data):
+     x = np.asarray(data, float)
+     vals_min = np.min(x)
+     vals_max = np.max(x)
+-    q2 = np.percentile(x, 50, interpolation="linear")
+-    q1 = np.percentile(x, 25, interpolation="lower")
+-    q3 = np.percentile(x, 75, interpolation="higher")
++    q2 = np.percentile(x, 50, method="linear")
++    q1 = np.percentile(x, 25, method="lower")
++    q3 = np.percentile(x, 75, method="higher")
+     iqr = q3 - q1
+     whisker_dist = 1.5 * iqr
+ 

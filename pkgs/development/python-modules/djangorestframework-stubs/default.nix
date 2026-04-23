@@ -1,0 +1,71 @@
+{
+  lib,
+  buildPythonPackage,
+  django-stubs,
+  fetchFromGitHub,
+  mypy,
+  py,
+  coreapi,
+  pytest-mypy-plugins,
+  pytestCheckHook,
+  requests,
+  types-pyyaml,
+  uv-build,
+  types-markdown,
+  types-requests,
+  typing-extensions,
+}:
+
+buildPythonPackage rec {
+  pname = "djangorestframework-stubs";
+  version = "3.16.7";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "typeddjango";
+    repo = "djangorestframework-stubs";
+    tag = version;
+    hash = "sha256-reOx6b1isu6wtC8cM8KI1HEr5wfJUNIeQd2YaZjIRnQ=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.19,<0.10.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
+
+  dependencies = [
+    django-stubs
+    requests
+    types-pyyaml
+    types-requests
+    typing-extensions
+  ];
+
+  optional-dependencies = {
+    compatible-mypy = [ mypy ] ++ django-stubs.optional-dependencies.compatible-mypy;
+    coreapi = [ coreapi ];
+    markdown = [ types-markdown ];
+  };
+
+  nativeCheckInputs = [
+    py
+    pytest-mypy-plugins
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  # Upstream recommends mypy > 1.7 which we don't have yet, thus all tests are failing with 3.14.5 and below
+  doCheck = false;
+
+  pythonImportsCheck = [ "rest_framework-stubs" ];
+
+  meta = {
+    description = "PEP-484 stubs for Django REST Framework";
+    homepage = "https://github.com/typeddjango/djangorestframework-stubs";
+    changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+  };
+}
