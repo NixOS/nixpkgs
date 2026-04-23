@@ -5,109 +5,122 @@
 
   # build-system
   setuptools,
+  wheel,
+  build,
 
   # dependencies
   jsonschema,
   numpy,
-  opencv-python-headless,
   pillow,
   pydantic,
   pydantic-extra-types,
   requests,
-  sentencepiece,
   tiktoken,
   typing-extensions,
 
-  # tests
+  # optional-dependencies
   click,
   fastapi,
   huggingface-hub,
-  openai,
-  pycountry,
+  jinja2,
+  llguidance,
+  opencv-python-headless,
   pydantic-settings,
   pytestCheckHook,
+  sentencepiece,
   soundfile,
   soxr,
+  uvloop,
+
+  # tests
+  openai,
+  pycountry,
   uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mistral-common";
-  version = "1.8.8";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-common";
-    tag = "v${version}";
-    hash = "sha256-rvW2idAqdCZi7+DsHJXczJKbfceZQ4lQyHScLOqxFIc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DejbLY2i6Hp1J+spxMut5RKugj7rDyrZmp6v+5wqyWY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    wheel
+    build
+  ];
 
   dependencies = [
     jsonschema
     numpy
-    opencv-python-headless
     pillow
     pydantic
     pydantic-extra-types
     requests
-    sentencepiece
     tiktoken
     typing-extensions
   ];
 
-  optional-dependencies = lib.fix (self: {
-    opencv = [
-      opencv-python-headless
-    ];
-    sentencepiece = [
-      sentencepiece
-    ];
-    soundfile = [
-      soundfile
-    ];
-    soxr = [
-      soxr
-    ];
-    audio = self.soundfile ++ self.soxr;
-    image = self.opencv;
-    hf-hub = [
-      huggingface-hub
-    ];
-    server = [
-      click
-      fastapi
-      pydantic-settings
-    ]
-    ++ fastapi.optional-dependencies.standard;
-  });
+  optional-dependencies =
+    let
+      self = finalAttrs.finalPackage.optional-dependencies;
+    in
+    {
+      opencv = [
+        opencv-python-headless
+      ];
+      sentencepiece = [
+        sentencepiece
+      ];
+      soundfile = [
+        soundfile
+      ];
+      soxr = [
+        soxr
+      ];
+      audio = self.soundfile ++ self.soxr;
+      image = self.opencv;
+      guidance = [
+        jinja2
+        llguidance
+      ];
+      hf-hub = [
+        huggingface-hub
+      ];
+      server = [
+        click
+        fastapi
+        pydantic-settings
+        uvloop
+      ]
+      ++ fastapi.optional-dependencies.standard;
+      all =
+        self.opencv
+        ++ self.sentencepiece
+        ++ self.audio
+        ++ self.image
+        ++ self.guidance
+        ++ self.hf-hub
+        ++ self.server;
+    };
 
   pythonImportsCheck = [ "mistral_common" ];
 
   nativeCheckInputs = [
-    click
-    fastapi
-    huggingface-hub
     openai
     pycountry
-    pydantic-settings
     pytestCheckHook
-    soundfile
-    soxr
     uvicorn
-  ];
+  ]
+  ++ finalAttrs.finalPackage.optional-dependencies.all;
 
   disabledTests = [
-    # Require internet
-    "test_download_gated_image"
-    "test_image_encoder_formats"
-    "test_image_processing"
-
-    # AssertionError: Regex pattern did not match.
-    "test_from_url"
-
     # AssertionError, Extra items in the right set
     "test_openai_chat_fields"
   ];
@@ -115,8 +128,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools to help you work with Mistral models";
     homepage = "https://github.com/mistralai/mistral-common";
-    changelog = "https://github.com/mistralai/mistral-common/releases/tag/v${version}";
+    changelog = "https://github.com/mistralai/mistral-common/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bgamari ];
   };
-}
+})
