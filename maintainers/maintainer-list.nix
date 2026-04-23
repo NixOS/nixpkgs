@@ -24644,6 +24644,7 @@
     name = "Greg Pfeil";
   };
   sempiternal-aurora = {
+    email = "myrialsarvay@gmail.com";
     github = "sempiternal-aurora";
     githubId = 78790545;
     name = "Myria Sarvay";

@@ -25,50 +25,28 @@ let
     text = cfg.extraConfig;
   };
 
-  baseLoginOptions = "-p -- \\u";
+  baseLoginOptions = "-p";
 
-  agettyCmd =
+  loginCmd =
     enableAutologin:
-    "${lib.getExe' pkgs.util-linux "agetty"} ${
-      lib.escapeShellArgs (
-        [
-          "--login-program"
-          (toString gettyCfg.loginProgram)
-          "--login-options"
-          # these options are passed as a single parameter
-          "${lib.optionalString enableAutologin "-f "}${baseLoginOptions}"
-        ]
-        ++ lib.optionals enableAutologin [
-          "--autologin"
-          gettyCfg.autologinUser
-        ]
-        ++ gettyCfg.extraArgs
-        ++ [
-          "--8bits"
-          "--noclear"
-          "--"
-          "-"
-        ]
-      )
-    } $TERM";
+    "${gettyCfg.loginProgram} ${baseLoginOptions}${lib.optionalString enableAutologin " -f -- ${gettyCfg.autologinUser}"}";
 
-  loginScript = pkgs.writers.writeDash "kmscon-login" ''
-    kms_tty=
-    active_tty_file=/sys/class/tty/tty0/active
-    if [ -f "$active_tty_file" ]; then
-      read -r kms_tty < "$active_tty_file"
-    fi
+  loginScript = pkgs.writers.writeDash "kmscon-login" (
+    lib.optionalString (gettyCfg.autologinUser != null && gettyCfg.autologinOnce) ''
+      kms_tty=
+      active_tty_file=/sys/class/tty/tty0/active
+      if [ -f "$active_tty_file" ]; then
+        read -r kms_tty < "$active_tty_file"
+      fi
 
-    ${lib.optionalString (gettyCfg.autologinUser != null && gettyCfg.autologinOnce) ''
       autologged="/run/kmscon.autologged"
       if [ "$kms_tty" = tty1 ] && [ ! -f "$autologged" ]; then
         touch "$autologged"
-        exec ${agettyCmd true}
+        exec ${loginCmd true}
       fi
-    ''}
-
-    exec ${agettyCmd (gettyCfg.autologinUser != null && !gettyCfg.autologinOnce)}
-  '';
+    ''
+    + "exec ${loginCmd (gettyCfg.autologinUser != null && !gettyCfg.autologinOnce)}"
+  );
 in
 {
   imports = [
@@ -182,32 +160,28 @@ in
 
     systemd.suppressedSystemUnits = [ "getty@.service" ];
 
-    services.kmscon.extraConfig =
-      let
-        xkb = optionals cfg.useXkbConfig (
-          lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
-            lib.filterAttrs (
-              n: v:
-              builtins.elem n [
-                "layout"
-                "model"
-                "options"
-                "variant"
-              ]
-              && v != ""
-            ) config.services.xserver.xkb
-          )
-        );
-        render = optionals cfg.hwRender [
-          "drm"
-          "hwaccel"
-        ];
-        fonts =
-          optional (cfg.fonts != null)
-            "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
-        term = optional (cfg.term != null) "term=${cfg.term}";
-      in
-      lib.concatLines (xkb ++ render ++ fonts ++ term);
+    services.kmscon.extraConfig = lib.concatLines (
+      optionals cfg.useXkbConfig (
+        lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
+          lib.filterAttrs (
+            n: v:
+            builtins.elem n [
+              "layout"
+              "model"
+              "options"
+              "variant"
+            ]
+            && v != ""
+          ) config.services.xserver.xkb
+        )
+      )
+      ++ optionals cfg.hwRender [
+        "drm"
+        "hwaccel"
+      ]
+      ++ optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}"
+      ++ optional (cfg.term != null) "term=${cfg.term}"
+    );
 
     hardware.graphics.enable = mkIf cfg.hwRender true;
 
