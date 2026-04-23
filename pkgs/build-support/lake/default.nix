@@ -92,7 +92,7 @@ lib.extendMkDerivation {
             patches = finalAttrs.patches or [ ];
             prePatch = finalAttrs.prePatch or "";
             postPatch = finalAttrs.postPatch or "";
-            excludePackages = builtins.map (dep: dep.passthru.lakePackageName or dep.pname) allLeanDeps;
+            excludePackages = map (dep: dep.passthru.lakePackageName or dep.pname) allLeanDeps;
           }).overrideAttrs
             (lib.toExtension overrideLakeDepsAttrs);
 

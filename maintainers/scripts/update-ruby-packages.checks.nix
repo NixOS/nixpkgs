@@ -20,7 +20,6 @@ let
     concatStrings
     filter
     genList
-    isNull
     length
     stringLength
     toJSON
@@ -182,7 +181,7 @@ let
 in
 if (length failedChecks) > 0 then
   # Fail the update script via `abort` on checks failure.
-  builtins.abort ''
+  abort ''
     ${"\n"}Gem upgrade aborted with the following failures:
 
     ${concatMapStringsSep "\n" (msg: " - ${msg}") failedChecks}

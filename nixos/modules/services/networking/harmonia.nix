@@ -227,7 +227,7 @@ in
             ProtectHome = true;
             # SQLite needs write access for WAL mode
             ReadWritePaths = [
-              (builtins.dirOf daemonCfg.dbPath) # Need write access for WAL and SHM files
+              (dirOf daemonCfg.dbPath) # Need write access for WAL and SHM files
             ];
             ReadOnlyPaths = [
               daemonCfg.storeDir

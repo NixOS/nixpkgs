@@ -8,10 +8,8 @@
 let
   inherit (builtins)
     hashString
-    map
     substring
     toJSON
-    toString
     unsafeDiscardStringContext
     ;
 

@@ -97,7 +97,7 @@ in
   testScript =
     { nodes, ... }:
     let
-      port = builtins.toString nodes.machine.services.goupile.settings.HTTP.Port;
+      port = toString nodes.machine.services.goupile.settings.HTTP.Port;
     in
     # py
     ''

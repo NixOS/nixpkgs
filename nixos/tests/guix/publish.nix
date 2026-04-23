@@ -6,7 +6,6 @@ import ../make-test-python.nix (
   { pkgs, lib, ... }:
   let
     publishPort = 8181;
-    inherit (builtins) toString;
   in
   {
     name = "guix-publish";

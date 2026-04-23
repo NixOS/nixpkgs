@@ -34,7 +34,7 @@
 }@args:
 
 let
-  inherit (builtins) elemAt toString;
+  inherit (builtins) elemAt;
 
   nullableOr = o: default: if o == null then default else o;
 

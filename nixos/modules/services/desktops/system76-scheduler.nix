@@ -10,8 +10,6 @@ let
 
   inherit (builtins)
     concatStringsSep
-    map
-    toString
     attrNames
     ;
   inherit (lib)

@@ -86,7 +86,7 @@ let
       echo '${
         builtins.toJSON {
           type = "minimal";
-          name = builtins.baseNameOf finalAttrs.src.url;
+          name = baseNameOf finalAttrs.src.url;
           sha1 = "";
         }
       }' > $out/archive.json

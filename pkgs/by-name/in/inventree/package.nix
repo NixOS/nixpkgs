@@ -188,7 +188,7 @@ python3Packages.buildPythonApplication rec {
         # TODO figure out why this fails
         "test_setting_object"
       ];
-      skippedFuncScripts = builtins.map (funcName: ''
+      skippedFuncScripts = map (funcName: ''
         grep -rlZ ${funcName} . | while IFS= read -r -d "" file; do
           substituteInPlace "$file" --replace-fail "${funcName}" "skip_${funcName}"
         done

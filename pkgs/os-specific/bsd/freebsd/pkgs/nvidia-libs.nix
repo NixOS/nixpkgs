@@ -38,11 +38,11 @@ mkDerivation {
     libx11
   ];
 
-  env.LOCALBASE = "${builtins.placeholder "out"}";
-  env.VKICD_PATH = "${builtins.placeholder "out"}/share/vulkan/icd.d";
-  env.VKLAYERS_PATH = "${builtins.placeholder "out"}/share/vulkan/implicit_layer.d";
-  env.EGL_GLVND_JSON_PATH = "${builtins.placeholder "out"}/share/glvnd/egl_vendor.d";
-  env.EGL_EXTERNAL_PLATFORM_JSON_PATH = "${builtins.placeholder "out"}/share/egl/egl_external_platform.d";
+  env.LOCALBASE = "${placeholder "out"}";
+  env.VKICD_PATH = "${placeholder "out"}/share/vulkan/icd.d";
+  env.VKLAYERS_PATH = "${placeholder "out"}/share/vulkan/implicit_layer.d";
+  env.EGL_GLVND_JSON_PATH = "${placeholder "out"}/share/glvnd/egl_vendor.d";
+  env.EGL_EXTERNAL_PLATFORM_JSON_PATH = "${placeholder "out"}/share/egl/egl_external_platform.d";
 
   postPatch = ''
     substituteInPlace lib/libGLX_nvidia/Makefile \

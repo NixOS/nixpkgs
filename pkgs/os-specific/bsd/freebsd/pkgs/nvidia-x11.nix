@@ -18,7 +18,7 @@ mkDerivation {
     nvidia-libs
   ];
 
-  env.LOCALBASE = "${builtins.placeholder "out"}";
+  env.LOCALBASE = "${placeholder "out"}";
 
   dontBuild = true;
   installPhase = ''
