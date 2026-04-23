@@ -3234,7 +3234,7 @@ assertNoAdditions {
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [
-      plenary-nvim
+      async-nvim
     ];
   };
 
