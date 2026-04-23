@@ -17,17 +17,18 @@
   libical,
   libsoup_3,
   glib,
+  glib-networking,
   gsettings-desktop-schemas,
   libadwaita,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "49.0.1";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calendar/${lib.versions.major version}/gnome-calendar-${version}.tar.xz";
-    hash = "sha256-4L/k6hCUItraB0Xdj4wOAjCriCB3ENHAfiRTIs+RP/I=";
+    hash = "sha256-DBEVqylNUyxMGfVs4Neu5T+OoysUMCCd0dntpHqD0sI=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     libical
     libsoup_3
     glib
+    glib-networking
     libgweather
     geoclue2
     gsettings-desktop-schemas
