@@ -14294,6 +14294,8 @@ self: super: with self; {
 
   pymcuprog = callPackage ../development/python-modules/pymcuprog { };
 
+  pymcurl = callPackage ../development/python-modules/pymcurl { };
+
   pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
 
   pymdstat = callPackage ../development/python-modules/pymdstat { };
