@@ -2081,6 +2081,12 @@
     githubId = 4923335;
     name = "Alexey Orlenko";
   };
+  ar-at-localhost = {
+    email = "pro.se.ahmad.raza.1@gmail.com";
+    github = "ar-at-localhost";
+    githubId = 49521540;
+    name = "Ahmad Raza";
+  };
   ar1a = {
     email = "aria@ar1as.space";
     github = "ar1a";
