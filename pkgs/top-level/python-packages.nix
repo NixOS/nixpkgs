@@ -21045,6 +21045,8 @@ self: super: with self; {
 
   trailbase = callPackage ../development/python-modules/trailbase { inherit (pkgs) trailbase; };
 
+  trailmark = callPackage ../development/python-modules/trailmark { };
+
   trailrunner = callPackage ../development/python-modules/trailrunner { };
 
   trainer = callPackage ../development/python-modules/trainer { };
