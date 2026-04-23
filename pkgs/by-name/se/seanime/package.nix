@@ -10,13 +10,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "seanime";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "5rahim";
     repo = "seanime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R6WKRuU2kBvw9XD3iAZky1YNKWDv+W7YZAwpprYeWkw=";
+    hash = "sha256-utKOewhtuivkp0mtns2ysp+q0nwou7tojZ6VjrPhEMw=";
   };
 
   nativeBuildInputs = [

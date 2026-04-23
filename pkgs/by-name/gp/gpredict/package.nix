@@ -76,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
     maintainers = with lib.maintainers; [
-      markuskowa
       cmcdragonkai
       pandapip1
     ];
