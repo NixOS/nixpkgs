@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+
   buildInputs = [
     libqalculate
     gtk3
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gtk-mac-integration-gtk3
   ];
+
   enableParallelBuilding = true;
 
   meta = {
