@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.9";
+  version = "15.0.10";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-s7Ubr0OjXpBg7nRuBPhnFwHY86bnZRPUnlsNBI/2Ng0=";
+      hash = "sha256-PlGjkyO2MoLWo7eAgoNMfd52dM7v9VKyfCxXbj3qqu4=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-FebSPdfJjxoW0iUBspt5AMugM5SWK7Wm7pP5zGU+icU=";
+      hash = "sha256-rangtzd7oee+2b7zdmKYJD8al4G3FYo+bdq8JgBn5oE=";
     };
   };
 
@@ -354,6 +354,7 @@ stdenv.mkDerivation rec {
       felschr
       hax404
       panicgh
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
