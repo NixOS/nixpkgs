@@ -38,6 +38,11 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ installFonts ];
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   passthru.updateScript = ./update.sh;
 
   meta = {
