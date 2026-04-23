@@ -6,6 +6,7 @@
   pkg-config,
   libqalculate,
   gtk3,
+  gtk-mac-integration-gtk3,
   curl,
   wrapGAppsHook3,
   desktopToDarwinBundle,
@@ -45,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     libqalculate
     gtk3
     curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration-gtk3
   ];
   enableParallelBuilding = true;
 
