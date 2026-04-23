@@ -25,18 +25,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.122.0";
+  version = "0.124.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-CpXWP64URsgt/PhQrUkrT87KG633hxRUIY0wWrTFmjk=";
+    hash = "sha256-YFnzzwCm9/b30qLDMbkf/rEizuTjeqdCgoBZeS0wNBo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-2qtMLWSdYWJ+blNfCHXtgmzizuM1HgpTGa5RQ3U/AEM=";
+  cargoHash = "sha256-tuUY+Mg7DwYnYLt1zfqo0rrz5ip0fukxj947yBJAyks=";
 
   # Match upstream's release build (codex only) and drop the expensive
   # release profile tweaks that dominate cold build time in nixpkgs.
