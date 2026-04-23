@@ -489,9 +489,10 @@ enum UnitComparison {
 
 // Compare the contents of two unit files and return whether the unit needs to be restarted or
 // reloaded. If the units differ, the service is restarted unless the only difference is
-// `X-Reload-Triggers` in the `Unit` section. If this is the only modification, the unit is
-// reloaded instead of restarted. If the only difference is `Options` in the `[Mount]` section, the
-// unit is reloaded rather than restarted.
+// `X-Reload-Triggers` in the `[Unit]` section, `Options` in the `[Mount]` section, or `ExecReload`
+// in the `[Service]` section, in which case the unit is reloaded rather than restarted. Removing
+// `ExecReload` is treated as a no-op since the running process is unaffected and the new unit can
+// no longer be reloaded.
 fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison {
     let mut ret = UnitComparison::Equal;
 
