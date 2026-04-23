@@ -604,7 +604,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                         return UnitComparison::UnequalNeedsRestart;
                     }
                 }
-            } else if section_name == "Exec"
+            } else if section_name == "Service"
                 && ini_cmp.len() == 1
                 && ini_cmp.contains_key("ExecReload")
             {
@@ -2665,6 +2665,23 @@ invalid
                         "Service".to_string(),
                         HashMap::from([("ExecReload".to_string(), vec!["barfoo".to_string()])])
                     )])
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            // ExecReload added to an existing [Service] section
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([("ExecStart".to_string(), vec!["x".to_string()])])
+                    )]),
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([
+                            ("ExecStart".to_string(), vec!["x".to_string()]),
+                            ("ExecReload".to_string(), vec!["y".to_string()]),
+                        ])
+                    )]),
                 ) == super::UnitComparison::UnequalNeedsReload
             );
 
