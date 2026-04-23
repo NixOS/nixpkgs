@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+      ners
       romildo
       ryanccn
     ];
