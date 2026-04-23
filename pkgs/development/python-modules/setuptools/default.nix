@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "80.10.1";
+  version = "82.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
     tag = "v${version}";
-    hash = "sha256-s/gfJc3yxvCE6cjP03vtIZqNFmoZKR3d7+4gTPk1hQg=";
+    hash = "sha256-M4fB+R4UNla2VlcWNhfDLvExQMpjLkPkgVsU4vg6ImU=";
   };
 
   # Drop dependency on coherent.license, which in turn requires coherent.build
