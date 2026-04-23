@@ -41,14 +41,17 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
-## Shell access to VMs in interactive mode {#sec-nixos-test-shell-access}
+## Shell access in interactive mode {#sec-nixos-test-shell-access}
 
 The function `<yourmachine>.shell_interact()` grants access to a shell running
-inside a virtual machine. To use it, replace `<yourmachine>` with the name of a
-virtual machine defined in the test, for example: `machine.shell_interact()`.
+inside a virtual machine or container. To use it, replace `<yourmachine>` with
+the name of a machine defined in the test, for example: `machine.shell_interact()`.
 Keep in mind that this shell may not display everything correctly as it is
-running within an interactive Python REPL, and logging output from the virtual
-machine may overwrite input and output from the guest shell:
+running within an interactive Python REPL, and logging output from the machine
+may overwrite input and output from the guest shell.
+
+For QEMU machines, `shell_interact()` connects to the guest's backdoor shell
+via `socat`:
 
 ```py
 >>> machine.shell_interact()
@@ -73,6 +76,37 @@ using:
 
 Once the connection is established, you can enter commands in the socat terminal
 where socat is running.
+
+For `systemd-nspawn` container machines, `shell_interact()` uses `nsenter` to
+enter the container's namespaces directly via a PTY:
+
+```py
+>>> container.shell_interact()
+container: Terminal is ready:
+sh-5.3# hostname
+container
+```
+
+## VM vs. container interactive capabilities {#sec-nixos-test-interactive-capabilities}
+
+Not all interactive features are available for both machine backends.
+The following table summarizes the differences:
+
+| Feature | QEMU VMs | nspawn containers |
+|---|---|---|
+| `shell_interact()` | yes (via backdoor socket) | yes (via `nsenter`) |
+| `get_tty_text()` | yes | yes |
+| `wait_until_tty_matches()` | yes | yes |
+| `dump_tty_contents()` | yes | yes |
+| `screenshot()` | yes | no |
+| `get_screen_text()` (OCR) | yes | no |
+| `send_key()` / `send_chars()` | yes | no |
+| `console_interact()` | yes | no |
+| `forward_port()` | yes | no |
+| SSH backdoor | yes | yes (via `systemd-ssh-proxy`) |
+
+Graphical display features (`screenshot`, OCR, keyboard input) rely on
+QEMU's monitor protocol and are not available for containers.
 
 ## SSH Access for test VMs {#sec-nixos-test-ssh-access}
 

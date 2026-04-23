@@ -580,6 +580,37 @@ class BaseMachine(ABC):
         """
         return self.systemctl(f"stop {jobname}", user)
 
+    def get_tty_text(self, tty: str) -> str:
+        """
+        Get the output printed to a given TTY.
+        """
+        status, output = self.execute(
+            f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
+        )
+        return output
+
+    def wait_until_tty_matches(self, tty: str, regexp: str, timeout: int = 900) -> None:
+        """Wait until the visible output on the chosen TTY matches regular
+        expression. Throws an exception on timeout.
+        """
+        matcher = re.compile(regexp)
+
+        def tty_matches(last_try: bool) -> bool:
+            text = self.get_tty_text(tty)
+            if last_try:
+                self.log(
+                    f"Last chance to match /{regexp}/ on TTY{tty}, "
+                    f"which currently contains: {text}"
+                )
+            return len(matcher.findall(text)) > 0
+
+        with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
+            retry(tty_matches, timeout)
+
+    def dump_tty_contents(self, tty: str) -> None:
+        """Debugging: Dump the contents of the TTY<n>"""
+        self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
+
     def execute(
         self,
         command: str,
@@ -836,37 +867,6 @@ class QemuMachine(BaseMachine):
             if decoded[-1] == "\n":
                 break
         return "".join(output_buffer)
-
-    def get_tty_text(self, tty: str) -> str:
-        """
-        Get the output printed to a given TTY.
-        """
-        status, output = self.execute(
-            f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
-        )
-        return output
-
-    def wait_until_tty_matches(self, tty: str, regexp: str, timeout: int = 900) -> None:
-        """Wait until the visible output on the chosen TTY matches regular
-        expression. Throws an exception on timeout.
-        """
-        matcher = re.compile(regexp)
-
-        def tty_matches(last_try: bool) -> bool:
-            text = self.get_tty_text(tty)
-            if last_try:
-                self.log(
-                    f"Last chance to match /{regexp}/ on TTY{tty}, "
-                    f"which currently contains: {text}"
-                )
-            return len(matcher.findall(text)) > 0
-
-        with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
-            retry(tty_matches, timeout)
-
-    def dump_tty_contents(self, tty: str) -> None:
-        """Debugging: Dump the contents of the TTY<n>"""
-        self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
     def _execute(
         self,
@@ -1600,6 +1600,43 @@ class NspawnMachine(BaseMachine):
             text=True,
         )
         return (cp.returncode, cp.stdout)
+
+    def shell_interact(self) -> None:
+        """
+        Allows you to directly interact with the container shell
+        via ``nsenter``. This should only be used during test development,
+        not in production tests.
+        Killing the interactive session with ``Ctrl-d`` or ``Ctrl-c``
+        returns to the test driver.
+        """
+        import pty
+
+        self.start()
+
+        container_pid = self.get_systemd_process
+        nsenter_path = shutil.which("nsenter")
+        assert nsenter_path is not None
+
+        self.log("Terminal is ready:")
+        try:
+            pty.spawn(
+                [
+                    nsenter_path,
+                    "--target",
+                    str(container_pid),
+                    "--mount",
+                    "--uts",
+                    "--ipc",
+                    "--net",
+                    "--pid",
+                    "--cgroup",
+                    "--",
+                    "/bin/sh",
+                    "-l",
+                ]
+            )
+        except KeyboardInterrupt:
+            pass
 
     def _stream_journal(self) -> None:
         assert self.process is not None, "Container not started"
