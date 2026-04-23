@@ -1,0 +1,17 @@
+diff --git a/src/plugins/bundled-runtime-deps.ts b/src/plugins/bundled-runtime-deps.ts
+index 5dca7aa..fac598b 100644
+--- a/src/plugins/bundled-runtime-deps.ts
++++ b/src/plugins/bundled-runtime-deps.ts
+@@ -823,6 +823,12 @@ export function installBundledRuntimeDeps(params: {
+   missingSpecs: string[];
+   env: NodeJS.ProcessEnv;
+ }): void {
++  // Refuse to spawn `npm install` in environments that opt out (e.g. the Nix
++  // build sandbox). Bundled runtime deps are expected to already be staged by
++  // the package build; a runtime install would require network access.
++  if (params.env.OPENCLAW_SKIP_PLUGIN_CLI === "1") {
++    throw new Error("bundled runtime deps install skipped (OPENCLAW_SKIP_PLUGIN_CLI=1)");
++  }
+   const installExecutionRoot = params.installExecutionRoot ?? params.installRoot;
+   fs.mkdirSync(params.installRoot, { recursive: true });
+   fs.mkdirSync(installExecutionRoot, { recursive: true });
