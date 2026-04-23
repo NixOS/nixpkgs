@@ -7154,8 +7154,6 @@ self: super: with self; {
 
   housekeeping = callPackage ../development/python-modules/housekeeping { };
 
-  howdoi = callPackage ../development/python-modules/howdoi { };
-
   hpack = callPackage ../development/python-modules/hpack { };
 
   hpccm = callPackage ../development/python-modules/hpccm { };
