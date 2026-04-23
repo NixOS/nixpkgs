@@ -11663,10 +11663,6 @@ with pkgs;
     guile = guile_2_2;
   };
 
-  gerbv = callPackage ../applications/science/electronics/gerbv {
-    cairo = cairo.override { x11Support = true; };
-  };
-
   # this is the same but without the (sizable) 3D models library
   kicad-small = kicad.override {
     pname = "kicad-small";

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cairo
+    (cairo.override { x11Support = true; })
     gettext
     gtk2-x11
     libtool
