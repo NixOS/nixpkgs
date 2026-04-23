@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dexter";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "remoteoss";
     repo = "dexter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8JjxR7Q+4OgBSIgODxIEU/0mC+bPp9Nz7uCAjfn4HiY=";
+    hash = "sha256-BmWzrbC9ka8L1/mrPOXJqnoi1YVXxRcg6tSkb8tI88Q=";
   };
 
   vendorHash = "sha256-1mJ4HdDCsZl/g8F+L+NrW2ACuiHe2aSheJO/1XfKAb4=";
