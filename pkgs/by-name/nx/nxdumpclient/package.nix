@@ -17,6 +17,9 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "nxdumpclient";
   version = "1.1.4";
 
