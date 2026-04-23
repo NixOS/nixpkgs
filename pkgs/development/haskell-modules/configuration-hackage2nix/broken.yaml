@@ -2884,7 +2884,6 @@ broken-packages:
   - hmatrix-mmap # failure in job https://hydra.nixos.org/build/233233046 at 2023-09-02
   - hmatrix-morpheus # failure in job https://hydra.nixos.org/build/295094280 at 2025-04-22
   - hmatrix-nipals # failure in job https://hydra.nixos.org/build/233197543 at 2023-09-02
-  - hmatrix-quadprogpp # failure in job https://hydra.nixos.org/build/326161220 at 2026-04-12
   - hmatrix-sparse # failure in job https://hydra.nixos.org/build/233224288 at 2023-09-02
   - hmatrix-static # failure in job https://hydra.nixos.org/build/233193039 at 2023-09-02
   - hmatrix-svdlibc # failure in job https://hydra.nixos.org/build/233216875 at 2023-09-02
