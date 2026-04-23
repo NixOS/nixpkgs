@@ -4842,6 +4842,12 @@
     github = "CHN-beta";
     githubId = 35858462;
   };
+  choco98 = {
+    name = "Conor Boyle";
+    email = "conorboyle07@protonmail.com";
+    github = "chocoblocko9";
+    githubId = 91826251;
+  };
   ChocolateLoverRaj = {
     email = "paranjperajas@gmail.com";
     github = "ChocolateLoverRaj";
