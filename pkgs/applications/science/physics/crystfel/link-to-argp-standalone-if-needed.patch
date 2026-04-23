@@ -1,0 +1,22 @@
+diff --git a/meson.build b/meson.build
+index e9bea380..53e4373e 100644
+--- a/meson.build
++++ b/meson.build
+@@ -206,10 +206,16 @@ if asapodep.found()
+   indexamajig_sources += ['src/im-asapo.c']
+ endif
+ 
++if build_machine.system() == 'darwin' or build_machine.system() == 'freebsd' or not cc.links('#include <argp.h>\nstatic error_t parse_opt (int key, char *arg, struct argp_state *state) { argp_usage(state); return 0; }; void main() {}')
++    argpdep = cc.find_library('argp')
++else
++    argpdep = dependency('', required : false)
++endif
++
+ indexamajig = executable('indexamajig', indexamajig_sources,
+                          dependencies: [mdep, rtdep, libcrystfeldep, gsldep,
+                                         pthreaddep, zmqdep, asapodep, asapoproddep,
+-                                        fftwdep, cjsondep],
++                                        fftwdep, cjsondep, argpdep],
+                          install: true,
+                          install_rpath: crystfel_rpath)
+ 

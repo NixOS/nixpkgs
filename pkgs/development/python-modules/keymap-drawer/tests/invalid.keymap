@@ -1,0 +1,11 @@
+/ {
+  keymap {
+    compatible = "zmk,keymap";
+
+    broken_layer {
+      bindings = <
+        &kp ESC   &kp A
+        &kp SPACE   // <-- missing closing + inconsistent row
+    };
+  };
+};

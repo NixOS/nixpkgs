@@ -1,0 +1,14 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2409,9 +2409,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "metrics"
+-version = "0.24.0"
++version = "0.24.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8ae428771d17306715c5091d446327d1cfdedc82185c65ba8423ab404e45bf10"
++checksum = "5d5312e9ba3771cfa961b585728215e3d972c950a3eed9252aa093d6301277e8"
+ dependencies = [
+  "ahash 0.8.11",
+  "portable-atomic",
