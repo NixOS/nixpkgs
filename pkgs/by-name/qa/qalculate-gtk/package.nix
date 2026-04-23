@@ -24,6 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
+  # TODO: Remove these patches when updating to 5.11 (See https://github.com/Qalculate/qalculate-gtk/pull/705)
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AM_CONDITIONAL(PLATFORM_MACOS, test "$build_macos" = "yes")' \
+                     'AM_CONDITIONAL(PLATFORM_MACOS, test "$build_mac" = "yes")'
+
+    substituteInPlace src/Makefile.am \
+      --replace-fail '$(GTK_MAC_CFLAGS)' '@GTK_MAC_CFLAGS@' \
+      --replace-fail '$(GTK_MAC_LIBS)' '@GTK_MAC_LIBS@'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
