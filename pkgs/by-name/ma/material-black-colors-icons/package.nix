@@ -2,12 +2,12 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  colorVariants ? [ ], # default: install all icons
+  iconColorVariants ? [ ], # default: install all icons
 }:
 
 let
-  pname = "material-black-colors";
-  colorVariantList = [
+  pname = "material-black-colors-icons";
+  iconColorVariantList = [
     "MB-Blueberry-Suru-GLOW"
     "MB-Cherry-Suru-GLOW"
     "MB-Lime-Suru-GLOW"
@@ -35,7 +35,7 @@ let
   ];
 
 in
-lib.checkListOfEnum "${pname}: color variants" colorVariantList colorVariants
+lib.checkListOfEnum "${pname}: color variants" iconColorVariantList iconColorVariants
 
   stdenvNoCC.mkDerivation
   {
@@ -53,7 +53,9 @@ lib.checkListOfEnum "${pname}: color variants" colorVariantList colorVariants
       runHook preInstall
       mkdir -p $out/share/icons
       cp -r ${
-        lib.concatStringsSep " " (if colorVariants != [ ] then colorVariants else colorVariantList)
+        lib.concatStringsSep " " (
+          if iconColorVariants != [ ] then iconColorVariants else iconColorVariantList
+        )
       } $out/share/icons/
       runHook postInstall
     '';
@@ -61,7 +63,7 @@ lib.checkListOfEnum "${pname}: color variants" colorVariantList colorVariants
     dontFixup = true;
 
     meta = {
-      description = "Material Black Colors icons";
+      description = "Material Black Colors Icons";
       homepage = "https://github.com/rtlewis88/rtl88-Themes/tree/material-black-COLORS";
       maintainers = with lib.maintainers; [
         bigboggle
