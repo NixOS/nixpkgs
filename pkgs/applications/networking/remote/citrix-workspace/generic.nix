@@ -268,7 +268,7 @@ stdenv.mkDerivation rec {
       mkWrappers = lib.concatMapStringsSep "\n";
 
       toWrap = [
-        "wfica"
+        "adapter"
         "selfservice"
         "util/configmgr"
         "util/conncenter"
@@ -320,6 +320,33 @@ stdenv.mkDerivation rec {
 
       echo "Copy .desktop files."
       cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
+      for desktop in $out/share/applications/*.desktop; do
+        sed -i \
+          -e "s#/opt/Citrix/ICAClient#$ICAInstDir#g" \
+          -e "s#$ICAInstDir/util/ctxwebhelper#ctxwebhelper#g" \
+          "$desktop"
+
+        case "$(basename "$desktop")" in
+          citrixapp.desktop)
+            sed -i \
+              -e 's#^TryExec=.*#TryExec=selfservice#' \
+              -e 's#^Exec=.*#Exec=selfservice %u#' \
+              "$desktop"
+            ;;
+          selfservice.desktop)
+            sed -i \
+              -e 's#^TryExec=.*#TryExec=selfservice#' \
+              -e 's#^Exec=.*#Exec=selfservice#' \
+              "$desktop"
+            ;;
+          wfica.desktop)
+            sed -i \
+              -e 's#^TryExec=.*#TryExec=adapter#' \
+              -e 's#^Exec=.*#Exec=adapter %f#' \
+              "$desktop"
+            ;;
+        esac
+      done
 
       # We introduce a dependency on the source file so that it need not be redownloaded everytime
       echo $src >> "$out/share/workspace_dependencies.pin"
