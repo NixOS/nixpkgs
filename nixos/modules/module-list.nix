@@ -168,6 +168,7 @@
   ./programs/appimage.nix
   ./programs/arp-scan.nix
   ./programs/atop.nix
+  ./programs/atuin.nix
   ./programs/ausweisapp.nix
   ./programs/autoenv.nix
   ./programs/autojump.nix
