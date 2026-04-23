@@ -19658,6 +19658,8 @@ self: super: with self; {
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
 
+  trailmark = callPackage ../development/python-modules/trailmark { };
+
   trailrunner = callPackage ../development/python-modules/trailrunner { };
 
   trainer = callPackage ../development/python-modules/trainer { };
