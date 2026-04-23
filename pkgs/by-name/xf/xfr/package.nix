@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xfr";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "lance0";
     repo = "xfr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AY+hNVywXWXgpLS0W/mtgfQWH/b647WLzjJCY3HrABM=";
+    hash = "sha256-8vZ/29B7bdiWd+ckwMUPUMWHYtrgoIlzw3wM6khtrZo=";
   };
 
-  cargoHash = "sha256-8iW5OSGpoLfa2RWJJigOSwk6Eiv6m4WNUEWyoAqkl0M=";
+  cargoHash = "sha256-Vkh1Rb1/MKN+8Rc00iVfrK4x3AcmyKVQ8FMQX2JhZX4=";
 
   nativeBuildInputs = [
     installShellFiles
