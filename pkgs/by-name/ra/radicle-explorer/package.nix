@@ -108,7 +108,7 @@ lib.fix (
           server.
         '';
 
-        homepage = "https://radicle.xyz";
+        homepage = "https://radicle.dev";
         license = lib.licenses.gpl3;
 
         teams = [ lib.teams.radicle ];

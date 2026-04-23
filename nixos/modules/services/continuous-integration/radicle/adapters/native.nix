@@ -81,7 +81,7 @@ in
                 };
                 description = ''
                   Configuration of radicle-native-ci.
-                  See <https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3qg5TKmN83afz2fj9z3fQjU8vaYE#configuration> for more information.
+                  See <https://radicle.network/nodes/seed.radicle.dev/rad:z3qg5TKmN83afz2fj9z3fQjU8vaYE#configuration> for more information.
                 '';
                 default = { };
               };
