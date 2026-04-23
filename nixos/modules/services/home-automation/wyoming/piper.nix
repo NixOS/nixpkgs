@@ -17,10 +17,6 @@ let
     types
     ;
 
-  inherit (builtins)
-    toString
-    ;
-
   inherit (utils)
     escapeSystemdExecArgs
     ;

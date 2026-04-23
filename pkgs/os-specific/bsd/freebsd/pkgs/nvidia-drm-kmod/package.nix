@@ -67,8 +67,8 @@ mkDerivation rec {
     "DEBUG_FLAGS=-g"
   ];
 
-  KMODDIR = "${builtins.placeholder "out"}/kernel";
-  KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
+  KMODDIR = "${placeholder "out"}/kernel";
+  KERN_DEBUGDIR = "${placeholder "debug"}/lib/debug";
   KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
   KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
 

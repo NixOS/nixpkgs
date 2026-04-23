@@ -8,7 +8,6 @@
 let
   inherit (builtins)
     pathExists
-    toString
     ;
 
   inherit (lib.filesystem)

@@ -43,7 +43,7 @@ in
         imports = [ ./common/wayland-cage.nix ];
         services.cage.program = lib.getExe pkgs.stirling-pdf-desktop;
         systemd.tmpfiles.settings."stirling-provisioning.json"."/etc/stirling-pdf/stirling-provisioning.json"."L+".argument =
-          builtins.toString (
+          toString (
             pkgs.writeText "stirling-provisioning.json" ''
               {
                 "serverUrl": "${server}",

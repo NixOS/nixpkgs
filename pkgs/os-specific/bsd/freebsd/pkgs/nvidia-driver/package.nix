@@ -32,7 +32,7 @@ mkDerivation rec {
     "BSDSRCTOP=${sys.src}"
     "SYSDIR=${sys.src}/sys"
     "DRMKMODDIR=${drm-kmod.src}"
-    "KMODDIR=${builtins.placeholder "out"}/kernel"
+    "KMODDIR=${placeholder "out"}/kernel"
     "NO_XREF=1"
     "DEBUG_FLAGS=-g"
   ];

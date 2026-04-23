@@ -15,6 +15,6 @@ mkDerivation {
     bintrans
   ];
   postPatch = ''
-    substituteInPlace usr.sbin/uathload/uathload.c --replace-fail _PATH_FIRMWARE '"${builtins.placeholder "out"}/share/firmware"'
+    substituteInPlace usr.sbin/uathload/uathload.c --replace-fail _PATH_FIRMWARE '"${placeholder "out"}/share/firmware"'
   '';
 }

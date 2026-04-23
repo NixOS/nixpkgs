@@ -79,7 +79,7 @@ stdenvNoCC.mkDerivation rec {
     latestVersion="$(curl -sS $metadataUrl | xmllint --xpath '/metadata/versioning/release/text()' -)"
 
     ${lib.strings.concatStrings (
-      builtins.map (
+      map (
         platform:
         let
           suffix = suffixMap.${platform} or (throw "Platform not in suffixMap: ${platform}");

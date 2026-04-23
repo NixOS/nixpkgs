@@ -61,7 +61,6 @@ in
     let
       settingsSqlite = nodes.machineSqlite.services.pocket-id.settings;
       settingsPostgres = nodes.machinePostgres.services.pocket-id.settings;
-      inherit (builtins) toString;
     in
     ''
       machineSqlite.wait_for_unit("pocket-id.service")

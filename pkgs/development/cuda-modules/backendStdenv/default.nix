@@ -16,9 +16,7 @@
 }:
 let
   inherit (builtins)
-    throw
     toJSON
-    toString
     ;
   inherit (_cuda.db) allSortedCudaCapabilities cudaCapabilityToInfo nvccCompatibilities;
   inherit (_cuda.lib)

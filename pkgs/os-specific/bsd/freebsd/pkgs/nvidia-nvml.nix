@@ -17,7 +17,7 @@ mkDerivation {
   runtimeDependencies = [ nvidia-libs ];
   buildInputs = [ nvidia-libs ];
 
-  env.LOCALBASE = "${builtins.placeholder "out"}";
+  env.LOCALBASE = "${placeholder "out"}";
 
   dontBuild = true;
   installPhase = ''

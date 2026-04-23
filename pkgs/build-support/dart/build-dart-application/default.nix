@@ -144,7 +144,7 @@ lib.extendMkDerivation {
       !(builtins.isString dartOutputType && dartOutputType != "")
       -> throw "dartOutputType must be a non-empty string";
 
-    (builtins.removeAttrs args [
+    (removeAttrs args [
       "gitHashes"
       "sdkSourceBuilders"
       "pubspecLock"

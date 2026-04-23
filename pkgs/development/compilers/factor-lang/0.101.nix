@@ -8,7 +8,7 @@ callPackage ./unwrapped.nix (
       hash = "sha256-uIuk309xZt+sV7WUza/tpeJRA6CnXAajL15X6S6vtFY=";
     };
   }
-  // (builtins.removeAttrs args [
+  // (removeAttrs args [
     "callPackage"
     "fetchurl"
   ])
