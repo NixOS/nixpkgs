@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xdoctest";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "xdoctest";
     tag = "v${version}";
-    hash = "sha256-kxisUcpfAxhB7wd2QLY5jkoUXXDYrkJx7bNB1wMVB30=";
+    hash = "sha256-cwRelkADUrSbrzJ8JjgLCiPil2ynwFmaLLWByJWkXwA=";
   };
 
   nativeBuildInputs = [
