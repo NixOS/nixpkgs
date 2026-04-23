@@ -3332,6 +3332,8 @@ with pkgs;
     isDesktopVariant = true;
   };
 
+  stm32cubeide_1_19_0 = stm32cubeide.override { version = "1.19.0"; };
+
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
   solc-select = with python3Packages; toPythonApplication solc-select;
