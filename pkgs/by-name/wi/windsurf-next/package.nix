@@ -12,7 +12,7 @@ let
     (lib.importJSON ./info.json)."${stdenv.hostPlatform.system}"
       or (throw "windsurf-next: unsupported system ${stdenv.hostPlatform.system}");
 in
-buildVscode {
+(buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
 
   inherit (info) version vscodeVersion;
@@ -57,4 +57,10 @@ buildVscode {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
-}
+}).overrideAttrs (oldAttrs: {
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Windsurf Next uses code-next.png instead of code.png
+    cp $out/lib/windsurf-next/resources/app/resources/linux/code-next.png \
+       $out/lib/windsurf-next/resources/app/resources/linux/code.png
+  '' + oldAttrs.postInstall or "";
+})
