@@ -1,0 +1,82 @@
+diff --git a/frontend/CMakeLists.txt b/frontend/CMakeLists.txt
+index e1a0c64..97082b2 100644
+--- a/frontend/CMakeLists.txt
++++ b/frontend/CMakeLists.txt
+@@ -27,6 +27,8 @@ if(NOT TARGET OBS::bpm)
+ 
+ add_executable(obs-studio)
+ add_executable(OBS::studio ALIAS obs-studio)
++if(OS_MACOS)
++  target_link_options(obs-studio PRIVATE LINKER:-headerpad_max_install_names)
++endif()
+ 
+ target_link_libraries(
+   obs-studio
+@@ -86,7 +88,7 @@ foreach(graphics_library IN ITEMS opengl metal d3d11)
+     target_compile_definitions(
+       obs-studio
+       PRIVATE
+-        DL_${graphics_library_U}="$<$<IF:$<PLATFORM_ID:Windows>,TARGET_FILE_NAME,TARGET_SONAME_FILE_NAME>:OBS::libobs-${graphics_library}>"
++        DL_${graphics_library_U}="$<$<PLATFORM_ID:Darwin>:@executable_path/../Frameworks/$<TARGET_SONAME_FILE_NAME:OBS::libobs-${graphics_library}>>$<$<PLATFORM_ID:Windows>:$<TARGET_FILE_NAME:OBS::libobs-${graphics_library}>>$<$<AND:$<NOT:$<PLATFORM_ID:Windows>>,$<NOT:$<PLATFORM_ID:Darwin>>>:$<TARGET_SONAME_FILE_NAME:OBS::libobs-${graphics_library}>>"
+     )
+   else()
+     target_compile_definitions(obs-studio PRIVATE DL_${graphics_library_U}="")
+diff --git a/libobs-metal/CMakeLists.txt b/libobs-metal/CMakeLists.txt
+index c844044..404f731 100644
+--- a/libobs-metal/CMakeLists.txt
++++ b/libobs-metal/CMakeLists.txt
+@@ -41,6 +41,19 @@ target_sources(
+ 
+ target_link_libraries(libobs-metal PRIVATE OBS::libobs)
+ 
++target_compile_options(
++  libobs-metal
++  PRIVATE
++    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-import-objc-header ${CMAKE_CURRENT_SOURCE_DIR}/libobs-metal-Bridging-Header.h>"
++    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xcc -fmodules>"
++    "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xcc -fcxx-modules>"
++)
++
++set_target_properties(
++  libobs-metal
++  PROPERTIES
++    Swift_LANGUAGE_VERSION 5
++    Swift_MODULE_NAME libobs_metal
++)
++
+ target_enable_feature(libobs "Metal renderer")
+ 
+ set_property(SOURCE OBSMetalRenderer.swift APPEND PROPERTY COMPILE_FLAGS -emit-objc-header)
+diff --git a/plugins/mac-avcapture/CMakeLists.txt b/plugins/mac-avcapture/CMakeLists.txt
+index 87e30fa..0ea7784 100644
+--- a/plugins/mac-avcapture/CMakeLists.txt
++++ b/plugins/mac-avcapture/CMakeLists.txt
+@@ -5,6 +5,7 @@ add_library(OBS::avcapture-legacy ALIAS mac-avcapture-legacy)
+ 
+ target_sources(mac-avcapture-legacy PRIVATE legacy/av-capture.mm legacy/left-right.hpp legacy/scope-guard.hpp)
+ target_include_directories(mac-avcapture-legacy PRIVATE legacy)
++target_compile_options(mac-avcapture-legacy PRIVATE -fobjc-arc)
+ 
+ target_link_libraries(
+   mac-avcapture-legacy
+@@ -40,6 +41,7 @@ target_sources(
+ )
+ 
+ target_link_libraries(mac-avcapture PRIVATE OBS::libobs)
++target_compile_options(mac-avcapture PRIVATE -fobjc-arc -fmodules)
+ 
+ set_target_properties_obs(
+   mac-avcapture
+diff --git a/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt b/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt
+index 9ab14d5..f118e27 100644
+--- a/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt
++++ b/plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt
+@@ -6,6 +6,9 @@ find_package(FFmpeg REQUIRED COMPONENTS avcodec avutil avformat)
+ 
+ add_executable(obs-ffmpeg-mux)
+ add_executable(OBS::ffmpeg-mux ALIAS obs-ffmpeg-mux)
++if(OS_MACOS)
++  target_link_options(obs-ffmpeg-mux PRIVATE LINKER:-headerpad_max_install_names)
++endif()
+ 
+ target_sources(obs-ffmpeg-mux PRIVATE ffmpeg-mux.c ffmpeg-mux.h)

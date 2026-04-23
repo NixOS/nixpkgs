@@ -38,6 +38,7 @@ in
   inherit cef;
 
   patches = [
+    ./darwin-cmake-fixes.patch
     ./darwin-source-fixes.patch
   ];
 
@@ -72,50 +73,6 @@ in
                 substituteInPlace CMakeLists.txt \
                   --replace-fail 'project(obs-studio VERSION ''${OBS_VERSION_CANONICAL})' \
                              'project(obs-studio VERSION ''${OBS_VERSION_CANONICAL} LANGUAGES C CXX OBJC OBJCXX Swift)'
-
-                substituteInPlace frontend/CMakeLists.txt \
-                  --replace-fail 'add_executable(OBS::studio ALIAS obs-studio)' 'add_executable(OBS::studio ALIAS obs-studio)
-
-        target_link_options(obs-studio PRIVATE LINKER:-headerpad_max_install_names)'
-
-                substituteInPlace frontend/CMakeLists.txt \
-                  --replace-fail '        DL_''${graphics_library_U}="$<$<IF:$<PLATFORM_ID:Windows>,TARGET_FILE_NAME,TARGET_SONAME_FILE_NAME>:OBS::libobs-''${graphics_library}>"
-    ' '        DL_''${graphics_library_U}="$<$<PLATFORM_ID:Darwin>:@executable_path/../Frameworks/$<TARGET_SONAME_FILE_NAME:OBS::libobs-''${graphics_library}>>$<$<PLATFORM_ID:Windows>:$<TARGET_FILE_NAME:OBS::libobs-''${graphics_library}>>$<$<AND:$<NOT:$<PLATFORM_ID:Windows>>,$<NOT:$<PLATFORM_ID:Darwin>>>:$<TARGET_SONAME_FILE_NAME:OBS::libobs-''${graphics_library}>>"
-    '
-
-                substituteInPlace plugins/obs-ffmpeg/ffmpeg-mux/CMakeLists.txt \
-                  --replace-fail 'add_executable(OBS::ffmpeg-mux ALIAS obs-ffmpeg-mux)' 'add_executable(OBS::ffmpeg-mux ALIAS obs-ffmpeg-mux)
-
-        target_link_options(obs-ffmpeg-mux PRIVATE LINKER:-headerpad_max_install_names)'
-
-                substituteInPlace libobs-metal/CMakeLists.txt \
-                  --replace-fail 'target_link_libraries(libobs-metal PRIVATE OBS::libobs)' 'target_link_libraries(libobs-metal PRIVATE OBS::libobs)
-
-            target_compile_options(
-              libobs-metal
-              PRIVATE
-                "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-import-objc-header ''${CMAKE_CURRENT_SOURCE_DIR}/libobs-metal-Bridging-Header.h>"
-                "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xcc -fmodules>"
-                "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xcc -fcxx-modules>"
-            )
-
-            set_target_properties(
-              libobs-metal
-              PROPERTIES
-                Swift_LANGUAGE_VERSION 5
-                Swift_MODULE_NAME libobs_metal
-            )'
-
-                # Upstream relies on Xcode target attributes to turn on Objective-C ARC and
-                # modules for the macOS capture plugins. With Ninja we need real compiler
-                # flags or @import-based sources fail to compile.
-                substituteInPlace plugins/mac-avcapture/CMakeLists.txt \
-                  --replace-fail 'target_include_directories(mac-avcapture-legacy PRIVATE legacy)' 'target_include_directories(mac-avcapture-legacy PRIVATE legacy)
-
-            target_compile_options(mac-avcapture-legacy PRIVATE -fobjc-arc)' \
-                  --replace-fail 'target_link_libraries(mac-avcapture PRIVATE OBS::libobs)' 'target_link_libraries(mac-avcapture PRIVATE OBS::libobs)
-
-            target_compile_options(mac-avcapture PRIVATE -fobjc-arc -fmodules)'
 
                 substituteInPlace cmake/macos/helpers.cmake \
                   --replace-fail '        COMMAND /bin/ln -fs obs-frontend-api.dylib libobs-frontend-api.1.dylib' '        COMMAND "''${CMAKE_COMMAND}" -E true' \
