@@ -47,6 +47,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Use external locker (such as i3lock) as X screen saver";
+    homepage = "https://github.com/xdbob/xss-lock";
     license = lib.licenses.mit;
     mainProgram = "xss-lock";
     maintainers = with lib.maintainers; [

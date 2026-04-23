@@ -23,4 +23,8 @@ stdenv.mkDerivation rec {
     libcec_platform
     tinyxml
   ];
+
+  meta = {
+    homepage = "https://github.com/xbmc/kodi-platform";
+  };
 }

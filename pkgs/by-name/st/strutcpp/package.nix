@@ -32,6 +32,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Collection of string utilities";
+    homepage = "https://github.com/Grumbel/strutcpp";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.free;

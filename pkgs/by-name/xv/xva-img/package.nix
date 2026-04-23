@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     maintainers = [ ];
     description = "Tool for converting Xen images to raw and back";
+    homepage = "https://github.com/eriklax/xva-img";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "xva-img";

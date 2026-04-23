@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       for live configuration changes and access to the active state
       of pwalarmd.
     '';
+    homepage = "https://github.com/amyipdev/pwalarmd";
     mainProgram = "pwalarmctl";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;

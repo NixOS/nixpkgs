@@ -78,6 +78,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Convenience script to run a virtualized X-Server";
+    homepage = "https://github.com/archlinux/svntogit-packages";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.artturin ];

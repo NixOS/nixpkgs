@@ -55,4 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  meta = {
+    homepage = "https://github.com/voldikss/coc-extensions";
+  };
 })

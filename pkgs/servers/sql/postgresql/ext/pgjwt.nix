@@ -38,6 +38,7 @@ postgresqlBuildExtension (finalAttrs: {
     longDescription = ''
       sign() and verify() functions to create and verify JSON Web Tokens.
     '';
+    homepage = "https://github.com/michelp/pgjwt";
     license = lib.licenses.mit;
     platforms = postgresql.meta.platforms;
     maintainers = with lib.maintainers; [ spinus ];

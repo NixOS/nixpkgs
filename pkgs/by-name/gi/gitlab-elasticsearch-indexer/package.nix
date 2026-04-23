@@ -52,6 +52,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Indexes Git repositories into Elasticsearch for GitLab";
+    homepage = "https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer";
     mainProgram = "gitlab-elasticsearch-indexer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

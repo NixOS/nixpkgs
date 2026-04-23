@@ -31,6 +31,7 @@ mkDerivation rec {
   ];
   meta = {
     description = "Libraries for creating business diagrams";
+    homepage = "https://invent.kde.org/graphics/kdiagram";
     license = lib.licenses.gpl2;
     platforms = qtbase.meta.platforms;
     maintainers = [ lib.maintainers.ttuegel ];

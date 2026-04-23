@@ -31,6 +31,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python and C interfaces for logging";
+    homepage = "https://github.com/anthony-tuininga/cx_Logging";
     changelog = "https://github.com/anthony-tuininga/cx_Logging/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sigmanificient ];

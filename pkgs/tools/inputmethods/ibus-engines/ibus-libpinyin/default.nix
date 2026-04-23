@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   meta = {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
+    homepage = "https://github.com/libpinyin/ibus-libpinyin";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       linsui

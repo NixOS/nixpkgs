@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Intel Media SDK";
+    homepage = "https://github.com/Intel-Media-SDK/MediaSDK";
     mainProgram = "mfx-tracer-config";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

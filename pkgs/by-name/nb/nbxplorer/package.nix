@@ -29,6 +29,7 @@ buildDotnetModule rec {
 
   meta = {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
+    homepage = "https://github.com/dgarage/NBXplorer";
     maintainers = with lib.maintainers; [
       kcalvinalvin
       erikarvstedt

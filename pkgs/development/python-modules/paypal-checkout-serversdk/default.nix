@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/paypal/Checkout-Python-SDK/releases/tag/${version}";
     description = "Python SDK for Checkout RESTful APIs";
+    homepage = "https://github.com/paypal/Checkout-Python-SDK";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };

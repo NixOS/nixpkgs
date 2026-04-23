@@ -20,6 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tools to read/write from/to MSR CPU registers on Linux";
+    homepage = "https://github.com/intel/msr-tools";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ peterhoeg ];

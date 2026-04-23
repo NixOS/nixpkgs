@@ -22,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Large lexicon for APE (~100,000 entries)";
+    homepage = "https://github.com/Attempto/Clex";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ yrashk ];

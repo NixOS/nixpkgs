@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CMake modules needed to build Open WebOS components";
+    homepage = "https://github.com/openwebos/cmake-modules-webos";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

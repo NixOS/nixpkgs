@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Gateway between FUSE and libarchive: allows mounting of cpio, .tar.gz, .tar.bz2 archives";
+    homepage = "https://git.sr.ht/~nabijaczleweli/archivemount-ng";
     changelog = "https://git.sr.ht/~nabijaczleweli/archivemount-ng/refs/${finalAttrs.version}";
     mainProgram = "archivemount";
     license = [

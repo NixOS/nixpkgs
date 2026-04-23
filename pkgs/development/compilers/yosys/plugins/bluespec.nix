@@ -38,6 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Bluespec plugin for Yosys";
+    homepage = "https://github.com/thoughtpolice/yosys-bluespec";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
