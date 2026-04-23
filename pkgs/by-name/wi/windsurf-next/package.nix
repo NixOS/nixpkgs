@@ -58,9 +58,11 @@ in
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 }).overrideAttrs (oldAttrs: {
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # Windsurf Next uses code-next.png instead of code.png
-    cp $out/lib/windsurf-next/resources/app/resources/linux/code-next.png \
-       $out/lib/windsurf-next/resources/app/resources/linux/code.png
-  '' + oldAttrs.postInstall or "";
+  installPhase = if stdenv.hostPlatform.isLinux then
+    (builtins.replaceStrings
+      [ ''icon_file="$out/lib/windsurf-next/resources/app/resources/linux/code.png"'' ]
+      [ ''icon_file="$out/lib/windsurf-next/resources/app/resources/linux/code-next.png"'' ]
+      oldAttrs.installPhase)
+  else
+    oldAttrs.installPhase;
 })
