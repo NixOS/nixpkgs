@@ -41,14 +41,22 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
-## Shell access to VMs in interactive mode {#sec-nixos-test-shell-access}
+## Shell access in interactive mode {#sec-nixos-test-shell-access}
+
+::: {.warning}
+`shell_interact()` is intended for use in interactive test runs, and in nspawn
+containers in fact are only available in interactive settings.
+:::
 
 The function `<yourmachine>.shell_interact()` grants access to a shell running
-inside a virtual machine. To use it, replace `<yourmachine>` with the name of a
-virtual machine defined in the test, for example: `machine.shell_interact()`.
+inside a virtual machine or container. To use it, replace `<yourmachine>` with
+the name of a machine defined in the test, for example: `machine.shell_interact()`.
 Keep in mind that this shell may not display everything correctly as it is
-running within an interactive Python REPL, and logging output from the virtual
-machine may overwrite input and output from the guest shell:
+running within an interactive Python REPL, and logging output from the machine
+may overwrite input and output from the guest shell.
+
+For QEMU machines, `shell_interact()` connects to the guest's backdoor shell
+via `socat`:
 
 ```py
 >>> machine.shell_interact()
@@ -73,6 +81,16 @@ using:
 
 Once the connection is established, you can enter commands in the socat terminal
 where socat is running.
+
+For `systemd-nspawn` container machines, `shell_interact()` uses `nsenter` to
+enter the container's namespaces directly via a PTY:
+
+```py
+>>> container.shell_interact()
+container: Terminal is ready:
+sh-5.3# hostname
+container
+```
 
 ## SSH Access for test VMs {#sec-nixos-test-ssh-access}
 

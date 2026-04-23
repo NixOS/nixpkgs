@@ -1615,6 +1615,43 @@ class NspawnMachine(BaseMachine):
         )
         return (cp.returncode, cp.stdout)
 
+    def shell_interact(self) -> None:
+        """
+        Allows you to directly interact with the container shell
+        via ``nsenter``. This should only be used during test development,
+        not in production tests.
+        Killing the interactive session with ``Ctrl-d`` or ``Ctrl-c``
+        returns to the test driver.
+        """
+        import pty
+
+        self.start()
+
+        container_pid = self.get_systemd_process
+        nsenter_path = shutil.which("nsenter")
+        assert nsenter_path is not None
+
+        self.log("Terminal is ready:")
+        try:
+            pty.spawn(
+                [
+                    nsenter_path,
+                    "--target",
+                    str(container_pid),
+                    "--mount",
+                    "--uts",
+                    "--ipc",
+                    "--net",
+                    "--pid",
+                    "--cgroup",
+                    "--",
+                    "/bin/sh",
+                    "-l",
+                ]
+            )
+        except KeyboardInterrupt:
+            pass
+
     def _stream_journal(self) -> None:
         assert self.process is not None, "Container not started"
         journal_path = self.state_dir / "var/log/journal"
