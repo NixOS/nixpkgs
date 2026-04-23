@@ -9,7 +9,7 @@
 {
   config,
   lib,
-  docPrefix ? "",
+  docPrefix,
   ...
 }:
 
@@ -515,6 +515,7 @@ in
   inherit options;
 
   config = {
+    _module.args.docPrefix = lib.mkDefault "";
     warnings =
       optionals config.warnUndeclaredOptions (
         mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
