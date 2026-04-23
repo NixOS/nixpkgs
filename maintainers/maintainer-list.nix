@@ -9045,6 +9045,12 @@
     githubId = 844574;
     name = "Daniel Austin";
   };
+  flupke = {
+    email = "luper.rouch@gmail.com";
+    github = "flupke";
+    githubId = 188962;
+    name = "Luper Rouch";
+  };
   flyfloh = {
     email = "nix@halbmastwurf.de";
     github = "flyfloh";
