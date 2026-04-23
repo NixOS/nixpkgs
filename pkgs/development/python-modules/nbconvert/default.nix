@@ -1,6 +1,5 @@
 {
   lib,
-  fetchurl,
   buildPythonPackage,
   fetchPypi,
   hatchling,
@@ -23,13 +22,6 @@
   pytestCheckHook,
 }:
 
-let
-  # see https://github.com/jupyter/nbconvert/issues/1896
-  style-css = fetchurl {
-    url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
-    hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
-  };
-in
 buildPythonPackage rec {
   pname = "nbconvert";
   version = "7.17.1";
@@ -46,9 +38,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
-
-    mkdir -p share/templates/classic/static
-    cp ${style-css} share/templates/classic/static/style.css
   '';
 
   build-system = [ hatchling ];
