@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   adwaita-icon-theme,
-  libsForQt5,
+  kdePackages,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -34,14 +34,14 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     pname = "tela-circle-icon-theme";
     version = "2025-02-10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "tela-circle-icon-theme";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-5Kqf6QNM+/JGGp2H3Vcl69Vh1iZYPq3HJxhvSH6k+eQ=";
     };
 
@@ -52,9 +52,12 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
 
     propagatedBuildInputs = [
       adwaita-icon-theme
-      libsForQt5.breeze-icons
+      kdePackages.breeze-icons
       hicolor-icon-theme
     ];
+
+    # breeze-icons propagates qtbase
+    dontWrapQtApps = true;
 
     dontDropIconThemeCache = true;
 
@@ -88,4 +91,4 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
       platforms = lib.platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
       maintainers = with lib.maintainers; [ romildo ];
     };
-  }
+  })

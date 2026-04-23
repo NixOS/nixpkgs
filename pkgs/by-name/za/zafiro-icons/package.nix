@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  libsForQt5,
+  kdePackages,
   gnome-icon-theme,
   numix-icon-theme,
   numix-icon-theme-circle,
@@ -29,13 +29,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    libsForQt5.breeze-icons
+    kdePackages.breeze-icons
     gnome-icon-theme
     numix-icon-theme
     numix-icon-theme-circle
     hicolor-icon-theme
     # still missing parent icon themes: Surfn
   ];
+
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
 
   dontDropIconThemeCache = true;
 

@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  plasma5Packages,
+  kdePackages,
   gnome-icon-theme,
   hicolor-icon-theme,
   nix-update-script,
@@ -26,10 +26,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
-    plasma5Packages.breeze-icons
+    kdePackages.breeze-icons
     gnome-icon-theme
     hicolor-icon-theme
   ];
+
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
 
   installPhase = ''
     runHook preInstall
