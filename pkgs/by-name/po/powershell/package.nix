@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.6.0";
+  version = "7.6.1";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -96,19 +96,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-u1LbkOlk7guR6T9VmzUIeMayfBL9UYMNjsoXk3Erljk=";
+        hash = "sha256-nhB49wsRxA4Q9LrRNU2xzcrzjNZ3X89A4HOOP1rGgH4=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-3d91ZPs7UtwmvlWA/FtOCOs/plsJRIiq5tSzytX+pGA=";
+        hash = "sha256-c0mIExlOoNhJ1ZQjMu5uUWV+pm2gghaqEFB4jVxSt0E=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-fGJ5z+rQYyRFGhD/dBiDCGyaAPAkuuqSS7nTwQb+DII=";
+        hash = "sha256-tfh0qDK+wrp4zT5E/bywTBthRNnqtCuYgcuLlAC8xQQ=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-BFF0cs9X1/nL2TiX2pvtRnxzymBjwp12VevCCqHWAj8=";
+        hash = "sha256-38lCKXZ5IWA/fD4csaxaqTFEivdJbM9ldyO2J4BXxBU=";
       };
     };
     tests.version = testers.testVersion {
