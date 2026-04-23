@@ -1569,6 +1569,32 @@ let
   */
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
+  /**
+    Label a data with an priority.
+    See the documentation of `filterOverrides` for the interpretation of the priority value.
+    See `mkDefault`, `mkOptionDefault`, `mkForce` for `mkOverride` partially applied with common priorities used in the NixOS module system.
+
+    # Inputs
+
+    `priority`
+
+    : A numeric value representing the precedence.
+      See the documentation of `filterOverrides` for the interpretation of this value.
+
+    `content`
+
+    : The data to be labeled with a given priority.
+
+    # Examples
+    :::{.example}
+    ## `lib.modules.mkOverride` usage example
+
+    ```nix
+    mkOverride 1000 "hello, world!"
+    => { _type = "override"; content = "hello, world!"; priority = 1000; }
+    ```
+    :::
+  */
   mkOverride = priority: content: {
     _type = "override";
     inherit priority content;
