@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pexpect,
   pillow,
-  pycryptodomex,
+  cryptography,
   pytestCheckHook,
   pyvirtualdisplay,
   setuptools,
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "vncdotool";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     owner = "sibson";
     repo = "vncdotool";
     tag = "v${version}";
-    hash = "sha256-QrD6z/g85FwaZCJ1PRn8CBKCOQcbVjQ9g0NpPIxguqk=";
+    hash = "sha256-CXxuaAi/B7NiGp1dhhe7iBw0qOdPfsKg7zMMwavGCW8=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pillow
-    pycryptodomex
+    cryptography
     twisted
   ];
 
