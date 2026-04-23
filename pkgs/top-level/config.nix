@@ -9,11 +9,11 @@
 {
   config,
   lib,
+  docPrefix ? "",
   ...
-}@args:
+}:
 
 let
-  docPrefix = args.docPrefix or "";
   inherit (lib)
     literalExpression
     mapAttrsToList
@@ -471,7 +471,7 @@ let
         Silence the warning for the upcoming deprecation of the
         `x86_64-darwin` platform in Nixpkgs 26.11.
 
-        See the [release notes](#x86_64-darwin-26.05) for more
+        See the [release notes](${docPrefix}#x86_64-darwin-26.05) for more
         information.
       '';
     };
