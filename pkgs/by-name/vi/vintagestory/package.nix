@@ -11,7 +11,7 @@
   libglvnd,
   pipewire,
   libpulseaudio,
-  dotnet-runtime_8,
+  dotnet-runtime_10,
   x11Support ? true,
   libxi,
   libxcursor,
@@ -28,11 +28,11 @@ assert waylandSupport -> libxkbcommon != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.21.7";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
-    hash = "sha256-zsVK6r5w7b7VBVxI3tJjtSs2uixBolXiM2oW088D84U=";
+    hash = "sha256-c90Mb5hyL8StLFrKokAgER/u6l3jhhluP5ErgVs4geI=";
   };
 
   __structuredAttrs = true;
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps $out/share/fonts/truetype
     cp -r * $out/share/vintagestory
-    magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
+    magick $out/share/vintagestory/assets/gameicon.png $out/share/icons/hicolor/512x512/apps/vintagestory.png
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
     rm -rvf $out/share/vintagestory/{install,run,server}.sh
@@ -92,11 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
      makeWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$runtimeLibraryPath")
 
-     makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
+     makeWrapper ${lib.meta.getExe dotnet-runtime_10} $out/bin/vintagestory \
       "''${makeWrapperArgs[@]}" \
        --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+    makeWrapper ${lib.getExe dotnet-runtime_10} $out/bin/vintagestory-server \
       "''${makeWrapperArgs[@]}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
