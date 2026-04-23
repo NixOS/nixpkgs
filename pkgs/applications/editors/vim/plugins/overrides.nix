@@ -227,6 +227,12 @@ assertNoAdditions {
     checkInputs = [ self.astrocore ];
   };
 
+  async-nvim = super.async-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "docgen"
+    ];
+  };
+
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];

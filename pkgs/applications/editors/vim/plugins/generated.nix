@@ -1036,6 +1036,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  async-nvim = buildVimPlugin {
+    pname = "async.nvim";
+    version = "0-unstable-2026-04-18";
+    src = fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "async.nvim";
+      rev = "7a1d7d49933fbe902b84b55f352a3b10fd587331";
+      hash = "sha256-uyUvZVN7L7SqPAE1woc1T8dlhpH24FBj3/WD4VMwWF8=";
+    };
+    meta.homepage = "https://github.com/lewis6991/async.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   async-vim = buildVimPlugin {
     pname = "async.vim";
     version = "0-unstable-2022-04-04";
