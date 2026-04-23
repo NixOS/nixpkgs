@@ -7,9 +7,29 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    filter
+    elem
+    filterAttrs
+    concatLists
+    mapAttrsToList
+    getBin
+    concatStringsSep
+    mkEnableOption
+    mkOption
+    types
+    literalExpression
+    mkIf
+    any
+    isBool
+    isString
+    optionalAttrs
+    mapAttrs'
+    nameValuePair
+    listToAttrs
+    ;
+
   inherit (utils) systemdUtils escapeSystemdPath;
   inherit (systemdUtils.unitOptions) unitOption;
   inherit (systemdUtils.lib)
