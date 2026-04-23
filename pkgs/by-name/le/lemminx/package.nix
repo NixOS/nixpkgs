@@ -26,13 +26,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "lemminx";
-  version = "0.31.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "lemminx";
     tag = version;
-    hash = "sha256-a+9RN1265fsmYAUMuUTxA+VqJv7xPlzuc8HqoZwmR4M=";
+    hash = "sha256-c3ybzIAk9WaGRrETmb4+scyl8KFWjjUd4nefvSEhLao=";
     # Lemminx reads this git information at runtime from a git.properties
     # file on the classpath
     leaveDotGit = true;
