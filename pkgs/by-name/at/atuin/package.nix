@@ -4,8 +4,11 @@
   fetchFromGitHub,
   installShellFiles,
   rustPlatform,
+  runCommandLocal,
   nixosTests,
   nix-update-script,
+  nushell,
+  atuin,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -59,6 +62,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     tests = {
       inherit (nixosTests) atuin;
+      nushell-integration =
+        runCommandLocal "test-${atuin.name}-nushell-integration"
+          {
+            nativeBuildInputs = [
+              nushell
+              atuin
+            ];
+            meta.platforms = nushell.meta.platforms;
+          }
+          ''
+            export HOME="$NIX_BUILD_ROOT"
+            mkdir $out
+            nu -c "atuin init nu | save atuin.nu"
+            nu -c "source atuin.nu"
+          '';
     };
     updateScript = nix-update-script { };
   };
