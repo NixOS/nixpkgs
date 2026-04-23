@@ -22609,6 +22609,13 @@
     github = "ranfdev";
     githubId = 23294184;
   };
+  ranidspace = {
+    name = "ranidspace";
+    email = "dev@ranid.space";
+    matrix = "@ranidspace:4d2.org";
+    github = "ranidspace";
+    githubId = 56847308;
+  };
   raphaelr = {
     email = "raphael-git@tapesoftware.net";
     matrix = "@raphi:tapesoftware.net";
