@@ -1995,6 +1995,7 @@ mapAliases {
   tkcvs = throw "'tkcvs' has been renamed to/replaced by 'tkrev'"; # Converted to throw 2025-10-27
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17
   tkimg = throw "'tkimg' has been renamed to/replaced by 'tclPackages.tkimg'"; # Converted to throw 2025-10-27
+  tla = throw "'tla' has been removed as it is broken and unmaintained. Please use 'breezy' instead"; # Added 2026-04-23
   tlaplusToolbox = tlaplus-toolbox; # Added 2025-08-21
   tokyo-night-gtk = throw "'tokyo-night-gtk' has been renamed to/replaced by 'tokyonight-gtk-theme'"; # Converted to throw 2025-10-27
   tomcat_connectors = throw "'tomcat_connectors' has been renamed to/replaced by 'apacheHttpdPackages.mod_jk'"; # Converted to throw 2025-10-27
