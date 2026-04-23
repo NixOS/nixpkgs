@@ -61,15 +61,15 @@ buildPythonApplication {
     util-linux
     vde2
   ]
+  ++ lib.optionals stdenv.isLinux [
+    vhost-device-vsock
+  ]
   ++ lib.optionals enableNspawn [
     systemd
   ]
   ++ lib.optionals enableOCR [
     imagemagick_light
     tesseract4
-  ]
-  ++ lib.optionals stdenv.isLinux [
-    vhost-device-vsock
   ];
 
   # containers test requires extra nix features that are not available in ofborg.
