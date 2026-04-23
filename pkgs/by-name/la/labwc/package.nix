@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     tag = finalAttrs.version;
-    hash = "sha256-3svQnSFdzKTfGLSjiNjswb4B5n0htQTltxhRmUbZD20=";
+    hash = "sha256-7lq/lcaYSc+mJOTkjtwF0LjOAg4Uck3BwAc+2RIntYo=";
   };
 
   outputs = [
