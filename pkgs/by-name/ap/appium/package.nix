@@ -8,6 +8,7 @@
 buildNpmPackage rec {
   pname = "appium";
   version = "3.3.0";
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://registry.npmjs.org/appium/-/appium-${version}.tgz";
