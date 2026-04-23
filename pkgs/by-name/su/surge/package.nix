@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/3wrsA7aG7Jb4ehhnKRJ6hAH0Ir5EAvCypRbcKhBG/M=";
   };
 
-  patches = [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     # Fix build error due to newer glibc version by upgrading lib "catch 2"
     # Issue: https://github.com/surge-synthesizer/surge/pull/4843
     # Patch: https://github.com/surge-synthesizer/surge/pull/4845
@@ -57,40 +57,48 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    cairo
-    libsndfile
-    libxcb
-    libxkbcommon
-    libxcb-util
-    libxcb-cursor
-    libxcb-keysyms
-    zenity
-    curl
-    rsync
-  ];
+  buildInputs =
+    [
+      cairo
+      libsndfile
+      curl
+      rsync
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libxcb
+      libxkbcommon
+      libxcb-util
+      libxcb-cursor
+      libxcb-keysyms
+      zenity
+    ];
 
   # Fix build with gcc 15
   env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
 
-  postPatch = ''
-    substituteInPlace src/common/SurgeStorage.cpp \
-      --replace "/usr/share/Surge" "$out/share/surge"
-    substituteInPlace src/linux/UserInteractionsLinux.cpp \
-      --replace '"zenity' '"${zenity}/bin/zenity'
-    patchShebangs scripts/linux/
-    cp -r $extraContent/Skins/ resources/data/skins
+  postPatch =
+    ''
+      substituteInPlace src/common/SurgeStorage.cpp \
+        --replace "/usr/share/Surge" "$out/share/surge"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace src/linux/UserInteractionsLinux.cpp \
+        --replace '"zenity' '"${zenity}/bin/zenity'
+      patchShebangs scripts/linux/
+    ''
+    + ''
+      cp -r $extraContent/Skins/ resources/data/skins
 
-    substituteInPlace libs/libsamplerate/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.1..3.18)" "cmake_minimum_required(VERSION 3.10)"
-  '';
+      substituteInPlace libs/libsamplerate/CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.1..3.18)" "cmake_minimum_required(VERSION 3.10)"
+    '';
 
   installPhase = ''
     cd ..
     cmake --build build --config Release --target install-everything-global
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = stdenv.hostPlatform.isLinux;
 
   installCheckPhase = ''
     export HOME=$(mktemp -d)
@@ -105,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://surge-synthesizer.github.io";
     license = lib.licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       magnetophon
     ];
