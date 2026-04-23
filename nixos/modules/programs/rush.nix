@@ -48,62 +48,45 @@ in
       type = either shellPackage path;
 
       description = ''
-        The resolved shell path that users can inherit to set `rush` as their login shell.
+        The resolved shell/wrapper path that users can inherit to set `rush` as their login shell.
         This is a convenience option for use in user definitions. Example:
           `users.users.alice = { inherit (config.programs.rush) shell; ... };`
       '';
     };
-
-    wrap = lib.mkOption {
-      type = bool;
-      default = config.security.enableWrappers;
-      defaultText = lib.literalExpression "config.security.enableWrappers";
-
-      description = ''
-        Whether to wrap the `rush` binary with a SUID-enabled wrapper.
-        This is required if {option}`security.enableWrappers` is enabled in your configuration.
-      '';
-    };
   };
 
-  config = lib.mkIf cfg.enable (
-    lib.mkMerge [
-      (lib.mkIf cfg.wrap {
-        security.wrappers.rush = lib.mkDefault {
-          group = "root";
-          owner = "root";
-          permissions = "u+rx,g+x,o+x";
-          setgid = false;
-          setuid = true;
-          source = lib.getExe cfg.package;
-        };
-      })
+  config = lib.mkIf cfg.enable {
+    programs.rush.shell = config.security.wrapperDir + "/rush";
 
-      {
-        programs.rush.shell = if cfg.wrap then config.security.wrapperDir + "/rush" else cfg.package;
+    environment = {
+      shells = [ cfg.shell ];
+      systemPackages = [ cfg.package ];
 
-        environment = {
-          shells = [ cfg.shell ];
-          systemPackages = [ cfg.package ];
+      etc."rush.rc".text =
+        lib.pipe
+          [
+            "# This file was created by the module `programs.rush`;"
+            "rush 2.0"
+            (lib.optionalString (cfg.global != "") "global\n${indent cfg.global}")
+            (lib.optionals (cfg.rules != { }) (
+              lib.mapAttrsToList (name: content: "rule ${name}\n${indent content}") cfg.rules
+            ))
+          ]
+          [
+            (lib.flatten)
+            (builtins.filter (line: line != ""))
+            (builtins.concatStringsSep "\n\n")
+            (lib.mkDefault)
+          ];
+    };
 
-          etc."rush.rc".text =
-            lib.pipe
-              [
-                "# This file was created by the module `programs.rush`;"
-                "rush 2.0"
-                (lib.optionalString (cfg.global != "") "global\n${indent cfg.global}")
-                (lib.optionals (cfg.rules != { }) (
-                  lib.mapAttrsToList (name: content: "rule ${name}\n${indent content}") cfg.rules
-                ))
-              ]
-              [
-                (lib.flatten)
-                (builtins.filter (line: line != ""))
-                (builtins.concatStringsSep "\n\n")
-                (lib.mkDefault)
-              ];
-        };
-      }
-    ]
-  );
+    security.wrappers.rush = lib.mkDefault {
+      group = "root";
+      owner = "root";
+      permissions = "u+rx,g+x,o+x";
+      setgid = false;
+      setuid = true;
+      source = lib.getExe cfg.package;
+    };
+  };
 }
