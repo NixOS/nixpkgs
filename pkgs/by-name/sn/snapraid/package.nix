@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapraid";
-  version = "14.3";
+  version = "14.4";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ULE+CtIcsmISK3qwbTGg2xGBHvJKkZjCeH+/0Et1b9M=";
+    hash = "sha256-zkKdJwRcOmrSWX7CHHTAlL2GYbVjLkNVFficBum86F8=";
   };
 
   env.VERSION = finalAttrs.version;

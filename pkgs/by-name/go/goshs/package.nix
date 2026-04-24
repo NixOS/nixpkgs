@@ -3,6 +3,7 @@
   fetchFromGitHub,
   stdenv,
   lib,
+  fetchpatch,
   testers,
 
   # passthru
@@ -11,16 +12,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "goshs";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "patrickhener";
     repo = "goshs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lh4jUz6dtbAwC9ErQrHe5FtxjHLL2gBRTSqLtj33GTc=";
+    hash = "sha256-DdGzX1qVz8mA+T9l+V2n7r6ngtV1moypT3sLO7f4OcY=";
   };
 
-  vendorHash = "sha256-wn+t6xY4zUK6NE5kZSefHYGpMq5whFZ644ij5bDs50I=";
+  patches = [
+    # Fixes the build for 2.0.3
+    (fetchpatch {
+      url = "https://github.com/patrickhener/goshs/commit/dc4a86e846b5a2e6f7cc97a29a73367dea26f91a.patch";
+      hash = "sha256-yXVBxOAp37yVdI5JlFMzSuSwiUaF2gWOfy4GfBVkGSI=";
+    })
+  ];
+
+  vendorHash = "sha256-R0U/cytan8U9nE/qYHmDUlUfIYhZAcjV2v/uIlZPTCs=";
 
   ldflags = [
     "-s"
@@ -42,12 +51,11 @@ buildGoModule (finalAttrs: {
     "-skip=^TestGetIPv4Addr$"
   ];
 
-  # Disabled until https://github.com/patrickhener/goshs/issues/137 is resolved
-  # passthru.tests.version = testers.testVersion {
-  #   package = goshs;
-  #   command = "goshs -v";
-  #   version = "goshs ${finalAttrs.version}";
-  # };
+  passthru.tests.version = testers.testVersion {
+    package = goshs;
+    command = "goshs -v";
+    version = "goshs ${finalAttrs.version}";
+  };
 
   meta = {
     description = "Simple, yet feature-rich web server written in Go";

@@ -4988,8 +4988,6 @@ self: super: with self; {
 
   email-validator = callPackage ../development/python-modules/email-validator { };
 
-  emailthreads = callPackage ../development/python-modules/emailthreads { };
-
   embedding-reader = callPackage ../development/python-modules/embedding-reader { };
 
   emborg = callPackage ../development/python-modules/emborg { };
@@ -11847,6 +11845,8 @@ self: super: with self; {
 
   optax = callPackage ../development/python-modules/optax { };
 
+  optiland = callPackage ../development/python-modules/optiland { };
+
   optimistix = callPackage ../development/python-modules/optimistix { };
 
   optimum = callPackage ../development/python-modules/optimum { };
@@ -16829,6 +16829,8 @@ self: super: with self; {
       { };
 
   requests-ratelimiter = callPackage ../development/python-modules/requests-ratelimiter { };
+
+  requests-sse = callPackage ../development/python-modules/requests-sse { };
 
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 

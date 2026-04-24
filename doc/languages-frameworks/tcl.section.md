@@ -21,12 +21,12 @@ Here is a simple package example to be called with `tclPackages.callPackage`.
 ```
 { lib, fetchzip, mkTclDerivation, openssl }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tcltls";
   version = "1.7.22";
 
   src = fetchzip {
-    url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${version}.tar.gz";
+    url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${finalAttrs.version}.tar.gz";
     hash = "sha256-TOouWcQc3MNyJtaAGUGbaQoaCWVe6g3BPERct/V65vk=";
   };
 
@@ -43,7 +43,7 @@ mkTclDerivation rec {
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
   };
-}
+})
 ```
 
 All Tcl libraries are declared in `pkgs/top-level/tcl-packages.nix` and are defined in `pkgs/development/tcl-modules/`.

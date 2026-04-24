@@ -191,6 +191,7 @@ mapAliases {
   editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04
   elegy = throw "elegy has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   email_validator = throw "'email_validator' has been renamed to/replaced by 'email-validator'"; # Converted to throw 2025-10-29
+  emailthreads = throw "'emailthreads' has been removed because the upstream repository was archived in 2024"; # Added 2026-04-09
   embreex = throw "embreex has been removed, as it required embree2"; # added 2025-09-14
   enocean = throw "'enocean' was removed because Home Assistant switched to 'enocean-async'"; # added 2026-03-31
   eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
