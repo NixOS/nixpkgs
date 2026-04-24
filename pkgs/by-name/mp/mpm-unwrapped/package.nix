@@ -45,6 +45,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = stdenvNoCC.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "MATLAB Package Manager";
     homepage = "https://www.mathworks.com/products/mpm.html";
@@ -54,7 +57,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "mpm";
   };
-
-  strictDeps = true;
-  __structuredAttrs = true;
 })
