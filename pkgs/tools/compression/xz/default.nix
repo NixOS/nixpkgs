@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.8.1";
+  version = "5.8.3";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
-    hash = "sha256-C1T3nfhZElBN4LFK7Hlx4/lkSRrxgS2DRHAFgHUTzZ4=";
+    hash = "sha256-//H/zysNqE0wihTeUToaoj1OmqNGTRfmS5cUv90Lv7Y=";
   };
 
   strictDeps = true;

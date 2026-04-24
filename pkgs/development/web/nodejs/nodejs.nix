@@ -430,6 +430,12 @@ let
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
+            # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+            # OpenSSL reports different errors
+            # https://github.com/nodejs/node/pull/62629
+            # patch does not apply
+            ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
+            ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
           )
         }"
       ];
