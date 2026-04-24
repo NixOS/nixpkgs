@@ -20,6 +20,7 @@
   nixpkgs-reviewFull,
   nil,
   nix-direnv,
+  nix-du,
   nix-fast-build,
   haskell,
   nix-serve-ng,
@@ -124,6 +125,10 @@ let
           };
 
           nix-direnv = nix-direnv.override {
+            nix = self.lix;
+          };
+
+          nix-du = nix-du.override {
             nix = self.lix;
           };
 
