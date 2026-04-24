@@ -39,6 +39,7 @@ def create_http_session() -> requests.Session:
         status_forcelist=[500, 502, 503, 504]
     )
     session = requests.Session()
+    session.headers["User-Agent"] = "nixpkgs-fetchCargoVendor/2 (https://github.com/NixOS/nixpkgs)"
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
     return session
