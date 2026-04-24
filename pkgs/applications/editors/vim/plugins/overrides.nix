@@ -1587,6 +1587,17 @@ assertNoAdditions {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
 
+  just-nvim = super.just-nvim.overrideAttrs {
+    checkInputs = with self; [
+      fidget-nvim
+      nvim-notify
+      telescope-nvim
+    ];
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  };
+
   kanagawa-paper-nvim = super.kanagawa-paper-nvim.overrideAttrs {
     nvimSkipModules = [
       # skipping wezterm theme switcher since it relies on a wezterm module
