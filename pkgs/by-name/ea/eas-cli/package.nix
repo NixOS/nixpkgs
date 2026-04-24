@@ -8,6 +8,8 @@
   makeWrapper,
   pkg-config,
   python3,
+  runCommand,
+  eas-cli,
 }:
 let
   version = "18.7.0";
@@ -54,6 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$tmpfile" lerna.json
   '';
 
+  buildPhase = ''
+    runHook preBuild
+    yarn build
+    runHook postBuild
+  '';
+
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.
   installPhase = ''
     runHook preInstall
@@ -61,15 +69,25 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/node_modules/eas-cli-root
     cp -r . $out/lib/node_modules/eas-cli-root
 
+    mkdir -p $out/bin
+    patchShebangs $out/lib/node_modules/eas-cli-root/packages/eas-cli/bin/run
+    ln -sf $out/lib/node_modules/eas-cli-root/packages/eas-cli/bin/run $out/bin/eas
+
     runHook postInstall
   '';
 
-  # postFixup is used to override the symlink created in the fixupPhase
-  postFixup = ''
-    mkdir -p $out/bin
-    ln -sf $out/lib/node_modules/eas-cli-root/packages/eas-cli/bin/run $out/bin/eas
-    wrapProgram $out/bin/eas --suffix PATH : ${lib.makeBinPath [ nodejs ]}
-  '';
+  passthru.tests = {
+    # CLI command registration is dynamic. There have been multiple issues
+    # where the build succeeds and the CLI executes, but the author does not
+    # catch that the install caused command registration to fail. This tests
+    # that a TOPICS section exists. In the previous failure modes, only a
+    # COMMAND section exists.
+    check-topics = runCommand "${finalAttrs.pname}-check-topics" { nativeBuildInputs = [ eas-cli ]; } ''
+      if eas | grep -q "^TOPICS$"; then
+          touch $out
+      fi
+    '';
+  };
 
   meta = {
     changelog = "https://github.com/expo/eas-cli/releases/tag/v${finalAttrs.version}";
