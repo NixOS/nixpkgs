@@ -11815,6 +11815,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-justice = buildVimPlugin {
+    pname = "nvim-justice";
+    version = "0-unstable-2026-04-13";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-justice";
+      rev = "a3e0d2d73d1748d1bed45e6b1797fbc73961e53f";
+      hash = "sha256-gT+vPt9BWe1AylFqbZsoEXL8cXSpMjRdiY44Cxalwcg=";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-justice/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-k8s-crd = buildVimPlugin {
     pname = "nvim-k8s-crd";
     version = "0-unstable-2026-02-16";
