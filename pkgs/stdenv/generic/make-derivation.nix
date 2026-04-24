@@ -46,6 +46,8 @@ let
     zipAttrsWith
     ;
 
+  inherit (lib.strings) sanitizeDerivationName;
+
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
 
@@ -544,7 +546,7 @@ let
               # it again.
               staticMarker = stdenvStaticMarker;
             in
-            lib.strings.sanitizeDerivationName (
+            sanitizeDerivationName (
               if attrs ? name then
                 attrs.name + hostSuffix
               else
