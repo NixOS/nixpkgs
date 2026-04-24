@@ -8807,6 +8807,8 @@ with pkgs;
 
   inherit (callPackage ../applications/networking/browsers/brave { })
     brave
+    brave-beta
+    brave-nightly
     ;
 
   cni = callPackage ../applications/networking/cluster/cni { };
