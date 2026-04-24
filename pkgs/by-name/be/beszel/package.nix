@@ -53,8 +53,6 @@ buildGo126Module (finalAttrs: {
 
   vendorHash = "sha256-TVpZbK9V9/GqpVFcjF7QGD5XJJHzRgjVXZOImHQTR1k=";
 
-  tags = [ "testing" ];
-
   preBuild = ''
     mkdir -p internal/site/dist
     cp -r ${finalAttrs.webui}/* internal/site/dist
@@ -68,7 +66,10 @@ buildGo126Module (finalAttrs: {
         "TestConfigSyncWithTokens"
       ];
     in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+    [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+      "-tags=testing"
+    ];
 
   postInstall = ''
     mv $out/bin/agent $out/bin/beszel-agent
