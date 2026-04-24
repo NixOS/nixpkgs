@@ -152,6 +152,7 @@ in
     callPackages ../build-support/fetchnextcloudapp/tests.nix { }
   );
   fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
+  fetchFromForgejo = recurseIntoAttrs (callPackages ../build-support/fetchforgejo/tests.nix { });
   fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
