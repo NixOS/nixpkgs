@@ -7,7 +7,7 @@
   removeReferencesTo,
   cppSupport ? true,
   fortranSupport ? false,
-  fortran,
+  gfortran,
   zlibSupport ? true,
   zlib,
   szipSupport ? true,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     inherit
       cppSupport
       fortranSupport
-      fortran
+      gfortran
       zlibSupport
       zlib
       szipSupport
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
     removeReferencesTo
     cmake
   ]
-  ++ optional fortranSupport fortran;
+  ++ optional fortranSupport gfortran;
 
   buildInputs =
-    optional fortranSupport fortran ++ optional szipSupport libaec ++ optional javaSupport jdk;
+    optional fortranSupport gfortran ++ optional szipSupport libaec ++ optional javaSupport jdk;
 
   propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       with stdenv.hostPlatform; !(isDarwin && isx86_64)
     ))
   ]
-  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
+  ++ optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     mv $out/mod/shared $dev/include
     rm -r $out/mod
 
-    find "$out" -type f -exec remove-references-to -t ${fortran} '{}' +
+    find "$out" -type f -exec remove-references-to -t ${gfortran} '{}' +
   '';
 
   enableParallelBuilding = true;
