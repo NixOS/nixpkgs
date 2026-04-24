@@ -1,4 +1,4 @@
-import ./generic.nix {
+{
   version = "15.17";
   rev = "refs/tags/REL_15_17";
   hash = "sha256-IxvCNJfTbbKT/2dFnNLk3fNUYDaRwHQeeAmvGc1w/OY=";

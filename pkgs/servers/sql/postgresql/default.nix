@@ -22,7 +22,7 @@ let
       version: path:
       let
         attrName = if jitSupport then "${version}_jit" else version;
-        postgresql = import path { inherit self; };
+        postgresql = self.callPackage ./generic.nix (import path // { inherit self; });
         attrValue = if jitSupport then postgresql.withJIT else postgresql.withoutJIT;
       in
       self.lib.nameValuePair attrName attrValue
