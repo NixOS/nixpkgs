@@ -31,7 +31,7 @@ let
   inherit (lib) optional optionalString cmakeBool;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.14.6";
   pname =
     "hdf5"
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf5";
-    rev = "hdf5_${version}";
+    tag = "hdf5_${finalAttrs.version}";
     hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
   };
 
@@ -150,4 +150,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
   };
-}
+})
