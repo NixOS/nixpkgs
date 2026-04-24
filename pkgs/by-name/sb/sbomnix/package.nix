@@ -4,6 +4,7 @@
   git,
   grype,
   nix,
+  nixVersions,
   nix-visualize,
   python3,
   vulnix,
@@ -30,7 +31,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "--prefix PATH : ${
       lib.makeBinPath [
         git
-        nix
+        # nix
+        # TODO: remove once sbomnix support new JSON format: https://github.com/tiiuae/sbomnix/issues/267
+        nixVersions.nix_2_31
         python3.pkgs.graphviz
         nix-visualize
         vulnix

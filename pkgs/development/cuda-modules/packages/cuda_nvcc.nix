@@ -168,6 +168,11 @@ buildRedist (finalAttrs: {
       # The cospi|sinpi|rsqrt function signatures in include/common/math_functions.h do not match
       # glibc 2.42's.
       # Indeed, there they are declared with noexcept(true) which is not the case in cuda_nvcc.
+      # - In CUDA < 13.0, sinpi/cospi/rsqrt all lack exception specifiers.
+      # - In CUDA >= 13.0, NVIDIA fixed sinpi/cospi (using __NV_IEC_60559_FUNCS_EXCEPTION_SPECIFIER)
+      #   but rsqrt/rsqrtf still lack noexcept, so we only patch those.
+      #   As the CRT headers (including math_functions.h) moved to the cuda_crt package, the glibc
+      #   2.42 compatibility patch is applied there instead.
       + lib.optionalString (cudaOlder "13.0" && lib.versionAtLeast glibc.version "2.42") ''
         nixLog "Patching math_functions.h signatures to match glibc's ones"
         substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.h" \
@@ -213,6 +218,7 @@ buildRedist (finalAttrs: {
             "__func__(float cospif(const float a))" \
             "__func__(float cospif(const float a) throw())"
       ''
+
       # Fix clang CUDA compilation: host_defines.h redefines __noinline__ as
       # __attribute__((noinline)), which conflicts with libstdc++ >=12 using
       # __attribute__((__noinline__)) — the macro expands to

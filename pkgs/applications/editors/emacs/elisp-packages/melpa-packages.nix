@@ -1194,6 +1194,13 @@ let
           # https://github.com/syl20bnr/flymake-elixir/issues/4
           flymake-elixir = addPackageRequires super.flymake-elixir [ self.flymake-easy ];
 
+          flymake-hadolint = super.flymake-hadolint.overrideAttrs (attrs: {
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace flymake-hadolint.el \
+                --replace-fail 'flymake-hadolint-program "hadolint"' 'flymake-hadolint-program "${lib.getExe pkgs.hadolint}"'
+            '';
+          });
+
           flyparens = ignoreCompilationError super.flyparens; # elisp error
 
           fold-dwim-org = ignoreCompilationError super.fold-dwim-org; # elisp error

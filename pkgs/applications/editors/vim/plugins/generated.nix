@@ -3322,6 +3322,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  codex-nvim = buildVimPlugin {
+    pname = "codex.nvim";
+    version = "1.1.0";
+    src = fetchFromGitHub {
+      owner = "johnseth97";
+      repo = "codex.nvim";
+      tag = "v1.1.0";
+      hash = "sha256-rx5/Iso5rWYfRTnQyZ8g16FCxqjj4FgWmG+r09ebVJc=";
+    };
+    meta.homepage = "https://github.com/johnseth97/codex.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   codi-vim = buildVimPlugin {
     pname = "codi.vim";
     version = "0-unstable-2023-02-28";
@@ -7475,6 +7488,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  just-nvim = buildVimPlugin {
+    pname = "just.nvim";
+    version = "1.0.0";
+    src = fetchFromGitHub {
+      owner = "nxuv";
+      repo = "just.nvim";
+      tag = "v1.0.0";
+      hash = "sha256-pwAlfwPFnWD2qfBAuhLxSoCQoOZD7gQHEy4Nnt0GOqE=";
+    };
+    meta.homepage = "https://github.com/nxuv/just.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   kanagawa-nvim = buildVimPlugin {
     pname = "kanagawa.nvim";
     version = "0-unstable-2026-04-20";
@@ -10244,6 +10270,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neotab-nvim = buildVimPlugin {
+    pname = "neotab.nvim";
+    version = "0-unstable-2025-08-04";
+    src = fetchFromGitHub {
+      owner = "kawre";
+      repo = "neotab.nvim";
+      rev = "e99d3e28c5a2066d2d368dfe4ef3827c8d75d337";
+      hash = "sha256-pSLvpKqfi1hQrFAYmXTOUOYERtnr79M23z5so2JOGhE=";
+    };
+    meta.homepage = "https://github.com/kawre/neotab.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   neoterm = buildVimPlugin {
     pname = "neoterm";
     version = "0-unstable-2023-03-09";
@@ -11802,6 +11841,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-justice = buildVimPlugin {
+    pname = "nvim-justice";
+    version = "0-unstable-2026-04-13";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-justice";
+      rev = "a3e0d2d73d1748d1bed45e6b1797fbc73961e53f";
+      hash = "sha256-gT+vPt9BWe1AylFqbZsoEXL8cXSpMjRdiY44Cxalwcg=";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-justice/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-k8s-crd = buildVimPlugin {
     pname = "nvim-k8s-crd";
     version = "0-unstable-2026-02-16";
@@ -12305,6 +12357,19 @@ final: prev: {
       hash = "sha256-XiYn/L2e/B+6LTjak3jAwRgnZ3gCbsyA0J61Dd+jZv4=";
     };
     meta.homepage = "https://github.com/michaelrommel/nvim-silicon/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-sioyek-highlights = buildVimPlugin {
+    pname = "nvim-sioyek-highlights";
+    version = "0-unstable-2026-02-06";
+    src = fetchFromGitHub {
+      owner = "jbuck95";
+      repo = "nvim-sioyek-highlights";
+      rev = "b8ab0a71b24c052cebaed97afe376b01fba19bf0";
+      hash = "sha256-x2Q+96/YEky8fdy4CZ/QPwcLjaOLmwmtpWiYMnS657A=";
+    };
+    meta.homepage = "https://github.com/jbuck95/nvim-sioyek-highlights/";
     meta.hydraPlatforms = [ ];
   };
 
