@@ -11845,6 +11845,8 @@ self: super: with self; {
 
   optax = callPackage ../development/python-modules/optax { };
 
+  optiland = callPackage ../development/python-modules/optiland { };
+
   optimistix = callPackage ../development/python-modules/optimistix { };
 
   optimum = callPackage ../development/python-modules/optimum { };
