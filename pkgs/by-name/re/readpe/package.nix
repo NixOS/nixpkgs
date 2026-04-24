@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-e9omL/HSlzBkJSUnjw271hmXGhasZlWw9X8P8ohoRi0=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   buildInputs = [ openssl ];
 
   enableParallelBuilding = true;
