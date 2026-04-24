@@ -3322,6 +3322,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  codex-nvim = buildVimPlugin {
+    pname = "codex.nvim";
+    version = "1.1.0";
+    src = fetchFromGitHub {
+      owner = "johnseth97";
+      repo = "codex.nvim";
+      tag = "v1.1.0";
+      hash = "sha256-rx5/Iso5rWYfRTnQyZ8g16FCxqjj4FgWmG+r09ebVJc=";
+    };
+    meta.homepage = "https://github.com/johnseth97/codex.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   codi-vim = buildVimPlugin {
     pname = "codi.vim";
     version = "0-unstable-2023-02-28";
