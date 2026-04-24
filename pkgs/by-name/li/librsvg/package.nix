@@ -157,8 +157,19 @@ stdenv.mkDerivation (finalAttrs: {
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
     lib.optionalString withPixbufLoader ''
-      # Merge gdkpixbuf and librsvg loaders
       GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
+    ''
+    + lib.optionalString (withPixbufLoader && stdenv.hostPlatform.isDarwin) ''
+      # Make the loader queryable before regenerating loaders.cache.
+      for f in $GDK_PIXBUF/loaders/*.dylib; do
+        install_name_tool \
+          -change @rpath/librsvg-2.2.dylib $out/lib/librsvg-2.2.dylib "$f"
+      done
+      GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \
+        ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders > $GDK_PIXBUF/loaders.cache
+    ''
+    + lib.optionalString withPixbufLoader ''
+      # Merge gdkpixbuf and librsvg loaders
       cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
       mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
     ''
