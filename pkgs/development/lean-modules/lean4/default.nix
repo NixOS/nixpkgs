@@ -113,22 +113,18 @@ in
 # Binary-patched for correct runtime discovery in wrapped environments.
 symlinkJoin {
   inherit (lean4) name pname;
-  paths = [ lean4 ];
+  paths = [
+    lean4
+    cadical
+  ];
   nativeBuildInputs = [ perl ];
   postBuild = ''
     newStorePath=$(echo "$out" | head -c 43)
 
-    # Copy (not symlink) — IO.appPath resolves through symlinks.
-    rm $out/bin/lean $out/bin/lake
-    cp ${lean4}/bin/lean $out/bin/lean
-    cp ${lean4}/bin/lake $out/bin/lake
-
-    for bin in $out/bin/lean $out/bin/lake; do
-      cat "$bin" \
-        | perl -pe "s|\Q${oldStorePath}\E|$newStorePath|g" \
-        > "$bin.tmp"
-      chmod +x "$bin.tmp"
-      mv "$bin.tmp" "$bin"
+    for bin in ${lean4}/bin/*; do
+      test -f "$bin" || continue
+      install -m755 "$bin" "$out/bin/"
+      perl -pi -e "s|\Q${oldStorePath}\E|$newStorePath|g" "$out/bin/$(basename "$bin")"
     done
   '';
 
