@@ -3,6 +3,8 @@
   lib,
   versionCheckHook,
   buildFHSEnv,
+  pam,
+  zlib,
 }:
 (buildFHSEnv {
   pname = "mpm";
@@ -11,11 +13,10 @@
   executableName = mpm-unwrapped.meta.mainProgram;
   runScript = lib.getExe mpm-unwrapped;
 
-  targetPkgs =
-    pkgs: with pkgs; [
-      pam
-      zlib
-    ];
+  targetPkgs = _: [
+    pam
+    zlib
+  ];
 
   meta = mpm-unwrapped.meta // {
     # Support only Linux platforms for the wrapped binary.
