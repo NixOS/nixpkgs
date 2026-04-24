@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -20,6 +21,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     RUNE_VERSION = finalAttrs.version;
   };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
