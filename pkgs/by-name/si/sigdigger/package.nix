@@ -2,13 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  qtbase,
+  libsForQt5,
   pkg-config,
   sigutils,
   fftwSinglePrec,
   suwidgets,
-  wrapQtAppsHook,
   suscan,
   libsndfile,
   soapysdr-with-plugins,
@@ -16,25 +14,25 @@
   volk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sigdigger";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "BatchDrake";
     repo = "SigDigger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dS+Fc0iQz7GIlGaR556Ur/EQh3Uzhqm9uBW42IuEqoE=";
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     sigutils
     fftwSinglePrec
     suwidgets
@@ -61,4 +59,4 @@ stdenv.mkDerivation rec {
       oxapentane
     ];
   };
-}
+})

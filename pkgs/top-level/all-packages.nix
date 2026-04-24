@@ -1814,8 +1814,6 @@ with pkgs;
 
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
-  klog = qt5.callPackage ../applications/radio/klog { };
-
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
   lgogdownloader-gui = callPackage ../by-name/lg/lgogdownloader/package.nix { enableGui = true; };
@@ -2856,18 +2854,6 @@ with pkgs;
   librest_1_0 = callPackage ../development/libraries/librest/1.0.nix { };
 
   licensee = callPackage ../tools/package-management/licensee { };
-
-  inherit
-    ({
-      limesuite = callPackage ../applications/radio/limesuite {
-      };
-      limesuiteWithGui = limesuite.override {
-        withGui = true;
-      };
-    })
-    limesuite
-    limesuiteWithGui
-    ;
 
   linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
 
@@ -7338,8 +7324,6 @@ with pkgs;
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
 
-  sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
-
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix { };
@@ -7384,24 +7368,6 @@ with pkgs;
     scheme = guile;
   };
 
-  soapysdr = callPackage ../applications/radio/soapysdr { };
-
-  soapysdr-with-plugins = callPackage ../applications/radio/soapysdr {
-    extraPackages = [
-      limesuite
-      soapyairspy
-      soapyaudio
-      soapybladerf
-      soapyhackrf
-      soapyplutosdr
-      soapyremote
-      soapyrtlsdr
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isLinux [
-      soapyuhd
-    ]);
-  };
-
   spandsp = callPackage ../development/libraries/spandsp { };
   spandsp3 = callPackage ../development/libraries/spandsp/3.nix { };
 
@@ -7431,8 +7397,6 @@ with pkgs;
   sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
 
   inherit (python3Packages) sphinxHook;
-
-  suwidgets = libsForQt5.callPackage ../applications/radio/suwidgets { };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
@@ -9337,10 +9301,6 @@ with pkgs;
 
   firewalld-gui = firewalld.override { withGui = true; };
 
-  fldigi = callPackage ../applications/radio/fldigi {
-    hamlib = hamlib_4;
-  };
-
   fossil = callPackage ../applications/version-management/fossil {
     sqlite = sqlite.override { enableDeserialize = true; };
   };
@@ -10161,8 +10121,6 @@ with pkgs;
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
-  pothos = libsForQt5.callPackage ../applications/radio/pothos { };
-
   # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules
   profanity = callPackage ../applications/networking/instant-messengers/profanity (
@@ -10214,8 +10172,6 @@ with pkgs;
 
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
-
-  qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
   qsudo = libsForQt5.callPackage ../applications/misc/qsudo { };
 

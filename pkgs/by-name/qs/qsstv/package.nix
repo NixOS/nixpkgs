@@ -2,11 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  qtbase,
-  qmake,
   openjpeg,
   pkg-config,
-  wrapQtAppsHook,
+  libsForQt5,
   fftw,
   libpulseaudio,
   alsa-lib,
@@ -26,14 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     imagemagick
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     openjpeg
     fftw
     libpulseaudio
