@@ -51,6 +51,8 @@ To ensure security and a focused utility, the bot adheres to specific limitation
   - opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
 - The user attempting to merge is a maintainer of all packages touched by the PR.
+- The PR has no CI failures (the `no PR failures` commit status is not in `error`/`failure` state).
+  A pending or missing status is tolerated, in which case the bot falls back to enabling Auto Merge.
 
 ### Approving merge bot changes
 

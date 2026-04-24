@@ -7,6 +7,7 @@ function runChecklist({
   pull_request,
   log,
   maintainers,
+  noPrFailuresState,
   user,
   userIsMaintainer,
 }) {
@@ -57,6 +58,9 @@ function runChecklist({
         pull_request.user.login === 'r-ryantm',
     },
     'PR is not a draft': !pull_request.draft,
+    // Pending/missing is tolerated so the auto-merge fallback can still queue the PR;
+    // only an explicit error/failure flips the check off.
+    'PR has no CI failures.': !['error', 'failure'].includes(noPrFailuresState),
   }
 
   if (user) {
@@ -146,6 +150,14 @@ async function handleMerge({
   // TODO: Find a more efficient way of downloading all the *names* of the touched files,
   // including an early exit when the first non-by-name file is found.
   if (files.length >= 100) return false
+
+  const noPrFailuresState = (
+    await github.rest.repos.listCommitStatusesForRef({
+      ...context.repo,
+      ref: pull_request.head.sha,
+      per_page: 100,
+    })
+  ).data.find(({ context }) => context === 'no PR failures')?.state
 
   // Only look through comments *after* the latest (force) push.
   const lastPush = events.findLastIndex(
@@ -271,6 +283,7 @@ async function handleMerge({
       pull_request,
       log,
       maintainers,
+      noPrFailuresState,
       user: comment.user,
       userIsMaintainer: await isMaintainer(comment.user.login),
     })
@@ -340,6 +353,7 @@ async function handleMerge({
     pull_request,
     log,
     maintainers,
+    noPrFailuresState,
   })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
