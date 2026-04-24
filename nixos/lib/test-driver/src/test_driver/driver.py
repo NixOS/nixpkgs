@@ -360,8 +360,6 @@ class Driver:
         if not self.config.enable_ssh_backdoor:
             return
 
-        assert self.vhost_vsock is not None
-
         if self.machines:
             print("SSH backdoor enabled, the machines can be accessed like this:")
             print(
