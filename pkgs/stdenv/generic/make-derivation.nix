@@ -397,16 +397,14 @@ let
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
       noNonNativeDeps =
-        (
-          depsBuildTarget
-          ++ depsBuildTargetPropagated
-          ++ depsHostHost
-          ++ depsHostHostPropagated
-          ++ buildInputs
-          ++ propagatedBuildInputs
-          ++ depsTargetTarget
-          ++ depsTargetTargetPropagated
-        ) == [ ];
+        depsBuildTarget == [ ]
+        && depsBuildTargetPropagated == [ ]
+        && depsHostHost == [ ]
+        && depsHostHostPropagated == [ ]
+        && buildInputs == [ ]
+        && propagatedBuildInputs == [ ]
+        && depsTargetTarget == [ ]
+        && depsTargetTargetPropagated == [ ];
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
       concretizeFlagImplications =
@@ -592,7 +590,6 @@ let
           propagatedBuildInputs = propagatedHostTargetOutputs;
           depsTargetTargetPropagated = propagatedTargetTargetOutputs;
 
-          # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags =
             configureFlags
             ++ (
