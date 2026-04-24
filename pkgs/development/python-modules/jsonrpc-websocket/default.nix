@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
-  version = "3.2.0";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "jsonrpc-websocket";
     tag = version;
-    hash = "sha256-SgwEY/5MPEkSrcsQV4qkVgKmYYYsWA2YluReOz7sEjc=";
+    hash = "sha256-vhE5jee3ryrKFm9s8SFklBIk+pV8FkUERwWQ75u/PIw=";
   };
 
   nativeBuildInputs = [ setuptools ];
