@@ -11,6 +11,10 @@
   cryptodev,
   withZlib ? false,
   zlib,
+  # allow usage of fully specified curves instead
+  # of only named curves
+  # (first disabled in 4.0.0 by default)
+  enableExplicitCurves ? false,
   enableSSL2 ? false,
   enableSSL3 ? false,
   enableMD2 ? false,
@@ -228,6 +232,9 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
+      ++ lib.optional (
+        lib.versionAtLeast version "4.0.0" && enableExplicitCurves
+      ) "enable-ec_explicit_curves"
       # /dev/crypto support has been dropped in OpenBSD 5.7.
       #
       # OpenBSD's ports does this too,
