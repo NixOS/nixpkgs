@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple and elegant pipewire graph editor";
     homepage = "https://github.com/ax9d/pw-viz";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     platforms = lib.platforms.linux;
   };
 })
