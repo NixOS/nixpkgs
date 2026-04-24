@@ -2515,12 +2515,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  hdf5-fortran-mpi = hdf5.override {
-    fortranSupport = true;
-    mpiSupport = true;
-    cppSupport = false;
-  };
-
   hdf5-threadsafe = hdf5.override {
     cppSupport = false;
     threadsafe = true;
