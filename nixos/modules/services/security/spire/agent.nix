@@ -55,8 +55,39 @@ in
               Built-in plugin types can be found at [the plugin types documentation](https://spiffe.io/docs/latest/deploying/spire_agent/#plugin-types).
               See [plugin configuration](https://spiffe.io/docs/latest/deploying/spire_agent/#plugin-configuration) for options and how to configure external plugins.
             '';
-            # TODO: We can probably enforce some of these constraints with a submodule
-            type = format.type;
+            type = lib.types.submodule {
+              freeformType = format.type;
+              options.NodeAttestor = lib.mkOption {
+                default = { };
+                description = ''
+                  Gathers information used to attest the agent's identity to the server. Generally paired with a server plugin of the same type.
+                '';
+                type = lib.types.submodule {
+                  freeformType = format.type;
+                  options.join_token = lib.mkOption {
+                    default = null;
+                    description = ''
+                      The `join_token` is responsible for attesting the agent's identity using a one-time-use pre-shared key.
+
+                      Must be used in conjunction with the server-side `join_token` plugin.
+                    '';
+                    type = lib.types.nullOr (
+                      lib.types.submodule {
+                        freeformType = format.type;
+                        options.plugin_data = lib.mkOption {
+                          type = lib.types.submodule { };
+                          default = { };
+                          description = ''
+                            As a special case for node attestors, the join token itself is configured by a CLI flag (`-joinToken`)
+                            or by configuring `join_token` in the agent's main config body.
+                          '';
+                        };
+                      }
+                    );
+                  };
+                };
+              };
+            };
             example = {
               KeyManager.memory.plugin_data = { };
               NodeAttestor.join_token.plugin_data = { };
@@ -71,7 +102,7 @@ in
     configFile = lib.mkOption {
       type = lib.types.path;
       defaultText = "Config file generated from services.spire.agent.settings";
-      default = format.generate "agent.conf" cfg.settings;
+      default = format.generate "agent.conf" (lib.filterAttrsRecursive (_: v: v != null) cfg.settings);
       description = ''
         Path to the SPIRE agent configuration file. See [the documentation](https://spiffe.io/docs/latest/deploying/spire_agent/) for more information.
       '';
