@@ -6,7 +6,7 @@
   flex,
   lib,
   libxml2,
-  llvmPackages_19,
+  llvmPackages,
   openexr,
   openimageio,
   partio,
@@ -20,7 +20,7 @@
 
 let
   boost_static = boost.override { enableStatic = true; };
-  inherit (llvmPackages_19) clang libclang llvm;
+  inherit (llvmPackages) clang libclang llvm;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
