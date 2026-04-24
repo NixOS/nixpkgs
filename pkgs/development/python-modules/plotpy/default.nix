@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "plotpy";
-  version = "2.8.4";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PlotPy";
     tag = "v${version}";
-    hash = "sha256-h2cB0sFZ5o4VPqQZ8rXio0iNsKTVLHsOJddACYlPyLs=";
+    hash = "sha256-6nLkpzwQEvaX9dlrpK6IKaDSOX6hAks9p4FjpXFTJjI=";
   };
 
   build-system = [
