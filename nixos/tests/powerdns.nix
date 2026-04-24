@@ -30,7 +30,7 @@
 
       environment.systemPackages = with pkgs; [
         dnsutils
-        powerdns
+        pdns
         mariadb
       ];
     };
@@ -43,7 +43,7 @@
     with subtest("Loading the MySQL schema works"):
         server.succeed(
             "sudo -u pdns mysql -u pdns -D powerdns <"
-            "${pkgs.powerdns}/share/doc/pdns/schema.mysql.sql"
+            "${pkgs.pdns}/share/doc/pdns/schema.mysql.sql"
         )
 
     with subtest("PowerDNS server starts"):
