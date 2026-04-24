@@ -61,32 +61,32 @@ in
   ];
 
   postPatch = ''
-                substituteInPlace cmake/macos/defaults.cmake \
-                  --replace-fail 'include(buildspec)' ""
+    substituteInPlace cmake/macos/defaults.cmake \
+      --replace-fail 'include(buildspec)' ""
 
-                # The upstream release pipeline uses the Xcode generator; nixpkgs uses Ninja
-                # so the build can run in the sandbox without depending on xcodebuild.
-                substituteInPlace cmake/macos/compilerconfig.cmake \
-                  --replace-fail 'if(NOT XCODE)' 'if(FALSE)' \
-                  --replace-fail 'check_sdk_requirements()' ""
+    # The upstream release pipeline uses the Xcode generator; nixpkgs uses Ninja
+    # so the build can run in the sandbox without depending on xcodebuild.
+    substituteInPlace cmake/macos/compilerconfig.cmake \
+      --replace-fail 'if(NOT XCODE)' 'if(FALSE)' \
+      --replace-fail 'check_sdk_requirements()' ""
 
-                substituteInPlace CMakeLists.txt \
-                  --replace-fail 'project(obs-studio VERSION ''${OBS_VERSION_CANONICAL})' \
-                             'project(obs-studio VERSION ''${OBS_VERSION_CANONICAL} LANGUAGES C CXX OBJC OBJCXX Swift)'
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'project(obs-studio VERSION ''${OBS_VERSION_CANONICAL})' \
+                 'project(obs-studio VERSION ''${OBS_VERSION_CANONICAL} LANGUAGES C CXX OBJC OBJCXX Swift)'
 
-                substituteInPlace cmake/macos/helpers.cmake \
-                  --replace-fail '        COMMAND /bin/ln -fs obs-frontend-api.dylib libobs-frontend-api.1.dylib' '        COMMAND "''${CMAKE_COMMAND}" -E true' \
-                  --replace-fail '        WORKING_DIRECTORY "$<TARGET_BUNDLE_CONTENT_DIR:''${target}>/Frameworks"' "" \
-                  --replace-fail '        COMMENT "Create symlink for legacy obs-frontend-api"' '        COMMENT "Skip legacy obs-frontend-api symlink for nixpkgs"'
+    substituteInPlace cmake/macos/helpers.cmake \
+      --replace-fail '        COMMAND /bin/ln -fs obs-frontend-api.dylib libobs-frontend-api.1.dylib' '        COMMAND "''${CMAKE_COMMAND}" -E true' \
+      --replace-fail '        WORKING_DIRECTORY "$<TARGET_BUNDLE_CONTENT_DIR:''${target}>/Frameworks"' "" \
+      --replace-fail '        COMMENT "Create symlink for legacy obs-frontend-api"' '        COMMENT "Skip legacy obs-frontend-api symlink for nixpkgs"'
 
-                # OBS enables SWIG's Python stable ABI on Windows and macOS, but we only
-                # need the Windows path here; deleting the argument entirely breaks CMake.
-                substituteInPlace shared/obs-scripting/obspython/CMakeLists.txt \
-                  --replace-fail '$<$<PLATFORM_ID:Windows,Darwin>:-py3-stable-abi>' '$<$<PLATFORM_ID:Windows>:-py3-stable-abi>'
-                substituteInPlace shared/obs-scripting/cmake/python.cmake \
-                  --replace-fail '$<$<PLATFORM_ID:Windows,Darwin>:-py3-stable-abi>' '$<$<PLATFORM_ID:Windows>:-py3-stable-abi>' \
-                  --replace-fail 'target_link_libraries(obs-scripting PRIVATE $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:Python::Python>)' 'target_link_libraries(obs-scripting PRIVATE $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD,Darwin>:Python::Python>)' \
-                  --replace-fail 'target_link_options(obs-scripting PRIVATE $<$<PLATFORM_ID:Darwin>:LINKER:-undefined,dynamic_lookup>)' ""
+    # OBS enables SWIG's Python stable ABI on Windows and macOS, but we only
+    # need the Windows path here; deleting the argument entirely breaks CMake.
+    substituteInPlace shared/obs-scripting/obspython/CMakeLists.txt \
+      --replace-fail '$<$<PLATFORM_ID:Windows,Darwin>:-py3-stable-abi>' '$<$<PLATFORM_ID:Windows>:-py3-stable-abi>'
+    substituteInPlace shared/obs-scripting/cmake/python.cmake \
+      --replace-fail '$<$<PLATFORM_ID:Windows,Darwin>:-py3-stable-abi>' '$<$<PLATFORM_ID:Windows>:-py3-stable-abi>' \
+      --replace-fail 'target_link_libraries(obs-scripting PRIVATE $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD>:Python::Python>)' 'target_link_libraries(obs-scripting PRIVATE $<$<PLATFORM_ID:Linux,FreeBSD,OpenBSD,Darwin>:Python::Python>)' \
+      --replace-fail 'target_link_options(obs-scripting PRIVATE $<$<PLATFORM_ID:Darwin>:LINKER:-undefined,dynamic_lookup>)' ""
   '';
 
   # curl 8's header-side typechecker rejects several legacy OBS call sites.
