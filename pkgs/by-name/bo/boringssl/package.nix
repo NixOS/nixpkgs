@@ -6,6 +6,8 @@
   ninja,
   perl,
   gitUpdater,
+
+  withShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
@@ -30,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" withShared)
+  ];
+
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
@@ -47,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    isShared = withShared;
+  };
 
   meta = {
     description = "Free TLS/SSL implementation";

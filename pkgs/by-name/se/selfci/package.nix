@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Minimalistic local-first Unix-philosophy-abiding CI";
-    homepage = "https://app.radicle.xyz/nodes/radicle.dpc.pw/rad%3Az2tDzYbAXxTQEKTGFVwiJPajkbeDU";
+    homepage = "https://radicle.network/nodes/radicle.dpc.pw/rad%3Az2tDzYbAXxTQEKTGFVwiJPajkbeDU";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       dvn0

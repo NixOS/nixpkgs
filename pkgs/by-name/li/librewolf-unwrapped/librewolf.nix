@@ -32,6 +32,10 @@ rec {
 
     sed -i '/# This must remain last./i gkrust_features += ["glean_disable_upload"]\'$'\n' toolkit/library/rust/gkrust-features.mozbuild
 
+    # Temporary fix used with patches/rust-build.patch
+    sed -i 's/9456ca46168ef86c98399a2536f577ef7be3cdde90c0c51392d8ac48519d3fae/b9432f9ed39742015f4bb4c3e75c89a2b9a9eef943dd0fd7cd889fddd1e6d39c/g' third_party/rust/encoding_rs/.cargo-checksum.json
+
+
     cp ${source}/patches/pref-pane/category-librewolf.svg browser/themes/shared/preferences
     cp ${source}/patches/pref-pane/librewolf.css browser/themes/shared/preferences
     cp ${source}/patches/pref-pane/librewolf.inc.xhtml browser/components/preferences
