@@ -73,7 +73,9 @@ in
       extraGroups = [ "video" ];
     };
     # Required for authentication
-    security.pam.services.cosmic-greeter = { };
+    security.pam.services.cosmic-greeter = {
+      allowNullPassword = true;
+    };
 
     hardware.graphics.enable = true;
     services.accounts-daemon.enable = true;
