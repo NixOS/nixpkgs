@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-contextmenus";
-  version = "1.4.13";
+  version = "1.4.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PieterL75";
     repo = "netbox_contextmenus";
     tag = "v${version}";
-    hash = "sha256-xgJ9EzdLc2xK9Kam8fS3f9bEgWq2O7NFx3D8Ci3Hc8o=";
+    hash = "sha256-YqyxZaHKXhMLDdBTAAKQsCBBSXikxBgcOvXEfa6f+0Y=";
   };
 
   build-system = [ setuptools ];
