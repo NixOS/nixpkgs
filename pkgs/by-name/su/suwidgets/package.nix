@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  qtbase,
+  libsForQt5,
   pkg-config,
   sigutils,
   fftwSinglePrec,
@@ -28,12 +27,12 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     sigutils
     fftwSinglePrec
   ];

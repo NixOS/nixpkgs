@@ -722,6 +722,8 @@ self: super: with self; {
 
   amcrest = callPackage ../development/python-modules/amcrest { };
 
+  amd-aiter = callPackage ../development/python-modules/amd-aiter { };
+
   amd-quark = callPackage ../development/python-modules/amd-quark { };
 
   amdsmi = toPythonModule (
