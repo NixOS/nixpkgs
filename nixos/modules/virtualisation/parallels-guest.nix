@@ -60,7 +60,11 @@ in
       # prltoolsd mount scripts invoke coreutils (tail, mkdir, chmod)
       # and gnused (sed) without inheriting the service PATH in all
       # code paths. Make them available alongside prl-tools.
-      path = [ prl-tools pkgs.coreutils pkgs.gnused ];
+      path = [
+        prl-tools
+        pkgs.coreutils
+        pkgs.gnused
+      ];
       serviceConfig = {
         ExecStart = "${prl-tools}/bin/prltoolsd -f";
         PIDFile = "/var/run/prltoolsd.pid";
