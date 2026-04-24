@@ -5,6 +5,7 @@
   jq,
   fetchFromGitHub,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Spawns lightweight nixos vms in a shell";
