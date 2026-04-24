@@ -1,0 +1,9 @@
+[package]
+name = "prune-electron"
+version = "0.1.0"
+edition = "2024"
+license = "BlueOak-1.0.0"
+
+[dependencies]
+clap = "4.5.48"
+walkdir = "2.5.0"
