@@ -8805,6 +8805,10 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
+  inherit (callPackage ../applications/networking/browsers/brave { })
+    brave
+    ;
+
   cni = callPackage ../applications/networking/cluster/cni { };
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix { };
 
