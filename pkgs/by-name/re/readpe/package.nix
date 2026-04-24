@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://pev.sourceforge.io/";
     license = lib.licenses.gpl2;
     mainProgram = "readpe";
-    maintainers = with lib.maintainers; [ jeschli ];
+    maintainers = with lib.maintainers; [
+      jeschli
+      mildsunrise
+    ];
     platforms = lib.platforms.linux;
   };
 })
