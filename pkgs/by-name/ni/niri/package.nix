@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       sodiboo
       getchoo
+      zimward
     ];
     mainProgram = "niri";
     platforms = lib.platforms.linux;
