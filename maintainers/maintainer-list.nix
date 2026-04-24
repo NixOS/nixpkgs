@@ -6071,12 +6071,6 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
-  dawnofmidnight = {
-    email = "dawnofmidnight@duck.com";
-    github = "dawnofmidnight";
-    githubId = 78233879;
-    name = "whispers";
-  };
   dawoox = {
     email = "contact@antoinebellanger.fr";
     github = "Dawoox";
@@ -28247,6 +28241,13 @@
     github = "WheelsForReals";
     githubId = 6102222;
     name = "WheelsForReals";
+  };
+  whispersofthedawn = {
+    email = "whispersofthedawn@duck.com";
+    github = "whispersofthedawn";
+    githubId = 78233879;
+    matrix = "@whispers:catgirl.cloud";
+    name = "whispers";
   };
   WhiteBlackGoose = {
     email = "wbg@angouri.org";
