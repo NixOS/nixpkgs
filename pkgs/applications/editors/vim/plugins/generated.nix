@@ -12308,6 +12308,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-sioyek-highlights = buildVimPlugin {
+    pname = "nvim-sioyek-highlights";
+    version = "0-unstable-2026-02-06";
+    src = fetchFromGitHub {
+      owner = "jbuck95";
+      repo = "nvim-sioyek-highlights";
+      rev = "b8ab0a71b24c052cebaed97afe376b01fba19bf0";
+      hash = "sha256-x2Q+96/YEky8fdy4CZ/QPwcLjaOLmwmtpWiYMnS657A=";
+    };
+    meta.homepage = "https://github.com/jbuck95/nvim-sioyek-highlights/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-snippets = buildVimPlugin {
     pname = "nvim-snippets";
     version = "1.0.0-unstable-2024-07-10";
