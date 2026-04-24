@@ -11,20 +11,20 @@
   writeShellApplication,
 }:
 let
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "expert";
     tag = "v${version}";
-    hash = "sha256-r/SovUjU12ENT6OqbYuGK7XAmoxchUgiHTswlON/WeI=";
+    hash = "sha256-J38+ESTrygj62wcOOAaq1ERM/ze3+p8Ec369Cz0F1Sg=";
   };
 
   engineDeps = fetchMixDeps {
     pname = "mix-deps-expert-engine";
 
     inherit src version;
-    hash = "sha256-2QCaY4TlscRmklPQ897xjjree7N8cLl7O83syfqPmng=";
+    hash = "sha256-relCdTBialz4Z/BpXZxmuhSYrvJqLINg/AVGfEhuDGo=";
 
     preConfigure = ''
       cd apps/engine
