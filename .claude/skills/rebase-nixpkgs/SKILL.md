@@ -172,7 +172,7 @@ Do **not** batch multiple package updates into a single commit — one commit pe
 
 ### 4.9 Push update to a per-package branch
 
-After committing a package update, push the commit to a dedicated branch on the `mkg20001/nixpkgs` fork so it can be used for upstream PRs or independent testing.
+After committing a package update, push the commit to a dedicated branch on the `planailabs/nixpkgs` fork so it can be used for upstream PRs or independent testing.
 
 1. Record the commit hash of the update you just made:
    ```bash
@@ -195,7 +195,7 @@ After committing a package update, push the commit to a dedicated branch on the 
    ```
 5. Push the branch:
    ```bash
-   git push git@github.com:mkg20001/nixpkgs.git <pkg-name>-<new-version>
+   git push git@github.com:planailabs/nixpkgs.git <pkg-name>-<new-version>
    ```
    If the branch already exists on the remote (from a previous run), force-push with `--force-with-lease`.
 6. Return to the main tree but **keep the worktree** — do **not** remove it:
@@ -272,7 +272,7 @@ When all packages build, summarise to the user:
 - which packages were skipped for version updates and why (e.g. fork pin, already latest, update broke build),
 - which patches you had to rebase,
 - any package whose fix was non-trivial,
-- for each updated package: the worktree path (`/tmp/wt-<pkg-name>`), the branch name (`<pkg-name>-<version>`), and the remote it was pushed to (`git@github.com:mkg20001/nixpkgs`),
+- for each updated package: the worktree path (`/tmp/wt-<pkg-name>`), the branch name (`<pkg-name>-<version>`), and the remote it was pushed to (`git@github.com:planailabs/nixpkgs`),
 - which NixOS tests were run and their pass/fail status.
 
 Then stop. Pushing and running `xzar.sh` for real is the user's call.
