@@ -2,40 +2,28 @@
   lib,
   stdenv,
   buildPackages,
-  fetchurl,
+  fetchFromGitHub,
   tcl,
   makeWrapper,
   autoreconfHook,
-  fetchpatch,
   replaceVars,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "expect";
-  version = "5.45.4";
+  version = "6.0a1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";
-    hash = "sha256-Safag7C92fRtBKBN7sGcd2e7mjI+QMR4H4nK92C5LDQ=";
+  src = fetchFromGitHub {
+    owner = "tcltk-depot";
+    repo = "expect";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RDWI4cH7X+N9axm31e1ACFUvTYfQ2r/sfNxWkZrYDJo=";
   };
 
   patches = [
     (replaceVars ./fix-build-time-run-tcl.patch {
       tcl = "${buildPackages.tcl}/bin/tclsh";
     })
-    # The following patches fix compilation with clang 15+
-    (fetchpatch {
-      url = "https://sourceforge.net/p/expect/patches/24/attachment/0001-Add-prototype-to-function-definitions.patch";
-      hash = "sha256-X2Vv6VVM3KjmBHo2ukVWe5YTVXRmqe//Kw2kr73OpZs=";
-    })
-    (fetchpatch {
-      url = "https://sourceforge.net/p/expect/patches/_discuss/thread/b813ca9895/6759/attachment/expect-configure-c99.patch";
-      hash = "sha256-PxQQ9roWgVXUoCMxkXEgu+it26ES/JuzHF6oML/nk54=";
-    })
-    ./0004-enable-cross-compilation.patch
-    # Include `sys/ioctl.h` and `util.h` on Darwin, which are required for `ioctl` and `openpty`.
-    # Include `termios.h` on FreeBSD for `openpty`
-    ./fix-darwin-bsd-clang16.patch
     # Remove some code which causes it to link against a file that does not exist at build time on native FreeBSD
     ./freebsd-unversioned.patch
   ];
@@ -49,24 +37,17 @@ tcl.mkTclDerivation rec {
     makeWrapper
   ];
 
+  __structuredAttrs = true;
+
   strictDeps = true;
-
-  env = {
-    NIX_CFLAGS_COMPILE = toString (
-      # Needed to avoid errors when building with GCC 15.
-      lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
-      # Autoconf 2.73 defaults to C23, but Expect uses K&R style function declarations.
-      ++ [ "-std=gnu17" ]
-    );
-  };
-
-  hardeningDisable = [ "format" ];
 
   postInstall = ''
     tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})
-    ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
+    ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${finalAttrs.version})"}
   '';
 
+  doCheck = true;
+  installCheckTarget = "test";
   tclRequiresCheck = [ "Expect" ];
 
   outputs = [
@@ -81,6 +62,5 @@ tcl.mkTclDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "expect";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
-    broken = tcl.isTcl9;
   };
-}
+})
