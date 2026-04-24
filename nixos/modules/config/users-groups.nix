@@ -11,10 +11,8 @@ let
     any
     attrNames
     attrValues
-    boolToString
     concatMap
     concatMapStringsSep
-    concatStrings
     elem
     filter
     filterAttrs
@@ -39,12 +37,9 @@ let
     mkRenamedOptionModule
     optional
     optionals
-    sort
     stringAfter
-    stringLength
     trace
     types
-    versionOlder
     xor
     ;
 
@@ -147,12 +142,6 @@ let
 
         name = mkOption {
           type = types.passwdEntry types.str;
-          apply =
-            x:
-            assert (
-              stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"
-            );
-            x;
           description = ''
             The name of the user account. If undefined, the name of the
             attribute set will be used.
@@ -210,12 +199,6 @@ let
 
         group = mkOption {
           type = types.str;
-          apply =
-            x:
-            assert (
-              stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"
-            );
-            x;
           default = "";
           description = "The user's primary group.";
         };
