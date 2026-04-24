@@ -272,7 +272,7 @@ in
         List of plugins to add to Reposilite.
       '';
       default = [ ];
-      example = "with reposilitePlugins; [ checksum groovy ]";
+      example = "with pkgs.reposilite.plugins; [ checksum groovy ]";
     };
 
     database = lib.mkOption {

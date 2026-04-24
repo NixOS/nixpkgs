@@ -6,6 +6,7 @@
   linkFarm,
   makeWrapper,
   nixosTests,
+  callPackage,
   plugins ? [ ],
 }:
 let
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = nixosTests.reposilite;
     updateScript = ./update.sh;
+    plugins = lib.recurseIntoAttrs (callPackage ./plugins.nix { });
   };
 
   meta = {
