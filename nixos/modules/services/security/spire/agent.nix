@@ -26,28 +26,28 @@ in
           agent = {
             trust_domain = lib.mkOption {
               type = lib.types.str;
-              description = "The trust domain that this agent belongs to";
+              description = "The trust domain that this agent belongs to (should be no more than 255 characters)";
               example = "example.com";
             };
             data_dir = lib.mkOption {
               type = lib.types.str;
               default = "$STATE_DIRECTORY";
-              description = "The directory where the SPIRE agent stores its data";
+              description = "A directory the agent can use for its runtime data";
             };
             server_address = lib.mkOption {
               type = lib.types.str;
-              description = "The address of the SPIRE server";
+              description = "DNS name or IP address of the SPIRE server";
               example = "server.example.com";
             };
             server_port = lib.mkOption {
               type = lib.types.port;
               default = 8081;
-              description = "The port on which the SPIRE server is listening";
+              description = "Port number of the SPIRE server";
             };
             socket_path = lib.mkOption {
               type = lib.types.path;
               default = "/run/spire/agent/public/api.sock";
-              description = "The path to the SPIRE agent socket";
+              description = "Location to bind the SPIRE Agent API socket (Unix only)";
             };
             join_token = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
@@ -121,7 +121,7 @@ in
     expandEnv = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Expand environment variables in SPIRE config file";
+      description = "Expand environment $VARIABLES in the config file";
     };
 
   };
