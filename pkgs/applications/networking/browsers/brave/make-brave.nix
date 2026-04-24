@@ -78,8 +78,11 @@
 {
   pname,
   version,
-  hash,
-  url,
+  # Map from Nix system strings ("x86_64-linux", "aarch64-darwin", ...) to
+  # the corresponding upstream `{ url, hash }` record. Encoding the per-system
+  # sources as data rather than positional arguments lets channel-specific
+  # package.nix files drop platforms that upstream hasn't published yet.
+  archives,
 }:
 
 let
@@ -156,13 +159,19 @@ let
   ] # disable automatic updates
   # The feature disable is needed for VAAPI to work correctly: https://github.com/brave/brave-browser/issues/20935
   ++ optionals enableVideoAcceleration [ "UseChromeOSDirectVideoDecoder" ];
+
+  archive =
+    assert lib.assertMsg (builtins.hasAttr stdenv.hostPlatform.system archives)
+      "${pname} is not available for ${stdenv.hostPlatform.system}";
+    archives.${stdenv.hostPlatform.system};
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = fetchurl {
-    inherit url hash;
-  };
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchurl { inherit (archive) url hash; };
 
   dontConfigure = true;
   dontBuild = true;
@@ -304,12 +313,7 @@ stdenv.mkDerivation {
       nasirhm
       buckley310
     ];
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    mainProgram = "brave";
+    platforms = builtins.attrNames archives;
+    mainProgram = pname;
   };
 }
