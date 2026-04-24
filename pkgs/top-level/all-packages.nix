@@ -2515,11 +2515,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  hdf5-threadsafe = hdf5.override {
-    cppSupport = false;
-    threadsafe = true;
-  };
-
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
   };
