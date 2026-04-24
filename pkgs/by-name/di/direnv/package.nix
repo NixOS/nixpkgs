@@ -44,6 +44,9 @@ buildGoModule (finalAttrs: {
     make install PREFIX=$out
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/208951
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
     fish
     zsh
