@@ -801,9 +801,8 @@ let
       );
 
     let
-      env' = env // {
-        ${if meta ? mainProgram then "NIX_MAIN_PROGRAM" else null} = meta.mainProgram;
-      };
+
+      env' = if meta ? mainProgram then env // { NIX_MAIN_PROGRAM = meta.mainProgram; } else env;
 
       derivationArg = makeDerivationArgument (
         removeAttrs attrs [
