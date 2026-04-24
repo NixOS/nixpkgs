@@ -126,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       syedahkam
-      coffeeispower
       mrmaxmeier
     ];
     mainProgram = "bombsquad";

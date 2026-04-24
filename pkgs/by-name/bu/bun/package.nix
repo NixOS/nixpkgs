@@ -133,7 +133,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       jk
       thilobillerbeck
       cdmistman
-      coffeeispower
       diogomdp
     ];
     platforms = builtins.attrNames finalAttrs.passthru.sources;
