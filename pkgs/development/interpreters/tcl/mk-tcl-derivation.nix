@@ -1,33 +1,9 @@
-# Generic builder for tcl packages/applications, generally based on mk-python-derivation.nix
+# Generic builder for tcl packages/applications
 {
   tcl,
   lib,
   makeWrapper,
-  runCommand,
-  writeScript,
 }:
-
-{
-  buildInputs ? [ ],
-  nativeBuildInputs ? [ ],
-  propagatedBuildInputs ? [ ],
-  checkInputs ? [ ],
-  nativeCheckInputs ? [ ],
-
-  # true if we should skip the configuration phase altogether
-  dontConfigure ? false,
-
-  # Extra flags passed to configure step
-  configureFlags ? [ ],
-
-  # Whether or not we should add common Tcl-related configure flags
-  addTclConfigureFlags ? true,
-
-  meta ? { },
-  passthru ? { },
-  doCheck ? true,
-  ...
-}@attrs:
 
 let
   inherit (tcl) stdenv;
@@ -41,20 +17,35 @@ let
     "--enable-stubs"
   ];
 
-  self = (
-    stdenv.mkDerivation (
-      (removeAttrs attrs [
-        "addTclConfigureFlags"
-        "checkPhase"
-        "checkInputs"
-        "nativeCheckInputs"
-        "doCheck"
-      ])
-      // {
+in
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+  excludeDrvArgNames = [
+    "addTclConfigureFlags"
+    "checkPhase"
+    "checkInputs"
+    "nativeCheckInputs"
+    "doCheck"
+  ];
+  extendDrvArgs =
+    finalAttrs:
+    args@{
+      # true if we should skip the configuration phase altogether
+      dontConfigure ? false,
 
-        buildInputs = buildInputs ++ [ tcl.tclPackageHook ];
+      # Extra flags passed to configure step
+      configureFlags ? [ ],
+
+      # Whether or not we should add common Tcl-related configure flags
+      addTclConfigureFlags ? true,
+      ...
+    }:
+    (
+      {
+        buildInputs = args.buildInputs or [ ] ++ [ tcl.tclPackageHook ];
+
         nativeBuildInputs =
-          nativeBuildInputs
+          args.nativeBuildInputs or [ ]
           ++ [
             makeWrapper
             tcl
@@ -62,18 +53,14 @@ let
           ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
             tcl.tclRequiresCheckHook
           ];
-        propagatedBuildInputs = propagatedBuildInputs ++ [ tcl ];
 
-        env = {
-          TCLSH = "${getBin tcl}/bin/tclsh";
-        }
-        // (attrs.env or { });
+        propagatedBuildInputs = args.propagatedBuildInputs or [ ] ++ [ tcl ];
 
         # Run tests after install, at which point we've done all TCLLIBPATH setup
         doCheck = false;
-        doInstallCheck = attrs.doCheck or (attrs.doInstallCheck or false);
-        installCheckInputs = checkInputs ++ (attrs.installCheckInputs or [ ]);
-        nativeInstallCheckInputs = nativeCheckInputs ++ (attrs.nativeInstallCheckInputs or [ ]);
+        doInstallCheck = args.doCheck or (args.doInstallCheck or false);
+        installCheckInputs = args.checkInputs or [ ] ++ args.installCheckInputs or [ ];
+        nativeInstallCheckInputs = args.nativeCheckInputs or [ ] ++ args.nativeInstallCheckInputs or [ ];
 
         # Add typical values expected by TEA for configureFlags
         configureFlags =
@@ -82,17 +69,19 @@ let
           else
             configureFlags;
 
+        env = {
+          TCLSH = "${getBin tcl}/bin/tclsh";
+        }
+        // args.env or { };
+
         meta = {
           platforms = tcl.meta.platforms;
         }
-        // meta;
+        // args.meta or { };
 
       }
-      // optionalAttrs (attrs ? checkPhase) {
-        installCheckPhase = attrs.checkPhase;
+      // optionalAttrs (args ? checkPhase) {
+        installCheckPhase = args.checkPhase;
       }
-    )
-  );
-
-in
-lib.extendDerivation true passthru self
+    );
+}
