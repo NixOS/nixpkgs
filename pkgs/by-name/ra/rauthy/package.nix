@@ -69,6 +69,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/sebadob/rauthy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ angelodlfrtr ];
+    maintainers = with lib.maintainers; [
+      angelodlfrtr
+      ungeskriptet
+    ];
   };
 })
