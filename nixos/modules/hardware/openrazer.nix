@@ -137,9 +137,7 @@ in
       packages = {
         kernel = lib.mkPackageOption pkgs "openrazer kernel" { } // {
           default = config.boot.kernelPackages.openrazer;
-          defaultText = lib.literalExpression ''
-            config.boot.kernelPackages.openrazer
-          '';
+          defaultText = lib.literalExpression "config.boot.kernelPackages.openrazer";
         };
         daemon = lib.mkPackageOption pkgs [ "python3Packages" "openrazer-daemon" ] { };
       };
