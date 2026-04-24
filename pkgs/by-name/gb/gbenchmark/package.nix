@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/benchmark";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ malik ];
   };
 })
