@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.5.2";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
     tag = "releases/v${finalAttrs.version}";
     hash = "sha256-kFlSig0eiUdw6GHwacNHtuGkuW14CkHkc3okN2ZeTns=";
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Create, update, and query Radicle Job Collaborative Objects";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M/tree/CHANGELOG.md";
+    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z2UcCU1LgMshWvXj6hXSDDrwB8q8M/tree/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
