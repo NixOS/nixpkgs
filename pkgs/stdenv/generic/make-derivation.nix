@@ -702,7 +702,6 @@ let
           propagatedBuildInputs = propagatedHostTargetOutputs;
           depsTargetTargetPropagated = propagatedTargetTargetOutputs;
 
-          # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags =
             configureFlags
             ++ (
