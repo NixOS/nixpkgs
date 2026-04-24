@@ -63,6 +63,8 @@ let
 
     env.CI = true;
 
+    __darwinAllowLocalNetworking = true;
+
     doCheck = true;
     checkPhase = ''
       runHook preCheck
@@ -91,6 +93,10 @@ buildGoModule (finalAttrs: {
     ;
 
   proxyVendor = true;
+
+  patches = [
+    ./prometheus-pr18519-fix-TestFsType.patch
+  ];
 
   outputs = [
     "out"
