@@ -1,6 +1,6 @@
 {
   lib,
-  stdenvNoCC,
+  buildNpmPackage,
   fetchFromGitHub,
   fetchzip,
 
@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "openlist-frontend";
   version = "4.1.10";
 
@@ -26,12 +26,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
+  postPatch = ''
+    cp -r ${finalAttrs.i18n}/* src/lang/
+  '';
+
   nativeBuildInputs = [
     nodejs
-    pnpmConfigHook
     pnpm_9
   ];
 
+  npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
@@ -39,14 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-xylF+Z7Fkx/bFYPlzqfGrl051ZLKzPgdlF7U8vKtQq8=";
   };
 
-  buildPhase = ''
-    runHook preBuild
-
-    cp -r ${finalAttrs.i18n}/* src/lang/
-    pnpm build
-
-    runHook postBuild
-  '';
+  npmConfigHook = pnpmConfigHook;
 
   installPhase = ''
     runHook preInstall
@@ -62,5 +59,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/OpenListTeam/OpenList-Frontend";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
+    inherit (nodejs.meta) platforms;
   };
 })
