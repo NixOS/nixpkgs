@@ -23,8 +23,8 @@ cargoBuildHook() {
         "--offline"
     )
 
-    if [ "${cargoBuildType}" != "debug" ]; then
-        flagsArray+=("--profile" "${cargoBuildType}")
+    if [ "${cargoBuildType:-release}" != "debug" ]; then
+        flagsArray+=("--profile" "${cargoBuildType:-release}")
     fi
 
     if [ -n "${cargoBuildNoDefaultFeatures-}" ]; then
