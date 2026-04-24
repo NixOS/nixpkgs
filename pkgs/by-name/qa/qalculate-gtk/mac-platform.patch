@@ -1,0 +1,5 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -1 +1 @@
+-AM_CONDITIONAL(PLATFORM_MACOS, test "$build_macos" = "yes")
++AM_CONDITIONAL(PLATFORM_MACOS, test "$build_mac" = "yes")
