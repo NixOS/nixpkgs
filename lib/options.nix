@@ -40,6 +40,7 @@ let
     mkOptionType
     ;
   inherit (lib.lists)
+    findFirstIndex
     last
     toList
     ;
@@ -374,6 +375,119 @@ rec {
       }
       // attrs
     );
+
+  /**
+    Creates a per-module `stateVersion` option that takes an int value, with a
+    default that is derived from `system.stateVersion`.
+
+    # Inputs
+
+    `config`
+    : The NixOS `config` fixed point. `config.system.stateVersion` is the only
+      attribute on this value that is used.
+
+    `name`
+    : A human-friendly name for your module, used for the description of the
+      created option.
+
+    `migrations`
+    : Attribute set that maps from values of `system.stateVersion`
+      (representing the breakpoints at which the default value of this option
+      will change) to Markdown instructions to users for manually migrating
+      their data to this breakpoint. The migration instructions will be
+      included in the NixOS documentation for this option. (These instructions
+      must only contain Markdown inlines, because they will be rendered in a
+      table. In particular, lists will not render correctly.)
+
+      `migrations` will also be exposed as an attribute on the result.
+
+    # Examples
+    :::{.example}
+    ## `lib.options.mkStateVersionOption` usage example
+
+    ```nix
+    exampleModule =
+      { lib, config, ... }:
+      {
+        options.services.whatever = {
+          stateVersion = lib.mkStateVersionOption config "the whatever service" {
+            "26.05" = "Rename `/var/lib/old_name` to `/var/lib/new_name`.";
+            "26.11" = "Run the `upgrade_whatever` utility.";
+          };
+        };
+      }
+
+    (pkgs.nixos [
+      exampleModule
+      { system.stateVersion = "25.11"; }
+    ]).config.services.whatever.stateVersion # => 0
+    (pkgs.nixos [
+      exampleModule
+      { system.stateVersion = "26.05"; }
+    }).config.services.whatever.stateVersion # => 1
+    (pkgs.nixos [
+      exampleModule
+      { system.stateVersion = "27.05"; }
+    }).config.services.whatever.stateVersion # => 2
+    ```
+
+    :::
+
+    Modules should use this function when they change how data managed by the
+    module is persisted on the system between NixOS releases.
+
+    The default value of the option will be the number of attributes in the
+    `migrations` parameter with name less than or equal to the value of
+    `system.stateVersion`.
+
+    When using this function, don't forget to add the option's value to
+    `system.moduleStateVersions."your.module.stateVersion"` when your module is
+    enabled.
+  */
+  mkStateVersionOption =
+    config: name: migrations:
+    let
+      versions = builtins.attrNames migrations;
+      maxVal = length versions;
+    in
+    assert builtins.all (v: builtins.match "[0-9]{2}\\.[0-9]{2}" v != null) versions;
+    mkOption {
+      type = lib.types.ints.between 0 maxVal;
+      description = ''
+        This option versions the format of state persisted by ${name}. Its
+        default value depends on the value of {option}`system.stateVersion`.
+
+        Users who wish to increment this option will need to take manual
+        migration steps to preserve their data. **If you perform these
+        migrations, rolling back to an older generation will require also
+        reversing the migrations to the state expected by that generation.**
+        The migrations needed to advance to each value of this option are as
+        follows (perform all instructions after the row for the current
+        `stateVersion`, up to and including the row for the new
+        `stateVersion`):
+
+        | `stateVersion` | Migration instructions |
+        |----------------|------------------------|
+        | 0              | (none)                 |
+        ${lib.concatImapStringsSep "\n" (
+          v: sv: "| ${toString v} | ${builtins.replaceStrings [ "\n" ] [ " " ] migrations.${sv}} |"
+        ) versions}
+
+        Note that you do **not** need to change {option}`system.stateVersion`
+        in order to update this option. {option}`system.stateVersion` only
+        determines the default value of this option. Most users should not
+        change {option}`system.stateVersion` at all.
+      '';
+      default = findFirstIndex (lib.versionOlder config.system.stateVersion) maxVal versions;
+      defaultText = lib.literalMD ''
+        If {option}`system.stateVersion` is:
+        ${lib.concatImapStringsSep "\n" (v: sv: "* &lt;${sv}: ${toString (v - 1)}") versions}
+        * otherwise: ${toString maxVal}
+      '';
+    }
+    // {
+      inherit migrations;
+    };
 
   /**
     A merge function that merges multiple definitions of an option into a single value

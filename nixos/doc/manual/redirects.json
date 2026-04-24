@@ -160,6 +160,9 @@
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
+  "sec-state-version": [
+    "index.html#sec-state-version"
+  ],
   "sec-wireless-declarative": [
     "index.html#sec-wireless-declarative"
   ],

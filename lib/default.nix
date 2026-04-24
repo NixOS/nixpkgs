@@ -533,6 +533,7 @@ let
         unknownModule
         mkOption
         mkPackageOption
+        mkStateVersionOption
         literalMD
         ;
       inherit (self.types)
