@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/sirwart/ripsecrets";
     changelog = "https://github.com/sirwart/ripsecrets/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "ripsecrets";
   };
 })
