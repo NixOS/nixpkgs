@@ -6,17 +6,18 @@
   ninja,
   gtest,
   prometheus-cpp,
+  glibcLocales,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gbenchmark";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-P7wJcKkIBoWtN9FCRticpBzYbEZPq71a0iW/2oDTZRU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mm4pG7zMB00iof32CxreoNBFnduPZTMp3reHMCIAFPQ=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # This might be a problem with our Clang, as it does not reproduce
   # with Xcode, but we just work around it by silencing the warning.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   # Tests fail on 32-bit due to not enough precision
   doCheck = stdenv.hostPlatform.is64bit;
