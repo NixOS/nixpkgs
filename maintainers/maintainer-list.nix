@@ -5449,6 +5449,12 @@
     name = "Simon Hauser";
     githubId = 15233006;
   };
+  connor-grady = {
+    email = "connor.grady@gmail.com";
+    github = "connor-grady";
+    githubId = 50903811;
+    name = "Connor Grady";
+  };
   connorbaker = {
     email = "ConnorBaker01@gmail.com";
     matrix = "@connorbaker:matrix.org";

@@ -1,68 +1,84 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
-  pnpm_9,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  nodejs_22,
-  nix-update-script,
+  bun,
+  nodejs_24,
   electron,
-  pipewire,
-  libpulseaudio,
+  nix-update-script,
+  libxkbcommon,
+  libx11,
+  libxcb,
+  libxtst,
   makeShellWrapper,
   makeDesktopItem,
   copyDesktopItems,
 }:
-
 let
-  pnpm = pnpm_9.override { nodejs = nodejs_22; };
+  patchcordAddon = callPackage ./patchcord-addon.nix { };
+  venbindAddon = callPackage ./venbind-addon.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "1.7.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-fx/RKnUhXhaWVd/KYPVxr19/Q8o1ovm2TgMTcTYjE3Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BnaPw9edaI1nKAu421JBkI9dAV3Xu3Yr5VQILN0QUTM=";
   };
 
   nativeBuildInputs = [
-    pnpmConfigHook
-    pnpm
-    nodejs_22
+    bun
+    nodejs_24
     makeShellWrapper
     copyDesktopItems
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libpulseaudio
-    pipewire
+    libxkbcommon
+    libx11
+    libxcb
+    libxtst
     (lib.getLib stdenv.cc.cc)
   ];
 
-  pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-NKind57XDW7I5XNmjAu4cqkK5UVNAaKewpfOTNzF2BM=";
-  };
+  node-modules = callPackage ./node-modules.nix { nodejs = nodejs_24; };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    GOOFCORD_PATCHCORD_PATH = "${patchcordAddon}/bin/patchcord";
+    GOOFCORD_VENBIND_PATH = "${venbindAddon}/lib/libvenbind.so";
   };
+
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${finalAttrs.node-modules} node_modules
+    chmod -R u+w node_modules
+    patchShebangs node_modules/.bin
+    patchShebangs node_modules/@typescript/native-preview/bin
+
+    runHook postConfigure
+  '';
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm build
+    bun run build -- --skipTypecheck
 
-    npm exec electron-builder -- \
+    node node_modules/electron-builder/out/cli/cli.js \
       --dir \
-      -c.electronDist="${electron.dist}" \
-      -c.electronVersion="${electron.version}"
+      -c.electronDist="${if stdenv.hostPlatform.isLinux then "electron-dist" else electron.dist}" \
+      -c.electronVersion="${electron.version}" \
+      -c.npmRebuild=false
 
     runHook postBuild
   '';
@@ -73,13 +89,21 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/lib/goofcord"
     cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/goofcord"
 
-    install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/goofcord.png"
+    install -Dm644 "assets/gf_icon.png" "$out/share/icons/hicolor/256x256/apps/goofcord.png"
 
     # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
     # see https://github.com/NixOS/nixpkgs/issues/172583
     makeShellWrapper "${lib.getExe electron}" "$out/bin/goofcord" \
       --add-flags "$out/share/lib/goofcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libxkbcommon
+          libx11
+          libxcb
+          libxtst
+        ]
+      }" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
@@ -120,11 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Milkshiift/GoofCord";
     downloadPage = "https://github.com/Milkshiift/GoofCord";
     license = lib.licenses.osl3;
-    maintainers = with lib.maintainers; [ nyabinary ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
+    maintainers = with lib.maintainers; [
+      nyabinary
+      miniharinn
     ];
+    platforms = lib.platforms.linux;
     mainProgram = "goofcord";
   };
 })

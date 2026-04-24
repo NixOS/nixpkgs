@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
-    tag = "v${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-bFJ6v27yfzMPqZijWCOlgdVS19IKIMqZcq2FjAyMnqo=";
   };
 

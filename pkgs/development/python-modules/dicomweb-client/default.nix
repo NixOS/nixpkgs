@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dicomweb-client";
-  version = "0.60.1";
+  version = "0.61.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ImagingDataCommons";
     repo = "dicomweb-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZxeZiCw8I5+Bf266PQ6WQA8mBRC7K3/kZrmuW4l6kQU=";
+    hash = "sha256-uCImuJDZr2gyWnLCU2JCmkGO/EloRty1fIRujwzYzAg=";
   };
 
   build-system = [
