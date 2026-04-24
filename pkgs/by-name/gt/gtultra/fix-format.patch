@@ -1,0 +1,45 @@
+From f42fd11a55f9502a79521f33ce24a45992becb99 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Wed, 13 Apr 2022 10:16:31 +0200
+Subject: [PATCH] Fix format warnings
+
+Fixes: `format not a string literal and no format arguments [8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat-security-Werror=format-security8;;]`
+---
+ src/ginfo.c     | 2 +-
+ src/gt2stereo.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/ginfo.c b/src/ginfo.c
+index cb9626c..a6d7d04 100644
+--- a/src/ginfo.c
++++ b/src/ginfo.c
+@@ -449,7 +449,7 @@ void displayPatternInfo(GTOBJECT *gt)
+ 				sprintf(infoTextBuffer, "Channel Tempo: %02X", (data - 0x80));
+ 		}
+ 		else
+-			sprintf(infoTextBuffer, patternInstructionInfoString[instr]);
++			sprintf(infoTextBuffer, "%s", patternInstructionInfoString[instr]);
+ 	}
+ 	else
+ 		sprintf(infoTextBuffer, "                                ");
+diff --git a/src/gt2stereo.c b/src/gt2stereo.c
+index 612f0b7..be83854 100644
+--- a/src/gt2stereo.c
++++ b/src/gt2stereo.c
+@@ -867,14 +867,14 @@ void waitkeymouse(GTOBJECT *gt)
+ 						else
+ 						{
+ 							sprintf(&keyOffsetText[0], "                        ");
+-							sprintf(infoTextBuffer, keyOffsetText);
++							sprintf(infoTextBuffer, "%s", keyOffsetText);
+ 						}
+ 					}
+ 				}
+ 				else
+ 				{
+ 					calculateNoteOffsets();
+-					sprintf(infoTextBuffer, keyOffsetText);
++					sprintf(infoTextBuffer, "%s", keyOffsetText);
+ 				}
+ 			}
+ 		}
