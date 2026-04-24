@@ -55,8 +55,29 @@ in
               Built-in plugin types can be found at [the plugin types documentation](https://spiffe.io/docs/latest/deploying/spire_agent/#plugin-types).
               See [plugin configuration](https://spiffe.io/docs/latest/deploying/spire_agent/#plugin-configuration) for options and how to configure external plugins.
             '';
-            # TODO: We can probably enforce some of these constraints with a submodule
-            type = format.type;
+            type = lib.types.submodule {
+              freeformType = format.type;
+              options.NodeAttestor = lib.mkOption {
+                default = { };
+                type = lib.types.submodule {
+                  freeformType = format.type;
+                  options.join_token = lib.mkOption {
+                    default = null;
+                    description = "Join token based node attestation.";
+                    type = lib.types.nullOr (
+                      lib.types.submodule {
+                        freeformType = format.type;
+                        options.plugin_data = lib.mkOption {
+                          type = format.type;
+                          default = { };
+                          description = "Plugin data for the join_token NodeAttestor.";
+                        };
+                      }
+                    );
+                  };
+                };
+              };
+            };
             example = {
               KeyManager.memory.plugin_data = { };
               NodeAttestor.join_token.plugin_data = { };
@@ -71,7 +92,7 @@ in
     configFile = lib.mkOption {
       type = lib.types.path;
       defaultText = "Config file generated from services.spire.agent.settings";
-      default = format.generate "agent.conf" cfg.settings;
+      default = format.generate "agent.conf" (lib.filterAttrsRecursive (_: v: v != null) cfg.settings);
       description = ''
         Path to the SPIRE agent configuration file. See [the documentation](https://spiffe.io/docs/latest/deploying/spire_agent/) for more information.
       '';
@@ -84,6 +105,8 @@ in
     };
 
   };
+  imports = [ ./agent-tpm.nix ];
+
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
