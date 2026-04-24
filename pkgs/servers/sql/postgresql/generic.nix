@@ -39,7 +39,6 @@ let
       removeReferencesTo,
 
       # passthru
-      buildEnv,
       buildPackages,
       newScope,
       nixosTests,
@@ -585,10 +584,7 @@ let
             in
             import ./ext.nix newSelf newSuper;
 
-          withPackages = postgresqlWithPackages {
-            inherit buildEnv lib makeBinaryWrapper;
-            postgresql = this;
-          };
+          withPackages = self.callPackage ./wrapper.nix { postgresql = this; };
 
           pg_config = buildPackages.callPackage ./pg_config.nix {
             inherit (finalAttrs) finalPackage;
@@ -640,74 +636,6 @@ let
         broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
       };
     });
-
-  postgresqlWithPackages =
-    {
-      postgresql,
-      buildEnv,
-      lib,
-      makeBinaryWrapper,
-    }:
-    f:
-    let
-      installedExtensions = f postgresql.pkgs;
-      recurse = postgresqlWithPackages {
-        inherit
-          buildEnv
-          lib
-          makeBinaryWrapper
-          postgresql
-          ;
-      };
-      finalPackage = buildEnv {
-        pname = "${postgresql.pname}-and-plugins";
-        inherit (postgresql) version;
-        paths = installedExtensions ++ [
-          # consider keeping in-sync with `postBuild` below
-          postgresql
-          postgresql.man # in case user installs this into environment
-        ];
-
-        pathsToLink = [
-          "/"
-          "/bin"
-          "/share/postgresql/extension"
-          # Unbreaks Omnigres' build system
-          "/share/postgresql/timezonesets"
-          "/share/postgresql/tsearch_data"
-        ];
-
-        nativeBuildInputs = [ makeBinaryWrapper ];
-        postBuild =
-          let
-            args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-          in
-          ''
-            wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-          '';
-
-        passthru = {
-          inherit installedExtensions;
-          inherit (postgresql)
-            pkgs
-            psqlSchema
-            ;
-
-          pg_config = postgresql.pg_config.override {
-            outputs = {
-              out = finalPackage;
-              man = finalPackage;
-            };
-          };
-
-          withJIT = recurse (_: installedExtensions ++ [ postgresql.jit ]);
-          withoutJIT = recurse (_: lib.remove postgresql.jit installedExtensions);
-
-          withPackages = f': recurse (ps: installedExtensions ++ f' ps);
-        };
-      };
-    in
-    finalPackage;
 
 in
 # passed by <major>.nix
