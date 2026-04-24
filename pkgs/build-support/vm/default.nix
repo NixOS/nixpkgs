@@ -730,9 +730,8 @@ let
             memSize
             ;
 
-          # Flatten this into string explicitly to allow IFS tricks below to work,
-          # and support structuredAttrs
-          debsInterspersed = toString (lib.intersperse "|" debs);
+          debsFlat = lib.flatten debs;
+          debsGrouped = debs;
 
           preVM = createEmptyImage { inherit size fullName; };
 
@@ -751,11 +750,9 @@ let
             # (which have lots of circular dependencies) from barfing.
             echo "unpacking Debs..."
 
-            for deb in $debsInterspersed; do
-              if test "$deb" != "|"; then
-                echo "$deb..."
-                dpkg-deb --extract "$deb" /mnt
-              fi
+            for deb in "''${debsFlat[@]}"; do
+              echo "$deb..."
+              dpkg-deb --extract "$deb" /mnt
             done
 
             # Make the Nix store available in /mnt, because that's where the .debs live.
@@ -778,10 +775,7 @@ let
 
             export DEBIAN_FRONTEND=noninteractive
 
-            oldIFS="$IFS"
-            IFS="|"
-            for component in $debsInterspersed; do
-              IFS="$oldIFS"
+            for component in "''${debsGrouped[@]}"; do
               echo
               echo ">>> INSTALLING COMPONENT: $component"
               debs=
