@@ -3,6 +3,8 @@
   meta,
   muslPatches ? { },
   pname ? "postgresql",
+  postPatch ? "",
+  postInstall ? "",
   src,
   version,
 }@builderArgs:
@@ -438,7 +440,8 @@ stdenv'.mkDerivation (finalAttrs: {
   + lib.optionalString (atLeast "15" && stdenv'.hostPlatform.isStatic) ''
     substituteInPlace src/interfaces/libpq/Makefile \
       --replace-fail "echo 'libpq must not be calling any function which invokes exit'; exit 1;" "echo;"
-  '';
+  ''
+  + postPatch;
 
   postInstall = ''
     moveToOutput "bin/ecpg" "$dev"
@@ -509,7 +512,8 @@ stdenv'.mkDerivation (finalAttrs: {
   + lib.optionalString tclSupport ''
     moveToOutput "lib/*pltcl*" "$pltcl"
     moveToOutput "share/postgresql/extension/*pltcl*" "$pltcl"
-  '';
+  ''
+  + postInstall;
 
   postFixup = lib.optionalString stdenv'.hostPlatform.isGnu ''
     # initdb needs access to "locale" command from glibc.
