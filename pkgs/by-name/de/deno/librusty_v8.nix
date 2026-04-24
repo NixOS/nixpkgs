@@ -70,14 +70,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-v8";
-  version = "147.1.0";
+  version = "147.2.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "rusty_v8";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-USCQtK5pJBpU1FTLMQ/bNwJXnVNkdX/EtCWqs2kVL50=";
+    hash = "sha256-HompYzilJ7AC+HXfJJcvPC3L0rQfdAOhMhir/7qDXG8=";
   };
 
   patches = [
@@ -97,7 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./librusty_v8-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
   ];
 
-  cargoHash = "sha256-FKwXdms9j+izRKsm5TKJ8Ct8lvBuG/tYXfNzVsbs8cM=";
+  cargoHash = "sha256-2h/zATsNngMg0Tvu5oSSveQNfaVbwFbzHndmSyP4Ddo=";
 
   nativeBuildInputs = [
     llvmPackages.clang

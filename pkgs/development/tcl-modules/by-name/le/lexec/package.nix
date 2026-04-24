@@ -3,6 +3,7 @@
   mkTclDerivation,
   fetchzip,
   autoreconfHook,
+  tcl,
 }:
 
 mkTclDerivation {
@@ -24,5 +25,6 @@ mkTclDerivation {
     license = lib.licenses.tcltk;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+    broken = tcl.isTcl9;
   };
 }
