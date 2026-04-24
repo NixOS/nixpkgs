@@ -730,7 +730,9 @@ let
             memSize
             ;
 
-          debs = (lib.intersperse "|" debs);
+          # Flatten this into string explicitly to allow IFS tricks below to work,
+          # and support structuredAttrs
+          debsInterspersed = toString (lib.intersperse "|" debs);
 
           preVM = createEmptyImage { inherit size fullName; };
 
@@ -749,7 +751,7 @@ let
             # (which have lots of circular dependencies) from barfing.
             echo "unpacking Debs..."
 
-            for deb in $debs; do
+            for deb in $debsInterspersed; do
               if test "$deb" != "|"; then
                 echo "$deb..."
                 dpkg-deb --extract "$deb" /mnt
@@ -778,7 +780,7 @@ let
 
             oldIFS="$IFS"
             IFS="|"
-            for component in $debs; do
+            for component in $debsInterspersed; do
               IFS="$oldIFS"
               echo
               echo ">>> INSTALLING COMPONENT: $component"
