@@ -8809,6 +8809,8 @@ with pkgs;
     brave
     brave-beta
     brave-nightly
+    brave-origin-beta
+    brave-origin-nightly
     ;
 
   cni = callPackage ../applications/networking/cluster/cni { };
