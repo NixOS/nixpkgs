@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   makeWrapper,
@@ -12,19 +12,16 @@
   SDL2_net,
   SDL2_mixer,
   gtk3,
-  writers,
-  python3Packages,
-  nix-update,
-  fetchpatch,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ecwolf";
   version = "1.4.2";
 
-  src = fetchFromBitbucket {
-    owner = "ecwolf";
-    repo = "ecwolf";
+  src = fetchFromGitHub {
+    owner = "ECWolfEngine";
+    repo = "ECWolf";
     tag = finalAttrs.version;
     hash = "sha256-T5K6B2fWMKMLB/662p/YLEv0Od9n0vUakznyoOnr0kI=";
   };
@@ -59,51 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
   '';
 
-  passthru.updateScript =
-    let
-      updateScriptPkg =
-        writers.writePython3 "ecwolf_update_script"
-          {
-            libraries = with python3Packages; [
-              debian-inspector
-              requests
-            ];
-          }
-          ''
-            from os import execl
-            from sys import argv
-
-            from debian_inspector.debcon import get_paragraphs_data
-            from requests import get
-
-            # The debian.drdteam.org repo is a primary source of information. It’s
-            # run by Blzut3, the creator and primary developer of ECWolf. It’s also
-            # listed on ECWolf’s download page:
-            # <https://maniacsvault.net/ecwolf/download.php>.
-            url = 'https://debian.drdteam.org/dists/stable/multiverse/binary-amd64/Packages'  # noqa: E501
-            response = get(url)
-            packages = get_paragraphs_data(response.text)
-            for package in packages:
-                if package['package'] == 'ecwolf':
-                    latest_version = package['version']
-                    break
-            nix_update_path = argv[1]
-
-            execl(nix_update_path, nix_update_path, '--version', latest_version)
-          '';
-    in
-    [
-      updateScriptPkg
-      (lib.getExe nix-update)
-    ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
+    description = "Advanced source port for Wolfenstein 3D, Spear of Destiny, and Super 3D Noah's Ark";
     mainProgram = "ecwolf";
     homepage = "https://maniacsvault.net/ecwolf/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       jayman2000
+      keenanweaver
     ];
     platforms = lib.platforms.all;
   };
