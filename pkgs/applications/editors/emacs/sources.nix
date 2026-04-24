@@ -85,6 +85,7 @@ let
               AndersonTorres
               adisbladis
               jwiegley
+              linj
               panchoh
             ];
             "macport" = with lib.maintainers; [
