@@ -10,9 +10,11 @@ let
 
   format = pkgs.formats.yaml { };
 
+  autheliaName = name: "authelia" + lib.optionalString (name != "") "-${name}";
+
   autheliaOpts =
     with lib;
-    { name, ... }:
+    { name, config, ... }:
     {
       options = {
         enable = mkEnableOption "Authelia instance";
@@ -23,21 +25,28 @@ let
           description = ''
             Name is used as a suffix for the service name, user, and group.
             By default it takes the value you use for `<instance>` in:
-            {option}`services.authelia.<instance>`
+            {option}`services.authelia.instances.<instance>`
+
+            When set to the empty string `""`, the service name, user, and group
+            will be just `authelia` without a suffix.
           '';
         };
 
         package = mkPackageOption pkgs "authelia" { };
 
         user = mkOption {
-          default = "authelia-${name}";
           type = types.str;
+          defaultText = lib.literalExpression ''
+            if name == "" then "authelia" else "authelia-''${name}"
+          '';
           description = "The name of the user for this authelia instance.";
         };
 
         group = mkOption {
-          default = "authelia-${name}";
           type = types.str;
+          defaultText = lib.literalExpression ''
+            if name == "" then "authelia" else "authelia-''${name}"
+          '';
           description = "The name of the group for this authelia instance.";
         };
 
@@ -252,6 +261,11 @@ let
           '';
         };
       };
+
+      config = {
+        user = mkDefault (autheliaName config.name);
+        group = mkDefault (autheliaName config.name);
+      };
     };
 
   writeOidcJwksConfigFile =
@@ -382,7 +396,7 @@ in
             ExecStart = "${execCommand} ${configArg}";
             Restart = "always";
             RestartSec = "5s";
-            StateDirectory = "authelia-${instance.name}";
+            StateDirectory = autheliaName instance.name;
             StateDirectoryMode = "0700";
 
             # Security options:
@@ -431,11 +445,8 @@ in
           };
         };
       mkInstanceUsersConfig = instance: {
-        groups."authelia-${instance.name}" = lib.mkIf (instance.group == "authelia-${instance.name}") {
-          name = "authelia-${instance.name}";
-        };
-        users."authelia-${instance.name}" = lib.mkIf (instance.user == "authelia-${instance.name}") {
-          name = "authelia-${instance.name}";
+        groups.${autheliaName instance.name} = lib.mkIf (instance.group == autheliaName instance.name) { };
+        users.${autheliaName instance.name} = lib.mkIf (instance.user == autheliaName instance.name) {
           isSystemUser = true;
           group = instance.group;
         };
@@ -468,7 +479,7 @@ in
         map (
           instance:
           lib.mkIf instance.enable {
-            "authelia-${instance.name}" = mkInstanceServiceConfig instance;
+            ${autheliaName instance.name} = mkInstanceServiceConfig instance;
           }
         ) instances
       );
@@ -481,5 +492,6 @@ in
     jk
     dit7ya
     nicomem
+    connor-grady
   ];
 }

@@ -7404,8 +7404,6 @@ self: super: with self; {
 
   idna = callPackage ../development/python-modules/idna { };
 
-  idna-ssl = callPackage ../development/python-modules/idna-ssl { };
-
   idrive-e2-client = callPackage ../development/python-modules/idrive-e2-client { };
 
   idstools = callPackage ../development/python-modules/idstools { };

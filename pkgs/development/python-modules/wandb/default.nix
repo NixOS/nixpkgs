@@ -75,12 +75,12 @@
 }:
 
 let
-  version = "0.26.0";
+  version = "0.26.1";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-pN2vfrexu87202WLes4eIbkU1aVuLpqR676f7AxokT8=";
+    hash = "sha256-QtMjiRqE9ZhA1S8gHt1F8NBXTq7QQ3ENhk02Lry80F4=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -90,7 +90,7 @@ let
 
     sourceRoot = "${src.name}/xpu";
 
-    cargoHash = "sha256-h5kttUU1KsP+IaXTfqfgRf+7cooRZQzi5i5NmQ9YEA0=";
+    cargoHash = "sha256-RPvtMV9Mrzb6lJhMR+fi58h/ncvbNkbIjAP35sdaOO0=";
 
     checkFlags = [
       # fails in sandbox
@@ -120,7 +120,7 @@ let
 
     sourceRoot = "${src.name}/parquet-rust-wrapper";
 
-    cargoHash = "sha256-fOq1KoWJEDZnchE6ooTmUQZ3DLdlbr2/aYl1qbF2GH4=";
+    cargoHash = "sha256-w98wliTcVJr4IlmKFVU+glmawMJl5qVCSUSJ8LeceJ8=";
 
     # The original build script renames the library:
     # https://github.com/wandb/wandb/blob/v0.26.0/parquet-rust-wrapper/build.sh#L37-L68

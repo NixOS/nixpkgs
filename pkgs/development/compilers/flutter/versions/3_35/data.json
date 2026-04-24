@@ -1,80 +1,75 @@
 {
-  "artifactHashes": {
-    "android-arm-profile/artifacts.zip": "sha256-tkMKTImxVqFBQhJDVD2NB0thlB/A1NFRekV1ScYLwVM=",
-    "android-arm-profile/darwin-x64.zip": "sha256-ktPTy7G41qtJ5oOeE6mfKK3IQQlBAmIBtFm7cUEOkxQ=",
-    "android-arm-profile/linux-x64.zip": "sha256-3Imdiu+I4WmOqsYmJjnyRFkOOfgIJjPbDUba6V08VmQ=",
-    "android-arm-profile/windows-x64.zip": "sha256-jJEhtr8Jvuak7n5Wq0t2wMMk2J6Vpmu5WlbXl3zN1AE=",
-    "android-arm-release/artifacts.zip": "sha256-WxypxJNW28+v88bGjfksIYSiCVdDkOnqzlBOJSPxwGQ=",
-    "android-arm-release/darwin-x64.zip": "sha256-J17mW6Xfbd+YT5N7n1Y+QTRK9DVk8l1ai37UDdt3rEY=",
-    "android-arm-release/linux-x64.zip": "sha256-gs/SzGsz9cjp6qM2Izqg0CbfX5WWFE1Cgy3X8mIB5Mc=",
-    "android-arm-release/windows-x64.zip": "sha256-ON/g8l1MlXB53CDjF8fZgOJ69l32WGhMnD5Bnxn7nys=",
-    "android-arm/artifacts.zip": "sha256-/1CR0aybIBZGopc0O5A9jG9Sn0MWlPts2WkhFva+72c=",
-    "android-arm64-profile/artifacts.zip": "sha256-geB9xlwjS+TDcE2CabNwX4R3gLwLmELO3OvJLMhaCG8=",
-    "android-arm64-profile/darwin-x64.zip": "sha256-cx8D1W5ezsf0DoWTU4nQycFtER59uSu5T8Mbrq7F4mc=",
-    "android-arm64-profile/linux-x64.zip": "sha256-bp3WdqCC0uD3gcbtcTpe0Bk28Co75PEjlYunN0nAGR0=",
-    "android-arm64-profile/windows-x64.zip": "sha256-bVDWw5Z7MHUqezYVdO5wZT7mnTSzmBoI/4PAFopsOyw=",
-    "android-arm64-release/artifacts.zip": "sha256-0/Q7w98SG69nEd2S2pp8djnk7zmC1YfLIW126tQtooc=",
-    "android-arm64-release/darwin-x64.zip": "sha256-9kcha9KcoHsEgY6jSdP92ETk+BqFeQ7LsgD0ubHkNLE=",
-    "android-arm64-release/linux-x64.zip": "sha256-JqVh/V7HBzbsa/9iacL2RZFf3X9GFs2llsDaTbOQdsU=",
-    "android-arm64-release/windows-x64.zip": "sha256-Xrtl3WBXvzLnn/I1vCsGIS+DyTCE9gJYBLDucn/H8u4=",
-    "android-arm64/artifacts.zip": "sha256-e3+ybL9AG3xN559EcWBtBxitudQd9HUluEHB15IX7ps=",
-    "android-x64-profile/artifacts.zip": "sha256-5bvosBPGtU2T1GGLGkPmyTVJ90JBdrGK+8C79mgSRSA=",
-    "android-x64-profile/darwin-x64.zip": "sha256-7vIRNLkQmVGhc48GtdYfC4oA3d35kPQtj3vcIKBchJc=",
-    "android-x64-profile/linux-x64.zip": "sha256-wYYyhpVXNjUPmoSbarHkTv2xSPUkmnSSVaDaYGNSTJM=",
-    "android-x64-profile/windows-x64.zip": "sha256-1FXPNfRQjncl5Pyg5x4TslWeCOIyrKBhjVBFkGLzHeM=",
-    "android-x64-release/artifacts.zip": "sha256-mRoPNcpq5hBL/AxskFK8ccbvKwzgb2vEUVJ9WtgUlH0=",
-    "android-x64-release/darwin-x64.zip": "sha256-AfWv2mUDxFzwDK/dGl/TrrkP2YyyOGNmfde6bj06AtE=",
-    "android-x64-release/linux-x64.zip": "sha256-4demp82PCXeOje3l+qOc/Eq+ngY8QybWE4iFGVK6lNc=",
-    "android-x64-release/windows-x64.zip": "sha256-3mQXqHuOhwDTRlsknFA8R/27luOzs28glJVD+3G/5EI=",
-    "android-x64/artifacts.zip": "sha256-BheP9zRanNkBOVzPwQvYp4jd9l/MIcnbmkshlwfT6Dc=",
-    "android-x86/artifacts.zip": "sha256-vXZo+hOtp1hRDvBBJfNmqlE6/ettAB9iEGdJZ/AeYKg=",
-    "darwin-arm64/artifacts.zip": "sha256-4CqgWDqeTGgNfmllemwbK692tRJ6y6O0/S8WdHPr2cI=",
-    "darwin-arm64/font-subset.zip": "sha256-gyTIBlcwE0UZZ/zVZIK2CkIoqQlbixcp54RBmyCgiJ4=",
-    "darwin-x64-profile/artifacts.zip": "sha256-Q7vaWylDWDSi8Fm2rnjX2OZrg9suz/oZIMLG+L8LPfg=",
-    "darwin-x64-profile/framework.zip": "sha256-t1FS8OI8Ptxpfker8th1KkWlKDb7lvd76o3vT5zLSos=",
-    "darwin-x64-profile/gen_snapshot.zip": "sha256-lzPl2i1XCdzmpV5Si5R/xju7JnmXz5N3MuTOWQHo6UY=",
-    "darwin-x64-release/artifacts.zip": "sha256-BXxo25VzpbNGsedjuXgOqnhDo1iOpDdXZ8ECYcCcgSY=",
-    "darwin-x64-release/framework.zip": "sha256-S22KfsuOjv9b4A/6F9cj47E4gGo1SYlP6xCRqV4D3iY=",
-    "darwin-x64-release/gen_snapshot.zip": "sha256-YR1Mqh3xMvlrLBaBC8q9TAloYWmBng15LdIDYq6JBMk=",
-    "darwin-x64/artifacts.zip": "sha256-eL9Y7UHaso/MKN0mSx8W4OqxwzDn/csuX8M8UwAjFWA=",
-    "darwin-x64/font-subset.zip": "sha256-vBUjrHafLzmJR13cFWr46flx4A9HE9p72DDfGIXHEcc=",
-    "darwin-x64/framework.zip": "sha256-oBeGU6XuQrXmF4z7ln7mUMsJMHg5XDjikxXgBKMJQ28=",
-    "darwin-x64/gen_snapshot.zip": "sha256-b9FUB6TQmGw5k+M2Z3y56CvInw/LTrPL9YyG5D4Uqoc=",
-    "flutter-web-sdk.zip": "sha256-0LQD3PWbBXc34qhxAHB/ESYjvpKndFheDYtMFxW6V2I=",
-    "flutter_gpu.zip": "sha256-b7GxH12dA1rGr1TUMFAm0R2xCGTwUIYHr0/Pktck+Rg=",
-    "flutter_patched_sdk.zip": "sha256-qiZzEVkaRfD3ELEmsQQrN9tvF9MMiEsRioGcaT6qW5E=",
-    "flutter_patched_sdk_product.zip": "sha256-jAD6sghpvJb/WUuPaT8SQGWnNCBE82qAOF41E8gE/LE=",
-    "ios-profile/artifacts.zip": "sha256-c8UEecqig9GwF3p+rS+KoCSieN1bfxX4vbL3RnNa9qU=",
-    "ios-release/artifacts.zip": "sha256-nfQ8YxiKXY4LYjiSfDGub6afhlnSPDIZ2+9wYrWkpsI=",
-    "ios/artifacts.zip": "sha256-63HYgql1rNuOqZtyCDyThXzFiE5YCLGqCw5XFtZfEn0=",
-    "linux-arm64-debug/linux-arm64-flutter-gtk.zip": "sha256-/bTubsiLpGYDywasjZxIylUitAQDFe83MQbC1E/PXLo=",
-    "linux-arm64-profile/linux-arm64-flutter-gtk.zip": "sha256-K7RhTflYahi7rQ9V4vhoHgG7iUkyUMx1BgdVKcayxuw=",
-    "linux-arm64-release/linux-arm64-flutter-gtk.zip": "sha256-m06sitBb919gU4G4g0hE0pCxW36H+d15NRQNCLvW3v4=",
-    "linux-arm64/artifacts.zip": "sha256-Sn3DR+eIvjae5SS7sX60IaFLDsEXOLBSxtKE4pTj6mM=",
-    "linux-arm64/font-subset.zip": "sha256-lGHk7ac3yS1Q51qRP5pj5y626TJzz3AzQTlx38N1hLI=",
-    "linux-x64-debug/linux-x64-flutter-gtk.zip": "sha256-ntz4GCTMutdQgqSxdC69YtIZFct4UkvYz5AbJT/6rVQ=",
-    "linux-x64-profile/linux-x64-flutter-gtk.zip": "sha256-kKePD4dJdAIBiEL2rBqGZCzP7PRlukEVq+yoTvW2p94=",
-    "linux-x64-release/linux-x64-flutter-gtk.zip": "sha256-oftxkU+eDRLWggV+EAymWk0pWsz3K5VaL6so9KpZAJo=",
-    "linux-x64/artifacts.zip": "sha256-NjqBtYiJahp52E7V7Px/wnGZVWjsFmPKxAbMIYL4kGg=",
-    "linux-x64/font-subset.zip": "sha256-dZXC7iFVzb/V8QTbfscdkdtjTzdMy7ce0Z1GlX+jm9E=",
-    "sky_engine.zip": "sha256-Zq7h04ARytTgc3yBUHNeUw50dzOPquZaiXtEC62RCFU=",
-    "windows-x64-debug/windows-x64-flutter.zip": "sha256-NhJsnViwfq+PGeCEqLNnx2lHDQgUptsRun3RStkbeCI=",
-    "windows-x64-profile/windows-x64-flutter.zip": "sha256-m07X3s+PYps2GzHNt4HfuRiJjXQse6v14GGwjh9yqiE=",
-    "windows-x64-release/windows-x64-flutter.zip": "sha256-PY5eIoQdDN58L41mnfk3LImf8FlRsp5ue9nbnYouvM4=",
-    "windows-x64/artifacts.zip": "sha256-eDq8AoAXetZoMM1Zovw1Jm2mGFHWWbmg2XzsSb558Rk=",
-    "windows-x64/flutter-cpp-client-wrapper.zip": "sha256-nqgeZnzp7dKgs+lp2jVrRgvvRD+MGi2NceqivM6Qk0I=",
-    "windows-x64/font-subset.zip": "sha256-1WbKyP4By37Tci6nQ2S7OsCKnWScflYk7T5L0P0DGuQ="
-  },
+  "version": "3.35.7",
+  "engineVersion": "035316565ad77281a75305515e4682e6c4c6f7ca",
+  "engineSwiftShaderHash": "sha256-ATVcuxqPHqHOWYyO7DoX9LdgUiO3INUi7m9Mc6ccc1M=",
+  "engineSwiftShaderRev": "d040a5bab638bf7c226235c95787ba6288bb6416",
   "channel": "stable",
-  "dartHash": {
-    "aarch64-darwin": "sha256-AdBnLbgmZvcvlFLfOO4VFqcs2bwpgYvT6t34LkBVYVI=",
-    "aarch64-linux": "sha256-1i918/G/tEoi+9XPCltHx1hRbOyl3Me87IiJbiWD57o=",
-    "x86_64-darwin": "sha256-TGel6P9oew5ao8DAMS5kCxLl1eknjZG7Jc7A32YofXk=",
-    "x86_64-linux": "sha256-7CLoEnFYLe+B0+EOKlVa5dPYHGlRRlo9Fs/EeTjp+So="
+  "engineHashes": {
+    "aarch64-linux": {
+      "aarch64-linux": "sha256-v2L0MQRTXvWngb8fu/AR9iofq2CDq1HFedXE8cSzOws=",
+      "x86_64-linux": "sha256-v2L0MQRTXvWngb8fu/AR9iofq2CDq1HFedXE8cSzOws="
+    },
+    "x86_64-linux": {
+      "aarch64-linux": "sha256-RKfKhFwlwVEguWqI6OinTqdCM3yNTP/5PwevREmS4Nk=",
+      "x86_64-linux": "sha256-RKfKhFwlwVEguWqI6OinTqdCM3yNTP/5PwevREmS4Nk="
+    }
   },
   "dartVersion": "3.9.2",
-  "engineVersion": "035316565ad77281a75305515e4682e6c4c6f7ca",
+  "dartHash": {
+    "x86_64-linux": "sha256-ZJcii2WBCE4PNt5+S2nH4hj+WoZuhRLFkzMlSZEa01Y=",
+    "aarch64-linux": "sha256-EzNApYsHor1suB9dFgJuewMqa0v7cADKLUzLym5GLOY=",
+    "x86_64-darwin": "sha256-mjWHCF5voWLKlqBKYhl2OKg2aDx0pyIQ1TlF6k4MQz0=",
+    "aarch64-darwin": "sha256-1rAfqatlOdphdi6dZSfUfKywAbdwRn6ijo60isjV3Lw="
+  },
   "flutterHash": "sha256-0GI3P11vys6JU+H5MXKznHTItOXZwap7bxHzgj6umc4=",
+  "artifactHashes": {
+    "android": {
+      "aarch64-darwin": "sha256-BbwfmKPmxZUPVoZEE687vudBCBPzVM/C9ehPEAPr6Jw=",
+      "aarch64-linux": "sha256-Pgc/ybLcRFJkbGUI2eY689yxOv2VyKdO/F5vGkTg/tM=",
+      "x86_64-darwin": "sha256-BbwfmKPmxZUPVoZEE687vudBCBPzVM/C9ehPEAPr6Jw=",
+      "x86_64-linux": "sha256-Pgc/ybLcRFJkbGUI2eY689yxOv2VyKdO/F5vGkTg/tM="
+    },
+    "fuchsia": {
+      "aarch64-darwin": "sha256-qpHjEpuIK1hI6ga1qr0Q/t5S2Jjk8oUpnkeXsIeu7UM=",
+      "aarch64-linux": "sha256-qpHjEpuIK1hI6ga1qr0Q/t5S2Jjk8oUpnkeXsIeu7UM=",
+      "x86_64-darwin": "sha256-qpHjEpuIK1hI6ga1qr0Q/t5S2Jjk8oUpnkeXsIeu7UM=",
+      "x86_64-linux": "sha256-qpHjEpuIK1hI6ga1qr0Q/t5S2Jjk8oUpnkeXsIeu7UM="
+    },
+    "ios": {
+      "aarch64-darwin": "sha256-ZjNJhDXqv9dg9Gn62TRYX1Vb4Qn0adS5nxxpYZOGsgY=",
+      "aarch64-linux": "sha256-ZjNJhDXqv9dg9Gn62TRYX1Vb4Qn0adS5nxxpYZOGsgY=",
+      "x86_64-darwin": "sha256-ZjNJhDXqv9dg9Gn62TRYX1Vb4Qn0adS5nxxpYZOGsgY=",
+      "x86_64-linux": "sha256-ZjNJhDXqv9dg9Gn62TRYX1Vb4Qn0adS5nxxpYZOGsgY="
+    },
+    "linux": {
+      "aarch64-darwin": "sha256-TB9BOiV1Z1cKJKusNW4O0oJEJCt9XmWN+g4yCXtyepc=",
+      "aarch64-linux": "sha256-TB9BOiV1Z1cKJKusNW4O0oJEJCt9XmWN+g4yCXtyepc=",
+      "x86_64-darwin": "sha256-7BocNpo89xSXNy6yob+EESVfalm2olwR/knVfq9I1VA=",
+      "x86_64-linux": "sha256-7BocNpo89xSXNy6yob+EESVfalm2olwR/knVfq9I1VA="
+    },
+    "macos": {
+      "aarch64-darwin": "sha256-vnV12shNi630OuyWTey/31vsmAcF7UMEgfdBZBXWc4c=",
+      "aarch64-linux": "sha256-vnV12shNi630OuyWTey/31vsmAcF7UMEgfdBZBXWc4c=",
+      "x86_64-darwin": "sha256-vnV12shNi630OuyWTey/31vsmAcF7UMEgfdBZBXWc4c=",
+      "x86_64-linux": "sha256-vnV12shNi630OuyWTey/31vsmAcF7UMEgfdBZBXWc4c="
+    },
+    "universal": {
+      "aarch64-darwin": "sha256-oPUDsJxKbbWEH1XgxOFoBnVYJAjgeCBKIrYtBafWtWU=",
+      "aarch64-linux": "sha256-ae6UH4K09lcl7UZzD/WKFxWUKEZQsLmizODs/RMKcis=",
+      "x86_64-darwin": "sha256-wxDWrT35CUIEQaKeIK0adr0oPfv6to60Z6R+8zrwhmU=",
+      "x86_64-linux": "sha256-CxvOlq8nxeY5esRanl2N7oO4RFgBTwQcRdS7Pp/5tt8="
+    },
+    "web": {
+      "aarch64-darwin": "sha256-T+LR7Yo2hEy24u3aS+ehp9nyRBB+3dNDyF6jw1oOd1o=",
+      "aarch64-linux": "sha256-T+LR7Yo2hEy24u3aS+ehp9nyRBB+3dNDyF6jw1oOd1o=",
+      "x86_64-darwin": "sha256-T+LR7Yo2hEy24u3aS+ehp9nyRBB+3dNDyF6jw1oOd1o=",
+      "x86_64-linux": "sha256-T+LR7Yo2hEy24u3aS+ehp9nyRBB+3dNDyF6jw1oOd1o="
+    },
+    "windows": {
+      "x86_64-darwin": "sha256-xTWgw8JE/4R9UcdZmLEbMk+yL2V3zfAIXDRli9XYe5k=",
+      "x86_64-linux": "sha256-xTWgw8JE/4R9UcdZmLEbMk+yL2V3zfAIXDRli9XYe5k="
+    }
+  },
   "pubspecLock": {
     "packages": {
       "_fe_analyzer_shared": {
@@ -1081,6 +1076,5 @@
     "sdks": {
       "dart": ">=3.9.0-21.0.dev <4.0.0"
     }
-  },
-  "version": "3.35.7"
+  }
 }

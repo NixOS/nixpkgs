@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mage";
-  version = "1.17.1";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "magefile";
     repo = "mage";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PoZqVUT+sKr9UY8OaWjYxaqTSYItOkOdi1FnmGJ1K78=";
+    sha256 = "sha256-QYvgKq7I+YGoDbECFGtQHPPP/z8oo5n3BT4LoShrEPc=";
   };
 
   vendorHash = null;
