@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-shell";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixos-shell";
     rev = finalAttrs.version;
-    sha256 = "sha256-plRKXQqww7easx0wgGKAkOJH1TW/PeeB20dq9XUN8J4=";
+    sha256 = "sha256-sVlbbhRVpAJ8fcjdwJFXlw9MOpb9aqFmAzDCzDi0jqo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
