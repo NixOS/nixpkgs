@@ -8,17 +8,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mpm-unwrapped";
   version = "2026.3";
 
-  passthru.supportedPlatforms = {
-    "aarch64-darwin" = {
-      mathworks_platform = "maca64";
-      hash = "sha256-ESqG7cmVvWfilKN/pM/f6bxPv5Vs8wJ5p2Ne8DD4dI8=";
-    };
-    "x86_64-linux" = {
-      mathworks_platform = "glnxa64";
-      hash = "sha256-lsCa2xT0mXUGunNcs2PsE04ItOOybxlQhmNuKa/qs6M=";
-    };
-  };
-
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
@@ -47,6 +36,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  passthru.supportedPlatforms = {
+    "aarch64-darwin" = {
+      mathworks_platform = "maca64";
+      hash = "sha256-ESqG7cmVvWfilKN/pM/f6bxPv5Vs8wJ5p2Ne8DD4dI8=";
+    };
+    "x86_64-linux" = {
+      mathworks_platform = "glnxa64";
+      hash = "sha256-lsCa2xT0mXUGunNcs2PsE04ItOOybxlQhmNuKa/qs6M=";
+    };
+  };
 
   meta = {
     description = "MATLAB Package Manager";
