@@ -1,30 +1,21 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
+  rustPlatform,
   icu,
 }:
-python3Packages.buildPythonApplication (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "actool";
-  version = "1.6.0";
-  pyproject = true;
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "actool";
     tag = finalAttrs.version;
-    hash = "sha256-OJJwEZEz+nNq3W1SDXt76Vx9qvEFUUL4dyem/oc2RA4=";
+    hash = "sha256-TRxA9c6q66Gso/ziqvly8IJR2AEHMc197gC9cUSuwAw=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
-    pillow
-    liblzfse
-    icu
-  ];
+  cargoHash = "sha256-BhR5gwIrFE0OuSAxVTY5kMfmMlPfIABfOgmX/rOvpug=";
 
   meta = {
     description = "Apple's actool reimplementation";

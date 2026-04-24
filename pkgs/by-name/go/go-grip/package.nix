@@ -5,13 +5,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "go-grip";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "chrishrb";
     repo = "go-grip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HwD/pdWEEU+Hoo4HUJeK8y40jp1byNhw/TSpa5SNRak=";
+    hash = "sha256-uDDzkkCX/tUKRCJYt/3Qsh4qObaCNaW9I801jQphM4A=";
   };
 
   vendorHash = "sha256-QsLiCsFY6nI85jsEZtAgmObEKpBSZWhzZk+TlukM8JU=";
