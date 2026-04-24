@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://ipxe.org/wimboot";
     description = "Windows Imaging Format bootloader";
+    changelog = "https://github.com/ipxe/wimboot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       das_j
