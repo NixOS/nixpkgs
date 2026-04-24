@@ -1,8 +1,9 @@
 # Arguments for buildPostgresql
 {
-  hash,
+  meta,
   muslPatches ? { },
-  rev,
+  pname ? "postgresql",
+  src,
   version,
 }@builderArgs:
 
@@ -171,16 +172,7 @@ let
       stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  inherit version;
-  pname = "postgresql";
-
-  src = fetchFromGitHub {
-    owner = "postgres";
-    repo = "postgres";
-    # rev, not tag, on purpose: allows updating when new versions
-    # are "stamped" a few days before release (tag).
-    inherit hash rev;
-  };
+  inherit pname src version;
 
   __structuredAttrs = true;
 
@@ -608,11 +600,7 @@ stdenv'.mkDerivation (finalAttrs: {
     };
 
   meta = {
-    homepage = "https://www.postgresql.org";
-    description = "Powerful, open source object-relational database system";
     license = lib.licenses.postgresql;
-    changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-    teams = [ lib.teams.postgres ];
     pkgConfigModules = [
       "libecpg"
       "libecpg_compat"
@@ -620,7 +608,9 @@ stdenv'.mkDerivation (finalAttrs: {
       "libpq"
     ];
     platforms = lib.platforms.unix;
-
+  }
+  // meta
+  // {
     # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
     # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for
     # the JIT apparently, but with a $(CLANG) that can produce binaries for the build, not the
@@ -634,6 +624,7 @@ stdenv'.mkDerivation (finalAttrs: {
     #
     # Note: This is "host canExecute build" on purpose, since this is about the LLVM that is called
     # to do JIT at **runtime**.
-    broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
+    broken =
+      meta.broken or false || (jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform);
   };
 })
