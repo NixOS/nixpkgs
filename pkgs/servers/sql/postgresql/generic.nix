@@ -1,8 +1,5 @@
-let
-
-  generic =
-    # utils
     {
+      # utils
       stdenv,
       fetchFromGitHub,
       fetchurl,
@@ -592,11 +589,4 @@ let
         # to do JIT at **runtime**.
         broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
       };
-    });
-
-in
-# passed by <major>.nix
-versionArgs:
-# passed by default.nix
-{ self, ... }@defaultArgs:
-self.callPackage generic (defaultArgs // versionArgs)
+    })
