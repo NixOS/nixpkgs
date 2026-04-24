@@ -9178,6 +9178,8 @@ with pkgs;
 
   inherit (callPackage ../applications/networking/browsers/brave { })
     brave
+    brave-beta
+    brave-nightly
     ;
 
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };

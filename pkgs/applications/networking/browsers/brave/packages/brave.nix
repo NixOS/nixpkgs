@@ -2,6 +2,7 @@
 rec {
   pname = "brave";
   version = "1.89.137";
+  channel = "stable";
 
   archives = {
     aarch64-linux = {

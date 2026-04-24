@@ -5,10 +5,10 @@
 # Regenerates pkgs/applications/networking/browsers/brave/packages/*.nix.
 #
 # Stable Brave is resolved via GitHub's /releases/latest endpoint, which by
-# definition skips drafts and prereleases. Upstream tags a release either as
-# stable, beta or nightly depending on which channel's builds it ships; there
-# is no reliable signal in the release metadata beyond the asset filenames,
-# so we identify each asset by its deterministic name pattern.
+# definition skips drafts and prereleases. Beta and nightly don't have a
+# reliable release-level signal (the `prerelease` flag is set inconsistently
+# upstream), so we paginate through recent releases and pick the newest one
+# whose asset list contains the channel-specific .deb.
 
 set -euo pipefail
 
@@ -17,8 +17,64 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 GH_AUTH=(${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"})
 REPO="brave/brave-browser"
 
+# Pagination tuning for release lookups. PAGE_SIZE is the GitHub API maximum.
+# MAX_PAGES is a safety cap: with 100 releases/page and Brave's cadence of
+# several builds per week, 5 pages covers well over a month of history, which
+# is far more than the ~2-week gap we've historically seen between an
+# infrequent variant's tag and HEAD of the releases feed.
+PAGE_SIZE=100
+MAX_PAGES=5
+
 sri_hash() {
   nix-hash --to-sri --type sha256 "$(nix-prefetch-url --type sha256 "$1")"
+}
+
+# Picks the newest release in a (newest-first) list whose assets include an
+# entry matching the template (with ${version} substituted by the release's
+# own tag). Prints the release JSON on success, or "null" if no match.
+match_release_in_page() {
+  local releasesJson="$1" template="$2"
+
+  jq -c --arg tmpl "$template" '
+    map(select(
+      . as $r
+      | $r.assets
+      | map(.name)
+      | any(. == ($tmpl | gsub("\\$\\{version\\}"; $r.tag_name | ltrimstr("v"))))
+    ))
+    | first
+  ' <<<"$releasesJson"
+}
+
+# Finds the newest release with a matching asset, paginating through the
+# GitHub releases feed as needed. Fails loudly if nothing turns up within
+# MAX_PAGES so a silent update-script regression can't ship empty archives.
+find_release_with_asset() {
+  local template="$1"
+  local page=1
+
+  while (( page <= MAX_PAGES )); do
+    local releasesJson
+    releasesJson="$(curl --fail -s "${GH_AUTH[@]}" \
+      "https://api.github.com/repos/${REPO}/releases?per_page=${PAGE_SIZE}&page=${page}")"
+
+    # An empty page means we've walked off the end of the release history.
+    if [[ "$(jq -r 'length' <<<"$releasesJson")" == "0" ]]; then
+      break
+    fi
+
+    local match
+    match="$(match_release_in_page "$releasesJson" "$template")"
+    if [[ "$match" != "null" ]]; then
+      printf '%s' "$match"
+      return 0
+    fi
+
+    page=$(( page + 1 ))
+  done
+
+  echo "update.sh: no release with asset matching '${template}' found within ${MAX_PAGES} pages of ${PAGE_SIZE}" >&2
+  return 1
 }
 
 # Emits a `<platform> = { url = ...; hash = ...; };` block if the release has
@@ -52,13 +108,14 @@ EOF
 
 # Writes pkgs/.../packages/<pname>.nix for one (pname, release) pair.
 #
-# $1: pname (e.g. "brave")
-# $2: release JSON object
-# $3: Linux .deb filename stem (e.g. "brave-browser")
-# $4: macOS .zip filename stem (always "brave" for the regular browser; each
+# $1: pname
+# $2: release channel ("stable", "beta" or "nightly")
+# $3: release JSON object
+# $4: Linux .deb filename stem (e.g. "brave-browser")
+# $5: macOS .zip filename stem (always "brave" for the regular browser; each
 #     release tag uniquely identifies the channel)
 write_package_nix() {
-  local pname="$1" releaseJson="$2" debStem="$3" darwinStem="$4"
+  local pname="$1" channel="$2" releaseJson="$3" debStem="$4" darwinStem="$5"
 
   local version
   version="$(jq -r '.tag_name | ltrimstr("v")' <<<"$releaseJson")"
@@ -71,6 +128,7 @@ write_package_nix() {
     echo 'rec {'
     echo "  pname = \"${pname}\";"
     echo "  version = \"${version}\";"
+    echo "  channel = \"${channel}\";"
     echo ''
     echo '  archives = {'
     emit_archive_entry "$releaseJson" "$version" "${debStem}_\${version}_arm64.deb"      "aarch64-linux"
@@ -82,8 +140,21 @@ write_package_nix() {
   } > "$outFile"
 }
 
-# Stable: GitHub's /releases/latest endpoint always points at the newest
-# non-prerelease, non-draft release, which matches the stable channel.
+# Stable is the only channel where GitHub's metadata reliably identifies
+# the right release: /releases/latest excludes drafts and prereleases by
+# definition and always surfaces the stable-channel tag.
 stableJson="$(curl --fail -s "${GH_AUTH[@]}" \
   "https://api.github.com/repos/${REPO}/releases/latest")"
-write_package_nix "brave" "$stableJson" "brave-browser" "brave"
+write_package_nix "brave" "stable" "$stableJson" "brave-browser" "brave"
+
+# pname, channel, deb stem, darwin zip stem
+channels=(
+  "brave-beta    beta    brave-browser-beta    brave"
+  "brave-nightly nightly brave-browser-nightly brave"
+)
+
+for entry in "${channels[@]}"; do
+  read -r pname channel debStem darwinStem <<<"$entry"
+  releaseJson="$(find_release_with_asset "${debStem}_\${version}_amd64.deb")"
+  write_package_nix "$pname" "$channel" "$releaseJson" "$debStem" "$darwinStem"
+done
