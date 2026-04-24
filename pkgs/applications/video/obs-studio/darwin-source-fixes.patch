@@ -1,0 +1,120 @@
+diff --git a/plugins/mac-avcapture/OBSAVCapture.m b/plugins/mac-avcapture/OBSAVCapture.m
+index 2b2716a..6a4eb3a 100644
+--- a/plugins/mac-avcapture/OBSAVCapture.m
++++ b/plugins/mac-avcapture/OBSAVCapture.m
+@@ -775,7 +775,10 @@ + (NSString *)effectsWarningForDevice:(AVCaptureDevice *)device
+         }
+     }
+     if (@available(macOS 15.0, *)) {
+-        if (device.backgroundReplacementActive) {
++        SEL backgroundReplacementActiveSelector = @selector(backgroundReplacementActive);
++        BOOL (*backgroundReplacementActiveFn)(id, SEL) = (BOOL (*)(id, SEL))[device methodForSelector:backgroundReplacementActiveSelector];
++        if ([device respondsToSelector:backgroundReplacementActiveSelector] && backgroundReplacementActiveFn &&
++            backgroundReplacementActiveFn(device, backgroundReplacementActiveSelector)) {
+             effectWarning = @"Warning.Effect.BackgroundReplacement";
+             effectsCount++;
+         }
+diff --git a/plugins/mac-videotoolbox/encoder.c b/plugins/mac-videotoolbox/encoder.c
+index 0eca6b9..7d668db 100644
+--- a/plugins/mac-videotoolbox/encoder.c
++++ b/plugins/mac-videotoolbox/encoder.c
+@@ -576,6 +576,9 @@ static OSStatus session_set_props(struct vt_encoder *enc, VTCompressionSessionRe
+ 			return code;
+ 		}
+ 
++#if defined(kVTCompressionPropertyKey_SpatialAdaptiveQPLevel) \
++    && defined(kVTQPModulationLevel_Default) \
++    && defined(kVTQPModulationLevel_Disable)
+ 		if (__builtin_available(macOS 15.0, *)) {
+ 			int spatial_aq = enc->spatial_aq ? kVTQPModulationLevel_Default : kVTQPModulationLevel_Disable;
+ 			CFNumberRef spatialAQ = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &spatial_aq);
+@@ -588,6 +591,7 @@ static OSStatus session_set_props(struct vt_encoder *enc, VTCompressionSessionRe
+ 
+ 			CFRelease(spatialAQ);
+ 		}
++#endif
+ 	}
+ 
+ 	// This can fail depending on hardware configuration
+diff --git a/libobs-metal/MetalDevice.swift b/libobs-metal/MetalDevice.swift
+index 90dd95c..e2cc5f0 100644
+--- a/libobs-metal/MetalDevice.swift
++++ b/libobs-metal/MetalDevice.swift
+@@ -61,11 +61,7 @@ final class MetalDevice {
+         let nopVertexSource = "[[vertex]] float4 vsNop() { return (float4)0; }"
+ 
+         let compileOptions = MTLCompileOptions()
+-        if #available(macOS 15, *) {
+-            compileOptions.mathMode = .fast
+-        } else {
+-            compileOptions.fastMathEnabled = true
+-        }
++        compileOptions.fastMathEnabled = true
+ 
+         guard let library = try? device.makeLibrary(source: nopVertexSource, options: compileOptions),
+             let function = library.makeFunction(name: "vsNop")
+diff --git a/libobs-metal/MTLOrigin+Extensions.swift b/libobs-metal/MTLOrigin+Extensions.swift
+index c2d6ae2..7079ae8 100644
+--- a/libobs-metal/MTLOrigin+Extensions.swift
++++ b/libobs-metal/MTLOrigin+Extensions.swift
+@@ -17,7 +17,7 @@
+ import Foundation
+ import Metal
+ 
+-extension MTLOrigin: @retroactive Equatable {
++extension MTLOrigin: Equatable {
+     public static func == (lhs: MTLOrigin, rhs: MTLOrigin) -> Bool {
+         lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z
+     }
+diff --git a/libobs-metal/MTLRegion+Extensions.swift b/libobs-metal/MTLRegion+Extensions.swift
+index 1b3978b..37c8a73 100644
+--- a/libobs-metal/MTLRegion+Extensions.swift
++++ b/libobs-metal/MTLRegion+Extensions.swift
+@@ -17,7 +17,7 @@
+ import Foundation
+ import Metal
+ 
+-extension MTLRegion: @retroactive Equatable {
++extension MTLRegion: Equatable {
+     public static func == (lhs: MTLRegion, rhs: MTLRegion) -> Bool {
+         lhs.origin == rhs.origin && lhs.size == rhs.size
+     }
+diff --git a/libobs-metal/MTLSize+Extensions.swift b/libobs-metal/MTLSize+Extensions.swift
+index 2e4c0f6..c061dd2 100644
+--- a/libobs-metal/MTLSize+Extensions.swift
++++ b/libobs-metal/MTLSize+Extensions.swift
+@@ -17,7 +17,7 @@
+ import Foundation
+ import Metal
+ 
+-extension MTLSize: @retroactive Equatable {
++extension MTLSize: Equatable {
+     public static func == (lhs: MTLSize, rhs: MTLSize) -> Bool {
+         lhs.width == rhs.width && lhs.height == rhs.height && lhs.depth == rhs.depth
+     }
+diff --git a/libobs-metal/MTLViewport+Extensions.swift b/libobs-metal/MTLViewport+Extensions.swift
+index 9304066..6c61d66 100644
+--- a/libobs-metal/MTLViewport+Extensions.swift
++++ b/libobs-metal/MTLViewport+Extensions.swift
+@@ -17,7 +17,7 @@
+ import Foundation
+ import Metal
+ 
+-extension MTLViewport: @retroactive Equatable {
++extension MTLViewport: Equatable {
+     /// Checks two ``MTLViewPort`` objects for equality
+     /// - Parameters:
+     ///   - lhs: First ``MTLViewPort``object
+diff --git a/libobs-metal/OBSShader.swift b/libobs-metal/OBSShader.swift
+index 9cd92c8..d235203 100644
+--- a/libobs-metal/OBSShader.swift
++++ b/libobs-metal/OBSShader.swift
+@@ -542,7 +542,7 @@ private func convertGSParam(_ shader: UnsafeMutablePointer<gs_shader>, parameter
+                 textures: [],
+                 samplers: [],
+                 arguments: [],
+-                gsFunction: function,
++                gsFunction: function
+             )
+ 
+             for j in 0..<function.pointee.params.num {

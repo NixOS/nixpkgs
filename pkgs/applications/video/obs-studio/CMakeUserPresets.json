@@ -11,7 +11,11 @@
       "name": "nixpkgs-darwin",
       "displayName": "Nixpkgs (Darwin)",
       "inherits": ["macos"],
-      "binaryDir": "${sourceDir}/build"
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
     }
   ]
 }
