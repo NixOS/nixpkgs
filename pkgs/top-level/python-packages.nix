@@ -5016,6 +5016,8 @@ self: super: with self; {
 
   encodec = callPackage ../development/python-modules/encodec { };
 
+  encutils = callPackage ../development/python-modules/encutils { };
+
   energyflip-client = callPackage ../development/python-modules/energyflip-client { };
 
   energyflow = callPackage ../development/python-modules/energyflow { };
