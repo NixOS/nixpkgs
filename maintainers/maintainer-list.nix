@@ -7306,6 +7306,11 @@
     githubId = 446083;
     name = "Daniel Rebelo de Oliveira";
   };
+  Dreaming-Codes = {
+    github = "Dreaming-Codes";
+    githubId = 10401566;
+    name = "Lorenzo Rizzotti";
+  };
   drets = {
     email = "dmitryrets@gmail.com";
     github = "drets";
