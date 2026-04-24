@@ -28,17 +28,17 @@
 assert !cppSupport || !mpiSupport;
 
 let
-  inherit (lib) optional optionals;
+  inherit (lib) optional optionalString cmakeBool;
 in
 
 stdenv.mkDerivation rec {
   version = "1.14.6";
   pname =
     "hdf5"
-    + lib.optionalString cppSupport "-cpp"
-    + lib.optionalString fortranSupport "-fortran"
-    + lib.optionalString mpiSupport "-mpi"
-    + lib.optionalString threadsafe "-threadsafe";
+    + optionalString cppSupport "-cpp"
+    + optionalString fortranSupport "-fortran"
+    + optionalString mpiSupport "-mpi"
+    + optionalString threadsafe "-threadsafe";
 
   src = fetchFromGitHub {
     owner = "HDFGroup";
@@ -88,18 +88,18 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
-    (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
-    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
-    (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
-    (lib.cmakeBool "HDF5_BUILD_FORTRAN" fortranSupport)
-    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
-    (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
-    (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
-    (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
-    (lib.cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe))
+    (cmakeBool "BUILD_STATIC_LIBS" enableStatic)
+    (cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
+    (cmakeBool "HDF5_BUILD_FORTRAN" fortranSupport)
+    (cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
+    (cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
+    (cmakeBool "HDF5_BUILD_JAVA" javaSupport)
+    (cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
+    (cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe))
     # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
     # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
-    (lib.cmakeBool "HDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16" (
+    (cmakeBool "HDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16" (
       with stdenv.hostPlatform; !(isDarwin && isx86_64)
     ))
   ]
@@ -117,14 +117,14 @@ stdenv.mkDerivation rec {
   ''
   # The shared build creates binaries with -shared suffixes,
   # so we remove these suffixes.
-  + lib.optionalString enableShared ''
+  + optionalString enableShared ''
     pushd ''${!outputBin}/bin
     for file in *-shared; do
       mv "$file" "''${file%%-shared}"
     done
     popd
   ''
-  + lib.optionalString fortranSupport ''
+  + optionalString fortranSupport ''
     mv $out/mod/shared $dev/include
     rm -r $out/mod
 
