@@ -255,8 +255,8 @@ in
       "sha256-S2NgrjralqxjjGo39TwaUSStqspnhI/E2/BLXUGP0Hc=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.42.90"
-      "sha256-JJOtHOlHDMYwjk4zEPArq7rmrlSINUxfd4etVVWGItw=";
+    buildMypyBoto3Package "cloudwatch" "1.42.95"
+      "sha256-vSHJoPnQi2X2pbQ51SrNN7pxEmBG5V63tp4M1fdLVdM=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.42.3"
@@ -966,8 +966,8 @@ in
       "sha256-h0urK602L1j2CtD1xsUOMaXizzc2CxbttMlaSNyQNoM=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.42.94"
-      "sha256-iNomJZUOwZ2mg3bsO0KNMvI77gPfLt7WUm1cUeaGZoA=";
+    buildMypyBoto3Package "opensearch" "1.42.95"
+      "sha256-CGCwYDcgttsyYSKUB2kVVeeOxtT6svLxR+fDFtjZ854=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.42.75"
