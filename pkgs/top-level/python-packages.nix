@@ -1884,6 +1884,8 @@ self: super: with self; {
 
   baycomp = callPackage ../development/python-modules/baycomp { };
 
+  bayeux-ml = callPackage ../development/python-modules/bayeux-ml { };
+
   bayesian-optimization = callPackage ../development/python-modules/bayesian-optimization { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
