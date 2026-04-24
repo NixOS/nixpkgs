@@ -1,5 +1,6 @@
 {
   lib,
+  pytestCheckHook,
 
   buildPythonApplication,
   colorama,
@@ -73,19 +74,26 @@ buildPythonApplication {
   doCheck = true;
 
   nativeCheckInputs = [
-    python.pkgs.pytest
     ruff
     ty
+    pytestCheckHook
   ];
 
-  checkPhase = ''
+  pythonImportsCheck = [
+    "test_driver.driver"
+    "test_driver.machine"
+  ];
+
+  pytestFlags = [
+    "-W error"
+  ];
+
+  preCheck = ''
     echo -e "\x1b[32m## run ty\x1b[0m"
     ty check --error-on-warning test_driver extract-docstrings.py
     echo -e "\x1b[32m## run ruff check\x1b[0m"
     ruff check .
     echo -e "\x1b[32m## run ruff format\x1b[0m"
     ruff format --check --diff .
-    echo -e "\x1b[32m## run pytest\x1b[0m"
-    pytest
   '';
 }
