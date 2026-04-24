@@ -146,6 +146,9 @@ lib.extendMkDerivation {
       # Enabled to detect some (native)BuildInputs mistakes
       strictDeps ? true,
 
+      # Enabled __structuredAttrs https://github.com/NixOS/nixpkgs/issues/205690
+      __structuredAttrs ? true,
+
       outputs ? [ "out" ],
 
       # used to disable derivation, useful for specific python versions
@@ -381,7 +384,7 @@ lib.extendMkDerivation {
         ]
       );
 
-      inherit strictDeps;
+      inherit strictDeps __structuredAttrs;
 
       env = {
         LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
