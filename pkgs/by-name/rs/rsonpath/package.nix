@@ -25,7 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/v0ldek/rsonpath";
     changelog = "https://github.com/v0ldek/rsonpath/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbutter ];
+    maintainers = with lib.maintainers; [
+      tbutter
+      progrm_jarvis
+    ];
     mainProgram = "rq";
   };
 })
