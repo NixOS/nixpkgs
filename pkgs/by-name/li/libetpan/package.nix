@@ -104,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ openssl ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   configureScript = "./autogen.sh";
 
   meta = {
