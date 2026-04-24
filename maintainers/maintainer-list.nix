@@ -4655,6 +4655,12 @@
     githubId = 1762540;
     name = "Changlin Li";
   };
+  chandler-barlow = {
+    email = "chandlerbrlw@gmail.com";
+    github = "chandler-barlow";
+    githubId = 46634817;
+    name = "Chandler Barlow";
+  };
   chanley = {
     email = "charlieshanley@gmail.com";
     github = "charlieshanley";
