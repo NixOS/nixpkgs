@@ -24,6 +24,7 @@ buildPythonPackage (finalAttrs: {
   pname = "stable-baselines3";
   version = "2.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
@@ -34,6 +35,9 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "gymnasium"
+  ];
   dependencies = [
     cloudpickle
     gymnasium
@@ -58,6 +62,12 @@ buildPythonPackage (finalAttrs: {
     "tests/test_dict_env.py"
     "tests/test_her.py"
     "tests/test_save_load.py"
+
+    # gymnasium.error.DeprecatedEnv: Environment version v3 for `Taxi` is deprecated.
+    # Please use `Taxi-v4` instead.
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-A2C]"
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-DQN]"
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-PPO]"
   ];
 
   disabledTests = [
