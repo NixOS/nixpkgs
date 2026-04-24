@@ -11,6 +11,8 @@ in
 {
   meta.maintainers = [ lib.maintainers.arianvp ];
 
+  imports = [ ./server-tpm.nix ];
+
   options.services.spire.server = {
     enable = lib.mkEnableOption "SPIRE Server";
 

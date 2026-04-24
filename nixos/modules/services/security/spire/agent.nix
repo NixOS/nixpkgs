@@ -125,6 +125,8 @@ in
     };
 
   };
+  imports = [ ./agent-tpm.nix ];
+
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
