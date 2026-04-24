@@ -3,12 +3,14 @@
   mkChromiumDerivation,
   chromiumVersionAtLeast,
   enableWideVine,
-  ungoogled,
+  variant,
 }:
 
 let
   # https://chromium-review.googlesource.com/c/chromium/src/+/7253206
   ifElseM145 = new: old: if chromiumVersionAtLeast "145" then new else old;
+
+  browserName = if variant == "helium" then "helium" else "chromium";
 in
 
 mkChromiumDerivation (base: rec {
@@ -64,21 +66,21 @@ mkChromiumDerivation (base: rec {
 
     # Install Desktop Entry
     install -D chrome/installer/linux/common/desktop.template \
-      $out/share/applications/chromium-browser.desktop
+      $out/share/applications/${browserName}-browser.desktop
 
-    substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace-fail "${ifElseM145 "@@MENUNAME" "@@MENUNAME@@"}" "Chromium" \
-      --replace-fail "${ifElseM145 "@@PACKAGE" "@@PACKAGE@@"}" "chromium" \
-      --replace-fail "${ifElseM145 "/usr/bin/@@usr_bin_symlink_name" "/usr/bin/@@USR_BIN_SYMLINK_NAME@@"}" "chromium" \
+    substituteInPlace $out/share/applications/${browserName}-browser.desktop \
+      --replace-fail "${ifElseM145 "@@MENUNAME" "@@MENUNAME@@"}" "${lib.toSentenceCase browserName}" \
+      --replace-fail "${ifElseM145 "@@PACKAGE" "@@PACKAGE@@"}" "${browserName}" \
+      --replace-fail "${ifElseM145 "/usr/bin/@@usr_bin_symlink_name" "/usr/bin/@@USR_BIN_SYMLINK_NAME@@"}" "${browserName}" \
       --replace-fail "${ifElseM145 "@@uri_scheme" "@@URI_SCHEME@@"}" "x-scheme-handler/chromium;" \
       --replace-fail "${ifElseM145 "@@extra_desktop_entries" "@@EXTRA_DESKTOP_ENTRIES@@"}" ""
 
     # See https://github.com/NixOS/nixpkgs/issues/12433
-    substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace-fail "[Desktop Entry]" "[Desktop Entry]''\nStartupWMClass=chromium-browser"
+    substituteInPlace $out/share/applications/${browserName}-browser.desktop \
+      --replace-fail "[Desktop Entry]" "[Desktop Entry]''\nStartupWMClass=${browserName}-browser"
 
-    if grep -F '@@' $out/share/applications/chromium-browser.desktop ; then
-      echo "error: chromium-browser.desktop contains unsubstituted placeholders" >&2
+    if grep -F '@@' $out/share/applications/${browserName}-browser.desktop ; then
+      echo "error: ${browserName}-browser.desktop contains unsubstituted placeholders" >&2
       exit 1
     fi
   '';
@@ -87,42 +89,18 @@ mkChromiumDerivation (base: rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = {
-    description =
-      "Open source web browser from Google"
-      + lib.optionalString ungoogled ", with dependencies on Google web services removed";
-    longDescription = ''
-      Chromium is an open source web browser from Google that aims to build a
-      safer, faster, and more stable way for all Internet users to experience
-      the web. It has a minimalist user interface and provides the vast majority
-      of source code for Google Chrome (which has some additional features).
-    '';
-    homepage =
-      if ungoogled then
-        "https://github.com/ungoogled-software/ungoogled-chromium"
-      else
-        "https://www.chromium.org/";
-    # Maintainer pings for this derivation are highly unreliable.
-    # If you add yourself as maintainer here, please also add yourself as CODEOWNER.
-    maintainers =
-      with lib.maintainers;
-      if ungoogled then
-        [
-          networkexception
-          emilylange
-        ]
-      else
-        [
-          networkexception
-          emilylange
-        ];
-    license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    mainProgram = "chromium";
-    hydraPlatforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
-    timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
-  };
+  meta =
+    let
+      upstreamMeta = (import ./variants/meta.nix lib).${variant}.meta;
+    in
+    upstreamMeta
+    // {
+      license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
+      platforms = lib.platforms.linux;
+      hydraPlatforms = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+    };
 })
