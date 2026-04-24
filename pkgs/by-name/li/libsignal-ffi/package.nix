@@ -6,6 +6,8 @@
   xcodebuild,
   protobuf,
   boringssl,
+
+  withShared ? !stdenv.hostPlatform.isStatic,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-ffi";
@@ -20,6 +22,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-xffBXvq1ikesIjw6cXfphnTIiyuMiUcY8h0pzSgfD8U=";
   };
+
+  postPatch =
+    lib.optionalString withShared ''
+      substituteInPlace rust/bridge/ffi/Cargo.toml \
+        --replace-fail 'crate-type = ["staticlib"]' 'crate-type = ["cdylib"]'
+    ''
+    + lib.optionalString boringssl.passthru.isShared ''
+      substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs \
+        --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
+        --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
+    '';
 
   nativeBuildInputs = [
     protobuf
@@ -39,6 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "libsignal-ffi"
   ];
+
+  postFixup = lib.optionalString (withShared && stdenv.hostPlatform.isDarwin) ''
+    dylib="$out/lib/libsignal_ffi.dylib"
+    install_name_tool -id "$dylib" "$dylib"
+  '';
 
   meta = {
     description = "C ABI library which exposes Signal protocol logic";
