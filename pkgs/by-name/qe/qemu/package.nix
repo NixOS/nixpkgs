@@ -140,11 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.2.2";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eEspb/KcFBeqcjI6vLLS6pq5dxck9Xfc14XDsE8h4XY=";
+    hash = "sha256-wEyjYBJlPzLRHGdNNwz1KnEOfT8Ywti2PkkyBSpIVNY=";
   };
 
   depsBuildBuild = [
@@ -162,13 +162,19 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perl
 
+  ]
+  ++ (with python3Packages; [
     # For python changes other than simple package additions, ping @dramforever for review.
     # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
-    python3Packages.distlib
+    distlib
+    pip
     # Hooks from the python package are needed to add `$pythonPath` so
     # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
-    python3Packages.python
-  ]
+    python
+    qemu-qmp
+    setuptools
+    wheel
+  ])
   ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
   ++ lib.optionals enableDocs [
     python3Packages.sphinx
