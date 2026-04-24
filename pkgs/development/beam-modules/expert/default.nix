@@ -1,9 +1,14 @@
 {
+  _experimental-update-script-combinators,
   erlang,
   fetchFromGitHub,
-  mixRelease,
-  lib,
   fetchMixDeps,
+  gnused,
+  lib,
+  mixRelease,
+  nix-update-script,
+  nurl,
+  writeShellApplication,
 }:
 let
   version = "0.1.0";
@@ -58,6 +63,24 @@ mixRelease rec {
 
   passthru = {
     inherit engineDeps;
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (lib.getExe (writeShellApplication {
+        name = "expert-update-engine";
+        runtimeInputs = [
+          gnused
+          nurl
+        ];
+        text = ''
+          nixpkgs="$(git rev-parse --show-toplevel)"
+          engineHashOld=${engineDeps.hash}
+          engineHashNew=$(nurl -e "(import $nixpkgs/. { }).$UPDATE_NIX_ATTR_PATH.engineDeps")
+          echo "$UPDATE_NIX_ATTR_PATH.engineDeps.hash" >&2
+          sed -i "s|$engineHashOld|$engineHashNew|" "$nixpkgs"/pkgs/development/beam-modules/expert/default.nix
+        '';
+      }))
+    ];
   };
 
   meta = {
