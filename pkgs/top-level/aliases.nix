@@ -1933,6 +1933,7 @@ mapAliases {
   swiPrologWithGui = throw "'swiPrologWithGui' has been renamed to/replaced by 'swi-prolog-gui'"; # Converted to throw 2025-10-27
   swww = warnAlias "'swww' has been renamed to 'awww'" awww; # Added 2026-03-22
   Sylk = throw "'Sylk' has been renamed to/replaced by 'sylk'"; # Converted to throw 2025-10-27
+  sylpheed = throw "'sylpheed' has been removed because it is broken and unmaintained, please use 'claws-mail' instead"; # Added 2026-04-22
   symbiyosys = throw "'symbiyosys' has been renamed to/replaced by 'sby'"; # Converted to throw 2025-10-27
   syn2mas = throw "'syn2mas' has been removed. It has been integrated into the main matrix-authentication-service CLI as a subcommand: 'mas-cli syn2mas'."; # Added 2025-07-07
   synapse-admin-etkecc = warnAlias "'synapse-admin-etkecc' has been renamed to 'ketesa'" ketesa; # Added 2026-04-03
