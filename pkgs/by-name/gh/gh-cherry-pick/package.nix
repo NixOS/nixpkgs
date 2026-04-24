@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
-    pytest
     pytest-cov-stub
     pytest-mock
   ];
