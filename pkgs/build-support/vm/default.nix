@@ -568,7 +568,7 @@ let
 
           echo "unpacking RPMs..."
           set +o pipefail
-          for i in $rpms; do
+          for i in "''${rpms[@]}"; do
               echo "$i..."
               ${rpm}/bin/rpm2cpio "$i" | chroot /mnt ${cpio}/bin/cpio -i --make-directories --unconditional
           done
@@ -585,7 +585,7 @@ let
 
           echo "installing RPMs..."
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-            rpm -iv --nosignature ${lib.optionalString (!runScripts) "--noscripts"} $rpms
+            rpm -iv --nosignature ${lib.optionalString (!runScripts) "--noscripts"} "''${rpms[@]}"
 
           echo "running post-install script..."
           eval "$postInstall"
