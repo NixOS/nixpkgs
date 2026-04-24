@@ -4,34 +4,29 @@
   fetchurl,
   hamlib,
   pkg-config,
-  qtbase,
-  qttools,
-  qtserialport,
-  qtcharts,
-  qmake,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "klog";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1d5x7rq0mgfrqws3q1y4z8wh2qa3gvsmd0ssf2yqgkyq3fhdrb5c";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
-    qmake
-    qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qttools
   ];
   buildInputs = [
     hamlib
-    qtbase
-    qtserialport
-    qtcharts
+    libsForQt5.qtbase
+    libsForQt5.qtserialport
+    libsForQt5.qtcharts
   ];
 
   qmakeFlags = [ "KLog.pro" ];
@@ -48,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pulsation ];
   };
-}
+})

@@ -6,12 +6,9 @@
   cmake,
   pkg-config,
   doxygen,
-  wrapQtAppsHook,
   pcre,
   poco,
-  qtbase,
-  qtsvg,
-  qwt6_1,
+  libsForQt5,
   nlohmann_json,
   soapysdr-with-plugins,
   portaudio,
@@ -20,14 +17,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pothos";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "PothosCore";
-    rev = "pothos-${version}";
+    rev = "pothos-${finalAttrs.version}";
     sha256 = "038c3ipvf4sgj0zhm3vcj07ymsva4ds6v89y43f5d3p4n8zc2rsg";
     fetchSubmodules = true;
   };
@@ -67,15 +64,15 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     doxygen
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     pcre
     poco
-    qtbase
-    qtsvg
-    qwt6_1
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qwt6_1
     nlohmann_json
     soapysdr-with-plugins
     portaudio
@@ -113,4 +110,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
