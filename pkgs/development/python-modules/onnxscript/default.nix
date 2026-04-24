@@ -30,14 +30,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnxscript";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxscript";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-raeNa/OY9c8g+kHNxSAdLxhj+iwaMf/wrjUaKfW4E2s=";
+    hash = "sha256-PktzMtG8GpeRy3XUz8MFbOSISVzAIubpeOS0ESbVvrI=";
   };
 
   env = {
