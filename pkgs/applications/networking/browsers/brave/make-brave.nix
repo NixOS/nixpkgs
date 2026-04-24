@@ -87,6 +87,10 @@
   # filesystem layout (opt directory, desktop files, icon names, darwin app
   # bundle name) produced by the matching .deb / .zip artifact.
   channel ? "stable",
+  # Upstream product flavor: "browser" (the regular Brave) or "origin" (the
+  # stripped-down Brave Origin). Origin has no stable channel upstream, so
+  # flavor = "origin" implies channel != "stable".
+  flavor ? "browser",
 }:
 
 let
@@ -101,8 +105,42 @@ let
     escapeShellArg
     ;
 
-  # Suffix used by upstream for non-stable channels in directory names, desktop
-  # file names and icon file stems.
+  # Flavor-specific naming stems. browser follows the historical Brave layout;
+  # origin uses a parallel tree under /opt/brave.com/brave-origin-<channel>/.
+  flavorData = {
+    browser = {
+      optStem = "brave";
+      fileStem = "brave-browser";
+      appIdStem = "com.brave.Browser";
+      darwinStem = "Brave Browser";
+      changelogFile = "CHANGELOG_DESKTOP.md";
+      # browser ships its icons with a channel suffix in the filename.
+      iconsCarryChannelSuffix = true;
+      homepages = {
+        stable = "https://brave.com/";
+        beta = "https://brave.com/download-beta/";
+        nightly = "https://brave.com/download-nightly/";
+      };
+    };
+    origin = {
+      optStem = "brave-origin";
+      fileStem = "brave-origin";
+      appIdStem = "com.brave.Origin";
+      darwinStem = "Brave Origin";
+      changelogFile = "CHANGELOG_DESKTOP_ORIGIN.md";
+      # origin keeps icons un-suffixed, because the parent directory already
+      # encodes the channel.
+      iconsCarryChannelSuffix = false;
+      homepages = {
+        beta = "https://brave.com/origin/download-beta/";
+        nightly = "https://brave.com/origin/download-nightly/";
+      };
+    };
+  };
+
+  fd = flavorData.${flavor};
+
+  # Suffix used by upstream for non-stable channels.
   channelDashSuffix = if channel == "stable" then "" else "-${channel}";
   channelDotSuffix = if channel == "stable" then "" else ".${channel}";
   channelSpaceSuffix =
@@ -112,20 +150,22 @@ let
       " ${lib.toUpper (lib.substring 0 1 channel)}${lib.substring 1 (-1) channel}";
 
   # /opt/brave.com/<optName>/
-  optName = "brave" + channelDashSuffix;
+  optName = fd.optStem + channelDashSuffix;
   # Basename used for .desktop, gnome-control-center xml and icon files.
-  fileBase = "brave-browser" + channelDashSuffix;
+  fileBase = fd.fileStem + channelDashSuffix;
   # Secondary .desktop app-id.
-  appId = "com.brave.Browser" + channelDotSuffix;
+  appId = fd.appIdStem + channelDotSuffix;
   # Upstream shell wrapper inside /opt.
   innerWrapper = fileBase;
   # macOS .app bundle name (inside the zip).
-  darwinApp = "Brave Browser" + channelSpaceSuffix;
+  darwinApp = fd.darwinStem + channelSpaceSuffix;
   # Upstream Exec= target in .desktop files (replaced with our wrapper).
-  # Stable uniquely uses "brave-browser-stable" rather than "brave-browser".
-  upstreamBin = if channel == "stable" then "brave-browser-stable" else fileBase;
-  # Upstream icon filename suffix ("_beta", "_nightly", or empty for stable).
-  iconSuffix = if channel == "stable" then "" else "_${channel}";
+  # browser-stable uniquely uses "brave-browser-stable" rather than the plain
+  # filename stem; every other combination matches `fileBase`.
+  upstreamBin =
+    if flavor == "browser" && channel == "stable" then "brave-browser-stable" else fileBase;
+  # Upstream icon filename suffix ("_beta", "_nightly", or empty).
+  iconSuffix = if fd.iconsCarryChannelSuffix && channel != "stable" then "_${channel}" else "";
 
   deps = [
     alsa-lib
@@ -324,24 +364,28 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage =
-      {
-        stable = "https://brave.com/";
-        beta = "https://brave.com/download-beta/";
-        nightly = "https://brave.com/download-nightly/";
-      }
-      .${channel};
+    homepage = fd.homepages.${channel};
     description =
       "Privacy-oriented browser for Desktop and Laptop computers"
+      + lib.optionalString (flavor == "origin") " (Origin variant)"
       + lib.optionalString (channel != "stable") " (${channel} channel)";
     changelog =
-      "https://github.com/brave/brave-browser/blob/master/CHANGELOG_DESKTOP.md#"
+      "https://github.com/brave/brave-browser/blob/master/${fd.changelogFile}#"
       + lib.replaceStrings [ "." ] [ "" ] version;
-    longDescription = ''
-      Brave browser blocks the ads and trackers that slow you down,
-      chew up your bandwidth, and invade your privacy. Brave lets you
-      contribute to your favorite creators automatically.
-    '';
+    longDescription =
+      if flavor == "origin" then
+        ''
+          Brave Origin is a stripped-down variant of the Brave browser that
+          removes most non-privacy features (rewards, wallet, AI, etc.) while
+          keeping the core privacy, adblock and Chromium-based browsing
+          experience.
+        ''
+      else
+        ''
+          Brave browser blocks the ads and trackers that slow you down,
+          chew up your bandwidth, and invade your privacy. Brave lets you
+          contribute to your favorite creators automatically.
+        '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [

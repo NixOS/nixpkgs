@@ -9180,6 +9180,8 @@ with pkgs;
     brave
     brave-beta
     brave-nightly
+    brave-origin-beta
+    brave-origin-nightly
     ;
 
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
