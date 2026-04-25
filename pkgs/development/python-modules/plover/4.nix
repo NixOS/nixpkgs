@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   versionCheckHook,
   appdirs,
   babel,
@@ -22,7 +21,9 @@
   wrapQtAppsHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "plover";
   version = "4.0.2";
   pyproject = true;
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstenoproject";
     repo = "plover";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VpQT25bl8yPG4J9IwLkhSkBt31Y8BgPJdwa88WlreA8=";
   };
 
@@ -90,4 +91,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
