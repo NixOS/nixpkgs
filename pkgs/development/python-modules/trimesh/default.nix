@@ -23,6 +23,7 @@
   scipy,
   pillow,
   mapbox-earcut,
+  embreex,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -59,7 +60,9 @@ buildPythonPackage (finalAttrs: {
       pillow
       # vhacdx # not packaged
       mapbox-earcut
-      # embreex # not packaged
+    ]
+    ++ lib.optionals embreex.meta.available [
+      embreex
     ];
   };
 
