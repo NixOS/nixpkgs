@@ -1,5 +1,5 @@
 {
-  buildPythonApplication,
+  buildPythonPackage,
   dulwich,
   docutils,
   lib,
@@ -15,7 +15,7 @@
   testscenarios,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "reno";
   version = "4.1.0";
   pyproject = true;
