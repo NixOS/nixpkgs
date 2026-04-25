@@ -9,6 +9,7 @@
   cffi,
   cryptography-vectors ? (callPackage ./vectors.nix { }),
   fetchFromGitHub,
+  fetchpatch,
   isPyPy,
   libiconv,
   openssl,
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-b6wQnPEf18ViqQVch+Jg1w0Cn372QKxLknD9rL4JjxY=";
   };
+
+  # Fix installing stray files into site-packages
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pyca/cryptography/commit/43eb178ee3aae8d0060221118437b03c23570a41.patch";
+      hash = "sha256-dJkdt28Q0BrM2hNLcOD9f+RWTLelrZTPrm1NZG0HzN0=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
