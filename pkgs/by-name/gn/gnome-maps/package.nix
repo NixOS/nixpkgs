@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "50.0";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CmbgGr0s8Eink7D4OrKkFWAGB18n4bKJb9gohpTRNm4=";
+    hash = "sha256-Qs3wNn+UXOPbEgOmvP0dX1822crDYcgcGFZ7kxMN6es=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
