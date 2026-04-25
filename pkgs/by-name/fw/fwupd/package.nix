@@ -194,6 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     gi-docgen
     gobject-introspection
+    libjcat.bin
     libxml2
     meson
     ninja
