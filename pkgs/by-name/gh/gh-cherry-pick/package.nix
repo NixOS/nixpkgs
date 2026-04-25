@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gh-cherry-pick";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PerchunPak";
     repo = "gh-cherry-pick";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-plNxOYLfKWLjN5RR1g2VOJWgyrzXdgI0MDJYe05XcCk=";
+    hash = "sha256-ec9q+3nd1zJ2K3dyWqLsdTH5GBJ4B1b8D/4Wd6d8PcA=";
   };
 
   build-system = with python3Packages; [
