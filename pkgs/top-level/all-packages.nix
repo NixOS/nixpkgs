@@ -1045,8 +1045,6 @@ with pkgs;
 
   dehinter = with python3Packages; toPythonApplication dehinter;
 
-  unsloth = with python3Packages; toPythonApplication unsloth;
-  
   gamescope-wsi = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = false;
     enableWsi = true;
