@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-googlesheets-datasource";
-  version = "1.2.14";
+  version = "2.5.0";
   zipHash = {
-    x86_64-linux = "sha256-N4JZ/aWpvezR9daJKU559GXd+FNGmDA4P9CrlC4RFmQ=";
-    aarch64-linux = "sha256-HZhyg6NhptFib/3JJ8AnSywF+eaZOwiCij3TlMB0YG8=";
-    x86_64-darwin = "sha256-EwE6w67ARVp/2GE9pSqaD5TuBnsgwsDLZCrEXPfRfUE=";
-    aarch64-darwin = "sha256-3UGd/t1k6aZsKsQCplLV9klmjQAga19VaopHx330xUs=";
+    x86_64-linux = "sha256-X4kPz/9o63giMRyVztix0OPO9Ip6sn/bH1Y2V1u/6qw=";
+    aarch64-linux = "sha256-o2OQsGX8pcKUxnJw1+6rnrXTkDYXCuVhnfFYzmGBVYU=";
+    x86_64-darwin = "sha256-n+BTCyzQo6FxeUX9VE8Kf9DNTgEYq+BaAUwo9vh7XSo=";
+    aarch64-darwin = "sha256-UKYtxzXeI547fxmTkfHxR7vEHwkPIGUd6AB4ZBa9DSY=";
   };
   meta = {
     description = "Integrate JSON data into Grafana";
