@@ -117,32 +117,11 @@ let
   patches_common = lib.optional (
     stdenv.system == "aarch64-darwin"
   ) ./patches/skip-flaky-darwin-tests.patch;
-
-  # Lowdown 3.0 compatibility patch for nix 2.30, which has a different
-  # markdown.cc layout (no LOWDOWN_TERM_NORELLINK branch) and never
-  # received an upstream backport.
-  lowdown30PatchOld = ./patches/lowdown-3.0-compat-2.28-2.30.patch;
 in
 lib.makeExtensible (
   self:
   (
     {
-      nixComponents_2_30 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.30.4";
-          inherit teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-cJ96IBZCYoX0Tdlo5Q7qDSAKfL6QcUq/4Kr1UplH50E=";
-          };
-        }).appendPatches
-          (patches_common ++ [ lowdown30PatchOld ]);
-
-      nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
-
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.31.4";
@@ -209,6 +188,7 @@ lib.makeExtensible (
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
         nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
+        nixComponents_2_30 = throw "nixComponents_2_30 has been removed. use nixComponents_2_31.";
         nixComponents_2_32 = throw "nixComponents_2_32 has been removed. use nixComponents_2_34.";
         nixComponents_2_33 = throw "nixComponents_2_33 has been removed. use nixComponents_2_34.";
         nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
@@ -217,6 +197,7 @@ lib.makeExtensible (
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
         nix_2_28 = throw "nix_2_28 has been removed. use nix_2_31.";
         nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
+        nix_2_30 = throw "nix_2_30 has been removed. use nix_2_31.";
         nix_2_32 = throw "nix_2_32 has been removed. use nix_2_34.";
         nix_2_33 = throw "nix_2_33 has been removed. use nix_2_34.";
 
