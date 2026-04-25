@@ -11840,6 +11840,8 @@ with pkgs;
     }
   );
 
+  nixUnitVersions = recurseIntoAttrs (callPackage ../by-name/ni/nix-unit/versions.nix { });
+
   nix = nixVersions.stable;
 
   nixStatic = pkgsStatic.nix;
