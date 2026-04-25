@@ -254,6 +254,43 @@ self: super:
     # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
     zip = dontCheck super.zip;
 
+    inherit
+      (lib.mapAttrs (
+        _:
+        overrideCabal (drv: {
+          __darwinAllowLocalNetworking = true;
+        })
+      ) super)
+      cisco-spark-api
+      context-http-client
+      context-wai-middleware
+      haskell-bee-redis
+      http-client-websockets
+      http-io-streams
+      katip-wai
+      keter
+      monad-metrics-extensible
+      mysql-haskell
+      network-transport-tcp
+      network-wait
+      om-socket
+      polysemy-webserver
+      port-utils
+      servant-hmac-auth
+      servant-prometheus
+      sydtest-servant
+      sydtest-wai
+      sydtest-yesod
+      wai-app-file-cgi
+      wai-make-assets
+      wai-token-bucket-ratelimiter
+      webex-teams-api
+      webex-teams-conduit
+      webex-teams-pipes
+      ws-chans
+      zeromq4-haskell
+      ;
+
     dap = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
     }) super.dap;
