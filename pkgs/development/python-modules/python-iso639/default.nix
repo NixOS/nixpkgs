@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-iso639";
-  version = "2026.1.31";
+  version = "2026.4.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jacksonllee";
     repo = "iso639";
     tag = "v${version}";
-    hash = "sha256-mavTbjf57EYUMil3DBOmTZl8WwRW7sjxddb4WuK+YlI=";
+    hash = "sha256-aXckFcWG8zcP9GELTT5eHnQzklAYG70LyX34fhVGdTo=";
   };
 
   build-system = [ setuptools ];
