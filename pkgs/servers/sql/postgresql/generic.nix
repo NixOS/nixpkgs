@@ -1,3 +1,12 @@
+# Arguments for buildPostgresql
+{
+  hash,
+  muslPatches ? { },
+  rev,
+  version,
+}@builderArgs:
+
+# Arguments to callPackage
 {
   # utils
   stdenv,
@@ -5,12 +14,6 @@
   fetchurl,
   lib,
   replaceVars,
-
-  # source specification
-  hash,
-  muslPatches ? { },
-  rev,
-  version,
 
   # runtime dependencies
   darwin,
@@ -37,6 +40,7 @@
 
   # passthru
   buildPackages,
+  buildPostgresql,
   newScope,
   nixosTests,
   self,
@@ -146,7 +150,7 @@
   # Uring
   uringSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform liburing,
   liburing,
-}@args:
+}@packageArgs:
 let
   atLeast = lib.versionAtLeast version;
   olderThan = lib.versionOlder version;
@@ -549,7 +553,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru =
     let
-      this = self.callPackage ./generic.nix args;
+      this = (buildPostgresql builderArgs).override packageArgs;
     in
     {
       inherit dlSuffix;
