@@ -26,6 +26,7 @@
   which,
   jq,
   writableTmpDirAsHomeHook,
+  installShellFiles,
   flutterTools ? null,
 }@args:
 
@@ -162,6 +163,7 @@ let
     nativeInstallCheckInputs = [
       which
       writableTmpDirAsHomeHook
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     installCheckPhase = ''
@@ -170,6 +172,10 @@ let
       $out/bin/flutter config --android-studio-dir $HOME
       $out/bin/flutter config --android-sdk $HOME
       $out/bin/flutter --version | fgrep --quiet '${builtins.substring 0 10 engineVersion}'
+
+      $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      installShellCompletion --bash "$TMPDIR/flutter.bash"
+      installShellCompletion --zsh "$TMPDIR/flutter.bash"
 
       runHook postInstallCheck
     '';
