@@ -474,6 +474,8 @@ lib.fix (
           builtins.attrValues nonEnvOutputs
         );
 
+        strictDeps = true;
+
         nativeBuildInputs = [
           makeWrapper
           libfaketime
