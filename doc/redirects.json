@@ -105,6 +105,12 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-fetchgit-both-tag-and-rev": [
+    "index.html#ex-fetchgit-both-tag-and-rev"
+  ],
+  "ex-fetchgit-fetchTags-attrs": [
+    "index.html#ex-fetchgit-fetchTags-attrs"
+  ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
     "index.html#ex-pkgs-substituteAll",
