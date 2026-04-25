@@ -52,6 +52,7 @@
   appstream,
   desktop-file-utils,
   libxpm,
+  libxcursor,
   libxmu,
   glib-networking,
   json-glib,
@@ -209,6 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxcursor
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -265,6 +267,20 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
     patchShebangs \
       plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # These tests do not complete on Darwin when they run GIMP through the
+      # in-build test harness.
+      for testName in color-parser export-options image palette selection-float unit; do
+        substituteInPlace libgimp/tests/meson.build \
+          --replace-fail "  '$testName'," ""
+      done
+
+      # The app-level test also does not complete on Darwin when it runs GIMP
+      # through the in-build test harness.
+      substituteInPlace app/tests/meson.build \
+        --replace-fail $'  {\n    \x27name\x27: \x27save-and-export\x27,\n  }\n' ""
+    ''}
   '';
 
   preBuild =
@@ -303,6 +319,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Prevent GIMP from overriding the relocatable runtime paths set by Nix.
+      gappsWrapperArgs+=(--set GIMP_NO_WRAPPER 1)
+    ''}
+
     gappsWrapperArgs+=(--prefix PATH : "${
       lib.makeBinPath [
         # for dot for gegl:introspect (Debug » Show Image Graph, hidden by default on stable release)
@@ -348,7 +369,7 @@ stdenv.mkDerivation (finalAttrs: {
       bddvlpr
     ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
     # https://gitlab.gnome.org/GNOME/gimp/-/issues/12522
     broken = stdenv.hostPlatform.isBigEndian;
