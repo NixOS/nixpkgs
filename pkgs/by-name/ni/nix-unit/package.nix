@@ -12,13 +12,10 @@
   nlohmann_json,
   pkg-config,
   fetchFromGitHub,
+  # Override to link nix-unit against a different Nix version; must
+  # expose nix-main, nix-store, nix-expr, nix-cmd, nix-flake.
+  nixComponents ? nixVersions.nixComponents_2_30,
 }:
-let
-  # We pin the nix version to a known working one here as upgrades can likely break the build.
-  # Since the nix language is rather stable we don't always need to have the latest and greatest for unit tests
-  # On each update of nix unit we should re-evaluate what version we need.
-  nixComponents = nixVersions.nixComponents_2_30;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix-unit";
   version = "2.30.0";
