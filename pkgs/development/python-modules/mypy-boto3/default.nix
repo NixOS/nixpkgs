@@ -335,8 +335,8 @@ in
       "sha256-UNxmIK9UD6AVmT4nyQzunNAKjp2YmV1wQ5oloHOwcXw=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.91"
-      "sha256-d/xCgnFZIqqBBq4XbOFjpRCxqdpH8FIgm8msv4V8hZQ=";
+    buildMypyBoto3Package "connect" "1.42.96"
+      "sha256-SMtRblhW1FEJpMvLdg6gLZhh8o/Hh2DarMBgyfwzRMI=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -806,8 +806,8 @@ in
       "sha256-UBSxl5YmYh3m4gl4iKdDU2McetKuDcLkiR73Yvf0AQQ=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.42.90"
-      "sha256-V+msnycNcwaLWCpOnCJ2gGRVs6irf1Qk09pzlYTSkBk=";
+    buildMypyBoto3Package "logs" "1.42.96"
+      "sha256-MU6OS6h65vu4ILnioSVFSjptSkCow4T2qbTky2vo8ao=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.42.3"
@@ -1366,8 +1366,8 @@ in
       "sha256-RQkxMKk7svSYMoPac44m9X0YyEEQWCz/geSRD2qjlI8=";
 
   mypy-boto3-transfer =
-    buildMypyBoto3Package "transfer" "1.42.84"
-      "sha256-42Ep7vDUBgqDLeIaQEakr45Pay6HOC0nHE4gamNFyw4=";
+    buildMypyBoto3Package "transfer" "1.42.96"
+      "sha256-Y/3Va1N/wP9vYfdHeqovrz0UHZLB3JFHg8K4Y+Ewycs=";
 
   mypy-boto3-translate =
     buildMypyBoto3Package "translate" "1.42.3"
