@@ -239,7 +239,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "docs" true)
     # We are building the official releases.
     (lib.mesonEnable "supported_build" true)
     (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
@@ -248,7 +247,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
-    (lib.mesonEnable "plugin_modem_manager" true)
     # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
     # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
     (lib.mesonEnable "hsi" isx86)
