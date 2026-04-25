@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  doctest,
+  # doctest,
   fmt,
   perl,
   glib,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    doctest
+    # doctest
     fmt
     glib
     openssl
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_BLAS=${if withBlas then "ON" else "OFF"}"
     "-DENABLE_FASTTEXT=ON"
     "-DENABLE_JEMALLOC=ON"
-    "-DSYSTEM_DOCTEST=ON"
+    "-DSYSTEM_DOCTEST=OFF" # https://github.com/rspamd/rspamd/issues/5994
     "-DSYSTEM_FMT=ON"
     "-DSYSTEM_XXHASH=ON"
     "-DSYSTEM_ZSTD=ON"
