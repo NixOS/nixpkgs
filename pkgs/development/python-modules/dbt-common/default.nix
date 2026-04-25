@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.37.3-unstable-2026-03-27";
+  version = "1.37.5-unstable-2026-04-23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
-    rev = "db4a7b70486b5337bf0e387260211a418ac36936"; # They don't tag releases
-    hash = "sha256-FcnCg05z9yalhAU1eueZ0x+YEuAfCeYSUlecoEQvS6k=";
+    rev = "c778092cc362539d692785a67316b82282da0882"; # They don't tag releases
+    hash = "sha256-ar51mwConX/5KO3e3cZfXXFvAONVAEnQN07U09Np2zc=";
   };
 
   build-system = [ hatchling ];
