@@ -44,13 +44,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.32.1";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1sNStxgvP8iaiINIa4UOFz8RGeQlFvJK5+RGlK/3Xa8=";
+    hash = "sha256-TQ8PLmz9hn+OFfIF5cckv5gGhID7vuA5O1xVJ6PSPVA=";
   };
 
   php = php.buildEnv (
@@ -88,12 +88,12 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  vendorHash = "sha256-8tEs+kQGB0pmhEQndOOOUDTFkIq+OvyKTmi9YAvK6qc=";
+  vendorHash = "sha256-iy869AKgn/ZL1jYFvqvYkfr4lv5J4l2W6glGqZvJLhE=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
     # replacing `$configuration` with actually-used flags.
-    substituteInPlace src/Movim/Daemon/Session.php \
+    substituteInPlace src/Movim/Daemon/SessionsWorker.php \
       --replace-fail \
         "'exec ' . PHP_BINARY . ' ' . \$configuration . '" \
         "'exec ' . PHP_BINARY . ' -dopcache.enable=1 -dopcache.enable_cli=1 ' . '"
@@ -110,6 +110,10 @@ php.buildComposerProject2 (finalAttrs: {
     substituteInPlace src/Movim/Image.php \
       --replace-fail "Imagick::ALPHACHANNEL_REMOVE" "Imagick::ALPHACHANNEL_OFF" \
       --replace-fail "Imagick::ALPHACHANNEL_ACTIVATE" "Imagick::ALPHACHANNEL_ON"
+
+    # Remove debug var_dump that was accidentally left in
+    substituteInPlace src/Movim/i18n/Locale.php \
+      --replace-fail "var_dump(LOCALES_PATH . \$language . '.po');" ""
   '';
 
   preBuild =
