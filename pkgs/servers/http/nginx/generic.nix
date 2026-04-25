@@ -224,6 +224,21 @@ stdenv.mkDerivation {
         ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
+      # Backport update mime-types from freenginx.
+      ++ [
+        (fetchpatch {
+          url = "https://github.com/freenginx/nginx/commit/b2f1ac35fe1d458f06008624fdc50ef99844a7bb.patch";
+          sha256 = "sha256-V2pqB6j43te8Q7wOU9GHHRs4Gm22duSiELrwxfD4fgY=";
+        })
+        (fetchpatch {
+          url = "https://github.com/freenginx/nginx/commit/4e12815b7590520417203543ccb7f116444711c9.patch";
+          sha256 = "sha256-ZV7beyblllvhEyuvxlscbEZqisBpO6XyFmJwYMpneYU=";
+        })
+        (fetchpatch {
+          url = "https://github.com/freenginx/nginx/commit/83ed572828ef4a82b2941c536411332242b71060.patch";
+          sha256 = "sha256-zlWUMU4OMyMPUKmWMv5Vg4Ey0G/aTjRbVdvU/Z2a+cE=";
+        })
+      ]
       # Upstream may be against cross-compilation patches.
       # https://trac.nginx.org/nginx/ticket/2240 https://trac.nginx.org/nginx/ticket/1928#comment:6
       # That dev quit the project in 2024 so the stance could be different now.
