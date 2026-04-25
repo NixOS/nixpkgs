@@ -5,7 +5,7 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "encode-sans";
   version = "1.002";
 
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ installFonts ];
 
   postInstall = ''
-    install -Dm644 README.md FONTLOG.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 README.md FONTLOG.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
   '';
 
   meta = {
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})
