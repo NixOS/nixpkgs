@@ -29,7 +29,33 @@ installFont() {
     exit 1
   fi
 
-  find -iname "*.$1" -print0 | xargs -0 -r install -m644 -D -t "$2"
+  local ext="$1"
+  local targetDir="$2"
+  local findExpr=()
+
+  set -f
+  includeFonts=(${includeFonts[@]})
+  excludeFonts=(${excludeFonts[@]})
+  set +f
+
+  if [ ${#includeFonts[@]} -gt 0 ]; then
+
+    findExpr+=( \( )
+    for p in "${includeFonts[@]}"; do
+      findExpr+=( "-name" "$p.$ext" "-o" )
+    done
+    unset 'findExpr[${#findExpr[@]}-1]'
+    findExpr+=( \) )
+  else
+    findExpr+=( -iname "*.$ext" )
+  fi
+
+  for p in "${excludeFonts[@]}"; do
+    findExpr+=( -not -name "$p.$ext" )
+  done
+
+  find . -type f "${findExpr[@]}" -print0 | \
+    xargs -0 -r install -m644 -D -t "$targetDir"
 }
 
 installFonts() {
