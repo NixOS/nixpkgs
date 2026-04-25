@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "1.0.29.0";
+  version = "1.0.33.0";
   src = fetchFromGitHub {
     owner = "immichFrame";
     repo = "immichFrame";
     rev = "v${version}";
-    hash = "sha256-YFh+/QWYYtQzBVJUyUuhhKqi9/5waWVX+lw/tov++ws=";
+    hash = "sha256-b8hfzNZJz9XCRO4UfzwK5OsrgqV2F5wnZlRH7h3Eo9Q=";
   };
 
   api = buildDotnetModule {
@@ -36,7 +36,7 @@ let
     sourceRoot = "${src.name}/immichFrame.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-eOv3DlmHaI6hVCYTBzCtLWKD72/RM/KjCUDVUgb9jcg=";
+    npmDepsHash = "sha256-PjbbBpYYUHH4oucJuk0FCdJa0LzTlkQnjkZ5MLziqTY=";
 
     installPhase = ''
       runHook preInstall
