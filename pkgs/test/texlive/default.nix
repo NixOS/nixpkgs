@@ -239,11 +239,7 @@ rec {
     runCommand "texlive-test-texdoc"
       {
         nativeBuildInputs = [
-          (texlive.withPackages (ps: [
-            ps.luatex
-            ps.texdoc
-            ps.texdoc.texdoc
-          ]))
+          ((texlive.withPackages (ps: [ ps.texdoc ])).overrideAttrs { withDocs = true; })
         ];
       }
       ''
