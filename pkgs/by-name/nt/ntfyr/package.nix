@@ -18,6 +18,7 @@
   blueprint-compiler,
   libadwaita,
   sqlite,
+  appstream-glib,
 }:
 let
   pname = "ntfyr";
@@ -41,6 +42,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     appstream
+    appstream-glib
     blueprint-compiler
     cargo
     desktop-file-utils
