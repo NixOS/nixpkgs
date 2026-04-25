@@ -21523,6 +21523,8 @@ self: super: with self; {
 
   yappi = callPackage ../development/python-modules/yappi { };
 
+  yapps = callPackage ../development/python-modules/yapps { };
+
   yapsy = callPackage ../development/python-modules/yapsy { };
 
   yara-python = callPackage ../development/python-modules/yara-python { };
