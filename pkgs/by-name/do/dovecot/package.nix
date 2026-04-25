@@ -21,6 +21,7 @@
   icu75,
   libexttextcat,
   libsodium,
+  libxcrypt,
   libstemmer,
   cyrus_sasl,
   nixosTests,
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
     icu75
     libexttextcat
     libsodium
+    libxcrypt
     libstemmer
     cyrus_sasl.dev
   ]
