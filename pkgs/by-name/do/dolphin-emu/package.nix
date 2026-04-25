@@ -9,7 +9,7 @@
   qt6,
   wrapGAppsHook3,
   # darwin-only
-  xcbuild,
+  re-plistbuddy,
 
   # buildInputs
   bzip2,
@@ -72,6 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace CMake/DolphinInjectVersionInfo.cmake \
+      --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -81,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild # for plutil
+    re-plistbuddy # for plutil as well
   ];
 
   buildInputs = [
