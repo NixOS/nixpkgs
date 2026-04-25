@@ -135,16 +135,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preFixup = ''
-    wrapProgram $out/bin/melt \
-      --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
-      ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
-      ${lib.optionalString (qt != null) "\${qtWrapperArgs[@]}"}
-
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapProgram $out/bin/melt \
+        --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
+        ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"}
+    ''}
+    ${lib.optionalString (qt != null) ''
+      wrapProgram $out/bin/melt \
+        "''${qtWrapperArgs[@]}"
+    ''}
   '';
 
   postFixup = ''
     substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
-      --replace '=''${prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/'
   '';
 
   passthru = {
