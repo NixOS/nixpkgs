@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
     "rich"
     "argcomplete"
     "supabase"
+    "requests"
   ];
 
   dependencies =
