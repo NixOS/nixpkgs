@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -21,6 +22,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUNE_VERSION = finalAttrs.version;
   };
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -31,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "rune";
   };
 })
