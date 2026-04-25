@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "starkbank-ecdsa";
-  version = "2.2.0";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "starkbank";
     repo = "ecdsa-python";
     tag = "v${version}";
-    hash = "sha256-HarlCDE2qOLbyhMLOE++bTC+7srJqwmohM6vrJkJ/gc=";
+    hash = "sha256-5yF2tVCgHJX++NncWiYfLE0P98Sxy91VN3qgc8PSLOI=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
