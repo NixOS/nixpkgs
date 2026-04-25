@@ -56,13 +56,13 @@ assert withWayland -> withCairo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fltk";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "fltk";
     repo = "fltk";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-xba9uiiwQhM4a3Rf4PoGshY3mUKZrcsm+Iv7qnE2sEA=";
+    hash = "sha256-8Go/UNuZ1LEn8BniAyBbAPk7jdvSs5QvXxin9LAFvhU=";
   };
 
   outputs = [ "out" ] ++ lib.optional withExamples "bin" ++ lib.optional withDocs "doc";
