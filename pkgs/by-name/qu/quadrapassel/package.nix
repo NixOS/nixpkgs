@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quadrapassel";
-  version = "50.0.1";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/quadrapassel/${lib.versions.major finalAttrs.version}/quadrapassel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-bn+Hgif5h82RnTwc5w6n08eUz34UDG76zu5wPROLQ3U=";
+    hash = "sha256-UeQ9BZ8GuJwQXVPXHe8L2XzpREcO4Tn8fnQ/zkpsOZQ=";
   };
 
   nativeBuildInputs = [
