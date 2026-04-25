@@ -49,7 +49,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evolution";
-  version = "3.60.0";
+  version = "3.60.1";
 
   outputs = [
     "out"
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor finalAttrs.version}/evolution-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D+10ikSTOnoROP5gJ5ZqvDZsbDLrWkHjDrYbjlQ5teU=";
+    hash = "sha256-jzM860wxzOfXdJXokBoA79xTdtpUKcHClNfj77xvcwg=";
   };
 
   nativeBuildInputs = [
