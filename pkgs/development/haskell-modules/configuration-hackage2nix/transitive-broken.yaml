@@ -282,7 +282,6 @@ dont-distribute-packages:
  - Bitly
  - bitly-cli
  - bitmaps
- - bits-extra
  - bittorrent
  - bla
  - blakesum-demo
@@ -1189,6 +1188,7 @@ dont-distribute-packages:
  - grapefruit-ui-gtk
  - grapesy
  - grapesy-etcd
+ - grapesy-etcd
  - graph-rewriting-cl
  - graph-rewriting-gl
  - graph-rewriting-lambdascope
@@ -1204,7 +1204,6 @@ dont-distribute-packages:
  - graphicstools
  - graphtype
  - greencard-lib
- - grid-proto
  - gridbounds
  - gridland
  - gross
@@ -1712,11 +1711,8 @@ dont-distribute-packages:
  - huzzy
  - hw-all
  - hw-balancedparens
- - hw-bits
  - hw-eliasfano
  - hw-excess
- - hw-int
- - hw-ip
  - hw-json
  - hw-json-demo
  - hw-json-lens
@@ -1725,7 +1721,6 @@ dont-distribute-packages:
  - hw-kafka-avro
  - hw-rankselect
  - hw-simd
- - hw-streams
  - hw-succinct
  - hw-uri
  - hworker-ses
@@ -3250,7 +3245,6 @@ dont-distribute-packages:
  - source-code-server
  - SourceGraph
  - SpacePrivateers
- - spade
  - sparkle
  - sparrow
  - sparsebit
