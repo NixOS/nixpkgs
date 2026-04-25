@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
-  version = "1.8.4";
+  version = "1.8.5";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
     tag = finalAttrs.version;
-    hash = "sha256-Xz0LH0YpUjDishvXsW6VNK8msFlPXg08wFoSfbgws0g=";
+    hash = "sha256-4Oany3uk0759YIZgD1gsONSFU1Mn/GAMvsSeP33J9Ts=";
   };
 
   sourceRoot = finalAttrs.src.name + "/c";
