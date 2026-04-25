@@ -1,0 +1,17 @@
+nixt: include <nix/store/globals.hh> for initLibStore
+
+Nix 2.31 stopped including globals.hh from store-api.hh, so the
+nix::initLibStore declaration is no longer visible transitively.
+
+diff --git a/include/nixt/InitEval.h b/include/nixt/InitEval.h
+index 1111111..2222222 100644
+--- a/include/nixt/InitEval.h
++++ b/include/nixt/InitEval.h
+@@ -8,6 +8,7 @@
+ #include <nix/flake/settings.hh>
+ #include <nix/main/plugin.hh>
+ #include <nix/main/shared.hh>
++#include <nix/store/globals.hh>
+ #include <nix/store/store-api.hh>
+ 
+ namespace nixt {
