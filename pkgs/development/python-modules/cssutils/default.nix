@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
+  encutils,
   more-itertools,
   cssselect,
   jaraco-test,
@@ -13,19 +14,27 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.11.1";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "cssutils";
     tag = "v${version}";
-    hash = "sha256-U9myMfKz1HpYVJXp85izRBpm2wjLHYZj8bUVt3ROTEg=";
+    hash = "sha256-kuqHfwJn+GT1VIC2PWu5Oj1X6SGn/bi2QPN8kfposVs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"coherent.licensed",' ""
+  '';
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ more-itertools ];
+  dependencies = [
+    encutils
+    more-itertools
+  ];
 
   nativeCheckInputs = [
     cssselect
@@ -37,7 +46,6 @@ buildPythonPackage rec {
 
   disabledTests = [
     # access network
-    "encutils"
     "website.logging"
   ];
 

@@ -18,13 +18,13 @@
   nix-update-script,
 }:
 let
-  version = "1.0.70";
+  version = "1.0.71";
   src = fetchFromGitHub {
     name = "exo";
     owner = "exo-explore";
     repo = "exo";
     tag = "v${version}";
-    hash = "sha256-ytxP5x8PyAPVne2c6OIvhdCuF68zffxypXSTlDAFnro=";
+    hash = "sha256-k3jtrJCxLx8nq1R70CtZWFyNVXEa5Ltw0MgdA0qFVXA=";
   };
 
   pyo3-bindings = python3Packages.buildPythonPackage (finalAttrs: {

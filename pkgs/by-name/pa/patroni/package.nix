@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patroni";
-  version = "4.1.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iY5QLbJXfQtfkzpQxvqSOzYQwgfFsBh8HPYujqxU44k=";
+    hash = "sha256-IEoO50MaEnXevS0HOzend19UHNA12CjDAUBB8fZxTkI=";
   };
 
   build-system = with python3Packages; [ setuptools ];
