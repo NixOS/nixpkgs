@@ -7042,8 +7042,6 @@ self: super: with self; {
 
   hfst = callPackage ../development/python-modules/hfst { };
 
-  hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
-
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
 
   hg-git = callPackage ../development/python-modules/hg-git { };

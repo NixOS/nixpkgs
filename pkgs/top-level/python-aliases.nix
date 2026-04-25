@@ -251,6 +251,7 @@ mapAliases {
   HAP-python = throw "'HAP-python' has been renamed to/replaced by 'hap-python'"; # Converted to throw 2025-10-29
   hcs_utils = throw "'hcs_utils' has been renamed to/replaced by 'hcs-utils'"; # Converted to throw 2025-10-29
   heif-image-plugin = throw "heif-image-plugin has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
+  hg-commitsigs = throw "'hg-commitsigs' was removed because it was broken"; # Added 2026-04-25
   hglib = throw "'hglib' has been renamed to/replaced by 'python-hglib'"; # Converted to throw 2025-10-29
   hijri-converter = hijridate; # added 2025-08-07
   holistic-trace-analysis = throw "'holistic-trace-analysis' was removed because there is no such package on PyPI"; # added 2026-02-28
