@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   buildPythonPackage,
   fetchFromGitHub,
   versionCheckHook,
@@ -8,16 +9,24 @@
   babel,
   evdev,
   mock,
-  pyqt5,
+  packaging,
+  pkginfo,
+  psutil,
+  pygments,
   pyserial,
+  pyside6,
   pytestCheckHook,
   pytest-qt,
   plover-stroke,
+  readme-renderer,
+  requests-cache,
+  requests-futures,
   rtf-tokenize,
   setuptools,
   wcwidth,
   wheel,
   xlib,
+  qtbase,
   wrapQtAppsHook,
 }:
 
@@ -25,37 +34,61 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "plover";
-  version = "4.0.2";
+  version = "5.0.0.dev2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstenoproject";
     repo = "plover";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VpQT25bl8yPG4J9IwLkhSkBt31Y8BgPJdwa88WlreA8=";
+    hash = "sha256-PZwxVrdQPhgbj+YmWZIUETngeJGs6IQty0hY43tLQO0=";
   };
 
+  # pythonRelaxDeps seemingly doesn't work here
   postPatch = ''
-    sed -i 's/,<77//g' pyproject.toml # pythonRelaxDepsHook doesn't work for this for some reason
+    sed -i 's/,<77//g' pyproject.toml
+    sed -i /PySide6-Essentials/d pyproject.toml
   '';
 
   build-system = [
     babel
     setuptools
-    pyqt5
+    pyside6
     wheel
+
+    # Replacement for missing pyside6-essentials tools,
+    # workaround for https://github.com/NixOS/nixpkgs/issues/277849.
+    # Ideally this would be solved in pyside6 itself but I spent four
+    # hours trying to untangle its build system before giving up. If
+    # anyone wants to spend the time fixing it feel free to request
+    # me (@Pandapip1) as a reviewer.
+    (buildPackages.writeShellScriptBin "pyside6-uic" ''
+      exec ${qtbase}/libexec/uic -g python "$@"
+    '')
+    (buildPackages.writeShellScriptBin "pyside6-rcc" ''
+      exec ${qtbase}/libexec/rcc -g python "$@"
+    '')
   ];
   dependencies = [
     appdirs
     evdev
-    pyqt5
+    packaging
+    pkginfo
+    psutil
+    pygments
     pyserial
+    pyside6
     plover-stroke
+    qtbase
+    readme-renderer
+    requests-cache
+    requests-futures
     rtf-tokenize
     setuptools
     wcwidth
     xlib
-  ];
+  ]
+  ++ readme-renderer.optional-dependencies.md;
   nativeBuildInputs = [
     wrapQtAppsHook
   ];
