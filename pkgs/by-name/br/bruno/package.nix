@@ -21,13 +21,13 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-lDsgAOCUrxhmlmYgObDwUR6gbms/q/rNIkTEwJckMyA=";
+    hash = "sha256-YVZPXrYfOFd9lUdZ0rwWnbSDO91Bn1vZyO3AwnE2pZE=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
@@ -36,7 +36,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-vz2I+0+eQk6A4SsiACipTGrYF8LtvWfGhgxqu7mChLE=";
+  npmDepsHash = "sha256-IH2AVyHwMZuyZOUsAP7qoxm5Em32hk90Tp7uvSE9bIE=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [

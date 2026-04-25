@@ -4,6 +4,7 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  stdenv,
 }:
 
 buildGoModule (finalAttrs: {
@@ -33,7 +34,13 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  __structuredAttrs = true;
+
   meta = {
+    # Networking failures in tests, even with __darwinAllowLocalNetworking on
+    # and sandbox disabled.
+    # Unclear as of 2026-04-24 whether the program works if tests are disabled.
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tunneling client for Pangolin";
     homepage = "https://github.com/fosrl/newt";
     changelog = "https://github.com/fosrl/newt/releases/tag/${finalAttrs.src.tag}";

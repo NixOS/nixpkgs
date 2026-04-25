@@ -20,19 +20,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastexcel";
-  version = "0.19.0";
+  version = "0.20.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ToucanToco";
     repo = "fastexcel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BMFZOduKN6D3y9aRkt9VAG2T9oNFBUcnmux1qTKgY5c=";
+    hash = "sha256-YL8EkV6IuqAMxooOMbqCrTfDM4uhH9A+v7UFw1f/iek=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-aTYwXJN2hncZsEAGSlQzK5cX4uWpNoS0wpsXL0I6pZo=";
+    hash = "sha256-TK/5eES+RlSDFIbhVjzbPgdrDRRKZlCiuqtLRm8R/go=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +41,6 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
-  ];
-
-  maturinBuildFlags = [
-    "--features __maturin"
   ];
 
   optional-dependencies = {

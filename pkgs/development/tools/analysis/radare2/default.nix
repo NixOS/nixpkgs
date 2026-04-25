@@ -21,6 +21,7 @@
   python3,
   readline,
   ruby,
+  versionCheckHook,
   vte,
   xxhash,
   zlib,
@@ -46,19 +47,19 @@ let
   qjs = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "e2b100e8c5fa7131e9fb22b8a0e9ca0f16eb9892"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
-    hash = "sha256-vq+K93MuvFC+JKw4623gKs53ngw1097l5Kf/RBGU+mA=";
+    rev = "3087a2ce5bcb66cc1fcd9f34d3e5ce3bd43a67d9"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
+    hash = "sha256-Z6DUe/W1+3SYPRPCiL3oNL5ovXCsW3dsFuGkA9WF3W4=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.1.2";
+  version = "6.1.4";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-YiKbXKKwbeAUkeq4LcUwOxTHU1Hua4YhcwDULiHVmrQ=";
+    hash = "sha256-3MwBtjR3XQMhbJHnD30OVedUEKcje5jDPszNynkGCT8=";
   };
 
   mesonFlags = [
@@ -133,6 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset";
     longDescription = ''
@@ -163,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       mic92
       raskin
     ];
-    mainProgram = "radare2";
+    mainProgram = "r2";
     platforms = lib.platforms.unix;
   };
 })

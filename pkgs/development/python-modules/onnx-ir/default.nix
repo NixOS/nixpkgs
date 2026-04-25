@@ -25,14 +25,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnx-ir";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "ir-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U6N1vnsvp2Tr2qSIl9gsUnrKDjeUuUXAXx6ZyRnUTKM=";
+    hash = "sha256-vdo8BiE7m9Qr3JktgcPGDZfykjcf/VYY39tfhtzOrpA=";
   };
 
   build-system = [
