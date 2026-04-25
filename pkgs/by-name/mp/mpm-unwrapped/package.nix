@@ -21,10 +21,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
 
   dontUnpack = true;
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
 
   installPhase = ''
     runHook preInstall
-    install -D "$src" "$out"/bin/mpm
+    install -D "${finalAttrs.src}" "$out"/bin/mpm
     runHook postInstall
   '';
 
