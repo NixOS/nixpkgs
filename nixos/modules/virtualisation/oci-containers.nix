@@ -132,8 +132,8 @@ let
           default = [ ];
           description = "Environment files for this container.";
           example = [
-            /path/to/.env
-            /path/to/.env.secret
+            "/path/to/.env"
+            "/path/to/.env.secret"
           ];
         };
 
