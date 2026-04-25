@@ -30,8 +30,8 @@ buildNpmPackage rec {
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-CT0e/IaAhFqRG+FdlA6ZIXOcmy1IzDdd677XV81SgHY=";
+    fetcherVersion = 3;
+    hash = "sha256-OqaRlqL08W8V35TYBk2mvgPDl58rLQV/avnSQGBvdNY=";
   };
 
   passthru = {
