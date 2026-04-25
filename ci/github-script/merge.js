@@ -42,6 +42,25 @@ function runChecklist({
       .filter(Boolean),
   )
 
+  // A "changes requested" review from a committer blocks both the merge queue and
+  // auto-merge, even if it was made on an older commit (unlike approvals, GitHub does
+  // not auto-dismiss changes-requested reviews on push). For each committer, take their
+  // latest actionable review; if it's `changes_requested`, they're blocking the PR.
+  const committerReviewState = new Map()
+  for (const { event, state, user } of events) {
+    if (
+      event === 'reviewed' &&
+      user &&
+      committers.has(user.id) &&
+      ['approved', 'changes_requested'].includes(state)
+    ) {
+      committerReviewState.set(user.id, state)
+    }
+  }
+  const noBlockingReviews = !Array.from(committerReviewState.values()).includes(
+    'changes_requested',
+  )
+
   const checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
@@ -61,6 +80,8 @@ function runChecklist({
     // Pending/missing is tolerated so the auto-merge fallback can still queue the PR;
     // only an explicit error/failure flips the check off.
     'PR has no CI failures.': !['error', 'failure'].includes(noPrFailuresState),
+    'PR is not blocked by a "changes requested" review from a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+      noBlockingReviews,
   }
 
   if (user) {
