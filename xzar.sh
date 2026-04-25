@@ -32,3 +32,5 @@ if [ "$(uname)" != "Darwin" ]; then
 fi
 build lmstudio
 upload lmstudio
+build unsloth
+upload unsloth
