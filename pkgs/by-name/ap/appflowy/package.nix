@@ -27,11 +27,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-aG3Avp9LP2b7Q4RGg8gL3QsbOfUUTWCojAmYpdjleoc=";
+        hash = "sha256-6akFImNU5EQLW6f2dQRUXUC8srM32xyVI14pjVxV6Sw=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-gDL0Y3v1lHBtDUjn4VM5YLKAzxh1NvrePGZrPiD9H6M=";
+        hash = "sha256-sJ4mXSYsJICXMpDZemqRF3uYgB9SWNdbzcT1s2gHpZA=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -40,7 +40,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.11.7";
+  version = "0.11.8";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
