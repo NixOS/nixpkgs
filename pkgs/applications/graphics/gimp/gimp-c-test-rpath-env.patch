@@ -1,0 +1,7 @@
+--- a/libgimp/tests/meson.build
++++ b/libgimp/tests/meson.build
+@@ -60,1 +60,3 @@
+-  plugin_executables += [meson.current_build_dir() / 'c-tests' / basename / fs.name(c_test_exe.full_path())]
++  c_test_plugin = meson.current_build_dir() / 'c-tests' / basename / fs.name(c_test_exe.full_path())
++  test_env.append('GIMP_TEMP_UPDATE_RPATH', c_test_plugin)
++  plugin_executables += [c_test_plugin]
