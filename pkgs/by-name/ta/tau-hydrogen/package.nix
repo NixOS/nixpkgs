@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
   meson,
@@ -8,7 +8,7 @@
   xcursorgen,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tau-hydrogen";
   version = "1.0.16";
 
@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     xcursorgen
   ];
+
+  postInstall = ''
+    find "$out" -xtype l -delete
+  '';
 
   meta = {
     description = "GTK icon theme for tauOS";
