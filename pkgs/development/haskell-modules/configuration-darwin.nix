@@ -16,18 +16,6 @@ self: super:
     # see: https://github.com/psibi/shell-conduit/issues/12
     shell-conduit = dontCheck super.shell-conduit;
 
-    conduit-extra = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.conduit-extra;
-
-    spacecookie = overrideCabal (_: {
-      __darwinAllowLocalNetworking = true;
-    }) super.spacecookie;
-
-    streaming-commons = overrideCabal (_: {
-      __darwinAllowLocalNetworking = true;
-    }) super.streaming-commons;
-
     # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
     hakyll = overrideCabal {
       testToolDepends = [ ];
@@ -136,12 +124,6 @@ self: super:
 
     sym = markBroken super.sym;
 
-    yesod-core = overrideCabal (drv: {
-      # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
-      # run tests that access localhost.
-      __darwinAllowLocalNetworking = true;
-    }) super.yesod-core;
-
     hidapi = super.hidapi.override { systemd = null; };
 
     # Ensure the necessary frameworks are propagatedBuildInputs on darwin
@@ -236,12 +218,6 @@ self: super:
     # Otherwise impure gcc is used, which is Apple's weird wrapper
     c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
-    http2 = overrideCabal (drv: {
-      # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
-      # that access localhost.
-      __darwinAllowLocalNetworking = true;
-    }) super.http2;
-
     # https://hydra.nixos.org/build/230964714/nixlog/1
     inline-c-cpp = appendPatch (pkgs.fetchpatch {
       url = "https://github.com/fpco/inline-c/commit/e8dc553b13bb847409fdced649a6a863323cff8a.patch";
@@ -262,78 +238,51 @@ self: super:
         })
       ) super)
       cisco-spark-api
+      conduit-extra
       context-http-client
       context-wai-middleware
+      dap
+      essence-of-live-coding-warp
       haskell-bee-redis
       http-client-websockets
       http-io-streams
+      http-streams
+      http2
+      io-streams
+      io-streams-haproxy
+      jsaddle-warp
       katip-wai
       keter
       monad-metrics-extensible
       mysql-haskell
+      network
       network-transport-tcp
       network-wait
       om-socket
+      openssl-streams
       polysemy-webserver
       port-utils
+      servant-auth-client
+      servant-client
       servant-hmac-auth
       servant-prometheus
+      snap
+      spacecookie
+      streaming-commons
       sydtest-servant
       sydtest-wai
       sydtest-yesod
       wai-app-file-cgi
       wai-make-assets
       wai-token-bucket-ratelimiter
+      warp
       webex-teams-api
       webex-teams-conduit
       webex-teams-pipes
       ws-chans
+      yesod-core
       zeromq4-haskell
       ;
-
-    dap = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.dap;
-
-    essence-of-live-coding-warp = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.essence-of-live-coding-warp;
-
-    http-streams = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.http-streams;
-
-    io-streams = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.io-streams;
-
-    io-streams-haproxy = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.io-streams-haproxy;
-
-    jsaddle-warp = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.jsaddle-warp;
-
-    openssl-streams = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.openssl-streams;
-
-    servant-auth-client = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.servant-auth-client;
-
-    servant-client = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.servant-client;
-
-    snap = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.snap;
-
-    warp = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.warp;
 
     ghcjs-dom-hello = overrideCabal (drv: {
       libraryHaskellDepends = with self; [
@@ -409,10 +358,6 @@ self: super:
     servant-auth-server = dontCheck super.servant-auth-server;
 
     sysinfo = dontCheck super.sysinfo;
-
-    network = overrideCabal (drv: {
-      __darwinAllowLocalNetworking = true;
-    }) super.network;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
