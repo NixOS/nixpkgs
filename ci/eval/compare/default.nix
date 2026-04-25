@@ -188,12 +188,7 @@ let
             kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
           ) rebuildsByKernel
           // {
-            "10.rebuild-nixos-tests" =
-              lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds)
-              &&
-                # Only set this label when no other label with indication for staging has been set.
-                # This avoids confusion whether to target staging or batch this with kernel updates.
-                lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
+            "10.rebuild-nixos-tests" = lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds);
           };
       }
     );
