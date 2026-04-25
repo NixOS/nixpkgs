@@ -68,7 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/sebadob/rauthy";
     changelog = "https://github.com/sebadob/rauthy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       angelodlfrtr
       ungeskriptet
