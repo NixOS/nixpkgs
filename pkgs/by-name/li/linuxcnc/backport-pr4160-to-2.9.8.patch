@@ -1,0 +1,253 @@
+diff --git a/src/emc/motion/command.c b/src/emc/motion/command.c
+index 0b79061d39..a0f36649b6 100644
+--- a/src/emc/motion/command.c
++++ b/src/emc/motion/command.c
+@@ -505,6 +505,22 @@ void emcmotCommandHandler_locked(void *arg, long servo_period)
+ 	    if (GET_MOTION_TELEOP_FLAG()) {
+                 axis_jog_abort_all(0);
+ 	    } else if (GET_MOTION_COORD_FLAG()) {
++		/* If motion was being held waiting for spindle at-speed, the
++		   operator most likely aborted because the machine sat idle
++		   with no obvious reason. Tell them why, loudly. A wait that
++		   never released after a spindle stop almost always means
++		   spindle.N.at-speed is not wired, or does not go true once the
++		   spindle has actually stopped. */
++		if (MOTION_ID_VALID(emcmotInternal->coord_tp.spindle.waiting_for_atspeed)) {
++			for (spindle_num = 0; spindle_num < emcmotConfig->numSpindles; spindle_num++) {
++				if (emcmotStatus->spindle_status[spindle_num].state == 0 && !emcmotStatus->spindle_status[spindle_num].at_speed) {
++					reportError(_("Aborted while waiting for spindle %d at-speed after a spindle stop. "
++						"Check that spindle.%d.at-speed is connected and goes true once the spindle has stopped."),
++						spindle_num, spindle_num);
++					break;
++				}
++			}
++		}
+ 		tpAbort(&emcmotInternal->coord_tp);
+ 	    } else {
+ 		for (joint_num = 0; joint_num < ALL_JOINTS; joint_num++) {
+@@ -528,6 +544,8 @@ void emcmotCommandHandler_locked(void *arg, long servo_period)
+ 		SET_JOINT_FAULT_FLAG(joint, 0);
+ 	    }
+ 	    emcmotStatus->paused = 0;
++			/* Drop any pending at-speed barrier so it can't strand a later move. */
++			emcmotStatus->atspeed_next_feed = 0;
+ 	    break;
+ 
+ 	case EMCMOT_JOG_ABORT:
+@@ -1452,6 +1470,14 @@ void emcmotCommandHandler_locked(void *arg, long servo_period)
+                 }
+             }
+ 
++	    /* A probe is a feed-type move, so honor any pending at-speed
++	       barrier just like G1: wait for spindle.N.at-speed (spin-up after
++	       M3, or stop after M5) before the probe starts. */
++	    if (emcmotStatus->atspeed_next_feed) {
++				issue_atspeed = 1;
++				emcmotStatus->atspeed_next_feed = 0;
++	    }
++
+ 	    /* append it to the emcmotInternal->coord_tp */
+ 	    tpSetId(&emcmotInternal->coord_tp, emcmotCommand->id);
+ 	    if (-1 == tpAddLine(&emcmotInternal->coord_tp,
+@@ -1461,7 +1487,7 @@ void emcmotCommandHandler_locked(void *arg, long servo_period)
+ 				emcmotCommand->ini_maxvel,
+ 				emcmotCommand->acc,
+ 				emcmotStatus->enables_new,
+-				0,
++				issue_atspeed,
+ 				-1,
+ 				emcmotCommand->tag)) {
+ 		reportError(_("can't add probe move"));
+@@ -1656,6 +1682,10 @@ void emcmotCommandHandler_locked(void *arg, long servo_period)
+ 	        *(emcmot_hal_data->spindle[n].spindle_orient) = 0;
+ 	        emcmotStatus->spindle_status[n].orient_state = EMCMOT_ORIENT_NONE;
+         }
++        /* Optionally make the spindle stop an at-speed barrier: the next feed
++           move waits until at-speed reflects the stopped state. Safe when
++           unwired since at-speed defaults to 1 (see motion.c). */
++        emcmotStatus->atspeed_next_feed = emcmotCommand->wait_for_spindle_at_speed;
+ 	    break;
+ 
+ 	case EMCMOT_SPINDLE_ORIENT:
+diff --git a/src/emc/motion/motion.c b/src/emc/motion/motion.c
+index febe7f3ff3..49ab00db38 100644
+--- a/src/emc/motion/motion.c
++++ b/src/emc/motion/motion.c
+@@ -733,6 +733,8 @@ static int export_spindle(int num, spindle_hal_t * addr){
+     if ((retval = hal_pin_float_newf(HAL_IN, &(addr->spindle_revs), mot_comp_id, "spindle.%d.revs", num)) != 0) return retval;
+     if ((retval = hal_pin_float_newf(HAL_IN, &(addr->spindle_speed_in), mot_comp_id, "spindle.%d.speed-in", num)) != 0) return retval;
+     if ((retval = hal_pin_bit_newf(HAL_IN, &(addr->spindle_is_atspeed), mot_comp_id, "spindle.%d.at-speed", num)) != 0) return retval;
++    /* Default 1: an unwired at-speed pin must never block motion. Do not
++       change to 0 or machines without at-speed wired would idle forever. */
+     *(addr->spindle_is_atspeed) = 1;
+     /* restore saved message level */
+     rtapi_set_msg_level(msg);
+diff --git a/src/emc/nml_intf/canon.hh b/src/emc/nml_intf/canon.hh
+index b64cba4cfe..2fd352b2f6 100644
+--- a/src/emc/nml_intf/canon.hh
++++ b/src/emc/nml_intf/canon.hh
+@@ -542,7 +542,7 @@ This is usually given in rpm and refers to the rate of spindle
+ rotation. If the spindle is already turning and is at a different
+ speed, change to the speed given with this command. */
+ 
+-extern void STOP_SPINDLE_TURNING(int spindle);
++extern void STOP_SPINDLE_TURNING(int spindle, int wait_for_atspeed = 1);
+ 
+ /* Stop the spindle from turning. If the spindle is already stopped, this
+ command may be given, but it will have no effect. */
+diff --git a/src/emc/nml_intf/emc.cc b/src/emc/nml_intf/emc.cc
+index 5b7949a395..1cd276a1c7 100644
+--- a/src/emc/nml_intf/emc.cc
++++ b/src/emc/nml_intf/emc.cc
+@@ -1027,7 +1027,8 @@ void EMC_SPINDLE_OFF::update(CMS * cms)
+ {
+ 
+     EMC_SPINDLE_CMD_MSG::update(cms);
+-
++    cms->update(spindle);
++    cms->update(wait_for_spindle_at_speed);
+ }
+ 
+ /*
+diff --git a/src/emc/nml_intf/emc.hh b/src/emc/nml_intf/emc.hh
+index 2e311ffafd..238ccc3f14 100644
+--- a/src/emc/nml_intf/emc.hh
++++ b/src/emc/nml_intf/emc.hh
+@@ -491,8 +491,7 @@ extern int emcSpindleAbort(int spindle);
+ extern int emcSpindleSpeed(int spindle, double speed, double factor, double xoffset);
+ extern int emcSpindleOn(int spindle, double speed, double factor, double xoffset,int wait_for_atspeed = 1);
+ extern int emcSpindleOrient(int spindle, double orientation, int direction);
+-extern int emcSpindleWaitOrientComplete(double timout);
+-extern int emcSpindleOff(int spindle);
++extern int emcSpindleOff(int spindle, int wait_for_atspeed = 0);
+ extern int emcSpindleIncrease(int spindle);
+ extern int emcSpindleDecrease(int spindle);
+ extern int emcSpindleConstant(int spindle);
+diff --git a/src/emc/nml_intf/emc_nml.hh b/src/emc/nml_intf/emc_nml.hh
+index 4e41b6eb61..094ca5fa77 100644
+--- a/src/emc/nml_intf/emc_nml.hh
++++ b/src/emc/nml_intf/emc_nml.hh
+@@ -1829,14 +1829,17 @@ class EMC_SPINDLE_ON:public EMC_SPINDLE_CMD_MSG {
+ 
+ class EMC_SPINDLE_OFF:public EMC_SPINDLE_CMD_MSG {
+   public:
+-    EMC_SPINDLE_OFF():EMC_SPINDLE_CMD_MSG(EMC_SPINDLE_OFF_TYPE,
+-					  sizeof(EMC_SPINDLE_OFF)) {
+-    };
++    EMC_SPINDLE_OFF()
++      : EMC_SPINDLE_CMD_MSG(EMC_SPINDLE_OFF_TYPE, sizeof(EMC_SPINDLE_OFF)),
++        spindle(0),
++        wait_for_spindle_at_speed(0)
++    {};
+ 
+     // For internal NML/CMS use only.
+     void update(CMS * cms);
+ 
+     int spindle;    // the spindle to be turned off
++    int wait_for_spindle_at_speed; // wait for at-speed (spindle stopped) before next feed
+ };
+ 
+ class EMC_SPINDLE_INCREASE:public EMC_SPINDLE_CMD_MSG {
+diff --git a/src/emc/rs274ngc/gcodemodule.cc b/src/emc/rs274ngc/gcodemodule.cc
+index d2416b217e..1791a498f5 100644
+--- a/src/emc/rs274ngc/gcodemodule.cc
++++ b/src/emc/rs274ngc/gcodemodule.cc
+@@ -408,13 +408,13 @@ void STOP_CUTTER_RADIUS_COMPENSATION(int direction) {}
+ void START_SPEED_FEED_SYNCH() {}
+ void START_SPEED_FEED_SYNCH(int spindle, double sync, bool vel) {}
+ void STOP_SPEED_FEED_SYNCH() {}
+-void START_SPINDLE_COUNTERCLOCKWISE(int spindle, int wait_for_at_speed) {}
+-void START_SPINDLE_CLOCKWISE(int spindle, int wait_for_at_speed) {}
+-void SET_SPINDLE_MODE(int spindle, double) {}
+-void STOP_SPINDLE_TURNING(int spindle) {}
+-void SET_SPINDLE_SPEED(int spindle, double rpm) {}
+-void ORIENT_SPINDLE(int spindle, double d, int i) {}
+-void WAIT_SPINDLE_ORIENT_COMPLETE(int s, double timeout) {}
++void START_SPINDLE_COUNTERCLOCKWISE(int /*spindle*/, int /*wait_for_at_speed*/) {}
++void START_SPINDLE_CLOCKWISE(int /*spindle*/, int /*wait_for_at_speed*/) {}
++void SET_SPINDLE_MODE(int /*spindle*/, double) {}
++void STOP_SPINDLE_TURNING(int /*spindle*/, int /*wait_for_at_speed*/) {}
++void SET_SPINDLE_SPEED(int /*spindle*/, double /*rpm*/) {}
++void ORIENT_SPINDLE(int /*spindle*/, double /*d*/, int /*i*/) {}
++void WAIT_SPINDLE_ORIENT_COMPLETE(int /*s*/, double /*timeout*/) {}
+ void PROGRAM_STOP() {}
+ void PROGRAM_END() {}
+ void FINISH() {}
+diff --git a/src/emc/sai/saicanon.cc b/src/emc/sai/saicanon.cc
+index e12a4b0b38..219d2088f6 100644
+--- a/src/emc/sai/saicanon.cc
++++ b/src/emc/sai/saicanon.cc
+@@ -482,7 +482,7 @@ void SET_SPINDLE_SPEED(int spindle, double rpm)
+   _sai._spindle_speed[spindle] = rpm;
+ }
+ 
+-void STOP_SPINDLE_TURNING(int spindle)
++void STOP_SPINDLE_TURNING(int spindle, int /*wait_for_atspeed*/)
+ {
+   PRINT("STOP_SPINDLE_TURNING(%i)\n", spindle);
+   _sai._spindle_turning[spindle] = CANON_STOPPED;
+diff --git a/src/emc/task/emccanon.cc b/src/emc/task/emccanon.cc
+index 663e9b7eb1..ec34ae26e9 100644
+--- a/src/emc/task/emccanon.cc
++++ b/src/emc/task/emccanon.cc
+@@ -1942,12 +1942,13 @@ void SET_SPINDLE_SPEED(int s, double r)
+     interp_list.append(emc_spindle_speed_msg);
+ }
+ 
+-void STOP_SPINDLE_TURNING(int s)
++void STOP_SPINDLE_TURNING(int s, int wait_for_atspeed)
+ {
+     EMC_SPINDLE_OFF emc_spindle_off_msg;
+ 
+     flush_segments();
+     emc_spindle_off_msg.spindle = s;
++    emc_spindle_off_msg.wait_for_spindle_at_speed = wait_for_atspeed;
+     interp_list.append(emc_spindle_off_msg);
+     // Added by atp 6/1/18 not sure this is right. There is a problem that the _second_ S word starts the spindle without M3/M4
+     canon.spindle[s].dir = 0;
+diff --git a/src/emc/task/emctaskmain.cc b/src/emc/task/emctaskmain.cc
+index 7292a17202..e47767cc10 100644
+--- a/src/emc/task/emctaskmain.cc
++++ b/src/emc/task/emctaskmain.cc
+@@ -2008,8 +2008,8 @@ static int emcTaskIssueCommand(NMLmsg * cmd)
+ 	break;
+ 
+     case EMC_SPINDLE_OFF_TYPE:
+-    spindle_off_msg = (EMC_SPINDLE_OFF *) cmd;
+-	retval = emcSpindleOff(spindle_off_msg->spindle);
++    spindle_off_msg = reinterpret_cast<EMC_SPINDLE_OFF *>(cmd);
++	retval = emcSpindleOff(spindle_off_msg->spindle, spindle_off_msg->wait_for_spindle_at_speed);
+ 	break;
+ 
+     case EMC_SPINDLE_BRAKE_RELEASE_TYPE:
+diff --git a/src/emc/task/taskintf.cc b/src/emc/task/taskintf.cc
+index 96a041d1fe..6c0c34fb0f 100644
+--- a/src/emc/task/taskintf.cc
++++ b/src/emc/task/taskintf.cc
+@@ -1933,11 +1933,12 @@ int emcSpindleOn(int spindle, double speed, double css_factor, double offset, in
+     return usrmotWriteEmcmotCommand(&emcmotCommand);
+ }
+ 
+-int emcSpindleOff(int spindle)
++int emcSpindleOff(int spindle, int wait_for_at_speed)
+ {
+     emcmotCommand.command = EMCMOT_SPINDLE_OFF;
+     emcmotCommand.state = 0;
+     emcmotCommand.spindle = spindle;
++    emcmotCommand.wait_for_spindle_at_speed = wait_for_at_speed;
+     return usrmotWriteEmcmotCommand(&emcmotCommand);
+ }
+ 
+diff --git a/tests/interp/compile/use-rs274.cc b/tests/interp/compile/use-rs274.cc
+index 02c69c2011..68f6f398d2 100644
+--- a/tests/interp/compile/use-rs274.cc
++++ b/tests/interp/compile/use-rs274.cc
+@@ -130,7 +130,7 @@ void SPINDLE_RETRACT_TRAVERSE() {}
+ void START_SPINDLE_CLOCKWISE(int spindle, int dir) {}
+ void START_SPINDLE_COUNTERCLOCKWISE(int spindle, int dir) {}
+ void SET_SPINDLE_SPEED(int spindle, double r) {}
+-void STOP_SPINDLE_TURNING(int spindle) {}
++void STOP_SPINDLE_TURNING(int spindle, int wait_for_atspeed) {}
+ void SPINDLE_RETRACT() {}
+ void ORIENT_SPINDLE(int spindle, double orientation, int mode) {}
+ void WAIT_SPINDLE_ORIENT_COMPLETE(int spindle, double timeout) {}
