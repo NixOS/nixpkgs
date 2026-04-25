@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gweather-locations";
-  version = "2025.1";
+  version = "2026.2";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gweather-locations/${lib.versions.major finalAttrs.version}/gweather-locations-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VgnuBM9qxMx3IfMkG9jWn/6/DxtgIQ+t2IyGmkuITYc=";
+    hash = "sha256-51cKNmHgp1KgY4eyAyWFz1iPxWdwsfnznxpV0XsoNf4=";
   };
 
   strictDeps = true;
