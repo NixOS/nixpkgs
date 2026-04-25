@@ -11833,12 +11833,7 @@ with pkgs;
     callPackage ../tools/package-management/nix/dependencies-scope.nix { }
   );
 
-  nixVersions = recurseIntoAttrs (
-    callPackage ../tools/package-management/nix {
-      storeDir = config.nix.storeDir or "/nix/store";
-      stateDir = config.nix.stateDir or "/nix/var";
-    }
-  );
+  nixVersions = recurseIntoAttrs (callPackage ../tools/package-management/nix { });
 
   nix = nixVersions.stable;
 
