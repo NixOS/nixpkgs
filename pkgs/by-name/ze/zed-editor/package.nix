@@ -97,7 +97,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.233.5";
+  version = "0.233.10";
 
   outputs = [
     "out"
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sMjl0WRLYIshN9TIBqu6wFnTohIKGyxalT6+vmVwX+E=";
+    hash = "sha256-ftbrApKQhSn6SNs7ysgBot9XctuVtAskBTnm2hmCBaA=";
   };
 
   postPatch = ''
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-RAgCFV7AzeW+ois529+rqHOjVxH42bZ6/ju7Dmh/FWg=";
+  cargoHash = "sha256-9r0jaT+ETAkGGHYDL1KFmq3M+apaLsRpORk7OOz4s5Q=";
 
   __structuredAttrs = true;
 
@@ -150,7 +150,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-about
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cargo-bundle ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cargo-bundle
+    rustPlatform.bindgenHook
+  ];
 
   dontUseCmakeConfigure = true;
 
