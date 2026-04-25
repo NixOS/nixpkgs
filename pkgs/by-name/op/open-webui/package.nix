@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-INUxpLGN+Jn2oYggA9kkp1zGY+LPQNXuRop4DaOi9Ps=";
+    hash = "sha256-NiB8V7B5H57t4NjKlAcQdK1E1dfS3nc/+8tWbSE3MBQ=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-tn76LGDLRaR87VM0pHgkutsbg4X4Kco04HwgGSS8Uug=";
+    npmDepsHash = "sha256-8bsC6LM+v7RTbhAjGYHKClKoiC/rLhzt+UGVp3CVDB0=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -99,7 +99,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       argon2-cffi
       asgiref
       async-timeout
-      asyncpg
       authlib
       azure-ai-documentintelligence
       azure-identity
@@ -109,6 +108,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       black
       boto3
       brotli
+      brotlicffi
       chardet
       chromadb
       cryptography
@@ -160,6 +160,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       peewee-migrate
       pillow
       psutil
+      psycopg
       pyarrow
       pycrdt
       pydub
@@ -185,6 +186,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sentence-transformers
       sentencepiece
       soundfile
+      sqlalchemy
       starlette-compress
       starsessions
       tiktoken
@@ -194,7 +196,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       xlrd
       youtube-transcript-api
     ]
+    ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
+    ++ sqlalchemy.optional-dependencies.asyncio
     ++ starsessions.optional-dependencies.redis;
 
   optional-dependencies = with python3Packages; {
@@ -215,7 +219,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       azure-search-documents
       colbert-ai
       elasticsearch
-      firecrawl-py
       gcp-storage-emulator
       moto
       oracledb
