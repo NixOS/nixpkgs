@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
 
   fetchurl,
   fetchFromGitHub,
@@ -374,6 +375,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit pythonEnv;
     inherit (finalAttrs) setuidApps;
+    tests.nixos-module = nixosTests.linuxcnc;
   };
 
   meta = {
