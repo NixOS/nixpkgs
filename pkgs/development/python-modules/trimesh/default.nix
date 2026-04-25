@@ -6,7 +6,6 @@
   pytestCheckHook,
   numpy,
   lxml,
-  trimesh,
 
   # optional deps
   colorlog,
@@ -28,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trimesh";
-  version = "4.11.5";
+  version = "4.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
     tag = finalAttrs.version;
-    hash = "sha256-LF7tjthYtsEZJLqBiQZBe4urLjSD3Vbi3g1ZJ++0Tyk=";
+    hash = "sha256-+Xmy3/GSnfj7u1sapMscoCGlRsz00IkUzEo9CJ5Ja3s=";
   };
 
   build-system = [ setuptools ];
@@ -69,6 +68,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     lxml
     pytestCheckHook
+  ]
+  # embreex is maintained by trimesh devs
+  ++ lib.optionals embreex.meta.available [
+    embreex
+    rtree
   ];
 
   disabledTests = [
@@ -76,7 +80,12 @@ buildPythonPackage (finalAttrs: {
     "test_load"
   ];
 
-  enabledTestPaths = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [
+    "tests/test_minimal.py"
+  ]
+  ++ lib.optionals embreex.meta.available [
+    "tests/test_ray.py"
+  ];
 
   pythonImportsCheck = [
     "trimesh"
