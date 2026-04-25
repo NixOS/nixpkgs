@@ -1,6 +1,5 @@
 {
   autoconf,
-  autogen,
   automake,
   clangStdenv,
   fetchFromGitea,
@@ -24,7 +23,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     automake
-    autogen
     autoconf
   ];
 
