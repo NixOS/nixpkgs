@@ -8,14 +8,14 @@
 }:
 buildLua (finalAttrs: {
   pname = "modernz";
-  version = "0.3.1";
+  version = "0.3.2";
 
   scriptPath = "modernz.lua";
   src = fetchFromGitHub {
     owner = "Samillion";
     repo = "ModernZ";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xHiKE84qBYa8wnLMhrTnOZPLwdY7ddW7ayIfFz1dIRw=";
+    hash = "sha256-HUbS5L0kuYYm9HZ0BEzsqFQii3PQlZtzPiVRF/rDbcY=";
   };
 
   nativeBuildInputs = [ installFonts ];
