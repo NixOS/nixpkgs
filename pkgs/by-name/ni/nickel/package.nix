@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_28
+    nixVersions.nix_2_31
     boost
   ];
 
@@ -68,6 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # aren't packaging py-nickel anyway
     "--workspace"
     "--exclude=py-nickel"
+  ];
+
+  checkFlags = lib.optionals enableNixImport [
+    # libnixmain from Nix >= 2.31 tries to create /nix/var/nix/profiles on
+    # initialisation, which is rejected by the build sandbox.
+    "--skip=stdin_format::evaluates_nix_from_stdin"
   ];
 
   postInstall = ''
