@@ -121,9 +121,16 @@ in
         name = "inhibit-lexical-cookie-warning-67916.patch";
         path = ./inhibit-lexical-cookie-warning-67916-30.patch;
       })
-      # tree-sitter 0.26 compatibility fix, from FreeBSD
-      # https://cgit.freebsd.org/ports/plain/editors/emacs/files/patch-src_treesit.c
-      ./tree-sitter-0.26.patch
+      (fetchpatch {
+        # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/970856
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/01_all_treesit-0.26.patch?id=d0f47979806d9be5a190fdb4ffa1bde439b2d616";
+        hash = "sha256-3pWeRxjAhr3ntBR3xDhoDUZDjU6xICU23NUpb/Vl6R4=";
+      })
+      (fetchpatch {
+        # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/971731
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/02_all_ts-query-pred.patch?id=86190bf195b3e17108372d8ad89eb57037180dd2";
+        hash = "sha256-0GPyfKLSaB09a8hamrSf6lx4Qk8Big4AKMOivkN1wEM=";
+      })
     ];
   });
 

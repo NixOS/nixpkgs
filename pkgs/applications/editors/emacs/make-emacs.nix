@@ -244,13 +244,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
-  ]
-  ++ lib.optionals (variant == "macport") [
     texinfo
   ]
   ++ lib.optionals srcRepo [
     autoreconfHook
-    texinfo
   ]
   ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
 
