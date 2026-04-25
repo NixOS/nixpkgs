@@ -1,7 +1,6 @@
 {
   # texlive package set
   tl,
-  bin,
 
   tlpdbVersion,
 
@@ -12,9 +11,7 @@
   makeWrapper,
   runCommand,
   writeShellScript,
-  writeText,
   toTLPkgSets,
-  bash,
   perl,
 
   # common runtime dependencies

@@ -2,7 +2,6 @@
 {
   lib,
   toTLPkgList,
-  toTLPkgSets,
   buildTeXEnv,
 }:
 args@{
