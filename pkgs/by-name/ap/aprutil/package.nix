@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   makeWrapper,
   apr,
   expat,
@@ -35,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-libxcrypt-build.patch
     # Fix incorrect Berkeley DB detection with newer versions of clang due to implicit `int` on main errors.
     ./clang-bdb.patch
+    # Fix error with missing function prototype
+    (fetchpatch {
+      url = "https://github.com/apache/apr-util/commit/e67caa006c75181b45b761cd50294cb3c8e18f1a.patch?full_index=1";
+      hash = "sha256-fwKT7mGPHIgJ5uG/KAOOE/38FSNfow+GJgHCxcp9mgI=";
+    })
   ]
   ++ lib.optional stdenv.hostPlatform.isFreeBSD ./include-static-dependencies.patch;
 
