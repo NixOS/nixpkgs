@@ -34,6 +34,10 @@ let
     tag = "20200910";
     hash = "sha256-YQl5IDtodcbTV3D6vtJi7CwxVtHHl58fG6qCAoSaP4U=";
   };
+  nativeGroffBinPath = lib.makeBinPath [
+    buildPackages.groff
+    (lib.getOutput "perl" buildPackages.groff)
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "groff";
@@ -125,13 +129,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Move mom docs instead of linking them to avoid dangling symlinks
     substituteInPlace Makefile \
       --replace-fail '$(LN_S) $(exampledir)' 'mv $(exampledir)'
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # pdfmom uses GROFF_COMMAND to find the groff executable internally.
+    substituteInPlace Makefile \
+      --replace-fail 'GROFF_COMMAND=test-groff \' 'GROFF_COMMAND=$(GROFFBIN) \'
   '';
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
-    "GROFF_BIN_PATH=${lib.getBin buildPackages.groff}/bin"
-    "GROFFBIN=${lib.getExe buildPackages.groff}"
+    "GROFF_BIN_PATH=${nativeGroffBinPath}"
+    "GROFFBIN=${lib.getExe' buildPackages.groff "groff"}"
   ];
 
   doCheck = true;
