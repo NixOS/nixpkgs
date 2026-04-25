@@ -7,6 +7,7 @@ function runChecklist({
   pull_request,
   log,
   maintainers,
+  reviews,
   user,
   userIsMaintainer,
 }) {
@@ -41,6 +42,27 @@ function runChecklist({
       .filter(Boolean),
   )
 
+  // A "changes requested" review from a committer blocks both the merge queue and
+  // auto-merge, even if it was made on an older commit (unlike approvals, GitHub does
+  // not auto-dismiss changes-requested reviews on push). For each committer, take their
+  // latest actionable review; if it's CHANGES_REQUESTED, they're blocking the PR.
+  // Dismissed reviews surface as DISMISSED and comment-only follow-ups as COMMENTED, so
+  // both are skipped naturally — the prior actionable review still stands until the
+  // committer explicitly approves or requests changes again.
+  const committerReviewState = new Map()
+  for (const { user, state } of reviews) {
+    if (
+      user &&
+      committers.has(user.id) &&
+      ['APPROVED', 'CHANGES_REQUESTED'].includes(state)
+    ) {
+      committerReviewState.set(user.id, state)
+    }
+  }
+  const noBlockingReviews = !Array.from(committerReviewState.values()).includes(
+    'CHANGES_REQUESTED',
+  )
+
   const checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
@@ -60,6 +82,8 @@ function runChecklist({
     // CI state is intentionally *not* a checklist item: auto-merge exists precisely to
     // cover unfinished CI, and an already-failed CI is reported via the merge message
     // (see merge() below) rather than a blanket refusal.
+    'PR is not blocked by a "changes requested" review from a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+      noBlockingReviews,
   }
 
   if (user) {
@@ -158,6 +182,15 @@ async function handleMerge({
       per_page: 100,
     })
   ).data.find(({ context }) => context === 'no PR failures')?.state
+
+  // Reviews are returned in chronological order; the latest review per user wins below.
+  // Dismissed reviews surface with state DISMISSED and comment-only follow-ups as
+  // COMMENTED, so both naturally drop out of the committer-blocking check.
+  const reviews = await github.paginate(github.rest.pulls.listReviews, {
+    ...context.repo,
+    pull_number,
+    per_page: 100,
+  })
 
   // Only look through comments *after* the latest (force) push.
   const lastPush = events.findLastIndex(
@@ -309,6 +342,7 @@ async function handleMerge({
       pull_request,
       log,
       maintainers,
+      reviews,
       user: comment.user,
       userIsMaintainer: await isMaintainer(comment.user.login),
     })
@@ -380,6 +414,7 @@ async function handleMerge({
     pull_request,
     log,
     maintainers,
+    reviews,
   })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
