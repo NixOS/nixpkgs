@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   writeShellScript,
   dash,
   php,
@@ -52,6 +53,14 @@ php.buildComposerProject2 (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-TQ8PLmz9hn+OFfIF5cckv5gGhID7vuA5O1xVJ6PSPVA=";
   };
+
+  patches = [
+    # Removes debug var_dump that was accidentally left in
+    (fetchpatch2 {
+      url = "https://github.com/movim/movim/commit/239bd099711d196df574106155374f301f2c9531.patch";
+      hash = "sha256-tLWUOKTJDFE9obrnghG/S8FHJY0rcWlueWncHVdi0Jk=";
+    })
+  ];
 
   php = php.buildEnv (
     {
@@ -110,10 +119,6 @@ php.buildComposerProject2 (finalAttrs: {
     substituteInPlace src/Movim/Image.php \
       --replace-fail "Imagick::ALPHACHANNEL_REMOVE" "Imagick::ALPHACHANNEL_OFF" \
       --replace-fail "Imagick::ALPHACHANNEL_ACTIVATE" "Imagick::ALPHACHANNEL_ON"
-
-    # Remove debug var_dump that was accidentally left in
-    substituteInPlace src/Movim/i18n/Locale.php \
-      --replace-fail "var_dump(LOCALES_PATH . \$language . '.po');" ""
   '';
 
   preBuild =
