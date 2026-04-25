@@ -3,7 +3,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
 
   # runPythonCommand
   runCommand,
@@ -37,7 +36,6 @@
   fwupd-efi,
   gnutls,
   gusb,
-  libcbor,
   libdrm,
   libgudev,
   libjcat,
@@ -129,7 +127,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.1.1";
+  version = "2.1.2";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -147,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-pb5BBA+3KTeZZ8WyNDaY9EKNTxp4MT/3G/MEgQ+Nysk=";
+    hash = "sha256-lNbm1E2Lqo8gXMNl6NodFNWhSizSxVIG1p5PI8Wj1Xw=";
   };
 
   patches = [
@@ -168,18 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # EFI capsule is located in fwupd-efi now.
     ./0004-Get-the-efi-app-from-fwupd-efi.patch
-
-    # FIXME: remove patches that fix CI on aarch64 after next release
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/b3d721360faa4de7dd6960d8f9f8f13aa310715f.patch";
-      sha256 = "sha256-x37QCK7XBzUUjUj1m3jaNe1qvaqtszB9DGFyF8gC3Ig=";
-      name = "fix-mtdram-test-for-missing-kernel-module.patch";
-    })
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/9ad8b76dc6c5af005a2c712ae3a6f352b51e9eea.patch";
-      sha256 = "sha256-h9zLTHeJbfDoamdfICKc0ohQ51yJC4I/CK0SQ4H6rRk=";
-      name = "fix-test_get_devices-on-non-x86-architectures.patch";
-    })
   ];
 
   postPatch = ''
@@ -230,7 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     fwupd-efi
     gnutls
     gusb
-    libcbor
     libdrm
     libgudev
     libjcat
