@@ -13,7 +13,7 @@
 
   # dependencies
   numpy,
-  pynvml,
+  nvidia-ml-py,
 
   # tests
   einops,
@@ -102,7 +102,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     torch
   ]
   ++ lib.optionals cudaSupport [
-    pynvml
+    nvidia-ml-py
   ];
 
   pythonImportsCheck = [
