@@ -86,6 +86,7 @@ buildPythonPackage (finalAttrs: {
       twey
       kovirobi
       pandapip1
+      ShamrockLee
     ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
