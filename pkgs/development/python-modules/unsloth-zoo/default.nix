@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
 
@@ -65,6 +66,11 @@ buildPythonPackage (finalAttrs: {
     "transformers"
   ];
 
+  pythonRemoveDeps = lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "cut_cross_entropy"
+    "triton"
+  ];
+
   patches = [
     # Avoid circular dependency in Nix, since `unsloth` depends on `unsloth-zoo`.
     ./dont-require-unsloth.patch
@@ -77,7 +83,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     accelerate
-    cut-cross-entropy
     datasets
     filelock
     hf-transfer
@@ -93,12 +98,14 @@ buildPythonPackage (finalAttrs: {
     sentencepiece
     torch
     torchao
-    triton
     tqdm
     transformers
     trl
     tyro
     typing-extensions
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cut-cross-entropy
+    triton
   ];
 
   # No tests
