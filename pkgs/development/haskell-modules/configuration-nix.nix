@@ -486,7 +486,9 @@ builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.nixVersions.nix_2_28; }) [
+  # Upstream has switched to Lix as its supported Nix implementation.
+  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.lix; }) [
+    (enableCabalFlag "lix")
     # nix-serve-ng isn't regularly released to Hackage
     (overrideSrc {
       src = pkgs.fetchFromGitHub {
