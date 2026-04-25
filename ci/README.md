@@ -51,6 +51,8 @@ To ensure security and a focused utility, the bot adheres to specific limitation
   - opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
 - The user attempting to merge is a maintainer of all packages touched by the PR.
+- No [committer][@NixOS/nixpkgs-committers] has an outstanding "changes requested" review.
+  These block both the merge queue and auto-merge, so the bot refuses to merge until the review is addressed or dismissed.
 
 Once these constraints are met, the bot picks a merge strategy based on the `no PR failures` commit status:
 
