@@ -50,8 +50,10 @@
   gi-docgen,
   perl,
   appstream,
+  libfyaml,
   desktop-file-utils,
   libxpm,
+  libxcursor,
   libxmu,
   glib-networking,
   json-glib,
@@ -81,6 +83,40 @@ let
       pygobject3
     ]
   );
+
+  librsvgForGimp =
+    if stdenv.hostPlatform.isDarwin then
+      librsvg.overrideAttrs (previousAttrs: {
+        postInstall = ''
+          install_name_tool -add_rpath "$out/lib" \
+            "$out/${gdk-pixbuf.moduleDir}/libpixbufloader_svg.dylib"
+          ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders \
+            "$out/${gdk-pixbuf.moduleDir}/libpixbufloader_svg.dylib" \
+            > "$out/${gdk-pixbuf.binaryDir}/loaders.cache"
+        ''
+        + previousAttrs.postInstall;
+      })
+    else
+      librsvg;
+
+  libfyamlForGimp =
+    if stdenv.hostPlatform.isDarwin then
+      libfyaml.overrideAttrs (previousAttrs: {
+        postInstall = (previousAttrs.postInstall or "") + ''
+          substituteInPlace "$dev/lib/pkgconfig/libfyaml.pc" \
+            --replace-fail " none required" ""
+        '';
+      })
+    else
+      libfyaml;
+
+  appstreamForGimp =
+    if stdenv.hostPlatform.isDarwin then
+      appstream.override {
+        libfyaml = libfyamlForGimp;
+      }
+    else
+      appstream;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
@@ -172,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    appstream # for library
+    appstreamForGimp # for library
     babl
     bash-completion
     cfitsio
@@ -199,7 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     openexr
     libmng
-    librsvg
+    librsvgForGimp
     libwmf
     zlib
     xz
@@ -234,6 +270,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxcursor
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -265,6 +302,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  mesonCheckFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # in-build-gimp.py mutates plug-in rpaths with install_name_tool.
+    # Running tests in parallel can make those mutations race.
+    "--num-processes=1"
+  ];
+
   env = {
     # The check runs before glib-networking is registered
     GIO_EXTRA_MODULES = "${glib-networking}/lib/gio/modules";
@@ -272,12 +315,20 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
     # Check if librsvg was built with --disable-pixbuf-loader.
-    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvgForGimp}/${gdk-pixbuf.moduleDir}";
 
     # Silence fontconfig warnings about missing config during tests
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [ ];
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Needed when running GIMP during the build.
+    BABL_PATH = "${babl}/lib/babl-0.1";
+    GEGL_PATH = "${gegl}/lib/gegl-0.4";
+
+    # Needed so GIMP uses the loader cache from the local librsvg override.
+    GDK_PIXBUF_MODULE_FILE = "${librsvgForGimp}/${gdk-pixbuf.binaryDir}/loaders.cache";
   };
 
   postPatch = ''
@@ -293,6 +344,16 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/gimp/-/merge_requests/2607
     substituteInPlace meson.build \
       --replace-fail "import('python').find_installation()" "import('python').find_installation('python3')"
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # The libgimp tests run GIMP through in-build-gimp.py. On Darwin this
+      # harness races while patching plug-in rpaths in parallel and some tests
+      # hang indefinitely even when the suite is serialized.
+      for testName in color-parser export-options image palette selection-float unit; do
+        substituteInPlace libgimp/tests/meson.build \
+          --replace-fail "  '$testName'," ""
+      done
+    ''}
 
     # Broken test
     # https://github.com/NixOS/nixpkgs/pull/484971#issuecomment-3846759517
@@ -336,14 +397,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${
-      lib.makeBinPath [
-        # for dot for gegl:introspect (Debug » Show Image Graph, hidden by default on stable release)
-        graphviz
-        # for gimp-script-fu-interpreter-3.0 invoked by shebang of some plug-ins
-        "$out"
-      ]
-    }")
+    gappsWrapperArgs+=(
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+        --set GIMP_NO_WRAPPER 1
+        --prefix BABL_PATH : "${babl}/lib/babl-0.1"
+        --prefix GEGL_PATH : "${gegl}/lib/gegl-0.4"
+      ''}
+      --prefix PATH : "${
+        lib.makeBinPath [
+          # for dot for gegl:introspect (Debug » Show Image Graph, hidden by default on stable release)
+          graphviz
+          # for gimp-script-fu-interpreter-3.0 invoked by shebang of some plug-ins
+          "$out"
+        ]
+      }"
+    )
   '';
 
   postFixup = ''
@@ -369,7 +437,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gimp.org/";
     maintainers = with lib.maintainers; [ jtojnar ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
     # https://gitlab.gnome.org/GNOME/gimp/-/issues/12522
     broken = stdenv.hostPlatform.isBigEndian;
