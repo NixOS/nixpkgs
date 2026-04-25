@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -43,6 +44,7 @@ buildPythonPackage {
 
   dependencies = [
     torch
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     triton
   ];
 
