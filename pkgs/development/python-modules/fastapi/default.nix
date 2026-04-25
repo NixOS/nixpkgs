@@ -14,6 +14,7 @@
 
   # tests
   anyio,
+  a2wsgi,
   dirty-equals,
   flask,
   inline-snapshot,
@@ -21,6 +22,8 @@
   pwdlib,
   pyjwt,
   pytest-asyncio,
+  pytest-xdist,
+  pytest-timeout,
   pytestCheckHook,
   sqlalchemy,
   trio,
@@ -42,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.128.0";
+  version = "0.135.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
-    hash = "sha256-qUTSqTe9mQzfuwqsTCQY6u7Tcnh9XNy4tr5o0/qFFLs=";
+    hash = "sha256-sE5d+MgmP9L+MUosRBsR+KSJkcC9i2EOOtKHq0sXjRM=";
   };
 
   build-system = [ pdm-backend ];
@@ -99,6 +102,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     anyio
+    a2wsgi
     dirty-equals
     flask
     inline-snapshot
@@ -107,6 +111,8 @@ buildPythonPackage rec {
     pyjwt
     pytestCheckHook
     pytest-asyncio
+    pytest-xdist
+    pytest-timeout
     trio
     sqlalchemy
   ]
@@ -132,6 +138,8 @@ buildPythonPackage rec {
     # Don't test docs and examples
     "docs_src"
     "tests/test_tutorial/test_sql_databases"
+    "tests/test_tutorial/test_static_files"
+    "tests/test_tutorial/test_custom_docs_ui"
     # Infinite recursion with strawberry-graphql
     "tests/test_tutorial/test_graphql/test_tutorial001.py"
   ];
