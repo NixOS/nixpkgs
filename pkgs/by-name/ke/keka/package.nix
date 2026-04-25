@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchzip,
   makeWrapper,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keka";
@@ -26,6 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "macOS file archiver";
     homepage = "https://www.keka.io";
@@ -34,6 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       emilytrau
       kinnrai
+      myzel394
     ];
     platforms = lib.platforms.darwin;
   };
