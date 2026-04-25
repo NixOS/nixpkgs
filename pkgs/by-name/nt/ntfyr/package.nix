@@ -62,6 +62,9 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Linux desktop client for ntfy.sh with GTK4";
     longDescription = ''
