@@ -316,7 +316,7 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
+      ++ lib.optional withUkify ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
