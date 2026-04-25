@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eog";
-  version = "50.0";
+  version = "50.1";
 
   outputs = [
     "out"
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/eog/${lib.versions.major finalAttrs.version}/eog-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XAIm0Qz6E1aa3iIY8DzmL3m43Fwoji4LEj0u9Rq9ywc=";
+    hash = "sha256-b17m11ZUi4jiWph+DQbavDxsMlmPt99J+wiUXB/pSlU=";
   };
 
   patches = [
