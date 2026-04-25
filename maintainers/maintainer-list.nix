@@ -27518,6 +27518,12 @@
     githubId = 14172;
     name = "Tim Cuthbertson";
   };
+  timh-de = {
+    email = "hessberger.tim+m@gmail.com";
+    name = "Tim Hessberger";
+    github = "TimH-DE";
+    githubId = 79646946;
+  };
   timhae = {
     email = "tim.haering@posteo.net";
     githubId = 6264882;
