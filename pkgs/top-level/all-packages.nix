@@ -5698,8 +5698,6 @@ with pkgs;
 
   lit = with python3Packages; toPythonApplication lit;
 
-  massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
-
   maven3 = maven;
   inherit (maven) buildMaven;
 
