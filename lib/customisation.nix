@@ -409,12 +409,10 @@ rec {
   extendDerivation =
     condition: passthru: drv:
     let
-      outputs = drv.outputs or [ "out" ];
-
       commonAttrs =
         drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
 
-      outputToAttrListElement = outputName: {
+      outputsList = map (outputName: {
         name = outputName;
         value =
           commonAttrs
@@ -436,9 +434,7 @@ rec {
               # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
               overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
             };
-      };
-
-      outputsList = map outputToAttrListElement outputs;
+      }) (drv.outputs or [ "out" ]);
     in
     commonAttrs
     // {
