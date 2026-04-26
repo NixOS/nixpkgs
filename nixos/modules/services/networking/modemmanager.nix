@@ -71,6 +71,9 @@ in
         pkgs.libqmi
         pkgs.libmbim
       ];
+
+      # systemd-networkd doesn't start ModemManager when required
+      wantedBy = lib.mkIf useNetworkd [ "network-online.target" ];
     };
 
     /*
