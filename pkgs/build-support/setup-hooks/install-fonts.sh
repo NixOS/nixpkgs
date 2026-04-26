@@ -42,7 +42,7 @@ installFont() {
 
     findExpr+=( \( )
     for p in "${includeFonts[@]}"; do
-      findExpr+=( "-name" "$p.$ext" "-o" )
+      findExpr+=( "-iname" "$p.$ext" "-o" )
     done
     unset 'findExpr[${#findExpr[@]}-1]'
     findExpr+=( \) )
@@ -51,7 +51,7 @@ installFont() {
   fi
 
   for p in "${excludeFonts[@]}"; do
-    findExpr+=( -not -name "$p.$ext" )
+    findExpr+=( -not -iname "$p.$ext" )
   done
 
   find . -type f "${findExpr[@]}" -print0 | \
@@ -61,23 +61,22 @@ installFont() {
 installFonts() {
   if [ "${dontInstallFonts-}" == 1 ]; then return; fi
 
-  installFont 'ttf' "$out/share/fonts/truetype"
-  installFont 'ttc' "$out/share/fonts/truetype"
-  installFont 'otf' "$out/share/fonts/opentype"
-  installFont 'otc' "$out/share/fonts/opentype"
-  installFont 'pfa' "$out/share/fonts/type1"
-  installFont 'pfb' "$out/share/fonts/type1"
-  installFont 'pfm' "$out/share/fonts/type1"
-  installFont 'afm' "$out/share/fonts/type1"
-  installFont 'bdf' "$out/share/fonts/misc"
-  installFont 'pcf' "$out/share/fonts/misc"
-  installFont 'otb' "$out/share/fonts/misc"
-  installFont 'psf' "$out/share/consolefonts"
-  installFont 'psfu' "$out/share/consolefonts"
+  declare -A font_dirs=(
+    ["ttf ttc"]="$out/share/fonts/truetype"
+    ["otf otc"]="$out/share/fonts/opentype"
+    ["pfa pfb pfm afm"]="$out/share/fonts/type1"
+    ["bdf pcf otb"]="$out/share/fonts/misc"
+    ["psf psfu"]="$out/share/consolefonts"
+  )
+
+  for exts in "${!font_dirs[@]}"; do
+    for ext in $exts; do
+      installFont "$ext" "${font_dirs[$exts]}"
+    done
+  done
 
   if [ -n "${webfont-}" ]; then
     installFont 'woff' "$webfont/share/fonts/woff"
     installFont 'woff2' "$webfont/share/fonts/woff2"
   fi
-
 }
