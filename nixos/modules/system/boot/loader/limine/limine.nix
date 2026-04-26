@@ -455,6 +455,10 @@ in
           assertion = cfg.efiSupport;
           message = "Secure boot is only supported on EFI systems.";
         }
+        {
+          assertion = !cfg.enableEditor;
+          message = "Editor is unconditionally disabled by Limine.";
+        }
       ];
 
       boot.loader.limine.enrollConfig = true;
