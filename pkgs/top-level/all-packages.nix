@@ -2633,9 +2633,6 @@ with pkgs;
 
   kronometer = kdePackages.callPackage ../tools/misc/kronometer { };
 
-  kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
-
-
   limine-full = limine.override { enableAll = true; };
 
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
