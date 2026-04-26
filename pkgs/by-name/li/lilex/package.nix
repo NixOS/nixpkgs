@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
   unzip,
 }:
 stdenvNoCC.mkDerivation rec {
@@ -13,18 +14,15 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-NDEO20unSfdy1CuI4+7EpjGFJ+dc7qqWz8VW7jU2b7w=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    installFonts
+    unzip
+  ];
 
   unpackPhase = ''
     runHook preUnpack
     unzip $src
     runHook postUnpack
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} +
-    runHook postInstall
   '';
 
   meta = {
