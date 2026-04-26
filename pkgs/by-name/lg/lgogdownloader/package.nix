@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dVEV2smZxB6+Utm9FApiFydAS3hLm4y9YZja1B/PiEk=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set_property(TARGET \''${PROJECT_NAME} PROPERTY CXX_STANDARD 11)" "set_property(TARGET \''${PROJECT_NAME} PROPERTY CXX_STANDARD 17)"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -52,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtwebengine
   ];
 
-  cmakeFlags = lib.optional enableGui "-DUSE_QT_GUI=ON";
+  cmakeFlags = [
+    (lib.cmakeBool "USE_QT_GUI" enableGui)
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DJSONCPP_HAS_STRING_VIEW=1")
+  ];
 
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
