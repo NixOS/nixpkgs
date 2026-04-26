@@ -155,8 +155,8 @@ rec {
 
           meta =
             let
-              matches = builtins.match "/bin/([^/]+)" destination;
-              isProgram = executable && matches != null;
+              matches = builtins.match "/bin/([^/]+)" finalAttrs.destination;
+              isProgram = finalAttrs.executable && matches != null;
             in
             {
               ${if isProgram then "mainProgram" else null} = lib.head matches;
