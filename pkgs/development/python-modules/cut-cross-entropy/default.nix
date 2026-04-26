@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  llvmPackages,
 
   # build-system
   setuptools,
@@ -44,6 +46,11 @@ buildPythonPackage {
   dependencies = [
     torch
     triton
+  ];
+
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    # the way openmp is supported on darwin
+    llvmPackages.openmp
   ];
 
   optional-dependencies = {
