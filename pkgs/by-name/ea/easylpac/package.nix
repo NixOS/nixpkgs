@@ -31,6 +31,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-52I8hlnoHPhygwr0dxDP50X2A7Gsh0v/0SGQFH3FG/8=";
 
+  # also include $PATH lookup logic for `lpac` in the darwin case.
+  postPatch = ''
+    substituteInPlace config.go --replace-fail \
+      'case "linux":' 'case "linux", "darwin":'
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
