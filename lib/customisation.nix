@@ -159,27 +159,27 @@ rec {
       # When f is a callable attribute set,
       # it may contain its own `f.override` and additional attributes.
       # This helper function recovers those attributes and decorate the overrider.
-      recoverMetadata =
+      decorate =
+        f':
         if isAttrs f then
-          fDecorated:
-          # Preserve additional attributes for f
-          f
-          // fDecorated
-          # Decorate f.override if presented
-          // lib.optionalAttrs (f ? override) {
-            override = fdrv: makeOverridable (f.override fdrv);
-          }
+          (
+            fDecorated:
+            # Preserve additional attributes for f
+            f
+            // fDecorated
+            # Decorate f.override if presented
+            // lib.optionalAttrs (f ? override) {
+              override = fdrv: makeOverridable (f.override fdrv);
+            }
+          )
+            (mirrorArgs f')
         else
-          id;
-      decorate = f': recoverMetadata (mirrorArgs f');
+          mirrorArgs f';
     in
     decorate (
       origArgs:
       let
         result = f origArgs;
-
-        # Changes the original arguments with (potentially a function that returns) a set of new attributes
-        overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
 
         # Re-call the function but with different arguments
         overrideArgs = mirrorArgs (
@@ -190,7 +190,7 @@ rec {
 
             This function was provided by `lib.makeOverridable`.
           */
-          newArgs: makeOverridable f (overrideWith newArgs)
+          newArgs: makeOverridable f (origArgs // (if isFunction newArgs then newArgs origArgs else newArgs))
         );
         # Change the result of the function call by applying g to it
         overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
