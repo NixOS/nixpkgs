@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   replaceVars,
   testers,
@@ -74,13 +75,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5904";
+  version = "1.3.5905";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-lrytLk7+RpD3V4g9m7JruqOfLggJO9sGLzt5UrGbs/Q=";
+    hash = "sha256-59Q7Atxt6CfR0LgNa6keGDY+HpV/eOdTngVHcUJEesg=";
   };
 
   outputs = [
@@ -92,6 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # Remove when version > 1.3.5905
+    (fetchpatch {
+      name = "0001-lomiri-ui-toolkit-Fix-compatibility-with-Qt-6.11.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/57303d2b01549ef78b029ed05babbc9400e102f3.patch";
+      hash = "sha256-22QSOaYZ+hsctLt8+ffrzBIY3btp+rM6NBsu0gvQMeM=";
+    })
+
     ./2001-Mark-problematic-tests.patch
 
     (replaceVars ./2002-Nixpkgs-versioned-QML-path.patch.in {
@@ -101,70 +109,70 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs documentation/docs.sh tests/
-
-    # Reverse dependencies (and their reverse dependencies too) access the function patched here to register their gettext catalogues,
-    # so hardcoding any prefix here will make only catalogues in that prefix work. APP_DIR envvar will override this, but with domains from multiple derivations being
-    # used in a single application (lomiri-system-settings), that's of not much use either.
-    # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n.cpp#L101-129
-    #
-    # This could be solved with a reference to the prefix of whoever requests the domain, but the call happens via some automatic Qt / QML callback magic,
-    # I'm not sure what the best way of injecting that there would be.
-    # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n_p.h#L34
-    #
-    # Using /run/current-system/sw/share/locale instead of /usr/share/locale isn't a great
-    # solution, but at least it should get us working localisations
+  ''
+  # Reverse dependencies (and their reverse dependencies too) access the function patched here to register their gettext catalogues,
+  # so hardcoding any prefix here will make only catalogues in that prefix work. APP_DIR envvar will override this, but with domains from multiple derivations being
+  # used in a single application (lomiri-system-settings), that's of not much use either.
+  # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n.cpp#L101-129
+  #
+  # This could be solved with a reference to the prefix of whoever requests the domain, but the call happens via some automatic Qt / QML callback magic,
+  # I'm not sure what the best way of injecting that there would be.
+  # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n_p.h#L34
+  #
+  # Using /run/current-system/sw/share/locale instead of /usr/share/locale isn't a great
+  # solution, but at least it should get us working localisations
+  + ''
     substituteInPlace src/LomiriToolkit/i18n.cpp \
       --replace-fail "/usr" "/run/current-system/sw"
-
-    # The code here overrides the regular QML import variables so the just-built modules are found & used in the tests
-    # But we need their QML dependencies too, so put them back in there
+  ''
+  # The code here overrides the regular QML import variables so the just-built modules are found & used in the tests
+  # But we need their QML dependencies too, so put them back in there
+  + ''
     substituteInPlace export_qml_dir.sh \
       --replace-fail '_IMPORT_PATH=$BUILD_DIR/qml' '_IMPORT_PATH=$BUILD_DIR/qml:${qtQmlPaths}'
-
-    # These tests try to load Suru theme icons, but override XDG_DATA_DIRS / use full paths to load them
+  ''
+  # These tests try to load Suru theme icons, but override XDG_DATA_DIRS / use full paths to load them
+  + ''
     substituteInPlace \
       tests/unit/visual/tst_visual.cpp \
-      tests/unit/visual/tst_icon.{11,13}.qml \
-      tests/unit/visual/tst_imageprovider.11.qml \
+      tests/unit/visual/tst_icon.qml \
+      tests/unit/visual13/tst_icon.{11,13}.qml \
+      tests/unit/visual/tst_imageprovider.qml \
+      tests/unit/visual13/tst_imageprovider.11.qml \
       --replace-fail '/usr/share' '${suru-icon-theme}/share'
   ''
-  # Adjust to Qt 6.11, TODO report & submit upstream
-  + lib.optionalString withQt6 ''
-    substituteInPlace apicheck/apicheck.cpp \
-      --replace-fail \
-        'attachedPropertiesType(QQmlEnginePrivate::get(currentEngine))' \
-        'attachedPropertiesType(QQmlTypeLoader::get(currentEngine))'
-
-    substituteInPlace src/LomiriToolkit/ucstylehints.cpp \
-      --replace-fail \
-        'QQmlEnginePrivate::getV4Engine(qmlEngine(this))' \
-        'qmlEngine(this)->handle()'
-  ''
-  + lib.optionalString (!withQt6) ''
-    for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
-      substituteInPlace $subproject/$subproject.pro \
-        --replace-fail '$$[QT_INSTALL_PREFIX]' "$out"
-    done
-
+  + lib.optionalString (!withQt6) (
+    ''
+      for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
+        substituteInPlace $subproject/$subproject.pro \
+          --replace-fail "\''$\''$[QT_INSTALL_PREFIX]" "$out"
+      done
+    ''
     # Install apicheck tool into bin
-    substituteInPlace apicheck/apicheck.pro \
-      --replace-fail '$$[QT_INSTALL_LIBS]/lomiri-ui-toolkit' "$out/bin"
-
-    substituteInPlace \
-      src/LomiriMetrics/LomiriMetrics.pro \
-      src/LomiriMetrics/lttng/lttng.pro \
-      --replace-fail '$$[QT_INSTALL_PLUGINS]' "$out/${qtbase.qtPluginPrefix}"
-
-    substituteInPlace features/lomiri_qml_plugin.prf \
-      --replace-fail '$$[QT_INSTALL_QML]' "$out/${qtbase.qtQmlPrefix}"
-
-    substituteInPlace documentation/documentation.pro \
-      --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
-      --replace-fail '$$[QT_INSTALL_DOCS]' '$$PREFIX/share/doc/lomiri-ui-toolkit'
-
+    + ''
+      substituteInPlace apicheck/apicheck.pro \
+        --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
+    ''
+    + ''
+      substituteInPlace \
+        src/LomiriMetrics/LomiriMetrics.pro \
+        src/LomiriMetrics/lttng/lttng.pro \
+        --replace-fail '$$[QT_INSTALL_PLUGINS]' "$out/${qtbase.qtPluginPrefix}"
+    ''
+    + ''
+      substituteInPlace features/lomiri_qml_plugin.prf \
+        --replace-fail '$$[QT_INSTALL_QML]' "$out/${qtbase.qtQmlPrefix}"
+    ''
+    + ''
+      substituteInPlace documentation/documentation.pro \
+        --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
+        --replace-fail '$$[QT_INSTALL_DOCS]' '$$PREFIX/share/doc/lomiri-ui-toolkit'
+    ''
     # Causes redefinition error with our own fortify hardening
-    sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
-  ''
+    + ''
+      sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
+    ''
+  )
   + lib.optionalString withQt6 ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
