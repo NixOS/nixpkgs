@@ -213,9 +213,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals waylandSupport [
     (lib.cmakeBool "WITH_GHOST_WAYLAND" true)
-    (lib.cmakeBool "WITH_GHOST_WAYLAND_DBUS" true)
     (lib.cmakeBool "WITH_GHOST_WAYLAND_DYNLOAD" false)
-    (lib.cmakeBool "WITH_GHOST_WAYLAND_LIBDECOR" true)
   ]
   ++ lib.optionals stdenv.cc.isClang [
     (lib.cmakeFeature "PYTHON_LINKFLAGS" "") # Clang doesn't support "-export-dynamic"
