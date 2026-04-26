@@ -413,7 +413,7 @@ let
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
       noNonNativeDeps =
-        builtins.length (
+        (
           depsBuildTarget
           ++ depsBuildTargetPropagated
           ++ depsHostHost
@@ -422,7 +422,7 @@ let
           ++ propagatedBuildInputs
           ++ depsTargetTarget
           ++ depsTargetTargetPropagated
-        ) == 0;
+        ) == [ ];
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
       concretizeFlagImplications =
@@ -464,7 +464,7 @@ let
             }${name} for ${attrs.name or attrs.pname}"
         ) deps;
     in
-    if builtins.length erroneousHardeningFlags != 0 then
+    if erroneousHardeningFlags != [ ] then
       abort (
         "mkDerivation was called with unsupported hardening flags: "
         + lib.generators.toPretty { } {
