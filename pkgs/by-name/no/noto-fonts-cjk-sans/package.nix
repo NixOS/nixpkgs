@@ -8,14 +8,14 @@
   static ? false,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts-cjk-sans";
   version = "2.004";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    tag = "Sans${version}";
+    tag = "Sans${finalAttrs.version}";
     hash = "sha256-i3ZKoSy2SVs46IViha+Sg8atH4n3ywgrunHPLtVT4Pk=";
     sparseCheckout = [
       "Sans/OTC"
@@ -55,4 +55,4 @@ stdenvNoCC.mkDerivation rec {
       emily
     ];
   };
-}
+})
