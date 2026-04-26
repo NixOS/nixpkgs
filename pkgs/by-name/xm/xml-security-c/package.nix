@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromCodeberg,
   autoreconfHook,
   pkg-config,
   xalanc,
@@ -13,9 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xml-security-c";
   version = "3.0.0";
 
-  src = fetchgit {
-    url = "https://git.shibboleth.net/git/cpp-xml-security";
-    rev = finalAttrs.version;
+  src = fetchFromCodeberg {
+    owner = "Shibboleth";
+    repo = "cpp-xml-security";
+    tag = finalAttrs.version;
     hash = "sha256-D60JtD4p9ERh6sowvwBHtE9XWVm3D8saooagDvA6ZtQ=";
   };
 

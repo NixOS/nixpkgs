@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromCodeberg,
   autoreconfHook,
   pkg-config,
   boost,
@@ -16,8 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xml-tooling-c";
   version = "3.3.0";
 
-  src = fetchgit {
-    url = "https://git.shibboleth.net/git/cpp-xmltooling.git";
+  src = fetchFromCodeberg {
+    owner = "Shibboleth";
+    repo = "cpp-xmltooling";
     tag = finalAttrs.version;
     hash = "sha256-czmBu7ThDwq+x7FahgZDMHqid8jeUNnTuKMI/Fj4IIw=";
   };
