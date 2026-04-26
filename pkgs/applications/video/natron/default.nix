@@ -10,7 +10,7 @@
   cairo,
   ceres-solver,
   expat,
-  extra-cmake-modules,
+  kdePackages,
   glog,
   libxdmcp,
   python312,
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];

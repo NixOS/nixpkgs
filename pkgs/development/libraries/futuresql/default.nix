@@ -1,9 +1,8 @@
 {
   stdenv,
-  lib,
   fetchurl,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   qtbase,
 }:
 stdenv.mkDerivation rec {
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
   ];
   buildInputs = [ qtbase ];
   cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];

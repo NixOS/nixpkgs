@@ -7,6 +7,7 @@
   libsForQt5,
   wayland-scanner,
 
+  extra-cmake-modules,
   plasma-wayland-protocols,
   wayland,
   wayland-protocols,
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.extra-cmake-modules
+    extra-cmake-modules
   ];
 
   buildInputs = [

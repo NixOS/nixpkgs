@@ -5,7 +5,7 @@
   cmake,
   ninja,
   qt6,
-  extra-cmake-modules,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     ninja
     qt6.wrapQtAppsHook
   ];

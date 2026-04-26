@@ -7,7 +7,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   withWayland ? true,
   withIndicator ? true,
   dbus,
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustc
