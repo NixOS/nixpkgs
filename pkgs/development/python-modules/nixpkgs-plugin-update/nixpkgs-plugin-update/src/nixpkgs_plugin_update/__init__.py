@@ -234,7 +234,9 @@ class Repo:
 
     def as_nix(self, plugin: "Plugin") -> str:
         ref_attr = (
-            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
         )
         return f"""fetchgit {{
       url = "{self.uri}";
@@ -439,9 +441,7 @@ class RepoGitHub(Repo):
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
         if url != response_url:
-            new_owner, new_name = (
-                urlsplit(response_url).path.strip("/").split("/")[:2]
-            )
+            new_owner, new_name = urlsplit(response_url).path.strip("/").split("/")[:2]
 
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self._branch)
             self.redirect = new_repo
@@ -467,7 +467,9 @@ class RepoGitHub(Repo):
             submodule_attr = ""
 
         ref_attr = (
-            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
         )
 
         return f"""fetchFromGitHub {{
@@ -1105,7 +1107,9 @@ def prefetch_plugin(
         latest_tag,
     )
 
-    cached_plugin = cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
+    cached_plugin = (
+        cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
+    )
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
         return (
@@ -1124,7 +1128,9 @@ def prefetch_plugin(
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
     sha256 = (
-        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}") if source_tag else p.repo.prefetch(commit)
+        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}")
+        if source_tag
+        else p.repo.prefetch(commit)
     )
 
     return (
