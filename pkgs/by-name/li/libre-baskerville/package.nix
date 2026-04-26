@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
 })
