@@ -9787,7 +9787,7 @@ with pkgs;
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
-  minitube = libsForQt5.callPackage ../applications/video/minitube { };
+  minitube = kdePackages.callPackage ../applications/video/minitube { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
