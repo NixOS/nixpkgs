@@ -2747,8 +2747,6 @@ with pkgs;
       ;
   };
 
-  nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
-
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
