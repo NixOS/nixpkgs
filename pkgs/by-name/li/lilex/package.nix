@@ -5,12 +5,12 @@
   installFonts,
   unzip,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lilex";
   version = "2.700";
 
   src = fetchurl {
-    url = "https://github.com/mishamyrt/Lilex/releases/download/${version}/Lilex.zip";
+    url = "https://github.com/mishamyrt/Lilex/releases/download/${finalAttrs.version}/Lilex.zip";
     hash = "sha256-NDEO20unSfdy1CuI4+7EpjGFJ+dc7qqWz8VW7jU2b7w=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ redyf ];
     platforms = lib.platforms.all;
   };
-}
+})
