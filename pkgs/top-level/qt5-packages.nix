@@ -78,8 +78,6 @@ makeScopeWithSplicing' {
 
         grantlee = callPackage ../development/libraries/grantlee/5 { };
 
-        qtcurve = callPackage ../data/themes/qtcurve { };
-
         herqq = callPackage ../development/libraries/herqq { };
 
         kdb = callPackage ../development/libraries/kdb { };
