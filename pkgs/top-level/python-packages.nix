@@ -12664,6 +12664,24 @@ self: super: with self; {
 
   plotpy = callPackage ../development/python-modules/plotpy { };
 
+  # Plover 5 moves from PyQt5 to PySide6,
+  # which is a backward-incompatible change to praphical plugins.
+  # Use Plover 4 for now (2026-04-26),
+  # as the upstream still warns about this in every Plover 5 release,
+  # List of unsupported plugins:
+  # https://github.com/opensteno/plover_plugins_registry/blob/master/unsupported.json
+  plover = plover_4;
+
+  plover-stroke = callPackage ../development/python-modules/plover-stroke { };
+
+  plover_4 = callPackage ../development/python-modules/plover/4.nix {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
+  plover_5 = callPackage ../development/python-modules/plover/5.nix {
+    inherit (pkgs.qt6) qtbase wrapQtAppsHook;
+  };
+
   pluggy = callPackage ../development/python-modules/pluggy { };
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
@@ -17156,6 +17174,8 @@ self: super: with self; {
   rstr = callPackage ../development/python-modules/rstr { };
 
   rtb-data = callPackage ../development/python-modules/rtb-data { };
+
+  rtf-tokenize = callPackage ../development/python-modules/rtf-tokenize { };
 
   rtfde = callPackage ../development/python-modules/rtfde { };
 
