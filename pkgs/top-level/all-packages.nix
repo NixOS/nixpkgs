@@ -9311,8 +9311,6 @@ with pkgs;
   };
   gnuradioPackages = recurseIntoAttrs gnuradio.pkgs;
 
-  goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
-
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
   gqrx-portaudio = gqrx.override {
