@@ -3213,7 +3213,6 @@ with pkgs;
   rtaudio = rtaudio_5;
 
   mpi = openmpi; # this attribute should used to build MPI applications
-  openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica { });
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
