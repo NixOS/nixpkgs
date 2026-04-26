@@ -89,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   # After the pnpm configure, we need to build the binaries of all instances
   # of better-sqlite3. It has a native part that it wants to build using a
   # script which is disallowed.
-  # Adapted from mkYarnModules.
   preBuild = ''
     for f in $(find -path '*/node_modules/better-sqlite3' -type d); do
       (cd "$f" && (
