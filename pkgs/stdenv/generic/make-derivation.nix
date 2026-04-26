@@ -855,12 +855,12 @@ let
       checkedEnv =
         let
           overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
-          makeError =
+          errors = lib.concatMapStringsSep "\n" (
             name:
             "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
                 lib.generators.toPretty { } derivationArg.${name}
-              }";
-          errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
+              }"
+          ) overlappingNames;
         in
         assert assertMsg (isAttrs env && !isDerivation env)
           "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
