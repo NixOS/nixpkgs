@@ -124,6 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -f tests/scripts/test063-delta-multiprovider
 
+    # syncrepl tests wait a fixed $SLEEP1/$SLEEP2 and then compare once
+    # without retrying, which is flaky on heavily loaded builders
+    export SLEEP1=15 SLEEP2=30
+
     # https://bugs.openldap.org/show_bug.cgi?id=10009
     # can probably be re-added once https://github.com/cyrusimap/cyrus-sasl/pull/772
     # has made it to a release
