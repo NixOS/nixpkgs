@@ -12,7 +12,7 @@
 
   # runtime
   lksctp-tools,
-  hyperscan,
+  vectorscan,
   libxcrypt,
   openssl,
   pkg-config,
@@ -62,10 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    hyperscan
     libxcrypt
     openssl
     sqlite
+    vectorscan
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     lksctp-tools
@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/solanum-ircd/solanum";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "solanum";
     platforms = lib.platforms.unix;
   };
 })
