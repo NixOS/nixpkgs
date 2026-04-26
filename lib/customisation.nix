@@ -151,6 +151,37 @@ rec {
     :::
   */
   makeOverridable =
+    let
+      positionFrom =
+        attrs:
+        if attrs == { } then
+          null
+        else
+          let
+            loc = unsafeGetAttrPos (head (attrNames attrs)) attrs;
+          in
+          if loc == null then null else "${loc.file}:${toString loc.line}";
+      updateMeta =
+        position: result:
+        if position != null && isDerivation result && result ? meta then
+          extendDerivation true {
+            meta = result.meta // {
+              inherit position;
+            };
+
+            # extendDerivation is weird about this and I'm afraid to change it
+            # with all the TODOs floating around in there. If you do, check
+            # that
+            #
+            #     ((pkg.override ...).dev.overrideAttrs ...).outputName == "dev"
+            #
+            # for a package with a dev output, which is not true right now
+            # unless I do this.
+            ${if result ? overrideAttrs then "overrideAttrs" else null} = result.overrideAttrs;
+          } result
+        else
+          result;
+    in
     f:
     let
       # Creates a functor with the same arguments as f
@@ -178,9 +209,6 @@ rec {
       let
         result = f origArgs;
 
-        # Changes the original arguments with (potentially a function that returns) a set of new attributes
-        overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
-
         # Re-call the function but with different arguments
         overrideArgs = mirrorArgs (
           /**
@@ -190,7 +218,13 @@ rec {
 
             This function was provided by `lib.makeOverridable`.
           */
-          newArgs: makeOverridable f (overrideWith newArgs)
+          newArgs:
+          let
+            overlay = if isFunction newArgs then newArgs origArgs else newArgs;
+          in
+          makeOverridable (mirrorArgs (finalArgs: updateMeta (positionFrom overlay) (f finalArgs))) (
+            origArgs // overlay
+          )
         );
         # Change the result of the function call by applying g to it
         overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
