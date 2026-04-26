@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   nixosTests,
   gitUpdater,
   static ? false, # whether to build the static version of the font
@@ -22,13 +23,9 @@ stdenvNoCC.mkDerivation rec {
     ];
   };
 
-  installPhase =
-    let
-      font-path = if static then "Serif/OTC/*.ttc" else "Serif/Variable/OTC/*.otf.ttc";
-    in
-    ''
-      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${font-path}
-    '';
+  sourceRoot = "source/${if static then "Serif/OTC" else "Serif/Variable/OTC"}";
+
+  nativeBuildInputs = [ installFonts ];
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
