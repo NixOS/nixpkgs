@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/solanum-ircd/solanum";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "solanum";
     platforms = lib.platforms.unix;
   };
 })
