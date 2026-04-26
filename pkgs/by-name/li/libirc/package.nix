@@ -3,30 +3,35 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
+  qt6,
 }:
 
 stdenv.mkDerivation {
   pname = "libirc";
-  version = "unstable-2022-10-15";
+  version = "0-unstable-2025-11-09";
 
   src = fetchFromGitHub {
     owner = "grumpy-irc";
     repo = "libirc";
-    rev = "734082ffffb6d6744070c75587159d927342edea";
-    sha256 = "Qi/YKLlau0rdQ9XCMyreQdv4ctQWHFIoE3YlW6QnbSI=";
+    rev = "59c6d81242910d8205b94acadf54cec0d2313884";
+    hash = "sha256-C7bO2Dwa6p7/bUh73JJCup2biIm9UShOUSxL9uCShqg=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    qt6.qtbase
+  ];
+
+  dontWrapQtApps = true; # library only
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
   cmakeFlags = [
-    "-DQT5_BUILD=1"
-    "-DQt5Core_DIR=${qtbase.dev}/lib/cmake/Qt5Core"
-    "-DQt5Network_DIR=${qtbase.dev}/lib/cmake/Qt5Network"
+    (lib.cmakeBool "QT6_BUILD" true)
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") # supposedly required for Qt
   ];
 
   preFixup = ''

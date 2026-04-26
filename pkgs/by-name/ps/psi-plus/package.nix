@@ -3,25 +3,15 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qtimageformats,
-  qtx11extras,
-  qttools,
-  libidn,
-  qca-qt5,
+  qt6,
+  kdePackages,
   libxscrnsaver,
   hunspell,
-  libsecret,
   libgcrypt,
   libgpg-error,
   usrsctp,
-  qtkeychain,
 
   chatType ? "basic", # See the assertion below for available options
-  qtwebkit,
-  qtwebengine,
 
   enablePlugins ? true,
   html-tidy,
@@ -34,12 +24,17 @@
   gst_all_1,
   enablePsiMedia ? false,
   pkg-config,
+
+  # For tests
+  psi-plus,
 }:
+
+assert lib.assertMsg (lib.toLower chatType != "webkit")
+  "psi-plus: chatType = \"webkit\" was removed because qtwebkit had known vulns and has no Qt6 equivalent. Use chatType = \"webengine\" instead.";
 
 assert builtins.elem (lib.toLower chatType) [
   "basic" # Basic implementation, no web stuff involved
-  "webkit" # Legacy one, based on WebKit (see https://wiki.qt.io/Qt_WebKit)
-  "webengine" # QtWebEngine (see https://wiki.qt.io/QtWebEngine)
+  "webengine"
 ];
 
 assert enablePsiMedia -> enablePlugins;
@@ -47,43 +42,40 @@ assert enablePsiMedia -> enablePlugins;
 stdenv.mkDerivation rec {
   pname = "psi-plus";
 
-  version = "1.5.2115";
+  version = "1.5.2139";
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
-    rev = version;
-    sha256 = "sha256-4is3ksl6IsYP1L0WhTT/56QUtR+EC1X6Lftre2BO6pM=";
+    tag = version;
+    hash = "sha256-wgR809rOtcKvim2gPm9MeiB67pU+EiRktpW5BCJqWs8=";
   };
 
   cmakeFlags = [
     "-DCHAT_TYPE=${chatType}"
     "-DENABLE_PLUGINS=${if enablePlugins then "ON" else "OFF"}"
     "-DBUILD_PSIMEDIA=${if enablePsiMedia then "ON" else "OFF"}"
+    "-DUSE_QT6=ON"
   ];
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals enablePsiMedia [
     pkg-config
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
-    qtimageformats
-    qtx11extras
-    libidn
-    qca-qt5
+    qt6.qtbase
+    qt6.qtmultimedia
+    kdePackages.qca
     libxscrnsaver
     hunspell
-    libsecret
     libgcrypt
     libgpg-error
     usrsctp
-    qtkeychain
+    kdePackages.qtkeychain
   ]
   ++ lib.optionals voiceMessagesSupport [
     gst_all_1.gst-plugins-base
@@ -95,11 +87,8 @@ stdenv.mkDerivation rec {
     libotr
     libomemo-c
   ]
-  ++ lib.optionals (chatType == "webkit") [
-    qtwebkit
-  ]
   ++ lib.optionals (chatType == "webengine") [
-    qtwebengine
+    qt6.qtwebengine
   ];
 
   preFixup = lib.optionalString voiceMessagesSupport ''
@@ -107,6 +96,10 @@ stdenv.mkDerivation rec {
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
     )
   '';
+
+  passthru.tests = {
+    webengine = psi-plus.override { chatType = "webengine"; };
+  };
 
   meta = {
     homepage = "https://psi-plus.com";

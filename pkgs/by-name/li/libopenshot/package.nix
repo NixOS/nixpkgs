@@ -13,34 +13,27 @@
   llvmPackages,
   pkg-config,
   python3,
-  qtbase,
-  qtmultimedia,
+  qt6,
   swig,
   zeromq,
+  resvg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot";
-  version = "0.4.0";
+  version = "0.7.0-unstable-2026-04-21";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-zroTnJRYIIglhha6jQvaVNTgnIV6kUWcu7s5zEvgH6Q=";
+    rev = "a58565292cb84438b1c6a039c343b4c65003bd82";
+    hash = "sha256-zUzyi/VydrxDLCY7E/LBr7+btthOjal3c7md6PTXQWA=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Darwin requires both Magick++ and MagickCore for a successful linkage
     ./0001-link-magickcore.diff
   ];
-
-  postPatch = ''
-    # Fix FFmpeg 8.0 API compatibility (FF_PROFILE_* -> AV_PROFILE_*)
-    substituteInPlace src/FFmpegWriter.cpp \
-      --replace-fail "FF_PROFILE_H264_BASELINE" "AV_PROFILE_H264_BASELINE" \
-      --replace-fail "FF_PROFILE_H264_CONSTRAINED" "AV_PROFILE_H264_CONSTRAINED"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -56,9 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     jsoncpp
     libopenshot-audio
     python3
-    qtbase
-    qtmultimedia
+    qt6.qtbase
+    qt6.qtmultimedia
     zeromq
+    resvg
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -68,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   dontWrapQtApps = true;
 
@@ -78,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_PYTHON" true)
     (lib.cmakeOptionType "filepath" "PYTHON_EXECUTABLE" (lib.getExe python3))
     (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python3.sitePackages)
+    "-DUSE_QT6=ON"
   ];
 
   passthru = {

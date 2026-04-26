@@ -6,26 +6,25 @@
   ncurses,
   which,
   cmake,
-  wrapQtAppsHook,
-  qtwebengine,
+  qt6,
   yaml-cpp,
   libirc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "huggle";
-  version = "3.4.13";
+  version = "3.4.14";
 
   src = fetchFromGitHub {
     owner = "huggle";
     repo = "huggle3-qt-lx";
     rev = version;
-    sha256 = "sha256-f7Oo6x262Ju9KY8f/xjm9gL6I1fRCaDsQWGWJMUNUfY=";
+    hash = "sha256-obArs5NqjHbuWv+zNGAuulHQz6MUIejRqNvg2l5eZxc=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
     which
     cmake
@@ -33,7 +32,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     yaml-cpp
-    qtwebengine
+    qt6.qtmultimedia
+    qt6.qtwebengine
     libirc
   ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "-S"
     "/build/source/src"
     "-DINSTALL_DATA_DIR=bin"
-    "-DQT5_BUILD=ON"
+    "-DQT6_BUILD=ON"
     "-DWEB_ENGINE=ON"
     "-DBUILD_SHARED_LIBS=OFF"
     "-Wno-dev"

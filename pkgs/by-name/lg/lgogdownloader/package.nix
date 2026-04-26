@@ -13,7 +13,7 @@
   tinyxml-2,
   help2man,
   html-tidy,
-  libsForQt5,
+  qt6,
   testers,
 
   enableGui ? false,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
     html-tidy
   ]
-  ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
+  ++ lib.optional enableGui qt6.wrapQtAppsHook;
 
   buildInputs = [
     boost
@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     tinyxml-2
   ]
   ++ lib.optionals enableGui [
-    libsForQt5.qtbase
-    libsForQt5.qtwebengine
+    qt6.qtbase
+    qt6.qtwebengine
   ];
 
   cmakeFlags = [
