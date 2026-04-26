@@ -219,6 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      --set GDK_BACKEND x11
       ${lib.optionalString withNvidiaGLWorkaround ''
         --set __GLX_VENDOR_LIBRARY_NAME mesa
         --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
