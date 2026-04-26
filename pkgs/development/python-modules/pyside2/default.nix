@@ -7,7 +7,6 @@
   ninja,
   qt5,
   shiboken2,
-  withWebengine ? false, # vulnerable, so omit by default
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
@@ -81,9 +80,6 @@ stdenv.mkDerivation rec {
       qtsvg
       qt3d
     ])
-    ++ lib.optionals withWebengine [
-      qt5.qtwebengine
-    ]
     ++ (with python.pkgs; [ setuptools ]);
 
   propagatedBuildInputs = [ shiboken2 ];

@@ -473,7 +473,6 @@
   ) { };
   boxquote = callPackage (
     {
-      cl-lib ? null,
       elpaBuild,
       fetchurl,
       lib,
@@ -481,12 +480,12 @@
     elpaBuild {
       pname = "boxquote";
       ename = "boxquote";
-      version = "2.3";
+      version = "2.4.1";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/boxquote-2.3.tar";
-        sha256 = "0fsvfy5b4k0h6fxmvvdngxap5pfypm8iik0m1jq70za7n7g8qvmy";
+        url = "https://elpa.nongnu.org/nongnu/boxquote-2.4.1.tar";
+        sha256 = "18gwx8dh2xbr90m1mvmp5jb8ssyn5cmq833sd4nsa76i021yh1l6";
       };
-      packageRequires = [ cl-lib ];
+      packageRequires = [ ];
       meta = {
         homepage = "https://elpa.nongnu.org/nongnu/boxquote.html";
         license = lib.licenses.free;
@@ -502,10 +501,10 @@
     elpaBuild {
       pname = "buttercup";
       ename = "buttercup";
-      version = "1.39";
+      version = "1.40";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/buttercup-1.39.tar";
-        sha256 = "0a2yj10jrql77l0dqyf95yzb6cd8z7z9p9jjc6lb7z8j26m208sj";
+        url = "https://elpa.nongnu.org/nongnu/buttercup-1.40.tar";
+        sha256 = "09r1yp05m7p6906isz1x6dhc7mrxsdisxa19a8py73gqsm1ymf1c";
       };
       packageRequires = [ ];
       meta = {
@@ -567,10 +566,10 @@
     elpaBuild {
       pname = "casual";
       ename = "casual";
-      version = "2.15.0";
+      version = "2.16.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/casual-2.15.0.tar";
-        sha256 = "1ydd6ilxh5msh5l1f86b2mi963hls4m5aipshfc0bygwfh83m7s0";
+        url = "https://elpa.nongnu.org/nongnu/casual-2.16.0.tar";
+        sha256 = "1s0d5c3aacyh1n5qy7ka4xwnmdbx3qrh0z0z41bc958zmay6mgpa";
       };
       packageRequires = [
         csv-mode
@@ -4483,10 +4482,10 @@
     elpaBuild {
       pname = "pg";
       ename = "pg";
-      version = "0.64";
+      version = "0.65";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/pg-0.64.tar";
-        sha256 = "1dip1s8l2im8j40hgn3jrqrb8mbly2wfd5fy4vmz9mn4axnxdvkn";
+        url = "https://elpa.nongnu.org/nongnu/pg-0.65.tar";
+        sha256 = "1gf93xsldhx105r5m03hiq3lzlzb3r5pjd3j99jl0gs3z8pmn8ic";
       };
       packageRequires = [ peg ];
       meta = {
@@ -5266,10 +5265,10 @@
     elpaBuild {
       pname = "subed";
       ename = "subed";
-      version = "1.4.1";
+      version = "1.4.2";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/subed-1.4.1.tar";
-        sha256 = "11rg436w2rdcpiix5hzmdb7r736nhiqpm4h8b18ac7dv6nnjjnwd";
+        url = "https://elpa.nongnu.org/nongnu/subed-1.4.2.tar";
+        sha256 = "0crpgxqk164z602iajhx7b0zxdjs5f9g8hv0q6n1vjrsby87pl1x";
       };
       packageRequires = [ ];
       meta = {
@@ -6090,10 +6089,10 @@
     elpaBuild {
       pname = "xah-fly-keys";
       ename = "xah-fly-keys";
-      version = "28.11.20260215192642";
+      version = "28.11.20260416140940";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-28.11.20260215192642.tar";
-        sha256 = "0k0p60wirvp36ifaqkq6420rxfj1ys4cb8j34q7rhcbdfw1cp9dd";
+        url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-28.11.20260416140940.tar";
+        sha256 = "0zzdwrd4h12bqlxzpj7xs4m5cdgx9nbljrnyld6qs5b19352izyl";
       };
       packageRequires = [ ];
       meta = {
