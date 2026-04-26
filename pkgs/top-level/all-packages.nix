@@ -9980,8 +9980,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  smtube = libsForQt5.callPackage ../applications/video/smtube { };
-
   inherit
     ({
       softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };
