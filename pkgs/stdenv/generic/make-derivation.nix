@@ -851,11 +851,10 @@ let
       checkedEnv =
         let
           overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
-          prettyPrint = lib.generators.toPretty { };
           makeError =
             name:
-            "  - ${name}: in `env`: ${prettyPrint env'.${name}}; in derivation arguments: ${
-                prettyPrint derivationArg.${name}
+            "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
+                lib.generators.toPretty { } derivationArg.${name}
               }";
           errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
         in
