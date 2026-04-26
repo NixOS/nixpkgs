@@ -20,7 +20,6 @@ let
     concatMapStrings
     concatStringsSep
     elem
-    elemAt
     extendDerivation
     filter
     filterAttrs
@@ -476,61 +475,59 @@ let
 
         outputs = outputs';
 
-        buildDependencies = [
-          (map (drv: getDev drv.__spliced.buildBuild or drv) (
-            checkDependencyList "depsBuildBuild" depsBuildBuild
-          ))
-          (map (drv: getDev drv.__spliced.buildHost or drv) (
-            checkDependencyList "nativeBuildInputs" nativeBuildInputs'
-          ))
-          (map (drv: getDev drv.__spliced.buildTarget or drv) (
-            checkDependencyList "depsBuildTarget" depsBuildTarget
-          ))
+        buildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
+          checkDependencyList "depsBuildBuild" depsBuildBuild
+        );
+        buildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
+          checkDependencyList "nativeBuildInputs" nativeBuildInputs'
+        );
+        buildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
+          checkDependencyList "depsBuildTarget" depsBuildTarget
+        );
+        hostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
+          checkDependencyList "depsHostHost" depsHostHost
+        );
+        hostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
+          checkDependencyList "buildInputs" buildInputs'
+        );
+        targetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
+          checkDependencyList "depsTargetTarget" depsTargetTarget
+        );
+        allDependencies = concatLists [
+          buildBuildOutputs
+          buildHostOutputs
+          buildTargetOutputs
+          hostHostOutputs
+          hostTargetOutputs
+          targetTargetOutputs
         ];
-        hostDependencies = [
-          (map (drv: getDev drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-          (map (drv: getDev drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
-        ];
-        targetDependencies = [
-          (map (drv: getDev drv.__spliced.targetTarget or drv) (
-            checkDependencyList "depsTargetTarget" depsTargetTarget
-          ))
-        ];
-        allDependencies = concatLists (concatLists [
-          buildDependencies
-          hostDependencies
-          targetDependencies
-        ]);
 
-        propagatedBuildDependencies = [
-          (map (drv: getDev drv.__spliced.buildBuild or drv) (
-            checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
-          ))
-          (map (drv: getDev drv.__spliced.buildHost or drv) (
-            checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
-          ))
-          (map (drv: getDev drv.__spliced.buildTarget or drv) (
-            checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
-          ))
+        propagatedBuildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
+          checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
+        );
+        propagatedBuildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
+          checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
+        );
+        propagatedBuildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
+          checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
+        );
+        propagatedHostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
+          checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
+        );
+        propagatedHostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
+          checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
+        );
+        propagatedTargetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
+          checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
+        );
+        allPropagatedDependencies = concatLists [
+          propagatedBuildBuildOutputs
+          propagatedBuildHostOutputs
+          propagatedBuildTargetOutputs
+          propagatedHostHostOutputs
+          propagatedHostTargetOutputs
+          propagatedTargetTargetOutputs
         ];
-        propagatedHostDependencies = [
-          (map (drv: getDev drv.__spliced.hostHost or drv) (
-            checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
-          ))
-          (map (drv: getDev drv.__spliced.hostTarget or drv) (
-            checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
-          ))
-        ];
-        propagatedTargetDependencies = [
-          (map (drv: getDev drv.__spliced.targetTarget or drv) (
-            checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
-          ))
-        ];
-        allPropagatedDependencies = concatLists (concatLists [
-          propagatedBuildDependencies
-          propagatedHostDependencies
-          propagatedTargetDependencies
-        ]);
 
         derivationArg = removeAttrs attrs removedOrReplacedAttrNames // {
           ${if (attrs ? name || (attrs ? pname && attrs ? version)) then "name" else null} =
@@ -581,19 +578,19 @@ let
           __ignoreNulls = true;
           inherit __structuredAttrs strictDeps;
 
-          depsBuildBuild = head buildDependencies;
-          nativeBuildInputs = elemAt buildDependencies 1;
-          depsBuildTarget = elemAt buildDependencies 2;
-          depsHostHost = head hostDependencies;
-          buildInputs = elemAt hostDependencies 1;
-          depsTargetTarget = head targetDependencies;
+          depsBuildBuild = buildBuildOutputs;
+          nativeBuildInputs = buildHostOutputs;
+          depsBuildTarget = buildTargetOutputs;
+          depsHostHost = hostHostOutputs;
+          buildInputs = hostTargetOutputs;
+          depsTargetTarget = targetTargetOutputs;
 
-          depsBuildBuildPropagated = head propagatedBuildDependencies;
-          propagatedNativeBuildInputs = elemAt propagatedBuildDependencies 1;
-          depsBuildTargetPropagated = elemAt propagatedBuildDependencies 2;
-          depsHostHostPropagated = head propagatedHostDependencies;
-          propagatedBuildInputs = elemAt propagatedHostDependencies 1;
-          depsTargetTargetPropagated = head propagatedTargetDependencies;
+          depsBuildBuildPropagated = propagatedBuildBuildOutputs;
+          propagatedNativeBuildInputs = propagatedBuildHostOutputs;
+          depsBuildTargetPropagated = propagatedBuildTargetOutputs;
+          depsHostHostPropagated = propagatedHostHostOutputs;
+          propagatedBuildInputs = propagatedHostTargetOutputs;
+          depsTargetTargetPropagated = propagatedTargetTargetOutputs;
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags =
