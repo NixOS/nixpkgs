@@ -3569,15 +3569,6 @@ with pkgs;
     yarn-berry = yarn-berry_3;
   };
 
-  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea { };
-
-  inherit (yarn2nix-moretea)
-    yarn2nix
-    mkYarnPackage
-    mkYarnModules
-    fixup_yarn_lock
-    ;
-
   yamllint = with python3Packages; toPythonApplication yamllint;
 
   # To expose more packages for Yi, override the extraPackages arg.
