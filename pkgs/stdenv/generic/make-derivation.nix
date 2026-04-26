@@ -823,9 +823,8 @@ let
       );
 
     let
-      mainProgram = meta.mainProgram or null;
       env' = env // {
-        ${if mainProgram != null then "NIX_MAIN_PROGRAM" else null} = mainProgram;
+        ${if meta ? mainProgram then "NIX_MAIN_PROGRAM" else null} = meta.mainProgram;
       };
 
       derivationArg = makeDerivationArgument (
