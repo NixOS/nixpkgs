@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "secure";
-  version = "1.0.1";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeerror";
     repo = "secure.py";
     tag = "v${version}";
-    hash = "sha256-lyosOejztFEINGKO0wAYv3PWBL7vpmAq+eQunwP9h5I=";
+    hash = "sha256-ZUipbCDyKd3hxLh6nE0f7DrPVLfUoRFCKPrw5KcqVHM=";
   };
 
   build-system = [ setuptools ];
