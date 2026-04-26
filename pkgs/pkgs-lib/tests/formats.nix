@@ -723,7 +723,7 @@ runBuildTests {
       ];
     };
     expected = ''
-      language-server = ["bash-language-server", {except-features = ["diagnostics"], name = "typescript-language-server"}]
+      language-server = ["bash-language-server", { except-features = ["diagnostics"], name = "typescript-language-server" }]
     '';
   };
 
