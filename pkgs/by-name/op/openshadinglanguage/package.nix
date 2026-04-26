@@ -4,6 +4,7 @@
   cmake,
   fetchFromGitHub,
   flex,
+  hexdump,
   lib,
   libxml2,
   llvmPackages,
@@ -14,7 +15,6 @@
   python3Packages,
   robin-map,
   stdenv,
-  util-linux,
   zlib,
 }:
 
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost_static
+    hexdump
     libclang
     llvm
     openexr
@@ -71,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     python3Packages.pybind11
     robin-map
-    util-linux # needed just for hexdump
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
