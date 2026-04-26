@@ -5,7 +5,7 @@
   ...
 }:
 let
-  toml = pkgs.formats.toml { };
+  ini = pkgs.formats.ini { };
   cfg = config.services.dunst;
 in
 {
@@ -22,7 +22,7 @@ in
     };
 
     settings = lib.mkOption {
-      type = toml.type;
+      type = ini.type;
       default = { };
       description = "Dunst configuration, see dunst(5)";
       example = lib.literalExpression ''
@@ -69,7 +69,7 @@ in
 
     environment = {
       systemPackages = [ cfg.package ];
-      etc."xdg/dunst/dunstrc".source = toml.generate "dunstrc" cfg.settings;
+      etc."xdg/dunst/dunstrc".source = ini.generate "dunstrc" cfg.settings;
     };
 
     services.dbus.packages = [ cfg.package ];
