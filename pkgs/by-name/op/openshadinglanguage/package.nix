@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
+    (lib.cmakeBool "USE_QT" false)
+
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
     (lib.cmakeFeature "LLVM_BC_GENERATOR" "${clang}/bin/clang++")
