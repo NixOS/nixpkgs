@@ -1,0 +1,43 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 1815754..ca71395 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -10,9 +10,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
+ 
+ [[package]]
+ name = "compiler_builtins"
+-version = "0.1.75"
++version = "0.1.89"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c6e3183e88f659a862835db8f4b67dbeed3d93e44dd4927eef78edb1c149d784"
++checksum = "9fc9c2080d347a2c316518840ac9194644a9993dfa1e9778ef38979a339f5d8b"
+ 
+ [[package]]
+ name = "fls"
+@@ -26,9 +26,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "libc"
+-version = "0.2.126"
++version = "0.2.140"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "349d5a591cd28b49e1d1037471617a32ddcda5731b99419008085f72d5a53836"
++checksum = "99227334921fae1a979cf0bfdfcc6b3e5ce376ef57e16fb6fb3ea2ed6095f80c"
+ 
+ [[package]]
+ name = "sc"
+@@ -38,9 +38,9 @@ checksum = "010e18bd3bfd1d45a7e666b236c78720df0d9a7698ebaa9c1c559961eb60a38b"
+ 
+ [[package]]
+ name = "unicode-width"
+-version = "0.1.9"
++version = "0.1.10"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3ed742d4ea2bd1176e236172c8429aaf54486e7ac098db29ffe6529e0ce50973"
++checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
+ 
+ [[package]]
+ name = "veneer"
+-- 
+2.38.1
+
