@@ -7,13 +7,13 @@
 }:
 mkLibretroCore rec {
   core = "fbalpha2012";
-  version = "0-unstable-2026-03-31";
+  version = "0-unstable-2026-04-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "fbalpha2012";
-    rev = "15af60bf24e3dc2267a38e3c8532450ebec86317";
-    hash = "sha256-7QfDk/j7akaORSekdx96mcDgsFp+kAq1/Cxtu3uPe4A=";
+    rev = "95fa35582b1ca7ce68de3313615794c8c9d8d7c0";
+    hash = "sha256-9F970HETDJsttoQOlqg2dFMzff/drR7G8MxXaSlWTHI=";
   };
 
   sourceRoot = "${src.name}/svn-current/trunk";
