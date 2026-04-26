@@ -24,7 +24,6 @@
   mpfr,
   nlohmann_json,
   opencascade-occt_7_6,
-  opencollada,
   pcre,
   zlib,
 
@@ -102,7 +101,6 @@ buildPythonPackage rec {
     mpfr
     nlohmann_json
     opencascade-occt
-    opencollada
     pcre
   ];
 
@@ -138,12 +136,11 @@ buildPythonPackage rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_IFCPYTHON=ON"
     "-DCITYJSON_SUPPORT=OFF"
+    "-DCOLLADA_SUPPORT=OFF"
     "-DEIGEN_DIR=${eigen}/include/eigen3"
     "-DJSON_INCLUDE_DIR=${nlohmann_json}/include/"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     "-DOCC_LIBRARY_DIR=${lib.getLib opencascade-occt}/lib"
-    "-DOPENCOLLADA_INCLUDE_DIR=${opencollada}/include/opencollada"
-    "-DOPENCOLLADA_LIBRARY_DIR=${lib.getLib opencollada}/lib/opencollada"
     "-DSWIG_EXECUTABLE=${swig}/bin/swig"
     "-DLIBXML2_INCLUDE_DIR=${libxml2.dev}/include/libxml2"
     "-DLIBXML2_LIBRARIES=${lib.getLib libxml2}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
