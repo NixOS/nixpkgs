@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_DIRECTORY" "${llvm}")
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace src/cmake/modules/FindLLVM.cmake \
       --replace-fail "NO_DEFAULT_PATH" ""
   '';
