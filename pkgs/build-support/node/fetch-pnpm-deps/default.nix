@@ -138,7 +138,11 @@ in
 
             # Remove timestamp and sort the json files
             rm -rf $storePath/{v3,v10}/tmp
-            for f in $(find $storePath -name "*.json"); do
+            # Exclude links/ which contains actual npm package files (e.g.
+            # tsconfig.json with JSONC trailing commas/comments) that jq cannot
+            # parse as strict JSON. All other *.json files are pnpm metadata
+            # that may contain checkedAt timestamps.
+            for f in $(find $storePath -not -path "*/links/*" -name "*.json"); do
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done
 
