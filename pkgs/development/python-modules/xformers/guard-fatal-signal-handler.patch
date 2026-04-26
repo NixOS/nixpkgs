@@ -1,0 +1,27 @@
+diff --git a/tests/multiprocessing_utils.py b/tests/multiprocessing_utils.py
+index 7394cf5..c476e1c 100644
+--- a/tests/multiprocessing_utils.py
++++ b/tests/multiprocessing_utils.py
+@@ -8,6 +8,7 @@ import gc
+ import multiprocessing
+ import os
+ import signal
++import sys
+ from tempfile import _TemporaryFileWrapper, NamedTemporaryFile
+ from typing import Dict, List, Tuple
+
+@@ -67,7 +68,13 @@ class SafeMpContext(multiprocessing.context.BaseContext):
+
+
+ def init_process_group(init_method: str, rank: int, world_size: int):
+-    torch._C._set_print_stack_traces_on_fatal_signal(True)
++    if (
++        sys.platform != "win32"
++        and sys.platform != "darwin"
++        and hasattr(torch._C, "_set_print_stack_traces_on_fatal_signal")
++    ):
++        # Windows and macOS do not support these signal handlers.
++        torch._C._set_print_stack_traces_on_fatal_signal(True)
+
+     if torch.cuda.device_count() >= world_size:
+         backend = "nccl"

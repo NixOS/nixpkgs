@@ -51,6 +51,11 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     hash = "sha256-UqpRHLN0INpW6sA8DbQCSeL8uhS+IoW60UPVUIh1NY0=";
   };
 
+  patches = [
+    # https://github.com/facebookresearch/xformers/issues/1394
+    ./guard-fatal-signal-handler.patch
+  ];
+
   # ModuleNotFoundError: No module named 'xformers.components'
   postPatch = ''
     touch xformers/components/__init__.py
