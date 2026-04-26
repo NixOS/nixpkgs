@@ -206,6 +206,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       hexa
       picnoir
       thanegill
+      karlbeecken
     ];
     mainProgram = "esphome";
   };
