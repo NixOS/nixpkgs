@@ -761,6 +761,7 @@ mapAliases {
   fontibmtype1 = font-ibm-type1; # Added 2026-01-19
   fontisasmisc = font-isas-misc; # Added 2026-01-19
   fontjismisc = font-jis-misc; # Added 2026-01-19
+  fontmatrix = throw "'fontmatrix' has been removed as upstream was archived 2024-10-24"; # Added 2026-04-26
   fontmicromisc = font-micro-misc; # Added 2026-01-19
   fontmisccyrillic = font-misc-cyrillic; # Added 2026-01-19
   fontmiscethiopic = font-misc-ethiopic; # Added 2026-01-19
