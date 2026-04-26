@@ -4,7 +4,7 @@
   lib,
   extra-cmake-modules,
   wayland-scanner,
-  plasma-wayland-protocols,
+  kdePackages,
   qtbase,
   wayland,
   wayland-protocols,
@@ -26,7 +26,7 @@ mkDerivation {
     wayland-scanner
   ];
   buildInputs = [
-    plasma-wayland-protocols
+    kdePackages.plasma-wayland-protocols
     wayland
     wayland-protocols
   ];
