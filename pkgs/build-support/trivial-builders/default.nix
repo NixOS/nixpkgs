@@ -111,12 +111,6 @@ rec {
       derivationArgs ? { },
       pos ? builtins.unsafeGetAttrPos "name" args,
     }@args:
-    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
-      destination must be an absolute path, relative to the derivation's out path,
-      got '${destination}' instead.
-
-      Ensure that the path starts with a / and specifies at least the filename.
-    '';
 
     let
       matches = builtins.match "/bin/([^/]+)" destination;
@@ -128,11 +122,18 @@ rec {
             pos
             text
             executable
-            destination
             checkPhase
             allowSubstitutes
             preferLocalBuild
             ;
+          destination =
+            assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+              destination must be an absolute path, relative to the derivation's out path,
+              got '${destination}' instead.
+
+              Ensure that the path starts with a / and specifies at least the filename.
+            '';
+            destination;
           passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
           meta =
             lib.optionalAttrs (executable && matches != null) {
