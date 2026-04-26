@@ -112,9 +112,6 @@ rec {
       pos ? builtins.unsafeGetAttrPos "name" args,
     }@args:
 
-    let
-      matches = builtins.match "/bin/([^/]+)" destination;
-    in
     runCommand name
       (
         {
@@ -136,6 +133,9 @@ rec {
             destination;
           passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
           meta =
+            let
+              matches = builtins.match "/bin/([^/]+)" destination;
+            in
             lib.optionalAttrs (executable && matches != null) {
               mainProgram = lib.head matches;
             }
