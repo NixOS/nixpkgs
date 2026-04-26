@@ -106,7 +106,7 @@ rec {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-EnD0cTQSOh1fARjKdoOCR5UjpvVA96EZVVWfqlH+m48=";
+        hash = "sha256-4u1Vgwk5cMCkrGfGSk2xO7hVHiDda0ioitvX/r3KPQc=";
       };
 
       nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];
