@@ -106,7 +106,8 @@ buildDotnetModule (finalAttrs: {
     ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
 
     wrapProgram $out/bin/otd-gui \
-      "''${gappsWrapperArgs[@]}"
+      "''${gappsWrapperArgs[@]}" \
+      --add-flags --skipupdate
   '';
 
   desktopItems = [
