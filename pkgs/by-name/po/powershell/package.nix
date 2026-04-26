@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/powershell}
     cp -R * $out/share/powershell
     chmod +x $out/share/powershell/pwsh
-    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh \
+    wrapProgram $out/share/powershell/pwsh \
       --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath buildInputs}" \
-      --set TERM xterm \
       --set POWERSHELL_TELEMETRY_OPTOUT 1 \
       --set DOTNET_CLI_TELEMETRY_OPTOUT 1
+    cp $out/share/powershell/pwsh $out/bin/pwsh
 
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
