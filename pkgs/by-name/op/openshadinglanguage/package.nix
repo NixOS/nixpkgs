@@ -34,15 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DBoost_ROOT=${boost}"
-    "-DUSE_BOOST_WAVE=ON"
-    "-DENABLE_RTTI=ON"
+    (lib.cmakeBool "ENABLE_RTTI" true)
+    (lib.cmakeBool "USE_BOOST_WAVE" true)
+    (lib.cmakeFeature "Boost_ROOT" "${boost}")
 
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
-    "-DLLVM_DIRECTORY=${llvm}"
-    "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
-    "-DLLVM_BC_GENERATOR=${clang}/bin/clang++"
+    (lib.cmakeFeature "LLVM_BC_GENERATOR" "${clang}/bin/clang++")
+    (lib.cmakeFeature "LLVM_CONFIG" "${llvm.dev}/bin/llvm-config")
+    (lib.cmakeFeature "LLVM_DIRECTORY" "${llvm}")
   ];
 
   prePatch = ''
