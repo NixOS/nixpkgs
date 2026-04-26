@@ -27,8 +27,8 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "npm run data" "true"
 
     # Patch lerna.json to not use nx
-    mv lerna.json lerna.old.json
-    ${jq}/bin/jq '. + {useNx: false}' < lerna.old.json > lerna.json
+    ${jq}/bin/jq '. + {useNx: false}' lerna.json > lerna.json.tmp
+    mv lerna.json.tmp lerna.json
   '';
 
   npmDepsHash = "sha256-mBe1fHnhor7ZR8CuRNs1zD7JzaZXZI5VM7mdAieVKqE=";
