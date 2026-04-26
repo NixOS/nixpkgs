@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "csv2md";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lzakharov";
     repo = "csv2md";
     rev = "v${version}";
-    hash = "sha256-xIcDBmLLB6cU5M05tOGRcwPmHCXRSXELv7TuaMEfVEg=";
+    hash = "sha256-51MCeM/zfjYMhB8Ryt1RMevEwszAzgYrJsyViEIOYVY=";
   };
 
   pythonImportsCheck = [ "csv2md" ];
