@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
     homepage = "http://www.impallari.com/librecaslon";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
 }
