@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  plasma5Packages,
+  kdePackages,
   hicolor-icon-theme,
 }:
 
@@ -23,11 +23,12 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    plasma5Packages.breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   makeFlags = [
     "DESTDIR=$(out)"

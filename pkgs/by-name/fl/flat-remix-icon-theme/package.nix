@@ -6,7 +6,7 @@
   pantheon,
   gnome-icon-theme,
   hicolor-icon-theme,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    libsForQt5.breeze-icons
+    kdePackages.breeze-icons
     pantheon.elementary-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontFixup = true;
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out/share/icons
