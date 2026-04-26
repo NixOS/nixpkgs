@@ -6,6 +6,7 @@
   nodejs_22,
   cudaPackages,
   gcc,
+  llama-cpp,
 }:
 
 let
@@ -150,6 +151,16 @@ python3.pkgs.buildPythonApplication {
   # Importing requires a GPU, else:
   # NotImplementedError: Unsloth: No NVIDIA GPU found?
   dontUsePythonImportsCheck = true;
+
+  # Studio's GGUF backend probes LLAMA_SERVER_PATH first, then falls
+  # back to ~/.unsloth/llama.cpp (which only exists after install.sh).
+  # Point it at the Nix-built binary so `unsloth studio` can load
+  # GGUF models without the user-side build step.
+  makeWrapperArgs = [
+    "--set-default"
+    "LLAMA_SERVER_PATH"
+    "${lib.getBin llama-cpp}/bin/llama-server"
+  ];
 
   passthru = {
     inherit studio-frontend;
