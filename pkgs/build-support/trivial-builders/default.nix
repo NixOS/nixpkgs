@@ -112,11 +112,13 @@ rec {
       pos ? builtins.unsafeGetAttrPos "name" args,
     }@args:
 
-    runCommand name
+    stdenvNoCC.mkDerivation
       (
+        finalAttrs:
         {
           inherit
             pos
+            name
             text
             executable
             checkPhase
@@ -132,6 +134,25 @@ rec {
             '';
             destination;
           passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
+
+          buildCommand =
+            ''
+              target=$out$destination
+              mkdir -p "$(dirname "$target")"
+
+              if [ -e "$textPath" ]; then
+                mv "$textPath" "$target"
+              else
+                echo -n "$text" > "$target"
+              fi
+
+              if [ -n "$executable" ]; then
+                chmod +x "$target"
+              fi
+
+              eval "$checkPhase"
+            '';
+
           meta =
             let
               matches = builtins.match "/bin/([^/]+)" destination;
@@ -149,23 +170,7 @@ rec {
           "meta"
           "passthru"
         ]
-      )
-      ''
-        target=$out$destination
-        mkdir -p "$(dirname "$target")"
-
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$target"
-        else
-          echo -n "$text" > "$target"
-        fi
-
-        if [ -n "$executable" ]; then
-          chmod +x "$target"
-        fi
-
-        eval "$checkPhase"
-      '';
+      );
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
