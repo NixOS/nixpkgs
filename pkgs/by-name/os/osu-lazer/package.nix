@@ -22,13 +22,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2026.418.0";
+  version = "2026.425.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     tag = "${version}-lazer";
-    hash = "sha256-0l0MlfCyO81X/Rpjhjc9WyxdhEhTLZcqRSOgYSaK6wk=";
+    hash = "sha256-gYxsoMrdHQzy8Ny2pLUbJ/UMEHIZfvLnFjX4cKHa3ck=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -70,9 +70,14 @@ buildDotnetModule rec {
   fixupPhase = ''
     runHook preFixup
 
+    # Disabling error reporting.
+    # https://github.com/ppy/osu/commit/48434dd683d095c42c01def8ff7cb95ce0a85ce4
+    # Unhandled exception. System.ArgumentException: Invalid DSN: No public key provided.
+
     wrapProgram $out/bin/osu! \
       ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
-      --set OSU_EXTERNAL_UPDATE_PROVIDER 1
+      --set OSU_EXTERNAL_UPDATE_PROVIDER 1 \
+      --set OSU_DISABLE_ERROR_REPORTING 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
