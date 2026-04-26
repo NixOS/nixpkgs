@@ -38,13 +38,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.13.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-q/DBgAOFyIqhagWffJ6z+F7TXAZd7otPOGJI4oid4vM=";
+    hash = "sha256-ztR5sA4/Y7rD0ltGbbF5kW1GFIaYESsmUCZfBQ49VMU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-V8MKgicqHU9kEMTw17xeM2pzzkAlGBZJ2j4W5OEIit0=";
+  cargoHash = "sha256-W+0sCci1sy2TUqIaMQBbf6vfI8QEV9YjnT6iDDCwl7U=";
 
   nativeBuildInputs = [
     jq
