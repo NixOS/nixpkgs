@@ -10166,8 +10166,6 @@ with pkgs;
     tag = "-daemon-qt5";
   };
 
-  quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss { };
-
   quodlibet = callPackage ../applications/audio/quodlibet {
     kakasi = null;
     keybinder3 = null;
