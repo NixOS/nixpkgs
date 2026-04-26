@@ -1,6 +1,5 @@
 {
   bison,
-  boost,
   cmake,
   fetchFromGitHub,
   flex,
@@ -19,7 +18,6 @@
 }:
 
 let
-  boost_static = boost.override { enableStatic = true; };
   inherit (llvmPackages) clang libclang llvm;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -34,10 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_RTTI" true)
-    (lib.cmakeBool "USE_BOOST_WAVE" true)
-    (lib.cmakeFeature "Boost_ROOT" "${boost}")
-
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
     (lib.cmakeFeature "LLVM_BC_GENERATOR" "${clang}/bin/clang++")
@@ -62,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost_static
     hexdump
     libclang
     llvm
