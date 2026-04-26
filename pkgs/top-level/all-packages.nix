@@ -9659,8 +9659,6 @@ with pkgs;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
-  k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
-
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
   kotatogram-desktop =
