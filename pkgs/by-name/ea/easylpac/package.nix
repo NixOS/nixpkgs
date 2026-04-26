@@ -79,6 +79,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stargate01 ];
     mainProgram = "EasyLPAC";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
