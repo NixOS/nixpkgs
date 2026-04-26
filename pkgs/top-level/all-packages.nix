@@ -9167,6 +9167,14 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
+  inherit (callPackage ../applications/networking/browsers/brave { })
+    brave
+    brave-beta
+    brave-nightly
+    brave-origin-beta
+    brave-origin-nightly
+    ;
+
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
   cni = callPackage ../applications/networking/cluster/cni { };
