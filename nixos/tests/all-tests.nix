@@ -1479,6 +1479,7 @@ in
   sharkey = runTest ./web-apps/sharkey.nix;
   shattered-pixel-dungeon = runTest ./shattered-pixel-dungeon.nix;
   shelfmark = runTest ./shelfmark.nix;
+  shells-environment = runTest ./shells-environment.nix;
   shiori = runTest ./shiori.nix;
   shoko = import ./shoko.nix { inherit runTest; };
   signal-desktop = runTest ./signal-desktop.nix;
