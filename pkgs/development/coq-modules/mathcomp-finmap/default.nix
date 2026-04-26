@@ -68,9 +68,14 @@ let
       license = lib.licenses.cecill-b;
     };
   };
+  useRocqPackages =
+    if builtins.isNull version then
+      coq.rocqPackages ? mathcomp-finmap
+    else
+      lib.versionAtLeast version "2.2.2";
 in
 # this is just a wrapper for rocqPackages.mathcomp-finmap for Rocq >= 9.0
-if coq.rocqPackages ? mathcomp-finmap then
+if useRocqPackages then
   coq.rocqPackages.mathcomp-finmap.override {
     inherit version mathcomp-boot;
     inherit (coq.rocqPackages) rocq-core;
