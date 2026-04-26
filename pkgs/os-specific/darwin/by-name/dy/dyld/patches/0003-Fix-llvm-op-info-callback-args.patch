@@ -1,8 +1,17 @@
-diff --git a/other-tools/dyld_info.cpp b/other-tools/dyld_info.cpp
-index 2de4978ba5..2ce27257d9 100644
+From 9a7a6f039550539033e0f32929f4fb76f11f5afe Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 10 Apr 2026 19:45:22 -0400
+Subject: [PATCH] Fix-llvm-op-info-callback-args
+
+---
+ other-tools/SymbolicatedImage.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/other-tools/SymbolicatedImage.cpp b/other-tools/SymbolicatedImage.cpp
+index 47f1bdb..efacc94 100644
 --- a/other-tools/SymbolicatedImage.cpp
 +++ b/other-tools/SymbolicatedImage.cpp
-@@ -991,7 +991,7 @@
+@@ -968,7 +968,7 @@ static const char* printDumpSymbolCallback(void* di, uint64_t referenceValue, ui
      return ((SymbolicatedImage*)di)->lookupSymbol(referencePC, referenceValue, *referenceType, *referenceName);
  }
  
@@ -11,3 +20,6 @@ index 2de4978ba5..2ce27257d9 100644
                                     int tagType, void* tagBuf)
  {
      return ((SymbolicatedImage*)di)->opInfo(pc, offset, opSize, tagType, tagBuf);
+-- 
+2.51.2
+

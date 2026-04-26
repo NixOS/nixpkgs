@@ -1,6 +1,16 @@
+From 720926afdec1b026d22b7525ea5a40b35a2c6475 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 10 Apr 2026 19:45:23 -0400
+Subject: [PATCH] Add-dsc_extractor_bin_cpp
+
+---
+ other-tools/dsc_extractor_bin.cpp | 33 +++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 other-tools/dsc_extractor_bin.cpp
+
 diff --git a/other-tools/dsc_extractor_bin.cpp b/other-tools/dsc_extractor_bin.cpp
 new file mode 100644
-index 0000000000..2f26fbe4db
+index 0000000..5a8f3f8
 --- /dev/null
 +++ b/other-tools/dsc_extractor_bin.cpp
 @@ -0,0 +1,33 @@
@@ -37,3 +47,6 @@ index 0000000000..2f26fbe4db
 +    fprintf(stderr, "dyld_shared_cache_extract_dylibs_progress() => %d\n", result);
 +    return 0;
 +}
+-- 
+2.51.2
+
