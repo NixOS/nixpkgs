@@ -29,6 +29,22 @@ in
   options.services.syncthing.relay = {
     enable = mkEnableOption "Syncthing relay service";
 
+    cert = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to the `cert.pem` file, which will be copied into `dataDirectory`
+      '';
+    };
+
+    key = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to the `key.pem` file, which will be copied into `dataDirectory`
+      '';
+    };
+
     listenAddress = mkOption {
       type = types.str;
       default = "";
@@ -119,6 +135,17 @@ in
         StateDirectory = baseNameOf dataDirectory;
 
         Restart = "on-failure";
+        ExecStartPre =
+          mkIf (cfg.cert != null || cfg.key != null)
+            "${pkgs.writers.writeBash "syncthing-relay-copy-keys" ''
+              install -dm700 ${dataDirectory}
+              ${optionalString (cfg.cert != null) ''
+                install -Dm644 ${toString cfg.cert} ${dataDirectory}/cert.pem
+              ''}
+              ${optionalString (cfg.key != null) ''
+                install -Dm600 ${toString cfg.key} ${dataDirectory}/key.pem
+              ''}
+            ''}";
         ExecStart = "${pkgs.syncthing-relay}/bin/strelaysrv ${concatStringsSep " " relayOptions}";
       };
     };
