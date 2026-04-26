@@ -91,6 +91,8 @@ buildDotnetModule (finalAttrs: {
       --replace-fail '/usr/bin/env rm' '${lib.getExe' coreutils "rm"}'
   '';
 
+  dontWrapGApps = true;
+
   postFixup = ''
     # Give a more "*nix" name to the binaries
     mv $out/bin/OpenTabletDriver.Console $out/bin/otd
@@ -102,6 +104,9 @@ buildDotnetModule (finalAttrs: {
     # Generate udev rules from source
     mkdir -p $out/lib/udev/rules.d
     ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
+
+    wrapProgram $out/bin/otd-gui \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [
