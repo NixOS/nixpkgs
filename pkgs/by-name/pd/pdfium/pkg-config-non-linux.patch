@@ -1,0 +1,19 @@
+--- a/build/config/linux/pkg-config.py
++++ b/build/config/linux/pkg-config.py
+@@ -122,16 +122,6 @@
+                     dest='version_as_components')
+   (options, args) = parser.parse_args()
+ 
+-  # If this is run on non-Linux platforms, just return nothing and indicate
+-  # success. This allows us to "kind of emulate" a Linux build from other
+-  # platforms.
+-  if "linux" not in sys.platform:
+-    if options.libdir:
+-      sys.stdout.write("")
+-      return 0
+-    print("[[],[],[],[],[]]")
+-    return 0
+-
+   # Make a list of regular expressions to strip out.
+   strip_out = []
+   if options.strip_out != None:
