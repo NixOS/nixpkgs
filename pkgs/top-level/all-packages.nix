@@ -11284,7 +11284,7 @@ with pkgs;
 
   blas-ilp64 = blas.override { isILP64 = true; };
 
-  labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
+  labplot = kdePackages.callPackage ../applications/science/math/labplot { };
 
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
