@@ -1721,6 +1721,7 @@ in
   userborn = runTest ./userborn.nix;
   userborn-immutable-etc = runTest ./userborn-immutable-etc.nix;
   userborn-immutable-users = runTest ./userborn-immutable-users.nix;
+  userborn-migration = runTest ./userborn-migration.nix;
   userborn-mutable-etc = runTest ./userborn-mutable-etc.nix;
   userborn-mutable-users = runTest ./userborn-mutable-users.nix;
   userborn-static = runTest ./userborn-static.nix;
