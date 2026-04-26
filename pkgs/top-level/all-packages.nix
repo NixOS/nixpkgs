@@ -9946,8 +9946,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  p4v = qt6Packages.callPackage ../applications/version-management/p4v { };
-
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
   pijuice = with python3Packages; toPythonApplication pijuice;
