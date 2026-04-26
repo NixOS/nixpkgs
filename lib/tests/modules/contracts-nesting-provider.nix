@@ -15,7 +15,12 @@
 # default providers' contract options placed at depths 0, 1, and 2. Each
 # provider returns `request.value + N` (with a different N per depth) so we
 # can tell which one fulfilled which contract.
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   inherit (config.contractTypes.arithmetic) mkProviderType;
@@ -79,13 +84,27 @@ in
     depth1.arithmetic = config.contracts.depth1.requests;
     depth2.inner.arithmetic = config.contracts.depth2.requests;
 
-    contracts.depth0.providers.p = config.depth0;
+    # depth 0: option *is* the contract option; inferred `contract = [ ]`.
+    contracts.depth0.providers.p.module = options.depth0;
     contracts.depth0.defaultProviderName = "p";
 
-    contracts.depth1.providers.p = config.depth1.arithmetic;
+    # depth 1: contract option lives inside a wrapping submodule named
+    # `arithmetic`, not matching the contract type name (`depth1`), so
+    # `contract` must be set explicitly.
+    contracts.depth1.providers.p = {
+      module = options.depth1;
+      contract = [ "arithmetic" ];
+    };
     contracts.depth1.defaultProviderName = "p";
 
-    contracts.depth2.providers.p = config.depth2.inner.arithmetic;
+    # depth 2: contract option lives two submodules deep.
+    contracts.depth2.providers.p = {
+      module = options.depth2;
+      contract = [
+        "inner"
+        "arithmetic"
+      ];
+    };
     contracts.depth2.defaultProviderName = "p";
   };
 }

@@ -161,7 +161,7 @@ submodule (contract: {
         **Example:**
 
         ```nix
-        { lib, config, ... }:
+        { lib, config, options, ... }:
         let
           inherit (config.contractTypes.arithmetic) mkProviderType;
         in
@@ -179,7 +179,7 @@ submodule (contract: {
             };
           };
           config = {
-            contracts.arithmetic.providers.increment = config.services.increment.arithmetic;
+            contracts.arithmetic.providers.increment.module = options.services.increment.arithmetic;
           };
         }
         ```

@@ -20,7 +20,12 @@ let
 
   # Provider: fulfills arithmetic requests by incrementing the value by 1.
   incrementProviderModule =
-    { lib, config, ... }:
+    {
+      lib,
+      config,
+      options,
+      ...
+    }:
     let
       inherit (lib) mkOption;
       inherit (config.contractTypes.arithmetic) mkProviderType;
@@ -37,7 +42,7 @@ let
         };
       };
       config = {
-        contracts.arithmetic.providers.increment = config.services.increment.arithmetic;
+        contracts.arithmetic.providers.increment.module = options.services.increment.arithmetic;
         contracts.arithmetic.defaultProviderName = "increment";
       };
     };

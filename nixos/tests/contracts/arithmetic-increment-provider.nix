@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  options,
   ...
 }:
 let
@@ -23,7 +24,7 @@ in
     };
   };
   config = {
-    contracts.arithmetic.providers.increment = config.arithmetic;
+    contracts.arithmetic.providers.increment.module = options.arithmetic;
     process.argv = [ "/run/current-system/sw/bin/true" ];
   };
 }

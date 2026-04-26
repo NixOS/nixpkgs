@@ -8,7 +8,12 @@
 #   want.myapp.db.caches.fast      (4 layers: consumer + group + subgroup + option)
 #
 # All depths coexist in the same `want` tree and the provider fulfills them all.
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) mkOption;
   inherit (config.contractTypes.arithmetic) mkProviderType;
@@ -42,7 +47,7 @@ in
     contracts.arithmetic.want.myapp.caches.region-b.fast.request.value = 200;
 
     # -- Provider --
-    contracts.arithmetic.providers.increment = config.services.increment.arithmetic;
+    contracts.arithmetic.providers.increment.module = options.services.increment.arithmetic;
     contracts.arithmetic.defaultProviderName = "increment";
 
   };

@@ -1,7 +1,12 @@
 # Tests that a renamed contract request option:
 # - still forwards the value correctly (old name → new name)
 # - emits a lib.warn on stderr
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   inherit (config.contractTypes.versioned) mkProviderType;
@@ -64,7 +69,7 @@ in
     # Consumer uses the old (renamed) option name.
     contracts.versioned.want.consumer.instance.request.oldValue = 5;
 
-    contracts.versioned.providers.increment = config.services.increment.versioned;
+    contracts.versioned.providers.increment.module = options.services.increment.versioned;
     contracts.versioned.defaultProvider = config.contracts.versioned.providers.increment;
   };
 }

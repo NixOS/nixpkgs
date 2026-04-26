@@ -47,6 +47,7 @@ in
   containers.machine =
     {
       config,
+      options,
       pkgs,
       lib,
       ...
@@ -93,7 +94,8 @@ in
         services.webapp.db.result = config.contracts.databaseConnection.results.webapp.db;
 
         # Provider wiring: register provider.
-        contracts.databaseConnection.providers.pgProvider = config.services.pgProvider.databaseConnection;
+        contracts.databaseConnection.providers.pgProvider.module =
+          options.services.pgProvider.databaseConnection;
 
         # Chain: the database provider also consumes fileSecrets for credentials.
         contracts.fileSecrets.want.pgProvider.credential = {

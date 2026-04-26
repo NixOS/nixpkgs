@@ -1,7 +1,12 @@
 # Tests that contract requests are type-checked: setting a request option to
 # the wrong type (e.g. a string where an int is expected) must produce an
 # evaluation error.
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) mkOption;
   inherit (config.contractTypes.arithmetic) mkProviderType;
@@ -25,7 +30,7 @@ in
     contracts.arithmetic.want.consumer.instance.request.value = "abc";
 
     # Provider
-    contracts.arithmetic.providers.increment = config.services.increment.arithmetic;
+    contracts.arithmetic.providers.increment.module = options.services.increment.arithmetic;
     contracts.arithmetic.defaultProviderName = "increment";
   };
 }

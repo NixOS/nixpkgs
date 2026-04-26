@@ -80,7 +80,7 @@ in
   };
 
   config = {
-    contracts.${contract}.providers.hardcoded-secret = config.testing.hardcoded-secret.${contract};
+    contracts.${contract}.providers.hardcoded-secret.module = options.testing.hardcoded-secret;
 
     system.activationScripts =
       lib.concatMapNestedAttrs' (options.testing.hardcoded-secret.type.getSubOptions [ ]).${contract}.type

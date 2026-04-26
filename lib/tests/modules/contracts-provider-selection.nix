@@ -6,6 +6,7 @@
 {
   lib,
   config,
+  options,
   ...
 }:
 let
@@ -75,9 +76,9 @@ in
     services.double.arithmetic = config.contracts.byRef.requests;
 
     # Register providers.
-    contracts.byRef.providers.increment = config.services.increment.arithmetic;
-    contracts.byRef.providers.double = config.services.double.arithmetic;
-    contracts.byName.providers.increment = config.services.increment.arithmetic;
+    contracts.byRef.providers.increment.module = options.services.increment.arithmetic;
+    contracts.byRef.providers.double.module = options.services.double.arithmetic;
+    contracts.byName.providers.increment.module = options.services.increment.arithmetic;
 
     # -- Consumers --
 
@@ -96,7 +97,7 @@ in
     # lets the override compose against the `defaultProvider`-derived
     # tree without `recursiveUpdate`.
     contracts.byRef.defaultProvider = config.contracts.byRef.providers.increment;
-    contracts.byRef.instances.consumer.fast = config.contracts.byRef.providers.double.consumer.fast;
+    contracts.byRef.instances.consumer.fast = config.contracts.byRef.providers.double;
 
     # byName: set defaultProviderName to "increment" (5 + 1 = 6)
     contracts.byName.defaultProviderName = "increment";

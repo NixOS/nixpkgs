@@ -230,11 +230,7 @@ in
                     `services.stash`), which by convention does not overlap with service
                     tree names.
 
-                    **Providers** set `contracts.${contractName}.providers.<name>`:
-
-                    ```nix
-                    contracts.${contractName}.providers."<provider>" = config."<provider>".${contractName};
-                    ```
+                    See `providers` for how providers register themselves.
                   '';
                   type = wantType;
                   default = { };
@@ -267,20 +263,30 @@ in
                   description = ''
                     Where to find instances of a provider of the `${contractName}` contract that can take request inputs to return results.
 
+                    Each entry is `{ module, contract? }` where `module` is
+                    the provider's option set (so `.loc` is reachable for GUI
+                    generation) and `contract` is the relative path within
+                    `module.value` to the contract instances. `contract` is
+                    inferred when omitted: `[ "${contractName}" ]` if
+                    `module.value` has that attribute (the conventional
+                    sub-option naming), otherwise `[ ]` (i.e. `module` is
+                    itself the contract-typed option).
+
                     ```nix
-                    contracts.${contractName}.providers."<provider>" = config."<provider>".${contractName};
+                    contracts.${contractName}.providers."<provider>".module = options."<provider>";
                     ```
 
-                    `nixos-contracts-bridge` automatically collects providers set by modular services
-                    into the containing system's `contracts.${contractName}.providers`.
+                    `nixos-contracts-bridge` automatically collects providers
+                    set by modular services into the containing system's
+                    `contracts.${contractName}.providers`.
 
-                    It may then be used where you configure the service consuming the `${contractName}` contract to manually set a provider:
+                    Per-instance overrides are written by setting an
+                    `instances.<consumer>.<...>` leaf to a provider entry
+                    directly; the `instances` option's `apply` resolves the
+                    reference at the matching path.
 
-                    ```nix
-                    contracts.${contractName}.instances."<consumer>"."<instance>" = config.contracts.${contractName}.providers."<provider>";
-                    ```
-
-                    For an easier way to set providers, consider setting `defaultProviderName` or `defaultProvider`.
+                    For an easier way to pick a single provider for every
+                    instance, consider `defaultProviderName` / `defaultProvider`.
                   '';
                   type = attrsOf raw;
                 };
@@ -305,6 +311,9 @@ in
                 defaultProvider = mkOption {
                   description = ''
                     The default provider for the `${contractName}` contract, alongside its configuration.
+                    Like `providers.<name>`, this is conventionally
+                    `{ module, contract? }` (with `module.value`/`module.loc`),
+                    not the resolved config value directly.
 
                     Setting this for a contract means you no longer need to set providers for individual `instances`:
 
@@ -334,11 +343,29 @@ in
                 instances = mkOption {
                   description = ''
                     Instances of the `${contractName}` contract.
-                    By default returns `defaultProvider`, if set (potentially by `defaultProviderName`),
-                    but may be overridden per instance like:
+                    By default extracts the contract instances from
+                    `defaultProvider.module.value` (using `defaultProvider.contract`,
+                    defaulting to `[ "${contractName}" ]`), if set (potentially
+                    by `defaultProviderName`), but may be overridden per instance.
+
+                    Each leaf is a provider reference `{ module, contract? }`
+                    (same shape as `providers.<name>`); the option's `apply`
+                    resolves it path-aware to the provider's instance at the
+                    matching path. GUIs read the override as a typed
+                    reference rather than an opaque value.
+
+                    Per-instance overrides compose against the
+                    `defaultProvider`-derived tree without
+                    `lib.recursiveUpdate`: `nestedAttrsOf` runs priority
+                    filtering at each leaf, so a `mkDefault` /
+                    `mkOptionDefault`-priority default at one path is
+                    preserved when another module sets a normal-priority
+                    override at a sibling path.
 
                     ```nix
-                    contracts.${contractName}.instances."<consumer>"."<instance>" = config.contracts.${contractName}.providers."<provider>";
+                    contracts.${contractName}.defaultProviderName = "<default>";
+                    contracts.${contractName}.instances."<consumer>"."<instance>" =
+                      config.contracts.${contractName}.providers."<other>";
                     ```
 
                     Used in the consumer like:
@@ -377,6 +404,34 @@ in
                     ```
                   '';
                   type = nestedAttrsOf raw;
+                  # Resolve provider-reference leaves (`{ module, contract? }`)
+                  # to the provider's instance at the matching path. Path-aware
+                  # so a ref at `<consumer>.<instance>` resolves to that
+                  # provider's specific consumer/instance, not its full tree.
+                  # Already-resolved instance attrsets at leaves pass through
+                  # unchanged - the apply can't tell them apart from values
+                  # produced by resolving a ref higher up - but writing them
+                  # by hand defeats GUI introspection and is discouraged.
+                  apply =
+                    let
+                      resolveRef =
+                        v:
+                        if v.contract or null != null then
+                          lib.getAttrFromPath v.contract v.module.value
+                        else if v.module.value ? ${contractName} then
+                          v.module.value.${contractName}
+                        else
+                          v.module.value;
+                      walk =
+                        path: v:
+                        if !lib.isAttrs v then
+                          v
+                        else if v ? module then
+                          lib.getAttrFromPath path (resolveRef v)
+                        else
+                          lib.mapAttrs (n: walk (path ++ [ n ])) v;
+                    in
+                    walk [ ];
                   # No option-level default: the docs build sandbox evaluates
                   # option defaults, and the assertion below must not fire there.
                   # The actual default is provided via `config.instances` in the
@@ -474,13 +529,45 @@ in
               # Provide the asserting default for `instances` via config rather
               # than on the option itself: the docs build sandbox evaluates option
               # defaults but does not evaluate submodule config blocks.
-              config.instances = lib.mkOptionDefault (
+              #
+              # `defaultProvider` is conventionally a provider reference
+              # `{ module, contract? }` (apply resolves it path-aware) but
+              # may also be a raw `nestedAttrsOf` tree of pre-resolved
+              # instances. Either way: walk each `want`-leaf path and set a
+              # `mkOptionDefault`-priority value at that path - either the
+              # whole providerRef (apply will pick the per-path slice) or
+              # the tree's value at that path. Wrapping each leaf
+              # individually (rather than the whole tree) lets per-leaf
+              # overrides from other modules compose against the default
+              # via `nestedAttrsOf`'s leaf-level priority handling.
+              config.instances =
                 let
                   provider = contract.config.defaultProvider;
+                  # Walk `want` with explicit recursion (vs.
+                  # `concatMapNestedAttrs'` whose `mergeAttrs` fold loses
+                  # sibling leaves at depth > 1) to produce a tree mirroring
+                  # `want` with `mkOptionDefault`-wrapped leaves carrying
+                  # the `defaultProvider` reference - `instances`'s `apply`
+                  # then resolves each leaf path-aware.
+                  buildDefaultTree =
+                    subWant:
+                    if subWant ? request then
+                      lib.mkOptionDefault provider
+                    else
+                      lib.mapAttrs (_: buildDefaultTree) subWant;
                 in
-                assert lib.assertMsg (provider != null) "contracts.${contractName}.defaultProvider is unset!";
-                provider
-              );
+                if provider != null then
+                  assert lib.assertMsg (
+                    provider ? module
+                  ) "contracts.${contractName}.defaultProvider must be a provider reference `{ module, contract? }`.";
+                  buildDefaultTree contract.config.want
+                else
+                  lib.mkOptionDefault (
+                    assert lib.assertMsg (
+                      contract.config.want == { }
+                    ) "contracts.${contractName}.defaultProvider is unset!";
+                    { }
+                  );
             });
           }
         ) contractTypes;

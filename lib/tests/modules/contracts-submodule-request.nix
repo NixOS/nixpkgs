@@ -4,7 +4,12 @@
 # and `port` sub-options) alongside a flat `name` option.  The provider reads
 # both and produces a result string, verifying the full structure survives the
 # want -> requests -> provider -> results round-trip.
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) mkOption types;
 
@@ -77,7 +82,7 @@ in
       };
     };
 
-    contracts.connection.providers.urlbuilder = config.services.urlbuilder.connection;
+    contracts.connection.providers.urlbuilder.module = options.services.urlbuilder.connection;
     contracts.connection.defaultProviderName = "urlbuilder";
   };
 }
