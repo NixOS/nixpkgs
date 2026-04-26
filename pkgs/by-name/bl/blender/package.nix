@@ -451,8 +451,6 @@ stdenv'.mkDerivation (finalAttrs: {
   meta = {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
-    # They comment two licenses: GPLv2 and Blender License, but they
-    # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
     license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
 
