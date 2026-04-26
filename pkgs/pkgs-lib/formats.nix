@@ -81,6 +81,8 @@ let
       str
       ;
   };
+
+  json2x = pkgs.callPackage ./formats/json2x/package.nix { };
 in
 optionalAttrs allowAliases aliases
 // rec {
@@ -464,13 +466,13 @@ optionalAttrs allowAliases aliases
           { runCommand, remarshal }:
           runCommand name
             {
-              nativeBuildInputs = [ remarshal ];
+              nativeBuildInputs = [ json2x ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
               preferLocalBuild = true;
             }
             ''
-              json2toml "$valuePath" "$out"
+              json2x toml "$valuePath" "$out"
             ''
         ) { };
 
