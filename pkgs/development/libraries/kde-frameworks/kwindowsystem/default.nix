@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   libpthread-stubs,
   libxdmcp,
@@ -10,7 +11,10 @@
 
 mkDerivation {
   pname = "kwindowsystem";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     libpthread-stubs
     libxdmcp

@@ -2,6 +2,8 @@
   lib,
   stdenv,
   mkDerivation,
+  cmake,
+  pkg-config,
   extra-cmake-modules,
   wayland-scanner,
   qtbase,
@@ -14,6 +16,8 @@ mkDerivation {
   pname = "kguiaddons";
 
   nativeBuildInputs = [
+    cmake
+    pkg-config
     extra-cmake-modules
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
