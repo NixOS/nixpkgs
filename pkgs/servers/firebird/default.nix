@@ -127,7 +127,8 @@ rec {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-wAiOyCVS7fjVqrDlJJwDFxw5ZD5spnXlYKCAQ8gctHI=";
+        fetchSubmodules = true;
+        hash = "sha256-IJrfs8q7GtX4Y+Cmg4avT5QJmLpld38tyR3TR1CcgyE=";
       };
 
       # CMake is just used for libcds
