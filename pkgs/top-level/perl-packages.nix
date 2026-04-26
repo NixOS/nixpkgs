@@ -7933,10 +7933,10 @@ with self;
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.087";
+    version = "0.088";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.087.tar.gz";
-      hash = "sha256-gHDsKVFg1I83bY/xssvwvxUtqfIDOTk4LwDxP3SM030=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.088.tar.gz";
+      hash = "sha256-kUn4t0JjRWbpgbmUn7fZs/Qa7zbvBOziG1HPNRU8SUA=";
     };
     meta = {
       description = "Cryptographic toolkit";
