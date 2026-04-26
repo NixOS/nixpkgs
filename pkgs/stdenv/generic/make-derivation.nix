@@ -394,13 +394,17 @@ let
       separateDebugInfo' =
         let
           actualValue = separateDebugInfo && isLinux;
-          conflictingOption =
+        in
+        if
+          actualValue
+          && (
             attrs ? "disallowedReferences"
             || attrs ? "disallowedRequisites"
             || attrs ? "allowedRequisites"
-            || attrs ? "allowedReferences";
-        in
-        if actualValue && conflictingOption && !__structuredAttrs then
+            || attrs ? "allowedReferences"
+          )
+          && !__structuredAttrs
+        then
           throw "separateDebugInfo = true in ${
             attrs.pname or "mkDerivation argument"
           } requires __structuredAttrs if {dis,}allowedRequisites or {dis,}allowedReferences is set"
