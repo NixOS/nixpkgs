@@ -2747,8 +2747,6 @@ with pkgs;
       ;
   };
 
-  nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
-
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
@@ -3215,7 +3213,6 @@ with pkgs;
   rtaudio = rtaudio_5;
 
   mpi = openmpi; # this attribute should used to build MPI applications
-  openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica { });
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
@@ -3454,8 +3451,6 @@ with pkgs;
   unrpa = with python3Packages; toPythonApplication unrpa;
 
   usort = with python3Packages; toPythonApplication usort;
-
-  vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
 
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
@@ -9147,8 +9142,6 @@ with pkgs;
     confd-calico
     ;
 
-  cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
-
   cbconvert-gui = cbconvert.gui;
 
   cdparanoia = cdparanoia-iii;
@@ -9316,8 +9309,6 @@ with pkgs;
     };
   };
   gnuradioPackages = recurseIntoAttrs gnuradio.pkgs;
-
-  goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
@@ -9986,8 +9977,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  smtube = libsForQt5.callPackage ../applications/video/smtube { };
-
   inherit
     ({
       softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };
@@ -10169,8 +10158,6 @@ with pkgs;
     withKDE = false;
     tag = "-daemon-qt5";
   };
-
-  quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss { };
 
   quodlibet = callPackage ../applications/audio/quodlibet {
     kakasi = null;
@@ -11700,10 +11687,6 @@ with pkgs;
       withRootSupport = true;
     }
   );
-
-  ### SCIENCE/ROBOTICS
-
-  apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
   ### MISC
 
