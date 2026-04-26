@@ -7,10 +7,9 @@
   qtbase,
   qtmultimedia,
   qtimageformats,
-  qtx11extras,
   qttools,
   libidn,
-  qca-qt5,
+  qca,
   libxscrnsaver,
   hunspell,
   libsecret,
@@ -20,7 +19,6 @@
   qtkeychain,
 
   chatType ? "basic", # See the assertion below for available options
-  qtwebkit,
   qtwebengine,
 
   enablePlugins ? true,
@@ -34,11 +32,16 @@
   gst_all_1,
   enablePsiMedia ? false,
   pkg-config,
+
+  # For tests
+  psi-plus,
 }:
+
+assert lib.assertMsg (lib.toLower chatType != "webkit")
+  "psi-plus: chatType = \"webkit\" was removed because qtwebkit had known vulns and has no Qt6 equivalent. Use chatType = \"webengine\" instead.";
 
 assert builtins.elem (lib.toLower chatType) [
   "basic" # Basic implementation, no web stuff involved
-  "webkit" # Legacy one, based on WebKit (see https://wiki.qt.io/Qt_WebKit)
   "webengine" # QtWebEngine (see https://wiki.qt.io/QtWebEngine)
 ];
 
@@ -59,6 +62,7 @@ stdenv.mkDerivation rec {
     "-DCHAT_TYPE=${chatType}"
     "-DENABLE_PLUGINS=${if enablePlugins then "ON" else "OFF"}"
     "-DBUILD_PSIMEDIA=${if enablePsiMedia then "ON" else "OFF"}"
+    "-DQT_DEFAULT_MAJOR_VERSION=6"
   ];
 
   nativeBuildInputs = [
@@ -74,9 +78,8 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     qtimageformats
-    qtx11extras
     libidn
-    qca-qt5
+    qca
     libxscrnsaver
     hunspell
     libsecret
@@ -95,9 +98,6 @@ stdenv.mkDerivation rec {
     libotr
     libomemo-c
   ]
-  ++ lib.optionals (chatType == "webkit") [
-    qtwebkit
-  ]
   ++ lib.optionals (chatType == "webengine") [
     qtwebengine
   ];
@@ -107,6 +107,10 @@ stdenv.mkDerivation rec {
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
     )
   '';
+
+  passthru.tests = {
+    webengine = psi-plus.override { chatType = "webengine"; };
+  };
 
   meta = {
     homepage = "https://psi-plus.com";

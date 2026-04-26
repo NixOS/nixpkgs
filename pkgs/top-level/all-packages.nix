@@ -10144,7 +10144,7 @@ with pkgs;
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
-  psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
+  psi-plus = qt6Packages.callPackage ../applications/networking/instant-messengers/psi-plus { };
 
   pulseview = libsForQt5.callPackage ../applications/science/electronics/pulseview { };
 
