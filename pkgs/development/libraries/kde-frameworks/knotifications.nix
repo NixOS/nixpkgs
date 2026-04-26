@@ -7,7 +7,7 @@
   kconfig,
   kcoreaddons,
   kwindowsystem,
-  phonon,
+  libcanberra,
   qttools,
   qtx11extras,
   qtmacextras,
@@ -25,7 +25,7 @@ mkDerivation {
     kconfig
     kcoreaddons
     kwindowsystem
-    phonon
+    libcanberra
     qtx11extras
     libdbusmenu-qt5
   ]
