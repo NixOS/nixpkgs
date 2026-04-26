@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrandr";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xrandr-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+N11Zq23QUf6uZZGgLa7re6Hz0Bqf8/1Fxil5pSbhBw=";
+    hash = "sha256-LK/MsqrySRpAaGdhF6DU+QqzB3JLlv/8VM0dqVN3lAA=";
   };
 
   strictDeps = true;
