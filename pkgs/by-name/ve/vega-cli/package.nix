@@ -72,6 +72,9 @@ buildNpmPackage (finalAttrs: {
     description = "Command line tools for the Vega visualization grammar";
     homepage = "https://vega.github.io/vega/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      pyrox0
+      philocalyst
+    ];
   };
 })
