@@ -27,6 +27,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     runHook preInstall
