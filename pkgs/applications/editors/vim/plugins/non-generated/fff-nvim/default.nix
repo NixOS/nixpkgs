@@ -5,24 +5,26 @@
   nix-update-script,
   openssl,
   perl,
-  zig_0_15,
+  zig,
+  gitMinimal,
   pkg-config,
   stdenv,
   vimUtils,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.5.2";
+  version = "0.6.4";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
     tag = "v${version}";
-    hash = "sha256-rv33dRf53m9iJwRl56z9oU0EuY1wUChsZyHOi/3gv4A=";
+    hash = "sha256-vu5yqOvVAPXHMi8sZFQuH9rNsFDffh3Ja74Be0Cs64c=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-ylQtZa3ZRs38mhge5tLLCRpnUdHYSjuZOwU+/6TO8Cw=";
+    cargoHash = "sha256-w6KwiE0rAT00fiRa1rT8uthVgcMB7EFGoG3+M5MYEBo=";
 
     cargoBuildFlags = [
       "-p"
@@ -42,7 +44,16 @@ let
       pkg-config
       perl
       rustPlatform.bindgenHook
+      writableTmpDirAsHomeHook
     ];
+
+    # Some tests need git
+    nativeCheckInputs = [ gitMinimal ];
+
+    # Tests need these permissions in order to use the FSEvents API on macOS.
+    sandboxProfile = ''
+      (allow mach-lookup (global-name "com.apple.FSEvents"))
+    '';
 
     buildInputs = [
       openssl
@@ -59,7 +70,7 @@ let
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
       RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
 
-      ZIG = lib.getExe zig_0_15; # zlob requires zig
+      ZIG = lib.getExe zig; # zlob requires zig
     };
   };
 in

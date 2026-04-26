@@ -76,20 +76,8 @@ let
       ];
       kernelIsCompatible =
         kernel:
-        let
-          nextMajorMinor =
-            ver:
-            "${lib.versions.major ver}.${
-              lib.pipe ver [
-                lib.versions.minor
-                lib.toInt
-                (x: x + 1)
-                toString
-              ]
-            }";
-        in
         (lib.versionAtLeast kernel.version kernelMinSupportedMajorMinor)
-        && (lib.versionOlder kernel.version (nextMajorMinor kernelMaxSupportedMajorMinor));
+        && (lib.versionAtLeast kernelMaxSupportedMajorMinor (lib.versions.majorMinor kernel.version));
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we

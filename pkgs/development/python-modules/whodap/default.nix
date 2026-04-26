@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "whodap";
-  version = "0.1.15";
+  version = "0.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "whodap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PEKFO+mVGtagmH2rny8zorvi9/zadWh+fiJqBc/NA+E=";
+    hash = "sha256-ybJiAWrAcs/9/8WutqsHvwsiWxR+tJL9wcQRaOiUZNQ=";
   };
 
   postPatch = ''
