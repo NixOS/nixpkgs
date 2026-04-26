@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
 
+    yarnBerryCheckVersionHook = callPackage ./yarn-berry-check-version-hook.nix { };
+
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
