@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
     chmod +x $out/share/powershell/pwsh
     wrapProgram $out/share/powershell/pwsh \
       --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath buildInputs}" \
-      --set TERM xterm \
       --set POWERSHELL_TELEMETRY_OPTOUT 1 \
       --set DOTNET_CLI_TELEMETRY_OPTOUT 1
     cp $out/share/powershell/pwsh $out/bin/pwsh
