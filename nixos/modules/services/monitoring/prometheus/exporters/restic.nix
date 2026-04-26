@@ -125,6 +125,14 @@ in
         :::
       '';
     };
+
+    cacheDirectory = mkOption {
+      type = types.str;
+      default = "restic-exporter";
+      description = ''
+        The directory where restic will store cache data below /var/cache.
+      '';
+    };
   };
 
   serviceOpts = {
@@ -140,7 +148,7 @@ in
         ${concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     serviceConfig = {
-      CacheDirectory = "restic-exporter";
+      CacheDirectory = cfg.cacheDirectory;
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
       LoadCredential = [
         "RESTIC_PASSWORD_FILE:${cfg.passwordFile}"
@@ -158,7 +166,7 @@ in
         LISTEN_ADDRESS = cfg.listenAddress;
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
-        RESTIC_CACHE_DIR = "%C/restic-exporter";
+        RESTIC_CACHE_DIR = "%C/${cfg.cacheDirectory}";
       }
       // (mapAttrs' (
         name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
