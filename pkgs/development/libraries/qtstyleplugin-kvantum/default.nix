@@ -8,7 +8,7 @@
   qtbase,
   qtsvg,
   qtx11extras ? null, # Qt 5 only
-  kwindowsystem,
+  kwindowsystem ? null, # Qt 6 only
   qtwayland,
   libx11,
   libxext,
