@@ -224,6 +224,9 @@ stdenvNoCC.mkDerivation {
   name = "libguestfs-appliance-nixos";
   version = libguestfs.version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   phases = [
     "buildPhase"
     "installPhase"

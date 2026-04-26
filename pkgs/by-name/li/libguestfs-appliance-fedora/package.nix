@@ -8,6 +8,9 @@ stdenvNoCC.mkDerivation rec {
   pname = "libguestfs-appliance-fedora";
   version = "1.56.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
     hash = "sha256-YbJlNaogMyutdtc7d+etyJvdd//yE8tedsZfkGXJr54=";
