@@ -469,6 +469,7 @@ in
         pkgs.gnome-maps
         pkgs.gnome-music
         pkgs.gnome-system-monitor
+        pkgs.gnome-tecla
         pkgs.gnome-weather
         pkgs.loupe
         pkgs.nautilus
