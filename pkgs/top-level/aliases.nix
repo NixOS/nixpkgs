@@ -1482,6 +1482,16 @@ mapAliases {
   nfstrace = throw "nfstrace has been removed, as it was broken"; # Added 2025-08-25
   nginxQuic = throw "'nginxQuic' has been removed. QUIC support is now available in the default nginx builds.";
   ngrid = throw "'ngrid' has been removed as it has been unmaintained upstream and broken"; # Added 2025-11-15
+  nim1 = throw "'nim1' has reached EOL, please use 'nim'"; # Added 2026-03-06
+  nim-unwrapped-1 = throw "'nim-unwrapped-1' has reached EOL, please use 'nim-unwrapped'"; # Added 2026-03-06
+  nim-unwrapped-2 = throw "'nim-unwrapped-2' has been upgraded and removed, please use 'nim-unwrapped'"; # Added 2026-03-06
+  nim-unwrapped-2_0 = throw "'nim-unwrapped-2_0' has been upgraded and removed, please use 'nim-unwrapped'"; # Added 2026-03-06
+  nim-unwrapped-2_2 = throw "'nim-unwrapped-2_2' has been upgraded and removed, please use 'nim-unwrapped'"; # Added 2026-03-06
+  nim-unwrapped_1_0 = throw "'nim-unwrapped_1_0' has reached EOL, please use 'nim-unwrapped'"; # Added 2026-03-06
+  nim_1_0 = throw "'nim_1_0' has reached EOL, please use 'nim'"; # Added 2026-03-06
+  nim_2 = throw "'nim_2' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
+  nim_2_0 = throw "'nim_2_0' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
+  nim_2_2 = throw "'nim_2_2' has been upgraded and removed, please use 'nim'"; # Added 2026-03-06
   nimbo = throw "'nimbo' has been removed due to being archived upstream."; # Added 2026-01-18
   nitrokey-fido2-firmware = throw "'nitrokey-fido2-firmware' has been removed as it was broken and unmaintained upstream since 2022"; # Added 2026-03-23
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
