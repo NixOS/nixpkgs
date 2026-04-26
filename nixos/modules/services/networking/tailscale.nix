@@ -142,6 +142,14 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ]; # for the CLI
+
+    users.users.tailscaled = {
+      isSystemUser = true;
+      group = "tailscaled";
+      extraGroups = [ "tss" ];
+    };
+    users.groups.tailscaled = { };
+    users.groups.tss = { };
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
@@ -153,19 +161,80 @@ in
         pkgs.kmod # required to pass tailscale's v6nat check
       ]
       ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
-      serviceConfig.Environment = [
-        "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
-      ]
-      ++ (lib.optionals (cfg.permitCertUid != null) [
-        "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-      ])
-      ++ (lib.optionals (cfg.disableTaildrop) [
-        "TS_DISABLE_TAILDROP=true"
-      ])
-      ++ (lib.optionals (cfg.disableUpstreamLogging) [
-        "TS_NO_LOGS_NO_SUPPORT=true"
-      ]);
+      serviceConfig = {
+        Environment = [
+          "PORT=${toString cfg.port}"
+          ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
+        ]
+        ++ (lib.optionals (cfg.permitCertUid != null) [
+          "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+        ])
+        ++ (lib.optionals (cfg.disableTaildrop) [
+          "TS_DISABLE_TAILDROP=true"
+        ])
+        ++ (lib.optionals (cfg.disableUpstreamLogging) [
+          "TS_NO_LOGS_NO_SUPPORT=true"
+        ]);
+
+        User = "tailscaled";
+        Group = "tailscaled";
+        SupplementaryGroups = "tss";
+        # Hardening options, using the configuration from
+        # https://tailscale.com/docs/reference/best-practices/device-hardening#suggested-hardening-configuration-based-on-systemd
+        DeviceAllow = [
+          "/dev/tun"
+          "/dev/net/tun"
+          "/dev/tpmrm0 rw"
+        ];
+        AmbientCapabilities = [
+          "CAP_NET_RAW"
+          "CAP_NET_ADMIN"
+          "CAP_SYS_MODULE"
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_RAW"
+          "CAP_NET_ADMIN"
+          "CAP_SYS_MODULE"
+        ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = false;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
+        ProtectSystem = "full";
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@known"
+          "~@clock"
+          "@cpu-emulation"
+          "@raw-io"
+          "@reboot"
+          "@mount"
+          "@obsolete"
+          "@swap"
+          "@debug"
+          "@keyring"
+          "@mount"
+          "@pkey"
+        ];
+
+      };
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of
