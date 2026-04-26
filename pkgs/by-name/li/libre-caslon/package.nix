@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,17 +29,17 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${pname}-${version}
-    cp -v "libre-caslon-text-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
-    cp -v "libre-caslon-display-${version}-src/fonts/OTF/"*.otf $out/share/fonts/opentype/
-    cp -v libre-caslon-text-${version}-src/README.md libre-caslon-text-${version}-src/FONTLOG.txt $out/share/doc/${pname}-${version}
+  nativeBuildInputs = [ installFonts ];
+
+  postInstall = ''
+    install -Dm444 \
+      libre-caslon-text-${version}-src/{README.md,FONTLOG.txt} \
+      -t $out/share/doc/${pname}-${version}
   '';
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "05aajwny99yqzn1nnq1blx6h7rl54x056y12hyawfbigkzxhscns";
+  outputHash = "sha256-hIfkLzUzpiWN6Z+L7RZqX0+h8e6RFbmQ3kRXGe3uxjw=";
 
   meta = {
     description = "Caslon fonts based on hand-lettered American Caslons of 1960s";
