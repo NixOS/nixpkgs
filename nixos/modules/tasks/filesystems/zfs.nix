@@ -17,6 +17,7 @@ let
   cfgSnapFlags = cfgSnapshots.flags;
   cfgScrub = config.services.zfs.autoScrub;
   cfgTrim = config.services.zfs.trim;
+  cfgDdtprune = config.services.zfs.ddtprune;
   cfgZED = config.services.zfs.zed;
 
   selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
@@ -584,6 +585,84 @@ in
       };
     };
 
+    services.zfs.ddtprune = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            enable = lib.mkEnableOption "periodic pruning of the ZFS deduplication table (DDT) for this pool";
+
+            days = lib.mkOption {
+              type = lib.types.nullOr lib.types.ints.positive;
+              default = null;
+              example = 30;
+              description = ''
+                Prune DDT entries older than the specified number of days.
+                Mutually exclusive with {option}`percentage`.
+
+                See {manpage}`zpool-ddtprune(8)` for details.
+              '';
+            };
+
+            percentage = lib.mkOption {
+              type = lib.types.nullOr (lib.types.ints.between 1 100);
+              default = null;
+              example = 25;
+              description = ''
+                Prune the specified percentage of DDT entries, selecting the oldest first.
+                Mutually exclusive with {option}`days`.
+
+                See {manpage}`zpool-ddtprune(8)` for details.
+              '';
+            };
+
+            interval = lib.mkOption {
+              default = "monthly";
+              type = lib.types.str;
+              example = "weekly";
+              description = ''
+                How often to prune the deduplication table.
+                The format is described in
+                {manpage}`systemd.time(7)`.
+              '';
+            };
+
+            randomizedDelaySec = lib.mkOption {
+              default = "6h";
+              type = lib.types.str;
+              example = "12h";
+              description = ''
+                Add a randomized delay before each DDT prune.
+                The delay will be chosen between zero and this value.
+                This value must be a time span in the format specified by
+                {manpage}`systemd.time(7)`.
+              '';
+            };
+          };
+        }
+      );
+      default = { };
+      example = lib.literalExpression ''
+        {
+          rpool = {
+            enable = true;
+            days = 30;
+            interval = "weekly";
+          };
+          tank = {
+            enable = true;
+            percentage = 10;
+          };
+        }
+      '';
+      description = ''
+        Per-pool configuration for periodic pruning of the ZFS deduplication
+        data table (DDT) using {manpage}`zpool-ddtprune(8)`.
+
+        Each attribute name is a pool name, and creates a
+        `zfs-ddtprune@«pool»` systemd timer/service pair.
+      '';
+    };
+
     services.zfs.expandOnBoot = lib.mkOption {
       type = lib.types.either (lib.types.enum [
         "disabled"
@@ -1092,5 +1171,46 @@ in
         RandomizedDelaySec = cfgTrim.randomizedDelaySec;
       };
     })
+
+    (
+      let
+        enabledDdtprunePools = lib.filterAttrs (_: cfg: cfg.enable) cfgDdtprune;
+      in
+      lib.mkIf (cfgZfs.enabled && enabledDdtprunePools != { }) {
+        assertions = lib.mapAttrsToList (pool: cfg: {
+          assertion = (cfg.days != null) != (cfg.percentage != null);
+          message = "services.zfs.ddtprune.${pool}: exactly one of `days` or `percentage` must be set.";
+        }) enabledDdtprunePools;
+
+        systemd.services = lib.mapAttrs' (
+          pool: cfg:
+          lib.nameValuePair "zfs-ddtprune@${pool}" {
+            description = "ZFS DDT prune for pool ${pool}";
+            after = [ "zfs-import.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+            };
+            script = ''
+              ${cfgZfs.package}/bin/zpool ddtprune ${
+                if cfg.days != null then "-d ${toString cfg.days}" else "-p ${toString cfg.percentage}"
+              } ${lib.escapeShellArg pool}
+            '';
+          }
+        ) enabledDdtprunePools;
+
+        systemd.timers = lib.mapAttrs' (
+          pool: cfg:
+          lib.nameValuePair "zfs-ddtprune@${pool}" {
+            wantedBy = [ "timers.target" ];
+            after = [ "multi-user.target" ];
+            timerConfig = {
+              OnCalendar = cfg.interval;
+              Persistent = lib.mkDefault "yes";
+              RandomizedDelaySec = cfg.randomizedDelaySec;
+            };
+          }
+        ) enabledDdtprunePools;
+      }
+    )
   ];
 }
