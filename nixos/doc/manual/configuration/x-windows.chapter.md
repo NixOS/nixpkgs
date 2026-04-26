@@ -179,12 +179,6 @@ to set one. The recommended configuration for modern systems is:
 ```nix
 { services.xserver.videoDrivers = [ "modesetting" ]; }
 ```
-::: {.note}
-The `modesetting` driver doesn't currently provide a `TearFree` option (this
-will become available in an upcoming X.org release), So, without using a
-compositor (for example, see [](#opt-services.picom.enable)) you will
-experience screen tearing.
-:::
 
 If you experience screen tearing no matter what, this configuration was
 reported to resolve the issue:
