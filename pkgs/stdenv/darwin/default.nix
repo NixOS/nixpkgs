@@ -258,7 +258,6 @@ let
     inherit (prevStage."llvmPackages_${llvmVersion}") compiler-rt libcxx;
   };
   llvmLibrariesDarwinDepsNoCC = prevStage: { inherit (prevStage.darwin) libcxx; };
-  llvmLibrariesDeps = _: { };
 
   llvmToolsPackages = prevStage: {
     inherit (prevStage."llvmPackages_${llvmVersion}")
@@ -663,7 +662,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert allDeps isBuiltByBootstrapFilesCompiler [
       (stage1Packages prevStage)
       (darwinPackages prevStage)
-      (llvmLibrariesDeps prevStage)
       (llvmToolsDeps prevStage)
       (sdkPackages prevStage)
       (sdkDarwinPackages prevStage)
@@ -736,7 +734,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isBuiltByNixpkgsCompiler [
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
     ];
 
@@ -754,7 +751,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           (stage1Packages prevStage)
           (disallowedPackages prevStage)
           (bintoolsPackages prevStage)
-          (llvmLibrariesDeps prevStage)
           (llvmToolsDeps prevStage)
           {
             inherit (prevStage) ccWrapperStdenv;
@@ -815,7 +811,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     ];
 
     assert allDeps isBuiltByNixpkgsCompiler [
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
       (sdkPackages prevStage)
       (sdkDarwinPackages prevStage)
@@ -834,7 +829,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         mergeDisjointAttrs [
           (stage1Packages prevStage)
           (disallowedPackages prevStage)
-          (llvmLibrariesDeps prevStage)
           (sdkPackages prevStage)
           {
             inherit (prevStage) ccWrapperStdenv;
@@ -891,7 +885,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert allDeps isBuiltByNixpkgsCompiler [
       (bintoolsPackages prevStage)
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
       (llvmToolsDeps prevStage)
       (llvmToolsPackages prevStage)
@@ -912,7 +905,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         mergeDisjointAttrs [
           (bintoolsPackages prevStage)
           (disallowedPackages prevStage)
-          (llvmLibrariesDeps prevStage)
           (llvmToolsDeps prevStage)
           (sdkPackages prevStage)
           (sdkPackagesNoCC prevStage)
@@ -962,7 +954,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       (lib.filterAttrs (_: pkg: lib.getName pkg != "pkg-config-wrapper") (stage1Packages prevStage)) # pkg-config is a wrapper
       (bintoolsPackages prevStage)
       (darwinPackages prevStage)
-      (llvmLibrariesDeps prevStage)
       (llvmLibrariesPackages prevStage)
       (llvmToolsDeps prevStage)
       (llvmToolsPackages prevStage)
@@ -1096,7 +1087,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         overrides =
           self: super:
           mergeDisjointAttrs [
-            (llvmLibrariesDeps prevStage)
             (llvmToolsDeps prevStage)
             (sdkPackages prevStage)
             (sdkPackagesNoCC prevStage)
