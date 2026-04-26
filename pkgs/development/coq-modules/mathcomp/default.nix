@@ -243,9 +243,11 @@ let
       );
     in
     patched-derivation5;
+  useRocqPackages =
+    if builtins.isNull version then coq.rocqPackages ? mathcomp else lib.versionAtLeast version "2.5.0";
 in
 # this is just a wrapper for rocqPackages.mathcomp for Rocq >= 9.0
-if coq.rocqPackages ? mathcomp && version != "2.3.0" && version != "2.4.0" then
+if useRocqPackages then
   let
     mc = coq.rocqPackages.mathcomp.override {
       inherit version withDoc single;
