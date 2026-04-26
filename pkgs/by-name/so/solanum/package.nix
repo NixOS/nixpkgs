@@ -12,7 +12,7 @@
 
   # runtime
   lksctp-tools,
-  hyperscan,
+  vectorscan,
   libxcrypt,
   openssl,
   pkg-config,
@@ -62,10 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    hyperscan
     libxcrypt
     openssl
     sqlite
+    vectorscan
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     lksctp-tools
