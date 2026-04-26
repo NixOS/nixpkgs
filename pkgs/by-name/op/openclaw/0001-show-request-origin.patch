@@ -1,0 +1,25 @@
+From 2d8401b4529a4e9a4a90f64d0af49ac8445fc96e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Sun, 26 Apr 2026 16:34:46 +0200
+Subject: [PATCH] show request origin
+
+---
+ src/gateway/server/ws-connection/message-handler.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gateway/server/ws-connection/message-handler.ts b/src/gateway/server/ws-connection/message-handler.ts
+index f3bf99bc8e..53155520a0 100644
+--- a/src/gateway/server/ws-connection/message-handler.ts
++++ b/src/gateway/server/ws-connection/message-handler.ts
+@@ -498,7 +498,7 @@ export function attachGatewayWsMessageHandler(params: {
+           });
+           if (!originCheck.ok) {
+             const errorMessage =
+-              "origin not allowed (open the Control UI from the gateway host or allow it in gateway.controlUi.allowedOrigins)";
++              "origin not allowed " + requestOrigin + " (open the Control UI from the gateway host or allow it in gateway.controlUi.allowedOrigins)";
+             markHandshakeFailure("origin-mismatch", {
+               origin: requestOrigin ?? "n/a",
+               host: requestHost ?? "n/a",
+-- 
+2.53.0
+
