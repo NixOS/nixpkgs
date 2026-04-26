@@ -14,16 +14,12 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-NDEO20unSfdy1CuI4+7EpjGFJ+dc7qqWz8VW7jU2b7w=";
   };
 
+  sourceRoot = ".";
+
   nativeBuildInputs = [
     installFonts
     unzip
   ];
-
-  unpackPhase = ''
-    runHook preUnpack
-    unzip $src
-    runHook postUnpack
-  '';
 
   meta = {
     description = "Open source programming font";
