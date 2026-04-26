@@ -148,6 +148,20 @@ in
         '';
       };
 
+      vault = lib.mkOption {
+        type = lib.types.nullOr (lib.types.attrsOf lib.types.path);
+        default = null;
+        description = ''
+          Secrets that will available to Keycloak inside the file vault.
+          The `keycloak` user must have read access to the secret files.
+
+          See [Keycloak documentation](https://www.keycloak.org/server/vault) for more info.
+        '';
+        example = {
+          master_smtpPassword = "/var/lib/secrets/smtpPassword";
+        };
+      };
+
       database = {
         type = mkOption {
           type = enum [
@@ -519,6 +533,7 @@ in
             quarkus-systemd-notify
             quarkus-systemd-notify-deployment
           ]);
+        vaultType = if (cfg.vault != null) then "file" else null;
       };
     in
     mkIf cfg.enable {
@@ -711,8 +726,18 @@ in
               "L+".argument = "${f}";
             };
           }) cfg.realmFiles;
+          vaultList =
+            if (cfg.vault != null) then
+              (lib.mapAttrsToList (name: value: {
+                name = "/run/keycloak/secrets/${name}";
+                value = {
+                  "L+".argument = value;
+                };
+              }) cfg.vault)
+            else
+              [ ];
         in
-        builtins.listToAttrs settingsList;
+        builtins.listToAttrs (settingsList ++ vaultList);
 
       systemd.services.keycloak =
         let
@@ -751,6 +776,9 @@ in
           // lib.optionalAttrs (cfg.initialAdminPassword != null) {
             KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
             KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
+          }
+          // lib.optionalAttrs (cfg.vault != null) {
+            KC_VAULT_DIR = "/run/keycloak/secrets";
           };
           serviceConfig = {
             LoadCredential =
