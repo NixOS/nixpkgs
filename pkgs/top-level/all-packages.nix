@@ -3453,8 +3453,6 @@ with pkgs;
 
   usort = with python3Packages; toPythonApplication usort;
 
-  vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
-
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
