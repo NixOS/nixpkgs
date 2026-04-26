@@ -112,65 +112,63 @@ rec {
       pos ? builtins.unsafeGetAttrPos "name" args,
     }@args:
 
-    stdenvNoCC.mkDerivation
-      (
-        finalAttrs:
-        {
-          inherit
-            pos
-            name
-            text
-            executable
-            checkPhase
-            allowSubstitutes
-            preferLocalBuild
-            ;
-          destination =
-            assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
-              destination must be an absolute path, relative to the derivation's out path,
-              got '${destination}' instead.
+    stdenvNoCC.mkDerivation (
+      finalAttrs:
+      {
+        inherit
+          pos
+          name
+          text
+          executable
+          checkPhase
+          allowSubstitutes
+          preferLocalBuild
+          ;
+        destination =
+          assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+            destination must be an absolute path, relative to the derivation's out path,
+            got '${destination}' instead.
 
-              Ensure that the path starts with a / and specifies at least the filename.
-            '';
-            destination;
-          passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
+            Ensure that the path starts with a / and specifies at least the filename.
+          '';
+          destination;
+        passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
 
-          buildCommand =
-            ''
-              target=$out$destination
-              mkdir -p "$(dirname "$target")"
+        buildCommand = ''
+          target=$out$destination
+          mkdir -p "$(dirname "$target")"
 
-              if [ -e "$textPath" ]; then
-                mv "$textPath" "$target"
-              else
-                echo -n "$text" > "$target"
-              fi
+          if [ -e "$textPath" ]; then
+            mv "$textPath" "$target"
+          else
+            echo -n "$text" > "$target"
+          fi
 
-              if [ -n "$executable" ]; then
-                chmod +x "$target"
-              fi
+          if [ -n "$executable" ]; then
+            chmod +x "$target"
+          fi
 
-              eval "$checkPhase"
-            '';
+          eval "$checkPhase"
+        '';
 
-          meta =
-            let
-              matches = builtins.match "/bin/([^/]+)" finalAttrs.destination;
-              isProgram = finalAttrs.executable && matches != null;
-            in
-            {
-              ${if isProgram then "mainProgram" else null} = lib.head matches;
-            }
-            // meta
-            // derivationArgs.meta or { };
-          passthru = passthru // derivationArgs.passthru or { };
-        }
-        // removeAttrs derivationArgs [
-          "passAsFile"
-          "meta"
-          "passthru"
-        ]
-      );
+        meta =
+          let
+            matches = builtins.match "/bin/([^/]+)" finalAttrs.destination;
+            isProgram = finalAttrs.executable && matches != null;
+          in
+          {
+            ${if isProgram then "mainProgram" else null} = lib.head matches;
+          }
+          // meta
+          // derivationArgs.meta or { };
+        passthru = passthru // derivationArgs.passthru or { };
+      }
+      // removeAttrs derivationArgs [
+        "passAsFile"
+        "meta"
+        "passthru"
+      ]
+    );
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
