@@ -21,17 +21,28 @@ let
     ];
   } (builtins.readFile ./replace-workspace-values.py);
 
-  fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
-    libraries =
-      with python3Packages;
-      [
-        requests
-      ]
-      ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
-    flakeIgnore = [
-      "E501"
-    ];
-  } (builtins.readFile ./fetch-cargo-vendor-util.py);
+  mkFetchCargoVendorUtil =
+    name: src:
+    writers.writePython3Bin name {
+      libraries =
+        with python3Packages;
+        [
+          requests
+        ]
+        ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
+      flakeIgnore = [
+        "E501"
+      ];
+    } (builtins.readFile src);
+
+  # Separate util used only by the FOD `vendorStaging` stage below. Kept
+  # distinct from fetchCargoVendorUtil so that changes to the network-facing
+  # bits (User-Agent, download URL) don't invalidate the input-addressed
+  # `-vendor` stage and force a mass rebuild of every Rust package in nixpkgs.
+  # vendorStaging is an FOD, so swapping its util is free for consumers.
+  # TODO: unify with fetchCargoVendorUtil on the next `staging` cycle.
+  fetchCargoVendorUtilV2 = mkFetchCargoVendorUtil "fetch-cargo-vendor-util-v2" ./fetch-cargo-vendor-util-v2.py;
+  fetchCargoVendorUtil = mkFetchCargoVendorUtil "fetch-cargo-vendor-util" ./fetch-cargo-vendor-util.py;
 in
 
 {
@@ -59,7 +70,7 @@ let
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
       nativeBuildInputs = [
-        fetchCargoVendorUtil
+        fetchCargoVendorUtilV2
         cacert
         # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
         # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
@@ -74,7 +85,7 @@ let
           cd "$cargoRoot"
         fi
 
-        fetch-cargo-vendor-util create-vendor-staging ./Cargo.lock "$out"
+        fetch-cargo-vendor-util-v2 create-vendor-staging ./Cargo.lock "$out"
 
         runHook postBuild
       '';
