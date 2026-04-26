@@ -352,10 +352,13 @@ stdenv.mkDerivation {
     # silently drop it with misconfigurations.
     test -f $out/bin/ceph-volume
 
+    install -m 0644 -D $src/systemd/ceph.tmpfiles.d $out/lib/tmpfiles.d/ceph.conf
+
     # Assert that getopt patch from preConfigure covered all instances
     ! grep -F -r 'GETOPT=getopt' $out
     ! grep -F -r 'GETOPT=/usr/local/bin/getopt' $out
 
+    # client output
     mkdir -p $client/{bin,etc,$sitePackages,share/bash-completion/completions}
     cp -r $out/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $client/bin
     cp -r $out/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $client/bin
