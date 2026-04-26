@@ -414,26 +414,22 @@ rec {
 
       outputsList = map (outputName: {
         name = outputName;
-        value =
-          commonAttrs
-          // {
-            inherit (drv.${outputName}) type outputName;
-            outputSpecified = true;
-            drvPath =
-              assert condition;
-              drv.${outputName}.drvPath;
-            outPath =
-              assert condition;
-              drv.${outputName}.outPath;
-          }
-          //
-            # TODO: give the derivation control over the outputs.
-            #       `overrideAttrs` may not be the only attribute that needs
-            #       updating when switching outputs.
-            optionalAttrs (passthru ? overrideAttrs) {
-              # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
-              overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
-            };
+        value = commonAttrs // {
+          inherit (drv.${outputName}) type outputName;
+          outputSpecified = true;
+          drvPath =
+            assert condition;
+            drv.${outputName}.drvPath;
+          outPath =
+            assert condition;
+            drv.${outputName}.outPath;
+          # TODO: give the derivation control over the outputs.
+          #       `overrideAttrs` may not be the only attribute that needs
+          #       updating when switching outputs.
+          # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
+          ${if passthru ? overrideAttrs then "overrideAttrs" else null} =
+            f: (passthru.overrideAttrs f).${outputName};
+        };
       }) (drv.outputs or [ "out" ]);
     in
     commonAttrs
