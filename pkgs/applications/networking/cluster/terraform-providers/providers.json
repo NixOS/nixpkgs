@@ -1247,13 +1247,13 @@
     "vendorHash": "sha256-u3WK/pLsuwySJX6GMNho8ImB+F+XXUPC6h+IQtDrOp8="
   },
   "spotinst_spotinst": {
-    "hash": "sha256-DWMa48u6D9lT6xtcYOQxWyHfMwFvI+iYufKoXgQJmC0=",
+    "hash": "sha256-0Wc+QgEeizydsvtyBdnxgLhpYuBZLMB3JGjmTDXzJY0=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.234.0",
+    "rev": "v1.235.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-iUu/SG4VprmEuYo6e8az5GARJhJWHyvyyJNSapnpWME="
+    "vendorHash": "sha256-odyKlnrYufT5pQsYuGN0hKQeQx7LzTLVNTwde97wyPc="
   },
   "statuscakedev_statuscake": {
     "hash": "sha256-zXBZZA+2uRN2FeGrayq0a4EBk7T+PvlBIwbuxwM7yBc=",
@@ -1373,13 +1373,13 @@
     "vendorHash": "sha256-Bat/S4e5vzT0/XOhJ9zCWLa4IE4owLC6ec1yvEh+c0Y="
   },
   "topicusonderwijs_octodns": {
-    "hash": "sha256-ZfQ7OgW0kKfcoBNBe+wDFKL+hlyxyb80LrfArPBjtv4=",
+    "hash": "sha256-gbw0Na3m5X5CjoaXHPREfQIpwzQ9hpa7A3Hn+rwcjEA=",
     "homepage": "https://registry.terraform.io/providers/topicusonderwijs/octodns",
     "owner": "topicusonderwijs",
     "repo": "terraform-provider-octodns",
-    "rev": "v1.1.5",
+    "rev": "v1.2.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-6qQ1k/fCxJGseqU+kjsE29kWYOpzorCeCTldXZo4ukY="
+    "vendorHash": "sha256-da0+/aLNEuMZWD7+zMUGpc1Ch5VKyN+EyO0Mp4mZWv8="
   },
   "trozz_pocketid": {
     "hash": "sha256-/rEdOnAbVM69mA/eP6SlZhk1FZfzrYpej2aO0NUP6E4=",
@@ -1418,13 +1418,13 @@
     "vendorHash": null
   },
   "vancluever_acme": {
-    "hash": "sha256-uYlaJfXerng7VfZt08fwvdBTy9UU6DgD5WGIca36LrA=",
+    "hash": "sha256-8uMCtwldGlGqwyZXV4Q1g+9lHQqa952Sd+mywkt0weo=",
     "homepage": "https://registry.terraform.io/providers/vancluever/acme",
     "owner": "vancluever",
     "repo": "terraform-provider-acme",
-    "rev": "v2.47.0",
+    "rev": "v2.48.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uXcqb1yTHzERpVtPnu0HCETJyo8BjI/Vw6dVeOyGXys="
+    "vendorHash": "sha256-i6Hw1hCr/LRhGjemGAzhZQYr/LsjBrT5aFVXAHDE85M="
   },
   "venafi_venafi": {
     "hash": "sha256-wpAckNRqZjSDt7KpCRpLSYkn6Gm+QPzn5sIJ90wRXjI=",
