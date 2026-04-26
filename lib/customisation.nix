@@ -264,6 +264,40 @@ rec {
     ```
   */
   callPackageWith =
+    let
+      makeErrorMessage =
+        autoArgs: fn: args: fargs: arg:
+        let
+          # Get a list of suggested argument names for a given missing one
+          getSuggestions =
+            arg:
+            pipe (autoArgs // args) [
+              attrNames
+              # Only use ones that are at most 2 edits away. While mork would work,
+              # levenshteinAtMost is only fast for 2 or less.
+              (filter (levenshteinAtMost 2 arg))
+              # Put strings with shorter distance first
+              (sortOn (levenshtein arg))
+              # Only take the first couple results
+              (take 3)
+              # Quote all entries
+              (map (x: "\"" + x + "\""))
+            ];
+
+          prettySuggestions =
+            suggestions:
+            if suggestions == [ ] then
+              ""
+            else if length suggestions == 1 then
+              ", did you mean ${elemAt suggestions 0}?"
+            else
+              ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
+
+          loc = unsafeGetAttrPos arg fargs;
+          loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
+        in
+        "lib.customisation.callPackageWith: Function called without required argument \"${arg}\" at ${loc'}${prettySuggestions (getSuggestions arg)}";
+    in
     autoArgs: fn: args:
     let
       f = if isFunction fn then fn else import fn;
@@ -277,58 +311,20 @@ rec {
       # wouldn't be passed to it
       missingArgs =
         # Filter out arguments that have a default value
-        (
-          filterAttrs (name: value: !value)
-            # Filter out arguments that would be passed
-            (removeAttrs fargs (attrNames allArgs))
-        );
-
-      # Get a list of suggested argument names for a given missing one
-      getSuggestions =
-        arg:
-        pipe (autoArgs // args) [
-          attrNames
-          # Only use ones that are at most 2 edits away. While mork would work,
-          # levenshteinAtMost is only fast for 2 or less.
-          (filter (levenshteinAtMost 2 arg))
-          # Put strings with shorter distance first
-          (sortOn (levenshtein arg))
-          # Only take the first couple results
-          (take 3)
-          # Quote all entries
-          (map (x: "\"" + x + "\""))
-        ];
-
-      prettySuggestions =
-        suggestions:
-        if suggestions == [ ] then
-          ""
-        else if length suggestions == 1 then
-          ", did you mean ${elemAt suggestions 0}?"
-        else
-          ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
-
-      errorForArg =
-        arg:
-        let
-          loc = unsafeGetAttrPos arg fargs;
-          loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
-        in
-        "Function called without required argument \"${arg}\" at "
-        + "${loc'}${prettySuggestions (getSuggestions arg)}";
-
-      # Only show the error for the first missing argument
-      error = errorForArg (head (attrNames missingArgs));
+        filterAttrs (name: value: !value)
+          # Filter out arguments that would be passed
+          (removeAttrs fargs (attrNames allArgs));
 
     in
     if missingArgs == { } then
       makeOverridable f allArgs
-    # This needs to be an abort so it can't be caught with `builtins.tryEval`,
-    # which is used by nix-env and ofborg to filter out packages that don't evaluate.
-    # This way we're forced to fix such errors in Nixpkgs,
-    # which is especially relevant with allowAliases = false
     else
-      abort "lib.customisation.callPackageWith: ${error}";
+      # Only show the error for the first missing argument
+      # This needs to be an abort so it can't be caught with `builtins.tryEval`,
+      # which is used by nix-env and ofborg to filter out packages that don't evaluate.
+      # This way we're forced to fix such errors in Nixpkgs,
+      # which is especially relevant with allowAliases = false
+      abort (makeErrorMessage autoArgs fn args fargs (head (attrNames missingArgs)));
 
   /**
     Like `callPackage`, but for a function that returns an attribute
