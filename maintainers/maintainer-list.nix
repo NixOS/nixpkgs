@@ -28680,6 +28680,13 @@
     githubId = 24815061;
     name = "Kevin De Baerdemaeker";
   };
+  ventu06 = {
+    name = "Eduardo Venturini";
+    email = "ventu06g@gmail.com";
+    github = "ventu06";
+    githubId = 35201396;
+    keys = [ { fingerprint = "65E8 A0BF 95E0 044E 952C  8D8C 0C22 EDEC CE5B 24CE"; } ];
+  };
   veprbl = {
     email = "veprbl@gmail.com";
     github = "veprbl";
