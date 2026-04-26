@@ -66,7 +66,11 @@ let
                 with pkgs;
                 [
                   glib # Poke thumbnailer to process media via gdbus
-                  mpv # URI dispatching for video support
+                  # URI dispatching for video support
+                  (mpv.override {
+                    # Not necessary here, and building deno for yt-dlp is too painful on my machines...
+                    youtubeSupport = false;
+                  })
                   xdotool # mouse movement
                 ]
                 ++ (with pkgs.lomiri; [
