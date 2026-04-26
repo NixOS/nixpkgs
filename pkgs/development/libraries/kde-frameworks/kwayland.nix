@@ -1,7 +1,8 @@
 {
   mkDerivation,
-  propagateBin,
   lib,
+  cmake,
+  pkg-config,
   extra-cmake-modules,
   wayland-scanner,
   kdePackages,
@@ -22,6 +23,8 @@ mkDerivation {
   ];
 
   nativeBuildInputs = [
+    cmake
+    pkg-config
     extra-cmake-modules
     wayland-scanner
   ];
@@ -31,6 +34,9 @@ mkDerivation {
     wayland-protocols
   ];
   propagatedBuildInputs = [ qtbase ];
-  setupHook = propagateBin; # XDG_CONFIG_DIRS
+  outputs = [
+    "out"
+    "dev"
+  ];
   meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
 }

@@ -2,6 +2,7 @@
   mkDerivation,
   lib,
   stdenv,
+  cmake,
   extra-cmake-modules,
   kcodecs,
   kconfig,
@@ -17,6 +18,7 @@
 mkDerivation {
   pname = "knotifications";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     qttools
   ];

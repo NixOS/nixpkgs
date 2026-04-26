@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   gettext,
   python3,
@@ -9,7 +10,10 @@
 
 mkDerivation {
   pname = "ki18n";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   propagatedNativeBuildInputs = [
     gettext
     python3

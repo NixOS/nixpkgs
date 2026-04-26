@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   qttools,
   kcodecs,
@@ -15,6 +16,7 @@
 mkDerivation {
   pname = "kbookmarks";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     qttools
   ];

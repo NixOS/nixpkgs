@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     kdePackages.extra-cmake-modules
   ];
   buildInputs = [ qtbase ];
-  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
+  cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ];
 
   # a library, nothing to wrap
   dontWrapQtApps = true;
