@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bitrise";
-  version = "2.39.2";
+  version = "2.39.3";
 
   src = fetchFromGitHub {
     owner = "bitrise-io";
     repo = "bitrise";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yduH5UkBwcp41pCeFyoOYtaTwvINrbMaQQlvmeRAXCY=";
+    hash = "sha256-rL/m5hV1PdNdE51h5xRsGy9Cuj3X/jnoyNnquJPnYfc=";
   };
 
   # many tests rely on writable $HOME/.bitrise and require network access
@@ -25,8 +25,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
   ldflags = [
-    "-X github.com/bitrise-io/bitrise/version.Commit=${finalAttrs.src.rev}"
-    "-X github.com/bitrise-io/bitrise/version.BuildNumber=0"
+    "-X github.com/bitrise-io/bitrise/v2/version.Commit=${finalAttrs.src.rev}"
+    "-X github.com/bitrise-io/bitrise/v2/version.VERSION=${finalAttrs.version}"
+    "-X github.com/bitrise-io/bitrise/v2/version.BuildNumber=0"
   ];
   env.CGO_ENABLED = 0;
 
