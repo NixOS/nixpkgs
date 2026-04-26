@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
     libsForQt5.qtwayland
 
-    libsForQt5.kwayland
-    libsForQt5.kwindowsystem
+    libsForQt5.__internalKF5.kwayland
+    libsForQt5.__internalKF5.kwindowsystem
 
     plasma-wayland-protocols
     wayland

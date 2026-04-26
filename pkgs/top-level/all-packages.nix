@@ -7137,9 +7137,6 @@ with pkgs;
     }
   );
 
-  # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
-  plasma5Packages = libsForQt5;
-
   qtEnv = qt5.env;
 
   qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });

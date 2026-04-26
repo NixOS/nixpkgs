@@ -51,14 +51,14 @@ makeScopeWithSplicing' {
 
     in
     (noExtraAttrs (
-      kdeFrameworks
-      // qt5
+      qt5
       // {
 
         inherit
-          kdeFrameworks
           qt5
           ;
+
+        __internalKF5 = lib.dontRecurseIntoAttrs kdeFrameworks;
 
         ### LIBRARIES
 
