@@ -9,7 +9,6 @@
   callPackage,
   ceres-solver,
   cmake,
-  colladaSupport ? true,
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
@@ -54,7 +53,6 @@
   nix-update-script,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openal,
-  opencollada-blender,
   opencolorio,
   openexr,
   openimagedenoise,
@@ -185,7 +183,6 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
     (lib.cmakeBool "WITH_JACK" jackaudioSupport)
     (lib.cmakeBool "WITH_LIBS_PRECOMPILED" false)
-    (lib.cmakeBool "WITH_OPENCOLLADA" colladaSupport)
     (lib.cmakeBool "WITH_OPENIMAGEDENOISE" openImageDenoiseSupport)
     (lib.cmakeBool "WITH_PIPEWIRE" false)
     (lib.cmakeBool "WITH_PULSEAUDIO" false)
@@ -325,7 +322,6 @@ stdenv'.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ]
-  ++ lib.optional colladaSupport opencollada-blender
   ++ lib.optional jackaudioSupport libjack2
   ++ lib.optional spaceNavSupport libspnav
   ++ lib.optionals vulkanSupport [
