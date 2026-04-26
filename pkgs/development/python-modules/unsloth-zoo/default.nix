@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -41,6 +42,8 @@ buildPythonPackage (finalAttrs: {
   pname = "unsloth-zoo";
   version = "2026.4.7";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.15";
 
   # no tags on GitHub
   src = fetchPypi {
