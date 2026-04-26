@@ -95,31 +95,28 @@ let
       # NOTE: the above documentation had to be duplicated in `lib/customisation.nix`: `makeOverridable`.
       overrideAttrs =
         f0:
-        let
-          extends' =
-            overlay: f:
-            (
-              final:
-              let
-                prev = f final;
-                thisOverlay = overlay final prev;
-                warnForBadVersionOverride = (
-                  prev ? src
-                  && thisOverlay ? version
-                  && prev ? version
-                  # We could check that the version is actually distinct, but that
-                  # would probably just delay the inevitable, or preserve tech debt.
-                  # && prev.version != thisOverlay.version
-                  && !(thisOverlay ? src)
-                  && !(thisOverlay.__intentionallyOverridingVersion or false)
-                );
-                pname = args.pname or "<unknown name>";
-                version = args.version or "<unknown version>";
-                pos = builtins.unsafeGetAttrPos "version" thisOverlay;
-              in
-              lib.warnIf warnForBadVersionOverride ''
+        makeDerivationExtensible (
+          (
+            overlay: f: final:
+            let
+              prev = f final;
+              thisOverlay = overlay final prev;
+              pos = builtins.unsafeGetAttrPos "version" thisOverlay;
+            in
+            lib.warnIf
+              (
+                prev ? src
+                && thisOverlay ? version
+                && prev ? version
+                # We could check that the version is actually distinct, but that
+                # would probably just delay the inevitable, or preserve tech debt.
+                # && prev.version != thisOverlay.version
+                && !(thisOverlay ? src)
+                && !(thisOverlay.__intentionallyOverridingVersion or false)
+              )
+              ''
                 ${
-                  args.name or "${pname}-${version}"
+                  args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
                 } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
                   toString pos.line or "<unknown line>"
                 }:${toString pos.column or "<unknown column>"}.
@@ -136,10 +133,12 @@ let
                 })
 
                 (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-              '' (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
-            );
-        in
-        makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
+              ''
+              (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+          )
+            (lib.toExtension f0)
+            rattrs
+        );
 
       finalPackage = mkDerivationSimple overrideAttrs args;
 
