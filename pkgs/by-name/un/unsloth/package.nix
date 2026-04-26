@@ -70,6 +70,14 @@ python3.pkgs.buildPythonApplication {
     # so `unsloth studio` can serve it as static assets.
     mkdir -p studio/frontend/dist
     cp -r ${studio-frontend}/. studio/frontend/dist/
+
+    # Skip the install.sh venv re-exec dance in `unsloth studio` and
+    # `unsloth studio run`. Nix installs studio.backend.* into the same
+    # site-packages as the CLI, so we can import directly. Both functions
+    # share the exact same probe line; force it to True everywhere.
+    sed -i \
+      's|in_studio_venv = sys.prefix.startswith(str(studio_venv_dir))|in_studio_venv = True  # Nix install: studio.backend is already importable|g' \
+      unsloth_cli/commands/studio.py
   '';
 
   build-system = with python3.pkgs; [
@@ -111,6 +119,7 @@ python3.pkgs.buildPythonApplication {
     fastapi
     uvicorn
     starlette
+    python-multipart
     structlog
     pyjwt
     httpx
