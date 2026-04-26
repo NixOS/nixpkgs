@@ -20641,6 +20641,8 @@ self: super: with self; {
 
   unsloth = callPackage ../development/python-modules/unsloth { };
 
+  unsloth-cli = callPackage ../development/python-modules/unsloth-cli { };
+
   unsloth-zoo = callPackage ../development/python-modules/unsloth-zoo { };
 
   unstructured = callPackage ../development/python-modules/unstructured { };
