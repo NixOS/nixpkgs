@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  meson,
+  ninja,
   pkg-config,
   xorgproto,
   libx11,
@@ -20,7 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     xorgproto
