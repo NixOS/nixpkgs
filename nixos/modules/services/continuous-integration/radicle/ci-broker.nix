@@ -135,7 +135,7 @@ in
       };
       description = ''
         Configuration of radicle-ci-broker.
-        See <https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
+        See <https://radicle.network/nodes/seed.radicle.dev/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
       '';
       default = { };
       example = lib.literalExpression ''

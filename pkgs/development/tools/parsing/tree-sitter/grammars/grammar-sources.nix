@@ -724,10 +724,10 @@
   };
 
   fsharp = {
-    version = "0.2.2-unstable-2026-03-29";
+    version = "0.3.0-unstable-2026-04-16";
     url = "github:ionide/tree-sitter-fsharp";
-    rev = "594c500ecace8618db32dd1144307897277db067";
-    hash = "sha256-e66aAsmNJWMcElqFIxSiHZgyQsq8NT7zU9y/fpbqJF4=";
+    rev = "5247c1197cb290fcaea0e0a793d32829c1396831";
+    hash = "sha256-ntcLDSt6BPF9PtASx221hwZhKl3yKKrzbEYQD/ghYxw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -794,10 +794,10 @@
   };
 
   ghostty = {
-    version = "1.2-unstable-2026-01-02";
+    version = "1.3.0-unstable-2026-04-24";
     url = "github:bezhermoso/tree-sitter-ghostty";
-    rev = "c14d6cb4dd36ff9dd569978491aa52e4726cbe86";
-    hash = "sha256-sVPr8jR6z0G68z3ZTdlMOXWguNGbZ/5apffNefm9apU=";
+    rev = "753055073a26100e51bdf1a92f4234cd6789c1f9";
+    hash = "sha256-+zy5dqyHUOC6Li31U6/GOAfqPSLZRKfpnyjKgtFSFeM=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

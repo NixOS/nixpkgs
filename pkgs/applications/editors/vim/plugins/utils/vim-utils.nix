@@ -218,7 +218,7 @@ let
             paths = allGrammars;
           };
 
-          allAndOptPluginNames = map (plugin: plugin.pname) (allPlugins ++ opt);
+          allAndOptPluginNames = map (plugin: plugin.pname or null) (allPlugins ++ opt);
 
           packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" (
             if allGrammars != [ ] then allPlugins ++ [ allGrammarsSymlinked ] else allPlugins

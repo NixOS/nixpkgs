@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cudaPackages,
+  replaceVars,
   addDriverRunpath,
 
   # build-system
@@ -15,10 +16,9 @@
   symlinkJoin,
 
   # dependencies
-  cuda-pathfinder,
+  numpy,
 
   # tests
-  numpy,
   pytestCheckHook,
 
   # passthru
@@ -37,6 +37,21 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-uRv27h2b6wXC8oOf5k2KxZ0bUFNvNu6XO05FBbJcU1k=";
   };
+
+  # Apply patch relative to cuda_bindings
+  patchFlags = [ "-p2" ];
+
+  patches = [
+    (replaceVars ./patch-nvidia-libs-paths.patch {
+      libcudart = lib.getLib cudaPackages.cuda_cudart;
+      libcufile = lib.getLib cudaPackages.libcufile;
+      libnvfatbin = lib.getLib cudaPackages.libnvfatbin;
+      libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
+      libnvml = addDriverRunpath.driverLink;
+      libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
+      libnvvm = "${cudaPackages.cuda_nvcc}/nvvm";
+    })
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/cuda_bindings";
 
@@ -90,15 +105,25 @@ buildPythonPackage (finalAttrs: {
     cudaPackages.libcufile # cufile.h
   ];
 
+  pythonRemoveDeps = [
+    # We circumvent cuda_pathfinder to localize nvidia libs with patches
+    "cuda-pathfinder"
+  ];
   dependencies = [
-    cuda-pathfinder
+    # Not explicitly listed as a dependency, but is required at import time
+    numpy
   ];
 
   pythonImportsCheck = [
     "cuda"
-    "cuda.cuda"
-    "cuda.cudart"
-    "cuda.nvrtc"
+    "cuda.bindings.cufile"
+    "cuda.bindings.driver"
+    "cuda.bindings.nvfatbin"
+    "cuda.bindings.nvjitlink"
+    "cuda.bindings.nvml"
+    "cuda.bindings.nvrtc"
+    "cuda.bindings.nvvm"
+    "cuda.bindings.runtime"
   ];
 
   preCheck = ''
@@ -106,7 +131,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    numpy
     pytestCheckHook
   ];
 
@@ -121,6 +145,24 @@ buildPythonPackage (finalAttrs: {
     #
     # Ideally, we should transition to cuda 13 across the whole nixpkgs tree.
     "tests/test_nvjitlink.py"
+  ];
+
+  disabledTests = [
+    # sysfs cpu topology is not available in the sandbox, causing:
+    #   cuda.bindings.nvml.UnknownError: Unknown Error
+    #   hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
+    "test_device_get_cpu_affinity_within_scope"
+    "test_device_get_memory_affinity"
+
+    # Requires the nvidia_fs kernel module (GPUDirect Storage), causing:
+    #   cuda.bindings.cufile.cuFileError: NVFS_SETUP_ERROR (5033): NVFS driver initialization error
+    "test_buf_register_already_registered"
+    "test_buf_register_host_memory"
+    "test_buf_register_invalid_flags"
+    "test_buf_register_large_buffer"
+    "test_buf_register_multiple_buffers"
+    "test_buf_register_simple"
+    "test_driver_open"
   ];
 
   # Tests need access to a GPU

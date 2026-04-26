@@ -278,6 +278,21 @@ rec {
       attr ? ${name} && !(hasPrefix "@" attr.${name})
     ) "Systemd ${group} field `${name}' is not a systemd credential";
 
+  assertRouteMetricOrTriple =
+    name: group: attr:
+    let
+      isMetric = n: 0 <= n && 4294967295 >= n;
+
+      parts = splitString ":" attr.${name};
+      partsValid =
+        length parts == 3 && all (p: (match "[0-9]+" p) != null && isMetric (toIntBase10 p)) parts;
+      valid = (isInt attr.${name} && isMetric attr.${name}) || partsValid;
+    in
+    optional (attr ? ${name} && !valid) (
+      "Systemd ${group} field `${name}' must either be an integer in the range [0,4294967295]"
+      + " or a string containing three integers separated with `:`"
+    );
+
   checkUnitConfig =
     group: checks: attrs:
     let

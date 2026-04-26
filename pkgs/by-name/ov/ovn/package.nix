@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "26.03.0";
+  version = "26.03.1";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jw9SRDu2QqgMqApwTYcZUwNAq60LISb7OJJLDS46bJE=";
+    hash = "sha256-m2YEFyIBrXUo4mxdDJ9bgVeWUxefi9muJ9iGtnq3bgs=";
     fetchSubmodules = true;
   };
 

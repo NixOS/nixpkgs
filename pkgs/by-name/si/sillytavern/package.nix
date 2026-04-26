@@ -1,7 +1,6 @@
 {
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   lib,
 }:
 buildNpmPackage (finalAttrs: {
@@ -17,9 +16,6 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-BE8B7yALOi5WLWHAvSPC2lUCgAFjUCOUMc4Ru2RBdJM=";
 
   dontNpmBuild = true;
-
-  # https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
 
   # These dirs are not installed automatically.
   # And if they were not in place, the app would try to create them at runtime, which is of course impossible to achieve.

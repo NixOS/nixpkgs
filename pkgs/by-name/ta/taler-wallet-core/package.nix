@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
-    fetcherVersion = 1;
-    hash = "sha256-jwoSvqE0hqRxu76vDtUOpZxvi4SsmKukfpmp5G6ZV/I=";
+    fetcherVersion = 3;
+    hash = "sha256-a1ym/UpUufUPTGL3dozZ9Jb0eX1XVB7Hahek25eLvc4=";
   };
 
   buildInputs = [ nodejs_20 ];
@@ -89,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   # After the pnpm configure, we need to build the binaries of all instances
   # of better-sqlite3. It has a native part that it wants to build using a
   # script which is disallowed.
-  # Adapted from mkYarnModules.
   preBuild = ''
     for f in $(find -path '*/node_modules/better-sqlite3' -type d); do
       (cd "$f" && (

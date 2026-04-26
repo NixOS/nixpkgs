@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.8.6";
+  version = "0.9.0";
 in
 buildGoModule rec {
   inherit version;
@@ -18,12 +18,12 @@ buildGoModule rec {
     owner = "AnalogJ";
     repo = "scrutiny";
     tag = "v${version}";
-    hash = "sha256-0NgAdgtlsAetXfFqJdYpvzEXL4Ibh4yzAjOaOFoMvrs=";
+    hash = "sha256-N6CYVhdA0BWewGUxyHtkW1ZFDGBYI7QfUo5er7xRcFw=";
   };
 
   subPackages = "collector/cmd/collector-metrics";
 
-  vendorHash = "sha256-4qjKGjCvB0ggf6Cda7LfMeqbbBbhGcxB2ZfymUhajq8=";
+  vendorHash = "sha256-fyHWy1TwwzFMIFzwilu4osfl/iI+2KqI6Bjr1UYUS68=";
 
   nativeBuildInputs = [ makeWrapper ];
 

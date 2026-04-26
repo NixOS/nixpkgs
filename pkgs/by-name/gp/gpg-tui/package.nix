@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpg-tui";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qGm0eHpVFGn8tNdEnmQ4oIfjCxyixMFYdxih7pHvGH0=";
+    hash = "sha256-DTVtMwKAZjPwT6c7FYoaT12Axoz3j1cMFKjDDsaHyjk=";
   };
 
-  cargoHash = "sha256-XdT/6N7CJJ8LY0KmkO6PuRdnq1FZvbZrGhky1hmyr2Y=";
+  cargoHash = "sha256-d2PYJajDKukwDERSjQcPSJaYbZDftNLBYEXq+7ZdlKw=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config

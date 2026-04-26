@@ -227,6 +227,12 @@ assertNoAdditions {
     checkInputs = [ self.astrocore ];
   };
 
+  async-nvim = super.async-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "docgen"
+    ];
+  };
+
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];
@@ -1579,6 +1585,17 @@ assertNoAdditions {
 
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
+  };
+
+  just-nvim = super.just-nvim.overrideAttrs {
+    checkInputs = with self; [
+      fidget-nvim
+      nvim-notify
+      telescope-nvim
+    ];
+    dependencies = with self; [
+      plenary-nvim
+    ];
   };
 
   kanagawa-paper-nvim = super.kanagawa-paper-nvim.overrideAttrs {
@@ -3228,7 +3245,7 @@ assertNoAdditions {
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [
-      plenary-nvim
+      async-nvim
     ];
   };
 
