@@ -89,7 +89,7 @@ class FetchConfig:
 
 def make_request(url: str, token=None) -> urllib.request.Request:
     headers = {}
-    if token is not None:
+    if token:
         headers["Authorization"] = f"token {token}"
     return urllib.request.Request(url, headers=headers)
 
@@ -140,7 +140,7 @@ class Repo:
         self._branch = branch
         # Redirect is the new Repo to use
         self.redirect: "Repo | None" = None
-        self.token: str | None = "dummy_token"
+        self.token: str | None = None
 
     @property
     def name(self):
