@@ -26,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     libxpm
     libssh
-    libsForQt5.phonon
     libsForQt5.qtbase
     libsForQt5.qtsvg
     libsForQt5.qttools
