@@ -3233,7 +3233,7 @@ with pkgs;
     lua = lua5_4;
   };
 
-  rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
+  rsibreak = kdePackages.callPackage ../applications/misc/rsibreak { };
 
   rubocop = rubyPackages.rubocop;
 
