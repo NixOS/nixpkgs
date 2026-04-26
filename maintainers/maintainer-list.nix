@@ -25927,6 +25927,12 @@
     githubId = 4061736;
     name = "Severen Redwood";
   };
+  ssnoer = {
+    email = "ssnoer@proton.me";
+    github = "Seba244c";
+    githubId = 23051740;
+    name = "Sebastian August Snoer";
+  };
   sstef = {
     email = "stephane@nix.frozenid.net";
     github = "haskelious";
