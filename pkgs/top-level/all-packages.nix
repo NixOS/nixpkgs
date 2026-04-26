@@ -2634,7 +2634,6 @@ with pkgs;
 
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
-  ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
 
   limine-full = limine.override { enableAll = true; };
 
