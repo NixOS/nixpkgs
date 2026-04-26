@@ -61,31 +61,28 @@ let
   '';
 
   bootstrapTools =
-    derivation (
-      {
-        inherit system;
+    derivation {
+      inherit system;
 
-        name = "bootstrap-tools";
-        builder = "${bootstrapFiles.unpack}/bin/bash";
+      name = "bootstrap-tools";
+      builder = "${bootstrapFiles.unpack}/bin/bash";
 
-        args = [
-          "${bootstrapFiles.unpack}/bootstrap-tools-unpack.sh"
-          bootstrapFiles.bootstrapTools
-        ];
+      args = [
+        "${bootstrapFiles.unpack}/bootstrap-tools-unpack.sh"
+        bootstrapFiles.bootstrapTools
+      ];
 
-        PATH = lib.makeBinPath [
-          (placeholder "out")
-          bootstrapFiles.unpack
-        ];
+      PATH = lib.makeBinPath [
+        (placeholder "out")
+        bootstrapFiles.unpack
+      ];
 
-        __impureHostDeps = commonImpureHostDeps;
-      }
-      // lib.optionalAttrs config.contentAddressedByDefault {
-        __contentAddressed = true;
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-      }
-    )
+      __impureHostDeps = commonImpureHostDeps;
+
+      ${if config.contentAddressedByDefault then "__contentAddressed" else null} = true;
+      ${if config.contentAddressedByDefault then "outputHashAlgo" else null} = "sha256";
+      ${if config.contentAddressedByDefault then "outputHashMode" else null} = "recursive";
+    }
     // {
       passthru.isFromBootstrapFiles = true;
     };
