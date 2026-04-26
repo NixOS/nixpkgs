@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cog";
     homepage = "https://github.com/oknozor/cocogitto";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ gs-101 ];
   };
 })
