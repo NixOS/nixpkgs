@@ -871,20 +871,18 @@ let
           v
         ) env';
 
-      # Fixed-output derivations may not reference other paths, which means that
-      # for a fixed-output derivation, the corresponding inputDerivation should
-      # *not* be fixed-output. To achieve this we simply delete the attributes that
-      # would make it fixed-output.
-      fixedOutputRelatedAttrs = [
+      attrsToRemove = [
+        # Fixed-output derivations may not reference other paths, which means that
+        # for a fixed-output derivation, the corresponding inputDerivation should
+        # *not* be fixed-output. To achieve this we simply delete the attributes that
+        # would make it fixed-output.
         "outputHashAlgo"
         "outputHash"
         "outputHashMode"
-      ];
 
-      # inputDerivation produces the inputs; not the outputs, so any
-      # restrictions on what used to be the outputs don't serve a purpose
-      # anymore.
-      outputCheckAttrs = [
+        # inputDerivation produces the inputs; not the outputs, so any
+        # restrictions on what used to be the outputs don't serve a purpose
+        # anymore.
         "allowedReferences"
         "allowedRequisites"
         "disallowedReferences"
@@ -902,7 +900,7 @@ let
         # needed to enter a nix-shell with
         #   nix-build shell.nix -A inputDerivation
         inputDerivation = derivation (
-          removeAttrs derivationArg (fixedOutputRelatedAttrs ++ outputCheckAttrs)
+          removeAttrs derivationArg attrsToRemove
           // {
             # Add a name in case the original drv didn't have one
             name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
