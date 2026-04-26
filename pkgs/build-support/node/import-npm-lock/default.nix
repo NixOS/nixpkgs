@@ -32,9 +32,12 @@ let
       if module ? "resolved" && module.resolved != null then
         (
           let
-            # Parse scheme from URL
-            mUrl = match "(.+)://(.+)" module.resolved;
+            # Parse scheme from URL.
+            mUrl = match "(.+)://(.+)/(.+)" module.resolved;
             scheme = elemAt mUrl 0;
+            host = elemAt mUrl 1;
+            path = elemAt mUrl 2;
+            url = if host == "registry.npmjs.org" then "mirror://npm/${path}" else module.resolved;
           in
           (
             if mUrl == null then
@@ -47,20 +50,19 @@ let
             else if (scheme == "http" || scheme == "https") then
               (fetchurl (
                 {
-                  url = module.resolved;
+                  inherit url;
                   hash = module.integrity;
                 }
                 // fetcherOpts
               ))
             else if lib.hasPrefix "git" module.resolved then
               let
-                url = elemAt mUrl 1;
-                urlParts = lib.splitString "#" url;
-                commit = if builtins.length urlParts == 2 then elemAt urlParts 1 else null;
+                pathParts = lib.splitString "#" path;
+                commit = if builtins.length pathParts == 2 then elemAt pathParts 1 else null;
               in
               (fetchGit (
                 {
-                  url = "${scheme}://${elemAt urlParts 0}";
+                  url = "${scheme}://${host}/${elemAt pathParts 0}";
                 }
                 // lib.optionalAttrs (commit != null) {
                   rev = commit;

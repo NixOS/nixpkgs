@@ -21,7 +21,23 @@ const exec = async (...args) => {
   return res
 }
 
+// Expand this with yarn and jsr in the future?
+const getMirrorsFromEnv = () => {
+  return {
+    "registry.npmjs.org": process.env.NIX_MIRRORS_npm,
+  };
+}
+
 const downloadFileHttps = (fileName, url, expectedHash, verbose, hashType = 'sha1') => {
+  const mirrors = getMirrorsFromEnv();
+  const parsedUrl = new URL(url);
+  const mirror = mirrors[parsedUrl.hostname];
+
+  if (mirror) {
+    const newUrl = new URL(`${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`, mirror);
+    url = newUrl.toString();
+  }
+
   return new Promise((resolve, reject) => {
     const get = (url, redirects = 0) => https.get(url, (res) => {
       if(redirects > 10) {

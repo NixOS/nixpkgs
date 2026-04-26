@@ -11,10 +11,7 @@ use std::{
 };
 use url::Url;
 
-fn warn_unresolved_packages(
-    packages_without_resolved: &[(String, Package)],
-    total_count: usize,
-) {
+fn warn_unresolved_packages(packages_without_resolved: &[(String, Package)], total_count: usize) {
     let missing_count = packages_without_resolved.len();
     if missing_count == 0 {
         return;
