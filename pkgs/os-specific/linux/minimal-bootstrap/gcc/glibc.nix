@@ -133,11 +133,20 @@ bash.runCommand "${pname}-${version}"
       --host=${hostPlatform.config} \
       --with-native-system-header-dir=${glibc}/include \
       --enable-languages=c,c++ \
+      --enable-checking=release \
       --disable-bootstrap \
       --disable-dependency-tracking \
       --disable-libsanitizer \
+      --disable-libssp \
+      --disable-libgomp \
+      --disable-libquadmath \
+      --disable-libitm \
+      --disable-libvtv \
+      --disable-libatomic \
+      --disable-libstdcxx-pch \
       --disable-lto \
       --disable-multilib \
+      --disable-nls \
       --disable-plugin \
       --with-specs="%x{-dynamic-linker=${glibc}/lib/${linkerName}} %x{-L${glibc}/lib/} -B${glibc}/lib"
 

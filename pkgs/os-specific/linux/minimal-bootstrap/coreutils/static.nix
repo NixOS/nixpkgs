@@ -32,6 +32,7 @@ let
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
     "--disable-dependency-tracking"
+    "--disable-nls"
     # libstdbuf.so fails in static builds
     "--enable-no-install-program=stdbuf"
     "--enable-single-binary=symlinks"

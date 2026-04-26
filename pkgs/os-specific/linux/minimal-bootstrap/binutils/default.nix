@@ -40,6 +40,7 @@ let
     "--host=${hostPlatform.config}"
     "--with-sysroot=/"
     "--disable-dependency-tracking"
+    "--disable-nls"
     "--enable-deterministic-archives"
     # depends on bison
     "--disable-gprofng"

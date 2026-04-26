@@ -134,11 +134,20 @@ bash.runCommand "${pname}-${version}"
       --with-native-system-header-dir=/include \
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
+      --enable-checking=release \
       --disable-bootstrap \
       --disable-dependency-tracking \
       --disable-libsanitizer \
+      --disable-libssp \
+      --disable-libgomp \
+      --disable-libquadmath \
+      --disable-libitm \
+      --disable-libvtv \
+      --disable-libatomic \
+      --disable-libstdcxx-pch \
       --disable-lto \
       --disable-multilib \
+      --disable-nls \
       --disable-plugin
 
     # Build

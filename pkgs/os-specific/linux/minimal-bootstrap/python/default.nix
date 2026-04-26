@@ -88,7 +88,10 @@ bash.runCommand "${pname}-${version}"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
-      --host=${hostPlatform.config}
+      --host=${hostPlatform.config} \
+      --disable-test-modules \
+      --without-ensurepip \
+      --without-static-libpython
 
     # Build
     make -j $NIX_BUILD_CORES

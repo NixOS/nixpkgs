@@ -40,6 +40,7 @@ let
     "--host=${hostPlatform.config}"
 
     "--disable-dependency-tracking"
+    "--disable-nls"
 
     "--with-sysroot=/"
     "--enable-deterministic-archives"
