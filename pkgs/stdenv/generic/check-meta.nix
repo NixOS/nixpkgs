@@ -379,6 +379,7 @@ let
       teamsPosition = any;
 
       identifiers = attrs;
+      generated = bool;
     };
 
   metaInvalid = if config.checkMeta then meta: !metaType.verify meta else meta: false;
