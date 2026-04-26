@@ -3103,18 +3103,6 @@ with haskellLib;
   # https://github.com/phadej/zinza/pull/28
   zinza = dontCheck super.zinza;
 
-  # doctests in 0.3.2.1 fail/infinitely loop
-  # https://github.com/robertmassaioli/range/issues/1
-  range = lib.pipe super.range [
-    (warnAfterVersion "0.3.2.1")
-    (overrideCabal {
-      version = "0.3.2.2";
-      sha256 = "sha256-BQ4WFCookJ8/kXk9mhzDaIWpun1X/gNk7bShs1vlWTg=";
-      editedCabalFile = null;
-      revision = null;
-    })
-  ];
-
   pdftotext = overrideCabal (drv: {
     jailbreak = true;
     postPatch = ''
