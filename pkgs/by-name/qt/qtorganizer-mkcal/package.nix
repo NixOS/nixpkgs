@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkcal
   ]
   ++ (with libsForQt5; [
-    kcalendarcore
+    __internalKF5.kcalendarcore
     qtbase
     qtpim
   ]);

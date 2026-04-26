@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = with libsForQt5; [
-    kcalendarcore
     kdePackages.extra-cmake-modules
+    __internalKF5.kcalendarcore
     qtbase
     qtpim
     timed

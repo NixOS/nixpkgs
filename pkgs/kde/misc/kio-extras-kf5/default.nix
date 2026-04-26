@@ -34,8 +34,11 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = with libsForQt5; [
-    qtbase
+  buildInputs =
+    with libsForQt5;
+    with libsForQt5.__internalKF5;
+    [
+      qtbase
 
       kactivities
       kactivities-stats
