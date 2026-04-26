@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "rctclient";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "svalouch";
     repo = "python-rctclient";
     tag = "v${version}";
-    hash = "sha256-QPla5h8wSM9Ynj44Uwc1a2yAnu8TXbyBWzVHQeW6jnI=";
+    hash = "sha256-f85ETzuZpOgnWpiLipLtAjOPn63yniCffWdPLyCEC3w=";
   };
 
   build-system = [ setuptools ];
