@@ -98,4 +98,21 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install
+
+    # Remove lib-dynload extension modules not needed for glibc's build scripts.
+    # glibc uses Python only for scripts that import: os, re, subprocess, argparse,
+    # pathlib, collections, tempfile.  Following the import chain:
+    #   subprocess -> selectors -> math, select, fcntl, _posixsubprocess
+    #   pathlib -> grp
+    #   tempfile -> random -> _random, bisect -> _bisect
+    # Everything else in lib-dynload is dead weight in the bootstrap context.
+    find $out/lib/python*/lib-dynload -name '*.so' \
+      ! -name '_bisect*' \
+      ! -name '_posixsubprocess*' \
+      ! -name '_random*' \
+      ! -name 'fcntl*' \
+      ! -name 'grp*' \
+      ! -name 'math*' \
+      ! -name 'select*' \
+      -delete
   ''

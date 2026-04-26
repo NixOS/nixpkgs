@@ -113,4 +113,8 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install
+
+    # gprof/addr2line/elfedit + man pages are unused downstream.
+    rm -f $out/bin/gprof $out/bin/addr2line $out/bin/elfedit
+    rm -rf $out/share/info $out/share/man
   ''

@@ -155,4 +155,7 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    # libstdc++ gdb pretty-printers + man pages are unused downstream.
+    rm -rf $out/share/gcc-*/python $out/share/man $out/share/info
   ''

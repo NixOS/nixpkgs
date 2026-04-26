@@ -78,4 +78,7 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    # Remove documentation not needed in the bootstrap chain.
+    rm -rf $out/share/info $out/share/man
   ''
