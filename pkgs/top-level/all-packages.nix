@@ -10094,13 +10094,12 @@ with pkgs;
   quasselClient = quassel.override {
     monolithic = false;
     client = true;
-    tag = "-client-kf5";
+    tag = "-client-qt5";
   };
 
   quasselDaemon = quassel.override {
     monolithic = false;
     enableDaemon = true;
-    withKDE = false;
     tag = "-daemon-qt5";
   };
 
