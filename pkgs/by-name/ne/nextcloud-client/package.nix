@@ -5,7 +5,6 @@
   qt6Packages,
   stdenv,
   cmake,
-  extra-cmake-modules,
   inotify-tools,
   kdePackages,
   libcloudproviders,
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     librsvg
     sphinx
     qt6Packages.wrapQtAppsHook

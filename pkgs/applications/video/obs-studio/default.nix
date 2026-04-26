@@ -62,7 +62,7 @@
   qrcodegencpp,
   simde,
   nix-update-script,
-  extra-cmake-modules,
+  kdePackages,
 }:
 
 let
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
   ]
   ++ optional scriptingSupport swig
   ++ optional cudaSupport autoAddDriverRunpath;

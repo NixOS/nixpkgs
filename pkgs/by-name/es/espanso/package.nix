@@ -4,7 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
-  extra-cmake-modules,
+  kdePackages,
   dbus,
   libx11,
   libxcb,
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-E3z8NfKZiQsaYqDKXSIltETa4cSL0ShHnUMymjH5pas=";
 
   nativeBuildInputs = [
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     makeWrapper
     wxwidgets_3_2

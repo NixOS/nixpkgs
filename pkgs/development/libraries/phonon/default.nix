@@ -7,7 +7,7 @@
   libGL,
   pkg-config,
   libpulseaudio,
-  extra-cmake-modules,
+  kdePackages,
   qtbase,
   qttools,
   debug ? false,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
   ];
 
   outputs = [
