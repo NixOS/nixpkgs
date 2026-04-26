@@ -96,48 +96,44 @@ let
       overrideAttrs =
         f0:
         makeDerivationExtensible (
-          (
-            overlay: f: final:
-            let
-              prev = f final;
-              thisOverlay = overlay final prev;
-              pos = builtins.unsafeGetAttrPos "version" thisOverlay;
-            in
-            lib.warnIf
-              (
-                prev ? src
-                && thisOverlay ? version
-                && prev ? version
-                # We could check that the version is actually distinct, but that
-                # would probably just delay the inevitable, or preserve tech debt.
-                # && prev.version != thisOverlay.version
-                && !(thisOverlay ? src)
-                && !(thisOverlay.__intentionallyOverridingVersion or false)
-              )
-              ''
-                ${
-                  args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
-                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                  toString pos.line or "<unknown line>"
-                }:${toString pos.column or "<unknown column>"}.
+          final:
+          let
+            prev = rattrs final;
+            thisOverlay = lib.toExtension f0 final prev;
+            pos = builtins.unsafeGetAttrPos "version" thisOverlay;
+          in
+          lib.warnIf
+            (
+              prev ? src
+              && thisOverlay ? version
+              && prev ? version
+              # We could check that the version is actually distinct, but that
+              # would probably just delay the inevitable, or preserve tech debt.
+              # && prev.version != thisOverlay.version
+              && !(thisOverlay ? src)
+              && !(thisOverlay.__intentionallyOverridingVersion or false)
+            )
+            ''
+              ${
+                args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
+              } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                toString pos.line or "<unknown line>"
+              }:${toString pos.column or "<unknown column>"}.
 
-                This is most likely not what you want. In order to properly change the version of a package, override
-                both the `version` and `src` attributes:
+              This is most likely not what you want. In order to properly change the version of a package, override
+              both the `version` and `src` attributes:
 
-                hello.overrideAttrs (oldAttrs: rec {
-                  version = "1.0.0";
-                  src = pkgs.fetchurl {
-                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
-                    hash = "...";
-                  };
-                })
+              hello.overrideAttrs (oldAttrs: rec {
+                version = "1.0.0";
+                src = pkgs.fetchurl {
+                  url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                  hash = "...";
+                };
+              })
 
-                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-              ''
-              (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
-          )
-            (lib.toExtension f0)
-            rattrs
+              (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+            ''
+            (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
         );
 
       finalPackage = mkDerivationSimple overrideAttrs args;
