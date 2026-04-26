@@ -7,7 +7,7 @@
   qtbase,
   qtx11extras,
   wayland,
-  plasma-wayland-protocols,
+  kdePackages,
 }:
 
 mkDerivation {
@@ -24,7 +24,7 @@ mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    plasma-wayland-protocols
+    kdePackages.plasma-wayland-protocols
   ];
   propagatedBuildInputs = [ qtbase ];
 
