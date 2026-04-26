@@ -589,19 +589,19 @@ let
           __ignoreNulls = true;
           inherit __structuredAttrs strictDeps;
 
-          depsBuildBuild = elemAt (elemAt dependencies 0) 0;
-          nativeBuildInputs = elemAt (elemAt dependencies 0) 1;
-          depsBuildTarget = elemAt (elemAt dependencies 0) 2;
-          depsHostHost = elemAt (elemAt dependencies 1) 0;
+          depsBuildBuild = head (head dependencies);
+          nativeBuildInputs = elemAt (head dependencies) 1;
+          depsBuildTarget = elemAt (head dependencies) 2;
+          depsHostHost = head (elemAt dependencies 1);
           buildInputs = elemAt (elemAt dependencies 1) 1;
-          depsTargetTarget = elemAt (elemAt dependencies 2) 0;
+          depsTargetTarget = head (elemAt dependencies 2);
 
-          depsBuildBuildPropagated = elemAt (elemAt propagatedDependencies 0) 0;
-          propagatedNativeBuildInputs = elemAt (elemAt propagatedDependencies 0) 1;
-          depsBuildTargetPropagated = elemAt (elemAt propagatedDependencies 0) 2;
-          depsHostHostPropagated = elemAt (elemAt propagatedDependencies 1) 0;
+          depsBuildBuildPropagated = head (head propagatedDependencies);
+          propagatedNativeBuildInputs = elemAt (head propagatedDependencies) 1;
+          depsBuildTargetPropagated = elemAt (head propagatedDependencies) 2;
+          depsHostHostPropagated = head (elemAt propagatedDependencies 1);
           propagatedBuildInputs = elemAt (elemAt propagatedDependencies 1) 1;
-          depsTargetTargetPropagated = elemAt (elemAt propagatedDependencies 2) 0;
+          depsTargetTargetPropagated = head (elemAt propagatedDependencies 2);
 
           # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags =
