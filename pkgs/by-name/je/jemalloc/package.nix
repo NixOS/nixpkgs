@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jemalloc";
     repo = "jemalloc";
     tag = finalAttrs.version;
-    hash = "sha256-krm4ACTTYg8AltmxItWwECZuMGmpXQ7VVM3f4OqMMxc=";
+    hash = "sha256-uGQppR2LS/Hhx4eWnavPDW3tzMyI1Df4XYrWEMQwBuw=";
   };
 
   patches = [
