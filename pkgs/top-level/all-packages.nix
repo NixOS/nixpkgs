@@ -11693,10 +11693,6 @@ with pkgs;
     }
   );
 
-  ### SCIENCE/ROBOTICS
-
-  apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
-
   ### MISC
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
