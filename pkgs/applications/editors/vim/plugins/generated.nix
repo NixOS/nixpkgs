@@ -7306,6 +7306,32 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  isabelle-lsp-nvim = buildVimPlugin {
+    pname = "isabelle-lsp.nvim";
+    version = "0-unstable-2025-12-02";
+    src = fetchFromGitHub {
+      owner = "Treeniks";
+      repo = "isabelle-lsp.nvim";
+      rev = "3601b59d77cc4998de29f966ded7d4d959318be2";
+      hash = "sha256-2SijIavooMFft9S/fMcH/YE77wctAP0Oneg/YAR9+LM=";
+    };
+    meta.homepage = "https://github.com/Treeniks/isabelle-lsp.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  isabelle-syn-nvim = buildVimPlugin {
+    pname = "isabelle-syn.nvim";
+    version = "0-unstable-2024-05-15";
+    src = fetchFromGitHub {
+      owner = "Treeniks";
+      repo = "isabelle-syn.nvim";
+      rev = "114b06dc34edf1707be7249b5a3815733e68d4c9";
+      hash = "sha256-f04jyExUwos9w89IeKbRdRMtWIsQYe0McAUoijq7mCA=";
+    };
+    meta.homepage = "https://github.com/Treeniks/isabelle-syn.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   iswap-nvim = buildVimPlugin {
     pname = "iswap.nvim";
     version = "0-unstable-2026-03-25";
