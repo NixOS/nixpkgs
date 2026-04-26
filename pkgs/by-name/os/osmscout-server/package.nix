@@ -51,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libsForQt5.kirigami2
     libsForQt5.qtquickcontrols2
     libsForQt5.qtlocation
     valhalla
@@ -69,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qmakeFlags = [
-    "SCOUT_FLAVOR=kirigami" # Choose to build the kirigami UI variant
+    "SCOUT_FLAVOR=qtcontrols"
     "CONFIG+=disable_mapnik" # Disable the optional mapnik backend
   ];
 
