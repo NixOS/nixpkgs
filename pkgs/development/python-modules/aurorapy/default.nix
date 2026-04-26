@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aurorapy";
-  version = "0.2.7";
+  version = "0.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "energievalsabbia";
     repo = "aurorapy";
     rev = version;
-    hash = "sha256-rGwfGq3zdoG9NCGqVN29Q4bWApk5B6CRdsW9ctWgOec=";
+    hash = "sha256-bc5i2x35sZXkCSJraTqX3Zc5B9eKL1qDh97/7ixyHLY=";
   };
 
   postPatch = ''
