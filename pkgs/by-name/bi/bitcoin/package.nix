@@ -6,8 +6,7 @@
   cmake,
   pkg-config,
   installShellFiles,
-  autoSignDarwinBinariesHook,
-  wrapQtAppsHook ? null,
+  darwin,
   boost,
   libevent,
   zeromq,
@@ -16,12 +15,11 @@
   qrencode,
   libsystemtap,
   capnproto,
-  qtbase ? null,
-  qttools ? null,
   python3,
   versionCheckHook,
   nixosTests,
-  withGui,
+  withGui ? true,
+  qt6Packages,
   withWallet ? true,
   enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   gnupg,
@@ -43,6 +41,9 @@ let
     url = "https://raw.githubusercontent.com/bitcoin-core/packaging/c2e5f3e20a8093ea02b73cbaf113bc0947b4140e/debian/bitcoin-qt.desktop";
     sha256 = "0cpna0nxcd1dw3nnzli36nf9zj28d2g9jf5y0zl9j18lvanvniha";
   };
+
+  inherit (darwin) autoSignDarwinBinariesHook;
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
@@ -65,12 +66,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ]
-  ++ lib.optionals withGui [ wrapQtAppsHook ];
+  ++ lib.optionals withGui [ qt6Packages.wrapQtAppsHook ];
 
   buildInputs = [
     boost
     libevent
-    zeromq
+    (zeromq.override {
+      enableCurve = false;
+      enableDrafts = false;
+      libsodium = null;
+    })
     zlib
     capnproto
   ]
@@ -78,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withWallet [ sqlite ]
   ++ lib.optionals withGui [
     qrencode
-    qtbase
-    qttools
+    qt6Packages.qtbase
+    qt6Packages.qttools
   ];
 
   preUnpack =
@@ -178,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
   # See also https://github.com/NixOS/nixpkgs/issues/24256
-  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 

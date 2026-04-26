@@ -10808,16 +10808,6 @@ with pkgs;
     withGui = false;
   };
 
-  bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
-    withGui = true;
-    zeromq = zeromq.override {
-      enableCurve = false;
-      enableDrafts = false;
-      libsodium = null;
-    };
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   bitcoind = bitcoin.override {
     withGui = false;
   };
