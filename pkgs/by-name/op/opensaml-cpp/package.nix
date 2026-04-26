@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromCodeberg,
   autoreconfHook,
   pkg-config,
   boost,
@@ -17,10 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "opensaml-cpp";
   version = "3.0.1";
 
-  src = fetchgit {
-    url = "https://git.shibboleth.net/git/cpp-opensaml.git";
-    rev = finalAttrs.version;
-    sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
+  src = fetchFromCodeberg {
+    owner = "Shibboleth";
+    repo = "cpp-opensaml";
+    tag = finalAttrs.version;
+    hash = "sha256-iBfKM40SzCiDGHacnxc7zZdvOYbCy9NEWjhPzCvWQ1c=";
   };
 
   buildInputs = [
