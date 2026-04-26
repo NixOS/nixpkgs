@@ -2631,7 +2631,7 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
+  kronometer = kdePackages.callPackage ../tools/misc/kronometer { };
 
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
