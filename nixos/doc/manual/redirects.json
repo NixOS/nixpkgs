@@ -2796,5 +2796,35 @@
   ],
   "module-contracts": [
     "index.html#module-contracts"
+  ],
+  "contracts": [
+    "index.html#contracts"
+  ],
+  "contracts-concepts": [
+    "index.html#contracts-concepts"
+  ],
+  "contracts-consumers": [
+    "index.html#contracts-consumers"
+  ],
+  "contracts-providers": [
+    "index.html#contracts-providers"
+  ],
+  "contracts-provider-selection": [
+    "index.html#contracts-provider-selection"
+  ],
+  "contracts-new-type": [
+    "index.html#contracts-new-type"
+  ],
+  "contracts-chaining": [
+    "index.html#contracts-chaining"
+  ],
+  "contracts-cross-node": [
+    "index.html#contracts-cross-node"
+  ],
+  "contracts-renames": [
+    "index.html#contracts-renames"
+  ],
+  "contracts-reference": [
+    "index.html#contracts-reference"
   ]
 }
