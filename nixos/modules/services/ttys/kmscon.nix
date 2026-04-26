@@ -156,7 +156,9 @@ in
 
     # tty1 is special: logind does not spawn autovt@tty1, it expects a static
     # pull-in via getty.target. With getty@ suppressed, we must replace it.
-    systemd.services."kmsconvt@tty1".wantedBy = [ "getty.target" ];
+    systemd.services."getty.target".wants = lib.mkIf (!config.services.displayManager.enable) [
+      "kmsconvt@tty1.service"
+    ];
 
     systemd.suppressedSystemUnits = [ "getty@.service" ];
 
