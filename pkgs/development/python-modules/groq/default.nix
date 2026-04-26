@@ -20,7 +20,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "groq";
   version = "1.2.0";
   pyproject = true;
@@ -28,14 +28,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "groq";
     repo = "groq-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PisqKpVM2KAlGgZDcCoFJhoib7WhuM1AkJOGYVimW0U=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.26.3" \
-      "hatchling>=1.26.3"
+      --replace-fail "hatchling==1.26.3" "hatchling>=1.26.3"
   '';
 
   build-system = [
@@ -67,7 +66,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "groq" ];
 
@@ -82,11 +81,11 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Groq API";
     homepage = "https://github.com/groq/groq-python";
-    changelog = "https://github.com/groq/groq-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/groq/groq-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
       sarahec
     ];
   };
-}
+})
