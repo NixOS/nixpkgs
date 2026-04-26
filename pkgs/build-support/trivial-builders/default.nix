@@ -98,6 +98,15 @@ rec {
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
   writeTextFile =
+    lib.extendMkDerivation {
+      constructDrv = stdenvNoCC.mkDerivation;
+
+      excludeDrvArgNames = [
+        "derivationArgs"
+      ];
+
+      extendDrvArgs =
+        finalAttrs:
     {
       name,
       text,
@@ -111,9 +120,6 @@ rec {
       derivationArgs ? { },
       pos ? builtins.unsafeGetAttrPos "name" args,
     }@args:
-
-    stdenvNoCC.mkDerivation (
-      finalAttrs:
       {
         inherit
           pos
@@ -167,8 +173,11 @@ rec {
         "passAsFile"
         "meta"
         "passthru"
-      ]
-    );
+      ];
+
+      # `writeTextFile`'s set pattern doesn't have ellipses.
+      inheritFunctionArgs = false;
+    };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
