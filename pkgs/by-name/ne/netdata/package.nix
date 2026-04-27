@@ -35,7 +35,7 @@
   nixosTests,
   openssl,
   pkg-config,
-  protobuf,
+  protobuf_21,
   replaceVars,
   rustc,
   rustPlatform,
@@ -63,6 +63,11 @@
   withSystemdJournal ? stdenv.hostPlatform.isLinux,
   withSystemdUnits ? stdenv.hostPlatform.isLinux,
 }:
+
+let
+  protobuf = protobuf_21;
+in
+
 stdenv.mkDerivation (
   finalAttrs:
   {

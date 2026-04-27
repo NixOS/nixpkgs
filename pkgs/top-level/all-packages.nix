@@ -2707,9 +2707,6 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
-  netdata = callPackage ../tools/system/netdata {
-    protobuf = protobuf_21;
-  };
   netdataCloud = netdata.override {
     withCloudUi = true;
   };
