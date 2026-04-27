@@ -1399,7 +1399,6 @@ in
   prefect = runTest ./prefect.nix;
   pretalx = runTest ./web-apps/pretalx.nix;
   pretix = runTest ./web-apps/pretix.nix;
-  thunderbird-appointment = runTest ./web-apps/thunderbird-appointment.nix;
   printing-service = runTest {
     imports = [ ./printing.nix ];
     _module.args.socket = false;
@@ -1743,6 +1742,7 @@ in
   test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
   thanos = runTest ./thanos.nix;
   thelounge = handleTest ./thelounge.nix { };
+  thunderbird-appointment = runTest ./web-apps/thunderbird-appointment.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;
   tigervnc = handleTest ./tigervnc.nix { };
   tika = runTest ./tika.nix;

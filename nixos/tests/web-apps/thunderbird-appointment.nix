@@ -1,26 +1,19 @@
-import ./make-test-python.nix (
-  { lib, ... }:
-  {
-    name = "thunderbird-appointment";
-    meta.maintainers = with lib.maintainers; [ ];
+{ lib, ... }:
 
-    nodes.machine =
-      { config, pkgs, ... }:
-      {
-        services.thunderbird-appointment = {
-          enable = true;
-          nginx.enable = false; # test without nginx for simplicity
-          settings = {
-            allowFirstTimeRegister = true;
-            secretKey = "test-secret-for-nixos-test-do-not-use-in-prod";
-            dbUrl = "sqlite:////var/lib/thunderbird-appointment/test.db"; # use sqlite for faster test
-          };
-          database.createLocally = false;
-          redis.createLocally = true;
-        };
+{
+  name = "thunderbird-appointment";
+  meta.maintainers = with lib.maintainers; [ philocalyst ];
 
-        # Allow first-time setup
-        environment.variables.APP_ALLOW_FIRST_TIME_REGISTER = "True";
+  nodes.machine = {
+    virtualisation.memorySize = 2048;
+
+    services.thunderbird-appointment = {
+      enable = true;
+      # A domain is always required, but we skip the nginx
+      # vhost here as the test needs no ACME/DNS!
+      nginx = {
+        enable = false;
+        domain = "appointment.example.com";
       };
       database.createLocally = true;
       redis.createLocally = true;
