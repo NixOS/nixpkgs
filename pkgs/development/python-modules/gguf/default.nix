@@ -59,6 +59,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
+    downloadPage = "https://github.com/ggml-org/llama.cpp/releases";
+    changelog = "https://github.com/ggml-org/llama.cpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mitchmindtree
