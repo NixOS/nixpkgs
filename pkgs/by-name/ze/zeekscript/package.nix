@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
-  version = "1.3.3";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "zeekscript";
     tag = "v${version}";
-    hash = "sha256-uNVmY+yJy/4H/zRGqg68Pop2TcwZgsrT46cdx3bhKIo=";
+    hash = "sha256-icc5mMhl/MK0+0fLYJG07wqWaKKX2QFcpD1IIvdmASw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
