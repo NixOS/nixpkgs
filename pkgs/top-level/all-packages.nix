@@ -2455,7 +2455,7 @@ with pkgs;
 
   gruut = with python3Packages; toPythonApplication gruut;
 
-  gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
+  gruut-ipa = with python3Packages; toPythonApplication gruut-ipa;
 
   gup = callPackage ../development/tools/build-managers/gup { };
 
