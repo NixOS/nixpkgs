@@ -139,7 +139,9 @@ rec {
           destination;
         passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
 
-        buildCommand = ''
+        installPhase = ''
+          runHook preInstall
+
           target=$out$destination
           mkdir -p "$(dirname "$target")"
 
@@ -153,6 +155,11 @@ rec {
             chmod +x "$target"
           fi
 
+          runHook postInstall
+        '';
+
+        buildCommand = ''
+          runPhase installPhase
           eval "$checkPhase"
         '';
 
