@@ -228,7 +228,10 @@ let
 
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags =
-    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or knownHardeningFlags;
+    if stdenvHasCC then
+      (stdenv.cc.defaultHardeningFlags or knownHardeningFlags)
+    else
+      knownHardeningFlags;
   hostSuffixNecessary = hostPlatform != buildPlatform && stdenvHasCC;
   stdenvHostSuffix = "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
