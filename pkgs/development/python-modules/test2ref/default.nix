@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "test2ref";
   version = "1.2.3";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nbiotcloud";
     repo = "test2ref";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-20vE6o8yKphKxlfGo+lBZ1VlKyCVlNawlMYVcj4JAtY=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Testing Against Learned Reference Data";
     homepage = "https://github.com/nbiotcloud/test2ref";
-    changelog = "https://github.com/nbiotcloud/test2ref/releases/tag/${src.tag}";
+    changelog = "https://github.com/nbiotcloud/test2ref/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
