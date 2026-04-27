@@ -11,7 +11,6 @@ let
     isList
     mapAttrs
     optional
-    optionalAttrs
     optionalString
     removeSuffix
     replaceString
@@ -178,21 +177,19 @@ let
             if final.isx86_64 || final.isMips64 || final.isPower64 then "lib64" else "lib"
           else
             null;
-        extensions =
-          optionalAttrs final.hasSharedLibraries {
-            sharedLibrary =
-              if final.isDarwin then
-                ".dylib"
-              else if (final.isWindows || final.isCygwin) then
-                ".dll"
-              else
-                ".so";
-          }
-          // {
-            staticLibrary = if final.isWindows then ".lib" else ".a";
-            library = if final.isStatic then final.extensions.staticLibrary else final.extensions.sharedLibrary;
-            executable = if (final.isWindows || final.isCygwin) then ".exe" else "";
-          };
+        extensions = {
+          staticLibrary = if final.isWindows then ".lib" else ".a";
+          library = if final.isStatic then final.extensions.staticLibrary else final.extensions.sharedLibrary;
+          executable = if (final.isWindows || final.isCygwin) then ".exe" else "";
+
+          ${if final.hasSharedLibraries then "sharedLibrary" else null} =
+            if final.isDarwin then
+              ".dylib"
+            else if (final.isWindows || final.isCygwin) then
+              ".dll"
+            else
+              ".so";
+        };
         # Misc boolean options
         useAndroidPrebuilt = false;
         useiOSPrebuilt = false;
