@@ -7639,6 +7639,12 @@
     githubId = 2746374;
     name = "edeneast";
   };
+  edenreich = {
+    email = "eden.reich@gmail.com";
+    github = "edenreich";
+    githubId = 16985712;
+    name = "Eden Reich";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
