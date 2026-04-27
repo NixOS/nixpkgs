@@ -54,15 +54,13 @@ in
 
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
-  stdenvNoCC ? stdenv.override (
-    {
-      cc = null;
-      hasCC = false;
-    }
+  stdenvNoCC ? stdenv.override {
+    cc = null;
+    hasCC = false;
     # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
     # size down from ~1 GiB to ~83 MiB, which is a considerable reduction.
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin { extraBuildInputs = [ ]; }
-  ),
+    ${if stdenv.hostPlatform.isDarwin then "extraBuildInputs" else null} = [ ];
+  },
 
   # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
@@ -218,26 +216,22 @@ let
       if !config.allowAliases || isSupported then
         nixpkgsFun {
           overlays = [
-            (
-              self': super':
-              {
-                pkgsi686Linux = super';
-              }
-              // lib.optionalAttrs (!isSupported) {
-                # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
-                # when used on a non x86_64-linux platform in CI.
-                # TODO: Remove this, once pkgsi686Linux can become a variant.
-                stdenv = super'.stdenv // {
-                  mkDerivation =
-                    args:
-                    (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
-                      meta = prevAttrs.meta or { } // {
-                        broken = true;
-                      };
-                    });
-                };
-              }
-            )
+            (self': super': {
+              pkgsi686Linux = super';
+
+              # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
+              # when used on a non x86_64-linux platform in CI.
+              # TODO: Remove this, once pkgsi686Linux can become a variant.
+              ${if !isSupported then "stdenv" else null} = super'.stdenv // {
+                mkDerivation =
+                  args:
+                  (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
+                    meta = prevAttrs.meta or { } // {
+                      broken = true;
+                    };
+                  });
+              };
+            })
           ]
           ++ overlays;
           ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
