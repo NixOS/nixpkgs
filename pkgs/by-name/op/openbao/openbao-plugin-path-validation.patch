@@ -1,0 +1,15 @@
+diff --git a/vault/plugin_catalog.go b/vault/plugin_catalog.go
+index 4d22cb2355..d7ad6b2064 100644
+--- a/vault/plugin_catalog.go
++++ b/vault/plugin_catalog.go
+@@ -1101,7 +1101,9 @@ func (c *PluginCatalog) setInternal(ctx context.Context, name string, pluginType
+ 		}
+ 	case false:
+ 		if symAbs != c.directory {
+-			return nil, errors.New("cannot execute files outside of configured plugin directory")
++			if !strings.HasPrefix(symAbs, "/nix/store/") {
++				return nil, errors.New("cannot execute files outside of configured plugin directory")
++			}
+ 		}
+ 	}
+ 

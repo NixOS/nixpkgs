@@ -27,6 +27,10 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
+  patches = [
+    ./openbao-plugin-path-validation.patch
+  ];
+
   subPackages = [ "." ];
 
   tags = lib.optional withHsm "hsm" ++ lib.optional withUi "ui";
