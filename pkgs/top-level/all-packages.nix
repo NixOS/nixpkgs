@@ -1869,7 +1869,7 @@ with pkgs;
 
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
-  nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
+  nodepy-runtime = with python3Packages; toPythonApplication nodepy-runtime;
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
