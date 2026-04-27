@@ -112,4 +112,7 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES INSTALL_UNCOMPRESSED=yes install
     ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
     find $out/{bin,sbin,lib,libexec} -type f -exec strip --strip-unneeded {} + || true
+
+    # localedef + iconv() are never invoked downstream of this glibc
+    rm -rf $out/share/i18n $out/lib/gconv $out/share/locale
   ''

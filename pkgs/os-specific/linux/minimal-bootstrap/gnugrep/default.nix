@@ -50,6 +50,7 @@ bash.runCommand "${pname}-${version}"
     cp ${./main.mk} Makefile
 
     # Build
+    # NOTE: parallel build (-j) breaks custom Makefile here; keep serial.
     make CC="tcc -B ${tinycc.libs}/lib"
 
     # Install
