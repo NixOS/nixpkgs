@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "http-nu";
-  version = "0.9.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "cablehead";
     repo = "http-nu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tnu5Ophc20+fhAfqfRgfuJVdWojBBPThNPNlcefDVrs=";
+    hash = "sha256-3w04DyKGSm9I4zPkrtbwjLsUleDapBNYH5ZZY4rPn0k=";
   };
 
-  cargoHash = "sha256-J1zGm5F+as/B7lXbiZVBWD4/axfRBFSDL0MEUOQ09GI=";
+  cargoHash = "sha256-ApqBT1GXcqITUOZ8+9h2E/D9sseJANiJAdnl0Aw5MT0=";
 
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
