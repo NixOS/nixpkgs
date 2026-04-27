@@ -67,7 +67,7 @@
   usbredir,
   xenSupport ? false,
   xen,
-  cephSupport ? false,
+  cephSupport ? !minimal,
   ceph,
   glusterfsSupport ? false,
   glusterfs,
