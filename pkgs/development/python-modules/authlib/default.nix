@@ -4,9 +4,10 @@
   cachelib,
   cryptography,
   fetchFromGitHub,
-  flask,
   flask-sqlalchemy,
+  flask,
   httpx,
+  joserfc,
   mock,
   pytest-asyncio,
   pytestCheckHook,
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   dependencies = [
     cryptography
+    joserfc
   ];
 
   nativeCheckInputs = [
