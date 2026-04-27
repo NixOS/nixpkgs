@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangowc";
-  version = "0.12.3";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "DreamMaoMao";
     repo = "mangowc";
     tag = finalAttrs.version;
-    hash = "sha256-cuOOgfufbGv0QIrRD6bAzaHiYXt32wxwt2Tzi+jAmwg=";
+    hash = "sha256-RP7eVqbnQ/uNCXh0HH8SXRIerMlkyHco+wpI9oxon0U=";
   };
 
   nativeBuildInputs = [
