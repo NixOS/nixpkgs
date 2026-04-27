@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-emulator";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/fuse-emulator/fuse-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Oo/t8v/pR8VxVhusVaWa2tTFkzj3TkSbfnpn2coEcJY=";
+    sha256 = "sha256-o/8zQwiYoPGSfydTqZmlvJkzZwLAS4ZyIg3uAdV9hdE=";
   };
 
   nativeBuildInputs = [
