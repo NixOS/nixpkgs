@@ -418,10 +418,8 @@ rec {
   gnuNetBSDDefaultExecFormat =
     cpu:
     if
-      (cpu.family == "arm" && cpu.bits == 32)
-      || (cpu.family == "sparc" && cpu.bits == 32)
-      || (cpu.family == "m68k" && cpu.bits == 32)
-      || (cpu.family == "x86" && cpu.bits == 32)
+      cpu.bits == 32
+      && (cpu.family == "arm" || cpu.family == "sparc" || cpu.family == "m68k" || cpu.family == "x86")
     then
       execFormats.aout
     else
