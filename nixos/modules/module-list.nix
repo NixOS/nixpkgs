@@ -1776,6 +1776,7 @@
   ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lasuite-drive.nix
   ./services/web-apps/lasuite-meet.nix
+  ./services/web-apps/thunderbird-appointment.nix
   ./services/web-apps/lauti.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/librechat.nix
