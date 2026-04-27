@@ -1,0 +1,13 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index f3afacc..9d2dd79 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -8,7 +8,7 @@ description = "DualSense 4 You"
+ anyhow = "1.0.101"
+ crc = "3.4.0"
+ dirs = "6.0.0"
+-eframe = "0.33.3"
++eframe = { version = "0.33.3", features = ["wgpu"] }
+ egui = "0.33.3"
+ egui_extras = { version = "0.33.3", features = ["svg", "svg_text", "file"] }
+ rfd = "0.17.2"
