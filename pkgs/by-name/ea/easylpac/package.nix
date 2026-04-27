@@ -20,13 +20,13 @@
 
 buildGoModule rec {
   pname = "easylpac";
-  version = "0.8.0.2";
+  version = "0.8.0.3";
 
   src = fetchFromGitHub {
     owner = "creamlike1024";
     repo = "EasyLPAC";
     tag = version;
-    hash = "sha256-GxcaMyEaPIGf+/wzmmycmFssTkP5Praj4GCYbxbJU28=";
+    hash = "sha256-q76p0BqrG8opuTClYKLfmM5hdziJIrZCwQmg2NkzW/E=";
   };
 
   vendorHash = "sha256-52I8hlnoHPhygwr0dxDP50X2A7Gsh0v/0SGQFH3FG/8=";
@@ -79,6 +79,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stargate01 ];
     mainProgram = "EasyLPAC";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

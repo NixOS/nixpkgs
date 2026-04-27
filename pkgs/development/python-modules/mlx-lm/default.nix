@@ -80,12 +80,6 @@ buildPythonPackage (finalAttrs: {
     "tests/test_models.py::TestModels::test_gated_delta_masked"
   ];
 
-  disabledTests = [
-    # ValueError: [rope] dims must be positive but got 0
-    # Reported upstream: https://github.com/ml-explore/mlx-lm/issues/1089
-    "test_all_models"
-  ];
-
   meta = {
     description = "Run LLMs with MLX";
     homepage = "https://github.com/ml-explore/mlx-lm";
