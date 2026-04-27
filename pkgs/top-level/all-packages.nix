@@ -6021,7 +6021,7 @@ with pkgs;
 
   xxdiff-tip = xxdiff;
 
-  yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
+  yq = python3Packages.toPythonApplication python3Packages.yq;
 
   mypy = with python3Packages; toPythonApplication mypy;
 
