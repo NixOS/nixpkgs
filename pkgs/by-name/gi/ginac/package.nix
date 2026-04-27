@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  gccStdenv,
   fetchurl,
   cln,
   pkg-config,
@@ -9,7 +10,7 @@
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "ginac";
   version = "1.8.10";
 
