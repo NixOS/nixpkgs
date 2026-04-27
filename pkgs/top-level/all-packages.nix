@@ -1880,7 +1880,7 @@ with pkgs;
     python3Packages.callPackage ../tools/misc/online-judge-template-generator
       { };
 
-  online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
+  online-judge-tools = with python3Packages; toPythonApplication online-judge-tools;
 
   inherit (ocamlPackages) patdiff;
 
