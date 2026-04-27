@@ -242,6 +242,14 @@ let
         fi
       done
 
+      # Make output store paths from derivations writable.
+      # Intentional word splitting.
+      for output in $outputs; do
+          if [ -e "''${!output}" ]; then
+              auto_mounts+=(--bind "''${!output}" "''${!output}")
+          fi
+      done
+
       declare -a x11_args
       # Always mount a tmpfs on /tmp/.X11-unix
       # Rationale: https://github.com/flatpak/flatpak/blob/be2de97e862e5ca223da40a895e54e7bf24dbfb9/common/flatpak-run.c#L277
