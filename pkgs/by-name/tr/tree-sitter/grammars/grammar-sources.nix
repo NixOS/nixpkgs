@@ -1750,10 +1750,10 @@
   };
 
   nu = {
-    version = "0-unstable-2025-12-13";
+    version = "0-unstable-2026-04-22";
     url = "github:nushell/tree-sitter-nu";
-    rev = "4c149627cc592560f77ead1c384e27ec85926407";
-    hash = "sha256-h02kb3VxSK/fxQENtj2yaRmAQ5I8rt5s5R8VrWOQWeo=";
+    rev = "348b787d8b0409091d85fe9d4eb007fe9f3406bb";
+    hash = "sha256-OL3fqHjimJ9VrR2UoeIdLxKKcsA1J80A9T8GSBO9KwE=";
     meta = {
       license = lib.licenses.mit;
     };
