@@ -6,16 +6,31 @@
 }:
 let
   cfg = config.services.vnstat;
+  settingsFormat = pkgs.formats.keyValue { };
 in
 {
   options.services.vnstat = {
     enable = lib.mkEnableOption "update of network usage statistics via vnstatd";
     package = lib.mkPackageOption pkgs "vnstat" { };
+    settings = lib.mkOption {
+      type = lib.types.submodule { freeformType = settingsFormat.type; };
+      default = { };
+      description = ''
+        Configuration for vnstat. Refer to
+        [https://humdi.net/vnstat/man/vnstat.conf.html](https://humdi.net/vnstat/man/vnstat.conf.html)
+        or {manpage}`vnstat.conf(5)` for more information.
+      '';
+      example = {
+        AlwaysAddNewInterfaces = 1;
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
+
+    environment.etc."vnstat.conf".source = settingsFormat.generate "vnstat.conf" cfg.settings;
 
     users = {
       groups.vnstatd = { };
