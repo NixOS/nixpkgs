@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "fork-cleaner";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Io/IOJYa9qDCTTf6vQvZeco1iEDV7crnvzR539QDz40=";
   };
 
