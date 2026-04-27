@@ -5,7 +5,7 @@
   bundlerEnv,
   nixosTests,
   ruby_4_0,
-  pdfium-binaries,
+  pdfium,
   makeWrapper,
   fetchYarnDeps,
   yarn,
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/rails \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pdfium-binaries ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pdfium ]}"
   '';
 
   passthru = {
