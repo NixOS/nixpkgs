@@ -11587,8 +11587,7 @@ with pkgs;
 
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
-  ape = callPackage ../applications/misc/ape { };
-  apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
+  apeClex = callPackage ../by-name/ap/ape/apeclex.nix { };
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unixtools.nix { });
