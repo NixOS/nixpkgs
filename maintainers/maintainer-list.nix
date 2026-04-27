@@ -277,6 +277,12 @@
     githubId = 92977828;
     name = "Mori Zen";
   };
+  _7591yj = {
+    email = "yeongjin.kim@proton.me";
+    github = "7591yj";
+    githubId = 77034308;
+    name = "Yeongjin Kim";
+  };
   _7karni = {
     email = "7karni@proton.me";
     name = "7karni";
