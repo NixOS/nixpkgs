@@ -2420,7 +2420,7 @@ with pkgs;
     with-gce = true;
   };
 
-  google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
+  google-compute-engine = with python3Packages; toPythonApplication google-compute-engine;
 
   gparted-full = gparted.override { withAllTools = true; };
 
