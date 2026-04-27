@@ -422,6 +422,10 @@ with haskellLib;
       dontCheck
       super.bloomfilter-blocked;
 
+  # Missing files necessary for test suite compilation
+  # https://github.com/brandonchinn178/kdl-hs/issues/33
+  kdl-hs = dontCheck super.kdl-hs;
+
   # support for transformers >= 0.6
   lifted-base = appendPatch (fetchpatch {
     url = "https://github.com/basvandijk/lifted-base/commit/6b61483ec7fd0d5d5d56ccb967860d42740781e8.patch";
