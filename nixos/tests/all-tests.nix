@@ -1399,6 +1399,7 @@ in
   prefect = runTest ./prefect.nix;
   pretalx = runTest ./web-apps/pretalx.nix;
   pretix = runTest ./web-apps/pretix.nix;
+  thunderbird-appointment = runTest ./web-apps/thunderbird-appointment.nix;
   printing-service = runTest {
     imports = [ ./printing.nix ];
     _module.args.socket = false;
