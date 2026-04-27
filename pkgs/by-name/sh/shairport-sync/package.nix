@@ -23,6 +23,7 @@
   libao,
   libsoundio,
   mosquitto,
+  nix-update-script,
   pipewire,
   soxr,
   alac,
@@ -43,7 +44,7 @@
   enableMqttClient ? true,
   enableDbus ? stdenv.hostPlatform.isLinux,
   enableSoxr ? true,
-  enableAlac ? true,
+  enableAlac ? !enableAirplay2, # airplay2 build uses ffmpeg for alac
   enableConvolution ? true,
   enableLibdaemon ? false,
   enableTinySVCmDNS ? true,
@@ -55,13 +56,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "5.0.2";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-tmnAVO9XpVNOwS8ze/23v4TV5Gq+goaVNnA9INf17wk=";
+    hash = "sha256-7/QB0lvpjZnGXo4vjKSYogjhi66S/QRRpypsqEMLGj0=";
   };
 
   nativeBuildInputs = [
@@ -140,6 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableAirplay2 "--with-airplay-2";
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script {
+    # ignore -dev tagged releases
+    extraArgs = [ "--version-regex=^([0-9\\.]+)$" ];
+  };
 
   meta = {
     homepage = "https://github.com/mikebrady/shairport-sync";

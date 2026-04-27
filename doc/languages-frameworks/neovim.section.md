@@ -115,6 +115,25 @@ patch those plugins but expose the necessary configuration under
 `PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
 needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
 
+### Plugin license overrides {#neovim-plugin-license-overrides}
+
+Generated Vim and Neovim plugins get their `meta.license` from GitHub license metadata when possible.
+Some upstream repositories do not expose a license file that GitHub can detect, or only mention the license in a README.
+In those cases, add a manual `meta.license` override in [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+
+For example, if upstream documents that a plugin uses the Vim license but GitHub does not detect it:
+
+```nix
+{
+  foo-nvim = super.foo-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      # README says this plugin is distributed under the Vim license.
+      license = lib.licenses.vim;
+    };
+  });
+}
+```
+
 ## LuaRocks based plugins {#neovim-luarocks-based-plugins}
 
 In order to automatically handle plugin dependencies, several Neovim plugins

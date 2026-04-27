@@ -17,6 +17,7 @@ final: prev: {
       hash = "sha256-Wo6u4btFmD7bqcBCb4OtyAYtYurwJGxeKwYhPoPodOc=";
     };
     meta.homepage = "https://github.com/euclidianAce/BetterLua.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -30,6 +31,7 @@ final: prev: {
       hash = "sha256-tLE5P3s38cnvVaQAEq9CwAiy70Imqh9oA6rKvjdWd78=";
     };
     meta.homepage = "https://github.com/vim-scripts/BufOnly.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -43,6 +45,7 @@ final: prev: {
       hash = "sha256-WpKyT/PePb9PQaIUghtNYd6FUoIB/ArcG9TduXhiBAc=";
     };
     meta.homepage = "https://github.com/jackMort/ChatGPT.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -56,6 +59,7 @@ final: prev: {
       hash = "sha256-J2rmiPrJ41KuIgpMRSycnbqbTBr+GrGtTlp/IgC2TBI=";
     };
     meta.homepage = "https://github.com/chrisbra/CheckAttach/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -69,19 +73,21 @@ final: prev: {
       hash = "sha256-490Y+f02VD4MhyV7fqqZmoLXXL+m3OTf6kA/p1HIYg8=";
     };
     meta.homepage = "https://github.com/vim-scripts/Colour-Sampler-Pack/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   CopilotChat-nvim = buildVimPlugin {
     pname = "CopilotChat.nvim";
-    version = "4.7.4-unstable-2026-04-16";
+    version = "4.7.4-unstable-2026-04-26";
     src = fetchFromGitHub {
       owner = "CopilotC-Nvim";
       repo = "CopilotChat.nvim";
-      rev = "5378035c2eb4089de245473dec1768e0986543bd";
-      hash = "sha256-dNDBRf/zZ7r4mNVNwST9PCm4QR9AQA/PPIbTXFT+C4k=";
+      rev = "137d3bc527518f5ea982c43c43084496732365c3";
+      hash = "sha256-jYKtDG9J7bEPDaQCorCuTZtePBTN4MAKZZqPduPSBtE=";
     };
     meta.homepage = "https://github.com/CopilotC-Nvim/CopilotChat.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -95,6 +101,7 @@ final: prev: {
       hash = "sha256-VKTfLdU7SwQohuTNefuhS5KCPbGLCDsr/mTABq+8hlk=";
     };
     meta.homepage = "https://github.com/whonore/Coqtail/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -108,6 +115,7 @@ final: prev: {
       hash = "sha256-uaA48i+lhwvYP6PGH4lTBaJh0Lnkda+lxNASKUCkSP0=";
     };
     meta.homepage = "https://github.com/vim-scripts/DoxygenToolkit.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -121,6 +129,7 @@ final: prev: {
       hash = "sha256-fCtAs6qsvWOYRp2Z1AwQa2ByUZcUCMKfuYBoNTP7EeY=";
     };
     meta.homepage = "https://github.com/numToStr/FTerm.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -134,6 +143,7 @@ final: prev: {
       hash = "sha256-HwaKkwANoNHe512eDvuOJ48tG8nDh7r67magi8OA/Vw=";
     };
     meta.homepage = "https://github.com/antoinemadec/FixCursorHold.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -147,6 +157,7 @@ final: prev: {
       hash = "sha256-wO/FUOT54t9KR/xvrMeasmLFdJc0j2FKzZ200KyMzwU=";
     };
     meta.homepage = "https://github.com/Aaronik/GPTModels.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -160,6 +171,7 @@ final: prev: {
       hash = "sha256-f2lJfi8yDb8W1NCQMMiaypZjTknkq3R/vr9O8SfRsuo=";
     };
     meta.homepage = "https://github.com/vim-scripts/Improved-AnsiEsc/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -173,6 +185,7 @@ final: prev: {
       hash = "sha256-SsnWpV5oDKCHVYgxKAP/yv9oWSUPK95307d7cClED+w=";
     };
     meta.homepage = "https://github.com/ionide/Ionide-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -186,6 +199,7 @@ final: prev: {
       hash = "sha256-/qUlzGfo2OhHEBGaoTH8K4VVT0Zg9ocJBb84orMD4xc=";
     };
     meta.homepage = "https://github.com/martinda/Jenkinsfile-vim-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -199,6 +213,7 @@ final: prev: {
       hash = "sha256-Nv81TAbBADGJp7tuKi05qr9v+FBA2ddEahjhXtBvIrw=";
     };
     meta.homepage = "https://github.com/vigoux/LanguageTool.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -212,6 +227,7 @@ final: prev: {
       hash = "sha256-IANdrxjLdthOPjKuYqkWBDkbqwX0CxOO0heCFNnQFCA=";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -225,6 +241,7 @@ final: prev: {
       hash = "sha256-o8f1BrmYgMcYgoTAIZpH/YRnHE7hmWxpS8gRD/dB5rE=";
     };
     meta.homepage = "https://github.com/Yggdroot/LeaderF/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -238,6 +255,7 @@ final: prev: {
       hash = "sha256-VLZvqV8Jjiu5hb0Mh80FAbDPAIgDfC9ol5uiCrM6AAA=";
     };
     meta.homepage = "https://github.com/goropikari/LibDeflate.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Zlib";
     meta.hydraPlatforms = [ ];
   };
 
@@ -251,6 +269,7 @@ final: prev: {
       hash = "sha256-iFpk2dmcdF3krwem0Agl044ML2syw61wWPX7ldz4bhg=";
     };
     meta.homepage = "https://github.com/molleweide/LuaSnip-snippets.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -264,6 +283,7 @@ final: prev: {
       hash = "sha256-4aOLVdnmlJFQob63mGMp4xNjar3ZCfaUjKJyoBnBD3k=";
     };
     meta.homepage = "https://github.com/Valloric/MatchTagAlways/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -277,6 +297,7 @@ final: prev: {
       hash = "sha256-Oyuv8mLPiMEsZPRnIgEjBFYJjGEhMzg+gnNhSSRvGoo=";
     };
     meta.homepage = "https://github.com/numToStr/Navigator.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -290,6 +311,7 @@ final: prev: {
       hash = "sha256-iGwjkWrm/Zmq7KNybArgVNnfs1OuKfSgCu/m6E35NgU=";
     };
     meta.homepage = "https://github.com/lanx-x/NeoSolarized/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -303,6 +325,7 @@ final: prev: {
       hash = "sha256-+FLHJ1tfIplXhO/6kajdcDBTIsNYN9kCOR9IdhXL6d4=";
     };
     meta.homepage = "https://github.com/GCBallesteros/NotebookNavigator.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -316,6 +339,7 @@ final: prev: {
       hash = "sha256-MMoadYv3a+V3oNVI3C0FlzQxlPDWG3L8yLsjFrnkhdE=";
     };
     meta.homepage = "https://github.com/chrisbra/NrrwRgn/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -329,6 +353,7 @@ final: prev: {
       hash = "sha256-ZLWtsMxy9SYp+GhNSBp4NpsbNCdsRV6+cirwLZiSu3k=";
     };
     meta.homepage = "https://github.com/Eutrius/Otree.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -342,6 +367,7 @@ final: prev: {
       hash = "sha256-7WGs7nPJoRCN/vaeg9SgtJK+ZhQI3AvAytK4L/KVRpw=";
     };
     meta.homepage = "https://github.com/vim-scripts/PreserveNoEOL/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -355,6 +381,7 @@ final: prev: {
       hash = "sha256-Tnl2TkLY9QXk/5qX2LcX5G2aq/sysH6BnD2YqXlneIU=";
     };
     meta.homepage = "https://github.com/henriklovhaug/Preview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -368,6 +395,7 @@ final: prev: {
       hash = "sha256-oHCTJW0bfFnljR7iYIOk4A90e5PppHN4y7nKhGr3eqo=";
     };
     meta.homepage = "https://github.com/yssl/QFEnter/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -381,6 +409,7 @@ final: prev: {
       hash = "sha256-BPvxcvC4Il9NkyY3qmAKAraORNYQNiyOvM+5DRTh3EI=";
     };
     meta.homepage = "https://github.com/chrisbra/Recover.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -394,6 +423,7 @@ final: prev: {
       hash = "sha256-2RD+9Wsfwo49yZhLoMhqtj/2VotJrcDYD0gw/8nzNbQ=";
     };
     meta.homepage = "https://github.com/vim-scripts/Rename/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -407,19 +437,21 @@ final: prev: {
       hash = "sha256-D2FoV9G5u4MrOJhZmCdZtE+C5ya5pP/DSmUGWVDXYFU=";
     };
     meta.homepage = "https://github.com/vim-scripts/ReplaceWithRegister/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   SchemaStore-nvim = buildVimPlugin {
     pname = "SchemaStore.nvim";
-    version = "0-unstable-2026-04-23";
+    version = "0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "b0o";
       repo = "SchemaStore.nvim";
-      rev = "d09eb13366fe95deeecf3deba7a4639f0c82fcdc";
-      hash = "sha256-6JLdNKPtRpjS2XKc6gs2I51AUeyiaidYBj7bO3S4F0Y=";
+      rev = "c3709d579066ab8f9600f5b76ade2da5042ec1ac";
+      hash = "sha256-4oaaUvc0VFfAb7QR4biBjXkksZuERyZmiuNACbeR89g=";
     };
     meta.homepage = "https://github.com/b0o/SchemaStore.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -433,6 +465,7 @@ final: prev: {
       hash = "sha256-9GckEP8XkrJqDNSYdCi3YeIaFFmPwoKwrLgYgJxlYFU=";
     };
     meta.homepage = "https://github.com/sunjon/Shade.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -446,6 +479,7 @@ final: prev: {
       hash = "sha256-EX39LVrFST7KgiM91Udq1BEBokK7KIj5FPB9qEQZ5UE=";
     };
     meta.homepage = "https://github.com/vim-scripts/ShowMultiBase/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -459,6 +493,7 @@ final: prev: {
       hash = "sha256-Rdw2KxpXKAvUhdHqAkP/r/sCwEhpP3R5jukkG1lsw9s=";
     };
     meta.homepage = "https://github.com/tmhedberg/SimpylFold/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -472,6 +507,7 @@ final: prev: {
       hash = "sha256-fPAt51rG7DI2vwtRZr8rWAlDswp6O9m4+ob5N5QpDho=";
     };
     meta.homepage = "https://github.com/vim-scripts/SmartCase/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -485,6 +521,7 @@ final: prev: {
       hash = "sha256-oRk5K/yuPj7EHteG/oRMq8pVmoiXzOv+9yVgONtlp7A=";
     };
     meta.homepage = "https://github.com/jaredgorski/SpaceCamp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -498,6 +535,7 @@ final: prev: {
       hash = "sha256-iSTFCKdjf+SiorW1ivZMNrHcaklJo5JBgLWUTmY4rZs=";
     };
     meta.homepage = "https://github.com/chrisbra/SudoEdit.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -511,6 +549,7 @@ final: prev: {
       hash = "sha256-k2bp13fZvXLy4Lcm6BnfWu10eQuATU0WVPV/6lQOVFU=";
     };
     meta.homepage = "https://github.com/vim-scripts/VimCompletesMe/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -524,6 +563,7 @@ final: prev: {
       hash = "sha256-3F2BGpt4874tAGdd5WnIiBvy8E19ZYSu98KU72tnF14=";
     };
     meta.homepage = "https://github.com/hsitz/VimOrganizer/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -537,6 +577,7 @@ final: prev: {
       hash = "sha256-DnIqX2WxnOdWRDTsjXlkTPqKuXXFag5ky2UImG7X0FE=";
     };
     meta.homepage = "https://github.com/VundleVim/Vundle.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -550,6 +591,7 @@ final: prev: {
       hash = "sha256-S/2Acgw1OITlw3O1RXOXpj5eLkq0qX1s6GwXQKw7TFY=";
     };
     meta.homepage = "https://github.com/esneider/YUNOcommit.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -563,6 +605,7 @@ final: prev: {
       hash = "sha256-xuQ60dTv+GjU904SB+Nt3tclbNsOycZurdtYZWciD3A=";
     };
     meta.homepage = "https://github.com/svban/YankAssassin.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -576,6 +619,7 @@ final: prev: {
       hash = "sha256-vEMx9TgjDx8AmjHVOHurW1/zYobyRsQdNTA/rNtFt30=";
     };
     meta.homepage = "https://github.com/vim-scripts/YankRing.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -590,6 +634,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/ycm-core/YouCompleteMe/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -603,6 +648,7 @@ final: prev: {
       hash = "sha256-ygmChz7YHn9lRaZiO3NRBMV0/lgNXyGwqj3BVX7awkA=";
     };
     meta.homepage = "https://github.com/vim-scripts/a.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -616,6 +662,7 @@ final: prev: {
       hash = "sha256-DVTQi6K+HMCBHVKRwh7qiiB/y+wFqfpGtrZmREa66lY=";
     };
     meta.homepage = "https://github.com/Alligator/accent.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -629,6 +676,7 @@ final: prev: {
       hash = "sha256-1ZmGW6H76tg5Cg3GOuQ9WYthl2wdmiIvuF6GBhPK93o=";
     };
     meta.homepage = "https://github.com/mileszs/ack.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -642,6 +690,7 @@ final: prev: {
       hash = "sha256-D74h9iDYHkg5pkIjvjWPawXZKYThHTUVE/XY2Lcl+kA=";
     };
     meta.homepage = "https://github.com/eikenb/acp/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -655,6 +704,7 @@ final: prev: {
       hash = "sha256-o6pu/24YYtlCRAw0pRrlccVeSPcOnMn70i8n7BKMHgc=";
     };
     meta.homepage = "https://github.com/mrtnvgr/actions.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -668,6 +718,7 @@ final: prev: {
       hash = "sha256-ibzfF/Ebm5+1EgZ05NQCTRDB+Q7ymyRy2fZpjvwv8EA=";
     };
     meta.homepage = "https://github.com/aznhe21/actions-preview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -681,6 +732,7 @@ final: prev: {
       hash = "sha256-eQ/7sKzkJU6jVGxXeePeObMN5kX51mofhph4BqTt7jk=";
     };
     meta.homepage = "https://github.com/aaronhallaert/advanced-git-search.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -694,6 +746,7 @@ final: prev: {
       hash = "sha256-4WQQwI72SRzgw0fmBfQPO8i0ULOnmx2q90Hse2FVE0Q=";
     };
     meta.homepage = "https://github.com/Mofiqul/adwaita.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -708,6 +761,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/aerial.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -721,6 +775,7 @@ final: prev: {
       hash = "sha256-9mXZzGZaZtjrfxhZBh8j9INuFpF/0wp70P/GBmG1LXA=";
     };
     meta.homepage = "https://github.com/Numkil/ag.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -734,6 +789,7 @@ final: prev: {
       hash = "sha256-zsH3M+nAR5HX0NZbOZfxIgOZU1bFj/GZf6J44tvjjzQ=";
     };
     meta.homepage = "https://github.com/derekelkins/agda-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -747,6 +803,7 @@ final: prev: {
       hash = "sha256-oT9xyB6ymkZnjgLwOoQdavntoCtTDB6Ts4dl+nLrwYQ=";
     };
     meta.homepage = "https://github.com/emmanueltouzery/agitator.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -760,6 +817,7 @@ final: prev: {
       hash = "sha256-Ya8/SpS+993FKLjyK2f18sTGMAKUWvqwqk9k0eC5UBI=";
     };
     meta.homepage = "https://github.com/aduros/ai.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "ISC";
     meta.hydraPlatforms = [ ];
   };
 
@@ -773,6 +831,7 @@ final: prev: {
       hash = "sha256-JJP1om3cJQC1/0wh2GFQCnMhPBgCKsiLZxc+xiuxjzg=";
     };
     meta.homepage = "https://github.com/joshuavial/aider.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -786,6 +845,7 @@ final: prev: {
       hash = "sha256-Rp/nl5dlz55aChrYUL7ir3XtWDFFS99CHS3l3FoCI7c=";
     };
     meta.homepage = "https://github.com/dchinmay2/alabaster.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -799,6 +859,7 @@ final: prev: {
       hash = "sha256-tneVWZaEywflAuBsuYCYtP/iK1h5mvLpv7nX5Hpajxw=";
     };
     meta.homepage = "https://github.com/slashmili/alchemist.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -812,6 +873,7 @@ final: prev: {
       hash = "sha256-ylXXgohtwdA3SBssckB9zrDhjXQK9OPFwt69n0LXYg8=";
     };
     meta.homepage = "https://github.com/dense-analysis/ale/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -825,6 +887,7 @@ final: prev: {
       hash = "sha256-97V2Q1c3DwNUZVa9RVWIN/N5Cw6Gr622PNBNcUpmiik=";
     };
     meta.homepage = "https://github.com/vim-scripts/align/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -838,6 +901,7 @@ final: prev: {
       hash = "sha256-z8+lEs8bQS4Gz3cgQQ5Cb3oW58Et7it/tAxUtE3cLc4=";
     };
     meta.homepage = "https://github.com/Vonr/align.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -851,6 +915,7 @@ final: prev: {
       hash = "sha256-g0uhWP8OREJifcjLjNAK43lNmtWXVIEUwTORfLuX1RQ=";
     };
     meta.homepage = "https://github.com/goolord/alpha-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -864,6 +929,7 @@ final: prev: {
       hash = "sha256-f/li32jpVigbZANnnbgSArnOH4nusj0DUz7952K+Znw=";
     };
     meta.homepage = "https://github.com/sourcegraph/amp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -877,6 +943,7 @@ final: prev: {
       hash = "sha256-KyFzPI2B0ioIABnhC6MwaHYLcuUzSqCsmcGpMei4XXk=";
     };
     meta.homepage = "https://github.com/anuvyklack/animation.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -890,6 +957,7 @@ final: prev: {
       hash = "sha256-dENwrF/O8tkzoam1sAg09IOWWZLEi+0uy3R6cJjXVT0=";
     };
     meta.homepage = "https://github.com/Olical/aniseed/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -903,6 +971,7 @@ final: prev: {
       hash = "sha256-dGlvaxZw2woaau78en3QH//a7JhI+GHTMIzW8uNjtmc=";
     };
     meta.homepage = "https://github.com/pearofducks/ansible-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -916,6 +985,7 @@ final: prev: {
       hash = "sha256-nK53ppPJWCChRVRAay/vb5DanFjrOBF00rIvHBLIBbM=";
     };
     meta.homepage = "https://github.com/ckarnell/antonys-macro-repeater/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -929,6 +999,7 @@ final: prev: {
       hash = "sha256-NdluZ0hNlPHW6XI7BYKV8wnBdXoCtBEBRmLbXBR+Z4c=";
     };
     meta.homepage = "https://github.com/solarnz/arcanist.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -942,6 +1013,7 @@ final: prev: {
       hash = "sha256-iFga589ovZztvCZ7/zeTshmVyLRXGvGLxMHP2mCBktA=";
     };
     meta.homepage = "https://github.com/vim-scripts/argtextobj.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -955,6 +1027,7 @@ final: prev: {
       hash = "sha256-iKGK7X7hBeap8nVnqXVYS/MddkMP9d/rBSD/s7qSldc=";
     };
     meta.homepage = "https://github.com/otavioschwanck/arrow.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -968,6 +1041,7 @@ final: prev: {
       hash = "sha256-NuRh9VPztFdPdqUX8yuUes084pXkSZStWp6ewUlgqso=";
     };
     meta.homepage = "https://github.com/arsham/arshlib.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -981,6 +1055,7 @@ final: prev: {
       hash = "sha256-S94KIu2ATE9tprJw83GQj7icrMixPsZ33WjmHm5kf4g=";
     };
     meta.homepage = "https://github.com/comfysage/artio.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "EUPL-1.2";
     meta.hydraPlatforms = [ ];
   };
 
@@ -994,6 +1069,7 @@ final: prev: {
       hash = "sha256-EQG6jOH/US/0T4iIwPv58FC4P7k3W7jTBdfRVbqFQi8=";
     };
     meta.homepage = "https://github.com/AstroNvim/astrocore/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1007,6 +1083,7 @@ final: prev: {
       hash = "sha256-N8uwx9PpGey0itrvq/OKOEwtRxXfto0MQ5Tbb7Bnc8w=";
     };
     meta.homepage = "https://github.com/AstroNvim/astrolsp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1020,6 +1097,7 @@ final: prev: {
       hash = "sha256-rh/cbZcGhpdaprhEs9Cgi2YYNT3B+L+djwFpCn44qeI=";
     };
     meta.homepage = "https://github.com/AstroNvim/astrotheme/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1033,6 +1111,7 @@ final: prev: {
       hash = "sha256-290PxuIz8Pc1UWz6Huy0ZQH1CxGeoqN5x2U+VDCRBJc=";
     };
     meta.homepage = "https://github.com/AstroNvim/astroui/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1046,6 +1125,7 @@ final: prev: {
       hash = "sha256-uyUvZVN7L7SqPAE1woc1T8dlhpH24FBj3/WD4VMwWF8=";
     };
     meta.homepage = "https://github.com/lewis6991/async.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1059,6 +1139,7 @@ final: prev: {
       hash = "sha256-YxZdOpV66YxNBACZRPugpk09+h42Sx/kjjDYPnOmqyI=";
     };
     meta.homepage = "https://github.com/prabirshrestha/async.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1072,6 +1153,7 @@ final: prev: {
       hash = "sha256-oemJyij+4PD60MQhEfcY2MdiGq47hB0gE+ybJXbKOXU=";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete-buffer.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1085,6 +1167,7 @@ final: prev: {
       hash = "sha256-5BGWLkyTV3HJ/Pped0k0FdLRXw0x8l5+GKYzAUmidP8=";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete-file.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1098,6 +1181,7 @@ final: prev: {
       hash = "sha256-Q6hmu5VtO0DaFhxt30aQunStaYidEoaKqPSU2SBYqfI=";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete-lsp.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1111,6 +1195,7 @@ final: prev: {
       hash = "sha256-+bG2PIFGIkyPD2eKndn3xOWLdZYqnZo6ktTLhlsJc5I=";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete-omni.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1124,6 +1209,7 @@ final: prev: {
       hash = "sha256-kj8gY6ArhnzU/WBJZmf+E0N5OmCB99tqgNFeC3So5Ng=";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete-tags.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1137,6 +1223,7 @@ final: prev: {
       hash = "sha256-41HCRPvzwFygJ9yqz5KVSL5HcRALASNkxBpUfEg8AkI=";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete-ultisnips.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1150,6 +1237,7 @@ final: prev: {
       hash = "sha256-pRu6Kl91pwrvE5I/psq5TM16ZZRTfjaIRVWIObj52r0=";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1163,6 +1251,7 @@ final: prev: {
       hash = "sha256-cJUDUToKbfvZl4y8JROiRH1yRgPYVmkqVyDH4njxwM8=";
     };
     meta.homepage = "https://github.com/skywind3000/asyncrun.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1176,6 +1265,7 @@ final: prev: {
       hash = "sha256-kUz6b1f7ooT5NjYotRCjSP07P7ZO/tsZA+tXcuz3WT4=";
     };
     meta.homepage = "https://github.com/skywind3000/asynctasks.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1189,6 +1279,7 @@ final: prev: {
       hash = "sha256-8BiMZIM8yrrmS+Mty2WnyC/k5FstlYp/fPlQVRvCRMo=";
     };
     meta.homepage = "https://github.com/vmchale/ats-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1202,6 +1293,7 @@ final: prev: {
       hash = "sha256-6BKH0HpTE+/w8S6v8U8TWhprQ93Vi+ctKDAHFiMRLdE=";
     };
     meta.homepage = "https://github.com/augmentcode/augment.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1215,6 +1307,7 @@ final: prev: {
       hash = "sha256-GSelduKp3s2M6litBAbxGBCoGnD4elNyAAXyrOQwCLw=";
     };
     meta.homepage = "https://github.com/ray-x/aurora/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1228,6 +1321,7 @@ final: prev: {
       hash = "sha256-dM9ZWncbVjRNk0VsGhngtPBM0kvSegnh1uXmljwCx8s=";
     };
     meta.homepage = "https://github.com/Jay-Madden/auto-fix-return.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1241,6 +1335,7 @@ final: prev: {
       hash = "sha256-yTv9UggjG2EDxH9HEyAn0CD2VvwdiOyO9oTD/g7c/Ck=";
     };
     meta.homepage = "https://github.com/hotwatermorning/auto-git-diff/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1254,6 +1349,7 @@ final: prev: {
       hash = "sha256-SWsefzaLn5mnVfZcO2rEGiS1tuuV28S3kk09l0QAedM=";
     };
     meta.homepage = "https://github.com/asiryk/auto-hlsearch.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1267,6 +1363,7 @@ final: prev: {
       hash = "sha256-ASK4CWWIhD1C6dwHFpMrUUXlwGrUyJrZmCIyy3LVuV8=";
     };
     meta.homepage = "https://github.com/jiangmiao/auto-pairs/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1280,6 +1377,7 @@ final: prev: {
       hash = "sha256-udN8ETRYKmVEeu+/2J6yZHnnBWtnLV7yKiOY0AvS8rg=";
     };
     meta.homepage = "https://github.com/okuuva/auto-save.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1293,6 +1391,7 @@ final: prev: {
       hash = "sha256-VboD/4FNA/LVad0Nu/ul43pcUMnwpNpP0cAhs14u3dI=";
     };
     meta.homepage = "https://github.com/rmagatti/auto-session/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1306,6 +1405,7 @@ final: prev: {
       hash = "sha256-DOKKyaDmfUPRTcXJvqD+0zAr63+93H0auax6Dse0Igo=";
     };
     meta.homepage = "https://github.com/m4xshen/autoclose.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1319,6 +1419,7 @@ final: prev: {
       hash = "sha256-UhiTOxHDt/NpslKbnuUswrK9aQKhm+eynI94tVU9JqA=";
     };
     meta.homepage = "https://github.com/gaoDean/autolist.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1332,6 +1433,7 @@ final: prev: {
       hash = "sha256-x8JHwQI/Z5S0IhA1EHFteGDOLTK0f8CCULqGZsk0EJQ=";
     };
     meta.homepage = "https://github.com/vim-scripts/autoload_cscope.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1345,6 +1447,7 @@ final: prev: {
       hash = "sha256-2xhvH9thJcRvh2auy+syJBGZvvayPCj4FNs4DgG6eTg=";
     };
     meta.homepage = "https://github.com/nullishamy/autosave.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "OSL-3.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1358,6 +1461,7 @@ final: prev: {
       hash = "sha256-Op/pl9wJIwYcOpF2cYG8PMZdsJ74LHOb6nAUpyi8pYc=";
     };
     meta.homepage = "https://github.com/lowitea/aw-watcher.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1371,6 +1475,7 @@ final: prev: {
       hash = "sha256-I7YYvQupeQxWr2HEpvba5n91+jYvJrcWZhQg+5rI908=";
     };
     meta.homepage = "https://github.com/ActivityWatch/aw-watcher-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1384,6 +1489,7 @@ final: prev: {
       hash = "sha256-bZls67M42MtlOsR9M8r+VeYOwIW9ynPfvSEzAxvZWWY=";
     };
     meta.homepage = "https://github.com/rafi/awesome-vim-colorschemes/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1397,6 +1503,7 @@ final: prev: {
       hash = "sha256-/GSzJjmMMfvXhXVOBapOj1Dt/5FHMETT6PEwlYgHEbs=";
     };
     meta.homepage = "https://github.com/AhmedAbdulrahman/aylin.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1410,6 +1517,7 @@ final: prev: {
       hash = "sha256-hFtprTDLMxKAmqF9lQZGq+GgiapjM5zUtsMWtWSrJH0=";
     };
     meta.homepage = "https://github.com/ayu-theme/ayu-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1423,6 +1531,7 @@ final: prev: {
       hash = "sha256-nu4nux21ghfcDfWtptsmaeUv4P6G+50TTDaH5wX0OXc=";
     };
     meta.homepage = "https://github.com/taybart/b64.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1436,6 +1545,7 @@ final: prev: {
       hash = "sha256-LT2mJWR5gzE65OfF09LRRoycAzkcGqRTcMdN+9jciKs=";
     };
     meta.homepage = "https://github.com/m00qek/baleia.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1449,6 +1559,7 @@ final: prev: {
       hash = "sha256-X9KrQg8TlhWGeeg2Loxv4OUBw/3Wt7XFVorDd/75CwA=";
     };
     meta.homepage = "https://github.com/ribru17/bamboo.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1462,6 +1573,7 @@ final: prev: {
       hash = "sha256-vhoqeTU/1tw1dj5o5rmUhqpSBFPPjOfp3TZnjMtnMQ8=";
     };
     meta.homepage = "https://github.com/romgrk/barbar.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1475,19 +1587,21 @@ final: prev: {
       hash = "sha256-Ue+GNwXUWRQ3WQAXTH7TL3fSCU2GSwtgllZ9E0yXgl8=";
     };
     meta.homepage = "https://github.com/utilyre/barbecue.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   base16-nvim = buildVimPlugin {
     pname = "base16-nvim";
-    version = "0-unstable-2026-04-19";
+    version = "0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "RRethy";
       repo = "base16-nvim";
-      rev = "17781884af64e4205f84dde41d6030a61d0eb0dc";
-      hash = "sha256-j/QwImtvOHSLaoYR5nUOncmTFHrhdDPt30y3K8L2UFc=";
+      rev = "6b4f4a07b8b0c23a5cd3740631d96a97d7ccec09";
+      hash = "sha256-DQm6OGkpZq9M2ugq3fl6IHXM/dUCcRHxKFd9ngD+nWc=";
     };
     meta.homepage = "https://github.com/RRethy/base16-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1501,6 +1615,7 @@ final: prev: {
       hash = "sha256-uJvaYYDMXvoo0fhBZUhN8WBXeJ87SRgof6GEK2efFT0=";
     };
     meta.homepage = "https://github.com/chriskempson/base16-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1514,6 +1629,7 @@ final: prev: {
       hash = "sha256-AUdBZbGcPDtixHMFms9Y0EyUdAXOzvcA2AbrRdYQ4ig=";
     };
     meta.homepage = "https://github.com/nvchad/base46/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1527,6 +1643,7 @@ final: prev: {
       hash = "sha256-ip7wGrzJTf1D4ZtmJ87hnD8k1y9QtQZHKdQ7PDzfyZ0=";
     };
     meta.homepage = "https://github.com/jamespwilliams/bat.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1540,6 +1657,7 @@ final: prev: {
       hash = "sha256-fceXwNwSB2pzVQDMVU1mx1aMRpow22hY5fcVf1yDwxk=";
     };
     meta.homepage = "https://github.com/vim-scripts/bats.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1553,6 +1671,7 @@ final: prev: {
       hash = "sha256-UNguEOuk2yszPAcARPtev6xpyA0YqW++s4sh2y14RyU=";
     };
     meta.homepage = "https://github.com/rbgrouleff/bclose.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1566,6 +1685,7 @@ final: prev: {
       hash = "sha256-x6DYr+w0FIwVgrXgip8/wSrUDqkRkAs5HxXdwjY76/I=";
     };
     meta.homepage = "https://github.com/sontungexpt/better-diagnostic-virtual-text/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1579,6 +1699,7 @@ final: prev: {
       hash = "sha256-h7Xa8McjnCOOP8WbqbmmJn9jjBMvk89Tvh0Qt1stEVU=";
     };
     meta.homepage = "https://github.com/max397574/better-escape.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1592,6 +1713,7 @@ final: prev: {
       hash = "sha256-fabA2mVZAZg5Qot4ED9cJ1YMZ4wX4OvURNhIvKltFtA=";
     };
     meta.homepage = "https://github.com/LunarVim/bigfile.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1605,6 +1727,7 @@ final: prev: {
       hash = "sha256-nOnNIXRUxsYNaEBhWuzCMTg37C9/S4ekxNbCpvBe+TU=";
     };
     meta.homepage = "https://github.com/openembedded/bitbake/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1618,6 +1741,7 @@ final: prev: {
       hash = "sha256-R1Iz9Cr8F3uTyi3HfDvfnQ9vfxLKfypUt4DXKmu+lSQ=";
     };
     meta.homepage = "https://github.com/FabijanZulj/blame.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1631,6 +1755,7 @@ final: prev: {
       hash = "sha256-e1gQiJugFnb9RyksF7RR4WIR/4PIWbgADltTIAb4COU=";
     };
     meta.homepage = "https://github.com/z4p5a9/blamer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1644,6 +1769,7 @@ final: prev: {
       hash = "sha256-tozXOgP0dzIFd3a6mjGehUdytqerkWdfOo89CEVC/Rk=";
     };
     meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-avante/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1657,6 +1783,7 @@ final: prev: {
       hash = "sha256-eRGq2bjr6kqFoT1s4P1MIA7nIEvRTYw4OFIJbS/JD60=";
     };
     meta.homepage = "https://github.com/disrupted/blink-cmp-conventional-commits/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1670,6 +1797,7 @@ final: prev: {
       hash = "sha256-xEGAXv41UX9GUybCSzDODkhgdEd4cclBXl0k4UBmFbs=";
     };
     meta.homepage = "https://github.com/giuxtaposition/blink-cmp-copilot/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1683,6 +1811,7 @@ final: prev: {
       hash = "sha256-z41OnVbJAQe4FMvdazs0Uw8sAOyXEBJcx3IVqjOWGyI=";
     };
     meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-dictionary/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1696,19 +1825,21 @@ final: prev: {
       hash = "sha256-DEzOzlwmvWmkR9VBF2jsgeA/bCjjgIiqY46GrcBGTfE=";
     };
     meta.homepage = "https://github.com/bydlw98/blink-cmp-env/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   blink-cmp-git = buildVimPlugin {
     pname = "blink-cmp-git";
-    version = "3.0.0-unstable-2026-02-21";
+    version = "3.0.0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "Kaiser-Yang";
       repo = "blink-cmp-git";
-      rev = "10783593af764424018a95e75df6ad5a8b66fe07";
-      hash = "sha256-esSFTYQP46Vy7XMpgVneh90NX/373FVpqEQeQb2jUFQ=";
+      rev = "302b9dabec3284de29665e2311118a3202cb192a";
+      hash = "sha256-s9nn6XRaCYxiwiEkv9J345hN3ppcblVHKE8WP6m+Atg=";
     };
     meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-git/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1722,6 +1853,7 @@ final: prev: {
       hash = "sha256-MlYg90l1UXNguQpCyfRVSi0hof+/jKAdoX/UnN/ZGwg=";
     };
     meta.homepage = "https://github.com/erooke/blink-cmp-latex/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1735,6 +1867,7 @@ final: prev: {
       hash = "sha256-ollZI9Bd3eAKvzS84oIzToVruYbCERKKhZpIR+cBxBE=";
     };
     meta.homepage = "https://github.com/GaetanLepage/blink-cmp-nixpkgs-maintainers/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1748,6 +1881,7 @@ final: prev: {
       hash = "sha256-0j8CljfXsEoZ+FkxB/YrT2YHvg87j1eyuhGgjxh+Dg0=";
     };
     meta.homepage = "https://github.com/alexandre-abrioux/blink-cmp-npm.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1761,6 +1895,7 @@ final: prev: {
       hash = "sha256-xyh4n1dM/aJ7L9kgSAptTPSlotM7mz92tgl7232dBME=";
     };
     meta.homepage = "https://github.com/ribru17/blink-cmp-spell/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1774,6 +1909,7 @@ final: prev: {
       hash = "sha256-enoPsYF8llGShf+sx6rLYYnLLzrd+jdCdZ4gy9A2lKU=";
     };
     meta.homepage = "https://github.com/mgalliou/blink-cmp-tmux/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1787,6 +1923,7 @@ final: prev: {
       hash = "sha256-x4VSBDdcij4BkvIzkFnGVtJvq+ow1rTtZk9MWeTlzpE=";
     };
     meta.homepage = "https://github.com/archie-judd/blink-cmp-words/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1800,6 +1937,7 @@ final: prev: {
       hash = "sha256-DciQaX2lYQptpEd8wke3x67SK6zMm2UI34qxBe6eC9Q=";
     };
     meta.homepage = "https://github.com/marcoSven/blink-cmp-yanky/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1813,6 +1951,7 @@ final: prev: {
       hash = "sha256-EMQC+2hjgAGYcBoSKkR5LV7jUsl3Oi8rL3K7FNIHXIw=";
     };
     meta.homepage = "https://github.com/Saghen/blink.compat/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1826,6 +1965,7 @@ final: prev: {
       hash = "sha256-cDvbUmnFZbPmU/HPISNV8zJV8WsH3COl3nGqgT5CbVQ=";
     };
     meta.homepage = "https://github.com/fang2hou/blink-copilot/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1839,6 +1979,7 @@ final: prev: {
       hash = "sha256-qBJ0zwkKlxZ6S6VzMusm9CCKx+EN1YOaBfdMb7xKQ5A=";
     };
     meta.homepage = "https://github.com/moyiz/blink-emoji.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1852,6 +1993,7 @@ final: prev: {
       hash = "sha256-SS66JZFCX8viYxYaObASlwtrG5h7yHbVvRBVXBNXkng=";
     };
     meta.homepage = "https://github.com/Saghen/blink.indent/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1865,19 +2007,21 @@ final: prev: {
       hash = "sha256-+sCNd10VQOFROwe6sZzSWUhskLb1k4Sg7NOQhwaTESA=";
     };
     meta.homepage = "https://github.com/MahanRahmati/blink-nerdfont.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
   blink-ripgrep-nvim = buildVimPlugin {
     pname = "blink-ripgrep.nvim";
-    version = "2.2.5";
+    version = "2.2.6";
     src = fetchFromGitHub {
       owner = "mikavilpas";
       repo = "blink-ripgrep.nvim";
-      tag = "v2.2.5";
-      hash = "sha256-ZTgRsY4efkihWAdJ6XiIdXipYLDq6DJiA303zXybzw0=";
+      tag = "v2.2.6";
+      hash = "sha256-W8FyG9WlSwp9ta0dsxhhtfJmQrc1OseieVw2k2mwWR8=";
     };
     meta.homepage = "https://github.com/mikavilpas/blink-ripgrep.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1891,6 +2035,7 @@ final: prev: {
       hash = "sha256-MYMLRpF0xFNr4SqJGekxKA+fbhOUlv7LYZOLEwhiBSo=";
     };
     meta.homepage = "https://github.com/dundalek/bloat.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1904,6 +2049,7 @@ final: prev: {
       hash = "sha256-dqi4srdtm7TNsFPNcGpV8iwyTL+ov4AEfuQpVnikiYI=";
     };
     meta.homepage = "https://github.com/HampusHauffman/block.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -1917,6 +2063,7 @@ final: prev: {
       hash = "sha256-qmVneHlI7XKTyXrSJu+lWaX6YmGQero7nTKrWR/i99c=";
     };
     meta.homepage = "https://github.com/uloco/bluloco.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "LGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1930,6 +2077,7 @@ final: prev: {
       hash = "sha256-oGplv+2q1M1pIwFj2u8ZT9WTNNImYreQtiBECGJKe/Q=";
     };
     meta.homepage = "https://github.com/rockerBOO/boo-colorscheme-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1943,6 +2091,7 @@ final: prev: {
       hash = "sha256-dmtvPgRb1CqOetyjUoUDJ+fruOotwY0ODBp8VN4kRAQ=";
     };
     meta.homepage = "https://github.com/nat-418/boole.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "0BSD";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1956,6 +2105,7 @@ final: prev: {
       hash = "sha256-As4k31PSSmrSkUemcnkxzrHd9nWXyGJguH9MKTpEnxU=";
     };
     meta.homepage = "https://github.com/turbio/bracey.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1969,6 +2119,7 @@ final: prev: {
       hash = "sha256-kZsvUcMpKVI8MCrYqKEKASfYlFeldlH8faa9xaOTFow=";
     };
     meta.homepage = "https://github.com/fruit-in/brainfuck-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1982,6 +2133,7 @@ final: prev: {
       hash = "sha256-ljUNfmpImtxFCS19HC9kFlaLlqaPDltKtnx1+/6Y33U=";
     };
     meta.homepage = "https://github.com/famiu/bufdelete.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -1995,6 +2147,7 @@ final: prev: {
       hash = "sha256-IRmhtjd6oXNwETCF98jIyoZJRbEeXZ8dcw6vH5ywugo=";
     };
     meta.homepage = "https://github.com/jlanzarotta/bufexplorer/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2008,6 +2161,7 @@ final: prev: {
       hash = "sha256-JIykUDweq54RxKHNTS6QqZi2CTLPTig9nY30Gzgp08o=";
     };
     meta.homepage = "https://github.com/AndrewRadev/bufferize.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2021,6 +2175,7 @@ final: prev: {
       hash = "sha256-ae4MB6+6v3awvfSUWlau9ASJ147ZpwuX1fvJdfMwo1Q=";
     };
     meta.homepage = "https://github.com/akinsho/bufferline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2034,6 +2189,7 @@ final: prev: {
       hash = "sha256-K/aXbMCL/AM14faIVjNscl8eVyyfS5+LQ4X7nfqDGTU=";
     };
     meta.homepage = "https://github.com/kwkarlwang/bufjump.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2047,6 +2203,7 @@ final: prev: {
       hash = "sha256-6jqlKe8Ekm+3dvlgFCpJnI0BZzWC3KDYoOb88/itH+g=";
     };
     meta.homepage = "https://github.com/kwkarlwang/bufresize.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2060,6 +2217,7 @@ final: prev: {
       hash = "sha256-Rlv8tndDWBcLD/P9684v9VtCLmCXR2NkUl5gCxYmfIE=";
     };
     meta.homepage = "https://github.com/bullets-vim/bullets.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2073,6 +2231,7 @@ final: prev: {
       hash = "sha256-rNB44bWt6kFnrn+UyOqYHjigA9F/Iao9Osg/YTO4nhw=";
     };
     meta.homepage = "https://github.com/itchyny/calendar.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2086,6 +2245,7 @@ final: prev: {
       hash = "sha256-feQYIeTgpNU8k7p9zxkZTlsKmAKB8SVn/ioX1Py7yfQ=";
     };
     meta.homepage = "https://github.com/bkad/camelcasemotion/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2099,6 +2259,7 @@ final: prev: {
       hash = "sha256-7R4jo4tLHuS34hikP+TeI3TH16qF7CAhhmChhzJ8NtQ=";
     };
     meta.homepage = "https://github.com/catppuccin/nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2112,6 +2273,7 @@ final: prev: {
       hash = "sha256-Ap9UKMWfDBbWLf7Rh47JQy3EO2Tphf05RZvX9voF1Ac=";
     };
     meta.homepage = "https://github.com/catppuccin/vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2125,6 +2287,7 @@ final: prev: {
       hash = "sha256-qgO4mBfgkaMxWE9h30+2e2ARLaHIUhO/5Hudl53mkuM=";
     };
     meta.homepage = "https://github.com/tyru/caw.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2138,6 +2301,7 @@ final: prev: {
       hash = "sha256-3TZ8VmvdgQ9n63m78C3r4OIUkVQHTHBvC24ixBdhTig=";
     };
     meta.homepage = "https://github.com/uga-rosa/ccc.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2151,6 +2315,7 @@ final: prev: {
       hash = "sha256-UB0YXXC4/7BtZ06By0lT2Ad4PQtohAF8m57b71Dmxvo=";
     };
     meta.homepage = "https://github.com/Eandrju/cellular-automaton.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2164,6 +2329,7 @@ final: prev: {
       hash = "sha256-sHBPnylcJIO4dOrfZiYLPQLzCnTdwBkjXcJl1VZ8k0I=";
     };
     meta.homepage = "https://github.com/ms-jpq/chadtree/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2177,6 +2343,7 @@ final: prev: {
       hash = "sha256-8gC+QJRZPktc/o7hBeCFjd4VbAMTPzAnIOl1MXc56Yw=";
     };
     meta.homepage = "https://github.com/vim-scripts/changeColorScheme.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2190,19 +2357,21 @@ final: prev: {
       hash = "sha256-TYkGB7cON2t4GwMaR9H1MDG2j3btBv2AR37ade8kqTY=";
     };
     meta.homepage = "https://github.com/sudormrfbin/cheatsheet.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   checkmate-nvim = buildVimPlugin {
     pname = "checkmate.nvim";
-    version = "0.12.0";
+    version = "0.12.1";
     src = fetchFromGitHub {
       owner = "bngarren";
       repo = "checkmate.nvim";
-      tag = "v0.12.0";
-      hash = "sha256-stV0WtkTj+7S1aPAbu1unP755xO275Q1D7k/pl+NbHM=";
+      tag = "v0.12.1";
+      hash = "sha256-HIZTf+lUTonfQ+pq5+MxuFNo7M73Bbpv77jNSlnVHj4=";
     };
     meta.homepage = "https://github.com/bngarren/checkmate.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2216,6 +2385,7 @@ final: prev: {
       hash = "sha256-jLgMK4jiLLdt/Xokk/j0GorCermtn2mwom6P/asgQvQ=";
     };
     meta.homepage = "https://github.com/yunlingz/ci_dark/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2229,6 +2399,7 @@ final: prev: {
       hash = "sha256-+nDYk3zkLlj9YkzfK8mbD22iLWaHpzHImxPt3EVfyV0=";
     };
     meta.homepage = "https://github.com/declancm/cinnamon.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2242,6 +2413,7 @@ final: prev: {
       hash = "sha256-vavBQv8UlgwCmVWAibgHQKG3bJ1zlzVMexdHWRMDbe8=";
     };
     meta.homepage = "https://github.com/projekt0n/circles.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2255,6 +2427,7 @@ final: prev: {
       hash = "sha256-3MEAVKAblGysBhlrCf8j7Pf79tmylkjTnQkg6cvKMjg=";
     };
     meta.homepage = "https://github.com/zootedb0t/citruszest.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2268,6 +2441,7 @@ final: prev: {
       hash = "sha256-0HUtcgpmkJOjaFi8v0OHUk0hd5I3ISO1zkPJO4vr38A=";
     };
     meta.homepage = "https://github.com/xavierd/clang_complete/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2280,6 +2454,7 @@ final: prev: {
       hash = "sha256-5XES8qyl3tdMmsT+mkVcJ1sC5AKJDpHI/elsoB8XE/8=";
     };
     meta.homepage = "https://git.sr.ht/~p00f/clangd_extensions.nvim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2293,6 +2468,7 @@ final: prev: {
       hash = "sha256-HBHlP2k4vUCbE+Sgm6vN5XE7UGnioFvj8CI6h5H+8x8=";
     };
     meta.homepage = "https://github.com/greggh/claude-code.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2306,6 +2482,7 @@ final: prev: {
       hash = "sha256-bK6fq5HZRCMnahYvgSKcCYwIEa76q/jObn9KxY7kxv8=";
     };
     meta.homepage = "https://github.com/pittcat/claude-fzf-history.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2319,6 +2496,7 @@ final: prev: {
       hash = "sha256-OBpNT1rbjnfoDQ/L+NSDyAVtgN4Nyva1hw/E9FvqZSs=";
     };
     meta.homepage = "https://github.com/pittcat/claude-fzf.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2332,6 +2510,7 @@ final: prev: {
       hash = "sha256-r8hAUpSsr8zNm+av8Mu5oILaTfEsXEnJmkzRmvi9pF8=";
     };
     meta.homepage = "https://github.com/coder/claudecode.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2345,6 +2524,7 @@ final: prev: {
       hash = "sha256-miltIeW0AZPgqoDno0Nyo287mBbV2cJaf1XahECZfr0=";
     };
     meta.homepage = "https://github.com/rhysd/clever-f.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2358,6 +2538,7 @@ final: prev: {
       hash = "sha256-j7MjRD2N+YcqAhbtD734H2cYaM43f40jDFdUv1oUKQc=";
     };
     meta.homepage = "https://github.com/bbchung/clighter8/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2371,6 +2552,7 @@ final: prev: {
       hash = "sha256-iXrDb3pSB1NZmvLpSEWwvxOoqyNfR+uXpU9azXQeAVM=";
     };
     meta.homepage = "https://github.com/ekickx/clipboard-image.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2384,6 +2566,7 @@ final: prev: {
       hash = "sha256-V7oNIu7IBAHqSrgCNoePNUPjQDU9cFThFf7XGIth0sk=";
     };
     meta.homepage = "https://github.com/laytan/cloak.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2397,6 +2580,7 @@ final: prev: {
       hash = "sha256-JXpGIHatTKjcyHWLxHEibwDrHJwaEflKDRzmOJGAvck=";
     };
     meta.homepage = "https://github.com/asheq/close-buffers.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2410,6 +2594,7 @@ final: prev: {
       hash = "sha256-qHWyDd7/hm/t5IX8gaP6VPWEJ6M3uACP6SKJpvKpX58=";
     };
     meta.homepage = "https://github.com/Civitasv/cmake-tools.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2423,6 +2608,7 @@ final: prev: {
       hash = "sha256-wQ2vmPhVD/ImtbM5+gwqwHr1XuVWs2glWnmz9bhLcYc=";
     };
     meta.homepage = "https://github.com/winston0410/cmd-parser.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2436,6 +2622,7 @@ final: prev: {
       hash = "sha256-TMo/b2ESYQ0TxcufmpXjRfwFLPGxi0oAaYHV9lddZPg=";
     };
     meta.homepage = "https://github.com/vim-scripts/cmdalias.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2449,6 +2636,7 @@ final: prev: {
       hash = "sha256-XcXAtZYrWXoSp2wOPI3WJd2OqhoPpYT6CwrIEMYHGxU=";
     };
     meta.homepage = "https://github.com/tzachar/cmp-ai/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2461,6 +2649,7 @@ final: prev: {
       hash = "sha256-ALMK7TnEB7/UZibVgOl4r6/gYsHCo6YAZcAR536VL4g=";
     };
     meta.homepage = "https://codeberg.org/FelipeLema/cmp-async-path/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2474,6 +2663,7 @@ final: prev: {
       hash = "sha256-a0rGq0Ci6rX1ucme1w+sMNrXAbucM4xkrWX1t11XqpM=";
     };
     meta.homepage = "https://github.com/crispgm/cmp-beancount/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2487,6 +2677,7 @@ final: prev: {
       hash = "sha256-dG4U7MtnXThoa/PD+qFtCt76MQ14V1wX8GMYcvxEnbM=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-buffer/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2500,6 +2691,7 @@ final: prev: {
       hash = "sha256-TI1FR0EjzPcjsFdJQ9vXVleQwyXkmqs4TvYyZ8A6cS0=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-calc/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2513,6 +2705,7 @@ final: prev: {
       hash = "sha256-kG+NO+0hv4xNzjfJmam3LN8GkpPqfpnDKFefwdx2B9A=";
     };
     meta.homepage = "https://github.com/vappolinario/cmp-clippy/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2526,6 +2719,7 @@ final: prev: {
       hash = "sha256-w1HwR13rXRyLgWabHwJYABXO++gPEOMr46poUzOChzg=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-cmdline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2539,6 +2733,7 @@ final: prev: {
       hash = "sha256-IcruTOCNxYKmbo0St1U+CmrDStASPLe+rTLNU6/2Xew=";
     };
     meta.homepage = "https://github.com/dmitmel/cmp-cmdline-history/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2552,6 +2747,7 @@ final: prev: {
       hash = "sha256-uTiXG8p0Cqc4o45ckscRSSv0qGqbfwuryqWBZHEh8Mc=";
     };
     meta.homepage = "https://github.com/PaterJason/cmp-conjure/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2565,6 +2761,7 @@ final: prev: {
       hash = "sha256-PAEWX0U8qbBwC3DqfCrDDlTLoIRIlcbwS1eDu3yarTc=";
     };
     meta.homepage = "https://github.com/davidsierradz/cmp-conventionalcommits/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2578,6 +2775,7 @@ final: prev: {
       hash = "sha256-2j3Y2vvBHXLD+fPH7fbvjKadd6X/uuHI0ajkjTJR35I=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-copilot/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2591,6 +2789,7 @@ final: prev: {
       hash = "sha256-C3E2ChqlXxiD62jx6Jvwf/3WjlcnjN3G1GKJGehzoq4=";
     };
     meta.homepage = "https://github.com/delphinus/cmp-ctags/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2604,6 +2803,7 @@ final: prev: {
       hash = "sha256-wi9L4RcnJWUzTkC4u8vSTacrMxg4ftm/K7pkuwLEQ3U=";
     };
     meta.homepage = "https://github.com/rcarriga/cmp-dap/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2617,6 +2817,7 @@ final: prev: {
       hash = "sha256-pmGFs6UPbhtb/NO8L+de0PyL5+JKeEr4LJxNPZNsaeM=";
     };
     meta.homepage = "https://github.com/uga-rosa/cmp-dictionary/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2630,6 +2831,7 @@ final: prev: {
       hash = "sha256-b4IFjTYvqodJokCGWyNJKShebSzz1UZ91vA5SthxORg=";
     };
     meta.homepage = "https://github.com/dmitmel/cmp-digraphs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2643,6 +2845,7 @@ final: prev: {
       hash = "sha256-EY0yu6wugw2cweTOYkdAXW4FZFh6SdTPsVncqrnrc14=";
     };
     meta.homepage = "https://github.com/SergioRibera/cmp-dotenv/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2656,6 +2859,7 @@ final: prev: {
       hash = "sha256-Sdgetlwhhc11ufDJH6uaXtbL0EZQFZ2Qgg5yBfG1u7I=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-emoji/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2669,6 +2873,7 @@ final: prev: {
       hash = "sha256-Fadb5xapY6WiRMCDc9hoj8AaIgSt+s0Y8ZPVtvTVhWo=";
     };
     meta.homepage = "https://github.com/mtoohey31/cmp-fish/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2682,6 +2887,7 @@ final: prev: {
       hash = "sha256-8cIixO0OusqlnKrFqVutGwUfdX319k8a19Nz1xiUH2I=";
     };
     meta.homepage = "https://github.com/tzachar/cmp-fuzzy-buffer/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2695,6 +2901,7 @@ final: prev: {
       hash = "sha256-hJakGmszuJnPIcqrDSNAmm2x1c7ra+qUMEdoKrUop+w=";
     };
     meta.homepage = "https://github.com/tzachar/cmp-fuzzy-path/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2708,6 +2915,7 @@ final: prev: {
       hash = "sha256-ufbqLLgcRDoSG2XTqmMRcaHG120wtUqtovIrhLwXZ3k=";
     };
     meta.homepage = "https://github.com/petertriho/cmp-git/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2721,6 +2929,7 @@ final: prev: {
       hash = "sha256-CYJ4Px18wXDMw/58InwBDxbcO+94IzNLcwYp6iKJPRE=";
     };
     meta.homepage = "https://github.com/max397574/cmp-greek/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2734,6 +2943,7 @@ final: prev: {
       hash = "sha256-95AvId9oT9N9hqEOphKPMdKT6raxc9o0AcEY4CGeI4U=";
     };
     meta.homepage = "https://github.com/kdheepak/cmp-latex-symbols/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2747,6 +2957,7 @@ final: prev: {
       hash = "sha256-Nr9dnPJt824Yb/udxQ5GKFW8rToWp6r7l9wAxwP2PRY=";
     };
     meta.homepage = "https://github.com/octaltree/cmp-look/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2760,6 +2971,7 @@ final: prev: {
       hash = "sha256-7mVKH6M7YjzxVq2RrlrUL8V/hcB/NmURU9Dl9aazw3U=";
     };
     meta.homepage = "https://github.com/notomo/cmp-neosnippet/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2773,6 +2985,7 @@ final: prev: {
       hash = "sha256-jEnuHDL+PDbnZtSzoO7ExDfl0sICFYDWvXqEGaC+Seg=";
     };
     meta.homepage = "https://github.com/GaetanLepage/cmp-nixpkgs-maintainers/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2786,6 +2999,7 @@ final: prev: {
       hash = "sha256-6o0eO4uuHNBbo6pqWgRtleOxd8rYaYbrl+dTjhB6M8Q=";
     };
     meta.homepage = "https://github.com/David-Kunz/cmp-npm/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2799,6 +3013,7 @@ final: prev: {
       hash = "sha256-CYZdfAsJYQyW413fRvNbsS5uayuc6fKDvDLZ2Y7j3ZQ=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2812,6 +3027,7 @@ final: prev: {
       hash = "sha256-BBvG0/yEyYs+sLPtCYAgZLz9ccGAMBCMhgmwC+gZ3kc=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp-document-symbol/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2825,6 +3041,7 @@ final: prev: {
       hash = "sha256-gIlax5z+J7ZbygiUMvnKvz0m2bmck/W1swIYq6WDAGo=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2838,6 +3055,7 @@ final: prev: {
       hash = "sha256-eUnytDC6OrbJpg4fepwzCfpwKi8d8LN5QvJOZaP2niE=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2851,6 +3069,7 @@ final: prev: {
       hash = "sha256-IleS0hULag/CcwNMdf+4eRsDnBzkCCGyA4wLR7gaxvg=";
     };
     meta.homepage = "https://github.com/quangnguyen30192/cmp-nvim-tags/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2864,6 +3083,7 @@ final: prev: {
       hash = "sha256-BwjkBU5yVZKYK8bfMQSct7rftuBjYzzF06CR5I68aHE=";
     };
     meta.homepage = "https://github.com/quangnguyen30192/cmp-nvim-ultisnips/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2877,6 +3097,7 @@ final: prev: {
       hash = "sha256-PyCZGb+54l9nLR0fXM2QXACGt25nH0IlucbTXIgbJp0=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-omni/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2890,6 +3111,7 @@ final: prev: {
       hash = "sha256-zkTOczQZQ59QiqiSxya9j8tOw+gtuFd7EK4gz+AAiTo=";
     };
     meta.homepage = "https://github.com/aspeddro/cmp-pandoc.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2903,6 +3125,7 @@ final: prev: {
       hash = "sha256-XsdneGNJzmRBggk8lz9JNDQYk7wbYfUAF2oZLXzFb9c=";
     };
     meta.homepage = "https://github.com/jmbuhr/cmp-pandoc-references/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2916,6 +3139,7 @@ final: prev: {
       hash = "sha256-e4Rd2y1Wekp7aobpTGaUeoSBnlfIASDaBR8js5dh2Vw=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-path/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2929,6 +3153,7 @@ final: prev: {
       hash = "sha256-IWYyZoXYyddW9wqR50E16IXFQAsFAjf93O/NkVGb9H8=";
     };
     meta.homepage = "https://github.com/lukas-reineke/cmp-rg/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2942,6 +3167,7 @@ final: prev: {
       hash = "sha256-suw8AGXLi48hB49otZlS+DzbhwPDC9ql34dX3ufLnNA=";
     };
     meta.homepage = "https://github.com/dcampos/cmp-snippy/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2955,6 +3181,7 @@ final: prev: {
       hash = "sha256-Gf7HSocvHmTleVQytNYmmN+fFX7kl5sYHQSpUJc0CGI=";
     };
     meta.homepage = "https://github.com/f3fora/cmp-spell/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -2968,6 +3195,7 @@ final: prev: {
       hash = "sha256-DQkEX5SdTLIdI4g157bVjlJUHRkFrD1akLHvDw7KJT4=";
     };
     meta.homepage = "https://github.com/nzlov/cmp-tabby/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2981,6 +3209,7 @@ final: prev: {
       hash = "sha256-g7H6dO+SfYSVjSs24+RcngtecuxsgntaAXb6aodFF3w=";
     };
     meta.homepage = "https://github.com/tzachar/cmp-tabnine/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -2994,6 +3223,7 @@ final: prev: {
       hash = "sha256-xHnBKOOg/6n06vK7sC3shDw80ci/cl/5xgs7kobd6+s=";
     };
     meta.homepage = "https://github.com/andersevenrud/cmp-tmux/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3007,6 +3237,7 @@ final: prev: {
       hash = "sha256-8WAk9S+/7vSz7bVHdEzjbKUokU144fvnByIeJ1gAWhU=";
     };
     meta.homepage = "https://github.com/ray-x/cmp-treesitter/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3020,6 +3251,7 @@ final: prev: {
       hash = "sha256-sPZX+dbGKOUfcjme4qG82impwYZgLbN5eRmblxPtbKI=";
     };
     meta.homepage = "https://github.com/lukas-reineke/cmp-under-comparator/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3033,6 +3265,7 @@ final: prev: {
       hash = "sha256-V5yC4st22stUkD54/2hDGi/Axi/T0YArkVhQlDvHg7g=";
     };
     meta.homepage = "https://github.com/dmitmel/cmp-vim-lsp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3046,6 +3279,7 @@ final: prev: {
       hash = "sha256-2whCuzLc57gPerZN7Dg6tUzZplox/6P+iRMuAYfjY1E=";
     };
     meta.homepage = "https://github.com/micangl/cmp-vimtex/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3059,6 +3293,7 @@ final: prev: {
       hash = "sha256-wG63srm0ieCPoEcpYxKHOJedWajW04FnJaL+1Vlb5Ug=";
     };
     meta.homepage = "https://github.com/pontusk/cmp-vimwiki-tags/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3072,6 +3307,7 @@ final: prev: {
       hash = "sha256-2mkN03noOr5vBvRbSb35xZKorSH+8savQNZtgM9+QcM=";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-vsnip/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3085,6 +3321,7 @@ final: prev: {
       hash = "sha256-RovqqMGvoUFvQB2CdYnDYa84/HQp2MotHNiuDLOgLuY=";
     };
     meta.homepage = "https://github.com/tamago324/cmp-zsh/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3098,6 +3335,7 @@ final: prev: {
       hash = "sha256-86lKQPPyqFz8jzuLajjHMKHrYnwW6+QOcPyQEx6B+gw=";
     };
     meta.homepage = "https://github.com/saadparwaiz1/cmp_luasnip/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3111,6 +3349,7 @@ final: prev: {
       hash = "sha256-Upk3D54HwM07QbbWs8fTsHQUYO/zyIFFnft/CohV/iA=";
     };
     meta.homepage = "https://github.com/chrisgrieser/cmp_yanky/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3124,6 +3363,7 @@ final: prev: {
       hash = "sha256-YmNd6atWTwAlgZItgFXgaLinTbAMWpQE5Jc/rWNstRo=";
     };
     meta.homepage = "https://github.com/lalitmee/cobalt2.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3137,6 +3377,7 @@ final: prev: {
       hash = "sha256-Onq7kMrwJp3/raWcil24RbizGK8VriPVFXbd8Gvg9A0=";
     };
     meta.homepage = "https://github.com/vn-ki/coc-clap/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3150,6 +3391,7 @@ final: prev: {
       hash = "sha256-IGhwtUGEe45qzyE5Rgez0cc2fv0rm8qniNq1O90T/E4=";
     };
     meta.homepage = "https://github.com/neoclide/coc-denite/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3163,6 +3405,7 @@ final: prev: {
       hash = "sha256-12luGVkbc7FDW/Hcl2vF5+p+hSLHgegHgizrXIMrV8I=";
     };
     meta.homepage = "https://github.com/antoinemadec/coc-fzf/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3176,6 +3419,7 @@ final: prev: {
       hash = "sha256-tfZKX/M/L0K84CIgq0g9Xnoy2meuaTd9BET7WzD3/Ms=";
     };
     meta.homepage = "https://github.com/josa42/coc-lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3189,19 +3433,21 @@ final: prev: {
       hash = "sha256-yG4zkgfnHIUojWcUL+AkH56lafG7TZ2yzWaa3sMd8Ps=";
     };
     meta.homepage = "https://github.com/neoclide/coc-neco/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   coc-nvim = buildVimPlugin {
     pname = "coc.nvim";
-    version = "0.0.82-unstable-2026-04-17";
+    version = "0.0.82-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "4760873cd36831c555309f884a955ab66717d8c0";
-      hash = "sha256-p/xVUvewcB6DhfHeV6tj+RH+ijeFOxA6/qARG0obcrA=";
+      rev = "0568d11f5cb0e38aa18f28621feacbe5af473076";
+      hash = "sha256-rpvtxc4hz/s9nJ1OmasL4ZwRCSrmr5MAIu3cwUUPOik=";
     };
     meta.homepage = "https://github.com/neoclide/coc.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3215,6 +3461,7 @@ final: prev: {
       hash = "sha256-8LtQjrk1v4dqsvTVLuyoGdrdSjMjlcKWREdApyoP+Ec=";
     };
     meta.homepage = "https://github.com/coc-extensions/coc-svelte/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3228,6 +3475,7 @@ final: prev: {
       hash = "sha256-BbmU3nKm+RFqihAM8NTqRhPm2mtSom9LFQZJZQZdKqE=";
     };
     meta.homepage = "https://github.com/iamcco/coc-tailwindcss/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3241,6 +3489,7 @@ final: prev: {
       hash = "sha256-1iSb6nOiqSwf0fQhPEwAKJBDCwL9SyBM3dw/ei8dOA8=";
     };
     meta.homepage = "https://github.com/manicmaniac/coconut.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3254,6 +3503,7 @@ final: prev: {
       hash = "sha256-SnzpyXqrAf60Vs7JbwuHmAJ/TNON8wwqNyPN3EGc2Og=";
     };
     meta.homepage = "https://github.com/ravitemer/codecompanion-history.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3267,19 +3517,21 @@ final: prev: {
       hash = "sha256-lIHyiBU3P1hxPY0CGKH1xj6cXCSKJ/2Hmc18gZLIXEU=";
     };
     meta.homepage = "https://github.com/franco-ruggeri/codecompanion-lualine.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   codecompanion-nvim = buildVimPlugin {
     pname = "codecompanion.nvim";
-    version = "19.11.0";
+    version = "19.12.0";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "codecompanion.nvim";
-      tag = "v19.11.0";
-      hash = "sha256-z8zcGgq5CBq5OlUZ+GfcvCgVrrFdGUMpJYR0duMigXA=";
+      tag = "v19.12.0";
+      hash = "sha256-SKqRMFG5xiJHhMCexOtQGAJRFYRgcfuInxTJvXhGhhI=";
     };
     meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3293,6 +3545,7 @@ final: prev: {
       hash = "sha256-QSkiyV70kFkArCnTXYRR+Dt4i5XSq072tYnOnHbKEBc=";
     };
     meta.homepage = "https://github.com/franco-ruggeri/codecompanion-spinner.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3306,6 +3559,7 @@ final: prev: {
       hash = "sha256-7Ujon82GbVqD5K+lattVCYHkkGofvVEjbeqyaUeR2rU=";
     };
     meta.homepage = "https://github.com/mrjones2014/codesettings.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3319,6 +3573,7 @@ final: prev: {
       hash = "sha256-eT6AU8kSgMFyDllcbShQd1WRO/z0S44TdSVUf61v2oo=";
     };
     meta.homepage = "https://github.com/gorbit99/codewindow.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3332,6 +3587,7 @@ final: prev: {
       hash = "sha256-rx5/Iso5rWYfRTnQyZ8g16FCxqjj4FgWmG+r09ebVJc=";
     };
     meta.homepage = "https://github.com/johnseth97/codex.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3345,6 +3601,7 @@ final: prev: {
       hash = "sha256-vN0ZrvnF4EpFHhAK1QFyORL2KyFSzngQRDgpu5dYyoY=";
     };
     meta.homepage = "https://github.com/metakirby5/codi.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3358,6 +3615,7 @@ final: prev: {
       hash = "sha256-wLmXyoVdOIsOcpshGFvDiEou++j42p2w2zYy9ZDidqo=";
     };
     meta.homepage = "https://github.com/archseer/colibri.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3371,6 +3629,7 @@ final: prev: {
       hash = "sha256-YanO/e4jlm/k5VSnMDGQ7PnWKuj+ADifg0UsZvbbkKA=";
     };
     meta.homepage = "https://github.com/tjdevries/colorbuddy.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3384,19 +3643,21 @@ final: prev: {
       hash = "sha256-hra7QFKWsIqtAWYNDqPv3tJUAsZfVmGTY3AQjeWvxaM=";
     };
     meta.homepage = "https://github.com/xzbdmw/colorful-menu.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   colorful-winsep-nvim = buildVimPlugin {
     pname = "colorful-winsep.nvim";
-    version = "0-unstable-2026-02-19";
+    version = "0-unstable-2026-04-26";
     src = fetchFromGitHub {
       owner = "nvim-zh";
       repo = "colorful-winsep.nvim";
-      rev = "84432d9966fafaa08dd9040c98b0011045d8e964";
-      hash = "sha256-xZKDP/9iG2+tt8nqNpirvCe5olNj/jLYrVV9D6o+UXk=";
+      rev = "6134b5cd4a38990c7b720adc90973ed32f726179";
+      hash = "sha256-11F/cax2qRDQtxbmM8TfHlmko5gxX5VrW8lPcPFfIzU=";
     };
     meta.homepage = "https://github.com/nvim-zh/colorful-winsep.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3410,6 +3671,7 @@ final: prev: {
       hash = "sha256-kL194P1Vtvsj8e2ngJpVKh+9hwsK7sBYECdfxgMd8vg=";
     };
     meta.homepage = "https://github.com/lilydjwg/colorizer/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3423,6 +3685,7 @@ final: prev: {
       hash = "sha256-KNTHHcbsJv9IJnXvnpXojYFQMULJbZP/c7WH5ksDTgM=";
     };
     meta.homepage = "https://github.com/Domeee/com.cloudedmountain.ide.neovim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3436,6 +3699,7 @@ final: prev: {
       hash = "sha256-yrwpVy9qiDqiMxy07hvdgx01BrQbkPy5e3OgAjuOw/k=";
     };
     meta.homepage = "https://github.com/mluders/comfy-line-numbers.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3449,6 +3713,7 @@ final: prev: {
       hash = "sha256-yp3kqhHQMtUFFPfbqgnrmmclx6r39k3ohen4Ys3s3BU=";
     };
     meta.homepage = "https://github.com/wincent/command-t/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3462,6 +3727,7 @@ final: prev: {
       hash = "sha256-bYh/rcJv03GlMhxmEUL/F/9Ao1n71C2jj8F60x0ZY40=";
     };
     meta.homepage = "https://github.com/saifulapm/commasemi.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3475,6 +3741,7 @@ final: prev: {
       hash = "sha256-2P8Zyd5ucOvihZdjgSmr7YlV0yuCn+LyHkCj9gPx/CY=";
     };
     meta.homepage = "https://github.com/LudoPinelli/comment-box.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3488,6 +3755,7 @@ final: prev: {
       hash = "sha256-h0kPue5Eqd5aeu4VoLH45pF0DmWWo1d8SnLICSQ63zc=";
     };
     meta.homepage = "https://github.com/numtostr/comment.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3501,6 +3769,7 @@ final: prev: {
       hash = "sha256-ltqRfpamivu+H5ss5aiq4/oNhGYs+CsJ1GQeVpggEBY=";
     };
     meta.homepage = "https://github.com/rhysd/committia.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3514,6 +3783,7 @@ final: prev: {
       hash = "sha256-AL4NaLxnmGyoG585njmU5SOxps51XJ4ZJa2qeGlzrlE=";
     };
     meta.homepage = "https://github.com/xeluxee/competitest.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "LGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3527,6 +3797,7 @@ final: prev: {
       hash = "sha256-UbPd2v+Oz8LXz3D4w6bUI+LTtd+IhWgigJCLqU5/l9o=";
     };
     meta.homepage = "https://github.com/krady21/compiler-explorer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3540,6 +3811,7 @@ final: prev: {
       hash = "sha256-7+1GJwFwM9n6PqHWTAZJwMNGyQAudJe2ZIdycPD05y8=";
     };
     meta.homepage = "https://github.com/Zeioth/compiler.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3553,6 +3825,7 @@ final: prev: {
       hash = "sha256-0M+CENXL1g3y+z3KfuSlGcHC4LRn5u1JpodmyYavPZM=";
     };
     meta.homepage = "https://github.com/steelsojka/completion-buffers/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3566,6 +3839,7 @@ final: prev: {
       hash = "sha256-6um9dye0MLY8K8AAsDksCpy1KbMNSdMuj+zKteSAxR4=";
     };
     meta.homepage = "https://github.com/nvim-lua/completion-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3579,6 +3853,7 @@ final: prev: {
       hash = "sha256-0/LsJnPOIjEH/hD1Mb2+OWHuVGW0uOA6imMDv2jgbbE=";
     };
     meta.homepage = "https://github.com/aca/completion-tabnine/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3592,6 +3867,7 @@ final: prev: {
       hash = "sha256-S/+Z84Ywa/zIrkkrd4I5BrFokBy751czqwZKx2tD8Xw=";
     };
     meta.homepage = "https://github.com/chikatoike/concealedyank.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3605,6 +3881,7 @@ final: prev: {
       hash = "sha256-fydXEReohZlxGgjClncOI9bqbnDPNTB07TPccXxO6bk=";
     };
     meta.homepage = "https://github.com/rhysd/conflict-marker.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3619,6 +3896,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/conform.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3632,6 +3910,7 @@ final: prev: {
       hash = "sha256-wz+nHMR6gYXGDxSAZExd7CItONY2MERYzDapNpKFLmc=";
     };
     meta.homepage = "https://github.com/Olical/conjure/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3645,6 +3924,7 @@ final: prev: {
       hash = "sha256-VCtnbhwZ8bIOmwUwu+ExU//FNhvsdJrac9Hdy9GKUr4=";
     };
     meta.homepage = "https://github.com/niklasdewally/conjure.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3658,6 +3938,7 @@ final: prev: {
       hash = "sha256-p7iMPS5Vbi78PTSbAD72Y56a62W8vsruXf/tFI56r7c=";
     };
     meta.homepage = "https://github.com/wellle/context.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3671,6 +3952,7 @@ final: prev: {
       hash = "sha256-jfUVDBqE1xeOAdcK+sltTR5fJAkgejzmgPENyWMg4ws=";
     };
     meta.homepage = "https://github.com/Shougo/context_filetype.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3684,6 +3966,7 @@ final: prev: {
       hash = "sha256-Esr33dRsKGc7vOQ2jMx8enj4uIicsRNvYbc4GsqlFUk=";
     };
     meta.homepage = "https://github.com/banjo/contextfiles.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3697,6 +3980,7 @@ final: prev: {
       hash = "sha256-erRL8bY/zuwuCZfttw+avTrFV7pjv2H6v73NzY2bymM=";
     };
     meta.homepage = "https://github.com/zbirenbaum/copilot-cmp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3710,6 +3994,7 @@ final: prev: {
       hash = "sha256-wb6WpIMUggHjUKEI++pRgg53vyiuwEZQmYWEN7sev3M=";
     };
     meta.homepage = "https://github.com/copilotlsp-nvim/copilot-lsp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3723,6 +4008,7 @@ final: prev: {
       hash = "sha256-9e5nJI+ugkolwdzQ4/KT6Gz1rpSbOSnLfdUWT9LDJg0=";
     };
     meta.homepage = "https://github.com/zbirenbaum/copilot.lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3736,6 +4022,7 @@ final: prev: {
       hash = "sha256-HYNqPdwatrNTNUGo6I2SzmNxSI4iqX+Ls7GHQcU8+Fk=";
     };
     meta.homepage = "https://github.com/AndreM222/copilot-lualine/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3749,6 +4036,7 @@ final: prev: {
       hash = "sha256-McrihGscbvt2lqHil3NxHUfgx/IAFDf7tdbBkv4vTK4=";
     };
     meta.homepage = "https://github.com/github/copilot.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3762,6 +4050,7 @@ final: prev: {
       hash = "sha256-91OF1qsqAln/E8H1vJLQHIdnpcEmTn1NCPgSU2768EA=";
     };
     meta.homepage = "https://github.com/ms-jpq/coq.artifacts/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3775,6 +4064,7 @@ final: prev: {
       hash = "sha256-njWd5MYav5nHzQg6EDYmRQQVNoA4Y/3U8xBkbAsZhag=";
     };
     meta.homepage = "https://github.com/tomtomjhj/coq-lsp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3788,6 +4078,7 @@ final: prev: {
       hash = "sha256-l+wMABt0lnKn1V6d7uhe6rUjfKsZw9XcO6RHwEVrZSI=";
     };
     meta.homepage = "https://github.com/ms-jpq/coq.thirdparty/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3801,19 +4092,21 @@ final: prev: {
       hash = "sha256-fto7KFjMA1f7eEYZXL083nVsxeH0iHhWGGhviirj7kI=";
     };
     meta.homepage = "https://github.com/jvoorhis/coq.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   coq_nvim = buildVimPlugin {
     pname = "coq_nvim";
-    version = "0-unstable-2026-01-06";
+    version = "0-unstable-2026-04-23";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "coq_nvim";
-      rev = "d939a34ceb2b57d2937890337a4aa75eb55e18a8";
-      hash = "sha256-ySWDUOXmbVAthLCx3EvRRZnBi44G0PofZq/MqUCh+6A=";
+      rev = "bcc1bf327b98042e6a77a9637cd465cbceca2679";
+      hash = "sha256-GKwfDWCKSJ6uQ8PZfKUW3MjMYtEhKVhmkJzbmdQkF9Y=";
     };
     meta.homepage = "https://github.com/ms-jpq/coq_nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3827,6 +4120,7 @@ final: prev: {
       hash = "sha256-Z/2hBW/bRb8wtJqBUT8tqgoXg4XqGNvp8L6xw+zHDaU=";
     };
     meta.homepage = "https://github.com/agda/cornelis/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3840,6 +4134,7 @@ final: prev: {
       hash = "sha256-zlN2n8ntfGVEWGvzl0HVohOgZhroBgNXWP/QR+RpfgU=";
     };
     meta.homepage = "https://github.com/lfilho/cosco.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3853,6 +4148,7 @@ final: prev: {
       hash = "sha256-qEn5WSjtmJwsiAFsnTSYbKp7N3Gdu0yoGSm8ASXADEg=";
     };
     meta.homepage = "https://github.com/nixprime/cpsm/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3866,6 +4162,7 @@ final: prev: {
       hash = "sha256-+6rC+bticNgMhZ+2lkPpitunSv4nHmBzCIj6ngt7gaA=";
     };
     meta.homepage = "https://github.com/saecki/crates.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3879,6 +4176,7 @@ final: prev: {
       hash = "sha256-xuXSIZUKA6SpdBnt/+Xojd1yPoSxKNVEfROaZq3p5CE=";
     };
     meta.homepage = "https://github.com/godlygeek/csapprox/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3892,6 +4190,7 @@ final: prev: {
       hash = "sha256-90Lt+xJn0YhDO6bzFWE6gXdJPwJkW2Jfl6H6gxqlmew=";
     };
     meta.homepage = "https://github.com/Decodetalkers/csharpls-extended-lsp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3905,6 +4204,7 @@ final: prev: {
       hash = "sha256-NTgIaEWqtubjFEfIrw8sKTjhNbnmJ1In0OcddRg5W0w=";
     };
     meta.homepage = "https://github.com/davidmh/cspell.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3918,6 +4218,7 @@ final: prev: {
       hash = "sha256-t3a9Qa5eMZuK+kg27hbeiW4GrQqxMMIMqd+xh/Spvws=";
     };
     meta.homepage = "https://github.com/chrisbra/csv.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3931,6 +4232,7 @@ final: prev: {
       hash = "sha256-JHNMO+l0P1mIZ2ZMqmbyZPP4WeGWKJLrs+9H1XBhoyM=";
     };
     meta.homepage = "https://github.com/hat0uma/csvview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3944,6 +4246,7 @@ final: prev: {
       hash = "sha256-GLVTLJ8sfucRMaSwpMc8zGYSVVOfSPFp18gO102b45Q=";
     };
     meta.homepage = "https://github.com/JazzCore/ctrlp-cmatcher/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3957,6 +4260,7 @@ final: prev: {
       hash = "sha256-ROnWmRZwhH5xGdOypD8ZLFXi7u5FPsaNfKzZZECEfYw=";
     };
     meta.homepage = "https://github.com/FelikZ/ctrlp-py-matcher/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -3970,6 +4274,7 @@ final: prev: {
       hash = "sha256-DMvHWWizsJjKHb96Hz/zOPQsd2uENfz8kI8Uvs9GUg0=";
     };
     meta.homepage = "https://github.com/ctrlpvim/ctrlp.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3983,6 +4288,7 @@ final: prev: {
       hash = "sha256-1AukntulOAV3lwZjPsPuAFbdiINcxrLoj75iil6Q2po=";
     };
     meta.homepage = "https://github.com/amiorin/ctrlp-z/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -3996,6 +4302,7 @@ final: prev: {
       hash = "sha256-Cfqol7Ivz6gnThL63UzNOwQsz/9OLOGQDXxbfzvcESY=";
     };
     meta.homepage = "https://github.com/gbprod/cutlass.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4009,6 +4316,7 @@ final: prev: {
       hash = "sha256-lz9TlZRhJIUnv/4qTT8SoimRiY/vGFlrOKT3xc3FtoQ=";
     };
     meta.homepage = "https://github.com/scottmckendry/cyberdream.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4022,6 +4330,7 @@ final: prev: {
       hash = "sha256-bgS8dXy7Th6neaAsmpanrVGhwSzhz0J9ykj+vyxhk+Q=";
     };
     meta.homepage = "https://github.com/ghillb/cybu.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4035,6 +4344,7 @@ final: prev: {
       hash = "sha256-HmDQfOIoSV93wqRe7O4FPuHEmAxwoP1+Ut+sKhB62jA=";
     };
     meta.homepage = "https://github.com/terrastruct/d2-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4048,6 +4358,7 @@ final: prev: {
       hash = "sha256-ixqdTuAyetFBg5Oolh5DEK+cRb9LMSgaKL1vZV38kNs=";
     };
     meta.homepage = "https://github.com/JachymPutta/dailies.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4061,6 +4372,7 @@ final: prev: {
       hash = "sha256-KBPpOmf2v6N45TPPKhKV80u1keZ5A85ora7XHS4XdpI=";
     };
     meta.homepage = "https://github.com/Koalhack/darcubox-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4074,6 +4386,7 @@ final: prev: {
       hash = "sha256-j7pFWOD/pbhjSmSepaWhB94Sawp7uHmkRhZDlo+bzxo=";
     };
     meta.homepage = "https://github.com/ptdewey/darkearth-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4087,6 +4400,7 @@ final: prev: {
       hash = "sha256-o1UvUGjq3kiiyv/jrVxIEsl3y3wFnBvgSJpyjXTOsMw=";
     };
     meta.homepage = "https://github.com/iofq/dart.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4100,6 +4414,7 @@ final: prev: {
       hash = "sha256-nsJKWCNJ3InidTaP0/cQ65YIX/6a1/wH56rlkNkJWJE=";
     };
     meta.homepage = "https://github.com/dart-lang/dart-vim-plugin/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4113,6 +4428,7 @@ final: prev: {
       hash = "sha256-bKBA4yhIQgQhS2M5XrVIhv0gsJIPnmFZ3RENWP8y7N8=";
     };
     meta.homepage = "https://github.com/joseotaviorf/dash.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4126,6 +4442,7 @@ final: prev: {
       hash = "sha256-fzk/ThE6F0ssfeXTuVyO6KiMQSZz7YLxXwB4lbDz3CA=";
     };
     meta.homepage = "https://github.com/nvimdev/dashboard-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4139,6 +4456,7 @@ final: prev: {
       hash = "sha256-VYNjVH1OtmSyvBoFxF5WBf150GwoIpjTe0Y0oK8Hp8A=";
     };
     meta.homepage = "https://github.com/Shougo/ddc-filter-matcher_head/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4152,6 +4470,7 @@ final: prev: {
       hash = "sha256-8zoRsX7ZNCNkokku0TW0LNkjXmBL8UCu8h3EAe4KQ+g=";
     };
     meta.homepage = "https://github.com/Shougo/ddc-filter-sorter_rank/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4165,6 +4484,7 @@ final: prev: {
       hash = "sha256-NJyBF550oRLpP+jGdH3T7UA1oZGyusE/gFuSk8Yk97k=";
     };
     meta.homepage = "https://github.com/tani/ddc-fuzzy/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4178,6 +4498,7 @@ final: prev: {
       hash = "sha256-wLQ9vpKgl4fyjLEWo1XIElw8CbFjpBkvYMFoMPrQTxM=";
     };
     meta.homepage = "https://github.com/Shougo/ddc-source-around/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4191,6 +4512,7 @@ final: prev: {
       hash = "sha256-UndfTc+awrlzJUziPEv5FFwwDjQTSqOVZXheQ/CERpg=";
     };
     meta.homepage = "https://github.com/LumaKernel/ddc-source-file/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4204,6 +4526,7 @@ final: prev: {
       hash = "sha256-oj+L2dy6FpOYv/j0E/tsSD0BfP9qTtWCKwrLZSsCUsc=";
     };
     meta.homepage = "https://github.com/Shougo/ddc-source-lsp/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4217,6 +4540,7 @@ final: prev: {
       hash = "sha256-fWJDl/MdW3Ce99sqs60Cp6OghnGfsQFmIkOTDkAT9yw=";
     };
     meta.homepage = "https://github.com/Shougo/ddc-ui-native/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4230,6 +4554,7 @@ final: prev: {
       hash = "sha256-kQ1fK65V0NtObqBy/FhcfACUGeI5Pk4t3Kw0BPpxChw=";
     };
     meta.homepage = "https://github.com/Shougo/ddc-ui-pum/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4243,6 +4568,7 @@ final: prev: {
       hash = "sha256-vetnDOYWEg+iuMOFL2GYzVfuYgV94Jl8DzBDZxhAFf0=";
     };
     meta.homepage = "https://github.com/Shougo/ddc.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4256,6 +4582,7 @@ final: prev: {
       hash = "sha256-xA0zFVgtZLsxX3gyfbLnitfNwdsn+p29euIJtnEaPv8=";
     };
     meta.homepage = "https://github.com/MironPascalCaseFan/debugmaster.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4269,6 +4596,7 @@ final: prev: {
       hash = "sha256-IKIl4Hg/fCwBlm3kc9MC6M7uZYvbRkvRrtHRe5U5/9c=";
     };
     meta.homepage = "https://github.com/andrewferrier/debugprint.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4282,6 +4610,7 @@ final: prev: {
       hash = "sha256-3j1VSBVNKIlOzDMcvwN78we+sBus/bv5P/wj9eIYq3U=";
     };
     meta.homepage = "https://github.com/Verf/deepwhite.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4295,6 +4624,7 @@ final: prev: {
       hash = "sha256-jv3Z70GrVjYYUISe4WPmO2UwqcmNl/EDMHPHm/36r8Y=";
     };
     meta.homepage = "https://github.com/kristijanhusak/defx-git/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4308,6 +4638,7 @@ final: prev: {
       hash = "sha256-//lijqO+c5VCA7OKYuF6aTINShtAZ9bo9tMFd/WZeT8=";
     };
     meta.homepage = "https://github.com/kristijanhusak/defx-icons/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4321,6 +4652,7 @@ final: prev: {
       hash = "sha256-y1aCgoPauses7fp/HU3cn1d3wmZbveybXjvHmYpz2fE=";
     };
     meta.homepage = "https://github.com/Shougo/defx.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4334,6 +4666,7 @@ final: prev: {
       hash = "sha256-tX4xzpB+62ty2zkPm8i5hXb+WX6fmhunHr7PatZ03U8=";
     };
     meta.homepage = "https://github.com/Raimondi/delimitMate/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4347,6 +4680,7 @@ final: prev: {
       hash = "sha256-jDvdyAT2lngYDSDw4c+zziUYUuNeET0FBWJA+IeD2Ts=";
     };
     meta.homepage = "https://github.com/mawkler/demicolon.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4360,6 +4694,7 @@ final: prev: {
       hash = "sha256-qggOAjHXK0ypBxTXSjmas3y97uBTbe6W2aM56qFPuC4=";
     };
     meta.homepage = "https://github.com/neoclide/denite-extra/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4373,6 +4708,7 @@ final: prev: {
       hash = "sha256-1kLALtSxZQa7EtRrHJLCIeLoYWvtIdn//oeHnSsDqkA=";
     };
     meta.homepage = "https://github.com/neoclide/denite-git/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4386,6 +4722,7 @@ final: prev: {
       hash = "sha256-wQYfTx1qsi61O66Wymvn8I/dJD2lQFAv7QiFBjuQt2c=";
     };
     meta.homepage = "https://github.com/Shougo/denite.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4399,6 +4736,7 @@ final: prev: {
       hash = "sha256-lj8yjZrwE9GfNPDIpH4tCI4TTJHkYRlFFCTdqMqWtZg=";
     };
     meta.homepage = "https://github.com/vim-denops/denops.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4412,6 +4750,7 @@ final: prev: {
       hash = "sha256-J9dftuSAmlkuurkA4GwYk67E4mKPow4o2FCoKsH2+zU=";
     };
     meta.homepage = "https://github.com/Shougo/deol.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4426,6 +4765,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-clang/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4439,6 +4779,7 @@ final: prev: {
       hash = "sha256-CVwxfAaw9C/vxqUxg7ykt28yIgR4eKwocPC7EtYB5xY=";
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-dictionary/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4452,6 +4793,7 @@ final: prev: {
       hash = "sha256-t8TfjEMJpiZXFMwFgXDD11G4wkbdEZvrDV9SrDGRRqU=";
     };
     meta.homepage = "https://github.com/ponko2/deoplete-fish/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4465,6 +4807,7 @@ final: prev: {
       hash = "sha256-9ZU9DgMkBPIu/vy01TZqLWdOvpnzmfUwa/oEErEtwYY=";
     };
     meta.homepage = "https://github.com/SevereOverfl0w/deoplete-github/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4479,6 +4822,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-go/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4492,6 +4836,7 @@ final: prev: {
       hash = "sha256-HWJsNAetYW0LBNag2HtFVJ14jDq4LG+3WL8AffGS2CA=";
     };
     meta.homepage = "https://github.com/Inazuma110/deoplete-greek/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4505,6 +4850,7 @@ final: prev: {
       hash = "sha256-VqgUTAXGGIWXdUrMuGigt3kd030wW8jjARPEH9nfIzU=";
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-jedi/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4518,6 +4864,7 @@ final: prev: {
       hash = "sha256-Tu6r8rzCuAESW2I2+d66Swl7X1pQhWuyr4mHF15irHQ=";
     };
     meta.homepage = "https://github.com/JuliaEditorSupport/deoplete-julia/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4531,6 +4878,7 @@ final: prev: {
       hash = "sha256-nXQfuLTLLtdrdh2txUicFJBv3dCDkW24GpXjRqyF1Yg=";
     };
     meta.homepage = "https://github.com/nicoe/deoplete-khard/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4544,6 +4892,7 @@ final: prev: {
       hash = "sha256-+54rweoKj45bIbjZWFgxP3gD6h+LJpmjGafYXKo3b7A=";
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-lsp/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4557,6 +4906,7 @@ final: prev: {
       hash = "sha256-aVdUV2TD6WYV5b6dyuwco0i5H9xONbn4N+LPC79yV9A=";
     };
     meta.homepage = "https://github.com/Valodim/deoplete-notmuch/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4570,6 +4920,7 @@ final: prev: {
       hash = "sha256-QgGMd+f3R89oCox7fcz0xDYhygTlrvMOC1TU+ZLwRbI=";
     };
     meta.homepage = "https://github.com/Shougo/deoplete.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4583,6 +4934,7 @@ final: prev: {
       hash = "sha256-y7xCEnMRiD+EtCoX84sdPUvnpywiuJ0C+T2v4y/KTbI=";
     };
     meta.homepage = "https://github.com/kristijanhusak/deoplete-phpactor/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4596,6 +4948,7 @@ final: prev: {
       hash = "sha256-kBTV4+vEGt/lynHCcOg3cJWHGJR8A3KGt4BoKweaTHM=";
     };
     meta.homepage = "https://github.com/sebastianmarkow/deoplete-rust/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4609,6 +4962,7 @@ final: prev: {
       hash = "sha256-er/ImvaPmw9XXfuKEylBh2c2pny1TeJKQGcKmeT2eWQ=";
     };
     meta.homepage = "https://github.com/tbodt/deoplete-tabnine/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4622,6 +4976,7 @@ final: prev: {
       hash = "sha256-CnrA0UfHvA9+CyFdTqgSIEdWSkc5fQIcjJx4EFlyBBk=";
     };
     meta.homepage = "https://github.com/carlitux/deoplete-ternjs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4635,6 +4990,7 @@ final: prev: {
       hash = "sha256-/RYhgFuEzHk5bR/lL3QLdnASItkjPCGUjx7QO7fhzug=";
     };
     meta.homepage = "https://github.com/lighttiger2505/deoplete-vim-lsp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4648,6 +5004,7 @@ final: prev: {
       hash = "sha256-3bFonS0ctgbW/c2e3MGMizLdzSk/GrBd3cHbKRCdS38=";
     };
     meta.homepage = "https://github.com/deoplete-plugins/deoplete-zsh/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4661,6 +5018,7 @@ final: prev: {
       hash = "sha256-6EFJG4HDP8xEifelH3qtNKHRr3CaVmd9Bjk1IqNVXkk=";
     };
     meta.homepage = "https://github.com/maskudo/devdocs.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4674,6 +5032,7 @@ final: prev: {
       hash = "sha256-KykUlUYrnOiqLOsToSlTxEhU1ICEdci4eIIuJavgvNs=";
     };
     meta.homepage = "https://github.com/rhysd/devdocs.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4687,6 +5046,7 @@ final: prev: {
       hash = "sha256-Mz5FeZzFPaPGvzWAKLUhvJtnB1hW1kW0vTGArMTc2nc=";
     };
     meta.homepage = "https://github.com/mahyarmirrashed/devexcuses.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4700,6 +5060,7 @@ final: prev: {
       hash = "sha256-YUBNgjUEpQIx7wKHFjA+UIe1QLFmamQTS3FLalsz4JU=";
     };
     meta.homepage = "https://github.com/vmchale/dhall-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4713,6 +5074,7 @@ final: prev: {
       hash = "sha256-gJlM0diDmyvmW5l/QIpUe2bDTZg8XekLBcFOoxeUW4E=";
     };
     meta.homepage = "https://github.com/dgagn/diagflow.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4726,6 +5088,7 @@ final: prev: {
       hash = "sha256-pIJ5dars2igBfLHYnd/0zgBoPZbW16+4Pth8Vk5OcYc=";
     };
     meta.homepage = "https://github.com/onsails/diaglist.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4739,6 +5102,7 @@ final: prev: {
       hash = "sha256-Sa+FkZErkGsSJaQlk8B3PFYMj44SCMFd6mLZDTtahLY=";
     };
     meta.homepage = "https://github.com/nvim-lua/diagnostic-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4752,6 +5116,7 @@ final: prev: {
       hash = "sha256-0KgZ/3q26b7MxMPRXp4/mgfl7tIUD3PnC6TYgagDGP4=";
     };
     meta.homepage = "https://github.com/3rd/diagram.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4765,6 +5130,7 @@ final: prev: {
       hash = "sha256-J2HU746yz8iHos7od5kIdEUd4/bgAPGwC38fLZ4gK+E=";
     };
     meta.homepage = "https://github.com/monaqa/dial.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4778,6 +5144,7 @@ final: prev: {
       hash = "sha256-DZpDaQ8nV+i2k969TTo19UnBSaK5jQwzP9c/bCsRFAQ=";
     };
     meta.homepage = "https://github.com/barrettruth/diffs.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4791,6 +5158,7 @@ final: prev: {
       hash = "sha256-SX+ybIzL/w6uyCy4iZKnWnzTFwqB1oXSgyYVAdpdKi8=";
     };
     meta.homepage = "https://github.com/sindrets/diffview.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4804,6 +5172,7 @@ final: prev: {
       hash = "sha256-35pNyVO0Yx+g5nvcFOmi2npb9Bnv83mkOtQJ2eKbSyc=";
     };
     meta.homepage = "https://github.com/elihunter173/dirbuf.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "AGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4817,6 +5186,7 @@ final: prev: {
       hash = "sha256-Lwwm95UEkS8Q0Qsoh10o3sFn48wf7v7eCX/FJJV1HMI=";
     };
     meta.homepage = "https://github.com/direnv/direnv.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4830,6 +5200,7 @@ final: prev: {
       hash = "sha256-Cbko4HU0i077WbAuERdG4NwCmeIZSk8uYmNl0mOzrO0=";
     };
     meta.homepage = "https://github.com/chipsenkbeil/distant.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4843,6 +5214,7 @@ final: prev: {
       hash = "sha256-3qPbKq9IRDn1O3gMyESwy45xfHPnOGSOIyEox927aLg=";
     };
     meta.homepage = "https://github.com/doki-theme/doki-theme-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4856,6 +5228,7 @@ final: prev: {
       hash = "sha256-gsS/n0CQ41WTl0sQxEWoWe7+wzTUyVKlrgaTC+Q2Nuc=";
     };
     meta.homepage = "https://github.com/NTBBloodbath/doom-one.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4869,6 +5242,7 @@ final: prev: {
       hash = "sha256-QonW4orbtdMcoxqvB/FU7Cw5ABPExEMZwMLHIZWAWPs=";
     };
     meta.homepage = "https://github.com/MoaidHathot/dotnet.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4882,6 +5256,7 @@ final: prev: {
       hash = "sha256-h0WQdK74FHJLva3RbyA8WZfX6rAo45wKPb9z4JbYAK8=";
     };
     meta.homepage = "https://github.com/Mofiqul/dracula.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4895,6 +5270,7 @@ final: prev: {
       hash = "sha256-OkLtrd6Cq7ZwF5r5/SBc9Uyp26q/gIgHLrVKLxboLCA=";
     };
     meta.homepage = "https://github.com/dracula/vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4908,19 +5284,21 @@ final: prev: {
       hash = "sha256-N4hB5wDgoqXrXxSfzDCrqmdDtdVvq+PtOS7FBPH7qXE=";
     };
     meta.homepage = "https://github.com/stevearc/dressing.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   dropbar-nvim = buildVimPlugin {
     pname = "dropbar.nvim";
-    version = "14.2.1-unstable-2025-10-05";
+    version = "14.2.1-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "Bekaboo";
       repo = "dropbar.nvim";
-      rev = "ce202248134e3949aac375fd66c28e5207785b10";
-      hash = "sha256-FzJXZcbwk3kEqmRFwKVavL1umPugdbJVYvaBZwiEK0I=";
+      rev = "f0a42bd92aa647e44221397723453403f5e20f16";
+      hash = "sha256-EN4iN76zOn4IF7A1cT3p9a2EzlFCRa/eHR325QzPLv8=";
     };
     meta.homepage = "https://github.com/Bekaboo/dropbar.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4934,6 +5312,7 @@ final: prev: {
       hash = "sha256-97QSkZHpHLq1XyLNhPz88i9VuWy6ux7ZFNJx/g44K2A=";
     };
     meta.homepage = "https://github.com/tamton-aquib/duck.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4947,19 +5326,21 @@ final: prev: {
       hash = "sha256-myMGiOiU9/xmdMJOvaJySLBvXS/xTAMULVaKGaVODw0=";
     };
     meta.homepage = "https://github.com/earthly/earthly.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
     meta.hydraPlatforms = [ ];
   };
 
   easy-dotnet-nvim = buildVimPlugin {
     pname = "easy-dotnet.nvim";
-    version = "0-unstable-2026-04-21";
+    version = "0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "GustavEikaas";
       repo = "easy-dotnet.nvim";
-      rev = "1e6b569af3818a1665f14115aea7b0a920b179f6";
-      hash = "sha256-EkJoifIH8PtiXUSFpWQtQgP6a1LuWLbvwHBYH/80Qik=";
+      rev = "8ae591fd0f3bf7b688c802918bd64f7956f939b9";
+      hash = "sha256-iKCH3jKq5OaisG2txI5TgYYC3nQTAIn8E67v1XP/LUQ=";
     };
     meta.homepage = "https://github.com/GustavEikaas/easy-dotnet.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4973,6 +5354,7 @@ final: prev: {
       hash = "sha256-RSk/KViWw48IX0NcC5hW4IGawZ6prBYxPa/kXPN4KSI=";
     };
     meta.homepage = "https://github.com/JellyApple102/easyread.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -4986,6 +5368,7 @@ final: prev: {
       hash = "sha256-M9Tr9nP1BXSTj8QZFN+AVclDqPCWP13kJ9oEQavY72o=";
     };
     meta.homepage = "https://github.com/Shougo/echodoc.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -4999,6 +5382,7 @@ final: prev: {
       hash = "sha256-xUVSkygICCpA3bBqitPblRn7wRQ6fffxJQ4ej5C1ICM=";
     };
     meta.homepage = "https://github.com/ph1losof/ecolog.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5012,6 +5396,7 @@ final: prev: {
       hash = "sha256-05fAaaaoaIrmwTFdrkX2rQX8X7AyOGLOcnz5HaoQB9Y=";
     };
     meta.homepage = "https://github.com/sainnhe/edge/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5025,6 +5410,7 @@ final: prev: {
       hash = "sha256-yn6/0UfoGeFEJ+fiIHKCvpzymMkjv0PheTsyhRY46sM=";
     };
     meta.homepage = "https://github.com/geldata/edgedb-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5038,6 +5424,7 @@ final: prev: {
       hash = "sha256-0HGxPpT4bvVTwwu+rY058eMWEfhGF3y5WHt3ifOzkUM=";
     };
     meta.homepage = "https://github.com/folke/edgy.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5051,6 +5438,7 @@ final: prev: {
       hash = "sha256-0ChRJwxnDBVuVdTEZQYxoxbAeQjqNfjNvfkorOueovU=";
     };
     meta.homepage = "https://github.com/gpanders/editorconfig.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5065,6 +5453,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/editorconfig/editorconfig-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5078,6 +5467,7 @@ final: prev: {
       hash = "sha256-QO4R/+qAMXV+NN3gsMcKz7Z2BHZbwbwNBoD1AxfA/aY=";
     };
     meta.homepage = "https://github.com/creativenull/efmls-configs-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5091,6 +5481,7 @@ final: prev: {
       hash = "sha256-FBhSMEaa/CwBMnuyUr8Q+flRo64onAt9mGYUNtM0mZs=";
     };
     meta.homepage = "https://github.com/elixir-tools/elixir-tools.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5104,6 +5495,7 @@ final: prev: {
       hash = "sha256-jEbxvkKEYnNJDYMmvHfxFM0nd12CH/jKYznW70yVs88=";
     };
     meta.homepage = "https://github.com/elmcast/elm-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5117,6 +5509,7 @@ final: prev: {
       hash = "sha256-CtKsqnhygVqPFjAw2QaTXhc/7+C99i04hx3sKMhrKvg=";
     };
     meta.homepage = "https://github.com/dmix/elvish.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5130,6 +5523,7 @@ final: prev: {
       hash = "sha256-wR9qoaLehfTVakMi2QYQqBMTi9Tc+I46H/wUlPShTmE=";
     };
     meta.homepage = "https://github.com/embark-theme/vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5144,6 +5538,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/mattn/emmet-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5157,6 +5552,7 @@ final: prev: {
       hash = "sha256-IOeeZW2TbFEMCNxYtZYCGH5eUuRn2CkNZuiZuX4+PnU=";
     };
     meta.homepage = "https://github.com/vim-scripts/emodeline/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5170,6 +5566,7 @@ final: prev: {
       hash = "sha256-5Z/1idVQiD8K+swsr9k3NrrgXxUIs5o7v/Cep/zZDiE=";
     };
     meta.homepage = "https://github.com/ovk/endec.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5183,6 +5580,7 @@ final: prev: {
       hash = "sha256-qsPPp3H7o+GtRXha+OoVWkCq795TwnHcyxtkhwwJ0IU=";
     };
     meta.homepage = "https://github.com/vim-scripts/errormarker.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5196,6 +5594,7 @@ final: prev: {
       hash = "sha256-WhDMjhZ15J5xu4/yMKwXLOo1zhE+6B5hLsRvw9qSTsk=";
     };
     meta.homepage = "https://github.com/hachy/eva01.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5209,18 +5608,20 @@ final: prev: {
       hash = "sha256-fkNyypxo1fm0rkV1CKayLLMHObsjgSI2nndhkpXHlFc=";
     };
     meta.homepage = "https://github.com/sainnhe/everforest/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   evergarden-nvim = buildVimPlugin {
     pname = "evergarden-nvim";
-    version = "0-unstable-2026-03-31";
+    version = "0-unstable-2026-04-25";
     src = fetchgit {
       url = "https://codeberg.org/evergarden/nvim";
-      rev = "f74fc61a5345818caf7c56bd4c6dcd16f17a1fdd";
-      hash = "sha256-kYfNaAx0koqFBSXKC1IuVJaZeUQC+0rT9deEqgcRt8I=";
+      rev = "762a37afe2e242144355fafe385d638ec347ec48";
+      hash = "sha256-q8nQ+F2OKL7AV92hUhHgesXMDrJakBGkLI17YvkVRa0=";
     };
     meta.homepage = "https://codeberg.org/evergarden/nvim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5234,6 +5635,7 @@ final: prev: {
       hash = "sha256-FdcOzT3LgJBifXdEAzfMtcfrIDlYFcY1RogVxcl3Avk=";
     };
     meta.homepage = "https://github.com/google/executor.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5247,6 +5649,7 @@ final: prev: {
       hash = "sha256-qOMToZtBd39mdFZEr5WfIkHj+7TWeCPy2GJdIN+qOic=";
     };
     meta.homepage = "https://github.com/jinh0/eyeliner.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5260,6 +5663,7 @@ final: prev: {
       hash = "sha256-iUnBoa1uVsJP0RvX+AUFj3M/4hT9rD8T+YGxuAldXYo=";
     };
     meta.homepage = "https://github.com/fenetikm/falcon/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5273,6 +5677,7 @@ final: prev: {
       hash = "sha256-XeQoEgPCj2VzkiR4BiHZQVOyO37lCsgoRGXHkjMbH9s=";
     };
     meta.homepage = "https://github.com/mahyarmirrashed/famous-quotes.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5286,6 +5691,7 @@ final: prev: {
       hash = "sha256-vd3/PZz6bsm0x8hBVhuy3zQvLQ89YCBQDADCSvbyJG8=";
     };
     meta.homepage = "https://github.com/brooth/far.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5299,6 +5705,7 @@ final: prev: {
       hash = "sha256-va00sqM2Ap9faUXww5CpWJQyCixN9fIwh8p8oSLQMy8=";
     };
     meta.homepage = "https://github.com/Chaitanyabsprip/fastaction.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5312,6 +5719,7 @@ final: prev: {
       hash = "sha256-jFOIG7SQy0sIhEOSmt47f6kGye+ge5Oq3UDwm1bXPqo=";
     };
     meta.homepage = "https://github.com/pteroctopus/faster.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5325,6 +5733,7 @@ final: prev: {
       hash = "sha256-9FgxQ2wtirjW9O+8I5JuBw7w+tToRdPnqT/kCdW8FtU=";
     };
     meta.homepage = "https://github.com/konfekt/fastfold/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5338,6 +5747,7 @@ final: prev: {
       hash = "sha256-PBzE9Fcl3Yk7mxysnhst68eiGmsU+lj4SK2rZZj7yH0=";
     };
     meta.homepage = "https://github.com/madskjeldgaard/faust-nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5351,6 +5761,7 @@ final: prev: {
       hash = "sha256-L9X1ykj10tcIne1SvoYeB3LbaoZg/6fryFTa9jtN/xE=";
     };
     meta.homepage = "https://github.com/lilydjwg/fcitx.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5364,6 +5775,7 @@ final: prev: {
       hash = "sha256-Sym2wKnQUR7RE3WbutOXxLrgDmtujNGNxv01wQTbDIo=";
     };
     meta.homepage = "https://github.com/micampe/fennel.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5377,6 +5789,7 @@ final: prev: {
       hash = "sha256-7dUPFfVvmImddhPhhOLiGXd45vmNeejOQ9jTPWyXKzg=";
     };
     meta.homepage = "https://github.com/wincent/ferret/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5390,6 +5803,7 @@ final: prev: {
       hash = "sha256-r47H2vfQQM283YIMZFGjLfTxu6mHy1BN/VsiCcEbKPA=";
     };
     meta.homepage = "https://github.com/bogado/file-line/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5403,6 +5817,7 @@ final: prev: {
       hash = "sha256-Nn7FdhrMYIFrA72lW6fNubsrKss0QfH06oveOgSIHVE=";
     };
     meta.homepage = "https://github.com/lewis6991/fileline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5416,6 +5831,7 @@ final: prev: {
       hash = "sha256-EozAWJu5D8eeveHXIAUejKi2EHxpY2z7uXWQaZgZdEc=";
     };
     meta.homepage = "https://github.com/VonHeikemen/fine-cmdline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5429,6 +5845,7 @@ final: prev: {
       hash = "sha256-j1M41XD8gLMqXJK5Pk+yu6IbsUnRagyzlKM9nQ1ozp0=";
     };
     meta.homepage = "https://github.com/glacambre/firenvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5443,6 +5860,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/andviro/flake8-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5456,6 +5874,7 @@ final: prev: {
       hash = "sha256-pHh0tJd/ynfjriu8xjnKunKVDHkoXii6ZbikdkIwovY=";
     };
     meta.homepage = "https://github.com/folke/flash.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5469,6 +5888,7 @@ final: prev: {
       hash = "sha256-NaOgzTVqOpQnEIOIMlHCupZUDYnLUic9zITKFxcOg3A=";
     };
     meta.homepage = "https://github.com/willothy/flatten.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5482,6 +5902,7 @@ final: prev: {
       hash = "sha256-vlAjzRfixL5IwkpuevsgMFn9HckCa4zxeIeJp7JPwmQ=";
     };
     meta.homepage = "https://github.com/felipeagc/fleet-theme-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5495,6 +5916,7 @@ final: prev: {
       hash = "sha256-T+lArIMFTk/EFdLA7Io/U6R8X/TFeHaWfcMNAaRpmq8=";
     };
     meta.homepage = "https://github.com/ggandor/flit.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5508,6 +5930,7 @@ final: prev: {
       hash = "sha256-1skclYdku+DDDdDX7UO2kvzgyPVodRl0rrzOf+J8TsQ=";
     };
     meta.homepage = "https://github.com/ncm2/float-preview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5521,6 +5944,7 @@ final: prev: {
       hash = "sha256-kTjE44pp02ZEJUp42p459l4WQA8oQ9SU8AuCxXFYm/k=";
     };
     meta.homepage = "https://github.com/nvzone/floaterm/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5534,6 +5958,7 @@ final: prev: {
       hash = "sha256-pbPPVSjWJQ3mRP1kixogMCRgy7BH0n5AE7hvey8C32I=";
     };
     meta.homepage = "https://github.com/liangxianzhe/floating-input.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5547,6 +5972,7 @@ final: prev: {
       hash = "sha256-la2C56Hi+6L54M1l6aAxfIxRjRkO6jt1w/84bEYJWf8=";
     };
     meta.homepage = "https://github.com/floobits/floobits-neovim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5560,6 +5986,7 @@ final: prev: {
       hash = "sha256-PH08FeZMvIXcE9/dfYxj4PiKwBzPCXWFAVOLSci0iNk=";
     };
     meta.homepage = "https://github.com/0xstepit/flow.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5573,6 +6000,7 @@ final: prev: {
       hash = "sha256-tOYxOUKa6Zn2Yq5peqGDEdCkpl+b+VKkSmZx7+kHZJ0=";
     };
     meta.homepage = "https://github.com/projectfluent/fluent.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5586,6 +6014,7 @@ final: prev: {
       hash = "sha256-alZBQYmo9jrsKYTL7dnObaP2op4SMQQRiEZBdhxUZiI=";
     };
     meta.homepage = "https://github.com/maxmx03/fluoromachine.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5599,6 +6028,7 @@ final: prev: {
       hash = "sha256-deLOga7lpWbhjDuww0HhKWCvtPA17dgFtF5ZoYCDvLw=";
     };
     meta.homepage = "https://github.com/nvim-flutter/flutter-tools.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5613,6 +6043,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/nvim-focus/focus.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5626,6 +6057,7 @@ final: prev: {
       hash = "sha256-FLzZGbbeUk3354Q8vbFonw57f6GbSDisRs43djTjX8I=";
     };
     meta.homepage = "https://github.com/anuvyklack/fold-preview.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5639,6 +6071,7 @@ final: prev: {
       hash = "sha256-qngq7nvxi+Ijxa4sGBRE9m/tqPXSsmznVcTG99I0Yjo=";
     };
     meta.homepage = "https://github.com/jghauser/follow-md-links.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5652,6 +6085,7 @@ final: prev: {
       hash = "sha256-SzM2P5RvnYUXYud2ubGtqdTXfQ3rshEusRWckH8a2E4=";
     };
     meta.homepage = "https://github.com/mhartington/formatter.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5665,6 +6099,7 @@ final: prev: {
       hash = "sha256-5HjlnQU2SczilpXcKgDcZ9O/sFfxpav0urZKw0oMd6Y=";
     };
     meta.homepage = "https://github.com/megaannum/forms/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5678,6 +6113,7 @@ final: prev: {
       hash = "sha256-rLKDfmuVx9SD9JTMxpMTGenFX5bCtqOQQF6H9pC78y8=";
     };
     meta.homepage = "https://github.com/rubiin/fortune.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5691,6 +6127,7 @@ final: prev: {
       hash = "sha256-VdFmSRBP7Up0j5+rp7ZkfTdQmduJjsl6EZ9gf27vgZg=";
     };
     meta.homepage = "https://github.com/charm-and-friends/freeze.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5704,6 +6141,7 @@ final: prev: {
       hash = "sha256-FzApcTbWfFkBD9WsYMhaCyn6ky8UmpUC2io/co/eByM=";
     };
     meta.homepage = "https://github.com/rafamadriz/friendly-snippets/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5717,6 +6155,7 @@ final: prev: {
       hash = "sha256-8+3oO1HAWdfEjBX6V7bLm4w+giJD1syqWPZCHZ7p94U=";
     };
     meta.homepage = "https://github.com/SuperBo/fugit2.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5730,6 +6169,7 @@ final: prev: {
       hash = "sha256-bjKPh7EwA6wtp0lilaUA7f5b1VarR9QWFBuJm1j8Qfo=";
     };
     meta.homepage = "https://github.com/shumphrey/fugitive-gitlab.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5743,6 +6183,7 @@ final: prev: {
       hash = "sha256-HNgrUZm7dXxGDkfMj9WFA5i+pKTFGgNYjYy6PTu+PJ4=";
     };
     meta.homepage = "https://github.com/BeneCollyridam/futhark-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5756,6 +6197,7 @@ final: prev: {
       hash = "sha256-uB4Rg2pdl7FKJLjZiV2Q0ExKDJ1SvDx0bwZfgBvhgOs=";
     };
     meta.homepage = "https://github.com/tzachar/fuzzy.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5769,6 +6211,7 @@ final: prev: {
       hash = "sha256-GyTx/t6yH2jXwVHVldppcKmEN77YDC1feAYW5G/FEnk=";
     };
     meta.homepage = "https://github.com/rktjmp/fwatch.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5782,6 +6225,7 @@ final: prev: {
       hash = "sha256-Caf1dJiIATbs0PNjSANjA3QgHg7PdeMz9Pjoc0Ti7G4=";
     };
     meta.homepage = "https://github.com/A7Lavinraj/fyler.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5795,6 +6239,7 @@ final: prev: {
       hash = "sha256-lM5vv0ucgxvoc8ZtJwShDoY7ji6BYl6VZA2bYN0UU2s=";
     };
     meta.homepage = "https://github.com/stsewd/fzf-checkout.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5808,6 +6253,7 @@ final: prev: {
       hash = "sha256-Dn54yq96yBS9i6duHtHhwHp6VbFXWewrng33CEBs7Ew=";
     };
     meta.homepage = "https://github.com/monkoose/fzf-hoogle.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5821,6 +6267,7 @@ final: prev: {
       hash = "sha256-7Ga9vLbDbTA2VNyVN3+j+SXoSsx6PT/nBH8lzbxQYIw=";
     };
     meta.homepage = "https://github.com/gfanto/fzf-lsp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5834,6 +6281,7 @@ final: prev: {
       hash = "sha256-VPxTYXdJaVbr2U7d6VuO4CpIyTC62uo3TAuf1MYiAXI=";
     };
     meta.homepage = "https://github.com/junegunn/fzf.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5847,6 +6295,7 @@ final: prev: {
       hash = "sha256-85mScXLgGp5SJSIPwVOt0RYTP4esV5SjzDD6dhox83U=";
     };
     meta.homepage = "https://github.com/NTBBloodbath/galaxyline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5860,6 +6309,7 @@ final: prev: {
       hash = "sha256-T4zxIGuUzLcMeZvjBOFGh+Ms6fusQWlhlfuXcOA92xA=";
     };
     meta.homepage = "https://github.com/Zeioth/garbage-day.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5873,6 +6323,7 @@ final: prev: {
       hash = "sha256-M3xH9XsWNu7f49qRI9dgfk85iQVUKCuwAYo+xORo2Wk=";
     };
     meta.homepage = "https://github.com/gbprod/nord.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5886,6 +6337,7 @@ final: prev: {
       hash = "sha256-8s9pgeBRVii4E791pXryFHlLkToyibdscqHDGHoAJXw=";
     };
     meta.homepage = "https://github.com/Teatek/gdscript-extended-lsp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5899,6 +6351,7 @@ final: prev: {
       hash = "sha256-s12r8dvva0O2VvEPjOQvpjVpEehxsa4AWoGHXFYxQlI=";
     };
     meta.homepage = "https://github.com/David-Kunz/gen.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5912,6 +6365,7 @@ final: prev: {
       hash = "sha256-VjV142/IsiNEEAmUomQqWqYmNqQQE/ax6qi2xuy2dRM=";
     };
     meta.homepage = "https://github.com/jsfaint/gen_tags.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5925,6 +6379,7 @@ final: prev: {
       hash = "sha256-DGsfm52XLPnkWX9yRUkge7sQtfPZ3nxxQPSDArfO1h4=";
     };
     meta.homepage = "https://github.com/gentoo/gentoo-syntax/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5938,6 +6393,7 @@ final: prev: {
       hash = "sha256-XI4FVjajin0NM+OaEN+O5vmalPpOB2RII+aOERSzjJA=";
     };
     meta.homepage = "https://github.com/ldelossa/gh.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5951,6 +6407,7 @@ final: prev: {
       hash = "sha256-hb6Da0dZOmmsRZSawVT184UTDPotby/q3B1qe9Y5YXI=";
     };
     meta.homepage = "https://github.com/ndmitchell/ghcid/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5964,6 +6421,7 @@ final: prev: {
       hash = "sha256-CrRDLhOBPcTosGX/mL7z4A5mkWtQGrR/UsDZp/6D6i8=";
     };
     meta.homepage = "https://github.com/eagletmt/ghcmod-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -5977,6 +6435,7 @@ final: prev: {
       hash = "sha256-EKZXskxVKFXlDBI7lfoOlWZE7lq6Pr2MJ9rgHPGgp70=";
     };
     meta.homepage = "https://github.com/f-person/git-blame.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5990,6 +6449,7 @@ final: prev: {
       hash = "sha256-1t0kKxTGLuOvuRkoLgkoqMZpF+oKo8+gMsTdgPsSb+8=";
     };
     meta.homepage = "https://github.com/akinsho/git-conflict.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6003,6 +6463,7 @@ final: prev: {
       hash = "sha256-PsCaSFQs0N0rnRy4wY9tPJ4c4ILQuiCc8/gmdOkz6yw=";
     };
     meta.homepage = "https://github.com/juansalvatore/git-dashboard-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6016,6 +6477,7 @@ final: prev: {
       hash = "sha256-pDz0IRlnnVHQ5G3Ga8I2wF8jDcF3hiyvMo5s5fwcV88=";
     };
     meta.homepage = "https://github.com/moyiz/git-dev.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6029,6 +6491,7 @@ final: prev: {
       hash = "sha256-9P8r04xS6aCAz2JLtesvGn2HC9SVq8EGA9y5x+fmji8=";
     };
     meta.homepage = "https://github.com/rhysd/git-messenger.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6042,6 +6505,7 @@ final: prev: {
       hash = "sha256-BM1AEpIcOd5nr4N/ZoxK9NodiUbUuY9hw7n/wRTXzzk=";
     };
     meta.homepage = "https://github.com/mikesmithgh/git-prompt-string-lualine.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6055,6 +6519,7 @@ final: prev: {
       hash = "sha256-fnqJqQTNei+8Gk4vZ2hjRj8iHBXTZT15xp9FvhGB+BQ=";
     };
     meta.homepage = "https://github.com/polarmutex/git-worktree.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6068,6 +6533,7 @@ final: prev: {
       hash = "sha256-/A4hkKTzjzeoR1SuwwklraAyI8oMkhxrwBBV9xb59PA=";
     };
     meta.homepage = "https://github.com/projekt0n/github-nvim-theme/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6081,6 +6547,7 @@ final: prev: {
       hash = "sha256-9Qu+oVOtufvf+ekj2rY+T9c2y7BXh9d7hfl6ZiMYpPY=";
     };
     meta.homepage = "https://github.com/wintermute-cell/gitignore.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6094,6 +6561,7 @@ final: prev: {
       hash = "sha256-HVFP7Af4zzZZfAbMP47rjhgtWeAwnooZU2NhPjM04zk=";
     };
     meta.homepage = "https://github.com/vim-scripts/gitignore.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6106,6 +6574,7 @@ final: prev: {
       hash = "sha256-rhYz3Z1Dcffvo8E3390gOBcqfFclWJ19wTKwp6L/874=";
     };
     meta.homepage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6119,6 +6588,7 @@ final: prev: {
       hash = "sha256-SlZQMc7xQ3/cCFSgZV+hK9fjEdoIdZR/ESAJ3Z1gbxk=";
     };
     meta.homepage = "https://github.com/LionyxML/gitlineage.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6132,6 +6602,7 @@ final: prev: {
       hash = "sha256-zrHvJSROjrDC5XtepOwuDrzrJG2jpnF5NJ05Iwd6DwA=";
     };
     meta.homepage = "https://github.com/ruifm/gitlinker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6145,6 +6616,7 @@ final: prev: {
       hash = "sha256-ag7t+G5TKRajLNc4ZrNuMufJSxqJQXPpWINZSFwEmx4=";
     };
     meta.homepage = "https://github.com/trevorhauter/gitportal.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6158,6 +6630,7 @@ final: prev: {
       hash = "sha256-pt34K3xWS4Gmvlgw0znpGHWhtwS4f58s8Qz9gcWuCkI=";
     };
     meta.homepage = "https://github.com/gregsexton/gitv/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6171,6 +6644,7 @@ final: prev: {
       hash = "sha256-N3ura/clenkz2CH9jsfkxiZ/Sn7sE2piJSCGP+ZqL7A=";
     };
     meta.homepage = "https://github.com/DNLHC/glance.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6184,6 +6658,7 @@ final: prev: {
       hash = "sha256-CvBcmVWBgI+m+PS7p7PmsiPtTEfqx2kpIzz4mImONIc=";
     };
     meta.homepage = "https://github.com/ellisonleao/glow.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6197,6 +6672,7 @@ final: prev: {
       hash = "sha256-4uH9Hdynja+ulXPmZq4uvrTceQUeF65VarxHXJ+ZUsM=";
     };
     meta.homepage = "https://github.com/ray-x/go.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6210,6 +6686,7 @@ final: prev: {
       hash = "sha256-yRXqwBOtMCX83Idhb7bb73HW7UIS5LNpphKBBtncF7k=";
     };
     meta.homepage = "https://github.com/dchinmay2/godbolt.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6223,6 +6700,7 @@ final: prev: {
       hash = "sha256-y0SXGG5h+OrScskPrk6fD+4bGrBG40luhWx17Nb7DDs=";
     };
     meta.homepage = "https://github.com/roman/golden-ratio/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6236,6 +6714,7 @@ final: prev: {
       hash = "sha256-VYrCUf81SbnrhHBefZYUUAyP+azeYQ6xubFU1u0Q+To=";
     };
     meta.homepage = "https://github.com/buoto/gotests-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6249,6 +6728,7 @@ final: prev: {
       hash = "sha256-pvAKu5JtkZa+CnIozDvFWClycI+WBSIKGVM7XkphQqo=";
     };
     meta.homepage = "https://github.com/rmagatti/goto-preview/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6262,6 +6742,7 @@ final: prev: {
       hash = "sha256-pDt7T1U1bqKveAq0CBWTtK2mdOzf8IbfmCi1fcpB2c8=";
     };
     meta.homepage = "https://github.com/junegunn/goyo.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6275,6 +6756,7 @@ final: prev: {
       hash = "sha256-qACM6HJ9DP3t6ts5IuMIfBe36Kx5Le1ZggHit+8zFRA=";
     };
     meta.homepage = "https://github.com/brymer-meneses/grammar-guard.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6288,6 +6770,7 @@ final: prev: {
       hash = "sha256-k/WiTJEjgugfwW9/ho3xh4dgl4ZkTVMtDE5yT43L2Zc=";
     };
     meta.homepage = "https://github.com/liuchengxu/graphviz.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6301,6 +6784,7 @@ final: prev: {
       hash = "sha256-Dz60583Qic2TqO3BPSHME4Q7CiweB1gQCdFNtjNoN3U=";
     };
     meta.homepage = "https://github.com/cbochs/grapple.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6314,6 +6798,7 @@ final: prev: {
       hash = "sha256-4xB/MRTDccA5gTKe6DrN+bNfDx6fzjuIGOLdkuxg8c0=";
     };
     meta.homepage = "https://github.com/blazkowolf/gruber-darker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6327,6 +6812,7 @@ final: prev: {
       hash = "sha256-fmX4WuD25BaaJBZCcUyrtgq1a39tVpxLe3KE72dcQT4=";
     };
     meta.homepage = "https://github.com/morhetz/gruvbox/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6340,6 +6826,7 @@ final: prev: {
       hash = "sha256-zocBGqqQOBtymRviN1Ptfj6QJ6UI60UqQ11Me4kn/VA=";
     };
     meta.homepage = "https://github.com/Xoconoch/gruvbox-alabaster.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6353,6 +6840,7 @@ final: prev: {
       hash = "sha256-UhOYkVInyQrPy970NMKfFhq3JZA2zuWQdyDOfv9glp8=";
     };
     meta.homepage = "https://github.com/luisiacc/gruvbox-baby/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6366,6 +6854,7 @@ final: prev: {
       hash = "sha256-md1NyTV42Zi9GM9lgFcayTN05bOYhvqjQcvs6K0D4xk=";
     };
     meta.homepage = "https://github.com/gruvbox-community/gruvbox/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6379,6 +6868,7 @@ final: prev: {
       hash = "sha256-HbrULCrdXweX7Va5DaWlIPg/He6Iel95uIsj7ZP4hDY=";
     };
     meta.homepage = "https://github.com/eddyekofo94/gruvbox-flat.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6392,6 +6882,7 @@ final: prev: {
       hash = "sha256-gyBfUYgSngpQn8BhKISWqgEKSyq8DuRT4csQ7q7bXM4=";
     };
     meta.homepage = "https://github.com/sainnhe/gruvbox-material/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6405,6 +6896,7 @@ final: prev: {
       hash = "sha256-MTOAc4Z8wvAGz99dJy5181R/Uf7G/qToyPFYNDJHjB0=";
     };
     meta.homepage = "https://github.com/f4z3r/gruvbox-material.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6418,6 +6910,7 @@ final: prev: {
       hash = "sha256-SogU3DStdWDN6qRjOnbGzoZ9Vc+fqnNYZF7XEqFeMUw=";
     };
     meta.homepage = "https://github.com/ellisonleao/gruvbox.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6431,6 +6924,7 @@ final: prev: {
       hash = "sha256-ivTgnX/JrhJ0MDX2tXo0sU6ZET0udR1Mu/tOLMo8rU8=";
     };
     meta.homepage = "https://github.com/nvimdev/guard-collection/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6444,6 +6938,7 @@ final: prev: {
       hash = "sha256-jd5EBHaTo3yMzv5mR+GC5IGk+QIHt4Xbi8N/URfyczU=";
     };
     meta.homepage = "https://github.com/nvimdev/guard.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6457,6 +6952,7 @@ final: prev: {
       hash = "sha256-M/FkwCXXhojVFEcCuHo/GkuCCSX9GlVYHBUECSZxBjs=";
     };
     meta.homepage = "https://github.com/nmac427/guess-indent.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6470,6 +6966,7 @@ final: prev: {
       hash = "sha256-GkSUwoDHFu615eTRaN2hjZJPxWe+77JqO8mEJ2YsIgw=";
     };
     meta.homepage = "https://github.com/ray-x/guihua.lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6483,6 +6980,7 @@ final: prev: {
       hash = "sha256-EL7NIy+g2k2KIANo2qFCF3WhGYLShVWOoqRXC2Dfquo=";
     };
     meta.homepage = "https://github.com/sjl/gundo.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6496,6 +6994,7 @@ final: prev: {
       hash = "sha256-Tb2IQR/l7TvokgpMWZBumyHULOvXQ2aGTL4P8fIEmRs=";
     };
     meta.homepage = "https://github.com/junegunn/gv.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6510,6 +7009,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/chrishrb/gx.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6523,6 +7023,7 @@ final: prev: {
       hash = "sha256-C+x83tKzV2R/JAkgOzCxtRt9flYu0iWtZf2WfL7zGgc=";
     };
     meta.homepage = "https://github.com/TheSnakeWitcher/hardhat.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6536,6 +7037,7 @@ final: prev: {
       hash = "sha256-Jy9ARUHU1ySpSxxoS3hLRjxp5Lqt7juWN5Jnbdo0rg0=";
     };
     meta.homepage = "https://github.com/m4xshen/hardtime.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6548,6 +7050,7 @@ final: prev: {
       hash = "sha256-zueMmX8rHXMpnv6ukrcFcTIWVOoYrBC/0Tn2+5fTRlU=";
     };
     meta.homepage = "https://git.sr.ht/~sircmpwn/hare.vim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6561,6 +7064,7 @@ final: prev: {
       hash = "sha256-ksPNAYnaFbq7N5ifF+RFbLexLW2Lm1ey0agHLzhn9GA=";
     };
     meta.homepage = "https://github.com/ThePrimeagen/harpoon/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6574,6 +7078,7 @@ final: prev: {
       hash = "sha256-qQSPVMdldksNZDPZvnTiXxty+GSUqMGz8nYEFDRezrQ=";
     };
     meta.homepage = "https://github.com/ThePrimeagen/harpoon/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6587,6 +7092,7 @@ final: prev: {
       hash = "sha256-s+ku3EtZ2y7yarzhekW4yKaBqvjdy/PRHivfDB+g6Hg=";
     };
     meta.homepage = "https://github.com/kiyoon/haskell-scope-highlighting.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6600,6 +7106,7 @@ final: prev: {
       hash = "sha256-Y4ZNYNb7shMQ8lTAx2/8De9KgbYq8Pf+6yQhHX6a4Ck=";
     };
     meta.homepage = "https://github.com/mrcjkb/haskell-snippets.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6613,6 +7120,7 @@ final: prev: {
       hash = "sha256-4FvqwxaMu3Mznrmt4U5NZlmUAdUIiLpr9fW+kjdwcOA=";
     };
     meta.homepage = "https://github.com/neovimhaskell/haskell-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6626,6 +7134,7 @@ final: prev: {
       hash = "sha256-yfQ5RjF+1VAbLiTP6PpXb3mUV189YDs3FVuRHlBSQ4U=";
     };
     meta.homepage = "https://github.com/wenzel-hoffman/haskell-with-unicode.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6639,6 +7148,7 @@ final: prev: {
       hash = "sha256-nbNxWaBSekXuS141mXCN5hBvnqJcGFCLjhhq5ixFKSU=";
     };
     meta.homepage = "https://github.com/travitch/hasksyn/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6652,6 +7162,7 @@ final: prev: {
       hash = "sha256-//wRcgbj9VhASi379ahD+aWRxwuX4h/4xsDgQln3nHM=";
     };
     meta.homepage = "https://github.com/StackInTheWild/headhunter.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6665,6 +7176,7 @@ final: prev: {
       hash = "sha256-LWYYVnLZgw6DhO/n0rclQVnon5TvyQVUGb2smaBzcPg=";
     };
     meta.homepage = "https://github.com/lukas-reineke/headlines.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6678,6 +7190,7 @@ final: prev: {
       hash = "sha256-kHoaeULWI+NrLp0am0DSKRKeA1vZIg4pt5NxZuFUDvY=";
     };
     meta.homepage = "https://github.com/rebelot/heirline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6691,6 +7204,7 @@ final: prev: {
       hash = "sha256-8trqFsA7nTKSdtkiAL0Sa9bXjh5ONtAqN7XNE/B8ukM=";
     };
     meta.homepage = "https://github.com/qvalentin/helm-ls.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6705,6 +7219,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/OXY2DEV/helpview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6718,6 +7233,7 @@ final: prev: {
       hash = "sha256-Zhn1o2QNCDy9YREBY+12P0VlDLLFw9sE080xVkYVKGg=";
     };
     meta.homepage = "https://github.com/RaafatTurki/hex.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6731,6 +7247,7 @@ final: prev: {
       hash = "sha256-3La0U8cwGGKchGVIJ3ZJ5OBM6gDEisY73cjN9hOemsE=";
     };
     meta.homepage = "https://github.com/Yggdroot/hiPairs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6744,6 +7261,7 @@ final: prev: {
       hash = "sha256-yU4i3uPI7qghxdevOuqzxu8gIol6pxgd7TIY6vnyfiU=";
     };
     meta.homepage = "https://github.com/tzachar/highlight-undo.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6757,6 +7275,7 @@ final: prev: {
       hash = "sha256-mm7fU/xnKzUfIvJN7tQfIRswWood7HPAmuD9PZUEN6I=";
     };
     meta.homepage = "https://github.com/pimalaya/himalaya-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6770,6 +7289,7 @@ final: prev: {
       hash = "sha256-WjmVefR0qk2ANWgyHSuYMTuCfzlVTF7tqzAL+uatKkc=";
     };
     meta.homepage = "https://github.com/m-demare/hlargs.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6783,6 +7303,7 @@ final: prev: {
       hash = "sha256-3B9j0O6sUXeOXxYmDlJb/nywHq6Q2kmbG3LkfLEaQt8=";
     };
     meta.homepage = "https://github.com/shellRaining/hlchunk.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6796,6 +7317,7 @@ final: prev: {
       hash = "sha256-6BrbvTK8JPNDgW9Ke3JqKZ1ura5F8hZeiyp5l1UYDX0=";
     };
     meta.homepage = "https://github.com/mpickering/hlint-refactor-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6809,6 +7331,7 @@ final: prev: {
       hash = "sha256-j/RFJgCbaH+V2K20RrQbsz0bzpN8Z6YAKzZMABYg/OU=";
     };
     meta.homepage = "https://github.com/calops/hmts.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6822,6 +7345,7 @@ final: prev: {
       hash = "sha256-+96p95cVwN6x3Ww7yDMZDRlIfuhpKoYaPi7WXYOIFU4=";
     };
     meta.homepage = "https://github.com/edluffy/hologram.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6835,6 +7359,7 @@ final: prev: {
       hash = "sha256-EaghfgNtf0Sptb3dHslfMatTBVOEhqgNtsMLtmGAp64=";
     };
     meta.homepage = "https://github.com/urbit/hoon.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6848,6 +7373,7 @@ final: prev: {
       hash = "sha256-gHRKkqAMrQmpPHEWGETj3KG0NqwCnlTT8z/cNmug/Xc=";
     };
     meta.homepage = "https://github.com/smoka7/hop.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6861,6 +7387,7 @@ final: prev: {
       hash = "sha256-hgCEl1D24kHOe3lLlw3rzjEeLLoHsGr3Erm5cv+ISnY=";
     };
     meta.homepage = "https://github.com/rktjmp/hotpot.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6874,6 +7401,7 @@ final: prev: {
       hash = "sha256-diXdGip0lb7axIOWhXPn0A618g4Ijr4NMyprS8Ed1xY=";
     };
     meta.homepage = "https://github.com/TheBlob42/houdini.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6887,6 +7415,7 @@ final: prev: {
       hash = "sha256-9pWEpDy5opC32IcnJ5F607BpwZ2fQ4Ap2qL5cnaV3Ls=";
     };
     meta.homepage = "https://github.com/lewis6991/hover.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6900,6 +7429,7 @@ final: prev: {
       hash = "sha256-bqb+PMxjlDU1FWUdgmCnFxSk8Q90wMVEuoTRaU0UAUg=";
     };
     meta.homepage = "https://github.com/othree/html5.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6913,6 +7443,7 @@ final: prev: {
       hash = "sha256-Zw+dudVej4hvT+S9Jk2IMuCWzU3b4z90fmfKDmcujug=";
     };
     meta.homepage = "https://github.com/julienvincent/hunk.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6926,6 +7457,7 @@ final: prev: {
       hash = "sha256-DODoHIcBcgZAMCgrReidDS4HsvwHvsKdpvNILvlrtts=";
     };
     meta.homepage = "https://github.com/jellydn/hurl.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6939,6 +7471,7 @@ final: prev: {
       hash = "sha256-GwsitCPMLkTJrjdIyrfzt8wqgHY/aJLNiHzdUBIOrY0=";
     };
     meta.homepage = "https://github.com/nvimtools/hydra.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6952,6 +7485,7 @@ final: prev: {
       hash = "sha256-aEONOJTy+u64OFaQyZcL6DbunlUKSsXdLAhTrEkCPEU=";
     };
     meta.homepage = "https://github.com/mboughaba/i3config.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6965,6 +7499,7 @@ final: prev: {
       hash = "sha256-bPdhL0lHQtgizqY/Nq7GYCBDur1bLX5owG7tHD0BnBE=";
     };
     meta.homepage = "https://github.com/cocopon/iceberg.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6978,6 +7513,7 @@ final: prev: {
       hash = "sha256-wcWC8ICGEpbDQX+v5XpTYTdXo+Us5jMmiKqyvkVWK/4=";
     };
     meta.homepage = "https://github.com/idris-hackers/idris-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -6991,6 +7527,7 @@ final: prev: {
       hash = "sha256-qk9+MsyAWMGspGHNsJBfHx3sJ190C7T14+Ef/zD9noU=";
     };
     meta.homepage = "https://github.com/idris-community/idris2-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7004,6 +7541,7 @@ final: prev: {
       hash = "sha256-v2oNgtjreNpbN0LV1RIdrcYLjFWj/k9fqGf/w4ig8cE=";
     };
     meta.homepage = "https://github.com/edwinb/idris2-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7017,6 +7555,7 @@ final: prev: {
       hash = "sha256-5FXpF7tKpJcF++eBnnd2SJeVGc2k1exa4g/k93Medjw=";
     };
     meta.homepage = "https://github.com/keaising/im-select.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7030,6 +7569,7 @@ final: prev: {
       hash = "sha256-LDh5xzIqNrxeGY6+cnB923uSuo8/uEms4NUdFhSDmlg=";
     };
     meta.homepage = "https://github.com/HakonHarnes/img-clip.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7043,6 +7583,7 @@ final: prev: {
       hash = "sha256-qDmoUwK4k+lg4Z6JEvjfaF1utKa6PwVkBFM/HSkxH+o=";
     };
     meta.homepage = "https://github.com/lewis6991/impatient.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7056,6 +7597,7 @@ final: prev: {
       hash = "sha256-k35uJZfarjRskS9MgCjSQ3gfl57d+r8vWvw0Uq16Z30=";
     };
     meta.homepage = "https://github.com/backdround/improved-search.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7069,6 +7611,7 @@ final: prev: {
       hash = "sha256-WDvzCOCWJFNTGl6g0/BF1SLPR+Xc4vGwVLqIdhAShkg=";
     };
     meta.homepage = "https://github.com/smjonas/inc-rename.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7082,6 +7625,7 @@ final: prev: {
       hash = "sha256-2qXhaaTpw8HTAGoD+Fe/ZQkDqRHQK0IMANDop+fwAY8=";
     };
     meta.homepage = "https://github.com/b0o/incline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7095,6 +7639,7 @@ final: prev: {
       hash = "sha256-inejFiP7TUJnlJFNYlnbpQgwUVsKfxymR6r7t2DBbJ4=";
     };
     meta.homepage = "https://github.com/nishigori/increment-activator/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7108,6 +7653,7 @@ final: prev: {
       hash = "sha256-s5Ljfw9Ol5M957j2abM3EiM2HUKrhvlxqu/9oPvITK8=";
     };
     meta.homepage = "https://github.com/haya14busa/incsearch-easymotion.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7121,6 +7667,7 @@ final: prev: {
       hash = "sha256-0iMAUC9L6MUPmoiSm4t/em0sK/ntym6rATc04htMkm4=";
     };
     meta.homepage = "https://github.com/haya14busa/incsearch.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7134,6 +7681,7 @@ final: prev: {
       hash = "sha256-Vc79ff416uJFqKH8zlM1y208SxaQGpQPqGVbiz5Vflg=";
     };
     meta.homepage = "https://github.com/lukas-reineke/indent-blankline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7147,6 +7695,7 @@ final: prev: {
       hash = "sha256-732LP5X/fQMrSWD31BYHWe29y14yqE/FyZ23BmzSe0Y=";
     };
     meta.homepage = "https://github.com/Darazaki/indent-o-matic/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7160,6 +7709,7 @@ final: prev: {
       hash = "sha256-jJOG6t18egq1uDGegDKvbz9NGmqiuHg7b2EyJZh3TMM=";
     };
     meta.homepage = "https://github.com/arsham/indent-tools.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7173,6 +7723,7 @@ final: prev: {
       hash = "sha256-l73H6AtnunKkGw/XXql4GtrADJ6fx9vJWzyFZOzbuTw=";
     };
     meta.homepage = "https://github.com/Yggdroot/indentLine/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7186,6 +7737,7 @@ final: prev: {
       hash = "sha256-/iWB1KffMORcIwnLg0WadaxjTqwVBpOK/No0J/+PMOk=";
     };
     meta.homepage = "https://github.com/ciaranm/inkpot/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7199,6 +7751,7 @@ final: prev: {
       hash = "sha256-DXJWji/NR8ZCxe014rD51v3EHJHMhRQeOoI3SsY8mR4=";
     };
     meta.homepage = "https://github.com/jbyuki/instant.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7212,6 +7765,7 @@ final: prev: {
       hash = "sha256-ShMECcqFQS607ZWRKHEh1cSLT/XChx5JpNOHSP3h/7I=";
     };
     meta.homepage = "https://github.com/pta2002/intellitab.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7225,6 +7779,7 @@ final: prev: {
       hash = "sha256-cdCHI3n1XtlxNMvdBWoex5v9BY//RCfHSQD9MBYORtk=";
     };
     meta.homepage = "https://github.com/parsonsmatt/intero-neovim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7238,6 +7793,7 @@ final: prev: {
       hash = "sha256-Z1omv+8iGoJ9wQrG7nMcowHbi+Z/DAfKxBPb2zu5keI=";
     };
     meta.homepage = "https://github.com/keith/investigate.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7251,6 +7807,7 @@ final: prev: {
       hash = "sha256-u1c3SwgEw+UrhCex/5qWqdul1ZX94yGuFvUtw5jrRas=";
     };
     meta.homepage = "https://github.com/neutaaaaan/iosvkem/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7264,6 +7821,7 @@ final: prev: {
       hash = "sha256-iwvN829U/V5/YLqIY+KgVIYVK3Tg9HtP+v82VhPWmmM=";
     };
     meta.homepage = "https://github.com/ajbucci/ipynb.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7277,6 +7835,7 @@ final: prev: {
       hash = "sha256-Z3oFFI9TZ45PdFcfwFvCibdAYKNj+DNwtl1LjSm26Y0=";
     };
     meta.homepage = "https://github.com/twerth/ir_black/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7290,6 +7849,7 @@ final: prev: {
       hash = "sha256-I2o1H9iRgGHmLA0v2U508hKWFCFrvZxXGWUOLtke7Do=";
     };
     meta.homepage = "https://github.com/Vigemus/iron.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7303,6 +7863,7 @@ final: prev: {
       hash = "sha256-+DcZ6IDWD1Zf2oNyPYrFz95r/fD5G9jTpYal0vGGOw8=";
     };
     meta.homepage = "https://github.com/haya14busa/is.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7316,6 +7877,7 @@ final: prev: {
       hash = "sha256-2SijIavooMFft9S/fMcH/YE77wctAP0Oneg/YAR9+LM=";
     };
     meta.homepage = "https://github.com/Treeniks/isabelle-lsp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7329,6 +7891,7 @@ final: prev: {
       hash = "sha256-f04jyExUwos9w89IeKbRdRMtWIsQYe0McAUoijq7mCA=";
     };
     meta.homepage = "https://github.com/Treeniks/isabelle-syn.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7342,6 +7905,7 @@ final: prev: {
       hash = "sha256-RasWfUX7UTJY14bfgArdai/zyvEqdKlbwUZWzsE+Kwo=";
     };
     meta.homepage = "https://github.com/mizlan/iswap.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7355,6 +7919,7 @@ final: prev: {
       hash = "sha256-698DMT3pdIYz0Y3vEg1ohcGvRARwJ9k+xm/o7NwSAbI=";
     };
     meta.homepage = "https://github.com/vim-scripts/jdaddy.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7368,6 +7933,7 @@ final: prev: {
       hash = "sha256-8sGu6i1fJNASWYtzqB+OPe3sny2jNmVCI0WPwCl6SnU=";
     };
     meta.homepage = "https://github.com/mahyarmirrashed/jdd.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7382,6 +7948,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/davidhalter/jedi-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7395,6 +7962,7 @@ final: prev: {
       hash = "sha256-vZdvKbSOFylzfX2Cmon8plbiawnYptjmwO018xn2m3g=";
     };
     meta.homepage = "https://github.com/metalelf0/jellybeans-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7408,6 +7976,7 @@ final: prev: {
       hash = "sha256-X+37Mlyt6+ZwfYlt4ZtdHPXDgcKtiXlUoUPZVb58w/8=";
     };
     meta.homepage = "https://github.com/nanotech/jellybeans.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7421,6 +7990,7 @@ final: prev: {
       hash = "sha256-ubZo3TYi72WqcGoSoveYRYcwOYk4oNW28uAYw939u5M=";
     };
     meta.homepage = "https://github.com/HiPhish/jinja.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7434,6 +8004,7 @@ final: prev: {
       hash = "sha256-hoU+DenrgxNwvLNmDtIsJ5yB5fhRjDRPOOL8WW9bpZM=";
     };
     meta.homepage = "https://github.com/NicolasGB/jj.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7447,6 +8018,7 @@ final: prev: {
       hash = "sha256-ZxdZDlYNv3Fki9ktNB3k3NUBBh/0/10F791kt8TnSH4=";
     };
     meta.homepage = "https://github.com/vito-c/jq.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7460,6 +8032,7 @@ final: prev: {
       hash = "sha256-KtD8bprqPIn8/lyssDfHxPYgGcxgDTJawFq/HkqKX/w=";
     };
     meta.homepage = "https://github.com/neoclide/jsonc.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7472,6 +8045,7 @@ final: prev: {
       hash = "sha256-bTh/6zmYQ+XqBsccKo8i149nU5bBfFv+8UKMayHIoo4=";
     };
     meta.homepage = "https://git.myzel394.app/Myzel394/jsonfly.nvim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7485,6 +8059,7 @@ final: prev: {
       hash = "sha256-s2SDgiid8LnouJ/Y2Bud/sfjuwyGf4l6kjMjpejL1/k=";
     };
     meta.homepage = "https://github.com/julelang/jule.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7498,6 +8073,7 @@ final: prev: {
       hash = "sha256-IiYX8sBzAvbMSzZhMBbam7xh8znK8qVSVWppZLKkemk=";
     };
     meta.homepage = "https://github.com/JuliaEditorSupport/julia-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7511,6 +8087,7 @@ final: prev: {
       hash = "sha256-LBBRZOSqn70qruSA/vbPMTzS7y05F/z4EqC+5JlU6NM=";
     };
     meta.homepage = "https://github.com/GCBallesteros/jupytext.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7524,6 +8101,7 @@ final: prev: {
       hash = "sha256-pwAlfwPFnWD2qfBAuhLxSoCQoOZD7gQHEy4Nnt0GOqE=";
     };
     meta.homepage = "https://github.com/nxuv/just.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7537,6 +8115,7 @@ final: prev: {
       hash = "sha256-vAq9ZiG3s4x/xFSKt9/o40pptj2y7S8DQqs1dJEdhVU=";
     };
     meta.homepage = "https://github.com/rebelot/kanagawa.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7550,6 +8129,7 @@ final: prev: {
       hash = "sha256-UDHWREwo+cCK+lxhXhAOZ7hyRaP36TRcCucJgMRwJHU=";
     };
     meta.homepage = "https://github.com/thesimonho/kanagawa-paper.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7563,6 +8143,7 @@ final: prev: {
       hash = "sha256-gvPVYFhF5pHVB+Wq7UdmMwOYQtByNNGUu8Owo4tIJGY=";
     };
     meta.homepage = "https://github.com/webhooked/kanso.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7576,6 +8157,7 @@ final: prev: {
       hash = "sha256-IajKK1EjrKs6b2rotOj+RlBBge9Ii2m/iuIuefnjAE4=";
     };
     meta.homepage = "https://github.com/imsnif/kdl.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7589,6 +8171,7 @@ final: prev: {
       hash = "sha256-IfIjh+FOzfI1AXT7n7zfBHLsPCeQoy6/XxWORULWu64=";
     };
     meta.homepage = "https://github.com/anuvyklack/keymap-layer.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7602,6 +8185,7 @@ final: prev: {
       hash = "sha256-QtES9qKa4eVOP0CLr4VkI5lIkoii1mVDHtaegkjN8DU=";
     };
     meta.homepage = "https://github.com/mikesmithgh/kitty-scrollback.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7615,6 +8199,7 @@ final: prev: {
       hash = "sha256-/UhbgvRSLwDHTrrB7V8b3f+mccdw8pjijFPtKxdQ1c4=";
     };
     meta.homepage = "https://github.com/serenevoid/kiwi.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7628,6 +8213,7 @@ final: prev: {
       hash = "sha256-7PKVOsb3jvuGEnP/LsrDr96wFSQMou2dgnV+hRaI444=";
     };
     meta.homepage = "https://github.com/kmonad/kmonad-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7641,6 +8227,7 @@ final: prev: {
       hash = "sha256-BX/y1rEcDqj96rDssWwrMbj93SVIfFCW3tFgsFI1d4M=";
     };
     meta.homepage = "https://github.com/frabjous/knap/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7654,6 +8241,7 @@ final: prev: {
       hash = "sha256-qUMAudof+WhyBuHJ0O8LcBOPybJAEVXYAmdIcHK2gP4=";
     };
     meta.homepage = "https://github.com/oskarnurm/koda.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7667,6 +8255,7 @@ final: prev: {
       hash = "sha256-lpa3o42jieVKqs+ZCU8HBqWsoqoc53JKMmCNmIJ0rH0=";
     };
     meta.homepage = "https://github.com/b3nj5m1n/kommentary/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7680,6 +8269,7 @@ final: prev: {
       hash = "sha256-Eiwn2nQxb92gmcf3M5JW4HEnr9Uljyj5Sg/MA7Nc7ro=";
     };
     meta.homepage = "https://github.com/udalov/kotlin-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7694,6 +8284,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/mistweaverco/kulala.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7707,6 +8298,7 @@ final: prev: {
       hash = "sha256-OxeY+0Q07zD6FHa0BRhz/1k4HyJeB8/j+vrzXVSbe/4=";
     };
     meta.homepage = "https://github.com/slugbyte/lackluster.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7720,6 +8312,7 @@ final: prev: {
       hash = "sha256-ORsKlHKtfaWmojESWa3d0yqO1fqSWJ1NG9Oulh+Fpvc=";
     };
     meta.homepage = "https://github.com/qnighy/lalrpop.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7733,6 +8326,7 @@ final: prev: {
       hash = "sha256-A3PMp8Wcg+I4qpKYB27HlQLYB60jKtfhs6+MqfPS3gs=";
     };
     meta.homepage = "https://github.com/Wansmer/langmapper.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7746,6 +8340,7 @@ final: prev: {
       hash = "sha256-wY3mv4EwndrW5WXjwRptaNXBtud6gtugogo7/7EM4B8=";
     };
     meta.homepage = "https://github.com/sk1418/last256/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7759,6 +8354,7 @@ final: prev: {
       hash = "sha256-9J+W5/0r6BaN63E0n4oPti9P4RYnV+Q3bIxfdohvlfw=";
     };
     meta.homepage = "https://github.com/latex-box-team/latex-box/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7772,6 +8368,7 @@ final: prev: {
       hash = "sha256-70roDFHMY2MB2d7wPrPbWdLqhr8r8TMkYTpaGI/GRRU=";
     };
     meta.homepage = "https://github.com/dundalek/lazy-lsp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7785,6 +8382,7 @@ final: prev: {
       hash = "sha256-h5404njTAfqMJFQ3MAr2PWSbV81eS4aIs0cxAXkT0EM=";
     };
     meta.homepage = "https://github.com/folke/lazy.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7798,6 +8396,7 @@ final: prev: {
       hash = "sha256-Tsg1wNdySi6nK00sq1qDBRkRRlpdMCXVToDJ1SiqnPQ=";
     };
     meta.homepage = "https://github.com/folke/lazydev.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7811,6 +8410,7 @@ final: prev: {
       hash = "sha256-KMaUWGXRbbx1k1VdOgy+iSCDB20WNIjJETd5XOoVTJU=";
     };
     meta.homepage = "https://github.com/crnvl96/lazydocker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7824,6 +8424,7 @@ final: prev: {
       hash = "sha256-V5vjfwuWtSzOicZD/cTwbPVQdKrr3/2ozsm4QyT36t0=";
     };
     meta.homepage = "https://github.com/kdheepak/lazygit.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7837,6 +8438,7 @@ final: prev: {
       hash = "sha256-h97fVlawU0oLkDuuvmUbrTFzsc92DQELvynmIRjGjjk=";
     };
     meta.homepage = "https://github.com/swaits/lazyjj.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7850,6 +8452,7 @@ final: prev: {
       hash = "sha256-AYClc7+z+0h5QfVGPGr7ZrzPuaD+IAMtHT/3ZnbSVLE=";
     };
     meta.homepage = "https://github.com/Julian/lean.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7863,6 +8466,7 @@ final: prev: {
       hash = "sha256-yS9ViuW8FoZN7Oy7tf1rzlC7qiHJwZgjNwzhf9DVtf8=";
     };
     meta.homepage = "https://github.com/leanprover/lean.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7876,18 +8480,20 @@ final: prev: {
       hash = "sha256-6ZbO0ND/JSoJVXSLNCfQzWgXoiUYJut2OGtAcpvPaMk=";
     };
     meta.homepage = "https://github.com/ggandor/leap-ast.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
   leap-nvim = buildVimPlugin {
     pname = "leap.nvim";
-    version = "0-unstable-2026-04-20";
+    version = "0-unstable-2026-04-26";
     src = fetchgit {
       url = "https://codeberg.org/andyg/leap.nvim/";
-      rev = "ce3cf75200ae148d75563088f435389f9e4100fd";
-      hash = "sha256-f3LwrPetVujz/ji1kWwOGuYjNiii/+E68I6RPnzXAIY=";
+      rev = "37605b63757d633a6cc70b7d65b932eafdbeedcf";
+      hash = "sha256-fkm0Nyyhc9GF7DWUpQShtZeKnYZm99pML8Y+y0FyDts=";
     };
     meta.homepage = "https://codeberg.org/andyg/leap.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7901,6 +8507,7 @@ final: prev: {
       hash = "sha256-PqfDPTKiM64tIi/BSQKDsE5rjmmuDHcBB91I3dZ4El8=";
     };
     meta.homepage = "https://github.com/kawre/leetcode.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7914,6 +8521,7 @@ final: prev: {
       hash = "sha256-C+j5CWSGKgyHzb8R6rJOg2KZ1a6JZsWHuNmNLsv4e44=";
     };
     meta.homepage = "https://github.com/mrjones2014/legendary.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7927,6 +8535,7 @@ final: prev: {
       hash = "sha256-upb1PMgnrAuNQGdv83VvOmbLtFUDnuGYchCbxLOORcA=";
     };
     meta.homepage = "https://github.com/camspiers/lens.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7940,6 +8549,7 @@ final: prev: {
       hash = "sha256-U2rZ+Kol2Up1a2kBBFWcIdV5xwl4WwdKe4E8A2EaOG4=";
     };
     meta.homepage = "https://github.com/oribarilan/lensline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7953,6 +8563,7 @@ final: prev: {
       hash = "sha256-liRjhV+h13QqsyvhzbokKoxIQqzLvzdoR8ZQnDM69b0=";
     };
     meta.homepage = "https://github.com/thirtythreeforty/lessspace.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7966,6 +8577,7 @@ final: prev: {
       hash = "sha256-NtHCfuL2Tq1a4Xevx+xAbnzsKqnPAbU/l7JvK7p0evU=";
     };
     meta.homepage = "https://github.com/cohama/lexima.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -7979,6 +8591,7 @@ final: prev: {
       hash = "sha256-ys3kgXtgaE5OGyNYZ2PuqM9FDGjxfIjRgXBUDBVIjUM=";
     };
     meta.homepage = "https://github.com/lmburns/lf.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7992,6 +8605,7 @@ final: prev: {
       hash = "sha256-t09f3sNDca3tnaTOZd6qAgEZTvbWu0tO2Nf8dlN5Jn0=";
     };
     meta.homepage = "https://github.com/ptzz/lf.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8005,6 +8619,7 @@ final: prev: {
       hash = "sha256-lBR5BU2aJJaI9LlwUDDy0lLKX7D/oUSzLohJmFvdfWk=";
     };
     meta.homepage = "https://github.com/LucHermitte/lh-brackets/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8018,6 +8633,7 @@ final: prev: {
       hash = "sha256-uV5m4xr86UnfBzqf84765fe37wGEsg+3kge1XNavbOc=";
     };
     meta.homepage = "https://github.com/LucHermitte/lh-vim-lib/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8031,6 +8647,7 @@ final: prev: {
       hash = "sha256-OOlFb/I+sIXFcj1PQLapITuvM34TrjLEzes2yeC7Iy4=";
     };
     meta.homepage = "https://github.com/max-baz/lightline-ale/";
+    meta.license = lib.meta.getLicenseFromSpdxId "ISC";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8044,6 +8661,7 @@ final: prev: {
       hash = "sha256-1iHpchPd2ZVtwbx+RFspAqaqxXScuKmxatfRpqQ83tk=";
     };
     meta.homepage = "https://github.com/mengelbrecht/lightline-bufferline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8057,19 +8675,21 @@ final: prev: {
       hash = "sha256-m6iaRm33Ethm38olNmcoLESd2XGMtXiJkfoTgFhReBU=";
     };
     meta.homepage = "https://github.com/shinchu/lightline-gruvbox.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   lightline-lsp = buildVimPlugin {
     pname = "lightline-lsp";
-    version = "0-unstable-2023-03-15";
+    version = "0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "spywhere";
       repo = "lightline-lsp";
-      rev = "4f5d42a7320cd2444a444df4b57529c4f921e4a2";
-      hash = "sha256-sV7gQshKlTsZOxC4JjYrKCnR6vfN5OrGw8Qz85VgOCs=";
+      rev = "5c00998b7fe06c101d887479ea9b753100527037";
+      hash = "sha256-XOL0sphbhXoViIOAiOnvfsA0GMB8zx5pY0xIkQ2y8p8=";
     };
     meta.homepage = "https://github.com/spywhere/lightline-lsp/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8083,6 +8703,7 @@ final: prev: {
       hash = "sha256-YYhSlqYUXFbArn2lq80LH/WXIUbHjt087+w2y/6EjtQ=";
     };
     meta.homepage = "https://github.com/itchyny/lightline.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8096,6 +8717,7 @@ final: prev: {
       hash = "sha256-pdmtzNMC7vvIxbhpWwm0fAS/jYAmti6a0gEiFA8BBoA=";
     };
     meta.homepage = "https://github.com/ggandor/lightspeed.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8109,6 +8731,7 @@ final: prev: {
       hash = "sha256-PWrJtDMUy0GQK1XrjcslMmJCI+n7QhYxy1cEbAZVxHI=";
     };
     meta.homepage = "https://github.com/markgandolfo/lightswitch.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8122,6 +8745,7 @@ final: prev: {
       hash = "sha256-Bwsch5DoRgYEztrMrfgOm8iNcK8aWRmg6NERtXscX9E=";
     };
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8135,6 +8759,7 @@ final: prev: {
       hash = "sha256-27Lu2U+/XELoT7yV4r0wqsFW/w8Z1BA4UDQslq1dOg4=";
     };
     meta.homepage = "https://github.com/AndrewRadev/linediff.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8148,6 +8773,7 @@ final: prev: {
       hash = "sha256-Bf2MabUe3fy0meL6zIYgal/yFxtLKsg3b/BUI/AVlrM=";
     };
     meta.homepage = "https://github.com/lf-lang/lingua-franca.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8161,6 +8787,7 @@ final: prev: {
       hash = "sha256-N2RXXWjvGJ2TAnX/i+riPKCrs10/3bElUJVJFOG1fZw=";
     };
     meta.homepage = "https://github.com/tamago324/lir.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8174,6 +8801,7 @@ final: prev: {
       hash = "sha256-1RSPwqMSZc2jZhIyutUhI6XNTtabRf/2G+dmTmNRqls=";
     };
     meta.homepage = "https://github.com/kkharji/lispdocs.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8187,6 +8815,7 @@ final: prev: {
       hash = "sha256-T9L/jmHqQJBdOkev3izFKzCuj2c9tgUVbC4zKp+4jhE=";
     };
     meta.homepage = "https://github.com/ldelossa/litee-calltree.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8200,6 +8829,7 @@ final: prev: {
       hash = "sha256-TbwKzyZHw/KH2qR15UTAYbbTMkxJky9SVrcSTlppw0k=";
     };
     meta.homepage = "https://github.com/ldelossa/litee-filetree.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8213,6 +8843,7 @@ final: prev: {
       hash = "sha256-PUFPQA0LWXn2fjT8Cfy7SFX14hkbUH05mQF4enuxUo0=";
     };
     meta.homepage = "https://github.com/ldelossa/litee.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8226,6 +8857,7 @@ final: prev: {
       hash = "sha256-V40YM+dw16znMyhV1n/8sxFaCNT6IAyywgF8dshVUlY=";
     };
     meta.homepage = "https://github.com/ldelossa/litee-symboltree.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8239,6 +8871,7 @@ final: prev: {
       hash = "sha256-agfevFIUb9KcKK1kiVoUbyyIubn0hs6xD3MXy/ZssuM=";
     };
     meta.homepage = "https://github.com/smjonas/live-command.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8252,6 +8885,7 @@ final: prev: {
       hash = "sha256-7EKKcpth1/hW4qgeVQm+6RnG6HKb6wnA1VsBSUO0PEI=";
     };
     meta.homepage = "https://github.com/brianhuster/live-preview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8265,19 +8899,21 @@ final: prev: {
       hash = "sha256-dLIPF5zrnZXtPAVbOe73O819kBS6XXCaoESTilM9U4s=";
     };
     meta.homepage = "https://github.com/saecki/live-rename.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   live-share-nvim = buildVimPlugin {
     pname = "live-share.nvim";
-    version = "2.1.3";
+    version = "2.1.4";
     src = fetchFromGitHub {
       owner = "azratul";
       repo = "live-share.nvim";
-      tag = "v2.1.3";
-      hash = "sha256-EXVnUcutSz3xfjTHjYr45nBWm6JP68PoGE07ooYsywA=";
+      tag = "v2.1.4";
+      hash = "sha256-MzgSIRZpBzvCiWppthKyFy5yocj7dghefsf5aonYQlg=";
     };
     meta.homepage = "https://github.com/azratul/live-share.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8291,6 +8927,7 @@ final: prev: {
       hash = "sha256-aYX33Btw00YQqvxgPdA6xifrOpeo7c+pBeKIB7po2qQ=";
     };
     meta.homepage = "https://github.com/ggml-org/llama.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8304,6 +8941,7 @@ final: prev: {
       hash = "sha256-vjSa/ae6p/xCFIgRXOwZFsyLu6Gap+/H0DIeIHMnyVs=";
     };
     meta.homepage = "https://github.com/huggingface/llm.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8317,6 +8955,7 @@ final: prev: {
       hash = "sha256-+qVJb3u3DqFn4p2K74xQPfFzR9/KH4r7oPEndW2wuMQ=";
     };
     meta.homepage = "https://github.com/folke/lsp-colors.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8330,6 +8969,7 @@ final: prev: {
       hash = "sha256-/x76tWGtSkDmbYyMZbVlzagqQnqumHyJqWHL2syDqvI=";
     };
     meta.homepage = "https://github.com/joechrisellis/lsp-format-modifications.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8343,6 +8983,7 @@ final: prev: {
       hash = "sha256-x++L67u2mE95Zeh+ZIh6mJa+ZfMm6/5JLtHZmC/EVR4=";
     };
     meta.homepage = "https://github.com/lukas-reineke/lsp-format.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8356,6 +8997,7 @@ final: prev: {
       hash = "sha256-06CiJ+xeMO4+OJkckcslqwloJyt2gwg514JuxV6KOfQ=";
     };
     meta.homepage = "https://github.com/lvimuser/lsp-inlayhints.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8369,6 +9011,7 @@ final: prev: {
       hash = "sha256-ZrtbUT6Q+KkIJTP1YJDCy1Fxy3Mmun2hXTVQ9V36kRQ=";
     };
     meta.homepage = "https://github.com/Issafalcon/lsp-overloads.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8382,6 +9025,7 @@ final: prev: {
       hash = "sha256-j9iDwZ1oq7v6rc8XQnBDBUUXTQ5defz/a5ZrcVRisv4=";
     };
     meta.homepage = "https://github.com/ahmedkhalf/lsp-rooter.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8395,6 +9039,7 @@ final: prev: {
       hash = "sha256-gmLeVnDyL8Zf5ZG92tP3mb/LAt438BxFtAi/Xax2zLI=";
     };
     meta.homepage = "https://github.com/nvim-lua/lsp-status.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8408,6 +9053,7 @@ final: prev: {
       hash = "sha256-CTLsXtY/89l1zV+Y09mhThx0PEEG5KhoOw1X4f4frtc=";
     };
     meta.homepage = "https://github.com/VonHeikemen/lsp-zero.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8421,6 +9067,7 @@ final: prev: {
       hash = "sha256-002AYHIcj9f54HOqD+MvzFAod00gi9nG9PDiD6qqPXg=";
     };
     meta.homepage = "https://github.com/nvim-lua/lsp_extensions.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8433,6 +9080,7 @@ final: prev: {
       hash = "sha256-jHiIZemneQACTDYZXBJqX2/PRTBoxq403ILvt1Ej1ZM=";
     };
     meta.homepage = "https://git.sr.ht/~whynothugo/lsp_lines.nvim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8446,6 +9094,7 @@ final: prev: {
       hash = "sha256-yKw5UmqLgllDszVcdwuUrYd8K7Ih7RfWn5H+6Yk3n8E=";
     };
     meta.homepage = "https://github.com/ray-x/lsp_signature.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8459,6 +9108,7 @@ final: prev: {
       hash = "sha256-lR755wx18PItw7uxxGg5dX6ybcrNuPA+D0oNt+hLkpI=";
     };
     meta.homepage = "https://github.com/lspcontainers/lspcontainers.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8472,6 +9122,7 @@ final: prev: {
       hash = "sha256-K/SxOuEQF/XNeC/uiyftmylYJDGx2isWf86DBM3pTvE=";
     };
     meta.homepage = "https://github.com/deathbeam/lspecho.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8485,6 +9136,7 @@ final: prev: {
       hash = "sha256-aIopYLm/x1CgCKpcsu9pxpqL0SXXhHDPTM8DKUwGeRw=";
     };
     meta.homepage = "https://github.com/onsails/lspkind.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8498,6 +9150,7 @@ final: prev: {
       hash = "sha256-oFzbEkY/WKT7jbwGxeKnbQXgnY8kSmH/UsjljXozBWU=";
     };
     meta.homepage = "https://github.com/nvimdev/lspsaga.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8511,6 +9164,7 @@ final: prev: {
       hash = "sha256-9DLLewfRn17BeQfZB2+FbeFI+2DhNevlBqhrvsmpYU4=";
     };
     meta.homepage = "https://github.com/barreiroleo/ltex_extra.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8524,6 +9178,7 @@ final: prev: {
       hash = "sha256-RxesT6jAX4H7SrmQPqV0wKs5qCkFMBXzQWDl2ToHqSs=";
     };
     meta.homepage = "https://github.com/nvim-java/lua-async/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8537,6 +9192,7 @@ final: prev: {
       hash = "sha256-8HMtydFDzTxsuKvce+bIra9vZ9zHfEBHyR346W635b8=";
     };
     meta.homepage = "https://github.com/arkav/lualine-lsp-progress/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8550,6 +9206,7 @@ final: prev: {
       hash = "sha256-w58aCqK2Gj4f9hxUcngJQi0Bj1I1twTwv0af7hOyKB0=";
     };
     meta.homepage = "https://github.com/evesdropper/luasnip-latex-snippets.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8563,6 +9220,7 @@ final: prev: {
       hash = "sha256-ihVEHzFZ59VXoao/lwsZv5pvX96db+RNXRGVXCLsapY=";
     };
     meta.homepage = "https://github.com/alvarosevilla95/luatab.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8576,6 +9234,7 @@ final: prev: {
       hash = "sha256-w1QF0PeaDjxp05wpwCkK9DYldYOnhrE1u3h10/2jmSw=";
     };
     meta.homepage = "https://github.com/lopi-py/luau-lsp.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8589,6 +9248,7 @@ final: prev: {
       hash = "sha256-FCsnQ3zl4ksmGRDMU2u0H4UdmY0Qxc+9N3L5W3jgSg8=";
     };
     meta.homepage = "https://github.com/mkasa/lushtags/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8602,6 +9262,7 @@ final: prev: {
       hash = "sha256-7fkB4w28W5aY/tJEvldgU1aL3wkcpf4/qX0Yc9ISv+A=";
     };
     meta.homepage = "https://github.com/Bilal2453/luvit-meta/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8615,6 +9276,7 @@ final: prev: {
       hash = "sha256-IrMR57gk9iCk73esHO24KZeep9VrlkV5sOC4PzGexyo=";
     };
     meta.homepage = "https://github.com/dccsillag/magma-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8628,6 +9290,7 @@ final: prev: {
       hash = "sha256-iejN+W0pWyjaS0q+EJKnbvMiIiYHrJ2K1Jl6mLjcWQM=";
     };
     meta.homepage = "https://github.com/forest-nvim/maple.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8641,6 +9304,7 @@ final: prev: {
       hash = "sha256-1rkEC4+EQSG5wmos2Pvw9GYU7HTiysL85AhBxoyXmKc=";
     };
     meta.homepage = "https://github.com/winston0410/mark-radar.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8654,6 +9318,7 @@ final: prev: {
       hash = "sha256-4n9Btas7GtHMrfNNE2IX2Gm2QOoTE4rHB35w5pAbicQ=";
     };
     meta.homepage = "https://github.com/OXY2DEV/markdoc.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8667,6 +9332,7 @@ final: prev: {
       hash = "sha256-nmcMObcZW50GIV1Lz8Xd64OriwA87rO47EZ7TEyEcpw=";
     };
     meta.homepage = "https://github.com/tadmccorkle/markdown.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8680,6 +9346,7 @@ final: prev: {
       hash = "sha256-TBXdG/Ih5DusAYZJyn37zVqHcMD85VkjrCoLyTo/KBg=";
     };
     meta.homepage = "https://github.com/iamcco/markdown-preview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8693,6 +9360,7 @@ final: prev: {
       hash = "sha256-xTEKyc3+BadA0q0Kx9MMSdkzApEEYYZMtQqSCbt42Rs=";
     };
     meta.homepage = "https://github.com/David-Kunz/markid/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8706,33 +9374,36 @@ final: prev: {
       hash = "sha256-ho2b2Ulh+GTqY0QvW7zjFOSlF5g/kaxWyOjKWhTFq7c=";
     };
     meta.homepage = "https://github.com/chentoast/marks.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   markview-nvim = buildVimPlugin {
     pname = "markview.nvim";
-    version = "28.1.0";
+    version = "28.2.0";
     src = fetchFromGitHub {
       owner = "OXY2DEV";
       repo = "markview.nvim";
-      tag = "v28.1.0";
-      hash = "sha256-O0si5VWfC2ijySL6jgQU2pfUF1M+FjPpCgSis3zPjmM=";
+      tag = "v28.2.0";
+      hash = "sha256-/sO6gNKNwkQDSMjCesrHynCNSXGhDCoN8youVdJm6t4=";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/OXY2DEV/markview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
   mason-lspconfig-nvim = buildVimPlugin {
     pname = "mason-lspconfig.nvim";
-    version = "2.1.0-unstable-2026-04-10";
+    version = "2.2.0";
     src = fetchFromGitHub {
       owner = "mason-org";
       repo = "mason-lspconfig.nvim";
-      rev = "0a3b42c3e503df87aef6d6513e13148381495c3a";
-      hash = "sha256-2To5AC3lurTK5NklB6ufMRHCbf3mw1D794Kh0UBGJz8=";
+      tag = "v2.2.0";
+      hash = "sha256-wWoRUg2nvmqaEWxjYEOk1q+jQyKupgJi2LubhewcVCw=";
     };
     meta.homepage = "https://github.com/mason-org/mason-lspconfig.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8746,6 +9417,7 @@ final: prev: {
       hash = "sha256-OlTAprysnaDspna0Q8GgbeTxWJ/YxRaHayeMxM+uUVM=";
     };
     meta.homepage = "https://github.com/jay-babu/mason-null-ls.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "AGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8759,6 +9431,7 @@ final: prev: {
       hash = "sha256-Oq93aLhK/fowReSAeg9nnXnLrpTpBek0j5uNX1FW1Vs=";
     };
     meta.homepage = "https://github.com/mason-org/mason.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8772,6 +9445,7 @@ final: prev: {
       hash = "sha256-y1heAB1HCntH4m5wITMejVQW0XxfmxjE/ZBZHrMNges=";
     };
     meta.homepage = "https://github.com/jay-babu/mason-nvim-dap.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "AGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8785,6 +9459,7 @@ final: prev: {
       hash = "sha256-OZGq2TKZx1+GSzrQAdk2fAUv3052NMfTkm5QdO+EXXk=";
     };
     meta.homepage = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8798,6 +9473,7 @@ final: prev: {
       hash = "sha256-tY28548sn72ZxfjTITqMRT1aLqtZCnHXSdWtqi0lLOk=";
     };
     meta.homepage = "https://github.com/vim-scripts/matchit.zip/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8811,6 +9487,7 @@ final: prev: {
       hash = "sha256-rix4puBEf1hKqPDHaliehemXCaeDI6rwMAWLm0E038Q=";
     };
     meta.homepage = "https://github.com/marko-cerovac/material.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8824,6 +9501,7 @@ final: prev: {
       hash = "sha256-9R4WWwsLa+CGIejxQJZwfprigHWsOY5ON8tQPiKP1Js=";
     };
     meta.homepage = "https://github.com/kaicataldo/material.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8837,6 +9515,7 @@ final: prev: {
       hash = "sha256-RoiTv2yTw6pkvkrKBz2T1MV3t5X3RjIMK+z/PMRNEdE=";
     };
     meta.homepage = "https://github.com/mattn/calendar-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8850,6 +9529,7 @@ final: prev: {
       hash = "sha256-7WaBHHQj7d/y4y3jLbE2HJ3XRXtEzY5wcKdrE4+frPc=";
     };
     meta.homepage = "https://github.com/vim-scripts/mayansmoke/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8863,6 +9543,7 @@ final: prev: {
       hash = "sha256-g9tPvjThz6EUk7zcY7lL+YH4lrT4x3FJ6jrNMHA8PAE=";
     };
     meta.homepage = "https://github.com/ravitemer/mcphub.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8876,6 +9557,7 @@ final: prev: {
       hash = "sha256-Tgza7QAzNu0D5cuDyH/jR3rvTuoV2DRA2MBCKjiPUdE=";
     };
     meta.homepage = "https://github.com/chikamichi/mediawiki.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8889,6 +9571,7 @@ final: prev: {
       hash = "sha256-4WeIgkbc9RxGB8NqLc/Z12OxtK+v8qbQ03T1pjJ3HAE=";
     };
     meta.homepage = "https://github.com/savq/melange-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8902,6 +9585,7 @@ final: prev: {
       hash = "sha256-0w4gPMXz3ZlSgt9Pffjy1D5aplog6MD1aKvqObAhqOI=";
     };
     meta.homepage = "https://github.com/mellow-theme/mellow.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8915,6 +9599,7 @@ final: prev: {
       hash = "sha256-ld2h000ZX3jZrgpcwW5ss6L0Uvu5fWXJCBAScFnvm/k=";
     };
     meta.homepage = "https://github.com/lsig/messenger.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8928,6 +9613,7 @@ final: prev: {
       hash = "sha256-aNGcNceW4I/lxhj+4usmLrK8pOgxc+NAqYHokL/3eeE=";
     };
     meta.homepage = "https://github.com/xero/miasma.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8941,6 +9627,7 @@ final: prev: {
       hash = "sha256-X1TLibzUF1f2qoGn886Y1OcbAZNMo4LXJVRRbB9/Hng=";
     };
     meta.homepage = "https://github.com/dasupradyumna/midnight.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8954,6 +9641,7 @@ final: prev: {
       hash = "sha256-JIhAhQYGLLRucwlhzfckQYU5qjqbHtNH52JlGS5a79w=";
     };
     meta.homepage = "https://github.com/hadronized/mind.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -8967,6 +9655,7 @@ final: prev: {
       hash = "sha256-vrCIUPR3+oHpXyaYI4qEXcOvQQaE9lexWqB0XGalHYY=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.ai/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8980,6 +9669,7 @@ final: prev: {
       hash = "sha256-7VwbEcd+PEgPXMRhFG9zCijMsqhpQWtzA1LAs0kBx9k=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.align/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -8993,6 +9683,7 @@ final: prev: {
       hash = "sha256-VlsDJtRqQCreS4WGVTnTddpl7GPMTkKIhRA/YauaBhQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.animate/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9006,6 +9697,7 @@ final: prev: {
       hash = "sha256-wGKFapSEWc7MUWGboe9lLTuTwgNB5whTNg6ZNGLiPwQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.base16/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9019,6 +9711,7 @@ final: prev: {
       hash = "sha256-lx+5plFDSB4ot8abgYR3fHlJzTHwDQQpUlC9DRP4V68=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.basics/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9032,6 +9725,7 @@ final: prev: {
       hash = "sha256-nyD3/+UJXWQ+zhhNUiKKfQgHBZpH8TKkr/T1Mftz7nU=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.bracketed/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9045,6 +9739,7 @@ final: prev: {
       hash = "sha256-dNpmKx48LDoXbXcV8deAl7QbUoC42ufKXgW+CKmNKLA=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.bufremove/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9058,6 +9753,7 @@ final: prev: {
       hash = "sha256-0OJMRCtGG2I3CmohQXcm92bXAi5QGZ1Klp/GQhOvyyk=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.clue/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9071,6 +9767,7 @@ final: prev: {
       hash = "sha256-TjArbkIwP5iPrHEx8x6bGJQEPnNQNXb+Nr9ujSQJ5tM=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.cmdline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9084,6 +9781,7 @@ final: prev: {
       hash = "sha256-dxw3mIsC4zrFvS156Q18V5Lhim/LpdBb29LLs4OqWL4=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.colors/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9097,6 +9795,7 @@ final: prev: {
       hash = "sha256-ADlpVkkUSyWY8dQLiGRIIBGqwMuwGhe97wJ/wGqZ/UQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.comment/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9110,6 +9809,7 @@ final: prev: {
       hash = "sha256-Y2cYv06QUvKWRoF/05+ajJ41z/4D6QZAuxjNCFAtu5E=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.completion/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9123,6 +9823,7 @@ final: prev: {
       hash = "sha256-swg5gxbUVY5Zkf6MThUP53aIg2NdSsEgmaFpoHwygSw=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.cursorword/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9136,6 +9837,7 @@ final: prev: {
       hash = "sha256-V1cDkMnFf81BPwRjRQC/wAmfTQjsxckhAobM6X9jZeg=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.deps/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9149,6 +9851,7 @@ final: prev: {
       hash = "sha256-mXpH4pZ542tLXpth9ESi60BE3wVJtB33dRu8k8KRjks=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.diff/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9162,6 +9865,7 @@ final: prev: {
       hash = "sha256-bw3nejD8F5149CXLg88LqNUuHf4o46kAifQG6WRyzLc=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.doc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9175,19 +9879,21 @@ final: prev: {
       hash = "sha256-+SlfaXZaTjTdPJik2SDTnfb+IFri2rG+DIv59dADi2w=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.extra/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   mini-files = buildVimPlugin {
     pname = "mini.files";
-    version = "0.17.0-unstable-2026-04-09";
+    version = "0.17.0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.files";
-      rev = "e8db416c9f5dbce70f5501da28263d45c0a4df6b";
-      hash = "sha256-HuLh9+k6x7CEnmu5V/QIvFE965v9oiXOpUC19TvOFkM=";
+      rev = "3e247eb12ca8c05622ceb8745f9004f761b22ef8";
+      hash = "sha256-/8Hnup7ufmjKnXWOC4HmAeRedXLzVJmfWrFikYZLA6s=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.files/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9201,6 +9907,7 @@ final: prev: {
       hash = "sha256-dnhT17eTP/jSjdFl1TIFRcozt1w+jieE7tTDwvV5BGQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.fuzzy/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9214,6 +9921,7 @@ final: prev: {
       hash = "sha256-1qexFbUk/Tyv5MbaZdmhOU6xFBIHbFaoqtzGNP7SPQ0=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini-git/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9227,6 +9935,7 @@ final: prev: {
       hash = "sha256-As3KIoOPhm/KAVOp0Gw1hPIOB7sI47nu2am+4gpPyo4=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.hipatterns/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9240,6 +9949,7 @@ final: prev: {
       hash = "sha256-CQLsJl3EUw71eAzd4Af0dnqfGbgEmmsWJRhwnuB+HJQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.hues/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9253,6 +9963,7 @@ final: prev: {
       hash = "sha256-/arujhZe9m9VB5nZ0xzCZjkxu4ai9Rfit7y6RwrLf7s=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.icons/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9266,6 +9977,7 @@ final: prev: {
       hash = "sha256-kbydWyaslRWTvKJMsuiMgIQi/FroPhBUke4DeRWLmQI=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.indentscope/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9279,6 +9991,7 @@ final: prev: {
       hash = "sha256-sJS5JSM7TRRcKaabxKokBsuRKrVoxypvi1adQ9h9Jvc=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.jump/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9292,6 +10005,7 @@ final: prev: {
       hash = "sha256-4ugbxE0U7mlakpHWx3zAvTlk58UCAX4RNhrGeLz4fz8=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.jump2d/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9305,6 +10019,7 @@ final: prev: {
       hash = "sha256-hL6fsUxmRzie3iZpbMOQ/C/iQzpJiHNB9HfsrgVTF4o=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.keymap/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9318,6 +10033,7 @@ final: prev: {
       hash = "sha256-aQ7212R5WhrGtlMzOoTeUBVSUEoKATESVrDY1m0henQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.map/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9331,6 +10047,7 @@ final: prev: {
       hash = "sha256-51eLYthhCerqi0RWWhfzGCIDp4VC+i0ZpZV9UYIuSDM=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.misc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9344,6 +10061,7 @@ final: prev: {
       hash = "sha256-+OTW77wcX1I2Ua5W6O7tX/4J22RLTxZ2YviV1Atr7OI=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.move/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9357,19 +10075,21 @@ final: prev: {
       hash = "sha256-j9sUgw7yaGFBgdpRxLZOhXMUp7YlleMDpo97lHjKpYQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.notify/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   mini-nvim = buildVimPlugin {
     pname = "mini.nvim";
-    version = "0.17.0-unstable-2026-04-21";
+    version = "0.17.0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.nvim";
-      rev = "5849ef04c32a6a8e55957b946c0a275801d87530";
-      hash = "sha256-itvNBJwakDOeIUaEZS5qSeI3L//kve3ub7r16EUvgi0=";
+      rev = "be81509b7160aa02264a59789164a2e1c4a6750a";
+      hash = "sha256-2ndsWJEkQjmzG5TAPR/D+OQPbSqZ/z9pR8vcPE/MOY0=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9383,6 +10103,7 @@ final: prev: {
       hash = "sha256-qMdxVUKjVX1+gPvf4VI1+qgykOZejzsVsXGR4PFu8J0=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.operators/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9396,6 +10117,7 @@ final: prev: {
       hash = "sha256-ewUVK+bPzzB8NySrm7iTyNJ4se71YBediFWpUFJCNfs=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.pairs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9409,6 +10131,7 @@ final: prev: {
       hash = "sha256-aRxyI1k0+d4xMhSL9w2rofY4jinJwmfZ2WalQ6wNHiQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.pick/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9422,6 +10145,7 @@ final: prev: {
       hash = "sha256-y/aHihPEBQazmeQVj/5kAlbeapBACERk2jUnBQNS3SM=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.sessions/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9435,6 +10159,7 @@ final: prev: {
       hash = "sha256-4putVLcfKrbOqpD9L/fLpKGES0ZCOmGXt3mxRfptYx8=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.snippets/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9448,6 +10173,7 @@ final: prev: {
       hash = "sha256-wgXJc58gco5mNYJpjmOZEirYo7xFSY0k8pCKAbmQbOQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.splitjoin/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9461,6 +10187,7 @@ final: prev: {
       hash = "sha256-9blx4VllXj9jNMd5LjXZoebtjgFDnrycTJu/S/ezpp4=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.starter/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9474,6 +10201,7 @@ final: prev: {
       hash = "sha256-RHMbkng5tQclXQ6qzpjgeV8NMUL4TkF1wMzrR+UdExU=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.statusline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9487,6 +10215,7 @@ final: prev: {
       hash = "sha256-H+VXj4N/7dTTcLx2uzu7TD7IJeQbR9TcgoEmS/fHloI=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.surround/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9500,6 +10229,7 @@ final: prev: {
       hash = "sha256-Oqq4Q/+ykxY8d7Cxz3tlM7pmq1a3jJD8/v6ZGWJaEoQ=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.tabline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9513,6 +10243,7 @@ final: prev: {
       hash = "sha256-5c8X1+zxYBJtoQ3rvZ2hyELVce1ojBN/talNaPRrYxc=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.trailspace/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9526,6 +10257,7 @@ final: prev: {
       hash = "sha256-p2samqxhCQdp2imNejVjk1XoWDDFHsZOwQUTsYYS6WI=";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.visits/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9539,19 +10271,21 @@ final: prev: {
       hash = "sha256-7MUCZSlWI7iy6LJdtzQ4320KC73PeG5gkE1lYTGY/ek=";
     };
     meta.homepage = "https://github.com/wfxr/minimap.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   minuet-ai-nvim = buildVimPlugin {
     pname = "minuet-ai.nvim";
-    version = "0.8.0-unstable-2026-04-23";
+    version = "0.9.0";
     src = fetchFromGitHub {
       owner = "milanglacier";
       repo = "minuet-ai.nvim";
-      rev = "173d8c9451504cdf93ce172f710487d3c6191ce8";
-      hash = "sha256-4tBdnziMUCL8Cgq5LFO5LSbWB8Kk5Brq9vKRgq38jOw=";
+      tag = "v0.9.0";
+      hash = "sha256-eOhbOrzhXqlzByq34/xKaCKr7u2JX3AaddieTlEe9OQ=";
     };
     meta.homepage = "https://github.com/milanglacier/minuet-ai.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9565,6 +10299,7 @@ final: prev: {
       hash = "sha256-Q+zlQVR8wVB1BqVTd0lkjZaFu/snt/hcb9jxw9fc/n4=";
     };
     meta.homepage = "https://github.com/jghauser/mkdir.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9578,6 +10313,7 @@ final: prev: {
       hash = "sha256-DxoSwy8WTgfKpguNVKsII2IUNfMS4oDGO18JmqalCcQ=";
     };
     meta.homepage = "https://github.com/jakewvincent/mkdnflow.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9591,6 +10327,7 @@ final: prev: {
       hash = "sha256-Mpze6Quz5KNQF+/59JYQCZVJgRGFzTOvC1U+6g9kh/o=";
     };
     meta.homepage = "https://github.com/SidOfc/mkdx/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9604,6 +10341,7 @@ final: prev: {
       hash = "sha256-gz97C8/tlU4SDKLaQ5Lv2NbQP8zQRsNxiIQWHoHHDJY=";
     };
     meta.homepage = "https://github.com/gsuuon/model.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9617,6 +10355,7 @@ final: prev: {
       hash = "sha256-X0KSozq68U9/hAfRBFkp0sgPb9fXzUFoQj0XKx7SBFw=";
     };
     meta.homepage = "https://github.com/mawkler/modicator.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9630,6 +10369,7 @@ final: prev: {
       hash = "sha256-5w1a8ISBM90bwajkAupBFXoucHat+lQsyD5Rr0e2SKY=";
     };
     meta.homepage = "https://github.com/miikanissi/modus-themes.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9643,6 +10383,7 @@ final: prev: {
       hash = "sha256-OgzU7vm046T9gmxmqO3sRKCH0E9QAheYGoT7WbL8Ot4=";
     };
     meta.homepage = "https://github.com/tomasr/molokai/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -9656,6 +10397,7 @@ final: prev: {
       hash = "sha256-FsDtd50Ehyd6EVdyU3fIDefkZJsOIi5bMPPdV3rKZw0=";
     };
     meta.homepage = "https://github.com/benlubas/molten-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9669,6 +10411,7 @@ final: prev: {
       hash = "sha256-amJ2l4BwV8LQDTHjRULOfsp1uo3tt+SkgoM3g24oWj4=";
     };
     meta.homepage = "https://github.com/jackplus-xyz/monaspace.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9682,6 +10425,7 @@ final: prev: {
       hash = "sha256-G8qGIUD2NivfJw016bKk67VEJzOitUZIk8o8k2WTt5w=";
     };
     meta.homepage = "https://github.com/loctvl842/monokai-pro.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9695,6 +10439,7 @@ final: prev: {
       hash = "sha256-wydCYXsQZyojiUf4CAi15pSysFxZjdRk8x3r668bPFU=";
     };
     meta.homepage = "https://github.com/shaunsingh/moonlight.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9708,6 +10453,7 @@ final: prev: {
       hash = "sha256-Ee8tcKacn7l8e9ODYm7yWj/dIt9dRMpmfQp/Zbv4ntQ=";
     };
     meta.homepage = "https://github.com/leafo/moonscript-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -9721,6 +10467,7 @@ final: prev: {
       hash = "sha256-gDpJg8u5N9xmSvWTuByjY2Ns9srWmoMf+oHJlILrQ48=";
     };
     meta.homepage = "https://github.com/yegappan/mru/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -9734,6 +10481,7 @@ final: prev: {
       hash = "sha256-JHl8Z7ESrWus2I6Pe+6gmdgCAZOzAKX7kimy71sAoe4=";
     };
     meta.homepage = "https://github.com/jake-stewart/multicursor.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9747,6 +10495,7 @@ final: prev: {
       hash = "sha256-lLXQuyVPJxrTnTwBbM6fVpbRoxMGzGZwX4y4+lI0i4Q=";
     };
     meta.homepage = "https://github.com/smoka7/multicursors.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9760,6 +10509,7 @@ final: prev: {
       hash = "sha256-4ogF5v8CJuJ6t6E+xAYhFrfWHd/g6lNEOxnEnCfIcjA=";
     };
     meta.homepage = "https://github.com/AckslD/muren.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -9773,6 +10523,7 @@ final: prev: {
       hash = "sha256-Q+ZKbL1gqJ9mq3oFuay+Omei/r2OekeH3AmYAU+2VPQ=";
     };
     meta.homepage = "https://github.com/jbyuki/nabla.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9786,6 +10537,7 @@ final: prev: {
       hash = "sha256-IFcUgDU6MZNVZm1DrqLn0i9ccuZ8Ountbt8a4cWTBwM=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9799,6 +10551,7 @@ final: prev: {
       hash = "sha256-X3l437QnBfVCAmVEAEa5ORy1JvNUhcoRiZuDw4o1B5M=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-bufword/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9812,6 +10565,7 @@ final: prev: {
       hash = "sha256-IE5IpiTDv1AkvTI29f+yXTCEaRrCeCc65MDwHV2w6Xw=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-cssomni/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9825,6 +10579,7 @@ final: prev: {
       hash = "sha256-3qmtQmG/na0yrFT2E6Vi8ev3mreXCXmEFuufivNF1CQ=";
     };
     meta.homepage = "https://github.com/yuki-yano/ncm2-dictionary/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -9838,6 +10593,7 @@ final: prev: {
       hash = "sha256-QZET/3S8NAZLF4aW/Eze4NLuZe6mREEDz72KKpednbU=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-github/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9851,6 +10607,7 @@ final: prev: {
       hash = "sha256-mCn5Wp66UtZ+xyt+4LpdeTAfMdjPqN6tK5tLs7GUAaY=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-html-subscope/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9864,6 +10621,7 @@ final: prev: {
       hash = "sha256-wIiQ8QDv8DJJH+jUCW8+XJg6gfQBy4eMW0I9p/VnqQI=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-jedi/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9877,6 +10635,7 @@ final: prev: {
       hash = "sha256-B1f/Tj7/Kb2lZArclmVE+oSi6hul0nLbl1qWaY5eBUI=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-markdown-subscope/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9890,6 +10649,7 @@ final: prev: {
       hash = "sha256-0Vtvh2+wk/AB7HDQO889bt9LXRyV6e4Q5ZCu9CySW3c=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-neoinclude/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9903,6 +10663,7 @@ final: prev: {
       hash = "sha256-GJyW/waaZvzTkAuLF4bEyu1olmACbMvdOHYpMBXxeK0=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-neosnippet/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9916,6 +10677,7 @@ final: prev: {
       hash = "sha256-JI2WumolKC1SQqdrEqG+rUEdNA7dTzujkWIOQRpSD3s=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-path/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9929,6 +10691,7 @@ final: prev: {
       hash = "sha256-Qosu06XjTHHFDgnkChg+hBV791/Hse1iSORqkzt1uhg=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9942,6 +10705,7 @@ final: prev: {
       hash = "sha256-UxDG/2nv3QT5VglSug+mdtNFoYqHyxJAgZA6OfR+bSg=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-tagprefix/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9955,6 +10719,7 @@ final: prev: {
       hash = "sha256-gnLhpv/Ex+XuqsfHmtjxNRjZI8+sJHWfGdGA3/LaKb0=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-tmux/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9968,6 +10733,7 @@ final: prev: {
       hash = "sha256-qoYd6s8WdQDp19n7zbMvKrADK3uvP5YUtAnaose4eDg=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-ultisnips/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -9981,6 +10747,7 @@ final: prev: {
       hash = "sha256-oikxyhCcsLhK/VlsbHV8LDfIEwkCzJFJmHf4zQrtYqU=";
     };
     meta.homepage = "https://github.com/ncm2/ncm2-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -9994,6 +10761,7 @@ final: prev: {
       hash = "sha256-CqFdBvcFTTPWYaHKqZtif/JLNgsMys9Jab+ogfys4g0=";
     };
     meta.homepage = "https://github.com/eagletmt/neco-ghc/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10007,6 +10775,7 @@ final: prev: {
       hash = "sha256-3eLPtc9KCAjgB2msyBnTmyUnM8To2BzaK/XMY0crawU=";
     };
     meta.homepage = "https://github.com/ujihisa/neco-look/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10020,6 +10789,7 @@ final: prev: {
       hash = "sha256-qs0CRmAlSA83aK2eCRHCDWTl20qn2BrXa0IBQk3FCIo=";
     };
     meta.homepage = "https://github.com/Shougo/neco-syntax/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10033,6 +10803,7 @@ final: prev: {
       hash = "sha256-uBUl7DTCSRN8/YGiFKSUzTAg+BllvQ8PsTy7nzul10c=";
     };
     meta.homepage = "https://github.com/Shougo/neco-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10046,6 +10817,7 @@ final: prev: {
       hash = "sha256-/TNl/IX81qr7Mcoy0dhF3bcsewXEnPSy2n+dm31eyyw=";
     };
     meta.homepage = "https://github.com/nvim-neo-tree/neo-tree.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10059,19 +10831,21 @@ final: prev: {
       hash = "sha256-vNQl037TW95WvLLs7eAkOsktG+fJ8gWmSfsYkJCxCTQ=";
     };
     meta.homepage = "https://github.com/Shougo/neocomplete.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   neoconf-nvim = buildVimPlugin {
     pname = "neoconf.nvim";
-    version = "1.4.0-unstable-2026-04-23";
+    version = "1.4.0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "neoconf.nvim";
-      rev = "751c246c6c1780b94b063918759f352480e3db21";
-      hash = "sha256-XuWMVLu1FFmcGnmDuomKYSSBD/yOUa6Za5UE7O52y2w=";
+      rev = "314baf12e4e39dcdfffb0f75d09f56dafb621591";
+      hash = "sha256-Ub9KEweOPGSbb/ln0cGv6aQOatrv0oVmh3qLjSR2koQ=";
     };
     meta.homepage = "https://github.com/folke/neoconf.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10085,6 +10859,7 @@ final: prev: {
       hash = "sha256-o4xuQE+GAsshNCppB6pGPwmVT66K1xBll60sd68Rnfk=";
     };
     meta.homepage = "https://github.com/IogaMaster/neocord/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10098,6 +10873,7 @@ final: prev: {
       hash = "sha256-coLbmqDxfmrXQtZ9QXK05PiA4gxA+McwukBWRrfmWl8=";
     };
     meta.homepage = "https://github.com/KeitaNakamura/neodark.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10111,6 +10887,7 @@ final: prev: {
       hash = "sha256-JRipsm9ngXM+f0gnlVvdV2EXkSMKi1o7kJVehzg/0tE=";
     };
     meta.homepage = "https://github.com/folke/neodev.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10124,6 +10901,7 @@ final: prev: {
       hash = "sha256-twE2fPXxxWJqZoaNkSG0v6PzyaoDzupx/ji4oI9jlKc=";
     };
     meta.homepage = "https://github.com/sbdchd/neoformat/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10137,19 +10915,21 @@ final: prev: {
       hash = "sha256-4KVPEpu3xsO4htGxudmgr8zMMOzn+eJSb9kl3Ww0zTk=";
     };
     meta.homepage = "https://github.com/danymat/neogen/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
   neogit = buildVimPlugin {
     pname = "neogit";
-    version = "3.0.0-unstable-2026-04-23";
+    version = "3.0.0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "2d94da0032e201865a5b65a6bc008dd6fce8f52e";
-      hash = "sha256-dCndB3pvCU7D80aU/5nOloxH2lYgGdC0Qtei8cRf7RU=";
+      rev = "792c139da736230855e8341ebe6175bb6eb8268b";
+      hash = "sha256-FdlR0Mdb4NraIfkLRcElar1JMLx7ZXjMd+ye9gmm0zA=";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10163,6 +10943,7 @@ final: prev: {
       hash = "sha256-M0a94xOPSZNRaf55+R0t5PBHY8j3pbggVrnohn41l2o=";
     };
     meta.homepage = "https://github.com/Shougo/neoinclude.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10176,6 +10957,7 @@ final: prev: {
       hash = "sha256-fveYMlGZWNVlCMAfIos0gHwYMN3WtJj94R+cXnRq3HM=";
     };
     meta.homepage = "https://github.com/neomake/neomake/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10189,6 +10971,7 @@ final: prev: {
       hash = "sha256-w/RIZYOTkDoM5gbB2T0GiPlvT1nTrTFOHwSkoo0uJ24=";
     };
     meta.homepage = "https://github.com/casedami/neomodern.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10202,6 +10985,7 @@ final: prev: {
       hash = "sha256-e6qLhVYSU7A0enXxmz3CTGv4vWmurBtofTOFRzRi0RE=";
     };
     meta.homepage = "https://github.com/Shougo/neomru.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10215,6 +10999,7 @@ final: prev: {
       hash = "sha256-N6WfR7t6zPV0GoI7wBDi1dkfNmrKcz3TaDA3OfLex7o=";
     };
     meta.homepage = "https://github.com/neomutt/neomutt.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10228,6 +11013,7 @@ final: prev: {
       hash = "sha256-0G8JDXz8cKZnUPSX4Gx/okiaHl6jGMsCep/uaU5fr+U=";
     };
     meta.homepage = "https://github.com/rafamadriz/neon/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10241,6 +11027,7 @@ final: prev: {
       hash = "sha256-PBEZDbwH1ZYAh9y2XXavbKo1SzlzO66J4e03gOh+Pwc=";
     };
     meta.homepage = "https://github.com/ii14/neorepl.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "LGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10254,6 +11041,7 @@ final: prev: {
       hash = "sha256-tvbskEQ3+uOUlGKdqAFMlbF5Vw0A08XTwuWEs2aP64o=";
     };
     meta.homepage = "https://github.com/nvim-neorg/neorg-telescope/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10267,6 +11055,7 @@ final: prev: {
       hash = "sha256-rvonvl0sJNYkLbvKP5vnjWMq/e3xUkCU9uBZcjBSBcQ=";
     };
     meta.homepage = "https://github.com/karb94/neoscroll.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10280,6 +11069,7 @@ final: prev: {
       hash = "sha256-A2gQ/sStDXAyBeTia+DEhWZrmV3YNJqkfxLQkqiKpxg=";
     };
     meta.homepage = "https://github.com/Shougo/neosnippet-snippets/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10293,6 +11083,7 @@ final: prev: {
       hash = "sha256-wJL68y+WDOSLLPtOboCExwF6B0Y886dfO3a+dul9MPo=";
     };
     meta.homepage = "https://github.com/Shougo/neosnippet.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10306,6 +11097,7 @@ final: prev: {
       hash = "sha256-pSLvpKqfi1hQrFAYmXTOUOYERtnr79M23z5so2JOGhE=";
     };
     meta.homepage = "https://github.com/kawre/neotab.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10319,6 +11111,7 @@ final: prev: {
       hash = "sha256-0C/yEG5KhK8BN2k+JOhe9dGgw6FYN4qHSIDXM7ZD8SQ=";
     };
     meta.homepage = "https://github.com/kassio/neoterm/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10333,19 +11126,21 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/rcasia/neotest-bash/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   neotest-ctest = buildVimPlugin {
     pname = "neotest-ctest";
-    version = "0.2.0-unstable-2026-03-26";
+    version = "0.3.0";
     src = fetchFromGitHub {
       owner = "orjangj";
       repo = "neotest-ctest";
-      rev = "4c99a85a95cea0bf22e228c9886da8be8bdb2530";
-      hash = "sha256-5wbTW/LaaoH9NZrt8A4SOFuhGtAWHyJHCXl9zyZfBDY=";
+      tag = "v0.3.0";
+      hash = "sha256-LiS/jg/XlMWvpB8CvHNXWiq2rrj2dGj//NsCTGUFjM8=";
     };
     meta.homepage = "https://github.com/orjangj/neotest-ctest/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10359,6 +11154,7 @@ final: prev: {
       hash = "sha256-oItkgTZBY79l4QnbkJpTIRZkMjcTjt70v+Us0G2oeKo=";
     };
     meta.homepage = "https://github.com/sidlatau/neotest-dart/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10372,6 +11168,7 @@ final: prev: {
       hash = "sha256-jEksgs7BDNsi8pKeZ6wEDA+pytT9oSKWbs4d0s30PuM=";
     };
     meta.homepage = "https://github.com/MarkEmmons/neotest-deno/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10385,6 +11182,7 @@ final: prev: {
       hash = "sha256-q241RKlgzgrUHxGJvGZC+voCIeTqGzdXu8KkZBCd6bo=";
     };
     meta.homepage = "https://github.com/Issafalcon/neotest-dotnet/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10399,6 +11197,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/jfpedroza/neotest-elixir/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10412,6 +11211,7 @@ final: prev: {
       hash = "sha256-bHKJCVtth/F36kjq+l9hHRRPMNITc+46kmFczVAixIg=";
     };
     meta.homepage = "https://github.com/llllvvuu/neotest-foundry/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10425,6 +11225,7 @@ final: prev: {
       hash = "sha256-btvAwNck/MAS0Xv2NzmPEYLuBb50DEiMjbkW3E7tg3I=";
     };
     meta.homepage = "https://github.com/nvim-neotest/neotest-go/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10438,6 +11239,7 @@ final: prev: {
       hash = "sha256-dsiBQi1zKMEwxAX+rcmNszHdKOVVvCeoSW/uMKQVhjE=";
     };
     meta.homepage = "https://github.com/fredrikaverpil/neotest-golang/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10451,6 +11253,7 @@ final: prev: {
       hash = "sha256-xhT1i2vuYZaV+axbgqqklFK93kvOR+nmjPzqQPQyxLs=";
     };
     meta.homepage = "https://github.com/weilbith/neotest-gradle/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10465,19 +11268,21 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/alfaix/neotest-gtest/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   neotest-haskell = buildVimPlugin {
     pname = "neotest-haskell";
-    version = "3.0.1-unstable-2026-04-21";
+    version = "4.0.0";
     src = fetchFromGitHub {
       owner = "MrcJkb";
       repo = "neotest-haskell";
-      rev = "cf7816eb183c8333b58abb63fd4cc156401d9d31";
-      hash = "sha256-/rqau8v3CWaPjCMQjWB4bWCeqOaBHdAn05Nlw3w1WSc=";
+      tag = "v4.0.0";
+      hash = "sha256-TcgTCMgGukHx5mGBoxj8RyzreNFXEBNVCehgMc7q6gY=";
     };
     meta.homepage = "https://github.com/MrcJkb/neotest-haskell/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10491,6 +11296,7 @@ final: prev: {
       hash = "sha256-t+nqylLLHITU8li1cOl97jFKkZRmvmDbSAwvmv1yk+M=";
     };
     meta.homepage = "https://github.com/rcasia/neotest-java/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10504,6 +11310,7 @@ final: prev: {
       hash = "sha256-TaEYHfNOQIX+TWZZym+h6e5kYUZLH7NfeEcEpi3QCus=";
     };
     meta.homepage = "https://github.com/nvim-neotest/neotest-jest/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10517,6 +11324,7 @@ final: prev: {
       hash = "sha256-cw8o6UG2ETPAtwdIP4dAjs+d4//SbUljfYBhzMqdUZ4=";
     };
     meta.homepage = "https://github.com/zidhuss/neotest-minitest/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10530,6 +11338,7 @@ final: prev: {
       hash = "sha256-hVUYoyWT982RSFy/b/t8kzRk86BnPuqrCBMwmaRjHqs=";
     };
     meta.homepage = "https://github.com/adrigzr/neotest-mocha/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10543,6 +11352,7 @@ final: prev: {
       hash = "sha256-ONAj22+wmWKwaq0rDhCQEzA027ZLzW7JTz0eAPLNpZg=";
     };
     meta.homepage = "https://github.com/theutz/neotest-pest/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10556,6 +11366,7 @@ final: prev: {
       hash = "sha256-vKLA/FDmsbR8VlOvxE5Ini/e+r6xGvaTGb2ulCge75Q=";
     };
     meta.homepage = "https://github.com/olimorris/neotest-phpunit/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10569,6 +11380,7 @@ final: prev: {
       hash = "sha256-k+YKXrSOWI8LZjSsLUmk3Z4uu/ZGXVFggRigl5TYcb4=";
     };
     meta.homepage = "https://github.com/thenbe/neotest-playwright/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10582,6 +11394,7 @@ final: prev: {
       hash = "sha256-NQGGq1HiBmu/4OhkvNruUWw+OmzS8MQ8LL9dWwaw2oo=";
     };
     meta.homepage = "https://github.com/nvim-neotest/neotest-plenary/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10595,6 +11408,7 @@ final: prev: {
       hash = "sha256-TUu50qK97RuBI1eOD0JGtSq3M7o0HwlRKjLz2SCfjlE=";
     };
     meta.homepage = "https://github.com/nvim-neotest/neotest-python/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10608,6 +11422,7 @@ final: prev: {
       hash = "sha256-45DTXO0CQ/YCivDev0We7+7Ca4i0kHKZmbSc73lkPSY=";
     };
     meta.homepage = "https://github.com/olimorris/neotest-rspec/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10621,6 +11436,7 @@ final: prev: {
       hash = "sha256-ksidW2kPD3mNQv3j1KnyH7+KwNk2qPUz4HdYfeL44k4=";
     };
     meta.homepage = "https://github.com/rouge8/neotest-rust/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10634,6 +11450,7 @@ final: prev: {
       hash = "sha256-engAlfkyvYC2FsKvN2TzsBbSpnikmShhxs6pWmpeKEY=";
     };
     meta.homepage = "https://github.com/stevanmilic/neotest-scala/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10647,6 +11464,7 @@ final: prev: {
       hash = "sha256-SVr5wspFfssYxjRCh20L2LksmdyqP1pbvACk6HRAU9I=";
     };
     meta.homepage = "https://github.com/shunsambongi/neotest-testthat/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10660,6 +11478,7 @@ final: prev: {
       hash = "sha256-XpiZ95MhjIS99dBrNFfq8SfggdIeEFfOSu3THgmX3+s=";
     };
     meta.homepage = "https://github.com/marilari88/neotest-vitest/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10673,6 +11492,7 @@ final: prev: {
       hash = "sha256-nW1jkx3kZU5qOqAByaGH45Scku/TYtT1I5UoZ36/WC4=";
     };
     meta.homepage = "https://github.com/lawrence-laz/neotest-zig/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10686,6 +11506,7 @@ final: prev: {
       hash = "sha256-L53zl5XYPvT8gPpPC4IyYpK1CZk7Iv6au3xYu6OD/uY=";
     };
     meta.homepage = "https://github.com/Shatur/neovim-ayu/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10699,6 +11520,7 @@ final: prev: {
       hash = "sha256-TKcP0WAlPzWseKKLwqYhAorMlih6942ZBjnE7Ix5bUU=";
     };
     meta.homepage = "https://github.com/cloudhead/neovim-fuzzy/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10712,6 +11534,7 @@ final: prev: {
       hash = "sha256-qHBDjLZIalJgU13kFb98aaQkOuxWtLlf6rq5X7ezkBs=";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/neovim-sensible/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10725,6 +11548,7 @@ final: prev: {
       hash = "sha256-IndNFcMe5iND8XLXv4l+BGA3QXS9SDao6Z8MwwE+qI4=";
     };
     meta.homepage = "https://github.com/saxon1964/neovim-tips/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10738,6 +11562,7 @@ final: prev: {
       hash = "sha256-6jpKFiSIgr5Y+RnehHpf+lEDqugdjvidw25DozRt024=";
     };
     meta.homepage = "https://github.com/trunk-io/neovim-trunk/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10751,6 +11576,7 @@ final: prev: {
       hash = "sha256-cAN761wZ6WVdxTtdKRc3WAyu7Wh7ITGgvm7yJ6dItjo=";
     };
     meta.homepage = "https://github.com/Shougo/neoyank.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10764,6 +11590,7 @@ final: prev: {
       hash = "sha256-WULWN/KMmT5VQ4s4bhsiUmAONZLG6slCcIHRMPnYDDE=";
     };
     meta.homepage = "https://github.com/preservim/nerdcommenter/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10777,6 +11604,7 @@ final: prev: {
       hash = "sha256-yp5AE8gv1xW3cXMd24D23BXCOqCp4CJQPFRhU9YdvRo=";
     };
     meta.homepage = "https://github.com/preservim/nerdtree/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10790,6 +11618,7 @@ final: prev: {
       hash = "sha256-H3IxxQwz3Q1nO7oSDKCtoGCsoPDWO3jRjqtwp3Kp/TQ=";
     };
     meta.homepage = "https://github.com/Xuyuanp/nerdtree-git-plugin/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10803,6 +11632,7 @@ final: prev: {
       hash = "sha256-/wahSooqgIAKaHw+OfRlhF2bUxjyPwe4OEm9zK9Jcv0=";
     };
     meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10816,6 +11646,7 @@ final: prev: {
       hash = "sha256-SmpAuhDM764kT8BG1XWztNt3CJITohhrGoaB3DBo0U0=";
     };
     meta.homepage = "https://github.com/miversen33/netman.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10829,6 +11660,7 @@ final: prev: {
       hash = "sha256-tEO+omzlaC0uFkIHebeqnGtiPbDelRTBJONEnTy0F9U=";
     };
     meta.homepage = "https://github.com/prichrd/netrw.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10842,6 +11674,7 @@ final: prev: {
       hash = "sha256-qrpwDbg/q0i9JD9ewSX714EH2ZcAFSLEJBP5a+j8V18=";
     };
     meta.homepage = "https://github.com/fiatjaf/neuron.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10855,6 +11688,7 @@ final: prev: {
       hash = "sha256-H8fKIbGNCSGoFfHYM4nC1Q2SiMhAtbYN7w9+Iz1nV9Y=";
     };
     meta.homepage = "https://github.com/Olical/nfnl/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10868,6 +11702,7 @@ final: prev: {
       hash = "sha256-KP605on3KluatHCCrlFy/dDl6gT0cmrxSWquzcRN3kQ=";
     };
     meta.homepage = "https://github.com/joeveiga/ng.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10881,6 +11716,7 @@ final: prev: {
       hash = "sha256-rGqNjdaK5HX6Cad3x+awRLz24PfsA+APWg+vKjWn490=";
     };
     meta.homepage = "https://github.com/chr4/nginx.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10893,6 +11729,7 @@ final: prev: {
       hash = "sha256-x8CryNcg3u5uCncCMTgK7yzCvk5MiomjKpdjNEoCQu4=";
     };
     meta.homepage = "https://codeberg.org/koibtw/nidhogg.nvim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -10906,19 +11743,21 @@ final: prev: {
       hash = "sha256-O74rBgyBjFcAoOaW5yghNu98vrctj3ugdvaWX1BN8f0=";
     };
     meta.homepage = "https://github.com/oxfist/night-owl.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
   nightfly = buildVimPlugin {
     pname = "nightfly";
-    version = "0-unstable-2026-04-20";
+    version = "0-unstable-2026-04-26";
     src = fetchFromGitHub {
       owner = "bluz71";
       repo = "vim-nightfly-colors";
-      rev = "caaba387a4a50cf08791395acc4a5b7363367cff";
-      hash = "sha256-zHT0Py7dePXfZ8duOfLxh/3K0ZaCrrB60uJ+asC/rII=";
+      rev = "4980ccc6de5f361fc9da116240ce7592e7d9a53a";
+      hash = "sha256-UGGHRCSZXq7vxgWntXTZDTiKuIDBs0MhWdeOucO3cxo=";
     };
     meta.homepage = "https://github.com/bluz71/vim-nightfly-colors/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10932,6 +11771,7 @@ final: prev: {
       hash = "sha256-HoZEwncrUnypWxyB+XR0UQDv+tNu1/NbvimxYGb7qu8=";
     };
     meta.homepage = "https://github.com/EdenEast/nightfox.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10945,6 +11785,7 @@ final: prev: {
       hash = "sha256-MCSATvt7sO9sLC4fWa/pTQzseWPt5BgPAyWGE5u4LLU=";
     };
     meta.homepage = "https://github.com/Alexis12119/nightly.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10958,6 +11799,7 @@ final: prev: {
       hash = "sha256-ZIDvVto6c9PXtE8O0vp1fL6fuDJrUrYZ0zIXtJBTw+0=";
     };
     meta.homepage = "https://github.com/zah/nim.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10971,6 +11813,7 @@ final: prev: {
       hash = "sha256-JZ1QnbQlP/G4CahzvIZYWGhUe0jH4S9TF4xl6fJu2bA=";
     };
     meta.homepage = "https://github.com/figsoda/nix-develop.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10984,6 +11827,7 @@ final: prev: {
       hash = "sha256-hikO7bpr6QGChbNbNUoQQucMYEW35D3+8o2XXltXo9g=";
     };
     meta.homepage = "https://github.com/tamago324/nlsp-settings.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -10997,6 +11841,7 @@ final: prev: {
       hash = "sha256-ZLokeEA70pdVmKOjK5vB8tRE0zGHicsunIHgW1Px0sw=";
     };
     meta.homepage = "https://github.com/mcchrish/nnn.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11010,6 +11855,7 @@ final: prev: {
       hash = "sha256-lx/DVKRUpNaeBf3TziAWd1lxo3wup/e8zCv+rW+tkmM=";
     };
     meta.homepage = "https://github.com/aktersnurra/no-clown-fiesta.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11023,6 +11869,7 @@ final: prev: {
       hash = "sha256-KNLeeaNxywouey0myeVhqRdMVxxouX/IRGOilYtWQAA=";
     };
     meta.homepage = "https://github.com/shortcuts/no-neck-pain.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11036,6 +11883,7 @@ final: prev: {
       hash = "sha256-TtH5Kw9qgkMisuJNI2LeTHTNfQZnJXPQfs9WJGQwgys=";
     };
     meta.homepage = "https://github.com/kartikp10/noctis.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11049,19 +11897,21 @@ final: prev: {
       hash = "sha256-FKzhFVmPxshDV4mWpD3LofjRpd6pXesf9QQei1s5rAo=";
     };
     meta.homepage = "https://github.com/folke/noice.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
   none-ls-nvim = buildVimPlugin {
     pname = "none-ls.nvim";
-    version = "0-unstable-2026-04-19";
+    version = "0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "nvimtools";
       repo = "none-ls.nvim";
-      rev = "e135361b9c11755ef6c48f54a2c970c509b56239";
-      hash = "sha256-W4mPpNxLjCBIrjthHi/y8EJ5C/N97Hgf1P+7c19wSWA=";
+      rev = "8cd333aa66e08492d891bdad272208a620cb93a3";
+      hash = "sha256-Yn9j7tfTvtNH1WPJn3N41jvfUKhzB8YSBS0u7kFHMyE=";
     };
     meta.homepage = "https://github.com/nvimtools/none-ls.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11075,6 +11925,7 @@ final: prev: {
       hash = "sha256-8uPbkaJBXsOGeYCyXSO/aMzf87PE5McwZeww4eoYZy8=";
     };
     meta.homepage = "https://github.com/shaunsingh/nord.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11088,6 +11939,7 @@ final: prev: {
       hash = "sha256-P4fbRNeJjXOoAQiWXXHZhm4ejgMD8W7OkdEF4TpEc7g=";
     };
     meta.homepage = "https://github.com/nordtheme/vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11101,6 +11953,7 @@ final: prev: {
       hash = "sha256-ipmt0xD2zTfoh8fyYG4+09uVL2ef98FE9VwWpWJtQks=";
     };
     meta.homepage = "https://github.com/andersevenrud/nordic.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11114,6 +11967,7 @@ final: prev: {
       hash = "sha256-cKYV6qiUUCnWDfK4RfbJNRPeklXc064z4lnV+dpDBbU=";
     };
     meta.homepage = "https://github.com/vigoux/notifier.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11127,6 +11981,7 @@ final: prev: {
       hash = "sha256-9RmBC8NBwZTzIgKHYGrLk9V2wzjPCgNeVVOeH9oAbzM=";
     };
     meta.homepage = "https://github.com/jlesquembre/nterm.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "EPL-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11140,6 +11995,7 @@ final: prev: {
       hash = "sha256-cWA0rzkOp/ekVKaFee7iea1lhnqKtWUIU+fW5M950wI=";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/null-ls.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11153,6 +12009,7 @@ final: prev: {
       hash = "sha256-RisbKK1mTrYnIFfsODx7zdy76lYsHXpWWPrM6wpO9Ds=";
     };
     meta.homepage = "https://github.com/nacro90/numb.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11166,6 +12023,7 @@ final: prev: {
       hash = "sha256-WNQMaM5EQBRQC9JfvEIgFhn3K5n8q0YeiJ9NdG3E+z4=";
     };
     meta.homepage = "https://github.com/nvchad/nvchad/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11179,6 +12037,7 @@ final: prev: {
       hash = "sha256-zy1fzwGKAZNDaceoPEyXUgVd7WAT3VnHTCytBh9+m98=";
     };
     meta.homepage = "https://github.com/nvchad/ui/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11192,6 +12051,7 @@ final: prev: {
       hash = "sha256-67PqSHuo/mkPyxUiscQs+HOkjo9NS5YlAFMAN1SRLg4=";
     };
     meta.homepage = "https://github.com/ChristianChiarulli/nvcode-color-schemes.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11205,6 +12065,7 @@ final: prev: {
       hash = "sha256-eDPdCU1ZBoSiMkdreExsW3AzynQjSfFFCbZQ7f+XGFM=";
     };
     meta.homepage = "https://github.com/AckslD/nvim-FeMaco.lua/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11218,6 +12079,7 @@ final: prev: {
       hash = "sha256-4C5pxZ18EYgPu4VGvYXsaLXHXhzixV58cmxmeO/ESa8=";
     };
     meta.homepage = "https://github.com/nathanmsmith/nvim-ale-diagnostic/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11231,6 +12093,7 @@ final: prev: {
       hash = "sha256-Ykp610LPF0tWidHM16UqeaU8sJxcr5OXJdHkjWCYUTU=";
     };
     meta.homepage = "https://github.com/mfussenegger/nvim-ansible/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11244,6 +12107,7 @@ final: prev: {
       hash = "sha256-0IqXpxKCzqVz6i9QajPYJ0FdfReHQBhehrvN89/8n6U=";
     };
     meta.homepage = "https://github.com/windwp/nvim-autopairs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11257,6 +12121,7 @@ final: prev: {
       hash = "sha256-XjSDOCwszCV7lKySInnqMU1ScCYpOhyQuNRtuRsM5mE=";
     };
     meta.homepage = "https://github.com/Canop/nvim-bacon/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11270,6 +12135,7 @@ final: prev: {
       hash = "sha256-UKolssxC+cfQ9x3Mum/mKPVY8jJBs6+DtQgvvufLFAk=";
     };
     meta.homepage = "https://github.com/code-biscuits/nvim-biscuits/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11283,6 +12149,7 @@ final: prev: {
       hash = "sha256-jm6xyNel7rmyQHijP9JBBk1ZiUY7+CvCEZVO4W5R21c=";
     };
     meta.homepage = "https://github.com/kevinhwang91/nvim-bqf/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11296,6 +12163,7 @@ final: prev: {
       hash = "sha256-nnOoi37giuQHJL3u8F3XkDp7LLceKOC4nZVep/m7qAY=";
     };
     meta.homepage = "https://github.com/ojroques/nvim-bufdel/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11309,6 +12177,7 @@ final: prev: {
       hash = "sha256-/T5RC/7Qf/Zbszs3ok+jYdh8sWCLRe8JAiHZdz3vkvo=";
     };
     meta.homepage = "https://github.com/roxma/nvim-cm-racer/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11322,6 +12191,7 @@ final: prev: {
       hash = "sha256-pY+aP9iBuJhvDZzVEsOHZmnfaq3vUP7TfKEEQrj+Mo8=";
     };
     meta.homepage = "https://github.com/weilbith/nvim-code-action-menu/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11335,6 +12205,7 @@ final: prev: {
       hash = "sha256-O0msAljyNYj4zdFBOCR43QiqHYl1e9c4MASi9MmS+R4=";
     };
     meta.homepage = "https://github.com/willothy/nvim-cokeline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11348,6 +12219,7 @@ final: prev: {
       hash = "sha256-Oe3GabiskksOjShjSlWigDj/gudWLicynQ1nCUO1tHQ=";
     };
     meta.homepage = "https://github.com/catgoose/nvim-colorizer.lua/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11361,6 +12233,7 @@ final: prev: {
       hash = "sha256-O2jhrjXxKaWHMfm3YJ9+92Onm0niEHfUp5kOh2gETuc=";
     };
     meta.homepage = "https://github.com/terrortylor/nvim-comment/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11374,6 +12247,7 @@ final: prev: {
       hash = "sha256-6lDm9f+Y9gORR78NzHpyGQi3k0YMmgRqt4DSSHx+3H4=";
     };
     meta.homepage = "https://github.com/roxma/nvim-completion-manager/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11387,6 +12261,7 @@ final: prev: {
       hash = "sha256-07D1qzMevOzzfN2whZL5DSgrKqOJrnPjZ+9QzpwQ7Cg=";
     };
     meta.homepage = "https://github.com/klen/nvim-config-local/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11400,6 +12275,7 @@ final: prev: {
       hash = "sha256-JQZTXahU3CMXUYZ2Sl09RO7pvvW2X3C/pco62CMfUmw=";
     };
     meta.homepage = "https://github.com/andythigpen/nvim-coverage/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11413,6 +12289,7 @@ final: prev: {
       hash = "sha256-tsdrScujrmly1aqWIIjTKvWlallmEdsf2QvSFk1Dn/s=";
     };
     meta.homepage = "https://github.com/ya2s/nvim-cursorline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11425,6 +12302,7 @@ final: prev: {
       hash = "sha256-9NF0+QoHOEAg6pd+oRBxr3ExWLqbvRrIMoMSZvNdqX4=";
     };
     meta.homepage = "https://codeberg.org/mfussenegger/nvim-dap/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11438,6 +12316,7 @@ final: prev: {
       hash = "sha256-hXfMfQ4jAnAQ+6MFTNdyJiFTVqivi5lSRvQotPoHrjY=";
     };
     meta.homepage = "https://github.com/jedrzejboczar/nvim-dap-cortex-debug/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11451,6 +12330,7 @@ final: prev: {
       hash = "sha256-5uHdDTVdfdJk6WLM6gvVDgEndFkP9SmqrqhHzaalH/k=";
     };
     meta.homepage = "https://github.com/docker/nvim-dap-docker/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11464,6 +12344,7 @@ final: prev: {
       hash = "sha256-wg9kiW2eAMmg4bvgqaAS9kt7qaVsIWl36BNqRbhZIgo=";
     };
     meta.homepage = "https://github.com/leoluz/nvim-dap-go/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11477,6 +12358,7 @@ final: prev: {
       hash = "sha256-HSYuFWJhqE8M6/Tm0/9F5l7dfLVu2kYPFOtqi66XFZk=";
     };
     meta.homepage = "https://github.com/julianolf/nvim-dap-lldb/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11489,6 +12371,7 @@ final: prev: {
       hash = "sha256-qqPoYmMPjK74Nyyl7TfsHnJCsIvOYFuQnKWn3Rh8FLU=";
     };
     meta.homepage = "https://codeberg.org/mfussenegger/nvim-dap-python/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11502,6 +12385,7 @@ final: prev: {
       hash = "sha256-CrZ799BcpX+VtYgM+U/Vds5cbxlNv3rcGpWHhB77UY4=";
     };
     meta.homepage = "https://github.com/rinx/nvim-dap-rego/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11515,6 +12399,7 @@ final: prev: {
       hash = "sha256-YIsmiWsdiUfnM+syZQqsa+wgP+aR35/IbgYeywqY1to=";
     };
     meta.homepage = "https://github.com/jonboh/nvim-dap-rr/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11528,6 +12413,7 @@ final: prev: {
       hash = "sha256-57BBhdrikDEswZe2QW+jHMSgfXIjauc6iDNpWS0YUaU=";
     };
     meta.homepage = "https://github.com/suketa/nvim-dap-ruby/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11541,6 +12427,7 @@ final: prev: {
       hash = "sha256-J/gUD4X//JtC2HB3HBeONivCQdMnXDnZJWd6jFF9+nk=";
     };
     meta.homepage = "https://github.com/rcarriga/nvim-dap-ui/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11554,6 +12441,7 @@ final: prev: {
       hash = "sha256-YMAP9csr7SHN2h5yPJ/nx1lezX9DaE0nLjVnr6c7xyw=";
     };
     meta.homepage = "https://github.com/igorlfs/nvim-dap-view/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11567,6 +12455,7 @@ final: prev: {
       hash = "sha256-8hsk+EwnvoHCNhb0dcL9e4hQg9I+t/5Cy9ZoZgcz4fU=";
     };
     meta.homepage = "https://github.com/theHamsta/nvim-dap-virtual-text/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11580,6 +12469,7 @@ final: prev: {
       hash = "sha256-8dlzaI94I8ppzLRNIfjVd92kYgqr07D1akDj4VdKQto=";
     };
     meta.homepage = "https://github.com/mxsdev/nvim-dap-vscode-js/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11593,6 +12483,7 @@ final: prev: {
       hash = "sha256-YIf7JxM3lVe1HiEEfxlj8gIM7nIL4yef38HC/wUITAY=";
     };
     meta.homepage = "https://github.com/amrbashir/nvim-docs-view/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11606,6 +12497,7 @@ final: prev: {
       hash = "sha256-vc2Q2iiyx6WcEr4RYtvr4s5yYSYKst+DpNG1WNKLQCI=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-early-retirement/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11619,6 +12511,7 @@ final: prev: {
       hash = "sha256-LpZ05Y8uaediJFzTBKrjfGd5scEr/wcG+Y0YvPens9o=";
     };
     meta.homepage = "https://github.com/allendang/nvim-expand-expr/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11632,6 +12525,7 @@ final: prev: {
       hash = "sha256-clcZm8yGqE+erN1zBT38ai4keVTWieIjB14+gRwpM+U=";
     };
     meta.homepage = "https://github.com/vijaymarupudi/nvim-fzf/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11645,6 +12539,7 @@ final: prev: {
       hash = "sha256-qSCf+LgqU1hsSarTpw9TsPgmSxPNwBi0VznKrPz/AQ8=";
     };
     meta.homepage = "https://github.com/vijaymarupudi/nvim-fzf-commands/";
+    meta.license = lib.meta.getLicenseFromSpdxId "AGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11658,6 +12553,7 @@ final: prev: {
       hash = "sha256-4l7C1uv84CCbw5uEyVBGs8XEvMnW5+M9zGar8lWRVwM=";
     };
     meta.homepage = "https://github.com/sakhnik/nvim-gdb/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11671,6 +12567,7 @@ final: prev: {
       hash = "sha256-Lv92CKF0iocchQcK/AQ7TMVqGILnzd+Z8eKZZYXcwxU=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-genghis/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11684,6 +12581,7 @@ final: prev: {
       hash = "sha256-9YLJm/L13gTktb6VIkz2W/60cothFtF7feiKd26R5lo=";
     };
     meta.homepage = "https://github.com/booperlv/nvim-gomove/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11697,6 +12595,7 @@ final: prev: {
       hash = "sha256-LrY61knLKAn36+RnMddAzxf/wYtdnLxnnQhtHB3mQwc=";
     };
     meta.homepage = "https://github.com/brenoprata10/nvim-highlight-colors/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11710,6 +12609,7 @@ final: prev: {
       hash = "sha256-p4T86YBklV4IRphLsaKq6MjBVqgCV9kda0n4QZ9oe4w=";
     };
     meta.homepage = "https://github.com/Iron-E/nvim-highlite/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11723,6 +12623,7 @@ final: prev: {
       hash = "sha256-W+R/GY6a6easPnpndGAb8TuE+jqaYZlqT9ZQUdQnUwQ=";
     };
     meta.homepage = "https://github.com/kevinhwang91/nvim-hlslens/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11736,6 +12637,7 @@ final: prev: {
       hash = "sha256-umsuGGP5tOf92bzWEhqD2y6dN0FDBsmLx60f45xgmig=";
     };
     meta.homepage = "https://github.com/neovimhaskell/nvim-hs.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11749,6 +12651,7 @@ final: prev: {
       hash = "sha256-xl33sp/+wjH8Y8Uoa7j7kaQIgcMXUWYlGfCDKkZQNLk=";
     };
     meta.homepage = "https://github.com/idanarye/nvim-impairative/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11762,6 +12665,7 @@ final: prev: {
       hash = "sha256-w4BCKMbbFps6YxV3gyo5KGzBRJnU6h1vrUbYRq9cO0A=";
     };
     meta.homepage = "https://github.com/nvim-java/nvim-java/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11775,6 +12679,7 @@ final: prev: {
       hash = "sha256-cM1+Z89x2IP9CJ5Ow1kQTsp66Ay6JfVE2LcjpAbls/w=";
     };
     meta.homepage = "https://github.com/nvim-java/nvim-java-core/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11788,6 +12693,7 @@ final: prev: {
       hash = "sha256-Xrzydrlbo8B99Y1kJUri0H/3gLBHXaZ/jbIZIfhi2gU=";
     };
     meta.homepage = "https://github.com/nvim-java/nvim-java-dap/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11801,6 +12707,7 @@ final: prev: {
       hash = "sha256-2jYUDoPX4FvshhzkGcBRYCtiJ6O5vldnZoSR85F7U5E=";
     };
     meta.homepage = "https://github.com/nvim-java/nvim-java-refactor/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11814,6 +12721,7 @@ final: prev: {
       hash = "sha256-aqFg+m8EMNpQkj5aQPZaW18dtez+AsxARiEiU3ycW6I=";
     };
     meta.homepage = "https://github.com/nvim-java/nvim-java-test/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11826,6 +12734,7 @@ final: prev: {
       hash = "sha256-ySaJ/eKtYmFoTWEKoFiiNWf+B8YIwUEqg/tKUOTcFfI=";
     };
     meta.homepage = "https://codeberg.org/mfussenegger/nvim-jdtls/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11839,6 +12748,7 @@ final: prev: {
       hash = "sha256-2A1O7xSlsmG1LjwfqQxta9pdKlEu7Uj+yAVaVZolX2g=";
     };
     meta.homepage = "https://github.com/gennaro-tedesco/nvim-jqx/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11851,6 +12761,7 @@ final: prev: {
       hash = "sha256-IaNsbBe5q7PB9Q/N/Z9nEnP6jlkQ6+xlkC0TCFnJpkk=";
     };
     meta.homepage = "https://gitlab.com/usmcamp0811/nvim-julia-autotest";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11864,6 +12775,7 @@ final: prev: {
       hash = "sha256-Ci2AwFBY8UYp57F3d+z4aTRJYtzau2cdhkqc8GWkltc=";
     };
     meta.homepage = "https://github.com/yorickpeterse/nvim-jump/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11877,6 +12789,7 @@ final: prev: {
       hash = "sha256-gT+vPt9BWe1AylFqbZsoEXL8cXSpMjRdiY44Cxalwcg=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-justice/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11890,6 +12803,7 @@ final: prev: {
       hash = "sha256-BleCITG11FKFAdSLjFyqJHDN3/zYV0ONvkmeRfoK4SI=";
     };
     meta.homepage = "https://github.com/anasinnyk/nvim-k8s-crd/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11903,6 +12817,7 @@ final: prev: {
       hash = "sha256-jmF06Cl1ieYXKTnW9pWdQH4IJGicvSVJAR7ppju9qyg=";
     };
     meta.homepage = "https://github.com/ethanholz/nvim-lastplace/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11916,6 +12831,7 @@ final: prev: {
       hash = "sha256-WHJ/MV4xKl4Unpxyxxj5j9qbxE0gP0pWe6eVXB4CGvg=";
     };
     meta.homepage = "https://github.com/kosayoda/nvim-lightbulb/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11929,19 +12845,21 @@ final: prev: {
       hash = "sha256-J1FbDjCBPAhx+Vm2exBqdOaNF4djCgR5ZDSadDasbrs=";
     };
     meta.homepage = "https://github.com/josa42/nvim-lightline-lsp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   nvim-lilypond-suite = buildVimPlugin {
     pname = "nvim-lilypond-suite";
-    version = "0-unstable-2025-11-28";
+    version = "0-unstable-2026-04-26";
     src = fetchFromGitHub {
       owner = "martineausimon";
       repo = "nvim-lilypond-suite";
-      rev = "a1a313fd6028a196cc9aaa8c8501838fe8cc8e2a";
-      hash = "sha256-ZRP/Nw5qnsF7IT7NNwRY5mDZOmExuUmFsdaDNmFVVSw=";
+      rev = "e57ced9e0df33773566af795d70919d577c58ce2";
+      hash = "sha256-/O2rUPjjcKFl44azZ0SJxzOO9mP5bp3VA+Hgt2/Hxu8=";
     };
     meta.homepage = "https://github.com/martineausimon/nvim-lilypond-suite/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11954,6 +12872,7 @@ final: prev: {
       hash = "sha256-5bVnAw7xxTntwmYYDZGt+3HOizlddqMOIyg/zqGbSEM=";
     };
     meta.homepage = "https://codeberg.org/mfussenegger/nvim-lint/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -11967,6 +12886,7 @@ final: prev: {
       hash = "sha256-4LugE23xPGpCjqeqNtCbou4RUaUf6TBJ0dNoGhhkx6c=";
     };
     meta.homepage = "https://github.com/antosha417/nvim-lsp-file-operations/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11980,6 +12900,7 @@ final: prev: {
       hash = "sha256-t93G/RbcG6wOJSp7xIaGCKb2a/800GFcN8f00wV6lcQ=";
     };
     meta.homepage = "https://github.com/mrded/nvim-lsp-notify/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11993,6 +12914,7 @@ final: prev: {
       hash = "sha256-38YOgLDtku2BPCaNEmX0555x1QmHuuDSCZL274bBhcg=";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/nvim-lsp-ts-utils/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12006,6 +12928,7 @@ final: prev: {
       hash = "sha256-boQBpuqeGLQV0Vnx+9zecxPEHRVnJMAWVmSld6msS7E=";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12019,6 +12942,7 @@ final: prev: {
       hash = "sha256-mtySELpRakpsge5ASb4CnY+qQpiPedY+0qr++WBmg3Y=";
     };
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12032,6 +12956,7 @@ final: prev: {
       hash = "sha256-7jccZ45ibSiflQEJV3cyuVNISP3xt5E5579e+hHro8c=";
     };
     meta.homepage = "https://github.com/sam4llis/nvim-lua-gf/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12045,6 +12970,7 @@ final: prev: {
       hash = "sha256-/k/vl22LDq44xut/XW7K9uLxpMNt3vOG7pD02lYRa18=";
     };
     meta.homepage = "https://github.com/bfredl/nvim-luadev/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12058,19 +12984,21 @@ final: prev: {
       hash = "sha256-zSFPXAvMuq5pL8vx1wAhHZ8h/agcwoUjioH6RIMy/AE=";
     };
     meta.homepage = "https://github.com/rafcamlet/nvim-luapad/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   nvim-metals = buildVimPlugin {
     pname = "nvim-metals";
-    version = "0.10.x-unstable-2026-04-22";
+    version = "0.10.x-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "scalameta";
       repo = "nvim-metals";
-      rev = "3c6ef5114fd46127c517e58d7e8e4dfc1f78dac3";
-      hash = "sha256-9ZernsWN0j185b2KeMvV+CAaN4+NgUfocUG8Ot1fo/4=";
+      rev = "b914d3b963582109371d0949424c3cc6758d99b8";
+      hash = "sha256-exQY3LwMfQP/2nE7Y2l0bwelduLQO/1i1I3RElmmKkc=";
     };
     meta.homepage = "https://github.com/scalameta/nvim-metals/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12084,6 +13012,7 @@ final: prev: {
       hash = "sha256-srCbkSDKZGb04N+1IQDhCq5uIrmpTjASARaTxUvVjjM=";
     };
     meta.homepage = "https://github.com/gpanders/nvim-moonwalk/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12097,6 +13026,7 @@ final: prev: {
       hash = "sha256-TLGvVuRg8ULrrytdJuypw5IYcYvz1nqn7nGFUeBXyyw=";
     };
     meta.homepage = "https://github.com/SmiteshP/nvim-navbuddy/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12110,6 +13040,7 @@ final: prev: {
       hash = "sha256-rRUlGtClq4NmyDqg0NhytnxFDMVpQhuF5cPKKRJHl88=";
     };
     meta.homepage = "https://github.com/smiteshp/nvim-navic/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12123,6 +13054,7 @@ final: prev: {
       hash = "sha256-IjkpqLHGO48QRiYkELyadZK2uFXQVyklGfBJSgAbzIY=";
     };
     meta.homepage = "https://github.com/AckslD/nvim-neoclip.lua/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12136,6 +13068,7 @@ final: prev: {
       hash = "sha256-ACDsnUqTYok+uea9O/vW4qu/GJgV9d6WTdUCRjSALvo=";
     };
     meta.homepage = "https://github.com/ghostbuster91/nvim-next/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12149,6 +13082,7 @@ final: prev: {
       hash = "sha256-NpF2za/TsgpPrRWsCoRinL8KrynQHrPpdhZjXJXAdm0=";
     };
     meta.homepage = "https://github.com/ya2s/nvim-nonicons/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12162,6 +13096,7 @@ final: prev: {
       hash = "sha256-h7STMjY+CBTqBkIDJXgtJz4WhNeQ02ES2Jesi3jZXeM=";
     };
     meta.homepage = "https://github.com/rcarriga/nvim-notify/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12175,6 +13110,7 @@ final: prev: {
       hash = "sha256-mW6m1SqZEpP0hVmMh6ORZY3afJoS5aUBUHlTza9b+w8=";
     };
     meta.homepage = "https://github.com/LhKipp/nvim-nu/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12188,6 +13124,7 @@ final: prev: {
       hash = "sha256-C11XegdlMo5l4NVi9txSc5uivz9qx5HCNtwQSbMm28k=";
     };
     meta.homepage = "https://github.com/sitiom/nvim-numbertoggle/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12201,6 +13138,7 @@ final: prev: {
       hash = "sha256-l47szqnNCnOU8Mnw0KQ3pDnRz0SwTF/0m6JjTfU23gw=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-origami/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12214,6 +13152,7 @@ final: prev: {
       hash = "sha256-cVivuGzsG2bKfUBklyK7in0C8Xis0aO0pfyOuTol1mU=";
     };
     meta.homepage = "https://github.com/ojroques/nvim-osc52/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12227,6 +13166,7 @@ final: prev: {
       hash = "sha256-nRaS6ViO+fqg6cZiyNZhCrIpFC6Lnn5Rv2WjQTmR2uA=";
     };
     meta.homepage = "https://github.com/julienvincent/nvim-paredit/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12240,6 +13180,7 @@ final: prev: {
       hash = "sha256-hzm+VF669NpILT6P540PriXDuOCjPq3D7YKxLv5EsQU=";
     };
     meta.homepage = "https://github.com/gpanders/nvim-parinfer/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12253,6 +13194,7 @@ final: prev: {
       hash = "sha256-Xl+aLUkAtCMQE/3j7c8jtsdKdl72H0YoEzBZptkbG88=";
     };
     meta.homepage = "https://github.com/gennaro-tedesco/nvim-peekup/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12266,6 +13208,7 @@ final: prev: {
       hash = "sha256-5VH1ffXvQuMDm32xt2t2UlEJiKuZWbkAMTXJic/8BYI=";
     };
     meta.homepage = "https://github.com/yorickpeterse/nvim-pqf/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12279,6 +13222,7 @@ final: prev: {
       hash = "sha256-w+QQ+obgKedKMHh4MnM82Wh7n7mOGk86vmzr0GFNhDc=";
     };
     meta.homepage = "https://github.com/jamestthompson3/nvim-remote-containers/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12292,6 +13236,7 @@ final: prev: {
       hash = "sha256-/cpsfbIj9R1A6YWSx/nBYwuasy3pwMkAmguLeiJrWXY=";
     };
     meta.homepage = "https://github.com/olrtg/nvim-rename-state/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12305,6 +13250,7 @@ final: prev: {
       hash = "sha256-USvXVEWoDH72e0qxkVPmYU80n5NcnIr9Zaf1AuONoYo=";
     };
     meta.homepage = "https://github.com/duane9/nvim-rg/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12318,6 +13264,7 @@ final: prev: {
       hash = "sha256-ncpV8GBkS5lRg/bOMqOUAS0s6BQAaWeaT2/P12jxT+w=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-rip-substitute/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12331,6 +13278,7 @@ final: prev: {
       hash = "sha256-uhNlLndXpLiU0qYvnnCepqqCp5eA+GRxq/aWJcRts+U=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-scissors/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12344,6 +13292,7 @@ final: prev: {
       hash = "sha256-g+gJp7noNdLKfvp+QbnTFE++PI3FcJG7reDenkg15k0=";
     };
     meta.homepage = "https://github.com/petertriho/nvim-scrollbar/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12357,6 +13306,7 @@ final: prev: {
       hash = "sha256-McUlWmCQiyCmGP+O9pgsvINeMgHuJp6lCpcvyP1NPs0=";
     };
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12370,6 +13320,7 @@ final: prev: {
       hash = "sha256-YMSgq7Y/BYUMFAm0NLergVBdmySTufypk48WEpORmBQ=";
     };
     meta.homepage = "https://github.com/s1n7ax/nvim-search-and-replace/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12383,6 +13334,7 @@ final: prev: {
       hash = "sha256-XiYn/L2e/B+6LTjak3jAwRgnZ3gCbsyA0J61Dd+jZv4=";
     };
     meta.homepage = "https://github.com/michaelrommel/nvim-silicon/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12396,6 +13348,7 @@ final: prev: {
       hash = "sha256-x2Q+96/YEky8fdy4CZ/QPwcLjaOLmwmtpWiYMnS657A=";
     };
     meta.homepage = "https://github.com/jbuck95/nvim-sioyek-highlights/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12409,6 +13362,7 @@ final: prev: {
       hash = "sha256-1DxKqZq8B9SjDIgXPNQrWlHYMgrkCYL1K7UiPn4u+ig=";
     };
     meta.homepage = "https://github.com/garymjr/nvim-snippets/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12422,6 +13376,7 @@ final: prev: {
       hash = "sha256-W0M1YWlQNUmeLxCOvNghY5txLNqNlp01IuSl+fkeA+I=";
     };
     meta.homepage = "https://github.com/dcampos/nvim-snippy/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12435,6 +13390,7 @@ final: prev: {
       hash = "sha256-0NABkr2d86Uq3OU4lbn2dyjRbwE3+5euqh1CA+MwDtQ=";
     };
     meta.homepage = "https://github.com/ishan9299/nvim-solarized-lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12448,6 +13404,7 @@ final: prev: {
       hash = "sha256-PkCZZuigHAAlGNcVD/bBTkGyZs9e3tgmnaDuPpKrBKM=";
     };
     meta.homepage = "https://github.com/prismatic-koi/nvim-sops/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12461,6 +13418,7 @@ final: prev: {
       hash = "sha256-2ZJV23CZ8B3x4DPHGuWnq84Jp3gLvyCARuyqtrZEOos=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-spider/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12474,6 +13432,7 @@ final: prev: {
       hash = "sha256-0mVWE8YimHmJO/GbTZD0cIVgwwt/sd7odeM854k/dHw=";
     };
     meta.homepage = "https://github.com/kylechui/nvim-surround/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12487,6 +13446,7 @@ final: prev: {
       hash = "sha256-pPpG/2ZbSYPLq5lvQXU1Nqt7rv2gcvx3Uukmje03v6s=";
     };
     meta.homepage = "https://github.com/svermeulen/nvim-teal-maker/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12500,6 +13460,7 @@ final: prev: {
       hash = "sha256-/dof+kvpx2ptWPyPUbgVlwpDeCprZCb7w5mPnYLWCiY=";
     };
     meta.homepage = "https://github.com/norcalli/nvim-terminal.lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12513,6 +13474,7 @@ final: prev: {
       hash = "sha256-mMi07UbMWmC75DFfW1b+sR2uRPxizibFwS2qcN9rpLI=";
     };
     meta.homepage = "https://github.com/klen/nvim-test/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12526,19 +13488,21 @@ final: prev: {
       hash = "sha256-NNdwBJjVlCwR3VzN7JRMhRRNHENRO9SXNnUUr4zZ8Eg=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-tinygit/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   nvim-tree-lua = buildVimPlugin {
     pname = "nvim-tree.lua";
-    version = "1.17.0-unstable-2026-04-16";
+    version = "1.17.0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "nvim-tree";
       repo = "nvim-tree.lua";
-      rev = "d277467fc0d1d0e2bca88165a1de6b526f9f6fe8";
-      hash = "sha256-SRDO1680yNSSOYCLSp+TLiwim8NzFGNFyWY6yaaQVZU=";
+      rev = "24cfcc94372e526fd9e1c2803ede9e0f1715e33f";
+      hash = "sha256-WzCT4Z1gjZo1KL2g9NydT14mP/GlDWXpAsG7ILyW9EA=";
     };
     meta.homepage = "https://github.com/nvim-tree/nvim-tree.lua/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12552,6 +13516,7 @@ final: prev: {
       hash = "sha256-PQR6tFt4lCrAZNQG7BLMD1IiCKja9wDS1S4laGJf/HE=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12565,6 +13530,7 @@ final: prev: {
       hash = "sha256-K4o+iJY8+D0PRvRvXuBqX2q3fwxizAPp/FFpm0O0I9E=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-context/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12578,6 +13544,7 @@ final: prev: {
       hash = "sha256-5l2XF8/sk94IWAauP1VDh4ylLcR5gXnoWCT01TjmHBc=";
     };
     meta.homepage = "https://github.com/RRethy/nvim-treesitter-endwise/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12591,6 +13558,7 @@ final: prev: {
       hash = "sha256-FLZ6h1M3Kc/YjOfKhn8nKLyVTySMMpsOL2MzIoAMEes=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-locals/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12604,6 +13572,7 @@ final: prev: {
       hash = "sha256-VHq7ohBDThkBwqUIEVBb4RujBkftu96DQe/y6l7egzM=";
     };
     meta.homepage = "https://github.com/theHamsta/nvim-treesitter-pairs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12617,6 +13586,7 @@ final: prev: {
       hash = "sha256-kjFizTo+DHCi29PTrANfleiQDXDnitbW32a50FU380s=";
     };
     meta.homepage = "https://github.com/eddiebergman/nvim-treesitter-pyfold/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12630,6 +13600,7 @@ final: prev: {
       hash = "sha256-RrhTSBTPveHw4DNQTi3CP16LMtQUnGBQIYv7NKWZ69w=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-refactor/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12643,6 +13614,7 @@ final: prev: {
       hash = "sha256-ehpGvHnY28Ym55B7ituwcvZmGmLt1x92J5M+m8j1ytU=";
     };
     meta.homepage = "https://github.com/PaterJason/nvim-treesitter-sexp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12656,6 +13628,7 @@ final: prev: {
       hash = "sha256-fOpRElIwvsFWm4AwETx7fpC3RtdH2BpCfX4YHVitqw0=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12669,6 +13642,7 @@ final: prev: {
       hash = "sha256-lf+AwSu96iKO1vWWU2D7jWHGfjXkbX9R2CX3gMZaD4M=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12682,6 +13656,7 @@ final: prev: {
       hash = "sha256-drFqgzbg1FY7h6ie01GJ9nvppkjd3LG5yyhYKtL54xY=";
     };
     meta.homepage = "https://github.com/RRethy/nvim-treesitter-textsubjects/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12695,6 +13670,7 @@ final: prev: {
       hash = "sha256-gIF4M8SSGMOjlLSfSjq6trqFSxb7ulXzVFC5nkMHg4I=";
     };
     meta.homepage = "https://github.com/AckslD/nvim-trevJ.lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12708,6 +13684,7 @@ final: prev: {
       hash = "sha256-bvBf9wEDxdwlMGN29v4dEPexZGuxZZr7s+6xAOrDNKI=";
     };
     meta.homepage = "https://github.com/windwp/nvim-ts-autotag/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12721,6 +13698,7 @@ final: prev: {
       hash = "sha256-UsfhWgOJ+SpqyA8D6Pckq5w1n+qVjK51K0rXYQvjqMw=";
     };
     meta.homepage = "https://github.com/joosepalviste/nvim-ts-context-commentstring/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12734,6 +13712,7 @@ final: prev: {
       hash = "sha256-zISVDb+YwBr5aQ/LdACKJ62eAzvtYVFpon4uh5OjA3A=";
     };
     meta.homepage = "https://github.com/kevinhwang91/nvim-ufo/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12747,6 +13726,7 @@ final: prev: {
       hash = "sha256-xaKMcgGI++yrNnmVa3h7ohLKTSkNolcr2zofuJgYRZo=";
     };
     meta.homepage = "https://github.com/samjwill/nvim-unception/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12760,6 +13740,7 @@ final: prev: {
       hash = "sha256-M5EAMy4pbrkYTcnqTex2Ym1lKeOCpBXYh7zgMKSkPKI=";
     };
     meta.homepage = "https://github.com/apyra/nvim-unity/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12773,6 +13754,7 @@ final: prev: {
       hash = "sha256-FZKW7/9Y6MRxEbd00HBt9eGpJWbAP8GNM6p8M9s/3ts=";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-various-textobjs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12786,6 +13768,7 @@ final: prev: {
       hash = "sha256-vTNEpDcZxch4Pj4lotEB/eQLxXtvhgdaqYY+8YIirDE=";
     };
     meta.homepage = "https://github.com/yioneko/nvim-vtsls/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12799,6 +13782,7 @@ final: prev: {
       hash = "sha256-nRXq/4ipl7j/ITFgoXkWLv6GFQeYXWgql6bnzOJrcQk=";
     };
     meta.homepage = "https://github.com/AckslD/nvim-whichkey-setup.lua/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12812,6 +13796,7 @@ final: prev: {
       hash = "sha256-ZavIPpQXLSRpJXJVJZp3N6QWHoTKRvVrFAw7jekNmX4=";
     };
     meta.homepage = "https://github.com/s1n7ax/nvim-window-picker/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12825,6 +13810,7 @@ final: prev: {
       hash = "sha256-T8zKVbMDGNB7FCDtkzvku4qiei12bBD+2oaoUTkLsLU=";
     };
     meta.homepage = "https://github.com/roxma/nvim-yarp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12838,6 +13824,7 @@ final: prev: {
       hash = "sha256-ghpXrJgEN0CCCEXDsqe9G34KTGpAc0x8UhMQNmakp2c=";
     };
     meta.homepage = "https://github.com/andersevenrud/nvim_context_vt/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12851,6 +13838,7 @@ final: prev: {
       hash = "sha256-6ipgRlBuHyf6DkN0gqsrvzYHPYy9VDxqVuWS+SCtkqg=";
     };
     meta.homepage = "https://github.com/neovim/nvimdev.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -12864,6 +13852,7 @@ final: prev: {
       hash = "sha256-/fc5XN3SDfIEsngSsQKIDdjNhnJr2l4iFVVKoHYd0F4=";
     };
     meta.homepage = "https://github.com/zbirenbaum/nvterm/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12877,6 +13866,7 @@ final: prev: {
       hash = "sha256-4GfQ6Mo32rsoQAXKZF9Bpnm/sms2hfbrTldpLp5ySoY=";
     };
     meta.homepage = "https://github.com/nvzone/menu/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12890,6 +13880,7 @@ final: prev: {
       hash = "sha256-jdz0cR1uz1EdxFCuxndsK9gyTZ2jg8wdYA0v33SevOg=";
     };
     meta.homepage = "https://github.com/nvzone/minty/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12903,6 +13894,7 @@ final: prev: {
       hash = "sha256-PNkoz91RmlZnRrdStAz5b7pGaWv27UOQU/9abYNP/5E=";
     };
     meta.homepage = "https://github.com/nvzone/typr/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12916,6 +13908,7 @@ final: prev: {
       hash = "sha256-5Xao1+QXZOvqwCXL6zWpckJPO1LDb8I7wtikMRFQ3Jk=";
     };
     meta.homepage = "https://github.com/nvzone/volt/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12929,6 +13922,7 @@ final: prev: {
       hash = "sha256-zajt8vt/bLMCqgSgjMj/MiUFTU3TNAnr25YM+J+qg2M=";
     };
     meta.homepage = "https://github.com/obsidian-nvim/obsidian.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12942,6 +13936,7 @@ final: prev: {
       hash = "sha256-atRXtqMIhsmwR1INrhbFsywWAgLTbT9bz/LLfcN4Lfg=";
     };
     meta.homepage = "https://github.com/tarides/ocaml.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12955,6 +13950,7 @@ final: prev: {
       hash = "sha256-95D6I9EqtTJdGI4jgljNuzs1sDjHEILiTc6NKMOlfow=";
     };
     meta.homepage = "https://github.com/nvimdev/oceanic-material/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12968,19 +13964,21 @@ final: prev: {
       hash = "sha256-f5isbjoGMsLlzWkxQAU2an4lwEiIPuXKAZGyezZlv/M=";
     };
     meta.homepage = "https://github.com/mhartington/oceanic-next/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   octo-nvim = buildVimPlugin {
     pname = "octo.nvim";
-    version = "0-unstable-2026-04-22";
+    version = "0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "pwntester";
       repo = "octo.nvim";
-      rev = "a8ad0646e6f9d01ad0a6fbd3ddca0fd715067d34";
-      hash = "sha256-oEiQyABAJhF6vgOU2PPPILqioaVF95gMJaQlxCtYEXM=";
+      rev = "34e67cc2d247e9b9271e2b54baeb6d4f6d1035bb";
+      hash = "sha256-rwOQs1l7j+GvbaJ1Vj42HE+lWcZrFKfTqDcvuACCDgE=";
     };
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12994,6 +13992,7 @@ final: prev: {
       hash = "sha256-5pC1ozSetRt+Jk9nWc8n9t0QSRi5Xn70YtCjADTzl5k=";
     };
     meta.homepage = "https://github.com/benomahony/oil-git.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13007,6 +14006,7 @@ final: prev: {
       hash = "sha256-1jdK1ZpdWEJrY1P/GOTTNSi+v7VUsN8BwLyTgiBBpOc=";
     };
     meta.homepage = "https://github.com/refractalize/oil-git-status.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13020,6 +14020,7 @@ final: prev: {
       hash = "sha256-IK1HhHbCI6qLgIuAciox3E43Cn4Cq2QHeRjd8l5NMnE=";
     };
     meta.homepage = "https://github.com/JezerM/oil-lsp-diagnostics.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13033,6 +14034,7 @@ final: prev: {
       hash = "sha256-zAPPMQyG8ys4ezoMDZYZzbiHc20TZrFjAiIwsIiIQN0=";
     };
     meta.homepage = "https://github.com/eero-lehtinen/oklch-color-picker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13046,6 +14048,7 @@ final: prev: {
       hash = "sha256-8tW5tp2GiYw+PnR7rqiKfykLW/yqvGOtqauZCgEeQCg=";
     };
     meta.homepage = "https://github.com/nomnivore/ollama.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13059,19 +14062,21 @@ final: prev: {
       hash = "sha256-vb5qXvS2g5nWr5yGULbsUGdPLc0ckTJuP8WT7cXCY1U=";
     };
     meta.homepage = "https://github.com/yonlu/omni.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   omnisharp-extended-lsp-nvim = buildVimPlugin {
     pname = "omnisharp-extended-lsp.nvim";
-    version = "0-unstable-2025-10-07";
+    version = "0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "Hoffs";
       repo = "omnisharp-extended-lsp.nvim";
-      rev = "a47388e5417e7f1cfa6962cc441a23c4c5fb2151";
-      hash = "sha256-0cRngH9BFuBbEu7007Xqr5zVJSBUowni7jxaMxGwnzU=";
+      rev = "66a003874ca0539b91cb84876080d6200c796aa7";
+      hash = "sha256-la0mFk+CHo669/vJ+fe+nAyEPN5BCtkdHSN0fttHi9o=";
     };
     meta.homepage = "https://github.com/Hoffs/omnisharp-extended-lsp.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13085,6 +14090,7 @@ final: prev: {
       hash = "sha256-O6dp/CPt+v6mvdMhTKd03Dybswe+iqaH8FLomukeT6o=";
     };
     meta.homepage = "https://github.com/Th3Whit3Wolf/one-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13098,6 +14104,7 @@ final: prev: {
       hash = "sha256-IqyNgMf8hH2KpRY8gTrqREMCZwMNfDRdH/joqhGhjxI=";
     };
     meta.homepage = "https://github.com/jbyuki/one-small-step-for-vimkind/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13111,6 +14118,7 @@ final: prev: {
       hash = "sha256-qOKXR/qfm3GsPSw0A5HOxvBaWJEUkelCcJJYHFFW8zc=";
     };
     meta.homepage = "https://github.com/navarasu/onedark.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13124,6 +14132,7 @@ final: prev: {
       hash = "sha256-vb2wGkul/NAjeV4zcpI3e9ozd9YI1LbwK85tq+hTcLA=";
     };
     meta.homepage = "https://github.com/joshdick/onedark.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13137,6 +14146,7 @@ final: prev: {
       hash = "sha256-DJGrRkELm3QkH7tZXNNfo/4IXLr7r0vnevzPGG/1K4g=";
     };
     meta.homepage = "https://github.com/LunarVim/onedarker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13150,6 +14160,7 @@ final: prev: {
       hash = "sha256-14SzvqMvcYlyIyXHUzzrdrZE9GMeFT2rEulQTX9e2oQ=";
     };
     meta.homepage = "https://github.com/olimorris/onedarkpro.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13163,6 +14174,7 @@ final: prev: {
       hash = "sha256-F5gbDtGD2QBDGZOjr/OCJJlyQgxvQTsy8IoNNAjnDzQ=";
     };
     meta.homepage = "https://github.com/sonph/onehalf/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13176,6 +14188,7 @@ final: prev: {
       hash = "sha256-IjY0QUfe122oT+bQd0/iE7ZoRK59WUWrUSRgIKOvN2M=";
     };
     meta.homepage = "https://github.com/rmehri01/onenord.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13189,6 +14202,7 @@ final: prev: {
       hash = "sha256-nsYbsuUplc8Fye+exMo7GGLYbAbean/tGqxNJR+Awlg=";
     };
     meta.homepage = "https://github.com/tyru/open-browser-github.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13202,6 +14216,7 @@ final: prev: {
       hash = "sha256-9QZgTv8W0BFlF0lsH1BPPAzjD6iXWXHXZf2zpouQH2s=";
     };
     meta.homepage = "https://github.com/tyru/open-browser.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13215,6 +14230,7 @@ final: prev: {
       hash = "sha256-A9uhcU1Wm4yDnaON8j6KVe7ahdKIkzW3cZwZK93RNew=";
     };
     meta.homepage = "https://github.com/nickjvandyke/opencode.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13228,6 +14244,7 @@ final: prev: {
       hash = "sha256-/FlNLWOSIrOYiWzAcgOdu9//QTorCDV1KWb+h6eqLwk=";
     };
     meta.homepage = "https://github.com/Almo7aya/openingh.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13241,6 +14258,7 @@ final: prev: {
       hash = "sha256-xmc9/g+tCWX8H1hm2BlKQsJKOUBCMQOFb7X0aKFMVoE=";
     };
     meta.homepage = "https://github.com/salkin-mada/openscad.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13254,6 +14272,7 @@ final: prev: {
       hash = "sha256-GD+fQcnlsXMRge5Eo03m+RNVbV5iTFiOfdJ/i6t6rFc=";
     };
     meta.homepage = "https://github.com/bitbloxhub/org-notebook.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "ISC";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13267,6 +14286,7 @@ final: prev: {
       hash = "sha256-K0OnM7PdTT4ypL0IAVWb9R83SDIhgko8j4KBzIkJJNM=";
     };
     meta.homepage = "https://github.com/chipsenkbeil/org-roam.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13280,6 +14300,7 @@ final: prev: {
       hash = "sha256-OZqpCpgbo5ULYTtthCIS/3Hs4k+dVOVkY2dKxQ1KF24=";
     };
     meta.homepage = "https://github.com/rgroli/other.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13293,6 +14314,7 @@ final: prev: {
       hash = "sha256-kTDFzud+Kx3YAI36QhEi+WjVkB6Owao7PdUBX3mLXKw=";
     };
     meta.homepage = "https://github.com/jmbuhr/otter.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13306,6 +14328,7 @@ final: prev: {
       hash = "sha256-xKu05IgOpgtt2W+WqXuTUjX66ffDrU8BDi8z7M6M1q4=";
     };
     meta.homepage = "https://github.com/hedyhli/outline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13320,6 +14343,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/overseer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13333,6 +14357,7 @@ final: prev: {
       hash = "sha256-OdcKcS6dJbbqNT0kvexXjDOWAWyFcrp8NlVBlT0msVg=";
     };
     meta.homepage = "https://github.com/nyoom-engineering/oxocarbon.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13346,6 +14371,7 @@ final: prev: {
       hash = "sha256-KCA7E766yRnV7XMrcwwpe7m1/pgiqecKtCWVtAlfGfU=";
     };
     meta.homepage = "https://github.com/vuki656/package-info.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13359,6 +14385,7 @@ final: prev: {
       hash = "sha256-fLM+ptjMd1YNoJQEI0vvr4sjaay7dfpaGhvWUy91d1M=";
     };
     meta.homepage = "https://github.com/wbthomason/packer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13372,6 +14399,7 @@ final: prev: {
       hash = "sha256-3zgTux85/9lttmIik+IVUJhXbwJCo4SRJDAD8g6tv1U=";
     };
     meta.homepage = "https://github.com/drewtempelmeyer/palenight.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13385,6 +14413,7 @@ final: prev: {
       hash = "sha256-ZSrDK8pOcZ/n/vuQd80JcKr2XJMQLf8tgbpzmuGKbus=";
     };
     meta.homepage = "https://github.com/JoosepAlviste/palenightfall.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13398,6 +14427,7 @@ final: prev: {
       hash = "sha256-gCyDl+2fDa5CPpibxQnp+pJSkyRl0r03Sh3+IXIoQIQ=";
     };
     meta.homepage = "https://github.com/roobert/palette.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13411,6 +14441,7 @@ final: prev: {
       hash = "sha256-JXB6hQgvJ3VfSY/tnSlZd7CRtts7l/hfTCeTmOkp0vA=";
     };
     meta.homepage = "https://github.com/NLKNguyen/papercolor-theme/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13424,6 +14455,7 @@ final: prev: {
       hash = "sha256-aQhqJthjUBLXESbtPZBpBZoQpRGTpKldL8uEqa+uHpk=";
     };
     meta.homepage = "https://github.com/pappasam/papercolor-theme-slim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13437,6 +14469,7 @@ final: prev: {
       hash = "sha256-H7cuzjSTimzWYDSDAs6CnhivAoEzU0E+QgrFBzXBwCc=";
     };
     meta.homepage = "https://github.com/dundalek/parpar.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13450,6 +14483,7 @@ final: prev: {
       hash = "sha256-xXrjfZQOzqXfm0vq1eQjwjyMxQMSrzF3CNBBd3LgG9Y=";
     };
     meta.homepage = "https://github.com/frankroeder/parrot.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13463,6 +14497,7 @@ final: prev: {
       hash = "sha256-xiDjkM/SScDFqkUoyznO5ECvEebiXwcx0EsHRsMj4Rw=";
     };
     meta.homepage = "https://github.com/OXY2DEV/patterns.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13476,6 +14511,7 @@ final: prev: {
       hash = "sha256-u/Mmu/zFX4T6zaFKdMvn2jpkTbgxSjwGK7bmV/1fROQ=";
     };
     meta.homepage = "https://github.com/lewis6991/pckr.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13489,6 +14525,7 @@ final: prev: {
       hash = "sha256-QCiXDle4EN1amUP8fTjN5le2b7qV+ETuY1ywZAXTTO4=";
     };
     meta.homepage = "https://github.com/tmsvg/pear-tree/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13502,6 +14539,7 @@ final: prev: {
       hash = "sha256-Tw3tPJNGuK3pqEIgGoKIwV/j9txYXVWv2NJMs807bxI=";
     };
     meta.homepage = "https://github.com/steelsojka/pears.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13515,6 +14553,7 @@ final: prev: {
       hash = "sha256-hGIPxHwTSXTHFJ3JiVATMjEmoFhZ87fWElj1AMPMbQU=";
     };
     meta.homepage = "https://github.com/toppair/peek.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13528,6 +14567,7 @@ final: prev: {
       hash = "sha256-UUj2Bnbr8y1UCOzu2ZfX4dq7KwqBj8r8PKaDCRbgEJc=";
     };
     meta.homepage = "https://github.com/t-troebst/perfanno.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13541,6 +14581,7 @@ final: prev: {
       hash = "sha256-L9gCb+Dg8ox+WoidCxmMgJnfgWFAJyphN5INHCtEXuQ=";
     };
     meta.homepage = "https://github.com/olimorris/persisted.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13554,6 +14595,7 @@ final: prev: {
       hash = "sha256-ACuDEp4MNiP2X2LnsEjVWmajedXdCQ9gg/EK55YF7uM=";
     };
     meta.homepage = "https://github.com/folke/persistence.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13567,6 +14609,7 @@ final: prev: {
       hash = "sha256-7ZWNRyVAbQuM/y3jFuZ5QfmvI+pT4Jmo5kW2HwjDS1Y=";
     };
     meta.homepage = "https://github.com/Weissle/persistent-breakpoints.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13580,6 +14623,7 @@ final: prev: {
       hash = "sha256-rcpTLh4DUo27zv9uQo7buN2bb8QQcTkAO6AI/zhJ6mk=";
     };
     meta.homepage = "https://github.com/pest-parser/pest.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13593,6 +14637,7 @@ final: prev: {
       hash = "sha256-QfmHOm6UNnRb2gXvv5bcBAxIloOn/psO3E3BK3F0Va4=";
     };
     meta.homepage = "https://github.com/lifepillar/pgsql.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13606,6 +14651,7 @@ final: prev: {
       hash = "sha256-ee13G+e3BWUhz/4fzap1UcSP77gLOx3P+otMrsIiloM=";
     };
     meta.homepage = "https://github.com/phha/zenburn.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13619,6 +14665,7 @@ final: prev: {
       hash = "sha256-e5LLscgEBuZHIfi+clojp9vfiofvXdU5C7BuhQB7vfw=";
     };
     meta.homepage = "https://github.com/pablopunk/pi.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13632,6 +14679,7 @@ final: prev: {
       hash = "sha256-m1mP+gsse+J2pYhZDbRerUI9oboMmJbMkvRfqodC5Cs=";
     };
     meta.homepage = "https://github.com/motus/pig.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13645,6 +14693,7 @@ final: prev: {
       hash = "sha256-DdTTiq0DVSny2kTurkcUVTdyubPSAA7tfzz3UPdbd9s=";
     };
     meta.homepage = "https://github.com/goropikari/plantuml.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13658,6 +14707,7 @@ final: prev: {
       hash = "sha256-l1U/PNuEOZNCJwbvP9pgSyK5NRhKQEm0HIApQw62UzU=";
     };
     meta.homepage = "https://github.com/weirongxu/plantuml-previewer.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13671,6 +14721,7 @@ final: prev: {
       hash = "sha256-qmo5xI7Vugtsbl95RW2Pnu6cDei1Xz7Pq06HrrwPpI4=";
     };
     meta.homepage = "https://github.com/aklt/plantuml-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13684,6 +14735,7 @@ final: prev: {
       hash = "sha256-c0c0Q1W9Nfen9jYiDUISSlCHOY+XJuNPiBCOw4masUs=";
     };
     meta.homepage = "https://github.com/olivercederborg/poimandres.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13697,6 +14749,7 @@ final: prev: {
       hash = "sha256-tJ2TrypKnCnQm+6FDjX0KDr+UNoBBVvGIm+uWJtpNLc=";
     };
     meta.homepage = "https://github.com/epwalsh/pomo.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13710,6 +14763,7 @@ final: prev: {
       hash = "sha256-eWqZ1KAnEf6m2iVy9x6vk5fP2cwzJ8/RbiXVCVPaVGQ=";
     };
     meta.homepage = "https://github.com/dleonard0/pony-vim-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13724,6 +14778,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/RishabhRD/popfix/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13737,6 +14792,7 @@ final: prev: {
       hash = "sha256-dNWz/xovUg55fDZUpVs/2kLphk3lqQyvPtc9ATwbeSQ=";
     };
     meta.homepage = "https://github.com/nvim-lua/popup.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13750,6 +14806,7 @@ final: prev: {
       hash = "sha256-AcBZ3by3ONZBDuY2jpfDZSutwotlh+YHA7SgCJEmrzo=";
     };
     meta.homepage = "https://github.com/tris203/precognition.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13763,6 +14820,7 @@ final: prev: {
       hash = "sha256-ZpsunLsn//zYgUtmAm5FqKVueVd/Pa1r55ZDqxCimBk=";
     };
     meta.homepage = "https://github.com/andweeb/presence.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13776,6 +14834,7 @@ final: prev: {
       hash = "sha256-ZxxN149hohgZqf/5gvQSKc87CAtc9PXq/5ypOGHtUm0=";
     };
     meta.homepage = "https://github.com/sotte/presenting.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13789,6 +14848,7 @@ final: prev: {
       hash = "sha256-5TfSgEiMJJG1ZfCeAULcfKpunbvxkas75cfLaiM1OtE=";
     };
     meta.homepage = "https://github.com/ewilazarus/preto/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13802,6 +14862,7 @@ final: prev: {
       hash = "sha256-PQPZw0qXwMtpVE4uSxR3xUvkHE9iG4T+ZwgV6H9pUjo=";
     };
     meta.homepage = "https://github.com/anuvyklack/pretty-fold.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13815,19 +14876,21 @@ final: prev: {
       hash = "sha256-Bvp8EJnOazXfCNK8emE7LKUeT3xPNyrIIUgdNh1vuA8=";
     };
     meta.homepage = "https://github.com/vim-scripts/prev_indent/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   project-nvim = buildVimPlugin {
     pname = "project.nvim";
-    version = "3.2.1-1";
+    version = "3.2.2-1";
     src = fetchFromGitHub {
       owner = "DrKJeff16";
       repo = "project.nvim";
-      tag = "v3.2.1-1";
-      hash = "sha256-vZWOH2fFmwdlU/rdnLWywx+XsuuH+X5x0DN8OHjZd6c=";
+      tag = "v3.2.2-1";
+      hash = "sha256-4ADgE8WF5xw7tHqNl6F3JbFj1QHF6LBIzcujeclpxIE=";
     };
     meta.homepage = "https://github.com/DrKJeff16/project.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13841,6 +14904,7 @@ final: prev: {
       hash = "sha256-vkxiM+65k4/iAV2Y+FkFJpnB8/hArGA061JPNENjkvo=";
     };
     meta.homepage = "https://github.com/GnikDroy/projections.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13854,6 +14918,7 @@ final: prev: {
       hash = "sha256-9eM66brPjiFlY64vmBetRYrKnpDyN7+/URMm4GsGimA=";
     };
     meta.homepage = "https://github.com/kevinhwang91/promise-async/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13867,6 +14932,7 @@ final: prev: {
       hash = "sha256-oLI5GWhC1bWF8NPuHi3ZSho2f138JOsJxytdmdHP6eg=";
     };
     meta.homepage = "https://github.com/frigoeu/psc-ide-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13880,6 +14946,7 @@ final: prev: {
       hash = "sha256-wa1i0gqOUK3SAT5NVZypDSGAHX3kvybntX9C5I2zRm8=";
     };
     meta.homepage = "https://github.com/Shougo/pum.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13893,6 +14960,7 @@ final: prev: {
       hash = "sha256-IrPiiDghh5qdeaTM6M4oRzay+LvqL3sdoiM2m89O4pA=";
     };
     meta.homepage = "https://github.com/purescript-contrib/purescript-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13907,6 +14975,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/python-mode/python-mode/";
+    meta.license = lib.meta.getLicenseFromSpdxId "LGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13920,6 +14989,7 @@ final: prev: {
       hash = "sha256-BQjf67ah68c2+ASedWl2cbE98gR4PxWQvhoum4tonvA=";
     };
     meta.homepage = "https://github.com/vim-python/python-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13933,6 +15003,7 @@ final: prev: {
       hash = "sha256-JGz/JHxXWVi74LDJWlQfj6BxcTny0V2RYTEOxNWyjgI=";
     };
     meta.homepage = "https://github.com/AlphaTechnolog/pywal.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13946,6 +15017,7 @@ final: prev: {
       hash = "sha256-uNToBV6iYuRrWsd7Rs2Q/4VZ/mgmg7PipIVO2YVMqBE=";
     };
     meta.homepage = "https://github.com/marcelbeumer/qfctl.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13959,6 +15031,7 @@ final: prev: {
       hash = "sha256-qqSEH2XyYjY8OsOjIMVuf85nFG3TgVquNGMhq7Hp2g0=";
     };
     meta.homepage = "https://github.com/codethread/qmk.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13972,6 +15045,7 @@ final: prev: {
       hash = "sha256-YgRiUnZ1MH5uuwNC3V9ZntphuKH3rIOlcdp+5C4zonk=";
     };
     meta.homepage = "https://github.com/quarto-dev/quarto-nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -13985,6 +15059,7 @@ final: prev: {
       hash = "sha256-fOS+ia+sZAK5Ctzp0E7dgLSAVgcSZPLtXDsfZrmPaLA=";
     };
     meta.homepage = "https://github.com/unblevable/quick-scope/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13998,6 +15073,7 @@ final: prev: {
       hash = "sha256-ldKDPSzv3QTZbeesRRZbHynESlrZSogdDP+zUq5mPzA=";
     };
     meta.homepage = "https://github.com/stevearc/quicker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14011,6 +15087,7 @@ final: prev: {
       hash = "sha256-PofmAwx2wQkZtIFtD7G9G3SgjwziZHpYNuORMvTco2Y=";
     };
     meta.homepage = "https://github.com/stefandtw/quickfix-reflector.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14024,6 +15101,7 @@ final: prev: {
       hash = "sha256-e2gx1docI9lfMVjGfkN20ywvYqsuMNAtPz4U3P2GfZs=";
     };
     meta.homepage = "https://github.com/dannyob/quickfixstatus/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14037,6 +15115,7 @@ final: prev: {
       hash = "sha256-uShIzazgemL+8ir3aJSfUijJzORvZsX/l/NFulBVIgU=";
     };
     meta.homepage = "https://github.com/jbyuki/quickmath.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14050,6 +15129,7 @@ final: prev: {
       hash = "sha256-dBHgAc3dOoeBI/lZzIJgYYTda8ZMvdThixUZebZXRHE=";
     };
     meta.homepage = "https://github.com/luochen1990/rainbow/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14062,6 +15142,7 @@ final: prev: {
       hash = "sha256-mXuANXeUUltbaE7kPi1PeREUXR+I3EdPzLgPw3gfyX8=";
     };
     meta.homepage = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14075,6 +15156,7 @@ final: prev: {
       hash = "sha256-Zf9VdRu/OF9h4AffOSAdM/Ypnla2wUp/iho3CV2YsH0=";
     };
     meta.homepage = "https://github.com/mechatroner/rainbow_csv/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14088,6 +15170,7 @@ final: prev: {
       hash = "sha256-R5daQm0G9BgRiCaR2KUfMrxy9ZBHftUrKYZgSGskiOM=";
     };
     meta.homepage = "https://github.com/kien/rainbow_parentheses.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14101,6 +15184,7 @@ final: prev: {
       hash = "sha256-Vx9O0KLYxm0cFQKfuBKoS1UijQfNLku7xzozSTAT/tM=";
     };
     meta.homepage = "https://github.com/vim-scripts/random.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14114,6 +15198,7 @@ final: prev: {
       hash = "sha256-CX12yrg2PyUhcCY8VqsSXZ6YQNA0ANRcYhroTb/WRWU=";
     };
     meta.homepage = "https://github.com/winston0410/range-highlight.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14127,6 +15212,7 @@ final: prev: {
       hash = "sha256-rqZjtPAAWaSavPCNtBI7vm627ZyffJOQ2Qs32M9uz3I=";
     };
     meta.homepage = "https://github.com/kelly-lin/ranger.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14140,6 +15226,7 @@ final: prev: {
       hash = "sha256-oTLZJNNTwbDBMLEH9jMVylXVwUrswtp4J9PB1anZ3+U=";
     };
     meta.homepage = "https://github.com/rafaqz/ranger.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14153,6 +15240,7 @@ final: prev: {
       hash = "sha256-kA2tt8mm6baPU//uij8Vnl60P/eDKmYt1JKOILB8RjY=";
     };
     meta.homepage = "https://github.com/vim-scripts/rcshell.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14166,6 +15254,7 @@ final: prev: {
       hash = "sha256-+PBYi3DnkPcNBg59nXLUTqkgxUpQZ2Sxl1juHz10ZkI=";
     };
     meta.homepage = "https://github.com/ryvnf/readline.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14179,6 +15268,7 @@ final: prev: {
       hash = "sha256-mZC2N8Udvep75/FeSRn2ZmEmE2/SNxFHw+W5QJHduLw=";
     };
     meta.homepage = "https://github.com/theprimeagen/refactoring.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14192,6 +15282,7 @@ final: prev: {
       hash = "sha256-dK3yUdR7HjAr6LxaNpcNPnEHz/18nmf91X85dcjOOE0=";
     };
     meta.homepage = "https://github.com/mawkler/refjump.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14205,6 +15296,7 @@ final: prev: {
       hash = "sha256-M7uR3yXYUQ4I8Gt8P6k25q67UNwksRDPKGrS/FCqrt0=";
     };
     meta.homepage = "https://github.com/tversteeg/registers.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14218,6 +15310,7 @@ final: prev: {
       hash = "sha256-kJABTjY6p+wFlNZ9VLmK5LvusHcbD/0aaZP6yOpR1Zc=";
     };
     meta.homepage = "https://github.com/vladdoster/remember.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14231,6 +15324,7 @@ final: prev: {
       hash = "sha256-weTaxA5M8dpx4sIKKYqHkTy0/ZoINjZ/VqAbs2FYfus=";
     };
     meta.homepage = "https://github.com/amitds1997/remote-nvim.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14244,6 +15338,7 @@ final: prev: {
       hash = "sha256-ca6DcLR/6HTRdJCinnQWE52VMDxY82cRSqJ7uJFbp9w=";
     };
     meta.homepage = "https://github.com/nosduco/remote-sshfs.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14257,6 +15352,7 @@ final: prev: {
       hash = "sha256-Nz36OESAcLqaNs4kDOIdrdAFvfiUPzUP8scvJpcPAa4=";
     };
     meta.homepage = "https://github.com/filipdutescu/renamer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14270,6 +15366,7 @@ final: prev: {
       hash = "sha256-c+2KzCACUnb/RkkLsI9uxvJNLP0PDgmuPSUlO/XgGBw=";
     };
     meta.homepage = "https://github.com/MeanderingProgrammer/render-markdown.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14283,6 +15380,7 @@ final: prev: {
       hash = "sha256-pY0BiclthomTdgJeBFmeVStRFexgsA5V1MU+YGL0OmI=";
     };
     meta.homepage = "https://github.com/gabrielpoca/replacer.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14296,6 +15394,7 @@ final: prev: {
       hash = "sha256-ykCswLzq38tO0GE4IB0dT3g239qkKpoW+d27sCorR90=";
     };
     meta.homepage = "https://github.com/9seconds/repolink.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14310,6 +15409,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/resession.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14323,6 +15423,7 @@ final: prev: {
       hash = "sha256-dhGaGq6Vq4BcIQtbt9+9EnFYcdpQISdaHjIupt/SsM4=";
     };
     meta.homepage = "https://github.com/vim-scripts/restore_view.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14336,6 +15437,7 @@ final: prev: {
       hash = "sha256-KCwTRLvF1th6o6kjxtUc0S19Qb9yg8xr0kKG4v4n7Tc=";
     };
     meta.homepage = "https://github.com/gu-fan/riv.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14349,6 +15451,7 @@ final: prev: {
       hash = "sha256-oKnJYSG9Ij6Nq9RNoLvSKdVUP/Q/bwcACIBq5YVC50A=";
     };
     meta.homepage = "https://github.com/kevinhwang91/rnvimr/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14362,6 +15465,7 @@ final: prev: {
       hash = "sha256-TZUtQLZWyWGkjEk0TmoQe7INAMvJt4GFPCo4g3NhKiQ=";
     };
     meta.homepage = "https://github.com/mfukar/robotframework-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14375,6 +15479,7 @@ final: prev: {
       hash = "sha256-8/xJmymtVGVz2avzlamgK1cNflZ3NRL+B3c7xxbI964=";
     };
     meta.homepage = "https://github.com/ron-rs/ron.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14388,6 +15493,7 @@ final: prev: {
       hash = "sha256-e481yg0oMqY4PTEZwK1CbcJIsXN6YfBixFhx2Ab0mFg=";
     };
     meta.homepage = "https://github.com/rose-pine/neovim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14401,6 +15507,7 @@ final: prev: {
       hash = "sha256-j5+Kg4B1flk4TwkZKRDW7tHbaoUyE5dKGypXsd9+qSw=";
     };
     meta.homepage = "https://github.com/seblyng/roslyn.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14414,6 +15521,7 @@ final: prev: {
       hash = "sha256-3xxQzaQa/en21TQsqF8ruunpuIKlyqTLhBSnAeZShRA=";
     };
     meta.homepage = "https://github.com/keith/rspec.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14427,6 +15535,7 @@ final: prev: {
       hash = "sha256-f9VEXT3bG4ESYpGGwUDONgL/Lsq4IToZEwaZyC2vG+4=";
     };
     meta.homepage = "https://github.com/ccarpita/rtorrent-syntax-file/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14440,6 +15549,7 @@ final: prev: {
       hash = "sha256-EqWwQ/8BAC7RdS0mowxOtcJoGFu7YD/XrKSAbjQtHTg=";
     };
     meta.homepage = "https://github.com/TheLazyCat00/runner-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14453,6 +15563,7 @@ final: prev: {
       hash = "sha256-kFane5ze7VDiOzF7jdmXkr50XQsNvdb+a9HQtybEVE0=";
     };
     meta.homepage = "https://github.com/simrat39/rust-tools.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14466,6 +15577,7 @@ final: prev: {
       hash = "sha256-70kp644jOtJ4wguty/SUFX+YEsoxW12LGg3vZh7BdPY=";
     };
     meta.homepage = "https://github.com/rust-lang/rust.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14479,6 +15591,7 @@ final: prev: {
       hash = "sha256-HaAwc1MyYq4YpxgtnknaZ3VJfk65tGxkCm0zp6cs/0c=";
     };
     meta.homepage = "https://github.com/tris203/rzls.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14492,6 +15605,7 @@ final: prev: {
       hash = "sha256-xC7c35ShtElmO9CPnYDH1MDOzpK4yXJZFgybNW62fYY=";
     };
     meta.homepage = "https://github.com/hauleth/sad.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14505,6 +15619,7 @@ final: prev: {
       hash = "sha256-hImYKeuOhz1mjj8EkPXPCVn4gmMDvWb4rJp1lOhd6WQ=";
     };
     meta.homepage = "https://github.com/vmware-archive/salt-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14518,6 +15633,7 @@ final: prev: {
       hash = "sha256-ptAiiRT+eEPE08Erkjo7Y6tOaJ47+Hzrfbu+eBjtrmg=";
     };
     meta.homepage = "https://github.com/samodostal/image.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14531,6 +15647,7 @@ final: prev: {
       hash = "sha256-s6AaO2hO+7ha0G6lyOENdKZZrnYak2OHJSgc/jtLMuE=";
     };
     meta.homepage = "https://github.com/lewis6991/satellite.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14544,6 +15661,7 @@ final: prev: {
       hash = "sha256-NpucvX0HBCu779Uk6qwBnjEp2RP6djlk6+GL+kGTlgM=";
     };
     meta.homepage = "https://github.com/cenk1cenk2/schema-companion.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14557,6 +15675,7 @@ final: prev: {
       hash = "sha256-cqZF3b+DkOQUOSU502vGQx8RNzH4b97B9zqHO9v8IBI=";
     };
     meta.homepage = "https://github.com/davidgranstrom/scnvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14570,6 +15689,7 @@ final: prev: {
       hash = "sha256-HsXeGF1eSZ4wjvkzeIGmjBr0/tv3QIXT7cvbW8p+ESI=";
     };
     meta.homepage = "https://github.com/tiagovla/scope.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14583,6 +15703,7 @@ final: prev: {
       hash = "sha256-4eiGIhy/J7wZm++wMx4zAKp5qeDQCApwPSVm8P5w5O0=";
     };
     meta.homepage = "https://github.com/Root-lee/screensaver.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14596,6 +15717,7 @@ final: prev: {
       hash = "sha256-KrQndfxx0H9RRHFhAA2Rjp3D+kihkBl8CQLOllF6tnI=";
     };
     meta.homepage = "https://github.com/0xJohnnyboy/scretch.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "AGPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14609,6 +15731,7 @@ final: prev: {
       hash = "sha256-ilEpAvW6l8yJgl/VV673onqhXEqJ7fRnp4bG8yG+E8w=";
     };
     meta.homepage = "https://github.com/Xuyuanp/scrollbar.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14622,6 +15745,7 @@ final: prev: {
       hash = "sha256-8zPQtfGmH9jy5T6eO4+oFoXp+C0i1rMJX/52ImzoQ9k=";
     };
     meta.homepage = "https://github.com/cakebaker/scss-syntax.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14635,6 +15759,7 @@ final: prev: {
       hash = "sha256-wqqPgp2igjQ7Ztwm9L0UNeUpS4a80w/UdvU/DzynONg=";
     };
     meta.homepage = "https://github.com/mahyarmirrashed/search-and-replace.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14648,6 +15773,7 @@ final: prev: {
       hash = "sha256-XRuMV//Iyh5gNbfZ+tJGBzhd5s6XldOGL53UUzaP8Pk=";
     };
     meta.homepage = "https://github.com/VonHeikemen/searchbox.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14661,6 +15787,7 @@ final: prev: {
       hash = "sha256-Gu4UqLlBu7XRsnTn0Z3Toghm/Ux/ll8lH8tBN9UWDjM=";
     };
     meta.homepage = "https://github.com/RobertAudi/securemodelines/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14674,6 +15801,7 @@ final: prev: {
       hash = "sha256-1hmP0+5Iti6+uhc5x9KXpF6jV9hWf5rhebqOWKKxnL0=";
     };
     meta.homepage = "https://github.com/megaannum/self/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14687,6 +15815,7 @@ final: prev: {
       hash = "sha256-e1Ri0cXCZfYyhfuC6up8QMEWquHtgC00/Ki0bzwtJxE=";
     };
     meta.homepage = "https://github.com/jaxbot/semantic-highlight.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14700,6 +15829,7 @@ final: prev: {
       hash = "sha256-A/voYRhrihnA8GF03CCuEXhsqYTLwuSg2whM6OHMNmQ=";
     };
     meta.homepage = "https://github.com/numirias/semshi/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14713,6 +15843,7 @@ final: prev: {
       hash = "sha256-dPwFpT8O91uxnxJ9drKvou+quM4iFqFW9EyeAFdWNoU=";
     };
     meta.homepage = "https://github.com/junegunn/seoul256.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14726,6 +15857,7 @@ final: prev: {
       hash = "sha256-4KC3r5WPnxm5VUsAn+2w4HU9J/Ro8FabTE/643yYcc8=";
     };
     meta.homepage = "https://github.com/osyo-manga/shabadou.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14739,6 +15871,7 @@ final: prev: {
       hash = "sha256-mn/SBtk9YbYZRTJZ054IVsSVOlrry5gsHOXQEnd3b7M=";
     };
     meta.homepage = "https://github.com/nvzone/showkeys/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14752,6 +15885,7 @@ final: prev: {
       hash = "sha256-I1YuIXJHP7JfETwOer6B7QDLMZGG/X59zXopb4nPel4=";
     };
     meta.homepage = "https://github.com/folke/sidekick.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14766,6 +15900,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/AndrewRadev/sideways.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14779,6 +15914,7 @@ final: prev: {
       hash = "sha256-CFgUligbr2Z+gE5YofyCFcQ8fnwzaNOdQwm1QoPm4D4=";
     };
     meta.homepage = "https://github.com/skim-rs/skim.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14792,6 +15928,7 @@ final: prev: {
       hash = "sha256-fy1hV8s65TcQbe2hHVp0HVX70z7sk/xp3OeEBVUGxdI=";
     };
     meta.homepage = "https://github.com/mopp/sky-color-clock.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14805,6 +15942,7 @@ final: prev: {
       hash = "sha256-l5T09tuB/LJWWvBo+gywyd7qVmFomDcoxrJHOd3WSEM=";
     };
     meta.homepage = "https://github.com/kovisoft/slimv/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14818,19 +15956,21 @@ final: prev: {
       hash = "sha256-Twsq8R2/Q3ffHTE3KTyyR8tln2ksEulo+Q9xY26mYEg=";
     };
     meta.homepage = "https://github.com/danielfalk/smart-open.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   smart-splits-nvim = buildVimPlugin {
     pname = "smart-splits.nvim";
-    version = "2.1.0-unstable-2026-04-17";
+    version = "2.1.0-unstable-2026-04-24";
     src = fetchFromGitHub {
       owner = "mrjones2014";
       repo = "smart-splits.nvim";
-      rev = "78b9d3bd21fe479690ae5e08a1bf3602698466d8";
-      hash = "sha256-J7uzQQQhKa6NyRPJ74D35RAy5Uju2swkZZda7m2GsAU=";
+      rev = "033a1ff747652dfa27bfbe90e0844b5cb59a741f";
+      hash = "sha256-PKDPl+M+jARmlDpAhjPsvG5clsbz6L8UaoS0mtulkv8=";
     };
     meta.homepage = "https://github.com/mrjones2014/smart-splits.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14844,6 +15984,7 @@ final: prev: {
       hash = "sha256-QAb0O/ZwTVogRyTK8+Y4ORaN6nVaeYepKgfSCF/fIPU=";
     };
     meta.homepage = "https://github.com/m4xshen/smartcolumn.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14857,6 +15998,7 @@ final: prev: {
       hash = "sha256-kmqjBNFjoX51gap6//iQEgcwAP3ved0bY285fj633t8=";
     };
     meta.homepage = "https://github.com/gorkunov/smartpairs.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14870,6 +16012,7 @@ final: prev: {
       hash = "sha256-DRN9YMkf1Ub5AhcBAFDn5AIFEdOscn+J0z1GCqXOk3c=";
     };
     meta.homepage = "https://github.com/ibhagwan/smartyank.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14883,6 +16026,7 @@ final: prev: {
       hash = "sha256-hL0lXzkFxR7qiXzStrmY+gR+ql/A6PR8eCV310gEaGs=";
     };
     meta.homepage = "https://github.com/sphamba/smear-cursor.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14896,6 +16040,7 @@ final: prev: {
       hash = "sha256-7lDH1JlTM+H/LWjMlAQPNY6A+xmS/cp+wChy4buGYIU=";
     };
     meta.homepage = "https://github.com/folke/snacks.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14909,6 +16054,7 @@ final: prev: {
       hash = "sha256-YUu5PPxXZIxrBxdIIc/XiCzWgbZwcHLRPHRLhZZgZIM=";
     };
     meta.homepage = "https://github.com/camspiers/snap/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14922,6 +16068,7 @@ final: prev: {
       hash = "sha256-dgAlf30eP8a4MP41lk3RLgSo1dbXQx5C8qbXpg1F2+o=";
     };
     meta.homepage = "https://github.com/leath-dub/snipe.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14935,6 +16082,7 @@ final: prev: {
       hash = "sha256-APFz6zknNpBDLI1nM5B4BZEm40EDvhY5nRB6W9rpurk=";
     };
     meta.homepage = "https://github.com/norcalli/snippets.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14948,6 +16096,7 @@ final: prev: {
       hash = "sha256-ChsaxWhv3OBWBYQqzC9phXBgzLevOKG3XJxh4xrOraA=";
     };
     meta.homepage = "https://github.com/shaunsingh/solarized.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14961,6 +16110,7 @@ final: prev: {
       hash = "sha256-b8gZM9/HFi4q+mWpEijO8fCBuu1eslGSNPgZOyjXMmc=";
     };
     meta.homepage = "https://github.com/craftzdog/solarized-osaka.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14973,6 +16123,7 @@ final: prev: {
       hash = "sha256-71emILbp291AZmh9Rc0S92mbkcZ88zjCvPTaumEM7Qg=";
     };
     meta.homepage = "https://gitlab.com/schrieveslaach/sonarlint.nvim";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -14986,6 +16137,7 @@ final: prev: {
       hash = "sha256-GxXnfw+iKvcunFn+gM5zcknmc6KD5uDfbZEgDQ9bceY=";
     };
     meta.homepage = "https://github.com/iamkarasik/sonarqube.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14999,6 +16151,7 @@ final: prev: {
       hash = "sha256-dNOL6aUro8SlhbMWPFY9tIF4C1HYNJo70f9zX3ajbPc=";
     };
     meta.homepage = "https://github.com/sainnhe/sonokai/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15012,6 +16165,7 @@ final: prev: {
       hash = "sha256-ZCMevcK3lqz8pXsozd4p0bbv1DpASBOtQD0ikDTRZtc=";
     };
     meta.homepage = "https://github.com/sQVe/sort.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15025,6 +16179,7 @@ final: prev: {
       hash = "sha256-oIx3rqOb5KCpgNYmc9HRf+zFGKiuuRASEORTqqy3j70=";
     };
     meta.homepage = "https://github.com/chikatoike/sourcemap.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15038,6 +16193,7 @@ final: prev: {
       hash = "sha256-FPF9M//hxICKBT7c7KIxdGb26j42p/x4KfPQB/fOCEQ=";
     };
     meta.homepage = "https://github.com/liuchengxu/space-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15051,6 +16207,7 @@ final: prev: {
       hash = "sha256-XcS6/xg5A6cX8AOVK7BvSeX1a7lJ7w3MFvJ0TvAxZKg=";
     };
     meta.homepage = "https://github.com/FireIsGood/spaceman.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15064,6 +16221,7 @@ final: prev: {
       hash = "sha256-rXBkSrusTGH5LUFu/vZwUt4yNCl7zI0ZB/urpYuJ5u4=";
     };
     meta.homepage = "https://github.com/cxwx/specs.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15077,6 +16235,7 @@ final: prev: {
       hash = "sha256-GvNrHog/A/Mo9U97uLE/tOF29h82bc4Lnvyd8NwLntQ=";
     };
     meta.homepage = "https://github.com/lewis6991/spellsitter.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15090,6 +16249,7 @@ final: prev: {
       hash = "sha256-rLsiBIifNC8zwUNsAJ8AeTlDS9IS/y3XEKfF5FZ2hZI=";
     };
     meta.homepage = "https://github.com/ravibrock/spellwarn.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15103,6 +16263,7 @@ final: prev: {
       hash = "sha256-Gwfx+ArykfD6MnYYswxzkULBUHCLFFEBAgK6ID/Dvu8=";
     };
     meta.homepage = "https://github.com/stsewd/sphinx.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15116,6 +16277,7 @@ final: prev: {
       hash = "sha256-a9fyf5wsajCG84+aHsCnhNpf5v20ZXEoFgdxA0V+AS4=";
     };
     meta.homepage = "https://github.com/sjl/splice.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15129,6 +16291,7 @@ final: prev: {
       hash = "sha256-a8ptV5i1eUIN5pcjl6HcZAdrCtIgctn906ahHPCqeYs=";
     };
     meta.homepage = "https://github.com/vimlab/split-term.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15143,6 +16306,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/AndrewRadev/splitjoin.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15156,6 +16320,7 @@ final: prev: {
       hash = "sha256-JkOWlqyVLcwW7hxOGj5jb8BpUge3bUHbSV0o5qOYW1c=";
     };
     meta.homepage = "https://github.com/JavaHello/spring-boot.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15169,6 +16334,7 @@ final: prev: {
       hash = "sha256-u6Mo+3hg3miqR4EmsoGZhajxiIk24+y5N+YdNW36/JQ=";
     };
     meta.homepage = "https://github.com/kkharji/sqlite.lua/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15182,6 +16348,7 @@ final: prev: {
       hash = "sha256-3Flf84WAZkzvWNPXKfB/Fruk0EWQrf8JrZGBo4Fqbig=";
     };
     meta.homepage = "https://github.com/srcery-colors/srcery-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15195,6 +16362,7 @@ final: prev: {
       hash = "sha256-6I8AFo6Oj7h1RYBlY6Iu8oLPLt3qPf5tTbsgUnCwIa4=";
     };
     meta.homepage = "https://github.com/chr4/sslsecure.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15208,6 +16376,7 @@ final: prev: {
       hash = "sha256-nghSU9Lk5f6/yflhwudylgUSxjJnJNHmHxpPu8rZ1C8=";
     };
     meta.homepage = "https://github.com/cshuaimin/ssr.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15221,6 +16390,7 @@ final: prev: {
       hash = "sha256-ATjmQRZ3TjDSgz/IrHfFekMmcS+DUt2o3sregyHMcX8=";
     };
     meta.homepage = "https://github.com/luukvbaal/stabilize.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15234,6 +16404,7 @@ final: prev: {
       hash = "sha256-HkuVio/F8HOb6k9N8LkYdQ1vheuyjrqP25RforoWZSk=";
     };
     meta.homepage = "https://github.com/tamton-aquib/staline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15247,6 +16418,7 @@ final: prev: {
       hash = "sha256-wIkRcJsEVyH/i2YSLQLl0uEY6iAUuZE7Hir21Ij9ejc=";
     };
     meta.homepage = "https://github.com/eigenfoo/stan-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15260,6 +16432,7 @@ final: prev: {
       hash = "sha256-1OeQdX97wldg6FX+aPOAMBvF9awy7jvdjenhwPfeW7w=";
     };
     meta.homepage = "https://github.com/josegamez82/starrynight/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15273,6 +16446,7 @@ final: prev: {
       hash = "sha256-+a5AFO4RadBTs3W+rSVukBV9VOhWfpp+xZJ8yHF7PsQ=";
     };
     meta.homepage = "https://github.com/darfink/starsearch.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15286,6 +16460,7 @@ final: prev: {
       hash = "sha256-AXJv5l5Y5ihvV4byNJHDLsomvNVLnyYoJgK6XFm3oT4=";
     };
     meta.homepage = "https://github.com/max397574/startup.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15299,6 +16474,7 @@ final: prev: {
       hash = "sha256-nFEQRJ5V+0RskJoAVRPAe2yrkORMTg9Jm13ClTmTSgk=";
     };
     meta.homepage = "https://github.com/luukvbaal/statuscol.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15312,6 +16488,7 @@ final: prev: {
       hash = "sha256-TIiv0pwBkwn7n1JFVqgcruKZ69OdxdEId4ca+M5hZ9k=";
     };
     meta.homepage = "https://github.com/arnamak/stay-centered.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15325,6 +16502,7 @@ final: prev: {
       hash = "sha256-sBtreV9MxX9fWgGwVplL9e3klWaaMSsTb+QZMshlaAc=";
     };
     meta.homepage = "https://github.com/duqcyxwd/stringbreaker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15338,6 +16516,7 @@ final: prev: {
       hash = "sha256-aEeHKyRXf7U28N0itLd2/uNOcqZeDAyeg+saryyfYJk=";
     };
     meta.homepage = "https://github.com/folke/styler.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15351,6 +16530,7 @@ final: prev: {
       hash = "sha256-I+3BWtvBK/cewyR5C28bVtt0gS9Wk3n1dbN64oSBfiU=";
     };
     meta.homepage = "https://github.com/teto/stylish.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15364,6 +16544,7 @@ final: prev: {
       hash = "sha256-t3wgyUtHab0erJkA7kUOGvbyHTzMmWlNE5WNtjDZL0g=";
     };
     meta.homepage = "https://github.com/gbprod/substitute.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15377,6 +16558,7 @@ final: prev: {
       hash = "sha256-mCG9mgrxkIfiVL5+9pi6K+mpzfwqLIhzRa3j7wzRgW8=";
     };
     meta.homepage = "https://github.com/kvrohit/substrata.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15390,6 +16572,7 @@ final: prev: {
       hash = "sha256-1z3WKIiikQqoweReUyK5O8MWSRN5y95qcxM6qzlKMME=";
     };
     meta.homepage = "https://github.com/supermaven-inc/supermaven-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15403,6 +16586,7 @@ final: prev: {
       hash = "sha256-tCesXoIMni0NHvCSlM7BWbQo8gVRbMBQm6fTajgQwEs=";
     };
     meta.homepage = "https://github.com/ervandew/supertab/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15416,6 +16600,7 @@ final: prev: {
       hash = "sha256-3A5KxgG54Gnp/anPYn+hkYzI4y5mV8qwu/MB/lIaWy4=";
     };
     meta.homepage = "https://github.com/ur4ltz/surround.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15429,6 +16614,7 @@ final: prev: {
       hash = "sha256-dCb6TXnnX4VAdtThntFJ4jijLpzf+HJoOXDXt/6qLZY=";
     };
     meta.homepage = "https://github.com/peterbjorgensen/sved/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15442,6 +16628,7 @@ final: prev: {
       hash = "sha256-/ghp3uLfQbv7sNnSeRk6wkV3XRR/ZsGm+xd8inrOG78=";
     };
     meta.homepage = "https://github.com/jamespeapen/swayconfig.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15455,6 +16642,7 @@ final: prev: {
       hash = "sha256-d0eeRitAOprm4dENV8PCYFtvSXSIzQQEImnSVGt8IVI=";
     };
     meta.homepage = "https://github.com/keith/swift.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15469,6 +16657,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/AndrewRadev/switch.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15482,6 +16671,7 @@ final: prev: {
       hash = "sha256-lZvtGgp4Pzl5VWfTqjpvAHXSQ8i781GMupolDpUR3l0=";
     };
     meta.homepage = "https://github.com/neovim-idea/switcher-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15495,6 +16685,7 @@ final: prev: {
       hash = "sha256-3oIpPETGq+EWOfAGT+5mZBPugntwSvoqc+NwlEyd2ts=";
     };
     meta.homepage = "https://github.com/Wansmer/symbol-usage.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15508,6 +16699,7 @@ final: prev: {
       hash = "sha256-rX/JTsiUMBwixU/8y31HY5zjFosFDreVAPgLKNz7L8s=";
     };
     meta.homepage = "https://github.com/simrat39/symbols-outline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15521,6 +16713,7 @@ final: prev: {
       hash = "sha256-oFhR0R+94zB/xgw42vP+GMRIf6GcckRm5sSp4/9XTXw=";
     };
     meta.homepage = "https://github.com/vim-syntastic/syntastic/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15534,6 +16727,7 @@ final: prev: {
       hash = "sha256-YAnw/FpSLqKjvnug4bdvbGHpYWwtDKuh/DmxhK+PSu0=";
     };
     meta.homepage = "https://github.com/nanozuki/tabby.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15547,6 +16741,7 @@ final: prev: {
       hash = "sha256-cCOlKn1n8um35kvzbk9UGZt+l8uFANse3yiNsITOkU0=";
     };
     meta.homepage = "https://github.com/kdheepak/tabline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15560,6 +16755,7 @@ final: prev: {
       hash = "sha256-uEUBsPxc1Ru7WPEvTCs6fJewP+KnZEa1aiwRG9T3M18=";
     };
     meta.homepage = "https://github.com/vim-scripts/tabmerge/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15574,6 +16770,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/codota/tabnine-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15587,6 +16784,7 @@ final: prev: {
       hash = "sha256-BtxyORvocIrxMmcZkGZPAfaYsM3cl8xjhWt7/eJUMGc=";
     };
     meta.homepage = "https://github.com/gcmt/taboo.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15600,6 +16798,7 @@ final: prev: {
       hash = "sha256-5T/nefCPCR2K1vySTG0vzh5+6weHinBLahPBL37+VtY=";
     };
     meta.homepage = "https://github.com/abecodes/tabout.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15613,6 +16812,7 @@ final: prev: {
       hash = "sha256-DgGqiYzpTOFiqLtliaInO90W0uIZp16vuMFzOP+l3/w=";
     };
     meta.homepage = "https://github.com/Shougo/tabpagebuffer.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15626,6 +16826,7 @@ final: prev: {
       hash = "sha256-qmDpdg3Tl3W4JSovRb4ODlrKMjRL5CaVI05YBn0Q0LI=";
     };
     meta.homepage = "https://github.com/godlygeek/tabular/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15639,6 +16840,7 @@ final: prev: {
       hash = "sha256-FiIJL6L3rYmCbvlNQnKnry0443mDzgTI9RxHjR5o2d0=";
     };
     meta.homepage = "https://github.com/AndrewRadev/tagalong.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15652,6 +16854,7 @@ final: prev: {
       hash = "sha256-2dVhKgPonsgTwxrQU8quA1zhWd4SIwNjdHnL89B+eIo=";
     };
     meta.homepage = "https://github.com/preservim/tagbar/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15665,6 +16868,7 @@ final: prev: {
       hash = "sha256-7cc0i4Z/kBdE7rBsdswd6l9t1V+eHX6it5+Ow9wTSh0=";
     };
     meta.homepage = "https://github.com/vim-scripts/taglist.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15678,6 +16882,7 @@ final: prev: {
       hash = "sha256-K9Jkd+d/XdukCDdEYvlNFEuCpFQIuVqhOGkWE9ivXyI=";
     };
     meta.homepage = "https://github.com/luckasRanarison/tailwind-tools.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15691,6 +16896,7 @@ final: prev: {
       hash = "sha256-2eUr4rB8gpax0xJ8U4O2O93UXUxF+HZV6Co8LwPZ3JE=";
     };
     meta.homepage = "https://github.com/themaxmarchuk/tailwindcss-colors.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15704,6 +16910,7 @@ final: prev: {
       hash = "sha256-VgVvcnBaWnZ4V5INtIn3ecqffo3EQvzUmxzg05WaVH4=";
     };
     meta.homepage = "https://github.com/fredehoey/tardis.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15717,6 +16924,7 @@ final: prev: {
       hash = "sha256-ThfL4J/r8Mr9WemSUwIea8gsolSX9gabJ6T0XYgAaE4=";
     };
     meta.homepage = "https://github.com/wellle/targets.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15730,6 +16938,7 @@ final: prev: {
       hash = "sha256-AXHdlfZgQYwHg18Utb5Q8zqqqr5DMa1ejOfansOLhAU=";
     };
     meta.homepage = "https://github.com/tbabej/taskwiki/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15743,6 +16952,7 @@ final: prev: {
       hash = "sha256-D8B16ejQ2csahOa49RCENCA1wRY5N0RGFnqxPjbhNR4=";
     };
     meta.homepage = "https://github.com/tomtom/tcomment_vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15757,6 +16967,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/nvim-telekasten/telekasten.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15770,6 +16981,7 @@ final: prev: {
       hash = "sha256-WPzFG8gdf0XzxsFkxgseOy6GQBu9C2KDOXeasdct0F8=";
     };
     meta.homepage = "https://github.com/ray-x/telescope-ast-grep.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15783,6 +16995,7 @@ final: prev: {
       hash = "sha256-50HiNqIeaBz1koWwNpLSa8vd+JTVALbafcufVn+S8hw=";
     };
     meta.homepage = "https://github.com/GustavoKatel/telescope-asynctasks.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15796,6 +17009,7 @@ final: prev: {
       hash = "sha256-h5Hqn3Zv/NHZ8o4g8NtPQFWIMzC54MrMg3tDOUXxkPI=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-cheat.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15809,6 +17023,7 @@ final: prev: {
       hash = "sha256-rjxIzYlUAjy15PQm3JLhUCt8eE8dxZIXCf6xAxakols=";
     };
     meta.homepage = "https://github.com/fannheyward/telescope-coc.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15822,6 +17037,7 @@ final: prev: {
       hash = "sha256-MRs8s4dfS59V0CCu7CHIqrz35RV4OC1X69lxPLTa+98=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-dap.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15835,6 +17051,7 @@ final: prev: {
       hash = "sha256-8V3MTporANLtZkH0RuLviWlgMmR6fay0WmZ3ZOQzpKI=";
     };
     meta.homepage = "https://github.com/xiyaowong/telescope-emoji.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15848,6 +17065,7 @@ final: prev: {
       hash = "sha256-FlJ7w5Ywwq03E0oYdnFJFb+MMUMQMa+5QhDMy2O9tGQ=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-file-browser.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15861,6 +17079,7 @@ final: prev: {
       hash = "sha256-iTSDtPxjNWPl5kMw1KSkbKtx2fIJJSs7P/NJkkkgd8g=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-frecency.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15874,6 +17093,7 @@ final: prev: {
       hash = "sha256-ChEM4jJonAE4qXd/dgTu2mdlpNBj5rEdpA8TgR38oRM=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzf-native.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15887,6 +17107,7 @@ final: prev: {
       hash = "sha256-pyir3SyJmUsYhjY7nRj67mbd0M+Z7t+TqSzE8zqOs7A=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzf-writer.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15901,6 +17122,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzy-native.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15914,6 +17136,7 @@ final: prev: {
       hash = "sha256-W4rQdKEv4ydhVE1PK/R26eKQTKlqO7zVjY6EfQ/jslg=";
     };
     meta.homepage = "https://github.com/Snikimonkd/telescope-git-conflicts.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15927,6 +17150,7 @@ final: prev: {
       hash = "sha256-Neojvrrjq6S+s1ZKW389N3SK4NvInkrIUVcDX8Mj7I8=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-github.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15940,6 +17164,7 @@ final: prev: {
       hash = "sha256-6H4afMXtaZn066oBq3z8vvR7WH7WhqZkvziyOXlsNVg=";
     };
     meta.homepage = "https://github.com/alduraibi/telescope-glyph.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15953,6 +17178,7 @@ final: prev: {
       hash = "sha256-Ck7xM+m8sRkkviXdXpeDYrxr3MNpavkW4/UCih0Ohc8=";
     };
     meta.homepage = "https://github.com/jmacadie/telescope-hierarchy.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15966,6 +17192,7 @@ final: prev: {
       hash = "sha256-kGGVegympVG4lzJ0zdFjsjiioy0gSQbJuENjll3jNlQ=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-live-grep-args.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -15979,6 +17206,7 @@ final: prev: {
       hash = "sha256-AgwzHr2UmwwqzlXlmQPLxdf6+EX6frvA2FJ/aJKSN3w=";
     };
     meta.homepage = "https://github.com/gbrlsnchs/telescope-lsp-handlers.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -15992,6 +17220,7 @@ final: prev: {
       hash = "sha256-+mIQVIoreE+goSBtMucgiEPldI01JDRdCKWH/6mzey8=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-media-files.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16005,6 +17234,7 @@ final: prev: {
       hash = "sha256-RyrfT/uQmuer+WN9Q58InTkuFJO+VQvVsp0ZRpRp7PQ=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-project.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16018,6 +17248,7 @@ final: prev: {
       hash = "sha256-aDzqVHnHIAiXgVSsgq3WIgzDVYKabUThKuUj3aJ6T3Y=";
     };
     meta.homepage = "https://github.com/Marskey/telescope-sg/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16031,6 +17262,7 @@ final: prev: {
       hash = "sha256-riBl0vSkRtM9Gtw/FNSKodSmqgGUpDnH7d5w+uU4ReQ=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-smart-history.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16044,6 +17276,7 @@ final: prev: {
       hash = "sha256-zYON9z3ELwjfqZ11LD6E7M+bymuBHxrSjYXhsCPEwR8=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-symbols.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16057,6 +17290,7 @@ final: prev: {
       hash = "sha256-YRhNmmG4gx9Ht8JwjQfbTjJyTHEuZmtP6lqnhOsk8bE=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-ui-select.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16070,6 +17304,7 @@ final: prev: {
       hash = "sha256-dWdKntDINjfCxhZ169MW5grayRNPfUd9e/qXBQ7z3do=";
     };
     meta.homepage = "https://github.com/fhill2/telescope-ultisnips.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16083,6 +17318,7 @@ final: prev: {
       hash = "sha256-KKCBr5l6U2OoJ/rVkMP7pVeO5M6phx2MOrxc5yIn6L4=";
     };
     meta.homepage = "https://github.com/debugloop/telescope-undo.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16096,6 +17332,7 @@ final: prev: {
       hash = "sha256-5ES1vENp7Sx0N8s4r/Ci4dkdqOhPkV7drimM8NY8dlY=";
     };
     meta.homepage = "https://github.com/tom-anders/telescope-vim-bookmarks.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16109,6 +17346,7 @@ final: prev: {
       hash = "sha256-w+hcCgh5DP5xC4EQvvrba7JuAE3c72SOk4Oc3yNvbMc=";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-z.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16123,6 +17361,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/natecraddock/telescope-zf-native.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16136,6 +17375,7 @@ final: prev: {
       hash = "sha256-LGfyAIbAAAF3q0NpMZx1AIgHLvk6ecpv7RyiL1q8Lxs=";
     };
     meta.homepage = "https://github.com/jvgrootveld/telescope-zoxide/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16149,6 +17389,7 @@ final: prev: {
       hash = "sha256-Z7GSENbICkM0q1ojZXOxFEQiytiCrXCiUE/18b20b1Q=";
     };
     meta.homepage = "https://github.com/luc-tielen/telescope_hoogle/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16162,6 +17403,7 @@ final: prev: {
       hash = "sha256-7jyUPqm2N0wpnAbj6SlJmlfwg5nsmoK/63yXjPASMkc=";
     };
     meta.homepage = "https://github.com/joerdav/templ.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16175,6 +17417,7 @@ final: prev: {
       hash = "sha256-b2eAKh5cS/uDuma8wCoMr+Ash+D67SwgRyjESAC3hHI=";
     };
     meta.homepage = "https://github.com/axelvc/template-string.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16188,6 +17431,7 @@ final: prev: {
       hash = "sha256-4WFQQeDPwSv2YOf56eViHNR01zfxly2U4o8PoYiG5oQ=";
     };
     meta.homepage = "https://github.com/jacoborus/tender.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16201,6 +17445,7 @@ final: prev: {
       hash = "sha256-rM4n+l1QfulLI/m2wNqM2wq+c9o0Y+jKDN2TaEh8BTw=";
     };
     meta.homepage = "https://github.com/chomosuke/term-edit.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16214,6 +17459,7 @@ final: prev: {
       hash = "sha256-L+BNITHwcPVJBzeIDWl4+S+jQPnmLrwQ6UbimTfMZfk=";
     };
     meta.homepage = "https://github.com/rebelot/terminal.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16227,6 +17473,7 @@ final: prev: {
       hash = "sha256-eSOj397pGN9nr5KXHaAyAC7boQMs/9455MGy//X+Ei4=";
     };
     meta.homepage = "https://github.com/wincent/terminus/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16240,6 +17487,7 @@ final: prev: {
       hash = "sha256-zGP9D7ZxvB35iUxkfd0XLaiuxrFc3nTwzJkkd1uywSg=";
     };
     meta.homepage = "https://github.com/oberblastmeister/termwrapper.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16253,6 +17501,7 @@ final: prev: {
       hash = "sha256-jTXoyfMbr+HSzovf1yJXYyMoIBsOIgUBY9M4TzEt8W4=";
     };
     meta.homepage = "https://github.com/ternjs/tern_for_vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16266,6 +17515,7 @@ final: prev: {
       hash = "sha256-Hr1HXivDgigKV/0jNQsA4ZvwEu/O1uRnTw61PrvD2BY=";
     };
     meta.homepage = "https://github.com/KeitaNakamura/tex-conceal.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16279,6 +17529,7 @@ final: prev: {
       hash = "sha256-ZLPxy1JNTfjLerSVDJAxmqqQUWhm+SuVdDUcjRH8lEU=";
     };
     meta.homepage = "https://github.com/let-def/texpresso.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16292,6 +17543,7 @@ final: prev: {
       hash = "sha256-2IMufSMy9JW50VzZ3SgOtp8kYs81ANwV0eP0ZH3rTFo=";
     };
     meta.homepage = "https://github.com/johmsalas/text-case.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16305,6 +17557,7 @@ final: prev: {
       hash = "sha256-nRElktIR/KcBUBQIoC3QV7B6BtpMby8eGVC8yd/FKXM=";
     };
     meta.homepage = "https://github.com/jsongerber/thanks.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16318,6 +17571,7 @@ final: prev: {
       hash = "sha256-89L6AQSBm3AaHymcjQ3/Ka8BbS9zWrC9mq4cD7DAx3w=";
     };
     meta.homepage = "https://github.com/vhsconnect/themed-tabs.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16331,6 +17585,7 @@ final: prev: {
       hash = "sha256-1I1fr4Hq6547pyj1yUq9yoYjnc/FO0z+x0lrXkwaLXM=";
     };
     meta.homepage = "https://github.com/zaldih/themery.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16344,6 +17599,7 @@ final: prev: {
       hash = "sha256-syz2cMin29eTTdqF9z3gO4EEvHFuJmgk2xo4xIq283Y=";
     };
     meta.homepage = "https://github.com/ron89/thesaurus_query.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16357,6 +17613,7 @@ final: prev: {
       hash = "sha256-3wYyN8mlqnaIas5+kOHNSupuOB/9VN72mQntxetofSA=";
     };
     meta.homepage = "https://github.com/itchyny/thumbnail.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16370,6 +17627,7 @@ final: prev: {
       hash = "sha256-XPavAumJdwG0ocrRKXFAt79VvaxGh+Zd2uHuAfBidkk=";
     };
     meta.homepage = "https://github.com/nvzone/timerly/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16383,6 +17641,7 @@ final: prev: {
       hash = "sha256-FzEMhfvgIE7tlX1LzRQ7ZuYF9aQK6yoHuqT28+vSerc=";
     };
     meta.homepage = "https://github.com/vim-scripts/timestamp.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16396,32 +17655,35 @@ final: prev: {
       hash = "sha256-gmtFb/FirvTtWeTpalabWmt5kQiH83rE7gph3VcKcss=";
     };
     meta.homepage = "https://github.com/levouh/tint.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   tinted-nvim = buildVimPlugin {
     pname = "tinted-nvim";
-    version = "1.0.0-unstable-2026-04-19";
+    version = "1.0.0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "tinted-theming";
       repo = "tinted-nvim";
-      rev = "13502cdf2cb854b7bb25473241aeb76458523e6f";
-      hash = "sha256-OSbwHoC/5Xieqqm61h4E32NJz+zNWcQBM/qotQgXA6s=";
+      rev = "5039445d5cea8ec7d21b86b9d84336ad0b25cdf6";
+      hash = "sha256-5Mkz6i8MvJR+18NeRBHm7ZGYg9Hs1rRQJiHGTircE/0=";
     };
     meta.homepage = "https://github.com/tinted-theming/tinted-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   tinted-vim = buildVimPlugin {
     pname = "tinted-vim";
-    version = "01-unstable-2026-04-19";
+    version = "01-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "tinted-theming";
       repo = "tinted-vim";
-      rev = "3b6128ba023812420defc3e870714e2131a564dd";
-      hash = "sha256-R5VMt5t2lZAwkArkdr6seQc5lL/gmYYeHe/fIfODo0s=";
+      rev = "122dba414a17b87af85aa981c580385b26af5e81";
+      hash = "sha256-HPtPmwY+S2d+wYoae1/WufB02v2kG6fldcGaOQPa2ZI=";
     };
     meta.homepage = "https://github.com/tinted-theming/tinted-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16435,6 +17697,7 @@ final: prev: {
       hash = "sha256-tD1DrY4mpPf5Qo9jZEBqSxOOqzk2Ssl1srH4mu+cN5g=";
     };
     meta.homepage = "https://github.com/rachartier/tiny-cmdline.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16448,6 +17711,7 @@ final: prev: {
       hash = "sha256-zv5pccxNV/D3GFTGov48CSDC9nuGZURSWd0+tQRN+to=";
     };
     meta.homepage = "https://github.com/rachartier/tiny-devicons-auto-colors.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16461,6 +17725,7 @@ final: prev: {
       hash = "sha256-DccGp/CzBxLszWVqfZLl/NRm82FKsLQ8Z7j286PB2i8=";
     };
     meta.homepage = "https://github.com/rachartier/tiny-glimmer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16474,6 +17739,7 @@ final: prev: {
       hash = "sha256-LpZuRNGSK8AHLTIPIWoQlGot89qubFRL/RZ+EMs4bnQ=";
     };
     meta.homepage = "https://github.com/rachartier/tiny-inline-diagnostic.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16487,6 +17753,7 @@ final: prev: {
       hash = "sha256-HKCSJAhBJD8MsFAkn0lVy4135WkiBVJycWEKQFa1Gvg=";
     };
     meta.homepage = "https://github.com/tomtom/tinykeymap_vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16500,6 +17767,7 @@ final: prev: {
       hash = "sha256-J7jfUlY4GkEYEVqWM4xqQItZCs35MwGyFJ0FTIO1I5M=";
     };
     meta.homepage = "https://github.com/tomtom/tlib_vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16513,6 +17781,7 @@ final: prev: {
       hash = "sha256-nUxK/ng7Z7ipWqOEPZDvW/2Waf7prhJa1gVsGTACEC8=";
     };
     meta.homepage = "https://github.com/wellle/tmux-complete.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16526,6 +17795,7 @@ final: prev: {
       hash = "sha256-dKarwc0NByKV8/rMHnHqwiRTgeiXAPGsviFBP+bOaXI=";
     };
     meta.homepage = "https://github.com/aserowy/tmux.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16539,6 +17809,7 @@ final: prev: {
       hash = "sha256-o+6E0v9saWw4EP4o5beuvdKfg7oMXloTuDqpoOGTQj8=";
     };
     meta.homepage = "https://github.com/edkolev/tmuxline.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16552,6 +17823,7 @@ final: prev: {
       hash = "sha256-VGeIRfwQsHgSO89Pmn6yIP9na1F6mmYZx0HDLe9IKCQ=";
     };
     meta.homepage = "https://github.com/folke/todo-comments.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16566,6 +17838,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/freitass/todo.txt-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16579,6 +17852,7 @@ final: prev: {
       hash = "sha256-fytbX+L12TK45YKFU9K+iFJcDrwboKabihc2LtX29J4=";
     };
     meta.homepage = "https://github.com/akinsho/toggleterm.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16592,6 +17866,7 @@ final: prev: {
       hash = "sha256-THvvevUwK3p/aZW+FI2RNnduqWBcmWF5tueYwEY43FI=";
     };
     meta.homepage = "https://github.com/tiagovla/tokyodark.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16605,6 +17880,7 @@ final: prev: {
       hash = "sha256-a9iRWue7DB7s/wNdxqqB51Jya5P9X6sDftqhdmKggU0=";
     };
     meta.homepage = "https://github.com/folke/tokyonight.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16618,6 +17894,7 @@ final: prev: {
       hash = "sha256-0ypbs+7HZ5AOmQ0a4PjT888AwtKjur9dUOwdXi+LH4U=";
     };
     meta.homepage = "https://github.com/markonm/traces.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16632,6 +17909,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/LeonHeidelbach/trailblazer.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16645,6 +17923,7 @@ final: prev: {
       hash = "sha256-IQlx0PlcR1XZVZKG5cP5M8Gx6R0nC4G3+t/kVvtofYI=";
     };
     meta.homepage = "https://github.com/tjdevries/train.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16658,6 +17937,7 @@ final: prev: {
       hash = "sha256-GlN7/+TmXld2UVPN2rDP7nKqbnswiezmGXn+uGK5I5c=";
     };
     meta.homepage = "https://github.com/xiyaowong/transparent.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16671,6 +17951,7 @@ final: prev: {
       hash = "sha256-y6X7TvWgPqP6S0DTkx53eMhS0veUQwKGVcr8y+FPgSY=";
     };
     meta.homepage = "https://github.com/MeanderingProgrammer/treesitter-modules.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16684,19 +17965,21 @@ final: prev: {
       hash = "sha256-qtfZ+wc5oWiuomvzD3SWUvYr6/z2wp+kZeMjKELJHog=";
     };
     meta.homepage = "https://github.com/Wansmer/treesj/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   treewalker-nvim = buildVimPlugin {
     pname = "treewalker.nvim";
-    version = "0-unstable-2026-04-10";
+    version = "0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "aaronik";
       repo = "treewalker.nvim";
-      rev = "6fbceceb8966620da8970b727b6daa358b982805";
-      hash = "sha256-ks5/R4hNYmPRdpi4W19ZWmWyCgj72bjpaaxSsmHQNkc=";
+      rev = "3680d19fc275f275352e9a3c05f3ec5079dfc0a7";
+      hash = "sha256-envD+jTgIOMrIcmX8a1cSl01YotsbZPobTadavvnK2Q=";
     };
     meta.homepage = "https://github.com/aaronik/treewalker.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16710,6 +17993,7 @@ final: prev: {
       hash = "sha256-Xg+kYYTKO7TZiPF3w737S9Fz25iun2gKdf/w39anl8A=";
     };
     meta.homepage = "https://github.com/tremor-rs/tremor-vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16723,6 +18007,7 @@ final: prev: {
       hash = "sha256-h4dgbcOY2ji+TeX0jlMohDe2oL5paogl7Tt6lZG9i7M=";
     };
     meta.homepage = "https://github.com/cappyzawa/trim.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16737,6 +18022,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/simonmclean/triptych.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16750,6 +18036,7 @@ final: prev: {
       hash = "sha256-6U/KWjvRMxWIxcsI2xNU/ltfgkaFG4E3BdzC7brK/DI=";
     };
     meta.homepage = "https://github.com/folke/trouble.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16763,6 +18050,7 @@ final: prev: {
       hash = "sha256-euaxTWS98i14wvuKrFvdCRigsKqrSUwZpMEmYtUBBss=";
     };
     meta.homepage = "https://github.com/Pocco81/true-zen.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16776,6 +18064,7 @@ final: prev: {
       hash = "sha256-1NoBH/FnAiuLuRhY+crX24Z6rt8NibKfUN/C//2Tff8=";
     };
     meta.homepage = "https://github.com/tesaguri/trust.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16789,6 +18078,7 @@ final: prev: {
       hash = "sha256-l/9aw6j2955MRrhOUneH6wU2/a46FAyzDQSyRzlhYOI=";
     };
     meta.homepage = "https://github.com/tronikelis/ts-autotag.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16802,6 +18092,7 @@ final: prev: {
       hash = "sha256-ORK3XpHANaqvp1bfMG2GJmAiaOsLoGW82ebL/FJtKaA=";
     };
     meta.homepage = "https://github.com/folke/ts-comments.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16815,6 +18106,7 @@ final: prev: {
       hash = "sha256-W48Jfa750jW3mB7ObDVdZXDaZDfbbA46cgMPNkPR6jg=";
     };
     meta.homepage = "https://github.com/dmmulroy/tsc.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16828,6 +18120,7 @@ final: prev: {
       hash = "sha256-WpHjAscUazGjVUzWlUrhxozpgi3MKAg/So5xBapiHhE=";
     };
     meta.homepage = "https://github.com/jgdavey/tslime.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16841,6 +18134,7 @@ final: prev: {
       hash = "sha256-RN0DMF1tkJkQ5xRDiEV/yNr455K6Iw9cLxPA91ThxPg=";
     };
     meta.homepage = "https://github.com/mtrajano/tssorter.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16854,6 +18148,7 @@ final: prev: {
       hash = "sha256-E+6yph7I1Z7NgUhjD5rkBeJ2Bx9QRbMpgd2Yu8uTPG4=";
     };
     meta.homepage = "https://github.com/Quramy/tsuquyomi/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16868,6 +18163,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/jrop/tuis.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16881,6 +18177,7 @@ final: prev: {
       hash = "sha256-MTMYohhexSzfV7qVY84JmeyC9JcxoX3FsU2k9NpeEMk=";
     };
     meta.homepage = "https://github.com/alexpasmantier/tv.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16894,6 +18191,7 @@ final: prev: {
       hash = "sha256-V6DFwvShvX6mYMRJajwOaxbHMNuCHCZzVrfT73iMuQo=";
     };
     meta.homepage = "https://github.com/folke/twilight.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16907,6 +18205,7 @@ final: prev: {
       hash = "sha256-tStomym4qd7IXj/ohYAc3akImNsOJdC7nQL+CkdMomc=";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/typescript.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16920,6 +18219,7 @@ final: prev: {
       hash = "sha256-CM5iwUUr7fZeGBL8A3L1NdaeWxV7Xai59ZE+l81Bm0A=";
     };
     meta.homepage = "https://github.com/pmizio/typescript-tools.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16933,6 +18233,7 @@ final: prev: {
       hash = "sha256-wUCrqMY8E1rf/NDfWa2/COHzhrVwo4n8uFu5CBccZ/Q=";
     };
     meta.homepage = "https://github.com/leafgarland/typescript-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -16946,6 +18247,7 @@ final: prev: {
       hash = "sha256-UHEVhlV/1cq6jaMhNNookeGPtHvSwy1AKLvb8FR6Rro=";
     };
     meta.homepage = "https://github.com/MrPicklePinosaur/typst-conceal.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16959,6 +18261,7 @@ final: prev: {
       hash = "sha256-EUYiHzDWJQM9Guk6ZM5GWE/etB+GHM48myRg/BPtOV0=";
     };
     meta.homepage = "https://github.com/chomosuke/typst-preview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16972,6 +18275,7 @@ final: prev: {
       hash = "sha256-qKY+tE7zCP7UNUeeesGGS5zJ9nudCJiQosLaI/TtD08=";
     };
     meta.homepage = "https://github.com/kaarmu/typst.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16985,6 +18289,7 @@ final: prev: {
       hash = "sha256-q9lUHeBlpCtkrDDaA77D393a/MSetZdy98sQqaOnqbk=";
     };
     meta.homepage = "https://github.com/J0schu/typstwatch.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -16998,32 +18303,35 @@ final: prev: {
       hash = "sha256-JEL6ansTFn4930gz6i7zUyvCaSxHJImz8hdwoQmX7qM=";
     };
     meta.homepage = "https://github.com/altermo/ultimate-autopair.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   ultisnips = buildVimPlugin {
     pname = "ultisnips";
-    version = "3.2-unstable-2026-04-19";
+    version = "3.2-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "SirVer";
       repo = "ultisnips";
-      rev = "10fc6cb2a48aa24d72894f71fceaa43a0432f287";
-      hash = "sha256-mSifyCvjefyl0snph+NAdI8alU2MeB5BozWHvmgpqVo=";
+      rev = "0223456b89f7f797c5424ddef07cfc28b5cd86a5";
+      hash = "sha256-m33oxuCVimpC0GQ0unsqm7Hy7UcTE6a2ONu6h80gqEI=";
     };
     meta.homepage = "https://github.com/SirVer/ultisnips/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
   unclash-nvim = buildVimPlugin {
     pname = "unclash.nvim";
-    version = "0-unstable-2026-01-28";
+    version = "0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "madmaxieee";
       repo = "unclash.nvim";
-      rev = "04f6aba5e2eea8b665cba88f21082e33a7cb6e59";
-      hash = "sha256-Rd+U0WtVCV2D0rsL8Sm5B4NRK2t4W5M7n/CH1I0w6s4=";
+      rev = "6115c7540d7f3c6fcac7658f521d263d338044bf";
+      hash = "sha256-FZFSNQc+czCwporg1/mmGcDRFY73grvlcieIcEo1Qv8=";
     };
     meta.homepage = "https://github.com/madmaxieee/unclash.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17037,6 +18345,7 @@ final: prev: {
       hash = "sha256-0fSCkozz9UWkkV1PsCCnIimOHsmXw9jLd9/oF9dLjMk=";
     };
     meta.homepage = "https://github.com/mbbill/undotree/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17050,6 +18359,7 @@ final: prev: {
       hash = "sha256-Cv1ETqnqbVQgKrXTMDA1JgcqQSIzK6S7i9pZHDNI4BU=";
     };
     meta.homepage = "https://github.com/chrisbra/unicode.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17063,6 +18373,7 @@ final: prev: {
       hash = "sha256-BPoSViNDO678SWVaGl9FHfSzWLEbqFR39v+MmfOPSo4=";
     };
     meta.homepage = "https://github.com/axkirillov/unified.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17076,6 +18387,7 @@ final: prev: {
       hash = "sha256-xGbA6D1ZXZ1lmtW9BXeQtGPmXSoXmdIGzVC2p58QCiI=";
     };
     meta.homepage = "https://github.com/tummetott/unimpaired.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17089,6 +18401,7 @@ final: prev: {
       hash = "sha256-a/2B3tbZhfCVtNwg/q2Eral6KWScGxSY9K+yWl/mIaE=";
     };
     meta.homepage = "https://github.com/afreakk/unimpaired-which-key.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17102,6 +18415,7 @@ final: prev: {
       hash = "sha256-ku6Bxg3jJruYOgrBRUzsankQtNryDmv1nWWjhvdskXs=";
     };
     meta.homepage = "https://github.com/unisonweb/unison/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17115,6 +18429,7 @@ final: prev: {
       hash = "sha256-nKbDaZU6zRGr11OelunXgwvvYQD4og2sk3dVB1YxoX0=";
     };
     meta.homepage = "https://github.com/Shougo/unite.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17128,6 +18443,7 @@ final: prev: {
       hash = "sha256-NWv2RJiy5JkKnqdGGXPoHvCkYaZSa6poPqhDjyowRQA=";
     };
     meta.homepage = "https://github.com/sontungexpt/url-open/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17141,6 +18457,7 @@ final: prev: {
       hash = "sha256-61Bq8w7r1cwEhyKJ4pKbeZLXupIsGdbAzrpE51uIcpc=";
     };
     meta.homepage = "https://github.com/axieax/urlview.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17154,6 +18471,7 @@ final: prev: {
       hash = "sha256-5JrITA72Cgl3WOPlU6nZjewP98cCQWFHCklN+qtFpis=";
     };
     meta.homepage = "https://github.com/vim-scripts/utl.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17167,6 +18485,7 @@ final: prev: {
       hash = "sha256-RmvRKigES1/CHCtNTt/kRN46lOVp9PusVZuGh0Q0Ru0=";
     };
     meta.homepage = "https://github.com/benomahony/uv.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17180,6 +18499,7 @@ final: prev: {
       hash = "sha256-sfw6Y9NbbFzoYALgQPBuu+36OSaTFzM0tWCOjDl8ag8=";
     };
     meta.homepage = "https://github.com/KabbAmine/vCoolor.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17193,6 +18513,7 @@ final: prev: {
       hash = "sha256-rcyz94b5VAYGoaq1q70EtgEu+DH0O6XSXPJECEtRRJI=";
     };
     meta.homepage = "https://github.com/junegunn/vader.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17206,6 +18527,7 @@ final: prev: {
       hash = "sha256-wAjzCkTMoxEP6Xc38I5lY3tSwEgU67w/bYPYxmaGaZA=";
     };
     meta.homepage = "https://github.com/vague-theme/vague.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17219,6 +18541,7 @@ final: prev: {
       hash = "sha256-EFx2o0x2VcKmbTAu/Iy56vTamCvsP5Apfi/RkRmrE1Y=";
     };
     meta.homepage = "https://github.com/jbyuki/venn.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17232,6 +18555,7 @@ final: prev: {
       hash = "sha256-oP4TeD2FEwL1M7D3wl1BQi812x+GhPdRQvFmrZ8l4Rc=";
     };
     meta.homepage = "https://github.com/linux-cultist/venv-selector.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17245,6 +18569,7 @@ final: prev: {
       hash = "sha256-xwQGTwWDrwxWdFYd3i7alXyFGbv4ONRsNdB+3jOogBs=";
     };
     meta.homepage = "https://github.com/vhda/verilog_systemverilog.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17258,6 +18583,7 @@ final: prev: {
       hash = "sha256-i3FhzaSTWSUMtvqhDHfGKqdHo/u9u2fGHwvmKq5P470=";
     };
     meta.homepage = "https://github.com/vifm/vifm.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17271,6 +18597,7 @@ final: prev: {
       hash = "sha256-WGSdiGoM7DEusdej7PdHRb7+1hzLuaWQgfYnXxyB3Vc=";
     };
     meta.homepage = "https://github.com/Konfekt/vim-CtrlXA/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17284,6 +18611,7 @@ final: prev: {
       hash = "sha256-r26pxvcBFPP+mht1kegj9aVXLiQwWh4G66JaRLpOIiU=";
     };
     meta.homepage = "https://github.com/konfekt/vim-DetectSpellLang/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17297,6 +18625,7 @@ final: prev: {
       hash = "sha256-WUokqQfMPjVLKrCh6Y/XetR3ZoVyGEpkTXukmsKwcTI=";
     };
     meta.homepage = "https://github.com/dpelle/vim-LanguageTool/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17310,6 +18639,7 @@ final: prev: {
       hash = "sha256-KRoR/3TNPipJiMiRv1pAWMTeRCp2Vz4mLuml3ws/I6U=";
     };
     meta.homepage = "https://github.com/inkarkat/vim-ReplaceWithRegister/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17323,6 +18653,7 @@ final: prev: {
       hash = "sha256-Xrzmxe0hLLwvutsKsvDWCfCLgInsg4ym49HJnCCG+xM=";
     };
     meta.homepage = "https://github.com/inkarkat/vim-ReplaceWithSameIndentRegister/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17336,6 +18667,7 @@ final: prev: {
       hash = "sha256-uicJ4cqoWOrc3dx6DnH/VdRFQXqVmauLyTcgyIrIwJU=";
     };
     meta.homepage = "https://github.com/inkarkat/vim-SyntaxRange/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17349,6 +18681,7 @@ final: prev: {
       hash = "sha256-MFXQjLIY1WJ6bGuxRr7WiIcjK9lOlMsFDit0bRmYd/s=";
     };
     meta.homepage = "https://github.com/tpope/vim-abolish/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17362,6 +18695,7 @@ final: prev: {
       hash = "sha256-UeoluK/MujaM9CbtjbJaH0tzttfvuXn+5HD0MFf7Mhs=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-actions/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17375,6 +18709,7 @@ final: prev: {
       hash = "sha256-+Oi8r3R09QpJgvtHSgdmxl+WJia54D1O9Bq0FoqqaNI=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-async/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17388,6 +18723,7 @@ final: prev: {
       hash = "sha256-xDs9ay76gU7nwB8vP+OZ6eVrVlm9RWZV6YMaZDoyXjM=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-background-cmd/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17401,6 +18737,7 @@ final: prev: {
       hash = "sha256-rA4M//UI4hw25doL5mEtK1IskDdggzWZUE3tMSCaiio=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-commenting/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17414,6 +18751,7 @@ final: prev: {
       hash = "sha256-mWpqizYkJ8IvIemRojsNA+KgSRhXVOnaKoxyLHwqoNE=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-completion/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17427,6 +18765,7 @@ final: prev: {
       hash = "sha256-8wb5B1MI27/OVJ8etuOwiDB53htQziPuVVztmfrc4lc=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-errorformats/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17440,6 +18779,7 @@ final: prev: {
       hash = "sha256-F7MFyKYmsRgO0Ae8jt6XTtYZJAqo25MR/aska3EQIOk=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-goto-thing-at-cursor/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17453,6 +18793,7 @@ final: prev: {
       hash = "sha256-a7oEd1L09LSdfnTMpyg/2pqd1yrhnSsHhL5yTTzJrpo=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-local-vimrc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17466,6 +18807,7 @@ final: prev: {
       hash = "sha256-rwr4LLEN3BZd83xXaIDnqEu2KTQ5P24bVgjWCDFQtLw=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-manager/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17479,6 +18821,7 @@ final: prev: {
       hash = "sha256-MubWLA85j7ZIZx2BYuw8VNCD6U/3mzps4+jmxNsgaZ4=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-mru/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17492,6 +18835,7 @@ final: prev: {
       hash = "sha256-RXYjI9acjEeS6CYrsFXH4p4F8AESp+nAMg8/M5nJKfE=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-mw-utils/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17505,6 +18849,7 @@ final: prev: {
       hash = "sha256-3mcEZ8YLG823BpLAixEOOqbM8OlIQX0lvjnyBL4Xv6Q=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-nix/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17518,6 +18863,7 @@ final: prev: {
       hash = "sha256-GOrCvVGEzMV1jccODq0rv5//hmC85mRo/SfbNlYlspE=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-other/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17531,6 +18877,7 @@ final: prev: {
       hash = "sha256-OULranGRwwi+qyQOkcme5OLFLi1nJQPUb5gxLoI7hs0=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-php-manual/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17544,6 +18891,7 @@ final: prev: {
       hash = "sha256-/suZijOZVclsFapWadlsMw7F5suyf0Ml3oFXCMZ1j0Q=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-signs/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17557,6 +18905,7 @@ final: prev: {
       hash = "sha256-o3K+w7qVcqeh6PPxXkPNd9QqB+RPcKt508z4pU8JFUY=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-sql/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17570,6 +18919,7 @@ final: prev: {
       hash = "sha256-KYoxSvbvwVRui9M0VbatG+5h76nm9U2ft6YEA/QNluU=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-syntax-checker/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17583,6 +18933,7 @@ final: prev: {
       hash = "sha256-3fDgKjKhQKDIsB8ph2Q+GLw4KNEwulIbv7Vd0OpclxM=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-toggle-buffer/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17596,6 +18947,7 @@ final: prev: {
       hash = "sha256-vEcEtcSx9oGWal/FNDYBbEYiKzDBycD3wRiL69q9xMQ=";
     };
     meta.homepage = "https://github.com/MarcWeber/vim-addon-xdebug/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17609,6 +18961,7 @@ final: prev: {
       hash = "sha256-VhGa3KrOS11I66RtoZyw+x/7yBwUsbYNJbiys/XeISI=";
     };
     meta.homepage = "https://github.com/inkarkat/vim-AdvancedSorters/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17622,6 +18975,7 @@ final: prev: {
       hash = "sha256-vl0ZPTZ2945NXtsnPnmmc8Vw3oKK0PgSv8WOw0A14ow=";
     };
     meta.homepage = "https://github.com/junegunn/vim-after-object/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17635,6 +18989,7 @@ final: prev: {
       hash = "sha256-yCSIe1SfPZww1tvowevzXFJbpEVTV+TPLFwqCJuTwXw=";
     };
     meta.homepage = "https://github.com/danilo-augusto/vim-afterglow/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17648,6 +19003,7 @@ final: prev: {
       hash = "sha256-XFdyVtRxQGTtDGIa2ai0YKzoRnyGXwPitZo2bDw5SNg=";
     };
     meta.homepage = "https://github.com/msuperdock/vim-agda/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17661,6 +19017,7 @@ final: prev: {
       hash = "sha256-gHdp2+Vd0AITx/0LSrwPRM6zOhhCyl0uMe8hS2IHnRc=";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17674,6 +19031,7 @@ final: prev: {
       hash = "sha256-9Ucs0396XA26p2WpRqrPwo+czKc7gXy3zE5usEgfRWY=";
     };
     meta.homepage = "https://github.com/enricobacis/vim-airline-clock/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17687,6 +19045,7 @@ final: prev: {
       hash = "sha256-xTgitX/kL8m/zjcxjCe4WWvhKfVPS284GoZjWkWc/gY=";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline-themes/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17700,6 +19059,7 @@ final: prev: {
       hash = "sha256-E+xLENJsOy//yKWWcVpRQEvbES9VnwaZ0E9/+U0dRJE=";
     };
     meta.homepage = "https://github.com/Konfekt/vim-alias/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17713,6 +19073,7 @@ final: prev: {
       hash = "sha256-Nh56egd4VEwnEabTr6nL/dJdZbkhK+lEUzVX7faDCm8=";
     };
     meta.homepage = "https://github.com/hsanson/vim-android/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17726,6 +19087,7 @@ final: prev: {
       hash = "sha256-YKhVMYoFpa1vUQbNb5kVemJ/0nZ8ExmFxu8CNenfrjM=";
     };
     meta.homepage = "https://github.com/b4winckler/vim-angry/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17739,6 +19101,7 @@ final: prev: {
       hash = "sha256-IRZDlMN/msiCRA3suGPVAH3JKVLP+i6/WkxujAQoGPw=";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-anzu/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17752,6 +19115,7 @@ final: prev: {
       hash = "sha256-E5ZboCQmp7FDAILPoAaGULepyAR90vfrOtaQ3EfdzJg=";
     };
     meta.homepage = "https://github.com/tpope/vim-apathy/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17765,6 +19129,7 @@ final: prev: {
       hash = "sha256-C6rB7l3fkLer6K+eHxlUmVOWpxV0pJdgqkGkMjzq3hY=";
     };
     meta.homepage = "https://github.com/ThePrimeagen/vim-apm/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17778,6 +19143,7 @@ final: prev: {
       hash = "sha256-cgcNlsmEhZ8aWicJKgpnVJRl7nrMllFRDkXBhwBv7xk=";
     };
     meta.homepage = "https://github.com/PeterRincker/vim-argumentative/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17791,6 +19157,7 @@ final: prev: {
       hash = "sha256-x0ebHFe8R0IEHJ7lTA1H/wcm+qW02J1aGy7RBGfazd8=";
     };
     meta.homepage = "https://github.com/FooSoft/vim-argwrap/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17804,6 +19171,7 @@ final: prev: {
       hash = "sha256-MkuY+hIgLiIeJMzF2W6WuwlDQMTHlASs+29NvYlMqa4=";
     };
     meta.homepage = "https://github.com/haya14busa/vim-asterisk/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17817,6 +19185,7 @@ final: prev: {
       hash = "sha256-vwQ3hwSpJBCdUp5dlHuP6GPaW7EJ4Rb5kXOJ9qtrpf8=";
     };
     meta.homepage = "https://github.com/wuelnerdotexe/vim-astro/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17830,6 +19199,7 @@ final: prev: {
       hash = "sha256-XgyLGoXi1GA3Dh8YlGN7kR/Xt/DbD5rZGdA+rXPMkEg=";
     };
     meta.homepage = "https://github.com/hura/vim-asymptote/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17843,6 +19213,7 @@ final: prev: {
       hash = "sha256-sCUEGcIyJHs/Qqgl6246ZWcNokTR0h9+AA6SYzyMhtU=";
     };
     meta.homepage = "https://github.com/907th/vim-auto-save/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17856,6 +19227,7 @@ final: prev: {
       hash = "sha256-LQVXUmrNOvJr78ULU9/8SRtHec6p9iNUT1YBDuxFYVQ=";
     };
     meta.homepage = "https://github.com/vim-autoformat/vim-autoformat/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17869,6 +19241,7 @@ final: prev: {
       hash = "sha256-V5rqmSqRAp358nGDTHmfR4tfntjPuHvkRTouGYMHPQI=";
     };
     meta.homepage = "https://github.com/benizi/vim-automkdir/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17882,6 +19255,7 @@ final: prev: {
       hash = "sha256-h1S5dUbOJog7SCePpldkH2P/JAv1Ebl/4Lu7mX3NFdc=";
     };
     meta.homepage = "https://github.com/jenterkin/vim-autosource/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17895,6 +19269,7 @@ final: prev: {
       hash = "sha256-Nk07QyuIqMbkgjyUmy9G4zPLrER4us5GLDdpQduSEVA=";
     };
     meta.homepage = "https://github.com/gioele/vim-autoswap/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17908,6 +19283,7 @@ final: prev: {
       hash = "sha256-cR45sboQ5XPqXfYDgV4S9LtHbdjwkdgFE7WeynhXpLM=";
     };
     meta.homepage = "https://github.com/bazelbuild/vim-bazel/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17921,6 +19297,7 @@ final: prev: {
       hash = "sha256-xJMZQ/27TgwAnvPVH1fjF6SLOA9jvXmbfcwV0NZ1kTY=";
     };
     meta.homepage = "https://github.com/moll/vim-bbye/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17934,6 +19311,7 @@ final: prev: {
       hash = "sha256-yrNZV90yiHIxw0OMSSvi5SMApR2oFT8EpvF6TiUlC88=";
     };
     meta.homepage = "https://github.com/ThePrimeagen/vim-be-good/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17947,6 +19325,7 @@ final: prev: {
       hash = "sha256-tbnB67O39OgozgknCZ1crnPZ9OBKtlGrvTeoFPnbLhc=";
     };
     meta.homepage = "https://github.com/nathangrigg/vim-beancount/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17960,6 +19339,7 @@ final: prev: {
       hash = "sha256-ra+XXdHCOB8/4EK9bh5jpvfQYXG6k+q69sYgjHZVoJg=";
     };
     meta.homepage = "https://github.com/sheoak/vim-bepoptimist/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -17973,6 +19353,7 @@ final: prev: {
       hash = "sha256-29z20+6KBY74HuZE0i8GqP7Z68uu+AzthJGCLwxycdQ=";
     };
     meta.homepage = "https://github.com/ntpeters/vim-better-whitespace/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17986,6 +19367,7 @@ final: prev: {
       hash = "sha256-ZS5rTj4Tq2OGOgN695PhxgPrgWBmSRbF1cWc6LdMD/E=";
     };
     meta.homepage = "https://github.com/MattesGroeger/vim-bookmarks/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -17999,6 +19381,7 @@ final: prev: {
       hash = "sha256-SD4PasLmOu59mtw3HibQLWaw/T72w/TGV021+xrJI38=";
     };
     meta.homepage = "https://github.com/gyim/vim-boxdraw/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18012,6 +19395,7 @@ final: prev: {
       hash = "sha256-4huq1x2rvAbBKJYB4SLB0T1UPkeZOfzb0TWxUZBqom0=";
     };
     meta.homepage = "https://github.com/ConradIrwin/vim-bracketed-paste/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18025,6 +19409,7 @@ final: prev: {
       hash = "sha256-nWWryCynf5WgMh1Yq9UeWVRMhjJJaQ0UKAyMVXuVoLE=";
     };
     meta.homepage = "https://github.com/mtikekar/vim-bsv/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18038,6 +19423,7 @@ final: prev: {
       hash = "sha256-/9NHHzIAH7xVOXtX/IwkWmKd/a2KZMbMzO+3JJ8SL7w=";
     };
     meta.homepage = "https://github.com/jeetsukumaran/vim-buffergator/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18051,6 +19437,7 @@ final: prev: {
       hash = "sha256-WrVDyPVi0s/lOpOyzfToQg7Xa5hq5TYMHLuhPdQhmn4=";
     };
     meta.homepage = "https://github.com/bling/vim-bufferline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18064,6 +19451,7 @@ final: prev: {
       hash = "sha256-cyZN06Dn+qaL5AjbZfBZIj9Est7b+Q8BYemmWpCt7Gs=";
     };
     meta.homepage = "https://github.com/bagrat/vim-buffet/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18077,6 +19465,7 @@ final: prev: {
       hash = "sha256-rolvtTZM7nTXKtRGvqegc1jLi9Wjf4mZ+VNSN3/83Mk=";
     };
     meta.homepage = "https://github.com/qpkorr/vim-bufkill/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18090,6 +19479,7 @@ final: prev: {
       hash = "sha256-qbLvl228beNHWVgRmgD8rbSMpuSfWwyys6SaCrGkxxw=";
     };
     meta.homepage = "https://github.com/ap/vim-buftabline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18103,6 +19493,7 @@ final: prev: {
       hash = "sha256-0RuJ/holrLkX4ht0X000fMpcUNGFo24QkONuYLOfrWA=";
     };
     meta.homepage = "https://github.com/isobit/vim-caddyfile/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18116,6 +19507,7 @@ final: prev: {
       hash = "sha256-+tBYH0X0fzc0jpoK0rolOtVE5m69OxL78w8WjkA/rLg=";
     };
     meta.homepage = "https://github.com/tpope/vim-capslock/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18129,6 +19521,7 @@ final: prev: {
       hash = "sha256-rOxPyI/q38/ADPfddRw4EnO7RykCksPMIWkynrhwtt4=";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-carbon-now-sh/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18142,6 +19535,7 @@ final: prev: {
       hash = "sha256-CHAStQ6mqr0oCyl9mRNMSKBKx9ITIrPuejTn3DQtV/8=";
     };
     meta.homepage = "https://github.com/m-pilia/vim-ccls/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18155,6 +19549,7 @@ final: prev: {
       hash = "sha256-H+lao2LLWu+f11xOF5aH5D4a8GY6ozmgZ/uLzgGWAGw=";
     };
     meta.homepage = "https://github.com/tpope/vim-characterize/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18168,6 +19563,7 @@ final: prev: {
       hash = "sha256-tgBDmEPEdoxszPQhfBTvpDjnTOJQUMRm+F3xo0aUoZA=";
     };
     meta.homepage = "https://github.com/t9md/vim-choosewin/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18181,6 +19577,7 @@ final: prev: {
       hash = "sha256-ufLheYnzc8EpCXERvV7LcpDoMOW4e4P/je3Q9Rh1gAI=";
     };
     meta.homepage = "https://github.com/rhysd/vim-clang-format/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18194,6 +19591,7 @@ final: prev: {
       hash = "sha256-rxbnQM0Fj6j7WFn0HKSGTPcMQ9DiOGUO0xhu2czJx0w=";
     };
     meta.homepage = "https://github.com/tpope/vim-classpath/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18207,6 +19605,7 @@ final: prev: {
       hash = "sha256-HnxYFW77MWnw5IHKTI1JpbkuXsNjRJDxRetgB6Ry4zk=";
     };
     meta.homepage = "https://github.com/guns/vim-clojure-highlight/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18220,6 +19619,7 @@ final: prev: {
       hash = "sha256-p//trww7y7ciSHN45VVnVdjBb1c71IXgXgf2s2HGKGk=";
     };
     meta.homepage = "https://github.com/guns/vim-clojure-static/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18233,6 +19633,7 @@ final: prev: {
       hash = "sha256-u7RLg6i1EG4miZzRGnT5yBQf4RuYRekHWqYKmpEi74Q=";
     };
     meta.homepage = "https://github.com/rstacruz/vim-closer/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18246,6 +19647,7 @@ final: prev: {
       hash = "sha256-WmXe+U4+qEecsRzsHqi3pYrk38wKVMxxOHtB/Lp4Rw0=";
     };
     meta.homepage = "https://github.com/alvan/vim-closetag/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18259,6 +19661,7 @@ final: prev: {
       hash = "sha256-/JcO2gCJg99di33d0ANnL33F3yUeeBg4eBVA21iZCvY=";
     };
     meta.homepage = "https://github.com/vhdirk/vim-cmake/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18272,6 +19675,7 @@ final: prev: {
       hash = "sha256-fCPetq4Wr/kuaT0Pcd6NSEAUBkkjbCE1PhTt0KLj9oI=";
     };
     meta.homepage = "https://github.com/tomasiser/vim-code-dark/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18285,6 +19689,7 @@ final: prev: {
       hash = "sha256-wcZUXW6Tv6qkGNtNfyugMDH2t1/7dfOv2Xl5NTewExY=";
     };
     meta.homepage = "https://github.com/google/vim-codefmt/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18298,6 +19703,7 @@ final: prev: {
       hash = "sha256-AvAB9ssClOOrcGQRZ70sMrcrmHlb0L+9FOh0MTLkZx4=";
     };
     meta.homepage = "https://github.com/kchmck/vim-coffee-script/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18311,6 +19717,7 @@ final: prev: {
       hash = "sha256-KZWwKUjnOIrfrVqtgjpcYTUYTxT6nXj4cTDTtwvzJ9I=";
     };
     meta.homepage = "https://github.com/kalbasit/vim-colemak/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18324,6 +19731,7 @@ final: prev: {
       hash = "sha256-j9nMjKYK7bqrGHprYp0ddLEWs1CNMudxXD13sOROVmY=";
     };
     meta.homepage = "https://github.com/owickstrom/vim-colors-paramount/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18337,6 +19745,7 @@ final: prev: {
       hash = "sha256-obLvaW7ulNr6dkMcMe4mCs3ROnz4eTnyfspDHVqloxU=";
     };
     meta.homepage = "https://github.com/altercation/vim-colors-solarized/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18350,6 +19759,7 @@ final: prev: {
       hash = "sha256-JhBnyvuKqP0ddKTUi+oVrfBd4Af/pxW4Goe+DfjB6LE=";
     };
     meta.homepage = "https://github.com/flazz/vim-colorschemes/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18363,6 +19773,7 @@ final: prev: {
       hash = "sha256-Gsswh6pjeVCLQAP/iNDt70kVXEMLlv3BjxTB+oDt0xc=";
     };
     meta.homepage = "https://github.com/jonbri/vim-colorstepper/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18376,6 +19787,7 @@ final: prev: {
       hash = "sha256-0a45pvYAbMxwN2URFX1lxIFBwWCq46LPai2GnGuL0Uo=";
     };
     meta.homepage = "https://github.com/tpope/vim-commentary/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18389,6 +19801,7 @@ final: prev: {
       hash = "sha256-xuET9UVwR82/y7APuCzyWVn9xlZJr46hPg51TkE+jkY=";
     };
     meta.homepage = "https://github.com/luan/vim-concourse/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18402,6 +19815,7 @@ final: prev: {
       hash = "sha256-mKlQkFH1665b290clIpx0BylrmOOmey/FX9XbSfC41s=";
     };
     meta.homepage = "https://github.com/romainl/vim-cool/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18415,6 +19829,7 @@ final: prev: {
       hash = "sha256-ofGDdI8DCNXGrf8rlggKpOx7DY7ccKdvRNeBi7Ipfrs=";
     };
     meta.homepage = "https://github.com/octol/vim-cpp-enhanced-highlight/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18428,6 +19843,7 @@ final: prev: {
       hash = "sha256-88QX1iF72zj+ec+yBUhHK4n9zWS8I8+ejhCDTaEolak=";
     };
     meta.homepage = "https://github.com/mhinz/vim-crates/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18441,6 +19857,7 @@ final: prev: {
       hash = "sha256-uGtPMgMt+s0GSQvpvo97diYOfhIf+pNuOQiGQ17I9uQ=";
     };
     meta.homepage = "https://github.com/vim-crystal/vim-crystal/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18454,6 +19871,7 @@ final: prev: {
       hash = "sha256-XvEPEBCvJIocIu12ZF8aqncjoBd2H4JX365MnvsD3zI=";
     };
     meta.homepage = "https://github.com/rbong/vim-crystalline/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18467,6 +19885,7 @@ final: prev: {
       hash = "sha256-ndFo3mG0UoMK3KyPoHj1L0+6p5aHG5hnJsuMtrEfTps=";
     };
     meta.homepage = "https://github.com/OrangeT/vim-csharp/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18480,6 +19899,7 @@ final: prev: {
       hash = "sha256-mkarxd+Xz9UpgrcYBjQlXqZbDQ95/Xikft9ftNPaXTU=";
     };
     meta.homepage = "https://github.com/ap/vim-css-color/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18493,6 +19913,7 @@ final: prev: {
       hash = "sha256-l1UyGjBdSCRH1EzzLE+hSI7OpYgtB0xTAy3wfxQK7ok=";
     };
     meta.homepage = "https://github.com/cue-lang/vim-cue/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18506,6 +19927,7 @@ final: prev: {
       hash = "sha256-JbfasdABxMIG3RRxOuesHaVlQsniNOFdYARVaWJSJos=";
     };
     meta.homepage = "https://github.com/itchyny/vim-cursorword/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18519,6 +19941,7 @@ final: prev: {
       hash = "sha256-UzQCdAWdM3fZIHqJBr280S71Cqf5q399wtSonUNGees=";
     };
     meta.homepage = "https://github.com/ehamberg/vim-cute-python/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18532,6 +19955,7 @@ final: prev: {
       hash = "sha256-1CA+H8wXDcA5sQLpHsJHHn9hNhWNyzZHHkVx3LqSPeA=";
     };
     meta.homepage = "https://github.com/tpope/vim-dadbod/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18545,6 +19969,7 @@ final: prev: {
       hash = "sha256-F+bCrgrRyNtgafwMSjkEBVj3LCBlxFZKajMF0K+x8D8=";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-dadbod-completion/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18558,6 +19983,7 @@ final: prev: {
       hash = "sha256-Of/9Ju2pkMEAZdSnDoRGxGSCBbR0e0oSRTts1VXVCf4=";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-dadbod-ui/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18571,6 +19997,7 @@ final: prev: {
       hash = "sha256-dZitAZGhii6MlP415zWaTDBlqumGYAZ+kndT9CtzJ/k=";
     };
     meta.homepage = "https://github.com/sunaku/vim-dasht/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18584,6 +20011,7 @@ final: prev: {
       hash = "sha256-dfvvNlfWWII6dccxaHx2hdLTLcvl0J7ghAHxDnuuEcA=";
     };
     meta.homepage = "https://github.com/ajmwagar/vim-deus/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18597,6 +20025,7 @@ final: prev: {
       hash = "sha256-9g3UdBcc34MR/BrKYqOki2Ge29k/QaRMsnyY+Pq9UE8=";
     };
     meta.homepage = "https://github.com/ryanoasis/vim-devicons/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18610,6 +20039,7 @@ final: prev: {
       hash = "sha256-M5tbfC3zZTSC6xYrVBNx3GtLfWn65qhs1+DxykrkGdQ=";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/vim-dim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18623,6 +20053,7 @@ final: prev: {
       hash = "sha256-oDSON3C8TzWxA5tfIHb8fPVbQn8+gQ3C4sWJPSAsTpI=";
     };
     meta.homepage = "https://github.com/blueyed/vim-diminactive/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18636,6 +20067,7 @@ final: prev: {
       hash = "sha256-xfSnzYbXl6GlCQJ/c2434YrDNjtkyNsGeVVjSNJ3Ehs=";
     };
     meta.homepage = "https://github.com/will133/vim-dirdiff/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18649,6 +20081,7 @@ final: prev: {
       hash = "sha256-22wI5qKpkwHZZdA75cDHD18TeinbnElyLN1x7kO6GDY=";
     };
     meta.homepage = "https://github.com/justinmk/vim-dirvish/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18662,6 +20095,7 @@ final: prev: {
       hash = "sha256-pX5KIDeXvHjDziJg9jR6kmQv77yt2Q/LgdQv5NkBbYc=";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-dirvish-git/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18675,6 +20109,7 @@ final: prev: {
       hash = "sha256-+92jco3btPAHWbVKL0kXycL4Inji3Wi0LtfQ5vXe6B8=";
     };
     meta.homepage = "https://github.com/tpope/vim-dispatch/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18688,6 +20123,7 @@ final: prev: {
       hash = "sha256-tPalsGkfR99k467wu6PHkukRF3cAdgCEvNOmTY8bNoQ=";
     };
     meta.homepage = "https://github.com/radenling/vim-dispatch-neovim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18701,6 +20137,7 @@ final: prev: {
       hash = "sha256-LVmQZTgOv2lkry7k2R+qCJrXvHrqeSCMTA6KEmoa3co=";
     };
     meta.homepage = "https://github.com/jhradilek/vim-docbk/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18714,6 +20151,7 @@ final: prev: {
       hash = "sha256-GQI1aN1Y5xmVZrTZuGLOWqXgOfo0ndPEEAnlwN0z9vI=";
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18727,6 +20165,7 @@ final: prev: {
       hash = "sha256-12pQdMoL58M36uKroct0A0T1hmrhQa3VPEBaVWk8IRg=";
     };
     meta.homepage = "https://github.com/tpope/vim-dotenv/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18740,6 +20179,7 @@ final: prev: {
       hash = "sha256-9CfWi83DCzWBARNG6AA0MQllEfQ/3UtYtYPDWLdmDwk=";
     };
     meta.homepage = "https://github.com/junegunn/vim-easy-align/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18753,6 +20193,7 @@ final: prev: {
       hash = "sha256-Ls785yG6nQGonpF5oqWc2NzMgklt3Bo7xG2xGCmsE0E=";
     };
     meta.homepage = "https://github.com/zhou13/vim-easyescape/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18766,6 +20207,7 @@ final: prev: {
       hash = "sha256-aAr8UwxGs0+ZGqWuP1WbuVlqL46V3ywzEH+q6i3Qgqg=";
     };
     meta.homepage = "https://github.com/neoclide/vim-easygit/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18779,6 +20221,7 @@ final: prev: {
       hash = "sha256-4Xc7QHlS2zdVHksIMPZUkJcd8Urq3NK0AmKUHMFUYMA=";
     };
     meta.homepage = "https://github.com/easymotion/vim-easymotion/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18792,6 +20235,7 @@ final: prev: {
       hash = "sha256-UYTofWq9aLN/oys89tdOC6yn+US3g1jDAga1olxQEEU=";
     };
     meta.homepage = "https://github.com/xolox/vim-easytags/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18805,6 +20249,7 @@ final: prev: {
       hash = "sha256-YgfWG/PjsDMW2z90sJyezFciVWn9eFEqLu4wJLydAfo=";
     };
     meta.homepage = "https://github.com/justincampbell/vim-eighties/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18818,6 +20263,7 @@ final: prev: {
       hash = "sha256-piKIpnc6FmVxpTnp/arSVMf9ljIT6Ah/CHPMGOEgs0A=";
     };
     meta.homepage = "https://github.com/elixir-editors/vim-elixir/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18831,6 +20277,7 @@ final: prev: {
       hash = "sha256-2Q1JGlxmwUggc6n9l/PqkpheSBkaYs9fbYn0+8+Lo1k=";
     };
     meta.homepage = "https://github.com/andys8/vim-elm-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18844,6 +20291,7 @@ final: prev: {
       hash = "sha256-ZuD+01VXJMSl0AmVZwXTzGfbnHg1fcVJGjnbXfRmcKE=";
     };
     meta.homepage = "https://github.com/kentarosasaki/vim-emacs-bindings/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18857,6 +20305,7 @@ final: prev: {
       hash = "sha256-3gdd2lFAMKJTqV9IV3CL7809RLkITa0Wi91dcMqvfC8=";
     };
     meta.homepage = "https://github.com/junegunn/vim-emoji/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18870,6 +20319,7 @@ final: prev: {
       hash = "sha256-DnyfqrHMRRHNlpcC0zk6oJpUcWp6Fm6OOm7+j1lKPvQ=";
     };
     meta.homepage = "https://github.com/tpope/vim-endwise/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18883,6 +20333,7 @@ final: prev: {
       hash = "sha256-eOMpCj4o9EK5mhbXEQ5Vz32/0UKbyRxNyDHhtP8QggE=";
     };
     meta.homepage = "https://github.com/Olical/vim-enmasse/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18896,6 +20347,7 @@ final: prev: {
       hash = "sha256-vVPleQoA8nlPzyG4CAmPUQbU6nf2GAfaDxmygdssHtI=";
     };
     meta.homepage = "https://github.com/vim-erlang/vim-erlang-compiler/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18909,6 +20361,7 @@ final: prev: {
       hash = "sha256-kvAn6oUQAWCaLHO8eKkgWros2mILumDugxiL0UveZwI=";
     };
     meta.homepage = "https://github.com/vim-erlang/vim-erlang-omnicomplete/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18922,6 +20375,7 @@ final: prev: {
       hash = "sha256-u7p/KQcpvuemmea1WS5c2BojTC26MogpX70BcywxtxY=";
     };
     meta.homepage = "https://github.com/vim-erlang/vim-erlang-runtime/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18935,6 +20389,7 @@ final: prev: {
       hash = "sha256-c6OHBuHSnd6tVcCR0IudYM6x7EGXkgbaJm5/2RZiKrA=";
     };
     meta.homepage = "https://github.com/vim-erlang/vim-erlang-tags/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18948,6 +20403,7 @@ final: prev: {
       hash = "sha256-vvt9CJfD2Y8rhFKVbvSEJYQN8jWrw6NTq8Wp/COVH1E=";
     };
     meta.homepage = "https://github.com/tpope/vim-eunuch/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -18961,6 +20417,7 @@ final: prev: {
       hash = "sha256-rjqahEzXEmTtpOil9jm2xyscjJLiKRmPB0pgwFFBKGc=";
     };
     meta.homepage = "https://github.com/tommcdo/vim-exchange/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18974,6 +20431,7 @@ final: prev: {
       hash = "sha256-+5seES5Y2z8eW51tHWW66fnEFXLbShucCblvMqnkYFA=";
     };
     meta.homepage = "https://github.com/terryma/vim-expand-region/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18987,6 +20445,7 @@ final: prev: {
       hash = "sha256-CuGeS8E/ADOeSjUOnEei8dksswB9G3yILO5V11YyjmI=";
     };
     meta.homepage = "https://github.com/int3/vim-extradite/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19000,6 +20459,7 @@ final: prev: {
       hash = "sha256-2XkM4Niq8FLxr/gNOBWaleggtgeb+SVIQZeLDtintR4=";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-fern/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19013,6 +20473,7 @@ final: prev: {
       hash = "sha256-IQ1P0jqRn6qUhdRp2zoLb2Tgd57/wTKq2W43aM+lj+A=";
     };
     meta.homepage = "https://github.com/wsdjeg/vim-fetch/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19026,6 +20487,7 @@ final: prev: {
       hash = "sha256-SL3FQDvU87UPoRcca+axp2oijMBmSJo1Zwef8uZWlEA=";
     };
     meta.homepage = "https://github.com/fadein/vim-figlet/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19039,6 +20501,7 @@ final: prev: {
       hash = "sha256-/tvx0yY2XZrwtkTucLtWZsW7MnB1GkdEcxKACmvcU+g=";
     };
     meta.homepage = "https://github.com/tpope/vim-fireplace/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19052,6 +20515,7 @@ final: prev: {
       hash = "sha256-8OjCJcGW425sb8nOabCoT/MxlNR13qub/oRRBVKlcvs=";
     };
     meta.homepage = "https://github.com/dag/vim-fish/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19065,6 +20529,7 @@ final: prev: {
       hash = "sha256-6VkjYY8z1SrpFqvWPCDYRPbS3qGana2EsKeugXvm5Pk=";
     };
     meta.homepage = "https://github.com/tpope/vim-flagship/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19078,6 +20543,7 @@ final: prev: {
       hash = "sha256-TQovzI4jc0D0tM1w+x0KPCCqOB8LMJ6da5od6voyQss=";
     };
     meta.homepage = "https://github.com/nvie/vim-flake8/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19091,6 +20557,7 @@ final: prev: {
       hash = "sha256-tb/QToEbEIg5SIYCnfI99qPI6HgwJD2+dpeZoqlK0dU=";
     };
     meta.homepage = "https://github.com/dcharbon/vim-flatbuffers/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19104,6 +20571,7 @@ final: prev: {
       hash = "sha256-A4SpMFB1thUhF4N5I7N+HnycE/OXQQbJVMr4wo0gKUc=";
     };
     meta.homepage = "https://github.com/voldikss/vim-floaterm/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19117,6 +20585,7 @@ final: prev: {
       hash = "sha256-x8fUmcuBLEQwZD+m7gEanpPppukRa6NoalNehY/2JuM=";
     };
     meta.homepage = "https://github.com/rbong/vim-flog/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19130,6 +20599,7 @@ final: prev: {
       hash = "sha256-a0v1ievhv7duLYOMaqmDWz0PM82U00MIlcZH6Lid8Yo=";
     };
     meta.homepage = "https://github.com/thosakwe/vim-flutter/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19143,6 +20613,7 @@ final: prev: {
       hash = "sha256-T7t+fbNREwNRRnwGl2uOGfpP9+Pibeiuns7P9/ITfYY=";
     };
     meta.homepage = "https://github.com/arecarn/vim-fold-cycle/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19156,6 +20627,7 @@ final: prev: {
       hash = "sha256-VNUfBvABPUO7N6m4QtKBHpdNPu1QYtWYS8oEfjlpgrE=";
     };
     meta.homepage = "https://github.com/embear/vim-foldsearch/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19169,6 +20641,7 @@ final: prev: {
       hash = "sha256-qjqNarMKuNb6dsXeh/euV2jl7ApLih72o1V9NzsraS4=";
     };
     meta.homepage = "https://github.com/thinca/vim-ft-diff_fold/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19182,6 +20655,7 @@ final: prev: {
       hash = "sha256-VxLhfsh+VN3DvlSTvc7s0FcGkUpH/JqmKQ947MnnI+Y=";
     };
     meta.homepage = "https://github.com/tommcdo/vim-fubitive/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19195,6 +20669,7 @@ final: prev: {
       hash = "sha256-vXSOXq3Tj5g0jUwQEZ0RRlon1OEX+jv1dgofUl4QcQg=";
     };
     meta.homepage = "https://github.com/tpope/vim-fugitive/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19208,6 +20683,7 @@ final: prev: {
       hash = "sha256-SmEesr0ne7zp2SV5JySEG5Fq2kO4AairMxg8H2Xiomw=";
     };
     meta.homepage = "https://github.com/maxjacobson/vim-fzf-coauthorship/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19221,6 +20697,7 @@ final: prev: {
       hash = "sha256-9Rfn7n/cn5XQ3Ykbe4aQbGKToewQbydXuzJT8IISGNM=";
     };
     meta.homepage = "https://github.com/HealsCodes/vim-gas/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19234,6 +20711,7 @@ final: prev: {
       hash = "sha256-yx2EqdZva/06xm2rnLQX3RXCu17HpzTcv1x/U7qnqho=";
     };
     meta.homepage = "https://github.com/ruanyl/vim-gh-line/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19247,6 +20725,7 @@ final: prev: {
       hash = "sha256-sC83gfCY3vtHDQ5iKV2Ax9DqES2qBz6a4Hro1TDsd5U=";
     };
     meta.homepage = "https://github.com/raghur/vim-ghost/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19260,6 +20739,7 @@ final: prev: {
       hash = "sha256-+F+ehYUvztezq+06VegLPblAS83VpB/fm8Y30eO1VCY=";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-gina/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19273,6 +20753,7 @@ final: prev: {
       hash = "sha256-vI1A/INwip/PIuEL/2NNQ3j8iZEtPttALXM1wnmvBas=";
     };
     meta.homepage = "https://github.com/mattn/vim-gist/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19286,6 +20767,7 @@ final: prev: {
       hash = "sha256-rEaRXgDVBHjiO8ROVwoBfoxACpgEUtDaJ4y05ImGCGA=";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-gista/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19299,6 +20781,7 @@ final: prev: {
       hash = "sha256-jLEhuLcG2csnRuBXCtbz2eKOPqhUwHdlhmAfbLpD5bo=";
     };
     meta.homepage = "https://github.com/tpope/vim-git/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19312,6 +20795,7 @@ final: prev: {
       hash = "sha256-AFCgabCEmEQjCzCrGg8dDCv5K7woOEZlS6u0Dhjnplk=";
     };
     meta.homepage = "https://github.com/itchyny/vim-gitbranch/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19325,6 +20809,7 @@ final: prev: {
       hash = "sha256-TESn+hh9ceDxacWFIesi75kkorDkQNRec6ClMKI7tWs=";
     };
     meta.homepage = "https://github.com/airblade/vim-gitgutter/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19338,6 +20823,7 @@ final: prev: {
       hash = "sha256-kdPmOGYi/B52bWq6zsxvKWwoFqpqOZ04LJGOGCtNvIE=";
     };
     meta.homepage = "https://github.com/junegunn/vim-github-dashboard/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19351,6 +20837,7 @@ final: prev: {
       hash = "sha256-d5lh5S1YQ1OzlsKmj+cB9UAdbX7haAqo3eR/4s4H7FQ=";
     };
     meta.homepage = "https://github.com/stykhomyrov/vim-glsl/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19364,6 +20851,7 @@ final: prev: {
       hash = "sha256-xIchBiNEZbrz0LRIWorJEac8y4DBa4akuM4JPqM0Yp4=";
     };
     meta.homepage = "https://github.com/JafarDakhan/vim-gml/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19377,6 +20865,7 @@ final: prev: {
       hash = "sha256-B6hSEeNjJdDUDjM0DlmAxc3zRRcJz91//GPk6rCWn6I=";
     };
     meta.homepage = "https://github.com/jamessan/vim-gnupg/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19390,6 +20879,7 @@ final: prev: {
       hash = "sha256-0mmt7i8GImhVR2kmr8MOQHFybw8QDXVRrYVg/ty30zU=";
     };
     meta.homepage = "https://github.com/fatih/vim-go/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19403,6 +20893,7 @@ final: prev: {
       hash = "sha256-VvBlw2AuFCGw73UOOnhgd6baPkqp838xa7RQjAuCBpM=";
     };
     meta.homepage = "https://github.com/habamax/vim-godot/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19416,6 +20907,7 @@ final: prev: {
       hash = "sha256-8kCWoXMAvzUuexxmgX4vADsJrBEwmLtl4QTjNgcujwQ=";
     };
     meta.homepage = "https://github.com/rhysd/vim-grammarous/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19429,6 +20921,7 @@ final: prev: {
       hash = "sha256-hN+YE6PQnApdK5dKERJBVpKepicYIgsfY5mpZiiOcfE=";
     };
     meta.homepage = "https://github.com/jparise/vim-graphql/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19442,6 +20935,7 @@ final: prev: {
       hash = "sha256-MLKikTcGuZIDvkUvCMQP46CeUOF17aT9hsBGTzBAQok=";
     };
     meta.homepage = "https://github.com/mhinz/vim-grepper/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19455,6 +20949,7 @@ final: prev: {
       hash = "sha256-kQMLaFY/Rr571Dixcewg6NBpmycxgwS1p7DCvpaITLk=";
     };
     meta.homepage = "https://github.com/lifepillar/vim-gruvbox8/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19468,6 +20963,7 @@ final: prev: {
       hash = "sha256-w5LcBaqotGkgQy/f/cs4dkQnLIPQ0fOoXl4n5edMe4Y=";
     };
     meta.homepage = "https://github.com/brennanfee/vim-gui-position/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19481,6 +20977,7 @@ final: prev: {
       hash = "sha256-Y+CFG55h0APxuFwHgUE+o3LJNprBWFyuuZCPrKNgzb4=";
     };
     meta.homepage = "https://github.com/ludovicchabant/vim-gutentags/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19494,6 +20991,7 @@ final: prev: {
       hash = "sha256-vqrYsCDKz1c0uLsaCcwpG0dS+ipVNRZknsC+3i7kICI=";
     };
     meta.homepage = "https://github.com/habamax/vim-habamax/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19507,6 +21005,7 @@ final: prev: {
       hash = "sha256-WP7Q1GwzSZzkeZl1t3JVo0ENk89LIgEBKyJMf0bdG7k=";
     };
     meta.homepage = "https://github.com/takac/vim-hardtime/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19520,6 +21019,7 @@ final: prev: {
       hash = "sha256-UVoZqZU3EnkEiHWfR2yg8sHzh6KwA5ix8S19/4ZwXEk=";
     };
     meta.homepage = "https://github.com/chkno/vim-haskell-module-name/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19533,6 +21033,7 @@ final: prev: {
       hash = "sha256-qj7ciF1adyQ0MrPaAu5nuHc4bdc1vgwpGicITS97UPg=";
     };
     meta.homepage = "https://github.com/enomsg/vim-haskellConcealPlus/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19546,6 +21047,7 @@ final: prev: {
       hash = "sha256-OSQwoDf5uqUyqMILkgGkhyccaPoT6R4+oS+TCEdBBs4=";
     };
     meta.homepage = "https://github.com/twinside/vim-haskellconceal/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19559,6 +21061,7 @@ final: prev: {
       hash = "sha256-+FGmFTKAXIAiJN3rU7zUCR/pds4WZAhwUDbyVqaK5V4=";
     };
     meta.homepage = "https://github.com/jvirtanen/vim-hcl/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19572,6 +21075,7 @@ final: prev: {
       hash = "sha256-cerqasD/mvLdE9g4HGs2fVaKzNed4lZ7sNyzFr35cvc=";
     };
     meta.homepage = "https://github.com/bitc/vim-hdevtools/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19585,6 +21089,7 @@ final: prev: {
       hash = "sha256-X+hTI/v7ro3z9hQl2cQOz3LbCvh4LUzBwj+u6QGbr18=";
     };
     meta.homepage = "https://github.com/towolf/vim-helm/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19599,6 +21104,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/RRethy/vim-hexokinase/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19612,6 +21118,7 @@ final: prev: {
       hash = "sha256-4vIQvMNaopyILttcHy/YmdXONooDwF0MOTPLhSBe2+g=";
     };
     meta.homepage = "https://github.com/jceb/vim-hier/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19625,6 +21132,7 @@ final: prev: {
       hash = "sha256-OTwLJgQa4/aTmxBqL5YBifsINwWVIrvEwaaZiO8WRcM=";
     };
     meta.homepage = "https://github.com/machakann/vim-highlightedyank/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19638,6 +21146,7 @@ final: prev: {
       hash = "sha256-JipB0m3amV9yOpwNfA9G86p0k22hHFu0c4Gqj8a3lvg=";
     };
     meta.homepage = "https://github.com/alx741/vim-hindent/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19651,6 +21160,7 @@ final: prev: {
       hash = "sha256-Is4N/h/x7fElqomxp0fx7nf3ICr0CcDHDPX+MFKdzHA=";
     };
     meta.homepage = "https://github.com/GEverding/vim-hocon/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19664,6 +21174,7 @@ final: prev: {
       hash = "sha256-9oDm9uNKX1wZXvi7IoxrG142R6SffWbPfDKK806JG58=";
     };
     meta.homepage = "https://github.com/Twinside/vim-hoogle/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19677,6 +21188,7 @@ final: prev: {
       hash = "sha256-63D6mRK7liVNMkYMrHfukVZDGr4pJZIFirnHCDghUj0=";
     };
     meta.homepage = "https://github.com/ntk148v/vim-horizon/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19690,6 +21202,7 @@ final: prev: {
       hash = "sha256-BezZp1kRFCwMMhBmzEdajGQv1ZfyObqjhPPP/aP+7oY=";
     };
     meta.homepage = "https://github.com/jonsmithers/vim-html-template-literals/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19703,6 +21216,7 @@ final: prev: {
       hash = "sha256-h90J8q8WZDHTZr6MuN9PHzbwbPGK3Bu/ErG0uZDjyX8=";
     };
     meta.homepage = "https://github.com/humanoid-colors/vim-humanoid-colorscheme/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19716,6 +21230,7 @@ final: prev: {
       hash = "sha256-alayuxDdf7q+y8jAjkFC759IU1/dDgVwGLBJorD6eCY=";
     };
     meta.homepage = "https://github.com/vim-utils/vim-husk/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19729,6 +21244,7 @@ final: prev: {
       hash = "sha256-AL5by9R8r5EzP4fdr9QUplNR57mRp8i856uCgPm+XxE=";
     };
     meta.homepage = "https://github.com/hylang/vim-hy/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19742,6 +21258,7 @@ final: prev: {
       hash = "sha256-vLLHiLZ8MgOtke+SyW+iyzj9y4c+Vp9yQTzCIEIaeLA=";
     };
     meta.homepage = "https://github.com/w0ng/vim-hybrid/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19755,6 +21272,7 @@ final: prev: {
       hash = "sha256-TDD99syRay/MVCF4BfX1BDeX1RFlEb61ASf15lgRT2I=";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-hybrid-material/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19768,6 +21286,7 @@ final: prev: {
       hash = "sha256-V4a9D3HpT1SZUrUc1XrC6SsrtKmIcFxdSVmq0Gwt/Ik=";
     };
     meta.homepage = "https://github.com/nuchs/vim-hypr-nav/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19781,6 +21300,7 @@ final: prev: {
       hash = "sha256-x4WVkZdaUaFzb5mkM9fKPnY4tBc0CgRypjmV4W2OzpM=";
     };
     meta.homepage = "https://github.com/noc7c9/vim-iced-coffee-script/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19794,6 +21314,7 @@ final: prev: {
       hash = "sha256-KqAJRCtDBG5xsvNsqkxoBdDckg02u4NBBreYQw7BphA=";
     };
     meta.homepage = "https://github.com/RRethy/vim-illuminate/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19807,6 +21328,7 @@ final: prev: {
       hash = "sha256-YvUyNsejKmboVKb4Y2tqr/vL1Fd1MDInrZ7l/dEWqpc=";
     };
     meta.homepage = "https://github.com/preservim/vim-indent-guides/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19820,6 +21342,7 @@ final: prev: {
       hash = "sha256-fIqe85gstH9KEXrXPHdsSI3KgPYs5wDtufYKHFXKaxE=";
     };
     meta.homepage = "https://github.com/michaeljsmith/vim-indent-object/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19833,6 +21356,7 @@ final: prev: {
       hash = "sha256-ne2r1RdQnHYQ3z3jcCTr85kUPu42oYEKZhGh6FSY3y4=";
     };
     meta.homepage = "https://github.com/jeetsukumaran/vim-indentwise/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19846,6 +21370,7 @@ final: prev: {
       hash = "sha256-P51sfZTfXa0yYWNFrIOqjZj1QnPGfh35m4o9cY5NhiQ=";
     };
     meta.homepage = "https://github.com/henrik/vim-indexed-search/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19859,6 +21384,7 @@ final: prev: {
       hash = "sha256-ffh7GRMZUjXr6d2rS9V6wlz6iv+lEZX/XmF7pN12l4M=";
     };
     meta.homepage = "https://github.com/ivanov/vim-ipython/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19872,6 +21398,7 @@ final: prev: {
       hash = "sha256-QwA7+6abdo+SnMpQ+CuiE3/OT0MZ4r14SqO6DbS087o=";
     };
     meta.homepage = "https://github.com/fisadev/vim-isort/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19885,6 +21412,7 @@ final: prev: {
       hash = "sha256-4kYY0jUv5U2i+G/29vPOZHqUX/cEQTWBo9pghRg9gIw=";
     };
     meta.homepage = "https://github.com/clojure-vim/vim-jack-in/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19898,6 +21426,7 @@ final: prev: {
       hash = "sha256-ZD+V/3dC10SlP6pzSLSmKQbPeSGpVWQRhb7jFLN/fpk=";
     };
     meta.homepage = "https://github.com/mhinz/vim-janah/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19911,6 +21440,7 @@ final: prev: {
       hash = "sha256-8P6rEfd4HN40oSwPFH2hMCQTj6ixVzomjZ//+zlt5Ds=";
     };
     meta.homepage = "https://github.com/artur-shaik/vim-javacomplete2/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19924,6 +21454,7 @@ final: prev: {
       hash = "sha256-uwLDmF/fvAfkcHHNAsVT+68bStN022dw/8gYm7hk8ms=";
     };
     meta.homepage = "https://github.com/pangloss/vim-javascript/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19937,6 +21468,7 @@ final: prev: {
       hash = "sha256-uJcoQ8UTS8d7xhhT8wnXSCdYJ5NeV7yLheHrj5xFhsY=";
     };
     meta.homepage = "https://github.com/jelera/vim-javascript-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19950,6 +21482,7 @@ final: prev: {
       hash = "sha256-dBNl1y9b3zTrSBkw25XaJhlscmVaA8dkznzy+wv2M7s=";
     };
     meta.homepage = "https://github.com/tpope/vim-jdaddy/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19963,6 +21496,7 @@ final: prev: {
       hash = "sha256-H6JWXWXcA/iAy80HnVzRlTy0DDR0D1VAWr1FbcbdPfI=";
     };
     meta.homepage = "https://github.com/tani/vim-jetpack/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19976,6 +21510,7 @@ final: prev: {
       hash = "sha256-D7VPO36AAj+Ny3fYbZJf7Z2Zhdt0R8BkkDb3QluOeJQ=";
     };
     meta.homepage = "https://github.com/lepture/vim-jinja/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -19989,6 +21524,7 @@ final: prev: {
       hash = "sha256-3v433JmLeVVjWHkHBZusLd6l11+zN+DxZu/DZtbnLvk=";
     };
     meta.homepage = "https://github.com/seirl/vim-jinja-languages/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20002,6 +21538,7 @@ final: prev: {
       hash = "sha256-IIiBJlGmdYntwqizUy2xB8hhBJBGa1ASK9hmN8xZEvk=";
     };
     meta.homepage = "https://github.com/avm99963/vim-jjdescription/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20016,6 +21553,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/maksimr/vim-jsbeautify/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20029,6 +21567,7 @@ final: prev: {
       hash = "sha256-N3Jlx/mdVa5XbFoXjXgUOQpF+Xu0SvvD17pQJ+fTJkQ=";
     };
     meta.homepage = "https://github.com/heavenshell/vim-jsdoc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20042,6 +21581,7 @@ final: prev: {
       hash = "sha256-4eLcpybVnmnXdhqbTc9JejNoMKnZyyKp+7cQ7TO+KbA=";
     };
     meta.homepage = "https://github.com/elzr/vim-json/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20055,6 +21595,7 @@ final: prev: {
       hash = "sha256-ChgUGTrLthuGSws/UpF71JYI/c2QqItax6hsh7mYX/w=";
     };
     meta.homepage = "https://github.com/google/vim-jsonnet/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20068,6 +21609,7 @@ final: prev: {
       hash = "sha256-SdE8BKpZ5civFG/ET0+GeHvGc6gK6+dWP55mQrthqVA=";
     };
     meta.homepage = "https://github.com/mogelbrod/vim-jsonpath/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20081,6 +21623,7 @@ final: prev: {
       hash = "sha256-6K75uLhqEyH325Wd/xN6JmCw/6vWGRBDKpiF5bY0p5k=";
     };
     meta.homepage = "https://github.com/MaxMEllon/vim-jsx-pretty/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20094,6 +21637,7 @@ final: prev: {
       hash = "sha256-x6ZOejria+DL5hagCW4Vdg0yHvqEhVS3T/uIVCeyh48=";
     };
     meta.homepage = "https://github.com/peitalin/vim-jsx-typescript/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20107,6 +21651,7 @@ final: prev: {
       hash = "sha256-4jNnMuYej4mCci0qNISbkDLGBmScudPlh6xiMsVrRo8=";
     };
     meta.homepage = "https://github.com/mroavi/vim-julia-cell/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20120,6 +21665,7 @@ final: prev: {
       hash = "sha256-nCW8+x64GiJkbKshi3RhfRQoceTV5QPXs0mculC8xhM=";
     };
     meta.homepage = "https://github.com/NoahTheDuke/vim-just/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20133,6 +21679,7 @@ final: prev: {
       hash = "sha256-XoOEVCCAmD5TfyuUrHXNFmmXLIFwgJgl/fSFTbgytyg=";
     };
     meta.homepage = "https://github.com/knubie/vim-kitty-navigator/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20146,6 +21693,7 @@ final: prev: {
       hash = "sha256-L5b8Dqtu/a25f1phQGsNaBz8OVs5gJy7BG+YrEZVcAM=";
     };
     meta.homepage = "https://github.com/lark-parser/vim-lark-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20159,6 +21707,7 @@ final: prev: {
       hash = "sha256-6/Gl7l3ImGqfKkOp0kkHdSQhRCw3jM2NyzRuQfAqAh4=";
     };
     meta.homepage = "https://github.com/farmergreg/vim-lastplace/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20172,6 +21721,7 @@ final: prev: {
       hash = "sha256-peOqUNNNnpnjNgsHBlKUT7zb/upzk43VhFMxbdgO0RY=";
     };
     meta.homepage = "https://github.com/xuhdev/vim-latex-live-preview/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20185,6 +21735,7 @@ final: prev: {
       hash = "sha256-GzBzND7VBWrAqn+PjYTDXj4GxYW81Fb7VGIqDp4gnSs=";
     };
     meta.homepage = "https://github.com/ludovicchabant/vim-lawrencium/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20198,6 +21749,7 @@ final: prev: {
       hash = "sha256-W/n70utKjNPRPl4Z1xfSTGMC6QJVTZlvRiIncfJ+ONg=";
     };
     meta.homepage = "https://github.com/hecal3/vim-leader-guide/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20211,6 +21763,7 @@ final: prev: {
       hash = "sha256-z/19LF7ZnOr0R2phgv3qB4q/2jKawskdmk8keRwfgfs=";
     };
     meta.homepage = "https://github.com/mk12/vim-lean/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20224,6 +21777,7 @@ final: prev: {
       hash = "sha256-vwMBEIlKorWs0agm1FgYvbYUO6e7RNb1X+bOL15qQps=";
     };
     meta.homepage = "https://github.com/ledger/vim-ledger/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20237,6 +21791,7 @@ final: prev: {
       hash = "sha256-HlPnGklYyxBm+VPj1J8214mzCB0RgJUOTNu3MekI9Yk=";
     };
     meta.homepage = "https://github.com/preservim/vim-lexical/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20250,6 +21805,7 @@ final: prev: {
       hash = "sha256-nhitS6E7+ZwqGOL8PxeYPnEZZphtvv2L8qekb7OnxPE=";
     };
     meta.homepage = "https://github.com/lfe-support/vim-lfe/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20263,6 +21819,7 @@ final: prev: {
       hash = "sha256-6tfyTSjUu+TN6s2QK/fKXGdFohoeQikyzZ+aHIUkPOQ=";
     };
     meta.homepage = "https://github.com/josa42/vim-lightline-coc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20276,6 +21833,7 @@ final: prev: {
       hash = "sha256-B+avg/Sm+ds1tgKf35Kr247rtYS4je0QGuYxXkr0KbI=";
     };
     meta.homepage = "https://github.com/tommcdo/vim-lion/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20289,6 +21847,7 @@ final: prev: {
       hash = "sha256-iqkjji8VhCKwjfw13QWIfP6q5EEiiktO1u7h1mHvMVY=";
     };
     meta.homepage = "https://github.com/tpope/vim-liquid/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20302,6 +21861,7 @@ final: prev: {
       hash = "sha256-uvTVn/vyoAOcnTwUfzK060XM7d3EjnReThxVfhYEU94=";
     };
     meta.homepage = "https://github.com/rhysd/vim-llvm/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20315,6 +21875,7 @@ final: prev: {
       hash = "sha256-7lvW0w3D8cv4xre1aLqN4HTg3BgdDi4silPuV6sv+PQ=";
     };
     meta.homepage = "https://github.com/embear/vim-localvimrc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20328,6 +21889,7 @@ final: prev: {
       hash = "sha256-nMyINojfIHgJFanmzKYIteFeMTjHwat8XkS3anqpoDA=";
     };
     meta.homepage = "https://github.com/andreshazard/vim-logreview/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20341,6 +21903,7 @@ final: prev: {
       hash = "sha256-enZpz3PIemCowfRRuzN8pSHruvrpowyGqm6qXNFgDZw=";
     };
     meta.homepage = "https://github.com/mlr-msft/vim-loves-dafny/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MS-PL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20354,6 +21917,7 @@ final: prev: {
       hash = "sha256-E8q17fWXvuA7siPFINPBT4eKkHLlGU54HWkdC9+4P0U=";
     };
     meta.homepage = "https://github.com/natebosch/vim-lsc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20367,6 +21931,7 @@ final: prev: {
       hash = "sha256-ZMqeuTKyQAknqXA4IvNCzgumcrafu0sLNp3ZFwQ6kj4=";
     };
     meta.homepage = "https://github.com/prabirshrestha/vim-lsp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20380,6 +21945,7 @@ final: prev: {
       hash = "sha256-8fGLdc1OA8JCI5TjCdXLQNB22f3KZ4u3cBvb8er+z58=";
     };
     meta.homepage = "https://github.com/rhysd/vim-lsp-ale/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20393,6 +21959,7 @@ final: prev: {
       hash = "sha256-M9s+nAbrxs1ZMExPlDc6twcCM9Cg/CjAARluD+kZd5Q=";
     };
     meta.homepage = "https://github.com/jackguo380/vim-lsp-cxx-highlight/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20406,6 +21973,7 @@ final: prev: {
       hash = "sha256-G7+ToiCUgdwANcPtVZFqBsAEcON+mwgpaRQtOaXtpb8=";
     };
     meta.homepage = "https://github.com/mattn/vim-lsp-settings/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20419,6 +21987,7 @@ final: prev: {
       hash = "sha256-pOf4epxM2KBN+JtmeeyeB+6hBr2C34bWwHFk4IFuckY=";
     };
     meta.homepage = "https://github.com/thomasfaingnaert/vim-lsp-snippets/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20432,6 +22001,7 @@ final: prev: {
       hash = "sha256-kVDZ1ireZgL8wAuVGOD0z2IDdk9k7MYFwDGbgP3YmAA=";
     };
     meta.homepage = "https://github.com/thomasfaingnaert/vim-lsp-ultisnips/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20445,6 +22015,7 @@ final: prev: {
       hash = "sha256-dZDXPFQiiGFXaXZK7ttWyP7Fcv+3JCtPYxSgXa90d7o=";
     };
     meta.homepage = "https://github.com/tbastos/vim-lua/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20458,6 +22029,7 @@ final: prev: {
       hash = "sha256-lCtftTLhZGoe4kfV43xwEvN5Xq/LVzzmENQHHCshS+M=";
     };
     meta.homepage = "https://github.com/google/vim-maktaba/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20471,6 +22043,7 @@ final: prev: {
       hash = "sha256-VLYGk6RiT/Vej3woPmpOe9ebiDDQms6B8xKw1aGouoQ=";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-manpager/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20484,6 +22057,7 @@ final: prev: {
       hash = "sha256-dGMO0vbi4LMQeMvA/NI98S/CsDT7LKDPrLP9NFkMZOQ=";
     };
     meta.homepage = "https://github.com/Yilin-Yang/vim-markbar/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20497,6 +22071,7 @@ final: prev: {
       hash = "sha256-bkVQRCu+F7VjIdY0Ll0MYhPrAShri9AONixOXq2V7rw=";
     };
     meta.homepage = "https://github.com/preservim/vim-markdown/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20510,6 +22085,7 @@ final: prev: {
       hash = "sha256-Dj5mUFf6FvAh2YbV4L8lTlFoM4N3pozTf99RjwEdobk=";
     };
     meta.homepage = "https://github.com/mzlogin/vim-markdown-toc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20523,6 +22099,7 @@ final: prev: {
       hash = "sha256-dO3+vS5tlpo+rqOAD8IPXNHPjCuhXkYgazGGj+V5R0I=";
     };
     meta.homepage = "https://github.com/leafOfTree/vim-matchtag/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20536,6 +22113,7 @@ final: prev: {
       hash = "sha256-REbSURtBOLWhjyZyJdEQ4VQXifX6e3bv9+B9PpKlq8o=";
     };
     meta.homepage = "https://github.com/andymass/vim-matchup/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20549,6 +22127,7 @@ final: prev: {
       hash = "sha256-3yuf5d9A2anJwmOmdIrlcC0/EAHh/K2z3skrDRzfoQE=";
     };
     meta.homepage = "https://github.com/aquach/vim-mediawiki-editor/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20562,6 +22141,7 @@ final: prev: {
       hash = "sha256-l63Iek33eqSSEEAcirhLQq/pibHuiggAqc36bwCNf8Q=";
     };
     meta.homepage = "https://github.com/samoshkin/vim-mergetool/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20575,6 +22155,7 @@ final: prev: {
       hash = "sha256-c1x/KYiam9l+RX9ATwZlpLCJ380kno3sBS330eudFz0=";
     };
     meta.homepage = "https://github.com/idanarye/vim-merginal/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20588,6 +22169,7 @@ final: prev: {
       hash = "sha256-UGv7i4+K70QTD0ajTyjtQT4yQeSdHYKfT5ujkKFTmD8=";
     };
     meta.homepage = "https://github.com/david-a-wheeler/vim-metamath/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20601,6 +22183,7 @@ final: prev: {
       hash = "sha256-0XGugINNYH+o8uPePNz28Nojy1dxdVD8RYU53xA6qWU=";
     };
     meta.homepage = "https://github.com/xolox/vim-misc/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20614,6 +22197,7 @@ final: prev: {
       hash = "sha256-g/0bkSBTKFykt4/k+fV+XSErAPDkf+cu4sLGoX5VsQ0=";
     };
     meta.homepage = "https://github.com/delroth/vim-molokai-delroth/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20627,6 +22211,7 @@ final: prev: {
       hash = "sha256-PJxHKsyinieRigMNtSa/jhCQQ5WQK8wzA9lryV7CuqQ=";
     };
     meta.homepage = "https://github.com/crusoexia/vim-monokai/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20640,6 +22225,7 @@ final: prev: {
       hash = "sha256-On1kMP5JMoeNYZAn/6gCh+2gJifSOkIF/tTVDHCoJuY=";
     };
     meta.homepage = "https://github.com/phanviet/vim-monokai-pro/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20653,19 +22239,21 @@ final: prev: {
       hash = "sha256-22RXCEbnzv4c0o1hCVz/rJVHs76oN0FQ1f3URY2w4Xc=";
     };
     meta.homepage = "https://github.com/patstockwell/vim-monokai-tasty/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   vim-moonfly-colors = buildVimPlugin {
     pname = "vim-moonfly-colors";
-    version = "0-unstable-2026-04-20";
+    version = "0-unstable-2026-04-26";
     src = fetchFromGitHub {
       owner = "bluz71";
       repo = "vim-moonfly-colors";
-      rev = "ed33cb0e0edfced6e86e782d51f23e67232ad4a9";
-      hash = "sha256-xFEI7cn5X3E90X3Z7njTg5/nFXXECJxPYmitfr+29VA=";
+      rev = "4ed07bc0c6083cdd547c63f5c245e02c068b0c45";
+      hash = "sha256-78F44cldvn+D/cfeaSe4A7LURMArCvkUJER22oTUuyM=";
     };
     meta.homepage = "https://github.com/bluz71/vim-moonfly-colors/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20679,6 +22267,7 @@ final: prev: {
       hash = "sha256-4NGFiLOYNJa03vSW9x+tqjfP8+J38mFTiRL0hZwoRLY=";
     };
     meta.homepage = "https://github.com/matze/vim-move/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20692,6 +22281,7 @@ final: prev: {
       hash = "sha256-UxMuSOKwCs7YJc/ywkoP78uRIX1vWovv+1Ne7RdiqG4=";
     };
     meta.homepage = "https://github.com/lifepillar/vim-mucomplete/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20705,6 +22295,7 @@ final: prev: {
       hash = "sha256-YtDPAe0zhPesVjIC1DGUsVLKyr1hqemOCECZKSG6qjY=";
     };
     meta.homepage = "https://github.com/terryma/vim-multiple-cursors/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20718,6 +22309,7 @@ final: prev: {
       hash = "sha256-lXgNJ6fFI8RgvTu0+kWnSfJmAipSixqbgXkKVbCcPFc=";
     };
     meta.homepage = "https://github.com/simnalamburt/vim-mundo/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20731,6 +22323,7 @@ final: prev: {
       hash = "sha256-lmYt+GKuXhbOhu3HufqIFE2DvzUYlk5vGqU6tpJ2yjY=";
     };
     meta.homepage = "https://github.com/mustache/vim-mustache-handlebars/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20744,6 +22337,7 @@ final: prev: {
       hash = "sha256-aH3fdAQQjLVth0rYGnqGIGxRZgSPkmpeUfAwVg8feWY=";
     };
     meta.homepage = "https://github.com/tiagofumo/vim-nerdtree-syntax-highlight/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20757,6 +22351,7 @@ final: prev: {
       hash = "sha256-PcUYAci4FehCtKftet/jLkAdocPPJrzQBHh3Q8uFOJo=";
     };
     meta.homepage = "https://github.com/jistr/vim-nerdtree-tabs/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20770,6 +22365,7 @@ final: prev: {
       hash = "sha256-gDBm1e4A+G9dM5/I2F4B+iMKC8wzYhTqe9Ei3Ppzrvw=";
     };
     meta.homepage = "https://github.com/nfnty/vim-nftables/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20783,6 +22379,7 @@ final: prev: {
       hash = "sha256-4tdDTzAaZTatKrA3UufL3a8fayxDEF18woFKEPTpGbQ=";
     };
     meta.homepage = "https://github.com/kana/vim-niceblock/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20796,6 +22393,7 @@ final: prev: {
       hash = "sha256-wb8UNs0eF6939pjZWafDoFgRh/10rKorJFZtPbTkn/k=";
     };
     meta.homepage = "https://github.com/nickel-lang/vim-nickel/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20809,6 +22407,7 @@ final: prev: {
       hash = "sha256-b1hXG3XRrWtZby+Z5J+WPREij6lFw8n73Ge6IbLBQgo=";
     };
     meta.homepage = "https://github.com/tommcdo/vim-ninja-feet/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20822,6 +22421,7 @@ final: prev: {
       hash = "sha256-Hmn8EVlvMQnQF8COeb89cgl5+A83kagOjGsmvm5WNoE=";
     };
     meta.homepage = "https://github.com/LnL7/vim-nix/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20835,6 +22435,7 @@ final: prev: {
       hash = "sha256-MWLc3ezCx7cG/HASghB4y7BwmFQq/r6sdKDIWTlihw4=";
     };
     meta.homepage = "https://github.com/symphorien/vim-nixhash/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20848,6 +22449,7 @@ final: prev: {
       hash = "sha256-fiMYfRlm/KiMQybL97RcWy3Y+0qim6kl3ZkBvCuv4ZM=";
     };
     meta.homepage = "https://github.com/noahfrederick/vim-noctu/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20861,6 +22463,7 @@ final: prev: {
       hash = "sha256-CoOpUc6VL77RTCbTg+17ned/I4OVfFIsKfbd5r+um54=";
     };
     meta.homepage = "https://github.com/fruit-in/vim-nong-theme/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20874,6 +22477,7 @@ final: prev: {
       hash = "sha256-TFByXuBhw9/OcNhe+aqY8+QN2sFvhCkWxhMgBwSV3LQ=";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/vim-numbertoggle/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20887,6 +22491,7 @@ final: prev: {
       hash = "sha256-+7lj2Tbv5V4El54pSfFlu8jq6Rz6Pz+EIsg9DwXuADU=";
     };
     meta.homepage = "https://github.com/tpope/vim-obsession/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20900,6 +22505,7 @@ final: prev: {
       hash = "sha256-w6DargglFxNkgZl7Uchl/uPntoGo54OH6tmJzaorfIw=";
     };
     meta.homepage = "https://github.com/ocaml/vim-ocaml/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20913,6 +22519,7 @@ final: prev: {
       hash = "sha256-IGS0YgmCHLiCPAb7jHWLHEfHu3AzKiatZbAYdEvgzlI=";
     };
     meta.homepage = "https://github.com/rakr/vim-one/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -20926,6 +22533,7 @@ final: prev: {
       hash = "sha256-wRqW6xu3xgJf/552zK4nGaP2NLmzdrnEEUrNWb1WGH0=";
     };
     meta.homepage = "https://github.com/petRUShka/vim-opencl/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20939,6 +22547,7 @@ final: prev: {
       hash = "sha256-lzLHlf5ELodySd7FSMAxKnuTSaK2HmifzkBtX9K/BuU=";
     };
     meta.homepage = "https://github.com/sirtaj/vim-openscad/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20952,6 +22561,7 @@ final: prev: {
       hash = "sha256-2Gyr95P5bQqy9BC2WiOU6NuXvzuHNdydvH/xH8xdkR0=";
     };
     meta.homepage = "https://github.com/kana/vim-operator-replace/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20965,6 +22575,7 @@ final: prev: {
       hash = "sha256-AtN0n1ywnB+hM8EvdP87fsL1zDRxQXXMh2nQFdCDOjk=";
     };
     meta.homepage = "https://github.com/rhysd/vim-operator-surround/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20978,6 +22589,7 @@ final: prev: {
       hash = "sha256-yykX2bTr77HMqDjFt6VQLI1qNHodxYIom5s8XrN3wps=";
     };
     meta.homepage = "https://github.com/kana/vim-operator-user/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -20991,6 +22603,7 @@ final: prev: {
       hash = "sha256-hE7zSg6u9AAoPeyfXaINi6tM9VknXB95mN0+mLTOifk=";
     };
     meta.homepage = "https://github.com/jceb/vim-orgmode/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21004,6 +22617,7 @@ final: prev: {
       hash = "sha256-HXmp65oIr8LSPa8DgiRfMgveECF9qvTQIh82A3psWQ8=";
     };
     meta.homepage = "https://github.com/sdiehl/vim-ormolu/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21017,6 +22631,7 @@ final: prev: {
       hash = "sha256-SYv2zi5B/0gPltNXq7GNPIRagrTx0gLrHPSIpcTQsns=";
     };
     meta.homepage = "https://github.com/fcpg/vim-osc52/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21030,6 +22645,7 @@ final: prev: {
       hash = "sha256-MicPNz+zUrWF87h7vj5junmYsriOl3Kyqxgh/8Mz6cg=";
     };
     meta.homepage = "https://github.com/ojroques/vim-oscyank/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-2-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21043,6 +22659,7 @@ final: prev: {
       hash = "sha256-FkfOgZ4obCqj0/QMCgblOBXYcQ/tSijNAKklY9lNYgI=";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-over/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21056,6 +22673,7 @@ final: prev: {
       hash = "sha256-ZKfXnq3DlzyPzbsWqTfNM80GFgQd3uO+650jyOtiFhw=";
     };
     meta.homepage = "https://github.com/hashivim/vim-packer/";
+    meta.license = lib.meta.getLicenseFromSpdxId "ISC";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21069,6 +22687,7 @@ final: prev: {
       hash = "sha256-Zu/u5AqGs1O5Zgh/Q1HKoxidkIaeUhGT+yYkFe85tYM=";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-pager/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21082,6 +22701,7 @@ final: prev: {
       hash = "sha256-/yWE4VppahyeU6021tHjo7S88UpPzeU53IiLVEgyxPU=";
     };
     meta.homepage = "https://github.com/vim-pandoc/vim-pandoc/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21095,6 +22715,7 @@ final: prev: {
       hash = "sha256-/u25UFAM4aWDH1kyVBFTz50NFr9aors3TBqBPoUkjx8=";
     };
     meta.homepage = "https://github.com/vim-pandoc/vim-pandoc-after/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21108,6 +22729,7 @@ final: prev: {
       hash = "sha256-9JdQYjtoPqQz6Cn3JFHQP9c7KD38pnnDx3k5mVO4cis=";
     };
     meta.homepage = "https://github.com/vim-pandoc/vim-pandoc-syntax/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21121,6 +22743,7 @@ final: prev: {
       hash = "sha256-aQrjEvkme43uDT5z+c6iKYVVoH6m0wGemB+14nCeRzQ=";
     };
     meta.homepage = "https://github.com/yorickpeterse/vim-paper/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21134,6 +22757,7 @@ final: prev: {
       hash = "sha256-tRrp8J/7S8xKKw+lLOJbV7vQLHpdGbhmytVM2QlRItc=";
     };
     meta.homepage = "https://github.com/bhurlow/vim-parinfer/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21147,6 +22771,7 @@ final: prev: {
       hash = "sha256-nfJmV+PNJy1upgz52uWIf9YkLqY6ELK04uoUnEUojeA=";
     };
     meta.homepage = "https://github.com/ku1ik/vim-pasta/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21160,6 +22785,7 @@ final: prev: {
       hash = "sha256-CaNuMd4CDdN27Bnv9QJFEzZCYUVdcPRJVqj5x5cGgFc=";
     };
     meta.homepage = "https://github.com/tpope/vim-pathogen/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21173,6 +22799,7 @@ final: prev: {
       hash = "sha256-faJqZI4oWqNTwbN6nX4nUR0hKiSx0nOcG8eDlzPH17E=";
     };
     meta.homepage = "https://github.com/junegunn/vim-peekaboo/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21186,6 +22813,7 @@ final: prev: {
       hash = "sha256-CkUROC4vyIdNbRONCgOnuPky8pZXE25KHKU9icCqWKI=";
     };
     meta.homepage = "https://github.com/preservim/vim-pencil/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21199,6 +22827,7 @@ final: prev: {
       hash = "sha256-zNvyfy4SlHqwMeo8TjRGtGgPO8k1zNAYabnTlysqn70=";
     };
     meta.homepage = "https://github.com/MeF0504/vim-pets/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21212,6 +22841,7 @@ final: prev: {
       hash = "sha256-Osm/TPV8zCVKwAaJztZSOSGe1VPFrmTsz6Iq52N077c=";
     };
     meta.homepage = "https://github.com/jparise/vim-phabricator/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21225,6 +22855,7 @@ final: prev: {
       hash = "sha256-GlS4R4b3OZLsNJk7gOCrNxDUUV05H6ffUqtlctYCXmk=";
     };
     meta.homepage = "https://github.com/justinj/vim-pico8-syntax/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21238,6 +22869,7 @@ final: prev: {
       hash = "sha256-8jvqRqkR2libYj7pC6nUpdqla9Cid8qWhA4rumMSkbY=";
     };
     meta.homepage = "https://github.com/junegunn/vim-plug/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21251,6 +22883,7 @@ final: prev: {
       hash = "sha256-N7UVzk/XUX76XcPHds+lLMZzO7gahj/9LIfof2BPThc=";
     };
     meta.homepage = "https://github.com/powerman/vim-plugin-AnsiEsc/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21264,6 +22897,7 @@ final: prev: {
       hash = "sha256-eK3fb45c6+dqt+2URW3IczIobm06Tc/6MQ0wXSGHQLc=";
     };
     meta.homepage = "https://github.com/hasundue/vim-pluto/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21277,6 +22911,7 @@ final: prev: {
       hash = "sha256-GcJRChc2cVXz6U1q4z3RmWnlpGllD4KiQ66U3uA/dg8=";
     };
     meta.homepage = "https://github.com/sheerun/vim-polyglot/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21290,6 +22925,7 @@ final: prev: {
       hash = "sha256-pn8Fpt59qzVcDaRaddc3g1vG366OeUnrIKXNWUfXWmk=";
     };
     meta.homepage = "https://github.com/jmcomets/vim-pony/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21303,6 +22939,7 @@ final: prev: {
       hash = "sha256-ioTgzkQlEd+/PSkL4cQBDskbHDbPWF3KTipDLKw13AQ=";
     };
     meta.homepage = "https://github.com/haya14busa/vim-poweryank/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21316,6 +22953,7 @@ final: prev: {
       hash = "sha256-pgSTKOUzmtzjfNeF3mKcNqqcBY44kHfC30xD5HiL9PY=";
     };
     meta.homepage = "https://github.com/prettier/vim-prettier/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21329,6 +22967,7 @@ final: prev: {
       hash = "sha256-ab7SHn1XXb3SiQKm24EYTKhsPf08psbTjEMAgjX1YVU=";
     };
     meta.homepage = "https://github.com/thinca/vim-prettyprint/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21342,6 +22981,7 @@ final: prev: {
       hash = "sha256-ga41f7QowPsLcU8wKIO9c5Zwc/aE5IslzppGHQT+/68=";
     };
     meta.homepage = "https://github.com/meain/vim-printer/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21355,6 +22995,7 @@ final: prev: {
       hash = "sha256-Xn8bQknIuZwBKptNI+mMfmlAZcCKzs1oWMYR8r+61BA=";
     };
     meta.homepage = "https://github.com/prisma/vim-prisma/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21368,6 +23009,7 @@ final: prev: {
       hash = "sha256-JEO/5xOqtIwlaSSAQVi/0rNOVhWqxL11mkr1sDXl5DE=";
     };
     meta.homepage = "https://github.com/tpope/vim-projectionist/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21381,6 +23023,7 @@ final: prev: {
       hash = "sha256-Zi9HVTYU6vABAqcvIbdcx0YtVHvKtkJupaLK3umO+DY=";
     };
     meta.homepage = "https://github.com/dhruvasagar/vim-prosession/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21394,6 +23037,7 @@ final: prev: {
       hash = "sha256-5Z4fisFwEUO2OueQo+MA3rzoBQgZdmJYM++elclwCe4=";
     };
     meta.homepage = "https://github.com/uarun/vim-protobuf/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21407,6 +23051,7 @@ final: prev: {
       hash = "sha256-G9dLjdq48x50wdd0+WjPxpgMlp00QLM8i3w1tj3s8zI=";
     };
     meta.homepage = "https://github.com/PProvost/vim-ps1/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21420,6 +23065,7 @@ final: prev: {
       hash = "sha256-VTlYf8Zcc6kXqevQTwUF4nAD2AKPYcOaJyoq66YMJBw=";
     };
     meta.homepage = "https://github.com/digitaltoad/vim-pug/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21433,6 +23079,7 @@ final: prev: {
       hash = "sha256-fE7SJ62qB9NY+Th8cPQAonyPsUljoZuoq0HQkrhLzrA=";
     };
     meta.homepage = "https://github.com/rodjek/vim-puppet/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21446,6 +23093,7 @@ final: prev: {
       hash = "sha256-8E/gUKU5KZUwRu2Tml7cDUeAL6LJwoTdu8RZN/2Enq4=";
     };
     meta.homepage = "https://github.com/Vimjas/vim-python-pep8-indent/";
+    meta.license = lib.meta.getLicenseFromSpdxId "CC0-1.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21459,6 +23107,7 @@ final: prev: {
       hash = "sha256-LQTwroaz7Eb/1GMwya1ucEgk74LTMil5Sn64AuT4WNQ=";
     };
     meta.homepage = "https://github.com/jeetsukumaran/vim-pythonsense/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21472,6 +23121,7 @@ final: prev: {
       hash = "sha256-7NYBN0fuls57LAmfZ6xgKdXTwEhd9CAWubnBPf5T4EU=";
     };
     meta.homepage = "https://github.com/romainl/vim-qf/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21485,6 +23135,7 @@ final: prev: {
       hash = "sha256-HOvZ0tK/stHD8NPxtSpiHUkxKQQ5geYGnhjD0X8Vamo=";
     };
     meta.homepage = "https://github.com/romainl/vim-qlist/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21498,6 +23149,7 @@ final: prev: {
       hash = "sha256-DGXSK/eNkLmniYGva2ubeDig50R6/6psgKF9yrODu+o=";
     };
     meta.homepage = "https://github.com/peterhoeg/vim-qml/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21511,6 +23163,7 @@ final: prev: {
       hash = "sha256-EoE1oc0uOopxjZ0XrfpQm4xK+acmvr6mD2I/9d2e17U=";
     };
     meta.homepage = "https://github.com/thinca/vim-quickrun/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Zlib";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21524,6 +23177,7 @@ final: prev: {
       hash = "sha256-e5+AqNaJ1I+ttYpWLMi9sC8Q79dH2D8bk22mwhKPxoU=";
     };
     meta.homepage = "https://github.com/racer-rust/vim-racer/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21537,6 +23191,7 @@ final: prev: {
       hash = "sha256-+7Xk8jhiYIP6kFRpv9uGV9fIzEPkCQTco4WidMqOlAk=";
     };
     meta.homepage = "https://github.com/wlangstroth/vim-racket/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21550,6 +23205,7 @@ final: prev: {
       hash = "sha256-OKDewqVA2Ut39lLLS4mwdC72g6EJXmBB8raFA1i4pmU=";
     };
     meta.homepage = "https://github.com/tpope/vim-ragtag/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21563,6 +23219,7 @@ final: prev: {
       hash = "sha256-0NqwCHvGeM5qale6xQR6NjG3bNRcpieDXk0W73jQUfo=";
     };
     meta.homepage = "https://github.com/tpope/vim-rails/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21576,6 +23233,7 @@ final: prev: {
       hash = "sha256-RJPRe2QY3cS27yzRMO04sxYgZifzq3UEBRRbtTKh1Pk=";
     };
     meta.homepage = "https://github.com/jordwalke/vim-reasonml/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21589,6 +23247,7 @@ final: prev: {
       hash = "sha256-G/dmkq1KtSHIl+I5p3LfO6mGPS3eyLRbEEsuLbTpGlk=";
     };
     meta.homepage = "https://github.com/tpope/vim-repeat/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21602,6 +23261,7 @@ final: prev: {
       hash = "sha256-cLltwCpFkd1reNwLKzwoUtDbImzSvTFPCmXNL9xpZlQ=";
     };
     meta.homepage = "https://github.com/rhaiscript/vim-rhai/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21615,6 +23275,7 @@ final: prev: {
       hash = "sha256-x2E2oIqW2BPUzmu5KeEUFFeH5+PXHRbjt8obIgDzYkc=";
     };
     meta.homepage = "https://github.com/tpope/vim-rhubarb/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21628,6 +23289,7 @@ final: prev: {
       hash = "sha256-JrpYcQ/mJQQUvDdsYlaaep6J6/irDIrCAb8W49JHqzk=";
     };
     meta.homepage = "https://github.com/airblade/vim-rooter/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21641,6 +23303,7 @@ final: prev: {
       hash = "sha256-O2Xc2nvJgBBjT8FkGAQsgeMZwTu6RjJhbcC4oiytJW8=";
     };
     meta.homepage = "https://github.com/tpope/vim-rsi/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21654,6 +23317,7 @@ final: prev: {
       hash = "sha256-pphvPEy3gMHB8EzmfO21yWbffpvr2Kp1Uwn1fXUvQEA=";
     };
     meta.homepage = "https://github.com/vim-ruby/vim-ruby/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21667,6 +23331,7 @@ final: prev: {
       hash = "sha256-6GJCL2OcNEk3Qv/9TRUhXPHiaLJXEtGfl05UzLMFvEc=";
     };
     meta.homepage = "https://github.com/tpope/vim-salve/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21680,6 +23345,7 @@ final: prev: {
       hash = "sha256-V9bbiAeR2HGdwjp6htP4GQQ56UHNHQhoOXjIPV87waY=";
     };
     meta.homepage = "https://github.com/machakann/vim-sandwich/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21693,6 +23359,7 @@ final: prev: {
       hash = "sha256-R/NrlXJHdo5GrwztPGXogh9tRGA9WTRtwb96JqitDPY=";
     };
     meta.homepage = "https://github.com/mhinz/vim-sayonara/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21706,6 +23373,7 @@ final: prev: {
       hash = "sha256-JTOyLgF6OcIYvNakbUB8AHP0kN8JMUy64XbRECPB10c=";
     };
     meta.homepage = "https://github.com/derekwyatt/vim-scala/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21719,6 +23387,7 @@ final: prev: {
       hash = "sha256-RsjJj/lzKC53EA3C5HLui13YCcxIgi0aQOX/zI82C78=";
     };
     meta.homepage = "https://github.com/thinca/vim-scouter/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21732,6 +23401,7 @@ final: prev: {
       hash = "sha256-DXUK2kI+Z0+t45yUfYWQPGcBAbJsSpCOK9Qp84W16gg=";
     };
     meta.homepage = "https://github.com/tpope/vim-scriptease/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21745,6 +23415,7 @@ final: prev: {
       hash = "sha256-5szvkGCMFfYGTC3mrOXw5hGSMSYfBzRGhY11LB8ktok=";
     };
     meta.homepage = "https://github.com/inside/vim-search-pulse/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21758,6 +23429,7 @@ final: prev: {
       hash = "sha256-1eomYzMHQSAmYr+GggGcK0UM6jYcS3Vd05zOM1X2MCg=";
     };
     meta.homepage = "https://github.com/tpope/vim-sensible/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21771,19 +23443,21 @@ final: prev: {
       hash = "sha256-x5FaM97AIxbQ8pXEttZXrxpVd1ME+rVyuhCIvF/f9eA=";
     };
     meta.homepage = "https://github.com/Konfekt/vim-sentence-chopper/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   vim-sexp = buildVimPlugin {
     pname = "vim-sexp";
-    version = "0-unstable-2026-04-06";
+    version = "0-unstable-2026-04-25";
     src = fetchFromGitHub {
       owner = "guns";
       repo = "vim-sexp";
-      rev = "2fc0a7c7e44fe94e48156d6a5b5fea28538430eb";
-      hash = "sha256-eZvNZhfTyPrgYNrDlHNhegtssm1Ee1+o7X49Z62nxVk=";
+      rev = "fdebfbb355fa3cd86dc7e31a337b44ca335dd4c4";
+      hash = "sha256-8krfygk3/EF0ZoVeNrYH6klPcPIaasPScr4iKO593XM=";
     };
     meta.homepage = "https://github.com/guns/vim-sexp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21797,6 +23471,7 @@ final: prev: {
       hash = "sha256-homad7Z7nIF6jEJJGhtiZvdNLQUhb0vvmvcEku3K5/c=";
     };
     meta.homepage = "https://github.com/tpope/vim-sexp-mappings-for-regular-people/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21810,6 +23485,7 @@ final: prev: {
       hash = "sha256-fjm6t50EqhNqNa7iKidaDjWR5Ky6eqN6eqWEcbsOTWM=";
     };
     meta.homepage = "https://github.com/itspriddle/vim-shellcheck/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21823,6 +23499,7 @@ final: prev: {
       hash = "sha256-9eZ7IZV5PSEHAACZYQ4iiCs8iZxSxWOPinkrf85rpSI=";
     };
     meta.homepage = "https://github.com/kshenoy/vim-signature/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21836,6 +23513,7 @@ final: prev: {
       hash = "sha256-xq8YiTfVVx0V1HicsAt99IgptKI799i6+bKy4gSGXY8=";
     };
     meta.homepage = "https://github.com/mhinz/vim-signify/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21849,6 +23527,7 @@ final: prev: {
       hash = "sha256-9EQ+SAAoQkLjL929dVBDCUWvaUFjVDZ7jGoSeGrpjDA=";
     };
     meta.homepage = "https://github.com/sile-typesetter/vim-sile/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21862,6 +23541,7 @@ final: prev: {
       hash = "sha256-HLj+3qJ49YRyx2uAtzSzMUtG0rZMEZDXO71fcc1BEfg=";
     };
     meta.homepage = "https://github.com/ivalkeen/vim-simpledb/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21875,6 +23555,7 @@ final: prev: {
       hash = "sha256-hC590lmKBssLCSKPF9O2cnt6TCJkklzbbhDNhf1ozUU=";
     };
     meta.homepage = "https://github.com/junegunn/vim-slash/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21888,6 +23569,7 @@ final: prev: {
       hash = "sha256-2Cr3h3uJvUL3CSoJs3aBFrkBeOBURSQItgQ4ep9sHXM=";
     };
     meta.homepage = "https://github.com/tpope/vim-sleuth/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21901,6 +23583,7 @@ final: prev: {
       hash = "sha256-wFoEmru31f7PoN8JMtTLyIj5t8wFAO4jduFOYkAJfJ8=";
     };
     meta.homepage = "https://github.com/jpalardy/vim-slime/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21914,6 +23597,7 @@ final: prev: {
       hash = "sha256-qL/HQclAQJmtXFZaF+RIgUA1GAqxu5MEDiIXHB1bjdU=";
     };
     meta.homepage = "https://github.com/mzlogin/vim-smali/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21927,6 +23611,7 @@ final: prev: {
       hash = "sha256-Ta0LuSz/bT1NKqBr6LU3hd0qATdbCT99SY8BIfYfv2g=";
     };
     meta.homepage = "https://github.com/t9md/vim-smalls/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21940,6 +23625,7 @@ final: prev: {
       hash = "sha256-rwKWi3ke0S44JUHzzEGYs30pbHsfmDyyOrn4t0bSlCg=";
     };
     meta.homepage = "https://github.com/Industrial/vim-smartbd/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21953,6 +23639,7 @@ final: prev: {
       hash = "sha256-tldt9G0tRuJH2YREQkTPGkrVm4jreHUJ2VJIqLDHKCI=";
     };
     meta.homepage = "https://github.com/Industrial/vim-smartbw/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -21966,6 +23653,7 @@ final: prev: {
       hash = "sha256-5oB+h85q6s8fCrU4oatL4lyZwn7edzoTNGdyUhL7B7E=";
     };
     meta.homepage = "https://github.com/psliwka/vim-smoothie/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21979,6 +23667,7 @@ final: prev: {
       hash = "sha256-vvT/zCzPuCzgsUKBYo3XkZVY5XSctKBr+p9Gndw1Imk=";
     };
     meta.homepage = "https://github.com/bohlender/vim-smt2/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -21992,6 +23681,7 @@ final: prev: {
       hash = "sha256-VkCownDdBKHXaa4KCJ+c0h4SVImmkkC4bbqP0uaQyPQ=";
     };
     meta.homepage = "https://github.com/justinmk/vim-sneak/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22005,6 +23695,7 @@ final: prev: {
       hash = "sha256-WUjS0wEVNVmPeFBUMjGBd4hE04H9RdZzFLhTY5++vjY=";
     };
     meta.homepage = "https://github.com/garbas/vim-snipmate/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22018,6 +23709,7 @@ final: prev: {
       hash = "sha256-6tcsy7rbREY9j9JRBsfWK2udl/Pa16KJTfiKTDQMMtE=";
     };
     meta.homepage = "https://github.com/honza/vim-snippets/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22031,6 +23723,7 @@ final: prev: {
       hash = "sha256-Og6qmrSIfhtGgait/nwJg+uNrUtY/j83cUWZj2TwUFY=";
     };
     meta.homepage = "https://github.com/lifepillar/vim-solarized8/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22044,6 +23737,7 @@ final: prev: {
       hash = "sha256-vd/RxKc04hUBtyc4lQn3EzftCPX9whrn2k8+UvNa7uI=";
     };
     meta.homepage = "https://github.com/tomlion/vim-solidity/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22057,6 +23751,7 @@ final: prev: {
       hash = "sha256-MdJUkdyt761/5eBRYbNdjzAsOLDTruc2am+8cmyWAu8=";
     };
     meta.homepage = "https://github.com/christoomey/vim-sort-motion/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22070,6 +23765,7 @@ final: prev: {
       hash = "sha256-IMD5xHFy26B5ZcR+9/TPyINYc/w4676B4Czy0jaGK94=";
     };
     meta.homepage = "https://github.com/tpope/vim-speeddating/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22083,6 +23779,7 @@ final: prev: {
       hash = "sha256-HFl8cMKza+X4Aeu3q6jIzslatYplUBthlK95QrxPTN8=";
     };
     meta.homepage = "https://github.com/kbenzie/vim-spirv/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22096,6 +23793,7 @@ final: prev: {
       hash = "sha256-cacNP4C9vl4h36GzWrrSZlRg53HelyYt+oXX0krHnyA=";
     };
     meta.homepage = "https://github.com/yorokobi/vim-splunk/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22109,6 +23807,7 @@ final: prev: {
       hash = "sha256-W5N/Dqxf9hSXEEJsrEkXInFwBXNBJe9Dzx9TVS12mPk=";
     };
     meta.homepage = "https://github.com/mhinz/vim-startify/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22122,6 +23821,7 @@ final: prev: {
       hash = "sha256-rfY5lcDI4PwjLEqwmli1iG7ugZuplETmAYBNAoJX0ho=";
     };
     meta.homepage = "https://github.com/dstein64/vim-startuptime/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22134,19 +23834,21 @@ final: prev: {
       hash = "sha256-YCxrSB7eRQ54iZhpcsAR930Uccj+2ZyogpYGKbcSlys=";
     };
     meta.homepage = "https://gitlab.com/LittleMorph/vim-ic10";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
   vim-strip-trailing-whitespace = buildVimPlugin {
     pname = "vim-strip-trailing-whitespace";
-    version = "1.0-unstable-2022-02-01";
+    version = "1.0-unstable-2026-04-26";
     src = fetchFromGitHub {
       owner = "axelf4";
       repo = "vim-strip-trailing-whitespace";
-      rev = "59385775cbe416b2797ec5e2c7eb445a3398dd46";
-      hash = "sha256-HuzAQ3uCHaFudfFePSgoX0HvG9UuW2wNjZ0mKqmFYxM=";
+      rev = "4da5f5ab7cedf43345f9b540580babb48322a7ed";
+      hash = "sha256-mtI9ixjaTqhYzoDvl7M4BhZ8Myd4N1/biGxuzviz+1o=";
     };
     meta.homepage = "https://github.com/axelf4/vim-strip-trailing-whitespace/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22160,6 +23862,7 @@ final: prev: {
       hash = "sha256-51RENZp53McViY5ZOeuB1A8B7FW9TFO5FEEUIvPEEWM=";
     };
     meta.homepage = "https://github.com/nbouscal/vim-stylish-haskell/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22173,6 +23876,7 @@ final: prev: {
       hash = "sha256-jxGvz1KpdR+faI8BsSynXkLs+20qE0rhEkRSo4sxnw8=";
     };
     meta.homepage = "https://github.com/alx741/vim-stylishask/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22186,6 +23890,7 @@ final: prev: {
       hash = "sha256-4oOBRGSSCgRyy03X4doMWFIlfeY9BQNLtaXLPkz29bI=";
     };
     meta.homepage = "https://github.com/lunacookies/vim-substrata/";
+    meta.license = lib.meta.getLicenseFromSpdxId "ISC";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22199,6 +23904,7 @@ final: prev: {
       hash = "sha256-tlnpbDabyqKPH2lQTc5N2tHHQMkkNum0vcTkbJ+EU2A=";
     };
     meta.homepage = "https://github.com/svermeulen/vim-subversive/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22212,6 +23918,7 @@ final: prev: {
       hash = "sha256-ycodyNmEtPDDDFZ/91E8Josm3Oz7NtTiOMisTfd1reU=";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-suda/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22225,6 +23932,7 @@ final: prev: {
       hash = "sha256-DZE5tkmnT+lAvx/RQHaDEgEJXRKsy56KJY919xiH1lE=";
     };
     meta.homepage = "https://github.com/tpope/vim-surround/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22238,6 +23946,7 @@ final: prev: {
       hash = "sha256-0dyK0ei8QklZqN199jyM2dSALcIrr8z7ZLAuiPaDUc8=";
     };
     meta.homepage = "https://github.com/evanleck/vim-svelte/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22251,6 +23960,7 @@ final: prev: {
       hash = "sha256-R7g70DOr6EkYp4JhFlY4+DbCM6XRf/Jh2P7acStpIO4=";
     };
     meta.homepage = "https://github.com/machakann/vim-swap/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22263,6 +23973,7 @@ final: prev: {
       hash = "sha256-sdCXJOvB+vJE0ir+qsT/u1cHNxrksMnqeQi4D/Vg6UA=";
     };
     meta.homepage = "https://codeberg.org/pbrisbin/vim-syntax-shakespeare";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22276,6 +23987,7 @@ final: prev: {
       hash = "sha256-RLPxedKayUQXsC8TSMvq4rM631WbyWkAbUdemwOPQsg=";
     };
     meta.homepage = "https://github.com/TabbyML/vim-tabby/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22289,6 +24001,7 @@ final: prev: {
       hash = "sha256-oHK0dJKBd4i412JhMrHW51U3/rL6Qy4CFXT9RNFGeFY=";
     };
     meta.homepage = "https://github.com/dhruvasagar/vim-table-mode/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22302,6 +24015,7 @@ final: prev: {
       hash = "sha256-+qh5MURjE9h4bI2K2hlFgIh7b72s09xFS5DOhQ+Vb9k=";
     };
     meta.homepage = "https://github.com/kana/vim-tabpagecd/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22315,6 +24029,7 @@ final: prev: {
       hash = "sha256-/aAkuiUyF+DSwbn5QEwev7nEN2zizLfMzNWPNWbNKvU=";
     };
     meta.homepage = "https://github.com/tpope/vim-tbone/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22328,6 +24043,7 @@ final: prev: {
       hash = "sha256-TIuKIr2JoMowVP67A8QAdE+L/JZFBdm/5Id3L5tImUI=";
     };
     meta.homepage = "https://github.com/teal-language/vim-teal/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22341,6 +24057,7 @@ final: prev: {
       hash = "sha256-h+uq29rXfkCfOH9cxlJcNOkLmAep+6Hsym6CmV7ggJg=";
     };
     meta.homepage = "https://github.com/erietz/vim-terminator/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22354,6 +24071,7 @@ final: prev: {
       hash = "sha256-MVsAR8lfsgMJHGnJ/ILevB2lrr20IAvetCFOvMVZ9Dk=";
     };
     meta.homepage = "https://github.com/hashivim/vim-terraform/";
+    meta.license = lib.meta.getLicenseFromSpdxId "ISC";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22368,6 +24086,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/juliosueiras/vim-terraform-completion/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22381,6 +24100,7 @@ final: prev: {
       hash = "sha256-vPACu8GlWxFITasOyWE9E87qqXLxG5WMn8h2XKNGD0I=";
     };
     meta.homepage = "https://github.com/vim-test/vim-test/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22394,6 +24114,7 @@ final: prev: {
       hash = "sha256-BPQKXJ77nbb7oZOBj//9CHWpQu3r+0FfSd1JDhkJjAM=";
     };
     meta.homepage = "https://github.com/glts/vim-textobj-comment/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22407,6 +24128,7 @@ final: prev: {
       hash = "sha256-te7ljHY7lzu+fmbakTkPKxF312+Q0LozTLazxQvSYE8=";
     };
     meta.homepage = "https://github.com/kana/vim-textobj-entire/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22420,6 +24142,7 @@ final: prev: {
       hash = "sha256-OuaNgW1dx0PW0eKS4QpdZpeBvZUOMPMuhPCnqAUIlDM=";
     };
     meta.homepage = "https://github.com/kana/vim-textobj-function/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22433,6 +24156,7 @@ final: prev: {
       hash = "sha256-uh+DmsfNjsBnot51lk8xd+Ob2zVdyFSghoA/O6iU1yQ=";
     };
     meta.homepage = "https://github.com/gibiansky/vim-textobj-haskell/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22446,6 +24170,7 @@ final: prev: {
       hash = "sha256-h7c6PMg4rJMH1f+NibOuQW/ComTmtCMpkCqntezwKTY=";
     };
     meta.homepage = "https://github.com/kana/vim-textobj-line/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22459,6 +24184,7 @@ final: prev: {
       hash = "sha256-7jvoYMhgcPxOVDYqmvHZ8TLW8t/UtVzT84iycXKD4eg=";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-textobj-multiblock/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22472,6 +24198,7 @@ final: prev: {
       hash = "sha256-SkQavbxgq9WSeoZZnwRWHaHtku82xdgBjHrTz02kNKk=";
     };
     meta.homepage = "https://github.com/preservim/vim-textobj-quote/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22485,6 +24212,7 @@ final: prev: {
       hash = "sha256-4+9SlywaEKpJL6MM2jcBjFoy2dpLqviil9idVNkeL/g=";
     };
     meta.homepage = "https://github.com/kana/vim-textobj-user/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22498,6 +24226,7 @@ final: prev: {
       hash = "sha256-Q8x7GqSK99i/yrYrgcYqFoa1KoSNIQDS/rv8TVpXEl0=";
     };
     meta.homepage = "https://github.com/Julian/vim-textobj-variable-segment/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22511,6 +24240,7 @@ final: prev: {
       hash = "sha256-Z9+mp5PUzz0pJCO7ZfhXcALBKUxmru/KciIOcWZ0WWU=";
     };
     meta.homepage = "https://github.com/thinca/vim-themis/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Zlib";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22524,6 +24254,7 @@ final: prev: {
       hash = "sha256-KUVmZVPwgUBugd7h4YP8wDHCJppcmqtB0rUvHsMfRnw=";
     };
     meta.homepage = "https://github.com/tmux-plugins/vim-tmux/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22537,6 +24268,7 @@ final: prev: {
       hash = "sha256-wfNbi7PJHVxswephCSB+ksT91hN/aFuvYRtYMIu7vWI=";
     };
     meta.homepage = "https://github.com/roxma/vim-tmux-clipboard/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22550,6 +24282,7 @@ final: prev: {
       hash = "sha256-R40ggkvFFcHk9lhVm9nw8b174VfUrlDiy+BUgql+KKc=";
     };
     meta.homepage = "https://github.com/tmux-plugins/vim-tmux-focus-events/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22563,6 +24296,7 @@ final: prev: {
       hash = "sha256-efqiRffnidYx+qjgsHyWshCFWgZp/ZrHl+Clt04pfpM=";
     };
     meta.homepage = "https://github.com/christoomey/vim-tmux-navigator/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22576,6 +24310,7 @@ final: prev: {
       hash = "sha256-AWP3+2nwdzj3QirgQ13JFRrLwHu9Z3dn5BBdaH7l4Ds=";
     };
     meta.homepage = "https://github.com/milkypostman/vim-togglelist/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22589,19 +24324,21 @@ final: prev: {
       hash = "sha256-hsPQWLJbTZF+hp715kMqcfyot2RiB3bQmEamUac6Ehc=";
     };
     meta.homepage = "https://github.com/cespare/vim-toml/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
   vim-tpipeline = buildVimPlugin {
     pname = "vim-tpipeline";
-    version = "1.0-unstable-2025-10-13";
+    version = "1.1";
     src = fetchFromGitHub {
       owner = "vimpostor";
       repo = "vim-tpipeline";
-      rev = "bc6dfc10e26a8dd1ec2f0512050a8a0afaa9d090";
-      hash = "sha256-p25EBXx4lDA+7lP6LukPT/rqX/bNCliRlHs0PcOp9bo=";
+      tag = "v1.1";
+      hash = "sha256-gkxtVpLd7AIjw7nxjyf9/wNhAMCx8yUsy8Ngm0N2XU8=";
     };
     meta.homepage = "https://github.com/vimpostor/vim-tpipeline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22615,6 +24352,7 @@ final: prev: {
       hash = "sha256-WAfwgTbz9mgEpI0nMgZTzukdPyyiRehhbtSUClOO4bE=";
     };
     meta.homepage = "https://github.com/bronson/vim-trailing-whitespace/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22628,6 +24366,7 @@ final: prev: {
       hash = "sha256-AJ0GGEd5vp3kFkvvdRZ4KHycrsyg9VmV4DfqDa5HdR4=";
     };
     meta.homepage = "https://github.com/tridactyl/vim-tridactyl/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22641,6 +24380,7 @@ final: prev: {
       hash = "sha256-1uiWL5gVfkaBJ19tknVccjCdLmRNYI0Mun2dQvEzrXI=";
     };
     meta.homepage = "https://github.com/ianks/vim-tsx/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22654,6 +24394,7 @@ final: prev: {
       hash = "sha256-0pajFA5JcLa8WMoOB43TXC5n05IxiYXQ7KTzCiZ0+tw=";
     };
     meta.homepage = "https://github.com/lumiliet/vim-twig/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22667,6 +24408,7 @@ final: prev: {
       hash = "sha256-3my/0EOsuB4MBAJQDflIAHg3/Rd7wkk0nW6yqElQY7o=";
     };
     meta.homepage = "https://github.com/sodapopcan/vim-twiggy/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22680,6 +24422,7 @@ final: prev: {
       hash = "sha256-ux/Hv5G50Ng8NG9VUj/EZXezQkQUDMcP5hKu1xWGyUw=";
     };
     meta.homepage = "https://github.com/rcarriga/vim-ultest/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22693,6 +24436,7 @@ final: prev: {
       hash = "sha256-Cyw+qZ3N7DvwVB6jSlWFxn6dHILj+wnmzrvdBFLvls0=";
     };
     meta.homepage = "https://github.com/arthurxavierx/vim-unicoder/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22706,6 +24450,7 @@ final: prev: {
       hash = "sha256-hsr3O/lV7rmC6zdfBVBqcbLDuumrY6r5ZmEnTttxrro=";
     };
     meta.homepage = "https://github.com/tpope/vim-unimpaired/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22719,6 +24464,7 @@ final: prev: {
       hash = "sha256-FRhYW1NFjuQHxjtvrZ/UOh/93TL03cMigKUkxTJ710Y=";
     };
     meta.homepage = "https://github.com/hashivim/vim-vagrant/";
+    meta.license = lib.meta.getLicenseFromSpdxId "ISC";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22732,6 +24478,7 @@ final: prev: {
       hash = "sha256-rpHVTwXRFfWlBbduJPSqtDjDEQTjwpi6mQ2LQJvRZiA=";
     };
     meta.homepage = "https://github.com/tpope/vim-vinegar/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22745,6 +24492,7 @@ final: prev: {
       hash = "sha256-hO33JPVQw1WTBeZtqmomwf1O0DhUd6KL7544BOPIw0U=";
     };
     meta.homepage = "https://github.com/triglav/vim-visual-increment/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22758,6 +24506,7 @@ final: prev: {
       hash = "sha256-KzBWkB/PYph6OfuF0GgNFYgqUAwMYbQQZbaaG9XuWZY=";
     };
     meta.homepage = "https://github.com/mg979/vim-visual-multi/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22771,6 +24520,7 @@ final: prev: {
       hash = "sha256-Cx1Ev4S7d/3Re3GfU+jmMlikhyQB8o5sGUX4zRdBdrw=";
     };
     meta.homepage = "https://github.com/bronson/vim-visual-star-search/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22784,6 +24534,7 @@ final: prev: {
       hash = "sha256-xG/qomvwHRqmpIxvs8Ad4yA8pLZFOfnVy70TFElk5ns=";
     };
     meta.homepage = "https://github.com/thinca/vim-visualstar/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22797,6 +24548,7 @@ final: prev: {
       hash = "sha256-BxYoaJfjsEkmCiiGryqOsO5jvmjLRvTV4U6Esqcqj0I=";
     };
     meta.homepage = "https://github.com/ngemily/vim-vp4/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22810,6 +24562,7 @@ final: prev: {
       hash = "sha256-hLKtAYNenLgcVPfs0iLEzOOz1OL0oQ3WPJm1VStx9QM=";
     };
     meta.homepage = "https://github.com/hrsh7th/vim-vsnip/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22823,6 +24576,7 @@ final: prev: {
       hash = "sha256-Ro64wc71m/SkFSPu+91tLFHuWaFfCTWH7zFPHbOg7C4=";
     };
     meta.homepage = "https://github.com/hrsh7th/vim-vsnip-integ/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22836,6 +24590,7 @@ final: prev: {
       hash = "sha256-CYxFcKhwt18TBM9GTilNMCSHTGsuoQenzRk56ZDsW/M=";
     };
     meta.homepage = "https://github.com/posva/vim-vue/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22849,6 +24604,7 @@ final: prev: {
       hash = "sha256-9xbq2oirZSksIjZfPdvi/+Fy28c0huH2ppnt/f07R7M=";
     };
     meta.homepage = "https://github.com/leafOfTree/vim-vue-plugin/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22862,6 +24618,7 @@ final: prev: {
       hash = "sha256-8zMKrmCV4Erp0Q4WyuqyyKgZS5JGu1dXSzrhftdmNFE=";
     };
     meta.homepage = "https://github.com/fcpg/vim-waikiki/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22875,6 +24632,7 @@ final: prev: {
       hash = "sha256-3D+07D3NKndFeTSNMJiG1HJl5Cv5/GjWJUU+6FOSI/k=";
     };
     meta.homepage = "https://github.com/wakatime/vim-wakatime/";
+    meta.license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22888,6 +24646,7 @@ final: prev: {
       hash = "sha256-xLVCCE3eSv0aJQRXiY5H2kUtNOV5Fa2WUwl8a1nDb8M=";
     };
     meta.homepage = "https://github.com/osyo-manga/vim-watchdogs/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22901,6 +24660,7 @@ final: prev: {
       hash = "sha256-dKGqjEZA994HxQHBWinvUuOCz7E0ZgwXh4HX6oF0M8o=";
     };
     meta.homepage = "https://github.com/jasonccox/vim-wayland-clipboard/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22914,6 +24674,7 @@ final: prev: {
       hash = "sha256-qcm7ihOPHS/6p4ZGhcwNSyzruIDk/Sx9rtqs01lN5UE=";
     };
     meta.homepage = "https://github.com/liuchengxu/vim-which-key/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22927,6 +24688,7 @@ final: prev: {
       hash = "sha256-S1CN0Dbb2BtZx4Jhafac2AltkzV2sPAixSESBXbn7/8=";
     };
     meta.homepage = "https://github.com/wesQ3/vim-windowswap/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22940,6 +24702,7 @@ final: prev: {
       hash = "sha256-2rTYzg5arjZXim9T+WfDWb5CIA2iN7gIuthcvqifhMk=";
     };
     meta.homepage = "https://github.com/chaoren/vim-wordmotion/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22953,6 +24716,7 @@ final: prev: {
       hash = "sha256-1UTVUotFi+jVAAKimeF32qrltz2RxS1hVXtRhelHfo4=";
     };
     meta.homepage = "https://github.com/preservim/vim-wordy/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22966,6 +24730,7 @@ final: prev: {
       hash = "sha256-HMsOY+r2hUj+scN7CcB8hLa+qbNQxCV1SfCRqkFGAeI=";
     };
     meta.homepage = "https://github.com/joonty/vim-xdebug/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -22979,6 +24744,7 @@ final: prev: {
       hash = "sha256-ADmotwtoRZcaJgzCg6YT3k29f7TpjHvPjy4ucfkJmOw=";
     };
     meta.homepage = "https://github.com/lyokha/vim-xkbswitch/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22992,6 +24758,7 @@ final: prev: {
       hash = "sha256-iqbfQVNCcJ2MuZFSwkOJvKGdxpkhyTwiD2LR5qzlP0M=";
     };
     meta.homepage = "https://github.com/mg979/vim-xtabline/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23005,6 +24772,7 @@ final: prev: {
       hash = "sha256-L453AAOnd3ubcefpy4WMb0vOVOqMccQDy9XqbxBtt6M=";
     };
     meta.homepage = "https://github.com/stephpy/vim-yaml/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23018,6 +24786,7 @@ final: prev: {
       hash = "sha256-AE2eoC7drlKAtM0+pr2up3ZcX505nO8K1pJy7+U0m1k=";
     };
     meta.homepage = "https://github.com/simonrw/vim-yapf/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23031,6 +24800,7 @@ final: prev: {
       hash = "sha256-dzMpm0/MGp2q2s+ijvXufXYFeQ2HdWs9cSRJ2tGR7cY=";
     };
     meta.homepage = "https://github.com/michal-h21/vim-zettel/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23044,6 +24814,7 @@ final: prev: {
       hash = "sha256-LGY83LXEqzrUZQKQyypdpmM4pR1hozaSW8+YQlVMweA=";
     };
     meta.homepage = "https://github.com/marrub--/vim-zscript/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23057,6 +24828,7 @@ final: prev: {
       hash = "sha256-ywzfawOIu/8X04ojLHgw5wGJoLZrEcB+rMwsDAfNmKI=";
     };
     meta.homepage = "https://github.com/dag/vim2hs/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23070,6 +24842,7 @@ final: prev: {
       hash = "sha256-7wvICkTmQBAAWfbIm5xVNGweZOrow0uSgvB6WeC360M=";
     };
     meta.homepage = "https://github.com/monkoose/vim9-stargate/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Unlicense";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23083,6 +24856,7 @@ final: prev: {
       hash = "sha256-iRaYEc3v7kEveUEfsx3hLhQHIY7gcgIQtaEtKzjWWnM=";
     };
     meta.homepage = "https://github.com/dominikduda/vim_current_word/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23096,6 +24870,7 @@ final: prev: {
       hash = "sha256-zgSKuwhuyoa67UlX4yX2JumjfHrx7Mlvg7Bv2i6TInU=";
     };
     meta.homepage = "https://github.com/andrep/vimacs/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23109,6 +24884,7 @@ final: prev: {
       hash = "sha256-mnG9yzlLThwsqh+siGfhVV0h1k4EvSCVrcjN1ndhFUg=";
     };
     meta.homepage = "https://github.com/TaDaa/vimade/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23122,6 +24898,7 @@ final: prev: {
       hash = "sha256-HievBzyVZke4AyCWAL9MlOw65X460cEEeOhwAL2brzs=";
     };
     meta.homepage = "https://github.com/jreybert/vimagit/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23135,6 +24912,7 @@ final: prev: {
       hash = "sha256-rymj9VJEJL0V+DxnHy1IPOrhobmYuVfya7YRoxb2nSQ=";
     };
     meta.homepage = "https://github.com/gotcha/vimelette/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23148,6 +24926,7 @@ final: prev: {
       hash = "sha256-4276fnfiq7p/ncfD/0OgxizVAGoUVB0n5HOBI3D0KOI=";
     };
     meta.homepage = "https://github.com/Shougo/vimfiler.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23161,6 +24940,7 @@ final: prev: {
       hash = "sha256-6JTCwVzK50gTAauTlTfVl+79vhlo6/SXmmoyDjriQGc=";
     };
     meta.homepage = "https://github.com/vimoutliner/vimoutliner/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23174,6 +24954,7 @@ final: prev: {
       hash = "sha256-XEBt9Yds73QCla3DnWeC+vK9xT47hLZxVC4mOPYE+L8=";
     };
     meta.homepage = "https://github.com/tex/vimpreviewpandoc/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23187,6 +24968,7 @@ final: prev: {
       hash = "sha256-k4+fOMcIA6jxh10oSMR1VkNj9bN+On2ycsEgQoqD1Bs=";
     };
     meta.homepage = "https://github.com/Shougo/vimproc.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23200,6 +24982,7 @@ final: prev: {
       hash = "sha256-hkSDNbvC49WAcPxHvniZNT5MfNJLO3Y+fCMUTM7OrXo=";
     };
     meta.homepage = "https://github.com/vimsence/vimsence/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23213,6 +24996,7 @@ final: prev: {
       hash = "sha256-Z12AmvKboiyHvNul06RR95vI0mKMGGEDznXhOwMyWBc=";
     };
     meta.homepage = "https://github.com/Shougo/vimshell.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23227,6 +25011,7 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/puremourning/vimspector/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23240,6 +25025,7 @@ final: prev: {
       hash = "sha256-dvrSe4dxbGl+rGScQDBK0tQUz4Pr37E3V326XcFGSQg=";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23253,6 +25039,7 @@ final: prev: {
       hash = "sha256-Bz7yi/YwOSV+xffGyCwz+uJJP9G88gDydo91HX2qK3U=";
     };
     meta.homepage = "https://github.com/preservim/vimux/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23266,6 +25053,7 @@ final: prev: {
       hash = "sha256-O85nZUWxIKm0gFILAkWH9WqfVcEbnbxR56grqMmum3A=";
     };
     meta.homepage = "https://github.com/vimwiki/vimwiki/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23279,6 +25067,7 @@ final: prev: {
       hash = "sha256-ozrjz34YIlDziuc9KLYM9zikTlg2YKYlIewapzN/nlY=";
     };
     meta.homepage = "https://github.com/lukas-reineke/virt-column.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23292,6 +25081,7 @@ final: prev: {
       hash = "sha256-WznB8eiwG7dIKg4LeblUQwb6E8yxAFLnV1wMwWq5/JI=";
     };
     meta.homepage = "https://github.com/jubnzv/virtual-types.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23305,6 +25095,7 @@ final: prev: {
       hash = "sha256-scElpk70TYfSfDA4BI73SZyO0RhCEUbEADpYWp9o4a0=";
     };
     meta.homepage = "https://github.com/vim-scripts/vis/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23318,6 +25109,7 @@ final: prev: {
       hash = "sha256-I/aM4syuxx6DznHqY561Ya51+i+s4ZRdpOMvnFL3qFk=";
     };
     meta.homepage = "https://github.com/navicore/vissort.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23331,6 +25123,7 @@ final: prev: {
       hash = "sha256-7k94AyzOx4Iqwu1Vns4i69/NR1uWlwouOB0UL9VsdL0=";
     };
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23344,6 +25137,7 @@ final: prev: {
       hash = "sha256-svKfA9p6WC6k3kbxG4TJxe2r0xpRPdbNTVk2PZcPAiY=";
     };
     meta.homepage = "https://github.com/mcauley-penney/visual-whitespace.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23357,6 +25151,7 @@ final: prev: {
       hash = "sha256-rNmgrhzewBQXQfJafF/BpfxlhHOrj/1qTJNyQ46EtsA=";
     };
     meta.homepage = "https://github.com/jannis-baum/vivify.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23370,6 +25165,7 @@ final: prev: {
       hash = "sha256-NGAvPSyttf/PDFUBSJtJVAUX2bpS+hwPeskZ0mFZ87A=";
     };
     meta.homepage = "https://github.com/EthanJWright/vs-tasks.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23383,6 +25179,7 @@ final: prev: {
       hash = "sha256-YGlTlHEuivPJzMyWfk+YmbZqftbj7Mrll8rB3vK3O2A=";
     };
     meta.homepage = "https://github.com/Mofiqul/vscode.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23396,6 +25193,7 @@ final: prev: {
       hash = "sha256-6ACKgxvzyERiGhCA103+8/HnJDiCls57zFTiahqwGQ4=";
     };
     meta.homepage = "https://github.com/dylanaraps/wal.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23409,6 +25207,7 @@ final: prev: {
       hash = "sha256-d8d5XhvVwQCoN+MZkmxv7lFpAkhJTOpVqHBsqhRKVPA=";
     };
     meta.homepage = "https://github.com/mattn/webapi-vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23422,6 +25221,7 @@ final: prev: {
       hash = "sha256-q4PZUh4QdppeKGB0hytnZi2WBE6FRTcgieka6AnqQ5k=";
     };
     meta.homepage = "https://github.com/willothy/wezterm.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23435,6 +25235,7 @@ final: prev: {
       hash = "sha256-2+slQRWbBLmMYOFfFvCV1BxS+0iUwCYEHKMEzJb1H1o=";
     };
     meta.homepage = "https://github.com/DingDean/wgsl.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23448,6 +25249,7 @@ final: prev: {
       hash = "sha256-SEppeCRrj03pXoQotW1dCKDz35b067+zUwsZbSEGaj8=";
     };
     meta.homepage = "https://github.com/AndrewRadev/whatif.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23461,6 +25263,7 @@ final: prev: {
       hash = "sha256-rKaYnXM4gRkkF/+xIFm2oCZwtAU6CeTdRWU93N+Jmbc=";
     };
     meta.homepage = "https://github.com/folke/which-key.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23474,6 +25277,7 @@ final: prev: {
       hash = "sha256-zrVRRa868Sq0V8THxq9609FDr2w3n6btISFClE1J30c=";
     };
     meta.homepage = "https://github.com/neolooong/whichpy.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23487,6 +25291,7 @@ final: prev: {
       hash = "sha256-9Dtf6x2daQ6bP7qq6jKiDY8RpKNG03r1z8AzqM6/Oaw=";
     };
     meta.homepage = "https://github.com/johnfrankmorgan/whitespace.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23500,6 +25305,7 @@ final: prev: {
       hash = "sha256-kdPDyhYlwrOydc31z6O6XvE3n9+FpHyB5TD/1kUMyyE=";
     };
     meta.homepage = "https://github.com/lervag/wiki-ft.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23513,6 +25319,7 @@ final: prev: {
       hash = "sha256-wcoiv8lPBr/r4yMw4tO6SmNQ09f1SjFqWlNDat7oXDk=";
     };
     meta.homepage = "https://github.com/lervag/wiki.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23526,6 +25333,7 @@ final: prev: {
       hash = "sha256-jbLwoZLD6jL9QMIuUXiCbA4nP0Caw+iiHuCCGaxLZQU=";
     };
     meta.homepage = "https://github.com/gelguy/wilder.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23539,6 +25347,7 @@ final: prev: {
       hash = "sha256-HGNBUuUFtZU9ozFsM0X5QadfnK+cEiosQfnnrI6bdtI=";
     };
     meta.homepage = "https://github.com/SUSTech-data/wildfire.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23552,6 +25361,7 @@ final: prev: {
       hash = "sha256-zf4Z3n6TKXaQuEyTnCeq2L1f9PuahnmMdoF71c44EdU=";
     };
     meta.homepage = "https://github.com/gcmt/wildfire.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23565,6 +25375,7 @@ final: prev: {
       hash = "sha256-Rx8dcEs779CYAwX8FerM94OWOFrQKGKsfCu+64p1P60=";
     };
     meta.homepage = "https://github.com/fgheng/winbar.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23578,6 +25389,7 @@ final: prev: {
       hash = "sha256-Nfzd8kFqA83/0RfMUAYF4XXqhihyb22OnxDBrWW1nzU=";
     };
     meta.homepage = "https://github.com/anuvyklack/windows.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23591,6 +25403,7 @@ final: prev: {
       hash = "sha256-wjpdX37kdgIKHS39LPKYcWTawQ4rc8KYf3ezt+5WL94=";
     };
     meta.homepage = "https://github.com/Exafunction/windsurf.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23604,6 +25417,7 @@ final: prev: {
       hash = "sha256-mW3kaducHWRlDx18WcwcbWDlNnAyHgELS3XjpeFFCgs=";
     };
     meta.homepage = "https://github.com/sindrets/winshift.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23617,6 +25431,7 @@ final: prev: {
       hash = "sha256-VGCaaCilZf0YBTVSzXrUm3ql64vmvdS48j3/PBcFq4o=";
     };
     meta.homepage = "https://github.com/wannesm/wmgraphviz.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23630,6 +25445,7 @@ final: prev: {
       hash = "sha256-L+t9V6sKny6kTM1gblQNtkqzKFlWOYpQ7MVi17jbzQU=";
     };
     meta.homepage = "https://github.com/vim-scripts/wombat256.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23643,6 +25459,7 @@ final: prev: {
       hash = "sha256-rS7pTGqB7l7Jrh4XEsXxSi3ErvWgYZQiVLUyv9jskhA=";
     };
     meta.homepage = "https://github.com/lukaszkorecki/workflowish/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23656,6 +25473,7 @@ final: prev: {
       hash = "sha256-a3f0NUYooMxrZEqLer+Duv6/ktq5MH2qUoFHD8z7fZA=";
     };
     meta.homepage = "https://github.com/natecraddock/workspaces.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23669,6 +25487,7 @@ final: prev: {
       hash = "sha256-TKkeg5NGH4wvDIISn21MLkxaHr4ZK1jhifSgk3a2Vak=";
     };
     meta.homepage = "https://github.com/andrewferrier/wrapping.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23682,6 +25501,7 @@ final: prev: {
       hash = "sha256-7gykRF51e7GMzOGT4Jz6/9+O7dxvCyih/k8gUtiMCwg=";
     };
     meta.homepage = "https://github.com/tweekmonster/wstrip.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23695,6 +25515,7 @@ final: prev: {
       hash = "sha256-T5c1dgokU0o+J6cvwEnH0tdr0Q2t7hYGgM9eXzF6u9A=";
     };
     meta.homepage = "https://github.com/piersolenski/wtf.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23708,6 +25529,7 @@ final: prev: {
       hash = "sha256-zTGclrlxThgqEvj8K3fQ87G98g3VDqvp/dCnZwSm4I8=";
     };
     meta.homepage = "https://github.com/kyza0d/xeno.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23721,6 +25543,7 @@ final: prev: {
       hash = "sha256-A40dFf85PxFCP8hh8PNLVJflBl1LRFo8J1iZbcXxmo0=";
     };
     meta.homepage = "https://github.com/Mythos-404/xmake.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23734,6 +25557,7 @@ final: prev: {
       hash = "sha256-HFiwXOwACiu7qHZ4wsI6+zEq1KLTJyOx08JJ36chC3k=";
     };
     meta.homepage = "https://github.com/drmingdrmer/xptemplate/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23747,6 +25571,7 @@ final: prev: {
       hash = "sha256-v93VkFnGdyHpwU/pDJquTzuCEA3lZQxv1WUJRXIBCE4=";
     };
     meta.homepage = "https://github.com/guns/xterm-color-table.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23760,6 +25585,7 @@ final: prev: {
       hash = "sha256-oiYZ6qSHiYaBMDtLGUT9jWltFpm91aa2koVhS4mVDRs=";
     };
     meta.homepage = "https://github.com/y9san9/y9nika.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23773,6 +25599,7 @@ final: prev: {
       hash = "sha256-49498W7Hadju54Vi9oOnlNouujhnS8hLQ7ji/3cvIZg=";
     };
     meta.homepage = "https://github.com/someone-stole-my-name/yaml-companion.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23786,6 +25613,7 @@ final: prev: {
       hash = "sha256-IsR9GGFYCd1YWqVRBO/HuR596+p8RQ+c5rU8eFaaDFM=";
     };
     meta.homepage = "https://github.com/cwrau/yaml-schema-detect.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23799,6 +25627,7 @@ final: prev: {
       hash = "sha256-z6USTspCiWU6UEP9TyACvzlb4MGEadBKUfxN2vJyeV0=";
     };
     meta.homepage = "https://github.com/ywpkwon/yank-path.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23812,6 +25641,7 @@ final: prev: {
       hash = "sha256-oGiXbSXo48NbaImzIKquEvplPCotLeIs4scvbhO6wyA=";
     };
     meta.homepage = "https://github.com/gbprod/yanky.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23826,19 +25656,21 @@ final: prev: {
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/HerringtonDarkholme/yats.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Vim";
     meta.hydraPlatforms = [ ];
   };
 
   yazi-nvim = buildVimPlugin {
     pname = "yazi.nvim";
-    version = "13.1.5-unstable-2026-04-22";
+    version = "13.1.5-unstable-2026-04-26";
     src = fetchFromGitHub {
       owner = "mikavilpas";
       repo = "yazi.nvim";
-      rev = "d34b366517a21fb2366e8ac393fc903008345173";
-      hash = "sha256-SjWgNlb8raCDQ7E3lgHnTwl0wFTibxxKV4YcCeX0qPE=";
+      rev = "21d84984103c82628a1f5818eca8c6dd3fd0cc8a";
+      hash = "sha256-3j48RTmA7TUV92zsEGo4caULgqVCcC/OKjqBS1MXEHk=";
     };
     meta.homepage = "https://github.com/mikavilpas/yazi.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23852,6 +25684,7 @@ final: prev: {
       hash = "sha256-awtWWuaAoUz3MqgNb608bwFdvZ/jxBx5ijmE8H6uHfM=";
     };
     meta.homepage = "https://github.com/lucasew-graveyard/yescapsquit.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23865,6 +25698,7 @@ final: prev: {
       hash = "sha256-F7aS8d6jJQQoIGkG2o4KNnDZAIrq0c+otIHvjdoGbtY=";
     };
     meta.homepage = "https://github.com/elkowar/yuck.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23878,6 +25712,7 @@ final: prev: {
       hash = "sha256-/B79WFWUxq8bIy6JLloQQNPEbNY7cjeiFWVUKCcAQzc=";
     };
     meta.homepage = "https://github.com/fsharp/zarchive-vim-fsharp/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23891,6 +25726,7 @@ final: prev: {
       hash = "sha256-2pGQXlZK0vp6YU7AyCyNm5kfCW02EwS54wn50zb4RuI=";
     };
     meta.homepage = "https://github.com/KabbAmine/zeavim.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23904,6 +25740,7 @@ final: prev: {
       hash = "sha256-OoxvSmZV6MCYKrH2ijGqIYhdSZG5oaRj+NFJGt0viyk=";
     };
     meta.homepage = "https://github.com/swaits/zellij-nav.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23917,6 +25754,7 @@ final: prev: {
       hash = "sha256-2PPRHYuiDETPsNv0sVx09nJ4kvhlS55Aj1DGEf96JqI=";
     };
     meta.homepage = "https://github.com/Lilja/zellij.nvim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23930,6 +25768,7 @@ final: prev: {
       hash = "sha256-vRJynz3bnkhfHKya+iEgm4PIEwT2P9kvkskgTt5UUU4=";
     };
     meta.homepage = "https://github.com/folke/zen-mode.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23943,6 +25782,7 @@ final: prev: {
       hash = "sha256-1zLxgs1EqAoGrjIr26awTFZ+NS06Ph/SDQHczBNCsaA=";
     };
     meta.homepage = "https://github.com/sand4rt/zen.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23956,6 +25796,7 @@ final: prev: {
       hash = "sha256-2fecMaB/59a/a0tUpDhipyGgwUliNf73SNTKQp3Bhck=";
     };
     meta.homepage = "https://github.com/zenbones-theme/zenbones.nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23969,6 +25810,7 @@ final: prev: {
       hash = "sha256-QKp5EyVNFMfwCIs4lzUjpIngWzTsUAW4k5vYcQmJG6o=";
     };
     meta.homepage = "https://github.com/jnurmine/zenburn/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -23982,6 +25824,7 @@ final: prev: {
       hash = "sha256-y3Y2y5cwuX9vQstSdMqmuCqhhOCiXU5ZcI+rKs+FLIo=";
     };
     meta.homepage = "https://github.com/nvimdev/zephyr-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -23995,6 +25838,7 @@ final: prev: {
       hash = "sha256-W5cSp/RFbUaGhtvfowaCASfOa0mrqfxxRGR23Bt07FQ=";
     };
     meta.homepage = "https://github.com/zk-org/zk-nvim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -24008,6 +25852,7 @@ final: prev: {
       hash = "sha256-EIZOyihVefJ+jZxkh9wx5H4P3eGMkThV/vfVxcCpkkY=";
     };
     meta.homepage = "https://github.com/troydm/zoomwintab.vim/";
+    meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
 
@@ -24021,6 +25866,7 @@ final: prev: {
       hash = "sha256-wk037qL8htUkH6NJ+/D3y4sJHv/Eo3fkkUlsWW1fCLU=";
     };
     meta.homepage = "https://github.com/jalvesaq/zotcite/";
+    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
     meta.hydraPlatforms = [ ];
   };
 
@@ -24034,6 +25880,7 @@ final: prev: {
       hash = "sha256-idKiUUqFu6xk95a5ZLn/hvcPrgmgoDb8KRWxX+hRz4Y=";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
+    meta.license = lib.meta.getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
