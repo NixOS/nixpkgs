@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     gettext
+    gjs # provides gjs-console at build time
     gobject-introspection
     wrapGAppsHook3
   ];
@@ -76,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "sushi";
     };
   };
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/sushi";
