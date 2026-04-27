@@ -11,7 +11,6 @@
 
   withGrass,
   withServer,
-  withWebKit,
 
   darwin,
   libtasn1,
@@ -45,7 +44,6 @@
   qtsensors,
   qtserialport,
   qtsvg,
-  qtwebkit,
   qtxmlpatterns,
   qwt,
   sqlite,
@@ -150,7 +148,6 @@ mkDerivation rec {
     zstd
   ]
   ++ lib.optional withGrass grass
-  ++ lib.optional withWebKit qtwebkit
   ++ lib.optional stdenv.hostPlatform.isDarwin libtasn1
   ++ pythonBuildInputs;
 
@@ -180,12 +177,14 @@ mkDerivation rec {
 
     # See https://github.com/libspatialindex/libspatialindex/issues/276
     "-DWITH_INTERNAL_SPATIALINDEX=True"
+
+    # Unmaintained & not in nixpkgs
+    "-DWITH_QTWEBKIT=OFF"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DQGIS_MACAPP_BUNDLE=0" # Don't copy Qt into bundle; we fix paths in postFixup
     "-DSQLITE3_INCLUDE_DIR=${sqlite.dev}/include" # FindSqlite3.cmake incorrectly assumes framework
   ]
-  ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
   ++ lib.optional withServer [
     "-DWITH_SERVER=True"
     "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"

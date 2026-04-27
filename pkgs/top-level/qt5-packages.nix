@@ -219,8 +219,6 @@ makeScopeWithSplicing' {
 
         telepathy = callPackage ../development/libraries/telepathy/qt { };
 
-        qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
-
         signond = callPackage ../development/libraries/signond { };
 
         timed = callPackage ../applications/system/timed { };
