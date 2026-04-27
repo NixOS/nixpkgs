@@ -15,7 +15,8 @@
   onnx-ir,
   packaging,
   typing-extensions,
-  pynvml,
+  # cuda-only:
+  nvidia-ml-py,
 
   # tests
   onnxruntime,
@@ -58,7 +59,7 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ]
   ++ lib.optionals cudaSupport [
-    pynvml
+    nvidia-ml-py
   ];
 
   pythonImportsCheck = [ "onnxscript" ];
