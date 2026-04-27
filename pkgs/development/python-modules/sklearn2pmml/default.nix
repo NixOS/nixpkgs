@@ -66,7 +66,7 @@ buildPythonPackage (finalAttrs: {
     statsmodels
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Only run the main test suite; subpackage tests require
     # sklearn-pandas which is not available in nixpkgs
     "sklearn2pmml/tests"

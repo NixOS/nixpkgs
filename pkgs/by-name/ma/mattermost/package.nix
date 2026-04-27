@@ -5,7 +5,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
-  nodejs_22,
+  nodejs,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
@@ -13,20 +13,21 @@
   nixosTests,
 
   versionInfo ? {
-    # ESR releases only.
-    # See https://docs.mattermost.com/upgrade/extended-support-release.html
+    # ESR releases only. Note: if NixOS would release with an ESR that goes out
+    # of support during the lifetime of the NixOS release, it is acceptable
+    # to put the latest non-ESR release here if we change it to an ESR shortly after
+    # the NixOS release.
+    #
+    # See <https://docs.mattermost.com/upgrade/extended-support-release.html>.
     # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.15";
-    srcHash = "sha256-b/hXZHYULl9nNJZT4GtKsaOfX8BEzz/v3Uy3EEbzN8U=";
-    vendorHash = "sha256-Z94d1eCIkuMG72Mlvk5su/99+4kJoaeHxaeZuk96Hlc=";
-    npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
-    lockfileOverlay = ''
-      unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
-    '';
+    regex = "^v(11\\.[67]\\.[0-9]+)$";
+    version = "11.6.1";
+    srcHash = "sha256-0TUh5qKi64jt3YhgCTceoizOGzqyt70Rh8VH+bSfS5o=";
+    vendorHash = "sha256-bWl1rdVRTOJzS2HKKsSRhzVcH1sPgEAlRLjrc+/o0lo=";
+    npmDepsHash = "sha256-30xwoizNh6fAWS0YdEheXtcO6I9MjoFdCekvLnnoBMc=";
   },
   ...
 }:
@@ -223,9 +224,7 @@ buildMattermost rec {
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
 
-      # https://github.com/NixOS/nixpkgs/issues/474535
-      nodejs = nodejs_22;
-
+      inherit nodejs;
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
       forceGitDeps = true;
@@ -235,10 +234,9 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        npm run build --workspace=platform/types
-        npm run build --workspace=platform/client
-        npm run build --workspace=platform/components
-        npm run build --workspace=channels
+        for ws in platform/{types,client,components,shared} channels; do
+          npm run build --workspace="$ws"
+        done
 
         runHook postBuild
       '';
