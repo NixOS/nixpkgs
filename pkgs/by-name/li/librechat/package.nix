@@ -92,5 +92,9 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "librechat-server";
+    knownVulnerabilities = [
+      "CVE-2026-34371"
+      "CVE-2026-31949"
+    ];
   };
 }
