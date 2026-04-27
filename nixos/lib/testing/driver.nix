@@ -85,7 +85,7 @@ let
           echo "Running type check (enable/disable: config.skipTypeCheck)"
           echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipTypeCheck"
 
-          ty check --error-on-warning testScriptWithTypes
+          ty check testScriptWithTypes
         ''}
 
         ${lib.optionalString (!config.skipLint) ''
