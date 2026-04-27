@@ -229,7 +229,9 @@ let
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags =
     (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or knownHardeningFlags;
-  stdenvHostSuffix = optionalString (hostPlatform != buildPlatform) "-${hostPlatform.config}";
+  stdenvHostSuffix = optionalString (
+    hostPlatform != buildPlatform && stdenvHasCC
+  ) "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
   userHook = config.stdenv.userHook or null;
 
@@ -398,19 +400,6 @@ let
           actualValue;
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
-      noNonNativeDeps =
-        (
-          depsBuildTarget
-          ++ depsBuildTargetPropagated
-          ++ depsHostHost
-          ++ depsHostHostPropagated
-          ++ buildInputs
-          ++ propagatedBuildInputs
-          ++ depsTargetTarget
-          ++ depsTargetTargetPropagated
-        ) == [ ];
-      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
-
       concretizeFlagImplications =
         flag: impliesFlags: list:
         if elem flag list then (list ++ impliesFlags) else list;
@@ -539,7 +528,20 @@ let
               # suffix. But we have some weird ones with run-time deps that are
               # just used for their side-affects. Those might as well since the
               # hash can't be the same. See #32986.
-              hostSuffix = optionalString (!dontAddHostSuffix) stdenvHostSuffix;
+              hostSuffix = optionalString (
+                !(attrs ? outputHash)
+                ||
+                  (
+                    depsBuildTarget
+                    ++ depsBuildTargetPropagated
+                    ++ depsHostHost
+                    ++ depsHostHostPropagated
+                    ++ buildInputs
+                    ++ propagatedBuildInputs
+                    ++ depsTargetTarget
+                    ++ depsTargetTargetPropagated
+                  ) == [ ]
+              ) stdenvHostSuffix;
 
               # Disambiguate statically built packages. This was originally
               # introduce as a means to prevent nix-env to get confused between
