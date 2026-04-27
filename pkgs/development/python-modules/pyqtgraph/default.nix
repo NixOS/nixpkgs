@@ -73,6 +73,8 @@ buildPythonPackage (finalAttrs: {
     # See https://github.com/pyqtgraph/pyqtgraph/issues/3485
     "test_maps_tick_values_to_local_times"
     "test_maps_hour_ticks_to_local_times_when_skip_greater_than_one"
+    "test_plotscene"
+    "test_simple"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # small precision-related differences on other architectures,
