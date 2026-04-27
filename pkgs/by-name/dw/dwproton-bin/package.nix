@@ -11,11 +11,11 @@ proton-ge-bin.overrideAttrs (
     inherit steamDisplayName;
 
     pname = "dwproton-bin";
-    version = "dwproton-10.0-24";
+    version = "dwproton-10.0-26";
 
     src = fetchzip {
       url = "https://dawn.wine/dawn-winery/dwproton/releases/download/${finalAttrs.version}/${finalAttrs.version}-x86_64.tar.xz";
-      hash = "sha256-3mfJGi2pUwPgWNZCvGD1SNHghS2HThX5Y7TrnJaEYvw=";
+      hash = "sha256-TkwhJCHPS0PdDIEL5GrxJPR09uO9U2DR8l9KWFLIF2g=";
     };
 
     preFixup = ''
