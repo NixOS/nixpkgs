@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  podman,
   versionCheckHook,
 }:
 
@@ -20,6 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  env.REPRO_ENV_PODMAN_BINARY = lib.getExe' podman "podman";
 
   meta = {
     changelog = "https://github.com/kpcyrd/repro-env/releases/tag/v${finalAttrs.version}";
