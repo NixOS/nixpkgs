@@ -5,16 +5,15 @@
 }:
 let
   version = "110.99.9";
-  baseurl = "https://smlnj.cs.uchicago.edu/dist/working/${version}";
 
   arch = if stdenv.hostPlatform.is64bit then "64" else "32";
 
-  hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashes = builtins.fromJSON (builtins.readFile ./hashes-legacy.json);
 
   fetchSource =
     name:
     fetchurl {
-      url = "${baseurl}/${name}";
+      url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/${name}";
       hash = hashes.${name};
     };
 
@@ -51,8 +50,11 @@ stdenv.mkDerivation {
   pname = "smlnj";
   inherit version sources;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   unpackPhase = ''
-    for s in $sources; do
+    for s in "''${sources[@]}"; do
       b=$(basename $s)
       cp $s ''${b#*-}
     done
@@ -61,7 +63,7 @@ stdenv.mkDerivation {
     ./config/unpack $TMP runtime
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '/^PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
     echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
   '';
@@ -80,11 +82,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update-legacy.sh;
 
   meta = {
     description = "Standard ML of New Jersey, a compiler";
-    homepage = "http://smlnj.org";
+    homepage = "https://smlnj.org";
     license = lib.licenses.bsd3;
     platforms = [
       "x86_64-linux"
