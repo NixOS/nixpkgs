@@ -7,7 +7,7 @@
   fetchurl,
   makeWrapper,
   nixosTests,
-  jre,
+  jdk11_headless,
 }:
 
 let
@@ -86,5 +86,8 @@ let
       }
     );
   };
+  # https://www.elastic.co/support/matrix#logstash-and-jvm
+  jre = jdk11_headless;
+
 in
 this
