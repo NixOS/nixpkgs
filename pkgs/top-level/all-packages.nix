@@ -1730,7 +1730,7 @@ with pkgs;
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
 
-  easyocr = with python3.pkgs; toPythonApplication easyocr;
+  easyocr = with python3Packages; toPythonApplication easyocr;
 
   espanso-wayland = espanso.override {
     x11Support = false;
