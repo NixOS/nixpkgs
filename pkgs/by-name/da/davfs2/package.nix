@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  autoreconfHook,
+  autoreconfHook269,
   neon,
   procps,
   replaceVars,
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoreconfHook269
   ];
 
   buildInputs = [
