@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "serialx";
-  version = "1.2.3";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "puddly";
     repo = "serialx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FroHqWuNGna5FxP4PXZzhADaNNRQnVjG9S5JJq4CVkQ=";
+    hash = "sha256-ttKnjpF3SYo2QIKMuPU2EuTTp/Hq0s+4gvNdXdNApbs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -62,6 +62,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # tries to access /sys/class/tty in sandbox
     "test_compat_tools_module"
+    # connects to 192.0.2.1
+    "test_async_socket_connect_timeout"
   ];
 
   meta = {
