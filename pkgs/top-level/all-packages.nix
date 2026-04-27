@@ -2703,10 +2703,6 @@ with pkgs;
     inherit (python3Packages) ansi2html;
   };
 
-  medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5.override { usev110Api = true; };
-  };
-
   mhonarc = perlPackages.MHonArc;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
