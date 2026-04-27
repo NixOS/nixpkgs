@@ -6,8 +6,8 @@ set -euo pipefail
 
 dir="$(dirname "$0")"
 url="https://smlnj.cs.uchicago.edu/dist/working/"
-hashfile="$dir/hashes.json"
-nixfile="$dir/default.nix"
+hashfile="$dir/hashes-legacy.json"
+nixfile="$dir/legacy.nix"
 
 version="$(curl --silent "$url" \
     | sed -n 's:.*<b>\([0-9]\{3\}\.[0-9.-]\+\)</b>.*:\1:p' \

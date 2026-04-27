@@ -9,7 +9,7 @@ let
 
   arch = if stdenv.hostPlatform.is64bit then "64" else "32";
 
-  hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashes = builtins.fromJSON (builtins.readFile ./hashes-legacy.json);
 
   fetchSource =
     name:
@@ -51,8 +51,11 @@ stdenv.mkDerivation {
   pname = "smlnj";
   inherit version sources;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   unpackPhase = ''
-    for s in $sources; do
+    for s in "''${sources[@]}"; do
       b=$(basename $s)
       cp $s ''${b#*-}
     done
@@ -80,7 +83,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update-legacy.sh;
 
   meta = {
     description = "Standard ML of New Jersey, a compiler";

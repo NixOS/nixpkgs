@@ -4623,7 +4623,8 @@ with pkgs;
 
   # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
-  smlnj = callPackage ../development/compilers/smlnj { };
+  smlnj = callPackage ../development/compilers/smlnj/legacy.nix { };
+  smlnj-legacy = callPackage ../development/compilers/smlnj/legacy.nix { };
 
   squeak = callPackage ../development/compilers/squeak {
     stdenv = clangStdenv;
