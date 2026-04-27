@@ -1544,10 +1544,10 @@
   };
 
   mail = {
-    version = "0-unstable-2025-04-09";
+    version = "0-unstable-2026-03-08";
     url = "github:ficcdaf/tree-sitter-mail";
-    rev = "c84126474aee00ce67c32229710a4e1e09827a08";
-    hash = "sha256-qqy7jsqsWVUlRuk+Cv+n3sEiH/SlO5/4Q+mrcftFKP4=";
+    rev = "5eddbfdbec4c893182c79047499901c196332e78";
+    hash = "sha256-ax9MlBuat3SmYJE5lkuTSula0A/RKoHljSqi9UZ2wO8=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
