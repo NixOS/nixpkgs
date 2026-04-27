@@ -170,6 +170,8 @@ in
 
   php = recurseIntoAttrs (callPackages ./php { });
 
+  pnpm = recurseIntoAttrs (callPackages ./pnpm { });
+
   go = recurseIntoAttrs (callPackage ../build-support/go/tests.nix { });
 
   lake = callPackage ../build-support/lake/test { };

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  pytestFlagsArray = [ "-v" ];
+  pytestFlags = [ "-v" ];
 
   pythonImportsCheck = [
     "mpl_typst"

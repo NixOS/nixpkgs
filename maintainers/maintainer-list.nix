@@ -13238,6 +13238,12 @@
     github = "joshainglis";
     githubId = 1281131;
   };
+  joshgodsiff = {
+    name = "Josh Godsiff";
+    email = "josh.godsiff@gmail.com";
+    github = "joshgodsiff";
+    githubId = 145132;
+  };
   joshheinrichs-shopify = {
     name = "Josh Heinrichs";
     email = "josh.heinrichs@shopify.com";

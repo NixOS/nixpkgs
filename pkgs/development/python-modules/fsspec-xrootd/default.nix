@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fsspec-xrootd";
-  version = "0.5.3";
+  version = "0.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "fsspec-xrootd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-phtvWBKaBu6piVB226y9R29njI39z6vRLBbwlHZbpKk=";
+    hash = "sha256-dlSh2TH7SQ95kFNPlSjMa697WdBURRlBxNtNf04uaBU=";
   };
 
   build-system = [
