@@ -764,6 +764,21 @@
   "sec-problems": [
     "index.html#sec-problems"
   ],
+  "sec-secrets": [
+    "index.html#sec-secrets"
+  ],
+  "sec-secrets-configuration-files": [
+    "index.html#sec-secrets-configuration-files"
+  ],
+  "sec-secrets-configuration-files-json": [
+    "index.html#sec-secrets-configuration-files-json"
+  ],
+  "sec-secrets-configuration-files-json-loadcredential": [
+    "index.html#sec-secrets-configuration-files-json-loadcredential"
+  ],
+  "sec-secrets-configuration-files-json-structured-secret": [
+    "index.html#sec-secrets-configuration-files-json-structured-secret"
+  ],
   "sec-using-llvm": [
     "index.html#sec-using-llvm"
   ],
