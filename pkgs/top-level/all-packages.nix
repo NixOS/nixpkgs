@@ -2530,8 +2530,6 @@ with pkgs;
 
   keybase = callPackage ../tools/security/keybase { };
 
-  kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
-
   kbdVlock = callPackage ../by-name/kb/kbd/package.nix { withVlock = true; };
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
