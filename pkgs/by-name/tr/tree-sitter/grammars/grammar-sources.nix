@@ -2233,10 +2233,10 @@
   };
 
   rego = {
-    version = "0-unstable-2024-06-12";
+    version = "0-unstable-2026-01-14";
     url = "github:FallenAngel97/tree-sitter-rego";
-    rev = "20b5a5958c837bc9f74b231022a68a594a313f6d";
-    hash = "sha256-XwlVsOlxYzB0x+T05iuIp7nFAoQkMByKiHXZ0t5QsjI=";
+    rev = "ddd39af81fe8b0288102a7cb97959dfce723e0f3";
+    hash = "sha256-I6jZ5jsJUAdjQti/lj4d11+GRSHjbN/hoGYO7ezGKv8=";
     meta = {
       license = lib.licenses.mit;
     };
