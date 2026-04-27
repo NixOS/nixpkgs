@@ -9,7 +9,7 @@
   meson,
   ninja,
   pkg-config,
-  python3,
+  python3Packages,
 
   # buildInputs
   abseil-cpp,
@@ -20,7 +20,6 @@
   libfabric,
   liburing,
   numactl,
-  python3Packages,
   taskflow,
   ucx,
 
@@ -87,7 +86,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    python3
+    python3Packages.python
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
