@@ -364,6 +364,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   hardeningEnable = lib.optionals (effectiveStdenv.hostPlatform.system == "loongarch64-linux") [
     "nostrictaliasing"
   ];
+
   hardeningDisable = lib.optional effectiveStdenv.hostPlatform.isMusl "fortify";
 
   # perform parts of `tools/ci_build/github/linux/copy_strip_binary.sh`
@@ -381,6 +382,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString cudaSupport ''
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
+
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
 
   __structuredAttrs = true;
