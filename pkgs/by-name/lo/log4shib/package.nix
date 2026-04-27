@@ -3,6 +3,7 @@
   stdenv,
   fetchFromCodeberg,
   autoreconfHook,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
 
   env.CXXFLAGS = "-std=c++11";
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Forked version of log4cpp that has been created for the Shibboleth project";
