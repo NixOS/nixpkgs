@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  withV8 ? false,
   freetype,
   gclient2nix,
   glib,
@@ -40,62 +41,135 @@ let
   chromiumBuildtoolsHash = "sha256-BvGCdJ3EgUZX6MC3jf86YNl4LzUxpxiptCEBv3bqBIo=";
   abseilRev = "2a7d49fc392cad55159d68d98aa3648bc89795d3";
   abseilHash = "sha256-dz2DA+bw/QQcfI9d9AKP7dn0eW0aAnhH+RmSStKS/hY=";
+  dragonboxRev = "beeeef91cf6fef89a4d4ba5e95d47ca64ccb3a44";
+  dragonboxHash = "sha256-j6swuGgYGfiFcK3iqd4EKTeU92rZHKTbF5T1fcak/ko=";
   fastFloatRev = "cb1d42aaa1e14b09e1452cfdef373d051b8c02a4";
   fastFloatHash = "sha256-CG5je117WYyemTe5PTqznDP0bvY5TeXn8Vu1Xh5yUzQ=";
+  fp16Rev = "3d2de1816307bac63c16a297e8c4dc501b4076df";
+  fp16Hash = "sha256-CR7h1d9RFE86l6btk4N8vbQxy0KQDxSMvckbiO87JEg=";
+  gtestRev = "4fe3307fb2d9f86d19777c7eb0e4809e9694dde7";
+  gtestHash = "sha256-gJhv3DQQSP5BQ6GmDobq42/Gkx4AbOg/ZS80bM0WpEw=";
+  highwayRev = "84379d1c73de9681b54fbe1c035a23c7bd5d272d";
+  highwayHash = "sha256-HNrlqtAs1vKCoSJ5TASs34XhzjEbLW+ISco1NQON+BI=";
   libcxxRev = "7ab65651aed6802d2599dcb7a73b1f82d5179d05";
   libcxxHash = "sha256-7O/X2JW8ghkPTjmFZmT9cgG3Ui5zk3gUb436KlPww34=";
   generateShimHeadersHash = "sha256-tqhnqYoQeXUTN7OSSVwchpEkGJwhCUSk8TG8LUgrHdg=";
   testFontsRev = "7f51783942943e965cd56facf786544ccfc07713";
   testFontsHash = "sha256-gBnAOW/X2R13AP9507uPsvQ4A2ZUPbvzFcg3Neu3DT8=";
+  v8Rev = "b210c794d22b5c0839ad63d8ae9129d6062168da";
+  v8Hash = "sha256-C4tj4rbl5+j191gnwdBWpaOVSZmQL+DSvVJ+VxyygHo=";
+  zlibRev = "7eda07b1e067ef3fd7eea0419c88b5af45c9a776";
+  zlibHash = "sha256-aKDRy4AJKO2SNDDwge5iesGQCbXKzVTECoJOIBhdQco=";
   simdutfRev = "f7356eed293f8208c40b3c1b344a50bd70971983";
   simdutfHash = "sha256-l0VPVhfabaMx0oJphFjA9S1LVtavWFZ4w3btW7avCDY=";
 
-  gclientDeps = gclient2nix.importGclientDeps {
-    "src" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://pdfium.googlesource.com/pdfium";
-        rev = pdfiumRef;
-        hash = pdfiumHash;
+  gclientDeps = gclient2nix.importGclientDeps (
+    {
+      "src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://pdfium.googlesource.com/pdfium";
+          rev = pdfiumRef;
+          hash = pdfiumHash;
+        };
       };
-    };
 
-    "src/build" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/chromium/src/build.git";
-        rev = buildRev;
-        hash = buildHash;
+      "src/build" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/chromium/src/build.git";
+          rev = buildRev;
+          hash = buildHash;
+        };
       };
-    };
 
-    "src/third_party/abseil-cpp" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp";
-        rev = abseilRev;
-        hash = abseilHash;
+      "src/third_party/abseil-cpp" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp";
+          rev = abseilRev;
+          hash = abseilHash;
+        };
       };
-    };
 
-    "src/third_party/fast_float/src" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/external/github.com/fastfloat/fast_float";
-        rev = fastFloatRev;
-        hash = fastFloatHash;
+      "src/third_party/fast_float/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/fastfloat/fast_float";
+          rev = fastFloatRev;
+          hash = fastFloatHash;
+        };
       };
-    };
 
-    "src/third_party/libc++/src" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxx.git";
-        rev = libcxxRev;
-        hash = libcxxHash;
+      "src/third_party/libc++/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxx.git";
+          rev = libcxxRev;
+          hash = libcxxHash;
+        };
       };
-    };
-  };
+    }
+    // lib.optionalAttrs withV8 {
+      "src/third_party/dragonbox/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/jk-jeon/dragonbox.git";
+          rev = dragonboxRev;
+          hash = dragonboxHash;
+        };
+      };
+
+      "src/third_party/fp16/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/Maratyszcza/FP16";
+          rev = fp16Rev;
+          hash = fp16Hash;
+        };
+      };
+
+      "src/third_party/highway/src" = {
+        # Chromium has an unbundle shim for highway, so this may be worth
+        # switching to a system package later.
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/google/highway.git";
+          rev = highwayRev;
+          hash = highwayHash;
+        };
+      };
+
+      "src/third_party/googletest/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/google/googletest";
+          rev = gtestRev;
+          hash = gtestHash;
+        };
+      };
+
+      "src/third_party/zlib" = {
+        # V8 still needs Chromium's google/compression_utils_portable target
+        # from this subtree even though PDFium itself uses system zlib.
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/chromium/src/third_party/zlib";
+          rev = zlibRev;
+          hash = zlibHash;
+        };
+      };
+
+      "src/v8" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/v8/v8";
+          rev = v8Rev;
+          hash = v8Hash;
+        };
+      };
+    }
+  );
 
   generateShimHeaders = fetchzip {
     url = "https://chromium.googlesource.com/chromium/src/+archive/${chromiumSrcRef}/tools/generate_shim_headers.tar.gz";
@@ -145,6 +219,15 @@ let
       throw "unsupported platform for pdfium";
 
   clangMajor = builtins.head (lib.splitVersion (lib.getVersion stdenv.cc.cc));
+
+  pythonForBuild = if withV8 then python3.withPackages (ps: [ ps.jinja2 ]) else python3;
+
+  icuForPdfium =
+    if withV8 && stdenv.hostPlatform.isLinux then
+      # V8 on Linux is built with libc++, so ICU's C++ ABI must match.
+      icu.override { stdenv = llvmPackages.libcxxStdenv; }
+    else
+      icu;
 
   chromiumClang =
     runCommand "chromium-clang-${lib.getVersion stdenv.cc.cc}"
@@ -213,7 +296,7 @@ stdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     pkg-config
-    python3
+    pythonForBuild
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcodebuild
@@ -223,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     glib
     harfbuzz
-    icu
+    icuForPdfium
     lcms2
     libjpeg
     libpng
@@ -232,11 +315,24 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  # Work around a GCC-specific build issue in Chromium/PDFium.
-  # https://crbug.com/402282789
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    CPPFLAGS = "-ffp-contract=off";
-  };
+  env =
+    let
+      cppflags = lib.concatStringsSep " " (
+        lib.optionals stdenv.cc.isGNU [
+          # Work around a GCC-specific build issue in Chromium/PDFium.
+          # https://crbug.com/402282789
+          "-ffp-contract=off"
+        ]
+        ++ lib.optionals (withV8 && stdenv.hostPlatform.isLinux) [
+          # libpdfium links V8 into a shared library on Linux, so V8's TLS
+          # accessors must use library mode instead of local-exec TLS.
+          "-DV8_TLS_USED_IN_LIBRARY"
+        ]
+      );
+    in
+    lib.optionalAttrs (cppflags != "") {
+      CPPFLAGS = cppflags;
+    };
 
   postPatch = ''
     substituteInPlace BUILD.gn \
@@ -247,6 +343,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p third_party/icu
     cp build/linux/unbundle/icu.gn third_party/icu/BUILD.gn
+    cat > third_party/icu/config.gni <<'EOF'
+    declare_args() {
+      icu_use_data_file = false
+    }
+    EOF
 
     # Clang builds still load helper targets from Chromium's buildtools tree
     # even when PDFium links against the system libc++.
@@ -265,7 +366,7 @@ stdenv.mkDerivation (finalAttrs: {
       'checkout_android = false' \
       'checkout_skia = false' \
       'checkout_testing_corpus = false' \
-      'checkout_v8 = false' \
+      'checkout_v8 = ${lib.boolToString withV8}' \
       'generate_location_tags = false' \
       > build/config/gclient_args.gni
   '';
@@ -299,9 +400,8 @@ stdenv.mkDerivation (finalAttrs: {
     # would otherwise stop the build.
     "treat_warnings_as_errors=false"
 
-    # Keep the build lean and avoid pulling V8 or PartitionAlloc into the
-    # dependency set.
-    "pdf_enable_v8=false"
+    # Match the requested V8 variant while keeping PartitionAlloc off.
+    "pdf_enable_v8=${lib.boolToString withV8}"
     "pdf_use_partition_alloc=false"
 
     # Prefer system libraries when PDFium already supports that mode.
@@ -314,6 +414,14 @@ stdenv.mkDerivation (finalAttrs: {
     "use_system_libtiff=true"
     "use_system_zlib=true"
     "use_system_harfbuzz=true"
+  ]
+  ++ lib.optionals withV8 [
+    # V8's sandbox path expects Chromium's hardened libc++, while this package
+    # deliberately uses nixpkgs' system libc++.
+    "v8_enable_sandbox=false"
+    "v8_enable_partition_alloc=false"
+    # libpdfium embeds V8's monolithic library into a shared library.
+    "v8_monolithic_for_shared_library=true"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Match the deployment target used by nixpkgs' Darwin libraries.
@@ -372,11 +480,26 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://pdfium.googlesource.com/pdfium/";
     license =
       with lib.licenses;
-      AND [
-        asl20
-        bsd3
-        mit
-      ];
+      AND (
+        [
+          asl20
+          bsd3
+          mit
+        ]
+        ++ lib.optionals withV8 [
+          # V8 compiles Chromium's bundled zlib subtree.
+          lib.licenses.zlib
+          # dragonbox is dual-licensed Apache-2.0 WITH LLVM-exception OR BSL-1.0.
+          (OR [
+            (WITH asl20 lib.licenses."llvm-exception")
+            boost
+          ])
+        ]
+        ++ lib.optionals (withV8 && stdenv.cc.isClang) [
+          # Clang builds enable V8's bundled glibc trig implementation.
+          lgpl21Plus
+        ]
+      );
     maintainers = with lib.maintainers; [ booxter ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

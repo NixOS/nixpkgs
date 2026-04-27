@@ -3090,6 +3090,11 @@ with pkgs;
 
   pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
 
+  pdfium-v8 = pdfium.override {
+    withV8 = true;
+    stdenv = if stdenv.hostPlatform.isLinux then llvmPackages.libcxxStdenv else llvmPackages.stdenv;
+  };
+
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
