@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.nistSoftware;
     maintainers = with lib.maintainers; [
-      orichter
       thillux
     ];
   };
