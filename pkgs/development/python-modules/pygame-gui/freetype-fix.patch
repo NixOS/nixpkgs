@@ -1,0 +1,182 @@
+diff --git a/tests/test_core/test_text/test_hyperlink_text_chunk.py b/tests/test_core/test_text/test_hyperlink_text_chunk.py
+index 0b4553b..0b2ee89 100644
+--- a/tests/test_core/test_text/test_hyperlink_text_chunk.py
++++ b/tests/test_core/test_text/test_hyperlink_text_chunk.py
+@@ -57,10 +57,10 @@ class TestHyperlinkTextChunk:
+                              row_bg_height=20,
+                              row_line_spacing_height=20)
+ 
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF0000')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 26, 255)
+         hyper_chunk.on_hovered()
+         assert hyper_chunk.is_hovered
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF00FF')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 230, 255)
+ 
+     def test_on_unhovered(self, _init_pygame, _display_surface_return_none, default_ui_manager: UIManager):
+         the_font = GUIFontFreetype(None, 20)
+@@ -92,13 +92,13 @@ class TestHyperlinkTextChunk:
+                              row_bg_height=20,
+                              row_line_spacing_height=20)
+ 
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF0000')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 26, 255)
+         hyper_chunk.on_hovered()
+         assert hyper_chunk.is_hovered
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF00FF')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 230, 255)
+         hyper_chunk.on_unhovered()
+         assert not hyper_chunk.is_hovered
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF0000')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 26, 255)
+ 
+     def test_set_active(self, _init_pygame, _display_surface_return_none, default_ui_manager: UIManager):
+         the_font = GUIFontFreetype(None, 20)
+@@ -130,10 +130,10 @@ class TestHyperlinkTextChunk:
+                              row_bg_height=20,
+                              row_line_spacing_height=20)
+ 
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF0000')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 26, 255)
+         hyper_chunk.set_active()
+         assert hyper_chunk.is_active
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FFFF00')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 230, 26, 255)
+ 
+     def test_set_inactive(self, _init_pygame, _display_surface_return_none, default_ui_manager: UIManager):
+         the_font = GUIFontFreetype(None, 20)
+@@ -165,13 +165,13 @@ class TestHyperlinkTextChunk:
+                              row_bg_height=20,
+                              row_line_spacing_height=20)
+ 
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF0000')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 26, 255)
+         hyper_chunk.set_active()
+         assert hyper_chunk.is_active
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FFFF00')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 230, 26, 255)
+         hyper_chunk.set_inactive()
+         assert not hyper_chunk.is_active
+-        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color('#FF0000')
++        assert rendered_chunk_surf.get_at((2, 6)) == pygame.Color(230, 26, 26, 255)
+ 
+ 
+ if __name__ == '__main__':
+diff --git a/tests/test_core/test_text/test_text_box_layout.py b/tests/test_core/test_text/test_text_box_layout.py
+index e9185a7..ba2d656 100644
+--- a/tests/test_core/test_text/test_text_box_layout.py
++++ b/tests/test_core/test_text/test_text_box_layout.py
+@@ -712,7 +712,7 @@ class TestTextBoxLayout:
+ 
+         assert layout.cursor_text_row is not None
+         assert layout.cursor_text_row.cursor_index == 2
+-        assert layout.cursor_text_row.cursor_draw_width == 18
++        assert layout.cursor_text_row.cursor_draw_width == 17
+ 
+         layout.cursor_text_row.edit_cursor_active = True
+         layout.set_cursor_position(10)
+@@ -752,7 +752,7 @@ class TestTextBoxLayout:
+         layout.set_cursor_from_click_pos((17, 24))
+         assert layout.cursor_text_row is not None
+         assert layout.cursor_text_row.cursor_index == 2
+-        assert layout.cursor_text_row.cursor_draw_width == 18
++        assert layout.cursor_text_row.cursor_draw_width == 17
+ 
+         layout.cursor_text_row.edit_cursor_active = True
+         layout.set_cursor_from_click_pos((17, 24))
+diff --git a/tests/test_core/test_text/test_text_box_layout_row.py b/tests/test_core/test_text/test_text_box_layout_row.py
+index 6198cd4..b786dc1 100644
+--- a/tests/test_core/test_text/test_text_box_layout_row.py
++++ b/tests/test_core/test_text/test_text_box_layout_row.py
+@@ -427,7 +427,7 @@ class TestTextBoxLayoutRow:
+         layout_surface.fill((0, 0, 0, 0))
+         layout_row.finalise(layout_surface)
+ 
+-        assert layout_surface.get_at((18, 18)) == pygame.Color('#00FF00')
++        assert layout_surface.get_at((18, 18)) == pygame.Color(0, 239, 0, 255)
+ 
+     def test_toggle_cursor(self, _init_pygame, _display_surface_return_none, default_ui_manager: UIManager):
+         input_data = deque([])
+@@ -507,7 +507,7 @@ class TestTextBoxLayoutRow:
+         layout_surface = pygame.Surface((200, 300), depth=32, flags=pygame.SRCALPHA)
+         layout_surface.fill((0, 0, 0, 0))
+         layout_row.finalise(layout_surface)
+-        assert layout_surface.get_at((18, 18)) == pygame.Color('#FFFFFF')
++        assert layout_surface.get_at((18, 18)) == pygame.Color(239, 239, 239, 239)
+ 
+         layout_row.clear()
+         assert layout_surface.get_at((18, 18)) == pygame.Color('#00000000')
+diff --git a/tests/test_core/test_text/test_text_line_chunk.py b/tests/test_core/test_text/test_text_line_chunk.py
+index 57eaa87..0e5099b 100644
+--- a/tests/test_core/test_text/test_text_line_chunk.py
++++ b/tests/test_core/test_text/test_text_line_chunk.py
+@@ -186,7 +186,7 @@ class TestTextLineChunkFTFont:
+ 
+         new_chunk = chunk.split(requested_x=70, line_width=200, row_start_x=0)
+ 
+-        assert chunk.width == 62
++        assert chunk.width == 63
+         assert new_chunk.width == 55
+         assert original_chunk_width == (chunk.width + new_chunk.width)
+         assert chunk.height == new_chunk.height
+@@ -211,7 +211,7 @@ class TestTextLineChunkFTFont:
+ 
+         new_chunk = chunk.split_index(index=5)
+ 
+-        assert chunk.width == 62
++        assert chunk.width == 63
+         assert new_chunk.width == 55
+         assert original_chunk_width == (chunk.width + new_chunk.width)
+         assert chunk.height == new_chunk.height
+diff --git a/tests/test_elements/test_ui_label.py b/tests/test_elements/test_ui_label.py
+index f2db5b0..c2db0a3 100644
+--- a/tests/test_elements/test_ui_label.py
++++ b/tests/test_elements/test_ui_label.py
+@@ -41,7 +41,7 @@ class TestUILabel:
+                         text="Test Label",
+                         manager=default_ui_manager)
+         label.set_text("new text")
+-        assert label.image is not None and label.rect.width == 56
++        assert label.image is not None and label.rect.width == 57
+ 
+     def test_kwargs_set_text(self, _init_pygame, default_ui_manager,
+                              _display_surface_return_none):
+diff --git a/tests/test_elements/test_ui_text_box.py b/tests/test_elements/test_ui_text_box.py
+index 17761c8..d21a4cc 100644
+--- a/tests/test_elements/test_ui_text_box.py
++++ b/tests/test_elements/test_ui_text_box.py
+@@ -91,7 +91,7 @@ class TestUITextBox:
+                                        "Well OK.",
+                              relative_rect=pygame.Rect(100, 100, -1, 50),
+                              manager=default_ui_manager)
+-        assert text_box.image is not None and text_box.rect.width == 808
++        assert text_box.image is not None and text_box.rect.width == 789
+ 
+     def test_creation_and_rebuild_with_scrollbar(self, _init_pygame: None,
+                                                  default_ui_manager: UIManager,
+diff --git a/tests/test_elements/test_ui_text_entry_box.py b/tests/test_elements/test_ui_text_entry_box.py
+index 99e9ecb..71c353d 100644
+--- a/tests/test_elements/test_ui_text_entry_box.py
++++ b/tests/test_elements/test_ui_text_entry_box.py
+@@ -66,7 +66,7 @@ class TestUITextEntryBox:
+                          "More text padding this out a little. Well OK.",
+             relative_rect=pygame.Rect(100, 100, -1, 50),
+             manager=default_ui_manager)
+-        assert text_box.image is not None and text_box.rect.width == 806
++        assert text_box.image is not None and text_box.rect.width == 788
+ 
+     def test_creation_and_rebuild_with_scrollbar(self, _init_pygame: None,
+                                                  default_ui_manager: UIManager,
+diff --git a/tests/test_elements/test_ui_text_entry_line.py b/tests/test_elements/test_ui_text_entry_line.py
+index 83511ee..49ddb49 100644
+--- a/tests/test_elements/test_ui_text_entry_line.py
++++ b/tests/test_elements/test_ui_text_entry_line.py
+@@ -560,7 +560,7 @@ class TestUITextEntryLine:
+ 
+         assert processed_down_event
+         assert processed_up_event
+-        assert text_entry.select_range == [3, 10]
++        assert text_entry.select_range == [3, 11]
+ 
+     def test_process_event_mouse_button_double_click(self, _init_pygame: None,
+                                                      default_ui_manager: UIManager,

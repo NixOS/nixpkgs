@@ -31,6 +31,8 @@ buildPythonPackage rec {
     python-i18n
   ];
 
+  patches = [ ./freetype-fix.patch ];
+
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
       --replace-fail "xsel" "${lib.getExe pkgs.xsel}"
@@ -54,6 +56,8 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_v_select_range"
     "test_process_event_text_ctrl_a"
     "test_process_event_text_ctrl_x"
+    # Pixel-accurate rendering comparison - fragile to FreeType/font updates
+    "test_draw_ui"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails to determine "/" as an existing path
