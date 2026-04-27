@@ -11194,8 +11194,6 @@ self: super: with self; {
 
   nominatim-api = callPackage ../by-name/no/nominatim/nominatim-api.nix { };
 
-  nonbloat-db = callPackage ../development/python-modules/nonbloat-db { };
-
   noneprompt = callPackage ../development/python-modules/noneprompt { };
 
   nonestorage = callPackage ../development/python-modules/nonestorage { };
