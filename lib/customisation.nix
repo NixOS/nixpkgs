@@ -20,7 +20,6 @@ let
     take
     length
     filterAttrs
-    flip
     head
     pipe
     isDerivation
@@ -98,19 +97,18 @@ rec {
   */
   overrideDerivation =
     drv: f:
-    let
-      newDrv = derivation (drv.drvAttrs // (f drv));
-    in
-    flip (extendDerivation (seq drv.drvPath true)) newDrv (
+    (extendDerivation (seq drv.drvPath true)) (
       {
         meta = drv.meta or { };
-        passthru = if drv ? passthru then drv.passthru else { };
+        passthru = drv.passthru or { };
       }
       // (drv.passthru or { })
-      // optionalAttrs (drv ? __spliced) {
-        __spliced = { } // (mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
+      // {
+        ${if drv ? __spliced then "__spliced" else null} = mapAttrs (
+          _: sDrv: overrideDerivation sDrv f
+        ) drv.__spliced;
       }
-    );
+    ) (derivation (drv.drvAttrs // (f drv)));
 
   /**
     `makeOverridable` takes a function from attribute set to attribute set and
