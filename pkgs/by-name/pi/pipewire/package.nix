@@ -51,7 +51,6 @@
   fdk_aac,
   libopus,
   ldacbt,
-  libldac-dec,
   spandsp,
   modemmanager,
   libpulseaudio,
@@ -168,7 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
   ++ lib.optional ldacbtSupport ldacbt
-  ++ lib.optional (ldacBtDecodeSupport && ldacbtSupport) libldac-dec
   ++ lib.optional libcameraSupport libcamera
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
