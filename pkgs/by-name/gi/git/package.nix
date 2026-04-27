@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) ''
     substituteInPlace Makefile \
       --replace-fail "RUST_TARGET_DIR = target/" \
-                     "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.rustcTargetSpec}/"
+                     "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.cargoShortTarget}/"
   '';
 
   nativeBuildInputs = [
