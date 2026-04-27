@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-saml=${opensaml-cpp}"
     "--with-boost=${boost.dev}"
     "--with-fastcgi"
+    "--with-boost=${boost.dev}"
     "CXXFLAGS=-std=c++14"
   ];
 
