@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Swiss-knife for updating nix packages";
     homepage = "https://github.com/Mic92/nix-update/";
-    changelog = "https://github.com/Mic92/nix-update/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Mic92/nix-update/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
