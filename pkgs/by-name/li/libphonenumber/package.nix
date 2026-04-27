@@ -45,15 +45,18 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    protobuf # for protoc at build time
   ]
   ++ lib.optionals enableTests [
-    gtest
     jre
   ];
 
   buildInputs = [
     icu
     protobuf
+  ]
+  ++ lib.optionals enableTests [
+    gtest
   ];
 
   propagatedBuildInputs = lib.optionals enableTests [
@@ -77,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
     (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
   ];
+
+  strictDeps = true;
 
   meta = {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
