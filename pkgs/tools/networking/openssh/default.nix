@@ -40,33 +40,44 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "10.2p1";
+    version = "10.3p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
+      hash = "sha256-VmgqNruS3PS08Bb9jsjnQFm3mo3iXBXWcNcx59GORfQ=";
     };
 
     extraPatches =
       let
-        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/7d4f03d56d19a19a15399a03b3ceca8a0f5924b4/security/openssh-portable/files/extra-patch-hpn";
+        urlBase = "https://raw.githubusercontent.com/freebsd/freebsd-ports/294be7ad9ef5106b696d830e06b9f322bd79d6f5/security/openssh-portable/files";
+        noBlocklistdHpnGluePatch = "${urlBase}/extra-patch-no-blocklistd-hpn-glue";
+        hpnPatch = "${urlBase}/extra-patch-hpn";
       in
       [
         ./ssh-keysign-8.5.patch
 
+        # the blocklistd patch from FreeBSD ports is now required for HPN,
+        # unless we apply this HPN glue patch
+        (fetchpatch {
+          name = "ssh-no-blocklistd-hpn-glue.patch";
+          url = noBlocklistdHpnGluePatch;
+          extraPrefix = "";
+          hash = "sha256-+AeJ9fLmmT/P07JZvGaXpNft+2F9PoFsbzr+s9wfdro=";
+        })
+
         # HPN Patch from FreeBSD ports
         (fetchpatch {
           name = "ssh-hpn-wo-channels.patch";
-          inherit url;
+          url = hpnPatch;
           stripLen = 1;
           excludes = [ "channels.c" ];
-          hash = "sha256-BGR0Jn1JoD/0q9/TKjygg9C3UWeVf0R2DrH0esMzmpY=";
+          hash = "sha256-dEYCSBcUXbSBzoMV/6QwLl5tj0c0/DPTtArchfRRQvM=";
         })
 
         (fetchpatch {
           name = "ssh-hpn-channels.patch";
-          inherit url;
+          url = hpnPatch;
           extraPrefix = "";
           includes = [ "channels.c" ];
           hash = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
