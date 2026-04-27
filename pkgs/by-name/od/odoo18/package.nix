@@ -104,7 +104,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo18;
+      inherit (nixosTests) odoo18 odoo18-multiprocess;
     };
   };
 
