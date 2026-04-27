@@ -1820,7 +1820,7 @@
   };
 
   opam = {
-    version = "0-unstable-2026-04-05";
+    version = "0.1.0-unstable-2026-04-05";
     url = "github:tmcgilchrist/tree-sitter-opam";
     rev = "8869773f9cef795cc02da3b98cfafcaf9febc6b0";
     hash = "sha256-q/BLM4d3H+dw93CbFLtynCJ1K4I4hJ9XBM4yaG2Z5Rk=";
