@@ -1874,7 +1874,7 @@ with pkgs;
 
   nsz = with python3Packages; toPythonApplication nsz;
 
-  ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
+  ocrmypdf = with python3Packages; toPythonApplication ocrmypdf;
 
   online-judge-template-generator =
     python3Packages.callPackage ../tools/misc/online-judge-template-generator
