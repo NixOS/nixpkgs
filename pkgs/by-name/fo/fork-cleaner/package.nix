@@ -19,10 +19,6 @@ buildGoModule {
 
   vendorHash = "sha256-+OlrXYjBiXtbMf/IRzj06J1yq2XdlQk54lnJtCmqymw=";
 
-  # allowGoReference adds the flag `-trimpath` which is also denoted by, fork-cleaner goreleaser config
-  #  <https://github.com/caarlos0/fork-cleaner/blob/645345bf97d751614270de4ade698ddbc53509c1/goreleaser.yml#L38>
-  allowGoReference = true;
-
   ldflags = [
     "-s"
     "-w"
