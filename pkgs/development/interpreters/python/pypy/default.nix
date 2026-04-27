@@ -390,7 +390,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.pypy.org/";
-    changelog = "https://doc.pypy.org/en/stable/release-v${version}.html";
+    changelog = "https://doc.pypy.org/release-v${version}.html";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     mainProgram = "pypy";
     license = lib.licenses.mit;
