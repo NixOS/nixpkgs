@@ -1486,6 +1486,8 @@ let
           else
             null;
 
+        nunchaku = callPackage ../development/ocaml-modules/nunchaku { };
+
         ### O ###
 
         ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
