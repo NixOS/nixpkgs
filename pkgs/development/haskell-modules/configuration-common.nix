@@ -1683,19 +1683,6 @@ with haskellLib;
     '';
   }) super.hledger-flow;
 
-  # hledger-web abuses the regular bounds to exclude yesod-static 1.6.1.2 since
-  # it builds to fail in some build plans. This doesn't affect us at all.
-  hledger-web = appendPatches [
-    (pkgs.fetchpatch {
-      name = "hledger-allow-yesod-static-1.6.1.2.patch";
-      url = "https://github.com/simonmichael/hledger/commit/b06eb8b68222f48024cf02d0718039a20e070201.patch";
-      hash = "sha256-IzDyAqaiqnH3d8d+ikkEpJJufgMB+ZF/1ntUJVyQyws=";
-      revert = true;
-      relative = "hledger-web";
-      excludes = [ "package.yaml" ];
-    })
-  ] super.hledger-web;
-
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
     # 2025-02-13: Too strict bounds on lens < 5.3 and vector < 0.13
