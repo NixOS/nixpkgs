@@ -61,7 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-libevent=${lib.getDev libevent}"
     "--with-libevent-libdir=${lib.getLib libevent}/lib"
-    "--with-munge=${munge}"
+    "--with-munge=${lib.getDev munge}"
+    "--with-munge-libdir=${lib.getLib munge}/lib"
     "--with-hwloc=${lib.getDev hwloc}"
     "--with-hwloc-libdir=${lib.getLib hwloc}/lib"
   ];

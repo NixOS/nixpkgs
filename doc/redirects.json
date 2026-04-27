@@ -4483,6 +4483,9 @@
     "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
   ],
+  "neovim-plugin-license-overrides": [
+    "index.html#neovim-plugin-license-overrides"
+  ],
   "updating-plugins-in-nixpkgs": [
     "index.html#updating-plugins-in-nixpkgs"
   ],
