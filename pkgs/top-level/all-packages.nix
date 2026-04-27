@@ -1572,7 +1572,7 @@ with pkgs;
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
 
-  beautysh = with python3.pkgs; toPythonApplication beautysh;
+  beautysh = with python3Packages; toPythonApplication beautysh;
 
   inherit (callPackages ../misc/logging/beats/7.x.nix { })
     auditbeat7
