@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.6.1";
 
   src = fetchFromGitHub {
-    owner = "envio-cli";
+    owner = "humblepenguinn";
     repo = "envio";
     rev = "v${finalAttrs.version}";
     hash = "sha256-je0DBoBIayFK//Aija5bnO/2z+hxNWgVkwOgxMyq5s4=";
@@ -36,8 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://envio-cli.github.io/home";
-    changelog = "https://github.com/envio-cli/envio/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/humblepenguinn/envio/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
     mainProgram = "envio";
     longDescription = ''
