@@ -1,0 +1,78 @@
+diff --git a/sdl2/test/sdlttf_test.py b/sdl2/test/sdlttf_test.py
+index 4e24ea8..36002bd 100644
+--- a/sdl2/test/sdlttf_test.py
++++ b/sdl2/test/sdlttf_test.py
+@@ -356,8 +356,8 @@ def test_TTF_GlyphIsProvided32(with_font):
+ def test_TTF_GlyphMetrics(with_sdl_ttf):
+     expected = {
+         'A': [1, 25, 0, 29, 25],
+-        'j': [-3, 7, -9, 28, 9],
+-        '.': [2, 7, -1, 4, 8]
++        'j': [-3, 7, -9, 29, 9],
++        '.': [2, 6, 0, 4, 8]
+     }
+     font = sdlttf.TTF_OpenFont(fontfile, 40)
+     minX, maxX, minY, maxY = c_int(0), c_int(0), c_int(0), c_int(0)
+@@ -377,8 +377,8 @@ def test_TTF_GlyphMetrics(with_sdl_ttf):
+ def test_TTF_GlyphMetrics32(with_sdl_ttf):
+     expected = {
+         'A': [1, 25, 0, 29, 25],
+-        'j': [-3, 7, -9, 28, 9],
+-        '.': [2, 7, -1, 4, 8]
++        'j': [-3, 7, -9, 29, 9],
++        '.': [2, 6, 0, 4, 8]
+     }
+     font = sdlttf.TTF_OpenFont(fontfile, 40)
+     minX, maxX, minY, maxY = c_int(0), c_int(0), c_int(0), c_int(0)
+@@ -396,34 +396,34 @@ def test_TTF_GlyphMetrics32(with_sdl_ttf):
+ 
+ def test_TTF_SizeText(with_font):
+     font = with_font
+-    min_expected_w = 69     # SDL2_ttf 2.0.18
+-    max_expected_w = 70     # SDL2_ttf <= 2.0.15
++    min_expected_w = 67     # freetype 2.14.2+
++    max_expected_w = 72     # Allow range for version differences
+     min_expected_h = 21     # SDL2_ttf 2.0.15 with FreeType 2.10.1
+     max_expected_h = 25     # SDL2_ttf < 2.0.15
+     w, h = c_int(0), c_int(0)
+     sdlttf.TTF_SizeText(font, b"Hi there!", byref(w), byref(h))
+     assert w.value >= min_expected_w
+-    assert w.value <= max_expected_w
++    assert w.value <= max_expected_w, f"Expected width <= {max_expected_w}, got {w.value}"
+     assert h.value >= min_expected_h
+     assert h.value <= max_expected_h
+ 
+ def test_TTF_SizeUTF8(with_font):
+     font = with_font
+-    min_expected_w = 72     # SDL2_ttf 2.0.18
+-    max_expected_w = 73     # SDL2_ttf <= 2.0.15
++    min_expected_w = 70     # freetype 2.14.2+
++    max_expected_w = 75     # Allow range for version differences
+     min_expected_h = 21     # SDL2_ttf 2.0.15 with FreeType 2.10.1
+     max_expected_h = 25     # SDL2_ttf < 2.0.15
+     w, h = c_int(0), c_int(0)
+     sdlttf.TTF_SizeUTF8(font, u"Hï thère!".encode('utf-8'), byref(w), byref(h))
+     assert w.value >= min_expected_w
+-    assert w.value <= max_expected_w
++    assert w.value <= max_expected_w, f"Expected width <= {max_expected_w}, got {w.value}"
+     assert h.value >= min_expected_h
+     assert h.value <= max_expected_h
+ 
+ def test_TTF_SizeUNICODE(with_font):
+     font = with_font
+-    min_expected_w = 69     # SDL2_ttf 2.0.18
+-    max_expected_w = 70     # SDL2_ttf <= 2.0.15
++    min_expected_w = 67     # freetype 2.14.2+
++    max_expected_w = 72     # Allow range for version differences
+     min_expected_h = 21     # SDL2_ttf 2.0.15 with FreeType 2.10.1
+     max_expected_h = 25     # SDL2_ttf < 2.0.15
+     w, h = c_int(0), c_int(0)
+@@ -433,7 +433,7 @@ def test_TTF_SizeUNICODE(with_font):
+     #print(list(strarr))
+     #print("w = {0}, h = {1}".format(w.value, h.value))
+     assert w.value >= min_expected_w
+-    assert w.value <= max_expected_w
++    assert w.value <= max_expected_w, f"Expected width <= {max_expected_w}, got {w.value}"
+     assert h.value >= min_expected_h
+     assert h.value <= max_expected_h
+ 

@@ -53,6 +53,9 @@ buildPythonPackage rec {
         SDL2 = (pkg: "${pkg}/lib/libSDL2${stdenv.hostPlatform.extensions.sharedLibrary}") SDL2;
       }
     ))
+
+    # Fix tests for freetype 2.14.2+
+    ./fix-freetype-tests.patch
   ];
 
   build-system = [ setuptools ];
