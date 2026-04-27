@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-huggingface";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_huggingface";
     inherit version;
-    hash = "sha256-OyH/7aIvgiHtVXeLs9rtcWZKsHs0Hx3S9AiWO9IDVbk=";
+    hash = "sha256-2ooqZd+UBBEsRDDfraCdT4RroWUZeiXb539zQBTFaoc=";
   };
 
   build-system = [ hatchling ];
