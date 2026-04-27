@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "davfs2";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/davfs2-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-G9wrsjWp8uVGpqE8VZ7PQ8ZEB+PESX13uOw/YvS4TkY=";
+    sha256 = "sha256-pTaBYetQVWUdfl6BgMFgbaleeMlBtruKkobfeSPPy6k=";
   };
 
   nativeBuildInputs = [
