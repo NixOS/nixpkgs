@@ -46,32 +46,32 @@ index 483d1c4e4..66609d9e9 100644
      getBadgesPath(userDataPath),
      getDraftPath(userDataPath),
 diff --git a/package.json b/package.json
-index 8585e6bdc..4d900ebfe 100644
+index dd87037e7..f16dd8d1f 100644
 --- a/package.json
 +++ b/package.json
-@@ -122,7 +122,6 @@
-     "@signalapp/sqlcipher": "3.2.1",
-     "@signalapp/windows-ucv": "1.0.1",
-     "emoji-datasource": "16.0.0",
+@@ -240,7 +240,6 @@
+     "electron": "41.2.2",
+     "electron-builder": "26.0.14",
+     "electron-mocha": "13.1.0",
 -    "emoji-datasource-apple": "16.0.0",
-     "google-libphonenumber": "3.2.39"
-   },
-   "devDependencies": {
+     "emoji-regex": "10.6.0",
+     "enhanced-resolve": "5.20.1",
+     "enquirer": "2.4.1",
 diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
-index 756130661..4872be4cf 100644
+index d659475fc..2f1e3cfdb 100644
 --- a/pnpm-lock.yaml
 +++ b/pnpm-lock.yaml
-@@ -97,9 +97,6 @@ importers:
-       emoji-datasource:
-         specifier: 16.0.0
-         version: 16.0.0
+@@ -430,9 +430,6 @@ importers:
+       electron-mocha:
+         specifier: 13.1.0
+         version: 13.1.0
 -      emoji-datasource-apple:
 -        specifier: 16.0.0
 -        version: 16.0.0
-       google-libphonenumber:
-         specifier: 3.2.39
-         version: 3.2.39
-@@ -6068,9 +6065,6 @@ packages:
+       emoji-regex:
+         specifier: 10.6.0
+         version: 10.6.0
+@@ -6154,9 +6151,6 @@ packages:
      resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
      engines: {node: '>=12'}
  
@@ -81,7 +81,7 @@ index 756130661..4872be4cf 100644
    emoji-datasource@16.0.0:
      resolution: {integrity: sha512-/qHKqK5Nr3+8zhgO6kHmF43Fm5C8HNn0AaFRIpgw8HF3+uF0Vfc8jgLI1ZQS5ba1vBzksS8NBCjHejwLb2D/Sg==}
  
-@@ -16954,8 +16948,6 @@ snapshots:
+@@ -16387,8 +16381,6 @@ snapshots:
  
    emittery@0.13.1: {}
  
@@ -89,7 +89,7 @@ index 756130661..4872be4cf 100644
 -
    emoji-datasource@16.0.0: {}
  
-   emoji-regex@10.4.0: {}
+   emoji-regex@10.6.0: {}
 diff --git a/stylesheets/components/fun/FunEmoji.scss b/stylesheets/components/fun/FunEmoji.scss
 index 1cc4bb43c..a6444101a 100644
 --- a/stylesheets/components/fun/FunEmoji.scss
