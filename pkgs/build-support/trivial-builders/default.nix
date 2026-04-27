@@ -270,8 +270,10 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      derivationArgs.installCheckPhase = ''
+        runHook preInstallCheck
         ${stdenv.shellDryRun} "$target"
+        runHook postIntsallCheck
       '';
     };
 
@@ -287,8 +289,10 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      derivationArgs.installCheckPhase = ''
+        runHook preInstallCheck
         ${stdenv.shellDryRun} "$target"
+        runHook postIntsallCheck
       '';
       meta.mainProgram = name;
     };
