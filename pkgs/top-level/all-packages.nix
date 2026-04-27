@@ -2497,7 +2497,7 @@ with pkgs;
     grubPlatform = "xen";
   };
 
-  gruut = with python3.pkgs; toPythonApplication gruut;
+  gruut = with python3Packages; toPythonApplication gruut;
 
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
 
