@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-bl1PG9Zk1wK+2mfbCBhD3OEpP8HQboqEO8sLFqX8DmA=";
       excludes = [ "ChangeLog" ];
     })
+    # autoconf 2.73 picks -std=gnu23, breaking the K&R sigsuspend probe and
+    # causing $(...) hangs. Drop with the next zsh release.
+    ./fix-sigsuspend-probe-c23.patch
   ]
   ++ lib.optionals stdenv.cc.isGNU [
     # Fixes compilation with gcc >= 14.
