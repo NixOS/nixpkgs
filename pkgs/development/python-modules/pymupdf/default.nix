@@ -8,6 +8,7 @@
 
   # build-system
   libclang,
+  pipcl,
   psutil,
   setuptools,
   swig,
@@ -44,14 +45,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pymupdf";
-  version = "1.27.2.2";
+  version = "1.27.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = finalAttrs.version;
-    hash = "sha256-o70IMa64jjX+b83uW4gISOiNrWtefQ8nc8Z99DfqrQI=";
+    hash = "sha256-KeddkzRkJ/tcINftYrx/BY0Z3WUaTU9iBqL5UorvclU=";
   };
 
   patches = [
@@ -75,6 +76,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [
     libclang
+    pipcl
     swig
     setuptools
   ];
@@ -151,6 +153,11 @@ buildPythonPackage (finalAttrs: {
     # Trace/BPT trap: 5 when getting widget options
     "tests/test_4505.py"
     "tests/test_widgets.py"
+
+    # Tests memory usage which is machine-dependent
+    # AssertionError: r1=403619840 r2=382353408 r=0.947310736756647.
+    "tests/test_memory.py::test_4090"
+
     # https://github.com/pymupdf/PyMuPDF/issues/4988 triggered by
     # https://github.com/swig/swig/issues/3279
     "tests/test_font.py::test_load_system_font"
