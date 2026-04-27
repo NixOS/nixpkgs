@@ -168,8 +168,8 @@ rec {
             f
             // fDecorated
             # Decorate f.override if presented
-            // lib.optionalAttrs (f ? override) {
-              override = fdrv: makeOverridable (f.override fdrv);
+            // {
+              ${if f ? override then "override" else null} = fdrv: makeOverridable (f.override fdrv);
             }
           )
             (mirrorArgs f')
