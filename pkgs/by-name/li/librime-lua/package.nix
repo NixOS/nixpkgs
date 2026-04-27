@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "librime-lua";
-  version = "0-unstable-2025-07-07";
+  version = "0-unstable-2026-04-26";
 
   src = fetchFromGitHub {
     owner = "hchunhui";
     repo = "librime-lua";
-    rev = "68f9c364a2d25a04c7d4794981d7c796b05ab627";
-    hash = "sha256-m7/qXdIlMMHscDDcFmusNuOR0cuzPpDQdprqRci8qZw=";
+    rev = "ef17b1f5e0c3f430d6039309d8ebd27bb26bc671";
+    hash = "sha256-kuNvJUiAlt+78U5ZqRbets2M/mrsVaECYxVFZRW/R40=";
   };
 
   propagatedBuildInputs = [ lua ];
