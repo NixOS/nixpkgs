@@ -20,7 +20,7 @@
 # This hook also provides an `installFont` function that can be used to install
 # additional fonts of a particular extension into their respective folder.
 #
-postInstallHooks+=(installFonts)
+preInstallHooks+=(installFonts)
 
 installFont() {
   if (($# != 2)); then
