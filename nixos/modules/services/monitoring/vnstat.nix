@@ -74,4 +74,8 @@ in
       };
     };
   };
+
+  meta = {
+    maintainers = with lib.maintainers; [ hmenke ];
+  };
 }
