@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/check-runzip.sh
   '';
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=implicit-int"
     "-Wno-error=incompatible-pointer-types"
