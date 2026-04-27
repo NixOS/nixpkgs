@@ -2459,7 +2459,7 @@ with pkgs;
 
   gup = callPackage ../development/tools/build-managers/gup { };
 
-  gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
+  gvm-tools = with python3Packages; toPythonApplication gvm-tools;
 
   gzip = callPackage ../tools/compression/gzip { };
 
