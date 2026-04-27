@@ -2679,11 +2679,6 @@ with pkgs;
 
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
-  logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
-    enableUnfree = false;
-    # https://www.elastic.co/support/matrix#logstash-and-jvm
-    jre = jdk11_headless;
-  };
   logstash = logstash7;
 
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
