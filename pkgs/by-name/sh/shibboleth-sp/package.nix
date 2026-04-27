@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-xmltooling=${xml-tooling-c}"
     "--with-saml=${opensaml-cpp}"
     "--with-fastcgi"
+    "--with-boost=${boost.dev}"
     "CXXFLAGS=-std=c++14"
   ];
 
