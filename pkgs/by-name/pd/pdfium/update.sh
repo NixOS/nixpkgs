@@ -95,12 +95,18 @@ pdfium_src=${pdfium_prefetch[1]}
 deps_file="$pdfium_src/DEPS"
 build_rev=$(extract_deps_rev "$deps_file" build_revision)
 abseil_rev=$(extract_deps_rev "$deps_file" abseil_revision)
+dragonbox_rev=$(extract_deps_rev "$deps_file" dragonbox_revision)
 fast_float_rev=$(extract_deps_rev "$deps_file" fast_float_revision)
+fp16_rev=$(extract_deps_rev "$deps_file" fp16_revision)
+gtest_rev=$(extract_deps_rev "$deps_file" gtest_revision)
+highway_rev=$(extract_deps_rev "$deps_file" highway_revision)
 libcxx_rev=$(extract_deps_rev "$deps_file" libcxx_revision)
 test_fonts_rev=$(extract_deps_rev "$deps_file" test_fonts_revision)
+v8_rev=$(extract_deps_rev "$deps_file" v8_revision)
+zlib_rev=$(extract_deps_rev "$deps_file" zlib_revision)
 simdutf_rev=$(extract_deps_rev "$deps_file" simdutf_revision)
 
-for dep_var in build_rev abseil_rev fast_float_rev libcxx_rev test_fonts_rev simdutf_rev; do
+for dep_var in build_rev abseil_rev dragonbox_rev fast_float_rev fp16_rev gtest_rev highway_rev libcxx_rev test_fonts_rev v8_rev zlib_rev simdutf_rev; do
   if [[ -z ${!dep_var} ]]; then
     echo "failed to extract $dep_var from $deps_file" >&2
     exit 1
@@ -126,10 +132,16 @@ done
 build_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/build.git/+archive/${build_rev}.tar.gz")")
 chromium_buildtools_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/+archive/refs/branch-heads/${target_version}/buildtools.tar.gz")")
 abseil_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/abseil-cpp/+archive/${abseil_rev}.tar.gz")")
+dragonbox_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/jk-jeon/dragonbox.git/+archive/${dragonbox_rev}.tar.gz")")
 fast_float_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/fastfloat/fast_float/+archive/${fast_float_rev}.tar.gz")")
+fp16_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/Maratyszcza/FP16/+archive/${fp16_rev}.tar.gz")")
+gtest_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/google/googletest/+archive/${gtest_rev}.tar.gz")")
+highway_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/google/highway.git/+archive/${highway_rev}.tar.gz")")
 libcxx_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/llvm/llvm-project/libcxx.git/+archive/${libcxx_rev}.tar.gz")")
 generate_shim_headers_hash=$(prefetch_subdir_archive_hash "${chromium_git_url}/chromium/src/+archive/refs/branch-heads/${target_version}/tools/generate_shim_headers.tar.gz")
 test_fonts_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/test_fonts/+archive/${test_fonts_rev}.tar.gz")")
+v8_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/v8/v8/+archive/${v8_rev}.tar.gz")")
+zlib_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/zlib/+archive/${zlib_rev}.tar.gz")")
 simdutf_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/simdutf/+archive/${simdutf_rev}.tar.gz")")
 
 set_int_var major "$major"
@@ -143,13 +155,25 @@ set_string_var buildHash "$build_hash"
 set_string_var chromiumBuildtoolsHash "$chromium_buildtools_hash"
 set_string_var abseilRev "$abseil_rev"
 set_string_var abseilHash "$abseil_hash"
+set_string_var dragonboxRev "$dragonbox_rev"
+set_string_var dragonboxHash "$dragonbox_hash"
 set_string_var fastFloatRev "$fast_float_rev"
 set_string_var fastFloatHash "$fast_float_hash"
+set_string_var fp16Rev "$fp16_rev"
+set_string_var fp16Hash "$fp16_hash"
+set_string_var gtestRev "$gtest_rev"
+set_string_var gtestHash "$gtest_hash"
+set_string_var highwayRev "$highway_rev"
+set_string_var highwayHash "$highway_hash"
 set_string_var libcxxRev "$libcxx_rev"
 set_string_var libcxxHash "$libcxx_hash"
 set_string_var generateShimHeadersHash "$generate_shim_headers_hash"
 set_string_var testFontsRev "$test_fonts_rev"
 set_string_var testFontsHash "$test_fonts_hash"
+set_string_var v8Rev "$v8_rev"
+set_string_var v8Hash "$v8_hash"
+set_string_var zlibRev "$zlib_rev"
+set_string_var zlibHash "$zlib_hash"
 set_string_var simdutfRev "$simdutf_rev"
 set_string_var simdutfHash "$simdutf_hash"
 
