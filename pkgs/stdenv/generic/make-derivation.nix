@@ -229,9 +229,8 @@ let
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags =
     (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or knownHardeningFlags;
-  stdenvHostSuffix = optionalString (
-    hostPlatform != buildPlatform && stdenvHasCC
-  ) "-${hostPlatform.config}";
+  hostSuffixNecessary = hostPlatform != buildPlatform && stdenvHasCC;
+  stdenvHostSuffix = "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
   userHook = config.stdenv.userHook or null;
 
@@ -529,8 +528,10 @@ let
               # just used for their side-affects. Those might as well since the
               # hash can't be the same. See #32986.
               hostSuffix = optionalString (
-                !(attrs ? outputHash)
-                ||
+                hostSuffixNecessary &&
+                (
+                  !(attrs ? outputHash)
+                  ||
                   (
                     depsBuildTarget
                     ++ depsBuildTargetPropagated
@@ -541,6 +542,7 @@ let
                     ++ depsTargetTarget
                     ++ depsTargetTargetPropagated
                   ) == [ ]
+                )
               ) stdenvHostSuffix;
 
               # Disambiguate statically built packages. This was originally
