@@ -2061,6 +2061,8 @@ let
 
         slug = callPackage ../development/ocaml-modules/slug { };
 
+        smbc = callPackage ../development/ocaml-modules/smbc { };
+
         smtml = callPackage ../development/ocaml-modules/smtml {
           mdx = mdx.override { inherit logs; };
         };

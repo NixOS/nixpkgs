@@ -1,0 +1,30 @@
+--- a/dune-project
++++ b/dune-project
+@@ -1,2 +1,2 @@
+-(lang dune 1.1)
+-(using menhir 1.0)
++(lang dune 1.4)
++(using menhir 2.0)
+--- a/src/Tip_parser.mly
++++ b/src/Tip_parser.mly
+@@ -8,8 +8,10 @@
+    vim:set ft=yacc: *)
+ 
+ %{
+-  module A = Tip_ast
+-  module Loc = Tip_loc
++  open struct
++    module A = Tip_ast
++    module Loc = Tip_loc
++  end
+ %}
+ 
+ %token EOI
+--- a/src/dune
++++ b/src/dune
+@@ -6,4 +6,4 @@
+   (public_name tip-parser)
+   (wrapped false)
+   (flags :standard -safe-string -w +a-4-44@8)
+-  (libraries bytes result))
++  (libraries result))
