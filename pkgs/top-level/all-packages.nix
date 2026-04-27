@@ -12150,7 +12150,6 @@ with pkgs;
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
   ape = callPackage ../applications/misc/ape { };
-  attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
   apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
 
   # Unix tools
