@@ -131,9 +131,11 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --with-native-system-header-dir=/include \
-      --with-sysroot=${musl} \
+      --with-native-system-header-dir=${musl}/include \
+      --with-sysroot=/ \
       --enable-languages=c,c++ \
+      --enable-static \
+      --disable-shared \
       --disable-bootstrap \
       --disable-dependency-tracking \
       --disable-libsanitizer \
@@ -146,4 +148,14 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    if [ -d "$out/lib64" ]; then
+      shopt -s dotglob
+      for lib in $out/lib64/*; do
+        mv --no-clobber "$lib" "$out/lib/"
+      done
+      shopt -u dotglob
+      rm -rf "$out/lib64"
+      ln -s lib "$out/lib64"
+    fi
   ''
