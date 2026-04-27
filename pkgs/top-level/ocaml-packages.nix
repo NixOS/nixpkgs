@@ -1465,6 +1465,8 @@ let
 
         num = callPackage ../development/ocaml-modules/num { };
 
+        nunchaku = callPackage ../development/ocaml-modules/nunchaku { };
+
         ### O ###
 
         ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
