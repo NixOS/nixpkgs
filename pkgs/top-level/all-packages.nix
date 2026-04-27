@@ -1709,7 +1709,7 @@ with pkgs;
 
   dune_3 = callPackage ../by-name/du/dune/package.nix { };
 
-  dvc = with python3.pkgs; toPythonApplication dvc;
+  dvc = with python3Packages; toPythonApplication dvc;
 
   dvc-with-remotes = dvc.override {
     enableGoogle = true;
