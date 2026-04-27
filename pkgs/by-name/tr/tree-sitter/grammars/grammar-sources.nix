@@ -2889,10 +2889,10 @@
   };
 
   vento = {
-    version = "0-unstable-2024-12-30";
+    version = "0-unstable-2026-02-23";
     url = "github:ventojs/tree-sitter-vento";
-    rev = "3b32474bc29584ea214e4e84b47102408263fe0e";
-    hash = "sha256-h8yC+MJIAH7DM69UQ8moJBmcmrSZkxvWrMb+NqtYB2Y=";
+    rev = "4569bc1fb81f050ca4ef3ceefdd31cfeb35c4f0a";
+    hash = "sha256-qD+O3gV/PGCdhv0nAlAi1ZeUmGSEfcKcbnipfZyex4g=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
