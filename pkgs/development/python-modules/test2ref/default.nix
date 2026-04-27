@@ -2,8 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   pdm-backend,
+
+  # dependencies
   binaryornot,
+
+  # tests
   pytest-cov-stub,
   pytestCheckHook,
 }:
