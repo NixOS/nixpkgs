@@ -38,8 +38,9 @@
   libwpe,
   libwpe-fdo,
   libxkbcommon,
-  libxml2,
+  libxml2_13,
   libxslt,
+  mesa,
   libgbm,
   sqlite,
   systemdLibs,
@@ -162,7 +163,7 @@ let
       libwpe
       libwpe-fdo
       libvpx'
-      libxml2
+      libxml2_13
       libxslt
       libgbm
       sqlite
@@ -182,17 +183,18 @@ let
       # remove bundled libs
       rm -rf $out/minibrowser-wpe/sys
 
-      # TODO: still fails on ubuntu trying to find libEGL_mesa.so.0
       wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
         --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
-        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
-
-    '';
-
-    preFixup = ''
-      # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-      mkdir -p "$out/lib"
-      ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib \
+        --run '
+          # Use Mesa as EGL vendor fallback when no system EGL vendor is configured.
+          # libglvnd discovers vendors via JSON files https://github.com/NVIDIA/libglvnd/blob/master/src/EGL/icd_enumeration.md
+          if [ -z "$__EGL_VENDOR_LIBRARY_DIRS" ] && [ -z "$__EGL_VENDOR_LIBRARY_FILENAMES" ] && \
+             ! [ -d /usr/share/glvnd/egl_vendor.d ] && ! [ -d /etc/glvnd/egl_vendor.d ] && \
+             ! [ -d /run/opengl-driver/share/glvnd/egl_vendor.d ]; then
+            export __EGL_VENDOR_LIBRARY_FILENAMES="${mesa}/share/glvnd/egl_vendor.d/50_mesa.json"
+          fi
+        '
     '';
   };
   webkit-darwin = fetchzip {
