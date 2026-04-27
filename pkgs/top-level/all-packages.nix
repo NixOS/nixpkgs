@@ -1872,7 +1872,7 @@ with pkgs;
 
   nixpkgs-pytools = with python3Packages; toPythonApplication nixpkgs-pytools;
 
-  nsz = with python3.pkgs; toPythonApplication nsz;
+  nsz = with python3Packages; toPythonApplication nsz;
 
   ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
 
