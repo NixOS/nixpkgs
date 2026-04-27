@@ -1,26 +1,20 @@
-import ./make-test-python.nix (
-  { lib, ... }:
-  {
-    name = "thunderbird-appointment";
-    meta.maintainers = with lib.maintainers; [ ];
+{ lib, ... }:
 
-    nodes.machine =
-      { config, pkgs, ... }:
-      {
-        services.thunderbird-appointment = {
-          enable = true;
-          nginx.enable = false; # test without nginx for simplicity
-          settings = {
-            allowFirstTimeRegister = true;
-            secretKey = "test-secret-for-nixos-test-do-not-use-in-prod";
-            dbUrl = "sqlite:////var/lib/thunderbird-appointment/test.db"; # use sqlite for faster test
-          };
-          database.createLocally = false;
-          redis.createLocally = true;
-        };
+{
+  name = "thunderbird-appointment";
+  meta.maintainers = with lib.maintainers; [ philocalyst ];
 
-        # Allow first-time setup
-        environment.variables.APP_ALLOW_FIRST_TIME_REGISTER = "True";
+  nodes.machine = {
+    virtualisation.memorySize = 2048;
+
+    services.thunderbird-appointment = {
+      enable = true;
+      dataDir = "/srv/thunderbird-appointment-state";
+      # A domain is always required, but we skip the nginx
+      # vhost here as the test needs no ACME/DNS!
+      nginx = {
+        enable = false;
+        domain = "appointment.example.com";
       };
       database.createLocally = true;
       redis.createLocally = true;
@@ -37,10 +31,13 @@ import ./make-test-python.nix (
     machine.wait_for_unit("thunderbird-appointment-worker.service")
 
     with subtest("secrets are generated with strict permissions"):
-        machine.succeed("test -f /var/lib/thunderbird-appointment/secrets.env")
-        machine.succeed("test $(stat -c %a /var/lib/thunderbird-appointment/secrets.env) = 600")
+        machine.succeed("test -d /srv/thunderbird-appointment-state")
+        machine.succeed("test $(stat -c %a /srv/thunderbird-appointment-state) = 750")
+        machine.succeed("test $(stat -c %U:%G /srv/thunderbird-appointment-state) = thunderbird-appointment:thunderbird-appointment")
+        machine.succeed("test -f /srv/thunderbird-appointment-state/secrets.env")
+        machine.succeed("test $(stat -c %a /srv/thunderbird-appointment-state/secrets.env) = 600")
         for key in ["SESSION_SECRET", "JWT_SECRET", "CSRF_SECRET", "SIGNED_SECRET", "DB_SECRET"]:
-            machine.succeed(f"grep -q '^{key}=.' /var/lib/thunderbird-appointment/secrets.env")
+            machine.succeed(f"grep -q '^{key}=.' /srv/thunderbird-appointment-state/secrets.env")
 
     with subtest("migrations ran against PostgreSQL"):
         # `run-command main update-db` stamps the alembic head on a fresh DB.

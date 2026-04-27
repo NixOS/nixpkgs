@@ -1776,7 +1776,6 @@
   ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lasuite-drive.nix
   ./services/web-apps/lasuite-meet.nix
-  ./services/web-apps/thunderbird-appointment.nix
   ./services/web-apps/lauti.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/librechat.nix
@@ -1874,6 +1873,7 @@
   ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/szurubooru.nix
   ./services/web-apps/tabbyapi.nix
+  ./services/web-apps/thunderbird-appointment.nix
   ./services/web-apps/tranquil-pds.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
