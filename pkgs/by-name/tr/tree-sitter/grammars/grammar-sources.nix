@@ -1462,10 +1462,10 @@
   };
 
   ledger = {
-    version = "0-unstable-2025-05-04";
+    version = "0-unstable-2026-03-20";
     url = "github:cbarrete/tree-sitter-ledger";
-    rev = "96c92d4908a836bf8f661166721c98439f8afb80";
-    hash = "sha256-L2xUTItnQ/bcieasItrozjAEJLm/fsUUyMex2juCnjw=";
+    rev = "22a1ab8195c1f6e808679f803007756fe7638c6f";
+    hash = "sha256-62xgcEavI5RKi77sbEnx9f3hA4faFeUCw0/uec8Nx3k=";
     meta = {
       license = lib.licenses.mit;
     };
