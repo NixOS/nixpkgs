@@ -13365,6 +13365,11 @@
     githubId = 5352661;
     name = "James Cleverley-Prance";
   };
+  jpwilliams = {
+    github = "jpwilliams";
+    githubId = 1736957;
+    name = "Jack Williams";
+  };
   jqueiroz = {
     email = "nixos@johnjq.com";
     github = "jqueiroz";
