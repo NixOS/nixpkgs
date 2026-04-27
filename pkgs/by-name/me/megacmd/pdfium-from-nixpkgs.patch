@@ -1,0 +1,17 @@
+diff --git a/sdk/cmake/modules/sdklib_libraries.cmake b/sdk/cmake/modules/sdklib_libraries.cmake
+index 8ef04608..a0a53e73 100644
+--- a/sdk/cmake/modules/sdklib_libraries.cmake
++++ b/sdk/cmake/modules/sdklib_libraries.cmake
+@@ -143,7 +143,11 @@ macro(load_sdklib_libraries)
+         endif()
+ 
+         if(USE_PDFIUM)
+-            pkg_check_modules(pdfium REQUIRED IMPORTED_TARGET pdfium)
++            add_library(PkgConfig::pdfium SHARED IMPORTED)
++            set_target_properties(PkgConfig::pdfium PROPERTIES
++                IMPORTED_LOCATION "${PDFIUM_LIBRARY}"
++                INTERFACE_INCLUDE_DIRECTORIES "${PDFIUM_INCLUDE_DIR}"
++            )
+             target_link_libraries(SDKlib PRIVATE PkgConfig::pdfium)
+             set(HAVE_PDFIUM 1)
+         endif()
