@@ -26,7 +26,7 @@
 let
   fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqtgraph";
   version = "0.14.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
-    tag = "pyqtgraph-${version}";
+    tag = "pyqtgraph-${finalAttrs.version}";
     hash = "sha256-T5rhaBtcKP/sYjCmYNMYR0BGttkiLhWTfEbZNeAdJJ0=";
   };
 
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   meta = {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "https://www.pyqtgraph.org/";
-    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -97,4 +97,4 @@ buildPythonPackage rec {
       doronbehar
     ];
   };
-}
+})
