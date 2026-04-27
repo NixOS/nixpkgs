@@ -50,7 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gdsfactory/gplugins";
     changelog = "https://github.com/gdsfactory/gplugins/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
-
