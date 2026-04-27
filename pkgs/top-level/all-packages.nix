@@ -6119,11 +6119,6 @@ with pkgs;
 
   ustream-ssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = openssl; };
 
-  ustream-ssl-wolfssl = callPackage ../development/libraries/ustream-ssl {
-    ssl_implementation = wolfssl;
-    additional_buildInputs = [ openssl ];
-  };
-
   ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
     ssl_implementation = mbedtls_2;
   };
@@ -6736,11 +6731,6 @@ with pkgs;
   libubox-nossl = callPackage ../development/libraries/libubox { };
 
   libubox = callPackage ../development/libraries/libubox { with_ustream_ssl = true; };
-
-  libubox-wolfssl = callPackage ../development/libraries/libubox {
-    with_ustream_ssl = true;
-    ustream-ssl = ustream-ssl-wolfssl;
-  };
 
   libubox-mbedtls = callPackage ../development/libraries/libubox {
     with_ustream_ssl = true;

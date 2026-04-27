@@ -41,10 +41,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "connect_box" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--vcr-record=none"
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

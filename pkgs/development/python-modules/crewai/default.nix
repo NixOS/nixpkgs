@@ -552,7 +552,7 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--override-ini=addopts="
   ];
 
