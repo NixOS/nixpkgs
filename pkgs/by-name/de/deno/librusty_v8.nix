@@ -159,6 +159,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstall
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Rust bindings for the V8 JavaScript engine";
     homepage = "https://github.com/denoland/rusty_v8";
