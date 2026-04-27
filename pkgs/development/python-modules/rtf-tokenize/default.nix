@@ -13,14 +13,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "rtf-tokenize";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstenoproject";
     repo = "rtf_tokenize";
     tag = finalAttrs.version;
-    hash = "sha256-zwD2sRYTY1Kmm/Ag2hps9VRdUyQoi4zKtDPR+F52t9A=";
+    hash = "sha256-bM/DFl1mpHgeBItdyA5Tt+Eo9u82Gz+6qwft2h0bM94=";
   };
 
   build-system = [ setuptools ];
