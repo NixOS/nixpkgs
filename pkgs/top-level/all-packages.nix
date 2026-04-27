@@ -2663,8 +2663,6 @@ with pkgs;
 
   keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
-  keybase = callPackage ../tools/security/keybase { };
-
   kbdVlock = callPackage ../../pkgs/by-name/kb/kbd/package.nix { withVlock = true; };
 
   krunvm = callPackage ../applications/virtualization/krunvm {
