@@ -39,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
+  configureFlags = [
+    "--with-xmltooling=${xml-tooling-c}"
+    "--with-boost=${boost.dev}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
