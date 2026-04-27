@@ -1,0 +1,82 @@
+--- a/lib/src/widgets/emoji_picker/emoji_builder.dart
++++ b/lib/src/widgets/emoji_picker/emoji_builder.dart
+@@ -1,7 +1,7 @@
+ import 'dart:convert';
++import 'dart:io';
+ 
+ import 'package:build/build.dart';
+-import 'package:http/http.dart' as http;
+ import 'package:interstellar/src/utils/trie.dart';
+ 
+ Builder emojiBuilder(BuilderOptions options) =>
+@@ -29,15 +29,9 @@
+   };
+ 
+   Future<String> _generateContent() async {
+-    final dataResponse = await http.get(
+-      Uri.parse('$_sourcePrefix/compact.raw.json'),
+-    );
+-    final dataJson = jsonDecode(dataResponse.body);
++    final dataJson = jsonDecode(await File('@compact.raw.json@').readAsString()) as List;
+ 
+-    final messagesResponse = await http.get(
+-      Uri.parse('$_sourcePrefix/messages.raw.json'),
+-    );
+-    final messagesJson = jsonDecode(messagesResponse.body);
++    final messagesJson = jsonDecode(await File('@messages.raw.json@').readAsString()) as Map<String, dynamic>;
+ 
+     final s = StringBuffer()
+       ..write('''
+@@ -53,8 +47,9 @@
+ 
+     final emojiGroups = <String>[];
+ 
+-    for (var i = 0; i < (messagesJson['groups'] as List).length; i++) {
+-      final group = messagesJson['groups'][i];
++    final groups = messagesJson['groups'] as List;
++    for (var i = 0; i < groups.length; i++) {
++      final group = groups[i] as Map<String, dynamic>;
+ 
+       assert(group['order'] == i, 'Emoji group order value should match index');
+ 
+@@ -61,4 +56,4 @@
+-      emojiGroups.add(group['message']);
++      emojiGroups.add(group['message'] as String);
+     }
+ 
+     s
+@@ -72,7 +67,8 @@
+ 
+     {
+       var i = 0;
+-      for (final emoji in dataJson) {
++      for (final emojiItem in dataJson) {
++        final emoji = emojiItem as Map<String, dynamic>;
+         if (emoji['group'] == null || emoji['order'] == null) continue;
+ 
+         assert(emoji['order'] == i + 1, 'Emoji order value should match index');
+@@ -84,9 +80,9 @@
+               : emoji['emoticon']),
+         ];
+ 
+-        trie.addChild(Trie.normalizeTerm(emoji['label']), {i});
++        trie.addChild(Trie.normalizeTerm(emoji['label'] as String), {i});
+         for (final tag in tags) {
+-          trie.addChild(Trie.normalizeTerm(tag), {i});
++          trie.addChild(Trie.normalizeTerm(tag as String), {i});
+         }
+ 
+         s
+@@ -93,9 +89,9 @@
+           ..write('const Emoji("')
+-          ..write(emoji['unicode'])
++          ..write(emoji['unicode'] as String)
+           ..write('","')
+-          ..write(emoji['label'])
++          ..write(emoji['label'] as String)
+           ..write('",')
+-          ..write(emoji['group'])
++          ..write(emoji['group'].toString())
+           ..write('),\n');
+ 
+         i++;

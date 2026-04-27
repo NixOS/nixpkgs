@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 68ce1294..5c2924f6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -350,7 +350,7 @@ message("Binary dir: ${CMAKE_CURRENT_BINARY_DIR}")
+
+ # TODO: linux .desktop/.xml files
+
+-if(COMMAND qt_generate_deploy_app_script)
++if(FALSE)
+     qt_generate_deploy_app_script(
+         TARGET CEmu
+         FILENAME_VARIABLE deploy_script

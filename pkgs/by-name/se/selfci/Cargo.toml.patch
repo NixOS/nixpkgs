@@ -1,0 +1,13 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 8f7a1e2..e2062c4 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -10,7 +10,7 @@ readme = "README.md"
+ keywords = ["ci"]
+ categories = ["development-tools"]
+ authors = ["dpc <dpc@dpc.pw>"]
+-rust-version = "1.92"
++rust-version = "1.91"
+ 
+ [[bin]]
+ name = "selfci"

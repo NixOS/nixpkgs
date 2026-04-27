@@ -1,0 +1,54 @@
+--- a/libgda/md5c.c
++++ b/libgda/md5c.c
+@@ -99,2 +99,2 @@
+-void MD5Init (context)
+-MD5_CTX *context;                                        /* context */
++void
++MD5Init (MD5_CTX *context)
+@@ -116,4 +116,2 @@
+-void MD5Update (context, input, inputLen)
+-MD5_CTX *context;                                        /* context */
+-unsigned char *input;                                /* input block */
+-unsigned int inputLen;                     /* length of input block */
++void
++MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
+@@ -158,3 +156,2 @@
+-void MD5Final (digest, context)
+-unsigned char digest[16];                         /* message digest */
+-MD5_CTX *context;                                       /* context */
++void
++MD5Final (unsigned char digest[16], MD5_CTX *context)
+@@ -187,3 +184,2 @@
+-static void MD5Transform (state, block)
+-UINT4 state[4];
+-unsigned char block[64];
++static void
++MD5Transform (UINT4 state[4], unsigned char block[64])
+@@ -280,4 +276,2 @@
+-static void Encode (output, input, len)
+-unsigned char *output;
+-UINT4 *input;
+-unsigned int len;
++static void
++Encode (unsigned char *output, UINT4 *input, unsigned int len)
+@@ -298,4 +292,2 @@
+-static void Decode (output, input, len)
+-UINT4 *output;
+-unsigned char *input;
+-unsigned int len;
++static void
++Decode (UINT4 *output, unsigned char *input, unsigned int len)
+@@ -312,4 +304,2 @@
+-static void MD5_memcpy (output, input, len)
+-POINTER output;
+-POINTER input;
+-unsigned int len;
++static void
++MD5_memcpy (POINTER output, POINTER input, unsigned int len)
+@@ -325,4 +315,2 @@
+-static void MD5_memset (output, value, len)
+-POINTER output;
+-int value;
+-unsigned int len;
++static void
++MD5_memset (POINTER output, int value, unsigned int len)

@@ -1,0 +1,55 @@
+From 2c8680324480bc0c20a026eb7ff9ffae1fe5fb13 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Tue, 6 Jan 2026 13:22:42 +0100
+Subject: [PATCH] Fix generated pkg-config modules with absolute installdirs
+
+Fixes: https://github.com/KhronosGroup/SPIRV-Tools/issues/3905
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ cmake/SPIRV-Tools-shared.pc.in | 4 ++--
+ cmake/SPIRV-Tools.pc.in        | 4 ++--
+ cmake/write_pkg_config.cmake   | 2 ++
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/cmake/SPIRV-Tools-shared.pc.in b/cmake/SPIRV-Tools-shared.pc.in
+index 0dcaa276..f6a282bd 100644
+--- a/cmake/SPIRV-Tools-shared.pc.in
++++ b/cmake/SPIRV-Tools-shared.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@PKG_CONFIG_LIBDIR@
++includedir=@PKG_CONFIG_INCLUDEDIR@
+ 
+ Name: SPIRV-Tools
+ Description: Tools for SPIR-V
+diff --git a/cmake/SPIRV-Tools.pc.in b/cmake/SPIRV-Tools.pc.in
+index 2984dc57..62902e58 100644
+--- a/cmake/SPIRV-Tools.pc.in
++++ b/cmake/SPIRV-Tools.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@PKG_CONFIG_LIBDIR@
++includedir=@PKG_CONFIG_INCLUDEDIR@
+ 
+ Name: SPIRV-Tools
+ Description: Tools for SPIR-V
+diff --git a/cmake/write_pkg_config.cmake b/cmake/write_pkg_config.cmake
+index d367ce3e..ed932271 100644
+--- a/cmake/write_pkg_config.cmake
++++ b/cmake/write_pkg_config.cmake
+@@ -28,4 +28,6 @@ REGEX
+ # CMake support "-dev" in the version.
+ # If it's not a "-dev" version then ensure it ends with ".1"
+ string(REGEX REPLACE "-dev.1" ".0" CURRENT_VERSION "${CURRENT_VERSION}.1")
++cmake_path(APPEND PKG_CONFIG_LIBDIR "\${exec_prefix}" "${CMAKE_INSTALL_LIBDIR}")
++cmake_path(APPEND PKG_CONFIG_INCLUDEDIR "\${prefix}" "${CMAKE_INSTALL_INCLUDEDIR}")
+ configure_file(${TEMPLATE_FILE} ${OUT_FILE} @ONLY)
+-- 
+2.51.2
+
