@@ -9,6 +9,7 @@
 
   # dependencies
   jsonpatch,
+  langchain-protocol,
   langsmith,
   packaging,
   pydantic,
@@ -52,6 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     jsonpatch
+    langchain-protocol
     langsmith
     packaging
     pydantic
