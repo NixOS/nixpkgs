@@ -3088,8 +3088,6 @@ with pkgs;
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
-  pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
-
   pdfium-v8 = pdfium.override {
     withV8 = true;
     stdenv = if stdenv.hostPlatform.isLinux then llvmPackages.libcxxStdenv else llvmPackages.stdenv;
