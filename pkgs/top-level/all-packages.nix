@@ -2667,8 +2667,6 @@ with pkgs;
 
   kbdVlock = callPackage ../../pkgs/by-name/kb/kbd/package.nix { withVlock = true; };
 
-  keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
-
   krunvm = callPackage ../applications/virtualization/krunvm {
     inherit (darwin) sigtool;
   };
