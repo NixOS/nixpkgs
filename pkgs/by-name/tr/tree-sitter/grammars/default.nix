@@ -53,7 +53,7 @@ lib.mapAttrs' (
       passthru.updateScript = nix-update-script {
         extraArgs = [
           "--override-filename"
-          "pkgs/development/tools/parsing/tree-sitter/grammars/grammar-sources.nix"
+          "pkgs/by-name/tr/tree-sitter/grammars/grammar-sources.nix"
         ]
         ++ (
           if (isUnstable attrs.version) then

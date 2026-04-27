@@ -5961,8 +5961,6 @@ with pkgs;
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
 
-  tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) { };
-
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
 
   uhdMinimal = uhd.override {
