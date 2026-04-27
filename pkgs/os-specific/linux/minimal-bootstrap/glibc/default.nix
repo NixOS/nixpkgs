@@ -115,4 +115,5 @@ bash.runCommand "${pname}-${version}"
 
     # localedef + iconv() are never invoked downstream of this glibc
     rm -rf $out/share/i18n $out/lib/gconv $out/share/locale
+    rm -rf $out/bin $out/sbin
   ''
