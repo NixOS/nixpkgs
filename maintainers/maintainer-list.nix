@@ -10820,6 +10820,11 @@
     github = "HigherOrderLogic";
     githubId = 73709188;
   };
+  highjeans = {
+    github = "highjeans";
+    githubId = 77588045;
+    name = "Vivan Waghela";
+  };
   hirenashah = {
     email = "hiren@hiren.io";
     github = "hirenashah";
