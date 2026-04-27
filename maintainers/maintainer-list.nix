@@ -6094,6 +6094,11 @@
     github = "Daru-san";
     githubId = 135046711;
   };
+  darwin67 = {
+    github = "darwin67";
+    githubId = 5746693;
+    name = "Darwin";
+  };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";
     github = "das-g";
