@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gptscript";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
     repo = "gptscript";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fLpSuShRqQGK3WaiJBJqgF1fjJSmnNMqkiJ50H8kTJ4=";
+    hash = "sha256-gwSi+84SmLBxeRyZZS6qlSdiA8gZUj4h2LnU6oXmfdI=";
   };
 
-  vendorHash = "sha256-jctYQD8HZ/1VQyPtipZjk4OFszHGcEUqNHTRw+fkDKE=";
+  vendorHash = "sha256-C9dksQ7Js3omL8RWdQt6cEEGbGHnkXdgpYou2oKNm0Y=";
 
   ldflags = [
     "-s"
