@@ -70,10 +70,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # ZeroDivisionError: float division by zero
+    # See https://github.com/pyqtgraph/pyqtgraph/issues/3485
     "test_maps_tick_values_to_local_times"
     "test_maps_hour_ticks_to_local_times_when_skip_greater_than_one"
-
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # small precision-related differences on other architectures,
