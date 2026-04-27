@@ -138,10 +138,6 @@ in
     #
     # TODO(winter): Move to qemu-vm? Trying it here for now as a
     # low impact change that'll probably improve people's experience.
-    #
-    # (I have no clue what is going on in https://github.com/nix-darwin/nix-darwin/issues/1081
-    # though, as this fix would only apply to one person in that thread... hopefully someone
-    # comes across with a reproducer if this doesn't do it.)
     system.systemBuilderArgs.allowSubstitutes = true;
 
     nix.settings = {
@@ -250,6 +246,9 @@ in
     system = {
       # To prevent gratuitous rebuilds on each change to Nixpkgs
       nixos.revision = null;
+
+      # To prevent channels and Git checkouts resulting in different system drvs
+      nixos.versionSuffix = "";
 
       # to be updated by module maintainers, see nixpkgs#325610
       stateVersion = "24.05";
