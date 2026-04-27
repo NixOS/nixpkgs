@@ -10509,12 +10509,19 @@ with pkgs;
         };
       };
     }).overrideAttrs
-      {
+      (old: {
         pname = "vim-darwin";
         meta = {
+          inherit (old.meta)
+            description
+            homepage
+            license
+            mainProgram
+            outputsToInstall
+            ;
           platforms = lib.platforms.darwin;
         };
-      };
+      });
 
   vimacs = callPackage ../applications/editors/vim/vimacs.nix { };
 

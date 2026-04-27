@@ -86,6 +86,7 @@ let
     cmakeFlags = [
       "-DUSE_GITHASH=OFF"
       "-DINSTALL_LICENSE=OFF"
+      "-DINSTALL_CADICAL=OFF"
       "-DUSE_MIMALLOC=ON"
     ];
 
