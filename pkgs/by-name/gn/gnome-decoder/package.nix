@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-decoder";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
     tag = finalAttrs.version;
-    hash = "sha256-O+DXfR9nZ0iz9IX/SZVX6ESI/vRa4ErEPxdgqSyOye0=";
+    hash = "sha256-g3ztQ+wiCDY19bc2/IABzXGSQrZltQgrTZ7rSI0RyFs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
