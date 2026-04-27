@@ -17,16 +17,16 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elastic";
-  version = "0.1.9";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
-    rev = version;
-    hash = "sha256-jK9RcZ5U1Dwkpu1mlfq/l4347eRCd3Y/KDYYIIkGytk=";
+    rev = finalAttrs.version;
+    hash = "sha256-ydRKkVYQ1f6Jlymej1Wzoppo6E0FEUvIfrfnDqLRcPY=";
   };
 
   nativeBuildInputs = [
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _0xMRTT ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

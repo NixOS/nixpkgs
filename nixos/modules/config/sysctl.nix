@@ -96,18 +96,10 @@ in
       # Maximise address space randomisation.
       "vm.mmap_rnd_bits" = lib.mkMerge [
         (lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 (
-          let
-            kernel = config.boot.kernelPackages.kernel;
-            isYes = kernel.config.isYes or (_: false);
-          in
-          lib.mkDefault (
-            if isYes "ARM64_64K_PAGES" then
-              29
-            else if isYes "ARM64_16K_PAGES" then
-              31
-            else
-              33
-          )
+          # Ideally, we'd want to set this to 33 on 4K pagesize
+          # kernels, but some vendor kernels e.g. linux_rpi can
+          # do a maximum of 24.
+          lib.mkDefault 24
         ))
         (lib.mkIf pkgs.stdenv.hostPlatform.isx86_64 (lib.mkDefault 32))
       ];
