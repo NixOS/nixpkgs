@@ -13,6 +13,11 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/vectors";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.7.19,<0.11.0" uv_build
+  '';
+
   build-system = [ uv-build ];
 
   # No tests included
