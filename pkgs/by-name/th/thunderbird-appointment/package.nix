@@ -127,7 +127,7 @@ python3.pkgs.buildPythonApplication {
     description = "Thunderbird Appointment - Invite others to grab times on your calendar";
     homepage = "https://github.com/thunderbird/appointment";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "run-command";
   };

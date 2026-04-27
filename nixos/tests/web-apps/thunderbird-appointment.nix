@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { lib, ... }:
   {
     name = "thunderbird-appointment";
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { config, pkgs, ... }:
