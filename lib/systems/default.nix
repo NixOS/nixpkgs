@@ -83,6 +83,29 @@ let
       # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
       rust = args.rust or args.rustc or { };
 
+      selectEmulator =
+        pkgs:
+        let
+          wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
+        in
+        # Note: we guarantee that the return value is either `null` or a path
+        # to an emulator program. That is, if an emulator requires additional
+        # arguments, a wrapper should be used.
+        if pkgs.stdenv.hostPlatform.canExecute final then
+          lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
+        else if final.isWindows then
+          "${wine}/bin/wine"
+        else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null then
+          "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
+        else if final.isWasi then
+          "${pkgs.wasmtime}/bin/wasmtime"
+        else if final.isGhcjs then
+          "${pkgs.nodejs-slim}/bin/node"
+        else if final.isMmix then
+          "${pkgs.mmixware}/bin/mmix"
+        else
+          null;
+
       final = {
         # Prefer to parse `config` as it is strictly more informative.
         parsed = parse.mkSystemFromString (args.config or allArgs.system);
@@ -370,48 +393,21 @@ let
         # Handle Android SDK and NDK versions.
         androidSdkVersion = args.androidSdkVersion or null;
         androidNdkVersion = args.androidNdkVersion or null;
+
+        emulatorAvailable = pkgs: selectEmulator pkgs != null;
+
+        # whether final.emulator pkgs.pkgsStatic works
+        staticEmulatorAvailable =
+          pkgs: final.emulatorAvailable pkgs && (final.isLinux || final.isWasi || final.isMmix);
+
+        emulator =
+          pkgs:
+          if (final.emulatorAvailable pkgs) then
+            selectEmulator pkgs
+          else
+            throw "Don't know how to run ${final.config} executables.";
+
       }
-      // (
-        let
-          selectEmulator =
-            pkgs:
-            let
-              wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
-            in
-            # Note: we guarantee that the return value is either `null` or a path
-            # to an emulator program. That is, if an emulator requires additional
-            # arguments, a wrapper should be used.
-            if pkgs.stdenv.hostPlatform.canExecute final then
-              lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
-            else if final.isWindows then
-              "${wine}/bin/wine"
-            else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null then
-              "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
-            else if final.isWasi then
-              "${pkgs.wasmtime}/bin/wasmtime"
-            else if final.isGhcjs then
-              "${pkgs.nodejs-slim}/bin/node"
-            else if final.isMmix then
-              "${pkgs.mmixware}/bin/mmix"
-            else
-              null;
-        in
-        {
-          emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
-
-          # whether final.emulator pkgs.pkgsStatic works
-          staticEmulatorAvailable =
-            pkgs: final.emulatorAvailable pkgs && (final.isLinux || final.isWasi || final.isMmix);
-
-          emulator =
-            pkgs:
-            if (final.emulatorAvailable pkgs) then
-              selectEmulator pkgs
-            else
-              throw "Don't know how to run ${final.config} executables.";
-
-        }
-      )
       // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args
@@ -553,8 +549,6 @@ let
             "-uefi"
           ];
         };
-      }
-      // {
         go = {
           # See https://pkg.go.dev/internal/platform for a list of known platforms
           GOARCH =
