@@ -24,6 +24,7 @@ let
     elem
     elemAt
     hasPrefix
+    head
     id
     length
     mapAttrs
@@ -68,7 +69,7 @@ let
     let
       found = match "(.*)e?abi.*" x;
     in
-    if found == null then x else elemAt found 0;
+    if found == null then x else head found;
 
 in
 
@@ -791,9 +792,9 @@ rec {
     l:
     {
       "1" =
-        if elemAt l 0 == "avr" then
+        if head l == "avr" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = "none";
             abi = "unknown";
           }
@@ -802,7 +803,7 @@ rec {
       "2" = # We only do 2-part hacks for things Nix already supports
         if elemAt l 1 == "cygwin" then
           mkSkeletonFromList [
-            (elemAt l 0)
+            (head l)
             "pc"
             "cygwin"
           ]
@@ -812,20 +813,20 @@ rec {
         # hack-in MSVC for the non-MinGW case right here.
         else if elemAt l 1 == "windows" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = "windows";
             abi = "msvc";
           }
         else if (elemAt l 1) == "elf" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             vendor = "unknown";
             kernel = "none";
             abi = elemAt l 1;
           }
         else
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = elemAt l 1;
           };
       "3" =
@@ -840,7 +841,7 @@ rec {
           ]
         then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = elemAt l 1;
             abi = elemAt l 2;
             vendor = "unknown";
@@ -862,7 +863,7 @@ rec {
           || hasPrefix "wasm32" (elemAt l 0)
         then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             vendor = elemAt l 1;
             kernel =
               if elemAt l 2 == "mingw32" then
@@ -873,14 +874,14 @@ rec {
         # lots of tools expect a triplet for Cygwin, even though the vendor is just "pc"
         else if elemAt l 2 == "cygwin" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             vendor = elemAt l 1;
             kernel = "cygwin";
           }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 3 components is ambiguous";
       "4" = {
-        cpu = elemAt l 0;
+        cpu = head l;
         vendor = elemAt l 1;
         kernel = elemAt l 2;
         abi = elemAt l 3;
