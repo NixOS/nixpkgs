@@ -11,6 +11,7 @@
   xml-security-c,
   xml-tooling-c,
   zlib,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://shibboleth.net/products/opensaml-cpp.html";

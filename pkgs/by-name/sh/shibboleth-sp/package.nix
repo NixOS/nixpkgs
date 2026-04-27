@@ -13,6 +13,7 @@
   xercesc,
   xml-security-c,
   xml-tooling-c,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://shibboleth.net/products/service-provider.html";

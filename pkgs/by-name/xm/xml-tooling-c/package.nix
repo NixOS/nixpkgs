@@ -10,6 +10,7 @@
   log4shib,
   xercesc,
   xml-security-c,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Low-level library that provides a high level interface to XML processing for OpenSAML 2";
