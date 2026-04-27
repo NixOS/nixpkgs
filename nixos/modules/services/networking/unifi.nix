@@ -41,7 +41,7 @@ in
     };
 
     services.unifi.jrePackage = lib.mkPackageOption pkgs "jdk" {
-      default = "jdk17_headless";
+      default = "jdk25_headless";
       extraDescription = ''
         Check the UniFi controller release notes to ensure it is supported.
       '';
