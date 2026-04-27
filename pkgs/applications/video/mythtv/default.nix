@@ -4,7 +4,6 @@
   fetchFromGitHub,
   which,
   qtbase,
-  qtwebkit,
   qtscript,
   libpulseaudio,
   fftwSinglePrec,
@@ -39,7 +38,6 @@
   soundtouch,
   libzip,
   libhdhomerun,
-  withWebKit ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -89,8 +87,7 @@ stdenv.mkDerivation rec {
     soundtouch
     libzip
     libhdhomerun
-  ]
-  ++ lib.optional withWebKit qtwebkit;
+  ];
   nativeBuildInputs = [
     pkg-config
     which

@@ -17,7 +17,6 @@
   enableVerbose ? true,
   withConnectivity ? false,
   withMultimedia ? false,
-  withWebKit ? false,
   withWebSockets ? false,
   withLocation ? false,
   withSerialPort ? false,
@@ -139,7 +138,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
@@ -156,7 +154,6 @@ buildPythonPackage rec {
       pyqt-builder
     ]
     ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
@@ -170,7 +167,6 @@ buildPythonPackage rec {
   passthru = {
     inherit sip pyqt5-sip;
     multimediaEnabled = withMultimedia;
-    webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;
     connectivityEnabled = withConnectivity;
     locationEnabled = withLocation;
@@ -191,7 +187,6 @@ buildPythonPackage rec {
     "PyQt5.QtGui"
   ]
   ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-  ++ lib.optional withWebKit "PyQt5.QtWebKit"
   ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
   ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
   ++ lib.optional withLocation "PyQt5.QtPositioning"

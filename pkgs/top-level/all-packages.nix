@@ -2747,8 +2747,6 @@ with pkgs;
       ;
   };
 
-  nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
-
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
@@ -2841,8 +2839,6 @@ with pkgs;
     eri2PureSh = false;
     eri3PureSh = false;
   };
-
-  libirc = libsForQt5.callPackage ../development/libraries/libirc { };
 
   libportal-gtk3 = libportal.override { variant = "gtk3"; };
   libportal-gtk4 = libportal.override { variant = "gtk4"; };
@@ -3217,7 +3213,6 @@ with pkgs;
   rtaudio = rtaudio_5;
 
   mpi = openmpi; # this attribute should used to build MPI applications
-  openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica { });
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
@@ -3457,8 +3452,6 @@ with pkgs;
 
   usort = with python3Packages; toPythonApplication usort;
 
-  vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
-
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
@@ -3476,10 +3469,6 @@ with pkgs;
   openconnectPackages = callPackage ../tools/networking/openconnect { };
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
-
-  globalprotect-openconnect =
-    libsForQt5.callPackage ../tools/networking/globalprotect-openconnect
-      { };
 
   buildWasmBindgenCli = callPackage ../build-support/wasm-bindgen-cli { };
 
@@ -4317,8 +4306,6 @@ with pkgs;
 
   graalvmPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
-
-  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   inherit (callPackage ../development/compilers/julia { })
     julia_110-bin
@@ -5917,8 +5904,6 @@ with pkgs;
   };
 
   seer = libsForQt5.callPackage ../development/tools/misc/seer { };
-
-  semantik = libsForQt5.callPackage ../applications/office/semantik { };
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
   sbt-with-scala-native = callPackage ../development/tools/build-managers/sbt/scala-native.nix { };
@@ -8114,6 +8099,7 @@ with pkgs;
   nginx = nginxStable;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
+    openssl = openssl_4_0;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -9157,8 +9143,6 @@ with pkgs;
     confd-calico
     ;
 
-  cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
-
   cbconvert-gui = cbconvert.gui;
 
   cdparanoia = cdparanoia-iii;
@@ -9166,8 +9150,6 @@ with pkgs;
   cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
-
-  clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
   cni = callPackage ../applications/networking/cluster/cni { };
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix { };
@@ -9328,8 +9310,6 @@ with pkgs;
     };
   };
   gnuradioPackages = recurseIntoAttrs gnuradio.pkgs;
-
-  goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
@@ -9510,8 +9490,6 @@ with pkgs;
 
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
-  mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
-
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
@@ -9554,8 +9532,6 @@ with pkgs;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
-
-  huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
@@ -9841,10 +9817,6 @@ with pkgs;
     withFonts = true;
   };
 
-  luminanceHDR = callPackage ../applications/graphics/luminance-hdr {
-    openexr = openexr_2;
-  };
-
   luddite = with python3Packages; toPythonApplication luddite;
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
@@ -10006,8 +9978,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  smtube = libsForQt5.callPackage ../applications/video/smtube { };
-
   inherit
     ({
       softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };
@@ -10033,8 +10003,6 @@ with pkgs;
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
   ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
-
-  notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     pythonPackages = python3Packages;
@@ -10123,8 +10091,6 @@ with pkgs;
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
 
-  plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
-
   # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules
   profanity = callPackage ../applications/networking/instant-messengers/profanity (
@@ -10132,10 +10098,6 @@ with pkgs;
     }
     // (config.profanity or { })
   );
-
-  psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
-
-  psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
 
   pulseview = libsForQt5.callPackage ../applications/science/electronics/pulseview { };
 
@@ -10197,8 +10159,6 @@ with pkgs;
     withKDE = false;
     tag = "-daemon-qt5";
   };
-
-  quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss { };
 
   quodlibet = callPackage ../applications/audio/quodlibet {
     kakasi = null;
@@ -11617,8 +11577,6 @@ with pkgs;
   simulide_1_1_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.1.0"; };
   simulide_1_2_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.2.0"; };
 
-  eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
-
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
 
   geda = callPackage ../applications/science/electronics/geda {
@@ -11689,11 +11647,6 @@ with pkgs;
     lisp-compiler = ecl;
   };
 
-  yacas-gui = yacas.override {
-    enableGui = true;
-    enableJupyter = false;
-  };
-
   ### SCIENCE / MISC
 
   boinc-headless = boinc.override { headless = true; };
@@ -11735,10 +11688,6 @@ with pkgs;
       withRootSupport = true;
     }
   );
-
-  ### SCIENCE/ROBOTICS
-
-  apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
   ### MISC
 
@@ -12085,7 +12034,15 @@ with pkgs;
 
   vimb = wrapFirefox vimb-unwrapped { };
 
-  vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
+  vivisect =
+    with python3Packages;
+    toPythonApplication (
+      vivisect.override {
+        # https://github.com/vivisect/vivisect/issues/683
+        # gui currently requires qt5 webengine, which has been removed
+        # withGui = true;
+      }
+    );
 
   py-wacz = with python3Packages; toPythonApplication wacz;
 

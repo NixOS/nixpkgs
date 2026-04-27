@@ -483,40 +483,29 @@ In this example, `prePnpmInstall` will be run by both `pnpmConfigHook` and by th
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`, if you haven't set it already, you can use `1` with your current hash:
+This is the version of the output of `fetchPnpmDeps`. New packages should use `3`:
 
 ```nix
 {
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 1;
-    hash = "..."; # you can use your already set hash here
-  };
-}
-```
-
-After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
-
-```nix
-{
-  # ...
-  pnpmDeps = fetchPnpmDeps {
-    # ...
-    fetcherVersion = 2;
+    fetcherVersion = 3;
     hash = "..."; # clear this hash and generate a new one
   };
 }
 ```
+
+When upgrading to a newer `fetcherVersion`, you need to regenerate the hash.
 
 This variable ensures that we can make changes to the output of `fetchPnpmDeps` without breaking existing hashes.
 Changes can include workarounds or bug fixes to existing PNPM issues.
 
 ##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
 
-- 1: Initial version, nothing special
+- 1: Initial version, nothing special. **Deprecated: Scheduled for removal in the 26.11 release.**. New packages must not use this value.
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
-- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
+- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950). **Recommended**
 
 ### Yarn {#javascript-yarn}
 

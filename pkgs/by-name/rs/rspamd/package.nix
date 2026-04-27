@@ -2,54 +2,58 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  nixosTests,
+
+  # build
   cmake,
-  # doctest,
-  fmt,
-  perl,
   glib,
+  perl,
+  pkg-config,
+
+  # runtime
+  blas,
+  fmt,
+  icu,
+  jemalloc,
+  lapack,
+  libarchive,
+  libsodium,
+  lua,
   luajit,
   openssl,
   pcre,
-  pkg-config,
-  sqlite,
   ragel,
-  fasttext,
-  icu,
-  hyperscan,
+  sqlite,
   vectorscan,
-  jemalloc,
-  blas,
-  lapack,
-  lua,
-  libsodium,
   xxhash,
   zstd,
-  libarchive,
-  # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
+
+  # flags
   # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
+  # Enabling blas support breaks Bayes filter training from within Sieve pipe in Dovecot
   withBlas ? false,
-  withHyperscan ? false,
-  withLuaJIT ? stdenv.hostPlatform.isx86_64,
-  withVectorscan ? true,
-  nixosTests,
+  withLuaJIT ? true,
 }:
 
-assert withHyperscan -> stdenv.hostPlatform.isx86_64;
-assert (!withHyperscan) || (!withVectorscan);
+let
+  inherit (lib)
+    cmakeFeature
+    ;
+
+  # rspamd doesn't consistently accept bools
+  cmakeBool' = feature: condition: cmakeFeature feature (if condition then "ON" else "OFF");
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
-  version = "3.14.3";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     tag = finalAttrs.version;
-    hash = "sha256-ntWBcwcPZwRRSTUO4a0JUNd6kc49fm+0/x+fqcZIA/o=";
+    hash = "sha256-8hpplpo57DnOUT1T8jcfGRyIoWySfqrOFrMgH1tept8=";
   };
-
-  patches = [
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -59,52 +63,49 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    # doctest
     fmt
     glib
-    openssl
-    pcre
-    sqlite
-    ragel
-    fasttext
     icu
     jemalloc
+    libarchive
     libsodium
+    (if withLuaJIT then luajit else lua)
+    openssl
+    pcre
+    ragel
+    sqlite
+    vectorscan
     xxhash
     zstd
-    libarchive
   ]
   ++ lib.optionals withBlas [
     blas
     lapack
-  ]
-  ++ lib.optional withHyperscan hyperscan
-  ++ lib.optional withLuaJIT luajit
-  ++ lib.optional (!withLuaJIT) lua
-  ++ lib.optional withVectorscan vectorscan;
+  ];
 
   cmakeFlags = [
+    (cmakeFeature "RUNDIR" "/run/rspamd")
+    (cmakeFeature "DBDIR" "/var/lib/rspamd")
+    (cmakeFeature "LOGDIR" "/var/log/rspamd")
+    (cmakeFeature "LOCAL_CONFDIR" "/etc/rspamd")
+    (cmakeBool' "ENABLE_BLAS" withBlas)
+    (cmakeBool' "ENABLE_HYPERSCAN" true)
+    (cmakeBool' "ENABLE_JEMALLOC" true)
+    (cmakeBool' "ENABLE_LUAJIT" withLuaJIT)
     # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
-    "-DENABLE_PCRE2=OFF"
-    "-DDEBIAN_BUILD=ON"
-    "-DRUNDIR=/run/rspamd"
-    "-DDBDIR=/var/lib/rspamd"
-    "-DLOGDIR=/var/log/rspamd"
-    "-DLOCAL_CONFDIR=/etc/rspamd"
-    "-DENABLE_BLAS=${if withBlas then "ON" else "OFF"}"
-    "-DENABLE_FASTTEXT=ON"
-    "-DENABLE_JEMALLOC=ON"
-    "-DSYSTEM_DOCTEST=OFF" # https://github.com/rspamd/rspamd/issues/5994
-    "-DSYSTEM_FMT=ON"
-    "-DSYSTEM_XXHASH=ON"
-    "-DSYSTEM_ZSTD=ON"
-    "-DENABLE_HYPERSCAN=ON"
-  ]
-  ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
+    (cmakeBool' "ENABLE_PCRE2" false)
+    # doctest 2.5.0 compat problems https://github.com/rspamd/rspamd/issues/5994
+    (cmakeBool' "SYSTEM_DOCTEST" false)
+    (cmakeBool' "SYSTEM_XXHASH" true)
+    (cmakeBool' "SYSTEM_ZSTD" true)
+  ];
 
-  passthru.tests.rspamd = nixosTests.rspamd;
+  __structuredAttrs = true;
+
+  passthru.tests = nixosTests.rspamd;
 
   meta = {
+    changelog = "https://github.com/rspamd/rspamd/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://rspamd.com";
     license = lib.licenses.asl20;
     description = "Advanced spam filtering system";

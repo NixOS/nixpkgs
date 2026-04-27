@@ -108,10 +108,6 @@ makeScopeWithSplicing' {
 
         liblastfm = callPackage ../development/libraries/liblastfm { };
 
-        libopenshot = callPackage ../development/libraries/libopenshot { };
-
-        libopenshot-audio = callPackage ../development/libraries/libopenshot-audio { };
-
         libqglviewer = callPackage ../development/libraries/libqglviewer { };
 
         libqofono = callPackage ../development/libraries/libqofono { };
@@ -222,8 +218,6 @@ makeScopeWithSplicing' {
             { };
 
         telepathy = callPackage ../development/libraries/telepathy/qt { };
-
-        qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
         signond = callPackage ../development/libraries/signond { };
 

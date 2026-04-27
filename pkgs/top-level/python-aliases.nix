@@ -362,6 +362,9 @@ mapAliases {
   openai-triton-no-cuda = throw "'openai-triton-no-cuda' has been renamed to/replaced by 'triton-no-cuda'"; # Converted to throw 2025-10-29
   openbabel-bindings = openbabel; # added 2025-09-17
   opsdroid_get_image_size = throw "'opsdroid_get_image_size' has been renamed to/replaced by 'opsdroid-get-image-size'"; # Converted to throw 2025-10-29
+  orange3 = throw "'orange3' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
+  orange-canvas-core = throw "'orange-canvas-core' has been removed as it was unmaintained and unused outside orange3"; # Added 2026-02-10
+  orange-widgets-base = throw "'orange-widgets-base' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
   orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
@@ -428,9 +431,12 @@ mapAliases {
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
+  pyqt5-stubs = throw "'pyqt5-stubs' has been removed as it was unused and depended on vulnerable qt5 webengine"; # Added 2026-01-15
+  pyqt5-webkit = throw "'pyqt5-webkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
   pyqt5_with_qtmultimedia = throw "'pyqt5_with_qtmultimedia' has been renamed to/replaced by 'pyqt5-multimedia'"; # Converted to throw 2025-10-29
-  pyqt5_with_qtwebkit = throw "'pyqt5_with_qtwebkit' has been renamed to/replaced by 'pyqt5-webkit'"; # Converted to throw 2025-10-29
+  pyqt5_with_qtwebkit = throw "'pyqt5_with_qtwebkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
+  pyqtwebengine = "'pyqtwebengine' has been removed as it depended on the removed qt5 webengine"; # Added 2026-02-10
   pyramid_beaker = throw "'pyramid_beaker' has been renamed to/replaced by 'pyramid-beaker'"; # Converted to throw 2025-10-29
   pyramid_chameleon = throw "'pyramid_chameleon' has been renamed to/replaced by 'pyramid-chameleon'"; # Converted to throw 2025-10-29
   pyramid_exclog = throw "'pyramid_exclog' has been renamed to/replaced by 'pyramid-exclog'"; # Converted to throw 2025-10-29

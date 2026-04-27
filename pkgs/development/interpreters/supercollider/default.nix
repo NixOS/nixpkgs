@@ -16,7 +16,6 @@
   libxt,
   qtbase,
   qttools,
-  qtwebengine,
   readline,
   qtwebsockets,
   qtwayland,
@@ -27,7 +26,6 @@
   supercolliderPlugins,
   writeText,
   runCommand,
-  withWebengine ? false, # vulnerable, so disabled by default
 }:
 
 stdenv.mkDerivation rec {
@@ -82,7 +80,6 @@ stdenv.mkDerivation rec {
     qtwayland
     readline
   ]
-  ++ lib.optional withWebengine qtwebengine
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   hardeningDisable = [ "stackprotector" ];
@@ -90,7 +87,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSC_WII=OFF"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
-    (lib.cmakeBool "SC_USE_QTWEBENGINE" withWebengine)
+    (lib.cmakeBool "SC_USE_QTWEBENGINE" false)
   ];
 
   passthru = {
