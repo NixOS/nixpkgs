@@ -103,6 +103,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       joko
       liff
+      yayayayaka
     ];
   };
 }
