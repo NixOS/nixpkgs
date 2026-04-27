@@ -33,8 +33,8 @@ buildGoModule rec {
       ;
     pnpm = pnpm_9;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-ELIbM+tWOGntv8XmNvRZ/Q2iSRq0g9Kv5LnkwLPisPM=";
-    fetcherVersion = 2;
+    hash = "sha256-8iKug4zsX3u0vS68osKRW6iOP+A3OdjI3yxNPIJaQqM=";
+    fetcherVersion = 3;
   };
 
   # Frontend is in a subdirectory
