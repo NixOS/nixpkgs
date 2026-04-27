@@ -3,6 +3,7 @@
   lib,
   haskellPackages,
   writeText,
+  cacert,
   gawk,
   staticCredentialsFile,
 }:
@@ -96,6 +97,8 @@ stdenv.mkDerivation {
     "DOCKER_PASS"
     "DOCKER_TOKEN"
   ];
+
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   inherit registry dockerCredentialsFile;
 }
