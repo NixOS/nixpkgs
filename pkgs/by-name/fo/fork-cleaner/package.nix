@@ -29,7 +29,7 @@ buildGoModule {
   meta = {
     description = "Quickly clean up unused forks on your GitHub account";
     homepage = "https://github.com/caarlos0/fork-cleaner";
-    changelog = "https://github.com/caarlos0/fork-cleaner/releases/tag/${version}";
+    changelog = "https://github.com/caarlos0/fork-cleaner/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ isabelroses ];
     mainProgram = "fork-cleaner";
