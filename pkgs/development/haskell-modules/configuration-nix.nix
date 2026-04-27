@@ -185,6 +185,10 @@ builtins.intersectAttrs super {
     }) super.threadscope
   );
 
+  # Test suite loops forever by design (?!)
+  # https://hackage-content.haskell.org/package/lager-1.0.0.0/src/test/Main.hs
+  lager = dontCheck super.lager;
+
   # Binary may be used separately for e.g. editor integrations
   cabal-cargs = enableSeparateBinOutput super.cabal-cargs;
 
