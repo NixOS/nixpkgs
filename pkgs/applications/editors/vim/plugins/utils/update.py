@@ -111,8 +111,11 @@ class VimEditor(nixpkgs_plugin_update.Editor):
     pname = "{plugin.name}";
     version = "{plugin.version}";
     src = {src_nix};
-    meta.homepage = "{repo.uri}";
-    meta.hydraPlatforms = [ ];
+    meta = {
+      homepage = "{repo.uri}";
+      hydraPlatforms = [ ];
+      generated = true;
+     };
   }};
 
 """.format(

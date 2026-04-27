@@ -70,6 +70,7 @@ let
         meta.hydraPlatforms = hydraPlatforms;
         meta.broken = broken;
         meta.maintainers = maintainers;
+        meta.generated = true;
       }
     );
 
