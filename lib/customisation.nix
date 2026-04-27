@@ -192,14 +192,12 @@ rec {
           */
           newArgs: makeOverridable f (origArgs // (if isFunction newArgs then newArgs origArgs else newArgs))
         );
-        # Change the result of the function call by applying g to it
-        overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
       in
       if isAttrs result then
         result
         // {
           override = overrideArgs;
-          overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
+          overrideDerivation = fdrv: makeOverridable (mirrorArgs (args: overrideDerivation (f args) fdrv)) origArgs;
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
             /**
               Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
@@ -211,7 +209,7 @@ rec {
             */
             # NOTE: part of the above documentation had to be duplicated in `mkDerivation`'s `overrideAttrs`.
             #       design/tech debt issue: https://github.com/NixOS/nixpkgs/issues/273815
-            fdrv: overrideResult (x: x.overrideAttrs fdrv);
+            fdrv: makeOverridable (mirrorArgs (args: (f args).overrideAttrs fdrv)) origArgs;
         }
       else if isFunction result then
         # Transform the result into a functor while propagating its arguments
