@@ -528,20 +528,19 @@ let
               # just used for their side-affects. Those might as well since the
               # hash can't be the same. See #32986.
               hostSuffix = optionalString (
-                hostSuffixNecessary &&
-                (
+                hostSuffixNecessary
+                && (
                   !(attrs ? outputHash)
                   ||
-                  (
-                    depsBuildTarget
-                    ++ depsBuildTargetPropagated
-                    ++ depsHostHost
-                    ++ depsHostHostPropagated
-                    ++ buildInputs
-                    ++ propagatedBuildInputs
-                    ++ depsTargetTarget
-                    ++ depsTargetTargetPropagated
-                  ) == [ ]
+                    depsBuildTarget == [ ]
+                    && depsBuildTargetPropagated == [ ]
+                    && depsHostHost == [ ]
+                    && depsHostHostPropagated == [ ]
+                    && buildInputs == [ ]
+                    && propagatedBuildInputs == [ ]
+                    && depsTargetTarget == [ ]
+                    && depsTargetTargetPropagated == [ ]
+
                 )
               ) stdenvHostSuffix;
 
