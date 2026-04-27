@@ -90,7 +90,7 @@
   liburing,
   fuseSupport ? stdenv.hostPlatform.isLinux && !minimal,
   fuse3,
-  canokeySupport ? false,
+  canokeySupport ? !minimal,
   canokey-qemu,
   u2fEmuSupport ? false,
   libu2f-emu,
