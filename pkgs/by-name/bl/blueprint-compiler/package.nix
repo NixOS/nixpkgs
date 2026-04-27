@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
+    python3
     wrapGAppsNoGuiHook
   ];
 
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.getExe finalAttrs.finalPackage} --help && touch $out
     '';
   };
+
+  strictDeps = true;
 
   meta = {
     description = "Markup language for GTK user interface files";
