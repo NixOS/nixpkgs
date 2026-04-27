@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
   env.OPENSSL_NO_VENDOR = 1;
 
-  passthru.updateScript = nix-update-script;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rust implementation of NearbyShare/QuickShare from Android for Linux and macOS";
