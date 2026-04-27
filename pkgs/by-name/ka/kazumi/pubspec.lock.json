@@ -445,8 +445,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "297b39532c426263d2fa9fde4d70d2b5bdfc8059",
-        "resolved-ref": "297b39532c426263d2fa9fde4d70d2b5bdfc8059",
+        "ref": "b429f8ba6b8a99cd0f7eb5fe8d1621f325635c3d",
+        "resolved-ref": "b429f8ba6b8a99cd0f7eb5fe8d1621f325635c3d",
         "url": "https://github.com/Predidit/linux_webview_window.git"
       },
       "source": "git",
@@ -1365,6 +1365,16 @@
       "source": "hosted",
       "version": "7.0.2"
     },
+    "photo_view": {
+      "dependency": "direct main",
+      "description": {
+        "name": "photo_view",
+        "sha256": "1fc3d970a91295fbd1364296575f854c9863f225505c28c46e0a03e48960c75e",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.15.0"
+    },
     "platform": {
       "dependency": "transitive",
       "description": {
@@ -2145,8 +2155,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "1b9e83371356c04d8b0fb7ab1d20ebacf5cf9764",
-        "resolved-ref": "1b9e83371356c04d8b0fb7ab1d20ebacf5cf9764",
+        "ref": "d9bbeabe51562e727850fe3f60407cf0f6239a8e",
+        "resolved-ref": "d9bbeabe51562e727850fe3f60407cf0f6239a8e",
         "url": "https://github.com/Predidit/flutter-webview-windows.git"
       },
       "source": "git",
@@ -2235,6 +2245,6 @@
   },
   "sdks": {
     "dart": ">=3.10.3 <4.0.0",
-    "flutter": ">=3.41.6"
+    "flutter": ">=3.41.7"
   }
 }
