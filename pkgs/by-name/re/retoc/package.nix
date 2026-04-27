@@ -11,6 +11,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "retoc";
   version = "0.1.5";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "trumank";
