@@ -410,20 +410,13 @@
   };
 
   dart = {
-    version = "0-unstable-2025-10-04";
+    version = "0-unstable-2026-03-14";
     url = "github:usernobody14/tree-sitter-dart";
-    rev = "d4d8f3e337d8be23be27ffc35a0aef972343cd54";
-    hash = "sha256-1ftYqCor1A0PsQ0AJLVqtxVRZxaXqE/NZ5yy7SizZCY=";
+    rev = "0fc19c3a57b1109802af41d2b8f60d8835c5da3a";
+    hash = "sha256-yK4XfjVPABFHf8MjoDge6bmapcybhdIF+49rlXFP+pw=";
     meta = {
       license = lib.licenses.mit;
     };
-    patches = [
-      (fetchpatch {
-        name = "Fix invalid `tree-sitter.json`";
-        url = "https://github.com/UserNobody14/tree-sitter-dart/commit/81638dbbdb76a0e88ea8c31b95ec76b9625ddb84.diff";
-        hash = "sha256-oaxuKQPN/gprO4OFWYItkj5dqd2xlq3SV6qr4YkSFjM=";
-      })
-    ];
   };
 
   dbml = {
