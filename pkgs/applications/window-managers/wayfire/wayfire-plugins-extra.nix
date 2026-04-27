@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-plugins-extra";
-  version = "0.11.0-unstable-2025-12-18";
+  version = "0.11.0-unstable-2026-04-23";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire-plugins-extra";
-    rev = "439a9b4dc66f1174f97e0db18b15726751fbf6d1";
-    hash = "sha256-lBLdlWcT2byEiPKoadKvWVHYNrhGGkliF3CSPwV0S5s=";
+    rev = "a65af2577986fbbdf8100048ad9943aff8ab27ff";
+    hash = "sha256-U6QllOwGbJQJECe1ofoiV659cLOJyIvYwqshYCCXlFg=";
     fetchSubmodules = true;
   };
 

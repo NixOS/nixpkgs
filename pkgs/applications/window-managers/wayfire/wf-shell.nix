@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wf-shell";
-  version = "0.11.0-unstable-2026-02-21";
+  version = "0.11.0-unstable-2026-04-26";
   outputs = [
     "out"
     "man"
@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wf-shell";
-    rev = "6057938099a2abe829fd3f8a3f466889327d92a3";
+    rev = "d340a173acfa2fe4bcf8088e154f76c43b5d4ab9";
     fetchSubmodules = true;
-    hash = "sha256-dMetnyr8ntmJybPialubLwsrv3ST7utWmnIY05u6t/4=";
+    hash = "sha256-I2PnrBrcD0VaxztJB6JyzfuYP6J0mXJ7ATrqgUzeCiM=";
   };
 
   nativeBuildInputs = [

@@ -22,18 +22,18 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   pango,
   libxcb-wm,
   yyjson,
 }:
 let
-  wlroots = wlroots_0_19;
+  wlroots = wlroots_0_20;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.11.0-unstable-2026-02-20";
+  version = "0.11.0-unstable-2026-04-17";
 
   outputs = [
     "out"
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
-    rev = "ad2c781a4c76b7539fa86e39fd3ef07ea3465070";
+    rev = "9a568ffd7a2af8780926da50f89908ec4f38bf3a";
     fetchSubmodules = true;
-    hash = "sha256-NADPszDx4D/1SlCvkS4IQaTP7O0+6FVzKWitxyBzyLA=";
+    hash = "sha256-sIwBNBY0qN+4+a9KAS8WDGCNyrX5O0tKPPIT8ebLRqo=";
   };
 
   postPatch = ''
