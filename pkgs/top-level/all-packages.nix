@@ -1289,7 +1289,7 @@ with pkgs;
     in
     ppsspp.override argset;
 
-  py65 = with python3.pkgs; toPythonApplication py65;
+  py65 = with python3Packages; toPythonApplication py65;
 
   rmg-wayland = callPackage ../by-name/rm/rmg/package.nix {
     withWayland = true;
