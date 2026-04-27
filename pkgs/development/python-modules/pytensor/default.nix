@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.38.2";
+  version = "2.38.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-BKyaApIijxuJ0gNNXqahDOMW3rpF6+qgoCEpWj6Uz5g=";
+    hash = "sha256-+yfALDxNIjQUgzEJ3/ZtvLIGNmx6bPYRQ9zGXFbcMNM=";
   };
 
   build-system = [
