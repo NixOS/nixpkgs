@@ -1588,7 +1588,7 @@ with pkgs;
   metricbeat = metricbeat7;
   packetbeat = packetbeat7;
 
-  biliass = with python3.pkgs; toPythonApplication biliass;
+  biliass = with python3Packages; toPythonApplication biliass;
 
   charles = charles5;
   inherit (callPackages ../applications/networking/charles { })
