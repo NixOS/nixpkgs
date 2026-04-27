@@ -1025,10 +1025,10 @@
   };
 
   groovy = {
-    version = "0-unstable-2025-01-22";
+    version = "0-unstable-2026-04-11";
     url = "github:murtaza64/tree-sitter-groovy";
-    rev = "86911590a8e46d71301c66468e5620d9faa5b6af";
-    hash = "sha256-652wluH2C3pYmhthaj4eWDVLtEvvVIuu70bJNnt5em0=";
+    rev = "deb0dcf8c4544f07564060f6e9b9f6e4b0bfc27d";
+    hash = "sha256-x7PawYYtgsduh60KNnS4LgB7SvoBV9aOJ9cHNsLBBhc=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
