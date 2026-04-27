@@ -23,8 +23,8 @@ buildNpmPackage (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-IJMu0XHwEn2TZP/He79FFGl/PeXOCTD51lIgmImpyKo=";
+    fetcherVersion = 3;
+    hash = "sha256-N5oasGilHECndJZYdRHZFvAa4aYwmPtOTBZtcty4g/k=";
   };
 
   nativeBuildInputs = [ pnpm_9 ];
