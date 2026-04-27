@@ -37,16 +37,27 @@ let
     ];
   };
 
-  filename =
-    if stdenv.hostPlatform.isDarwin then "Obsidian-${version}.dmg" else "obsidian-${version}.tar.gz";
-  src = fetchurl {
-    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    hash =
-      if stdenv.hostPlatform.isDarwin then
-        "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs="
-      else
-        "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
+  srcs = rec {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+      hash = "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
+    };
+
+    aarch64-linux = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
+      hash = "sha256-a8hye/27bXMdWvmgb1HW3nBhxoyQjIrotDqe03miAmA=";
+    };
+
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
+      hash = "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs=";
+    };
+
+    aarch64-darwin = x86_64-darwin;
   };
+
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   icon = fetchurl {
     url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
@@ -96,13 +107,18 @@ let
       runHook postInstall
     '';
 
-    passthru.updateScript = writeScript "updater" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl jq common-updater-scripts
-      set -eu -o pipefail
-      latestVersion="$(curl -sS https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/desktop-releases.json | jq -r '.latestVersion')"
-      update-source-version obsidian "$latestVersion"
-    '';
+    passthru = {
+      inherit srcs;
+      updateScript = writeScript "updater" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl jq common-updater-scripts
+        set -eu -o pipefail
+        latestVersion="$(curl -sS https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/desktop-releases.json | jq -r '.latestVersion')"
+        for platform in ${toString meta.platforms}; do
+          update-source-version obsidian "$latestVersion" --ignore-same-version --source-key=passthru.srcs.$platform
+        done
+      '';
+    };
   };
 
   darwin = stdenv.mkDerivation {
