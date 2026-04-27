@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ Implementation of W3C security standards for XML";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 })

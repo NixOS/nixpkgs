@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Forked version of log4cpp that has been created for the Shibboleth project";
     mainProgram = "log4shib-config";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drawbu ];
     license = lib.licenses.lgpl21;
     homepage = "http://log4cpp.sf.net";
   };
