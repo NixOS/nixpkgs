@@ -2986,6 +2986,9 @@ with haskellLib;
   # Too strict bounds on hspec < 2.11
   fuzzyset_0_2_4 = doJailbreak super.fuzzyset_0_2_4;
 
+  # 2026-04-27 too strict bounds on thread-utils-context < 0.4
+  # https://github.com/iand675/hs-opentelemetry/issues/218
+  hs-opentelemetry-api = doJailbreak super.hs-opentelemetry-api;
   # The following all have too strict bounds on hs-opentelemtry-api < 0.3
   # https://github.com/iand675/hs-opentelemetry/issues/203
   hs-opentelemetry-exporter-handle = doJailbreak super.hs-opentelemetry-exporter-handle;
