@@ -37,7 +37,7 @@ let
     ;
 
   inherit (lib.meta)
-    availableOn
+    platformMatch
     cpeFullVersionWithVendor
     ;
 
@@ -122,7 +122,14 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
-  hasUnsupportedPlatform = pkg: !(availableOn hostPlatform pkg);
+  # Logical inversion of meta.availableOn for hostPlatform
+  hasUnsupportedPlatform =
+    let
+      anyHostPlatform = any (platformMatch hostPlatform);
+    in
+    pkg:
+    pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
+    || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
