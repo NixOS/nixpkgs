@@ -2372,10 +2372,10 @@
   };
 
   slint = {
-    version = "0-unstable-2025-12-09";
+    version = "0-unstable-2026-04-17";
     url = "github:slint-ui/tree-sitter-slint";
-    rev = "10fb0f188d7950400773c06ba6c31075866e14bf";
-    hash = "sha256-60DfIx7aQqe0/ocxbpr00eU3IPs23E8TUILcVGrBYVs=";
+    rev = "68b25244cec6eb9d7f8f790ef781c29c822d8f84";
+    hash = "sha256-ugdB7gN3zTAGLm9Jk2hjuuZWxIYxEWYXW72qLpXM+1Q=";
     meta = {
       license = lib.licenses.mit;
     };
