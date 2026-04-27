@@ -409,7 +409,7 @@ with pkgs;
 
   kdePackages = callPackage ../kde { };
 
-  buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
+  buildcatrust = with python3Packages; toPythonApplication buildcatrust;
 
   mumps-mpi = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
 
