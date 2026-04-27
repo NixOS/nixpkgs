@@ -89,7 +89,7 @@ class FetchConfig:
 
 def make_request(url: str, token=None) -> urllib.request.Request:
     headers = {}
-    if token is not None:
+    if token:
         headers["Authorization"] = f"token {token}"
     return urllib.request.Request(url, headers=headers)
 
@@ -140,7 +140,7 @@ class Repo:
         self._branch = branch
         # Redirect is the new Repo to use
         self.redirect: "Repo | None" = None
-        self.token: str | None = "dummy_token"
+        self.token: str | None = None
 
     @property
     def name(self):
@@ -234,13 +234,18 @@ class Repo:
 
     def as_nix(self, plugin: "Plugin") -> str:
         ref_attr = (
-            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
         )
         return f"""fetchgit {{
       url = "{self.uri}";
       {ref_attr}
       hash = "{plugin.to_sri_hash()}";
     }}"""
+
+    def get_license_spdx_id(self, fallback_license: str | None = None) -> str | None:
+        return fallback_license
 
 
 class RepoGitHub(Repo):
@@ -439,9 +444,7 @@ class RepoGitHub(Repo):
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
         if url != response_url:
-            new_owner, new_name = (
-                urlsplit(response_url).path.strip("/").split("/")[:2]
-            )
+            new_owner, new_name = urlsplit(response_url).path.strip("/").split("/")[:2]
 
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self._branch)
             self.redirect = new_repo
@@ -460,6 +463,41 @@ class RepoGitHub(Repo):
         loaded = json.loads(data)
         return loaded["hash"]
 
+    def get_license_spdx_id(self, fallback_license: str | None = None) -> str | None:
+        license_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/license"
+        log.debug("Fetching license metadata from %s", license_url)
+
+        def log_fetch_failure(reason: str) -> str | None:
+            log.warning(
+                "Failed to fetch license metadata for %s/%s: %s; reusing %s",
+                self.owner,
+                self.repo,
+                reason,
+                fallback_license or "no cached license",
+            )
+            return fallback_license
+
+        try:
+            req = make_request(license_url, self.token)
+            with urllib.request.urlopen(req, timeout=10) as response:
+                data = json.load(response)
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
+            return log_fetch_failure(f"HTTP {e.code}")
+        except urllib.error.URLError as e:
+            return log_fetch_failure(str(e))
+
+        license_info = data.get("license")
+        if not isinstance(license_info, dict):
+            return None
+
+        spdx_id = license_info.get("spdx_id")
+        if not spdx_id or spdx_id == "NOASSERTION":
+            return None
+
+        return spdx_id
+
     def as_nix(self, plugin: "Plugin") -> str:
         if plugin.has_submodules:
             submodule_attr = "\n      fetchSubmodules = true;"
@@ -467,7 +505,9 @@ class RepoGitHub(Repo):
             submodule_attr = ""
 
         ref_attr = (
-            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
         )
 
         return f"""fetchFromGitHub {{
@@ -526,6 +566,7 @@ class Plugin:
     date: datetime | None = None
     last_tag: str | None = None
     tag: str | None = None
+    license: str | None = None
 
     @property
     def normalized_name(self) -> str:
@@ -781,6 +822,7 @@ class Editor:
                 date,
                 last_tag=last_tag,
                 tag=source_tag,
+                license=attr.get("license"),
             )
 
             plugins.append((pdesc, p))
@@ -1105,9 +1147,16 @@ def prefetch_plugin(
         latest_tag,
     )
 
-    cached_plugin = cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
+    cached_plugin = (
+        cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
+    )
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
+        license_spdx_id = (
+            cached_plugin.license
+            or (current_plugin.license if current_plugin else None)
+            or p.repo.get_license_spdx_id()
+        )
         return (
             replace(
                 cached_plugin,
@@ -1117,6 +1166,7 @@ def prefetch_plugin(
                 date=date,
                 last_tag=latest_tag,
                 tag=source_tag,
+                license=license_spdx_id,
             ),
             p.repo.redirect,
         )
@@ -1124,7 +1174,14 @@ def prefetch_plugin(
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
     sha256 = (
-        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}") if source_tag else p.repo.prefetch(commit)
+        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}")
+        if source_tag
+        else p.repo.prefetch(commit)
+    )
+    license_spdx_id = (
+        current_plugin.license
+        if current_plugin and current_plugin.license
+        else p.repo.get_license_spdx_id()
     )
 
     return (
@@ -1137,6 +1194,7 @@ def prefetch_plugin(
             date=date,
             last_tag=latest_tag,
             tag=source_tag,
+            license=license_spdx_id,
         ),
         p.repo.redirect,
     )
@@ -1243,6 +1301,7 @@ class Cache:
                     attr.get("version", ""),
                     last_tag=attr.get("last_tag"),
                     tag=attr.get("tag"),
+                    license=attr.get("license"),
                 )
                 downloads[cache_key] = p
         return downloads
