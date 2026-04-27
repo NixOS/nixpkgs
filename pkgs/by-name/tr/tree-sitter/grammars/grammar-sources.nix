@@ -161,10 +161,10 @@
   };
 
   blueprint = {
-    version = "0-unstable-2025-06-17";
+    version = "0-unstable-2026-04-18";
     url = "github:smrtrfszm/tree-sitter-blueprint";
-    rev = "de66f283c6c9b7c270d766c2e4cf95535650ec48";
-    hash = "sha256-zmMJZAxyKO42gIK3cWP/LuoPIo2+xr6fEDeHXknqa7M=";
+    rev = "f2b043912ffbfcf4e9e8d09709b86ab39a4b78ea";
+    hash = "sha256-tcy4FIQ/59PeSHIXX8YmbBX5lK0acKahePT2/xKzYyM=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
