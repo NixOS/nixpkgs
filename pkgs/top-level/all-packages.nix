@@ -2580,9 +2580,6 @@ with pkgs;
     )
   );
 
-  netdata = callPackage ../tools/system/netdata {
-    protobuf = protobuf_21;
-  };
   netdataCloud = netdata.override {
     withCloudUi = true;
   };
