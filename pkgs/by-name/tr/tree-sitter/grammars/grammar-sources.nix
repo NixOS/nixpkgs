@@ -198,10 +198,10 @@
   };
 
   caddyfile = {
-    version = "0-unstable-2025-12-16";
+    version = "0-unstable-2026-04-06";
     url = "github:caddyserver/tree-sitter-caddyfile";
-    rev = "2b816940b5bf4f86c650aded24500cb5b682f1a1";
-    hash = "sha256-C/dTDm4X+VxtNZaqb2AHgcDZyGeBN9VMwZjSzJVEHGo=";
+    rev = "6e62b4e297c955f050a6542a8d24df2f223a90e8";
+    hash = "sha256-a/ioYTQBFueZTtzoDre7UD6h5NluZ8gQc+8yTrj2Goc=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
