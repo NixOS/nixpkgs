@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchzip,
-  python3Packages,
   withV8 ? false,
 }:
 
@@ -52,9 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests = {
-      inherit (python3Packages) pypdfium2;
-    };
   };
 
   meta = {
