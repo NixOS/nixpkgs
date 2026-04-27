@@ -2199,10 +2199,10 @@
   };
 
   razor = {
-    version = "0-unstable-2025-02-17";
+    version = "0-unstable-2026-04-20";
     url = "github:tris203/tree-sitter-razor";
-    rev = "fe46ce5ea7d844e53d59bc96f2175d33691c61c5";
-    hash = "sha256-E4fgy588g6IP258TS2DvoILc1Aikvpfbtq20VIhBE4U=";
+    rev = "a3399c26610817c6d32c7643793caf3729cfb6d2";
+    hash = "sha256-hH3qIp5IKwOyxiQXlS2NnuTbt/ssNMEV8PaL1xDMi+g=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
