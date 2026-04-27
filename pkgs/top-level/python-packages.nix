@@ -6090,6 +6090,8 @@ self: super: with self; {
 
   gdsfactory = callPackage ../development/python-modules/gdsfactory { };
 
+  gplugins = callPackage ../development/python-modules/gplugins { };
+
   gdstk = callPackage ../development/python-modules/gdstk { };
 
   ge25519 = callPackage ../development/python-modules/ge25519 { };
