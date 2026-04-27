@@ -1870,7 +1870,7 @@ with pkgs;
 
   nodepy-runtime = with python3Packages; toPythonApplication nodepy-runtime;
 
-  nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
+  nixpkgs-pytools = with python3Packages; toPythonApplication nixpkgs-pytools;
 
   nsz = with python3.pkgs; toPythonApplication nsz;
 
