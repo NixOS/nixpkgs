@@ -215,10 +215,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (darwinMinVersionHook "13.3")
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     gtest
-  ]
-  ++ lib.optionals pythonSupport (
+  ];
+
+  nativeCheckInputs = lib.optionals pythonSupport (
     with python3Packages;
     [
       onnx
@@ -355,6 +356,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       python = python3Packages.onnxruntime;
     };
   };
+
+  strictDeps = true;
 
   meta = {
     description = "Cross-platform, high performance scoring engine for ML models";
