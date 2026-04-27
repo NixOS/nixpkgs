@@ -97,7 +97,7 @@ buildPythonPackage rec {
   meta = {
     description = "Medical imaging toolkit for deep learning";
     homepage = "https://docs.torchio.org";
-    changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/TorchIO-project/torchio/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bcdarwin ];
   };
