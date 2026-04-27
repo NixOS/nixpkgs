@@ -465,7 +465,6 @@
   ./services/backup/duplicity.nix
   ./services/backup/libvirtd-autosnapshot.nix
   ./services/backup/mysql-backup.nix
-  ./services/backup/pgbackrest.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/postgresql-wal-receiver.nix
   ./services/backup/restic-rest-server.nix

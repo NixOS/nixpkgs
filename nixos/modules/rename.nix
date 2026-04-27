@@ -82,6 +82,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "pgbackrest"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule
       [
         "services"
