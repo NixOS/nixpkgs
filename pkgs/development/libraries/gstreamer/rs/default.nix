@@ -135,7 +135,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.14.4";
+  version = "0.15.1";
 
   outputs = [
     "out"
@@ -147,13 +147,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-MZyYHMq6gFJkVxlrmeXUjOmRYsQBHj0848cnF+7mtbU=";
+    hash = "sha256-kpDLnUX9Ypk39UgP4W6TSYN9bJzVZebLgj+BMCeExoA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-T+fdu+Oe07Uf1YoRGYl2DMb1QgdSZVLwcOqH4bBNGXU=";
+    hash = "sha256-VbbaFLsI6LitE86t/JChtFlWmhRY757MOK2wwaUshy4=";
   };
 
   strictDeps = true;
