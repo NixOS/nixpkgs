@@ -2453,7 +2453,7 @@ with pkgs;
     withXorg = false;
   };
 
-  gruut = with python3.pkgs; toPythonApplication gruut;
+  gruut = with python3Packages; toPythonApplication gruut;
 
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
 
