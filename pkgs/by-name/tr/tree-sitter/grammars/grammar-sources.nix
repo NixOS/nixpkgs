@@ -237,10 +237,10 @@
   };
 
   cel = {
-    version = "0-unstable-2024-02-13";
+    version = "0-unstable-2026-03-04";
     url = "github:bufbuild/tree-sitter-cel";
-    rev = "df0585025e6f50cdb07347f5009ae3f47c652890";
-    hash = "sha256-Fyq56kzu1bL44QhrF3ZnKWgsoPRh3tjTRi2CynNQGfw=";
+    rev = "fd2e8efaa07e71e46dcc1d5c4c85556a742d8c36";
+    hash = "sha256-f/Gpsp+Se3lSguz89vWDf3gGaefnwpHCp4Bzfz6y29I=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
