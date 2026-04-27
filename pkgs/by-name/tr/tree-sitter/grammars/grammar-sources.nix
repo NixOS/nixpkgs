@@ -480,7 +480,7 @@
 
   djot = {
     version = "0-unstable-2025-09-15";
-    url = "github:treeman/tree-sitter-djot";
+    url = "codeberg:treeman/tree-sitter-djot";
     rev = "74fac1f53c6d52aeac104b6874e5506be6d0cfe6";
     hash = "sha256-HfEZHNhxEbH07gDzLPdl6n2Pf//o8tbJvwE+tesJDC8=";
     meta = {
