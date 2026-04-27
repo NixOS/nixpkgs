@@ -2690,8 +2690,6 @@ with pkgs;
   };
   logstash = logstash7;
 
-  logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
-
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
     lua = lua5_2_compat;
   };
