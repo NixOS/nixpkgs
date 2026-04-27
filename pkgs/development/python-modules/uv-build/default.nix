@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uv-build";
-  version = "0.10.0";
+  version = "0.11.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-nD26zqKMK5LNkeYdqVYteeYL4mYaQQ/QlyjbMDDhLAY=";
+    hash = "sha256-wu9EA3z/qj29lfSj8wKE4p8XEAJQakQTg2AK8I/64us=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-lEynVemQHCI7ZKD2+1n4K/AtEYRld2+aRLkDMSX8ejM=";
+    hash = "sha256-ygGRoZgD88Q2EkN0U4SDTwya96Ds3Pqy3Llj8cjGwnY=";
   };
 
   buildAndTestSubdir = "crates/uv-build";
@@ -47,9 +47,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Minimal build backend for uv";
     homepage = "https://docs.astral.sh/uv/reference/settings/#build-backend";
-    inherit (pkgs.uv.meta) changelog license;
+    inherit (pkgs.uv.meta) license;
     maintainers = with lib.maintainers; [ bengsparks ];
   };
 })
