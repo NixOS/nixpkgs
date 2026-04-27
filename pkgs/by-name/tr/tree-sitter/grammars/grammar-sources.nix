@@ -2793,10 +2793,10 @@
   };
 
   typespec = {
-    version = "0-unstable-2025-06-21";
+    version = "0-unstable-2026-01-01";
     url = "github:happenslol/tree-sitter-typespec";
-    rev = "814c98283fd92a248ba9d49ebfe61bc672a35875";
-    hash = "sha256-3/zNoawx1DsKmG0KFvJD+o80IMBsJd2VV2ng+fSrV1c=";
+    rev = "395bef1e1eb4dd18365401642beb534e8a244056";
+    hash = "sha256-N+clb40CgGzjyvC9b/qMhbSUZ6VsLJzK7N1k5iq2seY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
