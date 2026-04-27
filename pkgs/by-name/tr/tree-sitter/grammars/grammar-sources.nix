@@ -660,10 +660,10 @@
   };
 
   fga = {
-    version = "0-unstable-2025-12-17";
+    version = "0-unstable-2026-03-19";
     url = "github:matoous/tree-sitter-fga";
-    rev = "e763d12cfd8569494215f304bc2b0074c84709e9";
-    hash = "sha256-d1gvEoJosBcEiq4fxb+1LFcdSkuOWGXyG1cC44Lo19o=";
+    rev = "ce72d1c484ba133a18e966d67be66bce85695451";
+    hash = "sha256-8op8IFKh3dZY02Yiehvqz1XyeOw9qSoe0f31M4yzw1U=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
