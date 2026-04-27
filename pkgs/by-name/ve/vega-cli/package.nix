@@ -73,7 +73,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://vega.github.io/vega/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      pyrox0
       philocalyst
     ];
   };
