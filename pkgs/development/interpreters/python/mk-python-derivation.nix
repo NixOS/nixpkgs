@@ -112,6 +112,9 @@ lib.extendMkDerivation {
     "dependencies"
     "optional-dependencies"
     "build-system"
+
+    # Deprecated arguments
+    "pytestFlagsArray"
   ];
 
   extendDrvArgs =
@@ -439,6 +442,19 @@ lib.extendMkDerivation {
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
+    // (
+      let
+        deprecatedFlagNotEmpty =
+          attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ];
+        pos = builtins.unsafeGetAttrPos "pytestFlagsArray" attrs;
+      in
+      {
+        ${if deprecatedFlagNotEmpty then "pytestFlagsArray" else null} = throw ''
+          buildPythonPackage: Deprecated flag pytestFlagsArray found at ${pos.file}:${toString pos.line}
+            Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+        '';
+      }
+    )
     //
       lib.mapAttrs
         (
