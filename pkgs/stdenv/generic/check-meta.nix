@@ -81,13 +81,17 @@ let
 
   hasListedLicense =
     assert areLicenseListsValid;
-    list: attrs:
+    list:
+    let
+      containsListLicenses = lib.licenses.containsLicenses list;
+    in
+    attrs:
     attrs ? meta.license
     && (
       if isList attrs.meta.license then
         any (l: elem l list) attrs.meta.license
       else if attrs.meta.license ? "licenseType" then
-        lib.licenses.containsLicenses list attrs.meta.license
+        containsListLicenses attrs.meta.license
       else
         elem attrs.meta.license list
     );
