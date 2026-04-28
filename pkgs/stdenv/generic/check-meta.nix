@@ -181,7 +181,6 @@ let
     attrs:
     attrs ? meta.sourceProvenance
     && any (t: !t.isSource) attrs.meta.sourceProvenance
-    && !allowNonSource
     && !allowNonSourcePredicate attrs;
 
   showLicenseOrSourceType =
@@ -436,7 +435,7 @@ let
         msg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
         remediation = "";
       }
-    else if hasDeniedNonSourceProvenance attrs then
+    else if !allowNonSource && hasDeniedNonSourceProvenance attrs then
       {
         reason = "non-source";
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
