@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AzlYcgS0+UKN0FkuswHewL+epuqNzl2WkNVr5YWrqS0=";
   };
 
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "lib"
