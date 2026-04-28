@@ -1570,7 +1570,7 @@ let
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
   /**
-    Label a data with an priority.
+    Label data with a priority.
     See the documentation of `filterOverrides` for the interpretation of the priority value.
     See `mkDefault`, `mkOptionDefault`, `mkForce` for `mkOverride` partially applied with common priorities used in the NixOS module system.
 
