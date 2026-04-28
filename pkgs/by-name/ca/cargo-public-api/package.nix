@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "List and diff the public API of Rust library crates between releases and commits. Detect breaking API changes and semver violations";
     mainProgram = "cargo-public-api";
     homepage = "https://github.com/cargo-public-api/cargo-public-api";
-    changelog = "https://github.com/cargo-public-api/cargo-public-api/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/cargo-public-api/cargo-public-api/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
