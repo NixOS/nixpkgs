@@ -236,6 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "dev"
     "boot"
+    "ocaml"
   ];
 
   src = fetchFromGitHub {
@@ -340,6 +341,31 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     find dist/install/boot -type f -name '*.gz' -print -exec gunzip -k '{}' ';'
     cp -prvd dist/install/boot $boot
+  ''
+  # Copy the xsd_glue OCaml plugin interface to the ocaml output.
+  # This allows other derivations (namely oxenstored) to depend on the
+  # canonical plugin interface without pulling in the entire xen package,
+  # and avoiding issues that arise when the plugin interface is built twice,
+  # once in this package, and again in the oxenstored package, leading to
+  # a mismatch in hash between the two interfaces and the plugin not being
+  # able to load in oxenstored.
+  + ''
+    mkdir -p $ocaml/lib/ocaml
+    if [ -d $out/lib/ocaml/*/site-lib/xsd_glue ]; then
+      ocamlVersion=$(ls $out/lib/ocaml/)
+      mkdir -p $ocaml/lib/ocaml/$ocamlVersion/site-lib
+      cp -prvd $out/lib/ocaml/$ocamlVersion/site-lib/xsd_glue $ocaml/lib/ocaml/$ocamlVersion/site-lib/
+    fi
+  ''
+  # Also provide the canonical plugin_interface_v1 source files so
+  # downstream packages can build ABI-compatible OCaml modules against
+  # the versions built in the xen derivation. The dependency on the Xen
+  # package in this way also keeps the plugin, interface, oxenstored
+  # and xen packages coupled.
+  + ''
+    mkdir -p $ocaml/share/xen/ocaml/xsd_glue
+    cp -v tools/ocaml/libs/xsd_glue/plugin_interface_v1.ml $ocaml/share/xen/ocaml/xsd_glue/
+    cp -v tools/ocaml/libs/xsd_glue/plugin_interface_v1.mli $ocaml/share/xen/ocaml/xsd_glue/
 
     runHook postInstall
   '';
