@@ -576,6 +576,12 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                     }
                 }
 
+                // If this is a service unit, check if it was only `ExecReload`
+                if section_name == "Service" && ini_key == "ExecReload" {
+                    ret = UnitComparison::UnequalNeedsReload;
+                    continue;
+                }
+
                 // If this is a mount unit, check if it was only `Options`
                 if section_name == "Mount" && ini_key == "Options" {
                     ret = UnitComparison::UnequalNeedsReload;
@@ -598,6 +604,10 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                         return UnitComparison::UnequalNeedsRestart;
                     }
                 }
+            } else if section_name == "Exec" && ini_cmp.len() == 1
+                && ini_cmp.contains_key("ExecReload") {
+                ret = UnitComparison::UnequalNeedsReload;
+                continue;
             } else {
                 return UnitComparison::UnequalNeedsRestart;
             }
@@ -606,7 +616,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
 
     // A section was introduced that was missing in the previous unit
     if !section_cmp.is_empty() {
-        if section_cmp.keys().len() == 1 && section_cmp.contains_key("Unit") {
+        if section_cmp.keys().len() == 1 && (section_cmp.contains_key("Unit") || section_cmp.contains_key("Service")) {
             if let Some(new_unit_unit) = new_unit.get("Unit") {
                 for ini_key in new_unit_unit.keys() {
                     if !unit_section_ignores.contains_key(ini_key.as_str()) {
@@ -615,6 +625,14 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                         ret = UnitComparison::UnequalNeedsReload;
                     }
                 }
+            } else if let Some(new_unit_service) = new_unit.get("Service") {
+                if new_unit_service.len() == 1 && new_unit_service.contains_key("ExecReload") {
+                    ret = UnitComparison::UnequalNeedsReload;
+                } else {
+                    return UnitComparison::UnequalNeedsRestart;
+                }
+            } else {
+                return UnitComparison::UnequalNeedsRestart;
             }
         } else {
             return UnitComparison::UnequalNeedsRestart;
@@ -998,6 +1016,14 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
     }
 }
 
+/// Checks if a unit has been disabled in configuration
+fn is_unit_disabled(unit_file: PathBuf) -> bool {
+    unit_file
+        .canonicalize()
+        .map(|full_path| full_path == Path::new("/dev/null"))
+        .unwrap_or(true)
+}
+
 /// Iterate over currently active units in the given scope, compare the unit
 /// file in `old_unit_dir` against the one in `new_unit_dir`, and populate the
 /// action maps accordingly.
@@ -1050,6 +1076,7 @@ fn collect_unit_changes(
         let mut base_unit = unit.clone();
         let mut current_base_unit_file = current_unit_file.clone();
         let mut new_base_unit_file = new_unit_file.clone();
+        let mut removed = false;
 
         // Detect template instances
         if let Some((Some(template_name), Some(template_instance))) =
@@ -1064,6 +1091,21 @@ fn collect_unit_changes(
                 base_unit = format!("{template_name}@.{template_instance}");
                 current_base_unit_file = old_unit_dir.join(&base_unit);
                 new_base_unit_file = new_unit_dir.join(&base_unit);
+
+                // Handle instances defined as drop-ins
+                let mut current_dropins = glob(&format!("{}.d/*.conf", current_unit_file.display()))
+                    .context("Invalid glob pattern")?
+                    .filter_map(|v| v.ok());
+                let mut new_dropins = glob(&format!("{}.d/*.conf", new_unit_file.display()))
+                    .context("Invalid glob pattern")?
+                    .filter_map(|v| v.ok());
+
+                // When the unit is disabled, the override files will be a symlink to /dev/null instead.
+                removed =
+                    // True if either no existing files or no disabled files (unit existed)
+                    !current_dropins.all(is_unit_disabled)
+                    // True if either no new files or all disabled new files (unit gone)
+                    && new_dropins.all(is_unit_disabled);
             }
         }
 
@@ -1078,11 +1120,9 @@ fn collect_unit_changes(
         if current_base_unit_file.exists()
             && (unit_state.state == "active" || unit_state.state == "activating")
         {
-            if new_base_unit_file
-                .canonicalize()
-                .map(|full_path| full_path == Path::new("/dev/null"))
-                .unwrap_or(true)
-            {
+            // Account for template unit instances where overrideStrategy == "asDropin"
+            // whilst also allowing manual instances to keep running.
+            if removed || is_unit_disabled(new_base_unit_file.clone()) {
                 let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
                 if parse_systemd_bool(Some(&current_unit_info), "Unit", "X-StopOnRemoval", true) {
                     _ = units_to_stop.insert(unit.to_string(), ());
@@ -2617,6 +2657,38 @@ invalid
                         "Unit".to_string(),
                         HashMap::from([(
                             "X-Reload-Triggers".to_string(),
+                            vec!["barfoo".to_string()]
+                        )])
+                    )])
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            assert!(
+                super::compare_units(
+                    &HashMap::from([]),
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([(
+                            "ExecReload".to_string(),
+                            vec!["foobar".to_string()]
+                        )])
+                    )])
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([(
+                            "ExecReload".to_string(),
+                            vec!["foobar".to_string()]
+                        )])
+                    )]),
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([(
+                            "ExecReload".to_string(),
                             vec!["barfoo".to_string()]
                         )])
                     )])
