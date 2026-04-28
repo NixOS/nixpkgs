@@ -11,16 +11,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "gridtracker2";
-  version = "2.260323.0";
+  version = "2.260421.1";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3DUbKG7bMR2VpJPPsLNRLzYaStv5iTanECAT6DHMExo=";
+    hash = "sha256-tCZXr2Rzov4SGnY5bmah1EBWHrCGHj0AMaYlcZ6Jgso=";
   };
 
-  npmDepsHash = "sha256-dJmrNP2AwIaQaCq0guG+OTogfcL8f97MAp6N7HAw5z8=";
+  npmDepsHash = "sha256-5h3bswjVf/8JHhwHRFTUfydN7XXtWbxNHTZ0mLL7RT8=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
