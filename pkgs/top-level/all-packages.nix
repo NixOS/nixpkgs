@@ -10878,7 +10878,7 @@ with pkgs;
 
   beancount = with python3Packages; toPythonApplication beancount;
 
-  beancount_2 = with python3.pkgs; toPythonApplication beancount_2;
+  beancount_2 = with python3Packages; toPythonApplication beancount_2;
 
   beancount-black = with python3.pkgs; toPythonApplication beancount-black;
 
