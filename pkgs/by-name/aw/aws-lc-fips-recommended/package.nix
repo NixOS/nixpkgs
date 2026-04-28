@@ -9,16 +9,17 @@
 #
 # The build instruction from security policy documents are followed as closely as is practical.
 #
-{ lib
-, clangStdenv  # FIPS delocator tool expects clang
-, cmakeMinimal
-, fetchurl
-, unzip
-, gnumake
-, go
-, perl
-, nix-update-script
-, useSharedLibraries ? !clangStdenv.hostPlatform.isStatic
+{
+  lib,
+  clangStdenv, # FIPS delocator tool expects clang
+  cmakeMinimal,
+  fetchurl,
+  unzip,
+  gnumake,
+  go,
+  perl,
+  nix-update-script,
+  useSharedLibraries ? !clangStdenv.hostPlatform.isStatic,
 }:
 
 let
@@ -28,6 +29,9 @@ in
 clangStdenv.mkDerivation {
   pname = "aws-lc-fips";
   inherit version;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # Use fetchurl with zip so that hash correlates to hash from security policy documents.
   src = fetchurl {
@@ -43,16 +47,27 @@ clangStdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmakeMinimal gnumake go perl unzip ];
+  nativeBuildInputs = [
+    cmakeMinimal
+    gnumake
+    go
+    perl
+    unzip
+  ];
 
   # Per NIST security policy:
   # Dynamic: cmake -DFIPS=1 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=1 ..
   # Static:  cmake -DFIPS=1 ..
   cmakeFlags = [
     "-DFIPS=1"
-  ] ++ lib.optionals useSharedLibraries [
+  ]
+  ++ lib.optionals useSharedLibraries [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_SHARED_LIBS=1"
   ];
@@ -92,7 +107,10 @@ clangStdenv.mkDerivation {
   meta = {
     description = "AWS-LC cryptographic library (FIPS recommended)";
     homepage = "https://github.com/aws/aws-lc";
-    license = [ lib.licenses.asl20 lib.licenses.isc ];
+    license = [
+      lib.licenses.asl20
+      lib.licenses.isc
+    ];
     maintainers = [ lib.maintainers.goertzenator ];
     platforms = lib.platforms.unix;
     mainProgram = "bssl";
