@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation {
       }
     ) selectedFamilies;
     postBuild = ''
-      find "$out" \( -name hinted -or -name unhinted -or -name split \) -exec rm -fr {} +
+      find "$out" \( -name unhinted -or -name split \) -exec rm -fr {} +
     '';
   };
 
