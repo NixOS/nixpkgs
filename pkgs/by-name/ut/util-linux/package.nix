@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
   # root...
   configureFlags = [
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid"
