@@ -403,9 +403,12 @@ let
   # Along with a boolean flag for each reason
   checkValidity =
     attrs:
+    if !attrs ? meta then
+      null
+    else
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    if checkMeta && metaInvalid (attrs.meta or { }) then
+    if checkMeta && metaInvalid attrs.meta then
       {
         reason = "unknown-meta";
         msg = "has an invalid meta attrset:${
