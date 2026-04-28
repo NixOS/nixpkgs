@@ -5961,8 +5961,6 @@ with pkgs;
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
 
-  tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) { };
-
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
 
   uhdMinimal = uhd.override {
@@ -6118,11 +6116,6 @@ with pkgs;
   inherit (cosmopolitan) cosmocc;
 
   ustream-ssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = openssl; };
-
-  ustream-ssl-wolfssl = callPackage ../development/libraries/ustream-ssl {
-    ssl_implementation = wolfssl;
-    additional_buildInputs = [ openssl ];
-  };
 
   ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
     ssl_implementation = mbedtls_2;
@@ -6736,11 +6729,6 @@ with pkgs;
   libubox-nossl = callPackage ../development/libraries/libubox { };
 
   libubox = callPackage ../development/libraries/libubox { with_ustream_ssl = true; };
-
-  libubox-wolfssl = callPackage ../development/libraries/libubox {
-    with_ustream_ssl = true;
-    ustream-ssl = ustream-ssl-wolfssl;
-  };
 
   libubox-mbedtls = callPackage ../development/libraries/libubox {
     with_ustream_ssl = true;
@@ -8454,8 +8442,6 @@ with pkgs;
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
-  iptables = callPackage ../os-specific/linux/iptables { };
-  iptables-legacy = callPackage ../os-specific/linux/iptables { nftablesCompat = false; };
   iptables-nftables-compat = iptables;
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
@@ -10526,12 +10512,19 @@ with pkgs;
         };
       };
     }).overrideAttrs
-      {
+      (old: {
         pname = "vim-darwin";
         meta = {
+          inherit (old.meta)
+            description
+            homepage
+            license
+            mainProgram
+            outputsToInstall
+            ;
           platforms = lib.platforms.darwin;
         };
-      };
+      });
 
   vimacs = callPackage ../applications/editors/vim/vimacs.nix { };
 

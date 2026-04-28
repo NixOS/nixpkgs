@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "itch-dl";
-  version = "0.6.1";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DragoonAethis";
     repo = "itch-dl";
     tag = finalAttrs.version;
-    hash = "sha256-zwsiG38wOVi3pP0gQWkZqfAmdWKadjB65qiTg68tZWg=";
+    hash = "sha256-4+Idh76o/VbdQ6hgvQsrz9AGYeOGC2hgN0kMJz+ik2E=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "urllib3"
     "beautifulsoup4"
     "lxml"
+    "tqdm"
   ];
 
   meta = {

@@ -37,7 +37,7 @@ let
     };
     ```
   */
-  buildGrammar = callPackage ./build-grammar.nix { };
+  buildGrammar = callPackage ./grammars/build-grammar.nix { };
 
   /**
     Attrset of grammar sources.

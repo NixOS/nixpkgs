@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
+    "-DINSTALL_CADICAL=OFF"
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
   ];
 

@@ -29,19 +29,15 @@
   iputils,
 }:
 
-let
-  version = "1.8.13";
-  pname = "iptables";
-in
-
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  pname = "iptables";
+  version = "1.8.13";
 
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
-    sha256 = "GvzTPano+ROs5qISZ4gWLiB+JvXV4pxlc8Dlgf/Fi5k=";
+    url = "https://www.netfilter.org/projects/iptables/files/iptables-${finalAttrs.version}.tar.xz";
+    hash = "sha256-GvzTPano+ROs5qISZ4gWLiB+JvXV4pxlc8Dlgf/Fi5k=";
   };
 
   outputs = [

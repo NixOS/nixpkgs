@@ -6,6 +6,7 @@
   fetchpatch,
   stdenv,
   pkgsi686Linux,
+  kernel,
 }:
 
 let
@@ -18,19 +19,8 @@ let
       lib32 =
         (pkgsi686Linux.callPackage imported {
           libsOnly = true;
-          kernel = null;
         }).out;
     };
-
-  kernel =
-    # a hacky way of extracting parameters from callPackage
-    callPackage (
-      {
-        kernel,
-        libsOnly ? false,
-      }:
-      if libsOnly then { } else kernel
-    ) { };
 
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version then b else a;
 
@@ -76,6 +66,10 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
+  latest = selectHighestVersion production new_feature;
+
+  bleeding_edge = selectHighestVersion latest beta;
+
   production = generic {
     version = "595.58.03";
     sha256_64bit = "sha256-jA1Plnt5MsSrVxQnKu6BAzkrCnAskq+lVRdtNiBYKfk=";
@@ -85,7 +79,7 @@ rec {
     persistencedSha256 = "sha256-AtjM/ml/ngZil8DMYNH+P111ohuk9mWw5t4z7CHjPWw=";
   };
 
-  latest = selectHighestVersion production (generic {
+  new_feature = generic {
     version = "590.48.01";
     sha256_64bit = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
     sha256_aarch64 = "sha256-FOz7f6pW1NGM2f74kbP6LbNijxKj5ZtZ08bm0aC+/YA=";
@@ -93,16 +87,16 @@ rec {
     settingsSha256 = "sha256-NWsqUciPa4f1ZX6f0By3yScz3pqKJV1ei9GvOF8qIEE=";
     persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
     patchesOpen = [ kernel_6_19_patch ];
-  });
+  };
 
-  beta = selectHighestVersion latest (generic {
+  beta = generic {
     version = "595.45.04";
     sha256_64bit = "sha256-zUllSSRsuio7dSkcbBTuxF+dN12d6jEPE0WgGvVOj14=";
     sha256_aarch64 = "sha256-jl6lQWsgF6ya22sAhYPpERJ9r+wjnWzbGnINDpUMzsk=";
     openSha256 = "sha256-uqNfImwTKhK8gncUdP1TPp0D6Gog4MSeIJMZQiJWDoE=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
-  });
+  };
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver

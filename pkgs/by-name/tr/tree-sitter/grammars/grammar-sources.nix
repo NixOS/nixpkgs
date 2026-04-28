@@ -2246,10 +2246,10 @@
   };
 
   rescript = {
-    version = "5.0.0-unstable-2025-03-03";
+    version = "6.0.0-unstable-2026-04-26";
     url = "github:rescript-lang/tree-sitter-rescript";
-    rev = "d2df8a285fff95de56a91d2f8152aeceb66f40ef";
-    hash = "sha256-yNZrihl4BNvLu0Zqr4lSqvdZCeXU3KnCY7ZYC1U42R0=";
+    rev = "5b90cd4e4138b1231a67977303bda47eb608480a";
+    hash = "sha256-f5/z566/Ez8+jzQSXoWkEK3LJGYjWupQw+BFPDyOxsE=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2496,9 +2496,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.4.16";
+    version = "2026.4.23";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-bWZsxfLr8e2Kv96EGOwTyycLBH8DhXsLrzUIABN5um8=";
+    hash = "sha256-2tAoK0X52cA+BkBus3aW3rlu+q3himH0WpgmU07aCcM=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [

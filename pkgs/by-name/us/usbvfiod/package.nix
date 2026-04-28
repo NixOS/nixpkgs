@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
+    homepage = "https://github.com/cyberus-technology/usbvfiod";
     description = "A tool for USB device pass-through using the vfio-user protocol.";
-    changelog = "https://github.com/cyberus-technology/usb/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/cyberus-technology/usbvfiod/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "usbvfiod";
     maintainers = with lib.maintainers; [
       lbeierlieb
+      snu
     ];
     platforms = [
       "aarch64-linux"

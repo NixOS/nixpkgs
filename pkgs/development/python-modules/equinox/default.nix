@@ -59,6 +59,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "equinox" ];
 
+  disabledTests = [
+    # Flaky under heavy load:
+    #   AssertionError: Non-linear scaling detected: ratio=1.56
+    "test_speed_buffer_while"
+  ];
+
   meta = {
     description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
     changelog = "https://github.com/patrick-kidger/equinox/releases/tag/${finalAttrs.src.tag}";

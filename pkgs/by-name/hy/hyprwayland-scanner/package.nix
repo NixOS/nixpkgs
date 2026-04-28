@@ -34,7 +34,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/hyprwm/hyprwayland-scanner";
     description = "Hyprland version of wayland-scanner in and for C++";
-    changelog = "https://github.com/hyprwm/hyprwayland-scanner/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/hyprwm/hyprwayland-scanner/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     mainProgram = "hyprwayland-scanner";
