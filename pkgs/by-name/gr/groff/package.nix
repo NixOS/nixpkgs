@@ -54,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  patches = [
+    # TODO: Remove when updating to the next release.
+    ./fix-grotty-performance-regression.patch
+  ];
+
   postPatch = ''
     # POSIX_SHELL_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
     substituteInPlace contrib/gdiffmk/gdiffmk.sh \
