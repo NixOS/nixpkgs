@@ -19,14 +19,14 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "castget";
   # Using unstable version since it doesn't require `ronn`, see:
-  # https://github.com/mlj/castget/commit/e97b179227b4fc7e2e2bc5a373933624c0467daa
-  version = "2.0.1-unstable-2025-01-25";
+  # https://github.com/mlj/castget/commit/218734296e2efc53071e0dbd3c4d59930b571aae
+  version = "2.0.1-unstable-2026-02-04";
 
   src = fetchFromGitHub {
     owner = "mlj";
     repo = "castget";
-    rev = "e97b179227b4fc7e2e2bc5a373933624c0467daa";
-    hash = "sha256-3t/N8JO36wjHuzIdWNstRWphC/ZR6KkZX0l9yKarS7c=";
+    rev = "218734296e2efc53071e0dbd3c4d59930b571aae";
+    hash = "sha256-GEfsGOTBkorPWLGP3eNbuiGFwDUgb4Gu6ykyS3/RNOg=";
   };
 
   # without this, the build fails because of an encoding issue with the manual page.
