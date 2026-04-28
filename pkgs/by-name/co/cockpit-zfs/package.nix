@@ -38,11 +38,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oeXSOxogfAazRsKfngq2+DOyo//wRJQSqm7gaCza4WY=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/45Drives/cockpit-zfs/blob/main/package.json#L13
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-YnR1SqBGnxEQaGUGMNTHHEGcOIhuGbWnqMdr4eRGXcA=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-Tdxe5bXN9psSrnUXL1f+1nh4WPzuvOI7j0I+VPU2/1s=";
   };
 
   nativeBuildInputs = [
@@ -82,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
-  patchPhase =
+  postPatch =
     let
       # houston-common-lib has @types/electron which pulls in electron.
       # Electron's postinstall downloads binaries, which fails in sandbox.
@@ -91,8 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       houstonUiDir = "houston-common/houston-common-ui";
     in
     ''
-      runHook prePatch
-
       # Remove electron type dependency
       substituteInPlace ${houstonLibDir}/package.json \
         --replace-fail '"@types/electron": "^1.6.12",' ""
@@ -116,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "VueDevTools()," "" \
         --replace-fail "import dts from 'vite-plugin-dts'" ""
       sed -i '/dts({/,/})/d' ${houstonUiDir}/vite.config.ts
-
-      runHook postPatch
     '';
 
   buildPhase = ''
