@@ -25,24 +25,25 @@ rec {
     let
       OR = if permissive then lib.any else lib.all;
       AND = if permissive then lib.all else lib.any;
+      evaluateSubProperty = evaluateProperty predicate permissive;
     in
     license:
     if license.licenseType == "simple" then
       predicate license
     else if license.licenseType == "compound" then
       if license.operator == "OR" then
-        OR (x: evaluateProperty predicate permissive x) license.licenses
+        OR evaluateSubProperty license.licenses
       else if license.operator == "AND" then
-        AND (x: evaluateProperty predicate permissive x) license.licenses
+        AND evaluateSubProperty license.licenses
       else
         throw "Unknown license operator"
     else if license.licenseType == "exception" then
-      AND (x: evaluateProperty predicate permissive x) [
+      AND evaluateSubProperty [
         license.license
         license.exception
       ]
     else if license.licenseType == "plus" then
-      evaluateProperty predicate permissive license.license
+      evaluateSubProperty license.license
     else
       throw "Unknown license type or legacy license";
 
