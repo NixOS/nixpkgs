@@ -48,6 +48,7 @@ rustPlatform.buildRustPackage {
   # used to teach josh itself about its version number
   env.JOSH_VERSION = "r${version}";
 
+  # josh and josh-filter are used interactively, so git is likely already in PATH
   postInstall = ''
     wrapProgram "$out/bin/josh-proxy" --prefix PATH : "${git}/bin"
   '';
@@ -56,7 +57,7 @@ rustPlatform.buildRustPackage {
     description = "Just One Single History";
     homepage = "https://josh-project.github.io/josh/";
     downloadPage = "https://github.com/josh-project/josh";
-    changelog = "https://github.com/josh-project/josh/releases/tag/${version}";
+    changelog = "https://github.com/josh-project/josh/releases/tag/r${version}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.sternenseemann
