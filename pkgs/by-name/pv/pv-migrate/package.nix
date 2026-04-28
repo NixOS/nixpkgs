@@ -24,8 +24,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${finalAttrs.version}"
-    "-X main.commit=v${finalAttrs.version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.version}"
     "-X main.date=1970-01-01-00:00:01"
   ];
 
