@@ -10770,7 +10770,7 @@ with pkgs;
     xppen_4
     ;
 
-  ydiff = with python3.pkgs; toPythonApplication ydiff;
+  ydiff = with python3Packages; toPythonApplication ydiff;
 
   yokadi = python3Packages.callPackage ../applications/misc/yokadi { };
 
