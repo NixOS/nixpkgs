@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syncstorage-rs";
   version = "0.22.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "syncstorage-rs";
@@ -86,7 +88,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  passthru.tests = { inherit (nixosTests) firefox-syncserver; };
+  passthru.tests = {
+    firefox-syncserver =
+      nixosTests.firefox-syncserver.${if dbBackend == "postgresql" then "postgresql" else "mysql"};
+  };
 
   meta = {
     description = "Mozilla Sync Storage built with Rust";
