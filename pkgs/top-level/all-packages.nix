@@ -10819,7 +10819,7 @@ with pkgs;
     withGui = false;
   };
 
-  beancount = with python3.pkgs; toPythonApplication beancount;
+  beancount = with python3Packages; toPythonApplication beancount;
 
   beancount_2 = with python3.pkgs; toPythonApplication beancount_2;
 
