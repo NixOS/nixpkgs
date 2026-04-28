@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Sphinx theme for CPython project";
     homepage = "https://github.com/python/python-docs-theme";
-    changelog = "https://github.com/python/python-docs-theme/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/python/python-docs-theme/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ kaction ];
   };

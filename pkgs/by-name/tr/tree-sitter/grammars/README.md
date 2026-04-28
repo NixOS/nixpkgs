@@ -40,7 +40,7 @@ This will expand to an element in `pkgs.tree-sitter.grammars` at build time:
 }
 ```
 
-Each entry is passed to [buildGrammar](../build-grammar.nix), which in turn populates `pkgs.tree-sitter-grammars`.
+Each entry is passed to [buildGrammar](build-grammar.nix), which in turn populates `pkgs.tree-sitter-grammars`.
 
 Attempt to build the new grammar: `nix-build -A tree-sitter-grammars.tree-sitter-latex`.
 This will fail due to the invalid hash.
@@ -123,4 +123,3 @@ Or, to update all grammars:
 ```shell
 nix-shell maintainers/scripts/update.nix --argstr path tree-sitter-grammars --argstr keep-going true
 ```
-

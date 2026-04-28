@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "literata";
@@ -13,14 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    find . -name "*.ttf" -exec cp {} "$out/share/fonts/truetype/" \;
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Serif typeface designed for ebooks and optimized for reading";
