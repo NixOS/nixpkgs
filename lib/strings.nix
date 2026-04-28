@@ -337,6 +337,7 @@ rec {
 
   /**
     Concatenate a list of strings, adding a newline at the end of each one.
+    Defined as `concatMapStrings (s: s + "\n")`.
 
     # Inputs
 
@@ -360,7 +361,7 @@ rec {
 
     :::
   */
-  concatLines = str: concatStringsSep "\n" str + "\n";
+  concatLines = concatMapStrings (s: s + "\n");
 
   /**
     Given string `s`, replace every occurrence of the string `from` with the string `to`.
