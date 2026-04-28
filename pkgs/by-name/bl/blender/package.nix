@@ -281,6 +281,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (opensubdiv.override { inherit cudaSupport; })
     onetbb
     openvdb
+    openxr-loader
     potrace
     pugixml
     python3
@@ -304,7 +305,6 @@ stdenv'.mkDerivation (finalAttrs: {
         libxrender
         libxxf86vm
         openal
-        openxr-loader
       ]
     else
       [
@@ -314,7 +314,6 @@ stdenv'.mkDerivation (finalAttrs: {
         apple-sdk_15
         brotli
         llvmPackages.openmp
-        openxr-loader
       ]
   )
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [ sse2neon ]
