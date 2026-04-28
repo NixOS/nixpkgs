@@ -14,15 +14,30 @@ let
     ;
   inherit (lib.attrsets) filterAttrsRecursive;
   cfg = config.services.headplane;
-  settingsFile = (pkgs.formats.yaml { }).generate "headplane-config.yaml" (
-    # Headplane config can't have `null` values.
-    filterAttrsRecursive (n: v: v != null) cfg.settings
+  settingsFormat = pkgs.formats.yaml { };
+  filterSettings = lib.converge (
+    filterAttrsRecursive (
+      _: v:
+      !lib.elem v [
+        { }
+        null
+      ]
+    )
   );
+  agentSettings = cfg.settings.integration.agent;
+  settings = cfg.settings // {
+    integration = cfg.settings.integration // {
+      agent = if agentSettings == null || !agentSettings.enabled then null else agentSettings;
+    };
+  };
+  settingsFile = settingsFormat.generate "headplane-config.yaml" (filterSettings settings);
 in
 {
   options.services.headplane = {
     enable = mkEnableOption "Headplane";
     package = mkPackageOption pkgs "headplane" { };
+
+    agent.package = mkPackageOption pkgs "headplane-agent" { };
 
     debug = mkEnableOption "Enable debug loggin";
 
@@ -157,74 +172,74 @@ in
             type = types.submodule {
               options = {
                 agent = mkOption {
-                  type = types.submodule {
-                    options = {
-                      enabled = mkOption {
-                        type = types.bool;
-                        default = false;
-                        description = ''
-                          The Headplane agent allows retrieving information about nodes.
-                          This allows the UI to display version, OS, and connectivity data.
-                          You will see the Headplane agent in your Tailnet as a node when it connects.
-                        '';
-                      };
+                  type = types.nullOr (
+                    types.submodule {
+                      options = {
+                        enabled = mkOption {
+                          type = types.bool;
+                          default = false;
+                          description = ''
+                            The Headplane agent allows retrieving information about nodes.
+                            This allows the UI to display version, OS, and connectivity data.
+                            You will see the Headplane agent in your Tailnet as a node when it connects.
+                          '';
+                        };
 
-                      executable_path = mkOption {
-                        type = types.path;
-                        readOnly = true;
-                        default = "${cfg.settings.integration.agent.package}/bin/hp_agent";
-                        defaultText = lib.literalExpression ''"''\${config.services.headplane.settings.integration.agent.package}/bin/hp_agent"'';
-                        description = ''
-                          Path to the headplane agent binary.
-                        '';
-                      };
+                        executable_path = mkOption {
+                          type = types.path;
+                          readOnly = true;
+                          default = "${cfg.agent.package}/bin/hp_agent";
+                          defaultText = lib.literalExpression ''"''${config.services.headplane.agent.package}/bin/hp_agent"'';
+                          description = ''
+                            Path to the headplane agent binary.
+                          '';
+                        };
 
-                      pre_authkey_path = mkOption {
-                        type = types.nullOr types.path;
-                        default = null;
-                        description = ''
-                          Path to a file containing the agent preauth key.
-                          To connect to your Tailnet, you need to generate a pre-auth key.
-                          This can be done via the web UI or through the `headscale` CLI.
-                        '';
-                        example = "config.sops.secrets.agent_pre_authkey.path";
-                      };
+                        pre_authkey_path = mkOption {
+                          type = types.nullOr types.path;
+                          default = null;
+                          description = ''
+                            Path to a file containing the agent preauth key.
+                            To connect to your Tailnet, you need to generate a pre-auth key.
+                            This can be done via the web UI or through the `headscale` CLI.
+                          '';
+                          example = "config.sops.secrets.agent_pre_authkey.path";
+                        };
 
-                      host_name = mkOption {
-                        type = types.str;
-                        default = "headplane-agent";
-                        description = "Optionally change the name of the agent in the Tailnet";
-                      };
+                        host_name = mkOption {
+                          type = types.str;
+                          default = "headplane-agent";
+                          description = "Optionally change the name of the agent in the Tailnet";
+                        };
 
-                      cache_ttl = mkOption {
-                        type = types.ints.positive;
-                        default = 180000;
-                        description = ''
-                          How long to cache agent information (in milliseconds).
-                          If you want data to update faster, reduce the TTL, but this will increase the frequency of requests to Headscale.
-                        '';
-                      };
+                        cache_ttl = mkOption {
+                          type = types.ints.positive;
+                          default = 180000;
+                          description = ''
+                            How long to cache agent information (in milliseconds).
+                            If you want data to update faster, reduce the TTL, but this will increase the frequency of requests to Headscale.
+                          '';
+                        };
 
-                      cache_path = mkOption {
-                        type = types.path;
-                        default = "/var/lib/headplane/agent_cache.json";
-                        description = "Where to store the agent cache.";
-                      };
+                        cache_path = mkOption {
+                          type = types.path;
+                          default = "/var/lib/headplane/agent_cache.json";
+                          description = "Where to store the agent cache.";
+                        };
 
-                      work_dir = mkOption {
-                        type = types.path;
-                        default = "/var/lib/headplane/agent";
-                        description = ''
-                          Do not change this unless you are running a custom deployment.
-                          The work_dir represents where the agent will store its data to be able to automatically reauthenticate with your Tailnet.
-                          It needs to be writable by the user running the Headplane process.
-                        '';
+                        work_dir = mkOption {
+                          type = types.path;
+                          default = "/var/lib/headplane/agent";
+                          description = ''
+                            Do not change this unless you are running a custom deployment.
+                            The work_dir represents where the agent will store its data to be able to automatically reauthenticate with your Tailnet.
+                            It needs to be writable by the user running the Headplane process.
+                          '';
+                        };
                       };
-
-                      package = mkPackageOption pkgs "headplane-agent" { };
-                    };
-                  };
-                  default = { };
+                    }
+                  );
+                  default = null;
                   description = "Agent configuration for the Headplane agent.";
                 };
 
@@ -253,128 +268,127 @@ in
           };
 
           oidc = mkOption {
-            type = types.submodule {
-              options = {
-                issuer = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = "URL to OpenID issuer.";
-                  example = "https://provider.example.com/issuer-url";
-                };
+            type = types.nullOr (
+              types.submodule {
+                options = {
+                  issuer = mkOption {
+                    type = types.str;
+                    description = "URL to OpenID issuer.";
+                    example = "https://provider.example.com/issuer-url";
+                  };
 
-                client_id = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = "The client ID for the OIDC client.";
-                  example = "your-client-id";
-                };
+                  client_id = mkOption {
+                    type = types.str;
+                    description = "The client ID for the OIDC client.";
+                    example = "your-client-id";
+                  };
 
-                client_secret_path = mkOption {
-                  type = types.nullOr types.path;
-                  default = null;
-                  description = ''
-                    Path to a file containing the OIDC client secret.
-                  '';
-                  example = "config.sops.secrets.oidc_client_secret.path";
-                };
+                  client_secret_path = mkOption {
+                    type = types.nullOr types.path;
+                    default = null;
+                    description = ''
+                      Path to a file containing the OIDC client secret.
+                    '';
+                    example = "config.sops.secrets.oidc_client_secret.path";
+                  };
 
-                disable_api_key_login = mkOption {
-                  type = types.bool;
-                  default = false;
-                  description = "Whether to disable API key login.";
-                };
+                  disable_api_key_login = mkOption {
+                    type = types.bool;
+                    default = false;
+                    description = "Whether to disable API key login.";
+                  };
 
-                token_endpoint_auth_method = mkOption {
-                  type = types.enum [
-                    "client_secret_post"
-                    "client_secret_basic"
-                    "client_secret_jwt"
-                  ];
-                  default = "client_secret_post";
-                  description = "The token endpoint authentication method.";
-                };
+                  token_endpoint_auth_method = mkOption {
+                    type = types.enum [
+                      "client_secret_post"
+                      "client_secret_basic"
+                      "client_secret_jwt"
+                    ];
+                    default = "client_secret_post";
+                    description = "The token endpoint authentication method.";
+                  };
 
-                headscale_api_key_path = mkOption {
-                  type = types.nullOr types.path;
-                  default = null;
-                  description = ''
-                    Path to a file containing the Headscale API key.
-                  '';
-                  example = "config.sops.secrets.headscale_api_key.path";
-                };
+                  headscale_api_key_path = mkOption {
+                    type = types.path;
+                    description = ''
+                      Path to a file containing the Headscale API key.
+                    '';
+                    example = "config.sops.secrets.headscale_api_key.path";
+                  };
 
-                redirect_uri = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = ''
-                    This should point to your publicly accessible URL
-                    for your Headplane instance with /admin/oidc/callback.
-                  '';
-                  example = "https://headscale.example.com/admin/oidc/callback";
-                };
+                  redirect_uri = mkOption {
+                    type = types.nullOr types.str;
+                    default = null;
+                    description = ''
+                      This should point to your publicly accessible URL
+                      for your Headplane instance with /admin/oidc/callback.
+                    '';
+                    example = "https://headscale.example.com/admin/oidc/callback";
+                  };
 
-                user_storage_file = mkOption {
-                  type = types.path;
-                  default = "/var/lib/headplane/users.json";
-                  description = ''
-                    Path to a file containing the users and their permissions for Headplane.
-                  '';
-                  example = "/var/lib/headplane/users.json";
-                };
+                  user_storage_file = mkOption {
+                    type = types.path;
+                    default = "/var/lib/headplane/users.json";
+                    description = ''
+                      Path to a file containing the users and their permissions for Headplane.
+                    '';
+                    example = "/var/lib/headplane/users.json";
+                  };
 
-                profile_picture_source = mkOption {
-                  type = types.enum [
-                    "oidc"
-                    "gravatar"
-                  ];
-                  default = "oidc";
-                  description = "Source for user profile pictures.";
-                };
+                  profile_picture_source = mkOption {
+                    type = types.enum [
+                      "oidc"
+                      "gravatar"
+                    ];
+                    default = "oidc";
+                    description = "Source for user profile pictures.";
+                  };
 
-                strict_validation = mkOption {
-                  type = types.bool;
-                  default = true;
-                  description = "Enable strict validation of OIDC configuration.";
-                };
+                  strict_validation = mkOption {
+                    type = types.bool;
+                    default = true;
+                    description = "Enable strict validation of OIDC configuration.";
+                  };
 
-                scope = mkOption {
-                  type = types.str;
-                  default = "openid email profile";
-                  description = "OIDC scope to request.";
-                };
+                  scope = mkOption {
+                    type = types.str;
+                    default = "openid email profile";
+                    description = "OIDC scope to request.";
+                  };
 
-                extra_params = mkOption {
-                  type = types.nullOr (types.attrsOf types.str);
-                  default = null;
-                  description = "Extra parameters to send to the OIDC provider.";
-                  example = {
-                    prompt = "consent";
+                  extra_params = mkOption {
+                    type = types.nullOr (types.attrsOf types.str);
+                    default = null;
+                    description = "Extra parameters to send to the OIDC provider.";
+                    example = {
+                      prompt = "consent";
+                    };
+                  };
+
+                  authorization_endpoint = mkOption {
+                    type = types.nullOr types.str;
+                    default = null;
+                    description = "Custom authorization endpoint URL.";
+                    example = "https://provider.example.com/authorize";
+                  };
+
+                  token_endpoint = mkOption {
+                    type = types.nullOr types.str;
+                    default = null;
+                    description = "Custom token endpoint URL.";
+                    example = "https://provider.example.com/token";
+                  };
+
+                  userinfo_endpoint = mkOption {
+                    type = types.nullOr types.str;
+                    default = null;
+                    description = "Custom userinfo endpoint URL.";
+                    example = "https://provider.example.com/userinfo";
                   };
                 };
-
-                authorization_endpoint = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = "Custom authorization endpoint URL.";
-                  example = "https://provider.example.com/authorize";
-                };
-
-                token_endpoint = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = "Custom token endpoint URL.";
-                  example = "https://provider.example.com/token";
-                };
-
-                userinfo_endpoint = mkOption {
-                  type = types.nullOr types.str;
-                  default = null;
-                  description = "Custom userinfo endpoint URL.";
-                  example = "https://provider.example.com/userinfo";
-                };
-              };
-            };
-            default = { };
+              }
+            );
+            default = null;
             description = "OIDC Configuration for authentication.";
           };
         };
@@ -384,6 +398,19 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          cfg.settings.integration.agent == null
+          || !cfg.settings.integration.agent.enabled
+          || cfg.settings.integration.agent.pre_authkey_path != null;
+        message = ''
+          services.headplane.settings.integration.agent.pre_authkey_path must be set
+          when services.headplane.settings.integration.agent.enabled is true.
+        '';
+      }
+    ];
+
     environment = {
       systemPackages = [ cfg.package ];
       etc."headplane/config.yaml".source = "${settingsFile}";
