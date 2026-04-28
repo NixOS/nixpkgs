@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tcia-utils";
-  version = "3.2.1";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
