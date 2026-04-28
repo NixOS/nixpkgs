@@ -188,8 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
     (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
     (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-    # TODO: Clean up on `staging`.
-    "--without-wolfssl"
   ]
   ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
   # For the 'urandom', maybe it should be a cross-system option
