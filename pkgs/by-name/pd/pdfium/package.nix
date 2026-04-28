@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchzip,
   withV8 ? false,
   withXfa ? false,
   freetype,
   gclient2nix,
   glib,
+  glibcLocales,
   gn,
   harfbuzz,
   icu,
@@ -20,6 +22,7 @@
   pkg-config,
   python3,
   runCommand,
+  tzdata,
   xcodebuild,
   zlib,
 }:
@@ -57,6 +60,8 @@ let
   generateShimHeadersHash = "sha256-tqhnqYoQeXUTN7OSSVwchpEkGJwhCUSk8TG8LUgrHdg=";
   testFontsRev = "7f51783942943e965cd56facf786544ccfc07713";
   testFontsHash = "sha256-gBnAOW/X2R13AP9507uPsvQ4A2ZUPbvzFcg3Neu3DT8=";
+  testFontsBundleObject = "cd96fc55dc243f6c6f4cb63ad117cad6cd48dceb";
+  testFontsBundleHash = "sha256-7Jc+zNZp1Bf78tCk2scwdEoxdCaP8GLbVFG1XIK8NJI=";
   v8Rev = "b210c794d22b5c0839ad63d8ae9129d6062168da";
   v8Hash = "sha256-C4tj4rbl5+j191gnwdBWpaOVSZmQL+DSvVJ+VxyygHo=";
   zlibRev = "7eda07b1e067ef3fd7eea0419c88b5af45c9a776";
@@ -90,6 +95,16 @@ let
           url = "https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp";
           rev = abseilRev;
           hash = abseilHash;
+        };
+      };
+
+      # PDFium's native test targets use Chromium's googletest wrapper targets.
+      "src/third_party/googletest/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/google/googletest";
+          rev = gtestRev;
+          hash = gtestHash;
         };
       };
 
@@ -141,15 +156,6 @@ let
         };
       };
 
-      "src/third_party/googletest/src" = {
-        fetcher = "fetchFromGitiles";
-        args = {
-          url = "https://chromium.googlesource.com/external/github.com/google/googletest";
-          rev = gtestRev;
-          hash = gtestHash;
-        };
-      };
-
       "src/third_party/zlib" = {
         # V8 still needs Chromium's google/compression_utils_portable target
         # from this subtree even though PDFium itself uses system zlib.
@@ -190,6 +196,11 @@ let
     stripRoot = false;
   };
 
+  testFontsBundle = fetchurl {
+    url = "https://storage.googleapis.com/chromium-fonts/${testFontsBundleObject}";
+    hash = testFontsBundleHash;
+  };
+
   simdutf = fetchzip {
     url = "https://chromium.googlesource.com/chromium/src/third_party/simdutf/+archive/${simdutfRev}.tar.gz";
     hash = simdutfHash;
@@ -221,7 +232,14 @@ let
 
   clangMajor = builtins.head (lib.splitVersion (lib.getVersion stdenv.cc.cc));
 
-  pythonForBuild = if withV8 then python3.withPackages (ps: [ ps.jinja2 ]) else python3;
+  pythonForBuild =
+    if withV8 then
+      python3.withPackages (ps: [
+        ps.jinja2
+        ps.requests
+      ])
+    else
+      python3;
 
   icuForPdfium =
     if withV8 && stdenv.hostPlatform.isLinux then
@@ -229,6 +247,42 @@ let
       icu.override { stdenv = llvmPackages.libcxxStdenv; }
     else
       icu;
+
+  disabledUnitTests = [
+    # This checks for one exact compressed byte sequence, but PDFium here
+    # intentionally uses the system zlib implementation.
+    "FlateModule.Encode"
+    # This observes retain/release churn through std::set lookup and differs
+    # with the system standard library implementation used in nixpkgs.
+    "RetainPtr.SetContains"
+  ];
+
+  disabledEmbedderTests = [
+    # These assert exact serialized PDF and font-subset output. With system
+    # libraries, output differs from upstream's in-tree stack; known
+    # contributors are HarfBuzz subsetting and zlib-compressed save output.
+    "CPDFFontSubsetterTest.MultipleFontsMultipleTexts"
+    "FPDFSaveWithFontSubsetEmbedderTest.SaveWithoutSubsetWithNewText"
+    "FPDFSaveWithFontSubsetEmbedderTest.SaveWithSubsetWithNewText"
+    # These render tests also differ from upstream's in-tree stack. The known
+    # FreeType difference is the system autofit/autohinting configuration.
+    "FPDFViewEmbedderTest.RenderAnnotsGrayScale"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorScheme"
+    "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorSchemeAndConvertFillToStroke"
+    "FPDFAnnotEmbedderTest.ModifyRectQuadpointsWithAP"
+  ];
+
+  mkDisabledGtestFilter = disabledTests: "-${lib.concatStringsSep ":" disabledTests}";
+  unitTestFilter = mkDisabledGtestFilter disabledUnitTests;
+  embedderTestFilter = mkDisabledGtestFilter disabledEmbedderTests;
+
+  checkTargets = [
+    "pdfium_unittests"
+    "pdfium_embeddertests"
+  ]
+  ++ lib.optionals withV8 [ "pdfium_test" ];
 
   chromiumClang =
     runCommand "chromium-clang-${lib.getVersion stdenv.cc.cc}"
@@ -282,6 +336,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "src";
   strictDeps = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   patches = [
     # Drop Clang flags that older nixpkgs Clang does not support.
@@ -335,6 +390,13 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalAttrs (cppflags != "") {
       CPPFLAGS = cppflags;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      # Locale-sensitive tests expect glibc locales to be available.
+      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+      # JavaScript date/time tests set TZ themselves, but still need a
+      # timezone database in the sandbox to resolve that zone name.
+      TZDIR = "${tzdata}/share/zoneinfo";
     };
 
   postPatch = ''
@@ -358,7 +420,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${chromiumBuildtools}/. buildtools
 
     mkdir -p third_party/test_fonts third_party/simdutf
-    cp -r ${testFonts}/. third_party/test_fonts
+    cp -r ${testFonts}/. third_party/test_fonts/
+    tar -xzf ${testFontsBundle} -C third_party/test_fonts
     cp -r ${simdutf}/. third_party/simdutf
 
     install -Dm644 ${generateShimHeaders}/generate_shim_headers.py \
@@ -455,6 +518,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   ninjaFlags = [ "pdfium" ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    buildCores=1
+    if [ "''${enableParallelChecking-1}" ]; then
+      buildCores="$NIX_BUILD_CORES"
+    fi
+
+    TERM=dumb ninja -j"$buildCores" ${lib.concatStringsSep " " checkTargets}
+
+    ./pdfium_unittests --gtest_filter='${unitTestFilter}'
+    ./pdfium_embeddertests --gtest_filter='${embedderTestFilter}'
+    ${lib.optionalString withV8 ''
+      ${lib.getExe pythonForBuild} ../../testing/tools/run_javascript_tests.py \
+        --build-dir out/Release \
+        -j"$buildCores"
+    ''}
+
+    runHook postCheck
+  '';
 
   installPhase = ''
     runHook preInstall

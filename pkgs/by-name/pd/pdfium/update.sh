@@ -140,6 +140,17 @@ highway_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/
 libcxx_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/llvm/llvm-project/libcxx.git/+archive/${libcxx_rev}.tar.gz")")
 generate_shim_headers_hash=$(prefetch_subdir_archive_hash "${chromium_git_url}/chromium/src/+archive/refs/branch-heads/${target_version}/tools/generate_shim_headers.tar.gz")
 test_fonts_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/test_fonts/+archive/${test_fonts_rev}.tar.gz")")
+test_fonts_bundle_object=$(
+  curl -sSfL "${chromium_git_url}/chromium/src/third_party/test_fonts/+/${test_fonts_rev}/test_fonts.tar.gz.sha1?format=TEXT" \
+    | base64 -d \
+    | tr -d '\n'
+)
+if [[ -z $test_fonts_bundle_object ]]; then
+  echo "failed to extract test_fonts_bundle_object from Chromium test_fonts repo" >&2
+  exit 1
+fi
+mapfile -t test_fonts_bundle_prefetch < <(prefetch_file "https://storage.googleapis.com/chromium-fonts/${test_fonts_bundle_object}")
+test_fonts_bundle_hash=$(to_sri "${test_fonts_bundle_prefetch[0]}")
 v8_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/v8/v8/+archive/${v8_rev}.tar.gz")")
 zlib_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/zlib/+archive/${zlib_rev}.tar.gz")")
 simdutf_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/simdutf/+archive/${simdutf_rev}.tar.gz")")
@@ -170,6 +181,8 @@ set_string_var libcxxHash "$libcxx_hash"
 set_string_var generateShimHeadersHash "$generate_shim_headers_hash"
 set_string_var testFontsRev "$test_fonts_rev"
 set_string_var testFontsHash "$test_fonts_hash"
+set_string_var testFontsBundleObject "$test_fonts_bundle_object"
+set_string_var testFontsBundleHash "$test_fonts_bundle_hash"
 set_string_var v8Rev "$v8_rev"
 set_string_var v8Hash "$v8_hash"
 set_string_var zlibRev "$zlib_rev"
