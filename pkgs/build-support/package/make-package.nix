@@ -31,27 +31,17 @@ let
       this.extend (
         this: old:
         let
-          # Read name / pname / version directly off the layer
-          # state (`src` = prior layer `old` / the new `this`) rather
-          # than from `src.public`. Layers that merge `this.stdenvArgs`
-          # into their `public` (e.g. `layers.stdenvMkDerivation`)
-          # otherwise create a cycle here when the user installs
-          # an entangled override: reading `src.public.name` would
-          # force `this.stdenvArgs`, which in turn depends on the
-          # overlay this very `attrsView` is being computed for.
-          # `name` / `version` are set top-level on `this` by the
-          # user layer; `pname` is seeded here from `src.name` when
-          # a version is present, mirroring baseLayer's public
-          # surface.
           attrsView =
             src:
             (src.stdenvArgs or { })
-            // lib.optionalAttrs (src ? version) {
-              pname = src.name;
-              inherit (src) version;
+            // lib.optionalAttrs (src.public ? pname) {
+              inherit (src.public) pname;
             }
-            // lib.optionalAttrs (src ? name) {
-              inherit (src) name;
+            // lib.optionalAttrs (src.public ? version) {
+              inherit (src.public) version;
+            }
+            // lib.optionalAttrs (src.public ? name) {
+              inherit (src.public) name;
             }
             // {
               passthru = src.public.passthru or { };
@@ -272,12 +262,6 @@ let
         and `pkgs/build-support/lib/meson.nix`
       - `NIX_MAIN_PROGRAM` injection from `meta.mainProgram`
 
-    Historically these were hand-rolled inside `mk-derivation.nix`,
-    which meant every package using `mkPackage` directly had to
-    reimplement them (or miss them entirely; cf. the pre-refactor
-    hello package, which set `env = { ... }` at the layer level
-    where nothing read it).
-
     Use this layer instead of `layers.derivation` when you want full
     `stdenv.mkDerivation` semantics. `mkDerivationAsPackage` is built
     on top of it. `layers.derivation` stays as a minimal alternative
@@ -340,41 +324,18 @@ let
         inherit (this.public) meta;
         attrs = checkedAttrs;
       };
+      # Expose `stdenv` on the layer state (and therefore on
+      # `pkg.internals.stdenv`) so consumers that *deliberately*
+      # need it can reach in via `internals` -- the presence of an
+      # `internals` access flagging the dependency as something to
+      # eventually clean up. Not put on `public` to keep the user-
+      # facing surface narrow.
+      inherit stdenv;
       drvAttrs = derivationArg // checkedEnv;
       drvOutAttrs = builtins.derivationStrict this.drvAttrs;
       public =
         old.public
-        # Mirror legacy `extendDerivation`'s behaviour of exposing
-        # the raw derivation args (src, patches, name, pname,
-        # version, ...) on the package attrset so downstream tools
-        # that read them directly (e.g.
-        # `pkgs/build-support/src-only/tests.nix` reading
-        # `hello.patches`) keep working against mkPackage-based
-        # packages. `this.stdenvArgs` is a plain attrset computed by
-        # earlier layers with no fixpoint dependency on `public`
-        # itself, so merging it here does not create a cycle (unlike
-        # `this.drvAttrs`, which flows through
-        # `makeDerivationArgument`).
-        // this.stdenvArgs
         // {
-          # `stdenv.mkDerivation`'s `makeDerivationArgument` adds
-          # `inherit stdenv` to the derivation args, which legacy
-          # `extendDerivation` then exposes on the package attrset.
-          # Mirror that explicitly here so tools that read
-          # `pkg.stdenv` (e.g. `pkgs/build-support/src-only/tests.nix`)
-          # work the same against mkPackage-based packages. Reading
-          # the layer's `stdenv` parameter directly is safe (no
-          # fixpoint dependency).
-          inherit stdenv;
-          # `makeDerivationArgument` sets `system =
-          # stdenv.buildPlatform.system` on every derivation; legacy
-          # `extendDerivation` then mirrors it onto the package. Tools
-          # like `pkgs/top-level/packages-info.nix` read `pkg.system`
-          # directly, so expose it the same way here. Read from
-          # `stdenv.buildPlatform` rather than `this.drvAttrs.system`
-          # to avoid pulling the whole derivation argument pipeline
-          # into the fixpoint path of `public`.
-          inherit (stdenv.buildPlatform) system;
           meta = checkMeta.commonMeta {
             inherit (this) validity pos;
             attrs = checkedAttrs;
