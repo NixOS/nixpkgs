@@ -14,33 +14,33 @@ in
       lib.types.submodule {
         options.policy = {
           retention = {
-            keepLatest = lib.mkOption {
-              type = with lib.types; nullOr ints.positive;
+            keep-latest = lib.mkOption {
+              type = with lib.types; nullOr ints.unsigned;
               default = null;
               description = "Number of latest snapshots to keep.";
             };
-            keepHourly = lib.mkOption {
-              type = with lib.types; nullOr ints.positive;
+            keep-hourly = lib.mkOption {
+              type = with lib.types; nullOr ints.unsigned;
               default = null;
               description = "Number of hourly snapshots to keep.";
             };
-            keepDaily = lib.mkOption {
-              type = with lib.types; nullOr ints.positive;
+            keep-daily = lib.mkOption {
+              type = with lib.types; nullOr ints.unsigned;
               default = null;
               description = "Number of daily snapshots to keep.";
             };
-            keepWeekly = lib.mkOption {
-              type = with lib.types; nullOr ints.positive;
+            keep-weekly = lib.mkOption {
+              type = with lib.types; nullOr ints.unsigned;
               default = null;
               description = "Number of weekly snapshots to keep.";
             };
-            keepMonthly = lib.mkOption {
-              type = with lib.types; nullOr ints.positive;
+            keep-monthly = lib.mkOption {
+              type = with lib.types; nullOr ints.unsigned;
               default = null;
               description = "Number of monthly snapshots to keep.";
             };
-            keepAnnual = lib.mkOption {
-              type = with lib.types; nullOr ints.positive;
+            keep-annual = lib.mkOption {
+              type = with lib.types; nullOr ints.unsigned;
               default = null;
               description = "Number of annual snapshots to keep.";
             };
@@ -86,7 +86,7 @@ in
                 "*.log"
               ];
             };
-            ignoreDotFiles = lib.mkOption {
+            add-dot-ignore = lib.mkOption {
               type = lib.types.listOf lib.types.str;
               default = [ ];
               description = "List of dot-ignore files to source ignore patterns from.";
@@ -95,52 +95,45 @@ in
                 ".kopiaignore"
               ];
             };
-            ignoreCacheDirs = lib.mkOption {
+            ignore-cache-dirs = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
               description = "Whether to ignore cache directories.";
             };
-            maxFileSize = lib.mkOption {
+            max-file-size = lib.mkOption {
               type = with lib.types; nullOr ints.positive;
               default = null;
               description = "Maximum file size (in bytes) to include in backup.";
             };
-            oneFileSystem = lib.mkOption {
+            one-file-system = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
               description = "Whether to stay within one filesystem when finding files.";
             };
-            noParentIgnore = lib.mkOption {
-              type = with lib.types; nullOr bool;
-              default = null;
-              description = "Whether to not inherit ignore patterns from parent directories.";
-            };
           };
 
           errorHandling = {
-            ignoreFileErrors = lib.mkOption {
+            ignore-file-errors = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
               description = "Whether to ignore errors reading files.";
             };
-            ignoreDirectoryErrors = lib.mkOption {
+            ignore-dir-errors = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
               description = "Whether to ignore errors reading directories.";
             };
-            ignoreUnknownTypes = lib.mkOption {
+            ignore-unknown-types = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
               description = "Whether to ignore unknown file types.";
             };
           };
 
-          splitter = {
-            algorithm = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              description = "Splitter algorithm to use.";
-            };
+          splitter = lib.mkOption {
+            type = with lib.types; nullOr str;
+            default = null;
+            description = "Splitter algorithm to use.";
           };
         };
       }
@@ -150,97 +143,36 @@ in
 
   config =
     let
-      # Build policy CLI args from non-null options using a data-driven approach
       mkPolicyArgs =
         backup:
         let
           p = backup.policy;
 
-          # Declarative mapping: CLI flag → option value
-          flagMap = [
-            {
-              flag = "keep-latest";
-              value = p.retention.keepLatest;
-            }
-            {
-              flag = "keep-hourly";
-              value = p.retention.keepHourly;
-            }
-            {
-              flag = "keep-daily";
-              value = p.retention.keepDaily;
-            }
-            {
-              flag = "keep-weekly";
-              value = p.retention.keepWeekly;
-            }
-            {
-              flag = "keep-monthly";
-              value = p.retention.keepMonthly;
-            }
-            {
-              flag = "keep-annual";
-              value = p.retention.keepAnnual;
-            }
-            {
-              flag = "compression";
-              value = p.compression;
-            }
-            {
-              flag = "ignore-cache-dirs";
-              value = p.files.ignoreCacheDirs;
-            }
-            {
-              flag = "max-file-size";
-              value = p.files.maxFileSize;
-            }
-            {
-              flag = "one-file-system";
-              value = p.files.oneFileSystem;
-            }
-            {
-              flag = "no-parent-ignore";
-              value = p.files.noParentIgnore;
-            }
-            {
-              flag = "ignore-file-errors";
-              value = p.errorHandling.ignoreFileErrors;
-            }
-            {
-              flag = "ignore-dir-errors";
-              value = p.errorHandling.ignoreDirectoryErrors;
-            }
-            {
-              flag = "ignore-unknown-types";
-              value = p.errorHandling.ignoreUnknownTypes;
-            }
-            {
-              flag = "splitter";
-              value = p.splitter.algorithm;
-            }
-          ];
-
-          # List-type args (expand one value → multiple --flag= args)
-          listFlagMap = [
-            {
-              flag = "add-ignore";
-              values = p.files.ignore;
-            }
-            {
-              flag = "add-dot-ignore";
-              values = p.files.ignoreDotFiles;
-            }
-          ];
-
-          # Single dispatcher: null → skip, bool → boolToString, else → toString
           mkArg =
-            { flag, value }:
+            flag: value:
             lib.optional (value != null)
               "--${flag}=${if lib.isBool value then lib.boolToString value else toString value}";
 
-          mkListArgs = { flag, values }: map (v: "--${flag}=${lib.escapeShellArg v}") values;
+          mkListArgs = flag: values: map (v: "--${flag}=${lib.escapeShellArg v}") values;
         in
-        lib.concatLists (map mkArg flagMap) ++ lib.concatLists (map mkListArgs listFlagMap);
+        lib.concatLists [
+          (mkArg "keep-latest" p.retention.keep-latest)
+          (mkArg "keep-hourly" p.retention.keep-hourly)
+          (mkArg "keep-daily" p.retention.keep-daily)
+          (mkArg "keep-weekly" p.retention.keep-weekly)
+          (mkArg "keep-monthly" p.retention.keep-monthly)
+          (mkArg "keep-annual" p.retention.keep-annual)
+          (mkArg "compression" p.compression)
+          (mkArg "ignore-cache-dirs" p.files.ignore-cache-dirs)
+          (mkArg "max-file-size" p.files.max-file-size)
+          (mkArg "one-file-system" p.files.one-file-system)
+          (mkArg "ignore-file-errors" p.errorHandling.ignore-file-errors)
+          (mkArg "ignore-dir-errors" p.errorHandling.ignore-dir-errors)
+          (mkArg "ignore-unknown-types" p.errorHandling.ignore-unknown-types)
+          (mkArg "splitter" p.splitter)
+          (mkListArgs "add-ignore" p.files.ignore)
+          (mkListArgs "add-dot-ignore" p.files.add-dot-ignore)
+        ];
     in
     lib.mkIf (cfg.backups != { }) {
       systemd.services = lib.mapAttrs' (

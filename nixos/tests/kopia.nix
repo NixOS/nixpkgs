@@ -105,7 +105,7 @@ in
           inherit passwordFile;
           paths = [ "/opt" ];
           timerConfig = null;
-          policy.retention.keepDaily = 3;
+          policy.retention.keep-daily = 3;
           policy.compression = "zstd";
         };
 
@@ -222,9 +222,9 @@ in
           timerConfig = null;
           policy = {
             retention = {
-              keepDaily = 7;
-              keepWeekly = 4;
-              keepMonthly = 6;
+              keep-daily = 7;
+              keep-weekly = 4;
+              keep-monthly = 6;
             };
             compression = "zstd";
             files = {
@@ -232,11 +232,11 @@ in
                 "*.tmp"
                 "*.log"
               ];
-              ignoreCacheDirs = true;
+              ignore-cache-dirs = true;
             };
             errorHandling = {
-              ignoreFileErrors = true;
-              ignoreDirectoryErrors = true;
+              ignore-file-errors = true;
+              ignore-dir-errors = true;
             };
           };
         };

@@ -65,11 +65,11 @@
             paths = [ "/persistent" ];
             policy = {
               retention = {
-                keepLatest = 5;
-                keepDaily = 30;
-                keepWeekly = 4;
-                keepMonthly = 3;
-                keepAnnual = 0;
+                keep-latest = 5;
+                keep-daily = 30;
+                keep-weekly = 4;
+                keep-monthly = 3;
+                keep-annual = 0;
               };
               compression = "pgzip";
             };
