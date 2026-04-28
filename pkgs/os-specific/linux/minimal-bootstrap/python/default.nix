@@ -115,4 +115,17 @@ bash.runCommand "${pname}-${version}"
       ! -name 'math*' \
       ! -name 'select*' \
       -delete
+
+    rm -rf \
+      $out/lib/python*/ensurepip \
+      $out/lib/python*/idlelib \
+      $out/lib/python*/site-packages \
+      $out/lib/python*/test \
+      $out/lib/python*/tkinter \
+      $out/lib/python*/turtledemo \
+      $out/share/man
+
+    rm -f $out/bin/idle* $out/bin/pip*
+    find $out/lib/python* -type d -name __pycache__ -prune -exec rm -rf {} +
+    strip --strip-unneeded $out/bin/python${lib.versions.majorMinor version} $out/lib/python*/lib-dynload/*.so || true
   ''
