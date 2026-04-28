@@ -3433,7 +3433,7 @@ with pkgs;
 
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
-  translatepy = with python3.pkgs; toPythonApplication translatepy;
+  translatepy = with python3Packages; toPythonApplication translatepy;
 
   trytond = with python3Packages; toPythonApplication trytond;
 
