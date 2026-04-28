@@ -11665,7 +11665,7 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  spyder = with python3.pkgs; toPythonApplication spyder;
+  spyder = with python3Packages; toPythonApplication spyder;
 
   tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
     python3 = python312; # fails to build otherwise
