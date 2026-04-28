@@ -6,7 +6,7 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  nodejs_22,
+  nodejs-slim_22,
   python3,
   python3Packages,
   sqlite,
@@ -15,8 +15,8 @@
 }:
 
 let
-  nodejs = nodejs_22;
-  pnpm = pnpm_10.override { inherit nodejs; };
+  nodejs-slim = nodejs-slim_22;
+  pnpm = pnpm_10.override { inherit nodejs-slim; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seerr";
@@ -41,14 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     python3
     python3Packages.distutils
-    nodejs
+    nodejs-slim
     makeWrapper
     pnpmConfigHook
     pnpm
   ];
 
   preBuild = ''
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs-slim}
     pushd node_modules
     pnpm rebuild bcrypt sqlite3
     popd
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/bin
-    makeWrapper '${nodejs}/bin/node' "$out/bin/seerr" \
+    makeWrapper '${nodejs-slim}/bin/node' "$out/bin/seerr" \
       --add-flags "$out/share/dist/index.js" \
       --chdir "$out/share" \
       --set NODE_ENV production

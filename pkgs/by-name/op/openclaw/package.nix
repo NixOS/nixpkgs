@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm_10,
-  nodejs_22,
+  nodejs-slim_22,
   makeWrapper,
   versionCheckHook,
   rolldown,
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pnpmConfigHook
     pnpm_10
-    nodejs_22
+    nodejs-slim_22
     makeWrapper
     installShellFiles
   ];
@@ -83,7 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Remove symlinks pointing back to the build sandbox
     find $libdir/dist/extensions -type l -lname "$NIX_BUILD_TOP/*" -delete
 
-    makeWrapper ${lib.getExe nodejs_22} $out/bin/openclaw \
+    makeWrapper ${lib.getExe nodejs-slim_22} $out/bin/openclaw \
       --add-flags "$libdir/dist/index.js" \
       --set NODE_PATH "$libdir/node_modules"
     ln -s $out/bin/openclaw $out/bin/moltbot
