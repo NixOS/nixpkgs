@@ -65,6 +65,10 @@ let
       # This is convenient to have as a parameter so the stdenv "adapters" work better
       mkDerivationFromStdenv ?
         stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
+
+      # TODO: unify with the above
+      makeDerivationArgumentFromStdenv ?
+        stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).makeDerivationArgument,
     }:
 
     let
@@ -203,6 +207,8 @@ let
       inherit (hostPlatform) system;
 
       mkDerivation = mkDerivationFromStdenv stdenv;
+
+      makeDerivationArgument = makeDerivationArgumentFromStdenv stdenv;
 
       inherit fetchurlBoot;
 

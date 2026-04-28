@@ -52,6 +52,17 @@ let
       '')
     ];
 
+  # TODO: Base this on `devShell` attribute provided by the package, instead
+  #       of prying the internals.
+  #       Context: https://github.com/NixOS/nix/issues/7501
+  getGuts =
+    drvPkg:
+    drvPkg
+    // {
+      inherit (drvPkg.internals) drvAttrs;
+      outputs = drvPkg.internals.stdenvArgs.outputs or [ "out" ];
+    };
+
   nginxArguments =
     let
       nginxPort = "80";
@@ -700,18 +711,20 @@ rec {
       mkdir -p ./home/alice
       chown 1000 ./home/alice
       ln -s ${
-        pkgs.hello.overrideAttrs (
-          finalAttrs: prevAttrs: {
-            # A unique `hello` to make sure that it isn't included via another mechanism by accident.
-            configureFlags = prevAttrs.configureFlags or [ ] ++ [
-              " --program-prefix=layeredImageWithFakeRootCommands-"
-            ];
-            doCheck = false;
-            versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-            meta = prevAttrs.meta // {
-              mainProgram = "layeredImageWithFakeRootCommands-hello";
-            };
-          }
+        getGuts (
+          pkgs.hello.overrideAttrs (
+            finalAttrs: prevAttrs: {
+              # A unique `hello` to make sure that it isn't included via another mechanism by accident.
+              configureFlags = prevAttrs.configureFlags or [ ] ++ [
+                " --program-prefix=layeredImageWithFakeRootCommands-"
+              ];
+              doCheck = false;
+              versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+              meta = prevAttrs.meta // {
+                mainProgram = "layeredImageWithFakeRootCommands-hello";
+              };
+            }
+          )
         )
       } ./hello
     '';
@@ -896,7 +909,7 @@ rec {
   nix-shell-basic = streamNixShellImage {
     name = "nix-shell-basic";
     tag = "latest";
-    drv = pkgs.hello;
+    drv = getGuts pkgs.hello;
   };
 
   nix-shell-hook = streamNixShellImage {
@@ -999,7 +1012,7 @@ rec {
   nix-shell-build-derivation = streamNixShellImage {
     name = "nix-shell-build-derivation";
     tag = "latest";
-    drv = pkgs.hello;
+    drv = getGuts pkgs.hello;
     run = ''
       buildDerivation
       $out/bin/hello

@@ -20,8 +20,13 @@ let
                   meta
                   name
                   outputName
-                  system
                   ;
+                # `mkPackage`-based packages keep `system` off the
+                # user-facing surface; fall through to
+                # `internals.drvAttrs.system` for those. Legacy
+                # `stdenv.mkDerivation` derivations expose `system`
+                # via `extendDerivation`.
+                system = value.system or value.internals.drvAttrs.system;
                 ${if value ? "outputs" then "outputs" else null} = lib.listToAttrs (
                   lib.map (x: {
                     name = x;

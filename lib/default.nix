@@ -195,6 +195,7 @@ let
         composeManyExtensions
         makeExtensible
         makeExtensibleWithCustomName
+        encapsulate
         toExtension
         ;
       inherit (self.attrsets)
