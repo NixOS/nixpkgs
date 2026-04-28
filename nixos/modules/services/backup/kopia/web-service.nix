@@ -94,7 +94,7 @@ in
         }
         {
           assertion = (backup.web.tlsCertFile != null) == (backup.web.tlsKeyFile != null);
-          message = "services.kopia.backups.${name}: both web.tlsCertFile and web.tlsKeyFile must be set";
+          message = "services.kopia.backups.${name}: web.tlsCertFile and web.tlsKeyFile must be set together: specify both to enable TLS, or neither to disable it";
         }
       ]) cfg.backups
     );
