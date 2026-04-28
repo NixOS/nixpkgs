@@ -19,12 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.vscodeAnsibleVersion}";
     hash = "sha256-DsEW3xP8Fa9nwPuyEFVqG6rvAZgr4TDB6jhyixdvqt8=";
   };
+  patches = [
+    # Remove when updating, the project migrated to pnpm in https://github.com/ansible/vscode-ansible/commit/afa700ff78ad0839df446d18cb26e71b28559af4
+    ./yarn-4.14-support.patch
+  ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-GScYVFdG8MMtPjtXfz7e6Y+A1tFMF9T8suvU+/BhsHY=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-Lm3cz+ydOee34J2tnlMQuSTzBzFKFpQTXcMreMS3ZiU=";
   };
 
   nativeBuildInputs = [
