@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Novel data lake based on super-structured data";
     homepage = "https://zed.brimdata.io";
-    changelog = "https://github.com/brimdata/zed/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       dit7ya
