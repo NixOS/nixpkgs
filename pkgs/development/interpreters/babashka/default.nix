@@ -8,11 +8,11 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "babashka-unwrapped";
-  version = "1.12.217";
+  version = "1.12.218";
 
   src = fetchurl {
     url = "https://github.com/babashka/babashka/releases/download/v${finalAttrs.version}/babashka-${finalAttrs.version}-standalone.jar";
-    sha256 = "sha256-5Nnzx2chre+h0SnM5spwiR9r4gjlyfc2FbgYa0spM34=";
+    sha256 = "sha256-CEApb2noPYfRYRDTo1RBLOZELvEuxGO4HW1CB//bky8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
