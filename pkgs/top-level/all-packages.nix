@@ -1598,7 +1598,7 @@ with pkgs;
     charles5
     ;
 
-  libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
+  libtensorflow = python3Packages.tensorflow-build.libtensorflow;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
 
