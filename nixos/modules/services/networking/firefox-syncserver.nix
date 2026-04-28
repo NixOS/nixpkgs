@@ -27,7 +27,13 @@ let
   # where the syncserver starts before its database and role exist.
   dbService = if dbIsMySQL then "mysql.service" else "postgresql.target";
 
-  syncserver = cfg.package.override { dbBackend = cfg.database.type; };
+  syncserver =
+    if cfg.package != null then
+      cfg.package
+    else if dbIsMySQL then
+      pkgs.syncstorage-rs-mysql
+    else
+      pkgs.syncstorage-rs-pgsql;
 
   format = pkgs.formats.toml { };
   settings = {
@@ -139,7 +145,20 @@ in
         {option}`${opt.singleNode.enable}` does this automatically when enabled
       '';
 
-      package = lib.mkPackageOption pkgs "syncstorage-rs" { };
+      package = lib.mkOption {
+        type = lib.types.nullOr lib.types.package;
+        default = null;
+        defaultText = lib.literalExpression ''
+          if config.${opt.database.type} == "mysql" then
+            pkgs.syncstorage-rs-mysql
+          else
+            pkgs.syncstorage-rs-pgsql
+        '';
+        description = ''
+          Syncstorage server package to use. When `null`, the package is
+          selected automatically based on {option}`${opt.database.type}`.
+        '';
+      };
 
       database.type = lib.mkOption {
         type = lib.types.enum [
