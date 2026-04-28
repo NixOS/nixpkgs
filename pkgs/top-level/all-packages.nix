@@ -5668,7 +5668,7 @@ with pkgs;
 
   doit = with python3Packages; toPythonApplication doit;
 
-  dot2tex = with python3.pkgs; toPythonApplication dot2tex;
+  dot2tex = with python3Packages; toPythonApplication dot2tex;
 
   doxygen_gui = lowPrio (doxygen.override { withGui = true; });
 
