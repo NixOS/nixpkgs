@@ -10886,7 +10886,7 @@ with pkgs;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
-  beanquery = with python3.pkgs; toPythonApplication beanquery;
+  beanquery = with python3Packages; toPythonApplication beanquery;
 
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
