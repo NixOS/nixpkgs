@@ -6,9 +6,10 @@
   pnpmConfigHook,
   fetchurl,
   installShellFiles,
-  nodejs,
+  nodejs-slim,
   testers,
   withNode ? true,
+  withNPM ? false,
   version,
   hash,
   buildPackages,
@@ -30,11 +31,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rm -r dist/reflink.*node dist/vendor
   '';
 
-  buildInputs = lib.optionals withNode [ nodejs ];
+  buildInputs = lib.optional withNode nodejs-slim ++ lib.optional withNPM nodejs-slim.npm;
 
   nativeBuildInputs = [
     installShellFiles
-    nodejs
+    nodejs-slim
   ];
 
   installPhase = ''

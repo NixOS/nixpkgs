@@ -5,7 +5,7 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs_24,
+  nodejs-slim_24,
   makeWrapper,
   prisma-engines_6,
   ffmpeg,
@@ -31,7 +31,7 @@ let
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
   };
 
-  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
+  pnpm' = pnpm_10.override { nodejs-slim = nodejs-slim_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pnpmConfigHook
     pnpm'
-    nodejs_24
+    nodejs-slim_24
     makeWrapper
     # for sharp build:
     node-gyp
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Force build of sharp against native libvips (requires running install scripts).
     # This is necessary for supporting old CPUs (ie. without SSE 4.2 instruction set).
-    pnpm config set nodedir ${nodejs_24}
+    pnpm config set nodedir ${nodejs-slim_24}
     pnpm install --force --offline --frozen-lockfile
 
     pnpm build
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
-      makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
+      makeWrapper ${lib.getExe nodejs-slim_24} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
         --set NODE_ENV production \
         --set ZIPLINE_GIT_SHA "$(<$src/.git_head)" \
