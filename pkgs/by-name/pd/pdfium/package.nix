@@ -1,5 +1,6 @@
 {
   lib,
+  pdfium,
   stdenv,
   fetchurl,
   fetchzip,
@@ -561,6 +562,11 @@ stdenv.mkDerivation (finalAttrs: {
         versionInfo.patch
       ]
     );
+    tests = lib.optionalAttrs (!withV8 && stdenv.hostPlatform.isLinux) {
+      clang = pdfium.override {
+        stdenv = llvmPackages.stdenv;
+      };
+    };
   };
 
   meta = {
