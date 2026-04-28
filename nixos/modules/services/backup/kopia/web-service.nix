@@ -37,26 +37,21 @@ in
             '';
           };
 
-          serverPassword = lib.mkOption {
-            type = with lib.types; nullOr str;
-            default = null;
-            description = ''
-              Password for the Kopia web server (basic auth).
-              Mutually exclusive with {option}`web.serverPasswordFile`.
-
-              ::: {.warning}
-              This password will be stored in the Nix store in plain text.
-              Prefer {option}`web.serverPasswordFile` instead.
-              :::
-            '';
-          };
-
           serverPasswordFile = lib.mkOption {
             type = with lib.types; nullOr str;
             default = null;
             description = ''
               Path to a file containing the password for the Kopia web
-              server. Mutually exclusive with {option}`web.serverPassword`.
+              server.
+
+              For tests or examples, this can be provided with a store path:
+
+              ```nix
+              serverPasswordFile = pkgs.writeText "kopia-web-password" "my-super-safe-secret";
+              ```
+
+              This still stores the password in the Nix store. For production
+              secrets, prefer a runtime secret file such as `/run/secrets/...`.
             '';
           };
 
@@ -84,27 +79,14 @@ in
     assertions = lib.flatten (
       lib.mapAttrsToList (name: backup: [
         {
-          assertion =
-            backup.web.enable -> (backup.web.serverPassword != null || backup.web.serverPasswordFile != null);
-          message = "services.kopia.backups.${name}: web.serverPassword or web.serverPasswordFile must be set when web.enable is true";
-        }
-        {
-          assertion = backup.web.serverPassword == null || backup.web.serverPasswordFile == null;
-          message = "services.kopia.backups.${name}: web.serverPassword and web.serverPasswordFile are mutually exclusive";
+          assertion = backup.web.enable -> backup.web.serverPasswordFile != null;
+          message = "services.kopia.backups.${name}: web.serverPasswordFile must be set when web.enable is true";
         }
         {
           assertion = (backup.web.tlsCertFile != null) == (backup.web.tlsKeyFile != null);
           message = "services.kopia.backups.${name}: web.tlsCertFile and web.tlsKeyFile must be set together: specify both to enable TLS, or neither to disable it";
         }
       ]) cfg.backups
-    );
-
-    warnings = lib.flatten (
-      lib.mapAttrsToList (
-        name: backup:
-        lib.optional (backup.web.serverPassword != null)
-          "services.kopia.backups.${name}: web.serverPassword is set as plain text and will be world-readable in the Nix store. Consider using web.serverPasswordFile instead."
-      ) cfg.backups
     );
 
     systemd.services = lib.mapAttrs' (
@@ -120,12 +102,7 @@ in
           set -euo pipefail
           export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
           export KOPIA_SERVER_USERNAME=${lib.escapeShellArg backup.web.serverUsername}
-          ${
-            if backup.web.serverPassword != null then
-              "export KOPIA_SERVER_PASSWORD=${lib.escapeShellArg backup.web.serverPassword}"
-            else
-              ''export KOPIA_SERVER_PASSWORD="$(cat ${lib.escapeShellArg backup.web.serverPasswordFile})"''
-          }
+          export KOPIA_SERVER_PASSWORD="$(cat ${lib.escapeShellArg backup.web.serverPasswordFile})"
 
           exec ${kopiaExe} server start ${tlsArgs} --address ${lib.escapeShellArg backup.web.address}
         '';

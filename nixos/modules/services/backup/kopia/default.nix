@@ -22,6 +22,15 @@
                 type = lib.types.str;
                 description = ''
                   Path to a file containing the repository password, passed in via `KOPIA_PASSWORD`.
+
+                  For tests or examples, this can be provided with a store path:
+
+                  ```nix
+                  passwordFile = pkgs.writeText "kopia-password" "my-super-safe-secret";
+                  ```
+
+                  This still stores the password in the Nix store. For production
+                  secrets, prefer a runtime secret file such as `/run/secrets/...`.
                 '';
                 example = "/run/secrets/kopia-password";
               };

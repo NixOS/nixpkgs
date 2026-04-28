@@ -129,13 +129,13 @@ in
           backupCleanupCommand = "#!/bin/sh\ntouch /var/lib/kopia/with-hooks/cleanup-ran";
         };
 
-        # Test: SFTP backend with plain text password
+        # Test: SFTP backend with password file
         sftp-basic = {
           repository.sftp = {
             host = "server";
             path = "/home/kopia/repo";
             username = "kopia";
-            password = "kopia-sftp-pass";
+            passwordFile = sftpPasswordFile;
             knownHostsFile = "/root/.ssh/known_hosts";
           };
           inherit passwordFile;
@@ -157,12 +157,12 @@ in
           timerConfig = null;
         };
 
-        # Test: WebDAV backend with plain text credentials
+        # Test: WebDAV backend with password file
         webdav-basic = {
           repository.webdav = {
             url = "http://server:8080/";
             username = "kopia";
-            password = "kopia-webdav-pass";
+            passwordFile = webdavPasswordFile;
           };
           inherit passwordFile;
           paths = [ "/opt" ];
@@ -188,20 +188,6 @@ in
             endpoint = "server:9000";
             accessKeyIdFile = s3AccessKeyIdFile;
             secretAccessKeyFile = s3SecretAccessKeyFile;
-            disableTLS = true;
-          };
-          inherit passwordFile;
-          paths = [ "/opt" ];
-          timerConfig = null;
-        };
-
-        # Test: S3 backend with plain text credentials
-        s3-plaintext = {
-          repository.s3 = {
-            bucket = "kopia-test-plaintext";
-            endpoint = "server:9000";
-            accessKeyId = "minioadmin";
-            secretAccessKey = "minioadmin";
             disableTLS = true;
           };
           inherit passwordFile;
@@ -369,19 +355,10 @@ in
             "${pkgs.minio-client}/bin/mc alias set local http://localhost:9000 minioadmin minioadmin"
         )
         server.succeed("${pkgs.minio-client}/bin/mc mb local/kopia-test")
-        server.succeed("${pkgs.minio-client}/bin/mc mb local/kopia-test-plaintext")
         machine.succeed("systemctl start kopia-repository-s3-basic.service")
         machine.succeed("systemctl start kopia-snapshot-s3-basic.service")
         machine.succeed(
             "${kopiaEnv "s3-basic"}"
-            " kopia snapshot list /opt --json | jq -e 'length == 1'"
-        )
-
-    with subtest("s3-plaintext: repository connect with plain text credentials"):
-        machine.succeed("systemctl start kopia-repository-s3-plaintext.service")
-        machine.succeed("systemctl start kopia-snapshot-s3-plaintext.service")
-        machine.succeed(
-            "${kopiaEnv "s3-plaintext"}"
             " kopia snapshot list /opt --json | jq -e 'length == 1'"
         )
 

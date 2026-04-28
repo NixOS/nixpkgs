@@ -53,41 +53,21 @@ let
         '';
       };
 
-      accessKeyId = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          AWS access key ID for S3 authentication.
-          Mutually exclusive with {option}`accessKeyIdFile`.
-
-          ::: {.warning}
-          This value will be stored in the Nix store in plain text.
-          Prefer {option}`accessKeyIdFile` instead.
-          :::
-        '';
-      };
-
       accessKeyIdFile = lib.mkOption {
         type = with lib.types; nullOr str;
         default = null;
         description = ''
           Path to a file containing the AWS access key ID.
           Read at runtime for secrets management.
-          Mutually exclusive with {option}`accessKeyId`.
-        '';
-      };
 
-      secretAccessKey = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          AWS secret access key for S3 authentication.
-          Mutually exclusive with {option}`secretAccessKeyFile`.
+          For tests or examples, this can be provided with a store path:
 
-          ::: {.warning}
-          This value will be stored in the Nix store in plain text.
-          Prefer {option}`secretAccessKeyFile` instead.
-          :::
+          ```nix
+          accessKeyIdFile = pkgs.writeText "kopia-s3-access-key-id" "my-super-safe-secret";
+          ```
+
+          This still stores the secret in the Nix store. For production
+          secrets, prefer a runtime secret file such as `/run/secrets/...`.
         '';
       };
 
@@ -97,21 +77,15 @@ let
         description = ''
           Path to a file containing the AWS secret access key.
           Read at runtime for secrets management.
-          Mutually exclusive with {option}`secretAccessKey`.
-        '';
-      };
 
-      sessionToken = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          AWS session token for temporary credentials.
-          Mutually exclusive with {option}`sessionTokenFile`.
+          For tests or examples, this can be provided with a store path:
 
-          ::: {.warning}
-          This value will be stored in the Nix store in plain text.
-          Prefer {option}`sessionTokenFile` instead.
-          :::
+          ```nix
+          secretAccessKeyFile = pkgs.writeText "kopia-s3-secret-access-key" "my-super-safe-secret";
+          ```
+
+          This still stores the secret in the Nix store. For production
+          secrets, prefer a runtime secret file such as `/run/secrets/...`.
         '';
       };
 
@@ -121,7 +95,15 @@ let
         description = ''
           Path to a file containing the AWS session token.
           Read at runtime for secrets management.
-          Mutually exclusive with {option}`sessionToken`.
+
+          For tests or examples, this can be provided with a store path:
+
+          ```nix
+          sessionTokenFile = pkgs.writeText "kopia-s3-session-token" "my-super-safe-secret";
+          ```
+
+          This still stores the secret in the Nix store. For production
+          secrets, prefer a runtime secret file such as `/run/secrets/...`.
         '';
       };
     };
@@ -179,26 +161,20 @@ let
         '';
       };
 
-      password = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          SFTP password for authentication.
-          Mutually exclusive with {option}`passwordFile`.
-
-          ::: {.warning}
-          This password will be stored in the Nix store in plain text.
-          Prefer {option}`passwordFile` or {option}`keyFile` instead.
-          :::
-        '';
-      };
-
       passwordFile = lib.mkOption {
         type = with lib.types; nullOr str;
         default = null;
         description = ''
           Path to a file containing the SFTP password.
-          Mutually exclusive with {option}`password`.
+
+          For tests or examples, this can be provided with a store path:
+
+          ```nix
+          passwordFile = pkgs.writeText "kopia-sftp-password" "my-super-safe-secret";
+          ```
+
+          This still stores the password in the Nix store. For production
+          secrets, prefer a runtime secret file such as `/run/secrets/...`.
 
           ::: {.warning}
           Password authentication is less secure than key-based authentication.
@@ -258,27 +234,21 @@ let
         '';
       };
 
-      password = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          WebDAV password for authentication.
-          Mutually exclusive with {option}`passwordFile`.
-
-          ::: {.warning}
-          This password will be stored in the Nix store in plain text.
-          Prefer {option}`passwordFile` instead.
-          :::
-        '';
-      };
-
       passwordFile = lib.mkOption {
         type = with lib.types; nullOr str;
         default = null;
         description = ''
           Path to a file containing the WebDAV password.
           Read at runtime for secrets management.
-          Mutually exclusive with {option}`password`.
+
+          For tests or examples, this can be provided with a store path:
+
+          ```nix
+          passwordFile = pkgs.writeText "kopia-webdav-password" "my-super-safe-secret";
+          ```
+
+          This still stores the password in the Nix store. For production
+          secrets, prefer a runtime secret file such as `/run/secrets/...`.
         '';
       };
 
@@ -343,24 +313,18 @@ in
 
   config =
     let
-      # Generate a shell snippet that sets a variable from either a literal value or a file.
-      # If both are null, returns the empty string.
-      mkCredentialExport =
+      # Generate a shell snippet that sets a variable from a file.
+      # If the file is null, returns the empty string.
+      mkCredentialFileExport =
         {
           varName,
-          value,
           valueFile,
           export ? true,
         }:
         let
           prefix = if export then "export " else "";
         in
-        if value != null then
-          "${prefix}${varName}=${lib.escapeShellArg value}"
-        else if valueFile != null then
-          ''${prefix}${varName}="$(cat ${lib.escapeShellArg valueFile})"''
-        else
-          "";
+        if valueFile != null then ''${prefix}${varName}="$(cat ${lib.escapeShellArg valueFile})"'' else "";
 
       # Generate the connect-or-create script body for a given backend type and args variable.
       mkConnectOrCreate = kopiaExe: backendType: argsVar: ''
@@ -383,29 +347,12 @@ in
             in
             [
               {
-                assertion = s3.accessKeyId != null || s3.accessKeyIdFile != null;
-                message = "${prefix}: one of repository.s3.accessKeyId or repository.s3.accessKeyIdFile must be set";
+                assertion = s3.accessKeyIdFile != null;
+                message = "${prefix}: repository.s3.accessKeyIdFile must be set";
               }
               {
-                assertion = s3.secretAccessKey != null || s3.secretAccessKeyFile != null;
-                message = "${prefix}: one of repository.s3.secretAccessKey or repository.s3.secretAccessKeyFile must be set";
-              }
-              # mutual exclusive options
-              {
-                assertion = s3.accessKeyId == null || s3.accessKeyIdFile == null;
-                message = "services.kopia.backups.${name}: repository.s3.accessKeyId and repository.s3.accessKeyIdFile are mutually exclusive";
-              }
-              {
-                assertion = s3.accessKeyId == null || s3.accessKeyIdFile == null;
-                message = "services.kopia.backups.${name}: repository.s3.accessKeyId and repository.s3.accessKeyIdFile are mutually exclusive";
-              }
-              {
-                assertion = s3.secretAccessKey == null || s3.secretAccessKeyFile == null;
-                message = "services.kopia.backups.${name}: repository.s3.secretAccessKey and repository.s3.secretAccessKeyFile are mutually exclusive";
-              }
-              {
-                assertion = s3.sessionToken == null || s3.sessionTokenFile == null;
-                message = "services.kopia.backups.${name}: repository.s3.sessionToken and repository.s3.sessionTokenFile are mutually exclusive";
+                assertion = s3.secretAccessKeyFile != null;
+                message = "${prefix}: repository.s3.secretAccessKeyFile must be set";
               }
             ]
           )
@@ -420,18 +367,13 @@ in
                 message = "${prefix}: one of repository.sftp.host or repository.sftp.hostFile must be set";
               }
               {
-                assertion = sftp.keyFile != null || sftp.password != null || sftp.passwordFile != null;
-                message = "${prefix}: at least one of repository.sftp.keyFile, repository.sftp.password, or repository.sftp.passwordFile must be set";
+                assertion = sftp.keyFile != null || sftp.passwordFile != null;
+                message = "${prefix}: at least one of repository.sftp.keyFile or repository.sftp.passwordFile must be set";
               }
 
-              # assert mutualExclusion options, mainly for secret handling
               {
                 assertion = sftp.host == null || sftp.hostFile == null;
                 message = "services.kopia.backups.${name}: repository.sftp.host and repository.sftp.hostFile are mutually exclusive";
-              }
-              {
-                assertion = sftp.password == null || sftp.passwordFile == null;
-                message = "services.kopia.backups.${name}: repository.sftp.password and repository.sftp.passwordFile are mutually exclusive";
               }
             ]
           )
@@ -446,7 +388,6 @@ in
                 message = "${prefix}: one of repository.webdav.url or repository.webdav.urlFile must be set";
               }
 
-              # assert mutualExclusion options, mainly for secret handling
               {
                 assertion = webdav.url == null || webdav.urlFile == null;
                 message = "services.kopia.backups.${name}: repository.webdav.url and repository.webdav.urlFile are mutually exclusive";
@@ -455,43 +396,7 @@ in
                 assertion = webdav.username == null || webdav.usernameFile == null;
                 message = "services.kopia.backups.${name}: repository.webdav.username and repository.webdav.usernameFile are mutually exclusive";
               }
-              {
-                assertion = webdav.password == null || webdav.passwordFile == null;
-                message = "services.kopia.backups.${name}: repository.webdav.password and repository.webdav.passwordFile are mutually exclusive";
-              }
             ]
-          )
-        ) cfg.backups
-      );
-
-      warnings = lib.flatten (
-        lib.mapAttrsToList (
-          name: backup:
-          lib.optionals (backup.repository ? s3) (
-            let
-              s3 = backup.repository.s3;
-            in
-
-            (lib.optional (s3.accessKeyId != null)
-              "services.kopia.backups.${name}: repository.s3.accessKeyId is set as plain text and will be world-readable in the Nix store. Consider using repository.s3.accessKeyIdFile instead."
-            )
-            ++ (lib.optional (s3.secretAccessKey != null)
-              "services.kopia.backups.${name}: repository.s3.secretAccessKey is set as plain text and will be world-readable in the Nix store. Consider using repository.s3.secretAccessKeyFile instead."
-            )
-            ++ (lib.optional (s3.sessionToken != null)
-              "services.kopia.backups.${name}: repository.s3.sessionToken is set as plain text and will be world-readable in the Nix store. Consider using repository.s3.sessionTokenFile instead."
-            )
-          )
-          ++ lib.optionals (backup.repository ? sftp) (
-
-            (lib.optional (backup.repository.sftp.password != null)
-              "services.kopia.backups.${name}: repository.sftp.password is set as plain text and will be world-readable in the Nix store. Consider using repository.sftp.passwordFile instead."
-            )
-          )
-          ++ lib.optionals (backup.repository ? webdav) (
-            (lib.optional (backup.repository.webdav.password != null)
-              "services.kopia.backups.${name}: repository.webdav.password is set as plain text and will be world-readable in the Nix store. Consider using repository.webdav.passwordFile instead."
-            )
           )
         ) cfg.backups
       );
@@ -514,19 +419,16 @@ in
                 s3 = repo.s3;
               in
               ''
-                ${mkCredentialExport {
+                ${mkCredentialFileExport {
                   varName = "AWS_ACCESS_KEY_ID";
-                  value = s3.accessKeyId;
                   valueFile = s3.accessKeyIdFile;
                 }}
-                ${mkCredentialExport {
+                ${mkCredentialFileExport {
                   varName = "AWS_SECRET_ACCESS_KEY";
-                  value = s3.secretAccessKey;
                   valueFile = s3.secretAccessKeyFile;
                 }}
-                ${mkCredentialExport {
+                ${mkCredentialFileExport {
                   varName = "AWS_SESSION_TOKEN";
-                  value = s3.sessionToken;
                   valueFile = s3.sessionTokenFile;
                 }}
                 REPO_ARGS="--bucket ${lib.escapeShellArg s3.bucket} --endpoint ${lib.escapeShellArg s3.endpoint} --region ${lib.escapeShellArg s3.region}"
@@ -540,12 +442,14 @@ in
                 sftp = repo.sftp;
               in
               ''
-                ${mkCredentialExport {
+                ${mkCredentialFileExport {
                   varName = "SFTP_HOST";
-                  value = sftp.host;
                   valueFile = sftp.hostFile;
                   export = false;
                 }}
+                ${lib.optionalString (sftp.host != null) ''
+                  SFTP_HOST=${lib.escapeShellArg sftp.host}
+                ''}
                 REPO_ARGS="--path ${lib.escapeShellArg sftp.path} --host $SFTP_HOST --port ${toString sftp.port} --username ${lib.escapeShellArg sftp.username}"
                 ${lib.optionalString (sftp.keyFile != null) ''
                   REPO_ARGS="$REPO_ARGS --keyfile ${lib.escapeShellArg sftp.keyFile}"
@@ -554,9 +458,6 @@ in
                   REPO_ARGS="$REPO_ARGS --known-hosts ${lib.escapeShellArg sftp.knownHostsFile}"
                 ''}
                 # TODO: waiting upstream fix(https://github.com/kopia/kopia/issues/5180)
-                ${lib.optionalString (sftp.password != null) ''
-                  REPO_ARGS="$REPO_ARGS --sftp-password ${lib.escapeShellArg sftp.password}"
-                ''}
                 ${lib.optionalString (sftp.passwordFile != null) ''
                   REPO_ARGS="$REPO_ARGS --sftp-password $(cat ${lib.escapeShellArg sftp.passwordFile})"
                 ''}
@@ -567,12 +468,14 @@ in
                 dav = repo.webdav;
               in
               ''
-                ${mkCredentialExport {
+                ${mkCredentialFileExport {
                   varName = "WEBDAV_URL";
-                  value = dav.url;
                   valueFile = dav.urlFile;
                   export = false;
                 }}
+                ${lib.optionalString (dav.url != null) ''
+                  WEBDAV_URL=${lib.escapeShellArg dav.url}
+                ''}
                 REPO_ARGS="--url $WEBDAV_URL"
                 ${lib.optionalString dav.flat ''
                   REPO_ARGS="$REPO_ARGS --flat"
@@ -580,14 +483,15 @@ in
                 ${lib.optionalString dav.atomicWrites ''
                   REPO_ARGS="$REPO_ARGS --atomic-writes"
                 ''}
-                ${mkCredentialExport {
+                ${mkCredentialFileExport {
                   varName = "KOPIA_WEBDAV_USERNAME";
-                  value = dav.username;
                   valueFile = dav.usernameFile;
                 }}
-                ${mkCredentialExport {
+                ${lib.optionalString (dav.username != null) ''
+                  export KOPIA_WEBDAV_USERNAME=${lib.escapeShellArg dav.username}
+                ''}
+                ${mkCredentialFileExport {
                   varName = "KOPIA_WEBDAV_PASSWORD";
-                  value = dav.password;
                   valueFile = dav.passwordFile;
                 }}
                 ${mkConnectOrCreate kopiaExe "webdav" "REPO_ARGS"}
