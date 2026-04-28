@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
