@@ -1,0 +1,10 @@
+{
+  "x64": {
+    "url": "https://github.com/desktop/desktop/releases/download/release-3.5.8/GitHub.Desktop-x64.zip",
+    "hash": "sha256:182c48006cce4654d4c8042151e1f35089319d3bc5c99e7bf249b07d4d75120e"
+  },
+  "arm64": {
+    "url": "https://github.com/desktop/desktop/releases/download/release-3.5.8/GitHub.Desktop-arm64.zip",
+    "hash": "sha256:7b1278f06231ea4a429da5055ccef44347b4c06f6b5bde35d97bba898911fbda"
+  }
+}
