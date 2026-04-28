@@ -68,19 +68,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.5.7";
+  version = "1.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = finalAttrs.version;
-    hash = "sha256-JrkfLwEL7iTL9P/4UDM4hFQtRL1JYH47dgZ1d+Mphqw=";
+    hash = "sha256-bxRRpwd7pmE+/JMARaqjuE+xFh8Qx70Aon2w56sOi1I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Szy2mSTriMwMViVTbI+0XaizcQBKh1Ncipf84moDREI=";
+    hash = "sha256-0vuXMxwbbpfMA0UcHcLieTJK6u67o6EYdJLH5Q+wtc8=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -263,6 +263,11 @@ buildPythonPackage (finalAttrs: {
     "chromadb/test/test_client.py::test_http_client_with_inconsistent_host_settings[async_client]"
     "chromadb/test/test_client.py::test_http_client_with_inconsistent_port_settings[async_client]"
     "chromadb/test/test_client.py::test_http_client[async_client]"
+
+    # ValueError: Could not connect to a Chroma server.
+    "chromadb/test/property/test_add_mcmr.py::test_add_small[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_medium[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_large[single-region]"
   ];
 
   __darwinAllowLocalNetworking = true;
