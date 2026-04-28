@@ -26,13 +26,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyqt6";
-  version = "6.9.0";
+  version = "6.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyqt6";
     inherit (finalAttrs) version;
-    hash = "sha256-ao/4480YMRu32Tf310HnhwQK5/9HznUcKKlMXN3BtOY=";
+    hash = "sha256-Rd1gqmmXbeGRi1zta057aiWr0qkZ7O9f1YJuzHZxiIk=";
   };
 
   patches = [
