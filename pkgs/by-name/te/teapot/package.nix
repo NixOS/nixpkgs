@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     # By no known reason libtirpc is not detected
-    NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-    NIX_LDFLAGS = [ "-ltirpc" ];
+    NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
+    NIX_LDFLAGS = "-ltirpc";
   };
 
   postPatch = ''
