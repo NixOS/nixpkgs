@@ -392,14 +392,11 @@ let
   metaInvalid = meta: !metaType.verify meta;
 
   checkOutputsToInstall =
-    if checkMeta then
-      attrs:
-      let
-        actualOutputs = attrs.outputs or [ "out" ];
-      in
-      any (output: !elem output actualOutputs) (attrs.meta.outputsToInstall or [ ])
-    else
-      attrs: false;
+    attrs:
+    let
+      actualOutputs = attrs.outputs or [ "out" ];
+    in
+    any (output: !elem output actualOutputs) (attrs.meta.outputsToInstall or [ ]);
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -423,7 +420,7 @@ let
       }
 
     # --- Put checks that cannot be ignored here ---
-    else if checkOutputsToInstall attrs then
+    else if checkMeta && checkOutputsToInstall attrs then
       {
         reason = "broken-outputs";
         msg = "has invalid meta.outputsToInstall";
