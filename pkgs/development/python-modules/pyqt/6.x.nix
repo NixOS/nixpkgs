@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchzip,
+  fetchPypi,
   pkg-config,
   dbus,
   lndir,
@@ -29,14 +29,10 @@ buildPythonPackage (finalAttrs: {
   version = "6.9.0";
   pyproject = true;
 
-  # It looks like a stable release, but is it? Who knows.
-  # It's not on PyPI proper yet, at least, and the current
-  # actually-released version does not build with Qt 6.9,
-  # so we kinda have to use it.
-  # "ffs smdh fam" - K900
-  src = fetchzip {
-    url = "https://web.archive.org/web/20250406083944/https://www.riverbankcomputing.com/pypi/packages/PyQt6/pyqt6-6.9.0.tar.gz";
-    hash = "sha256-UZSbz6MqdNtl2r4N8uvgNjQ+28KCzNFb5yFqPcooT5E=";
+  src = fetchPypi {
+    pname = "pyqt6";
+    inherit (finalAttrs) version;
+    hash = "sha256-ao/4480YMRu32Tf310HnhwQK5/9HznUcKKlMXN3BtOY=";
   };
 
   patches = [
