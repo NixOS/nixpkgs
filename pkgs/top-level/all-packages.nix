@@ -6626,7 +6626,7 @@ with pkgs;
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
 
-  libretranslate = with python3.pkgs; toPythonApplication libretranslate;
+  libretranslate = with python3Packages; toPythonApplication libretranslate;
 
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
