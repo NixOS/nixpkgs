@@ -25,10 +25,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-PRU4X3lVRnPvvVPzabJ/J2ly4eyFwCxSsKuL0yuRy2I=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/dokieli/dokieli/blob/main/package.json#L125
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-3FyctNQ8pDvJ559SJvAJZjn49wptfB5Q5Takk51oqMQ=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-hKIOGY3wU9IpKD5mKJtIOupdFswQDoZKGf5NcINKn8o=";
   };
 
   buildPhase = ''
