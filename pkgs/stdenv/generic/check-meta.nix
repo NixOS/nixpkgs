@@ -384,7 +384,6 @@ let
     };
 
   checkMeta = config.checkMeta;
-  metaInvalid = meta: !metaType.verify meta;
 
   checkOutputsToInstall =
     attrs:
@@ -408,7 +407,7 @@ let
     else
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    if checkMeta && metaInvalid attrs.meta then
+    if checkMeta && !metaType.verify attrs.meta then
       {
         reason = "unknown-meta";
         msg = "has an invalid meta attrset:${
