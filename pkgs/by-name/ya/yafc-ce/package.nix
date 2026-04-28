@@ -55,8 +55,8 @@ buildDotnetModule (finalAttrs: {
       YAFC Community Edition is an updated and actively-maintained version of the original YAFC.
     '';
     homepage = "https://github.com/shpaass/yafc-ce";
-    downloadPage = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
-    changelog = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
+    downloadPage = "https://github.com/shpaass/yafc-ce/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/shpaass/yafc-ce/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       diamond-deluxe
