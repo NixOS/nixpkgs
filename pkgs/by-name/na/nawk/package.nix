@@ -5,6 +5,7 @@
   bison,
   buildPackages,
   installShellFiles,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage nawk.1
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/onetrueawk/awk";
