@@ -3232,7 +3232,7 @@ with pkgs;
     resholve
     ;
 
-  reuse = with python3.pkgs; toPythonApplication reuse;
+  reuse = with python3Packages; toPythonApplication reuse;
 
   rmate = rubyPackages.rmate;
 
