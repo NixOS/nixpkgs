@@ -54,10 +54,7 @@ mkJetBrainsProduct {
     homepage = "https://www.jetbrains.com/phpstorm/";
     description = "PHP IDE from JetBrains";
     longDescription = "PhpStorm provides an editor for PHP, HTML and JavaScript with on-the-fly code analysis, error prevention and automated refactorings for PHP and JavaScript code.";
-    maintainers = with lib.maintainers; [
-      dritter
-      tymscar
-    ];
+    maintainers = with lib.maintainers; [ tymscar ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then
