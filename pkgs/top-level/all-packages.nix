@@ -10279,7 +10279,7 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
-  socialscan = with python3.pkgs; toPythonApplication socialscan;
+  socialscan = with python3Packages; toPythonApplication socialscan;
 
   squeezelite-pulse = callPackage ../by-name/sq/squeezelite/package.nix {
     audioBackend = "pulse";
