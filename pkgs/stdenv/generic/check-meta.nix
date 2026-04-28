@@ -387,10 +387,13 @@ let
 
   checkOutputsToInstall =
     attrs:
-    let
-      actualOutputs = attrs.outputs or [ "out" ];
-    in
-    any (output: !elem output actualOutputs) (attrs.meta.outputsToInstall or [ ]);
+    attrs.meta ? outputsToInstall
+    && (
+      let
+        actualOutputs = attrs.outputs or [ "out" ];
+      in
+      !all (output: elem output actualOutputs) attrs.meta.outputsToInstall
+    );
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
