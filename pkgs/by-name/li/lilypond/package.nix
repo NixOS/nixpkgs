@@ -78,8 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "mem=mf2pt1" "mem=$PWD/mf/mf2pt1"
   '';
 
-  patches = [ ];
-
   strictDeps = true;
 
   depsBuildBuild = [
