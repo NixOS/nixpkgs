@@ -27,7 +27,14 @@ let
         }
       );
     in
-    drv'.passedAttrs // { inherit (drv') stdenv; };
+    drv'.passedAttrs
+    // {
+      # `mkPackage`-based derivations keep `stdenv` off the user-
+      # facing surface, so reach into `internals` for it. Falls
+      # back to `drv'.stdenv` for legacy `stdenv.mkDerivation`
+      # derivations.
+      stdenv = drv'.internals.stdenv or drv'.stdenv;
+    };
 
   canEvalDrv = drv: (builtins.tryEval drv.drvPath).success;
 
@@ -53,8 +60,12 @@ let
       pname
       version
       src
-      patches
       ;
+    # `patches` is not on `mkPackage`'s user-facing surface; reach
+    # into `internals` for it (`hello`'s layer keeps `src` on
+    # `public` because other packages re-use it, but `patches` has
+    # no such consumer).
+    inherit (hello.internals.stdenvArgs) patches;
   };
   helloDrvSimpleSrc = srcOnly helloDrvSimple;
   helloDrvSimpleSrcFreeform = srcOnly {
