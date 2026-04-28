@@ -18,16 +18,26 @@ let
     hash = "sha256-Z+PtS88Rv9Vv6FA15KxSBWCmOtwmTqO1etgCV7WaTXo=";
   };
   missingHashes = ./missing-hashes.json;
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/expo/eas-cli/blob/v18.7.0/package.json#L37
+    ./yarn-4.14-support.patch
+  ];
 in
 # cc is necessary because of building an npm package without a prebuilt binary
 #  for ARM. See comment in nativeBuildInputs below.
 stdenv.mkDerivation (finalAttrs: {
   pname = "eas-cli";
-  inherit src version missingHashes;
+  inherit
+    src
+    version
+    missingHashes
+    patches
+    ;
 
   yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit src missingHashes;
-    hash = "sha256-ZlbCHWEwVaYCfzowrm1qrM1MpLo5vNmEG5bWzWT/cTU=";
+    inherit src missingHashes patches;
+    hash = "sha256-KtFLJc2bEBS0sgTqbF68574fFMxwSlaSKcR0RedVJ4k=";
   };
 
   nativeBuildInputs = [
