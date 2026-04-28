@@ -12159,7 +12159,7 @@ with pkgs;
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
-  sieveshell = with python3.pkgs; toPythonApplication managesieve;
+  sieveshell = with python3Packages; toPythonApplication managesieve;
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
