@@ -14,12 +14,15 @@
 }:
 
 let
-  cryptoLib = {
-    openssl = openssl;
-    aws-lc = aws-lc;
-    libressl = libressl;
-    boringssl = boringssl;
-  }.${cryptoBackend} or (throw "Unknown crypto backend: ${cryptoBackend}. Valid options: openssl, aws-lc, libressl, boringssl");
+  cryptoLib =
+    {
+      openssl = openssl;
+      aws-lc = aws-lc;
+      libressl = libressl;
+      boringssl = boringssl;
+    }
+    .${cryptoBackend}
+      or (throw "Unknown crypto backend: ${cryptoBackend}. Valid options: openssl, aws-lc, libressl, boringssl");
 
   # Feature notes per backend:
   # - aws-lc: PQ key exchange, FIPS support (recommended for performance/security)
