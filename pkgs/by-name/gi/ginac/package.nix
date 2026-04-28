@@ -2,6 +2,7 @@
   lib,
   stdenv,
   gccStdenv,
+  callPackage,
   fetchurl,
   cln,
   pkg-config,
@@ -35,6 +36,8 @@ gccStdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [ "--disable-rpath" ];
+
+  passthru.tests.example = callPackage ./ginac-example-test.nix { ginac = finalAttrs.finalPackage; };
 
   meta = {
     description = "GiNaC C++ library for symbolic manipulations";
