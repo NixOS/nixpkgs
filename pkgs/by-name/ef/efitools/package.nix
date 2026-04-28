@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix build with gcc15
     ./remove-redundant-bool.patch
+
+    # https://bugs.debian.org/1122408
+    ./objcopy-output-target.patch
   ];
 
   postPatch = ''
