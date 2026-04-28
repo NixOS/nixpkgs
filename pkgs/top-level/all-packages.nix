@@ -3319,7 +3319,7 @@ with pkgs;
     openssl = openssl.override { withZlib = true; };
   };
 
-  staticjinja = with python3.pkgs; toPythonApplication staticjinja;
+  staticjinja = with python3Packages; toPythonApplication staticjinja;
 
   stoken = callPackage ../tools/security/stoken (config.stoken or { });
 
