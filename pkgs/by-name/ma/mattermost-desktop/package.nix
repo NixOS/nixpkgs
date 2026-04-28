@@ -37,6 +37,8 @@ buildNpmPackage rec {
       --replace-fail \
         "const VERSION = childProcess.execSync('git rev-parse --short HEAD', {cwd: __dirname}).toString();" \
         "const VERSION = process.env.version;"
+    substituteInPlace src/common/config/buildConfig.ts \
+      --replace-fail 'enableUpdateNotifications: true,' 'enableUpdateNotifications: false,'
   '';
 
   postBuild = ''
@@ -101,6 +103,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       joko
       liff
+      yayayayaka
     ];
   };
 }
