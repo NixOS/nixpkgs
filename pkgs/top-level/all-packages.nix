@@ -10882,7 +10882,7 @@ with pkgs;
 
   beancount-black = with python3Packages; toPythonApplication beancount-black;
 
-  beanhub-cli = with python3.pkgs; toPythonApplication beanhub-cli;
+  beanhub-cli = with python3Packages; toPythonApplication beanhub-cli;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
