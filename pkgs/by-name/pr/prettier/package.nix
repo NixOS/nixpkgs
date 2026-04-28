@@ -80,11 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uMLRFBZP7/42R6nReONcb9/kVGCn3yGHLcLFajMZLmQ=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/prettier/prettier/blob/main/package.json#L265
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-dpxzbtWyXsHS6tH6DJ9OqSsUSc+YqYeAPJYb95Qy5wQ=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-+cDMrVwkTU5rYOQ7d2TqpsYx5F4JVZCpmf1vjOBhZ3M=";
   };
 
   nativeBuildInputs = [
