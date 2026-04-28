@@ -12,7 +12,7 @@
   pnpmConfigHook,
   makeDesktopItem,
   nix-update-script,
-  noto-fonts-cjk-sans, 
+  noto-fonts-cjk-sans,
   writeText,
 }:
 
