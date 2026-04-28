@@ -11,13 +11,13 @@
   writeShellApplication,
 }:
 let
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "expert";
     tag = "v${version}";
-    hash = "sha256-J38+ESTrygj62wcOOAaq1ERM/ze3+p8Ec369Cz0F1Sg=";
+    hash = "sha256-CGWWbzrBjCbz9S8f1nCLx2x6j4MFgsSd5XjgrxhuvzE=";
   };
 
   engineDeps = fetchMixDeps {

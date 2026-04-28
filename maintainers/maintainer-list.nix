@@ -19480,6 +19480,14 @@
     name = "Nicolas Goudry";
     keys = [ { fingerprint = "21B6 A59A 4E89 0B1B 83E3 0CDB 01C8 8C03 5450 9AA9"; } ];
   };
+  nicolas-guichard = {
+    name = "Nicolas Qiu Guichard";
+    email = "nicolas@guichard.eu";
+    matrix = "@nicolas:guichard.eu";
+    github = "nicolas-guichard";
+    githubId = 11260285;
+    keys = [ { fingerprint = "22B2 237B 0158 EE61 704C E191 7684 D229 0313 47AA"; } ];
+  };
   nicomem = {
     email = "nix@nicomem.com";
     github = "nicomem";

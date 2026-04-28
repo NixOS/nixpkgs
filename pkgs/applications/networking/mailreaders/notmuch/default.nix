@@ -1,5 +1,4 @@
 {
-  fetchpatch,
   fetchurl,
   lib,
   stdenv,
@@ -214,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Mail indexer";
     homepage = "https://notmuchmail.org/";
-    changelog = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${finalAttrs.version}";
+    changelog = "https://notmuchmail.org/news/release-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       flokli

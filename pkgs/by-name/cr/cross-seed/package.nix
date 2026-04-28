@@ -20,7 +20,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-tR7zPoIX6yjlRx8QbRSxskvueQ1BsP3gGAlonKHH0RY=";
 
   passthru = {
-    updateScript = nix-update-script;
+    updateScript = nix-update-script { };
     tests.cross-seed = nixosTests.cross-seed;
   };
 

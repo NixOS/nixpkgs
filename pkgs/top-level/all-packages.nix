@@ -5961,8 +5961,6 @@ with pkgs;
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
 
-  tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) { };
-
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
 
   uhdMinimal = uhd.override {
@@ -8444,8 +8442,6 @@ with pkgs;
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
-  iptables = callPackage ../os-specific/linux/iptables { };
-  iptables-legacy = callPackage ../os-specific/linux/iptables { nftablesCompat = false; };
   iptables-nftables-compat = iptables;
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
