@@ -9,6 +9,7 @@
   clinfo,
   gdk-pixbuf,
   gtk4,
+  libadwaita,
   libdrm,
   ocl-icd,
   vulkan-loader,
@@ -24,16 +25,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5z4IAiApUjlsSL0EX1PQH6rceeQxAD8f3CKmYO2x8gQ=";
+    hash = "sha256-c5GJf8AYgaAN3O6AVSEbJybEYb6lSHf7R24/1PKYhyM=";
   };
 
-  cargoHash = "sha256-mCmAj9yLei0ZNtsBh+YeVlCmbHyT69LIHFnwbAk+Ido=";
+  cargoHash = "sha256-Y+XdCmaDXdP7x22bYm//Ov7+IzlCr8GpFOgCXGFCfbA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     gdk-pixbuf
     gtk4
+    libadwaita
     libdrm
     ocl-icd
     vulkan-loader
