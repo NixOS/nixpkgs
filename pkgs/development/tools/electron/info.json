@@ -1342,7 +1342,7 @@
                 "fetcher": "fetchFromGitiles"
             }
         },
-        "electron_yarn_hash": "sha256-HCnJJqfgcilB+Cl2OaezL9Uu1xk0ZBdVEXg2VDR1dwU=",
+        "electron_yarn_hash": "sha256-4wVNDVy8SMZgh3tTzytUveyBv0MwLlWpjwDgC/+WYVM=",
         "modules": "140",
         "node": "22.22.1",
         "version": "39.8.9"
@@ -2690,7 +2690,7 @@
                 "fetcher": "fetchFromGitiles"
             }
         },
-        "electron_yarn_hash": "sha256-0P2Kt1uJA0lmZjIOr4Bpu6NDl4CwEKEgRz/B92oCs9M=",
+        "electron_yarn_hash": "sha256-HSLQS89ZdIxni51WDVvr19oDZyaG/PlPG8XfdvEDQhQ=",
         "modules": "143",
         "node": "24.14.1",
         "version": "40.9.2"
@@ -4054,7 +4054,7 @@
                 "fetcher": "fetchFromGitiles"
             }
         },
-        "electron_yarn_hash": "sha256-tPI7O7xlvDjU5+krILVB6JhLpftMq4Bn8+KIKMjBVgA=",
+        "electron_yarn_hash": "sha256-i9/E2hO0vq5kbDwFLvaVl7OoixGpHxBQ6sMiHgnWYuA=",
         "modules": "145",
         "node": "24.15.0",
         "version": "41.3.0"

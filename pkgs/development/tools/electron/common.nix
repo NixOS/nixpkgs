@@ -24,6 +24,10 @@
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
   yarn-berry = yarn-berry_4;
+
+  # Only apply to old versions after upstream updates to Yarn 4.14
+  # https://github.com/electron/electron/blob/main/package.json#L148
+  yarnPatch = ./yarn-4.14-support.patch;
 in
 
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
@@ -66,6 +70,7 @@ in
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     src = gclientDeps."src/electron".path;
+    patches = [ yarnPatch ];
     hash = info.electron_yarn_hash;
   };
 
@@ -185,7 +190,16 @@ in
   ''
   + ''
     (
+      PATH=$PATH:${
+        lib.makeBinPath (
+          with pkgsBuildHost;
+          [
+            git
+          ]
+        )
+      }
       cd electron
+      git apply ${yarnPatch}
       YARN_ENABLE_SCRIPTS=0 yarnBerryConfigHook
     )
     (
