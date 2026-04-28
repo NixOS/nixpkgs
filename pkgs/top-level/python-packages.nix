@@ -734,6 +734,8 @@ self: super: with self; {
 
   ament-package = callPackage ../development/python-modules/ament-package { };
 
+  amplitude-analytics = callPackage ../development/python-modules/amplitude-analytics { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
