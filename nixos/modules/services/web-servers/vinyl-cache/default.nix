@@ -14,27 +14,16 @@ let
     optionalString
     concatMap
     ;
-  inherit (builtins) isNull;
 
-  cfg = config.services.varnish;
+  cfg = config.services.vinyl-cache;
 
-  # Varnish has very strong opinions and very complicated code around handling
+  # Vinyl Cache has very strong opinions and very complicated code around handling
   # the stateDir. After a lot of back and forth, we decided that we a)
   # do not want a configurable option here, as most of the handling depends
   # on the version and the compile time options. Putting everything into
-  # /var/run (RAM backed) is absolutely recommended by Varnish anyways.
+  # /var/run (RAM backed) is absolutely recommended by Vinyl Cache anyways.
   # We do need to pay attention to the version-dependend variations, though!
-  stateDir =
-    if
-      (lib.versionOlder cfg.package.version "7")
-    # Remove after Varnish 6.0 is gone. In 6.0 varnishadm always appends the
-    # hostname (by default) and can't be nudged to not use any name. This has
-    # long changed by 7.5 and can be used without the host name.
-    then
-      "/var/run/varnish/${config.networking.hostName}"
-    # Newer varnish uses this:
-    else
-      "/var/run/varnishd";
+  stateDir = "/var/run/vinyld";
 
   # from --help:
   #   -a [<name>=]address[:port][,proto] # HTTP listen address and port
@@ -43,8 +32,8 @@ let
   #                                # Proto can be "PROXY" or "HTTP" (default)
   #                                # user, group and mode set permissions for
   #                                #   a Unix domain socket.
-  commandLineAddresses =
-    (concatMapStringsSep " " (
+  commandLineAddresses = (
+    concatMapStringsSep " " (
       a:
       "-a "
       + optionalString (!isNull a.name) "${a.name}="
@@ -54,8 +43,9 @@ let
       + optionalString (!isNull a.user) ",user=${a.user}"
       + optionalString (!isNull a.group) ",group=${a.group}"
       + optionalString (!isNull a.mode) ",mode=${a.mode}"
-    ) cfg.listen)
-    + lib.optionalString (!isNull cfg.http_address) " -a ${cfg.http_address}";
+    ) cfg.listen
+  );
+
   addressSubmodule = types.submodule {
     options = {
       name = mkOption {
@@ -69,7 +59,7 @@ let
           ("127.0.0.1") or an IPv6  address enclosed in square brackets ("[::1]").
 
           (VCL4.1 and higher) If given an absolute Path ("/path/to/listen.sock") or "@"
-          followed by the name of an abstract socket ("@myvarnishd") accept connections
+          followed by the name of an abstract socket ("@myvinyld") accept connections
           on a Unix domain socket.
 
           The user, group and mode sub-arguments may be used to specify the permissions
@@ -126,44 +116,34 @@ let
     +
       lib.optionalString (cfg.extraModules != [ ])
         " -p vmod_path='${
-           lib.makeSearchPathOutput "lib" "lib/varnish/vmods" ([ cfg.package ] ++ cfg.extraModules)
+           lib.makeSearchPathOutput "lib" "lib/vinyl/vmods" ([ cfg.package ] ++ cfg.extraModules)
          }' -r vmod_path";
 in
 {
-  imports = [
-    (lib.mkRemovedOptionModule [
-      "services"
-      "varnish"
-      "stateDir"
-    ] "The `stateDir` option never was functional or useful. varnish uses compile-time settings.")
+  meta.maintainers = [
+    lib.maintainers.leona
+    lib.maintainers.osnyx
   ];
-
   options = {
-    services.varnish = {
-      enable = lib.mkEnableOption "Varnish Server";
+    services.vinyl-cache = {
+      enable = lib.mkEnableOption "Vinyl Cache";
 
       enableConfigCheck = lib.mkEnableOption "checking the config during build time" // {
         default = true;
       };
 
-      package = lib.mkPackageOption pkgs "varnish" { };
-
-      http_address = lib.mkOption {
-        type = with lib.types; nullOr str;
-        default = null;
-        description = ''
-          HTTP listen address and port.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "vinyl-cache" { };
 
       listen = lib.mkOption {
         description = "Accept for client requests on the specified listen addresses.";
         type = lib.types.listOf checkedAddressModule;
         defaultText = lib.literalExpression ''[ { address="*"; port=6081; } ]'';
-        default = lib.optional (isNull cfg.http_address) {
-          address = "*";
-          port = 6081;
-        };
+        default = [
+          {
+            address = "*";
+            port = 6081;
+          }
+        ];
       };
 
       config = lib.mkOption {
@@ -176,9 +156,8 @@ in
       extraModules = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = lib.literalExpression "[ pkgs.varnishPackages.geoip ]";
         description = ''
-          Varnish modules (except 'std').
+          Vinyl Cache modules (except 'std').
         '';
       };
 
@@ -187,69 +166,93 @@ in
         default = "";
         example = "-s malloc,256M";
         description = ''
-          Command line switches for varnishd (run 'varnishd -?' to get list of options)
+          Command line switches for vinyld (run 'vinyld -?' to get list of options)
         '';
       };
+
+      enableFileLogging = lib.mkEnableOption "file based logging";
     };
 
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services.varnish = {
-      description = "Varnish";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig = {
-        Type = "simple";
-        PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/sbin/varnishd ${commandLineAddresses} -n ${stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
-        Restart = "always";
-        RestartSec = "5s";
-        User = "varnish";
-        Group = "varnish";
-        RuntimeDirectory = lib.removePrefix "/var/run/" stateDir;
-        AmbientCapabilities = "cap_net_bind_service";
-        NoNewPrivileges = true;
-        LimitNOFILE = 131072;
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      systemd.services.vinyl-cache = {
+        description = "Vinyl Cache";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${cfg.package}/bin/vinyld ${commandLineAddresses} -n ${stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
+          Restart = "always";
+          RestartSec = "5s";
+          User = "vinyl-cache";
+          Group = "vinyl-cache";
+          DynamicUser = true;
+          RuntimeDirectory = lib.removePrefix "/var/run/" stateDir;
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+          NoNewPrivileges = true;
+          LimitNOFILE = 131072;
+        };
       };
-    };
 
-    environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ cfg.package ];
 
-    # check .vcl syntax at compile time (e.g. before nixops deployment)
-    system.checks = lib.mkIf cfg.enableConfigCheck [
-      (pkgs.runCommand "check-varnish-syntax" { } ''
-        ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
-      '')
-    ];
-
-    assertions =
-      (concatMap (m: [
-        {
-          assertion = (hasPrefix "/" m.address) || (hasPrefix "@" m.address) -> m.port == null;
-          message = "Listen ports must not be specified with UNIX sockets: ${builtins.toJSON m}";
-        }
-        {
-          assertion = !(hasPrefix "/" m.address) -> m.user == null && m.group == null && m.mode == null;
-          message = "Abstract UNIX sockets or IP sockets can not be used with user, group, and mode settings: ${builtins.toJSON m}";
-        }
-      ]) cfg.listen)
-      ++ [
-        {
-          assertion = cfg.package.pname != "vinyl-cache";
-          message = "services.varnish only supports Varnish Cache. Please use services.vinyl-cache.";
-        }
+      # check .vcl syntax at compile time (e.g. before nixops deployment)
+      system.checks = lib.mkIf cfg.enableConfigCheck [
+        (pkgs.runCommand "check-vinyl-cache-syntax" { } ''
+          ${cfg.package}/bin/vinyld -C ${commandLine} 2> $out || (cat $out; exit 1)
+        '')
       ];
 
-    warnings =
-      lib.optional (!isNull cfg.http_address)
-        "The option `services.varnish.http_address` is deprecated. Use `services.varnish.listen` instead.";
+      assertions =
+        concatMap (m: [
+          {
+            assertion = (hasPrefix "/" m.address) || (hasPrefix "@" m.address) -> m.port == null;
+            message = "Listen ports must not be specified with UNIX sockets: ${builtins.toJSON m}";
+          }
+          {
+            assertion = !(hasPrefix "/" m.address) -> m.user == null && m.group == null && m.mode == null;
+            message = "Abstract UNIX sockets or IP sockets can not be used with user, group, and mode settings: ${builtins.toJSON m}";
+          }
+        ]) cfg.listen
+        ++ [
+          {
+            assertion = cfg.package.pname == "vinyl-cache";
+            message = "services.vinyl-cache only supports Vinyl Cache. Please use services.varnish.";
+          }
+        ];
+    })
+    (lib.mkIf (cfg.enable && cfg.enableFileLogging) {
+      systemd.services = {
+        vinylncsa = {
+          after = [ "vinyl-cache.service" ];
+          requires = [ "vinyl-cache.service" ];
+          description = "Vinyl Cache logging daemon";
+          wantedBy = [ "multi-user.target" ];
+          # We want to reopen logs with HUP. vinylncsa must run in daemon mode for that.
+          serviceConfig = {
+            Type = "forking";
+            Restart = "always";
+            RuntimeDirectory = "vinylncsa";
+            LogsDirectory = "vinyl-cache";
+            PIDFile = "/run/vinylncsa/vinylncsa.pid";
+            User = "vinyl-cache";
+            Group = "vinyl-cache";
+            ExecStart = "${cfg.package}/bin/vinylncsa -D -a -w /var/log/vinyl-cache/vinyl-cache.log -P /run/vinylncsa/vinylncsa.pid";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          };
+        };
+      };
 
-    users.users.varnish = {
-      group = "varnish";
-      uid = config.ids.uids.varnish;
-    };
-
-    users.groups.varnish.gid = config.ids.uids.varnish;
-  };
+      services.logrotate.settings.vinyl-cache = lib.mapAttrs (_: lib.mkDefault) {
+        files = [ "/var/log/vinyl-cache/*.log" ];
+        frequency = "daily";
+        rotate = 14;
+        compress = true;
+        delaycompress = true;
+        postrotate = "systemctl reload vinylncsa";
+      };
+    })
+  ];
 }
