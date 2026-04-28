@@ -62,7 +62,7 @@ buildPythonPackage (finalAttrs: {
     broken = lib.versionAtLeast lsprotocol.version "2024";
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
-    changelog = "https://github.com/openlawlibrary/pygls/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kira-bruneau ];
   };
