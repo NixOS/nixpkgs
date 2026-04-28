@@ -6927,7 +6927,7 @@ with pkgs;
     withPm = [ ];
   };
 
-  mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
+  mygpoclient = with python3Packages; toPythonApplication mygpoclient;
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
