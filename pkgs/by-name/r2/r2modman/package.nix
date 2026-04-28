@@ -25,13 +25,16 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches missingHashes;
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-7ty3ESydrDzXrUIdgDC1DqYrkhRX5FsIeOJ0rWP5X0k=";
+    hash = "sha256-6WfpOAt9XRw4fC+Ix9OoDPvg7oIxcdKRX5ttIywG14E=";
   };
 
   patches = [
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L117
+    ./yarn-4.14-support.patch
   ];
 
   __darwinAllowLocalNetworking = true;
