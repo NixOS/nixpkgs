@@ -139,6 +139,7 @@ buildNpmPackage (finalAttrs: {
       autrimpo
       adda
       kira-bruneau
+      xmnlz
     ];
     platforms = [
       "x86_64-linux"
