@@ -5805,7 +5805,7 @@ with pkgs;
 
   openai = with python3Packages; toPythonApplication openai;
 
-  openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
+  openai-whisper = with python3Packages; toPythonApplication openai-whisper;
 
   openocd-rp2040 = openocd.overrideAttrs (old: {
     pname = "openocd-rp2040";
