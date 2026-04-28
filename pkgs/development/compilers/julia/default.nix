@@ -23,12 +23,12 @@ in
 {
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.10.10";
+      version = "1.10.11";
       sha256 = {
-        x86_64-linux = "6a78a03a71c7ab792e8673dc5cedb918e037f081ceb58b50971dfb7c64c5bf81";
-        aarch64-linux = "a4b157ed68da10471ea86acc05a0ab61c1a6931ee592a9b236be227d72da50ff";
-        x86_64-darwin = "942b0d4accc9704861c7781558829b1d521df21226ad97bd01e1e43b1518d3e6";
-        aarch64-darwin = "52d3f82c50d9402e42298b52edc3d36e0f73e59f81fc8609d22fa094fbad18be";
+        x86_64-linux = "1grpvdzkh4b6mfdn1khbs1nz1b7q61rkzfip3q2x4330fjqwcjgv";
+        aarch64-linux = "1cn62bmrgz344zsml80rqpmryp8hk6bdni3zhh43lpqf8a0aj11h";
+        x86_64-darwin = "0jzk0kl1jvnav8ccarpwzfvyyzibfhrhfj72s3q17kzxwhpgbimx";
+        aarch64-darwin = "0nzh0zwjlagn4aglimyajmqv5m6qwdqz7lyjaszfxzyf1p0hcmxx";
       };
     }) { }
   );
@@ -57,8 +57,8 @@ in
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.10.10";
-        hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
+        version = "1.10.11";
+        hash = "sha256-XItQngSzszyIGzSvqdXBV/yLQGDxf5x8SnrQ/DtzUtU=";
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
           # [build] Some improvements to the LLVM build system
