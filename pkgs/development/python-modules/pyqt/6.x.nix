@@ -24,7 +24,7 @@
   withPdf ? true,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqt6";
   version = "6.9.0";
   pyproject = true;
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     EOF
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
+      --replace-fail 'version = "${finalAttrs.version}"' 'version = "${lib.versions.pad 3 finalAttrs.version}"'
   '';
 
   enableParallelBuilding = true;
@@ -166,4 +166,4 @@ buildPythonPackage rec {
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [ LunNova ];
   };
-}
+})
