@@ -4,7 +4,7 @@
   stdenv,
 }:
 rec {
-  version = "9.2.0340";
+  version = "9.2.0341";
 
   outputs = [
     "out"
