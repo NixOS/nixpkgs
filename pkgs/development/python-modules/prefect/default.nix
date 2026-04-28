@@ -1,14 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  makePythonPath,
+  fetchFromGitHub,
   nixosTests,
   nix-update-script,
-  python,
+  pythonAtLeast,
+  pythonOlder,
+  replaceVars,
+  writeShellScriptBin,
 
   aiosqlite,
   alembic,
+  amplitude-analytics,
   anyio,
   apprise,
   asgi-lifespan,
@@ -18,6 +21,7 @@
   cloudpickle,
   coolname,
   cryptography,
+  cyclopts,
   dateparser,
   docker,
   exceptiongroup,
@@ -38,6 +42,7 @@
   opentelemetry-exporter-otlp,
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-logging,
+  opentelemetry-instrumentation-system-metrics,
   opentelemetry-test-utils,
   orjson,
   packaging,
@@ -49,22 +54,22 @@
   pydantic-extra-types,
   pydantic-settings,
   pydantic,
+  pydocket,
   python-dateutil,
+  python-on-whales,
   python-slugify,
-  python-socks,
   pytz,
   pyyaml,
   readchar,
   rfc3339-validator,
   rich,
+  ruamel-yaml-clib,
   ruamel-yaml,
   semver,
   sniffio,
   sqlalchemy,
   toml,
-  typer,
   typing-extensions,
-  ujson,
   uv,
   uvicorn,
   versioningit,
@@ -72,23 +77,28 @@
   whenever,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prefect";
-  version = "3.5.0";
+  version = "3.7.0";
   pyproject = true;
 
-  # Trying to install from source is challenging
-  # the packaging is using versioningit and looking for
-  # .git directory
-  # Source will be missing sdist, uv.lock, ui artefacts ...
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BazzO+gR/mLcx+tlysPMJzcqmctUU0LSYL0YMZMyVrg=";
+  src = fetchFromGitHub {
+    owner = "PrefectHQ";
+    repo = "prefect";
+    tag = finalAttrs.version;
+    hash = "sha256-AfiXH9u6W6UpE8hepNzPGIm1cxC+5RonhtBYWMu2IaQ=";
   };
 
-  pythonRelaxDeps = [
-    "websockets"
-    "typer"
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'default-version = "3.6.24+nogit"' \
+        'default-version = "${finalAttrs.version}"'
+  '';
+
+  # versioningit: NotVCSError: Git not installed; assuming this isn't a Git repository
+  nativeBuildInputs = [
+    (writeShellScriptBin "git" "false")
   ];
 
   build-system = [
@@ -103,17 +113,16 @@ buildPythonPackage rec {
     asyncpg
     click
     cryptography
+    cyclopts
     dateparser
     docker
-    graphviz
     jinja2
     jinja2-humanize-extension
-    humanize
     pytz
     readchar
     sqlalchemy
-    typer
     # client dependencies
+    amplitude-analytics
     anyio
     asgi-lifespan
     cachetools
@@ -122,43 +131,42 @@ buildPythonPackage rec {
     exceptiongroup
     fastapi
     fsspec
-    # graphviz already included
+    graphviz
     griffe
     httpcore
     httpx
+    humanize
     jsonpatch
     jsonschema
     opentelemetry-api
     orjson
     packaging
     pathspec
-    pendulum
     pluggy
     prometheus-client
     pydantic
     pydantic-core
     pydantic-extra-types
     pydantic-settings
+    pydocket
     python-dateutil
     python-slugify
-    python-socks
     pyyaml
     rfc3339-validator
     rich
     ruamel-yaml
+    ruamel-yaml-clib
     semver
     sniffio
     toml
     typing-extensions
-    ujson
     uvicorn
     websockets
-    whenever
-    uv
-    semver
   ]
   ++ sqlalchemy.optional-dependencies.asyncio
-  ++ httpx.optional-dependencies.http2;
+  ++ httpx.optional-dependencies.http2
+  ++ lib.optional (pythonOlder "3.13") pendulum
+  ++ lib.optional (pythonAtLeast "3.13") whenever;
 
   optional-dependencies = {
     aws = [
@@ -169,6 +177,12 @@ buildPythonPackage rec {
     ];
     bitbucket = [
       # prefect-bitbucket
+    ];
+    buildx = [
+      python-on-whales
+    ];
+    bundles = [
+      uv
     ];
     dask = [
       # prefect-dask
@@ -202,6 +216,7 @@ buildPythonPackage rec {
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
       opentelemetry-instrumentation-logging
+      opentelemetry-instrumentation-system-metrics
       opentelemetry-test-utils
     ];
     ray = [
@@ -224,12 +239,6 @@ buildPythonPackage rec {
     ];
   };
 
-  makeWrapperArgs = [
-    # Add the installed directories to the python path so the worker can find them
-    "--prefix PYTHONPATH : ${makePythonPath dependencies}"
-    "--prefix PYTHONPATH : $out/${python.sitePackages}"
-  ];
-
   passthru.tests = {
     inherit (nixosTests) prefect;
 
@@ -242,19 +251,6 @@ buildPythonPackage rec {
     };
   };
 
-  # Tests are not included in the pypi source
-  doCheck = false;
-  # nativeCheckInputs = [
-  #   pytestCheckHook
-  #   pytest-asyncio
-  #   pytest-cov
-  #   pytest-env
-  #   # pytest-flakefinder
-  #   pytest-mypy-plugins
-  #   pytest-timeout
-  #   pytest-xdist
-  # ];
-
   meta = {
     description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
@@ -265,4 +261,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "prefect";
   };
-}
+})
