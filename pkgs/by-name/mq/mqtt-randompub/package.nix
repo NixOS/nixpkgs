@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Tool that sends random MQTT messages to random topics";
     homepage = "https://github.com/fabaff/mqtt-randompub";
-    changelog = "https://github.com/fabaff/mqtt-randompub/blob/${finalAttrs.src.rev}/ChangeLog";
+    changelog = "https://github.com/fabaff/mqtt-randompub/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mqtt-randompub";
