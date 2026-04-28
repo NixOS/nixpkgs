@@ -8,7 +8,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aurorapy";
   version = "0.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "energievalsabbia";
     repo = "aurorapy";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-bc5i2x35sZXkCSJraTqX3Zc5B9eKL1qDh97/7ixyHLY=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the communication protocol for Power-One Aurora inverters";
     homepage = "https://gitlab.com/energievalsabbia/aurorapy";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
