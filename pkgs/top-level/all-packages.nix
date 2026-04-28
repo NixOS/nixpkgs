@@ -6852,7 +6852,7 @@ with pkgs;
 
   mpeg2dec = libmpeg2;
 
-  msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
+  msoffcrypto-tool = with python3Packages; toPythonApplication msoffcrypto-tool;
 
   mpich = callPackage ../development/libraries/mpich {
     automake = automake116x;
