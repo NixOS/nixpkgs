@@ -21,19 +21,19 @@
 
 buildPythonPackage rec {
   pname = "bravado-core";
-  version = "6.6.1";
+  version = "6.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "bravado-core";
     rev = "v${version}";
-    hash = "sha256-kyHmZNPl5lLKmm5i3TSi8Tfi96mQHqaiyBfceBJcOdw=";
+    hash = "sha256-tMrGNezHtmSwuZOdTI+dMIFZ8SWi38LoOWevdwHcKr8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonref
     jsonschema # jsonschema[format-nongpl]
     python-dateutil
@@ -47,9 +47,10 @@ buildPythonPackage rec {
   ]
   ++ jsonschema.optional-dependencies.format-nongpl;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ];
 
   pythonImportsCheck = [ "bravado_core" ];
 
