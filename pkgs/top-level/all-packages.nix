@@ -10212,7 +10212,7 @@ with pkgs;
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
   curaengine = callPackage ../applications/misc/curaengine {
-    inherit (python3.pkgs) libarcus;
+    inherit (python3Packages) libarcus;
     protobuf = protobuf_21;
   };
 
