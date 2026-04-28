@@ -25,7 +25,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
 
   meta = {
-    changelog = "https://marketplace.visualstudio.com/items/gplane.wasm-language-tools/changelog";
     description = "Language support of WebAssembly";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=gplane.wasm-language-tools";
     homepage = "https://github.com/g-plane/vscode-wasm";
