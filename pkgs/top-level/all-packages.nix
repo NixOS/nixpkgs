@@ -9409,6 +9409,8 @@ with pkgs;
     ];
   };
 
+  mullvad-browser = wrapFirefox mullvad-browser-unwrapped { };
+
   floorp-bin = wrapFirefox floorp-bin-unwrapped {
     pname = "floorp-bin";
   };

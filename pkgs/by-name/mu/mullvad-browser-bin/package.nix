@@ -287,6 +287,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   passthru = {
     inherit sources;
     updateScript = callPackage ./update.nix {
