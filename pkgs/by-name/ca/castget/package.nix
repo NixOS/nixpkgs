@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       primarily intended for automatic, unattended downloading of podcasts.
     '';
     homepage = "https://castget.johndal.com/";
-    changelog = "https://github.com/mlj/castget/blob/${finalAttrs.version}/CHANGES.md";
+    changelog = "https://github.com/mlj/castget/blob/${finalAttrs.src.rev}/CHANGES.md";
     maintainers = with lib.maintainers; [ doronbehar ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
