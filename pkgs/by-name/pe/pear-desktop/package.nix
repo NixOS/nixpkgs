@@ -130,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       aacebedo
       SuperSandro2000
+      LodWKobku
     ];
     mainProgram = "pear-desktop";
     platforms = [
