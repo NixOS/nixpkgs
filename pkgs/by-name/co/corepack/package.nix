@@ -7,7 +7,6 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
-  fetchpatch2,
   writeScriptBin,
 }:
 
@@ -30,6 +29,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # We can use the built-in SQLite module instead (and skip the installCheck phase on version of
     # Node.js that do not have built-in SQLite support).
     ./use-builtin-sqlite.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/nodejs/corepack/blob/main/package.json#L19
+    ./yarn-4.14-support.patch
   ];
 
   nativeBuildInputs = [
@@ -49,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patches
       src
       ;
-    hash = "sha256-cmY6e29ryLs0psZ/TEqRfs4RdB7eCzfXU7aUH+yCE/s=";
+    hash = "sha256-WIXXaam6OoIQrAUiLtF/Fst3vYTFj3mqBr7UxhUcXMI=";
   };
 
   postPatch = ''
