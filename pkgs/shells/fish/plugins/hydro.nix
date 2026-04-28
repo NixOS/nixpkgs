@@ -2,6 +2,7 @@
   lib,
   buildFishPlugin,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 buildFishPlugin {
@@ -14,6 +15,8 @@ buildFishPlugin {
     rev = "24bb2375e3cb29c71ab790c8cfe98b9069de80c3";
     hash = "sha256-8ixve1ws80q5jNdKoooL25Lk7qopVitCMVTucW490fU=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Ultra-pure, lag-free prompt with async Git status";
