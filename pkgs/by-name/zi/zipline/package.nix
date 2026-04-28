@@ -31,7 +31,7 @@ let
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
   };
 
-  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
+  pnpm' = pnpm_10.override { nodejs-slim = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
