@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,13 +16,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-EjXcLjzVQeOJgLxGua8t0oMc+APOsONGGpG6VJVCgFw=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Digital version of Frederic Goudy’s Deepdene";
