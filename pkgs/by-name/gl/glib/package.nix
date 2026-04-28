@@ -9,7 +9,6 @@
   pkg-config,
   perl,
   python3,
-  python3Packages,
   libiconv,
   zlib,
   libffi,
@@ -196,8 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     python3
-    python3Packages.packaging # mostly used to make meson happy
-    python3Packages.wrapPython # for patchPythonScript
     gettext
     libxslt
   ]
@@ -296,11 +293,6 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '';
-
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    buildPythonPath ${python3Packages.packaging}
-    patchPythonScript "$dev/share/glib-2.0/codegen/utils.py"
   '';
 
   # Move man pages to the same output as their binaries (needs to be
