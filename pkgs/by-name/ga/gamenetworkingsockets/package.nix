@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "GameNetworkingSockets";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "GameNetworkingSockets";
     rev = "v${finalAttrs.version}";
-    sha256 = "12741wmpvy7mcvqqmjg4a7ph75rwliwgclhk4imjijqf2qkvsphd";
+    sha256 = "sha256-JE1MtcDK+0SRX03V7vq3nyK4YILsf/ffI1M7BTGzoRA=";
   };
 
   nativeBuildInputs = [
