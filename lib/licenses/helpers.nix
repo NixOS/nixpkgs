@@ -21,11 +21,12 @@ rec {
     - [license] license expression to check
   */
   evaluateProperty =
-    predicate: permissive: license:
+    predicate: permissive:
     let
       OR = if permissive then lib.any else lib.all;
       AND = if permissive then lib.all else lib.any;
     in
+    license:
     if license.licenseType == "simple" then
       predicate license
     else if license.licenseType == "compound" then
