@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncpp";
-  version = "1.9.7";
+  version = "1.9.7-unstable-2026-04-23";
 
   outputs = [
     "out"
@@ -21,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
-    rev = finalAttrs.version;
-    sha256 = "sha256-rf8d2UNTVEZhuiyChK2XnUbfGDvsfXnKADhaSp8qBwQ=";
+    rev = "755d0a69d7109d465db6196a3c7e1c6f3c62a48f";
+    hash = "sha256-FfFZPbAZjeD//00TdVsAI8yXFcZ8Uiy3cBkyyqYZgrg=";
   };
 
   /*
