@@ -139,21 +139,10 @@ let
 
         inherit (this) help name;
 
-        # Match `lib.customisation.makeOverridable`'s `.override`,
-        # which accepts both the function form `pkg.override (old: {
-        # ... })` and the legacy attrset form
-        # `pkg.override { ... }`. Many existing nixpkgs callers
-        # (e.g. `pkgs/test/cc-wrapper/hardening.nix`) rely on the
-        # attrset shape, and refusing it would force every such call
-        # site to be ported when a package becomes mkPackage-based.
         override =
-          fOrAttrs:
+          f:
           this.extend (
-            this: old:
-            let
-              f = if lib.isFunction fOrAttrs then fOrAttrs else (_: fOrAttrs);
-            in
-            {
+            this: old: {
               deps = old.deps // f old.deps;
             }
           );

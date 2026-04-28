@@ -100,18 +100,21 @@ let
   # for when we need a slightly more complicated program
   helloWithStdEnv =
     stdenv': env:
-    (hello.override { stdenv = stdenv'; }).overrideAttrs (
-      {
-        preBuild = ''
-          export CFLAGS="$TEST_EXTRA_FLAGS"
-        '';
-        NIX_DEBUG = "1";
-        postFixup = ''
-          cp $out/bin/hello $out/bin/test-bin
-        '';
-      }
-      // env
-    );
+    (hello.override (_: {
+      stdenv = stdenv';
+    })).overrideAttrs
+      (
+        {
+          preBuild = ''
+            export CFLAGS="$TEST_EXTRA_FLAGS"
+          '';
+          NIX_DEBUG = "1";
+          postFixup = ''
+            cp $out/bin/hello $out/bin/test-bin
+          '';
+        }
+        // env
+      );
 
   stdenvUnsupport =
     additionalUnsupported:
