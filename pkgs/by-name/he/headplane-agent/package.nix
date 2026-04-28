@@ -5,6 +5,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "headplane-agent";
+  __structuredAttrs = true;
   # Note, if you are upgrading this, you should upgrade headplane at the same time
   version = "0.6.1";
 

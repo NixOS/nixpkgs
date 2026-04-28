@@ -39,7 +39,7 @@ in
 
     agent.package = mkPackageOption pkgs "headplane-agent" { };
 
-    debug = mkEnableOption "Enable debug loggin";
+    debug = mkEnableOption "debug logging";
 
     settings = mkOption {
       description = ''
@@ -71,7 +71,7 @@ in
                     Path to a file containing the cookie secret.
                     The secret must be exactly 32 characters long.
                   '';
-                  example = "config.sops.secrets.headplane_cookie.path";
+                  example = lib.literalExpression "config.sops.secrets.headplane_cookie.path";
                 };
 
                 cookie_secure = mkOption {
@@ -122,7 +122,7 @@ in
                   description = ''
                     Path to a file containing the TLS certificate.
                   '';
-                  example = "config.sops.secrets.tls_cert.path";
+                  example = lib.literalExpression "config.sops.secrets.tls_cert.path";
                 };
 
                 public_url = mkOption {
@@ -203,7 +203,7 @@ in
                             To connect to your Tailnet, you need to generate a pre-auth key.
                             This can be done via the web UI or through the `headscale` CLI.
                           '';
-                          example = "config.sops.secrets.agent_pre_authkey.path";
+                          example = lib.literalExpression "config.sops.secrets.agent_pre_authkey.path";
                         };
 
                         host_name = mkOption {
@@ -289,7 +289,7 @@ in
                     description = ''
                       Path to a file containing the OIDC client secret.
                     '';
-                    example = "config.sops.secrets.oidc_client_secret.path";
+                    example = lib.literalExpression "config.sops.secrets.oidc_client_secret.path";
                   };
 
                   disable_api_key_login = mkOption {
@@ -309,11 +309,13 @@ in
                   };
 
                   headscale_api_key_path = mkOption {
-                    type = types.path;
+                    type = types.nullOr types.path;
+                    default = null;
                     description = ''
                       Path to a file containing the Headscale API key.
+                      Required when `services.headplane.settings.oidc` is set.
                     '';
-                    example = "config.sops.secrets.headscale_api_key.path";
+                    example = lib.literalExpression "config.sops.secrets.headscale_api_key.path";
                   };
 
                   redirect_uri = mkOption {
@@ -400,6 +402,27 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
+        assertion = config.services.headscale.enable;
+        message = ''
+          services.headplane requires services.headscale.enable = true.
+          The headplane module references the headscale systemd unit
+          (in `after`/`requires`) and reads its configFile, port, user,
+          and group. Enable headscale or disable headplane.
+        '';
+      }
+      {
+        assertion = cfg.settings.server.cookie_secret_path != null;
+        message = ''
+          services.headplane.settings.server.cookie_secret_path must be set.
+          Headplane refuses to start without either `cookie_secret` or
+          `cookie_secret_path` (validated at startup, see upstream
+          app/server/config/schema.ts). The NixOS module only exposes the
+          *_path form to keep secrets out of the world-readable /nix/store.
+          Provide a path to a file containing a 32-character secret, e.g.
+          via systemd `LoadCredential` or sops-nix.
+        '';
+      }
+      {
         assertion =
           cfg.settings.integration.agent == null
           || !cfg.settings.integration.agent.enabled
@@ -407,6 +430,15 @@ in
         message = ''
           services.headplane.settings.integration.agent.pre_authkey_path must be set
           when services.headplane.settings.integration.agent.enabled is true.
+        '';
+      }
+      {
+        assertion = cfg.settings.oidc == null || cfg.settings.oidc.headscale_api_key_path != null;
+        message = ''
+          services.headplane.settings.oidc.headscale_api_key_path must be set
+          when services.headplane.settings.oidc is non-null. Headplane's OIDC
+          flow requires a Headscale API key to mint sessions; upstream config
+          validation rejects an OIDC block without it.
         '';
       }
     ];
