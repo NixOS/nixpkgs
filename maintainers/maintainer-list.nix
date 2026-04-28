@@ -6794,6 +6794,12 @@
     githubId = 265220;
     name = "David Leung";
   };
+  dhogenson = {
+    email = "dallin.hogenson@icloud.com";
+    github = "dhogenson";
+    githubId = 167140817;
+    name = "Dallin Hogenson";
+  };
   diadatp = {
     email = "nixpkgs@diadatp.com";
     github = "diadatp";
