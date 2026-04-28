@@ -85,7 +85,7 @@ let
         };
       };
 
-      "42crunch".vscode-openapi = buildVscodeMarketplaceExtension {
+      "42crunch".vscode-openapi = buildVscodeMarketplaceExtension rec {
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
@@ -93,7 +93,7 @@ let
           hash = "sha256-nV7RZpDd+15YmINKrFSIlFurC955bnE4A8esrKWYVnE=";
         };
         meta = {
-          changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
+          changelog = "https://github.com/42Crunch/vscode-openapi/blob/v${mktplcRef.version}/CHANGELOG.md";
           description = "Visual Studio Code extension with rich support for the OpenAPI Specification (OAS)";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi";
           homepage = "https://github.com/42Crunch/vscode-openapi";
