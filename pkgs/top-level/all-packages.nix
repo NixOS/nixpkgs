@@ -1658,6 +1658,8 @@ with pkgs;
 
   intel-oneapi = recurseIntoAttrs (callPackage ../development/libraries/intel-oneapi { });
 
+  intelLlvmStdenv = intel-llvm.stdenv;
+
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });

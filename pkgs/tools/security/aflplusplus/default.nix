@@ -17,12 +17,17 @@
   wine ? null,
   cmocka,
   llvmPackages,
+  withNyx ? false,
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
 # 32 and 64-bit libraries ... complicates things, so it's recommended to build
 # a full 32bit version of this package if you want to do wine fuzzing
 assert (wine != null) -> (stdenv.targetPlatform.system == "i686-linux");
+
+# nyx mode is only available on x86_64-linux,
+# see nyx_mode/build_nyx_support.sh in source code of aflplusplus
+assert withNyx -> (stdenv.targetPlatform.system == "x86_64-linux");
 
 let
   aflplusplus-qemu = callPackage ./qemu.nix { };
@@ -35,6 +40,17 @@ let
       throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
   libdislocator = callPackage ./libdislocator.nix { inherit aflplusplus; };
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
+
+  libnyx =
+    if withNyx then callPackage ./nyx_mode/libnyx/libnyx.nix { inherit aflplusplus; } else null;
+  qemu-nyx =
+    if withNyx then callPackage ./nyx_mode/QEMU-Nyx/qemu-nyx.nix { inherit aflplusplus; } else null;
+  nyx-packer =
+    if withNyx then
+      callPackage ./nyx_mode/packer/packer.nix { inherit aflplusplus qemu-nyx; }
+    else
+      null;
+
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
     version = "4.35c";
@@ -43,7 +59,12 @@ let
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       tag = "v${version}";
-      hash = "sha256-j5YH39JKcjYuDqyl+KRMtgn3UoeWEW1z7m4ysf2uilc=";
+      hash =
+        if withNyx then
+          "sha256-srHrYPEb0UAP/G9cOxJOZ9D6v9pxqez28suPsa70E2M="
+        else
+          "sha256-j5YH39JKcjYuDqyl+KRMtgn3UoeWEW1z7m4ysf2uilc=";
+      fetchSubmodules = withNyx;
     };
 
     enableParallelBuilding = true;
@@ -68,6 +89,10 @@ let
     # warning: "_FORTIFY_SOURCE" redefined
     hardeningDisable = [ "fortify" ];
 
+    # We build nyx mode dependencies ourselves, so this patch skips
+    # build_nyx_support.sh in the aflplusplus source code. It also skips
+    # test-nyx-mode.sh because we can't test nyx mode in the sandbox.
+    patches = lib.optional withNyx ./nyx_mode/nyx_mode.patch;
     postPatch = ''
       # Don't care about this.
       rm Android.bp
@@ -94,6 +119,9 @@ let
 
       substituteInPlace GNUmakefile.llvm \
         --replace-fail "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
+    ''
+    + lib.optionalString withNyx ''
+      patchShebangs nyx_mode/build_nyx_support.sh
     '';
 
     env.NIX_CFLAGS_COMPILE = toString [
@@ -145,7 +173,15 @@ let
         --replace-fail "cgdelete" "${libcgroup}/bin/cgdelete"
 
       patchShebangs $out/bin
-
+    ''
+    + lib.optionalString withNyx ''
+      # Use same FHS as if built from source using build_nyx_support.sh. This
+      # means libnyx.so must be next to afl binaries and nyx_mode dependencies
+      # are in nyx_mode/.
+      cp ${libnyx}/lib/libnyx.so $out/bin
+      mkdir $out/nyx_mode
+      ln -s ${nyx-packer} $out/nyx_mode/packer
+      ln -s ${qemu-nyx} $out/nyx_mode/QEMU-Nyx
     ''
     + lib.optionalString (wine != null) ''
       substitute afl-wine-trace $out/bin/afl-wine-trace \
@@ -166,6 +202,7 @@ let
       file
       cmocka
     ];
+
     doInstallCheck = true;
     installCheckPhase = ''
       runHook preInstallCheck
@@ -191,7 +228,13 @@ let
     '';
 
     passthru = {
-      inherit libdislocator libtokencap;
+      inherit
+        libdislocator
+        libtokencap
+        libnyx
+        nyx-packer
+        qemu-nyx
+        ;
       qemu = aflplusplus-qemu;
     };
 

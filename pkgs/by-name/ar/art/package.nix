@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "art";
-  version = "1.26.3";
+  version = "1.26.4";
 
   src = fetchFromGitHub {
     owner = "artpixls";
     repo = "ART";
     tag = finalAttrs.version;
-    hash = "sha256-cBhM8vYQoEGntM4GjFaNNC5fuBQxcX343qEcrdMxuSE=";
+    hash = "sha256-T7ri0fQz3OBLmr3BBQvYgSmAQaV/aMax6SOupAQDg5o=";
   };
 
   # Fix the build with CMake 4.

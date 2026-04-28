@@ -489,9 +489,10 @@ enum UnitComparison {
 
 // Compare the contents of two unit files and return whether the unit needs to be restarted or
 // reloaded. If the units differ, the service is restarted unless the only difference is
-// `X-Reload-Triggers` in the `Unit` section. If this is the only modification, the unit is
-// reloaded instead of restarted. If the only difference is `Options` in the `[Mount]` section, the
-// unit is reloaded rather than restarted.
+// `X-Reload-Triggers` in the `[Unit]` section, `Options` in the `[Mount]` section, or `ExecReload`
+// in the `[Service]` section, in which case the unit is reloaded rather than restarted. Removing
+// `ExecReload` is treated as a no-op since the running process is unaffected and the new unit can
+// no longer be reloaded.
 fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison {
     let mut ret = UnitComparison::Equal;
 
@@ -532,6 +533,13 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                     }
                 }
                 continue; // check the next section
+            } else if section_name == "Service"
+                && section_val.len() == 1
+                && section_val.contains_key("ExecReload")
+            {
+                // Dropping ExecReload does not affect the running process and the
+                // new unit can no longer be reloaded, so there is nothing to do.
+                continue;
             } else {
                 return UnitComparison::UnequalNeedsRestart;
             }
@@ -562,6 +570,11 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                 if section_name == "Unit" && unit_section_ignores.contains_key(ini_key.as_str()) {
                     continue;
                 }
+                // Dropping ExecReload does not affect the running process and the
+                // new unit can no longer be reloaded, so there is nothing to do.
+                if section_name == "Service" && ini_key == "ExecReload" {
+                    continue;
+                }
                 return UnitComparison::UnequalNeedsRestart;
             };
 
@@ -574,6 +587,12 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                     } else if unit_section_ignores.contains_key(ini_key.as_str()) {
                         continue;
                     }
+                }
+
+                // If this is a service unit, check if it was only `ExecReload`
+                if section_name == "Service" && ini_key == "ExecReload" {
+                    ret = UnitComparison::UnequalNeedsReload;
+                    continue;
                 }
 
                 // If this is a mount unit, check if it was only `Options`
@@ -598,6 +617,12 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
                         return UnitComparison::UnequalNeedsRestart;
                     }
                 }
+            } else if section_name == "Service"
+                && ini_cmp.len() == 1
+                && ini_cmp.contains_key("ExecReload")
+            {
+                ret = UnitComparison::UnequalNeedsReload;
+                continue;
             } else {
                 return UnitComparison::UnequalNeedsRestart;
             }
@@ -606,15 +631,28 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
 
     // A section was introduced that was missing in the previous unit
     if !section_cmp.is_empty() {
-        if section_cmp.keys().len() == 1 && section_cmp.contains_key("Unit") {
-            if let Some(new_unit_unit) = new_unit.get("Unit") {
-                for ini_key in new_unit_unit.keys() {
-                    if !unit_section_ignores.contains_key(ini_key.as_str()) {
-                        return UnitComparison::UnequalNeedsRestart;
-                    } else if ini_key == "X-Reload-Triggers" {
-                        ret = UnitComparison::UnequalNeedsReload;
+        if section_cmp.keys().len() == 1 {
+            // Dispatch on which section is actually new.
+            if section_cmp.contains_key("Unit") {
+                if let Some(new_unit_unit) = new_unit.get("Unit") {
+                    for ini_key in new_unit_unit.keys() {
+                        if !unit_section_ignores.contains_key(ini_key.as_str()) {
+                            return UnitComparison::UnequalNeedsRestart;
+                        } else if ini_key == "X-Reload-Triggers" {
+                            ret = UnitComparison::UnequalNeedsReload;
+                        }
                     }
                 }
+            } else if section_cmp.contains_key("Service") {
+                if let Some(new_unit_service) = new_unit.get("Service") {
+                    if new_unit_service.len() == 1 && new_unit_service.contains_key("ExecReload") {
+                        ret = UnitComparison::UnequalNeedsReload;
+                    } else {
+                        return UnitComparison::UnequalNeedsRestart;
+                    }
+                }
+            } else {
+                return UnitComparison::UnequalNeedsRestart;
             }
         } else {
             return UnitComparison::UnequalNeedsRestart;
@@ -2620,6 +2658,112 @@ invalid
                             vec!["barfoo".to_string()]
                         )])
                     )])
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            assert!(
+                super::compare_units(
+                    &HashMap::from([]),
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([("ExecReload".to_string(), vec!["foobar".to_string()])])
+                    )])
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([("ExecReload".to_string(), vec!["foobar".to_string()])])
+                    )]),
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([("ExecReload".to_string(), vec!["barfoo".to_string()])])
+                    )])
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            // New [Service] section while [Unit] already existed: must inspect
+            // the [Service] section, not the (unchanged) [Unit] one.
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Unit".to_string(),
+                        HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                    )]),
+                    &HashMap::from([
+                        (
+                            "Unit".to_string(),
+                            HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                        ),
+                        (
+                            "Service".to_string(),
+                            HashMap::from([("ExecStart".to_string(), vec!["y".to_string()])])
+                        ),
+                    ]),
+                ) == super::UnitComparison::UnequalNeedsRestart
+            );
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Unit".to_string(),
+                        HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                    )]),
+                    &HashMap::from([
+                        (
+                            "Unit".to_string(),
+                            HashMap::from([("Description".to_string(), vec!["x".to_string()])])
+                        ),
+                        (
+                            "Service".to_string(),
+                            HashMap::from([("ExecReload".to_string(), vec!["y".to_string()])])
+                        ),
+                    ]),
+                ) == super::UnitComparison::UnequalNeedsReload
+            );
+
+            // ExecReload removed: running process is unaffected and the new
+            // unit cannot be reloaded, so no action is needed.
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([
+                            ("ExecStart".to_string(), vec!["x".to_string()]),
+                            ("ExecReload".to_string(), vec!["y".to_string()]),
+                        ])
+                    )]),
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([("ExecStart".to_string(), vec!["x".to_string()])])
+                    )]),
+                ) == super::UnitComparison::Equal
+            );
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([("ExecReload".to_string(), vec!["y".to_string()])])
+                    )]),
+                    &HashMap::from([]),
+                ) == super::UnitComparison::Equal
+            );
+
+            // ExecReload added to an existing [Service] section
+            assert!(
+                super::compare_units(
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([("ExecStart".to_string(), vec!["x".to_string()])])
+                    )]),
+                    &HashMap::from([(
+                        "Service".to_string(),
+                        HashMap::from([
+                            ("ExecStart".to_string(), vec!["x".to_string()]),
+                            ("ExecReload".to_string(), vec!["y".to_string()]),
+                        ])
+                    )]),
                 ) == super::UnitComparison::UnequalNeedsReload
             );
 

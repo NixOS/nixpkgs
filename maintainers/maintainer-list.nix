@@ -7764,6 +7764,12 @@
     githubId = 411447;
     name = "Leo Gaspard";
   };
+  ekzyis = {
+    email = "ramdip.singhgill@gmail.com";
+    github = "ekzyis";
+    githubId = 27162016;
+    name = "Ramdip Gill";
+  };
   elasticdog = {
     email = "aaron@elasticdog.com";
     github = "elasticdog";

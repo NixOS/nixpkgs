@@ -105,11 +105,10 @@ let
 
     test -n "$NIX_PROFILES"
     and begin
-      # We ensure that __extra_* variables are read in $__fish_datadir/config.fish
-      # with a preference for user-configured data by making sure the package-specific
-      # data comes last. Files are loaded/sourced in encounter order, duplicate
-      # basenames get skipped, so we assure this by prepending Nix profile paths
-      # (ordered in reverse of the $NIX_PROFILE variable)
+      # We ensure that __extra_* variables are read in embedded:config.fish with a preference for
+      # user-configured data by making sure the package-specific data comes last. Files are
+      # loaded/sourced in encounter order, duplicate basenames get skipped, so we assure this by
+      # prepending Nix profile paths (ordered in reverse of the $NIX_PROFILE variable)
       #
       # Note that at this point in evaluation, there is nothing whatsoever on the
       # fish_function_path. That means we don't have most fish builtins, e.g., `eval`.
@@ -135,12 +134,12 @@ let
   # `begin; begin; …; end; end` but that's ok.
   sourceWithFenv = path: ''
     begin # fenv
-      # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
-      # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
-      set fish_function_path ${fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
+      # This happens before embedded:config.fish sets fish_function_path, so it is currently unset.
+      # We set it and then completely erase it, leaving its configuration to embedded:config.fish
+      set fish_function_path ${fishPlugins.foreign-env}/share/fish/vendor_functions.d
       fenv source ${lib.escapeShellArg path}
       set -l fenv_status $status
-      # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
+      # clear fish_function_path so that it will be correctly set when we return to embedded:config.fish
       set -e fish_function_path
       test $fenv_status -eq 0
     end # fenv
