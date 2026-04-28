@@ -23,12 +23,20 @@
     "rev": "cb1d42aaa1e14b09e1452cfdef373d051b8c02a4",
     "hash": "sha256-CG5je117WYyemTe5PTqznDP0bvY5TeXn8Vu1Xh5yUzQ="
   },
+  "gtest": {
+    "rev": "4fe3307fb2d9f86d19777c7eb0e4809e9694dde7",
+    "hash": "sha256-gJhv3DQQSP5BQ6GmDobq42/Gkx4AbOg/ZS80bM0WpEw="
+  },
   "generateShimHeaders": {
     "hash": "sha256-tqhnqYoQeXUTN7OSSVwchpEkGJwhCUSk8TG8LUgrHdg="
   },
   "testFonts": {
     "rev": "7f51783942943e965cd56facf786544ccfc07713",
-    "hash": "sha256-gBnAOW/X2R13AP9507uPsvQ4A2ZUPbvzFcg3Neu3DT8="
+    "hash": "sha256-gBnAOW/X2R13AP9507uPsvQ4A2ZUPbvzFcg3Neu3DT8=",
+    "bundle": {
+      "object": "cd96fc55dc243f6c6f4cb63ad117cad6cd48dceb",
+      "hash": "sha256-7Jc+zNZp1Bf78tCk2scwdEoxdCaP8GLbVFG1XIK8NJI="
+    }
   },
   "simdutf": {
     "rev": "f7356eed293f8208c40b3c1b344a50bd70971983",

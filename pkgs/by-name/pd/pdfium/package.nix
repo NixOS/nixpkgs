@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchzip,
   freetype,
   gclient2nix,
   glib,
+  glibcLocales,
   gn,
   harfbuzz,
   icu,
@@ -30,56 +32,70 @@ let
   version = toString versionInfo.build;
   chromiumSrcRef = "refs/branch-heads/${version}";
 
-  gclientDeps = gclient2nix.importGclientDeps {
-    "src" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://pdfium.googlesource.com/pdfium";
-        rev = "refs/heads/chromium/${version}";
-        inherit (sources.pdfium) hash;
-      };
-    };
+  canRunTests = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-    "src/build" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/chromium/src/build.git";
-        inherit (sources.build) rev hash;
+  gclientDeps = gclient2nix.importGclientDeps (
+    {
+      "src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://pdfium.googlesource.com/pdfium";
+          rev = "refs/heads/chromium/${version}";
+          inherit (sources.pdfium) hash;
+        };
       };
-    };
 
-    "src/third_party/abseil-cpp" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp";
-        inherit (sources.abseil) rev hash;
+      "src/build" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/chromium/src/build.git";
+          inherit (sources.build) rev hash;
+        };
       };
-    };
 
-    "src/third_party/fast_float/src" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/external/github.com/fastfloat/fast_float";
-        inherit (sources.fastFloat) rev hash;
+      "src/third_party/abseil-cpp" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp";
+          inherit (sources.abseil) rev hash;
+        };
       };
-    };
 
-    "src/third_party/simdutf" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/chromium/src/third_party/simdutf";
-        inherit (sources.simdutf) rev hash;
+      "src/third_party/fast_float/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/fastfloat/fast_float";
+          inherit (sources.fastFloat) rev hash;
+        };
       };
-    };
 
-    "src/third_party/test_fonts" = {
-      fetcher = "fetchFromGitiles";
-      args = {
-        url = "https://chromium.googlesource.com/chromium/src/third_party/test_fonts";
-        inherit (sources.testFonts) rev hash;
+      "src/third_party/simdutf" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/chromium/src/third_party/simdutf";
+          inherit (sources.simdutf) rev hash;
+        };
       };
-    };
-  };
+
+      "src/third_party/test_fonts" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/chromium/src/third_party/test_fonts";
+          inherit (sources.testFonts) rev hash;
+        };
+      };
+    }
+    // lib.optionalAttrs canRunTests {
+      # PDFium's native test targets use Chromium's googletest wrapper targets.
+      "src/third_party/googletest/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/google/googletest";
+          inherit (sources.gtest) rev hash;
+        };
+      };
+    }
+  );
 
   generateShimHeaders = fetchzip {
     url = "https://chromium.googlesource.com/chromium/src/+archive/${chromiumSrcRef}/tools/generate_shim_headers.tar.gz";
@@ -91,6 +107,11 @@ let
     url = "https://chromium.googlesource.com/chromium/src/+archive/${chromiumSrcRef}/buildtools.tar.gz";
     inherit (sources.chromiumBuildtools) hash;
     stripRoot = false;
+  };
+
+  testFontsBundle = fetchurl {
+    url = "https://storage.googleapis.com/chromium-fonts/${sources.testFonts.bundle.object}";
+    inherit (sources.testFonts.bundle) hash;
   };
 
   chromiumCpu =
@@ -117,6 +138,36 @@ let
       stdenv.cc
     ];
   };
+
+  disabledUnitTests = [
+    # This checks for one exact compressed byte sequence, but PDFium here
+    # intentionally uses the system zlib implementation.
+    "FlateModule.Encode"
+    # This observes retain/release churn through std::set lookup and differs
+    # with the system standard library implementation used in nixpkgs.
+    "RetainPtr.SetContains"
+  ];
+
+  disabledEmbedderTests = [
+    # These assert exact serialized PDF and font-subset output. With system
+    # libraries, output differs from upstream's in-tree stack; known
+    # contributors are HarfBuzz subsetting and zlib-compressed save output.
+    "CPDFFontSubsetterTest.MultipleFontsMultipleTexts"
+    "FPDFSaveWithFontSubsetEmbedderTest.SaveWithoutSubsetWithNewText"
+    "FPDFSaveWithFontSubsetEmbedderTest.SaveWithSubsetWithNewText"
+    # These render tests also differ from upstream's in-tree stack. The known
+    # FreeType difference is the system autofit/autohinting configuration.
+    "FPDFViewEmbedderTest.RenderAnnotsGrayScale"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorScheme"
+    "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorSchemeAndConvertFillToStroke"
+    "FPDFAnnotEmbedderTest.ModifyRectQuadpointsWithAP"
+  ];
+
+  mkDisabledGtestFilter = disabledTests: "-${lib.concatStringsSep ":" disabledTests}";
+  unitTestFilter = mkDisabledGtestFilter disabledUnitTests;
+  embedderTestFilter = mkDisabledGtestFilter disabledEmbedderTests;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfium";
@@ -129,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "src";
   __structuredAttrs = true;
   strictDeps = true;
+  doCheck = canRunTests;
 
   patches = [
     # Drop Clang flags that older nixpkgs Clang does not support.
@@ -145,6 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./pkg-config-non-linux.patch
     # Keep /nix/store paths out of the macOS SDK sysroot rewrite.
     ./pkg-config-absolute-paths.patch
+    # Accept the same 1-channel Apple rendering tolerance as PDFium's fuzzy
+    # helper for Mac expectation-suffix embedder tests.
+    ./darwin-embedder-test-pixel-tolerance.patch
   ];
 
   nativeBuildInputs = [
@@ -171,6 +226,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && canRunTests) {
+    # Locale-sensitive tests expect glibc locales to be available.
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
+
   postPatch = ''
     substituteInPlace BUILD.gn \
       --replace-fail 'component("pdfium")' 'shared_library("pdfium")'
@@ -194,6 +254,9 @@ stdenv.mkDerivation (finalAttrs: {
     # even when PDFium links against the system libc++.
     mkdir -p buildtools
     cp -r ${chromiumBuildtools}/. buildtools
+  ''
+  + lib.optionalString canRunTests ''
+    tar -xzf ${testFontsBundle} -C third_party/test_fonts
   '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -270,6 +333,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   ninjaFlags = [ "pdfium" ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    buildCores=1
+    if [ "''${enableParallelChecking-1}" ]; then
+      buildCores="$NIX_BUILD_CORES"
+    fi
+
+    TERM=dumb ninja -j"$buildCores" pdfium_unittests pdfium_embeddertests
+
+    ./pdfium_unittests --gtest_filter='${unitTestFilter}'
+    ./pdfium_embeddertests --gtest_filter='${embedderTestFilter}'
+
+    runHook postCheck
+  '';
 
   installPhase = ''
     runHook preInstall
