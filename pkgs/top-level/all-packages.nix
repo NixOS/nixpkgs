@@ -3192,7 +3192,7 @@ with pkgs;
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
 
-  pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
+  pycflow2dot = with python3Packages; toPythonApplication pycflow2dot;
 
   pyinfra = with python3Packages; toPythonApplication pyinfra;
 
@@ -3230,7 +3230,7 @@ with pkgs;
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
-  rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
+  rainbowstream = with python3Packages; toPythonApplication rainbowstream;
 
   rapidgzip = with python3Packages; toPythonApplication rapidgzip;
 
