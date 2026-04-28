@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.0.0-rc.1";
-  sha256 = "sha256-Jys58NbFXoQXuhvzkqzwXXaK1GzcOehXIO1FIEQ60x4=";
+  version = "26.0.0-rc.2";
+  sha256 = "sha256-uf2qSym2VA3JsXghSBT2mPg0KMYcqPYwauDrIhnVAys=";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -56,6 +56,13 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      ./fix-temporal-integration-with-shared-icu.patch
+      # TODO: remove when included in a next release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/730fa6a16fa47406905b47540f3ab46ee10420c2.patch?full_index=1";
+        hash = "sha256-Ks9mT/7fcJ9nl8FWHq7HrVP+ZHF9AEOYV7xsN/NOWII=";
+      })
 
       # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
       # OpenSSL reports different errors
