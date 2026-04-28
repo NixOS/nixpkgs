@@ -6799,7 +6799,7 @@ with pkgs;
 
   libxml2Python =
     let
-      inherit (python3.pkgs) libxml2;
+      inherit (python3Packages) libxml2;
     in
     pkgs.buildEnv {
       # slightly hacky
