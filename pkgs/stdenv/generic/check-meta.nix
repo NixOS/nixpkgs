@@ -81,20 +81,16 @@ let
 
   hasListedLicense =
     assert areLicenseListsValid;
-    list:
-    if list == [ ] then
-      attrs: false
-    else
-      attrs:
-      attrs ? meta.license
-      && (
-        if isList attrs.meta.license then
-          any (l: elem l list) attrs.meta.license
-        else if attrs.meta.license ? "licenseType" then
-          lib.licenses.containsLicenses list attrs.meta.license
-        else
-          elem attrs.meta.license list
-      );
+    list: attrs:
+    attrs ? meta.license
+    && (
+      if isList attrs.meta.license then
+        any (l: elem l list) attrs.meta.license
+      else if attrs.meta.license ? "licenseType" then
+        lib.licenses.containsLicenses list attrs.meta.license
+      else
+        elem attrs.meta.license list
+    );
 
   hasAllowlistedLicense = hasListedLicense allowlist;
 
@@ -428,13 +424,13 @@ let
       }
 
     # --- Put checks that can be ignored here ---
-    else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
+    else if hasDeniedUnfreeLicense attrs && !(allowlist != [ ] && hasAllowlistedLicense attrs) then
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
         remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
       }
-    else if hasBlocklistedLicense attrs then
+    else if blocklist != [ ] && hasBlocklistedLicense attrs then
       {
         reason = "blocklisted";
         msg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
