@@ -559,6 +559,10 @@ runTests {
     ];
     expected = "a\nb\nc\n";
   };
+  testConcatLinesEmpty = {
+    expr = concatLines [ ];
+    expected = "";
+  };
 
   testMakeIncludePathWithPkgs = {
     expr = (

@@ -3520,6 +3520,12 @@ with pkgs;
   varnishPackages = varnish80Packages;
   varnish = varnishPackages.varnish;
 
+  inherit (callPackages ../servers/vinyl-cache { })
+    vinyl-cache_9
+    ;
+
+  vinyl-cache = vinyl-cache_9;
+
   vncdo = with python3Packages; toPythonApplication vncdo;
 
   # An alias to work around the splicing incidents
@@ -10192,7 +10198,6 @@ with pkgs;
       callPackage ../applications/networking/instant-messengers/ripcord/darwin.nix { };
 
   inherit (callPackage ../applications/networking/cluster/rke2 { })
-    rke2_1_32
     rke2_1_33
     rke2_1_34
     rke2_1_35

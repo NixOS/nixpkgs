@@ -37,6 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build ./config
     patchShebangs --build ./contrib
     patchShebangs --build ./src/util/convert-help.py
+
+  ''
+  # 1. Remove the build information (options to configure and the CC path)
+  # These are hardcoded in the library and create an unwanted dependency
+  # on *.dev inputs.
+  # 2. Remove the reference to the pmix include directories, which are
+  # also hardcoded into the library (would be a cyclic reference).
+  + ''
+    substituteInPlace ./src/runtime/pmix_info_support.c \
+      --replace-fail 'PMIX_CONFIGURE_CLI' '""' \
+      --replace-fail 'PMIX_CC_ABSOLUTE' '""'
+
+    substituteInPlace ./src/mca/pinstalldirs/config/pinstall_dirs.h.in \
+      --replace-fail '@includedir@' ""
   '';
 
   nativeBuildInputs = [
@@ -91,10 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
-    # The build info (parameters to ./configure) are hardcoded
-    # into the library. This clears all references to $dev/include.
-    remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libpmix.so)
-
     # The path to the pmixcc-wrapper-data.txt is hard coded and
     # points to $out instead of dev. Use wrapper to fix paths.
     wrapProgram "''${!outputDev}"/bin/pmixcc \
