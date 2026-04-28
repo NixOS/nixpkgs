@@ -3294,7 +3294,7 @@ with pkgs;
 
   s3-credentials = with python3Packages; toPythonApplication s3-credentials;
 
-  safety-cli = with python3.pkgs; toPythonApplication safety;
+  safety-cli = with python3Packages; toPythonApplication safety;
 
   sasview = callPackage ../applications/science/misc/sasview { };
 
