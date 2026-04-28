@@ -49,7 +49,7 @@ in
 
 ags.bundle {
   pname = "hyprpanel";
-  version = "0-unstable-2026-03-23";
+  version = "0-unstable-2026-04-23";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -57,8 +57,8 @@ ags.bundle {
   src = fetchFromGitHub {
     owner = "Jas-SinghFSU";
     repo = "HyprPanel";
-    rev = "e919b4a8a8ab5f2a0752f68576ab3eed6993cefd";
-    hash = "sha256-92ZbaBfsEXEE7VaWJjv9aRSk3l9nyoYYyMe2AwTqSZI=";
+    rev = "1961ba86ad5ab880beb639e5454054b2b5037e0d";
+    hash = "sha256-QowlCOrE4jGOTDCUCEx/E8gHjqSx3r25y7v4dEBpBhk=";
   };
 
   # keep in sync with https://github.com/Jas-SinghFSU/HyprPanel/blob/master/flake.nix#L42
