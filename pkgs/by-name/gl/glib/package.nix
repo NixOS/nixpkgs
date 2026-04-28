@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     finalAttrs.setupHook
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+  ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD && !stdenv.hostPlatform.isWindows) [
     libsysprof-capture
   ]
   ++ [
@@ -237,6 +237,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Dxattr=false"
     "-Dsysprof=disabled" # sysprof-capture does not build on FreeBSD
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "-Dsysprof=disabled" # sysprof-capture does not build on Windows
   ];
 
   env = {
