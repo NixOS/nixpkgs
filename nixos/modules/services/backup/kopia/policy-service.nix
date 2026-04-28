@@ -247,7 +247,7 @@ in
         name: backup:
         let
           policyArgs = lib.concatStringsSep " " (mkPolicyArgs backup);
-          policyScript = pkgs.writeShellScript "kopia-policy-${name}" ''
+          policyScript = ''
             set -euo pipefail
             export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
 
@@ -258,10 +258,10 @@ in
         in
         lib.nameValuePair "kopia-policy-${name}" {
           description = "Kopia policy for ${name}";
-          requires = [ "kopia-policy-${name}".service ];
-          after = [ "kopia-repository-${name}".service ];
-          before = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}" ];
-          wantedBy = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}" ];
+          requires = [ "kopia-repository-${name}.service" ];
+          after = [ "kopia-repository-${name}.service" ];
+          before = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}.service" ];
+          wantedBy = lib.mkIf (backup.paths != [ ]) [ "kopia-snapshot-${name}.service" ];
           environment = {
             KOPIA_CONFIG_PATH = "/var/lib/kopia/${name}/repository.config";
           };
