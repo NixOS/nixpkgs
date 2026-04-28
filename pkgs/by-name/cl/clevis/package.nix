@@ -78,10 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
   # be vulnerable to code injection. This hint is a courtesy of Stack Exchange:
   # https://unix.stackexchange.com/a/267438
   #
-  # Meson's find_program only searches paths relative to the build prefix
-  # and /usr/lib, neither of which contain systemd-reply-password in the
-  # nix store. Prepend the actual nix store path so meson can find it.
-  #
   # The systemd pkgconfig variable 'systemdsystemunitdir' points into the
   # read-only systemd store path. Redirect unit installation to $out.
   postPatch = ''
@@ -89,10 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
                  xargs -0 -I@ sh -c 'grep -q "/bin/cat" "$1" && echo "$1"' sh @); do
       substituteInPlace "$f" --replace-fail '/bin/cat' '${lib.getExe' coreutils "cat"}'
     done
-
-    substituteInPlace src/luks/systemd/meson.build \
-      --replace-fail "sd_reply_pass = find_program(" \
-        "sd_reply_pass = find_program('${systemd}/lib/systemd/systemd-reply-password',"
 
     substituteInPlace src/luks/systemd/meson.build \
       --replace-fail "unitdir = systemd.get_pkgconfig_variable('systemdsystemunitdir')" \
