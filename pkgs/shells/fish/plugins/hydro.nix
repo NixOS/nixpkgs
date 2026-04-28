@@ -19,6 +19,6 @@ buildFishPlugin {
     description = "Ultra-pure, lag-free prompt with async Git status";
     homepage = "https://github.com/jorgebucaran/hydro";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ higherorderlogic ];
   };
 }
