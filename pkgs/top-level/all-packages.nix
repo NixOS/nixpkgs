@@ -5502,7 +5502,7 @@ with pkgs;
   libbpf = callPackage ../os-specific/linux/libbpf { };
   libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
 
-  bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
+  bundlewrap = with python3Packages; toPythonApplication bundlewrap;
 
   # Wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
