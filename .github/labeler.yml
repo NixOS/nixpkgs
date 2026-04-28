@@ -551,7 +551,6 @@
               - pkgs/by-name/*/*tree-sitter*/**/*
               - pkgs/by-name/ne/neovim-unwrapped/treesitter-parsers.nix
               - pkgs/development/python-modules/*tree-sitter*/**/*
-              - pkgs/development/tools/parsing/tree-sitter/**/*
 
 "6.topic: updaters":
   - any:

@@ -315,7 +315,7 @@ class Driver:
 
         general_symbols = dict(
             start_all=self.start_all,
-            test_script=self.config.test_script,
+            test_script=self.test_script,
             machines=self.machines,
             machines_qemu=self.machines_qemu,
             machines_nspawn=self.machines_nspawn,
@@ -359,8 +359,6 @@ class Driver:
     def dump_machine_ssh(self) -> None:
         if not self.config.enable_ssh_backdoor:
             return
-
-        assert self.vhost_vsock is not None
 
         if self.machines:
             print("SSH backdoor enabled, the machines can be accessed like this:")
