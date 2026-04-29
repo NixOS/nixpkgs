@@ -501,11 +501,9 @@ nameDrvAfterAttrName (
       )
     );
 
-    pieAlwaysEnabled = brokenIf stdenv.hostPlatform.isStatic (
-      checkTestBin (f2exampleWithStdEnv stdenv { }) {
-        ignorePie = false;
-      }
-    );
+    pieAlwaysEnabled = checkTestBin (f2exampleWithStdEnv stdenv { }) {
+      ignorePie = false;
+    };
 
     relROExplicitEnabled =
       checkTestBin
