@@ -4,9 +4,11 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
+  pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
   replaceVars,
+  writableTmpDirAsHomeHook,
   writeShellScriptBin,
 
   aiosqlite,
@@ -16,6 +18,7 @@
   apprise,
   asgi-lifespan,
   asyncpg,
+  boto3,
   cachetools,
   click,
   cloudpickle,
@@ -37,12 +40,15 @@
   jinja2,
   jsonpatch,
   jsonschema,
+  moto,
+  numpy,
   opentelemetry-api,
   opentelemetry-distro,
   opentelemetry-exporter-otlp,
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-logging,
   opentelemetry-instrumentation-system-metrics,
+  opentelemetry-sdk,
   opentelemetry-test-utils,
   orjson,
   packaging,
@@ -55,12 +61,17 @@
   pydantic-settings,
   pydantic,
   pydocket,
+  pytest-asyncio,
+  pytest-env,
+  pytest-timeout,
+  pytest-xdist,
   python-dateutil,
   python-on-whales,
   python-slugify,
   pytz,
   pyyaml,
   readchar,
+  respx,
   rfc3339-validator,
   rich,
   ruamel-yaml-clib,
@@ -73,8 +84,10 @@
   uv,
   uvicorn,
   versioningit,
+  watchfiles,
   websockets,
   whenever,
+  yamllint,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -94,6 +107,12 @@ buildPythonPackage (finalAttrs: {
       --replace-fail \
         'default-version = "3.6.24+nogit"' \
         'default-version = "${finalAttrs.version}"'
+  ''
+  + lib.optionalString finalAttrs.doCheck ''
+    substituteInPlace src/prefect/__init__.py \
+      --replace-fail \
+        '__development_base_path__: pathlib.Path = __module_path__.parents[1]' \
+        '__development_base_path__: pathlib.Path = pathlib.Path("${finalAttrs.src}")'
   '';
 
   # versioningit: NotVCSError: Git not installed; assuming this isn't a Git repository
@@ -250,6 +269,28 @@ buildPythonPackage (finalAttrs: {
       ];
     };
   };
+
+  # FIXME: build killed at ~30%
+  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+
+    boto3
+    moto
+    numpy
+    opentelemetry-sdk
+    opentelemetry-test-utils
+    pytest-asyncio
+    pytest-env
+    pytest-timeout
+    pytest-xdist
+    respx
+    uv
+    uvicorn
+    watchfiles
+    yamllint
+  ];
 
   meta = {
     description = "Workflow orchestration framework for building resilient data pipelines in Python";
