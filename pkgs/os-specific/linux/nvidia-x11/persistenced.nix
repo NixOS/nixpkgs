@@ -4,6 +4,7 @@ nvidia_x11: sha256:
   stdenv,
   lib,
   fetchFromGitHub,
+  buildPackages,
   m4,
   pkg-config,
   addDriverRunpath,
@@ -26,6 +27,8 @@ stdenv.mkDerivation {
     NIX_LDFLAGS = toString [ "-ltirpc" ];
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     m4
     pkg-config
@@ -36,7 +39,12 @@ stdenv.mkDerivation {
     libtirpc
   ];
 
-  makeFlags = [ "DATE=true" ];
+  makeFlags = [
+    "DATE=true"
+    "DO_STRIP="
+    "HOST_CC=\$(CC_FOR_BUILD)"
+    "HOST_LD=\$(LD_FOR_BUILD)"
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
