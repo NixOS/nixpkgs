@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qJiv1XZhcrAEnmeBVY4GiQmL+HudgrhGxlLlccAdYNg=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [
     pkg-config

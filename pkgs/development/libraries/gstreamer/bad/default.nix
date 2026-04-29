@@ -134,6 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  # Argument list too long
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -389,9 +395,6 @@ stdenv.mkDerivation (finalAttrs: {
         "-Dx265=disabled"
       ]
   );
-
-  # Argument list too long
-  strictDeps = true;
 
   postPatch = ''
     patchShebangs \
