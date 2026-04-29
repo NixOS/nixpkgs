@@ -84,11 +84,12 @@ in
 
     group = lib.mkOption {
       type = lib.types.str;
-      default = if cfg.enableNginx then "nginx" else defaultGroup;
-      defaultText = "If `services.firefly-iii-data-importer.enableNginx` is true then `nginx` else ${defaultGroup}";
+      default = defaultGroup;
       description = ''
-        Group under which firefly-iii-data-importer runs. It is best to set this to the group
-        of whatever webserver is being used as the frontend.
+        Group under which firefly-iii-data-importer runs.
+        While this also changes which group has access to the phpfpm socket,
+        changing {option}`services.firefly-iii-data-importer.poolConfig."listen.group"`
+        is preferred.
       '';
     };
 
@@ -149,6 +150,9 @@ in
       default = { };
       defaultText = lib.literalExpression ''
         {
+          "listen.mode" = "0660";
+          "listen.owner" = if config.services.firefly-iii-data-importer.enableNginx then config.services.nginx.user else config.services.firefly-iii-data-importer.user;
+          "listen.group" = if config.services.firefly-iii-data-importer.enableNginx then config.services.nginx.group else config.services.firefly-iii-data-importer.group;
           "pm" = "dynamic";
           "pm.max_children" = 32;
           "pm.start_servers" = 2;
@@ -201,9 +205,9 @@ in
         log_errors = on
       '';
       settings = {
-        "listen.mode" = "0660";
-        "listen.owner" = user;
-        "listen.group" = group;
+        "listen.mode" = lib.mkDefault "0660";
+        "listen.owner" = lib.mkDefault (if cfg.enableNginx then config.services.nginx.user else user);
+        "listen.group" = lib.mkDefault (if cfg.enableNginx then config.services.nginx.group else group);
         "pm" = lib.mkDefault "dynamic";
         "pm.max_children" = lib.mkDefault 32;
         "pm.start_servers" = lib.mkDefault 2;
