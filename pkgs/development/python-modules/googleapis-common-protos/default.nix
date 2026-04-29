@@ -53,8 +53,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Common protobufs used in Google APIs";
-    homepage = "https://github.com/googleapis/python-api-common-protos";
-    changelog = "https://github.com/googleapis/python-api-common-protos/releases/tag/${src.tag}";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/googleapis-common-protos";
+    changelog = "https://github.com/googleapis/google-cloud-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
