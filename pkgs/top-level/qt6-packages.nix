@@ -42,6 +42,7 @@ makeScopeWithSplicing' {
     // {
 
       # LIBRARIES
+      accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
       accounts-qt = callPackage ../development/libraries/accounts-qt { };
       appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
