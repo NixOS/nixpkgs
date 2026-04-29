@@ -1,4 +1,5 @@
 {
+  fetchpatch,
   fetchFromGitHub,
   buildDunePackage,
   lib,
@@ -27,6 +28,13 @@ buildDunePackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-I7u/n49WOnpc0EaagsjC4Ts/kz0Xj6YHZv6+QZKLrC4=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/robur-coop/httpcats/commit/d8787555d4831e0488780d42bd2c65de662d1d38.patch";
+      hash = "sha256-Mqam6Sxd2kkkHDm459u9uerifuHbvZUVy2khQffvvCE=";
+    })
+  ];
 
   propagatedBuildInputs = [
     h2
