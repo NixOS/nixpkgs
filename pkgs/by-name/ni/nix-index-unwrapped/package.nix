@@ -6,6 +6,7 @@
   openssl,
   curl,
   sqlite,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -36,6 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --subst-var out
     install -Dm555 command-not-found.nu -t $out/etc/profile.d
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Files database for nixpkgs";
