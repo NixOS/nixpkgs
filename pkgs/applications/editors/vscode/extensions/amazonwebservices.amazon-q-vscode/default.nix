@@ -12,7 +12,7 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/aws/aws-toolkit-vscode/releases/tag/amazonq%2Fv${finalAttrs.version}";
+    # changelog = "https://github.com/aws/aws-toolkit-vscode/releases/tag/amazonq%2Fv${finalAttrs.version}";
     description = "Amazon Q, CodeCatalyst, Local Lambda debug, SAM/CFN syntax, ECS Terminal, AWS resources";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.amazon-q-vscode";
     homepage = "https://github.com/aws/aws-toolkit-vscode";
