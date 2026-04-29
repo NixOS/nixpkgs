@@ -101,12 +101,14 @@ fp16_rev=$(extract_deps_rev "$deps_file" fp16_revision)
 gtest_rev=$(extract_deps_rev "$deps_file" gtest_revision)
 highway_rev=$(extract_deps_rev "$deps_file" highway_revision)
 libcxx_rev=$(extract_deps_rev "$deps_file" libcxx_revision)
+libcxxabi_rev=$(extract_deps_rev "$deps_file" libcxxabi_revision)
+llvm_libc_rev=$(extract_deps_rev "$deps_file" llvm_libc_revision)
 test_fonts_rev=$(extract_deps_rev "$deps_file" test_fonts_revision)
 v8_rev=$(extract_deps_rev "$deps_file" v8_revision)
 zlib_rev=$(extract_deps_rev "$deps_file" zlib_revision)
 simdutf_rev=$(extract_deps_rev "$deps_file" simdutf_revision)
 
-for dep_var in build_rev abseil_rev dragonbox_rev fast_float_rev fp16_rev gtest_rev highway_rev libcxx_rev test_fonts_rev v8_rev zlib_rev simdutf_rev; do
+for dep_var in build_rev abseil_rev dragonbox_rev fast_float_rev fp16_rev gtest_rev highway_rev libcxx_rev libcxxabi_rev llvm_libc_rev test_fonts_rev v8_rev zlib_rev simdutf_rev; do
   if [[ -z ${!dep_var} ]]; then
     echo "failed to extract $dep_var from $deps_file" >&2
     exit 1
@@ -138,6 +140,8 @@ fp16_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/Mar
 gtest_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/google/googletest/+archive/${gtest_rev}.tar.gz")")
 highway_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/google/highway.git/+archive/${highway_rev}.tar.gz")")
 libcxx_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/llvm/llvm-project/libcxx.git/+archive/${libcxx_rev}.tar.gz")")
+libcxxabi_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/llvm/llvm-project/libcxxabi.git/+archive/${libcxxabi_rev}.tar.gz")")
+llvm_libc_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/external/github.com/llvm/llvm-project/libc.git/+archive/${llvm_libc_rev}.tar.gz")")
 generate_shim_headers_hash=$(prefetch_subdir_archive_hash "${chromium_git_url}/chromium/src/+archive/refs/branch-heads/${target_version}/tools/generate_shim_headers.tar.gz")
 test_fonts_hash=$(to_sri "$(prefetch_hash "${chromium_git_url}/chromium/src/third_party/test_fonts/+archive/${test_fonts_rev}.tar.gz")")
 test_fonts_bundle_object=$(
@@ -178,6 +182,10 @@ set_string_var highwayRev "$highway_rev"
 set_string_var highwayHash "$highway_hash"
 set_string_var libcxxRev "$libcxx_rev"
 set_string_var libcxxHash "$libcxx_hash"
+set_string_var libcxxabiRev "$libcxxabi_rev"
+set_string_var libcxxabiHash "$libcxxabi_hash"
+set_string_var llvmLibcRev "$llvm_libc_rev"
+set_string_var llvmLibcHash "$llvm_libc_hash"
 set_string_var generateShimHeadersHash "$generate_shim_headers_hash"
 set_string_var testFontsRev "$test_fonts_rev"
 set_string_var testFontsHash "$test_fonts_hash"

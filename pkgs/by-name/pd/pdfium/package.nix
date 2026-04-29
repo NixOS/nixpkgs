@@ -1,5 +1,8 @@
 {
+  buildPackages,
   lib,
+  pkgsBuildBuild,
+  pkgsBuildHost,
   pdfium,
   stdenv,
   fetchurl,
@@ -20,8 +23,6 @@
   llvmPackages,
   ninja,
   openjpeg,
-  pkg-config,
-  python3,
   runCommand,
   tzdata,
   xcodebuild,
@@ -58,6 +59,10 @@ let
   highwayHash = "sha256-HNrlqtAs1vKCoSJ5TASs34XhzjEbLW+ISco1NQON+BI=";
   libcxxRev = "7ab65651aed6802d2599dcb7a73b1f82d5179d05";
   libcxxHash = "sha256-7O/X2JW8ghkPTjmFZmT9cgG3Ui5zk3gUb436KlPww34=";
+  libcxxabiRev = "8f11bb1d4438d0239d0dfc1bd9456a9f31629dda";
+  libcxxabiHash = "sha256-L5CUvhpOLS+NBNGssCv0pY9rsDFuAI0LlPjXQRfy62A=";
+  llvmLibcRev = "044963a253be3b8b2a63a1b2e0f3e361b01bc186";
+  llvmLibcHash = "sha256-J5W8ZN+E/GTPSrIOZbMW1eiw3wPiA+AB/ucEpDqYZNI=";
   generateShimHeadersHash = "sha256-tqhnqYoQeXUTN7OSSVwchpEkGJwhCUSk8TG8LUgrHdg=";
   testFontsRev = "7f51783942943e965cd56facf786544ccfc07713";
   testFontsHash = "sha256-gBnAOW/X2R13AP9507uPsvQ4A2ZUPbvzFcg3Neu3DT8=";
@@ -128,6 +133,24 @@ let
       };
     }
     // lib.optionalAttrs withV8 {
+      "src/third_party/libc++abi/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxxabi.git";
+          rev = libcxxabiRev;
+          hash = libcxxabiHash;
+        };
+      };
+
+      "src/third_party/llvm-libc/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libc.git";
+          rev = llvmLibcRev;
+          hash = llvmLibcHash;
+        };
+      };
+
       "src/third_party/dragonbox/src" = {
         fetcher = "fetchFromGitiles";
         args = {
@@ -216,6 +239,29 @@ let
       "//build/toolchain/mac:clang_${darwinToolchainArch}"
     else
       throw "unsupported platform for pdfium";
+  chromiumHostToolchain =
+    if stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform then
+      "//build/toolchain/linux/unbundle:host"
+    else
+      chromiumToolchain;
+  chromiumCpu =
+    platform:
+    if platform.isx86_64 then
+      "x64"
+    else if platform.isAarch64 then
+      "arm64"
+    else if platform.isi686 then
+      "x86"
+    else
+      throw "unsupported CPU for pdfium";
+  chromiumOs =
+    platform:
+    if platform.isLinux then
+      "linux"
+    else if platform.isDarwin then
+      "mac"
+    else
+      throw "unsupported OS for pdfium";
   clangRuntimeTarget =
     if stdenv.hostPlatform.isLinux then
       stdenv.hostPlatform.config
@@ -230,17 +276,18 @@ let
       "${llvmPackages.compiler-rt}/lib/darwin"
     else
       throw "unsupported platform for pdfium";
+  buildToolStdenv = if withV8 then buildPackages.llvmPackages.stdenv else buildPackages.stdenv;
 
   clangMajor = builtins.head (lib.splitVersion (lib.getVersion stdenv.cc.cc));
 
   pythonForBuild =
     if withV8 then
-      python3.withPackages (ps: [
+      buildPackages.python3.withPackages (ps: [
         ps.jinja2
         ps.requests
       ])
     else
-      python3;
+      buildPackages.python3;
 
   icuForPdfium =
     if withV8 && stdenv.hostPlatform.isLinux then
@@ -291,6 +338,34 @@ let
         strictDeps = true;
       }
       ''
+        installRuntimeDir() {
+          local runtimeSrc="$1"
+          local runtimeTarget="$2"
+          local runtimeCpu="$3"
+
+          mkdir -p "$out/lib/clang/${clangMajor}/lib/$runtimeTarget"
+
+          for runtimeLib in "$runtimeSrc"/*; do
+            ln -s "$runtimeLib" \
+              "$out/lib/clang/${clangMajor}/lib/$runtimeTarget/$(basename "$runtimeLib")"
+          done
+
+          ${lib.optionalString stdenv.hostPlatform.isLinux ''
+            # Chromium's Linux toolchain looks for unsuffixed compiler-rt names
+            # in the Clang resource dir, while nixpkgs installs them with an
+            # arch suffix under compiler-rt's linux output.
+            for runtimeLib in \
+              "$out"/lib/clang/${clangMajor}/lib/"$runtimeTarget"/libclang_rt.*-"$runtimeCpu".a \
+              "$out"/lib/clang/${clangMajor}/lib/"$runtimeTarget"/libclang_rt.*-"$runtimeCpu".so; do
+              if [ -e "$runtimeLib" ]; then
+                runtimeBasename="$(basename "$runtimeLib")"
+                ln -s "$runtimeBasename" \
+                  "$out/lib/clang/${clangMajor}/lib/$runtimeTarget/''${runtimeBasename/-$runtimeCpu/}"
+              fi
+            done
+          ''}
+        }
+
         mkdir -p "$out/bin" "$out/lib/clang/${clangMajor}/lib/${clangRuntimeTarget}"
 
         ln -s ${stdenv.cc}/bin/clang "$out/bin/clang"
@@ -303,23 +378,15 @@ let
         ln -s ${stdenv.cc.cc.lib}/lib/clang/${clangMajor}/include \
           "$out/lib/clang/${clangMajor}/include"
 
-        for runtimeLib in ${compilerRtLibDir}/*; do
-          ln -s "$runtimeLib" \
-            "$out/lib/clang/${clangMajor}/lib/${clangRuntimeTarget}/$(basename "$runtimeLib")"
-        done
-        ${lib.optionalString stdenv.hostPlatform.isLinux ''
-          # Chromium's Linux toolchain looks for unsuffixed compiler-rt names in
-          # the Clang resource dir, while nixpkgs installs them with an arch
-          # suffix under compiler-rt's linux output.
-          for runtimeLib in \
-            "$out"/lib/clang/${clangMajor}/lib/${clangRuntimeTarget}/libclang_rt.*-${stdenv.hostPlatform.parsed.cpu.name}.a \
-            "$out"/lib/clang/${clangMajor}/lib/${clangRuntimeTarget}/libclang_rt.*-${stdenv.hostPlatform.parsed.cpu.name}.so; do
-            if [ -e "$runtimeLib" ]; then
-              runtimeBasename="$(basename "$runtimeLib")"
-              ln -s "$runtimeBasename" \
-                "$out/lib/clang/${clangMajor}/lib/${clangRuntimeTarget}/''${runtimeBasename/-${stdenv.hostPlatform.parsed.cpu.name}/}"
-            fi
-          done
+        installRuntimeDir \
+          ${compilerRtLibDir} \
+          ${clangRuntimeTarget} \
+          ${stdenv.hostPlatform.parsed.cpu.name}
+        ${lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) ''
+          installRuntimeDir \
+            ${buildPackages.llvmPackages.compiler-rt}/lib/linux \
+            ${stdenv.buildPlatform.config} \
+            ${stdenv.buildPlatform.parsed.cpu.name}
         ''}
       '';
 in
@@ -344,6 +411,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./clang-pre-23-compat.patch
     # Keep thin archives linkable when Linux Clang builds use the system linker.
     ./thin-archive-no-lld.patch
+    # Fix Chromium's Linux unbundle cross toolchain on nixpkgs.
+    ./cross-compile.patch
+    # Use the full GNU target triple expected by nixpkgs' cross Clang wrapper.
+    ./clang-arm64-target.patch
     # Let Chromium's pkg-config helper run on non-Linux hosts.
     ./pkg-config-non-linux.patch
     # Keep /nix/store paths out of the macOS SDK sysroot rewrite.
@@ -354,8 +425,13 @@ stdenv.mkDerivation (finalAttrs: {
     gclient2nix.gclientUnpackHook
     gn
     ninja
-    pkg-config
+    pkgsBuildHost.pkg-config
     pythonForBuild
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+    # host_pkg_config points at the build-side wrapper, so it must be part of
+    # the environment for its setup hook to populate build-side search paths.
+    pkgsBuildBuild.pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcodebuild
@@ -441,10 +517,12 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Chromium's unbundle host toolchain reads BUILD_* directly from the
     # environment rather than discovering the wrappers itself.
-    export BUILD_CC="$CC"
-    export BUILD_CXX="$CXX"
-    export BUILD_AR="$AR"
-    export BUILD_NM="$NM"
+    export READELF="${lib.getExe' buildToolStdenv.cc.bintools "readelf"}"
+    export BUILD_CC="${lib.getExe' buildToolStdenv.cc "cc"}"
+    export BUILD_CXX="${lib.getExe' buildToolStdenv.cc "c++"}"
+    export BUILD_AR="${lib.getExe' buildToolStdenv.cc.bintools "ar"}"
+    export BUILD_NM="${lib.getExe' buildToolStdenv.cc.bintools "nm"}"
+    export BUILD_READELF="${lib.getExe' buildToolStdenv.cc.bintools "readelf"}"
   '';
 
   gnFlags = [
@@ -454,7 +532,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Pick the Chromium toolchain that matches the host platform.
     "custom_toolchain=\"${chromiumToolchain}\""
-    "host_toolchain=\"${chromiumToolchain}\""
+    "host_toolchain=\"${chromiumHostToolchain}\""
 
     # Upstream's PDFium checkout defaults to Siso, Chromium sysroots, and
     # in-tree libc++, none of which exist in this minimal nixpkgs build.
@@ -483,14 +561,34 @@ stdenv.mkDerivation (finalAttrs: {
     "use_system_zlib=true"
     "use_system_harfbuzz=true"
   ]
-  ++ lib.optionals withV8 [
-    # V8's sandbox path expects Chromium's hardened libc++, while this package
-    # deliberately uses nixpkgs' system libc++.
-    "v8_enable_sandbox=false"
-    "v8_enable_partition_alloc=false"
-    # libpdfium embeds V8's monolithic library into a shared library.
-    "v8_monolithic_for_shared_library=true"
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+    # GN otherwise infers these from the build machine instead of the target.
+    "host_cpu=\"${chromiumCpu stdenv.buildPlatform}\""
+    "host_os=\"${chromiumOs stdenv.buildPlatform}\""
+    "target_cpu=\"${chromiumCpu stdenv.hostPlatform}\""
+    "target_os=\"${chromiumOs stdenv.hostPlatform}\""
+
+    # Chromium's pkg-config helper needs explicit build-side and target-side
+    # wrappers when cross-compiling with the unbundle toolchain.
+    "host_pkg_config=\"${pkgsBuildBuild.pkg-config}/bin/pkg-config\""
+    "pkg_config=\"${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config\""
   ]
+  ++ lib.optionals withV8 (
+    [
+      # V8's sandbox path expects Chromium's hardened libc++, while this package
+      # deliberately uses nixpkgs' system libc++.
+      "v8_enable_sandbox=false"
+      "v8_enable_partition_alloc=false"
+      # Avoid depending on Chromium's bundled-libc++ ICU ABI in V8.
+      "v8_enable_i18n_support=false"
+      # libpdfium embeds V8's monolithic library into a shared library.
+      "v8_monolithic_for_shared_library=true"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+      "v8_target_cpu=\"${chromiumCpu stdenv.hostPlatform}\""
+      "v8_snapshot_toolchain=\"//build/toolchain/linux/unbundle:host\""
+    ]
+  )
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Match the deployment target used by nixpkgs' Darwin libraries.
     "mac_deployment_target=\"${stdenv.hostPlatform.darwinMinVersion}\""
