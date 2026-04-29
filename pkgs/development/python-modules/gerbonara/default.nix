@@ -9,7 +9,7 @@
   rtree,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gerbonara";
   version = "1.6.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbonara";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XWxYgnzvebO+iTL6idWyX+j7bsyvNkWdKDEuqsU/p4w=";
   };
 
@@ -38,9 +38,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pythonic library for reading/modifying/writing Gerber/Excellon/IPC-356 files";
-    mainProgram = "gerbonara";
     homepage = "https://github.com/jaseg/gerbonara";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wulfsta ];
+    mainProgram = "gerbonara";
   };
-}
+})
