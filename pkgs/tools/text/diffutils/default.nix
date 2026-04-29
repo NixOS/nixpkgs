@@ -63,8 +63,23 @@ stdenv.mkDerivation rec {
       ''
         sed -i -E 's:test-time::g' gnulib-tests/Makefile.in
       ''
+    else if stdenv.hostPlatform.isMusl then
+      # gnulib's getopt tests fail against musl
+      ''
+        sed -i -E 's:test-getopt-(gnu|posix)\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
+      ''
     else
       null;
+
+  # ./configure decides to use weak symbols on pkgsStatic, which
+  # makes pthread_in_use() return false and the *-mt tests abort
+  # setlocale_null.c makes the same wrong choice with HAVE_WEAK_SYMBOLS
+  # FIXME: rebuild avoidance, swap to optionalString in staging
+  postConfigure = lib.optionalDrvAttr (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isMusl) ''
+    substituteInPlace lib/config.h \
+      --replace-fail '#define USE_POSIX_THREADS_WEAK 1' '#undef USE_POSIX_THREADS_WEAK' \
+      --replace-fail '#define HAVE_WEAK_SYMBOLS 1' '#undef HAVE_WEAK_SYMBOLS'
+  '';
 
   configureFlags =
     # "pr" need not be on the PATH as a run-time dep, so we need to tell
