@@ -4733,9 +4733,12 @@ assertNoAdditions {
     };
   });
 
-  vim-beancount = super.vim-beancount.overrideAttrs {
+  vim-beancount = super.vim-beancount.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-bepoptimist = super.vim-bepoptimist.overrideAttrs (old: {
     meta = old.meta // {
