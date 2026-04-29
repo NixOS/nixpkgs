@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  pkgs,
   nodejs,
   stdenv,
   testers,
@@ -55,11 +56,31 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
 
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
+    tests =
+      let
+        packageTests =
+          if berryVersion == 4 then
+            {
+              inherit (pkgs)
+                prettier
+                corepack
+                katex
+                ;
+            }
+          else
+            {
+              inherit (pkgs)
+                svgo
+                yarn-lock-converter
+                ;
+            };
+      in
+      packageTests
+      // {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+        };
       };
-    };
   }
   // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 
