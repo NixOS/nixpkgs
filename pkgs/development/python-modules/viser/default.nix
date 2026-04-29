@@ -55,7 +55,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nerfstudio-project";
+    owner = "viser-project";
     repo = "viser";
     tag = "v${version}";
     hash = "sha256-usnvEvuBNPrqRXV7jh0qw1ppmZgAe1CUhAwd/M5CvC0=";
@@ -145,7 +145,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/nerfstudio-project/viser/releases/tag/${src.tag}";
+    changelog = "https://github.com/viser-project/viser/releases/tag/${src.tag}";
     description = "Web-based 3D visualization + Python";
     homepage = "https://github.com/nerfstudio-project/viser";
     license = lib.licenses.asl20;
