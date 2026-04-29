@@ -468,24 +468,44 @@ let
 
         outputs = outputs';
 
-        buildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
-          checkDependencyList "depsBuildBuild" depsBuildBuild
-        );
-        buildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
-          checkDependencyList "nativeBuildInputs" nativeBuildInputs'
-        );
-        buildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
-          checkDependencyList "depsBuildTarget" depsBuildTarget
-        );
-        hostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
-          checkDependencyList "depsHostHost" depsHostHost
-        );
-        hostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
-          checkDependencyList "buildInputs" buildInputs'
-        );
-        targetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
-          checkDependencyList "depsTargetTarget" depsTargetTarget
-        );
+        buildBuildOutputs =
+          if depsBuildBuild == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildBuild or drv) (
+              checkDependencyList "depsBuildBuild" depsBuildBuild
+            );
+        buildHostOutputs =
+          if nativeBuildInputs' == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildHost or drv) (
+              checkDependencyList "nativeBuildInputs" nativeBuildInputs'
+            );
+        buildTargetOutputs =
+          if depsBuildTarget == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildTarget or drv) (
+              checkDependencyList "depsBuildTarget" depsBuildTarget
+            );
+        hostHostOutputs =
+          if depsHostHost == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost);
+        hostTargetOutputs =
+          if buildInputs' == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs');
+        targetTargetOutputs =
+          if depsTargetTarget == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.targetTarget or drv) (
+              checkDependencyList "depsTargetTarget" depsTargetTarget
+            );
         allDependencies = concatLists [
           buildBuildOutputs
           buildHostOutputs
@@ -495,24 +515,48 @@ let
           targetTargetOutputs
         ];
 
-        propagatedBuildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
-          checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
-        );
-        propagatedBuildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
-          checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
-        );
-        propagatedBuildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
-          checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
-        );
-        propagatedHostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
-          checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
-        );
-        propagatedHostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
-          checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
-        );
-        propagatedTargetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
-          checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
-        );
+        propagatedBuildBuildOutputs =
+          if depsBuildBuildPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildBuild or drv) (
+              checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
+            );
+        propagatedBuildHostOutputs =
+          if propagatedNativeBuildInputs == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildHost or drv) (
+              checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
+            );
+        propagatedBuildTargetOutputs =
+          if depsBuildTargetPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildTarget or drv) (
+              checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
+            );
+        propagatedHostHostOutputs =
+          if depsHostHostPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostHost or drv) (
+              checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
+            );
+        propagatedHostTargetOutputs =
+          if propagatedBuildInputs == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostTarget or drv) (
+              checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
+            );
+        propagatedTargetTargetOutputs =
+          if depsTargetTargetPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.targetTarget or drv) (
+              checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
+            );
         allPropagatedDependencies = concatLists [
           propagatedBuildBuildOutputs
           propagatedBuildHostOutputs
