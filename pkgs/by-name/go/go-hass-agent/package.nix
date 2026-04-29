@@ -72,7 +72,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/joshuar/go-hass-agent";
     changelog = "https://github.com/joshuar/go-hass-agent/blob/v${finalAttrs.version}/CHANGELOG.md";
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      nadir-ishiguro
+    ];
     platforms = lib.platforms.linux;
   };
 })
