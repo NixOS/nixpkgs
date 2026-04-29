@@ -23,6 +23,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # The glibc test asserts that resolved library paths exist as files on
+  # disk.  On macOS since Big Sur, system libraries live in a shared dyld
+  # cache and /usr/lib/lib*.dylib are no longer real files, causing the
+  # assertion to fail.  The macOS-specific mock test still runs and covers
+  # the Darwin codepath.
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/dlinfo_glibc_test.py"
+  ];
+
   pythonImportsCheck = [ "dlinfo" ];
 
   meta = {
@@ -31,6 +40,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/fphammerle/python-dlinfo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
