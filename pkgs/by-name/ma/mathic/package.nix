@@ -34,6 +34,10 @@ stdenv.mkDerivation {
     libtool
   ];
 
+  __structuredAttrs = true;
+
+  strictDeps = true;
+
   preConfigure = "./autogen.sh";
 
   enableParallelBuilding = true;

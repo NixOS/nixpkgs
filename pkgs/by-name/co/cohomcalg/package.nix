@@ -23,6 +23,10 @@ stdenv.mkDerivation {
     memtailor
   ];
 
+  __structuredAttrs = true;
+
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   checkTarget = "checkdirs";

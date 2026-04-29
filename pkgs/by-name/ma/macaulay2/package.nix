@@ -139,6 +139,10 @@ stdenv.mkDerivation {
     which
   ];
 
+  __structuredAttrs = true;
+
+  strictDeps = true;
+
   postPatch = ''
     substituteInPlace M2/configure.ac \
       --replace-warn \

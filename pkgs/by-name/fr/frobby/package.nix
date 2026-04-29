@@ -23,6 +23,10 @@ stdenv.mkDerivation {
     gmp
   ];
 
+  __structuredAttrs = true;
+
+  strictDeps = true;
+
   postPatch = ''
     patchShebangs --build .
   '';

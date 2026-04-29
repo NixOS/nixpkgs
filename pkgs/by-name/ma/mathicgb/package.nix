@@ -29,6 +29,10 @@ stdenv.mkDerivation {
     memtailor
   ];
 
+  __structuredAttrs = true;
+
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoconf
     automake

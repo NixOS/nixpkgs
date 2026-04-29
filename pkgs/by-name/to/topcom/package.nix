@@ -36,6 +36,10 @@ stdenv.mkDerivation {
     libtool
   ];
 
+  __structuredAttrs = true;
+
+  strictDeps = true;
+
   patches = [
     (fetchpatch {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/topcom/-/raw/main/system-libs.patch";
