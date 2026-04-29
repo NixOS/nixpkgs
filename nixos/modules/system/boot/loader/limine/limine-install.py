@@ -557,7 +557,7 @@ def install_bootloader() -> None:
 
         if config('secureBoot', 'enable'):
             sbctl = os.path.join(str(config('secureBoot', 'sbctl')), 'bin', 'sbctl')
-            if not os.path.exists("/var/lib/sbctl") and config('secureBoot', 'autoGenerateKeys'):
+            if not os.path.exists("/var/lib/sbctl/keys") and config('secureBoot', 'autoGenerateKeys'):
                 print('auto generating keys')
                 try:
                     subprocess.run([sbctl, 'create-keys'])
