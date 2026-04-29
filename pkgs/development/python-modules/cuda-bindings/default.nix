@@ -19,15 +19,49 @@
   numpy,
 
   # tests
+  cuda-pathfinder,
+  pytest-benchmark,
   pytestCheckHook,
+  util-linux,
 
   # passthru
   cuda-bindings,
 }:
 
+let
+  cudaVersion = cudaPackages.cudaMajorMinorVersion;
+
+  versionSpecificAttrs =
+    let
+      args = {
+        inherit replaceVars;
+        cudaLibPaths = {
+          libcudart = lib.getLib cudaPackages.cuda_cudart;
+          libcufile = lib.getLib cudaPackages.libcufile;
+          libnvfatbin = lib.getLib cudaPackages.libnvfatbin;
+          libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
+          libnvml = addDriverRunpath.driverLink;
+          libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
+          libnvvm =
+            if cudaOlder "13.0" then "${cudaPackages.cuda_nvcc}/nvvm" else lib.getLib cudaPackages.libnvvm;
+        };
+      };
+    in
+    {
+      # cuda-bindings patch versions DO NOT correspond to cuda toolkits' own path versions.
+      # Only major.minor is supposed to match
+      "12.9" = import ./12_9.nix args;
+      "13.0" = import ./13_0.nix args;
+      "13.1" = import ./13_1.nix args;
+      "13.2" = import ./13_2.nix args;
+    }
+    .${cudaVersion} or (throw "Unsupported cuda-bindings version: ${cudaVersion}");
+
+  inherit (cudaPackages) cudaOlder cudaAtLeast;
+in
 buildPythonPackage (finalAttrs: {
   pname = "cuda-bindings";
-  version = "12.9.6";
+  inherit (versionSpecificAttrs) version;
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,22 +69,14 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uRv27h2b6wXC8oOf5k2KxZ0bUFNvNu6XO05FBbJcU1k=";
+    hash = versionSpecificAttrs.sourceHash;
   };
 
   # Apply patch relative to cuda_bindings
   patchFlags = [ "-p2" ];
 
   patches = [
-    (replaceVars ./patch-nvidia-libs-paths.patch {
-      libcudart = lib.getLib cudaPackages.cuda_cudart;
-      libcufile = lib.getLib cudaPackages.libcufile;
-      libnvfatbin = lib.getLib cudaPackages.libnvfatbin;
-      libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
-      libnvml = addDriverRunpath.driverLink;
-      libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
-      libnvvm = "${cudaPackages.cuda_nvcc}/nvvm";
-    })
+    versionSpecificAttrs.nvidiaLibsPatch
   ];
 
   sourceRoot = "${finalAttrs.src.name}/cuda_bindings";
@@ -76,7 +102,8 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           "path = 'libcuda.so.1'" \
           "path = '${libCudaPath}/lib/libcuda.so.1'"
-    '';
+    ''
+    + (versionSpecificAttrs.postPatch or "");
 
   preBuild = ''
     export CUDA_PYTHON_PARALLEL_LEVEL=$NIX_BUILD_CORES
@@ -101,8 +128,14 @@ buildPythonPackage (finalAttrs: {
   };
 
   buildInputs = [
-    cudaPackages.cuda_nvcc # crt/host_defines.h
     cudaPackages.libcufile # cufile.h
+  ]
+  # Until 13.0, crt headers are shipped in nvcc
+  ++ lib.optionals (cudaOlder "13.0") [
+    cudaPackages.cuda_nvcc # crt/host_defines.h
+  ]
+  ++ lib.optionals (cudaAtLeast "13.0") [
+    cudaPackages.cuda_crt # crt/host_defines.h
   ];
 
   pythonRemoveDeps = [
@@ -118,13 +151,12 @@ buildPythonPackage (finalAttrs: {
     "cuda"
     "cuda.bindings.cufile"
     "cuda.bindings.driver"
-    "cuda.bindings.nvfatbin"
     "cuda.bindings.nvjitlink"
-    "cuda.bindings.nvml"
     "cuda.bindings.nvrtc"
     "cuda.bindings.nvvm"
     "cuda.bindings.runtime"
-  ];
+  ]
+  ++ (versionSpecificAttrs.pythonImportsCheck or [ ]);
 
   preCheck = ''
     rm -rf cuda
@@ -132,38 +164,28 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ]
+  ++ lib.optionals (cudaPackages.cudaAtLeast "13.0") [
+    # Although we don't want cuda.pathfinder as a dependency (to handle dlopens), it is imported by
+    # some tests
+    cuda-pathfinder
+
+    pytest-benchmark
+    util-linux # findmnt
   ];
 
   enabledTestPaths = [
     "tests/"
   ];
 
-  disabledTestPaths = [
+  disabledTestPaths = lib.optionals (cudaOlder "13.0") [
     # The current driver shipped in NixOS (590.48.01) advertises CUDA 13.1, causing the following
     # error:
     # cuda.bindings._internal.utils.NotSupportedError: only CUDA 12 driver is supported
-    #
-    # Ideally, we should transition to cuda 13 across the whole nixpkgs tree.
     "tests/test_nvjitlink.py"
   ];
 
-  disabledTests = [
-    # sysfs cpu topology is not available in the sandbox, causing:
-    #   cuda.bindings.nvml.UnknownError: Unknown Error
-    #   hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
-    "test_device_get_cpu_affinity_within_scope"
-    "test_device_get_memory_affinity"
-
-    # Requires the nvidia_fs kernel module (GPUDirect Storage), causing:
-    #   cuda.bindings.cufile.cuFileError: NVFS_SETUP_ERROR (5033): NVFS driver initialization error
-    "test_buf_register_already_registered"
-    "test_buf_register_host_memory"
-    "test_buf_register_invalid_flags"
-    "test_buf_register_large_buffer"
-    "test_buf_register_multiple_buffers"
-    "test_buf_register_simple"
-    "test_driver_open"
-  ];
+  disabledTests = versionSpecificAttrs.disabledTests or [ ];
 
   # Tests need access to a GPU
   doCheck = false;

@@ -7259,12 +7259,6 @@
     githubId = 187309685;
     name = "Drew Council";
   };
-  dritter = {
-    email = "dritter03@googlemail.com";
-    github = "dritter";
-    githubId = 1544760;
-    name = "Dominik Ritter";
-  };
   drperceptron = {
     github = "drperceptron";
     githubId = 92106371;
@@ -7763,6 +7757,12 @@
     github = "Ekleog";
     githubId = 411447;
     name = "Leo Gaspard";
+  };
+  ekzyis = {
+    email = "ramdip.singhgill@gmail.com";
+    github = "ekzyis";
+    githubId = 27162016;
+    name = "Ramdip Gill";
   };
   elasticdog = {
     email = "aaron@elasticdog.com";
@@ -11297,6 +11297,12 @@
     github = "ifurther";
     githubId = 55025025;
     name = "Feather Lin";
+  };
+  igor-ramazanov = {
+    email = "personal@igorramazanov.tech";
+    github = "igor-ramazanov";
+    githubId = 12570166;
+    name = "Igor Ramazanov";
   };
   igsha = {
     email = "igor.sharonov@gmail.com";
@@ -26044,6 +26050,12 @@
     email = "blue@spook.rip";
     github = "StayBlue";
     githubId = 23127866;
+  };
+  stealthbadger747 = {
+    email = "parawell.erik@gmail.com";
+    github = "StealthBadger747";
+    githubId = 26052996;
+    name = "Erik Parawell";
   };
   steamwalker = {
     email = "steamwalker@xs4all.nl";

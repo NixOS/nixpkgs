@@ -1226,6 +1226,7 @@
   ./services/networking/hans.nix
   ./services/networking/haproxy.nix
   ./services/networking/harmonia.nix
+  ./services/networking/headplane.nix
   ./services/networking/headscale.nix
   ./services/networking/hickory-dns.nix
   ./services/networking/hostapd.nix
@@ -1308,6 +1309,7 @@
   ./services/networking/netbird.nix
   ./services/networking/netbird/server.nix
   ./services/networking/netclient.nix
+  ./services/networking/netfoil.nix
   ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
   ./services/networking/newt.nix
@@ -1840,6 +1842,7 @@
   ./services/web-servers/unit/default.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
+  ./services/web-servers/vinyl-cache/default.nix
   ./services/x11/clight.nix
   ./services/x11/colord.nix
   ./services/x11/desktop-managers/default.nix

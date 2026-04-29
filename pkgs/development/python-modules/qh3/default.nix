@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "qh3";
-  version = "1.7.3";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "qh3";
     tag = "v${version}";
-    hash = "sha256-wi2PYd74kOU2tol7pVgpMqbL3peGhXyKKEke6+CBIwU=";
+    hash = "sha256-zZQyKQK/zJ58XnCgxk/SvexBF1Z+GBtvulhuhUiIago=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-sv5DFeapeH00CBssQcRZ7SI3JlyUuKo7gIRVjN/kA+Q=";
+    hash = "sha256-2HwwyHex1SE34dUGtooOf5LCkhkVhLpsoEHBFvLUkLM=";
   };
 
   nativeBuildInputs = [
