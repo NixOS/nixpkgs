@@ -60,7 +60,10 @@ buildGoModule (finalAttrs: {
   installPhase = ''
     install out/minikube -Dt $out/bin
 
-    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
+    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [ libvirt ])
+      }
     export HOME=$PWD
 
     for shell in bash zsh fish; do
