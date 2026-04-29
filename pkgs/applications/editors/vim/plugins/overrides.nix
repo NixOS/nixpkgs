@@ -209,6 +209,12 @@ assertNoAdditions {
     dependencies = [ self.middleclass ];
   };
 
+  argtextobj-vim = super.argtextobj-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   arrow-nvim = super.arrow-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.gpl3Plus;
