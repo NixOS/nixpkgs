@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-jevIk0XXQbGMA8M94tti8UuXlpcjagpcPCB7PXKewLE=";
 
   oodleLib = fetchurl {
-    url = "https://github.com/WorkingRobot/OodleUE/raw/refs/heads/main/Engine/Source/Programs/Shared/EpicGames.Oodle/Sdk/2.9.10/linux/lib/liboo2corelinux64.so.9";
+    url = "https://raw.githubusercontent.com/WorkingRobot/OodleUE/a4c95b32ab07c3f35dce7e7c52b0f8cbfd3a7765/Engine/Source/Programs/Shared/EpicGames.Oodle/Sdk/2.9.10/linux/lib/liboo2corelinux64.so.9";
     hash = "sha256-7X6Y9wvhJUqAZE79OuRC/2H4VKL+neuwuXi5UomITpw=";
   };
 
@@ -60,5 +60,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ caniko ];
     mainProgram = "retoc";
+    platforms = [ "x86_64-linux" ];
   };
 }
