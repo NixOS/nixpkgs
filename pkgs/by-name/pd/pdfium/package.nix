@@ -1,5 +1,9 @@
 {
+  buildPackages,
   lib,
+  pkgsBuildBuild,
+  pkgsBuildHost,
+  pkgsCross,
   pdfium,
   stdenv,
   fetchurl,
@@ -18,8 +22,6 @@
   llvmPackages,
   ninja,
   openjpeg,
-  pkg-config,
-  python3,
   symlinkJoin,
   xcodebuild,
   zlib,
@@ -34,6 +36,10 @@ let
   chromiumSrcRef = "refs/branch-heads/${version}";
 
   canRunTests = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  canCrossTest =
+    stdenv.buildPlatform == stdenv.hostPlatform
+    && stdenv.hostPlatform.isLinux
+    && stdenv.hostPlatform.isx86_64;
 
   gclientDeps = gclient2nix.importGclientDeps (
     {
@@ -130,6 +136,20 @@ let
       "//build/toolchain/mac:clang_${chromiumCpu stdenv.hostPlatform}"
     else
       throw "unsupported platform for pdfium";
+  chromiumHostToolchain =
+    if stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform then
+      "//build/toolchain/linux/unbundle:host"
+    else
+      chromiumToolchain;
+  chromiumOs =
+    platform:
+    if platform.isLinux then
+      "linux"
+    else if platform.isDarwin then
+      "mac"
+    else
+      throw "unsupported OS for pdfium";
+  buildToolStdenv = buildPackages.stdenv;
   clangMajor = builtins.head (lib.splitVersion (lib.getVersion stdenv.cc.cc));
 
   chromiumClang = symlinkJoin {
@@ -194,6 +214,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-system-libcxx-hardening.patch
     # Keep thin archives linkable when Linux Clang builds use the system linker.
     ./thin-archive-no-lld.patch
+    # Fix Chromium's Linux unbundle cross toolchain on nixpkgs.
+    ./cross-compile.patch
+    # Use the full GNU target triple expected by nixpkgs' cross Clang wrapper.
+    ./clang-arm64-target.patch
     # Let Chromium's pkg-config helper run on non-Linux hosts.
     ./pkg-config-non-linux.patch
     # Keep /nix/store paths out of the macOS SDK sysroot rewrite.
@@ -207,8 +231,13 @@ stdenv.mkDerivation (finalAttrs: {
     gclient2nix.gclientUnpackHook
     gn
     ninja
-    pkg-config
-    python3
+    pkgsBuildHost.pkg-config
+    buildPackages.python3
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+    # host_pkg_config points at the build-side wrapper, so it must be part of
+    # the environment for its setup hook to populate build-side search paths.
+    pkgsBuildBuild.pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcodebuild
@@ -260,14 +289,18 @@ stdenv.mkDerivation (finalAttrs: {
     tar -xzf ${testFontsBundle} -C third_party/test_fonts
   '';
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # Chromium's unbundle host toolchain reads BUILD_* directly from the
-    # environment rather than discovering the wrappers itself.
-    export BUILD_CC="$CC"
-    export BUILD_CXX="$CXX"
-    export BUILD_AR="$AR"
-    export BUILD_NM="$NM"
-  '';
+  preConfigure =
+    lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform)
+      ''
+        # Chromium's unbundle host toolchain reads BUILD_* directly from the
+        # environment rather than discovering the wrappers itself.
+        export READELF="${lib.getExe' stdenv.cc.bintools "${stdenv.cc.targetPrefix}readelf"}"
+        export BUILD_CC="${lib.getExe' buildToolStdenv.cc "cc"}"
+        export BUILD_CXX="${lib.getExe' buildToolStdenv.cc "c++"}"
+        export BUILD_AR="${lib.getExe' buildToolStdenv.cc.bintools "ar"}"
+        export BUILD_NM="${lib.getExe' buildToolStdenv.cc.bintools "nm"}"
+        export BUILD_READELF="${lib.getExe' buildToolStdenv.cc.bintools "readelf"}"
+      '';
 
   gnFlags = [
     # Build a release-style shared library rather than GN's default
@@ -278,7 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Linux, unbundle expects host_toolchain to be the same :default toolchain;
     # only cross builds switch it to :host for build-machine tools.
     "custom_toolchain=\"${chromiumToolchain}\""
-    "host_toolchain=\"${chromiumToolchain}\""
+    "host_toolchain=\"${chromiumHostToolchain}\""
 
     # Upstream's PDFium checkout defaults to Chromium sysroots and in-tree
     # libc++, neither of which exists in this minimal nixpkgs build.
@@ -305,6 +338,18 @@ stdenv.mkDerivation (finalAttrs: {
     "use_system_libtiff=true"
     "use_system_zlib=true"
     "use_system_harfbuzz=true"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+    # GN otherwise infers these from the build machine instead of the target.
+    "host_cpu=\"${chromiumCpu stdenv.buildPlatform}\""
+    "host_os=\"${chromiumOs stdenv.buildPlatform}\""
+    "target_cpu=\"${chromiumCpu stdenv.hostPlatform}\""
+    "target_os=\"${chromiumOs stdenv.hostPlatform}\""
+
+    # Chromium's pkg-config helper needs explicit build-side and target-side
+    # wrappers when cross-compiling with the unbundle toolchain.
+    "host_pkg_config=\"${pkgsBuildBuild.pkg-config}/bin/pkg-config\""
+    "pkg_config=\"${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config\""
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Match the deployment target used by nixpkgs' Darwin libraries.
@@ -378,11 +423,15 @@ stdenv.mkDerivation (finalAttrs: {
         versionInfo.patch
       ]
     );
-    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      clang = pdfium.override {
-        stdenv = llvmPackages.stdenv;
+    tests =
+      lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        clang = pdfium.override {
+          stdenv = llvmPackages.stdenv;
+        };
+      }
+      // lib.optionalAttrs canCrossTest {
+        cross = pkgsCross.aarch64-multiplatform.pdfium;
       };
-    };
   };
 
   meta = {
