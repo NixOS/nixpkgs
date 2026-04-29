@@ -49,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5VYzDwAMyVN2HR/sS8rCwTR7UW/tt60AS7wZMjx+w74=";
   };
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   depsBuildBuild = [
     pkg-config
   ];

@@ -156,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VbbaFLsI6LitE86t/JChtFlWmhRY757MOK2wwaUshy4=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [

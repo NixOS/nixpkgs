@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8S+TAnPHodPg1/hblP+dE3nRYqzMky6Mo9OJk+0n/Kw=";
   };
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -86,8 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
   ];
-
-  strictDeps = true;
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
