@@ -17,6 +17,8 @@
   npm-lockfile-fix,
   jq,
   moreutils,
+  srcOnly,
+  removeReferencesTo,
 }:
 
 buildNpmPackage rec {
@@ -41,6 +43,9 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+
+    # remove references to nodejs-source
+    removeReferencesTo
   ]
   ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -180,6 +185,9 @@ buildNpmPackage rec {
             size=${"$"}{s}x$s
             install -Dm644 $src/packages/bruno-electron/resources/icons/png/$size.png $out/share/icons/hicolor/$size/apps/bruno.png
           done
+
+          # remove dependency to nodejs-source
+          find "$out" -type f -exec remove-references-to -t "${srcOnly nodejs}" {} \;
         ''
     }
 
