@@ -24,10 +24,13 @@ buildPythonPackage (finalAttrs: {
     textual
   ];
 
+  # has no tests
+  doCheck = false;
+
   pythonImportsCheck = [ "textual_fspicker" ];
 
   meta = {
-    description = "A Textual widget library for picking things in the filesystem";
+    description = "Textual widget library for picking things in the filesystem";
     homepage = "https://github.com/davep/textual-fspicker";
     changelog = "https://github.com/davep/textual-fspicker/blob/v${finalAttrs.version}/ChangeLog.md";
     license = lib.licenses.mit;
