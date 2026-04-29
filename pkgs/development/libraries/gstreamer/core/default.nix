@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
   nativeBuildInputs = [
     meson

@@ -117,6 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
   strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
