@@ -1,0 +1,11 @@
+--- a/src/prefect/__init__.py
++++ b/src/prefect/__init__.py
+@@ -57,7 +57,7 @@
+ # The absolute path to this module
+ __module_path__: pathlib.Path = pathlib.Path(__file__).parent
+ # The absolute path to the root of the repository, only valid for use during development
+-__development_base_path__: pathlib.Path = __module_path__.parents[1]
++__development_base_path__: pathlib.Path = pathlib.Path("@src@")
+ 
+ # The absolute path to the built UI within the Python module, used by
+ # `prefect server start` to serve a dynamic build of the UI
