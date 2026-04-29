@@ -209,6 +209,12 @@ assertNoAdditions {
     dependencies = [ self.middleclass ];
   };
 
+  argtextobj-vim = super.argtextobj-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   arrow-nvim = super.arrow-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.gpl3Plus;
@@ -444,6 +450,12 @@ assertNoAdditions {
   bullets-vim = super.bullets-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
+    };
+  });
+
+  camelcasemotion = super.camelcasemotion.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
     };
   });
 
@@ -2218,6 +2230,12 @@ assertNoAdditions {
   lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
+
+  lsp-format-nvim = super.lsp-format-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   lsp_extensions-nvim = super.lsp_extensions-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -4477,6 +4495,12 @@ assertNoAdditions {
     nvimSkipModules = "tsc.better-messages-test";
   };
 
+  tslime-vim = super.tslime-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   tsuquyomi = super.tsuquyomi.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
@@ -4709,9 +4733,12 @@ assertNoAdditions {
     };
   });
 
-  vim-beancount = super.vim-beancount.overrideAttrs {
+  vim-beancount = super.vim-beancount.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-bepoptimist = super.vim-bepoptimist.overrideAttrs (old: {
     meta = old.meta // {
@@ -4847,6 +4874,12 @@ assertNoAdditions {
   });
 
   vim-easy-align = super.vim-easy-align.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-easymotion = super.vim-easymotion.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
     };
@@ -5038,6 +5071,12 @@ assertNoAdditions {
   vim-hypr-nav = super.vim-hypr-nav.overrideAttrs {
     runtimeDeps = [ jq ];
   };
+
+  vim-indentwise = super.vim-indentwise.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
 
   vim-isort = super.vim-isort.overrideAttrs {
     postPatch = ''
@@ -5328,6 +5367,12 @@ assertNoAdditions {
     };
   });
 
+  vim-textobj-user = super.vim-textobj-user.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";
@@ -5505,6 +5550,12 @@ assertNoAdditions {
     # Meta file
     nvimSkipModules = "virt-column.config.types";
   };
+
+  vis = super.vis.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
     checkInputs = [
