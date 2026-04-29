@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Jandy iAqualink";
     homepage = "https://github.com/flz/iaqualink-py";
-    changelog = "https://github.com/flz/iaqualink-py/releases/tag/v${src.tag}";
+    changelog = "https://github.com/flz/iaqualink-py/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

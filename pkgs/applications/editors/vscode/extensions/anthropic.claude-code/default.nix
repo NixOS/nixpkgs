@@ -1,10 +1,21 @@
 {
   lib,
+  stdenv,
   stdenvNoCC,
+  autoPatchelfHook,
+  alsa-lib,
+  testers,
   vscode-utils,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib stdenv.cc.cc)
+    alsa-lib
+  ];
+
   mktplcRef =
     let
       sources = {
@@ -34,6 +45,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
+  passthru.tests.bundled-claude-runs = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.finalPackage}/share/vscode/extensions/anthropic.claude-code/resources/native-binary/claude --version";
+  };
+
   meta = {
     description = "Harness the power of Claude Code without leaving your IDE";
     homepage = "https://docs.anthropic.com/s/claude-code";
@@ -48,4 +64,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "aarch64-darwin"
     ];
   };
-}
+})
