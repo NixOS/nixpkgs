@@ -123,6 +123,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./git-sh-i18n.patch
     # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
+    # The 'total N' header from ls -l is unstable on ZFS and similar
+    # filesystems, causing spurious failures.
+    # https://github.com/NixOS/nixpkgs/issues/498789
+    (fetchurl {
+      name = "t7703-ignore-ls-total.patch";
+      url = "https://lore.kernel.org/git/20260504101429.340123-1-joerg@thalheim.io/raw";
+      hash = "sha256-44EPfEJ39LjPWjqjFb52EKNaJGzYxZzJaJOis8QnazU=";
+    })
     # Address test failure (new in 2.52.0) caused by `git-gui--askyesno` being
     # installed by `make install`.
     (fetchurl {
