@@ -143,6 +143,7 @@ let
     inherit
       brotli
       libuv
+      nghttp2
       nghttp3
       ngtcp2
       openssl
@@ -151,16 +152,6 @@ let
       ;
     cares = c-ares;
     http-parser = llhttp;
-    nghttp2 = nghttp2.overrideAttrs {
-      patches = [
-        (fetchpatch2 {
-          url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
-          hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
-          excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
-          revert = true;
-        })
-      ];
-    };
   }
   // (lib.optionalAttrs useSharedAdaAndSimd {
     inherit
