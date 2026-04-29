@@ -116,6 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs libbacktrace/install-debuginfo-for-buildid.sh
     patchShebangs runtest
+
+    # Fix libgomp build with glibc 2.43 C23 const-preserving strchr
+    # https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=9c9d3aef2f66625d9cb03ef4baee10ed6648e681
+    # Remove when GCC >= 15.3 or >= 16.1
+    substituteInPlace libgomp/affinity-fmt.c \
+      --replace-fail 'char *q = strchr' 'const char *q = strchr'
   ''
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.

@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "strictflexarrays3" ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

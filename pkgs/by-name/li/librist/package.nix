@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   buildInputs = [
     cjson
     cmocka

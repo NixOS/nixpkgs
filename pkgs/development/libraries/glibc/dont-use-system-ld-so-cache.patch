@@ -1,8 +1,8 @@
-diff --git a/elf/Makefile b/elf/Makefile
-index 5d666b1b..a5017e9c 100644
---- a/elf/Makefile
-+++ b/elf/Makefile
-@@ -669,14 +669,14 @@ $(objpfx)sln: $(sln-modules:%=$(objpfx)%.o)
+diff --git i/elf/Makefile w/elf/Makefile
+index 01cc5163..00089274 100644
+--- i/elf/Makefile
++++ w/elf/Makefile
+@@ -1640,17 +1640,16 @@ $(objpfx)sln: $(sln-modules:%=$(objpfx)%.o)
  
  $(objpfx)ldconfig: $(ldconfig-modules:%=$(objpfx)%.o)
  
@@ -21,27 +21,31 @@ index 5d666b1b..a5017e9c 100644
 +CFLAGS-rtld.c += $(PREFIX-FLAGS)
 +CFLAGS-dl-usage.c += $(PREFIX-FLAGS) \
    -D'RTLD="$(rtlddir)/$(rtld-installed-name)"'
+-CFLAGS-dl-diagnostics.c += $(SYSCONF-FLAGS) \
+-  -D'PREFIX="$(prefix)"' \
++CFLAGS-dl-diagnostics.c += $(PREFIX-FLAGS) \
+   -D'RTLD="$(rtlddir)/$(rtld-installed-name)"'
  
  cpp-srcs-left := $(all-rtld-routines:=.os)
-diff --git a/elf/dl-diagnostics.c b/elf/dl-diagnostics.c
-index bef224b3..8e166b12 100644
---- a/elf/dl-diagnostics.c
-+++ b/elf/dl-diagnostics.c
-@@ -205,7 +205,7 @@ print_paths (void)
+diff --git i/elf/dl-diagnostics.c w/elf/dl-diagnostics.c
+index 21311178..719e02f8 100644
+--- i/elf/dl-diagnostics.c
++++ w/elf/dl-diagnostics.c
+@@ -204,7 +204,7 @@ print_paths (void)
  {
    _dl_diagnostics_print_labeled_string ("path.prefix", PREFIX);
    _dl_diagnostics_print_labeled_string ("path.rtld", RTLD);
 -  _dl_diagnostics_print_labeled_string ("path.sysconfdir", SYSCONFDIR);
 +  _dl_diagnostics_print_labeled_string ("path.sysconfdir", PREFIX "/etc");
-
+ 
    unsigned int index = 0;
    static const char *system_dirs = SYSTEM_DIRS "\0";
-diff --git a/elf/ldconfig.c b/elf/ldconfig.c
-index 28ed637a..6f07b79a 100644
---- a/elf/ldconfig.c
-+++ b/elf/ldconfig.c
-@@ -57,7 +57,7 @@
- #define TLS_HWCAP_BIT 63
+diff --git i/elf/ldconfig.c w/elf/ldconfig.c
+index aca96740..f19fb6e0 100644
+--- i/elf/ldconfig.c
++++ w/elf/ldconfig.c
+@@ -47,7 +47,7 @@
+ 
  
  #ifndef LD_SO_CONF
 -# define LD_SO_CONF SYSCONFDIR "/ld.so.conf"
@@ -49,10 +53,10 @@ index 28ed637a..6f07b79a 100644
  #endif
  
  /* Get libc version number.  */
-diff --git a/sysdeps/generic/dl-cache.h b/sysdeps/generic/dl-cache.h
-index 964d50a4..2224d651 100644
---- a/sysdeps/generic/dl-cache.h
-+++ b/sysdeps/generic/dl-cache.h
+diff --git i/sysdeps/generic/dl-cache.h w/sysdeps/generic/dl-cache.h
+index 26f0c1e0..31d25e3b 100644
+--- i/sysdeps/generic/dl-cache.h
++++ w/sysdeps/generic/dl-cache.h
 @@ -35,7 +35,7 @@
  #endif
  

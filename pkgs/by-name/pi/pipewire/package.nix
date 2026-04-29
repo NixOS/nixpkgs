@@ -91,6 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
   version = "1.6.4";
 
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   outputs = [
     "out"
     "jack"
