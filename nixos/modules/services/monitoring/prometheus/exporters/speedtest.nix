@@ -15,6 +15,8 @@ let
     ;
 in
 {
+  port = 9798;
+
   extraOpts = {
     serverID = mkOption {
       type = types.int;
