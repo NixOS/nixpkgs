@@ -24,7 +24,7 @@
 
 buildPythonPackage {
   pname = "pyscf";
-  version = "2.12.1-unstable-2026-03-21";
+  version = "2.13.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
