@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     # tests are not needed at runtime
     rm -rf spec e2e
     # delete artifacts from patching
-    rm *.orig
+    rm -f *.orig
 
     mkdir -p $out
     mv .{ruby*,app_version} $out/
