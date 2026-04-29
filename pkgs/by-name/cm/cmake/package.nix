@@ -124,6 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional cursesUI ncurses
     ++ lib.optional qt5UI qtbase;
 
+  # bootstrap is not autoconf and rejects --enable-static/--disable-shared
+  # FIXME: rebuild avoidance, drop optionalDrvAttr in staging
+  dontAddStaticConfigureFlags = lib.optionalDrvAttr stdenv.hostPlatform.isStatic true;
+
   preConfigure = ''
     substituteInPlace Modules/Platform/UnixPaths.cmake \
       --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
@@ -131,6 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
     configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags $cmakeFlags"
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isStatic && useSharedLibraries) ''
+    # FindLibArchive ignores libarchive.pc's Libs.private
+    export NIX_LDFLAGS+=" $($PKG_CONFIG --static --libs-only-l libarchive)"
   '';
 
   # The configuration script is not autoconf-based, although being similar;
@@ -175,6 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
     (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # kwsys's DynamicLoader test is inimical to -static
+    # doCheck is off anyway so just skip building tests
+    (lib.cmakeBool "BUILD_TESTING" false)
   ];
 
   # make install attempts to use the just-built cmake
