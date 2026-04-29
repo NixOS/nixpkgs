@@ -7,11 +7,6 @@
   cython,
   setuptools,
 
-  # nativeBuildInputs
-  pkg-config,
-
-  # buildInputs
-  luajit,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "lupa";
@@ -22,24 +17,16 @@ buildPythonPackage (finalAttrs: {
     owner = "scoder";
     repo = "lupa";
     tag = "lupa-${finalAttrs.version}";
-    hash = "sha256-JlKxisVd0sbLcmVjzyFEkbUDAornAoCWekpASl6qeY4=";
+    # Lua sources are vendored as submodules under third-party/.
+    # They are needed so that setup.py builds properly named backend
+    # modules (e.g. lua51, lua54, luajit21) expected by consumers like fakeredis.
+    fetchSubmodules = true;
+    hash = "sha256-XLBUQ1TrzWWST9RJdMTnpsceldDNzidnL82bixLhSRA=";
   };
 
   build-system = [
     cython
     setuptools
-  ];
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  env = {
-    LUPA_NO_BUNDLE = "true";
-  };
-
-  buildInputs = [
-    luajit
   ];
 
   pythonImportsCheck = [ "lupa" ];
