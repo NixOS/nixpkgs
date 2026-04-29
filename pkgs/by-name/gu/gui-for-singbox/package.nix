@@ -5,6 +5,8 @@
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
+  gtk3,
+  makeWrapper,
   nodejs,
   pkg-config,
   pnpm_10,
@@ -18,13 +20,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.21.0";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-IGsH8QHoj2CvrSEc9eIisxySXQkjPSDBXsCPOXqANVM=";
+    hash = "sha256-CEJ0yzF2smBlLgZ4EH5UWV4Pc4vA2ZH80TjoudUKWZM=";
   };
 
   metaCommon = {
@@ -38,6 +40,8 @@ let
     inherit pname version src;
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
+
+    patches = [ ./frontend-runtime-path.patch ];
 
     nativeBuildInputs = [
       nodejs
@@ -54,7 +58,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 2;
-      hash = "sha256-dWqwEnXPT+5N+36szm4AF1ChM9M6UJltct+EtQAofGQ=";
+      hash = "sha256-36i2WWTzp3FN7GSBA3va9f97AS+a6Vcj+qgVAw9eZf8=";
     };
 
     buildPhase = ''
@@ -85,17 +89,12 @@ buildGo126Module {
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
-  postPatch = ''
-    substituteInPlace bridge/bridge.go \
-      --subst-var out
-  '';
-
-  vendorHash = "sha256-EeIxt0BzSaZh1F38btUXN9kAvj12nlqEerVgWVGkiuk=";
+  vendorHash = "sha256-9uWrctbQ+vujb1Q8zT7Bv7rVyNY1rCM577c9caOKRNo=";
 
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
+    makeWrapper
     pkg-config
     wails
   ];
@@ -133,6 +132,12 @@ buildGo126Module {
     install -Dm 0644 build/appicon.png $out/share/icons/hicolor/256x256/apps/gui-for-singbox.png
 
     runHook postInstall
+  '';
+
+  # The app fails to run correctly  without the GTK schema path in XDG_DATA_DIRS.
+  postFixup = ''
+    wrapProgram $out/bin/GUI.for.SingBox \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
   '';
 
   passthru = {
