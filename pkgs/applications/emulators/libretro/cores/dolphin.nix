@@ -83,8 +83,6 @@ mkLibretroCore {
     (cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
-  dontUseCmakeBuildDir = false;
-
   meta = {
     description = "Port of Dolphin to libretro";
     homepage = "https://github.com/libretro/dolphin";
