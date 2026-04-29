@@ -37,7 +37,10 @@ lib.makeScope newScope (
 
     gst-editing-services = callPackage ./ges { };
 
-    gst-vaapi = callPackage ./vaapi { };
+    gst-vaapi =
+      lib.warn
+        "gst_all_1.gst-vaapi has been deprecated and replaced by the va plugin (part of gst-plugins-bad) upstream"
+        (callPackage ./vaapi { }); # Added 2026-04-26
 
     icamerasrc-ipu6 = callPackage ./icamerasrc { };
     icamerasrc-ipu6ep = callPackage ./icamerasrc {
