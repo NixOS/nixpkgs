@@ -18,17 +18,22 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "upsies";
-  version = "2026.01.26";
+  version = "2026.04.06";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "plotski";
     repo = "upsies";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gsWIyyUkpdUQjwZJXcevMLG0T1fgJj7brbVHfcks31w=";
+    hash = "sha256-3NnxsdI0WvXiWLEN1V+INKUYLD4K8eKINjVMhVSJqAs=";
   };
 
   patches = [
+    (fetchpatch {
+      name = "allow-newer-async-lru.patch";
+      url = "https://codeberg.org/plotski/upsies/commit/86e4961977451f78348aa9807f8a73bda8fa4c48.patch";
+      sha256 = "sha256-WHhsWCQkkCLBByoGnxw127c/grbjkLDsenytchFUweI=";
+    })
     (fetchpatch {
       name = "use-pytest-timeout.patch";
       url = "https://codeberg.org/plotski/upsies/commit/db6b564f8575c913a6fbabb61d5326a073c9b52c.patch";
