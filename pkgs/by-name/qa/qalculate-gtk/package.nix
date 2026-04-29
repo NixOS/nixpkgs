@@ -30,11 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+
   buildInputs = [
     libqalculate
     gtk3
     curl
   ];
+
   enableParallelBuilding = true;
 
   meta = {
