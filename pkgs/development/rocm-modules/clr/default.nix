@@ -242,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
       # "9-4-generic" - since only 942 is valid for 6.4 target it directly
       # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
       "942" # MI300A/X, MI325X
-      # "950" #  MI350X TODO: Expected in ROCm 7.x
+      "950" # MI350X, MI355X
       # "10-1-generic" # fine for all RDNA1 cards
       "1010"
       # "10-3-generic"
