@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
 
   # Use only versions specified in anytype-ts middleware.version file:
   #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
-  version = "0.49.0-rc08";
+  version = "0.50.3";
 
   # Update only together with 'anytype' package.
   # nixpkgs-update: no auto update
