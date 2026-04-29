@@ -26057,6 +26057,13 @@
     githubId = 26052996;
     name = "Erik Parawell";
   };
+  stealthybox = {
+    email = "leigh@null.net";
+    github = "stealthybox";
+    githubId = 2754700;
+    name = "Leigh Capili";
+    keys = [ { fingerprint = "05E7 89C9 142C DD05 8261  4EF8 5943 2144 444F B382"; } ];
+  };
   steamwalker = {
     email = "steamwalker@xs4all.nl";
     github = "steamwalker";
