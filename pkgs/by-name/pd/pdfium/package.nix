@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
   withV8 ? false,
+  withXfa ? false,
   freetype,
   gclient2nix,
   glib,
@@ -267,6 +268,8 @@ let
         ''}
       '';
 in
+# PDFium's XFA parser uses V8 types directly.
+assert !withXfa || withV8;
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfium";
   inherit version gclientDeps;
@@ -402,6 +405,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Match the requested V8 variant while keeping PartitionAlloc off.
     "pdf_enable_v8=${lib.boolToString withV8}"
+    "pdf_enable_xfa=${lib.boolToString withXfa}"
     "pdf_use_partition_alloc=false"
 
     # Prefer system libraries when PDFium already supports that mode.
