@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "troubadix";
-  version = "26.4.4";
+  version = "26.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "troubadix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OByl6SYPgM6pFp2OQyHMZHGr3JJ4kTJTZByWjdEnF7c=";
+    hash = "sha256-wZpxwgIGvl4cVpPNrsYa5eGbAUgdf4lOxP2f537FYQI=";
   };
 
   pythonRelaxDeps = [

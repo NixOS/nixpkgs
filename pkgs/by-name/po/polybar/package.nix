@@ -102,8 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Replace hardcoded /etc when copying and reading the default config.
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "/etc" $out
+    substituteInPlace CMakeLists.txt --replace-fail "/etc" $out
     substituteAllInPlace src/utils/file.cpp
+    # Fix gcc15 build: i3ipcpp forces -std=c++11 but the jsoncpp library was
+    # compiled with C++17 (JSONCPP_HAS_STRING_VIEW=1), causing ABI mismatch.
+    # The i3ipcpp code resolves operator[](const char*) but the library only
+    # exports operator[](std::string_view). Bump i3ipcpp to C++17 to match.
+    substituteInPlace lib/i3ipcpp/CMakeLists.txt --replace-fail \
+      "-std=c++11" \
+      "-std=c++17"
   '';
 
   postInstall = ''

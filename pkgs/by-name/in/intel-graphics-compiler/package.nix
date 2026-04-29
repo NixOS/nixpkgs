@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${version}";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];

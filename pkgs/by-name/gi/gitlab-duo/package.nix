@@ -8,10 +8,11 @@
   patch-package,
   stdenv,
   versionCheckHook,
+  ripgrep,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "gitlab-duo";
-  version = "8.67.0";
+  version = "8.89.0";
 
   # DOCS https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp#node-version
   nodejs = nodejs_22;
@@ -21,7 +22,7 @@ buildNpmPackage (finalAttrs: {
     owner = "editor-extensions";
     repo = "gitlab-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GnL3720MwiWtC7lHA4CrfiZUTeOV+ytWFii16OKGbAM=";
+    hash = "sha256-AiC0xxk8d/2rvRGm31vWqRuJ7nzMrITTGabv7v1LpOA=";
   };
 
   patches = [
@@ -30,13 +31,9 @@ buildNpmPackage (finalAttrs: {
     ./missing-hashes.patch
   ];
 
-  # PATCH: Only build for the current platform, not all targets
-  postPatch = ''
-    sed -i 's/SUPPORTED_TARGETS=".\+"/SUPPORTED_TARGETS="bun-$TARGET"/' packages/cli/scripts/compile_executables.sh
-  '';
-
   npmFlags = [ "--install-links" ];
-  npmDepsHash = "sha256-9b73NGu3GO5Sgus7BZ7WvOaXBvQ3UrW9BUTk6NwH+uY=";
+  npmDepsHash = "sha256-U/dwfYZqy/1CM+Emz1w44mAzY24Z8vKWBXSzSqeVmnY=";
+  npmRebuildFlags = [ "--ignore-scripts" ];
   npmBuildScript = "build:binary";
   npmWorkspace = "@gitlab/duo-cli";
   nativeBuildInputs = [
@@ -48,6 +45,8 @@ buildNpmPackage (finalAttrs: {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "true";
   env.PUPPETEER_SKIP_DOWNLOAD = "true";
   env.TARGET = "${stdenv.targetPlatform.node.platform}-${stdenv.targetPlatform.node.arch}";
+  env.SUPPORTED_TARGETS = "bun-${stdenv.targetPlatform.node.platform}-${stdenv.targetPlatform.node.arch}";
+  env.SKIP_RIPGREP_BUNDLE = 1;
 
   postConfigure = ''
     patchShebangs --build ./packages/cli/scripts
@@ -59,6 +58,9 @@ buildNpmPackage (finalAttrs: {
 
     install -Dm755 packages/cli/bin/duo-$TARGET $out/bin/duo
 
+    wrapProgram $out/bin/duo \
+      --prefix PATH : ${lib.getExe ripgrep}
+
     runHook postInstall
   '';
 
@@ -69,7 +71,6 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp/-/blob/main/CHANGELOG.md";
     description = "CLI for GitLab AI assistant";
     downloadPage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp";
