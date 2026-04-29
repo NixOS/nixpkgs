@@ -76,7 +76,12 @@ in
     profileDir = mkOption {
       type = path;
       default = "/var/lib/qBittorrent/";
-      description = "the path passed to qbittorrent via --profile.";
+      description = ''
+        The path passed to qbittorrent via --profile.
+        Please note that the resulting systemd service will be run with some very strict security controls, 
+        such as `ProtectHome=yes`, `PrivateUsers=true`, and `ProtectSystem=full` among others, so you cannot specify 
+        a profileDir in your home directory. See [this bug report](https://github.com/NixOS/nixpkgs/issues/514206) for further info.  
+      '';
     };
 
     openFirewall = mkEnableOption "opening both the webuiPort and torrentPort over TCP in the firewall";
