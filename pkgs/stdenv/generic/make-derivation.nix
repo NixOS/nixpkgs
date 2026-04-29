@@ -415,20 +415,6 @@ let
         ) == [ ];
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
-      enabledHardeningOptions =
-        if elem "all" hardeningDisable then
-          [ ]
-        else
-          subtractLists (unique (
-            pipe hardeningDisable [
-              # disabling fortify implies fortify3 should also be disabled
-              (concretizeFlagImplications "fortify" [ "fortify3" ])
-              # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
-              (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
-              # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
-              (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
-            ]
-          )) (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = subtractLists knownHardeningFlags (
         hardeningEnable ++ remove "all" hardeningDisable
@@ -630,6 +616,22 @@ let
             else
               null
           } =
+            let
+              enabledHardeningOptions =
+                if elem "all" hardeningDisable then
+                  [ ]
+                else
+                  subtractLists (unique (
+                    pipe hardeningDisable [
+                      # disabling fortify implies fortify3 should also be disabled
+                      (concretizeFlagImplications "fortify" [ "fortify3" ])
+                      # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+                      (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+                      # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+                      (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
+                    ]
+                  )) (defaultHardeningFlags ++ hardeningEnable);
+            in
             concatStringsSep " " enabledHardeningOptions;
 
           # TODO: remove platform condition
