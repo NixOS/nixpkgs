@@ -17,7 +17,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.54.11";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "anyproto";
