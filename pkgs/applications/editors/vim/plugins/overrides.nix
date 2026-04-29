@@ -453,6 +453,12 @@ assertNoAdditions {
     };
   });
 
+  camelcasemotion = super.camelcasemotion.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   catppuccin-nvim = super.catppuccin-nvim.overrideAttrs {
     nvimSkipModules = [
       "catppuccin.groups.integrations.noice"
