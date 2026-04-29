@@ -12,23 +12,31 @@
   # dependencies
   anthropic,
   authlib,
+  azure-identity,
   cyclopts,
   exceptiongroup,
+  griffelib,
   httpx,
   jsonref,
   jsonschema-path,
   mcp,
   openai,
   openapi-pydantic,
+  opentelemetry-api,
   packaging,
   platformdirs,
   py-key-value-aio,
   pydantic,
+  pydantic-monty,
   pydocket,
+  pyjwt,
   pyperclip,
   python-dotenv,
+  pyyaml,
   rich,
+  uncalled-for,
   uvicorn,
+  watchfiles,
   websockets,
 
   # tests
@@ -39,71 +47,119 @@
   lupa,
   psutil,
   pytest-asyncio,
+  pytest-examples,
   pytest-httpx,
+  pytest-retry,
+  pytest-timeout,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "2.14.5";
+  version = "3.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "jlowin";
+    owner = "PrefectHQ";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j3aUvAKm0rW5X/l1VXoSBc5fCjSLxnyznwzj1D3E7Ck=";
+    hash = "sha256-rJpxPvqAaa6/vXhG1+R9dI32cY/54e6I+F/zyBVoqBM=";
   };
+
+  # The mcp library spawns subprocess servers with a minimal environment
+  # (HOME, LOGNAME, PATH, SHELL, TERM, USER) that excludes PYTHONPATH.
+  # This means the subprocess's Python interpreter cannot find fastmcp.
+  # Inject PYTHONPATH into the env dicts used by tests that spawn MCP
+  # server subprocesses.
+  postPatch = ''
+    substituteInPlace tests/test_mcp_config.py \
+      --replace-fail \
+        '"command": "python",' \
+        '"command": "python", "env": {"PYTHONPATH": os.environ.get("PYTHONPATH", "")},'
+    substituteInPlace tests/client/test_stdio.py \
+      --replace-fail \
+        'PythonStdioTransport(script_path=' \
+        'PythonStdioTransport(env={"PYTHONPATH": os.environ.get("PYTHONPATH", "")}, script_path=' \
+      --replace-fail \
+        'script_path=stdio_script_with_stderr,' \
+        'env={"PYTHONPATH": os.environ.get("PYTHONPATH", "")}, script_path=stdio_script_with_stderr,'
+    substituteInPlace tests/server/test_server.py \
+      --replace-fail \
+        'script_path=server_file' \
+        'env={"PYTHONPATH": os.environ.get("PYTHONPATH", "")}, script_path=server_file'
+    substituteInPlace tests/cli/test_run.py \
+      --replace-fail \
+        'import inspect''\nimport json' \
+        'import inspect''\nimport json''\nimport os' \
+      --replace-fail \
+        'StdioMCPServer(command="python", args=[str(script_path)])' \
+        'StdioMCPServer(command="python", args=[str(script_path)], env={"PYTHONPATH": os.environ.get("PYTHONPATH", "")})'
+  '';
 
   build-system = [
     hatchling
     uv-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "pydocket"
-  ];
   dependencies = [
     authlib
     cyclopts
     exceptiongroup
+    griffelib
     httpx
     jsonref
     jsonschema-path
     mcp
     openapi-pydantic
+    opentelemetry-api
     packaging
     platformdirs
     py-key-value-aio
     pydantic
-    pydocket
     pyperclip
     python-dotenv
+    pyyaml
     rich
+    uncalled-for
     uvicorn
+    watchfiles
     websockets
   ]
-  ++ py-key-value-aio.optional-dependencies.disk
+  ++ py-key-value-aio.optional-dependencies.filetree
   ++ py-key-value-aio.optional-dependencies.keyring
   ++ py-key-value-aio.optional-dependencies.memory
   ++ pydantic.optional-dependencies.email;
 
   optional-dependencies = {
     anthropic = [ anthropic ];
+    azure = [
+      azure-identity
+      pyjwt
+    ];
+    code-mode = [ pydantic-monty ];
     openai = [ openai ];
+    tasks = [ pydocket ];
   };
+
+  pythonRelaxDeps = [ "py-key-value-aio" ];
 
   pythonImportsCheck = [ "fastmcp" ];
 
   nativeCheckInputs = [
+    azure-identity
     dirty-equals
     email-validator
     fastapi
     inline-snapshot
     lupa
     psutil
+    pyjwt
     pytest-asyncio
+    pytest-examples
     pytest-httpx
+    pytest-retry
+    pytest-timeout
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
@@ -111,59 +167,24 @@ buildPythonPackage (finalAttrs: {
   ++ inline-snapshot.optional-dependencies.dirty-equals;
 
   disabledTests = [
-    # redis.exceptions.ResponseError: unknown command `evalsha`, with args beginning with:
-    "test_get_prompt_as_task_returns_prompt_task"
-    "test_prompt_task_server_generated_id"
-
-    "test_logging_middleware_with_payloads"
-    "test_structured_logging_middleware_produces_json"
-
-    # AssertionError: assert 'INFO' == 'DEBUG'
-    "test_temporary_settings"
-
-    # mcp.shared.exceptions.McpError: Connection closed
-    "test_log_file_captures_stderr_output_with_path"
-    "test_log_file_captures_stderr_output_with_textio"
-    "test_log_file_none_uses_default_behavior"
-
-    # RuntimeError: Client failed to connect: Connection closed
-    "test_keep_alive_maintains_session_across_multiple_calls"
-    "test_keep_alive_false_starts_new_session_across_multiple_calls"
-    "test_keep_alive_false_exit_scope_kills_server"
-    "test_keep_alive_starts_new_session_if_manually_closed"
-    "test_keep_alive_true_exit_scope_kills_client"
-    "test_keep_alive_maintains_session_if_reentered"
-    "test_close_session_and_try_to_use_client_raises_error"
-    "test_parallel_calls"
-    "test_run_mcp_config"
-    "test_settings_from_environment_issue_1749"
+    # Requires uv binary
     "test_uv_transport"
     "test_uv_transport_module"
+
+    # Requires network access
     "test_github_api_schema_performance"
 
     # Hang forever
     "test_nested_streamable_http_server_resolves_correctly"
 
-    # RuntimeError: Client failed to connect: Timed out while waiting for response
-    "test_timeout"
-    "test_timeout_tool_call_overrides_client_timeout_even_if_lower"
+    # Imports from fastmcp.apps.* (prefab-ui) and google_genai are unavailable
+    "test_doc_examples_quality"
 
-    # assert 0 == 2
-    "test_multi_client"
-    "test_canonical_multi_client_with_transforms"
+    # Requires pydocket >= 0.19.0, but nixpkgs has 0.17.1
+    "test_timeout_with_task_mode"
 
-    # AssertionError: assert {'annotations...object'}, ...} == {'annotations...sers']}}, ...}
-    "test_list_tools"
-
-    # AssertionError: assert len(caplog.records) == 1
-    "test_log"
-
-    #  assert [TextContent(...e, meta=None)] == [TextContent(...e, meta=None)]
-    "test_read_resource_tool_works"
-
-    # fastmcp.exceptions.ToolError: Unknown tool
-    "test_multi_client_with_logging"
-    "test_multi_client_with_elicitation"
+    # assert 'INFO' == 'DEBUG' — environment-sensitive log-level default
+    "test_temporary_settings"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
@@ -173,7 +194,30 @@ buildPythonPackage (finalAttrs: {
     "test_stateless_proxy"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # These depend on the optional package prefab-ui (https://github.com/PrefectHQ/prefab),
+    # which is not yet available in nixpkgs.
+    "tests/apps/test_approval.py"
+    "tests/apps/test_choice.py"
+    "tests/apps/test_file_upload.py"
+    "tests/apps/test_form.py"
+    "tests/test_apps.py"
+    "tests/test_apps_prefab.py"
+    "tests/test_fastmcp_app.py"
+    # These tests use tasks and require pydocket >=0.19.0, but nixpkgs only has 0.17.1.
+    "tests/client/tasks"
+    "tests/client/transports/test_memory_transport.py"
+    "tests/server/http/test_http_dependencies.py"
+    "tests/server/mount/test_advanced.py"
+    "tests/server/providers/test_local_provider.py"
+    "tests/server/tasks"
+    "tests/server/test_dependencies.py"
+    "tests/server/test_server_docket.py"
+    "tests/server/test_tool_annotations.py"
+    "tests/tools/tool/test_tool.py"
+    "tests/utilities/test_async_utils.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
     "tests/client/auth/test_oauth_client.py"
     "tests/client/test_sse.py"
@@ -186,9 +230,12 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Fast, Pythonic way to build MCP servers and clients";
-    changelog = "https://github.com/jlowin/fastmcp/releases/tag/${finalAttrs.src.tag}";
-    homepage = "https://github.com/jlowin/fastmcp";
+    changelog = "https://github.com/PrefectHQ/fastmcp/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/PrefectHQ/fastmcp";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      squat
+    ];
   };
 })
