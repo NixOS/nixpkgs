@@ -23716,13 +23716,12 @@ final: prev: {
   vim-solarized8 = buildVimPlugin {
     pname = "vim-solarized8";
     version = "1.6.4-unstable-2026-03-11";
-    src = fetchFromGitHub {
-      owner = "lifepillar";
-      repo = "vim-solarized8";
-      rev = "4433b4411de92b2446a4d32f0d8bf1b25c476bf9";
-      hash = "sha256-Og6qmrSIfhtGgait/nwJg+uNrUtY/j83cUWZj2TwUFY=";
+    src = fetchgit {
+      url = "https://codeberg.org/lifepillar/vim-solarized8/";
+      rev = "5dfbfb00be8237619c680302fc9250e391b1686a";
+      hash = "sha256-qJLlHsXKcLC+bpirfcuBj3igK9dDk8L9oVGPzWhtkEI=";
     };
-    meta.homepage = "https://github.com/lifepillar/vim-solarized8/";
+    meta.homepage = "https://codeberg.org/lifepillar/vim-solarized8/";
     meta.license = lib.licenses.unfree;
     meta.hydraPlatforms = [ ];
   };
