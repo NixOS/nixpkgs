@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "grafana-to-ntfy";
-  version = "2026.3.15";
+  version = "2026.4.29";
 
   src = fetchFromGitHub {
     owner = "kittyandrew";
     repo = "grafana-to-ntfy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jK/UTgazDlVaIAD0AM61i0dAVX41LCPJFGf1tfMhNk0=";
+    hash = "sha256-ac0T8SNCDH9kQTKIfYn9KinnrSCYIBpNByO6NQ8UntA=";
   };
 
-  cargoHash = "sha256-/e9dDcoablMSLb8q0DPUqNExPny13fm/xBhUT46hkXQ=";
+  cargoHash = "sha256-RuWXlofcruR69sg+RO2v1DBgxaPEyu8TeZEiZP7rBV8=";
 
   # No unit tests; all testing is NixOS VM-based integration tests
   doCheck = false;
