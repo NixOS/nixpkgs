@@ -1,9 +1,7 @@
 {
   lib,
   vscode-utils,
-  jq,
   shfmt,
-  moreutils,
 }:
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
@@ -13,10 +11,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-Mff3ZpxnLp/cEB17T0KGZ4GWG8jN4VxrfR/wIEi2ouM=";
   };
 
-  postInstall = ''
-    cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."shfmt.executablePath".default = "${lib.getExe shfmt}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
-  '';
+  executableConfig."shfmt.executablePath".package = shfmt;
 
   meta = {
     description = "Extension uses shfmt to provide a formatter for shell script documents";

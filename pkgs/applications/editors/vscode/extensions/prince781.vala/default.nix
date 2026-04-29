@@ -2,8 +2,6 @@
   lib,
   vala-language-server,
   vscode-utils,
-  jq,
-  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -14,15 +12,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-LJJDKhwzbGznyiXeB8SYir3LOM7/quYhGae1m4X/s3M=";
   };
 
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-
-  postInstall = ''
-    cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."vala.languageServerPath".default = "${lib.getExe vala-language-server}"' package.json | sponge package.json
-  '';
+  executableConfig."vala.languageServerPath".package = vala-language-server;
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/prince781.vala/changelog";

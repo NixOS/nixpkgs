@@ -1,9 +1,7 @@
 {
   vscode-utils,
   craftos-pc,
-  jq,
   lib,
-  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -13,24 +11,16 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "1.2.3";
     hash = "sha256-QoLMefSmownw9AEem0jx1+BF1bcolHYpiqyPKQNkdiQ=";
   };
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-  postInstall = ''
-    cd "$out/$installPrefix"
-
-    jq -e '
-      .contributes.configuration.properties."craftos-pc.executablePath.linux".default =
-        "${lib.meta.getExe craftos-pc}" |
-      .contributes.configuration.properties."craftos-pc.executablePath.mac".default =
-        "${lib.meta.getExe craftos-pc}" |
-      .contributes.configuration.properties."craftos-pc.executablePath.windows".default =
-        "${lib.meta.getExe craftos-pc}"
-    ' \
-    < package.json \
-    | sponge package.json
-  '';
+  executableConfig =
+    lib.genAttrs
+      [
+        "craftos-pc.executablePath.linux"
+        "craftos-pc.executablePath.linux"
+        "craftos-pc.executablePath.windows"
+      ]
+      (_: {
+        package = craftos-pc;
+      });
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.craftos-pc/changelog";
     description = "Visual Studio Code extension for opening a CraftOS-PC window";

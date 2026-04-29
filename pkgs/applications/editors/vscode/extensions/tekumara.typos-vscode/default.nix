@@ -1,8 +1,6 @@
 {
   stdenv,
-  jq,
   lib,
-  moreutils,
   typos-lsp,
   vscode-utils,
   vscode-extension-update-script,
@@ -42,17 +40,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     inherit (extInfo) hash arch;
   };
 
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-
   buildInputs = [ typos-lsp ];
 
-  postInstall = ''
-    cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."typos.path".default = "${lib.getExe typos-lsp}"' package.json | sponge package.json
-  '';
+  executableConfig."typos.path".package = typos-lsp;
 
   passthru.updateScript = vscode-extension-update-script { };
 

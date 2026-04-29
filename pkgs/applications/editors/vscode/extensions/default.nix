@@ -6,10 +6,8 @@
   config,
   fetchurl,
   jdk,
-  jq,
   lib,
   llvmPackages,
-  moreutils,
   protobuf,
   python3Packages,
   stdenv,
@@ -2759,20 +2757,12 @@ let
             hash = "sha256-83hvz4nqpOxou5tFmiXyuUgWjRnTrOu42R+pRJdNbwU=";
           };
 
-          nativeBuildInputs = [
-            jq
-            moreutils
-          ];
-
           buildInputs = [
             cfn-lint
             pydot
           ];
 
-          postInstall = ''
-            cd "$out/$installPrefix"
-            jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
-          '';
+          executableConfig."cfnLint.path".package = cfn-lint;
 
           meta = {
             description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
@@ -4944,17 +4934,9 @@ let
           sha256 = "1nlrijjwc35n1xgb5lgnr4yvlgfcxd0vdj93ip8lv2xi8x1ni5f6";
         };
 
-        nativeBuildInputs = [
-          jq
-          moreutils
-        ];
-
         buildInputs = [ jdk ];
 
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."ltex.java.path".default = "${jdk}"' package.json | sponge package.json
-        '';
+        executableConfig."ltex.java.path".package = jdk;
 
         meta = {
           license = lib.licenses.mpl20;
@@ -5552,14 +5534,10 @@ let
           version = "0.5.5";
           sha256 = "sha256-Em+w3FyJLXrpVAe9N7zsHRoMcpvl+psmG1new7nA8iE=";
         };
-        nativeBuildInputs = [
-          jq
-          moreutils
-        ];
-        postInstall = ''
-          cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties.protoc.properties.path.default = "${protobuf}/bin/protoc"' package.json | sponge package.json
-        '';
+        executableConfig.protoc = {
+          extraJqExpr = ".properties.path";
+          package = protobuf;
+        };
         meta = {
           license = lib.licenses.mit;
         };

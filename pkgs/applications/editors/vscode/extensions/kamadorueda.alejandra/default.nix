@@ -1,9 +1,9 @@
 {
   alejandra,
-  jq,
   lib,
-  moreutils,
   vscode-utils,
+  jq,
+  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -13,21 +13,13 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "1.0.0";
     hash = "sha256-COlEjKhm8tK5XfOjrpVUDQ7x3JaOLiYoZ4MdwTL8ktk=";
   };
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
+  executableConfig."alejandra.program".package = alejandra;
   postInstall = ''
     cd "$out/$installPrefix"
-
-    jq -e '
-      .contributes.configuration.properties."alejandra.program".default =
-        "${alejandra}/bin/alejandra" |
+    ${lib.getExe jq} -e '
       .contributes.configurationDefaults."alejandra.program" =
-        "${alejandra}/bin/alejandra"
-    ' \
-    < package.json \
-    | sponge package.json
+        "${lib.getExe alejandra}"
+    ' package.json | ${lib.getExe' moreutils "sponge"} package.json
   '';
   meta = {
     description = "Uncompromising Nix Code Formatter";

@@ -1,9 +1,7 @@
 {
   lib,
   vscode-utils,
-  jq,
   guile,
-  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -14,10 +12,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-uoHYfbLeANHnMB7OgDQPfIIlNN7LgERS9zQfa+QIk0M=";
   };
 
-  postInstall = ''
-    cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."guileScheme.guileREPLCommand".default = "${lib.getExe' guile "guile"}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
-  '';
+  executableConfig."guileScheme.guileREPLCommand".package = guile;
 
   meta = {
     description = "Better experience for working with scheme";

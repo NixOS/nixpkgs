@@ -1,7 +1,5 @@
 {
-  jq,
   lib,
-  moreutils,
   tinymist,
   vscode-utils,
 }:
@@ -14,17 +12,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-R4tlQgtQaXIT6qiBg1RqQB0Usnsj0Ijs2Bhn2J1CQq4=";
   };
 
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-
   buildInputs = [ tinymist ];
 
-  postInstall = ''
-    cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."tinymist.serverPath".default = "${lib.getExe tinymist}"' package.json | sponge package.json
-  '';
+  executableConfig."tinymist.serverPath".package = tinymist;
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/myriad-dreamin.tinymist/changelog";

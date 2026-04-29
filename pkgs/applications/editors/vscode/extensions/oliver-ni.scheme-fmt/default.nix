@@ -1,9 +1,7 @@
 {
   lib,
   vscode-utils,
-  jq,
   python3,
-  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -14,10 +12,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-oTXy0Vjd0s7ZYZzr36ILQOJm4BW9Qd7y8fGbnhkaD1Y=";
   };
 
-  postInstall = ''
-    cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."scheme-fmt.pythonPath".default = "${lib.getExe python3}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
-  '';
+  executableConfig."scheme-fmt.pythonPath".package = python3;
 
   meta = {
     description = "Formats Scheme source code";

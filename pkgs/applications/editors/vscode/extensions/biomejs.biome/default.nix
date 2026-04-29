@@ -1,9 +1,7 @@
 {
   lib,
   vscode-utils,
-  jq,
   biome,
-  moreutils,
   vscode-extension-update-script,
 }:
 
@@ -15,10 +13,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-HH+KJYY4J6nuHwQ/+DhEFsJ7P5S97UsNuoc+y7GnE00=";
   };
 
-  postInstall = ''
-    cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."biome.lsp.bin".oneOf[0].default = "${lib.getExe biome}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
-  '';
+  executableConfig."biome.lsp.bin" = {
+    extraJqExpr = ".oneOf[0]";
+    package = biome;
+  };
 
   passthru.updateScript = vscode-extension-update-script {
     extraArgs = [ "--pre-release" ];
