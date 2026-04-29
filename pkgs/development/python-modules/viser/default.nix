@@ -49,7 +49,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "viser";
   version = "1.0.20";
   pyproject = true;
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "viser-project";
     repo = "viser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-usnvEvuBNPrqRXV7jh0qw1ppmZgAe1CUhAwd/M5CvC0=";
   };
 
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   ];
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/src/viser/client/yarn.lock";
+    yarnLock = finalAttrs.src + "/src/viser/client/yarn.lock";
     hash = "sha256-4x+zJIqjVoKmEdOUPGpCuMmlRBfF++3oWtbNYAvd2ko=";
   };
 
@@ -145,10 +145,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/viser-project/viser/releases/tag/${src.tag}";
+    changelog = "https://github.com/viser-project/viser/releases/tag/${finalAttrs.src.tag}";
     description = "Web-based 3D visualization + Python";
     homepage = "https://github.com/nerfstudio-project/viser";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})
