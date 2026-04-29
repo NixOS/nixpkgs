@@ -5367,6 +5367,12 @@ assertNoAdditions {
     };
   });
 
+  vim-textobj-user = super.vim-textobj-user.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";
