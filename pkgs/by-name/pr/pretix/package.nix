@@ -51,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2026.3.1";
+  version = "2026.4.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${version}";
-    hash = "sha256-E/WJRuugcfy/r6USS37G73PiHg8DuYRFSq0e19XIRJg=";
+    hash = "sha256-M5ty2kcIyVAFzGiieLx1FHIRXnl4jCR/O2IU7kztV3U=";
   };
 
   npmDeps = buildNpmPackage {
@@ -65,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-+84WFNs0iPhMb4YIKfHYByYeFQHITyWeF5yIM8pvQSs=";
+    npmDepsHash = "sha256-U4oXGir53h7R3z4p371PJGm2EU+arsqe/abn6GvSGXs=";
 
     dontBuild = true;
 
@@ -94,6 +94,7 @@ python.pkgs.buildPythonApplication rec {
     "bleach"
     "celery"
     "css-inline"
+    "cryptography"
     "django-bootstrap3"
     "django-compressor"
     "django-filter"
