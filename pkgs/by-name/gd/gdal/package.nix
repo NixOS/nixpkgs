@@ -260,6 +260,10 @@ stdenv.mkDerivation (finalAttrs: {
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5 on macOS
+    "gcore/hdf4multidim.py"
   ];
   disabledTests = [
     # tests that attempt to make network requests
