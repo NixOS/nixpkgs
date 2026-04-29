@@ -25,7 +25,7 @@ let
     filterAttrs
     getDev
     head
-    imap1
+    foldl'
     isAttrs
     isBool
     isDerivation
@@ -44,6 +44,8 @@ let
     toFunction
     unique
     zipAttrsWith
+    isPath
+    seq
     ;
 
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
@@ -436,17 +438,17 @@ let
       checkDependencyList = checkDependencyList' [ ];
       checkDependencyList' =
         positions: name: deps:
-        imap1 (
+        seq (foldl' (
           index: dep:
-          if dep == null || isDerivation dep || isString dep || builtins.isPath dep then
-            dep
+          if dep == null || isDerivation dep || isString dep || isPath dep then
+            index + 1
           else if isList dep then
-            checkDependencyList' ([ index ] ++ positions) name dep
+            seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1)
           else
             throw "Dependency is not of a valid type: ${
               concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
             }${name} for ${attrs.name or attrs.pname}"
-        ) deps;
+        ) 1 deps) deps;
     in
     if erroneousHardeningFlags != [ ] then
       abort (

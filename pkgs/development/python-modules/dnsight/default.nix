@@ -85,7 +85,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "SDK and CLI tool for DNS, email and web security hygiene";
     homepage = "https://github.com/dnsight/dnsight";
-    changelog = "https://github.com/dnsight/dnsight/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/dnsight/dnsight/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnsight";

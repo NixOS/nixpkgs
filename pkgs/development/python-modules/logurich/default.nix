@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Logger that combine loguru and rich";
     homepage = "https://github.com/PakitoSec/logurich";
-    changelog = "https://github.com/PakitoSec/logurich/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/PakitoSec/logurich/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

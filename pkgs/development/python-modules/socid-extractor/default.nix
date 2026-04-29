@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python module to extract details from personal pages";
     homepage = "https://github.com/soxoj/socid-extractor";
-    changelog = "https://github.com/soxoj/socid-extractor/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/soxoj/socid-extractor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "socid_extractor";

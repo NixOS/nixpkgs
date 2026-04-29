@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Bandwidth Test server and client";
     homepage = "https://github.com/manawenuz/btest-rs";
-    changelog = "https://github.com/manawenuz/btest-rs/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/manawenuz/btest-rs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "btest";
