@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "gerbonara";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbonara";
     tag = "v${version}";
-    hash = "sha256-fT13JMoOvKMxdHoagZAmIsGhU3M1S4bEmKUHae+EJcI=";
+    hash = "sha256-XWxYgnzvebO+iTL6idWyX+j7bsyvNkWdKDEuqsU/p4w=";
   };
 
   build-system = [ uv-build ];
