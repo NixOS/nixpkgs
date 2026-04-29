@@ -164,6 +164,10 @@ let
     "zerocallusedregs"
   ];
 
+  concretizeFlagImplications =
+    flag: impliesFlags: list:
+    if elem flag list then (list ++ impliesFlags) else list;
+
   removedOrReplacedAttrNames = [
     "checkInputs"
     "installCheckInputs"
@@ -410,10 +414,6 @@ let
           ++ depsTargetTargetPropagated
         ) == [ ];
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
-
-      concretizeFlagImplications =
-        flag: impliesFlags: list:
-        if elem flag list then (list ++ impliesFlags) else list;
 
       hardeningDisable' = unique (
         pipe hardeningDisable [
