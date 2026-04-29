@@ -114,30 +114,33 @@ in
         in
         ''
           ${lib.optionalString (cfg.settings.bauthPass != null) (optionalCred "BAUTH_PASS_FILE" "BAUTH_PASS")}
-          ${lib.optionalString (cfg.settings.ntfyBAuthPass != null) (optionalCred "NTFY_BAUTH_PASS_FILE" "NTFY_BAUTH_PASS")}
+          ${lib.optionalString (cfg.settings.ntfyBAuthPass != null) (
+            optionalCred "NTFY_BAUTH_PASS_FILE" "NTFY_BAUTH_PASS"
+          )}
           exec ${lib.getExe cfg.package}
         '';
 
-      environment =
-        {
-          NTFY_URL = cfg.settings.ntfyUrl;
-          ROCKET_PORT = toString cfg.settings.port;
-          ROCKET_ADDRESS = cfg.settings.address;
-        }
-        // lib.optionalAttrs (cfg.settings.bauthUser != null) {
-          BAUTH_USER = cfg.settings.bauthUser;
-        }
-        // lib.optionalAttrs (cfg.settings.ntfyBAuthUser != null) {
-          NTFY_BAUTH_USER = cfg.settings.ntfyBAuthUser;
-        }
-        // lib.optionalAttrs cfg.settings.markdown {
-          MARKDOWN = "true";
-        };
+      environment = {
+        NTFY_URL = cfg.settings.ntfyUrl;
+        ROCKET_PORT = toString cfg.settings.port;
+        ROCKET_ADDRESS = cfg.settings.address;
+      }
+      // lib.optionalAttrs (cfg.settings.bauthUser != null) {
+        BAUTH_USER = cfg.settings.bauthUser;
+      }
+      // lib.optionalAttrs (cfg.settings.ntfyBAuthUser != null) {
+        NTFY_BAUTH_USER = cfg.settings.ntfyBAuthUser;
+      }
+      // lib.optionalAttrs cfg.settings.markdown {
+        MARKDOWN = "true";
+      };
 
       serviceConfig = {
         LoadCredential =
           lib.optional (cfg.settings.bauthPass != null) "BAUTH_PASS_FILE:${cfg.settings.bauthPass}"
-          ++ lib.optional (cfg.settings.ntfyBAuthPass != null) "NTFY_BAUTH_PASS_FILE:${cfg.settings.ntfyBAuthPass}";
+          ++ lib.optional (
+            cfg.settings.ntfyBAuthPass != null
+          ) "NTFY_BAUTH_PASS_FILE:${cfg.settings.ntfyBAuthPass}";
 
         DynamicUser = true;
 
