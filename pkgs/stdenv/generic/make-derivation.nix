@@ -165,6 +165,10 @@ let
     "zerocallusedregs"
   ];
 
+  concretizeFlagImplications =
+    flag: impliesFlags: list:
+    if elem flag list then (list ++ impliesFlags) else list;
+
   removedOrReplacedAttrNames = [
     "checkInputs"
     "installCheckInputs"
@@ -408,10 +412,6 @@ let
         else
           actualValue;
       outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
-
-      concretizeFlagImplications =
-        flag: impliesFlags: list:
-        if elem flag list then (list ++ impliesFlags) else list;
 
       hardeningDisable' = unique (
         pipe hardeningDisable [
