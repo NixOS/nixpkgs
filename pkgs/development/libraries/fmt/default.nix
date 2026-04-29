@@ -60,7 +60,11 @@ let
           used as a fast and safe alternative to printf and IOStreams.
         '';
         homepage = "https://fmt.dev/";
-        changelog = "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.rst";
+        changelog =
+          let
+            ext = if lib.versionOlder version "10" then "rst" else "md";
+          in
+          "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.${ext}";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ ];
         license = lib.licenses.mit;
