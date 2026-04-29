@@ -24,9 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-CXxuaAi/B7NiGp1dhhe7iBw0qOdPfsKg7zMMwavGCW8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pillow
     cryptography
     twisted
