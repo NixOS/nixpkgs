@@ -9,6 +9,8 @@ buildGoModule (finalAttrs: {
   pname = "roots";
   version = "0.4.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "roots";
