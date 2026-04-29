@@ -4495,6 +4495,12 @@ assertNoAdditions {
     nvimSkipModules = "tsc.better-messages-test";
   };
 
+  tslime-vim = super.tslime-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   tsuquyomi = super.tsuquyomi.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
