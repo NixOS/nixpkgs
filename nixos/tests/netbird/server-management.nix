@@ -18,8 +18,6 @@
         port = 8011;
         metricsPort = 9090;
         logLevel = "DEBUG";
-        oidcConfigEndpoint = "https://idp.test/.well-known/openid-configuration";
-
         settings = {
           # Use a test encryption key
           DataStoreEncryptionKey = "test-encryption-key-for-testing";
@@ -34,7 +32,6 @@
         turnDomain = "turn.test";
         port = 8011;
         metricsPort = 9090;
-        oidcConfigEndpoint = "https://idp.test/.well-known/openid-configuration";
 
         # Configure relay
         relayAddresses = [ "rels://relay.test:443" ];
@@ -59,7 +56,6 @@
         turnDomain = "turn.test";
         port = 8011;
         metricsPort = 9090;
-        oidcConfigEndpoint = "https://idp.test/.well-known/openid-configuration";
 
         store = {
           engine = "postgres";

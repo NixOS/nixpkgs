@@ -42,7 +42,7 @@
     relay.succeed("test -d /var/lib/netbird-relay")
 
     # Verify firewall is configured (relay port and STUN)
-    relay.succeed("iptables -L INPUT -n | grep -q 8443")
-    relay.succeed("iptables -L INPUT -n | grep -q 3478")
+    relay.succeed("iptables -L -n | grep -q 8443")
+    relay.succeed("iptables -L -n | grep -q 3478")
   '';
 }
