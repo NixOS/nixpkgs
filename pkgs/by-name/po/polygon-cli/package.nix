@@ -31,7 +31,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "Command-line tool for polygon.codeforces.com";
     mainProgram = "polygon-cli";
     homepage = "https://github.com/kunyavskiy/polygon-cli";
-    changelog = "https://github.com/kunyavskiy/polygon-cli/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaser ];
   };
