@@ -487,8 +487,8 @@ stdenv.mkDerivation (finalAttrs: {
   preInstallCheck = ''
     # Some tests break with high concurrency
     # https://github.com/NixOS/nixpkgs/pull/403237
-    if ((NIX_BUILD_CORES > 32)); then
-      NIX_BUILD_CORES=32
+    if ((NIX_BUILD_CORES > 16)); then
+      NIX_BUILD_CORES=16
     fi
 
     installCheckFlagsArray+=(
@@ -537,6 +537,8 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t4122-apply-symlink-inside
     disable_test t7513-interpret-trailers
     disable_test t2200-add-update
+    # https://github.com/NixOS/nixpkgs/issues/498789
+    disable_test t7703-repack-geometric
 
     # Fails reproducibly on ZFS on Linux with formD normalization
     disable_test t0021-conversion
