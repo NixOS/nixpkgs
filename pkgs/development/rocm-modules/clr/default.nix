@@ -247,10 +247,12 @@ stdenv.mkDerivation (finalAttrs: {
       "1010"
       # "10-3-generic"
       "1030" # W6800, various Radeon cards
+      # 1100 through 1103 = RDNA3
       # "11-generic" # will handle 7600, hopefully ryzen AI series iGPUs
       "1100"
       "1101"
       "1102"
+      "1103" # RDNA3 iGPU like Radeon 780M
       "1150" # Strix Point
       "1151" # Strix Halo
       # "12-generic"
