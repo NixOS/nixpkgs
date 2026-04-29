@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nodejs,
+  curl,
   nix-update-script,
 }:
 
@@ -30,7 +31,10 @@ buildGoModule (finalAttrs: {
   # Some of the tests require a writable $HOME
   preCheck = "export HOME=$TMPDIR";
 
-  nativeCheckInputs = [ nodejs ];
+  nativeCheckInputs = [
+    nodejs
+    curl
+  ];
 
   passthru.updateScript = nix-update-script { };
 
