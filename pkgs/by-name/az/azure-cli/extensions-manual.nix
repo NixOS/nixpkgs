@@ -33,6 +33,7 @@
     url = "https://hybridaksstorage.z13.web.core.windows.net/HybridAKS/CLI/aksarc-1.5.62-py3-none-any.whl";
     hash = "sha256-PCy4SUbB4Vlj+fIwhufGwMJrrRehQr/W+QxAphTPnEk=";
     description = "Microsoft Azure Command-Line Tools HybridContainerService Extension";
+    changelog = null;
     propagatedBuildInputs = with python3Packages; [
       kubernetes
       paramiko
@@ -46,6 +47,7 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/alias-${version}-py2.py3-none-any.whl";
     hash = "sha256-BfgtdQJueA0nvTShvlf07A9CVQDYq07n6S/uB7lE2jM=";
     description = "Support for command aliases";
+    changelog = null;
     propagatedBuildInputs = with python3Packages; [
       jinja2
     ];
@@ -78,12 +80,13 @@
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
   };
 
-  arcappliance = mkAzExtension {
+  arcappliance = mkAzExtension rec {
     pname = "arcappliance";
     version = "1.6.0";
     url = "https://arcplatformcliextprod.z13.web.core.windows.net/arcappliance-1.6.0-py2.py3-none-any.whl";
     hash = "sha256-1VTKp4R6ohI4C9QsZgAabJJMnkTycEQF7DDshw/7Qkw=";
     description = "Microsoft Azure Command-Line Tools Arcappliance Extension";
+    changelog = "https://github.com/Azure/azure-cli-extensions/releases/tag/arcappliance-${version}";
     propagatedBuildInputs = with python3Packages; [
       jsonschema
       kubernetes
@@ -97,6 +100,7 @@
     url = "https://azurearcdatacli.z13.web.core.windows.net/arcdata-1.5.25-py2.py3-none-any.whl";
     hash = "sha256-/ejgjd/O37GtS6/+gzsscImoLllaDYCl2LS8m+pulTw=";
     description = "Tools for managing ArcData";
+    changelog = "https://learn.microsoft.com/en-us/azure/azure-arc/data/release-notes";
     propagatedBuildInputs = with python3Packages; [
       jinja2
       jsonpatch
@@ -129,6 +133,7 @@
     url = "https://github.com/Azure/azure-cli-extensions/releases/download/azure-devops-${version}/azure_devops-${version}-py2.py3-none-any.whl";
     hash = "sha256-4rDeAqOnRRKMP26MJxG4u9vBuos6/SQIoVgfNbBpulk=";
     description = "Tools for managing Azure DevOps";
+    changelog = "https://github.com/Azure/azure-devops-cli-extension/releases/tag/20250624.2";
     propagatedBuildInputs = with python3Packages; [ distro ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
@@ -139,6 +144,7 @@
     version = "0.25.0";
     url = "https://github.com/Azure/azure-iot-cli-extension/releases/download/v${version}/azure_iot-${version}-py3-none-any.whl";
     hash = "sha256-fbS8B2Z++oRyUT2eEh+yVR/K6uaCVce8B2itQXfBscY=";
+    changelog = "https://github.com/Azure/azure-iot-cli-extension/blob/main/HISTORY.rst";
     propagatedBuildInputs = (
       with python3Packages;
       [
@@ -166,6 +172,7 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/cloud_service-1.0.1-py3-none-any.whl";
     hash = "sha256-9rLYCn6rO6vTGFdBtGfgHQwceKbtf/t48DG4dQBzc+Q=";
     description = "Microsoft Azure Command-Line Tools ComputeManagementClient Extension";
+    changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/cloudservice/HISTORY.rst";
     propagatedBuildInputs = with python3Packages; [
       azure-mgmt-compute
     ];
