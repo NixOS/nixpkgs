@@ -4,10 +4,11 @@ nvidia_x11: sha256:
   stdenv,
   lib,
   fetchFromGitHub,
+  buildPackages,
   m4,
-  glibc,
-  libtirpc,
   pkg-config,
+  addDriverRunpath,
+  libtirpc,
 }:
 
 stdenv.mkDerivation {
@@ -21,23 +22,29 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  env = {
-    LIBRARY_PATH = "${glibc}/lib";
+  env = lib.optionalAttrs (lib.versionOlder nvidia_x11.persistencedVersion "450.51") {
     NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+    NIX_LDFLAGS = toString [ "-ltirpc" ];
   };
-  NIX_LDFLAGS = [ "-ltirpc" ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
     m4
     pkg-config
+    addDriverRunpath
   ];
 
   buildInputs = [
     libtirpc
-    stdenv.cc.cc.lib
   ];
 
-  makeFlags = nvidia_x11.passthru.mod.makeFlags ++ [ "DATE=true" ];
+  makeFlags = [
+    "DATE=true"
+    "DO_STRIP="
+    "HOST_CC=\$(CC_FOR_BUILD)"
+    "HOST_LD=\$(LD_FOR_BUILD)"
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -47,8 +54,7 @@ stdenv.mkDerivation {
     cp $out/{bin,origBin}/nvidia-persistenced
     patchelf --set-interpreter /lib64/ld-linux-x86-64.so.2 $out/origBin/nvidia-persistenced
 
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/nvidia-persistenced):${nvidia_x11}/lib" \
-      $out/bin/nvidia-persistenced
+    addDriverRunpath $out/bin/nvidia-persistenced
   '';
 
   meta = {
