@@ -286,8 +286,8 @@ stdenv.mkDerivation rec {
     # here, these paths end up being written to the torrc in the user's
     # state dir.
     cat >>TorBrowser/Tor/torrc-defaults <<EOF
-    GeoIPFile $TBB_IN_STORE/TorBrowser/Data/Tor/geoip
-    GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
+    GeoIPFile $TBB_IN_STORE/TorBrowser/Tor/geoip
+    GeoIPv6File $TBB_IN_STORE/TorBrowser/Tor/geoip6
     EOF
 
     mkdir -p $out/bin
