@@ -78,5 +78,19 @@ buildNodejs {
         hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
         includes = [ "test/*" ];
       })
+      # Patch for nghttp2 1.69 support
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/ecbc22dc3709290dcaadf634a28d8307a75952ee.diff?full_index=1";
+        hash = "sha256-LwniqgKlG1IiqSzdP7UgBw3/9cn1jyz/jtx45yb6RWM=";
+        includes = [
+          "test/parallel/test-http2-misbehaving-flow-control-paused.js"
+          "test/parallel/test-http2-misbehaving-flow-control.js"
+        ];
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
+      })
     ];
 }

@@ -64,6 +64,14 @@ buildNodejs {
         hash = "sha256-Ks9mT/7fcJ9nl8FWHq7HrVP+ZHF9AEOYV7xsN/NOWII=";
       })
 
+      # Patch for nghttp2 1.69 support
+      # TODO: remove when included in a next release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
+      })
+
       # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
       # OpenSSL reports different errors
       # https://github.com/nodejs/node/pull/62629

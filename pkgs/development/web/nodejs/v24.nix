@@ -63,6 +63,13 @@ buildNodejs {
         url = "https://github.com/nodejs/node/commit/dd25d8f29d3ddadcf5a5ebfdf98ece55f9df96c6.patch?full_index=1";
         hash = "sha256-6cxRN7TyWmJgUZt3jp2YXbVIjrDb2BNep5LxBOtT3Q0=";
       })
+
+      # Patch for nghttp2 1.69 support
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
+      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
