@@ -37,6 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
   version = "0.31.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -83,19 +86,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Note that cargoBuildFeatures reference what buildFeatures is set to in stdenv.mkDerivation,
   # so that user can easily create an overlay to set cargoBuildFeatures to what he needs
   preBuild = ''
-    if [[ " $cargoBuildFeatures " == *" web_viewer "* ]]; then
-      # transform the environment variable that is a space separated list into a comma separated list
-      buildWebViewerFeatures=$(echo $buildWebViewerFeatures | tr ' ' ',')
+    if [[ " ''${cargoBuildFeatures[*]} " == *" web_viewer "* ]]; then
+      # join the bash array into a comma-separated list for cargo's --features flag
+      buildWebViewerFeaturesJoined=$(IFS=,; echo "''${buildWebViewerFeatures[*]}")
       # Create the features option only if there are features to pass
-      buildWebViewerFeaturesCargoOption=""
-      if [[ ! -z "$buildWebViewerFeatures" ]]; then
-        buildWebViewerFeaturesCargoOption="--features $buildWebViewerFeatures"
-        echo "Features passed to the web viewer build: $buildWebViewerFeatures"
+      buildWebViewerFeaturesCargoOption=()
+      if [[ -n "$buildWebViewerFeaturesJoined" ]]; then
+        buildWebViewerFeaturesCargoOption=("--features" "$buildWebViewerFeaturesJoined")
+        echo "Features passed to the web viewer build: $buildWebViewerFeaturesJoined"
       else
         echo "No features will be passed to the web viewer build"
       fi
       echo "Building the wasm web viewer for rerun's web_viewer feature"
-      cargo run -p re_dev_tools -- build-web-viewer --no-default-features $buildWebViewerFeaturesCargoOption --release -g
+      cargo run -p re_dev_tools -- build-web-viewer --no-default-features "''${buildWebViewerFeaturesCargoOption[@]}" --release -g
     else
       echo "web_viewer feature not enabled, skipping web viewer build."
     fi
@@ -159,7 +162,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     while IFS= read -r -d $'\0' path ; do
       elfHasDynamicSection "$path" || continue
-      for dep in $addDlopenRunpaths ; do
+      for dep in "''${addDlopenRunpaths[@]}" ; do
         patchelf "$path" --add-rpath "$dep"
       done
     done < <(
