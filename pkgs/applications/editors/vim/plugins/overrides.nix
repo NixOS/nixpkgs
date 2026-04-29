@@ -5072,6 +5072,12 @@ assertNoAdditions {
     runtimeDeps = [ jq ];
   };
 
+  vim-indentwise = super.vim-indentwise.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
+
   vim-isort = super.vim-isort.overrideAttrs {
     postPatch = ''
       substituteInPlace autoload/vimisort.vim \
