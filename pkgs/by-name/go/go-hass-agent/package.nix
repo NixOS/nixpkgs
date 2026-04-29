@@ -9,20 +9,20 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "go-hass-agent";
-  version = "14.10.3";
+  version = "14.10.5";
 
   src = fetchFromGitHub {
     owner = "joshuar";
     repo = "go-hass-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7F4zxxMKNrUiKonfO7dQQuODEnFgaFRM7Rzb7n1Erys=";
+    hash = "sha256-jBcXHXsJUBRGt2Nvnx3vUCIHx+pUBa+aBLhN6m8KY98=";
   };
 
-  vendorHash = "sha256-WPglpc8xqCW51LmdhGLAuB4jg96T72eRuaS61zagoNw=";
+  vendorHash = "sha256-nmlkHfwO1VPrszvUDskRwaxh4DYDMoBYhLXMmzqmXq4=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-baO2S+NNgNgGjMNPrtmgaiiNTHv3vScOXQIVx1Xaxow=";
+    hash = "sha256-LwOVVVGWufQ+Q3jiv0H9lf7zg3R9fXvvAlLiUWqtmZs=";
   };
 
   overrideModAttrs = oldAttrs: {
