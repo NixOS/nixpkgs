@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.52.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-XPAeRnh9a0A1/5VGZzzGQBhlBsih1VR8QmFdkxG5cQE=";
+    hash = "sha256-qRuFTbSJA+39sv+dNUoVwMUJK4DpuNubuKP4KHcqn4k=";
   };
 
   build-system = [ hatchling ];
@@ -56,12 +56,6 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
-    "-Wignore::trio.TrioDeprecationWarning"
-    "-Wignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
-  ];
-
   pythonImportsCheck = [ "starlette" ];
 
   passthru.tests = {
@@ -69,8 +63,8 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
-    downloadPage = "https://github.com/encode/starlette";
+    changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
+    downloadPage = "https://github.com/Kludex/starlette";
     homepage = "https://www.starlette.io/";
     description = "Little ASGI framework that shines";
     license = lib.licenses.bsd3;
