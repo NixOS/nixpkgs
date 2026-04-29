@@ -174,9 +174,9 @@
 
   confcom = mkAzExtension rec {
     pname = "confcom";
-    version = "2.0.0b1";
+    version = "2.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
-    hash = "sha256-64Agk0G0nKPcM/KQYWoOudmKxelaaLouhet2IJB8QuM=";
+    hash = "sha256-1j1ASDf/g4eSixhvxBFCS4yPiX8QG/+x7IC07g5aLfw=";
     description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ openssl ];
