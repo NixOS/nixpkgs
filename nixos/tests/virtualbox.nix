@@ -77,6 +77,8 @@ let
 
       virtualisation.virtualbox.guest.enable = true;
 
+      boot.initrd.systemd.enable = false;
+
       boot.initrd.kernelModules = [
         "af_packet"
         "vboxsf"
