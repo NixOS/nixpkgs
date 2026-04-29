@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python binding to typst";
     homepage = "https://github.com/messense/typst-py";
-    changelog = "https://github.com/messense/typst-py/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/messense/typst-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client library for Supabase Auth";
     homepage = "https://github.com/supabase/supabase-py/";
-    changelog = "https://github.com/supabase/supabase-py/blob/v${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/supabase/supabase-py/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ macbucheron ];
   };
