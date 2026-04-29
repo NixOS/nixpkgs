@@ -11,8 +11,6 @@ let
   programCfg = config.programs.nncp;
   callerCfg = config.services.nncp.caller;
   daemonCfg = config.services.nncp.daemon;
-  settingsFormat = pkgs.formats.json { };
-  jsonCfgFile = settingsFormat.generate "nncp.json" programCfg.settings;
   pkg = programCfg.package;
 in
 {

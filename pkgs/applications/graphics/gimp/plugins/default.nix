@@ -13,12 +13,10 @@ let
     stdenv
     fetchurl
     fetchpatch
-    fetchpatch2
     pkg-config
     intltool
     glib
     fetchFromGitHub
-    fetchFromGitLab
     ;
 
   # We cannot use gimp from the arguments directly, or it would be shadowed by the one

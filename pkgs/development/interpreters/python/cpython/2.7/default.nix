@@ -260,8 +260,6 @@ let
     # don't rely on detecting glibc-isms.
     ++ lib.optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
     ++ lib.optional static "LDFLAGS=-static";
-
-  strictDeps = true;
   buildInputs =
     lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
     ++ [

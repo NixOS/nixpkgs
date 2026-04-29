@@ -7,7 +7,7 @@
   ExtLib,
   stdlib,
   version ? null,
-}@args:
+}:
 
 let
   repo = "metarocq";

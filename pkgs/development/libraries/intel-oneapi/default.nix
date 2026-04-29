@@ -44,7 +44,7 @@
         postInstall ? "",
         components ? [ "default" ],
         ...
-      }@args:
+      }:
       let
         shortName = name: builtins.elemAt (lib.splitString "." name) 3;
       in

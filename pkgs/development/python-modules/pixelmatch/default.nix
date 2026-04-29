@@ -7,10 +7,6 @@
   pytestCheckHook,
   pytest-benchmark,
 }:
-let
-  owner = "whtsky";
-  repo = "pixelmatch-py";
-in
 buildPythonPackage rec {
   pname = "pixelmatch";
   version = "0.4.0";

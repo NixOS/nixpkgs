@@ -29,7 +29,6 @@
 }:
 
 let
-  pname = "scopehal-apps";
   version = "0.1.1";
 in
 stdenv.mkDerivation {

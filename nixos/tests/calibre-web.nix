@@ -2,7 +2,6 @@
 
 let
   port = 3142;
-  defaultPort = 8083;
 in
 {
   name = "calibre-web";

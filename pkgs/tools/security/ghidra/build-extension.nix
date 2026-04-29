@@ -79,7 +79,7 @@ let
         pname,
         meta ? { },
         ...
-      }@args:
+      }:
       {
         installPhase = ''
           runHook preInstall

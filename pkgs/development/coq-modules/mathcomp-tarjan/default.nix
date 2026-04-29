@@ -5,7 +5,7 @@
   mathcomp-fingroup,
   lib,
   version ? null,
-}@args:
+}:
 
 mkCoqDerivation {
 

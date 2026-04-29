@@ -24,7 +24,6 @@ let
   rel = if stdenvNoCC.hostPlatform.isDarwin then "43558" else "46342";
 
   # Intel openmp uses its own versioning.
-  openmpVersion = "2023.1.0";
   openmpRel = "46305";
 
   # Thread Building Blocks release.

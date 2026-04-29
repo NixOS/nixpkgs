@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.hadoop;
-  hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
   mkIfNotNull = x: lib.mkIf (x != null) x;
   # generic hbase role options
   hbaseRoleOption =

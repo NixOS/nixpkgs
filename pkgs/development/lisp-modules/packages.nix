@@ -10,17 +10,8 @@
 let
 
   inherit (pkgs.lib)
-    head
-    makeLibraryPath
-    makeSearchPath
-    setAttr
-    hasAttr
-    optionals
     optionalAttrs
     isDerivation
-    hasSuffix
-    splitString
-    remove
     ;
 
   # Used by builds that would otherwise attempt to write into storeDir.

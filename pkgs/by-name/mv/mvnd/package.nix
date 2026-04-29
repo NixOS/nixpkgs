@@ -19,7 +19,6 @@ let
     x86_64-darwin = "darwin-amd64";
     x86_64-linux = "linux-amd64";
   };
-  inherit (platformMap.${stdenv.system}) os arch;
 in
 
 maven.buildMavenPackage rec {

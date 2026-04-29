@@ -46,33 +46,29 @@ in
       client2 = client;
     };
 
-  testScript =
-    let
-      file = "/tmp/msg";
-    in
-    ''
-      def nats_cmd(*args):
-          return (
-              "nats "
-              "--server=nats://server:${toString port} "
-              "--user=${username} "
-              "--password=${password} "
-              "{}"
-          ).format(" ".join(args))
+  testScript = ''
+    def nats_cmd(*args):
+        return (
+            "nats "
+            "--server=nats://server:${toString port} "
+            "--user=${username} "
+            "--password=${password} "
+            "{}"
+        ).format(" ".join(args))
 
-      def parallel(*fns):
-          from threading import Thread
-          threads = [ Thread(target=fn) for fn in fns ]
-          for t in threads: t.start()
-          for t in threads: t.join()
+    def parallel(*fns):
+        from threading import Thread
+        threads = [ Thread(target=fn) for fn in fns ]
+        for t in threads: t.start()
+        for t in threads: t.join()
 
-      start_all()
-      server.wait_for_unit("nats.service")
+    start_all()
+    server.wait_for_unit("nats.service")
 
-      with subtest("pub sub"):
-          parallel(
-              lambda: client1.succeed(nats_cmd("sub", "--count", "1", "${topic}")),
-              lambda: client2.succeed("sleep 2 && {}".format(nats_cmd("pub", "${topic}", "hello"))),
-          )
-    '';
+    with subtest("pub sub"):
+        parallel(
+            lambda: client1.succeed(nats_cmd("sub", "--count", "1", "${topic}")),
+            lambda: client2.succeed("sleep 2 && {}".format(nats_cmd("pub", "${topic}", "hello"))),
+        )
+  '';
 }

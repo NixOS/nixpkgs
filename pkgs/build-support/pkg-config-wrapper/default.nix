@@ -61,7 +61,6 @@ stdenv.mkDerivation {
     let
       addFlags = optionalString stdenv.targetPlatform.isStatic "--static";
       shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
-      prog = "${getBin pkg-config}/bin/${baseBinName}";
     in
     ''
       mkdir -p $out/bin $out/nix-support

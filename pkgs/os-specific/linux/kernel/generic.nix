@@ -341,17 +341,6 @@ lib.makeOverridable (
                 Certain arguments must be evaluated lazily; so that only the output(s) depend on them.
                 Original reproducer / simplified use case:
               */
-              versionDoesNotDependOnPatchesEtcNixOS =
-                builtins.seq
-                  (nixos (
-                    { config, pkgs, ... }:
-                    {
-                      boot.kernelPatches = [
-                        (builtins.seq config.boot.kernelPackages.kernel.version { patch = pkgs.emptyFile; })
-                      ];
-                    }
-                  )).config.boot.kernelPackages.kernel.outPath
-                  emptyFile;
               versionDoesNotDependOnPatchesEtc =
                 builtins.seq
                   (import ./generic.nix args' (

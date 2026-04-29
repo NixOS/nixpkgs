@@ -22,8 +22,7 @@ let
     the address. See RFC 4291.
   */
   ipv6Bits = 128;
-  ipv6Pieces = 8; # 'x:x:x:x:x:x:x:x'
-  ipv6PieceBits = 16; # One piece in range from 0 to 0xffff.
+  ipv6Pieces = 8; # 'x:x:x:x:x:x:x:x' # One piece in range from 0 to 0xffff.
   ipv6PieceMaxValue = 65535; # 2^16 - 1
 in
 let

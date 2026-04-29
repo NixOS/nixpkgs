@@ -22,7 +22,7 @@ in
   # redirect stdout to stderr to allow the update script to be used with update script combinators
   silent ? true,
   useBwrap ? stdenv.hostPlatform.isLinux,
-}@attrs:
+}:
 
 let
   data' =

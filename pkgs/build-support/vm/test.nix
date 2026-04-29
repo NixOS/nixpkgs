@@ -7,7 +7,6 @@
 }:
 let
   inherit (vmTools)
-    buildRPM
     diskImages
     makeImageTestScript
     runInLinuxImage

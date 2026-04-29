@@ -9,9 +9,6 @@
 let
   inherit (lib)
     head
-    licenses
-    maintainers
-    platforms
     replaceStrings
     toList
     ;

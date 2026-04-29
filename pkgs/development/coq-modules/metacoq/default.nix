@@ -5,7 +5,7 @@
   coq,
   equations,
   version ? null,
-}@args:
+}:
 
 let
   repo = "metacoq";

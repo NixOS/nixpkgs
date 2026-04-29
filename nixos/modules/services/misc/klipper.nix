@@ -301,7 +301,6 @@ in
 
     environment.systemPackages =
       let
-        default = a: b: if a != null then a else b;
         genconf = pkgs.klipper-genconf.override {
           klipper = cfg.package;
         };

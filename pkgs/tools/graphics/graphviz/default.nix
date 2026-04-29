@@ -31,7 +31,6 @@
 
 let
   inherit (lib)
-    optional
     optionals
     optionalString
     optionalAttrs

@@ -7,7 +7,7 @@
   factor-no-gui,
   librsvg,
   gdk-pixbuf,
-}@initAttrs:
+}:
 
 drvArgs:
 

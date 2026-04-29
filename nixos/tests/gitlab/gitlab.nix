@@ -14,7 +14,6 @@
 let
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   initialRootPassword = "notproduction";
-  rootProjectId = "2";
 
   aliceUsername = "alice";
   aliceUserId = "2";
@@ -23,7 +22,6 @@ let
   aliceProjectName = "test-alice";
 
   bobUsername = "bob";
-  bobUserId = "3";
   bobPassword = "XwkkBbl2SiIwabQzgcoaTbhsotijEEtF";
   bobProjectId = "2";
 in

@@ -17,7 +17,6 @@ let
     cleanSourceFilter
     concatMapStringsSep
     evalModules
-    filter
     functionArgs
     hasSuffix
     isAttrs

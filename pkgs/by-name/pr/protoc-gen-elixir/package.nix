@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  inherit (beamPackages) mixRelease fetchMixDeps erlang;
+  inherit (beamPackages) mixRelease fetchMixDeps;
 in
 mixRelease rec {
   pname = "protoc-gen-elixir";

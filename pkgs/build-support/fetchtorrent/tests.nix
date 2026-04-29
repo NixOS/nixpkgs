@@ -20,16 +20,6 @@ let
   #
   # For more information, see the discussion at
   # https://github.com/NixOS/nixpkgs/pull/432091/files/bd13421b2b70f3f125061018c800439ef2d43e8d#r2264073113
-  sintel.meta = {
-    description = "An open source short film to show off open source technologies.";
-    longDescription = ''
-      An independently produced short film, initiated by the Blender Foundation
-      as a means to further improve and validate the free/open source 3D
-      creation suite Blender.
-    '';
-    license = lib.licenses.cc-by-30;
-    homepage = "https://durian.blender.org/";
-  };
 
   # Via https://webtorrent.io/free-torrents
   http.url = "${./test-sintel.torrent}";

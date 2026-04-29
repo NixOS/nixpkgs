@@ -31,7 +31,7 @@ rec {
   };
 
   extract =
-    args@{
+    {
       pname,
       version,
       name ? null,

@@ -145,9 +145,7 @@ let
             old.passthru
             // (
               let
-                hostRid = systemToDotnetRid base.stdenv.hostPlatform.system;
                 hasILCompiler = base.hasILCompiler || withBaseRuntimes.hasILCompiler;
-                packageName = "runtime.${hostRid}.Microsoft.DotNet.ILCompiler";
                 mergePackages =
                   a: b:
                   let

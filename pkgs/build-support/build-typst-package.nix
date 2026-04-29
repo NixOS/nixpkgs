@@ -36,7 +36,7 @@ lib.extendMkDerivation {
     {
       typstDeps ? [ ],
       ...
-    }@attrs:
+    }:
     {
       name = "typst-package-${finalAttrs.pname}-${finalAttrs.version}";
 

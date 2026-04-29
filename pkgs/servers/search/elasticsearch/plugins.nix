@@ -186,32 +186,28 @@ in
     };
   };
 
-  search-guard =
-    let
-      majorVersion = lib.head (builtins.splitVersion esVersion);
-    in
-    esPlugin rec {
-      pluginName = "search-guard";
-      version =
-        # https://docs.search-guard.com/latest/search-guard-versions
-        if esVersion == "7.17.27" then
-          "${esVersion}-53.10.0"
-        else
-          throw "unsupported version ${esVersion} for plugin ${pluginName}";
-      src =
-        if esVersion == "7.17.27" then
-          fetchurl {
-            url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
-            hash = "sha256-M1yJ8OD+mDq2uEiK6pvsMxUQMrg6o5A4xEPX8nDt1Rs=";
-          }
-        else
-          throw "unsupported version ${version} for plugin ${pluginName}";
-      meta = {
-        homepage = "https://search-guard.com";
-        description = "Elasticsearch plugin that offers encryption, authentication, and authorisation";
-        license = lib.licenses.asl20;
-      };
+  search-guard = esPlugin rec {
+    pluginName = "search-guard";
+    version =
+      # https://docs.search-guard.com/latest/search-guard-versions
+      if esVersion == "7.17.27" then
+        "${esVersion}-53.10.0"
+      else
+        throw "unsupported version ${esVersion} for plugin ${pluginName}";
+    src =
+      if esVersion == "7.17.27" then
+        fetchurl {
+          url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
+          hash = "sha256-M1yJ8OD+mDq2uEiK6pvsMxUQMrg6o5A4xEPX8nDt1Rs=";
+        }
+      else
+        throw "unsupported version ${version} for plugin ${pluginName}";
+    meta = {
+      homepage = "https://search-guard.com";
+      description = "Elasticsearch plugin that offers encryption, authentication, and authorisation";
+      license = lib.licenses.asl20;
     };
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   analysis-lemmagen = throw "elasticsearchPlugins.analysis-lemmagen has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05

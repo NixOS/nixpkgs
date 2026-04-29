@@ -19,7 +19,7 @@ let
       jdk,
       updateScript ? null,
       ...
-    }@attrs:
+    }:
     let
       desktopItem = makeDesktopItem {
         categories = [

@@ -388,7 +388,6 @@ let
     optionals
     optionalString
     enableFeature
-    versionOlder
     versionAtLeast
     ;
 in

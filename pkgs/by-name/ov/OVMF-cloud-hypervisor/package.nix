@@ -36,11 +36,8 @@
 }:
 
 let
-  cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
   version = lib.getVersion edk2;
-
-  OvmfPkKek1AppPrefix = "4e32566d-8e9e-4f52-81d3-5bb9715f9727";
 
   debian-edk-src = fetchFromGitLab {
     domain = "salsa.debian.org";
@@ -56,8 +53,6 @@ let
     rev = "refs/tags/debian/2025.02-8";
     hash = "sha256-n/6T5UBwW8U49mYhITRZRgy2tNdipeU4ZgGGDu9OTkg=";
   };
-
-  buildPrefix = "Build/*/*";
 
 in
 

@@ -36,13 +36,11 @@ let
     toINIWithGlobalSection
     toKeyValue
     toLua
-    mkLuaInline
     ;
 
   inherit (lib.types)
     serializableValueWith
     attrsOf
-    atom
     bool
     coercedTo
     either
@@ -349,7 +347,7 @@ optionalAttrs allowAliases aliases
           {
             listsAsDuplicateKeys ? false,
             ...
-          }@args:
+          }:
           let
             atom = iniAtom {
               inherit listsAsDuplicateKeys;

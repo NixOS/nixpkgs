@@ -107,7 +107,7 @@ let
         '';
     };
 
-  inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+  inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey;
 
 in
 tests

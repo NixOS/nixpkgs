@@ -9,7 +9,7 @@
   isl_0_20,
   noSysDirs,
   wrapCC,
-}@args:
+}:
 
 let
   versions = import ./versions.nix;
@@ -17,7 +17,6 @@ let
     majorMinorVersion:
     let
       majorVersion = lib.versions.major majorMinorVersion;
-      atLeast = lib.versionAtLeast majorMinorVersion;
       attrName = "gcc${lib.replaceStrings [ "." ] [ "" ] majorMinorVersion}";
       pkg = lib.lowPrio (
         wrapCC (

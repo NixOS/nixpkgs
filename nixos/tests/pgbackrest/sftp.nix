@@ -1,7 +1,6 @@
 { lib, pkgs, ... }:
 let
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-  backupPath = "/home/backup";
 in
 {
   name = "pgbackrest-sftp";

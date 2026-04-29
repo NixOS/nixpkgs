@@ -7,7 +7,6 @@
 }:
 let
   cfg = config.services.biboumi;
-  inherit (config.environment) etc;
   rootDir = "/run/biboumi/mnt-root";
   stateDir = "/var/lib/biboumi";
   settingsFile = pkgs.writeText "biboumi.cfg" (

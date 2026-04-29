@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     let
-      inherit (finalAttrs) pname version;
+      inherit (finalAttrs) version;
     in
     fetchurl {
       url = "https://mesa.freedesktop.org/archive/glu/glu-${version}.tar.xz";

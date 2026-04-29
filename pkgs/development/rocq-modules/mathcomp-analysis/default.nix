@@ -8,7 +8,7 @@
   single ? false,
   rocq-core,
   version ? null,
-}@args:
+}:
 
 let
   repo = "analysis";

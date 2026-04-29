@@ -27,8 +27,6 @@ let
     flags
     nccl
     ;
-
-  stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {

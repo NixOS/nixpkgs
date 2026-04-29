@@ -5,7 +5,7 @@
 }:
 
 let
-  inherit (python3Packages) buildPythonApplication pythonOlder;
+  inherit (python3Packages) buildPythonApplication;
 
 in
 buildPythonApplication rec {

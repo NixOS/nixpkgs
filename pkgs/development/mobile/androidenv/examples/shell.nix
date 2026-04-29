@@ -111,12 +111,6 @@ let
 
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
-  firstSdkVersion = lib.foldl' (
-    s: x: if lib.strings.compareVersions (toString x) s < 0 then toString x else s
-  ) "100" androidComposition.platformVersions;
-  latestSdkVersion = lib.foldl' (
-    s: x: if lib.strings.compareVersions (toString x) s > 0 then toString x else s
-  ) "0" androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
 pkgs.mkShell rec {

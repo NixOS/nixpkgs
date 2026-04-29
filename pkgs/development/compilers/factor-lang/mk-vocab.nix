@@ -1,6 +1,6 @@
 {
   stdenv,
-}@initAttrs:
+}:
 
 drvArgs:
 

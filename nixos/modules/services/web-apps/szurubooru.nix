@@ -15,7 +15,6 @@ let
     types
     ;
   format = pkgs.formats.yaml { };
-  python = pkgs.python3;
 in
 
 {

@@ -7,7 +7,6 @@ let
   inherit (lib)
     concatStrings
     listToAttrs
-    makeOverridable
     mapAttrsToList
     nameValuePair
     ;

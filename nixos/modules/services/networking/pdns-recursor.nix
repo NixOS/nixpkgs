@@ -11,31 +11,6 @@ let
   cfg = config.services.pdns-recursor;
 
   oneOrMore = type: with types; either type (listOf type);
-  valueType =
-    with types;
-    oneOf [
-      int
-      str
-      bool
-      path
-    ];
-  configType = with types; attrsOf (nullOr (oneOrMore valueType));
-
-  serialize =
-    val:
-    with types;
-    if str.check val then
-      val
-    else if int.check val then
-      toString val
-    else if path.check val then
-      toString val
-    else if bool.check val then
-      boolToYesNo val
-    else if builtins.isList val then
-      (concatMapStringsSep "," serialize val)
-    else
-      "";
 
   settingsFormat = pkgs.formats.yaml { };
 

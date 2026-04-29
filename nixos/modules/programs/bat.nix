@@ -16,7 +16,6 @@ let
     mkOption
     mkPackageOption
     nameValuePair
-    optionalString
     types
     isBool
     boolToString

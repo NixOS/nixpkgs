@@ -69,7 +69,6 @@
 let
 
   majorVersion = lib.versions.major version;
-  minorVersion = lib.versions.minor version;
 
   pname = "nodejs-slim";
 

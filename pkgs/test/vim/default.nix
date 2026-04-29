@@ -4,12 +4,6 @@
   vim-full,
   vimPlugins,
 }:
-let
-  inherit (vimUtils) buildVimPlugin;
-
-  packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
-
-in
 lib.recurseIntoAttrs {
   vim_empty_config = vimUtils.vimrcFile {
     beforePlugins = "";

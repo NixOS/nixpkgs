@@ -133,7 +133,6 @@ let
     getLib
     optionals
     optionalString
-    replaceStrings
     ;
 
   withLibxcrypt =

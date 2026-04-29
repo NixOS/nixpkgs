@@ -9,7 +9,7 @@
   single ? false,
   coq,
   version ? null,
-}@args:
+}:
 
 let
   repo = "analysis";

@@ -52,7 +52,6 @@ let
   inherit (builtins)
     foldl'
     ;
-  inherit (lib.asserts) assertMsg;
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists)
     concatLists

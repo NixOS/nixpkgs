@@ -5,20 +5,6 @@
   fetchgit,
 }:
 let
-  kernel = stdenv.buildPlatform.parsed.kernel.name;
-  abi = stdenv.buildPlatform.parsed.abi.name;
-  include =
-    includedFiles: src:
-    builtins.filterSource (
-      path: type:
-      lib.lists.any (
-        f:
-        let
-          p = toString (src + ("/" + f));
-        in
-        (path == p) || (type == "directory" && lib.strings.hasPrefix path p)
-      ) includedFiles
-    ) src;
   updateFeatures =
     f: up: functions:
     builtins.deepSeq f (

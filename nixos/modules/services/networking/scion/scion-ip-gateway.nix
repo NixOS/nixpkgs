@@ -12,7 +12,6 @@ let
   cfg = config.services.scion.scion-ip-gateway;
   toml = pkgs.formats.toml { };
   json = pkgs.formats.json { };
-  connectionDir = if globalCfg.stateless then "/run" else "/var/lib";
   defaultConfig = {
     tunnel = { };
     gateway = {

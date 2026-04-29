@@ -8,10 +8,6 @@
 let
   libconfig = formats.libconfig { };
 
-  include_expr = {
-    val = 1;
-  };
-
   include_file = writeText "libconfig-test-include" ''
     val=1;
   '';

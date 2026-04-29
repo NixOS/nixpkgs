@@ -13,7 +13,6 @@ let
       ./ssh-keys.nix;
 
   inherit (import ssh-keys pkgs)
-    snakeOilPrivateKey
     snakeOilPublicKey
     ;
 in

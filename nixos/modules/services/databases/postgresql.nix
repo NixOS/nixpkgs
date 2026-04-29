@@ -8,7 +8,6 @@
 let
   inherit (lib)
     any
-    attrValues
     concatMapStrings
     concatStringsSep
     const
@@ -30,7 +29,6 @@ let
     mkIf
     mkMerge
     mkOption
-    mkPackageOption
     mkRemovedOptionModule
     mkRenamedOptionModule
     optionalString
@@ -38,7 +36,6 @@ let
     sortProperties
     types
     versionAtLeast
-    warn
     ;
 
   cfg = config.services.postgresql;
@@ -645,16 +642,6 @@ in
     services.postgresql.package =
       let
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
-        mkWarn =
-          ver:
-          warn ''
-            The postgresql package is not pinned and selected automatically by
-            `system.stateVersion`. Right now this is `pkgs.postgresql_${ver}`, the
-            oldest postgresql version available and thus the next that will be
-            removed when EOL on the next stable cycle.
-
-            See also https://endoflife.date/postgresql
-          '';
         base =
           # XXX Don't forget to keep `defaultText` of `services.postgresql.package` up to date!
           if versionAtLeast config.system.stateVersion "25.11" then

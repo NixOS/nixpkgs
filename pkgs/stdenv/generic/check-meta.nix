@@ -16,12 +16,10 @@ let
     filter
     findFirst
     getName
-    isDerivation
     length
     concatMap
     mutuallyExclusive
     optional
-    optionalString
     isAttrs
     isString
     warn

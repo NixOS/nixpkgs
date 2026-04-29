@@ -4816,7 +4816,7 @@ rec {
         # Adds devDependencies to the crate with rootPackageId.
         runTests ? false,
         ...
-      }@args:
+      }:
       assert (builtins.isAttrs crateConfigs);
       assert (builtins.isString packageId);
       assert (builtins.isString rootPackageId);

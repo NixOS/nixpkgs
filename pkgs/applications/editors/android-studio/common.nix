@@ -82,7 +82,6 @@
 }:
 
 let
-  filename = "android-studio-${version}-linux.tar.gz";
 
   androidStudio = stdenv.mkDerivation {
     pname = "${pname}-unwrapped";

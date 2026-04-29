@@ -11,8 +11,6 @@ let
   inherit (haskell.lib.compose)
     overrideCabal
     addBuildTools
-    justStaticExecutables
-    appendConfigureFlags
     ;
   inherit (lib) makeBinPath;
   bundledBins = lib.optional stdenv.hostPlatform.isLinux crun;
