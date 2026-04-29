@@ -53,11 +53,14 @@ def replace_key(
             local_default_features = local_dep.pop(
                 "default-features", local_dep.pop("default_features", None)
             )
+            local_no_default_features = local_dep.pop("no-default-features", None)
             workspace_default_features = workspace_dep.get(
                 "default-features", workspace_dep.get("default_features")
             )
 
-            if not workspace_default_features and local_default_features:
+            if local_no_default_features:
+                final["default-features"] = False
+            elif not workspace_default_features and local_default_features:
                 final["default-features"] = True
 
             optional = local_dep.pop("optional", False)

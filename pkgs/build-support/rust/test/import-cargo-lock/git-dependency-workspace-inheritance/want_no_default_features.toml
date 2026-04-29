@@ -1,0 +1,11 @@
+[package]
+name = "im_using_workspaces"
+version = "1.0.0"
+publish = false
+
+[dependencies.foo]
+version = "1.0.0"
+features = [
+    "meow",
+]
+default-features = false
