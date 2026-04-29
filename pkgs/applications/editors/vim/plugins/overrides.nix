@@ -5551,6 +5551,12 @@ assertNoAdditions {
     nvimSkipModules = "virt-column.config.types";
   };
 
+  vis = super.vis.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
     checkInputs = [
       # Optional telescope integration
