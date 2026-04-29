@@ -2976,6 +2976,11 @@ with pkgs;
     withV8 = true;
     stdenv = if stdenv.hostPlatform.isLinux then llvmPackages.libcxxStdenv else llvmPackages.stdenv;
   };
+  pdfium-full = pdfium.override {
+    withV8 = true;
+    withXfa = true;
+    stdenv = if stdenv.hostPlatform.isLinux then llvmPackages.libcxxStdenv else llvmPackages.stdenv;
+  };
 
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true; # enable internal rsh implementation
