@@ -35,10 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     patches = [
       # bundix and bundlerEnv fail with system-specific gems
       ./0001-build-ffi-gem.diff
-      # openssl 3.6.0 breaks ruby openssl gem
-      # See https://github.com/NixOS/nixpkgs/issues/456753
-      # and https://github.com/ruby/openssl/issues/949#issuecomment-3370358680
-      ./0002-openssl-hotfix.diff
     ];
     postPatch = ''
       substituteInPlace ./Gemfile \
