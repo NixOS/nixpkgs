@@ -21,6 +21,7 @@
   ocaml_intrinsics ? null,
   prelude,
   ppx_enumerate,
+  rresult,
   scfg,
   yojson,
   z3,
@@ -31,13 +32,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dWZrN0hTxxqGC2queit91GDuw/x5fyRPwHbmKxkvc/w=";
+    hash = "sha256-7kshzfxWpOx2LyGOs/j/eaTB4b4ba4sp5n4yztGfFV4=";
   };
 
   minimalOCamlVersion = "4.14";
@@ -67,6 +68,7 @@ buildDunePackage (finalAttrs: {
     ocaml_intrinsics
     ppx_enumerate
     prelude
+    rresult
     scfg
     yojson
     z3
