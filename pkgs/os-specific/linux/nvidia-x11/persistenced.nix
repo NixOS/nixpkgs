@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     stdenv.cc.cc.lib
   ];
 
-  makeFlags = nvidia_x11.makeFlags ++ [ "DATE=true" ];
+  makeFlags = nvidia_x11.passthru.mod.makeFlags ++ [ "DATE=true" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
