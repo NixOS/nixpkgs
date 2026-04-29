@@ -14271,6 +14271,13 @@
     githubId = 10689811;
     name = "Torben Schweren";
   };
+  kittyandrew = {
+    email = "alias.nixpkgs.maintainer@kittymail.me";
+    github = "kittyandrew";
+    githubId = 45767571;
+    matrix = "@kittyandrew:ndrew.me";
+    name = "kittyandrew";
+  };
   kittywitch = {
     email = "kat@inskip.me";
     github = "kittywitch";
