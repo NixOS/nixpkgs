@@ -2231,6 +2231,12 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  lsp-format-nvim = super.lsp-format-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   lsp_extensions-nvim = super.lsp_extensions-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
