@@ -4879,6 +4879,12 @@ assertNoAdditions {
     };
   });
 
+  vim-easymotion = super.vim-easymotion.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-easytags = super.vim-easytags.overrideAttrs (old: {
     dependencies = [ self.vim-misc ];
     patches = [
