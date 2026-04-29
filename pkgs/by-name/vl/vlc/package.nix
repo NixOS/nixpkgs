@@ -63,6 +63,7 @@
   libxml2,
   live555,
   lua5,
+  makemkv,
   ncurses,
   nix-update-script,
   perl,
@@ -92,6 +93,7 @@
   skins2Support ? !onlyLibVLC,
   waylandSupport ? true,
   withQt5 ? true,
+  withLibmmbd ? true,
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -99,7 +101,7 @@
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
 let
-  inherit (lib) optionalString optionals;
+  inherit (lib) getLib optionalString optionals;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
@@ -219,7 +221,8 @@ stdenv.mkDerivation (finalAttrs: {
       qtx11extras
     ]
   )
-  ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
+  ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ]
+  ++ optionals withLibmmbd [ makemkv ];
   strictDeps = true;
 
   env = {
@@ -285,6 +288,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Given in EXTRA_DIST, but not in install-data target
   postInstall = ''
     cp -R share/hrtfs $out/share/vlc
+  ''
+  + optionalString withLibmmbd ''
+    cp ${getLib makemkv}/lib/libmmbd* $out/lib/vlc/plugins/access/
   '';
 
   preFixup = ''
