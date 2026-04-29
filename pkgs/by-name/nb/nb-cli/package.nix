@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nb-cli";
-  version = "1.7.3";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nonebot";
     repo = "nb-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/OZHDMfwaajePiQ7Nb6BsQcpUPybP5SDWHWG/tVUxCo=";
+    hash = "sha256-Vo+MmbaC+i/FZfrZywb2vgNQotafLyXpdBo6pDlZeaE=";
   };
 
   pythonRemoveDeps = [ "pip" ];

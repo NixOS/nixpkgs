@@ -88,7 +88,7 @@ let
           fetchurl {
             url = "https://www.mrc-lmb.cam.ac.uk/harry/imosflm/ver${
               builtins.replaceStrings [ "." ] [ "" ] version
-            }/downloads/mosflm-${version}-osx-64.zip";
+            }/downloads/imosflm-${version}-osx-64.zip";
             hash = "sha256-0sXgA3zSIjhy9+zTiv+K/51yZsIgGorMtKVjdRjW+AM=";
           }
         else

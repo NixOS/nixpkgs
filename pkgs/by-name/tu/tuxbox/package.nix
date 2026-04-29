@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/AndyCappDev/tuxbox/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/AndyCappDev/tuxbox/releases/tag/v${finalAttrs.version}";
     description = "Linux driver for all TourBox models - Native feel with USB, Bluetooth, haptics and graphical configuration GUI";
     homepage = "https://github.com/AndyCappDev/tuxbox";
     license = lib.licenses.mit;

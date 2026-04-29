@@ -55,6 +55,7 @@ let
     kirigami-addons
     qqc2-desktop-style
     ;
+  speexdsp' = speexdsp.override { withFftw3 = false; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -109,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     rnnoise
     rubberband
     soundtouch
-    speexdsp
+    speexdsp'
     onetbb
     webrtc-audio-processing
     zita-convolver
