@@ -59,14 +59,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gLYYuIy43cuXrCvjjXLHMim0m/EAwaivLdFhKuUdeX0=";
+    hash = "sha256-qmv6DzYA/c/uGS4LNTdn3PnzhtLrhprF6r9ccngsUTU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
