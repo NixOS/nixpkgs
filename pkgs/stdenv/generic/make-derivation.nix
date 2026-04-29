@@ -13,6 +13,7 @@ stdenv:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
+    all
     assertMsg
     attrNames
     concatLists
@@ -31,6 +32,7 @@ let
     isDerivation
     isInt
     isList
+    isPath
     isString
     mapAttrs
     mapNullable
@@ -44,7 +46,6 @@ let
     toFunction
     unique
     zipAttrsWith
-    isPath
     seq
     ;
 
@@ -225,6 +226,8 @@ let
 
   # TODO(@Ericson2314): Make always true and remove / resolve #178468
   defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
+
+  isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
 
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
   defaultHardeningFlags =
@@ -429,17 +432,24 @@ let
       checkDependencyList = checkDependencyList' [ ];
       checkDependencyList' =
         positions: name: deps:
-        seq (foldl' (
-          index: dep:
-          if dep == null || isDerivation dep || isString dep || isPath dep then
-            index + 1
-          else if isList dep then
-            seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1)
-          else
-            throw "Dependency is not of a valid type: ${
-              concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
-            }${name} for ${attrs.name or attrs.pname}"
-        ) 1 deps) deps;
+        if all isSingularDependency deps then
+          deps
+        else
+          # iterate again with the index if an invalid type was passed, or we
+          # need to recurse into a sublist. making sublists take longer is
+          # worth it, since nobody uses them and handling them makes normal
+          # dependencies slower
+          seq (foldl' (
+            index: dep:
+            if isSingularDependency dep then
+              index + 1
+            else if isList dep then
+              seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1)
+            else
+              throw "Dependency is not of a valid type: ${
+                concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
+              }${name} for ${attrs.name or attrs.pname}"
+          ) 1 deps) deps;
     in
     if erroneousHardeningFlags != [ ] then
       abort (
