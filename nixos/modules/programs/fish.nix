@@ -302,7 +302,9 @@ in
                   fi
                 '';
             packages =
-              if config.documentation.nixos.enable && config.documentation.man.enable then
+              if
+                config.documentation.enable && config.documentation.nixos.enable && config.documentation.man.enable
+              then
                 builtins.filter (pkg: pkg != config.system.build.manual.nixos-configuration-reference-manpage) (
                   cfge.systemPackages ++ cfg.extraCompletionPackages
                 )
