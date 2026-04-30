@@ -28,20 +28,22 @@
   xlib,
   qtbase,
   wrapQtAppsHook,
+  hidapi,
+  xkbcommon,
 }:
 
 buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "plover";
-  version = "5.0.0.dev2";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstenoproject";
     repo = "plover";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PZwxVrdQPhgbj+YmWZIUETngeJGs6IQty0hY43tLQO0=";
+    hash = "sha256-1NpZmUDq806geKANqswPYglHwInxum/c/Hxq7JhTpbc=";
   };
 
   # pythonRelaxDeps seemingly doesn't work here
@@ -49,6 +51,8 @@ buildPythonPackage (finalAttrs: {
     sed -i 's/,<77//g' pyproject.toml
     sed -i /PySide6-Essentials/d pyproject.toml
   '';
+
+  pythonRelaxDeps = [ "xkbcommon" ];
 
   build-system = [
     babel
@@ -72,6 +76,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     appdirs
     evdev
+    hidapi
     packaging
     pkginfo
     psutil
@@ -86,6 +91,7 @@ buildPythonPackage (finalAttrs: {
     rtf-tokenize
     setuptools
     wcwidth
+    xkbcommon
     xlib
   ]
   ++ readme-renderer.optional-dependencies.md;
