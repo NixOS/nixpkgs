@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-shell";
   version = "1.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_shell";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-FSnxSR937S5mUz7uxACWB3NRD5bFNaxTKiTWCzt/VAg=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for Cloud Shell";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-shell";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-shell-v${version}/packages/google-cloud-shell/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-shell-v${finalAttrs.version}/packages/google-cloud-shell/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
