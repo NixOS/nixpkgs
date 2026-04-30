@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kagglesdk";
-  version = "0.1.19";
+  version = "0.1.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kagglesdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AfR4MlVev8KuhHKD71A87BmT0lXpNipnpRlvgaGcAos=";
+    hash = "sha256-tQWkISdaTn/gC5+qxI3rCMRo+4QYE7XPi9mcVgKz3qM=";
   };
 
   build-system = [
