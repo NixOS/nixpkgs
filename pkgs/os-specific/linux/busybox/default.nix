@@ -92,6 +92,10 @@ stdenv.mkDerivation rec {
     })
     # https://lists.busybox.net/pipermail/busybox/2026-March/092010.html
     ./build-system-buffer-overflow.patch
+
+    # [PATCH v2 1/1] wget: don't allow control characters or spaces in the URL
+    # https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
+    ./CVE-2025-60876.patch
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
