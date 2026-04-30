@@ -132,7 +132,7 @@ buildRedist (
         own workflows.
       '';
       homepage = "https://developer.nvidia.com/nsight-compute";
-      changelog = "https://docs.nvidia.com/nsight-compute/ReleaseNotes";
+      changelog = "https://docs.nvidia.com/nsight-compute/ReleaseNotes/";
 
       mainProgram = "ncu";
     };
