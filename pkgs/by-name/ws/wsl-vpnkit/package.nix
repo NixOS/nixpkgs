@@ -1,7 +1,8 @@
 {
   lib,
-  resholve,
   fetchFromGitHub,
+  makeWrapper,
+  stdenvNoCC,
 
   # Runtime dependencies
   coreutils,
@@ -23,7 +24,7 @@ let
     '';
   });
 in
-resholve.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "wsl-vpnkit";
   inherit version;
 
@@ -34,46 +35,37 @@ resholve.mkDerivation {
     hash = "sha256-Igbr3L2W32s4uBepllSz07bkbI3qwAKMZkBrXLqGrGA=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postPatch = ''
     substituteInPlace wsl-vpnkit \
-      --replace "/app/wsl-vm" "${gvproxy}/bin/gvforwarder" \
-      --replace "/app/wsl-gvproxy.exe" "${gvproxyWin}/bin/gvproxy-windows.exe"
+      --replace-fail "/app/wsl-vm" "${gvproxy}/bin/gvforwarder" \
+      --replace-fail "/app/wsl-gvproxy.exe" "${gvproxyWin}/bin/gvproxy-windows.exe"
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp wsl-vpnkit $out/bin
+    runHook preInstall
+
+    install -Dm 0755 wsl-vpnkit $out/bin/wsl-vpnkit
+
+    runHook postInstall
   '';
 
-  solutions.wsl-vpnkit = {
-    scripts = [ "bin/wsl-vpnkit" ];
-    interpreter = "none";
-    inputs = [
-      coreutils
-      dnsutils
-      gawk
-      gnugrep
-      iproute2
-      iptables
-      iputils
-      wget
-    ];
-
-    keep = {
-      "$VMEXEC_PATH" = true;
-      "$GVPROXY_PATH" = true;
-    };
-
-    execer = [
-      "cannot:${iproute2}/bin/ip"
-      "cannot:${wget}/bin/wget"
-    ];
-
-    fix = {
-      aliases = true;
-      ping = "${iputils}/bin/ping";
-    };
-  };
+  postFixup = ''
+    wrapProgram $out/bin/wsl-vpnkit \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          dnsutils
+          gawk
+          gnugrep
+          iproute2
+          iptables
+          iputils
+          wget
+        ]
+      }
+  '';
 
   meta = {
     description = "Provides network connectivity to Windows Subsystem for Linux (WSL) when blocked by VPN";
