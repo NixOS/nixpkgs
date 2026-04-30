@@ -27,6 +27,6 @@ ocamlPackages.buildDunePackage rec {
     mainProgram = "anders";
     homepage = "https://homotopy.dev/";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.suhr ];
+    maintainers = [ ];
   };
 }
