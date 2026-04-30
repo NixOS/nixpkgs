@@ -1,18 +1,18 @@
 {
-  bash,
   coreutils,
   fetchFromGitHub,
   ghostscript,
-  locale,
-  zenity,
   gnused,
   lib,
-  resholve,
+  locale,
+  makeWrapper,
+  stdenvNoCC,
+  zenity,
 }:
 
-resholve.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "pdfmm";
-  version = "unstable-2019-01-24";
+  version = "0-unstable-2019-01-24";
 
   src = fetchFromGitHub {
     owner = "jpfleury";
@@ -21,33 +21,30 @@ resholve.mkDerivation {
     hash = "sha256-TOISD/2g7MwnLrtpMnfr2Ln0IiwlJVNavWl4eh/uwN0=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 0755 pdfmm $out/bin/pdfmm
+
+    runHook postInstall
   '';
 
-  solutions.default = {
-    scripts = [
-      "bin/pdfmm"
-    ];
-    interpreter = "${bash}/bin/bash";
-    inputs = [
-      coreutils
-      ghostscript
-      locale
-      zenity
-      gnused
-    ];
-    fake = {
-      # only need xmessage if zenity is unavailable
-      external = [ "xmessage" ];
-    };
-    execer = [
-      "cannot:${zenity}/bin/zenity"
-    ];
-    keep."$toutLu" = true;
-  };
+  postFixup = ''
+    wrapProgram $out/bin/pdfmm \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          ghostscript
+          gnused
+          locale
+          zenity
+        ]
+      }
+  '';
 
   meta = {
     description = "Graphical assistant to reduce the size of a PDF file";
