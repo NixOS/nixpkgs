@@ -1,0 +1,13 @@
+diff --git a/include/paths.h b/include/paths.h
+index f8861ea4e5a8..d6aac29ed5a8 100644
+--- a/include/paths.h
++++ b/include/paths.h
+@@ -71,7 +71,7 @@
+ #define	_PATH_IFCONFIG	"/sbin/ifconfig"
+ #define	_PATH_KMEM	"/dev/kmem"
+ #define	_PATH_LIBMAP_CONF	"/etc/libmap.conf"
+-#define	_PATH_LOCALE	"/usr/share/locale"
++#define	_PATH_LOCALE	"/run/current-system/sw/share/locale"
+ #define	_PATH_LOGIN	"/usr/bin/login"
+ #define	_PATH_MAILDIR	"/var/mail"
+ #define	_PATH_MAN	"/usr/share/man"
