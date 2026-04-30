@@ -30,7 +30,10 @@ buildNpmPackage (finalAttrs: {
     description = "ACP-compatible coding agent powered by the Claude Agent SDK";
     homepage = "https://github.com/zed-industries/claude-agent-acp";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ storopoli ];
+    maintainers = with lib.maintainers; [
+      amadejkastelic
+      storopoli
+    ];
     mainProgram = "claude-agent-acp";
   };
 })
