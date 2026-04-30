@@ -82,6 +82,9 @@ buildPythonPackage {
       psfl
       zpl20
     ];
+    knownVulnerabilities = [
+      "CVE-2025-47273"
+    ];
     platforms = python.meta.platforms;
     priority = 10;
   };
