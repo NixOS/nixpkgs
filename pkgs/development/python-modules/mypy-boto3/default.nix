@@ -1106,8 +1106,8 @@ in
       "sha256-yrq9Pk5zgOWfsYakcPdA0xqK+QVI8mRV2j3iy4fqBX0=";
 
   mypy-boto3-resiliencehub =
-    buildMypyBoto3Package "resiliencehub" "1.42.3"
-      "sha256-fijgv07T/uckhzTbyzvQ8IzbtaYyz5QTeHGl3w4+Sko=";
+    buildMypyBoto3Package "resiliencehub" "1.43.0"
+      "sha256-q1NTyAk8F3hQBeh23YBA/416Xr9Di0xGfGm9fqzmMTU=";
 
   mypy-boto3-resource-explorer-2 =
     buildMypyBoto3Package "resource-explorer-2" "1.42.30"
