@@ -1002,13 +1002,35 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
     }
 }
 
-/// Checks if a unit has been disabled in configuration
-fn is_unit_disabled(unit_file: impl AsRef<Path>) -> bool {
-    unit_file
-        .as_ref()
-        .canonicalize()
-        .map(|full_path| full_path == Path::new("/dev/null"))
-        .unwrap_or(true)
+#[derive(Debug, PartialEq)]
+enum UnitFileState {
+    /// The file exists and resolves to a real unit file.
+    Present,
+    /// The file is a (chain of) symlink(s) to /dev/null, i.e. masked.
+    Masked,
+    /// The file does not exist, or is a dangling symlink.
+    Missing,
+}
+
+impl UnitFileState {
+    /// Whether the unit file is absent from the configuration, either because
+    /// it does not exist or because it has been masked to /dev/null.
+    fn is_gone(&self) -> bool {
+        matches!(self, UnitFileState::Masked | UnitFileState::Missing)
+    }
+}
+
+/// Classify a unit-file path. Unexpected I/O errors are propagated.
+fn unit_file_state(unit_file: impl AsRef<Path>) -> Result<UnitFileState> {
+    let path = unit_file.as_ref();
+    match path.canonicalize() {
+        Ok(target) if target == Path::new("/dev/null") => Ok(UnitFileState::Masked),
+        Ok(_) => Ok(UnitFileState::Present),
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => Ok(UnitFileState::Missing),
+        Err(err) => {
+            Err(err).with_context(|| format!("Failed to canonicalize unit file {}", path.display()))
+        }
+    }
 }
 
 /// Iterate over currently active units in the given scope, compare the unit
@@ -1079,19 +1101,32 @@ fn collect_unit_changes(
                 current_base_unit_file = old_unit_dir.join(&base_unit);
                 new_base_unit_file = new_unit_dir.join(&base_unit);
 
-                // Handle instances defined as drop-ins
-                let mut current_dropins =
-                    unit_dropin_glob(&current_unit_file)?.filter_map(|v| v.ok());
-                let mut new_dropins = unit_dropin_glob(&new_unit_file)?.filter_map(|v| v.ok());
+                // Handle instances defined as drop-ins. When the unit is
+                // disabled, the override files will be a symlink to
+                // /dev/null instead.
 
-                // When the unit is disabled, the override files will be a symlink to /dev/null instead.
-                dropins_removed =
-                    // True iff at least one current drop-in is not /dev/null,
-                    // i.e. the instance was NixOS-managed in the old generation.
-                    !current_dropins.all(is_unit_disabled)
-                    // True iff there are no new drop-ins, or all of them are
-                    // /dev/null, i.e. the instance is gone in the new generation.
-                    && new_dropins.all(is_unit_disabled);
+                // The instance was NixOS-managed in the old generation iff
+                // at least one current drop-in is a real file (not masked).
+                let mut currently_managed = false;
+                for entry in unit_dropin_glob(&current_unit_file)?.flatten() {
+                    if unit_file_state(&entry)? == UnitFileState::Present {
+                        currently_managed = true;
+                        break;
+                    }
+                }
+
+                // If the instance was managed before, check whether it
+                // still is: gone iff no new drop-ins remain (or all are
+                // masked to /dev/null).
+                if currently_managed {
+                    dropins_removed = true;
+                    for entry in unit_dropin_glob(&new_unit_file)?.flatten() {
+                        if unit_file_state(&entry)? == UnitFileState::Present {
+                            dropins_removed = false;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -1108,7 +1143,7 @@ fn collect_unit_changes(
         {
             // Account for template unit instances where overrideStrategy == "asDropin"
             // whilst also allowing manual instances to keep running.
-            if dropins_removed || is_unit_disabled(&new_base_unit_file) {
+            if dropins_removed || unit_file_state(&new_base_unit_file)?.is_gone() {
                 let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
                 if parse_systemd_bool(Some(&current_unit_info), "Unit", "X-StopOnRemoval", true) {
                     _ = units_to_stop.insert(unit.to_string(), ());
