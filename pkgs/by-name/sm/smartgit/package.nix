@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       Command line Git is required.
     '';
     homepage = "https://www.syntevo.com/smartgit/";
-    changelog = "https://www.syntevo.com/smartgit/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
+    changelog = "https://www.smartgit.dev/changelogs/changelog-24.1.txt";
     license = lib.licenses.unfree;
     mainProgram = "smartgit";
     platforms = lib.platforms.linux;
