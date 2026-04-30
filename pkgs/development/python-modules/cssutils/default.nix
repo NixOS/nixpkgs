@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "cssutils";
     tag = "v${version}";
-    hash = "sha256-kuqHfwJn+GT1VIC2PWu5Oj1X6SGn/bi2QPN8kfposVs=";
+    hash = "sha256-K9jbuX7AueSB3AB7PAVjpQhzb3Umn9OoHaL4RrMzKEs=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
-    changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
+    changelog = "https://github.com/jaraco/cssutils/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

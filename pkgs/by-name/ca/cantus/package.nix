@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cantus";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "CodedNil";
     repo = "cantus";
     tag = finalAttrs.version;
-    hash = "sha256-pnc/fjmi932tZQsAfvvAoZ1PXEP8gckGuauR+5btei8=";
+    hash = "sha256-4bnIYOHVOPawDg4s5mPKYXURpDSVgyTmoh1WiGj/Zl8=";
   };
 
-  cargoHash = "sha256-sDZF5cWlhsBblAe0sreGbfgXKIip5raM0r9ZeJrLrLQ=";
+  cargoHash = "sha256-TbbXZGToQTH0k6KxpCsjcG/kOFY0c4L/P8QUpDyQ+2E=";
 
   nativeBuildInputs = [
     pkg-config

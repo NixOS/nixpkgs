@@ -106,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [
+    node-gyp
     nodejs
     pnpmConfigHook
     pnpm
@@ -241,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Build it explicitly against Electron headers ahead of packaging.
     export npm_config_nodedir=${electron.headers}
     pushd node_modules/fs-xattr
-    ${lib.getExe node-gyp} rebuild
+    node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
   '';
