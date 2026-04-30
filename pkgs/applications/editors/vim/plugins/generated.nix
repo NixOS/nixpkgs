@@ -15286,20 +15286,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  registers-nvim = buildVimPlugin {
-    pname = "registers.nvim";
-    version = "2.3.0-unstable-2024-11-05";
-    src = fetchFromGitHub {
-      owner = "tversteeg";
-      repo = "registers.nvim";
-      rev = "c217f8f369e0886776cda6c94eab839b30a8940d";
-      hash = "sha256-M7uR3yXYUQ4I8Gt8P6k25q67UNwksRDPKGrS/FCqrt0=";
-    };
-    meta.homepage = "https://github.com/tversteeg/registers.nvim/";
-    meta.license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
-    meta.hydraPlatforms = [ ];
-  };
-
   remember-nvim = buildVimPlugin {
     pname = "remember.nvim";
     version = "1.5.1";
