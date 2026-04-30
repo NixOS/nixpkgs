@@ -19,7 +19,6 @@ let
     isString
     match
     typeOf
-    elemAt
     ;
 
 in
