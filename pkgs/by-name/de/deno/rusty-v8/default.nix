@@ -132,7 +132,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "rustc_version=\"${rustc.version}\""
         "rust_sysroot_absolute=\"${rustToolchain}\""
         "rust_bindgen_root=\"${rustToolchain}\""
-        "use_chromium_rust_toolchain=true"
         # To accomodate our newer rustc compiler
         "removed_rust_stdlib_libs=[\"adler\"]"
         "added_rust_stdlib_libs=[\"adler2\"]"
