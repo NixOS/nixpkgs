@@ -1314,8 +1314,8 @@ in
       "sha256-VXknxOg7dOctEBdJ8GH8vELe/dcWmT1ygCQSQ84qCO0=";
 
   mypy-boto3-sso-oidc =
-    buildMypyBoto3Package "sso-oidc" "1.42.67"
-      "sha256-POfoZvj0owBR5hm8kaVqbc0jJEQemELE/PK5EUvAfvU=";
+    buildMypyBoto3Package "sso-oidc" "1.43.0"
+      "sha256-rMrmybKplGKYPFr1cIQaHRs/bwcKFYlFWCQRe7PxXOk=";
 
   mypy-boto3-stepfunctions =
     buildMypyBoto3Package "stepfunctions" "1.42.3"
