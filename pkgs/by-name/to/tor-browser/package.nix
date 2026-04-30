@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.10";
+  version = "15.0.11";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-PlGjkyO2MoLWo7eAgoNMfd52dM7v9VKyfCxXbj3qqu4=";
+      hash = "sha256-+1ZpJcVkqqP2WE3kyAJ7Ip3CmM2JIpUos1wgvLjND24=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-rangtzd7oee+2b7zdmKYJD8al4G3FYo+bdq8JgBn5oE=";
+      hash = "sha256-dZeTAkmvI5+mu7u9DrUj/JTvLHE4hiNVqd5AyVbZptg=";
     };
   };
 
@@ -347,7 +347,7 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser routing traffic through the Tor network";
     mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
-    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
+    changelog = "https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/raw/maint-${lib.versions.majorMinor version}/projects/browser/Bundle-Data/Docs-TBB/ChangeLog.txt";
     platforms = lib.attrNames sources;
     maintainers = with lib.maintainers; [
       c4patino

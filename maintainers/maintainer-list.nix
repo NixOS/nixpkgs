@@ -3971,6 +3971,12 @@
     name = "Joseph Madden";
     keys = [ { fingerprint = "3CF8 E983 2219 AB4B 0E19  158E 6112 1921 C9F8 117C"; } ];
   };
+  brett = {
+    email = "brett@librum.org";
+    github = "brett";
+    githubId = 523;
+    name = "Brett Eisenberg";
+  };
   brettlyons = {
     email = "blyons@fastmail.com";
     github = "brettlyons";
@@ -13885,6 +13891,13 @@
     githubId = 49727155;
     matrix = "@katexochen:matrix.org";
     name = "Paul Meyer";
+  };
+  katok = {
+    name = "katok";
+    email = "kat.ok.timofey@gmail.com";
+    matrix = "@kat.ok:matrix.org";
+    github = "Hi-Timofey";
+    githubId = 43324422;
   };
   katrinafyi = {
     name = "katrinafyi";

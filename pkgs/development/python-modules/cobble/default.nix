@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "test_sub_sub_classes_are_included_in_abc"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Create Python data objects";

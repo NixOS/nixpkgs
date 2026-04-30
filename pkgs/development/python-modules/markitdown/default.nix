@@ -100,7 +100,7 @@ buildPythonPackage (finalAttrs: {
     "test_module_misc"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Python tool for converting files and office documents to Markdown";

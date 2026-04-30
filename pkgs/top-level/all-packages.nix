@@ -9424,13 +9424,23 @@ with pkgs;
     )
     // {
       jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk {
+        jdk = jdk25;
+        withJcef = false;
+      };
+      jdk-no-jcef-21 = callPackage ../development/compilers/jetbrains-jdk/21.nix {
         jdk = jdk21;
         withJcef = false;
       };
       jdk = callPackage ../development/compilers/jetbrains-jdk {
+        jdk = jdk25;
+      };
+      jdk-21 = callPackage ../development/compilers/jetbrains-jdk/21.nix {
         jdk = jdk21;
       };
       jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix {
+        jdk = jdk25;
+      };
+      jcef-21 = callPackage ../development/compilers/jetbrains-jdk/jcef.nix {
         jdk = jdk21;
       };
     }

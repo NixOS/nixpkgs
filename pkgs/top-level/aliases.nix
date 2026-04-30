@@ -2134,6 +2134,7 @@ mapAliases {
   warmux = throw "'warmux' has been removed as it is unmaintained and broken"; # Added 2025-11-03
   warsow = throw "'warsow' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
   warsow-engine = throw "'warsow-engine' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
+  wasistlos = throw "'wasistlos' has been removed because it was unmaintained and archived upstream. Consider using 'karere' instead"; # Added 2026-04-13
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_117;
   wasm-strip = throw "'wasm-strip' has been removed due to upstream deprecation. Use 'wabt' instead."; # Added 2025-11-06
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
@@ -2147,7 +2148,7 @@ mapAliases {
   webmacs = throw "webmacs has been removed as it was unmaintained upstream"; # Added 2026-02-03
   welkin = throw "welkin was removed as it is unmaintained upstream"; # Added 2026-01-01
   whalebird = throw "'whalebird' has been removed because it was using an EOL electron version"; # Added 2026-03-20
-  whatsapp-for-linux = throw "'whatsapp-for-linux' has been renamed to/replaced by 'wasistlos'"; # Converted to throw 2025-10-27
+  whatsapp-for-linux = throw "'whatsapp-for-linux' has been removed because it was unmaintained and archived upstream. Consider using 'karere' instead"; # Converted to throw 2025-10-27
   wifi-password = throw "'wifi-password' has been removed as it was unmaintained upstream"; # Added 2025-08-29
   win-pvdrivers = throw "'win-pvdrivers' has been removed as it was subject to the Xen build machine compromise (XSN-01) and has open security vulnerabilities (XSA-468)"; # Added 2025-08-29
   win-virtio = throw "'win-virtio' has been renamed to/replaced by 'virtio-win'"; # Converted to throw 2025-10-27
