@@ -101,8 +101,17 @@ def ensure_vlan_bridge(vlan: int) -> typing.Generator[str, None, None]:
         # releasing this vlan, grab an exclusive lock.
         with vlan_lock(vlan):
             if bridge_path.exists():
-                child_intf_count = len(list((bridge_path / "brif").iterdir()))
-                if child_intf_count == 0:
+                # The VDE tap is owned by the test driver's vde_plug2tap
+                # and shares its lifetime with the vlan, not with any
+                # container. Don't count it when deciding whether the
+                # bridge is still in use, otherwise the bridge would
+                # never be deleted as long as vde_plug2tap is alive.
+                child_intfs = [
+                    p.name
+                    for p in (bridge_path / "brif").iterdir()
+                    if p.name != tap_name
+                ]
+                if not child_intfs:
                     logger.info("deleting bridge %s", bridge_name)
                     run_ip("link", "delete", bridge_name)
 
