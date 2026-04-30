@@ -981,9 +981,6 @@ in
           "ECDHE-RSA-AES256-GCM-SHA384"
           "ECDHE-ECDSA-CHACHA20-POLY1305"
           "ECDHE-RSA-CHACHA20-POLY1305"
-          "DHE-RSA-AES128-GCM-SHA256"
-          "DHE-RSA-AES256-GCM-SHA384"
-          "DHE-RSA-CHACHA20-POLY1305"
         ];
         description = ''
           List of available cipher suites to choose from when negotiating TLS sessions.
