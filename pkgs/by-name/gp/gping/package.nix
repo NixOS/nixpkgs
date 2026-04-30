@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gping";
   version = "1.20.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
@@ -41,14 +43,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "gping-v(.*)"
+    ];
+  };
 
   meta = {
     description = "Ping, but with a graph";
     homepage = "https://github.com/orf/gping";
     changelog = "https://github.com/orf/gping/releases/tag/gping-v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cafkafk ];
+    maintainers = with lib.maintainers; [
+      cafkafk
+      kybe236
+    ];
     mainProgram = "gping";
   };
 })
