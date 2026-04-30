@@ -2130,7 +2130,7 @@ with pkgs;
 
   cudaPackages_12 = cudaPackages_12_9;
 
-  cudaPackages_13 = cudaPackages_13_0;
+  cudaPackages_13 = cudaPackages_13_2;
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
@@ -7992,9 +7992,6 @@ with pkgs;
 
   inherit
     ({
-      kanidm_1_7 = callPackage ../servers/kanidm/1_7.nix {
-        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_7;
-      };
       kanidm_1_8 = callPackage ../servers/kanidm/1_8.nix {
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
       };
@@ -8002,14 +7999,11 @@ with pkgs;
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_9;
       };
 
-      kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_8 = kanidm_1_8.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_9 = kanidm_1_9.override { enableSecretProvisioning = true; };
     })
-    kanidm_1_7
     kanidm_1_8
     kanidm_1_9
-    kanidmWithSecretProvisioning_1_7
     kanidmWithSecretProvisioning_1_8
     kanidmWithSecretProvisioning_1_9
     ;

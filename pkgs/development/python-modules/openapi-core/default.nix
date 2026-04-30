@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.23.0";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     tag = version;
-    hash = "sha256-3Q0Cr9GfDNL+uA5oV20V2OMewTU9yRI0/WmXLW+nuzo=";
+    hash = "sha256-wGaRx+IEqsvs7ygCDgh1H4di662SQhjmpB9LMP/YGKM=";
   };
 
   build-system = [ poetry-core ];

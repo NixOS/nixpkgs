@@ -5,7 +5,7 @@
   cargo-tauri,
   desktop-file-utils,
   fetchFromGitHub,
-  gradle_8,
+  gradle_9,
   jdk17,
   makeBinaryWrapper,
   makeShellWrapper,
@@ -25,7 +25,7 @@
 }:
 
 let
-  gradle = gradle_8.override { java = jdk; };
+  gradle = gradle_9.override { java = jdk; };
   jdk = jdk17;
 in
 
@@ -61,13 +61,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./remove-spotless.patch
   ];
 
+  cargoPatches = [
+    # Cidre 0.11.3 currently fails to build on darwin. Updating it to the latest version
+    # resolves this issue.
+    # Upstream PR is https://github.com/modrinth/code/pull/5862
+    ./update-cidre.patch
+  ];
+
   # Let the app know about our actual version number
   postPatch = ''
     substituteInPlace {apps/app,packages/app-lib}/Cargo.toml apps/app-frontend/package.json \
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-Mnb16KO+xcocUuvQN4woUlb1aFNzzwyIeRP4mIcA1Fk=";
+  cargoHash = "sha256-GwangszzKTEYvflibPgkIyUkHlpfMgenD/mq3my5LIY=";
+
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
@@ -116,6 +124,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     TURBO_BINARY_PATH = lib.getExe turbo;
+    # Cidre requires a target version of at least 10.15
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.15";
   };
 
   preGradleUpdate = ''
@@ -170,7 +180,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.
     # Darwin is the only exception
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
-    broken = !stdenv.hostPlatform.isx86_64 || !stdenv.hostPlatform.isLinux;
+    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
