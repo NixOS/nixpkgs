@@ -112,121 +112,6 @@ let
           '';
         };
 
-        languagePacks = lib.mkOption {
-          # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
-          type = lib.types.listOf (
-            lib.types.enum [
-              "ach"
-              "af"
-              "an"
-              "ar"
-              "ast"
-              "az"
-              "be"
-              "bg"
-              "bn"
-              "br"
-              "bs"
-              "ca-valencia"
-              "ca"
-              "cak"
-              "cs"
-              "cy"
-              "da"
-              "de"
-              "dsb"
-              "el"
-              "en-CA"
-              "en-GB"
-              "en-US"
-              "eo"
-              "es-AR"
-              "es-CL"
-              "es-ES"
-              "es-MX"
-              "et"
-              "eu"
-              "fa"
-              "ff"
-              "fi"
-              "fr"
-              "fur"
-              "fy-NL"
-              "ga-IE"
-              "gd"
-              "gl"
-              "gn"
-              "gu-IN"
-              "he"
-              "hi-IN"
-              "hr"
-              "hsb"
-              "hu"
-              "hy-AM"
-              "ia"
-              "id"
-              "is"
-              "it"
-              "ja"
-              "ka"
-              "kab"
-              "kk"
-              "km"
-              "kn"
-              "ko"
-              "lij"
-              "lt"
-              "lv"
-              "mk"
-              "mr"
-              "ms"
-              "my"
-              "nb-NO"
-              "ne-NP"
-              "nl"
-              "nn-NO"
-              "oc"
-              "pa-IN"
-              "pl"
-              "pt-BR"
-              "pt-PT"
-              "rm"
-              "ro"
-              "ru"
-              "sat"
-              "sc"
-              "sco"
-              "si"
-              "sk"
-              "skr"
-              "sl"
-              "son"
-              "sq"
-              "sr"
-              "sv-SE"
-              "szl"
-              "ta"
-              "te"
-              "tg"
-              "th"
-              "tl"
-              "tr"
-              "trs"
-              "uk"
-              "ur"
-              "uz"
-              "vi"
-              "xh"
-              "zh-CN"
-              "zh-TW"
-            ]
-          );
-          default = [ ];
-          description = ''
-            The language packs to install.
-          '';
-        };
-
         autoConfig = lib.mkOption {
           type = lib.types.lines;
           default = "";
@@ -282,15 +167,6 @@ let
                 Value = value;
                 Status = cfg.preferencesStatus;
               }) cfg.preferences
-            );
-            ExtensionSettings = builtins.listToAttrs (
-              map (
-                lang:
-                lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-                  installation_mode = "normal_installed";
-                  install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-                }
-              ) cfg.languagePacks
             );
           };
           finalPackage = cfg.package.override (old: {
