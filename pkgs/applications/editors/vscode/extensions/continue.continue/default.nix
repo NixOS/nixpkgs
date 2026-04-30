@@ -36,7 +36,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
   meta = {
-    changelog = "https://marketplace.visualstudio.com/items/Continue.continue";
+    changelog = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
     description = "Open-source AI code assistant";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
     homepage = "https://github.com/continuedev/continue";
