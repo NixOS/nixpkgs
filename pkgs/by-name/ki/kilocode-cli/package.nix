@@ -18,19 +18,19 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kilocode-cli";
-  version = "0.25.1";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "Kilo-Org";
     repo = "kilocode-legacy";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-XlJ9/9FABLpKVJXdIRzbzOpJVXdIzgFvPPeER1LRsuk=";
+    hash = "sha256-LU39ezcgdEsleBUzVGP7og2h1mSgknu03DN0eq3eDqg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
-    hash = "sha256-Q/LamZwVaIQVILtXRi1RQrYtpxYJWEKPAt3knwm47S0=";
+    hash = "sha256-6y/kUSDW1WJjfZl17m8Vo6Eay5ipsOaK0PTbQexVbMY=";
   };
 
   npmDeps = fetchNpmDeps {
