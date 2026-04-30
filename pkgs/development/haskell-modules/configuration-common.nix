@@ -464,6 +464,10 @@ with haskellLib;
   # https://github.com/morphismtech/distributors/issues/23
   distributors = dontCheck super.distributors;
 
+  # Test files missing from sdist
+  # https://github.com/sol/ghc-bench/issues/81
+  ghc-bench = dontCheck super.ghc-bench;
+
   # Needs QuickCheck >= 2.16
   # https://github.com/input-output-hk/io-sim/issues/248
   io-sim = dontCheck super.io-sim;
