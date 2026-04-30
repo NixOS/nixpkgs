@@ -1050,8 +1050,8 @@ in
       "sha256-kD3REDwAHOj2eFUwzEPmrqjFaqj/mF5urdyf5QvQv/Q=";
 
   mypy-boto3-pricing =
-    buildMypyBoto3Package "pricing" "1.42.82"
-      "sha256-oo2K5E+2+mbJgcq8FjBJdbuuWF3x8IRPrCEZU+Ml0hE=";
+    buildMypyBoto3Package "pricing" "1.43.0"
+      "sha256-bj4/jUE8pkOLIiC1um5TU0AVhc877vWZndeixsxMthc=";
 
   mypy-boto3-privatenetworks =
     buildMypyBoto3Package "privatenetworks" "1.38.0"
