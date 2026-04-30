@@ -49,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "msticpy";
-  version = "2.17.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";
     tag = "v${version}";
-    hash = "sha256-tzAfynPyIqvWHxzLZ67r/Q5hNBKZAJhllhEVJ69L43k=";
+    hash = "sha256-aX5Nd0tNuweBp2SqGwe4/Z4LcdJaX3p5LLNQAOdGVGo=";
   };
 
   pythonRelaxDeps = [
