@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/autokey/autokey";
     description = "Desktop automation utility for Linux and X11";
     license = with lib.licenses; [ gpl3 ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
   };
 })
