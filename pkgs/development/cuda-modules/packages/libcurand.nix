@@ -19,6 +19,6 @@ buildRedist {
       efficiently perform communications between different GPUs.
     '';
     homepage = "https://developer.nvidia.com/curand";
-    changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes";
+    changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes/";
   };
 }
