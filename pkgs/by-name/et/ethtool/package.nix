@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethtool";
-  version = "6.19";
+  version = "7.0";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/ethtool/ethtool-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HCEUq24MDSqmfWmZYOsR3080HiQDE5zfKK6dqFimAl8=";
+    hash = "sha256-Zgv5clp4cTQ6DSMgaKdjT7z7abbC+O/0VYJ/rvsM0WI=";
   };
 
   nativeBuildInputs = [
