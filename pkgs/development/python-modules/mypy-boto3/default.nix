@@ -47,8 +47,8 @@ in
       "sha256-BwX8ieQDuKQ+ZXvGD+INPX6pS6qvqewhj8Ttfi1Rs8Q=";
 
   mypy-boto3-account =
-    buildMypyBoto3Package "account" "1.42.6"
-      "sha256-FtWO7IGhuWHuDyZTxFWdP8YC5Lz7CErmvKYQ+cYnxEs=";
+    buildMypyBoto3Package "account" "1.43.0"
+      "sha256-KNFTnweHO/8xVFHLcjBP0USqBQfc5BQjj+JBEGlM7kI=";
 
   mypy-boto3-acm =
     buildMypyBoto3Package "acm" "1.42.80"
