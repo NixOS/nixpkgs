@@ -531,8 +531,8 @@ in
       "sha256-bPKKphp64m4s7ceo0ypSfyqY/AGzqFkIWQksqDIRLSM=";
 
   mypy-boto3-firehose =
-    buildMypyBoto3Package "firehose" "1.42.3"
-      "sha256-OBj2x8ELpXJvwfkGf6LeOnBXc0WzLbkKsZ4zlnoI/fM=";
+    buildMypyBoto3Package "firehose" "1.43.0"
+      "sha256-3y8ubLM+XkcUxBxNt5QUocBDLvzVaAY73pqXfCSr1mc=";
 
   mypy-boto3-fis =
     buildMypyBoto3Package "fis" "1.42.3"
