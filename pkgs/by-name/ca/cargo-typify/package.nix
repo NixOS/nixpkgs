@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-typify";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-tsZY+Ygh+9xOOAKcNh2U2k47o+uNAC2zguL+qW/wiqg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ym3xPMn36+Y8dnImmuegjwrARPzozhwI+qhDCXmFsHg=";
   };
 
-  cargoHash = "sha256-K5Fj261Jh+NVipR71cYo5CqHx31czfgs6kr6uifHvaw=";
+  cargoHash = "sha256-3hh4M5cqwLDHcHI+YGKXQOeTXGcVTec+xk+mZcVp0IU=";
 
   nativeBuildInputs = [
     rustfmt
@@ -46,13 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set RUSTFMT "${lib.getExe rustfmt}"
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
-
   meta = {
     description = "JSON Schema to Rust type converter";
-    mainProgram = "cargo-typify";
     homepage = "https://github.com/oxidecomputer/typify";
+    changelog = "https://github.com/oxidecomputer/typify/blob/${finalAttrs.src.tag}/CHANGELOG.adoc";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "cargo-typify";
   };
 })
