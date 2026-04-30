@@ -578,8 +578,8 @@ in
       "sha256-ciXs8g462XTc+GTyxuGDDEsoR9DMD+bOdSUFe0OLshM=";
 
   mypy-boto3-greengrass =
-    buildMypyBoto3Package "greengrass" "1.42.3"
-      "sha256-8D2hxBxdFbrrXSHzvOUBoNkedTErIQG4mlcMx3r9yx4=";
+    buildMypyBoto3Package "greengrass" "1.43.0"
+      "sha256-Xo93GLmd72kiV+e6/f4+gHdEdeMO6C8ph37wKweEl+U=";
 
   mypy-boto3-greengrassv2 =
     buildMypyBoto3Package "greengrassv2" "1.42.3"
