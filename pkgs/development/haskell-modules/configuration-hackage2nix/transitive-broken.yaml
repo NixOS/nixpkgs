@@ -215,7 +215,6 @@ dont-distribute-packages:
  - bbi
  - bdcs
  - bdcs-api
- - beam-duckdb
  - beam-th
  - beautifHOL
  - bech32-th
@@ -569,6 +568,7 @@ dont-distribute-packages:
  - constraint-reflection
  - constructible
  - container
+ - containers-accelerate
  - content-store
  - control
  - control-invariants
@@ -727,6 +727,7 @@ dont-distribute-packages:
  - dfinity-radix-tree
  - dhall-lex
  - dhall-secret
+ - dhscanner-kbapi
  - dhscanner-kbgen
  - dia-functions
  - diagrams-html5
@@ -2704,10 +2705,16 @@ dont-distribute-packages:
  - ppad-base58
  - ppad-bip32
  - ppad-bip39
+ - ppad-bolt3
+ - ppad-bolt4
+ - ppad-bolt5
+ - ppad-bolt7
+ - ppad-bolt8
  - ppad-hkdf
  - ppad-hmac-drbg
  - ppad-pbkdf
  - ppad-secp256k1
+ - ppad-tx
  - pqueue-mtl
  - practice-room
  - pred-trie
@@ -3136,6 +3143,7 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - shellmate-extras
+ - shibuya-kafka-adapter
  - shibuya-metrics
  - shibuya-pgmq-adapter
  - shine-varying
