@@ -122,6 +122,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 dist/@kilocode/cli-*/bin/kilo $out/bin/kilo
+    ln -s kilo $out/bin/kilocode
 
     wrapProgram $out/bin/kilo \
       --prefix PATH : ${
