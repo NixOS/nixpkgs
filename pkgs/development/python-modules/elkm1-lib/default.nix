@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elkm1-lib";
   version = "2.2.14";
   pyproject = true;
@@ -16,15 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gwww";
     repo = "elkm1";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lejeRHteVMO7qz8qMPCG5d8V/rj550FL+WuogM/Lcbw=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    pyserial-asyncio-fast
-  ];
+  dependencies = [ pyserial-asyncio-fast ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -34,10 +32,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "elkm1_lib" ];
 
   meta = {
-    description = "Python module for interacting with ElkM1 alarm/automation panel";
+    description = "Module for interacting with ElkM1 alarm/automation panel";
     homepage = "https://github.com/gwww/elkm1";
-    changelog = "https://github.com/gwww/elkm1/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/gwww/elkm1/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
