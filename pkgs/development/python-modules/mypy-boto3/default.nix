@@ -59,8 +59,8 @@ in
       "sha256-o5hZAxSZklg7hzL7MWCBYnnYTRoBSSAKPLpub1NVO74=";
 
   mypy-boto3-amp =
-    buildMypyBoto3Package "amp" "1.42.3"
-      "sha256-hT/YK9234i1l9viz0pGJm7ab5spLxbfGmlzeKc/8naA=";
+    buildMypyBoto3Package "amp" "1.43.0"
+      "sha256-yDDyrgINiqUb6lcpQI9oWDy6lw+NiJR4hwmxnAPpQeA=";
 
   mypy-boto3-amplify =
     buildMypyBoto3Package "amplify" "1.42.3"
