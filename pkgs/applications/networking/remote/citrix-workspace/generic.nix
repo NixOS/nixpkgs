@@ -277,6 +277,9 @@ stdenv.mkDerivation rec {
             "$ICAInstDir/lib"
             "$ICAInstDir/usr/lib/x86_64-linux-gnu"
             "$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle"
+            # HdxRtcEngine loads libpulse.so.0 with dlopen, so autoPatchelf
+            # cannot discover it from ELF dependencies.
+            "${lib.getLib libpulseaudio}/lib"
           ]
         );
 
