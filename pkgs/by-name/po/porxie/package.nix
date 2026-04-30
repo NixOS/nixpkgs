@@ -5,20 +5,28 @@
   nixosTests,
   stdenvNoCC,
   nix-update-script,
+  rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "porxie";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromCodeberg {
     owner = "Blooym";
     repo = "porxie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TxN9BA/o9BI9yF7k3wpJae78hIcCAhB/ggXVQlt4oP0=";
+    hash = "sha256-dnBHgNSk0i6bokBXQlZMOwePusiplAN2hIna08Y68fA=";
   };
-  cargoHash = "sha256-a0Ps8SvheQoX+Ai8EYgEpyTFwNvB7E3J6MfGiyEvMzM=";
+  cargoHash = "sha256-fl6mv8qHdVQtXc6B6cVu9vG9gJQruAJU2tklChziOBo=";
+
+  buildInputs = [ rust-jemalloc-sys ];
+
+  checkFlags = [
+    # Requires network access.
+    "--skip=identity_service::tests::resolve_and_cache"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

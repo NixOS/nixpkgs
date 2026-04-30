@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cAfNj1/YNwIO5sv3B3rTSTZ79qKbYb37Ltw+224NNDY=";
+    hash = "sha256-MkKZ2iL2fkZcos60d1fd1OVBA28thVXrEmsEgvTMmS4=";
   };
 
   pythonRelaxDeps = [

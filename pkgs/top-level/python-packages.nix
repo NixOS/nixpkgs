@@ -7252,6 +7252,8 @@ self: super: with self; {
 
   httpx-oauth = callPackage ../development/python-modules/httpx-oauth { };
 
+  httpx-retries = callPackage ../development/python-modules/httpx-retries { };
+
   httpx-socks = callPackage ../development/python-modules/httpx-socks { };
 
   httpx-sse = callPackage ../development/python-modules/httpx-sse { };

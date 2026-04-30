@@ -90,11 +90,13 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     runHook postInstall
   '';
 
-  doInstallCheck = false;
+  doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
+    # Bypass `dune exec` so its stderr warnings don't pollute test output.
     PATH="$out/bin":$PATH
+    export WITH_CERB=cerberus
 
     patchShebangs --build tests
 

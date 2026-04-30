@@ -866,6 +866,14 @@ let
 
       INIT_ON_ALLOC_DEFAULT_ON = yes;
 
+      # Randomize kernel stack offset on syscall entry to make stack address dependent
+      # attacks harder, supported since 5.13.
+      # Only default enabled on AArch64 from 7.1 due to perf issues prior to that release
+      # that were resolved in "randomize_kstack: Maintain kstack_offset per task"
+      RANDOMIZE_KSTACK_OFFSET_DEFAULT = whenAtLeast (
+        if stdenv.hostPlatform.isAarch64 then "7.1" else "5.13"
+      ) yes;
+
       # Enable stack smashing protections in schedule()
       # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
       SCHED_STACK_END_CHECK = yes;
@@ -1237,6 +1245,7 @@ let
         EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" yes; # initrd kernel parameter for EFI
+        PSTORE = yes;
         EFI_VARS_PSTORE = lib.mkIf (!stdenv.hostPlatform.isLoongArch64) yes;
 
         # Generic compression support for EFI payloads
