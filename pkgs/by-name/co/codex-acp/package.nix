@@ -7,6 +7,7 @@
   pkg-config,
   openssl,
   libcap,
+  bubblewrap,
   librusty_v8 ? callPackage ./librusty_v8.nix { },
 }:
 let
@@ -43,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    CODEX_BWRAP_SOURCE_DIR = "${codexSrc}/codex-rs/vendor/bubblewrap";
+    CODEX_BWRAP_SOURCE_DIR = "${bubblewrap.src}";
   };
 
   nativeBuildInputs = [

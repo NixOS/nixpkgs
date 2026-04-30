@@ -15,7 +15,8 @@ fetchurl {
       x86_64-darwin = "sha256-YwzSQPG77NsHFBfcGDh6uBz2fFScHFFaC0/Pnrpke7c=";
       aarch64-darwin = "sha256-v+LJvjKlbChUbw+WWCXuaPv2BkBfMQzE4XtEilaM+Yo=";
     }
-    .${stdenv.hostPlatform.system};
+    .${stdenv.hostPlatform.system}
+      or (throw "librusty_v8 146.4.0 is not available for ${stdenv.hostPlatform.system}");
   meta = {
     version = "146.4.0";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

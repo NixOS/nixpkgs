@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash cacert common-updater-scripts coreutils curl gnutar jq nix nix-update python3
+#!nix-shell -i bash -p bash cacert common-updater-scripts coreutils curl gnutar jq nix-update
 
 set -euo pipefail
 
@@ -7,23 +7,24 @@ PACKAGE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NIXPKGS_ROOT="$(realpath "$PACKAGE_DIR/../../../..")"
 PACKAGE_NIX="$PACKAGE_DIR/package.nix"
 LIBRUSTY_V8_NIX="$PACKAGE_DIR/librusty_v8.nix"
-ATTR_PATH="${UPDATE_NIX_ATTR_PATH:-codex-acp}"
+ATTR_PATH=codex-acp
 OWNER="zed-industries"
 REPO="codex-acp"
 
 github_api_get() {
   local url="$1"
+  local curl_args=(
+    --fail
+    --silent
+    --show-error
+    -H "Accept: application/vnd.github+json"
+  )
 
   if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-    curl --fail --silent --show-error \
-      -H "Accept: application/vnd.github+json" \
-      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-      "$url"
-  else
-    curl --fail --silent --show-error \
-      -H "Accept: application/vnd.github+json" \
-      "$url"
+    curl_args+=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
   fi
+
+  curl "${curl_args[@]}" "$url"
 }
 
 normalize_version() {
@@ -47,61 +48,69 @@ prefetch_sri() {
 
 parse_release_metadata() {
   local cargo_lock="$1"
+  local codex_metadata codex_tag codex_rev v8_version
 
-  python3 - "$cargo_lock" <<'PY'
-import pathlib
-import re
-import sys
+  codex_metadata="$(
+    sed -nE 's|.*git\+https://github\.com/openai/codex\?tag=([^#"]+)#([0-9a-f]+).*|\1 \2|p' "$cargo_lock" \
+      | head -n1
+  )"
+  if [[ -z "$codex_metadata" ]]; then
+    echo "Could not find pinned openai/codex dependency in Cargo.lock" >&2
+    return 1
+  fi
+  read -r codex_tag codex_rev <<<"$codex_metadata"
+  if [[ -z "$codex_tag" || -z "$codex_rev" ]]; then
+    echo "Could not parse pinned openai/codex dependency in Cargo.lock" >&2
+    return 1
+  fi
 
-text = pathlib.Path(sys.argv[1]).read_text()
+  v8_version="$(
+    awk '
+      /^\[\[package\]\]$/ { in_pkg = 1; is_v8 = 0; next }
+      in_pkg && /^name = "v8"$/ { is_v8 = 1; next }
+      in_pkg && is_v8 && /^version = "/ {
+        gsub(/^version = "/, "")
+        gsub(/"$/, "")
+        print
+        exit
+      }
+    ' "$cargo_lock"
+  )"
+  if [[ -z "$v8_version" ]]; then
+    echo "Could not find v8 package version in Cargo.lock" >&2
+    return 1
+  fi
 
-codex_match = re.search(
-    r'git\+https://github\.com/openai/codex\?tag=([^#"]+)#([0-9a-f]+)',
-    text,
-)
-if codex_match is None:
-    raise SystemExit("Could not find pinned openai/codex dependency in Cargo.lock")
-
-v8_match = re.search(r'\[\[package\]\]\nname = "v8"\nversion = "([^"]+)"', text)
-if v8_match is None:
-    raise SystemExit('Could not find v8 package version in Cargo.lock')
-
-print(codex_match.group(1))
-print(codex_match.group(2))
-print(v8_match.group(1))
-PY
+  printf '%s\n%s\n%s\n' "$codex_tag" "$codex_rev" "$v8_version"
 }
 
 update_codex_pins() {
-  python3 - "$PACKAGE_NIX" <<'PY'
-import os
-import pathlib
-import re
-import sys
+  local tmp
+  tmp="$(mktemp)"
 
-path = pathlib.Path(sys.argv[1])
-text = path.read_text()
+  awk -v codex_rev="$CODEX_REV" -v codex_hash="$CODEX_HASH" '
+    /codexRev = "[0-9a-f]+";/ {
+      rev_count++
+      sub(/codexRev = "[0-9a-f]+";/, "codexRev = \"" codex_rev "\";")
+    }
+    /codexHash = "sha256-[^"]+";/ {
+      hash_count++
+      sub(/codexHash = "sha256-[^"]+";/, "codexHash = \"" codex_hash "\";")
+    }
+    { print }
+    END {
+      if (rev_count != 1) {
+        print "Failed to update codexRev in package.nix" > "/dev/stderr"
+        exit 1
+      }
+      if (hash_count != 1) {
+        print "Failed to update codexHash in package.nix" > "/dev/stderr"
+        exit 1
+      }
+    }
+  ' "$PACKAGE_NIX" >"$tmp"
 
-patterns = [
-    (
-        r'codexRev = "[0-9a-f]+";',
-        f'codexRev = "{os.environ["CODEX_REV"]}";',
-        "codexRev",
-    ),
-    (
-        r'codexHash = "sha256-[^"]+";',
-        f'codexHash = "{os.environ["CODEX_HASH"]}";',
-        "codexHash",
-    ),
-]
-
-for pattern, replacement, label in patterns:
-    text, count = re.subn(pattern, replacement, text, count=1)
-    if count != 1:
-        raise SystemExit(f"Failed to update {label} in {path}")
-
-path.write_text(text)
-PY
+  mv "$tmp" "$PACKAGE_NIX"
 }
 
 write_librusty_v8_nix() {
@@ -123,7 +132,8 @@ fetchurl {
       x86_64-darwin = "${V8_HASH_X86_64_DARWIN}";
       aarch64-darwin = "${V8_HASH_AARCH64_DARWIN}";
     }
-    .\${stdenv.hostPlatform.system};
+    .\${stdenv.hostPlatform.system}
+    or (throw "librusty_v8 ${V8_VERSION} is not available for \${stdenv.hostPlatform.system}");
   meta = {
     version = "${V8_VERSION}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
