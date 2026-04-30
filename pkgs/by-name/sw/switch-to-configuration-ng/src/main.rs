@@ -1086,9 +1086,11 @@ fn collect_unit_changes(
 
                 // When the unit is disabled, the override files will be a symlink to /dev/null instead.
                 dropins_removed =
-                    // True if either no existing files or no disabled files (unit existed)
+                    // True iff at least one current drop-in is not /dev/null,
+                    // i.e. the instance was NixOS-managed in the old generation.
                     !current_dropins.all(is_unit_disabled)
-                    // True if either no new files or all disabled new files (unit gone)
+                    // True iff there are no new drop-ins, or all of them are
+                    // /dev/null, i.e. the instance is gone in the new generation.
                     && new_dropins.all(is_unit_disabled);
             }
         }
