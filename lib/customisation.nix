@@ -264,7 +264,6 @@ rec {
   */
   callPackageWith =
     let
-      filterTrueAttrs = set: removeAttrs set (filter (name: set.${name}) (attrNames set));
       makeErrorMessage =
         autoArgs: fn: args: fargs: arg:
         let
@@ -309,14 +308,14 @@ rec {
 
       # a list of argument names that the function requires, but
       # wouldn't be passed to it
-      missingArgs =
+      missingNames =
         # Filter out arguments that have a default value
-        filterTrueAttrs
+        filter (name: !fargs.${name})
           # Filter out arguments that would be passed
-          (removeAttrs fargs (attrNames allArgs));
+          (attrNames (removeAttrs fargs (attrNames allArgs)));
 
     in
-    if missingArgs == { } then
+    if missingNames == [ ] then
       makeOverridable f allArgs
     else
       # Only show the error for the first missing argument
@@ -324,7 +323,7 @@ rec {
       # which is used by nix-env and ofborg to filter out packages that don't evaluate.
       # This way we're forced to fix such errors in Nixpkgs,
       # which is especially relevant with allowAliases = false
-      abort (makeErrorMessage autoArgs fn args fargs (head (attrNames missingArgs)));
+      abort (makeErrorMessage autoArgs fn args fargs (head missingNames));
 
   /**
     Like `callPackage`, but for a function that returns an attribute
