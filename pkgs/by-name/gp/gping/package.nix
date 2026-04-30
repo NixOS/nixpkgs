@@ -11,16 +11,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gping";
-  version = "1.20.1";
+  version = "1.20.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     tag = "gping-v${finalAttrs.version}";
-    hash = "sha256-whHbGZnxOQ/ISyWMl6miuogppZahgXxO3XmhcP6ymIo=";
+    hash = "sha256-5R47STjc8aQZ90SmsXXs86rLlE8YqWOzFRsFeSVkJKo=";
   };
 
-  cargoHash = "sha256-F0QBL7tCCdjnavClqrw8yYxFrY8y4f8h/gcHSpEqBiM=";
+  cargoHash = "sha256-P8v7RNZoycRpYRjjnT5rwBML9tuMvdGQU40uif5xj1c=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,14 +43,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "gping-v(.*)"
+    ];
+  };
 
   meta = {
     description = "Ping, but with a graph";
     homepage = "https://github.com/orf/gping";
-    changelog = "https://github.com/orf/gping/releases/tag/gping-v${finalAttrs.version}";
+    changelog = "https://github.com/orf/gping/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cafkafk ];
+    maintainers = with lib.maintainers; [
+      cafkafk
+      kybe236
+    ];
     mainProgram = "gping";
   };
 })
