@@ -231,9 +231,7 @@ let
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
-        carton = callPackage ../development/ocaml-modules/carton {
-          cmdliner = cmdliner_1;
-        };
+        carton = callPackage ../development/ocaml-modules/carton { };
 
         carton-git = callPackage ../development/ocaml-modules/carton/git.nix { };
 
