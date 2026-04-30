@@ -347,8 +347,8 @@ in
       "sha256-diymNW6D5QCBts8lrsxQy1Q18+LeRkhtOThRkd4gWsk=";
 
   mypy-boto3-connectcases =
-    buildMypyBoto3Package "connectcases" "1.42.90"
-      "sha256-zJ8mqzUaYMPA8CYMRKRAt/9QS0h1MmERWlDj8QN4/XU=";
+    buildMypyBoto3Package "connectcases" "1.43.0"
+      "sha256-4rq7ErTAeExDoq40tL6gjEsQjvGfOhUGuiDBoVOw4vQ=";
 
   mypy-boto3-connectparticipant =
     buildMypyBoto3Package "connectparticipant" "1.42.3"
