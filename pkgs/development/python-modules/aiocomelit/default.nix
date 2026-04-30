@@ -4,25 +4,23 @@
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
+  orjson,
   pint,
-  setuptools,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiocomelit";
-  version = "2.0.2";
+  version = "2.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiocomelit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k/p6z+flMvmuwwHqPH9Aw/ai761kbT+HQUXVNKeqk0U=";
+    hash = "sha256-EB07sAGSyTpsCNH8xwOuHBYhQyajBnZBP+8WCLBq7i4=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +28,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     colorlog
+    orjson
     pint
   ];
 
