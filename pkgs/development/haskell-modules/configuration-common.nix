@@ -456,9 +456,9 @@ with haskellLib;
   # https://github.com/raehik/binrep/issues/14
   binrep = warnAfterVersion "1.1.0" (doJailbreak super.binrep);
 
-  # Does not support QuickCheck == 2.15.*
-  # https://codeberg.org/noiioiu/comonad-coactions/issues/1
-  comonad-coactions = dontCheck super.comonad-coactions;
+  # Test suite can't be built with GHC 9.10, incorrect lower bound on t-h
+  # https://codeberg.org/noiioiu/comonad-coactions/issues/1#issuecomment-14082215
+  comonad-coactions = dontCheck (doJailbreak super.comonad-coactions);
 
   # doctests don't evaluate properly
   # https://github.com/morphismtech/distributors/issues/23
