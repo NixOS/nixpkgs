@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,6 +26,9 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X github.com/k1LoW/roots/version.Version=${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
