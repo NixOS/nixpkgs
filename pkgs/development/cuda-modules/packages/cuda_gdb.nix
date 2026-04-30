@@ -66,6 +66,6 @@ buildRedist {
       applications running on actual hardware.
     '';
     homepage = "https://docs.nvidia.com/cuda/cuda-gdb";
-    changelog = "https://docs.nvidia.com/cuda/cuda-gdb#release-notes";
+    changelog = "https://docs.nvidia.com/cuda/cuda-gdb/";
   };
 }
