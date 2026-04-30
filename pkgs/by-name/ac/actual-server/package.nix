@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://actualbudget.org/docs/releases";
+    changelog = "https://actualbudget.org/docs/releases/";
     description = "Super fast privacy-focused app for managing your finances";
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
