@@ -63,6 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     # The rewrite-gradle plugin breaks the nixDownloadDeps task injected by fetchDeps
     substituteInPlace build.gradle \
       --replace-fail "rewrite 'org.openrewrite.recipe:rewrite-gradle:2.3.0'" ""
+    # Disable telemetry and contact options by default
+    substituteInPlace src/main/java/app/freerouting/settings/UserProfileSettings.java \
+      --replace-fail 'public Boolean isTelemetryAllowed = true;' 'public Boolean isTelemetryAllowed = false;'
+    substituteInPlace src/main/java/app/freerouting/settings/UserProfileSettings.java \
+      --replace-fail 'public Boolean isContactAllowed = true;' 'public Boolean isContactAllowed = false;'
   '';
 
   installPhase = ''
