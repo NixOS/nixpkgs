@@ -22,7 +22,7 @@ in
         example = true;
         description = ''
           Sets the environment variable to run step-ca with debug logging by adding `STEPDEBUG = "1"` to
-          {option}`systemd.step-ca.environment`.
+          {option}`systemd.services.step-ca.environment`.
         '';
       };
       address = lib.mkOption {
