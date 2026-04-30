@@ -1,10 +1,9 @@
 {
-  fetchpatch,
-  fetchFromGitHub,
+  fetchpatch2,
+  fetchzip,
   buildDunePackage,
   lib,
   logs,
-  miou,
   fmt,
   h2,
   h1,
@@ -22,17 +21,15 @@ buildDunePackage (finalAttrs: {
   pname = "httpcats";
   version = "0.2.1";
 
-  src = fetchFromGitHub {
-    owner = "robur-coop";
-    repo = "httpcats";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-I7u/n49WOnpc0EaagsjC4Ts/kz0Xj6YHZv6+QZKLrC4=";
+  src = fetchzip {
+    url = "https://github.com/robur-coop/httpcats/releases/download/v${finalAttrs.version}/httpcats-${finalAttrs.version}.tbz";
+    hash = "sha256-ehtwxQGHw8igzI0dy2Zzs+VOqvck/tAUuuJl+jSpVU8=";
   };
 
   patches = [
-    (fetchpatch {
+    (fetchpatch2 {
       url = "https://github.com/robur-coop/httpcats/commit/d8787555d4831e0488780d42bd2c65de662d1d38.patch";
-      hash = "sha256-Mqam6Sxd2kkkHDm459u9uerifuHbvZUVy2khQffvvCE=";
+      hash = "sha256-6zXPb+mvw2rcEMv28b0npcL8cKl3CASxDbl7FOAGsXs=";
     })
   ];
 
@@ -46,6 +43,8 @@ buildDunePackage (finalAttrs: {
     happy-eyeballs-miou-unix
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   checkInputs = [
     logs
@@ -58,7 +57,7 @@ buildDunePackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/robur-coop/httpcats/";
     description = "A simple HTTP client / server using h1, h2, and miou";
-    changelog = "https://github.com/robur-coop/httpcats/blob/${finalAttrs.src.tag}/CHANGES.md";
+    changelog = "https://github.com/robur-coop/httpcats/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rpqt ];
   };
