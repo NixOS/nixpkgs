@@ -7,29 +7,38 @@
 }:
 buildNpmPackage rec {
   pname = "playwright-mcp";
-  version = "0.0.56";
+  version = "0.0.69";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright-mcp";
     tag = "v${version}";
-    hash = "sha256-kfn9vIxmx+dSYKzR5ayGX8RIWd5d8quTAyx4/dC6hIY=";
+    hash = "sha256-zX9RsHVInRib69N4LkG3R4TB5qjlBirpu9BBftcr92I=";
   };
 
-  npmDepsHash = "sha256-Qsln4llNpfXYXhSEfHnvdsFIF7adHKEyC1eGHtVY2Qk=";
+  npmDepsHash = "sha256-hc5AkUTGoXxXlDW9vPpiO23QOgANJp1lX4xoaySHoK4=";
 
-  # Codex MCP smoke test (after `codex mcp add playwright-nix --env DISPLAY=:0 -- $out/bin/mcp-server-playwright --headless --isolated`):
+  npmWorkspace = "packages/playwright-mcp";
+
+  # Codex MCP smoke test (after `codex mcp add playwright-nix --env DISPLAY=:0 -- $out/bin/playwright-mcp --headless --isolated`):
   # timeout 45s codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check "Use only playwright-nix MCP tools. Navigate to https://example.com and return only the page title."
   postInstall = ''
-    rm -rf "$out/lib/node_modules/@playwright/mcp/node_modules/playwright"
-    rm -rf "$out/lib/node_modules/@playwright/mcp/node_modules/playwright-core"
-    ln -s ${playwright-test}/lib/node_modules/playwright "$out/lib/node_modules/@playwright/mcp/node_modules/playwright"
-    ln -s ${playwright-test}/lib/node_modules/playwright-core "$out/lib/node_modules/@playwright/mcp/node_modules/playwright-core"
+    pkg_dir="$out/lib/node_modules/playwright-mcp-internal"
+    rm -rf "$pkg_dir/node_modules/playwright"
+    rm -rf "$pkg_dir/node_modules/playwright-core"
+    ln -s ${playwright-test}/lib/node_modules/playwright "$pkg_dir/node_modules/playwright"
+    ln -s ${playwright-test}/lib/node_modules/playwright-core "$pkg_dir/node_modules/playwright-core"
 
-    wrapProgram $out/bin/mcp-server-playwright \
+    # Workspace symlinks point to a packages/ tree that npmInstallHook does not
+    # ship; npm hoisted the workspace contents directly into playwright-mcp-internal.
+    rm "$pkg_dir/node_modules/@playwright/mcp"
+    rm "$pkg_dir/node_modules/@playwright/mcp-extension"
+    rm "$pkg_dir/node_modules/playwright-cli"
+    rm "$pkg_dir/node_modules/.bin/playwright-mcp"
+
+    wrapProgram $out/bin/playwright-mcp \
       --set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers} \
-      --set-default PLAYWRIGHT_MCP_BROWSER chromium \
-      --run 'if [ -z "$PLAYWRIGHT_MCP_USER_DATA_DIR" ]; then PLAYWRIGHT_MCP_USER_DATA_DIR="$(mktemp -d -t mcp-pw-XXXXXX)"; export PLAYWRIGHT_MCP_USER_DATA_DIR; trap "rm -rf \"$PLAYWRIGHT_MCP_USER_DATA_DIR\"" EXIT; fi'
+      --set-default PLAYWRIGHT_MCP_BROWSER chromium
   '';
 
   dontNpmBuild = true;
@@ -44,7 +53,7 @@ buildNpmPackage rec {
     description = "Playwright MCP server";
     homepage = "https://github.com/Microsoft/playwright-mcp";
     license = lib.licenses.asl20;
-    mainProgram = "mcp-server-playwright";
+    mainProgram = "playwright-mcp";
     maintainers = [ lib.maintainers.kalekseev ];
   };
 }
