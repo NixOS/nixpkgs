@@ -411,8 +411,8 @@ in
       "sha256-jkgV+/T/mGbAFQh46ZYBLTM66Rtd762XUUsbcFciJkk=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.42.80"
-      "sha256-pkUCCZiYPvenvC/+Drd5SHImQTdJEDTGEJKz53cMhZ0=";
+    buildMypyBoto3Package "dms" "1.43.0"
+      "sha256-SDTUIwYwaIa8GTCU4P6x0gjZcjVtv+fY39ahC6rnYDQ=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.42.3"
