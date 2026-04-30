@@ -1366,8 +1366,8 @@ in
       "sha256-0hww0SSW03bUktNCr81f5C56U961ETH96Gn1VZwX1Iw=";
 
   mypy-boto3-transfer =
-    buildMypyBoto3Package "transfer" "1.42.96"
-      "sha256-Y/3Va1N/wP9vYfdHeqovrz0UHZLB3JFHg8K4Y+Ewycs=";
+    buildMypyBoto3Package "transfer" "1.43.0"
+      "sha256-tC7uaKRyBaeJRefCknpR+CHWyTmV3DxuauCaAj37hV0=";
 
   mypy-boto3-translate =
     buildMypyBoto3Package "translate" "1.42.3"
