@@ -59,6 +59,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/entireio/cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      iamanaws
       sheeeng
       squishykid
     ];
