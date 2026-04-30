@@ -4,9 +4,12 @@
   fetchFromGitHub,
   wrapGAppsHook3,
   gobject-introspection,
+  imagemagick,
   gtksourceview3,
   libappindicator-gtk3,
   libnotify,
+  xautomation,
+  xwd,
   zenity,
   wmctrl,
 }:
@@ -19,7 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "autokey";
     repo = "autokey";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d1WJLqkdC7QgzuYdnxYhajD3DtCpgceWCAxGrk0KKew=";
   };
 
@@ -51,7 +54,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   runtimeDeps = [
+    imagemagick
     zenity
+    xautomation
+    xwd
     wmctrl
   ];
 
@@ -67,9 +73,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/autokey/autokey";
     description = "Desktop automation utility for Linux and X11";
-    license = with lib.licenses; [ gpl3 ];
+    homepage = "https://github.com/autokey/autokey";
+    changelog = "https://github.com/autokey/autokey/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
   };
