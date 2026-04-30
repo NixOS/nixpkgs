@@ -18,7 +18,7 @@ in
 buildLinux (
   args
   // rec {
-    version = "6.19.9";
+    version = "7.0.3";
     pname = "linux-zen";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
     isZen = true;
@@ -27,7 +27,7 @@ buildLinux (
       owner = "zen-kernel";
       repo = "zen-kernel";
       rev = "v${version}-${suffix}";
-      sha256 = "09wlnd8ndm4r75ywk2sanmkc0v788rz9faa61hcfschw5pq5yzx6";
+      sha256 = "16qbgrqq8wkp5gyy60n6rabpbyv47imaw9pnndg2mzisbb3cb808";
     };
 
     # This is based on the following source:
@@ -45,7 +45,6 @@ buildLinux (
 
       # Preempt (low-latency)
       PREEMPT = mkKernelOverride yes;
-      PREEMPT_VOLUNTARY = mkKernelOverride no;
       PREEMPT_LAZY = mkKernelOverride no;
 
       # Preemptible tree-based hierarchical RCU
