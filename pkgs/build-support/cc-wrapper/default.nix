@@ -554,6 +554,10 @@ stdenvNoCC.mkDerivation {
     elif [ -e $ccPath/cpp${exeSuffix} ]; then
       wrap ${targetPrefix}cpp $wrapper $ccPath/cpp${exeSuffix}
     fi
+
+    if [ -e $ccPath/clang-scan-deps${exeSuffix} ]; then
+      wrap ${targetPrefix}clang-scan-deps ${./clang-scan-deps-wrapper.sh} $ccPath/clang-scan-deps${exeSuffix}
+    fi
   ''
 
   # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
