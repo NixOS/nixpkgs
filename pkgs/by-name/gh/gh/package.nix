@@ -5,7 +5,8 @@
   installShellFiles,
   stdenv,
   testers,
-  gh,
+  makeWrapper,
+  enableTelemetry ? false,
 }:
 
 buildGoModule (finalAttrs: {
@@ -21,7 +22,10 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-4xZAcwn9/vUTkahIlqwyGb/2SYYGusdXY4nye8ldp/g=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   # N.B.: using the Makefile is intentional.
   # We pass "nixpkgs" for build.Date to avoid `gh --version` reporting a very old date.
@@ -34,6 +38,10 @@ buildGoModule (finalAttrs: {
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/gh -t $out/bin
+  ''
+  + lib.optionalString (!enableTelemetry) ''
+    wrapProgram $out/bin/gh \
+      --set GH_TELEMETRY false
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installManPage share/man/*/*.[1-9]
@@ -51,7 +59,7 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   passthru.tests.version = testers.testVersion {
-    package = gh;
+    package = finalAttrs.finalPackage;
   };
 
   meta = {
