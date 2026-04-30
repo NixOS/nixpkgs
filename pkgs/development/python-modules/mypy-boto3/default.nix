@@ -1042,8 +1042,8 @@ in
       "sha256-gkNI9kZ0fOLazbkKBu6JHlwiCmhk28WfL9o7FFj9f5Y=";
 
   mypy-boto3-pipes =
-    buildMypyBoto3Package "pipes" "1.42.3"
-      "sha256-315QgDF/CNolDYIYUcEGqdc5rQotI1uw0q8aQN9sW08=";
+    buildMypyBoto3Package "pipes" "1.43.0"
+      "sha256-5bmcUB1MIxJ34XQSsE41OrGfhy8c614AZenIWM885v8=";
 
   mypy-boto3-polly =
     buildMypyBoto3Package "polly" "1.42.76"
