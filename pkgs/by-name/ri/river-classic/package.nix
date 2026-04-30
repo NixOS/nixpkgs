@@ -28,14 +28,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-classic";
-  version = "0.3.16";
+  version = "0.3.17";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
   src = fetchFromCodeberg {
     owner = "river";
     repo = "river-classic";
-    hash = "sha256-MbUKs9zNGiC2bzQf2+rX6zlsJpJkmUkqPxGpJti4Odc=";
+    hash = "sha256-+Geq3AetoiHB8xkMGf9nsYq8Mse2fZ5Edg1iOZ30f1A=";
     tag = "v${finalAttrs.version}";
   };
 
