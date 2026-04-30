@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "litecli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YSPNtDL5rNgRh5lJBKfL1jjWemlmf3eesBMSLyJVRLY=";
   };
 
@@ -47,13 +47,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Command-line interface for SQLite";
-    mainProgram = "litecli";
     longDescription = ''
       A command-line client for SQLite databases that has auto-completion and syntax highlighting.
     '';
     homepage = "https://litecli.com";
-    changelog = "https://github.com/dbcli/litecli/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/dbcli/litecli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "litecli";
   };
 })
