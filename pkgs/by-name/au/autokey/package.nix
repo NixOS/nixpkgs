@@ -26,8 +26,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-d1WJLqkdC7QgzuYdnxYhajD3DtCpgceWCAxGrk0KKew=";
   };
 
-  # Tests appear to be broken with import errors within the project structure
-  doCheck = false;
+  postPatch = ''
+    # pyrcc5 embeds resource mtimes; preserve normalized source mtimes for reproducible wheels.
+    substituteInPlace setup.py \
+      --replace-fail "shutil.copy(str(icon), str(target_directory))" \
+        "shutil.copy2(str(icon), str(target_directory))"
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -43,6 +47,22 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = with python3Packages; [
     setuptools
   ];
+
+  nativeCheckInputs = with python3Packages; [
+    pyqt5
+    pyhamcrest
+    pytestCheckHook
+    pytest-cov-stub
+  ];
+
+  disabledTestPaths = [
+    # Runs `git describe` during test collection.
+    "tests/test_common.py"
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   dependencies = with python3Packages; [
     dbus-python
