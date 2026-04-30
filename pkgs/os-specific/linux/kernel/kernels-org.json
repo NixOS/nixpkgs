@@ -25,8 +25,8 @@
         "lts": true
     },
     "6.12": {
-        "version": "6.12.84",
-        "hash": "sha256:1pajzxxp2jpjzjav4inbz58hm4xdacj10fp899wmalqzgcx4cvnm",
+        "version": "6.12.85",
+        "hash": "sha256:1v8a0z6znmr2m26l4744wndaimsh24zz6q4d7m4p8s0ayjcwjnp3",
         "lts": true
     },
     "6.18": {
