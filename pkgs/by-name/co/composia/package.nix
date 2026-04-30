@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "composia";
   version = "0.1.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromForgejo {
     domain = "forgejo.alexma.top";
     owner = "alexma233";
@@ -18,11 +20,7 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-LIts6L6jl2ZmHvOBboB9eBIf3VWraaVMca7/s7h65bU=";
 
-  subPackages = [
-    "cmd/composia"
-    "cmd/composia-controller"
-    "cmd/composia-agent"
-  ];
+  subPackages = "cmd/composia cmd/composia-controller cmd/composia-agent";
 
   ldflags = [
     "-s"
