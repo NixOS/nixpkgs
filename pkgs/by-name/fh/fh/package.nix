@@ -37,10 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd fh \
-      --bash <($out/bin/fh completion bash) \
-      --fish <($out/bin/fh completion fish) \
-      --zsh <($out/bin/fh completion zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd fh --"$shell" <("$out/bin/fh" completion "$shell")
+    done
   '';
 
   __darwinAllowLocalNetworking = true;
@@ -48,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
-    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "fh";

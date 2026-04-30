@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.16.6";
+  version = "2.16.7";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "astro";
     tag = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-xuAkfTVF+do7Tmk6LUOFkS7yunhVRkl+ZGpsOC7Ob4M=";
+    hash = "sha256-0UkbHGOvMJxY4RXVLx9T8oh2cnuwziEuwUfFrls4Wc0=";
   };
 
   # https://pnpm.io/filtering#--filter-package_name-1
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-+5S/VuZjP6LoWUPKF1NMhw317AFAJUgaY7/Tq0ZKouw=";
+    hash = "sha256-DFoIq5+cKqnmWLJ6CHhfdQEAGjvpu72qb1CSWaExODI=";
   };
 
   nativeBuildInputs = [
