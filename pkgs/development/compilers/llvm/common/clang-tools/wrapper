@@ -1,4 +1,4 @@
-#!/bin/sh
+#! @shell@
 
 buildcpath() {
   local path after
@@ -15,7 +15,7 @@ buildcpath() {
     esac
     shift
   done
-  echo $path${after:+':'}$after
+  printf "%s" "$path${after:+:}$after"
 }
 
 buildcpluspath() {
@@ -33,7 +33,7 @@ buildcpluspath() {
     esac
     shift
   done
-  echo $path${after:+':'}$after
+  printf "%s" "$path${after:+:}$after"
 }
 
 # When user passes `--query-driver`, avoid extending `CPATH` et al, since we
@@ -55,4 +55,4 @@ if [ "$extendcpath" = true ]; then
                                                                                             $(<@clang@/nix-support/libc-cflags))
 fi
 
-@out@/bin/$(basename $0)-unwrapped "$@"
+exec @prog@ "$@"

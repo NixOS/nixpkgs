@@ -556,6 +556,14 @@ stdenvNoCC.mkDerivation {
     fi
   ''
 
+  # This is used by C++20 modules support in cmake.
+  + optionalString isClang ''
+    if [ -e $ccPath/clang-scan-deps${exeSuffix} ]; then
+      export clang="$out"
+      wrap ${targetPrefix}clang-scan-deps ${../../development/compilers/llvm/common/clang-tools/wrapper} $ccPath/clang-scan-deps${exeSuffix}
+    fi
+  ''
+
   # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
   + optionalString cc.langAda or false ''
     for cmd in gnatbind gnatchop gnatclean gnatlink gnatls gnatmake; do
