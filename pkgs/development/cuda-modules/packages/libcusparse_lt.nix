@@ -30,7 +30,7 @@ buildRedist (finalAttrs: {
       least one operand is a structured sparse matrix with 50% sparsity ratio.
     '';
     homepage = "https://developer.nvidia.com/cusparselt-downloads";
-    changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes";
+    changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes/";
 
     maintainers = [ lib.maintainers.sepiabrown ];
     license = _cuda.lib.licenses.cusparse_lt;
