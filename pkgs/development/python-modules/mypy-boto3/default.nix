@@ -918,8 +918,8 @@ in
       "sha256-InMFJXbw+lFAqmmjeCs8v1ICBrvnIJb/0xKRla/FVPc=";
 
   mypy-boto3-migrationhuborchestrator =
-    buildMypyBoto3Package "migrationhuborchestrator" "1.42.3"
-      "sha256-d42VxAv6JSb35fAax31Sk5qsINDFqMWcvh0KQt1GmZQ=";
+    buildMypyBoto3Package "migrationhuborchestrator" "1.43.0"
+      "sha256-Qzuv+hkKiTS26EfgCkzV9FSgL1LCYhsT5nx1xdAQG64=";
 
   mypy-boto3-migrationhubstrategy =
     buildMypyBoto3Package "migrationhubstrategy" "1.42.3"
