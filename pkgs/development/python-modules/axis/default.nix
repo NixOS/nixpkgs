@@ -13,7 +13,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "axis";
   version = "69";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "axis";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-igeDyGKG235ooe/QrHjbya9WTCzwC8GfMoCwtpaBlR8=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for communicating with devices from Axis Communications";
     homepage = "https://github.com/Kane610/axis";
-    changelog = "https://github.com/Kane610/axis/releases/tag/v${version}";
+    changelog = "https://github.com/Kane610/axis/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "axis";
   };
-}
+})
