@@ -43,6 +43,10 @@ in
       allowedUDPPorts = [ cfg.udpPort ];
     };
 
+    boot.kernel.sysctl = {
+      "net.ipv4.conf.all.src_valid_mark" = 1;
+    };
+
     systemd.tmpfiles.rules = [
       "d ${cfg.rootDir}    - root root"
       "z ${cfg.rootDir}    - root root"
