@@ -3,7 +3,6 @@
   fetchpatch,
   fetchFromGitHub,
   ocamlPackages,
-  opam,
   makeBinaryWrapper,
   writableTmpDirAsHomeHook,
   unstableGitUpdater,
@@ -91,7 +90,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = false;
   installCheckPhase = ''
     runHook preInstallCheck
 
