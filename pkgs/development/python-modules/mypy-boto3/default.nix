@@ -255,8 +255,8 @@ in
       "sha256-PVskBSuwqSfNybHDtLLfVpDG0dwR/Q1LhrHz1imsR8A=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.42.95"
-      "sha256-vSHJoPnQi2X2pbQ51SrNN7pxEmBG5V63tp4M1fdLVdM=";
+    buildMypyBoto3Package "cloudwatch" "1.43.0"
+      "sha256-jVUV51R8Yc8QyvjijYo1uyRPgTBpyZfsVVg7/og9f/A=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.42.3"
