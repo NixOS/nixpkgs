@@ -309,7 +309,11 @@ let
                     "echo 'Could not get IPv4 address for ${name}!' >&2; "
                     "exit 1"
                 )
-            ).strip()
+            )
+
+            ip = ip + '\n'
+            ip = ip[:ip.find('\n')]
+
             return ip
 
 
