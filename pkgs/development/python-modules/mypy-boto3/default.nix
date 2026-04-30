@@ -674,8 +674,8 @@ in
       "sha256-LTEwiPO3NwdWlo4X0JJxjsQ95xpvpqPb6Wb28CR6ZOk=";
 
   mypy-boto3-iotsecuretunneling =
-    buildMypyBoto3Package "iotsecuretunneling" "1.42.3"
-      "sha256-fFaYE0C7np/DqrRPbqGYNw/dYNkyPot/iF+OufT49Q0=";
+    buildMypyBoto3Package "iotsecuretunneling" "1.43.0"
+      "sha256-han7AMRHtSLHVlPIBwAS2nGanHHiPTov2n/ayLZmC6c=";
 
   mypy-boto3-iotsitewise =
     buildMypyBoto3Package "iotsitewise" "1.42.3"
