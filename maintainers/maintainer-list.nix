@@ -12419,6 +12419,13 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jelni = {
+    email = "nixpkgs@jel.gay";
+    github = "jelni";
+    githubId = 25802745;
+    matrix = "@me:jel.gay";
+    name = "jel";
+  };
   jemand771 = {
     email = "willy@jemand771.net";
     github = "jemand771";
