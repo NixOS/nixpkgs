@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
-    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "fh";
