@@ -12,7 +12,7 @@ buildNpmPackage rec {
   version = "1.3.18";
 
   src = fetchFromGitHub {
-    owner = "executablebooks";
+    owner = "jupyter-book";
     repo = "mystmd";
     rev = "mystmd@${version}";
     hash = "sha256-20Cxs4ib7xRn4UC9ShiQ+KnyrTCmW/vII7QN9BObY78=";
@@ -40,8 +40,8 @@ buildNpmPackage rec {
 
   meta = {
     description = "Command line tools for working with MyST Markdown";
-    homepage = "https://github.com/executablebooks/mystmd";
-    changelog = "https://github.com/executablebooks/mystmd/blob/${src.rev}/packages/myst-cli/CHANGELOG.md";
+    homepage = "https://github.com/jupyter-book/mystmd";
+    changelog = "https://github.com/jupyter-book/mystmd/blob/${src.rev}/packages/myst-cli/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "myst";
