@@ -802,8 +802,8 @@ in
       "sha256-HA4SqeZxi+iSD/WcokROHaCQEUGAQhEG9FghFEdUWhY=";
 
   mypy-boto3-location =
-    buildMypyBoto3Package "location" "1.42.92"
-      "sha256-UBSxl5YmYh3m4gl4iKdDU2McetKuDcLkiR73Yvf0AQQ=";
+    buildMypyBoto3Package "location" "1.43.0"
+      "sha256-EunrKwNaYp0CDiwp8frI7zASilMF4wYHjDSuCsJ6aJM=";
 
   mypy-boto3-logs =
     buildMypyBoto3Package "logs" "1.42.97"
