@@ -8,6 +8,7 @@
   openssl,
   postgresql,
   postgresqlTestHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -82,6 +83,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     withCheck = finalAttrs.finalPackage.overrideAttrs {
       doCheck = true;
     };
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=martin-v(.*)"
+      "--subpackage=webui"
+    ];
   };
 
   meta = {
