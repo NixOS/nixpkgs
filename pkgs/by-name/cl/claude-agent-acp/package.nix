@@ -2,20 +2,29 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  makeWrapper,
+  claude-code,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "claude-agent-acp";
-  version = "0.21.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "claude-agent-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6c6bHuso3diW5ZfHiM2xcxGDTNG0LIL0TZd0MFVpW/E=";
+    hash = "sha256-egYGwkN8iexw42EIhUgKb+QuAKfH4lKts0lftzfHAiY=";
   };
 
-  npmDepsHash = "sha256-UtiIcjgNCYMFrRpO5AlUbOyutJ3ipwIbcpMi2BqawEk=";
+  npmDepsHash = "sha256-sUB/S3EycM3FGibAaZMA1T7tCyDu2XfkSg86qcABmYk=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/claude-agent-acp \
+      --prefix CLAUDE_CODE_EXECUTABLE ${lib.getExe claude-code}
+  '';
 
   meta = {
     description = "ACP-compatible coding agent powered by the Claude Agent SDK";
