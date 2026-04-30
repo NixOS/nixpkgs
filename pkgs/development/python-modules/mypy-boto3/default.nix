@@ -539,8 +539,8 @@ in
       "sha256-r/8/UTc1qhymzpKf/F3hXQlA2tMZBwd4JmqCio6cFdc=";
 
   mypy-boto3-fms =
-    buildMypyBoto3Package "fms" "1.42.3"
-      "sha256-0h6KDGLtMUvl9VN+TIElcnxf+T85MPPwWhYKlIZ90uY=";
+    buildMypyBoto3Package "fms" "1.43.0"
+      "sha256-+MaSBJxS/iQ/6veTEuSoJY5vaSDAaXsaJwMyW00wqUA=";
 
   mypy-boto3-forecast =
     buildMypyBoto3Package "forecast" "1.42.3"
