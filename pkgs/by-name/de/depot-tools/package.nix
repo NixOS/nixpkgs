@@ -33,6 +33,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postPatch = ''
     substituteInPlace gerrit_util.py \
       --replace-fail "import httplib2.socks" "httplib2.socks = None" \
