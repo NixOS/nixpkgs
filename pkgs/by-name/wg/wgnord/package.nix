@@ -1,5 +1,4 @@
 {
-  bash,
   coreutils,
   curl,
   fetchFromGitHub,
@@ -8,11 +7,12 @@
   iproute2,
   jq,
   lib,
-  resholve,
+  makeWrapper,
+  stdenvNoCC,
   wireguard-tools,
 }:
 
-resholve.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "wgnord";
   version = "0.2.1";
 
@@ -23,38 +23,38 @@ resholve.mkDerivation rec {
     hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postPatch = ''
     substituteInPlace wgnord \
-      --replace '$conf_dir/countries.txt' "$out/share/countries.txt" \
-      --replace '$conf_dir/countries_iso31662.txt' "$out/share/countries_iso31662.txt"
+      --replace-fail '$conf_dir/countries.txt' "$out/share/countries.txt" \
+      --replace-fail '$conf_dir/countries_iso31662.txt' "$out/share/countries_iso31662.txt"
   '';
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -Dm 755 wgnord -t $out/bin/
     install -Dm 644 countries.txt -t $out/share/
     install -Dm 644 countries_iso31662.txt -t $out/share/
+    runHook postInstall
   '';
 
-  solutions.default = {
-    scripts = [ "bin/wgnord" ];
-    interpreter = "${bash}/bin/sh";
-    inputs = [
-      coreutils
-      curl
-      gnugrep
-      gnused
-      iproute2
-      jq
-      wireguard-tools
-    ];
-    fix.aliases = true; # curl command in an alias
-    execer = [
-      "cannot:${iproute2}/bin/ip"
-      "cannot:${wireguard-tools}/bin/wg-quick"
-    ];
-  };
+  postFixup = ''
+    wrapProgram $out/bin/wgnord \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          curl
+          gnugrep
+          gnused
+          iproute2
+          jq
+          wireguard-tools
+        ]
+      }
+  '';
 
   meta = {
     description = "NordVPN Wireguard (NordLynx) client in POSIX shell";
