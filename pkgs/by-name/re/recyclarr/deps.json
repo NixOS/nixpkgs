@@ -11,13 +11,13 @@
   },
   {
     "pname": "Autofac",
-    "version": "9.0.0",
-    "hash": "sha256-9H9NGKwigUQ0x2pbCM3cgJXJsbZVzY7BvQRfa5sSi5g="
+    "version": "9.1.0",
+    "hash": "sha256-TygJLo8rvWC/KCExg+Hy3eYc0sP+AdhpdlU6fOj11f0="
   },
   {
     "pname": "Autofac.Extensions.DependencyInjection",
-    "version": "10.0.0",
-    "hash": "sha256-ACQwFG8a5LMoqGyHI/YpwVyXZQYqM5+wnk0q2BbGVZ4="
+    "version": "11.0.0",
+    "hash": "sha256-GjvG67HWkyam/GWtdU4Wh3pXY1cJ1i3loPVG9lga7vk="
   },
   {
     "pname": "Autofac.Extras.AggregateService",
@@ -76,13 +76,13 @@
   },
   {
     "pname": "CliWrap",
-    "version": "3.10.0",
-    "hash": "sha256-XMGTr0gkZxSOC72hrCjpIChpN0c0A19X3TqOAdBtgb4="
+    "version": "3.10.1",
+    "hash": "sha256-uH4SXiMkUIPw5RRyKtDTTCSkkr3BhBAPrxnC4O4ES4c="
   },
   {
     "pname": "coverlet.collector",
-    "version": "8.0.0",
-    "hash": "sha256-Gwqyodb0UVbrnV5GlEiTyKYSDqhRHjN9/UZBwkh4vnM="
+    "version": "10.0.0",
+    "hash": "sha256-0cU5wHZfwQFJFXugC19kiRo9XU1jV4ApbDKuRaL72Vc="
   },
   {
     "pname": "Docker.DotNet.Enhanced",
@@ -106,8 +106,8 @@
   },
   {
     "pname": "GitVersion.MsBuild",
-    "version": "6.6.0",
-    "hash": "sha256-LCaB96Y73kAb36XHXZFYeMRtVOpEZ3Q/OWon9hHgr4k="
+    "version": "6.7.0",
+    "hash": "sha256-yUiPTONPgRdES6Bt6VYdGSj9exT6744Za7QeF4v0jW8="
   },
   {
     "pname": "JetBrains.Annotations",
@@ -121,38 +121,38 @@
   },
   {
     "pname": "Microsoft.CodeCoverage",
-    "version": "18.3.0",
-    "hash": "sha256-fqKglbYvEb/77+rmUvLyLZSwROM1P9OW03Ub307WYZ8="
+    "version": "18.4.0",
+    "hash": "sha256-px8qchiuY5rkujAZ1wGEjuuhZdZmsRSp+FCiTmRUA1A="
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
-    "version": "10.0.5",
-    "hash": "sha256-6rOmJD7Jzq5MPLDd1aV+7gCQwIM9j4c+iT1pGea/daI="
+    "version": "10.0.6",
+    "hash": "sha256-CSd5RC5pMsmglpnE6Vm3JabMnbmziqtUGrZE5Rg7uF4="
   },
   {
     "pname": "Microsoft.Extensions.Configuration.Abstractions",
-    "version": "10.0.5",
-    "hash": "sha256-DNK+lL2jeHFYyd43zfgVY32UskEfQ4YsTapztuQbYwo="
+    "version": "10.0.6",
+    "hash": "sha256-jxtne26QF7bASCRmLNwYsKruY3QhsnuzN9Us11WUdSQ="
   },
   {
     "pname": "Microsoft.Extensions.Configuration.Binder",
-    "version": "10.0.5",
-    "hash": "sha256-cVG2NEW1rgLfeq/Gnh/XXqzDx2Tt8ecvgCAB4uFzcQo="
+    "version": "10.0.6",
+    "hash": "sha256-34blBlrQ3FRS7iCS7/gxPZMa9xgDW0p3iEERqwgXFMA="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection",
-    "version": "10.0.5",
-    "hash": "sha256-ofDRirUV9XLSz4oksCqErwBJFtAieHACFfyZukHKFng="
+    "version": "10.0.6",
+    "hash": "sha256-K3ODZC+Bwd3Tze5wF7BQvJJGlNObdf2PNA35F41jHTE="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "10.0.5",
-    "hash": "sha256-KrP+hE3gk7pATbJYZsJ1LHiXjzLA+ntHW7G/VGgHk2g="
+    "version": "10.0.4",
+    "hash": "sha256-0QhVYjk9Cxy6NFef9VKftGmscTZnvcD1bhBQoXz3mwA="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "8.0.1",
-    "hash": "sha256-lzTYLpRDAi3wW9uRrkTNJtMmaYdtGJJHdBLbUKu60PM="
+    "version": "10.0.6",
+    "hash": "sha256-lFiZb81kfBJK7J0b0A2UIpydPRT73Xcs57Gzf/+1xXc="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
@@ -160,29 +160,34 @@
     "hash": "sha256-UfLfEQAkXxDaVPC7foE/J3FVEXd31Pu6uQIhTic3JgY="
   },
   {
+    "pname": "Microsoft.Extensions.DependencyModel",
+    "version": "8.0.2",
+    "hash": "sha256-PyuO/MyCR9JtYqpA1l/nXGh+WLKCq34QuAXN9qNza9Q="
+  },
+  {
     "pname": "Microsoft.Extensions.Diagnostics",
-    "version": "10.0.5",
-    "hash": "sha256-LlFT3ZzFH9QfymvP9DY4NteJKTdT+mqSGpzUDpsLNhM="
+    "version": "10.0.6",
+    "hash": "sha256-TGJjvsztoajNzOe0KeuOvtb2ZuNDbjq2NfPs15zo3kA="
   },
   {
     "pname": "Microsoft.Extensions.Diagnostics.Abstractions",
-    "version": "10.0.5",
-    "hash": "sha256-pwQltVfaqx0jRpO0d9k/dYtyOpnGixK2MB3aHVVbo0E="
+    "version": "10.0.6",
+    "hash": "sha256-9AbUvHuHhDPjtf6vsci2r6VfSg0BlmkJkMYmIqAQ2QA="
   },
   {
     "pname": "Microsoft.Extensions.Http",
-    "version": "10.0.5",
-    "hash": "sha256-72/sp94yZdM9dX870eibFuUc4Tvyp0tgc4/SanMAqDw="
+    "version": "10.0.6",
+    "hash": "sha256-3REMteQjA7j5LDJ7wDnlWkJlVHHXx0+dgbiVlZQAi/c="
   },
   {
     "pname": "Microsoft.Extensions.Logging",
-    "version": "10.0.5",
-    "hash": "sha256-4gVrKZfo/YHZKgKNsgGZZYqa79XWK9wDUuiVfguUV6U="
+    "version": "10.0.6",
+    "hash": "sha256-tskLj/WXLK35gkuJAWaAhPjMW92N1JKOTzTLupR30pE="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
-    "version": "10.0.5",
-    "hash": "sha256-e3A/l+II+n+D7/OPwjdyQM1IBtKHfHeIdlkJmuRw77w="
+    "version": "10.0.6",
+    "hash": "sha256-4ijpXt4PoTNcmF5dl/rEZkRWBAjukB229lXtBtJhxn4="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
@@ -191,23 +196,23 @@
   },
   {
     "pname": "Microsoft.Extensions.Options",
-    "version": "10.0.5",
-    "hash": "sha256-nw+m6VWXjmaBqZ1aH/l9SR9Oy62N9dmiMKloJ78kxv8="
+    "version": "10.0.6",
+    "hash": "sha256-GJCULaUcN2FxCA9fKOLe5EDEtkKLrEuP2Kw0jRqospA="
   },
   {
     "pname": "Microsoft.Extensions.Options.ConfigurationExtensions",
-    "version": "10.0.5",
-    "hash": "sha256-VQPPvrvYWY/QpmilerCyTNLVejWeBE9mHtGTMOxXUlg="
+    "version": "10.0.6",
+    "hash": "sha256-T0HNAYrIsm1xzfBD1qLqziI5qwSsGXGmXSDdOgpC5s0="
   },
   {
     "pname": "Microsoft.Extensions.Primitives",
-    "version": "10.0.5",
-    "hash": "sha256-uvrur+0dg4zAAQcpLkkhPA77ST0tA3+EpGdDlCckC+E="
+    "version": "10.0.6",
+    "hash": "sha256-/iSFDryQIl8rl+TtrzunT5LcbPsQCeC2V+9CnS1P4Cc="
   },
   {
     "pname": "Microsoft.NET.Test.Sdk",
-    "version": "18.3.0",
-    "hash": "sha256-o2bILLF5i+XUoi8xZYgolU3CxLTdql5R/tEVWVnKFPU="
+    "version": "18.4.0",
+    "hash": "sha256-ak/emX4C4KQVzc0bSNK4bChS+dvb3FvxZbJNrmf/2+w="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
@@ -216,33 +221,28 @@
   },
   {
     "pname": "Microsoft.Testing.Extensions.Telemetry",
-    "version": "2.0.2",
-    "hash": "sha256-8f23W3125L2ZAExRVwvXSft3a93k+pSb/0CZV0HlFi4="
+    "version": "2.1.0",
+    "hash": "sha256-SawLiz1fB3QbkkyEVloEj8UpQTAIZR7U9FZfqwCkGr0="
   },
   {
     "pname": "Microsoft.Testing.Extensions.TrxReport.Abstractions",
-    "version": "2.0.2",
-    "hash": "sha256-ePhFIkoWZVt79Tkhu62MxYyIheFMBhf1NUbIimZIZ9c="
+    "version": "2.1.0",
+    "hash": "sha256-X54qc4Ey+3hm0e5eCY1R2me8b4zGrWzjesm9fGJWXys="
   },
   {
     "pname": "Microsoft.Testing.Extensions.VSTestBridge",
-    "version": "2.0.2",
-    "hash": "sha256-odn6fZO7yaPs3EaEUr12GraVH5anp0r/BabJpJl8q/c="
+    "version": "2.1.0",
+    "hash": "sha256-2m14uEmuEELn4Ci/CZNpKjhlnzq9vYvhgeiM03DZj7A="
   },
   {
     "pname": "Microsoft.Testing.Platform",
-    "version": "2.0.2",
-    "hash": "sha256-K8B4tQaYslm+njUQ59nyvh4f4UgrbOo6DQgO9Hwt0aY="
+    "version": "2.1.0",
+    "hash": "sha256-CbR0j0Dh65cMccO7L6ppx4b5iiXjqxjjfC9A85HeLuM="
   },
   {
     "pname": "Microsoft.Testing.Platform.MSBuild",
-    "version": "2.0.2",
-    "hash": "sha256-RbL2Ie/sQx07hffiao8ScR+yMyYqI8astlC0/uf3bzM="
-  },
-  {
-    "pname": "Microsoft.TestPlatform.AdapterUtilities",
-    "version": "18.0.1",
-    "hash": "sha256-LE5xsyc75ERflV/EA4A4DV+ja2LAb0KR/DPinAG+AgI="
+    "version": "2.1.0",
+    "hash": "sha256-6T2tBSokr5/oiwqKASk18BieKqkIzDbYX32j1Hl1z1g="
   },
   {
     "pname": "Microsoft.TestPlatform.ObjectModel",
@@ -251,13 +251,13 @@
   },
   {
     "pname": "Microsoft.TestPlatform.ObjectModel",
-    "version": "18.3.0",
-    "hash": "sha256-3Y3OxAQsXl6sunQlSjfq31aLWykHQTj2o/TOVI/uy88="
+    "version": "18.4.0",
+    "hash": "sha256-ERL2goDaM0vUElW25DM/5lI2WplE5E6g9mhTegY0bC8="
   },
   {
     "pname": "Microsoft.TestPlatform.TestHost",
-    "version": "18.3.0",
-    "hash": "sha256-OkR+XvipAHPQbHywTwN8lVcMpyRs2MUJKCxJ5OfKAFk="
+    "version": "18.4.0",
+    "hash": "sha256-S4T/6xHvov8jDcbcuZAOoutMAEudUb3dMP7MyxVa8Fo="
   },
   {
     "pname": "NETStandard.Library",
@@ -291,23 +291,23 @@
   },
   {
     "pname": "NUnit3TestAdapter",
-    "version": "6.1.0",
-    "hash": "sha256-ApKCpMldOi4NIHU+1FedlqvpkLmgIs1hnBSy02tzv5s="
+    "version": "6.2.0",
+    "hash": "sha256-sKQjvF/qlEgfrCKHt1OzT+QZdtPt4RBBZd2f0oD1ldg="
   },
   {
     "pname": "ReferenceTrimmer",
-    "version": "3.4.5",
-    "hash": "sha256-GS6njxeBRH0avSmrFjuEw2tNPWg8Sa/P6BplHsjmFNI="
+    "version": "3.4.7",
+    "hash": "sha256-LgRvN1CYOZGj9Cx5SrOghx3KTJVPZZ22T8EgyKMyDJc="
   },
   {
     "pname": "Refit",
-    "version": "10.0.1",
-    "hash": "sha256-oS6MCd4cvhXlJCKMy6Dlr9gjxx0VUGaXG/reKrxKK7M="
+    "version": "10.1.6",
+    "hash": "sha256-KC0PVsbqx5RHZxItYgJaBeUQBlPLQbTx643BzEhXIc0="
   },
   {
     "pname": "Refit.HttpClientFactory",
-    "version": "10.0.1",
-    "hash": "sha256-xn7mqLxfVpTq8EmDiKvbj/zGWupw/SabxQMmJRKOY9U="
+    "version": "10.1.6",
+    "hash": "sha256-/fkHB7cFXIRVUDnznQVJBgpwLS8KdhtiASF78xp4C8Q="
   },
   {
     "pname": "Refitter.MSBuild",
@@ -351,13 +351,8 @@
   },
   {
     "pname": "Spectre.Console",
-    "version": "0.53.1",
-    "hash": "sha256-uj/DD9y9MFWh5ugfQ1nTpbDP5xj55Sa8KX06B8CluMc="
-  },
-  {
-    "pname": "Spectre.Console",
-    "version": "0.54.0",
-    "hash": "sha256-qlZQkT5KzACqJ1bLgBOylq9qO0L7XCh/RY8L8PnkpcU="
+    "version": "0.55.0",
+    "hash": "sha256-YPW3qtPFW2Hud+y6vmZidrD8a42oDJefPW8MIwdb4rs="
   },
   {
     "pname": "Spectre.Console.Analyzer",
@@ -365,14 +360,19 @@
     "hash": "sha256-Om2PRAfm4LoPImty4zpGo/uoqha6ZnuCU6iNcAvKiUE="
   },
   {
+    "pname": "Spectre.Console.Ansi",
+    "version": "0.55.0",
+    "hash": "sha256-6nV1xQurUlpKCPVkbBcn0YLTaF3vvFFRoCjV+NjYox8="
+  },
+  {
     "pname": "Spectre.Console.Cli",
-    "version": "0.53.1",
-    "hash": "sha256-WN79g+F9jRsqXAwVFLYS/lfaQish2yFwL40GB/PpdTo="
+    "version": "0.55.0",
+    "hash": "sha256-VJvGl38caKtrLqc1P8HMG8T2Ny2OgEumZzqk2rUcJNw="
   },
   {
     "pname": "Spectre.Console.Testing",
-    "version": "0.54.0",
-    "hash": "sha256-0ENVkihGqT1bS1ulKQ6Legnko56fSeY6c5C1ZU6OA6k="
+    "version": "0.55.0",
+    "hash": "sha256-Rgro4QZBqQiKHB6LP3H2nII2Tp2Lpp+wNMFoQwQCv+E="
   },
   {
     "pname": "SSH.NET",
@@ -426,8 +426,8 @@
   },
   {
     "pname": "TestableIO.System.IO.Abstractions",
-    "version": "22.1.0",
-    "hash": "sha256-C+zj0Xiv/wMSIqGMFSxQ06QePt7PChP1yl3EfHUAggU="
+    "version": "22.1.1",
+    "hash": "sha256-nBLPa/4R7gHmKltK260ZX6e+aOLlVkw5+2kuhraF2ec="
   },
   {
     "pname": "TestableIO.System.IO.Abstractions.Extensions",
@@ -436,27 +436,27 @@
   },
   {
     "pname": "TestableIO.System.IO.Abstractions.TestingHelpers",
-    "version": "22.1.0",
-    "hash": "sha256-49BRx8rx+4k8tdX+O3KOdi2NJF6uC9fVtnjnhcezK54="
+    "version": "22.1.1",
+    "hash": "sha256-tCAMji9DqF+kbA+ArJn6Lsux2bpvQwBI+d2MvzNVQn4="
   },
   {
     "pname": "TestableIO.System.IO.Abstractions.Wrappers",
-    "version": "22.1.0",
-    "hash": "sha256-lT9YUMBZ2YRP4DSajhzACDJVlR0jm8hdZnGncXbhLxA="
+    "version": "22.1.1",
+    "hash": "sha256-1dLAGZ6XaKlxWsYljNgEsQXG8ET4mubrYxLBNpdee6I="
   },
   {
     "pname": "Testably.Abstractions.FileSystem.Interface",
-    "version": "10.0.0",
-    "hash": "sha256-xEDpDTiT1lBFJHoWfJ9htPlwi5nrL5J/QJVj/9Slu48="
+    "version": "10.1.0",
+    "hash": "sha256-zS5HAJ+iZbjsiiqPE0+M+0PMGxOH1Bsmm3vdNSKoYPU="
   },
   {
     "pname": "Testcontainers",
-    "version": "4.10.0",
-    "hash": "sha256-9FZz37LV8arTeK3C5SLcg0SjCczXdY1nPbfKsxZMQl4="
+    "version": "4.11.0",
+    "hash": "sha256-SbrnISUOL0sQntC/z9/jOutewfLHQVT6vqjl2MfIjmw="
   },
   {
     "pname": "YamlDotNet",
-    "version": "16.3.0",
-    "hash": "sha256-4Gi8wSQ8Rsi/3+LyegJr//A83nxn2fN8LN1wvSSp39Q="
+    "version": "17.0.1",
+    "hash": "sha256-z23qb/L7DcjLgVsvROjyD7gr342u3QKjcPA2mZ0xz2g="
   }
 ]
