@@ -614,8 +614,8 @@ in
       "sha256-HHmkU/o6zilpJMmpvE6hWmHw9hf2dJFFctNUjsjbGcA=";
 
   mypy-boto3-importexport =
-    buildMypyBoto3Package "importexport" "1.42.3"
-      "sha256-Wu7msQDFRWieeKOSI4IqCovlny14zFPr/5UKvGEw9GU=";
+    buildMypyBoto3Package "importexport" "1.43.0"
+      "sha256-UPfzmcKh+ZgETuak1eYRQEyKke20BW5q0Os62mj5D+E=";
 
   mypy-boto3-inspector =
     buildMypyBoto3Package "inspector" "1.42.3"
