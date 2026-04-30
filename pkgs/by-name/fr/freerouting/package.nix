@@ -74,7 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
       Freerouting is an advanced autorouter for all PCB programs that support
       the standard Specctra or Electra DSN interface. '';
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ srounce ];
+    maintainers = with lib.maintainers; [
+      srounce
+      Misaka13514
+    ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "freerouting";
   };
