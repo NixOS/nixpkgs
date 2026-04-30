@@ -9,6 +9,8 @@
 }:
 
 stdenv.mkDerivation {
+  __structuredAttrs = true;
+
   pname = "libchdr";
   version = "0-unstable-2025-12-27";
 
