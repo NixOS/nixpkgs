@@ -1020,6 +1020,7 @@ mapAliases {
   kgx = throw "'kgx' has been renamed to/replaced by 'gnome-console'"; # Converted to throw 2025-10-27
   khd = throw "'khd' has been removed as it has been pulled upstream"; # Added 2025-12-18
   khoj = throw "khoj has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
+  kilocode-cli = warnAlias "'kilocode-cli' has been renamed to/replaced by 'kilocode'" kilocode; # Added 2026-04-30
   kmplayer = throw "'kmplayer' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   knot-resolver = warnAlias "'knot-resolver' is currently aliased to 'knot-resolver_5'. This will change with the knot-resolver 6 being declared as stable. Please explicitly use the 'knot-resolver_5' or 'knot-resolver_6' package until then." knot-resolver_5; # Added 2025-11-30
   kodiGBM = throw "'kodiGBM' has been renamed to/replaced by 'kodi-gbm'"; # Converted to throw 2025-10-27
