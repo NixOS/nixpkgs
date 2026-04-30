@@ -934,8 +934,8 @@ in
       "sha256-Igsngmg9PeJcyqX/Ih+fgzUuBotaf+2UWHK9RKEePL4=";
 
   mypy-boto3-mwaa =
-    buildMypyBoto3Package "mwaa" "1.42.3"
-      "sha256-BkxJ1ilQTVsOqdq63kNtKyKqxrKrEXUkg3v6EN73HR8=";
+    buildMypyBoto3Package "mwaa" "1.43.0"
+      "sha256-w9AGeJrbRrTD31ANqKy6+MIQKenn05akYLfsXfnOw+w=";
 
   mypy-boto3-neptune =
     buildMypyBoto3Package "neptune" "1.42.91"
