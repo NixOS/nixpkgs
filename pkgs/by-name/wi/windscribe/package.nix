@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
   pname = "windscribe";
   version = "2.21.7";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://github.com/Windscribe/Desktop-App/releases/download/v${version}/windscribe_${version}_amd64.deb";
     hash = "sha256-ADzN5RH3hLcgvOW5Ix0n44cIslezrM9s1z8uum/Qd1c=";
