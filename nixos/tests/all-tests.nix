@@ -1141,6 +1141,7 @@ in
     pkgs.callPackage ../../pkgs/stdenv/generic/check-meta-test.nix
       { };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
+  nmtrust = runTest ./nmtrust.nix;
   node-red = runTest ./node-red.nix;
   nohang = runTest ./nohang.nix;
   nomad = runTest ./nomad.nix;
