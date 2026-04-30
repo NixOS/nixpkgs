@@ -1,5 +1,7 @@
 {
   lib,
+  pkgs,
+  nixosTests,
   fetchFromGitHub,
   rustPlatform,
   stdenv,
@@ -99,6 +101,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
+    tests = nixosTests.autopush-rs;
+    services.autoconnect = {
+      imports = [
+        (lib.modules.importApply ./service-autoconnect.nix { inherit pkgs; })
+      ];
+      package = finalAttrs.finalPackage.out;
+    };
+    services.autoendpoint = {
+      imports = [
+        (lib.modules.importApply ./service-autoendpoint.nix { inherit pkgs; })
+      ];
+      package = finalAttrs.finalPackage.out;
+    };
+
     updateScript = nix-update-script { };
   };
 
