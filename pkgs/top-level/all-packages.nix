@@ -4343,78 +4343,52 @@ with pkgs;
       llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
 
       llvmPackages_18 = llvmPackagesSet."18";
-      clang_18 = llvmPackages_18.clang;
-      lld_18 = llvmPackages_18.lld;
-      lldb_18 = llvmPackages_18.lldb;
-      llvm_18 = llvmPackages_18.llvm;
-
       llvmPackages_19 = llvmPackagesSet."19";
-      clang_19 = llvmPackages_19.clang;
-      lld_19 = llvmPackages_19.lld;
-      lldb_19 = llvmPackages_19.lldb;
-      llvm_19 = llvmPackages_19.llvm;
-      bolt_19 = llvmPackages_19.bolt;
-
       llvmPackages_20 = llvmPackagesSet."20";
-      clang_20 = llvmPackages_20.clang;
-      lld_20 = llvmPackages_20.lld;
-      lldb_20 = llvmPackages_20.lldb;
-      llvm_20 = llvmPackages_20.llvm;
-      bolt_20 = llvmPackages_20.bolt;
-      flang_20 = llvmPackages_20.flang;
-
       llvmPackages_21 = llvmPackagesSet."21";
-      clang_21 = llvmPackages_21.clang;
-      lld_21 = llvmPackages_21.lld;
-      lldb_21 = llvmPackages_21.lldb;
-      llvm_21 = llvmPackages_21.llvm;
-      bolt_21 = llvmPackages_21.bolt;
-      flang_21 = llvmPackages_21.flang;
-
       llvmPackages_22 = llvmPackagesSet."22";
-      clang_22 = llvmPackages_22.clang;
-      lld_22 = llvmPackages_22.lld;
-      lldb_22 = llvmPackages_22.lldb;
-      llvm_22 = llvmPackages_22.llvm;
-      bolt_22 = llvmPackages_22.bolt;
-      flang_22 = llvmPackages_22.flang;
 
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
     llvmPackages_18
-    clang_18
-    lld_18
-    lldb_18
-    llvm_18
     llvmPackages_19
-    clang_19
-    lld_19
-    lldb_19
-    llvm_19
-    bolt_19
     llvmPackages_20
-    clang_20
-    lld_20
-    lldb_20
-    llvm_20
-    bolt_20
-    flang_20
     llvmPackages_21
-    clang_21
-    lld_21
-    lldb_21
-    llvm_21
-    bolt_21
-    flang_21
     llvmPackages_22
-    clang_22
-    lld_22
-    lldb_22
-    llvm_22
-    bolt_22
-    flang_22
     mkLLVMPackages
     ;
+
+  clang_18 = llvmPackages_18.clang;
+  lld_18 = llvmPackages_18.lld;
+  lldb_18 = llvmPackages_18.lldb;
+  llvm_18 = llvmPackages_18.llvm;
+
+  clang_19 = llvmPackages_19.clang;
+  lld_19 = llvmPackages_19.lld;
+  lldb_19 = llvmPackages_19.lldb;
+  llvm_19 = llvmPackages_19.llvm;
+  bolt_19 = llvmPackages_19.bolt;
+
+  clang_20 = llvmPackages_20.clang;
+  lld_20 = llvmPackages_20.lld;
+  lldb_20 = llvmPackages_20.lldb;
+  llvm_20 = llvmPackages_20.llvm;
+  bolt_20 = llvmPackages_20.bolt;
+  flang_20 = llvmPackages_20.flang;
+
+  clang_21 = llvmPackages_21.clang;
+  lld_21 = llvmPackages_21.lld;
+  lldb_21 = llvmPackages_21.lldb;
+  llvm_21 = llvmPackages_21.llvm;
+  bolt_21 = llvmPackages_21.bolt;
+  flang_21 = llvmPackages_21.flang;
+
+  clang_22 = llvmPackages_22.clang;
+  lld_22 = llvmPackages_22.lld;
+  lldb_22 = llvmPackages_22.lldb;
+  llvm_22 = llvmPackages_22.llvm;
+  bolt_22 = llvmPackages_22.bolt;
+  flang_22 = llvmPackages_22.flang;
 
   mitschemeX11 = mitscheme.override {
     enableX11 = true;
