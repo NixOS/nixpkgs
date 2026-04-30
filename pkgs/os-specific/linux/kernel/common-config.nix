@@ -849,6 +849,13 @@ let
       CRYPTO_DRBG_HASH = yes;
       CRYPTO_DRBG_CTR = yes;
 
+      # Deprecated because it has a large attack surface and seen as a mistake.
+      # https://lore.kernel.org/all/20260430011544.31823-1-ebiggers@kernel.org/
+      # "If you're in charge of the configuration for a Linux kernel, I strongly
+      # recommend disabling all CONFIG_CRYPTO_USER_API_* kconfig options"
+      # https://news.ycombinator.com/item?id=47956312
+      CRYPTO_USER_API = no;
+
       # Enable KFENCE
       # See: https://docs.kernel.org/dev-tools/kfence.html
       KFENCE = whenAtLeast "5.12" yes;
