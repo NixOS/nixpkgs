@@ -92,11 +92,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "a492f5c1bbe877d2f58d4b066d0a1c89ab579b84";
+  rev = "97d05cdf1720586ebfff5d4bc6e15a6a533eb21e";
   # This is the commit number
   # Currently from the branch: https://github.com/JetBrains/jcef/tree/261
   # Run `git rev-list --count HEAD`
-  version = "1131";
+  version = "1156";
 
   nativeBuildInputs = [
     cmake
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-c1gJu6gogALx3viLi9saLvqOn+zS9jCpWizB2g1Xa/g=";
+    hash = "sha256-31WV6vYp0zIf6EkccQTeiggCRtQnDOg8/4J2q6axiGs=";
   };
 
   # Find the hash in tools/buildtools/linux64/clang-format.sha1
