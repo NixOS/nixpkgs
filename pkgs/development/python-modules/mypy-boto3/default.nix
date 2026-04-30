@@ -1214,8 +1214,8 @@ in
       "sha256-CW9tYiy+Um/VTlnt0GhJvo/BSPnJJ5ILEPwMAhraHvY=";
 
   mypy-boto3-secretsmanager =
-    buildMypyBoto3Package "secretsmanager" "1.42.8"
-      "sha256-WrQvNc6TJ2XrsWhBRvR4qHzEuDvvlQ/Rqg4mi4jVnIE=";
+    buildMypyBoto3Package "secretsmanager" "1.43.0"
+      "sha256-Jl7i/d+dPkKuOWhWJft4YaU5EQ2OMkNyhHwOHL1mayA=";
 
   mypy-boto3-securityhub =
     buildMypyBoto3Package "securityhub" "1.42.89"
