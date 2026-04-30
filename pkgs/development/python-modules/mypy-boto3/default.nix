@@ -243,8 +243,8 @@ in
       "sha256-XWNJ5/MQnUSXTAA5Fa6MYxXj/ygw6tVjnTY+Nar8vU8=";
 
   mypy-boto3-cloudsearchdomain =
-    buildMypyBoto3Package "cloudsearchdomain" "1.42.3"
-      "sha256-t3cUQtOO2ZDZsBdcA9XinyF5tZiZVC5fatcbwQlzXAA=";
+    buildMypyBoto3Package "cloudsearchdomain" "1.43.0"
+      "sha256-uyv85XKo/8MreIxPhVtrocfjYaYEoW7ppWT50LA1dv0=";
 
   mypy-boto3-cloudtrail =
     buildMypyBoto3Package "cloudtrail" "1.42.3"
