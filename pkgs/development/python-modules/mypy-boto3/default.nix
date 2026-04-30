@@ -910,8 +910,8 @@ in
       "sha256-YpSyhr87CmLo2+LGQzXU8q9uZt5YiDm23Ukpdh8eZIg=";
 
   mypy-boto3-migration-hub-refactor-spaces =
-    buildMypyBoto3Package "migration-hub-refactor-spaces" "1.42.3"
-      "sha256-22PPd3dk1V3i26ETACZ9nxOjtNNaV/dBT0FxKEBZgkk=";
+    buildMypyBoto3Package "migration-hub-refactor-spaces" "1.43.0"
+      "sha256-PIgHi6/xkiAjzrvgRgh6b2dLPTGoVnvd3xVLAW6nTCc=";
 
   mypy-boto3-migrationhub-config =
     buildMypyBoto3Package "migrationhub-config" "1.42.3"
