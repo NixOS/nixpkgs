@@ -1,44 +1,45 @@
 {
-  bash,
   coreutils,
   gnused,
   goss,
   lib,
-  resholve,
+  makeWrapper,
+  stdenvNoCC,
   which,
 }:
 
-resholve.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "dgoss";
-  version = goss.version;
-  src = goss.src;
+  inherit (goss) version src;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
-    sed -i '2i GOSS_PATH=\$\{GOSS_PATH:-${goss}/bin/goss\}' extras/dgoss/dgoss
+    runHook preInstall
+
     install -D extras/dgoss/dgoss $out/bin/dgoss
+
+    runHook postInstall
   '';
 
-  solutions = {
-    default = {
-      scripts = [ "bin/dgoss" ];
-      interpreter = "${bash}/bin/bash";
-      inputs = [
-        coreutils
-        gnused
-        which
-      ];
-      keep = {
-        "$CONTAINER_RUNTIME" = true;
-      };
-    };
-  };
+  postFixup = ''
+    wrapProgram $out/bin/dgoss \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          goss
+          which
+        ]
+      }
+  '';
 
   meta = {
-    homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
-    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
+    homepage = "https://github.com/goss-org/goss/blob/v${goss.version}/extras/dgoss/README.md";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${goss.version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
