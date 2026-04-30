@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nxv";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "jamesbrink";
     repo = "nxv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-714babrR7inR+zkFSk8eqho4GIvUn6ITj7S54i5UcBI=";
+    hash = "sha256-U0xAPnWe/H2GQ2+J7bkVt2OX7ch5Otib2mrF/d4MYcs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-oc/R/Z0dXqt6JTNCVzejTO2LEuTmiYHdn5WNsxQ8IHQ=";
+  cargoHash = "sha256-IzV6NITX3r9rVHcP9A9oikna8YT9BpfLOPsQYxw3QzM=";
 
   # Tests use mockito which needs to bind to localhost
   __darwinAllowLocalNetworking = true;
