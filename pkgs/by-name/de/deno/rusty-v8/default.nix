@@ -144,6 +144,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [ "simdutf" ];
 
+  # rusty-v8 has its own default hardening flags, which are "extensive" for release builds as long as `use_custom_libcxx` stays true.
+  # Avoids many warnings about redefined macros (on build failures) and uses the upstream flag.
+  hardeningDisable = [ "libcxxhardeningfast" ];
+
   checkFlags = [
     # These tests probably fail due to a more recent rustc version (upstream: 1.89.0, here: 1.93.0)
     "--skip=ui"
