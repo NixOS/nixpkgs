@@ -9890,6 +9890,12 @@
     githubId = 19275558;
     name = "Julien Girard-Satabin";
   };
+  gkaganov = {
+    email = "grigori.kaganov@tutamail.com";
+    github = "gkaganov";
+    githubId = 101670053;
+    name = "Grigori Kaganov";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
