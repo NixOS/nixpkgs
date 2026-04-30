@@ -774,8 +774,8 @@ in
       "sha256-IaCx86fBpIsBp6ue8uE0z3U3HKeq0fDhfJVmPDsiQk8=";
 
   mypy-boto3-lex-runtime =
-    buildMypyBoto3Package "lex-runtime" "1.42.3"
-      "sha256-tkSUeZeD8Aa1DzQIDBt8rQYBecfllEyl9kATJkM6FYM=";
+    buildMypyBoto3Package "lex-runtime" "1.43.0"
+      "sha256-1kE3yNQBw8a1bYq3xMfAEfqW2p4FduGQ/uAJjI81xds=";
 
   mypy-boto3-lexv2-models =
     buildMypyBoto3Package "lexv2-models" "1.42.65"
