@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.25.0";
+  version = "1.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     repo = "sdk-python";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-o6QesUL9he2q5o+HDUA6Orb3uM6jWiWkN7uYbkhXopY=";
+    hash = "sha256-mCx7IP3/KUDTzmzgwBIpzi2UFf9gNFxlSrBpOyPm/xs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
