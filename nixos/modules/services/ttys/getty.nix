@@ -13,6 +13,8 @@ let
   baseArgs = [
     "--login-program"
     "${cfg.loginProgram}"
+    "--issue-file"
+    "/etc/issue:/etc/issue.d:/run/issue:/run/issue.d"
   ]
   ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
     "--autologin"
