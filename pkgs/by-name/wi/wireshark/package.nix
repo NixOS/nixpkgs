@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
       experts. It runs on UNIX, macOS and Windows.
     '';
     homepage = "https://www.wireshark.org";
-    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${finalAttrs.src.tag}.html";
+    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${finalAttrs.version}.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
