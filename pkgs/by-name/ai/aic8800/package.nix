@@ -10,13 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aic8800";
-  version = "1.0.7";
+  shortVersion = "1.0.9";
+  version = "${finalAttrs.shortVersion}-0b1";
   KDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   CROSS_COMPILE = "";
 
   src = fetchurl {
     url = "https://linux.brostrend.com/${finalAttrs.pname}-dkms.deb";
-    hash = "sha256-uSHBVrkntJkgTE93WrEUkOj9wGA2t4J/AOYgFf8KYdg="; # Replace with actual hash
+    hash = "sha256-/YN4jVZLswGOOC4jbJEaYWJ152l0DmItQpNLWm8NcUo="; # Replace with actual hash
   };
 
   patches = [
@@ -45,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Date: 2025-07-02 16:07:27.081211751 +0500
     (fetchpatch {
       name = "add-archer-tx1u-nano.patch";
-      url = "https://raw.githubusercontent.com/darkprof83/aic8800-dkms/refs/heads/master/0005-Add-Archer-TX1U-nano.patch";
-      hash = "sha256-elf5QqMG0UITyLvht2pRDHwQ8l+0q5CbtN8HPQaN25s=";
+      url = "https://raw.githubusercontent.com/darkprof83/aic8800-dkms/4416312a36d2d62dbaf2c2bc1156be795506c188/0005-Add-Archer-TX1U-nano.patch";
+      hash = "sha256-Gyb42SYIyRntKoUHU4y7WFC8FPJ3nnP311PwME5jfno=";
     })
   ];
 
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     unpackRoot="$(pwd -P)"
     files="$unpackRoot/lib/firmware"
     dest="$out/lib/firmware"
-    sourceRoot="$unpackRoot/usr/src/${finalAttrs.pname}-${finalAttrs.version}"
+    sourceRoot="$unpackRoot/usr/src/${finalAttrs.pname}-${finalAttrs.shortVersion}"
     cd "$sourceRoot"
   '';
 
@@ -103,6 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://linux.brostrend.com/troubleshooting/source-code/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ darkprof83 ];
-    broken = kernel.kernelOlder "5.4" || kernel.kernelAtLeast "6.13";
+    broken = kernel.kernelOlder "5.4" || kernel.kernelAtLeast "6.19";
   };
 })
