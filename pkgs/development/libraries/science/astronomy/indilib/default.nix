@@ -4,6 +4,7 @@
   fetchFromGitHub,
   bash,
   cmake,
+  pkg-config,
   cfitsio,
   libusb1,
   kmod,
@@ -23,17 +24,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XTb+etafMRTP/Arb087s+kZoqFT50RT1fpVDeHaGdmY=";
+    hash = "sha256-T5Ba0MwJ+jelEHkFatzvUiPB2PeZm0KMYMEdCPWgotc=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   nativeInstallCheckInputs = [
