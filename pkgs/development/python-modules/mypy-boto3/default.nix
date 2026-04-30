@@ -203,8 +203,8 @@ in
       "sha256-tzV4iGq77gV+G8V29kn3qq9Riqa5TqDObBi2uVAXpx8=";
 
   mypy-boto3-chime-sdk-voice =
-    buildMypyBoto3Package "chime-sdk-voice" "1.42.3"
-      "sha256-Yj+PL5SHeMuiC3kougQa6zahznlD32+1NQWqoD8xdEg=";
+    buildMypyBoto3Package "chime-sdk-voice" "1.43.0"
+      "sha256-Vtu56EDQljvG3JZbiqt3CJzhquUIbYY2/Kn7QXw4Poc=";
 
   mypy-boto3-cleanrooms =
     buildMypyBoto3Package "cleanrooms" "1.42.91"
