@@ -197,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI for managing Git and GitHub";
     homepage = "https://desktop.github.com";
-    changelog = "https://desktop.github.com/release-notes";
+    changelog = "https://desktop.github.com/release-notes/";
     downloadPage = "https://desktop.github.com/download";
     license = lib.licenses.mit;
     mainProgram = "github-desktop";
