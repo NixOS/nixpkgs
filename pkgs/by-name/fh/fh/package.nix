@@ -37,10 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd fh \
-      --bash <($out/bin/fh completion bash) \
-      --fish <($out/bin/fh completion fish) \
-      --zsh <($out/bin/fh completion zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd fh --"$shell" <("$out/bin/fh" completion "$shell")
+    done
   '';
 
   __darwinAllowLocalNetworking = true;
