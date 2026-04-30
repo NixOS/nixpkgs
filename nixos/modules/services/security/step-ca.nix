@@ -16,6 +16,15 @@ in
       enable = lib.mkEnableOption "the smallstep certificate authority server";
       openFirewall = lib.mkEnableOption "opening the certificate authority server port";
       package = lib.mkPackageOption pkgs "step-ca" { };
+      enableDebugLog = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Sets the environment variable to run step-ca with debug logging by adding `STEPDEBUG = "1"` to
+          {option}`systemd.step-ca.environment`.
+        '';
+      };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
@@ -92,6 +101,9 @@ in
         restartTriggers = [ configFile ];
         unitConfig = {
           ConditionFileNotEmpty = ""; # override upstream
+        };
+        environment = lib.mkIf (cfg.enableDebugLog) {
+          STEPDEBUG = "1";
         };
         serviceConfig = {
           Type = "notify";
