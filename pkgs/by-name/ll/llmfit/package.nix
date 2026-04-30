@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-BrydHdtiMklC8OZ+FzDg88v+i2/plPyX9eTYprtqNnM=";
 
   meta = {
-    description = "Find what runs on your hardware";
+    description = "TUI to find LLM models right sized for the system's RAM, CPU, and GPU";
     homepage = "https://github.com/AlexsJones/llmfit";
     changelog = "https://github.com/AlexsJones/llmfit/blob/v${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
