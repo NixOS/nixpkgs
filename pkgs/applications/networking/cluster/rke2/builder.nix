@@ -82,7 +82,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/k3s-io/k3s/pkg/version.GitCommit=${lib.substring 0 6 rke2Commit}"
     "-X github.com/k3s-io/k3s/pkg/version.Program=${finalAttrs.pname}"
     "-X github.com/k3s-io/k3s/pkg/version.Version=v${finalAttrs.version}"
-    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
+    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}-X:boringcrypto"
     "-X github.com/rancher/rke2/pkg/images.DefaultRegistry=docker.io"
     "-X github.com/rancher/rke2/pkg/images.DefaultEtcdImage=rancher/hardened-etcd:${etcdVersion}"
     "-X github.com/rancher/rke2/pkg/images.DefaultKubernetesImage=rancher/hardened-kubernetes:${k8sImageTag}"
