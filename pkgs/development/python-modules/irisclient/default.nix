@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python client for Iris REST api";
-    changelog = "https://github.com/houqp/iris-python-client/blob/v${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/houqp/iris-python-client/blob/${src.tag}/HISTORY.rst";
     homepage = "https://github.com/houqp/iris-python-client";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ onny ];

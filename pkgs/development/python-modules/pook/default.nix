@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
-    changelog = "https://github.com/h2non/pook/blob/v${src.tag}/History.rst";
+    changelog = "https://github.com/h2non/pook/blob/${src.tag}/History.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

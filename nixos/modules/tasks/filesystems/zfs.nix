@@ -277,6 +277,10 @@ in
       "zfs"
       "enableUnstable"
     ] "Instead set `boot.zfs.package = pkgs.zfs_unstable;`")
+    (lib.mkRenamedOptionModule
+      [ "boot" "zfs" "allowHibernation" ]
+      [ "boot" "zfs" "unsafeAllowHibernation" ]
+    )
   ];
 
   ###### interface
@@ -305,12 +309,12 @@ in
         description = "True if ZFS filesystem support is enabled";
       };
 
-      allowHibernation = lib.mkOption {
+      unsafeAllowHibernation = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
-          Allow hibernation support, this may be a unsafe option depending on your
-          setup. Make sure to NOT use Swap on ZFS.
+          Allow hibernation (suspend to disk) support. This is generally considered **UNSAFE**,
+          is not well supported by openzfs, and could lead to corruption and data loss.
         '';
       };
 
@@ -350,19 +354,18 @@ in
 
       forceImportRoot = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = lib.versionOlder config.system.stateVersion "26.11";
+        defaultText = lib.literalExpression ''lib.versionOlder config.system.stateVersion "26.11"'';
         description = ''
           Forcibly import the ZFS root pool(s) during early boot.
 
-          This is enabled by default for backwards compatibility purposes, but it is highly
-          recommended to disable this option, as it bypasses some of the safeguards ZFS uses
-          to protect your ZFS pools.
+          It is highly recommended to keep this option disabled as it bypasses ZFS
+          safeguard that protect your pools.
 
-          If you set this option to `false` and NixOS subsequently fails to
-          boot because it cannot import the root pool, you should boot with the
-          `zfs_force=1` option as a kernel parameter (e.g. by manually
-          editing the kernel params in grub during boot). You should only need to do this
-          once.
+          If NixOS fails to boot because it cannot import the root pool, you should boot
+          with the `zfs_force=1` option as a kernel parameter (e.g. by manually
+          editing the kernel params via your bootloader).
+          You should only need to do this after unclean shutdowns.
         '';
       };
 
@@ -372,10 +375,10 @@ in
         description = ''
           Forcibly import all ZFS pool(s).
 
-          If you set this option to `false` and NixOS subsequently fails to
-          import your non-root ZFS pool(s), you should manually import each pool with
-          "zpool import -f \<pool-name\>", and then reboot. You should only need to do
-          this once.
+          It is highly recommended to keep this option disabled as it bypasses ZFS
+          safeguard that protect your pools.
+
+          See {option}`boot.zfs.forceImportRoot` for details.
         '';
       };
 
@@ -672,12 +675,12 @@ in
           message = "ZFS requires networking.hostId to be set";
         }
         {
-          assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
+          assertion = cfgZfs.forceImportAll -> cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
         {
-          assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
-          message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
+          assertion = cfgZfs.unsafeAllowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
+          message = "boot.zfs.unsafeAllowHibernation while force importing is enabled will cause data corruption";
         }
         {
           assertion = !(lib.elem "" allPools);
@@ -694,12 +697,25 @@ in
         }
       ];
 
+      warnings =
+        lib.optional
+          (
+            options.boot.zfs.forceImportRoot.definitionsWithLocations == [
+              {
+                inherit (__curPos) file;
+                value = true;
+              }
+            ]
+          )
+          "`boot.zfs.forceImportRoot` is using the default value of `true`. It is highly recommended to set it to `false`, the new default from 26.11 on, to reduce the risk of data loss. Alternatively, you can silence this warning by explicitly setting it to `true`.";
+
       boot = {
         kernelModules = [ "zfs" ];
-        # https://github.com/openzfs/zfs/issues/260
+        # https://github.com/openzfs/zfs/issues/260#issuecomment-982142240
         # https://github.com/openzfs/zfs/issues/12842
+        # https://github.com/openzfs/zfs/issues/14118#issuecomment-1301576647
         # https://github.com/NixOS/nixpkgs/issues/106093
-        kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
+        kernelParams = lib.optionals (!config.boot.zfs.unsafeAllowHibernation) [ "nohibernate" ];
 
         extraModulePackages = [
           cfgZfs.modulePackage

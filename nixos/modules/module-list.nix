@@ -1322,6 +1322,7 @@
   ./services/networking/nix-store-gcs-proxy.nix
   ./services/networking/nixops-dns.nix
   ./services/networking/nm-file-secret-agent.nix
+  ./services/networking/nmtrust.nix
   ./services/networking/nncp.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nomad.nix

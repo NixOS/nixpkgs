@@ -23,19 +23,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llguidance";
-  version = "1.7.2";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "llguidance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eu+hhYCVoZWMdwrjiHyvbGwjYKnbkBETZNMQ+SOb8AU=";
+    hash = "sha256-vEF9+nlYP8LnlROgDU0HPg8H+OmZCQARoE6ngGIw7NM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-oeFm9dPqlJWPnrA7//D31E1W2St+zIRd8pzR6gUhiTg=";
+    hash = "sha256-5dJkC0Iz0IBXxSq5ZeorLta7WEd81ajagSoXt1Zsq7Q=";
   };
 
   nativeBuildInputs = [

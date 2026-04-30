@@ -1,28 +1,39 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
+  rustPlatform,
+  nixosTests,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "grafana-to-ntfy";
-  version = "0-unstable-2025-01-25";
+  version = "2026.4.29";
 
   src = fetchFromGitHub {
     owner = "kittyandrew";
     repo = "grafana-to-ntfy";
-    rev = "64d11f553776bbf7695d9febd74da1bad659352d";
-    hash = "sha256-GO9VE9wymRk+QKGFyDpd0wS9GCY3pjpFUe37KIcnKxc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ac0T8SNCDH9kQTKIfYn9KinnrSCYIBpNByO6NQ8UntA=";
   };
 
-  cargoHash = "sha256-w4HSxdihElPz0q05vWjajQ9arZjAzd82L0kEKk1Uk8s=";
+  cargoHash = "sha256-RuWXlofcruR69sg+RO2v1DBgxaPEyu8TeZEiZP7rBV8=";
+
+  # No unit tests; all testing is NixOS VM-based integration tests
+  doCheck = false;
+
+  passthru = {
+    tests.grafana-to-ntfy = nixosTests.grafana-to-ntfy;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
-    description = "Bridge to forward Grafana alerts to ntfy.sh notification service";
+    description = "Bridge to forward Grafana and Prometheus Alertmanager alerts to ntfy.sh";
     homepage = "https://github.com/kittyandrew/grafana-to-ntfy";
+    changelog = "https://github.com/kittyandrew/grafana-to-ntfy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kittyandrew ];
     mainProgram = "grafana-to-ntfy";
   };
-}
+})
