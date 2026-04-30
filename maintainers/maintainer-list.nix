@@ -1268,6 +1268,13 @@
     githubId = 58669111;
     name = "Alexandre Ros";
   };
+  alexma233 = {
+    email = "i@fur.im";
+    github = "alexma233";
+    githubId = 72970078;
+    keys = [ { fingerprint = "D64E B243 965E DCF4 B303  5F0C AE50 3C5E 4ECB A50B"; } ];
+    name = "AlexMa233";
+  };
   alexnabokikh = {
     email = "nabokikh@duck.com";
     github = "alexnabokikh";
