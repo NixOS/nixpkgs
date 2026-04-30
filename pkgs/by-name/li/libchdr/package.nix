@@ -31,14 +31,14 @@ stdenv.mkDerivation {
     zstd
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "INSTALL_STATIC_LIBS" stdenv.hostPlatform.isStatic)
-    (lib.cmakeBool "WITH_SYSTEM_ZLIB" true)
-    (lib.cmakeBool "WITH_SYSTEM_ZSTD" true)
-    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
-    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
-  ];
+  cmakeEntries = {
+    BUILD_SHARED_LIBS = !stdenv.hostPlatform.isStatic;
+    INSTALL_STATIC_LIBS = stdenv.hostPlatform.isStatic;
+    WITH_SYSTEM_ZLIB = true;
+    WITH_SYSTEM_ZSTD = true;
+    CMAKE_INSTALL_LIBDIR = "lib";
+    CMAKE_INSTALL_INCLUDEDIR = "include";
+  };
 
   meta = {
     description = "Standalone library for reading MAME's CHDv1-v5 formats";
