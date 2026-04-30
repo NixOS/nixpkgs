@@ -1134,8 +1134,8 @@ lib.fix (
     // optionalAttrs (disallowedRequisites != [ ] || disallowGhcReference) {
       disallowedRequisites = disallowedRequisites ++ (if disallowGhcReference then [ ghc ] else [ ]);
     }
-    // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinLocalNetworking) {
-      __darwinAllowLocalNetworking = true;
+    // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinAllowLocalNetworking) {
+      inherit __darwinAllowLocalNetworking;
     }
   )
 )

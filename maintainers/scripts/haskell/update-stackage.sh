@@ -104,16 +104,12 @@ sed -r \
     -e '/ hledger-lib /d' \
     -e '/ hledger-ui /d' \
     -e '/ hledger-web /d' \
+    -e '/ spacecookie /d' \
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.
 # lsp, lsp-types, lsp-test, hie-bios: These are tightly coupled to hls which is not in stackage. They have no rdeps in stackage.
 # ShellCheck: latest version of command-line dev tool.
 # Agda: The Agda community is fast-moving; we strive to always include the newest versions of Agda and the Agda packages in nixpkgs.
-
-# Work around Stackage LTS including a bogus version of cassava which has been deprecated on Hackage.
-# See <https://github.com/haskell-hvr/cassava/issues/248>.
-# TODO(@sternenseemann): drop this once the situation has been resolved in Stackage LTS
-sed -e 's/cassava ==0.5.5.0/cassava >= 0.5.4.0 \&\& (> 0.5.5.0 || < 0.5.5.0) \&\& < 0.6.0.0/' -i "$stackage_config"
 
 echo "$old_version -> $version"
