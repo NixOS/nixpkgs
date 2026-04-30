@@ -505,12 +505,12 @@ mapAttrs (mkVBoxTest { } vboxVMs) {
   simple-gui = ''
     # Home to select Tools, down to move to the VM, enter to start it.
     def send_vm_startup():
-        machine.send_key("home")
-        machine.send_key("down")
+        machine.send_key("ctrl-m")
         machine.send_key("ret")
 
 
     create_vm_simple()
+    machine.succeed(ru("VBoxManage setextradata global \"GUI/Input/SelectorShortcuts\" \"ToolsGlobalMachineManager=Ctrl+M\""))
     machine.succeed(ru("VirtualBox >&2 &"))
     machine.wait_until_succeeds(ru("xprop -name 'Oracle VirtualBox Manager'"))
     machine.sleep(5)
