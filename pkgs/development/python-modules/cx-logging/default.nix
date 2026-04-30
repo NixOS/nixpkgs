@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -21,6 +22,11 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools>=70.1,<75" "setuptools"
+  ''
+  # The flag -soname isn't recognized by the linker on darwin. Only -install_name is valid.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace setup.py \
+      --replace-fail "-soname" "-install_name"
   '';
 
   build-system = [ setuptools ];
