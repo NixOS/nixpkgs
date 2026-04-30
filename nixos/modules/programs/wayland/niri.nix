@@ -16,14 +16,34 @@ in
     useNautilus = lib.mkEnableOption "Nautilus as file-chooser for xdg-desktop-portal-gnome" // {
       default = true;
     };
+
+    extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = with pkgs; [
+        alacritty
+        fuzzel
+        swaylock
+        brightnessctl
+
+        xwayland-satellite
+      ];
+      defaultText = lib.literalExpression ''
+        with pkgs; [ brightnessctl alacritty fuzzel swaylock ];
+      '';
+      example = lib.literalExpression ''
+        with pkgs; [ brightnessctl alacritty fuzzel swaylock ];
+      '';
+      description = ''
+        Extra packages to be installed system wide.
+        By default, they're the packages used in the base configuration, plus xwayland-satellite for running X11 apps.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [
-          cfg.package
-        ];
+        environment.systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
         # Required for xdg-desktop-portal-gnome's FileChooser to work properly
         services.dbus.packages = lib.mkIf cfg.useNautilus [
