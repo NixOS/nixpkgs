@@ -339,6 +339,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # with the Nix store, which fails. Simply remove this step to get
     # rpaths that point to the Nix store.
     ./disable-cmake-mkl-rpath.patch
+  ]
+  ++ lib.optionals rocmSupport [
+    # [ROCm] Make AOTriton bundling optional via BUILD_AOTRITON_INTO_WHEEL flag
+    # https://github.com/pytorch/pytorch/pull/182030
+    ./no-bundle-aotriton.patch
   ];
 
   postPatch = ''
@@ -506,6 +511,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
+    # Don't copy AOTriton to output, load from AOTriton package
+    BUILD_AOTRITON_INTO_WHEEL = false;
     # Broken HIP flag setup, fails to compile due to not finding rocthrust
     # Only supports gfx942 so let's turn it off for now
     USE_FBGEMM_GENAI = setBool false;
