@@ -1,20 +1,20 @@
 {
-  lib,
-  resholve,
-  fetchFromGitHub,
   bc,
   coreutils,
+  fetchFromGitHub,
   file,
+  findutils,
   gawk,
   ghostscript,
   gnused,
   imagemagick,
+  lib,
+  makeWrapper,
+  stdenvNoCC,
   zip,
-  runtimeShell,
-  findutils,
 }:
 
-resholve.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "pdf2odt";
   version = "20220827";
 
@@ -24,6 +24,8 @@ resholve.mkDerivation {
     rev = "a05fbdebcc39277d905d1ae66f585a19f467b406";
     hash = "sha256-995iF5Z1V4QEXeXUB8irG451TXpQBHZThJcEfHwfRtE=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -36,25 +38,22 @@ resholve.mkDerivation {
     runHook postInstall
   '';
 
-  solutions.default = {
-    scripts = [ "bin/pdf2odt" ];
-    interpreter = runtimeShell;
-    inputs = [
-      bc
-      coreutils
-      file
-      findutils
-      gawk
-      ghostscript
-      gnused
-      imagemagick
-      zip
-    ];
-    execer = [
-      # zip can exec; confirmed 2 invocations in pdf2odt don't
-      "cannot:${zip}/bin/zip"
-    ];
-  };
+  postFixup = ''
+    wrapProgram $out/bin/pdf2odt \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bc
+          coreutils
+          file
+          findutils
+          gawk
+          ghostscript
+          gnused
+          imagemagick
+          zip
+        ]
+      }
+  '';
 
   meta = {
     description = "PDF to ODT/ODS format converter";
