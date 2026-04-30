@@ -10,6 +10,7 @@
   bc,
   opensnitch,
   nixosTests,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +18,17 @@ stdenv.mkDerivation rec {
   version = "${opensnitch.version}-${kernel.version}";
 
   inherit (opensnitch) src;
+
+  patches = [
+    (fetchpatch2 {
+      # fixes build failures on kernel >= 6.19 (#490127)
+      # remove when added to a release
+      name = "fix-kernel-6.19-build.patch";
+      stripLen = 1;
+      url = "https://github.com/evilsocket/opensnitch/commit/614537c92ec82f54f76a45fb406ad2fb6e6fa618.patch?full_index=1";
+      hash = "sha256-FCJfDhgmnm1GXPDaxr+YpVWTRrwBvjVzvGdZSFB6SqQ=";
+    })
+  ];
 
   sourceRoot = "${src.name}/ebpf_prog";
 
@@ -35,6 +47,7 @@ stdenv.mkDerivation rec {
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=opensnitch-ebpf-module&id=984b952a784eb701f691dd9f2d45dfeb8d15053b
   env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
+  env.KERNEL_VER = kernel.modDirVersion;
   env.KERNEL_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source";
   env.KERNEL_HEADERS = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
