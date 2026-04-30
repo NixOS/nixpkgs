@@ -1198,8 +1198,8 @@ in
       "sha256-Z1RCFA6/um97HHZodIDXoeubMlI4DAlOi++JJq6nP4Y=";
 
   mypy-boto3-savingsplans =
-    buildMypyBoto3Package "savingsplans" "1.42.62"
-      "sha256-ah5aNvlMpjEz/nec9LBb8eb/WVUT8hw12sQzTA/Wu0s=";
+    buildMypyBoto3Package "savingsplans" "1.43.0"
+      "sha256-UdTdVjxyxI4cZR13CjCtP+mj9EvH+pwB8lAYfNPWFXc=";
 
   mypy-boto3-scheduler =
     buildMypyBoto3Package "scheduler" "1.42.3"
