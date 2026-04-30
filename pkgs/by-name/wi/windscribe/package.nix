@@ -194,6 +194,7 @@ stdenv.mkDerivation rec {
     homepage = "https://windscribe.com";
     license = licenses.gpl2;
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = with maintainers; [ syntheit ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "windscribe";
   };
