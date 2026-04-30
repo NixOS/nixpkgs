@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       data files.
     '';
     homepage = "https://vcmi.eu";
-    changelog = "https://vcmi.eu/ChangeLog";
+    changelog = "https://vcmi.eu/ChangeLog/";
     license = with lib.licenses; [
       gpl2Plus
       cc-by-sa-40
