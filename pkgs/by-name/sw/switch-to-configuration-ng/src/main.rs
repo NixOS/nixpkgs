@@ -1003,8 +1003,9 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
 }
 
 /// Checks if a unit has been disabled in configuration
-fn is_unit_disabled(unit_file: PathBuf) -> bool {
+fn is_unit_disabled(unit_file: impl AsRef<Path>) -> bool {
     unit_file
+        .as_ref()
         .canonicalize()
         .map(|full_path| full_path == Path::new("/dev/null"))
         .unwrap_or(true)
@@ -1105,7 +1106,7 @@ fn collect_unit_changes(
         {
             // Account for template unit instances where overrideStrategy == "asDropin"
             // whilst also allowing manual instances to keep running.
-            if dropins_removed || is_unit_disabled(new_base_unit_file.clone()) {
+            if dropins_removed || is_unit_disabled(&new_base_unit_file) {
                 let current_unit_info = parse_unit(&current_unit_file, &current_base_unit_file)?;
                 if parse_systemd_bool(Some(&current_unit_info), "Unit", "X-StopOnRemoval", true) {
                     _ = units_to_stop.insert(unit.to_string(), ());
