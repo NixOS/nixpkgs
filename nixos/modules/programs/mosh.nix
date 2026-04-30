@@ -45,4 +45,6 @@ in
       };
     };
   };
+
+  meta.maintainers = [ lib.maintainers.me-and ];
 }
