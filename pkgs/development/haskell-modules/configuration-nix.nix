@@ -192,6 +192,16 @@ builtins.intersectAttrs super {
   # Binary may be used separately for e.g. editor integrations
   cabal-cargs = enableSeparateBinOutput super.cabal-cargs;
 
+  # Needs pginit to function and pgrep to verify.
+  tmp-postgres = overrideCabal (drv: {
+    preCheck = ''
+      export HOME="$TMPDIR"
+    ''
+    + (drv.preCheck or "");
+    libraryToolDepends = drv.libraryToolDepends or [ ] ++ [ pkgs.buildPackages.postgresql ];
+    testToolDepends = drv.testToolDepends or [ ] ++ [ pkgs.procps ];
+  }) super.tmp-postgres;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
   mysql = dontCheck super.mysql;
@@ -207,6 +217,18 @@ builtins.intersectAttrs super {
       export CUDA_PATH=${pkgs.cudatoolkit}
     '';
   }) super.cuda;
+
+  # Compiles some C or C++ source which requires these headers
+  VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
+  vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
+
+  # Requires wrapQtAppsHook
+  qtah-cpp-qt5 = overrideCabal (drv: {
+    buildDepends = [ pkgs.qt5.wrapQtAppsHook ];
+  }) super.qtah-cpp-qt5;
+
+  # https://github.com/evanrinehart/mikmod/issues/1
+  mikmod = addExtraLibrary pkgs.libmikmod super.mikmod;
 
   nvvm = overrideCabal (drv: {
     preConfigure = ''
@@ -269,10 +291,12 @@ builtins.intersectAttrs super {
   # jni needs help finding libjvm.so because it's in a weird location.
   jni = overrideCabal (drv: {
     preConfigure = ''
-      local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
-      appendToVar configureFlags "--extra-lib-dir=''${libdir[0]}"
+      local libdir=( "${lib.getLib pkgs.jdk}/lib/openjdk/lib/server" )
+      appendToVar configureFlags "--extra-lib-dirs=''${libdir[0]}"
     '';
   }) super.jni;
+
+  inline-java = addBuildDepend pkgs.jdk super.inline-java;
 
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
@@ -375,6 +399,9 @@ builtins.intersectAttrs super {
   double-conversion = disableCabalFlag "embedded_double_conversion" (
     addBuildDepends [ pkgs.double-conversion ] super.double-conversion
   );
+
+  # library dependency declaration hidden behind conditional
+  bindings-levmar = addExtraLibrary pkgs.blas super.bindings-levmar;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
   gio = lib.pipe super.gio [
@@ -515,6 +542,10 @@ builtins.intersectAttrs super {
   # Wants to execute cabal-install
   ghci-quickfix = dontCheck super.ghci-quickfix;
 
+  # * doctests don't work without cabal-install
+  #   https://github.com/noinia/hgeometry/issues/132 krank:ignore-line
+  hgeometry-combinatorial = dontCheck super.hgeometry-combinatorial;
+
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;
@@ -556,6 +587,21 @@ builtins.intersectAttrs super {
   holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
+
+  # https://github.com/NixOS/nixpkgs/issues/6350 krank:ignore-line
+  paypal-adaptive-hoops = overrideCabal (drv: {
+    testTargets = [ "local" ];
+  }) super.paypal-adaptive-hoops;
+
+  # Wrap the generated binaries to include their run-time dependencies in $PATH.
+  cryptol = overrideCabal (drv: {
+    buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = drv.postInstall or "" + ''
+      for b in $out/bin/cryptol $out/bin/cryptol-html; do
+        wrapProgram $b --prefix 'PATH' ':' "${lib.getBin pkgs.z3}/bin"
+      done
+    '';
+  }) super.cryptol;
 
   # Some test cases require network access
   hpack_0_39_1 = doDistribute (

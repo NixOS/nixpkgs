@@ -880,7 +880,6 @@ dont-distribute-packages:
  - eventium-memory
  - eventium-postgresql
  - eventium-sqlite
- - eventlog-live-otelcol
  - EventSocket
  - eventsource-geteventstore-store
  - eventsource-store-specs
@@ -1190,8 +1189,6 @@ dont-distribute-packages:
  - grapefruit-records
  - grapefruit-ui
  - grapefruit-ui-gtk
- - grapesy
- - grapesy-etcd
  - graph-rewriting-cl
  - graph-rewriting-gl
  - graph-rewriting-lambdascope
