@@ -1,5 +1,4 @@
 {
-  bash,
   bc,
   coreutils,
   fetchFromGitHub,
@@ -11,64 +10,64 @@
   jq,
   lame,
   lib,
+  makeWrapper,
   mediainfo,
   mp4v2,
   ncurses,
-  resholve,
+  stdenvNoCC,
 }:
 
-resholve.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "aaxtomp3";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "krumpetpirate";
     repo = "aaxtomp3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7a9ZVvobWH/gPxa3cFiPL+vlu8h1Dxtcq0trm3HzlQg=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postPatch = ''
     substituteInPlace AAXtoMP3 \
-      --replace 'AAXtoMP3' 'aaxtomp3'
+      --replace-fail 'AAXtoMP3' 'aaxtomp3'
     substituteInPlace interactiveAAXtoMP3 \
-      --replace 'AAXtoMP3' 'aaxtomp3' \
-      --replace 'call="./aaxtomp3"' 'call="$AAXTOMP3"'
+      --replace-fail 'AAXtoMP3' 'aaxtomp3' \
+      --replace-fail 'call="./aaxtomp3"' 'call="${placeholder "out"}/bin/aaxtomp3"'
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 AAXtoMP3 $out/bin/aaxtomp3
     install -Dm 755 interactiveAAXtoMP3 $out/bin/interactiveaaxtomp3
+
+    runHook postInstall
   '';
 
-  solutions.default = {
-    scripts = [
-      "bin/aaxtomp3"
-      "bin/interactiveaaxtomp3"
-    ];
-    interpreter = "${bash}/bin/bash";
-    inputs = [
-      bc
-      coreutils
-      ffmpeg
-      findutils
-      gawk
-      gnugrep
-      gnused
-      jq
-      lame
-      mediainfo
-      mp4v2
-      ncurses
-    ];
-    keep."$call" = true;
-    fix = {
-      "$AAXTOMP3" = [ "${placeholder "out"}/bin/aaxtomp3" ];
-      "$FIND" = [ "find" ];
-      "$GREP" = [ "grep" ];
-      "$SED" = [ "sed" ];
-    };
-  };
+  postFixup =
+    let
+      runtimePath = lib.makeBinPath [
+        bc
+        coreutils
+        ffmpeg
+        findutils
+        gawk
+        gnugrep
+        gnused
+        jq
+        lame
+        mediainfo
+        mp4v2
+        ncurses
+      ];
+    in
+    ''
+      wrapProgram $out/bin/aaxtomp3 --prefix PATH : ${runtimePath}
+      wrapProgram $out/bin/interactiveaaxtomp3 --prefix PATH : ${runtimePath}
+    '';
 
   meta = {
     description = "Convert Audible's .aax filetype to MP3, FLAC, M4A, or OPUS";
@@ -76,4 +75,4 @@ resholve.mkDerivation rec {
     license = lib.licenses.wtfpl;
     maintainers = [ ];
   };
-}
+})
