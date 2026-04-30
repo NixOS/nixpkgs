@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://smile.mijorus.it/changelog";
+    changelog = "https://smile.mijorus.it/changelog/";
     description = "Emoji picker for linux, with custom tags support and localization";
     downloadPage = "https://github.com/mijorus/smile";
     homepage = "https://mijorus.it/projects/smile/";
