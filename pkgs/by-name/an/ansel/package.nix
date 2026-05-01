@@ -82,13 +82,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "ansel";
-  version = "0-unstable-2026-04-21";
+  version = "0-unstable-2026-05-01";
 
   src = fetchFromGitHub {
     owner = "aurelienpierreeng";
     repo = "ansel";
-    rev = "01022024bc001987ac69308c8a5d1b2b4063f239";
-    hash = "sha256-vsy4oi0iK8P2UTk0C6X9j5ItOxIYJ2xuGXOAm4uioIA=";
+    rev = "31c4dcb406b26a18e86e0b88232696ee476b5705";
+    hash = "sha256-brbk5/ujjmwbiTLk3gwyIZP9ihupg6dxjVV/eeztg0o=";
     fetchSubmodules = true;
   };
 
