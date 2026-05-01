@@ -24123,6 +24123,12 @@
     github = "saadndm";
     githubId = 88615188;
   };
+  sadneo = {
+    name = "sadneo";
+    email = "busyidalin@gmail.com";
+    github = "sadneo";
+    githubId = 70412323;
+  };
   sagikazarmark = {
     name = "Mark Sagi-Kazar";
     email = "mark.sagikazar@gmail.com";
