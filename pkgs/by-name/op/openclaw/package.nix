@@ -85,7 +85,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe nodejs_22} $out/bin/openclaw \
       --add-flags "$libdir/dist/index.js" \
-      --set NODE_PATH "$libdir/node_modules"
+      --set NODE_PATH "$libdir/node_modules" \
+      --prefix PATH : ${lib.makeBinPath [ nodejs_22 ]}
     ln -s $out/bin/openclaw $out/bin/moltbot
     ln -s $out/bin/openclaw $out/bin/clawdbot
 
