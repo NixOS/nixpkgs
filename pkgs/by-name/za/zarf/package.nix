@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "zarf";
-  version = "0.75.0";
+  version = "0.75.1";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
     repo = "zarf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gQWEKLtNvb61UddbVj7SbwOXHYQxzE2ve5xuuxv3dC8=";
+    hash = "sha256-buR3rixOmKxSw3SMXlkLfdlbaMvIQz07Wh1w5kh/fgs=";
   };
 
-  vendorHash = "sha256-djU3gNWDQtzCR0U+DNrcENQktrozjEN8/lDs53LeeGQ=";
+  vendorHash = "sha256-cc1UP4u30mFU3zrxkIyEde+dN/buCLZ8Ndee85HrSPU=";
   proxyVendor = true;
 
   nativeBuildInputs = [
