@@ -8608,11 +8608,6 @@ with pkgs;
     protobuf = protobuf_33;
   };
 
-  sinit = callPackage ../os-specific/linux/sinit {
-    rcinit = "/etc/rc.d/rc.init";
-    rcshutdown = "/etc/rc.d/rc.shutdown";
-  };
-
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
   }; # sysdig is a client, for a driver look at linuxPackagesFor
