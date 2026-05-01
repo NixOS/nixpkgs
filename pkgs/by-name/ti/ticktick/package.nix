@@ -72,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf "$out/opt/ticktick/ticktick" "$out/bin/ticktick"
 
     substituteInPlace "$out/share/applications/ticktick.desktop" \
-      --replace "Exec=/opt/TickTick/ticktick" "Exec=$out/bin/ticktick"
+      --replace-fail "Exec=/opt/TickTick/ticktick" "Exec=$out/bin/ticktick" \
+      --replace-fail "Icon=ticktick" "Icon=$out/share/icons/hicolor/256x256/apps/ticktick.png"
 
     runHook postInstall
   '';
