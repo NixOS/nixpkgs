@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation {
   pname = "speed-cloudflare-cli";
-  version = "2.0.3-unstable-2024-05-15";
+  version = "2.0.3-unstable-2025-07-31";
 
   src = fetchFromGitHub {
     owner = "KNawm";
     repo = "speed-cloudflare-cli";
-    rev = "dd301195e7def359a39cceeba16b1c0bedac8f5d";
-    sha256 = "sha256-kxLeQUdJbkmApf5Af3Mgd3WvS3GhXXOIvA4gNB55TGM=";
+    rev = "8eb34f4bd4f63493fbd93b1659389b9a1e5e4a36";
+    sha256 = "sha256-kJ//zXBW2IQ5V5dJfAm8iGxf9QILH0uloNYiwG3pTe4=";
   };
 
   nativeBuildInputs = [ nodejs ];
