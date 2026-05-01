@@ -89,6 +89,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       adamcstephens
       colinsane
+      cpu
     ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
