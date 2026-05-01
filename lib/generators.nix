@@ -216,6 +216,9 @@ rec {
     : listsAsDuplicateKeys (optional, default: `false`)
       : allow lists as values for duplicate keys
 
+    : listsAsDuplicateSections (optional, default: `false`)
+      : allow lists as values for duplicate sections
+
     # Examples
     :::{.example}
     ## `lib.generators.toINI` usage example
@@ -246,6 +249,7 @@ rec {
       mkSectionName ? (name: escape [ "[" "]" ] name),
       mkKeyValue ? mkKeyValueDefault { } "=",
       listsAsDuplicateKeys ? false,
+      listsAsDuplicateSections ? false,
     }:
     attrsOfAttrs:
     let
@@ -255,10 +259,15 @@ rec {
         concatStringsSep sep (mapAttrsToList mapFn attrs);
       mkSection =
         sectName: sectValues:
-        ''
-          [${mkSectionName sectName}]
-        ''
-        + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
+        concatStringsSep "" (
+          map (
+            attrList:
+            ''
+              [${mkSectionName sectName}]
+            ''
+            + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } attrList
+          ) (if listsAsDuplicateSections && isList sectValues then sectValues else [ sectValues ])
+        );
     in
     # map input to ini sections
     mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
@@ -280,6 +289,9 @@ rec {
 
     : listsAsDuplicateKeys (optional, default: `false`)
       : allow lists as values for duplicate keys
+
+    : listsAsDuplicateSections (optional, default: `false`)
+      : allow lists as values for duplicate sections
 
     2\. Structured function argument
 
@@ -329,6 +341,7 @@ rec {
       mkSectionName ? (name: escape [ "[" "]" ] name),
       mkKeyValue ? mkKeyValueDefault { } "=",
       listsAsDuplicateKeys ? false,
+      listsAsDuplicateSections ? false,
     }:
     {
       globalSection,
@@ -340,7 +353,14 @@ rec {
       else
         (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection) + "\n"
     )
-    + (toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; } sections);
+    + (toINI {
+      inherit
+        mkSectionName
+        mkKeyValue
+        listsAsDuplicateKeys
+        listsAsDuplicateSections
+        ;
+    } sections);
 
   /**
     Generate a git-config file from an attrset.
