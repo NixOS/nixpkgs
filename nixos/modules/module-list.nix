@@ -1795,6 +1795,7 @@
   ./services/web-apps/umami.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
+  ./services/web-apps/wanderer.nix
   ./services/web-apps/weblate.nix
   ./services/web-apps/websurfx.nix
   ./services/web-apps/whitebophir.nix
