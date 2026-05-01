@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "opencc";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "opencc";
     inherit version;
-    hash = "sha256-K7kTx+04hGaybTivTIxLtBndtQMjXQcPDuGySZjvi8o=";
+    hash = "sha256-u3EFwQ7pDJunSToJmsXmEc6rRkuJXAWEvZ7zBMEJUP0=";
   };
 
   nativeBuildInputs = [
