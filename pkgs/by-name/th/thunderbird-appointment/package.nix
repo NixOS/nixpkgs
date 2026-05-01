@@ -71,7 +71,7 @@ pythonPackages.buildPythonApplication (
       babel
       caldav
       celery
-      celery-redbeat
+      celery-redbeat-pypi
       cryptography
       dnspython
       email-validator
@@ -112,6 +112,8 @@ pythonPackages.buildPythonApplication (
   in
   {
     pname = "thunderbird-appointment";
+    __structuredAttrs = true;
+
     inherit version src;
 
     sourceRoot = "source/backend";
