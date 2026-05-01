@@ -45,6 +45,8 @@ appimageTools.wrapType2 {
       --delete-original $out/p3x-onenote.desktop
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://github.com/patrikx3/onenote";
     description = "Linux Electron Onenote - A Linux compatible version of OneNote";
