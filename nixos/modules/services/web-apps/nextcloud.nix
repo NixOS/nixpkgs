@@ -145,15 +145,17 @@ let
         #       in the nix_read_secret() php function.
         #       When there's no CREDENTIALS_DIRECTORY we try to use systemd-run to
         #       load the credentials just as in a service unit.
-        # NOTE: If there are no credentials that are required at runtime then there's no need
-        #       to load any credentials.
-        if [[ $requiresRuntimeSystemdCredentials == true && -z "''${CREDENTIALS_DIRECTORY:-}" ]]; then
+        #
+        # `systemd-run` with `--description` is also being used since `nextcloud-occ` might be used
+        # to set sensitive data in `config.php` and persisting this into system logs is a bad idea.
+        if [[ $requiresRuntimeSystemdCredentials == true && -z "''${CREDENTIALS_DIRECTORY:-}" ]] || [[ "$USER" != nextcloud ]]; then
           exec ${lib.getExe' config.systemd.package "systemd-run"} \
             ${
               lib.escapeShellArgs (
                 map (credential: "--property=LoadCredential=${credential}") runtimeSystemdCredentials
               )
             } \
+            --description "Nextcloud OCC Command" \
             --uid=nextcloud \
             --same-dir \
             --pty \
@@ -166,24 +168,6 @@ let
             --quiet \
             -- \
             ${command}
-        elif [[ "$USER" != nextcloud ]]; then
-          if [[ -x /run/wrappers/bin/sudo ]]; then
-            exec /run/wrappers/bin/sudo \
-              --preserve-env=CREDENTIALS_DIRECTORY \
-              --preserve-env=OC_PASS \
-              --preserve-env=NC_PASS \
-              --user=nextcloud \
-              -- \
-              ${command}
-          else
-            exec ${lib.getExe' pkgs.util-linux "runuser"} \
-              --whitelist-environment=CREDENTIALS_DIRECTORY \
-              --whitelist-environment=OC_PASS \
-              --whitelist-environment=NC_PASS \
-              --user=nextcloud \
-              -- \
-              ${command}
-          fi
         else
           exec ${command}
         fi
