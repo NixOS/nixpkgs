@@ -8,7 +8,7 @@
   fixup-yarn-lock,
   go,
   makeWrapper,
-  nodejs_20,
+  nodejs_22,
   nix-update-script,
   patchelf,
   removeReferencesTo,
@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktn-cli";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "open-constructs";
     repo = "cdk-terrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KgDRQ76ePLJEdULMCTJTouMaWu0SCeV4NwNW2WpoaNY=";
+    hash = "sha256-yBCLxp7w/M2y7vDEI1ceAAJbyYpPT4mN4hZ3FKpaiJ0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-0aOwRdfCTiQHmWzOk+ExLX+/EAryxheyILe7L7oyd4w=";
+    hash = "sha256-c5WQXZLbOuvy6Jj6TchV00HThFIePMdsGW1rWAUKnvo=";
   };
 
   hcl2json-go-modules =
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     go
     makeWrapper
-    nodejs_20
+    nodejs_22
     patchelf
     removeReferencesTo
     yarn
@@ -129,7 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib/node_modules/cdktn-cli"
     cp -rL node_modules packages/cdktn-cli/bundle packages/cdktn-cli/package.json "$out/lib/node_modules/cdktn-cli/"
 
-    makeWrapper "${lib.getExe nodejs_20}" "$out/bin/cdktn" \
+    makeWrapper "${lib.getExe nodejs_22}" "$out/bin/cdktn" \
+      --add-flags "--no-warnings=DEP0040" \
       --add-flags "$out/lib/node_modules/cdktn-cli/bundle/bin/cdktn.js"
 
     runHook postInstall
@@ -160,5 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cdktn";
     maintainers = with lib.maintainers; [ deejayem ];
     platforms = lib.platforms.unix;
+    # Uses @cdktf/node-pty-prebuilt-multiarch which is not yet available for node 22 on aarch64-linux
+    broken = stdenv.hostPlatform.system == "aarch64-linux";
   };
 })
