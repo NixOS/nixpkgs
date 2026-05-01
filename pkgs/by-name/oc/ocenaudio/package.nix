@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ];
 
+  autoPatchelfIgnoreMissingDeps = [
+    "libqtocenai.so.*"
+    "libqtocencore.so.*"
+  ];
+
   dontBuild = true;
   dontStrip = true;
 
