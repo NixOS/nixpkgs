@@ -24459,6 +24459,12 @@
     githubId = 5104601;
     name = "schnusch";
   };
+  schra = {
+    email = "andre.schroeder@andresco.de";
+    github = "schra";
+    githubId = 23171985;
+    name = "André Schröder";
+  };
   schrobingus = {
     email = "brent.monning.jr@gmail.com";
     name = "Brent Monning";
