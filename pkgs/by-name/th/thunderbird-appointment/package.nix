@@ -1,9 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  buildNpmPackage,
-  nodejs_22,
-  python312,
+  stdenv,
+  fetchPnpmDeps,
+  pnpm_11,
+  pnpmConfigHook,
+  nodejs_24,
+  python3,
   makeWrapper,
   nixosTests,
   runCommand,
@@ -11,57 +14,9 @@
 }:
 
 let
-  # Match the upstream backend runtime (Python 3.12).
-  python3 = python312;
   pythonPackages = python3.pkgs;
-  version = "1.4.2";
-
-  backendPyproject = writeText "thunderbird-appointment-pyproject.toml" ''
-    [project]
-    name = "thunderbird-appointment"
-    version = "${version}"
-
-    [project.scripts]
-    run-command = "appointment.main:cli"
-
-    [tool.setuptools]
-    include-package-data = true
-
-    [tool.setuptools.package-data]
-    appointment = [
-      "l10n/*/*.ftl",
-      "templates/assets/img/*.png",
-      "templates/assets/img/icons/*.png",
-      "templates/email/*.jinja2",
-      "templates/email/errors/*.jinja2",
-      "templates/email/includes/*.jinja2",
-    ]
-  '';
-
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
-  pname = "thunderbird-appointment";
-  inherit version;
-  __structuredAttrs = true;
-
-  src = fetchFromGitHub {
-    owner = "thunderbird";
-    repo = "appointment";
-    rev = "r-0837";
-    hash = "sha256-SilLfP/Vvbk91j1DekKXoNbD61/t0crl8ZubVBzbADE=";
-  };
-
-  sourceRoot = "source/backend";
-
-  postPatch = ''
-    cp ${backendPyproject} pyproject.toml
-  '';
-
-  pyproject = true;
-
-  build-system = [ pythonPackages.setuptools ];
-
-  dependencies = with pythonPackages; [
+  version = "1.9.1";
+  runtimeDependencies = with pythonPackages; [
     alembic
     argon2-cffi
     authlib
@@ -111,6 +66,73 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     validators
   ];
 
+  backendPyproject = writeText "thunderbird-appointment-pyproject.toml" ''
+    [project]
+    name = "thunderbird-appointment"
+    version = "${version}"
+
+    [project.scripts]
+    run-command = "appointment.main:cli"
+
+    [tool.setuptools]
+    include-package-data = true
+
+    [tool.setuptools.package-data]
+    appointment = [
+      "l10n/*/*.ftl",
+      "templates/assets/img/*.png",
+      "templates/assets/img/icons/*.png",
+      "templates/email/*.jinja2",
+      "templates/email/errors/*.jinja2",
+      "templates/email/includes/*.jinja2",
+    ]
+  '';
+
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
+  pname = "thunderbird-appointment";
+  inherit version;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "thunderbird";
+    repo = "appointment";
+    rev = "r-0942";
+    hash = "sha256-o6dUQLHtNmliSOBp/gf46uez4aZT/jrCWmfobpK//b8=";
+  };
+
+  sourceRoot = "source/backend";
+
+  postPatch = ''
+    cp ${backendPyproject} pyproject.toml
+
+    # Resolve Schedule's CalendarBase forward reference before tests freeze
+    # time. Freezegun patches the module-level `date` name, which breaks
+    # Pydantic's lazy rebuild of this model on the first request in that scope.
+    python3 - <<'PY'
+    from pathlib import Path
+
+    path = Path("src/appointment/database/schemas.py")
+    source = path.read_text()
+    marker = "class CalendarBase(BaseModel):\n"
+    end = "\n\nclass CalendarConnectionOut("
+    if source.count(marker) != 1 or source.count(end) != 1:
+        raise SystemExit("unexpected Appointment schema layout")
+    start = source.index(marker)
+    insertion = source.index(end, start)
+    if "Schedule.model_rebuild()" in source:
+        raise SystemExit("Schedule schema rebuild already present")
+    source = source[:insertion] + "\n\n# Resolve Schedule's CalendarBase forward reference eagerly.\nSchedule.model_rebuild()" + source[insertion:]
+    path.write_text(source)
+    PY
+  '';
+
+  pyproject = true;
+
+  build-system = [ pythonPackages.setuptools ];
+
+  dependencies = runtimeDependencies;
+
   nativeBuildInputs = [ makeWrapper ];
 
   # Upstream ships a tightly pinned requirements.txt for container builds.
@@ -150,7 +172,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     let
       wrap = name: pkg: args: ''
         makeWrapper ${lib.getExe pythonPackages.${pkg}} $out/bin/thunderbird-appointment-${name} \
-          --prefix PYTHONPATH : "$out/${python3.sitePackages}:${pythonPackages.makePythonPath finalAttrs.dependencies}" \
+          --prefix PYTHONPATH : "$out/${python3.sitePackages}:${pythonPackages.makePythonPath runtimeDependencies}" \
           --add-flags "${args}"
       '';
     in
@@ -170,19 +192,35 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     '';
 
   passthru = {
-    frontend = buildNpmPackage (frontendAttrs: {
+    frontend = stdenv.mkDerivation (frontendAttrs: {
       pname = "thunderbird-appointment-frontend";
-      nodejs = nodejs_22;
-
       inherit (finalAttrs) version src;
 
       sourceRoot = "source/frontend";
-      npmDepsHash = "sha256-xsifpdFtDJx3eW5kXw4Bg4udXxyySuX8cLgH+rK3WLo=";
+
+      pnpmDeps = fetchPnpmDeps {
+        inherit (frontendAttrs) pname version src;
+        sourceRoot = "${frontendAttrs.src.name}/frontend";
+        pnpm = pnpm_11;
+        fetcherVersion = 4;
+        hash = "sha256-Jw/dxpnnnpKeP13UcEHORtSVbJ5Ez2pbFtZLcrV/b74=";
+      };
+
+      nativeBuildInputs = [
+        nodejs_24
+        pnpm_11
+        pnpmConfigHook
+      ];
+
+      buildInputs = [ frontendAttrs.pnpmDeps ];
 
       env.TZ = "America/Vancouver";
 
-      preBuild = ''
-        npm run lint
+      buildPhase = ''
+        runHook preBuild
+        pnpm run lint
+        pnpm run build
+        runHook postBuild
       '';
 
       installPhase = ''
@@ -199,83 +237,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       '';
     });
 
-    runtimeDependencies = with pythonPackages; [
-      alembic
-      argon2-cffi
-      authlib
-      babel
-      caldav
-      celery
-      celery-redbeat
-      cryptography
-      dnspython
-      email-validator
-      fastapi
-      flower
-      fluent-runtime
-      fluent-syntax
-      google-api-python-client
-      google-auth-httplib2
-      google-auth-oauthlib
-      hiredis
-      icalendar
-      itsdangerous
-      jinja2
-      markdown
-      nh3
-      niquests
-      oauthlib
-      posthog
-      psycopg
-      pydantic
-      pyjwt
-      python-dotenv
-      python-multipart
-      redis
-      requests-oauthlib
-      sentry-sdk
-      slowapi
-      sqlalchemy
-      sqlalchemy-utils
-      starlette-context
-      starlette-csrf
-      typer
-      tzdata
-      uvicorn
-      validators
-    ];
-  in
-  {
-    pname = "thunderbird-appointment";
-    inherit version src;
-
-    sourceRoot = "source/backend";
-
-    postPatch = ''
-      cat >> pyproject.toml <<'EOF'
-
-      [tool.setuptools]
-      include-package-data = true
-
-      [tool.setuptools.package-data]
-      appointment = [
-        "l10n/*/*.ftl",
-        "templates/assets/img/*.png",
-        "templates/assets/img/icons/*.png",
-        "templates/email/*.jinja2",
-        "templates/email/errors/*.jinja2",
-        "templates/email/includes/*.jinja2",
-      ]
-      EOF
-    '';
-
-    pyproject = true;
-
-    build-system = [ pythonPackages.setuptools ];
-
-    dependencies = runtimeDependencies;
-
-    nativeBuildInputs = [ makeWrapper ];
+    frontendPath = "${finalAttrs.finalPackage}/share/thunderbird-appointment/frontend";
 
     services = {
       api.executable = lib.getExe finalAttrs.finalPackage;
@@ -302,7 +264,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
             test -f ${finalAttrs.finalPackage}/share/thunderbird-appointment/alembic.ini
             test -f ${finalAttrs.finalPackage}/share/thunderbird-appointment/appointment/migrations/env.py
             ${lib.concatMapStringsSep "\n" (b: "thunderbird-appointment-${b} --help > /dev/null") bins}
-            export PYTHONPATH="${finalAttrs.finalPackage}/${python3.sitePackages}:${pythonPackages.makePythonPath finalAttrs.dependencies}"
+            export PYTHONPATH="${finalAttrs.finalPackage}/${python3.sitePackages}:${pythonPackages.makePythonPath runtimeDependencies}"
             ${python3.interpreter} - <<'PY'
             import appointment.celery_app
             import appointment.main
@@ -318,7 +280,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Thunderbird Appointment - Invite others to grab times on your calendar";
     homepage = "https://github.com/thunderbird/appointment";
-    changelog = "https://github.com/thunderbird/appointment/releases/tag/r-0837";
+    changelog = "https://github.com/thunderbird/appointment/releases/tag/r-0942";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ philocalyst ];
     platforms = lib.platforms.unix;
