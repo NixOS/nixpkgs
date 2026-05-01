@@ -122,7 +122,6 @@ buildFHSEnv {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "houdini";
-    hydraPlatforms = [ ]; # requireFile src's should be excluded
     maintainers = with lib.maintainers; [
       canndrew
       kwohlfahrt

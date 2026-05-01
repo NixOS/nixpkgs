@@ -189,6 +189,5 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       m0streng0
     ];
-    hydraPlatforms = [ ]; # requireFile used as src
   };
 }
