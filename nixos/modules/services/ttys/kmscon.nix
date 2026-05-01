@@ -149,6 +149,10 @@ in
         ))
       ];
 
+      serviceConfig.Environment = optionals cfg.useXkbConfig [
+        "XKB_CONFIG_ROOT=${config.services.xserver.xkb.dir}"
+      ];
+
       restartIfChanged = false;
       # logind spawns autovt@ttyN.service on VT switch; point it at kmscon
       aliases = [ "autovt@.service" ];
