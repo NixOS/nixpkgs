@@ -463,13 +463,13 @@
     "vendorHash": "sha256-/8h2bmesnFz3tav3+iDelZSjp1Z9lreexwcw0WdYekA="
   },
   "goharbor_harbor": {
-    "hash": "sha256-+HhtRod8VNOE6KceWIviWDCPvPuLK9/WaKrgT27GUpw=",
+    "hash": "sha256-2mi1QlWPAPGVr/Q0xOQjI8R8baeyJotjjoKZyQYNJg0=",
     "homepage": "https://registry.terraform.io/providers/goharbor/harbor",
     "owner": "goharbor",
     "repo": "terraform-provider-harbor",
-    "rev": "v3.11.5",
+    "rev": "v3.11.6",
     "spdx": "MIT",
-    "vendorHash": "sha256-yOM4JcQxAvYAFPyAFfjJn4FK8pEXF3I55ddMTkijn9c="
+    "vendorHash": "sha256-874QpqIFFhzIGJZ8nKGcUe9qEpR9jQkx4nl75Cpqpww="
   },
   "grafana_grafana": {
     "hash": "sha256-M29iRplTonmxOXeQYAdij+ttfGYiOCLN/v6YvYN9k7w=",
