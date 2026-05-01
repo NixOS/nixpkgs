@@ -13,7 +13,6 @@ let
   plat =
     {
       aarch64-linux = "-arm64";
-      armv7l-linux = "-armv7l";
       x86_64-linux = "";
     }
     .${stdenv.hostPlatform.system};
@@ -21,7 +20,6 @@ let
   hash =
     {
       aarch64-linux = "sha256-sfnRzY+1flUdIM1ey9u00j9eiDa4u5bY/f3fupV+FKM=";
-      armv7l-linux = "sha256-ZnFSJE1VmvqSKZHBsMtvBbypsbY35z9X5T4bYT0DytU=";
       x86_64-linux = "sha256-lgZjVVBWPloqMWX0oryNB0lxgmJCBqC7pp0AjeUMjQM=";
     }
     .${stdenv.hostPlatform.system};
@@ -58,7 +56,6 @@ appimageTools.wrapType2 {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "armv7l-linux"
     ];
     mainProgram = "p3x-onenote";
   };
