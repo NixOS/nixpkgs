@@ -11042,6 +11042,8 @@ self: super: with self; {
 
   neurio = callPackage ../development/python-modules/neurio { };
 
+  neurite = callPackage ../development/python-modules/neurite { };
+
   neurokit2 = callPackage ../development/python-modules/neurokit2 { };
 
   neuron-full = pkgs.neuron-full.override { python3 = python; };
@@ -15199,6 +15201,8 @@ self: super: with self; {
   pystiebeleltron = callPackage ../development/python-modules/pystiebeleltron { };
 
   pystray = callPackage ../development/python-modules/pystray { };
+
+  pystrum = callPackage ../development/python-modules/pystrum { };
 
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
@@ -20967,6 +20971,8 @@ self: super: with self; {
   volvooncall = callPackage ../development/python-modules/volvooncall { };
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
+
+  voxelmorph = callPackage ../development/python-modules/voxelmorph { };
 
   vpk = callPackage ../development/python-modules/vpk { };
 
