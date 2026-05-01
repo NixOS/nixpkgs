@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "test_integration_zip_zip"
       ];
     in
-    builtins.map (x: "--skip=" + x) skipList;
+    map (x: "--skip=" + x) skipList;
 
   meta = {
     description = "Rust tool to collect and aggregate code coverage data for multiple source files";

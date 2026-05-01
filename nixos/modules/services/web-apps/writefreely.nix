@@ -6,7 +6,6 @@
 }:
 
 let
-  inherit (builtins) toString;
   inherit (lib)
     types
     mkIf
@@ -15,7 +14,6 @@ let
     ;
   inherit (lib)
     optional
-    optionals
     optionalAttrs
     optionalString
     ;

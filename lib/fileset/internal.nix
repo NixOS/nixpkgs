@@ -12,7 +12,7 @@ let
     split
     trace
     typeOf
-    fetchGit
+
     ;
 
   inherit (lib.attrsets)

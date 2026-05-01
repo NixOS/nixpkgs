@@ -253,7 +253,7 @@ in
         section:
         lib.concatMapAttrsStringSep "" (
           param: value: ''
-            crudini --inplace --set "$AMULE_CONF" "${section}" "${param}" "${builtins.toString value}"
+            crudini --inplace --set "$AMULE_CONF" "${section}" "${param}" "${toString value}"
           ''
         )
       ) cfg.settings)

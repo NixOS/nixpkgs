@@ -9,8 +9,7 @@ let
   format = pkgs.formats.toml { };
   filterAttrs = x: lib.filterAttrs (n: v: n != "ClientSecretFile" || v != null) x;
   getIndex =
-    item:
-    builtins.toString (lib.lists.findFirstIndex (x: x == item) null cfg.settings.RegistrationOIDC);
+    item: toString (lib.lists.findFirstIndex (x: x == item) null cfg.settings.RegistrationOIDC);
   secretFiles = lib.filter (
     x: lib.hasAttr "ClientSecretFile" (filterAttrs x)
   ) cfg.settings.RegistrationOIDC;

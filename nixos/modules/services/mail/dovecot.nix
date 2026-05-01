@@ -150,7 +150,7 @@ let
     let
       configVersion = cfg.settings.dovecot_config_version;
       storageVersion = cfg.settings.dovecot_storage_version;
-      remainingSettings = builtins.removeAttrs cfg.settings [
+      remainingSettings = removeAttrs cfg.settings [
         "dovecot_config_version"
         "dovecot_storage_version"
       ];

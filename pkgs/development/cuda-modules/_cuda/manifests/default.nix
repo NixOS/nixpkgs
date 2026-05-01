@@ -16,4 +16,4 @@ lib.mapAttrs (
       "${version}" = lib.importJSON (redistManifestDir + "/${fileName}");
     }
   ) (builtins.readDir redistManifestDir)
-) (builtins.removeAttrs (builtins.readDir ./.) [ "default.nix" ])
+) (removeAttrs (builtins.readDir ./.) [ "default.nix" ])

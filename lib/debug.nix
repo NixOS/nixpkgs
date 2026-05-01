@@ -653,7 +653,7 @@ rec {
       in
       throw (
         builtins.seq traceFailures (
-          "${builtins.toString (builtins.length failures)} ${description} failed:\n- "
+          "${toString (builtins.length failures)} ${description} failed:\n- "
           + (concatMapStringsSep "\n- " (failure: failure.name) failures)
           + "\n\n"
           + builtins.toJSON failures

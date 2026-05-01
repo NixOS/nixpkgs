@@ -70,7 +70,7 @@ in
         services.nginx = {
           enable = lib.mkDefault true;
           virtualHosts.${cfg.hostName} = {
-            locations."/".proxyPass = "http://${cfg.hostName}:${builtins.toString cfg.settings.HTTP.Port}";
+            locations."/".proxyPass = "http://${cfg.hostName}:${toString cfg.settings.HTTP.Port}";
           };
         };
       }
