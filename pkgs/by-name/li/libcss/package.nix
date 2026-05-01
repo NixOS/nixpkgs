@@ -41,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     perl
     netsurf-buildsystem
+  ];
+
+  propagatedBuildInputs = [
     libparserutils
     libwapcaplet
   ];
