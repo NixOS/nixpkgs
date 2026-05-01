@@ -1,7 +1,9 @@
 {
+  config,
   cargo-nextest,
   clang,
   diffutils,
+  rust-advisory-db,
   lib,
   makeSetupHook,
   rust,
@@ -16,7 +18,20 @@
   tests,
   pkgsCross,
 }:
-{
+lib.fix (self: {
+  cargoAuditHook = makeSetupHook {
+    name = "cargo-audit-hook.sh";
+    substitutions = {
+      inherit (stdenv.targetPlatform.rust.platform) arch os;
+      auditDatabase = rust-advisory-db;
+      failOnAuditFail = builtins.toString config.failRustAudit;
+    };
+    propagatedBuildInputs = [
+      pkgsHostTarget.cargo-audit
+      pkgsHostTarget.jq
+    ];
+  } ./cargo-audit-hook.sh;
+
   cargoBuildHook = makeSetupHook {
     name = "cargo-build-hook.sh";
     substitutions = {
@@ -24,6 +39,16 @@
       inherit (rust.envVars) setEnv;
 
     };
+
+    # Modify bootstrap config if any are added here
+    propagatedBuildInputs = [
+      self.cargoAuditHook
+    ];
+
+    passthru.bootstrap = self.cargoBuildHook.overrideAttrs {
+      propagatedBuildInputs = [ ];
+    };
+
     passthru.tests = {
       test = tests.rust-hooks.cargoBuildHook;
     }
@@ -133,4 +158,4 @@
       inherit clang;
     };
   } ./rust-bindgen-hook.sh;
-}
+})
