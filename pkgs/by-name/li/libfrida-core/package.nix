@@ -6,12 +6,12 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "17.9.1";
+  version = "17.9.3";
   source =
     {
       x86_64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-        hash = "sha256-94Zk7onepdNVEeDb+Vn4h680UoXCZPeZW+eGpaUrnwI=";
+        hash = "sha256-HHT305+9qlZfTWgpsZe6IbcY7lZysN7voOd+fEbKazg=";
       };
       aarch64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-arm64.tar.xz";
