@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pypoolstation";
-  version = "0.5.8";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GIRx66esht82tKBJDhCDrwPkxsdBPi1w9tSQ7itF0qQ=";
+    hash = "sha256-blTvbvuIS2YISd0jBR/TXOSm594htGB7lc9JpA+3ayM=";
   };
 
   build-system = [ poetry-core ];
