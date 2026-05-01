@@ -60,7 +60,6 @@ let
 in
 buildGoModule (finalAttrs: {
   inherit
-    autobrr-web
     pname
     version
     src
@@ -69,7 +68,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-HjHRT/PAZdMM/2JWmNMK/I9Gc0ThTAFDSxWW/ATYxW8=";
 
   preBuild = ''
-    cp -r ${autobrr-web}/* web/dist
+    cp -r ${finalAttrs.passthru.autobrr-web}/* web/dist
   '';
 
   ldflags = [
@@ -88,6 +87,7 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
 
   passthru = {
+    inherit autobrr-web;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
