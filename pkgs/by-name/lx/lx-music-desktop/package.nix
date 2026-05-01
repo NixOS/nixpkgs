@@ -19,13 +19,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
-  version = "2.12.1";
+  version = "2.12.2";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bhgXNk1WUVYb5/42uLIi+V8Ivc9/ykul+Um6QmGlvyk=";
+    hash = "sha256-0hUm7BfjI4x22DsAPX/VZo+IKInSl6hhylTK0awPhYo=";
   };
 
   desktopItems = [
@@ -56,7 +56,6 @@ buildNpmPackage (finalAttrs: {
     (replaceVars ./electron-builder.patch {
       electron_version = electron.version;
     })
-    ./electron-version.patch
   ];
 
   nativeBuildInputs = [
@@ -64,7 +63,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-62ytK6WNwdkKfci2gsC+WVDcNi247IXqFGBWa5a5J5c=";
+  npmDepsHash = "sha256-iIymnYIAE8rFEa8I2nVt2JrMyRiZL5nBS+HfNoDN1Hk=";
 
   makeCacheWritable = true;
 
