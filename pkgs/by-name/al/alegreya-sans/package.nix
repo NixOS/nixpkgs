@@ -1,12 +1,18 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alegreya-sans";
   version = "2.008";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "huertatipografica";
@@ -15,12 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0xz5lq9fh0pj02ifazhddzh792qkxkz1z6ylj26d93wshc90jl5g";
   };
 
-  installPhase = ''
-    install -D -m 444 fonts/otf/* -t $out/share/fonts/otf
-    install -D -m 444 fonts/ttf/* -t $out/share/fonts/ttf
-    install -D -m 444 fonts/webfonts/*.woff -t $out/share/fonts/woff
-    install -D -m 444 fonts/webfonts/*.woff2 -t $out/share/fonts/woff2
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Humanist sans serif family with a calligraphic feeling";
