@@ -1,6 +1,8 @@
 with import ../lib;
 
 {
+  pkgs ? import ./.. { system = "x86_64-linux"; },
+
   nixpkgs ? {
     outPath = cleanSource ./..;
     revCount = 708350;
@@ -80,8 +82,6 @@ let
   allTests = foldAttrs recursiveUpdate { } (
     map allTestsForSystem (if attrNamesOnly then [ (head supportedSystems) ] else supportedSystems)
   );
-
-  pkgs = import ./.. { system = "x86_64-linux"; };
 
   versionModule =
     { config, ... }:
