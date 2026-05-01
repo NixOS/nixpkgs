@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "braintree";
-  version = "4.41.0";
+  version = "4.42.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "braintree";
     repo = "braintree_python";
     rev = version;
-    hash = "sha256-5rTYRzlx/XueL6vF0/kM73bgN/QjvM55ZSLIWNI8YiQ=";
+    hash = "sha256-cpQjf/5Exfpb/NY9offI8U8ny2pKHqHW2PGfo8STE9w=";
   };
 
   build-system = [ setuptools ];
