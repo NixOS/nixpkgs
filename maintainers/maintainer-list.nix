@@ -23948,6 +23948,12 @@
     githubId = 40308458;
     name = "rwxd";
   };
+  rwyattwalker = {
+    email = "wyatt@wwalker.me";
+    github = "rwyattwalker";
+    githubId = 82427125;
+    name = "Wyatt Walker";
+  };
   rxiao = {
     email = "ben.xiao@me.com";
     github = "benxiao";
