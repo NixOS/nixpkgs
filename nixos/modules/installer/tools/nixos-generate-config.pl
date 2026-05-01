@@ -24,8 +24,7 @@ sub uniq {
 }
 
 sub runCommand {
-    my ($cmd) = @_;
-    open FILE, "$cmd 2>&1 |" or die "Failed to execute: $cmd\n";
+    open FILE, "-|", @_ or die "Failed to execute: @_\n";
     my @ret = <FILE>;
     close FILE;
     return ($?, @ret);
@@ -458,7 +457,7 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @info) = runCommand("@btrfs@ subvol show $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@btrfs@", "subvol", "show", "$rootDir$mountPoint");
         if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
@@ -505,7 +504,7 @@ EOF
     # This should work for single and multi-device systems.
     # still needs subvolume support
     if ($fsType eq "bcachefs") {
-        my ($status, @info) = runCommand("bcachefs fs usage $rootDir$mountPoint");
+        my ($status, @info) = runCommand("bcachefs", "fs", "usage", "$rootDir$mountPoint");
         my $UUID = $info[0];
 
         if ($status == 0 && $UUID =~ /^Filesystem:[ \t\n]*([0-9a-z-]+)/) {
