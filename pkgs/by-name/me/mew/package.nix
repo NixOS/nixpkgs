@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation {
   pname = "mew";
-  version = "1.0-unstable-2025-06-20";
+  version = "1.0-unstable-2026-03-18";
 
   src = fetchFromCodeberg {
     owner = "sewn";
     repo = "mew";
-    rev = "af6440da8fe6683cf0b873e0a98c293bf02c3447";
-    hash = "sha256-NbpYITHO81fnaDY0dtolaUBdRqQNKwHQz/lBQMOHM5c=";
+    rev = "98dea211e634ccc2f75b4dae09fc2705666c6322";
+    hash = "sha256-u0TBWPBOdXNYwuwn9U1xqJsUShyOz9MIP1CNozcxbzg=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,8 @@ stdenv.mkDerivation {
   makeFlags = [
     # The PREFIX var is hardcoded in the makefile.
     "PREFIX=$(out)"
+    # Disables the incompatible-pointer-types build check.
+    "CFLAGS=-Wno-error=incompatible-pointer-types"
   ];
 
   postFixup = ''
