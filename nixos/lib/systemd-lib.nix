@@ -67,7 +67,9 @@ rec {
   mkPathSafeName = replaceStrings [ "@" ":" "\\" "[" "]" ] [ "-" "-" "-" "" "" ];
 
   # a type for options that take a unit name
-  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
+  # note: redundantly escaping backslash in the bracket expression makes the regex
+  # slightly more portable even though POSIX doesn't require it.
+  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
 
   makeUnit =
     name: unit:
