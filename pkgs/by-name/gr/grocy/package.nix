@@ -21,7 +21,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-qdN+stXuwChv6IaFSX2SrSdej7Id/M0UaO2cggAvWdc=";
   };
 
-  vendorHash = "sha256-3f7me/YG2lt7fhkgXO1+0SXO+1IK+Fdb3/gywWyaxVg=";
+  vendorHash = "sha256-QqG8+LMDrZz8CexmfDK18TWvdQCR9N7oJLjzcCQkzmA=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
