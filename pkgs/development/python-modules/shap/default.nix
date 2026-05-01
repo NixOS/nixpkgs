@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.50.0";
+  version = "0.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = "shap";
     tag = "v${version}";
-    hash = "sha256-sf9EYa15/5xEOtHSesuq97dFP4frtteoGSpHE8kGP9Q=";
+    hash = "sha256-UcN0fWWW5ckKucHDaOgBnbOFXvskCsymT+JH8uCTqF4=";
   };
 
   postPatch = ''
