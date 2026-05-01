@@ -12,7 +12,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "nirimod";
-  version = "0-unstable-2026-04-18";
+  version = "0-unstable-2026-04-30";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,8 +20,8 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "srinivasr";
     repo = "nirimod";
-    rev = "6dbda782788caed4e8691e372e79b5c73d6871ba";
-    hash = "sha256-l3q0hxUpgW7Fmb2zz3IY+dhbTffhUy2oYc80sf6p6LA=";
+    rev = "afb2b7c31746aa762e47b0497281196898232a92";
+    hash = "sha256-2wIaTPDTCuYerUIQJSHO884vRcoDFVxWTgGB4FXN0wk=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -38,11 +38,6 @@ python3Packages.buildPythonApplication {
   ];
 
   dependencies = [ python3Packages.pygobject3 ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'nirimod = "nirimod.main:main"' 'nirimod = "nirimod.__main__:main"'
-  '';
 
   postInstall = ''
     install -Dm644 data/nirimod.svg $out/share/icons/hicolor/scalable/apps/nirimod.svg
