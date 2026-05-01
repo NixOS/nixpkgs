@@ -22,6 +22,7 @@
   libxi,
   libxrandr,
   libxfixes,
+  libjpeg_turbo,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
@@ -35,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-cw3IejeWFhuFSzUgK2sv4LEa2ohHNx6C3T7+GhHljsY=";
   };
+
+  postPatch = ''
+    substituteInPlace src/capture/v4l2.c \
+      --replace-fail "libturbojpeg.so.0" "${lib.getLib libjpeg_turbo}/lib/libturbojpeg.so.0"
+  '';
 
   nativeBuildInputs = [
     pkg-config
