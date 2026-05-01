@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   gz-cmake,
@@ -40,13 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Replace FreeImage with STB image headers (vendored).
-    # FreeImage was removed from nixpkgs due to security vulnerabilities.
-    # https://github.com/gazebosim/gz-common/pull/803
-    ./patches/pr-803.patch
+    # TODO: Remove after update to > 7.1.1
+    (fetchpatch2 {
+      url = "https://github.com/gazebosim/gz-common/commit/a2d36c050b8e93e23b3d8d5ec1abb7b87c61cfdc.patch?full_index=1";
+      hash = "sha256-Zk6kFfWWSwNon/HcLDMmmO1XZrMUoPbc6bk0zAXXN9Y=";
+    })
 
     # Replace hardcoded /home with /tmp in SystemPaths_TEST.cc FindFile test.
-    # https://github.com/gazebosim/gz-common/pull/802
-    ./patches/pr-802.patch
+    # TODO: Remove after update to > 7.1.1
+    (fetchpatch2 {
+      url = "https://github.com/gazebosim/gz-common/commit/2d63d3f5b3f4b29418955a7c266a199f803e6d5c.patch?full_index=1";
+      hash = "sha256-Gws0KVhfGd61uPNC1gJXlCaY81tVZeU6PlqcJA40LeA=";
+    })
   ];
 
   nativeBuildInputs = [
