@@ -1,10 +1,12 @@
 {
   lib,
+  buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
+  applyPatches,
+  fetchpatch,
   nodejs,
 }:
-stdenv.mkDerivation {
+buildNpmPackage {
   pname = "speed-cloudflare-cli";
   version = "2.0.3-unstable-2025-07-31";
 
@@ -15,17 +17,18 @@ stdenv.mkDerivation {
     sha256 = "sha256-kJ//zXBW2IQ5V5dJfAm8iGxf9QILH0uloNYiwG3pTe4=";
   };
 
-  nativeBuildInputs = [ nodejs ];
+  postInstall = ''
+    mkdir -p "$out/bin"
 
-  installPhase = ''
-    mkdir -p $out/bin
-
-    install -Dm755 $src/cli.js $out/bin/speed-cloudflare-cli
-    install -Dm644 $src/chalk.js $out/bin/chalk.js
-    install -Dm644 $src/stats.js $out/bin/stats.js
-
-    patchShebangs $out/bin/speed-cloudflare-cli
+    # Create an executable wrapper
+    makeWrapper ${lib.getExe nodejs} "$out/bin/speed-cloudflare-cli" \
+      --add-flags "$out/lib/node_modules/speed-cloudflare-cli/cli.js"
   '';
+
+  npmDepsHash = "sha256-CoirJgdpF9WEgbaXQbq5QlRO9wstZbNxIW2L1cJ+nXg=";
+
+  dontBuild = true;
+  dontNpmBuild = true;
 
   meta = {
     description = "Measure the speed and consistency of your internet connection using speed.cloudflare.com";
