@@ -330,11 +330,7 @@ in
               done
 
               # Move the new temporary /etc mount underneath the current /etc mount.
-              #
-              # This should eventually use util-linux to perform this move beneath,
-              # however, this functionality is not yet in util-linux. See this
-              # tracking issue: https://github.com/util-linux/util-linux/issues/2604
-              ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath "$tmpEtcMount" /etc
+              mount --move --beneath "$tmpEtcMount" /etc
 
               # Unmount the top /etc mount to atomically reveal the new mount.
               umount --lazy --recursive /etc
