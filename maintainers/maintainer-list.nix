@@ -15908,6 +15908,12 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  lpbigfish = {
+    email = "lpbigfish@proton.me";
+    name = "Filip Štegner";
+    github = "LPbigFish";
+    githubId = 82438197;
+  };
   lpchaim = {
     email = "lpchaim@proton.me";
     matrix = "@lpchaim:matrix.org";
