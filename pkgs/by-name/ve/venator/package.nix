@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-qjSB/XAxB/VbO4m9Gg/XP9332WaSm/d/ejSTrHRchHg=";
   };
 
-  cargoRoot = "venator-app";
   buildAndTestSubdir = "venator-app";
   # NOTE: don't put npmRoot here because it will break the build with "Found
   # version mismatched Tauri packages".
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     cp ${finalAttrs.src}/venator-app/package.json .
     cp ${finalAttrs.src}/venator-app/package-lock.json .
-    cp ${finalAttrs.src}/Cargo.lock venator-app/
   '';
 
   cargoHash = "sha256-OLtWDJuK9fXbpjUfidLP2nKdD49cWmqWI92bhV29054=";
