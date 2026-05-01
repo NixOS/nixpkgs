@@ -14,20 +14,20 @@
   which,
 
   # runtime
-  nodejs_20,
+  nodejs_24,
 
   # tests
   nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "8.0.2";
+  version = "8.1.5";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u4LDk9r88h3EqX6ZRMPCQmjOvfJDXwV2YYrKEkGBWgs=";
+    hash = "sha256-vLKjTn8tdHb/DUHj/w3ovXmRNzD8CMSKCaPleW+i7Tc=";
   };
 
   outputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-1CmfcDZ23oITP8GQGIBeZP4Z5AON0f3CtdHGnpZxHgQ=";
+    hash = "sha256-gvjk4OmKR6W/nllUCSaiX/lVXJSac9r04xr7fNiBftI=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    nodejs_20
+    nodejs_24
   ];
 
   preBuild = ''
@@ -79,11 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Build PeerTube cli
     npm run build:peertube-cli
-    patchShebangs ~/apps/peertube-cli/dist/peertube.js
+    patchShebangs ~/apps/peertube-cli/dist/peertube.mjs
 
     # Build PeerTube runner
     npm run build:peertube-runner
-    patchShebangs ~/apps/peertube-runner/dist/peertube-runner.js
+    patchShebangs ~/apps/peertube-runner/dist/peertube-runner.mjs
 
     # Clean up declaration files
     find \
@@ -130,11 +130,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $cli/bin
     mv ~/apps/peertube-cli/{dist,node_modules,package.json} $cli
-    ln -s $cli/dist/peertube.js $cli/bin/peertube-cli
+    ln -s $cli/dist/peertube.mjs $cli/bin/peertube-cli
 
     mkdir -p $runner/bin
     mv ~/apps/peertube-runner/{dist,node_modules,package.json} $runner
-    ln -s $runner/dist/peertube-runner.js $runner/bin/peertube-runner
+    ln -s $runner/dist/peertube-runner.mjs $runner/bin/peertube-runner
 
     # Create static gzip and brotli files
     fd -e css -e eot -e html -e js -e json -e svg -e webmanifest -e xlf \
