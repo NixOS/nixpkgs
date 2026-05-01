@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   gz-cmake,
@@ -23,7 +22,7 @@
   testers,
 }:
 let
-  version = "9.1.0";
+  version = "9.2.0";
   versionPrefix = "gz-physics${lib.versions.major version}";
   ldLibraryPathEnv = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
 in
@@ -38,19 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gazebosim";
     repo = "gz-physics";
     tag = "${versionPrefix}_${finalAttrs.version}";
-    hash = "sha256-9JM/vtDOOfwpmc4cu1XEE0FSgaYBaLAD7dCvqI7MuMY=";
+    hash = "sha256-p7Qx9nR0aRm+Ze6FFQzb2oEM59ssPslkDCIwKyVBlu0=";
   };
-
-  patches = [
-    # Fix bullet-featherstone CastTo*Shape failures on macOS when Bullet is linked
-    # as a shared library: replaces dynamic_cast (broken by RTTI fragmentation under
-    # RTLD_LOCAL + -fvisibility=hidden) with Bullet's getShapeType() enum.
-    # TODO: Remove after update to > 9.1.0
-    (fetchpatch2 {
-      url = "https://github.com/gazebosim/gz-physics/commit/260e8938dfba398101b97f546ccb834f8e1aeb49.patch?full_index=1";
-      hash = "sha256-jXBKrTmskXLTth09sNUSIEQ4lybkUP0HuaiOLxOV9GA=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
