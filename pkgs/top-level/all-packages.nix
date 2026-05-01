@@ -4608,10 +4608,6 @@ with pkgs;
     stdenv = gcc14Stdenv;
   };
 
-  urweb = callPackage ../development/compilers/urweb {
-    icu = icu67;
-  };
-
   vcard = python3Packages.toPythonApplication python3Packages.vcard;
 
   inherit (callPackage ../development/compilers/vala { })
