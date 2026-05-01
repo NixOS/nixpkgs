@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  cocotb,
   coreutils,
   jinja2,
   pandas,
@@ -12,17 +13,25 @@
   which,
   yosys,
 }:
-
+let
+  # cocotb should build if it is at at least v2.1 or python is v3.13 or lower
+  # https://github.com/cocotb/cocotb/issues/4708#issuecomment-2923059120
+  cocotbPyVer =
+    (lib.head (lib.filter (x: x.pname == "python3") cocotb.propagatedBuildInputs)).version;
+  cocotbCanBuild =
+    ((lib.compareVersions cocotb.version "2.1.0") != -1)
+    || ((lib.compareVersions cocotbPyVer "3.14.0") == -1);
+in
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.6.1";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "olofk";
     repo = "edalize";
     tag = "v${version}";
-    hash = "sha256-5c3Szq0tXQdlyzFTFCla44qB/O6RK8vezVOaFOv8sw4=";
+    hash = "sha256-kcv/n0anQN/7v1KCRtrP91u2nFAJ55E1OxuPwxaHfGA=";
   };
 
   postPatch = ''
@@ -37,6 +46,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ jinja2 ];
+
+  dependencies = lib.optional cocotbCanBuild cocotb;
 
   optional-dependencies = {
     reporting = [
@@ -102,6 +113,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/olofk/edalize";
     changelog = "https://github.com/olofk/edalize/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ astro ];
+    maintainers = with lib.maintainers; [
+      astro
+      Mop-u
+    ];
   };
 }
