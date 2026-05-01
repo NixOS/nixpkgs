@@ -96,6 +96,7 @@ let
         maintainers = with lib.maintainers; [
           thoughtpolice
           fpletz
+          ruuda
         ];
         inherit knownVulnerabilities;
 
