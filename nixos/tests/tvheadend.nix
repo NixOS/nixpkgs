@@ -3,7 +3,7 @@
 {
   name = "tvheadend";
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = with lib.maintainers; [ juaningan ];
 
   nodes.machine =
     { ... }:

@@ -121,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TV streaming server and digital video recorder";
     homepage = "https://tvheadend.org";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ juaningan ];
     platforms = lib.platforms.linux;
     mainProgram = "tvheadend";
   };
