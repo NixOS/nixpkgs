@@ -120,27 +120,6 @@ let
   };
 in
 {
-  # 4.1 was released April 2025 and became unsupported on April 28, 2026,
-  # one year after the release of OpenBSD 7.7.
-  libressl_4_1 = generic {
-    version = "4.1.2";
-    hash = "sha256-+6Ti+ip/UjBt96OJlwoQ6YuX6w7bKZqf252/SZmcYeE=";
-    # Fixes build on loongarch64
-    # https://github.com/libressl/portable/pull/1184
-    postPatch = ''
-      mkdir -p include/arch/loongarch64
-      cp ${
-        fetchurl {
-          url = "https://github.com/libressl/portable/raw/refs/tags/v4.1.0/include/arch/loongarch64/opensslconf.h";
-          hash = "sha256-68dw5syUy1z6GadCMR4TR9+0UQX6Lw/CbPWvjHGAhgo=";
-        }
-      } include/arch/loongarch64/opensslconf.h
-    '';
-    patches = [
-      common-cmake-install-full-dirs-patch
-    ];
-  };
-
   # 4.2 was released October 2025 and will become unsupported on October 22,
   # 2026, one year after the release of OpenBSD 7.8.
   libressl_4_2 = generic {
