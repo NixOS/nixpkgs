@@ -254,6 +254,7 @@ in
   ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = runTest ./babeld.nix;
   bazarr = runTest ./bazarr.nix;
+  bazelisk = runTest ./bazelisk.nix;
   bcache = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bcache.nix;
   bcachefs = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bcachefs.nix;
   beanstalkd = runTest ./beanstalkd.nix;

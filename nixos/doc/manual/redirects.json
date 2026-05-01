@@ -1710,6 +1710,9 @@
   "module-security-acme-reload-dependencies": [
     "index.html#module-security-acme-reload-dependencies"
   ],
+  "module-programs-bazelisk": [
+    "index.html#module-programs-bazelisk"
+  ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"
   ],
