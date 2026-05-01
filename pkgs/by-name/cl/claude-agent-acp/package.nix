@@ -11,7 +11,7 @@ buildNpmPackage (finalAttrs: {
   version = "0.31.4";
 
   src = fetchFromGitHub {
-    owner = "zed-industries";
+    owner = "agentclientprotocol";
     repo = "claude-agent-acp";
     tag = "v${finalAttrs.version}";
     hash = "sha256-cXTtDekC0+n1NCgTzIyGSqHEgpgdHP6EVI23L4nCbWE=";
@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "ACP-compatible coding agent powered by the Claude Agent SDK";
-    homepage = "https://github.com/zed-industries/claude-agent-acp";
+    homepage = "https://github.com/agentclientprotocol/claude-agent-acp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       amadejkastelic
