@@ -4401,6 +4401,8 @@ self: super: with self; {
 
   eyed3 = callPackage ../development/python-modules/eyed3 { };
 
+  ez-setup = callPackage ../development/python-modules/ez-setup { };
+
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
   ezyrb = callPackage ../development/python-modules/ezyrb { };
