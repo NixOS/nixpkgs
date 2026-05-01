@@ -1,45 +1,55 @@
 {
   lib,
-  buildNpmPackage,
-  pnpm_9,
-  fetchPnpmDeps,
-  pnpmConfigHook,
+  stdenv,
   fetchFromGitHub,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
+  fetchPnpmDeps,
   unstableGitUpdater,
 }:
-let
-  pnpm = pnpm_9;
-in
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "piped";
-  version = "0-unstable-2024-11-04";
+  version = "0-unstable-2026-02-20";
 
   src = fetchFromGitHub {
     owner = "TeamPiped";
     repo = "piped";
-    rev = "7866c06801baef16ce94d6f4dd0f8c1b8bc88153";
-    hash = "sha256-o3TwE0s5rim+0VKR+oW9Rv3/eQRf2dgRQK4xjZ9pqCE=";
+    rev = "268ea742c3bf8cfc008ab1ab6206ac807d0776df";
+    hash = "sha256-maYRZi/EWY03bR4eUmPNgYvaqFmL4RnASFVYxJAfuPg=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
-  npmConfigHook = pnpmConfigHook;
+  nativeBuildInputs = [
+    nodejs
+    pnpm_10
+    pnpmConfigHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-    cp dist $out -r
+
+    cp -r dist "$out"
+
     runHook postInstall
   '';
 
-  npmDeps = pnpmDeps;
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       ;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-IB/suR1I1hNip1qpIcUCP0YyUEDV2EwE5F2WXW8OhmU=";
+    hash = "sha256-mBbcNT+vDtrHtqgVAMVxvh18wuKGtwzkCYSIfzGqYeM=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
@@ -47,8 +57,10 @@ buildNpmPackage rec {
   meta = {
     homepage = "https://github.com/TeamPiped/Piped";
     description = "Efficient and privacy-friendly YouTube frontend";
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = with lib.maintainers; [
+      lucasew
+      SchweGELBin
+    ];
     license = [ lib.licenses.agpl3Plus ];
   };
-
-}
+})
