@@ -43,14 +43,14 @@ def unpivot(options: Dict[Key, Option]) -> Dict[str, JSON]:
     return result
 
 warningsAreErrors = False
-optOffset = 0
 for arg in sys.argv[1:]:
     if arg == "--warnings-are-errors":
-        optOffset += 1
         warningsAreErrors = True
 
-options = pivot(json.load(open(sys.argv[1 + optOffset], 'r')))
-overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
+attrs = json.load(open(os.environ["NIX_ATTRS_JSON_FILE"], 'r'))
+
+options = pivot(json.load(open(attrs['baseOptionsPath'], 'r')))
+overrides = pivot(attrs['options'])
 
 # merge both descriptions
 for (k, v) in overrides.items():
