@@ -600,7 +600,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system";
     license = lib.licenses.gpl2;
-    changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.txt";
+    changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.adoc";
 
     longDescription = ''
       Git, a popular distributed version control system designed to

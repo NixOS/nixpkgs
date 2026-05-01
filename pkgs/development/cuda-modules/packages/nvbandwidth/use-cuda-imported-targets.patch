@@ -1,0 +1,47 @@
+Use CMake imported targets and disable the static Boost build.
+
+The upstream link command `target_link_libraries(... ${NVML_LIB_NAME} cuda)`
+expands to plain `-lnvidia-ml -lcuda`, which forces the linker to look up
+those names on its search path. The corresponding stubs live in non-standard
+`*/lib/stubs` directories that aren't on the Nix linker search path, so the
+build fails. Switching to the `CUDA::nvml` / `CUDA::cuda_driver` imported
+targets exposed by `find_package(CUDAToolkit)` makes CMake link against the
+absolute stub paths it discovers via `CUDAToolkit_ROOT` instead.
+
+The static-Boost branch is also dropped: it dispatches on `/etc/os-release`,
+which doesn't exist in the Nix sandbox, and we want a dynamic build anyway.
+---
+ CMakeLists.txt | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -43,16 +43,11 @@
+     set(CMAKE_BUILD_TYPE "Release")
+ endif()
+
+-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-    file(READ "/etc/os-release" OS_RELEASE_CONTENT)
+-    # Skip static libs on Fedora - https://github.com/NVIDIA/nvbandwidth/issues/4
+-    if(NOT OS_RELEASE_CONTENT MATCHES "ID=.*fedora|azurelinux")
+-        set(Boost_USE_STATIC_LIBS ON)
+-    endif()
+-else()
++if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+     set(Boost_USE_STATIC_LIBS ON)
+ endif()
+ find_package(Boost COMPONENTS program_options REQUIRED)
++find_package(CUDAToolkit REQUIRED)
+
+ set(src
+     environment.cpp
+@@ -85,7 +80,7 @@
+
+ add_executable(nvbandwidth ${src})
+ target_include_directories(nvbandwidth PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES} .)
+-target_link_libraries(nvbandwidth Boost::program_options ${NVML_LIB_NAME} cuda)
++target_link_libraries(nvbandwidth Boost::program_options CUDA::nvml CUDA::cuda_driver)
+
+ if (MULTINODE)
+     find_package(MPI REQUIRED)

@@ -14,34 +14,34 @@
 
 let
   pname = "proxmox-backup-client";
-  version = "4.1.4";
+  version = "4.2.0";
 
   proxmox-backup_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-backup.git";
-    rev = "0de679b244377f9193993698b875636bab58d678";
+    rev = "035c449897fafc228c8bbf3a5b5ba38564478ac7";
     name = "proxmox-backup";
-    hash = "sha256-7OGmKNcg7rq0oxPMk5XFuOvueABUC6334lpH8uG4tSQ=";
+    hash = "sha256-tfZXmMWQrP0MiBC1uuSenGaghqHi4ljky6T2KtLcjhk=";
   };
 
   proxmox_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox.git";
-    rev = "407d1e05197bf0e5bec47bf8a56f69ce2a63c1ec";
+    rev = "22c4d5ecbfce6eb2fd566181e0b7d23ac2df4f0c";
     name = "proxmox";
-    hash = "sha256-E7y4au5x8HcFcABiRV1ESb9SvpjyhSBzlxIn94CMbeI=";
+    hash = "sha256-rYaLx6Lorry+NkEmc6/xARMY6ZgdnIaCLJqRA0Mnf8o=";
   };
 
   proxmox-fuse_src = fetchgit {
     url = "git://git.proxmox.com/git/proxmox-fuse.git";
-    rev = "506314563706b0bcd95f99ebedc9b2d1c5532cc4"; # 2.0.0
+    rev = "258788a3d66f7a77040a480170fff9890d4939aa"; # 3.0.0
     name = "proxmox-fuse";
-    hash = "sha256-QVr6ylGaGOpkmidq8TtEB4b/oInGIcufHMBB0XwzbPw=";
+    hash = "sha256-deEPxhg2uyswBYjgYrXcAEBByJ/4ptX7I9y0R3AAFA0=";
   };
 
   proxmox-pxar_src = fetchgit {
     url = "git://git.proxmox.com/git/pxar.git";
-    rev = "993c66fcb8819770f279cb9fb4d13f58f367606c"; # 1.0.0
+    rev = "091a8a382d0d6fc71025351fb35c51b1f3b0074d"; # 1.0.1
     name = "pxar";
-    hash = "sha256-V5DkTIyPuopSILQoJt04E5G9ZEylQF1x5oXgWQJuDq8=";
+    hash = "sha256-9SFlrz6nuVby6iQ2ELVaioZu2pcs90tSuyzLCWJlcrA=";
   };
 
   proxmox-pathpatterns_src = fetchgit {
@@ -80,8 +80,6 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
     rm .cargo/config.toml
-
-    (cd ../pxar && chmod -R u+w . && patch -p1 <${./0003-decoder-fix-autoref-error-in-pointer-to-reference-co.patch})
 
     # avoid some unnecessary dependencies, stemming from greedy linkage by rustc
     # see also upstream Makefile for similar workaround

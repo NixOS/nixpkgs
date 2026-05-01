@@ -35,6 +35,10 @@ mkMesonExecutable (finalAttrs: {
   mesonFlags = [
   ];
 
+  excludedTestPatterns = lib.optionals (lib.versions.majorMinor version == "2.34") [
+    "fchmodatTryNoFollow.fallbackWithoutProc"
+  ];
+
   passthru = {
     tests = {
       run =
@@ -49,7 +53,8 @@ mkMesonExecutable (finalAttrs: {
             ''
             + ''
               export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage} \
+                --gtest_filter=-${lib.concatStringsSep ":" finalAttrs.excludedTestPatterns}
               touch $out
             ''
           );

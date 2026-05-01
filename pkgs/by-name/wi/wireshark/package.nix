@@ -59,7 +59,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.6.4";
+  version = "4.6.5";
 
   outputs = [
     "out"
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wireshark";
     owner = "wireshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h254dXxloBC5xQYcpeaLlAj2Ip4eQWHYSPPJLkIwQZw=";
+    hash = "sha256-U30OJ8m+L/EVLN7NrqWNl77IMaO2cnw2N5uWzLVJE30=";
   };
 
   patches = [
@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
       experts. It runs on UNIX, macOS and Windows.
     '';
     homepage = "https://www.wireshark.org";
-    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${finalAttrs.src.tag}.html";
+    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${finalAttrs.version}.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [

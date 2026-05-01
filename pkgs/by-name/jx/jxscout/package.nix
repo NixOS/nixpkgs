@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "jxscout";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "francisconeves97";
     repo = "jxscout";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DvvhcnjBHRHUEW5mWHLa7ufC+7yzYwKKOV79Syk5zME=";
+    hash = "sha256-jAtij9VJFYISXibmes+oO/Hh1MoEThkqfzmBe+z1RqQ=";
   };
 
   subPackages = [ "cmd/jxscout" ];

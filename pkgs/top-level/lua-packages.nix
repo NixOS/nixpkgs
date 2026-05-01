@@ -281,8 +281,8 @@ rec {
 
       meta = {
         description = "Modular widget library for the awesome window manager";
-        homepage = "https://vicious.rtfd.io";
-        changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
+        homepage = "https://vicious.readthedocs.io";
+        changelog = "https://vicious.readthedocs.io/changelog.html";
         license = lib.licenses.gpl2Plus;
         maintainers = with lib.maintainers; [
           makefu

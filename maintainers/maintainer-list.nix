@@ -12426,6 +12426,13 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jelni = {
+    email = "nixpkgs@jel.gay";
+    github = "jelni";
+    githubId = 25802745;
+    matrix = "@me:jel.gay";
+    name = "jel";
+  };
   jemand771 = {
     email = "willy@jemand771.net";
     github = "jemand771";
@@ -18062,7 +18069,7 @@
     keys = [ { fingerprint = "C3E7 F8C4 9CBC 9320 D360  B117 8516 D0FA 7D8F 58FC"; } ];
   };
   Misaka13514 = {
-    name = "Misaka13514";
+    name = "Rine Amakawa";
     email = "Misaka13514@gmail.com";
     matrix = "@misaka13514:matrix.org";
     github = "Misaka13514";

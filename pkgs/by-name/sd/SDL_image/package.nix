@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_image";
-  version = "1.2.12-unstable-2026-04-03";
+  version = "1.2.12-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_image";
-    rev = "678ac6a4c6021853485050926f45db08ba6aec48";
-    hash = "sha256-kK8EPDW8jkdOiDrOxK9MmrtA5varUzbj1/arLwjkUIs=";
+    rev = "5e690c3ff429025386837c4ff38e1761cd5e1d72";
+    hash = "sha256-BZz35PPW3UXfSyQEbYzpLD2HIZ+hCmDNVvvRypmecQY=";
   };
 
   configureFlags = [
