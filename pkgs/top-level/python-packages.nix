@@ -9327,6 +9327,8 @@ self: super: with self; {
 
   lojack-api = callPackage ../development/python-modules/lojack-api { };
 
+  loky = callPackage ../development/python-modules/loky { };
+
   lomond = callPackage ../development/python-modules/lomond { };
 
   london-tube-status = callPackage ../development/python-modules/london-tube-status { };
