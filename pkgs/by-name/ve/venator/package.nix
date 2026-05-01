@@ -56,6 +56,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
+  # "Failed to create GBM buffer" on NVIDIA GPU and X11
+  # See https://github.com/tauri-apps/tauri/issues/9394
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    gappsWrapperArgs+=(
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    )
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
