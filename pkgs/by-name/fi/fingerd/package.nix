@@ -13,6 +13,8 @@ buildGoModule (finalAttrs: {
   pname = "fingerd";
   version = "0.2.2-unstable-2025-11-20";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "PennockTech";
     repo = "fingerd";
