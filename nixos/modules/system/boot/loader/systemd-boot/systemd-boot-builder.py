@@ -65,6 +65,8 @@ class CopyWriter:
     source: Path
 
     def write_boot_file(self, path: Path) -> None:
+        if path.exists():
+            return
         with tempfile.NamedTemporaryFile(
             mode="wb",
             dir=path.parent,
@@ -86,20 +88,29 @@ class InitrdWithSecretsWriter:
     initrd_secrets: Path
 
     def write_boot_file(self, path: Path) -> None:
-        with tempfile.NamedTemporaryFile(
-            mode="wb",
-            dir=path.parent,
-            delete=False,
-            prefix=path.name,
-            suffix=".tmp",
-        ) as tmp:
-            with open(self.source, mode="rb") as source_file:
-                shutil.copyfileobj(source_file, tmp)
-            tmp.flush()
-            run([self.initrd_secrets, tmp.name])
-            os.fsync(tmp.fileno())
-            tmp.close()
-            os.rename(tmp.name, path)
+        if path.exists():
+            # TODO: This is for matching old behavior. Previously, we
+            # appended secrets to initrd every time no matter what, so
+            # we must continue doing that. One potential alternative
+            # would be running the secret script on an empty file and
+            # using the hashed contents of that file as part of the
+            # key that the path name is based on.
+            run([self.initrd_secrets, path])
+        else:
+            with tempfile.NamedTemporaryFile(
+                mode="wb",
+                dir=path.parent,
+                delete=False,
+                prefix=path.name,
+                suffix=".tmp",
+            ) as tmp:
+                with open(self.source, mode="rb") as source_file:
+                    shutil.copyfileobj(source_file, tmp)
+                tmp.flush()
+                run([self.initrd_secrets, tmp.name])
+                os.fsync(tmp.fileno())
+                tmp.close()
+                os.rename(tmp.name, path)
 
 
 @dataclass
@@ -107,6 +118,8 @@ class ContentsWriter:
     contents: bytes
 
     def write_boot_file(self, path: Path) -> None:
+        if path.exists():
+            return
         with tempfile.NamedTemporaryFile(
             mode="wb",
             dir=path.parent,
@@ -589,8 +602,7 @@ def garbage_collect(gc_roots: BootFileList) -> None:
 def write_boot_files(boot_files: BootFileList) -> None:
     for boot_file in boot_files:
         boot_path = BOOT_MOUNT_POINT / boot_file.path
-        if not boot_path.exists():
-            boot_file.writer.write_boot_file(boot_path)
+        boot_file.writer.write_boot_file(boot_path)
 
 
 def main() -> None:
