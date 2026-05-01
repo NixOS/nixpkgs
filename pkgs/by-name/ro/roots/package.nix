@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
@@ -30,7 +31,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.monorepo-detection = callPackage ./test.nix { roots = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Tool for exploring multiple root directories such as those in a monorepo project";
