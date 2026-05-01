@@ -56,6 +56,7 @@ let
 
       patchShebangs $out/bin/logstash
       patchShebangs $out/bin/logstash-plugin
+      patchShebangs $out/vendor/jruby/bin
 
       wrapProgram $out/bin/logstash \
          --set JAVA_HOME "${jre}"
