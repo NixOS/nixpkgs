@@ -1,50 +1,55 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  cmake,
   extra-cmake-modules,
-  kdoctools,
   wrapQtAppsHook,
-  qtscript,
-  kconfig,
-  kinit,
+  shared-mime-info,
+  xz,
+  qttools,
   karchive,
-  kcrash,
   kcmutils,
+  kconfig,
   kconfigwidgets,
+  kcrash,
   knewstuff,
   kparts,
-  qca-qt5,
-  shared-mime-info,
+  qca,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "okteta";
-  version = "0.26.25";
+  version = "0.26.25-unstable-2026-04-28";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/okteta/${finalAttrs.version}/src/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-K+GJG/SYyzgDDKXbGtAixQJVfBwLj/asP9rIJUpbt2s=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "utilities";
+    repo = "okteta";
+    rev = "9ab055f50e7569c9a0bc401be4b5686dc1e61dcc";
+    hash = "sha256-1ih0kFS7opA5w1QyB7MQAOYFoSAUPKNM8fRi1G/mq2U=";
   };
 
   nativeBuildInputs = [
-    qtscript
+    cmake
     extra-cmake-modules
-    kdoctools
     wrapQtAppsHook
   ];
-  buildInputs = [ shared-mime-info ];
 
-  propagatedBuildInputs = [
-    kconfig
-    kinit
+  buildInputs = [
+    shared-mime-info
+    xz
+
+    qttools
+
+    karchive
     kcmutils
+    kconfig
     kconfigwidgets
+    kcrash
     knewstuff
     kparts
-    qca-qt5
-    karchive
-    kcrash
+    qca
   ];
 
   outputs = [

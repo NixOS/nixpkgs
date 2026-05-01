@@ -9641,7 +9641,7 @@ with pkgs;
     ;
   k3s = k3s_1_35;
 
-  okteta = libsForQt5.callPackage ../applications/editors/okteta { };
+  okteta = kdePackages.callPackage ../applications/editors/okteta { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
