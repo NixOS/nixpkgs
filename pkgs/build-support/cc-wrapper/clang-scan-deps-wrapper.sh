@@ -15,7 +15,7 @@ buildcpath() {
     esac
     shift
   done
-  echo $path${after:+':'}$after
+  printf "%s" "$path${after:+':'}$after"
 }
 
 buildcpluspath() {
@@ -33,7 +33,7 @@ buildcpluspath() {
     esac
     shift
   done
-  echo $path${after:+':'}$after
+  printf "%s" "$path${after:+':'}$after"
 }
 
 export C_INCLUDE_PATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
