@@ -4,7 +4,7 @@
   ...
 }:
 {
-  name = "odoo";
+  name = "odoo-${package.version}";
   meta.maintainers = with lib.maintainers; [ mkg20001 ];
 
   nodes.server = {

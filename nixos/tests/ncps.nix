@@ -1,11 +1,12 @@
 {
+  testName,
   lib,
   pkgs,
   ...
 }:
 
 {
-  name = "ncps";
+  name = testName;
   meta = with lib.maintainers; {
     maintainers = [
       aciceri
