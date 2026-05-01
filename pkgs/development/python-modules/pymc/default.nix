@@ -23,14 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "5.28.4";
+  version = "5.28.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-REQ9+II6MFZ64FlJudRRhmXA4/Cb017XrsrZFZBY7R0=";
+    hash = "sha256-neySWgFxnebW9v0Fa6+ZaxQeFQ0v6wpRvQrBj0zOHJs=";
   };
 
   build-system = [
