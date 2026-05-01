@@ -1802,6 +1802,12 @@
     githubId = 2085567;
     name = "Aneesh Agrawal";
   };
+  Aneurysm9 = {
+    email = "a9@aneurysm9.com";
+    github = "Aneurysm9";
+    githubId = 473616;
+    name = "Anthony Mirabella";
+  };
   angaz = {
     name = "Angus Dippenaar";
     github = "angaz";
