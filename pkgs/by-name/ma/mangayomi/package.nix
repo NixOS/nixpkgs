@@ -14,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.7.2";
+  version = "0.7.70";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-p2PjylbwOSCtJlPhT7sf1VOZfJx6y0CkNY6xIo2ij5I=";
+    hash = "sha256-DtmWxPG3kHzkx0uiyt5sGBibmWymf8SZuIYSbE5QQ0U=";
   };
 
   metaCommon = {
@@ -37,7 +37,7 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-lKEkTHLTX6RdTxC8bU3GQm0RD2RBy4rDHzBHIiks4eg=";
+    cargoHash = "sha256-aqgNdkdJMqILbWW/Ss2gBhMijs6pLbWctmSPyQa2hO0=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
