@@ -1183,6 +1183,7 @@ in
     _module.args.package = pkgs.odoo19;
   };
   oh-my-zsh = runTest ./oh-my-zsh.nix;
+  oidentd = runTest ./oidentd.nix;
   oku = runTest ./oku.nix;
   olivetin = runTest ./olivetin.nix;
   ollama = runTest ./ollama.nix;
