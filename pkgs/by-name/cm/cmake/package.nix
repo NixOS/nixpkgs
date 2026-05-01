@@ -192,10 +192,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
-  passthru.updateScript = gitUpdater {
-    url = "https://gitlab.kitware.com/cmake/cmake.git";
-    rev-prefix = "v";
-    ignoredVersions = "-"; # -rc1 and friends
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.kitware.com/cmake/cmake.git";
+      rev-prefix = "v";
+      ignoredVersions = "-"; # -rc1 and friends
+    };
   };
 
   meta = {
