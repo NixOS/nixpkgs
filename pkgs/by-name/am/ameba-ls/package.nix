@@ -14,7 +14,7 @@ crystal.buildCrystalPackage rec {
   version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "crystal-lang-tools";
+    owner = "crystal-ameba";
     repo = "ameba-ls";
     tag = "v${version}";
     hash = "sha256-TEHjR+34wrq24XJNLhWZCEzcDEMDlmUHv0iiF4Z6JlI=";
@@ -47,8 +47,8 @@ crystal.buildCrystalPackage rec {
 
   meta = {
     description = "Crystal language server powered by Ameba linter";
-    homepage = "https://github.com/crystal-lang-tools/ameba-ls";
-    changelog = "https://github.com/crystal-lang-tools/ameba-ls/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/crystal-ameba/ameba-ls";
+    changelog = "https://github.com/crystal-ameba/ameba-ls/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

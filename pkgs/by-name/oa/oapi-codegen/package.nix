@@ -26,8 +26,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Go client and server OpenAPI 3 generator";
-    homepage = "https://github.com/deepmap/oapi-codegen";
-    changelog = "https://github.com/deepmap/oapi-codegen/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/oapi-codegen/oapi-codegen";
+    changelog = "https://github.com/oapi-codegen/oapi-codegen/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ j4m3s ];
     mainProgram = "oapi-codegen";
