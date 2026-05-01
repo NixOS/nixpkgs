@@ -51,6 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test
   '';
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Autoconf's thread probe can leak the literal "none required" marker
+    # into libfyaml.pc on Darwin, which then breaks downstream link steps.
+    substituteInPlace "$dev/lib/pkgconfig/libfyaml.pc" \
+      --replace-fail " none required" ""
+  '';
+
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
   };
