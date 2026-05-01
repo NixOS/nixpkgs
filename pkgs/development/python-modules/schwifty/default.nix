@@ -21,6 +21,22 @@
   pythonOlder,
 }:
 
+let
+  inherit (lib.versions) major minor patch;
+  inherit (lib.strings) concatStringsSep replicate;
+  inherit (builtins) stringLength;
+
+  pad = char: length: input:
+    (replicate (lib.max 0 (length - stringLength input)) char) + input;
+
+  toCalVer = version:
+    concatStringsSep "." [
+      (major version)
+      (pad "0" 2 (minor version))
+      (patch version)
+    ];
+
+in
 buildPythonPackage rec {
   pname = "schwifty";
   version = "2026.1.0";
@@ -55,7 +71,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "schwifty" ];
 
   meta = {
-    changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";
+    # The version here must be converted as release tags on PyPI and GitHub have different zero-padding
+    changelog = "https://github.com/mdomke/schwifty/blob/${toCalVer version}/CHANGELOG.rst";
     description = "Validate/generate IBANs and BICs";
     homepage = "https://github.com/mdomke/schwifty";
     license = lib.licenses.mit;
