@@ -1,29 +1,46 @@
 {
-  fetchzip,
+  apple-sdk,
+  fetchFromGitHub,
+  ibtool,
   lib,
   makeBinaryWrapper,
   stdenv,
+  xcbuildHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "terminal-notifier";
   version = "2.0.0";
 
-  src = fetchzip {
-    url = "https://github.com/alloy/terminal-notifier/releases/download/${finalAttrs.version}/terminal-notifier-${finalAttrs.version}.zip";
-    hash = "sha256-YMFO/pg41FDXBrqdwpgxGkDUii5zfNp9ni5EKNImJT4=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "julienXX";
+    repo = "terminal-notifier";
+    tag = finalAttrs.version;
+    hash = "sha256-Hd9cI3R2nQK2deBb5CBYz4DTHAEcO4vzqtA5qZwa1Ao=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    ibtool
+    makeBinaryWrapper
+    xcbuildHook
+  ];
 
-  dontBuild = true;
+  buildInputs = [
+    apple-sdk
+  ];
+
+  xcbuildFlags = [
+    "-target"
+    "terminal-notifier"
+    "-configuration"
+    "Release"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{Applications,bin}
-    cp -r terminal-notifier.app $out/Applications
+    cp -r Products/Release/terminal-notifier.app $out/Applications/
     makeWrapper \
       $out/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier \
       $out/bin/terminal-notifier \
