@@ -888,9 +888,18 @@ let
       description = "NixOS scripted networking setup";
     };
 
-    services.udev.extraRules = ''
-      KERNEL=="tun", TAG+="systemd"
-    '';
+    services.udev.extraRules = lib.concatStringsSep "\n" (
+      [ ''KERNEL=="tun", TAG+="systemd"'' ]
+      # This creates a udev rule to start each service with a WantedBy
+      # dependency on a device unit. It's needed because if the service
+      # unit is loaded in stage 2 but its device was already up by
+      # stage 1, systemd will not automatically start it.
+      ++ lib.forEach (lib.attrNames cfg.interfaces) (
+        iface:
+        ''ACTION=="add", SUBSYSTEM=="net", KERNEL=="${iface}", ''
+        + ''ENV{SYSTEMD_WANTS}="network-addresses-${iface}.service"''
+      )
+    );
 
   };
 
