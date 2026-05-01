@@ -10,7 +10,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-attachments";
-  version = "11.0.1";
+  version = "11.1.0";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kani999";
     repo = "netbox-attachments";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8wZeHLt8Hx8hghsliKtKxCI/2dQh/EQitZ4YXPSj/Qs=";
+    hash = "sha256-xe5p2PaLI+PBkQohmueth32BOQ7u9ZOCllq/WByAu6c=";
   };
 
   build-system = [ setuptools ];
