@@ -22,34 +22,61 @@ let
         elemAt
         ;
       base = removeSuffix "/" (last (splitString ":" url));
-      path = reverseList (splitString "/" base);
+      pathParts = reverseList (splitString "/" base);
       repoName =
         # ../repo/trunk -> repo
-        if head path == "trunk" then
-          elemAt path 1
+        if head pathParts == "trunk" then
+          elemAt pathParts 1
         # ../repo/branches/branch -> repo-branch
-        else if elemAt path 1 == "branches" then
-          "${elemAt path 2}-${head path}"
+        else if elemAt pathParts 1 == "branches" then
+          "${elemAt pathParts 2}-${head pathParts}"
         # ../repo/tags/tag -> repo-tag
-        else if elemAt path 1 == "tags" then
-          "${elemAt path 2}-${head path}"
+        else if elemAt pathParts 1 == "tags" then
+          "${elemAt pathParts 2}-${head pathParts}"
         # ../repo (no trunk) -> repo
         else
-          head path;
+          head pathParts;
     in
     "${repoName}-r${toString rev}";
+
+  # Constructs the final URL from base url, path, and tag.
+  # - If `tag` is set, appends `/tags/${tag}` to the URL
+  # - Otherwise, appends `/${path}` if path is not empty
+  getFullUrl =
+    {
+      url,
+      path ? "",
+      tag ? null,
+    }:
+    let
+      baseUrl = lib.removeSuffix "/" url;
+    in
+    if tag != null then
+      "${baseUrl}/tags/${tag}"
+    else if path != "" then
+      "${baseUrl}/${path}"
+    else
+      url;
 in
 
 {
   url,
+  # Subdirectory path within the repository (e.g., "trunk", "branches/foo").
+  # Ignored if `tag` is set.
+  path ? "",
+  # Tag name to fetch. Sets path to "tags/${tag}".
+  # Mutually exclusive with `path`.
+  tag ? null,
   rev ? "HEAD",
-  name ? repoToName url rev,
+  name ? repoToName (getFullUrl { inherit url path tag; }) rev,
   sha256 ? "",
   hash ? "",
   ignoreExternals ? false,
   ignoreKeywords ? false,
   preferLocalBuild ? true,
 }:
+
+assert tag == null || path == "" || throw "fetchsvn: `tag` and `path` are mutually exclusive";
 
 assert sshSupport -> openssh != null;
 
@@ -78,8 +105,9 @@ else
       else
         lib.fakeSha256;
 
+    url = getFullUrl { inherit url path tag; };
+
     inherit
-      url
       rev
       ignoreExternals
       ignoreKeywords
