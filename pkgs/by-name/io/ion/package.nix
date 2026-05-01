@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ dywedir ];
     mainProgram = "ion";
     platforms = lib.platforms.unix;
+    teams = [ lib.teams.redox ];
   };
 }
