@@ -19,18 +19,18 @@
 let
   dochash =
     if stdenv.hostPlatform.isLinux then
-      "sha256-d2YQUBWRlDROwiDMJ5mQAR9o+cYsbv1jiulsr1SAaik="
+      "sha256-ldx6r0KKNl1mkohTkaEG4rawf4VjHeJvNUdPkmrAkYA="
     else if stdenv.hostPlatform.isDarwin then
-      "sha256-eIzTsn4wYz7TEyWN8QssM7fxpMfz/ENlxDVUMz0Cm4c="
+      "sha256-ga0ebb9zIPI5+Qza8APs0kbCxUIxqCmXRO/R8uWASOg="
     else if stdenv.hostPlatform.isWindows then
-      "sha256-+iagR5jvpHi8WDh4/DO+GDP6jajEpZ6G1ROhM+zkSiw="
+      "sha256-bBwETA9/ph0zXVNad9zMkQvfq1MmFJ08tCV+mUPwlXQ="
     else
       throw "PySDL3 does not support ${stdenv.hostPlatform.uname.system}";
   lib_ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 buildPythonPackage rec {
   pname = "pysdl3";
-  version = "0.9.8b9";
+  version = "0.9.11b0";
   pyproject = true;
 
   pythonImportsCheck = [ "sdl3" ];
@@ -39,12 +39,12 @@ buildPythonPackage rec {
     owner = "Aermoss";
     repo = "PySDL3";
     tag = "v${version}";
-    hash = "sha256-TpfMpp8CGb8lYALCWlMtyucxObDg1VYEvBW+mVHN9JM=";
+    hash = "sha256-lUnQ5YDM6HXarZUSy+x95lStBXDQlvG5JL6hFdHg6z0=";
   };
 
   docfile = fetchurl {
     url = "https://github.com/Aermoss/PySDL3/releases/download/v${version}/${stdenv.hostPlatform.uname.system}-Docs.py";
-    hash = "${dochash}";
+    hash = dochash;
   };
 
   postUnpack = ''
@@ -83,6 +83,13 @@ buildPythonPackage rec {
     SDL_AUDIODRIVER = "dummy";
     SDL_RENDER_DRIVER = "software";
     PYTHONFAULTHANDLER = "1";
+
+    # For import checks, duplicated from setup hook.
+    SDL_CHECK_BINARY_VERSION = 0;
+    SDL_DISABLE_METADATA = 1;
+    # Checks for __doc__.py next to the file being executed.
+    # It's very fragile, and doesn't work during the import check.
+    SDL_DOC_GENERATOR = 0;
   };
 
   meta = {

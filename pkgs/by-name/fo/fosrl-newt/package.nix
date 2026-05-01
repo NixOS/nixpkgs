@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "newt";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
     tag = finalAttrs.version;
-    hash = "sha256-5+B1sderUwy6hJPKFRK8fV0bX2+rgHh3WmAjgQqVsR4=";
+    hash = "sha256-Maw0qELlnh0m+NsQGdDC3wGYK8zi8Lbt7zwJqieR4hg=";
   };
 
   vendorHash = "sha256-+zMSzNbqmWm/DXL2xMUd5uPP5tSIybsRokwJ2zd0pf0=";

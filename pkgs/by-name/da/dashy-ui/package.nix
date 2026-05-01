@@ -17,12 +17,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "3.3.0";
+  version = "3.3.1";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
     tag = finalAttrs.version;
-    hash = "sha256-Xc6zwnR0J+0DuTKNW3eHyJRvUgJgEeL3jA26wzNTMN0=";
+    hash = "sha256-EvyRLa+qUFPzmU2k5CVK8WH3D3vmcj9F8fzj3LEjYgg=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";

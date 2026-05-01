@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-lightning";
-  version = "2.6.2";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     tag = finalAttrs.version;
-    hash = "sha256-AUTCeRC0BvFmu+nDQ9ROecfk4Ifphe3x7Kv3cXPsACQ=";
+    hash = "sha256-zOSV2X3yZy0uh1lJ2yNl/hHBvfIDcIrATHtiRwThsQA=";
   };
 
   env.PACKAGE_NAME = "pytorch";

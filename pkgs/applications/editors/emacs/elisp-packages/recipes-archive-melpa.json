@@ -75440,20 +75440,20 @@
   "repo": "merrickluo/liberime",
   "unstable": {
    "version": [
-    20260415,
-    754
+    20260427,
+    303
    ],
-   "commit": "6e8cc1cbadaafae5f99524d1d4dc8fcf115685be",
-   "sha256": "0rmbcfna27g4y4s84glbhrzf2lm68b1rq994ca5mg2x2jfrchrv7"
+   "commit": "2130baba8e5e15922650bc01de95a1d6c6a1c1f7",
+   "sha256": "0zr0hk11xani4pn0yv2xlpfwargv33q610w0yw6ac1r91bn9r9z9"
   },
   "stable": {
    "version": [
     0,
     0,
-    7
+    9
    ],
-   "commit": "6e8cc1cbadaafae5f99524d1d4dc8fcf115685be",
-   "sha256": "0rmbcfna27g4y4s84glbhrzf2lm68b1rq994ca5mg2x2jfrchrv7"
+   "commit": "2130baba8e5e15922650bc01de95a1d6c6a1c1f7",
+   "sha256": "0zr0hk11xani4pn0yv2xlpfwargv33q610w0yw6ac1r91bn9r9z9"
   }
  },
  {

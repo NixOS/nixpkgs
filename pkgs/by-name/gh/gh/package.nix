@@ -6,7 +6,6 @@
   stdenv,
   testers,
   makeWrapper,
-  enableTelemetry ? false,
 }:
 
 buildGoModule (finalAttrs: {
@@ -38,10 +37,8 @@ buildGoModule (finalAttrs: {
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/gh -t $out/bin
-  ''
-  + lib.optionalString (!enableTelemetry) ''
     wrapProgram $out/bin/gh \
-      --set GH_TELEMETRY false
+      --set-default GH_TELEMETRY false
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installManPage share/man/*/*.[1-9]

@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anchor";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "solana-foundation";
     repo = "anchor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y5452JSBAH+GkAJ57cDjup3vyMzPac+xvNAE+W81Ong=";
+    hash = "sha256-lpLNocNrSWkf/b34PCmUKqFumdo3LcOyGMtN8O2ciEU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-GH/R7S8jQAWGTz8Ig/u/yb9o6FPtmkAaOzgl0uiB0dk=";
+  cargoHash = "sha256-Nx5g+X9cPL71Gf9J/Zp5u6H8rrbDQW6KqTc/Ti+mzow=";
 
   # Only build the anchor-cli package
   cargoBuildFlags = [
@@ -35,7 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/solana-foundation/anchor";
     changelog = "https://github.com/solana-foundation/anchor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ Denommus ];
+    maintainers = with lib.maintainers; [
+      Denommus
+      _0xgsvs
+    ];
     mainProgram = "anchor";
   };
 })

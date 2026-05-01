@@ -2,11 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildGoModule,
   nix-update-script,
   copyDesktopItems,
   makeDesktopItem,
+  cargo,
   cmake,
+  corrosion,
   pkg-config,
   avahi-compat,
   ffmpeg,
@@ -25,17 +28,33 @@
   pugixml,
   qt6,
   lxqt,
+  rustPlatform,
+  rustc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "idescriptor";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "iDescriptor";
     repo = "iDescriptor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tBTAJqXDqWAqrxQlEEi2kDcVqrB6WrBquxvKV2dkpQ4=";
+    hash = "sha256-AN3CVR9WWa9cG6C6q+hiDyTomT+RebHC1ghr6XyEtAo=";
     fetchSubmodules = true;
+  };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/iDescriptor/iDescriptor/commit/fc73e3146dc4884cf9bc1f7879574ac832cc21e6.patch";
+      hash = "sha256-WqEpSY/fhbsMv0bgU2Ak5japUdohaN7zsNG1BbxJnKs=";
+    })
+  ];
+
+  cargoRoot = "src/rust";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
+    hash = "sha256-PJhMb+lMiu8ubOYVX8YVkQzeQMbBO+i6NQhvuyrCujk=";
   };
 
   ipatool-go-modules =
@@ -50,15 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     }).goModules;
 
   nativeBuildInputs = [
+    cargo
     cmake
     copyDesktopItems
     pkg-config
     go
     qt6.wrapQtAppsHook
+    rustPlatform.cargoSetupHook
+    rustc
   ];
 
   buildInputs = [
     avahi-compat
+    corrosion
     ffmpeg
     libheif
     libimobiledevice
@@ -83,9 +106,17 @@ stdenv.mkDerivation (finalAttrs: {
     lxqt.qtermwidget
   ];
 
+  cxx-qt-cmake = fetchFromGitHub {
+    owner = "kdab";
+    repo = "cxx-qt-cmake";
+    tag = "0.8.1";
+    hash = "sha256-kXSIU71iHn+SSGikGoNeMbBpSrDJ6hwhnHslmskm8nY=";
+  };
+
   cmakeFlags = [
     "-DPACKAGE_MANAGER_MANAGED=ON"
     "-DPACKAGE_MANAGER_HINT=nixpkgs"
+    "-DFETCHCONTENT_SOURCE_DIR_CXXQT=${finalAttrs.cxx-qt-cmake}"
   ];
 
   preConfigure = ''

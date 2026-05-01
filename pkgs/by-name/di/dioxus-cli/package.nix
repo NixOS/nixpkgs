@@ -6,6 +6,7 @@
   cacert,
   openssl,
   rustfmt,
+  installShellFiles,
   makeWrapper,
   esbuild,
   wasm-bindgen-cli_0_2_118,
@@ -16,15 +17,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxus-cli";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchCrate {
     pname = "dioxus-cli";
     version = finalAttrs.version;
-    hash = "sha256-iAwR43SwmOBvuHa9qZBJLCjyhQSj/XgDx0jkWR+lgrE=";
+    hash = "sha256-PKidohK85wv/ZN9WcNS+HTlVGgR5o07gWLshZhzyg5k=";
   };
 
-  cargoHash = "sha256-JS5/7hQhgN2gbMmLY2zD2GE/Ony8AAHAzj7Ituj6l90=";
+  cargoHash = "sha256-T6xLlu8XeJPm+ULgpTALTT93X55ExJhDMuhpal2QLhg=";
   buildFeatures = [
     "no-downloads"
   ]
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cacert
+    installShellFiles
     makeWrapper
   ];
 
@@ -68,6 +70,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postInstall = ''
+    installShellCompletion --cmd dx \
+      --bash <($out/bin/dx completions bash) \
+      --fish <($out/bin/dx completions fish) \
+      --zsh <($out/bin/dx completions zsh)
+  '';
+
+  postFixup = ''
     wrapProgram $out/bin/dx \
       --suffix PATH : ${
         lib.makeBinPath [
