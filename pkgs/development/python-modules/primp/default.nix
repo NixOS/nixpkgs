@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
   ];
   # pytest runs from the source root but asyncio_mode=auto is configured in
   # crates/primp-python/pyproject.toml, which pytest doesn't pick up from there
-  pytestFlagsArray = [
+  pytestFlags = [
     "-o"
     "asyncio_mode=auto"
   ];
