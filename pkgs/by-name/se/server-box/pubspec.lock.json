@@ -184,11 +184,11 @@
       "dependency": "transitive",
       "description": {
         "name": "camera_platform_interface",
-        "sha256": "98cfc9357e04bad617671b4c1f78a597f25f08003089dd94050709ae54effc63",
+        "sha256": "7ac852d77699acee79f0d438b793feee26721841e50973576419ff5c6d95e9b7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.12.0"
+      "version": "2.13.0"
     },
     "camera_web": {
       "dependency": "transitive",
@@ -377,7 +377,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "2.17.0"
+      "version": "2.17.1"
     },
     "dbus": {
       "dependency": "transitive",
@@ -710,7 +710,7 @@
       "version": "4.1.0"
     },
     "flutter_svg": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "flutter_svg",
         "sha256": "1ded017b39c8e15c8948ea855070a5ff8ff8b3d5e83f3446e02d6bb12add7ad9",
@@ -1075,11 +1075,11 @@
       "dependency": "transitive",
       "description": {
         "name": "local_auth_android",
-        "sha256": "b41970749c2d43791790724b76917eeee1e90de76e6b0eec3edca03a329bf44c",
+        "sha256": "b201c006fa769c23386f89aa6837ec0eb8179fcfb212eadcf87b422b3f9a6a78",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.7"
+      "version": "2.0.8"
     },
     "local_auth_darwin": {
       "dependency": "transitive",
@@ -1305,11 +1305,11 @@
       "dependency": "transitive",
       "description": {
         "name": "path_provider_android",
-        "sha256": "914a07484c4380e572998d30486e77e0d9cd2faec72fee268086d07bf7f302c9",
+        "sha256": "69cbd515a62b94d32a7944f086b2f82b4ac40a1d45bebfc00813a430ab2dabcd",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.3.0"
+      "version": "2.3.1"
     },
     "path_provider_foundation": {
       "dependency": "transitive",
@@ -2070,11 +2070,11 @@
       "dependency": "transitive",
       "description": {
         "name": "vm_service",
-        "sha256": "45caa6c5917fa127b5dbcfbd1fa60b14e583afdc08bfc96dda38886ca252eb60",
+        "sha256": "046d3928e16fa4dc46e8350415661755ab759d9fc97fc21b5ab295f71e4f0499",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "15.0.2"
+      "version": "15.1.0"
     },
     "wake_on_lan": {
       "dependency": "direct main",
@@ -2090,21 +2090,21 @@
       "dependency": "direct main",
       "description": {
         "name": "wakelock_plus",
-        "sha256": "8b12256f616346910c519a35606fb69b1fe0737c06b6a447c6df43888b097f39",
+        "sha256": "ddf3db70eaa10c37558ff817519b85d527dbd21034fd5d8e1c2e85f31588f1c1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.1"
+      "version": "1.5.2"
     },
     "wakelock_plus_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "wakelock_plus_platform_interface",
-        "sha256": "24b84143787220a403491c2e5de0877fbbb87baf3f0b18a2a988973863db4b03",
+        "sha256": "14b2e5b9e35c2631e656913c47adecdd71633ae92896a27a64c8f1fcfabc21cc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.4.0"
+      "version": "1.5.0"
     },
     "watch_connectivity": {
       "dependency": "direct main",
