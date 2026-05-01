@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gobgpd";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Rk/Bciy4qYrLzpKGXSZbJPlOzLjfNKR+gbYIbRy7D4=";
+    hash = "sha256-XbErKP/F7E/e03b1rNTfpnAqkqcu2TwPtj2rV65HCnI=";
   };
 
   vendorHash = "sha256-XZIcjBMNZbNDYmZLiH5s5kFoSi62n5JruqnsnlQFP4I=";
