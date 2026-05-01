@@ -1438,24 +1438,6 @@ with pkgs;
 
   crystfel-headless = callPackage ../applications/science/physics/crystfel { withGui = false; };
 
-  amule-daemon = amule.override {
-    monolithic = false;
-    enableDaemon = true;
-    mainProgram = "amuled";
-  };
-
-  amule-gui = amule.override {
-    monolithic = false;
-    client = true;
-    mainProgram = "amulegui";
-  };
-
-  amule-web = amule.override {
-    monolithic = false;
-    httpServer = true;
-    mainProgram = "amuleweb";
-  };
-
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
