@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ amarshall ];
     homepage = "https://github.com/julienXX/terminal-notifier";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
