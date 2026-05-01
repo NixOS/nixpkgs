@@ -36,7 +36,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       DeeUnderscore
-      sudoforge
     ];
     mainProgram = "git-bug-migration";
   };
