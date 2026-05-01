@@ -4,21 +4,22 @@
   fetchFromGitHub,
   nodejs,
   nix-update-script,
+  curl,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "jfrog-cli";
-  version = "2.78.10";
+  version = "2.98.0";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o3H+onnvGFGxUtFRYFHmrEQ5EqQCGP8n/NdqdEHNj84=";
+    hash = "sha256-ADVjR2l03p1/lGzThIeFNZbMGAQ2r5IwOJ7l/2JUbTc=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-jzjYFnctUwQUVC59JIsrHTIWCqYiZTurNFLn9zuM+18=";
+  vendorHash = "sha256-etxagQWxKlYmJCuvwa7VXKUfkK4EaDR2R4YPzfUx8ug=";
 
   checkFlags = "-skip=^TestReleaseBundle";
 
@@ -30,7 +31,10 @@ buildGoModule (finalAttrs: {
   # Some of the tests require a writable $HOME
   preCheck = "export HOME=$TMPDIR";
 
-  nativeCheckInputs = [ nodejs ];
+  nativeCheckInputs = [
+    nodejs
+    curl
+  ];
 
   passthru.updateScript = nix-update-script { };
 
