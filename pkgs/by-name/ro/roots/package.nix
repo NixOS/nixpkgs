@@ -38,6 +38,12 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool for exploring multiple root directories such as those in a monorepo project";
+    longDescription = ''
+      roots discovers root directories of projects (those containing files
+      like package.json, go.mod, or Cargo.toml) and prints their paths.
+      It is useful for locating each subproject in a monorepo and feeding
+      the results into other tools.
+    '';
     homepage = "https://github.com/k1LoW/roots";
     changelog = "https://github.com/k1LoW/roots/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
