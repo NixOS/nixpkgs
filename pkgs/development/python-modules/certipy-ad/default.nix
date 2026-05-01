@@ -40,6 +40,7 @@ buildPythonPackage (finalAttrs: {
     "pycryptodome"
     "pyopenssl"
     "beautifulsoup4"
+    "requests"
   ];
 
   build-system = [ setuptools ];
