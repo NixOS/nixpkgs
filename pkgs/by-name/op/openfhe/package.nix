@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "openfhe";
   version = "1.5.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "openfheorg";
     repo = "openfhe-development";
