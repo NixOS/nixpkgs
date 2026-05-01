@@ -154,7 +154,6 @@
   ./misc/man-db.nix
   ./misc/mandoc.nix
   ./misc/meta.nix
-  ./misc/nixops-autoluks.nix
   ./misc/nixpkgs-flake.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
