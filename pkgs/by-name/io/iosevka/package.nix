@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   cctools,
-  remarshal,
+  go-toml,
   ttfautohint-nox,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
@@ -70,7 +70,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-9v4PKlS8FNuhnhdJmu3J1Bl+uSPS4KqE3PBrOhf9jQw=";
 
   nativeBuildInputs = [
-    remarshal
+    go-toml
     ttfautohint-nox
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -91,7 +91,7 @@ buildNpmPackage rec {
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
-      printf "%s" "$buildPlan" | remarshal -o private-build-plans.toml -if json -of toml
+      printf "%s" "$buildPlan" | jsontoml -use-json-number > private-build-plans.toml
     ''}
     ${lib.optionalString
       (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan))
