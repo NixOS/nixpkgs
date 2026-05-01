@@ -24123,6 +24123,14 @@
     github = "saadndm";
     githubId = 88615188;
   };
+  sadorowo = {
+    name = "Franciszek Pilch";
+    email = "contact@sador.me";
+    matrix = "@boss:sador.me";
+    github = "sadorowo";
+    githubId = 97941280;
+    keys = [ { fingerprint = "1983 18AD C53B 4668 80EF  2AF0 5503 FB2E 3229 D890"; } ];
+  };
   sagikazarmark = {
     name = "Mark Sagi-Kazar";
     email = "mark.sagikazar@gmail.com";
