@@ -14,12 +14,12 @@
   sourceHighlight,
   gitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trace-cmd";
   version = "3.4";
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${finalAttrs.version}.tar.gz";
     hash = "sha256-7IMInvVLIjGcHZvnSzhcne+4ieFa85ep7KMn2Oy9pF8=";
   };
 
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
       wentasah
     ];
   };
-}
+})
