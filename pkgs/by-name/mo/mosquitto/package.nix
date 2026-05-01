@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source MQTT v3.1/3.1.1/5.0 broker";
     homepage = "https://mosquitto.org/";
-    changelog = "https://github.com/eclipse/mosquitto/blob/v${finalAttrs.version}/ChangeLog.txt";
+    changelog = "https://github.com/eclipse-mosquitto/mosquitto/blob/v2.0.22/ChangeLog.txt";
     license = lib.licenses.epl10;
     maintainers = with lib.maintainers; [
       peterhoeg

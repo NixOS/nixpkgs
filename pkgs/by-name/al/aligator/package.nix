@@ -27,14 +27,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qdXZo7IvgcUFEJARwxpSaHJVRlZ6HdgRADPOiY3oCpk=";
+    hash = "sha256-8DO+lfM4mk4bA/IOEJlLaOp9snCUBHiw7RRcYEwJC7c=";
   };
+
+  # aligator 0.19.0 expect gbenchmark 1.9.5, which is not merged yet:
+  # https://github.com/NixOS/nixpkgs/pull/506375
+  postPatch = ''
+    substituteInPlace \
+        bench/lqr.cpp \
+        bench/se2-car.cpp \
+        bench/talos-walk.cpp \
+        bench/croc-talos-arm.cpp \
+        bench/gar-riccati.cpp \
+      --replace-fail \
+        "benchmark::Benchmark" \
+        "benchmark::internal::Benchmark"
+  '';
 
   outputs = [
     "doc"
