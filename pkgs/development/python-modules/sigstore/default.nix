@@ -37,14 +37,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sigstore";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wt9ZoMHTiMlbAab9p8/WF38/OiyCaqHPS5R7/fTAfxw=";
+    hash = "sha256-33JjQdYH/FptFUo0CecWItm9qH1wGQPHdk/JSdX8QfQ=";
   };
 
   build-system = [ flit-core ];
