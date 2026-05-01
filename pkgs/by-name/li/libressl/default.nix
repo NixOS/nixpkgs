@@ -111,13 +111,17 @@ let
         identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" version;
       };
     };
+
   # https://github.com/libressl/portable/pull/1206
+  # This got merged in February 2026 and is included as of LibreSSL 4.3.0.
   common-cmake-install-full-dirs-patch = fetchpatch {
     url = "https://github.com/libressl/portable/commit/a15ea0710398eaeed3be53cf643e80a1e80c981d.patch";
     hash = "sha256-Mlf4SrGCCqALQicbGtmVGdkdfcE8DEGYkOuVyG2CozM=";
   };
 in
 {
+  # 4.1 was released April 2025 and became unsupported on April 28, 2026,
+  # one year after the release of OpenBSD 7.7.
   libressl_4_1 = generic {
     version = "4.1.2";
     hash = "sha256-+6Ti+ip/UjBt96OJlwoQ6YuX6w7bKZqf252/SZmcYeE=";
@@ -137,11 +141,20 @@ in
     ];
   };
 
+  # 4.2 was released October 2025 and will become unsupported on October 22,
+  # 2026, one year after the release of OpenBSD 7.8.
   libressl_4_2 = generic {
     version = "4.2.1";
     hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
     patches = [
       common-cmake-install-full-dirs-patch
     ];
+  };
+
+  # 4.3 was released April 2026 and will become unsupported one year after the
+  # release of OpenBSD 7.9.
+  libressl_4_3 = generic {
+    version = "4.3.1";
+    hash = "sha256-wttCrOFOfVQZgm+rNadC7G5NEnJaBRpR0M6jwQug+lA=";
   };
 }
