@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "maddy";
-  version = "0.8.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+tj2h1rAdr0SPgLGGzVf5sdFmhcwY76fkMm2P/gYFuo=";
+    sha256 = "sha256-U7czabdpOC+vb5ERFbbS5W4h7pOCwbEZuXbU/MXRvW4=";
   };
 
-  vendorHash = "sha256-+xsG7z2wSxoZ1vEJIDBtwDMiU7zKCtZOsYPUhv6HMpQ=";
+  vendorHash = "sha256-8dMS2kFlQ762u4Ifv1O1Capr8Jb7wsQuHSsJvHwa0j0=";
 
   tags = [ "libpam" ];
 
@@ -29,9 +29,14 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X github.com/foxcpp/maddy.Version=${finalAttrs.version}"
+    "-X github.com/foxcpp/maddy.DefaultLibexecDirectory=/run/wrappers/bin"
   ];
 
-  subPackages = [ "cmd/maddy" ];
+  subPackages = [
+    "cmd/maddy"
+    "cmd/maddy-pam-helper"
+    "cmd/maddy-shadow-helper"
+  ];
 
   buildInputs = [ pam ];
 
@@ -49,15 +54,18 @@ buildGoModule (finalAttrs: {
 
     ln -s "$out/bin/maddy" "$out/bin/maddyctl"
 
+    mkdir -p "$out/libexec/maddy"
+    mv "$out/bin/maddy-pam-helper" "$out/bin/maddy-shadow-helper" "$out/libexec/maddy"
+
     mkdir -p $out/lib/systemd/system
 
     substitute dist/systemd/maddy.service $out/lib/systemd/system/maddy.service \
-      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
 
     substitute dist/systemd/maddy@.service $out/lib/systemd/system/maddy@.service \
-      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=strict-prototypes";
@@ -69,5 +77,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://maddy.email";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nickcao ];
+    mainProgram = "maddy";
   };
 })
