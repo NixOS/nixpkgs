@@ -147,9 +147,6 @@ let
           lib.maintainers.osnyx
         ];
         platforms = lib.platforms.unix;
-        knownVulnerabilities = lib.optionals (lib.versions.major version == "7") [
-          "VSV00018: https://vinyl-cache.org/security/VSV00018.html"
-        ];
         broken = stdenv.isDarwin && version == "8.0.1"; # https://github.com/NixOS/nixpkgs/issues/495368
       };
     };
@@ -159,11 +156,6 @@ in
   varnish60 = common {
     version = "6.0.17";
     hash = "sha256-CVmHd1hCDFE/WIZqjc1TfX1O2RqFetdNSO4ihmXoL5k=";
-  };
-  # EOL 2026-03-15
-  varnish77 = common {
-    version = "7.7.3";
-    hash = "sha256-6W7q/Ez+KlWO0vtU8eIr46PZlfRvjADaVF1YOq74AjY=";
   };
   # EOL 2026-09-15
   varnish80 = common {

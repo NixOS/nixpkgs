@@ -3520,12 +3520,10 @@ with pkgs;
 
   inherit (callPackages ../servers/varnish { })
     varnish60
-    varnish77
     varnish80
     ;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages
-    varnish77Packages
     varnish80Packages
     ;
   varnishPackages = varnish80Packages;
