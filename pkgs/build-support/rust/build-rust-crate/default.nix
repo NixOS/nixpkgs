@@ -408,6 +408,8 @@ lib.makeOverridable
         depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
         nativeBuildInputs = [
           rust
+        ]
+        ++ lib.optionals (workspace_member == null) [
           cargo
           jq
         ]
