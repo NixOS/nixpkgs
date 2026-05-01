@@ -6,6 +6,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
   pname = "zsh-simple-abbreviations";
   version = "1.1.0";
 
