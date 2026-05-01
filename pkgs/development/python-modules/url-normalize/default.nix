@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "url-normalize";
   version = "3.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niksite";
     repo = "url-normalize";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RZORbZfeRfzGJFsLXJUuqXVFsD8TfcHzjBGb80cTetQ=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "url_normalize" ];
 
   meta = {
-    changelog = "https://github.com/niksite/url-normalize/blob/${src.tag}/CHANGELOG.md";
     description = "URL normalization for Python";
     homepage = "https://github.com/niksite/url-normalize";
+    changelog = "https://github.com/niksite/url-normalize/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
