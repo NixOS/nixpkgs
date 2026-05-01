@@ -55,7 +55,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/mgeier/sphinx-last-updated-by-git/blob/${finalAttrs.version}/NEWS.rst";
     description = "Get the last updated time for each Sphinx page from Git";
     homepage = "https://github.com/mgeier/sphinx-last-updated-by-git";
     license = lib.licenses.bsd2;
