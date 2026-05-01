@@ -1,0 +1,10 @@
+--- a/bindings/python/__init__.py
++++ b/bindings/python/__init__.py
+@@ -1,3 +1,7 @@
++import os
++os.environ['GNC_DBD_DIR'] = '@gnc_dbd_dir@'
++os.environ['GSETTINGS_SCHEMA_DIR'] = '@gsettings_schema_dir@'
++
+ # import all the symbols from gnucash_core, so basic gnucash stuff can be
+ # loaded with:
+ # >>> from gnucash import thingy

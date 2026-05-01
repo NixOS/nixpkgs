@@ -1,0 +1,29 @@
+From ca46aa2bea7a67fbac55d7228026623def0aca9d Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Fri, 16 May 2025 17:39:24 +0200
+Subject: [PATCH 2/2] Don't assume that touch devices support get_num_fingers
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ test/touch_test.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/test/touch_test.py b/test/touch_test.py
+index 259a2c70..e8e58161 100644
+--- a/test/touch_test.py
++++ b/test/touch_test.py
+@@ -30,7 +30,10 @@ class TouchTest(unittest.TestCase):
+ 
+     @unittest.skipIf(not has_touchdevice, "no touch devices found")
+     def test_num_fingers(self):
+-        touch.get_num_fingers(touch.get_device(0))
++        # sdl2-compat reports pens/styli as touch devices but they don't
++        # support get_num_fingers, they can be distinguished by negative id
++        if touch.get_device(0) >= 0:
++            touch.get_num_fingers(touch.get_device(0))
+ 
+     def test_num_fingers__invalid(self):
+         self.assertRaises(TypeError, touch.get_num_fingers, "test")
+-- 
+2.49.0
+

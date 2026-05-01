@@ -1,0 +1,22 @@
+diff --git a/frontend/src-tauri/stirling-pdf.desktop b/frontend/src-tauri/stirling-pdf.desktop
+index 45db59c..8068696 100644
+--- a/frontend/src-tauri/stirling-pdf.desktop
++++ b/frontend/src-tauri/stirling-pdf.desktop
+@@ -3,13 +3,13 @@ Version=1.0
+ Type=Application
+ Name=Stirling-PDF
+ Comment=Locally hosted web application that allows you to perform various operations on PDF files
+-Exec=/usr/bin/stirling-pdf
++Exec=stirling-pdf
+ Icon={{icon}}
+ Terminal=false
+-MimeType=application/pdf;
++MimeType=application/pdf;x-scheme-handler/stirlingpdf;
+ Categories=Office;Graphics;Utility;
+ Actions=open-file;
+ 
+ [Desktop Action open-file]
+ Name=Open PDF File
+-Exec=/usr/bin/stirling-pdf %F
+\ No newline at end of file
++Exec=stirling-pdf %F

@@ -1,0 +1,57 @@
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  pytest,
+  requests,
+  setuptools,
+}:
+
+buildPythonPackage rec {
+  pname = "meraki";
+  version = "2.1.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "meraki";
+    repo = "dashboard-api-python";
+    tag = version;
+    hash = "sha256-B9eda7ccpCRGuBB2XfRI/Fz+MVBUIjFZzHYWfckQT2g=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<79.0.0" "setuptools"
+  '';
+
+  pythonRelaxDeps = [
+    "pytest"
+    "setuptools"
+  ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aiohttp
+    jinja2
+    pytest
+    requests
+    setuptools
+  ];
+
+  # All tests require an API key
+  doCheck = false;
+
+  pythonImportsCheck = [ "meraki" ];
+
+  meta = {
+    description = "Cisco Meraki cloud-managed platform dashboard API python library";
+    homepage = "https://github.com/meraki/dashboard-api-python";
+    changelog = "https://github.com/meraki/dashboard-api-python/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dylanmtaylor ];
+  };
+}

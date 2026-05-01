@@ -1,0 +1,147 @@
+[
+  {
+    "pname": "Dapper",
+    "version": "2.1.66",
+    "hash": "sha256-e5n/wnAFGPDSe30oQQ0fanXrvFZYYa+qCDSTHtfQmPw="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.JsonPatch",
+    "version": "10.0.1",
+    "hash": "sha256-bbX3CGoxG5E8RPUBeEvG9Us8l8WxBHRcjxPR3mJLnbg="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
+    "version": "10.0.1",
+    "hash": "sha256-E1ciFt7uy39aKRDfmXrHJ6e4SsaWm+C3inQqTzQEC2U="
+  },
+  {
+    "pname": "Microsoft.Azure.Amqp",
+    "version": "2.4.11",
+    "hash": "sha256-Nd2crPn0GUSgCzicuNhm0fYKiXtpQ3aduBjcjTMMF/4="
+  },
+  {
+    "pname": "Microsoft.Azure.ServiceBus",
+    "version": "5.2.0",
+    "hash": "sha256-YgxtiQzmlKj6KHyZppnDoWgoeO3wUlyVZimF2dNt1tA="
+  },
+  {
+    "pname": "Microsoft.Azure.Services.AppAuthentication",
+    "version": "1.0.3",
+    "hash": "sha256-KaGL7asV10S+fGp9dt1i6frelho8ns73epxGzZ4iRis="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "1.0.0",
+    "hash": "sha256-asIXVFsAK7ELd/f+vLwhxYDdazqRTmf+fGJ4WFtcCeo="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Clients.ActiveDirectory",
+    "version": "3.14.2",
+    "hash": "sha256-mFlsKSQ6DsKttWuFkv6eMs0uSFHgwocxDad1icMXKj0="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.JsonWebTokens",
+    "version": "5.4.0",
+    "hash": "sha256-yKITMgW2JEXhPlQgdmofAyt0eEcCr72P4rM2EC6wrig="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Logging",
+    "version": "5.4.0",
+    "hash": "sha256-YKdSKQDO5+ssC5mqLGtBhuJ4lLbLUadMVV4PPJ6/tMU="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Tokens",
+    "version": "5.4.0",
+    "hash": "sha256-gCJ+4QwhuBPSkDN+HcMCpTE2LFIQ3htI/SddoHOB7T4="
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
+  },
+  {
+    "pname": "NBitcoin",
+    "version": "9.0.4",
+    "hash": "sha256-UuzpFfVggaz2dV60kGqjnCYtkLyhOrd9dlzzgmTA+4Q="
+  },
+  {
+    "pname": "NBitcoin.Altcoins",
+    "version": "5.0.2",
+    "hash": "sha256-uXjJoS965jLXeeZav0fIndM0TdZ92ODOgCV1duVQAzk="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "1.6.0",
+    "hash": "sha256-ExWI1EKDCRishcfAeHVS/RoJphqSqohmJIC/wz3ZtVo="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "1.6.1",
+    "hash": "sha256-iNan1ix7RtncGWC9AjAZ2sk70DoxOsmEOgQ10fXm4Pw="
+  },
+  {
+    "pname": "NETStandard.Library.Ref",
+    "version": "2.1.0",
+    "hash": "sha256-Ruovy9EKgXaFuFr3zgw5fRKUS9yBIJ4nLeHgXv0zx4o="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "10.0.1",
+    "hash": "sha256-Gw7dQIsmYfmcR5ASTuMsB8cqaI4g3osw0j+LO1jEzJY="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "10.0.3",
+    "hash": "sha256-WEHCjp+OMr5axXQjFsh7TMDE/ttE35nMv5RBPdcxfhs="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "12.0.1",
+    "hash": "sha256-4Xf3RZrJomAh3jaZrEAJX3oPmOowGV8yDB9Y3h0Dw4U="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.1",
+    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "Newtonsoft.Json.Bson",
+    "version": "1.0.2",
+    "hash": "sha256-ZUj6YFSMZp5CZtXiamw49eZmbp1iYBuNsIKNnjxcRzA="
+  },
+  {
+    "pname": "NicolasDorier.CommandLine",
+    "version": "2.0.0",
+    "hash": "sha256-LizYyIMx6I17jZd52duYcGWNgcPs88c/zWxo/ADd3D8="
+  },
+  {
+    "pname": "NicolasDorier.CommandLine.Configuration",
+    "version": "2.0.0",
+    "hash": "sha256-fDpDOVdt7xCDXXqaBnbaFvUOPaE0Sl4cLWjNkU0Cz7I="
+  },
+  {
+    "pname": "NicolasDorier.StandardConfiguration",
+    "version": "2.0.1",
+    "hash": "sha256-PdNopObnA2hOiHomejN/ZYK2CK1aGXMuOnsjHyS2Mco="
+  },
+  {
+    "pname": "Npgsql",
+    "version": "10.0.1",
+    "hash": "sha256-cb4z+WH9qynS6n4I43FzSiifWLzgH26HAP/DnZvsjak="
+  },
+  {
+    "pname": "RabbitMQ.Client",
+    "version": "7.2.0",
+    "hash": "sha256-NkEb2ey0jo/OAeaVOUwIeSbeplqkOsgv1+ys8ZQgemQ="
+  },
+  {
+    "pname": "System.IdentityModel.Tokens.Jwt",
+    "version": "5.4.0",
+    "hash": "sha256-zLtoejPBG8yeFEPIcXZAkdAb0WDnrVXh5YsUYKULyRU="
+  }
+]

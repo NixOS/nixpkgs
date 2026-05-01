@@ -1,0 +1,26 @@
+From 18efb9b5c8e562b169425f6ba79977e52e8b91b9 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <paveloomm@gmail.com>
+Date: Sat, 13 Jan 2024 12:49:45 +0000
+Subject: [PATCH] Ensure the default config file is writable.
+
+---
+ streamrip/config.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/streamrip/config.py b/streamrip/config.py
+index 7ee2f57..88a5fef 100644
+--- a/streamrip/config.py
++++ b/streamrip/config.py
+@@ -378,6 +378,9 @@ def set_user_defaults(path: str, /):
+     """Update the TOML file at the path with user-specific default values."""
+     shutil.copy(BLANK_CONFIG_PATH, path)
+
++    # Ensure the default config file is writable
++    os.chmod(path, 0o644)
++
+     with open(path) as f:
+         toml = parse(f.read())
+     toml["downloads"]["folder"] = DEFAULT_DOWNLOADS_FOLDER  # type: ignore
+--
+2.42.0
+

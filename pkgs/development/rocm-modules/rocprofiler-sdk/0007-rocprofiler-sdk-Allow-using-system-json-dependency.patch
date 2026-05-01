@@ -1,0 +1,73 @@
+From fda4ff3c2389a5a8b57d44fd9be715ade37d576e Mon Sep 17 00:00:00 2001
+From: Robin Voetter <rvoetter@amd.com>
+Date: Sat, 4 Apr 2026 22:01:44 +0000
+Subject: [PATCH] [rocprofiler-sdk] Allow using system json dependency
+
+This adds a new option, ROCPROFILER_BUILD_JSON, which can be set to OFF to
+make rocprofiler-sdk use a system dependency for nlohmann_json instead of trying
+to build it manually. To mimick old behavior, ROCPROFILER_BUILD_JSON is set to
+ON by default.
+
+Related: https://github.com/ROCm/rocm-systems/pull/2319
+---
+ cmake/rocprofiler_options.cmake |  2 ++
+ external/CMakeLists.txt         | 27 ++++++++++++++++-----------
+ 2 files changed, 18 insertions(+), 11 deletions(-)
+
+diff --git a/cmake/rocprofiler_options.cmake b/cmake/rocprofiler_options.cmake
+index 077898a520..e35a41c95c 100644
+--- a/cmake/rocprofiler_options.cmake
++++ b/cmake/rocprofiler_options.cmake
+@@ -71,6 +71,8 @@ rocprofiler_add_option(ROCPROFILER_BUILD_ELFIO "Enable building ELFIO library in
+                        ON)
+ rocprofiler_add_option(ROCPROFILER_BUILD_OTF2 "Enable building OTF2 library internally"
+                        ON)
++rocprofiler_add_option(ROCPROFILER_BUILD_JSON "Enable building JSON library internally"
++                       ON)
+ if(ROCPROFILER_BUILD_TESTS)
+     rocprofiler_add_option(
+         ROCPROFILER_BUILD_GTEST
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 0c5d4e5fe5..b943be5ad6 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -235,20 +235,25 @@ else()
+     target_link_libraries(otf2 INTERFACE PkgConfig::OTF2)
+ endif()
+ 
+-rocprofiler_checkout_git_submodule(
+-    RECURSIVE
+-    RELATIVE_PATH external/json
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+-    REPO_URL https://github.com/nlohmann/json.git
+-    REPO_BRANCH "develop")
+-
+ #
+ # JSON
+ #
+-add_subdirectory(json)
+-target_include_directories(
+-    rocprofiler-sdk-json SYSTEM
+-    INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/json/include>)
++if(ROCPROFILER_BUILD_JSON)
++    rocprofiler_checkout_git_submodule(
++        RECURSIVE
++        RELATIVE_PATH external/json
++        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
++        REPO_URL https://github.com/nlohmann/json.git
++        REPO_BRANCH "develop")
++
++    add_subdirectory(json)
++    target_include_directories(
++        rocprofiler-sdk-json SYSTEM
++        INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/json/include>)
++else()
++    find_package(nlohmann_json REQUIRED GLOBAL)
++    target_link_libraries(rocprofiler-sdk-json INTERFACE nlohmann_json::nlohmann_json)
++endif()
+ 
+ #
+ # SQLite3
+-- 
+2.43.0
+

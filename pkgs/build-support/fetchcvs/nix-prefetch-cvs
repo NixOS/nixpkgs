@@ -1,0 +1,82 @@
+#! /bin/sh -e
+
+cvsRoot=$1
+module=$2
+tag=$3
+expHash=$4
+
+hashType=$NIX_HASH_ALGO
+if test -z "$hashType"; then
+    hashType=sha256
+fi
+
+if test -z "$cvsRoot"; then
+    echo "syntax: nix-prefetch-cvs CVSROOT MODULE [TAG [HASH]]" >&2
+    exit 1
+elif test -z "$module"; then
+    echo "syntax: nix-prefetch-cvs CVSROOT MODULE [TAG [HASH]]" >&2
+    exit 1
+fi
+
+
+mkTempDir() {
+    # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+    # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+    tmpPath="$(realpath "$(mktemp -d --tmpdir nix-prefetch-csv-XXXXXXXX)")"
+    trap removeTempDir EXIT
+}
+
+removeTempDir() {
+    rm -rf "$tmpPath"
+}
+
+
+# If the hash was given, a file with that hash may already be in the
+# store.
+if test -n "$expHash"; then
+    finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" cvs-export)
+    if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
+        finalPath=
+    fi
+    hash=$expHash
+fi
+
+
+# If we don't know the hash or a path with that hash doesn't exist,
+# download the file and add it to the store.
+if test -z "$finalPath"; then
+
+    mkTempDir
+    tmpFile=$tmpPath/cvs-export
+    #mkdir $tmpPath
+
+    # Perform the checkout.
+    if test -z "$tag"; then
+        args=(-D "now")
+    elif test "$USE_DATE" = "1"; then
+        args=(-D "$tag")
+    else
+        args=(-r "$tag")
+    fi
+    (cd "$tmpPath" && cvs -f -z0 -d $cvsRoot export "${args[*]}" -d cvs-export $module >&2)
+
+    # Compute the hash.
+    hash=$(nix-hash --type $hashType ${hashFormat:-"--sri"} $tmpFile)
+    if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
+
+    # Add the downloaded file to the Nix store.
+    finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+
+    if test -n "$expHash" -a "$expHash" != "$hash"; then
+        echo "hash mismatch for CVS root \`$cvsRoot'"
+        exit 1
+    fi
+fi
+
+if ! test -n "$QUIET"; then echo "path is $finalPath" >&2; fi
+
+echo $hash
+
+if test -n "$PRINT_PATH"; then
+    echo $finalPath
+fi

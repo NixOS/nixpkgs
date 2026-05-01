@@ -1,0 +1,11 @@
+{
+  "invidious": {
+    "hash": "sha256-tACx4+HqouftDalZlrurS75gYvS02qnmxQoL91YfTjg=",
+    "version": "2.20260207.0",
+    "date": "2026.02.07",
+    "commit": "118d6356"
+  },
+  "videojs": {
+    "hash": "sha256-jED3zsDkPN8i6GhBBJwnsHujbuwlHdsVpVqa1/pzSH4="
+  }
+}

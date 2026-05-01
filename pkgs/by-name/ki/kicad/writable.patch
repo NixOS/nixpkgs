@@ -1,0 +1,49 @@
+commit 6a72fd032405515e468797be91b5a6ebcbbb5fd8
+Author: Evils <evils.devils@protonmail.com>
+Date:   Wed Nov 23 19:49:13 2022 +0100
+
+    ensure new projects are writable
+
+diff --git a/kicad/kicad_manager_frame.cpp b/kicad/kicad_manager_frame.cpp
+index 7ee8090858..391514519c 100644
+--- a/kicad/kicad_manager_frame.cpp
++++ b/kicad/kicad_manager_frame.cpp
+@@ -638,6 +638,12 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
+ 
+                 // wxFFile dtor will close the file
+             }
++
++            if( destFileName.IsOk() && !destFileName.IsFileWritable() )
++            {
++                destFileName.SetPermissions(0644);
++            }
++
+         }
+     }
+ 
+diff --git a/kicad/project_template.cpp b/kicad/project_template.cpp
+index bf951fcddb..2bef94326b 100644
+--- a/kicad/project_template.cpp
++++ b/kicad/project_template.cpp
+@@ -282,6 +282,21 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
+ 
+             result = false;
+         }
++	else if( !destFile.IsFileWritable() && !destFile.SetPermissions(0644) )
++        {
++            if( aErrorMsg )
++            {
++                if( !aErrorMsg->empty() )
++                    *aErrorMsg += "\n";
++
++                wxString msg;
++
++                msg.Printf( _( "Cannot make file writable: '%s'." ), destFile.GetFullPath() );
++                *aErrorMsg += msg;
++            }
++
++            result = false;
++	}
+     }
+ 
+     return result;

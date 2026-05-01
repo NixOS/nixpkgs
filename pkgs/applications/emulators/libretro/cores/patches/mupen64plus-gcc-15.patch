@@ -1,0 +1,13 @@
+diff --git a/GLideN64/src/GLideNHQ/TxHiResLoader.h b/GLideN64/src/GLideNHQ/TxHiResLoader.h
+index 4c13651..f887c78 100644
+--- a/GLideN64/src/GLideNHQ/TxHiResLoader.h
++++ b/GLideN64/src/GLideNHQ/TxHiResLoader.h
+@@ -13,6 +13,8 @@
+ #define CORRECTFILENAME(str)
+ #endif /* OS_WINDOWS */
+ 
++#include <cstdint>
++
+ #include "TxCache.h"
+ #include "TxQuantize.h"
+ #include "TxImage.h"

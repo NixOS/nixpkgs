@@ -1,0 +1,92 @@
+From 3402c32b97c0d16138c6753c8268ba97d604eb43 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+Date: Tue, 24 Feb 2026 15:44:41 +0000
+Subject: [PATCH] tests: fix job control triggering test termination
+
+This avoids the test harness being terminated like:
+  make[1]: *** [Makefile:24419: check-recursive] Hangup
+  make[3]: *** [Makefile:24668: check-TESTS] Hangup
+  make: *** [Makefile:24922: check] Hangup
+  make[2]: *** [Makefile:24920: check-am] Hangup
+  make[4]: *** [Makefile:24685: tests/misc/usage_vs_refs.log] Error 129
+  ...
+
+This happened sometimes when the tests were being run non interactively.
+For example when run like:
+
+  setsid make TESTS="tests/timeout/timeout.sh \
+   tests/tail/overlay-headers.sh" SUBDIRS=. -j2 check
+
+Note the race window can be made bigger by adding a sleep
+after tail is stopped in overlay-headers.sh
+
+The race can trigger the kernel to induce its job control
+mechanism to prevent stuck processes.
+I.e. where it sends SIGHUP + SIGCONT to a process group
+when it determines that group may become orphaned,
+and there are stopped processes in that group.
+
+* tests/tail/overlay-headers.sh: Use setsid(1) to keep the stopped
+tail process in a separate process group, thus avoiding any kernel
+job control protection mechanism.
+* tests/timeout/timeout.sh: Use setsid(1) to avoid the kernel
+checking the main process group when sleep(1) is reparented.
+Fixes https://bugs.gnu.org/80477
+---
+ tests/tail/overlay-headers.sh | 10 ++++++++--
+ tests/timeout/timeout.sh      | 11 ++++++++---
+ 2 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/tests/tail/overlay-headers.sh b/tests/tail/overlay-headers.sh
+index be9b6a7df..52c7da056 100755
+--- a/tests/tail/overlay-headers.sh
++++ b/tests/tail/overlay-headers.sh
+@@ -20,6 +20,8 @@
+ . "${srcdir=.}/tests/init.sh"; path_prepend_ ./src
+ print_ver_ tail sleep
+ 
++setsid true || skip_ 'setsid required to control groups'
++
+ # Function to count number of lines from tail
+ # while ignoring transient errors due to resource limits
+ countlines_ ()
+@@ -54,8 +56,12 @@ echo start > file2 || framework_failure_
+ env sleep 60 & sleep=$!
+ 
+ # Note don't use timeout(1) here as it currently
+-# does not propagate SIGCONT
+-tail $fastpoll --pid=$sleep -f file1 file2 > out & pid=$!
++# does not propagate SIGCONT.
++# Note use setsid here to ensure we're in a separate process group
++# as we're going to STOP this tail process, and this can trigger
++# the kernel to send SIGHUP to a group if other tests have
++# processes that are reparented. (See tests/timeout/timeout.sh).
++setsid tail $fastpoll --pid=$sleep -f file1 file2 > out & pid=$!
+ 
+ # Ensure tail is running
+ kill -0 $pid || fail=1
+diff --git a/tests/timeout/timeout.sh b/tests/timeout/timeout.sh
+index 9a395416b..fbb043312 100755
+--- a/tests/timeout/timeout.sh
++++ b/tests/timeout/timeout.sh
+@@ -56,9 +56,14 @@ returns_ 124 timeout --foreground -s0 -k1 .1 sleep 10 && fail=1
+ ) || fail=1
+ 
+ # Don't be confused when starting off with a child (Bug#9098).
+-out=$(sleep .1 & exec timeout .5 sh -c 'sleep 2; echo foo')
+-status=$?
+-test "$out" = "" && test $status = 124 || fail=1
++# Use setsid to avoid sleep being in the test's process group, as
++# upon reparenting it can trigger an orphaned process group SIGHUP
++# (if there were stopped processes in other tests).
++if setsid true; then
++  out=$(setsid sleep .1 & exec timeout .5 sh -c 'sleep 2; echo foo')
++  status=$?
++  test "$out" = "" && test $status = 124 || fail=1
++fi
+ 
+ # Verify --verbose output
+ cat > exp <<\EOF
+-- 
+2.53.0
+

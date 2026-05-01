@@ -1,0 +1,135 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  python3Packages,
+  versionCheckHook,
+  nix-update-script,
+
+  prefix ? "uutils-",
+  buildMulticallBinary ? true,
+
+  selinuxSupport ? false,
+  libselinux,
+
+  acl,
+}:
+
+assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "uutils-coreutils";
+  version = "0.8.0";
+
+  src = fetchFromGitHub {
+    owner = "uutils";
+    repo = "coreutils";
+    tag = finalAttrs.version;
+    hash = "sha256-nH0WtsVP1uwPvimpGnmWx5v0VButIFJu9K5wXsiC4cA=";
+  };
+
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-FMTzMgXcAg9dk7dfYG7lTOHYJxN3YHjf0R96LS7W3FI=";
+  };
+
+  buildInputs =
+    lib.optionals (lib.meta.availableOn stdenv.hostPlatform acl) [
+      acl
+    ]
+    ++ lib.optionals selinuxSupport [
+      libselinux
+    ];
+
+  nativeBuildInputs = [
+    cargo
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+    python3Packages.sphinx
+  ];
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "PROFILE=release"
+    "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
+    "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
+    # Explicitly enable acl, and if requested selinux.
+    # We cannot rely on SELINUX_ENABLED here since our explicit assignment
+    # overrides its effect in the makefile.
+    "BUILD_SPEC_FEATURE=${
+      lib.concatStringsSep "," (
+        # We can always enable acl, on non-Linux, libc provides the headers,
+        # only in Linux we need to add the acl lib to buildInputs.
+        [
+          "feat_acl"
+        ]
+        ++ (lib.optionals selinuxSupport [
+          "feat_selinux"
+        ])
+      )
+    }"
+    "SKIP_UTILS=${lib.optionalString stdenv.hostPlatform.isStatic "stdbuf"}"
+  ]
+  ++ lib.optionals (prefix != null) [
+    "PROG_PREFIX=${prefix}"
+  ]
+  ++ lib.optionals buildMulticallBinary [
+    "MULTICALL=y"
+  ];
+
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+    # Upstream uses hardlinks for the multicall aliases by default, but NAR
+    # serialization does not preserve hardlinks, exploding the closure to
+    # ~100 copies of the 14 MiB binary.
+    LN = "ln -sf";
+  }
+  // lib.optionalAttrs selinuxSupport {
+    SELINUX_INCLUDE_DIR = "${lib.getInclude libselinux}/include";
+    SELINUX_LIB_DIR = lib.makeLibraryPath [
+      libselinux
+    ];
+    SELINUX_STATIC = "0";
+  };
+
+  # too many impure/platform-dependent tests
+  doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram =
+    let
+      prefix' = lib.optionalString (prefix != null) prefix;
+    in
+    "${placeholder "out"}/bin/${prefix'}ls";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Cross-platform Rust rewrite of the GNU coreutils";
+    longDescription = ''
+      uutils is an attempt at writing universal (as in cross-platform)
+      CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
+    '';
+    homepage = "https://github.com/uutils/coreutils";
+    changelog = "https://github.com/uutils/coreutils/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      siraben
+      matthiasbeyer
+    ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+  };
+})

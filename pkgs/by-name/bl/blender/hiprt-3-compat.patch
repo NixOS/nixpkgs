@@ -1,0 +1,42 @@
+diff --git a/extern/hipew/src/hipew.c b/extern/hipew/src/hipew.c
+index e72ccde6..138e1efc 100644
+--- a/extern/hipew/src/hipew.c
++++ b/extern/hipew/src/hipew.c
+@@ -241,13 +241,13 @@ static int hipewHipInit(void) {
+   /* ROCm 6 changes paths from /opt/rocm/hip/lib to /opt/rocm/lib, so
+    * search for libraries there. */
+ 
+-  const char* hip_paths[] = { "libamdhip64.so",
++  const char* hip_paths[] = { "libamdhip64.so.7",
++                            "/opt/rocm/lib/libamdhip64.so.7",
++                            "/opt/rocm/hip/lib/libamdhip64.so.7",
+                             "libamdhip64.so.6",
+                             "/opt/rocm/lib/libamdhip64.so.6",
+                             "/opt/rocm/hip/lib/libamdhip64.so.6",
+-                            "libamdhip64.so.7",
+-                            "/opt/rocm/lib/libamdhip64.so.7",
+-                            "/opt/rocm/hip/lib/libamdhip64.so.7",
++                            "libamdhip64.so",
+                              NULL };
+ #endif
+   static int initialized = 0;
+diff --git a/intern/cycles/kernel/device/hiprt/CMakeLists.txt b/intern/cycles/kernel/device/hiprt/CMakeLists.txt
+index 9f48fb9be3..01e05159c9 100644
+--- a/intern/cycles/kernel/device/hiprt/CMakeLists.txt
++++ b/intern/cycles/kernel/device/hiprt/CMakeLists.txt
+@@ -30,13 +30,13 @@
+ set(SRC_KERNEL_DEVICE_HIPRT_SDK
+   hiprt/impl/Aabb.h
+   hiprt/impl/BvhNode.h
+-  hiprt/impl/Geometry.h
++  hiprt/impl/Header.h
+   hiprt/impl/hiprt_device_impl.h
+   hiprt/impl/hiprt_kernels_bitcode.h
+   hiprt/impl/Instance.h
++  hiprt/impl/Obb.h
+   hiprt/impl/QrDecomposition.h
+   hiprt/impl/Quaternion.h
+-  hiprt/impl/Scene.h
+   hiprt/impl/Transform.h
+   hiprt/impl/Triangle.h
+ )

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nixos-test-driver"
+version = "0.0.0"
+
+[project.scripts]
+nixos-test-driver = "test_driver:main"
+generate-driver-symbols = "test_driver:generate_driver_symbols"
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.setuptools.package-data]
+test_driver = ["py.typed"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+
+lint.select = ["E", "F", "I", "U", "N"]
+lint.ignore = ["E501", "N818"]

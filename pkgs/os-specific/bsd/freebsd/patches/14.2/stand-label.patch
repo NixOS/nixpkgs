@@ -1,0 +1,390 @@
+diff --git a/stand/common/disk.c b/stand/common/disk.c
+index c1650f0fa..1baf91efa 100644
+--- a/stand/common/disk.c
++++ b/stand/common/disk.c
+@@ -468,7 +468,7 @@ disk_parsedev(struct devdesc **idev, const char *devspec, const char **path)
+ 
+ 	if (*cp != '\0' && *cp != ':')
+ 		return (EINVAL);
+-	dev = malloc(sizeof(*dev));
++	dev = calloc(sizeof(*dev), 1);
+ 	if (dev == NULL)
+ 		return (ENOMEM);
+ 	dev->dd.d_unit = unit;
+diff --git a/stand/efi/include/efi.h b/stand/efi/include/efi.h
+index b603c3a78..d430a7012 100644
+--- a/stand/efi/include/efi.h
++++ b/stand/efi/include/efi.h
+@@ -74,14 +74,16 @@ typedef uint32_t   UINTN;
+ #include "efidef.h"
+ #include "efidevp.h"
+ #include "efipciio.h"
+-#include "efiprot.h"
+ #include "eficon.h"
++#include "efiapi.h"
++#include "efipart.h"
++#include "efigpt.h"
++#include "efiprot.h"
+ #include "eficonsctl.h"
+ #include "efiser.h"
+ #include "efi_nii.h"
+ #include "efipxebc.h"
+ #include "efinet.h"
+-#include "efiapi.h"
+ #include "efifs.h"
+ #include "efierr.h"
+ #include "efigop.h"
+@@ -90,6 +92,7 @@ typedef uint32_t   UINTN;
+ #include "efitcp.h"
+ #include "efipoint.h"
+ #include "efiuga.h"
++#include "efichar.h"
+ #include <sys/types.h>
+ 
+ /*
+diff --git a/stand/efi/include/efilib.h b/stand/efi/include/efilib.h
+index e1920430a..3bbd83a50 100644
+--- a/stand/efi/include/efilib.h
++++ b/stand/efi/include/efilib.h
+@@ -40,6 +40,7 @@ extern EFI_RUNTIME_SERVICES	*RS;
+ extern struct devsw efipart_fddev;
+ extern struct devsw efipart_cddev;
+ extern struct devsw efipart_hddev;
++extern struct devsw efipart_label;
+ extern struct devsw efihttp_dev;
+ extern struct devsw efinet_dev;
+ extern struct netif_driver efinetif;
+@@ -58,6 +59,7 @@ typedef struct pdinfo
+ 	uint32_t		pd_unit;	/* unit number */
+ 	uint32_t		pd_open;	/* reference counter */
+ 	void			*pd_bcache;	/* buffer cache data */
++	char			pd_volname[36*2];
+ 	struct pdinfo		*pd_parent;	/* Linked items (eg partitions) */
+ 	struct devsw		*pd_devsw;	/* Back pointer to devsw */
+ } pdinfo_t;
+diff --git a/stand/efi/include/efiprot.h b/stand/efi/include/efiprot.h
+index be11ea83b..1463c756c 100644
+--- a/stand/efi/include/efiprot.h
++++ b/stand/efi/include/efiprot.h
+@@ -632,4 +632,41 @@ typedef struct _EFI_COMPONENT_NAME2 {
+     CHAR8 **SupportedLanguages;
+ } EFI_COMPONENT_NAME2;
+ 
++//
++// Partition Info Protocol
++//
++
++#define PARTITION_INFO_PROTOCOL \
++  { 0x8cf2f62c, 0xbc9b, 0x4821, {0x80, 0x8d, 0xec, 0x9e, 0xc4, 0x21, 0xa1, 0xa0} }
++
++INTERFACE_DECL(_EFI_PARTITION_INFO);
++
++#define EFI_PARTITION_INFO_INTERFACE_REVISION 0x0001000
++#define PARTITION_TYPE_OTHER 0x00
++#define PARTITION_TYPE_MBR 0x01
++#define PARTITION_TYPE_GPT 0x02
++
++#pragma pack(1)
++
++typedef struct _EFI_PARTITION_INFO {
++
++  UINT32         Revision;
++  UINT32         Type;
++  UINT8          System;
++  UINT8          Reserved[7];
++  union {
++   ///
++   /// MBR data
++   ///
++   MBR_PARTITION_RECORD Mbr;
++
++   ///
++   /// GPT data
++   ///
++   EFI_PARTITION_ENTRY Gpt;
++  } Info;
++} EFI_PARTITION_INFO;
++
++#pragma pack()
++
+ #endif
+diff --git a/stand/efi/libefi/efipart.c b/stand/efi/libefi/efipart.c
+index 3df603457..a7b6050ff 100644
+--- a/stand/efi/libefi/efipart.c
++++ b/stand/efi/libefi/efipart.c
+@@ -35,11 +35,10 @@
+ 
+ #include <efi.h>
+ #include <efilib.h>
+-#include <efiprot.h>
+-#include <efichar.h>
+ #include <disk.h>
+ 
+ static EFI_GUID blkio_guid = BLOCK_IO_PROTOCOL;
++static EFI_GUID partinfo_guid = PARTITION_INFO_PROTOCOL;
+ 
+ typedef bool (*pd_test_cb_t)(pdinfo_t *, pdinfo_t *);
+ static int efipart_initfd(void);
+@@ -58,6 +57,12 @@ static int efipart_printfd(int);
+ static int efipart_printcd(int);
+ static int efipart_printhd(int);
+ 
++static int efipart_get_volname(EFI_HANDLE h, char *dest, int size);
++static int label_parsedev(struct devdesc **idev, const char *devspec, const char **path);
++
++static char *nullfmt(struct devdesc *vdev);
++static int nullinit(void);
++
+ /* EISA PNP ID's for floppy controllers */
+ #define	PNP0604	0x604
+ #define	PNP0700	0x700
+@@ -104,6 +109,20 @@ struct devsw efipart_hddev = {
+ 	.dv_parsedev = disk_parsedev,
+ };
+ 
++struct devsw efipart_label = {
++	.dv_name = "label",
++	.dv_type = DEVT_LABEL,
++	.dv_init = nullinit,
++	.dv_strategy = efipart_strategy,
++	.dv_open = efipart_open,
++	.dv_close = efipart_close,
++	.dv_ioctl = efipart_ioctl,
++	.dv_print = efipart_printhd,
++	.dv_cleanup = nullsys,
++	.dv_fmtdev = nullfmt,
++	.dv_parsedev = label_parsedev,
++};
++
+ static pdinfo_list_t fdinfo = STAILQ_HEAD_INITIALIZER(fdinfo);
+ static pdinfo_list_t cdinfo = STAILQ_HEAD_INITIALIZER(cdinfo);
+ static pdinfo_list_t hdinfo = STAILQ_HEAD_INITIALIZER(hdinfo);
+@@ -406,6 +425,8 @@ efipart_inithandles(void)
+ 		pd->pd_handle = hin[i];
+ 		pd->pd_devpath = devpath;
+ 		pd->pd_blkio = blkio;
++		/* Do not fail here */
++		efipart_get_volname(hin[i], pd->pd_volname, sizeof(pd->pd_volname));
+ 		STAILQ_INSERT_TAIL(&pdinfo, pd, pd_link);
+ 	}
+ 
+@@ -419,6 +440,20 @@ efipart_inithandles(void)
+ 	return (0);
+ }
+ 
++static int
++efipart_get_volname(EFI_HANDLE h, char *dest, int size)
++{
++	EFI_PARTITION_INFO *partinfo;
++	int status;
++
++	status = OpenProtocolByHandle(h, &partinfo_guid, (void **)&partinfo);
++	if (EFI_ERROR(status)) {
++		return (efi_status_to_errno(status));
++	}
++	cpy16to8(partinfo->Info.Gpt.PartitionName, dest, size);
++	return (0);
++}
++
+ /*
+  * Get node identified by pd_test() from plist.
+  */
+@@ -1249,3 +1284,99 @@ efipart_realstrategy(void *devdata, int rw, daddr_t blk, size_t size,
+ 		free(blkbuf);
+ 	return (rc);
+ }
++
++static pdinfo_t *
++label_lookup_part(const char *label, struct devsw **dev)
++{
++	pdinfo_t *dp, *pp;
++
++	/*
++	 * Check hard disks, then cd, then floppy
++	 */
++	STAILQ_FOREACH(dp, &hdinfo, pd_link) {
++		if (!strcmp(label, dp->pd_volname)) {
++			*dev = &efipart_hddev;
++			return (dp);
++		}
++		STAILQ_FOREACH(pp, &dp->pd_part, pd_link) {
++			if (!strcmp(label, pp->pd_volname)) {
++				*dev = &efipart_hddev;
++				return (pp);
++			}
++		}
++	}
++	STAILQ_FOREACH(dp, &cdinfo, pd_link) {
++		if (!strcmp(label, dp->pd_volname)) {
++			*dev = &efipart_cddev;
++			return (dp);
++		}
++		STAILQ_FOREACH(pp, &dp->pd_part, pd_link) {
++			if (!strcmp(label, pp->pd_volname)) {
++				*dev = &efipart_cddev;
++				return (pp);
++			}
++		}
++	}
++	STAILQ_FOREACH(dp, &fdinfo, pd_link) {
++		if (!strcmp(label, dp->pd_volname)) {
++			*dev = &efipart_fddev;
++			return (dp);
++		}
++	}
++	return (NULL);
++}
++
++static int
++label_parsedev(struct devdesc **idev, const char *devspec, const char **path)
++{
++	pdinfo_t *part;
++	const char *devspeci, *devspecp;
++	char *label;
++	struct disk_devdesc *dev;
++
++	if (strncmp(devspec, "label:", strlen("label:"))) {
++		return (EINVAL);
++	}
++	devspeci = devspec + strlen("label:");
++	devspecp = strchr(devspeci, ':');
++	if (devspecp == NULL) {
++		return (EINVAL);
++	}
++	label = malloc(devspecp - devspeci + 1);
++	if (label == NULL) {
++		return (ENOMEM);
++	}
++	memcpy(label, devspeci, devspecp - devspeci);
++	label[devspecp - devspeci] = 0;
++
++	dev = calloc(sizeof(*dev), 1);
++	if (dev == NULL)
++		return (ENOMEM);
++
++	part = label_lookup_part(label, &dev->dd.d_dev);
++	if (part == NULL) {
++		return (ENOENT);
++	}
++
++	dev->dd.d_unit = part->pd_parent->pd_unit;
++	dev->d_slice = part->pd_unit;
++	dev->d_partition = D_PARTISGPT;
++	*idev = &dev->dd;
++	if (path != NULL) {
++		*path = devspecp + 1;
++	}
++
++	return (0);
++}
++
++static char *
++nullfmt(struct devdesc *vdev)
++{
++	return ("");
++}
++
++static int
++nullinit(void)
++{
++	return (0);
++}
+diff --git a/stand/efi/loader/conf.c b/stand/efi/loader/conf.c
+index 3bc74ea63..042aa15b3 100644
+--- a/stand/efi/loader/conf.c
++++ b/stand/efi/loader/conf.c
+@@ -40,6 +40,7 @@ struct devsw *devsw[] = {
+ 	&efipart_fddev,
+ 	&efipart_cddev,
+ 	&efipart_hddev,
++	&efipart_label,
+ 	&efihttp_dev, /* ordering with efinet_dev matters */
+ #if defined(LOADER_NET_SUPPORT)
+ 	&efinet_dev,
+diff --git a/stand/kboot/kboot/hostdisk.c b/stand/kboot/kboot/hostdisk.c
+index a9117d4c1..fc98bf534 100644
+--- a/stand/kboot/kboot/hostdisk.c
++++ b/stand/kboot/kboot/hostdisk.c
+@@ -465,7 +465,7 @@ hostdisk_parsedev(struct devdesc **idev, const char *devspec, const char **path)
+ 		return (EINVAL);
+ 	}
+ 	free(fn);
+-	dev = malloc(sizeof(*dev));
++	dev = calloc(sizeof(*dev), 1);
+ 	if (dev == NULL)
+ 		return (ENOMEM);
+ 	dev->d_unit = 0;
+diff --git a/stand/libofw/devicename.c b/stand/libofw/devicename.c
+index 5e3a789c1..dd7eb2cf8 100644
+--- a/stand/libofw/devicename.c
++++ b/stand/libofw/devicename.c
+@@ -98,7 +98,7 @@ ofw_common_parsedev(struct devdesc **dev, const char *devspec, const char **path
+ 
+ 	if (ofw_path_to_handle(devspec, ofwtype, &rem_path) == -1)
+ 		return (ENOENT);
+-	idev = malloc(sizeof(struct ofw_devdesc));
++	idev = calloc(sizeof(struct ofw_devdesc), 1);
+ 	if (idev == NULL) {
+ 		printf("ofw_parsedev: malloc failed\n");
+ 		return ENOMEM;
+diff --git a/stand/libsa/dev.c b/stand/libsa/dev.c
+index 1edc843d5..841615588 100644
+--- a/stand/libsa/dev.c
++++ b/stand/libsa/dev.c
+@@ -72,7 +72,7 @@ default_parsedev(struct devdesc **dev, const char *devspec,
+ 	int unit, err;
+ 	char *cp;
+ 
+-	idev = malloc(sizeof(struct devdesc));
++	idev = calloc(sizeof(struct devdesc), 1);
+ 	if (idev == NULL)
+ 		return (ENOMEM);
+ 
+@@ -139,7 +139,8 @@ devparse(struct devdesc **dev, const char *devspec, const char **path)
+ 	if (err != 0)
+ 		return (err);
+ 
+-	idev->d_dev = dv;
++	if (idev->d_dev == NULL)
++		idev->d_dev = dv;
+ 	if (dev != NULL)
+ 		*dev = idev;
+ 	else
+diff --git a/stand/libsa/stand.h b/stand/libsa/stand.h
+index 260defa3a..8fb5c818d 100644
+--- a/stand/libsa/stand.h
++++ b/stand/libsa/stand.h
+@@ -148,6 +148,7 @@ struct devsw {
+ #define DEVT_CD		3
+ #define DEVT_ZFS	4
+ #define DEVT_FD		5
++#define DEVT_LABEL	6
+     int		(*dv_init)(void);	/* early probe call */
+     int		(*dv_strategy)(void *devdata, int rw, daddr_t blk,
+ 			size_t size, char *buf, size_t *rsize);
+diff --git a/stand/libsa/zfs/zfs.c b/stand/libsa/zfs/zfs.c
+index 70a102f64..2f7c1caaa 100644
+--- a/stand/libsa/zfs/zfs.c
++++ b/stand/libsa/zfs/zfs.c
+@@ -1643,7 +1643,7 @@ zfs_parsedev(struct devdesc **idev, const char *devspec, const char **path)
+ 	spa = spa_find_by_name(poolname);
+ 	if (!spa)
+ 		return (ENXIO);
+-	dev = malloc(sizeof(*dev));
++	dev = calloc(sizeof(*dev), 1);
+ 	if (dev == NULL)
+ 		return (ENOMEM);
+ 	dev->pool_guid = spa->spa_guid;
+diff --git a/stand/uboot/devicename.c b/stand/uboot/devicename.c
+index 4ee9c7fd7..23670d759 100644
+--- a/stand/uboot/devicename.c
++++ b/stand/uboot/devicename.c
+@@ -102,7 +102,7 @@ uboot_parsedev(struct uboot_devdesc **dev, const char *devspec,
+ 	}
+ 	if (dv == NULL)
+ 		return(ENOENT);
+-	idev = malloc(sizeof(struct uboot_devdesc));
++	idev = calloc(sizeof(struct uboot_devdesc), 1);
+ 	err = 0;
+ 	np = (devspec + strlen(dv->dv_name));
+ 

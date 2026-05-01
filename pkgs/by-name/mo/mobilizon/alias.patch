@@ -1,0 +1,13 @@
+diff --git a/lib/federation/activity_pub/types/resources.ex b/lib/federation/activity_pub/types/resources.ex
+index fd1831e68..0fa00129a 100644
+--- a/lib/federation/activity_pub/types/resources.ex
++++ b/lib/federation/activity_pub/types/resources.ex
+@@ -4,7 +4,7 @@ defmodule Mobilizon.Federation.ActivityPub.Types.Resources do
+   alias Mobilizon.Actors.Actor
+   alias Mobilizon.Federation.ActivityPub.Permission
+   alias Mobilizon.Federation.ActivityPub.Types.Entity
+-  alias alias Mobilizon.Federation.ActivityStream
++  alias Mobilizon.Federation.ActivityStream
+   alias Mobilizon.Federation.ActivityStream.Convertible
+   alias Mobilizon.Resources.Resource
+   alias Mobilizon.Service.Activity.Resource, as: ResourceActivity

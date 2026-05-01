@@ -1,0 +1,16 @@
+(stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+error: Refusing to evaluate package 'a-0' in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:15 because it has problems:
+- deprecated: Package is deprecated and replaced by b
+
+See also https://nixos.org/manual/nixpkgs/unstable#sec-problems
+To allow evaluation regardless, use:
+- Nixpkgs import: import nixpkgs { config = <below code>; }
+- NixOS: nixpkgs.config = <below code>;
+- nix-* commands: Put below code in ~/.config/nixpkgs/config.nix
+
+  {
+    problems.handlers = {
+      a.deprecated = "warn"; # or "ignore"
+    };
+  }

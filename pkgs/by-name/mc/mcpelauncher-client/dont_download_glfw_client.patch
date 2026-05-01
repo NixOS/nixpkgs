@@ -1,0 +1,25 @@
+diff --git a/ext/glfw.cmake b/ext/glfw.cmake
+index 5487f32..feeb89f 100644
+--- a/ext/glfw.cmake
++++ b/ext/glfw.cmake
+@@ -1,18 +1,2 @@
+-include(FetchContent)
+-
+-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+-
+-FetchContent_Declare(
+-        glfw3_ext
+-        URL "https://github.com/minecraft-linux/glfw/archive/fce9121962bc0a21c39e2d6f8e08bad30c566c72.zip"
+-)
+-
+-FetchContent_GetProperties(glfw3_ext)
+-if(NOT glfw3_ext_POPULATED)
+-  FetchContent_Populate(glfw3_ext)
+-  add_subdirectory(${glfw3_ext_SOURCE_DIR} ${glfw3_ext_BINARY_DIR})
+-endif()
++find_package(glfw3 REQUIRED)
+ add_library(glfw3 ALIAS glfw)
+\ No newline at end of file

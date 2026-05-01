@@ -1,0 +1,76 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gst_all_1,
+  libx11,
+  pipewire,
+  pulseaudio,
+  qt6,
+  wayland,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vokoscreen-ng";
+  version = "4.8.3";
+
+  src = fetchFromGitHub {
+    owner = "vkohaupt";
+    repo = "vokoscreenNG";
+    tag = finalAttrs.version;
+    hash = "sha256-D2E4G6rq6kFZbwjYhoccl/aROCdpuS8UJu0JKGc8wKU=";
+  };
+
+  qmakeFlags = [ "src/vokoscreenNG.pro" ];
+
+  nativeBuildInputs = [
+    qt6.qttools
+    pkg-config
+    qt6.qmake
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    gst_all_1.gstreamer
+    libx11
+    pulseaudio
+    qt6.qtbase
+    qt6.qtmultimedia
+    wayland
+    pipewire
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+  ];
+
+  # TODO: translations don't get built by the qmake project
+  preBuild = ''
+    lrelease src/language/*.ts
+  '';
+
+  # upstream doesn't provide an install target
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 -t $out/bin vokoscreenNG
+    install -Dm644 -t $out/share/applications src/applications/vokoscreenNG.desktop
+    install -Dm644 -t $out/share/icons src/applications/vokoscreenNG.png
+
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "User friendly Open Source screencaster for Linux and Windows";
+    license = lib.licenses.gpl2Plus;
+    homepage = "https://github.com/vkohaupt/vokoscreenNG";
+    maintainers = with lib.maintainers; [
+      dietmarw
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "vokoscreenNG";
+  };
+})

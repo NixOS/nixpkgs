@@ -1,0 +1,92 @@
+From 246d8e82c805e2e49ea0abd39abc9b2d800bde59 Mon Sep 17 00:00:00 2001
+From: Colin Watson <cjwatson@debian.org>
+Date: Mon, 3 Feb 2025 15:28:10 +0000
+Subject: [PATCH] Support numpy 2.0
+
+See: https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword
+---
+ hickle/legacy_v3/loaders/load_numpy.py | 2 +-
+ hickle/loaders/load_builtins.py        | 4 ++--
+ hickle/loaders/load_numpy.py           | 2 +-
+ hickle/tests/test_02_hickle_lookup.py  | 6 +++---
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/hickle/legacy_v3/loaders/load_numpy.py b/hickle/legacy_v3/loaders/load_numpy.py
+index 0fd6c0a4..d17044bc 100644
+--- a/hickle/legacy_v3/loaders/load_numpy.py
++++ b/hickle/legacy_v3/loaders/load_numpy.py
+@@ -115,7 +115,7 @@ def load_np_scalar_dataset(h_node):
+ 
+ def load_ndarray_dataset(h_node):
+     py_type, data = get_type_and_data(h_node)
+-    return np.array(data, copy=False)
++    return np.asarray(data)
+ 
+ def load_ndarray_masked_dataset(h_node):
+     py_type, data = get_type_and_data(h_node)
+diff --git a/hickle/loaders/load_builtins.py b/hickle/loaders/load_builtins.py
+index 7cfbf281..53b74429 100644
+--- a/hickle/loaders/load_builtins.py
++++ b/hickle/loaders/load_builtins.py
+@@ -170,7 +170,7 @@ def create_listlike_dataset(py_obj, h_group, name,list_len = -1,item_dtype = Non
+         # strings and bytes are stored as array of bytes with strings encoded
+         # using utf8 encoding
+         string_data = bytearray(py_obj,"utf8") if isinstance(py_obj,str) else memoryview(py_obj)
+-        string_data = np.array(string_data,copy=False)
++        string_data = np.asarray(string_data)
+         string_data.dtype = 'S1'
+         dataset = h_group.create_dataset( name, data = string_data,shape = (1,string_data.size), **kwargs)
+         dataset.attrs["str_type"] = py_obj.__class__.__name__.encode("ascii")
+@@ -385,7 +385,7 @@ def load_list_dataset(h_node,base_type,py_obj_type):
+         if h_node.dtype.itemsize > 1 and 'bytes' in h_node.dtype.name:
+ 
+             # string dataset 4.0.x style convert it back to python string
+-            content = np.array(content, copy=False, dtype=str).tolist()
++            content = np.asarray(content, dtype=str).tolist()
+         else:
+ 
+             # decode bytes representing python string before final conversion
+diff --git a/hickle/loaders/load_numpy.py b/hickle/loaders/load_numpy.py
+index a4c76e91..bff98187 100644
+--- a/hickle/loaders/load_numpy.py
++++ b/hickle/loaders/load_numpy.py
+@@ -232,7 +232,7 @@ def load_ndarray_dataset(h_node,base_type,py_obj_type):
+             # not converted to list of string but saved as ar consequently
+             # itemsize of dtype is > 1
+             string_data = bytes(string_data).decode("utf8")
+-        return np.array(string_data,copy=False,dtype=dtype)
++        return np.asarray(string_data,dtype=dtype)
+     if issubclass(py_obj_type,np.matrix):
+         return py_obj_type(data=h_node[()],dtype=dtype)
+     # TODO how to restore other ndarray derived object_types
+diff --git a/hickle/tests/test_02_hickle_lookup.py b/hickle/tests/test_02_hickle_lookup.py
+index 628a2b12..dd91ffd1 100644
+--- a/hickle/tests/test_02_hickle_lookup.py
++++ b/hickle/tests/test_02_hickle_lookup.py
+@@ -816,7 +816,7 @@ def test_ReferenceManager_get_root(h5_data):
+     content = data_group.create_dataset('mydata',data=12)
+     type_table = root_group.create_group('hickle_types_table')
+     int_pickle_string = bytearray(pickle.dumps(int))
+-    int_np_entry = np.array(int_pickle_string,copy=False)
++    int_np_entry = np.asarray(int_pickle_string)
+     int_np_entry.dtype = 'S1'
+     int_entry = type_table.create_dataset(str(len(type_table)),data = int_np_entry,shape =(1,int_np_entry.size))
+     int_base_type = b'int'
+@@ -878,7 +878,7 @@ def test_ReferenceManager(h5_data):
+     with pytest.raises(lookup.ReferenceError):
+         reference_manager = lookup.ReferenceManager(false_root)
+     int_pickle_string = bytearray(pickle.dumps(int))
+-    int_np_entry = np.array(int_pickle_string,copy=False)
++    int_np_entry = np.asarray(int_pickle_string)
+     int_np_entry.dtype = 'S1'
+     int_entry = type_table.create_dataset(str(len(type_table)),data = int_np_entry,shape =(1,int_np_entry.size))
+     int_base_type = b'int'
+@@ -1052,7 +1052,7 @@ def test_ReferenceManager_store_type(h5_data,compression_kwargs):
+ @pytest.mark.no_compression
+ def test_ReferenceManager_get_manager(h5_data):
+     h_node = h5_data.create_group('some_list')
+-    item_data = np.array(memoryview(b'hallo welt lore grueszet dich ipsum aus der lore von ipsum gelort in ipsum'),copy=False)
++    item_data = np.asarray(memoryview(b'hallo welt lore grueszet dich ipsum aus der lore von ipsum gelort in ipsum'))
+     item_data.dtype = 'S1'
+     h_item = h_node.create_dataset('0',data=item_data,shape=(1,item_data.size))
+     with lookup.ReferenceManager.create_manager(h5_data) as memo:

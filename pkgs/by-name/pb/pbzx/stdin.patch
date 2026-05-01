@@ -1,0 +1,53 @@
+C standard defines `stdin` as a macro so we can’t use it as an
+identifier. See also
+https://lists.llvm.org/pipermail/llvm-commits/Week-of-Mon-20130506/173524.html
+
+--- a/pbzx.c
++++ b/pbzx.c
+@@ -34,7 +34,7 @@
+ 
+ /* Structure to hold the command-line options. */
+ struct options {
+-    bool stdin;    /* True if data should be read from stdin. */
++    bool usestdin; /* True if data should be read from stdin. */
+     bool noxar;    /* The input data is not a XAR archive but the pbzx Payload. */
+     bool help;     /* Print usage with details and exit. */
+     bool version;  /* Print version and exit. */
+@@ -74,7 +74,7 @@
+         /* Skip arguments that are not flags. */
+         if (argv[i][0] != '-') continue;
+         /* Match available arguments. */
+-        if      (strcmp(argv[i], "-")  == 0) opts->stdin = true;
++        if      (strcmp(argv[i], "-")  == 0) opts->usestdin = true;
+         else if (strcmp(argv[i], "-n") == 0) opts->noxar = true;
+         else if (strcmp(argv[i], "-h") == 0) opts->help = true;
+         else if (strcmp(argv[i], "-v") == 0) opts->version = true;
+@@ -204,9 +204,9 @@
+     parse_args(&argc, argv, &opts);
+     if (opts.version) version();
+     if (opts.help) usage(NULL);
+-    if (!opts.stdin && argc < 2)
++    if (!opts.usestdin && argc < 2)
+         usage("missing filename argument");
+-    else if ((!opts.stdin && argc > 2) || (opts.stdin && argc > 1))
++    else if ((!opts.usestdin && argc > 2) || (opts.usestdin && argc > 1))
+         usage("unhandled positional argument(s)");
+ 
+     char const* filename = NULL;
+@@ -216,7 +216,7 @@
+     struct stream stream;
+     stream_init(&stream);
+     bool success = false;
+-    if (opts.stdin) {
++    if (opts.usestdin) {
+         stream.type = STREAM_FP;
+         stream.fp = stdin;
+         success = true;
+@@ -291,6 +291,6 @@
+     }
+     free(zbuf);
+     lzma_end(&zs);
+-    if (!opts.stdin) stream_close(&stream);
++    if (!opts.usestdin) stream_close(&stream);
+     return 0;
+ }

@@ -1,0 +1,10 @@
+--- allegro-4.4.3/docs/src/allegro._tx.orig     2019-02-02 20:28:46.000000000 +0100
++++ allegro-4.4.3/docs/src/allegro._tx  2019-11-04 11:12:39.352699777 +0100
+@@ -23,6 +23,7 @@
+ @man_shortdesc_force1=allegro
+ @man_shortdesc_force2=Allegro game programming library.
+ @$\input texinfo
++@$@documentencoding ISO-8859-1
+ @$@setfilename allegro.inf
+ @$@settitle Allegro Manual
+ @$@setchapternewpage odd

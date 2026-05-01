@@ -1,0 +1,12 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 58ab5c2..4f56a25 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1,5 +1,7 @@
+ include(GoogleTest)
+ 
++set(CMAKE_CXX_STANDARD 17)
++
+ function(add_gmock_test target)
+     add_executable(${target} ${ARGN})
+     target_link_libraries(${target} config playlist bookmarks event_bus ${GMOCK_BOTH_LIBRARIES} ${XDG_BASEDIR_LIBRARIES} ${Boost_LIBRARIES} ${CURL_LIBRARIES} ${JSONCPP_LIBRARIES} pthread)
