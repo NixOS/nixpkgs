@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "esper";
-  version = "3.7";
+  version = "3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benmoran56";
     repo = "esper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dOeF1CyWcR1wLjO0rTjBq6piJN8QXae4dBK4akdQIjk=";
+    hash = "sha256-D0aPZ/AHA0l3reKV1QYnWxH23gWJTXRlOp9XcbYYOXA=";
   };
 
   build-system = [ flit-core ];
