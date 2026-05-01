@@ -8,12 +8,13 @@
   mpv-unwrapped,
   libplacebo,
   libappindicator,
+  webkitgtk_4_1,
 }:
 
 let
   srcInfo = lib.importJSON ./src-info.json;
   description = "Third-party Bilibili client developed in Flutter";
-  version = "2.0.4";
+  version = "2.0.6";
 in
 flutter341.buildFlutterApplication {
   pname = "piliplus";
@@ -37,6 +38,7 @@ flutter341.buildFlutterApplication {
     mpv-unwrapped
     libplacebo
     libappindicator
+    webkitgtk_4_1
   ];
 
   # See lib/scripts/build.sh.
