@@ -2369,6 +2369,7 @@ with pkgs;
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
     pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
   };
+
   gnupg = gnupg24;
 
   gnused = callPackage ../tools/text/gnused { };
