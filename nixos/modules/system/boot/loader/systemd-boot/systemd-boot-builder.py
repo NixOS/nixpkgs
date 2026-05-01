@@ -12,7 +12,7 @@ import sys
 import tempfile
 import warnings
 import json
-from typing import NamedTuple, Any, Sequence
+from typing import NamedTuple, Any, Protocol, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -56,117 +56,150 @@ class BootSpec:
     initrdSecrets: str | None = None  # noqa: N815
 
 
-@dataclass(frozen=True)
-class GcRoot:
-    prefix: Path | None
-    path: Path | None
-
-    @staticmethod
-    def from_prefix(prefix: Path) -> "GcRoot":
-        return GcRoot(prefix=prefix, path=None)
-
-    @staticmethod
-    def from_path(path: Path) -> "GcRoot":
-        return GcRoot(prefix=None, path=path)
+class WriteBootFile(Protocol):
+    def write_boot_file(self, path: Path) -> None: ...
 
 
-@dataclass(frozen=True)
-class Entry:
+@dataclass
+class CopyWriter:
+    source: Path
+
+    def write_boot_file(self, path: Path) -> None:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            dir=path.parent,
+            delete=False,
+            prefix=path.name,
+            suffix=".tmp",
+        ) as tmp:
+            with open(self.source, mode="rb") as source_file:
+                shutil.copyfileobj(source_file, tmp)
+            tmp.flush()
+            os.fsync(tmp.fileno())
+            tmp.close()
+            os.rename(tmp.name, path)
+
+
+@dataclass
+class InitrdWithSecretsWriter:
+    source: Path
+    initrd_secrets: Path
+
+    def write_boot_file(self, path: Path) -> None:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            dir=path.parent,
+            delete=False,
+            prefix=path.name,
+            suffix=".tmp",
+        ) as tmp:
+            with open(self.source, mode="rb") as source_file:
+                shutil.copyfileobj(source_file, tmp)
+            tmp.flush()
+            run([self.initrd_secrets, tmp.name])
+            os.fsync(tmp.fileno())
+            tmp.close()
+            os.rename(tmp.name, path)
+
+
+@dataclass
+class ContentsWriter:
+    contents: bytes
+
+    def write_boot_file(self, path: Path) -> None:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            dir=path.parent,
+            delete=False,
+            prefix=path.name,
+            suffix=".tmp",
+        ) as tmp:
+            tmp.write(self.contents)
+            tmp.flush()
+            os.fsync(tmp.fileno())
+            tmp.close()
+            os.rename(tmp.name, path)
+
+
+class SystemIdentifier(NamedTuple):
     profile: str | None
-    generation_number: int
+    generation: int
     specialisation: str | None
 
 
-@dataclass(frozen=True)
-class DiskEntry:
-    entry: Entry
-    counters: str | None
-    description: str | None
-    kernel: Path
-    initrd: Path
-    devicetree: Path | None
-    kernel_params: str | None
-    machine_id: str | None
-    sort_key: str
+@dataclass
+class BootFile:
+    system_identifier: SystemIdentifier
+    path: Path
+    writer: WriteBootFile
 
-    @property
-    def title(self) -> str:
-        return "{name}{profile}{specialisation}".format(
-            name=DISTRO_NAME,
-            profile=" [" + self.entry.profile + "]" if self.entry.profile else "",
-            specialisation=" (%s)" % self.entry.specialisation
-            if self.entry.specialisation
-            else "",
+    @staticmethod
+    def from_source(system_identifier: SystemIdentifier, source: Path) -> "BootFile":
+        return BootFile(
+            system_identifier=system_identifier,
+            path=boot_path(source),
+            writer=CopyWriter(source=source),
         )
 
-    def serialise(self) -> str:
-        boot_entry = [
-            f"title {self.title}",
-            f"version {self.description}" if self.description is not None else None,
-            f"linux /{self.kernel}",
-            f"initrd /{self.initrd}",
-            f"options {self.kernel_params}" if self.kernel_params is not None else None,
-            f"machine-id {self.machine_id}" if self.machine_id is not None else None,
-            f"devicetree /{self.devicetree}" if self.devicetree is not None else None,
-            f"sort-key {self.sort_key}",
-        ]
-        return "\n".join(filter(None, boot_entry))
-
-    def write(self) -> GcRoot:
-        # Check first if the file already exists
-        for e in os.scandir(path=BOOT_MOUNT_POINT / "loader" / "entries"):
-            match = re.fullmatch(
-                rf"{self.path_prefix}(\+[0-9]+(-[0-9]+)?)?\.conf", e.name
+    @staticmethod
+    def from_initrd(
+        system_identifier: SystemIdentifier, source: Path, initrd_secrets: Path | None
+    ) -> "BootFile":
+        if initrd_secrets is None:
+            return BootFile.from_source(system_identifier, source)
+        else:
+            # We're trying to calculate a canonical path unique to
+            # this initrd and secret-appender. The boot_path is the
+            # canonical path for files that don't need modifications,
+            # so it serves as a perfect proxy for the unique
+            # information to combine for a combined unique path. The
+            # original paths themselves would have also been fine, but
+            # boot_path is more semantically representative, since
+            # it's the actual path whose uniqueness we're trying to
+            # ensure for other things.
+            combined = "\n".join(
+                [str(boot_path(source)), str(boot_path(initrd_secrets))]
             )
-            if match:
-                # Check that the contents match the hash
-                with open(e.path, "r") as f:
-                    hash = hashlib.sha256(f.read().encode("utf-8")).hexdigest()
-                    if hash == self.content_hash:
-                        # The contents match, we are done, there is nothing to write
-                        return GcRoot.from_prefix(
-                            BOOT_MOUNT_POINT / "loader" / "entries" / self.path_prefix
-                        )
+            combined_hash = hashlib.sha256(combined.encode("utf-8")).hexdigest()
+            return BootFile(
+                system_identifier=system_identifier,
+                path=NIXOS_DIR / f"{combined_hash}-initrd.efi",
+                writer=InitrdWithSecretsWriter(
+                    source=source, initrd_secrets=initrd_secrets
+                ),
+            )
 
-        # We didn't find a matching file, so we'll create one
-        tmp_path = self.path.with_suffix(".tmp")
-        with tmp_path.open("w") as f:
-            boot_entry = self.serialise()
-
-            f.write(boot_entry)
-            f.flush()
-            os.fsync(f.fileno())
-        tmp_path.rename(self.path)
-        return GcRoot.from_prefix(
-            BOOT_MOUNT_POINT / "loader" / "entries" / self.path_prefix
+    @staticmethod
+    def from_entry(
+        system_identifier: SystemIdentifier, contents: bytes
+    ) -> tuple["BootFile", str]:
+        contents_hash = hashlib.sha256(contents).hexdigest()
+        path_prefix = f"nixos-{contents_hash}"
+        path = None
+        for e in os.scandir(path=BOOT_MOUNT_POINT / "loader" / "entries"):
+            mat = re.fullmatch(
+                rf"{re.escape(path_prefix)}(\+[0-9]+(-[0-9]+)?)?\.conf", e.name
+            )
+            if mat is not None:
+                path = Path("loader/entries") / e.name
+                break
+        if path is None:
+            counters = f"+{BOOT_COUNTING_TRIES}" if BOOT_COUNTING else ""
+            path = Path(f"loader/entries/{path_prefix}{counters}.conf")
+        return (
+            BootFile(
+                system_identifier=system_identifier,
+                path=path,
+                writer=ContentsWriter(contents=contents),
+            ),
+            f"{path_prefix}.conf",
         )
 
-    @property
-    def content_hash(self) -> str:
-        return hashlib.sha256(self.serialise().encode("utf-8")).hexdigest()
 
-    @property
-    def path_prefix(self) -> str:
-        return "-".join(
-            p
-            for p in [
-                "nixos",
-                self.content_hash,
-            ]
-            if p
-        )
-
-    @property
-    def path(self) -> Path:
-        return BOOT_MOUNT_POINT / "loader" / "entries" / self.filename
-
-    @property
-    def filename(self) -> str:
-        return f"{self.path_prefix}{self.counters if self.counters else ''}.conf"
-
-    @property
-    def bootctl_id(self) -> str:
-        return f"{self.path_prefix}.conf"
+# This gets its own type alias to document that the order is very
+# important. The order ensures that entry files are written after
+# their respective kernel / initrd / etc.
+type BootFileList = list[BootFile]
 
 
 libc = ctypes.CDLL("libc.so.6")
@@ -178,22 +211,6 @@ def run(
     cmd: Sequence[str | Path], stdout: FILE = None
 ) -> subprocess.CompletedProcess[str]:
     return subprocess.run(cmd, check=True, text=True, stdout=stdout, stderr=sys.stderr)
-
-
-class SystemIdentifier(NamedTuple):
-    profile: str | None
-    generation: int
-    specialisation: str | None
-
-
-def copy_if_not_exists(source: Path, dest: Path) -> None:
-    if not dest.exists():
-        tmpfd, tmppath = tempfile.mkstemp(
-            dir=dest.parent, prefix=dest.name, suffix=".tmp."
-        )
-        shutil.copyfile(source, tmppath)
-        os.fsync(tmpfd)
-        shutil.move(tmppath, dest)
 
 
 def generation_dir(profile: str | None, generation: int) -> Path:
@@ -294,84 +311,58 @@ def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
     )
 
 
-def copy_from_file(file: Path) -> Path:
-    """
-    Copy a file to the boot filesystem (XBOOTLDR if in use, otherwise ESP), basing the destination filename on the store path that's being copied from. Return the destination path, relative to the boot filesystem mountpoint.
-    """
+def boot_path(file: Path) -> Path:
     store_file_path = file.resolve()
     suffix = store_file_path.name
     store_subdir = store_file_path.relative_to(STORE_DIR).parts[0]
-    efi_file_path = NIXOS_DIR / (
+    return NIXOS_DIR / (
         f"{suffix}.efi" if suffix == store_subdir else f"{store_subdir}-{suffix}.efi"
     )
-    copy_if_not_exists(store_file_path, BOOT_MOUNT_POINT / efi_file_path)
-    return efi_file_path
 
 
-def write_entry(
+def boot_file(
     profile: str | None,
     generation: int,
     specialisation: str | None,
     machine_id: str | None,
     bootspec: BootSpec,
-    current: bool,
-) -> tuple[DiskEntry, set[GcRoot]]:
-    gc_roots = set()
-
+) -> tuple[BootFileList, str]:
+    system_identifier = SystemIdentifier(profile, generation, specialisation)
     if specialisation:
         bootspec = bootspec.specialisations[specialisation]
-    kernel = copy_from_file(bootspec.kernel)
-    gc_roots.add(GcRoot.from_path(path=(BOOT_MOUNT_POINT / kernel)))
-    initrd = copy_from_file(bootspec.initrd)
-    gc_roots.add(GcRoot.from_path(path=(BOOT_MOUNT_POINT / initrd)))
-    devicetree = (
-        copy_from_file(bootspec.devicetree) if bootspec.devicetree is not None else None
+    kernel = BootFile.from_source(system_identifier, bootspec.kernel)
+    initrd = BootFile.from_initrd(
+        system_identifier,
+        bootspec.initrd,
+        Path(bootspec.initrdSecrets) if bootspec.initrdSecrets is not None else None,
     )
-    if devicetree is not None:
-        gc_roots.add(GcRoot.from_path(path=(BOOT_MOUNT_POINT / devicetree)))
+    devicetree = None
+    if bootspec.devicetree is not None:
+        devicetree = BootFile.from_source(system_identifier, bootspec.devicetree)
 
-    kernel_params = "init=%s " % bootspec.init
-
-    kernel_params = kernel_params + " ".join(bootspec.kernelParams)
+    kernel_params = " ".join([f"init={bootspec.init}"] + bootspec.kernelParams)
     build_time = int(system_dir(profile, generation, specialisation).stat().st_ctime)
     build_date = datetime.datetime.fromtimestamp(build_time).strftime("%F")
 
-    counters = f"+{BOOT_COUNTING_TRIES}" if BOOT_COUNTING else None
-    entry = Entry(profile, generation, specialisation)
-
-    disk_entry = DiskEntry(
-        entry=entry,
-        kernel=kernel,
-        initrd=initrd,
-        devicetree=devicetree,
-        counters=counters,
-        kernel_params=kernel_params,
-        machine_id=machine_id,
-        description=f"Generation {generation} {bootspec.label}, built on {build_date}",
-        sort_key=bootspec.sortKey,
+    title = "{name}{profile}{specialisation}".format(
+        name=DISTRO_NAME,
+        profile=" [" + profile + "]" if profile else "",
+        specialisation=" (%s)" % specialisation if specialisation else "",
     )
-
-    try:
-        if bootspec.initrdSecrets is not None:
-            run([bootspec.initrdSecrets, BOOT_MOUNT_POINT / initrd])
-    except subprocess.CalledProcessError:
-        if current:
-            print("failed to create initrd secrets!", file=sys.stderr)
-            sys.exit(1)
-        else:
-            print(
-                "warning: failed to create initrd secrets "
-                f'for "{disk_entry.title} - Configuration {generation}", an older generation',
-                file=sys.stderr,
-            )
-            print(
-                "note: this is normal after having removed "
-                "or renamed a file in `boot.initrd.secrets`",
-                file=sys.stderr,
-            )
-
-    gc_roots.add(disk_entry.write())
-    return disk_entry, gc_roots
+    description = f"Generation {generation} {bootspec.label}, built on {build_date}"
+    boot_entry = [
+        f"title {title}",
+        f"version {description}",
+        f"linux /{str(kernel.path)}",
+        f"initrd /{str(initrd.path)}",
+        f"options {kernel_params}",
+        f"machine-id {machine_id}" if machine_id is not None else None,
+        f"devicetree /{str(devicetree.path)}" if devicetree is not None else None,
+        f"sort-key {bootspec.sortKey}",
+    ]
+    contents = "\n".join(filter(None, boot_entry))
+    entry, bootctl_id = BootFile.from_entry(system_identifier, contents.encode("utf-8"))
+    return (list(filter(None, [kernel, initrd, devicetree, entry])), bootctl_id)
 
 
 def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
@@ -511,64 +502,48 @@ def install_bootloader(args: argparse.Namespace) -> None:
     for profile in get_profiles():
         gens += get_generations(profile)
 
-    gc_roots: set[GcRoot] = set()
+    boot_files: BootFileList = []
 
     default_config = Path(args.default_config)
     default_entry_id: str | None = None
 
     for gen in gens:
-        try:
-            bootspec = get_bootspec(gen.profile, gen.generation)
-            is_default = Path(bootspec.init).parent == default_config
-            disk_entry, new_gc_roots = write_entry(
-                *gen, machine_id, bootspec, current=is_default
+        bootspec = get_bootspec(gen.profile, gen.generation)
+        is_default = Path(bootspec.init).parent == default_config
+        new_boot_files, new_bootctl_id = boot_file(*gen, machine_id, bootspec)
+        boot_files.extend(new_boot_files)
+        if is_default:
+            default_entry_id = new_bootctl_id
+        for specialisation_name, specialisation in bootspec.specialisations.items():
+            is_default = Path(specialisation.init).parent == default_config
+            new_boot_files, new_bootctl_id = boot_file(
+                gen.profile,
+                gen.generation,
+                specialisation_name,
+                machine_id,
+                bootspec,
             )
-            gc_roots.update(new_gc_roots)
+            boot_files.extend(new_boot_files)
             if is_default:
-                default_entry_id = disk_entry.bootctl_id
-            for specialisation_name, specialisation in bootspec.specialisations.items():
-                is_default = Path(specialisation.init).parent == default_config
-                disk_entry, new_gc_roots = write_entry(
-                    gen.profile,
-                    gen.generation,
-                    specialisation_name,
-                    machine_id,
-                    bootspec,
-                    current=is_default,
-                )
-                gc_roots.update(new_gc_roots)
-                if is_default:
-                    default_entry_id = disk_entry.bootctl_id
-        except OSError as e:
-            # See https://github.com/NixOS/nixpkgs/issues/114552
-            if e.errno == errno.EINVAL:
-                profile = (
-                    f"profile '{gen.profile}'" if gen.profile else "default profile"
-                )
-                print(
-                    "ignoring {} in the list of boot entries because of the following error:\n{}".format(
-                        profile, e
-                    ),
-                    file=sys.stderr,
-                )
-            else:
-                raise e
+                default_entry_id = new_bootctl_id
 
     write_loader_conf(default_entry_id)
+
+    # Garbage-collect stale kernels/initrds/entries before re-populating extra
+    # files, so that user-supplied extraEntries (which may also live under
+    # loader/entries and start with `nixos-`) are not removed again.
+    garbage_collect(boot_files)
+
+    write_boot_files(boot_files)
+
+    remove_extra_files()
+    run([COPY_EXTRA_FILES])
 
     if BOOT_MOUNT_POINT != EFI_SYS_MOUNT_POINT:
         # Cleanup any entries in ESP if xbootldrMountPoint is set.
         # If the user later unsets xbootldrMountPoint, entries in XBOOTLDR will not be cleaned up
         # automatically, as we don't have information about the mount point anymore.
         cleanup_esp()
-
-    # Garbage-collect stale kernels/initrds/entries before re-populating extra
-    # files, so that user-supplied extraEntries (which may also live under
-    # loader/entries and start with `nixos-`) are not removed again.
-    garbage_collect(gc_roots)
-
-    remove_extra_files()
-    run([COPY_EXTRA_FILES])
 
 
 def remove_extra_files() -> None:
@@ -589,16 +564,12 @@ def remove_extra_files() -> None:
     extra_files_dir.mkdir(parents=True, exist_ok=True)
 
 
-def garbage_collect(gc_roots: set[GcRoot]) -> None:
+def garbage_collect(gc_roots: BootFileList) -> None:
     # Check if a file is in the list of gc roots.
-    # For prefixes, we need to allow for the potential presence of boot counters.
     def has_gc_root(p: Path) -> bool:
-        for root in gc_roots:
-            if root.path and root.path == p:
-                return True
-            elif root.prefix and re.fullmatch(
-                rf"{re.escape(str(root.prefix))}(\+[0-9]+(-[0-9]+)?)?\.conf", str(p)
-            ):
+        for gc_root in gc_roots:
+            gc_root_path = BOOT_MOUNT_POINT / gc_root.path
+            if gc_root_path == p:
                 return True
         return False
 
@@ -613,6 +584,30 @@ def garbage_collect(gc_roots: set[GcRoot]) -> None:
         match = re.fullmatch(r"nixos-.+\.conf", e.name)
         if match:
             delete_path(e)
+
+
+def write_boot_files(boot_files: BootFileList) -> None:
+    for boot_file in boot_files:
+        boot_path = BOOT_MOUNT_POINT / boot_file.path
+        try:
+            if not boot_path.exists():
+                boot_file.writer.write_boot_file(boot_path)
+        except OSError as e:
+            # See https://github.com/NixOS/nixpkgs/issues/114552
+            if e.errno == errno.EINVAL:
+                profile = (
+                    f"profile '{boot_file.system_identifier.profile}'"
+                    if boot_file.system_identifier.profile
+                    else "default profile"
+                )
+                print(
+                    "ignoring {} in the list of boot entries because of the following error:\n{}".format(
+                        profile, e
+                    ),
+                    file=sys.stderr,
+                )
+            else:
+                raise e
 
 
 def main() -> None:
