@@ -2,33 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hypothesis,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
-  poetry-core,
+  stamina,
   toml,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "librouteros";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = "librouteros";
-    tag = version;
-    hash = "sha256-vN12LYqFOU7flD6bTFtGw5VhPJ238pZ0MStM3ljwDU4=";
+    tag = finalAttrs.version;
+    hash = "sha256-5b/f8B0npEF81nfYGpQ6vT9Px45m0ACQry6CJUXjIiI=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.18,<0.9.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ toml ];
 
   nativeCheckInputs = [
+    hypothesis
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
+    stamina
   ];
 
   disabledTests = [
@@ -46,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the MikroTik RouterOS API";
     homepage = "https://librouteros.readthedocs.io/";
-    changelog = "https://github.com/luqasz/librouteros/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/luqasz/librouteros/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
