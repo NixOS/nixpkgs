@@ -18,6 +18,10 @@ The goal is to eventually have all GitHub specific code in `ci/github-script` an
 A lot of code has already been migrated, but some Bash code still remains.
 New CI features need to be introduced in JavaScript, not Bash.
 
+The JavaScript code is type-checked using TypeScript.
+Run `nix-build ci -A typecheck-ci-scripts` or use `typecheck-ci-scripts` from the repository's `nix-shell`.
+See [`ci/github-script/README.md`](./github-script/README.md) for more details.
+
 ## Nixpkgs merge bot
 
 The Nixpkgs merge bot empowers package maintainers by enabling them to merge PRs related to their own packages.

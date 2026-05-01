@@ -168,6 +168,7 @@ in
 rec {
   inherit pkgs fmt;
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
+  typecheck-ci-scripts = pkgs.callPackage ./github-script { };
 
   # FIXME(lf-): it might be useful to test other Nix implementations
   # (nixVersions.stable and Lix) here somehow at some point to ensure we don't

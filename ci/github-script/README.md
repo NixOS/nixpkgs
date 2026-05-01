@@ -15,3 +15,27 @@ Run `./run commits OWNER REPO PR`, where OWNER is your username or "NixOS", REPO
 ## Labeler
 
 Run `./run labels OWNER REPO`, where OWNER is your username or "NixOS" and REPO the name of your fork or "nixpkgs".
+
+## Type checking
+
+The JavaScript files are type-checked using TypeScript with `--checkJs`. This catches common bugs like using `Set.length` instead of `Set.size`, undeclared variables, and mismatched function signatures.
+
+To run the type checker from the repository root:
+
+```
+nix-build ci -A typecheck-ci-scripts
+```
+
+Or use the `typecheck-ci-scripts` command from this folder's development shell:
+
+```
+typecheck-ci-scripts
+```
+
+For interactive development, enter `nix-shell` in this directory and run:
+
+```
+tsc --project jsconfig.json
+```
+
+Editors that support `jsconfig.json` (VS Code, etc.) will show type errors inline.
