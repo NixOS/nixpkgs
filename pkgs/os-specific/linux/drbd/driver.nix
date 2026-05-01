@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drbd";
-  version = "9.2.16";
+  version = "9.3.2";
 
   src = fetchurl {
     url = "https://pkg.linbit.com//downloads/drbd/9/drbd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2ff9XtSlUnJG5y6qrRYGTgQiZdEnzywKaKR96ItF8Zw=";
+    hash = "sha256-WtV2NNS2wRjpIICrW2bgGWnrslHZygFWLSNZi/OxZv4=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -57,6 +57,5 @@ stdenv.mkDerivation (finalAttrs: {
       DRBD is a software-based, shared-nothing, replicated storage solution
       mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
     '';
-    broken = kernel.kernelOlder "5.11";
   };
 })
