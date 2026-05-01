@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patches = [
     # gcc-11 compat upstream patch
     (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=904949c9026cb772dc93fbe0947a252ef47127f4";
+      url = "https://cgit.git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=904949c9026cb772dc93fbe0947a252ef47127f4";
       hash = "sha256-h9DyD+pmlQT5dmKjWI9t0gCIYHe7pYkP55LnOqsE0vI=";
       excludes = [ "ChangeLog" ];
     })
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # Upstream fix for clang-13 and gcc-12 test support
     (fetchpatch {
       name = "gcc-12.patch";
-      url = "https://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=ab9fe5cb9b85c5afab94f2a7f4b6d7d473c14ee9";
+      url = "https://cgit.git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=ab9fe5cb9b85c5afab94f2a7f4b6d7d473c14ee9";
       hash = "sha256-wmSLgLnLuFE+IC6AjxzZp/HEnaOCS1VfY2cac0T7Y+w=";
     })
   ]
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # Adds compatibility with C++17 by removing the `register` storage class specifier.
     (fetchpatch {
       name = "remove-register-keyword";
-      url = "https://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=416b39758dba2c74515584514a959ad1b0ad50d1";
+      url = "https://cgit.git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=416b39758dba2c74515584514a959ad1b0ad50d1";
       hash = "sha256-R5A7IGHhU82EqceMCsuNBanhRz4dFVqiaH8637dr7jw=";
       includes = [ "lib/*" ];
     })
