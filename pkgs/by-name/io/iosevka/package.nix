@@ -78,6 +78,8 @@ buildNpmPackage rec {
     cctools
   ];
 
+  strictDeps = true;
+
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
       builtins.toJSON { buildPlans.${pname} = privateBuildPlan; }
