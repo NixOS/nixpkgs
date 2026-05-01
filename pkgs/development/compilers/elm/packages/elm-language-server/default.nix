@@ -30,6 +30,6 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "elm-language-server";
     homepage = "https://github.com/elm-tooling/elm-language-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
