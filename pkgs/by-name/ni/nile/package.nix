@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nile";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "nile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/C4b8wPKWHGgiheuAN7AvU+KcD5aj5i6KzgFSdTIkNI=";
+    hash = "sha256-tzf3sqD7P32AXzZu/WDauOSsEe/xhCh6x4KGQ1YnJqw=";
   };
 
   build-system = with python3Packages; [ setuptools ];
