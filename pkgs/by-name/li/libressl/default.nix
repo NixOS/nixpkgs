@@ -23,6 +23,9 @@ let
       pname = "libressl";
       inherit version;
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       src = fetchurl {
         url = "mirror://openbsd/LibreSSL/libressl-${version}.tar.gz";
         inherit hash;
