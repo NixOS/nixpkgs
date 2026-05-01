@@ -30,13 +30,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "socalabs-voc";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "FigBug";
     repo = "Voc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wLO/855JkpCN7BL5/V7bZJa4d9MvnfYrTC3d+0p1+F4=";
+    hash = "sha256-q1mvfYjO0z17mv3MBYEAfr2I7P3A7rnVPvclB8yjfog=";
     fetchSubmodules = true;
     preFetch = ''
       # can't clone using ssh
