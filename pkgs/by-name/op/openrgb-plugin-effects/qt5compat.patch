@@ -1,0 +1,114 @@
+Commit ID: 20f227f4ef942e2ead5a3a684248c2da48c979bc
+Change ID: rwlwzspvylkypuqoornwzvuvpuzorvso
+Author   : Alexey Sokolov <alexey+github@asokolov.org> (2025-07-21 22:34:37)
+Committer: Marie Ramlow <me@nycode.dev> (2025-10-12 12:05:01)
+
+    Fix build with Qt6 using core5compat
+
+    Updated to add Qt5 backwards compatibility by Adam Honse <calcprogrammer1@gmail.com>
+
+diff --git a/Effects/Ambient/RectangleSelector.cpp b/Effects/Ambient/RectangleSelector.cpp
+index 8f28ddcbcc..d8b4f56a1d 100644
+--- a/Effects/Ambient/RectangleSelector.cpp
++++ b/Effects/Ambient/RectangleSelector.cpp
+@@ -1,6 +1,5 @@
+ #include "RectangleSelector.h"
+ #include <math.h>
+-#include <QDesktopWidget>
+ #include <QBrush>
+ 
+ RectangleSelector::RectangleSelector(QWidget* parent)
+@@ -57,7 +56,7 @@
+ 
+     QPainter painter(this);
+ 
+-    texture.setDevicePixelRatio(devicePixelRatioF() / qApp->desktop()->devicePixelRatioF());
++    texture.setDevicePixelRatio(devicePixelRatioF() / qApp->primaryScreen()->devicePixelRatio());
+ 
+     painter.setPen(QColor(0, 0, 0, 128));
+     painter.setBrush(Qt::NoBrush);
+@@ -69,7 +68,7 @@
+     for(QScreen *screen :  QApplication::screens())
+     {
+         QRect geometry = screen->geometry();
+-        qreal ratio = screen->devicePixelRatio() / qApp->desktop()->devicePixelRatioF();
++        qreal ratio = screen->devicePixelRatio() / qApp->primaryScreen()->devicePixelRatio();
+         QRect physical_geometry(geometry.x(), geometry.y(), std::lrint((qreal) geometry.width() * ratio), lrint((qreal) geometry.height() * ratio));
+ 
+         if(physical_geometry.contains(rect.center()))
+@@ -92,7 +91,7 @@
+     for(QScreen *screen :  QApplication::screens())
+     {
+         QRect geometry = screen->geometry();
+-        qreal ratio = screen->devicePixelRatio() / qApp->desktop()->devicePixelRatioF();
++        qreal ratio = screen->devicePixelRatio() / qApp->primaryScreen()->devicePixelRatio();
+ 
+         screen_geometries.emplace_back(geometry.x(), geometry.y(),
+                                        std::lrint((qreal) geometry.width() * ratio),
+diff --git a/Effects/Shaders/GLSLHighlighter.h b/Effects/Shaders/GLSLHighlighter.h
+index 7e9f21423b..ca9bf42c3c 100644
+--- a/Effects/Shaders/GLSLHighlighter.h
++++ b/Effects/Shaders/GLSLHighlighter.h
+@@ -2,6 +2,7 @@
+ #define GLSLHIGHLIGHTER_H
+ 
+ #include <QSyntaxHighlighter>
++#include <QRegExp>
+ 
+ class GLSLHighlighter : public QSyntaxHighlighter
+ {
+diff --git a/OpenRGBEffectPage.cpp b/OpenRGBEffectPage.cpp
+index 0d6e4ab0fb..4b756cf63c 100644
+--- a/OpenRGBEffectPage.cpp
++++ b/OpenRGBEffectPage.cpp
+@@ -38,7 +38,7 @@
+     | Extra options and custom widgets                |
+     \*-----------------------------------------------*/
+     ui->ExtraOptions->addWidget(effect);
+-    ui->ExtraOptions->setMargin(0);
++    ui->ExtraOptions->setContentsMargins(0, 0, 0, 0);
+     effect->setParent(ui->extra_settings);
+ 
+     InitUi();
+diff --git a/OpenRGBEffectsPlugin.pro b/OpenRGBEffectsPlugin.pro
+index 3e53316519..fec852f88c 100644
+--- a/OpenRGBEffectsPlugin.pro
++++ b/OpenRGBEffectsPlugin.pro
+@@ -1,4 +1,10 @@
+-QT += gui widgets core
++QT += gui widgets core opengl
++
++if(greaterThan(QT_MAJOR_VERSION, 5)) {
++QT +=                                                                                           \
++    core5compat                                                                                 \
++}
++
+ DEFINES += OPEN_RGB_EFFECTS_PLUGIN_LIBRARY
+ TEMPLATE = lib
+ 
+diff --git a/SaveProfilePopup.cpp b/SaveProfilePopup.cpp
+index 7297dad8b7..4fa837235f 100644
+--- a/SaveProfilePopup.cpp
++++ b/SaveProfilePopup.cpp
+@@ -2,8 +2,8 @@
+ #include "ui_SaveProfilePopup.h"
+ #include "OpenRGBEffectSettings.h"
+ 
+-#include <QRegExp>
+-#include <QRegExpValidator>
++#include <QRegularExpression>
++#include <QRegularExpressionValidator>
+ 
+ SaveProfilePopup::SaveProfilePopup(QWidget *parent) :
+     QWidget(parent),
+@@ -12,8 +12,8 @@
+     ui->setupUi(this);
+ 
+     // only letters or numbers, - _ and .
+-    QRegExp re("^[\\w\\-_.]+$");
+-    QRegExpValidator *validator = new QRegExpValidator(re, this);
++    QRegularExpression re("^[\\w\\-_.]+$");
++    QRegularExpressionValidator *validator = new QRegularExpressionValidator(re, this);
+     ui->filename->setValidator(validator);
+ 
+     std::vector<std::string> filenames = OpenRGBEffectSettings::ListProfiles();

@@ -1,0 +1,58 @@
+diff --git a/powerdnsadmin/__init__.py b/powerdnsadmin/__init__.py
+index 660f96b..4d45c36 100755
+--- a/powerdnsadmin/__init__.py
++++ b/powerdnsadmin/__init__.py
+@@ -72,10 +72,16 @@ def create_app(config=None):
+     # SMTP
+     app.mail = Mail(app)
+ 
++    from powerdnsadmin.routes.index import register_modules
++
+     # Load app's components
+     assets.init_app(app)
+     models.init_app(app)
+-    routes.init_app(app)
++
++    with app.app_context():
++        register_modules()
++        routes.init_app(app)
++
+     services.init_app(app)
+ 
+     # Register filters
+diff --git a/powerdnsadmin/routes/index.py b/powerdnsadmin/routes/index.py
+index 0918261..870d824 100644
+--- a/powerdnsadmin/routes/index.py
++++ b/powerdnsadmin/routes/index.py
+@@ -52,11 +52,16 @@ def register_modules():
+     global azure
+     global oidc
+     global saml
+-    google = google_oauth()
+-    github = github_oauth()
+-    azure = azure_oauth()
+-    oidc = oidc_oauth()
+-    saml = SAML()
++
++    try:
++        google = google_oauth()
++        github = github_oauth()
++        azure = azure_oauth()
++        oidc = oidc_oauth()
++        saml = SAML()
++    except Exception:
++        # Database not ready yet, will initialize on first request
++        pass
+ 
+ 
+ @index_bp.before_request
+@@ -65,6 +70,9 @@ def before_request():
+     g.user = current_user
+     login_manager.anonymous_user = Anonymous
+ 
++    if google is None:
++        register_modules()
++
+     # Check site is in maintenance mode
+     maintenance = Setting().get('maintenance')
+     if maintenance and current_user.is_authenticated and current_user.role.name not in [

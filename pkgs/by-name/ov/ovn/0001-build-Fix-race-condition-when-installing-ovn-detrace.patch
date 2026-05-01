@@ -1,0 +1,64 @@
+From a94104a0c419a5049712f7372690dab10f54ab2f Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Sun, 12 Oct 2025 18:46:14 -0400
+Subject: [PATCH ovn] build: Fix race condition when installing ovn-detrace.
+
+When running parallel make install (-j), ovn-detrace-install could
+trigger before ovn_detrace.py is installed. In this case, `ln` will
+fail.
+
+When it happens, make fails with:
+
+```
+ln: failed to create symbolic link '[...]/bin/ovn-detrace': No such file or directory
+make[2]: *** [Makefile:3852: ovn-detrace-install] Error 1
+```
+
+Automake install-*-local targets are not guaranteed any order. In
+contrast, install-*-hook does [1]. This patch switches the make target
+to use the latter.
+
+[1] https://www.gnu.org/software/automake/manual/html_node/Extending-Installation.html
+
+Signed-off-by: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+---
+ Makefile.am           | 2 ++
+ utilities/automake.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 6119ef510..060d3189d 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -128,6 +128,7 @@ dist_scripts_SCRIPTS =
+ dist_scripts_DATA =
+ EXTRA_PROGRAMS =
+ INSTALL_DATA_LOCAL =
++INSTALL_DATA_HOOK =
+ UNINSTALL_LOCAL =
+ man_MANS =
+ MAN_FRAGMENTS =
+@@ -487,6 +488,7 @@ dist-hook: $(DIST_HOOKS)
+ all-local: $(ALL_LOCAL)
+ clean-local: $(CLEAN_LOCAL)
+ install-data-local: $(INSTALL_DATA_LOCAL)
++install-data-hook: $(INSTALL_DATA_HOOK)
+ uninstall-local: $(UNINSTALL_LOCAL)
+ .PHONY: $(DIST_HOOKS) $(CLEAN_LOCAL) $(INSTALL_DATA_LOCAL) $(UNINSTALL_LOCAL)
+ 
+diff --git a/utilities/automake.mk b/utilities/automake.mk
+index 1de33614f..ec955f6bf 100644
+--- a/utilities/automake.mk
++++ b/utilities/automake.mk
+@@ -106,7 +106,7 @@ utilities_ovn_appctl_SOURCES = utilities/ovn-appctl.c
+ utilities_ovn_appctl_LDADD = lib/libovn.la $(OVSDB_LIBDIR)/libovsdb.la $(OVS_LIBDIR)/libopenvswitch.la
+ 
+ # ovn-detrace
+-INSTALL_DATA_LOCAL += ovn-detrace-install
++INSTALL_DATA_HOOK += ovn-detrace-install
+ ovn-detrace-install:
+ 	ln -sf ovn_detrace.py $(DESTDIR)$(bindir)/ovn-detrace
+ 
+-- 
+2.51.0
+

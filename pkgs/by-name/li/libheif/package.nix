@@ -1,0 +1,103 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  dav1d,
+  rav1e,
+  libde265,
+  x265,
+  libpng,
+  libjpeg,
+  libaom,
+  gdk-pixbuf,
+
+  # for passthru.tests
+  gimp,
+  imagemagick,
+  imlib2Full,
+  imv,
+  python3Packages,
+  vips,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libheif";
+  version = "1.20.2";
+
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+    "lib"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "strukturag";
+    repo = "libheif";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PVfdX3/Oe3DXpYU5WMnCSi2p9X4fPszq2X3uuyh8RVU=";
+  };
+
+  patches = [
+    # CVE-2025-68431 (https://github.com/strukturag/libheif/security/advisories/GHSA-j87x-4gmq-cqfq)
+    (fetchpatch {
+      name = "001-fix-wrong-copy-width-in-overlay-images.patch";
+      url = "https://github.com/strukturag/libheif/commit/b8c12a7b70f46c9516711a988483bed377b78d46.patch";
+      hash = "sha256-PzGfcbdWAPdfExbSrPQwpk4v++TcNCXOhtwhgLGM13c=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
+
+  buildInputs = [
+    dav1d
+    rav1e
+    libde265
+    x265
+    libpng
+    libjpeg
+    libaom
+    gdk-pixbuf
+  ];
+
+  # Fix installation path for gdk-pixbuf module
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "lib"}/${gdk-pixbuf.moduleDir}";
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/heif.thumbnailer \
+      --replace-fail "TryExec=heif-thumbnailer" "TryExec=$bin/bin/heif-thumbnailer" \
+      --replace-fail "Exec=heif-thumbnailer" "Exec=$bin/bin/heif-thumbnailer"
+  '';
+
+  # Wrong include path in .cmake.  It's a bit difficult to patch because of special characters.
+  postFixup = ''
+    sed '/^  INTERFACE_INCLUDE_DIRECTORIES/s|"[^"]*/include"|"${placeholder "dev"}/include"|' \
+      -i "$dev"/lib/cmake/libheif/libheif-config.cmake
+  '';
+
+  passthru.tests = {
+    inherit
+      gimp
+      imagemagick
+      imlib2Full
+      imv
+      vips
+      ;
+    inherit (python3Packages) pillow-heif;
+  };
+
+  meta = {
+    homepage = "http://www.libheif.org/";
+    description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kuflierl ];
+  };
+})

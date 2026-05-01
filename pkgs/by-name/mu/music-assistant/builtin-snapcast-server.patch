@@ -1,0 +1,33 @@
+diff --git a/music_assistant/providers/snapcast/__init__.py b/music_assistant/providers/snapcast/__init__.py
+index 742d798183ec6fd1ac1fdbcad750912c222de5c3..8d0d95577d31f735977884280b08f384187774bd 100644
+--- a/music_assistant/providers/snapcast/__init__.py
++++ b/music_assistant/providers/snapcast/__init__.py
+@@ -87,7 +87,8 @@ DEFAULT_SNAPSTREAM_IDLE_THRESHOLD = 60000
+ MASS_STREAM_PREFIX = "Music Assistant - "
+ MASS_ANNOUNCEMENT_POSTFIX = " (announcement)"
+ SNAPWEB_DIR = pathlib.Path(__file__).parent.resolve().joinpath("snapweb")
+-CONTROL_SCRIPT = pathlib.Path(__file__).parent.resolve().joinpath("control.py")
++CONTROL_SCRIPT_DIR = pathlib.Path(__file__).parent.resolve()
++CONTROL_SCRIPT = CONTROL_SCRIPT_DIR.joinpath("control.py")
+ 
+ DEFAULT_SNAPCAST_FORMAT = AudioFormat(
+     content_type=ContentType.PCM_S16LE,
+@@ -866,6 +867,10 @@ class SnapCastProvider(PlayerProvider):
+ 
+         args = [
+             "snapserver",
++            # defaults to /etc/snapcast.conf but needs
++            # to exist in order for snapserver to start
++            # https://github.com/badaix/snapcast/issues/1402
++            "--config=/dev/null",
+             # config settings taken from
+             # https://raw.githubusercontent.com/badaix/snapcast/86cd4b2b63e750a72e0dfe6a46d47caf01426c8d/server/etc/snapserver.conf
+             f"--server.datadir={self.mass.storage_path}",
+@@ -878,6 +883,7 @@ class SnapCastProvider(PlayerProvider):
+             f"--stream.buffer={self._snapcast_server_buffer_size}",
+             f"--stream.chunk_ms={self._snapcast_server_chunk_ms}",
+             f"--stream.codec={self._snapcast_server_transport_codec}",
++            f"--stream.plugin_dir={CONTROL_SCRIPT_DIR}",
+             f"--stream.send_to_muted={str(self._snapcast_server_send_to_muted).lower()}",
+             f"--streaming_client.initial_volume={self._snapcast_server_initial_volume}",
+         ]

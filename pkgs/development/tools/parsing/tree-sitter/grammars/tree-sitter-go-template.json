@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/ngalaiko/tree-sitter-go-template",
+  "rev": "65f4f86c3aaa9dabab36e3482584e8a111cf7db1",
+  "date": "2025-08-23T12:29:37Z",
+  "path": "/nix/store/f5palcms6bafi6yc77z2yqa3yhb0pbhz-tree-sitter-go-template",
+  "sha256": "1wf0fswkd1fd2f0x6xz2qqvr7sdyz3h93vac9z6jad41sqx4w9md",
+  "hash": "sha256-rSZOOtaBNCXNT0ztkeD4vumTN8bid9OBE82FNrl2wPE=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

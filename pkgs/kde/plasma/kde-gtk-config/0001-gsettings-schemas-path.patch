@@ -1,0 +1,21 @@
+diff --git a/kded/gtkconfig.cpp b/kded/gtkconfig.cpp
+index 5303636..199c4d5 100644
+--- a/kded/gtkconfig.cpp
++++ b/kded/gtkconfig.cpp
+@@ -41,6 +41,16 @@ GtkConfig::GtkConfig(QObject *parent, const QVariantList&) :
+     kdeglobalsConfigWatcher(KConfigWatcher::create(KSharedConfig::openConfig(QStringLiteral("kdeglobals")))),
+     kwinConfigWatcher(KConfigWatcher::create(KSharedConfig::openConfig(QStringLiteral("kwinrc"))))
+ {
++    // Add GSETTINGS_SCHEMAS_PATH to the front of XDG_DATA_DIRS.
++    // Normally this would be done by wrapGAppsHook, but this plugin
++    // (shared object) cannot be wrapped.
++    QByteArray xdgdata = qgetenv("XDG_DATA_DIRS");
++    if (!xdgdata.isEmpty()) {
++        xdgdata.push_front(":");
++    }
++    xdgdata.push_front(QByteArray(GSETTINGS_SCHEMAS_PATH));
++    qputenv("XDG_DATA_DIRS", xdgdata);
++
+     QDBusConnection dbus = QDBusConnection::sessionBus();
+     dbus.registerService(QStringLiteral("org.kde.GtkConfig"));
+     dbus.registerObject(QStringLiteral("/GtkConfig"), this, QDBusConnection::ExportScriptableSlots);

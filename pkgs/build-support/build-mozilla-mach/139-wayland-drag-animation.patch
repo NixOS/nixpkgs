@@ -1,0 +1,53 @@
+# HG changeset patch
+# User Dão Gottwald <dao@mozilla.com>
+# Date 1742828426 0
+# Node ID aa8a29bd1fb9668c81475b534b4ceb220dd4fe55
+# Parent  653a7b21210b5b61a36af11b99ccd51e6c85a905
+Bug 1955112 - Finish tab moving animation when a drag session wasn't ended properly. r=dwalker,tabbrowser-reviewers
+
+Differential Revision: https://phabricator.services.mozilla.com/D242631
+
+diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
+--- a/browser/components/tabbrowser/content/tabs.js
++++ b/browser/components/tabbrowser/content/tabs.js
+@@ -1012,18 +1012,39 @@
+         newMargin *= -1;
+       }
+       ind.style.transform = this.verticalMode
+         ? "translateY(" + Math.round(newMargin) + "px)"
+         : "translateX(" + Math.round(newMargin) + "px)";
+     }
+ 
+     #setMovingTabMode(movingTab) {
++      if (movingTab == this.#isMovingTab()) {
++        return;
++      }
++
+       this.toggleAttribute("movingtab", movingTab);
+       gNavToolbox.toggleAttribute("movingtab", movingTab);
++
++      if (movingTab) {
++        // This is a bit of an escape hatch in case a tab drag & drop session
++        // wasn't ended properly, leaving behind the movingtab attribute, which
++        // may break the UI (bug 1954163). We don't get mousemove events while
++        // dragging tabs, so at that point it should be safe to assume that we
++        // should not be in drag and drop mode, and clean things up if needed.
++        requestAnimationFrame(() => {
++          this.addEventListener(
++            "mousemove",
++            () => {
++              this.finishAnimateTabMove();
++            },
++            { once: true }
++          );
++        });
++      }
+     }
+ 
+     #isMovingTab() {
+       return this.hasAttribute("movingtab");
+     }
+ 
+     #expandGroupOnDrop(draggedTab) {
+       if (
+

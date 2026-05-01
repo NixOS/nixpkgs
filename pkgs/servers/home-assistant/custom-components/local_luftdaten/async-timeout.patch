@@ -1,0 +1,31 @@
+From 06a6b3ff1ae181f9972b47838569d658ba4b3d9c Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Sat, 4 Oct 2025 14:45:02 +0200
+Subject: [PATCH] Use the python native asyncio timeout function
+
+instead of depending on the undeclared async-timeout package.
+---
+ custom_components/local_luftdaten/sensor.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/custom_components/local_luftdaten/sensor.py b/custom_components/local_luftdaten/sensor.py
+index 4f4f5b4..82ea041 100644
+--- a/custom_components/local_luftdaten/sensor.py
++++ b/custom_components/local_luftdaten/sensor.py
+@@ -12,7 +12,6 @@
+ import asyncio
+ from typing import Optional
+ import aiohttp
+-import async_timeout
+ import datetime
+ 
+ import json
+@@ -170,7 +169,7 @@ async def async_update(self):
+             responseData = None
+             try:
+                 _LOGGER.debug("Get data from %s", str(self._resource))
+-                with async_timeout.timeout(30):
++                async with asyncio.timeout(30):
+                     response = await self._session.get(self._resource)
+                 responseData = await response.text()
+                 _LOGGER.debug("Received data: %s", str(self.data))

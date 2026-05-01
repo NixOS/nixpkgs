@@ -1,0 +1,43 @@
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "binserve";
+  version = "0.2.0";
+
+  src = fetchFromGitHub {
+    owner = "mufeedvh";
+    repo = "binserve";
+    rev = "v${version}";
+    hash = "sha256-Chm2xPB0BrLXSZslg9wnbDyHSJRQAvOtpH0Rw6w1q1s=";
+  };
+
+  cargoLock.lockFile = ./Cargo.lock;
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
+
+  doCheck = false;
+
+  meta = {
+    description = "Fast production-ready static web server";
+    homepage = "https://github.com/mufeedvh/binserve";
+    knownVulnerabilities = [
+      "CVE-2025-4432"
+      "CVE-2024-32650"
+      "This web server is unmaintained. Consider using maintained alternatives instead."
+    ];
+    longDescription = ''
+      A fast production-ready static web server with TLS
+      (HTTPS), routing, hot reloading, caching, templating, and security in a
+      single-binary you can set up with zero code
+    '';
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ snapdgn ];
+    platforms = lib.platforms.unix;
+    mainProgram = "binserve";
+  };
+}
