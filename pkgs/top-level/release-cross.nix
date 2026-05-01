@@ -47,7 +47,6 @@ let
     linux
     mapTestOnCross
     pkgsForCross
-    unix
     ;
 
   inherit (release-lib.lib)

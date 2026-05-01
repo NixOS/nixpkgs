@@ -27,20 +27,6 @@ let
     vanillaPackages
     rpiPackages
     ;
-
-  markBroken =
-    drv:
-    drv.overrideAttrs (
-      {
-        meta ? { },
-        ...
-      }:
-      {
-        meta = meta // {
-          broken = true;
-        };
-      }
-    );
 in
 {
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
