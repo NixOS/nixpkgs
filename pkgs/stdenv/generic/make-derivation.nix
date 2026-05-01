@@ -836,19 +836,24 @@ let
       checkedEnv =
         let
           overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
-          errors = lib.concatMapStringsSep "\n" (
-            name:
-            "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
-                lib.generators.toPretty { } derivationArg.${name}
-              }"
-          ) overlappingNames;
         in
         assert
           (isAttrs env && !isDerivation env)
           || throw "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
         assert
           (overlappingNames == [ ])
-          || throw "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
+          || throw (
+            let
+              errors = lib.concatMapStringsSep "\n" (
+                name:
+                "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
+                    lib.generators.toPretty { } derivationArg.${name}
+                  }"
+              ) overlappingNames;
+
+            in
+            "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}"
+          );
         mapAttrs (
           n: v:
           assert
