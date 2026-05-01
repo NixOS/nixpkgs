@@ -130,11 +130,11 @@ let
 
   useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
   useSharedGtestAndHistogram = lib.versionAtLeast version (
-    if majorVersion == "24" then "24.14.0" else "25.4"
+    if majorVersion == 24 then "24.14.0" else "25.4"
   );
-  useSharedNBytes = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.5");
+  useSharedNBytes = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.5");
   useSharedLief = lib.versionAtLeast version "25.6";
-  useSharedMerve = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.6.1");
+  useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
   useSharedTemporal = majorVersion == "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
