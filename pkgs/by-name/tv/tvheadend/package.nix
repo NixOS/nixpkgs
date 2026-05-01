@@ -32,6 +32,10 @@
   x265,
 }:
 
+let
+  pythonEnv = python3.withPackages (ps: [ ps.requests ]);
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "tvheadend";
   version = "4.3-unstable-2026-02-25";
@@ -52,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     makeWrapper
     pkg-config
-    python3
+    pythonEnv
     which
   ];
 
@@ -112,6 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
+    # Fix scripts shipped by upstream to not rely on a host-provided python3.
+    for f in $out/bin/tvhmeta $out/bin/tv_meta_tmdb.py $out/bin/tv_meta_tvdb.py; do
+      substituteInPlace "$f" \
+        --replace-fail '#! /usr/bin/env python3' '#!${pythonEnv}/bin/python3'
+    done
+
     # `tar -j` needs bzip2 in PATH for config backups.
     wrapProgram $out/bin/tvheadend \
       --prefix PATH : ${lib.makeBinPath [ bzip2 ]}
