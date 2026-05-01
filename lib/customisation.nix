@@ -6,6 +6,8 @@ let
     unsafeGetAttrPos
     ;
   inherit (lib)
+    all
+    attrValues
     functionArgs
     isFunction
     mirrorFunctionArgs
@@ -265,8 +267,14 @@ rec {
   callPackageWith =
     let
       makeErrorMessage =
-        autoArgs: fn: args: fargs: arg:
+        autoArgs: fn: args: fargs: unpassedArgs:
         let
+          # The first missing arg
+          arg = head (
+            # Filter out the default args. We did a similar computation in the
+            # happy path, but we're okay recomputing it in an error case
+            filter (name: !fargs.${name}) (attrNames unpassedArgs)
+          );
           # Get a list of suggested argument names for a given missing one
           getSuggestions =
             arg:
@@ -306,16 +314,12 @@ rec {
       # This includes automatic ones and ones passed explicitly
       allArgs = intersectAttrs fargs autoArgs // args;
 
-      # a list of argument names that the function requires, but
-      # wouldn't be passed to it
-      missingNames =
-        # Filter out arguments that have a default value
-        filter (name: !fargs.${name})
-          # Filter out arguments that would be passed
-          (attrNames (removeAttrs fargs (attrNames allArgs)));
+      # arguments that weren't passed automatically to the function
+      unpassedArgs = removeAttrs fargs (attrNames allArgs);
 
     in
-    if missingNames == [ ] then
+    # if nonempty, check if the function has defaults for those other args
+    if unpassedArgs == { } || all (value: value) (attrValues unpassedArgs) then
       makeOverridable f allArgs
     else
       # Only show the error for the first missing argument
@@ -323,7 +327,7 @@ rec {
       # which is used by nix-env and ofborg to filter out packages that don't evaluate.
       # This way we're forced to fix such errors in Nixpkgs,
       # which is especially relevant with allowAliases = false
-      abort (makeErrorMessage autoArgs fn args fargs (head missingNames));
+      abort (makeErrorMessage autoArgs fn args fargs unpassedArgs);
 
   /**
     Like `callPackage`, but for a function that returns an attribute
