@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "url-normalize";
-  version = "2.2.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niksite";
     repo = "url-normalize";
     tag = "v${version}";
-    hash = "sha256-ZFY1KMEHvteMFVM3QcYjCiTz3dLxRWyv/dZQMzVxGvo=";
+    hash = "sha256-RZORbZfeRfzGJFsLXJUuqXVFsD8TfcHzjBGb80cTetQ=";
   };
 
   build-system = [ setuptools ];
