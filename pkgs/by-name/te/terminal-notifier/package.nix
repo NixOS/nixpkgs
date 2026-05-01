@@ -1,40 +1,43 @@
 {
-  stdenv,
-  runtimeShell,
-  lib,
   fetchzip,
+  lib,
+  makeBinaryWrapper,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terminal-notifier";
-
   version = "2.0.0";
 
   src = fetchzip {
-    url = "https://github.com/alloy/terminal-notifier/releases/download/${version}/terminal-notifier-${version}.zip";
-    sha256 = "0gi54v92hi1fkryxlz3k5s5d8h0s66cc57ds0vbm1m1qk3z4xhb0";
+    url = "https://github.com/alloy/terminal-notifier/releases/download/${finalAttrs.version}/terminal-notifier-${finalAttrs.version}.zip";
+    hash = "sha256-YMFO/pg41FDXBrqdwpgxGkDUii5zfNp9ni5EKNImJT4=";
     stripRoot = false;
   };
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/Applications
-    mkdir -p $out/bin
+    runHook preInstall
+
+    mkdir -p $out/{Applications,bin}
     cp -r terminal-notifier.app $out/Applications
-    cat >$out/bin/terminal-notifier <<EOF
-    #!${runtimeShell}
-    cd $out/Applications/terminal-notifier.app
-    exec ./Contents/MacOS/terminal-notifier "\$@"
-    EOF
-    chmod +x $out/bin/terminal-notifier
+    makeWrapper \
+      $out/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier \
+      $out/bin/terminal-notifier \
+      --chdir $out/Applications/terminal-notifier.app
+
+    runHook postInstall
   '';
 
   meta = {
-    maintainers = with lib.maintainers; [ amarshall ];
+    description = "Send macOS User Notifications from the command-line";
     homepage = "https://github.com/julienXX/terminal-notifier";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ amarshall ];
     platforms = lib.platforms.darwin;
     mainProgram = "terminal-notifier";
   };
-}
+})
