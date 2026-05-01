@@ -15410,6 +15410,11 @@
     github = "LogicalOverflow";
     githubId = 5919957;
   };
+  lgug2z = {
+    name = "Jeezy";
+    github = "LGUG2Z";
+    githubId = 13164844;
+  };
   lheintzmann1 = {
     email = "lheintzmann1@disroot.org";
     github = "lheintzmann1";
