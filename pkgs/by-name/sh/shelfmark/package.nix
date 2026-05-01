@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3Packages,
+  python314Packages,
   makeWrapper,
   nixosTests,
   shelfmark-frontend,
@@ -10,6 +10,8 @@
 }:
 
 let
+  python3Packages = python314Packages;
+
   pythonDeps = with python3Packages; [
     flask
     flask-cors
@@ -35,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shelfmark";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Fe7zu51gFG2QgcBWcGkFi64CdZW4ohZg+7jdmeMFVLI=";
+    hash = "sha256-4x5HwVNNGmoJ/ey1+hc7IqgYjaEJjOWpFuqGlTc4MsM=";
   };
 
   nativeBuildInputs = [
