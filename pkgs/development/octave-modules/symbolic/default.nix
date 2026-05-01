@@ -15,13 +15,13 @@ let
 in
 buildOctavePackage rec {
   pname = "symbolic";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "cbm755";
     repo = "octsympy";
     tag = "v${version}";
-    hash = "sha256-H2242+1zlke4aLoS3gsHpDfopM5oSZ4IpVR3+xxQ0Dc=";
+    hash = "sha256-7SrTLb2DNeBIDC3yHRs+/ttSR/tCDhBD9lXCHuue6fw=";
   };
 
   propagatedBuildInputs = [ pythonEnv ];
