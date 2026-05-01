@@ -25,6 +25,7 @@ let
     getDev
     head
     foldl'
+    intersectAttrs
     isAttrs
     isBool
     isDerivation
@@ -835,13 +836,13 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
+          overlappingArgs = intersectAttrs env' derivationArg;
         in
         assert
           (isAttrs env && !isDerivation env)
           || throw "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
         assert
-          (overlappingNames == [ ])
+          (overlappingArgs == { })
           || throw (
             let
               errors = lib.concatMapStringsSep "\n" (
@@ -849,7 +850,7 @@ let
                 "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
                     lib.generators.toPretty { } derivationArg.${name}
                   }"
-              ) overlappingNames;
+              ) (attrNames overlappingArgs);
 
             in
             "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}"
