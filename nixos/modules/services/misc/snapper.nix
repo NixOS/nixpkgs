@@ -298,6 +298,7 @@ in
         inherit documentation;
         requires = [ "local-fs.target" ];
         serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
+        serviceConfig.Type = "oneshot";
       };
 
       systemd.timers.snapper-timeline = {
@@ -312,6 +313,7 @@ in
         description = "Cleanup of Snapper Snapshots";
         inherit documentation;
         serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --cleanup";
+        serviceConfig.Type = "oneshot";
       };
 
       systemd.timers.snapper-cleanup = {
