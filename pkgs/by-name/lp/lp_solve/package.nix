@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cctools,
   fixDarwinDylibNames,
   darwin,
@@ -12,11 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lp_solve";
-  version = "5.5.2.11";
+  version = "5.5.2.14";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/lpsolve/lpsolve/${finalAttrs.version}/lp_solve_${finalAttrs.version}_source.tar.gz";
-    hash = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
+  src = fetchFromGitHub {
+    owner = "lp-solve";
+    repo = "lp_solve";
+    tag = finalAttrs.version;
+    hash = "sha256-mCYstt0vEGZk7rjcXmxqZjYTviF8xfg1mvA4jqKCYgE=";
   };
 
   nativeBuildInputs =
@@ -76,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Mixed Integer Linear Programming (MILP) solver";
     mainProgram = "lp_solve";
-    homepage = "https://lpsolve.sourceforge.net";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    homepage = "https://github.com/lp-solve/lp_solve";
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.unix;
   };
 })
