@@ -547,6 +547,7 @@ in
   fider = runTest ./fider.nix;
   filebrowser = runTest ./filebrowser.nix;
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
+  fingerd = runTest ./fingerd.nix;
   firefly-iii = runTest ./firefly-iii.nix;
   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
   firefox = runTest {
