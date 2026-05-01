@@ -162,10 +162,23 @@ let
 
     // {
 
-      meta = {
-        description = "The default build environment for Unix packages in Nixpkgs";
-        platforms = lib.platforms.all;
-      };
+      meta =
+        let
+          pos = builtins.unsafeGetAttrPos "name" argsStdenv;
+        in
+        {
+          description = "The default build environment for Unix packages in Nixpkgs";
+          platforms = lib.platforms.all;
+          position = "${pos.file}:${toString pos.line}";
+          teams = [ lib.teams.stdenv ];
+          license = lib.licenses.mit;
+          identifiers.cpeParts = {
+            part = "a";
+            vendor = "nixos";
+            product = argsStdenv.name;
+            inherit version;
+          };
+        };
 
       inherit buildPlatform hostPlatform targetPlatform;
 
