@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pythonkuma";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "pythonkuma";
     tag = "v${version}";
-    hash = "sha256-7c2TYGRlHn9stAd5Xe1aZP08WyKTtKKfKPGT7OoNmSQ=";
+    hash = "sha256-jQapfwdDuHb5Ha25cUQycfRb/A07pRtm92Iy8bbYfqI=";
   };
 
   build-system = [
