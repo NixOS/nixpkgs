@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Entity-relationship diagramming tool";
       exec = "brmodelo";
       icon = "brmodelo";
-      comment = finalAttrs.meta.description;
+      comment = "Entity-relationship diagram tool for making conceptual and logical database models";
       categories = [
         "Development"
         "Education"

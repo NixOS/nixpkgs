@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Armitage";
       exec = "armitage";
       icon = "armitage";
-      comment = finalAttrs.meta.description;
+      comment = "Graphical cyber attack management tool for Metasploit";
       categories = [
         "Network"
         "Security"
