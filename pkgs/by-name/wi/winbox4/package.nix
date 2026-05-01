@@ -15,7 +15,6 @@ let
     license = lib.licenses.unfree;
     mainProgram = "WinBox";
     maintainers = with lib.maintainers; [
-      Scrumplex
       yrd
       savalet
     ];

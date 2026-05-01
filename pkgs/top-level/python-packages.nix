@@ -13235,6 +13235,8 @@ self: super: with self; {
 
   py-pdf-parser = callPackage ../development/python-modules/py-pdf-parser { };
 
+  py-radix = callPackage ../development/python-modules/py-radix { };
+
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
   py-rust-stemmers = callPackage ../development/python-modules/py-rust-stemmers { };

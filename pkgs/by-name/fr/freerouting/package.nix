@@ -4,27 +4,48 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   makeDesktopItem,
-  jdk,
+  jdk25,
   gradle,
   copyDesktopItems,
-  jre,
+  jre25_minimal,
 }:
+
+let
+  jre = jre25_minimal.override {
+    modules = [
+      "java.base"
+      "java.compiler"
+      "java.desktop"
+      "java.instrument"
+      "java.naming"
+      "java.net.http"
+      "java.rmi"
+      "java.scripting"
+      "java.security.jgss"
+      "java.sql"
+      "jdk.attach"
+      "jdk.jdi"
+      "jdk.management"
+      "jdk.unsupported"
+    ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerouting";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "freerouting";
     repo = "freerouting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K4fwbvSPuKAAnIcTDBSAI1/6HuCB7c9rCGTJcyAj5dQ=";
+    hash = "sha256-bIts0ORxw9GDKRP78k0YnrfUqBliyf8v3gK/WtfNRgw=";
   };
 
-  gradleBuildTask = "executableJar";
+  gradleBuildTask = "dist";
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    jdk
+    jdk25
     gradle
     copyDesktopItems
   ];
@@ -36,16 +57,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  gradleFlags = [ "--no-configuration-cache" ];
+
+  postPatch = ''
+    # The rewrite-gradle plugin breaks the nixDownloadDeps task injected by fetchDeps
+    substituteInPlace build.gradle \
+      --replace-fail "rewrite 'org.openrewrite.recipe:rewrite-gradle:2.3.0'" ""
+    # Disable telemetry and contact options by default
+    substituteInPlace src/main/java/app/freerouting/settings/UserProfileSettings.java \
+      --replace-fail 'public Boolean isTelemetryAllowed = true;' 'public Boolean isTelemetryAllowed = false;'
+    substituteInPlace src/main/java/app/freerouting/settings/UserProfileSettings.java \
+      --replace-fail 'public Boolean isContactAllowed = true;' 'public Boolean isContactAllowed = false;'
+  '';
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{bin,share/freerouting}
-    cp build/libs/freerouting-executable.jar $out/share/freerouting
+    cp build/dist/freerouting-executable.jar $out/share/freerouting
 
     makeWrapper ${lib.getExe jre} $out/bin/freerouting \
       --add-flags "-jar $out/share/freerouting/freerouting-executable.jar"
 
-    install -Dm644 ${finalAttrs.src}/design/icon/freerouting_icon_256x256_v1.png \
+    install -Dm644 ${finalAttrs.src}/assets/icon/freerouting_icon_256x256_v3.png \
       $out/share/icons/hicolor/256x256/apps/freerouting.png
 
     runHook postInstall
@@ -74,7 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
       Freerouting is an advanced autorouter for all PCB programs that support
       the standard Specctra or Electra DSN interface. '';
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ srounce ];
+    maintainers = with lib.maintainers; [
+      srounce
+      Misaka13514
+    ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "freerouting";
   };
