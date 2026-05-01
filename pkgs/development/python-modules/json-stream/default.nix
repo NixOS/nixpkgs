@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "json-stream";
   version = "2.5.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "daggaz";
     repo = "json-stream";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fQuTvd2Kizy8icYoewvJJVDc7FXuXRQkwJfOCka3Eo4=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
