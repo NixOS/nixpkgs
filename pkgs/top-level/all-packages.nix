@@ -12198,4 +12198,6 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  rayforce-debug = callPackage ../by-name/ra/rayforce/package.nix { debug = true; };
 }
