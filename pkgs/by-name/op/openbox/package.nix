@@ -15,8 +15,10 @@
   libsm,
   imlib2,
   pango,
+  bashNonInteractive,
   libstartup_notification,
   makeWrapper,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,10 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     makeWrapper
+    python3
     python3.pkgs.wrapPython
   ];
 
   buildInputs = [
+    bashNonInteractive
     libxml2
     libxinerama
     libxcursor
@@ -46,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     imlib2
   ];
+
+  strictDeps = true;
 
   pythonPath = with python3.pkgs; [
     pyxdg
@@ -88,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "X window manager for non-desktop embedded systems";
