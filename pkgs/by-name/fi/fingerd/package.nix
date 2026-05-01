@@ -2,10 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
   libcap,
-  versionCheckHook,
   nix-update-script,
+  nixosTests,
+  stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -45,6 +46,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.basic = nixosTests.fingerd;
   };
 
   meta = {
