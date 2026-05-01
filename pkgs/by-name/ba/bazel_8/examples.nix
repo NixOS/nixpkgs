@@ -24,7 +24,7 @@ let
     sha256 = "sha256-NQqXsmX7hyTqLINkz1rnavx15jQTdIKpotw42rGc5mc=";
   };
 in
-{
+rec {
   java = bazelPackage {
     inherit src registry;
     sourceRoot = "source/java-tutorial";
@@ -56,36 +56,43 @@ in
       outputHashAlgo = "sha256";
     };
   };
-  cpp = bazelPackage {
-    inherit src registry;
-    sourceRoot = "source/cpp-tutorial/stage3";
-    name = "cpp-tutorial";
-    targets = [ "//main:hello-world" ];
-    bazel = bazel_8;
-    installPhase = ''
-      mkdir $out
-      cp bazel-bin/main/hello-world $out/
-    '';
-    nativeBuildInputs = lib.optional (stdenv.hostPlatform.isDarwin) cctools;
-    commandArgs = lib.optionals (stdenv.hostPlatform.isDarwin) [
-      "--host_cxxopt=-xc++"
-      "--cxxopt=-xc++"
-    ];
-    env = {
-      USE_BAZEL_VERSION = bazel_8.version;
+  mk_cpp =
+    extra_args:
+    bazelPackage {
+      inherit src registry;
+      sourceRoot = "source/cpp-tutorial/stage3";
+      name = "cpp-tutorial";
+      targets = [ "//main:hello-world" ];
+      bazel = bazel_8;
+      installPhase = ''
+        mkdir $out
+        cp bazel-bin/main/hello-world $out/
+      '';
+      nativeBuildInputs = lib.optional (stdenv.hostPlatform.isDarwin) cctools;
+      commandArgs =
+        lib.optionals (stdenv.hostPlatform.isDarwin) [
+          "--host_cxxopt=-xc++"
+          "--cxxopt=-xc++"
+        ]
+        ++ extra_args;
+      env = {
+        USE_BAZEL_VERSION = bazel_8.version;
+      };
+      bazelRepoCacheFOD = {
+        outputHash =
+          {
+            aarch64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
+            aarch64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
+            x86_64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
+            x86_64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
+          }
+          .${stdenv.hostPlatform.system};
+        outputHashAlgo = "sha256";
+      };
     };
-    bazelRepoCacheFOD = {
-      outputHash =
-        {
-          aarch64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          aarch64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          x86_64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-          x86_64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-        }
-        .${stdenv.hostPlatform.system};
-      outputHashAlgo = "sha256";
-    };
-  };
+  cpp = mk_cpp [ ];
+  cpp_with_linux_sandbox =
+    if stdenv.hostPlatform.isLinux then (mk_cpp [ "--spawn_strategy=linux-sandbox" ]) else { };
   rust = bazelPackage {
     inherit src registry;
     sourceRoot = "source/rust-examples/01-hello-world";
