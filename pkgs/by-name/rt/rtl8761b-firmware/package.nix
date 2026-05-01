@@ -4,32 +4,30 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "rtl8761b-firmware";
-  version = "rtk1395";
+  version = "162105963";
 
   src = fetchFromGitHub {
-    owner = "Realtek-OpenSource";
-    repo = "android_hardware_realtek";
-    rev = finalAttrs.version;
-    hash = "sha256-vd9sZP7PGY+cmnqVty3sZibg01w8+UNinv8X85B+dzc=";
+    owner = "andrew-ld";
+    repo = "rtl8761b-firmware";
+    rev = "4b36bce18a5c9162d0c4f63ff70abcc5e9db9e28";
+    hash = "sha256-5DB7eGmKmnn2PQUHjDmKRPiNPZjC3pkSbEiE7rjdJOI=";
   };
 
   installPhase = ''
-    install -D -pm644 \
-      bt/rtkbt/Firmware/BT/rtl8761b_fw \
-      $out/lib/firmware/rtl_bt/rtl8761b_fw.bin
+    runHook preInstall
 
-    install -D -pm644 \
-      bt/rtkbt/Firmware/BT/rtl8761b_config \
-      $out/lib/firmware/rtl_bt/rtl8761b_config.bin
+    install -Dm444 -t $out/lib/firmware/rtl_bt/ *
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Firmware for Realtek RTL8761b";
     license = lib.licenses.unfreeRedistributableFirmware;
-    maintainers = with lib.maintainers; [ milibopp ];
+    maintainers = with lib.maintainers; [ elfenermarcell ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
-})
+}
