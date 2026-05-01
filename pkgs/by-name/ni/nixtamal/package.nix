@@ -7,6 +7,8 @@
   darwin,
   makeBinaryWrapper,
   coreutils,
+  curl,
+  gawk,
   nix-prefetch-darcs,
   nix-prefetch-fossil,
   nix-prefetch-git,
@@ -18,7 +20,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.4.1";
+  version = "1.5.0";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -27,7 +29,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-0iXSACRjdBkEV+9wfcKJhpzY3oArd66g/Dc30HcCbng=";
+    hash = "sha256-noQU480HoxVjnHvEY/rso9jANNA8EIKbYeYpnhkkx74=";
   };
 
   nativeBuildInputs = [
@@ -110,6 +112,8 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     wrapProgram "$bin/bin/nixtamal" --prefix PATH : ${
       lib.makeBinPath [
         coreutils
+        curl
+        gawk
         nix-prefetch-darcs
         nix-prefetch-fossil
         nix-prefetch-git
