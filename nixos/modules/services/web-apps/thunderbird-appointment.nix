@@ -371,7 +371,12 @@ in
         environment = serviceEnv;
         serviceConfig = commonServiceConfig // {
           ExecStartPre = pkgs.writeShellScript "thunderbird-appointment-update-db" ''
-            cd ${cfg.package}/share/thunderbird-appointment
+            # The application resolves Alembic paths relative to its working
+            # directory and also writes appointment.log there. Keep the
+            # writable dataDir as CWD, exposing the immutable migration files
+            # through symlinks instead of running from the store output.
+            ln -sfn ${cfg.package}/share/thunderbird-appointment/alembic.ini ${cfg.dataDir}/alembic.ini
+            ln -sfn ${cfg.package}/share/thunderbird-appointment/appointment ${cfg.dataDir}/appointment
             exec ${getExe' cfg.package "run-command"} main update-db
           '';
           ExecStart = getExe' cfg.package "thunderbird-appointment-api";

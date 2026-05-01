@@ -2,35 +2,68 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   python3,
   makeWrapper,
   nixosTests,
+  runCommand,
 }:
 
 let
-  version = "1.4.1";
+  python = python3.override {
+    self = python;
+    packageOverrides =
+      final: prev: {
+        niquests = prev.niquests.overridePythonAttrs (old: {
+          # These live SSL/network tests are unrelated to Appointment itself and
+          # currently fail during local package verification on Darwin.
+          disabledTestPaths = (old.disabledTestPaths or [ ]) ++ [
+            "tests/test_live.py"
+            "tests/test_sse.py"
+          ];
+        });
+      };
+  };
+  pythonPackages = python.pkgs;
+
+  version = "1.4.2";
   src = fetchFromGitHub {
     owner = "thunderbird";
     repo = "appointment";
-    rev = "r-0825";
-    hash = "sha256-hgZuokYobQP57dBbIvtaH2ynaMl8h3pc9vIoDgGs0uI=";
+    rev = "r-0837";
+    hash = "sha256-SilLfP/Vvbk91j1DekKXoNbD61/t0crl8ZubVBzbADE=";
   };
 
-  frontend = buildNpmPackage {
+  frontend = buildNpmPackage (frontendAttrs: {
     pname = "thunderbird-appointment-frontend";
     inherit version src;
+    nodejs = nodejs_20;
+
     sourceRoot = "source/frontend";
-    npmDepsHash = "sha256-TmhsLwMbGpBW7QXfIHc3cemD/L8fWh97yOZSLvj2YY4=";
+    npmDepsHash = "sha256-xsifpdFtDJx3eW5kXw4Bg4udXxyySuX8cLgH+rK3WLo=";
+
+    env.TZ = "America/Vancouver";
+
+    preBuild = ''
+      npm run lint
+      npm run test -- --run
+    '';
+
     installPhase = ''
       runHook preInstall
       mkdir -p $out
       cp -r dist $out/
       runHook postInstall
     '';
-  };
+    
+    passthru.tests.build = runCommand "${frontendAttrs.pname}-build-test" { } ''
+      test -f ${frontendAttrs.finalPackage}/dist/index.html
+      test -d ${frontendAttrs.finalPackage}/dist/assets
+      touch $out
+    '';
+  });
 in
-python3.pkgs.buildPythonApplication {
-
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "thunderbird-appointment";
   inherit version src;
 
@@ -39,23 +72,46 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     substituteInPlace src/appointment/main.py \
       --replace-fail 'from starlette_csrf import CSRFMiddleware' 'from asgi_csrf import CSRFMiddleware'
+    cat > pyproject.toml << 'TOML'
+[project]
+name = "thunderbird-appointment"
+version = "${finalAttrs.version}"
+
+    [project.scripts]
+    run-command = "appointment.main:cli"
+
+    [tool.setuptools]
+    include-package-data = true
+
+    [tool.setuptools.package-data]
+    appointment = [
+      "l10n/*/*.ftl",
+      "templates/assets/img/*.png",
+      "templates/assets/img/icons/*.png",
+      "templates/email/*.jinja2",
+      "templates/email/errors/*.jinja2",
+      "templates/email/includes/*.jinja2",
+    ]
+    TOML
   '';
 
   pyproject = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = [ pythonPackages.setuptools ];
 
-  dependencies = with python3.pkgs; [
+  # Keep this aligned with backend/requirements.txt. Extras that nixpkgs
+  # packages separately are listed explicitly where they matter at runtime.
+  dependencies = with pythonPackages; [
     alembic
     argon2-cffi
     babel
     niquests
     caldav
     celery
-
     celery-redbeat
     cryptography
     dnspython
+    email-validator
     fastapi
     flower
     fluent-runtime
@@ -93,7 +149,7 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with pythonPackages; [
     pytestCheckHook
     faker
     httpx
@@ -104,31 +160,86 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "appointment" ];
 
-  env = {
-    APP_SECRET_KEY = "test-key-for-tests";
-    DB_URL = "sqlite:///:memory:";
-    APP_ALLOW_FIRST_TIME_REGISTER = "true";
-  };
+  pytestFlagsArray = [
+    "--disable-warnings"
+    "-s"
+  ];
+
+  # Upstream conftest imports `defines` from backend/test as a top-level module.
+  preCheck = ''
+    export PYTHONPATH="$PWD/test''${PYTHONPATH:+:$PYTHONPATH}"
+  '';
+
+  # These tests depend on live public DNS state
+  disabledTests = [
+    "test_for_host"
+    "test_for_txt_record"
+    "test_no_records"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/thunderbird-appointment/frontend
-    cp -r ${frontend}/* $out/share/thunderbird-appointment/frontend/
+    cp -r ${frontend}/dist/. $out/share/thunderbird-appointment/frontend/
 
-    makeWrapper ${python3.interpreter} $out/bin/run-command \
-      --prefix PYTHONPATH : "$out/${python3.sitePackages}" \
-      --add-flags "-m appointment.main"
+    ln -s run-command $out/bin/thunderbird-appointment-cli
+
+    makeWrapper ${lib.getExe pythonPackages.uvicorn} $out/bin/thunderbird-appointment-api \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}" \
+      --add-flags "--factory appointment.main:server --host 0.0.0.0 --port 5000"
+
+    makeWrapper ${lib.getExe pythonPackages.celery} $out/bin/thunderbird-appointment-worker \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}" \
+      --add-flags "-A appointment.celery_app:celery worker -l INFO --beat -Q appointment"
+
+    makeWrapper ${lib.getExe pythonPackages.celery} $out/bin/thunderbird-appointment-flower \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}" \
+      --add-flags "-A appointment.celery_app:celery flower -l INFO"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) thunderbird-appointment;
+  passthru = {
+    inherit frontend;
+    frontendPath = "${finalAttrs.finalPackage}/share/thunderbird-appointment/frontend";
+
+    services = {
+      api.executable = lib.getExe' finalAttrs.finalPackage "thunderbird-appointment-api";
+      worker.executable = lib.getExe' finalAttrs.finalPackage "thunderbird-appointment-worker";
+      flower.executable = lib.getExe' finalAttrs.finalPackage "thunderbird-appointment-flower";
+    };
+
+    tests = {
+      frontendBuild = frontend.passthru.tests.build;
+
+      packageLayout = runCommand "${finalAttrs.pname}-package-layout" { } ''
+        test -x ${lib.getExe' finalAttrs.finalPackage "run-command"}
+        test -x ${lib.getExe' finalAttrs.finalPackage "thunderbird-appointment-api"}
+        test -x ${lib.getExe' finalAttrs.finalPackage "thunderbird-appointment-worker"}
+        test -x ${lib.getExe' finalAttrs.finalPackage "thunderbird-appointment-flower"}
+        test -f ${finalAttrs.finalPackage}/share/thunderbird-appointment/frontend/index.html
+        test -d ${finalAttrs.finalPackage}/share/thunderbird-appointment/frontend/assets
+        touch $out
+      '';
+
+      cliHelp = runCommand "${finalAttrs.pname}-cli-help" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } ''
+        run-command --help > /dev/null
+        thunderbird-appointment-api --help > /dev/null
+        thunderbird-appointment-worker --help > /dev/null
+        thunderbird-appointment-flower --help > /dev/null
+        touch $out
+      '';
+
+      inherit (nixosTests) thunderbird-appointment;
+    };
   };
 
   meta = with lib; {
     description = "Thunderbird Appointment - Invite others to grab times on your calendar";
     homepage = "https://github.com/thunderbird/appointment";
+    changelog = "https://github.com/thunderbird/appointment/releases/tag/r-0837";
     license = licenses.mpl20;
     maintainers = [ ];
     platforms = platforms.unix;
-    mainProgram = "run-command";
+    mainProgram = "thunderbird-appointment-api";
   };
-}
+})

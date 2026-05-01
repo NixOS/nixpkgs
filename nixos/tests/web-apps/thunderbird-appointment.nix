@@ -24,11 +24,19 @@
   testScript = ''
     start_all()
 
-    machine.wait_for_unit("thunderbird-appointment-secrets.service")
-    machine.wait_for_unit("postgresql.service")
-    machine.wait_for_unit("redis-thunderbird-appointment.service")
-    machine.wait_for_unit("thunderbird-appointment.service")
-    machine.wait_for_unit("thunderbird-appointment-worker.service")
+    def wait_for_unit_with_diagnostics(unit):
+        try:
+            machine.wait_for_unit(unit, timeout=90)
+        except Exception:
+            machine.log(machine.succeed(f"systemctl status {unit} --no-pager || true"))
+            machine.log(machine.succeed(f"journalctl -u {unit} -b --no-pager -n 100 || true"))
+            raise
+
+    wait_for_unit_with_diagnostics("thunderbird-appointment-secrets.service")
+    wait_for_unit_with_diagnostics("postgresql.service")
+    wait_for_unit_with_diagnostics("redis-thunderbird-appointment.service")
+    wait_for_unit_with_diagnostics("thunderbird-appointment.service")
+    wait_for_unit_with_diagnostics("thunderbird-appointment-worker.service")
 
     with subtest("secrets are generated with strict permissions"):
         machine.succeed("test -d /srv/thunderbird-appointment-state")
@@ -41,16 +49,23 @@
 
     with subtest("migrations ran against PostgreSQL"):
         # `run-command main update-db` stamps the alembic head on a fresh DB.
+        machine.succeed("test -f /srv/thunderbird-appointment-state/appointment.log")
         machine.succeed(
             "sudo -u postgres psql -tAc "
             "\"SELECT to_regclass('public.alembic_version')\" "
             "thunderbird-appointment | grep -q alembic_version"
         )
 
-    with subtest("the API is up and serving its OpenAPI docs"):
+    with subtest("the API health endpoint checks PostgreSQL and Redis"):
         machine.wait_for_open_port(5000)
-        machine.wait_until_succeeds("curl -fsS http://127.0.0.1:5000/docs", timeout=60)
-        machine.succeed("curl -fsS http://127.0.0.1:5000/redoc | grep -q 'Thunderbird Appointment'")
+        machine.succeed("curl -fsS http://127.0.0.1:5000/ > /dev/null")
+        machine.succeed("curl -fsS http://127.0.0.1:5000/session-info | grep -q true")
+
+    with subtest("the worker executes its scheduled heartbeat"):
+        machine.wait_until_succeeds(
+            "journalctl -u thunderbird-appointment-worker.service -b --no-pager | grep -q 'Celery heartbeat'",
+            timeout=90,
+        )
 
     with subtest("units are meaningfully hardened"):
         machine.log(machine.succeed("systemd-analyze security thunderbird-appointment.service"))
