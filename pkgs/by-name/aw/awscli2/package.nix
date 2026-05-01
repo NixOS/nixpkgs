@@ -12,6 +12,7 @@
   awscli2,
   addBinToPathHook,
   writableTmpDirAsHomeHook,
+  cacert,
 }:
 
 let
@@ -82,6 +83,8 @@ py.pkgs.buildPythonApplication rec {
     # with a configure script, but we don't as we provide all of the packages
     # through PYTHONPATH
     sed -i '/pip>=/d' requirements/bootstrap.txt
+
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt awscli/botocore/cacert.pem
   '';
 
   nativeBuildInputs = [
