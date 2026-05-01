@@ -26641,6 +26641,12 @@
     githubId = 28858039;
     name = "Tuomas Mäkinen";
   };
+  t7ru = {
+    email = "gabonnie1234@gmail.com";
+    github = "t7ru";
+    githubId = 57356716;
+    name = "Benjamin van Pham";
+  };
   taciturnaxolotl = {
     email = "me@dunkirk.sh";
     github = "taciturnaxolotl";
