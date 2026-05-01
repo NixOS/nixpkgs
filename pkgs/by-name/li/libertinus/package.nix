@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
   zstd,
 }:
 
@@ -14,7 +15,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-JQZ3ySnTd1owkTZDWUN5ryZKwu8oAQNaody+MLm+I6Y=";
   };
 
-  nativeBuildInputs = [ zstd ];
+  nativeBuildInputs = [
+    installFonts
+    zstd
+  ];
 
   installPhase = ''
     runHook preInstall
