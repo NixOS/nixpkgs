@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-routing";
-  version = "0.3.2";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-routing";
     tag = "v${version}";
-    hash = "sha256-HB07q6VO/PjbLLzKmHPMK91ZnppFtm9woQwdJIOFs5s=";
+    hash = "sha256-POnxnLES4Jub4u8pvpehMo0KfOCyAPGH83cRFRPgfOc=";
   };
 
   build-system = [ setuptools ];
