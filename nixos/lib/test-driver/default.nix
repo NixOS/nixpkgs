@@ -2,7 +2,7 @@
   lib,
   stdenv,
 
-  buildPythonApplication,
+  buildPythonPackage,
   colorama,
   coreutils,
   imagemagick_light,
@@ -32,7 +32,7 @@
   extraPythonPackages ? (_: [ ]),
 }:
 
-buildPythonApplication {
+buildPythonPackage {
   pname = "nixos-test-driver";
   version = "1.1";
   pyproject = true;

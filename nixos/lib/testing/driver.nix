@@ -13,11 +13,13 @@ let
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
-  testDriver = config.pythonTestDriverPackage.override {
-    inherit (config) enableOCR extraPythonPackages;
-    qemu_pkg = config.qemu.package;
-    enableNspawn = config.containers != { };
-  };
+  testDriver = hostPkgs.python3Packages.toPythonApplication (
+    config.pythonTestDriverPackage.override {
+      inherit (config) enableOCR extraPythonPackages;
+      qemu_pkg = config.qemu.package;
+      enableNspawn = config.containers != { };
+    }
+  );
 
   pythonizeName =
     name:
@@ -123,7 +125,7 @@ in
     pythonTestDriverPackage = mkOption {
       description = "Package containing the python NixOS test driver implemetnation";
       type = types.package;
-      default = hostPkgs.nixos-test-driver;
+      default = hostPkgs.python3Packages.nixos-test-driver;
       readOnly = true;
     };
 
