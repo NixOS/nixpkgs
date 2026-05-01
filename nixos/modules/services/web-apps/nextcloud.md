@@ -68,6 +68,11 @@ It requires elevated permissions to become the `nextcloud` user. Given the way t
 escalation is implemented, parameters passed via the environment to Nextcloud are
 currently ignored, except for `OC_PASS` and `NC_PASS`.
 
+::: {.warning}
+When Polkit is enabled, the command being executed by `nextcloud-occ` might be logged
+into the system's journal. Be careful to not leak secrets that way!
+:::
+
 Custom service units that need to run `nextcloud-occ` either need elevated privileges
 or the systemd configuration from `nextcloud-setup.service` (recommended):
 
