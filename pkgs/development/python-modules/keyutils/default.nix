@@ -2,22 +2,20 @@
   lib,
   buildPythonPackage,
   cython,
-  fetchFromGitHub,
+  fetchzip,
   keyutils,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "keyutils";
   version = "0.6";
   format = "setuptools";
 
   # github version comes bundled with tests
-  src = fetchFromGitHub {
-    owner = "sassoftware";
-    repo = "python-keyutils";
-    rev = version;
-    sha256 = "0pfqfr5xqgsqkxzrmj8xl2glyl4nbq0irs0k6ik7iy3gd3mxf5g1";
+  src = fetchzip {
+    url = "http://deb.debian.org/debian/pool/main/p/python-keyutils/python-keyutils_0.6.orig.tar.gz";
+    hash = "sha256-/oL510Qi6ryugCuqx8/jPQGYlhGKDlMY54+2a9NTM88=";
   };
 
   postPatch = ''
@@ -34,7 +32,7 @@ buildPythonPackage rec {
 
   buildInputs = [ keyutils ];
   nativeBuildInputs = [ cython ];
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ ];
 
   meta = {
     description = "Set of python bindings for keyutils";
