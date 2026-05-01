@@ -5942,16 +5942,17 @@
       elpaBuild,
       fetchurl,
       lib,
+      transient,
     }:
     elpaBuild {
       pname = "minimail";
       ename = "minimail";
-      version = "0.4.0.20260415.81600";
+      version = "0.4.2.0.20260428.192238";
       src = fetchurl {
-        url = "https://elpa.gnu.org/devel/minimail-0.4.0.20260415.81600.tar";
-        sha256 = "1a1mh3g6vfvmlr419iv8fz7hfjb1ddsia26059zj69gqv7fniqbh";
+        url = "https://elpa.gnu.org/devel/minimail-0.4.2.0.20260428.192238.tar";
+        sha256 = "0wd5nay9x0sqr7l96ibi554qab5mfgh3dw493rcw7cs3cwiwsvhm";
       };
-      packageRequires = [ ];
+      packageRequires = [ transient ];
       meta = {
         homepage = "https://elpa.gnu.org/devel/minimail.html";
         license = lib.licenses.free;

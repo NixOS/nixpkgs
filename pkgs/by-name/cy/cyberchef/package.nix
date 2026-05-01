@@ -21,7 +21,7 @@ let
       categories = [ "Development" ];
     }
   );
-  version = "10.23.0";
+  version = "11.0.0";
 in
 stdenv.mkDerivation {
   pname = "cyberchef";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/gchq/CyberChef/releases/download/v${version}/CyberChef_v${version}.zip";
-    hash = "sha256-O2nPVWhKbXkfPNLcfrP3iZmB4uG7F3pgMB/Nt52/h38=";
+    hash = "sha256-Hom0YFel1GVdyx/1q7N93se6uLUVutp0Lu31WNhkPPA=";
     stripRoot = false;
   };
 

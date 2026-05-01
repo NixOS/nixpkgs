@@ -60,6 +60,7 @@ mapAliases (
     peskcolor-vim = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
     playground = throw "playground has been archived"; # Added 2025-12-18
     pure-lua = lib.warnOnInstantiate "Please replace 'vimPlugins.pure-lua' with 'vimPlugins.moonlight-nvim' as this name was an error" moonlight-nvim; # Added 2025-11-17
+    registers-nvim = throw "the upstream repository got deleted"; # added 2026-04-30
     rust-tools-nvim = lib.warnOnInstantiate "'vimPlugins.rust-tools-nvim' is abandoned by upstream; you should use 'vimPlugins.rustaceanvim'" rust-tools-nvim;
     Spacegray-vim = throw "'vimPlugins.Spacegray-vim' has been removed: abandoned by upstream"; # Added 2025-03-24
     SpaceVim = throw "this distribution didn't work properly in vimPlugins, please use top-level 'spacevim' instead"; # added 2024-11-27

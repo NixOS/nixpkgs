@@ -4,20 +4,20 @@
   fetchFromGitHub,
   dacite,
   python-dateutil,
-  requests,
+  curl-cffi,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "soundcloud-v2";
-  version = "1.6.2";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "7x11x13";
     repo = "soundcloud.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V+eEBMlzHbNM3dd+vBNkIvjwc+DdV8RZTasSggCv/jY=";
+    hash = "sha256-5Mb7Dt5TYAI/xTMezSWE9klP4Psw59gTEy1448O7CIw=";
   };
 
   build-system = [ setuptools ];
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     dacite
     python-dateutil
-    requests
+    curl-cffi
   ];
 
   # tests require network
