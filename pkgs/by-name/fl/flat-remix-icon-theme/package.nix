@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "flat-remix-icon-theme";
-  version = "20240201";
+  version = "20250709";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix";
     tag = finalAttrs.version;
-    hash = "sha256-3TkBRgoT2AW0Sb0CrXdxh53/jYARAMFC/TIj/r/zruo=";
+    hash = "sha256-hV+WIDay9hqgazMNcyh4+ZRqXkKKAwXTAD5ySAXud2Y=";
   };
 
   nativeBuildInputs = [
