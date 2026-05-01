@@ -8,11 +8,11 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "babashka-unwrapped";
-  version = "1.12.217";
+  version = "1.12.218";
 
   src = fetchurl {
     url = "https://github.com/babashka/babashka/releases/download/v${finalAttrs.version}/babashka-${finalAttrs.version}-standalone.jar";
-    sha256 = "sha256-5Nnzx2chre+h0SnM5spwiR9r4gjlyfc2FbgYa0spM34=";
+    sha256 = "sha256-CEApb2noPYfRYRDTo1RBLOZELvEuxGO4HW1CB//bky8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -69,7 +69,7 @@ buildGraalvmNativeImage (finalAttrs: {
       | ${lib.getExe finalAttrs.finalPackage} -I -o -e "(or (some->> *input* (filter #(= '(def version) (take 2 %))) first last last last) (throw (ex-info \"Couldn't find expected '(def version ...)' form in 'borkdude/deps.clj'.\" {})))")
 
     update-source-version babashka.clojure-tools "$clojure_tools_version" \
-      --file="pkgs/development/interpreters/babashka/clojure-tools.nix"
+      --file="pkgs/by-name/ba/babashka/clojure-tools.nix"
   '';
 
   meta = {

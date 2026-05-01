@@ -4719,9 +4719,6 @@ with pkgs;
   acl2 = callPackage ../development/interpreters/acl2 { };
   acl2-minimal = callPackage ../development/interpreters/acl2 { certifyBooks = false; };
 
-  babashka-unwrapped = callPackage ../development/interpreters/babashka { };
-  babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
-
   uiua-unstable = callPackage ../by-name/ui/uiua/package.nix { uiua_versionType = "unstable"; };
 
   # BQN interpreters and compilers
