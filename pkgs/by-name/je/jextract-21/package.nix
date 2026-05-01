@@ -5,18 +5,18 @@
   makeBinaryWrapper,
   gradle,
   jdk21,
-  llvmPackages,
+  llvmPackages_20, # LLVM 21 have breaking change will cause check fail
 }:
 
 stdenv.mkDerivation {
   pname = "jextract";
-  version = "unstable-2023-11-27";
+  version = "unstable-2024-02-14";
 
   src = fetchFromGitHub {
     owner = "openjdk";
     repo = "jextract";
-    rev = "8730fcf05c229d035b0db52ee6bd82622e9d03e9"; # Update jextract 21 with latest fixes
-    hash = "sha256-Wct/yx5C0EjDtDyXNYDH5LRmrfq7islXbPVIGBR6x5Y=";
+    rev = "0f87c6cdd5d63a7148deb38e16ed4de1306a4573"; # Update jextract 21 with latest fixes
+    hash = "sha256-Bji7I6LNMs70drGo5+75OClCrxhOsoLV2V7Wdct6494=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   ];
 
   gradleFlags = [
-    "-Pllvm_home=${lib.getLib llvmPackages.libclang}"
+    "-Pllvm_home=${lib.getLib llvmPackages_20.libclang}"
     "-Pjdk21_home=${jdk21}"
   ];
 
