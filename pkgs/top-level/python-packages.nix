@@ -11626,6 +11626,8 @@ self: super: with self; {
 
   opendal = callPackage ../development/python-modules/opendal { };
 
+  opendp = callPackage ../development/python-modules/opendp { };
+
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
