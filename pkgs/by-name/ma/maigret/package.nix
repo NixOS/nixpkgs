@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pythonRemoveDeps = [
     "future-annotations"
     "future"
+    "PyPDF2"
     "six"
   ];
 
@@ -55,7 +56,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       networkx
       platformdirs
       pycountry
-      pypdf2
+      pypdf
       pysocks
       python-bidi
       pyvis
