@@ -454,6 +454,7 @@ rec {
       (rattrs self)
       // {
         ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
+        __overriders = [ extenderName ];
       }
     );
 
