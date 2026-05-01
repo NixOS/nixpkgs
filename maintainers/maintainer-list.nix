@@ -22969,6 +22969,12 @@
       { fingerprint = "66A8 1706 2227 9BD9 586A  CEDD 5B29 A881 3F47 65C4"; }
     ];
   };
+  reivilibre = {
+    email = "nix.oo@emunest.net";
+    github = "reivilibre";
+    githubId = 38398653;
+    name = "Olivier 'reivilibre'";
+  };
   relrod = {
     email = "ricky@elrod.me";
     github = "relrod";
