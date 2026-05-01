@@ -184,14 +184,14 @@ in
             fi
             if [ ! -s /run/xrdp/rsakeys.ini ]; then
               mkdir -p /run/xrdp
-              ${pkgs.xrdp}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
+              ${cfg.package}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
             fi
           '';
           serviceConfig = {
             User = "xrdp";
             Group = "xrdp";
             PermissionsStartOnly = true;
-            ExecStart = "${pkgs.xrdp}/bin/xrdp --nodaemon --port ${toString cfg.port} --config ${confDir}/xrdp.ini";
+            ExecStart = "${cfg.package}/bin/xrdp --nodaemon --port ${toString cfg.port} --config ${confDir}/xrdp.ini";
           };
         };
 
@@ -201,7 +201,7 @@ in
           description = "xrdp session manager";
           restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children
           serviceConfig = {
-            ExecStart = "${pkgs.xrdp}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
+            ExecStart = "${cfg.package}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
             ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
           };
         };
