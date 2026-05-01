@@ -3,8 +3,10 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   git,
+  headplane-agent,
   lib,
   makeWrapper,
+  nixosTests,
   nodejs_22,
   pnpm_10,
   pnpmConfigHook,
@@ -13,13 +15,13 @@
 let
   pname = "headplane";
   # Note, if you are upgrading this, you should upgrade headplane-agent at the same time
-  version = "0.6.1";
-  pnpmDepsHash = "sha256-AYfEL3HSRg87I+Y0fkLthFSDWgHTg5u0DBpzn6KBn1Q=";
+  version = "0.6.2";
+  pnpmDepsHash = "sha256-CsmffCo9Se/4oiOqbcuhjPMuGmR2GL+YfcyWgzBTAh8=";
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
     tag = "v${version}";
-    hash = "sha256-hsrnmEwKXJlPjV4aIfmS6GAE414ArVRGoPPpZGmV0x4=";
+    hash = "sha256-2C/Pn2M2aHADtoljSFg9hz6xOaZp6IRI77jjy+LDAgw=";
   };
 
   headplaneSshWasm = buildGoModule {
@@ -103,6 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags $out/share/headplane/build/server/index.js
     runHook postInstall
   '';
+
+  passthru = {
+    agent = headplane-agent;
+    tests = { inherit (nixosTests) headplane; };
+  };
 
   meta = {
     description = "Feature-complete Web UI for Headscale";
