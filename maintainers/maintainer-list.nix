@@ -18515,6 +18515,11 @@
     githubId = 8165792;
     name = "Mark Karpov";
   };
+  mrmaxmeier = {
+    github = "mrmaxmeier";
+    githubId = 3913977;
+    name = "Mrmaxmeier";
+  };
   mrmebelman = {
     email = "burzakovskij@protonmail.com";
     github = "MrMebelMan";
