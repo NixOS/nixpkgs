@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  gitMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
   nix-update-script,
@@ -10,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildkite-cli";
-  version = "3.32.2";
+  version = "3.40.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7jBYi9KGkeB6Pu4VDR8QSTG3U4QFFVih3MUp2Sldpqo=";
+    hash = "sha256-8Fij2SG6dLnyc4U2Q+jIx2ZDzbGd6ETTWiiz3ciRaE8=";
   };
 
-  vendorHash = "sha256-yi77gGlBIGEQQbYVVsQP74IVFuZo5GAPOdgYmaDnBAs=";
+  vendorHash = "sha256-pxVSzEc/pgPaMMBOl5LYjbmPVpjr1M2obFmeiGqfgik=";
 
   ldflags = [
     "-s"
@@ -27,6 +28,7 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    gitMinimal
     writableTmpDirAsHomeHook
   ];
 
