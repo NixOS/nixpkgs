@@ -21266,6 +21266,11 @@
     githubId = 3438604;
     name = "Petter Storvik";
   };
+  pfmephisto = {
+    github = "pfmephisto";
+    githubId = 22501790;
+    name = "Povl Filip Sonne-Frederiksen";
+  };
   phaer = {
     name = "Paul Haerle";
     email = "nix@phaer.org";
