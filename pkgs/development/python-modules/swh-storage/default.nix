@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-storage";
-  version = "4.1.1";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-storage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AY2IcRJG19oSy2usI9JZTEKYLI3SEiLpNisqD7zus8A=";
+    hash = "sha256-l9ElZtpJBryFvBLtXQZ7NiYH6FvyarmoWzTkTg7E8gw=";
   };
 
   build-system = [
