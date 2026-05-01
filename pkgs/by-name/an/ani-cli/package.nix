@@ -14,6 +14,7 @@
   mpv,
   vlc,
   iina,
+  openssl,
   withMpv ? true,
   withVlc ? false,
   withIina ? false,
@@ -27,13 +28,13 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-cli";
-  version = "4.11";
+  version = "4.14";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gQprGtKXXpDm66dFWsrriL4G0NPav+nqm8T6wkdbgk8=";
+    hash = "sha256-OyCKDN89sBz59+3JncMDyNOq8UMqqjara+A0Owo3oko=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -44,6 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     fzf
     ffmpeg
     aria2
+    openssl
   ]
   ++ lib.optional chromecastSupport catt
   ++ lib.optional syncSupport syncplay;
