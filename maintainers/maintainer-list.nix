@@ -215,6 +215,12 @@
     github = "2hexed";
     githubId = 54501296;
   };
+  _2zqa = {
+    name = "Marijn Kok";
+    email = "hkju4b4ds@mozmail.com";
+    github = "2zqa";
+    githubId = 25235249;
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
