@@ -8,7 +8,9 @@
 
 let
   pname = "p3x-onenote";
-  version = "2025.10.111";
+  onenote = lib.importJSON ./sources.json;
+
+  version = onenote.version;
 
   plat =
     {
@@ -17,12 +19,7 @@ let
     }
     .${stdenv.hostPlatform.system};
 
-  hash =
-    {
-      aarch64-linux = "sha256-sfnRzY+1flUdIM1ey9u00j9eiDa4u5bY/f3fupV+FKM=";
-      x86_64-linux = "sha256-lgZjVVBWPloqMWX0oryNB0lxgmJCBqC7pp0AjeUMjQM=";
-    }
-    .${stdenv.hostPlatform.system};
+  hash = onenote.hash.${stdenv.hostPlatform.system};
 
   src = fetchurl {
     url = "https://github.com/patrikx3/onenote/releases/download/v${version}/P3X-OneNote-${version}${plat}.AppImage";
