@@ -62,6 +62,7 @@ lua-iconv,,,,7.0.0,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
 lua-protobuf,,,,,,lockejan
+lua-resty-hmac-ffi,https://raw.githubusercontent.com/jkeys089/lua-resty-hmac/master/rockspec/lua-resty-hmac-ffi-0.06-1.rockspec,,,,5.1,"de11n despsyched"
 lua-resty-http,,,,,,
 lua-resty-jwt,,,,,,
 lua-resty-openidc,,,,,,
