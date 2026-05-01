@@ -1566,7 +1566,6 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     let distro_id = required_env("DISTRO_ID")?;
     let pre_switch_check = required_env("PRE_SWITCH_CHECK")?;
     let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
-    let locale_archive = required_env("LOCALE_ARCHIVE")?;
     let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
     let log_level = if std::env::var("STC_DEBUG").is_ok() {
         LevelFilter::Debug
@@ -1580,11 +1579,6 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     // The action that is to be performed (like switch, boot, test, dry-activate) Also exposed via
     // environment variable from now on
     std::env::set_var("NIXOS_ACTION", Into::<&'static str>::into(action));
-
-    // Expose the locale archive as an environment variable for systemctl and the activation script
-    if !locale_archive.is_empty() {
-        std::env::set_var("LOCALE_ARCHIVE", locale_archive);
-    }
 
     let os_release = parse_os_release().context("Failed to parse os-release")?;
 
