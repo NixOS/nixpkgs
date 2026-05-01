@@ -1087,8 +1087,8 @@ runTests {
   ];
 
   testToSentenceCase = {
-    expr = strings.toSentenceCase "hello world";
-    expected = "Hello world";
+    expr = strings.toSentenceCase "hello World";
+    expected = "Hello World";
   };
 
   testToSentenceCasePath = testingThrow (strings.toSentenceCase ./.);
