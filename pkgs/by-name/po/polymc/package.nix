@@ -78,6 +78,9 @@ symlinkJoin {
 
   postBuild = "wrapQtAppsHook";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   qtWrapperArgs =
     let
       runtimeLibs = [

@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
-    rev = "5603242bf3b70d83a8dbd171b52be5f4fcedfc1c";
-    hash = "sha256-iPOTfk1seKcKdus3+ksnZUUr3NFxwsz9d93vtxSmg5c=";
+    rev = "ac74509f1a78359ed0128b2a171abf91c43fa8ae";
+    hash = "sha256-nWtiVbf4VTDQ765s+VP8lbYeaKR3jp6yZYd1vBLm3jM=";
   };
 
   nativeBuildInputs = [
@@ -64,14 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtbase
     kdePackages.quazip
     kdePackages.qtcharts
+    kdePackages.qtwayland
+    kdePackages.qt5compat
+    kdePackages.qt6ct
     zlib
 
     tomlplusplus
     ghc_filesystem
-  ]
-  ++ lib.optional (lib.versionAtLeast kdePackages.qtbase.version "6") [
-    kdePackages.qtwayland
-    kdePackages.qt5compat
   ]
   ++ lib.optional gamemodeSupport gamemode;
 
@@ -117,7 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!builtins.isNull msaClientID) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
   ++ lib.optionals msaRequired [ "-DLauncher_STRICT_DRM=on" ];
 
-  meta = with lib; {
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://polymc.org/";
     downloadPage = "https://polymc.org/download/";
     changelog = "https://github.com/PolyMC/PolyMC/releases";
@@ -127,9 +129,20 @@ stdenv.mkDerivation (finalAttrs: {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = platforms.unix;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "i686-linux"
+      "riscv64-linux"
+      "powerpc64le-linux"
+    ]
+    ++ [
+      "x86_64-freebsd"
+    ]
+    ++ lib.platforms.darwin
+    ++ lib.platforms.windows;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       hustlerone
     ];
   };
