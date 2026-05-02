@@ -79,7 +79,9 @@ symlinkJoin {
   postBuild = "wrapQtAppsHook";
 
   strictDeps = true;
-  __structuredAttrs = true;
+
+  # TODO: Maybe re-enable once #510526 is merged.
+  __structuredAttrs = false;
 
   qtWrapperArgs =
     let
