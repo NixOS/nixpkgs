@@ -5668,6 +5668,7 @@ self: super: with self; {
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
+  flask-debugtoolbar = callPackage ../development/python-modules/flask-debugtoolbar { };
   flask-dance = callPackage ../development/python-modules/flask-dance { };
 
   flask-dramatiq = callPackage ../development/python-modules/flask-dramatiq { };
