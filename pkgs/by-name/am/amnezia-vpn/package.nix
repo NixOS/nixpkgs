@@ -94,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "int nVersion = 1;" "int nVersion = 0;"
     substituteInPlace client/ui/qautostart.cpp \
       --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "AmneziaVPN"
+    substituteInPlace client/ui/systemtray_notificationhandler.cpp \
+      --replace-fail 'm_systemTrayIcon.show();' ''' \
+      --replace-fail 'setTrayState(Vpn::ConnectionState::Disconnected);' 'setTrayState(Vpn::ConnectionState::Disconnected); m_systemTrayIcon.show();'
+    substituteInPlace client/main.cpp \
+      --replace-fail '#include "version.h"' $'#include "version.h"\n#include <QIcon>' \
+      --replace-fail 'app.setApplicationDisplayName(APPLICATION_NAME);' $'app.setApplicationDisplayName(APPLICATION_NAME);\n    app.setWindowIcon(QIcon::fromTheme("AmneziaVPN"));'
     substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
       --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/icons/hicolor/512x512/apps/AmneziaVPN.png"
     substituteInPlace deploy/data/linux/AmneziaVPN.service \
