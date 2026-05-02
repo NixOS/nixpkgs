@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
 
   pythonRelaxDeps = [
