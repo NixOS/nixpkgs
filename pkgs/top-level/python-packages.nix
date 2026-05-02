@@ -14302,6 +14302,8 @@ self: super: with self; {
 
   pymcuprog = callPackage ../development/python-modules/pymcuprog { };
 
+  pymcurl = callPackage ../development/python-modules/pymcurl { };
+
   pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
 
   pymdstat = callPackage ../development/python-modules/pymdstat { };
@@ -16533,6 +16535,8 @@ self: super: with self; {
   queuelib = callPackage ../development/python-modules/queuelib { };
 
   quickjs = callPackage ../development/python-modules/quickjs { };
+
+  quickjs-ng = callPackage ../development/python-modules/quickjs-ng { };
 
   quil = callPackage ../development/python-modules/quil { };
 
