@@ -19628,6 +19628,13 @@
     githubId = 5629639;
     name = "Nindouja";
   };
+  ninelore = {
+    email = "9l+nix@9lo.re";
+    matrix = "@9lore:tchncs.de";
+    github = "ninelore";
+    githubId = 21343557;
+    name = "Ingo Reitz";
+  };
   ninjafb = {
     email = "oscar@oronberg.com";
     github = "NinjaFB";
