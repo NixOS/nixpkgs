@@ -20704,6 +20704,8 @@ self: super: with self; {
 
   uqbar = callPackage ../development/python-modules/uqbar { };
 
+  ur-rtde = callPackage ../development/python-modules/ur-rtde { };
+
   uranium = callPackage ../development/python-modules/uranium { };
 
   uri-template = callPackage ../development/python-modules/uri-template { };
