@@ -142,7 +142,6 @@ stdenv.mkDerivation rec {
       nix-prefetch-url file://$PWD/${name}
     '';
   };
-
   dontBuild = true;
   dontConfigure = true;
   sourceRoot = ".";
@@ -333,7 +332,7 @@ stdenv.mkDerivation rec {
   # Null out hardcoded webkit bundle path so it falls back to LD_LIBRARY_PATH
   postFixup = ''
     ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
-      $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37.56.4
+      $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.*
 
     autoPatchelf -- "$out"
 
