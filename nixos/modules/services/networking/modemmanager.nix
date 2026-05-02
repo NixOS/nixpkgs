@@ -72,6 +72,8 @@ in
         pkgs.libmbim
       ];
 
+      serviceConfig.KillMode = "mixed";
+
       # systemd-networkd doesn't start ModemManager when required
       wantedBy = lib.mkIf useNetworkd [ "network-online.target" ];
     };
