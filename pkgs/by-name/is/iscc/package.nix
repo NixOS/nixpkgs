@@ -9,13 +9,13 @@
 
 let
   version = "6.4.1";
-  majorVersion = builtins.substring 0 1 version;
+  tagVersion = lib.replaceStrings [ "." ] [ "_" ] version;
 in
 stdenvNoCC.mkDerivation rec {
   pname = "iscc";
   inherit version;
   src = fetchurl {
-    url = "https://files.jrsoftware.org/is/${majorVersion}/innosetup-${version}.exe";
+    url = "https://github.com/jrsoftware/issrc/releases/download/is-${tagVersion}/innosetup-${version}.exe";
     hash = "sha256-9Bdg4fGuFdIIm7arFi4hcguSrnUG7XBmezkgAGPWjjQ=";
   };
   nativeBuildInputs = [
@@ -24,12 +24,15 @@ stdenvNoCC.mkDerivation rec {
   ];
   unpackPhase = ''
     runHook preUnpack
+
     innoextract $src
+
     runHook postUnpack
   '';
   dontBuild = true;
   installPhase = ''
     runHook preInstall
+
     mkdir -p "$out/bin"
     cp -r ./app/* "$out/bin"
 
