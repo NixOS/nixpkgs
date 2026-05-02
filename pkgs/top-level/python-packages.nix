@@ -20466,6 +20466,7 @@ self: super: with self; {
 
   types-xxhash = callPackage ../development/python-modules/types-xxhash { };
 
+  yacron = callPackage ../development/python-modules/yacron { };
   typesense = callPackage ../development/python-modules/typesense {
     inherit (pkgs) typesense curl;
   };
@@ -21511,6 +21512,7 @@ self: super: with self; {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  yacron = callPackage ../development/python-modules/yacron { };
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
