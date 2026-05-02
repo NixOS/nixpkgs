@@ -10,22 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mruby";
-  version = "3.3.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mruby";
     repo = "mruby";
     rev = finalAttrs.version;
-    sha256 = "sha256-rCoEC1ioX6bOocPoPi+Lsn4PM8gY0DjKja1/MJvJ1n8=";
+    sha256 = "sha256-7CDTRQncpjY0HO0S1lM57aUvV6ZseEp+/nxXp4ZuuQs=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2025-7207.patch";
-      url = "https://github.com/mruby/mruby/commit/1fdd96104180cc0fb5d3cb086b05ab6458911bb9.patch";
-      hash = "sha256-wtSlLydofkp2brk/pRiJqt4NhkGRdzsx7JpTmWu2B7I=";
-    })
-  ];
 
   nativeBuildInputs = [ rake ];
 
@@ -53,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Embeddable implementation of the Ruby language";
     homepage = "https://mruby.org";
-    maintainers = with lib.maintainers; [ nicknovitski ];
+    maintainers = with lib.maintainers; [
+      nicknovitski
+      nomadium
+    ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "mruby";
