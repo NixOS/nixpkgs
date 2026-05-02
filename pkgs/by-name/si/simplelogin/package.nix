@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ];
 
+  strictDeps = true;
+
   __structuredAttrs = true;
 
   pythonDeps = with python3.pkgs; [
