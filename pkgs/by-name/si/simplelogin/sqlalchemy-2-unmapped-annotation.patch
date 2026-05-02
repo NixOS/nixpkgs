@@ -1,0 +1,13 @@
+--- a/app/models.py
++++ b/app/models.py
+@@ -2062,6 +2062,10 @@
+ class Contact(Base, ModelMixin):
+     """
+     Store configuration of sender (website-email) and alias.
+     """
++    # This transient annotation is accepted by SQLAlchemy 1.3 but needs an
++    # explicit opt-in with SQLAlchemy 2.
++    __allow_unmapped__ = True
++
+ 
+     MAX_NAME_LENGTH = 512

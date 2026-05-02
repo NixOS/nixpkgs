@@ -1,0 +1,12 @@
+--- a/app/config.py
++++ b/app/config.py
+@@ -355,6 +355,8 @@
+ if LOCAL_FILE_UPLOAD:
+     print("Upload files to local dir")
+-    UPLOAD_DIR = os.path.join(ROOT_DIR, "static/upload")
++    UPLOAD_DIR = os.environ.get(
++        "LOCAL_FILE_UPLOAD_DIR", os.path.join(ROOT_DIR, "static/upload")
++    )
+     if not os.path.exists(UPLOAD_DIR):
+         print("Create upload dir")
+         os.makedirs(UPLOAD_DIR)

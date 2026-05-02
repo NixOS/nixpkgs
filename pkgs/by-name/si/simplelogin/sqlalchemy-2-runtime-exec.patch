@@ -1,0 +1,402 @@
+--- a/monitoring.py
++++ b/monitoring.py
+@@ -6,6 +6,7 @@
+ 
+ import arrow
+ import newrelic.agent
++from sqlalchemy import text
+ 
+ from app.models import JobState
+ from app.config import JOB_MAX_ATTEMPTS, JOB_TAKEN_RETRY_WAIT_MINS
+@@ -90,7 +91,7 @@
+ @newrelic.agent.background_task()
+ def log_nb_db_connection():
+     # get the number of connections to the DB
+-    r = Session.execute("select count(*) from pg_stat_activity;")
++    r = Session.execute(text("select count(*) from pg_stat_activity;"))
+     nb_connection = list(r)[0][0]
+ 
+     LOG.d("number of db connections %s", nb_connection)
+@@ -101,7 +102,10 @@
+ def log_nb_db_connection_by_app_name():
+     # get the number of connections to the DB
+     rows = Session.execute(
+-        "SELECT application_name, count(datid) FROM pg_stat_activity group by application_name"
++        text(
++            "SELECT application_name, count(datid) FROM pg_stat_activity "
++            "group by application_name"
++        )
+     )
+     for row in rows:
+         if row[0].find("sl-") == 0:
+@@ -113,7 +117,7 @@
+ 
+ @newrelic.agent.background_task()
+ def log_pending_to_process_events():
+-    r = Session.execute("select count(*) from sync_event WHERE taken_time IS NULL;")
++    r = Session.execute(text("select count(*) from sync_event WHERE taken_time IS NULL;"))
+     events_pending = list(r)[0][0]
+ 
+     LOG.d("number of events pending to process %s", events_pending)
+@@ -126,12 +130,14 @@
+ def log_events_pending_dead_letter():
+     since = arrow.now().shift(minutes=-10).datetime
+     r = Session.execute(
+-        """
+-        SELECT COUNT(*)
+-        FROM sync_event
+-        WHERE (taken_time IS NOT NULL AND taken_time < :since)
+-           OR (taken_time IS NULL AND created_at < :since)
+-        """,
++        text(
++            """
++            SELECT COUNT(*)
++            FROM sync_event
++            WHERE (taken_time IS NOT NULL AND taken_time < :since)
++               OR (taken_time IS NULL AND created_at < :since)
++            """
++        ),
+         {"since": since},
+     )
+     events_pending = list(r)[0][0]
+@@ -145,11 +151,13 @@
+ @newrelic.agent.background_task()
+ def log_failed_events():
+     r = Session.execute(
+-        """
+-        SELECT COUNT(*)
+-        FROM sync_event
+-        WHERE retry_count >= 10;
+-        """,
++        text(
++            """
++            SELECT COUNT(*)
++            FROM sync_event
++            WHERE retry_count >= 10;
++            """
++        ),
+     )
+     failed_events = list(r)[0][0]
+ 
+@@ -169,14 +177,16 @@
+ @newrelic.agent.background_task()
+ def log_failed_jobs():
+     r = Session.execute(
+-        """
+-        SELECT COUNT(*)
+-        FROM job
+-        WHERE (
+-            state = :error_state
+-            OR (state = :taken_state AND attempts >= :max_attempts)
+-        )
+-        """,
++        text(
++            """
++            SELECT COUNT(*)
++            FROM job
++            WHERE (
++                state = :error_state
++                OR (state = :taken_state AND attempts >= :max_attempts)
++            )
++            """
++        ),
+         {
+             "error_state": JobState.error.value,
+             "taken_state": JobState.taken.value,
+--- a/cron.py
++++ b/cron.py
+@@ -108,7 +108,7 @@
+ 
+     total_deleted = 0
+     batch_size = 500
+-    Session.execute("set session statement_timeout=30000").rowcount
++    Session.execute(text("set session statement_timeout=30000")).rowcount
+     queries_done = 0
+     cutoff_time = arrow.now().shift(days=-14)
+     rows_to_delete = EmailLog.filter(EmailLog.created_at < cutoff_time).count()
+@@ -1104,7 +1104,7 @@
+ 
+     LOG.d("Getting the list of users to skip")
+     query = "select u.id, count(a.id) from users u, alias a where a.user_id=u.id group by u.id having count(a.id) > :max_alias"
+-    rows = Session.execute(query, {"max_alias": config.HIBP_MAX_ALIAS_CHECK})
++    rows = Session.execute(text(query), {"max_alias": config.HIBP_MAX_ALIAS_CHECK})
+     user_ids = [row[0] for row in rows]
+     LOG.d("Got %d users to skip" % len(user_ids))
+ 
+--- a/job_runner.py
++++ b/job_runner.py
+@@ -8,6 +8,7 @@
+ import arrow
+ import newrelic.agent
+ import time
++from sqlalchemy import text
+ from sqlalchemy.exc import IntegrityError
+ from sqlalchemy.orm import Query
+ from sqlalchemy.orm.exc import ObjectDeletedError
+@@ -360,7 +361,7 @@
+         "taken_before_time": taken_before_time.datetime,
+     }
+     try:
+-        res = Session.execute(sql, args)
++        res = Session.execute(text(sql), args)
+         Session.commit()
+     except ObjectDeletedError:
+         return False
+--- a/commands/replace_noreply_in_contacts.py
++++ b/commands/replace_noreply_in_contacts.py
+@@ -2,6 +2,7 @@
+ import argparse
+ import time
+ 
++from sqlalchemy import text
+ 
+ from app.email_utils import generate_reply_email, get_noreply_email
+ from app.email_validation import is_valid_email
+@@ -25,7 +26,8 @@
+ print(f"Replacing contacts with reply_email={_noreply_email}")
+ while True:
+     rows = Session.execute(
+-        el_query, {"last_id": last_id, "reply_email": _noreply_email, "step": step}
++        text(el_query),
++        {"last_id": last_id, "reply_email": _noreply_email, "step": step},
+     )
+     loop_updated = 0
+     for row in rows:
+@@ -42,7 +44,8 @@
+             f"Replacing contact {contact_id} with {website_email} reply_email for {reply_email}"
+         )
+         Session.execute(
+-            update_query, {"contact_id": row[0], "reply_email": reply_email}
++            text(update_query),
++            {"contact_id": row[0], "reply_email": reply_email},
+         )
+         Session.commit()
+         updated += 1
+--- a/commands/alias_partner_set_flag_and_clear_note.py
++++ b/commands/alias_partner_set_flag_and_clear_note.py
+@@ -2,7 +2,7 @@
+ import argparse
+ import time
+ 
+-from sqlalchemy import func
++from sqlalchemy import func, text
+ from app.models import Alias
+ from app.db import Session
+ 
+@@ -28,7 +28,7 @@
+ start_time = time.time()
+ for batch_start in range(alias_id_start, max_alias_id, step):
+     rows_done = Session.execute(
+-        alias_query,
++        text(alias_query),
+         {
+             "start": batch_start,
+             "end": batch_start + step,
+--- a/commands/recalculate_user_flag_alias_create_from_partner.py
++++ b/commands/recalculate_user_flag_alias_create_from_partner.py
+@@ -2,7 +2,7 @@
+ import argparse
+ import time
+ 
+-from sqlalchemy import func
++from sqlalchemy import func, text
+ from app.models import Alias, User
+ from app.db import Session
+ 
+@@ -28,7 +28,7 @@
+ start_time = time.time()
+ for batch_start in range(user_id_start, max_user_id, step):
+     rows = Session.execute(
+-        el_query,
++        text(el_query),
+         {
+             "start": batch_start,
+             "end": batch_start + step,
+@@ -38,7 +38,7 @@
+     for row in rows:
+         if row[1] > 0:
+             Session.execute(
+-                user_update_query,
++                text(user_update_query),
+                 {"user_id": row[0], "user_flag": User.FLAG_CREATED_ALIAS_FROM_PARTNER},
+             )
+             Session.commit()
+--- a/commands/mark_aliases_as_partner_created.py
++++ b/commands/mark_aliases_as_partner_created.py
+@@ -2,7 +2,7 @@
+ import argparse
+ import time
+ 
+-from sqlalchemy import func
++from sqlalchemy import func, text
+ 
+ from app.models import Alias, SLDomain
+ from app.db import Session
+@@ -34,7 +34,7 @@
+ start_time = time.time()
+ for batch_start in range(alias_id_start, max_alias_id, step):
+     updated += Session.execute(
+-        sql,
++        text(sql),
+         {
+             "start": batch_start,
+             "end": batch_start + step,
+--- a/commands/backfill_email_log.py
++++ b/commands/backfill_email_log.py
+@@ -2,7 +2,7 @@
+ import argparse
+ import time
+ 
+-from sqlalchemy import func
++from sqlalchemy import func, text
+ from app.models import Alias
+ from app.db import Session
+ 
+@@ -27,9 +27,11 @@
+ updated = 0
+ start_time = time.time()
+ for batch_start in range(alias_id_start, max_alias_id, step):
+-    rows = Session.execute(el_query, {"start": batch_start, "end": batch_start + step})
++    rows = Session.execute(
++        text(el_query), {"start": batch_start, "end": batch_start + step}
++    )
+     for row in rows:
+-        Session.execute(alias_query, {"alias_id": row[0], "el_id": row[1]})
++        Session.execute(text(alias_query), {"alias_id": row[0], "el_id": row[1]})
+         Session.commit()
+         updated += 1
+     elapsed = time.time() - start_time
+--- a/commands/find_abuser_by_domain.py
++++ b/commands/find_abuser_by_domain.py
+@@ -2,7 +2,7 @@
+ import sys
+ import time
+ 
+-from sqlalchemy import func
++from sqlalchemy import func, text
+ 
+ from app.abuser_audit_log_utils import emit_abuser_audit_log, AbuserAuditLogAction
+ from app.db import Session
+@@ -61,7 +61,7 @@
+     LOG.i("Users will NOT be marked as abusers")
+ for batch_start in range(user_id_start, max_user_id, step):
+     rows = Session.execute(
+-        sql,
++        text(sql),
+         {
+             "start": batch_start,
+             "end": batch_start + step,
+--- a/app/models.py
++++ b/app/models.py
+@@ -1796,7 +1796,7 @@
+         last_email_log_id UPDATE.
+         """
+         Session.execute(
+-            "SELECT id FROM alias WHERE id = :alias_id FOR UPDATE",
++            text("SELECT id FROM alias WHERE id = :alias_id FOR UPDATE"),
+             {"alias_id": alias_id},
+         )
+ 
+@@ -2373,7 +2373,7 @@
+         if "alias_id" in kwargs:
+             sql = "UPDATE alias SET last_email_log_id = :el_id WHERE id = :alias_id"
+             Session.execute(
+-                sql, {"el_id": email_log.id, "alias_id": kwargs["alias_id"]}
++                text(sql), {"el_id": email_log.id, "alias_id": kwargs["alias_id"]}
+             )
+         if commit:
+             Session.commit()
+@@ -4156,7 +4156,7 @@
+                 args["taken_older_than"] = allow_taken_older_than.datetime
+             sql_taken_condition = "({})".format(" OR ".join(taken_condition))
+             sql = f"UPDATE sync_event SET taken_time = :taken_time WHERE id = :sync_event_id AND {sql_taken_condition}"
+-            res = Session.execute(sql, args)
++            res = Session.execute(text(sql), args)
+             Session.commit()
+         except ObjectDeletedError:
+             return False
+--- a/app/events/event_dispatcher.py
++++ b/app/events/event_dispatcher.py
+@@ -1,6 +1,7 @@
+ from abc import ABC, abstractmethod
+ 
+ import newrelic.agent
++from sqlalchemy import text
+ 
+ from app import config
+ from app.db import Session
+@@ -23,7 +24,7 @@
+ class PostgresDispatcher(Dispatcher):
+     def send(self, event: bytes):
+         instance = SyncEvent.create(content=event, flush=True)
+-        Session.execute(f"NOTIFY {NOTIFICATION_CHANNEL}, '{instance.id}';")
++        Session.execute(text(f"NOTIFY {NOTIFICATION_CHANNEL}, '{instance.id}';"))
+ 
+     @staticmethod
+     def get():
+--- a/app/dashboard/views/alias_contact_manager.py
++++ b/app/dashboard/views/alias_contact_manager.py
+@@ -104,18 +104,10 @@
+     sub = (
+         Session.query(
+             Contact.id,
+-            func.sum(case([(EmailLog.is_reply, 1)], else_=0)).label("nb_reply"),
++            func.sum(case((EmailLog.is_reply, 1), else_=0)).label("nb_reply"),
+             func.sum(
+                 case(
+-                    [
+-                        (
+-                            and_(
+-                                EmailLog.is_reply.is_(False),
+-                                EmailLog.blocked.is_(False),
+-                            ),
+-                            1,
+-                        )
+-                    ],
++                    (and_(EmailLog.is_reply.is_(False), EmailLog.blocked.is_(False)), 1),
+                     else_=0,
+                 )
+             ).label("nb_forward"),
+@@ -166,10 +158,8 @@
+         q = q.filter(Contact.id == contact_id)
+ 
+     latest_activity = case(
+-        [
+-            (EmailLog.created_at > Contact.created_at, EmailLog.created_at),
+-            (EmailLog.created_at < Contact.created_at, Contact.created_at),
+-        ],
++        (EmailLog.created_at > Contact.created_at, EmailLog.created_at),
++        (EmailLog.created_at < Contact.created_at, Contact.created_at),
+         else_=Contact.created_at,
+     )
+     q = (
+--- a/app/api/serializer.py
++++ b/app/api/serializer.py
+@@ -334,24 +334,16 @@
+     alias_activity_subquery = (
+         Session.query(
+             Alias.id,
+-            func.sum(case([(EmailLog.is_reply, 1)], else_=0)).label("nb_reply"),
++            func.sum(case((EmailLog.is_reply, 1), else_=0)).label("nb_reply"),
+             func.sum(
+                 case(
+-                    [(and_(EmailLog.is_reply.is_(False), EmailLog.blocked), 1)],
++                    (and_(EmailLog.is_reply.is_(False), EmailLog.blocked), 1),
+                     else_=0,
+                 )
+             ).label("nb_blocked"),
+             func.sum(
+                 case(
+-                    [
+-                        (
+-                            and_(
+-                                EmailLog.is_reply.is_(False),
+-                                EmailLog.blocked.is_(False),
+-                            ),
+-                            1,
+-                        )
+-                    ],
++                    (and_(EmailLog.is_reply.is_(False), EmailLog.blocked.is_(False)), 1),
+                     else_=0,
+                 )
+             ).label("nb_forward"),
