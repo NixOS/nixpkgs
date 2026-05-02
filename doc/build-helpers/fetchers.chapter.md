@@ -876,6 +876,32 @@ However, `fetchFromGitHub` will automatically switch to using `fetchgit` in any 
 
 When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
 
+## `fetchFromHuggingFace` {#fetchfromhuggingface}
+
+`fetchFromHuggingFace` fetches repositories from Hugging Face Hub. It expects
+`repoId`, exactly one of `rev` or `tag`, and `hash`.
+
+`repoId` must be in the form `repo` or `owner/repo`, so repositories such as
+`gpt2` work as well.
+
+The optional `repoType` argument selects which Hugging Face namespace to use:
+
+- `"model"` (default) fetches from `https://huggingface.co/<repo-id>`
+- `"dataset"` fetches from `https://huggingface.co/datasets/<repo-id>`
+- `"space"` fetches from `https://huggingface.co/spaces/<repo-id>`
+
+To use a different Hugging Face Hub instance, use `domain`
+(defaults to `"huggingface.co"`).
+
+Unlike `fetchFromGitHub` and `fetchFromGitLab`, `fetchFromHuggingFace` always
+uses `fetchgit`, because Hugging Face repositories are Git repositories and
+model weights are commonly stored in Git LFS. As a result, `fetchLFS` defaults
+to `true`.
+
+Since it is a thin wrapper around `fetchgit`, options such as
+`fetchSubmodules`, `deepClone`, `leaveDotGit`, `sparseCheckout`, and `rootDir`
+are supported as well.
+
 ## `fetchFromGitLab` {#fetchfromgitlab}
 
 This is used with GitLab repositories. It behaves similarly to `fetchFromGitHub`, and expects `owner`, `repo`, `rev`, and `hash`.
