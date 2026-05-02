@@ -1,13 +1,17 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  jdk,
+  jre,
   makeWrapper,
-  buildNativeImage ? true,
+  buildNativeImage ? false,
 }:
 
-stdenv.mkDerivation rec {
+let
+  jdk = jre;
+in
+
+stdenvNoCC.mkDerivation rec {
   pname = "dapl" + lib.optionalString buildNativeImage "-native";
   version = "0.2.0+date=2021-10-16";
 
@@ -75,7 +79,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     inherit (jdk.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dapl-native.x86_64-darwin
+    broken = stdenvNoCC.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dapl-native.x86_64-darwin
   };
 }
 # TODO: Processing app
