@@ -98,6 +98,7 @@ bash.runCommand "${pname}-${version}"
     cd build
     # libstdc++.so is built against musl and fails to link
     export CXX=false
+    export CFLAGS="-O1"
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

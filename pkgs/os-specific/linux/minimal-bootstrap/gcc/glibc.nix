@@ -126,6 +126,10 @@ bash.runCommand "${pname}-${version}"
     # Configure
     export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
     export CXX="g++ -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CFLAGS="-O1 -pipe"
+    export CXXFLAGS="-O1 -pipe"
+    export CFLAGS_FOR_TARGET="-O0"
+    export CXXFLAGS_FOR_TARGET="-O0"
 
     bash ./configure \
       --prefix=$out \
