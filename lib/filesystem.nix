@@ -371,7 +371,6 @@ in
     let
       inherit (lib)
         concatMapAttrs
-        id
         makeScope
         recurseIntoAttrs
         removeSuffix
