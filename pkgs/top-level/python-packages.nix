@@ -550,7 +550,6 @@ self: super: with self; {
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
-  aiospamc = callPackage ../development/python-modules/aiospamc { };
   aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
 
   aiosolaredge = callPackage ../development/python-modules/aiosolaredge { };
@@ -560,6 +559,8 @@ self: super: with self; {
   aiosonic = callPackage ../development/python-modules/aiosonic { };
 
   aiosonos = callPackage ../development/python-modules/aiosonos { };
+
+  aiospamc = callPackage ../development/python-modules/aiospamc { };
 
   aiosql = callPackage ../development/python-modules/aiosql { };
 
@@ -3340,6 +3341,8 @@ self: super: with self; {
 
   coinbase-advanced-py = callPackage ../development/python-modules/coinbase-advanced-py { };
 
+  coinbase-commerce = callPackage ../development/python-modules/coinbase-commerce { };
+
   coincidence = callPackage ../development/python-modules/coincidence { };
 
   coincurve = callPackage ../development/python-modules/coincurve { inherit (pkgs) secp256k1; };
@@ -3702,7 +3705,6 @@ self: super: with self; {
 
   crontab = callPackage ../development/python-modules/crontab { };
 
-  parse-crontab = callPackage ../development/python-modules/parse-crontab { };
   cross-web = callPackage ../development/python-modules/cross-web { };
 
   crossandra = callPackage ../development/python-modules/crossandra { };
@@ -6060,6 +6062,7 @@ self: super: with self; {
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
   flanker = callPackage ../development/python-modules/flanker { };
+
   flasgger = callPackage ../development/python-modules/flasgger { };
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
@@ -6104,9 +6107,13 @@ self: super: with self; {
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
+  flask-dance = callPackage ../development/python-modules/flask-dance { };
+
   flask-debugtoolbar = callPackage ../development/python-modules/flask-debugtoolbar { };
 
-  flask-debugtoolbar-sqlalchemy = callPackage ../development/python-modules/flask-debugtoolbar-sqlalchemy { };  flask-dance = callPackage ../development/python-modules/flask-dance { };
+  flask-debugtoolbar-sqlalchemy =
+    callPackage ../development/python-modules/flask-debugtoolbar-sqlalchemy
+      { };
 
   flask-dramatiq = callPackage ../development/python-modules/flask-dramatiq { };
 
@@ -6147,6 +6154,7 @@ self: super: with self; {
   flask-principal = callPackage ../development/python-modules/flask-principal { };
 
   flask-profiler = callPackage ../development/python-modules/flask-profiler { };
+
   flask-pymongo = callPackage ../development/python-modules/flask-pymongo { };
 
   flask-restful = callPackage ../development/python-modules/flask-restful { };
@@ -11562,9 +11570,7 @@ self: super: with self; {
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
-  newrelic = callPackage ../development/python-modules/newrelic { };
-
-  newrelic-telemetry-sdk = callPackage ../development/python-modules/newrelic-telemetry-sdk { };  nested-lookup = callPackage ../development/python-modules/nested-lookup { };
+  nested-lookup = callPackage ../development/python-modules/nested-lookup { };
 
   nested-multipart-parser = callPackage ../development/python-modules/nested-multipart-parser { };
 
@@ -11663,6 +11669,10 @@ self: super: with self; {
   nevow = callPackage ../development/python-modules/nevow { };
 
   newick = callPackage ../development/python-modules/newick { };
+
+  newrelic = callPackage ../development/python-modules/newrelic { };
+
+  newrelic-telemetry-sdk = callPackage ../development/python-modules/newrelic-telemetry-sdk { };
 
   newspaper3k = callPackage ../development/python-modules/newspaper3k { };
 
@@ -12820,6 +12830,8 @@ self: super: with self; {
   parquet = callPackage ../development/python-modules/parquet { };
 
   parse = callPackage ../development/python-modules/parse { };
+
+  parse-crontab = callPackage ../development/python-modules/parse-crontab { };
 
   parse-type = callPackage ../development/python-modules/parse-type { };
 
@@ -15598,6 +15610,7 @@ self: super: with self; {
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
 
   pyre2 = callPackage ../development/python-modules/pyre2 { };
+
   pyreadstat = callPackage ../development/python-modules/pyreadstat { };
 
   pyrealsense2 = toPythonModule (
@@ -16417,7 +16430,6 @@ self: super: with self; {
 
   python-crontab = callPackage ../development/python-modules/python-crontab { };
 
-  parse-crontab = callPackage ../development/python-modules/parse-crontab { };
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
@@ -21368,7 +21380,6 @@ self: super: with self; {
 
   types-xxhash = callPackage ../development/python-modules/types-xxhash { };
 
-  yacron = callPackage ../development/python-modules/yacron { };
   typesense = callPackage ../development/python-modules/typesense {
     inherit (pkgs) typesense curl;
   };
@@ -21998,11 +22009,12 @@ self: super: with self; {
 
   watchgod = callPackage ../development/python-modules/watchgod { };
 
+  watchtower = callPackage ../development/python-modules/watchtower { };
+
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
   watergate-local-api = callPackage ../development/python-modules/watergate-local-api { };
 
-  watchtower = callPackage ../development/python-modules/watchtower { };
   watermark = callPackage ../development/python-modules/watermark { };
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
@@ -22420,10 +22432,11 @@ self: super: with self; {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
-  yacron = callPackage ../development/python-modules/yacron { };
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
+
+  yacron = callPackage ../development/python-modules/yacron { };
 
   yacs = callPackage ../development/python-modules/yacs { };
 
