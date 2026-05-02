@@ -37,6 +37,8 @@ buildPythonPackage rec {
     hash = "sha256-xtxWDlYESIwkow/YdjaUAkJ/x2jdUyhqfSRycJVLncY=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [
     hatchling
     hatch-vcs
