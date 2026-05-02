@@ -86,17 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     "tex"
   ];
 
-  passthru = {
-    tlType = "run";
-    # packages needed by euktoeps, euktopdf and eukleides.sty
-    tlDeps = with texlive; [
-      collection-pstricks
-      epstopdf
-      iftex
-      moreverb
-    ];
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
+  # packages needed by euktoeps, euktopdf and eukleides.sty
+  passthru.tlDeps = with texlive; [
+    collection-pstricks
+    epstopdf
+    iftex
+    moreverb
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
