@@ -17336,6 +17336,8 @@ self: super: with self; {
 
   scales = callPackage ../development/python-modules/scales { };
 
+  scalib = callPackage ../development/python-modules/scalib { };
+
   scancode-toolkit = callPackage ../development/python-modules/scancode-toolkit { };
 
   scanpy = callPackage ../development/python-modules/scanpy { };
