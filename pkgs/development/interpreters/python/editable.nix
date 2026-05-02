@@ -81,7 +81,7 @@ buildPythonPackage (
     pyproject = true;
 
     unpackPhase = ''
-      python -c "import json, tomli_w; print(tomli_w.dumps(json.load(open('$pyprojectContentsPath'))))" > pyproject.toml
+      printf "%s" "$pyprojectContents" | python -c "import json, sys, tomli_w; print(tomli_w.dumps(json.load(sys.stdin)))" > pyproject.toml
       echo 'import os.path, sys; sys.path.insert(0, os.path.expandvars("${root}"))' > _${pname}.pth
     '';
 
@@ -93,7 +93,7 @@ buildPythonPackage (
     # We inline the same functionality for better UX.
     nativeBuildInputs = (derivationArgs.nativeBuildInputs or [ ]) ++ [ tomli-w ];
     pyprojectContents = builtins.toJSON pyproject;
-    passAsFile = [ "pyprojectContents" ];
     preferLocalBuild = true;
+    __structuredAttrs = true;
   }
 )
