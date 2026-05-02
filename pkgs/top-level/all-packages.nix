@@ -8890,31 +8890,6 @@ with pkgs;
 
   mplus-outline-fonts = recurseIntoAttrs (callPackage ../data/fonts/mplus-outline-fonts { });
 
-  noto-fonts-cjk-serif-static = callPackage ../by-name/no/noto-fonts-cjk-serif/package.nix {
-    static = true;
-  };
-
-  noto-fonts-cjk-sans-static = callPackage ../by-name/no/noto-fonts-cjk-sans/package.nix {
-    static = true;
-  };
-
-  noto-fonts-lgc-plus = callPackage ../by-name/no/noto-fonts/package.nix {
-    suffix = "-lgc-plus";
-    variants = [
-      "Noto Sans"
-      "Noto Serif"
-      "Noto Sans Mono"
-      "Noto Music"
-      "Noto Sans Symbols"
-      "Noto Sans Symbols 2"
-      "Noto Sans Math"
-    ];
-    longDescription = ''
-      This package provides the Noto Fonts, but only for latin, greek
-      and cyrillic scripts, as well as some extra fonts.
-    '';
-  };
-
   openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf_colr_0" ]; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
