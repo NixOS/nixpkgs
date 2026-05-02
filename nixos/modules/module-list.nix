@@ -1714,6 +1714,7 @@
   ./services/web-apps/mediagoblin.nix
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/meme-bingo-web.nix
+  ./services/web-apps/metube.nix
   ./services/web-apps/microbin.nix
   ./services/web-apps/miniflux.nix
   ./services/web-apps/misskey.nix
