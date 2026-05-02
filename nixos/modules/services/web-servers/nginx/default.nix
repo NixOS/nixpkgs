@@ -137,7 +137,9 @@ let
           ${toString (
             flip mapAttrsToList upstream.servers (
               name: server: ''
-                server ${name} ${concatStringsSep " " (mapAttrsToList toUpstreamParameter server)};
+                server ${name} ${
+                  concatStringsSep " " (mapAttrsToList toUpstreamParameter (filterAttrs (_: v: v != null) server))
+                };
               ''
             )
           )}
@@ -1195,12 +1197,103 @@ in
                       ]
                     );
                     options = {
+                      weight = mkOption {
+                        type = types.nullOr types.ints.positive;
+                        default = null;
+                        description = ''
+                          Sets the weight of the server, by default, 1.
+                        '';
+                      };
+                      max_conns = mkOption {
+                        type = types.nullOr types.ints.unsigned;
+                        default = null;
+                        description = ''
+                          Limits the maximum number of simultaneous active connections to the proxied
+                          server. Default value is zero, meaning there is no limit. If the server
+                          group does not reside in the shared memory, the limitation works per each
+                          worker process.
+                        '';
+                      };
+                      max_fails = mkOption {
+                        type = types.nullOr types.ints.unsigned;
+                        default = null;
+                        description = ''
+                          Sets the number of unsuccessful attempts to communicate with the server
+                          that should happen in the duration set by the {option}`fail_timeout`
+                          parameter to consider the server unavailable for a duration also set by
+                          the {option}`fail_timeout` parameter. By default, the number of
+                          unsuccessful attempts is set to 1. The zero value disables the accounting
+                          of attempts.
+                        '';
+                      };
+                      fail_timeout = mkOption {
+                        type = types.nullOr types.str;
+                        default = null;
+                        example = "30s";
+                        description = ''
+                          Sets the time during which the specified number of unsuccessful attempts
+                          to communicate with the server should happen to consider the server
+                          unavailable; and the period of time the server will be considered
+                          unavailable. By default, the parameter is set to 10 seconds.
+                        '';
+                      };
                       backup = mkOption {
                         type = types.bool;
                         default = false;
                         description = ''
                           Marks the server as a backup server. It will be passed
                           requests when the primary servers are unavailable.
+
+                          The parameter cannot be used along with the hash, ip_hash,
+                          and random load balancing methods.
+                        '';
+                      };
+                      down = mkOption {
+                        type = types.bool;
+                        default = false;
+                        description = ''
+                          Marks the server as permanently unavailable.
+                        '';
+                      };
+                      resolve = mkOption {
+                        type = types.bool;
+                        default = false;
+                        description = ''
+                          Monitors changes of the IP addresses that correspond to a domain name of
+                          the server, and automatically modifies the upstream configuration without
+                          the need of restarting nginx. The server group must reside in the shared
+                          memory.
+
+                          In order for this parameter to work, the
+                          [resolver](https://nginx.org/en/docs/http/ngx_http_core_module.html#resolver)
+                          directive must be specified in the http block or in the corresponding
+                          upstream block.
+                        '';
+                      };
+                      service = mkOption {
+                        type = types.nullOr types.str;
+                        default = null;
+                        example = "http";
+                        description = ''
+                          Enables resolving of DNS SRV records and sets the service name. In order
+                          for this parameter to work, it is necessary to specify the
+                          {option}`resolve` parameter for the server and specify a hostname without
+                          a port number.
+                        '';
+                      };
+                      route = mkOption {
+                        type = types.nullOr types.str;
+                        default = null;
+                        description = ''
+                          Sets the server route name.
+                        '';
+                      };
+                      drain = mkOption {
+                        type = types.bool;
+                        default = false;
+                        description = ''
+                          Puts the server into the "draining" mode. In this mode, only requests
+                          bound to the server will be proxied to it.
                         '';
                       };
                     };
