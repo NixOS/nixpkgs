@@ -31,29 +31,30 @@ let
       ncurses.dev
     ];
   };
+  libxaw_combined = symlinkJoin {
+    name = "libxaw_combined";
+    paths = [
+      libxaw
+      libxaw.dev
+    ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eli";
-  version = "4.8.1";
+  version = "4.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${finalAttrs.version}/eli-${finalAttrs.version}.tar.bz2";
-    sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
+    hash = "sha256-evEdDSc0QxntMHwgC6e53PLC4O1ZZTvUN3y9i8DB+8I=";
   };
 
-  patches = [
-    # Newer GCC will reject function parameters with an implicit type of `int` and undefined
-    # references to undeclared functions.
-    ./function-declarations.patch
-  ];
-
   buildInputs = [
-    ncurses
+    curses_combined
     fontconfig
     libx11.dev
     libxt.dev
-    libxaw.dev
     libxext.dev
+    libxaw_combined
   ];
 
   nativeBuildInputs = [
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     configureFlagsArray=(
       --with-tcltk="${tcl} ${tk_combined}"
       --with-curses="${curses_combined}"
+      --with-Xaw="${libxaw_combined}"
     )
     export ODIN_LOCALIPC=1
   '';
@@ -102,7 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://eli-project.sourceforge.net/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ timokau ];
+    mainProgram = "eli";
+    maintainers = with lib.maintainers; [
+      timokau
+      lordkekz
+    ];
     platforms = lib.platforms.linux;
   };
 })
