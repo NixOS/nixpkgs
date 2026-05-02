@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     substituteInPlace AniLibria.pro \
-      --replace "\$\$PREFIX" '${placeholder "out"}'
+      --replace-fail "\$\$PREFIX" '${placeholder "out"}'
   '';
 
   qtWrapperArgs = [
