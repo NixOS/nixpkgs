@@ -173,6 +173,7 @@ in
     domain = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
+      example = "bitwarden.example.com";
       description = "The domain under which VaultWarden will be reachable.";
     };
 
