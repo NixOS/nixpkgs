@@ -1401,6 +1401,7 @@
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
   ./services/networking/ssh/sshd.nix
+  ./services/networking/sshpiper.nix
   ./services/networking/sslh.nix
   ./services/networking/strongswan-swanctl/module.nix
   ./services/networking/strongswan.nix

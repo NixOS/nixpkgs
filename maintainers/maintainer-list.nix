@@ -4512,6 +4512,11 @@
     githubId = 1945;
     name = "Casey Rodarmor";
   };
+  cashmeredev = {
+    github = "cashmeredev";
+    githubId = 126001665;
+    name = "cashmeredev";
+  };
   catap = {
     email = "kirill@korins.ky";
     github = "catap";
