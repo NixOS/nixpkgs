@@ -7910,6 +7910,12 @@
     githubId = 45268815;
     name = "Flavio Galán";
   };
+  ElSebas41 = {
+    email = "achavezaiquipa@gmail.com";
+    github = "ElSebas41";
+    githubId = 189925713;
+    name = "Angel Chavez";
+  };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
     matrix = "@elvishjerricco:matrix.org";
