@@ -2,15 +2,15 @@
   List of active NixOS maintainers.
    ```nix
    handle = {
-     # Required
-     name = "Your name";
-     github = "GithubUsername";
-     githubId = your-github-id;
+   # Required
+   name = "Your name";
+   github = "GithubUsername";
+   githubId = your-github-id;
 
-     # Optional
-     email = "address@example.org";
-     matrix = "@user:example.org";
-     keys = [ { fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333"; } ];
+   # Optional
+   email = "address@example.org";
+   matrix = "@user:example.org";
+   keys = [ { fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333"; } ];
    };
    ```
 
@@ -34,7 +34,7 @@
    If `github` begins with a numeral, `handle` should be prefixed with an underscore.
    ```nix
    _1example = {
-     github = "1example";
+   github = "1example";
    };
    ```
 
@@ -22291,6 +22291,12 @@
     github = "q3k";
     githubId = 315234;
     name = "Serge Bazanski";
+  };
+  qaaxaap = {
+    email = "1515784026@qq.com";
+    github = "qaaxaap";
+    githubId = 175310223;
+    name = "KangNing Lei";
   };
   qaidvoid = {
     email = "contact@qaidvoid.dev";
