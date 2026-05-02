@@ -64,6 +64,7 @@
   libossp_uuid,
   lxc,
   libpcap,
+  libtorch-bin,
   libxtst,
   libxdmcp,
   libpthread-stubs,
@@ -810,6 +811,10 @@ in
       }
     );
 
+  numo-narray = attrs: {
+    buildFlags = [ "--with-cflags=-Wincompatible-pointer-types" ];
+  };
+
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
     buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
@@ -1036,6 +1041,36 @@ in
     buildFlags = [ "--with-ssh" ];
   };
 
+  safetensors = attrs: {
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (buildRubyGem { inherit (attrs) gemName version source; })
+        name
+        src
+        unpackPhase
+        nativeBuildInputs
+        ;
+      hash = "sha256-hrv2gnB35xRWRWRZ7gVIcO0hiiJW/oty+MpeuG18gRI=";
+    };
+    nativeBuildInputs = [
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+      rustPlatform.bindgenHook
+    ];
+    dontBuild = false;
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
+
+    preInstall = ''
+      export CARGO_HOME="$PWD/../.cargo/"
+    '';
+
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
+    '';
+  };
+
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
@@ -1123,6 +1158,46 @@ in
       openssl
     ];
     buildInputs = [ freetds ];
+  };
+
+  tokenizers = attrs: {
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (buildRubyGem { inherit (attrs) gemName version source; })
+        name
+        src
+        unpackPhase
+        nativeBuildInputs
+        ;
+      hash = "sha256-Yxcerq4Wil1nrEzHoEmsTAj4VnUmrwRlA3WO2b72yOc=";
+    };
+    nativeBuildInputs = [
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+      rustPlatform.bindgenHook
+    ];
+    dontBuild = false;
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
+
+    preInstall = ''
+      export CARGO_HOME="$PWD/../.cargo/"
+    '';
+
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
+    '';
+  };
+
+  torch-rb = attrs: {
+    buildFlags = [ "--with-torch-dir=${libtorch-bin}" ];
+    nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+      (libtorch-bin.dev)
+    ];
+    env = {
+      CPLUS_INCLUDE_PATH = "${libtorch-bin.dev}/include:${libtorch-bin.dev}/include/torch/csrc/api/include/:${attrs.ruby.gemPath}/gems/rice-4.7.1/include";
+    };
   };
 
   treetop = attrs: {
