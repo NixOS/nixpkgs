@@ -12,8 +12,9 @@
   python3,
   rustc,
   versionCheckHook,
-  wasm-bindgen-cli_0_2_104,
+  wasm-bindgen-cli_0_2_117,
   wasm-pack,
+  enableExtended ? true,
 }:
 
 # TODO: package python bindings
@@ -24,7 +25,7 @@ let
   # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
   # [2] https://github.com/lindera/unidic-mecab
   # To find these urls:
-  #   rg -A5 download_urls $(nix-build . -A pagefind.cargoDeps --no-out-link)/lindera-*/build.rs
+  #   rg -A5 download_urls $(nix-build . -A pagefind.cargoDeps --no-out-link)/*/lindera-*/build.rs
   lindera-srcs = {
     unidic-mecab = fetchurl {
       passthru.vendorDir = "lindera-unidic-*";
@@ -56,49 +57,55 @@ let
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "pagefind";
-  version = "1.4.0";
+  inherit enableExtended;
+
+  pname = "pagefind" + lib.optionalString (finalAttrs.enableExtended) "-extended";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Pagefind";
     repo = "pagefind";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+jArZueDqpJQKg3fKdJjeQQL+egyR6Zi6wqPMZoFgyk=";
+    hash = "sha256-/4nHUEcNQ66M5+x85xiIUUA/Nt+YQCrwn7HIo3olCMM=";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoHash = "sha256-zbo8NkB9umpNDvkhKXpOdt8hJn+d+nrTXMaUghmIPrg=";
+  cargoHash = "sha256-RdU6ZF32kyRC9C0J7NfscNhrs+NjfE5jppIt6u47fcw=";
 
   env.cargoDeps_web = rustPlatform.fetchCargoVendor {
     name = "cargo-deps-web-${finalAttrs.version}";
     inherit (finalAttrs) src;
-    patches = [ ./web-cargo-lock.patch ];
     sourceRoot = "${finalAttrs.src.name}/pagefind_web";
-    hash = "sha256-TdbNvDF4WQ2xgkKGVmmZ8R2Wga21OUaGmey/2HVWVcQ=";
+    hash = "sha256-8DqD5QVoHOBtV11UKrunlzR7i+8PTeJGulzN6d2vqks=";
   };
   env.npmDeps_web_js = fetchNpmDeps {
     name = "pagefind-npm-deps-web-js-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_web_js";
-    hash = "sha256-whpmjNKdiMxNfg7fRIWUPdyRWqsEphhqvQfiM65GYDs=";
+    hash = "sha256-vrPdlvd6doaIKiawsvJLnhIPhC35/qzdgUhkfMZrcP8=";
   };
   env.npmDeps_ui_default = fetchNpmDeps {
     name = "pagefind-npm-deps-ui-default-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_ui/default";
-    hash = "sha256-voCs49JneWYE1W9U7aB6G13ypH6JqathVDeF58V57U8=";
+    hash = "sha256-78Qyk18IzekdP6l8pkWxhGeKEST2Ju/AUBASycbggRQ=";
   };
   env.npmDeps_ui_modular = fetchNpmDeps {
     name = "pagefind-npm-deps-ui-modular-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_ui/modular";
-    hash = "sha256-4d85V2X1doq3G8okgYSXOMuQDoAXCgtAtegFEPr+Wno=";
+    hash = "sha256-Ja9s9EX2b9TviLA/NxwQ3Z7RMjL8LIUJAuE63EyBbN4=";
+  };
+  env.npmDeps_ui_component = fetchNpmDeps {
+    name = "pagefind-npm-deps-ui-component-${finalAttrs.version}";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/pagefind_ui/component";
+    hash = "sha256-ZSsXn+A8VVGSCjP2J7ql4rIoOto7a/vzRcVhxuo5Ngk=";
   };
   env.npmDeps_playground = fetchNpmDeps {
     name = "pagefind-npm-deps-playground-${finalAttrs.version}";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/pagefind_playground";
-    hash = "sha256-npo8MV6AAuQ/mGC9iu3bR7pjGoI7NgxuIeh+H3oz7Y8=";
+    hash = "sha256-JO2VRDxsKxYIMZKZ8UilJp76jihRHrD1IeTRfoff/+s=";
   };
 
   env.GIT_VERSION = finalAttrs.version;
@@ -118,10 +125,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (
       local postPatchHooks=() # written to by npmConfigHook
       source ${npmHooks.npmConfigHook}/nix-support/setup-hook
-      npmRoot=pagefind_web_js     npmDeps=$npmDeps_web_js     npmConfigHook
-      npmRoot=pagefind_ui/default npmDeps=$npmDeps_ui_default npmConfigHook
-      npmRoot=pagefind_ui/modular npmDeps=$npmDeps_ui_modular npmConfigHook
-      npmRoot=pagefind_playground npmDeps=$npmDeps_playground npmConfigHook
+      npmRoot=pagefind_web_js       npmDeps=$npmDeps_web_js       npmConfigHook
+      npmRoot=pagefind_ui/default   npmDeps=$npmDeps_ui_default   npmConfigHook
+      npmRoot=pagefind_ui/modular   npmDeps=$npmDeps_ui_modular   npmConfigHook
+      npmRoot=pagefind_ui/component npmDeps=$npmDeps_ui_component npmConfigHook
+      npmRoot=pagefind_playground   npmDeps=$npmDeps_playground   npmConfigHook
     )
 
     # patch build-time dependency downloads
@@ -152,8 +160,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ]}
     )
 
-    # nightly-only feature
+    # nightly-only features
     substituteInPlace pagefind_web/local_build.sh \
+      --replace-fail 'RUSTFLAGS="-Z unstable-options -C panic=immediate-abort"' 'RUSTFLAGS=""' \
+      --replace-fail ' -Z build-std=panic_abort,std' ""
+    substituteInPlace pagefind_web/local_fast_build.sh \
       --replace-fail ' -Z build-std=panic_abort,std' "" \
       --replace-fail ' -Z build-std-features=panic_immediate_abort' ""
   '';
@@ -166,7 +177,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     rustc
     rustc.llvmPackages.lld
-    wasm-bindgen-cli_0_2_104
+    wasm-bindgen-cli_0_2_117
     wasm-pack
   ]
   ++ lib.optionals stdenv.buildPlatform.isDarwin [
@@ -202,6 +213,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       npm run build
     )
 
+    echo Entering ./pagefind_ui/component
+    (
+      cd pagefind_ui/component
+      npm run build
+    )
+
     echo Entering ./pagefind_playground
     (
       cd pagefind_playground
@@ -209,8 +226,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  # always build extended
-  buildFeatures = [ "extended" ];
+  buildFeatures = lib.optionals finalAttrs.enableExtended [ "extended" ];
 
   doInstallCheck = true;
 
@@ -220,8 +236,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit lindera-srcs;
+    tests.extended = finalAttrs.finalPackage.overrideAttrs {
+      enableExtended = true;
+    };
     tests.non-extended = finalAttrs.finalPackage.overrideAttrs {
-      buildFeatures = [ ];
+      enableExtended = false;
     };
   };
 

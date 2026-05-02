@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modelsearch";
-  version = "1.3";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "django-modelsearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eQ0ZWUR9xXm0RkBpZ3Z+ruxlWvJdWed2sX6XkZIAZBk=";
+    hash = "sha256-UH1t/CXJ7OX250SoUZYKMIAHuCxYxOT6l79RXI/oMLs=";
   };
 
   build-system = [
