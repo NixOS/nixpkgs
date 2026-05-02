@@ -35,5 +35,9 @@ buildPythonPackage {
     changelog = "https://github.com/pylixm/django-mdeditor/releases";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ augustebaum ];
+    knownVulnerabilities = [
+      # https://nvd.nist.gov/vuln/detail/CVE-2025-13030
+      "CVE-2025-13030"
+    ];
   };
 }
