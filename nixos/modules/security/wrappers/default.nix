@@ -356,8 +356,7 @@ in
 
           echo -n "Checking that Nix store paths of all wrapped programs exist... "
 
-          declare -A wrappers
-          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
+          ${lib.toShellVar "wrappers" (lib.mapAttrs (n: v: v.source) wrappers)}
 
           for name in "''${!wrappers[@]}"; do
             path="''${wrappers[$name]}"
@@ -366,6 +365,20 @@ in
               echo "FAIL"
               echo "The path $path does not exist!"
               echo 'Please, check the value of `security.wrappers."'$name'".source`.'
+              test -t 1 && echo -ne '\033[0m'
+              exit 1
+            fi
+          done
+
+          ${lib.toShellVar "capabilities" (lib.mapAttrs (n: v: v.capabilities) wrappers)}
+
+          for name in "''${!capabilities[@]}"; do
+            capability="''${capabilities[$name]}"
+            if ! ${lib.getExe pkgs.libcap-text-verifier} "$capability" > /dev/null; then
+              test -t 1 && echo -ne '\033[1;31m'
+              echo "FAIL"
+              echo "The capability $capability is invalid!"
+              echo 'Please, check the value of `security.wrappers."'$name'".capabilities`.'
               test -t 1 && echo -ne '\033[0m'
               exit 1
             fi
