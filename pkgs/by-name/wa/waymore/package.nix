@@ -2,24 +2,31 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  waymore,
   testers,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "waymore";
-  version = "6.5";
+  version = "8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
     repo = "waymore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3nvdbQydtnk/tod2WyJLAGKKjwTv6Z6JA7+qwqgp2o4=";
+    hash = "sha256-Mis0QbXWNre5H7VyXz6HzgArgQV0AdjUjZDQM+y3j0c=";
   };
 
   preBuild = ''
     export HOME=$(mktemp -d)
+  '';
+
+  # Allow version test
+  postPatch = ''
+    substituteInPlace waymore/waymore.py \
+      --replace-fail 'if (sys.stdout.isatty() or (not sys.stdout.isatty() and pipe))' \
+                'if (sys.stdout.isatty() or (not sys.stdout.isatty() and (pipe or "--version" in sys.argv)))'
   '';
 
   build-system = with python3Packages; [
@@ -32,21 +39,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
+    aiohttp
+    psutil
+    pyyaml
     requests
     termcolor
-    pyyaml
-    psutil
-    uritools
     tldextract
   ];
 
   pythonImportsCheck = [ "waymore.waymore" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = waymore;
-    command = "waymore --version";
-    version = "Waymore - v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Find way more from the Wayback Machine";
