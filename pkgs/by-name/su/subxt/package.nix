@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  cmake,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,9 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bin"
     "subxt"
   ];
-
-  # Needed by wabt-sys
-  nativeBuildInputs = [ cmake ];
 
   # Requires a running substrate node
   doCheck = false;
