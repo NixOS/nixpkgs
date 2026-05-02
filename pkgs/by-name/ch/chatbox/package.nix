@@ -14,9 +14,21 @@ let
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
+
+  # Custom runScript to enable native Wayland support
+  runScript = writeScript "chatbox-run" ''
+    #!/bin/sh
+    if [ "''${NIXOS_OZONE_WL:-}" = "1" ] && [ -n "''${WAYLAND_DISPLAY:-}" ]; then
+      exec appimage-exec.sh -w ${appimageContents} -- --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=wayland "$@"
+    else
+      exec appimage-exec.sh -w ${appimageContents} -- "$@"
+    fi
+  '';
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  runScript = runScript;
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/xyz.chatboxapp.app.desktop $out/share/applications/chatbox.desktop
