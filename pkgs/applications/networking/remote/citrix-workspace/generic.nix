@@ -345,6 +345,8 @@ stdenv.mkDerivation rec {
   autoPatchelfIgnoreMissingDeps = [
     "libwebkit2gtk-4.0.so.37"
     "libjavascriptcoregtk-4.0.so.18"
+    "libgpgme.so.11"
+    "libpugixml.so.1"
   ];
   # Null out hardcoded webkit bundle path so it falls back to LD_LIBRARY_PATH
   postFixup = ''
