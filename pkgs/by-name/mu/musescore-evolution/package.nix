@@ -22,26 +22,21 @@
   libopus,
   tinyxml-2,
   qt5, # Needed for musescore 3.X
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore-evolution";
-  version = "3.7.0-unstable-2026-03-03";
+  version = "3.7.0-unstable-2026-03-11";
 
   src = fetchFromGitHub {
     owner = "Jojo-Schmitz";
     repo = "MuseScore";
-    rev = "67504236fa073783f6616545185ec8bde6c22647";
-    hash = "sha256-QUUvUkdrJ4iL6cgDob+PdVRZp44kzHeoOi2N0Xb51To=";
+    rev = "2713642a8a0378f6d6465bbf6fdc74aaa21b4c85";
+    hash = "sha256-FQiAcb9vihdyQt2tZHMLMBp72e/i5xieVoQMVh5BrP4=";
   };
 
   patches = [
     ./musescore-evolution-pch-fix.patch
-    (fetchpatch {
-      url = "https://github.com/Jojo-Schmitz/MuseScore/commit/bbaa38ba2babb339043f87d50cec3240ca49fe0b.patch";
-      hash = "sha256-TbbrBo4uWCHeAs0Er3eYL+i0JWafI0zhetLpFjN0xg8=";
-    })
   ];
 
   # From top-level CMakeLists.txt:
