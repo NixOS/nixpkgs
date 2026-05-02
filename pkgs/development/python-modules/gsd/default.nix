@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gsd";
-  version = "4.2.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "gsd";
     tag = "v${version}";
-    hash = "sha256-qswKeZ8HJEjIV27O2UBmjN+Napa2sItECS5r/vb+l7k=";
+    hash = "sha256-jgj5XgBN68E/Rd60YnXwsy0YIJDcPAk8ajnGeVe1k9g=";
   };
 
   build-system = [
