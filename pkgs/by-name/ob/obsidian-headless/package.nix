@@ -63,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     pushd node_modules/better-sqlite3
     npm run build-release --offline "--nodedir=${nodeSources}"
-    find build -type f -not -path 'build/Release/better_sqlite3.node' -delete
+    mv build/Release/better_sqlite3.node .
+    rm -rf build
+    mkdir -p build/Release
+    mv better_sqlite3.node build/Release/
     popd
 
     runHook postBuild
