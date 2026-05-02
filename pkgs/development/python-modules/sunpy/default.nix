@@ -60,14 +60,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sunpy";
-  version = "7.1.0";
+  version = "7.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "sunpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FeKmg3dZfbbjt1lDliF4uXf8PvM3J5HWtYqKRriJ4l0=";
+    hash = "sha256-saq3vYJMKogXSBxKn/tqlSnE96K10EM27femC+Qx0Gw=";
   };
 
   build-system = [
