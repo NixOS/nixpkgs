@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://jrsoftware.org/isinfo.php";
     changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "iscc";
     platforms = wineWow64Packages.stable.meta.platforms;
   };
