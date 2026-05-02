@@ -1,24 +1,21 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  pigeon,
+  rustPlatform,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "verifpal";
-  version = "0.31.2";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "symbolicsoft";
     repo = "verifpal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-k8SGCo36tk4Etg4jt0NDeEj1BmSYjaZZptNNnrOXs4E=";
+    hash = "sha256-k13pf7uWTuxeTAvY5Dw0WYA6PGa6uvsX537HLCHP2qE=";
   };
 
-  vendorHash = "sha256-Vg375DBPvurRpwl918AGQU+wJGnB1tYisgch9FA+Y/g=";
-
-  nativeBuildInputs = [ pigeon ];
+  cargoHash = "sha256-7aW3ppvtnqgmBtuwVkM1jPjtSRtB1dSjpogz0XfzKpM=";
 
   subPackages = [ "cmd/verifpal" ];
 
