@@ -7540,6 +7540,12 @@
     githubId = 84813895;
     name = "Ivanoe Megnin-Preiss";
   };
+  e1618033 = {
+    email = "dev@ronapa.com";
+    github = "e1618033";
+    githubId = 277340975;
+    name = "Emiliano Panaro";
+  };
   e1mo = {
     email = "nixpkgs@e1mo.de";
     matrix = "@e1mo:chaos.jetzt";
