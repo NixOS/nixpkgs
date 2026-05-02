@@ -181,6 +181,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/huggingface/sentence-transformers";
     changelog = "https://github.com/huggingface/sentence-transformers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "LibSQL with extended capabilities like HTTP protocol, replication, and more";
     homepage = "https://github.com/tursodatabase/libsql";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "sqld";
   };
 })

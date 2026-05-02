@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mahkoh/jay";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "jay";
   };
 })

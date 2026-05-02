@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CycloneDX/cdxgen";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       quincepie
     ];
   };

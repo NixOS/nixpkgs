@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/container2wasm/container2wasm";
     changelog = "https://github.com/container2wasm/container2wasm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "c2w";
   };
 })

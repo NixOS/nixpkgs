@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/bjesus/clapboard";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dit7ya
       bjesus
     ];
     platforms = lib.platforms.linux;

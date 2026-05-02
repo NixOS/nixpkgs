@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      dit7ya
       mmlb
     ];
     mainProgram = "zf";

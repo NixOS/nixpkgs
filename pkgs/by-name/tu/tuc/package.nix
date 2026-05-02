@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "tuc";
     homepage = "https://github.com/riquito/tuc";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

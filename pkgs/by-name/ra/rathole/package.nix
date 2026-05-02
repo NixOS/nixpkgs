@@ -71,7 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "rathole";
     maintainers = with lib.maintainers; [
-      dit7ya
       xokdvium
     ];
   };
