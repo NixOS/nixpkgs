@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
 
   # nativeBuildInputs
@@ -32,6 +33,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-JxWuaOBhkjjw4sp7l++QF+0EzGIhPAOaJcKwwmdTg+w=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/librelane/librelane/pull/927.patch";
+      hash = "sha256-zGOQHV0caIJh9YTNM3sFWU7HYIwk1td9On82RUoJ3y8=";
+    })
+  ];
 
   build-system = [
     python3Packages.poetry-core
