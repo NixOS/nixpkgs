@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyvesync";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdjoe";
     repo = "pyvesync";
     tag = version;
-    hash = "sha256-fruuFt7Zb5ZDX8MmEXB4rypuYON3UG50mExnMpMQct4=";
+    hash = "sha256-pJv5CMsM82ZUfc9ZuuAut+wHp2pMHOeOqMcH1jg3uRs=";
   };
 
   build-system = [ setuptools ];
