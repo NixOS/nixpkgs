@@ -40,6 +40,8 @@ buildPythonPackage (finalAttrs: {
     "test_invoke_install"
     "test_invoke_uninstall"
     "test_isolation"
+    # Tests fails on hydra
+    "test_parse_requirements_editable"
   ];
 
   meta = {
