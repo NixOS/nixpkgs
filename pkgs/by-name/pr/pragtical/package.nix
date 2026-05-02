@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pragtical";
-  version = "3.8.3";
+  version = "3.8.7";
   pluginManagerVersion = "1.4.7.1";
   linenoiseRev = "e78e236c8d85c078fdd9fc4e1f08716058aa1a42";
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
 
-    hash = "sha256-/rCDtUSBQaNsmzcIwWy+VBuMJHEbVXpn+a1Gz3bC6DU=";
+    hash = "sha256-ht6oqCmMBGuV16AtDGYdSDAQHFd8Ep9LuErj0CDIeCA=";
   };
 
   strictDeps = true;
