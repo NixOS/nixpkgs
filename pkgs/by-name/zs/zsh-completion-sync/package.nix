@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -22,6 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     install -D zsh-completion-sync.plugin.zsh  $out/share/zsh-completion-sync/zsh-completion-sync.plugin.zsh
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Automatically loads completions added dynamically to FPATH or XDG_DATA_DIRS";
