@@ -460,6 +460,7 @@ let
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
 
             location / {
+              more_clear_headers "Content-Type";
               return ${toString vhost.redirectCode} https://$host$request_uri;
             }
             ${acmeLocation}
@@ -1437,7 +1438,8 @@ in
 
     services.nginx.additionalModules =
       optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
-      ++ lib.optional cfg.experimentalZstdSettings pkgs.nginxModules.zstd;
+      ++ lib.optional cfg.experimentalZstdSettings pkgs.nginxModules.zstd
+      ++ lib.optional (lib.any (vhost: vhost.forceSSL) vhostsConfigs) pkgs.nginxModules.moreheaders;
 
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
       serverAliases = [ "127.0.0.1" ] ++ lib.optional config.networking.enableIPv6 "[::1]";
