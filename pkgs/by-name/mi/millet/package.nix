@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "millet";
-  version = "0.14.9";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "azdavis";
     repo = "millet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ffna9qsCTRHnUstgCDZxHweHteYVA/xiAtOkzCw2ltI=";
+    hash = "sha256-D2USOM6KrHs3Iuim98XVI7y0/aNk+kVNXo/6rgEYoCw=";
   };
 
-  cargoHash = "sha256-eQobRfvVdL68FeV/P/BL824sHEibC5eQoPeo6m6XJcI=";
+  cargoHash = "sha256-g63mDzqKY/18v3qi6KnV4qmuMRxupVVe43es/84Z/h0=";
 
   postPatch = ''
     rm .cargo/config.toml
