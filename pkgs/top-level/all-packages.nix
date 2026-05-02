@@ -8254,6 +8254,7 @@ with pkgs;
       (callPackages ../servers/monitoring/zabbix/server.nix { postgresqlSupport = true; }).${version};
     web = (callPackages ../servers/monitoring/zabbix/web.nix { }).${version};
     agent2 = (callPackages ../servers/monitoring/zabbix/agent2.nix { }).${version};
+    web-service = (callPackages ../servers/monitoring/zabbix/web-service.nix { }).${version};
 
     # backwards compatibility
     server = server-pgsql;
