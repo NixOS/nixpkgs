@@ -3331,6 +3331,7 @@ self: super: with self; {
 
   crontab = callPackage ../development/python-modules/crontab { };
 
+  parse-crontab = callPackage ../development/python-modules/parse-crontab { };
   cross-web = callPackage ../development/python-modules/cross-web { };
 
   crossandra = callPackage ../development/python-modules/crossandra { };
@@ -15636,6 +15637,7 @@ self: super: with self; {
 
   python-crontab = callPackage ../development/python-modules/python-crontab { };
 
+  parse-crontab = callPackage ../development/python-modules/parse-crontab { };
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
