@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.5.1";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp_templates";
     tag = version;
-    hash = "sha256-lGlg8AgP7VtwZm5xfpEzs1VJSbfBdYns/l4ROP0LtEQ=";
+    hash = "sha256-xHrTTcqaBGR4TXDk5lTBSHfrgNiA2OchVpuoESJoczY=";
   };
 
   nativeBuildInputs = [ poetry-core ];
