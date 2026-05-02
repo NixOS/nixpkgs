@@ -132,6 +132,12 @@
     githubId = 56617252;
     matrix = "@oxc45:matrix.org";
   };
+  _0xCCF4 = {
+    email = "0xCCF4@lenzentech.de";
+    name = "0xCCF4";
+    github = "0xCCF4";
+    githubId = 20901343;
+  };
   _0xd61 = {
     email = "dgl@degit.co";
     name = "Daniel Glinka";
