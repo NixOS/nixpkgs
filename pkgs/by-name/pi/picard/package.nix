@@ -22,6 +22,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   # nix-update --commit picard --version-regex 'release-(.*)'
   version = "2.13.3";
   pyproject = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
@@ -34,13 +35,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     gettext
     qt5.wrapQtAppsHook
     pythonPackages.setuptools
-  ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) [
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-vaapi
-    gst_all_1.gstreamer
   ];
 
   buildInputs = [
@@ -49,6 +43,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals (pyqt5.multimediaEnabled) [
     qt5.qtmultimedia.bin
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-vaapi
   ];
 
   propagatedBuildInputs = with pythonPackages; [
