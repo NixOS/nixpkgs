@@ -34,6 +34,11 @@ buildPythonPackage rec {
       --replace-fail "required_plugins = pytest-cov" ""
   '';
 
+  pythonRelaxDeps = [
+    "oauthlib"
+    "requests"
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -41,8 +46,6 @@ buildPythonPackage rec {
     pyjwt
     requests
   ];
-
-  pythonRelaxDeps = [ "oauthlib" ];
 
   optional-dependencies = {
     Images = [
