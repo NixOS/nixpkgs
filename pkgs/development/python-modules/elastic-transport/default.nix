@@ -20,7 +20,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elastic-transport";
   version = "8.17.1";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "elastic-transport-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LWSvE88wEwMxRi6IZsMkIRP8UTRfImC9QZnuka1oiso=";
   };
 
@@ -90,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Transport classes and utilities shared among Python Elastic client libraries";
     homepage = "https://github.com/elastic/elastic-transport-python";
-    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
