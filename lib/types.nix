@@ -1747,5 +1747,5 @@ rec {
 
   # TODO: Migrate usage of lib.types.types in nixpkgs
   # Then add a deprecation warning
-  types = lib.types;
+  types = lib.warn "`lib.types.types` will be deprecated after 26.05. Use `lib.types` instead" lib.types;
 }
