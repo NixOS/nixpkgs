@@ -51,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "trivialautovarinit" ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_EXAMPLES" withExamples)
     (lib.cmakeBool "BUILD_TOOLS" withTools)
   ]
   ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
