@@ -350,6 +350,12 @@ with lib.maintainers;
     shortName = "GraalVM-CE";
   };
 
+  gradient = {
+    members = [ derdennisop ];
+    scope = "Maintain Gradient packages.";
+    shortName = "gradient";
+  };
+
   haskell = {
     github = "haskell";
     enableFeatureFreezePing = true;
