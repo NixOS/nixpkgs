@@ -39,8 +39,8 @@ let
       dnsmasq
       e2fsprogs
       findutils
-      getent
       gawk
+      getent
       gnugrep
       gnused
       gnutar
@@ -50,36 +50,28 @@ let
       iptables
       iw
       kmod
+      lego
       libxfs
       lvm2
-      lz4
       lxcfs
+      lz4
       nftables
       qemu-utils
       qemu_kvm
       rsync
+      skopeo
       squashfs-tools-ng
       squashfsTools
       sshfs
       swtpm
       systemd
       thin-provisioning-tools
+      umoci
       util-linux
       virtiofsd
       xdelta
       xz
       zstd
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
-      skopeo
-      umoci
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
-      lego
-    ]
-    ++ lib.optionals (lib.versionOlder cfg.package.version "7.0.0") [
-      minio
-      minio-client
     ]
     ++ lib.optionals config.security.apparmor.enable [
       apparmor-bin-utils
