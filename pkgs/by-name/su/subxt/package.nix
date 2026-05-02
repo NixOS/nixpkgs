@@ -32,12 +32,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/paritytech/subxt";
-    description = "Submit transactions to a substrate node via RPC";
+    description = "Subxt is a CLI tool for interacting with chains in the Polkadot network";
+    changelog = "https://github.com/paritytech/subxt/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "subxt";
     license = with lib.licenses; [
       gpl3Plus
       asl20
     ];
-    maintainers = [ lib.maintainers.FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      kilyanni
+    ];
   };
 })
