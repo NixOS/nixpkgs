@@ -2212,6 +2212,8 @@ self: super: with self; {
 
   boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
 
+  boinor = callPackage ../development/python-modules/boinor { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   bokeh-sampledata = callPackage ../development/python-modules/bokeh-sampledata { };
