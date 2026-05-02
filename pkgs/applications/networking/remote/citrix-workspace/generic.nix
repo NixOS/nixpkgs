@@ -78,6 +78,13 @@
   xdpyinfo,
   libxcb,
   zlib,
+  webkitgtk_4_0,
+  webkitgtk_4_1,
+  networkmanager,
+  libproxy,
+  gpgme,
+  libayatana-appindicator,
+  pugixml,
 
   homepage,
   version,
@@ -214,6 +221,13 @@ stdenv.mkDerivation rec {
     libxmu
     libxtst
     zlib
+    webkitgtk_4_0
+    webkitgtk_4_1
+    networkmanager
+    libproxy
+    gpgme
+    libayatana-appindicator
+    pugixml
   ];
 
   runtimeDependencies = [
