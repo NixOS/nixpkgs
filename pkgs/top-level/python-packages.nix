@@ -12091,6 +12091,8 @@ self: super: with self; {
 
   newick = callPackage ../development/python-modules/newick { };
 
+  newrelic = callPackage ../development/python-modules/newrelic { };
+
   newspaper3k = callPackage ../development/python-modules/newspaper3k { };
 
   newversion = callPackage ../development/python-modules/newversion { };
