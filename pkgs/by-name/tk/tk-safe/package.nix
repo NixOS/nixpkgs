@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tk-safe";
-  version = "25.12.3";
-  revision = "25";
+  version = "26.1.0";
+  revision = "26";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/rLNeIGEaag0TKFQLO0TxF3ARXg3rcTNx_${revision}.snap";
-    hash = "sha512-RdcScrTOQHVUn5JE59Z7S44+l2naNXBgID5VqMVelni0bPvnBigEDgRp5BID65Q52MXMe79lzzqo7qRmbYkb3Q==";
+    hash = "sha512-rhjnJ3C+nRNZB7cY5lp0q+xyvMX0AoaQmOUbKGkl4fqaZ7OqgrE/WmlObiH7c8HmtRRD7Hq3z3h+aS5MifvB+A==";
   };
 
   desktopItems = [
