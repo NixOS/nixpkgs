@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "stamina";
-  version = "25.2.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
     tag = version;
-    hash = "sha256-PsoEo53JeD9zrqRmvPotTiX4lM16aJXB3Gr1+mFTEYA=";
+    hash = "sha256-3cCaYAoWPriynITcMnWn1WndXP2gLro/0ba/87hrnIk=";
   };
 
   build-system = [
