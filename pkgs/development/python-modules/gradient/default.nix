@@ -1,83 +1,56 @@
 {
   lib,
-  attrs,
-  boto3,
   buildPythonPackage,
-  click-completion,
-  click-didyoumean,
-  click-help-colors,
-  colorama,
-  fetchPypi,
-  gradient-statsd,
-  gradient-utils,
-  gql,
-  halo,
-  marshmallow,
-  progressbar2,
-  pyopenssl,
-  pyyaml,
-  requests,
-  requests-toolbelt,
-  terminaltables,
-  websocket-client,
+  fetchFromGitHub,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  httpx,
+  pydantic,
+  typing-extensions,
+  anyio,
+  distro,
+  sniffio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gradient";
   version = "3.10.1";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TL9Jbo9UvQhgG9aT3wjLD8DvTY48Os04DdaUfNAwcu4=";
+  src = fetchFromGitHub {
+    owner = "digitalocean";
+    repo = "gradient-python";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Psre4HdF4/cgQ5CcM3H6PC+6asej4Is4+932Gvym774=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'attrs<=' 'attrs>=' \
-      --replace 'colorama==' 'colorama>=' \
-      --replace 'gql[requests]==3.0.0a6' 'gql' \
-      --replace 'PyYAML==5.*' 'PyYAML' \
-      --replace 'marshmallow<' 'marshmallow>=' \
-      --replace 'websocket-client==0.57.*' 'websocket-client'
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.26.3" "hatchling"
   '';
 
-  propagatedBuildInputs = [
-    attrs
-    boto3
-    click-completion
-    click-didyoumean
-    click-help-colors
-    colorama
-    gql
-    gradient-statsd
-    gradient-utils
-    halo
-    marshmallow
-    progressbar2
-    pyopenssl
-    pyyaml
-    requests
-    requests-toolbelt
-    terminaltables
-    websocket-client
+  nativeBuildInputs = [
+    hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  # Tries to use /homeless-shelter to mimic container usage, etc
-  doCheck = false;
+  dependencies = [
+    httpx
+    pydantic
+    typing-extensions
+    anyio
+    distro
+    sniffio
+  ];
 
-  # marshmallow.exceptions.StringNotCollectionError: "only" should be a collection of strings.
-  # Support for marshmallow > 3
-  # pythonImportsCheck = [
-  #   "gradient"
-  # ];
+  pythonImportsCheck = [ "gradient" ];
 
   meta = {
-    description = "Command line interface for Gradient";
+    description = "Python API library for Gradient";
     mainProgram = "gradient";
-    homepage = "https://github.com/Paperspace/gradient-cli";
-    license = lib.licenses.isc;
+    homepage = "https://github.com/digitalocean/gradient-python";
+    license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})
