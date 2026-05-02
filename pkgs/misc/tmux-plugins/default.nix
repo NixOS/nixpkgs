@@ -75,6 +75,10 @@ in
 {
   inherit mkTmuxPlugin;
 
+  agent-usage = pkgs.callPackage ./tmux-agent-usage {
+    inherit mkTmuxPlugin;
+  };
+
   battery = mkTmuxPlugin rec {
     pluginName = "battery";
     version = "2.0.0";
