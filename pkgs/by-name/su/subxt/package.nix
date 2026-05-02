@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "subxt";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3yTX2H4T0nnA0Kh1Lx1/blK/Edd1ZOHQVEXiiOLxino=";
   };
 
