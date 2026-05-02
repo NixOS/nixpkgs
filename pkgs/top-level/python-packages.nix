@@ -22981,6 +22981,7 @@ self: super: with self; {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  yacron = callPackage ../development/python-modules/yacron { };
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
