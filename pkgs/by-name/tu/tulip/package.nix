@@ -7,14 +7,16 @@
   libGLU,
   libGL,
   glew,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
   autoPatchelfHook,
-  python3,
+  python312,
   cmake,
   libjpeg,
   llvmPackages,
 }:
+let
+  python3 = python312; # fails to build otherwise
+in
 
 stdenv.mkDerivation rec {
   pname = "tulip";
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     freetype
     glew
     libjpeg
-    qtbase
+    libsForQt5.qtbase
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
