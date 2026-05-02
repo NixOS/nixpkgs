@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "0-unstable-2026-02-12";
+  version = "0-unstable-2026-04-27";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "4e777cb6088f95c16ab3da9458ef78db43010d04";
-    hash = "sha256-8qDSDz6pliZMal1Nt/KufZ42TYHlQuMgZwhm23Qr9pk=";
+    rev = "4ef9d994294afc45ea824b7403261ac0ac6ceca2";
+    hash = "sha256-wLNbOf06/ss5Mpu/HYjISqgb+bICxdzGvlPwqLIc1aM=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
