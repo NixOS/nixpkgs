@@ -13,6 +13,8 @@
   ninja,
   gnome,
   python,
+
+  withCairo ? true,
 }:
 
 buildPythonPackage rec {
@@ -41,14 +43,18 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    cairo
     glib
+  ]
+  ++ lib.optionals withCairo [
+    cairo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ ncurses ];
 
   propagatedBuildInputs = [
-    pycairo
     gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
+  ]
+  ++ lib.optionals withCairo [
+    pycairo
   ];
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/378447
@@ -61,7 +67,9 @@ buildPythonPackage rec {
     # This is only used for figuring out what version of Python is in
     # use, and related stuff like figuring out what the install prefix
     # should be, but it does need to be able to execute Python code.
-    "-Dpython=${python.pythonOnBuildForHost.interpreter}"
+    (lib.mesonOption "python" python.pythonOnBuildForHost.interpreter)
+
+    (lib.mesonEnable "pycairo" withCairo)
   ];
 
   passthru = {
