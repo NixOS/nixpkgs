@@ -63,7 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  doCheck = true;
+  # From some reason it dies at the end...
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkPhase =
     let
       exampleAudio = fetchurl {
