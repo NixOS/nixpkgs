@@ -37,6 +37,16 @@ buildPythonPackage rec {
     pyvirtualdisplay
   ];
 
+  #  Disable integration tests that require LibVNCServer examples.
+  #  The pure Nix sandbox prohibits vncdotool to download these.
+  #
+  #  libvncserver outputs do not include examples since upstream
+  #  LibVNCServer does not easily provide examples.
+  #
+  #  Perhaps a Patch to tests/functional/libvncserver.py to provide
+  #  LibVNCServer examples via eg. LIBVNCSERVER_DIR is a solution.
+  disabledTestPaths = [ "tests/functional" ];
+
   pythonImportsCheck = [ "vncdotool" ];
 
   meta = {
