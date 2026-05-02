@@ -222,5 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin;
     # Prevent a store collision.
     priority = 4;
+    mainProgram = "vncviewer";
   };
 })
