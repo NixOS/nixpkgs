@@ -6218,6 +6218,8 @@ self: super: with self; {
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
+  flanker = callPackage ../development/python-modules/flanker { };
+
   flare-capa = callPackage ../development/python-modules/flare-capa { };
 
   flasgger = callPackage ../development/python-modules/flasgger { };
