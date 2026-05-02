@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs build
 
     # Enforce reproducible build compiler flags
-    substituteInPlace CMakeLists.txt --replace '-mtune=native' ""
+    substituteInPlace CMakeLists.txt --replace-fail '-mtune=native' ""
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
