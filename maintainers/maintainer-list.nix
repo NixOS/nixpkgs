@@ -4579,6 +4579,12 @@
     githubId = 9086315;
     name = "Connor Brewster";
   };
+  cbrxyz = {
+    email = "me@cbrxyz.com";
+    github = "cbrxyz";
+    githubId = 52760912;
+    name = "Cameron Brown";
+  };
   ccellado = {
     email = "annplague@gmail.com";
     github = "ccellado";
