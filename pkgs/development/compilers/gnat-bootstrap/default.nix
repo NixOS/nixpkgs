@@ -33,23 +33,6 @@ stdenv.mkDerivation (
         url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${finalAttrs.version}/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
       in
       {
-        "12" = {
-          gccVersion = "12.1.0";
-          alireRevision = "2";
-        }
-        // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
-            upstreamTriplet = "x86_64-apple-darwin19.6.0";
-          };
-          x86_64-linux = {
-            inherit url;
-            hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
-            upstreamTriplet = "x86_64-pc-linux-gnu";
-          };
-        }
-        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
         "13" = {
           gccVersion = "13.2.0";
           alireRevision = "2";
@@ -96,6 +79,36 @@ stdenv.mkDerivation (
             inherit url;
             hash = "sha256-/nARwdQzAMd41fslUbrgloxn0hVZp9PokfQ9yPmL1g8=";
             upstreamTriplet = "aarch64-apple-darwin23.6.0";
+          };
+        }
+        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        "15" = {
+          gccVersion = "15.2.0";
+        }
+        // {
+          x86_64-darwin = {
+            alireRevision = "1";
+            inherit url;
+            hash = "sha256-1YTqWsLBwNH/GBAtF5CL/YZHQvfE/3PE0LlLJ9HmjAg=";
+            upstreamTriplet = "x86_64-apple-darwin22.6.0";
+          };
+          x86_64-linux = {
+            alireRevision = "1";
+            inherit url;
+            hash = "sha256-b4hAg3ifoBRqgPxpfMYuOdunw7wzRTL/G5YGBO+im24=";
+            upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+          aarch64-linux = {
+            alireRevision = "1";
+            inherit url;
+            hash = "sha256-0V/VHqOSYQI6LmvpUIHy3zB6hI3dG0njOcDsrg8oZq8=";
+            upstreamTriplet = "aarch64-linux-gnu";
+          };
+          aarch64-darwin = {
+            alireRevision = "2-pre0";
+            url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-15.2.0-2-macos-pre0/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
+            hash = "sha256-4bFtsjixfXYc8wYOc+5iAbp1MmiIS1h1NcdKno2IdJg=";
+            upstreamTriplet = "aarch64-apple-darwin24.6.0";
           };
         }
         .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
@@ -146,13 +159,15 @@ stdenv.mkDerivation (
     ++
       lib.optionals
         (
-          lib.versionAtLeast majorVersion "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+          (majorVersion == "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
+          || (lib.versionAtLeast majorVersion "15" && stdenv.hostPlatform.isLinux)
         )
         [
           # not sure why the bootstrap binaries link to zstd only on this architecture but they do
           zstd
         ];
 
+    __structuredAttrs = true;
     strictDeps = true;
 
     # https://github.com/alire-project/GNAT-FSF-builds/issues/51
@@ -245,8 +260,6 @@ stdenv.mkDerivation (
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"
-      ]
-      ++ lib.optionals (lib.versionAtLeast majorVersion "13") [
         "aarch64-darwin"
       ]
       ++ lib.optionals (lib.versionAtLeast majorVersion "14") [
