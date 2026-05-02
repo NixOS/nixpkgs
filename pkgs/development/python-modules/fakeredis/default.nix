@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.33.0";
+  version = "2.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     tag = "v${version}";
-    hash = "sha256-uvbvrziVdoa/ip8MbZG8GcpN1FoINxUV+SDVRmg78Qs=";
+    hash = "sha256-DAOKR4HkmKd+6zUQSxhGBYKxQWRYLmzjQTJIGjAyoJA=";
   };
 
   build-system = [ hatchling ];
