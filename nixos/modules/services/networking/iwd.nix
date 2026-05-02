@@ -11,7 +11,6 @@ let
     mkPackageOption
     mkIf
     mkOption
-    types
     recursiveUpdate
     optionalAttrs
     ;

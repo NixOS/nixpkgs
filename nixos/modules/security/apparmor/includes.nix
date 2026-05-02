@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (builtins) attrNames hasAttr isAttrs;
+  inherit (builtins) hasAttr isAttrs;
   inherit (lib) getLib;
   inherit (config.environment) etc;
   # Utility to generate an AppArmor rule
