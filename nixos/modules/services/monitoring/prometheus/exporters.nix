@@ -112,6 +112,7 @@ let
         "redis"
         "restic"
         "rtl_433"
+        "rtorrent"
         "sabnzbd"
         "scaphandre"
         "script"
