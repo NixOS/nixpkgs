@@ -24,7 +24,6 @@
   miniupnpc,
   dht,
   libnatpmp,
-  libiconv,
   # Build options
   enableGTK3 ? false,
   gtkmm3,
@@ -32,6 +31,7 @@
   wrapGAppsHook3,
   enableQt5 ? false,
   enableQt6 ? false,
+  enableMac ? false,
   qt5,
   qt6Packages,
   nixosTests,
@@ -40,10 +40,14 @@
   enableCli ? true,
   installLib ? false,
   apparmorRulesFromClosure,
+  ibtool,
+  actool,
+  coreutils,
+  makeWrapper,
 }:
 
 let
-  inherit (lib) cmakeBool optionals;
+  inherit (lib) cmakeBool optionals optionalString;
 
   apparmorRules = apparmorRulesFromClosure { name = "transmission-daemon"; } (
     [
@@ -74,16 +78,29 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  patches = [
+    ./0001-Skip-bundle-fixup.patch
+  ];
+
   outputs = [
     "out"
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
     "apparmor"
   ];
+
+  # Remove once https://github.com/NixOS/nixpkgs/pull/508307 lands
+  # Stop clang trying to write in $HOME
+  env.CLANG_MODULE_CACHE_PATH = "/tmp/clang_module_cache";
 
   cmakeFlags = [
     (cmakeBool "ENABLE_CLI" enableCli)
     (cmakeBool "ENABLE_DAEMON" enableDaemon)
     (cmakeBool "ENABLE_GTK" enableGTK3)
-    (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
+    (cmakeBool "ENABLE_MAC" enableMac)
     (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
     (cmakeBool "INSTALL_LIB" installLib)
     (cmakeBool "RUN_CLANG_TIDY" false)
@@ -91,6 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isDarwin [
     # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+    # we don't have a compatible-enough signing tool right now
+    "-DCODESIGN_EXECUTABLE=${lib.getExe' coreutils "true"}"
+    "-DACTOOL_EXECUTABLE=${lib.getExe actool}"
   ];
 
   postPatch = ''
@@ -112,6 +132,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Upstream uses different config file name.
     substituteInPlace CMakeLists.txt \
       --replace-fail 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+  ''
+  + optionalString (stdenv.hostPlatform.isDarwin && (enableQt5 || enableQt6)) ''
+    substituteInPlace qt/CMakeLists.txt \
+      --replace-fail \
+        'transmission::qt_impl)' \
+        'transmission::qt_impl "-framework AppKit" "-framework CoreGraphics")'
   '';
 
   nativeBuildInputs = [
@@ -121,7 +147,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals enableGTK3 [ wrapGAppsHook3 ]
   ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
-  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ];
+  ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
+  ++ optionals enableMac [
+    ibtool
+    actool
+    makeWrapper
+  ];
 
   buildInputs = [
     curl
@@ -164,29 +195,33 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enableSystemd [ systemd ]
   ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
-  postInstall = ''
-    mkdir $apparmor
-    cat >$apparmor/bin.transmission-daemon <<EOF
-    abi <abi/4.0>,
-    include <tunables/global>
-    profile $out/bin/transmission-daemon {
-      include <abstractions/base>
-      include <abstractions/nameservice>
-      include <abstractions/ssl_certs>
-      include "${apparmorRules}"
-      @{PROC}/sys/kernel/random/uuid r,
-      @{PROC}/sys/vm/overcommit_memory r,
-      @{PROC}/@{pid}/environ r,
-      @{PROC}/@{pid}/mounts r,
-      /tmp/tr_session_id_* rwk,
+  postInstall =
+    optionalString stdenv.hostPlatform.isLinux ''
+      mkdir $apparmor
+      cat >$apparmor/bin.transmission-daemon <<EOF
+      abi <abi/4.0>,
+      include <tunables/global>
+      profile $out/bin/transmission-daemon {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${apparmorRules}"
+        @{PROC}/sys/kernel/random/uuid r,
+        @{PROC}/sys/vm/overcommit_memory r,
+        @{PROC}/@{pid}/environ r,
+        @{PROC}/@{pid}/mounts r,
+        /tmp/tr_session_id_* rwk,
 
-      $out/share/transmission/public_html/** r,
+        $out/share/transmission/public_html/** r,
 
-      include if exists <local/bin.transmission-daemon>
-    }
-    EOF
-    install -Dm0444 -t $out/share/icons ../icons/hicolor_apps_scalable_transmission.svg
-  '';
+        include if exists <local/bin.transmission-daemon>
+      }
+      EOF
+      install -Dm0444 -t $out/share/icons ../icons/hicolor_apps_scalable_transmission.svg
+    ''
+    + optionalString enableMac ''
+      makeWrapper $out/Applications/Transmission.app/Contents/MacOS/Transmission $out/bin/transmission-mac
+    '';
 
   passthru.tests = {
     apparmor = nixosTests.transmission_4; # starts the service with apparmor enabled
@@ -200,6 +235,8 @@ stdenv.mkDerivation (finalAttrs: {
         "transmission-qt"
       else if enableGTK3 then
         "transmission-gtk"
+      else if enableMac then
+        "transmission-mac"
       else
         "transmission-cli";
     longDescription = ''
