@@ -1015,6 +1015,12 @@
     githubId = 56970006;
     keys = [ { fingerprint = "50E2 669C AB38 2F4A 5F72  1667 0D6B FC01 D45E DADD"; } ];
   };
+  akosseres = {
+    name = "Ákos Seres";
+    email = "seresakos2000@gmail.com";
+    github = "AkosSeres";
+    githubId = 11257907;
+  };
   akotro = {
     name = "Antonis Kotronakis";
     email = "mail@akotro.dev";
@@ -26334,12 +26340,6 @@
     github = "sudo-mac";
     githubId = 90754995;
     name = "sudo-mac";
-  };
-  sudoforge = {
-    github = "sudoforge";
-    githubId = 3893293;
-    name = "sudoforge";
-    keys = [ { fingerprint = "7EBCE51F278D30AE1C34036341BF61468C327D5A"; } ];
   };
   sudosubin = {
     email = "sudosubin@gmail.com";

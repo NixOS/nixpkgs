@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "nuclear";
-  version = "2.7.1";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igrek51";
     repo = "nuclear";
     rev = version;
-    hash = "sha256-AMjFncP7dfKcbNJvHTtmVdLCZVNLqUTmQt+qdlzXhqQ=";
+    hash = "sha256-hoOvISKjl5XTxtv8I3BSkOI7oZFSL+yA3NiYceJGcIY=";
   };
 
   build-system = [ setuptools ];
