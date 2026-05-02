@@ -379,5 +379,11 @@ buildPythonPackage rec {
     description = "Python library for easily interacting with trained machine learning models";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
+    knownVulnerabilities = [
+      "gradio v5 is unmaintained, upgrade to v6 on nixos-unstable"
+      "CVE-2026-27167" # https://github.com/NixOS/nixpkgs/issues/496131
+      "CVE-2026-28416" # https://github.com/NixOS/nixpkgs/issues/496130
+      "CVE-2026-28415" # https://github.com/NixOS/nixpkgs/issues/496125
+    ];
   };
 }
