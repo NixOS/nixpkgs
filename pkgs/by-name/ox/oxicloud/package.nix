@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "DioCrafts";
+    owner = "AtalayaLabs";
     repo = "OxiCloud";
     tag = "v${finalAttrs.version}";
     hash = "sha256-+jtFA6SWHcTTEjc+am2oFqJ1cC2bmKb5oppchpAN0SE=";
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Ultra-fast, secure & lightweight self-hosted cloud storage";
-    homepage = "https://github.com/DioCrafts/OxiCloud";
-    changelog = "https://github.com/DioCrafts/OxiCloud/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/AtalayaLabs/OxiCloud";
+    changelog = "https://github.com/AtalayaLabs/OxiCloud/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "oxicloud";
     maintainers = with lib.maintainers; [ flashonfire ];

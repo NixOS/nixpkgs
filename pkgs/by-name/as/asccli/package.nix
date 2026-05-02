@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "1.2.5";
 
   src = fetchFromGitHub {
-    owner = "rudrankriyam";
+    owner = "rorkai";
     repo = "App-Store-Connect-CLI";
     tag = "${finalAttrs.version}";
     hash = "sha256-9zGLR+lXxR0ku758wmNlglgUYLXa9p/fsZ4p7a7/+E4=";
@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Scriptable CLI for the App Store Connect API";
     homepage = "https://asccli.sh";
-    changelog = "https://github.com/rudrankriyam/App-Store-Connect-CLI/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/rorkai/App-Store-Connect-CLI/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       DimitarNestorov

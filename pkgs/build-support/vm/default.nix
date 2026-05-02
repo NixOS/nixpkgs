@@ -568,7 +568,7 @@ let
 
           echo "unpacking RPMs..."
           set +o pipefail
-          for i in $rpms; do
+          for i in "''${rpms[@]}"; do
               echo "$i..."
               ${rpm}/bin/rpm2cpio "$i" | chroot /mnt ${cpio}/bin/cpio -i --make-directories --unconditional
           done
@@ -585,7 +585,7 @@ let
 
           echo "installing RPMs..."
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-            rpm -iv --nosignature ${lib.optionalString (!runScripts) "--noscripts"} $rpms
+            rpm -iv --nosignature ${lib.optionalString (!runScripts) "--noscripts"} "''${rpms[@]}"
 
           echo "running post-install script..."
           eval "$postInstall"
@@ -730,7 +730,8 @@ let
             memSize
             ;
 
-          debs = (lib.intersperse "|" debs);
+          debsFlat = lib.flatten debs;
+          debsGrouped = debs;
 
           preVM = createEmptyImage { inherit size fullName; };
 
@@ -749,11 +750,9 @@ let
             # (which have lots of circular dependencies) from barfing.
             echo "unpacking Debs..."
 
-            for deb in $debs; do
-              if test "$deb" != "|"; then
-                echo "$deb..."
-                dpkg-deb --extract "$deb" /mnt
-              fi
+            for deb in "''${debsFlat[@]}"; do
+              echo "$deb..."
+              dpkg-deb --extract "$deb" /mnt
             done
 
             # Make the Nix store available in /mnt, because that's where the .debs live.
@@ -776,10 +775,7 @@ let
 
             export DEBIAN_FRONTEND=noninteractive
 
-            oldIFS="$IFS"
-            IFS="|"
-            for component in $debs; do
-              IFS="$oldIFS"
+            for component in "''${debsGrouped[@]}"; do
               echo
               echo ">>> INSTALLING COMPONENT: $component"
               debs=

@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-desktop";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
     hash = "sha256-VVyKC1z7YECZlbTaFaq2OwGg0k22qBbn/HEOYiJ8fcw=";
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     );
 
-  # see: https://github.com/containers/podman-desktop/blob/main/.flatpak.desktop
+  # see: https://github.com/podman-desktop/podman-desktop/blob/main/.flatpak.desktop
   desktopItems = [
     (makeDesktopItem {
       name = "podman-desktop";
@@ -175,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
-    changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/podman-desktop/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       booxter

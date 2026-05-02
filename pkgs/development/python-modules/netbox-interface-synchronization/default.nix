@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netbox-interface-synchronization";
-  version = "4.1.7";
+  version = "4.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetTech2001";
     repo = "netbox-interface-synchronization";
     tag = finalAttrs.version;
-    hash = "sha256-02fdfE1BwpWsh21M0oP65kMAbFxDxYHsAEWA64rUl18=";
+    hash = "sha256-DZ1xOfHop/rASWbBzVILVqvll94tQM7tRiSXwOo/QQI=";
   };
 
   build-system = [ setuptools ];

@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/opt/heroic"
-    cp -r dist/linux-unpacked/resources "$out/opt/heroic"
+    cp -r dist/*-unpacked/resources "$out/opt/heroic"
 
     bin_dir="$out/opt/heroic/resources/app.asar.unpacked/build/bin"
 
@@ -111,7 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "${lib.getExe electron}" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
-      --suffix PATH ":" "${umu-launcher}/bin" \
+      --suffix PATH ":" "${
+        lib.makeBinPath (
+          lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+            umu-launcher
+          ]
+        )
+      }" \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
@@ -141,10 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
       baksa
     ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
-    # It may also work on other Linux targets, but all the game stores only
-    # support x86 Linux, so it would require extra hacking to run games via QEMU
-    # user emulation.  Upstream provide Linux builds only for x86_64.
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "heroic";
   };
 })

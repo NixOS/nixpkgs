@@ -77,6 +77,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbcl";
   inherit version;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     # Changing the version shouldn’t change the source for the

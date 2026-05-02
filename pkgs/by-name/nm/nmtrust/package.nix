@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
+  nixosTests,
   shellcheck,
   bash,
   systemd,
@@ -13,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "nmtrust";
-  version = "0.1.0";
+  version = "0.1.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -21,8 +22,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "brett";
     repo = "nmtrust-nix";
-    rev = "v0.1.0";
-    hash = "sha256-7Cs00mCzByTKe7w5pnkkgqtZyUSaPa2r/5Uv133eZy0=";
+    rev = "v0.1.1";
+    hash = "sha256-niCbYxeunNxfkM/HEUiMAvwiholR0nmEPqssOOl9Qvo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,6 +51,8 @@ stdenv.mkDerivation {
       }
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) nmtrust; };
 
   meta = {
     description = "Declarative network trust management for NixOS";

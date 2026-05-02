@@ -30,28 +30,13 @@ let
   # Generate Conflicts= for a target (all other trust targets)
   conflictsFor = target: map (t: "${t}.target") (builtins.filter (t: t != target) trustTargets);
 
-  # Generate systemd unit overrides for a system unit.
   # Uses StopWhenUnneeded instead of PartOf to avoid same-transaction
   # issues: when transitioning between targets that both want a unit
   # (e.g. offline -> trusted for allowOffline units), PartOf on the
   # old target would stop the unit before WantedBy on the new target
   # can restart it. StopWhenUnneeded only stops the unit when NO
   # active target wants it.
-  mkSystemUnitOverrides =
-    unitName: unitCfg:
-    let
-      targets = [
-        "nmtrust-trusted.target"
-      ]
-      ++ lib.optional unitCfg.allowOffline "nmtrust-offline.target";
-    in
-    {
-      unitConfig.StopWhenUnneeded = true;
-      wantedBy = targets;
-    };
-
-  # Generate user unit overrides
-  mkUserUnitOverrides =
+  mkUnitOverrides =
     unitName: unitCfg:
     let
       targets = [
@@ -316,7 +301,7 @@ in
     systemd.services =
       lib.mapAttrs' (name: value: {
         name = lib.removeSuffix ".service" (lib.removeSuffix ".timer" (lib.removeSuffix ".socket" name));
-        value = mkSystemUnitOverrides name value;
+        value = mkUnitOverrides name value;
       }) cfg.systemUnits
       // {
         nmtrust-apply = {
@@ -325,6 +310,8 @@ in
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${trustHelper}/bin/nmtrust apply";
+            Restart = "on-failure";
+            RestartSec = "5";
             ProtectSystem = "strict";
             ReadWritePaths = [ "/run/nmtrust" ];
             ProtectHome = true;
@@ -347,6 +334,8 @@ in
             Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = "${trustHelper}/bin/nmtrust apply";
+            Restart = "on-failure";
+            RestartSec = "5";
             ProtectSystem = "strict";
             ReadWritePaths = [ "/run/nmtrust" ];
             ProtectHome = true;
@@ -358,6 +347,10 @@ in
 
     # --- User unit overrides ---
 
+    # When the same unit appears under multiple users, union their wantedBy
+    # lists. systemd.user.services is system-wide, so per-user allowOffline
+    # differences are resolved by taking the most permissive value (any
+    # true wins).
     systemd.user.services = lib.foldl' (
       acc: username:
       lib.foldl' (
@@ -366,10 +359,19 @@ in
           strippedName = lib.removeSuffix ".service" (
             lib.removeSuffix ".timer" (lib.removeSuffix ".socket" unitName)
           );
+          incoming = mkUnitOverrides unitName cfg.userUnits.${username}.${unitName};
+          existing = acc'.${strippedName} or null;
         in
         acc'
         // {
-          ${strippedName} = mkUserUnitOverrides unitName cfg.userUnits.${username}.${unitName};
+          ${strippedName} =
+            if existing == null then
+              incoming
+            else
+              existing
+              // {
+                wantedBy = lib.unique (existing.wantedBy ++ incoming.wantedBy);
+              };
         }
       ) acc (builtins.attrNames cfg.userUnits.${username})
     ) { } userNames;

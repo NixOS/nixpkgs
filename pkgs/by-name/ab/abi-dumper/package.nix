@@ -21,9 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace abi-dumper.pl \
-      --replace eu-readelf ${elfutils}/bin/eu-readelf \
-      --replace vtable-dumper ${vtable-dumper}/bin/vtable-dumper \
-      --replace '"ctags"' '"${ctags}/bin/ctags"'
+      --replace-fail eu-readelf ${elfutils}/bin/eu-readelf \
+      --replace-fail vtable-dumper ${vtable-dumper}/bin/vtable-dumper \
+      --replace-fail '"ctags"' '"${ctags}/bin/ctags"'
   '';
 
   buildInputs = [

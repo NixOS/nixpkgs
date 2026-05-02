@@ -48,9 +48,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "nbdev" ];
 
   meta = {
-    homepage = "https://github.com/fastai/nbdev";
+    homepage = "https://github.com/AnswerDotAI/nbdev";
     description = "Create delightful software with Jupyter Notebooks";
-    changelog = "https://github.com/fastai/nbdev/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/AnswerDotAI/nbdev/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
