@@ -1203,6 +1203,62 @@ in
       maintainers = with lib.maintainers; [ szaffarano ];
     };
   };
+
+  tmux-super-fingers = mkTmuxPlugin {
+    pluginName = "tmux-super-fingers";
+    version = "0-unstable-2026-02-05";
+    src = pkgs.fetchFromGitHub {
+      owner = "artemave";
+      repo = "tmux_super_fingers";
+      rev = "8a82cf1e0d5a49a49e2d221ab65d2a0e135e613a";
+      hash = "sha256-EL90MOFASWalHyPDVEysdGNGOVeiKAihK2eP4QBUnT0=";
+    };
+    nativeBuildInputs = [
+      pkgs.makeWrapper
+    ];
+    propagatedbuildInputs = [
+      pkgs.python3
+      pkgs.bash
+    ];
+    postInstall = ''
+      substituteInPlace $target/run.py \
+        --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe pkgs.python3}'
+      wrapProgram $target/run.sh \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            pkgs.lsof
+            pkgs.file
+          ]
+        }
+    '';
+    meta = {
+      homepage = "https://github.com/artemave/tmux_super_fingers";
+      description = "A Tmux plugin to open file links from the terminal in vim";
+      longDescription = ''
+        Tmux fingers plugin introduced the "fingers" mode, where particularly
+        looking chunks of text (e.g. file paths) are highlighted and
+        assigned a character "mark". When user hits the mark key, the
+        highlighted text gets copied to clipboard.
+
+        Super Fingers builds upon this idea. Notably:
+        - it opens files in a terminal $EDITOR running elsewhere
+          within the same tmux session
+        - only files paths that actually exist are highlighted
+        - it opens files at line number
+        - text that isn't a file path, but maps onto one
+          (e.g. UsersController#show in rails log or
+          +++ b/app/models/user.rb in a diff) is also highlighted
+        - different types of marks are actioned differently: text
+          files are sent to editor, urls and image files - to OS open
+        - works across all panes in a window
+        - can be invoked while scrolling up
+        - handles multiline marks (wrapping)
+      '';
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ asakura ];
+    };
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
