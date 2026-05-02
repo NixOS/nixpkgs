@@ -13,6 +13,12 @@
   pydantic-settings,
   python-multipart,
   scalar-fastapi,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp,
+  opentelemetry-instrumentation-fastapi,
+  opentelemetry-exporter-prometheus,
+  prometheus-client,
   uvicorn,
   websockets,
   tesserocr,
@@ -32,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "1.10.0";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-g0ATehTRtrqgTjvMTs+yvFdFwXTZ8AWsO+Hljwlcbto=";
+    hash = "sha256-/UM/P/m4KdtYinYd1+Y8ESLfVURc7jQL8KpV2wR2ISs=";
   };
 
   build-system = [
@@ -48,7 +54,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "websockets"
+    "opentelemetry-api"
+    "opentelemetry-sdk"
+    "opentelemetry-instrumentation-fastapi"
+    "opentelemetry-exporter-prometheus"
   ];
 
   pythonRemoveDeps = [
@@ -64,6 +73,12 @@ buildPythonPackage rec {
     pydantic-settings
     python-multipart
     scalar-fastapi
+    opentelemetry-api
+    opentelemetry-sdk
+    opentelemetry-exporter-otlp
+    opentelemetry-instrumentation-fastapi
+    opentelemetry-exporter-prometheus
+    prometheus-client
     typer
     uvicorn
     websockets

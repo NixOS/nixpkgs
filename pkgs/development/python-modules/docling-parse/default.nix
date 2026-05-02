@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   cxxopts,
@@ -12,6 +13,7 @@
   utf8cpp,
   libjpeg,
   qpdf,
+  blend2d,
   loguru-cpp,
   # python dependencies
   tabulate,
@@ -23,15 +25,22 @@
 
 buildPythonPackage rec {
   pname = "docling-parse";
-  version = "5.0.0";
+  version = "5.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
     tag = "v${version}";
-    hash = "sha256-qxD3ryU1jXf8Gm5/IiG2NTOnRgA6HADPfgBj6Kn+Pj4=";
+    hash = "sha256-HKhS6sIhUAr+VFo4jikQ1MMQpcLY6sS7RZaqcjaKvQc=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/docling-project/docling-parse/commit/e922be4ef4af2053b27fa755407aeae7d85c2b9c.patch";
+      hash = "sha256-UfuaEDqRWVIYG57l59/bIw1a+qssxTw27nprQ6jC2WA=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -54,6 +63,7 @@ buildPythonPackage rec {
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev utf8cpp}/include/utf8cpp";
 
   buildInputs = [
+    blend2d
     pybind11
     cxxopts
     libjpeg
@@ -102,8 +112,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;
     maintainers = [ ];
-    # error: no matching conversion for functional-style cast from 'bool' to 'nlohmann::basic_json<>'
-    # See https://github.com/docling-project/docling-parse/issues/172 for context
-    broken = true;
   };
 }
