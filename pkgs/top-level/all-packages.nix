@@ -4049,6 +4049,57 @@ with pkgs;
     }
   );
 
+  gcobol = wrapCC (
+    gcc.cc.override {
+      name = "gcobol";
+      langCC = true; # required for cobol.
+      langC = true;
+      langJit = true;
+      langCobol = true;
+      profiledCompiler = false;
+    }
+  );
+
+  gcobol15 = wrapCC (
+    gcc15.cc.override {
+      name = "gcobol";
+      langCC = true; # required for cobol.
+      langC = true;
+      langJit = true;
+      langCobol = true;
+      profiledCompiler = false;
+    }
+  );
+
+  # Cannot override gcc.cc, as this is built at in earlier stdenv bootstrapping
+  # stage (in the native case), which doesn't have a fully-fledged fetchurl.
+  # fetchurl is required to build cargo, and thus evaluation fails as it cannot
+  # properly build the nativeBuildInputs of gccrs. Replace this with a proper
+  # override when cargo is no longer a dependency of gccrs
+  gccrs = pkgs."gccrs${toString default-gcc-version}";
+
+  gccrs14 = wrapCC (
+    gcc14.cc.override {
+      name = "gccrs";
+      langCC = true; # required for rust.
+      langC = true;
+      langJit = true;
+      langRust = true;
+      profiledCompiler = false;
+    }
+  );
+
+  gccrs15 = wrapCC (
+    gcc15.cc.override {
+      name = "gccrs";
+      langCC = true; # required for rust.
+      langC = true;
+      langJit = true;
+      langRust = true;
+      profiledCompiler = false;
+    }
+  );
+
   ghdl-mcode = callPackage ../by-name/gh/ghdl/package.nix { backend = "mcode"; };
 
   ghdl-gcc = callPackage ../by-name/gh/ghdl/package.nix { backend = "gcc"; };
