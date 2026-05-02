@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "anytype-cli";
-  version = "0.1.14";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "anyproto";
