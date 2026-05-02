@@ -2,40 +2,26 @@
   lib,
   python3,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # Doesn't work with latest pydantic
-      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: {
-        dependencies = [
-          python3.pkgs.pydantic_1
-          python3.pkgs.cryptography
-          python3.pkgs.email-validator
-        ];
-      });
-    };
-  };
-in
-py.pkgs.buildPythonApplication (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.12.3";
+  version = "5.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-6RPtld95MauhCmSLrgncr4+s16z0PfmiiC6eAph8ZmI=";
+    hash = "sha256-GRVVyHqAjTsC02Ba7963xP3dutH6KmpSYvHI2eWyehE=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with py.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  dependencies = with py.pkgs; [
+  dependencies = with python3.pkgs; [
     alive-progress
     awsipranges
     azure-identity
@@ -52,6 +38,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     azure-mgmt-loganalytics
     azure-mgmt-monitor
     azure-mgmt-network
+    azure-mgmt-postgresqlflexibleservers
     azure-mgmt-rdbms
     azure-mgmt-recoveryservices
     azure-mgmt-recoveryservicesbackup
@@ -74,15 +61,18 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     dulwich
     google-api-python-client
     google-auth-httplib2
+    h2
     jsonschema
     kubernetes
+    markdown
     microsoft-kiota-abstractions
     msgraph-sdk
     numpy
+    oci
     pandas
     py-iam-expand
     py-ocsf-models
-    pydantic_1
+    pydantic
     pygithub
     python-dateutil
     pytz
@@ -94,6 +84,8 @@ py.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "prowler" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
