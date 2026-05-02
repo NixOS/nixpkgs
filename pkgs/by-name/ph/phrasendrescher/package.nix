@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "18vg6h294219v14x5zqm8ddmq5amxlbz7pw81lcmpz8v678kwyph";
   };
 
+  patches = [
+    # gcc15
+    ./fix-prototypes.patch
+  ];
+
   postPatch = ''
     substituteInPlace configure \
       --replace 'SSL_LIB="ssl"' 'SSL_LIB="crypto"'
