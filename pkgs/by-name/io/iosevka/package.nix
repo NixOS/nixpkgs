@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   cctools,
-  remarshal,
+  go-toml,
   ttfautohint-nox,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
@@ -63,20 +63,22 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eOh1jdrgaMYhqxP+QSCBxqhkJUGYrWLTkYwGmKSNrRA=";
   };
 
   npmDepsHash = "sha256-9v4PKlS8FNuhnhdJmu3J1Bl+uSPS4KqE3PBrOhf9jQw=";
 
   nativeBuildInputs = [
-    remarshal
+    go-toml
     ttfautohint-nox
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # libtool
     cctools
   ];
+
+  strictDeps = true;
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
@@ -85,22 +87,16 @@ buildNpmPackage rec {
       privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile = [
-    "extraParameters"
-  ]
-  ++ lib.optionals (
-    !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
-  ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
-      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
+      printf "%s" "$buildPlan" | jsontoml -use-json-number > private-build-plans.toml
     ''}
     ${lib.optionalString
       (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan))
       ''
-        cp "$buildPlanPath" private-build-plans.toml
+        printf "%s" "$buildPlan" > private-build-plans.toml
       ''
     }
     ${lib.optionalString
@@ -111,7 +107,7 @@ buildNpmPackage rec {
     }
     ${lib.optionalString (extraParameters != null) ''
       echo -e "\n" >> params/parameters.toml
-      cat "$extraParametersPath" >> params/parameters.toml
+      printf "%s" "$extraParameters" >> params/parameters.toml
     ''}
     runHook postConfigure
   '';
@@ -136,6 +132,8 @@ buildNpmPackage rec {
 
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://typeof.net/Iosevka/";
