@@ -174,6 +174,12 @@ makeScope newScope (
 
     ocl = callPackage ../development/octave-modules/ocl { };
 
+    octave_tar = callPackage ../development/octave-modules/octave_tar { };
+
+    octave_zstd = callPackage ../development/octave-modules/octave_zstd {
+      inherit (pkgs) zstd;
+    };
+
     octclip = callPackage ../development/octave-modules/octclip { };
 
     octproj = callPackage ../development/octave-modules/octproj { };
