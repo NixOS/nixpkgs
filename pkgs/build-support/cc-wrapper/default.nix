@@ -195,6 +195,7 @@ let
         cooperlake = versionAtLeast ccVersion "10.0";
         tigerlake = versionAtLeast ccVersion "10.0";
         knm = versionAtLeast ccVersion "8.0";
+        rocketlake = versionAtLeast ccVersion "11.0";
         alderlake = versionAtLeast ccVersion "12.0";
         sapphirerapids = versionAtLeast ccVersion "11.0";
         emeraldrapids = versionAtLeast ccVersion "13.0";
@@ -228,6 +229,7 @@ let
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm = versionAtLeast ccVersion "7.0";
+        rocketlake = versionAtLeast ccVersion "13.0";
         alderlake = versionAtLeast ccVersion "16.0";
         sapphirerapids = versionAtLeast ccVersion "12.0";
         emeraldrapids = versionAtLeast ccVersion "16.0";
