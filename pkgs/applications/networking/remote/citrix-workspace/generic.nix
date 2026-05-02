@@ -78,7 +78,6 @@
   xdpyinfo,
   libxcb,
   zlib,
-  webkitgtk_4_0,
   webkitgtk_4_1,
   networkmanager,
   libproxy,
@@ -221,7 +220,6 @@ stdenv.mkDerivation rec {
     libxmu
     libxtst
     zlib
-    webkitgtk_4_0
     webkitgtk_4_1
     networkmanager
     libproxy
@@ -348,7 +346,10 @@ stdenv.mkDerivation rec {
     ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
       $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.*
 
-    autoPatchelf -- "$out"
+    # WebKitGTK 4.0 was removed from Nixpkgs. Ignoring these missing libraries allows the
+    # build to succeed and the core Workspace app to work (e.g. via .ica files).
+    # However, features relying on the embedded browser (like SAML SSO) may crash at runtime.
+    autoPatchelf --ignore-missing libwebkit2gtk-4.0.so.37 libjavascriptcoregtk-4.0.so.18 -- "$out"
 
     $out/opt/citrix-icaclient/util/ctx_rehash
   '';
