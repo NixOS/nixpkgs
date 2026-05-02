@@ -526,6 +526,7 @@ self: super: with self; {
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
+  aiospamc = callPackage ../development/python-modules/aiospamc { };
   aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
 
   aiosolaredge = callPackage ../development/python-modules/aiosolaredge { };
