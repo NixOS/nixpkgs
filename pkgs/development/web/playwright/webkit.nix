@@ -19,6 +19,7 @@
   gst_all_1,
   harfbuzz,
   harfbuzzFull,
+  hyphen,
   icu74,
   lcms,
   libavif,
@@ -38,8 +39,9 @@
   libwpe,
   libwpe-fdo,
   libxkbcommon,
-  libxml2,
+  libxml2_13,
   libxslt,
+  mesa,
   libgbm,
   sqlite,
   systemdLibs,
@@ -119,8 +121,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-Ei08TuR+WedVAfKRSeRQq7ZhULgxXQIV0bQPcNFYhr4=";
-          aarch64-linux = "sha256-/+tven7ksYhXQxPYfazyZhNsgvE8rr3A28fZPwL4c9s=";
+          x86_64-linux = "sha256-BVIZxnnfhBvI737ojRZ+yUX8mcbQ6WOlNdYJ9t4R5yY=";
+          aarch64-linux = "sha256-t9kqUdyOgDXroKp7LWQsaiaRGZVZN3ZdfYLahl5GW2E=";
         }
         .${system} or throwSystem;
     };
@@ -144,6 +146,7 @@ let
       gst_all_1.gstreamer
       harfbuzz
       harfbuzzFull
+      hyphen
       icu74
       lcms
       libavif
@@ -162,7 +165,7 @@ let
       libwpe
       libwpe-fdo
       libvpx'
-      libxml2
+      libxml2_13
       libxslt
       libgbm
       sqlite
@@ -182,25 +185,26 @@ let
       # remove bundled libs
       rm -rf $out/minibrowser-wpe/sys
 
-      # TODO: still fails on ubuntu trying to find libEGL_mesa.so.0
       wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
         --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
-        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
-
-    '';
-
-    preFixup = ''
-      # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-      mkdir -p "$out/lib"
-      ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib \
+        --run '
+          # Use Mesa as EGL vendor fallback when no system EGL vendor is configured.
+          # libglvnd discovers vendors via JSON files https://github.com/NVIDIA/libglvnd/blob/master/src/EGL/icd_enumeration.md
+          if [ -z "$__EGL_VENDOR_LIBRARY_DIRS" ] && [ -z "$__EGL_VENDOR_LIBRARY_FILENAMES" ] && \
+             ! [ -d /usr/share/glvnd/egl_vendor.d ] && ! [ -d /etc/glvnd/egl_vendor.d ] && \
+             ! [ -d /run/opengl-driver/share/glvnd/egl_vendor.d ]; then
+            export __EGL_VENDOR_LIBRARY_FILENAMES="${mesa}/share/glvnd/egl_vendor.d/50_mesa.json"
+          fi
+        '
     '';
   };
   webkit-darwin = fetchzip {
     inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-An3sdw8HltgHQ6YASsxyhoK1fd8PxZ0BBCMpnOORkv8=";
-        aarch64-darwin = "sha256-suXPCuXLMz3xoFxE5+Yjd9OXxLfNDDJiU6O1Ic0PsOI=";
+        x86_64-darwin = "sha256-NjuRZrYzraE1FrPAmyMcQFAS2zWZXYe8cBQVbSU6zFw=";
+        aarch64-darwin = "sha256-9g7YHg+TQNmAE07K6jKSSRUJ7IENUQMp2q54Mk2BbaY=";
       }
       .${system} or throwSystem;
   };

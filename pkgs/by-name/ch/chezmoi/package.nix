@@ -7,16 +7,16 @@
 
 buildGo125Module (finalAttrs: {
   pname = "chezmoi";
-  version = "2.69.4";
+  version = "2.70.2";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x809oaZk6vwkXMUAtIAnB2YTXH0zOjZVh75uClfBkH4=";
+    hash = "sha256-47tc3L3iUVt+i13qyZMxRYb59Y/id/+EMQfbZGsMJzQ=";
   };
 
-  vendorHash = "sha256-mPZaxrIhwRMcC0mmYBXU1lDcZy1p7iMSO7sfRUI/dU0=";
+  vendorHash = "sha256-uTbU8lrMTfyiljJ6flo88k3xJrhZJCzPuyu/hFrRTGo=";
 
   nativeBuildInputs = [
     installShellFiles

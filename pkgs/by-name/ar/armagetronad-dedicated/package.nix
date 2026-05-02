@@ -1,7 +1,11 @@
 {
   armagetronad,
-}:
+  ...
+}@args:
 
-armagetronad.override {
-  dedicatedServer = true;
-}
+armagetronad.override (
+  {
+    dedicatedServer = true;
+  }
+  // args
+)

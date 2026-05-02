@@ -14,6 +14,9 @@
       etc."resolv.conf".source = "/etc/tetrd/resolv.conf";
     };
 
+    # Our resolv.conf will override resolvconf's version.
+    networking.resolvconf.enable = false;
+
     systemd = {
       tmpfiles.rules = [ "f /etc/tetrd/resolv.conf - - -" ];
 

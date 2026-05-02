@@ -82,7 +82,10 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.6.0";
+  version = "3.8.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -90,10 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-Gxr8AH9grTjrMTHHOVseLuTC3rNuQEZRWhSvR4HgIc4=";
+    hash = "sha256-X/Aqab5CZX+HbGLZBgtGB08XaNno5883c2yLuRRSkAM=";
   };
 
-  patches = [ ./mujoco-system-deps-dont-fetch.patch ];
+  patches = [
+    ./mujoco-system-deps-dont-fetch.patch
+  ];
 
   nativeBuildInputs = [
     cmake

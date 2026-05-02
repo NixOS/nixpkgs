@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Fix plugin dir
     substituteInPlace src/style/CMakeLists.txt \
-       --replace "DESTINATION \"\''${QT_PLUGINS_DIR}/styles" "DESTINATION \"$qtPluginPrefix/styles"
+       --replace-fail "DESTINATION \"\''${QT_PLUGINS_DIR}/styles" "DESTINATION \"$qtPluginPrefix/styles"
   '';
 
   passthru = {

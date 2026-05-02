@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yutto";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   pythonRelaxDeps = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "yutto-dev";
     repo = "yutto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zolH3mf9YQLZLK98hhbHqUdDLRDodS/fChyfZ/xzVew=";
+    hash = "sha256-5p0/a7cwmXqQVQP90cgwWHFpFaT+YDGDFbN+EGH89CA=";
   };
 
   build-system = with python3Packages; [ uv-build ];
@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       typing-extensions
       pydantic
       returns
+      segno
     ]
     ++ (with httpx.optional-dependencies; http2 ++ socks);
 

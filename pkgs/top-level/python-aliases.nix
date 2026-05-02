@@ -191,6 +191,7 @@ mapAliases {
   editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04
   elegy = throw "elegy has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   email_validator = throw "'email_validator' has been renamed to/replaced by 'email-validator'"; # Converted to throw 2025-10-29
+  emailthreads = throw "'emailthreads' has been removed because the upstream repository was archived in 2024"; # Added 2026-04-09
   embreex = throw "embreex has been removed, as it required embree2"; # added 2025-09-14
   enocean = throw "'enocean' was removed because Home Assistant switched to 'enocean-async'"; # added 2026-03-31
   eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
@@ -256,7 +257,9 @@ mapAliases {
   hologram = throw "'hologram' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   homeassistant-bring-api = throw "'homeassistant-bring-api' has been renamed to/replaced by 'bring-api'"; # Converted to throw 2025-10-29
   homepluscontrol = throw "'homepluscontrol' has been removed as it was unmaintained upstream"; # Added 2026-03-22
+  howdoi = throw "'howdoi' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   HTSeq = throw "'HTSeq' has been renamed to/replaced by 'htseq'"; # Converted to throw 2025-10-29
+  idna-ssl = throw "'idna-ssl' has been removed as it was archived upstream"; # Added 2026-04-23
   IMAPClient = throw "'IMAPClient' has been renamed to/replaced by 'imapclient'"; # Converted to throw 2025-10-29
   inlinestyler = throw "inlinestyler has been removed because it is no longer maintained"; # added 2025-08-09
   ionhash = throw "ionhash has been removed due to being unmaintained upstream"; # added 2025-07-30
@@ -338,6 +341,7 @@ mapAliases {
   mne-python = throw "'mne-python' has been renamed to/replaced by 'mne'"; # Converted to throw 2025-10-29
   modeled = "'modeled' has been removed because it is unmaintained"; # Added 2026-01-19
   monarchmoney = throw "'monarchmoney' has been renamed to/replaced by 'monarchmoneycommunity'"; # Added 2026-03-05
+  monkeytype = throw "'monkeytype' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   moretools = "'moretools' has been removed because it is unmaintained"; # Added 2026-01-19
   mpris-server = throw "mpris-server was removed because it is unused"; # added 2025-10-31
   msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
@@ -348,6 +352,7 @@ mapAliases {
   ninja-python = throw "'ninja-python' has been renamed to/replaced by 'ninja'"; # Converted to throw 2025-10-29
   nitpick = throw "'nitpick' has been removed because it was unmaintained upstream since 2017 and using python2"; # added 2025-08-25
   nixpkgs = throw "nixpkgs has been removed as its dependency pythonix was removed"; # added 2025-07-24
+  nonbloat-db = throw "nonbloat-db has been removed because the upstream project was archived."; # added 2025-05-16
   Nuitka = throw "'Nuitka' has been renamed to/replaced by 'nuitka'"; # Converted to throw 2025-10-29
   oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
@@ -358,6 +363,9 @@ mapAliases {
   openai-triton-no-cuda = throw "'openai-triton-no-cuda' has been renamed to/replaced by 'triton-no-cuda'"; # Converted to throw 2025-10-29
   openbabel-bindings = openbabel; # added 2025-09-17
   opsdroid_get_image_size = throw "'opsdroid_get_image_size' has been renamed to/replaced by 'opsdroid-get-image-size'"; # Converted to throw 2025-10-29
+  orange3 = throw "'orange3' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
+  orange-canvas-core = throw "'orange-canvas-core' has been removed as it was unmaintained and unused outside orange3"; # Added 2026-02-10
+  orange-widgets-base = throw "'orange-widgets-base' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
   orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
@@ -419,13 +427,17 @@ mapAliases {
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
+  pymystem3 = throw "'pymystem3' has been removed because it is broken and unmaintained"; # Added 2026-04-19
   pyobject = throw "'pyobject' has been removed because it was only supporting python 2"; # Added 2026-01-24
   pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
+  pyqt5-stubs = throw "'pyqt5-stubs' has been removed as it was unused and depended on vulnerable qt5 webengine"; # Added 2026-01-15
+  pyqt5-webkit = throw "'pyqt5-webkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
   pyqt5_with_qtmultimedia = throw "'pyqt5_with_qtmultimedia' has been renamed to/replaced by 'pyqt5-multimedia'"; # Converted to throw 2025-10-29
-  pyqt5_with_qtwebkit = throw "'pyqt5_with_qtwebkit' has been renamed to/replaced by 'pyqt5-webkit'"; # Converted to throw 2025-10-29
+  pyqt5_with_qtwebkit = throw "'pyqt5_with_qtwebkit' has been removed as it depended on insecure&unmaintained qtwebkit"; # Added 2026-04-26
+  pyqtwebengine = "'pyqtwebengine' has been removed as it depended on the removed qt5 webengine"; # Added 2026-02-10
   pyramid_beaker = throw "'pyramid_beaker' has been renamed to/replaced by 'pyramid-beaker'"; # Converted to throw 2025-10-29
   pyramid_chameleon = throw "'pyramid_chameleon' has been renamed to/replaced by 'pyramid-chameleon'"; # Converted to throw 2025-10-29
   pyramid_exclog = throw "'pyramid_exclog' has been renamed to/replaced by 'pyramid-exclog'"; # Converted to throw 2025-10-29

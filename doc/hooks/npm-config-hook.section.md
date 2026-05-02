@@ -13,7 +13,7 @@ Primarily made for a multi-language environment.
 
 #### `npmDeps` {#npm-config-hook-deps}
 
-Derivation that contains the NPM package dependencies.
+Derivation that contains the npm package dependencies.
 Usually built with `fetchNpmDeps`.
 This attribute is required or the hook will abort the build.
 

@@ -239,6 +239,14 @@ rec {
     config = "m68k-unknown-linux-gnu";
   };
 
+  arc = {
+    config = "arc-unknown-linux-gnu";
+  };
+
+  sh4 = {
+    config = "sh4-unknown-linux-gnu";
+  };
+
   s390 = {
     config = "s390-unknown-linux-gnu";
   };

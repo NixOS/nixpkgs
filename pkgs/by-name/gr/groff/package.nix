@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   perl,
   enableGhostscript ? false,
   ghostscript,
@@ -17,6 +18,7 @@
   iconv,
   enableLibuchardet ? false,
   libuchardet, # for detecting input file encoding in preconv(1)
+  enableUrwFonts ? false,
   buildPackages,
   autoreconfHook,
   pkg-config,
@@ -24,21 +26,27 @@
   bison,
   bashNonInteractive,
 }:
-
+let
+  urw-fonts = fetchFromGitHub {
+    name = "groff-urw-base35-fonts";
+    owner = "ArtifexSoftware";
+    repo = "urw-base35-fonts";
+    tag = "20200910";
+    hash = "sha256-YQl5IDtodcbTV3D6vtJi7CwxVtHHl58fG6qCAoSaP4U=";
+  };
+  nativeGroffBinPath = lib.makeBinPath [
+    buildPackages.groff
+    (lib.getOutput "perl" buildPackages.groff)
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "groff";
-  version = "1.23.0";
+  version = "1.24.1";
 
   src = fetchurl {
     url = "mirror://gnu/groff/groff-${finalAttrs.version}.tar.gz";
-    hash = "sha256-a5dX9ZK3UYtJAutq9+VFcL3Mujeocf3bLTCuOGNRHBM=";
+    hash = "sha256-dOKBl5W2r/QxrqyYPWOpyJaO6roqLrp9+LpMe0Hnz9g=";
   };
-
-  patches = [
-    # Backport e49b934 "Fix underspecified `getenv()` prototype." for non-glibc systems with C23
-    # This can be dropped in the next release, when the local getopt implementation in libgroff is removed
-    ./fix-underspecified-getenv-prototype.patch
-  ];
 
   outputs = [
     "out"
@@ -51,25 +59,19 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postPatch = ''
-    # BASH_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
+    # POSIX_SHELL_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
     substituteInPlace contrib/gdiffmk/gdiffmk.sh \
-      --replace "@BASH_PROG@" "/bin/sh"
+      --replace-fail "@POSIX_SHELL_PROG@" "/bin/sh"
   ''
   + lib.optionalString enableHtml ''
     substituteInPlace src/preproc/html/pre-html.cpp \
-      --replace "psselect" "${psutils}/bin/psselect" \
-      --replace "pnmcut" "${lib.getBin netpbm}/bin/pnmcut" \
-      --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
-      --replace "pnmtopng" "${lib.getBin netpbm}/bin/pnmtopng"
+      --replace-fail "pamcut" "${lib.getExe' netpbm "pamcut"}" \
+      --replace-fail "pnmcrop" "${lib.getExe' netpbm "pnmcrop"}" \
+      --replace-fail "pnmtopng" "${lib.getExe' netpbm "pnmtopng"}"
     substituteInPlace tmac/www.tmac.in \
-      --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
-      --replace "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
-      --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
-  ''
-  + lib.optionalString (enableGhostscript || enableHtml) ''
-    substituteInPlace contrib/pdfmark/pdfroff.sh \
-      --replace '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getBin ghostscript}/bin/gs" \
-      --replace '$GROFF_AWK_INTERPRETER' "${lib.getBin gawk}/bin/gawk"
+      --replace-fail "pnmcrop" "${lib.getExe' netpbm "pnmcrop"}" \
+      --replace-fail "pngtopnm" "${lib.getExe' netpbm "pngtopnm"}" \
+      --replace-fail "@PNMTOPS_NOSETPAGE@" "${lib.getExe' netpbm "pnmtops"} -nosetpage"
   '';
 
   strictDeps = true;
@@ -102,30 +104,53 @@ stdenv.mkDerivation (finalAttrs: {
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
   # package. To avoid this issue, X11 support is explicitly disabled.
-  configureFlags =
-    lib.optionals (!enableGhostscript) [
-      "--without-x"
-    ]
-    ++ [
-      "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
-    ]
-    ++ lib.optionals enableGhostscript [
-      "--with-gs=${lib.getBin ghostscript}/bin/gs"
-      "--with-awk=${lib.getBin gawk}/bin/gawk"
-      "--with-appresdir=${placeholder "out"}/lib/X11/app-defaults"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "gl_cv_func_signbit=yes"
-    ];
+  configureFlags = [
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+    "--enable-year2038"
+  ]
+  ++ lib.optionals (stdenv.cc.isClang) [
+    "CFLAGS=-std=gnu11" # https://github.com/NixOS/nixpkgs/pull/481765
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "gl_cv_func_signbit=yes"
+  ]
+  ++ lib.optionals enableGhostscript [
+    "--with-gs=${lib.getExe ghostscript}"
+    "--with-appdefdir=${placeholder "out"}/lib/X11/app-defaults"
+  ]
+  ++ lib.optionals (!enableGhostscript) [
+    "--without-x"
+  ]
+  ++ lib.optionals enableUrwFonts [
+    "--with-urw-fonts-dir=${urw-fonts}/fonts"
+  ];
+
+  postConfigure = ''
+    # Move mom docs instead of linking them to avoid dangling symlinks
+    substituteInPlace Makefile \
+      --replace-fail '$(LN_S) $(exampledir)' 'mv $(exampledir)'
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # pdfmom uses GROFF_COMMAND to find the groff executable internally.
+    substituteInPlace Makefile \
+      --replace-fail 'GROFF_COMMAND=test-groff \' 'GROFF_COMMAND=$(GROFFBIN) \'
+  '';
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
-    "GROFF_BIN_PATH=${buildPackages.groff}/bin"
-    "GROFFBIN=${buildPackages.groff}/bin/groff"
+    "GROFF_BIN_PATH=${nativeGroffBinPath}"
+    "GROFFBIN=${lib.getExe' buildPackages.groff "groff"}"
   ];
 
   doCheck = true;
+
+  preCheck = ''
+    # The neqn-smoke-test fails on nixpkgs because neqn exec's eqn,
+    # but eqn, isn't in the PATH in the nixpkgs test env, to remedy
+    # that GROFF_BIN_PATH is set as follows:
+    export GROFF_BIN_PATH=.
+  '';
 
   postInstall = ''
     for f in 'man.local' 'mdoc.local'; do
@@ -146,16 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/afmtodit $perl
     moveToOutput bin/gperl $perl
     moveToOutput bin/chem $perl
-
     moveToOutput bin/gpinyin $perl
     moveToOutput lib/groff/gpinyin $perl
-    substituteInPlace $perl/bin/gpinyin \
-      --replace $out/lib/groff/gpinyin $perl/lib/groff/gpinyin
-
     moveToOutput bin/grog $perl
     moveToOutput lib/groff/grog $perl
-    substituteInPlace $perl/bin/grog \
-      --replace $out/lib/groff/grog $perl/lib/groff/grog
 
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';

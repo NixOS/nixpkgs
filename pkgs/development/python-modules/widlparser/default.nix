@@ -8,7 +8,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "widlparser";
   version = "1.4.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plinss";
     repo = "widlparser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vYDldZH49GfNRjKh3x0DX05jYFOLQtA//7bw+B16O1M=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

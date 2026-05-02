@@ -92,7 +92,10 @@ buildPgrxExtension (finalAttrs: {
     changelog = "https://github.com/tensorchord/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
     homepage = "https://github.com/tensorchord/VectorChord";
-    license = lib.licenses.agpl3Only; # dual licensed with Elastic License v2 (ELv2)
+    license = lib.licenses.OR [
+      lib.licenses.agpl3Only
+      lib.licenses.elastic20
+    ];
     maintainers = with lib.maintainers; [
       diogotcorreia
     ];

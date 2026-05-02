@@ -26,7 +26,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyglossary";
   version = "5.3.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ilius";
     repo = "pyglossary";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gg2D2nWhG8j4+NtzSzgmsdKd5UK8PherM8Hi1b2GAqg=";
   };
 
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "pyglossary";
   };
-}
+})

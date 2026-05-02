@@ -274,6 +274,5 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
       mjoerg
       sigmasquadron
     ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

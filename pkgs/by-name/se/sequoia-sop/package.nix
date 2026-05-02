@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Implementation of the Stateless OpenPGP Command Line Interface using Sequoia";
     homepage = "https://gitlab.com/sequoia-pgp/sequoia-sop";
-    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sop/-/blob/v${finalAttrs.src.tag}/NEWS";
+    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sop/-/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sqop";

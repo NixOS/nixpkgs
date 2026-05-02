@@ -22,6 +22,8 @@
   nss,
   nspr,
   gtk3,
+  libnotify,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
     nss
     nspr
     gtk3
+    libnotify
+    libpulseaudio
   ];
 
   installPhase = ''

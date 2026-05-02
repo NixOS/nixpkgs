@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "livekit-ingress";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "ingress";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gt1oIAKEBwQWqDCLSsRgoe7oIk5jDNReN+dFYUNnRUc=";
+    hash = "sha256-Xg69NfsEWJEJcRcLBkMgBmCEIVhSe1wjxWxBbO1k1e0=";
   };
 
-  vendorHash = "sha256-fttI+xNzHiDWKGkl20oGJOcWffElmmqNd7gbb5FiQZc=";
+  vendorHash = "sha256-n8QT+wRCxFq9vcclsOnLjc0NG2NJTgo2ouqXedSdKvQ=";
 
   subPackages = [ "cmd/server" ];
 

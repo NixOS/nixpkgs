@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-tftpd";
-  version = "0.5.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "altugbakan";
     repo = "rs-tftpd";
     tag = finalAttrs.version;
-    hash = "sha256-Q4WeRX0rGlsyp5riy16X5WXMWmWRZABEhCPz+HAiPuo=";
+    hash = "sha256-zdchV2WKkOyHPN4N0pFFavPXv8fcGgjoRKLAUbj5Rto=";
   };
 
-  cargoHash = "sha256-VloKNrje6nmiHZmyO5IGRGIHRc/VfldgYsG5kpmrvyw=";
+  cargoHash = "sha256-I49jiMcC9ndk8GuCKJE3+qS7F6V38meUdbtrxKJNhsg=";
 
   buildFeatures = [ "client" ];
 

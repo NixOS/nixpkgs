@@ -29,13 +29,13 @@
   lndir,
 }:
 let
-  version = "2.20.13";
+  version = "2.20.15";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-Oh0iFcGWsiPe7xCHw1+9z3BuWikEshVDLWeBPHrEJA0=";
+    hash = "sha256-Czh4Knel0IIHsTc3kEnp1153Kv+3721GRCbTYTkeCDg=";
   };
 
   python = python3.override {
@@ -174,6 +174,7 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "django-allauth"
     "django-auditlog"
+    "django-cachalot"
     "drf-spectacular-sidecar"
     "python-dotenv"
     "gotenberg-client"
@@ -181,6 +182,7 @@ python.pkgs.buildPythonApplication rec {
     "scikit-learn"
     "tika-client"
     # requested by maintainer
+    "imap-tools"
     "ocrmypdf"
   ];
 

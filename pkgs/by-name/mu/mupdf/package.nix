@@ -50,19 +50,9 @@ let
     src = fetchFromGitHub {
       owner = "ArtifexSoftware";
       repo = "thirdparty-freeglut";
-      rev = "13ae6aa2c2f9a7b4266fc2e6116c876237f40477";
-      hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
+      rev = "d5e2256d571b3ef66fb60716c99e35e9d3e570a2";
+      hash = "sha256-yVnVFh2KMpkRB0Emr1iiUwg8ZcPn/k4fnBtBsnv6jX0=";
     };
-
-    patches = [
-      # Fix build with gcc15
-      # https://github.com/freeglut/freeglut/pull/187
-      (fetchpatch {
-        name = "freeglut-fix-fgPlatformDestroyContext-prototype-for-C23.patch";
-        url = "https://github.com/freeglut/freeglut/commit/800772e993a3ceffa01ccf3fca449d3279cde338.patch";
-        hash = "sha256-agXw3JHq81tx5514kkorvuU5mX4E3AV930hy1OJl4L0=";
-      })
-    ];
 
     # cmake 4 compatibility, upstream is dead
     postPatch = ''
@@ -72,12 +62,12 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  version = "1.27.0";
+  version = "1.27.2";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-riRCQW3kmRgtN6UmxvorrMejvtWoiNETygSERITf58Y=";
+    hash = "sha256-VThnsTUwPcTCWrZ8XyNNjpAKDjbmboSE2ZrcBf4ehzc=";
   };
 
   patches = [

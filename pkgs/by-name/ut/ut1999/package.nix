@@ -43,11 +43,11 @@ let
     # fat binary
     aarch64-darwin = x86_64-darwin;
   };
-  unpackIso =
-    runCommand "ut1999-iso"
+  baseGame =
+    runCommand "ut1999-iso1"
       {
         # This upload of the game is officially sanctioned by OldUnreal (who has received permission from Epic Games to link to archive.org) and the UT99.org community
-        # This is a copy of the original Unreal Tournament: Game of the Year Edition (also known as UT or UT99).
+        # This is a copy of the original Unreal Tournament: Game of the Year Edition (also known as UT or UT99). The first ISO contains the base game.
         src = fetchurl {
           url = "https://archive.org/download/ut-goty/UT_GOTY_CD1.iso";
           hash = "sha256-4YSYTKiPABxd3VIDXXbNZOJm4mx0l1Fhte1yNmx0cE8=";
@@ -58,6 +58,21 @@ let
         bsdtar -xvf "$src"
         mkdir $out
         cp -r Music Sounds Textures Maps $out
+      '';
+  bonusPacks =
+    runCommand "ut1999-iso2"
+      {
+        # The second ISO contains bonus maps and game modes
+        src = fetchurl {
+          url = "https://archive.org/download/ut-goty/UT_GOTY_CD2.iso";
+          hash = "sha256-2V2O4c+VVi7gI/1UA17IgT1CdfY9GEdCMiCYbtyNANg=";
+        };
+        nativeBuildInputs = [ libarchive ];
+      }
+      ''
+        bsdtar -xvf "$src"
+        mkdir $out
+        cp -r System Sounds Textures maps $out
       '';
   systemDir =
     rec {
@@ -137,26 +152,33 @@ stdenv.mkDerivation (finalAttrs: {
       # NOTE: OldUnreal patch doesn't include these folders on linux but could in the future
       # on darwin it does, but they are empty
       rm -rf ./{Music,Sounds}
-      ln -s ${unpackIso}/{Music,Sounds} .
+      cp -r ${baseGame}/{Music,Sounds} .
+      chmod u+w ./Sounds
+      cp -n ${bonusPacks}/Sounds/* ./Sounds
+      cp -n ${bonusPacks}/System/*.{u,int} ./System
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      # maps need no post-processing on linux, therefore linking them is ok
+      # maps need no post-processing on linux
       rm -rf ./Maps
-      ln -s ${unpackIso}/Maps .
+      cp -r ${baseGame}/Maps .
+      chmod u+w ./Maps
+      cp -n ${bonusPacks}/maps/* ./Maps
     ''
     + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-      # Maps need post-processing on darwin, therefore need to be copied
-      cp -n ${unpackIso}/Maps/* ./Maps || true
+      # Maps need post-processing on darwin
+      cp -n ${baseGame}/Maps/* ./Maps || true
+      cp -n ${bonusPacks}/maps/* ./Maps || true
       # unpack compressed maps with ucc (needs absolute paths)
       for map in $PWD/Maps/*.uz; do ./UCC decompress $map; done
       mv ${systemDir}/*.unr ./Maps || true
       rm ./Maps/*.uz
     ''
     + ''
-      cp -n ${unpackIso}/Textures/* ./Textures || true
+      cp -n ${baseGame}/Textures/* ./Textures || true
+      cp -n ${bonusPacks}/Textures/* ./Textures || true
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      cp -n ${unpackIso}/System/*.{u,int} ./System || true
+      cp -n ${baseGame}/System/*.{u,int} ./System || true
       ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
       ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 

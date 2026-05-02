@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2125.0.1";
+  version = "2125.1.1";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "${finalAttrs.version}" > "$out/GIT-TAG"
       git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
     '';
-    hash = "sha256-KzM2FWJPxZtkpwvK4DSdfNuxE8yy1OVaioVegQbBSWk=";
+    hash = "sha256-cSnD4H7rruhnSeVPQqvzLqvL5tM1o5WZ4oZunrlHZOM=";
   };
 
   strictDeps = true;
@@ -136,14 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
     (darwinMinVersionHook "13.4")
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "cmake-Add-option-to-use-system-oaknut.patch";
-      url = "https://github.com/azahar-emu/azahar/commit/6201256e15ee4d4fc053933545abf50fc46be178.patch";
-      hash = "sha256-03eIubAJ65W9clI9iaLcLNAAMbkX4E507nYNV8DVwZc=";
-    })
   ];
 
   postPatch = ''

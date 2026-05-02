@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "talosctl";
-  version = "1.12.6";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eVA2ZRCC3Lw4EvSHi0ohEoRHudpAi+Ps4zcIfXQWlGE=";
+    hash = "sha256-dO4GBDhxsiuNn0lJl8RgFwUVxn34+Uks69Cm5J9zJsg";
   };
 
-  vendorHash = "sha256-gul+sTsi0kVt8BGjuEAaqAnreDP9wql0dBOfMYuxRWY=";
+  vendorHash = "sha256-489ZbRoB7KhvrKfnfGEAw406zdMrkT/3fcw6LcAtFyo";
 
   ldflags = [
     "-s"

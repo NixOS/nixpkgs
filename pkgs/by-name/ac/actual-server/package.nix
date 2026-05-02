@@ -4,9 +4,10 @@
   cctools,
   fetchFromGitHub,
   jq,
-  makeWrapper,
+  makeBinaryWrapper,
   nodejs_22,
   python3,
+  xcbuild,
   yarn-berry_4,
   nixosTests,
 }:
@@ -44,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     (yarn-berry.yarnBerryConfigHook.override { inherit nodejs; })
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
-    makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
+    xcbuild
   ];
 
   env = {
@@ -55,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     NODE_JQ_SKIP_INSTALL_BINARY = "true";
     SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
   };
+  # during build, vite tries to access localhost
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     ln -sv ../../../${translations.name} ./packages/desktop-client/locale
@@ -121,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
+    makeBinaryWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 
@@ -130,7 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) offlineCache;
+    inherit translations;
     tests = nixosTests.actual;
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -139,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
     license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag

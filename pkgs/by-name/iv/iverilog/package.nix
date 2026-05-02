@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = "sh autoconf.sh";
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   enableParallelBuilding = true;
 
   # NOTE(jleightcap): the `make check` target only runs a "Hello, World"-esque sanity check.

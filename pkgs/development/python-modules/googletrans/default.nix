@@ -28,7 +28,6 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interact with Google Translate API";
     homepage = "https://py-googletrans.readthedocs.io";
-    changelog = "https://github.com/ssut/py-googletrans/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ unode ];
     mainProgram = "translate";

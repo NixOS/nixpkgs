@@ -201,7 +201,7 @@ in
         in
         if builtins.length matches != 0 then
           { inherit path matches; }
-        else if path == /. then
+        else if toString path == "/" then
           null
         else
           go (dirOf path);
@@ -211,7 +211,7 @@ in
           base = baseNameOf file;
           type = (builtins.readDir parent).${base} or null;
         in
-        file == /. || type == "directory";
+        toString file == "/" || type == "directory";
     in
     go (if isDir then file else parent);
 

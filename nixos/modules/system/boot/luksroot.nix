@@ -214,7 +214,7 @@ let
 
                       # and try reading it from /dev/console with a timeout
                       IFS= read -t 1 -r passphrase
-                      if [ -n "$passphrase" ]; then
+                      if [ $? = 0 ]; then
                          ${
                            if luks.reusePassphrases then
                              ''
@@ -232,7 +232,7 @@ let
                   fi
               done
               echo -n "Verifying passphrase for ${dev.device}..."
-              echo -n "$passphrase" | ${csopen} --key-file=-
+              echo "$passphrase" | ${csopen}
               if [ $? == 0 ]; then
                   echo " - success"
                   ${
@@ -609,6 +609,17 @@ let
       ) luks.devices
     )
   );
+
+  systemdStage1HardwareKeyAssertionMessage = opt: ''
+    ${opt} is deprecated, and it is unsupported with systemd stage 1. Support will be removed in 26.11 along with scripted stage 1. Hardware keys in systemd stage 1 are supported with systemd-cryptsetup(8). To migrate, enroll a key in a LUKS slot with systemd-cryptenroll(1). Usually, systemd will automatically detect the configuration at runtime, but if necessary, configure the corresponding crypttab(5) options with boot.initrd.luks.devices.<name>.crypttabExtraOpts.
+
+    Note: After migrating to a new LUKS slot, the old LUKS slot used for the scripted stage 1 implementation should be removed, otherwise it could interfere with falling back to a passphrase prompt in the event the hardware key fails.
+
+    See:
+    - https://www.freedesktop.org/software/systemd/man/systemd-cryptsetup.html
+    - https://www.freedesktop.org/software/systemd/man/systemd-cryptenroll.html
+    - https://www.freedesktop.org/software/systemd/man/crypttab.html
+  '';
 
 in
 {
@@ -1106,21 +1117,16 @@ in
       # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
-        message = "systemd stage 1 does not support GPG smartcards yet.";
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.gpgSupport";
       }
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
-        message = ''
-          systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.fido2Support`.
-          Use systemd-cryptenroll(1) to configure FIDO2 support, and set
-          `boot.initrd.luks.devices.''${DEVICE}.crypttabExtraOpts` as appropriate per crypttab(5)
-          (e.g. `fido2-device=auto`).
-        '';
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.fido2Support";
       }
       # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
-        message = "systemd stage 1 does not support Yubikeys yet.";
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.yubikeySupport";
       }
     ];
 

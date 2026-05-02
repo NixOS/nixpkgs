@@ -319,8 +319,6 @@
         # https://gitlab.haskell.org/ghc/ghc/-/issues/26518 krank:ignore-line
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
-
-      # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
       ++
         lib.optionals
           (
@@ -388,7 +386,7 @@ assert !enableNativeBignum -> gmp != null;
 assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 # It is currently impossible to cross-compile GHC with Hadrian.
-assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
+assert lib.assertMsg (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
   "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
 let

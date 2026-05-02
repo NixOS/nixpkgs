@@ -2,6 +2,8 @@
   stdenv,
   fetchFromGitHub,
   fetchgit,
+  fetchpatch,
+  applyPatches,
   lib,
   bison,
   blas,
@@ -41,12 +43,21 @@ let
     hash = "sha256-8cvglBCykZVQk3BD7VE3riXfJ0PAEBwsoloqUsrMlBc=";
   };
 
-  regression_src = fetchFromGitHub {
-    name = "Xyce_Regression";
-    owner = "Xyce";
-    repo = "Xyce_Regression";
-    rev = "Release-${version}";
-    hash = "sha256-aA/4UpzSb+EeJ1RVkVwSKiNh7BDcLHxNDnKXZmnCBmI=";
+  regression_src = applyPatches {
+    src = fetchFromGitHub {
+      name = "Xyce_Regression";
+      owner = "Xyce";
+      repo = "Xyce_Regression";
+      rev = "Release-${version}";
+      hash = "sha256-aA/4UpzSb+EeJ1RVkVwSKiNh7BDcLHxNDnKXZmnCBmI=";
+    };
+    patches = [
+      # remove after next release
+      (fetchpatch {
+        url = "https://github.com/Xyce/Xyce_Regression/commit/a77e39e409d3ab2ae05d6dcbf08d9e42e3fd0f15.patch";
+        hash = "sha256-BJJO2qSwQf+u2HUWhdyBUwP3j4HbMPfXrAhgdzeTZgc=";
+      })
+    ];
   };
 in
 
@@ -80,7 +91,6 @@ stdenv.mkDerivation rec {
         koma-script
         optional
         framed
-        enumitem
         multirow
         newtx
         preprint
@@ -164,11 +174,14 @@ stdenv.mkDerivation rec {
     local docFiles=("doc/Users_Guide/Xyce_UG"
       "doc/Reference_Guide/Xyce_RG"
       "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
+    # hotfix for: https://github.com/Xyce/Xyce/issues/177
+    substituteInPlace doc/Reference_Guide/Xyce_RG_macros.tex \
+      --replace-fail "\\def\\device{\\goodbreak" "\\def\\device{\\item[]\\goodbreak"
 
     # SANDIA LaTeX class and some organization logos are not publicly available see
     # https://groups.google.com/g/xyce-users/c/MxeViRo8CT4/m/ppCY7ePLEAAJ
     for img in "snllineblubrd" "snllineblk" "DOEbwlogo" "NNSA_logo"; do
-      sed -i -E "s/\\includegraphics\[height=(0.[1-9]in)\]\{$img\}/\\mbox\{\\rule\{0mm\}\{\1\}\}/" ''${docFiles[2]}.tex
+      sed -i -E "s/\\includegraphics\[height=(0.[1-9]in)\]\{$img\}/\\mbox\{\\\\rule\{0mm\}\{\1\}\}/" ''${docFiles[2]}.tex
     done
 
     install -d $doc/share/doc/${pname}-${version}/

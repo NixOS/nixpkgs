@@ -2,29 +2,31 @@
   "comment": "This file is kept up to date via update.sh",
   "browsers": {
     "chromium": {
-      "revision": "1208",
-      "browserVersion": "145.0.7632.6",
+      "revision": "1217",
+      "browserVersion": "147.0.7727.15",
       "title": "Chrome for Testing"
     },
     "chromium-headless-shell": {
-      "revision": "1208",
-      "browserVersion": "145.0.7632.6",
+      "revision": "1217",
+      "browserVersion": "147.0.7727.15",
       "title": "Chrome Headless Shell"
     },
     "firefox": {
-      "revision": "1509",
-      "browserVersion": "146.0.1",
+      "revision": "1511",
+      "browserVersion": "148.0.2",
       "title": "Firefox"
     },
     "webkit": {
-      "revision": "2248",
+      "revision": "2272",
       "revisionOverrides": {
+        "mac14": "2251",
+        "mac14-arm64": "2251",
         "debian11-x64": "2105",
         "debian11-arm64": "2105",
         "ubuntu20.04-x64": "2092",
         "ubuntu20.04-arm64": "2092"
       },
-      "browserVersion": "26.0",
+      "browserVersion": "26.4",
       "title": "WebKit"
     },
     "ffmpeg": {

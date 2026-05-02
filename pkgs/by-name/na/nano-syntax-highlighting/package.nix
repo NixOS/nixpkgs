@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   src = fetchFromGitHub {
     owner = "galenguyer";
-    repo = pname;
+    repo = "nano-syntax-highlighting";
     tag = version;
     hash = "sha256-H0F57b8M+onhpVtvna03t919xk6+z/dJP37y9hcqfCY=";
   };
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: rec {
           for nanorcPath in ${finalAttrs.finalPackage}/share/*.nanorc; do
             nano --rcfile "$nanorcPath" --listsyntaxes \
             | tail --lines +2 \
-            | xargs --max-args 1 expect -f ${expectScript}/bin/${pname}-test-syntax.exp "$nanorcPath"
+            | xargs --max-args 1 expect -f ${expectScript}/bin/nano-syntax-highlighting-test-syntax.exp "$nanorcPath"
           done;
           touch $out
         ''

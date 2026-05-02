@@ -80,7 +80,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Tool to remove censorship removal for language models";
     homepage = "https://github.com/p-e-w/heretic";
-    changelog = "https://github.com/p-e-w/heretic/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/p-e-w/heretic/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       agpl3Only
       agpl3Plus

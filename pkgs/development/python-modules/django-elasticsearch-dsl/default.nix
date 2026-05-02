@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-elasticsearch-dsl";
   version = "8.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-es";
     repo = "django-elasticsearch-dsl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GizdFOM4UjI870XdE33D7uXHXkuv/bLYbyi9yyNjti8=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})

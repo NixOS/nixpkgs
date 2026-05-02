@@ -51,8 +51,13 @@ tcl.mkTclDerivation rec {
 
   strictDeps = true;
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -std=gnu17";
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      # Needed to avoid errors when building with GCC 15.
+      lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
+      # Autoconf 2.73 defaults to C23, but Expect uses K&R style function declarations.
+      ++ [ "-std=gnu17" ]
+    );
   };
 
   hardeningDisable = [ "format" ];
@@ -61,6 +66,8 @@ tcl.mkTclDerivation rec {
     tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})
     ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
   '';
+
+  tclRequiresCheck = [ "Expect" ];
 
   outputs = [
     "out"
@@ -74,5 +81,6 @@ tcl.mkTclDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "expect";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    broken = tcl.isTcl9;
   };
 }

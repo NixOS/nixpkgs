@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Cargo subcommand to generate a Dash/Zeal docset for your Rust packages";
     mainProgram = "cargo-docset";
     homepage = "https://github.com/Robzz/cargo-docset";
-    changelog = "https://github.com/Robzz/cargo-docset/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/Robzz/cargo-docset/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       colinsane

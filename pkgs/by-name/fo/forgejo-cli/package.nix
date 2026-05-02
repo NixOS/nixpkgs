@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromCodeberg {
     owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tWb5h0i3Z8qSHqFL7FofwljMdXgV1Z6x8ojut9pm6Yg=";
+    hash = "sha256-6qouGcqNau2aCBPYpn0hFdm8QXL1WjZvnowK4aspe/Q=";
   };
 
-  cargoHash = "sha256-7gCzU7U8kIxWnwLksXIUkgfFWWjZ/0QiaHnCD+H8sGQ=";
+  cargoHash = "sha256-UPDhPKC/x0ccfm7Df74PtCn+Zt9ShCxf9uB5TVaYV6Y=";
 
   nativeBuildInputs = [
     pkg-config

@@ -93,6 +93,16 @@ buildPythonPackage (finalAttrs: {
           "elif field.label == field.LABEL_REPEATED:" \
           "elif hasattr(field_value, 'extend'):"
     ''
+    # mlcroissant 1.1.0 requires leaf fields to define `source` or `value`
+    + ''
+      substituteInPlace tensorflow_datasets/core/utils/croissant_utils_test.py \
+        --replace-fail \
+          "references=mlc.Source(field='splits/name')," \
+          "references=mlc.Source(field='splits/name'), source=mlc.Source(field='splits/name')," \
+        --replace-fail \
+          "references=mlc.Source(field='labels/label')," \
+          "references=mlc.Source(field='labels/label'), source=mlc.Source(field='labels/label'),"
+    ''
     # TypeError: only 0-dimensional arrays can be converted to Python scalars
     + ''
       substituteInPlace tensorflow_datasets/datasets/smallnorb/smallnorb_dataset_builder.py \

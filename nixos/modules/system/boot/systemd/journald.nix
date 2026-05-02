@@ -126,6 +126,8 @@ in
       "systemd-journald-sync@.service"
       "systemd-journald-audit.socket"
       "systemd-journald-dev-log.socket"
+      "systemd-journalctl.socket"
+      "systemd-journalctl@.service"
       "syslog.socket"
     ];
 

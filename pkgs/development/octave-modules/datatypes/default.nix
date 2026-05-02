@@ -7,13 +7,13 @@
 
 buildOctavePackage rec {
   pname = "datatypes";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "pr0m1th3as";
     repo = "datatypes";
     tag = "release-${version}";
-    sha256 = "sha256-0RhZm/UzICbAAn1uCSQSgq8+6GnOuTB6TD9NoIEdvXA=";
+    sha256 = "sha256-qgFYyRMrdWhbHBvOEsDAetpllr5yyhtoEB+7Ri6zbSI=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };

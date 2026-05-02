@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-editing-services";
-  version = "1.26.5";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-editing-services/gst-editing-services-${finalAttrs.version}.tar.xz";
-    hash = "sha256-c0kAlE+Q7OXi85g8M1F4/aUAI/40KqdezZ2KnDi2TZ4=";
+    hash = "sha256-o26HkAtErBYIYS8tYW/AMvnX2SAyfE0jGv+2/pNJcU0=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

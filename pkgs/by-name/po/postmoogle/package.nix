@@ -5,13 +5,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "postmoogle";
-  version = "0.9.29";
+  version = "0.9.30";
 
   src = fetchFromGitHub {
     owner = "etkecc";
     repo = "postmoogle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VBRlsPfNqDehR07vbLvh0nGUgE6H8izW4jqWfMeHmTE=";
+    hash = "sha256-eNXc2PK3yfetyEvTyoiuoFXjEpO4ZYbDFyFaLbzwqeY=";
   };
 
   tags = [

@@ -3,22 +3,29 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  stdenv,
+  writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lazycommit";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "m7medvision";
     repo = "lazycommit";
-    tag = "v${version}";
-    hash = "sha256-DD3DXTev8WHNkAYDrPY2PISuA8WwKuK0GCLebpn01Rg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tS5jWucT4/1YRAXySUnElEkjaF2+Bl7O3taSzZf2NF0=";
   };
 
   vendorHash = "sha256-4OPCUWXxsAnzxsqZPHhjvhxQQf5Knm7nGqrdjH4I4YY=";
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  # Error reading config file: open /nix/build/nix-53143-2282724270/.home/.config/.lazycommit.yaml: no such file or directory
+  checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^TestSetEndpoint_Validation$";
+
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.buildSource=nix"
   ];
 
@@ -34,11 +41,11 @@ buildGoModule rec {
   meta = {
     description = "Simple cli for generating git commits";
     homepage = "https://github.com/m7medvision/lazycommit";
-    changelog = "https://github.com/m7medvision/lazycommit/releases/tag/v${version}";
+    changelog = "https://github.com/m7medvision/lazycommit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       m7medvision
     ];
     mainProgram = "lazycommit";
   };
-}
+})

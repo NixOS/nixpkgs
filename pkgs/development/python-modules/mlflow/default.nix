@@ -7,6 +7,7 @@
   setuptools,
 
   # dependencies
+  aiohttp,
   alembic,
   cachetools,
   click,
@@ -38,12 +39,12 @@
   requests,
   scikit-learn,
   scipy,
+  skops,
   sqlalchemy,
   sqlparse,
   uvicorn,
 
   # tests
-  aiohttp,
   azure-core,
   azure-storage-blob,
   azure-storage-file,
@@ -76,20 +77,20 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "3.8.1";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-QjRFQRShVjTnCN7/+LJ0iiB/h0+P4GJJV4RaviQdS2U=";
+    hash = "sha256-Oe6nBnnOz7MvGUNCcCGhHl6ZbyDfAhQ0LlfMBF4p6Hc=";
   };
 
   pythonRelaxDeps = [
     "cryptography"
     "gunicorn"
-    "importlib-metadata"
+    "importlib_metadata"
     "packaging"
     "protobuf"
     "pytz"
@@ -99,6 +100,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     alembic
     cachetools
     click
@@ -132,6 +134,7 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     shap
+    skops
     sqlalchemy
     sqlparse
     uvicorn

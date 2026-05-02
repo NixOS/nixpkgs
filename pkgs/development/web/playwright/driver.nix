@@ -19,20 +19,20 @@ let
   throwSystem = throw "Unsupported system: ${system}";
   browsersJSON = (lib.importJSON ./browsers.json).browsers;
 
-  version = "1.58.2";
+  version = "1.59.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-PRA3hjMlnHGVMidhEo371WXRPyVP2W0rle8ONUlKg9Y=";
+    hash = "sha256-kiH1jDyt5xMWc5C2dytoDC9fi1b5tWXZG8S6KEpuotM=";
   };
 
   babel-bundle = buildNpmPackage {
     pname = "babel-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/babel";
-    npmDepsHash = "sha256-MVMxYncmIA4k6h7mLirJaroOSNbCpvKSGxN3BGGqJ9w=";
+    npmDepsHash = "sha256-ByCy4go8PM0ksDg+2DcJPyoKG7Z0uIqKM647ZQwYwAE=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -42,7 +42,7 @@ let
     pname = "expect-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/expect";
-    npmDepsHash = "sha256-wXy6pkHJusB/WLgNKIPnuY4mTjntOMbrFrQp0UjrqAw=";
+    npmDepsHash = "sha256-PbPCsMqRkfU2c/mCsLSagew84XTgeO6H5+isNZQl2ek=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -52,7 +52,7 @@ let
     pname = "utils-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/utils";
-    npmDepsHash = "sha256-HzMu3xDb7MleJSsQ1+VvpIFSxcRfnVXniYIv/c5PHRg=";
+    npmDepsHash = "sha256-BTaF1atpK+kG++ZJBUK4r3A7mbN2vv3xpDmb1NiNngE=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -62,7 +62,7 @@ let
     pname = "utils-bundle-core";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/utils";
-    npmDepsHash = "sha256-/nxMK+gr4jmxeUazLRXd9LXdYYBVY9VnzbbXoxazX7c=";
+    npmDepsHash = "sha256-O8X80rTT10ht97towSocANnGwH4fH1f3nZMSl8TOc+Y=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -72,7 +72,7 @@ let
     pname = "zip-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/zip";
-    npmDepsHash = "sha256-c0UZ0Jg86icwJp3xarpXpxWjRYeIjz9wpWtJZDHkd8U=";
+    npmDepsHash = "sha256-5BHgCelIPh8ljIcdrO4AHafjqfLowDwJcpN+mD13Syw=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -84,7 +84,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-kc77z9REuV7b+zHcUzBLf7F2+cbAhzD/kaGxa6xNnGo=";
+    npmDepsHash = "sha256-H3kKFthmZH4fqFPQA34w7iw2rubpEKLlJ9jaW6mpuyo=";
 
     nativeBuildInputs = [
       cacert
@@ -97,6 +97,10 @@ let
       sed -i '/\/\/ Update test runner./,/^\s*$/{d}' utils/build/build.js
       sed -i '/^\/\/ Update bundles\./,/^[[:space:]]*}$/d' utils/build/build.js
       sed -i '/execSync/d' ./utils/generate_third_party_notice.js
+      # The dlopen library check uses ldconfig which doesn't work under Nix.
+      # These libraries are already provided via rpath by autoPatchelfHook and wrapProgram.
+      substituteInPlace packages/playwright-core/src/server/registry/index.ts \
+        --replace-fail "['libGLESv2.so.2', 'libx264.so']" "[]"
       chmod +w packages/playwright/bundles/babel
       ln -s ${babel-bundle}/node_modules packages/playwright/bundles/babel/node_modules
       chmod +w packages/playwright/bundles/expect

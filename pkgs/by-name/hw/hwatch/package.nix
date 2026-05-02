@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd hwatch \
       --bash $src/completion/bash/hwatch-completion.bash \
       --fish $src/completion/fish/hwatch.fish \
-      --zsh $src/completion/zsh/_hwatch \
+      --zsh $src/completion/zsh/_hwatch
   '';
 
   passthru.tests.version = testers.testVersion {

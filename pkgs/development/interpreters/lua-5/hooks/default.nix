@@ -34,6 +34,5 @@ in
   # we move the files around ourselves
   luarocksMoveDataFolder = makeSetupHook {
     name = "luarocks-move-rock";
-    propagatedBuildInputs = [ ];
   } ./luarocks-move-data.sh;
 }

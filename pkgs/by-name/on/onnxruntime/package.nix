@@ -21,7 +21,7 @@
   protobuf,
   microsoft-gsl,
   darwinMinVersionHook,
-  pythonSupport ? true,
+  pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
   rocmSupport ? config.rocmSupport,
@@ -165,6 +165,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     libpng
     nlohmann_json
     microsoft-gsl
+    protobuf
     zlib
   ]
   ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
@@ -313,6 +314,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     !(
       cudaSupport
       || rocmSupport
+      # cross-compiled test binaries can't execute on the build platform
+      || (effectiveStdenv.hostPlatform != effectiveStdenv.buildPlatform)
       || builtins.elem effectiveStdenv.buildPlatform.system [
         # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
         "aarch64-linux"

@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "3.1.0";
+  version = "3.1.1";
 in
 buildPythonPackage {
   pname = "mfusepy";
@@ -19,7 +19,7 @@ buildPythonPackage {
     owner = "mxmlnkn";
     repo = "mfusepy";
     tag = "v${version}";
-    hash = "sha256-HOibpS6lbrIwhdnbML9nLK9XUo8ILDqAp8ZjGiMKYMQ=";
+    hash = "sha256-k7CxATpFTIZfQxnz8aYuyeooFY64JZl7Z8jfH2CtehM=";
   };
 
   # If fuse library path cannot be found, use fuse library path in nixpkgs

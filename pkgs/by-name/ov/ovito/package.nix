@@ -18,6 +18,7 @@
   imagemagick,
   copyDesktopItems,
   nix-update-script,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6Packages.wrapQtAppsHook
+    wrapGAppsHook3
     imagemagick
     copyDesktopItems
   ];
@@ -61,6 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     # needed to run natively on wayland
     qt6Packages.qtwayland
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # manually create a desktop file
   desktopItems = [

@@ -135,7 +135,8 @@ buildDotnetModule rec {
 
   meta = {
     homepage = "https://ryujinx.app";
-    changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
+    # historical changelog https://git.ryujinx.app/projects/Ryubing/wiki/Changelog
+    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${src.tag}";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,

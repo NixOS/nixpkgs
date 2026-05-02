@@ -15,11 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.5.14";
+  version = "3.11.3";
 
   src = fetchurl {
-    url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
-    hash = "sha256-uIy8rIhUjohiQJ/K5EprsIISXMAx1w27I3cGo/9H9Wk=";
+    # Uses archive.org because the original site removes older versions.
+    url = "https://web.archive.org/web/20260419212716/https://jmvdveer.home.xs4all.nl/algol68g-3.11.3.tar.gz";
+    hash = "sha256-P8hKm5lFG3P8+OigX2mFPzL1bN30bblAvijajJzTcxA=";
   };
 
   outputs = [
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "a68g";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.unix;
   };
 })

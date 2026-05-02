@@ -1,15 +1,27 @@
 {
-  lib,
   apple-sdk,
   mkAppleDerivation,
   ncurses,
   pkg-config,
+  pkgs,
   stdenvNoCC,
 }:
 
 let
-  iokitUser = apple-sdk.sourceRelease "IOKitUser";
-  xnu = apple-sdk.sourceRelease "xnu";
+  f =
+    pkgs: prev:
+    if
+      !pkgs.stdenv.hostPlatform.isDarwin
+      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
+      || !(pkgs.stdenv ? __bootPackages)
+    then
+      prev.darwin.sourceRelease
+    else
+      f pkgs.stdenv.__bootPackages pkgs;
+  bootstrapSourceRelease = f pkgs pkgs;
+  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
+  iokitUser = bootstrapSourceRelease "IOKitUser";
+  xnu = bootstrapSourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "IOKitTools-deps-private-headers";

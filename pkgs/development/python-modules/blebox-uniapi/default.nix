@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   aiohttp,
-  semver,
   deepmerge,
   jmespath,
   pytest-asyncio,
@@ -13,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "blebox-uniapi";
-  version = "2.5.0";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
     tag = "v${version}";
-    hash = "sha256-johTs1AGvC6mGasK87ijhBNbHb1m36Ep9TR8XPG35d0=";
+    hash = "sha256-+XdUteik6VDPXWgO9vDC34n2fIIDMUI5jTYzs/qCpLU=";
   };
 
   postPatch = ''
@@ -28,12 +27,11 @@ buildPythonPackage rec {
       --replace-fail "pytest-runner" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     jmespath
-    semver
   ];
 
   nativeCheckInputs = [

@@ -95,6 +95,8 @@ makeScopeWithSplicing' {
         bintools = self.binutilsDualAs-unwrapped;
       };
 
+      sourceRelease = self.callPackage ../os-specific/darwin/sourceRelease { };
+
       inherit (self.file_cmds) xattr;
 
       # Note: Not in `packages.nix` because it’s a package set not a derivation.
@@ -158,6 +160,10 @@ makeScopeWithSplicing' {
         xcode_26_2_Apple_silicon
         xcode_26_3
         xcode_26_3_Apple_silicon
+        xcode_26_4
+        xcode_26_4_Apple_silicon
+        xcode_26_4_1
+        xcode_26_4_1_Apple_silicon
         xcode
         requireXcode
         ;

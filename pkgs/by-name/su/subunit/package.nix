@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = nix-update-script;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Streaming protocol for test results";

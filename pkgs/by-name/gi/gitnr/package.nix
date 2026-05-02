@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Create `.gitignore` files using one or more templates from TopTal, GitHub or your own collection";
     homepage = "https://github.com/reemus-dev/gitnr";
-    changelog = "https://github.com/reemus-dev/gitnr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer

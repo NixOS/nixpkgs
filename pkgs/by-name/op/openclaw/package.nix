@@ -11,7 +11,7 @@
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.4.9",
+  version ? "2026.4.21",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
@@ -21,10 +21,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wqvLBe+cEoo0x096fK6qKR8bDs4QHPTlxK5e64K4yls=";
+    hash = "sha256-K1Pl9lXzGKfoq/fXWxYX5PoY3IBzJr0PPstUDGET/gs=";
   };
 
-  pnpmDepsHash = "sha256-mdppNeJVf0Def0GohiKks6W3uzsaoJUYJo/ggGmypKQ=";
+  pnpmDepsHash = "sha256-FDajXHs4s0+QDRPq4ZxQWWW9rqeSJVYACAl/5Mw2Agc=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -70,15 +70,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           continue;
         }' \
       --replace-fail \
-        'stageInstalledRootRuntimeDeps({ fingerprint, packageJson, pluginDir, repoRoot })
-      ) {
-        return;
-      }' \
-        'stageInstalledRootRuntimeDeps({ fingerprint, packageJson, pluginDir, repoRoot })
-      ) {
-        return;
-      }
-      return; // nix: sandbox has no npm'
+        '    if (
+          stageInstalledRootRuntimeDeps({
+            directDependencyPackageRoot,
+            fingerprint,
+            packageJson,
+            pluginDir,
+            pruneConfig,
+            repoRoot,
+          })
+        ) {
+          continue;
+        }' \
+        '    if (
+          stageInstalledRootRuntimeDeps({
+            directDependencyPackageRoot,
+            fingerprint,
+            packageJson,
+            pluginDir,
+            pruneConfig,
+            repoRoot,
+          })
+        ) {
+          continue;
+        }
+        continue; // nix: sandbox has no npm'
     pnpm build
     pnpm ui:build
 

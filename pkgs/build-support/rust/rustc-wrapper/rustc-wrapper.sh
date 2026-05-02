@@ -1,6 +1,6 @@
 #!@shell@
 
-defaultSysroot=(@sysroot@)
+defaultSysroot=(@sysrootFlag@)
 
 for arg; do
     case "$arg" in

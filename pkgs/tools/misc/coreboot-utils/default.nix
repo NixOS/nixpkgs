@@ -110,6 +110,10 @@ let
       pname = "nvramtool";
       meta.description = "Read and write coreboot parameters and display information from the coreboot table in CMOS/NVRAM";
       meta.mainProgram = "nvramtool";
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
     };
     superiotool = generic {
       pname = "superiotool";

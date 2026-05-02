@@ -7,20 +7,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "ecspresso";
-  version = "2.8.0";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "kayac";
     repo = "ecspresso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mcKvjNHpyP6s9D1KVIqZLmSPOUZ0RkXioGXWbRsp3uc=";
+    hash = "sha256-TW7ccNYdCAySH9QwlKskjsutiUPHfTlmTSTCpOqPdfY=";
   };
 
   subPackages = [
     "cmd/ecspresso"
   ];
 
-  vendorHash = "sha256-gkCs7wtaRdpA8BY8H309fJKRB8NwMehGvIW8tNNFb/I=";
+  vendorHash = "sha256-vdj0QIqnci6P+4zWrhcxrFwvyu+hF9r6RrqtBGbVToA=";
 
   ldflags = [
     "-s"

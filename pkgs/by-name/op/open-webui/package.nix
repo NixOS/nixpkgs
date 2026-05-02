@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.8.12";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-ynWv/X4IBKO09+ira+NUwbzw51MK9aEvGkeaHzCngd0=";
+    hash = "sha256-NiB8V7B5H57t4NjKlAcQdK1E1dfS3nc/+8tWbSE3MBQ=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-UeoU7UGQ+0ViEIjK/Ze7KazB/JCyFYljHyTmxuza4v8=";
+    npmDepsHash = "sha256-8bsC6LM+v7RTbhAjGYHKClKoiC/rLhzt+UGVp3CVDB0=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -92,6 +92,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       aiocache
       aiofiles
       aiohttp
+      aiosqlite
       alembic
       anthropic
       apscheduler
@@ -107,9 +108,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       black
       boto3
       brotli
+      brotlicffi
       chardet
       chromadb
       cryptography
+      datasets_3
       ddgs
       docx2txt
       einops
@@ -155,9 +158,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pandas
       peewee
       peewee-migrate
-      pgvector
       pillow
       psutil
+      psycopg
       pyarrow
       pycrdt
       pydub
@@ -183,17 +186,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sentence-transformers
       sentencepiece
       soundfile
+      sqlalchemy
       starlette-compress
       starsessions
       tiktoken
       transformers
-      unstructured
       uvicorn
       validators
       xlrd
       youtube-transcript-api
     ]
+    ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
+    ++ sqlalchemy.optional-dependencies.asyncio
     ++ starsessions.optional-dependencies.redis;
 
   optional-dependencies = with python3Packages; {
@@ -206,11 +211,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mariadb
     ];
 
+    unstructured = [
+      unstructured
+    ];
+
     all = [
       azure-search-documents
       colbert-ai
       elasticsearch
-      firecrawl-py
       gcp-storage-emulator
       moto
       oracledb
@@ -223,6 +231,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ finalAttrs.passthru.optional-dependencies.mariadb
     ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ finalAttrs.passthru.optional-dependencies.unstructured
     ++ moto.optional-dependencies.s3;
   };
 

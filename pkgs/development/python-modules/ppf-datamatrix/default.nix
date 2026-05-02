@@ -30,6 +30,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/adrianschlatter/ppf.datamatrix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kurogeek ];
-    changelog = "https://github.com/adrianschlatter/ppf.datamatrix/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/adrianschlatter/ppf.datamatrix/releases/tag/${finalAttrs.src.tag}";
   };
 })

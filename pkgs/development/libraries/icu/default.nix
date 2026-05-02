@@ -59,10 +59,6 @@ in
     version = "70.1";
     hash = "sha256-jSBUKMF78Tu1NTAGae0oszihV7HAGuZtMdDT4tR8P9U=";
   };
-  icu69 = make-icu {
-    version = "69.1";
-    hash = "sha256-TLp7es0dPELES7DBS+ZjcJjH+vKzMM6Ha8XzuRXQl0U=";
-  };
   icu67 = make-icu {
     version = "67.1";
     hash = "sha256-lKgM1vJRpTvSqZf28bWsZlP+eR36tm4esCJ3QPuG1dw=";

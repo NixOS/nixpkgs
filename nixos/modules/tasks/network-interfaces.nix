@@ -747,9 +747,10 @@ in
       default = "";
       example = "text=anything; echo You can put $text here.";
       description = ''
-        Shell commands to be executed after all the network
-        interfaces have been created, but not necessarily
-        fully configured.
+        Shell commands to be executed at the end of the
+        `network-setup` systemd service.  Note that if
+        you are using DHCP to obtain the network configuration,
+        interfaces may not be fully configured yet.
       '';
     };
 
@@ -1779,7 +1780,9 @@ in
       optionalString hasBonds "options bonding max_bonds=0";
 
     boot.kernel.sysctl = {
-      "net.ipv4.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
+      # Only set when proxyARP needs it; never write =0 (the kernel default),
+      # which would race with systemd-networkd's IPv4Forwarding= on switch.
+      "net.ipv4.conf.all.forwarding" = mkIf (any (i: i.proxyARP) interfaces) (mkDefault true);
       "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       # allow all users to do ICMP echo requests (ping)
@@ -1850,20 +1853,6 @@ in
         '';
       };
     };
-
-    networking.localCommands = lib.mkIf config.networking.resolvconf.enable ''
-      # Set the static DNS configuration, if given.
-      ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-      ${optionalString (cfg.nameservers != [ ] && cfg.domain != null) ''
-        domain ${cfg.domain}
-      ''}
-      ${optionalString (cfg.search != [ ]) ("search " + concatStringsSep " " cfg.search)}
-      ${flip concatMapStrings cfg.nameservers (ns: ''
-        nameserver ${ns}
-      '')}
-      EOF
-    '';
-
     services.mstpd = mkIf needsMstpd { enable = true; };
 
     virtualisation.vswitch = mkIf (cfg.vswitches != { }) { enable = true; };

@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Sign and stamp PDF files";
     mainProgram = "pyhanko";
     homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-cli";
-    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/pyhanko-cli/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko-cli";
+    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko-cli";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
   };

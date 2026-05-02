@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yapesdl";
-  version = "0.80.1";
+  version = "0.81.1";
 
   src = fetchFromGitHub {
     owner = "calmopyrin";
     repo = "yapesdl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VCjxdVatu1h6VNMkLYL8Nknwn7ax0J2OhO1bc7dnQRA=";
+    hash = "sha256-vCScQmkODKZKbvrauuR9WNTjjKEvlomfzB0QifHxSVs=";
   };
 
   nativeBuildInputs = [

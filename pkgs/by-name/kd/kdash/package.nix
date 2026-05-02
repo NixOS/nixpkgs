@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kdash";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "kdash-rs";
     repo = "kdash";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1ZG0u4k95tm+k/cvLIzWD/pvVrdP3+ivTqtKr3Pniqw=";
+    sha256 = "sha256-yIBBWtdIvx9lMU9hoh0bsqYqXkSSBtfOMmUxM5UR+IQ=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Fix for build failure with gcc15
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
-  cargoHash = "sha256-zcvlR7BDkeTcwhGi2Fyz2VdfZH4+JOMRTIjIXkTAHOU=";
+  cargoHash = "sha256-eRXW3EBkNMClxLUKufhrz9WJVBY5UTA/JnabGJvAvF4=";
 
   meta = {
     description = "Simple and fast dashboard for Kubernetes";

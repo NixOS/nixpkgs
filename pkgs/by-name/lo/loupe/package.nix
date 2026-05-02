@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/meson.build --replace-fail \
       "'src' / rust_target / meson.project_name()," \
-      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()," \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(),"
   '';
 
   nativeBuildInputs = [

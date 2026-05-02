@@ -180,7 +180,7 @@ buildPythonPackage (finalAttrs: {
     export NUMBA_CACHE_DIR=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # UserWarning: 'where' used without 'out', expect unitialized memory in output.
     # If this is intentional, use out=None.
     "-Wignore::UserWarning"

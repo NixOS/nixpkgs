@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "multidict";
   version = "6.7.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HOQRfSxf0+HeXsV4ShwfUDjNVyg2SjNuE157JLRlAL0=";
   };
 
@@ -51,10 +51,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "multidict" ];
 
   meta = {
-    changelog = "https://github.com/aio-libs/multidict/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/multidict/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

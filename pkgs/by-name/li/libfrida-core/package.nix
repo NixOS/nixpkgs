@@ -2,19 +2,28 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  nix-update-script,
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "17.2.17";
+  version = "17.9.1";
   source =
     {
       x86_64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-        hash = "sha256-9elOokCY1bxzG2iL4iOODC/7qavwn77a0zOEBpAtT8Q=";
+        hash = "sha256-94Zk7onepdNVEeDb+Vn4h680UoXCZPeZW+eGpaUrnwI=";
       };
       aarch64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-arm64.tar.xz";
-        hash = "sha256-jk8BKmp3VNvCYK6kgGouFOBECoDaGiWQ8EzZvBwL7cc=";
+        hash = "sha256-o9kJvxqHICzuFItPj6r76D8aEEF/8QsRwJvE4oxphfA=";
+      };
+      x86_64-darwin = {
+        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-x86_64.tar.xz";
+        hash = "sha256-9W6o5giLSR/5bWsgRTMHI3GS7565Nkdb2kZCIm5V/cQ=";
+      };
+      aarch64-darwin = {
+        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-arm64.tar.xz";
+        hash = "sha256-bTxBvz+wpdNGUDHTFB1nN1UroMC3Bi2H/bzTVSCeMno=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");
@@ -37,6 +46,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Frida core library intended for static linking into bindings";
     homepage = "https://frida.re/";
@@ -46,6 +57,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

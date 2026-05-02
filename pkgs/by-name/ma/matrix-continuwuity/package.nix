@@ -23,66 +23,32 @@ let
     }).overrideAttrs
       (
         final: old: {
-          version = "10.5.1";
+          version = "10.10.1";
           src = fetchFromGitea {
             domain = "forgejo.ellis.link";
             owner = "continuwuation";
             repo = "rocksdb";
-            rev = "10.5.fb";
-            hash = "sha256-X4ApGLkHF9ceBtBg77dimEpu720I79ffLoyPa8JMHaU=";
+            rev = "10.10.fb";
+            hash = "sha256-1ef75IDMs5Hba4VWEyXPJb02JyShy5k4gJfzGDhopRk=";
           };
 
           patches = [ ];
-
-          cmakeFlags =
-            lib.subtractLists [
-              # no real reason to have snappy or zlib, no one uses this
-              (lib.cmakeBool "WITH_SNAPPY" true)
-              (lib.cmakeBool "ZLIB" true)
-              (lib.cmakeBool "WITH_ZLIB" true)
-              # we dont need to use ldb or sst_dump (core_tools)
-              (lib.cmakeBool "WITH_CORE_TOOLS" true)
-              # we dont need to build rocksdb tests
-              (lib.cmakeBool "WITH_TESTS" true)
-              # we use rust-rocksdb via C interface and dont need C++ RTTI
-              (lib.cmakeBool "USE_RTTI" true)
-              # this doesn't exist in RocksDB
-              (lib.cmakeBool "FORCE_SSE43" true)
-            ] old.cmakeFlags
-            ++ [
-              # no real reason to have snappy, no one uses this
-              (lib.cmakeBool "WITH_SNAPPY" false)
-              (lib.cmakeBool "ZLIB" false)
-              (lib.cmakeBool "WITH_ZLIB" false)
-              # we dont need to use ldb or sst_dump (core_tools)
-              (lib.cmakeBool "WITH_CORE_TOOLS" false)
-              # we dont need to build rocksdb tests
-              (lib.cmakeBool "WITH_TESTS" false)
-              # we use rust-rocksdb via C interface and dont need C++ RTTI
-              (lib.cmakeBool "USE_RTTI" false)
-              (lib.cmakeBool "WITH_TRACE_TOOLS" false)
-            ];
-          outputs = [ "out" ];
-
-          # We aren't building tools, the original package uses this to make sure rocksdb
-          # tools work as expected. Hence we override this and make it empty.
-          preInstall = "";
         }
       );
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.6";
+  version = "0.5.8";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p6dL1wL9n+1ivUItdlZuLxTneDBjCHEdNr0ukau2rHI=";
+    hash = "sha256-o7bZMSsdSt6VOrsuSMrS7fU9u/LrdD/579IMvsZH+ss=";
   };
 
-  cargoHash = "sha256-lLbnFA2WS96er84G2e9bGrYhhqe2zL3Npn1SXB3De2w=";
+  cargoHash = "sha256-QM4K5TmWWRTcrovAvvEbXEraI4C0vMSJ68Z/6kHhOr8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -122,6 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://forgejo.ellis.link/continuwuation/continuwuity/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      bartoostveen
       nyabinary
       snaki
     ];

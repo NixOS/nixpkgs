@@ -1,16 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  django,
   fetchFromGitHub,
-  netaddr,
-  netbox,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   pillow,
   qrcode,
-  setuptools,
+  psycopg2,
+
+  # nativeCheckInputs
+  django,
+  netaddr,
+  netbox,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-qrcode";
   version = "0.0.20";
   pyproject = true;
@@ -18,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-qrcode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7dPMpuJ2nuj9rRmVrfthD+xrEHoUaLFqDJWC6cGGCwY=";
   };
 
@@ -33,6 +40,7 @@ buildPythonPackage rec {
     django
     netaddr
     netbox
+    psycopg2 # not specified in pyproject.toml, but required at import time
   ];
 
   preFixup = ''
@@ -44,9 +52,9 @@ buildPythonPackage rec {
   meta = {
     description = "Netbox plugin for generate QR codes for objects: Rack, Device, Cable";
     homepage = "https://github.com/netbox-community/netbox-qrcode";
-    changelog = "https://github.com/netbox-community/netbox-qrcode/releases/tag/${src.tag}";
+    changelog = "https://github.com/netbox-community/netbox-qrcode/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace webpack.common.js \
-      --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}" \
+      --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}"
   '';
 
   npmDepsHash = "sha256-oxytp6n/4X1bhpfFqpqMAji86sbjV669F324zY3hoK4=";

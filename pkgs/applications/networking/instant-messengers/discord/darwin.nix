@@ -1,13 +1,13 @@
 {
   pname,
-  version,
-  src,
+  source,
   meta,
   stdenv,
   binaryName,
   desktopName,
   self,
   lib,
+  fetchurl,
   undmg,
   makeWrapper,
   writeScript,
@@ -32,6 +32,9 @@ let
     withMoonlight
   ];
   enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
+
+  inherit (source) version;
+  src = fetchurl { inherit (source) url hash; };
 
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
@@ -106,6 +109,7 @@ stdenv.mkDerivation {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
+    inherit source;
     updateScript = ./update.py;
 
     tests = {

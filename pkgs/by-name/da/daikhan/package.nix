@@ -15,7 +15,7 @@
   libgee,
   gst_all_1,
   sqlite,
-  xxHash,
+  xxhash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-rs
     sqlite
-    xxHash
+    xxhash
   ];
 
   mesonFlags = [

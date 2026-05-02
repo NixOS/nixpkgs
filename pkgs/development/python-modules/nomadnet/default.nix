@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nomadnet";
-  version = "0.9.9";
+  version = "0.9.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "NomadNet";
     tag = finalAttrs.version;
-    hash = "sha256-qLe9fnIE9kY9JerAAH318dq1SOshP9xX3l/2c91fnSA=";
+    hash = "sha256-vIV3FEvwqd2je/DzGWeshEx5Tb+DhOQIg7l0LbffEwY=";
   };
 
   build-system = [ setuptools ];

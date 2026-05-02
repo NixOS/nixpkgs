@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sipvicious";
-  version = "0.3.5";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnableSecurity";
     repo = "sipvicious";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jH5/rNGFbiPdSX52UuJCAq5M7Kco7tCAhtcCyZl5wEc=";
+    hash = "sha256-OQq1PP0qoETu+0qs2vhkgVU5FVZA5wnWMKU+lKJrvv4=";
   };
 
   build-system = [

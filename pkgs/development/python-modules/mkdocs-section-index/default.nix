@@ -11,7 +11,7 @@
   mkdocs-material,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-section-index";
   version = "0.3.10";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oprypin";
     repo = "mkdocs-section-index";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cw/a17xliK68vStC20f+IHI3nQl1/s/lIIj1tyQJti0=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

@@ -18,14 +18,16 @@
   wayland-scanner,
   wlroots_0_20,
   xwayland,
-  zig_0_15,
+  zig_0_16,
   withManpages ? true,
   xwaylandSupport ? true,
 }:
-
+let
+  zig = zig_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.2";
+  version = "0.4.5";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -33,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nufonz39XphxPW1lERq2acVgE5mGmW+x1yimyS6O4tc=";
+    hash = "sha256-q4JAlr9/ex+BEgktBmFwOvZzQEAGvxXPD1QyKqyha4g=";
   };
 
   strictDeps = true;
@@ -44,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_15
+    zig
   ]
   ++ lib.optional withManpages scdoc;
 

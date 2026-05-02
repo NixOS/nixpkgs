@@ -856,16 +856,6 @@ in
       };
     };
 
-    # Remove with systemd 259.4
-    security.polkit.extraConfig = mkIf config.security.polkit.enable ''
-      polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.machine1.register-machine" &&
-              subject.user != "root") {
-              return polkit.Result.AUTH_ADMIN_KEEP;
-          }
-      });
-    '';
-
     # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
     # part, run0 would fail to run the command even if authentication is successful and the user has
     # permission to run the command. This next part is only enabled if polkit is enabled because the
@@ -885,6 +875,21 @@ in
     systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
       serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
       overrideStrategy = "asDropin";
+    };
+
+    # Fix paths in sshd-vsock.socket
+    # https://github.com/systemd/systemd/blob/v259.3/src/ssh-generator/ssh-generator.c#L239
+    # this socket is used, for example, when NixOS is started via systemd-vmspawn
+    systemd.sockets.sshd-vsock = mkIf config.services.openssh.enable {
+      overrideStrategy = "asDropin";
+      socketConfig.ExecStartPost = [
+        ""
+        "${config.systemd.package}/lib/systemd/systemd-ssh-issue --make-vsock"
+      ];
+      socketConfig.ExecStopPre = [
+        ""
+        "${config.systemd.package}/lib/systemd/systemd-ssh-issue --rm-vsock"
+      ];
     };
   };
 

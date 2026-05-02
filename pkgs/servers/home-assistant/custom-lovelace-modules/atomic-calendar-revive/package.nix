@@ -15,20 +15,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atomic-calendar-revive";
-  version = "10.2.0";
+  version = "10.2.2";
 
   src = fetchFromGitHub {
     owner = "totaldebug";
     repo = "atomic-calendar-revive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cqtXhBSFuEuh8IH/6S0qZN3+SrdCt0WXrBJlBcDUujY=";
+    hash = "sha256-FiER75oDc9fbdZlh/dLPKmuA11i/UWy2uoX/aPW2m1s=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-fhi1ysI2ygMfPTSiu40tt713fA/dy7r28Xyk0HxSvXE=";
+    hash = "sha256-DoMzpXCkK60o1YPpStCNCdpj0I+4OqXr7PcX3hjVhSg=";
   };
 
   nativeBuildInputs = [

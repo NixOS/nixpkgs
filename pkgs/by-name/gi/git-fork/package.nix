@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/"{bin,Applications}
     mv Fork.app "$out/Applications/"
-    ln -s "$out/Applications/Fork.app/Contents/MacOS/Fork" "$out/bin/fork"
+    ln -s "$out/Applications/Fork.app/Contents/Resources/fork_cli" "$out/bin/fork"
 
     runHook postInstall
   '';

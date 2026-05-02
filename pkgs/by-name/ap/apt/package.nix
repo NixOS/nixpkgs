@@ -25,7 +25,7 @@
   triehash,
   udev,
   w3m,
-  xxHash,
+  xxhash,
   xz,
   zstd,
   withDocs ? true,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     p11-kit
     udev
-    xxHash
+    xxhash
     xz
     zstd
   ]

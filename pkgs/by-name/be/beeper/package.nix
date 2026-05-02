@@ -9,10 +9,10 @@
 }:
 let
   pname = "beeper";
-  version = "4.2.630";
+  version = "4.2.770";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-    hash = "sha256-1oaJoQ9Ws9Bc+CQFojYCJc5ChgkHUVOKtWrT3ehGMNU=";
+    hash = "sha256-0x1p61zIkAGpBG0dyRwLqoKbhqI3EGTtqpdYr5sxhog=";
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;
@@ -29,7 +29,7 @@ let
       sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
 
       # hide version status element on about page otherwise a error message is shown
-      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $out/resources/app/build/renderer/PrefsPanes-*.css
+      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $out/resources/app/build/renderer/*.css
     '';
   };
 in

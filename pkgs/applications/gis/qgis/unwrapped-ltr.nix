@@ -11,7 +11,6 @@
 
   withGrass,
   withServer,
-  withWebKit,
 
   darwin,
   libtasn1,
@@ -45,7 +44,6 @@
   qtsensors,
   qtserialport,
   qtsvg,
-  qtwebkit,
   qtxmlpatterns,
   qwt,
   sqlite,
@@ -87,7 +85,7 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.44.8";
+  version = "3.44.9";
   pname = "qgis-ltr-unwrapped";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
@@ -95,7 +93,7 @@ mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-FL/JqvcLqKhHsG96o/7Mel8wH8OaL+2LDtq6jngjW50=";
+    hash = "sha256-aeTWjzYRCKcgdB9sknrcqO5oWEuwU7OuvrvAi8W4bWE=";
   };
 
   passthru = {
@@ -150,7 +148,6 @@ mkDerivation rec {
     zstd
   ]
   ++ lib.optional withGrass grass
-  ++ lib.optional withWebKit qtwebkit
   ++ lib.optional stdenv.hostPlatform.isDarwin libtasn1
   ++ pythonBuildInputs;
 
@@ -180,12 +177,14 @@ mkDerivation rec {
 
     # See https://github.com/libspatialindex/libspatialindex/issues/276
     "-DWITH_INTERNAL_SPATIALINDEX=True"
+
+    # Unmaintained & not in nixpkgs
+    "-DWITH_QTWEBKIT=OFF"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DQGIS_MACAPP_BUNDLE=0" # Don't copy Qt into bundle; we fix paths in postFixup
     "-DSQLITE3_INCLUDE_DIR=${sqlite.dev}/include" # FindSqlite3.cmake incorrectly assumes framework
   ]
-  ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
   ++ lib.optional withServer [
     "-DWITH_SERVER=True"
     "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"

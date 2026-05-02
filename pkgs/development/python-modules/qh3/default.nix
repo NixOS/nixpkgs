@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "qh3";
-  version = "1.7.1";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "qh3";
     tag = "v${version}";
-    hash = "sha256-duZstcheiv3eLPp2IMaZvYo5vq5SMBxcy7HQmBI0SaI=";
+    hash = "sha256-zZQyKQK/zJ58XnCgxk/SvexBF1Z+GBtvulhuhUiIago=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-BqUofzjfDNUhE27GYcV7CXUK2dT/BQ16Z5aQkHyYUIE=";
+    hash = "sha256-2HwwyHex1SE34dUGtooOf5LCkhkVhLpsoEHBFvLUkLM=";
   };
 
   nativeBuildInputs = [
@@ -61,9 +61,11 @@ buildPythonPackage rec {
     rm -r qh3
   '';
 
-  disabledTests = lib.optionals stdenv.buildPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # ConnectionError
     "test_connect_and_serve_ipv4"
+    "test_ech_accepted"
+    "test_grease_ech_no_rejection"
   ];
 
   meta = {

@@ -167,6 +167,7 @@ stdenv.mkDerivation rec {
     1 a busybox() { '$out'/bin/busybox "$@"; }\
     logger() { '$out'/bin/logger "$@"; }\
     ' ${debianDispatcherScript} > ${outDispatchPath}
+    sed -i 's|/sbin/resolvconf|"$(busybox which resolvconf)"|g' ${outDispatchPath}
     chmod 555 ${outDispatchPath}
     HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
   '';

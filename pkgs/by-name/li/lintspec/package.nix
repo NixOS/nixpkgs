@@ -9,6 +9,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lintspec";
   version = "0.16.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "beeb";
@@ -23,6 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lintspec"
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lintspec \

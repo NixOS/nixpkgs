@@ -6,18 +6,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "itsycal";
-  version = "0.15.10";
+  version = "0.15.12";
 
   src = fetchzip {
     url = "https://itsycal.s3.amazonaws.com/Itsycal-${finalAttrs.version}.zip";
-    hash = "sha256-6+E/4SbRIChJMc2VDMNYongsAWRtcFxtIj6lvTiexrU=";
+    hash = "sha256-2Xu1ZQnNl0o2/AYOIjxZPDnc0TxMXrqKej7CCZEVV9I=";
+    stripRoot = false;
   };
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications/Itsycal.app"
-    cp -R . "$out/Applications/Itsycal.app"
+    mkdir -p "$out/Applications"
+    cp -R Itsycal.app "$out/Applications/"
 
     runHook postInstall
   '';

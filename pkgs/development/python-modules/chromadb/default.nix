@@ -68,19 +68,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.5.5";
+  version = "1.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = finalAttrs.version;
-    hash = "sha256-Y/M7awTi2AJTh4xRY0MIfnC9ygy62fG7X3W9QUxW2XE=";
+    hash = "sha256-bxRRpwd7pmE+/JMARaqjuE+xFh8Qx70Aon2w56sOi1I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-yx5OMZSWRAP732lRypap79vr2I72aT+TWooo+5e0wDQ=";
+    hash = "sha256-0vuXMxwbbpfMA0UcHcLieTJK6u67o6EYdJLH5Q+wtc8=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -102,7 +102,12 @@ buildPythonPackage (finalAttrs: {
                        "anonymized_telemetry: bool = False"
     ''
     # error: queries overflow the depth limit!
+    # https://github.com/chroma-core/chroma/issues/6891
+    # https://github.com/chroma-core/chroma/issues/6892
+    # https://github.com/chroma-core/chroma/issues/6687
     + ''
+      sed -i '1i #![recursion_limit = "256"]' rust/blockstore/src/lib.rs
+      sed -i '1i #![recursion_limit = "256"]' rust/index/src/lib.rs
       sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
     '';
 
@@ -258,6 +263,11 @@ buildPythonPackage (finalAttrs: {
     "chromadb/test/test_client.py::test_http_client_with_inconsistent_host_settings[async_client]"
     "chromadb/test/test_client.py::test_http_client_with_inconsistent_port_settings[async_client]"
     "chromadb/test/test_client.py::test_http_client[async_client]"
+
+    # ValueError: Could not connect to a Chroma server.
+    "chromadb/test/property/test_add_mcmr.py::test_add_small[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_medium[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_large[single-region]"
   ];
 
   __darwinAllowLocalNetworking = true;

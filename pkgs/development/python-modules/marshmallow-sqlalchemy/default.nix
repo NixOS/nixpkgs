@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "marshmallow_sqlalchemy";
     inherit version;
-    hash = "sha256-ZBAwS/mOwm6jXz+dPO6C5R/Qk8Q0YSrdMqC9zbVmj3w=";
+    hash = "sha256-5RGSwgR3BkWi+rDXL0T4eJJy7vdZUfhLFgjWtLC/4OY=";
   };
 
   build-system = [ flit-core ];

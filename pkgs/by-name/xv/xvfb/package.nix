@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   xorg-server,
+  fetchurl,
   dri-pkgconfig-stub,
   libdrm,
   libGL,
@@ -37,7 +38,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvfb";
 
-  inherit (xorg-server) src version;
+  #FIXME: go back to xorg-server version on nixpkgs staging
+  #inherit (xorg-server) src version;
+  version = "21.1.21";
+  src = fetchurl {
+    url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
+    hash = "sha256-wMvlVFs/ZFuuYCS4MNHRFUqVY1BoOk5Ssv/1sPoatRk=";
+  };
 
   strictDeps = true;
 
@@ -99,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Ddtrace=false"
+    "-Dxquartz=false"
   ];
 
   meta = {

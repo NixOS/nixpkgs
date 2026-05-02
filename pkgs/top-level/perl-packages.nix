@@ -116,11 +116,11 @@ with self;
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.8.2";
+    version = "3.9.0";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-pSOfWiwS4Me05DL/1+k2/u+UWpYhpBWRx307DPRYVgs=";
+      hash = "sha256-lO1Hfjs/lNEmzscynw6DmfHQzoLHxNiCqUrbFQ5//JA=";
     };
 
     outputs = [
@@ -1337,10 +1337,10 @@ with self;
 
   Apppapersway = buildPerlPackage rec {
     pname = "App-papersway";
-    version = "2.001";
+    version = "3.000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SP/SPWHITTON/App-papersway-${version}.tar.gz";
-      hash = "sha256-Jx8MJdyr/tfumMhuCofQX0r3vWcVuDzfJGpCjq2+Odw=";
+      hash = "sha256-60H7zCtVbBfYOqVKw9X1EjOM7mzjSuPj5IwcDWhC+dE=";
     };
     buildInputs = [
       AnyEvent
@@ -7933,10 +7933,10 @@ with self;
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.087";
+    version = "0.088";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.087.tar.gz";
-      hash = "sha256-gHDsKVFg1I83bY/xssvwvxUtqfIDOTk4LwDxP3SM030=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.088.tar.gz";
+      hash = "sha256-kUn4t0JjRWbpgbmUn7fZs/Qa7zbvBOziG1HPNRU8SUA=";
     };
     meta = {
       description = "Cryptographic toolkit";
@@ -14831,10 +14831,10 @@ with self;
 
   GitAutofixup = buildPerlPackage {
     pname = "App-Git-Autofixup";
-    version = "0.004007";
+    version = "0.005000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004007.tar.gz";
-      hash = "sha256-2pe/dnKAlbO27nHaGfC/GUMBsvRd9HietU23Tt0hCjs=";
+      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.005.tar.gz";
+      hash = "sha256-4mPAOzbD+mDZ7co5xyMyA2x1u6645pYw4Q4yHRqYUTM=";
     };
     meta = {
       description = "Create fixup commits for topic branches";
@@ -25313,10 +25313,10 @@ with self;
 
   NetCIDRLite = buildPerlPackage {
     pname = "Net-CIDR-Lite";
-    version = "0.22";
+    version = "0.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/ST/STIGTSP/Net-CIDR-Lite-0.22.tar.gz";
-      hash = "sha256-QxfYyzQaYXueCIjaQ8Cc3//8sMnt97jJko10KlY7hRc=";
+      url = "mirror://cpan/authors/id/S/ST/STIGTSP/Net-CIDR-Lite-0.23.tar.gz";
+      hash = "sha256-mlgnjkmgjN65vsAc7N06lb5zbQ59TQXRP5COOj/hDTI=";
     };
     meta = {
       description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
@@ -25710,10 +25710,10 @@ with self;
 
   NetIPXS = buildPerlPackage {
     pname = "Net-IP-XS";
-    version = "0.22";
+    version = "0.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.22.tar.gz";
-      hash = "sha256-JZe0aDizgur3S6XJnD9gpqC1poHsNqFBchJL9E9LGSA=";
+      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.23.tar.gz";
+      hash = "sha256-c7E+E68xWC/whLgNUK+LOeGStGc6wvfWj+4Mpa9txX8=";
     };
     propagatedBuildInputs = [
       IOCapture
@@ -28193,10 +28193,10 @@ with self;
 
   Plack = buildPerlPackage {
     pname = "Plack";
-    version = "1.0050";
+    version = "1.0053";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0050.tar.gz";
-      hash = "sha256-0mUa3oLrv/er4KOhifyTLa3Ed5GGzolGjlbQGJ6qbtQ=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0053.tar.gz";
+      hash = "sha256-QPxEA0wWTpr3DdCP++5AjCQwLsDbMQ0pAd9xdTuxZ9o=";
     };
     buildInputs = [
       AuthenSimplePasswd
@@ -28226,6 +28226,7 @@ with self;
       TryTiny
     ];
     patches = [
+      ../development/perl-modules/Plack-xsendfile-disable-by-default-CVE-2026-7381.patch
       ../development/perl-modules/Plack-test-replace-DES-hash-with-bcrypt.patch
     ];
     meta = {
@@ -31355,10 +31356,10 @@ with self;
 
   Starman = buildPerlModule {
     pname = "Starman";
-    version = "0.4017";
+    version = "0.4018";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4017.tar.gz";
-      hash = "sha256-b/q5FfMj9gCJ4+v4Urm5cH1pFyZt+K/XNw+sBL/f7k4=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4018.tar.gz";
+      hash = "sha256-bY2yl9hRFB+k/3dI3/BVG+K6j5pELtnKrGRNvMmjbt0=";
     };
     buildInputs = [
       LWP
@@ -35965,10 +35966,10 @@ with self;
 
   TextCSV_XS = buildPerlPackage {
     pname = "Text-CSV_XS";
-    version = "1.52";
+    version = "1.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.52.tgz";
-      hash = "sha256-5BWqcFut+Es1ncTA8MmC8b9whIHaoUdW8xNufInA5B0=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.62.tgz";
+      hash = "sha256-FxBpPt2u/dVudNpCuqntZ25+rtKOvTA60jyYL+8rFBU=";
     };
     meta = {
       description = "Comma-Separated Values manipulation routines";

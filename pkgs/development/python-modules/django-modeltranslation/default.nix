@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-modeltranslation";
-  version = "0.20.2";
+  version = "0.20.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
     tag = "v${version}";
-    hash = "sha256-zjCasSZzIviCBDHyKwQlS0lR5S01AmMjBnWG/iEEJO4=";
+    hash = "sha256-DlghTCh2bcY+jHOYhQWVzMRGNKRIiQkLt4ZHDLVxUUs=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Translates Django models using a registration approach";
     homepage = "https://github.com/deschler/django-modeltranslation";
-    changelog = "https://github.com/deschler/django-modeltranslation/blob/v${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/deschler/django-modeltranslation/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ augustebaum ];
   };

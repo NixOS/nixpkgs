@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ansi2image";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "ansi2image";
     tag = "v${version}";
-    hash = "sha256-1sPEEWcOzesLQXSeMsUra8ZRSMAKzH6iisOgdhpxhKM=";
+    hash = "sha256-GWrVo1WJux+ATvG5F9J4WMDlI0XAeTpQg7NrkN1P4Co=";
   };
 
   propagatedBuildInputs = [

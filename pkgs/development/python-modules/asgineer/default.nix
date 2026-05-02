@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Really thin ASGI web framework";
     homepage = "https://asgineer.readthedocs.io";
-    changelog = "https://github.com/almarklein/asgineer/releases/tag/v${src.tag}";
+    changelog = "https://github.com/almarklein/asgineer/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };

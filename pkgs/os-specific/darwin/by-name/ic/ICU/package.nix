@@ -133,6 +133,16 @@ let
           --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
         substituteInPlace config/dist-data.sh \
           --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
+
+        # Make sure this ICU build puts C++ symbols in a distinct namespace to avoid symbol clashes with other ICU
+        # implementations (including both the system ICU and builds of the upstream ICU).
+        # This breaks binary compatibility for the C++ API, but it’s not ABI stable anyway. Without doing this,
+        # `dotnet` crashes on macOS 26.4 when linked against `libicucore.A.dylib` from Nixpkgs.
+        substituteInPlace common/unicode/uvernum.h \
+          --replace-fail 'U_ICU_VERSION_SUFFIX ' 'U_ICU_VERSION_SUFFIX _nix'
+        # Only enable symbol renaming for C++ symbols. C symbols need to remain unversioned for compatibility.
+        substituteInPlace common/unicode/uversion.h \
+          --replace-fail U_DISABLE_RENAMING 0
       '';
 
     # remove dependency on bootstrap-tools in early stdenv build

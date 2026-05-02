@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.26.0";
+  version = "3.28.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ase";
     repo = "ase";
     tag = version;
-    hash = "sha256-1738NQPgOqSr2PZu1T2b9bL0V+ZzGk2jcWBhLF21VQs=";
+    hash = "sha256-ZbQxCd8uFTNPVUjjsCCiZR9pKRucobWfxDZGdyMm6ko=";
   };
 
   build-system = [ setuptools ];

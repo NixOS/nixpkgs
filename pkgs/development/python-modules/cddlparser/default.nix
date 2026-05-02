@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tidoust";
-    repo = pname;
+    repo = "cddlparser";
     tag = "v${version}";
     sha256 = "sha256-LcIxU77bYpsuE4j1QgzdD3d7CO/EUEA9xwn+uIV68Oc=";
   };

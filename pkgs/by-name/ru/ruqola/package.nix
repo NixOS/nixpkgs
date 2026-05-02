@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ruqola";
-  version = "2.6.1";
+  version = "2.7.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "ruqola";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z/JyIXZKXdOc92Ebq1Jcnhx/6EL7rkcdnxN2BsQn5Cw=";
+    hash = "sha256-qw69To9NuT4pnp3OfQHcny1FSEmLXTZpeo21h5dWdSo=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qtnetworkauth
+    qt6.qtspeech
     qt6.qtwebsockets
   ];
 

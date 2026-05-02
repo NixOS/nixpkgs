@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "croaring";
-  version = "4.3.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "RoaringBitmap";
     repo = "CRoaring";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c4o8AMCtDGLChXxJKJyxkWhuYu7axqLb2ce8IOGk920=";
+    hash = "sha256-wks7kkF0va7RUJXY74ku/yWTSsHQKlFczfhAHyuNudM=";
   };
 
   # roaring.pc.in cannot handle absolute CMAKE_INSTALL_*DIRs, nor
@@ -27,6 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ cmocka ];
 
   doCheck = true;
+
+  postPatch = ''
+    # Fixes the build of dependent projects by updating the supported
+    # CMake version.
+    # Issue: https://github.com/RoaringBitmap/CRoaring/issues/793
+    # PR: https://github.com/RoaringBitmap/CRoaring/pull/794
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '2.8...3.15' '3.15'
+  '';
 
   preConfigure = ''
     mkdir -p dependencies/.cache
@@ -49,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     platforms = lib.platforms.all;
   };
 })

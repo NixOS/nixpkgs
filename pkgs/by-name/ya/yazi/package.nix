@@ -9,7 +9,7 @@
     jq
     poppler-utils
     _7zz
-    ffmpeg
+    ffmpeg-headless
     fd
     ripgrep
     fzf
@@ -27,7 +27,7 @@
   jq,
   poppler-utils,
   _7zz,
-  ffmpeg,
+  ffmpeg-headless,
   fd,
   ripgrep,
   fzf,

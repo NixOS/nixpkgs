@@ -81,7 +81,7 @@
 
       postFixup = ''
         patchelf $out/bin/${pname} \
-          --add-needed ${gnutls}/lib/libgnutls.so \
+          --add-needed ${gnutls}/lib/libgnutls.so
       '';
 
       description = "Dedicated server for FTEQW";

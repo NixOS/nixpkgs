@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  wolfssl,
   bionic-translation,
   python3,
   which,
@@ -35,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Do not hardocde addr2line binary path
     ./no-hardcode-path-addr2line.patch
+    ./remove-wolfssljni.patch
   ];
 
   postPatch = ''
@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     lz4
     openssl
-    (wolfssl.override { enableJni = true; })
     xz
     zlib
   ];

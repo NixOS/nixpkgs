@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "deck";
-  version = "1.57.0";
+  version = "1.58.0";
 
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0j3/cFRKclyO4mpm+r5lBqM3uTnzUatfLqH2aUMDbUA=";
+    hash = "sha256-dNqG7R8iaV/XdefGAsx1trptWK8G6NIjj7dmSMG5tUI=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
   ];
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-/Cde+eGOqUsL3Q5jDtZaTzOTMnE72ncgBMQzcIeNVls=";
+  vendorHash = "sha256-b/eBY5VQJJGLxVDyCJclwbOpF0pgVCu+DKE/FoOyy4Q=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd deck \

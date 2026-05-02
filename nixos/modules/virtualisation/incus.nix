@@ -54,8 +54,6 @@ let
       lvm2
       lz4
       lxcfs
-      minio
-      minio-client
       nftables
       qemu-utils
       qemu_kvm
@@ -99,6 +97,10 @@ let
     ]
     ++ lib.optionals nvidiaEnabled [
       libnvidia-container
+    ]
+    ++ lib.optionals cfg.bucketSupport [
+      minio
+      minio-client
     ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
@@ -209,6 +211,13 @@ in
         default = cfg.package.client;
         defaultText = lib.literalExpression "config.virtualisation.incus.package.client";
         description = "The incus client package to use. This package is added to PATH.";
+      };
+
+      bucketSupport = lib.mkOption {
+        type = lib.types.bool;
+        description = "Enable bucket support using minio, which is an insecure and unmaintained S3 provider.";
+        default = if lib.versionAtLeast config.system.stateVersion "26.11" then false else null;
+        defaultText = lib.literalExpression ''if lib.versionAtLeast config.system.stateVersion "26.11" then false else null;'';
       };
 
       softDaemonRestart = lib.mkOption {

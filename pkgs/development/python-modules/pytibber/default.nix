@@ -12,21 +12,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytibber";
-  version = "0.37.0";
+  version = "0.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = finalAttrs.version;
-    hash = "sha256-NCHTSvwAJhRzruBZwPzieI5jqrRrugnDjgZHHiLXgbE=";
+    hash = "sha256-ZM9oXX6iEmsR20f2Jgg3fME1lm3egKun1GvNOZIKTV0=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "gql"
-  ];
 
   dependencies = [
     aiohttp

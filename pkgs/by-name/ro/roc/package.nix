@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage {
     description = "Fast, friendly, functional programming language";
     mainProgram = "roc";
     homepage = "https://www.roc-lang.org/";
-    changelog = "https://github.com/roc-lang/roc/releases/tag/${rocVersion}";
+    changelog = "https://github.com/roc-lang/roc/releases/tag/alpha4-rolling";
     license = lib.licenses.upl;
     maintainers = [
       lib.maintainers.anton-4

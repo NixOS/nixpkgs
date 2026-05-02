@@ -45,17 +45,14 @@ If a particular lock file is present, it is a strong indication of which package
 
 It's better to try to use a Nix tool that understands the lock file.
 Using a different tool might give you a hard-to-understand error because different packages have been installed.
-An example of problems that could arise can be found [here](https://github.com/NixOS/nixpkgs/pull/126629).
-Upstream use npm, but this is an attempt to package it with `yarn2nix` (that uses yarn.lock).
 
 Using a different tool forces you to commit a lock file to the repository.
 These files are fairly large, so when packaging for nixpkgs, this approach does not scale well.
 
 Exceptions to this rule are:
 
-- When you encounter one of the bugs from a Nix tool. In each of the tool-specific instructions, known problems will be detailed. If you have a problem with a particular tool, then it's best to try another tool, even if this means you will have to re-create a lock file and commit it to Nixpkgs. In general `yarn2nix` has fewer known problems, and so a simple search in Nixpkgs will reveal many `yarn.lock` files committed.
+- When you encounter one of the bugs from a Nix tool. In each of the tool-specific instructions, known problems will be detailed. If you have a problem with a particular tool, then it's best to try another tool, even if this means you will have to re-create a lock file and commit it to Nixpkgs.
 - Some lock files contain particular version of a package that has been pulled off npm for some reason. In that case, you can recreate upstream lock (by removing the original and `npm install`, `yarn`, ...) and commit this to nixpkgs.
-- The only tool that supports workspaces (a feature of npm that helps manage sub-directories with different package.json from a single top level package.json) is `yarn2nix`. If upstream has workspaces you should try `yarn2nix`.
 
 ### Try to use upstream package.json {#javascript-upstream-package-json}
 
@@ -92,7 +89,7 @@ Exceptions to this rule are:
 Each tool has an abstraction to just build the node_modules (dependencies) directory.
 You can always use the `stdenv.mkDerivation` with the node_modules to build the package (symlink the node_modules directory and then use the package build command).
 The node_modules abstraction can be also used to build some web framework frontends.
-For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. `mkYarnModules` to make the derivation containing node_modules.
+For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/pl/plausible/package.nix) is built.
 Then when building the frontend you can just symlink the node_modules directory.
 
 ## Tool-specific instructions {#javascript-tool-specific}
@@ -486,40 +483,29 @@ In this example, `prePnpmInstall` will be run by both `pnpmConfigHook` and by th
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`, if you haven't set it already, you can use `1` with your current hash:
+This is the version of the output of `fetchPnpmDeps`. New packages should use `3`:
 
 ```nix
 {
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 1;
-    hash = "..."; # you can use your already set hash here
-  };
-}
-```
-
-After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
-
-```nix
-{
-  # ...
-  pnpmDeps = fetchPnpmDeps {
-    # ...
-    fetcherVersion = 2;
+    fetcherVersion = 3;
     hash = "..."; # clear this hash and generate a new one
   };
 }
 ```
+
+When upgrading to a newer `fetcherVersion`, you need to regenerate the hash.
 
 This variable ensures that we can make changes to the output of `fetchPnpmDeps` without breaking existing hashes.
 Changes can include workarounds or bug fixes to existing PNPM issues.
 
 ##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
 
-- 1: Initial version, nothing special
+- 1: Initial version, nothing special. **Deprecated: Scheduled for removal in the 26.11 release.**. New packages must not use this value.
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
-- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
+- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950). **Recommended**
 
 ### Yarn {#javascript-yarn}
 
@@ -597,139 +583,6 @@ This script by default runs `yarn --offline build`, and it relies upon the proje
 To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup project files and dependencies. To disable this phase, you can set `dontYarnInstall = true` or override the `installPhase`. Below is a list of additional `mkDerivation` arguments read by this hook:
 
 - `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
-
-#### yarn2nix {#javascript-yarn2nix}
-
-> [!WARNING]
-> The `yarn2nix` functions have been deprecated in favor of `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook` (for Yarn v1) and `yarn-berry_*.*` tooling (Yarn v3 and v4). Documentation for `yarn2nix` functions still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
-
-##### Preparation {#javascript-yarn2nix-preparation}
-
-You will need at least a `yarn.lock` file. If upstream does not have one you need to generate it and reference it in your package definition.
-
-If the downloaded files contain the `package.json` and `yarn.lock` files they can be used like this:
-
-```nix
-{
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = "....";
-  };
-}
-```
-
-##### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
-
-> [!WARNING]
-> The `mkYarnPackage` functions have been deprecated in favor of `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook` (for Yarn v1) and `yarn-berry_*.*` tooling (Yarn v3 and v4). Documentation for `mkYarnPackage` functions still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
-
-`mkYarnPackage` will by default try to generate a binary. For packages only generating static assets (Svelte, Vue, React, Webpack, ...), you will need to explicitly override the build step with your instructions.
-
-It's important to use the `--offline` flag. For example if you script is `"build": "something"` in `package.json` use:
-
-```nix
-{
-  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline build
-
-    runHook postBuild
-  '';
-}
-```
-
-The `distPhase` is packing the package's dependencies in a tarball using `yarn pack`. You can disable it using:
-
-```nix
-{ doDist = false; }
-```
-
-The configure phase can sometimes fail because it makes many assumptions that may not always apply. One common override is:
-
-```nix
-{
-  configurePhase = ''
-    runHook preConfigure
-
-    ln -s $node_modules node_modules
-
-    runHook postConfigure
-  '';
-}
-```
-
-or if you need a writeable node_modules directory:
-
-```nix
-{
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -r $node_modules node_modules
-    chmod +w node_modules
-
-    runHook postConfigure
-  '';
-}
-```
-
-##### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
-
-This will generate a derivation including the `node_modules` directory.
-If you have to build a derivation for an integrated web framework (Rails, Phoenix, etc.), this is probably the easiest way.
-
-#### Overriding dependency behavior {#javascript-mkYarnPackage-overriding-dependencies}
-
-In the `mkYarnPackage` record the property `pkgConfig` can be used to override packages when you encounter problems building.
-
-For instance, say your package is throwing errors when trying to invoke node-sass:
-
-```
-ENOENT: no such file or directory, scandir '/build/source/node_modules/node-sass/vendor'
-```
-
-To fix this we will specify different versions of build inputs to use, as well as some post install steps to get the software built the way we want:
-
-```nix
-mkYarnPackage rec {
-  pkgConfig = {
-    node-sass = {
-      buildInputs = with final; [
-        python
-        libsass
-        pkg-config
-      ];
-      postInstall = ''
-        LIBSASS_EXT=auto yarn --offline run build
-        rm build/config.gypi
-      '';
-    };
-  };
-}
-```
-
-##### Pitfalls {#javascript-yarn2nix-pitfalls}
-
-- If version is missing from upstream package.json, yarn will silently install nothing. In that case, you will need to override package.json as shown in the [package.json section](#javascript-upstream-package-json)
-- Having trouble with `node-gyp`? Try adding these lines to the `yarnPreBuild` steps:
-
-  ```nix
-  {
-    yarnPreBuild = ''
-      mkdir -p $HOME/.node-gyp/${nodejs.version}
-      echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-      ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-      export npm_config_nodedir=${nodejs}
-    '';
-  }
-  ```
-
-  - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
-  - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
-- `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
 
 #### Yarn Berry v3/v4 {#javascript-yarn-v3-v4}
 Yarn Berry (v3 / v4) have similar formats, they start with blocks like these:

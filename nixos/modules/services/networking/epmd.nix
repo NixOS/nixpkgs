@@ -5,6 +5,8 @@
   ...
 }:
 let
+  inherit (lib.types) listOf oneOf str;
+
   cfg = config.services.epmd;
 in
 {
@@ -21,7 +23,10 @@ in
     };
     package = lib.mkPackageOption pkgs "erlang" { };
     listenStream = lib.mkOption {
-      type = lib.types.str;
+      type = oneOf [
+        str
+        (listOf str)
+      ];
       default = "[::]:4369";
       description = ''
         the listenStream used by the systemd socket.

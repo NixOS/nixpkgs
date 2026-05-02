@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyghmi";
-  version = "1.6.14";
+  version = "1.6.16";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p6Rb+ltGeGHZFDhzTqln1MmZVSJzvwDg+liBPtgbVNU=";
+    hash = "sha256-VqMQ54Mx9fkq3UAbzEApzm0LuRKEGXQARf8HGH7yZ6U=";
   };
 
   build-system = [

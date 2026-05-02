@@ -27,7 +27,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
@@ -91,6 +90,7 @@
   # tests
   pytestCheckHook,
   pytest-cov-stub,
+  pytest-factoryboy,
   pytest-flask,
   mock,
   rarfile,
@@ -113,16 +113,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.8.0";
+  version = "2.10.0";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8sYoy11eocn7UDeTuaPqOxXZLdUqkabU4DMNLBD5Xp4=";
+    hash = "sha256-DbZV8n+2nbILLIi7niXohcIynwza+w5LVo/jy4wmTbw=";
   };
   pyproject = true;
-  # Waiting for https://github.com/beetbox/beets/pull/6267
-  disabled = pythonAtLeast "3.14";
 
   patches = extraPatches;
 
@@ -181,8 +179,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    ffmpeg
     pytestCheckHook
     pytest-cov-stub
+    pytest-factoryboy
     pytest-flask
     mock
     rarfile
@@ -273,13 +273,12 @@ buildPythonPackage (finalAttrs: {
         bareasc = { };
         beatport.propagatedBuildInputs = [ requests-oauthlib ];
         bench.testPaths = [ ];
-        bpd.testPaths = [ ];
+        bpd = { };
         bpm.testPaths = [ ];
         bpsync.testPaths = [ ];
         bucket = { };
         chroma = {
           propagatedBuildInputs = [ pyacoustid ];
-          testPaths = [ ];
           wrapperBins = [
             chromaprint
           ];

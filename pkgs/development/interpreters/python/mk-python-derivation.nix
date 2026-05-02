@@ -112,6 +112,9 @@ lib.extendMkDerivation {
     "dependencies"
     "optional-dependencies"
     "build-system"
+
+    # Deprecated arguments
+    "pytestFlagsArray"
   ];
 
   extendDrvArgs =
@@ -418,7 +421,12 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
         updateScript = nix-update-script { };
+        # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
+        # They are internal and subject to changes.
+        # TODO(@ShamrockLee): Remove when overrideStdenvCompat gets removed.
         ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
+        ${if attrs ? stdenv then "__stdenvPythonCompatPos" else null} =
+          builtins.unsafeGetAttrPos "stdenv" attrs;
       }
       // attrs.passthru or { };
 
@@ -434,6 +442,19 @@ lib.extendMkDerivation {
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
+    // (
+      let
+        deprecatedFlagNotEmpty =
+          attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ];
+        pos = builtins.unsafeGetAttrPos "pytestFlagsArray" attrs;
+      in
+      {
+        ${if deprecatedFlagNotEmpty then "pytestFlagsArray" else null} = throw ''
+          buildPythonPackage: Deprecated flag pytestFlagsArray found at ${pos.file}:${toString pos.line}
+            Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+        '';
+      }
+    )
     //
       lib.mapAttrs
         (

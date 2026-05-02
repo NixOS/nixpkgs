@@ -106,8 +106,8 @@ in
           ];
         };
 
-        linux_6_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.19";
+        linux_7_0 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "7.0";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -180,6 +180,7 @@ in
         linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream";
         linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream";
         linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
+        linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -485,7 +486,7 @@ in
         rtw89 =
           if lib.versionOlder kernel.version "5.16" then callPackage ../os-specific/linux/rtw89 { } else null;
 
-        openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
+        openafs_1_8 = callPackage ../by-name/op/openafs/module.nix { };
         # Current stable release; don't backport release updates!
         openafs = openafs_1_8;
 
@@ -676,7 +677,7 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_6_19 = recurseIntoAttrs (packagesFor kernels.linux_6_19);
+    linux_7_0 = recurseIntoAttrs (packagesFor kernels.linux_7_0);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -689,6 +690,7 @@ in
     linux_6_15 = throw "linux 6.15 was removed because it reached its end of life upstream"; # Added 2025-08-23
     linux_6_16 = throw "linux 6.16 was removed because it reached its end of life upstream"; # Added 2025-10-22
     linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
+    linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
   };
 
   rpiPackages = {
@@ -744,7 +746,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_19;
+    linux_latest = packages.linux_7_0;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

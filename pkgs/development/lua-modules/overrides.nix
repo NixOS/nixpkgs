@@ -885,13 +885,25 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs {
+
+    doCheck = true;
+    nativeCheckInputs = [
+      final.nlua
+      final.bustedCheckHook
+      writableTmpDirAsHomeHook
+    ];
+
+    nvimSkipModules = [
+      "neorg.modules.core.dirman.tests"
+      "neorg.modules.core.ui.module"
+      "neorg.modules.core.concealer.module"
+    ];
+
     # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
-        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
-        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim'," \
-        --replace-fail ", 'nvim-treesitter-legacy-api == 0.9.2'" ""
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
     '';
   };
 
@@ -1250,6 +1262,13 @@ in
     meta = (old.meta or { }) // {
       broken = lua.luaversion != "5.1";
     };
+  });
+
+  tree-sitter-norg-meta = prev.tree-sitter-norg-meta.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      writableTmpDirAsHomeHook
+      tree-sitter
+    ];
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {

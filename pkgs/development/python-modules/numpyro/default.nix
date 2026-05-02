@@ -40,6 +40,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-sNqllL9nBwXp0kn+HAjvIaHf7LR0UKh9q7DZ20yCr5A=";
   };
 
+  patches = [
+    # Remove usage of xla_pmap_p which was removed in jax 0.10.0
+    ./fix-jax-0.10.0-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

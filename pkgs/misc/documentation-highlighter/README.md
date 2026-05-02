@@ -6,7 +6,7 @@ This file was generated with pkgs/misc/documentation-highlighter/update.sh
 
 **This package contains only the CDN build assets of highlight.js.**
 
-This may be what you want if you'd like to install the pre-built distributable highlight.js client-side assets via NPM. If you want to use highlight.js mainly on the server-side, you likely want the [highlight.js][1] package instead.
+This may be what you want if you'd like to install the pre-built distributable highlight.js client-side assets via npm. If you want to use highlight.js mainly on the server-side, you likely want the [highlight.js][1] package instead.
 
 To access these files via CDN:<br>
 https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/

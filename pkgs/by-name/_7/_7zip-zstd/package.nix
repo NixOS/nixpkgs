@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
-      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+      --replace-fail windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
   buildPhase =

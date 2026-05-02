@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Unofficial Amazon Games client";
     homepage = "https://github.com/imLinguin/nile";
-    changelog = "https://github.com/imLinguin/nile/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/imLinguin/nile/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     mainProgram = "nile";
     maintainers = [ ];

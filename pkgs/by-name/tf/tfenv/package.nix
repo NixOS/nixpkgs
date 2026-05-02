@@ -16,13 +16,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "tfenv";
-  version = "3.0.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "tfutils";
     repo = "tfenv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2Fpaj/UQDE7PNFX9GNr4tygvKmm/X0yWVVerJ+Y6eks=";
+    hash = "sha256-bwY5QEXugogNrStT859lNOkPoQ+n3BQZGexErxl5nco=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,22 +33,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/lib $out/libexec $out/share
+    mkdir -p $out/bin $out/share/tfenv $out/share/doc/tfenv
 
-    cp -r lib/* $out/lib/
-    cp -r libexec/* $out/libexec/
-    cp -r share/* $out/share/
+    cp -r bin lib libexec share CHANGELOG.md $out/share/tfenv/
 
-    install -m0644 CHANGELOG.md $out/CHANGELOG.md
-
-    install -m0755 bin/tfenv $out/bin/tfenv
-    install -m0755 bin/terraform $out/bin/terraform
+    ln -s $out/share/tfenv/CHANGELOG.md $out/share/doc/tfenv/CHANGELOG.md
 
     runHook postInstall
   '';
 
   postFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
+    for f in $out/share/tfenv/bin/* $out/share/tfenv/libexec/*; do
       [ -f "$f" ] || continue
       wrapProgram "$f" \
         --prefix PATH : "${
@@ -62,6 +57,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           ]
         }"
     done
+
+    ln -s $out/share/tfenv/bin/tfenv $out/bin/tfenv
+    ln -s $out/share/tfenv/bin/terraform $out/bin/terraform
   '';
 
   passthru.updateScript = nix-update-script { };

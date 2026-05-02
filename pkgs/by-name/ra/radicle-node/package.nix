@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
     hash = srcHash;
@@ -164,8 +164,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Unlike centralized code hosting platforms, there is no single entity controlling the network.
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
-    homepage = "https://radicle.xyz";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
+    homepage = "https://radicle.dev";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit

@@ -677,10 +677,6 @@ let
       };
     in
     {
-      imports = [
-        (lib.mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
-      ];
-
       options = {
         validMinDays = lib.mkOption {
           type = lib.types.nullOr lib.types.int;

@@ -21,14 +21,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "equinox";
-  version = "0.13.6";
+  version = "0.13.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OETWXAcCp945mMrpC8U4gSBvEeQX8RoUGZR4irBs7Ak=";
+    hash = "sha256-vgmU8cqNCyiZYah1SSwzVtLS+YB2T1uooCC17k12+h8=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -56,26 +57,13 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  pytestFlags = [
-    # DeprecationWarning: The default axis_types will change in JAX v0.9.0 to jax.sharding.AxisType.Explicit.
-    "-Wignore::DeprecationWarning"
-  ];
-
-  disabledTestPaths = [
-    # ValueError: not enough values to unpack (expected 2, got 0)
-    "tests/test_finalise_jaxpr.py"
-  ];
+  pythonImportsCheck = [ "equinox" ];
 
   disabledTests = [
-    # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
-    # Reported upstream: https://github.com/patrick-kidger/equinox/issues/1186
-    "test_jax_transform_warn"
-
-    # Flaky: AssertionError: Non-linear scaling detected
+    # Flaky under heavy load:
+    #   AssertionError: Non-linear scaling detected: ratio=1.56
     "test_speed_buffer_while"
   ];
-
-  pythonImportsCheck = [ "equinox" ];
 
   meta = {
     description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";

@@ -31,13 +31,15 @@ wrapLuaProgramsIn() {
     if head -n1 "$f" | grep -q '#!.*'; then
         # Cross-compilation hack: exec '/nix/store/...-lua-.../bin/lua' execute
         # the host lua
+        # NOTE: We don't --replace-fail, because this hook is also used
+        # on Lua packages' wrapped binaries.
         substituteInPlace "$f" \
-          --replace-fail "@luaBuild@" "@luaHost@"
+          --replace-quiet "@luaBuild@" "@luaHost@"
         # Build platform's Luarocks writes scripts that reference luarocks
         # itself in them, so we fix these references to reference the host
         # platform's luarocks.
         substituteInPlace "$f" \
-          --replace-fail "@luarocksBuild@" "@luarocksHost@"
+          --replace-quiet "@luarocksBuild@" "@luarocksHost@"
     fi
 
     # wrapProgram creates the executable shell script described
@@ -60,7 +62,7 @@ wrapLuaProgramsIn() {
 
     # Same as above, but now for the wrapper script
     substituteInPlace "$f" \
-      --replace-fail "@luarocksBuild@" "@luarocksHost@"
+      --replace-quiet "@luarocksBuild@" "@luarocksHost@"
 
   done
 }

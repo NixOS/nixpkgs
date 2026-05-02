@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gh-cherry-pick";
-  version = "1.2.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PerchunPak";
     repo = "gh-cherry-pick";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EiXWgiCV99k3810nCWA+AnlLjG8VKRCPnns9KtfGxqY=";
+    hash = "sha256-a2vhQ9upJYc+t4Juq+eukNc7dzq6MafNxDUULPZs9sQ=";
   };
 
   build-system = with python3Packages; [
@@ -20,26 +20,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
     uv-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "attrs"
-    "trio"
-  ];
-
   dependencies = with python3Packages; [
-    attrs
     cyclopts
     httpx
-    loguru
-    trio
-    typing-extensions
   ];
 
+  # upstream has strict dependency pins, but it doesn't break with slightly
+  # newer/older versions
+  #   (c) upstream maintainer
+  pythonRelaxDeps = true;
+
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    pytest
+    faker
+    pytest-asyncio
     pytest-cov-stub
+    pytest-httpx
     pytest-mock
-    pytest-trio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "gh_cherry_pick" ];

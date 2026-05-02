@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI read-only interface for Mozilla Firefox's bookmarks";
     homepage = "https://github.com/zer0-x/foxmarks";
-    changelog = "https://github.com/zer0-x/foxmarks/blobl/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/zer0-x/foxmarks/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ loicreynier ];
   };

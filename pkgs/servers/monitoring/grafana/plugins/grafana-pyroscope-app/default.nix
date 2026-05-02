@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "grafana-pyroscope-app";
-  version = "2.0.1";
-  zipHash = "sha256-ws/gYJnq2BQHeaPezGFsEgmvbURRo1kCI8yRO5X6588=";
+  version = "2.0.4";
+  zipHash = "sha256-merfONOOSaD3KOQkRP7v8J18pemW3dLBf3bz3QpEpiQ=";
   meta = {
     description = "Integrate seamlessly with Pyroscope, the open-source continuous profiling platform, providing a smooth, query-less experience for browsing and analyzing profiling data";
     license = lib.licenses.agpl3Only;

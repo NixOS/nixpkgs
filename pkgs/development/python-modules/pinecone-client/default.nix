@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "8.1.0";
+  version = "8.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pinecone-io";
     repo = "pinecone-python-client";
     tag = "v${version}";
-    hash = "sha256-rXsCaH8SbMttBQWfF8Gy6hz+PVboxkLJZCs0/o6lAEI=";
+    hash = "sha256-VfoSW17Bx/eFlnSxUiQZsfY/y210/sKIF5df/kb2kTc=";
   };
 
   build-system = [ hatchling ];

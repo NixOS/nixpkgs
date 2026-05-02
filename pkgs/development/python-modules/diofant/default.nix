@@ -82,6 +82,6 @@ buildPythonPackage rec {
     description = "Python CAS library";
     homepage = "https://github.com/diofant/diofant";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ suhr ];
+    maintainers = [ ];
   };
 }

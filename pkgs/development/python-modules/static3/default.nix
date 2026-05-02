@@ -8,6 +8,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
   webtest,
 }:
 
@@ -23,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-uFgv+57/UZs4KoOdkFxbvTEDQrJbb0iYJ5JoWWN4yFY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'pytest-cov'" ""
-  '';
-
   optional-dependencies = {
     KidMagic = [
       # TODO: kid
@@ -39,6 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     webtest
   ]
   ++ lib.concatAttrValues optional-dependencies;

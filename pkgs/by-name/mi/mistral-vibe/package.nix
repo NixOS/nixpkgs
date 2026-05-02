@@ -28,14 +28,15 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.7.3";
+  version = "2.9.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XRBrBd7X8HewrUJ7K8wQMcVJz3ITPKzyKpyCi7detsE=";
+    hash = "sha256-3kMilvBmBhP57jPlDLc+S6kDuJjcOjMHEwh8W4hzEVw=";
   };
 
   build-system = with python3Packages; [
@@ -59,11 +60,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     agent-client-protocol
     anyio
     cachetools
+    charset-normalizer
     cryptography
     gitpython
     giturlparse
     google-auth
     httpx
+    jsonpatch
     keyring
     markdownify
     mcp
@@ -160,6 +163,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # This tests the install_script and fails. This is not relevant for nixpkgs.
+    "tests/test_install_script.py"
+
     # All snapshot tests fail with AssertionError
     "tests/snapshots/"
 

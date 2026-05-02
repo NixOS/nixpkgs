@@ -24,12 +24,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ecl";
-  version = "24.5.10";
+  version = "26.3.27";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    hash = "sha256-5Opluxhh4OSVOGv6i8ZzvQFOltPPnZHpA4+RQ1y+Yis=";
+    hash = "sha256-QW1XB78R0rPY0z1nkUGaeG5MxZrAzD7FBe5ZtRqfXJo=";
   };
+
+  patches = [
+    # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/370
+    (fetchpatch {
+      name = "allocate-first_env-dynamically.patch";
+      url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/61a14dfc6681f674ae5673856c0749fdf4af6564.patch";
+      hash = "sha256-DOn0mtlW1Bl59LxqEQiE90ZJlXDSbTbxL0s8NNL882o=";
+      includes = [ "src/c/main.d" ];
+    })
+
+    # https://gitlab.com/embeddable-common-lisp/ecl/-/work_items/838
+    (fetchpatch {
+      name = "clang-miscompilation.patch";
+      url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/d39cc449f770c52cc4c8b297cf600d7bd53d172a.patch";
+      hash = "sha256-C+zVjAY/+hQ4Te62DQxIQsHu0AqewygmSEQpcmrA5EU=";
+    })
+  ];
 
   nativeBuildInputs = [
     libtool
@@ -48,31 +65,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
-  ];
-
-  patches = [
-    # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
-      sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
-    })
-  ]
-  ++ lib.optionals stdenv.cc.isGNU [
-    # Fix gcc15 compat for downstream packages e.g. sage
-    # error: ‘bool’ cannot be defined via ‘typedef’
-    (fetchpatch {
-      url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/1aec8f741f69fd736f020b7fe4d3afc33e60ae6a.patch";
-      sha256 = "sha256-/cA6iOOob0ATViQm5EwBbdin5peqRMjLPKa7RjkrJ94=";
-    })
-    # error: too many arguments to function 'fn'; expected 0, have 1
-    (fetchpatch {
-      url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/5b4e9c4bbd7cce4a678eecd493e56c495490e8b5.patch";
-      sha256 = "sha256-QHxswFiW2rfDAQ98Sl+VVmyP4M/eIjJWQEcR/B+m398=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/5ec9e02f6db9694dcdef7574036f1e320d64a8af.patch";
-      sha256 = "sha256-ZRah0IqOt6OQZGqlCq0RKiToyxsRXQEXAiSUGgqZnKU=";
-    })
   ];
 
   configureFlags = [

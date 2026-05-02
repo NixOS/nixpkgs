@@ -6,11 +6,11 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "cubelify";
-  version = "1.25.10";
+  version = "1.25.11";
 
   src = fetchurl {
     url = "https://storage.cubelify.com/overlay/v1/Cubelify%20Overlay-${version}.AppImage";
-    hash = "sha512-JgiyrcKJneihOAywZom2YQLNOejb0IidicSGVCwVHMJeUEwyFOQtUrhM4vvXwqradnogPK3LAez/dQJ58reGfA==";
+    hash = "sha512-iWOkFTH5iPw3gzirWph14f8/M0cLQgsUyGX5Xnestc1oqcrKOJgdVb65RBWgCQBywhMkEXC0h1wzaZiBaKYuAQ==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,7 +25,7 @@ appimageTools.wrapType2 rec {
       install -Dm444 ${contents}/cubelify-overlay.desktop -t $out/share/applications/
       install -Dm444 ${contents}/cubelify-overlay.png -t $out/share/pixmaps/
       substituteInPlace $out/share/applications/cubelify-overlay.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=cubelify' \
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=cubelify'
     '';
 
   passthru.updateScript = ./update.sh;

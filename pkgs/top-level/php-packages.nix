@@ -417,7 +417,10 @@ lib.makeScope pkgs.newScope (
           #
           # These will be passed as arguments to mkExtension above.
           extensionData = [
-            { name = "bcmath"; }
+            {
+              name = "bcmath";
+              env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+            }
             {
               name = "bz2";
               buildInputs = [ bzip2 ];
@@ -717,7 +720,10 @@ lib.makeScope pkgs.newScope (
             }
             { name = "sysvmsg"; }
             { name = "sysvsem"; }
-            { name = "sysvshm"; }
+            {
+              name = "sysvshm";
+              configureFlags = [ "CFLAGS=-std=gnu17" ];
+            }
             {
               name = "tidy";
               configureFlags = [ "--with-tidy=${html-tidy}" ];

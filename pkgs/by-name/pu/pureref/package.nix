@@ -9,7 +9,7 @@
   dpkg,
 }:
 let
-  version = "2.1.1";
+  version = "2.1.2";
   deb =
     runCommand "PureRef-${version}_x64"
       {
@@ -19,7 +19,7 @@ let
           cacert
           dpkg
         ];
-        outputHash = "sha256-Dyozn6WJ93AvXavlW3xmY5p5TsQxU+dJkogEBE8e+zs=";
+        outputHash = "sha256-aGHhesJ6JJQpuRbDgASjpY4e28WHaVSFNEgGZmG7U3g=";
         outputHashMode = "recursive";
       }
       ''

@@ -14,13 +14,13 @@
   importlib-resources,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "irc";
   version = "20.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jdv9GfcSBM7Ount8cnJLFbP6h7q16B5Fp1vvc2oaPHY=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "IRC (Internet Relay Chat) protocol library for Python";
     homepage = "https://github.com/jaraco/irc";
-    changelog = "https://github.com/jaraco/irc/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/jaraco/irc/blob/v${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

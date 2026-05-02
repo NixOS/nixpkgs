@@ -66,8 +66,9 @@ function runChecklist({
     if (allByName) {
       // We can only determine the below, if all packages are in by-name, since
       // we can't reliably relate changed files to packages outside by-name.
-      checklist[`${user.login} is a maintainer of all touched packages.`] =
-        eligible.has(user.id)
+      checklist[
+        `${user.login} is a maintainer of all touched packages on the ${pull_request.base.ref} branch.`
+      ] = eligible.has(user.id)
     }
   } else {
     // This is only used when no user is passed, i.e. for labeling.

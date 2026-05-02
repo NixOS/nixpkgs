@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.1";
+  version = "12.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
+    hash = "sha256-WhWXybzBuI7hB54TuqxOmOoHUUIqf0uiC8+KDbvbqgA=";
   };
 
   pythonRelaxDeps = [

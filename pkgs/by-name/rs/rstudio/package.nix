@@ -19,13 +19,14 @@
   makeWrapper,
   nodejs,
   npmHooks,
+  python3,
   xcbuild,
   yarn,
   yarnConfigHook,
   zip,
 
-  boost187,
-  electron_38,
+  boost190,
+  electron_39,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -44,7 +45,8 @@
 }:
 
 let
-  electron = electron_38;
+  electron = electron_39;
+  boost = boost190;
 
   mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
@@ -62,8 +64,8 @@ let
     owner = "quarto-dev";
     repo = "quarto";
     # Note: rev should ideally be the last commit of the release/rstudio-[codename] branch
-    rev = "591b3520eafbb4da7b26b9f31aac6948801f19d8";
-    hash = "sha256-scdm66Ekfjp5wdNDXcVZA5ZhNgFvuf/kIBF56HrE8uM=";
+    rev = "8c1669f3095c5afee6bcd98a659d51a43300bda9";
+    hash = "sha256-01urKiFz5iDtW8r+w7zwUDXUOKZIOhi/ip329RsuQ+Q=";
   };
 
   hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -85,13 +87,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rstudio";
-  version = "2026.01.1+403";
+  version = "2026.04.0+526";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s+t48LLvxdit6US6MB4DvpEZtUY6SSK5Qha1k4VW0Qk=";
+    hash = "sha256-6oHH3C3/MGFSOuI+FvyrLyOKRyy455Wkr75ZL8ZeiWg=";
   };
 
   # sources fetched into _deps via cmake's FetchContent
@@ -123,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     dontBuild = true;
     dontFixup = true;
 
-    outputHash = "sha256-t2kWnviFMw7TdxaJpiGDXe0M5HSIGD7o5hqWiPKUdOc=";
+    outputHash = "sha256-XzSDU4GVY6OrIFG4qCWUF94nV6fcz9zyFSlSvttVrYw=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -145,12 +147,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!server) [
     makeWrapper
-    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+    (python3.withPackages (ps: [ ps.setuptools ]))
     npmHooks.npmConfigHook
   ];
 
   buildInputs = [
-    boost187
+    boost
     libuuid
     openssl
     R
@@ -249,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "rstudio-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-7gXLCFhan/TCTlc2okMWuWzfRYXmuwcqhmGKAqJOEM0=";
+    hash = "sha256-lO+wJk0HWYrKO1Rqz8laVpZK5RUfA9ijYvtPEtVf1r4=";
   };
 
   preConfigure = ''
@@ -285,8 +287,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # node used by cmake and node used for distribution
     # version in cmake/globals.cmake
-    RSTUDIO_NODE_VERSION="22.13.1"
-    RSTUDIO_INSTALLED_NODE_VERSION="22.21.1"
+    RSTUDIO_NODE_VERSION="22.22.2"
+    RSTUDIO_INSTALLED_NODE_VERSION="22.22.2"
 
     mkdir -p dependencies/common/node
     ln -s ${nodejs} dependencies/common/node/$RSTUDIO_NODE_VERSION
@@ -314,7 +316,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r electron-dist
 
     # force @electron/packager to use our electron instead of downloading it
-    substituteInPlace node_modules/@electron/packager/dist/packager.js \
+    substituteInPlace \
+      node_modules/@electron/packager/dist/packager.js \
+      node_modules/@electron-forge/core/node_modules/@electron/packager/dist/packager.js \
       --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
 
     # now that we patched everything, we still have to run the scripts we ignored with --ignore-scripts

@@ -33,7 +33,7 @@
   pugixml,
   sdl3,
   sfml,
-  xxHash,
+  xxhash,
   xz,
   zlib-ng,
   # linux-only
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     sdl3
     sfml
-    xxHash
+    xxhash
     xz
     zlib-ng
   ]

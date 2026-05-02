@@ -2,7 +2,6 @@
   lib,
   clangStdenv,
   fetchFromGitLab,
-  fetchpatch,
   cmake,
   pkg-config,
   spdlog,
@@ -18,42 +17,18 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "ananicy-cpp";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
+    hash = "sha256-Nl7Ugj5VPHwW85GJ44luUc2e95kFCanQhDRopGH9nTU=";
   };
 
   patches = [
     ./match-wrappers.patch
-
-    # FIXME: remove these when updating to next stable release
-    (fetchpatch {
-      name = "allow-regex-pattern-matching.patch";
-      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/6ea2dccceec39b6c4913f617dad81d859aa20f24.patch";
-      hash = "sha256-C+7x/VpVwewXEPwibi7GxGfjuhDkhcjTyGbZHlYL2Bs=";
-    })
-    (fetchpatch {
-      name = "use-a-reliable-path-for-mounts-file.patch";
-      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/de6f11978db98bfd13a1e87dcdab61dbe6496710.patch";
-      hash = "sha256-9bJlFCClddlAEknfqp7Gcij7NX6tqohE2wqoalLoN5I=";
-    })
-    # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/merge_requests/30
-    (fetchpatch {
-      name = "fix-build-with-clang-19.patch";
-      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/b2589a9b1faa2ecf54aeede40ea781c33bfb09a8.patch";
-      hash = "sha256-nfyCdhvnWj446z5aPFCXGi79Xgja8W0Eopl6I30fOBM=";
-    })
-
-    # fix build w/ glibc-2.42 (don't conflict with sched_* API from glibc 2.41)
-    (fetchpatch {
-      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/99e64815bacaf3baa28ad89d022e33ebede94fa9.patch";
-      hash = "sha256-V9yf0nUa91DXRufDYhufybQUTP6R1CUzF51SEBMdjmA=";
-    })
   ];
 
   strictDeps = true;

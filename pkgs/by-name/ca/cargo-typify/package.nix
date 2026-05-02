@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-typify";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-czVxvsRhKnNnvPmONF+pTzZG1tizfCCbThgPhaI8TLo=";
+    hash = "sha256-tsZY+Ygh+9xOOAKcNh2U2k47o+uNAC2zguL+qW/wiqg=";
   };
 
-  cargoHash = "sha256-7z/gWIl2HqEkpRcWXZv6QQmLdJVJQfY7VCVP2ik5Mps=";
+  cargoHash = "sha256-K5Fj261Jh+NVipR71cYo5CqHx31czfgs6kr6uifHvaw=";
 
   nativeBuildInputs = [
     rustfmt

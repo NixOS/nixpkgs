@@ -2,12 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "3.3.0";
+  version = "4.0.0";
   pname = "pamqp";
 
   pyproject = true;
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gmr";
     repo = "pamqp";
-    rev = version;
-    hash = "sha256-0vjiPBLd8afnATjmV2sINsBd4j7L544u5DA3jLiLSsY=";
+    tag = version;
+    hash = "sha256-0rRVbzC5G+lH6Okvw8PtoPZKD8LlobAGYvDEIDw0aFo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/gmr/pamqp/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/gmr/pamqp/blob/${src.tag}/docs/changelog.rst";
     description = "RabbitMQ Focused AMQP low-level library";
     homepage = "https://github.com/gmr/pamqp";
     license = lib.licenses.bsd3;

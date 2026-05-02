@@ -56,12 +56,6 @@ let
             xz
             zenity
 
-            # Steam expects it to be /sbin specifically
-            (pkgs.runCommand "sbin-ldconfig" { } ''
-              mkdir -p $out/sbin
-              ln -s /bin/ldconfig $out/sbin/ldconfig
-            '')
-
             # crashes on startup if it can't find libx11 locale files
             (pkgs.runCommand "xorg-locale" { } ''
               mkdir -p $out
@@ -132,6 +126,13 @@ let
         '';
 
         inherit extraPreBwrapCmds;
+
+        # Steam expects /sbin/ldconfig to exist, and since SinceRT3
+        # symlinking it results in a symlink loop in nested containers.
+        # Thus, just copy it.
+        extraBuildCommands = ''
+          cp -f $out/usr/{bin,sbin}/ldconfig
+        '';
 
         extraBwrapArgs = [
           # Steam will dump crash reports here, make those more accessible

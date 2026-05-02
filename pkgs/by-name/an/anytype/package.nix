@@ -130,9 +130,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
-    changelog = "https://community.anytype.io/t/anytype-desktop-${
-      builtins.replaceStrings [ "." ] [ "-" ] (lib.versions.majorMinor finalAttrs.version)
-    }-0-released";
+    changelog = "https://github.com/anyproto/anytype-ts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [

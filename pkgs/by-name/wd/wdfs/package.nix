@@ -27,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     neon
   ];
 
+  # autoconf 2.72 sets the C standard to C23 but not all compilers are ready for that
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook to
     # take effect.

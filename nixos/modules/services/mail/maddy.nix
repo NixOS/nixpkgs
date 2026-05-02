@@ -329,8 +329,8 @@ in
           This option does not delete accounts which are not (anymore) listed.
         '';
         example = {
-          "user1@localhost".passwordFile = /secrets/user1-localhost;
-          "user2@localhost".passwordFile = /secrets/user2-localhost;
+          "user1@localhost".passwordFile = "/secrets/user1-localhost";
+          "user2@localhost".passwordFile = "/secrets/user2-localhost";
         };
         type = lib.types.attrsOf (
           lib.types.submodule {

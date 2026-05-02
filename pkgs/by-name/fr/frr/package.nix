@@ -31,7 +31,8 @@
   readline,
   rtrlib,
   protobufc,
-  zeromq,
+  sqlite,
+  lua53Packages,
 
   # tests
   net-tools,
@@ -80,13 +81,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.5.3";
+  version = "10.6.0";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = "frr";
     rev = "frr-${finalAttrs.version}";
-    hash = "sha256-nVXoRApW8EZtP1HiGJ5JBJaoQXVISfPK2k+xmCtdVH0=";
+    hash = "sha256-o0h9adGvb9FEcAMYrjrjTb7MMozdXriOsK6fE0fGjss=";
   };
 
   # Without the std explicitly set, we may run into abseil-cpp
@@ -119,7 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     readline
     rtrlib
-    zeromq
+    lua53Packages.lua
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
@@ -148,11 +150,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configureFlags = [
+    "--disable-zeromq"
     "--disable-silent-rules"
     "--enable-configfile-mask=0640"
     "--enable-group=frr"
     "--enable-logfile-mask=0640"
     "--enable-multipath=${toString numMultipath}"
+    "--enable-config-rollbacks"
+    "--enable-scripting"
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/var"

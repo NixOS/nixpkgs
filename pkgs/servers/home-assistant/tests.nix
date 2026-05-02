@@ -172,6 +172,13 @@ let
       # outdated snapshot
       "tests/components/hypontech/test_sensor.py::test_sensors"
     ];
+    influxdb = [
+      # These tests fail because they check for the number of warnings in the
+      # logs and there is an extra warning in the logs:
+      # `WARNING:aiohttp_fast_zlib:zlib_ng and isal are not available, falling back to zlib, performance will be degraded.`
+      "tests/components/influxdb/test_sensor.py::test_state_for_no_results"
+      "tests/components/influxdb/test_sensor.py::test_state_matches_first_query_result_for_multiple_return"
+    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"

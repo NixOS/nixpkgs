@@ -23,7 +23,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chalice";
   version = "1.32.0";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "chalice";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7qmE78aFfq9XCl2zcx1dAVKZZb96Bu47tSW1Qp2vFl4=";
   };
 
@@ -94,8 +94,8 @@ buildPythonPackage rec {
     description = "Python Serverless Microframework for AWS";
     mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
-    changelog = "https://github.com/aws/chalice/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/aws/chalice/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

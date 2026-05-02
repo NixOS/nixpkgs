@@ -8,10 +8,13 @@
   ada,
   brotli,
   c-ares,
+  gtest,
+  hdrhistogram_c,
   libuv,
   lief,
   llhttp,
   merve,
+  nbytes,
   nghttp2,
   nghttp3,
   ngtcp2,
@@ -124,55 +127,65 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedAdaAndSimd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.2";
-  useSharedLief = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "25.6";
-  useSharedMerve = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "25.6.1";
-  useSharedSQLite = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.5";
-  useSharedZstd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.15";
+  useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
+  useSharedGtestAndHistogram = lib.versionAtLeast version (
+    if majorVersion == 24 then "24.14.0" else "25.4"
+  );
+  useSharedNBytes = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.5");
+  useSharedLief = lib.versionAtLeast version "25.6";
+  useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
+  useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedZstd = lib.versionAtLeast version "22.15";
 
-  sharedLibDeps =
-    (lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
-      inherit
-        brotli
-        libuv
-        nghttp3
-        ngtcp2
-        openssl
-        uvwasi
-        zlib
-        ;
-      cares = c-ares;
-      http-parser = llhttp;
-      nghttp2 = nghttp2.overrideAttrs {
-        patches = [
-          (fetchpatch2 {
-            url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
-            hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
-            excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
-            revert = true;
-          })
-        ];
-      };
-    })
-    // (lib.optionalAttrs useSharedAdaAndSimd {
-      inherit
-        ada
-        simdjson
-        ;
-      simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
-    })
-    // (lib.optionalAttrs useSharedSQLite {
-      inherit sqlite;
-    })
-    // (lib.optionalAttrs useSharedLief {
-      inherit lief;
-    })
-    // (lib.optionalAttrs useSharedMerve {
-      inherit merve;
-    })
-    // (lib.optionalAttrs useSharedZstd {
-      inherit zstd;
-    });
+  sharedLibDeps = {
+    inherit
+      brotli
+      libuv
+      nghttp3
+      ngtcp2
+      openssl
+      uvwasi
+      zlib
+      ;
+    cares = c-ares;
+    http-parser = llhttp;
+    nghttp2 = nghttp2.overrideAttrs {
+      patches = [
+        (fetchpatch2 {
+          url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
+          hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
+          excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
+          revert = true;
+        })
+      ];
+    };
+  }
+  // (lib.optionalAttrs useSharedAdaAndSimd {
+    inherit
+      ada
+      simdjson
+      ;
+    simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
+  })
+  // (lib.optionalAttrs useSharedSQLite {
+    inherit sqlite;
+  })
+  // (lib.optionalAttrs useSharedGtestAndHistogram {
+    inherit gtest;
+    hdr-histogram = hdrhistogram_c;
+  })
+  // (lib.optionalAttrs useSharedLief {
+    inherit lief;
+  })
+  // (lib.optionalAttrs useSharedNBytes {
+    inherit nbytes;
+  })
+  // (lib.optionalAttrs useSharedMerve {
+    inherit merve;
+  })
+  // (lib.optionalAttrs useSharedZstd {
+    inherit zstd;
+  });
 
   copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
     builtins.attrNames sharedLibDeps

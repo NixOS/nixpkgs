@@ -24,14 +24,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gradia";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iYqMuqq2AmrdNMa7dkDUGg1+gCG7wL/rDEdWAPfcQnw=";
+    hash = "sha256-9gxxl59jceZZIja/fg7ygbhjcHUo4TEEnK/IzJLsRgM=";
   };
 
   nativeBuildInputs = [
@@ -53,10 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     bash
     glib-networking
     tesseract
-  ];
-
-  patches = [
-    ./0001-fix-image_stack-action-target-type.patch
   ];
 
   postPatch = ''

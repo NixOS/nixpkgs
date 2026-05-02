@@ -12,7 +12,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eiswarnung";
   version = "2.0.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/61qrRfD7/gaEcvFot34HYXOVLWwTDi/fvcgHDTv9u0=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"'
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
   '';
 
   pythonRelaxDeps = [ "pytz" ];
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for getting Eiswarning API forecasts";
     homepage = "https://github.com/klaasnicolaas/python-eiswarnung";
-    changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${version}";
+    changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

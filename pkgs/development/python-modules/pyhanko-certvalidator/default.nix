@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-certvalidator";
-    changelog = "https://github.com/MatthiasValvekens/pyhanko/blob/pyhanko-certvalidator/${src.tag}/docs/changelog.rst#pyhanko-certvalidator";
+    changelog = "https://github.com/MatthiasValvekens/pyhanko/blob/${src.tag}/docs/changelog.rst#pyhanko-certvalidator";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
   };

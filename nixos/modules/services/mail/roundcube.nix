@@ -256,8 +256,8 @@ in
         upload_max_filesize = ${cfg.maxAttachmentSize}
       '';
       settings = lib.mapAttrs (name: lib.mkDefault) {
-        "listen.owner" = "nginx";
-        "listen.group" = "nginx";
+        "listen.owner" = config.services.nginx.user;
+        "listen.group" = config.services.nginx.group;
         "listen.mode" = "0660";
         "pm" = "dynamic";
         "pm.max_children" = 75;

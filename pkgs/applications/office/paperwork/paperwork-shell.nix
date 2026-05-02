@@ -19,12 +19,12 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paperwork-shell";
   inherit (callPackage ./src.nix { }) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/paperwork-shell";
+  sourceRoot = "${finalAttrs.src.name}/paperwork-shell";
 
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;
@@ -71,4 +71,4 @@ buildPythonPackage rec {
       symphorien
     ];
   };
-}
+})

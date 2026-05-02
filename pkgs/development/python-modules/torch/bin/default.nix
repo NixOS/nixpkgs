@@ -15,8 +15,8 @@
   cudaPackages,
 
   # dependencies
-  cuda-bindings,
   filelock,
+  fsspec,
   jinja2,
   networkx,
   numpy,
@@ -25,6 +25,9 @@
   setuptools,
   sympy,
   typing-extensions,
+  # linux-only
+  cuda-bindings,
+  # x86_64-linux only
   triton,
 
   config,
@@ -35,7 +38,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.10.0";
+  version = "2.11.0";
 in
 buildPythonPackage {
   inherit version;
@@ -87,8 +90,16 @@ buildPythonPackage {
     "libcuda.so.1"
   ];
 
+  pythonRemoveDeps = [
+    "cuda-toolkit"
+    "nvidia-cudnn-cu12"
+    "nvidia-cusparselt-cu12"
+    "nvidia-nccl-cu12"
+    "nvidia-nvshmem-cu12"
+  ];
   dependencies = [
     filelock
+    fsspec
     jinja2
     networkx
     numpy
@@ -101,7 +112,9 @@ buildPythonPackage {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cuda-bindings
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ];
 
   postInstall = ''
     # ONNX conversion

@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mv $out/bin/snow_frontend_egui $out/bin/snowemu
 
-    install -Dm644 assets/snow_icon.png $out/share/icons/hicolor/1024x1024/apps/snowemu.png
+    install -Dm644 assets/snow_icon.png $out/share/icons/snowemu.png
 
     wrapProgram $out/bin/snowemu \
       --prefix LD_LIBRARY_PATH : ${

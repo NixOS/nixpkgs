@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "googleapis-common-protos";
   version = "1.73.0";
   pyproject = true;
@@ -16,11 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "googleapis-common-protos-v${version}";
+    tag = "googleapis-common-protos-v${finalAttrs.version}";
     hash = "sha256-LrsmLySAOTsECwxa1NaFuyZAjar0Jbg9DHNi6uqYaxk=";
   };
 
-  sourceRoot = "${src.name}/packages/googleapis-common-protos";
+  sourceRoot = "${finalAttrs.src.name}/packages/googleapis-common-protos";
 
   build-system = [ setuptools ];
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Common protobufs used in Google APIs";
-    homepage = "https://github.com/googleapis/python-api-common-protos";
-    changelog = "https://github.com/googleapis/python-api-common-protos/releases/tag/${src.tag}";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/googleapis-common-protos";
+    changelog = "https://github.com/googleapis/google-cloud-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

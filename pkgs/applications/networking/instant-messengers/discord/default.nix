@@ -1,6 +1,5 @@
 {
   callPackage,
-  fetchurl,
   lib,
   stdenv,
   discord,
@@ -101,13 +100,7 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
   callPackage package (
     args
     // {
-      inherit pname;
-      inherit (source) version;
-
-      src = fetchurl {
-        inherit (source) url hash;
-      };
-
+      inherit pname source;
       meta = meta // {
         mainProgram = args.binaryName;
       };

@@ -306,8 +306,42 @@ let
       (builtins.concatStringsSep "")
     ]}
 
+    ${lib.optionalString cfg.qemu.forceAccel (
+      if hostPkgs.stdenv.hostPlatform.isLinux then
+        ''
+          # Check for hardware-accelerated virtualisation support (KVM)
+          if [ ! -e /dev/kvm ]; then
+            echo "forceAccel is enabled but /dev/kvm does not exist." >&2
+            echo "Hardware-accelerated virtualisation (KVM) is not available on this system." >&2
+            exit 1
+          elif [ ! -r /dev/kvm ] || [ ! -w /dev/kvm ]; then
+            echo "forceAccel is enabled but /dev/kvm is not accessible (permission denied)." >&2
+            echo "Check that the nix build user is in the 'kvm' group or that /dev/kvm has the correct permissions." >&2
+            exit 1
+          fi
+        ''
+      else if hostPkgs.stdenv.hostPlatform.isDarwin then
+        ''
+          # Check for hardware-accelerated virtualisation support (HVF)
+          if ! sysctl -n kern.hv_support 2>/dev/null | grep -q 1; then
+            echo "forceAccel is enabled but Hypervisor.framework is not available on this system." >&2
+            exit 1
+          fi
+        ''
+      else
+        ''
+          echo "forceAccel is enabled but no known accelerator is available for this platform." >&2
+          exit 1
+        ''
+    )}
+
     # Start QEMU.
-    exec ${qemu-common.qemuBinary qemu} \
+    exec ${
+      qemu-common.qemuBinaryWith {
+        qemuPkg = qemu;
+        forceAccel = cfg.qemu.forceAccel;
+      }
+    } \
         -name ${config.system.name} \
         -m ${toString config.virtualisation.memorySize} \
         -smp ${toString config.virtualisation.cores} \
@@ -716,6 +750,8 @@ in
     };
 
     virtualisation.qemu = {
+      enableSharedMemory = mkEnableOption "shared memory";
+
       package = mkOption {
         type = types.package;
         default =
@@ -726,6 +762,17 @@ in
         defaultText = literalExpression "if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then config.virtualisation.host.pkgs.qemu_kvm else config.virtualisation.host.pkgs.qemu";
         example = literalExpression "pkgs.qemu_test";
         description = "QEMU package to use.";
+      };
+
+      forceAccel = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to force the use of hardware-accelerated virtualisation.
+          When enabled, QEMU will not fall back to the slower software
+          emulation (TCG) and will instead error out if the accelerator is not
+          available.
+        '';
       };
 
       options = mkOption {
@@ -1315,7 +1362,7 @@ in
             + "${guest.address}:${toString guest.port},"
           else
             "'guestfwd=${proto}:${guest.address}:${toString guest.port}-"
-            + "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
+            + "cmd:${hostPkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
         );
         restrictNetworkOption = lib.optionalString cfg.restrictNetwork "restrict=on,";
       in
@@ -1337,6 +1384,10 @@ in
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"
+      ])
+      (mkIf cfg.qemu.enableSharedMemory [
+        "-object memory-backend-memfd,id=mem0,size=${toString config.virtualisation.memorySize}M,share=on"
+        "-machine memory-backend=mem0"
       ])
       (
         let

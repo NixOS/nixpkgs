@@ -7,18 +7,21 @@
   python3,
   qt6Packages,
   radare2,
+  xvfb-run,
+  breakpointHook,
+  writableTmpDirAsHomeHook,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "iaito";
-  version = "6.1.0";
+  version = "6.1.4";
 
   srcs = [
     (fetchFromGitHub {
       owner = "radareorg";
       repo = "iaito";
       tag = finalAttrs.version;
-      hash = "sha256-nvMx0zbfsphfBgxdQnk+EhRpQnJ2Qv05rF7w+zQUUQg=";
+      hash = "sha256-HKh5D96Dwo6YttWcOMlFy4H9OS3FbQvQ5RK+aOY4V5s=";
       name = "main";
     })
     (fetchFromGitHub {
@@ -47,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     qt6Packages.qttools
     qt6Packages.wrapQtAppsHook
+    breakpointHook
   ];
 
   buildInputs = [
@@ -78,6 +82,22 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    xvfb-run
+    writableTmpDirAsHomeHook
+  ];
+
+  # `iaito -v` does only work with GUI access
+  installCheckPhase = ''
+    runHook preCheck
+    xvfb-run -a ${placeholder "out"}/bin/iaito -v | grep "${finalAttrs.version}"
+    runHook postCheck
+  '';
+
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Official radare2 GUI";

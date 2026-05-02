@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin for customizing the navigation structure of your MkDocs site";
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-nav";
-    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phaer ];
   };

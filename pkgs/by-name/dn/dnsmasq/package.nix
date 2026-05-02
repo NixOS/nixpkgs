@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-S/UMLBAY+fvCYDffUbkOzqDLc9RhYoRnY7kt8NbDpFg=";
   };
 
+  patches = [
+    # https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=9ad74926d4f7f34ff902e1db5235535aa813c33f
+    ./CVE-2026-6507.patch
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '1i#include <linux/sockios.h>' -i src/dhcp.c
   '';

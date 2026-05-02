@@ -8,26 +8,24 @@
   ninja,
   vala,
   desktop-file-utils,
-  gtk3,
-  granite,
-  libhandy,
-  libnotify,
-  vte,
+  gtk4,
+  granite7,
+  libadwaita,
+  vte-gtk4,
   libgee,
   pcre2,
-  wrapGAppsHook3,
-  xvfb-run,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "7.2.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
     tag = version;
-    hash = "sha256-fYOX48zGJY/1iIcL0SaHLyt/c6tr9qTeH1i5hTsZvvE=";
+    hash = "sha256-IzLaM9FPMRGJKvlXktyrhDYSyP4LJ8yFW8/FmsmZjU4=";
   };
 
   nativeBuildInputs = [
@@ -36,18 +34,16 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook3
-    xvfb-run
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
-    libnotify
     pcre2
-    vte
+    vte-gtk4
   ];
 
   passthru = {

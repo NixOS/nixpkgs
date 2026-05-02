@@ -8,6 +8,7 @@
   cmake,
   xxd,
   rocm-device-libs,
+  rocprofiler-register,
   elfutils,
   libdrm,
   numactl,
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
     libdrm
     numactl
+    rocprofiler-register
   ];
 
   cmakeFlags = [

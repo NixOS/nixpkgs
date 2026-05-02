@@ -30,8 +30,8 @@ let
     "2.4.10".sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.6.0".sha256 = "sha256-CkvVsByI5rRcLwWWBdJyirk3emUpsupiKnq7W6LWkcY=";
     "2.6.1".sha256 = "sha256-XyzVu30+bZFJpZwFrNhCmzvhhJIRdp5aN0UdAB4ZbX8=";
+    "2.6.3".sha256 = "sha256-50MvtkKVLdJaX8DFbSGPPQqlls5C0z76gwkbyn1pmIo=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -77,6 +77,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbcl";
   inherit version;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     # Changing the version shouldn’t change the source for the
@@ -182,15 +184,20 @@ stdenv.mkDerivation (finalAttrs: {
     # "https://sourceforge.net/p/sbcl/mailman/sbcl-devel/thread/2cf20df7-01d0-44f2-8551-0df01fe55f1a%400brg.net/"),
     # but for Nix envvars are sufficiently useful that it’s worth maintaining
     # this functionality downstream.
-    if lib.versionOlder "2.5.2" finalAttrs.version then
+    if lib.versionOlder "2.6.2" finalAttrs.version then
       [
-        ./dynamic-space-size-envvar-2.5.3-feature.patch
-        ./dynamic-space-size-envvar-2.5.3-tests.patch
+        ./patches/dynamic-space-size-envvar-2.6.3-feature.patch
+        ./patches/dynamic-space-size-envvar-2.6.3-tests.patch
+      ]
+    else if lib.versionOlder "2.5.2" finalAttrs.version then
+      [
+        ./patches/dynamic-space-size-envvar-2.5.3-feature.patch
+        ./patches/dynamic-space-size-envvar-2.5.3-tests.patch
       ]
     else
       [
-        ./dynamic-space-size-envvar-2.5.2-feature.patch
-        ./dynamic-space-size-envvar-2.5.2-tests.patch
+        ./patches/dynamic-space-size-envvar-2.5.2-feature.patch
+        ./patches/dynamic-space-size-envvar-2.5.2-tests.patch
       ];
 
   sbclPatchPhase =

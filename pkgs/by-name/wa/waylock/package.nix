@@ -10,18 +10,20 @@
   wayland,
   wayland-scanner,
   wayland-protocols,
-  zig_0_15,
+  zig_0_16,
 }:
-
+let
+  zig = zig_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromCodeberg {
     owner = "ifreund";
     repo = "waylock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TSCE6HSGUkXh76epNuJ+AuG/ZCgR0O8EWRDxz9YDuq8=";
+    hash = "sha256-A/XPgoon1J+fmEVUGuqvqbimRRDfLPkzkMYipPaKrfo=";
   };
 
   postPatch = ''
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     scdoc
     wayland-scanner
-    zig_0_15
+    zig
   ];
 
   buildInputs = [

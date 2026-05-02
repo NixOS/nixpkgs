@@ -71,7 +71,7 @@ buildPythonPackage rec {
     description = "Data visualization toolchain based on aggregating into a grid";
     mainProgram = "datashader";
     homepage = "https://datashader.org";
-    changelog = "https://github.com/holoviz/datashader/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/holoviz/datashader/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       nickcao

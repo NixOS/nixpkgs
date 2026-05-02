@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mimir";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     rev = "mimir-${finalAttrs.version}";
     owner = "grafana";
     repo = "mimir";
-    hash = "sha256-C7vfJrcFin4zv/wO9IWIzUPtjiOAoOEWcniCTNm1eRs=";
+    hash = "sha256-rz1Wzsnxt8eGf0rkI8pvhpft+EhTUsdFK4s+9QVn7dg=";
   };
 
   vendorHash = null;

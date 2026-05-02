@@ -219,6 +219,10 @@ in
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";
 
+      # Since we explicitly provide a resolv.conf, disable resolvconf
+      networking.resolvconf.enable = false;
+
+      # ... but we still set the package for correct compatibility.
       networking.resolvconf.package = config.systemd.package;
 
       nix.firewall.extraNftablesRules = [

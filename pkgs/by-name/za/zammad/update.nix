@@ -8,7 +8,6 @@
   jq,
   nix-prefetch-github,
   yarn,
-  yarn2nix,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -29,7 +28,6 @@ stdenvNoCC.mkDerivation rec {
     jq
     nix-prefetch-github
     yarn
-    yarn2nix
   ];
 
   meta = {

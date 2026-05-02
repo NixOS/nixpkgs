@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication {
 
     install -vD $pname.py $out/bin/$pname
 
-    substituteInPlace $out/bin/$pname --replace '"Coercer"' '"coercer"'
+    substituteInPlace $out/bin/$pname --replace-fail '"Coercer"' '"coercer"'
 
     runHook postInstall
   '';

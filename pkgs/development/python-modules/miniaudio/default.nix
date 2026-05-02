@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.61";
+  version = "1.70";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irmen";
     repo = "pyminiaudio";
     tag = "v${version}";
-    hash = "sha256-H3o2IWGuMqLrJTzQ7w636Ito6f57WBtMXpXXzrZ7UD8=";
+    hash = "sha256-7i1ORJJwdd/an5IsW/xO1puI/LJJ5WDEdaE8DU4/laQ=";
   };
 
   # TODO: Properly unvendor miniaudio c library

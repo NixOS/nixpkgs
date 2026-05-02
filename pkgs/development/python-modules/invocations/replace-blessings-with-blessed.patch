@@ -13,14 +13,14 @@ index 54322c3..81ac173 100644
  from invoke import Collection, task, Exit
 diff --git a/setup.py b/setup.py
 index 78ae28b..c78a74c 100644
---- a/setup.py
-+++ b/setup.py
-@@ -16,7 +16,7 @@ requirements = [
+--- a/pyproject.toml	2026-04-25 00:07:29.730867343 +0200
++++ b/pyproject.toml	2026-04-25 00:08:23.736953102 +0200
+@@ -16,7 +16,7 @@
      # time if missing), but that got hairy fast, and these are all
      # pure-Python packages, so it shouldn't be a huge burden for users to
      # obtain them.
 -    "blessings>=1.6",
 +    "blessed",
-     "releases>=1.6",
-     "semantic_version>=2.4,<2.7",
-     "tabulate>=0.7.5",
+     "build>=1.3",
+     # For envs that don't actually have pip - we use some of its tooling atm.
+     "pip~=25.2",

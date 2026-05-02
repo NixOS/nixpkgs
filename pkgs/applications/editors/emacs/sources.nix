@@ -85,6 +85,7 @@ let
               AndersonTorres
               adisbladis
               jwiegley
+              linj
               panchoh
             ];
             "macport" = with lib.maintainers; [
@@ -111,9 +112,24 @@ in
     rev = "emacs-30.2";
     hash = "sha256-W2eZ+cNQhi/fMeRkwOqSKU7Vzvp43WUOpiwaLLNEXtg=";
     patches = fetchpatch: [
+      (fetchpatch {
+        name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8f535370b9efbc91673b20c6987a5cae4f6dc562";
+        hash = "sha256-ny44eIi8DUa9pQhVGzhGz4H6FXU4+ki86SITLXhkwpw=";
+      })
       (builtins.path {
         name = "inhibit-lexical-cookie-warning-67916.patch";
         path = ./inhibit-lexical-cookie-warning-67916-30.patch;
+      })
+      (fetchpatch {
+        # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/970856
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/01_all_treesit-0.26.patch?id=d0f47979806d9be5a190fdb4ffa1bde439b2d616";
+        hash = "sha256-3pWeRxjAhr3ntBR3xDhoDUZDjU6xICU23NUpb/Vl6R4=";
+      })
+      (fetchpatch {
+        # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/971731
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/02_all_ts-query-pred.patch?id=86190bf195b3e17108372d8ad89eb57037180dd2";
+        hash = "sha256-0GPyfKLSaB09a8hamrSf6lx4Qk8Big4AKMOivkN1wEM=";
       })
     ];
   });
@@ -124,5 +140,22 @@ in
     variant = "macport";
     rev = "emacs-mac-30.2";
     hash = "sha256-i/W2Xa6Vk1+T1fs6fa4wJVMLLB6BK8QAPcdmPrU8NwM=";
+    patches = fetchpatch: [
+      (fetchpatch {
+        name = "fix-off-by-one-mistake-80851-CVE-2026-6861.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8f535370b9efbc91673b20c6987a5cae4f6dc562";
+        hash = "sha256-ny44eIi8DUa9pQhVGzhGz4H6FXU4+ki86SITLXhkwpw=";
+      })
+      (fetchpatch {
+        # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/970856
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/01_all_treesit-0.26.patch?id=d0f47979806d9be5a190fdb4ffa1bde439b2d616";
+        hash = "sha256-3pWeRxjAhr3ntBR3xDhoDUZDjU6xICU23NUpb/Vl6R4=";
+      })
+      (fetchpatch {
+        # tree-sitter 0.26 compatibility fix, see https://bugs.gentoo.org/971731
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/02_all_ts-query-pred.patch?id=86190bf195b3e17108372d8ad89eb57037180dd2";
+        hash = "sha256-0GPyfKLSaB09a8hamrSf6lx4Qk8Big4AKMOivkN1wEM=";
+      })
+    ];
   });
 }

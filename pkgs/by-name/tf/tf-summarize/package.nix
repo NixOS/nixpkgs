@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tf-summarize";
-  version = "0.3.15";
+  version = "0.3.20";
 
   src = fetchFromGitHub {
     owner = "dineshba";
     repo = "tf-summarize";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-m0XQkxcNW0QTYd3tPz9v13dsiI/jUV0eJW0Oo2vKKtk=";
+    hash = "sha256-+u1akn3cEWoRza8IyJLh5GFJAxd2VVnusVKUFtcr0MY=";
   };
 
   vendorHash = "sha256-ncXJCOmpf6cuZd7JouAlyae/+pbjmlByrT3Z32EZEhc=";

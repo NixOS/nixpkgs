@@ -6,18 +6,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "jwx";
-  version = "3.0.13";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "lestrrat-go";
     repo = "jwx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f2L78kS0H3FxS/qS0hP+GUXjkH3teJ1L5rrzy1oq+Wk=";
+    hash = "sha256-tVvesVrsbFONhmpFo59c/kC3vxAjWpQwnbaUmrx8O5E=";
   };
 
-  vendorHash = "sha256-BGxLwALZ6PZiErbIngaJCUjBhkg3UbfZig/MMOgAZTQ=";
+  vendorHash = "sha256-jCAHyCfTEcbtGEkxPLJvXJ90mVDyijWOoHJ5dbJouCs=";
 
   sourceRoot = "${finalAttrs.src.name}/cmd/jwx";
+
+  env.GOEXPERIMENT = "jsonv2";
 
   meta = {
     description = "Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";

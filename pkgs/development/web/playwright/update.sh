@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused common-updater-scripts jq prefetch-npm-deps unzip nix-prefetch
+#!nix-shell -i bash -p curl gnused common-updater-scripts jq prefetch-npm-deps
 # shellcheck shell=bash
 set -euo pipefail
 
@@ -103,10 +103,19 @@ replace_sha() {
 prefetch_browser() {
     local url="$1"
     local strip_root="$2"
+    local fake="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    local expr
+    local out
 
-    # nix-prefetch is used to obtain sha with `stripRoot = false`
-    # doesn't work on macOS https://github.com/msteen/nix-prefetch/issues/53
-    nix-prefetch --option extra-experimental-features flakes -q "{ stdenv, fetchzip }: stdenv.mkDerivation { name=\"browser\"; src = fetchzip { url = \"$url\"; stripRoot = $strip_root; }; }"
+    # Use real fetchzip via fake-hash trick. nix-prefetch wrapper is broken on
+    # macOS (msteen/nix-prefetch#53), so parse the "got:" line from the
+    # mismatch error of a fixed-output derivation instead.
+    expr="(import \"$repo_root\" {}).fetchzip { url = \"$url\"; stripRoot = $strip_root; hash = \"$fake\"; }"
+    if out=$(nix-build --no-out-link -E "$expr" 2>&1); then
+        echo "prefetch_browser: unexpected build success for $url" >&2
+        return 1
+    fi
+    echo "$out" | grep -Eo 'got:[[:space:]]+sha256-[A-Za-z0-9+/=]+' | awk '{print $NF}' | head -n1
 }
 
 browser_download_info() {

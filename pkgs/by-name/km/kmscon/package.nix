@@ -29,13 +29,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.3.3";
+  version = "9.3.5";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U9jDlZb5aBzQ7IErtLsajxcN1W5/8/eNwhGIuz7aUCw=";
+    hash = "sha256-QBN1rSDmwVg7cgljhe6kVIg/xLoolmOPqS8JXZuQiXs=";
   };
 
   strictDeps = true;

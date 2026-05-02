@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "25.11";
+  version = "26.04";
 
   src = fetchFromGitHub {
     owner = "niri-wm";
     repo = "niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FC9eYtSmplgxllCX4/3hJq5J3sXWKLSc7at8ZUxycVw=";
+    hash = "sha256-ehSMsSpE+0k8r+2Vseu8kangsYxToZv3vinynsDp9zs=";
   };
 
   outputs = [
@@ -44,10 +44,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     patchShebangs resources/niri-session
     substituteInPlace resources/niri.service \
-      --replace-fail '/usr/bin' "$out/bin"
+      --replace-fail 'niri' "$out/bin/niri"
   '';
 
-  cargoHash = "sha256-X28M0jyhUtVtMQAYdxIPQF9mJ5a77v8jw1LKaXSjy7E=";
+  cargoHash = "sha256-gfnalA3qI3a9h3PvsxgQLCrzapfjLLkxhTMJpwRh+ro=";
 
   strictDeps = true;
 
@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       sodiboo
       getchoo
+      zimward
     ];
     mainProgram = "niri";
     platforms = lib.platforms.linux;

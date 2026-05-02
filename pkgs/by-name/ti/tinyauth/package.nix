@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
   stdenvNoCC,
   bun,
   nixosTests,
@@ -11,17 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tinyauth";
-  version = "5.0.6";
+  version = "5.0.7";
 
   src = fetchFromGitHub {
     owner = "steveiliop56";
     repo = "tinyauth";
     tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-V75kjO34b1DBBI5aJMfn9finHSbVbWqQ34CH68gzrig=";
+    hash = "sha256-VeII5jSNUJpGZgqons1o1fp6KXxDOBhSMciSqtQfaC4=";
   };
 
-  vendorHash = "sha256-iyduJgKt9OAkOY6J8J1GztCkYEssr/TcB43L6/Qdzmc=";
+  vendorHash = "sha256-XP+kVfcDKWAvBdrvGjiTdWh7jNe6qiDsgVjPrFFPoDU=";
 
   subPackages = [ "cmd/tinyauth" ];
 
@@ -35,10 +33,6 @@ buildGoModule (finalAttrs: {
 
   preBuild = ''
     cp -r ${finalAttrs.frontend}/dist internal/assets/dist
-  '';
-
-  postPatch = ''
-    ${lib.getExe git} apply --directory paerser/ patches/nested_maps.diff
   '';
 
   frontend = stdenvNoCC.mkDerivation {
@@ -83,7 +77,7 @@ buildGoModule (finalAttrs: {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-pd5v5lD8Lyhf21OQvzjDTh63EcAe7E1OAoQuFGhAOX8=";
+    outputHash = "sha256-FRACDa1akm+JnYIRwNXRcomzDIMCIAlJDbjMyS77sNA=";
   };
 
   passthru = {

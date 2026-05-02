@@ -60,6 +60,11 @@ in
                 default = { };
               };
 
+              copyChannel = lib.mkEnableOption ''
+                copy channel in test image. disabled by default as it forces image
+                rebuilds excessively. enable to validate channel things.
+              '';
+
               testScript = lib.mkOption {
                 type = lib.types.str;
                 description = "final script provided to test runner";
@@ -104,7 +109,7 @@ in
                   documentation.enable = lib.mkForce false;
                   documentation.nixos.enable = lib.mkForce false;
                   # including a channel forces images to be rebuilt on any changes
-                  system.installer.channel.enable = lib.mkForce false;
+                  system.installer.channel.enable = lib.mkForce config.copyChannel;
 
                   environment.etc."nix/registry.json".text = lib.mkForce "{}";
 
@@ -170,64 +175,67 @@ in
                 #
                 # container specific
                 #
-                +
-                  lib.optionalString (config.type == "container")
-                    # python
-                    ''
-                      with subtest("[${image_id}] switch-to-configuration updates /sbin/init via installBootLoader"):
-                          # Remove /sbin/init so we can verify installBootLoader recreates it
-                          server.succeed(f"incus exec {instance_name} -- rm -f /sbin/init")
-                          server.fail(f"incus exec {instance_name} -- test -e /sbin/init")
+                + lib.optionalString (config.type == "container") (
+                  # python
+                  ''
+                    with subtest("[${image_id}] switch-to-configuration updates /sbin/init via installBootLoader"):
+                        # Remove /sbin/init so we can verify installBootLoader recreates it
+                        server.succeed(f"incus exec {instance_name} -- rm -f /sbin/init")
+                        server.fail(f"incus exec {instance_name} -- test -e /sbin/init")
 
-                          server.succeed(
-                              f"incus exec {instance_name} -- /run/current-system/bin/switch-to-configuration switch"
-                          )
+                        server.succeed(
+                            f"incus exec {instance_name} -- /run/current-system/bin/switch-to-configuration switch"
+                        )
 
-                          # Verify installBootLoader recreated /sbin/init pointing to the system's init
-                          server.succeed(f"incus exec {instance_name} -- test -x /sbin/init")
-                          target = server.succeed(f"incus exec {instance_name} -- readlink -f /sbin/init").strip()
-                          current = server.succeed(f"incus exec {instance_name} -- readlink -f /run/current-system/init").strip()
-                          assert target == current, f"/sbin/init -> {target}, expected {current}"
+                        # Verify installBootLoader recreated /sbin/init pointing to the system's init
+                        server.succeed(f"incus exec {instance_name} -- test -x /sbin/init")
+                        target = server.succeed(f"incus exec {instance_name} -- readlink -f /sbin/init").strip()
+                        current = server.succeed(f"incus exec {instance_name} -- readlink -f /run/current-system/init").strip()
+                        assert target == current, f"/sbin/init -> {target}, expected {current}"
 
-                      # TODO troubleshoot VM hot memory resizing which was introduced in 6.12
-                      with subtest("[${image_id}] memory limits can be hotplug changed"):
-                          server.set_instance_config(instance_name, "limits.memory 512MB")
-                          # can't use lsmem since it sees the host's memory size
-                          server.wait_instance_exec_success(instance_name, "grep 'MemTotal:[[:space:]]*500000 kB' /proc/meminfo", timeout=1)
+                    # TODO troubleshoot VM hot memory resizing which was introduced in 6.12
+                    with subtest("[${image_id}] memory limits can be hotplug changed"):
+                        server.set_instance_config(instance_name, "limits.memory 512MB")
+                        # can't use lsmem since it sees the host's memory size
+                        server.wait_instance_exec_success(instance_name, "grep 'MemTotal:[[:space:]]*500000 kB' /proc/meminfo", timeout=1)
 
-                      # verify the patched container systemd generator from `pkgs.distrobuilder.generator`
-                      with subtest("[${image_id}] lxc-generator compatibility"):
-                          with subtest("[${image_id}] lxc-container generator configures plain container"):
-                              # default container is plain
-                              server.succeed(f"incus exec {instance_name} test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+                    # verify the patched container systemd generator from `pkgs.distrobuilder.generator`
+                    with subtest("[${image_id}] lxc-generator compatibility"):
+                        with subtest("[${image_id}] lxc-container generator configures plain container"):
+                            # default container is plain
+                            server.succeed(f"incus exec {instance_name} test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
 
-                              server.check_instance_sysctl(instance_name)
+                            server.check_instance_sysctl(instance_name)
 
-                          with subtest("[${image_id}] lxc-container generator configures nested container"):
-                              server.set_instance_config(instance_name, "security.nesting=true", restart=True)
+                        with subtest("[${image_id}] lxc-container generator configures nested container"):
+                            server.set_instance_config(instance_name, "security.nesting=true", restart=True)
 
-                              server.fail(f"incus exec {instance_name} test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
-                              target = server.succeed(f"incus exec {instance_name} readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
-                              assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
+                            server.fail(f"incus exec {instance_name} test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+                            target = server.succeed(f"incus exec {instance_name} readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
+                            assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
 
-                              server.check_instance_sysctl(instance_name)
+                            server.check_instance_sysctl(instance_name)
 
-                      with subtest("[${image_id}] lxcfs"):
-                          with subtest("[${image_id}] mounts lxcfs overlays"):
-                              server.succeed(f"incus exec {instance_name} mount | grep 'lxcfs on /proc/cpuinfo type fuse.lxcfs'")
-                              server.succeed(f"incus exec {instance_name} mount | grep 'lxcfs on /proc/meminfo type fuse.lxcfs'")
+                    with subtest("[${image_id}] lxcfs"):
+                        with subtest("[${image_id}] mounts lxcfs overlays"):
+                            server.succeed(f"incus exec {instance_name} mount | grep 'lxcfs on /proc/cpuinfo type fuse.lxcfs'")
+                            server.succeed(f"incus exec {instance_name} mount | grep 'lxcfs on /proc/meminfo type fuse.lxcfs'")
 
-                          with subtest("[${image_id}] supports per-instance lxcfs"):
-                              server.succeed(f"incus stop {instance_name}")
-                              server.fail(f"pgrep -a lxcfs | grep 'incus/devices/{instance_name}/lxcfs'")
+                        with subtest("[${image_id}] supports per-instance lxcfs"):
+                            server.succeed(f"incus stop {instance_name}")
+                            server.fail(f"pgrep -a lxcfs | grep 'incus/devices/{instance_name}/lxcfs'")
 
-                              server.succeed("incus config set instances.lxcfs.per_instance=true")
+                            server.succeed("incus config set instances.lxcfs.per_instance=true")
 
-                              server.succeed(f"incus start {instance_name}")
-                              server.wait_for_instance(instance_name)
-                              server.succeed(f"pgrep -a lxcfs | grep 'incus/devices/{instance_name}/lxcfs'")
-                    ''
-
+                            server.succeed(f"incus start {instance_name}")
+                            server.wait_for_instance(instance_name)
+                            server.succeed(f"pgrep -a lxcfs | grep 'incus/devices/{instance_name}/lxcfs'")
+                  ''
+                  + lib.optionalString (config.copyChannel) ''
+                    with subtest("[${image_id}] channel copied correctly"):
+                        server.succeed(f"incus exec {instance_name} -- systemctl status nix-channel-init.service")
+                  ''
+                )
                 #
                 # virtual-machine specific
                 #

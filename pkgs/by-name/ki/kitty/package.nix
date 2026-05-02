@@ -20,7 +20,7 @@
   libxext,
   wayland-protocols,
   wayland,
-  xxHash,
+  xxhash,
   nerd-fonts,
   lcms2,
   librsync,
@@ -76,7 +76,7 @@ buildPythonApplication rec {
     librsync
     matplotlib
     openssl.dev
-    xxHash
+    xxhash
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpng

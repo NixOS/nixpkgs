@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dash-core-components";
   version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "dash_core_components";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-xnM4dK+XXlUvlaE5ihbC7n3xTOQ/pguzcYo8bgtj/+4=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antoinerg ];
   };
-}
+})

@@ -3,9 +3,10 @@
   lib,
   nodejs_24,
   pnpm_10_29_2,
+  node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_40,
+  electron_41,
   python3,
   makeWrapper,
   callPackage,
@@ -29,7 +30,7 @@ assert lib.warnIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_10_29_2;
-  electron = electron_40;
+  electron = electron_41;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -58,13 +59,13 @@ let
     '';
   });
 
-  version = "8.6.0";
+  version = "8.8.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-K6mufC7LFGWeCkIkrsYPO2n/0L1b6yBqiLcv7w7e57g=";
+    hash = "sha256-moWEqKWZgqIfhK01RUROF4Waxbn5kcmxZQ94PGai4ww=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -76,7 +77,7 @@ let
       inherit (finalAttrs) pname src version;
       inherit pnpm;
       fetcherVersion = 3;
-      hash = "sha256-WbdYcI5y01gdS9AIzy4VZZ6eFaTHaVPscTawLSsHzlc=";
+      hash = "sha256-CPZkybD/rCBMBK9qUSweBdLr9hXu0Ztn8fekqrRzUR4=";
     };
 
     strictDeps = true;
@@ -105,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [
+    node-gyp
     nodejs
     pnpmConfigHook
     pnpm
@@ -159,11 +161,11 @@ stdenv.mkDerivation (finalAttrs: {
     # language-pack postprocessing), and they expect a different macOS
     # app layout than nixpkgs' Electron provides.
     substituteInPlace package.json \
-      --replace-fail '"artifactBuildCompleted": "ts/scripts/artifact-build-completed.node.ts",' "" \
-      --replace-fail '"afterSign": "ts/scripts/after-sign.node.ts",' "" \
-      --replace-fail '"afterPack": "ts/scripts/after-pack.node.ts",' "" \
-      --replace-fail '"sign": "./ts/scripts/sign-macos.node.ts",' "" \
-      --replace-fail '"afterAllArtifactBuild": "ts/scripts/after-all-artifact-build.node.ts",' ""
+      --replace-fail '"artifactBuildCompleted": "scripts/artifact-build-completed.mjs",' "" \
+      --replace-fail '"afterSign": "scripts/after-sign.mjs",' "" \
+      --replace-fail '"afterPack": "scripts/after-pack.mjs",' "" \
+      --replace-fail '"sign": "scripts/sign-macos.mjs",' "" \
+      --replace-fail '"afterAllArtifactBuild": "scripts/after-all-artifact-build.mjs",' ""
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -177,15 +179,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 3;
     hash =
       if withAppleEmojis then
-        "sha256-d6ul6MTJhnM4PyxMlMaVovnvSPfYh3DmMjHjmOideB4="
+        "sha256-Ib+NQbnCawbGgx45u27ubf1a6lHkrGde+m1DUT23w5Y="
       else
-        "sha256-JymcPdFMi0wfceOJnPrwEBG4PnosIFnrxiIrTlcGf/g=";
+        "sha256-0HzY/4XHjc8uAIMy6OzgGcuDNGfqQVW2RHOtyeYPJaw=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1775687068;
+    SOURCE_DATE_EPOCH = 1777225303;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Disable code signing during local macOS builds.
@@ -240,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Build it explicitly against Electron headers ahead of packaging.
     export npm_config_nodedir=${electron.headers}
     pushd node_modules/fs-xattr
-    pnpm exec node-gyp rebuild
+    node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
   '';
@@ -277,8 +279,9 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags ${lib.escapeShellArg commandLineArgs}
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -p $out/share
+    mkdir -p $out/share/polkit-1/actions
     cp -r dist/*-unpacked/resources $out/share/signal-desktop
+    mv $out/share/signal-desktop/*.policy $out/share/polkit-1/actions/
 
     for icon in build/icons/png/*
     do

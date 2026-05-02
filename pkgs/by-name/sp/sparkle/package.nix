@@ -43,20 +43,20 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sparkle";
-  version = "1.26.3";
+  version = "1.26.4";
 
   src = fetchFromGitHub {
     owner = "xishang0128";
     repo = "sparkle";
     tag = finalAttrs.version;
-    hash = "sha256-36eqSgXDl3ASDO4wn8cCptSE4qf3FwFyl+TEhCzhGwA=";
+    hash = "sha256-+3MHCy1N1/kOVFYDNvNiP/jkL0HHi2RwfeIqe2Z40O8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-uiUp2YtPMvG0d9GIedxNzkY0TR/bdbWQv4IFiVZew5s=";
+    hash = "sha256-Us4qsCJdRZKYJQAgcqeStX7MfEqBWr4rKXBqU2K+KZI=";
   };
 
   nativeBuildInputs = [

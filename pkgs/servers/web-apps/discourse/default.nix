@@ -305,8 +305,8 @@ let
       pname = "discourse-assets";
       inherit version src;
       pnpm = pnpm;
-      fetcherVersion = 1;
-      hash = "sha256-/vPNHEB/ZuHWnSLqfz2NM/scSRH9wzotzjunDAw5Imc=";
+      fetcherVersion = 3;
+      hash = "sha256-xft/2x0iti0yJ53uI9q2+FSvKgWWfKQzlMlPFz3RZsE=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [

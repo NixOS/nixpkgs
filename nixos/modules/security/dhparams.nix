@@ -143,68 +143,81 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && cfg.stateful) {
-    systemd.services = {
-      dhparams-init = {
-        description = "Clean Up Old Diffie-Hellman Parameters";
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      warnings = [
+        ''
+          The `security.dhparam` module is deprecated and scheduled for removal in NixOS 26.11.
+          Generating your own params has been shown to be problematic in RFC 7919 (2016).
 
-        # Clean up even when no DH params is set
-        wantedBy = [ "multi-user.target" ];
+          Remove any uses of DHE and migrate to ECDHE (RFC 8422, 2018) and
+          Hybrid PQ (draft-ietf-tls-ecdhe-mlkem, 2026) key exchange algorithms.
+        ''
+      ];
+    })
+    (lib.mkIf (cfg.enable && cfg.stateful) {
+      systemd.services = {
+        dhparams-init = {
+          description = "Clean Up Old Diffie-Hellman Parameters";
 
-        serviceConfig.RemainAfterExit = true;
-        serviceConfig.Type = "oneshot";
+          # Clean up even when no DH params is set
+          wantedBy = [ "multi-user.target" ];
 
-        script = ''
-          if [ ! -d ${cfg.path} ]; then
-            mkdir -p ${cfg.path}
-          fi
+          serviceConfig.RemainAfterExit = true;
+          serviceConfig.Type = "oneshot";
 
-          # Remove old dhparams
-          for file in ${cfg.path}/*; do
-            if [ ! -f "$file" ]; then
-              continue
+          script = ''
+            if [ ! -d ${cfg.path} ]; then
+              mkdir -p ${cfg.path}
             fi
-            ${lib.concatStrings (
-              lib.mapAttrsToList (
-                name:
-                { bits, path, ... }:
-                ''
-                  if [ "$file" = ${lib.escapeShellArg path} ] && \
-                     ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text \
-                     | head -n 1 | grep "(${toString bits} bit)" > /dev/null; then
-                    continue
-                  fi
-                ''
-              ) cfg.params
-            )}
-            rm "$file"
-          done
 
-          # TODO: Ideally this would be removing the *former* cfg.path, though
-          # this does not seem really important as changes to it are quite
-          # unlikely
-          rmdir --ignore-fail-on-non-empty ${cfg.path}
-        '';
-      };
-    }
-    // lib.mapAttrs' (
-      name:
-      { bits, path, ... }:
-      lib.nameValuePair "dhparams-gen-${name}" {
-        description = "Generate Diffie-Hellman Parameters for ${name}";
-        after = [ "dhparams-init.service" ];
-        before = [ "${name}.service" ];
-        requiredBy = [ "${name}.service" ];
-        wantedBy = [ "multi-user.target" ];
-        unitConfig.ConditionPathExists = "!${path}";
-        serviceConfig.Type = "oneshot";
-        script = ''
-          mkdir -p ${lib.escapeShellArg cfg.path}
-          ${pkgs.openssl}/bin/openssl dhparam -out ${lib.escapeShellArg path} \
-            ${toString bits}
-        '';
+            # Remove old dhparams
+            for file in ${cfg.path}/*; do
+              if [ ! -f "$file" ]; then
+                continue
+              fi
+              ${lib.concatStrings (
+                lib.mapAttrsToList (
+                  name:
+                  { bits, path, ... }:
+                  ''
+                    if [ "$file" = ${lib.escapeShellArg path} ] && \
+                       ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text \
+                       | head -n 1 | grep "(${toString bits} bit)" > /dev/null; then
+                      continue
+                    fi
+                  ''
+                ) cfg.params
+              )}
+              rm "$file"
+            done
+
+            # TODO: Ideally this would be removing the *former* cfg.path, though
+            # this does not seem really important as changes to it are quite
+            # unlikely
+            rmdir --ignore-fail-on-non-empty ${cfg.path}
+          '';
+        };
       }
-    ) cfg.params;
-  };
+      // lib.mapAttrs' (
+        name:
+        { bits, path, ... }:
+        lib.nameValuePair "dhparams-gen-${name}" {
+          description = "Generate Diffie-Hellman Parameters for ${name}";
+          after = [ "dhparams-init.service" ];
+          before = [ "${name}.service" ];
+          requiredBy = [ "${name}.service" ];
+          wantedBy = [ "multi-user.target" ];
+          unitConfig.ConditionPathExists = "!${path}";
+          serviceConfig.Type = "oneshot";
+          script = ''
+            mkdir -p ${lib.escapeShellArg cfg.path}
+            ${pkgs.openssl}/bin/openssl dhparam -out ${lib.escapeShellArg path} \
+              ${toString bits}
+          '';
+        }
+      ) cfg.params;
+    })
+  ];
 
 }

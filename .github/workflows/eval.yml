@@ -132,7 +132,7 @@ jobs:
             core.info(`Found pinned.json commit: ${ciPinBumpCommit}`)
 
       - name: Install Nix
-        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
 
       - name: Load supported versions
         id: versions
@@ -180,7 +180,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
 
       - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
         continue-on-error: true
@@ -238,7 +238,7 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
@@ -270,7 +270,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
 
       - name: Combine all output paths and eval stats
         run: |
@@ -279,7 +279,7 @@ jobs:
             --out-link combined
 
       - name: Upload the maintainer list
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-prefix }}maintainers
           path: combined/maintainers.json
@@ -300,7 +300,7 @@ jobs:
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the comparison results
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ inputs.artifact-prefix }}comparison
           path: comparison/*
@@ -312,6 +312,12 @@ jobs:
           script: |
             const { readFile } = require('node:fs/promises')
             const changed = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8'))
+            const removedByKernel = Object.fromEntries(
+              Object.entries(changed.attrdiffByKernel ?? {}).map(([kernel, diff]) => [
+                kernel,
+                diff.removed.length,
+              ]),
+            )
             const description =
               'Package: ' + [
                 `added ${changed.attrdiff.added.length}`,
@@ -321,7 +327,15 @@ jobs:
               ' — Rebuild: ' + [
                 `linux ${changed.rebuildCountByKernel.linux}`,
                 `darwin ${changed.rebuildCountByKernel.darwin}`
-              ].join(', ')
+              ].join(', ') +
+              (
+                Object.values(removedByKernel).some((count) => count > 0)
+                  ? ' — Removed: ' + [
+                      `linux ${removedByKernel.linux ?? 0}`,
+                      `darwin ${removedByKernel.darwin ?? 0}`
+                    ].join(', ')
+                  : ''
+              )
 
             const { serverUrl, repo, runId, payload } = context
             const target_url =
@@ -451,7 +465,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b # v31.10.4
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
 
       - name: Ensure flake outputs on all systems still evaluate
         run: nix flake check --all-systems --no-build './nixpkgs/untrusted?shallow=1'

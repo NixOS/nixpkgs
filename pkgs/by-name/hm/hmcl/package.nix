@@ -10,7 +10,7 @@
   copyDesktopItems,
   desktopToDarwinBundle,
   jdk,
-  jdk17,
+  jdk25,
   hmclJdk ? jdk.override {
     # Required by jar file
     enableJavaFX = true;
@@ -21,13 +21,14 @@
   },
   minecraftJdks ? [
     hmclJdk
-    jdk17
+    jdk25
   ],
   libxxf86vm,
   libxtst,
   libxrandr,
   libxext,
   libxcursor,
+  libxkbcommon,
   libx11,
   xrandr,
   glib,
@@ -49,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.12.4";
+  version = "3.13.2";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-CxLs3rMW++FGF7WV9EMIb+69ZrnV2MadEHD/NMyXBIw=";
+    hash = "sha256-2OLtf47fmNiEFOkjHiDCj99seiMy25PlmRDSFKu9WFI=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -152,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxxf86vm
     libxext
     libxcursor
+    libxkbcommon
     libxrandr
     libxtst
     libpulseaudio
@@ -192,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xrandr)
       }" \
       --run 'cd $HOME' \
-      ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix JAVA_TOOL_OPTIONS " " "-Dorg.lwjgl.glfw.libname=${lib.getLib glfw3'}/lib/libglfw.so"''} \
       ''${gappsWrapperArgs[@]}
   '';
 
@@ -212,6 +213,15 @@ stdenv.mkDerivation (finalAttrs: {
       Hello Minecraft! Launcher (HMCL) is a free, open-source, and cross-platform Minecraft launcher.
       It provides comprehensive support for managing multiple game versions and mod loaders,
       including Forge, NeoForge, Fabric, Quilt, LiteLoader, and OptiFine.
+
+      Starting with Minecraft 26.1, Wayland support can be enabled
+      by adding the JDK arguments -DMC_DEBUG_ENABLED and
+      -DMC_DEBUG_PREFER_WAYLAND. If needed, configure them in
+      HMCL -> Advanced Settings -> JVM Options -> JVM Arguments.
+
+      Users who are still on an older version and want to use Wayland should
+      enable HMCL -> Advanced Settings -> Workaround -> Use System GLFW.
+      Otherwise, keep it disabled.
     '';
     maintainers = with lib.maintainers; [
       daru-san

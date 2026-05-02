@@ -3,12 +3,15 @@
   lib,
   fetchFromGitHub,
   python3,
+  python3Packages,
   extraPythonPackages ? ps: [ ],
   unstableGitUpdater,
   makeWrapper,
   writeShellScript,
 }:
-
+let
+  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+in
 stdenv.mkDerivation rec {
   pname = "klipper";
   version = "0.13.0-unstable-2026-03-21";
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
-    (python3.withPackages (p: with p; [ cffi ]))
+    python3Packages.cffi
     makeWrapper
   ];
 
@@ -45,10 +48,30 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  # we need to run this to prebuild the chelper.
-  postBuild = ''
-    python ./chelper/__init__.py
+  # we need to run this to prebuild the chelper .so. However when cross
+  # compiling, a patch is temporarily required during the build process to
+  # prevent the build process from using dlopen() on this .so which has been
+  # built for a foreign architecture. We then place the unpatched __init__.py
+  # back, as this dlopen() call is required at runtime
+  postBuild =
+    if isCross then
+      ''
+        python ./chelper/__init__.py
+        mv ./chelper/__init__unpatched.py ./chelper/__init__.py
+      ''
+    else
+      ''
+        python ./chelper/__init__.py
+      '';
+
+  prePatch = lib.optionalString isCross ''
+    cp ./chelper/__init__.py ./chelper/__init__unpatched.py
   '';
+
+  patches = lib.optionals isCross [
+    # https://github.com/Klipper3d/klipper/pull/7254
+    ./cross-ffi.patch
+  ];
 
   # Python 3 is already supported but shebangs aren't updated yet
   postPatch = ''
@@ -58,7 +81,7 @@ stdenv.mkDerivation rec {
     done
 
     # needed for cross compilation
-    substituteInPlace ./chelper/__init__.py \
+    substituteInPlace ./chelper/__init__*.py \
       --replace 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
   '';
 

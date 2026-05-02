@@ -41,7 +41,7 @@ let
       pkgs.gitMinimal
     ];
     documentation = [
-      "https://docs.radicle.xyz/guides/seeder"
+      "https://radicle.dev/guides/seeder"
     ];
     after = [
       "network.target"
@@ -225,7 +225,7 @@ in
         };
       settings = lib.mkOption {
         description = ''
-          See <https://app.radicle.xyz/nodes/seed.radicle.garden/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/radicle/src/node/config.rs#L275>
+          See <https://radicle.network/nodes/iris.radicle.network/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/radicle/src/node/config.rs#L275>
         '';
         default = { };
         example = lib.literalExpression ''

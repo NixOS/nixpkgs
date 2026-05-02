@@ -7,23 +7,21 @@
   lib,
   nix-update-script,
 }:
-let
-  version = "0.8.6";
-in
-buildGoModule rec {
-  inherit version;
+
+buildGoModule (finalAttrs: {
+  version = "0.9.2";
   pname = "scrutiny-collector";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
-    tag = "v${version}";
-    hash = "sha256-0NgAdgtlsAetXfFqJdYpvzEXL4Ibh4yzAjOaOFoMvrs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZQHTwJZBOYJ2De0CmyxXc4Fb2Vt+jKg+YpDDZhSt+cg=";
   };
 
   subPackages = "collector/cmd/collector-metrics";
 
-  vendorHash = "sha256-4qjKGjCvB0ggf6Cda7LfMeqbbBbhGcxB2ZfymUhajq8=";
+  vendorHash = "sha256-Em8k2AFoZv4TD4HFkkNIdyPj7IBOFiUIKffkifWfZFY=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -48,6 +46,7 @@ buildGoModule rec {
   meta = {
     description = "Hard disk metrics collector for Scrutiny";
     homepage = "https://github.com/AnalogJ/scrutiny";
+    changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       samasaur
@@ -55,4 +54,4 @@ buildGoModule rec {
     ];
     mainProgram = "scrutiny-collector-metrics";
   };
-}
+})

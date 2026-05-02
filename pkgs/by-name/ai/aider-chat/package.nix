@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python312Packages,
+  python3Packages,
   fetchFromGitHub,
   fetchpatch,
   replaceVars,
@@ -12,9 +12,6 @@
 }:
 
 let
-  # dont support python 3.13 (Aider-AI/aider#3037)
-  python3Packages = python312Packages;
-
   aider-nltk-data = python3Packages.nltk.dataDir (d: [
     d.punkt-tab
     d.stopwords

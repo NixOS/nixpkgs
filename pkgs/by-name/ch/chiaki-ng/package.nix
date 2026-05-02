@@ -26,7 +26,7 @@
   shaderc,
   lcms2,
   libdovi,
-  xxHash,
+  xxhash,
   kdePackages,
 }:
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     shaderc
     lcms2
     libdovi
-    xxHash
+    xxhash
   ];
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";

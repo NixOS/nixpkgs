@@ -8,6 +8,7 @@
   nodejs,
   rustPlatform,
   rustc,
+  sd,
   wasm-bindgen-cli_0_2_108,
   wasm-pack,
   yarnConfigHook,
@@ -21,11 +22,12 @@
   # can set this parameter to override these occurrences with your own url. Must include the schema.
   # Example: https://my-ente.example.com
   enteMainUrl ? null,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.24";
+  version = "1.3.32";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -36,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-fM/a5V5Depkeu8hIzaYJr/0w0Mt/zM9/b+76W7ggUfw=";
+    hash = "sha256-Lwa45QqqyvFgHJ4IiJm2tJy5CdPI5XO3wCzXTeNCTq4=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -48,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-ftb0h5MOHyQ2iec6iE7/WdHXgrviLCy8oIqFXv5OTq8=";
+    hash = "sha256-/FkAxi9KpW/Z6sdo7gfxvCmaAe0JzjubScrcGjbLD88=";
   };
   cargoRoot = "packages/wasm";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-NhpSwesQ9B5gEeBQVjEEAKO4A68wfmBoQ3ga/baieNE=";
+    hash = "sha256-bWOwIa7SD0z2StoUg9HlQGTBq2xXltLgQ2ft8umjg/Y=";
   };
 
   nativeBuildInputs = [
@@ -81,16 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
         packages/wasm/package.json \
         --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
     ''
-    # Replace hardcoded ente.io urls if desired
+    # Replace hardcoded links pointing to the public ente instance so that
+    # users of a self-hosted instance are not accidentally redirected there
     + lib.optionalString (enteMainUrl != null) ''
-      substituteInPlace \
-        apps/payments/src/services/billing.ts \
-        apps/photos/src/pages/shared-albums.tsx \
-        --replace-fail "https://ente.io" ${lib.escapeShellArg enteMainUrl}
-
-      substituteInPlace \
-        apps/accounts/src/pages/index.tsx \
-        --replace-fail "https://web.ente.io" ${lib.escapeShellArg enteMainUrl}
+      for pattern in "https://web.ente.io" "https://ente.com" "https://ente.io"; do
+        mapfile -d "" -t files < <(grep -rlFZ -- "$pattern" apps/)
+        ${lib.getExe sd} -F -- "$pattern" ${lib.escapeShellArg enteMainUrl} "''${files[@]}"
+      done
     '';
 
   yarnBuildScript = "build:${enteApp}";
@@ -106,57 +105,60 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  passthru.updateScript = writeScript "update-ente-web" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p coreutils nix-update gnugrep gnused curl
+  passthru = {
+    tests = { inherit (nixosTests) ente; };
+    updateScript = writeScript "update-ente-web" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p coreutils nix-update gnugrep gnused curl
 
-    set -eu -o pipefail
+      set -eu -o pipefail
 
-    # Assume the current working directory is Nixpkgs
-    file_path="./pkgs/by-name/en/ente-web/package.nix"
+      # Assume the current working directory is Nixpkgs
+      file_path="./pkgs/by-name/en/ente-web/package.nix"
 
-    # Extract version, then update
-    old_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
-    if [[ -z "$old_version" ]]; then
-      echo "Failed to extract old version from $file_path"
-      exit 1
-    fi
+      # Extract version, then update
+      old_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+      if [[ -z "$old_version" ]]; then
+        echo "Failed to extract old version from $file_path"
+        exit 1
+      fi
 
-    nix-update ente-web --version-regex 'photos-v(.*)'
+      nix-update ente-web --version-regex 'photos-v(.*)'
 
-    new_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
-    if [[ -z "$new_version" ]]; then
-      echo "Failed to extract new version from $file_path"
-      exit 1
-    fi
+      new_version=$(grep -oP 'version = "\K[^"]+' "$file_path" | head -n1)
+      if [[ -z "$new_version" ]]; then
+        echo "Failed to extract new version from $file_path"
+        exit 1
+      fi
 
-    if [[ "$old_version" == "$new_version" ]]; then
-      echo "No update"
-      exit 0
-    fi
+      if [[ "$old_version" == "$new_version" ]]; then
+        echo "No update"
+        exit 0
+      fi
 
-    echo "Updated to version $new_version, checking wasm-bindgen..."
+      echo "Updated to version $new_version, checking wasm-bindgen..."
 
-    # Fetch Cargo.lock from GitHub instead of cloning repository
-    cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/web/packages/wasm/Cargo.lock"
+      # Fetch Cargo.lock from GitHub instead of cloning repository
+      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/web/packages/wasm/Cargo.lock"
 
-    wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
+      wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
 
-    if [[ -z "$wasm_bindgen_version" ]]; then
-      echo "Failed to find wasm-bindgen version in Cargo.lock from $cargo_lock_url"
-      exit 1
-    fi
+      if [[ -z "$wasm_bindgen_version" ]]; then
+        echo "Failed to find wasm-bindgen version in Cargo.lock from $cargo_lock_url"
+        exit 1
+      fi
 
-    echo "Found wasm-bindgen version: $wasm_bindgen_version"
+      echo "Found wasm-bindgen version: $wasm_bindgen_version"
 
-    # Construct new attribute name
-    wasm_bindgen_attr="wasm-bindgen-cli_''${wasm_bindgen_version//./_}"
+      # Construct new attribute name
+      wasm_bindgen_attr="wasm-bindgen-cli_''${wasm_bindgen_version//./_}"
 
-    # Replace old attribute name in file
-    sed -i "s/wasm-bindgen-cli_[0-9_]\+/$wasm_bindgen_attr/g" "$file_path"
+      # Replace old attribute name in file
+      sed -i "s/wasm-bindgen-cli_[0-9_]\+/$wasm_bindgen_attr/g" "$file_path"
 
-    echo "Successfully updated wasm-bindgen-cli to $wasm_bindgen_attr"
-  '';
+      echo "Successfully updated wasm-bindgen-cli to $wasm_bindgen_attr"
+    '';
+  };
 
   meta = {
     description = "Ente application web frontends";

@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "podman";
-  version = "5.7.0";
+  version = "5.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5GbgqwsFBXE3kXdOpbbcmIEkj5FWNBqyWdq2tZQbvK8=";
+    hash = "sha256-i4eWC1MyBdc+en3W3+4fdeDP79Z2hsk9SIg3PfG0mI0=";
   };
 
   build-system = [ setuptools ];

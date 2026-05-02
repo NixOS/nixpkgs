@@ -4,6 +4,7 @@
   adslib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   pytestCheckHook,
   setuptools,
 }:
@@ -44,6 +45,13 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "pyads" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "Python wrapper for TwinCAT ADS library";

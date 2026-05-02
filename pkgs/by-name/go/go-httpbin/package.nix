@@ -2,19 +2,20 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
   nixosTests,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "go-httpbin";
-  version = "2.21.0";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "mccutchen";
     repo = "go-httpbin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QJskXXieiFr406WI8gGtgcoL4pHEVzNOwM6JyYk+0EA=";
+    hash = "sha256-N0lq11tF5z+n7AlrOLdJ4eZvaZljSKafpkwma6jPW3k=";
   };
 
   vendorHash = null;
@@ -24,17 +25,13 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  # tests are flaky
-  doCheck = false;
+  __darwinAllowLocalNetworking = true;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/go-httpbin --help &> /dev/null
-    runHook postInstallCheck
-  '';
 
   passthru = {
     tests = { inherit (nixosTests) go-httpbin; };

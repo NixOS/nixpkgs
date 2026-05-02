@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunicode";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "libunicode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J8qawT1oiUO9xTVEMQvsY0K2NtIfkUq9PoCbFt6wqek=";
+    hash = "sha256-EBu8zn5XritudZmBvQmjOmU08XLjhyKI6hVCrnWoR6k=";
   };
 
   # Fix: set_target_properties Can not find target to add properties to: Catch2, et al.

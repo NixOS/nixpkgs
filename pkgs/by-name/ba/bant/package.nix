@@ -20,13 +20,13 @@ let
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-qS2oKQ9/vNX58PftEjHD+3ApXtWL90YVBHnifLtDTcU=";
+    hash = "sha256-aGm/SiHogz9LSK2LQkEOkeQWBVOHDRvUK0YEU9Tuznw=";
   };
 
   bazelFlags = [
@@ -72,6 +72,9 @@ buildBazelPackage rec {
   };
 
   passthru.updateScript = nix-update-script { };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Bazel/Build Analysis and Navigation Tool";

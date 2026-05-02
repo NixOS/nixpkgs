@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highscore-sameboy";
-  version = "0-unstable-2026-02-17";
+  version = "0-unstable-2026-04-01";
 
   src = fetchFromGitHub {
     owner = "highscore-emu";
     repo = "SameBoy";
-    rev = "aae1571db7de438638d4180dc451b1b348d5a135";
-    hash = "sha256-PZNWzN/C6QPTgNLIsN55cE/3DyfcUdUknAUjxZ7sJvA=";
+    rev = "f59693cc4f1f3ac547eaf25856574fb850c1da61";
+    hash = "sha256-GzBTB3lqWi+Cw24fFVN9YBa3ecOA5G9756RWM6mMxvA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/highscore";

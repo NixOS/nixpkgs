@@ -8,7 +8,7 @@
   psutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "adb-enhanced";
   version = "2.8.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ashishb";
     repo = "adb-enhanced";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YuQgz3WeN50hg/IgdoNV61St9gpu6lcgFfKCfI/ENl0=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ vtuan10 ];
     mainProgram = "adbe";
   };
-}
+})

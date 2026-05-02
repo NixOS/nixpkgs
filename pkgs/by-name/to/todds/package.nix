@@ -14,9 +14,9 @@
   # buildInputs
   boost,
   fmt,
-  hyperscan,
   onetbb,
   opencv,
+  vectorscan,
 
   # tests
   versionCheckHook,
@@ -53,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     fmt
-    hyperscan
     onetbb
     opencv
+    vectorscan
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart

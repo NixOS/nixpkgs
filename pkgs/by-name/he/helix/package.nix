@@ -13,8 +13,8 @@
       tree-sitter-beancount = prev.tree-sitter-beancount.override {
         excludeBrokenTreeSitterJson = false;
       };
-      tree-sitter-dart = prev.tree-sitter-dart.overrideAttrs {
-        patches = [ ];
+      tree-sitter-git-rebase = prev.tree-sitter-git-rebase.overrideAttrs {
+        dontPatch = true;
       };
       tree-sitter-glimmer = prev.tree-sitter-glimmer.override {
         excludeBrokenTreeSitterJson = false;
@@ -22,17 +22,11 @@
       tree-sitter-janet-simple = prev.tree-sitter-janet-simple.override {
         excludeBrokenTreeSitterJson = false;
       };
-      tree-sitter-latex = prev.tree-sitter-latex.override {
-        generate = false;
-      };
       tree-sitter-qmljs = prev.tree-sitter-qmljs.overrideAttrs {
         dontCheckForBrokenSymlinks = true;
       };
       tree-sitter-sql = prev.tree-sitter-sql.override {
         generate = false;
-      };
-      tree-sitter-tlaplus = prev.tree-sitter-tlaplus.overrideAttrs {
-        patches = [ ];
       };
     }
   ),

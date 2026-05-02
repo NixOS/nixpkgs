@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "openfga-sdk";
-  version = "0.10.0";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-yopZJMGv2cVJZsTXqU7vaQN31QOwCW/kg0gghqt6rus=";
+    hash = "sha256-weuwtEr2u9W5c8zgpHiQUspbUTyk2/WuXEp2kYZM4Xc=";
   };
 
   build-system = [ hatchling ];

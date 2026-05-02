@@ -199,16 +199,16 @@ in
             ''
           else
             indentFishFile "nixos-env-preinit.fish" ''
-              # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
-              # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
-              set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
+              # This happens before embedded:config.fish sets fish_function_path, so it is currently
+              # unset. We set it and then completely erase it, leaving its configuration to embedded:config.fish
+              set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d
 
               # source the NixOS environment config
               if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
                 fenv source ${config.system.build.setEnvironment}
               end
 
-              # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
+              # clear fish_function_path so that it will be correctly set when we return to embedded:config.fish
               set -e fish_function_path
             '';
       }
@@ -301,11 +301,20 @@ in
                     find -L $package/share/man -type f | xargs ${pkgs.python3.pythonOnBuildForHost.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
                   fi
                 '';
+            packages =
+              if
+                config.documentation.enable && config.documentation.nixos.enable && config.documentation.man.enable
+              then
+                builtins.filter (pkg: pkg != config.system.build.manual.nixos-configuration-reference-manpage) (
+                  cfge.systemPackages ++ cfg.extraCompletionPackages
+                )
+              else
+                cfge.systemPackages ++ cfg.extraCompletionPackages;
           in
           pkgs.buildEnv {
             name = "system_fish-completions";
             ignoreCollisions = true;
-            paths = map generateCompletions (config.environment.systemPackages ++ cfg.extraCompletionPackages);
+            paths = map generateCompletions packages;
           };
       })
 

@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stax";
-  version = "0.25.1";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "cesarferreira";
     repo = "stax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HHunRVDoijBOcIzj0xknj2O+m+A1nmkkxu97XZcvmJw=";
+    hash = "sha256-8LIc0/z6HJuej9VWMqpW9RTu/kGDQHN59vopDr+iF6w=";
   };
 
   nativeBuildInputs = [ perl ];
 
-  cargoHash = "sha256-cJmK5uX3HCz4own2UtXFkHdGFETjina2/UW18f/g/bA=";
+  cargoHash = "sha256-lOQzFz579p89hDBh3Z7oO2iTITpJG9fFqW/rEq8DwJ0=";
 
   doInstallCheck = true;
   doCheck = false;

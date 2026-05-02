@@ -1,0 +1,17 @@
+diff --git a/tests/Makefile.in b/tests/Makefile.in
+index c45abcc..01727ef 100644
+--- a/tests/Makefile.in
++++ b/tests/Makefile.in
+@@ -2003,11 +2003,7 @@ GCAL_OBJS = \
+   ../src/utils.o
+ 
+ GCAL_GNULIB_OBJS = \
+-  ../lib/fclose.o \
+-  ../lib/fflush.o \
+-  ../lib/fseeko.o \
+-  ../lib/ioctl.o \
+-  ../lib/tmpdir.o 
++  ../lib/libgnu.a
+ 
+ check_gcal_SOURCES = check_gcal.c \
+                            check_file-io.c \

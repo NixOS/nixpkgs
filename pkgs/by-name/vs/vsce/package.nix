@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   libsecret,
-  nodejs,
+  nodejs-slim,
   clang_20,
   versionCheckHook,
   nix-update-script,
@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.7.1";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Urn3MlcvJragFvbPYOurUCIOyqYQsEqg5IKbFwcHBo=";
+    hash = "sha256-MYsJOQSrpsEMDw5WbfcfNfrTvu6R5JmKVMeq8WpaFqs=";
   };
 
-  npmDepsHash = "sha256-lJDCeOqSYZCI9o9RsFSviQKkxgcv8XGps3ecy55r7E4=";
+  npmDepsHash = "sha256-QN3twFFcLPqHH4wdC3+G34ze/G/m1RlaPwrHVa0NoFI=";
 
   postPatch = ''
     substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    nodejs.python
+    nodejs-slim.python
   ]
   ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
 
