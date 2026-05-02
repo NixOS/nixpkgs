@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aRxWq9gGfglfBixS7xOoj8r29rJRAfGj4ydcSFf/7P0=";
+    hash = "sha256-Me1aQaN0TwnxzcN4tuz9BPeqmwjL3n5FEegD3elWV58=";
   };
 
-  vendorHash = "sha256-ywID0txn7L6+QkYNvGvO5DTsDQBZLU+pGwNd3q7kLKI=";
+  vendorHash = "sha256-EhC+uK3b0zFCP0/Bn+0jMPyqTvQLTjCrQmH5k7CYi6w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
