@@ -9,7 +9,7 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pip-api";
   version = "0.0.34";
   pyproject = true;
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "di";
     repo = "pip-api";
-    tag = version;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nmCP4hp+BsD80OBjerOu+QTBBExGHvn/v19od4V3ncI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pip ];
+  dependencies = [ pip ];
 
   nativeCheckInputs = [
     pretend
@@ -44,9 +44,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Importable pip API";
-    homepage = "https://github.com/di/pip-api";
-    changelog = "https://github.com/di/pip-api/blob/${version}/CHANGELOG";
-    license = with lib.licenses; [ mit ];
+    homepage = "https://github.com/di/pip-api/";
+    changelog = "https://github.com/di/pip-api/blob/${finalAttrs.src.tag}/CHANGELOG";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
