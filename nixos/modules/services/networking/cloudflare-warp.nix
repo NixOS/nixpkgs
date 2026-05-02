@@ -80,6 +80,9 @@ in
           Environment = [ "RUST_BACKTRACE=full" ];
           WorkingDirectory = cfg.rootDir;
 
+          # This service is particularly chatty, even at "info" level
+          LogLevelMax = "warning";
+
           # See the systemd.exec docs for the canonicalized paths, the service
           # makes use of them for logging, and account state info tracking.
           # https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#RuntimeDirectory=
