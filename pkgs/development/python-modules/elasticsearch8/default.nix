@@ -43,8 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Official low-level client for Elasticsearch";
-    homepage = "https://github.com/elasticsearch/elasticsearch-py";
-    changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/elastic/elasticsearch-py";
+    changelog = "https://github.com/elastic/elastic-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
