@@ -144,12 +144,14 @@ let
   rpath = makeLibraryPath deps + ":" + makeSearchPathOutput "lib" "lib64" deps;
   binpath = makeBinPath deps;
 
-  enableFeatures =
-    optionals enableVideoAcceleration [
-      "AcceleratedVideoDecodeLinuxGL"
-      "AcceleratedVideoEncoder"
-    ]
-    ++ optional enableVulkan "Vulkan";
+  enableFeatures = [
+    "TouchpadOverscrollHistoryNavigation"
+  ]
+  ++ optionals enableVideoAcceleration [
+    "AcceleratedVideoDecodeLinuxGL"
+    "AcceleratedVideoEncoder"
+  ]
+  ++ optional enableVulkan "Vulkan";
 
   disableFeatures = [
     "OutdatedBuildDetector"
