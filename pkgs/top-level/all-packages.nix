@@ -11271,7 +11271,14 @@ with pkgs;
     inherit (perlPackages) perl TextFormat;
   };
 
-  raxml-mpi = raxml.override { useMpi = true; };
+  # raxml MPI is not available on darwin
+  raxml-mpi =
+    (raxml.override {
+      useMpi = true;
+    }).overrideAttrs
+      {
+        meta.platforms = [ "x86_64-linux" ];
+      };
 
   ### SCIENCE/MACHINE LEARNING
 
