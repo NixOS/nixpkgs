@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "distorm3";
-  version = "3.5.2";
+  version = "3.5.2b";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";
     tag = version;
-    hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
+    hash = "sha256-2ftEV3TMS3HT7f96k+Pwt3Mm31fVEXcHpcbbz05jycU=";
   };
 
   build-system = [
