@@ -341,6 +341,11 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libwebkit2gtk-4.0.so.37"
+    "libjavascriptcoregtk-4.0.so.18"
+  ];
   # Null out hardcoded webkit bundle path so it falls back to LD_LIBRARY_PATH
   postFixup = ''
     ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
@@ -349,7 +354,7 @@ stdenv.mkDerivation rec {
     # WebKitGTK 4.0 was removed from Nixpkgs. Ignoring these missing libraries allows the
     # build to succeed and the core Workspace app to work (e.g. via .ica files).
     # However, features relying on the embedded browser (like SAML SSO) may crash at runtime.
-    autoPatchelf --ignore-missing libwebkit2gtk-4.0.so.37 libjavascriptcoregtk-4.0.so.18 -- "$out"
+    autoPatchelf "$out"
 
     $out/opt/citrix-icaclient/util/ctx_rehash
   '';
