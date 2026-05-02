@@ -65,6 +65,18 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-srht": [
+    "index.html#module-services-srht"
+  ],
+  "module-services-srht-basic-usage": [
+    "index.html#module-services-srht-basic-usage"
+  ],
+  "module-services-srht-configuration": [
+    "index.html#module-services-srht-configuration"
+  ],
+  "module-services-srht-httpd": [
+    "index.html#module-services-srht-httpd"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"

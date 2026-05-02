@@ -1196,6 +1196,8 @@ with pkgs;
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
       { };
 
+  sourcehut = callPackage ../applications/version-management/sourcehut { };
+
   svn2git = callPackage ../applications/version-management/svn2git {
     git = gitSVN;
   };
