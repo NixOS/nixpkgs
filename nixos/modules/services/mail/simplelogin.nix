@@ -19,55 +19,10 @@ let
 
   cfg = config.services.simplelogin;
 
-  renderedEnv = lib.generators.toKeyValue {
-    mkValueString =
-      v:
-      if builtins.isBool v then
-        (if v then "1" else null)
-      else if builtins.isInt v || builtins.isFloat v then
-        toString v
-      else if builtins.isList v || builtins.isAttrs v then
-        builtins.toJSON v
-      else
-        toString v;
-  } (lib.filterAttrs (n: v: v != null) cfg.settings);
-
-  envFile = pkgs.writeText "simplelogin.env" renderedEnv;
-
-  dbUri =
-    if cfg.database.createLocally then
-      "postgresql:///${cfg.database.name}"
-    else if cfg.database.passwordFile != null then
-      throw "services.simplelogin.database.passwordFile support should be implemented with a generated runtime env file"
-    else
-      cfg.database.uri;
-
-  defaultSettings = {
-    URL = cfg.url;
-    EMAIL_DOMAIN = cfg.emailDomain;
-    SUPPORT_EMAIL = cfg.supportEmail;
-    DB_URI = dbUri;
-    FLASK_SECRET = cfg.flaskSecret;
-    LOCAL_FILE_UPLOAD = true;
-    DISABLE_ALIAS_SUFFIX = true;
-    GNUPGHOME = "/var/lib/simplelogin/pgp";
-    POSTFIX_SERVER = cfg.mail.postfixHost;
-    POSTFIX_PORT = cfg.mail.postfixPort;
-    EMAIL_SERVERS_WITH_PRIORITY = map (x: [
-      x.priority
-      x.host
-    ]) cfg.mail.emailServersWithPriority;
-    DKIM_PRIVATE_KEY_PATH = cfg.dkimKeyFile;
-    OPENID_PRIVATE_KEY_PATH = "${cfg.package}/share/simplelogin/local_data/jwtRS256.key";
-    OPENID_PUBLIC_KEY_PATH = "${cfg.package}/share/simplelogin/local_data/jwtRS256.key.pub";
-    WORDS_FILE_PATH = "${cfg.package}/share/simplelogin/local_data/words.txt";
-  };
-
-  webEnv = envFile;
 in
 {
   options.services.simplelogin = {
-    enable = mkEnableOption "SimpleLogin";
+    enable = mkEnableOption "SimpleLogin email alias service";
 
     package = mkPackageOption pkgs "simplelogin" { };
 
@@ -97,12 +52,13 @@ in
 
     flaskSecret = mkOption {
       type = types.str;
-      description = "Flask secret. Use a secret manager in real deployments.";
+      example = "0123456789abcdef0123456789abcdef";
+      description = "Secret key for Flask session signing. Must be at least 32 characters.";
     };
 
     dkimKeyFile = mkOption {
       type = types.path;
-      description = "Path to the DKIM private key.";
+      description = "Path to the DKIM private key file.";
     };
 
     secretFile = mkOption {
@@ -116,23 +72,13 @@ in
     };
 
     settings = mkOption {
-      type = types.attrsOf (
-        types.oneOf [
-          types.str
-          types.int
-          types.float
-          types.bool
-          (types.listOf types.anything)
-          (types.attrsOf types.anything)
-        ]
-      );
+      type = types.attrsOf types.anything;
       default = { };
-      description = ''
-        Free-form upstream environment variables.
-
-        Booleans map to presence-style variables: `true` becomes `FOO=1`,
-        `false` is omitted.
-      '';
+      example = {
+        NOT_SEND_EMAIL = true;
+        DISABLE_REGISTRATION = true;
+      };
+      description = "Extra settings to be added to the SimpleLogin configuration environment.";
     };
 
     database = {
@@ -285,198 +231,299 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.simplelogin.settings = mkMerge [
-      defaultSettings
+  config = mkIf cfg.enable (
+    let
+      dbUri =
+        if cfg.database.createLocally then
+          "postgresql:///${cfg.database.name}"
+        else if cfg.database.passwordFile != null then
+          throw "services.simplelogin.database.passwordFile support should be implemented with a generated runtime env file"
+        else
+          cfg.database.uri;
+
+      defaultSettings = {
+        URL = cfg.url;
+        EMAIL_DOMAIN = cfg.emailDomain;
+        SUPPORT_EMAIL = cfg.supportEmail;
+        DB_URI = dbUri;
+        FLASK_SECRET = cfg.flaskSecret;
+        LOCAL_FILE_UPLOAD = true;
+        DISABLE_ALIAS_SUFFIX = true;
+        GNUPGHOME = "/var/lib/simplelogin/pgp";
+        POSTFIX_SERVER = cfg.mail.postfixHost;
+        POSTFIX_PORT = cfg.mail.postfixPort;
+        EMAIL_SERVERS_WITH_PRIORITY = map (x: [
+          x.priority
+          x.host
+        ]) cfg.mail.emailServersWithPriority;
+        DKIM_PRIVATE_KEY_PATH = cfg.dkimKeyFile;
+        OPENID_PRIVATE_KEY_PATH = "${cfg.package}/share/simplelogin/local_data/jwtRS256.key";
+        OPENID_PUBLIC_KEY_PATH = "${cfg.package}/share/simplelogin/local_data/jwtRS256.key.pub";
+        WORDS_FILE_PATH = "${cfg.package}/share/simplelogin/local_data/words.txt";
+      };
+
+      renderedEnv = lib.generators.toKeyValue {
+        mkValueString =
+          v:
+          if builtins.isBool v then
+            (if v then "1" else null)
+          else if builtins.isInt v || builtins.isFloat v then
+            toString v
+          else if builtins.isList v || builtins.isAttrs v then
+            builtins.toJSON v
+          else
+            toString v;
+      } (lib.filterAttrs (n: v: v != null) (defaultSettings // cfg.settings));
+
+      envFile = pkgs.writeText "simplelogin.env" renderedEnv;
+      webEnv = envFile;
+    in
+    mkMerge [
       {
-        ALIAS_DOMAINS = [ cfg.emailDomain ];
+        users.users.simplelogin = {
+          isSystemUser = true;
+          group = "simplelogin";
+        };
+        users.groups.simplelogin = { };
+
+        systemd.services.simplelogin-setup = {
+          description = "SimpleLogin Setup";
+          wantedBy = [ "multi-user.target" ];
+          after = optional cfg.database.createLocally "postgresql.service";
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            User = "simplelogin";
+            Group = "simplelogin";
+            StateDirectory = "simplelogin";
+            WorkingDirectory = "/var/lib/simplelogin";
+            EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
+            ExecStartPre = [
+              "${pkgs.coreutils}/bin/mkdir -p /var/lib/simplelogin/pgp /var/lib/simplelogin/upload"
+            ];
+            ExecStart = [
+              "${cfg.package}/bin/simplelogin-db-upgrade"
+              "${cfg.package}/bin/simplelogin-init-app"
+            ];
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [ "/var/lib/simplelogin" ];
+          };
+        };
+
+        systemd.services.simplelogin-web = {
+          description = "SimpleLogin Web Service";
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "simplelogin-setup.service"
+          ];
+          requires = [ "simplelogin-setup.service" ];
+          serviceConfig = {
+            User = "simplelogin";
+            Group = "simplelogin";
+            WorkingDirectory = "/var/lib/simplelogin";
+            StateDirectory = "simplelogin";
+            EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
+            ExecStart = ''
+              ${cfg.package}/bin/simplelogin-web -b ${cfg.web.address}:${toString cfg.web.port} -w ${toString cfg.web.workers} --timeout ${toString cfg.web.timeout}
+            '';
+            Restart = "on-failure";
+            RestartSec = "5s";
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [ "/var/lib/simplelogin" ];
+          };
+        };
       }
-    ];
 
-    users.users.simplelogin = {
-      isSystemUser = true;
-      group = "simplelogin";
-      home = "/var/lib/simplelogin";
-      createHome = true;
-    };
+      (mkIf cfg.database.createLocally {
+        services.postgresql = {
+          enable = true;
+          ensureDatabases = [ cfg.database.name ];
+          ensureUsers = [
+            {
+              name = cfg.database.user;
+              ensureDBOwnership = true;
+            }
+          ];
+        };
+      })
 
-    users.groups.simplelogin = { };
+      (mkIf cfg.nginx.enable {
+        services.nginx = {
+          enable = true;
+          virtualHosts."${cfg.hostName}" = {
+            forceSSL = cfg.nginx.forceSSL;
+            enableACME = cfg.nginx.enableACME;
+            locations."/" = {
+              proxyPass = "http://${cfg.web.address}:${toString cfg.web.port}";
+              extraConfig = ''
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+              '';
+            };
+          };
+        };
+      })
 
-    services.postgresql = mkIf cfg.database.createLocally {
-      enable = true;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        {
-          name = cfg.database.user;
-          ensureDBOwnership = true;
-        }
-      ];
-    };
+      (mkIf cfg.mail.enable {
+        systemd.services.simplelogin-email-handler = {
+          description = "SimpleLogin Email Handler";
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "simplelogin-setup.service"
+          ];
+          requires = [ "simplelogin-setup.service" ];
+          serviceConfig = {
+            User = "simplelogin";
+            Group = "simplelogin";
+            WorkingDirectory = "/var/lib/simplelogin";
+            StateDirectory = "simplelogin";
+            EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
+            ExecStart = "${cfg.package}/bin/simplelogin-email-handler";
+            Restart = "on-failure";
+            RestartSec = "5s";
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [ "/var/lib/simplelogin" ];
+          };
+        };
+      })
 
-    systemd.services.simplelogin-setup = {
-      description = "SimpleLogin database setup";
-      wantedBy = [ "multi-user.target" ];
-      before = [
-        "simplelogin-web.service"
-      ]
-      ++ optional cfg.mail.enable "simplelogin-email-handler.service"
-      ++ optional cfg.jobRunner.enable "simplelogin-job-runner.service";
-      after = optional cfg.database.createLocally "postgresql.service";
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "simplelogin";
-        Group = "simplelogin";
-        StateDirectory = "simplelogin";
-        WorkingDirectory = "/var/lib/simplelogin";
-        EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStartPre = [
-          "${pkgs.coreutils}/bin/mkdir -p /var/lib/simplelogin/pgp /var/lib/simplelogin/upload"
-        ];
-        ExecStart = [
-          "${cfg.package}/bin/simplelogin-db-upgrade"
-          "${cfg.package}/bin/simplelogin-init-app"
-        ];
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = [ "/var/lib/simplelogin" ];
-      };
-    };
+      (mkIf cfg.mail.configurePostfix {
+        services.postfix = {
+          enable = true;
+          hostname = cfg.hostName;
+          networks = [
+            "127.0.0.0/8"
+            "[::ffff:127.0.0.0]/104"
+            "[::1]/128"
+          ];
+          config = {
+            transport_maps = [ "hash:/etc/postfix/transport" ];
+            virtual_alias_maps = [
+              "proxy:pgsql:/etc/postfix/pgsql-aliases.cf"
+              "proxy:pgsql:/etc/postfix/pgsql-virtual-alias-maps.cf"
+            ];
+            virtual_mailbox_domains = [ "proxy:pgsql:/etc/postfix/pgsql-domains.cf" ];
+            virtual_mailbox_maps = [ "proxy:pgsql:/etc/postfix/pgsql-mailboxes.cf" ];
+            mydestination = "localhost.$mydomain, localhost, $myhostname";
+          };
+        };
 
-    systemd.services.simplelogin-web = {
-      description = "SimpleLogin web service";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "simplelogin-setup.service" ];
-      after = [ "simplelogin-setup.service" ];
-      serviceConfig = {
-        User = "simplelogin";
-        Group = "simplelogin";
-        WorkingDirectory = "/var/lib/simplelogin";
-        StateDirectory = "simplelogin";
-        EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStart = ''
-          ${cfg.package}/bin/simplelogin-web -b ${cfg.web.address}:${toString cfg.web.port} -w ${toString cfg.web.workers} --timeout ${toString cfg.web.timeout}
-        '';
-        Restart = "on-failure";
-        RestartSec = "5s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = [ "/var/lib/simplelogin" ];
-      };
-    };
+        environment.etc = {
+          "postfix/transport".text = "${cfg.emailDomain} smtp:[${cfg.mail.listenAddress}]:${toString cfg.mail.listenPort}";
+          "postfix/pgsql-aliases.cf".text = ''
+            user = ${cfg.database.user}
+            hosts = localhost
+            dbname = ${cfg.database.name}
+            query = SELECT email FROM alias WHERE email='%s' AND enabled=1;
+          '';
+          "postfix/pgsql-virtual-alias-maps.cf".text = ''
+            user = ${cfg.database.user}
+            hosts = localhost
+            dbname = ${cfg.database.name}
+            query = SELECT mailbox.email FROM mailbox, alias, alias_mailbox WHERE alias.email='%s' AND alias.id=alias_mailbox.alias_id AND mailbox.id=alias_mailbox.mailbox_id AND alias.enabled=1;
+          '';
+          "postfix/pgsql-domains.cf".text = ''
+            user = ${cfg.database.user}
+            hosts = localhost
+            dbname = ${cfg.database.name}
+            query = SELECT domain FROM domain WHERE domain='%s' AND verified=1;
+          '';
+          "postfix/pgsql-mailboxes.cf".text = ''
+            user = ${cfg.database.user}
+            hosts = localhost
+            dbname = ${cfg.database.name}
+            query = SELECT email FROM mailbox WHERE email='%s' AND verified=1;
+          '';
+        };
+      })
 
-    systemd.services.simplelogin-email-handler = mkIf cfg.mail.enable {
-      description = "SimpleLogin email handler";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "simplelogin-setup.service" ];
-      after = [ "simplelogin-setup.service" ];
-      serviceConfig = {
-        User = "simplelogin";
-        Group = "simplelogin";
-        WorkingDirectory = "/var/lib/simplelogin";
-        StateDirectory = "simplelogin";
-        EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStart = "${cfg.package}/bin/simplelogin-email-handler";
-        Restart = "on-failure";
-        RestartSec = "5s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = [ "/var/lib/simplelogin" ];
-      };
-    };
+      (mkIf cfg.jobRunner.enable {
+        systemd.services.simplelogin-job-runner = {
+          description = "SimpleLogin Job Runner";
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "simplelogin-setup.service"
+          ];
+          requires = [ "simplelogin-setup.service" ];
+          serviceConfig = {
+            User = "simplelogin";
+            Group = "simplelogin";
+            WorkingDirectory = "/var/lib/simplelogin";
+            StateDirectory = "simplelogin";
+            EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
+            ExecStart = "${cfg.package}/bin/simplelogin-job-runner";
+            Restart = "on-failure";
+            RestartSec = "5s";
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [ "/var/lib/simplelogin" ];
+          };
+        };
+      })
 
-    systemd.services.simplelogin-job-runner = mkIf cfg.jobRunner.enable {
-      description = "SimpleLogin job runner";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "simplelogin-setup.service" ];
-      after = [ "simplelogin-setup.service" ];
-      serviceConfig = {
-        User = "simplelogin";
-        Group = "simplelogin";
-        WorkingDirectory = "/var/lib/simplelogin";
-        StateDirectory = "simplelogin";
-        EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStart = "${cfg.package}/bin/simplelogin-job-runner";
-        Restart = "on-failure";
-        RestartSec = "5s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = [ "/var/lib/simplelogin" ];
-      };
-    };
+      (mkIf cfg.eventListener.enable {
+        systemd.services.simplelogin-event-listener = {
+          description = "SimpleLogin Event Listener";
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "simplelogin-setup.service"
+          ];
+          requires = [ "simplelogin-setup.service" ];
+          serviceConfig = {
+            User = "simplelogin";
+            Group = "simplelogin";
+            WorkingDirectory = "/var/lib/simplelogin";
+            StateDirectory = "simplelogin";
+            EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
+            ExecStart = "${cfg.package}/bin/simplelogin-event-listener ${cfg.eventListener.mode}";
+            Restart = "on-failure";
+            RestartSec = "5s";
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [ "/var/lib/simplelogin" ];
+          };
+        };
+      })
 
-    systemd.services.simplelogin-event-listener = mkIf cfg.eventListener.enable {
-      description = "SimpleLogin event listener";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "simplelogin-setup.service" ];
-      after = [ "simplelogin-setup.service" ];
-      serviceConfig = {
-        User = "simplelogin";
-        Group = "simplelogin";
-        WorkingDirectory = "/var/lib/simplelogin";
-        StateDirectory = "simplelogin";
-        EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStart = "${cfg.package}/bin/simplelogin-event-listener ${cfg.eventListener.mode}";
-        Restart = "on-failure";
-        RestartSec = "5s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = [ "/var/lib/simplelogin" ];
-      };
-    };
+      (mkIf cfg.monitoring.enable {
+        systemd.services.simplelogin-monitoring = {
+          description = "SimpleLogin Monitoring";
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "simplelogin-setup.service"
+          ];
+          requires = [ "simplelogin-setup.service" ];
+          serviceConfig = {
+            User = "simplelogin";
+            Group = "simplelogin";
+            WorkingDirectory = "/var/lib/simplelogin";
+            StateDirectory = "simplelogin";
+            EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
+            ExecStart = "${cfg.package}/bin/simplelogin-monitoring";
+            Restart = "on-failure";
+            RestartSec = "5s";
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ReadWritePaths = [ "/var/lib/simplelogin" ];
+          };
+        };
+      })
+    ]
+  );
 
-    systemd.services.simplelogin-monitoring = mkIf cfg.monitoring.enable {
-      description = "SimpleLogin monitoring exporter";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "simplelogin-setup.service" ];
-      after = [ "simplelogin-setup.service" ];
-      serviceConfig = {
-        User = "simplelogin";
-        Group = "simplelogin";
-        WorkingDirectory = "/var/lib/simplelogin";
-        StateDirectory = "simplelogin";
-        EnvironmentFile = [ webEnv ] ++ optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStart = "${cfg.package}/bin/simplelogin-monitoring";
-        Restart = "on-failure";
-        RestartSec = "5s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ReadWritePaths = [ "/var/lib/simplelogin" ];
-      };
-    };
-
-    services.nginx = mkIf cfg.nginx.enable {
-      enable = true;
-      virtualHosts.${cfg.hostName} = {
-        forceSSL = mkDefault cfg.nginx.forceSSL;
-        enableACME = mkDefault cfg.nginx.enableACME;
-        locations."/".proxyPass = "http://${cfg.web.address}:${toString cfg.web.port}";
-      };
-    };
-
-    services.postfix = mkIf (cfg.mail.enable && cfg.mail.configurePostfix) {
-      enable = true;
-      settings.main = {
-        mydestination = [ ];
-        myhostname = cfg.hostName;
-        mydomain = cfg.emailDomain;
-        myorigin = cfg.emailDomain;
-        relay_domains = [ cfg.emailDomain ];
-        transport_maps = [ "hash:/etc/postfix/transport" ];
-      };
-      mapFiles.transport = pkgs.writeText "simplelogin-transport" ''
-        ${cfg.emailDomain} smtp:${cfg.mail.listenAddress}:${toString cfg.mail.listenPort}
-      '';
-    };
-
-    networking.firewall.allowedTCPPorts = optional cfg.nginx.enable 80 ++ optional cfg.nginx.enable 443;
-  };
-
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ philocalyst ];
 }
