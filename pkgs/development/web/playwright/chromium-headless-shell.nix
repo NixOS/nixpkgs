@@ -57,7 +57,7 @@ let
       libxfixes
       libxrandr
       libgbm
-      libgcc.lib
+      libgcc
       libxkbcommon
       nspr
       nss
