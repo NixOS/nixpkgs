@@ -230,6 +230,10 @@ in
       "openssh"
       "banner"
     ] "Use services.openssh.settings.Banner instead.")
+    (lib.mkRenamedOptionModule
+      [ "services" "openssh" "moduliFile" ]
+      [ "services" "openssh" "settings" "ModuliFile" ]
+    )
   ];
 
   ###### interface
@@ -727,6 +731,14 @@ in
                 '';
                 example = "/etc/ssh/banner";
               };
+              ModuliFile = lib.mkOption {
+                type = lib.types.path;
+                default = "${config.services.openssh.package}/etc/ssh/moduli";
+                defaultText = lib.literalExpression ''"''${config.services.openssh.package}/etc/ssh/moduli"'';
+                description = ''
+                  Specifies the {manpage}`moduli(5)` file to use for Diffie-Hellman key exchange.
+                '';
+              };
             };
           }
         );
@@ -736,16 +748,6 @@ in
         type = lib.types.lines;
         default = "";
         description = "Verbatim contents of {file}`sshd_config`.";
-      };
-
-      moduliFile = lib.mkOption {
-        example = "/etc/my-local-ssh-moduli;";
-        type = lib.types.path;
-        description = ''
-          Path to `moduli` file to install in
-          `/etc/ssh/moduli`. If this option is unset, then
-          the `moduli` file shipped with OpenSSH will be used.
-        '';
       };
 
     };
@@ -768,14 +770,12 @@ in
       };
       users.groups.sshd = { };
 
-      services.openssh.moduliFile = lib.mkDefault "${cfg.package}/etc/ssh/moduli";
       services.openssh.sftpServerExecutable = lib.mkDefault "${cfg.package}/libexec/sftp-server";
 
       environment.etc =
         authKeysFiles
         // authPrincipalsFiles
         // {
-          "ssh/moduli".source = cfg.moduliFile;
           "ssh/sshd_config".source = sshconf;
         };
 
