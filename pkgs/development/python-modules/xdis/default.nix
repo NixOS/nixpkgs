@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.8";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     tag = version;
-    hash = "sha256-sAL2D7Rg/iyob2nawXX/b5F/uOGCMsb1q0ZnPLIfh6o=";
+    hash = "sha256-k1SawlgbItbWe8J2pAxYOku/4CHyzWH3UR1j3kBZy1Q=";
   };
 
   build-system = [
