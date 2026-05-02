@@ -1,0 +1,138 @@
+From: Nix Packaging <nix@nixos.org>
+Subject: [PATCH] build: use portable pwd detection with environment override
+
+On systems like NixOS, /bin/pwd does not exist. This patch makes two
+improvements:
+
+1. Check if PWDCMND is already set in the environment before searching,
+   allowing users/systems to override the pwd command path.
+
+2. Use 'pwd' (shell builtin) as the fallback instead of '/bin/pwd'.
+   The shell builtin is POSIX-compliant and supports -P on all modern
+   shells (bash, dash, ksh, zsh).
+
+Affected scripts:
+- src/pmlogger/pmlogger_check.sh
+- src/pmlogger/pmlogger_daily.sh
+- src/pmlogger/pmlogger_janitor.sh
+- src/pmlogger/utilproc.sh
+- src/pmie/pmie_check.sh
+- src/pmie/pmie_daily.sh
+
+---
+ src/pmie/pmie_check.sh           | 4 +++-
+ src/pmie/pmie_daily.sh           | 4 +++-
+ src/pmlogger/pmlogger_check.sh   | 4 +++-
+ src/pmlogger/pmlogger_daily.sh   | 4 +++-
+ src/pmlogger/pmlogger_janitor.sh | 4 +++-
+ src/pmlogger/utilproc.sh         | 3 ++-
+ 6 files changed, 17 insertions(+), 6 deletions(-)
+
+--- a/src/pmie/pmie_check.sh
++++ b/src/pmie/pmie_check.sh
+@@ -96,12 +96,14 @@ umask 022
+
+ # determine path for pwd command to override shell built-in
+-PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
++# Honor PWDCMND from environment if already set
++[ -z "$PWDCMND" ] && PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
+ BEGIN	    	{ i = 0 }
+ / not in /  	{ i = 1 }
+ / aliased to /  { i = 1 }
+  	    	{ if ( i == 0 ) print }
+ '`
+-[ -z "$PWDCMND" ] && PWDCMND=/bin/pwd
++# Fallback to shell builtin (portable, supports -P on POSIX shells)
++[ -z "$PWDCMND" ] && PWDCMND=pwd
+ eval $PWDCMND -P >/dev/null 2>&1
+ [ $? -eq 0 ] && PWDCMND="$PWDCMND -P"
+ here=`$PWDCMND`
+--- a/src/pmie/pmie_daily.sh
++++ b/src/pmie/pmie_daily.sh
+@@ -106,12 +106,14 @@ myname="$PCP_BINADM_DIR/pmie_daily"
+
+ # determine path for pwd command to override shell built-in
+-PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
++# Honor PWDCMND from environment if already set
++[ -z "$PWDCMND" ] && PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
+ BEGIN	    	{ i = 0 }
+ / not in /  	{ i = 1 }
+ / aliased to /  { i = 1 }
+  	    	{ if ( i == 0 ) print }
+ '`
+-[ -z "$PWDCMND" ] && PWDCMND=/bin/pwd
++# Fallback to shell builtin (portable, supports -P on POSIX shells)
++[ -z "$PWDCMND" ] && PWDCMND=pwd
+ eval $PWDCMND -P >/dev/null 2>&1
+ [ $? -eq 0 ] && PWDCMND="$PWDCMND -P"
+ here=`$PWDCMND`
+--- a/src/pmlogger/pmlogger_check.sh
++++ b/src/pmlogger/pmlogger_check.sh
+@@ -86,12 +86,14 @@ trap "_cleanup; exit \$status" 0 1 2 3 15
+
+ # determine path for pwd command to override shell built-in
+-PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
++# Honor PWDCMND from environment if already set
++[ -z "$PWDCMND" ] && PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
+ BEGIN	    	{ i = 0 }
+ / not in /  	{ i = 1 }
+ / aliased to /  { i = 1 }
+  	    	{ if ( i == 0 ) print }
+ '`
+-[ -z "$PWDCMND" ] && PWDCMND=/bin/pwd
++# Fallback to shell builtin (portable, supports -P on POSIX shells)
++[ -z "$PWDCMND" ] && PWDCMND=pwd
+ eval $PWDCMND -P >/dev/null 2>&1
+ [ $? -eq 0 ] && PWDCMND="$PWDCMND -P"
+ here=`$PWDCMND`
+--- a/src/pmlogger/pmlogger_daily.sh
++++ b/src/pmlogger/pmlogger_daily.sh
+@@ -336,12 +336,14 @@ myname="$PCP_BINADM_DIR/pmlogger_daily"
+
+ # determine path for pwd command to override shell built-in
+-PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
++# Honor PWDCMND from environment if already set
++[ -z "$PWDCMND" ] && PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
+ BEGIN	    	{ i = 0 }
+ / not in /  	{ i = 1 }
+ / aliased to /  { i = 1 }
+  	    	{ if ( i == 0 ) print }
+ '`
+-[ -z "$PWDCMND" ] && PWDCMND=/bin/pwd
++# Fallback to shell builtin (portable, supports -P on POSIX shells)
++[ -z "$PWDCMND" ] && PWDCMND=pwd
+ eval $PWDCMND -P >/dev/null 2>&1
+ [ $? -eq 0 ] && PWDCMND="$PWDCMND -P"
+ here=`$PWDCMND`
+--- a/src/pmlogger/pmlogger_janitor.sh
++++ b/src/pmlogger/pmlogger_janitor.sh
+@@ -103,12 +103,14 @@ myname="$PCP_BINADM_DIR/pmlogger_janitor"
+
+ # determine path for pwd command to override shell built-in
+-PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
++# Honor PWDCMND from environment if already set
++[ -z "$PWDCMND" ] && PWDCMND=`which pwd 2>/dev/null | $PCP_AWK_PROG '
+ BEGIN	    	{ i = 0 }
+ / not in /  	{ i = 1 }
+ / aliased to /  { i = 1 }
+  	    	{ if ( i == 0 ) print }
+ '`
+-[ -z "$PWDCMND" ] && PWDCMND=/bin/pwd
++# Fallback to shell builtin (portable, supports -P on POSIX shells)
++[ -z "$PWDCMND" ] && PWDCMND=pwd
+ eval $PWDCMND -P >/dev/null 2>&1
+ [ $? -eq 0 ] && PWDCMND="$PWDCMND -P"
+ here=`$PWDCMND`
+--- a/src/pmlogger/utilproc.sh
++++ b/src/pmlogger/utilproc.sh
+@@ -251,7 +251,8 @@ BEGIN           { i = 0 }
+ / not in /      { i = 1 }
+ / aliased to /  { i = 1 }
+                 { if ( i == 0 ) print }
+ '`
+-	[ -z "$_PWDCMD" ] && _PWDCMD=/bin/pwd
++	# Fallback to shell builtin (portable, supports -P on POSIX shells)
++	[ -z "$_PWDCMD" ] && _PWDCMD=pwd
+ 	eval $_PWDCMD -P >/dev/null 2>&1
+ 	[ $? -eq 0 ] && _PWDCMD="$_PWDCMD -P"
+     fi
