@@ -325,6 +325,7 @@ lib.makeOverridable
       buildDependencies_ = buildDependencies;
       processedAttrs = [
         "src"
+        "propagatedBuildInputs"
         "nativeBuildInputs"
         "buildInputs"
         "crateBin"
@@ -418,7 +419,8 @@ lib.makeOverridable
         buildInputs =
           lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
           ++ (crate.buildInputs or [ ])
-          ++ buildInputs_;
+          ++ buildInputs_
+          ++ completePropagatedBuildInputs;
         dependencies = map lib.getLib dependencies_;
         buildDependencies = map lib.getLib buildDependencies_;
 
@@ -426,6 +428,16 @@ lib.makeOverridable
         completeBuildDeps = lib.unique (
           buildDependencies
           ++ lib.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
+        );
+
+        # Propagated native build inputs from this crate and all transitive Rust
+        # dependencies. Analogous to completeDeps but for native library deps:
+        # a crate can declare `propagatedBuildInputs` in its override and they
+        # will automatically be added to the buildInputs of every crate that
+        # depends on it, without having to repeat them up the dependency tree.
+        completePropagatedBuildInputs = lib.unique (
+          (crate.propagatedBuildInputs or [ ])
+          ++ lib.concatMap (dep: dep.completePropagatedBuildInputs or [ ]) dependencies
         );
 
         # Create a list of features that are enabled by the crate itself and
