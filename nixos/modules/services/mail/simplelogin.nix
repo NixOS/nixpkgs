@@ -34,7 +34,7 @@ in
 
     url = mkOption {
       type = types.str;
-      default = "https://${cfg.hostName}";
+      defaultText = lib.literalExpression ''"https/''${config.services.simplelogin.hostName}"'';
       description = "Public URL of the SimpleLogin instance, used in links sent in email.";
     };
 
@@ -46,7 +46,7 @@ in
 
     supportEmail = mkOption {
       type = types.str;
-      default = "support@${cfg.emailDomain}";
+      defaultText = lib.literalExpression ''"support/''${config.services.simplelogin.emailDomain}"'';
       description = "Email address for support messages sent by the application.";
     };
 
@@ -191,12 +191,9 @@ in
             };
           }
         );
-        default = [
-          {
-            priority = 10;
-            host = "${cfg.hostName}.";
-          }
-        ];
+        defaultText = lib.literalExpression ''
+          [ { priority = 10; host = "''${config.services.simplelogin.hostName}."; } ]
+        '';
         description = "List of mail servers used for MX entries, in order of priority.";
       };
       configurePostfix = mkOption {
@@ -280,6 +277,15 @@ in
     in
     mkMerge [
       {
+        services.simplelogin.url = mkDefault "https://${cfg.hostName}";
+        services.simplelogin.supportEmail = mkDefault "support@${cfg.emailDomain}";
+        services.simplelogin.mail.emailServersWithPriority = mkDefault [
+          {
+            priority = 10;
+            host = "${cfg.hostName}.";
+          }
+        ];
+
         users.users.simplelogin = {
           isSystemUser = true;
           group = "simplelogin";
@@ -417,7 +423,8 @@ in
         };
 
         environment.etc = {
-          "postfix/transport".text = "${cfg.emailDomain} smtp:[${cfg.mail.listenAddress}]:${toString cfg.mail.listenPort}";
+          "postfix/transport".text =
+            "${cfg.emailDomain} smtp:[${cfg.mail.listenAddress}]:${toString cfg.mail.listenPort}";
           "postfix/pgsql-aliases.cf".text = ''
             user = ${cfg.database.user}
             hosts = localhost
