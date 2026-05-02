@@ -14,14 +14,14 @@
 }:
 buildPythonPackage rec {
   pname = "supabase-auth";
-  version = "2.28.3";
+  version = "2.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
     tag = "v${version}";
-    hash = "sha256-Ra7Ig9IMWouMIadx6mg/pe8GlgLCavR6OsPjqgySTCw=";
+    hash = "sha256-LaSlAYFvx/HHdfmc9J+KScVQ9JFGS98Yfihzn8F7t3g=";
   };
 
   sourceRoot = "${src.name}/src/auth";
