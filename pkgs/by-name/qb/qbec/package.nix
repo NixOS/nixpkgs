@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "qbec";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "splunk";
     repo = "qbec";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9vHURoI4CwHcdL4spmERRJGz0dfPEdAMjWSRlxOs1N8=";
+    sha256 = "sha256-pdsS4jkfn64efZ2DWkP8+vrCKv09LFwDVJc/ZlPMuVc=";
   };
 
-  vendorHash = "sha256-raXRnuPu/t5opgU58MP4qiO1GcUcD976t4OmwHrLdc8=";
+  vendorHash = "sha256-LXgOkmtKyUbpohUptcvwZQvgBQBBrOaQqnktaC4FLT0=";
 
   doCheck = false;
 
