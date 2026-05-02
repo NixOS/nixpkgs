@@ -25,7 +25,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gridcoin-research";
+  pname = if withGui then "gridcoin-research" else "gridcoin-researchd";
   version = "5.5.0.0";
 
   src = fetchFromGitHub {
@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "${finalAttrs.version}";
     hash = "sha256-PN0yDVHlty+4CcRfMWe4LG6wHXaTOyLo7lxtrVCSLHA=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake

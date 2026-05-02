@@ -12825,7 +12825,7 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  gridcoin-research = callPackage ../applications/blockchains/gridcoin-research { };
+  gridcoin-researchd = gridcoin-research.override { withGui = false; };
 
   groestlcoin = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     withGui = true;
