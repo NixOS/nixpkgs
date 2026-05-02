@@ -224,6 +224,8 @@ stdenv.mkDerivation {
         ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
+      # incompatible with forks like angie
+      ++ lib.optional (pname == "nginx") ./0001-Add-S-flag-for-testing-only-the-syntax.patch
       # Upstream may be against cross-compilation patches.
       # https://trac.nginx.org/nginx/ticket/2240 https://trac.nginx.org/nginx/ticket/1928#comment:6
       # That dev quit the project in 2024 so the stance could be different now.
