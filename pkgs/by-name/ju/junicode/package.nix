@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  texlive,
   callPackage,
 }:
 
@@ -47,9 +46,9 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    tlDeps = with texlive; [
-      xkeyval
-      fontspec
+    tlDeps = ps: [
+      ps.xkeyval
+      ps.fontspec
     ];
 
     tests = callPackage ./tests.nix { };
