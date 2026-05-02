@@ -6087,6 +6087,12 @@
     githubId = 39523942;
     name = "Alex Clarke";
   };
+  darkjaguar91 = {
+    name = "Brandon Talbot";
+    email = "bjtal91@gmail.com";
+    github = "DarkJaguar91";
+    githubId = 3388903;
+  };
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
@@ -17785,6 +17791,14 @@
     email = "michael@vanstraten.de";
     github = "michaelvanstraten";
     githubId = 50352631;
+  };
+  michailik = {
+    name = "Michail Konstantinidis";
+    github = "MichailiK";
+    githubId = 39029839;
+    email = "git@michaili.dev";
+    matrix = "@michailik:matrix.org";
+    keys = [ { fingerprint = "BF68 0E5D 6D55 01B3 17EF  B7D6 8704 07F9 D274 E6BA"; } ];
   };
   michalrus = {
     email = "m@michalrus.com";
