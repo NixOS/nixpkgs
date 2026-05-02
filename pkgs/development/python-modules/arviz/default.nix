@@ -1,134 +1,47 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
-  # nativeBuildInputs
-  writableTmpDirAsHomeHook,
-
   # build-system
-  packaging,
-  setuptools,
+  flit-core,
 
   # dependencies
-  h5netcdf,
-  matplotlib,
-  numpy,
-  pandas,
-  platformdirs,
-  scipy,
-  typing-extensions,
-  xarray,
-  xarray-einstats,
+  arviz-base,
+  arviz-plots,
+  arviz-stats,
 
   # tests
-  bokeh,
-  cloudpickle,
-  emcee,
-  ffmpeg,
-  h5py,
-  jax,
-  jaxlib,
-  numba,
-  numpyro,
-  #, pymc3 (circular dependency)
-  pyro-ppl,
-  #, pystan (not packaged)
   pytestCheckHook,
-  torchvision,
-  zarr,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz";
-  version = "0.23.4";
+  version = "1.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YQ5i+CSuznbWAQ29jgqrOs+zgOAS5U4wSNEIquJQkvY=";
+    hash = "sha256-M9tj1X65hiLpI32X+t/gPYZHGwmAQ+9n52e8lVptg7k=";
   };
 
-  nativeBuildInputs = [
-    # Arviz wants to write a stamp file to the homedir at import time.
-    # Without $HOME being writable, `pythonImportsCheck` fails.
-    # https://github.com/arviz-devs/arviz/commit/4db612908f588d89bb5bfb6b83a08ada3d54fd02
-    writableTmpDirAsHomeHook
-  ];
-
   build-system = [
-    packaging
-    setuptools
+    flit-core
   ];
 
   dependencies = [
-    h5netcdf
-    h5py
-    matplotlib
-    numpy
-    pandas
-    platformdirs
-    scipy
-    typing-extensions
-    xarray
-    xarray-einstats
-  ];
+    arviz-base
+    arviz-plots
+    arviz-stats
+  ]
+  ++ arviz-stats.optional-dependencies.xarray;
 
   nativeCheckInputs = [
-    bokeh
-    cloudpickle
-    emcee
-    ffmpeg
-    jax
-    jaxlib
-    numba
-    numpyro
-    # pymc3 (circular dependency)
-    pyro-ppl
-    # pystan (not packaged)
     pytestCheckHook
-    torchvision
-    zarr
   ];
-
-  enabledTestPaths = [
-    "arviz/tests/base_tests/"
-  ];
-
-  disabledTestPaths = [
-    # AttributeError: module 'zarr.storage' has no attribute 'DirectoryStore'
-    # https://github.com/arviz-devs/arviz/issues/2357
-    "arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_function"
-    "arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_method"
-  ];
-
-  disabledTests = [
-    # TypeError: only 0-dimensional arrays can be converted to Python scalars
-    "test_deterministic"
-    "test_mcse_array"
-    "test_mcse_dataset"
-    "test_mcse_nan"
-    "test_multichain_summary_array"
-    "test_numba_mcse"
-    "test_plot_mcse"
-
-    # Tests require network access
-    "test_plot_ppc_transposed"
-    "test_plot_separation"
-    "test_plot_trace_legend"
-    "test_cov"
-
-    # countourpy is not available at the moment
-    "test_plot_kde"
-    "test_plot_kde_2d"
-    "test_plot_pair"
-  ];
-
-  # Tests segfault on darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "arviz" ];
 
