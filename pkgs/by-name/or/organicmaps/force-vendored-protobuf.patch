@@ -1,0 +1,39 @@
+index 84fc55c511..3a006ddae2 100644
+--- i/3party/CMakeLists.txt
++++ w/3party/CMakeLists.txt
+@@ -38,32 +38,32 @@ if (NOT WITH_SYSTEM_PROVIDED_3PARTY)
+ 
+   # Add gflags library.
+   set(GFLAGS_BUILD_TESTING OFF)
+   set(GFLAGS_BUILD_PACKAGING OFF)
+   add_subdirectory(gflags)
+   target_compile_options(gflags_nothreads_static PRIVATE $<$<CXX_COMPILER_ID:GNU>:-Wno-subobject-linkage>)
+ 
+   # Add pugixml library.
+   add_subdirectory(pugixml)
+ 
+-  # Add protobuf library.
+-  add_subdirectory(protobuf)
+-
+   add_subdirectory(freetype)
+   add_subdirectory(icu)
+   add_subdirectory(harfbuzz)
+ 
+   add_library(utf8cpp INTERFACE)
+   add_library(utf8cpp::utf8cpp ALIAS utf8cpp)
+   target_include_directories(utf8cpp INTERFACE "${OMIM_ROOT}/3party/utfcpp/source")
+ endif()
+ 
++# Add protobuf library.
++add_subdirectory(protobuf)
++
+ add_subdirectory(agg)
+ add_subdirectory(bsdiff-courgette)
+ add_subdirectory(glaze)
+ add_subdirectory(minizip)
+ add_subdirectory(open-location-code)
+ add_subdirectory(opening_hours)
+ add_subdirectory(stb_image)
+ add_subdirectory(succinct)
+ 
+ add_subdirectory(vulkan_wrapper)
