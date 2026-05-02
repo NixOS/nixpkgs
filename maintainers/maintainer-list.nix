@@ -21457,6 +21457,12 @@
     github = "piegamesde";
     githubId = 14054505;
   };
+  pierreborine = {
+    email = "nixpkgs@thecakeis.top";
+    github = "PierreBorine";
+    githubId = 85021467;
+    name = "Pierre Borine";
+  };
   pierrechevalier83 = {
     email = "pierrechevalier83@gmail.com";
     github = "pierrechevalier83";
