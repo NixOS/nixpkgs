@@ -1,0 +1,98 @@
+[
+  {
+    "author": "elm",
+    "package": "browser",
+    "version": "1.0.2",
+    "sha256": "0863nw2hhbpm3s03lm1imi5x28wwknzrwg2p79s5mydgvdvgwjf0"
+  },
+  {
+    "author": "elm",
+    "package": "bytes",
+    "version": "1.0.8",
+    "sha256": "0n411j2cyz9m241q6vszfzpq3fraradwal5m0gigp2505mdfpz3x"
+  },
+  {
+    "author": "elm",
+    "package": "core",
+    "version": "1.0.5",
+    "sha256": "0g3xbi8f9k5q45s95nx3jfvzwdf4b2n63a52wr4027d2xjx0pmvl"
+  },
+  {
+    "author": "elm",
+    "package": "html",
+    "version": "1.0.0",
+    "sha256": "15k1679ja57vvlpinpv06znmrxy09lbhzfkzdc89i01qa8c4gb4a"
+  },
+  {
+    "author": "elm",
+    "package": "html",
+    "version": "1.0.1",
+    "sha256": "1m045b6cixyqygll4cjf9d9s3k1lj839kxc3gbid0fpqc4g10i6b"
+  },
+  {
+    "author": "elm",
+    "package": "json",
+    "version": "1.1.3",
+    "sha256": "1hx986yqw1v2bpkrh6brszl8n8awwg1s8zi7v5qg0p1rqwvjlicz"
+  },
+  {
+    "author": "elm",
+    "package": "json",
+    "version": "1.1.4",
+    "sha256": "0niq7id7r78ckvgap4psq0xdlnhcv1dz2j81lrnhl4fsgn0awvs8"
+  },
+  {
+    "author": "elm",
+    "package": "random",
+    "version": "1.0.0",
+    "sha256": "0z0znkwfs35xiabk6pa9yqwsq03jssgd7jmsj1kk000mikfm7f39"
+  },
+  {
+    "author": "elm",
+    "package": "time",
+    "version": "1.0.0",
+    "sha256": "0wqa2vhl1zf8z0j2yd3yjwfhr0dydfns43bbzll3k4rhnjadxr1l"
+  },
+  {
+    "author": "elm",
+    "package": "url",
+    "version": "1.0.0",
+    "sha256": "1f2ij4i7zmijnj2i50qf19lpkr14bhms8dkq029inb5mydi9f8gs"
+  },
+  {
+    "author": "elm",
+    "package": "virtual-dom",
+    "version": "1.0.2",
+    "sha256": "1d6pqv6cvrsk2cp3dxxrq82vwrij4hrgjazg3lh93z75jkpvywhl"
+  },
+  {
+    "author": "elm",
+    "package": "virtual-dom",
+    "version": "1.0.5",
+    "sha256": "16v6h8msm1yin45vwdj8g0wnqs4gjjyknhz2iamrzzbssxvryyqv"
+  },
+  {
+    "author": "elm-explorations",
+    "package": "test",
+    "version": "1.2.2",
+    "sha256": "0kw32x0lr6nh5j9xk56vgg7x7c705g38grghh7cdp49frwdd6w3l"
+  },
+  {
+    "author": "elm-explorations",
+    "package": "test",
+    "version": "2.0.0",
+    "sha256": "1gfgafc25brvsa3cw3s3xjrlqhfx66x0hrym0haxrah45s10fq4a"
+  },
+  {
+    "author": "elm-explorations",
+    "package": "test",
+    "version": "2.2.1",
+    "sha256": "0rgwwqbnbj61x0c3lvk9d0z2qlw219djkhnc02qygsw9k5599q3v"
+  },
+  {
+    "author": "mpizenberg",
+    "package": "elm-test-runner",
+    "version": "6.0.0",
+    "sha256": "1lhcv1yswgbyd58aych1rx8ixfjwqwp141xk48j3ffn3b7ad132y"
+  }
+]
