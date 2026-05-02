@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sendspin-go";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kCTW9eOSC/15c2PaXWiWsAqEOCWodKYcptqtWAQc9fQ=";
+    hash = "sha256-ME4LZp5NNLSAtdkIUZJWWWQTUr5Lt3y+HscJAR/AS7c=";
   };
 
   __structuredAttrs = true;
