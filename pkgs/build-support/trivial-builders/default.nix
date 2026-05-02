@@ -146,7 +146,7 @@ rec {
           if [ -e "$textPath" ]; then
             mv "$textPath" "$target"
           else
-            echo -n "$text" > "$target"
+            printf "%s" "$text" > "$target"
           fi
 
           if [ -n "$executable" ]; then
@@ -347,10 +347,10 @@ rec {
       {
         inherit pname code;
         executable = true;
-        passAsFile = [ "code" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
+        __structuredAttrs = true;
         meta = {
           mainProgram = pname;
         };
@@ -358,7 +358,7 @@ rec {
       ''
         n=$out/bin/${pname}
         mkdir -p "$(dirname "$n")"
-        mv "$codePath" code.c
+        printf "%s" "$code" > code.c
         $CC -x c code.c -o "$n"
       '';
 
