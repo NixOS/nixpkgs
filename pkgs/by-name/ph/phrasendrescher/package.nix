@@ -5,6 +5,7 @@
   openssl,
   libssh2,
   gpgme,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [ "--with-plugins" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-h";
+  doInstallCheck = true;
 
   meta = {
     description = "Modular and multi processing pass phrase cracking tool";
