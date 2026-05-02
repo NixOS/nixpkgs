@@ -6,6 +6,7 @@ import warnings
 from pathlib import Path
 
 import ptpython.ipython
+from colorama import Fore, Style
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
 from test_driver.driver import Driver, DriverConfiguration, load_driver_configuration
@@ -53,6 +54,29 @@ def writeable_dir(arg: str) -> Path:
     if not os.access(path, os.W_OK):
         raise argparse.ArgumentTypeError(f"{path} is not a writeable directory")
     return path
+
+
+def formatwarning(
+    message: Warning | str,
+    category: type[Warning],
+    filename: str,
+    lineno: int,
+    line: str | None = None,
+) -> str:
+    return (
+        Style.BRIGHT
+        + Fore.YELLOW
+        + f"??? Warning ({category.__name__}): "  # ty: ignore[unsupported-operator]
+        + Style.NORMAL
+        + str(message)
+        + "\n"
+        + f'    File "{filename}", line {lineno}\n'
+        + (f"      {line}\n" if line is not None else "")
+        + Style.RESET_ALL
+    )
+
+
+warnings.formatwarning = formatwarning  # ty:ignore[invalid-assignment]
 
 
 def main() -> None:
