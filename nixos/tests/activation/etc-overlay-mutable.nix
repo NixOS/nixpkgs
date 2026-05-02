@@ -20,6 +20,23 @@
           text = "foo";
           mode = "0300";
         };
+        # Small regular file: inlined into the metadata erofs image.
+        inlinetest = {
+          text = "inline-content\n";
+          mode = "0640";
+        };
+        # Empty regular file: served directly from the metadata erofs image
+        # without payload or content.
+        emptytest = {
+          text = "";
+          mode = "0644";
+        };
+        # Large regular file (>4096 bytes): served from the basedir data layer
+        # via overlay redirect, not inlined.
+        bigfile = {
+          text = lib.strings.replicate 5000 "a";
+          mode = "0644";
+        };
       };
 
       # Prerequisites
@@ -52,6 +69,23 @@
         machine.succeed("stat --format '%a' /etc/modetest | tee /dev/stderr | grep -Eq '^300$'")
         machine.succeed("stat --format '%F' /etc/modetest2 | tee /dev/stderr | grep -Eq '^regular file$'")
         machine.succeed("stat --format '%a' /etc/modetest2 | tee /dev/stderr | grep -Eq '^300$'")
+
+      with subtest("small regular files are inlined into the metadata image"):
+        assert machine.succeed("cat /etc/inlinetest") == "inline-content\n"
+        machine.succeed("stat --format '%a' /etc/inlinetest | tee /dev/stderr | grep -Eq '^640$'")
+        # Inlined files are stored in the metadata erofs image, not redirected
+        # to the basedir data layer, so they carry no overlay redirect xattr.
+        machine.fail("getfattr -h -n trusted.overlay.redirect /run/nixos-etc-metadata/inlinetest")
+
+      with subtest("empty regular files are served from the metadata image"):
+        assert machine.succeed("cat /etc/emptytest") == ""
+        machine.succeed("stat --format '%F %s %a' /etc/emptytest | tee /dev/stderr | grep -Eq '^regular empty file 0 644$'")
+        machine.fail("getfattr -h -n trusted.overlay.redirect /run/nixos-etc-metadata/emptytest")
+
+      with subtest("large regular files are served from the basedir"):
+        assert machine.succeed("wc -c < /etc/bigfile").strip() == "5000"
+        assert machine.succeed("head -c 10 /etc/bigfile") == "aaaaaaaaaa"
+        machine.succeed("getfattr -h -n trusted.overlay.redirect /run/nixos-etc-metadata/bigfile")
 
       with subtest("switching to the same generation"):
         machine.succeed("/run/current-system/bin/switch-to-configuration test")

@@ -69,6 +69,22 @@ let
 
   etcHardlinks = lib.filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
 
+  # Regular files at or below this size are inlined into the erofs metadata
+  # image (see build-composefs-dump.py) and therefore do not need to be
+  # shipped in the basedir data-only lower layer. Keep this in sync with
+  # INLINE_CONTENT_MAX in build-composefs-dump.py.
+  etcInlineContentMax = 4096;
+
+  # Entries whose content we can prove at eval time will be served directly
+  # from the metadata image (inlined, or empty). Excluding them here keeps
+  # their source paths out of the basedir build script, so changing a small
+  # text-backed /etc file does not rebuild etc-lowerdir. Entries backed by
+  # `source` (size unknown at eval time) are kept and filtered at build time
+  # below.
+  isInlinedAtEvalTime = f: f.text != null && lib.stringLength f.text <= etcInlineContentMax;
+
+  etcBasedirEntries = lib.filter (f: !isInlinedAtEvalTime f) etcHardlinks;
+
 in
 
 {
@@ -368,6 +384,18 @@ in
         src="$1"
         target="$2"
 
+        if [[ -f "$src" ]]; then
+          # Small regular files are inlined into the erofs metadata image by
+          # build-composefs-dump.py and served directly from there, so we do
+          # not need a copy in the basedir data layer. Keep the size check in
+          # sync with INLINE_CONTENT_MAX in build-composefs-dump.py. Empty
+          # files need no backing copy either.
+          size=$(stat --dereference --format=%s "$src")
+          if (( size <= ${toString etcInlineContentMax} )); then
+            return
+          fi
+        fi
+
         mkdir -p "$out/$(dirname "$target")"
         cp "$src" "$out/$target"
       }
@@ -381,7 +409,7 @@ in
           "${etcEntry.source}"
           etcEntry.target
         ]
-      ) etcHardlinks}
+      ) etcBasedirEntries}
     '';
 
     system.build.etcMetadataImage =
