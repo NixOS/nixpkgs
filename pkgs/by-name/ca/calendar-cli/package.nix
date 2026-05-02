@@ -12,7 +12,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "calendar-cli";
-  version = "1.0.2";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
