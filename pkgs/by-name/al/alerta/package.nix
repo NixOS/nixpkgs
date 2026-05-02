@@ -17,7 +17,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
-    six
     click
     requests
     requests-hawk
