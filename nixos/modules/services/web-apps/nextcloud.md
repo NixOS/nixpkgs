@@ -5,8 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud33` which is also the latest
-major version available.
+The current default by NixOS is `nextcloud33`.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
 
