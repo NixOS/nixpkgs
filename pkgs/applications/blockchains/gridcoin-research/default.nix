@@ -1,62 +1,75 @@
 {
-  fetchFromGitHub,
   stdenv,
   lib,
-  openssl,
+  fetchFromGitHub,
+  qt6,
+
+  # nativeBuildInputs
+  cmake,
+  pkg-config,
+
+  # buildInputs
   boost,
   curl,
   libevent,
   libzip,
-  qrencode,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
-  autoreconfHook,
-  pkg-config,
-  libtool,
   miniupnpc,
-  hexdump,
+  openssl,
+  qrencode,
+
+  # options
+  withGui ? true,
+  withDbus ? withGui,
+  withQrencode ? withGui,
+  withUpnp ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gridcoin-research";
-  version = "5.4.9.0";
+  version = "5.5.0.0";
 
   src = fetchFromGitHub {
     owner = "gridcoin-community";
     repo = "Gridcoin-Research";
-    rev = "${version}";
-    hash = "sha256-nupZB4nNbitpf5EBCNy0e+ovjayAszup/r7qxbxA5jI=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-PN0yDVHlty+4CcRfMWe4LG6wHXaTOyLo7lxtrVCSLHA=";
   };
 
   nativeBuildInputs = [
+    cmake
     pkg-config
-    wrapQtAppsHook
-    autoreconfHook
-    libtool
-    hexdump
-  ];
+  ]
+  ++ lib.optionals withGui [ qt6.wrapQtAppsHook ];
 
   buildInputs = [
-    qttools
-    qtbase
-    qrencode
+    boost
+    curl
     libevent
     libzip
     openssl
-    boost
+  ]
+  ++ lib.optionals withGui [
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qttools
+  ]
+  ++ lib.optionals withQrencode [
+    qrencode
+  ]
+  ++ lib.optionals withUpnp [
     miniupnpc
-    curl
   ];
 
-  configureFlags = [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-    "--with-qrencode"
-    "--with-boost-libdir=${boost.out}/lib"
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_PIE" true)
+    (lib.cmakeBool "ENABLE_GUI" withGui)
+    (lib.cmakeBool "USE_QT6" withGui)
+    (lib.cmakeBool "USE_DBUS" withDbus)
+    (lib.cmakeBool "ENABLE_QRENCODE" withQrencode)
+    (lib.cmakeBool "ENABLE_UPNP" withUpnp)
+    (lib.cmakeBool "DEFAULT_UPNP" withUpnp)
   ];
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "POS-based cryptocurrency that rewards users for participating on the BOINC network";
@@ -69,5 +82,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gigglesquid ];
     platforms = lib.platforms.linux;
+    changelog = "https://github.com/gridcoin-community/Gridcoin-Research/releases/tag/${finalAttrs.src.tag}";
+    mainProgram = if withGui then "gridcoinresearch" else "gridcoinresearchd";
   };
-}
+})
