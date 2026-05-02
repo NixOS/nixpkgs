@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fileshelter";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "fileshelter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M6Asq3FWK7JpiLwxtNfuzeltO7iWxLOZIYg5lwJCByM=";
+    hash = "sha256-wh2M9bWIgQ3b8q4TVAq88LAomjiwNDND1b2FRsiYZng=";
   };
 
   postPatch = ''
