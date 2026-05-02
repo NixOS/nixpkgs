@@ -9,26 +9,20 @@
   rustPlatform,
   versionCheckHook,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radioboat";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1fTXXT0HxGOoy+oNK1ixzgFgjapreQEOoVlQlJwqbrA=";
+    hash = "sha256-mjmrUWnc2oBuUiKnyKGULILI9mp5JZjXSwkp1WgqcHA=";
   };
 
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail 'version = "0.4.0"' 'version = "${finalAttrs.version}"'
-  '';
+  cargoHash = "sha256-YvifggF8XZTzFBUs6u5IzdtPsxehjSNlwIT3Gb6wjW4=";
 
   __structuredAttrs = true;
-
-  cargoHash = "sha256-ibDOUgprr5VziIvTpvDFISGVpVH5ZyQ1ZZ5tIQirPP8=";
 
   nativeBuildInputs = [
     makeWrapper
