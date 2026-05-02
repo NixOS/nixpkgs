@@ -7513,6 +7513,8 @@ with pkgs;
 
   ### DEVELOPMENT / TESTING TOOLS
 
+  trailmark = with python3.pkgs; toPythonApplication trailmark;
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agdaPackages = recurseIntoAttrs (
