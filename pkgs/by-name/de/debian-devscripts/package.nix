@@ -20,6 +20,9 @@
   help2man,
   nix-update-script,
   sendmailPath ? "/run/wrappers/bin/sendmail",
+  runCommand,
+  coreutils,
+  util-linux,
 }:
 
 let
@@ -46,9 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Debian/devscripts/pull/2/commits/c6a018e0ef50a1b0cb4962a2f96dae7c6f21f1d4.patch";
       hash = "sha256-UpS239JiAM1IYxNuJLdILq2h0xlR5t0Tzhj47xiMHww=";
     })
+    # Write to stdout and exit 0 for --help, --version
+    # https://salsa.debian.org/debian/devscripts/-/merge_requests/637
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/devscripts/-/commit/dbb258ea17749e2d102d4d181fe2709bda5584e7.patch";
+      hash = "sha256-+/E1UhxKk4PYD1bO1kI0qjfBpcMoFbo3xiY45IQ/FWU=";
+    })
   ];
 
   postPatch = ''
+    substituteInPlace scripts/annotate-output.sh \
+      --replace-fail '/usr/bin/printf' '${lib.getExe' coreutils "printf"}'
     substituteInPlace scripts/debrebuild.pl \
       --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
     patchShebangs scripts
@@ -63,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -92,7 +104,18 @@ stdenv.mkDerivation (finalAttrs: {
     FileDirList
     FileTouch
     IOString
+    StringShellQuote
+    YAMLLibYAML
   ]);
+
+  pythonPath = with python3Packages; [
+    junit-xml
+    magic
+    python-apt
+    python-debian
+    requests
+    unidiff
+  ];
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -123,17 +146,29 @@ stdenv.mkDerivation (finalAttrs: {
     "PERLMOD_DIR=/share/devscripts"
   ];
 
-  postInstall = ''
+  preFixup = ''
+    buildPythonPath "$out ''${pythonPath[*]}"
+    patchPythonScript "$out/bin/deb-check-file-conflicts"
+    patchPythonScript "$out/bin/deb-janitor"
+    patchPythonScript "$out/bin/debbisect"
+    patchPythonScript "$out/bin/debdiff-apply"
+    patchPythonScript "$out/bin/debftbfs"
+    patchPythonScript "$out/bin/debootsnap"
+    patchPythonScript "$out/bin/reproducible-check"
+    patchPythonScript "$out/bin/sadt"
+    patchPythonScript "$out/bin/suspicious-source"
+    patchPythonScript "$out/bin/wrap-and-sort"
     sed -re 's@(^|[ !`"])/bin/bash@\1${stdenv.shell}@g' -i "$out/bin"/*
-    for i in "$out/bin"/*; do
-      wrapProgram "$i" \
+    ln -s debchange $out/bin/dch
+    ln -s deb2apptainer $out/bin/deb2singularity
+    ln -s pts-subscribe $out/bin/pts-unsubscribe
+    mv "$out/bin" "$out/.bin-wrapped"
+    for i in "$out/.bin-wrapped"/*; do
+      makeWrapper "$i" "$out/bin/''${i#$out/.bin-wrapped/}" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/${python.sitePackages}" \
-        --prefix PATH : "${dpkg}/bin"
+        --prefix PATH : "${curl}/bin:${dpkg}/bin:${gnupg}/bin:${util-linux}/bin"
     done
-    ln -s debchange $out/bin/dch
-    ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
   passthru.updateScript = nix-update-script {
@@ -142,6 +177,105 @@ stdenv.mkDerivation (finalAttrs: {
       "^v([0-9.]+)$"
     ];
   };
+
+  passthru.tests.helpVersion =
+    runCommand "debian-devscripts-test-help-version"
+      {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      }
+      ''
+        export HOME=/tmp
+
+        for cmd in ${finalAttrs.finalPackage}/bin/*; do
+            echo "Running $cmd"
+
+            case "''${cmd##*/}" in
+
+            # Fails with an error from python-apt
+            debootsnap | \
+            mk-origtargz | \
+            reproducible-check)
+                ! output=$("$cmd" --help 2>&1)
+                case "$output" in
+                *'
+        apt_pkg.Error: E:Unable to determine a suitable packaging system type')
+                    ;;
+                *)
+                    "$cmd" --help
+                    ;;
+                esac
+                ! "$cmd" --version
+                ;;
+
+            # Supports neither -h, --help, nor --version
+            add-patch | \
+            archpath | \
+            debrsign | \
+            dscextract | \
+            edit-patch | \
+            list-unreleased | \
+            namecheck | \
+            salsa | \
+            svnpath)
+                ! "$cmd" -h
+                ! "$cmd" --help
+                ! "$cmd" --version
+                ;;
+
+            # Supports -h but neither --help nor --version
+            deb2apptainer | \
+            deb2docker | \
+            deb2singularity)
+               "$cmd" -h
+               ! "$cmd" --help
+               ! "$cmd" --version
+               ;;
+
+            # Supports --help but not --version
+            annotate-output | \
+            dd-list | \
+            deb-check-file-conflicts | \
+            deb-janitor | \
+            debbisect | \
+            debcheckout | \
+            debdiff-apply | \
+            debftbfs | \
+            debrebuild | \
+            debrepro | \
+            hardening-check | \
+            ltnu | \
+            origtargz | \
+            sadt | \
+            suspicious-source | \
+            who-permits-upload | \
+            wrap-and-sort)
+                "$cmd" --help
+                ! "$cmd" --version
+                ;;
+
+            # Everything else supports --help and --version
+            *)
+                "$cmd" --help
+                output=$("$cmd" --version)
+                case "$output" in
+                *'version ${finalAttrs.version}
+        '* | *'version ${finalAttrs.version}.
+        '* | *'version
+        ${finalAttrs.version} '* | *'v. ${finalAttrs.version}
+        '* | *'devscripts ${finalAttrs.version}.'* | *'(devscripts ${finalAttrs.version})'*)
+                    ;;
+                *)
+                    echo "$cmd --version did not output the expected version ${finalAttrs.version}:" >&2
+                    "$cmd" --version
+                    false
+                esac
+                ;;
+
+            esac
+        done
+
+        : >"$out"
+      '';
 
   meta = {
     description = "Debian package maintenance scripts";
