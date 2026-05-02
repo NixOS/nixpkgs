@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mysqld_exporter";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "mysqld_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uHr9hVjnQx1DIr7ByaqgmR4YOvCYo49+b+Ikh+Vlh+o=";
+    hash = "sha256-1K0Xtj7VRAMQK5wgFGj7Yvzae6wVi9wWu1UcnEmpQJU=";
   };
 
-  vendorHash = "sha256-fM3CqyOEKYJOFkEwBE7/yIQEKUUIbBIbmHQp12/psas=";
+  vendorHash = "sha256-qoJ0vLeJXyYOruNRaXiimixEmcC5bOendAId1VXIhj8=";
 
   ldflags =
     let
