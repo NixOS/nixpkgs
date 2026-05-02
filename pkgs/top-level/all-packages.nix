@@ -10428,12 +10428,6 @@ with pkgs;
     }
   );
 
-  unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
-
-  unigine-sanctuary = pkgsi686Linux.callPackage ../applications/graphics/unigine-sanctuary { };
-
-  unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
-
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };

@@ -6,7 +6,7 @@
   freetype,
   fontconfig,
   zlib,
-  qtquickcontrols2,
+  libsForQt5,
   libxinerama,
   libxcb,
   libsm,
@@ -51,7 +51,7 @@ let
       freetype
       fontconfig
       zlib
-      qtquickcontrols2
+      libsForQt5.qtquickcontrols2
       libxinerama
       libxcb
       libsm
@@ -108,7 +108,7 @@ buildFHSEnv {
     freetype
     fontconfig
     zlib
-    qtquickcontrols2
+    libsForQt5.qtquickcontrols2
     libxinerama
     libxcb
     libsm
