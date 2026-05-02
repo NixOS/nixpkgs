@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-ydoc";
-  version = "3.4.1";
+  version = "4.0.0a0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HlYSPlYiHyVwJhsRY10SgotKa9ejlj0hlxbS+chtaBI=";
+    hash = "sha256-KDMFJuSZGMJSfKSoOstGQoVr8WYKMLrJ1I/gLC3nxRU=";
   };
 
   build-system = [
