@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       fpletz
       lewo
     ];
+    mainProgram = "rspamd";
     platforms = with lib.platforms; linux;
   };
 })
