@@ -6,7 +6,7 @@
   flex,
   bison,
   texinfo,
-  jdk_headless,
+  openjdk8_headless,
   erlang,
   makeWrapper,
   readline,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     flex
     bison
     texinfo
-    jdk_headless
+    openjdk8_headless
     erlang
     readline
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     for e in $(ls $out/bin) ; do
       wrapProgram $out/bin/$e \
         --prefix PATH ":" "${gcc}/bin" \
-        --prefix PATH ":" "${jdk_headless}/bin" \
+        --prefix PATH ":" "${openjdk8_headless}/bin" \
         --prefix PATH ":" "${erlang}/bin"
     done
   '';

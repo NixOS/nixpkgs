@@ -5129,10 +5129,6 @@ with pkgs;
     mkLLVMPackages
     ;
 
-  mercury = callPackage ../development/compilers/mercury {
-    jdk_headless = openjdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
   mitschemeX11 = mitscheme.override {
     enableX11 = true;
   };
