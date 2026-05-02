@@ -83,6 +83,13 @@ in
       {
         environment.systemPackages = [ cfg.package ];
 
+        security.wrappers.Hyprland = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_sys_nice+ep";
+          source = lib.getExe cfg.package;
+        };
+
         xdg.portal = {
           enable = true;
           extraPortals = [ cfg.portalPackage ];
