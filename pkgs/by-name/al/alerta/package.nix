@@ -24,7 +24,17 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tabulate
   ];
 
-  doCheck = false;
+  doCheck = true;
+
+  pythonImportsCheck = [ "alertaclient" ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    requests-mock
+  ];
+
+  # AlertTestCases attempt to connect to alerta api
+  disabledTests = [ "AlertTestCase" ];
 
   meta = {
     homepage = "https://alerta.io";
