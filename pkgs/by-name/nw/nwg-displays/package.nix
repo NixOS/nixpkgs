@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-displays";
-    description = "Output management utility for Sway and Hyprland";
+    description = "Output management utility for Sway, Hyprland and Niri";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ qf0xb ];
