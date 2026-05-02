@@ -33,7 +33,7 @@ let
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ vollate ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
