@@ -19,7 +19,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.14.10";
+  version = "1.14.11";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
