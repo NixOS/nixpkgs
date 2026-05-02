@@ -9,7 +9,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "curses";
-  version = "1.0.11";
+  version = "1.0.12";
 
   minimalOCamlVersion = "4.06";
 
@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
     owner = "mbacarella";
     repo = "curses";
     rev = finalAttrs.version;
-    hash = "sha256-tjBOv7RARDzBShToNLL9LEaU/Syo95MfwZunFsyN4/Q=";
+    hash = "sha256-g7YveFRuS+uTq8Ps8+cU93CRFOXW+fjJfs4rafTVmIg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
