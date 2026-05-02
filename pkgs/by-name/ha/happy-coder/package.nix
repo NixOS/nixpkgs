@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "happy-coder";
-  version = "1.1.6-unstable-2026-04-17";
+  version = "1.1.8-unstable-2026-04-30";
 
   src = fetchFromGitHub {
     owner = "slopus";
     repo = "happy";
-    rev = "c8c389f7e6ded2d02e65775884aeea53408fee97";
-    hash = "sha256-YoXslJyNvg5ZNnYWmwyJWWIz0q84+au8UNaZ/K69pFY=";
+    rev = "df4cdae8e7fca04c0c65aef933bb28a01a346d77";
+    hash = "sha256-FUs/0gqm0rlpThqaOTC1otFPoAnFyFhBrKHcbGefO9o=";
   };
 
   pnpmWorkspaces = [ "happy..." ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-sWRISfCsWQslNhucMiRhIf8ncU4OFaOYOrcc/1ATI98=";
+    hash = "sha256-STnqzVxClUfuf2la2R6yeIrNbaXsTpT6tX9xUJoLsK4=";
   };
 
   nativeBuildInputs = [
