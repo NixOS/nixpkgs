@@ -11,22 +11,23 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ntfy-sh"
+      "user"
+    ] "ntfy-sh is now a DynamicUser service, so a static user is no longer needed.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ntfy-sh"
+      "group"
+    ] "ntfy-sh is now a DynamicUser service, so a static group is no longer needed.")
+  ];
+
   options.services.ntfy-sh = {
     enable = lib.mkEnableOption "[ntfy-sh](https://ntfy.sh), a push notification service";
 
     package = lib.mkPackageOption pkgs "ntfy-sh" { };
-
-    user = lib.mkOption {
-      default = "ntfy-sh";
-      type = lib.types.str;
-      description = "User the ntfy-sh server runs under.";
-    };
-
-    group = lib.mkOption {
-      default = "ntfy-sh";
-      type = lib.types.str;
-      description = "Primary group of ntfy-sh user.";
-    };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -101,7 +102,6 @@ in
 
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
-          User = cfg.user;
           StateDirectory = "ntfy-sh";
 
           DynamicUser = true;
@@ -122,17 +122,6 @@ in
           # Upstream Recommendation
           LimitNOFILE = 20500;
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        };
-      };
-
-      users.groups = lib.optionalAttrs (cfg.group == "ntfy-sh") {
-        ntfy-sh = { };
-      };
-
-      users.users = lib.optionalAttrs (cfg.user == "ntfy-sh") {
-        ntfy-sh = {
-          isSystemUser = true;
-          group = cfg.group;
         };
       };
     };
