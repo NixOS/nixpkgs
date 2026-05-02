@@ -9,25 +9,18 @@
   tzdata,
   hypothesis,
   pytestCheckHook,
-  sphinxHook,
-  sphinx-copybutton,
-  pydata-sphinx-theme,
 }:
 
 buildPythonPackage rec {
-  version = "6.3.2";
+  version = "7.0.3";
   pname = "icalendar";
   pyproject = true;
-  outputs = [
-    "out"
-    "doc"
-  ];
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-EnG6zPaKKTgLw2DxWOyBkxlFuqtURpBlxy1aoZjX/TQ=";
+    hash = "sha256-wPzndvrXhxspcdqmm1ile6aXeJQznoM7oCqXRR1zGMw=";
   };
 
   patches = [
@@ -46,12 +39,6 @@ buildPythonPackage rec {
     tzdata
   ];
 
-  nativeBuildInputs = [
-    sphinxHook
-    sphinx-copybutton
-    pydata-sphinx-theme
-  ];
-
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
@@ -61,8 +48,6 @@ buildPythonPackage rec {
     # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
     "test_dateutil_timezone_is_matched_with_tzname"
     "test_docstring_of_python_file"
-    # AssertionError: assert $TZ not in set()
-    "test_add_missing_timezones_to_example"
   ];
 
   enabledTestPaths = [ "src/icalendar" ];
