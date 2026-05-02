@@ -31,7 +31,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [
     gettext
     qt5.wrapQtAppsHook
-    pythonPackages.pytestCheckHook
   ]
   ++ lib.optionals (pyqt5.multimediaEnabled) [
     gst_all_1.gst-libav
@@ -67,6 +66,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "--localedir=${placeholder "out"}/share/locale"
   ];
 
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
+  ];
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
