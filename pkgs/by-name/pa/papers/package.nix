@@ -102,13 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     nautilus
   ];
 
-  mesonFlags =
-    lib.optionals (!withLibsecret) [
-      "-Dkeyring=disabled"
-    ]
-    ++ lib.optionals (!supportNautilus) [
-      "-Dnautilus=false"
-    ];
+  mesonFlags = [
+    (lib.mesonEnable "keyring" withLibsecret)
+    (lib.mesonBool "nautilus" supportNautilus)
+  ];
 
   # For https://gitlab.gnome.org/GNOME/papers/-/blob/5efed8638dd4a2d5c36f59eb9a22158d69632e0b/shell/src/meson.build#L36
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
