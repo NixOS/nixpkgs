@@ -83,6 +83,7 @@ let
       fortranSupport
       pythonSupport
       precision
+      scalarType
       withPtScotch
       ;
     enableMpi = self.mpiSupport;
@@ -268,6 +269,9 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       serial = petsc.override {
         mpiSupport = false;
+      };
+      complex = petsc.override {
+        scalarType = "complex";
       };
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
