@@ -33,37 +33,6 @@ let
   settingsFile = settingsFormat.generate "headplane-config.yaml" (filterSettings settings);
 in
 {
-  imports = [
-    (lib.mkRemovedOptionModule
-      [
-        "services.headplane"
-        "settings"
-        "oidc"
-        "redirect_uri"
-      ]
-      "Use services.headplane.settings.server.base_url instead; the OIDC redirect URI is now derived from it. Do not include the /admin suffix."
-    )
-    (lib.mkRemovedOptionModule [
-      "services.headplane"
-      "settings"
-      "oidc"
-      "user_storage_file"
-    ] "Users are now stored in the internal database.")
-    (lib.mkRemovedOptionModule [
-      "services.headplane"
-      "settings"
-      "oidc"
-      "strict_validation"
-    ] "This option has no effect in Headplane 0.6.2 and later.")
-    (lib.mkRemovedOptionModule [
-      "services.headplane"
-      "settings"
-      "integration"
-      "agent"
-      "cache_ttl"
-    ] "This option has no effect in Headplane 0.6.2 and later.")
-  ];
-
   options.services.headplane = {
     enable = mkEnableOption "Headplane";
     package = mkPackageOption pkgs "headplane" { };
@@ -151,17 +120,6 @@ in
                   example = "/var/lib/headplane";
                 };
 
-                info_secret_path = mkOption {
-                  type = types.nullOr types.path;
-                  default = null;
-                  description = ''
-                    Path to a file containing the info secret.
-                    Allows access to certain debug endpoints that may expose
-                    sensitive information about your Headplane instance.
-                    If not set, these endpoints will be disabled.
-                  '';
-                  example = lib.literalExpression "config.sops.secrets.headplane_info_secret.path";
-                };
               };
             };
             default = { };
@@ -278,8 +236,17 @@ in
                           description = "Optionally change the name of the agent in the Tailnet.";
                         };
 
+                        cache_ttl = mkOption {
+                          type = types.nullOr types.int;
+                          default = null;
+                          description = ''
+                            Deprecated cache TTL for the agent. This option is accepted
+                            by Headplane 0.6.2 but has no effect.
+                          '';
+                        };
+
                         cache_path = mkOption {
-                          type = types.str;
+                          type = types.path;
                           default = "/var/lib/headplane/agent_cache.json";
                           description = "The path to store the agent's cache.";
                         };
@@ -399,56 +366,22 @@ in
                     '';
                   };
 
-                  use_end_session = mkOption {
-                    type = types.bool;
-                    default = false;
-                    description = ''
-                      Enable RP-initiated logout. When true, /logout redirects the user
-                      to the IdP's end_session_endpoint. The post_logout_redirect_uri
-                      MUST be pre-registered in your OIDC client configuration.
-                    '';
-                  };
-
-                  end_session_endpoint = mkOption {
+                  redirect_uri = mkOption {
                     type = types.nullOr types.str;
                     default = null;
                     description = ''
-                      Override the auto-discovered end_session_endpoint, or supply
-                      one if your provider does not advertise it via discovery.
+                      Deprecated OIDC redirect URI. Use services.headplane.settings.server.base_url
+                      instead; Headplane derives the callback URL from it.
                     '';
-                    example = "https://provider.example.com/logout";
+                    example = "https://headplane.example.com/admin/oidc/callback";
                   };
 
-                  post_logout_redirect_uri = mkOption {
-                    type = types.nullOr types.str;
+                  strict_validation = mkOption {
+                    type = types.nullOr types.bool;
                     default = null;
                     description = ''
-                      Where the identity provider should redirect after RP-initiated logout.
-                      If unset, Headplane defaults to its own login page.
-                    '';
-                    example = "https://headplane.example.com/admin/login?s=logout";
-                  };
-
-                  subject_claims = mkOption {
-                    type = types.nullOr (types.listOf types.str);
-                    default = null;
-                    description = ''
-                      Fallback claims to use when your provider does not return a standard
-                      OIDC `sub` claim. Headplane always checks `sub` first, then each
-                      claim here in order.
-                    '';
-                    example = [
-                      "open_id"
-                      "email"
-                    ];
-                  };
-
-                  allow_weak_rsa_keys = mkOption {
-                    type = types.bool;
-                    default = false;
-                    description = ''
-                      Allow ID token verification with legacy RSA keys smaller than 2048 bits.
-                      Only use as a temporary compatibility workaround.
+                      Deprecated OIDC validation setting. This option is accepted
+                      by Headplane 0.6.2 but has no effect.
                     '';
                   };
 
@@ -496,6 +429,16 @@ in
                     description = "Custom userinfo endpoint URL.";
                     example = "https://provider.example.com/userinfo";
                   };
+
+                  user_storage_file = mkOption {
+                    type = types.nullOr types.path;
+                    default = null;
+                    description = ''
+                      Deprecated path to the pre-0.6.2 JSON user database.
+                      Headplane uses this once to migrate users into its internal database.
+                    '';
+                    example = "/var/lib/headplane/users.json";
+                  };
                 };
               }
             );
@@ -509,6 +452,33 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings =
+      lib.optionals (cfg.settings.oidc != null && cfg.settings.oidc.redirect_uri != null) [
+        ''
+          services.headplane.settings.oidc.redirect_uri is deprecated by Headplane 0.6.2.
+          Use services.headplane.settings.server.base_url instead; Headplane derives
+          the OIDC callback URL from it.
+        ''
+      ]
+      ++ lib.optionals (cfg.settings.oidc != null && cfg.settings.oidc.strict_validation != null) [
+        ''
+          services.headplane.settings.oidc.strict_validation is deprecated and has no effect
+          in Headplane 0.6.2.
+        ''
+      ]
+      ++ lib.optionals (cfg.settings.oidc != null && cfg.settings.oidc.user_storage_file != null) [
+        ''
+          services.headplane.settings.oidc.user_storage_file is deprecated. Headplane 0.6.2
+          uses it only to migrate the pre-0.6.2 JSON user database into the internal database.
+        ''
+      ]
+      ++ lib.optionals (agentSettings != null && agentSettings.cache_ttl != null) [
+        ''
+          services.headplane.settings.integration.agent.cache_ttl is deprecated and has no
+          effect in Headplane 0.6.2.
+        ''
+      ];
+
     assertions = [
       {
         assertion = config.services.headscale.enable;
@@ -540,7 +510,8 @@ in
         '';
       }
       {
-        assertion = agentSettings == null || !agentSettings.enabled || agentSettings.pre_authkey_path != null;
+        assertion =
+          agentSettings == null || !agentSettings.enabled || agentSettings.pre_authkey_path != null;
         message = ''
           services.headplane.settings.integration.agent.pre_authkey_path must be set
           when the agent is enabled.
