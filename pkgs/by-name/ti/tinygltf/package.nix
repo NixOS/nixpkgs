@@ -35,11 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "TINYGLTF_INSTALL_VENDOR" false)
+    (lib.cmakeBool "TINYGLTF_USE_CUSTOM_JSON" false) # faster but vibe-coded
+    (lib.cmakeBool "TINYGLTF_BUILD_TESTS" finalAttrs.doCheck)
   ];
+
+  doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/syoyo/tinygltf/releases/tag/${finalAttrs.src.tag}";
     description = "Header only C++11 tiny glTF 2.0 library";
     homepage = "https://github.com/syoyo/tinygltf";
     license = lib.licenses.mit;
