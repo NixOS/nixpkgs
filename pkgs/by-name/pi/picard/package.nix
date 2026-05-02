@@ -23,6 +23,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   version = "2.13.3";
   pyproject = true;
   strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
