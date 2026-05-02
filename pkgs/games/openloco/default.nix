@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  SDL2,
+  sdl3,
   cmake,
   libpng,
   libzip,
@@ -17,25 +17,25 @@ let
   sfl-src = fetchFromGitHub {
     owner = "slavenf";
     repo = "sfl-library";
-    tag = "2.0.2";
-    hash = "sha256-C8BRl77fryD1aNW6ASD/orb8+hrAKBqmXjr2Z4JqX94=";
+    tag = "2.2.0";
+    hash = "sha256-U1InclhSF3pte2AhKUVYBYOXZagksDMkUWgFn5ZB/tk=";
   };
 
   openloco-objects = fetchurl {
-    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.6/objects.zip";
-    sha256 = "4cea1ab77131650b5475b489445ce65c275b3a23b921456afda4d9c5c83e580c";
+    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.8/objects.zip";
+    sha256 = "sha256-ZYiR2UpGBAt79x39fwG7wd2mRwcSyz3AdIKTH+tQE8c=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "openloco";
-  version = "25.12";
+  version = "26.04";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
     tag = "v${version}";
-    hash = "sha256-kne9G+GKbfDJDAI4DDxWFQKK7zp2FhX/rL2ws7iqXKE=";
+    hash = "sha256-tOvqDJfF6iG05EatUdWGp4wv8UDXdDs1frQ9FMF5myU=";
   };
 
   postPatch = ''
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2
+    sdl3
     libpng
     libzip
     openal
