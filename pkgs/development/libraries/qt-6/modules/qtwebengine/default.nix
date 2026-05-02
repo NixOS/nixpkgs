@@ -117,6 +117,12 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
+  ]
+  # Remove once merged with upstream
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./clang-base-path-from-cmake-compiler.patch
+
+    ./lflags-remove-strip-darwin-isysroot.patch
   ];
 
   postPatch = ''
@@ -189,7 +195,7 @@ qtModule {
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" # Per Qt 6’s deployment target (why doesn’t the hook work?). Bumped to 12.0 because chromium 6.11 uses kIOMainPortDefault.
   ];
 
   propagatedBuildInputs = [

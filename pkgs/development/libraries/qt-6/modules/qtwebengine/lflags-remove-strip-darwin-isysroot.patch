@@ -1,0 +1,74 @@
+Subject: Build: strip relative -isysroot from chromium-emitted lflags
+
+In src/{core,pdf}/configure/BUILD.root.gn.in, lflags_remove is fed to
+the rsp writer in our gn fork
+(src/3rdparty/gn/src/gn/rsp_target_writer.cc, LFLAGS case) where it
+runs std::regex_replace over the accumulated ldflags before writing
+the rsp file. The intent, per the inline comment, is to drop sysroot
+flags whose path was emitted as relative.
+
+Such relative paths are produced by chromium's mac/linux toolchain
+configs via rebase_path(sysroot, root_build_dir). For qtwebengine, the
+chromium root_build_dir is build/src/core/Release/$arch, so the
+rebased path is correct when read from there -- but the rsp file is
+consumed by the *cmake*-driven ninja link, which runs from build/. The
+two cwds differ by four levels, so the rebased path resolves to a
+non-existent location, triggering -Wmissing-sysroot and a subsequent
+"framework not found CoreFoundation" failure (linker falls back to a
+bogus sysroot, can't find /System/Library/Frameworks under it).
+
+The existing pattern only matched the Linux --sysroot=PATH single-
+token form, so the Apple two-token form '-isysroot PATH' slipped
+through untouched. Extend the alternation to cover both, and tighten
+the path match to \.\./\S+ (the prior \.\./.*\S*? was effectively
+\.\./.* and worked only because --sysroot= was the last token in
+the Linux ldflags string -- on macOS -isysroot is followed by more
+flags like -mmacos-version-min, so we need a match that stops at the
+next whitespace).
+
+Also add lflags_remove to the convert_dict target, which declares
+rsp_types but had no filter; on macOS it hits the same relative
+-isysroot issue as QtWebEngineCore (the linker fails on -lbsm because
+the bogus sysroot wins last and ld can't resolve system libs under
+it). QtWebEngineCore and QtPdf had the filter; convert_dict appears
+to have been overlooked.
+
+The good absolute -isysroot is already injected on the clang++ command
+line by cmake earlier, so stripping the bad one is sufficient
+(-isysroot is last-wins, and now only the good one remains).
+
+Reproduced on aarch64-darwin with nixpkgs's apple-sdk-15.5, on
+Qt 6.11.0. After this change qtwebengine builds successfully.
+
+diff --git a/src/core/configure/BUILD.root.gn.in b/src/core/configure/BUILD.root.gn.in
+--- a/src/core/configure/BUILD.root.gn.in
++++ b/src/core/configure/BUILD.root.gn.in
+@@ -107,7 +107,7 @@ if (ozone_platform_x11) {
+
+ shared_library("QtWebEngineCore") {
+   rsp_types = [ "objects", "archives", "libs", "ldir", "lflags" ]
+-  lflags_remove = "(--sysroot=)(\\.\\./.*\\S*?)" # ignore sysroot with realative path
++  lflags_remove = "(--sysroot=|-isysroot )\\.\\./\\S+" # ignore sysroot with relative path
+   configs += [
+     ":cpp20_config",
+     ":QtWebEngineCore_config",
+@@ -829,6 +829,7 @@ if (enable_extensions) {
+ if (enable_spellcheck) {
+   shared_library("convert_dict") {
+     rsp_types = [ "objects", "archives", "libs", "ldir", "lflags" ]
++    lflags_remove = "(--sysroot=|-isysroot )\\.\\./\\S+" # ignore sysroot with relative path
+     configs += [ "//build/config/compiler:wexit_time_destructors" ]
+     deps = [
+       "//chrome/tools/convert_dict:lib",
+diff --git a/src/pdf/configure/BUILD.root.gn.in b/src/pdf/configure/BUILD.root.gn.in
+--- a/src/pdf/configure/BUILD.root.gn.in
++++ b/src/pdf/configure/BUILD.root.gn.in
+@@ -51,7 +51,7 @@ config("cpp20_config") {
+ static_library("QtPdf") {
+   complete_static_lib = true
+   rsp_types = [ "objects", "archives", "libs", "ldir", "lflags" ]
+-  lflags_remove = "(--sysroot=)(\\.\\./.*\\S*?)" # ignore sysroot with realative path
++  lflags_remove = "(--sysroot=|-isysroot )\\.\\./\\S+" # ignore sysroot with relative path
+   configs += [
+     ":cpp20_config",
+     ":QtPdf_config"
