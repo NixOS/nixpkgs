@@ -4,6 +4,7 @@
   fetchFromGitHub,
   coreutils,
   darwin,
+  fish,
   glibcLocales,
   gnused,
   gnugrep,
@@ -385,6 +386,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
+    minimal = fish.override {
+      usePython = false;
+    };
     shellPath = "/bin/fish";
     tests = {
       nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.fish;
