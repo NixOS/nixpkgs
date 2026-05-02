@@ -210,10 +210,10 @@
     "version": "1.0.189"
   },
   "linux-stable": {
-    "hash": "sha256-N4gdcj8LYiXxvkbZhZyiWr375vaXt6JnwcoqLOKMsGg=",
+    "hash": "sha256-vMuoz1OR0cKvrfT/ilkNXEtEP3zEwyNGh6AW5iQADws=",
     "kind": "legacy",
-    "url": "https://stable.dl2.discordapp.net/apps/linux/0.0.134/discord-0.0.134.tar.gz",
-    "version": "0.0.134"
+    "url": "https://stable.dl2.discordapp.net/apps/linux/0.0.135/discord-0.0.135.tar.gz",
+    "version": "0.0.135"
   },
   "osx-canary": {
     "hash": "sha256-tR52aLUTW5iLzOQnXVS6muqsu44rXplHeXNKsR3u4Sw=",
