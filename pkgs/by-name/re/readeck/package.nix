@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.22.2";
+  version = "0.22.3";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-0arC5t7FlW5+AyGF9FuIPc+aeF+CMKIzO1vLJ7aisQE=";
+    hash = "sha256-F4aj+vgCmwCnSBNa72kgCINNtmS6Zk1oeILZVXF5G+Y=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +62,10 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web";
-    hash = "sha256-80mh7fATUKf9G/JGsfHYHOLjr/je7g0uRdRGqBWapnY=";
+    hash = "sha256-ysDEkoL0e84udmCmvfTMA5lWS08aSyyTuCq+/8s3FMw=";
   };
 
-  vendorHash = "sha256-4cLv7eYNzj+YzrinbEg7tT+JkEen+C5ypg3NTQOB6FM=";
+  vendorHash = "sha256-cfd52pO2uUT5fdqCXM2rreXztb63FzUWv0s5/wbKXDw=";
 
   passthru.updateScript = nix-update-script { };
 
