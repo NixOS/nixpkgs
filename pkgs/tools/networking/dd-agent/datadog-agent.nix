@@ -108,6 +108,19 @@ buildGoModule rec {
     mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
     cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
     rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d,agentcrashdetect.d,myapp.d}
+
+    # install integration data directories (default configs, profiles)
+    # some integrations have behavior which depends on the data directory contents,
+    # such as the snmp integration, which defines profiles for various devices in
+    # it's data directory, without which the user will not be able to choose device
+    # profiles, or use auto-discovery.
+    for dataDir in ${python}/${python.sitePackages}/datadog_checks/*/data; do
+      [ -d "$dataDir" ] || continue
+      integrationName=$(basename "$(dirname "$dataDir")")
+      mkdir -p $out/share/datadog-agent/conf.d/$integrationName.d
+      cp -rT --no-preserve=mode "$dataDir" $out/share/datadog-agent/conf.d/$integrationName.d/
+    done
+
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
     wrapProgram "$out/bin/agent" \
@@ -132,6 +145,7 @@ buildGoModule rec {
     homepage = "https://www.datadoghq.com";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      mel
       thoughtpolice
     ];
   };
