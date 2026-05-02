@@ -420,38 +420,36 @@ For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is 
 
 Follow these guidelines:
 
-- For the `pname` attribute:
+- All three names (the `pname` value, the attribute name and the filename for the Nix expression) _should_ be the same.
 
-  - It _should_ be identical to the upstream package name.
+- All three names _should_ be identical to the upstream package name.
 
-  - It _must not_ contain uppercase letters.
+- All three names _should not_ contain uppercase letters.
 
-    Example: Use `"mplayer"` instead of `"MPlayer"`
+  Example: Use `"mplayer"` instead of `"MPlayer"`
 
-- For the package attribute name:
+- All three names _should_ be a valid identifier in Nix.
 
-  - It _must_ be a valid identifier in Nix.
+- If any of the names would otherwise begin with a digit, then that name _should_ be prefixed with an underscore.
+  Otherwise that name _should not_ be prefixed with an underscore.
 
-  - If the `pname` starts with a digit, the attribute name _should_ be prefixed with an underscore.
-    Otherwise the attribute name _should not_ be prefixed with an underscore.
+  Example: Use `_0ad` instead of `0ad`.
 
-    Example: The corresponding attribute name for `0ad` should be `_0ad`.
+- Hyphenated names _should_ be used instead of [snake case](https://en.wikipedia.org/wiki/Snake_case) or [camel case](https://en.wikipedia.org/wiki/Camel_case)
 
-  - New attribute names _should_ be the same as the value in `pname`.
+  Hyphenated names _should not_ be converted to snake case or camel case.
+  This was done historically, but is not necessary any more.
+  [The Nix language allows dashes in identifiers since 2012](https://github.com/NixOS/nix/commit/95c74eae269b2b9e4bc514581b5caa1d80b54acc).
 
-    Hyphenated names _should not_ be converted to [snake case](https://en.wikipedia.org/wiki/Snake_case) or [camel case](https://en.wikipedia.org/wiki/Camel_case).
-    This was done historically, but is not necessary any more.
-    [The Nix language allows dashes in identifiers since 2012](https://github.com/NixOS/nix/commit/95c74eae269b2b9e4bc514581b5caa1d80b54acc).
+- If there are multiple versions of a package, this _should_ be reflected in all three names.
 
-  - If there are multiple versions of a package, this _should_ be reflected in the attribute names in `all-packages.nix`.
+  Example: `json-c_0_9` and `json-c_0_11`
 
-    Example: `json-c_0_9` and `json-c_0_11`
+  If there is an obvious “default” version, make an extra attribute.
 
-    If there is an obvious “default” version, make an extra attribute.
+  Example: `json-c = json-c_0_9;`
 
-    Example: `json-c = json-c_0_9;`
-
-    See also [versioning][versioning].
+  See also [versioning][versioning].
 
 ## Versioning
 [versioning]: #versioning
