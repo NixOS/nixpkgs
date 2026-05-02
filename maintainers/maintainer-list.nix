@@ -25496,6 +25496,13 @@
     name = "Sebastian Kowalak";
     matrix = "@scl:tchncs.de";
   };
+  skrobul = {
+    github = "skrobul";
+    githubId = 183976;
+    name = "Marek Skrobacki";
+    email = "skrobul@skrobul.com";
+    keys = [ { fingerprint = "FB53 541D E519 8620 9807  D91C 5D96 65C7 E748 CCD7"; } ];
+  };
   skwig = {
     name = "skwig";
     github = "skwig";
