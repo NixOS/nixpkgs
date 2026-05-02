@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 let
-  version = "1.1.1";
+  version = "1.1.2";
 in
 python3Packages.buildPythonApplication {
   pname = "rewaita";
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication {
     owner = "SwordPuffin";
     repo = "Rewaita";
     tag = "v${version}";
-    hash = "sha256-T9GQuhMkCEUFX2BpTTQ+zKhDpSxtVKuncITtm7nqzyY=";
+    hash = "sha256-D8OWRa356gDS5hVceZmnC261HTBGZsNsDz/n5xJoYwE=";
   };
 
   postPatch = ''
