@@ -1639,6 +1639,12 @@
     name = "Anas Elgarhy";
     keys = [ { fingerprint = "E10B D192 9231 08C7 3C35 7EC3 83E0 3DC6 F383 4086"; } ];
   };
+  anddani = {
+    email = "andredanielsson93@gmail.com";
+    github = "anddani";
+    githubId = 12611639;
+    name = "André Danielsson";
+  };
   andehen = {
     email = "git@andehen.net";
     github = "andehen";
