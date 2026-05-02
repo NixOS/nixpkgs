@@ -1,0 +1,65 @@
+diff --git a/README.md b/README.md
+index 84e725c..18730f1 100644
+--- a/README.md
++++ b/README.md
+@@ -3,8 +3,10 @@
+   <p><strong>Tooling to supercharge Dioxus projects</strong></p>
+ </div>
+ 
+-The **dioxus-cli** (inspired by wasm-pack and webpack) is a tool for getting Dioxus projects up and running.
+-It handles building, bundling, development and publishing to simplify development.
++The **dioxus-cli** provides `dx`, the command line tool for creating, serving,
++building, and bundling Dioxus apps. It targets the Dioxus app model directly:
++web, desktop, mobile, and fullstack/server builds are selected through `dx`
++target flags instead of a separate frontend project or JavaScript framework.
+ 
+ ## Installation
+ 
+@@ -44,21 +46,32 @@ Alternatively, you can specify the template path:
+ dx new --template gh:dioxuslabs/dioxus-template
+ ```
+ 
+-Run `dx --help` for a list of all the available commands.
++Then serve or build the app for the target you need:
++
++```shell
++dx serve --web
++dx build --desktop
++dx build --android
++```
++
++Use `--fullstack`, `--server`, or the app's Dioxus features for fullstack and
++server builds. Run `dx --help` for a list of all the available commands.
+ Furthermore, you can run `dx <command> --help` to get help with a specific command.
+ 
+ ## Dioxus config file
+ 
+-You can use the `Dioxus.toml` file for further configuration.
+-Some fields are mandatory, but the CLI tool will tell you which ones are missing.
+-You can create a `Dioxus.toml` with all fields already set using `dx config init project-name`,
+-or you can use this bare-bones template (only mandatory fields) to get started:
++Dioxus apps can use a `Dioxus.toml` file for project configuration, including
++app metadata, static assets, development server settings, web metadata, and
++bundle metadata. Target selection is handled by `dx` flags such as `--web`,
++`--desktop`, `--ios`, `--android`, `--server`, or `--platform`.
++
++You can create a `Dioxus.toml` with `dx config init project-name`, or start
++from a small web app configuration:
+ 
+ ```toml
+ [application]
+ name = "project-name"
+-# Currently supported platforms: web, desktop
+-default_platform = "web"
++out_dir = "dist"
+ 
+ # Optional: enable copying from a static directory (e.g. "public")
+ public_dir = "public"
+@@ -66,5 +79,6 @@ public_dir = "public"
+ [web.app]
+ title = "Hello"
+ 
+-[web.resource.dev]
++[web.watcher]
++watch_path = ["src", "public"]
+ ```
