@@ -30,6 +30,7 @@ let
   inherit (lib.lists)
     all
     commonPrefix
+    commonPrefixLength
     concatLists
     elemAt
     filter
@@ -834,9 +835,7 @@ rec {
       # The common base components prefix, e.g.
       # (/foo/bar, /foo/bar/baz) -> /foo/bar
       # (/foo/bar, /foo/baz) -> /foo
-      commonBaseComponentsLength =
-        # TODO: Have a `lib.lists.commonPrefixLength` function such that we don't need the list allocation from commonPrefix here
-        length (commonPrefix fileset1._internalBaseComponents fileset2._internalBaseComponents);
+      commonBaseComponentsLength = commonPrefixLength fileset1._internalBaseComponents fileset2._internalBaseComponents;
 
       # To be able to intersect filesetTree's together, they need to have the same base path.
       # Base paths can be intersected by taking the longest one (if any)
@@ -916,9 +915,7 @@ rec {
       # The common base components prefix, e.g.
       # (/foo/bar, /foo/bar/baz) -> /foo/bar
       # (/foo/bar, /foo/baz) -> /foo
-      commonBaseComponentsLength =
-        # TODO: Have a `lib.lists.commonPrefixLength` function such that we don't need the list allocation from commonPrefix here
-        length (commonPrefix positive._internalBaseComponents negative._internalBaseComponents);
+      commonBaseComponentsLength = commonPrefixLength positive._internalBaseComponents negative._internalBaseComponents;
 
       # We need filesetTree's with the same base to be able to compute the difference between them
       # This here is the filesetTree from the negative file set, but for a base path that matches the positive file set.
