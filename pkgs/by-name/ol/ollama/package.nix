@@ -148,10 +148,6 @@ goBuild (finalAttrs: {
     ./interactive-launch-fix.patch
   ];
 
-  patches = [
-    ./ollama-no-openclaw-daemon.patch
-  ];
-
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
