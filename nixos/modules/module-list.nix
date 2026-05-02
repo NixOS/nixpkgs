@@ -349,6 +349,7 @@
   ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
+  ./programs/wayland/kanshi.nix
   ./programs/wayland/labwc.nix
   ./programs/wayland/mangowc.nix
   ./programs/wayland/miracle-wm.nix
