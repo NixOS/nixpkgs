@@ -53,4 +53,3 @@ buildNpmPackage (finalAttrs: {
     platforms = lib.platforms.all;
   };
 })
-
