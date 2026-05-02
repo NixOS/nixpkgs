@@ -9,7 +9,7 @@
   libxt,
   openusd,
   onetbb,
-  vtk,
+  vtk_9_6,
   autoPatchelfHook,
   python3Packages,
   opencascade-occt,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    vtk
+    vtk_9_6
     opencascade-occt
     assimp
     fontconfig
