@@ -120,9 +120,9 @@ let
         configurePhase = ''
           runHook preConfigure
 
-          make -j$NIX_BUILD_CORES ${defconfig}
+          cat $extraConfigPath >> configs/${defconfig}
 
-          cat $extraConfigPath >> .config
+          make -j$NIX_BUILD_CORES ${defconfig}
 
           runHook postConfigure
         '';
