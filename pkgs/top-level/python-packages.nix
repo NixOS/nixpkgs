@@ -3662,6 +3662,8 @@ self: super: with self; {
 
   datrie = callPackage ../development/python-modules/datrie { };
 
+  davey = callPackage ../development/python-modules/davey { };
+
   dawg-python = callPackage ../development/python-modules/dawg-python { };
 
   dawg2-python = callPackage ../development/python-modules/dawg2-python { };
