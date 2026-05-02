@@ -373,9 +373,12 @@ let
 
   defaultConfigureFlags = [
     "--verbose"
-    "--prefix=$out"
+    (if isLibrary then "--prefix=$dev" else "--prefix=$out")
     # Note: This must be kept in sync manually with mkGhcLibdir
     ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
+    (optionalString isLibrary (
+      "--dynlibdir=$out/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib"
+    ))
     "--libsubdir=\\$abi/\\$libname"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
@@ -644,6 +647,7 @@ lib.fix (
       outputs = [
         "out"
       ]
+      ++ (optional isLibrary "dev")
       ++ (optional enableSeparateDataOutput "data")
       ++ (optional enableSeparateDocOutput "doc")
       ++ (optional enableSeparateBinOutput "bin")
@@ -896,8 +900,9 @@ lib.fix (
           # just the target specified; "install" will error here, since not all targets have been built.
           else
             ''
+              mkdir -p $out
               ${setupCommand} copy ${buildTarget}
-              local packageConfDir="$out/${ghcLibdir}/package.conf.d"
+              local packageConfDir="$dev/${ghcLibdir}/package.conf.d"
               local packageConfFile="$packageConfDir/${pname}-${version}.conf"
               mkdir -p "$packageConfDir"
               ${setupCommand} register --gen-pkg-config=$packageConfFile
@@ -926,13 +931,12 @@ lib.fix (
             cp -r dist/build/$exe/$exe.jsexe ${binDir}
           done
         ''}
-
         ${optionalString enableSeparateDocOutput ''
           for x in ${docdir "$doc"}"/html/src/"*.html; do
-            remove-references-to -t $out $x
+            remove-references-to -t $out ${optionalString isLibrary "-t $dev"} $x
           done
           mkdir -p $doc
-        ''}
+        ''}${optionalString isLibrary "find $out -type f -exec remove-references-to -t $dev '{}' +"}
         ${optionalString enableSeparateDataOutput "mkdir -p $data"}
 
         runHook postInstall
