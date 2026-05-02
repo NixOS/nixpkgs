@@ -45,7 +45,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "compliance-trestle";
-  version = "3.12.0";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # TODO: Try to fall back to fetchSubmodules at the next release
     # fetchSubmodules = true;
-    hash = "sha256-4z+hJoykIwDRshtSyE94POy39cRNVqtT4L6KftNWG6w=";
+    hash = "sha256-WEQ3r7TfgvbVWuDHdeqLNn21zWXYDqm1iVE4XEFKPdw=";
   };
 
   postPatch = ''
