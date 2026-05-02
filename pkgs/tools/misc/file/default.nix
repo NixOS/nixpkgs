@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file";
-  version = "5.45";
+  version = "5.47";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
       "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
+    hash = "sha256-RWcv7BZctMwTWKLXa11X0ih23Ll6sWlCesOFy+HVWXo=";
   };
 
   outputs = [
@@ -33,17 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Upstream patch to fix 32-bit tests.
-    #
-    # It is included in 5.46+, but we are not updating to it or a later version until:
-    #
-    # https://bugs.astron.com/view.php?id=622
-    # https://bugs.astron.com/view.php?id=638
-    #
-    # are resolved. See also description of the 1st bug here:
-    #
-    # https://github.com/NixOS/nixpkgs/pull/402318#issuecomment-2881163359
-    ./32-bit-time_t.patch
+    # Fixes `cat archive.zip | file -` just showing a generic "data" type. See:
+    # - https://bugs.astron.com/view.php?id=764
+    # - https://github.com/file/file/commit/12b76648185104ce9118d8b5fa57aa34a77ad084
+    # Vendored patch because using fetchpatch is impossible for a package in
+    # this part of the bootstrap chain.
+    ./0001-PR-745-streamout-Don-t-flush-when-trying-to-set-nega.patch
   ];
 
   strictDeps = true;
