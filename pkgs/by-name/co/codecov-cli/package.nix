@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "codecov-cli";
-  version = "11.2.6";
+  version = "11.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "prevent-cli";
     tag = "v${version}";
-    hash = "sha256-8KBemqwMqiio4pnftsBgnFj69Bgb5jQr5YlMegujPZY=";
+    hash = "sha256-1CVl8X05e0Fm7TCKlZtQk+o9i26O9KVdnlUIBYqa8IE=";
   };
 
   sourceRoot = "${src.name}/${pname}";
