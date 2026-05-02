@@ -23,7 +23,7 @@ appimageTools.wrapType2 rec {
       wrapProgram $out/bin/cubelify \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm444 ${contents}/cubelify-overlay.desktop -t $out/share/applications/
-      install -Dm444 ${contents}/cubelify-overlay.png -t $out/share/pixmaps/
+      install -Dm444 ${contents}/cubelify-overlay.png -t $out/share/icons
       substituteInPlace $out/share/applications/cubelify-overlay.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=cubelify'
     '';
