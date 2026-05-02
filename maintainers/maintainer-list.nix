@@ -28097,6 +28097,12 @@
     githubId = 1183303;
     name = "Jakob Klepp";
   };
+  truita = {
+    email = "josep@truita.es";
+    github = "truita";
+    githubId = 67246478;
+    name = "Josep Mengual";
+  };
   trundle = {
     name = "Andreas Stührk";
     email = "andy@hammerhartes.de";
