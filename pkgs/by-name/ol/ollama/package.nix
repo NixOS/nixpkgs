@@ -198,10 +198,10 @@ goBuild (finalAttrs: {
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
     substituteInPlace cmd/launch/openclaw_test.go \
-      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
-      --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
       --replace-fail '/usr/bin/env' '${coreutils}/bin/env' \
       --replace-fail '/usr/bin/sort' '${coreutils}/bin/sort' \
+      --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \
+      --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
     substituteInPlace cmd/launch/hermes_test.go \
       --replace-fail '/bin/mkdir' '${coreutils}/bin/mkdir' \

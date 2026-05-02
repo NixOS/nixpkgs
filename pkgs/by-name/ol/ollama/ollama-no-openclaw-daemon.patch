@@ -1,25 +1,12 @@
-diff --git a/cmd/launch/openclaw.go b/cmd/launch/openclaw.go
-index b47dec02..c345dfc7 100644
---- a/cmd/launch/openclaw.go
-+++ b/cmd/launch/openclaw.go
-@@ -78,15 +78,11 @@ func (c *Openclaw) Run(model string, args []string) error {
+--- a/cmd/launch/openclaw.go	2026-05-02 09:00:41.122359706 +0200
++++ b/cmd/launch/openclaw.go	2026-05-02 09:00:45.082913318 +0200
+@@ -83,9 +83,6 @@
  			"--skip-channels",
  			"--skip-skills",
  		}
--		if canInstallDaemon() {
+-		if openclawCanInstallDaemon() {
 -			onboardArgs = append(onboardArgs, "--install-daemon")
--		} else {
--			// When we can't install a daemon (e.g. no systemd, sudo dropped
--			// XDG_RUNTIME_DIR, or container environment), skip the gateway
--			// health check so non-interactive onboarding completes. The
--			// gateway is started as a foreground child process after onboarding.
--			onboardArgs = append(onboardArgs, "--skip-health")
 -		}
-+		// When we can't install a daemon (e.g. no systemd, sudo dropped
-+		// XDG_RUNTIME_DIR, or container environment), skip the gateway
-+		// health check so non-interactive onboarding completes. The
-+		// gateway is started as a foreground child process after onboarding.
-+		onboardArgs = append(onboardArgs, "--skip-health")
  		cmd := exec.Command(bin, onboardArgs...)
+ 		cmd.Env = openclawInstallEnv()
  		cmd.Stdin = os.Stdin
- 		cmd.Stdout = os.Stdout
