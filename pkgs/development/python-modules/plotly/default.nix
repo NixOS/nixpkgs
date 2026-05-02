@@ -148,6 +148,13 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "plotly" ];
 
+  passthru = {
+    # Currently doesn't work in sandbox
+    # tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    #   irisplot = callPackage ./tests.nix { };
+    # };
+  };
+
   meta = {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
     homepage = "https://plot.ly/python/";
