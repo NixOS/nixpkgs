@@ -2,7 +2,7 @@
 {
   lib,
   toTLPkgList,
-  toTLPkgSets,
+  tl,
   buildTeXEnv,
 }:
 args@{
@@ -46,7 +46,11 @@ let
       in
       builtins.genericClosure {
         startSet = pkgListToSets pkgList;
-        operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or [ ]);
+        operator =
+          { pkg, ... }:
+          pkgListToSets (
+            if pkg ? tlDeps then if builtins.isFunction pkg.tlDeps then pkg.tlDeps tl else pkg.tlDeps else [ ]
+          );
       }
     );
   combined = combinePkgs (lib.attrValues pkgSet);
