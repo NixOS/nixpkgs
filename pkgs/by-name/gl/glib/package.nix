@@ -43,8 +43,6 @@
     && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
 }:
 
-assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
-
 let
   glib-untested = glib.overrideAttrs { doCheck = false; };
   # break dependency cycles
