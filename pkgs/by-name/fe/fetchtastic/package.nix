@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
 }:
@@ -37,6 +38,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "fetchtastic" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_download_firmware_success"
+    "test_get_target_path_for_release"
+    "test_platform_functions"
+  ];
 
   meta = {
     description = "Utility for downloading and managing the latest Meshtastic firmware releases";
