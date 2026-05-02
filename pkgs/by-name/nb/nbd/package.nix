@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/NetworkBlockDevice/nbd/commit/915444bc0b8a931d32dfb755542f4bd1d37f1449.patch";
       hash = "sha256-6z+c2cXhY92WPDqRO6AJ5BBf1N38yTgOE1foduIr5Dg=";
     })
+    # Update test certificate expiry dates
+    (fetchpatch {
+      url = "https://github.com/NetworkBlockDevice/nbd/commit/58b356bd19e63e39aae9a5d24a66c3f42bd17180.patch";
+      hash = "sha256-2P1C7X6dQogDBWrcR9D54QInbNzNbKKYLQp/dR8briQ=";
+    })
   ];
 
   nativeBuildInputs = [
