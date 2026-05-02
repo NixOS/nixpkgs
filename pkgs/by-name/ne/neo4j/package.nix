@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neo4j";
-  version = "2026.02.2";
+  version = "2026.04.0";
 
   src = fetchurl {
     url = "https://neo4j.com/artifact.php?name=neo4j-community-${finalAttrs.version}-unix.tar.gz";
-    hash = "sha256-TpVibiE0ijAQl5mkRjnCFpvCTifhoTcZcv8lg8PYSTw=";
+    hash = "sha256-/XUEZrEkfA0e8JqExhT34EV5OzDfoncUjo2nFkZZiCA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
