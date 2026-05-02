@@ -14066,9 +14066,9 @@ self: super: with self; {
     inherit (pkgs.llvmPackages) openmp;
   };
 
-  pykefcontrol = callPackage ../development/python-modules/pykefcontrol { };
-
   pykeepass = callPackage ../development/python-modules/pykeepass { };
+
+  pykefcontrol = callPackage ../development/python-modules/pykefcontrol { };
 
   pykerberos = callPackage ../development/python-modules/pykerberos { krb5-c = pkgs.krb5; };
 
