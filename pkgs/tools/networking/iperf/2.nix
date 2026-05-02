@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-fastsampling" ];
 
+  makeFlags = [ "AR:=$(AR)" ];
+
   postInstall = ''
     mv $out/bin/iperf $out/bin/iperf2
     ln -s $out/bin/iperf2 $out/bin/iperf
