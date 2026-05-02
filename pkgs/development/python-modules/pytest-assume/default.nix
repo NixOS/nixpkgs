@@ -8,7 +8,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-assume";
   version = "2.4.3";
   pyproject = true;
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astraw38";
     repo = "pytest-assume";
-    tag = "v${version}";
-    sha256 = "sha256-QIwETun/n8SnBzK/axWiVTcuWiJ0ph3+2pQYVRMmVWI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QIwETun/n8SnBzK/axWiVTcuWiJ0ph3+2pQYVRMmVWI=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin that allows multiple failures per test";
     homepage = "https://github.com/astraw38/pytest-assume";
-    changelog = "https://github.com/astraw38/pytest-assume/releases/tag/${src.tag}";
+    changelog = "https://github.com/astraw38/pytest-assume/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jfr ];
   };
-}
+})
