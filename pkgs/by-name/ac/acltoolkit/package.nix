@@ -7,7 +7,9 @@
 python3.pkgs.buildPythonPackage {
   pname = "acltoolkit";
   version = "0-unstable-2023-02-03";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "zblurx";
@@ -21,7 +23,7 @@ python3.pkgs.buildPythonPackage {
     sed -i -e "s/==[0-9.]*//" setup.py
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     asn1crypto
     dnspython
     impacket
