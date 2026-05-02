@@ -11583,10 +11583,6 @@ with pkgs;
     // (config.caffe or { })
   );
 
-  gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
-
-  gap-full = lowPrio (gap.override { packageSet = "full"; });
-
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
   };
