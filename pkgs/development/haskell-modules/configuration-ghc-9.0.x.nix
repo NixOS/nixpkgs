@@ -37,4 +37,17 @@ self: super: {
   unix = null;
   xhtml = null;
   Win32 = null;
+
+  # core pkgs on later GHCs that we can reasonably provide a stub
+  # or Hackage released version for (though they may not build).
+  Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+  semaphore-compat = self.semaphore-compat_1_0_0;
+  os-string = self.os-string_2_0_10;
+
+  # core pkgs on later GHCs we can't provide at all
+  system-cxx-std-lib = null;
+  ghc-experimental = null;
+  ghc-internal = null;
+  ghc-platform = null;
+  ghc-toolchain = null;
 }
