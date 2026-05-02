@@ -1,6 +1,8 @@
+diff --git a/contrib/CMakeLists.txt b/contrib/CMakeLists.txt
+index 1120c0309..62e6177ab 100644
 --- a/contrib/CMakeLists.txt
 +++ b/contrib/CMakeLists.txt
-@@ -85,7 +85,7 @@ endif (INSTALL_PHP_EXAMPLES)
+@@ -87,7 +87,7 @@ endif (INSTALL_PHP_EXAMPLES)
  if (INSTALL_BASH_COMPLETION)
      macro_optional_find_package (BashCompletion)
      if (NOT BASH_COMPLETION_FOUND)
