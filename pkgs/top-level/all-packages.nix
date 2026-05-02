@@ -11581,14 +11581,6 @@ with pkgs;
 
   ### SCIENCE / MATH
 
-  caffe = callPackage ../applications/science/math/caffe (
-    {
-      opencv4 = opencv4WithoutCuda; # Used only for image loading.
-      blas = openblas;
-    }
-    // (config.caffe or { })
-  );
-
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 
   gap-full = lowPrio (gap.override { packageSet = "full"; });

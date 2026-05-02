@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  config,
   fetchFromGitHub,
   fetchurl,
   fetchpatch,
@@ -9,16 +10,17 @@
   gflags,
   glog,
   hdf5-cpp,
-  opencv4,
+  opencv4WithoutCuda,
+  opencv4 ? opencv4WithoutCuda, # Used only for image loading
   protobuf,
   doxygen,
-  blas,
-  lmdbSupport ? true,
+  openblas,
+  lmdbSupport ? config.caffe.lmdbSupport or true,
   lmdb,
-  leveldbSupport ? true,
+  leveldbSupport ? config.caffe.leveldbSupport or true,
   leveldb,
   snappy,
-  pythonSupport ? false,
+  pythonSupport ? config.caffe.pythonSupport or false,
   python ? null,
   numpy ? null,
   replaceVars,
@@ -33,15 +35,15 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caffe";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "BVLC";
     repo = "caffe";
-    rev = version;
-    sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
+    tag = finalAttrs.version;
+    hash = "sha256-Q6aWb5ck6gp/bbUMr/l6/hxqpNUPHngbG3EIVNm4koA=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
     protobuf
     hdf5-cpp
     opencv4
-    blas
+    openblas
   ]
   ++ lib.optional lmdbSupport lmdb
   ++ lib.optionals leveldbSupport [
@@ -183,4 +185,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
