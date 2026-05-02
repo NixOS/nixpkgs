@@ -9027,11 +9027,6 @@ with pkgs;
 
   bambootracker-qt6 = bambootracker.override { withQt6 = true; };
 
-  awesome = callPackage ../applications/window-managers/awesome {
-    cairo = cairo.override { xcbSupport = true; };
-    inherit (texFunctions) fontsConf;
-  };
-
   awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
 
   backintime = backintime-qt;
