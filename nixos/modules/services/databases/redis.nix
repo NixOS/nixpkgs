@@ -505,7 +505,19 @@ in
 
   config = lib.mkIf (enabledServers != { }) {
 
-    assertions = lib.concatLists (
+    assertions = [
+      {
+        assertion = !builtins.elem config.environment.memoryAllocator.provider [
+          "graphene-hardened"
+          "graphene-hardened-light"
+        ];
+        message = ''
+          Redis is incompatible with the "${config.environment.memoryAllocator.provider}"
+          memory allocator. Redis requires a working malloc_usable_size() which
+          this allocator does not support. Redis may crash on startup.
+        '';
+      }
+    ] ++ lib.concatLists (
       lib.mapAttrsToList (name: conf: [
         {
           assertion = conf.requirePass != null -> conf.requirePassFile == null;
