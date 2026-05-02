@@ -3,6 +3,7 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  zfs,
   lz4,
 }:
 
@@ -40,6 +41,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hypothesis
     pytest-cov-stub
     pytestCheckHook
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ zfs ]}"
   ];
 
   doCheck = true;
