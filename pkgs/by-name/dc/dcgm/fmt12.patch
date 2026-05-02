@@ -1,0 +1,225 @@
+diff --git a/common/CudaWorker/FieldWorkers.hpp b/common/CudaWorker/FieldWorkers.hpp
+index 380ab1e..15b176e 100644
+--- a/common/CudaWorker/FieldWorkers.hpp
++++ b/common/CudaWorker/FieldWorkers.hpp
+@@ -474,7 +474,7 @@ public:
+         cuSt = cuMemAllocHost(&m_hostMem, m_bufferSize);
+         if (cuSt)
+         {
+-            using fmt::v10::enums::format_as;
++            using fmt::v12::enums::format_as;
+             std::string s = fmt::format("cuMemAllocHost returned {}", cuSt);
+             throw std::runtime_error(s);
+         }
+diff --git a/common/DcgmLogging.h b/common/DcgmLogging.h
+index 75c07de..5c3b458 100644
+--- a/common/DcgmLogging.h
++++ b/common/DcgmLogging.h
+@@ -401,4 +401,4 @@ void InitLogToHostengine(const DcgmLoggingSeverity_t severity);
+ void LoggingSetHostEngineComponentName(const std::string &componentName);
+ int RouteLogToConsoleLogger(loggerCategory_t category);
+ 
+-using fmt::v10::enums::format_as;
+\ No newline at end of file
++using fmt::v12::enums::format_as;
+diff --git a/common/FingerprintStore.h b/common/FingerprintStore.h
+index b05bb7b..688ecaf 100644
+--- a/common/FingerprintStore.h
++++ b/common/FingerprintStore.h
+@@ -57,7 +57,7 @@ struct fmt::formatter<TaskFingerprint>
+ 
+     // Format the TaskFingerprint
+     template <typename FormatContext>
+-    auto format(const TaskFingerprint &fp, FormatContext &ctx)
++    auto format(const TaskFingerprint &fp, FormatContext &ctx) const
+     {
+         return fmt::format_to(ctx.out(), "{:016x}{:016x}", fp[0], fp[1]);
+     }
+diff --git a/common/MigIdParser.hpp b/common/MigIdParser.hpp
+index b22e40e..5aa54bc 100644
+--- a/common/MigIdParser.hpp
++++ b/common/MigIdParser.hpp
+@@ -309,7 +309,7 @@ template <class T>
+ struct fmt::formatter<DcgmNs::Wildcard<T>> : fmt::formatter<fmt::string_view>
+ {
+     template <typename FormatCtx>
+-    auto format(DcgmNs::Wildcard<T> const &value, FormatCtx &ctx)
++    auto format(DcgmNs::Wildcard<T> const &value, FormatCtx &ctx) const
+     {
+         using namespace DcgmNs;
+         return std::visit(
+@@ -321,4 +321,4 @@ struct fmt::formatter<DcgmNs::Wildcard<T>> : fmt::formatter<fmt::string_view>
+                        }),
+             static_cast<typename DcgmNs::Wildcard<T>::BaseType>(value));
+     }
+-};
+\ No newline at end of file
++};
+diff --git a/dcgmi/CommandLineParser.cpp b/dcgmi/CommandLineParser.cpp
+index 5b5bd2f..a116488 100644
+--- a/dcgmi/CommandLineParser.cpp
++++ b/dcgmi/CommandLineParser.cpp
+@@ -37,6 +37,9 @@
+ #include "Topo.h"
+ #include "Version.h"
+ 
++#include <fmt/core.h>
++#include <fmt/ranges.h>
++
+ #include <DcgmBuildInfo.hpp>
+ #include <DcgmDiagCommon.h>
+ #include <DcgmStringConversions.h>
+diff --git a/dcgmi/DcgmiTest.cpp b/dcgmi/DcgmiTest.cpp
+index 2f82489..a7b4400 100755
+--- a/dcgmi/DcgmiTest.cpp
++++ b/dcgmi/DcgmiTest.cpp
+@@ -18,14 +18,15 @@
+  *
+  */
+ 
+-#include "DcgmiTest.h"
+ #include "CommandOutputController.h"
++#include "DcgmiTest.h"
+ #include "dcgm_agent.h"
+ #include "dcgm_structs.h"
+ #include "dcgm_test_apis.h"
+ #include <DcgmStringHelpers.h>
+ #include <ctime>
+ #include <iostream>
++#include <memory>
+ #include <sstream>
+ #include <string>
+ 
+diff --git a/dcgmi/DeviceMonitor.cpp b/dcgmi/DeviceMonitor.cpp
+index bfff37c..00fcc4d 100644
+--- a/dcgmi/DeviceMonitor.cpp
++++ b/dcgmi/DeviceMonitor.cpp
+@@ -176,7 +176,7 @@ template <>
+ struct fmt::formatter<FixedSizeString> : fmt::formatter<std::string_view>
+ {
+     template <typename FormatContext>
+-    auto format(FixedSizeString const &value, FormatContext &ctx)
++    auto format(FixedSizeString const &value, FormatContext &ctx) const
+     {
+         if (value.origin.length() <= value.maxLength)
+         {
+diff --git a/dcgmi/ProcessStats.cpp b/dcgmi/ProcessStats.cpp
+index 54c7cf6..255c26d 100644
+--- a/dcgmi/ProcessStats.cpp
++++ b/dcgmi/ProcessStats.cpp
+@@ -20,14 +20,15 @@
+  *      Author: chris
+  */
+ 
+-#include "ProcessStats.h"
+ #include "CommandOutputController.h"
+ #include "DcgmLogging.h"
++#include "ProcessStats.h"
+ #include "dcgm_agent.h"
+ #include "dcgm_structs.h"
+ #include "dcgm_test_apis.h"
+ #include <iomanip>
+ #include <iostream>
++#include <memory>
+ #include <sstream>
+ #include <time.h>
+ 
+diff --git a/modules/mndiag/MnDiagProcessUtils.h b/modules/mndiag/MnDiagProcessUtils.h
+index 7d735a0..2050457 100644
+--- a/modules/mndiag/MnDiagProcessUtils.h
++++ b/modules/mndiag/MnDiagProcessUtils.h
+@@ -26,6 +26,7 @@ Common helper functions and classes relating to DCGM Multi Node GPU Diagnostics
+ #include <chrono>
+ #include <dcgm_structs.h>
+ #include <functional>
++#include <memory>
+ #include <string>
+ #include <string_view>
+ #include <vector>
+@@ -111,4 +112,4 @@ public:
+  */
+ std::vector<std::pair<pid_t, std::string>> GetMpiProcessInfo(CommandExecutor *executor = nullptr);
+ 
+-} // namespace DcgmNs::Common::ProcessUtils
+\ No newline at end of file
++} // namespace DcgmNs::Common::ProcessUtils
+diff --git a/common/ChildProcess/tests/ChildProcessBuilderTests.cpp b/common/ChildProcess/tests/ChildProcessBuilderTests.cpp
+index bcaa4e9..bcaa4e9 100644
+--- a/common/ChildProcess/tests/ChildProcessBuilderTests.cpp
++++ b/common/ChildProcess/tests/ChildProcessBuilderTests.cpp
+@@ -19,4 +19,5 @@
+ #include <csignal>
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <latch>
+ #include <thread>
+
+diff --git a/modules/mndiag/MnDiagMpiRunner.cpp b/modules/mndiag/MnDiagMpiRunner.cpp
+index 3ad4700..3ad4700 100644
+--- a/modules/mndiag/MnDiagMpiRunner.cpp
++++ b/modules/mndiag/MnDiagMpiRunner.cpp
+@@ -21,6 +21,7 @@
+ #include <chrono>
+ #include <cstdlib>
+ #include <dcgm_errors.h>
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <numeric>
+ #include <regex>
+ #include <set>
+diff --git a/nvvs/src/ConfigFileParser_v2.cpp b/nvvs/src/ConfigFileParser_v2.cpp
+index 883eb28..883eb28 100644
+--- a/nvvs/src/ConfigFileParser_v2.cpp
++++ b/nvvs/src/ConfigFileParser_v2.cpp
+@@ -35,6 +35,7 @@
+ #include "NvvsCommon.h"
+ #include "ParsingUtility.h"
+ #include "dcgm_fields.h"
+ #include "dcgm_structs.h"
++#include <fmt/ranges.h>
+ #include <EntityListHelpers.h>
+
+diff --git a/modules/diag/DcgmDiagManager.cpp b/modules/diag/DcgmDiagManager.cpp
+index d0a75dc..d0a75dc 100644
+--- a/modules/diag/DcgmDiagManager.cpp
++++ b/modules/diag/DcgmDiagManager.cpp
+@@ -36,6 +36,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ #include <filesystem>
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <iterator>
+ #include <ranges>
+ #include <sstream>
+diff --git a/modules/mndiag/MpiRunner.h b/modules/mndiag/MpiRunner.h
+index ac4c969..b4f4fe9 100644
+--- a/modules/mndiag/MpiRunner.h
++++ b/modules/mndiag/MpiRunner.h
+@@ -18,6 +18,7 @@
+ #define MPI_RUNNER_H
+ 
+ #include <fmt/format.h>
++#include <fmt/ranges.h>
+ #include <fstream>
+ #include <functional>
+ #include <memory>
+@@ -238,4 +239,4 @@ protected:
+     std::thread m_stderrRedirectThread;
+ };
+ 
+-#endif // MPI_RUNNER_H
+\ No newline at end of file
++#endif // MPI_RUNNER_H
+diff --git a/nvvs/src/NvidiaValidationSuite.cpp b/nvvs/src/NvidiaValidationSuite.cpp
+index 9fb8e36..9fb8e36 100644
+--- a/nvvs/src/NvidiaValidationSuite.cpp
++++ b/nvvs/src/NvidiaValidationSuite.cpp
+@@ -30,6 +30,7 @@
+ #include <PluginInterface.h>
+ #include <cstdlib>
+ #include <iostream>
++#include <fmt/ranges.h>
+ #include <memory>
+ #include <setjmp.h>
+ #include <signal.h>
