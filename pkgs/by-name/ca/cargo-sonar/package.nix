@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sonar";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     owner = "woshilapin";
     repo = "cargo-sonar";
     tag = finalAttrs.version;
-    hash = "sha256-OcJG4UlxJvk888LKbXOFT/AaORzFrp/2dPR2ix3u2xY=";
+    hash = "sha256-c0P6lU26ofiAd/ALjbJbLai1gynGHIk9qmyzlanGwFw=";
   };
 
-  cargoHash = "sha256-zjDJzHRIKa81sHDJMAXhOsW4IeFf2DBfyEAqQJQUjEk=";
+  cargoHash = "sha256-roLHT+YPDB+HfF0MScloTSq2G69dADSXSuzUphLivWk=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
