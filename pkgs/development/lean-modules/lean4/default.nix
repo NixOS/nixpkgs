@@ -8,9 +8,12 @@
   git,
   gmp,
   cadical,
+  cadical' ? cadical.override { version = "2.1.3"; },
   pkg-config,
   libuv,
   perl,
+  runCommand,
+  writeText,
   testers,
 }:
 
@@ -75,7 +78,7 @@ let
     buildInputs = [
       gmp
       libuv
-      cadical
+      cadical'
     ];
 
     nativeCheckInputs = [
@@ -109,27 +112,47 @@ let
   });
 
   oldStorePath = builtins.substring 0 43 (toString lean4);
-in
-# Binary-patched for correct runtime discovery in wrapped environments.
-symlinkJoin {
-  inherit (lean4) name pname;
-  paths = [
-    lean4
-    cadical
-  ];
-  nativeBuildInputs = [ perl ];
-  postBuild = ''
-    newStorePath=$(echo "$out" | head -c 43)
 
-    for bin in ${lean4}/bin/*; do
-      test -f "$bin" || continue
-      install -m755 "$bin" "$out/bin/"
-      perl -pi -e "s|\Q${oldStorePath}\E|$newStorePath|g" "$out/bin/$(basename "$bin")"
-    done
-  '';
+  # Binary-patched for correct runtime discovery in wrapped environments.
+  wrapped = symlinkJoin {
+    inherit (lean4) name pname;
+    paths = [
+      lean4
+      cadical'
+    ];
+    nativeBuildInputs = [ perl ];
+    postBuild = ''
+      newStorePath=$(echo "$out" | head -c 43)
 
-  inherit (lean4) version src meta;
-  passthru = {
-    inherit (lean4) version src;
+      for bin in ${lean4}/bin/*; do
+        test -f "$bin" || continue
+        install -m755 "$bin" "$out/bin/"
+        perl -pi -e "s|\Q${oldStorePath}\E|$newStorePath|g" "$out/bin/$(basename "$bin")"
+      done
+    '';
+
+    inherit (lean4) version src meta;
+    passthru = {
+      inherit (lean4) version src;
+      tests =
+        let
+          src = writeText "smoke.lean" ''
+            import Std
+            example : 1 + 1 = 2 := by decide
+            example : ∀ (x y : BitVec 8), x &&& y = y &&& x := by bv_decide
+          '';
+        in
+        {
+          version = testers.testVersion {
+            package = wrapped;
+            version = "v${lean4.version}";
+          };
+          smoke = runCommand "lean4-test-smoke" { } ''
+            ${wrapped}/bin/lean ${src}
+            touch $out
+          '';
+        };
+    };
   };
-}
+in
+wrapped
