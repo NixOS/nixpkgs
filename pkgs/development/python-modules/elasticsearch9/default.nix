@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  anyio
+  anyio,
   buildPythonPackage,
   elastic-transport,
   fetchPypi,
