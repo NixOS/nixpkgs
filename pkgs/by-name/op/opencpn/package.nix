@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  DarwinTools,
+  darwin,
   alsa-utils,
   at-spi2-core,
   cmake,
@@ -47,6 +47,9 @@
   libxdmcp,
   xz,
 }:
+let
+  inherit (darwin) DarwinTools;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
