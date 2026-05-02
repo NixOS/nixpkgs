@@ -5,6 +5,7 @@ from dataclasses import asdict, dataclass, field
 from enum import StrEnum
 from typing import List
 from subprocess import PIPE, Popen
+import base64
 import json
 import urllib.request
 import re
@@ -133,6 +134,10 @@ def version_triple_to_str(triple: list) -> str:
     return ".".join(str(x) for x in triple)
 
 
+def sri_from_sha256_hex(hex_hash: str) -> str:
+    return "sha256-" + base64.b64encode(bytes.fromhex(hex_hash)).decode("utf-8")
+
+
 def fetch_distro_source(variant: Variant) -> DistroSource:
     manifest = fetch_distro_manifest(variant)
 
@@ -141,14 +146,17 @@ def fetch_distro_source(variant: Variant) -> DistroSource:
         name: DistroModule(
             version=mod["full"]["module_version"],
             url=mod["full"]["url"],
-            hash=prefetch(mod["full"]["url"]),
+            hash=sri_from_sha256_hex(mod["full"]["package_sha256"]),
         )
         for name, mod in manifest["modules"].items()
     }
 
     return DistroSource(
         version=version_triple_to_str(manifest["full"]["host_version"]),
-        distro=DistroRef(url=distro_url, hash=prefetch(distro_url)),
+        distro=DistroRef(
+            url=distro_url,
+            hash=sri_from_sha256_hex(manifest["full"]["package_sha256"]),
+        ),
         modules=modules,
     )
 
@@ -168,10 +176,10 @@ def main():
         Variant(Platform.LINUX, Branch.PTB, Kind.DISTRO),
         Variant(Platform.LINUX, Branch.CANARY, Kind.DISTRO),
         Variant(Platform.LINUX, Branch.DEVELOPMENT, Kind.DISTRO),
-        Variant(Platform.MACOS, Branch.STABLE, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.PTB, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.CANARY, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.DEVELOPMENT, Kind.LEGACY),
+        Variant(Platform.MACOS, Branch.STABLE, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.PTB, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.CANARY, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.DEVELOPMENT, Kind.DISTRO),
     ]
 
     sources = {}
