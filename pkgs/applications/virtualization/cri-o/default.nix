@@ -17,13 +17,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cri-o";
-  version = "1.35.0";
+  version = "1.35.2";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aP3qhD2d1x+VPDifkg9lXgVD38UcongyN6vHkn8oYos=";
+    hash = "sha256-JlEB87JS8ATbP2vGO0NM45nojZq3M2mUB6btdMTtLSU=";
   };
   vendorHash = null;
 
