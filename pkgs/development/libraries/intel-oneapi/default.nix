@@ -84,7 +84,7 @@
           mkdir -p "$out"
 
           # Required for the installer to find libstdc++
-          export LD_LIBRARY_PATH="${lib.makeLibraryPath [ libgcc.lib ]}"
+          export LD_LIBRARY_PATH="${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
 
           # The installer is an insane four-stage rube goldberg machine:
           # 1. Our $src (bash script) unpacks install.sh (bash script)
