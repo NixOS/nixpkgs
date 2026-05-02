@@ -11563,7 +11563,8 @@ self: super: with self; {
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   newrelic = callPackage ../development/python-modules/newrelic { };
-  nested-lookup = callPackage ../development/python-modules/nested-lookup { };
+
+  newrelic-telemetry-sdk = callPackage ../development/python-modules/newrelic-telemetry-sdk { };  nested-lookup = callPackage ../development/python-modules/nested-lookup { };
 
   nested-multipart-parser = callPackage ../development/python-modules/nested-multipart-parser { };
 
