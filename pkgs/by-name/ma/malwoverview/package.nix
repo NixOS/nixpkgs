@@ -1,30 +1,32 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "malwoverview";
-  version = "6.1.1";
+  version = "8.0.1";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alexandreborges";
     repo = "malwoverview";
-    tag = "v${version}";
-    hash = "sha256-43LcrP89vhVFDRRRItFL6hl++mvdGoPugMwD3TEOSE0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yIlKrZaIJmz3INGTrk+ydU+8gjAt54glSteMUrXSAgU=";
   };
 
   pythonRemoveDeps = [
     "pathlib"
   ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     colorama
     configparser
     geocoder
@@ -34,6 +36,11 @@ python3.pkgs.buildPythonApplication rec {
     requests
     simplejson
     validators
+    tqdm
+    python-whois
+    ipwhois
+    # For --tui
+    textual
   ];
 
   # Project has no tests
@@ -46,9 +53,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for threat hunting and gathering intel information from various sources";
     homepage = "https://github.com/alexandreborges/malwoverview";
-    changelog = "https://github.com/alexandreborges/malwoverview/releases/tag/v${version}";
+    changelog = "https://github.com/alexandreborges/malwoverview/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "malwoverview.py";
   };
-}
+})
