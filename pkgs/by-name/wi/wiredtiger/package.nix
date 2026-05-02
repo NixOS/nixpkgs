@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiredtiger";
-  version = "11.3.1";
+  version = "mongodb-8.3.1";
 
   src = fetchFromGitHub {
     repo = "wiredtiger";
     owner = "wiredtiger";
     tag = finalAttrs.version;
-    hash = "sha256-K5cZZTvZaWR6gVXF+mHNh7nHxMqi9XaEpB2qsd/pay8=";
+    hash = "sha256-r8J1wp3wQDGyop7BvEGbwVbOixx1Q2aqUDpNw7vyOqY=";
   };
 
   nativeBuildInputs = [
