@@ -14,19 +14,19 @@ let
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
     name = "roo-code-${finalAttrs.version}.vsix";
     pname = "roo-code-vsix";
-    version = "3.52.0";
+    version = "3.53.0";
 
     src = fetchFromGitHub {
       owner = "RooCodeInc";
       repo = "Roo-Code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-DvuL1WByEJER+v73pCvwNdRNfM8j+c1VQGGjAyV79p8=";
+      hash = "sha256-mZiAWFy6KnP15/nKl4//l4v3c9b5dUsUqK3xacbt/bI=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-kQjxcqHEClQtG6x2QM1/zixN6rvcEivX8vicNydDdOw=";
+      hash = "sha256-T8Yq9qNhnHF6ZRtU4rIRmT04AXTTwqUs6lMb3OPwb/Q=";
     };
 
     nativeBuildInputs = [
