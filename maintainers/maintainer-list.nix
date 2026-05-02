@@ -11942,6 +11942,13 @@
     githubId = 7558482;
     name = "Jack Gerrits";
   };
+  jackoe = {
+    name = "Jack Wines";
+    email = "nixos@winesj.com";
+    github = "jackoe";
+    githubId = 3060163;
+    matrix = "@noiobeforebedtime:winesj.com";
+  };
   jackr = {
     name = "Jack Rosenberg";
     email = "nixos@jackr.eu";
