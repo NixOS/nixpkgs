@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyintesishome";
-  version = "1.8.5";
+  version = "1.8.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jnimmo";
     repo = "pyIntesisHome";
     tag = version;
-    hash = "sha256-QgIvIn8I5EtJSNj1FdOI+DPgG7/y2ToQ62dhk7flieo=";
+    hash = "sha256-TwZAuu/mnChZwhZ5uGPiQ23curCiqTKWNgDrvwpgojc=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
