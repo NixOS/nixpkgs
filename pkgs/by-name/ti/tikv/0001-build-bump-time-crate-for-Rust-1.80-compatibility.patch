@@ -1,0 +1,191 @@
+From ea55c243b77d7db770d2401fbddb57558b139df8 Mon Sep 17 00:00:00 2001
+From: comonad <comonad@a-stable.com>
+Date: Wed, 1 Apr 2026 14:17:56 +0800
+Subject: [PATCH 1/6] build: bump time crate for Rust 1.80+ compatibility
+
+---
+ Cargo.lock | 58 +++++++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 42 insertions(+), 16 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 8e018c222..e21a2dbd5 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -340,7 +340,7 @@ dependencies = [
+  "bytes",
+  "fastrand 2.0.1",
+  "http 0.2.12",
+- "time 0.3.20",
++ "time 0.3.44",
+  "tokio",
+  "tracing",
+  "url",
+@@ -483,7 +483,7 @@ dependencies = [
+  "once_cell",
+  "percent-encoding",
+  "sha2 0.10.8",
+- "time 0.3.20",
++ "time 0.3.44",
+  "tracing",
+ ]
+ 
+@@ -658,7 +658,7 @@ dependencies = [
+  "pin-utils",
+  "ryu",
+  "serde",
+- "time 0.3.20",
++ "time 0.3.44",
+  "tokio",
+  "tokio-util",
+ ]
+@@ -708,7 +708,7 @@ dependencies = [
+  "slog",
+  "slog-global",
+  "tikv_util",
+- "time 0.3.20",
++ "time 0.3.44",
+  "tokio",
+  "url",
+  "uuid 1.7.0",
+@@ -738,7 +738,7 @@ dependencies = [
+  "rustc_version 0.4.0",
+  "serde",
+  "serde_json",
+- "time 0.3.20",
++ "time 0.3.44",
+  "url",
+  "uuid 1.7.0",
+ ]
+@@ -757,7 +757,7 @@ dependencies = [
+  "oauth2",
+  "pin-project",
+  "serde",
+- "time 0.3.20",
++ "time 0.3.44",
+  "tz-rs",
+  "url",
+  "uuid 1.7.0",
+@@ -774,7 +774,7 @@ dependencies = [
+  "futures 0.3.15",
+  "serde",
+  "serde_json",
+- "time 0.3.20",
++ "time 0.3.44",
+ ]
+ 
+ [[package]]
+@@ -791,7 +791,7 @@ dependencies = [
+  "log",
+  "serde",
+  "serde_derive",
+- "time 0.3.20",
++ "time 0.3.44",
+  "url",
+  "uuid 1.7.0",
+ ]
+@@ -812,7 +812,7 @@ dependencies = [
+  "serde",
+  "serde_derive",
+  "serde_json",
+- "time 0.3.20",
++ "time 0.3.44",
+  "url",
+  "uuid 1.7.0",
+ ]
+@@ -830,7 +830,7 @@ dependencies = [
+  "once_cell",
+  "serde",
+  "serde_json",
+- "time 0.3.20",
++ "time 0.3.44",
+ ]
+ 
+ [[package]]
+@@ -1994,6 +1994,16 @@ dependencies = [
+  "uuid 1.7.0",
+ ]
+ 
++[[package]]
++name = "deranged"
++version = "0.5.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d630bccd429a5bb5a64b5e94f693bfc48c9f8566418fda4c494cc94f911f87cc"
++dependencies = [
++ "powerfmt",
++ "serde",
++]
++
+ [[package]]
+ name = "derivative"
+ version = "2.2.0"
+@@ -4370,6 +4380,12 @@ dependencies = [
+  "num-traits",
+ ]
+ 
++[[package]]
++name = "num-conv"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
++
+ [[package]]
+ name = "num-derive"
+ version = "0.3.0"
+@@ -4906,6 +4922,12 @@ dependencies = [
+  "ws2_32-sys",
+ ]
+ 
++[[package]]
++name = "powerfmt"
++version = "0.2.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "439ee305def115ba05938db6eb1644ff94165c5ab5e9420d1c1bcedbba909391"
++
+ [[package]]
+ name = "pprof"
+ version = "0.13.0"
+@@ -7797,14 +7819,17 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.20"
++version = "0.3.44"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cd0cbfecb4d19b5ea75bb31ad904eb5b9fa13f21079c3b92017ebdf4999a5890"
++checksum = "91e7d9e3bb61134e77bde20dd4825b97c010155709965fedf0f49bb138e52a9d"
+ dependencies = [
++ "deranged",
+  "itoa 1.0.1",
+  "js-sys",
+  "libc 0.2.176",
++ "num-conv",
+  "num_threads",
++ "powerfmt",
+  "serde",
+  "time-core",
+  "time-macros",
+@@ -7812,16 +7837,17 @@ dependencies = [
+ 
+ [[package]]
+ name = "time-core"
+-version = "0.1.0"
++version = "0.1.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2e153e1f1acaef8acc537e68b44906d2db6436e2b35ac2c6b42640fff91f00fd"
++checksum = "40868e7c1d2f0b8d73e4a8c7f0ff63af4f6d19be117e90bd73eb1d62cf831c6b"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.8"
++version = "0.2.24"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fd80a657e71da814b8e5d60d3374fc6d35045062245d80224748ae522dd76f36"
++checksum = "30cfb0125f12d9c277f35663a0a33f8c30190f4e4574868a330595412d34ebf3"
+ dependencies = [
++ "num-conv",
+  "time-core",
+ ]
+ 
+-- 
+2.53.0
+
