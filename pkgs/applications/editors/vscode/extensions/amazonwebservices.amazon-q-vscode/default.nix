@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   mktplcRef = {
     name = "amazon-q-vscode";
     publisher = "AmazonWebServices";
-    version = "2.0.0";
-    hash = "sha256-XK0xCwvG5HBqTrERRkjpzbZCiAiK54d9vOt0Na3fzRI=";
+    version = "2.1.0";
+    hash = "sha256-DTh8IoJfKuAoNx5XS41wZlafoJwi68g0oJn0vXbEGDo=";
   };
 
   meta = {
