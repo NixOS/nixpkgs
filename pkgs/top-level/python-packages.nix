@@ -16152,6 +16152,8 @@ self: super: with self; {
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
+  pytokens = callPackage ../development/python-modules/pytokens { };
+
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };

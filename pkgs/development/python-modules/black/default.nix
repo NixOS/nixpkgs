@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pytestCheckHook,
   aiohttp,
   click,
@@ -17,37 +16,22 @@
   pathspec,
   parameterized,
   platformdirs,
+  pythonOlder,
+  pytokens,
   tokenize-rt,
+  tomli,
+  typing-extensions,
   uvloop,
 }:
-
 buildPythonPackage rec {
   pname = "black";
-  version = "25.1.0";
+  version = "26.3.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M0ltXNEiKtczkTUrSujaFSU8Xeibk6gLPiyNmhnsJmY=";
+    hash = "sha256-LFD1BjqWQcfu13lQFLo3sPX6In89QIuWiTbiS8BWawc=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "click-8.2-compat-1.patch";
-      url = "https://github.com/psf/black/commit/14e1de805a5d66744a08742cad32d1660bf7617a.patch";
-      hash = "sha256-fHRlMetE6+09MKkuFNQQr39nIKeNrqwQuBNqfIlP4hc=";
-    })
-    (fetchpatch {
-      name = "click-8.2-compat-2.patch";
-      url = "https://github.com/psf/black/commit/ed64d89faa7c738c4ba0006710f7e387174478af.patch";
-      hash = "sha256-df/J6wiRqtnHk3mAY3ETiRR2G4hWY1rmZMfm2rjP2ZQ=";
-    })
-    (fetchpatch {
-      name = "click-8.2-compat-3.patch";
-      url = "https://github.com/psf/black/commit/b0f36f5b4233ef4cf613daca0adc3896d5424159.patch";
-      hash = "sha256-SGLCxbgrWnAi79IjQOb2H8mD/JDbr2SGfnKyzQsJrOA=";
-    })
-  ];
 
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
@@ -61,6 +45,11 @@ buildPythonPackage rec {
     packaging
     pathspec
     platformdirs
+    pytokens
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -102,9 +91,6 @@ buildPythonPackage rec {
   disabledTests = [
     # requires network access
     "test_gen_check_output"
-    # broken on Python 3.13.4
-    # FIXME: remove this when fixed upstream
-    "test_simple_format[pep_701]"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin
