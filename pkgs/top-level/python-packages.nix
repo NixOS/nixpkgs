@@ -21091,6 +21091,7 @@ self: super: with self; {
 
   watergate-local-api = callPackage ../development/python-modules/watergate-local-api { };
 
+  watchtower = callPackage ../development/python-modules/watchtower { };
   watermark = callPackage ../development/python-modules/watermark { };
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
