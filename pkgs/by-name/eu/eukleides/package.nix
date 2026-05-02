@@ -8,7 +8,6 @@
   getopt,
   readline,
   texinfo,
-  texlive,
   versionCheckHook,
 }:
 
@@ -87,11 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # packages needed by euktoeps, euktopdf and eukleides.sty
-  passthru.tlDeps = with texlive; [
-    collection-pstricks
-    epstopdf
-    iftex
-    moreverb
+  passthru.tlDeps = ps: [
+    ps.collection-pstricks
+    ps.epstopdf
+    ps.iftex
+    ps.moreverb
   ];
 
   doInstallCheck = true;
