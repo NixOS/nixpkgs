@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "picard";
   # nix-update --commit picard --version-regex 'release-(.*)'
   version = "2.13.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
@@ -33,6 +33,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [
     gettext
     qt5.wrapQtAppsHook
+    pythonPackages.setuptools
   ]
   ++ lib.optionals (pyqt5.multimediaEnabled) [
     gst_all_1.gst-libav
@@ -51,6 +52,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
+    charset-normalizer
     chromaprint
     discid
     fasteners
