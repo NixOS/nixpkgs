@@ -1,0 +1,75 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7526f05b70..18871afb75 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -356,20 +356,6 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+ # directories outside the build tree to the install RPATH
+ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ 
+-# The following logic is what allows binaries to run successfully in the build
+-# directory AND install directory.
+-# This will need to be overridden for some targets that have a different
+-# relative position to LIB_DIR using the INSTALL_RPATH target property.
+-# However, we can cover the most common case for RPATH setting using the
+-# global default.
+-if(NOT APPLE)
+-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LIB_DIR}:$ORIGIN/../${LIB_DIR}")
+-else(NOT APPLE)
+-  # For OSX, use the INSTALL_NAME_DIR target property
+-  set(CMAKE_INSTALL_RPATH "@executable_path/../${LIB_DIR}")
+-  set(CMAKE_INSTALL_NAME_DIR "@executable_path/../${LIB_DIR}")
+-endif(NOT APPLE)
+-
+ #---------------------------------------------------------------------
+ # For certain platforms (in particular Visual C++) we want to keep some pre-defined
+ # flags that are commonly used in the build logic.
+diff --git a/misc/CMake/BRLCAD_ExternalDeps.cmake b/misc/CMake/BRLCAD_ExternalDeps.cmake
+index fdce1dc0c0..1375de50d1 100644
+--- a/misc/CMake/BRLCAD_ExternalDeps.cmake
++++ b/misc/CMake/BRLCAD_ExternalDeps.cmake
+@@ -752,15 +752,6 @@ function(brlcad_bext_process)
+   string(REPLACE ";" "\n" TP_B "${ALL_BINARY_FILES}")
+   file(WRITE "${TP_INVENTORY_BINARIES}" "${TP_B}")
+ 
+-  if(NBINARY_FILES)
+-    message("Setting rpath on new 3rd party lib and exe files...")
+-    # Set local RPATH so the files will work during build
+-    foreach(lf ${NBINARY_FILES})
+-      rpath_build_dir_process("${CMAKE_BINARY_DIR}" "${lf}")
+-    endforeach(lf ${NBINARY_FILES})
+-    message("Setting rpath on new 3rd party lib and exe files... done.")
+-  endif(NBINARY_FILES)
+-
+   if(NNOEXEC_FILES)
+     message("Scrubbing paths from new 3rd party data files...")
+     foreach(tf ${NNOEXEC_FILES})
+@@ -864,6 +855,7 @@ function(brlcad_bext_process)
+   # to define an RPATH that will allow the binary files to work when
+   # the install directory is relocated.
+   foreach(bf ${ALL_BINARY_FILES})
++    continue()
+     if(IS_SYMLINK ${bf})
+       continue()
+     endif(IS_SYMLINK ${bf})
+diff --git a/misc/CMake/BRLCAD_Util.cmake b/misc/CMake/BRLCAD_Util.cmake
+index 631909f499..43a536d21d 100644
+--- a/misc/CMake/BRLCAD_Util.cmake
++++ b/misc/CMake/BRLCAD_Util.cmake
+@@ -154,17 +154,6 @@ function(PLUGIN_SETUP plugin_targets subdir)
+       LIBRARY DESTINATION ${LIBEXEC_DIR}/${subdir}
+       ARCHIVE DESTINATION ${LIBEXEC_DIR}/${subdir}
+     )
+-    # Set the RPATH target property
+-    if(NOT APPLE)
+-      set_property(
+-        TARGET ${target_name}
+-        PROPERTY INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LIB_DIR}:$ORIGIN/../../${LIB_DIR}"
+-      )
+-    else(NOT APPLE)
+-      # For OSX, set the INSTALL_NAME_DIR target property
+-      set_property(TARGET ${target_name} PROPERTY INSTALL_RPATH "@executable_path/../../${LIB_DIR}")
+-      set_property(TARGET ${target_name} PROPERTY INSTALL_NAME_DIR "@executable_path/../../${LIB_DIR}")
+-    endif(NOT APPLE)
+   endforeach(target_name${plugins})
+ endfunction(PLUGIN_SETUP)
+ 
