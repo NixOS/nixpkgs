@@ -7,14 +7,16 @@
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "alerta";
   version = "8.5.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-ePvT2icsgv+io5aDDUr1Zhfodm4wlqh/iqXtNkFhS10=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     six
     click
     requests
