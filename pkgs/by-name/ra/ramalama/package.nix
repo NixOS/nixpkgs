@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch,
   go-md2man,
 
   llama-cpp-vulkan,
@@ -16,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AqX8pNbeDPCxlwaSJg4+XVrfypvXGR77q8tkI7t3vTY=";
+    hash = "sha256-9y7H1Iq/Dn89NIJDegY8lbII4ehx3jhulyOEkBIm4Nk=";
   };
 
   build-system = with python3Packages; [
@@ -41,14 +40,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [
     go-md2man
-  ];
-
-  patches = [
-    # fix darwin tests: https://github.com/containers/ramalama/pull/2567
-    (fetchpatch {
-      url = "https://github.com/containers/ramalama/commit/2b51b749b706261a5f704b4d785dbd45447b14b6.patch";
-      hash = "sha256-HV7gn0W7b0P7OS53Js5JdHoFjvE7tO4e3RMReGZpRIo=";
-    })
   ];
 
   postPatch = ''
