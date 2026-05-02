@@ -145,11 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     perlWithPackages
   ];
 
-  passthru = {
-    tlType = "run";
-    pkgs = [ finalAttrs.finalPackage ];
-  };
-
   meta = {
     description = "Create and manage multiple choice questionnaires with automated marking";
     mainProgram = "auto-multiple-choice";
