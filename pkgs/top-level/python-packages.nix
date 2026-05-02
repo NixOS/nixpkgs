@@ -12093,6 +12093,8 @@ self: super: with self; {
 
   newrelic = callPackage ../development/python-modules/newrelic { };
 
+  newrelic-telemetry-sdk = callPackage ../development/python-modules/newrelic-telemetry-sdk { };
+
   newspaper3k = callPackage ../development/python-modules/newspaper3k { };
 
   newversion = callPackage ../development/python-modules/newversion { };
