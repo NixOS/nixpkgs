@@ -1,0 +1,47 @@
+Workaround for https://github.com/NixOS/nixpkgs/issues/515658.
+
+KICAD_LIBRARY_DATA is baked in at compile time and points at the kicad
+base derivation, which on Nix does not contain the symbol or footprint
+template tables (those ship in separate derivations).  When KiCad runs
+its first-time setup it copies the URI from that nonexistent
+share/kicad/template/{sym,fp}-lib-table into the user's global library
+table, leaving the user with no built-in libraries.
+
+Point the default rows at the per-library env vars exposed by the
+wrapper (KICAD10_SYMBOL_DIR, KICAD10_FOOTPRINT_DIR) so the URIs resolve
+to the actual library locations.
+
+diff --git a/common/libraries/library_manager.cpp b/common/libraries/library_manager.cpp
+--- a/common/libraries/library_manager.cpp
++++ b/common/libraries/library_manager.cpp
+@@ -415,10 +415,28 @@ bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulat
+     if( aPopulateDefaultLibraries )
+     {
+         LIBRARY_TABLE_ROW& chained = table.InsertRow();
+-        chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
+         chained.SetNickname( wxT( "KiCad" ) );
+         chained.SetDescription( _( "KiCad Default Libraries" ) );
+-        chained.SetURI( defaultLib.GetFullPath() );
++
++        // Nixpkgs ships symbol/footprint libraries from separate derivations, so the
++        // compile-time KICAD_LIBRARY_DATA path is empty.  Point the default rows at
++        // the per-library env vars exposed by the wrapper instead.  See
++        // https://github.com/NixOS/nixpkgs/issues/515658
++        switch( aType )
++        {
++        case LIBRARY_TABLE_TYPE::SYMBOL:
++            chained.SetType( wxT( "KiCad" ) );
++            chained.SetURI( wxT( "${KICAD10_SYMBOL_DIR}" ) );
++            break;
++        case LIBRARY_TABLE_TYPE::FOOTPRINT:
++            chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
++            chained.SetURI( wxT( "${KICAD10_FOOTPRINT_DIR}/../template/fp-lib-table" ) );
++            break;
++        default:
++            chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
++            chained.SetURI( defaultLib.GetFullPath() );
++            break;
++        }
+     }
+
+     try
