@@ -6,24 +6,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  pyserial,
-  pyserial-asyncio-fast,
   pytest-asyncio,
   pytestCheckHook,
+  serialx,
   setuptools,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "velbus-aio";
-  version = "2026.4.0";
+  version = "2026.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "velbus-aio";
     tag = finalAttrs.version;
-    hash = "sha256-bFR4iZdvkY8pg4OzAH7E0vEw7E5kyEII2iLfeG5p3OQ=";
+    hash = "sha256-l77L2JI2jXw+cQw/yO1LvyWBxvUF0IBctM5V02BGtO8=";
     fetchSubmodules = true;
   };
 
@@ -34,8 +33,7 @@ buildPythonPackage (finalAttrs: {
     backoff
     beautifulsoup4
     lxml
-    pyserial
-    pyserial-asyncio-fast
+    serialx
   ];
 
   nativeCheckInputs = [
