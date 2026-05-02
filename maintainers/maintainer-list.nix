@@ -1590,6 +1590,12 @@
     githubId = 5149377;
     name = "Amine Chikhaoui";
   };
+  amodio = {
+    name = "Jacques Boscq";
+    github = "Amodio";
+    githubId = 2722398;
+    email = "jacques@boscq.fr";
+  };
   amozeo = {
     email = "wroclaw223@outlook.com";
     github = "amozeo";
