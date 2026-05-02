@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nodejs,
   srcOnly,
-  removeReferencesTo,
   node-gyp,
   pnpm_9,
   fetchPnpmDeps,
@@ -50,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_9
     makeWrapper
     python3
-    removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools.libtool
@@ -65,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pushd node_modules/better-sqlite3
     npm run build-release --offline "--nodedir=${nodeSources}"
-    find build -type f -exec remove-references-to -t "${nodeSources}" {} \;
+    find build -type f -not -path 'build/Release/better_sqlite3.node' -delete
     popd
 
     runHook postBuild
