@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iqtree";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "iqtree";
     repo = "iqtree3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Zy/u7YSCoqkLwq6xOoFMFDInGYREea1gS+PzSP4F8Q=";
+    hash = "sha256-ussHrw/lR7XjN8USHbV+Es88hF0HQOeSYZ7lMIoxJhk=";
     fetchSubmodules = true;
   };
 
