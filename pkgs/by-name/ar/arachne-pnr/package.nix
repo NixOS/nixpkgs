@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace 'echo UNKNOWN' 'echo ${lib.substring 0 10 src.rev}'
+      --replace-fail 'echo UNKNOWN' 'echo ${lib.substring 0 10 src.rev}'
   '';
 
   meta = {
