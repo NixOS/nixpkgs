@@ -9,6 +9,8 @@
 
   enablePlayback ? true,
   gst_all_1,
+
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -68,10 +70,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     pythonPackages.pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
   doCheck = true;
 
   # In order to spare double wrapping, we use:
