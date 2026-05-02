@@ -14846,6 +14846,7 @@ self: super: with self; {
 
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
 
+  pyre2 = callPackage ../development/python-modules/pyre2 { };
   pyreadstat = callPackage ../development/python-modules/pyreadstat { };
 
   pyrealsense2 = toPythonModule (
