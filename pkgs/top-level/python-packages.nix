@@ -16695,6 +16695,8 @@ self: super: with self; {
 
   red-black-tree-mod = callPackage ../development/python-modules/red-black-tree-mod { };
 
+  red-commons = callPackage ../development/python-modules/red-commons { };
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redgtech-api = callPackage ../development/python-modules/redgtech-api { };
