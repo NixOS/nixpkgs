@@ -235,6 +235,10 @@ rec {
     libc = "newlib";
   };
 
+  csky = {
+    config = "csky-unknown-linux-gnuabiv2";
+  };
+
   m68k = {
     config = "m68k-unknown-linux-gnu";
   };

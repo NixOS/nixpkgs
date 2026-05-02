@@ -37,6 +37,7 @@ let
     "armv6l-linux"
     "armv7a-linux"
     "armv7l-linux"
+    "csky-linux"
     "i686-linux"
     "loongarch64-linux"
     "m68k-linux"
@@ -134,6 +135,7 @@ in
   x86 = filterDoubles predicates.isx86;
   i686 = filterDoubles predicates.isi686;
   x86_64 = filterDoubles predicates.isx86_64;
+  csky = filterDoubles predicates.isCsky;
   microblaze = filterDoubles predicates.isMicroBlaze;
   mips = filterDoubles predicates.isMips;
   mmix = filterDoubles predicates.isMmix;
