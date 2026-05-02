@@ -3366,6 +3366,13 @@
     githubId = 17732342;
     name = "Imani Pelton";
   };
+  berber = {
+    name = "Zeremonienmeister Berber Aab";
+    github = "zmberber";
+    githubId = 29400525;
+    email = "git@zmberber.com";
+    matrix = "@berber:c-base.org";
+  };
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
