@@ -3,6 +3,7 @@
   clippy,
   dbus,
   lib,
+  nixosTests,
   pkg-config,
   rustPlatform,
 }:
@@ -28,6 +29,8 @@ rustPlatform.buildRustPackage {
     echo "Running clippy..."
     cargo clippy -- -Dwarnings
   '';
+
+  passthru.tests = { inherit (nixosTests) switchTest; };
 
   meta = {
     description = "NixOS switch-to-configuration program";
