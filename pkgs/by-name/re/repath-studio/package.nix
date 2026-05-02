@@ -195,7 +195,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/repath-studio/repath-studio/blob/v${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/repath-studio/repath-studio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Cross-platform vector graphics editor, that combines procedural tooling with traditional design workflows";
     homepage = "https://repath.studio";
     downloadPage = "https://github.com/repath-studio/repath-studio";
