@@ -37,13 +37,13 @@ let
     apprise
   ];
 
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
     tag = "v${version}";
-    hash = "sha256-4x5HwVNNGmoJ/ey1+hc7IqgYjaEJjOWpFuqGlTc4MsM=";
+    hash = "sha256-abRM2ZWfA5nyD0YF7BVmZ6AU37+qd7osjQVGqhjdEV0=";
   };
 
   frontend = buildNpmPackage (finalAttrs: {
