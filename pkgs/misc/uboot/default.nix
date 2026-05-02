@@ -115,14 +115,12 @@ let
         ]
         ++ extraMakeFlags;
 
-        passAsFile = [ "extraConfig" ];
-
         configurePhase = ''
           runHook preConfigure
 
           make -j$NIX_BUILD_CORES ${defconfig}
 
-          cat $extraConfigPath >> .config
+          printf "%s" "$extraConfig" >> .config
 
           runHook postConfigure
         '';
@@ -145,17 +143,17 @@ let
 
         dontStrip = true;
 
-        meta =
+        __structuredAttrs = true;
 
-          {
-            homepage = "https://www.denx.de/wiki/U-Boot/";
-            description = "Boot loader for embedded systems";
-            license = lib.licenses.gpl2Plus;
-            maintainers = with lib.maintainers; [
-              lopsided98
-            ];
-          }
-          // extraMeta;
+        meta = {
+          homepage = "https://www.denx.de/wiki/U-Boot/";
+          description = "Boot loader for embedded systems";
+          license = lib.licenses.gpl2Plus;
+          maintainers = with lib.maintainers; [
+            lopsided98
+          ];
+        }
+        // extraMeta;
       }
       // removeAttrs args [
         "extraMeta"
