@@ -11000,8 +11000,6 @@ with pkgs;
 
   run-npush = callPackage ../by-name/np/npush/run.nix { };
 
-  openloco = pkgsi686Linux.callPackage ../games/openloco { };
-
   openraPackages_2019 = import ../games/openra_2019 {
     inherit lib;
     pkgs = pkgs.__splicedPackages;
