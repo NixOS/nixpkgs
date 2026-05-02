@@ -7,6 +7,7 @@
   writableTmpDirAsHomeHook,
   ripgrep,
   makeBinaryWrapper,
+  stdenvNoCC,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
@@ -65,7 +66,22 @@ buildNpmPackage (finalAttrs: {
 
     # Clean up now-dangling .bin symlinks
     find "$nm/.bin" -xtype l -delete
+
+  ''
+  + ''
+    # koffi vendors native addons for many platforms
+    # The non-Darwin ones are ELF files, which makes the Darwin
+    # audit-tmpdir hook try to inspect their RPATHs with patchelf (not
+    # available on Darwin)
+    find "$nm/koffi/build/koffi" -mindepth 1 -maxdepth 1 -type d \
+      ! -name '${
+        if stdenvNoCC.hostPlatform.isDarwin then
+          "darwin_*"
+        else
+          "${stdenvNoCC.hostPlatform.parsed.kernel.name}_*"
+      }' -exec rm -r {} +
   '';
+
   postFixup = "wrapProgram $out/bin/pi --prefix PATH : ${lib.makeBinPath [ ripgrep ]}";
 
   doInstallCheck = true;
