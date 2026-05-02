@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thedesk";
-  version = "25.3.1";
+  version = "25.4.0";
 
   src = fetchurl {
     url = "https://github.com/cutls/thedesk-next/releases/download/v${finalAttrs.version}/thedesk-next_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-DNZVHSd9dG4h6lv0PoUUaBaA/ijJJtX8d9Qy5iPdLoc=";
+    hash = "sha256-O+rsTZpm70KuGcCxAt7G75vIZseF03repNOxzoczr24=";
   };
 
   nativeBuildInputs = [
