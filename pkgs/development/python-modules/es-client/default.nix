@@ -7,7 +7,7 @@
   dotmap,
   ecs-logging,
   elastic-transport,
-  elasticsearch8,
+  elasticsearch9,
   fetchFromGitHub,
   hatchling,
   mock,
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     dotmap
     ecs-logging
     elastic-transport
-    elasticsearch8
+    elasticsearch9
     pyyaml
     tiered-debug
     voluptuous
