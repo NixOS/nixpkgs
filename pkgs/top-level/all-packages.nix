@@ -1718,18 +1718,6 @@ with pkgs;
     enableSSH = true;
   };
 
-  easycrypt = callPackage ../applications/science/logic/easycrypt {
-    why3 = pkgs.why3.override {
-      ideSupport = false;
-      coqPackages = {
-        coq = null;
-        flocq = null;
-      };
-    };
-  };
-
-  easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
-
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
   espanso-wayland = espanso.override {
