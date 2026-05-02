@@ -16,7 +16,6 @@
   selinuxSupport ? false,
   libselinux,
   libsepol,
-  texinfo,
   # No openssl in default version, so openssl-induced rebuilds aren't too big.
   # It makes *sum functions significantly faster.
   minimal ? true,
@@ -46,20 +45,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.10"; # TODO: remove texinfo dep and the patches on next release.
+  version = "9.11";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FlNamt8LEANzZOLWEqrT2fTso6NElJztdNEvr0vVHSU=";
+    hash = "sha256-OUAk7aCllVIXztqc0SAeZdyPo6opwpURNaSVIdV8PMM=";
   };
-
-  patches = [
-    ./fix-kill-doctest.patch
-    # See https://github.com/NixOS/nixpkgs/pull/487081#issuecomment-3953615275,
-    # https://github.com/NixOS/nixpkgs/issues/495290,
-    # and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=80477
-    ./tests-notty-sighup.patch
-  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -144,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     perl
-    texinfo
     xz.bin
   ];
 
@@ -249,8 +239,12 @@ stdenv.mkDerivation (finalAttrs: {
       # binlore only spots exec in runcon on some platforms (i.e., not
       # darwin; see comment on inverse case below)
       binlore.out = binlore.synthesize finalAttrs.finalPackage ''
-        execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
-        execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+        execer can bin/${
+          if withPrefix then "g" else ""
+        }{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
+        execer cannot bin/${
+          if withPrefix then "g" else ""
+        }{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
       '';
     }
     // optionalAttrs (singleBinary == false) {
@@ -259,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
       # hard-set it so people working on macOS don't miss cases of
       # runcon until ofBorg fails.
       binlore.out = binlore.synthesize finalAttrs.finalPackage ''
-        execer can bin/runcon
+        execer can bin/${if withPrefix then "g" else ""}runcon
       '';
     };
 
