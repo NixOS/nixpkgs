@@ -11868,6 +11868,11 @@
     github = "j0xaf";
     githubId = 932697;
   };
+  j10ccc = {
+    name = "popWheat";
+    github = "j10ccc";
+    githubId = 49830650;
+  };
   j1nxie = {
     email = "rylie@rylie.moe";
     name = "Nguyen Pham Quoc An";
