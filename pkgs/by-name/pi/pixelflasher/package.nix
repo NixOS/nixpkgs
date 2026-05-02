@@ -10,14 +10,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pixelflasher";
-  version = "8.14.3.1";
+  version = "9.0.2.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "badabing2005";
     repo = "PixelFlasher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ey6wUl/9OaXxnQ17PvnhpBFB21++WbUsRhkGlrr7Yuk=";
+    hash = "sha256-VcuwobtZ+3z06XtE8fHa0Jr0GHlRYi6od8oo/lwSaWo=";
   };
 
   desktopItems = [
