@@ -3467,7 +3467,7 @@ with pkgs;
     enableLTO = false;
   };
 
-  gnat = gnat13; # When changing this, update also gnatPackages
+  gnat = pkgs."gnat${toString default-gcc-version}"; # When changing this, update also gnatPackages
 
   gnat13 = wrapCC (
     gcc13.cc.override {
@@ -3577,7 +3577,8 @@ with pkgs;
     }
   );
 
-  gnat-bootstrap = gnat-bootstrap13;
+  gnat-bootstrap = pkgs."gnat-bootstrap${toString default-gcc-version}";
+
   gnat-bootstrap13 = wrapCCWith {
     cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "13"; };
     isAlireGNAT = true;
@@ -3602,7 +3603,7 @@ with pkgs;
   gnat14Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat14; });
   gnat15Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat15; });
   gnat16Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat16; });
-  gnatPackages = gnat13Packages;
+  gnatPackages = pkgs."gnat${toString default-gcc-version}Packages";
 
   inherit (gnatPackages)
     gprbuild
