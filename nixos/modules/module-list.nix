@@ -1520,6 +1520,7 @@
   ./services/security/kanidm.nix
   ./services/security/munge.nix
   ./services/security/nginx-sso.nix
+  ./services/security/nvd-sync.nix
   ./services/security/oauth2-proxy-nginx.nix
   ./services/security/oauth2-proxy.nix
   ./services/security/openbao.nix
