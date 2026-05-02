@@ -2,30 +2,20 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchpatch,
   glibcLocales,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "topydo";
-  version = "0.14";
+  version = "0.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "topydo";
     repo = "topydo";
-    rev = finalAttrs.version;
-    sha256 = "1lpfdai0pf90ffrzgmmkadbd86rb7250i3mglpkc82aj6prjm6yb";
+    tag = finalAttrs.version;
+    hash = "sha256-f31tp4VBMv1usViYN50IaGeyQpo3oRSf/WDz99UEpss=";
   };
-
-  patches = [
-    # fixes a failing test
-    (fetchpatch {
-      name = "update-a-test-reference-ics-file.patch";
-      url = "https://github.com/topydo/topydo/commit/9373bb4702b512b10f0357df3576c129901e3ac6.patch";
-      hash = "sha256-JpyQfryWSoJDdyzbrESWY+RmRbDw1myvTlsFK7+39iw=";
-    })
-  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     arrow
@@ -44,7 +34,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # Skip test that has been reported multiple times upstream without result:
   # bram85/topydo#271, bram85/topydo#274.
   preCheck = ''
-    substituteInPlace test/test_revert_command.py --replace 'test_revert_ls' 'dont_test_revert_ls'
+    substituteInPlace test/test_revert_command.py --replace-fail 'test_revert_ls' 'dont_test_revert_ls'
   '';
 
   env.LC_ALL = "en_US.UTF-8";
