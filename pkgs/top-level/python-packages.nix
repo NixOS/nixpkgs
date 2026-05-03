@@ -3341,8 +3341,6 @@ self: super: with self; {
 
   coinbase-advanced-py = callPackage ../development/python-modules/coinbase-advanced-py { };
 
-  coinbase-commerce = callPackage ../development/python-modules/coinbase-commerce { };
-
   coincidence = callPackage ../development/python-modules/coincidence { };
 
   coincurve = callPackage ../development/python-modules/coincurve { inherit (pkgs) secp256k1; };
