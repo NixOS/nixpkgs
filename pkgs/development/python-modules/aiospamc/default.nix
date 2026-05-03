@@ -67,8 +67,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
 
-  meta = with lib; {
-    description = "An asyncio-based library to communicate with SpamAssassin's SPAMD service";
+  meta = {
+    description = "Asyncio-based library to communicate with SpamAssassin's SPAMD service";
     longDescription = ''
       Python asyncio-based library that implements the SPAMC/SPAMD client protocol used by SpamAssassin.
       It allows you to ping, check, and report messages to a SpamAssassin server asynchronously.
