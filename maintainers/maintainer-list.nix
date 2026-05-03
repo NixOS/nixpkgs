@@ -25819,6 +25819,11 @@
     github = "soyouzpanda";
     githubId = 23421201;
   };
+  soymadip = {
+    name = "soymadip";
+    github = "soymadip";
+    githubId = 84225810;
+  };
   soywod = {
     name = "Clément DOUIN";
     email = "clement.douin@posteo.net";
