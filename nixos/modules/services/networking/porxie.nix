@@ -18,7 +18,7 @@ in
       default = [ ];
       description = ''
         Files to load environment variables from. Use for secrets such as
-        {env}`PORXIE_SERVER_AUTH_TOKEN` and {env}`PORXIE_POLICY_REQUEST_HEADERS`.
+        {env}`PORXIE_SERVER_ADMIN_PASSWORD` and {env}`PORXIE_POLICY_REQUEST_HEADERS`.
       '';
     };
 
@@ -29,7 +29,7 @@ in
         [README](https://codeberg.org/Blooym/porxie/src/branch/main/README.md)
         for detailed information about application configuration.
 
-        Secrets such as {option}`settings.PORXIE_SERVER_AUTH_TOKEN` should be set via
+        Secrets such as {option}`settings.PORXIE_SERVER_ADMIN_PASSWORD` should be set via
         {option}`environmentFiles` rather than here, as values set here will
         be readable in the Nix store.
       '';
@@ -56,13 +56,15 @@ in
               systems, the `unix:` prefix for a UNIX socket path (e.g. `unix:/run/porxie/porxie.sock`).
             '';
           };
-          PORXIE_SERVER_AUTH_TOKEN = lib.mkOption {
+          PORXIE_SERVER_ADMIN_PASSWORD = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
-              Bearer token for authenticating admin requests.
+              Admin password for authenticating privileged requests.
 
               When unset, all authenticated endpoints will reject requests with HTTP 401.
+
+              Authenticated requests always expect the username `admin` as per specification.
 
               Should be set via {option}`environmentFiles` rather than directly.
             '';
@@ -88,9 +90,8 @@ in
             description = ''
               Maximum blob size that can be fetched and served.
 
-              Blobs that exceed this limit will return HTTP 413. Setting this too high can
-              exhaust process or system memory. The minimum value is 512kb and the maximum is
-              the system's total memory.
+              Blobs that exceed this limit will return HTTP 413. The minimum value is 512kb
+              and the maximum is the system's total memory.
             '';
           };
           PORXIE_BLOB_CACHE_HEADER = lib.mkOption {
@@ -162,8 +163,7 @@ in
               For production deployments, a CDN or caching layer in front of this server is
               recommended for lower latency and better global availability.
 
-              Setting this too high can exhaust process or system memory. The minimum value is
-              8mb and the maximum is the system's total memory.
+              The minimum value is 8mb and the maximum is the system's total memory.
             '';
           };
           PORXIE_CACHE_BLOB_TTI = lib.mkOption {
@@ -194,8 +194,7 @@ in
             description = ''
               Policy service URL that DID+CID pairs will be checked against.
 
-              Requests are sent as HTTP GET `<url>/<did>/<cid>`. The service is expected to
-              return HTTP 200 (OK) if permitted or HTTP 410 (GONE) if restricted.
+              Requests are sent via XRPC to `<url>/xrpc/dev.blooym.porxie.getBlobPolicy?did=<did>&cid=<cid>`.
             '';
           };
           PORXIE_POLICY_REQUEST_HEADERS = lib.mkOption {
@@ -206,6 +205,8 @@ in
               Headers sent alongside all requests to the policy service.
               Each header must be in the format `Name: value`.
 
+              As pipes are used as a delimiter, they cannot be contained in header values.
+
               Should be set via {option}`environmentFiles` for sensitive values such as API keys.
             '';
           };
@@ -214,8 +215,7 @@ in
             default = null;
             apply = v: if v != null then lib.boolToString v else null;
             description = ''
-              Allow requests to proceed if the policy service is unavailable or returns an
-              unexpected status code.
+              Allow requests to proceed if the policy service is unavailable.
 
               Warning: enabling this means restricted blobs may be served when the policy
               service is unreachable.

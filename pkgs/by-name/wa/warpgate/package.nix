@@ -20,9 +20,7 @@ rustPlatform.buildRustPackage (
 
       patches = [ ./web-ui-package-json.patch ];
 
-      npmDepsHash = "sha256-jgsNF93DkEVgPGzdi192HKoSHPYhdrtog28jZvOLK6E=";
-      # Fix peer dependency conflicts with ESLint 9.
-      npmFlags = [ "--legacy-peer-deps" ];
+      npmDepsHash = "sha256-jRY3vR9rwqQc1WjxIuPb797ZXXrgDYNZ947fERxJ0zA=";
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
@@ -37,19 +35,20 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "warpgate";
-    version = "0.18.0";
+    version = "0.23.1";
 
     src = fetchFromGitHub {
       owner = "warp-tech";
       repo = "warpgate";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-GLY/VGEKB6gFNTbBlbhpmqQZ62pk2wd6JwWwy4Tz0FE=";
+      hash = "sha256-GayjhHkD9LtuR7dz7tw1smz4fPwOl8R9X9QTgx9snnM=";
     };
 
-    cargoHash = "sha256-hwAtj8tTDsYgzuDobMg97wepKKIpohSVClyRiaDd+8w=";
+    cargoHash = "sha256-Y3oVvQkZDmGmmxUYrWSP6qKZ4hgjly+t98PRmi88oaY=";
 
     patches = [
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
+      ./remove-nightly-rustflags.patch
     ];
 
     env.RUSTFLAGS = "--cfg tokio_unstable";

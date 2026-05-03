@@ -44,9 +44,10 @@ buildGoModule rec {
     homepage = "https://git.sr.ht/~whynothugo/ImapGoose";
     changelog = "https://git.sr.ht/~whynothugo/ImapGoose/refs/v${version}";
     license = lib.licenses.isc;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "imapgoose";
     maintainers = with lib.maintainers; [
+      philocalyst
       bobberb
     ];
   };

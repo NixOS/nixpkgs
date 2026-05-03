@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs,
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs_20
+    nodejs
     pnpmConfigHook
     pnpm_9
     makeWrapper
@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/lib/openspec
 
     substituteInPlace bin/openspec.js \
-      --replace '#!/usr/bin/env node' '#!${nodejs_20}/bin/node' \
+      --replace '#!/usr/bin/env node' '#!${nodejs}/bin/node' \
       --replace "../dist" "$out/lib/openspec/dist"
     install -Dm755 bin/openspec.js $out/bin/openspec
 

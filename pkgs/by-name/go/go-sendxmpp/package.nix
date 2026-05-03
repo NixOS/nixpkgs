@@ -9,17 +9,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-sendxmpp";
-  version = "0.15.5";
+  version = "0.15.6";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "mdosch";
     repo = "go-sendxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uOJ7pI+6ETjb0iRMM3XDeztXHjxNQlU05ODTiBi72LY=";
+    hash = "sha256-HoK13rhsH5OyRHLuuCC+zGpcrK1591Zqy0hUinHbhcE=";
   };
 
-  vendorHash = "sha256-tt70h/JG8t9tbhqJoPu0KPVJ8ZbNKq0h7oLfiPAL4jg=";
+  vendorHash = "sha256-Zy3oewVeoKEIOmh2lxyjBIHNCJX/YtWxuGOk6IM9CXs=";
 
   passthru = {
     tests = { inherit (nixosTests) ejabberd prosody; };
