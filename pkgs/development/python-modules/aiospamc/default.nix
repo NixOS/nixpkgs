@@ -11,7 +11,6 @@
   pytest-mock,
   mock,
   trustme,
-  nix-update-script,
   poetry-core,
   pythonRelaxDepsHook,
   uv-build,
@@ -39,12 +38,10 @@ buildPythonPackage (finalAttrs: {
     uv-build
   ];
 
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'uv_build>=0.7.19,<0.8.0' 'uv_build>=0.7.19'
   '';
-
   dependencies = [
     certifi
     loguru
@@ -66,7 +63,6 @@ buildPythonPackage (finalAttrs: {
     "tests/test_cli.py"
   ];
 
-
   meta = {
     description = "Asyncio-based library to communicate with SpamAssassin's SPAMD service";
     longDescription = ''
@@ -74,7 +70,8 @@ buildPythonPackage (finalAttrs: {
       It allows you to ping, check, and report messages to a SpamAssassin server asynchronously.
     '';
     homepage = "https://github.com/mjcaley/aiospamc";
-    license = licenses.mit;
+    changelog = "https://github.com/mjcaley/aiospamc/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ philocalyst ];
   };
 })
