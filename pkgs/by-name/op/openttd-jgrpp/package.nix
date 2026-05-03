@@ -1,4 +1,5 @@
 {
+  lib,
   fetchFromGitHub,
   openttd,
   zstd,
@@ -22,6 +23,7 @@ openttd.overrideAttrs (oldAttrs: rec {
     homepage = "https://github.com/JGRennison/OpenTTD-patches";
     changelog = "https://github.com/JGRennison/OpenTTD-patches/blob/jgrpp-${version}/jgrpp-changelog.md";
     mainProgram = "openttd";
+    maintainers = with lib.maintainers; [ artifycz ];
   };
 
 })
