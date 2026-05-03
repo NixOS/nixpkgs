@@ -33,6 +33,8 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  extraPkgs = pkgs: [ pkgs.libnotify ];
+
   extraBwrapArgs = [
     "--setenv _JAVA_AWT_WM_NONREPARENTING 1"
   ];
