@@ -11,6 +11,14 @@ let
   systemd = config.systemd.package;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "systemd"
+      "coredump"
+      "extraConfig"
+    ] "Use systemd.coredump.settings.Coredump instead.")
+  ];
+
   options = {
     systemd.coredump.enable = lib.mkOption {
       default = true;
@@ -22,13 +30,17 @@ in
       '';
     };
 
-    systemd.coredump.extraConfig = lib.mkOption {
-      default = "";
-      type = lib.types.lines;
-      example = "Storage=journal";
+    systemd.coredump.settings.Coredump = lib.mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
+      };
+      example = {
+        Storage = "journal";
+      };
       description = ''
-        Extra config options for systemd-coredump. See {manpage}`coredump.conf(5)` man page
-        for available options.
+        Settings for systemd-coredump. See {manpage}`coredump.conf(5)` for
+        available options.
       '';
     };
   };
@@ -42,10 +54,7 @@ in
       ];
 
       environment.etc = {
-        "systemd/coredump.conf".text = ''
-          [Coredump]
-          ${cfg.extraConfig}
-        '';
+        "systemd/coredump.conf".text = utils.systemdUtils.lib.settingsToSections cfg.settings;
 
         # install provided sysctl snippets
         "sysctl.d/50-coredump.conf".source =
