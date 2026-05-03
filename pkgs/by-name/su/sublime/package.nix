@@ -7,6 +7,7 @@
   cairo,
   gtk2,
   makeDesktopItem,
+  gccNGPackages_15,
 }:
 let
   libPath = lib.makeLibraryPath [
@@ -14,6 +15,7 @@ let
     libx11
     gtk2
     cairo
+    gccNGPackages_15.libstdcxx
   ];
 in
 
@@ -26,7 +28,6 @@ stdenv.mkDerivation rec {
       fetchurl {
         name = "sublimetext-${version}.tar.bz2";
         urls = [
-          "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%20${version}.tar.bz2"
           "https://download.sublimetext.com/Sublime%20Text%20${version}.tar.bz2"
         ];
         sha256 = "026g5mppk28lzzzn9ibykcqkrd5msfmg0sc0z8w8jd7v3h28wcq7";
