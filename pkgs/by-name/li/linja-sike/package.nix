@@ -1,23 +1,32 @@
-{ lib, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  installFonts,
+}:
 
-fetchurl {
+stdenvNoCC.mkDerivation {
   pname = "linja-sike";
   version = "5.0";
 
-  url = "https://wyub.github.io/tokipona/linja-sike-5.otf";
+  src = fetchurl {
+    url = "https://lipamanka.gay/linja-sike-5.otf";
+    hash = "sha256-TJcKIK6byBb9/zyoKHTmhMpOGwHYG/ZPmm72huSO/Yo=";
+  };
 
-  downloadToTemp = true;
-  recursiveHash = true;
-  postFetch = ''
-    install -D $downloadedFile $out/share/fonts/opentype/linja-sike.otf
-  '';
+  dontUnpack = true;
 
-  sha256 = "sha256-LkjG1Oao/LqKwI+eRZPzShTh7lz5DkooltXm7vxZC9w=";
+  __structuredAttrs = true;
+
+  stripDeps = true;
+
+  postPatch = "cp $src linja-sike-5.otf";
+
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Extensive sitelen pona font by lipamanka";
     homepage = "https://docs.google.com/document/d/1d8kUIAVlB-JNgK3LWr_zVCuUOZTh2hF7CfC6xQgxsBs/edit?usp=sharing";
-    downloadPage = "https://wyub.github.io/tokipona/linjasike";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ somasis ];
