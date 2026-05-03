@@ -7,7 +7,7 @@ import sys
 import tempfile
 import threading
 import traceback
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator, Iterator
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
 from pathlib import Path
@@ -300,7 +300,7 @@ class Driver:
                         f"Error during cleanup of vhost-device-vsock process: {e}"
                     )
 
-    def subtest(self, name: str) -> Iterator[None]:
+    def subtest(self, name: str) -> Generator[None]:
         """Group logs under a given test name"""
         with self.logger.subtest(name):
             try:
