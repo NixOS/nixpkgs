@@ -85,13 +85,10 @@ lib.makeOverridable (
         buildInputs ? null,
       }@args:
       let
-        compatArgs =
-          lib.optionalAttrs (args ? nativeBuildInputs) {
-            inherit nativeBuildInputs;
-          }
-          // lib.optionalAttrs (args ? buildInputs) {
-            inherit buildInputs;
-          };
+        compatArgs = {
+          ${if args ? nativeBuildInputs then "nativeBuildInputs" else null} = nativeBuildInputs;
+          ${if args ? buildInputs then "buildInputs" else null} = buildInputs;
+        };
       in
       compatArgs
       // derivationArgs

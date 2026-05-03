@@ -48,6 +48,8 @@ let
     seq
     ;
 
+  inherit (lib.strings) sanitizeDerivationName;
+
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
 
@@ -399,16 +401,14 @@ let
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
       noNonNativeDeps =
-        (
-          depsBuildTarget
-          ++ depsBuildTargetPropagated
-          ++ depsHostHost
-          ++ depsHostHostPropagated
-          ++ buildInputs
-          ++ propagatedBuildInputs
-          ++ depsTargetTarget
-          ++ depsTargetTargetPropagated
-        ) == [ ];
+        depsBuildTarget == [ ]
+        && depsBuildTargetPropagated == [ ]
+        && depsHostHost == [ ]
+        && depsHostHostPropagated == [ ]
+        && buildInputs == [ ]
+        && propagatedBuildInputs == [ ]
+        && depsTargetTarget == [ ]
+        && depsTargetTargetPropagated == [ ];
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
       concretizeFlagImplications =
@@ -548,7 +548,7 @@ let
               # it again.
               staticMarker = stdenvStaticMarker;
             in
-            lib.strings.sanitizeDerivationName (
+            sanitizeDerivationName (
               if attrs ? name then
                 attrs.name + hostSuffix
               else
@@ -594,7 +594,6 @@ let
           propagatedBuildInputs = propagatedHostTargetOutputs;
           depsTargetTargetPropagated = propagatedTargetTargetOutputs;
 
-          # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags =
             configureFlags
             ++ (
@@ -806,9 +805,8 @@ let
       );
 
     let
-      env' = env // {
-        ${if meta ? mainProgram then "NIX_MAIN_PROGRAM" else null} = meta.mainProgram;
-      };
+
+      env' = if meta ? mainProgram then env // { NIX_MAIN_PROGRAM = meta.mainProgram; } else env;
 
       derivationArg = makeDerivationArgument (
         removeAttrs attrs [

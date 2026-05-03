@@ -468,19 +468,14 @@ stdenvNoCC.mkDerivation {
       libc_lib
       ;
     default_hardening_flags_str = toString defaultHardeningFlags;
-  }
-  // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
     # These will become empty strings when not targeting Darwin.
-    inherit (targetPlatform)
-      darwinPlatform
-      darwinSdkVersion
-      darwinMinVersion
-      darwinMinVersionVariable
-      ;
-  }
-  // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
+    darwinPlatform = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinPlatform;
+    darwinSdkVersion = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinSdkVersion;
+    darwinMinVersion = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinMinVersion;
+    darwinMinVersionVariable = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinMinVersionVariable;
     # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
-    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
+    ${if stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null then "fallback_sdk" else null} =
+      apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =

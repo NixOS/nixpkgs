@@ -26,9 +26,7 @@
     };
     passthru.tests = {
       test = tests.rust-hooks.cargoBuildHook;
-    }
-    // lib.optionalAttrs (stdenv.isLinux) {
-      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoBuildHook;
+      ${if stdenv.isLinux then "testCross" else null} = pkgsCross.riscv64.tests.rust-hooks.cargoBuildHook;
     };
   } ./cargo-build-hook.sh;
 
@@ -40,9 +38,7 @@
     };
     passthru.tests = {
       test = tests.rust-hooks.cargoCheckHook;
-    }
-    // lib.optionalAttrs (stdenv.isLinux) {
-      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoCheckHook;
+      ${if stdenv.isLinux then "testCross" else null} = pkgsCross.riscv64.tests.rust-hooks.cargoCheckHook;
     };
   } ./cargo-check-hook.sh;
 
@@ -53,9 +49,8 @@
     };
     passthru.tests = {
       test = tests.rust-hooks.cargoInstallHook;
-    }
-    // lib.optionalAttrs (stdenv.isLinux) {
-      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoInstallHook;
+      ${if stdenv.isLinux then "testCross" else null} =
+        pkgsCross.riscv64.tests.rust-hooks.cargoInstallHook;
     };
   } ./cargo-install-hook.sh;
 
@@ -67,9 +62,8 @@
     };
     passthru.tests = {
       test = tests.rust-hooks.cargoNextestHook;
-    }
-    // lib.optionalAttrs (stdenv.isLinux) {
-      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoNextestHook;
+      ${if stdenv.isLinux then "testCross" else null} =
+        pkgsCross.riscv64.tests.rust-hooks.cargoNextestHook;
     };
   } ./cargo-nextest-hook.sh;
 
@@ -106,9 +100,7 @@
 
     passthru.tests = {
       test = tests.rust-hooks.cargoSetupHook;
-    }
-    // lib.optionalAttrs (stdenv.isLinux) {
-      testCross = pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
+      ${if stdenv.isLinux then "testCross" else null} = pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
     };
   } ./cargo-setup-hook.sh;
 
