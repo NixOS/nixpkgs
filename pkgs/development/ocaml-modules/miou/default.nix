@@ -20,8 +20,8 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     description = "Composable concurrency primitives for OCaml";
-    homepage = "https://git.robur.coop/robur/miou";
-    changelog = "https://git.robur.coop/robur/miou/src/tag/v${finalAttrs.version}/CHANGES.md";
+    homepage = "https://github.com/robur-coop/miou";
+    changelog = "https://github.com/robur-coop/miou/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
