@@ -1,0 +1,61 @@
+From b1c502726f304eb01ec38db56d6f78d64dae984d Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Tue, 1 Jul 2025 22:58:29 +0800
+Subject: [PATCH] Replace hardcoded PTY and zip-tools paths with placeholders;
+ Remove runtime chmod
+
+---
+ src/app.ts   | 10 ----------
+ src/const.ts |  9 ++-------
+ 2 files changed, 2 insertions(+), 17 deletions(-)
+
+diff --git a/src/app.ts b/src/app.ts
+index 46af2d65..06c1feb3 100755
+--- a/src/app.ts
++++ b/src/app.ts
+@@ -99,16 +99,6 @@ try {
+   process.exit(-1);
+ }
+ 
+-(function initCompressModule() {
+-  try {
+-    fs.chmodSync(GOLANG_ZIP_PATH, 0o755);
+-    fs.chmodSync(PTY_PATH, 0o755);
+-  } catch (error: any) {
+-    logger.error(error?.message);
+-    logger.error($t("TXT_CODE_a8b245fa"));
+-  }
+-})();
+-
+ // Initialize Websocket server
+ io.on("connection", (socket: Socket) => {
+   protocol.addGlobalSocket(socket);
+diff --git a/src/const.ts b/src/const.ts
+index 98226dd3..90e7c03d 100755
+--- a/src/const.ts
++++ b/src/const.ts
+@@ -2,19 +2,14 @@ import os from "os";
+ import path from "path";
+ 
+ const SYS_INFO = `${os.platform()}_${os.arch()}${os.platform() === "win32" ? ".exe" : ""}`;
+-const ptyName = `pty_${SYS_INFO}`;
+ const frpcName = `frpc_${SYS_INFO}`;
+-const PTY_PATH = path.normalize(path.join(process.cwd(), "lib", ptyName));
++const PTY_PATH = "@ptyPath@";
+ const FRPC_PATH = path.normalize(path.join(process.cwd(), "lib", frpcName));
+ const FILENAME_BLACKLIST = ["\\", "/", ".", "'", '"', "?", "*", "<", ">"];
+ const LOCAL_PRESET_LANG_PATH = path.normalize(path.join(process.cwd(), "language"));
+ const IGNORE = "[IGNORE_LOG]";
+-const SYSTEM_TYPE = os.platform();
+ const ZIP_TIMEOUT_SECONDS = 60 * 40;
+-const GOLANG_ZIP_NAME = `file_zip_${SYSTEM_TYPE}_${os.arch()}${
+-  SYSTEM_TYPE === "win32" ? ".exe" : ""
+-}`;
+-const GOLANG_ZIP_PATH = path.normalize(path.join(process.cwd(), "lib", GOLANG_ZIP_NAME));
++const GOLANG_ZIP_PATH = "@zipToolsPath@";
+ 
+ export {
+   GOLANG_ZIP_PATH,
+-- 
+2.50.1
+

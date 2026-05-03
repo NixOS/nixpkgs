@@ -1,0 +1,25 @@
+From 5aaec7dc27f948aced29536716e24c065912c3cc Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 2 Jul 2025 01:00:14 +0800
+Subject: [PATCH] Replace static path with placeholder in panel
+
+---
+ src/app.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/app.ts b/src/app.ts
+index 724d7ebc..da012465 100755
+--- a/src/app.ts
++++ b/src/app.ts
+@@ -176,7 +176,7 @@ _  /  / / / /___  ____/ /_  /  / / / /_/ /_  / / / /_/ /_  /_/ //  __/  /
+   }
+   app.use(protocolMiddleware);
+   app.use(
+-    koaStatic(path.join(process.cwd(), "public"), {
++    koaStatic("@frontendDist@", {
+       maxAge: 10 * 24 * 60 * 60
+     })
+   );
+-- 
+2.50.1
+
