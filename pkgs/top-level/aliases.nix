@@ -1213,6 +1213,7 @@ mapAliases {
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi3 = linuxKernel.kernels.linux_rpi3;
   linux_rpi4 = linuxKernel.kernels.linux_rpi4;
+  linuxConsoleTools = warnAlias "'linuxConsoleTools' has been renamed to 'linuxconsoletools'" linuxconsoletools; # Added 2026-02-08
   linuxPackages-libre = throw "linux_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages-rt = throw "linuxPackages-rt has been removed due to lack of maintenance"; # Added 2026-03-24
   linuxPackages-rt_latest = throw "linuxPackages-rt_latest has been removed due to lack of maintenance"; # Added 2026-03-24
