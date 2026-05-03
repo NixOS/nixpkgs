@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   stdenv,
   # for passthru.plugins
   pkgs,
@@ -34,6 +34,14 @@ let
       hash = "sha256-fNOznaFzWJ4Dve9U1+E4xPaznnyxae2jHNaBCdJzDyQ=";
       fetchSubmodules = true;
     };
+
+    patches = [
+      (fetchpatch2 {
+        name = "fix-shiboken6-type-index-case.patch";
+        url = "https://github.com/rizinorg/cutter/commit/07fea9c772dc573588dc2e5771f0740ee1883738.patch?full_index=1";
+        hash = "sha256-/C/s+Ui5F7MCxbzbChQ5Tv/oUHUQxXmk9xOnNI80xwQ=";
+      })
+    ];
 
     nativeBuildInputs = [
       cmake
