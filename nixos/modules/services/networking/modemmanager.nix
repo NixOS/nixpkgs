@@ -71,6 +71,8 @@ in
         pkgs.libqmi
         pkgs.libmbim
       ];
+
+      wantedBy = [ "network.target" ];
     };
 
     /*
