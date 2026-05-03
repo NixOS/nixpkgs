@@ -2784,7 +2784,7 @@ let
 
       kilocode.kilo-code = callPackage ./kilocode.kilo-code { };
 
-      kravets.vscode-publint = buildVscodeMarketplaceExtension {
+      kravets.vscode-publint = buildVscodeMarketplaceExtension (finalAttrs: {
         mktplcRef = {
           name = "vscode-publint";
           publisher = "Kravets";
@@ -2792,14 +2792,18 @@ let
           hash = "sha256-GfIbQajdBpC0i8x7YlKYgpBwweWop4OBUU7dIDi9Yvk=";
         };
         meta = {
-          changelog = "https://marketplace.visualstudio.com/items/Kravets.vscode-publint/changelog";
+          changelog =
+            let
+              version' = lib.replaceString "." "" finalAttrs.version;
+            in
+            "https://github.com/kravetsone/vscode-publint/blob/master/CHANGELOG.md#${version'}";
           description = "Lint packaging errors in VS Code with publint";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Kravets.vscode-publint";
           homepage = "https://github.com/kravetsone/vscode-publint";
           license = lib.licenses.mit;
           maintainers = [ ];
         };
-      };
+      });
 
       kubukoz.nickel-syntax = buildVscodeMarketplaceExtension {
         mktplcRef = {
