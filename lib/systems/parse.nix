@@ -444,7 +444,8 @@ rec {
   isCompatible =
     with cpuTypes;
     a: b:
-    any id [
+    b == a
+    || any id [
       # x86
       (b == i386 && isCompatible a i486)
       (b == i486 && isCompatible a i586)
@@ -482,9 +483,6 @@ rec {
 
       # SPARC
       (b == sparc && isCompatible a sparc64)
-
-      # identity
-      (b == a)
     ];
 
   ################################################################################
