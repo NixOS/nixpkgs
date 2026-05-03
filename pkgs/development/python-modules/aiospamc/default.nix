@@ -39,9 +39,6 @@ buildPythonPackage (finalAttrs: {
     uv-build
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
