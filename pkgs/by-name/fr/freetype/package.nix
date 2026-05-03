@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freetype";
-  version = "2.14.2";
+  version = "2.14.3";
 
   src =
     let
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://savannah/freetype/freetype-${version}.tar.xz";
-      sha256 = "sha256-S2Lcq0ySChqGA2mTMiGBQ2LmmeJvVXklFtZx5v9VteE=";
+      sha256 = "sha256-NrxPHMQTM1No7mVsQq/KZcWjmH6HaMwozxG6d154Wl8=";
     };
 
   propagatedBuildInputs = [
