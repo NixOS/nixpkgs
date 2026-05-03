@@ -3238,6 +3238,11 @@
     github = "beeb";
     githubId = 703631;
   };
+  beeelias = {
+    name = "beeelias";
+    github = "beeelias";
+    githubId = 236911673;
+  };
   bellackn = {
     name = "Nico Bellack";
     email = "blcknc@pm.me";
