@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchMavenArtifact,
   fixDarwinDylibNames,
-  jdk11,
+  jdk17,
   lib,
   libbsd,
   libuuid,
@@ -18,14 +18,14 @@
 let
   version = aeron.version;
 
-  sbeAll_1_31_1 = fetchMavenArtifact {
+  sbeAll_1_37_1 = fetchMavenArtifact {
     groupId = "uk.co.real-logic";
-    version = "1.31.1";
+    version = "1.37.1";
     artifactId = "sbe-all";
-    hash = "sha512-Ypsk8PbShFOxm49u1L+TTuApaW6ECTSee+hHEhmY/jNi5AymHXBWwDMBMkzC25aowiHLJS5EnzLk6hu9Lea93Q==";
+    hash = "sha256-IOsTkpJJCSoB/c0eg1GlWvgLq1QUqf2hnQ7d9vWYOmY=";
   };
 
-  sbeAll = sbeAll_1_31_1;
+  sbeAll = sbeAll_1_37_1;
 
 in
 
@@ -37,16 +37,33 @@ stdenv.mkDerivation {
     owner = "real-logic";
     repo = "aeron";
     tag = version;
-    hash = "sha256-sROEZVOfScrlqMLbfrPtw3LQCQ5TfMcrLiP6j/Z9rSM=";
+    hash = "sha256-JTESN/dWXc/6X0lX4JRdBgC3Y+LYfhcpCaDnMq72Ffo=";
   };
 
-  patches = [
-    ./aeron-all.patch
-    # Use pre-built aeron-all.jar from Maven repo, avoiding Gradle
+  postPatch = ''
+    # Replace aeron-all jar generation with a symbolic link
+    # We use a simplified regex that matches the block
+    sed -i '/add_custom_command(OUTPUT \''${AERON_ALL_JAR}/,/VERBATIM)/c\
+    add_custom_command(OUTPUT ''${AERON_ALL_JAR}\
+        COMMAND ln --symbolic ''${CMAKE_CURRENT_SOURCE_DIR}/aeron-all.jar ''${AERON_ALL_JAR}\
+        DEPENDS ''${AERON_ALL_SOURCES}\
+        WORKING_DIRECTORY ''${CMAKE_CURRENT_SOURCE_DIR}\
+        COMMENT "Generating aeron-all jar"\
+        VERBATIM)' CMakeLists.txt
 
-    ./aeron-archive-sbe.patch
-    # Use SBE tool to generate C++ codecs, avoiding Gradle
-  ];
+    # Replace C Archive codecs generation with SBE call
+    sed -i '/add_custom_command(OUTPUT \''${GENERATED_C_CODECS}/,/VERBATIM)/c\
+    add_custom_command(OUTPUT \''${GENERATED_C_CODECS}\
+        COMMAND \''${CMAKE_COMMAND} -E env JAVA_HOME=$ENV{JAVA_HOME} BUILD_JAVA_HOME=$ENV{BUILD_JAVA_HOME} BUILD_JAVA_VERSION=$ENV{BUILD_JAVA_VERSION} java -cp sbe.jar -Dsbe.output.dir=\''${ARCHIVE_CODEC_TARGET_DIR}/c -Dsbe.target.language=C -Dsbe.target.namespace=aeron_archive_client uk.co.real_logic.sbe.SbeTool \''${CODEC_SCHEMA}\
+        DEPENDS \''${CODEC_SCHEMA} aeron-all-jar\
+        WORKING_DIRECTORY \''${ARCHIVE_CODEC_WORKING_DIR}\
+        COMMENT "Generating C Archive codecs"\
+        VERBATIM)' aeron-archive/src/main/c/CMakeLists.txt
+
+    # Fix the GENERATED_C_CODECS list in aeron-archive/src/main/c/CMakeLists.txt
+    # Replace aeron_c_archive_client with c/aeron_archive_client
+    sed -i 's/aeron_c_archive_client/c\/aeron_archive_client/g' aeron-archive/src/main/c/CMakeLists.txt
+  '';
 
   buildInputs = [
     libbsd
@@ -56,7 +73,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    jdk11
+    jdk17
     makeWrapper
     patchelf
   ]
@@ -97,10 +114,10 @@ stdenv.mkDerivation {
 
       make -j $NIX_BUILD_CORES \
         aeron \
-        aeron_archive_client \
-        aeron_client_shared \
+        aeron_static \
+        aeron_archive_c_client \
+        aeron_archive_c_client_static \
         aeron_driver \
-        aeron_client \
         aeron_driver_static \
         aeronmd
 
