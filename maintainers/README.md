@@ -31,6 +31,14 @@ Commit access to the Nixpkgs repository is not required for that.
 
 In order to do so, add yourself to the [`maintainer-list.nix`](./maintainer-list.nix), and then to the desired package's `meta.maintainers` list, and send a PR with the changes.
 
+Adding someone to `meta.maintainers` is not a simple mechanical change, even for packages that currently have no maintainers.
+Maintainers can use the [nixpkgs-merge-bot](../ci/README.md#nixpkgs-merge-bot) to merge certain pull requests for packages they maintain, including their own backports, so maintainer additions grant real privileges and must be reviewed accordingly.
+
+Reviewers and committers are responsible for making sure maintainer additions receive deliberate review before merging.
+If the package already has maintainers, that includes making sure the current maintainers are notified on the PR, that their consent is collected, and that they are given time to reply before merging.
+For most packages, that means waiting at least a week, just like for other non-endorsed changes affecting a maintained package.
+For sensitive packages, such as security-critical or core infrastructure packages, special attention may be needed and the appropriate level of review should be negotiated with the existing maintainers or relevant teams.
+
 If you're adding yourself as a maintainer as part of another PR (in which you become a maintainer of a package, for example), make your change to
 `maintainer-list.nix` in a separate commit titled `maintainers: add <handle>`.
 
