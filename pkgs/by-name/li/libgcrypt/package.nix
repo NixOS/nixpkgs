@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.gnu.org/software/libgcrypt/";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://github.com/gpg/libgcrypt/blob/libgcrypt-${version}/NEWS";
     description = "General-purpose cryptographic library";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
