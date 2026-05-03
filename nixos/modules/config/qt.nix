@@ -211,7 +211,7 @@ in
         }
       ];
 
-    environment.variables = {
+    environment.sessionVariables = {
       QT_QPA_PLATFORMTHEME = lib.mkIf (cfg.platformTheme != null) cfg.platformTheme;
       QT_STYLE_OVERRIDE = lib.mkIf (cfg.style != null) cfg.style;
     };
