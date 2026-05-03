@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "chroma";
-  version = "2.24.0";
+  version = "2.24.1";
 
   src = fetchFromGitHub {
     owner = "alecthomas";
     repo = "chroma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KfojHrRJjGT03WeBobvBO9pHsJP6I7fSxzcSlmCsaxE=";
+    hash = "sha256-AcXfyqwcDCVG3msdUOA8M5sRgKM6UjUsou9/zKEHnE8=";
   };
 
   vendorHash = "sha256-Vq5k4Jz4r5iZs7Yy175Ubj92eSr4v1xCtbLYhfo3OAg=";

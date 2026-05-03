@@ -471,7 +471,7 @@ recurseIntoAttrs {
     toml = expectDataEqual {
       file = writeTOML "data.toml" { hello = "world"; };
       expected = ''
-        hello = "world"
+        hello = 'world'
       '';
     };
 

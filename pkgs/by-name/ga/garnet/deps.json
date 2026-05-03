@@ -165,6 +165,11 @@
     "hash": "sha256-kmYad8WDMK9lZQBOCrsu3HuzXCbD+oQmRcOZU9++VPI="
   },
   {
+    "pname": "Microsoft.VisualStudio.Threading.Analyzers",
+    "version": "17.14.15",
+    "hash": "sha256-wv0Hi7pjPYeSwDFyaa8baIOyiUraVfudmVtpm0okoYU="
+  },
+  {
     "pname": "System.ClientModel",
     "version": "1.7.0",
     "hash": "sha256-R9tHPr+rDvwaS1RQUHVZHTnmAL9I79OvixuZ2Thp9rw="
