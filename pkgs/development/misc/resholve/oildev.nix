@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  python27,
   callPackage,
   fetchFromGitHub,
   makeWrapper,
@@ -12,6 +11,9 @@
   six,
   typing,
 }:
+let
+  python27 = callPackage ./python27.nix { };
+in
 
 {
   /*

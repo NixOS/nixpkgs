@@ -1,7 +1,6 @@
 {
   lib,
   callPackage,
-  python27,
   fetchFromGitHub,
   installShellFiles,
   rSrc,
@@ -13,7 +12,9 @@
   resholve,
   resholve-utils,
 }:
-
+let
+  python27 = callPackage ./python27.nix { };
+in
 let
   sedparse = python27.pkgs.buildPythonPackage {
     pname = "sedparse";
