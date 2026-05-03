@@ -189,6 +189,7 @@ in
   activation-nix-channel = runTest ./activation/nix-channel.nix;
   activation-nixos-init = runTest ./activation/nixos-init.nix;
   activation-perlless = runTest ./activation/perlless.nix;
+  activation-template-dropin = runTest ./activation/template-dropin.nix;
   activation-var = runTest ./activation/var.nix;
   actual = runTest ./actual.nix;
   adguardhome = runTest ./adguardhome.nix;
