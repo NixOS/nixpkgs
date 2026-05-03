@@ -24,7 +24,7 @@ let
   buildSet = type: flags: name: elements: ''
     set ${name} {
       type ${type}
-      ${lib.optionalString (flags != [ ]) "flags ${lib.concatStringsSep "," flags}"}
+      ${lib.optionalString (flags != null && flags != [ ]) "flags ${lib.concatStringsSep "," flags}"}
       ${lib.optionalString (elements != [ ]) "elements = { ${lib.concatStringsSep "," elements} }"}
     }
   '';
