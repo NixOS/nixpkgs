@@ -8789,10 +8789,6 @@ with pkgs;
 
   cygwin = recurseIntoAttrs (callPackages ../os-specific/cygwin { });
 
-  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
-
-  wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
-
   inherit
     ({
       zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
