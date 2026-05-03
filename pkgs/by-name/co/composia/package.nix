@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "composia";
-  version = "0.1.2";
+  version = "0.2.1";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     owner = "alexma233";
     repo = "composia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fca4lmjR2er+bfhI5yX3prL+02iFsaKfgmdTdaVeiOU=";
+    hash = "sha256-h5Smj0C+6ysO8Iwh0owkdo0FCkBgkKlxpBlCdMftkhw=";
   };
 
-  vendorHash = "sha256-LIts6L6jl2ZmHvOBboB9eBIf3VWraaVMca7/s7h65bU=";
+  vendorHash = "sha256-mLhKepFDJSaaRL1HV+Uf3gcFPS/YZrHL8z8Qw3zd6es=";
 
   subPackages = "cmd/composia cmd/composia-controller cmd/composia-agent";
 
