@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   pkg-config,
   meson,
   ninja,
@@ -64,6 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
     hash = "sha256-/KDqKNHyj5XIQH0lefRwLawIXnx1hkTayotA0eByygw=";
   };
+
+  # FIXME: This patch should be made unconditional the next time librsvg is
+  # updated.
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://gitlab.gnome.org/GNOME/librsvg/-/work_items/1161
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gtk-osx/-/raw/2c1492036ff92d1c87d7b7a4c3c5a7a3f042f825/patches/librsvg-libpixbufloader-install-names.patch";
+      hash = "sha256-kEoKwAUW56KtMQ1zShXSnt2gwA+Ik/i8U8k2Zy9V+Jw=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
