@@ -111,13 +111,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
-  version = "1.12.38";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "k2-fsa";
     repo = "sherpa-onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lzcquKwP68KOem50b4X0+nZ3s2IthiYB76IxfvmJo54=";
+    hash = "sha256-J69BqXuKGD4VDXAGDkE5tJQ9L6CQ3RoqnBAHhwmvyW8=";
   };
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "python" ];
