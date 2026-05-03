@@ -13,12 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "uhexen2";
-  version = "1.5.9";
+  # Switch to stable once it's tagged https://github.com/sezero/uhexen2/issues/76#issuecomment-3488634804
+  version = "1.5.9-unstable-2026-03-15";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/uhexen2/uhexen2";
-    sha256 = "0crdihbnb92awkikn15mzdpkj1x9s34xixf1r7fxxf762m60niks";
-    rev = "4ef664bc41e3998b0d2a55ff1166dadf34c936be";
+    rev = "adbdb95d941c7190984123cd4b7479720a294de6";
+    hash = "sha256-6bPBxaIkhDGC1eUAdamuoOlJU94TJou/ZvyFRFWP4A0=";
   };
 
   buildInputs = [
