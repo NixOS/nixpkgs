@@ -14,7 +14,6 @@ let
     });
   callPackage = lib.callPackageWith pkgsBuildHost;
   source = callPackage ./source.nix { };
-  deps = callPackage ./deps.nix { };
   # not exposed in all-packages
   resholveBuildTimeOnly = removeKnownVulnerabilities resholve;
 in
@@ -23,8 +22,6 @@ rec {
   resholve = (
     callPackage ./resholve.nix {
       inherit (source) rSrc version;
-      inherit (deps.oil) oildev;
-      inherit (deps) configargparse;
       inherit resholve-utils;
       # used only in tests
       resholve = resholveBuildTimeOnly;
