@@ -96,7 +96,10 @@ buildPythonPackage rec {
     description = "Pure Python wrapper for SDL3";
     homepage = "https://github.com/Aermoss/PySDL3";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jansol ];
+    maintainers = with lib.maintainers; [
+      jansol
+      alfarel
+    ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
