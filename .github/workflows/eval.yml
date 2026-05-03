@@ -23,6 +23,10 @@ on:
         default: false
         type: boolean
     secrets:
+      # Can be provided in pull requests because the job it is used in does
+      # not evaluate untrusted code.
+      NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY:
+        required: false
       # Should only be provided in the merge queue, not in pull requests,
       # where we're evaluating untrusted code.
       CACHIX_AUTH_TOKEN_GHA:
@@ -349,10 +353,20 @@ jobs:
               description,
               target_url
             })
+
+      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        if: github.event_name == 'pull_request_target' && vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID
+        id: app-token
+        with:
+          client-id: ${{ vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID }}
+          private-key: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
+
       - name: Request changes if PR is against an inappropriate branch
         if: ${{ github.event_name == 'pull_request_target' }}
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
             require('./nixpkgs/trusted/ci/github-script/check-target-branch.js')({
               github,
