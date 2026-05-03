@@ -66,9 +66,6 @@ buildPythonPackage (finalAttrs: {
     "tests/test_cli.py"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = with lib; {
     description = "An asyncio-based library to communicate with SpamAssassin's SPAMD service";
