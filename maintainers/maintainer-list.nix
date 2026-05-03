@@ -29974,6 +29974,12 @@
     githubId = 973709;
     name = "Jairo Llopis";
   };
+  yamadashy = {
+    email = "koukun0120@gmail.com";
+    github = "yamadashy";
+    githubId = 5019072;
+    name = "Kazuki Yamada";
+  };
   yamashitax = {
     email = "hello@yamashit.ax";
     github = "yamashitax";
