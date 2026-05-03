@@ -48,6 +48,8 @@ lib.makeScope newScope (self: {
 
   bsnes-mercury-performance = self.bsnes-mercury.override { withProfile = "performance"; };
 
+  cap32 = self.callPackage ./cores/cap32.nix { };
+
   citra = self.callPackage ./cores/citra.nix { };
 
   desmume = self.callPackage ./cores/desmume.nix { };
