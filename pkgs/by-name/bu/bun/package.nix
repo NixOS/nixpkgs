@@ -14,6 +14,7 @@
   cctools,
   darwin,
   rcodesign,
+  callPackage,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -23,6 +24,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src =
     finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+
+  webkit = callPackage ./webkit.nix { };
 
   sourceRoot =
     {
