@@ -172,19 +172,13 @@ module.exports = async ({ github, context, core, dry }) => {
           '  ```',
         ].join('\n')
 
-        await postReview({
-          github,
-          context,
-          core,
-          dry,
-          body,
-          event: 'REQUEST_CHANGES',
-          reviewKey,
-        })
+        await postReview({ github, context, core, dry, body, reviewKey })
+
+        throw new Error(`The PR contains commits from a different base.`)
       }
-    } else {
-      await dismissReviews({ github, context, core, dry, reviewKey })
     }
+
+    await dismissReviews({ github, context, core, dry, reviewKey })
 
     let mergedSha, targetSha
 
