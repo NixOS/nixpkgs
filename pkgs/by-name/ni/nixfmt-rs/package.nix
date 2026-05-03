@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  scdoc,
   versionCheckHook,
   nix-update-script,
   nixfmt,
@@ -25,10 +26,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-fadjOtfB8bFuhTN9mAmi2A526boW7Aje39IBjdxszok=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
+
+  postBuild = ''
+    scdoc < docs/nixfmt.1.scd > nixfmt.1
+  '';
 
   postInstall = ''
-    installManPage docs/*
+    installManPage nixfmt.1
   '';
 
   doInstallCheck = true;
