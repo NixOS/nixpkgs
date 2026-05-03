@@ -12,26 +12,26 @@
     "version": "10.0.5"
   },
   {
-    "hash": "sha256-mo+oXTx0d1MYBu+EoU82S3Sw6hLpGq8MNDVYpSUlwDc=",
     "pname": "runtime.linux-x64.Microsoft.NETCore.ILAsm",
+    "sha256": "9a8fa85d3c7477531806ef84a14f364b74b0ea12e91aaf0c343558a52525c037",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/runtime.linux-x64.microsoft.netcore.ilasm/10.0.5/runtime.linux-x64.microsoft.netcore.ilasm.10.0.5.nupkg",
     "version": "10.0.5"
   },
   {
-    "hash": "sha256-v/XY6xI4DJV9s8A0iXLPMmFCi4YV1OKPvxNgGZZemG8=",
     "pname": "runtime.linux-x64.Microsoft.NETCore.ILDAsm",
+    "sha256": "bff5d8eb12380c957db3c0348972cf3261428b8615d4e28fbf136019965e986f",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/runtime.linux-x64.microsoft.netcore.ildasm/10.0.5/runtime.linux-x64.microsoft.netcore.ildasm.10.0.5.nupkg",
     "version": "10.0.5"
   },
   {
+    "hash": "sha256-2+XY7YVXMjgLVREx+WwAdW43SlnAiIOpFOsL0QFxDJQ=",
     "pname": "runtime.osx-arm64.Microsoft.NETCore.ILAsm",
-    "sha256": "dbe5d8ed855732380b551131f96c00756e374a59c08883a914eb0bd101710c94",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/runtime.osx-arm64.microsoft.netcore.ilasm/10.0.5/runtime.osx-arm64.microsoft.netcore.ilasm.10.0.5.nupkg",
     "version": "10.0.5"
   },
   {
+    "hash": "sha256-ZG38Yl0fbpKpDjHLMfUOi4o5wlzUGZH6YfLPSISuKKY=",
     "pname": "runtime.osx-arm64.Microsoft.NETCore.ILDAsm",
-    "sha256": "646dfc625d1f6e92a90e31cb31f50e8b8a39c25cd41991fa61f2cf4884ae28a6",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/runtime.osx-arm64.microsoft.netcore.ildasm/10.0.5/runtime.osx-arm64.microsoft.netcore.ildasm.10.0.5.nupkg",
     "version": "10.0.5"
   },
