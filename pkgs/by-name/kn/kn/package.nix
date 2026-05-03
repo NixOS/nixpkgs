@@ -48,7 +48,7 @@ buildGoModule (finalAttrs: {
     description = "Create Knative resources interactively from the command line or from within scripts";
     mainProgram = "kn";
     homepage = "https://github.com/knative/client";
-    changelog = "https://github.com/knative/client/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/knative/client/releases/tag/knative-v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
