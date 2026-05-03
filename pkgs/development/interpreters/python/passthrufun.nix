@@ -79,7 +79,7 @@ let
             keep = self: hooks self { };
             optionalExtensions = cond: as: lib.optionals cond as;
             pythonExtension = import ../../../top-level/python-packages.nix;
-            python2Extension = import ../../../top-level/python2-packages.nix;
+            python2Extension = import ../../misc/resholve/python2-packages.nix;
             extensions = lib.composeManyExtensions (
               [
                 hooks
