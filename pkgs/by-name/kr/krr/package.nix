@@ -65,7 +65,7 @@ python3.pkgs.buildPythonPackage (finalAttrs: {
       reduces costs and improves performance.
     '';
     homepage = "https://github.com/robusta-dev/krr";
-    changelog = "https://github.com/robusta-dev/krr/releases/tag/v${finalAttrs.src.rev}";
+    changelog = "https://github.com/robusta-dev/krr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "krr";
