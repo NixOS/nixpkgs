@@ -8,15 +8,15 @@
   buildstream,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "buildstream-plugins";
   version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
-    repo = "buildstream-plugins";
-    tag = version;
+    repo = finalAttrs.pname;
+    tag = finalAttrs.version;
     hash = "sha256-vbHfceMdaedAg0fVt8pBF+S7yPYhfQlgEYvb48ym+4I=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shymega ];
   };
-}
+})
