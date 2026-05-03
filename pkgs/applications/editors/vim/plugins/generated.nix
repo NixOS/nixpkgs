@@ -15539,6 +15539,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  run-nvim = buildVimPlugin {
+    pname = "run.nvim";
+    version = "2.0.0";
+    src = fetchgit {
+      url = "https://codeberg.org/ssnoer/run.nvim";
+      tag = "v2.0.0";
+      hash = "sha256-MTxhhcD6lHLJCfwaivKF9reeUrMog/8I2kJarNWz5Kk=";
+    };
+    meta.homepage = "https://codeberg.org/ssnoer/run.nvim";
+    meta.license = lib.licenses.unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   runner-nvim = buildVimPlugin {
     pname = "runner-nvim";
     version = "0-unstable-2026-02-11";
