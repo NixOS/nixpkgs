@@ -8090,6 +8090,13 @@
     githubId = 5085029;
     name = "Emanuele Peruffo";
   };
+  epic9491 = {
+    email = "epic9491@tutamail.com";
+    github = "epic9491";
+    githubId = 213664452;
+    matrix = "@gumbo:gaialabs.me";
+    name = "gumbo";
+  };
   EpicEric = {
     email = "eric@eric.dev.br";
     github = "EpicEric";
