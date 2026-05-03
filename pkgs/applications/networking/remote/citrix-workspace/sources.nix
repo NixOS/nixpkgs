@@ -21,6 +21,15 @@ let
   #
   # The latest versions can be found at https://www.citrix.com/downloads/workspace-app/linux/
   supportedVersions = lib.mapAttrs mkVersionInfo {
+    "26.01.0" = {
+      major = "26";
+      minor = "01";
+      patch = "0";
+      hash = "0avrf9jpqhijvp6w4jgs7xgp4gg1q2mdzak9h9klkqrbsgrvjr3p";
+      suffix = "150";
+      homepage = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
+    };
+
     "25.08.10" = {
       major = "25";
       minor = "08";

@@ -19,6 +19,7 @@
   glib,
   glib-networking,
   gnome2,
+  gst_all_1,
   gtk2,
   gtk2-x11,
   gtk3,
@@ -77,6 +78,7 @@
   xprop,
   xdpyinfo,
   libxcb,
+  x264,
   zlib,
 
   homepage,
@@ -87,6 +89,18 @@
 }:
 
 let
+  gstPackages = [
+    gst_all_1.gstreamer
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-vaapi
+  ];
+
+  gstPluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstPackages;
+
   fuse3' = symlinkJoin {
     name = "fuse3-backwards-compat";
     paths = [ (lib.getLib fuse3) ];
@@ -145,6 +159,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
+  strictDeps = true;
+  __structuredAttrs = true;
   sourceRoot = ".";
   preferLocalBuild = true;
   passthru.icaroot = "${placeholder "out"}/opt/citrix-icaclient";
@@ -214,8 +230,10 @@ stdenv.mkDerivation rec {
     libxaw
     libxmu
     libxtst
+    x264
     zlib
-  ];
+  ]
+  ++ gstPackages;
 
   runtimeDependencies = [
     glib
@@ -239,26 +257,63 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
+      isSelfservice = program: (builtins.match "selfservice(.*)" program) != null;
+      isWfica = program: (builtins.match "wfica(.*)" program) != null;
+
       icaFlag =
         program:
-        if (builtins.match "selfservice(.*)" program) != null then
+        if isSelfservice program then
           "--icaroot"
-        else if (builtins.match "wfica(.*)" program != null) then
+        else if isWfica program then
           null
         else
           "-icaroot";
+
+      ldLibraryPath =
+        program:
+        lib.concatStringsSep ":" (
+          lib.optional (isWfica program) "$ICAInstDir"
+          ++ [
+            "$ICAInstDir/lib"
+            "$ICAInstDir/usr/lib/x86_64-linux-gnu"
+            "$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle"
+            # HdxRtcEngine loads libpulse.so.0 with dlopen, so autoPatchelf
+            # cannot discover it from ELF dependencies.
+            "${lib.getLib libpulseaudio}/lib"
+          ]
+        );
+
+      # Only the ICA engine needs the top-level client directory on the library
+      # path. Leaving it enabled for UI helpers exposes Citrix's session-only
+      # libproxy.so to the embedded web stack, which then fails to resolve CGP
+      # symbols.
+      wrapperArgs =
+        program:
+        lib.concatStringsSep " \\\n          " (
+          lib.optional (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''
+          ++ [
+            ''--set ICAROOT "$ICAInstDir"''
+            ''--prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"''
+            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${gstPluginPath}"''
+            ''--prefix LD_LIBRARY_PATH : "${ldLibraryPath program}"''
+            ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
+            ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"''
+          ]
+        );
+
       wrap = program: ''
         wrapProgram $out/opt/citrix-icaclient/${program} \
-          ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
-          --set ICAROOT "$ICAInstDir" \
-          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
-          --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib:$ICAInstDir/usr/lib/x86_64-linux-gnu:$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle" \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
-          --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"
+          ${wrapperArgs program}
       '';
+
       wrapLink = program: ''
         ${wrap program}
         ln -sf $out/opt/citrix-icaclient/${program} $out/bin/${baseNameOf program}
+      '';
+
+      makeBinWrapper = program: wrapperName: ''
+        makeWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
+          ${wrapperArgs program}
       '';
 
       copyCert = path: ''
@@ -268,7 +323,7 @@ stdenv.mkDerivation rec {
       mkWrappers = lib.concatMapStringsSep "\n";
 
       toWrap = [
-        "wfica"
+        "adapter"
         "selfservice"
         "util/configmgr"
         "util/conncenter"
@@ -283,15 +338,29 @@ stdenv.mkDerivation rec {
       export HOME=$(mktemp -d)
 
       # Run upstream installer in the store-path.
-      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' -e 's, -C / , -C . ,g' ./linuxx64/hinst
+      sed -i \
+        -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' \
+        -e 's,/bin/true,true,g' \
+        -e 's, -C / , -C . ,g' \
+        -e 's,^[[:space:]]*install_deviceTrust "\$ICAInstDir",      :,' \
+        -e 's,^[[:space:]]*install_EPA_with_prompt "\$ICAInstDir",      :,' \
+        -e 's,^[[:space:]]*install_fido2Service "\$CDSourceDir" "\$ICAInstDir",  :,' \
+        ./linuxx64/hinst
       source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
       faketime -f "$source_date" ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
+
+      mkdir -p "$ICAInstDir/usr"
+      tar -xzf ./linuxx64/linuxx64.cor/Webkit2gtk4.0/webkit2gtk-4.0.tar.gz \
+        --strip-components=2 \
+        -C "$ICAInstDir/usr" \
+        webkit2gtk-4.0-package/usr/lib
 
       if [ -f "$ICAInstDir/util/setlog" ]; then
         chmod +x "$ICAInstDir/util/setlog"
         ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
       fi
       ${mkWrappers wrapLink toWrap}
+      ${makeBinWrapper "wfica" "wfica"}
       ${mkWrappers wrap [
         "PrimaryAuthManager"
         "ServiceRecord"
@@ -314,12 +383,42 @@ stdenv.mkDerivation rec {
       rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so} || true
       ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
       ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
+      # `hinst` disables multimedia when it cannot link into FHS plugin
+      # directories. In Nix we provide the plugin path via wrappers instead.
+      sed -i 's/^MultiMedia=Off$/MultiMedia=On/' "$ICAInstDir/config/module.ini"
 
       echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
       echo UTC > "$ICAInstDir/timezone"
 
       echo "Copy .desktop files."
       cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
+      for desktop in $out/share/applications/*.desktop; do
+        sed -i \
+          -e "s#/opt/Citrix/ICAClient#$ICAInstDir#g" \
+          -e "s#$ICAInstDir/util/ctxwebhelper#ctxwebhelper#g" \
+          "$desktop"
+
+        case "$(basename "$desktop")" in
+          citrixapp.desktop)
+            sed -i \
+              -e 's#^TryExec=.*#TryExec=selfservice#' \
+              -e 's#^Exec=.*#Exec=selfservice %u#' \
+              "$desktop"
+            ;;
+          selfservice.desktop)
+            sed -i \
+              -e 's#^TryExec=.*#TryExec=selfservice#' \
+              -e 's#^Exec=.*#Exec=selfservice#' \
+              "$desktop"
+            ;;
+          wfica.desktop)
+            sed -i \
+              -e 's#^TryExec=.*#TryExec=adapter#' \
+              -e 's#^Exec=.*#Exec=adapter %f#' \
+              "$desktop"
+            ;;
+        esac
+      done
 
       # We introduce a dependency on the source file so that it need not be redownloaded everytime
       echo $src >> "$out/share/workspace_dependencies.pin"
@@ -335,6 +434,9 @@ stdenv.mkDerivation rec {
     ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
       $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37.56.4
 
+    addAutoPatchelfSearchPath --no-recurse "$out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu"
+    addAutoPatchelfSearchPath "$out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle"
+    addAutoPatchelfSearchPath "$out/opt/citrix-icaclient/lib"
     autoPatchelf -- "$out"
 
     $out/opt/citrix-icaclient/util/ctx_rehash
