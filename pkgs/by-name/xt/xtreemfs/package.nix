@@ -119,6 +119,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Distributed filesystem";
+    homepage = "https://github.com/xtreemfs/xtreemfs";
     maintainers = with lib.maintainers; [
       raskin
       matejc

@@ -17,6 +17,7 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     description = "Stream and Genlex libraries for use with Camlp4 and Camlp5";
+    homepage = "https://github.com/ocaml/camlp-streams";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
   };

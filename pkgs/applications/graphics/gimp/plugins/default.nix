@@ -266,6 +266,7 @@ lib.makeScope pkgs.newScope (
 
       meta = {
         broken = gimp.majorVersion != "2.0";
+        homepage = "https://github.com/lmanul/gimp-texturize";
       };
     };
 
@@ -323,6 +324,7 @@ lib.makeScope pkgs.newScope (
 
       meta = {
         broken = gimp.majorVersion != "2.0";
+        homepage = "https://github.com/carlobaldassi/gimp-lqr-plugin";
       };
     };
 

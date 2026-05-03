@@ -36,6 +36,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Feature-rich Prometheus exporter for Apache Kafka written in Go";
+    homepage = "https://github.com/redpanda-data/kminion";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "kminion";

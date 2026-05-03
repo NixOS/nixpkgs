@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "High-quality data compression program";
+    homepage = "https://gitlab.com/federicomenaquintero/bzip2";
     license = lib.licenses.bzip2;
     pkgConfigModules = [ "bz2" ];
     platforms = lib.platforms.all;

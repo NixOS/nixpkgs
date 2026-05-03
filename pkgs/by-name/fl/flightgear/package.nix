@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Flight simulator";
+    homepage = "https://gitlab.com/flightgear/flightgear";
     maintainers = with lib.maintainers; [
       raskin
       kirillrdy

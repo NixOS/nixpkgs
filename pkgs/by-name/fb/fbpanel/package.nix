@@ -58,6 +58,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Stand-alone panel";
+    homepage = "https://github.com/aanatoly/fbpanel";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;

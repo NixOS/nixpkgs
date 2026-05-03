@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Secure suspend/hibernate-friendly alternative to `vlock -an`";
+    homepage = "https://github.com/muennich/physlock";
     mainProgram = "physlock";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

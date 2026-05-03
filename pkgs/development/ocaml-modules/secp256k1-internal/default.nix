@@ -42,6 +42,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Bindings to secp256k1 internal functions (generic operations on the curve)";
+    homepage = "https://gitlab.com/nomadic-labs/ocaml-secp256k1-internal";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

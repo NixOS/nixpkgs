@@ -41,6 +41,7 @@ mkDerivation {
 
   meta = {
     description = "Database connectivity and creation framework for various database vendors";
+    homepage = "https://invent.kde.org/libraries/kdb";
     mainProgram = "kdb3_sqlite3_dump";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;

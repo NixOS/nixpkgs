@@ -89,6 +89,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tora SQL tool";
+    homepage = "https://github.com/tora-tool/tora";
     mainProgram = "tora";
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.linux;

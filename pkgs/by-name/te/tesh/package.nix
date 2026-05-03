@@ -23,4 +23,8 @@ python3Packages.buildPythonPackage rec {
     pexpect
     distutils
   ];
+
+  meta = {
+    homepage = "https://github.com/OceanSprint/tesh";
+  };
 }

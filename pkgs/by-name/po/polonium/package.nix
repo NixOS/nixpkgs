@@ -48,6 +48,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
+    homepage = "https://github.com/zeroxoneafour/polonium";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       peterhoeg

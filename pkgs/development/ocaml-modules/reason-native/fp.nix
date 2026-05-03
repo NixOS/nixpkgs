@@ -17,6 +17,7 @@ buildDunePackage {
 
   meta = {
     description = "Library for creating and operating on file paths consistently on multiple platforms";
+    homepage = "https://github.com/reasonml/reason-native";
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/fp";
     license = lib.licenses.mit;
     maintainers = [ ];

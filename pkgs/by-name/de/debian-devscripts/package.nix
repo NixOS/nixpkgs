@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Debian package maintenance scripts";
+    homepage = "https://salsa.debian.org/debian/devscripts";
     license = lib.licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;

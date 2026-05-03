@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Modern C++20 Unicode library";
+    homepage = "https://github.com/contour-terminal/libunicode";
     mainProgram = "unicode-query";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;

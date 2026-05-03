@@ -118,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
+    homepage = "https://github.com/GoldenCheetah/GoldenCheetah";
     mainProgram = "GoldenCheetah";
     platforms = with lib.platforms; darwin ++ linux;
     maintainers = with lib.maintainers; [ adamcstephens ];

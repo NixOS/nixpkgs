@@ -177,5 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     platforms = lib.platforms.unix;
+    homepage = "https://github.com/bestpractical/rt";
   };
 })

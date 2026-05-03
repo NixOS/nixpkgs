@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [ mono ];
   meta = {
     description = "Texture synthesis from examples";
+    homepage = "https://github.com/mxgmn/SynTex";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

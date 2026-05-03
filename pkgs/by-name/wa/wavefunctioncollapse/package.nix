@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [ mono ];
   meta = {
     description = "Generator of bitmaps that are locally similar to the input bitmap";
+    homepage = "https://github.com/mxgmn/WaveFunctionCollapse";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

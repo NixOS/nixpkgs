@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for translating ASN.1 into other forms";
+    homepage = "https://github.com/kimgr/asn1ate";
     mainProgram = "asn1ate";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
