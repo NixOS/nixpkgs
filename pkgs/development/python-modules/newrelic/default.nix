@@ -44,7 +44,9 @@ buildPythonPackage (finalAttrs: {
       The New Relic Python Agent enables instrumentation of Python applications.
     '';
     homepage = "https://github.com/newrelic/newrelic-python-agent";
-    changelog = "https://docs.newrelic.com/docs/release-notes/agent-release-notes/python-release-notes/python-agent-${lib.replaceStrings ["."] ["-"] finalAttrs.version}";
+    changelog = "https://docs.newrelic.com/docs/release-notes/agent-release-notes/python-release-notes/python-agent-${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philocalyst ];
   };
