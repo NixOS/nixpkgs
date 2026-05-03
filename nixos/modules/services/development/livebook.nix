@@ -97,7 +97,7 @@ in
     systemd.user.services.livebook = {
       serviceConfig = {
         Restart = "always";
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         ExecStart = "${cfg.package}/bin/livebook start";
         KillMode = "mixed";
 
