@@ -1,9 +1,7 @@
 {
-  applyPatches,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  k3s,
   lib,
   nixosTests,
   stdenv,
@@ -17,13 +15,11 @@ let
   etcdUtlVendorHash = "sha256-GVih32FEUV7FiDe/5+V5cDUhUM3D9kSA+5jpHu1fwFs=";
   etcdServerVendorHash = "sha256-silFeLWbqqSJ8WMmlE4dDH98cCFUKLQDvs8Vhx5LnDY=";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "etcd-io";
-      repo = "etcd";
-      tag = "v${version}";
-      hash = etcdSrcHash;
-    };
+  src = fetchFromGitHub {
+    owner = "etcd-io";
+    repo = "etcd";
+    tag = "v${version}";
+    hash = etcdSrcHash;
   };
 
   env = {

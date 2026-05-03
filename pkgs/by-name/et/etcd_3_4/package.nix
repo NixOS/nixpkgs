@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "etcd";
   version = "3.4.42";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ue5Mcksy3LiXLaVdxNz83V9qrxQfzxL5kw4rZobYcvY=";
   };
 
@@ -46,4 +46,4 @@ buildGoModule rec {
     homepage = "https://etcd.io/";
     maintainers = with lib.maintainers; [ superherointj ];
   };
-}
+})
