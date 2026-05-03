@@ -1,6 +1,7 @@
 { lib, config, ... }:
 let
-  # List of subnets that will never be routed through Tor under any circumstance.
+  # List of subnets that aren't routable on the public internet.
+  # https://en.wikipedia.org/wiki/List_of_reserved_IP_addresses
   reservedSubnets = [
     "0.0.0.0/8"
     "10.0.0.0/8"
