@@ -3899,6 +3899,18 @@ assertNoAdditions {
     };
   });
 
+  run-nvim = super.run-nvim.overrideAttrs {
+    dependencies = [
+      self.telescope-nvim
+    ];
+
+    checkInputs = [
+      # Transitive depedency of telescope.nvim
+      # Issue: https://github.com/NixOS/nixpkgs/issues/394939
+      self.plenary-nvim
+    ];
+  };
+
   rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };

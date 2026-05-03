@@ -134,7 +134,7 @@ buildNpmPackage' rec {
     patchShebangs apps/desktop/node_modules
 
     pushd apps/desktop/desktop_native/napi
-    npm run build
+    npm run build -- --release
     popd
 
     pushd apps/desktop/desktop_native/proxy

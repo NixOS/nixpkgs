@@ -64,7 +64,7 @@ buildPythonPackage (finalAttrs: {
       orjson
       ujson
     ]
-    ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.optional-dependencies [ "all" ]);
+    ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [

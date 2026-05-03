@@ -6,6 +6,8 @@ let
     unsafeGetAttrPos
     ;
   inherit (lib)
+    all
+    attrValues
     functionArgs
     isFunction
     mirrorFunctionArgs
@@ -19,8 +21,6 @@ let
     sortOn
     take
     length
-    filterAttrs
-    flip
     head
     pipe
     isDerivation
@@ -98,19 +98,18 @@ rec {
   */
   overrideDerivation =
     drv: f:
-    let
-      newDrv = derivation (drv.drvAttrs // (f drv));
-    in
-    flip (extendDerivation (seq drv.drvPath true)) newDrv (
+    (extendDerivation (seq drv.drvPath true)) (
       {
         meta = drv.meta or { };
-        passthru = if drv ? passthru then drv.passthru else { };
+        passthru = drv.passthru or { };
       }
       // (drv.passthru or { })
-      // optionalAttrs (drv ? __spliced) {
-        __spliced = { } // (mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
+      // {
+        ${if drv ? __spliced then "__spliced" else null} = mapAttrs (
+          _: sDrv: overrideDerivation sDrv f
+        ) drv.__spliced;
       }
-    );
+    ) (derivation (drv.drvAttrs // (f drv)));
 
   /**
     `makeOverridable` takes a function from attribute set to attribute set and
@@ -155,73 +154,67 @@ rec {
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
-      # Recover overrider and additional attributes for f
-      # When f is a callable attribute set,
-      # it may contain its own `f.override` and additional attributes.
-      # This helper function recovers those attributes and decorate the overrider.
-      recoverMetadata =
-        if isAttrs f then
-          fDecorated:
-          # Preserve additional attributes for f
-          f
-          // fDecorated
-          # Decorate f.override if presented
-          // lib.optionalAttrs (f ? override) {
-            override = fdrv: makeOverridable (f.override fdrv);
+
+      f' =
+        origArgs:
+        let
+          result = f origArgs;
+
+          # Re-call the function but with different arguments
+          overrideArgs = mirrorArgs (
+            /**
+                    Change the arguments with which a certain function is called.
+
+              In some cases, you may find a list of possible attributes to pass in this function's `__functionArgs` attribute, but it will not be complete for an original function like `args@{foo, ...}: ...`, which accepts arbitrary attributes.
+
+              This function was provided by `lib.makeOverridable`.
+            */
+            newArgs: makeOverridable f (origArgs // (if isFunction newArgs then newArgs origArgs else newArgs))
+          );
+        in
+        if isAttrs result then
+          result
+          // {
+            override = overrideArgs;
+            overrideDerivation =
+              fdrv: makeOverridable (mirrorArgs (args: overrideDerivation (f args) fdrv)) origArgs;
+            ${if result ? overrideAttrs then "overrideAttrs" else null} =
+              /**
+                Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
+
+                This function is provided by `lib.makeOverridable`, and indirectly by `callPackage` among others, in order to make the combination of `override` and `overrideAttrs` work.
+                Specifically, it re-adds the `override` attribute to the result of `overrideAttrs`.
+
+                The real implementation of `overrideAttrs` is provided by `stdenv.mkDerivation`.
+              */
+              # NOTE: part of the above documentation had to be duplicated in `mkDerivation`'s `overrideAttrs`.
+              #       design/tech debt issue: https://github.com/NixOS/nixpkgs/issues/273815
+              fdrv: makeOverridable (mirrorArgs (args: (f args).overrideAttrs fdrv)) origArgs;
+          }
+        else if isFunction result then
+          # Transform the result into a functor while propagating its arguments
+          setFunctionArgs result (functionArgs result)
+          // {
+            override = overrideArgs;
           }
         else
-          id;
-      decorate = f': recoverMetadata (mirrorArgs f');
+          result;
     in
-    decorate (
-      origArgs:
-      let
-        result = f origArgs;
+    # Recover overrider and additional attributes for f
+    # When f is a callable attribute set,
+    # it may contain its own `f.override` and additional attributes.
+    # This recovers those attributes and decorates the overrider.
+    if isAttrs f then
+      # Preserve additional attributes for f
+      f
+      // (mirrorArgs f')
+      # Decorate f.override if presented
+      // {
+        ${if f ? override then "override" else null} = fdrv: makeOverridable (f.override fdrv);
+      }
 
-        # Changes the original arguments with (potentially a function that returns) a set of new attributes
-        overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
-
-        # Re-call the function but with different arguments
-        overrideArgs = mirrorArgs (
-          /**
-            Change the arguments with which a certain function is called.
-
-            In some cases, you may find a list of possible attributes to pass in this function's `__functionArgs` attribute, but it will not be complete for an original function like `args@{foo, ...}: ...`, which accepts arbitrary attributes.
-
-            This function was provided by `lib.makeOverridable`.
-          */
-          newArgs: makeOverridable f (overrideWith newArgs)
-        );
-        # Change the result of the function call by applying g to it
-        overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
-      in
-      if isAttrs result then
-        result
-        // {
-          override = overrideArgs;
-          overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
-          ${if result ? overrideAttrs then "overrideAttrs" else null} =
-            /**
-              Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
-
-              This function is provided by `lib.makeOverridable`, and indirectly by `callPackage` among others, in order to make the combination of `override` and `overrideAttrs` work.
-              Specifically, it re-adds the `override` attribute to the result of `overrideAttrs`.
-
-              The real implementation of `overrideAttrs` is provided by `stdenv.mkDerivation`.
-            */
-            # NOTE: part of the above documentation had to be duplicated in `mkDerivation`'s `overrideAttrs`.
-            #       design/tech debt issue: https://github.com/NixOS/nixpkgs/issues/273815
-            fdrv: overrideResult (x: x.overrideAttrs fdrv);
-        }
-      else if isFunction result then
-        # Transform the result into a functor while propagating its arguments
-        setFunctionArgs result (functionArgs result)
-        // {
-          override = overrideArgs;
-        }
-      else
-        result
-    );
+    else
+      mirrorArgs f';
 
   /**
     Call the package function in the file `fn` with the required
@@ -272,6 +265,46 @@ rec {
     ```
   */
   callPackageWith =
+    let
+      makeErrorMessage =
+        autoArgs: fn: args: fargs: unpassedArgs:
+        let
+          # The first missing arg
+          arg = head (
+            # Filter out the default args. We did a similar computation in the
+            # happy path, but we're okay recomputing it in an error case
+            filter (name: !fargs.${name}) (attrNames unpassedArgs)
+          );
+          # Get a list of suggested argument names for a given missing one
+          getSuggestions =
+            arg:
+            pipe (autoArgs // args) [
+              attrNames
+              # Only use ones that are at most 2 edits away. While mork would work,
+              # levenshteinAtMost is only fast for 2 or less.
+              (filter (levenshteinAtMost 2 arg))
+              # Put strings with shorter distance first
+              (sortOn (levenshtein arg))
+              # Only take the first couple results
+              (take 3)
+              # Quote all entries
+              (map (x: "\"" + x + "\""))
+            ];
+
+          prettySuggestions =
+            suggestions:
+            if suggestions == [ ] then
+              ""
+            else if length suggestions == 1 then
+              ", did you mean ${elemAt suggestions 0}?"
+            else
+              ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
+
+          loc = unsafeGetAttrPos arg fargs;
+          loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
+        in
+        "lib.customisation.callPackageWith: Function called without required argument \"${arg}\" at ${loc'}${prettySuggestions (getSuggestions arg)}";
+    in
     autoArgs: fn: args:
     let
       f = if isFunction fn then fn else import fn;
@@ -281,62 +314,20 @@ rec {
       # This includes automatic ones and ones passed explicitly
       allArgs = intersectAttrs fargs autoArgs // args;
 
-      # a list of argument names that the function requires, but
-      # wouldn't be passed to it
-      missingArgs =
-        # Filter out arguments that have a default value
-        (
-          filterAttrs (name: value: !value)
-            # Filter out arguments that would be passed
-            (removeAttrs fargs (attrNames allArgs))
-        );
-
-      # Get a list of suggested argument names for a given missing one
-      getSuggestions =
-        arg:
-        pipe (autoArgs // args) [
-          attrNames
-          # Only use ones that are at most 2 edits away. While mork would work,
-          # levenshteinAtMost is only fast for 2 or less.
-          (filter (levenshteinAtMost 2 arg))
-          # Put strings with shorter distance first
-          (sortOn (levenshtein arg))
-          # Only take the first couple results
-          (take 3)
-          # Quote all entries
-          (map (x: "\"" + x + "\""))
-        ];
-
-      prettySuggestions =
-        suggestions:
-        if suggestions == [ ] then
-          ""
-        else if length suggestions == 1 then
-          ", did you mean ${elemAt suggestions 0}?"
-        else
-          ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
-
-      errorForArg =
-        arg:
-        let
-          loc = unsafeGetAttrPos arg fargs;
-          loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
-        in
-        "Function called without required argument \"${arg}\" at "
-        + "${loc'}${prettySuggestions (getSuggestions arg)}";
-
-      # Only show the error for the first missing argument
-      error = errorForArg (head (attrNames missingArgs));
+      # arguments that weren't passed automatically to the function
+      unpassedArgs = removeAttrs fargs (attrNames allArgs);
 
     in
-    if missingArgs == { } then
+    # if nonempty, check if the function has defaults for those other args
+    if unpassedArgs == { } || all (value: value) (attrValues unpassedArgs) then
       makeOverridable f allArgs
-    # This needs to be an abort so it can't be caught with `builtins.tryEval`,
-    # which is used by nix-env and ofborg to filter out packages that don't evaluate.
-    # This way we're forced to fix such errors in Nixpkgs,
-    # which is especially relevant with allowAliases = false
     else
-      abort "lib.customisation.callPackageWith: ${error}";
+      # Only show the error for the first missing argument
+      # This needs to be an abort so it can't be caught with `builtins.tryEval`,
+      # which is used by nix-env and ofborg to filter out packages that don't evaluate.
+      # This way we're forced to fix such errors in Nixpkgs,
+      # which is especially relevant with allowAliases = false
+      abort (makeErrorMessage autoArgs fn args fargs unpassedArgs);
 
   /**
     Like `callPackage`, but for a function that returns an attribute
@@ -409,36 +400,28 @@ rec {
   extendDerivation =
     condition: passthru: drv:
     let
-      outputs = drv.outputs or [ "out" ];
-
       commonAttrs =
         drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
 
-      outputToAttrListElement = outputName: {
+      outputsList = map (outputName: {
         name = outputName;
-        value =
-          commonAttrs
-          // {
-            inherit (drv.${outputName}) type outputName;
-            outputSpecified = true;
-            drvPath =
-              assert condition;
-              drv.${outputName}.drvPath;
-            outPath =
-              assert condition;
-              drv.${outputName}.outPath;
-          }
-          //
-            # TODO: give the derivation control over the outputs.
-            #       `overrideAttrs` may not be the only attribute that needs
-            #       updating when switching outputs.
-            optionalAttrs (passthru ? overrideAttrs) {
-              # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
-              overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
-            };
-      };
-
-      outputsList = map outputToAttrListElement outputs;
+        value = commonAttrs // {
+          inherit (drv.${outputName}) type outputName;
+          outputSpecified = true;
+          drvPath =
+            assert condition;
+            drv.${outputName}.drvPath;
+          outPath =
+            assert condition;
+            drv.${outputName}.outPath;
+          # TODO: give the derivation control over the outputs.
+          #       `overrideAttrs` may not be the only attribute that needs
+          #       updating when switching outputs.
+          # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
+          ${if passthru ? overrideAttrs then "overrideAttrs" else null} =
+            f: (passthru.overrideAttrs f).${outputName};
+        };
+      }) (drv.outputs or [ "out" ]);
     in
     commonAttrs
     // {
