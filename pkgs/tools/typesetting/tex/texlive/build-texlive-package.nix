@@ -82,6 +82,9 @@ let
   }
   // lib.optionalAttrs hasCatalogue {
     homepage = "https://ctan.org/pkg/${catalogue}";
+  }
+  // lib.optionalAttrs (lib.elem "jar" (args.scriptExts or [ ])) {
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
