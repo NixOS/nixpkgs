@@ -16005,6 +16005,8 @@ self: super: with self; {
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
+  python-statemachine = callPackage ../development/python-modules/python-statemachine { };
+
   python-status = callPackage ../development/python-modules/python-status { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
