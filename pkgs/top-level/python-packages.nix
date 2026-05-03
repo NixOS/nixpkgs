@@ -7823,6 +7823,13 @@ self: super: with self; {
 
   jamo = callPackage ../development/python-modules/jamo { };
 
+  janim = callPackage ../development/python-modules/janim {
+    inherit (pkgs.qt6) wrapQtAppsHook qtbase;
+    pyquaternion = pyquaternion.overridePythonAttrs {
+      doCheck = false;
+    };
+  };
+
   janus = callPackage ../development/python-modules/janus { };
 
   jaraco-abode = callPackage ../development/python-modules/jaraco-abode { };
