@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reco";
-  version = "5.1.1";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "reco";
     rev = finalAttrs.version;
-    hash = "sha256-vSVWGXC0QJ20t2MRImBwG8ZTrTLE5Z98GO6No80mCUU=";
+    hash = "sha256-v5OsVtGcBScfrcAoJT7mV6YrzAMyO5jPmqYyMkqAhYo=";
   };
 
   nativeBuildInputs = [
