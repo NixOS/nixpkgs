@@ -28,11 +28,16 @@ let
 
     postPatch = ''
       rm binaries/*/pac
-      substituteInPlace Makefile --replace-fail 'uname -p' 'uname -m'
+      substituteInPlace Makefile \
+        --replace-fail 'uname -p' 'uname -m' \
+        --replace-fail 'ifneq ($(filter arm%,$(UNAME_P)),)' 'ifneq ($(filter aarch64 arm%,$(UNAME_P)),)'
     '';
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ glib ];
+    preBuild = ''
+      mkdir -p binaries/linux_arm
+    '';
     installPhase = ''
       runHook preInstall
 
@@ -68,9 +73,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
     npmDepsHash = "sha256-dGzmdvzKp/JHCgDf3NJb0oolgW4Y/spagzpeVpMF28w=";
-
-    # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-    nodejs = nodejs_22;
 
     installPhase = ''
       runHook preInstall
