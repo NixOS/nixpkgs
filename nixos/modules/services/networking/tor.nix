@@ -196,8 +196,8 @@ in
     # regarding IPv6 traffic, so it gets simply dropped at the end of filter
     # chains. That's on purpose as IPv6 has not been tested.
     networking.nftables.tables = {
-      tor = {
-        enable = config.networking.tor.client.enable;
+      tor = lib.mkIf config.networking.tor.client.enable {
+        enable = true;
         family = "inet";
         content = ''
 
@@ -262,8 +262,8 @@ in
         '';
       };
 
-      tor-router = {
-        enable = config.networking.tor.router.enable;
+      tor-router = lib.mkIf config.networking.tor.router.enable {
+        enable = true;
         family = "inet";
         content = ''
 
