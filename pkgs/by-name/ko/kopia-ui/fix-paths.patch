@@ -57,7 +57,7 @@ index c5963e41..30f72965 100644
 -    win: path.join(process.resourcesPath, "server", "kopia.exe"),
 -    linux: path.join(process.resourcesPath, "server", "kopia"),
 -  }[osShortName];
-+  return "KOPIA";
++  return process.env.KOPIA_EXECUTABLE;
  }
  export function selectByOS(x) {
    return x[osShortName];
