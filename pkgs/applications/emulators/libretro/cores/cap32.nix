@@ -15,7 +15,7 @@ mkLibretroCore {
   };
 
   makefile = "Makefile";
-  
+
   meta = {
     description = "Caprice32 libretro port (Amstrad CPC emulator)";
     homepage = "https://github.com/libretro/libretro-cap32";
