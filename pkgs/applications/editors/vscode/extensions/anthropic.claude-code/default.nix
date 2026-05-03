@@ -23,18 +23,22 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
         "x86_64-linux" = {
           arch = "linux-x64";
           hash = "sha256-cDR/E5ATkKHUhvfQ+721M1DbNNxbSzWdnah7kEpyIxc=";
+          signatureHash = "sha256-X18dx/5ZbDYA+nxHPwPUe9+smEemHPoDX/KGq+117Ls=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
           hash = "sha256-8vJHvwYdCdQb0kHNbM6KNp27BJh8RGrBmw++Zz7nLf4=";
+          signatureHash = "sha256-tB+7NtUaH96SjWzYrlgLmfFWtnqNT6wcHxqLQ8pFO0k=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
           hash = "sha256-y93nqrqeLrOSPu+/NsKVg1yYPGT1x5XENO3VE/+uQU4=";
+          signatureHash = "sha256-CAV+CiAY3Y+6uE5n1wjrk5ZNFrHEX0Shf7mDOLyVlJA=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
           hash = "sha256-CYewM/KAk/WrEBiDK/aCkNc4/sGMIDnrHAoHIYU/h+o=";
+          signatureHash = "sha256-btKfHI2TWuyf51UZnr+MnbrncDhVS2iiALIUOkSABus=";
         };
       };
     in
