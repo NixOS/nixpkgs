@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       the domain in a user interface or sorting domain lists by site.
     '';
     homepage = "https://rockdaboot.github.io/libpsl/";
-    changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/libpsl-${finalAttrs.version}/NEWS";
+    changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/${finalAttrs.version}/NEWS";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "psl";
