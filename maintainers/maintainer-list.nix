@@ -29044,6 +29044,12 @@
     githubId = 230381;
     name = "Daniel Nilsson";
   };
+  vrashabh-sontakke = {
+    email = "vrashabhsontakke@outlook.com";
+    github = "Vrashabh-Sontakke";
+    githubId = 86019029;
+    name = "Vrashabh Sontakke";
+  };
   vrinek = {
     email = "vrinek@hey.com";
     github = "vrinek";
