@@ -72,6 +72,7 @@ let
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
   jq = "${pkgs.jq}/bin/jq";
+  grep = lib.getExe pkgs.gnugrep;
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (
     ''
       set -efu
@@ -92,6 +93,61 @@ let
               --retry 1000 --retry-delay 1 --retry-all-errors \
               "$@"
       }
+
+      # Before version 2.0.0, Syncthing used LevelDB. In version 2.0.0,
+      # Syncthing started using SQLite. If you upgrade from an older version of
+      # Syncthing that uses LevelDB to a newer version of Syncthing that uses
+      # SQLite, then Syncthing will automatically do a one time database
+      # migration [1]. While the migration is happening, the regular Syncthing
+      # REST API is not available. Instead, a temporary API is made available
+      # in its place.
+      #
+      # The rest of this script depends on Syncthing’s regular REST API. This
+      # next part checks to see if Syncthing is currently providing the
+      # temporary API. If it is, this next part will wait until the regular API
+      # is available.
+      #
+      # [1]: <https://github.com/syncthing/syncthing/releases/tag/v2.0.0>
+      while true
+      do
+        # We can use pretty much any API endpoint here. I chose to use
+        # /rest/noauth/health because it doesn’t return a lot of data and
+        # because doing a “health check” seems like an appropriate way to check
+        # to see if the regular API is “alive” or not.
+        content_type="$(curl \
+          -o /dev/null \
+          -w '%header{Content-Type}' \
+          ${curlAddressArgs "/rest/noauth/health"}
+        )"
+        # The “($|([ \t]*;.*))” part at the end allows us to not worry about
+        # whether or not the Content-Type contains any parameters. “$” matches
+        # the end of the string which indicates that no parameters were used
+        # [1][2]. The “[ \t]*;” part matches OWS [3] followed by a semicolon
+        # which indicates that at least one parameter was used [4].
+        #
+        # We use “grep -i” here because media types are case-insensitive [2].
+        #
+        # [1]: <https://httpwg.org/specs/rfc9110.html#field.content-type>
+        # [2]: <https://httpwg.org/specs/rfc9110.html#media.type>
+        # [3]: <https://httpwg.org/specs/rfc9110.html#whitespace>
+        # [4]: <https://httpwg.org/specs/rfc9110.html#parameter>
+        if printf %s "$content_type" | ${lib.escapeShellArg grep} -qiP '^text/plain($|([ \t]*;.*))'
+        then
+          echo Waiting for Syncthing to finish its database migration…
+          sleep 30
+        # TODO: This next regex pattern can be simplified if this Syncthing bug gets fixed [1].
+        #
+        # [1]: <https://github.com/syncthing/syncthing/issues/10500>
+        elif printf %s "$content_type" | ${lib.escapeShellArg grep} -qiP '^application/json($|([ \t]*;.*))'
+        then
+          echo 'Syncthing is not doing a database migration (anymore).'
+          break
+        else
+          printf 'ERROR: Syncthing responded with an unexpected Content-Type: %s\n' "$content_type"
+          # This is the EX_PROTOCOL exit status from <man:sysexits.h(3head)>.
+          exit 76
+        fi
+      done
     ''
     +
 
