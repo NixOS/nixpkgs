@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "etcd";
-  version = "3.4.42";
+  version = "3.4.44";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ue5Mcksy3LiXLaVdxNz83V9qrxQfzxL5kw4rZobYcvY=";
+    hash = "sha256-56V9cAlFiCdDm3X8lBJmjwj1HVRNihrCzIV0r0XEMHk=";
   };
 
   proxyVendor = true;
