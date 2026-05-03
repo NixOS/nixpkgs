@@ -16,7 +16,6 @@
   sdl3-image,
 }:
 let
-  lib_ext = stdenv.hostPlatform.extensions.sharedLibrary;
   version = "0.9.11b0";
 
   # Arranging these as normal derivations allows the updater to function while still allowing easy access to the fod via the `src` attribute.
@@ -56,12 +55,16 @@ buildPythonPackage {
     cp ${docfile} source/sdl3/__doc__.py
   '';
 
-  postInstall = ''
-    mkdir $out/${python.sitePackages}/sdl3/bin
-    ln -s ${sdl3}/lib/libSDL3${lib_ext} -t $out/${python.sitePackages}/sdl3/bin
-    ln -s ${sdl3-ttf}/lib/libSDL3_ttf${lib_ext} -t $out/${python.sitePackages}/sdl3/bin
-    ln -s ${sdl3-image}/lib/libSDL3_image${lib_ext} -t $out/${python.sitePackages}/sdl3/bin
-  '';
+  postInstall =
+    let
+      lib_ext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      mkdir $out/${python.sitePackages}/sdl3/bin
+      ln -s ${sdl3}/lib/libSDL3${lib_ext} -t $out/${python.sitePackages}/sdl3/bin
+      ln -s ${sdl3-ttf}/lib/libSDL3_ttf${lib_ext} -t $out/${python.sitePackages}/sdl3/bin
+      ln -s ${sdl3-image}/lib/libSDL3_image${lib_ext} -t $out/${python.sitePackages}/sdl3/bin
+    '';
 
   build-system = [
     setuptools-scm
