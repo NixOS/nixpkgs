@@ -1236,7 +1236,7 @@ in
     '';
     meta = with lib; {
       homepage = "https://github.com/ofirgall/tmux-window-name";
-      description = "A plugin to name your tmux windows smartly, like IDE's";
+      description = "Tmux plugin to name your windows smartly, like IDE's";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ ndom91 ];
