@@ -87,12 +87,14 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
         mkdir -p $out/bin/
         mkdir -p "$out/Applications/${longName}.app/Contents/MacOS"
 
+        binary_name="$(awk -F'[<>]' '/CFBundleExecutable/{getline; print $3}' '${vscode}/Applications/${longName}.app/Contents/Info.plist')"
+
         for path in PkgInfo Frameworks Resources _CodeSignature Info.plist; do
           ln -s "${vscode}/Applications/${longName}.app/Contents/$path" "$out/Applications/${longName}.app/Contents/"
         done
 
         makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}
-        makeWrapper "${vscode}/Applications/${longName}.app/Contents/MacOS/Electron" "$out/Applications/${longName}.app/Contents/MacOS/Electron" ${extensionsFlag}
+        makeWrapper "${vscode}/Applications/${longName}.app/Contents/MacOS/$binary_name" "$out/Applications/${longName}.app/Contents/MacOS/$binary_name" ${extensionsFlag}
       ''
     else
       ''
