@@ -53,6 +53,23 @@ let
         group = "workload";
       };
       users.groups.workload = { };
+
+      services.spire.agent = {
+        enable = true;
+        settings = {
+          agent = {
+            trust_domain = trustDomain;
+            server_address = "server.${trustDomain}";
+            trust_bundle_format = "pem";
+            trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
+          };
+          plugins = {
+            KeyManager.memory.plugin_data = { };
+            WorkloadAttestor.systemd.plugin_data = { };
+            WorkloadAttestor.unix.plugin_data = { };
+          };
+        };
+      };
     };
 
   tpmAgent =
@@ -96,23 +113,7 @@ let
 
       environment.systemPackages = [ pkgs.spire-tpm-plugin ];
 
-      services.spire.agent = {
-        enable = true;
-        settings = {
-          agent = {
-            trust_domain = trustDomain;
-            server_address = "server.${trustDomain}";
-            trust_bundle_format = "pem";
-            trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
-          };
-          plugins = {
-            KeyManager.memory.plugin_data = { };
-            NodeAttestor.tpm.plugin_data = { };
-            WorkloadAttestor.systemd.plugin_data = { };
-            WorkloadAttestor.unix.plugin_data = { };
-          };
-        };
-      };
+      services.spire.agent.settings.plugins.NodeAttestor.tpm.plugin_data = { };
     };
 in
 {
@@ -148,23 +149,9 @@ in
       virtualisation.credentials."spire.join_token".source = "./join_token";
       systemd.services.spire-agent.serviceConfig.ImportCredential = [ "spire.join_token" ];
 
-      services.spire.agent = {
-        enable = true;
-        settings = {
-          agent = {
-            trust_domain = trustDomain;
-            server_address = "server.${trustDomain}";
-            join_token_file = "$CREDENTIALS_DIRECTORY/spire.join_token";
-            trust_bundle_format = "pem";
-            trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
-          };
-          plugins = {
-            KeyManager.memory.plugin_data = { };
-            NodeAttestor.join_token.plugin_data = { };
-            WorkloadAttestor.systemd.plugin_data = { };
-            WorkloadAttestor.unix.plugin_data = { };
-          };
-        };
+      services.spire.agent.settings = {
+        agent.join_token_file = "$CREDENTIALS_DIRECTORY/spire.join_token";
+        plugins.NodeAttestor.join_token.plugin_data = { };
       };
     };
 
