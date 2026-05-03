@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/fusionlanguage/fut/releases/tag/fut-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin; # require macos-26
     maintainers = with lib.maintainers; [ chillcicada ];
     mainProgram = "fut";
   };
