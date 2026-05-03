@@ -16,19 +16,22 @@
   pkg-config,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withLua ? false,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtorrent";
-  version = "0.16.8";
+  version = "0.16.11";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TG5wEJwOPhgmKNcpjTuSu6MNk91t9sR33mXIUueR4yA=";
+    hash = "sha256-OEIJMBj1UfIOpR1w8c8ztKWJVD5hKxiJaxweF7mBRNM=";
   };
 
   outputs = [
@@ -36,10 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     installShellFiles
     pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -69,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-h";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
     inherit libtorrent-rakshasa;
