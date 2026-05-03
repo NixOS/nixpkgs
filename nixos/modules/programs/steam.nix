@@ -241,6 +241,11 @@ in
 
     hardware.steam-hardware.enable = true;
 
+    # ntsync is enabled by default if the module is available in Proton 11 onwards.
+    hardware.ntsync.enable = lib.mkDefault (
+      lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.14"
+    );
+
     environment.systemPackages = [
       cfg.package
       cfg.package.run
