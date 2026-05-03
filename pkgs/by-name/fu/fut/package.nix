@@ -36,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = false;
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Fusion programming language";
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fusion-lang.org";
     changelog = "https://github.com/fusionlanguage/fut/releases/tag/fut-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ chillcicada ];
     mainProgram = "fut";
   };
