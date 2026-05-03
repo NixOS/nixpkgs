@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "nano-syntax-highlighting";
-  version = "2026.03.14";
+  version = "2026.05.01";
 
   src = fetchFromGitHub {
     owner = "galenguyer";
     repo = "nano-syntax-highlighting";
     tag = version;
-    hash = "sha256-H0F57b8M+onhpVtvna03t919xk6+z/dJP37y9hcqfCY=";
+    hash = "sha256-ipnePkQEDfJ7T3GJ84D6bmo9KZ2AUkJ8aUqH0rPCsps=";
   };
 
   dontBuild = true;
