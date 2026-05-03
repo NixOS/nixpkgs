@@ -65,6 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-frRJsnIqdoAhNW9m3+4yAsIptU7U5qcM5AwJDpf/FvI=";
   };
 
+  # FIXME: This patch should be made unconditional the next time librsvg is
+  # updated.
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Rebased copy of https://gitlab.gnome.org/GNOME/gtk-osx/-/blob/2c1492036ff92d1c87d7b7a4c3c5a7a3f042f825/patches/librsvg-libpixbufloader-install-names.patch.
+    # Fixes https://gitlab.gnome.org/GNOME/librsvg/-/work_items/1161.
+    ./librsvg-libpixbufloader-install-names.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
