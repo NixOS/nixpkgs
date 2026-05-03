@@ -73,24 +73,24 @@ in
 
         };
 
-        allowedDestinations = lib.mkOption {
+        excludedDestinations = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
           example = [ "104.16.0.0/13" ];
-          description = "Allowed destination addresses that will not be routed through Tor.";
+          description = "Excluded destination addresses that will not be routed through Tor.";
         };
 
-        allowedInterfaces = lib.mkOption {
+        excludedInterfaces = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          description = "List of allowed interfaces. The packets that are destined to these interfaces will not be routed through Tor.";
+          description = "List of excluded interfaces. The packets that are destined to these interfaces will not be routed through Tor.";
           example = [ "wg0" ];
         };
 
-        allowedFwMarks = lib.mkOption {
+        excludedFwMarks = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          description = "List of allowed fwMarks. The packets marked with these fwMarks will not be routed through Tor.";
+          description = "List of excluded fwMarks. The packets marked with these fwMarks will not be routed through Tor.";
           example = [ "0x100" ];
         };
 
@@ -99,18 +99,18 @@ in
       router = {
         enable = lib.mkEnableOption "the routing of all received traffic through Tor. Does not act as a router for the current machine. IPv6 traffic is not routed and it is dropped.";
 
-        allowedDestinations = lib.mkOption {
+        excludedDestinations = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
           example = [ "104.16.0.0/13" ];
-          description = "Allowed destination addresses that will not be routed through Tor.";
+          description = "Excluded destination addresses that will not be routed through Tor.";
         };
 
-        allowedSources = lib.mkOption {
+        excludedSources = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
           example = [ "192.168.1.0/24" ];
-          description = "Allowed source addresses that will not be routed through Tor.";
+          description = "Excluded source addresses that will not be routed through Tor.";
         };
 
       };
@@ -203,11 +203,11 @@ in
 
           ${buildSubnetsSet "reserved_subnets" reservedSubnets}
 
-          ${buildSubnetsSet "allowed_destinations" config.networking.tor.client.allowedDestinations}
+          ${buildSubnetsSet "excluded_destinations" config.networking.tor.client.excludedDestinations}
 
-          ${buildSet "ifname" null "allowed_ifs" config.networking.tor.client.allowedInterfaces}
+          ${buildSet "ifname" null "excluded_ifs" config.networking.tor.client.excludedInterfaces}
 
-          ${buildSet "mark" null "allowed_marks" config.networking.tor.client.allowedFwMarks}
+          ${buildSet "mark" null "excluded_marks" config.networking.tor.client.excludedFwMarks}
 
           chain tor_nat_output {
             type nat hook output priority ${toString config.networking.tor.natPriority}
@@ -216,8 +216,8 @@ in
             ip daddr 127.0.0.0/8 return
             ip6 daddr ::1/128 return
 
-            oifname @allowed_ifs return # Do not modify any packet destined to allowed intfs
-            meta mark @allowed_marks return # Do not modify any packet marked with allowed marks
+            oifname @excluded_ifs return # Do not modify any packet destined to excluded intfs
+            meta mark @excluded_marks return # Do not modify any packet marked with excluded marks
 
             skuid tor return # Do not modify any tor packets
 
@@ -227,10 +227,10 @@ in
               "skuid squid return"
             }
 
-            # Here we prioritize allowedDestinations over DNS redirection,
+            # Here we prioritize excludedDestinations over DNS redirection,
             # but we redirect DNS requests before allowing local addresses, as
             # most network configurations have local IP addresses as DNS servers.
-            ip daddr @allowed_destinations return
+            ip daddr @excluded_destinations return
             ip protocol udp udp dport 53 dnat to 127.0.0.1:9053 # route dns before allowing local addresses
             ip daddr @reserved_subnets ip daddr != ${config.networking.tor.VirtualAddrNetworkIPv4} return
 
@@ -246,8 +246,8 @@ in
             oifname lo accept # For processes that connect to interface IPs, like 192.186.1.150 and are routed through lo
             ip daddr 127.0.0.0/8 accept # DNATed packets have ethernet intf but local addresses
 
-            oifname @allowed_ifs accept
-            meta mark @allowed_marks accept
+            oifname @excluded_ifs accept
+            meta mark @excluded_marks accept
 
             skuid tor accept
 
@@ -257,7 +257,7 @@ in
             }
 
             ip daddr @reserved_subnets accept
-            ip daddr @allowed_destinations accept
+            ip daddr @excluded_destinations accept
           }
         '';
       };
@@ -268,16 +268,16 @@ in
         content = ''
 
           ${buildSubnetsSet "reserved_subnets" reservedSubnets}
-          ${buildSubnetsSet "allowed_destinations" config.networking.tor.router.allowedDestinations}
+          ${buildSubnetsSet "excluded_destinations" config.networking.tor.router.excludedDestinations}
 
-          ${buildSubnetsSet "allowed_sources" config.networking.tor.router.allowedSources}
+          ${buildSubnetsSet "excluded_sources" config.networking.tor.router.excludedSources}
 
           chain tor_nat_prerouting {
             type nat hook prerouting priority ${toString config.networking.tor.natPriority}
 
             ip daddr @reserved_subnets ip daddr != ${config.networking.tor.VirtualAddrNetworkIPv4} return
-            ip saddr @allowed_sources return
-            ip daddr @allowed_destinations return
+            ip saddr @excluded_sources return
+            ip daddr @excluded_destinations return
 
             ip protocol udp udp dport 53 redirect to :9053
             ip protocol tcp tcp flags syn redirect to :9040
@@ -289,8 +289,8 @@ in
             ct state established,related accept
 
             ip daddr @reserved_subnets accept
-            ip saddr @allowed_sources accept
-            ip daddr @allowed_destinations accept
+            ip saddr @excluded_sources accept
+            ip daddr @excluded_destinations accept
           }
         '';
       };
