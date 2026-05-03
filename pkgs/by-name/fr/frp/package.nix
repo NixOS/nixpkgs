@@ -1,22 +1,26 @@
 {
   buildGoModule,
+  callPackage,
   lib,
   fetchFromGitHub,
   nixosTests,
 }:
-
-buildGoModule (finalAttrs: {
-  pname = "frp";
-  version = "0.66.0";
+let
+  version = "0.68.1";
 
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = "frp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-GFvXdhX7kA43kppWWdL7KhummUCqpa1cQ7V2d9ISGfo=";
+    tag = "v${version}";
+    hash = "sha256-AF0SrJFqWzwYJZSRm36fl+nR3TO6GldUMko18AkhjLI=";
   };
+  web = callPackage ./dashboard.nix { inherit version src; };
+in
+buildGoModule (finalAttrs: {
+  pname = "frp";
+  inherit version src;
 
-  vendorHash = "sha256-m5ECF0cgp2LfsTKey02MHz5TfqfzOCT5cU5trUfrOjY=";
+  vendorHash = "sha256-Tolhk0si85L/ZRs5k+xt5H6bZceZaW7xMPvcunHufSU=";
 
   doCheck = false;
 
@@ -24,6 +28,11 @@ buildGoModule (finalAttrs: {
     "cmd/frpc"
     "cmd/frps"
   ];
+
+  preBuild = ''
+    cp -r ${web.frpc} web/frpc/dist
+    cp -r ${web.frps} web/frps/dist
+  '';
 
   passthru.tests = {
     frp = nixosTests.frp;
