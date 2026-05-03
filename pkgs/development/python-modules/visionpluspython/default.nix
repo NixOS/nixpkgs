@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "visionpluspython";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9tHjRWMVxi1diPlKGPXLRgi5rkuAXskStUBIqfO0oh4=";
+    hash = "sha256-y+aLrkn3Uw18MWQvXvThxuzW51PCgEs/IJksTQkNeMs=";
   };
 
   build-system = [ setuptools ];
