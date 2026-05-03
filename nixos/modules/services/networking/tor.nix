@@ -59,7 +59,7 @@ in
       };
 
       client = {
-        enable = lib.mkEnableOption "the routing of all traffic of the current machine through Tor. Does not act as a router for other machines.";
+        enable = lib.mkEnableOption "the routing of all traffic of the current machine through Tor. Does not act as a router for other machines. IPv6 traffic is not routed and it is dropped.";
 
         clearnetProxy = {
           enable = lib.mkEnableOption "a squid instance that can perform requests without being routed through Tor.";
@@ -97,7 +97,7 @@ in
       };
 
       router = {
-        enable = lib.mkEnableOption "the routing of all received traffic through Tor. Does not act as a router for the current machine.";
+        enable = lib.mkEnableOption "the routing of all received traffic through Tor. Does not act as a router for the current machine. IPv6 traffic is not routed and it is dropped.";
 
         allowedDestinations = lib.mkOption {
           type = lib.types.listOf lib.types.str;
