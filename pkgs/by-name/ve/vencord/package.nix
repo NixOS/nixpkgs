@@ -24,9 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
-    # For some reason 1.14.10 is not tagged
-    rev = "cacd0efd87a8aba95ad2a3be8ae569a295b9eaae";
-    hash = "sha256-RnxhUGI0eji7gQf+FJnG+BoHphJmjxT9EF5FYUWYCbs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ylu1O4zvnVVEXzNQ5j1+Y2X54lVCyqVJLJa1Ngz+7aA=";
   };
 
   patches = [ ./fix-deps.patch ];

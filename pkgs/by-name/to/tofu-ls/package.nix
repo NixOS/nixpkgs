@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tofu-ls";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "opentofu";
     repo = "tofu-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gdejHJp4RAeOxH3h8iyMhRGNwFlFwVwTssypdE/X78s=";
+    hash = "sha256-C38Iqk+1TplSeoZcdhskdtGYUqK1ABtInXQkPDnGCsg=";
   };
 
   vendorHash = "sha256-Uq/4rd3OvCBhp53MEMLiWL/V6hkygwdBLSN8Wzwqoew=";

@@ -151,7 +151,9 @@ let
       libxrender
       libxtst
       nspr
-      nss
+      # nss is intentionally NOT in libPath: it would leak via LD_LIBRARY_PATH
+      # to xdg-open and break Firefox children when versions diverge (#514859,
+      # PR #186603)
       libxcb
       libxkbcommon
       pango
