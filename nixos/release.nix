@@ -28,6 +28,8 @@ with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
 
 let
 
+  configuration' = lib.setDefaultModuleLocation "<argument to nixos/release.nix>" configuration;
+
   version = fileContents ../.version;
   versionSuffix =
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
@@ -94,7 +96,7 @@ let
     };
 
   makeModules = module: rest: [
-    configuration
+    configuration'
     versionModule
     module
     rest
@@ -365,7 +367,7 @@ rec {
       (import lib/eval-config.nix {
         inherit system;
         modules = [
-          configuration
+          configuration'
           versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
         ];
@@ -382,7 +384,7 @@ rec {
       (import lib/eval-config.nix {
         inherit system;
         modules = [
-          configuration
+          configuration'
           versionModule
           ./maintainers/scripts/ec2/amazon-image-zfs.nix
         ];
@@ -406,7 +408,7 @@ rec {
           (import lib/eval-config.nix {
             inherit system;
             modules = [
-              configuration
+              configuration'
               versionModule
               ./maintainers/scripts/incus/incus-container-image.nix
             ];
@@ -430,7 +432,7 @@ rec {
           (import lib/eval-config.nix {
             inherit system;
             modules = [
-              configuration
+              configuration'
               versionModule
               ./maintainers/scripts/incus/incus-container-image.nix
             ];
@@ -454,7 +456,7 @@ rec {
           (import lib/eval-config.nix {
             inherit system;
             modules = [
-              configuration
+              configuration'
               versionModule
               ./maintainers/scripts/incus/incus-virtual-machine-image.nix
             ];
@@ -478,7 +480,7 @@ rec {
           (import lib/eval-config.nix {
             inherit system;
             modules = [
-              configuration
+              configuration'
               versionModule
               ./maintainers/scripts/incus/incus-virtual-machine-image.nix
             ];
