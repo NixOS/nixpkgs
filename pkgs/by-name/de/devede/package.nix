@@ -11,7 +11,6 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   gobject-introspection,
-  nix-update-script,
 }:
 
 let
@@ -28,7 +27,7 @@ in
 buildPythonApplication (finalAttrs: {
   pname = "devede";
   version = "4.21.3.1";
-  format = "pyproject";
+  pyproject = true;
   namePrefix = "";
 
   src = fetchFromGitLab {
