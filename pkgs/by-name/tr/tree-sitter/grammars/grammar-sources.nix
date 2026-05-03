@@ -2000,6 +2000,19 @@
     };
   };
 
+  plank = {
+    version = "0.1.0";
+    url = "github:plankevm/plank-monorepo";
+    hash = "sha256-B2UmV5i2ELlmzyrR8iFIOQcSpHeRQl4I6lxakMskolg=";
+    location = "plank-tree-sitter";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        _0xferrous
+      ];
+    };
+  };
+
   po = {
     version = "0-unstable-2024-04-20";
     url = "github:erasin/tree-sitter-po";

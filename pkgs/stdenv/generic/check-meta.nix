@@ -37,7 +37,7 @@ let
     ;
 
   inherit (lib.meta)
-    availableOn
+    platformMatch
     cpeFullVersionWithVendor
     ;
 
@@ -82,19 +82,19 @@ let
   hasListedLicense =
     assert areLicenseListsValid;
     list:
-    if list == [ ] then
-      attrs: false
-    else
-      attrs:
-      attrs ? meta.license
-      && (
-        if isList attrs.meta.license then
-          any (l: elem l list) attrs.meta.license
-        else if attrs.meta.license ? "licenseType" then
-          lib.licenses.containsLicenses list attrs.meta.license
-        else
-          elem attrs.meta.license list
-      );
+    let
+      containsListLicenses = lib.licenses.containsLicenses list;
+    in
+    attrs:
+    attrs ? meta.license
+    && (
+      if isList attrs.meta.license then
+        any (l: elem l list) attrs.meta.license
+      else if attrs.meta.license ? "licenseType" then
+        containsListLicenses attrs.meta.license
+      else
+        elem attrs.meta.license list
+    );
 
   hasAllowlistedLicense = hasListedLicense allowlist;
 
@@ -122,7 +122,14 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
-  hasUnsupportedPlatform = pkg: !(availableOn hostPlatform pkg);
+  # Logical inversion of meta.availableOn for hostPlatform
+  hasUnsupportedPlatform =
+    let
+      anyHostPlatform = any (platformMatch hostPlatform);
+    in
+    pkg:
+    pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
+    || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
@@ -178,7 +185,6 @@ let
     attrs:
     attrs ? meta.sourceProvenance
     && any (t: !t.isSource) attrs.meta.sourceProvenance
-    && !allowNonSource
     && !allowNonSourcePredicate attrs;
 
   showLicenseOrSourceType =
@@ -381,17 +387,17 @@ let
       identifiers = attrs;
     };
 
-  metaInvalid = if config.checkMeta then meta: !metaType.verify meta else meta: false;
+  checkMeta = config.checkMeta;
 
   checkOutputsToInstall =
-    if config.checkMeta then
-      attrs:
+    attrs:
+    attrs.meta ? outputsToInstall
+    && (
       let
         actualOutputs = attrs.outputs or [ "out" ];
       in
-      any (output: !elem output actualOutputs) (attrs.meta.outputsToInstall or [ ])
-    else
-      attrs: false;
+      !all (output: elem output actualOutputs) attrs.meta.outputsToInstall
+    );
 
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
@@ -403,9 +409,12 @@ let
   # Along with a boolean flag for each reason
   checkValidity =
     attrs:
+    if !attrs ? meta then
+      null
+    else
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    if metaInvalid (attrs.meta or { }) then
+    if checkMeta && !metaType.verify attrs.meta then
       {
         reason = "unknown-meta";
         msg = "has an invalid meta attrset:${
@@ -415,7 +424,7 @@ let
       }
 
     # --- Put checks that cannot be ignored here ---
-    else if checkOutputsToInstall attrs then
+    else if checkMeta && checkOutputsToInstall attrs then
       {
         reason = "broken-outputs";
         msg = "has invalid meta.outputsToInstall";
@@ -423,19 +432,19 @@ let
       }
 
     # --- Put checks that can be ignored here ---
-    else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
+    else if hasDeniedUnfreeLicense attrs && !(allowlist != [ ] && hasAllowlistedLicense attrs) then
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
         remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
       }
-    else if hasBlocklistedLicense attrs then
+    else if blocklist != [ ] && hasBlocklistedLicense attrs then
       {
         reason = "blocklisted";
         msg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
         remediation = "";
       }
-    else if hasDeniedNonSourceProvenance attrs then
+    else if !allowNonSource && hasDeniedNonSourceProvenance attrs then
       {
         reason = "non-source";
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
