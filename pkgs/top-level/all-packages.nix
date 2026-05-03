@@ -8312,16 +8312,6 @@ with pkgs;
     enableExperimental = true;
   };
 
-  busybox = callPackage ../os-specific/linux/busybox {
-    # Fixes libunwind from being dynamically linked to a static binary.
-    stdenv =
-      if (stdenv.targetPlatform.useLLVM or false) then
-        overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
-      else
-        stdenv;
-  };
-  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { };
-
   cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
 
   conky = callPackage ../os-specific/linux/conky (

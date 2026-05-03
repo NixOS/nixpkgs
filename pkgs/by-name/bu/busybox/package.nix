@@ -13,6 +13,7 @@
   useMusl ? stdenv.hostPlatform.libc == "musl",
   musl,
   extraConfig ? "",
+  overrideCC,
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -46,13 +47,21 @@ let
     owner = "installer-team";
     repo = "busybox";
     rev = "debian/1%${debianVersion}";
-    sha256 = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
+    hash = "sha256-6r0RXtmqGXtJbvLSD1Ma1xpqR8oXL2bBKaUE/cSENL8=";
   };
   debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
+
+  # Fixes libunwind from being dynamically linked to a static binary.
+  stdenv' =
+    if (stdenv.targetPlatform.useLLVM or false) then
+      overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
+    else
+      stdenv;
+
 in
 
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "busybox";
   version = "1.37.0";
 
@@ -60,8 +69,8 @@ stdenv.mkDerivation rec {
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
-    url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
+    url = "https://busybox.net/downloads/busybox-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-MxHf8y50ZJn03w1d8E1+s5Y4LX4Qi7klDntRm4NwQ6Q=";
   };
 
   hardeningDisable = [
@@ -147,7 +156,7 @@ stdenv.mkDerivation rec {
     CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
 
     ${extraConfig}
-    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv'.cc.targetPrefix}"
     ${libcConfig}
     EOF
 
@@ -157,7 +166,7 @@ stdenv.mkDerivation rec {
   '';
 
   postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
-    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+    makeFlagsArray+=("CC=${stdenv'.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   makeFlags = [ "SKIP_STRIP=y" ];
@@ -176,9 +185,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
-    stdenv.cc.libc
-    stdenv.cc.libc.static
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv'.cc.libc ? static) [
+    stdenv'.cc.libc
+    stdenv'.cc.libc.static
   ];
 
   enableParallelBuilding = true;
@@ -199,6 +208,6 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" finalAttrs.version;
   };
-}
+})
