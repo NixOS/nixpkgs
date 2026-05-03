@@ -73,6 +73,7 @@ in
       ];
 
       wantedBy = [ "network.target" ];
+      serviceConfig.KillMode = "mixed";
     };
 
     /*
