@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libweaver";
-  version = "0-unstable-2025-12-18";
+  version = "0-unstable-2026-04-24";
 
   src = fetchFromGitHub {
     owner = "isledecomp";
     repo = "SIEdit";
-    rev = "2c32d65dbab577bf3a8701bc8bcae9034a7815d9";
-    hash = "sha256-qtE7c/LCQBhVWgbdmu4e5mCo+4Pz6QkAY29dHG/Fi/U=";
+    rev = "a08fbcb9a93b9029366eabe0f23d0279fb9f15b0";
+    hash = "sha256-8NTYeyEorQArzL5VFKYnRoaITK1+3S7RKy8aslxjLvk=";
   };
 
   strictDeps = true;
