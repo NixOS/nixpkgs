@@ -715,7 +715,9 @@ rec {
           __structuredAttrs = false;
           pname = name;
           version = lib.trivial.release + "pre-git";
-          inherit meta;
+          meta = meta // {
+            license = lib.licenses.mit;
+          };
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
           inherit propagatedNativeBuildInputs;
