@@ -57,13 +57,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gephgui-wry";
-  version = "5.5.0";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "gephgui-pkg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NxtE26GPG2EvgtMa6eEOZmOcqu4yYr3zioF1CmrxLRk=";
+    hash = "sha256-f6IC9dRQ3CW3P0TRuOe1mmG3jOAvyMPBpylHJ82AUpM=";
     fetchSubmodules = true;
   };
 
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) version src;
 
     sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
-    npmDepsHash = "sha256-dGzmdvzKp/JHCgDf3NJb0oolgW4Y/spagzpeVpMF28w=";
+    npmDepsHash = "sha256-GFeHowIv+TiejSNK6kAGAgYcwc2DHu3c4UBEeTScIPk=";
 
     installPhase = ''
       runHook preInstall
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
-  cargoHash = "sha256-Dh1WuxU1rRDNu2cF9GCo1CIiph1sLc5j0GSPb7b7kJA=";
+  cargoHash = "sha256-Ekl03CvM32E3Q86YZL8eBFYAzDcpAXq8yVi2Fg3t5yc=";
 
   nativeBuildInputs = [
     pkg-config
