@@ -224,6 +224,13 @@ in
     (mkRemovedOptionModule
       [
         "services"
+        "go-neb"
+      ]
+      "The go-neb module has been removed. Consider migrating to `matrix-hookshot` (`services.matrix-hookshot.enable`)."
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
         "grafana-agent"
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
