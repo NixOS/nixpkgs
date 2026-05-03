@@ -20,6 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-NAzVFWWbys+jYYOifCOOoucAKfa19njIzXBQbtgGX9M=";
   };
 
+  patches = [
+    # https://github.com/Motion-Project/motion/pull/1959
+    ./fix-cross.diff
+  ];
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
