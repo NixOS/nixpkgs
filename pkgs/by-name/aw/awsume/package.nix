@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awsume";
   version = "4.5.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trek10inc";
@@ -21,13 +21,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   dependencies = with python3Packages; [
     colorama
     boto3
     psutil
     pluggy
     pyyaml
-    setuptools
   ];
 
   postPatch = ''
