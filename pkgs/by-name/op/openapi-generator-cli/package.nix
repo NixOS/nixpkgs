@@ -11,7 +11,7 @@
 
 let
   jre = jre_headless;
-  version = "7.21.0";
+  version = "7.22.0";
   mainProgram = "openapi-generator-cli";
   this = maven.buildMavenPackage {
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "OpenAPITools";
       repo = "openapi-generator";
       tag = "v${version}";
-      hash = "sha256-3e2JrZ+k88t3CyrkBzwkijs0yZGGwB9Se2CeSB02x6c=";
+      hash = "sha256-G3MuOJFXVpKNG9Y3JEVMJFxt2wWv1I1dSGuxni4JYdc=";
     };
 
     patches = [
