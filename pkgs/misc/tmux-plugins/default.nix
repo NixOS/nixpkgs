@@ -1227,11 +1227,16 @@ in
 
       for f in tmux_window_name.tmux scripts/rename_session_windows.py; do
         wrapProgram $target/$f \
-          --prefix PATH : ${lib.makeBinPath [(pkgs.python3.withPackages (p: with p; [
-              libtmux
-              pip
-            ]))
-          ]}
+          --prefix PATH : ${
+            lib.makeBinPath [
+              (pkgs.python3.withPackages (
+                p: with p; [
+                  libtmux
+                  pip
+                ]
+              ))
+            ]
+          }
       done
     '';
     meta = with lib; {
