@@ -22,9 +22,6 @@ buildDotnetModule rec {
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.json;
 
-  # [...]Microsoft.NET.Publish.targets(248,5): error MSB3021: Unable to copy file "[...]/NUnit3.TestAdapter.pdb" to "[...]/NUnit3.TestAdapter.pdb". Access to the path '[...]/NUnit3.TestAdapter.pdb' is denied. [[...]/ExecutionEngineTests.csproj]
-  enableParallelBuilding = false;
-
   executables = [ "BoogieDriver" ];
 
   makeWrapperArgs = [

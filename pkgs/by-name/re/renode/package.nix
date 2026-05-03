@@ -115,8 +115,6 @@ buildDotnetModule rec {
 
   dontUseCmakeConfigure = true;
 
-  enableParallelBuilding = false;
-
   preBuild = ''
     mkdir -p lib/resources
     ln -s ${resources}/* lib/resources/

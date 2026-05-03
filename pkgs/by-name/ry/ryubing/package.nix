@@ -51,8 +51,6 @@ buildDotnetModule rec {
       darwin.sigtool
     ];
 
-  enableParallelBuilding = false;
-
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
