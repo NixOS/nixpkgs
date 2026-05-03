@@ -24,16 +24,12 @@ let
   buildSet = type: flags: name: elements: ''
     set ${name} {
       type ${type}
-      ${if flags != null then "flags ${flags}" else ""}
-
-      ${lib.optionalString (elements != [ ])
-
-        "elements = { ${lib.concatStringsSep "," elements} }"
-      }
+      ${lib.optionalString (flags != [ ]) "flags ${lib.concatStringsSep "," flags}"}
+      ${lib.optionalString (elements != [ ]) "elements = { ${lib.concatStringsSep "," elements} }"}
     }
   '';
 
-  buildSubnetsSet = buildSet "ipv4_addr" "interval";
+  buildSubnetsSet = buildSet "ipv4_addr" [ "interval" ];
 
 in
 {
