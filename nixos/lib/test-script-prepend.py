@@ -7,6 +7,7 @@ from unittest import TestCase
 
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.driver import Driver
+from test_driver.logger import AbstractLogger, CompositeLogger
 from typing_extensions import Protocol
 
 from test_driver.machine import BaseMachine, NspawnMachine, QemuMachine
@@ -93,8 +94,7 @@ def join_all() -> None:
     return None
 
 
-def log(msg: str):
-    pass
+log: AbstractLogger = CompositeLogger([])
 
 
 def polling_condition(
