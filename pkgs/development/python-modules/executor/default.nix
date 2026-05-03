@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  isPy27,
   pythonAtLeast,
   coloredlogs,
   humanfriendly,
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # pipes is removed in python 3.13
-  disabled = isPy27 || pythonAtLeast "3.13";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "xolox";

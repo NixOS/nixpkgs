@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   setuptools,
   pytestCheckHook,
   scipy,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "mlxtend";
   version = "0.24.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";

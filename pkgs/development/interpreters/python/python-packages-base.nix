@@ -190,7 +190,6 @@ in
 {
   inherit lib pkgs stdenv;
   inherit (python.passthru)
-    isPy27
     isPy311
     isPy312
     isPy313

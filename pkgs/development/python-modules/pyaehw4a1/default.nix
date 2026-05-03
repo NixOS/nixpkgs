@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchFromGitHub,
 }:
 
@@ -9,8 +8,6 @@ buildPythonPackage rec {
   pname = "pyaehw4a1";
   version = "0.3.9";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "bannhead";

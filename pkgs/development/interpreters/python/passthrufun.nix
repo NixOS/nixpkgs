@@ -109,12 +109,10 @@ let
     );
 in
 rec {
-  isPy27 = pythonVersion == "2.7";
   isPy311 = pythonVersion == "3.11";
   isPy312 = pythonVersion == "3.12";
   isPy313 = pythonVersion == "3.13";
   isPy314 = pythonVersion == "3.14";
-  isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
   isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
   isPy3k = isPy3;
   isPyPy = lib.hasInfix "pypy" interpreter;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytestCheckHook,
   autoconf,
   automake,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "awslambdaric";
   version = "3.1.1";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";

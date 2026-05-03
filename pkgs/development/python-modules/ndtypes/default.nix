@@ -5,13 +5,11 @@
   python,
   numpy,
   libndtypes,
-  isPy27,
 }:
 
 buildPythonPackage {
   pname = "ndtypes";
   format = "setuptools";
-  disabled = isPy27;
   inherit (libndtypes) version src meta;
 
   outputs = [

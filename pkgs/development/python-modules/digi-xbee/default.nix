@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   pyserial,
   srp,
   lib,
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "digi-xbee";
   version = "1.5.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     pname = "digi_xbee";
