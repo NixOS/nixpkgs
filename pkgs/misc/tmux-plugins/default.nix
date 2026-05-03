@@ -1216,14 +1216,13 @@ in
     nativeBuildInputs = [ pkgs.makeWrapper ];
     rtpFilePath = "tmux_window_name.tmux";
     postInstall = ''
-      # Update USR_BIN_REMOVER with .nix-profile PATH
-      sed -i "s|^USR_BIN_REMOVER.*|USR_BIN_REMOVER = (r\'^/home/${config.home.username}/.nix-profile/bin/(.+)( --.*)?\', r\'\\\g<1>\')|" $target/scripts/rename_session_windows.py
+      script=$target/scripts/rename_session_windows.py
 
-      # Update substitute_sets with .nix-profile PATHs
-      sed -i "s|^\ssubstitute_sets: List.*|    substitute_sets: List[Tuple] = field(default_factory=lambda: [(\'/home/${config.home.username}/.nix-profile/bin/(.+) --.*\', \'\\\g<1>\'), (r\'.+ipython([32])\', r\'ipython\\\g<1>\'), USR_BIN_REMOVER, (r\'(bash) (.+)/(.+[ $])(.+)\', \'\\\g<3>\\\g<4>\')])|" $target/scripts/rename_session_windows.py
-
-      # Update dir_programs with .nix-profile PATH for applications
-      sed -i "s|^\sdir_programs: List.*|    dir_programs: List[str] = field(default_factory=lambda: [['/home/${config.home.username}/.nix-profile/bin/vim', '/home/${config.home.username}/.nix-profile/bin/vi', '/home/${config.home.username}/.nix-profile/bin/git', '/home/${config.home.username}/.nix-profile/bin/nvim']])|" $target/scripts/rename_session_windows.py
+      sed -i \
+        -e 's|^USR_BIN_REMOVER.*|USR_BIN_REMOVER = (r"^" + os.path.expanduser("~") + r"/.nix-profile/bin/(.+)( --.*)?", r"\\g<1>")|' \
+        -e 's|^\(\s*\)substitute_sets: List.*|\1substitute_sets: List[Tuple] = field(default_factory=lambda: [(os.path.expanduser("~") + r"/.nix-profile/bin/(.+) --.*", r"\\g<1>"), (r".+ipython([32])", r"ipython\\g<1>"), USR_BIN_REMOVER, (r"(bash) (.+)/(.+[ $])(.+)", r"\\g<3>\\g<4>")])|' \
+        -e 's|^\(\s*\)dir_programs: List.*|\1dir_programs: List[str] = field(default_factory=lambda: [os.path.expanduser("~") + "/.nix-profile/bin/" + p for p in ["vim", "vi", "git", "nvim"]])|' \
+        $script
 
       for f in tmux_window_name.tmux scripts/rename_session_windows.py; do
         wrapProgram $target/$f \
