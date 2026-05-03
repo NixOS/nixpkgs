@@ -2,14 +2,16 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
   nixfmt,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixfmt-rs";
-  version = "0.1.4";
+  version = "0.2.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -18,15 +20,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Mic92";
     repo = "nixfmt-rs";
     tag = finalAttrs.version;
-    hash = "sha256-lfT+cFys0iJGkOgLO8LR7lnKMG7ZKJTVvOCm6dSBf8w=";
+    hash = "sha256-eBVi22+EGMYWv2t/seoPqou8PuABxVcsWTFcrNYP6So=";
   };
 
-  cargoHash = "sha256-TmZi99xxTlSTpqr6k29CsnTK8qfj5gjs1AGkx1hcXCg=";
+  cargoHash = "sha256-fadjOtfB8bFuhTN9mAmi2A526boW7Aje39IBjdxszok=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage docs/*
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  nativeCheckInputs = [ nixfmt ];
+  nativeCheckInputs = [
+    gitMinimal
+    nixfmt
+  ];
 
   passthru.updateScript = nix-update-script { };
 
