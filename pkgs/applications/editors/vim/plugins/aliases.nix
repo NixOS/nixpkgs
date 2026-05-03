@@ -52,6 +52,7 @@ mapAliases (
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
     fruzzy = throw "vimPlugins.fruzzy did not update since 2019-10-28 and uses EOL version of Nim"; # Added 2025-11-12
     gleam-vim = throw "gleam.vim has been removed: its code was merged into vim."; # Added 2025-06-10
+    mind-nvim = throw "the upstream repository got deleted"; # added 2026-05-03
     minsnip-nvim = throw "the upstream repository got deleted"; # added 2025-08-30
     neuron-nvim = throw "neuron.nvim has been removed: archived repository 2023-02-19"; # Added 2025-09-10
     nvim-gps = throw "nvim-gps has been archived since 2022. Use nvim-navic instead."; # Added 2025-12-18

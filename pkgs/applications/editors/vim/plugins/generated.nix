@@ -9645,20 +9645,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  mind-nvim = buildVimPlugin {
-    pname = "mind.nvim";
-    version = "2.2.1-unstable-2023-03-22";
-    src = fetchFromGitHub {
-      owner = "hadronized";
-      repo = "mind.nvim";
-      rev = "002137dd7cf97865ebd01b6a260209d2daf2da66";
-      hash = "sha256-JIhAhQYGLLRucwlhzfckQYU5qjqbHtNH52JlGS5a79w=";
-    };
-    meta.homepage = "https://github.com/hadronized/mind.nvim/";
-    meta.license = lib.licenses.unfree;
-    meta.hydraPlatforms = [ ];
-  };
-
   mini-ai = buildVimPlugin {
     pname = "mini.ai";
     version = "0.17.0-unstable-2026-04-03";
