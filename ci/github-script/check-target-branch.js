@@ -151,9 +151,11 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'REQUEST_CHANGES',
+      event: 'COMMENT',
       reviewKey,
     })
+
+    throw new Error('This PR is against the wrong branch.')
   } else if (rebuildsAllTests && !isExemptKernelUpdate) {
     let branchText
     if (base === 'master' && maxRebuildCount >= 500) {
@@ -177,9 +179,11 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'REQUEST_CHANGES',
+      event: 'COMMENT',
       reviewKey,
     })
+
+    throw new Error('This PR is against the wrong branch.')
   } else if (
     maxRebuildCount >= 500 &&
     !isExemptKernelUpdate &&
@@ -200,7 +204,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'REQUEST_CHANGES',
+      event: 'COMMENT',
       reviewKey,
     })
   } else {
