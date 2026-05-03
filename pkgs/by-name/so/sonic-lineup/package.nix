@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     libfishsound
     libid3tag
     libjack2
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     liblo
     libmad
     liboggz
