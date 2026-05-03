@@ -13,7 +13,6 @@
   standard-imghdr,
   tld,
   webob,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -55,9 +54,6 @@ buildPythonPackage (finalAttrs: {
     "flanker.addresslib.address"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = with lib; {
     description = "Mailgun Parsing Tools for email addresses and MIME";
