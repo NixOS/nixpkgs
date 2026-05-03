@@ -10,6 +10,12 @@ on:
     secrets:
       NIXPKGS_CI_APP_PRIVATE_KEY:
         required: true
+      NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY:
+        required: true
+      NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY:
+        required: true
+      NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -36,9 +42,21 @@ jobs:
           sparse-checkout-cone-mode: true # default, for clarity
           sparse-checkout: |
             ci/github-script
+
+      # It's fine to reuse this app in the 'eval / compare' job,
+      # because this job has to run before that one.
+      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        if: vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID
+        id: app-token
+        with:
+          client-id: ${{ vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID }}
+          private-key: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
+
       - id: prepare
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
           retries: 10
           # The default for this includes code 422, which happens regularly for us when comparing commits:
           #   422 - Server Error: Sorry, this diff is taking too long to generate.
@@ -60,6 +78,9 @@ jobs:
     permissions:
       # cherry-picks
       pull-requests: write
+    secrets:
+      NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY }}
+      NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
@@ -82,6 +103,8 @@ jobs:
       # compare
       pull-requests: write
       statuses: write
+    secrets:
+      NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
