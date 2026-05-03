@@ -32,7 +32,8 @@
   langObjCpp,
   langJit,
   langRust ? false,
-  disableBootstrap ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform),
+  hostIsTarget,
+  disableBootstrap ? (!hostIsTarget),
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
@@ -48,7 +49,6 @@ assert !enablePlugin -> disableGdbPlugin;
 
 let
   inherit (stdenv)
-    buildPlatform
     hostPlatform
     targetPlatform
     ;
@@ -56,9 +56,8 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
 
-  crossMingw = (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
-  crossDarwin =
-    (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.libc == "libSystem";
+  crossMingw = !hostIsTarget && targetPlatform.isMinGW;
+  crossDarwin = !hostIsTarget && targetPlatform.libc == "libSystem";
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
@@ -247,20 +246,18 @@ let
     ++ lib.optional (isl != null) "--with-isl=${isl}"
 
     # Ada options, gcc can't build the runtime library for a cross compiler
-    ++ lib.optional langAda (
-      if lib.systems.equals hostPlatform targetPlatform then "--enable-libada" else "--disable-libada"
-    )
+    ++ lib.optional langAda (if hostIsTarget then "--enable-libada" else "--disable-libada")
 
     ++ import ../common/platform-flags.nix {
       inherit (stdenv) targetPlatform;
       inherit lib;
     }
-    ++ lib.optionals (!lib.systems.equals targetPlatform hostPlatform) crossConfigureFlags
+    ++ lib.optionals (!hostIsTarget) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (
-      lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
+      hostIsTarget && targetPlatform.isx86_32
     ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isCygwin) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
@@ -277,7 +274,7 @@ let
       lib.optional (targetPlatform.libc == "musl")
         # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
         "--disable-libmpx"
-    ++ lib.optionals (lib.systems.equals targetPlatform hostPlatform && targetPlatform.libc == "musl") [
+    ++ lib.optionals (hostIsTarget && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
