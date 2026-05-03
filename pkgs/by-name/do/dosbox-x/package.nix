@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   alsa-lib,
   autoreconfHook,
   ffmpeg,
@@ -110,10 +111,16 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    # Version output on stderr, program returns status code 1
-    command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      # Version output on stderr, program returns status code 1
+      command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "dosbox-x-v";
+      ignoredVersions = "-osfree$";
+    };
   };
 
   meta = {
