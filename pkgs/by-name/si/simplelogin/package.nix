@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     bcrypt
     blinker
     boto3
-    coinbase-commerce
     coloredlogs
     cryptography
     deprecated
