@@ -51,8 +51,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Programmable client library that takes advantage of the commonalities among";
-    homepage = "https://launchpad.net/lazr.restfulclient";
-    changelog = "https://git.launchpad.net/lazr.restfulclient/tree/NEWS.rst?h=${version}";
+    homepage = "https://pypi.org/project/lazr.restfulclient";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
