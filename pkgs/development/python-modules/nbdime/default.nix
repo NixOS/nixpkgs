@@ -91,7 +91,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jupyter/nbdime";
-    changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/nbdime/blob/v${version}/CHANGELOG.md";
     description = "Tools for diffing and merging of Jupyter notebooks";
     license = lib.licenses.bsd3;
     maintainers = [ ];
