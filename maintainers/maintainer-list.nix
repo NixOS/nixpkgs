@@ -145,6 +145,12 @@
     githubId = 67933444;
     keys = [ { fingerprint = "B39E B98E 8860 DAFB 0567  0073 A614 B7D2 5134 987A"; } ];
   };
+  _0xferrous = {
+    email = "0xferrous@proton.me";
+    github = "0xferrous";
+    githubId = 213212767;
+    name = "0xferrous";
+  };
   _0xgsvs = {
     email = "venkat.subrahmanyam.34@gmail.com";
     name = "0xgsvs";
