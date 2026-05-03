@@ -45,6 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-DOCdQqCihkR0g/6m90DbJxw00QTpyVmFzCxagrVWKiI=";
     })
     ./match-vamp.patch
+    (fetchpatch2 {
+      url = "https://github.com/piper-audio/piper-vamp-cpp/commit/6f16a09b78b995b3cf2844f00033bde90e5e0936.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "piper-vamp-cpp/";
+      hash = "sha256-G9O9t1Niesffj4bDFO0q8KMgygTdYJUVHkq/7nkGSRk=";
+    })
   ];
 
   buildInputs = [
