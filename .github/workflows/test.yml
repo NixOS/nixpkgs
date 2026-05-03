@@ -116,5 +116,8 @@ jobs:
       statuses: write # unused on pull_request, required by PR workflow
     secrets:
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+      NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
+      NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY }}
+      NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY }}
     with:
       artifact-prefix: pr-
