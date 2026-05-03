@@ -720,15 +720,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "dkjson";
-      version = "2.8-2";
+      version = "2.9-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/dkjson-2.8-2.rockspec";
-          sha256 = "0hr4vfmf64kvmqbnr1vx4p6gl3mmiq1hg5jd60rqwplsiaib2r67";
+          url = "mirror://luarocks/dkjson-2.9-1.rockspec";
+          sha256 = "1nxm2ncjdx1yh4lb4v5jab826069idimqbxikapf6hdv0n9m1h90";
         }).outPath;
       src = fetchurl {
-        url = "https://dkolf.de/dkjson-lua/dkjson-2.8.tar.gz";
-        sha256 = "0chmlcv8498n313x19aampwvz2s1pp4zpcvvxdhwihcixcxwvs14";
+        url = "https://dkolf.de/dkjson-lua/dkjson-2.9.tar.gz";
+        sha256 = "0qwszsny4g58pb8hzm1wlsp6gvmjiywgcydim6w1bgdnq66x5dvs";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
