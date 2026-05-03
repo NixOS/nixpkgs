@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   setuptools,
   regex,
   csvw,
@@ -15,7 +14,6 @@ buildPythonPackage rec {
   pname = "segments";
   version = "2.4.0";
   pyproject = true;
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "cldf";
