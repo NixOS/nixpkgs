@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "4.10.0";
+  version = "4.12.0";
   pyproject = true;
 
   outputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xd6a4/HiQRqH/1ey142lP6yOrp5brI5YcJJ8ti3fwDM=";
+    hash = "sha256-mbGPaFTWOeyGcWZC77oqEYPecoDUGk5JXQuFAOO0ZpI=";
   };
 
   postPatch = ''
