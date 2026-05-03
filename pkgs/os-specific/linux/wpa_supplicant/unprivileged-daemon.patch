@@ -1,0 +1,133 @@
+commit 47cc80d3056f8a783ce1caabeb0a8b5379cba3d1
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Mon Feb 2 08:24:24 2026 +0100
+
+    Fixes for running wpa_supplicant unprivileged
+    
+    1. Ensure appropriate group ownership and permissions on the client sockets.
+       Motivation: clients communicate with the daemon by creating "client"
+       sockets; by default this is owned by the user running the client,
+       so it may be inaccessible by the daemon.
+    
+    2. Move the "control" sockets under a subdirectory of /run/wpa_supplicant.
+       Motivation: wpa_supplicant will try to adjust the ownership of the
+       sockets directory, even if they are fine, and fail.
+    
+    3. Move the "client" under a subdirectory of /run/wpa_supplicant instead
+       of tmp. Motivation: this allows to unshare /tmp.
+    
+    4. Extend the dbus policy to allow the wpa_supplicant user/group.
+
+diff --git a/src/common/wpa_ctrl.c b/src/common/wpa_ctrl.c
+index 7e197f094..6bfb09111 100644
+--- a/src/common/wpa_ctrl.c
++++ b/src/common/wpa_ctrl.c
+@@ -15,6 +15,8 @@
+ #include <fcntl.h>
+ #include <sys/un.h>
+ #include <unistd.h>
++#include <sys/types.h>
++#include <grp.h>
+ #include <fcntl.h>
+ #endif /* CONFIG_CTRL_IFACE_UNIX */
+ #ifdef CONFIG_CTRL_IFACE_UDP_REMOTE
+@@ -165,6 +167,14 @@ try_again:
+ 		return NULL;
+ 	}
+ 
++	/* Set the client socket owner group to "wpa_supplicant"
++	 * and ensure group and user permissions are the same */
++	struct group *grp = getgrnam("wpa_supplicant");
++	if (grp != NULL) {
++		lchown(ctrl->local.sun_path, -1, grp->gr_gid);
++		chmod(ctrl->local.sun_path, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
++	}
++
+ #ifdef ANDROID
+ 	/* Set group even if we do not have privileges to change owner */
+ 	lchown(ctrl->local.sun_path, -1, AID_WIFI);
+diff --git a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
+index e81b495f4..c371dd11f 100644
+--- a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
++++ b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
+@@ -4,7 +4,12 @@
+ <busconfig>
+         <policy user="root">
+                 <allow own="fi.w1.wpa_supplicant1"/>
+-
++                <allow send_destination="fi.w1.wpa_supplicant1"/>
++                <allow send_interface="fi.w1.wpa_supplicant1"/>
++                <allow receive_sender="fi.w1.wpa_supplicant1" receive_type="signal"/>
++        </policy>
++        <policy group="wpa_supplicant">
++                <allow own="fi.w1.wpa_supplicant1"/>
+                 <allow send_destination="fi.w1.wpa_supplicant1"/>
+                 <allow send_interface="fi.w1.wpa_supplicant1"/>
+                 <allow receive_sender="fi.w1.wpa_supplicant1" receive_type="signal"/>
+diff --git a/wpa_supplicant/wpa_cli.c b/wpa_supplicant/wpa_cli.c
+index 03180a316..f5e22dee1 100644
+--- a/wpa_supplicant/wpa_cli.c
++++ b/wpa_supplicant/wpa_cli.c
+@@ -44,10 +44,10 @@ static int wpa_cli_attached = 0;
+ static int wpa_cli_connected = -1;
+ static int wpa_cli_last_id = 0;
+ #ifndef CONFIG_CTRL_IFACE_DIR
+-#define CONFIG_CTRL_IFACE_DIR "/var/run/wpa_supplicant"
++#define CONFIG_CTRL_IFACE_DIR "/run/wpa_supplicant/control"
+ #endif /* CONFIG_CTRL_IFACE_DIR */
+ static const char *ctrl_iface_dir = CONFIG_CTRL_IFACE_DIR;
+-static const char *client_socket_dir = NULL;
++static const char *client_socket_dir = "/run/wpa_supplicant/client";
+ static char *ctrl_ifname = NULL;
+ static const char *global = NULL;
+ static const char *pid_file = NULL;
+diff --git a/wpa_supplicant/wpa_gui-qt4/wpagui.cpp b/wpa_supplicant/wpa_gui-qt4/wpagui.cpp
+index 0c125d90f..924b43313 100644
+--- a/wpa_supplicant/wpa_gui-qt4/wpagui.cpp
++++ b/wpa_supplicant/wpa_gui-qt4/wpagui.cpp
+@@ -137,7 +137,8 @@ WpaGui::WpaGui(QApplication *_app, QWidget *parent, const char *,
+ 	ctrl_conn = NULL;
+ 	monitor_conn = NULL;
+ 	msgNotifier = NULL;
+-	ctrl_iface_dir = strdup("/var/run/wpa_supplicant");
++	ctrl_iface_dir = strdup("/run/wpa_supplicant/control");
++  client_socket_dir = strdup("/run/wpa_supplicant/client");
+ 	signalMeterInterval = 0;
+ 
+ 	parse_argv();
+@@ -321,7 +322,7 @@ int WpaGui::openCtrlConnection(const char *ifname)
+ 		free(ctrl_iface);
+ 		ctrl_iface = NULL;
+ 
+-		ctrl = wpa_ctrl_open(NULL);
++		ctrl = wpa_ctrl_open2(NULL, client_socket_dir);
+ 		if (ctrl) {
+ 			len = sizeof(buf) - 1;
+ 			ret = wpa_ctrl_request(ctrl, "INTERFACES", 10, buf,
+@@ -385,12 +386,12 @@ int WpaGui::openCtrlConnection(const char *ifname)
+ 	}
+ 
+ 	debug("Trying to connect to '%s'", cfile);
+-	ctrl_conn = wpa_ctrl_open(cfile);
++	ctrl_conn = wpa_ctrl_open2(cfile, client_socket_dir);
+ 	if (ctrl_conn == NULL) {
+ 		free(cfile);
+ 		return -1;
+ 	}
+-	monitor_conn = wpa_ctrl_open(cfile);
++	monitor_conn = wpa_ctrl_open2(cfile, client_socket_dir);
+ 	free(cfile);
+ 	if (monitor_conn == NULL) {
+ 		wpa_ctrl_close(ctrl_conn);
+diff --git a/wpa_supplicant/wpa_gui-qt4/wpagui.h b/wpa_supplicant/wpa_gui-qt4/wpagui.h
+index 898722bd9..228a39cef 100644
+--- a/wpa_supplicant/wpa_gui-qt4/wpagui.h
++++ b/wpa_supplicant/wpa_gui-qt4/wpagui.h
+@@ -131,6 +131,7 @@ private:
+ 	int pingsToStatusUpdate;
+ 	WpaMsgList msgs;
+ 	char *ctrl_iface_dir;
++	char *client_socket_dir;
+ 	struct wpa_ctrl *monitor_conn;
+ 	UserDataRequest *udr;
+ 	QAction *disconnectAction;

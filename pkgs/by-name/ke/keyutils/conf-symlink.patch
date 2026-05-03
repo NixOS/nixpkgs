@@ -1,0 +1,13 @@
+diff --git a/request-key.c b/request-key.c
+index bf47c0a..105fee8 100644
+--- a/request-key.c
++++ b/request-key.c
+@@ -313,7 +313,7 @@ static void scan_conf_dir(struct parameters *params, const char *confdir)
+ 	while ((d = readdir(dir))) {
+ 		if (d->d_name[0] == '.')
+ 			continue;
+-		if (d->d_type != DT_UNKNOWN && d->d_type != DT_REG)
++		if (d->d_type != DT_UNKNOWN && d->d_type != DT_REG && d->d_type != DT_LNK)
+ 			continue;
+ 		l = strlen(d->d_name);
+ 		if (l < 5)

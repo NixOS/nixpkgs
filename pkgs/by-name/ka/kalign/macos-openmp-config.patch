@@ -1,0 +1,46 @@
+From fb223fceeb81f481316694560ceacc473ad04b4a Mon Sep 17 00:00:00 2001
+From: natsukium <tomoya.otabi@gmail.com>
+Date: Thu, 23 Apr 2026 16:46:54 +0900
+Subject: [PATCH] cmake: allow overriding hardcoded libomp path on macOS
+
+The OpenMP workaround hardcoded /opt/homebrew/opt/libomp, which locked
+out a custom build.
+Introduce LIBOMP_ROOT (defaulting to Homebrew) so the prefix can be
+overridden on the cmake command line.
+
+While here, restrict the block to AppleClang. The flags inside are
+AppleClang-specific (-Xpreprocessor -fopenmp, linking against the LLVM
+libomp runtime) and were previously forced on any compiler targeting
+Apple Silicon, silently breaking GCC and mis-configuring Homebrew LLVM
+Clang builds.
+---
+ CMakeLists.txt | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5a7d3f0..d76453d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -75,15 +75,15 @@ set(KALIGN_KMEANS_UPGMA_THRESHOLD "50" CACHE STRING "Number of sequences thresho
+ 
+ 
+ if(USE_OPENMP)
+-  # Configure OpenMP for macOS with Homebrew (only for arm64 native builds)
+-  if(APPLE AND CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64" AND NOT CMAKE_OSX_ARCHITECTURES MATCHES "x86_64")
+-    list(APPEND CMAKE_PREFIX_PATH /opt/homebrew)
+-    # Set OpenMP flags for Apple Clang + Homebrew libomp
+-    set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
++  # Configure OpenMP for macOS with external libomp (only for Apple Clang on arm64 native builds)
++  if(APPLE AND CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "arm64" AND NOT CMAKE_OSX_ARCHITECTURES MATCHES "x86_64" AND CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
++    # Defaults to Homebrew
++    set(LIBOMP_ROOT "/opt/homebrew/opt/libomp" CACHE PATH "libomp install prefix")
++    set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I${LIBOMP_ROOT}/include")
+     set(OpenMP_C_LIB_NAMES "omp")
+-    set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
++    set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${LIBOMP_ROOT}/include")
+     set(OpenMP_CXX_LIB_NAMES "omp")
+-    set(OpenMP_omp_LIBRARY /opt/homebrew/opt/libomp/lib/libomp.dylib)
++    set(OpenMP_omp_LIBRARY "${LIBOMP_ROOT}/lib/libomp.dylib")
+   endif()
+ 
+   find_package(OpenMP)

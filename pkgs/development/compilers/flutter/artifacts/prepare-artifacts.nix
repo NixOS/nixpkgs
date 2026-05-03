@@ -1,0 +1,30 @@
+{
+  lib,
+  stdenv,
+  callPackage,
+  autoPatchelfHook,
+  src,
+}:
+
+(stdenv.mkDerivation {
+  inherit (src) name;
+  inherit src;
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir --parents "$out/bin"
+    cp --recursive . "$out/bin/cache"
+    rm --force "$out/bin/cache/flutter.version.json"
+
+    runHook postInstall
+  '';
+}).overrideAttrs
+  (
+    if builtins.pathExists (./overrides + "/${src.flutterPlatform}.nix") then
+      callPackage (./overrides + "/${src.flutterPlatform}.nix") { }
+    else
+      ({ ... }: { })
+  )
