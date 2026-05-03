@@ -11,19 +11,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "coroot";
-  version = "1.17.9";
+  version = "1.19.7";
 
   src = fetchFromGitHub {
     owner = "coroot";
     repo = "coroot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hr1t3WaYEOYnj3Cam2NGgiGD49Vr9HBkz4JmOlJxzQQ=";
+    hash = "sha256-eMN0n+kXN49o7oCjWAa3kPDAEksvGroRLrfFEVdPORE=";
   };
 
   vendorHash = "sha256-DCdrE8UYkuUN+rUuxVSGbAnAeLivZ2Xp8xjM+56ZF+A=";
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/front";
-    hash = "sha256-6a8eOPgAdpZpdXmrHVw/twfikjjWHSy/BdYdlyRQkjc=";
+    hash = "sha256-5N4dmtKdZgwulqxFHYKhnHOYAg0gnb/rzVVcmzjYFUg=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,9 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     npm --prefix="$npmRoot" run build-prod
   '';
+
+  # required for tests
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Open-source APM & Observability tool";
