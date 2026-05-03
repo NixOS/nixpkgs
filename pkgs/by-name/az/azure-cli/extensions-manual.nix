@@ -192,7 +192,7 @@
       chmod +x $out/${python3.sitePackages}/azext_confcom/bin/genpolicy-linux
     '';
     meta = {
-      maintainers = with lib.maintainers; [ miampf ];
+      maintainers = [ ];
       platforms = lib.platforms.linux; # confcom is linux only
     };
   };
