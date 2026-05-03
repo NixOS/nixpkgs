@@ -50,6 +50,8 @@ buildPythonPackage rec {
     tomli-w
   ];
 
+  setupHook = ./setup-hook.sh;
+
   preCheck = ''
     # so that its built binary is accessible by tests
     export PATH="$out/bin:$PATH"

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  callPackage,
 
   # build-system
   hatchling,
@@ -27,6 +28,7 @@
   polars,
   pyarrow,
   pytestCheckHook,
+  pytest-xdist,
   requests,
   scikit-image,
   scipy,
@@ -91,6 +93,7 @@ buildPythonPackage (finalAttrs: {
     polars
     pyarrow
     pytestCheckHook
+    pytest-xdist # Optional, used to speed up tests
     requests
     scikit-image
     scipy
@@ -116,11 +119,15 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  pytestFlags = [
+    "-vv"
+  ];
+
   disabledTestPaths = [
     # Broken imports
     "plotly/matplotlylib/mplexporter/tests"
-    # Fails to catch error when serializing document
-    "tests/test_optional/test_kaleido/test_kaleido.py::test_defaults"
+    # Choreographer can't run in sandbox
+    "tests/test_optional/test_kaleido/test_kaleido.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails to launch kaleido subprocess
@@ -147,6 +154,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "plotly" ];
+
+  passthru = {
+    # Currently doesn't work in sandbox
+    # tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    #   irisplot = callPackage ./tests.nix { };
+    # };
+  };
 
   meta = {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";

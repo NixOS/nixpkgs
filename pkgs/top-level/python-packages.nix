@@ -8229,7 +8229,10 @@ self: super: with self; {
 
   kaldi-native-fbank = callPackage ../development/python-modules/kaldi-native-fbank { };
 
-  kaleido = callPackage ../development/python-modules/kaleido { };
+  kaleido = callPackage ../development/python-modules/kaleido {
+    plotly = null;
+    withPlotly = false;
+  };
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python { };
 

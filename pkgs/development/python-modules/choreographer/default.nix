@@ -2,13 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   setuptools,
+  setuptools-git-versioning,
 
   # dependencies
   logistro,
   simplejson,
+  pytestCheckHook,
+  pytest-asyncio,
+  async-timeout,
+  numpy,
+
+  # Runtime dependencies
+  ungoogled-chromium,
+  
+  # update script
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,14 +35,23 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-WjAE3UlUCiXK5DxwmZvehQQaoJRkgEE8rNJQdAyOM4Q=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools-git-versioning"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # Override chromium download & execute (borked on NixOS)
+    sed -i '/def find_browser/,/) -> str | None:/ s#) -> str | None:#) -> str | None:\n        return "${lib.getExe ungoogled-chromium}"#' \
+      src/choreographer/browsers/chromium.py
+
+    # Override runtime libs check
+    sed -i 's#"""Return true if libs ok."""#"""Return true if libs ok."""\n        _logger.debug("(nixpkgs) skipping lib check.")\n        return True#' \
+      src/choreographer/browsers/chromium.py
+
+    # Disable chromium crashpad
+    sed -i 's#"--disable-breakpad"#"--disable-breakpad",\n                "--disable-crashpad-for-testing",\n                "--disable-gpu",\n                "--headless"#' \
+      src/choreographer/browsers/chromium.py
   '';
 
   build-system = [
     setuptools
+    setuptools-git-versioning
   ];
 
   dependencies = [
@@ -38,16 +59,44 @@ buildPythonPackage (finalAttrs: {
     simplejson
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+
+    # Undeclared but definitely needed
+    pytest-asyncio
+    async-timeout
+    numpy
+  ];
+
   pythonImportsCheck = [ "choreographer" ];
 
-  # Tests require running chrome
-  doCheck = false;
+  pytestFlags = [ "--log-level=DEBUG" ];
+
+  dontUsePytestCheck = stdenv.hostPlatform.isDarwin;
+
+  disabledTests = [
+    # Need a full graphical environment (we should add VM tests)
+    "test_context"
+    "test_no_context"
+    "test_watchdog"
+
+    # tests choreographer's own chrome download path, these fail since we've bypassed it
+    "test_canary"
+    "test_internal"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Devtools Protocol implementation for chrome";
     homepage = "https://github.com/plotly/choreographer";
     changelog = "https://github.com/plotly/choreographer/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      pandapip1
+    ];
   };
 })
