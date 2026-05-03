@@ -1550,6 +1550,7 @@ mapAliases {
   onscripter-en = throw "onscripter-en has been removed due to lack of maintenance in both upstream and Nixpkgs; onscripter is available instead"; # Added 2025-10-17
   onthespot = throw "onethespot has been removed due to lack of upstream maintenance"; # Added 2025-09-26
   opae = throw "opae has been removed because it has been marked as broken since June 2023."; # Added 2025-10-11
+  open-stage-control = throw "'open-stage-control' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-05-04
   open-timeline-io = warnAlias "'open-timeline-io' has been renamed to 'opentimelineio'" opentimelineio; # Added 2025-08-10
   openafs_1_8 = throw "'openafs_1_8' has been renamed to/replaced by 'openafs'"; # Converted to throw 2025-10-27
   openai-triton-llvm = throw "'openai-triton-llvm' has been renamed to/replaced by 'triton-llvm'"; # Converted to throw 2025-10-27
