@@ -7,23 +7,24 @@
   makeBinaryWrapper,
   nixosTests,
   stdenv,
+  fetchpatch,
   versionCheckHook,
   x11Support ? true,
-  zig_0_15,
+  zig_0_16,
 }:
 
 let
-  zig = zig_0_15;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P0yLiRIA0bDMiYfL6Kz2/OXh+nmnbHZnsCbcYGIGnbc=";
+    hash = "sha256-8wAt0gpIV97GY17B6rhjnhVR/UuuGQSAaKOcr+G1mKo=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     linux-pam
   ]
-  ++ (lib.optionals x11Support [ libxcb ]);
+  ++ lib.optionals x11Support [ libxcb ];
 
-  postConfigure = ''
-    ln -s ${
-      callPackage ./deps.nix {
-        inherit zig;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  patches = [
+    (fetchpatch {
+      name = "fix-building-without-x11";
+      url = "https://codeberg.org/fairyglade/ly/commit/4db9295102ac43d054c4e12f067429c5104f6e19.patch";
+      hash = "sha256-pzT1LkfbyVqYPaRsr/tEgtpt3lRj3i1ZlUm3+CTK21Q=";
+    })
+  ];
 
   zigBuildFlags = [
+    "--system"
+    "${callPackage ./deps.nix { }}"
     "-Denable_x11_support=${lib.boolToString x11Support}"
   ];
 
