@@ -208,6 +208,14 @@
     "path": "ofl/akshar"
   },
   {
+    "name": "Akt",
+    "designer": "Dmitry Grenev",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/akt"
+  },
+  {
     "name": "Aladin",
     "designer": "Sudtipos",
     "minisite": "",
@@ -334,6 +342,14 @@
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/alice"
+  },
+  {
+    "name": "Alien Block",
+    "designer": "Kensuke Uchida",
+    "minisite": "",
+    "category": "DISPLAY",
+    "license": "OFL",
+    "path": "ofl/alienblock"
   },
   {
     "name": "Alike",
@@ -810,7 +826,7 @@
   {
     "name": "Arapey",
     "designer": "Eduardo Tunni",
-    "minisite": "",
+    "minisite": "https://etunni.github.io/Arapey-Minisite",
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/arapey"
@@ -900,8 +916,8 @@
     "designer": "Steve Matteson",
     "minisite": "",
     "category": "SANS_SERIF",
-    "license": "APACHE2",
-    "path": "apache/arimo"
+    "license": "OFL",
+    "path": "ofl/arimo"
   },
   {
     "name": "Arizonia",
@@ -1230,6 +1246,14 @@
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/bizudpmincho"
+  },
+  {
+    "name": "BJCree",
+    "designer": "SIL International",
+    "minisite": "",
+    "category": "SERIF",
+    "license": "OFL",
+    "path": "ofl/bjcree"
   },
   {
     "name": "Babylonica",
@@ -3188,8 +3212,8 @@
     "designer": "Steve Matteson",
     "minisite": "",
     "category": "MONOSPACE",
-    "license": "APACHE2",
-    "path": "apache/cousine"
+    "license": "OFL",
+    "path": "ofl/cousine"
   },
   {
     "name": "Coustard",
@@ -3992,6 +4016,14 @@
     "path": "ofl/esteban"
   },
   {
+    "name": "Estedad",
+    "designer": "Amin Abedi, Fontamin",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/estedad"
+  },
+  {
     "name": "Estonia",
     "designer": "Robert Leuschke",
     "minisite": "",
@@ -4214,6 +4246,22 @@
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/finlandica"
+  },
+  {
+    "name": "Finlandica Headline",
+    "designer": "Helsinki Type Studio, Niklas Ekholm, Juho Hiilivirta, Jaakko Suomalainen",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/finlandicaheadline"
+  },
+  {
+    "name": "Finlandica Text",
+    "designer": "Helsinki Type Studio, Niklas Ekholm, Juho Hiilivirta, Jaakko Suomalainen",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/finlandicatext"
   },
   {
     "name": "Fira Code",
@@ -7366,6 +7414,14 @@
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/mplusrounded1c"
+  },
+  {
+    "name": "M PLUS U",
+    "designer": "Coji Morishita",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/mplusu"
   },
   {
     "name": "Ma Shan Zheng",
@@ -12860,7 +12916,7 @@
     "designer": "Christian Robertson",
     "minisite": "",
     "category": "MONOSPACE",
-    "license": "APACHE2",
+    "license": "OFL",
     "path": "ofl/robotomono"
   },
   {
@@ -13382,6 +13438,14 @@
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/sairasemicondensed"
+  },
+  {
+    "name": "Saira Stencil",
+    "designer": "Hector Gatti, Omnibus-Type",
+    "minisite": "",
+    "category": "DISPLAY",
+    "license": "OFL",
+    "path": "ofl/sairastencil"
   },
   {
     "name": "Saira Stencil One",
@@ -14440,6 +14504,14 @@
     "path": "ofl/strait"
   },
   {
+    "name": "Strichpunkt Sans",
+    "designer": "René Bieder",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/strichpunktsans"
+  },
+  {
     "name": "Strong",
     "designer": "Gaslight",
     "minisite": "",
@@ -14836,8 +14908,8 @@
     "designer": "Steve Matteson",
     "minisite": "",
     "category": "SERIF",
-    "license": "APACHE2",
-    "path": "apache/tinos"
+    "license": "OFL",
+    "path": "ofl/tinos"
   },
   {
     "name": "Tiny5",
