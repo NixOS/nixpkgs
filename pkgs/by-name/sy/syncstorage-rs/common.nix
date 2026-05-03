@@ -1,14 +1,16 @@
 {
   fetchFromGitHub,
+  fetchurl,
   rustPlatform,
   pkg-config,
   python3,
   cmake,
-  libmysqlclient,
+  openssl,
   makeBinaryWrapper,
   lib,
   nix-update-script,
   nixosTests,
+  ...
 }:
 
 let
@@ -23,13 +25,25 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syncstorage-rs";
-  version = "0.21.1-unstable-2026-01-26";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "syncstorage-rs";
-    rev = "11659d98f9c69948a0aab353437ce2036c388711";
-    hash = "sha256-G37QvxTNh/C3gmKG0UYHI6QBr0F+KLGRNI/Sx33uOsc=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-eo8+6wQQRRjvazE3A7+pJfAtTYKUE3ATTTos/yhqaXI=";
+  };
+
+  # set cargoHash in override
+  #
+  # Has to pull from `finalAttrs` here since overriding using `.overrideAttrs`
+  # does not appear to work for `rustPlatform.buildRustPackage` attributes.
+  cargoHash = finalAttrs.cargoHash;
+
+  # required by utoipa-swagger-ui rust crate as ZIP file
+  swaggerUI = fetchurl {
+    url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip";
+    hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +53,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     python3
   ];
 
+  buildAndTestSubdir = "syncserver";
+  buildNoDefaultFeatures = true;
+
+  # Add database features in override
+  #
+  # Has to pull from `finalAttrs` here since overriding using `.overrideAttrs`
+  # does not appear to work for `rustPlatform.buildRustPackage` attributes.
+  buildFeatures = finalAttrs.buildFeatures ++ [
+    "py_verifier"
+  ];
+
+  # Add database backend dependencies in override
   buildInputs = [
-    libmysqlclient
+    openssl
   ];
 
   preFixup = ''
@@ -48,7 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoHash = "sha256-9Dcf5mDyK/XjsKTlCPXTHoBkIq+FFPDg1zfK24Y9nHQ=";
+  # cause utoipa-swagger-ui crate to use Swagger UI version downloaded by Nix
+  SWAGGER_UI_DOWNLOAD_URL = "file:${finalAttrs.swaggerUI}";
 
   # almost all tests need a DB to test against
   doCheck = false;

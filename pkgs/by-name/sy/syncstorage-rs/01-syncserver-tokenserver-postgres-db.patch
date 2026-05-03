@@ -1,0 +1,26 @@
+diff --git a/syncserver/Cargo.toml b/syncserver/Cargo.toml
+index 3f658f6..461a0df 100644
+--- a/syncserver/Cargo.toml
++++ b/syncserver/Cargo.toml
+@@ -70,7 +70,7 @@ slog-journald = "2.2.0"
+ default = ["mysql", "py_verifier"]
+ no_auth = []
+ py_verifier = ["tokenserver-auth/py", "tokenserver-common/py"]
+-mysql = ["syncstorage-db/mysql"]
+-postgres = ["syncstorage-db/postgres"]
+-spanner = ["syncstorage-db/spanner"]
++mysql = ["syncstorage-db/mysql", "tokenserver-db/mysql"]
++postgres = ["syncstorage-db/postgres", "tokenserver-db/postgres"]
++spanner = ["syncstorage-db/spanner", "tokenserver-db/mysql"]
+ actix-compress = ["actix-web/compress-brotli", "actix-web/compress-gzip", "actix-web/compress-zstd"]
+diff --git a/tokenserver-db/Cargo.toml b/tokenserver-db/Cargo.toml
+index c55b77f..ee68f92 100644
+--- a/tokenserver-db/Cargo.toml
++++ b/tokenserver-db/Cargo.toml
+@@ -25,6 +25,5 @@ temp-env.workspace = true
+ syncserver-settings = { path = "../syncserver-settings" }
+ 
+ [features]
+-default = ["mysql"]
+ mysql = ['tokenserver-mysql']
+ postgres = ['tokenserver-postgres']
