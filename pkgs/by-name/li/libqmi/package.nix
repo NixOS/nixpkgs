@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bJbNfnKVJuhy/6EJgu5b7t6vxNTex/5heTzMzTzVREw=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config # for finding build-time dependencies
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
