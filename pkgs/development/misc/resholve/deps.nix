@@ -2,11 +2,12 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  python27,
   fetchPypi,
   ...
 }:
-
+let
+  python27 = callPackage ./python27.nix { };
+in
 /*
   Notes on specific dependencies:
   - if/when python2.7 is removed from nixpkgs, this may need to figure
@@ -15,7 +16,6 @@
 
 rec {
   oil = callPackage ./oildev.nix {
-    inherit python27;
     inherit six;
     inherit typing;
   };
