@@ -54,15 +54,15 @@ buildPythonPackage (finalAttrs: {
     "flanker.addresslib.address"
   ];
 
-
-  meta = with lib; {
+  meta = {
     description = "Mailgun Parsing Tools for email addresses and MIME";
     longDescription = ''
       Flanker is an open source parsing library written in Python by the Mailgun Team.
       Flanker currently consists of an address parsing library as well as a MIME parsing library.
     '';
     homepage = "https://github.com/mailgun/flanker";
-    license = licenses.asl20;
+    changelog = "https://github.com/mailgun/flanker/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philocalyst ];
   };
 })
