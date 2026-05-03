@@ -7,13 +7,9 @@ const { getCommitDetailsForPR } = require('./get-pr-commit-details')
  *  context: import('@actions/github/lib/context').Context,
  *  core: import('@actions/core'),
  *  repoPath?: string,
- *  dry: boolean,
  * }} CheckManualFileEditsProps
  */
-async function checkManualFileEdits({ github, context, core, repoPath, dry }) {
-  const { dismissReviews, postReview } = require('./reviews.js')
-  const reviewKey = 'manual-file-edits'
-
+async function checkManualFileEdits({ github, context, core, repoPath }) {
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
     core.info('This is not a pull request. Skipping checks.')
@@ -39,13 +35,8 @@ async function checkManualFileEdits({ github, context, core, repoPath, dry }) {
       changedPaths.includes('maintainers/github-teams.json'),
     )
   ) {
-    postReview({
-      github,
-      context,
-      core,
-      dry,
-      event: 'REQUEST_CHANGES',
-      body: [
+    core.setFailed(
+      [
         'maintainers/github-teams.json is supposed to accurately reflect the state of the teams in GitHub.\n',
         'Therefore, it should not be edited manually.\n',
         'All changes to teams listed in maintainers/github-teams.json should be performed in GitHub by a team maintainer.\n',
@@ -57,16 +48,7 @@ async function checkManualFileEdits({ github, context, core, repoPath, dry }) {
         (prev, curr) => prev + (!prev || prev.endsWith('\n') ? '' : ' ') + curr,
         '',
       ),
-      reviewKey,
-    })
-  } else {
-    dismissReviews({
-      github,
-      context,
-      core,
-      dry,
-      reviewKey,
-    })
+    )
   }
 }
 
