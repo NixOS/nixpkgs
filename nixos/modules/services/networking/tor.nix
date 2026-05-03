@@ -31,6 +31,7 @@ let
 
   buildSubnetsSet = buildSet "ipv4_addr" [ "interval" ];
 
+  cfg = config.networking.tor;
 in
 {
 
@@ -120,69 +121,65 @@ in
 
   config = {
 
-    services.tor =
-      lib.mkIf (config.networking.tor.client.enable || config.networking.tor.router.enable)
-        {
-          enable = true;
+    services.tor = lib.mkIf (cfg.client.enable || cfg.router.enable) {
+      enable = true;
 
-          client = {
-            enable = true;
-            transparentProxy.enable = true;
-            dns.enable = true;
-          };
+      client = {
+        enable = true;
+        transparentProxy.enable = true;
+        dns.enable = true;
+      };
 
-          settings = {
+      settings = {
 
-            # If router option is enabled then bind to 0.0.0.0 instead of 127.0.0.1.
-            DNSPort = lib.mkIf config.networking.tor.router.enable [
-              {
-                addr = "0.0.0.0";
-                port = 9053;
-              }
-            ];
+        # If router option is enabled then bind to 0.0.0.0 instead of 127.0.0.1.
+        DNSPort = lib.mkIf cfg.router.enable [
+          {
+            addr = "0.0.0.0";
+            port = 9053;
+          }
+        ];
 
-            # Without mkForce it sets addr to 127.0.0.1 and later it cannot bind again as 0.0.0.0.
-            TransPort = lib.mkIf config.networking.tor.router.enable (
-              lib.mkForce [
-                {
-                  addr = "0.0.0.0";
-                  port = 9040;
-                }
-              ]
-            );
+        # Without mkForce it sets addr to 127.0.0.1 and later it cannot bind again as 0.0.0.0.
+        TransPort = lib.mkIf cfg.router.enable (
+          lib.mkForce [
+            {
+              addr = "0.0.0.0";
+              port = 9040;
+            }
+          ]
+        );
 
-            VirtualAddrNetworkIPv4 = config.networking.tor.virtualAddrNetworkIPv4;
-          };
+        VirtualAddrNetworkIPv4 = cfg.virtualAddrNetworkIPv4;
+      };
 
-        };
+    };
 
     # Open ports on firewall.
-    networking.firewall.allowedTCPPorts = lib.mkIf config.networking.tor.router.enable [ 9040 ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.router.enable [ 9040 ];
 
-    networking.firewall.allowedUDPPorts = lib.mkIf config.networking.tor.router.enable [ 9053 ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.router.enable [ 9053 ];
 
     # Enable squid with shutdown_lifetime set to 0, as it instead would delay service stopping.
-    services.squid = lib.mkIf config.networking.tor.client.enable {
-      enable = config.networking.tor.client.clearnetProxy.enable;
+    services.squid = lib.mkIf cfg.client.enable {
+      enable = cfg.client.clearnetProxy.enable;
       proxyAddress = "127.0.0.1";
-      proxyPort = config.networking.tor.client.clearnetProxy.port;
+      proxyPort = cfg.client.clearnetProxy.port;
       extraConfig = ''
         shutdown_lifetime 0 seconds;
       '';
     };
 
     # Sometimes squid would refuse to start if no network is available.
-    systemd.services.squid.after = lib.mkIf config.networking.tor.client.enable [
+    systemd.services.squid.after = lib.mkIf cfg.client.enable [
       "network-online.target"
     ];
 
-    systemd.services.squid.wants = lib.mkIf config.networking.tor.client.enable [
+    systemd.services.squid.wants = lib.mkIf cfg.client.enable [
       "network-online.target"
     ];
 
-    networking.nftables.enable = lib.mkIf (
-      config.networking.tor.client.enable || config.networking.tor.router.enable
-    ) true;
+    networking.nftables.enable = lib.mkIf (cfg.client.enable || cfg.router.enable) true;
 
     # Patch rules before checking them as they would simply fail as both "tor"
     # and "squid" users aren't available during build.
@@ -196,21 +193,21 @@ in
     # regarding IPv6 traffic, so it gets simply dropped at the end of filter
     # chains. That's on purpose as IPv6 has not been tested.
     networking.nftables.tables = {
-      tor = lib.mkIf config.networking.tor.client.enable {
+      tor = lib.mkIf cfg.client.enable {
         enable = true;
         family = "inet";
         content = ''
 
           ${buildSubnetsSet "reserved_subnets" reservedSubnets}
 
-          ${buildSubnetsSet "excluded_destinations" config.networking.tor.client.excludedDestinations}
+          ${buildSubnetsSet "excluded_destinations" cfg.client.excludedDestinations}
 
-          ${buildSet "ifname" null "excluded_ifs" config.networking.tor.client.excludedInterfaces}
+          ${buildSet "ifname" null "excluded_ifs" cfg.client.excludedInterfaces}
 
-          ${buildSet "mark" null "excluded_marks" config.networking.tor.client.excludedFwMarks}
+          ${buildSet "mark" null "excluded_marks" cfg.client.excludedFwMarks}
 
           chain tor_nat_output {
-            type nat hook output priority ${toString config.networking.tor.natPriority}
+            type nat hook output priority ${toString cfg.natPriority}
 
             oifname lo return
             ip daddr 127.0.0.0/8 return
@@ -222,7 +219,7 @@ in
             skuid tor return # Do not modify any tor packets
 
             # Do not modify any squid packets
-            ${lib.optionalString (config.networking.tor.client.clearnetProxy.enable)
+            ${lib.optionalString (cfg.client.clearnetProxy.enable)
 
               "skuid squid return"
             }
@@ -232,14 +229,14 @@ in
             # most network configurations have local IP addresses as DNS servers.
             ip daddr @excluded_destinations return
             ip protocol udp udp dport 53 dnat to 127.0.0.1:9053 # route dns before allowing local addresses
-            ip daddr @reserved_subnets ip daddr != ${config.networking.tor.virtualAddrNetworkIPv4} return
+            ip daddr @reserved_subnets ip daddr != ${cfg.virtualAddrNetworkIPv4} return
 
             ip protocol tcp dnat to 127.0.0.1:9040 # this rewrites the dest addr but not the interface!
           }
 
           chain tor_filter_output {
             # Set filterPriority and drop everything by default.
-            type filter hook output priority ${toString config.networking.tor.filterPriority}; policy drop;
+            type filter hook output priority ${toString cfg.filterPriority}; policy drop;
 
             ct state established,related accept
 
@@ -251,7 +248,7 @@ in
 
             skuid tor accept
 
-            ${lib.optionalString (config.networking.tor.client.clearnetProxy.enable)
+            ${lib.optionalString (cfg.client.clearnetProxy.enable)
 
               "skuid squid accept"
             }
@@ -262,20 +259,20 @@ in
         '';
       };
 
-      tor-router = lib.mkIf config.networking.tor.router.enable {
+      tor-router = lib.mkIf cfg.router.enable {
         enable = true;
         family = "inet";
         content = ''
 
           ${buildSubnetsSet "reserved_subnets" reservedSubnets}
-          ${buildSubnetsSet "excluded_destinations" config.networking.tor.router.excludedDestinations}
+          ${buildSubnetsSet "excluded_destinations" cfg.router.excludedDestinations}
 
-          ${buildSubnetsSet "excluded_sources" config.networking.tor.router.excludedSources}
+          ${buildSubnetsSet "excluded_sources" cfg.router.excludedSources}
 
           chain tor_nat_prerouting {
-            type nat hook prerouting priority ${toString config.networking.tor.natPriority}
+            type nat hook prerouting priority ${toString cfg.natPriority}
 
-            ip daddr @reserved_subnets ip daddr != ${config.networking.tor.virtualAddrNetworkIPv4} return
+            ip daddr @reserved_subnets ip daddr != ${cfg.virtualAddrNetworkIPv4} return
             ip saddr @excluded_sources return
             ip daddr @excluded_destinations return
 
@@ -284,7 +281,7 @@ in
           }
 
           chain tor_filter_forward {
-            type filter hook forward priority ${toString config.networking.tor.filterPriority}; policy drop
+            type filter hook forward priority ${toString cfg.filterPriority}; policy drop
 
             ct state established,related accept
 
@@ -297,9 +294,7 @@ in
 
     };
 
-    boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkIf config.networking.tor.router.enable (
-      lib.mkDefault 1
-    );
+    boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkIf cfg.router.enable (lib.mkDefault 1);
 
   };
 
