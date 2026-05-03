@@ -1,24 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pytz,
   python-dateutil,
   setuptools,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "crontab";
-  version = "0.22.8";
+  version = "1.0.5";
   pyproject = true;
 
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-Gsl3+xuLpbe1jm9xPNffNuYdeu5MK4CavPdq3d0t7q8=";
+  src = fetchFromGitHub {
+    owner = "josiahcarlson";
+    repo = "parse-crontab";
+    tag = finalAttrs.version;
+    hash = "sha256-iZS4vkfp93BK5wp1S3qCg0bC7NcT7o5/nNMRI+SXTws=";
   };
 
   build-system = [
@@ -33,14 +34,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "crontab" ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Parse Unix crontab schedule expressions";
     homepage = "https://github.com/josiahcarlson/parse-crontab";
-    license = licenses.mit;
+    changelog = "https://github.com/josiahcarlson/parse-crontab/blob/${finalAttrs.version}/changelog.txt";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ philocalyst ];
   };
 })
