@@ -3,7 +3,6 @@
   stdenv,
   bash,
   fetchFromGitHub,
-  fetchpatch,
   libiconv,
   makeWrapper,
   openssl,
@@ -14,25 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websocat";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "vi";
     repo = "websocat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v5+9cbKe3c12/SrW7mgN6tvQIiAuweqvMIl46Ce9f2A=";
+    hash = "sha256-Ukz7qM6yT6LCdUxew8KhwTeEuz3JF7LOsoHKGM9rBmQ=";
   };
 
-  # Fix build with Rust 1.87
-  # FIXME: remove in next update
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/vi/websocat/commit/d4455623e777231d69b029d69d7a17c0de2bafe7.diff";
-      hash = "sha256-OUQQ+3eESE3XcGgToErqvF8ItpT8YCMAZhbvRzkFKpc=";
-    })
-  ];
-
-  cargoHash = "sha256-3m7Gg//vjNjYlesEjKsdqjU48dAtgSeugxingr8OJyY=";
+  cargoHash = "sha256-taG+oi+9eh6CnhS7wKSxEzLXOtvVhtLT1D3EuS4AwWY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,11 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  buildFeatures = [ "ssl" ];
-
-  # Needed to get openssl-sys to use pkg-config.
-  env.OPENSSL_NO_VENDOR = 1;
-
   # The wrapping is required so that the "sh-c" option of websocat works even
   # if sh is not in the PATH (as can happen, for instance, when websocat is
   # started as a systemd service).
@@ -61,6 +46,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ bash ]}
   '';
 
+  # Darwin requires local networking for the checks
+  __darwinAllowLocalNetworking = true;
   doInstallCheck = true;
 
   meta = {
