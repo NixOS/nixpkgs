@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "NO_INTERNET=1"
     "PREFIX=${placeholder "out"}"
+    "VERSION=v${finalAttrs.version}"
   ];
 
   enableParallelBuilding = true;
@@ -28,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   hardeningDisable = [ "format" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "Library to parse proxy auto-config (PAC) files";
