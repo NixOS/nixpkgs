@@ -40,7 +40,7 @@ in
 
     networking.tor = {
 
-      VirtualAddrNetworkIPv4 = lib.mkOption {
+      virtualAddrNetworkIPv4 = lib.mkOption {
         type = lib.types.str;
         default = "10.64.0.0/10";
         description = "The virtual address space used by Tor.";
@@ -151,7 +151,7 @@ in
               ]
             );
 
-            VirtualAddrNetworkIPv4 = config.networking.tor.VirtualAddrNetworkIPv4;
+            VirtualAddrNetworkIPv4 = config.networking.tor.virtualAddrNetworkIPv4;
           };
 
         };
@@ -232,7 +232,7 @@ in
             # most network configurations have local IP addresses as DNS servers.
             ip daddr @excluded_destinations return
             ip protocol udp udp dport 53 dnat to 127.0.0.1:9053 # route dns before allowing local addresses
-            ip daddr @reserved_subnets ip daddr != ${config.networking.tor.VirtualAddrNetworkIPv4} return
+            ip daddr @reserved_subnets ip daddr != ${config.networking.tor.virtualAddrNetworkIPv4} return
 
             ip protocol tcp dnat to 127.0.0.1:9040 # this rewrites the dest addr but not the interface!
           }
@@ -275,7 +275,7 @@ in
           chain tor_nat_prerouting {
             type nat hook prerouting priority ${toString config.networking.tor.natPriority}
 
-            ip daddr @reserved_subnets ip daddr != ${config.networking.tor.VirtualAddrNetworkIPv4} return
+            ip daddr @reserved_subnets ip daddr != ${config.networking.tor.virtualAddrNetworkIPv4} return
             ip saddr @excluded_sources return
             ip daddr @excluded_destinations return
 
