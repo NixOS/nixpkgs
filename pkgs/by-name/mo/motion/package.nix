@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  ffmpeg,
+  ffmpeg-headless,
   libjpeg,
   libmicrohttpd,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg-headless
     libjpeg
     libmicrohttpd
   ];
