@@ -27,10 +27,11 @@ let
     else
       throw "PySDL3 does not support ${stdenv.hostPlatform.uname.system}";
   lib_ext = stdenv.hostPlatform.extensions.sharedLibrary;
-in
-buildPythonPackage rec {
-  pname = "pysdl3";
   version = "0.9.11b0";
+in
+buildPythonPackage {
+  pname = "pysdl3";
+  inherit version;
   pyproject = true;
 
   pythonImportsCheck = [ "sdl3" ];
