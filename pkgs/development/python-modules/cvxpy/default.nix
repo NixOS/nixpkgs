@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   numpy,
@@ -28,6 +29,7 @@ buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
   version = "1.8.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
@@ -35,6 +37,15 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-MDKTuiePzqdIJlTRxbCOxoaEAisGx368iWbwKEB97QU=";
   };
+
+  patches = [
+    # Upstream PR: https://github.com/cvxpy/cvxpy/pull/3290
+    (fetchpatch {
+      name = "highs-1.14.0.patch";
+      url = "https://github.com/cvxpy/cvxpy/commit/89f8d337d927457c2e308de8295dd83f274e40e7.patch";
+      hash = "sha256-BO878Kz5ZH5FHkxZugzT+n6wjsoOReqCZWM2HDvFqAw=";
+    })
+  ];
 
   postPatch =
     # too tight tolerance in tests (AssertionError)
