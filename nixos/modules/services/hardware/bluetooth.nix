@@ -66,13 +66,14 @@ in
           restored on boot: if Bluetooth was on when the system shut down,
           it will be powered on; if it was off, it will stay off.
 
-          This works by translating a user-initiated power-off (bluez
-          `Powered=false`) into an `rfkill block`, so clients such as
-          PipeWire/WirePlumber cannot auto-power the adapter back on.
-          The off state is recorded in `/var/lib/bluetooth/power-state`
-          and re-applied at next boot, since some platforms (e.g.
-          `thinkpad_acpi` on Lenovo ThinkPads) reset the rfkill state
-          on boot and override systemd-rfkill's restoration.
+          The state is snapshotted at shutdown to
+          `/var/lib/bluetooth/power-state` and re-applied at next boot
+          via `rfkill block`. The rfkill route is needed because some
+          platforms (e.g. `thinkpad_acpi` on Lenovo ThinkPads) reset
+          rfkill state on boot, overriding systemd-rfkill's restoration,
+          and because rfkill hides the adapter from bluez's D-Bus tree
+          so that clients (PipeWire/WirePlumber, gnome-bluetooth, ...)
+          cannot auto-power it back on.
         '';
       };
 
@@ -194,51 +195,41 @@ in
     }
     // (optionalAttrs persistPowerState {
       bluetooth-persist-power-state = {
-        description = "Persist Bluetooth power state via rfkill";
+        description = "Persist Bluetooth power state across reboots";
         after = [ "bluetooth.service" ];
         requires = [ "bluetooth.service" ];
         partOf = [ "bluetooth.service" ];
         wantedBy = [ "bluetooth.target" ];
+        # Snapshot the current power state at shutdown and re-apply it at
+        # next boot via rfkill block. rfkill hides the adapter from bluez's
+        # D-Bus tree, so neither bluez's Policy.AutoEnable nor clients
+        # (PipeWire/WirePlumber, gnome-bluetooth, auto-reconnecting paired
+        # devices, ...) can power it back on. Re-applying at boot is
+        # necessary because some platforms (e.g. thinkpad_acpi on Lenovo
+        # ThinkPads) reset rfkill state on boot, overriding systemd-rfkill.
         serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          RestartSec = "5s";
+          Type = "oneshot";
+          RemainAfterExit = true;
           StateDirectory = "bluetooth";
+          ExecStart = pkgs.writeShellScript "bluetooth-restore-power-state" ''
+            if [ "$(cat /var/lib/bluetooth/power-state 2>/dev/null)" = "off" ]; then
+              ${pkgs.util-linux}/bin/rfkill block bluetooth
+            fi
+          '';
+          # Runs before bluetooth.service stops (After= reverses on stop),
+          # so bluez is still reachable for the Powered query.
+          ExecStop = pkgs.writeShellScript "bluetooth-save-power-state" ''
+            state=on
+            rfkill_state=$(${pkgs.util-linux}/bin/rfkill list bluetooth)
+            bluez_state=$(${package}/bin/bluetoothctl show 2>/dev/null || true)
+            if [[ "$rfkill_state" == *"Soft blocked: yes"* ]]; then
+              state=off
+            elif [[ "$bluez_state" == *"Powered: no"* ]]; then
+              state=off
+            fi
+            echo "$state" > /var/lib/bluetooth/power-state
+          '';
         };
-        # Translate every user-initiated power-off into an rfkill block,
-        # which keeps the adapter out of bluez's D-Bus tree so that no
-        # client (PipeWire/WirePlumber, gnome-bluetooth, auto-reconnecting
-        # paired devices, ...) can power it back on against the user's
-        # expressed intent. The desired state is recorded in a small file
-        # and re-applied at our service's startup, since some platforms
-        # (e.g. thinkpad_acpi) reset rfkill state on boot and override
-        # systemd-rfkill's restoration. When the user later turns
-        # Bluetooth on (e.g. via GNOME's tile, which lifts the rfkill
-        # block), bluez exposes the adapter again and Policy.AutoEnable
-        # restores the powered state.
-        script = ''
-          state_file=/var/lib/bluetooth/power-state
-
-          # Re-apply the user's last off intent, after thinkpad_acpi (or
-          # similar) has had its say at boot.
-          if [ "$(cat "$state_file" 2>/dev/null)" = "off" ]; then
-            echo "bluetooth-persist: saved state is off, applying rfkill block"
-            ${pkgs.util-linux}/bin/rfkill block bluetooth || true
-          fi
-
-          ${pkgs.glib.bin}/bin/gdbus monitor --system --dest org.bluez \
-          | while IFS= read -r line; do
-              case "$line" in
-                *"PropertiesChanged"*"'Powered': <true>"*)
-                  echo on > "$state_file"; sync "$state_file"
-                  ;;
-                *"PropertiesChanged"*"'Powered': <false>"*)
-                  echo off > "$state_file"; sync "$state_file"
-                  ${pkgs.util-linux}/bin/rfkill block bluetooth || true
-                  ;;
-              esac
-            done
-        '';
       };
     })
     // (optionalAttrs cfg.hsphfpd.enable {
