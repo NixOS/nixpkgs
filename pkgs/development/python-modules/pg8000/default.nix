@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python driver for PostgreSQL";
-    homepage = "https://github.com/tlocke/pg8000";
-    changelog = "https://github.com/tlocke/pg8000#release-notes";
+    homepage = "https://codeberg.org/tlocke/pg8000";
+    changelog = "https://codeberg.org/tlocke/pg8000#release-notes";
     license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
     platforms = lib.platforms.unix;
