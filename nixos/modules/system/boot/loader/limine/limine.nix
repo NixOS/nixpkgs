@@ -297,9 +297,25 @@ in
 
         brandingColor = lib.mkOption {
           default = null;
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.str;
           description = ''
-            Color index of the title at the top of the screen in the range of 0-7 (Limine defaults to 6 (cyan)).
+            Color of the title at the top of the screen in RRGGBB format (Limine defaults to #00AAAA (cyan)).
+          '';
+        };
+
+        helpColor = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the help text displayed beside keybinds in RRGGBB format (Limine defaults to #00AA00 (dark green)).
+          '';
+        };
+
+        helpColorBright = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the bright help text used for the auto-boot countdown digit in RRGGBB format (Limine defaults to #55FF55 (bright green)).
           '';
         };
 
