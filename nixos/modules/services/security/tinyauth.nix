@@ -149,6 +149,11 @@ in
       default = "tinyauth";
       description = "Group account under which Tinyauth runs.";
     };
+
+    enableUnixSocket = mkEnableOption ''
+      Whether to enable a UNIX domain socket at `/run/tinyauth/tinyauth.sock`
+      instead of listening on an IP address and port.
+    '';
   };
 
   config = mkIf cfg.enable {
@@ -174,6 +179,7 @@ in
         GIN_MODE = "release";
         TINYAUTH_DATABASE_PATH = "${cfg.dataDir}/tinyauth.db";
         TINYAUTH_RESOURCES_PATH = "${cfg.dataDir}/resources";
+        TINYAUTH_SERVER_SOCKETPATH = mkIf cfg.enableUnixSocket "%t/tinyauth/tinyauth.sock";
       };
 
       serviceConfig = {
@@ -181,6 +187,8 @@ in
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.dataDir;
+        RuntimeDirectory = mkIf cfg.enableUnixSocket "tinyauth";
+        RuntimeDirectoryMode = mkIf cfg.enableUnixSocket "750";
         ExecStart = getExe cfg.package;
         Restart = "always";
 
@@ -224,7 +232,7 @@ in
           "~@privileged"
           "~@resources"
         ];
-        UMask = "0077";
+        UMask = if cfg.enableUnixSocket then "0007" else "0077";
       };
     };
 
