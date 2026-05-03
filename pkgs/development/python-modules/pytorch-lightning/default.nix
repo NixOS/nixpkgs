@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-lightning";
-  version = "2.6.1";
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {

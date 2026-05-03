@@ -8,7 +8,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "sesh";
-  version = "2.25.0";
+  version = "2.26.1";
 
   nativeBuildInputs = [
     go-mockery
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "joshmedeski";
     repo = "sesh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-azs1tf9eR4MVSdjMdd3U/xdPAANn1Kyamf0TwFrBSTU=";
+    hash = "sha256-egh50ajgs2ngB9eALk4xq7W1n8OrTYeMBRsveisH2LQ=";
   };
 
   # NOTE: prevent crash when getting vendor deps/hash
