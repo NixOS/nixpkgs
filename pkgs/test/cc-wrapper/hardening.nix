@@ -505,6 +505,18 @@ nameDrvAfterAttrName (
       ignorePie = false;
     };
 
+    pieDisabledWithNoPie =
+      checkTestBin
+        (f2exampleWithStdEnv stdenv {
+          env = {
+            TEST_EXTRA_FLAGS = "-no-pie";
+          };
+        })
+        {
+          ignorePie = false;
+          expectFailure = true;
+        };
+
     relROExplicitEnabled =
       checkTestBin
         (f2exampleWithStdEnv stdenv {
