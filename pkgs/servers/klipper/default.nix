@@ -109,8 +109,10 @@ stdenv.mkDerivation rec {
     # under `klipper_path`
     cp -r $src/docs $out/lib/docs
     cp -r $src/config $out/lib/config
-    cp -r $src/scripts $out/lib/scripts
     cp -r $src/klippy $out/lib/klippy
+    mkdir -p $out/lib/scripts
+    cp -r $src/scripts/* $out/lib/scripts
+    cp $src/lib/katapult/flashtool.py $out/lib/scripts/flash_can.py
 
     # Add version information. For the normal procedure see https://www.klipper3d.org/Packaging.html#versioning
     # This is done like this because scripts/make_version.py is not available when sourceRoot is set to "${src.name}/klippy"

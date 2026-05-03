@@ -1816,7 +1816,7 @@ with pkgs;
 
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
 
-  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
+  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { flashDevice = "/dev/null"; };
 
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
