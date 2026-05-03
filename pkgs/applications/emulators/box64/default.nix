@@ -16,7 +16,10 @@
 assert
   withDynarec
   -> (
-    stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64
+    stdenv.hostPlatform.isAarch64
+    || stdenv.hostPlatform.isRiscV64
+    || stdenv.hostPlatform.isLoongArch64
+    || (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)
   );
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Arch dynarec
     (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
     (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
+    (lib.cmakeBool "PPC64LE_DYNAREC" (
+      withDynarec && (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)
+    ))
     (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
   ];
 
