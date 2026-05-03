@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxelar";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "emanuele-em";
     repo = "proxelar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PQRGn03chv+x3AO0yyxkXDmrCHVDP9vjaVUwMRMxpYE=";
+    hash = "sha256-dUz20mk9ghUyCRuxkEpjjibhDMk7kAezZxGPadQhhM0=";
   };
 
-  cargoHash = "sha256-1cPkzDIF4bcESbEOATYM2fd7FenV5dkrrYsZIoCML7Q=";
+  cargoHash = "sha256-Jc6NExi2BUs1Hoia4MyDouj/LUO9tCRN0Pu2/32uG7c=";
 
   __structuredAttrs = true;
 

@@ -203,6 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
+    broken = lib.versionAtLeast version "2.4" && stdenv.hostPlatform.isDarwin; # fails to link openssl
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with lib.licenses; [
