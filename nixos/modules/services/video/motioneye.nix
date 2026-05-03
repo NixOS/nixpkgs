@@ -15,7 +15,7 @@ in
     packages = {
       motioneye = lib.mkPackageOption pkgs "motioneye" { };
       motion = lib.mkPackageOption pkgs "motion" { };
-      ffmpeg = lib.mkPackageOption pkgs "ffmpeg" { };
+      ffmpeg = lib.mkPackageOption pkgs "ffmpeg-headless" { };
     };
 
     user = lib.mkOption {
