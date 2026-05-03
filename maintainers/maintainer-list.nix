@@ -23078,6 +23078,11 @@
     github = "Reputable2772";
     githubId = 153411261;
   };
+  ReStranger = {
+    name = "ReStranger";
+    github = "ReStranger";
+    githubId = 69393944;
+  };
   ret2pop = {
     email = "ret2pop@gmail.com";
     github = "ret2pop";
