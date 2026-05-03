@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmbim
   ]
   ++ lib.optionals withIntrospection [
+    gi-docgen
     libgudev
   ];
 
