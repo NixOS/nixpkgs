@@ -25,21 +25,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.125.0";
+  version = "0.128.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-q175gmBw+edb5+w8TM36yUeFsyIdB1/IwWzbxBbBmoA=";
+    hash = "sha256-v2W0eslPOPHxHX76+bnkE/f4y+MnQuopeOoAC5X16TA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-fDVlj7zAZnwP9YBaYaSQZXYYWrBm5IEyLT9zoorvzFg=";
+  cargoHash = "sha256-3NQ4UCfBpANhyoJJatd8m31cEugsd42Ye2BXuzlKC0c=";
 
-  # Match upstream's release build (codex only) and drop the expensive
-  # release profile tweaks that dominate cold build time in nixpkgs.
+  # Match upstream's release build for the codex binary only.
   cargoBuildFlags = [
     "--package"
     "codex-cli"
@@ -57,6 +56,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
 
+  ''
+  # Keep upstream's release profile on Darwin. Without LTO/codegen-units=1,
+  # the aarch64-darwin binary grows enough for ld64 to hit ARM64 branch range
+  # limits while linking codex-cli.
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "fat"' "" \
       --replace-fail 'codegen-units = 1' ""
