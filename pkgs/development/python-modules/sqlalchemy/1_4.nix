@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "1.4.54-unstable-2025-08-16";
+  version = "rel_2_1_0b2";
   pyproject = true;
 
   src = fetchFromGitHub {
