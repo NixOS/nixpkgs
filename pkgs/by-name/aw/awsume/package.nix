@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awsume";
   version = "4.5.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trek10inc";
@@ -20,6 +20,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   env.AWSUME_SKIP_ALIAS_SETUP = 1;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     colorama
