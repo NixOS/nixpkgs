@@ -490,6 +490,7 @@ lib.mapAttrs mkLicense (
       fullName = "Commons Clause License";
       url = "https://commonsclause.com/";
       free = false;
+      redistributable = true;
     };
 
     cpl10 = {
