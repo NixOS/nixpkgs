@@ -4,7 +4,7 @@
   direwolf,
   nix-update-script,
   hamlibSupport ? true,
-  gpsdSupport ? true,
+  gpsdSupport ? false,
   extraScripts ? false,
 }:
 
