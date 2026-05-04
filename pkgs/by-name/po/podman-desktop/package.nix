@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   copyDesktopItems,
   electron_41,
-  nodejs_24,
+  nodejs-slim_24,
   pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -21,8 +21,8 @@
 }:
 
 let
-  nodejs = nodejs_24;
-  pnpm = pnpm_10_29_2.override { inherit nodejs; };
+  nodejs-slim = nodejs-slim_24;
+  pnpm = pnpm_10_29_2.override { inherit nodejs-slim; };
   electron = electron_41;
   appName = "Podman Desktop";
 in
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    nodejs
+    nodejs-slim
     pnpm
     pnpmConfigHook
   ]

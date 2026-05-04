@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  nodejs_22,
+  nodejs-slim_22,
   gitMinimal,
   gitSetupHook,
   pnpm_8,
@@ -11,7 +11,7 @@
   nix-update-script,
 }:
 let
-  pnpm' = pnpm_8.override { nodejs = nodejs_22; };
+  pnpm' = pnpm_8.override { nodejs-slim = nodejs-slim_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs-slim_22
     # patches are applied with git during build
     gitMinimal
     gitSetupHook
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm'
   ];
 
-  buildInputs = [ nodejs_22 ];
+  buildInputs = [ nodejs-slim_22 ];
 
   pnpmWorkspaces = [ "@vtsls/language-server" ];
 

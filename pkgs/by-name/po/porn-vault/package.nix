@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenvNoCC,
-  nodejs_22,
+  nodejs-slim_22,
   ffmpeg,
   imagemagick,
   makeWrapper,
@@ -37,8 +37,8 @@ let
       mainProgram = "izzy";
     };
   };
-  nodejs = nodejs_22;
-  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
+  nodejs-slim = nodejs-slim_22;
+  pnpm' = pnpm_9.override { inherit nodejs-slim; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "porn-vault";
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs
+    nodejs-slim
     pnpmConfigHook
     pnpm'
     makeWrapper
@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/porn-vault" \
+    makeWrapper "${lib.getExe nodejs-slim}" "$out/bin/porn-vault" \
       --chdir "$out/share/porn-vault" \
       --add-flags "dist/index.js" \
       --set-default IZZY_PATH "${lib.getExe izzy}" \
@@ -110,7 +110,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/porn-vault/porn-vault";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.luNeder ];
-    inherit (nodejs.meta) platforms;
+    inherit (nodejs-slim.meta) platforms;
     mainProgram = "porn-vault";
   };
 })

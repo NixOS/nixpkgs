@@ -7,7 +7,7 @@
   fetchgit,
   srcOnly,
   removeReferencesTo,
-  nodejs_20,
+  nodejs-slim_20,
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -17,8 +17,8 @@
   zip,
 }:
 let
-  nodeSources = srcOnly nodejs_20;
-  pnpm' = pnpm_9.override { nodejs = nodejs_20; };
+  nodeSources = srcOnly nodejs-slim_20;
+  pnpm' = pnpm_9.override { nodejs-slim = nodejs-slim_20; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     customPython
-    nodejs_20
+    nodejs-slim_20
+    nodejs-slim_20.npm
     pnpmConfigHook
     pnpm'
     gitMinimal
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-a1ym/UpUufUPTGL3dozZ9Jb0eX1XVB7Hahek25eLvc4=";
   };
 
-  buildInputs = [ nodejs_20 ];
+  buildInputs = [ nodejs-slim_20 ];
 
   # Make a fake git repo with a commit.
   # Without this, the package does not build.
