@@ -10990,7 +10990,7 @@ self: super: with self; {
 
   netbox-dns = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-dns/package.nix { };
 
-  netbox-documents = callPackage ../development/python-modules/netbox-documents { };
+  netbox-documents = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-documents/package.nix { };
 
   netbox-floorplan-plugin = callPackage ../development/python-modules/netbox-floorplan-plugin { };
 
