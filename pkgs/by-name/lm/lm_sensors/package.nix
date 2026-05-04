@@ -62,8 +62,6 @@ stdenv.mkDerivation {
     "SBINDIR=${placeholder "bin"}/bin"
     "INCLUDEDIR=${placeholder "dev"}/include"
     "MANDIR=${placeholder "man"}/share/man"
-    # This is a dependency of the library.
-    "ETCDIR=${placeholder "out"}/etc"
     "BUILD_SHARED_LIB=${if stdenv.hostPlatform.isStatic then "0" else "1"}"
     "BUILD_STATIC_LIB=${if stdenv.hostPlatform.isStatic then "1" else "0"}"
 
@@ -71,6 +69,10 @@ stdenv.mkDerivation {
     "AR=${stdenv.cc.targetPrefix}ar"
   ]
   ++ lib.optional sensord "PROG_EXTRA=sensord";
+
+  installFlags = [
+    "ETCDIR=${placeholder "out"}/etc"
+  ];
 
   enableParallelBuilding = true;
 
