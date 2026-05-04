@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/TASEmulators/fceux/blob/${finalAttrs.src.rev}/changelog.txt";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "fceux";
-    maintainers = with lib.maintainers; [ sbruder ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })
