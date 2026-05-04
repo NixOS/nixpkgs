@@ -202,11 +202,6 @@ let
 
             ssl_protocols ${cfg.sslProtocols};
             ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
-            ${optionalString (cfg.sslDhparam != false)
-              "ssl_dhparam ${
-                if cfg.sslDhparam == true then config.security.dhparams.params.nginx.path else cfg.sslDhparam
-              };"
-            }
 
             ${optionalString cfg.recommendedTlsSettings ''
               # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
@@ -970,7 +965,7 @@ in
       sslCiphers = mkOption {
         type = types.nullOr types.str;
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
-        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305";
+        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305";
         description = "Ciphers to choose from when negotiating TLS handshakes.";
       };
 
@@ -979,13 +974,6 @@ in
         default = "TLSv1.2 TLSv1.3";
         example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
         description = "Allowed TLS protocol versions.";
-      };
-
-      sslDhparam = mkOption {
-        type = types.either types.path types.bool;
-        default = false;
-        example = "/path/to/dhparams.pem";
-        description = "Path to DH parameters file, or `true` to generate with `security.dhparms.params.nginx`.";
       };
 
       proxyResolveWhileRunning = mkOption {
@@ -1287,6 +1275,13 @@ in
   };
 
   imports = [
+    (mkRemovedOptionModule [ "services" "nginx" "sslDhparam" ] ''
+      DHE cipher suites have been removed from the default nginx cipher list.
+
+      No additional configuration is required as ECDHE is used by default already.
+
+      If you wish to use Hybrid PQ key exchange, you can set services.nginx.recommendedTlsSettings = true.
+    '')
     (mkRemovedOptionModule [ "services" "nginx" "stateDir" ] ''
       The Nginx log directory has been moved to /var/log/nginx, the cache directory
       to /var/cache/nginx. The option services.nginx.stateDir has been removed.
@@ -1656,8 +1651,6 @@ in
           ) (filter (vhostConfig: vhostConfig.useACMEHost != null) acmeEnabledVhosts);
       in
       listToAttrs acmePairs;
-
-    security.dhparams.params.nginx = lib.mkIf (cfg.sslDhparam == true) { };
 
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {
