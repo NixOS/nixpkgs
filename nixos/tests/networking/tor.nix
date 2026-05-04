@@ -23,6 +23,17 @@
           router.enable = true;
         };
       };
+
+    client_and_router =
+      { ... }:
+      {
+        networking.tor = {
+          transPort = 10040;
+          dnsPort = 10053;
+          client.enable = true;
+          router.enable = true;
+        };
+      };
   };
 
   testScript = ''
@@ -39,5 +50,14 @@
     router.succeed("ss -tlpn | grep -F '0.0.0.0:7040'")
     router.succeed("ss -ulpn | grep -F '0.0.0.0:7053'")
     router.succeed("cat /proc/sys/net/ipv4/ip_forward | grep 1")
+
+    client_and_router.wait_for_unit("tor.service")
+    client_and_router.succeed("nft list ruleset | grep tor_nat_output")
+    client_and_router.succeed("nft list ruleset | grep tor_filter_output")
+    client_and_router.succeed("nft list ruleset | grep tor_nat_prerouting")
+    client_and_router.succeed("nft list ruleset | grep tor_filter_forward")
+    client_and_router.succeed("ss -tlpn | grep -F '0.0.0.0:10040'")
+    client_and_router.succeed("ss -ulpn | grep -F '0.0.0.0:10053'")
+    client_and_router.succeed("cat /proc/sys/net/ipv4/ip_forward | grep 1")
   '';
 }
