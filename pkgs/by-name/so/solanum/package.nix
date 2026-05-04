@@ -19,6 +19,9 @@
   sqlite,
   unstableGitUpdater,
   nixosTests,
+
+  # flags
+  withSCTP ? lib.meta.availableOn stdenv.hostPlatform lksctp-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "mbedtls" false)
     (lib.mesonEnable "openssl" true)
     (lib.mesonEnable "gnutls" false)
+    (lib.mesonEnable "sctp" withSCTP)
   ];
 
   nativeBuildInputs = [
@@ -67,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     vectorscan
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals withSCTP [
     lksctp-tools
   ];
 
