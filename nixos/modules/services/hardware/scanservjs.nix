@@ -23,8 +23,6 @@ let
       lib.mapAttrsToList (k: v: if builtins.isAttrs v then leafs v else [ v ]) attrs
     );
 
-  package = pkgs.scanservjs;
-
   configFile = pkgs.writeText "config.local.js" ''
     /* eslint-disable no-unused-vars */
     module.exports = {
@@ -52,11 +50,11 @@ let
       ],
     };
   '';
-
 in
 {
   options.services.scanservjs = {
     enable = lib.mkEnableOption "scanservjs";
+    package = lib.mkPackageOption pkgs "scanservjs" { };
     stateDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/scanservjs";
@@ -71,15 +69,17 @@ in
       '';
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
-        options.host = lib.mkOption {
-          type = lib.types.str;
-          description = "The IP to listen on.";
-          default = "127.0.0.1";
-        };
-        options.port = lib.mkOption {
-          type = lib.types.port;
-          description = "The port to listen on.";
-          default = 8080;
+        options = {
+          host = lib.mkOption {
+            type = lib.types.str;
+            description = "The IP to listen on.";
+            default = "127.0.0.1";
+          };
+          port = lib.mkOption {
+            type = lib.types.port;
+            description = "The port to listen on.";
+            default = 8080;
+          };
         };
       };
     };
@@ -143,7 +143,11 @@ in
         LD_LIBRARY_PATH = "/etc/sane-libs";
       };
       serviceConfig = {
-        ExecStart = lib.getExe package;
+        ExecStart = lib.getExe cfg.package;
+        ExecStartPre = [
+          "${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.stateDir}/data/preview"
+          "${lib.getExe' pkgs.coreutils "ln"} -sf ${cfg.package}/lib/data/preview/default.jpg ${cfg.stateDir}/data/preview/default.jpg"
+        ];
         Restart = "always";
         User = "scanservjs";
         Group = "scanservjs";
