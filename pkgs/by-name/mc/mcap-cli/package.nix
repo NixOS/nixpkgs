@@ -34,7 +34,7 @@ buildGoModule {
   tags = [
     "sqlite_omit_load_extension"
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "netgo"
     "osusergo"
   ];

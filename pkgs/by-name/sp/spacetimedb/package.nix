@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=codegen"
     "--skip=publish"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flakes on darwin in nix build sandbox, timing out waiting for listen addr
     "--skip=cli_can_ping_spacetimedb_on_disk"
     "--skip=cli_can_publish_spacetimedb_on_disk"

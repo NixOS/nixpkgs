@@ -21,7 +21,7 @@ callPackage ./generic.nix args {
   tests = {
     inherit (nixosTests.zfs) series_2_4;
   }
-  // lib.optionalAttrs stdenv.isx86_64 {
+  // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
     inherit (nixosTests.zfs) installer;
   };
 

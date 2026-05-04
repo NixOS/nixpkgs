@@ -40,7 +40,7 @@ buildNpmPackage rec {
     docify
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
+  ++ lib.optional stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 

@@ -56,7 +56,7 @@ deployAndroidPackage {
       libxkbfile
       libxshmfence
     ])
-    ++ lib.optional (os == "linux" && stdenv.isx86_64) pkgsi686Linux.glibc;
+    ++ lib.optional (os == "linux" && stdenv.hostPlatform.isx86_64) pkgsi686Linux.glibc;
   patchInstructions =
     (lib.optionalString (os == "linux") ''
       addAutoPatchelfSearchPath $packageBaseDir/lib

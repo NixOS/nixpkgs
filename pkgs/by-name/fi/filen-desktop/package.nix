@@ -63,7 +63,7 @@ buildNpmPackage {
     electron
     makeWrapper
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 

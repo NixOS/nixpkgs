@@ -32,7 +32,7 @@ buildNpmPackage (finalAttrs: {
     pkg-config
     nodejs-slim.python
   ]
-  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
 
   buildInputs = [ libsecret ];
 

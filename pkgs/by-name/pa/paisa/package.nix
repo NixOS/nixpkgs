@@ -96,7 +96,7 @@ buildGoModule (finalAttrs: {
     # darwin clang compiler the native node-addon-api cannot be built anymore.
     # this can only be fixed by upstream upgrading dependencies (especially
     # node-gyp and node-addon-api).
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://paisa.fyi/";
     changelog = "https://github.com/ananthakumaran/paisa/releases/tag/v${finalAttrs.version}";
     description = "Personal finance manager, building on top of the ledger double entry accounting tool";

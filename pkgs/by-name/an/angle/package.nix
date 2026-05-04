@@ -35,7 +35,7 @@ let
       llvmPackages.clang
     ];
     postBuild =
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/darwin
           ln -s $out/resource-root/lib/darwin/libclang_rt.osx.a \
@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     llvmPackages.bintools
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
   ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       glib
       libxcb.dev
       libx11.dev
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       pciutils
       libGL
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_15
     ];
 

@@ -58,7 +58,7 @@ buildPythonPackage rec {
     xlib
     libayatana-appindicator
   ]
-  ++ lib.optionals stdenv.isDarwin [ pyobjc-framework-Quartz ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ pyobjc-framework-Quartz ];
 
   nativeCheckInputs = [ pytest ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ];
 

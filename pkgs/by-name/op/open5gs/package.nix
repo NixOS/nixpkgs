@@ -83,10 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     libnghttp2.dev
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     lksctp-tools
   ]
-  ++ lib.optionals (!stdenv.isLinux) [
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     usrsctp
   ];
 

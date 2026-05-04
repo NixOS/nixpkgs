@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     pytest
     pyperclip
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     xclip
     xvfb-run
   ];

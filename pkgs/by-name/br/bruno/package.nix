@@ -42,7 +42,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems

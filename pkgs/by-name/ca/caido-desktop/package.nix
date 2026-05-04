@@ -111,9 +111,9 @@ let
   };
 
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   linux
-else if stdenv.isDarwin then
+else if stdenv.hostPlatform.isDarwin then
   darwin
 else
   throw "caido-desktop: unsupported platform ${stdenv.hostPlatform.system}"

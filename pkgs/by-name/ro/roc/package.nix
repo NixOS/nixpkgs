@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage {
     cmake
     zig_0_13
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage {
     llvmPackages.llvm.dev
     makeBinaryWrapper
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glibc
     stdenv.cc.cc.lib
   ];
@@ -67,13 +67,13 @@ rustPlatform.buildRustPackage {
     '';
 
   postInstall =
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/roc \
         --set NIX_GLIBC_PATH ${glibc.out}/lib \
         --set NIX_LIBGCC_S_PATH ${stdenv.cc.cc.lib}/lib \
         --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
     ''
-    + lib.optionalString (!stdenv.isLinux) ''
+    + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
       wrapProgram $out/bin/roc --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
     '';
 
@@ -84,12 +84,12 @@ rustPlatform.buildRustPackage {
   ];
 
   checkPhase =
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       runHook preCheck
       NIX_GLIBC_PATH=${glibc.out}/lib NIX_LIBGCC_S_PATH=${stdenv.cc.cc.lib}/lib cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip=glue_cli_tests --skip=test_snapshots
       runHook postCheck
     ''
-    + lib.optionalString (!stdenv.isLinux) ''
+    + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
       runHook preCheck
       cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip=glue_cli_tests --skip=test_snapshots
       runHook postCheck

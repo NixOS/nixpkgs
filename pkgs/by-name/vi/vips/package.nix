@@ -49,7 +49,7 @@
   withDevDoc ?
     !stdenv.hostPlatform.isDarwin
     && !stdenv.hostPlatform.isFreeBSD
-    && !(stdenv.hostPlatform.isRiscV && stdenv.isLinux),
+    && !(stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.isLinux),
 
   # passthru
   testers,
