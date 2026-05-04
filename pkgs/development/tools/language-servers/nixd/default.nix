@@ -22,7 +22,7 @@
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_31;
   common = rec {
     version = "2.9.0";
 
@@ -107,6 +107,12 @@ in
       outputs = [
         "out"
         "dev"
+      ];
+
+      patches = [
+        # Nix 2.31 stopped including globals.hh from store-api.hh, hiding
+        # the nix::initLibStore declaration.
+        ./nixt-nix-2.31-globals.patch
       ];
 
       buildInputs = [

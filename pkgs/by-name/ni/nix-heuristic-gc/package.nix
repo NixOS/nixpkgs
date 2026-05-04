@@ -20,12 +20,12 @@ python3Packages.buildPythonPackage rec {
 
   # NIX_SYSTEM suggested at
   # https://github.com/NixOS/nixpkgs/issues/386184#issuecomment-2692433531
-  env.NIX_SYSTEM = nixVersions.nixComponents_2_30.nix-store.stdenv.hostPlatform.system;
+  env.NIX_SYSTEM = nixVersions.nixComponents_2_31.nix-store.stdenv.hostPlatform.system;
 
   buildInputs = [
     boost
-    nixVersions.nixComponents_2_30.nix-store
-    nixVersions.nixComponents_2_30.nix-main
+    nixVersions.nixComponents_2_31.nix-store
+    nixVersions.nixComponents_2_31.nix-main
     python3Packages.pybind11
     python3Packages.setuptools
   ];
@@ -50,5 +50,8 @@ python3Packages.buildPythonPackage rec {
       ris
       me-and
     ];
+    # Uses nix::settings/Store::getUri and builds with C++20, all of which
+    # were removed/changed in Nix 2.31.
+    broken = true;
   };
 }

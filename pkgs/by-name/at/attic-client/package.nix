@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   nixVersions,
   nixosTests,
   boost,
@@ -16,7 +17,7 @@ let
   # Only the attic-client crate builds against the Nix C++ libs
   # This derivation is also used to build the server
   needNixInclude = lib.elem "attic-client" crates;
-  nix = nixVersions.nix_2_28;
+  nix = nixVersions.nix_2_31;
 in
 
 rustPlatform.buildRustPackage {
@@ -29,6 +30,17 @@ rustPlatform.buildRustPackage {
     rev = "12cbeca141f46e1ade76728bce8adc447f2166c6";
     hash = "sha256-0nZlCCDC5PfndsQJXXtcyrtrfW49I3KadGMDlutzaGU=";
   };
+
+  patches = lib.optionals needNixInclude [
+    # Nix >= 2.29 moved openStore/settings into separate headers and the
+    # 2.31 public headers require C++23.
+    # https://github.com/zhaofengli/attic/pull/332
+    (fetchpatch {
+      name = "nix-2.31-compat.patch";
+      url = "https://github.com/zhaofengli/attic/commit/fcfda42868c29f697503e666c009ab3ae4d95e5a.patch";
+      hash = "sha256-rc8I6YnMsMXx8MbI4Xf0gLBea9COnAA8IzUyaqw4TyI=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

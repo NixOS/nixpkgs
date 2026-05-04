@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nixVersions,
-  nixComponents ? nixVersions.nixComponents_2_30,
+  nixComponents ? nixVersions.nixComponents_2_31,
   cmake,
   pkg-config,
   boost,
