@@ -194,14 +194,17 @@ class BootFile:
     ) -> tuple["BootFile", str]:
         contents_hash = hashlib.sha256(contents).hexdigest()
         path_prefix = f"nixos-{contents_hash}"
+        pat = re.compile(rf"{re.escape(path_prefix)}(\+[0-9]+(-[0-9]+)?)?\.conf")
         path = None
         for e in os.scandir(path=BOOT_MOUNT_POINT / "loader" / "entries"):
-            mat = re.fullmatch(
-                rf"{re.escape(path_prefix)}(\+[0-9]+(-[0-9]+)?)?\.conf", e.name
-            )
-            if mat is not None:
-                path = Path("loader/entries") / e.name
-                break
+            if pat.fullmatch(e.name) is None:
+                continue
+            # Ignore files whose content does not match the hash in their
+            # name so GC removes them and a fresh entry is written.
+            if hashlib.sha256(Path(e.path).read_bytes()).hexdigest() != contents_hash:
+                continue
+            path = Path("loader/entries") / e.name
+            break
         if path is None:
             counters = f"+{BOOT_COUNTING_TRIES}" if BOOT_COUNTING else ""
             path = Path(f"loader/entries/{path_prefix}{counters}.conf")
