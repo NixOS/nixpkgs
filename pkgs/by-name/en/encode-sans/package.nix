@@ -2,9 +2,10 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "encode-sans";
   version = "1.002";
 
@@ -13,13 +14,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-TPAUc5msAUgJZHibjgYaS2TOuzKFy0rje9ZQTXE6s+w=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 *.ttf                 -t $out/share/fonts/truetype
-    install -Dm644 README.md FONTLOG.txt -t $out/share/doc/${pname}-${version}
-
-    runHook postInstall
+  postInstall = ''
+    install -Dm644 README.md FONTLOG.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
   '';
 
   meta = {
@@ -34,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/impallari/Encode-Sans";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
-}
+})
