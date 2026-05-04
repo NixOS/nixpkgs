@@ -20,16 +20,16 @@
   sqlframe,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "narwhals";
-  version = "2.16.0";
+  version = "2.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
-    tag = "v${version}";
-    hash = "sha256-k7CeM8Q4JgKbkLisAaVrljro4diOf0K0immek6AI0vM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hRd0a6wJsBsvyz8m4oOC7KN5IqKG1zfwdCIszVDjsfQ=";
   };
 
   build-system = [ hatchling ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytest-env
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
 
@@ -85,6 +85,7 @@ buildPythonPackage rec {
     "test_first_expr_broadcasting"
     # sqlframe improvements cause strict XPASS failures (tests expected to fail now pass)
     "test_unique_expr"
+    "test_join_duplicate_column_names"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
@@ -99,8 +100,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight and extensible compatibility layer between dataframe libraries";
     homepage = "https://github.com/narwhals-dev/narwhals";
-    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${src.tag}";
+    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
