@@ -160,7 +160,6 @@ in
 
     };
 
-    # Open ports on firewall.
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.router.enable [ 9040 ];
 
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.router.enable [ 9053 ];
