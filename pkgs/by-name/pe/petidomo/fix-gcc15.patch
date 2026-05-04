@@ -1,0 +1,68 @@
+diff --git a/liblists/lists.h b/liblists/lists.h
+index 6643552..982c8bc 100644
+--- a/liblists/lists.h
++++ b/liblists/lists.h
+@@ -32,7 +32,7 @@
+ #ifndef __cplusplus
+ #ifndef PETIDOMO_HAS_DEFINED_BOOL
+ #  define PETIDOMO_HAS_DEFINED_BOOL 1
+-typedef int bool;
++#include <stdbool.h>
+ #endif
+ #ifndef FALSE
+ #  define FALSE (0==1)
+diff --git a/libtext/text.h b/libtext/text.h
+index a258c79..1fd5274 100644
+--- a/libtext/text.h
++++ b/libtext/text.h
+@@ -36,7 +36,7 @@ extern "C" {
+ #ifndef __cplusplus
+ #ifndef PETIDOMO_HAS_DEFINED_BOOL
+ #  define PETIDOMO_HAS_DEFINED_BOOL 1
+-typedef int bool;
++#include <stdbool.h>
+ #endif
+ 
+ #ifndef FALSE
+diff --git a/petidomo.h b/petidomo.h
+index d503de0..a0c1308 100644
+--- a/petidomo.h
++++ b/petidomo.h
+@@ -26,7 +26,7 @@
+ 
+ #ifndef PETIDOMO_HAS_DEFINED_BOOL
+ #    define PETIDOMO_HAS_DEFINED_BOOL 1
+-     typedef int bool;
++#include <stdbool.h>
+ #endif
+ 
+ #ifndef DEBUG_DMALLOC
+@@ -135,7 +135,7 @@ struct Mail
+     };
+ 
+ void RemoveCarrigeReturns(char *buffer);
+-int isRFC822Address(const char *buffer);
++bool isRFC822Address(const char *buffer);
+ int ParseAddressLine(char *buffer);
+ int ParseReplyToLine(char *buffer);
+ int ParseFromLine(char *buffer);
+@@ -157,8 +157,8 @@ int ArchiveMail(const struct Mail *MailStruct, const char *listname);
+ /********** authen.c **********/
+ 
+ int FindBodyPassword(struct Mail *MailStruct);
+-int isValidAdminPassword(const char *password, const char *listname);
+-int isValidPostingPassword(const char *password, const char *listname);
++bool isValidAdminPassword(const char *password, const char *listname);
++bool isValidPostingPassword(const char *password, const char *listname);
+ 
+ /********** filter.c **********/
+ 
+@@ -226,7 +226,7 @@ const char *getPassword(void  );
+ /********** tool.c **********/
+ 
+ char *buildFuzzyMatchAddress(const char *);
+-int isValidListName(const char *);
++bool isValidListName(const char *);
+ bool isSubscribed(const char *, const char *, char **, char **, bool);
+ 
+ /********** unsubscribe.c **********/
