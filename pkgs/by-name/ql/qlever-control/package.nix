@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qlever-control";
-  version = "0.5.46";
+  version = "0.5.47";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qlever-dev";
     repo = "qlever-control";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vXSVrNfz4gRBCrTi0D+sXtfsAZwv7HO67zs7wh98cOY=";
+    hash = "sha256-sNTI8H7dzK4rDhLzRrf3nWSkn3Z5xHG1rU77+59CwHY=";
   };
 
   build-system = with python3Packages; [

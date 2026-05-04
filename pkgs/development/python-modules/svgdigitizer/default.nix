@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "svgdigitizer";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";
     repo = "svgdigitizer";
     tag = version;
-    hash = "sha256-7F1q0AvkeqLIoWDNNBUc/91caiQ7kdIcKOkvdAajsLI=";
+    hash = "sha256-Wba1I80wi2YGbHqpbXfCoHw0zkNovX3PRPkdqhm05Ys=";
   };
 
   build-system = [

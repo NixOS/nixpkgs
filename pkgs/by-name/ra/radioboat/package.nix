@@ -12,23 +12,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radioboat";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1fTXXT0HxGOoy+oNK1ixzgFgjapreQEOoVlQlJwqbrA=";
+    hash = "sha256-mjmrUWnc2oBuUiKnyKGULILI9mp5JZjXSwkp1WgqcHA=";
   };
-
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail 'version = "0.4.0"' 'version = "${finalAttrs.version}"'
-  '';
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-ibDOUgprr5VziIvTpvDFISGVpVH5ZyQ1ZZ5tIQirPP8=";
+  cargoHash = "sha256-YvifggF8XZTzFBUs6u5IzdtPsxehjSNlwIT3Gb6wjW4=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -59,6 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "radioboat";
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })
