@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioautomower";
-  version = "2.7.3";
+  version = "2.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O1z0dhVtKfIOr7TrXFiPElC11isD4aDDLmzc0+OX+B8=";
+    hash = "sha256-6McuzSo3CanhafN8ooB/fQkD+BAVpaPqPDNHSSsVLgA=";
   };
 
   postPatch = ''
