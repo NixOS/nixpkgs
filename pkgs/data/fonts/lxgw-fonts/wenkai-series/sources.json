@@ -1,0 +1,221 @@
+{
+  "LXGWWenKai": {
+    "version": "v1.522",
+    "sources": {
+      "LXGWWenKai": {
+        "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.522/lxgw-wenkai-v1.522.tar.gz",
+        "sha256": "681a77d5d002175e3a9e1af0fc6fa220164cc9ad6c14f1e842a539878e7ce1a4"
+      },
+      "LXGWWenKai-Light": {
+        "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.522/LXGWWenKai-Light.ttf",
+        "sha256": "526ec70cbb0118e871d481f8179e03ff045f0e4d72d080dcca87950c4ab27cca"
+      },
+      "LXGWWenKai-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.522/LXGWWenKai-Medium.ttf",
+        "sha256": "d4bdeb38a39151d74d084cba5090f8cb7d20bf83eedb78c35939ae70b9f4e3f6"
+      },
+      "LXGWWenKai-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.522/LXGWWenKai-Regular.ttf",
+        "sha256": "39ad71264b588165b469e35e6afb162a378dacd1f95348160240ba9038ac3009"
+      },
+      "LXGWWenKaiMono-Light": {
+        "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.522/LXGWWenKaiMono-Light.ttf",
+        "sha256": "e4d22716a148d4ee820b9a4f63886a1d52dd68b4fa5826cc5e2dec55977f7930"
+      },
+      "LXGWWenKaiMono-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.522/LXGWWenKaiMono-Medium.ttf",
+        "sha256": "7a674f448b15a1b3df781c3498973d77f71d270788f7f921080c1344e9d739e1"
+      },
+      "LXGWWenKaiMono-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.522/LXGWWenKaiMono-Regular.ttf",
+        "sha256": "bc068e4e395c396f2909ffdfac3a3751578b73ed3d64a79c9c31bfa84e43debe"
+      }
+    }
+  },
+  "LXGWWenKaiGB": {
+    "version": "v1.522",
+    "sources": {
+      "LXGWWenKaiGB": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.522/lxgw-wenkai-gb-v1.522.tar.gz",
+        "sha256": "6ab7077f0bb2e462b71708a4cc98bb428d029fffba4a1c4b0a81e29fc453a70c"
+      },
+      "LXGWWenKaiGB-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.522/LXGWWenKaiGB-Light.ttf",
+        "sha256": "1cc41da57587fe1b2c72e237237b272521e0b7aeda0af3513dcc879ad6c2bebc"
+      },
+      "LXGWWenKaiGB-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.522/LXGWWenKaiGB-Medium.ttf",
+        "sha256": "b885c51ec0d3f325974013801dfcefda1a9ba0bf385c607cf5f2582dafa2e5ab"
+      },
+      "LXGWWenKaiGB-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.522/LXGWWenKaiGB-Regular.ttf",
+        "sha256": "295568c131648062107543aa159c97dd49564be791136c2abf74cad83eba3f7f"
+      },
+      "LXGWWenKaiMonoGB-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.522/LXGWWenKaiMonoGB-Light.ttf",
+        "sha256": "bf505b58ee5ee1e6e18c2eaa634c1fc394997b01618636fb07887c3d4c6852a4"
+      },
+      "LXGWWenKaiMonoGB-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.522/LXGWWenKaiMonoGB-Medium.ttf",
+        "sha256": "a34d9f1d2ea8e90363ac52f33ca9445e6be59e3be1298f605731673fb19c8f49"
+      },
+      "LXGWWenKaiMonoGB-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.522/LXGWWenKaiMonoGB-Regular.ttf",
+        "sha256": "fb82a0d6b9c0a1a3c83ad303eab1cc998e6a52c1028027fc3527455bdadb4ecb"
+      }
+    }
+  },
+  "LXGWWenKaiTC": {
+    "version": "v1.522",
+    "sources": {
+      "LXGWWenKaiTC": {
+        "url": "https://github.com/lxgw/LxgwWenkaiTC/releases/download/v1.522/lxgw-wenkai-tc-v1.522.tar.gz",
+        "sha256": "136675dc839a5b076c00f9c716c610d81fddddd8573f876ebdd6983bfe0f09f8"
+      },
+      "LXGWWenKaiMonoTC-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiTC/releases/download/v1.522/LXGWWenKaiMonoTC-Light.ttf",
+        "sha256": "3d2e2dba34cfdd0d10ba3cc9a50c67c5e2384b94748461518d0799560708a865"
+      },
+      "LXGWWenKaiMonoTC-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiTC/releases/download/v1.522/LXGWWenKaiMonoTC-Medium.ttf",
+        "sha256": "31ed72b9d4f3d78e602ad47e3ea334cb9ec110db9bf4c3ad844618e91f62659b"
+      },
+      "LXGWWenKaiMonoTC-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiTC/releases/download/v1.522/LXGWWenKaiMonoTC-Regular.ttf",
+        "sha256": "04f1e24faab8108075a74fb27ad81de4a3f80b1510fe993993c19b00eb1b3945"
+      },
+      "LXGWWenKaiTC-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiTC/releases/download/v1.522/LXGWWenKaiTC-Light.ttf",
+        "sha256": "dca5b82a847c7a419bfd0a9ddb97a90fa198848ef6c3f15ab72b6909738cb820"
+      },
+      "LXGWWenKaiTC-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiTC/releases/download/v1.522/LXGWWenKaiTC-Medium.ttf",
+        "sha256": "94ca2870022fb8e4f90e2887524603690598142d17b620dfae318f1818ba8e17"
+      },
+      "LXGWWenKaiTC-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiTC/releases/download/v1.522/LXGWWenKaiTC-Regular.ttf",
+        "sha256": "b1a0795862c1415bf3f393ea50b2a4ea6275012cf5bad3f94feeb1222f555731"
+      }
+    }
+  },
+  "LXGWWenKaiKR": {
+    "version": "v0.901",
+    "sources": {
+      "LXGWWenKaiKR": {
+        "url": "https://github.com/lxgw/LxgwWenkaiKR/releases/download/v0.901/lxgw-wenkai-kr-v0.901.tar.gz",
+        "sha256": "848bb9517e7dde856b85cab778820e235273c1e3bd79e9dc8905f13c20526d33"
+      },
+      "LXGWWenKaiKR-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiKR/releases/download/v0.901/LXGWWenKaiKR-Light.ttf",
+        "sha256": "8efb3790062802ef7503ce47e6a6402f84a0ff8eac238189b6c5d0d8959ecc07"
+      },
+      "LXGWWenKaiKR-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiKR/releases/download/v0.901/LXGWWenKaiKR-Medium.ttf",
+        "sha256": "33bd42346be15070d76a572e2109a5fbc781c41ba686b48a44c0576a77c77e8b"
+      },
+      "LXGWWenKaiKR-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiKR/releases/download/v0.901/LXGWWenKaiKR-Regular.ttf",
+        "sha256": "53f4000736b832d0716e8189af6b0dd8e91c5e244f5218a97583d5564d672b59"
+      },
+      "LXGWWenKaiMonoKR-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiKR/releases/download/v0.901/LXGWWenKaiMonoKR-Light.ttf",
+        "sha256": "01c1cb3a27596bf6b453f741f62794cd1aa9f92581be9d83b5135b0d493b1147"
+      },
+      "LXGWWenKaiMonoKR-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiKR/releases/download/v0.901/LXGWWenKaiMonoKR-Medium.ttf",
+        "sha256": "99539f620839682bee92b576730ee43fb1c00c36c5c29b145ea8ef73bd8b7b1e"
+      },
+      "LXGWWenKaiMonoKR-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiKR/releases/download/v0.901/LXGWWenKaiMonoKR-Regular.ttf",
+        "sha256": "9be52ae96d0c0f7f9e7ff35895dbb8d6b6919483c7923e2f3306f3f33b9cb9d5"
+      }
+    }
+  },
+  "LXGWWenKai-Lite": {
+    "version": "v1.522",
+    "sources": {
+      "LXGWWenKai-Lite": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Lite/releases/download/v1.522/lxgw-wenkai-lite-v1.522.tar.gz",
+        "sha256": "e724c8d540ebd525fd783931872a82a1a8a2202765672655957e4f1de1001543"
+      },
+      "LXGWWenKaiLite-Light": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Lite/releases/download/v1.522/LXGWWenKaiLite-Light.ttf",
+        "sha256": "b57d46de1db72c500a7f2ee374a66615f308e541627ec3623e9b9087e88d392e"
+      },
+      "LXGWWenKaiLite-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Lite/releases/download/v1.522/LXGWWenKaiLite-Medium.ttf",
+        "sha256": "02eb0f8deed11b00481393f5720630ae1a44424f37f4157ea160a69a1c72a0b6"
+      },
+      "LXGWWenKaiLite-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Lite/releases/download/v1.522/LXGWWenKaiLite-Regular.ttf",
+        "sha256": "140c99ba4e28e817cec49bf82a0c5fcdc4fe633fb9dfda16d0ee8d59a8545f15"
+      },
+      "LXGWWenKaiMonoLite-Light": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Lite/releases/download/v1.522/LXGWWenKaiMonoLite-Light.ttf",
+        "sha256": "454c49982d8fde937a45651bbcbcfe9e91cd1eb0cdd243008c6864240c0a99e0"
+      },
+      "LXGWWenKaiMonoLite-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Lite/releases/download/v1.522/LXGWWenKaiMonoLite-Medium.ttf",
+        "sha256": "5cd816c815fd4f6358db0f8610da387d854b0e2ffca1b38a4c91440c12da715a"
+      },
+      "LXGWWenKaiMonoLite-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Lite/releases/download/v1.522/LXGWWenKaiMonoLite-Regular.ttf",
+        "sha256": "5f60e1f071ad1a15869da7e02e995b332243ef4c6ec575bad5bbef827d015ce5"
+      }
+    }
+  },
+  "LXGWWenKaiGB-Lite": {
+    "version": "v1.522",
+    "sources": {
+      "LXGWWenKaiGB-Lite": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB-Lite/releases/download/v1.522/lxgw-wenkai-gb-lite-v1.522.tar.gz",
+        "sha256": "6eaf2008dfdbe6eaffecd6a4bca56e28d25e91356c5d237489fc3005a34b4254"
+      },
+      "LXGWWenKaiGBLite-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB-Lite/releases/download/v1.522/LXGWWenKaiGBLite-Light.ttf",
+        "sha256": "66f1105694ab2387b77326fe70a1031d3008abece640fe66fbdfb24c97abe07a"
+      },
+      "LXGWWenKaiGBLite-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB-Lite/releases/download/v1.522/LXGWWenKaiGBLite-Medium.ttf",
+        "sha256": "161b7cbfb3400e10e3825d93548ae09209cd4f666be652a5f49e4d792c5459c0"
+      },
+      "LXGWWenKaiGBLite-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB-Lite/releases/download/v1.522/LXGWWenKaiGBLite-Regular.ttf",
+        "sha256": "1675c708cce181871d9a8adc987f35a0cabc6ff980685cd99f05d2655ea08c4c"
+      },
+      "LXGWWenKaiMonoGBLite-Light": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB-Lite/releases/download/v1.522/LXGWWenKaiMonoGBLite-Light.ttf",
+        "sha256": "9f2a866946a94a204e760edc440451de1b23a099df3eef9b9bf4a1d67ca7323b"
+      },
+      "LXGWWenKaiMonoGBLite-Medium": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB-Lite/releases/download/v1.522/LXGWWenKaiMonoGBLite-Medium.ttf",
+        "sha256": "7ff485f8c27ed74109bf3929849756017c443330ed8d0821487e38dad3bd2591"
+      },
+      "LXGWWenKaiMonoGBLite-Regular": {
+        "url": "https://github.com/lxgw/LxgwWenkaiGB-Lite/releases/download/v1.522/LXGWWenKaiMonoGBLite-Regular.ttf",
+        "sha256": "3d239c940113ac6a1a90b41a1e7a246a4820958814d71d50a938953fb5a39923"
+      }
+    }
+  },
+  "LXGWWenKai-Screen": {
+    "version": "v1.522",
+    "sources": {
+      "LXGWWenKaiGBScreen": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.522/LXGWWenKaiGBScreen.ttf",
+        "sha256": "23ec023913e1851925eb94462c4b0ccd1d78bb89533745aaa8cc682ccd339dc0"
+      },
+      "LXGWWenKaiMonoGBScreen": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.522/LXGWWenKaiMonoGBScreen.ttf",
+        "sha256": "294ad0fcc597f93c555cb866bb827f38acd0479c0372c42b18bc0e93bd6434e4"
+      },
+      "LXGWWenKaiMonoScreen": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.522/LXGWWenKaiMonoScreen.ttf",
+        "sha256": "758bf0e7fceddeae425fa3f5b792aa3e80428856b9f37d21355e0e4295135e9d"
+      },
+      "LXGWWenKaiScreen": {
+        "url": "https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.522/LXGWWenKaiScreen.ttf",
+        "sha256": "cd1a6fa39c4ea42fd8f4e289945789b0e510cf7016435640f8893cdad9b220f3"
+      }
+    }
+  }
+}
