@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage, # for tests
   fetchurl,
   replaceVars,
   buildPackages,
@@ -193,6 +194,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # fails
 
   passthru = {
+    tests = {
+      setup-hook-tests = callPackage ./test/test-setup-hook.nix {
+        inherit lib stdenv;
+      };
+    };
+
     updateScript = gitUpdater {
       url = "https://gitlab.kitware.com/cmake/cmake.git";
       rev-prefix = "v";
