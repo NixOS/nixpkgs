@@ -11090,6 +11090,8 @@ self: super: with self; {
 
   nftables = callPackage ../os-specific/linux/nftables/python.nix { inherit (pkgs) nftables; };
 
+  ngff-zarr = callPackage ../development/python-modules/ngff-zarr { };
+
   nglview = callPackage ../development/python-modules/nglview { };
 
   nh3 = callPackage ../development/python-modules/nh3 { };
