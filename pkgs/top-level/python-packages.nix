@@ -17904,6 +17904,8 @@ self: super: with self; {
     inherit (pkgs) libpcap;
   };
 
+  sl-pgp = callPackage ../development/python-modules/sl-pgp { };
+
   slack-bolt = callPackage ../development/python-modules/slack-bolt { };
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
