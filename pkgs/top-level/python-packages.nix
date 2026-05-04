@@ -4851,6 +4851,8 @@ self: super: with self; {
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
 
+  earth2studio = callPackage ../development/python-modules/earth2studio { };
+
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   easydict = callPackage ../development/python-modules/easydict { };
