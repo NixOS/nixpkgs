@@ -7,6 +7,7 @@ let
       lib,
       stdenv,
       fetchurl,
+      fetchpatch2,
       nixosTests,
       buildPackages,
       # Native buildInputs components
@@ -135,7 +136,15 @@ let
         # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
         ++ lib.optional (
           !stdenv.hostPlatform.isLinux && lib.versionAtLeast version "10.6"
-        ) ./patch/macos-MDEV-26769-regression-fix.patch;
+        ) ./patch/macos-MDEV-26769-regression-fix.patch
+        ++ lib.optional (lib.versionOlder version "10.6") (
+          # TOREM: 10.11.17, 11.4.11, 11.8.7
+          fetchpatch2 {
+            name = "MDEV-38811-crash-in-information_schema.table_constra.patch";
+            url = "https://github.com/MariaDB/server/commit/87309d3d4bb8f48910d05b0ca5ee989bcdd6b053.patch";
+            hash = "sha256-9Goa0NTUdSOs1Vm+FnkoSFhw0o8ZLNOw6cLUqCVnF5Y=";
+          }
+        );
 
         cmakeFlags = [
           "-DBUILD_CONFIG=mysql_release"
@@ -382,22 +391,22 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
-    version = "10.6.24";
-    hash = "sha256-SeK63GdFcMhg48t6LAFhJKpmKMlfMBMwMEEeXImqFy8=";
+    version = "10.6.25";
+    hash = "sha256-riIfvK83MAcDQ+hI4R4lYJK6Usb89RpRA3STFyAkCmw=";
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.15";
-    hash = "sha256-UxHoV2VAK95agamnsmQ6c3jSAxaigiv61LbdzxBHWaU=";
+    version = "10.11.16";
+    hash = "sha256-5PnyA104NFRkroq66vaDgNHOrbr7ToR0TtLtW3qrZOc=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.9";
-    hash = "sha256-jkgcoptadARE1FRRyOotk3Ec9SXW+l0nvJUSz4lzsHU=";
+    version = "11.4.10";
+    hash = "sha256-FHg93F7dlm/wWqDv1e1tPTae1bnkCApEjwD4ep8KSms=";
   };
   mariadb_118 = self.callPackage generic {
     # Supported until 2028-06-04
-    version = "11.8.5";
-    hash = "sha256-vLc5RWnAiHfCg+FkmGlQRTG+6MqvowKI8HjjDZn8ufY=";
+    version = "11.8.6";
+    hash = "sha256-sSZYGoyok3bSo85j/ul8EUw+FTFTRedpudAMUeG31hk=";
   };
 }
