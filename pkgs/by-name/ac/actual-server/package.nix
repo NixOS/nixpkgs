@@ -14,13 +14,13 @@
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.4.0";
+  version = "26.5.2";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-Gc2klYxGv+vd1Yc2ftj25B4Kea0GKkpjYcVDN9HvLPk=";
+    hash = "sha256-bcQAlG9acxTSqOQiSr1pmk4A6yjDWD/QH3AeYtqgAdo=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -28,8 +28,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "14c3f5e7ed4e47dedab8cebeaf5e2170cfa5f9d0";
-    hash = "sha256-+4hENE9unsta1YoIDE7shcjy1AlWfnPczvm4jYnw5Dw=";
+    rev = "fb8bcc31b7c3be7ce407d4cd529e6ed4e57e4af7";
+    hash = "sha256-MxhXFgoR+EUT8HuZn5vP0BJm20SLnz+Xum51XrGRucM=";
   };
 
 in
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-WWnf7HgTdyWrrHZA43hPjv8Q1PO1ETMKkd0eSu0pQ3M=";
+    hash = "sha256-WheFZAohlrbvJZRBDux9hzv4lytdGpGt+92QKsYbQKE=";
   };
 
   pname = "actual-server";
@@ -108,13 +108,17 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client}
+    mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client,lib/actual/packages/crdt}
     cp -r ./packages/sync-server/build/{app.js,src,migrations,bin} $out/lib/actual/packages/sync-server
     # sync-server uses package.json to determine version info
     cp ./packages/sync-server/package.json $out/lib/actual/packages/sync-server
     # sync-server uses package.json to determine path to web ui.
     cp ./packages/desktop-client/package.json $out/lib/actual/packages/desktop-client
     cp -r packages/desktop-client/build $out/lib/actual/packages/desktop-client/build
+    # sync-server depends on the @actual-app/crdt workspace; its node_modules
+    # symlink points back to packages/crdt.
+    cp ./packages/crdt/package.json $out/lib/actual/packages/crdt
+    cp -r ./packages/crdt/dist $out/lib/actual/packages/crdt/dist
 
     # Re-create node_modules/ to contain just production packages required for
     # sync-server itself, using existing offline cache. This will also now build
