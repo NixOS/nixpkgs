@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-runtimeconfig";
-  version = "0.36.0";
+  version = "0.36.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_runtimeconfig";
     inherit version;
-    hash = "sha256-+pDFyELolBTJfz/RIoNbGNHC30tyKhZ7D6XiQTKO2t0=";
+    hash = "sha256-6+8N5VijHHdf08jKqW3NiqzgXtJwr7JKdNvrEmGFDAk=";
   };
 
   build-system = [ setuptools ];
