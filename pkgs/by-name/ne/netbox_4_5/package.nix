@@ -115,6 +115,15 @@ py.pkgs.buildPythonApplication rec {
       inherit (nixosTests) netbox-upgrade;
     };
     updateScript = nix-update-script { };
+    plugins = lib.recurseIntoAttrs (
+      lib.makeExtensible (
+        self:
+        lib.packagesFromDirectoryRecursive {
+          inherit (py.pkgs) callPackage;
+          directory = ./plugins;
+        }
+      )
+    );
   };
 
   meta = {
