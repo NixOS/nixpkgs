@@ -625,7 +625,14 @@ def garbage_collect(gc_roots: BootFileList) -> None:
 
 
 def write_boot_files(boot_files: BootFileList) -> None:
-    for boot_file in boot_files:
+    # Deduplicate by destination path so shared files are written once.
+    # Prefer the current configuration's entry so its failures are fatal.
+    unique: dict[Path, BootFile] = {}
+    for bf in boot_files:
+        if bf.path not in unique or bf.current:
+            unique[bf.path] = bf
+
+    for boot_file in unique.values():
         boot_path = BOOT_MOUNT_POINT / boot_file.path
         try:
             boot_file.writer.write_boot_file(boot_path)
