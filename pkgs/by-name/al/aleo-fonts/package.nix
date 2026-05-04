@@ -16,7 +16,14 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-HSxP5/sLHQTujBVt1u93625EXEc42lxpt8W1//6ngWM=";
   };
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   nativeBuildInputs = [ installFonts ];
+
+  preInstall = "rm -r fonts/old";
 
   meta = {
     description = "Slab serif typeface designed by Alessio Laiso";
