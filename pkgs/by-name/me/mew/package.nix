@@ -43,6 +43,8 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
+  patches = [ ./typed-wayland-listeners.patch ];
+
   postFixup = ''
     substituteInPlace $out/bin/mew-run \
       --replace-fail \

@@ -1,0 +1,70 @@
+--- a/mew.c
++++ b/mew.c
+@@ -768,7 +768,7 @@
+ 
+ static const struct wl_keyboard_listener keyboard_listener = {
+ 	.keymap = keyboard_handle_keymap,
+-	.enter = noop,
++	.enter = NULL,
+ 	.leave = keyboard_handle_leave,
+ 	.key = keyboard_handle_key,
+ 	.modifiers = keyboard_handle_modifiers,
+@@ -816,10 +816,10 @@
+ }
+ 
+ static const struct wl_surface_listener surface_listener = {
+-	.enter = noop,
+-	.leave = noop,
++	.enter = NULL,
++	.leave = NULL,
+ 	.preferred_buffer_scale = surface_handle_preferred_scale,
+-	.preferred_buffer_transform = noop,
++	.preferred_buffer_transform = NULL,
+ };
+ 
+ static void
+@@ -833,7 +833,7 @@
+ }
+ 
+ static const struct wl_data_device_listener data_device_listener = {
+-	.data_offer = noop,
++	.data_offer = NULL,
+ 	.selection = data_device_handle_selection,
+ };
+ 
+@@ -847,12 +847,12 @@
+ }
+ 
+ static const struct wl_output_listener output_listener = {
+-	.geometry = noop,
+-	.mode = noop,
+-	.done = noop,
+-	.scale = noop,
++	.geometry = NULL,
++	.mode = NULL,
++	.done = NULL,
++	.scale = NULL,
+ 	.name = output_handle_name,
+-	.description = noop,
++	.description = NULL,
+ };
+ 
+ static void
+@@ -871,7 +871,7 @@
+ 
+ static const struct wl_seat_listener seat_listener = {
+ 	.capabilities = seat_handle_capabilities,
+-	.name = noop,
++	.name = NULL,
+ };
+ 
+ static void
+@@ -902,7 +902,7 @@
+ 
+ static const struct wl_registry_listener registry_listener = {
+ 	.global = registry_handle_global,
+-	.global_remove = noop,
++	.global_remove = NULL,
+ };
+ 
+ static void
