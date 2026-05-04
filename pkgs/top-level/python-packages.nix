@@ -5254,6 +5254,8 @@ self: super: with self; {
 
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
+  extra-platforms = callPackage ../development/python-modules/extra-platforms { };
+
   extra-streamlit-components =
     callPackage ../development/python-modules/extra-streamlit-components
       { };
