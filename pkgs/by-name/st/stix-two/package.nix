@@ -14,6 +14,8 @@ stdenvNoCC.mkDerivation rec {
     "webfont"
   ];
 
+  preInstall = "rm -r static_ttf_woff2/";
+
   src = fetchzip {
     url = "https://github.com/stipub/stixfonts/raw/v${version}/zipfiles/STIX${
       builtins.replaceStrings [ "." ] [ "_" ] version
