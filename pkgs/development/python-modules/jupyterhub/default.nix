@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -44,22 +45,25 @@
   requests-mock,
   versionCheckHook,
   virtualenv,
+  # darwin-only
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "5.4.4";
+  version = "5.4.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
-    tag = version;
-    hash = "sha256-c7xbZvq43YT8EE3rnuJDotIsD/pEgnQvJX8U46q6yq0=";
+    tag = finalAttrs.version;
+    hash = "sha256-MdwH9IAV12GqmWc0tfCUi2NA5sT0BFlwCr20JVRzduU=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-64FRdLHBpnywpCLjsMoXmWp/tK00+QwNIR9yAoQFIbg=";
   };
 
@@ -114,22 +118,16 @@ buildPythonPackage rec {
     mock
     nbclassic
     playwright
-    # require pytest-asyncio<0.23
-    # https://github.com/jupyterhub/jupyterhub/pull/4663
-    (pytest-asyncio.overrideAttrs (
-      final: prev: {
-        version = "0.21.2";
-        src = fetchFromGitHub {
-          inherit (prev.src) owner repo;
-          tag = "v${final.version}";
-          hash = "sha256-AVVvdo/CDF9IU6l779sLc7wKz5h3kzMttdDNTPLYxtQ=";
-        };
-      }
-    ))
+    pytest-asyncio
     pytestCheckHook
     requests-mock
     versionCheckHook
     virtualenv
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied:
+    # '/private/tmp/temp_user_1/Library/Jupyter/runtime/jpserver-45402-open.html'
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -165,15 +163,17 @@ buildPythonPackage rec {
     "jupyterhub/tests/test_user.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://github.com/jupyterhub/jupyterhub";
-    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/reference/changelog.md";
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${finalAttrs.src.tag}/docs/source/reference/changelog.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
     badPlatforms = [
       # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-      lib.systems.inspect.patterns.isDarwin
+      # lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})
