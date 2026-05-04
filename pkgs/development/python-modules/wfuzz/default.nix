@@ -46,6 +46,7 @@ buildPythonPackage (finalAttrs: {
     chardet
     distutils # src/wfuzz/plugin_api/base.py
     legacy-cgi
+    netaddr # src/wfuzz/plugins/payloads/{iprange,ipnet}.py
     pycurl
     six
     setuptools
