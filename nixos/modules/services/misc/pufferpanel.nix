@@ -167,7 +167,7 @@ in
         ProtectControlGroups = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
-        ProtectKernelTunables = true;
+        ProtectKernelTunables = false;
         PrivateUsers = true;
         PrivateDevices = true;
         RestrictRealtime = true;
