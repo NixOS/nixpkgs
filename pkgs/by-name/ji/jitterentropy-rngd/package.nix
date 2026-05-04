@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jitterentropy-rngd";
-  version = "1.2.8";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-rngd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LDym636ss3B1G/vrqatu9g5vbVEeDX0JQcxZ/IxGeY0=";
+    hash = "sha256-PadDqDemklNbyi3VMkvPNMYN185YZYwrUar7KyXOJrc=";
   };
 
   enableParallelBuilding = true;
