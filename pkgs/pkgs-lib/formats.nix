@@ -461,18 +461,16 @@ optionalAttrs allowAliases aliases
       generate =
         name: value:
         pkgs.callPackage (
-          { runCommand, go-toml }:
+          { runCommand, remarshal }:
           runCommand name
             {
-              nativeBuildInputs = [ go-toml ];
+              nativeBuildInputs = [ remarshal ];
               value = builtins.toJSON value;
               passAsFile = [ "value" ];
               preferLocalBuild = true;
             }
-            # -use-json-number: preserve JSON ints as TOML ints
-            # (Go's json.Decoder defaults to float64 for all numbers)
             ''
-              jsontoml -use-json-number < "$valuePath" > "$out"
+              json2toml "$valuePath" "$out"
             ''
         ) { };
 

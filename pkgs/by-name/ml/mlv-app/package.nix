@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "All in one MLV processing app that is pretty great";
