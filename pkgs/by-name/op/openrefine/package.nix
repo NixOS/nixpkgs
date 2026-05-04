@@ -4,14 +4,13 @@
   fetchFromGitHub,
   buildNpmPackage,
   curl,
-  jdk17,
+  jdk,
   jq,
   makeWrapper,
   maven,
 }:
 
 let
-  jdk = jdk17;
   version = "3.10.1";
   src = fetchFromGitHub {
     owner = "openrefine";
