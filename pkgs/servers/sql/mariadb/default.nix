@@ -7,6 +7,7 @@ let
       lib,
       stdenv,
       fetchurl,
+      fetchpatch,
       nixosTests,
       buildPackages,
       # Native buildInputs components
@@ -130,6 +131,11 @@ let
           ./patch/cmake-includedir.patch
           # patch for musl compatibility
           ./patch/include-cstdint-full.patch
+          # fix crash that affects Akonadi
+          (fetchpatch {
+            url = "https://github.com/MariaDB/server/commit/20241132630660c94180f74a00065044dd2ae45c.diff";
+            hash = "sha256-zw514/FeDXMkb4ywhqIRYcM7B3ocRKndPUsW8vgvCJ0=";
+          })
         ]
         # Fixes a build issue as documented on
         # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
