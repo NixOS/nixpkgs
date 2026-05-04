@@ -19,34 +19,38 @@ let
     enableNspawn = config.containers != { };
   };
 
-  pythonizeName =
-    name:
+  typeHints =
     let
-      head = lib.substring 0 1 name;
-      tail = lib.substring 1 (-1) name;
+      pythonizeName =
+        name:
+        let
+          head = lib.substring 0 1 name;
+          tail = lib.substring 1 (-1) name;
+        in
+        (if builtins.match "[A-z_]" head == null then "_" else head)
+        + lib.stringAsChars (c: if builtins.match "[A-z0-9_]" c == null then "_" else c) tail;
+
+      vmMachineNames = lib.attrNames config.driverConfiguration.vms;
+      containerMachineNames = lib.attrNames config.driverConfiguration.containers;
+
+      theOnlyMachine =
+        let
+          exactlyOneMachine = lib.length (lib.attrValues config.nodes) == 1;
+          allMachineNames = lib.attrNames config.allMachines;
+        in
+        lib.optional (exactlyOneMachine && !lib.elem "machine" allMachineNames) "machine";
+
+      vmMachineTypeHints = map (name: "${pythonizeName name} = create_fake_qemu_machine()") (
+        vmMachineNames ++ theOnlyMachine
+      );
+      containerMachineTypeHints = map (
+        name: "${pythonizeName name} = create_fake_nspawn_machine()"
+      ) containerMachineNames;
+      vlanTypeHints = map (i: "vlan${toString i} = create_fake_vlan()") config.driverConfiguration.vlans;
     in
-    (if builtins.match "[A-z_]" head == null then "_" else head)
-    + lib.stringAsChars (c: if builtins.match "[A-z0-9_]" c == null then "_" else c) tail;
-
-  vlanTypeHints = lib.strings.concatMapStringsSep "\n" (
-    i: "vlan${toString i}: VLan"
-  ) config.driverConfiguration.vlans;
-
-  vmMachineNames = lib.attrNames config.driverConfiguration.vms;
-  containerMachineNames = lib.attrNames config.driverConfiguration.containers;
-
-  theOnlyMachine =
-    let
-      exactlyOneMachine = lib.length (lib.attrValues config.nodes) == 1;
-      allMachineNames = map (c: c.system.name) (lib.attrValues config.allMachines);
-    in
-    lib.optional (exactlyOneMachine && !lib.elem "machine" allMachineNames) "machine";
-
-  pythonizedVmNames = map pythonizeName (vmMachineNames ++ theOnlyMachine);
-  vmMachineTypeHints = map (name: "${name}: QemuMachine;") pythonizedVmNames;
-
-  pythonizedContainerNames = map pythonizeName containerMachineNames;
-  containerMachineTypeHints = map (name: "${name}: NspawnMachine;") pythonizedContainerNames;
+    lib.strings.concatStringsSep "\n" (
+      vlanTypeHints ++ vmMachineTypeHints ++ containerMachineTypeHints
+    );
 
   withChecks = lib.warnIf config.skipLint "Linting is disabled";
 
@@ -57,7 +61,8 @@ let
         nativeBuildInputs = [
           hostPkgs.makeWrapper
         ]
-        ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
+        ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.ty ]
+        ++ lib.optionals (!config.skipLint) [ hostPkgs.ruff ];
         buildInputs = [ testDriver ];
         testScript = config.testScriptString;
         preferLocalBuild = true;
@@ -69,42 +74,33 @@ let
       ''
         mkdir -p $out/bin
 
-        ${lib.optionalString (!config.skipTypeCheck) ''
-          # prepend type hints so the test script can be type checked with mypy
-
+        ${lib.optionalString (!config.skipTypeCheck || !config.skipLint) ''
+          # prepend type hints so the test script can be type checked with ty
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
-          echo "${toString vmMachineTypeHints}" >> testScriptWithTypes
-          echo "${toString containerMachineTypeHints}" >> testScriptWithTypes
-          echo "${toString vlanTypeHints}" >> testScriptWithTypes
+          echo "${toString typeHints}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
+        ''}
 
+        ${lib.optionalString (!config.skipTypeCheck) ''
           echo "Running type check (enable/disable: config.skipTypeCheck)"
           echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipTypeCheck"
 
-          mypy  --no-implicit-optional \
-                --pretty \
-                --no-color-output \
-                testScriptWithTypes
+          ty check testScriptWithTypes
         ''}
 
-        echo -n "$testScript" > testScriptFile
-
-        cp "${config.driverConfiguration.test_script}" $out/test-script
-
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
-
-        ${testDriver}/bin/generate-driver-symbols
         ${lib.optionalString (!config.skipLint) ''
           echo "Linting test script (enable/disable: config.skipLint)"
           echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipLint"
 
-          PYFLAKES_BUILTINS="$(
-            echo -n ${
-              lib.escapeShellArg (lib.concatStringsSep "," (pythonizedVmNames ++ pythonizedContainerNames))
-            },
-            cat ${lib.escapeShellArg "driver-symbols"}
-          )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
+          # F are the "(py)flakes" checks.
+          # we can't go with the defaults because these include
+          # code style/formatting
+          ruff check --select F testScriptWithTypes
         ''}
+
+        cp "${config.driverConfiguration.test_script}" $out/test-script
+
+        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
 
         wrapProgram $out/bin/nixos-test-driver \
           --add-flags "--config ${config.driverConfigurationFile}" \

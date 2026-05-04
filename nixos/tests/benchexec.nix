@@ -32,7 +32,7 @@ in
     in
     ''
       start_all()
-      machine.wait_for_unit("multi-user.target")
+      benchexec.wait_for_unit("multi-user.target")
       benchexec.succeed(''''\
           systemd-run \
             --property='StandardOutput=file:${stdout}' \
