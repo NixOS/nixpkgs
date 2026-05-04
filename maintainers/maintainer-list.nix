@@ -10219,6 +10219,12 @@
     keys = [ { fingerprint = "D1D3 37F6 CB32 02DC B9BA  337B F9D8 EABC F57E ED58"; } ];
     name = "Gabriel Santos";
   };
+  gthm = {
+    email = "gunnar@magnusson.io";
+    github = "gunnihinn";
+    githubId = 6123958;
+    name = "Gunnar Þór Magnússon";
+  };
   gtrunsec = {
     email = "gtrunsec@hardenedlinux.org";
     github = "GTrunSec";
