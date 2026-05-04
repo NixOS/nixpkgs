@@ -7801,6 +7801,8 @@ self: super: with self; {
     }
   );
 
+  itkwasm = callPackage ../development/python-modules/itkwasm { };
+
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   itunespy = callPackage ../development/python-modules/itunespy { };
