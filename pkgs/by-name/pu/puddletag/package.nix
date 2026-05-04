@@ -7,7 +7,6 @@
 
 let
   qt = libsForQt5;
-
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "puddletag";
@@ -35,7 +34,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   buildInputs = with qt; [
     qtbase
-    qtwayland
   ];
 
   nativeBuildInputs = with qt; [
@@ -75,6 +73,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       peterhoeg
       dschrempf
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
