@@ -9,6 +9,7 @@
 }:
 maven.buildMavenPackage {
   __structuredAttrs = true;
+  strictDeps = true;
 
   pname = "reitti";
   version = "3.4.1";
