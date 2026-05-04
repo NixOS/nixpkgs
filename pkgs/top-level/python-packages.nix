@@ -2823,6 +2823,8 @@ self: super: with self; {
 
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean { };
 
+  click-extra = callPackage ../development/python-modules/click-extra { };
+
   click-help-colors = callPackage ../development/python-modules/click-help-colors { };
 
   click-log = callPackage ../development/python-modules/click-log { };
