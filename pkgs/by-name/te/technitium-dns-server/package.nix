@@ -53,7 +53,10 @@ buildDotnetModule rec {
     homepage = "https://github.com/TechnitiumSoftware/DnsServer";
     license = lib.licenses.gpl3Only;
     mainProgram = "technitium-dns-server";
-    maintainers = with lib.maintainers; [ fabianrig ];
+    maintainers = with lib.maintainers; [ 
+      fabianrig
+      awildleon
+    ];
     platforms = lib.platforms.linux;
   };
 }
