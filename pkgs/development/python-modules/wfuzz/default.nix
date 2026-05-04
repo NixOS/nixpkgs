@@ -85,5 +85,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://wfuzz.readthedocs.io";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ pamplemousse ];
+    mainProgram = "wfuzz";
   };
 })
