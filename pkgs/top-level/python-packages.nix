@@ -7811,6 +7811,12 @@ self: super: with self; {
 
   itkwasm-downsample-wasi = callPackage ../development/python-modules/itkwasm-downsample-wasi { };
 
+  itkwasm-image-io = callPackage ../development/python-modules/itkwasm-image-io { };
+
+  itkwasm-image-io-emscripten =
+    callPackage ../development/python-modules/itkwasm-image-io-emscripten
+      { };
+
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   itunespy = callPackage ../development/python-modules/itunespy { };
