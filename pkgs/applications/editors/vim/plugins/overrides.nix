@@ -2416,13 +2416,6 @@ assertNoAdditions {
     };
   });
 
-  mind-nvim = super.mind-nvim.overrideAttrs (old: {
-    dependencies = [ self.plenary-nvim ];
-    meta = old.meta // {
-      license = lib.licenses.bsd3;
-    };
-  });
-
   mini-nvim = super.mini-nvim.overrideAttrs {
     # reduce closure size
     postInstall = ''
@@ -3898,6 +3891,18 @@ assertNoAdditions {
       license = lib.licenses.mit;
     };
   });
+
+  run-nvim = super.run-nvim.overrideAttrs {
+    dependencies = [
+      self.telescope-nvim
+    ];
+
+    checkInputs = [
+      # Transitive depedency of telescope.nvim
+      # Issue: https://github.com/NixOS/nixpkgs/issues/394939
+      self.plenary-nvim
+    ];
+  };
 
   rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];

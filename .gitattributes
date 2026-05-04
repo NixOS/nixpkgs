@@ -1,7 +1,26 @@
-**/deps.nix linguist-generated
+# node/js lock files
+**/package-lock.json linguist-generated
+**/yarn.nix linguist-generated
+**/yarn.lock linguist-generated
+
+# Rust lock files
+**/Cargo.lock linguist-generated
+pkgs/build-support/rust/**/Cargo.lock -linguist-generated
+
+# NuGet, Gradle and others
 **/deps.json linguist-generated
+
+# Ruby lock files
+**/gemset.nix linguist-generated
+**/Gemfile.lock linguist-generated
+
+# PHP lock files
+**/composer.lock linguist-generated
+
+# various package managers and tools
+**/deps.nix linguist-generated
 **/deps.toml linguist-generated
-**/node-packages.nix linguist-generated
+
 
 pkgs/applications/editors/emacs-modes/*-generated.nix linguist-generated
 pkgs/development/r-modules/*-packages.nix linguist-generated

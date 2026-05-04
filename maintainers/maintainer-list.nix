@@ -145,6 +145,12 @@
     githubId = 67933444;
     keys = [ { fingerprint = "B39E B98E 8860 DAFB 0567  0073 A614 B7D2 5134 987A"; } ];
   };
+  _0xferrous = {
+    email = "0xferrous@proton.me";
+    github = "0xferrous";
+    githubId = 213212767;
+    name = "0xferrous";
+  };
   _0xgsvs = {
     email = "venkat.subrahmanyam.34@gmail.com";
     name = "0xgsvs";
@@ -19683,6 +19689,13 @@
     github = "Nindouja";
     githubId = 5629639;
     name = "Nindouja";
+  };
+  ninelore = {
+    email = "9l+nix@9lo.re";
+    matrix = "@9lore:tchncs.de";
+    github = "ninelore";
+    githubId = 21343557;
+    name = "Ingo Reitz";
   };
   ninjafb = {
     email = "oscar@oronberg.com";
