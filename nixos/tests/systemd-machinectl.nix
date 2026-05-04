@@ -75,10 +75,6 @@ let
   # improvement: move following profile to ../modules/profiles/vmspawn-guest.nix
   profile-guest-vmspawn = {
     imports = [ ../modules/profiles/qemu-guest.nix ];
-    # improvement: move following configuration to qemu-guest.nix
-    boot.initrd.availableKernelModules = [
-      "virtiofs"
-    ];
 
     boot.initrd.systemd.enable = true;
     # root is defined by systemd-vmspawn

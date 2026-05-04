@@ -223,7 +223,7 @@ in
         appservice.wait_for_open_port(11111)
 
     with subtest("copy the registration file"):
-        appservice.copy_from_vm("/var/lib/matrix-appservice-irc/registration.yml")
+        appservice.copy_from_machine("/var/lib/matrix-appservice-irc/registration.yml")
         homeserver.copy_from_host(
             str(pathlib.Path(os.environ.get("out", os.getcwd())) / "registration.yml"), "/"
         )

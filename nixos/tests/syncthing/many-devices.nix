@@ -227,7 +227,7 @@ in
   })
   + ''
     # Useful for debugging later
-    machine.copy_from_vm("${configPath}", "before")
+    machine.copy_from_machine("${configPath}", "before")
 
     machine.systemctl("restart syncthing-init.service")
     machine.wait_for_unit("syncthing-init.service")
@@ -237,13 +237,13 @@ in
   })
   + ''
     # Useful for debugging later
-    machine.copy_from_vm("${configPath}", "after")
+    machine.copy_from_machine("${configPath}", "after")
 
     # Copy the systemd unit's bash script, to inspect it for debugging.
     mergeScript = machine.succeed(
         "systemctl cat syncthing-init.service | "
         "${pkgs.initool}/bin/initool g - Service ExecStart --value-only"
     ).strip() # strip from new lines
-    machine.copy_from_vm(mergeScript, "")
+    machine.copy_from_machine(mergeScript, "")
   '';
 }

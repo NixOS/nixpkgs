@@ -113,7 +113,7 @@ in
 
       machine.succeed("run-goupile-test")
       out_dir = os.environ.get("out", os.getcwd())
-      machine.copy_from_vm("/tmp/videos", out_dir)
+      machine.copy_from_machine("/tmp/videos", out_dir)
     '';
 
   # Debug interactively with:

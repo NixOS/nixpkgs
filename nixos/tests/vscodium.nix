@@ -51,6 +51,8 @@ let
         enableOCR = true;
 
         testScript = ''
+          machine = ${name}
+
           @polling_condition
           def codium_running():
               machine.succeed('pgrep -x codium')

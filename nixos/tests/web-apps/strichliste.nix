@@ -52,12 +52,12 @@
       start_all()
 
       def get_users():
-        response = machine.succeed("http --check-status http://strichliste.local/api/user")
+        response = server.succeed("http --check-status http://strichliste.local/api/user")
         users = json.loads(response)["users"]
         return users
 
       def get_user(uid: int):
-        response = machine.succeed(f"http --check-status http://strichliste.local/api/user/{uid}")
+        response = server.succeed(f"http --check-status http://strichliste.local/api/user/{uid}")
         user = json.loads(response)["user"]
         return user
 
@@ -67,7 +67,7 @@
           t.assertEqual(len(users), 0, "Strichliste must not have users.")
 
         with subtest("Create user"):
-          machine.succeed("http --check-status post http://strichliste.local/api/user name=Alice")
+          server.succeed("http --check-status post http://strichliste.local/api/user name=Alice")
           users = get_users()
           t.assertEqual(len(users), 1, "Strichliste must have exactly one user.")
 
@@ -77,19 +77,19 @@
           t.assertEqual(user["balance"], 0, "New users should have a balance of 0")
 
         with subtest("Deposit money"):
-          machine.succeed("http --check-status post http://strichliste.local/api/user/1/transaction amount=500")
+          server.succeed("http --check-status post http://strichliste.local/api/user/1/transaction amount=500")
           user = get_user(1)
           t.assertEqual(user["balance"], 500, "Balance must be 500 after depositing 500")
 
         with subtest("Dispense money"):
-          machine.succeed("http --check-status post http://strichliste.local/api/user/1/transaction amount=-1000")
+          server.succeed("http --check-status post http://strichliste.local/api/user/1/transaction amount=-1000")
           user = get_user(1)
           t.assertEqual(user["balance"], -500, "Balance must be -500 after dispensing 1000")
 
         with subtest("Undo transaction"):
-          response = machine.succeed("http --check-status post http://strichliste.local/api/user/1/transaction amount=7500")
+          response = server.succeed("http --check-status post http://strichliste.local/api/user/1/transaction amount=7500")
           transaction = json.loads(response)["transaction"]
-          machine.succeed(f"http --check-status delete http://strichliste.local/api/user/1/transaction/{transaction['id']}")
+          server.succeed(f"http --check-status delete http://strichliste.local/api/user/1/transaction/{transaction['id']}")
 
       server.wait_for_unit("phpfpm-strichliste.service")
 
