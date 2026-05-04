@@ -153,6 +153,9 @@ in
   configureScript = "./mconfig";
 
   configureFlags = [
+    "-V"
+    version
+
     "--localstatedir=${
       if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
     }"
@@ -205,29 +208,24 @@ in
     '') sourceFilesWithDefaultPaths}
   '';
 
+  # Run configure script with `$stdenv/setup`-provided scriptConfigure function
   postConfigure = ''
-    # Code borrowed from pkgs/stdenv/generic/setup.sh configurePhase()
-
-    # set to empty if unset
-    : ''${configureFlags=}
-
-    # shellcheck disable=SC2086
-    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" $configureFlags "''${configureFlagsArray[@]}"
-
-    # End of the code from pkgs/stdenv/generic/setup.sh configurPhase()
+    scriptConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-    make -C builddir -j"$NIX_BUILD_CORES"
-    runHook postBuild
-  '';
+  makeFlags = [
+    "-Cbuilddir"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    make -C builddir install LOCALSTATEDIR="$out/var/lib"
-    runHook postInstall
-  '';
+  # Use `$stdenv/setup`'s buildPhase
+  buildPhase = "";
+
+  installFlags = [
+    "LOCALSTATEDIR=${placeholder "out"}/var/lib"
+  ];
+
+  # Use `$stdenv/setup`'s installPhase
+  installPhase = "";
 
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
