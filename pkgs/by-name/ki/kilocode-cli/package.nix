@@ -8,7 +8,7 @@
   nodejs,
   writableTmpDirAsHomeHook,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   unzip,
   patchelf,
   autoPatchelfHook,
@@ -16,6 +16,9 @@
   versionCheckHook,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kilocode-cli";
   version = "0.25.1";
@@ -29,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-Q/LamZwVaIQVILtXRi1RQrYtpxYJWEKPAt3knwm47S0=";
   };

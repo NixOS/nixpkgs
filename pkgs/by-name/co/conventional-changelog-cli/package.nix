@@ -5,12 +5,14 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "conventional-changelog-cli";
   version = "7.2.0";
@@ -24,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-vOZnVCz5lFdVD2qmlHdTRxzuEjpR3W/rXfzvjvdOh9E=";
   };

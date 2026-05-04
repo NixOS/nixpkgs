@@ -4,11 +4,14 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   nix-update-script,
   makeBinaryWrapper,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
   version = "3.2.6";
@@ -22,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-koRJkT/JloptmtQKLprqms53TL/Q4XHaktIl/6PIasw=";
   };

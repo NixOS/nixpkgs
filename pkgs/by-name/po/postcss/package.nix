@@ -4,11 +4,13 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "postcss";
   version = "8.5.8";
@@ -28,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-SwTVjgS4Hkl1SgXqSdjjbyKqUW2TfD1ruLu2Jcl51gg=";
   };

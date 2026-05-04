@@ -4,7 +4,7 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   fetchFromGitHub,
   buildGo125Module,
   installShellFiles,
@@ -15,13 +15,15 @@
       nodejs
       fetchPnpmDeps
       pnpmConfigHook
-      pnpm
+      pnpm_10
       fetchFromGitHub
       ;
   },
 }:
 
 let
+  pnpm = pnpm_10;
+
   buildGoModule = buildGo125Module;
 
   inherit (import ./sources.nix { inherit fetchFromGitHub; })

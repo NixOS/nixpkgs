@@ -3135,8 +3135,9 @@ with pkgs;
     pnpm_9
     pnpm_10_29_2
     pnpm_10
+    pnpm_11
     ;
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   inherit (callPackages ../build-support/node/fetch-pnpm-deps { })
     fetchPnpmDeps

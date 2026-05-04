@@ -7,9 +7,11 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildPythonPackage rec {
   pname = "yt-dlp-ejs";
   version = "0.8.0";
@@ -27,6 +29,7 @@ buildPythonPackage rec {
       pname
       version
       src
+      pnpm
       ;
     fetcherVersion = 2;
     hash = "sha256-3hhwKUzfdlKmth4uRlfBSdxEOIfhAVaq2PZIOHWGWiM=";
