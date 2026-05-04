@@ -7803,6 +7803,12 @@ self: super: with self; {
 
   itkwasm = callPackage ../development/python-modules/itkwasm { };
 
+  itkwasm-downsample = callPackage ../development/python-modules/itkwasm-downsample { };
+
+  itkwasm-downsample-emscripten =
+    callPackage ../development/python-modules/itkwasm-downsample-emscripten
+      { };
+
   itkwasm-downsample-wasi = callPackage ../development/python-modules/itkwasm-downsample-wasi { };
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
