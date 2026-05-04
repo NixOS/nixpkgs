@@ -2913,6 +2913,12 @@
     githubId = 1017537;
     name = "Bruno Bieth";
   };
+  bad3r = {
+    name = "Bad3r";
+    email = "github@unsigned.sh";
+    github = "Bad3r";
+    githubId = 25513724;
+  };
   badele = {
     name = "Bruno Adelé";
     email = "brunoadele@gmail.com";
