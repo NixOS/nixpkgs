@@ -13,7 +13,7 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deezer-python";
   version = "7.3.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pCrPlEbt5Mx8qGjewR5+Z/W7rFEehqd7QRrtvPGyKJk=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper around the Deezer API";
     homepage = "https://github.com/browniebroke/deezer-python";
-    changelog = "https://github.com/browniebroke/deezer-python/releases/tag/v${version}";
+    changelog = "https://github.com/browniebroke/deezer-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
