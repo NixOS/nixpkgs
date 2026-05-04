@@ -40,9 +40,7 @@
   "bazel": {
     "description": "Maintenance of https://bazel.build/ and related packages",
     "id": 5468470,
-    "maintainers": {
-      "Profpatsch": 3153638
-    },
+    "maintainers": {},
     "members": {
       "aherrmann": 732652,
       "avdv": 3471749,
