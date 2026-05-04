@@ -48,7 +48,7 @@
 let
   qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib stdenv; };
 
-  qemu = buildPackages.qemu_kvm;
+  qemu = buildPackages.qemu;
 
   modulesClosure = makeModulesClosure {
     kernel = lib.getOutput "modules" kernel;
@@ -270,11 +270,11 @@ let
   vmRunCommand =
     qemuCommand:
     writeText "vm-run" ''
-      ${coreutils}/bin/mkdir xchg
+      ${buildPackages.coreutils}/bin/mkdir xchg
       export > xchg/saved-env
 
       if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
-        ${coreutils}/bin/cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
+        ${buildPackages.coreutils}/bin/cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
         source "$NIX_ATTRS_SH_FILE"
       fi
       source $stdenv/setup
@@ -298,22 +298,22 @@ let
       # Write the command to start the VM to a file so that the user can
       # debug inside the VM if the build fails (when Nix is called with
       # the -K option to preserve the temporary build directory).
-      ${coreutils}/bin/cat > ./run-vm <<EOF
-      #! ${bash}/bin/sh
+      ${buildPackages.coreutils}/bin/cat > ./run-vm <<EOF
+      #! ${buildPackages.bash}/bin/sh
       ''${diskImage:+diskImage=$diskImage}
       # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
       # Since we are running in a sandbox already, the difference between seccomp and none is minimal
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
+      ${buildPackages.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
+      ${buildPackages.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
 
       # Wait until virtiofsd has created these sockets to avoid race condition.
-      until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 0.1; done
-      until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 0.1; done
+      until [[ -e virtio-store.sock ]]; do ${buildPackages.coreutils}/bin/sleep 0.1; done
+      until [[ -e virtio-xchg.sock ]]; do ${buildPackages.coreutils}/bin/sleep 0.1; done
 
       ${qemuCommand}
       EOF
 
-      ${coreutils}/bin/chmod +x ./run-vm
+      ${buildPackages.coreutils}/bin/chmod +x ./run-vm
       source ./run-vm
 
       if ! test -e xchg/in-vm-exit; then
@@ -321,7 +321,7 @@ let
         exit 1
       fi
 
-      exitCode="$(${coreutils}/bin/cat xchg/in-vm-exit)"
+      exitCode="$(${buildPackages.coreutils}/bin/cat xchg/in-vm-exit)"
       if [ "$exitCode" != "0" ]; then
         exit "$exitCode"
       fi
@@ -396,13 +396,14 @@ let
       }:
       {
         requiredSystemFeatures = [ "kvm" ];
-        builder = "${bash}/bin/sh";
+        builder = "${buildPackages.bash}/bin/sh";
         args = [
           "-e"
           (vmRunCommand qemuCommandLinux)
         ];
         origArgs = args;
         origBuilder = builder;
+        inherit (stdenv.buildPlatform) system;
         env.QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
         __structuredAttrs = true;
       }
