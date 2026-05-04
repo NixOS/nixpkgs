@@ -1563,6 +1563,7 @@ in
   shoko = import ./shoko.nix { inherit runTest; };
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = runTest ./silverbullet.nix;
+  simple = runTest ./simple.nix;
   simple-container = runTest ./simple-container.nix;
   simple-vm = runTest ./simple-vm.nix;
   simplelogin = runTest ./simplelogin/default.nix;
