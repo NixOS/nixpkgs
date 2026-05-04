@@ -11000,7 +11000,9 @@ self: super: with self; {
     callPackage ../by-name/ne/netbox_4_5/plugins/netbox-interface-synchronization/package.nix
       { };
 
-  netbox-napalm-plugin = callPackage ../development/python-modules/netbox-napalm-plugin { };
+  netbox-napalm-plugin =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-napalm-plugin/package.nix
+      { };
 
   netbox-plugin-prometheus-sd =
     callPackage ../development/python-modules/netbox-plugin-prometheus-sd
