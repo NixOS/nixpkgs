@@ -11014,7 +11014,7 @@ self: super: with self; {
     callPackage ../by-name/ne/netbox_4_5/plugins/netbox-reorder-rack/package.nix
       { };
 
-  netbox-routing = callPackage ../development/python-modules/netbox-routing { };
+  netbox-routing = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-routing/package.nix { };
 
   netbox-topology-views = callPackage ../development/python-modules/netbox-topology-views { };
 
