@@ -16,6 +16,8 @@ elif [[ $variant == still ]]; then
     head_tail=tail
 elif [[ $variant == collabora ]]; then
     true
+elif [[ $variant == collabora-coda ]]; then
+    true
 else
     echoerr got unknown variant $variant
     exit 3
@@ -78,12 +80,18 @@ case $variant in
     fi
     ;;
 
-(collabora)
+(collabora|collabora-coda)
     all_tags=$(git ls-remote --tags --sort -v:refname https://gerrit.libreoffice.org/core)
+    prefix="cp"
+    tag_prefix='\Krefs/tags/'$prefix'-\d+\.\d+\.\d+-\d+$'
+    if [[ "$variant" == "collabora-coda" ]]; then
+        prefix="coda"
+        tag_prefix='\Krefs/tags/'$prefix'-\d+\.\d+\.\d+.\d+-\d+$'
+    fi
     rev=$(grep --perl-regexp --only-matching --max-count=1 \
-        '\Krefs/tags/cp-\d+\.\d+\.\d+-\d+$' <<< "$all_tags")
-    full_version=${rev#refs/tags/cp-}
-    tag=${rev#refs/tags/}
+        "$tag_prefix" <<< "$all_tags")
+    full_version=${rev#refs/tags/$prefix-}
+    clean_rev=${rev#refs/tags/}
     echoerr full version is $full_version
     echo \"$full_version\" > version.nix
 
@@ -99,7 +107,7 @@ case $variant in
         echo "{ fetchgit, ... }:" > $t.nix
         echo "fetchgit {" >> $t.nix
         echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> $t.nix
-        echo "  tag = \"$tag\";" >> $t.nix
+        echo "  rev = \"$sub_rev\";" >> $t.nix
         echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> $t.nix
         echo "}" >> "$t.nix"
     done
@@ -108,7 +116,7 @@ case $variant in
     echo "{ fetchgit, ... }:" > main.nix
     echo "fetchgit {" >> main.nix
     echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> main.nix
-    echo "  rev = \"$rev\";" >> main.nix
+    echo "  rev = \"$clean_rev\";" >> main.nix
     echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> main.nix
     echo "  fetchSubmodules = false;" >> main.nix
     echo "}" >> main.nix
