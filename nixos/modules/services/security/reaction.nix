@@ -240,6 +240,10 @@ in
             ''
           );
 
+      systemd.slices.system-reaction = {
+        description = "Reaction system slice";
+      };
+
       systemd.services.reaction = {
         description = "A daemon that scans program outputs for repeated patterns, and takes action.";
         documentation = [ "https://reaction.ppom.me" ];
@@ -250,6 +254,7 @@ in
         serviceConfig = {
           Type = "simple";
           KillMode = "mixed"; # for plugins
+          Slice = "system-reaction.slice";
           User = if (!cfg.runAsRoot) then "reaction" else "root";
           ExecStart = ''
             ${getExe cfg.package} start -c ${settingsDir}${
