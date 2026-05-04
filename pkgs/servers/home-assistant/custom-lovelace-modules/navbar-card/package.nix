@@ -57,7 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-F8nNDBl/BYhtwggaZd61oibYE4j5u7WPVjLG8P4UEcc=";
+    outputHash =
+      {
+        "x86_64-linux" = "sha256-F8nNDBl/BYhtwggaZd61oibYE4j5u7WPVjLG8P4UEcc=";
+        "aarch64-linux" = "sha256-pd9P82wwmoNdDTMa92SmA2KgwnFIbXtoitcGP+QfOyk=";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "navbar-card: unsupported platform ${stdenv.hostPlatform.system}");
     outputHashMode = "recursive";
   };
 
@@ -108,6 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/joseluis9595/lovelace-navbar-card";
     changelog = "https://github.com/joseluis9595/lovelace-navbar-card/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = [ lib.maintainers.jamiemagee ];
   };
 })
