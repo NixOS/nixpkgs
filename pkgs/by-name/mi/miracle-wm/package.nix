@@ -25,36 +25,27 @@
   pkg-config,
   python3,
   systemd,
+  wasmedge,
   wayland,
+  wayland-scanner,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.8.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N8FDoQDEfv0xGjtnKx+jNfRwxvJdb4ETvQnZuBvlccQ=";
+    hash = "sha256-yrshySK7tstNAgb9jApqqx4R+c74G2Ada6fjmCeKsV0=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
       --replace-fail '-march=native' '# -march=native'
-  ''
-  # Fix compat with newer Mir
-  # https://github.com/miracle-wm-org/miracle-wm/commit/aaae6e64261d8a00c2a1df47e2eab99400382d69
-  # Remove when version > 0.8.3
-  + ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'pkg_check_modules(MIRRENDERER REQUIRED mirrenderer' 'pkg_check_modules(MIRRENDERER mirrenderer'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests/)' ""
   '';
 
   strictDeps = true;
@@ -63,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -85,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
         tenacity
       ]
     ))
+    wasmedge
     wayland
     yaml-cpp
   ];
@@ -93,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LTO" true)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    # https://github.com/miracle-wm-org/miracle-wm/issues/865
+    (lib.cmakeBool "FEATURE_PLUGIN_SYSTEM" false)
     (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
     (lib.cmakeBool "END_TO_END_TESTS" finalAttrs.finalPackage.doCheck)
   ];
