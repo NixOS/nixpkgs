@@ -23,11 +23,13 @@ let
     types
     ;
 
+  persistPowerState = cfg.powerOnBoot == "auto";
+
   cfgFmt = pkgs.formats.ini { };
 
   defaults = {
     General.ControllerMode = "dual";
-    Policy.AutoEnable = cfg.powerOnBoot;
+    Policy.AutoEnable = if persistPowerState then true else cfg.powerOnBoot;
   };
 
   hasDisabledPlugins = builtins.length cfg.disabledPlugins > 0;
@@ -55,9 +57,24 @@ in
       hsphfpd.enable = mkEnableOption "support for hsphfpd[-prototype] implementation";
 
       powerOnBoot = mkOption {
-        type = types.bool;
+        type = types.either types.bool (types.enum [ "auto" ]);
         default = true;
-        description = "Whether to power up the default Bluetooth controller on boot.";
+        description = ''
+          Whether to power up the default Bluetooth controller on boot.
+
+          When set to `"auto"`, the power state from the last session is
+          restored on boot: if Bluetooth was on when the system shut down,
+          it will be powered on; if it was off, it will stay off.
+
+          The state is snapshotted at shutdown to
+          `/var/lib/bluetooth/power-state` and re-applied at next boot
+          via `rfkill block`. The rfkill route is needed because some
+          platforms (e.g. `thinkpad_acpi` on Lenovo ThinkPads) reset
+          rfkill state on boot, overriding systemd-rfkill's restoration,
+          and because rfkill hides the adapter from bluez's D-Bus tree
+          so that clients (PipeWire/WirePlumber, gnome-bluetooth, ...)
+          cannot auto-power it back on.
+        '';
       };
 
       package = mkPackageOption pkgs "bluez" { };
@@ -176,6 +193,45 @@ in
           };
         };
     }
+    // (optionalAttrs persistPowerState {
+      bluetooth-persist-power-state = {
+        description = "Persist Bluetooth power state across reboots";
+        after = [ "bluetooth.service" ];
+        requires = [ "bluetooth.service" ];
+        partOf = [ "bluetooth.service" ];
+        wantedBy = [ "bluetooth.target" ];
+        # Snapshot the current power state at shutdown and re-apply it at
+        # next boot via rfkill block. rfkill hides the adapter from bluez's
+        # D-Bus tree, so neither bluez's Policy.AutoEnable nor clients
+        # (PipeWire/WirePlumber, gnome-bluetooth, auto-reconnecting paired
+        # devices, ...) can power it back on. Re-applying at boot is
+        # necessary because some platforms (e.g. thinkpad_acpi on Lenovo
+        # ThinkPads) reset rfkill state on boot, overriding systemd-rfkill.
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          StateDirectory = "bluetooth";
+          ExecStart = pkgs.writeShellScript "bluetooth-restore-power-state" ''
+            if [ "$(cat /var/lib/bluetooth/power-state 2>/dev/null)" = "off" ]; then
+              ${pkgs.util-linux}/bin/rfkill block bluetooth
+            fi
+          '';
+          # Runs before bluetooth.service stops (After= reverses on stop),
+          # so bluez is still reachable for the Powered query.
+          ExecStop = pkgs.writeShellScript "bluetooth-save-power-state" ''
+            state=on
+            rfkill_state=$(${pkgs.util-linux}/bin/rfkill list bluetooth)
+            bluez_state=$(${package}/bin/bluetoothctl show 2>/dev/null || true)
+            if [[ "$rfkill_state" == *"Soft blocked: yes"* ]]; then
+              state=off
+            elif [[ "$bluez_state" == *"Powered: no"* ]]; then
+              state=off
+            fi
+            echo "$state" > /var/lib/bluetooth/power-state
+          '';
+        };
+      };
+    })
     // (optionalAttrs cfg.hsphfpd.enable {
       hsphfpd = {
         after = [ "bluetooth.service" ];
