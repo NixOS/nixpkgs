@@ -9,13 +9,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certipy";
   version = "0.2.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-TocB5qLygeehVMLzaM/07fN0AJCE0peIy+jDg4iXeE8=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ isgy ];
     mainProgram = "certipy";
   };
-}
+})
