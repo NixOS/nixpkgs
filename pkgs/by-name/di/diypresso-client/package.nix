@@ -12,6 +12,8 @@
   bossa,
 }:
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "diypresso-client";
   version = "1.0.1";
 
