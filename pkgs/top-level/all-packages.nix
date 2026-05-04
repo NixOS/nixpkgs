@@ -2302,8 +2302,6 @@ with pkgs;
 
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
-  uniscribe = callPackage ../tools/text/uniscribe { };
-
   inherit (callPackages ../tools/filesystems/garage { })
     garage
     garage_1
@@ -6048,8 +6046,6 @@ with pkgs;
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 
   ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
-
-  ceedling = callPackage ../development/tools/ceedling { };
 
   celt = callPackage ../development/libraries/celt { };
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix { };
