@@ -864,6 +864,60 @@ in
           { x = 30; }
         ];
 
+      # valueMeta.definitions: mkDefinition records with mkOrder-wrapped single-key attrsets
+      # Use duplicateKeys which has mixed priorities and repeated keys
+      assert
+        let
+          defs = c.options.asAttrs.valueMeta.attrs.duplicateKeys.definitions;
+          extract = d: {
+            prio = d.value.priority;
+            value = d.value.content;
+          };
+        in
+        map extract defs == [
+          {
+            prio = 500;
+            value = {
+              x = "first";
+            };
+          }
+          {
+            prio = 1000;
+            value = {
+              y = "only";
+            };
+          }
+          {
+            prio = 1500;
+            value = {
+              x = "last";
+            };
+          }
+        ];
+
+      # Round-trip: feed definitions through mapDefinitionValue + mkMerge into a listOf option
+      assert
+        let
+          rendered = lib.modules.mapDefinitionValue (attr: lib.cli.toCommandLineGNU { } attr) (
+            mkMerge c.options.asAttrs.valueMeta.attrs.duplicateKeys.definitions
+          );
+          result =
+            (lib.evalModules {
+              modules = [
+                { options.out = mkOption { type = types.listOf types.str; }; }
+                { config.out = rendered; }
+                # Interleave: mkOrder 800 lands between x(500) and y(1000)
+                { config.out = mkOrder 800 [ "--interleaved" ]; }
+              ];
+            }).config.out;
+        in
+        result == [
+          "-xfirst"
+          "--interleaved"
+          "-yonly"
+          "-xlast"
+        ];
+
       # Error cases are tested via checkConfigError in modules.sh
 
       "ok";

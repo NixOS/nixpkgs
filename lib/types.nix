@@ -74,6 +74,8 @@ let
     mergeOptionDecls
     defaultOrderPriority
     defaultOverridePriority
+    mkDefinition
+    mkOrder
     mkOverride
     ;
   inherit (lib.fileset)
@@ -928,7 +930,7 @@ rec {
 
             evals = filter (e: e.eval.optionalValue ? value) (
               map (item: {
-                inherit (item) key;
+                inherit (item) key file prio;
                 eval = mergeDefinitions (loc ++ [ item.key ]) elemType [
                   {
                     inherit (item) file value;
@@ -947,6 +949,13 @@ rec {
               The ordered list representation, especially useful when asAttrs is set.
             */
             valueMeta.attrListValue = attrListValue;
+            valueMeta.definitions = map (
+              e:
+              mkDefinition {
+                inherit (e) file;
+                value = mkOrder e.prio { ${e.key} = e.eval.optionalValue.value or e.eval.mergedValue; };
+              }
+            ) evals;
           };
       };
       emptyValue = {
