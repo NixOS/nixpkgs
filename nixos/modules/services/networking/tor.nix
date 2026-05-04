@@ -202,8 +202,8 @@ in
     # Patch rules before checking them as they would simply fail as both "tor"
     # and "squid" users aren't available during build.
     networking.nftables.preCheckRuleset = ''
-      ${lib.getExe pkgs.gnused} -i 's/skuid tor/skuid 1/' ruleset.conf
-      ${lib.getExe pkgs.gnused} -i 's/skuid squid/skuid 2/' ruleset.conf
+      ${lib.getExe pkgs.gnused} --in-place 's/skuid tor/skuid 1/' ruleset.conf
+      ${lib.getExe pkgs.gnused} --in-place 's/skuid squid/skuid 2/' ruleset.conf
     '';
 
     # Here are the nftables for the routing operations. As you may notice the
