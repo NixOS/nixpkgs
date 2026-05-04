@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   requests,
+  typing-extensions,
   pytestCheckHook,
   typesense,
   curl,
@@ -34,7 +36,14 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ requests ];
+  dependencies = [
+    requests
+    typing-extensions
+  ];
+
+  # The integration tests start a local Typesense server and rely on tooling
+  # that is flaky in the Darwin sandbox, so keep them enabled on Linux only.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     pytestCheckHook
