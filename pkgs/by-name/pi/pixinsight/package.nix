@@ -161,13 +161,5 @@ buildFHSEnv {
     unwrapped = pixinsight;
   };
 
-  inherit (pixinsight.meta)
-    description
-    homepage
-    license
-    maintainers
-    platforms
-    sourceProvenance
-    hydraPlatforms
-    ;
+  inherit (pixinsight) meta;
 }
