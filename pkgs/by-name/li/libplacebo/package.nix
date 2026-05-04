@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ProxyVT ];
     platforms = lib.platforms.all;
   };
 })
