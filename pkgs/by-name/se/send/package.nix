@@ -3,24 +3,32 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs_20,
+  nodejs_22,
   nix-update-script,
   nixosTests,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "send";
   version = "3.4.27";
 
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "send";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tfntox8Sw3xzlCOJgY/LThThm+mptYY5BquYDjzHonQ=";
   };
 
-  nodejs = nodejs_20;
+  # @dannycoates/express-ws uses the unmaintained esm loader, which fails on nodejs_22.
+  postConfigure = ''
+    patch -p1 \
+      --directory=node_modules/@dannycoates \
+      < ${./dannycoates-express-ws-drop-esm-loader.patch}
+  '';
 
-  npmDepsHash = "sha256-ZVegUECrwkn/DlAwqx5VDmcwEIJV/jAAV99Dq29Tm2w=";
+  nodejs = nodejs_22;
+
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-QInXcYpZcAOJMS6QFtIapftyWsqA80ef+OiKJ9XEs98=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -28,11 +36,8 @@ buildNpmPackage rec {
 
   env = {
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
-
     NODE_OPTIONS = "--openssl-legacy-provider";
   };
-
-  makeCacheWritable = true;
 
   npmPackFlags = [ "--ignore-scripts" ];
 
@@ -40,7 +45,7 @@ buildNpmPackage rec {
     cp -r dist $out/lib/node_modules/send/
     ln -s $out/lib/node_modules/send/dist/version.json $out/lib/node_modules/send/version.json
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/send \
+    makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/send \
       --add-flags $out/lib/node_modules/send/server/bin/prod.js \
       --set "NODE_ENV" "production"
   '';
@@ -54,7 +59,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "File Sharing Experiment";
-    changelog = "https://github.com/timvisee/send/releases/tag/v${version}";
+    changelog = "https://github.com/timvisee/send/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/timvisee/send";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
@@ -63,4 +68,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "send";
   };
-}
+})
