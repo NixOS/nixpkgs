@@ -264,7 +264,7 @@ export PATH="$path_backup"
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
     responseFile=$(@mktemp@ "${TMPDIR:-/tmp}/cc-params.XXXXXX")
     trap '@rm@ -f -- "$responseFile"' EXIT
-    printf "%q\n" \
+    escapeResponseArgs \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
        ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
