@@ -9673,25 +9673,6 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
-  kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
-  kuma-experimental = callPackage ../applications/networking/cluster/kuma {
-    isFull = true;
-    enableGateway = true;
-    pname = "kuma-experimental";
-  };
-  kumactl = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kumactl" ];
-    pname = "kumactl";
-  };
-  kuma-cp = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kuma-cp" ];
-    pname = "kuma-cp";
-  };
-  kuma-dp = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kuma-dp" ];
-    pname = "kuma-dp";
-  };
-
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   wrapHelm = callPackage ../applications/networking/cluster/helm/wrapper.nix { };
