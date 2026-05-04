@@ -906,6 +906,9 @@ checkConfigError 'A definition for option .attrList.badListElem. is not of type 
 checkConfigError 'A definition for option .attrList.badString. is not of type .attribute list of string.. TypeError: Definition values:' config.attrListStrict.badString ./declare-attrList.nix
 checkConfigError 'A definition for option .attrList.badListString. is not of type .attribute list of string.. Each list element must be a single-key attribute set.' config.attrListStrict.badListString ./declare-attrList.nix
 
+# attrListWith valueMeta.definitions: file propagation
+checkConfigError 'the-defs-file\.nix' config.argv ./attrList-valueMeta-definitions-file-diagnostic-forwarding.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
