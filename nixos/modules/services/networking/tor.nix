@@ -52,6 +52,20 @@ in
         description = "The virtual address space used by Tor.";
       };
 
+      transPort = lib.mkOption {
+        type = lib.types.int;
+        default = 9040;
+        example = 10040;
+        description = "The TransPort setting of Tor";
+      };
+
+      dnsPort = lib.mkOption {
+        type = lib.types.int;
+        default = 9053;
+        example = 10053;
+        description = "The DNSPort setting of Tor";
+      };
+
       natPriority = lib.mkOption {
         type = lib.types.int;
         default = -100;
@@ -138,19 +152,19 @@ in
       settings = {
 
         # If router option is enabled then bind to 0.0.0.0 instead of 127.0.0.1.
-        DNSPort = lib.mkIf cfg.router.enable [
+        DNSPort = lib.mkIf (cfg.client.enable || cfg.router.enable) [
           {
-            addr = "0.0.0.0";
-            port = 9053;
+            addr = if cfg.router.enable then "0.0.0.0" else "127.0.0.1";
+            port = cfg.dnsPort;
           }
         ];
 
         # Without mkForce it sets addr to 127.0.0.1 and later it cannot bind again as 0.0.0.0.
-        TransPort = lib.mkIf cfg.router.enable (
+        TransPort = lib.mkIf (cfg.client.enable || cfg.router.enable) (
           lib.mkForce [
             {
-              addr = "0.0.0.0";
-              port = 9040;
+              addr = if cfg.router.enable then "0.0.0.0" else "127.0.0.1";
+              port = cfg.transPort;
             }
           ]
         );
@@ -160,9 +174,9 @@ in
 
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.router.enable [ 9040 ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.router.enable [ cfg.transPort ];
 
-    networking.firewall.allowedUDPPorts = lib.mkIf cfg.router.enable [ 9053 ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.router.enable [ cfg.dnsPort ];
 
     # Enable squid with shutdown_lifetime set to 0, as it instead would delay service stopping.
     services.squid = lib.mkIf cfg.client.enable {
@@ -232,10 +246,10 @@ in
             # but we redirect DNS requests before allowing local addresses, as
             # most network configurations have local IP addresses as DNS servers.
             ip daddr @excluded_destinations return
-            ip protocol udp udp dport 53 dnat to 127.0.0.1:9053 # route dns before allowing local addresses
+            ip protocol udp udp dport 53 dnat to 127.0.0.1:${toString cfg.dnsPort} # route dns before allowing local addresses
             ip daddr @reserved_subnets ip daddr != ${cfg.virtualAddrNetworkIPv4} return
 
-            ip protocol tcp dnat to 127.0.0.1:9040 # this rewrites the dest addr but not the interface!
+            ip protocol tcp dnat to 127.0.0.1:${toString cfg.transPort} # this rewrites the dest addr but not the interface!
           }
 
           chain tor_filter_output {
@@ -280,8 +294,8 @@ in
             ip saddr @excluded_sources return
             ip daddr @excluded_destinations return
 
-            ip protocol udp udp dport 53 redirect to :9053
-            ip protocol tcp tcp flags syn redirect to :9040
+            ip protocol udp udp dport 53 redirect to :${toString cfg.dnsPort}
+            ip protocol tcp tcp flags syn redirect to :${toString cfg.transPort}
           }
 
           chain tor_filter_forward {
