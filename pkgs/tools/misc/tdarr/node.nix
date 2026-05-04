@@ -5,9 +5,9 @@ callPackage ./common.nix { } {
   component = "node";
 
   hashes = {
-    linux_x64 = "sha256-3dd8ouRfThm481rDJDnxxUuSkqNlFR+2aywPzyy7xrw=";
-    linux_arm64 = "sha256-LD/cQECal9dLZY/FQSFztOVzd7MaeHL1rdbMUJ2DPNY=";
-    darwin_x64 = "sha256-icgzoHqZ+P6gXJ8jQTau3O2D6uRvET4MtNoWJI/JnvM=";
-    darwin_arm64 = "sha256-Rw478IpDLLe+Ek3Jt5Duaq1sHL1D3pE0HkVqk+v1ECE=";
+    linux_x64 = "sha256-Xm7xufs4xne/KYDofsYaLCN0G3a2LZy5h4pObGWnVcY=";
+    linux_arm64 = "sha256-fIac6EjU0CF7pWSUaIjwe3r1x7Cbgwz41X769ujS1B0=";
+    darwin_x64 = "sha256-LnNJ53rLxC6zg8kNsq7ipUzQSXH9kkMjQFbtJJxC2uc=";
+    darwin_arm64 = "sha256-JfiFsiFJcZx8fFyO4s0v2PpeQZ/APjRN1FdudzYaeWU=";
   };
 }
