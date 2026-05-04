@@ -360,6 +360,7 @@
   zvbi,
   # Darwin
   apple-sdk_15,
+  autoSignDarwinBinariesHook,
   xcode, # unfree contains metalcc and metallib
   # Cuda Packages
   cuda_cudart,
@@ -842,7 +843,8 @@ stdenv.mkDerivation (
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
     ++ optionals withCudaLLVM [ clang ]
-    ++ optionals withCudaNVCC [ cuda_nvcc ];
+    ++ optionals withCudaNVCC [ cuda_nvcc ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ autoSignDarwinBinariesHook ];
 
     buildInputs =
       [ ]

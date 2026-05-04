@@ -9,7 +9,7 @@ let
     initArgs: ffmpegVariant:
     callPackage ./generic.nix (
       {
-        inherit (darwin) xcode;
+        inherit (darwin) autoSignDarwinBinariesHook xcode;
         inherit (cudaPackages) cuda_cudart cuda_nvcc libnpp;
       }
       // (initArgs // { inherit ffmpegVariant; })
