@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "traccar";
-  version = "6.12.2";
+  version = "6.13.0";
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
   src = fetchzip {
     stripRoot = false;
     url = "https://github.com/traccar/traccar/releases/download/v${version}/traccar-other-${version}.zip";
-    hash = "sha256-lOzakS36B/2+UX/TwcQf4diaB/WfFff1XEZD07Sc/zc=";
+    hash = "sha256-nrAT/ewMpRXTN7bTU02VIJ4YoK5yvgfVZqMvQ1fXPo8=";
   };
 
   installPhase = ''

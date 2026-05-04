@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "retryhttp";
   version = "1.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "austind";

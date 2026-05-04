@@ -2416,13 +2416,6 @@ assertNoAdditions {
     };
   });
 
-  mind-nvim = super.mind-nvim.overrideAttrs (old: {
-    dependencies = [ self.plenary-nvim ];
-    meta = old.meta // {
-      license = lib.licenses.bsd3;
-    };
-  });
-
   mini-nvim = super.mini-nvim.overrideAttrs {
     # reduce closure size
     postInstall = ''

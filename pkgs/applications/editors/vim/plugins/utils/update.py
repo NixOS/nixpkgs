@@ -95,7 +95,10 @@ class VimEditor(nixpkgs_plugin_update.Editor):
                   fetchFromGitHub,
                   fetchgit,
                 }:
-
+                let
+                  inherit (lib.licenses) unfree;
+                  inherit (lib.meta) getLicenseFromSpdxId;
+                in
                 final: prev: {
                 """
                 )
@@ -128,9 +131,9 @@ class VimEditor(nixpkgs_plugin_update.Editor):
                 license_spdx_id, license_spdx_id
             )
         license_nix = (
-            f"    meta.license = lib.meta.getLicenseFromSpdxId {json.dumps(license_spdx_id)};\n"
+            f"    meta.license = getLicenseFromSpdxId {json.dumps(license_spdx_id)};\n"
             if license_spdx_id
-            else "    meta.license = lib.licenses.unfree;\n"
+            else "    meta.license = unfree;\n"
         )
         content += """{buildFn} {{
     pname = "{plugin.name}";

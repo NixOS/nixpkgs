@@ -10,7 +10,7 @@
 python3Packages.buildPythonApplication {
   pname = "jello-lang";
   version = "0-unstable-2025-01-07";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codereport";
