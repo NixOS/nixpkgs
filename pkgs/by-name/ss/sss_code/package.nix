@@ -4,6 +4,7 @@
   pkg-config,
   fontconfig,
   libiconv,
+  writableTmpDirAsHomeHook,
   oniguruma,
   stdenv,
   libxcb,
@@ -28,7 +29,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "sss_code"
   ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    writableTmpDirAsHomeHook
+  ];
 
   buildInputs = [
     fontconfig
