@@ -74,7 +74,11 @@ let
   }
   //
     lib.optionalAttrs
-      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      (
+        (lib.versionOlder version "2.35pre")
+        && !stdenv.hostPlatform.isStatic
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      )
       {
         # Currently fails in static build
         inherit
@@ -147,7 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
     nix-functional-tests
   ]
   ++
-    lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    lib.optionals
+      (
+        (lib.versionOlder version "2.35pre")
+        && !stdenv.hostPlatform.isStatic
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      )
       [
         # Perl currently fails in static build
         # TODO: Split out tests into a separate derivation?
