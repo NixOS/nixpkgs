@@ -3,25 +3,27 @@
   appimageTools,
   fetchurl,
   makeWrapper,
+  nix-update-script,
 }:
-
-appimageTools.wrapAppImage rec {
+let
   pname = "protonup-qt";
-  version = "2.14.0";
+  version = "2.15.0";
 
-  src = appimageTools.extractType2 {
-    inherit pname version;
-    src = fetchurl {
-      url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
-      hash = "sha256-OdogpqqNZiwKqj2ELfmAw/601iVHMsTqxl5CUjqRQBs=";
-    };
+  src = fetchurl {
+    url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
+    hash = "sha256-FzrgOlEmC+4fvd32Btl18+b6eRWaSeTxCLg7K8VZ0dI=";
   };
+
+  appimageContents = appimageTools.extract { inherit pname version src; };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
 
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -Dm644 ${src}/net.davidotek.pupgui2.desktop $out/share/applications/protonup-qt.desktop
-    install -Dm644 ${src}/net.davidotek.pupgui2.png $out/share/pixmaps/protonup-qt.png
+    install -Dm644 ${appimageContents}/net.davidotek.pupgui2.desktop $out/share/applications/protonup-qt.desktop
+    install -Dm644 ${appimageContents}/net.davidotek.pupgui2.png $out/share/pixmaps/protonup-qt.png
     substituteInPlace $out/share/applications/protonup-qt.desktop \
       --replace-fail "Exec=net.davidotek.pupgui2" "Exec=protonup-qt" \
       --replace-fail "Icon=net.davidotek.pupgui2" "Icon=protonup-qt"
@@ -31,6 +33,8 @@ appimageTools.wrapAppImage rec {
   '';
 
   extraPkgs = pkgs: with pkgs; [ zstd ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://davidotek.github.io/protonup-qt/";
