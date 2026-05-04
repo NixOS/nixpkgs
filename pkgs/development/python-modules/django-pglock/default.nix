@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/AmbitionEng/django-pglock";
     changelog = "https://github.com/AmbitionEng/django-pglock/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }
