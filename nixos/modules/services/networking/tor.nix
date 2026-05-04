@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   # List of subnets that aren't routable on the public internet.
   # https://en.wikipedia.org/wiki/List_of_reserved_IP_addresses
@@ -184,8 +189,8 @@ in
     # Patch rules before checking them as they would simply fail as both "tor"
     # and "squid" users aren't available during build.
     networking.nftables.preCheckRuleset = ''
-      sed -i 's/skuid tor/skuid 1/' ruleset.conf
-      sed -i 's/skuid squid/skuid 2/' ruleset.conf
+      ${lib.getExe pkgs.gnused} -i 's/skuid tor/skuid 1/' ruleset.conf
+      ${lib.getExe pkgs.gnused} -i 's/skuid squid/skuid 2/' ruleset.conf
     '';
 
     # Here are the nftables for the routing operations. As you may notice the
