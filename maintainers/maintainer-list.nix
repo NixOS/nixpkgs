@@ -21506,6 +21506,12 @@
     githubId = 7536431;
     name = "Jonas Fierlings";
   };
+  pignated = {
+    email = "npcobb2003+nixpkgs@gmail.com";
+    github = "pignated";
+    githubId = 91336649;
+    name = "Nathan Cobb";
+  };
   pilz = {
     name = "Pilz";
     email = "nix@pilz.foo";
