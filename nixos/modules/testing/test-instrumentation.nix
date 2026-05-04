@@ -98,6 +98,21 @@ in
       enables commands to be sent to test and debug stage 1. Use
       machine.switch_root() to leave stage 1 and proceed to stage 2
     '';
+
+    focusUnits = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "nginx.service"
+        "postgresql.service"
+      ];
+      description = ''
+        List of systemd units to focus serial console output on. When set,
+        the default journal forwarding and kernel messages on the serial
+        console are suppressed and only journal output from the specified
+        units is shown.
+      '';
+    };
   };
 
   config = {
@@ -135,12 +150,19 @@ in
 
     boot.initrd.systemd = lib.mkMerge [
       {
-        contents."/etc/systemd/journald.conf".text = ''
-          [Journal]
-          ForwardToConsole=yes
-          TTYPath=/dev/${qemu-common.qemuSerialDevice}
-          MaxLevelConsole=debug
-        '';
+        contents."/etc/systemd/journald.conf".text =
+          if cfg.focusUnits == [ ] then
+            ''
+              [Journal]
+              ForwardToConsole=yes
+              TTYPath=/dev/${qemu-common.qemuSerialDevice}
+              MaxLevelConsole=debug
+            ''
+          else
+            ''
+              [Journal]
+              ForwardToConsole=no
+            '';
 
         settings.Manager = managerSettings;
       }
@@ -225,17 +247,29 @@ in
       # determinism (e.g. if the VM runs at lower speed, then
       # timeouts in the VM should also be delayed).
       "clocksource=acpi_pm"
+    ]
+    ++ lib.optionals (cfg.focusUnits != [ ]) [
+      "systemd.show_status=false"
+      "rd.systemd.show_status=false"
+      "udev.log_level=0"
+      "loglevel=0"
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xwininfo ];
 
-    # Log everything to the serial console.
-    services.journald.extraConfig = ''
-      ForwardToConsole=yes
-      TTYPath=/dev/${qemu-common.qemuSerialDevice}
-      MaxLevelConsole=debug
-    '';
+    # Log everything to the serial console (unless focusUnits is set).
+    services.journald.extraConfig =
+      if cfg.focusUnits == [ ] then
+        ''
+          ForwardToConsole=yes
+          TTYPath=/dev/${qemu-common.qemuSerialDevice}
+          MaxLevelConsole=debug
+        ''
+      else
+        ''
+          ForwardToConsole=no
+        '';
 
     systemd.settings.Manager = managerSettings;
     systemd.user.extraConfig = ''
@@ -244,7 +278,23 @@ in
       DefaultDeviceTimeoutSec=300
     '';
 
-    boot.consoleLogLevel = 7;
+    boot.consoleLogLevel = if cfg.focusUnits == [ ] then 7 else 0;
+
+    systemd.services.focus-units-journal = lib.mkIf (cfg.focusUnits != [ ]) (
+      let
+        unitFlags = lib.concatMapStringsSep " " (u: "-u ${lib.escapeShellArg u}") cfg.focusUnits;
+      in
+      {
+        description = "Stream focused journal units to serial console";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "systemd-journald.service" ];
+        serviceConfig = {
+          ExecStart = "${pkgs.systemd}/bin/journalctl --follow --lines=all --no-pager ${unitFlags}";
+          StandardOutput = "file:/dev/${qemu-common.qemuSerialDevice}";
+          Restart = "on-failure";
+        };
+      }
+    );
 
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 150 null;
