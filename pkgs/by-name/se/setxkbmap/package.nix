@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "setxkbmap";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "setxkbmap";
     tag = "setxkbmap-${finalAttrs.version}";
-    hash = "sha256-eEh1rifV+XY5RuKbA3Rgn9vmQPnyWvSae/m5lZA3FGE=";
+    hash = "sha256-KH9AHiPL6OqsYjRUga8pkzKee/sG3dwNF3e8VXMx6Es=";
   };
 
   strictDeps = true;
