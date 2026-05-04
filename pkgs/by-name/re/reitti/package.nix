@@ -2,6 +2,7 @@
   lib,
   maven,
   openjdk25,
+  openjdk25_headless,
   fetchFromGitHub,
   xmlstarlet,
   jq,
@@ -59,7 +60,7 @@ maven.buildMavenPackage rec {
     cp target/*.jar $out/share/java/reitti.jar
 
     mkdir -p $out/bin
-    makeWrapper ${openjdk25}/bin/java $out/bin/reitti \
+    makeWrapper ${openjdk25_headless}/bin/java $out/bin/reitti \
       --add-flags "-jar $out/share/java/reitti.jar"
 
     runHook postInstall
