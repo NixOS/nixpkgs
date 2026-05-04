@@ -135,7 +135,10 @@ resholve.mkDerivation rec {
     '';
     changelog = "https://github.com/yadm-dev/yadm/blob/${version}/CHANGES";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ abathur ];
+    maintainers = with lib.maintainers; [
+      abathur
+      sandarukasa
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "yadm";
   };
