@@ -98,8 +98,8 @@ let
       -toolprefix ${tools}/bin/ \
       -use-external-Flocq \
       -use-external-MenhirLib \
-      ${target}
-    '';
+      ${target} \
+    ''; # do NOT remove the above "\", this must NOT end with a newline (c.f. below)
 
     installTargets = "documentation install";
     installFlags = [ ]; # trust ./configure
