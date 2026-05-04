@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-python";
     name = "isort";
-    version = "2025.0.0";
-    hash = "sha256-nwt9Pv084jt9nWvxSXLIWu7981UGSbCgVRTrFfJA6q4=";
+    version = "2026.4.0";
+    hash = "sha256-9UwAZfr8MnshHvZFCXl2v8IpgFJJrYuM5Z6Zn/uqlOQ=";
   };
   meta = {
     description = "Import sorting extension for Visual Studio Code using isort";
