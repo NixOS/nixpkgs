@@ -1,9 +1,22 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  utils,
+  ...
+}:
 
 let
   cfg = config.services.timesyncd;
 in
 {
+
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "timesyncd"
+      "extraConfig"
+    ] "Use services.timesyncd.settings.Time instead.")
+  ];
 
   options = {
 
@@ -43,15 +56,17 @@ in
           See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
-      extraConfig = lib.mkOption {
-        default = "";
-        type = lib.types.lines;
-        example = ''
-          PollIntervalMaxSec=180
-        '';
+      settings.Time = lib.mkOption {
+        default = { };
+        type = lib.types.submodule {
+          freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
+        };
+        example = {
+          PollIntervalMaxSec = 180;
+        };
         description = ''
-          Extra config options for systemd-timesyncd. See
-          {manpage}`timesyncd.conf(5)` for available options.
+          Settings for systemd-timesyncd. See {manpage}`timesyncd.conf(5)` for
+          available options.
         '';
       };
     };
@@ -74,16 +89,17 @@ in
       environment.LD_LIBRARY_PATH = config.system.nssModules.path;
     };
 
-    environment.etc."systemd/timesyncd.conf".text = ''
-      [Time]
-    ''
-    + lib.optionalString (cfg.servers != null) ''
-      NTP=${lib.concatStringsSep " " cfg.servers}
-    ''
-    + lib.optionalString (cfg.fallbackServers != null) ''
-      FallbackNTP=${lib.concatStringsSep " " cfg.fallbackServers}
-    ''
-    + cfg.extraConfig;
+    services.timesyncd.settings.Time = lib.mkMerge [
+      (lib.mkIf (cfg.servers != null) {
+        NTP = lib.mkDefault (lib.concatStringsSep " " cfg.servers);
+      })
+      (lib.mkIf (cfg.fallbackServers != null) {
+        FallbackNTP = lib.mkDefault (lib.concatStringsSep " " cfg.fallbackServers);
+      })
+    ];
+
+    environment.etc."systemd/timesyncd.conf".text =
+      utils.systemdUtils.lib.settingsToSections cfg.settings;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;
