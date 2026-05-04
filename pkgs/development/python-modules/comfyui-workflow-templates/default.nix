@@ -31,6 +31,9 @@ buildPythonPackage (finalAttrs: {
     comfyui-workflow-templates-media-other
   ];
 
+  # Package only ships static workflow JSON assets; no tests.
+  doCheck = false;
+
   pythonImportsCheck = [ "comfyui_workflow_templates" ];
 
   meta = {

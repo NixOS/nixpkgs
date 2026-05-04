@@ -23,6 +23,9 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
+  # Upstream ships no test suite at this tag.
+  doCheck = false;
+
   pythonImportsCheck = [ "comfy_aimdo.control" ];
 
   meta = {

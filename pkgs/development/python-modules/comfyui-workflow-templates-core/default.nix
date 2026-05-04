@@ -18,6 +18,12 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  # Upstream ships a `tests/` suite that resolves sibling packages by
+  # walking up to the source monorepo (`packages/{core,meta,media_*}/src`).
+  # That layout is not part of the published sdist, so the suite cannot
+  # run from a PyPI source checkout.
+  doCheck = false;
+
   pythonImportsCheck = [ "comfyui_workflow_templates_core" ];
 
   meta = {

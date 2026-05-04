@@ -18,6 +18,9 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  # Package only ships static Markdown documentation; no tests.
+  doCheck = false;
+
   pythonImportsCheck = [ "comfyui_embedded_docs" ];
 
   meta = {

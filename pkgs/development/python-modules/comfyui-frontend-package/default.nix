@@ -18,6 +18,9 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  # Package only ships the prebuilt frontend bundle; no tests.
+  doCheck = false;
+
   pythonImportsCheck = [ "comfyui_frontend_package" ];
 
   meta = {

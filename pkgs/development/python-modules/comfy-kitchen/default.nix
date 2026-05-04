@@ -31,6 +31,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "BUILD_NO_CUDA = False" "BUILD_NO_CUDA = True"
   '';
 
+  # Upstream tests exercise the CUDA/Triton kernel backends; this build
+  # uses BUILD_NO_CUDA = True so those backends are unavailable and the
+  # suite cannot run in the sandbox.
+  doCheck = false;
+
   pythonImportsCheck = [ "comfy_kitchen" ];
 
   meta = {
