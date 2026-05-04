@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   patches = [
-    # replace use of imp module for Python 3.12
+    # replace use of imp module for Python >= 3.12
     # https://github.com/xmendez/wfuzz/pull/365
     (fetchpatch2 {
       url = "https://github.com/xmendez/wfuzz/commit/f4c028b9ada4c36dabf3bc752f69f6ddc110920f.patch?full_index=1";
@@ -48,9 +48,9 @@ buildPythonPackage (finalAttrs: {
     legacy-cgi
     netaddr # src/wfuzz/plugins/payloads/{iprange,ipnet}.py
     pycurl
-    six
-    setuptools
     pyparsing
+    setuptools
+    six
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
 
