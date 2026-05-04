@@ -11,7 +11,6 @@ let
     concatMapStringsSep
     concatStringsSep
     filterAttrs
-    flatten
     getAttr
     isAttrs
     literalExpression
