@@ -38,13 +38,13 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "tinygo";
-  version = "0.40.1";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+dLdQdq47M+HKjiMQI1/NJZqiRFuR8rnv/osCbFTpQE=";
+    hash = "sha256-8Zpvhx+xgC/Cjdm3zSpntLKOT4HsBU7lPWdLumWeFyw=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-+962anRjsh1N0QHgEQIL8Dqwwsbps+LLEDpqCFBHksM=";
+  vendorHash = "sha256-OO8o/s71jZIypfYZCLT6jwUPyQJ89AKg3DfzTrbrD/A=";
 
   patches = [
     ./0001-GNUmakefile.patch
