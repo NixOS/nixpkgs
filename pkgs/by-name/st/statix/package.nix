@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "statix";
     maintainers = with lib.maintainers; [
+      mightyiam
       nerdypepper
       progrm_jarvis
     ];
