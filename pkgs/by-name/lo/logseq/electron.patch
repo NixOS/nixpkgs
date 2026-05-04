@@ -1,0 +1,74 @@
+diff --git a/gulpfile.js b/gulpfile.js
+index 3619962..dd9c1cb 100644
+--- a/gulpfile.js
++++ b/gulpfile.js
+@@ -272,9 +272,6 @@ exports.electron = () => {
+ }
+ 
+ exports.electronMaker = async () => {
+-  cp.execSync('pnpm cljs:release-electron', {
+-    stdio: 'inherit',
+-  })
+   cp.execSync('pnpm desktop:prepare-runtime-js', {
+     stdio: 'inherit',
+   })
+diff --git a/package.json b/package.json
+index 2a390b0..195a8f6 100644
+--- a/package.json
++++ b/package.json
+@@ -62,7 +62,7 @@
+     "release-mobile": "run-s gulp:buildMobile cljs:release-mobile webpack-mobile-build",
+     "dev-release-app": "run-s gulp:build cljs:dev-release-app webpack-app-build",
+     "dev-electron-app": "gulp electron",
+-    "release-electron": "run-s gulp:build && pnpm db-worker-node:release:bundle webpack-app-build && gulp electronMaker",
++    "release-electron": "run-s gulp:build cljs:release-electron && pnpm db-worker-node:bundle webpack-app-build && gulp electronMaker",
+     "debug-electron": "cd static/ && pnpm electron:debug",
+     "webpack-watch": "webpack --watch",
+     "webpack-app-watch": "pnpm exec webpack --watch --config-name app",
+diff --git a/resources/electron-builder.yml b/resources/electron-builder.yml
+index 5940870..5581abb 100644
+--- a/resources/electron-builder.yml
++++ b/resources/electron-builder.yml
+@@ -20,6 +20,7 @@ extraResources:
+     to: .agents/skills/logseq-cli/SKILL.md
+ 
+ mac:
++  identity: null
+   artifactName: ${productName}-darwin-${arch}-${version}.${ext}
+   icon: icons/logseq_big_sur.icns
+   target:
+@@ -54,3 +55,6 @@ linux:
+     - zip
+   mimeTypes:
+     - x-scheme-handler/logseq
++
++electronDist: ../electron-dist
++electronVersion: @electron_version@
+diff --git a/resources/package.json b/resources/package.json
+index 0a0fe74..0cecc2b 100644
+--- a/resources/package.json
++++ b/resources/package.json
+@@ -11,7 +11,7 @@
+   "scripts": {
+     "electron:dev": "electron .",
+     "electron:debug": "electron --inspect=9229 .",
+-    "electron:make": "electron-builder --config electron-builder.yml --publish never",
++    "electron:make": "electron-builder --config electron-builder.yml --publish never --dir",
+     "electron:make-linux-arm64": "electron-builder --config electron-builder.yml --linux AppImage zip --arm64 --publish never",
+     "electron:make-macos-arm64": "electron-builder --config electron-builder.yml --mac dmg zip --arm64 --publish never",
+     "electron:make-win-arm64": "electron-builder --config electron-builder.yml --win nsis zip --arm64 --publish never",
+diff --git a/src/electron/electron/core.cljs b/src/electron/electron/core.cljs
+index 70dde33..fceaac0 100644
+--- a/src/electron/electron/core.cljs
++++ b/src/electron/electron/core.cljs
+@@ -362,8 +362,8 @@
+                     (preferred-win-cli-dir)
+                     (preferred-unix-cli-dir))]
+       (cond
+-        (not (fs/existsSync cli-path))
+-        (logger/warn :cli/install (str "Missing CLI script at " cli-path ", skip installing launcher"))
++        true
++        (logger/warn :cli/install (str "CLI script installation skipped, because it is already part of the nixpkgs package"))
+ 
+         (nil? cli-dir)
+         (logger/warn :cli/install "No writable PATH directory found; skip installing logseq launcher")
