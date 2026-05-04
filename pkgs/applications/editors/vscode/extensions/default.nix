@@ -1375,8 +1375,8 @@ let
         mktplcRef = {
           name = "competitive-programming-helper";
           publisher = "DivyanshuAgrawal";
-          version = "2026.4.1776958969";
-          hash = "sha256-Ng9Yw1Jq2lSLqczHj6tjhtINfzx1bOXlVN0K1pogIKw=";
+          version = "2026.5.1777808848";
+          hash = "sha256-HzevH4HO9QVkSwARx5EF5ylKE3bjOgWt7eSPP5rHEUw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
