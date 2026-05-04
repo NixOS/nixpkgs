@@ -8,7 +8,7 @@
 with lib;
 
 let
-  inherit (lib.options) showOption showFiles;
+  inherit (lib.options) showFiles;
 
   cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
