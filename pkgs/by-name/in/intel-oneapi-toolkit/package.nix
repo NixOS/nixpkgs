@@ -55,11 +55,12 @@
   libuuid,
   sqlite,
   libffi,
+  bash,
   # The list of components to install;
   # Either [ "all" ], [ "default" ], or a custom list of components.
   # If you want to install all default components plus an extra one, pass [ "default" <your extra components here> ]
   # Note that changing this will also change the `buildInputs` of the derivation.
-  components ? [ "default" ],
+  components ? [ "all" ],
 }:
 let
   shortName = name: builtins.elemAt (lib.splitString "." name) 3;
@@ -135,20 +136,15 @@ in
   extendDrvArgs =
     finalAttrs:
     {
-      pname,
-      versionYear,
-      versionMajor,
-      versionMinor,
-      versionRel,
-      src,
-      meta,
       depsByComponent ? { },
-      postInstall ? "",
       components ? [ "default" ],
       ...
     }:
     {
       version = "${finalAttrs.versionYear}.${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.${finalAttrs.versionRel}";
+
+      strictDeps = true;
+      __structuredAttrs = true;
 
       nativeBuildInputs = [
         ncurses5
@@ -160,6 +156,8 @@ in
 
       buildInputs = [
         python3
+        # Required for patchShebangs to discover the correct interpreter
+        bash
       ]
       ++ lib.concatMap (
         comp:
@@ -205,7 +203,7 @@ in
         rm -rf "$out"/logs
         rm -rf "$out"/.toolkit_linking_tool
 
-        ln -s "$out/$versionYear.$versionMajor"/{lib,etc,bin,share,opt} "$out"
+        ln -s "$out/$versionYear.$versionMajor"/{lib,etc,bin,share,opt,include} "$out"
 
         runHook postInstall
       '';
