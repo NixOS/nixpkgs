@@ -7,18 +7,18 @@
   jq,
   makeWrapper,
 }:
-maven.buildMavenPackage {
+maven.buildMavenPackage rec {
   __structuredAttrs = true;
   strictDeps = true;
 
   pname = "reitti";
-  version = "3.4.1";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "dedicatedcode";
     repo = "reitti";
-    rev = "54291e7d71dc9cc256f22a3c08176974c314d315";
-    hash = "sha256-ybRArA9MzQRwF/WuC0PLr5n4pfte2kw1hluwezSR3os=";
+    tag = "v${version}";
+    hash = "sha256-2Fx6j/88jhfiv1PHGCSM80i/F00JzIrDkJ37DEEEfHA=";
   };
 
   mvnHash = "sha256-AeQVaj438m/ydXe+H+IZ7ZcOkXaokng5WiBsjrOCdFo=";
@@ -65,11 +65,11 @@ maven.buildMavenPackage {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A personal transit tracking application";
+  meta = {
+    description = "Personal transit tracking application";
     homepage = "https://github.com/dedicatedcode/reitti";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "reitti";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
