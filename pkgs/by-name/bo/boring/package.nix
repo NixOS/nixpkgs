@@ -5,6 +5,7 @@
   installShellFiles,
   lib,
   stdenv,
+  nix-update-script,
   testers,
 }:
 
@@ -38,10 +39,14 @@ buildGoModule (finalAttrs: {
       --zsh  <($out/bin/boring --shell zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = boring;
-    command = "boring version";
-    version = "boring ${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = boring;
+      command = "boring version";
+      version = "boring ${finalAttrs.version}";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
