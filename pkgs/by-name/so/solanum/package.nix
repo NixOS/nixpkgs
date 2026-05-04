@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
     license = lib.licenses.gpl2Plus;
