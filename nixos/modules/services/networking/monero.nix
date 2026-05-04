@@ -271,7 +271,7 @@ in
       group = "monero";
       description = "Monero daemon user";
       home = cfg.dataDir;
-      createHome = true;
+      createHome = !(lib.strings.hasPrefix "/var/lib/" cfg.dataDir);
     };
 
     users.groups.monero = { };
@@ -298,6 +298,34 @@ in
           0
           1
         ];
+        StateDirectory = lib.mkIf (lib.strings.hasPrefix "/var/lib/" cfg.dataDir) (
+          lib.strings.removePrefix "/var/lib/" cfg.dataDir
+        );
+        ReadWritePaths = lib.mkIf (!(lib.strings.hasPrefix "/var/lib/" cfg.dataDir)) [ cfg.dataDir ];
+        WorkingDirectory = "${cfg.dataDir}";
+        LockPersonality = lib.mkDefault true;
+        NoNewPrivileges = lib.mkDefault true;
+        PrivateDevices = lib.mkDefault true;
+        PrivateMounts = lib.mkDefault true;
+        PrivateNetwork = lib.mkDefault false;
+        PrivateTmp = lib.mkDefault true;
+        PrivateUsers = lib.mkDefault true;
+        ProcSubset = lib.mkDefault "pid";
+        ProtectClock = lib.mkDefault true;
+        ProtectHome = lib.mkDefault true;
+        ProtectHostname = lib.mkDefault true;
+        ProtectSystem = lib.mkDefault "strict";
+        ProtectControlGroups = lib.mkDefault true;
+        ProtectKernelLogs = lib.mkDefault true;
+        ProtectKernelModules = lib.mkDefault true;
+        ProtectKernelTunables = lib.mkDefault true;
+        ProtectProc = lib.mkDefault "invisible";
+        CapabilityBoundingSet = lib.mkDefault "";
+        RemoveIPC = lib.mkDefault true;
+        RestrictNamespaces = lib.mkDefault true;
+        RestrictRealtime = lib.mkDefault true;
+        RestrictSUIDSGID = lib.mkDefault true;
+        SystemCallFilter = "@system-service";
       };
     };
 
