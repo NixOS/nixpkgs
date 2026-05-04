@@ -7,7 +7,7 @@
 
 buildPythonPackage {
   pname = "pypresence";
-  version = "4.3.0-unstable-2025-03-27";
+  version = "4.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
