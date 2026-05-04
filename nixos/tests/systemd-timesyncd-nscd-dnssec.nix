@@ -50,9 +50,7 @@ in
       # Configure systemd-timesyncd to use our NTP hostname
       services.timesyncd.enable = lib.mkForce true;
       services.timesyncd.servers = [ ntpHostname ];
-      services.timesyncd.extraConfig = ''
-        FallbackNTP=${ntpHostname}
-      '';
+      services.timesyncd.settings.Time.FallbackNTP = ntpHostname;
 
       # The debug output is necessary to determine whether systemd-timesyncd successfully resolves our NTP hostname or not
       systemd.services.systemd-timesyncd.environment.SYSTEMD_LOG_LEVEL = "debug";
