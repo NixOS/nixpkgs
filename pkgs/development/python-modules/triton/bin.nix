@@ -4,6 +4,7 @@
   cudaPackages,
   buildPythonPackage,
   fetchurl,
+  glibc,
   python,
   autoPatchelfHook,
   zlib,
@@ -23,12 +24,6 @@ buildPythonPackage (finalAttrs: {
     in
     fetchurl srcs;
 
-  pythonRemoveDeps = [
-    "cmake"
-    # torch and triton refer to each other so this hook is included to mitigate that.
-    "torch"
-  ];
-
   buildInputs = [ zlib ];
 
   nativeBuildInputs = [
@@ -37,11 +32,20 @@ buildPythonPackage (finalAttrs: {
 
   dontStrip = true;
 
-  # If this breaks, consider replacing with "${cuda_nvcc}/bin/ptxas"
-  postFixup = ''
-    mkdir -p $out/${python.sitePackages}/triton/third_party/cuda/bin/
-    ln -s ${cudaPackages.cuda_nvcc}/bin/ptxas $out/${python.sitePackages}/triton/third_party/cuda/bin/
-  '';
+  postFixup =
+    # If this breaks, consider replacing with "${cuda_nvcc}/bin/ptxas"
+    ''
+      mkdir -p $out/${python.sitePackages}/triton/third_party/cuda/bin/
+      ln -s ${cudaPackages.cuda_nvcc}/bin/ptxas $out/${python.sitePackages}/triton/third_party/cuda/bin/
+    ''
+    # FileNotFoundError: [Errno 2] No such file or directory: '/sbin/ldconfig'
+    + ''
+      BACKENDS_DIR="$out/${python.sitePackages}/triton/backends"
+      substituteInPlace \
+        $BACKENDS_DIR/amd/driver.py \
+        $BACKENDS_DIR/nvidia/driver.py \
+        --replace-fail "/sbin/ldconfig" "${lib.getExe' glibc "ldconfig"}"
+    '';
 
   meta = {
     description = "Language and compiler for custom Deep Learning operations";
