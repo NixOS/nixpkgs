@@ -20,10 +20,9 @@ buildHomeAssistantComponent rec {
     hash = "sha256-5BXIKh8uPKuxsLbxu0fUbuCR2LYOXk1HpOvrqehg0u0=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/watchman/manifest.json \
-      --replace-fail "prettytable==3.12.0" "prettytable"
-  '';
+  ignoreVersionRequirement = [
+    "prettytable"
+  ];
 
   dontBuild = true;
 
