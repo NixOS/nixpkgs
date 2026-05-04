@@ -27,6 +27,7 @@ let
     enum
     ints
     nullOr
+    number
     path
     str
     submodule
@@ -58,6 +59,8 @@ let
       <AllowAv1Encoding>${boolToString cfg.transcoding.hardwareEncodingCodecs.av1}</AllowAv1Encoding>
       <EnableIntelLowPowerH264HwEncoder>${boolToString cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerH264HwEncoder>
       <EnableIntelLowPowerHevcHwEncoder>${boolToString cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerHevcHwEncoder>
+      <DownMixAudioBoost>${toString cfg.transcoding.downMixAudioBoost}</DownMixAudioBoost>
+      <DownMixStereoAlgorithm>${cfg.transcoding.downMixStereoAlgorithm}</DownMixStereoAlgorithm>
       <EnableDecodingColorDepth10HevcRext>${boolToString cfg.transcoding.hardwareDecodingCodecs.hevcRExt10bit}</EnableDecodingColorDepth10HevcRext>
       <EnableDecodingColorDepth12HevcRext>${boolToString cfg.transcoding.hardwareDecodingCodecs.hevcRExt12bit}</EnableDecodingColorDepth12HevcRext>
       <HardwareDecodingCodecs>
@@ -345,6 +348,35 @@ in
           description = ''
             Enable low-power encoding mode for Intel Quick Sync Video.
             Requires i915 HuC firmware to be configured.
+          '';
+        };
+
+        downMixAudioBoost = mkOption {
+          type = number;
+          default = 2;
+          description = ''
+            Audio volume boost applied when downmixing surround sound to stereo.
+            A value of 1 means no boost.
+          '';
+        };
+
+        downMixStereoAlgorithm = mkOption {
+          type = enum [
+            "None"
+            "Dave750"
+            "NightmodeDialogue"
+            "Rfc7845"
+            "Ac4"
+          ];
+          default = "None";
+          description = ''
+            Algorithm used for downmixing surround sound audio to stereo.
+
+            - `"None"`: No special algorithm, use ffmpeg's default.
+            - `"Dave750"`: Algorithm by Dave_750 for 5.1/7.1 to stereo.
+            - `"NightmodeDialogue"`: Nightmode algorithm that boosts dialogue clarity.
+            - `"Rfc7845"`: Algorithm defined in RFC 7845 Section 5.1.1.5 (Opus spec).
+            - `"Ac4"`: AC-4 standard algorithm defined in ETSI TS 103 190.
           '';
         };
       };
