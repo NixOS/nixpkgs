@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ggml-python";
-  version = "0.0.37";
+  version = "0.0.37-metal";
   pyproject = true;
 
   src = fetchFromGitHub {
