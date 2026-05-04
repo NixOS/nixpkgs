@@ -34,7 +34,7 @@
         RebootWatchdogSec = "10min";
         KExecWatchdogSec = "5min";
       };
-      systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
+      systemd.user.settings.Manager.DefaultEnvironment = "\"XXX_USER=bar\"";
       services.journald.extraConfig = "Storage=volatile";
       test-support.displayManager.auto.user = "alice";
 
