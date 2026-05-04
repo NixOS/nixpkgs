@@ -64,7 +64,6 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [
       armijnhemel
-      sbruder
     ];
   };
 }
