@@ -79,8 +79,6 @@ let
     systemd
   ];
 
-  version = "2025.14";
-
   selectSystem =
     attrs:
     attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -91,17 +89,20 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-JHuYHi4uBHzMopa45ipwsdx/3Ox/FxN3lYhBACQOCkE=";
-    aarch64-linux = "sha256-miCh1x6sCcAbg9iX7SJzYcxJ8DIQVNdrg6b39ht8gTw=";
+    x86_64-linux = "sha256-HleajbEbw5Z1ab/E4zSR+GxDOIuvegP4N9yRFZYv7z4=";
+    aarch64-linux = "sha256-Mm2F6PB15pHgRpsw1c1PjmIAcuGaqhfAeZS5HXdoWRQ=";
   };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mullvad-vpn";
-  inherit version;
+  version = "2026.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
-    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_${platform}.deb";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${finalAttrs.version}/MullvadVPN-${finalAttrs.version}_${platform}.deb";
     inherit hash;
   };
 
@@ -123,6 +124,10 @@ stdenv.mkDerivation {
     libappindicator
     wayland
   ];
+
+  postPatch = ''
+    patchShebangs opt/Mullvad\ VPN/mullvad-vpn
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -166,13 +171,16 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
-    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${finalAttrs.version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
     mainProgram = "mullvad-vpn";
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
-    maintainers = [
+    maintainers = with lib.maintainers; [
+      jackr
+      airone01
+      sigmasquadron
     ];
   };
-}
+})
