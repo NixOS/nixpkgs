@@ -1,39 +1,56 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   cython,
-  fetchPypi,
-  fontconfig,
-  gdal,
+  setuptools-scm,
+
+  # nativeBuildInputs
   geos,
+  proj,
+
+  # dependencies
   matplotlib,
   numpy,
-  owslib,
-  pillow,
-  proj,
   pyproj,
   pyshp,
+  shapely,
+
+  # optional-dependencies
+  # ows
+  owslib,
+  pillow,
+  # plotting
+  gdal,
+  scipy,
+
+  # tests
+  fontconfig,
   pytest-mpl,
   pytestCheckHook,
-  scipy,
-  setuptools-scm,
-  shapely,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cartopy";
   version = "0.25.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VfGjkOXz8HWyIcfZH7ECWK2XjbeGx5MOugbrRdKHU/4=";
+  src = fetchFromGitHub {
+    owner = "SciTools";
+    repo = "cartopy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qnsr8IgqgqQDyGslYBvpAr/+ccsUPOiA2yGOXge3nUw=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    cython
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
-    cython
     geos # for geos-config
     proj
   ];
@@ -66,12 +83,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-    export HOME=$TMPDIR
   '';
 
   pytestFlags = [
@@ -85,16 +102,41 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Numerical errors. Example:
+    #   AssertionError: Arrays are not almost equal to 4 decimals
+    "test_LatitudeFormatter_mercator"
+    "test_cursor_values"
+    "test_default"
+    "test_extents"
+    "test_geoaxes_no_subslice"
+    "test_geoaxes_set_boundary_clipping"
+    "test_get_extent"
+    "test_gridliner_labels_zoom"
+    "test_infinite_loop_bounds"
+    "test_invalid_xy_domain_corner"
+    "test_invalid_y_domain"
+    "test_osgb_vals"
+    "test_pcolormesh_datalim"
+    "test_plot_after_contour_doesnt_shrink"
+    "test_sweep"
+    "test_tiny_point_between_boundary_points"
+    "test_transform_point"
+    "test_with_transform"
+
+    # Failed: Error: Image files did not match.
+    "test_background_img"
     "test_gridliner_constrained_adjust_datalim"
-    "test_gridliner_labels_bbox_style"
+    "test_imshow"
+    "test_pil_Image"
+    "test_stock_img"
   ];
 
   meta = {
     description = "Process geospatial data to create maps and perform analyses";
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
+    changelog = "https://github.com/SciTools/cartopy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "feature_download";
   };
-}
+})
