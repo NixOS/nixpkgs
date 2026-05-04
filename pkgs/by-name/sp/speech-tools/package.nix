@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-c23.patch
     # Fix "unbonded variable" error in some scripts
     ./fix-unbonded-variable.patch
+    # Fix "ISO C++17 does not allow 'register' storage class specifier
+    ./remove-register-specifier.patch
   ];
 
   buildInputs = [
