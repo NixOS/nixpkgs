@@ -92,6 +92,8 @@ makeScopeWithSplicing' {
 
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
+      pyotherside = callPackage ../development/libraries/pyotherside { };
+
       qca = callPackage ../development/libraries/qca {
         inherit (qt6) qtbase qt5compat;
       };
