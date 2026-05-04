@@ -7,16 +7,16 @@
 
 buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   pname = "mongosh";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GgXFbT0cgoo3wSe5jyE4sU977q4/xTOiEYILN0Kyl+4=";
+    hash = "sha256-CHHGQYJBv1sVo2LT9jxx+c15TU8ecG9R5DVQOA9yG+A=";
   };
 
-  npmDepsHash = "sha256-7o9UGK06wLAWDad6Xqq8o9cvJFSIkI2j8uHQxt77r9c=";
+  npmDepsHash = "sha256-FlVKJqXiDW3FdBrm2lN2vw+xFkvm7J1FgCEI6rFfR4o=";
 
   patches = [
     ./disable-telemetry.patch
