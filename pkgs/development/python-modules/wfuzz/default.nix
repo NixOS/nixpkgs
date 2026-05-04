@@ -35,6 +35,9 @@ buildPythonPackage (finalAttrs: {
       url = "https://github.com/xmendez/wfuzz/commit/f4c028b9ada4c36dabf3bc752f69f6ddc110920f.patch?full_index=1";
       hash = "sha256-t7pUMcdFmwAsGUNBRdZr+Jje/yR0yzeGIgeYNEq4hFE=";
     })
+    # replace removed `pipes` stdlib module with `shlex` for Python >= 3.13
+    # https://github.com/xmendez/wfuzz/issues/380
+    ./python-313-shlex.patch
   ];
 
   build-system = [ setuptools ];
