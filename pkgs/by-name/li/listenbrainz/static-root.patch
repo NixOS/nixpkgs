@@ -1,0 +1,13 @@
+diff --git a/listenbrainz/webserver/static_manager.py b/listenbrainz/webserver/static_manager.py
+index 319dab3..d8e212b 100644
+--- a/listenbrainz/webserver/static_manager.py
++++ b/listenbrainz/webserver/static_manager.py
+@@ -3,7 +3,7 @@ import json
+ import time
+ from flask import current_app
+ 
+-MANIFEST_PATH = os.path.join("/", "static", "dist", "manifest.json")
++MANIFEST_PATH = os.path.join(os.environ.get("LISTENBRAINZ_STATIC_ROOT", "/static"), "dist", "manifest.json")
+ 
+ manifest_content = {}
+ last_reload_time = 0
