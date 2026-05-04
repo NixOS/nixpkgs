@@ -8340,6 +8340,12 @@
     githubId = 965612;
     name = "York Wong";
   };
+  ethnt = {
+    email = "ethan@turkeltaub.dev";
+    github = "ethnt";
+    githubId = 137037;
+    name = "Ethan Turkeltaub";
+  };
   Etjean = {
     email = "et.jean@outlook.fr";
     github = "Etjean";
