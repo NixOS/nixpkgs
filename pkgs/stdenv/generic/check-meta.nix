@@ -571,8 +571,9 @@ let
       );
 
       # Needed for CI to be able to avoid requesting reviews from individual
-      # team members
-      nonTeamMaintainers = attrs.meta.maintainers or [ ];
+      # team members.
+      # Prefer nonTeamMaintainers in case meta is copied from another package
+      nonTeamMaintainers = attrs.meta.nonTeamMaintainers or attrs.meta.maintainers or [ ];
 
       identifiers =
         let
