@@ -105,6 +105,30 @@ let
       ];
     };
 
+  /**
+    The test framework as exposed through its [other entrypoints] has defaults
+    that are most suitable for external usage.
+
+    This module adjusts it for the particular, important use case of
+    NixOS *as packaged in the nixpkgs repo*.
+
+    [other entrypoints]: https://nixos.org/manual/nixos/stable/#sec-calling-nixos-tests
+  */
+  localTestOverrides =
+    { lib, ... }:
+    {
+      _class = "nixosTest";
+      # for error messages, pseudo-url in no particular format
+      _file = "nixpkgs/nixos/tests/all-tests.nix#localTestOverrides";
+      imports = [
+        ./read-only-pkgs.nix
+      ];
+      extraBaseModules = {
+        _file = "nixpkgs/nixos/tests/all-tests.nix#localTestOverrides-extraBaseModules";
+        config.nix.enable = lib.mkDefault false;
+      };
+    };
+
   inherit
     (rec {
       doRunTest =
@@ -112,7 +136,7 @@ let
         ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
           imports = [
             arg
-            ./read-only-pkgs.nix
+            localTestOverrides
           ];
         }).config.result;
       findTests =
