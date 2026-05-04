@@ -10980,7 +10980,7 @@ self: super: with self; {
     callPackage ../by-name/ne/netbox_4_5/plugins/netbox-attachments/package.nix
       { };
 
-  netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
+  netbox-bgp = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-bgp/package.nix { };
 
   netbox-contextmenus = callPackage ../development/python-modules/netbox-contextmenus { };
 
