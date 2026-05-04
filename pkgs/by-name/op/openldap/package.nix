@@ -122,6 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugs.openldap.org/show_bug.cgi?id=8623
     rm -f tests/scripts/test022-ppolicy
 
+    # syncreplication timing-sensitive test, fails on slow/sandboxed builders
+    # https://github.com/NixOS/nixpkgs/issues/516392
+    rm -f tests/scripts/test017-syncreplication-refresh
+
     rm -f tests/scripts/test063-delta-multiprovider
 
     # https://bugs.openldap.org/show_bug.cgi?id=10009
