@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file";
-  version = "5.47";
+  version = "5.45";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
       "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-RWcv7BZctMwTWKLXa11X0ih23Ll6sWlCesOFy+HVWXo=";
+    hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
   };
 
   outputs = [
@@ -33,12 +33,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fixes `cat archive.zip | file -` just showing a generic "data" type. See:
+    # Upstream patch to fix 32-bit tests.
+    #
+    # It is included in 5.46+, but we are not updating to 5.46 due to:
+    #
+    # https://bugs.astron.com/view.php?id=622
+    # https://bugs.astron.com/view.php?id=638
+    #
+    # Which were partially resolved in 5.47, but not completely:
+    #
     # - https://bugs.astron.com/view.php?id=764
+    #
+    # The above was fixed in:
+    #
     # - https://github.com/file/file/commit/12b76648185104ce9118d8b5fa57aa34a77ad084
-    # Vendored patch because using fetchpatch is impossible for a package in
-    # this part of the bootstrap chain.
-    ./0001-PR-745-streamout-Don-t-flush-when-trying-to-set-nega.patch
+    #
+    # But there's also another regression described & fixed here:
+    #
+    # - https://github.com/ahupp/python-magic/issues/362
+    # - https://github.com/file/file/commit/c54605718190ad8fe9c25cb475f1f32ca7cd54f7
+    #
+    # But we prefer not dealing with so many regressions. See:
+    #
+    # - https://github.com/NixOS/nixpkgs/pull/514964
+    ./32-bit-time_t.patch
   ];
 
   strictDeps = true;
