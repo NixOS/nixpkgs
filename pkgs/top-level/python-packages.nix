@@ -11010,7 +11010,9 @@ self: super: with self; {
 
   netbox-qrcode = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-qrcode/package.nix { };
 
-  netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
+  netbox-reorder-rack =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-reorder-rack/package.nix
+      { };
 
   netbox-routing = callPackage ../development/python-modules/netbox-routing { };
 
