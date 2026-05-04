@@ -4909,6 +4909,8 @@ self: super: with self; {
 
   earn-e-p1 = callPackage ../development/python-modules/earn-e-p1 { };
 
+  earth2studio = callPackage ../development/python-modules/earth2studio { };
+
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   easydict = callPackage ../development/python-modules/easydict { };
