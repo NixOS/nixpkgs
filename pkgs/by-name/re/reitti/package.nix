@@ -2,18 +2,37 @@
   lib,
   maven,
   openjdk25,
-  openjdk25_headless,
+  jre25_minimal,
   fetchFromGitHub,
   xmlstarlet,
   jq,
   makeWrapper,
 }:
+let
+  jre = jre25_minimal.override {
+    modules = [
+      "java.base"
+      "java.compiler"
+      "java.desktop"
+      "java.instrument"
+      "java.net.http"
+      "java.prefs"
+      "java.rmi"
+      "java.scripting"
+      "java.security.jgss"
+      "java.sql.rowset"
+      "jdk.jfr"
+      "jdk.management"
+      "jdk.net"
+      "jdk.unsupported"
+    ];
+  };
+in
 maven.buildMavenPackage rec {
-  __structuredAttrs = true;
-  strictDeps = true;
-
   pname = "reitti";
   version = "4.0.4";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dedicatedcode";
@@ -60,7 +79,7 @@ maven.buildMavenPackage rec {
     cp target/*.jar $out/share/java/reitti.jar
 
     mkdir -p $out/bin
-    makeWrapper ${openjdk25_headless}/bin/java $out/bin/reitti \
+    makeWrapper ${jre}/bin/java $out/bin/reitti \
       --add-flags "-jar $out/share/java/reitti.jar"
 
     runHook postInstall
