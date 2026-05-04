@@ -1076,11 +1076,18 @@ in
     setFunctionArgs : (a -> b) -> { [String] :: Bool } -> (a -> b)
     ```
   */
-  setFunctionArgs = f: args: {
-    # TODO: Should we add call-time "type" checking like built in?
-    __functor = self: f;
-    __functionArgs = args;
-  };
+  setFunctionArgs =
+    f: args:
+    if lib.isAttrs f then
+      f
+      // {
+        __functionArgs = args;
+      }
+    else
+      {
+        __functor = self: f;
+        __functionArgs = args;
+      };
 
   /**
     Extract the expected function arguments from a function.
