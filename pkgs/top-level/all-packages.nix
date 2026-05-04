@@ -11272,10 +11272,6 @@ with pkgs;
     useRx3d = true;
   };
 
-  minc_tools = callPackage ../applications/science/biology/minc-tools {
-    inherit (perlPackages) perl TextFormat;
-  };
-
   raxml-mpi = raxml.override { useMpi = true; };
 
   ### SCIENCE/MACHINE LEARNING
