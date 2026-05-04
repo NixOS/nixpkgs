@@ -1,16 +1,26 @@
 {
   lib,
   stdenv,
+  pkgsHostTarget,
   fetchFromGitHub,
   autoreconfHook,
   gmp,
   libffi,
-  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polyml";
-  version = "5.7.1";
+  version = "5.9.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "polyml";
+    repo = "polyml";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-dHP5XNoLcFIqASfZVWu3MtY3B3H66skEl8ohlwTGyyM=";
+  };
 
   postPatch = ''
     substituteInPlace configure.ac \
@@ -23,19 +33,10 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace-fail stdc++ c++
   '';
 
-  patches = [
-    ./5.7-new-libffi-FFI_SYSV.patch
-
-    # glibc 2.34 compat
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/polyml/raw/4d8868ca5a1ce3268f212599a321f8011c950496/f/polyml-pthread-stack-min.patch";
-      sha256 = "1h5ihg2sxld9ymrl3f2mpnbn2242ka1fsa0h4gl9h90kndvg6kby";
-    })
-  ];
-
   buildInputs = [
     libffi
     gmp
+    pkgsHostTarget.stdenv.cc
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -46,12 +47,12 @@ stdenv.mkDerivation rec {
     "--with-gmp"
   ];
 
-  src = fetchFromGitHub {
-    owner = "polyml";
-    repo = "polyml";
-    rev = "v${version}";
-    sha256 = "0j0wv3ijfrjkfngy7dswm4k1dchk3jak9chl5735dl8yrl8mq755";
-  };
+  preInstall = ''
+    substituteInPlace polyc \
+      --replace-fail "LINK=\"$CXX\"" "LINK=\"${lib.getExe' pkgsHostTarget.stdenv.cc "c++"}\""
+  '';
+
+  doCheck = true;
 
   meta = {
     description = "Standard ML compiler and interpreter";
@@ -61,8 +62,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.polyml.org/";
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; (linux ++ darwin);
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    # The last successful Darwin Hydra build was in 2024
-    broken = stdenv.hostPlatform.isDarwin;
+    # Broken as make target `polyimport.o` requires running code
+    # compiled by the cross-compiler
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    maintainers = with lib.maintainers; [ sempiternal-aurora ];
   };
-}
+})
