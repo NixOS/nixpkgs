@@ -28,18 +28,11 @@ buildGoModule (finalAttrs: {
     "-X github.com/anyproto/anytype-cli/core.Version=v${finalAttrs.version}"
   ];
 
-  doCheck = false;
-
-  postInstall = ''
-    ln -s $out/bin/anytype-cli $out/bin/anytype
-    ln -s $out/bin/anytype-cli $out/bin/any
-  '';
-
   meta = with lib; {
     description = "Command-line interface for interacting with Anytype";
     homepage = "https://github.com/anyproto/anytype-cli";
     license = licenses.mit;
-    mainProgram = "anytype";
+    mainProgram = "anytype-cli";
     platforms = platforms.linux ++ platforms.darwin;
   };
 })
