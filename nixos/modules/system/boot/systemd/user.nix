@@ -15,7 +15,6 @@ let
   systemd = config.systemd.package;
 
   inherit (systemdUtils.lib)
-    makeUnit
     generateUnits
     targetToUnit
     serviceToUnit

@@ -13,8 +13,8 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.21.1";
-  hash = "sha256-RRa19vj7iTtGzdssdtHVOsDzS4X+p1HeiZKy8EIWxq8=";
+  version = "3.22.0";
+  hash = "sha256-yheDM92AtojGXCx0UrK5gBvQgyGSxcsKPzl93HpHRt8=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
@@ -24,13 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) hash;
   };
 
-  plugins = fetchFromGitHub {
-    owner = "novomesk";
-    repo = "nomacs-plugins";
-    rev = "20101da282f13d3184ece873388e1c234a79b5e7";
-    hash = "sha256-gcRc4KoWJQ5BirhLuk+c+5HwBeyQtlJ3iyX492DXeVk=";
-  };
-
   outputs = [
     "out"
   ]
@@ -38,13 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
-
-  postUnpack = ''
-    rm -rf $sourceRoot/plugins
-    mkdir $sourceRoot/plugins
-    cp -r ${finalAttrs.plugins}/* $sourceRoot/plugins/
-    chmod -R +w $sourceRoot/plugins
-  '';
 
   nativeBuildInputs = [
     cmake

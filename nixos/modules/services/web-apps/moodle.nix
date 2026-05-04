@@ -17,9 +17,7 @@ let
     types
     ;
   inherit (lib)
-    concatStringsSep
     literalExpression
-    mapAttrsToList
     optional
     optionalString
     ;
