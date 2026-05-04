@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/sagb/alttab/commit/665e3e369f74ab0075c22a46a3cb3a9f76bdd762.patch";
       hash = "sha256-7l74kXs0bAyozBbgOEzDSY+4NE2pjdVfWda0XiPvCz4=";
     })
+    # Fix tests on darwin: https://github.com/sagb/alttab/pull/193
+    ./use-kill-0-for-liveness-check.patch
   ];
 
   nativeBuildInputs = [
