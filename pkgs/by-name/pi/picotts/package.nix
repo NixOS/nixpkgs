@@ -2,38 +2,44 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
+  autoreconfHook,
   popt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picotts";
-  version = "0-unstable-2018-10-19";
+  version = "0-unstable-2021-05-06";
 
   src = fetchFromGitHub {
     repo = "picotts";
     owner = "naggety";
-    rev = "2f86050dc5da9ab68fc61510b594d8e6975c4d2d";
-    sha256 = "1k2mdv9llkh77jr4qr68yf0zgjqk87np35fgfmnc3rpdp538sccl";
+    rev = "21089d223e177ba3cb7e385db8613a093dff74b5";
+    sha256 = "sha256-NmmYa3mVUSMsLC1blFAET3zLY66anGY2ff6ZQ424h1s=";
   };
-  nativeBuildInputs = [
-    autoconf
-    automake
+
+  patches = [
+    # upstream PR: https://github.com/ihuguet/picotts/pull/14
+    ./fix-compilation-darwin.patch
   ];
+
+  postPatch = ''
+    cd pico
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
   buildInputs = [
-    libtool
     popt
   ];
-  sourceRoot = "${finalAttrs.src.name}/pico";
-  preConfigure = "./autogen.sh";
+
   meta = {
     description = "Text to speech voice sinthesizer from SVox";
     homepage = "https://github.com/naggety/picotts";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.canndrew ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "pico2wave";
   };
 })
