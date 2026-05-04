@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   stdenv,
   ncurses5,
   bc,
@@ -184,14 +183,3 @@
     });
 
 }
-// (
-  let
-    toolkit = callPackage ./toolkit.nix { };
-  in
-  {
-    inherit toolkit;
-    # Intel merged the Base Toolkit and HPC Toolkit into intel-oneapi-toolkit with the 2026.0 release.
-    base = lib.warn "'intel-oneapi.base' and 'intel-oneapi.hpc' have been merged upstream into a single package. Please switch to 'intel-oneapi-toolkit'" toolkit;
-    hpc = lib.warn "'intel-oneapi.base' and 'intel-oneapi.hpc' have been merged upstream into a single package. Please switch to 'intel-oneapi-toolkit'" toolkit;
-  }
-)

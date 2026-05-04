@@ -179,7 +179,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
     inherit (finalAttrs) pname;
-    file = "toolkit.nix";
+    file = "package.nix";
     downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneapi-toolkit-download.html";
   };
 
