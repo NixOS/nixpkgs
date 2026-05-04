@@ -11632,6 +11632,8 @@ self: super: with self; {
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
 
+  openfermion = callPackage ../development/python-modules/openfermion { };
+
   openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
 
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
@@ -13060,6 +13062,8 @@ self: super: with self; {
   ptpython = callPackage ../development/python-modules/ptpython { };
 
   ptyprocess = callPackage ../development/python-modules/ptyprocess { };
+
+  pubchempy = callPackage ../development/python-modules/pubchempy { };
 
   publicsuffix2 = callPackage ../development/python-modules/publicsuffix2 { };
 
