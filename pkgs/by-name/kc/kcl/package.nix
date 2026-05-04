@@ -60,7 +60,7 @@ buildGoModule (finalAttrs: {
 
   doCheck = true;
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line interface for KCL programming language";
