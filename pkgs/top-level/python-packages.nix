@@ -14218,6 +14218,8 @@ self: super: with self; {
 
   pygreat = callPackage ../development/python-modules/pygreat { };
 
+  pygrib = callPackage ../development/python-modules/pygrib { };
+
   pygrok = callPackage ../development/python-modules/pygrok { };
 
   pygsl = callPackage ../development/python-modules/pygsl { inherit (pkgs) gsl swig; };
