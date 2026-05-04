@@ -1656,15 +1656,6 @@ with pkgs;
 
   coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
 
-  intel-oneapi = recurseIntoAttrs (
-    (callPackage ../development/libraries/intel-oneapi { })
-    // {
-      # Intel merged the Base and HPC Toolkits into intel-oneapi-toolkit with the 2026.0 release.
-      base = lib.warn "'intel-oneapi.base' and 'intel-oneapi.hpc' have been merged upstream into a single package. Please switch to 'intel-oneapi-toolkit'" intel-oneapi-toolkit;
-      hpc = lib.warn "'intel-oneapi.base' and 'intel-oneapi.hpc' have been merged upstream into a single package. Please switch to 'intel-oneapi-toolkit'" intel-oneapi-toolkit;
-    }
-  );
-
   intelLlvmStdenv = intel-llvm.stdenv;
 
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
