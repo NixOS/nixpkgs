@@ -10997,7 +10997,7 @@ self: super: with self; {
       { };
 
   netbox-interface-synchronization =
-    callPackage ../development/python-modules/netbox-interface-synchronization
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-interface-synchronization/package.nix
       { };
 
   netbox-napalm-plugin = callPackage ../development/python-modules/netbox-napalm-plugin { };
