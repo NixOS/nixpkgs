@@ -3898,7 +3898,7 @@ assertNoAdditions {
     ];
 
     checkInputs = [
-      # Transitive depedency of telescope.nvim
+      # Transitive dependency of telescope.nvim
       # Issue: https://github.com/NixOS/nixpkgs/issues/394939
       self.plenary-nvim
     ];
@@ -5721,6 +5721,12 @@ assertNoAdditions {
       "randombones_dark"
     ];
   };
+
+  zig-vim = super.zig-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   zk-nvim = super.zk-nvim.overrideAttrs {
     checkInputs = with self; [
