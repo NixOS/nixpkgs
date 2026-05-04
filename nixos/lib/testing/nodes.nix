@@ -50,6 +50,7 @@ let
           inherit (config) containers;
           nodes = config.nodesCompat;
         };
+        nix.enable = lib.mkDefault false;
       }
       (
         { options, ... }:
