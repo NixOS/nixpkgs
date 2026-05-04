@@ -2029,8 +2029,6 @@ let
           mdx = mdx.override { inherit logs; };
         };
 
-        sodium = callPackage ../development/ocaml-modules/sodium { };
-
         sosa = callPackage ../development/ocaml-modules/sosa { };
 
         soundtouch = callPackage ../development/ocaml-modules/soundtouch {
