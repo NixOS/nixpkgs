@@ -923,6 +923,12 @@
     githubId = 4717906;
     name = "Jakub Skokan";
   };
+  aiwao = {
+    email = "aiwao@140.lol";
+    github = "aiwao";
+    githubId = 233898056;
+    name = "aiwao";
+  };
   aiyion = {
     email = "git@aiyionpri.me";
     github = "AiyionPrime";
