@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "10.3.0";
+  version = "10.4.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "ChezScheme";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5h9W4Tdn8EKEhdecKttLOn8J2OfNp5iaIg017UIk3CI=";
+    hash = "sha256-eZws5ezk5nCZglVBvdhOGp5CnfwiHTAGPb6+w+BHemk=";
     # Vendored nanopass and stex
     fetchSubmodules = true;
   };
