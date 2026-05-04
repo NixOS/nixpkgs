@@ -29,7 +29,7 @@ let
   buildSet = type: flags: name: elements: ''
     set ${name} {
       type ${type}
-      ${lib.optionalString (flags != null && flags != [ ]) "flags ${lib.concatStringsSep "," flags}"}
+      ${lib.optionalString (flags != [ ]) "flags ${lib.concatStringsSep "," flags}"}
       ${lib.optionalString (elements != [ ]) "elements = { ${lib.concatStringsSep "," elements} }"}
     }
   '';
@@ -207,9 +207,9 @@ in
 
           ${buildSubnetsSet "excluded_destinations" cfg.client.excludedDestinations}
 
-          ${buildSet "ifname" null "excluded_ifs" cfg.client.excludedInterfaces}
+          ${buildSet "ifname" [ ] "excluded_ifs" cfg.client.excludedInterfaces}
 
-          ${buildSet "mark" null "excluded_marks" cfg.client.excludedFwMarks}
+          ${buildSet "mark" [ ] "excluded_marks" cfg.client.excludedFwMarks}
 
           chain tor_nat_output {
             type nat hook output priority ${toString cfg.natPriority}
