@@ -13,8 +13,6 @@
 }:
 let
   inherit (lib)
-    filterAttrs
-    literalExpression
     mkIf
     mkOption
     mkRemovedOptionModule

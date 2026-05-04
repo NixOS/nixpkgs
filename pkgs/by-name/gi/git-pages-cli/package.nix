@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "git-pages-cli";
   version = "1.8.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "git-pages";
     repo = "git-pages-cli";
@@ -28,7 +30,12 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(.*)"
+    ];
+  };
 
   meta = {
     description = "Command-line application for uploading a site to a git-pages server";

@@ -33,8 +33,9 @@ let
     stripIdlelib = true;
     stripTests = true;
     enableOptimizations = false;
-    packageOverrides = prev: final: {
-      setuptools = removeKnownVulnerabilities final.setuptools;
+    packageOverrides = final: prev: {
+      pip = removeKnownVulnerabilities prev.pip;
+      setuptools = removeKnownVulnerabilities prev.setuptools;
     };
   };
   callPackage = lib.callPackageWith (pkgsBuildHost // { python27 = python27'; });

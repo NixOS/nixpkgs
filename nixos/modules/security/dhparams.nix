@@ -147,7 +147,7 @@ in
     (lib.mkIf cfg.enable {
       warnings = [
         ''
-          The `security.dhparam` module is deprecated and scheduled for removal in NixOS 26.11.
+          The `security.dhparams` module is deprecated and scheduled for removal in NixOS 26.11.
           Generating your own params has been shown to be problematic in RFC 7919 (2016).
 
           Remove any uses of DHE and migrate to ECDHE (RFC 8422, 2018) and

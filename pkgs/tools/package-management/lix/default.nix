@@ -35,21 +35,6 @@
   confDir ? "/etc",
 }:
 let
-  # Support for mdbook >= 0.5, https://git.lix.systems/lix-project/lix/issues/1051
-  lixMdbookPatch = fetchpatch2 {
-    name = "lix-mdbook-0.5-support.patch";
-    url = "https://git.lix.systems/lix-project/lix/commit/54df89f601b3b4502a5c99173c9563495265d7e7.patch";
-    excludes = [ "package.nix" ];
-    hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
-  };
-
-  lixLowdown30Patch = fetchpatch {
-    name = "lix-lowdown-3.0-support.patch";
-    url = "https://git.lix.systems/lix-project/lix/commit/af0390c27bdc401ece8f8192cb3024f0ff08e977.patch";
-    excludes = [ "flake.nix" ];
-    hash = "sha256-ZBkbgeZ/D7H2teX8bPy5NEG1aXbQVksTDV3aVBZdRPM=";
-  };
-
   makeLixScope =
     {
       attrName,
@@ -189,14 +174,14 @@ lib.makeExtensible (
       attrName = "lix_2_94";
 
       lix-args = rec {
-        version = "2.94.1";
+        version = "2.94.2";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
           rev = version;
-          hash = "sha256-+VJmizrdZPygtffgS/yfMb4PkZUUK5JmyGGzn0GPsKc=";
+          hash = "sha256-Nmqsl/YCnBW5U3TUfFWHGVUbyS2/Ll655BAE3qZilC4=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {
@@ -206,8 +191,6 @@ lib.makeExtensible (
         };
 
         patches = [
-          lixMdbookPatch
-          lixLowdown30Patch
         ];
       };
     };
@@ -216,14 +199,14 @@ lib.makeExtensible (
       attrName = "lix_2_95";
 
       lix-args = rec {
-        version = "2.95.1";
+        version = "2.95.2";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
           rev = version;
-          hash = "sha256-eZEynXdDcrjDMjGVfDhFJJrU5ENal7wlx7bn/wkggTg=";
+          hash = "sha256-nFxJMIdcGTI9NiHAa5HZ2BmcGFLwC2pTq+V4Gjc499I=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {

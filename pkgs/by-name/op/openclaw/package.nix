@@ -11,7 +11,7 @@
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.4.21",
+  version ? "2026.4.22",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
@@ -21,10 +21,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K1Pl9lXzGKfoq/fXWxYX5PoY3IBzJr0PPstUDGET/gs=";
+    hash = "sha256-BB+stGBDgMRAPHrVWJS2dFRjw2WrVrFdVf/23Tq1UeA=";
   };
 
-  pnpmDepsHash = "sha256-FDajXHs4s0+QDRPq4ZxQWWW9rqeSJVYACAl/5Mw2Agc=";
+  pnpmDepsHash = "sha256-z45mB/w7sorAE3CTliDpvMm9eq+/l9L/mmhYJt0t9O4=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -78,6 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             pluginDir,
             pruneConfig,
             repoRoot,
+            stampPath,
           })
         ) {
           continue;
@@ -90,6 +91,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             pluginDir,
             pruneConfig,
             repoRoot,
+            stampPath,
           })
         ) {
           continue;
@@ -135,9 +137,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     in
     ''
       installShellCompletion --cmd openclaw \
-        --bash <(${emulator} $out/bin/openclaw completion --shell bash) \
-        --fish <(${emulator} $out/bin/openclaw completion --shell fish) \
-        --zsh <(${emulator} $out/bin/openclaw completion --shell zsh)
+        --bash <(OPENCLAW_SKIP_PLUGIN_CLI=1 ${emulator} $out/bin/openclaw completion --shell bash) \
+        --fish <(OPENCLAW_SKIP_PLUGIN_CLI=1 ${emulator} $out/bin/openclaw completion --shell fish) \
+        --zsh  <(OPENCLAW_SKIP_PLUGIN_CLI=1 ${emulator} $out/bin/openclaw completion --shell zsh)
     ''
   );
 
@@ -145,6 +147,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;
+
+  patches = [
+    ./skip-bundled-runtime-install.patch
+  ];
 
   meta = {
     description = "Self-hosted, open-source AI assistant/agent";

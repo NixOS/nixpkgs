@@ -3,7 +3,6 @@
 let
   inherit (lib)
     genAttrs
-    maintainers
     mkAliasOptionModule
     mkEnableOption
     mkIf

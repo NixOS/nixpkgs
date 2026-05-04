@@ -2,13 +2,9 @@
   lib,
   autoPatchelfHook,
   bzip2,
-  cairo,
   fetchurl,
-  gdk-pixbuf,
   glibc,
-  pango,
-  gtk2,
-  libsForQt5,
+  kdePackages,
   stdenv,
   runtimeShell,
   unzip,
@@ -16,19 +12,19 @@
 
 let
   pname = "bcompare";
-  version = "4.4.7.28397";
+  version = "5.2.0.31950";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://www.scootersoftware.com/bcompare-${version}_amd64.deb";
-      sha256 = "sha256-4AWTSoYpVhGmBBxcwHXdg1CGd/04+8yL9pu+gHrsj6U";
+      url = "https://www.scootersoftware.com/files/bcompare-${version}_amd64.deb";
+      sha256 = "sha256-CCSRNGWIYVKAoQVVJ8McDUtc45nK0S4CdamcT5uVlQM=";
     };
 
     x86_64-darwin = fetchurl {
-      url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
-      sha256 = "sha256-qbpM6hJbv+APo+ed45k3GXrl1HnZRxD1uT2lvaN3oM4=";
+      url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
+      sha256 = "sha256-R+G2Zlr074i2W4GaEDweK0c0q8tnzjs6M0N106WVAlg=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
@@ -54,35 +50,34 @@ let
       cp -R usr/{bin,lib,share} $out/
 
       # Remove library that refuses to be autoPatchelf'ed
+      #  - bcompare_ext_kde.amd64.so is linked with Qt4
+      #  - bcompare_ext_kde5.amd64.so is linked with Qt5
       rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
+      rm $out/lib/beyondcompare/ext/bcompare_ext_kde5.amd64.so
 
       substituteInPlace $out/bin/bcompare \
         --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
         --replace "ldd" "${glibc.bin}/bin/ldd" \
         --replace "/bin/bash" "${runtimeShell}"
-
-      # Create symlink bzip2 library
-      ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/beyondcompare/libbz2.so.1.0
     '';
 
     nativeBuildInputs = [ autoPatchelfHook ];
 
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
-      gtk2
-      pango
-      cairo
-      libsForQt5.kio
-      libsForQt5.kservice
-      libsForQt5.ki18n
-      libsForQt5.kcoreaddons
-      gdk-pixbuf
+      kdePackages.kio
+      kdePackages.kservice
+      kdePackages.ki18n
+      kdePackages.kcoreaddons
       bzip2
     ];
 
     dontBuild = true;
     dontConfigure = true;
     dontWrapQtApps = true;
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = stdenv.mkDerivation {
@@ -98,6 +93,9 @@ let
       mkdir -p $out/Applications/BCompare.app
       cp -R . $out/Applications/BCompare.app
     '';
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   meta = {
