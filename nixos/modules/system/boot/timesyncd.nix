@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with lib;
-
 let
   cfg = config.services.timesyncd;
 in
@@ -9,18 +7,18 @@ in
 
   options = {
 
-    services.timesyncd = with types; {
-      enable = mkOption {
+    services.timesyncd = {
+      enable = lib.mkOption {
         default = !config.boot.isContainer;
-        defaultText = literalExpression "!config.boot.isContainer";
-        type = bool;
+        defaultText = lib.literalExpression "!config.boot.isContainer";
+        type = lib.types.bool;
         description = ''
           Enables the systemd NTP client daemon.
         '';
       };
-      servers = mkOption {
+      servers = lib.mkOption {
         default = null;
-        type = nullOr (listOf str);
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         description = ''
           The set of NTP servers from which to synchronise.
 
@@ -31,10 +29,10 @@ in
           See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
-      fallbackServers = mkOption {
+      fallbackServers = lib.mkOption {
         default = config.networking.timeServers;
-        defaultText = literalExpression "config.networking.timeServers";
-        type = nullOr (listOf str);
+        defaultText = lib.literalExpression "config.networking.timeServers";
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         description = ''
           The set of fallback NTP servers from which to synchronise.
 
@@ -45,9 +43,9 @@ in
           See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = lines;
+        type = lib.types.lines;
         example = ''
           PollIntervalMaxSec=180
         '';
@@ -59,7 +57,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
 
@@ -79,11 +77,11 @@ in
     environment.etc."systemd/timesyncd.conf".text = ''
       [Time]
     ''
-    + optionalString (cfg.servers != null) ''
-      NTP=${concatStringsSep " " cfg.servers}
+    + lib.optionalString (cfg.servers != null) ''
+      NTP=${lib.concatStringsSep " " cfg.servers}
     ''
-    + optionalString (cfg.fallbackServers != null) ''
-      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+    + lib.optionalString (cfg.fallbackServers != null) ''
+      FallbackNTP=${lib.concatStringsSep " " cfg.fallbackServers}
     ''
     + cfg.extraConfig;
 
