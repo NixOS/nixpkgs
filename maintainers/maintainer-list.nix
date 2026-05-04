@@ -11249,6 +11249,11 @@
     github = "icewind1991";
     githubId = 1283854;
   };
+  iciclejj = {
+    name = "Stephan Bentze";
+    github = "iciclejj";
+    githubId = 55782191;
+  };
   icy-thought = {
     name = "Icy-Thought";
     email = "gilganyx@pm.me";
