@@ -21,6 +21,7 @@ let
         deprecated
         redistributable
         ;
+      licenseType = "simple";
     }
     // optionalAttrs (attrs ? spdxId) {
       inherit spdxId;
