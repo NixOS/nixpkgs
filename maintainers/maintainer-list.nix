@@ -20628,6 +20628,13 @@
     name = "Orhun Parmaksız";
     keys = [ { fingerprint = "165E 0FF7 C48C 226E 1EC3 63A7 F834 2482 4B3E 4B90"; } ];
   };
+  oricat = {
+    email = "nixpkgs@ori.cat";
+    github = "OriCat101";
+    githubId = 63188591;
+    matrix = "@ori:ori.cat";
+    name = "ori";
+  };
   orichter = {
     email = "richter-oliver@gmx.net";
     github = "ORichterSec";
