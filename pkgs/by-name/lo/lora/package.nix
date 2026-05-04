@@ -10,6 +10,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
   version = "3.021";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
