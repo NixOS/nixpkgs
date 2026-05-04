@@ -6,6 +6,8 @@
   tantivy-go,
 }:
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "anytype-cli";
   version = "0.2.3";
 
