@@ -11,7 +11,7 @@
   makeWrapper,
   net-tools,
   nixosTests,
-  nodejs_20,
+  nodejs_22,
   replace,
   ruby_3_3,
   stdenv,
@@ -266,7 +266,7 @@ let
     nativeBuildInputs = [
       rubyEnv.wrappedRuby
       rubyEnv.bundler
-      nodejs_20
+      nodejs_22
       git
       cacert
       yarnConfigHook
