@@ -138,9 +138,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      antoinerg
-      tomasajt
-    ];
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 })
