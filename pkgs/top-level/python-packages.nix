@@ -3098,6 +3098,8 @@ self: super: with self; {
 
   comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
 
+  comfyui-manager = callPackage ../development/python-modules/comfyui-manager { };
+
   comfyui-workflow-templates =
     callPackage ../development/python-modules/comfyui-workflow-templates
       { };

@@ -18,6 +18,7 @@ let
       comfy-kitchen
       comfyui-embedded-docs
       comfyui-frontend-package
+      comfyui-manager
       comfyui-workflow-templates
       einops
       filelock
