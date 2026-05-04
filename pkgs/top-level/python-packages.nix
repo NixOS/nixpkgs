@@ -11008,7 +11008,7 @@ self: super: with self; {
     callPackage ../by-name/ne/netbox_4_5/plugins/netbox-plugin-prometheus-sd/package.nix
       { };
 
-  netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
+  netbox-qrcode = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-qrcode/package.nix { };
 
   netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
 
