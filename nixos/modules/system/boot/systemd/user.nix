@@ -64,14 +64,26 @@ let
     };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "systemd"
+      "user"
+      "extraConfig"
+    ] "Use systemd.user.settings.Manager instead.")
+  ];
+
   options = {
-    systemd.user.extraConfig = lib.mkOption {
-      default = "";
-      type = lib.types.lines;
-      example = "DefaultTimeoutStartSec=60";
+    systemd.user.settings.Manager = lib.mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
+      };
+      example = {
+        DefaultTimeoutStartSec = 60;
+      };
       description = ''
-        Extra config options for systemd user instances. See {manpage}`systemd-user.conf(5)` for
-        available options.
+        Settings for systemd user instances. See {manpage}`systemd-user.conf(5)`
+        for available options.
       '';
     };
 
@@ -201,10 +213,7 @@ in
         upstreamWants = [ ];
       };
 
-      "systemd/user.conf".text = ''
-        [Manager]
-        ${cfg.extraConfig}
-      '';
+      "systemd/user.conf".text = utils.systemdUtils.lib.settingsToSections cfg.settings;
     };
 
     systemd.user.units =
@@ -242,7 +251,8 @@ in
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
 
     # enable systemd user tmpfiles
-    systemd.user.services.systemd-tmpfiles-setup.wantedBy = lib.optional cfg.tmpfiles.enable "basic.target";
+    systemd.user.services.systemd-tmpfiles-setup.wantedBy =
+      lib.optional cfg.tmpfiles.enable "basic.target";
 
     # /run/current-system/sw/etc/xdg is in systemd's $XDG_CONFIG_DIRS so we can
     # write the tmpfiles.d rules for everyone there
