@@ -47,28 +47,21 @@
   # Either [ "all" ], [ "default" ], or a custom list of components.
   # If you want to install all default components plus an extra one, pass [ "default" <your extra components here> ]
   # Note that changing this will also change the `buildInputs` of the derivation.
-  # The default value is not "default" because some of the components in the defualt set are currently broken.
-  components ? [
-    "intel.oneapi.lin.advisor"
-    "intel.oneapi.lin.dpcpp-cpp-compiler"
-    "intel.oneapi.lin.dpcpp_dbg"
-    "intel.oneapi.lin.vtune"
-    "intel.oneapi.lin.mkl.devel"
-  ],
+  components ? [ "default" ],
   intel-oneapi,
 }:
 intel-oneapi.mkIntelOneApi (finalAttrs: {
-  pname = "intel-oneapi-base-toolkit";
+  pname = "intel-oneapi-toolkit";
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6caa93ca-e10a-4cc5-b210-68f385feea9e/intel-oneapi-base-toolkit-2025.3.1.36_offline.sh";
-    hash = "sha256-xXV6FP4t1ChSi/bcDFpkmMexNejPTtk2Nay/PmSpCFA=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/71180075-e4e3-4c6f-bbbb-19017ed0cf7d/intel-oneapi-toolkit-2026.0.0.198_offline.sh";
+    hash = "sha256-FVpSiWvSQjndxzP0h+zLKvXK2ZV+7R4r/mDOFFNpTls=";
   };
 
-  versionYear = "2025";
-  versionMajor = "3";
-  versionMinor = "1";
-  versionRel = "36";
+  versionYear = "2026";
+  versionMajor = "0";
+  versionMinor = "0";
+  versionRel = "198";
 
   inherit components;
 
@@ -164,6 +157,8 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       sqlite
       nspr
     ];
+    ifort-compiler = [ ];
+    tbb = [ ];
     mkl = mpi ++ pti;
   };
 
@@ -173,23 +168,28 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
     # All too old, not in nixpkgs anymore
     "libffi.so.6"
     "libgdbm.so.4"
-    "libopencl-clang.so.14"
     "libreadline.so.6"
+    # Bundled only as unversioned .so in GTPin; the .so.14 soname isn't present
+    "libopencl-clang.so.14"
+    # 2026 ships libsycl.so.9; some vtune binaries still reference the old .so.8
+    "libsycl.so.8"
+    # GTPin internal, not present in the package
+    "liboutputgenerator.so"
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
     inherit (finalAttrs) pname;
-    file = "base.nix";
-    downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&oneapi-toolkit-os=linux&oneapi-lin=offline";
+    file = "toolkit.nix";
+    downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneapi-toolkit-download.html";
   };
 
-  passthru.stdenv = callPackage ./stdenv.nix { kit = intel-oneapi.base; };
+  passthru.stdenv = callPackage ./stdenv.nix { kit = finalAttrs.finalPackage; };
 
-  passthru.tests = callPackage ./tests.nix { kit = intel-oneapi.base; };
+  passthru.tests = callPackage ./tests.nix { kit = finalAttrs.finalPackage; };
 
   meta = {
-    description = "Intel oneAPI Base Toolkit";
-    homepage = "https://software.intel.com/content/www/us/en/develop/tools/oneapi/base-toolkit.html";
+    description = "Intel oneAPI Toolkit";
+    homepage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneapi-toolkit.html";
     license = with lib.licenses; [
       intel-eula
       issl
