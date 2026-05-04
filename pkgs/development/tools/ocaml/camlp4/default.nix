@@ -153,5 +153,6 @@ else
       description = "Software system for writing extensible parsers for programming languages";
       homepage = "https://github.com/ocaml/camlp4";
       platforms = ocaml.meta.platforms or [ ];
+      license = lib.licenses.WITH lib.licenses.lgpl2Only lib.licenses.ocamlLgplLinkingException;
     };
   }
