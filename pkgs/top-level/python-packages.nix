@@ -7817,6 +7817,8 @@ self: super: with self; {
     callPackage ../development/python-modules/itkwasm-image-io-emscripten
       { };
 
+  itkwasm-image-io-wasi = callPackage ../development/python-modules/itkwasm-image-io-wasi { };
+
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   itunespy = callPackage ../development/python-modules/itunespy { };
