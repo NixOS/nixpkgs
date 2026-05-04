@@ -1444,6 +1444,8 @@ let
 
         notty = callPackage ../development/ocaml-modules/notty { };
 
+        notty-community = callPackage ../development/ocaml-modules/notty-community { };
+
         npy = callPackage ../development/ocaml-modules/npy {
           inherit (pkgs.python3Packages) numpy;
         };
