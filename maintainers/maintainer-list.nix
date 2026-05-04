@@ -16804,6 +16804,13 @@
     githubId = 20665331;
     name = "Mark";
   };
+  Marker06 = {
+    email = "linuxenjoyerfi@proton.me";
+    github = "Marker06";
+    githubId = 148945811;
+    name = "Marcus";
+    matrix = "@marker06:matrix.org";
+  };
   markus1189 = {
     email = "markus1189@gmail.com";
     github = "markus1189";
