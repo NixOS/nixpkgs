@@ -86,6 +86,117 @@ Each Netbird client service by default:
 on demand, for example to connect to work-related or otherwise conflicting network only when required.
 See the option description for more information.
 
-[environment](#opt-services.netbird.clients._name_.environment) allows you to pass additional configurations
-through environment variables, but special care needs to be taken for overriding config location and
-daemon address due [hardened](#opt-services.netbird.clients._name_.hardened) option.
+## Client configuration {#module-services-netbird-client-configuration}
+
+Following [RFC 0042](https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md), the NetBird
+client module provides two escape hatches for configuring upstream settings instead of individual typed
+options:
+
+- [`extraEnvironment`](#opt-services.netbird.clients._name_.extraEnvironment) — set `NB_*` environment
+  variables that the NetBird client reads at startup. Values set here take precedence over the
+  module's computed defaults.
+- [`config`](#opt-services.netbird.clients._name_.config) — set keys in `config.json` (merged via
+  `preStart`). This is useful for settings that are not exposed as environment variables.
+
+See the
+[NetBird environment variable reference](https://docs.netbird.io/how-to/cli/environment-variables)
+for the full list of supported `NB_*` variables.
+
+### DNS {#module-services-netbird-dns}
+
+```nix
+{
+  services.netbird.clients.work = {
+    port = 51820;
+    extraEnvironment = {
+      NB_DISABLE_DNS = "true";
+      NB_EXTRA_DNS_LABELS = "myserver=10.0.0.5";
+      NB_DNS_ROUTER_INTERVAL = "5000";
+    };
+  };
+}
+```
+
+### Routing and firewall {#module-services-netbird-routing}
+
+```nix
+{
+  services.netbird.clients.restricted = {
+    port = 51820;
+    extraEnvironment = {
+      NB_DISABLE_CLIENT_ROUTES = "true";
+      NB_DISABLE_SERVER_ROUTES = "true";
+      NB_BLOCK_LAN_ACCESS = "true";
+      NB_BLOCK_INBOUND = "true";
+      NB_DISABLE_FIREWALL = "true";
+    };
+  };
+}
+```
+
+### Rosenpass (post-quantum cryptography) {#module-services-netbird-rosenpass}
+
+```nix
+{
+  services.netbird.clients.secure = {
+    port = 51820;
+    extraEnvironment = {
+      NB_ENABLE_ROSENPASS = "true";
+      NB_ROSENPASS_PERMISSIVE = "true"; # allow connections with non-Rosenpass peers
+    };
+  };
+}
+```
+
+See [the NetBird docs](https://docs.netbird.io/how-to/enable-post-quantum-cryptography) for more information.
+
+### SSH {#module-services-netbird-ssh}
+
+```nix
+{
+  services.netbird.clients.withSsh = {
+    port = 51820;
+    extraEnvironment = {
+      NB_ALLOW_SERVER_SSH = "true";
+      NB_SSH_ALLOW_SFTP = "true";
+      NB_SSH_ALLOW_LOCAL_PORT_FORWARDING = "true";
+    };
+  };
+}
+```
+
+### Connection and hostname {#module-services-netbird-connection}
+
+```nix
+{
+  services.netbird.clients.lazy = {
+    port = 51820;
+    extraEnvironment = {
+      NB_ENABLE_LAZY_CONNECTION = "true";
+      NB_DISABLE_NETWORK_MONITOR = "true";
+      NB_HOSTNAME = "my-custom-hostname";
+      NB_ANONYMIZE = "true";
+    };
+  };
+}
+```
+
+### Self-hosted deployments (config.json) {#module-services-netbird-selfhosted}
+
+For self-hosted NetBird deployments, use the `config` option to set `config.json` keys:
+
+```nix
+{
+  services.netbird.clients.selfhosted = {
+    port = 51820;
+    config = {
+      ManagementURL = "https://management.example.com:443";
+      AdminURL = "https://admin.example.com:443";
+      Mtu = 1280;
+    };
+  };
+}
+```
+
+Consult [the source code](https://github.com/netbirdio/netbird/blob/88747e3e0191abc64f1e8c7ecc65e5e50a1527fd/client/internal/config.go#L49-L82)
+or inspect an existing `config.json` for a complete list of available keys.
