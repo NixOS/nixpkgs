@@ -29,6 +29,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ThmfHgl8LbgDRUINen4JvOo6f7n5VJ+ULjaENCvfZvg=";
   };
 
+  patches = [
+    ./qualify-parsetab-imports.patch
+  ];
+
   build-system = [
     setuptools
   ];
