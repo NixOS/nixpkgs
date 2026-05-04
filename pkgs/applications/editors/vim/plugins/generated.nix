@@ -25829,6 +25829,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  zig-vim = buildVimPlugin {
+    pname = "zig.vim";
+    version = "0-unstable-2026-05-02";
+    src = fetchgit {
+      url = "https://codeberg.org/ziglang/zig.vim/";
+      rev = "73f6856496aee1d94884f072dfad18df7977d4e3";
+      hash = "sha256-I+nPSItC/0M8QTs1mVX7F+KjtezYpq9GFpUdsFl6bTE=";
+    };
+    meta.homepage = "https://codeberg.org/ziglang/zig.vim/";
+    meta.license = lib.licenses.unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   zk-nvim = buildVimPlugin {
     pname = "zk-nvim";
     version = "0.4.7-unstable-2026-03-13";
