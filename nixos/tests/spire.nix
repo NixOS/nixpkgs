@@ -45,6 +45,14 @@ let
         config.services.spire.agent.settings.agent.socket_path;
       virtualisation.credentials."spire.trust_bundle".source = "./trust_bundle";
       systemd.services.spire-agent.serviceConfig.ImportCredential = [ "spire.trust_bundle" ];
+
+      # A non-root, non-spire-agent user used to verify that arbitrary
+      # workloads can reach the Workload API socket.
+      users.users.workload = {
+        isNormalUser = true;
+        group = "workload";
+      };
+      users.groups.workload = { };
     };
 in
 {
@@ -180,25 +188,36 @@ in
         join_token = server.succeed("spire-server token generate -socketPath ${adminSocket}").split()[1]
         with open(agent.state_dir / "join_token", "w") as f:
           f.write(join_token)
-        parent_id = f"spiffe://${trustDomain}/spire/agent/join_token/{join_token}"
-        server.succeed(f"spire-server entry create -socketPath ${adminSocket} -selector 'systemd:id:backdoor.service' -parentID {parent_id} -spiffeID {spiffe_id}")
+        return f"spiffe://${trustDomain}/spire/agent/join_token/{join_token}"
 
 
       def provision_tpm(agent):
         agent.wait_for_unit("tpm2.target")
         ek_hash = agent.succeed("get_tpm_pubhash").strip()
-        parent_id = f"spiffe://${trustDomain}/spire/agent/tpm/{ek_hash}"
-        server.succeed(f"spire-server entry create -socketPath ${adminSocket} -selector 'systemd:id:backdoor.service' -parentID '{parent_id}' -spiffeID {spiffe_id}")
+        return f"spiffe://${trustDomain}/spire/agent/tpm/{ek_hash}"
+
+
+      def register_entry(parent_id, selector, spiffe_id):
+        server.succeed(f"spire-server entry create -socketPath ${adminSocket} -selector '{selector}' -parentID '{parent_id}' -spiffeID '{spiffe_id}'")
 
 
       def test_agent(name, agent_node, provision_fn):
         with subtest(f"Setup SPIRE agent with {name} attestation"):
           provision_trust_bundle(agent_node)
-          provision_fn(agent_node)
+          parent_id = provision_fn(agent_node)
+          register_entry(parent_id, "systemd:id:backdoor.service", spiffe_id)
+          register_entry(parent_id, "unix:user:workload", "spiffe://${trustDomain}/workload")
           agent_node.wait_for_unit("spire-agent.service")
           agent_node.wait_until_succeeds("spire-agent healthcheck -socketPath $SPIFFE_ENDPOINT_SOCKET", timeout=90)
         with subtest(f"Test certificate authentication from {name} agent"):
           agent_node.wait_until_succeeds("spire-agent api fetch x509 -socketPath $SPIFFE_ENDPOINT_SOCKET -write .")
+        with subtest(f"Workload running as non-root, non-spire-agent user can reach Workload API ({name})"):
+          # SPIRE's security model relies on workload attestation, not unix
+          # permissions on the socket. Verify an unrelated user can connect.
+          agent_node.wait_until_succeeds(
+            "su -s /bin/sh workload -c "
+            "'spire-agent api fetch x509 -socketPath \"$SPIFFE_ENDPOINT_SOCKET\"'"
+          )
         # TODO: Add something to communicate with
 
 
