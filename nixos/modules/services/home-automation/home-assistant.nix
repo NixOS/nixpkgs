@@ -430,13 +430,34 @@ in
 
             lovelace = {
               # https://www.home-assistant.io/lovelace/dashboards/
-              dashboards = mkOption {
+              dashboards.nixos-lovelace = mkOption {
                 type = types.nullOr format.type;
-                default = null;
+                default =
+                  if cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null then
+                    {
+                      mode = "yaml";
+                      filename = "ui-lovelace.yaml";
+                      title = "Overview";
+                      icon = "mdi:view-dashboard";
+                      show_in_sidebar = true;
+                    }
+                  else
+                    null;
+                defaultText = literalExpression ''
+                  if cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null then {
+                    mode = "yaml";
+                    filename = "ui-lovelace.yaml";
+                    title = "Overview";
+                    icon = "mdi:view-dashboard";
+                    show_in_sidebar = true;
+                  } else null
+                '';
                 description = ''
-                  Lovelace dashboard definitions. When {option}`lovelaceConfig` or
-                  {option}`lovelaceConfigFile` is set, a YAML-mode dashboard named
-                  `nixos-lovelace` is added by default.
+                  Default NixOS-managed Lovelace dashboard. Automatically populated
+                  when {option}`lovelaceConfig` or {option}`lovelaceConfigFile` is set.
+
+                  Additional dashboards can be defined under
+                  `config.lovelace.dashboards.<name>`.
 
                   See <https://www.home-assistant.io/lovelace/dashboards/> for details.
                 '';
@@ -631,18 +652,6 @@ in
         See https://www.home-assistant.io/dashboards/dashboards/ for details.
       ''
     ];
-
-    services.home-assistant.config.lovelace.dashboards =
-      mkIf (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null)
-        {
-          nixos-lovelace = mkDefault {
-            mode = "yaml";
-            filename = "ui-lovelace.yaml";
-            title = "Overview";
-            icon = "mdi:view-dashboard";
-            show_in_sidebar = true;
-          };
-        };
 
     assertions = [
       {
