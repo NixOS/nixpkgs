@@ -76,6 +76,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "gf2";
-    maintainers = with lib.maintainers; [ _0xd61 ];
+    maintainers = [ ];
   };
 }
