@@ -10,7 +10,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "2.17.0";
   pyproject = false;
 
-  pythonPath = [ python3Packages.setuptools ];
+  pythonPath = [
+    python3Packages.setuptools
+  ];
+
   nativeBuildInputs = [
     python3Packages.wrapPython
     makeWrapper
@@ -56,6 +59,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://tautulli.com/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rhoriguchi ];
+    maintainers = [ lib.maintainers.rhoriguchi ];
   };
 })
