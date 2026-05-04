@@ -55,4 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  meta = {
+    license = lib.licenses.mit;
+  };
 })
