@@ -8,6 +8,8 @@
   makeWrapper,
 }:
 maven.buildMavenPackage {
+  __structuredAttrs = true;
+
   pname = "reitti";
   version = "3.4.1";
 
