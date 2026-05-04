@@ -312,8 +312,6 @@ in
 
     };
 
-    boot.kernel.sysctl."net.ipv4.ip_forward" = lib.mkIf cfg.router.enable (lib.mkDefault 1);
-
   };
 
 }
