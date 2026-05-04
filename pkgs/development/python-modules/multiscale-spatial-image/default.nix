@@ -1,23 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
+  dask-image,
   dask,
+  fetchFromGitHub,
+  fsspec,
+  hatch-vcs,
+  hatchling,
+  ngff-zarr,
   numpy,
   python-dateutil,
   spatial-image,
-  xarray,
+  writableTmpDirAsHomeHook,
   xarray-dataclass,
+  xarray,
   zarr,
-  dask-image,
-  fsspec,
-  jsonschema,
-  nbmake,
-  pooch,
-  pytestCheckHook,
-  pytest-mypy,
-  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -32,10 +29,20 @@ buildPythonPackage rec {
     hash = "sha256-uF9ZccLvP1ref6qn3l6EpedsoK29Q8lAdr68JjsYMis=";
   };
 
-  build-system = [ hatchling ];
+  pythonRelaxDeps = [
+    "dask"
+    "ngff-zarr"
+    "xarray"
+  ];
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     dask
+    ngff-zarr
     numpy
     python-dateutil
     spatial-image
@@ -49,20 +56,9 @@ buildPythonPackage rec {
     #itk = [
     #  itk-filtering # not in nixpkgs yet
     #];
-    test = [
-      dask-image
-      fsspec
-      #ipfsspec # not in nixpkgs
-      #itk-filtering # not in nixpkgs
-      jsonschema
-      nbmake
-      pooch
-      pytest-mypy
-      urllib3
-    ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.test;
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   doCheck = false; # all test files try to download data
 
