@@ -14,13 +14,13 @@
   common-updater-scripts,
 }:
 let
-  version = "1.18.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "inngest";
     repo = "inngest";
     tag = "v${version}";
-    hash = "sha256-r7SvSFYyoe4PMZ7MtM9aJa1yE9mV5HSGYiO/PagYMz4=";
+    hash = "sha256-EDSlcfo22qyUR445UjtJ+dxUlLEep5ypcUBT/mYtvCQ=";
   };
 
   website = fetchFromGitHub {
