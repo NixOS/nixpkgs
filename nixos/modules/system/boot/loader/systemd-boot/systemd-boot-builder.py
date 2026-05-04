@@ -521,24 +521,35 @@ def install_bootloader(args: argparse.Namespace) -> None:
     default_entry_id: str | None = None
 
     for gen in gens:
-        bootspec = get_bootspec(gen.profile, gen.generation)
-        is_default = Path(bootspec.init).parent == default_config
-        new_boot_files, new_bootctl_id = boot_file(*gen, machine_id, bootspec)
-        boot_files.extend(new_boot_files)
-        if is_default:
-            default_entry_id = new_bootctl_id
-        for specialisation_name, specialisation in bootspec.specialisations.items():
-            is_default = Path(specialisation.init).parent == default_config
-            new_boot_files, new_bootctl_id = boot_file(
-                gen.profile,
-                gen.generation,
-                specialisation_name,
-                machine_id,
-                bootspec,
-            )
+        try:
+            bootspec = get_bootspec(gen.profile, gen.generation)
+            is_default = Path(bootspec.init).parent == default_config
+            new_boot_files, new_bootctl_id = boot_file(*gen, machine_id, bootspec)
             boot_files.extend(new_boot_files)
             if is_default:
                 default_entry_id = new_bootctl_id
+            for specialisation_name, specialisation in bootspec.specialisations.items():
+                is_default = Path(specialisation.init).parent == default_config
+                new_boot_files, new_bootctl_id = boot_file(
+                    gen.profile,
+                    gen.generation,
+                    specialisation_name,
+                    machine_id,
+                    bootspec,
+                )
+                boot_files.extend(new_boot_files)
+                if is_default:
+                    default_entry_id = new_bootctl_id
+        except OSError as e:
+            # See https://github.com/NixOS/nixpkgs/issues/114552
+            if e.errno != errno.EINVAL:
+                raise
+            profile = f"'{gen.profile}'" if gen.profile else "default"
+            print(
+                f"ignoring generation {gen.generation} of the {profile} profile "
+                f"because of the following error:\n{e}",
+                file=sys.stderr,
+            )
 
     write_loader_conf(default_entry_id)
 
