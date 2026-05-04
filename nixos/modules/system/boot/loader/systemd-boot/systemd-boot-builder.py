@@ -604,16 +604,10 @@ def remove_extra_files() -> None:
 
 
 def garbage_collect(gc_roots: BootFileList) -> None:
-    # Check if a file is in the list of gc roots.
-    def has_gc_root(p: Path) -> bool:
-        for gc_root in gc_roots:
-            gc_root_path = BOOT_MOUNT_POINT / gc_root.path
-            if gc_root_path == p:
-                return True
-        return False
+    keep = {BOOT_MOUNT_POINT / gc_root.path for gc_root in gc_roots}
 
     def delete_path(e: os.DirEntry) -> None:
-        if e.is_file(follow_symlinks=True) and not has_gc_root(Path(e.path)):
+        if e.is_file(follow_symlinks=True) and Path(e.path) not in keep:
             os.remove(e.path)
 
     for e in os.scandir(BOOT_MOUNT_POINT / NIXOS_DIR):
