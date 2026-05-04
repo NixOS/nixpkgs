@@ -1,13 +1,15 @@
 {
   lib,
   autoAddDriverRunpath,
-  config,
   cudaPackages,
   fetchFromGitHub,
   nix-update-script,
+
+  config,
+  cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
 }:
 let
-  inherit (lib.lists) last map optionals;
+  inherit (lib.lists) head map optionals;
   inherit (lib.trivial) boolToString;
   inherit (config) cudaSupport;
   inherit (cudaPackages)
@@ -17,7 +19,17 @@ let
     cuda_nvcc
     libcublas
     ;
-  inherit (cudaPackages.flags) cudaCapabilities dropDots isJetsonBuild;
+  inherit (cudaPackages.flags) dropDots isJetsonBuild;
+  cudaCapability = lib.pipe cudaCapabilities [
+    # Filter out *a variants since gpu-burn doesn't use them
+    (builtins.filter (c: !lib.hasSuffix "a" c))
+
+    # 9.0 -> 90
+    (map dropDots)
+
+    # gpu-burn targets a single capability, so pick the first one in the list
+    head
+  ];
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
@@ -58,7 +70,7 @@ backendStdenv.mkDerivation {
   makeFlags = [
     # NOTE: CUDAPATH assumes cuda_cudart is a single output containing all of lib, dev, and stubs.
     "CUDAPATH=${cuda_cudart}"
-    "COMPUTE=${last (map dropDots cudaCapabilities)}"
+    "COMPUTE=${cudaCapability}"
     "IS_JETSON=${boolToString isJetsonBuild}"
   ];
 
@@ -70,8 +82,11 @@ backendStdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru = {
+    inherit cudaCapability;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
   };
 
   # NOTE: Certain packages may be missing from cudaPackages on non-Linux platforms. To avoid evaluation failure,
