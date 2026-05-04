@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Punch clock to track time spent on projects";
     mainProgram = "kapow";
     homepage = "https://gottcode.org/kapow/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
   };
