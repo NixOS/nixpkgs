@@ -380,7 +380,8 @@ in
   nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
   nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
 
-  nix-perl-bindings = callPackage ../src/perl/package.nix { };
+  nix-perl-bindings =
+    if (lib.versionAtLeast version "2.35pre") then null else callPackage ../src/perl/package.nix { };
 
   nix-everything = callPackage ../packaging/everything.nix { } // {
     # Note: no `passthru.overrideAllMesonComponents` etc

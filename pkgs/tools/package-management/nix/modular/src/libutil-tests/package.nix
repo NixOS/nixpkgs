@@ -10,6 +10,7 @@
 
   rapidcheck,
   gtest,
+  zstd,
   runCommand,
 
   # Configuration Options
@@ -30,7 +31,8 @@ mkMesonExecutable (finalAttrs: {
     nix-util-test-support
     rapidcheck
     gtest
-  ];
+  ]
+  ++ lib.optional (lib.versionAtLeast version "2.35pre") zstd;
 
   mesonFlags = [
   ];
