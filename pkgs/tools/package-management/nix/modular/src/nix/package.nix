@@ -1,6 +1,7 @@
 {
   lib,
   mkMesonExecutable,
+  stdenv,
 
   nix-store,
   nix-expr,
@@ -12,6 +13,11 @@
   # Configuration Options
 
   version,
+
+  # Whether to link against mimalloc for malloc override.
+  # Significantly improves evaluation performance on allocation-heavy
+  # workloads (~10-15% on large evaluations).
+  withMimalloc ? ((lib.versionAtLeast version "2.35pre") && !stdenv.hostPlatform.isWindows),
 }:
 
 mkMesonExecutable (finalAttrs: {
@@ -25,10 +31,11 @@ mkMesonExecutable (finalAttrs: {
     nix-expr
     nix-main
     nix-cmd
-    mimalloc
-  ];
+  ]
+  ++ lib.optional withMimalloc mimalloc;
 
-  mesonFlags = [
+  mesonFlags = lib.optionals withMimalloc [
+    (lib.mesonEnable "mimalloc" withMimalloc)
   ];
 
   meta = {
