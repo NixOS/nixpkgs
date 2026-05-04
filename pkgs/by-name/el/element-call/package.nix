@@ -21,6 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/5RkZNf/ErSxNwW0ZfPwF52k3fZzAQAFMmbJ9xM7f74=";
   };
 
+  patches = [
+    # Remove after updating since project has moved to pnpm
+    # https://github.com/element-hq/element-call/blob/v0.19.2/package.json#L159
+    ./yarn-4.14-support.patch
+  ];
+
   matrixJsSdkRevision = "6e3efef0c5f660df47cf00874927dec1c75cc3cf";
   matrixJsSdkOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.offlineCache}/checkouts/${finalAttrs.matrixJsSdkRevision}/yarn.lock";
@@ -47,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Ose2PlsNHlCllynl+aIx/nToqtsqs7f43znOTLm2WEE=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-2P4kwccT2WP2SlJJ1biZCRU8O+Y43sGJmfRTUujklUg=";
   };
 
   nativeBuildInputs = [

@@ -8,10 +8,17 @@
   src,
 }:
 
+let
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/tilt-dev/tilt/blob/master/web/package.json#L94
+    ./yarn-4.14-support.patch
+  ];
+in
 stdenvNoCC.mkDerivation {
   pname = "tilt-assets";
   src = "${src}/web";
-  inherit version;
+  inherit version patches;
 
   nativeBuildInputs = [
     nodejs
@@ -21,6 +28,8 @@ stdenvNoCC.mkDerivation {
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "tilt-assets-deps";
     src = "${src}/web";
+
+    inherit patches;
 
     nativeBuildInputs = [ yarn-berry ];
 

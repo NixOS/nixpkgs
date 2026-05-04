@@ -36,6 +36,12 @@ buildGoModule (finalAttrs: {
     hash = "sha256-fGRvCDIOQcF743SimatyNmX0gZtO0tvgEAFuk38rl88=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/grafana/grafana/blob/main/package.json#L483
+    ./yarn-4.14-support.patch
+  ];
+
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
@@ -48,8 +54,8 @@ buildGoModule (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-5aInVAn9UMGp8U+LEIR1D19RI9vKVrNpt5Frbr1sBJs=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-l+X7vgU+wuuq+Usdp0ffY1SpT70QlmdsjrHnyyJufjw=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
