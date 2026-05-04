@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkqueue";
-  version = "2.6.4";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "mheily";
     repo = "libkqueue";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Lex/EmVMESScungJ6r/Br7TaoC4fcDHvDBJpryoe84E=";
+    sha256 = "sha256-hT7/0Cy4UCKN16Rlwyjj1AAYC4/n1+170xsnYrjiglQ=";
   };
 
   nativeBuildInputs = [ cmake ];
