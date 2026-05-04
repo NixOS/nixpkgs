@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
     cargo clippy -- -Dwarnings
   '';
 
-  passthru.tests = { inherit (nixosTests) switchTest; };
+  passthru.tests = { inherit (nixosTests) switchTest activation-template-dropin; };
 
   meta = {
     description = "NixOS switch-to-configuration program";

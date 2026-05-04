@@ -12,7 +12,7 @@ in
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dmarc-metrics-exporter";
-  version = "1.2.0";
+  version = "1.3.0";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cIsI4TNYuLK0fpUg9lnbl5KSBtzQoT/pTByI9hiy/7o=";
+    hash = "sha256-B2a/F0Ebz6zpe4apVRl7+lX0IS099EmuWOatW2HZdVM=";
   };
 
   pythonRelaxDeps = true;
@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       bite-parser
       dataclasses-serialization
       prometheus-client
+      pydantic
       structlog
       uvicorn
       xsdata
