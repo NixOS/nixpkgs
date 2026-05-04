@@ -8,25 +8,22 @@
   runtimeShell,
   binlore,
   esh,
+  coreutils,
+  util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "esh";
-  version = "0.1.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "esh";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1ddaji5nplf1dyvgkrhqjy8m5djaycqcfhjv30yprj1avjymlj6w";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-suwbUT8miOYMdTMw+vJm2URiDInhEczn0JG9K5KpEto=";
   };
 
   nativeBuildInputs = [ asciidoctor ];
-
-  buildInputs = [
-    gawk
-    gnused
-  ];
 
   makeFlags = [
     "prefix=$(out)"
@@ -34,13 +31,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs .
+    substituteInPlace tests/run-tests \
+        --replace-fail 'set -eu' "set -eu;export ESH_SHELL=${runtimeShell}"
     substituteInPlace esh \
-        --replace '"/bin/sh"' '"${runtimeShell}"' \
-        --replace '"awk"' '"${gawk}/bin/awk"' \
-        --replace 'sed' '${gnused}/bin/sed'
-    substituteInPlace tests/test-dump.exp \
-        --replace '#!/bin/sh' '#!${runtimeShell}'
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
+        --replace-fail '"awk"' '"${gawk}/bin/awk"' \
+        --replace-fail 'sed -' '${gnused}/bin/sed -'
+    substituteInPlace tests/test-cli-no-args.exp2 \
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
+        --replace-fail '"awk"' '"${gawk}/bin/awk"'
+    substituteInPlace tests/test-cli-help.exp \
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
+        --replace-fail '"awk"' '"${gawk}/bin/awk"'
+    substituteInPlace tests/test-cli-dump.exp \
+        --replace-fail '!/bin/sh' '!${runtimeShell}'
+    substituteInPlace tests/test-eval-error.t \
+        --replace-fail 'cut' '${coreutils}/bin/cut' \
+        --replace-fail ' rev' ' ${util-linux}/bin/rev'
+    substituteInPlace tests/test-eval-error-nested.t \
+        --replace-fail 'cut' '${coreutils}/bin/cut' \
+        --replace-fail ' rev' ' ${util-linux}/bin/rev'
   '';
 
   doCheck = true;
