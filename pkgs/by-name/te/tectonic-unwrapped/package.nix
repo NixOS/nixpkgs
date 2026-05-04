@@ -14,6 +14,7 @@
 
   # nativeBuildInputs
   pkg-config,
+  installShellFiles,
 
   # buildInputs
   fontconfig,
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildFeatures = [ "external-harfbuzz" ];
@@ -92,6 +94,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail Exec=tectonic Exec=$out/bin/tectonic
     install -Dm644 dist/appimage/tectonic.desktop -t $out/share/applications/
     install -Dm644 dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd nextonic \
+      --bash <($out/bin/nextonic show shell-completions bash) \
+      --zsh <($out/bin/nextonic show shell-completions zsh) \
+      --fish <($out/bin/nextonic show shell-completions fish)
   '';
 
   checkFlags = [
