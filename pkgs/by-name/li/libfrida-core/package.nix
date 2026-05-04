@@ -6,24 +6,24 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "17.9.1";
+  version = "17.9.5";
   source =
     {
       x86_64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-        hash = "sha256-94Zk7onepdNVEeDb+Vn4h680UoXCZPeZW+eGpaUrnwI=";
+        hash = "sha256-6YgD9srSHEGhtn6qSVljlVr6tu166VoY3EhashiLsCE=";
       };
       aarch64-linux = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-arm64.tar.xz";
-        hash = "sha256-o9kJvxqHICzuFItPj6r76D8aEEF/8QsRwJvE4oxphfA=";
+        hash = "sha256-h4VPdfiz+a13mVIaL4YYTxhCsVJZh/u1t9fhGT95e7M=";
       };
       x86_64-darwin = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-x86_64.tar.xz";
-        hash = "sha256-9W6o5giLSR/5bWsgRTMHI3GS7565Nkdb2kZCIm5V/cQ=";
+        hash = "sha256-y/IYH+qEtgiFgxdGZ1O9J01EYDOTGue2O3X7U5d8e8E=";
       };
       aarch64-darwin = {
         url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-arm64.tar.xz";
-        hash = "sha256-bTxBvz+wpdNGUDHTFB1nN1UroMC3Bi2H/bzTVSCeMno=";
+        hash = "sha256-my5OQgYEx8mSnPfk3UtM20wc0Q5hnAuCkOohoRjOgu4=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");
