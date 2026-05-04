@@ -3,6 +3,7 @@ import argparse
 import ctypes
 import datetime
 import errno
+import functools
 import hashlib
 import os
 import re
@@ -330,6 +331,7 @@ def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
     )
 
 
+@functools.lru_cache(maxsize=None)
 def boot_path(file: Path) -> Path:
     store_file_path = file.resolve()
     suffix = store_file_path.name
