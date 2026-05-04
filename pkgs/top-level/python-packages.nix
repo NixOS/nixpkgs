@@ -10986,7 +10986,7 @@ self: super: with self; {
     callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contextmenus/package.nix
       { };
 
-  netbox-contract = callPackage ../development/python-modules/netbox-contract { };
+  netbox-contract = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contract/package.nix { };
 
   netbox-dns = callPackage ../development/python-modules/netbox-dns { };
 
