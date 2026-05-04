@@ -4,6 +4,7 @@
   pkg-config,
   fontconfig,
   libiconv,
+  oniguruma,
   stdenv,
   libxcb,
   lib,
@@ -32,7 +33,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     fontconfig
     libxcb
+    oniguruma
   ];
+
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  };
 
   doCheck = false;
 
