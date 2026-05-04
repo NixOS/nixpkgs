@@ -248,7 +248,7 @@ class TerminalLogger(AbstractLogger):
         tic = time.time()
         yield
         toc = time.time()
-        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
+        self.info(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
     def debug(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.DEBUG:
@@ -379,6 +379,6 @@ class XMLLogger(AbstractLogger):
         yield
         self.drain_log_queue()
         toc = time.time()
-        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
+        self.info(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
         self.xml.endElement("nest")
