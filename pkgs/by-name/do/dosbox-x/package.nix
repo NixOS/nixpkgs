@@ -9,6 +9,7 @@
   fluidsynth,
   freetype,
   glib,
+  libGL,
   libicns,
   libpcap,
   libpng,
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    libGL
     libxkbfile
     libxrandr
   ];
