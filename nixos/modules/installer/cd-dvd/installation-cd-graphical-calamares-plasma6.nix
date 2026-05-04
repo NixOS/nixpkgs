@@ -54,4 +54,14 @@
       }
     '';
 
+  # Auto-login leaves pam_kwallet with no password to unlock the wallet,
+  # so plasma-nm blocks indefinitely when saving Wi-Fi PSKs via Secret
+  # Service and the installer GUI hangs on "waiting for authorization".
+  # The live session has no secrets worth persisting.
+  # https://github.com/NixOS/nixpkgs/issues/219346
+  environment.etc."xdg/kwalletrc".text = ''
+    [Wallet]
+    Enabled=false
+  '';
+
 }
