@@ -128,6 +128,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${initBinary}/init init/init
   '';
 
+  postInstall = ''
+    ln -s $out/lib/libkrun-efi.dylib $out/lib/libkrun.dylib
+  '';
+
   passthru = {
     tests.withoutGpu = libkrun-efi.override { withGpu = false; };
     updateScript = nix-update-script { };
