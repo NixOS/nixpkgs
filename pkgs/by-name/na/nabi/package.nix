@@ -7,6 +7,7 @@
   libhangul,
   autoconf,
   automake,
+  gettext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoconf
     automake
+    gettext
   ];
 
   buildInputs = [
@@ -33,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs ./autogen.sh
+    substituteInPlace ./autogen.sh --replace-fail "autopoint" "autopoint --force"
+    substituteInPlace ./autogen.sh --replace-fail "aclocal" "aclocal -I m4"
   '';
 
   preConfigure = ''
