@@ -11,7 +11,7 @@
 
 let
   pname = "quba";
-  version = "1.5.0";
+  version = "1.5.1";
 
   passthru.updateScript = writeShellScript "update-quiet" ''
     ${lib.getExe nix-update} --system=x86_64-linux quba
@@ -31,7 +31,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}.AppImage";
-    hash = "sha256-xB1r8DNFOFQQx+MeGC1mWhf7PuMavM7DyYRBlEjAZ8k=";
+    hash = "sha256-YBsmFc0xQnTYk+vBp6ARf4Ykou8UBq8k//xaXRgdze0=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -63,7 +63,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}-universal.dmg";
-      hash = "sha256-niuU1zkxNRmCYxzto3g6i6Z3k5KCAgVIVQMgOLZJnSE=";
+      hash = "sha256-dVi4PAOEfIcqgP5ljqvN4X2y4fAuq1p5xDFBUI/YW6I=";
     };
 
     unpackCmd = "7zz x -bd -osource -xr'!*/Applications' -xr'!*com.apple.provenance' $curSrc";
