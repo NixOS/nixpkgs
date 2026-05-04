@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "wireproxy";
-  version = "1.0.10";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "pufferffish";
     repo = "wireproxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-F8WatQsXgq3ex2uAy8eoS2DkG7uClNwZ74eG/mJN83o=";
+    hash = "sha256-R1G/VtyQsl7yoDwZw+24qTdeq//qYQTQwzAPvH8f+ls=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=v${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-uCU5WLCKl5T4I1OccVl7WU0GM/t4RyAEmzHkJ22py30=";
+  vendorHash = "sha256-T6RN7f05bNVL7gfhaAR0+lKZWqXvMcgjiyPldCmmvU4=";
 
   passthru.tests.version = testers.testVersion {
     package = wireproxy;
