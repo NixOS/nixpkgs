@@ -133,7 +133,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://conan.io";
     changelog = "https://github.com/conan-io/conan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ HaoZeke ];
+    maintainers = [ ];
     mainProgram = "conan";
   };
 })
