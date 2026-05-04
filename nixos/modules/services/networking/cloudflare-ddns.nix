@@ -17,13 +17,29 @@ in
     package = lib.mkPackageOption pkgs "cloudflare-ddns" { };
 
     credentialsFile = lib.mkOption {
-      type = lib.types.path;
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Path to a file containing the Cloudflare API authentication token.
         The file content should be in the format `CLOUDFLARE_API_TOKEN=YOUR_SECRET_TOKEN`.
         The file does not need to be readable by the service user.
         Ensure permissions are secure (e.g., `0400` or `0440`) and ownership is appropriate (e.g., owned by root).
+
+        Either this option or [](#opt-services.cloudflare-ddns.apiTokenFile) must be set.
       '';
+      default = null;
+      example = "/run/secrets/cloudflare-ddns-token";
+    };
+    apiTokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      description = ''
+        Path to a file containing the Cloudflare API authentication token.
+        The file must only contain the token: `YOUR_SECRET_TOKEN`.
+        The file does not need to be readable by the service user.
+        Ensure permissions are secure (e.g., `0400` or `0440`) and ownership is appropriate (e.g., owned by root).
+
+        Either this option or [](#opt-services.cloudflare-ddns.credentialsFile) must be set.
+      '';
+      default = null;
       example = "/run/secrets/cloudflare-ddns-token";
     };
 
@@ -233,6 +249,10 @@ in
         assertion = cfg.provider.ipv4 != "none" || cfg.provider.ipv6 != "none";
         message = "services.cloudflare-ddns requires at least one provider (ipv4 or ipv6) to be enabled (not 'none')";
       }
+      {
+        assertion = cfg.credentialsFile != null || cfg.apiTokenFile != null;
+        message = "services.cloudflare-ddns requires either credentialsFile or apiTokenFile to be set";
+      }
     ];
 
     systemd.services.cloudflare-ddns = {
@@ -242,6 +262,8 @@ in
       wants = [ "network-online.target" ];
 
       environment = lib.filterAttrs (_: value: value != "") {
+        CLOUDFLARE_API_TOKEN_FILE = lib.mkIf (cfg.apiTokenFile != null) "%d/apiTokenFile";
+
         DOMAINS = formatList cfg.domains;
         IP4_DOMAINS = lib.optionalString (cfg.ip4Domains != null) (formatList cfg.ip4Domains);
         IP6_DOMAINS = lib.optionalString (cfg.ip6Domains != null) (formatList cfg.ip6Domains);
@@ -274,8 +296,8 @@ in
         User = cfg.user;
         Group = cfg.group;
 
-        EnvironmentFile = cfg.credentialsFile;
-
+        EnvironmentFile = lib.optional (cfg.credentialsFile != null) cfg.credentialsFile;
+        LoadCredential = lib.optional (cfg.apiTokenFile != null) "apiTokenFile:${cfg.apiTokenFile}";
 
         ExecStart = lib.getExe cfg.package;
 
