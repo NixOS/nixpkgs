@@ -551,14 +551,14 @@ def install_bootloader(args: argparse.Namespace) -> None:
                 file=sys.stderr,
             )
 
-    write_loader_conf(default_entry_id)
-
     # Garbage-collect stale kernels/initrds/entries before re-populating extra
     # files, so that user-supplied extraEntries (which may also live under
     # loader/entries and start with `nixos-`) are not removed again.
     garbage_collect(boot_files)
 
     write_boot_files(boot_files)
+
+    write_loader_conf(default_entry_id)
 
     remove_extra_files()
     run([COPY_EXTRA_FILES])
