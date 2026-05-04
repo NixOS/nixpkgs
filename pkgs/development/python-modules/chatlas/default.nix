@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chatlas";
-  version = "0.15.2";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "chatlas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BHqF60JTGlnP20BLQkcofkJUs7sAZAwhtr46y2HeNxY=";
+    hash = "sha256-8dME+zY+yzPiUK2WUKlOJS6GF7UA2qSym617P2DoV68=";
   };
 
   build-system = [
