@@ -15,23 +15,23 @@
 }:
 
 let
-  beylaVersion = "v3.6.0";
+  beylaVersion = "v3.9.5";
 in
 
 buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dAWBmvrthnsji6WuM2itRdfV4ONKDjsCzUJkUSmb1XI=";
+    hash = "sha256-q5R2noxBZ3OPyZqmB+bx3iJKWFxC2WIprcgh9RwjLzk=";
   };
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/internal/web/ui";
-    hash = "sha256-YUCft67WskKubZu8qEIUoH5NHwSfD5o0tWzyply90Zg=";
+    hash = "sha256-vResNUT4auDsK9ngnJYfMUUOYr/ikPhrvakqCjGq2Q8=";
   };
 
   frontend = buildNpmPackage {
@@ -65,7 +65,7 @@ buildGoModule (finalAttrs: {
   modRoot = "collector";
 
   proxyVendor = true;
-  vendorHash = "sha256-PbaqxDJHXB1MT5KtiEIkl+gP0DolzlC5JRItGC5VCpQ=";
+  vendorHash = "sha256-uTIdurwLfxh27fb1CPCHbHmENk3S6VYNBaGT/5yh3Sc=";
 
   subPackages = [ "." ];
 
@@ -82,6 +82,7 @@ buildGoModule (finalAttrs: {
 
   tags = [
     "embedalloyui"
+    "gore2regex"
     "netgo"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
