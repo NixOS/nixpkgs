@@ -633,6 +633,10 @@ def write_boot_files(boot_files: BootFileList) -> None:
             if boot_file.current:
                 print("failed to create initrd secrets!", file=sys.stderr)
                 sys.exit(1)
+            # Keep the entry bootable by leaving at least a pristine initrd
+            # in place. CopyWriter is a no-op if one already exists.
+            assert isinstance(boot_file.writer, InitrdWithSecretsWriter)
+            CopyWriter(source=boot_file.writer.source).write_boot_file(boot_path)
             print(
                 "warning: failed to create initrd secrets for generation "
                 f"{boot_file.system_identifier.generation}, an older generation",
