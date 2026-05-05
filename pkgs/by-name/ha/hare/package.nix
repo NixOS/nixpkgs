@@ -75,7 +75,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "0.26.0";
+  version = "0.26.0.1";
 
   outputs = [
     "out"
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~sircmpwn";
     repo = "hare";
     tag = finalAttrs.version;
-    hash = "sha256-3NrhnbAR0VIyr7JkAsY8NIkW8AelPSphzIYu8QMgXsU=";
+    hash = "sha256-ypu3GXO2hTGg26l0+FUzEMK/+HiylJIWQxe9UbhKXz4=";
   };
 
   patches = [
