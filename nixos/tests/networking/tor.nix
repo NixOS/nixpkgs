@@ -103,8 +103,8 @@
     tcp, dns = getpkts(client, 8040, 8053)
     assert tcp == 0 and dns == 0
 
-    # Send one DNS request somewhere
-    client.execute("nslookup www.google.com 8.8.8.8")
+    # Send one DNS request somewhere.
+    client.fail("nslookup www.google.com 8.8.8.8")
 
     # Ensure there are more than zero DNS packets and exactly zero TCP packets
     # being forwarded to the Tor daemon.
@@ -120,5 +120,7 @@
     tcp, dns = getpkts(client, 8040, 8053)
     assert tcp > 0 and dns > 0
 
+    # Try to resolve a .onion because why not.
+    client.succeed("nslookup duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion 8.8.8.8 | grep -F 'Address: 10.'")
   '';
 }
