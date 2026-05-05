@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses ];
 
+  # C23 (GCC 15 default) rejects K&R empty-parens declarations as no-arg functions
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   preConfigure = "export LIBS=-lncurses";
 
   meta = {
