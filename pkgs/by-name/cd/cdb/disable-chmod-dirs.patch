@@ -1,0 +1,22 @@
+diff --git a/instcopy.c b/instcopy.c
+index 5e3b245..a1270ce 100644
+--- a/instcopy.c
++++ b/instcopy.c
+@@ -31,8 +31,6 @@ void hier_h(const char *home,num mode)
+   if (mkdir(home,0700) == -1)
+     if (errno != EEXIST)
+       strerr_die4sys(111,FATAL,"unable to mkdir ",home,": ");
+-  if (chmod(home,mode) == -1)
+-    strerr_die4sys(111,FATAL,"unable to chmod ",home,": ");
+ }
+ 
+ void hier_d(const char *home,const char *subdir,num mode)
+@@ -42,8 +40,6 @@ void hier_d(const char *home,const char *subdir,num mode)
+   if (mkdir(subdir,0700) == -1)
+     if (errno != EEXIST)
+       strerr_die6sys(111,FATAL,"unable to mkdir ",home,"/",subdir,": ");
+-  if (chmod(subdir,mode) == -1)
+-    strerr_die6sys(111,FATAL,"unable to chmod ",home,"/",subdir,": ");
+ }
+ 
+ static char inbuf_space[INBUF_SIZE];

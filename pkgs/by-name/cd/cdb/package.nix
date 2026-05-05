@@ -2,72 +2,56 @@
   stdenv,
   lib,
   fetchurl,
-  fetchFromGitHub,
 }:
 
-let
-  version = "0.75";
-  sha256 = "1iajg55n47hqxcpdzmyq4g4aprx7bzxcp885i850h355k5vmf68r";
-  # Please don’t forget to update the docs:
-  # clone https://github.com/Profpatsch/cdb-docs
-  # and create a pull request with the result of running
-  # ./update <version>
-  # from the repository’s root folder.
-  docRepo = fetchFromGitHub {
-    owner = "Profpatsch";
-    repo = "cdb-docs";
-    rev = "359b6c55c9e170ebfc88f3f38face8ae2315eacb";
-    sha256 = "1y0ivviy58i0pmavhvrpznc4yjigjknff298gnw9rkg5wxm0gbbq";
-  };
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdb";
-  inherit version;
+  version = "20251021";
 
   src = fetchurl {
-    url = "https://cr.yp.to/cdb/cdb-${version}.tar.gz";
-    inherit sha256;
+    url = "https://cdb.cr.yp.to/cdb-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jlMdY5C818mky9Fv7TYybu546LDlwHg6gVimp5Q3490=";
   };
 
   outputs = [
-    "bin"
-    "doc"
     "out"
+    "doc"
+    "man"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=implicit-int"
-    "-Wno-error=implicit-function-declaration"
+  patches = [
+    # disable chmod on output directories
+    ./disable-chmod-dirs.patch
   ];
 
   postPatch = ''
-    # A little patch, borrowed from Archlinux AUR, borrowed from Gentoo Portage
-    sed -e 's/^extern int errno;$/#include <errno.h>/' -i error.h
+    # Don't hardcode gcc
+    substituteInPlace conf-cc conf-ld --replace-fail 'gcc' '${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc'
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+
+    # Set install prefix to output directory
+    echo "$out" > conf-home
+
+    runHook postConfigure
   '';
 
   postInstall = ''
-    # don't use make setup, but move the binaries ourselves
-    mkdir -p $bin/bin
-    install -m 755 -t $bin/bin/ cdbdump cdbget cdbmake cdbmake-12 cdbmake-sv cdbstats cdbtest
+    mkdir -p $man/share/man/man1 $man/share/man/man3
+    cp doc/man/*.1 $man/share/man/man1/
+    cp doc/man/*.3 $man/share/man/man3/
 
-    # patch paths in scripts
-    function cdbmake-subst {
-      substituteInPlace $bin/bin/$1 \
-        --replace /usr/local/bin/cdbmake $bin/bin/cdbmake
-    }
-    cdbmake-subst cdbmake-12
-    cdbmake-subst cdbmake-sv
-
-    # docs
-    mkdir -p $doc/share/cdb
-    cp -r "${docRepo}/docs" $doc/share/cdb/html
+    mkdir -p $doc/share/doc/cdb
+    cp doc/*.md $doc/share/doc/cdb/
+    cp -r doc/html $doc/share/doc/cdb/
   '';
 
   meta = {
-    homepage = "https://cr.yp.to/cdb.html";
+    homepage = "https://cdb.cr.yp.to/";
     license = lib.licenses.publicDomain;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
