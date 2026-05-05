@@ -22,7 +22,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/buttercup.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/buttercup.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace 'Exec=AppRun' 'Exec=buttercup-desktop'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
