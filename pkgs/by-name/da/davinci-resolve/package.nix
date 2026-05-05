@@ -72,7 +72,7 @@ let
       ];
 
       src =
-        runCommandLocal "${pname}-src.zip"
+        runCommandLocal "davinci-resolve-src.zip"
           rec {
             outputHashMode = "recursive";
             outputHashAlgo = "sha256";
