@@ -14297,6 +14297,11 @@
     githubId = 148352;
     name = "Jim Fowler";
   };
+  kitlangton = {
+    github = "kitlangton";
+    githubId = 7587245;
+    name = "Kit Langton";
+  };
   kitsunoff = {
     github = "kitsunoff";
     githubId = 58953114;
