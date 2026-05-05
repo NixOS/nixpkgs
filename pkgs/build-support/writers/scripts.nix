@@ -17,6 +17,7 @@ let
     last
     optionalString
     strings
+    toFunction
     types
     ;
 in
@@ -751,7 +752,7 @@ rec {
     ## `pkgs.writers.writeHaskell` usage example
 
     ```nix
-    writeHaskell "missiles" { libraries = [ pkgs.haskellPackages.acme-missiles ]; } ''
+    writeHaskell "missiles" { libraries = hpkgs: [ hpkgs.acme-missiles ]; } ''
       import Acme.Missiles
 
       main = launchMissiles
@@ -777,7 +778,7 @@ rec {
     makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${(ghc.withPackages (_: libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
+        ${(ghc.withPackages (toFunction libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit makeWrapperArgs strip;
