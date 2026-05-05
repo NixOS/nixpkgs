@@ -66,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional enableMMAI onnxruntime;
 
+  # GCC 15 ICE in -Wmismatched-tags diagnostic during template specialisation lookup
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-mismatched-tags";
+
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_CLIENT" true)
     (lib.cmakeBool "ENABLE_LUA" true)
