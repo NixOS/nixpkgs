@@ -5,9 +5,9 @@
   booleanoperations,
   buildPythonPackage,
   cmake,
+  cython,
   defcon,
   fetchFromGitHub,
-  fetchpatch,
   fontmath,
   fonttools,
   libxml2,
@@ -15,7 +15,7 @@
   ninja,
   pytestCheckHook,
   runAllTests ? false,
-  scikit-build,
+  scikit-build-core,
   setuptools-scm,
   tqdm,
   ufonormalizer,
@@ -27,22 +27,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "afdko";
-  version = "4.0.2";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = "afdko";
     tag = finalAttrs.version;
-    hash = "sha256:0955dvbydifhgx9gswbf5drsmmghry7iyf6jwz6qczhj86clswcm";
+    hash = "sha256:sha256-1nUc2p4+BloHwT8Esnu/DZC14DA+XhKsFt8C9O2cZ+A=";
   };
 
-  build-system = [ setuptools-scm ];
-
-  nativeBuildInputs = [
-    scikit-build
+  build-system = [
     cmake
+    cython
     ninja
+    scikit-build-core
+    setuptools-scm
   ];
 
   buildInputs = [
@@ -51,25 +51,14 @@ buildPythonPackage (finalAttrs: {
   ];
 
   patches = [
-    # Don't try to install cmake and ninja using pip
-    ./no-pypi-build-tools.patch
+    ./dont-fetch-third-party-libs.patch
 
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
-
-    # Fix tests
-    # FIXME: remove in 5.0
-    (fetchpatch {
-      url = "https://github.com/adobe-type-tools/afdko/commit/3b78bea15245e2bd2417c25ba5c2b8b15b07793c.patch";
-      excludes = [
-        "CMakeLists.txt"
-        "requirements.txt"
-      ];
-      hash = "sha256-Ao5AUVm1h4a3qidqlBFWdC7jiXyBfXQEnsT7XsXXXRU=";
-    })
   ];
 
   env = {
+    FORCE_SYSTEM_ANTLR4 = true;
     # Use system libxml2
     FORCE_SYSTEM_LIBXML2 = true;
   }
@@ -80,8 +69,7 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  # setup.py will always (re-)execute cmake in buildPhase
-  dontConfigure = true;
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     booleanoperations
