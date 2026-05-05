@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "univers";
-  version = "31.1.0";
+  version = "32.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XGF+3QNlfwLdqoTbC2ahETSqYE/gSwbnyChIPwicnaY=";
+    hash = "sha256-+uGHJF9yvuFYHymwsLbpBwSbLqE24+Ur+Njtv+8Q5/A=";
   };
 
   build-system = [
