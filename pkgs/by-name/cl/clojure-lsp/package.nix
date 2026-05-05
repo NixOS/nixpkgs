@@ -3,11 +3,9 @@
   stdenvNoCC,
   buildGraalvmNativeImage,
   fetchurl,
-  fetchFromGitHub,
   writeScript,
   writableTmpDirAsHomeHook,
   versionCheckHook,
-  testers,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {
@@ -18,6 +16,9 @@ buildGraalvmNativeImage (finalAttrs: {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${finalAttrs.version}/clojure-lsp-standalone.jar";
     hash = "sha256-sSE/BIRT5CNc2ZS3LwSMLvQDVKLMlM1BIhKq6joX3c8=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   extraNativeImageBuildArgs = [
     # These build args mirror the build.clj upstream
