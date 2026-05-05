@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "3.20.0";
+  version = "3.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bthome-ble";
     tag = "v${version}";
-    hash = "sha256-xfDnjDs+2v6Up7VR5RV4A3Jbjb0evzOkaj7yIWf0Lhk=";
+    hash = "sha256-aUhfcWjElFIIb9xMGuKt4cowSJ6VPXO3xfft7C0stRs=";
   };
 
   build-system = [ poetry-core ];
