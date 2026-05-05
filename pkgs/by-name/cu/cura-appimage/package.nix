@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   # Give some good names so the intermediate packages are easy
   # to recognise by name in the Nix store.
   appimageBinName = "cura-appimage-tools-output";
-  wrapperScriptName = "${pname}-wrapper-script";
+  wrapperScriptName = "cura-appimage-wrapper-script";
 
   src = fetchurl {
     url = "https://github.com/Ultimaker/Cura/releases/download/${version}/Ultimaker-Cura-${version}-linux-X64.AppImage";
