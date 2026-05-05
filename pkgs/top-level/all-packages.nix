@@ -8557,6 +8557,7 @@ with pkgs;
     desktop_notifications =
       callPackage ../by-name/nu/nushell-plugin-desktop_notifications/package.nix
         { };
+    file = callPackage ../by-name/nu/nushell-plugin-file/package.nix { };
   };
 
   net-tools =
