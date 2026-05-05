@@ -1758,6 +1758,9 @@
   "ssec-cross-cookbook": [
     "index.html#ssec-cross-cookbook"
   ],
+  "cross-qa-emulation": [
+    "index.html#cross-qa-emulation"
+  ],
   "cross-qa-fails-to-find-binutils": [
     "index.html#cross-qa-fails-to-find-binutils"
   ],
