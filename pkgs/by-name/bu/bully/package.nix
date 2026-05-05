@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm555 -t $out/bin bully
-    install -Dm444 -t $out/share/doc/${pname} ../*.md
+    install -Dm444 -t $out/share/doc/bully ../*.md
   '';
 
   meta = {
