@@ -1,86 +1,73 @@
 {
   lib,
   stdenv,
+  callPackage,
+  fetchFromGitHub,
   fetchurl,
+  automake,
+  autoconf,
+
+  # passthru
+  testers,
+  smlnj,
 }:
 let
-  version = "110.99.9";
-  baseurl = "https://smlnj.cs.uchicago.edu/dist/working/${version}";
+  version = "2026.1";
+  src = fetchFromGitHub {
+    owner = "smlnj";
+    repo = "smlnj";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-n5oWhignhFl8B/cXSO3g/KQXInZqT1A0Mp8GzLeGqNc=";
+  };
 
-  arch = if stdenv.hostPlatform.is64bit then "64" else "32";
+  llvm = callPackage ./llvm.nix { inherit src version; };
 
-  hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
-
-  fetchSource =
-    name:
-    fetchurl {
-      url = "${baseurl}/${name}";
-      hash = hashes.${name};
-    };
-
-  bootSource = if stdenv.hostPlatform.is64bit then "boot.amd64-unix.tgz" else "boot.x86-unix.tgz";
-
-  sources = map fetchSource [
-    bootSource
-    "config.tgz"
-    "cm.tgz"
-    "compiler.tgz"
-    "runtime.tgz"
-    "system.tgz"
-    "MLRISC.tgz"
-    "smlnj-lib.tgz"
-    "old-basis.tgz"
-    "ckit.tgz"
-    "nlffi.tgz"
-    "cml.tgz"
-    "eXene.tgz"
-    "ml-lpt.tgz"
-    "ml-lex.tgz"
-    "ml-yacc.tgz"
-    "ml-burg.tgz"
-    "pgraph.tgz"
-    "trace-debug-profile.tgz"
-    "heap2asm.tgz"
-    "smlnj-c.tgz"
-    "doc.tgz"
-    "asdl.tgz"
-  ];
+  bootFile =
+    if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isx86_64 then
+      fetchurl {
+        url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.amd64-unix.tgz";
+        hash = "sha256-caFguKkhFOjgJDtcOcF6YAbzFl2nQYXbtWCjvaBjL6o=";
+      }
+    else if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.arm64-unix.tgz";
+        hash = "sha256-qygH0n163jiwm4CsltPeCCpHqnBxCHKP5O20GZyq1/0=";
+      }
+    else
+      throw "Unsupported host platform: ${stdenv.hostPlatform.config}";
 
 in
 stdenv.mkDerivation {
   pname = "smlnj";
-  inherit version sources;
+  inherit src version;
 
-  unpackPhase = ''
-    for s in $sources; do
-      b=$(basename $s)
-      cp $s ''${b#*-}
-    done
-    unpackFile config.tgz
-    mkdir base
-    ./config/unpack $TMP runtime
-  '';
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patchPhase = ''
-    sed -i '/^PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
-    echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
+    unpackFile ${bootFile}
+    mkdir -pv runtime/bin runtime/lib
+    ln -s ${llvm}/bin/llvm-config     runtime/bin/llvm-config
+    ln -s ${llvm}/lib/libCFGCodeGen.a runtime/lib/libCFGCodeGen.a
   '';
 
   buildPhase = ''
-    ./config/install.sh -default ${arch}
-  '';
-
-  installPhase = ''
+    export INSTALLDIR=$out
     mkdir -pv $out
-    cp -rv bin lib $out
-
-    cd $out/bin
-    for i in *; do
-      sed -i "2iSMLNJ_HOME=$out/" $i
-    done
+    ./build.sh
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.llvm = llvm;
+  passthru.tests.version = testers.testVersion {
+    package = smlnj;
+    command = "sml @SMLversion";
+  };
 
   meta = {
     description = "Standard ML of New Jersey, a compiler";
@@ -88,13 +75,12 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     platforms = [
       "x86_64-linux"
-      "i686-linux"
+      "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [
       skyesoss
-      thoughtpolice
     ];
     mainProgram = "sml";
   };
