@@ -43,16 +43,16 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $out/bin/
-    install -d $out/share/doc/${pname} $out/man/man1
+    install -d $out/share/doc/atasm $out/man/man1
     installFlagsArray+=(
       DESTDIR=$out/bin/
-      DOCDIR=$out/share/doc/${pname}
+      DOCDIR=$out/share/doc/atasm
       MANDIR=$out/man/man1
     )
   '';
 
   postInstall = ''
-    mv docs/* $out/share/doc/${pname}
+    mv docs/* $out/share/doc/atasm
   '';
 
   meta = {
