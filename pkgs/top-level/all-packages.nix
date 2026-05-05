@@ -2620,13 +2620,11 @@ with pkgs;
 
   keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
-  keybase = callPackage ../tools/security/keybase { };
-
-  kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
+  kbfs = callPackage ../by-name/ke/keybase/kbfs.nix { };
 
   kbdVlock = callPackage ../../pkgs/by-name/kb/kbd/package.nix { withVlock = true; };
 
-  keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
+  keybase-gui = callPackage ../by-name/ke/keybase/gui.nix { };
 
   krunvm = callPackage ../applications/virtualization/krunvm {
     inherit (darwin) sigtool;
