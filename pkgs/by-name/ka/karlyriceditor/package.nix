@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtmultimedia
   ];
 
+  postPatch = ''
+    # https://github.com/gyunaev/karlyriceditor/pull/38
+    sed -ie "24i #include <QElapsedTimer>" src/videogenerator.h
+  '';
+
   installPhase = ''
     runHook preInstall
 
