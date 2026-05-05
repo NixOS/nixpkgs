@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchtune";
-  version = "0.6.2-unstable-2026-02-19";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
