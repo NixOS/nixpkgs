@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    makeWrapper "${proot}/bin/proot" "$out/bin/${pname}" \
+    makeWrapper "${proot}/bin/proot" "$out/bin/autenticacao-gov-pt-bin" \
       --add-flags "-b" \
       --add-flags "$out/app:/app" \
       --add-flags "$out/app/bin/eidguiV2" \
