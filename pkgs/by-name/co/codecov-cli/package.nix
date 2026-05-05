@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-8KBemqwMqiio4pnftsBgnFj69Bgb5jQr5YlMegujPZY=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${src.name}/codecov-cli";
 
   build-system = with python3Packages; [ setuptools ];
 
