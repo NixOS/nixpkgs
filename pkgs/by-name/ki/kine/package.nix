@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -27,6 +28,8 @@ buildGoModule (finalAttrs: {
   env = {
     "CGO_CFLAGS" = "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_USE_ALLOCA=1";
   };
+
+  passthru.tests = nixosTests.kine;
 
   meta = {
     description = "etcdshim that translates etcd API to RDMS";

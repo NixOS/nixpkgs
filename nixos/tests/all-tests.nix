@@ -842,6 +842,7 @@ in
   keyd = handleTest ./keyd.nix { };
   keymap = handleTest ./keymap.nix { };
   kimai = runTest ./kimai.nix;
+  kine = import ./kine/default.nix { inherit pkgs runTest; };
   kismet = runTest ./kismet.nix;
   kiwix-serve = runTest ./kiwix-serve;
   kmonad = runTest ./kmonad.nix;
