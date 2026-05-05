@@ -41,13 +41,6 @@ let
     '';
   };
 
-  google-fonts' = google-fonts.override {
-    fonts = [
-      "Caveat"
-      "Bentham"
-    ];
-  };
-
   # Playwright's upstream chromium-headless-shell zips use different directory
   # names per architecture (chrome-headless-shell-linux64 vs chrome-linux).
   chrome =
@@ -132,8 +125,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    cp ${google-fonts'}/share/fonts/truetype/Bentham-* ./apps/web/public/bentham.ttf
-    cp ${google-fonts'}/share/fonts/truetype/Caveat* ./apps/web/public/caveat.ttf
+    cp ${google-fonts.bentham}/share/fonts/truetype/google-fonts/bentham/Bentham* ./apps/web/public/bentham.ttf
+    cp ${google-fonts.caveat}/share/fonts/truetype/google-fonts/caveat/Caveat* ./apps/web/public/caveat.ttf
 
     yarn prisma:generate
     yarn web:build
