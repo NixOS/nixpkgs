@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
   # Don't propagate out to the dev output to avoid pulling in GUI dependencies
   propagatedBuildOutputs = [ "lib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libtypec/libtypec";
     description = "generic diagnostic tool interface for usb-c ports";
     longDescription = "libtypec is aimed to provide a generic interface abstracting all platform complexity for user space to develop tools for efficient USB-C port management. The library can also enable development of diagnostic and debug tools to debug system issues around USB-C/USB PD topology.";
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       mit
       gpl2Only
     ];
-    maintainers = with maintainers; [ johnazoidberg ];
+    maintainers = with lib.maintainers; [ johnazoidberg ];
   };
 }

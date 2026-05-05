@@ -34,11 +34,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "scheduler-card.js";
 
-  meta = with lib; {
+  meta = {
     description = "HA Lovelace card for control of scheduler entities";
     homepage = "https://github.com/nielsfaber/scheduler-card";
     changelog = "https://github.com/nielsfaber/scheduler-card/releases/tag/v${version}";
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Plus;
   };
 }

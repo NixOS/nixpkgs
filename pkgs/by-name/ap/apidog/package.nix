@@ -56,13 +56,13 @@ appimageTools.wrapType2 {
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one API design, test, mock and documentation platform";
     homepage = "https://apidog.com";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "apidog";
-    maintainers = with maintainers; [ DomagojAlaber ];
+    maintainers = with lib.maintainers; [ DomagojAlaber ];
   };
 }
