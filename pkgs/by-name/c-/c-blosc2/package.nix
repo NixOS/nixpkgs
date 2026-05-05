@@ -12,16 +12,59 @@
   zstd,
 }:
 
+let
+  zfpVersion = "1.0.1";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-blosc2";
-  version = "2.23.1";
+  version = "3.0.2";
 
-  src = fetchFromGitHub {
-    owner = "Blosc";
-    repo = "c-blosc2";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iyEB1Hnvo42tMHyB4pDfXru5doFwNiFuxq21Tr3zLIg=";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner = "Blosc";
+      repo = "c-blosc2";
+      rev = "v${finalAttrs.version}";
+      sha256 = "sha256-YR8iArp81QK12RazxYMVq3YEFaR24TFKCHDkvjwJIhE=";
+    })
+    (fetchFromGitHub {
+      name = "zfp";
+      owner = "LLNL";
+      repo = "zfp";
+      rev = zfpVersion;
+      hash = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
+    })
+  ];
+  sourceRoot = "source";
+
+  # perform parameter expansion for cmakeFlags
+  preUnpack =
+    let
+      cmakeFlags = toString [
+        (lib.cmakeBool "BUILD_STATIC" static)
+        (lib.cmakeBool "BUILD_SHARED" (!static))
+
+        (lib.cmakeBool "PREFER_EXTERNAL_LZ4" true)
+        (lib.cmakeBool "PREFER_EXTERNAL_ZLIB" true)
+        (lib.cmakeBool "PREFER_EXTERNAL_ZSTD" true)
+
+        (lib.cmakeBool "BUILD_EXAMPLES" false)
+        (lib.cmakeBool "BUILD_BENCHMARKS" false)
+        (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+
+        (lib.cmakeFeature "BLOSC_ZFP_SOURCE_DIR" "$PWD/zfp")
+      ];
+    in
+    ''
+      export cmakeFlags="${cmakeFlags}"
+    '';
+  postUnpack = ''
+    # ensure our separately pinned versions correspond to those in source
+    if ! grep -F 'BLOSC_ZFP_VERSION "${zfpVersion}"' source/CMakeLists.txt ; then
+      echo 'Expected to find BLOSC_ZFP_VERSION "${zfpVersion}" in source/CMakeLists.txt:' \
+        'has zfp source been updated to match pinned version?'
+      exit 1
+    fi
+  '';
 
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
@@ -37,19 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     zlib-ng
     zstd
-  ];
-
-  cmakeFlags = [
-    "-DBUILD_STATIC=${if static then "ON" else "OFF"}"
-    "-DBUILD_SHARED=${if static then "OFF" else "ON"}"
-
-    "-DPREFER_EXTERNAL_LZ4=ON"
-    "-DPREFER_EXTERNAL_ZLIB=ON"
-    "-DPREFER_EXTERNAL_ZSTD=ON"
-
-    "-DBUILD_EXAMPLES=OFF"
-    "-DBUILD_BENCHMARKS=OFF"
-    "-DBUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   doCheck = !static;
