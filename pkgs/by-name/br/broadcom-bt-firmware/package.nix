@@ -21,8 +21,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   unpackCmd = ''
-    mkdir -p ${pname}-${version}
-    cabextract $src --directory ${pname}-${version}
+    mkdir -p broadcom-bt-firmware-${version}
+    cabextract $src --directory broadcom-bt-firmware-${version}
   '';
 
   installPhase = ''
