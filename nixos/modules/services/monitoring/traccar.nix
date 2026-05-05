@@ -42,6 +42,22 @@ in
 {
   options.services.traccar = {
     enable = lib.mkEnableOption "Traccar, an open source GPS tracking system";
+    package = lib.mkPackageOption pkgs "traccar" { };
+    environment = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      description = ''
+        Extra environment variables to pass to Traccar. Secrets should be passed
+        using the {option}`services.traccar.environmentFile` option instead.
+
+        See [the documentation](https://www.traccar.org/configuration-file/)
+        for more information.
+      '';
+      default = { };
+      example = {
+        CONFIG_USE_ENVIRONMENT_VARIABLES = "true";
+        DATABASE_URL = "jdbc:postgresql://localhost/traccar?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/run/postgresql/.s.PGSQL.5432";
+      };
+    };
     settingsFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -93,6 +109,8 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ];
 
+        environment = lib.mkIf (cfg.environment != { }) cfg.environment;
+
         preStart = ''
           test -f '${configFilePath}' && rm -f '${configFilePath}'
 
@@ -107,9 +125,9 @@ in
 
         serviceConfig = {
           DynamicUser = true;
-          WorkingDirectory = "${pkgs.traccar}";
+          WorkingDirectory = "${cfg.package}";
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-          ExecStart = "${lib.getExe pkgs.traccar} ${configFilePath}";
+          ExecStart = "${lib.getExe cfg.package} ${configFilePath}";
           LockPersonality = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
