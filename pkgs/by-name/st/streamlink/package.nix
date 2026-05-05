@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchPypi,
   replaceVars,
@@ -41,6 +42,13 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # requires ffmpeg to be in PATH
     "test_no_cache"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # requires Linux-only socket.SO_BINDTODEVICE
+    "test_set_interface[unix-iface]"
+    "test_set_interface[unix-iface-prefix]"
+    "test_set_interface[unix-ifhost-prefix]"
+    "test_set_interface[unix-ifhost-prefix-invalid]"
   ];
 
   propagatedBuildInputs =
