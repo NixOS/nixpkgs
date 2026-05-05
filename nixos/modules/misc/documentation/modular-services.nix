@@ -23,6 +23,7 @@ let
       "<imports = [ pkgs.ktls-utils.services.default ]>" = fakeSubmodule pkgs.ktls-utils.services.default;
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;
       "<imports = [ pkgs.snid.services.default ]>" = fakeSubmodule pkgs.snid.services.default;
+      "<imports = [ pkgs.timetagger.services.default ]>" = fakeSubmodule pkgs.timetagger.services.default;
     };
   };
 in
