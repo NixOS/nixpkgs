@@ -2005,6 +2005,7 @@
   ./virtualisation/docker-rootless.nix
   ./virtualisation/docker.nix
   ./virtualisation/ecs-agent.nix
+  ./virtualisation/fex.nix
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/incus-agent.nix
   ./virtualisation/incus.nix
