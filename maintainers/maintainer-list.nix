@@ -13981,6 +13981,12 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  kdeldycke = {
+    email = "kevin@deldycke.com";
+    github = "kdeldycke";
+    githubId = 159718;
+    name = "Kevin Deldycke";
+  };
   kedry = {
     name = "Kevin Edry";
     github = "kedry";
