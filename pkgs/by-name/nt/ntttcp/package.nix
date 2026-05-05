@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,6 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     sha256 = "sha256-6O7qSrR6EFr7k9lHQHGs/scZxJJ5DBNDxlSL5hzlRf4=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/microsoft/ntttcp-for-linux/commit/e18597c05e3d4b439849ce0e149cb701ff5a36c2.patch";
+      hash = "sha256-FOgjKseMDL1O1f+lgmmreGus4YRTZMwIJinh/7MT2Xk=";
+    })
+  ];
 
   preBuild = "cd src";
 
