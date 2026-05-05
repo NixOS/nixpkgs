@@ -9245,6 +9245,12 @@
     githubId = 26125115;
     name = "Frédéric Christ";
   };
+  fredrikaverpil = {
+    email = "fredrik.averpil@gmail.com";
+    github = "fredrikaverpil";
+    githubId = 994357;
+    name = "Fredrik Averpil";
+  };
   Freed-Wu = {
     email = "wuzhenyu@ustc.edu";
     github = "Freed-Wu";
