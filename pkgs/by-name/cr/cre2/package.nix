@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libtool,
   pkg-config,
@@ -19,6 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "1h9jwn6z8kjf4agla85b5xf7gfkdwncp0mfd8zwk98jkm8y2qx9q";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/marcomaggi/cre2/pull/34.patch";
+      hash = "sha256-hXSBuNsTP41VIIRbhWumNT3K4EnxGIlpxIU/lDCsPmY=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
