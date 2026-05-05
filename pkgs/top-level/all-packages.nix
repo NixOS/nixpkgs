@@ -485,9 +485,6 @@ with pkgs;
 
   buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
   fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
-  dupeguru = callPackage ../applications/misc/dupeguru {
-    python3Packages = python311Packages;
-  };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
