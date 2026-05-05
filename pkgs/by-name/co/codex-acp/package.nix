@@ -2,6 +2,7 @@
   lib,
   stdenv,
   callPackage,
+  codex,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
@@ -62,7 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = false;
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests.codex = codex;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "An ACP-compatible coding agent powered by Codex";
