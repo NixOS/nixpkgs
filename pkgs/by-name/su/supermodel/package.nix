@@ -20,6 +20,11 @@ stdenv.mkDerivation {
     hash = "sha256-3FdLBGxmi4Xj7ao2nvjLleJSTXvKQrhUWvnQr8DK/RY=";
   };
 
+  # Game.h is missing #include <cstdint>, which GCC 15 no longer provides transitively.
+  postPatch = ''
+    sed -i '/^#include <memory>/a #include <cstdint>' Src/Game.h
+  '';
+
   buildInputs = [
     libGLU
     SDL2
