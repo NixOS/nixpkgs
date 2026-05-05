@@ -1,14 +1,13 @@
 {
   lib,
-  stdenvNoCC,
   fetchFromGitHub,
   makeBinaryWrapper,
   nix-update-script,
-  python3,
+  python3Packages,
 }:
 
 let
-  pythonEnv = python3.withPackages (
+  appDependencies =
     ps: with ps; [
       aiohttp
       alembic
@@ -46,12 +45,14 @@ let
       tqdm
       transformers
       yarl
-    ]
-  );
+    ];
+  pythonEnv = python3Packages.python.withPackages appDependencies;
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "comfyui";
   version = "0.20.1";
+
+  pyproject = false;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -65,37 +66,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  postPatch = ''
-    substituteInPlace comfy/cli_args.py \
-      --replace-fail \
-        'parser.add_argument("--base-directory", type=str, default=None, help="Set the ComfyUI base directory for models, custom_nodes, input, output, temp, and user directories.")' \
-        'xdg_data_home = os.environ.get("XDG_DATA_HOME") or os.path.expanduser("~/.local/share")
-    comfyui_data_home = os.path.join(xdg_data_home, "comfyui")
-    parser.add_argument("--base-directory", type=str, default=comfyui_data_home, help="Set the ComfyUI base directory for models, custom_nodes, input, output, temp, and user directories.")' \
-      --replace-fail \
-        'database_default_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "user", "comfyui.db")
-    )' \
-        'database_default_path = os.path.join(comfyui_data_home, "user", "comfyui.db")'
+  patches = [ ./use-writable-runtime-paths.patch ];
 
-    substituteInPlace folder_paths.py \
-      --replace-fail \
-        'folder_names_and_paths["custom_nodes"] = ([os.path.join(base_path, "custom_nodes")], set())' \
-        'custom_nodes_directory = os.path.join(base_path, "custom_nodes")
-    folder_names_and_paths["custom_nodes"] = ([custom_nodes_directory], set())' \
-      --replace-fail \
-        'if not os.path.exists(input_directory):
-        try:
-            os.makedirs(input_directory)
-        except:
-            logging.error("Failed to create input directory")' \
-        'for default_directory in (input_directory, custom_nodes_directory):
-        if not os.path.exists(default_directory):
-            try:
-                os.makedirs(default_directory)
-            except:
-                logging.error(f"Failed to create {default_directory}")'
-  '';
+  dependencies = appDependencies python3Packages;
+
+  dontBuild = true;
+  dontWrapPythonPrograms = true;
 
   installPhase = ''
     runHook preInstall
