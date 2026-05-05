@@ -824,7 +824,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = passthru // {
     doc = stdenv.mkDerivation {
-      inherit src;
+      inherit (finalAttrs) src;
       name = "python${pythonVersion}-${version}-doc";
 
       dontConfigure = true;
