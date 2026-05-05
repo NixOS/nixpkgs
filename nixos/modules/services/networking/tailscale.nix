@@ -215,7 +215,7 @@ in
               case "$state" in
                 NeedsLogin|NeedsMachineAuth|Stopped)
                   echo "Server needs authentication, sending auth key"
-                  tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                  tailscale up --auth-key="$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
                   ;;
                 Running)
                   echo "Tailscale is running"
