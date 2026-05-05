@@ -6227,6 +6227,8 @@ with pkgs;
       }
   );
 
+  jsoncppSecureMemory = jsoncpp.override { secureMemory = true; };
+
   mtrace = callPackage ../development/libraries/glibc/mtrace.nix { };
 
   # Provided by libc on Operating Systems that use the Extensible Linker Format.

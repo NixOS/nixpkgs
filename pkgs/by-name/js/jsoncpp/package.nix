@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncpp";
   version = "1.9.7";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "dev"
@@ -35,10 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     export sourceRoot=${finalAttrs.src.name}
   '';
 
-  postPatch = lib.optionalString secureMemory ''
-    sed -i 's/#define JSONCPP_USING_SECURE_MEMORY 0/#define JSONCPP_USING_SECURE_MEMORY 1/' include/json/version.h
-  '';
-
   nativeBuildInputs = [
     cmake
     python3
@@ -46,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    "-DJSONCPP_USE_SECURE_MEMORY=${if secureMemory then "ON" else "OFF"}"
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_OBJECT_LIBS=OFF"
     "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
