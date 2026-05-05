@@ -12518,6 +12518,12 @@
     githubId = 30251156;
     name = "Jesse Moore";
   };
+  jesssullivan = {
+    email = "jess@sulliwood.org";
+    github = "Jesssullivan";
+    githubId = 37297218;
+    name = "Jess Sullivan";
+  };
   jethair = {
     email = "jethair@duck.com";
     github = "JetHair";
