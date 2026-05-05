@@ -17,6 +17,7 @@ lib.makeOverridable (
     domain ? "gitlab.com",
     group ? null,
     fetchSubmodules ? false,
+    postCheckout ? "",
     leaveDotGit ? false,
     deepClone ? false,
     forceFetchGit ? false,
@@ -27,9 +28,9 @@ lib.makeOverridable (
   }@args:
 
   assert (
-    lib.assertMsg (lib.xor (tag == null) (
-      rev == null
-    )) "fetchFromGitLab requires one of either `rev` or `tag` to be provided (not both)."
+    lib.assertMsg (
+      tag != null || rev != null
+    ) "fetchFromGitLab requires at least one of `rev` or `tag` to be provided."
   );
 
   let
@@ -40,7 +41,7 @@ lib.makeOverridable (
         repo
       ]
     );
-    revWithTag = if tag != null then "refs/tags/" + tag else rev;
+    revWithTag = fetchgit.getRevWithTag { inherit rev tag; };
     escapedSlug = lib.replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
     escapedRevWithTag = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] revWithTag;
     passthruAttrs = removeAttrs args [
@@ -61,7 +62,7 @@ lib.makeOverridable (
 
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITLAB_PRIVATE_";
     useFetchGit =
-      fetchSubmodules || leaveDotGit || deepClone || forceFetchGit || (sparseCheckout != [ ]);
+      fetchSubmodules || postCheckout != "" || deepClone || forceFetchGit || (sparseCheckout != [ ]);
     fetcher = if useFetchGit then fetchgit else fetchzip;
 
     privateAttrs = lib.optionalAttrs private (
