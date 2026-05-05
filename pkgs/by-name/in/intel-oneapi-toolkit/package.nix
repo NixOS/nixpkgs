@@ -23,7 +23,6 @@
   level-zero,
   libdrm,
   elfutils,
-  libxxf86vm,
   libxrandr,
   libxfixes,
   libxext,
@@ -48,10 +47,6 @@
   bzip2,
   gdbm,
   libxcrypt-legacy,
-  freetype,
-  gtk2,
-  gdk-pixbuf,
-  fontconfig,
   libuuid,
   sqlite,
   libffi,
@@ -127,43 +122,6 @@ let
 
   # Figured out by looking at autoPatchelfHook failure output
   depsByComponent = rec {
-    advisor = [
-      libdrm
-      zlib
-      gtk2
-      gdk-pixbuf
-      at-spi2-atk
-      glib
-      pango
-      gdk-pixbuf
-      cairo
-      fontconfig
-      glib
-      freetype
-      libx11
-      libxxf86vm
-      libxext
-      libxcb
-      libxcomposite
-      libxdamage
-      libxfixes
-      libxrandr
-      nss
-      dbus
-      cups
-      libgbm
-      expat
-      libxkbcommon
-      eudev
-      alsa-lib
-      ncurses5
-      bzip2
-      libuuid
-      gdbm
-      libxcrypt-legacy
-      sqlite
-      nspr
-    ];
     dpcpp-cpp-compiler = [
       zlib
       level-zero
