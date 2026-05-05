@@ -8069,8 +8069,6 @@ self: super: with self; {
 
   jsonschema-rs = callPackage ../development/python-modules/jsonschema-rs { };
 
-  jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
-
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
 
   jsonslicer = callPackage ../development/python-modules/jsonslicer { };
