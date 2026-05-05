@@ -17,13 +17,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "sandbox-runtime";
-  version = "0.0.49";
+  version = "0.0.50";
 
   src = fetchFromGitHub {
     owner = "anthropic-experimental";
     repo = "sandbox-runtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1QwUOtgOYcVm61nLCeQL46O/+G/LyXSv+ZnC3la2Ajc=";
+    hash = "sha256-L5MscAoXXaaUh0BgiDtVyjCdFneMP/w7jbE+1LVtRo0=";
   };
 
   postPatch =
