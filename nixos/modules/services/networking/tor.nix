@@ -185,7 +185,7 @@ in
       '';
     };
 
-    # Sometimes squid would refuse to start if no network is available.
+    # Wait for network so that squid picks up the right DNS information
     systemd.services.squid.after = lib.mkIf cfg.client.enable [
       "network-online.target"
     ];
