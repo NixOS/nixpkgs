@@ -13,7 +13,7 @@ buildDunePackage {
   inherit pname version;
   src = fetchFromGitHub {
     owner = "johnwhitington";
-    repo = pname;
+    repo = "camlgpc";
     rev = "v${version}";
     hash = "sha256-+Dx8BuRlxb8xh41jHskrNcKGV/HgedauLt1vo1tADHw=";
   };

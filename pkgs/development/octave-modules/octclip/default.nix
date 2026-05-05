@@ -10,7 +10,7 @@ buildOctavePackage rec {
 
   src = fetchFromBitbucket {
     owner = "jgpallero";
-    repo = pname;
+    repo = "octclip";
     rev = "OctCLIP-${version}";
     sha256 = "sha256-gG2b8Ix6bzO6O7GRACE81JCVxfXW/+ZdfoniigAEq3g=";
   };

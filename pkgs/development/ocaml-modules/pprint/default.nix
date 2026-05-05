@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "fpottier";
-    repo = pname;
+    repo = "pprint";
     rev = version;
     sha256 = "sha256-avf71vAgCL1MU8O7Q3FNN3wEdCDtbNZP0ipETnn8AqA=";
   };

@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "aantron";
-    repo = pname;
+    repo = "lambdasoup";
     rev = version;
     hash = "sha256-+d1JPU7OyQgt8pDTlwZraqPHH+OBQD1ycsELKpHT95Y=";
   };

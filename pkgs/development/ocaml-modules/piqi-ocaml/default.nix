@@ -12,11 +12,11 @@
 stdenv.mkDerivation rec {
   version = "0.7.8";
   pname = "piqi-ocaml";
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  name = "ocaml${ocaml.version}-piqi-ocaml-${version}";
 
   src = fetchFromGitHub {
     owner = "alavrik";
-    repo = pname;
+    repo = "piqi-ocaml";
     rev = "v${version}";
     sha256 = "sha256-6Luq49sbo+AqLSq57mc6fLhrRx0K6G5LCUIzkGPfqYo=";
   };

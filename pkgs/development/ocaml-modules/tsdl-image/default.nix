@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "sanette";
-    repo = pname;
+    repo = "tsdl-image";
     rev = version;
     hash = "sha256-mgTFwkuFJVwJmHrzHSdNh8v4ehZIcWemK+eLqjglw5o=";
   };

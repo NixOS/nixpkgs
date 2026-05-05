@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
-    repo = pname;
+    repo = "ocplib-simplex";
     rev = "v${version}";
     hash = "sha256-fLTht+TlyJIsIAsRLmmkFKsnbSeW3BgyAyURFdnGfko=";
   };

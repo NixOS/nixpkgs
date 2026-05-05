@@ -10,7 +10,7 @@ ocamlPackages.buildDunePackage rec {
   version = "0.8.1";
   src = fetchFromGitHub {
     owner = "Lelio-Brun";
-    repo = pname;
+    repo = "obelisk";
     rev = "v${version}";
     sha256 = "sha256-JJ8k9/6awKZH87T9Ut8x/hlshiUI6sy2fZtY6x2dIIk=";
   };

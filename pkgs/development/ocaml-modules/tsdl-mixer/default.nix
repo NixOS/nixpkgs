@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "sanette";
-    repo = pname;
+    repo = "tsdl-mixer";
     rev = version;
     hash = "sha256-szuGmLzgGyQExCQwpopVNswtZZdhP29Q1+uNQJZb43Q=";
   };

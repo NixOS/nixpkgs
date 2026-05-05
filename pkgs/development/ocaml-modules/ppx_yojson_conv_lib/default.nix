@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "janestreet";
-    repo = pname;
+    repo = "ppx_yojson_conv_lib";
     rev = "v${version}";
     hash = "sha256-XGgpcAEemBNEagblBjpK+BiL0OUsU2JPqOq+heHbqVk=";
   };

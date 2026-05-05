@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
-    repo = pname;
+    repo = "ppx_tools_versioned";
     rev = version;
     sha256 = "07lnj4yzwvwyh5fhpp1dxrys4ddih15jhgqjn59pmgxinbnddi66";
   };

@@ -11,7 +11,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "ACoquereau";
-    repo = pname;
+    repo = "psmt2-frontend";
     rev = version;
     hash = "sha256-cYY9x7QZjH7pdJyHMqfMXgHZ3/zJLp/6ntY6OSIo6Vs=";
   };

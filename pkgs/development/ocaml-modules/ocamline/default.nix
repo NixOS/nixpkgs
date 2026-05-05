@@ -10,7 +10,7 @@ buildDunePackage rec {
   version = "1.2";
   src = fetchFromGitHub {
     owner = "chrisnevers";
-    repo = pname;
+    repo = "ocamline";
     rev = version;
     sha256 = "Sljm/Bfr2Eo0d75tmJRuWUkkfHUYQ0g27+FzXBePnVg=";
   };

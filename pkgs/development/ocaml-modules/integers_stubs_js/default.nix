@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "o1-labs";
-    repo = pname;
+    repo = "integers_stubs_js";
     rev = version;
     sha256 = "sha256-lg5cX9/LQlVmR42XcI17b6KaatnFO2L9A9ZXfID8mTY=";
   };

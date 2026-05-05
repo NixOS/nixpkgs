@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "pveber";
-    repo = pname;
+    repo = "ocaml-r";
     rev = "v${version}";
     sha256 = "sha256-jPyVMxjeh9+xu0dD1gelAxcOhxouKczyvzVoKZ5oSrs=";
   };
