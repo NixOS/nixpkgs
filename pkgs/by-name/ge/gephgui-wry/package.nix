@@ -52,13 +52,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gephgui-wry";
-  version = "5.5.0";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "gephgui-pkg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NxtE26GPG2EvgtMa6eEOZmOcqu4yYr3zioF1CmrxLRk=";
+    hash = "sha256-sf1bGrWc9n0Rad38p4JUx8MKxNpS97vtp1kS1bVwJGI=";
     fetchSubmodules = true;
   };
 
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) version src;
 
     sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
-    npmDepsHash = "sha256-dGzmdvzKp/JHCgDf3NJb0oolgW4Y/spagzpeVpMF28w=";
+    npmDepsHash = "sha256-GFeHowIv+TiejSNK6kAGAgYcwc2DHu3c4UBEeTScIPk=";
 
     # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
     nodejs = nodejs_22;
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
-  cargoHash = "sha256-Dh1WuxU1rRDNu2cF9GCo1CIiph1sLc5j0GSPb7b7kJA=";
+  cargoHash = "sha256-HRwRgKK5hHK9bg5aQyoKqZO4sRvmOlbsxdAqM9/40fs=";
 
   nativeBuildInputs = [
     pkg-config
