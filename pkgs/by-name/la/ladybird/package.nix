@@ -17,6 +17,7 @@
   libpulseaudio,
   libwebp,
   libxcrypt,
+  mimalloc,
   openssl,
   python3,
   qt6Packages,
@@ -40,18 +41,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-04-04";
+  version = "0-unstable-2026-05-04";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "b11f30b32eff7c5e7baf6e84d0a432975631486d";
-    hash = "sha256-Fv74py0dQG2hQti40eh7vXCkN0rkheeqQ/JM3KIuLDA=";
+    rev = "90b790f8702a5d5c5a66ef02f8669da2838ca6e3";
+    hash = "sha256-BdJ24YtKMv8B6Vvequf9b5qr0S3FfFuphFo78mCIaN4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-5CB5mRdmvsmTmy3PGKhCx3NZm7Et2cIwIg9vF2wA7xE=";
+    hash = "sha256-sbNYOdY56+waCVQHbGuvV5jT9EawV2IiGmL1e/O6ZRc=";
   };
 
   postPatch = ''
@@ -104,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjxl
     libwebp
     libxcrypt
+    mimalloc
     openssl
     qt6Packages.qtbase
     qt6Packages.qtmultimedia
