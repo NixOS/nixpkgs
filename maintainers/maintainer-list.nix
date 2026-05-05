@@ -18220,6 +18220,12 @@
     githubId = 14153763;
     name = "modderme123";
   };
+  moeleak = {
+    email = "i@leak.moe";
+    github = "moeleak";
+    githubId = 52288096;
+    name = "moeleak";
+  };
   mofrim = {
     email = "mofrim@posteo.de";
     github = "mofrim";
