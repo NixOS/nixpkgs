@@ -23417,6 +23417,12 @@
     name = "Michele Guerini Rocco";
     keys = [ { fingerprint = "92B2 904F D293 C94D C4C9  3E6B BFBA F4C9 75F7 6450"; } ];
   };
+  roamingparrot = {
+    email = "roamingparrot@protonmail.com";
+    github = "roamingparrot";
+    githubId = 190113561;
+    name = "roamingparrot";
+  };
   roastiek = {
     email = "r.dee.b.b@gmail.com";
     github = "roastiek";
