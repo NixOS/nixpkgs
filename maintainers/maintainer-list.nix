@@ -12674,6 +12674,11 @@
     name = "Jonathan Hult";
     keys = [ { fingerprint = "DEE7 054C 5D43 ABEA C0F9  8BE4 3512 C8F8 2E2F 2A16"; } ];
   };
+  jiamingc = {
+    name = "Jiaming Chen";
+    github = "jiamingc";
+    githubId = 21327067;
+  };
   jiegec = {
     name = "Jiajie Chen";
     email = "c@jia.je";
