@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       execution results and can check this differences at after.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hamburger1984 ];
+    maintainers = [ ];
     mainProgram = "hwatch";
   };
 })
