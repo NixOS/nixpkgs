@@ -39,7 +39,7 @@ with lib;
     };
 
     package = mkPackageOption pkgs "mullvad" {
-      example = "mullvad-vpn";
+      example = "pkgs.mullvad-vpn";
       extraDescription = ''
         `pkgs.mullvad` only provides the CLI tool, `pkgs.mullvad-vpn` provides both the CLI and the GUI.
       '';
