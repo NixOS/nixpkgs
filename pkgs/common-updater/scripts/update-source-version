@@ -229,13 +229,15 @@ if [[ -n "$newUrl" ]]; then
         die "Couldn't evaluate source url from '$attr.$sourceKey'!"
     fi
 
-    # Escape regex metacharacter that may appear in URLs
-    oldUrlEscaped=$(echo "$oldUrl" | sed -e 's|[*.^$[\|]|\\&|g')
-    newUrlEscaped=$(echo "$newUrl" | sed -e 's|[&\|]|\\&|g')
+    if [[ "$oldUrl" != "$newUrl" ]]; then
+      # Escape regex metacharacter that may appear in URLs
+      oldUrlEscaped=$(echo "$oldUrl" | sed -e 's|[*.^$[\|]|\\&|g')
+      newUrlEscaped=$(echo "$newUrl" | sed -e 's|[&\|]|\\&|g')
 
-    sed -i.cmp "$nixFile" -e "s|\"$oldUrlEscaped\"|\"$newUrlEscaped\"|"
-    if cmp -s "$nixFile" "$nixFile.cmp"; then
-        die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
+      sed -i.cmp "$nixFile" -e "s|\"$oldUrlEscaped\"|\"$newUrlEscaped\"|"
+      if cmp -s "$nixFile" "$nixFile.cmp"; then
+          die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
+      fi
     fi
 fi
 
