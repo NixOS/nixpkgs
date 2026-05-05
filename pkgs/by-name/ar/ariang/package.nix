@@ -32,17 +32,17 @@ buildNpmPackage rec {
     runHook preInstall
 
     mkdir -p $out/share
-    cp -r dist $out/share/${pname}
+    cp -r dist $out/share/ariang
 
     for size in 16 24 36 48 72; do
       mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
-      magick $out/share/${pname}/tileicon.png -resize ''${size}x''${size} \
-        $out/share/icons/hicolor/''${size}x''${size}/apps/${pname}.png
+      magick $out/share/ariang/tileicon.png -resize ''${size}x''${size} \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/ariang.png
     done
 
     mkdir -p $out/bin
-    makeWrapper ${xdg-utils}/bin/xdg-open $out/bin/${pname} \
-      --add-flags "file://$out/share/${pname}/index.html"
+    makeWrapper ${xdg-utils}/bin/xdg-open $out/bin/ariang \
+      --add-flags "file://$out/share/ariang/index.html"
 
     runHook postInstall
   '';
