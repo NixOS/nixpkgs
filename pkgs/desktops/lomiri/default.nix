@@ -72,6 +72,10 @@ let
       lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
       lomiri-mediaplayer-app = callPackage ./applications/lomiri-mediaplayer-app { };
       lomiri-music-app = callPackage ./applications/lomiri-music-app { };
+      lomiri-notes-app = callPackage ./applications/lomiri-notes-app { };
+      lomiri-system-settings-online-accounts =
+        callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-online-accounts.nix
+          { };
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
       lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
       lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
@@ -82,12 +86,15 @@ let
 
       #### Development tools / libraries
       libusermetrics = callPackage ./development/libusermetrics { };
+      lomiri-online-accounts-unwrapped = callPackage ./development/lomiri-online-accounts { };
+      lomiri-online-accounts = callPackage ./development/lomiri-online-accounts/wrapper.nix { };
       qtmir = callPackage ./development/qtmir { };
       trust-store = callPackage ./development/trust-store { };
       u1db-qt = callPackage ./development/u1db-qt { };
 
       #### QML / QML-related
       lomiri-notifications = callPackage ./qml/lomiri-notifications { };
+      lomiri-online-accounts-plugins = callPackage ./qml/lomiri-online-accounts-plugins { };
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
       qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };

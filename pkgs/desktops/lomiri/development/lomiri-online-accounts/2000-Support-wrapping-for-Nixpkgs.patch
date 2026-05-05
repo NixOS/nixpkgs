@@ -1,0 +1,212 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d0cb6e0..51337e0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -58,14 +58,15 @@ endif()
+ 
+ pkg_check_modules(APPARMOR libapparmor REQUIRED)
+ 
+-set(ONLINE_ACCOUNTS_PLUGIN_DIR ${CMAKE_INSTALL_FULL_DATADIR}/lomiri-online-accounts/qml-plugins)
+-set(ONLINE_ACCOUNTS_PLUGIN_PRIVATE_MODULE_DIR ${CMAKE_INSTALL_FULL_LIBDIR}/lomiri-online-accounts/private)
++set(ONLINE_ACCOUNTS_PLUGIN_DIR_SUFFIX lomiri-online-accounts/qml-plugins)
++set(ONLINE_ACCOUNTS_PLUGIN_PRIVATE_MODULE_DIR_SUFFIX lomiri-online-accounts/private)
+ 
+ set(LOA_I18N_DOMAIN "${PROJECT_NAME}")
+ set(SIGNONUI_I18N_DOMAIN "signon-ui")
+ 
+ include(JoinPaths)
+ join_paths(PC_LIBDIR "\${prefix}" "${CMAKE_INSTALL_LIBDIR}")
++join_paths(PC_DATADIR "\${prefix}" "${CMAKE_INSTALL_DATADIR}")
+ join_paths(PC_INCLUDEDIR "\${prefix}" "${CMAKE_INSTALL_INCLUDEDIR}")
+ 
+ add_subdirectory(click-hooks)
+diff --git a/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/CMakeLists.txt b/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/CMakeLists.txt
+index ffc4667..9333ea7 100644
+--- a/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/CMakeLists.txt
++++ b/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/CMakeLists.txt
+@@ -16,7 +16,7 @@ add_definitions(
+     ${SIGNONPLUGINSCOMMON_CFLAGS}
+ )
+ 
+-add_definitions(-DONLINE_ACCOUNTS_PLUGIN_DIR="${ONLINE_ACCOUNTS_PLUGIN_DIR}")
++add_definitions(-DONLINE_ACCOUNTS_PLUGIN_DIR_SUFFIX="${ONLINE_ACCOUNTS_PLUGIN_DIR_SUFFIX}")
+ add_definitions(-DBUILDING_ONLINE_ACCOUNTS_PLUGIN)
+ 
+ set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+diff --git a/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/LomiriOnlineAccountsPlugin.pc.in b/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/LomiriOnlineAccountsPlugin.pc.in
+index 3cbeb1d..b8a9ec6 100644
+--- a/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/LomiriOnlineAccountsPlugin.pc.in
++++ b/online-accounts-plugins/lib/LomiriOnlineAccountsPlugin/LomiriOnlineAccountsPlugin.pc.in
+@@ -2,7 +2,8 @@ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ libdir=@PC_LIBDIR@
+ includedir=@PC_INCLUDEDIR@
+-plugin_qml_dir=@ONLINE_ACCOUNTS_PLUGIN_DIR@
++datadir=@PC_DATADIR@
++plugin_qml_dir=${datadir}/@ONLINE_ACCOUNTS_PLUGIN_DIR_SUFFIX@
+ 
+ Name: @PLUGIN_LIB@
+ Description: Online Accounts plugin module for Lomiri
+diff --git a/online-accounts-ui/src/CMakeLists.txt b/online-accounts-ui/src/CMakeLists.txt
+index 17f6d90..ae3f215 100644
+--- a/online-accounts-ui/src/CMakeLists.txt
++++ b/online-accounts-ui/src/CMakeLists.txt
+@@ -25,8 +25,10 @@ add_definitions(
+ add_definitions(-DLOA_I18N_DOMAIN="${LOA_I18N_DOMAIN}")
+ add_definitions(-DSIGNONUI_I18N_DOMAIN="${SIGNONUI_I18N_DOMAIN}")
+ add_definitions(-DDEBUG_ENABLED)
+-add_definitions(-DOAU_PLUGIN_DIR="${ONLINE_ACCOUNTS_PLUGIN_DIR}")
+-add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR="${ONLINE_ACCOUNTS_PLUGIN_PRIVATE_MODULE_DIR}")
++add_definitions(-DOAU_PLUGIN_DIR_PREFIX_FALLBACK="${CMAKE_INSTALL_FULL_DATADIR}")
++add_definitions(-DOAU_PLUGIN_DIR_SUFFIX="${ONLINE_ACCOUNTS_PLUGIN_DIR_SUFFIX}")
++add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR_PREFIX_FALLBACK="${CMAKE_INSTALL_FULL_LIBDIR}")
++add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR_SUFFIX="${ONLINE_ACCOUNTS_PLUGIN_PRIVATE_MODULE_DIR_SUFFIX}")
+ 
+ set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+diff --git a/online-accounts-ui/src/browser-request.cpp b/online-accounts-ui/src/browser-request.cpp
+index 762e0b8..4c66ed1 100644
+--- a/online-accounts-ui/src/browser-request.cpp
++++ b/online-accounts-ui/src/browser-request.cpp
+@@ -163,7 +163,14 @@ void BrowserRequestPrivate::start()
+         QObject::connect(m_dialog, SIGNAL(finished(int)),
+                          this, SLOT(onFinished()));
+ 
+-        m_dialog->engine()->addImportPath(PLUGIN_PRIVATE_MODULE_DIR);
++        QByteArray nixWrapperPluginPrivateModuleDirPrefix = qgetenv("NIX_LOA_PRIVATE_MODULE_DIR_PREFIX");
++        QString pluginPrivateModuleDir = QDir(
++            !nixWrapperPluginPrivateModuleDirPrefix.isEmpty()
++            ? nixWrapperPluginPrivateModuleDirPrefix
++            : PLUGIN_PRIVATE_MODULE_DIR_PREFIX_FALLBACK
++        ).absoluteFilePath(PLUGIN_PRIVATE_MODULE_DIR_SUFFIX);
++
++        m_dialog->engine()->addImportPath(pluginPrivateModuleDir);
+         m_dialog->rootContext()->setContextProperty("request", this);
+         m_dialog->setSource(QUrl("qrc:/qml/SignOnUiPage.qml"));
+     } else {
+diff --git a/online-accounts-ui/src/dialog-request.cpp b/online-accounts-ui/src/dialog-request.cpp
+index 4eb6ace..063003c 100644
+--- a/online-accounts-ui/src/dialog-request.cpp
++++ b/online-accounts-ui/src/dialog-request.cpp
+@@ -180,8 +180,15 @@ void DialogRequestPrivate::start()
+         QObject::connect(m_dialog, SIGNAL(finished(int)),
+                          this, SLOT(onFinished()));
+ 
++        QByteArray nixWrapperPluginPrivateModuleDirPrefix = qgetenv("NIX_LOA_PRIVATE_MODULE_DIR_PREFIX");
++        QString pluginPrivateModuleDir = QDir(
++            !nixWrapperPluginPrivateModuleDirPrefix.isEmpty()
++            ? nixWrapperPluginPrivateModuleDirPrefix
++            : PLUGIN_PRIVATE_MODULE_DIR_PREFIX_FALLBACK
++        ).absoluteFilePath(PLUGIN_PRIVATE_MODULE_DIR_SUFFIX);
++
+         m_dialog->engine()->addImportPath(q->mountPoint() +
+-                                          PLUGIN_PRIVATE_MODULE_DIR);
++                                          pluginPrivateModuleDir);
+         m_dialog->rootContext()->setContextProperty("request", this);
+         m_dialog->setSource(QUrl("qrc:/qml/SignOnUiDialog.qml"));
+         q->setWindow(m_dialog);
+diff --git a/online-accounts-ui/src/external-browser-request.cpp b/online-accounts-ui/src/external-browser-request.cpp
+index 98cee6b..4c9adcd 100644
+--- a/online-accounts-ui/src/external-browser-request.cpp
++++ b/online-accounts-ui/src/external-browser-request.cpp
+@@ -26,6 +26,7 @@
+ #include <online-accounts-common/i18n.h>
+ 
+ #include <LomiriOnlineAccountsPlugin/request-handler.h>
++#include <QDir>
+ #include <QQmlContext>
+ #include <QQmlEngine>
+ #include <QVariant>
+@@ -104,7 +105,14 @@ void ExternalBrowserRequestPrivate::start()
+         QObject::connect(m_dialog, SIGNAL(finished(int)),
+                          this, SLOT(onFinished()));
+ 
+-        m_dialog->engine()->addImportPath(PLUGIN_PRIVATE_MODULE_DIR);
++        QByteArray nixWrapperPluginPrivateModuleDirPrefix = qgetenv("NIX_LOA_PRIVATE_MODULE_DIR_PREFIX");
++        QString pluginPrivateModuleDir = QDir(
++            !nixWrapperPluginPrivateModuleDirPrefix.isEmpty()
++            ? nixWrapperPluginPrivateModuleDirPrefix
++            : PLUGIN_PRIVATE_MODULE_DIR_PREFIX_FALLBACK
++        ).absoluteFilePath(PLUGIN_PRIVATE_MODULE_DIR_SUFFIX);
++
++        m_dialog->engine()->addImportPath(pluginPrivateModuleDir);
+         m_dialog->rootContext()->setContextProperty("request", this);
+         m_dialog->setSource(QUrl("qrc:/qml/SignOnUiPage.qml"));
+     } else {
+diff --git a/online-accounts-ui/src/provider-request.cpp b/online-accounts-ui/src/provider-request.cpp
+index b134ffa..6435d8c 100644
+--- a/online-accounts-ui/src/provider-request.cpp
++++ b/online-accounts-ui/src/provider-request.cpp
+@@ -25,6 +25,7 @@
+ 
+ #include <LomiriOnlineAccountsPlugin/account-manager.h>
+ #include <LomiriOnlineAccountsPlugin/application-manager.h>
++#include <QDir>
+ #include <QQmlContext>
+ #include <QQmlEngine>
+ #include <QQuickItem>
+@@ -123,8 +124,23 @@ void ProviderRequestPrivate::start()
+                      this, SLOT(onWindowVisibleChanged(bool)));
+     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
+     QString mountPoint = q->mountPoint();
++
++    QByteArray nixWrapperPluginPrivateModuleDirPrefix = qgetenv("NIX_LOA_PRIVATE_MODULE_DIR_PREFIX");
++    QString pluginPrivateModuleDir = QDir(
++        !nixWrapperPluginPrivateModuleDirPrefix.isEmpty()
++        ? nixWrapperPluginPrivateModuleDirPrefix
++        : PLUGIN_PRIVATE_MODULE_DIR_PREFIX_FALLBACK
++    ).absoluteFilePath(PLUGIN_PRIVATE_MODULE_DIR_SUFFIX);
++
++    QByteArray nixWrapperPluginDirPrefix = qgetenv("NIX_LOA_PLUGIN_DIR_PREFIX");
++    QString pluginDir = QDir(
++        !nixWrapperPluginDirPrefix.isEmpty()
++        ? nixWrapperPluginDirPrefix
++        : OAU_PLUGIN_DIR_PREFIX_FALLBACK
++    ).absoluteFilePath(OAU_PLUGIN_DIR_SUFFIX);
++
+     QQmlEngine *engine = m_view->engine();
+-    engine->addImportPath(mountPoint + PLUGIN_PRIVATE_MODULE_DIR);
++    engine->addImportPath(mountPoint + pluginPrivateModuleDir);
+ 
+     /* If the plugin comes from a click package, also add
+      *   <package-dir>/lib
+@@ -142,7 +158,7 @@ void ProviderRequestPrivate::start()
+     QQmlContext *context = m_view->rootContext();
+ 
+     context->setContextProperty("systemQmlPluginPath",
+-                                QUrl::fromLocalFile(mountPoint + OAU_PLUGIN_DIR));
++                                QUrl::fromLocalFile(mountPoint + pluginDir));
+     context->setContextProperty("localQmlPluginPath",
+                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(
+                                     QStandardPaths::GenericDataLocation) +
+diff --git a/tests/online-accounts-ui/tst_browser_request/CMakeLists.txt b/tests/online-accounts-ui/tst_browser_request/CMakeLists.txt
+index 11d31a9..a7cb4f0 100644
+--- a/tests/online-accounts-ui/tst_browser_request/CMakeLists.txt
++++ b/tests/online-accounts-ui/tst_browser_request/CMakeLists.txt
+@@ -37,7 +37,8 @@ set(SOURCES
+ )
+ 
+ add_definitions(-DNO_REQUEST_FACTORY)
+-add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR="/tmp")
++add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR_PREFIX_FALLBACK="/tmp")
++add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR_SUFFIX="")
+ add_definitions(-DSIGNONUI_FAIL_TIMEOUT=100)
+ add_definitions(-DSIGNONUI_I18N_DOMAIN="${SIGNONUI_I18N_DOMAIN}")
+ add_definitions(-DTEST_DATA_DIR="${CMAKE_CURRENT_BINARY_DIR}/data")
+diff --git a/tests/online-accounts-ui/tst_provider_request/CMakeLists.txt b/tests/online-accounts-ui/tst_provider_request/CMakeLists.txt
+index bf00c45..1d38e4d 100644
+--- a/tests/online-accounts-ui/tst_provider_request/CMakeLists.txt
++++ b/tests/online-accounts-ui/tst_provider_request/CMakeLists.txt
+@@ -33,8 +33,10 @@ set(SOURCES
+ 
+ add_definitions(-DNO_REQUEST_FACTORY)
+ add_definitions(-DTEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../data")
+-add_definitions(-DOAU_PLUGIN_DIR="/tmp")
+-add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR="/tmp")
++add_definitions(-DOAU_PLUGIN_DIR_PREFIX_FALLBACK="/tmp")
++add_definitions(-DOAU_PLUGIN_DIR_SUFFIX="")
++add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR_PREFIX_FALLBACK="/tmp")
++add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR_SUFFIX="")
+ 
+ qt_add_resources(UI_RESOURCES tst_provider_request.qrc)
+ 

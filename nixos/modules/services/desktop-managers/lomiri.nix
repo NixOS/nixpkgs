@@ -97,6 +97,7 @@ in
           (with pkgs; [
             glib # XDG MIME-related tools identify it as GNOME, add gio for MIME identification to work
             libayatana-common
+            libsForQt5.signond # provides SSO-relevant services, for online accounts settings
             ubports-click
           ])
           # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
@@ -119,6 +120,8 @@ in
             lomiri-history-service
             lomiri-mediaplayer-app
             lomiri-music-app
+            lomiri-notes-app
+            lomiri-online-accounts
             lomiri-polkit-agent
             lomiri-schemas # exposes some required dbus interfaces
             lomiri-session # wrappers to properly launch the session
@@ -200,6 +203,8 @@ in
       };
 
       environment.pathsToLink = [
+        # Accounts SSO information, for online account management
+        "/share/accounts"
         # Configs for inter-app data exchange system
         "/share/lomiri-content-hub/peers"
         # Configs for inter-app URL requests

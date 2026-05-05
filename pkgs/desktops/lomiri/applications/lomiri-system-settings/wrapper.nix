@@ -4,12 +4,18 @@
   nixosTests,
   glib,
   lndir,
+  lomiri-system-settings-online-accounts,
   lomiri-system-settings-unwrapped,
   wrapGAppsHook3,
   wrapQtAppsHook,
-  plugins ? [ ],
+  plugins ? [ lomiri-system-settings-online-accounts ],
 }:
 
+let
+  pluginsAndTheirExtraPrefixes = lib.lists.foldl (
+    prefixes: plugin: prefixes ++ [ plugin ] ++ (plugin.passthru.extraSearchPrefixes or [ ])
+  ) [ ] plugins;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings";
   inherit (lomiri-system-settings-unwrapped) version;
@@ -30,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     glib # schema hook
     lomiri-system-settings-unwrapped
   ]
-  ++ plugins;
+  ++ pluginsAndTheirExtraPrefixes;
 
   installPhase = ''
     runHook preInstall
@@ -43,10 +49,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lndir ${lomiri-system-settings-unwrapped}/$inheritedPath $out/$inheritedPath
     done
 
-    for mergedPath in lib/lomiri-system-settings share/lomiri-system-settings share/locale; do
-      mkdir -p $out/$mergedPath
-      for lssPart in ${lomiri-system-settings-unwrapped} ${lib.strings.concatStringsSep " " plugins}; do
-        lndir $lssPart/$mergedPath $out/$mergedPath
+    for mergedPath in lib/lomiri-system-settings share/lomiri-system-settings share/accounts share/locale share/lomiri-online-accounts; do
+      for lssPart in ${lomiri-system-settings-unwrapped} ${lib.strings.concatStringsSep " " pluginsAndTheirExtraPrefixes}; do
+        if [ -d $lssPart/$mergedPath ]; then
+          mkdir -p $out/$mergedPath
+          lndir $lssPart/$mergedPath $out/$mergedPath
+        fi
       done
     done
 
@@ -59,6 +67,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       --set NIX_LSS_PREFIX "$out"
+      --set NIX_LOA_PLUGIN_DIR_PREFIX "$out/share"
+      --set NIX_LOA_PRIVATE_MODULE_DIR_PREFIX "$out/lib"
     )
   '';
 
