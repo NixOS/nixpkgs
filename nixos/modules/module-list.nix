@@ -172,6 +172,7 @@
   ./programs/ausweisapp.nix
   ./programs/autoenv.nix
   ./programs/autojump.nix
+  ./programs/azure-vpn-client.nix
   ./programs/bandwhich.nix
   ./programs/bash-my-aws.nix
   ./programs/bash/bash-completion.nix
