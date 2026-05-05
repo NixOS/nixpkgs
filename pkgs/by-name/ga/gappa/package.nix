@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gappa";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1ux5ImKR8edXyvL21w3jY2o4/fATEjO2SMzS8B0o8Ok=";
+    hash = "sha256-NAEaQcS5NsbfH6MoL+THTJYZyeAJ4VQyp1kiFXeV0cU=";
   };
 
   strictDeps = true;
@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
