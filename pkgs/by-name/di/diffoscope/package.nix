@@ -323,7 +323,7 @@ python.pkgs.buildPythonApplication rec {
 
       # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
       newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
-      update-source-version ${pname} "$newVersion"
+      update-source-version diffoscope "$newVersion"
     '';
   };
 
