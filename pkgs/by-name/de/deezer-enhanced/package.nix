@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation rec {
     mv usr/* $out
 
     ### Wrap deezer-enhanced to include all libraries in the environment
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/deezer-enhanced \
       --set LD_LIBRARY_PATH ${
         lib.makeLibraryPath [
           ### Xorg libs
