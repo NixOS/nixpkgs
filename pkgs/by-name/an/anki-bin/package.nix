@@ -105,7 +105,7 @@ let
       '';
 
       extraInstallCommands = ''
-        ln -s ${pname} $out/bin/anki
+        ln -s anki-bin $out/bin/anki
 
         mkdir -p $out/share
         cp -R ${unpacked}/share/applications \
