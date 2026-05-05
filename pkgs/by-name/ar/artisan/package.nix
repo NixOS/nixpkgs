@@ -9,7 +9,7 @@ let
   version = "4.0.2";
 
   src = fetchurl {
-    url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${version}/${pname}-linux-${version}.AppImage";
+    url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${version}/artisan-linux-${version}.AppImage";
     hash = "sha256-KmjqM3gYpxxjEBaXjF5zvL8bgfgD8IKvAX0xYf29J48=";
   };
 
