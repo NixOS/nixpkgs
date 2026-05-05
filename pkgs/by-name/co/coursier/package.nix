@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
         nix
       ]
     }
-    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion coursier" | tr -d '"')"
     latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coursier/coursier.git 'v*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
     if [ "$oldVersion" != "$latestTag" ]; then
       nixpkgs="$(git rev-parse --show-toplevel)"
       default_nix="$nixpkgs/pkgs/development/tools/coursier/default.nix"
-      update-source-version ${pname} "$latestTag" --version-key=version --print-changes
+      update-source-version coursier "$latestTag" --version-key=version --print-changes
     else
-      echo "${pname} is already up-to-date"
+      echo "coursier is already up-to-date"
     fi
   '';
 
