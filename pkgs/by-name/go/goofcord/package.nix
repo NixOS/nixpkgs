@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BnaPw9edaI1nKAu421JBkI9dAV3Xu3Yr5VQILN0QUTM=";
+    hash = "sha256-qcgEUkPh671q9aJtge+PSbBTrg7vY+iz+H+SKXPFqFI=";
   };
 
   nativeBuildInputs = [
@@ -147,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       nyabinary
       miniharinn
+      baba
     ];
     platforms = lib.platforms.linux;
     mainProgram = "goofcord";
