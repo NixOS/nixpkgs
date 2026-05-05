@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dub";
-  version = "1.39.0";
+  version = "1.41.0";
 
   enableParallelBuilding = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dlang";
     repo = "dub";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-73b15A9+hClD6IbuxTy9QZKpTKjUFYBuqGOclUyhrnM=";
+    hash = "sha256-86TzaRdu+CFM0Ld2fXxjaUUT9dl37MYPdmsvxE4ZUkE=";
   };
 
   postPatch = ''
@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r test/pr2642-cache-db
     rm -r test/pr2644-describe-artifact-path
     rm -r test/pr2647-build-deep
+    rm -r test/issue2698-cimportpaths-broken-with-dmd-ldc
 
     ./test/run-unittest.sh
 
