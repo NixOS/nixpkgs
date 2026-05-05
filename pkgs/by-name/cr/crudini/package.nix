@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     # this just creates the man page
     make all
 
-    install -Dm444 -t $out/share/doc/${pname} README.md EXAMPLES
+    install -Dm444 -t $out/share/doc/crudini README.md EXAMPLES
     installManPage *.1
   '';
 
