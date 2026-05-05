@@ -2,6 +2,8 @@
   gitMinimal,
   lib,
   libgit2,
+  oniguruma,
+  pkg-config,
   rustPlatform,
   stdenv,
   fetchFromGitHub,
@@ -19,8 +21,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-B0XTk0KxA60AuaS6eO3zF/eA/cTcLwA31ipG4VjvO8Q=";
 
-  buildInputs = [ libgit2 ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    libgit2
+    oniguruma
+  ];
+
   nativeCheckInputs = [ gitMinimal ];
+
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   meta = {
     description = "Quickly fix up an old commit using your currently-staged changes";
