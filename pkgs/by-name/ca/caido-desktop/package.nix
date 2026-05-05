@@ -73,7 +73,7 @@ let
         -t $out/share/applications
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
-      wrapProgram $out/bin/${pname} \
+      wrapProgram $out/bin/caido-desktop \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     '';
@@ -105,7 +105,7 @@ let
       mkdir -p $out/Applications/Caido.app $out/bin
       cp -R . $out/Applications/Caido.app/
       makeWrapper $out/Applications/Caido.app/Contents/MacOS/Caido \
-        $out/bin/${pname}
+        $out/bin/caido-desktop
       runHook postInstall
     '';
   };
