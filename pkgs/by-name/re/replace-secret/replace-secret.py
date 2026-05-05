@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import argparse
-from argparse import RawDescriptionHelpFormatter
+import json
+from argparse import BooleanOptionalAction, RawDescriptionHelpFormatter
 
 description = """
 Replace a string in one file with a secret from a second file.
@@ -17,11 +18,16 @@ parser = argparse.ArgumentParser(
 parser.add_argument("string_to_replace", help="the string to replace")
 parser.add_argument("secret_file", help="the file containing the secret")
 parser.add_argument("file", help="the file to perform the replacement on")
+parser.add_argument("--escape", help="whether to quote and escape the secret", default=False, action=BooleanOptionalAction)
+parser.add_argument("--escape_style", help="the escaping scheme used when quoting is used", choices=['json'], default='json')
 args = parser.parse_args()
 
 with open(args.secret_file) as sf, open(args.file, 'r+') as f:
     old = f.read()
     secret = sf.read().strip("\n")
+    if args.escape:
+        if args.escape_style == "json":
+            secret = json.dumps(secret)
     new_content = old.replace(args.string_to_replace, secret)
     f.seek(0)
     f.write(new_content)

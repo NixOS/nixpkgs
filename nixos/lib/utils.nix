@@ -11,10 +11,10 @@ let
     concatMapStringsSep
     concatStringsSep
     elem
-    escapeShellArg
     filter
     flatten
     getName
+    hasAttr
     hasPrefix
     hasSuffix
     imap0
@@ -202,7 +202,7 @@ let
               };
             }
           ];
-        } "_secret" -> { ".example[1].relevant.secret" = { _secret = "/path/to/secret"; quote = true; }; }
+        } "_secret" -> { ".example.1.relevant.secret" = { _secret = "/path/to/secret"; quote = true; }; }
     */
     recursiveGetAttrsetWithJqPrefix =
       item: attr:
@@ -222,7 +222,7 @@ let
               recurse (prefix + (if prefix == "." then "" else ".") + escapedName) item.${name}
             ) (attrNames item)
           else if isList item then
-            imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
+            imap0 (index: item: recurse (prefix + ''."${toString index}"'') item) item
           else
             [ ];
       in
@@ -232,127 +232,206 @@ let
       Takes some options, an attrset and a file path and generates a bash snippet that
       outputs a JSON file at the file path with all instances of
 
+      ```nix
       { _secret = "/path/to/secret" }
+      ```
 
-      in the attrset replaced with the contents of the file
-      "/path/to/secret" in the output JSON.
+      in the attrset replaced with the contents of the file `/path/to/secret`.
 
-      The first argument exposes the following options:
+      This function uses `genSecretsReplacement` under the hood with its first input value
+      set to generate JSON configurations files. See the documentation for that function
+      for examples, implementation details and documentation about all inputs.
+    */
+    genJqSecretsReplacement = genSecretsReplacement {
+      generator = toJSON;
+      escape_style = "json";
+    };
 
-      - attr: The name of the secret attribute that will be processed, defaults to "_secret"
-      - loadCredential: A boolean determining whether the script should load secrets directly (false)
-        or load them from $CREDENTIALS_DIRECTORY (true). In the latter case the output attribute set
-        will contain a .credentials attribute with the necessary credential list that can be passed
-        to systemd's `LoadCredential=` option.
+    /*
+      Used to generate a configuration file which contains secrets
+      whithout storing the secrets in the nix store.
 
-      The output of this utility is an attribute set containing the main script and optionally
-      a list of credentials:
+      :::{.info}
+      This function expects the secrets to be readily available on the target host
+      at pre-established locations. An out of band tool is required to transport the secrets.
 
-      {
-        # The main script
-        script = "...";
+      Further documentation can be found [in the nixpkgs manual](https://nixos.org/nixpkgs/manual/index.html#sec-secrets).
+      :::
 
-        # If the loadCredential option was set:
-        credentials = [
-          "secret1:/path/to/secret1"
-          #...
-        ];
-      }
+      Takes a config file generator, some options for fine tuning,
+      the config file expressed in nix - an arbitrary value of nested lists and attrsets -
+      and a file path where the config file will be created on the target host.
 
-      When a configuration option accepts an attrset that is finally
-      converted to JSON, this makes it possible to let the user define
-      arbitrary secret values.
+      This function will store in the nix store a version of the given config file
+      with secrets replaced by uniquely identifiable placeholders.
+      It then generates a bash snippet that takes the config file in the nix store
+      and creates the config file in the wanted location with all placeholders
+      replaced with the decrypted secrets.
 
-      Example:
-        If the file "/path/to/secret" contains the string
-        "topsecretpassword1234",
+      By default, this function assumes the user running the bash script can access
+      all files containing the required secrets. If that's not the case, the `loadCredential` attribute
+      can be set to `true` to make use of
+      [systemd's `LoadCredential` feature](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html?#LoadCredential=ID:PATH)
+      that bypasses this permission issue.
 
-        genJqSecretsReplacement { } {
-          example = [
-            {
-              irrelevant = "not interesting";
-            }
-            {
-              ignored = "ignored attr";
-              relevant = {
-                secret = {
-                  _secret = "/path/to/secret";
-                };
+      # Inputs
+
+      `generator`
+
+      : 1\. Generator attrset with two attrs:
+        - `generator`: `a -> String` the function generating the config file.
+          It takes one argument, an arbitrary value of nested lists and attrsets
+          and produces a string which is the config file itself in the expected format (json, yaml, etc.).
+        - `escape_style`: a string which currently can only be `json` which describes
+          how the decrypted secret should be sanitized to be embedded into the config file.
+          For example, this tells to escape the quote `"` character by adding a backslash when
+          replacing a placeholder in a JSON string with a secret containing a quote.
+          Secrets that should not be quoted (with `quote = false`) will not be escaped.
+
+      `options`
+
+      : 2\. Options on how to parse the configuration file
+        - attr: The name of the attribute that will be identify a value as identifying a secret, defaults to `_secret`.
+        - loadCredential: A boolean determining whether the script should load secrets directly (false)
+          or load them from $CREDENTIALS_DIRECTORY (true), defaults to `false`. In the latter case the output attribute set
+          will contain a `.credentials` attr with the necessary credential list that can be passed
+          to systemd's `LoadCredential=` option.
+
+      `configuration`
+
+      : 3\. Arbitrary value of nested attrset or list. The `generator` function will be applied to it
+        after all secrets - the attrsets containing the `attr` attribute (which is `_secret` by default) -
+        are replaced by uniquely identified placeholders. The output of the `generator` function is
+        then stored in the nix store.
+
+        Additional attributes can be added next to `attr` to further customize
+        how the secret whould be embedded:
+
+        - `quote`: If `quote = true`, the default, the content of the secret file will
+          be quoted and embedded following the `escape_style`.
+
+          Otherwise, if `quote = false`, the content of the secret file will be outputted as-is,
+          without quotes.Care should then be taken to make sure the format is compatible with the
+          one from generator. This allows for structured secrets.
+
+      `path`
+
+      : A `string` representing the path where the configuration will be created on the target host.
+
+      # Output
+
+      `output`
+
+      : Attrset containing:
+        - `script`: The bash script that creates the final configuration with embedded secrets in the expected location
+          by replacing all placeholders with the secrets in the configuration file stored in the nix store.
+        - `credentials`: The credential list to give to systemd's `LoadCredential=`. Only available when the
+          `loadCredential` attribute is set to `true` in the `options` attrset.
+
+      # Type
+
+      ```
+      genSecretsReplacement :: Attrset -> Attrset -> a -> String -> Attrset
+      ```
+
+      # Example - JSON Generation
+
+      Assuming the file `/path/to/secret` exists and contains `topsecretpassword1234`,
+      the following function call:
+
+      ```nix
+      genSecretsReplacement { escape_style = "json"; generator = builtins.toJSON; } { } {
+        example = [
+          {
+            not_a_secret = "some value";
+          }
+          {
+            not_a_secret = "some value";
+            relevant = {
+              secret = {
+                _secret = "/path/to/secret";
               };
+            };
+          }
+        ];
+      } "/path/to/output.json"
+      ```
+
+      would generate a snippet that, when run, outputs the following file at "/path/to/output.json":
+
+      ```json
+      {
+        "example": [
+          {
+            not_a_secret = "some value";
+          },
+          {
+            not_a_secret = "some value";
+            "relevant": {
+              "secret": "topsecretpassword1234"
             }
-          ];
-        } "/path/to/output.json"
+          }
+        ]
+      }
+      ```
 
-        would generate a snippet that, when run, outputs the following
-        JSON file at "/path/to/output.json":
+      # Example - Structured Secret
 
-        {
-          "example": [
-            {
-              "irrelevant": "not interesting"
-            },
-            {
-              "ignored": "ignored attr",
-              "relevant": {
-                "secret": "topsecretpassword1234"
-              }
-            }
-          ]
-        }
-
-      The attribute set { _secret = "/path/to/secret"; } can contain extra
+      The attribute set `{ _secret = "/path/to/secret"; }` can contain extra
       options, currently it accepts the `quote = true|false` option.
 
-      If `quote = true` (default behavior), the content of the secret file will
-      be quoted as a string and embedded.  Otherwise, if `quote = false`, the
-      content of the secret file will be parsed to JSON and then embedded.
+      Assuming the file `/path/to/secret` exists and contains an actual JSON valid value:
 
-      Example:
-        If the file "/path/to/secret" contains the JSON document:
+      ```json
+      [
+        { "a": "topsecretpassword1234" },
+        { "b": "topsecretpassword5678" }
+      ]
+      ```
 
-        [
-          { "a": "topsecretpassword1234" },
-          { "b": "topsecretpassword5678" }
-        ]
+      the following function call:
 
-        genJqSecretsReplacement { } {
-          example = [
-            {
-              irrelevant = "not interesting";
-            }
-            {
-              ignored = "ignored attr";
-              relevant = {
-                secret = {
-                  _secret = "/path/to/secret";
-                  quote = false;
-                };
+      ```nix
+      genSecretsReplacement { escape_style = "json"; generator = builtins.toJSON; } { } {
+        example = [
+          {
+            not_a_secret = "some value";
+          }
+          {
+            not_a_secret = "some value";
+            relevant = {
+              secret = {
+                _secret = "/path/to/secret";
               };
-            }
-          ];
-        } "/path/to/output.json"
+            };
+          }
+        ];
+      } "/path/to/output.json"
+      ```
 
-        would generate a snippet that, when run, outputs the following
-        JSON file at "/path/to/output.json":
+      would generate a snippet that, when run, outputs the following file at "/path/to/output.json":
 
-        {
-          "example": [
-            {
-              "irrelevant": "not interesting"
-            },
-            {
-              "ignored": "ignored attr",
-              "relevant": {
-                "secret": [
-                  { "a": "topsecretpassword1234" },
-                  { "b": "topsecretpassword5678" }
-                ]
-              }
+      ```json
+      {
+        "example": [
+          {
+            not_a_secret = "some value";
+          },
+          {
+            not_a_secret = "some value";
+            "relevant": {
+              "secret": [
+                { "a": "topsecretpassword1234" },
+                { "b": "topsecretpassword5678" }
+              ]
             }
-          ]
-        }
+          }
+        ]
+      }
+      ```
     */
-    genJqSecretsReplacement =
+    genSecretsReplacement =
+      { generator, escape_style }:
       {
         attr ? "_secret",
         loadCredential ? false,
@@ -368,11 +447,34 @@ let
           }
           // set
         ) secretsRaw;
-        stringOrDefault = str: def: if str == "" then def else str;
+
+        # Like `mapAttrsRecursiveCond` but also recurses over lists.
+        mapAttrsRecursiveCond' =
+          cond: f: set:
+          let
+            recurse =
+              path: val:
+              if isAttrs val && cond val then
+                mapAttrs (n: v: recurse (path ++ [ n ]) v) val
+              else if isList val && cond val then
+                imap0 (i: v: recurse (path ++ [ (toString i) ]) v) val
+              else
+                f path val;
+          in
+          recurse [ ] set;
+
+        # Change the _secret values inside the set by the path
+        setWithSecretsReplaced = mapAttrsRecursiveCond' (as: !(isAttrs as && hasAttr attr as)) (
+          path: item:
+          if (isAttrs item && hasAttr attr item) then
+            sanitizePath "@.${concatMapStringsSep "." (n: lib.escape ''"${n}"'') path}@"
+          else
+            item
+        ) set;
 
         # Sanitize path to create a valid credential tag (same as in genLoadCredentialForJqSecretsReplacementSnippet)
         sanitizePath =
-          path: lib.stringAsChars (c: if builtins.match "[a-zA-Z0-9_.#=!-]" c != null then c else "_") path;
+          path: lib.stringAsChars (c: if builtins.match "[a-zA-Z0-9_.#=!-]" c != null then c else "") path;
 
         # Generate credential tag for a given index and path
         credentialTag = index: path: "${toString index}_${sanitizePath (secrets.${path}.${attr})}";
@@ -390,36 +492,17 @@ let
             rm '${output}'
           fi
 
-          inherit_errexit_enabled=0
-          shopt -pq inherit_errexit && inherit_errexit_enabled=1
-          shopt -s inherit_errexit
-        ''
-        + concatStringsSep "\n" (
-          imap1 (
-            index: name:
-            # We keep variable assignment and export separated to avoid masking the return code of the file access.
-            # With `set -e` this will now fail if a file doesn't exist.
-            ''
-              secret${toString index}=$(<${credentialPath index name})
-              export secret${toString index}
-            '') (attrNames secrets)
-        )
-        + "\n"
-        + "${pkgs.jq}/bin/jq >'${output}' "
-        + escapeShellArg (
-          stringOrDefault (concatStringsSep " | " (
-            imap1 (
-              index: name:
-              "${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})"
-            ) (attrNames secrets)
-          )) "."
-        )
-        + ''
-           <<'EOF'
-          ${toJSON set}
+          cat >'${output}' <<'EOF'
+          ${generator setWithSecretsReplaced}
           EOF
-          (( ! inherit_errexit_enabled )) && shopt -u inherit_errexit
-        '';
+        ''
+        + (concatStringsSep "\n" (
+          imap1 (index: name: ''
+            ${pkgs.replace-secret}/bin/replace-secret "\"${sanitizePath "@${name}@"}\"" ${credentialPath index name} '${output}' ${
+              optionalString secrets.${name}.quote "--escape --escape_style=${escape_style}"
+            }
+          '') (attrNames secrets)
+        ));
 
         /*
           Generates a list of systemd LoadCredential entries if loadCredential was set,
