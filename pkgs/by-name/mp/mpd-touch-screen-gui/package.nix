@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
   SDL2,
@@ -25,6 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "156eaebede89da2b83a98d8f9dfa46af12282fb4";
     sha256 = "sha256-vr/St4BghrndjUQ0nZI/uJq+F/MjEj6ulc4DYwQ/pgU=";
   };
+  patches = [
+    # Fixes build with gcc15. See: https://github.com/muesli4/mpd-touch-screen-gui/pull/15
+    (fetchpatch {
+      url = "https://github.com/muesli4/mpd-touch-screen-gui/pull/15/commits/ecbe6fe2d7e30b81584e1f15e3003e0dba013f24.patch";
+      hash = "sha256-p4TywZl7SQrMsKGEZgcctTY5DgnIWddQSFadVpyCbTU=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    sed -i s#/usr/share/fonts/TTF#${dejavu_fonts}/share/fonts/truetype#g data/program.conf
+    substituteInPlace data/program.conf \
+      --replace-fail /usr/share/fonts/TTF ${dejavu_fonts}/share/fonts/truetype
   '';
 
   buildInputs = [
@@ -48,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://stackoverflow.com/questions/53089494/configure-error-could-not-find-a-version-of-the-library
   configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
+    (lib.withFeatureAs true "boost-libdir" "${lib.getLib boost}/lib")
   ];
 
   doCheck = true;
