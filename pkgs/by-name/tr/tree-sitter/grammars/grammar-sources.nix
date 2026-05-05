@@ -2924,10 +2924,10 @@
   };
 
   vhdl = {
-    version = "1.4.0-unstable-2026-03-29";
+    version = "1.5.0-unstable-2026-05-01";
     url = "github:jpt13653903/tree-sitter-vhdl";
-    rev = "497a47c441902030b916f8d5bc6f0f5291f135f3";
-    hash = "sha256-8rkklfXroaaJIFgkB1V82Bhx8QwJmMcGMz72i994ukA=";
+    rev = "b8e31d110c6b039899d0f307792bdb0ff50ece2c";
+    hash = "sha256-RBfzfxYzUnwVprnZFAiBinUL++09svvWjNA0Hc9zkiw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
