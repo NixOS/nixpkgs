@@ -137,7 +137,7 @@ let
       testScript = ''
         # save hostapd config file for manual inspection
         machine.wait_for_unit("hostapd.service")
-        machine.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
+        machine.copy_from_machine("/run/hostapd/wlan0.hostapd.conf")
 
         ${extraTestScript}
       '';
@@ -257,7 +257,7 @@ in
           machine.succeed("wpa_cli -i wlan0 list_networks | grep -q test2")
 
       # save file for manual inspection
-      machine.copy_from_vm(config_file)
+      machine.copy_from_machine(config_file)
 
       # check hardening options
       machine.succeed("systemd-analyze security wpa_supplicant >&2")

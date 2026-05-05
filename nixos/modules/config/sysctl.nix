@@ -72,20 +72,25 @@ in
           {
             inherit (config.boot.kernelPackages.kernel) configfile;
           }
-          ''
-            mmap_rnd_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
-            if [[ -z "$mmap_rnd_bits_max" ]]; then
-              echo "Unable to determine mmap_rnd_bits_max. Check your kernel configfile is valid."
-              exit 1
-            fi
-            mmap_rnd_compat_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
-            if [[ -z "$mmap_rnd_compat_bits_max" ]]; then
-              echo "Unable to determine mmap_rnd_compat_bits_max. Check your kernel configfile is valid."
-              exit 1
-            fi
-            echo "vm.mmap_rnd_bits=$mmap_rnd_bits_max" >> $out
-            echo "vm.mmap_rnd_compat_bits=$mmap_rnd_compat_bits_max" >> $out
-          '';
+          (
+            ''
+              mmap_rnd_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
+              if [[ -z "$mmap_rnd_bits_max" ]]; then
+                echo "Unable to determine mmap_rnd_bits_max. Check your kernel configfile is valid."
+                exit 1
+              fi
+              echo "vm.mmap_rnd_bits=$mmap_rnd_bits_max" >> $out
+            ''
+            # HAVE_ARCH_MMAP_RND_COMPAT_BITS is not defined for LoongArch64
+            + lib.optionalString (!pkgs.stdenv.hostPlatform.isLoongArch64) ''
+              mmap_rnd_compat_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
+              if [[ -z "$mmap_rnd_compat_bits_max" ]]; then
+                echo "Unable to determine mmap_rnd_compat_bits_max. Check your kernel configfile is valid."
+                exit 1
+              fi
+              echo "vm.mmap_rnd_compat_bits=$mmap_rnd_compat_bits_max" >> $out
+            ''
+          );
       "sysctl.d/60-nixos.conf".text = lib.concatStrings (
         lib.mapAttrsToList (
           n: v: lib.optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"

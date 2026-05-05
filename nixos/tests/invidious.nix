@@ -2,8 +2,8 @@
 {
   name = "invidious";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ sbruder ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {
