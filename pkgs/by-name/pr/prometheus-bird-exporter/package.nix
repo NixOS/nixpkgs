@@ -5,18 +5,20 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bird-exporter";
-  version = "1.4.3";
+  version = "1.4.5";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "bird_exporter";
-    rev = version;
-    sha256 = "sha256-aClwJ+J83iuZbfNP+Y1vKEjBULD5wh/R3TMceCccacc=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-uR3/2ktVxzEZOy57eFopLFsAuiw03e9WZn2QC4/GNVc=";
   };
 
-  vendorHash = "sha256-0EXRpehdpOYpq6H9udmNnQ24EucvAcPUKOlFSAAewbE=";
+  vendorHash = "sha256-seTykqpdYQiWp8CoTAJ62rzxDaLFqjWe8y5YMu8Ypm8=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bird; };
 
@@ -27,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lukegb ];
   };
-}
+})
