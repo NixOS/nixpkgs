@@ -5793,6 +5793,8 @@ self: super: with self; {
 
   flexparser = callPackage ../development/python-modules/flexparser { };
 
+  fli = callPackage ../development/python-modules/fli { };
+
   flickrapi = callPackage ../development/python-modules/flickrapi { };
 
   flipr-api = callPackage ../development/python-modules/flipr-api { };
