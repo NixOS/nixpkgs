@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "par2cmdline";
-  version = "0.8.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Parchive";
     repo = "par2cmdline";
     rev = "v${finalAttrs.version}";
-    sha256 = "11mx8q29cr0sryd11awab7y4mhqgbamb1ss77rffjj6in8pb4hdk";
+    sha256 = "sha256-bk0RAphX4EnrthznmmGjTqttb9He9RERJ9c80ZBEc54=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
