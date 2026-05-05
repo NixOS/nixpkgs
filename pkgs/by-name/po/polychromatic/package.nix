@@ -83,7 +83,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/polychromatic/polychromatic/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ evanjs ];
+    maintainers = with lib.maintainers; [
+      evanjs
+      nadir-ishiguro
+    ];
     mainProgram = "polychromatic-controller";
   };
 })
