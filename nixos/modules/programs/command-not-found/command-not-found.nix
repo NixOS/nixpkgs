@@ -61,7 +61,14 @@ in
   config = lib.mkMerge [
     {
       programs.command-not-found = {
-        enable = lib.mkDefault (builtins.pathExists cfg.dbPath);
+        /*
+          - command-not-found itself defaults to false (priority 1500).
+          - Minimal profile uses mkDefault (priority 1000).
+
+          We want this option to take precedence over command-not-found's option default (<1500),
+          and minimal profile to take precedence over this (>1000).
+        */
+        enable = lib.mkOverride 1100 (builtins.pathExists cfg.dbPath);
         dbPath = pkgs.path + "/programs.sqlite";
       };
     }
