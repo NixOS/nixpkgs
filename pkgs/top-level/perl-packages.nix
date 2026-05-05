@@ -30445,8 +30445,16 @@ with self;
         url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
         hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
       })
+      (fetchpatch {
+        url = "https://github.com/PerlGameDev/SDL/commit/2a1eb99101a89e46c13b75b08a4c685e0f7425fe.patch";
+        hash = "sha256-u2RJLeBpqueAPt0DFd8iZ9GA2pputPpZiovQeLyt6j8=";
+      })
     ];
-    preCheck = "rm t/core_audiospec.t";
+    preCheck = "
+      rm t/core_audiospec.t
+      # https://github.com/PerlGameDev/SDL/pull/310
+      rm t/core_surface.t
+    ";
     buildInputs = [
       pkgs.SDL
       pkgs.SDL_gfx
