@@ -1768,6 +1768,7 @@
   ./services/web-apps/rimgo.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/rsshub.nix
+  ./services/web-apps/rundeck.nix
   ./services/web-apps/rutorrent.nix
   ./services/web-apps/screego.nix
   ./services/web-apps/selfoss.nix
