@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awww";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "LGFae";
     repo = "awww";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bvO+gfuUOVUiBEwAJ5A2RjpysPzCfyXD+DM8piOa1+4=";
+    hash = "sha256-owyQdC2vi0kYC119fzyVQp0J4G0t1n4xXUwryhlBbqA=";
   };
 
-  cargoHash = "sha256-4ApaMiVqXD4RlyWFMk2wKsyo37FT/OeVly/H88pF7oc=";
+  cargoHash = "sha256-huw9vzLzXE7eu1ksB6a/SJAtp4xLc2hDb0RHS8O28MY=";
 
   buildInputs = [
     lz4
