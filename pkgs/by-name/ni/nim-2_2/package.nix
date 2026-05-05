@@ -48,8 +48,8 @@ let
           runHook preBuild
           cat >> config/config.nims << WTF
 
-          switch("os", "${nimUnwrapped.passthru.nimTarget.os}")
-          switch("cpu", "${nimUnwrapped.passthru.nimTarget.cpu}")
+          switch("os", "${stdenv.targetPlatform.nim.os}")
+          switch("cpu", "${stdenv.targetPlatform.nim.cpu}")
           switch("define", "nixbuild")
 
           # Configure the compiler using the $CC set by Nix at build time
@@ -63,8 +63,8 @@ let
 
           mv config/nim.cfg config/nim.cfg.old
           cat > config/nim.cfg << WTF
-          os = "${nimUnwrapped.passthru.nimTarget.os}"
-          cpu =  "${nimUnwrapped.passthru.nimTarget.cpu}"
+          os = "${stdenv.targetPlatform.nim.os}"
+          cpu =  "${stdenv.targetPlatform.nim.cpu}"
           define:"nixbuild"
           WTF
 
