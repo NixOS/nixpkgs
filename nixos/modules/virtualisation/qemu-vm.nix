@@ -552,7 +552,7 @@ in
         y = 768;
       };
       description = ''
-        The resolution of the virtual machine display.
+        The resolution of the virtual machine display (relevant only if guest uses grub).
       '';
     };
 
