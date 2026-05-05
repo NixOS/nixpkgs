@@ -5,7 +5,7 @@
 }:
 python3.pkgs.buildPythonApplication {
   pname = "pywalfox-native";
-  version = "2.7.4";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
