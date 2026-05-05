@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious";
-    rev = "${pname}-${version}";
+    rev = "audacious-${version}";
     hash = "sha256-1+RyGMUrotFdNCNpxzKpXGafKn9kNtzEyRVefUmJexU=";
   };
 
