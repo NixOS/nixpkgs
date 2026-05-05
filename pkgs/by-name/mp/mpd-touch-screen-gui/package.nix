@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    sed -i s#/usr/share/fonts/TTF#${dejavu_fonts}/share/fonts/truetype#g data/program.conf
+    substituteInPlace data/program.conf \
+      --replace-fail /usr/share/fonts/TTF ${dejavu_fonts}/share/fonts/truetype
   '';
 
   buildInputs = [
