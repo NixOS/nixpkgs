@@ -7,6 +7,7 @@ function runChecklist({
   pull_request,
   log,
   maintainers,
+  noPrFailuresState,
   user,
   userIsMaintainer,
 }) {
@@ -41,6 +42,25 @@ function runChecklist({
       .filter(Boolean),
   )
 
+  // A "changes requested" review from a committer blocks both the merge queue and
+  // auto-merge, even if it was made on an older commit (unlike approvals, GitHub does
+  // not auto-dismiss changes-requested reviews on push). For each committer, take their
+  // latest actionable review; if it's `changes_requested`, they're blocking the PR.
+  const committerReviewState = new Map()
+  for (const { event, state, user } of events) {
+    if (
+      event === 'reviewed' &&
+      user &&
+      committers.has(user.id) &&
+      ['approved', 'changes_requested'].includes(state)
+    ) {
+      committerReviewState.set(user.id, state)
+    }
+  }
+  const noBlockingReviews = !Array.from(committerReviewState.values()).includes(
+    'changes_requested',
+  )
+
   const checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
@@ -57,6 +77,11 @@ function runChecklist({
         pull_request.user.login === 'r-ryantm',
     },
     'PR is not a draft': !pull_request.draft,
+    // Pending/missing is tolerated so the auto-merge fallback can still queue the PR;
+    // only an explicit error/failure flips the check off.
+    'PR has no CI failures.': !['error', 'failure'].includes(noPrFailuresState),
+    'PR is not blocked by a "changes requested" review from a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+      noBlockingReviews,
   }
 
   if (user) {
@@ -147,6 +172,14 @@ async function handleMerge({
   // TODO: Find a more efficient way of downloading all the *names* of the touched files,
   // including an early exit when the first non-by-name file is found.
   if (files.length >= 100) return false
+
+  const noPrFailuresState = (
+    await github.rest.repos.listCommitStatusesForRef({
+      ...context.repo,
+      ref: pull_request.head.sha,
+      per_page: 100,
+    })
+  ).data.find(({ context }) => context === 'no PR failures')?.state
 
   // Only look through comments *after* the latest (force) push.
   const lastPush = events.findLastIndex(
@@ -272,6 +305,7 @@ async function handleMerge({
       pull_request,
       log,
       maintainers,
+      noPrFailuresState,
       user: comment.user,
       userIsMaintainer: await isMaintainer(comment.user.login),
     })
@@ -341,6 +375,7 @@ async function handleMerge({
     pull_request,
     log,
     maintainers,
+    noPrFailuresState,
   })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
