@@ -68,7 +68,7 @@ ocamlPackages.buildDunePackage {
 
   installPhase = ''
     runHook preInstall
-    dune install --prefix $bin ${pname}
+    dune install --prefix $bin alt-ergo
     mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib
     mv $bin/lib/alt-ergo $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/
     runHook postInstall
