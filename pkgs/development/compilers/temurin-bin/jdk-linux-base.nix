@@ -86,7 +86,6 @@ let
 
     installPhase = ''
       cd ..
-
       mv $sourceRoot $out
 
       # jni.h expects jni_md.h to be in the header search path.

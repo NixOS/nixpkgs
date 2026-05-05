@@ -3559,6 +3559,9 @@ with pkgs;
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
+  temurin-bin-26 = javaPackages.compiler.temurin-bin.jdk-26;
+  temurin-jre-bin-26 = javaPackages.compiler.temurin-bin.jre-26;
+
   temurin-bin-25 = javaPackages.compiler.temurin-bin.jdk-25;
   temurin-jre-bin-25 = javaPackages.compiler.temurin-bin.jre-25;
 
@@ -3574,8 +3577,8 @@ with pkgs;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-21;
-  temurin-jre-bin = temurin-jre-bin-21;
+  temurin-bin = temurin-bin-25;
+  temurin-jre-bin = temurin-jre-bin-25;
 
   semeru-bin-21 = javaPackages.compiler.semeru-bin.jdk-21;
   semeru-jre-bin-21 = javaPackages.compiler.semeru-bin.jre-21;
@@ -4183,6 +4186,7 @@ with pkgs;
   openjfx17 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "17"; };
   openjfx21 = openjfx;
   openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
+  openjfx26 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "26"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -4214,9 +4218,14 @@ with pkgs;
   jdk25 = openjdk25;
   jdk25_headless = openjdk25_headless;
 
+  openjdk26 = javaPackages.compiler.openjdk26;
+  openjdk26_headless = javaPackages.compiler.openjdk26.headless;
+  jdk26 = openjdk26;
+  jdk26_headless = openjdk26_headless;
+
   # default JDK
-  jdk = jdk21;
-  jdk_headless = jdk21_headless;
+  jdk = jdk25;
+  jdk_headless = jdk25_headless;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
@@ -4245,6 +4254,10 @@ with pkgs;
       jre25_minimal = callPackage ../development/compilers/openjdk/jre.nix {
         jdk = jdk25;
         jdkOnBuild = buildPackages.jdk25;
+      };
+      jre26_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+        jdk = jdk26;
+        jdkOnBuild = buildPackages.jdk26;
       };
       jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
         jdkOnBuild = buildPackages.jdk;
@@ -4701,12 +4714,14 @@ with pkgs;
       zulu17 = callPackage ../development/compilers/zulu/17.nix { };
       zulu21 = callPackage ../development/compilers/zulu/21.nix { };
       zulu25 = callPackage ../development/compilers/zulu/25.nix { };
+      zulu26 = callPackage ../development/compilers/zulu/26.nix { };
     })
     zulu8
     zulu11
     zulu17
     zulu21
     zulu25
+    zulu26
     ;
   zulu = zulu21;
 
