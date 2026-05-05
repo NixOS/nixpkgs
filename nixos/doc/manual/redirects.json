@@ -62,6 +62,15 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-ghorg": [
+    "index.html#module-services-ghorg"
+  ],
+  "module-services-ghorg-basic-usage": [
+    "index.html#module-services-ghorg-basic-usage"
+  ],
+  "module-services-ghorg-multiple-jobs-and-credentials": [
+    "index.html#module-services-ghorg-multiple-jobs-and-credentials"
+  ],
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],

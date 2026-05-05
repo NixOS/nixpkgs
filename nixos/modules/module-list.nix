@@ -869,6 +869,7 @@
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoipupdate.nix
+  ./services/misc/ghorg.nix
   ./services/misc/gitea.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
