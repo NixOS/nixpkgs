@@ -17,16 +17,16 @@
 }:
 
 let
-  version = "0.306.0";
+  version = "0.306.2";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-zg/DIh/HKJZraMIGcB2KKxiRQhuSrRDDcAEoL2prhFg=";
+    hash = "sha256-XlSdAOuC+nwxRVa0nnsqGDPY57q58byLgLpTqEyImJ8=";
   };
 
-  vendorHash = "sha256-0X8rzETUgLa83EA/GQnZUrWXUYnAm8H60kk6ZKsH9Yo=";
+  vendorHash = "sha256-JBhx1K8E2BynsgjXBno+0OUpWF15Eyo9yBzofruBEck=";
 
   commonMeta = {
     license = lib.licenses.mit;
