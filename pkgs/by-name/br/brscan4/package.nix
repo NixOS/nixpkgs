@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   src =
     {
       "i686-linux" = fetchurl {
-        url = "http://download.brother.com/welcome/dlf006646/${pname}-${version}.i386.deb";
+        url = "http://download.brother.com/welcome/dlf006646/brscan4-${version}.i386.deb";
         sha256 = "sha256-ymIAg+rfSYP5uzsAM1hUYZacJ0PXmKEoljNtb0pgGMw=";
       };
       "x86_64-linux" = fetchurl {
-        url = "https://download.brother.com/welcome/dlf006645/${pname}-${version}.amd64.deb";
+        url = "https://download.brother.com/welcome/dlf006645/brscan4-${version}.amd64.deb";
         sha256 = "sha256-Gpr5456MCNpyam3g2qPo7S3aEZFMaUGR8bu7YmRY8xk=";
       };
     }
