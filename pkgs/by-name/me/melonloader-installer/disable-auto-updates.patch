@@ -1,0 +1,19 @@
+Subject: [PATCH] Disable auto-updates
+---
+Index: MelonLoader.Installer/Updater.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/MelonLoader.Installer/Updater.cs b/MelonLoader.Installer/Updater.cs
+--- a/MelonLoader.Installer/Updater.cs	(revision 201f0da25ae5e576884f65c350046d7bb267b513)
++++ b/MelonLoader.Installer/Updater.cs	(date 1769995332111)
+@@ -18,7 +18,7 @@
+             return null;
+ 
+         // Don't auto-update on CI builds
+-        if (Program.Version.Revision > 0)
++        if (true)
+         {
+             State = UpdateState.AlreadyChecked;
+             return null;
