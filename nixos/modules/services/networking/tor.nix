@@ -142,32 +142,29 @@ in
 
     services.tor = lib.mkIf (cfg.client.enable || cfg.router.enable) {
       enable = true;
-
-      client = {
-        enable = true;
-        transparentProxy.enable = true;
-        dns.enable = true;
-      };
+      client.enable = true;
 
       settings = {
-
-        # If router option is enabled then bind to 0.0.0.0 instead of 127.0.0.1.
-        DNSPort = lib.mkIf (cfg.client.enable || cfg.router.enable) [
-          {
-            addr = if cfg.router.enable then "0.0.0.0" else "127.0.0.1";
+        DNSPort = [
+          (lib.mkIf cfg.client.enable {
+            addr = "127.0.0.1";
             port = cfg.dnsPort;
-          }
+          })
+
+          (lib.mkIf cfg.router.enable {
+            addr = "0.0.0.0";
+            port = cfg.dnsPort;
+          })
         ];
 
-        # Without mkForce it sets addr to 127.0.0.1 and later it cannot bind again as 0.0.0.0.
-        TransPort = lib.mkIf (cfg.client.enable || cfg.router.enable) (
-          lib.mkForce [
-            {
-              addr = if cfg.router.enable then "0.0.0.0" else "127.0.0.1";
-              port = cfg.transPort;
-            }
-          ]
-        );
+        AutomapHostOnResolve = true;
+
+        TransPort = [
+          {
+            addr = if cfg.router.enable then "0.0.0.0" else "127.0.0.1";
+            port = cfg.transPort;
+          }
+        ];
 
         VirtualAddrNetworkIPv4 = cfg.virtualAddrNetworkIPv4;
       };
