@@ -163,25 +163,27 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  postInstall = ''
-    installShellCompletion --cmd incus \
-      --bash <($out/bin/incus completion bash) \
-      --fish <($out/bin/incus completion fish) \
-      --zsh <($out/bin/incus completion zsh)
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+      installShellCompletion --cmd incus \
+        --bash <($out/bin/incus completion bash) \
+        --fish <($out/bin/incus completion fish) \
+        --zsh <($out/bin/incus completion zsh)
+    ''
+    + ''
+      mkdir -p $agent_loader/bin $agent_loader/etc/systemd/system $agent_loader/lib/udev/rules.d
+      # the agent_loader output is used by virtualisation.incus.agent
+      cp internal/server/instance/drivers/agent-loader/incus-agent-linux $agent_loader/bin/incus-agent
+      cp internal/server/instance/drivers/agent-loader/incus-agent-setup-linux $agent_loader/bin/incus-agent-setup
+      chmod +x $agent_loader/bin/incus-agent{,-setup}
+      patchShebangs $agent_loader/bin/incus-agent{,-setup}
+      cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
+      cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
+      substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"
 
-    mkdir -p $agent_loader/bin $agent_loader/etc/systemd/system $agent_loader/lib/udev/rules.d
-    # the agent_loader output is used by virtualisation.incus.agent
-    cp internal/server/instance/drivers/agent-loader/incus-agent-linux $agent_loader/bin/incus-agent
-    cp internal/server/instance/drivers/agent-loader/incus-agent-setup-linux $agent_loader/bin/incus-agent-setup
-    chmod +x $agent_loader/bin/incus-agent{,-setup}
-    patchShebangs $agent_loader/bin/incus-agent{,-setup}
-    cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
-    cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
-    substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"
-
-    mkdir $doc
-    cp -R doc/html $doc/
-  '';
+      mkdir $doc
+      cp -R doc/html $doc/
+    '';
 
   passthru = {
     client = callPackage ./client.nix {
