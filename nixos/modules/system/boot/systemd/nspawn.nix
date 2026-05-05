@@ -102,49 +102,97 @@ let
     (assertValueOneOf "VirtualEthernet" boolValues)
   ];
 
-  instanceOptions = {
-    options = (getAttrs [ "enable" ] sharedOptions) // {
-      execConfig = mkOption {
-        default = { };
-        example = {
-          Parameters = "/bin/sh";
+  instanceOptions =
+    { name, config, ... }:
+    {
+      options = (getAttrs [ "enable" ] sharedOptions) // {
+        execConfig = mkOption {
+          default = { };
+          example = {
+            Parameters = "/bin/sh";
+          };
+          type = types.addCheck (types.attrsOf unitOption) checkExec;
+          description = ''
+            Each attribute in this set specifies an option in the
+            `[Exec]` section of this unit. See
+            {manpage}`systemd.nspawn(5)` for details.
+          '';
         };
-        type = types.addCheck (types.attrsOf unitOption) checkExec;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Exec]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
+
+        filesConfig = mkOption {
+          default = { };
+          example = {
+            Bind = [ "/home/alice" ];
+          };
+          type = types.addCheck (types.attrsOf unitOption) checkFiles;
+          description = ''
+            Each attribute in this set specifies an option in the
+            `[Files]` section of this unit. See
+            {manpage}`systemd.nspawn(5)` for details.
+          '';
+        };
+
+        networkConfig = mkOption {
+          default = { };
+          example = {
+            Private = false;
+          };
+          type = types.addCheck (types.attrsOf unitOption) checkNetwork;
+          description = ''
+            Each attribute in this set specifies an option in the
+            `[Network]` section of this unit. See
+            {manpage}`systemd.nspawn(5)` for details.
+          '';
+        };
+
+        extraDrvConfig = mkOption {
+          type = types.nullOr types.package;
+          default = null;
+          description = ''
+            Extra config for an nspawn-unit that is generated via `nix-build`.
+            This is necessary since nspawn doesn't support overrides in
+            `/etc/systemd/nspawn` natively and sometimes a derivation
+            is needed for configs (e.g. to determine all needed store-paths to bind-mount
+            into a machine).
+          '';
+        };
+
+        unit = mkOption {
+          readOnly = true;
+          type = types.pathInStore;
+          default = instanceToUnit name config;
+          defaultText = "nspawn unit file";
+          description = "The generated .nspawn unit file";
+        };
       };
 
-      filesConfig = mkOption {
-        default = { };
-        example = {
-          Bind = [ "/home/alice" ];
-        };
-        type = types.addCheck (types.attrsOf unitOption) checkFiles;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Files]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
-      };
-
-      networkConfig = mkOption {
-        default = { };
-        example = {
-          Private = false;
-        };
-        type = types.addCheck (types.attrsOf unitOption) checkNetwork;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Network]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
-      };
     };
 
-  };
+  makeUnit' =
+    name: def:
+    if def.extraDrvConfig == null || !def.enable then
+      pkgs.runCommand "nspawn-inst" { } "cat ${makeUnit name def}/${shellEscape name} > $out"
+    else
+      pkgs.runCommand "nspawn-${mkPathSafeName name}-custom"
+        {
+          preferLocalBuild = true;
+          allowSubstitutes = false;
+        }
+        (
+          let
+            name' = shellEscape name;
+          in
+          ''
+            if [ ! -f "${def.extraDrvConfig}" ]; then
+              echo "systemd.nspawn.${name}.extraDrvConfig is not a file!"
+              exit 1
+            fi
+
+            touch $out
+            cat ${makeUnit name def}/${name'} > $out
+            cat ${def.extraDrvConfig} >> $out
+          ''
+        );
 
   instanceToUnit =
     name: def:
@@ -161,9 +209,13 @@ let
           ${attrsToSection def.networkConfig}
         '';
       }
-      // def;
+      // (filterAttrs (n: const (elem n optWhitelist)) def);
+      optWhitelist = [
+        "extraDrvConfig"
+        "enable"
+      ];
     in
-    base // { unit = makeUnit name base; };
+    makeUnit' name base;
 
 in
 {
@@ -180,23 +232,14 @@ in
 
   config =
     let
-      units = mapAttrs' (
-        n: v:
-        let
-          nspawnFile = "${n}.nspawn";
-        in
-        nameValuePair nspawnFile (instanceToUnit nspawnFile v)
-      ) cfg;
+      units = mapAttrs' (name: value: {
+        name = "systemd/nspawn/${name}.nspawn";
+        value.source = value.unit;
+      }) cfg;
     in
     mkMerge [
       (mkIf (cfg != { }) {
-        environment.etc."systemd/nspawn".source = mkIf (cfg != { }) (generateUnits {
-          allowCollisions = false;
-          type = "nspawn";
-          inherit units;
-          upstreamUnits = [ ];
-          upstreamWants = [ ];
-        });
+        environment.etc = units;
       })
       {
         systemd.targets.multi-user.wants = [ "machines.target" ];
