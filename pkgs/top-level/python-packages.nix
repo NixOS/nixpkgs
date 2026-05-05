@@ -3844,6 +3844,10 @@ self: super: with self; {
 
   deprecated = callPackage ../development/python-modules/deprecated { };
 
+  deprecated-crypt-alternative =
+    callPackage ../development/python-modules/deprecated-crypt-alternative
+      { };
+
   deprecation = callPackage ../development/python-modules/deprecation { };
 
   deprecation-alias = callPackage ../development/python-modules/deprecation-alias { };
@@ -18609,6 +18613,9 @@ self: super: with self; {
 
   standard-chunk =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-chunk { } else null;
+
+  standard-crypt =
+    if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-crypt { } else null;
 
   standard-imghdr =
     if pythonAtLeast "3.13" then
