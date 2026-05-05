@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
+    name = "azuredatastudio-${version}.tar.gz";
 
     # Url can be found at: https://github.com/microsoft/azuredatastudio/releases
     # In the downloads table for Linux .tar.gz
