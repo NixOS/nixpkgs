@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "9.2.3";
+  version = "9.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     tag = "v${version}";
-    hash = "sha256-czHn5pgiyQwn+78NQnJDo49knstL9m2Gp3neZeb75js=";
+    hash = "sha256-VW4whif1l7nY1Ifwn/NHJrDbYNeroJRWQtO47dOfEAo=";
   };
 
   pythonRelaxDeps = [
