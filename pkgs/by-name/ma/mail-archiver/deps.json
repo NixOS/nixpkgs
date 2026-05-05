@@ -1,0 +1,382 @@
+[
+  {
+    "pname": "Azure.Core",
+    "version": "1.50.0",
+    "hash": "sha256-8Pjz0/2wTLK5uY7G5qrxQr4CsmrjiR8gL4g6zJymj5s="
+  },
+  {
+    "pname": "Azure.Core",
+    "version": "1.52.0",
+    "hash": "sha256-3LYlVraPSIgNNuguhwZt44M5ROoMaffXYRXbIRQwQes="
+  },
+  {
+    "pname": "Azure.Identity",
+    "version": "1.20.0",
+    "hash": "sha256-rb3Idf+SPj4mAWP7dnY6dz1YDvd/o/1h+YTFk5uBD58="
+  },
+  {
+    "pname": "BouncyCastle.Cryptography",
+    "version": "2.6.2",
+    "hash": "sha256-Yjk2+x/RcVeccGOQOQcRKCiYzyx1mlFnhS5auCII+Ms="
+  },
+  {
+    "pname": "Humanizer.Core",
+    "version": "2.14.1",
+    "hash": "sha256-EXvojddPu+9JKgOG9NSQgUTfWq1RpOYw7adxDPKDJ6o="
+  },
+  {
+    "pname": "MailKit",
+    "version": "4.15.1",
+    "hash": "sha256-ZI2ASxX1dY53YxWRii0Dow4aojR8VCEWzCWZLrH7wPw="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Authentication.OpenIdConnect",
+    "version": "10.0.5",
+    "hash": "sha256-rsywtF8bSN/De2thXGDSsT2nBoeTBYkLxlQHQv7NG4k="
+  },
+  {
+    "pname": "Microsoft.Bcl.AsyncInterfaces",
+    "version": "10.0.3",
+    "hash": "sha256-+wTcmczUD1qSnnWZ1miijr62/glcRbNWRpEZh/OBU2g="
+  },
+  {
+    "pname": "Microsoft.Build.Framework",
+    "version": "17.11.31",
+    "hash": "sha256-YS4oASrmC5dmZrx5JPS7SfKmUpIJErlUpVDsU3VrfFE="
+  },
+  {
+    "pname": "Microsoft.Build.Framework",
+    "version": "18.0.2",
+    "hash": "sha256-fO31KAdDs2J0RUYD1ov9UB3ucsbALan7K0YdWW+yg7A="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Analyzers",
+    "version": "3.11.0",
+    "hash": "sha256-hQ2l6E6PO4m7i+ZsfFlEx+93UsLPo4IY3wDkNG11/Sw="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Common",
+    "version": "5.0.0",
+    "hash": "sha256-g4ALvBSNyHEmSb1l5TFtWW7zEkiRmhqLx4XWZu9sr2U="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp",
+    "version": "5.0.0",
+    "hash": "sha256-ctBCkQGFpH/xT5rRE3xibu9YxPD108RuC4a4Z25koG8="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+    "version": "5.0.0",
+    "hash": "sha256-yWVcLt/f2CouOfFy966glGdtSFy+RcgrU1dd9UtlL/Q="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Workspaces.Common",
+    "version": "5.0.0",
+    "hash": "sha256-Bir5e1gEhgQQ6upQmVKQHAKLRfenAu60DAzNupNnZsQ="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Workspaces.MSBuild",
+    "version": "5.0.0",
+    "hash": "sha256-+58+iqTayTiE0pDaog1U8mjaDA8bNNDLA8gjCQZZudo="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore",
+    "version": "10.0.5",
+    "hash": "sha256-SR8KBOuIx9e1j/cMwYRCO62WEB+CUrGptexl9MSgp8M="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore.Abstractions",
+    "version": "10.0.5",
+    "hash": "sha256-qMKa7YGJUfaPTRMsAYYPlLxXdhZeyAZLiOSDcNFzDnA="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore.Analyzers",
+    "version": "10.0.5",
+    "hash": "sha256-jPTN3RkI1J7vb7O4xiCHjMczMKh//NnKhJAGTuT7v88="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore.Design",
+    "version": "10.0.5",
+    "hash": "sha256-+D17/sNpPhhDaLJJR4fFjSMySFU4yKQzHgzPcAJAdR0="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore.Relational",
+    "version": "10.0.4",
+    "hash": "sha256-WwGoCwNxDXyqfBvUX9fGa/6X+yiDBuE7hf3csU78+Os="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore.Relational",
+    "version": "10.0.5",
+    "hash": "sha256-5jfkvUKSexKCbCsYZYkBAWd4BIN48dlF5pP6htfDMMQ="
+  },
+  {
+    "pname": "Microsoft.EntityFrameworkCore.Tools",
+    "version": "10.0.5",
+    "hash": "sha256-9s/S2hX7uRRxwTF9u0pcWjhPkWIdRKFW8txNGVWcD5s="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyModel",
+    "version": "10.0.5",
+    "hash": "sha256-UfG98EJ+0JTQA8Kx8yxt9mg19s0RSIOO+pG9JJy8uB0="
+  },
+  {
+    "pname": "Microsoft.Graph",
+    "version": "5.103.0",
+    "hash": "sha256-S30UOOeUOnalXtLw+mTWmU+1xhZeF81qKsTw/mCDCl4="
+  },
+  {
+    "pname": "Microsoft.Graph.Core",
+    "version": "3.2.5",
+    "hash": "sha256-5YhZijYrVh4loc2ZrU/7REhTRM7Lzw0/7pYu0hN8t9k="
+  },
+  {
+    "pname": "Microsoft.Identity.Client",
+    "version": "4.83.3",
+    "hash": "sha256-NvfB9tHpBjCVPvqKWXn3dZ8HtiUFQa5wc7qAv78/RxY="
+  },
+  {
+    "pname": "Microsoft.Identity.Client.Extensions.Msal",
+    "version": "4.83.1",
+    "hash": "sha256-t4hG5KSzfBfhfZ7dJDBS2wr7v2nnDwRjPs78ZziM/b8="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Abstractions",
+    "version": "8.14.0",
+    "hash": "sha256-bkCuz1Wj56N+LHWLvHKLcCtIRqBK+3k5vD2qfB7xXKk="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Abstractions",
+    "version": "8.15.0",
+    "hash": "sha256-LKTvERNUTMCEF7xs377tCMwOMRki93OS4kh6Yv0uXJ4="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.JsonWebTokens",
+    "version": "8.0.1",
+    "hash": "sha256-Xv9MUnjb66U3xeR9drOcSX5n2DjOCIJZPMNSKjWHo9Y="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.JsonWebTokens",
+    "version": "8.15.0",
+    "hash": "sha256-LwzKiGjcnORvmQ9tim6lomXpfVlPpd/fE8FKTFWKlpM="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Logging",
+    "version": "8.15.0",
+    "hash": "sha256-mMXwsjGcrrmHR1mG7BLTKg/30mX+m93QVX17/ynOOd4="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Logging",
+    "version": "8.6.1",
+    "hash": "sha256-AXGRN3rs+CJlxyxF80FzPe8UDcZqg6jHrj12pyBs+gU="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Protocols",
+    "version": "8.0.1",
+    "hash": "sha256-v3DIpG6yfIToZBpHOjtQHRo2BhXGDoE70EVs6kBtrRg="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Protocols",
+    "version": "8.15.0",
+    "hash": "sha256-TwWCsH4V8fIe0HrDyh1Qsl1tKooABBIltjknANuQ/2Q="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Protocols",
+    "version": "8.6.1",
+    "hash": "sha256-o+1L4GoUh94XKcUzTS/ECVoPIfVH/i84XN+wSmE75pg="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+    "version": "8.0.1",
+    "hash": "sha256-ZHKaZxqESk+OU1SFTFGxvZ71zbdgWqv1L6ET9+fdXX0="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+    "version": "8.15.0",
+    "hash": "sha256-mjPX/caX/QNfY3ziLvCA4DVT/xM0K72/VIf39fOEQkk="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+    "version": "8.6.1",
+    "hash": "sha256-H8ZkyYOR37DT09dbCU4khligNgUbIHfnHUiuaD5Kenw="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Tokens",
+    "version": "8.0.1",
+    "hash": "sha256-beVbbVQy874HlXkTKarPTT5/r7XR1NGHA/50ywWp7YA="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Tokens",
+    "version": "8.15.0",
+    "hash": "sha256-7Lo/TsvqgNCEMyFssO3Om233521Pqgb9K9lUeHc5HMk="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Tokens",
+    "version": "8.6.1",
+    "hash": "sha256-rB4Hg9FSlkiXireuZKYdVq9CcqmJa5YeTw+WMlSVnkQ="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Validators",
+    "version": "8.6.1",
+    "hash": "sha256-BDdJNDquVEplPJT3fYOakg26bSNyzNyUce+7mCjtc5o="
+  },
+  {
+    "pname": "Microsoft.Kiota.Abstractions",
+    "version": "1.21.1",
+    "hash": "sha256-y0aQ7xmF1/tGRVs+ovOP5SBF0xBIBD9KDFZ7lANsrkk="
+  },
+  {
+    "pname": "Microsoft.Kiota.Authentication.Azure",
+    "version": "1.21.1",
+    "hash": "sha256-PfeynGo3oIEGHs2PWGcYFF0C7UiL1RPxslKsK7tcxbc="
+  },
+  {
+    "pname": "Microsoft.Kiota.Http.HttpClientLibrary",
+    "version": "1.21.1",
+    "hash": "sha256-cfDPkawrCXVg15fhnMBrP9AFH7TSiYEjPk2uqgzdyM8="
+  },
+  {
+    "pname": "Microsoft.Kiota.Serialization.Form",
+    "version": "1.21.1",
+    "hash": "sha256-pNm74Zy6XHrtC646eODl0HNmBU1P6rY2G2rQhB69Odk="
+  },
+  {
+    "pname": "Microsoft.Kiota.Serialization.Json",
+    "version": "1.21.1",
+    "hash": "sha256-w1m9HDrVKb+Uvk3r7ARXUiA8YfXTCy+KNyKoR3cVSGA="
+  },
+  {
+    "pname": "Microsoft.Kiota.Serialization.Multipart",
+    "version": "1.21.1",
+    "hash": "sha256-1jYZZkYbaNCBwK02UQjnxJsLOJzgSjcFmmJ4MEHgktQ="
+  },
+  {
+    "pname": "Microsoft.Kiota.Serialization.Text",
+    "version": "1.21.1",
+    "hash": "sha256-P0Ws+69Lnx/CI1eh4vp3LhP3wtGccqS0tb6xpUIHVJQ="
+  },
+  {
+    "pname": "Microsoft.VisualStudio.SolutionPersistence",
+    "version": "1.0.52",
+    "hash": "sha256-KZGPtOXe6Hv8RrkcsgoLKTRyaCScIpQEa2NhNB3iOXw="
+  },
+  {
+    "pname": "Microsoft.Win32.SystemEvents",
+    "version": "6.0.0",
+    "hash": "sha256-N9EVZbl5w1VnMywGXyaVWzT9lh84iaJ3aD48hIBk1zA="
+  },
+  {
+    "pname": "MimeKit",
+    "version": "4.15.1",
+    "hash": "sha256-MI4Wr+JWoxR9wsYhKmW8j1EdJ59W/O4jv5D9Zb8mEUw="
+  },
+  {
+    "pname": "Mono.TextTemplating",
+    "version": "3.0.0",
+    "hash": "sha256-VlgGDvgNZb7MeBbIZ4DE2Nn/j2aD9k6XqNHnASUSDr0="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "Npgsql",
+    "version": "10.0.2",
+    "hash": "sha256-hW03ZWoW7y16vvScwsjZNyqFybGy+s6hQYQXebo78yQ="
+  },
+  {
+    "pname": "Npgsql.EntityFrameworkCore.PostgreSQL",
+    "version": "10.0.1",
+    "hash": "sha256-G5WmWoc02gHTsdBLXESFQ5eMV+liwiO8YjzFKg4NDEk="
+  },
+  {
+    "pname": "Otp.NET",
+    "version": "1.4.1",
+    "hash": "sha256-M4BJnj0H2t9UlGXM693WePZuNMMSfrZ3kir95lDLfMQ="
+  },
+  {
+    "pname": "QRCoder",
+    "version": "1.7.0",
+    "hash": "sha256-sssSQBTHf1cUWNQYFEEJ8PRLs486ciDsXtrwL+ozZIU="
+  },
+  {
+    "pname": "Std.UriTemplate",
+    "version": "2.0.8",
+    "hash": "sha256-0f3ydgUE2KDzzHmN4FREzXLDrPJgLZemx917muHX90k="
+  },
+  {
+    "pname": "System.ClientModel",
+    "version": "1.10.0",
+    "hash": "sha256-TVrfx/IagmiZHd3HIrkwlIF/9rbbIONUeqOpamI68Vs="
+  },
+  {
+    "pname": "System.CodeDom",
+    "version": "6.0.0",
+    "hash": "sha256-uPetUFZyHfxjScu5x4agjk9pIhbCkt5rG4Axj25npcQ="
+  },
+  {
+    "pname": "System.Composition",
+    "version": "9.0.0",
+    "hash": "sha256-FehOkQ2u1p8mQ0/wn3cZ+24HjhTLdck8VZYWA1CcgbM="
+  },
+  {
+    "pname": "System.Composition.AttributedModel",
+    "version": "9.0.0",
+    "hash": "sha256-a7y7H6zj+kmYkllNHA402DoVfY9IaqC3Ooys8Vzl24M="
+  },
+  {
+    "pname": "System.Composition.Convention",
+    "version": "9.0.0",
+    "hash": "sha256-tw4vE5JRQ60ubTZBbxoMPhtjOQCC3XoDFUH7NHO7o8U="
+  },
+  {
+    "pname": "System.Composition.Hosting",
+    "version": "9.0.0",
+    "hash": "sha256-oOxU+DPEEfMCuNLgW6wSkZp0JY5gYt44FJNnWt+967s="
+  },
+  {
+    "pname": "System.Composition.Runtime",
+    "version": "9.0.0",
+    "hash": "sha256-AyIe+di1TqwUBbSJ/sJ8Q8tzsnTN+VBdJw4K8xZz43s="
+  },
+  {
+    "pname": "System.Composition.TypedParts",
+    "version": "9.0.0",
+    "hash": "sha256-F5fpTUs3Rr7yP/NyIzr+Xn5NdTXXp8rrjBnF9UBBUog="
+  },
+  {
+    "pname": "System.Drawing.Common",
+    "version": "6.0.0",
+    "hash": "sha256-/9EaAbEeOjELRSMZaImS1O8FmUe8j4WuFUw1VOrPyAo="
+  },
+  {
+    "pname": "System.IdentityModel.Tokens.Jwt",
+    "version": "8.0.1",
+    "hash": "sha256-hW4f9zWs0afxPbcMqCA/FAGvBZbBFSkugIOurswomHg="
+  },
+  {
+    "pname": "System.IdentityModel.Tokens.Jwt",
+    "version": "8.15.0",
+    "hash": "sha256-5O0wbGp0gWnukK+0mWBjMnP1bZc6N0xuNcO2qmFiUX8="
+  },
+  {
+    "pname": "System.IdentityModel.Tokens.Jwt",
+    "version": "8.6.1",
+    "hash": "sha256-vzwoEHRmUBnmlj77lFUZ/nD2oCEmY2rjwyaaXEZxuaU="
+  },
+  {
+    "pname": "System.Memory.Data",
+    "version": "10.0.3",
+    "hash": "sha256-HefKyCuNJ7bONOVqGi2WScG6XIoFyfGSwTQM9Ol06+U="
+  },
+  {
+    "pname": "System.Security.Cryptography.Pkcs",
+    "version": "10.0.0",
+    "hash": "sha256-d3sLG+LZ3+N/h/6gdJcVKOgbBO6wYb66NfXalAEDqnE="
+  },
+  {
+    "pname": "System.Security.Cryptography.ProtectedData",
+    "version": "4.5.0",
+    "hash": "sha256-Z+X1Z2lErLL7Ynt2jFszku6/IgrngO3V1bSfZTBiFIc="
+  }
+]
