@@ -44,7 +44,7 @@ let
   };
 
   node_modules = stdenv.mkDerivation (finalAttrs: {
-    pname = "${pname}-node_modules";
+    pname = "convertx-node_modules";
     inherit version src;
 
     dontConfigure = true;
