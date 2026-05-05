@@ -75,14 +75,14 @@
     assert tcp > 0 and dns == 0
 
     # This should fail as without connectivity the Tor daemon cannot to resolve domains.
-    clearclient.fail("nslookup www.google.com 8.8.8.8")
+    clearclient.fail("nslookup -timeout=1 www.google.com 8.8.8.8")
     tcp, dns = get_prerouting_pkts(router, 7040, 7053)
     assert tcp > 0 and dns > 0
 
     # Trying to resolve a .onion address instead should always succeed as the
     # Tor daemon optimistically replies with a IP within VirtualAddrNetworkIPv4
     # even without connectivity.
-    clearclient.succeed("nslookup duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion 8.8.8.8 | grep -F 'Address: 10.'")
+    clearclient.succeed("nslookup -timeout=1 duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion 8.8.8.8 | grep -F 'Address: 10.'")
 
     client.wait_for_unit("tor.service")
     client.succeed("nft list ruleset | grep tor_nat_output")
@@ -105,7 +105,7 @@
     assert tcp == 0 and dns == 0
 
     # Send one DNS request somewhere.
-    client.fail("nslookup www.google.com 8.8.8.8")
+    client.fail("nslookup -timeout=1 www.google.com 8.8.8.8")
 
     # Ensure there are more than zero DNS packets and exactly zero TCP packets
     # being forwarded to the Tor daemon.
@@ -122,6 +122,6 @@
     assert tcp > 0 and dns > 0
 
     # Try to resolve a .onion because why not.
-    client.succeed("nslookup duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion 8.8.8.8 | grep -F 'Address: 10.'")
+    client.succeed("nslookup -timeout=1 duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion 8.8.8.8 | grep -F 'Address: 10.'")
   '';
 }
