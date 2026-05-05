@@ -88,7 +88,15 @@ update_codex_pins() {
   local tmp
   tmp="$(mktemp)"
 
-  awk -v codex_rev="$CODEX_REV" -v codex_hash="$CODEX_HASH" '
+  awk \
+    -v latest_version="$latest_version" \
+    -v codex_tag="$CODEX_TAG" \
+    -v codex_rev="$CODEX_REV" \
+    -v codex_hash="$CODEX_HASH" '
+    /# codex-acp [^ ]+ pins openai\/codex rust-v[0-9.]+ in Cargo.lock\./ {
+      comment_count++
+      sub(/# codex-acp [^ ]+ pins openai\/codex rust-v[0-9.]+ in Cargo.lock\./, "# codex-acp " latest_version " pins openai/codex " codex_tag " in Cargo.lock.")
+    }
     /codexRev = "[0-9a-f]+";/ {
       rev_count++
       sub(/codexRev = "[0-9a-f]+";/, "codexRev = \"" codex_rev "\";")
@@ -99,6 +107,10 @@ update_codex_pins() {
     }
     { print }
     END {
+      if (comment_count != 1) {
+        print "Failed to update codex pin comment in package.nix" > "/dev/stderr"
+        exit 1
+      }
       if (rev_count != 1) {
         print "Failed to update codexRev in package.nix" > "/dev/stderr"
         exit 1
