@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trimesh";
-  version = "4.12.1";
+  version = "4.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
     tag = finalAttrs.version;
-    hash = "sha256-+Xmy3/GSnfj7u1sapMscoCGlRsz00IkUzEo9CJ5Ja3s=";
+    hash = "sha256-Zef/BCheJWJNkK+ligeAMmuI3EX4uGfcNNbEJ9BNngY=";
   };
 
   build-system = [ setuptools ];
@@ -78,6 +78,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # requires loading models which aren't part of the Pypi tarball
     "test_load"
+  ]
+  ++ lib.optionals embreex.meta.available [
+    # requires manifold3d
+    "test_contains_cavity"
   ];
 
   enabledTestPaths = [
