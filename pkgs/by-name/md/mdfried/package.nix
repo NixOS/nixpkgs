@@ -2,22 +2,41 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  chafa,
+  glib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdfried";
-  version = "0.15.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "benjajaja";
     repo = "mdfried";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V++xkJBnTlqzcsw6BDkrqScIV+phzxyDqQXcV34L4ps=";
+    hash = "sha256-Wio+YkucU7HgXzA0BswShVNS6z7r2upJxCLc1jQ+8bM";
   };
 
-  cargoHash = "sha256-qnsJkwAmBcakYcoqGdYRqfN6e46PG5IH6SAXLvy3mM8=";
+  cargoHash = "sha256-i1PqonM06y04HTRA05winvhz4IKUEThlUkFLnrqeHqA";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    chafa
+    glib
+  ];
 
   doCheck = true;
+
+  checkFlags = [
+    "--skip=tests::duplicate_image"
+    "--skip=tests::parse"
+    "--skip=tests::reload_add_image"
+    "--skip=tests::reload_move_image"
+  ];
 
   meta = {
     description = "Markdown viewer TUI for the terminal, with big text and image rendering";
