@@ -10,6 +10,7 @@
   pkgconfig,
   pytest-asyncio,
   pytestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,12 @@ buildPythonPackage rec {
     # other than the builtin schemas (based on quick GitHub code search), so I don't
     # think it's worthwhile.
     (replaceVars ./include-paths.patch { inherit capnproto; })
+
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    (fetchpatch {
+      url = "https://github.com/capnproto/pycapnp/commit/aa90ab6844df4718f02e2ca4974858d5ab0b079c.patch";
+      hash = "sha256-pscOdgPotLZsW0XWyRTJigIDl3uWOizA1W0gQGZHSyg=";
+    })
   ];
 
   build-system = [
