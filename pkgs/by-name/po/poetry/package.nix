@@ -43,6 +43,7 @@ let
       poetry-plugin-migrate = callPackage ./plugins/poetry-plugin-migrate.nix { };
       poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
       poetry-plugin-shell = callPackage ./plugins/poetry-plugin-shell.nix { };
+      poetry-plugin-lambda-build = callPackage ./plugins/poetry-plugin-lambda-build.nix { };
     };
 
   # selector is a function mapping pythonPackages to a list of plugins
