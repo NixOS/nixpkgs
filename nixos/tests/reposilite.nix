@@ -20,7 +20,7 @@
 
           reposilite = {
             enable = true;
-            plugins = with pkgs.reposilitePlugins; [
+            plugins = with pkgs.reposilite.plugins; [
               checksum
               groovy
             ];
