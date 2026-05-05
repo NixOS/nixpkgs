@@ -31,8 +31,8 @@
   },
   {
     "pname": "HidSharpCore",
-    "version": "1.2.1.1",
-    "hash": "sha256-lM4o3FYBon8eQIMt4uiJAs8M0t4MW+joykiDX+lrdv4="
+    "version": "1.3.0",
+    "hash": "sha256-MhNwqDoAM2o7OkAV/MtJJKW++xI4q+uLheJdYIAk5Ls="
   },
   {
     "pname": "HtmlAgilityPack",
@@ -291,8 +291,8 @@
   },
   {
     "pname": "JetBrains.Annotations",
-    "version": "2023.3.0",
-    "hash": "sha256-/Eykez68qYMO5mlmUelzAke8aJehyp8fspO5Z+yt5G4="
+    "version": "2025.2.4",
+    "hash": "sha256-YJpS77UH9tTETCKHr5M+bQOax1BLPFqIr/i+KLN9tEI="
   },
   {
     "pname": "JetBrains.ReSharper.GlobalTools",
@@ -406,13 +406,18 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection",
+    "version": "10.0.1",
+    "hash": "sha256-RKOB+zPrtQNUbJY/1jR54rKOM8KHPgynPExxugku3I8="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection",
     "version": "10.0.5",
     "hash": "sha256-ofDRirUV9XLSz4oksCqErwBJFtAieHACFfyZukHKFng="
   },
   {
-    "pname": "Microsoft.Extensions.DependencyInjection",
-    "version": "6.0.0-rc.1.21451.13",
-    "hash": "sha256-zJQsAVTfA46hUV5q67BslsVn9yehYBclD06wg2UhyWQ="
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "10.0.1",
+    "hash": "sha256-zNUpau51ds7iQTaSUTFtyTHIUoinYc129W50CnufMdQ="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
@@ -423,11 +428,6 @@
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
     "version": "6.0.0",
     "hash": "sha256-SZke0jNKIqJvvukdta+MgIlGsrP2EdPkkS8lfLg7Ju4="
-  },
-  {
-    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "6.0.0-rc.1.21451.13",
-    "hash": "sha256-oTYhI+lMwaQ7l9CfDHeNMBAdfofv4kHC0vqBZ7oJr4U="
   },
   {
     "pname": "Microsoft.Extensions.Features",
@@ -556,23 +556,23 @@
   },
   {
     "pname": "OpenTabletDriver",
-    "version": "0.6.6.2",
-    "hash": "sha256-y8qI1EPIxKky0M4wDwvo0EEnkXGKNa5bmclPlQGvCBY="
+    "version": "0.6.7",
+    "hash": "sha256-W9i/aLaKrtr50p175k7O6JPwggiAheUv07lxEhUnRPE="
   },
   {
     "pname": "OpenTabletDriver.Configurations",
-    "version": "0.6.6.2",
-    "hash": "sha256-tsVq8FRk472eqMhRjyxDZlu8R0M4x7IyLcBVFnDLpF8="
+    "version": "0.6.7",
+    "hash": "sha256-rqefS28sg6bM/bqNaLWGXXRM4m1Eh1LvuSHwrxOPVWg="
   },
   {
     "pname": "OpenTabletDriver.Native",
-    "version": "0.6.6.2",
-    "hash": "sha256-okPhvAieIc+4ojQK9vd9kWQcAIXhcKZBl5D3eJ4gQxc="
+    "version": "0.6.7",
+    "hash": "sha256-iixLrALB1XXzNgfeyU6opLNte5OZQ1jh/huTIyQsRZ8="
   },
   {
     "pname": "OpenTabletDriver.Plugin",
-    "version": "0.6.6.2",
-    "hash": "sha256-EcrM+3NeTrPnIhNGPqNm2LzUTxdDGRC1BwyaCYlrUYE="
+    "version": "0.6.7",
+    "hash": "sha256-0Sb462Etv3b+KtXoxqPW8UAr3/HrWY0lA5gRj9Xrf18="
   },
   {
     "pname": "PolySharp",
@@ -616,8 +616,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2026.416.0",
-    "hash": "sha256-moHhHajj0WlcA0hHdLTw4MoKLdnHJdw8+EhSrCcbUVY="
+    "version": "2026.428.0",
+    "hash": "sha256-mlf9kFMjtBLx+9VV7Z08VaQicnH4Z8EV3CHzH60+JAQ="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -631,8 +631,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2026.423.0",
-    "hash": "sha256-fzw3TLXkLkBpy2JKJ1cz2yyc6ncJQGAjFEXlw4n/jH0="
+    "version": "2026.427.0",
+    "hash": "sha256-vrPesDiu08qqdcm06Lzs0iKY2rH/pOfkVXvvr7rMsQY="
   },
   {
     "pname": "ppy.osuTK.NS20",
@@ -1368,11 +1368,6 @@
     "pname": "System.Runtime.CompilerServices.Unsafe",
     "version": "6.0.0",
     "hash": "sha256-bEG1PnDp7uKYz/OgLOWs3RWwQSVYm+AnPwVmAmcgp2I="
-  },
-  {
-    "pname": "System.Runtime.CompilerServices.Unsafe",
-    "version": "6.0.0-rc.1.21451.13",
-    "hash": "sha256-BgiqR6Y555tJEBEqDT5+yHCyQy5Wv9bLKlKWcQFiq2w="
   },
   {
     "pname": "System.Runtime.Extensions",
