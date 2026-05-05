@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       instances of stellar-core on the network. Optionally, stellar-core can
       store historical records of the ledger and participate in consensus.
     '';
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
     mainProgram = "stellar-core";
   };
