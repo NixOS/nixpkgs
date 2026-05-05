@@ -28996,6 +28996,11 @@
     githubId = 7038383;
     name = "Vojta Káně";
   };
+  vokinn = {
+    github = "vokinn";
+    githubId = 113241287;
+    name = "vokin";
+  };
   volfyd = {
     email = "lb.nix@lisbethmail.com";
     github = "volfyd";
