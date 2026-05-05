@@ -1186,6 +1186,8 @@ self: super: with self; {
 
   atenpdu = callPackage ../development/python-modules/atenpdu { };
 
+  atheris = callPackage ../development/python-modules/atheris { };
+
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atom = callPackage ../development/python-modules/atom { };
