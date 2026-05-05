@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,opt,share/{pixmaps,icons/hicolor/256x256/apps}}
+    mkdir -p $out/{bin,opt,share/icons/hicolor/256x256/apps}
 
     mv * $out/opt/
     chmod +x $out/opt/osmium
@@ -76,7 +76,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
 
-    ln -s $out/opt/resources/assets/icons/256x256.png $out/share/pixmaps/osmium.png
     ln -s $out/opt/resources/assets/icons/256x256.png $out/share/icons/hicolor/256x256/apps/osmium.png
 
     ln -s "$desktopItem/share/applications" $out/share
