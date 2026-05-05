@@ -11,9 +11,9 @@
   librusty_v8 ? callPackage ./librusty_v8.nix { },
 }:
 let
-  # codex-acp 0.12.0 pins openai/codex rust-v0.124.0 in Cargo.lock.
-  codexRev = "e9fb49366c93a1478ec71cc41ecee415a197d036";
-  codexHash = "sha256-YFnzzwCm9/b30qLDMbkf/rEizuTjeqdCgoBZeS0wNBo=";
+  # codex-acp 0.13.0 pins openai/codex rust-v0.128.0 in Cargo.lock.
+  codexRev = "e4310be51f617f5e60382038fa9cbf53a2429ca4";
+  codexHash = "sha256-v2W0eslPOPHxHX76+bnkE/f4y+MnQuopeOoAC5X16TA=";
   codexSrc = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
@@ -23,21 +23,23 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex-acp";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "codex-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qPqg95FpXHBtyHBJtrfJUwu9GokfmOJgKgqLKQ48u+8=";
+    hash = "sha256-8Mz3xPhGSjaucZ9c0etGOe4JJC8vJhGFOnAhkwXmhyY=";
   };
 
-  cargoHash = "sha256-/BZ82qiTy/mPwhf5v5CFrNSB6AxCRFdmHB72L0+KjJw=";
+  cargoHash = "sha256-kneMay6MGXhHA0q/usKsLFs/YKmdSHmrgSthzhaPgbk=";
 
-  # fetchCargoVendor only keeps the individual git crate subtrees, so restore
-  # the workspace-root file that codex-core includes via ../../../../node-version.txt.
+  # fetchCargoVendor only keeps the individual git crate subtrees. Older Codex
+  # crates included this workspace-root file from codex-core.
   postPatch = ''
-    cp ${codexSrc}/codex-rs/node-version.txt "$cargoDepsCopy/source-git-0/node-version.txt"
+    if [ -e ${codexSrc}/codex-rs/node-version.txt ]; then
+      cp ${codexSrc}/codex-rs/node-version.txt "$cargoDepsCopy/source-git-0/node-version.txt"
+    fi
   '';
 
   env = {
