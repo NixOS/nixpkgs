@@ -1842,6 +1842,17 @@ in
 
   options = {
 
+    security.pam.enable = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+
+      description = ''
+        Whether to enable PAM, or entirely disable it.
+
+        Unless you're building a container image, you probably don't want to disable PAM.
+      '';
+    };
+
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
 
     security.pam.loginLimits = lib.mkOption {
@@ -2463,200 +2474,207 @@ in
 
   ###### implementation
 
-  config = {
-    assertions = [
-      {
-        assertion = config.users.motd == "" || config.users.motdFile == null;
-        message = ''
-          Only one of users.motd and users.motdFile can be set.
-        '';
-      }
-      {
-        assertion = config.security.pam.zfs.enable -> config.boot.zfs.enabled;
-        message = ''
-          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled`).
-        '';
-      }
-      {
-        assertion = with config.security.pam.sshAgentAuth; enable -> authorizedKeysFiles != [ ];
-        message = ''
-          `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
-          Did you forget to set `services.openssh.enable` ?
-        '';
-      }
-      {
-        assertion =
-          with config.security.pam.rssh;
-          enable
-          -> (settings.auth_key_file or null != null || settings.authorized_keys_command or null != null);
-        message = ''
-          security.pam.rssh.enable requires either security.pam.rssh.settings.auth_key_file or
-          security.pam.rssh.settings.authorized_keys_command to be set.
-        '';
-      }
-    ];
+  config = lib.mkMerge [
+    {
+      warnings = lib.optional (
+        !config.security.pam.enable && !config.boot.isContainer
+      ) "PAM disabled but boot.isContainer is not set.";
+    }
+    (lib.mkIf config.security.pam.enable {
+      assertions = [
+        {
+          assertion = config.users.motd == "" || config.users.motdFile == null;
+          message = ''
+            Only one of users.motd and users.motdFile can be set.
+          '';
+        }
+        {
+          assertion = config.security.pam.zfs.enable -> config.boot.zfs.enabled;
+          message = ''
+            `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled`).
+          '';
+        }
+        {
+          assertion = with config.security.pam.sshAgentAuth; enable -> authorizedKeysFiles != [ ];
+          message = ''
+            `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
+            Did you forget to set `services.openssh.enable` ?
+          '';
+        }
+        {
+          assertion =
+            with config.security.pam.rssh;
+            enable
+            -> (settings.auth_key_file or null != null || settings.authorized_keys_command or null != null);
+          message = ''
+            security.pam.rssh.enable requires either security.pam.rssh.settings.auth_key_file or
+            security.pam.rssh.settings.authorized_keys_command to be set.
+          '';
+        }
+      ];
 
-    warnings =
-      lib.optional
-        (
-          with config.security.pam.sshAgentAuth;
-          enable && lib.any (s: lib.hasPrefix "%h" s || lib.hasPrefix "~" s) authorizedKeysFiles
-        )
-        ''
-          security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
-
-          Specifying user-writeable files there result in an insecure configuration:
-          a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
-          See https://github.com/NixOS/nixpkgs/issues/31611
-        ''
-      ++
+      warnings =
         lib.optional
           (
-            with config.security.pam.rssh;
-            enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
+            with config.security.pam.sshAgentAuth;
+            enable && lib.any (s: lib.hasPrefix "%h" s || lib.hasPrefix "~" s) authorizedKeysFiles
           )
           ''
-            security.pam.rssh.settings.auth_key_file will be ignored as
-            security.pam.rssh.settings.authorized_keys_command has been specified.
-            Explictly set the former to null to silence this warning.
-          '';
+            security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
 
-    environment.systemPackages =
-      # Include the PAM modules in the system path mostly for the manpages.
-      [ package ]
-      ++ lib.optional config.users.ldap.enable pam_ldap
-      ++ lib.optional config.services.kanidm.unix.enable config.services.kanidm.package
-      ++ lib.optional config.services.sssd.enable pkgs.sssd
-      ++ lib.optionals config.security.pam.krb5.enable [
-        pam_krb5
-        pam_ccreds
-      ]
-      ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
-      ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
-      ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
-      ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+            Specifying user-writeable files there result in an insecure configuration:
+            a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
+            See https://github.com/NixOS/nixpkgs/issues/31611
+          ''
+        ++
+          lib.optional
+            (
+              with config.security.pam.rssh;
+              enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
+            )
+            ''
+              security.pam.rssh.settings.auth_key_file will be ignored as
+              security.pam.rssh.settings.authorized_keys_command has been specified.
+              Explictly set the former to null to silence this warning.
+            '';
 
-    security.wrappers = {
-      unix_chkpwd = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${package}/bin/unix_chkpwd";
+      environment.systemPackages =
+        # Include the PAM modules in the system path mostly for the manpages.
+        [ package ]
+        ++ lib.optional config.users.ldap.enable pam_ldap
+        ++ lib.optional config.services.kanidm.unix.enable config.services.kanidm.package
+        ++ lib.optional config.services.sssd.enable pkgs.sssd
+        ++ lib.optionals config.security.pam.krb5.enable [
+          pam_krb5
+          pam_ccreds
+        ]
+        ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
+        ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
+        ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
+        ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+        ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+
+      security.wrappers = {
+        unix_chkpwd = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${package}/bin/unix_chkpwd";
+        };
       };
-    };
 
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
+      environment.etc = lib.mapAttrs' makePAMService enabledServices;
 
-    systemd =
-      lib.mkIf (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
-        {
-          tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
-          services.lastlog2-import = {
-            enable = true;
-            wantedBy = [ "default.target" ];
-            after = [
-              "local-fs.target"
-              "systemd-tmpfiles-setup.service"
-            ];
-            # TODO: ${pkgs.util-linux.lastlog}/lib/systemd/system/lastlog2-import.service
-            # uses unpatched /usr/bin/mv, needs to be fixed on staging
-            # in the meantime, use a service drop-in here
-            serviceConfig.ExecStartPost = [
-              ""
-              "${lib.getExe' pkgs.coreutils "mv"} /var/log/lastlog /var/log/lastlog.migrated"
-            ];
+      systemd =
+        lib.mkIf (lib.any (service: service.updateWtmp) (lib.attrValues config.security.pam.services))
+          {
+            tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
+            services.lastlog2-import = {
+              enable = true;
+              wantedBy = [ "default.target" ];
+              after = [
+                "local-fs.target"
+                "systemd-tmpfiles-setup.service"
+              ];
+              # TODO: ${pkgs.util-linux.lastlog}/lib/systemd/system/lastlog2-import.service
+              # uses unpatched /usr/bin/mv, needs to be fixed on staging
+              # in the meantime, use a service drop-in here
+              serviceConfig.ExecStartPost = [
+                ""
+                "${lib.getExe' pkgs.coreutils "mv"} /var/log/lastlog /var/log/lastlog.migrated"
+              ];
+            };
+            packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
           };
-          packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
+
+      security.pam.services = {
+        other = {
+          useDefaultRules = false;
+          rules =
+            let
+              rules = utils.pam.autoOrderRules [
+                {
+                  name = "warn";
+                  control = "required";
+                  modulePath = "${package}/lib/security/pam_warn.so";
+                }
+                {
+                  name = "deny";
+                  control = "required";
+                  modulePath = "${package}/lib/security/pam_deny.so";
+                }
+              ];
+            in
+            {
+              auth = rules;
+              account = rules;
+              password = rules;
+              session = rules;
+            };
         };
 
-    security.pam.services = {
-      other = {
-        useDefaultRules = false;
-        rules =
-          let
-            rules = utils.pam.autoOrderRules [
-              {
-                name = "warn";
-                control = "required";
-                modulePath = "${package}/lib/security/pam_warn.so";
-              }
-              {
-                name = "deny";
-                control = "required";
-                modulePath = "${package}/lib/security/pam_deny.so";
-              }
-            ];
-          in
-          {
-            auth = rules;
-            account = rules;
-            password = rules;
-            session = rules;
-          };
+        # Most of these should be moved to specific modules.
+        i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
+        i3lock-color.enable = lib.mkDefault config.programs.i3lock.enable;
+        vlock.enable = lib.mkDefault config.console.enable;
+        xlock.enable = lib.mkDefault config.services.xserver.enable;
+        xscreensaver.enable = lib.mkDefault config.services.xscreensaver.enable;
+
+        runuser = {
+          rootOK = true;
+          unixAuth = false;
+          setEnvironment = false;
+        };
+
+        /*
+          FIXME: should runuser -l start a systemd session? Currently
+          it complains "Cannot create session: Already running in a
+          session".
+        */
+        runuser-l = {
+          rootOK = true;
+          unixAuth = false;
+        };
+      }
+      // lib.optionalAttrs (config.security.pam.enableFscrypt) {
+        # Allow fscrypt to verify login passphrase
+        fscrypt = { };
       };
 
-      # Most of these should be moved to specific modules.
-      i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
-      i3lock-color.enable = lib.mkDefault config.programs.i3lock.enable;
-      vlock.enable = lib.mkDefault config.console.enable;
-      xlock.enable = lib.mkDefault config.services.xserver.enable;
-      xscreensaver.enable = lib.mkDefault config.services.xscreensaver.enable;
+      security.apparmor.includes."abstractions/pam" =
+        lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
+          lib.attrNames enabledServices
+        )
+        + (
+          with lib;
+          pipe enabledServices [
+            lib.attrValues
+            (catAttrs "rules")
+            (lib.concatMap lib.attrValues)
+            (lib.concatMap lib.attrValues)
+            (lib.filter (rule: rule.enable))
+            (lib.filter (
+              rule:
+              !builtins.elem rule.control [
+                "include"
+                "substack"
+              ]
+            ))
+            (lib.catAttrs "modulePath")
+            (map (
+              modulePath:
+              lib.throwIfNot (lib.hasPrefix "/" modulePath)
+                ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
+                modulePath
+            ))
+            lib.unique
+            (map (module: "mr ${module},"))
+            concatLines
+          ]
+        );
 
-      runuser = {
-        rootOK = true;
-        unixAuth = false;
-        setEnvironment = false;
-      };
-
-      /*
-        FIXME: should runuser -l start a systemd session? Currently
-        it complains "Cannot create session: Already running in a
-        session".
-      */
-      runuser-l = {
-        rootOK = true;
-        unixAuth = false;
-      };
-    }
-    // lib.optionalAttrs (config.security.pam.enableFscrypt) {
-      # Allow fscrypt to verify login passphrase
-      fscrypt = { };
-    };
-
-    security.apparmor.includes."abstractions/pam" =
-      lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
-        lib.attrNames enabledServices
-      )
-      + (
-        with lib;
-        pipe enabledServices [
-          lib.attrValues
-          (catAttrs "rules")
-          (lib.concatMap lib.attrValues)
-          (lib.concatMap lib.attrValues)
-          (lib.filter (rule: rule.enable))
-          (lib.filter (
-            rule:
-            !builtins.elem rule.control [
-              "include"
-              "substack"
-            ]
-          ))
-          (lib.catAttrs "modulePath")
-          (map (
-            modulePath:
-            lib.throwIfNot (lib.hasPrefix "/" modulePath)
-              ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor''
-              modulePath
-          ))
-          lib.unique
-          (map (module: "mr ${module},"))
-          concatLines
-        ]
-      );
-
-    security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;
-    security.sudo-rs.extraConfig = optionalSudoConfigForSSHAgentAuth;
-  };
+      security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;
+      security.sudo-rs.extraConfig = optionalSudoConfigForSSHAgentAuth;
+    })
+  ];
 }
