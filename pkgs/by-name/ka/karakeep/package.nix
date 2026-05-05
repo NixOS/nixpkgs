@@ -96,14 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  preInstall = ''
-    # provide a environment variable to override the cache directory
-    # https://github.com/vercel/next.js/discussions/58864
-    patch -p1 -i ${./patches/cache-from-env-not-nix-store.patch}
-  '';
-
   installPhase = ''
     runHook preInstall
+
+    # Provide an environment variable to override the cache directory.
+    # https://github.com/vercel/next.js/discussions/58864
+    substituteInPlace apps/web/.next/standalone/node_modules/next/dist/server/image-optimizer.js \
+      --replace '_path.join)(distDir,' '_path.join)(process.env["NEXT_CACHE_DIR"] || distDir,'
 
     mkdir -p $out/share/doc/karakeep
     cp README.md LICENSE $out/share/doc/karakeep
