@@ -1214,6 +1214,7 @@ in
     (handleTestOn [ "x86_64-linux" ] ./openstack-image.nix { }).userdata or { };
   opentabletdriver = runTest ./opentabletdriver.nix;
   opentelemetry-collector = runTest ./opentelemetry-collector.nix;
+  openvpn3 = import ./openvpn3 { inherit runTest; };
   openvscode-server = runTest ./openvscode-server.nix;
   openvswitch = runTest ./openvswitch.nix;
   optee = runTestOn [ "aarch64-linux" ] ./optee.nix;
