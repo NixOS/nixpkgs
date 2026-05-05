@@ -13,13 +13,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "univers";
   version = "32.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+uGHJF9yvuFYHymwsLbpBwSbLqE24+Ur+Njtv+8Q5/A=";
   };
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for parsing version ranges and expressions";
     homepage = "https://github.com/aboutcode-org/univers";
-    changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aboutcode-org/univers/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = with lib.licenses; [
       asl20
       bsd3
@@ -66,4 +66,4 @@ buildPythonPackage rec {
       armijnhemel
     ];
   };
-}
+})
