@@ -385,6 +385,7 @@ in
 
     firewallBackend = mkOption {
       type = types.enum [
+        "none"
         "iptables"
         "nftables"
       ];
