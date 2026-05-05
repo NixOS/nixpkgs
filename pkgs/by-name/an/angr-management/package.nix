@@ -1,20 +1,20 @@
 {
   lib,
   fetchFromGitHub,
-  python312,
+  python312Packages,
   libxcb-cursor,
 }:
 
-python312.pkgs.buildPythonApplication (finalAttrs: {
+python312Packages.buildPythonApplication (finalAttrs: {
   pname = "angr-management";
-  version = "9.2.154";
+  version = "9.2.212";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr-management";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZaQRXCt6u5FGApiXTToJdIXBnBLv3emo13YG5ip0lJA=";
+    hash = "sha256-u+VVvWDipjDyOyWMznZrm0lvf+2eB4rWGpABE+YwZP0=";
   };
 
   pythonRelaxDeps = [
@@ -25,10 +25,10 @@ python312.pkgs.buildPythonApplication (finalAttrs: {
 
   buildInputs = [ libxcb-cursor ];
 
-  build-system = with python312.pkgs; [ setuptools ];
+  build-system = with python312Packages; [ setuptools ];
 
   dependencies =
-    with python312.pkgs;
+    with python312Packages;
     (
       [
         # requirements from setup.cfg
