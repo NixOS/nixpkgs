@@ -33,6 +33,6 @@ buildHomeAssistantComponent rec {
     description = "Home Assistant component for EcoFlow Cloud";
     homepage = "https://github.com/tolwi/hassio-ecoflow-cloud";
     maintainers = with lib.maintainers; [ ananthb ];
-    # license = lib.licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }
