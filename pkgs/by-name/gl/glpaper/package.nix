@@ -22,6 +22,9 @@ stdenv.mkDerivation {
     sha256 = "sha256-zgvnWqsw243jZ9e6fG6L0hDfRRHwzmIdsxwnnWhimu0=";
   };
 
+  # nop() is used as a typed Wayland callback stub, which GCC 15 rejects as an error.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   nativeBuildInputs = [
     meson
     ninja
