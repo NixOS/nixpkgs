@@ -176,8 +176,8 @@ in
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.router.enable [ cfg.dnsPort ];
 
     # Enable squid with shutdown_lifetime set to 0, as it instead would delay service stopping.
-    services.squid = lib.mkIf cfg.client.enable {
-      enable = cfg.client.clearnetProxy.enable;
+    services.squid = lib.mkIf (cfg.client.enable && cfg.client.clearnetProxy.enable) {
+      enable = true;
       proxyAddress = "127.0.0.1";
       proxyPort = cfg.client.clearnetProxy.port;
       extraConfig = ''
@@ -186,11 +186,11 @@ in
     };
 
     # Wait for network so that squid picks up the right DNS information
-    systemd.services.squid.after = lib.mkIf cfg.client.enable [
+    systemd.services.squid.after = lib.mkIf (cfg.client.enable && cfg.client.clearnetProxy.enable) [
       "network-online.target"
     ];
 
-    systemd.services.squid.wants = lib.mkIf cfg.client.enable [
+    systemd.services.squid.wants = lib.mkIf (cfg.client.enable && cfg.client.clearnetProxy.enable) [
       "network-online.target"
     ];
 
