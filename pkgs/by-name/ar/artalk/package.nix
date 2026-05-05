@@ -24,7 +24,7 @@ let
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "${pname}-frontend";
+    pname = "artalk-frontend";
 
     inherit src version;
 
