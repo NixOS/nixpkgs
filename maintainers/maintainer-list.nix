@@ -6327,6 +6327,13 @@
     githubId = 223910;
     name = "Dhananjay Balan";
   };
+  dbe = {
+    email = "daniel@beecham.se";
+    github = "dbeecham";
+    githubId = 1388869;
+    name = "Daniel Beecham";
+    keys = [ { fingerprint = "0958 4E8B 7234 5847 EF27  02E9 C288 E1E2 1E76 BF58"; } ];
+  };
   dbeckwith = {
     email = "djbsnx@gmail.com";
     github = "dbeckwith";
