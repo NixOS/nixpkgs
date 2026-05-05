@@ -10,7 +10,10 @@
         networking.tor = {
           transPort = 8040;
           dnsPort = 8053;
-          client.enable = true;
+          client = {
+            enable = true;
+            clearnetProxy.enable = true;
+          };
         };
         environment.systemPackages = with pkgs; [ dnsutils ];
       };
@@ -38,13 +41,16 @@
     import re
 
     # Return packet counters found in Tor's output chain.
-    def get_output_pkgs(node, tcp_port, dns_port):
+    def get_output_pkts(node, tcp_port, dns_port):
+      proxy_user = int(node.succeed("id -u squid"))
+      proxy_re = rf'skuid {proxy_user} counter packets (\d+) bytes \d+ return'
       tcp_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{tcp_port}'
       dns_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{dns_port}'
       ruleset = node.succeed("nft list chain inet tor tor_nat_output")
+      proxy = int(re.search(proxy_re, ruleset).group(1))
       tcp = int(re.search(tcp_re, ruleset).group(1))
       dns = int(re.search(dns_re, ruleset).group(1))
-      return tcp, dns
+      return proxy, tcp, dns
 
     # Return packet counters found in Tor's prerouting chain.
     def get_prerouting_pkts(node, tcp_port, dns_port):
@@ -100,16 +106,25 @@
     client.succeed("ip link set dummy0 up")
     client.succeed("ip route add default via 10.88.99.1 dev dummy0")
 
-    # Verify that there are ZERO TCP and DNS packets being forwarded to Tor.
-    tcp, dns = get_output_pkgs(client, 8040, 8053)
-    assert tcp == 0 and dns == 0
+    # Trigger network-online.target and wait for Squid.
+    client.succeed("systemctl start network-online.target")
+    client.wait_for_unit("squid.service")
+
+    # Verify that there are zero TCP and zero DNS packets forwarded to Tor and
+    # zero allowed proxy packets.
+    proxy, tcp, dns = get_output_pkts(client, 8040, 8053)
+    assert proxy == 0 and tcp == 0 and dns == 0
+
+    client.fail("curl --proxy http://127.0.0.1:3128 --max-time 1 http://1.1.1.1")
+    proxy, tcp, dns = get_output_pkts(client, 8040, 8053)
+    assert proxy > 0 and tcp == 0 and dns == 0
 
     # Send one DNS request somewhere.
     client.fail("nslookup -timeout=1 www.google.com 8.8.8.8")
 
     # Ensure there are more than zero DNS packets and exactly zero TCP packets
     # being forwarded to the Tor daemon.
-    tcp, dns = get_output_pkgs(client, 8040, 8053)
+    _, tcp, dns = get_output_pkts(client, 8040, 8053)
     assert tcp == 0 and dns > 0
 
     # This should succeed even though there is no internet, as the packet
@@ -118,7 +133,7 @@
     client.succeed("nc -vz 1.1.1.1 80")
 
     # And then verify that this packet did go exactly through our TCP DNAT rule.
-    tcp, dns = get_output_pkgs(client, 8040, 8053)
+    _, tcp, dns = get_output_pkts(client, 8040, 8053)
     assert tcp > 0 and dns > 0
 
     # Try to resolve a .onion because why not.

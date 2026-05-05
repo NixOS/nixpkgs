@@ -234,7 +234,7 @@ in
             skuid tor return # Do not modify any tor packets
 
             # Do not modify any squid packets
-            ${lib.optionalString (cfg.client.clearnetProxy.enable) "skuid squid return"}
+            ${lib.optionalString (cfg.client.clearnetProxy.enable) "skuid squid counter return"}
 
             # Here we prioritize excludedDestinations over DNS redirection,
             # but we redirect DNS requests before allowing local addresses, as
