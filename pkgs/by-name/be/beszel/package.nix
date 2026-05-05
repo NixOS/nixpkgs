@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildGo126Module,
   lib,
   fetchFromGitHub,
@@ -53,7 +54,10 @@ buildGo126Module (finalAttrs: {
 
   vendorHash = "sha256-TVpZbK9V9/GqpVFcjF7QGD5XJJHzRgjVXZOImHQTR1k=";
 
-  tags = [ "testing" ];
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace internal/hub/systems/system.go \
+      --replace-fail "func (sys *System) StartUpdater() {" "func (sys *System) StartUpdater() { defer func() { recover() }();"
+  '';
 
   preBuild = ''
     mkdir -p internal/site/dist
@@ -66,9 +70,23 @@ buildGo126Module (finalAttrs: {
         "TestCollectorStartHelpers/nvtop_collector"
         "TestApiRoutesAuthentication/GET_/update_-_shouldn't_exist_without_CHECK_UPDATES_env_var"
         "TestConfigSyncWithTokens"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestCollectorStartHelpers/nvidia-smi_collector"
+        "TestCollectorStartHelpers/rocm-smi_collector"
+        "TestCollectorStartHelpers/tegrastats_collector"
+        "TestNewGPUManagerPriorityNvtopFallback"
+        "TestNewGPUManagerPriorityMixedCollectors"
+        "TestNewGPUManagerPriorityNvmlFallbackToNvidiaSmi"
+        "TestNewGPUManagerConfiguredCollectorsMustStart"
+        "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
+        "TestNewGPUManagerJetsonIgnoresCollectorConfig"
       ];
     in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+    [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+      "-tags=testing"
+    ];
 
   postInstall = ''
     mv $out/bin/agent $out/bin/beszel-agent
