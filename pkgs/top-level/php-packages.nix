@@ -19,11 +19,16 @@
   html-tidy,
   icu73,
   libffi,
+  libavif,
   libiconv,
+  libjpeg,
   libkrb5,
+  libpng,
   libpq,
   libsodium,
+  libwebp,
   libxml2,
+  libxpm,
   libxslt,
   libzip,
   net-snmp,
@@ -486,11 +491,54 @@ lib.makeScope pkgs.newScope (
                 zlib
                 gd
               ];
-              configureFlags = [
-                "--enable-gd"
-                "--with-external-gd=${gd.dev}"
-                "--enable-gd-jis-conv"
-              ];
+              configureFlags =
+                let
+                  createGdImageVariable = format: "php_cv_lib_gd_gdImageCreateFrom${format}=yes";
+                  gdImageVariableIfBuildInputs =
+                    { gdLib, variableSuffix }@args:
+                    let
+                      hasSameLibName = lib: lib.name == gdLib.name;
+                      dependsOnLib = builtins.any hasSameLibName gd.buildInputs;
+                    in
+                    # See https://github.com/php/php-src/pull/14901
+                    lib.optional dependsOnLib (createGdImageVariable variableSuffix);
+
+                  defaultGdImageVariables = builtins.map createGdImageVariable [
+                    "Bmp"
+                    "Tga"
+                  ];
+
+                  gdImageVariablesLists = builtins.map gdImageVariableIfBuildInputs [
+                    {
+                      gdLib = libpng;
+                      variableSuffix = "Png";
+                    }
+                    {
+                      gdLib = libavif;
+                      variableSuffix = "Avif";
+                    }
+                    {
+                      gdLib = libwebp;
+                      variableSuffix = "Webp";
+                    }
+                    {
+                      gdLib = libjpeg;
+                      variableSuffix = "Jpeg";
+                    }
+                    {
+                      gdLib = libxpm;
+                      variableSuffix = "Xpm";
+                    }
+                  ];
+
+                  gdImageVariables = defaultGdImageVariables ++ (builtins.concatLists gdImageVariablesLists);
+                in
+                [
+                  "--enable-gd"
+                  "--with-external-gd=${gd.dev}"
+                  "--enable-gd-jis-conv"
+                ]
+                ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) gdImageVariables;
               doCheck = false;
             }
             {
