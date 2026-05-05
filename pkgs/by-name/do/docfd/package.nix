@@ -53,7 +53,7 @@ ocamlPackages.buildDunePackage rec {
     lwd
     nottui
     nottui-unix
-    notty
+    notty-community
     ocaml_sqlite3
     ocolor
     oseq
