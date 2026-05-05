@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jgoerzen";
     repo = "gopher";
-    rev = "release/${finalAttrs.version}";
-    sha256 = "sha256-8J63TnC3Yq7+64PPLrlPEueMa9D/eWkPsb08t1+rPAA=";
+    tag = "release/${finalAttrs.version}";
+    hash = "sha256-8J63TnC3Yq7+64PPLrlPEueMa9D/eWkPsb08t1+rPAA=";
   };
 
   buildInputs = [ ncurses ];
