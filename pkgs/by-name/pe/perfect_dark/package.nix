@@ -22,13 +22,13 @@ assert lib.assertOneOf "romID" romID roms;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "perfect_dark";
-  version = "0-unstable-2026-04-25";
+  version = "0-unstable-2026-05-02";
 
   src = fetchFromGitHub {
     owner = "fgsfdsfgs";
     repo = "perfect_dark";
-    rev = "bed3bf52d0d5095d112940b1327ed6c256e54ea8";
-    hash = "sha256-ZROpZ7sYmZi9Ptag2m5OOijJcGCldxBQl0fgxK5ve5c=";
+    rev = "45139a9293dc221de5795733137c76f5ee134261";
+    hash = "sha256-WTRh/Eij+8n2lQTCCNL3FSTXHUVslEfiupFl8FMPXuo=";
 
     postFetch = ''
       pushd $out

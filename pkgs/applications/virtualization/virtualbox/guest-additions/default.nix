@@ -18,9 +18,9 @@
   libx11,
 }:
 let
-  virtualboxVersion = "7.2.6";
+  virtualboxVersion = "7.2.8";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
+  virtualboxSha256 = "0642ed4a12b7204cd30c0abbc2c10c1cc7ad55ce1756a01e86a16d4b6b066592";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -68,6 +68,8 @@ let
       pkg = libxt;
     }
   ];
+
+  hasVboxVideo = lib.versionOlder kernel.version "7.0";
 in
 stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
@@ -133,7 +135,10 @@ stdenv.mkDerivation {
 
     # Install kernel modules.
     cd src/vboxguest-${virtualboxVersion}_NixOS
-    make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
+
+    INSTALL_TARGETS=(install-vboxguest install-vboxsf ${lib.optionalString hasVboxVideo "install-vboxvideo"})
+    make INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers ''${INSTALL_TARGETS[@]}
+
     cd ../..
 
     # Install binaries
