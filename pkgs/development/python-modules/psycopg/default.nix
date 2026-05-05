@@ -220,6 +220,7 @@ buildPythonPackage rec {
     "refcount"
     "timing"
     "flakey"
+    "slow"
   ];
 
   postCheck = ''

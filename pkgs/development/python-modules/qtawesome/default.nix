@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyqt5,
+  pyqt6,
   pytestCheckHook,
   pythonOlder,
   qtpy,
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pyqt5
+    pyqt6
     qtpy
   ];
 

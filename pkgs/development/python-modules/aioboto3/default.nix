@@ -60,6 +60,17 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_patches"
+  ]
+  ++ [
+    # DynamoDB tests fail with aiobotocore 3.x due to HTTP header issue with moto:
+    # "Duplicate 'Server' header found" - same issue as aiobotocore disables
+    "test_dynamo_resource_query"
+    "test_dynamo_resource_put"
+    "test_dynamo_resource_batch_write_flush_on_exit_context"
+    "test_dynamo_resource_batch_write_flush_amount"
+    "test_flush_doesnt_reset_item_buffer"
+    "test_dynamo_resource_property"
+    "test_dynamo_resource_waiter"
   ];
 
   pythonImportsCheck = [ "aioboto3" ];

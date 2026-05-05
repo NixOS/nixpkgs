@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -53,6 +54,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-NlmNabyoHiakwvomjivTA7N304ovNCMDSaBLSmcmZ7w=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/python-pillow/Pillow/security/advisories/GHSA-whj4-6x5x-4v2j
+      name = "CVE-2026-40192.patch";
+      url = "https://github.com/python-pillow/Pillow/commit/3cb854e8b2bab43f40e342e665f9340d861aa628.patch";
+      hash = "sha256-7Hh72WoD7Iy/aB1J7w5X6ge3wx4lPWAQrOR6luO0FOg=";
+    })
+  ];
 
   build-system = [
     setuptools
