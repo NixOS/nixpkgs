@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 camingo-code/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 camingo-code/*.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 camingo-code/*.txt -t $out/share/doc/camingo-code-${version}
 
     runHook postInstall
   '';
