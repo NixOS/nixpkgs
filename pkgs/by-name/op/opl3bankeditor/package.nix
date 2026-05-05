@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opl3bankeditor";
-  version = "1.5.1-unstable-2026-01-03";
+  version = "1.5.1-unstable-2026-05-04";
 
   src = fetchFromGitHub {
     owner = "Wohlstand";
     repo = "opl3bankeditor";
-    rev = "9d0084cc7073ca911446257c7b937901267c3243";
+    rev = "0155632a595897cb679c9f9c8575cee3eff2123d";
     fetchSubmodules = true;
-    hash = "sha256-wUHpXZ0McL6WLqogXaA+HtVpKxC/Dc5Ji4PnjCksoGE=";
+    hash = "sha256-OEcfqvvEACo270kNfli/mdf/JO45XOp9QXOmKQQTpos=";
   };
 
   nativeBuildInputs = [
