@@ -142,6 +142,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   buildFlags =
     # IPv6 has no reason to be disabled.
     [ "-D NETWORK_IP6_ENABLE=TRUE" ]
+    ++ [ "-D QEMU_PV_VARS=TRUE" ]
     ++ lib.optionals debug [ "-D DEBUG_ON_SERIAL_PORT=TRUE" ]
     ++ lib.optionals sourceDebug [ "-D SOURCE_DEBUG_ENABLE=TRUE" ]
     ++ lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
