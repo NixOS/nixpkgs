@@ -99,8 +99,9 @@ in
             libayatana-common
             ubports-click
           ])
-          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
           ++ (with pkgs.lomiri-qt6; [
+            # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+            lomiri-weather-app
             morph-browser
           ])
           ++ (with pkgs.lomiri; [
