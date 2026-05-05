@@ -26989,6 +26989,13 @@
     githubId = 5663576;
     keys = [ { fingerprint = "6F0F D43B 80E5 583E 60FC  51DC 4936 D067 EB12 AB32"; } ];
   };
+  telometto = {
+     name = "telometto";
+     email = "nixpkgs.vck46@simplelogin.com";
+     github = "telometto";
+     githubId = 65364211;
+     keys = [ { fingerprint = "1BD2 0559 D5B7 910E C8D2  DC56 04A4 F2BD 258B D627"; } ];
+  };
   telotortium = {
     email = "rirelan@gmail.com";
     github = "telotortium";
