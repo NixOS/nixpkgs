@@ -1998,8 +1998,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.75.1";
-          hash = "sha256-C6PqrgpQyiG5neVB12bpHMmxFRWXCPQuG0QeyVf5BKs=";
+          version = "6.75.3";
+          hash = "sha256-UrcrHL46ZtQl6Zazec/2rkZLtnPK9BsmyT+9nhTncsA=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
