@@ -1,0 +1,22 @@
+diff --git a/packages/appium/lib/main.js b/packages/appium/lib/main.js
+index 1da121801..66ce1e574 100755
+--- a/packages/appium/lib/main.js
++++ b/packages/appium/lib/main.js
+@@ -257,7 +257,7 @@ async function init(args) {
+     }
+ 
+     if (!serverArgs.noPermsCheck) {
+-      await requireDir(appiumHome, true, appiumHomeSourceName);
++      await requireDir(appiumHome, false, appiumHomeSourceName);
+     }
+ 
+     const appiumDriver = new AppiumDriver(
+@@ -277,7 +277,7 @@ async function init(args) {
+       appiumHome,
+     });
+   } else {
+-    await requireDir(appiumHome, true, appiumHomeSourceName);
++    await requireDir(appiumHome, false, appiumHomeSourceName);
+     if (isExtensionCommandArgs(preConfigArgs)) {
+       // if the user has requested the 'driver' CLI, don't run the normal server,
+       // but instead pass control to the driver CLI
