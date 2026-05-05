@@ -38,9 +38,9 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/
     cp -r bin $out/bin
 
-    mkdir -p $out/share/${pname}
-    cp -r ${appimageContents}/locales $out/share/${pname}
-    cp -r ${appimageContents}/resources $out/share/${pname}
+    mkdir -p $out/share/clickup
+    cp -r ${appimageContents}/locales $out/share/clickup
+    cp -r ${appimageContents}/resources $out/share/clickup
     cp -r --no-preserve=mode ${appimageContents}/usr/share/icons $out/share/
     find $out/share/icons -name desktop.png -execdir mv {} clickup.png \;
 
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation {
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=clickup' \
       --replace-fail 'Icon=desktop' 'Icon=clickup'
 
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/clickup \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} --no-update"
 
     runHook postInstall
