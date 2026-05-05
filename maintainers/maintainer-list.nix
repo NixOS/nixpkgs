@@ -22918,6 +22918,14 @@
     githubId = 77415970;
     name = "Redhawk";
   };
+<<<<<<< HEAD
+=======
+  redhood = {
+     name = "Alice Liddell";
+     github = "red-hood-woods";
+     githubId = "258934709";
+  };
+>>>>>>> 152cfe941fe5 (seamonkey: init 2.53.23)
   redianthus = {
     github = "redianthus";
     githubId = 16472988;
