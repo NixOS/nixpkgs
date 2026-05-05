@@ -2868,6 +2868,14 @@
     githubId = 2998834;
     name = "Bruno Rodrigues";
   };
+
+  b12f = {
+    email = "hello@benjaminbaedorf.eu";
+    github = "b12f";
+    githubId = 11312895;
+    name = "Benjamin Yule Bädorf";
+    keys = [ { fingerprint = "FC62 3BBC BD26 04D5 CC9D 90BA E77B 0AAA F0D9 B76B"; } ];
+  };
   b4dm4n = {
     email = "fabianm88@gmail.com";
     github = "B4dM4n";

@@ -1,0 +1,24 @@
+#!@shell@
+set -eu
+
+db=$1; shift
+
+export SECRET_KEY_BASE=1
+
+cd @openproject@
+mkdir -p @openprojectStatePath@/{tmp,files}
+
+if [[ "$(echo "\dt" | @psql@ "$db" 2>&1)" = "No relations found." ]]; then
+	echo "Initialising database and running seed..."
+	DISABLE_DATABASE_ENVIRONMENT_CHECK=1 @bundle@ exec rake db:structure:load db:seed
+else
+	echo "Executing database migration and database seed..."
+	@bundle@ exec rake db:migrate
+	@bundle@ exec rake db:seed
+fi
+
+if [ "${1:-}" = "--set" ]; then
+	shift
+	echo "Update application settings..."
+	@bundle@ exec rake setting:set["$@"]
+fi

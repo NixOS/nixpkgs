@@ -1,0 +1,12 @@
+#!@shell@
+
+set -eu
+
+export SECRET_KEY_BASE=$(cat $SECRET_KEY_BASE_FILE)
+
+set -x
+
+cd @openproject@
+mkdir -p @openprojectStatePath@/{tmp,files}
+
+exec @bundle@ exec good_job start

@@ -1,0 +1,29 @@
+#!@shell@
+
+set -eu
+
+set -x
+
+cd @openproject@
+mkdir -p @openprojectStatePath@/{tmp,files}
+
+@bundle@ exec rake redmine:email:receive_imap \
+       host="${IMAP_HOST}" \
+       username="${IMAP_USERNAME}" \
+       password="${IMAP_PASSWORD}" \
+       ssl="${IMAP_SSL}" \
+       ssl_verification="${IMAP_SSL_VERIFICATION}" \
+       port="${IMAP_PORT}" \
+       folder="${IMAP_FOLDER}" \
+       project="${IMAP_ATTR_PROJECT}" \
+       category="${IMAP_ATTR_CATEGORY}" \
+       priority="${IMAP_ATTR_PRIORITY}" \
+       status="${IMAP_ATTR_STATUS}" \
+       version="${IMAP_ATTR_VERSION}" \
+       type="${IMAP_ATTR_TYPE}" \
+       assigned_to="${IMAP_ATTR_ASSIGNED_TO}" \
+       unknown_user="${IMAP_UNKNOWN_USER}" \
+       no_permission_check="${IMAP_NO_PERMISSION_CHECK}" \
+       move_on_success="${IMAP_MOVE_ON_SUCCESS}" \
+       move_on_failure="${IMAP_MOVE_ON_FAILURE}" \
+       allow_override="${IMAP_ALLOW_OVERRIDE}"

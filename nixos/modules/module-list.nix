@@ -1737,6 +1737,7 @@
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/open-web-calendar.nix
   ./services/web-apps/opencloud.nix
+  ./services/web-apps/openproject.nix
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
