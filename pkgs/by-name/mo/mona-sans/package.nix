@@ -9,6 +9,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mona-sans";
   version = "2.0.23";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     rev = finalAttrs.version;
     owner = "github";

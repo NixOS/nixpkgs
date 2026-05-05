@@ -33,7 +33,6 @@ let
   inherit (pkgs)
     mariadb
     stdenv
-    writeShellScript
     ;
   cfg = config.services.drupal;
   eachSite = cfg.sites;

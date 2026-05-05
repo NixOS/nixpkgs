@@ -126,8 +126,6 @@ makeScopeWithSplicing' {
 
         mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
-        maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
-
         maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
         maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
@@ -153,6 +151,8 @@ makeScopeWithSplicing' {
         };
 
         pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
+
+        pyotherside = callPackage ../development/libraries/pyotherside { };
 
         qca = callPackage ../development/libraries/qca {
           inherit (libsForQt5) qtbase;
@@ -231,6 +231,7 @@ makeScopeWithSplicing' {
           Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
         ''; # Added 2025-10-25
         mapbox-gl-native = throw "libsForQt5.mapbox-gl-native has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+        maplibre-gl-native = throw "libsForQt5.maplibre-gl-native has been removed due to being broken and superseded by maplibre-native-qt"; # Added 2026-04-11
       }
     ))
   );

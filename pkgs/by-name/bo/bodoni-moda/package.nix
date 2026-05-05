@@ -8,6 +8,11 @@ stdenvNoCC.mkDerivation {
   pname = "bodoni-moda";
   version = "2.4-unstable-2024-02-18";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "indestructible-type";
     repo = "Bodoni";

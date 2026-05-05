@@ -29,6 +29,13 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X=github.com/influxdata/telegraf/internal.Commit=${finalAttrs.src.rev}"
     "-X=github.com/influxdata/telegraf/internal.Version=${finalAttrs.version}"
+  ]
+  # Binary is too large for the default GOT PLT displacments on 32-bit ARM;
+  # need to use larger encoding otherwise linking fails with:
+  # BFD (GNU Binutils) 2.46 assertion fail /build/binutils-with-gold-2.46/bfd/elf32-arm.c:9783
+  ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    "-extldflags"
+    "-Wl,--long-plt"
   ];
 
   passthru.tests = {

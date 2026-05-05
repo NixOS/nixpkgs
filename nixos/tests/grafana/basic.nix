@@ -2,7 +2,7 @@ import ../make-test-python.nix (
   { lib, pkgs, ... }:
 
   let
-    inherit (lib) mkMerge nameValuePair maintainers;
+    inherit (lib) mkMerge;
 
     baseGrafanaConf = {
       services.grafana = {

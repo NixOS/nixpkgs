@@ -104,14 +104,14 @@ let
 in
 effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.3.6";
+  version = "6.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-kXe/Pyjzf6CxYtsYP15hgYnj+qricrlXGqi/G3uQMFM=";
+    hash = "sha256-TmhMjO1WTF4fT/G0EyRzORI/Q/cd3IipQn0eRwkWYRE=";
   };
 
   patches = [
@@ -135,6 +135,7 @@ effectiveBuildPythonApplication rec {
 
   nativeBuildInputs = [
     clang
+    cython
     gobject-introspection
     pkg-config
     wrapGAppsHook3
@@ -168,7 +169,6 @@ effectiveBuildPythonApplication rec {
   ++ [
     atk.out
     cairo
-    cython
     ffmpeg
     gdk-pixbuf
     glib
