@@ -613,6 +613,7 @@
   ./services/development/labgrid/coordinator.nix
   ./services/development/livebook.nix
   ./services/development/lorri.nix
+  ./services/development/nix-post-build-hook-queue.nix
   ./services/development/nixseparatedebuginfod2.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/turborepo-remote-cache.nix
