@@ -8,19 +8,32 @@ testModuleArgs@{
 }:
 let
   inherit (lib) mkOption types;
-  inherit (types) either str functionTo;
+  inherit (types)
+    lines
+    str
+    functionTo
+    coercedTo
+    ;
+  testScriptArgs = {
+    nodes = lib.mapAttrs (
+      k: v:
+      if v.virtualisation.useNixStoreImage then
+        # prevent infinite recursion when testScript would
+        # reference v's toplevel
+        config.withoutTestScriptReferences.nodesCompat.${k}
+      else
+        # reuse memoized config
+        v
+    ) config.nodesCompat;
+    containers = config.containers;
+  };
 in
 {
   options = {
     testScript = mkOption {
-      type = either str (functionTo str);
-      apply =
-        v:
-        if lib.isFunction v then
-          # Only pass args the testScript function expects.
-          args: v (builtins.intersectAttrs (lib.functionArgs v) args)
-        else
-          v;
+      type = coercedTo (functionTo lines) (
+        v: v (builtins.intersectAttrs (lib.functionArgs v) testScriptArgs)
+      ) lines;
       description = ''
         A series of python declarations and statements that you write to perform
         the test.
@@ -50,23 +63,7 @@ in
     withoutTestScriptReferences.includeTestScriptReferences = false;
     withoutTestScriptReferences.testScript = lib.mkForce "testscript omitted";
 
-    testScriptString =
-      if lib.isFunction config.testScript then
-        config.testScript {
-          nodes = lib.mapAttrs (
-            k: v:
-            if v.virtualisation.useNixStoreImage then
-              # prevent infinite recursion when testScript would
-              # reference v's toplevel
-              config.withoutTestScriptReferences.nodesCompat.${k}
-            else
-              # reuse memoized config
-              v
-          ) config.nodesCompat;
-          containers = config.containers;
-        }
-      else
-        config.testScript;
+    testScriptString = config.testScript;
 
     nodeDefaults =
       { config, name, ... }:
