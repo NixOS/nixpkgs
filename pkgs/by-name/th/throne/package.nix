@@ -19,20 +19,20 @@
 
   # override if you want to have more up-to-date rulesets
   throne-srslist ? fetchurl {
-    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/05793e2da7ca10a7acb2494f60a27ac5f7ec924c/srslist.h";
-    hash = "sha256-NHer5Vy1zBL9yJlVDLVFNRG4ITzb2GTjmt718KsSrGw=";
+    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/c637d0bb8a3707eb5e122c81753600d3e18a5969/srslist.h";
+    hash = "sha256-Kf3TAGXi7Y0PhWjdTOZdPUMlimszWkcrQw9zv8pb76s=";
   },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.1.1-unstable-2026-03-28";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
-    rev = "f53bb73790782a9a9b7bfeb30c8d6e6bcc2b05f0";
-    hash = "sha256-hEjbzS0JV5OA0c9kWTFGc5kv04qzobN0TFBjMJZ1ohc=";
+    tag = finalAttrs.version;
+    hash = "sha256-gtbGKyEOTq+1IP7v4ZhVVohGQFlDtP7NbbhyFD2rCnA=";
   };
 
   strictDeps = true;
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     proxyVendor = true;
-    vendorHash = "sha256-HNd0HI4JRPZiiSxDzOKgyAOW7tzZPCTPvOC5t+3yhoQ=";
+    vendorHash = "sha256-G0ev2my+sHQFYdmfkR2Zq3ujSeqi5fZ4BdrnUS8mfDE=";
 
     nativeBuildInputs = [
       protobuf
@@ -145,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
       "with_tailscale"
       "badlinkname"
       "tfogo_checklinkname"
+      "with_naive_outbound"
+      "with_purego" # prebuilt .a files inside cronet-go are annoying to fix
     ];
   };
 
