@@ -11697,6 +11697,12 @@
     githubId = 13622947;
     keys = [ { fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293"; } ];
   };
+  isomorph70 = {
+    name = "Svend Haugaard Sørensen";
+    github = "Isomorph70";
+    githubId = 37809106;
+    email = "isomorph70+os@gmail.com";
+  };
   isotoxal = {
     name = "Abhinav Kuruvila Joseph";
     email = "abhinavkuruvila@proton.me";
