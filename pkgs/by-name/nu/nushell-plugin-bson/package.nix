@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_bson";
-  version = "26.1100.0";
+  version = "26.1121.1";
 
   src = fetchFromGitHub {
     owner = "Kissaki";
     repo = "nu_plugin_bson";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Uu2YF5fnNvRP4+9GpLYjzZt7lg0kCbBl4bk4l5rEuY=";
+    hash = "sha256-GByQCBtvFoC6Fn8qyFkXXDsUbsOLjag55SC7toUmc4c=";
   };
 
-  cargoHash = "sha256-iORPlIP9kDLlJkm09SZn2lO3bWcj/Q/g+dBd2CPWiOg=";
+  cargoHash = "sha256-DjvvaLYyfqgFo+G071YgViAgBfLCm9M0z/vyS+azLfU=";
 
   nativeBuildInputs = [
     llvmPackages.libclang
