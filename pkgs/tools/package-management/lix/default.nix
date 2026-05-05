@@ -35,6 +35,12 @@
   confDir ? "/etc",
 }:
 let
+  lixMdbookPatch = fetchpatch2 {
+    name = "lix-mdbook-0.5-support.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/54df89f601b3b4502a5c99173c9563495265d7e7.patch";
+    excludes = [ "package.nix" ];
+    hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
+  };
   makeLixScope =
     {
       attrName,
@@ -191,6 +197,7 @@ lib.makeExtensible (
         };
 
         patches = [
+          lixMdbookPatch
         ];
       };
     };

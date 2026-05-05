@@ -40,8 +40,7 @@
   "bazel": {
     "description": "Maintenance of https://bazel.build/ and related packages",
     "id": 5468470,
-    "maintainers": {
-    },
+    "maintainers": {},
     "members": {
       "aherrmann": 732652,
       "avdv": 3471749,
@@ -128,7 +127,6 @@
       "HeitorAugustoLN": 44377258,
       "Pandapip1": 45835846,
       "a-kenji": 65275785,
-      "ahoneybun": 4884946,
       "drakon64": 6444703,
       "michaelBelsanti": 62124625,
       "thefossguy": 44400303
@@ -213,7 +211,6 @@
       "fulsomenko": 14945057,
       "gador": 1883533,
       "griff": 4368,
-      "groodt": 343415,
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,

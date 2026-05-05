@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "lean4";
     publisher = "leanprover";
-    version = "0.0.234";
-    hash = "sha256-pChzzyJ49LAlSHWl83G6GaH3mTJB2ZZTjMygxWpubtE=";
+    version = "0.0.236";
+    hash = "sha256-N4Y71r22e5MNLOYVFVF3FYnzoQTHIAoC/t3zv+5eB80=";
   };
 
   meta = {

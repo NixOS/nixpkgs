@@ -23,12 +23,17 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-HL/kFpz5xvFDKgef2+AI/qjs2jakl00qfPSABYMGyrI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "Cython~=3.1.0" "cython"
+  '';
+
   build-system = [
+    cython
     distutils
     setuptools
   ];
 
-  nativeBuildInputs = [ cython ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   nativeCheckInputs = [
     click
