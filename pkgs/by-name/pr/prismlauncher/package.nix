@@ -4,6 +4,8 @@
   flite,
   gamemode,
   glfw3-minecraft,
+  gsettings-desktop-schemas,
+  gtk3,
   jdk17,
   jdk21,
   jdk25,
@@ -116,6 +118,8 @@ symlinkJoin {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"
+      "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
     ];
 
   meta = {
