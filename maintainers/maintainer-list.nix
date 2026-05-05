@@ -4524,6 +4524,12 @@
     githubId = 1945;
     name = "Casey Rodarmor";
   };
+  cassis163 = {
+    email = "c.aangeenbrug@protonmail.com";
+    github = "cassis163";
+    githubId = 42798012;
+    name = "Casper Aangeenbrug";
+  };
   catap = {
     email = "kirill@korins.ky";
     github = "catap";
