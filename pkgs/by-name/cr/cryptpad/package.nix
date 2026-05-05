@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "2025.9.0";
+  version = "2026.2.2";
   # nix version of install-onlyoffice.sh
   # a later version could rebuild from sdkjs/web-apps as per
   # https://github.com/cryptpad/onlyoffice-builds/blob/main/build.sh
@@ -123,6 +123,11 @@ let
       version = "v8.3.3.23+5";
       hash = "sha256-+53jzvmGltD1yjXAimLl8zL1V4YDc1qF1PUFSeyiUm8=";
     }
+    {
+      subdir = "v9";
+      version = "v9.2.0.119+5";
+      hash = "sha256-P0mHrwcroYrSVDyCrabkHjOm84sexZMPebZtGvt+BxU=";
+    }
   ];
 
   x2t_version = "v7.3+1";
@@ -146,14 +151,20 @@ buildNpmPackage {
     owner = "cryptpad";
     repo = "cryptpad";
     tag = version;
-    hash = "sha256-C5vj8vgSzR81NJhCSlY9sEoSAQs3ckeoCrChrSTTIso=";
+    hash = "sha256-FViPvcqVJ2CfXHe44HOMymwH2XmfC0yzhlFPXl3ue+g=";
     # case-insensitive file results in different hash on darwin, delete to avoid collision
     postFetch = ''
       find $out -iname "funding.json" -delete
     '';
   };
 
-  npmDepsHash = "sha256-d/2JKGdC/tgDOo4Qr/0g83lh5gW6Varr0vkZUZe+WTA=";
+  # rm package-lock.json & npm install --package-lock-only --ignore-scripts
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
+
+  npmDepsHash = "sha256-7lw2Qt8SXqbFIYgn0DrAWyIFedr7YLmuVbt2yJ3j1vs=";
+  npmDepsFetcherVersion = 2;
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -166,9 +177,6 @@ buildNpmPackage {
     # fix httpSafePort setting
     # https://github.com/cryptpad/cryptpad/pull/1571
     ./0001-env.js-fix-httpSafePort-handling.patch
-    # fix install-onlyyofice.sh check
-    # https://github.com/cryptpad/cryptpad/pull/2097
-    ./0001-install-onlyoffice.sh-fix-check-for-new-install_vers.patch
   ];
 
   # cryptpad build tries to write in cache dir
