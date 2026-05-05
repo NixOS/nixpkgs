@@ -78,6 +78,9 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
     echo "Running lib/tests/fetchers.nix"
     [[ $(nix-instantiate --eval --strict lib/tests/fetchers.nix | tee /dev/stderr) == '[ ]' ]];
 
+    echo "Running lib/tests/customisation.nix"
+    [[ $(nix-instantiate --eval --strict lib/tests/customisation.nix | tee /dev/stderr) == '[ ]' ]];
+
     mkdir $out
     echo success > $out/${nix.version}
   ''
