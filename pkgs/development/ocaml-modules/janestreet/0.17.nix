@@ -686,6 +686,48 @@ with self;
     ];
   };
 
+  hardcaml = janePackage {
+    pname = "hardcaml";
+    hash = "sha256-GfKU6Vdsgplf7FLX2IlD2a1zMdJKO/N4C60397eFLcU=";
+    meta.description = "Hardcaml is an OCaml library for designing hardware";
+    propagatedBuildInputs = [
+      bignum
+      bin_prot
+      core
+      core_kernel
+      jane_rope
+      ppx_compare
+      ppx_sexp_conv
+      sexplib
+      splittable_random
+      stdio
+      ppxlib_jane
+      ppx_jane
+    ];
+    doCheck = false; # hardcaml_waveterm as recursve checkInput dependency
+  };
+
+  hardcaml_waveterm = janePackage {
+    pname = "hardcaml_waveterm";
+    hash = "sha256-R7NTEJel52KjdzRrTtJaX0dx1kuzxVqNHGwi4ORaR9k=";
+    meta.description = "Hardcaml is an OCaml library for designing hardware";
+    propagatedBuildInputs = [
+      async
+      base
+      bignum
+      core
+      core_unix
+      cryptokit
+      hardcaml
+      notty
+      notty_async
+      ppx_jane
+      re
+      stdio
+      num
+    ];
+  };
+
   hex_encode = janePackage {
     pname = "hex_encode";
     hash = "sha256-5DqaCJllphdEreOpzAjT61qb3M6aN9b2xhiUjHVLrvE=";
@@ -894,6 +936,18 @@ with self;
       ppx_jane
       ppx_sexp_conv
       ppx_sexp_message
+    ];
+  };
+
+  notty_async = janePackage {
+    pname = "notty_async";
+    hash = "sha256-zD9V2vtgCJfjj4DAQLReGIno2SLeryukCPgScyoQFP0=";
+    meta.description = "An Async driver for Notty";
+    propagatedBuildInputs = [
+      ppx_jane
+      notty
+      async
+      core_unix
     ];
   };
 
