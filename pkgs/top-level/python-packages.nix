@@ -7342,6 +7342,16 @@ self: super: with self; {
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
+  hyprland-config = callPackage ../development/python-modules/hyprland-config { };
+
+  hyprland-monitors = callPackage ../development/python-modules/hyprland-monitors { };
+
+  hyprland-schema = callPackage ../development/python-modules/hyprland-schema { };
+
+  hyprland-socket = callPackage ../development/python-modules/hyprland-socket { };
+
+  hyprland-state = callPackage ../development/python-modules/hyprland-state { };
+
   hyrule = callPackage ../development/python-modules/hyrule { };
 
   i-pi = callPackage ../development/python-modules/i-pi { };
