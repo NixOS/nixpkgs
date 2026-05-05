@@ -43,6 +43,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
+    web = [ fastapi ];
     webapi = [
       fastapi
       uvicorn
