@@ -262,7 +262,7 @@ stdenv.mkDerivation {
           coreutils
         ]
       }
-      --set CHROME_WRAPPER ${pname}
+      --set CHROME_WRAPPER brave
       ${optionalString (enableFeatures != [ ]) ''
         --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime=true}}"
       ''}
