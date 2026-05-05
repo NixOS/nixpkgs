@@ -264,6 +264,11 @@ let
           target.succeed("nix-env -iA nixos.procps >&2")
           assert ".nix-profile" in target.succeed("type -tP ps | tee /dev/stderr")
 
+          # This test is a bit hacky, and relies on `zzz` being lower in the alphabet
+          # than `nixos`, the only other channel we have.
+          target.succeed("nix-channel --add http://example.com zzz")
+          assert "Invalid argument" not in target.execute("nix-channel --update zzz")[1]
+
       with subtest(
           "Check that the daemon works, and that non-root users can run builds "
           "(this will build a new profile generation through the daemon)"
