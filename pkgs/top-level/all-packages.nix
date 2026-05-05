@@ -12193,4 +12193,10 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  # Main wal-g package (PostgreSQL) - aliased to wal-g-pg
+  wal-g = callPackage ../by-name/wa/wal-g-pg/package.nix { };
+
+  # MySQL variant
+  wal-g-mysql = callPackage ../by-name/wa/wal-g-pg/package.nix { mysql = true; };
 }
