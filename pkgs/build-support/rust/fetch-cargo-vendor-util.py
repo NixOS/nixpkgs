@@ -40,6 +40,7 @@ def create_http_session() -> requests.Session:
         status_forcelist=[500, 502, 503, 504]
     )
     session = requests.Session()
+    session.headers["User-Agent"] = "nixpkgs-fetchCargoVendor/2 (https://github.com/NixOS/nixpkgs)"
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
     return session
@@ -68,7 +69,9 @@ def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
     if pkg["source"] != "registry+https://github.com/rust-lang/crates.io-index":
         raise Exception("Only the default crates.io registry is supported.")
 
-    return f"https://crates.io/api/v1/crates/{pkg["name"]}/{pkg["version"]}/download"
+    # Use static.crates.io (CDN) instead of crates.io/api to avoid the 1 req/sec
+    # rate limit on the API servers.
+    return f"https://static.crates.io/crates/{pkg["name"]}/{pkg["version"]}/download"
 
 
 def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
