@@ -53,7 +53,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "find_package(Boost COMPONENTS system filesystem REQUIRED)" \
+        "find_package(Boost COMPONENTS filesystem REQUIRED)"
   '';
 
   meta = {
