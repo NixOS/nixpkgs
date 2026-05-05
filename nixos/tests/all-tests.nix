@@ -1713,6 +1713,7 @@ in
   unifi = runTest ./unifi.nix;
   unit-perl = runTest ./web-servers/unit-perl.nix;
   unit-php = runTest ./web-servers/unit-php.nix;
+  unpackerr = runTest ./unpackerr.nix;
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = runTest ./uptermd.nix;
