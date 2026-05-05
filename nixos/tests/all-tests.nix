@@ -661,6 +661,7 @@ in
   gnome-flashback = runTest ./gnome-flashback.nix;
   gns3-server = runTest ./gns3-server.nix;
   gnupg = runTest ./gnupg.nix;
+  go-avahi-cname = runTest ./go-avahi-cname.nix;
   go-camo = runTest ./go-camo.nix;
   go-csp-collector = runTest ./go-csp-collector.nix;
   go-httpbin = runTest ./go-httpbin.nix;
