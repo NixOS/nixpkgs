@@ -2,7 +2,6 @@
   callPackages,
   callPackage,
   varnish60,
-  varnish77,
   varnish80,
   lib,
 }:
@@ -20,10 +19,6 @@
       version = "0.4";
       sha256 = "1n94slrm6vn3hpymfkla03gw9603jajclg84bjhwb8kxsk3rxpmk";
     };
-  };
-  varnish77Packages = lib.recurseIntoAttrs rec {
-    varnish = varnish77;
-    modules = (callPackages ./modules.nix { inherit varnish; }).modules26;
   };
   varnish80Packages = lib.recurseIntoAttrs rec {
     varnish = varnish80;
