@@ -5,6 +5,7 @@
   arch ? "",
   sha256 ? "",
   hash ? "",
+  signatureHash ? "",
 }:
 let
   archurl = (if arch == "" then "" else "?targetPlatform=${arch}");

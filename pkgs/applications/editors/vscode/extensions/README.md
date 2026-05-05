@@ -15,6 +15,15 @@
 
 * Use `hash` instead of `sha256`.
 
+* Add `signatureHash` to enable automatic cryptographic signature verification (optional) or pass `--with-signature` to the update script to populate it.
+  For multi-platform extensions with per-system `hash` values, the update script fetches a `signatureHash` per platform and inserts it into each per-system block.
+
+  Signature verification runs only when the `vscode` package exposes `passthru.hasVsceSign = true`.
+  Microsoft's build does; `vscodium` does not because it ships without the `vsce-sign` binary).
+  Users who overlay `vscode = vscodium` or other variant without `vsce-sign` get verification automatically skipped.
+
+  For per-extension opt-out set `allowMissingVsceSign = true` via `overrideAttrs`: `(pkgs.vscode-extensions.publisher.extension.overrideAttrs { allowMissingVsceSign = true; })`.
+
 * On `meta` field:
   - add a `changelog`.
   - `description` should mention it is a Visual Studio Code extension.
