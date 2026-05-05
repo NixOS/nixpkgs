@@ -146,6 +146,27 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "opensfm" ];
 
+  # https://opensfm.org/docs/using.html#quickstart
+  passthru.tests = lib.genAttrs' [ "berlin" "lund" ] (
+    name:
+    lib.nameValuePair "integration-test-${name}" (
+      runCommand "opensfm-integration-test-${name}"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          set -euo pipefail
+          opensfm --help
+          cp -r ${srcOnly finalAttrs.finalPackage}/data/${name} data
+          chmod -R +w data/
+          bash -x $(command -v opensfm_run_all) data/
+          if [[ -s data/camera_models.json && -s data/undistorted/reconstruction.json ]]; then
+            touch $out
+          fi
+        ''
+    )
+  );
+
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = [
