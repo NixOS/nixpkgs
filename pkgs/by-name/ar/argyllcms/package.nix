@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
       # Expect the text in format of 'Current Version 3.0.1 (19th October 2023)'
       new_version="$(curl -s https://www.argyllcms.com/ |
           pcregrep -o1 '>Current Version ([0-9.]+) ')"
-      update-source-version ${pname} "$new_version"
+      update-source-version argyllcms "$new_version"
     '';
   };
 
