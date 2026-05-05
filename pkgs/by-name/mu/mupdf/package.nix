@@ -55,6 +55,8 @@ let
       hash = "sha256-yVnVFh2KMpkRB0Emr1iiUwg8ZcPn/k4fnBtBsnv6jX0=";
     };
 
+    patches = [ ]; # the current patches won't apply
+
     # cmake 4 compatibility, upstream is dead
     postPatch = ''
       substituteInPlace CMakeLists.txt \
