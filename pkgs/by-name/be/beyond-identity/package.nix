@@ -44,7 +44,7 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://packages.beyondidentity.com/public/linux-authenticator/deb/ubuntu/pool/focal/main/b/be/${pname}_${version}/${pname}_${version}_amd64.deb";
+      url = "https://packages.beyondidentity.com/public/linux-authenticator/deb/ubuntu/pool/focal/main/b/be/beyond-identity_${version}/beyond-identity_${version}_amd64.deb";
       hash = "sha512-aOQi0hG7AZ3lIAPCDgGAjqVmNCuqFC62CjI9XPLBpvbxBgr2yi7alP952i31MufzzruzVweoQb8SWgNIHq/zIw==";
     };
 
