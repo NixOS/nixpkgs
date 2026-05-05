@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp cfdg $out/bin/
 
-    mkdir -p $out/share/doc/${pname}-${version}
-    cp *.txt $out/share/doc/${pname}-${version}
+    mkdir -p $out/share/doc/cfdg-${version}
+    cp *.txt $out/share/doc/cfdg-${version}
 
     runHook postInstall
   '';
