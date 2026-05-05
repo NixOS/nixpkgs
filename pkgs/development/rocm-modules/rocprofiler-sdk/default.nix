@@ -46,7 +46,7 @@
 # rocprofiler-sdk is the home of rocprofv3
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-sdk";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
