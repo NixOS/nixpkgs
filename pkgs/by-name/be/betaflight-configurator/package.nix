@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   inherit pname;
   version = "10.10.0";
   src = fetchurl {
-    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64-portable.zip";
+    url = "https://github.com/betaflight/betaflight-configurator/releases/download/${version}/betaflight-configurator_${version}_linux64-portable.zip";
     sha256 = "sha256-UB5Vr5wyCUZbOaQNckJQ1tAXwh8VSLNI1IgTiJzxV08=";
   };
 
@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin \
-             $out/opt/${pname}
+             $out/opt/betaflight-configurator
 
-    cp -r . $out/opt/${pname}/
-    install -m 444 -D icon/bf_icon_128.png $out/share/icons/hicolor/128x128/apps/${pname}.png
+    cp -r . $out/opt/betaflight-configurator/
+    install -m 444 -D icon/bf_icon_128.png $out/share/icons/hicolor/128x128/apps/betaflight-configurator.png
     cp -r ${desktopItem}/share/applications $out/share/
 
-    makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/${pname}
+    makeWrapper ${nwjs}/bin/nw $out/bin/betaflight-configurator --add-flags $out/opt/betaflight-configurator
     runHook postInstall
   '';
 
