@@ -7,6 +7,7 @@
   meson,
   ninja,
   libevdev,
+  lua5_4,
   mtdev,
   udev,
   wacomSupport ? stdenv.hostPlatform.isLinux,
@@ -53,7 +54,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.29.2";
+  version = "1.31.1";
 
   outputs = [
     "bin"
@@ -66,12 +67,8 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-oxDGUbZebxAmBd2j51qV9Jn8SXBjUX2NPRgkxbDz7Dk=";
+    hash = "sha256-9Ko97vJyo4a9NUF7omqHTwzVV02sJ2EqpDIh+nPeLwk=";
   };
-
-  patches = [
-    ./udev-absolute-path.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -87,6 +84,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libevdev
+    lua5_4
     mtdev
     (python3.withPackages (
       pp: with pp; [
