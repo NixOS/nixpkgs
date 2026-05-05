@@ -6023,6 +6023,7 @@ with pkgs;
     boost188
     boost189
     boost190
+    boost191
     ;
 
   boost = boost189;
