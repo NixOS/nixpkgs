@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "torcs-without-data";
-  version = "1.3.8";
+  version = "1.3.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/torcs/torcs-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-S5Z3NUX7NkEZgqbziXIF64/VciedTOVp8s4HsI6Jp68=";
+    url = "mirror://sourceforge/torcs/all-in-one/${finalAttrs.version}/torcs-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-+caehtKQKVRnRRsB14ONhQBbphNkSm/oo/hafGoDzUw=";
   };
 
   patches = [
