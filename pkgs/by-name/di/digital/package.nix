@@ -72,13 +72,13 @@ maven.buildMavenPackage rec {
     # Digital.jar expects to find lib/ in the same directory as the jar file
     cp -r src/main/dig/lib $out/share/java/
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-      --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
+    makeWrapper ${jre}/bin/java $out/bin/digital \
+      --add-flags "-classpath $out/share/java/digital-${version}.jar:''${classpath#:}" \
       --add-flags "-jar $out/share/java/Digital.jar"
 
-    install -Dm644 src/main/svg/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
+    install -Dm644 src/main/svg/icon.svg $out/share/icons/hicolor/scalable/apps/digital.svg
     for size in 16 32 48 64 128; do
-      install -Dm644 src/main/resources/icons/icon"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
+      install -Dm644 src/main/resources/icons/icon"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/digital.png
     done
 
     runHook postInstall
