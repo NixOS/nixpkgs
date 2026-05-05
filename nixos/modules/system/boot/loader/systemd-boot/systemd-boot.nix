@@ -55,6 +55,8 @@ let
 
       configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
+      rememberLastChoice = cfg.rememberLastChoice;
+
       inherit (cfg)
         consoleMode
         graceful
@@ -514,6 +516,20 @@ in
         )
       );
     };
+
+    rememberLastChoice = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = ''
+        Remembers the last chosen systemd-boot entry. For example, given entries A and B. If B is
+        is selected, next boot B will automatically be highlighted instead of the latest generation.
+        This is done by setting `default @saved` within the systemd-boot config.
+
+        This option will not work properly unless `boot.loader.canTouchEfiVariables = true`
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -540,6 +556,10 @@ in
           -> config.hardware.deviceTree.enable
           -> config.hardware.deviceTree.name != null;
         message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
+      }
+      {
+        assertion = cfg.rememberLastChoice -> efi.canTouchEfiVariables;
+        message = "'boot.loader.systemd-boot.rememberLastChoice' requires 'boot.loader.efi.canTouchEfiVariables' to be set";
       }
     ]
     ++ concatMap (filename: [

@@ -654,4 +654,50 @@ in
       '';
     }
   );
+
+  currentGenerationFile = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-boot-current-generation";
+      meta.maintainers = with lib.maintainers; [ micha4w ];
+
+      nodes.machine = common;
+
+      testScript =
+        { nodes, ... }:
+        ''
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
+
+          machine.succeed(
+              "bootctl list | grep 'title: NixOS' | head -n1 | grep -q 'Current Profile'"
+          )
+        '';
+    }
+  );
+
+  rememberLastChoice = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-boot-remember-last-choice";
+      meta.maintainers = with lib.maintainers; [ micha4w ];
+
+      nodes.machine = {
+        imports = [ common ];
+        boot.loader.systemd-boot.rememberLastChoice = true;
+      };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed(
+            "test -e /boot/loader/loader.conf"
+        )
+        machine.succeed(
+            "grep -q '@saved' /boot/loader/loader.conf"
+        )
+      '';
+    }
+  );
 }
