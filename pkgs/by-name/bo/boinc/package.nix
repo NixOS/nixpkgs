@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   version = "8.2.11";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-src";
+    name = "boinc-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
