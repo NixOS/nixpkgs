@@ -215,13 +215,12 @@ let
     "build"
     "host"
   ];
-  buildPlatformConfigureFlag = "--build=${buildPlatform.config}";
-  hostPlatformConfigureFlag = "--host=${hostPlatform.config}";
-  targetPlatformConfigureFlag = "--target=${targetPlatform.config}";
-  defaultConfigurePlatformsFlags = optionals useDefaultConfigurePlatforms [
-    buildPlatformConfigureFlag
-    hostPlatformConfigureFlag
-  ];
+  configurePlatformFlagMap = {
+    build = "--build=${buildPlatform.config}";
+    host = "--host=${hostPlatform.config}";
+    target = "--target=${targetPlatform.config}";
+  };
+  defaultConfigurePlatformsFlags = map (p: configurePlatformFlagMap.${p}) defaultConfigurePlatforms;
 
   # TODO(@Ericson2314): Make always true and remove / resolve #178468
   defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
@@ -601,9 +600,7 @@ let
               if configurePlatforms == defaultConfigurePlatforms then
                 defaultConfigurePlatformsFlags
               else
-                optional (elem "build" configurePlatforms) buildPlatformConfigureFlag
-                ++ optional (elem "host" configurePlatforms) hostPlatformConfigureFlag
-                ++ optional (elem "target" configurePlatforms) targetPlatformConfigureFlag
+                map (p: configurePlatformFlagMap.${p}) configurePlatforms
             );
 
           inherit patches;
