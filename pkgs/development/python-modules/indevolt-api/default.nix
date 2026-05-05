@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "indevolt-api";
-  version = "1.6.5";
+  version = ".1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Xirt";
     repo = "indevolt-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Fhi9+6nWt7upUuA045SwPCwWevZDZTWnTiTBHsaR9W4=";
+    hash = "sha256-WcTfEsf6ypMdutY3Ab5WavNRYGiWtUehzlrNO7z8jgk=";
   };
 
   build-system = [ setuptools ];
