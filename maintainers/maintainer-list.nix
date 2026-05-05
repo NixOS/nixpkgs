@@ -26585,6 +26585,12 @@
     githubId = 12595971;
     name = "Guillaume Girol";
   };
+  syntheit = {
+    email = "daniel@matv.io";
+    github = "syntheit";
+    githubId = 96559325;
+    name = "Daniel Miller";
+  };
   sysedwinistrator = {
     email = "edwin.mowen@gmail.com";
     github = "sysedwinistrator";
