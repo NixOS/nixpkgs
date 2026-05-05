@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "md4c";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "mity";
     repo = "md4c";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-2/wi7nJugR8X2J9FjXJF1UDnbsozGoO7iR295/KSJng=";
+    hash = "sha256-rsNJlNLsmTEiAARqQ5TovNWmHNikMiRi8eEyn8o43ao=";
   };
 
   outputs = [
@@ -22,13 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "dev"
     "man"
-  ];
-
-  patches = [
-    # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so prefix and
-    # exec_prefix cannot be $out, too
-    # Use CMake's _FULL_ variables instead of `prefix` concatenation.
-    ./0001-fix-pkgconfig.patch
   ];
 
   nativeBuildInputs = [
