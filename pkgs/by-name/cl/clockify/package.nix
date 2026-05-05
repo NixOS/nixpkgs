@@ -22,7 +22,7 @@ appimageTools.wrapType2 rec {
       install -Dm 444 ${appimageContents}/clockify.png -t $out/share/icons
 
       substituteInPlace $out/share/applications/clockify.desktop \
-        --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun' 'Exec=clockify'
     '';
 
   meta = {
