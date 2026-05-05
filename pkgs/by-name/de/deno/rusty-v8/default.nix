@@ -132,7 +132,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "rustc_version=\"${rustc.version}\""
         "rust_sysroot_absolute=\"${rustToolchain}\""
         "rust_bindgen_root=\"${rustToolchain}\""
-        "use_chromium_rust_toolchain=true"
         # To accomodate our newer rustc compiler
         "removed_rust_stdlib_libs=[\"adler\"]"
         "added_rust_stdlib_libs=[\"adler2\"]"
@@ -144,6 +143,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   buildFeatures = [ "simdutf" ];
+
+  hardeningDisable = [
+    # rusty-v8 has its own default hardening flags, which are "extensive" for release builds as long as `use_custom_libcxx` stays true.
+    # Avoids many warnings about redefined macros (on build failures) and uses the upstream flag.
+    "libcxxhardeningfast"
+    # from Arch Linux: this uses malloc_usable_size, which is incompatible with fortification level 3
+    # https://gitlab.archlinux.org/archlinux/packaging/packages/deno/-/blob/cd9bdf9e67381da413142413646bd8648807510a/PKGBUILD#L49
+    "fortify3"
+  ];
 
   checkFlags = [
     # These tests probably fail due to a more recent rustc version (upstream: 1.89.0, here: 1.93.0)
