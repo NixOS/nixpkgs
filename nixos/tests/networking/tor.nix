@@ -15,23 +15,20 @@
         environment.systemPackages = with pkgs; [ dnsutils ];
       };
 
+    clearclient =
+      { nodes, ... }:
+      {
+        environment.systemPackages = with pkgs; [ dnsutils ];
+        # Set the router node as the gateway.
+        networking.defaultGateway = nodes.router.networking.primaryIPAddress;
+      };
+
     router =
       { ... }:
       {
         networking.tor = {
           transPort = 7040;
           dnsPort = 7053;
-          router.enable = true;
-        };
-      };
-
-    client_and_router =
-      { ... }:
-      {
-        networking.tor = {
-          transPort = 10040;
-          dnsPort = 10053;
-          client.enable = true;
           router.enable = true;
         };
       };
@@ -47,6 +44,44 @@
       tcp = int(re.search(tcp_re, ruleset).group(1))
       dns = int(re.search(dns_re, ruleset).group(1))
       return tcp, dns
+
+    # Return packet counters found in prerouting chain
+    def get_router_pkts(node, tcp_port, udp_port):
+      tcp_re = rf'ip protocol tcp tcp flags syn counter packets (\d+) bytes \d+ redirect to :{tcp_port}'
+      dns_re = rf'ip protocol udp udp dport 53 counter packets (\d+) bytes \d+ redirect to :{udp_port}'
+      ruleset = node.succeed("nft list ruleset")
+      tcp = int(re.search(tcp_re, ruleset).group(1))
+      dns = int(re.search(dns_re, ruleset).group(1))
+      return tcp, dns
+
+    router.wait_for_unit("tor.service")
+    router.succeed("nft list ruleset | grep tor_nat_prerouting")
+    router.succeed("nft list ruleset | grep tor_filter_forward")
+    router.succeed("ss -tlpn | grep -F '0.0.0.0:7040'")
+    router.succeed("ss -ulpn | grep -F '0.0.0.0:7053'")
+
+    tcp, dns = get_router_pkts(router, 7040, 7053)
+    assert tcp == 0 and dns == 0
+
+    clearclient.wait_for_unit("multi-user.target")
+
+    # If routed through a Tor gateway, the Tor daemon always replies with a
+    # SYN-ACK, no matter its network state.
+    clearclient.succeed("nc -vz 1.1.1.1 80")
+
+    # At this point we should have TCP packets but no DNS packets.
+    tcp, dns = get_router_pkts(router, 7040, 7053)
+    assert tcp > 0 and dns == 0
+
+    # This should fail as without connectivity the Tor daemon cannot to resolve domains.
+    clearclient.fail("nslookup www.google.com 8.8.8.8")
+    tcp, dns = get_router_pkts(router, 7040, 7053)
+    assert tcp > 0 and dns > 0
+
+    # Trying to resolve a .onion address instead should always succeed as the
+    # Tor daemon optimistically replies with a IP within VirtualAddrNetworkIPv4
+    # even without connectivity.
+    clearclient.succeed("nslookup duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion 8.8.8.8 | grep -F 'Address: 10.'")
 
     client.wait_for_unit("tor.service")
     client.succeed("nft list ruleset | grep tor_nat_output")
@@ -85,18 +120,5 @@
     tcp, dns = getpkts(client, 8040, 8053)
     assert tcp > 0 and dns > 0
 
-    router.wait_for_unit("tor.service")
-    router.succeed("nft list ruleset | grep tor_nat_prerouting")
-    router.succeed("nft list ruleset | grep tor_filter_forward")
-    router.succeed("ss -tlpn | grep -F '0.0.0.0:7040'")
-    router.succeed("ss -ulpn | grep -F '0.0.0.0:7053'")
-
-    client_and_router.wait_for_unit("tor.service")
-    client_and_router.succeed("nft list ruleset | grep tor_nat_output")
-    client_and_router.succeed("nft list ruleset | grep tor_filter_output")
-    client_and_router.succeed("nft list ruleset | grep tor_nat_prerouting")
-    client_and_router.succeed("nft list ruleset | grep tor_filter_forward")
-    client_and_router.succeed("ss -tlpn | grep -F '0.0.0.0:10040'")
-    client_and_router.succeed("ss -ulpn | grep -F '0.0.0.0:10053'")
   '';
 }

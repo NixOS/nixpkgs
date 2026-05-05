@@ -285,8 +285,8 @@ in
             ip saddr @excluded_sources return
             ip daddr @excluded_destinations return
 
-            ip protocol udp udp dport 53 redirect to :${toString cfg.dnsPort}
-            ip protocol tcp tcp flags syn redirect to :${toString cfg.transPort}
+            ip protocol udp udp dport 53 counter redirect to :${toString cfg.dnsPort}
+            ip protocol tcp tcp flags syn counter redirect to :${toString cfg.transPort}
           }
 
           chain tor_filter_forward {
