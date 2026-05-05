@@ -24,6 +24,7 @@
   pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
+  tensorrtSupport ? cudaSupport && cudaPackages.tensorrt.meta.available,
   rocmSupport ? config.rocmSupport,
   withFullProtobuf ? false,
   cudaPackages ? { },
@@ -192,6 +193,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cuda_cudart
     ]
     ++ lib.optionals ncclSupport [ nccl ]
+    ++ lib.optionals tensorrtSupport [ tensorrt ]
   )
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
@@ -275,6 +277,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
+  ]
+  ++ lib.optionals tensorrtSupport [
+    (lib.cmakeBool "onnxruntime_USE_TENSORRT" true)
+    (lib.cmakeBool "onnxruntime_USE_TENSORRT_BUILTIN_PARSER" true)
+    (lib.cmakeFeature "onnxruntime_TENSORRT_HOME" "${cudaPackages.tensorrt}")
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (
