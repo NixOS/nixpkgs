@@ -8,22 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jitterentropy";
-  version = "3.6.3";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-library";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-A7a0kg9JRiNNKJbLJu5Fbu6ZgCwv3+3oDhZr3jwNXmM=";
+    hash = "sha256-sJWgPx3GbvnBBVlCML/eRtUoMXux38tpWi1ZKhz41xY=";
   };
-
-  patches = [
-    # cmake 4 compatibility
-    (fetchpatch {
-      url = "https://github.com/smuellerDD/jitterentropy-library/commit/047beb1bf9ef7a14e63f3e4f2d4e79f673baa7ec.patch";
-      hash = "sha256-m/cfI7s7sdjkZjkKL/w/rNZzP/t3eimbVryMW5+crw4=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -32,7 +24,18 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  hardeningDisable = [ "fortify" ]; # avoid warnings
+  # disable internal timer thread and only use processor high-resolution timer
+  # this also fixes the rng-tools build
+  cmakeFlags = [
+    "-DINTERNAL_TIMER=OFF"
+  ];
+
+  # this package internally compiles without optimization by choice,
+  # as it introduces more execution time jitter, therefore disable fortify.
+  hardeningDisable = [
+    "fortify"
+    "fortify3"
+  ];
 
   meta = {
     description = "Provides a noise source using the CPU execution timing jitter";
@@ -45,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       johnazoidberg
+      thillux
     ];
   };
 })

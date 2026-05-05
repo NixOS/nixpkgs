@@ -11,9 +11,8 @@
 
 let
   hashes = {
-    # Issue tracking PostgreSQL 18 support: https://github.com/apache/age/issues/2164
-    # "18" = "";
-    "17" = "sha256-gqoAhVqQaDhe5CIcTc//1HonQLP1zoBIGuCQuXsJy+A=";
+    "18" = "sha256-Hqjg62YLTLEa6wRA5S4MAIED7Hobtiih4E55cSzVTqE";
+    "17" = "sha256-hAjhNj/benwZbbuxDl9RSjwWRai9CUozbEN6ecPKoFE=";
     "16" = "sha256-iukdi2c3CukGvjuTojybFFAZBlAw8GEfzFPr2qJuwTA=";
     "15" = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
     "14" = "sha256-jZXhcYBubpjIJ8M5JHXKV5f6VK/2BkypH3P7nLxZz3E=";
@@ -22,7 +21,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "age";
-  version = if lib.versionAtLeast postgresql.version "16" then "1.6.0-rc0" else "1.5.0-rc0";
+  version =
+    if lib.versionAtLeast postgresql.version "17" then
+      "1.7.0-rc0"
+    else if lib.versionAtLeast postgresql.version "16" then
+      "1.6.0-rc0"
+    else
+      "1.5.0-rc0";
 
   src = fetchFromGitHub {
     owner = "apache";

@@ -313,9 +313,9 @@
 
   ssh = mkAzExtension rec {
     pname = "ssh";
-    version = "2.0.7";
+    version = "2.0.8";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
-    hash = "sha256-H/CwitltPFB6E2FK9HsDEEjmn2NOD9/O4BOdBlRQAwY=";
+    hash = "sha256-eX42Pr1rTPWqUna4nvNMv7sWtIGcXyc/CbmhwRjQxoM=";
     description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
     propagatedBuildInputs = with python3Packages; [
       oras

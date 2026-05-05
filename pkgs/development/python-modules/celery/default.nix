@@ -34,7 +34,6 @@
   pytest-celery,
   pytest-click,
   pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   python-memcached,
@@ -155,11 +154,6 @@ buildPythonPackage (finalAttrs: {
     pytest-click
     pytest-timeout
     pytestCheckHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # Using `pytest-xdist` leads to incomplete tests which hang `pytestRemoveBytecode`
-    # under `sandbox=false` (the default on Darwin).
-    pytest-xdist
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
