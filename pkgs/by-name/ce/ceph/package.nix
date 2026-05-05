@@ -282,7 +282,7 @@ let
             inherit version;
             hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
           };
-          patches = []; # those two CVE patches do not apply (!)
+          patches = [ ]; # those two CVE patches do not apply (!)
           disabledTests = old.disabledTests or [ ] ++ [
             "test_export_md5_digest"
           ];
