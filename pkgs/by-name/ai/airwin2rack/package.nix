@@ -47,11 +47,10 @@ let
   };
 
   vcvRackSdk = srcOnly vcv-rack;
-  pname = "airwin2rack";
   version = "2.13.0-unstable-2026-01-19";
 in
 stdenv.mkDerivation {
-  inherit pname;
+  pname = "airwin2rack";
   inherit version;
 
   src = fetchFromGitHub {
@@ -159,17 +158,17 @@ stdenv.mkDerivation {
     install -Dm755 "awcons-products/Airwindows Consolidated" $out/bin/Airwindows\ Consolidated
 
     ${lib.optionalString enableVCVRack ''
-      mkdir ../${pname}
+      mkdir ../airwin2rack
       strip -s plugin.so
-      mv plugin.so ../${pname}
+      mv plugin.so ../airwin2rack
       cd ..
-      mv LICENSE.md ${pname}
-      mv README.md ${pname}
-      mv plugin.json ${pname}
-      mv res ${pname}
-      tar -c ${pname} | zstd -19 -o "${pname}-${version}-lin-x64.vcvplugin"
+      mv LICENSE.md airwin2rack
+      mv README.md airwin2rack
+      mv plugin.json airwin2rack
+      mv res airwin2rack
+      tar -c airwin2rack | zstd -19 -o "airwin2rack-${version}-lin-x64.vcvplugin"
       # got the directory from arch wiki
-      install -Dm755 "${pname}-${version}-lin-x64.vcvplugin" $out/usr/lib/vcvrack/plugins
+      install -Dm755 "airwin2rack-${version}-lin-x64.vcvplugin" $out/usr/lib/vcvrack/plugins
     ''}
 
     runHook postInstall
