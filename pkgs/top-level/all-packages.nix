@@ -11716,6 +11716,9 @@ with pkgs;
 
   openlilylib-fonts = recurseIntoAttrs (callPackage ../misc/lilypond/fonts.nix { });
 
+  mongoc_1 = mongoc;
+  mongoc_2 = callPackage ../by-name/mo/mongoc/2.nix { };
+
   nixDependencies = recurseIntoAttrs (
     callPackage ../tools/package-management/nix/dependencies-scope.nix { }
   );
