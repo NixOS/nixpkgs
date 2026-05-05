@@ -138,9 +138,9 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf (cfg.client.enable || cfg.router.enable) {
 
-    services.tor = lib.mkIf (cfg.client.enable || cfg.router.enable) {
+    services.tor = {
       enable = true;
       client.enable = true;
 
@@ -176,7 +176,7 @@ in
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.router.enable [ cfg.dnsPort ];
 
     # Enable squid with shutdown_lifetime set to 0, as it instead would delay service stopping.
-    services.squid = lib.mkIf (cfg.client.enable && cfg.client.clearnetProxy.enable) {
+    services.squid = lib.mkIf cfg.client.clearnetProxy.enable {
       enable = true;
       proxyAddress = "127.0.0.1";
       proxyPort = cfg.client.clearnetProxy.port;
@@ -186,15 +186,15 @@ in
     };
 
     # Wait for network so that squid picks up the right DNS information
-    systemd.services.squid.after = lib.mkIf (cfg.client.enable && cfg.client.clearnetProxy.enable) [
+    systemd.services.squid.after = lib.mkIf cfg.client.clearnetProxy.enable [
       "network-online.target"
     ];
 
-    systemd.services.squid.wants = lib.mkIf (cfg.client.enable && cfg.client.clearnetProxy.enable) [
+    systemd.services.squid.wants = lib.mkIf cfg.client.clearnetProxy.enable [
       "network-online.target"
     ];
 
-    networking.nftables.enable = lib.mkIf (cfg.client.enable || cfg.router.enable) true;
+    networking.nftables.enable = true;
 
     # Patch rules before checking them as they would simply fail as both "tor"
     # and "squid" users aren't available during build.
