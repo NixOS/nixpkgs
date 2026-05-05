@@ -829,10 +829,12 @@ in
     # because either the overlay is mutable (and users can legitimately change
     # values without them being overridden) or it is immutable and systemd will
     # suggest to only make runtime changes.
-    systemd.services."systemd-localed".environment = lib.mkIf (!config.system.etc.overlay.enable) {
-      SYSTEMD_ETC_LOCALE_CONF = "/etc/static/locale.conf";
-      SYSTEMD_ETC_VCONSOLE_CONF = "/etc/static/vconsole.conf";
-    };
+    systemd.services."systemd-localed".environment =
+      lib.mkIf (!config.system.etc.overlay.enable && !config.i18n.imperativeLocale)
+        {
+          SYSTEMD_ETC_LOCALE_CONF = "/etc/static/locale.conf";
+          SYSTEMD_ETC_VCONSOLE_CONF = "/etc/static/vconsole.conf";
+        };
     systemd.services."systemd-timedated".environment =
       lib.mkIf (!config.system.etc.overlay.enable && config.time.timeZone != null)
         {
