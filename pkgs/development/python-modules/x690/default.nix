@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "x690";
-  version = "1.0.0post1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exhuma";
     repo = "x690";
     tag = "v${version}";
-    hash = "sha256-HNKZq6VfqYAih2SrhGChC2jaQ76dhzKM/Mcr6pVYFE4=";
+    hash = "sha256-yU4FABlTAFoj87SJXDA+sVCJT3pCbYxpTXp7Ja2ltGE=";
   };
 
   build-system = [
