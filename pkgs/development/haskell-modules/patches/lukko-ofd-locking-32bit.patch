@@ -1,0 +1,32 @@
+From 4e69ffad996c3771f50017b97375af249dd17c85 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Thu, 29 Dec 2022 19:20:09 +0000
+Subject: [PATCH] Always use 64-bit file offsets
+
+Previously, OFD locking was broken on 32-bit, because it would somehow
+end up using the 64-bit fcntl() function, but pass it 32-bit off_t
+values in struct flock.  To fix this, tell libc to use always use
+64-bit file offsets.
+
+This is the same fix that was applied for a similar issue in GHC[1].
+
+[1]: https://gitlab.haskell.org/ghc/ghc/-/commit/9853fc5e3556e733b56976b0a2fce9e82130a9ef
+
+Fixes: https://github.com/haskellari/lukko/issues/15
+---
+ src-ofd/Lukko/OFD.hsc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src-ofd/Lukko/OFD.hsc b/src-ofd/Lukko/OFD.hsc
+index b4b9074..82e1170 100644
+--- a/src-ofd/Lukko/OFD.hsc
++++ b/src-ofd/Lukko/OFD.hsc
+@@ -33,6 +33,7 @@ module Lukko.OFD (
+     hUnlock,
+     ) where
+ 
++#define _FILE_OFFSET_BITS 64
+ #define _GNU_SOURCE
+ #include <unistd.h>
+ 
+

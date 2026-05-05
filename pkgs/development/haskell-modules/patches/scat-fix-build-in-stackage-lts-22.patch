@@ -1,0 +1,56 @@
+From e21cc9c17b5b605b5bc0aacad66d44bbe0beb8c4 Mon Sep 17 00:00:00 2001
+From: rnhmjoj <rnhmjoj@inventati.org>
+Date: Sat, 9 Dec 2023 14:56:21 +0100
+Subject: [PATCH 1/2] update vector version
+
+---
+ scat.cabal | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/scat.cabal b/scat.cabal
+index 0e94fe6..b4e5f18 100644
+--- a/scat.cabal
++++ b/scat.cabal
+@@ -72,7 +72,7 @@ executable scat
+                      , bytestring
+                      , optparse-applicative >= 0.5
+                      , mtl
+-                     , vector == 0.12.*
++                     , vector == 0.13.*
+                      , ansi-terminal >= 0.6.1
+ 
+ test-suite scat-tests
+@@ -84,5 +84,5 @@ test-suite scat-tests
+                      , bytestring
+                      , optparse-applicative >= 0.5
+                      , mtl
+-                     , vector == 0.12.*
++                     , vector == 0.13.*
+                      , ansi-terminal >= 0.6.1
+
+From c6a3636548d628f32d8edc73a333188ce24141a7 Mon Sep 17 00:00:00 2001
+From: rnhmjoj <rnhmjoj@inventati.org>
+Date: Wed, 5 Jun 2024 12:20:03 +0200
+Subject: [PATCH 2/2] =?UTF-8?q?Fix=20build=20on=20mtl=20=E2=89=A5=202.3?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+mtl stopped (re)exporting some functions, causing a build error.
+---
+ src/Main.hs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/Main.hs b/src/Main.hs
+index 49837ba..7f0236e 100644
+--- a/src/Main.hs
++++ b/src/Main.hs
+@@ -9,6 +9,7 @@ import System.IO
+ import System.Exit
+ import System.Console.ANSI
+ import Control.Exception
++import Control.Monad (when, unless)
+ import Control.Monad.Reader
+ 
+ import Scat
+

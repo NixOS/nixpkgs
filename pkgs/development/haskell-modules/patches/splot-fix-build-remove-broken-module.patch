@@ -1,0 +1,22 @@
+From a6710b05470d25cb5373481cf1cfc1febd686407 Mon Sep 17 00:00:00 2001
+From: Bas van Dijk <v.dijk.bas@gmail.com>
+Date: Tue, 7 Jul 2020 18:48:28 +0200
+Subject: [PATCH] Fix build by not requiring the broken Tools.SPlotTest module
+
+Also include Paths_splot to fix a cabal warning.
+---
+ splot.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/splot.cabal b/splot.cabal
+index f644883..b76a45a 100644
+--- a/splot.cabal
++++ b/splot.cabal
+@@ -29,6 +29,6 @@ executable splot
+ 
+   Build-Depends: cairo, bytestring, bytestring-lexing == 0.5.*, strptime >= 0.1.7, time, 
+                  containers, colour, mtl, HUnit, template-haskell, vcs-revision >= 0.0.2
+-  Other-Modules: Tools.ColorMap Tools.SPlotTest Tools.SPlotTest Tools.StatePlot
++  Other-Modules: Tools.ColorMap Tools.StatePlot Paths_splot
+   Main-Is: Tools/SPlotMain.hs
+   Ghc-Options: -O2 -rtsopts
