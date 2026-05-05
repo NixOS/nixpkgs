@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://stackoverflow.com/questions/53089494/configure-error-could-not-find-a-version-of-the-library
   configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
+    (lib.withFeatureAs true "boost-libdir" "${lib.getLib boost}/lib")
   ];
 
   doCheck = true;
