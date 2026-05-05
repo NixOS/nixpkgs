@@ -21,7 +21,7 @@ appimageTools.wrapType2 rec {
       contents = appimageTools.extract { inherit pname version src; };
     in
     ''
-      wrapProgram $out/bin/${pname} \
+      wrapProgram $out/bin/dopamine \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
       install -Dm644 ${contents}/dopamine.desktop $out/share/applications/dopamine.desktop
