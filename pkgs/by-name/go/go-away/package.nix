@@ -82,6 +82,7 @@ buildGo125Module (finalAttrs: {
     '';
     homepage = "https://git.gammaspectra.live/git/go-away";
     license = lib.licenses.mit;
+    mainProgram = "go-away";
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "go-away";
   };
