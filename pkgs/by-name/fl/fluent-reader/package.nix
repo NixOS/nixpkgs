@@ -6,11 +6,11 @@
 
 let
   pname = "fluent-reader";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "https://github.com/yang991178/fluent-reader/releases/download/v${version}/Fluent.Reader.${version}.AppImage";
-    hash = "sha256-83bqDyiPcAKIEejIPLSVLb8hxAtNogF98nYbOCjZtsg=";
+    hash = "sha256-AJxE1X6X/KJg/6xWZQJyvgHj9TabFBk2TQdotDs4iWQ=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
