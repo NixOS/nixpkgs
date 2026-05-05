@@ -64,16 +64,17 @@ stdenv.mkDerivation rec {
   ];
   strictDeps = true;
 
+  enableParallelBuilding = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
     chmod -R u+w ./craftos2-lua
     make -C craftos2-lua ${if stdenv.hostPlatform.isDarwin then "macosx" else "linux"}
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    make
-    runHook postBuild
   '';
 
   patches = [
@@ -85,7 +86,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/share/craftos $out/include
+    mkdir -p $out/bin $out/lib $out/share/craftos $dev/include
     DESTDIR=$out/bin make install
     cp ./craftos2-lua/src/liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -95,7 +96,7 @@ stdenv.mkDerivation rec {
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --replace-needed craftos2-lua/src/liblua${stdenv.hostPlatform.extensions.sharedLibrary} liblua${stdenv.hostPlatform.extensions.sharedLibrary} $out/bin/craftos
     ''}
-    cp -R api $out/include/CraftOS-PC
+    cp -R api $dev/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -112,9 +113,12 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  passthru.tests = {
-    eval-hello-world = callPackage ./test-eval-hello-world { };
-    eval-periphemu = callPackage ./test-eval-periphemu { };
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      eval-hello-world = callPackage ./test-eval-hello-world { };
+      eval-periphemu = callPackage ./test-eval-periphemu { };
+    };
   };
 
   meta = {
