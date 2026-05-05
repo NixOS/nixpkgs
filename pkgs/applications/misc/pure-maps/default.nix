@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pure-maps";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "pure-maps";
     rev = version;
-    hash = "sha256-UkPZ5Wy/05srZv1r5GLoT5hFQVLfYF6Q2rQDFoILlQ0=";
+    hash = "sha256-scml5GWR2RsgMNuW/rThQ7qMrwIXEPGXVNLA+uwbG20=";
     fetchSubmodules = true;
   };
 
