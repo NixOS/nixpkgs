@@ -24,11 +24,13 @@
   cudaPackages ? { },
   enablePython ? false,
   pythonPackages ? null,
+  enableExamples ? enableGUI, # currently broken without enableGUI
   enableGUI ? false,
 }:
 
 assert cudaSupport -> (cudaPackages ? cudatoolkit && cudaPackages.cudatoolkit != null);
 assert enablePython -> pythonPackages != null;
+assert enableGUI -> enableExamples;
 
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
@@ -36,7 +38,7 @@ in
 
 stdenv'.mkDerivation rec {
   pname = "librealsense";
-  version = "2.56.3";
+  version = "2.57.7";
 
   outputs = [
     "out"
@@ -47,7 +49,7 @@ stdenv'.mkDerivation rec {
     owner = "IntelRealSense";
     repo = "librealsense";
     rev = "v${version}";
-    sha256 = "sha256-Stx337mGcpMCg9DlZmvX4LPQmCSzLRFcUQPxaD/Y0Ds=";
+    sha256 = "sha256-d/FkvnUa7CqW25ZG8PY9+cd7uRL4zC1Md/JT8B/qAKU=";
   };
 
   buildInputs = [
@@ -63,10 +65,12 @@ stdenv'.mkDerivation rec {
       pybind11
     ]
   )
+  ++ lib.optionals (enableExamples || enableGUI) [
+    glfw
+  ]
   ++ lib.optionals enableGUI [
     libgbm
     gtk3
-    glfw
     libGLU
     curl
   ];
@@ -95,7 +99,7 @@ stdenv'.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_EXAMPLES=ON"
+    "-DBUILD_EXAMPLES=${lib.boolToString enableExamples}"
     "-DBUILD_GRAPHICAL_EXAMPLES=${lib.boolToString enableGUI}"
     "-DBUILD_GLSL_EXTENSIONS=${lib.boolToString enableGUI}"
     "-DCHECK_FOR_UPDATES=OFF" # activated by BUILD_GRAPHICAL_EXAMPLES, will make it download and compile libcurl
@@ -185,5 +189,6 @@ stdenv'.mkDerivation rec {
       pbsds
     ];
     platforms = lib.platforms.unix;
+    mainProgram = if enableGUI then "realsense-viewer" else "rs-enumerate-devices";
   };
 }
