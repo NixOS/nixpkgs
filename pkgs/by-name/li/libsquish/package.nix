@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
-  ];
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isx86) (lib.cmakeBool "BUILD_SQUISH_WITH_SSE2" false);
 
   meta = {
     description = "Library for compressing images with the DXT/S3TC standard";
