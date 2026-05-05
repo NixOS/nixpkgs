@@ -89,15 +89,15 @@ The `installShellCompletion` function takes one or more paths to shell
 completion files.
 
 By default it will autodetect the shell type from the completion file extension,
-but you may also specify it by passing one of `--bash`, `--fish`, `--zsh`, or
-`--nushell`. These flags apply to all paths listed after them (up until another
-shell flag is given). Each path may also have a custom installation name
-provided by providing a flag `--name NAME` before the path. If this flag is not
-provided, zsh completions will be renamed automatically such that `foobar.zsh`
-becomes `_foobar`. A root name may be provided for all paths using the flag
-`--cmd NAME`; this synthesizes the appropriate name depending on the shell
-(e.g. `--cmd foo` will synthesize the name `foo.bash` for bash and `_foo` for
-zsh).
+but you may also specify it by passing one of `--bash`, `--fish`, `--zsh`,
+`--elvish` or `--nushell`. These flags apply to all paths listed after them (up
+until another shell flag is given). Each path may also have a custom
+installation name provided by providing a flag `--name NAME` before the path. If
+this flag is not provided, zsh completions will be renamed automatically such
+that `foobar.zsh` becomes `_foobar`. A root name may be provided for all paths
+using the flag `--cmd NAME`; this synthesizes the appropriate name depending on
+the shell (e.g. `--cmd foo` will synthesize the name `foo.bash` for bash and
+`_foo` for zsh).
 
 ### Example Usage {#installshellfiles-installshellcompletion-exampleusage}
 
@@ -107,11 +107,12 @@ zsh).
   postInstall = ''
     # explicit behavior
     installShellCompletion --bash --name foobar.bash share/completions.bash
+    installShellCompletion --elvish --name foobar share/completions.elv
     installShellCompletion --fish --name foobar.fish share/completions.fish
     installShellCompletion --nushell --name foobar share/completions.nu
     installShellCompletion --zsh --name _foobar share/completions.zsh
     # implicit behavior
-    installShellCompletion share/completions/foobar.{bash,fish,zsh,nu}
+    installShellCompletion share/completions/foobar.{bash,fish,zsh,elv,nu}
   '';
 }
 ```
@@ -135,6 +136,7 @@ failure. To prevent this, guard the completion generation commands.
     # using process substitution
     installShellCompletion --cmd foobar \
       --bash <($out/bin/foobar --bash-completion) \
+      --elvish <($out/bin/foobar --elvish-completion) \
       --fish <($out/bin/foobar --fish-completion) \
       --nushell <($out/bin/foobar --nushell-completion) \
       --zsh <($out/bin/foobar --zsh-completion)

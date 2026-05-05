@@ -14,15 +14,18 @@ runCommandLocal "install-shell-files--install-completion-name"
     echo bar > bar
     echo baz > baz
     echo bucks > bucks
+    echo corge > corge
 
     installShellCompletion \
       --bash --name foobar.bash foo \
       --zsh --name _foobar bar \
       --fish baz \
-      --nushell --name foobar.nu bucks
+      --nushell --name foobar.nu bucks \
+      --elvish --name grault.elv corge
 
     cmp foo $out/share/bash-completion/completions/foobar.bash
     cmp bar $out/share/zsh/site-functions/_foobar
     cmp baz $out/share/fish/vendor_completions.d/baz
     cmp bucks $out/share/nushell/vendor/autoload/foobar.nu
+    cmp corge $out/share/elvish/completions/grault.elv
   ''
