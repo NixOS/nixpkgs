@@ -16282,6 +16282,12 @@
     githubId = 7910815;
     name = "Alex McGrath";
   };
+  lykaz = {
+    name = "Lukas";
+    matrix = "@luki63:matrix.org";
+    github = "lykaz";
+    githubId = 57544489;
+  };
   lykos153 = {
     email = "silvio.ankermann@cloudandheat.com";
     github = "Lykos153";
