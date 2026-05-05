@@ -161,10 +161,20 @@ stdenv.mkDerivation {
 To run a cross-compiled binary outside the Nix sandbox, build it and invoke the emulator from a shell. This is also a quick way to verify the dispatch table above:
 
 ```ShellSession
-$ nix-build '<nixpkgs>' -A pkgsCross.aarch64-multiplatform.hello
+$ nix-build '<nixpkgs>' -A pkgsCross.aarch64-multiplatform.hello # Should be available in cache.nixos.org
+```
+
+To get a path for an emulator, given a `crossSystem.config` (e.g with `aarch64-linux`):
+
+```ShellSession
 $ nix-instantiate --eval --strict -E \
     '(import <nixpkgs> { crossSystem.config = "aarch64-unknown-linux-gnu"; }).stdenv.hostPlatform.emulator (import <nixpkgs> {})'
 "/nix/store/.../bin/qemu-aarch64"
+```
+
+And specifically for `aarch64-linux`, and many other platforms, you have all of them available in `qemu` package, meaning you can simply run:
+
+```ShellSession
 $ nix-shell -p qemu --run 'qemu-aarch64 ./result/bin/hello'
 Hello, world!
 ```
