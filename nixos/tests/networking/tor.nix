@@ -41,7 +41,7 @@
     def get_output_pkgs(node, tcp_port, dns_port):
       tcp_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{tcp_port}'
       dns_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{dns_port}'
-      ruleset = node.succeed("nft list ruleset")
+      ruleset = node.succeed("nft list chain inet tor tor_nat_output")
       tcp = int(re.search(tcp_re, ruleset).group(1))
       dns = int(re.search(dns_re, ruleset).group(1))
       return tcp, dns
@@ -50,7 +50,7 @@
     def get_prerouting_pkts(node, tcp_port, dns_port):
       tcp_re = rf'ip protocol tcp tcp flags syn counter packets (\d+) bytes \d+ redirect to :{tcp_port}'
       dns_re = rf'ip protocol udp udp dport 53 counter packets (\d+) bytes \d+ redirect to :{dns_port}'
-      ruleset = node.succeed("nft list ruleset")
+      ruleset = node.succeed("nft list chain inet tor-router tor_nat_prerouting")
       tcp = int(re.search(tcp_re, ruleset).group(1))
       dns = int(re.search(dns_re, ruleset).group(1))
       return tcp, dns
