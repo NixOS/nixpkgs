@@ -1,67 +1,69 @@
 {
-  stdenv,
+  Security ? null,
+  autoPatchelfHook,
+  curl,
   fetchFromGitHub,
   lib,
-  rustPlatform,
-  curl,
-  pkg-config,
+  llvmPackages,
+  nix-update-script,
   openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snarkos";
-  version = "2.2.7";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
-    owner = "AleoHQ";
+    owner = "ProvableHQ";
     repo = "snarkOS";
-    rev = "v${version}";
-    sha256 = "sha256-+z9dgg5HdR+Gomug03gI1zdCU6t4SBHkl1Pxoq69wrc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7wa7uD4tcZa9nQ2GSgleSNQ/ugJ4sRshqcZhQpz49lY=";
   };
 
-  cargoHash = "sha256-riUOxmuXDP5+BPSPu5+cLBP43bZxAqvVG/k5kvThSAs=";
-
-  # buildAndTestSubdir = "cli";
-
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-    rustPlatform.bindgenHook
+  patches = [
+    ./0001-remove-update-subcommand.patch
+    ./0002-fix-auditable.patch
   ];
 
-  env = {
-    # Needed to get openssl-sys to use pkg-config.
-    OPENSSL_NO_VENDOR = 1;
-    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-    OPENSSL_DIR = "${lib.getDev openssl}";
+  cargoHash = "sha256-cW+QZvXvgQ5J1lBJ/+IdL2Pq7XzHRb3Wl+OaLGCznzI=";
 
-    # TODO check why rust compilation fails by including the rocksdb from nixpkgs
-    # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
-    # try to build RocksDB from source.
-    # ROCKSDB_INCLUDE_DIR="${rocksdb}/include";
-    # ROCKSDB_LIB_DIR="${rocksdb}/lib";
-  };
+  nativeBuildInputs = [
+    llvmPackages.lld
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    pkg-config
+    rustPlatform.bindgenHook
+  ]);
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    openssl
+    stdenv.cc.cc.lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
     curl
   ];
 
-  # some tests are flaky and some need network access
-  # TODO finish filtering the tests to enable them
-  doCheck = !stdenv.hostPlatform.isLinux;
-  # checkFlags = [
-  #   # tries to make a network access
-  #   "--skip=rpc::rpc::tests::test_send_transaction_large"
-  #   # flaky test
-  #   "--skip=helpers::block_requests::tests::test_block_requests_case_2ca"
-  # ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [ openssl ];
+
+  passthru.updateScript = nix-update-script { };
+
+  preCheck = ''
+    export LD_LIBRARY_PATH="${lib.makeLibraryPath [ openssl ]}"
+  '';
 
   meta = {
-    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
-    broken = true;
     description = "Decentralized Operating System for Zero-Knowledge Applications";
-    homepage = "https://snarkos.org";
+    homepage = "https://github.com/provableHQ/snarkOS";
+    changelog = "https://github.com/ProvableHQ/snarkOS/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.unix;
     mainProgram = "snarkos";
   };
-}
+})
