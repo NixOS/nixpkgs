@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   patches = [
     ./numpy2-repr.patch
+    ./numpy2-float.patch
   ];
 
   # The VERSION.txt file is required for setup.py
