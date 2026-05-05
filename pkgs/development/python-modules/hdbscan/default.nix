@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   cython,
   numpy,
@@ -26,15 +25,6 @@ buildPythonPackage rec {
     tag = "release-${version}";
     hash = "sha256-4uwWoNkrdLB2KzDAksPupdgkIFBgTahzravOtu1WYws=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Replace obsolete use of assert_raises with pytest.raises
-      name = "replace-assert_raises";
-      url = "https://github.com/scikit-learn-contrib/hdbscan/pull/667/commits/04d6a4dcdcd2bb2597419b8aa981d7620765809f.patch";
-      hash = "sha256-z/u5b2rNPKOCe+3/GVE8rMB5ajeU5PrvLVesjEgj9TA=";
-    })
-  ];
 
   pythonRemoveDeps = [ "cython" ];
 
