@@ -57,8 +57,11 @@ let
 
       inherit (cfg)
         consoleMode
+        ambiguousDateFormat
         graceful
         editor
+        entryNamePrefix
+        includeDistroName
         rebootForBitlocker
         ;
 
@@ -215,6 +218,36 @@ in
         gaining root access by passing init=/bin/sh as a kernel
         parameter. However, it is enabled by default for backwards
         compatibility.
+      '';
+    };
+
+    entryNamePrefix = mkOption {
+      default = "Generation ";
+      example = "Gen ";
+      type = types.addCheck types.str (value: stringLength value <= 20);
+
+      description = ''
+        Prefix shown before the generation number in systemd-boot entries,
+        in the `version` field.
+        Must be at most 20 characters.
+      '';
+    };
+
+    includeDistroName = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to include the distro name prefix (for example `NixOS`) in the
+        bootspec label after the generation number in systemd-boot entries.
+      '';
+    };
+
+    ambiguousDateFormat = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Use a date format with month abbreviations instead of all-numeric dates
+        to avoid ambiguity when the day is below 13.
       '';
     };
 
