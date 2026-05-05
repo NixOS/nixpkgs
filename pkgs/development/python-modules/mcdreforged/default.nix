@@ -47,6 +47,8 @@ buildPythonPackage rec {
     pathspec
   ];
 
+  pythonRelaxDeps = [ "ruamel.yaml" ];
+
   nativeCheckInputs = [
     pytestCheckHook
     versionCheckHook
