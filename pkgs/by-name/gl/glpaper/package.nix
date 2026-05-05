@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation {
   pname = "glpaper";
-  version = "unstable-2022-05-15";
+  version = "unstable-2024-08-07";
 
   src = fetchFromSourcehut {
     owner = "~scoopta";
     repo = "glpaper";
     vc = "hg";
-    rev = "f89e60b7941fb60f1069ed51af9c5bb4917aab35";
-    sha256 = "sha256-E7FKjt3NL0aAEibfaq+YS2IVvpjNjInA+Rs8SU63/3M=";
+    rev = "af9827d20bfe1956dd88fb2202b38ed0de705305";
+    sha256 = "sha256-zgvnWqsw243jZ9e6fG6L0hDfRRHwzmIdsxwnnWhimu0=";
   };
 
   nativeBuildInputs = [
