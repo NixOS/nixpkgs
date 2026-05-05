@@ -148,6 +148,18 @@ in
         address = "0.0.0.0";
         tlsCert = cfsslCert;
         tlsKey = cfsslKey;
+        disable = lib.concatStringsSep "," [
+          "bundle"
+          "certinfo"
+          "crl"
+          "health"
+          "init_ca"
+          "newcert"
+          "newkey"
+          "revoke"
+          "scan"
+          "scaninfo"
+        ];
         configFile = toString (
           pkgs.writeText "cfssl-config.json" (
             builtins.toJSON {
