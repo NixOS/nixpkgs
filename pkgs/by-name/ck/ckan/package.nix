@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     for size in 16 24 48 64 96 128 256; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      magick -background none ${icon} -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
+      magick -background none ${icon} -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/ckan.png
     done
     install -m 644 -D $src $out/bin/ckan.exe
     makeWrapper ${mono}/bin/mono $out/bin/ckan \
