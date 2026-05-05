@@ -2947,8 +2947,6 @@ with pkgs;
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
-  pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
-
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
 
   nsjail = callPackage ../tools/security/nsjail {
