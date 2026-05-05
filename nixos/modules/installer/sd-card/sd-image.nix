@@ -400,7 +400,7 @@ in
         # Figure out device names for the boot device and root filesystem.
         rootPart=$(${lib.getExe' pkgs.util-linux "findmnt"} -n -o SOURCE /)
         bootDevice=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo PKNAME $rootPart)
-        partNum=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo MAJ:MIN $rootPart | ${lib.getExe pkgs.gawk} -F: '{print $2}')
+        partNum=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo PARTN $rootPart)
 
         # Resize the root partition and the filesystem to fit the disk
         echo ",+," | ${lib.getExe' pkgs.util-linux "sfdisk"} -N$partNum --no-reread $bootDevice
