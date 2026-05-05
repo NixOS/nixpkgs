@@ -20797,6 +20797,12 @@
     githubId = 5948762;
     name = "Berk Özkütük";
   };
+  ozturkkl = {
+    email = "97kemalozturk@gmail.com";
+    github = "ozturkkl";
+    githubId = 51798197;
+    name = "Kemal Ozturk";
+  };
   ozwaldorf = {
     email = "self@ossian.dev";
     github = "ozwaldorf";
