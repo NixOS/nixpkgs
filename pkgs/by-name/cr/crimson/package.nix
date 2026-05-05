@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ installFonts ];
 
   postInstall = ''
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md
+    install -m444 -Dt $out/share/doc/crimson-${version} README.md
   '';
 
   meta = {
