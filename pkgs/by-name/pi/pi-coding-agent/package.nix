@@ -7,19 +7,20 @@
   writableTmpDirAsHomeHook,
   ripgrep,
   makeBinaryWrapper,
+  stdenvNoCC,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "0.70.5";
+  version = "0.72.1";
 
   src = fetchFromGitHub {
     owner = "badlogic";
     repo = "pi-mono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jn+hvS/DIwbwAff+UovdIVnmrb4o8gsC4IR24MnwF1I=";
+    hash = "sha256-SqUxghc60P3HfmaFJGB/m23mvzw0cD7cDEUrNFOqo0Y=";
   };
 
-  npmDepsHash = "sha256-MZgcHJdGFGSNgQ26/24iA12FdmO7S5vWv4crSNFhHi0=";
+  npmDepsHash = "sha256-KUC1xQK6oJXtg962YeLOnO76uTdR10/VNa9iiCdT3VM=";
 
   npmWorkspace = "packages/coding-agent";
 
@@ -65,7 +66,22 @@ buildNpmPackage (finalAttrs: {
 
     # Clean up now-dangling .bin symlinks
     find "$nm/.bin" -xtype l -delete
+
+  ''
+  + ''
+    # koffi vendors native addons for many platforms
+    # The non-Darwin ones are ELF files, which makes the Darwin
+    # audit-tmpdir hook try to inspect their RPATHs with patchelf (not
+    # available on Darwin)
+    find "$nm/koffi/build/koffi" -mindepth 1 -maxdepth 1 -type d \
+      ! -name '${
+        if stdenvNoCC.hostPlatform.isDarwin then
+          "darwin_*"
+        else
+          "${stdenvNoCC.hostPlatform.parsed.kernel.name}_*"
+      }' -exec rm -r {} +
   '';
+
   postFixup = "wrapProgram $out/bin/pi --prefix PATH : ${lib.makeBinPath [ ripgrep ]}";
 
   doInstallCheck = true;
