@@ -87,6 +87,15 @@ in
             }
           ];
         };
+        extraConfig = ''
+          {{- range $_, $v := parseNumberRangePair "6000-6006,6007" "6000-6006,6007" }}
+          [[proxies]]
+          name = "tcp-{{ $v.First }}"
+          type = "tcp"
+          localPort = {{ $v.First }}
+          remotePort = {{ $v.Second }}
+          {{- end }}
+        '';
       };
     };
   };
