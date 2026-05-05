@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncpp";
   version = "1.9.7";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "dev"
