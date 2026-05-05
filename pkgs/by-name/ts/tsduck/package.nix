@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     # add missing <sys/time.h> for utimes() on Darwin;
     # fixed upstream on master, drop after next tagged release
     ./utimes-fix.patch
+    # fall back when Linux builders use scheduler policies rejected by pthreads
+    ./sched-policy-fallback.patch
   ];
   checkTarget = "test";
   doCheck = true;
