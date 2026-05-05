@@ -563,6 +563,32 @@ in
               `services.prometheus.exporters.pgbouncer.connectionString` are mutually exclusive!
             '';
           }
+          {
+            assertion =
+              cfg.node.enable
+              ->
+                cfg.node.listenStream == "${cfg.node.listenAddress}:${toString cfg.node.port}"
+                || (cfg.node.listenAddress == "0.0.0.0" && cfg.node.port == 9100);
+            message = ''
+              `services.prometheus.exporters.node.listenAddress` and
+              `services.prometheus.exporters.node.port` have no effect
+              when `services.prometheus.exporters.node.listenStream` is set
+              to a non-default value.
+            '';
+          }
+          {
+            assertion =
+              cfg.postfix.enable
+              ->
+                cfg.postfix.listenStream == "${cfg.postfix.listenAddress}:${toString cfg.postfix.port}"
+                || (cfg.postfix.listenAddress == "0.0.0.0" && cfg.postfix.port == 9154);
+            message = ''
+              `services.prometheus.exporters.postfix.listenAddress` and
+              `services.prometheus.exporters.postfix.port` have no effect
+              when `services.prometheus.exporters.postfix.listenStream` is set
+              to a non-default value.
+            '';
+          }
         ]
         ++ (flip map (attrNames exporterOpts) (exporter: {
           assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
