@@ -1,0 +1,26 @@
+gradle.projectsLoaded {
+  rootProject.allprojects {
+    task nixDownloadDeps {
+      doLast {
+        configurations.findAll { it.canBeResolved }.each { conf ->
+          try {
+            conf.resolve()
+          } catch (Exception e) {
+            // Some configurations might still fail;
+            // however, they are probably not related to the Linux desktop app,
+            // so ignore them and hope that everything still works.
+            println "Could not resolve ${conf.name} (Error: ${e.message})"
+          }
+        }
+
+        buildscript.configurations.findAll { it.canBeResolved }.each { conf ->
+          try {
+            conf.resolve()
+          } catch (Exception e) {
+            println "Could not resolve buildscript ${conf.name} (Error: ${e.message})"
+          }
+        }
+      }
+    }
+  }
+}
