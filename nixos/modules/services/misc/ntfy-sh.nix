@@ -28,6 +28,26 @@ in
       description = "Primary group of ntfy-sh user.";
     };
 
+    nginx = {
+      enable = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = "Whether to set up an nginx virtual host.";
+      };
+
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 2586;
+        description = "Internal port for ntfy to listen to.";
+      };
+
+      virtualHost = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        example = "push.example.com";
+        description = "Virtual host to use for nginx.";
+      };
+    };
+
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
@@ -88,7 +108,7 @@ in
 
       services.ntfy-sh.settings = {
         auth-file = lib.mkDefault "/var/lib/ntfy-sh/user.db";
-        listen-http = lib.mkDefault "127.0.0.1:2586";
+        listen-http = if cfg.nginx.enable then "[::1]:${cfg.nginx.port}" else lib.mkDefault "[::1]:2586";
         attachment-cache-dir = lib.mkDefault "/var/lib/ntfy-sh/attachments";
         cache-file = lib.mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
@@ -133,6 +153,24 @@ in
         ntfy-sh = {
           isSystemUser = true;
           group = cfg.group;
+        };
+      };
+
+      services.nginx = lib.mkIf cfg.nginx.enable {
+        enable = true;
+        virtualHosts."${cfg.nginx.virtualHost}" = {
+          forceSSL = true;
+
+          locations."/" = {
+            proxyPass = "http://[::1]:${cfg.nginx.port}";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_connect_timeout 3m;
+              proxy_send_timeout 3m;
+              proxy_read_timeout 3m;
+              client_max_body_size 0;
+            '';
+          };
         };
       };
     };
