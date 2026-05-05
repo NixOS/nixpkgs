@@ -20,7 +20,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/cozydrive.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/cozydrive.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace 'Exec=AppRun' 'Exec=cozydrive'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
