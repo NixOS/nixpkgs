@@ -1,11 +1,13 @@
 {
   fetchFromGitHub,
   lib,
+  stdenv,
   gobject-introspection,
   gtk3,
   python3Packages,
   wrapGAppsHook3,
   gdk-pixbuf,
+  hidapi,
   libappindicator,
   librsvg,
   upower,
@@ -37,27 +39,35 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gdk-pixbuf
     gobject-introspection
     wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     udevCheckHook
   ];
 
   buildInputs = [
-    libappindicator
     librsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libappindicator
     upower
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    evdev
-    dbus-python
-    gtk3
-    hid-parser
-    psutil
-    pygobject3
-    pyudev
-    pyyaml
-    typing-extensions
-    xlib
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      gtk3
+      hid-parser
+      psutil
+      pygobject3
+      pyudev
+      pyyaml
+      typing-extensions
+      xlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      evdev
+      dbus-python
+    ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
@@ -65,7 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-cov-stub
   ];
 
-  preConfigure = ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace lib/solaar/listener.py \
       --replace-fail getfacl "${lib.getExe' acl "getfacl"}"
   '';
@@ -82,7 +92,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : '${lib.makeLibraryPath [ hidapi ]}')
   '';
+
+  env.DYLD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin (
+    lib.makeLibraryPath [ hidapi ]
+  );
 
   pythonImportsCheck = [
     "solaar"
@@ -109,6 +126,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ysndr
       oxalica
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
