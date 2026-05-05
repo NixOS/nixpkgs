@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   unpackCmd = ''
-    mkdir -p ${pname}-${version}
-    cp $src ${pname}-${version}/bt-fw-converter.pl
+    mkdir -p bt-fw-converter-${version}
+    cp $src bt-fw-converter-${version}/bt-fw-converter.pl
   '';
 
   installPhase = ''
