@@ -10,12 +10,13 @@
   pcre2,
   neko,
   mbedtls_2,
+  mbedtls,
 }:
 let
   ocamlDependencies =
     version:
     if lib.versionAtLeast version "4.3" then
-      with ocaml-ng.ocamlPackages_4_14;
+      with ocaml-ng.ocamlPackages;
       [
         ocaml
         findlib
@@ -24,7 +25,7 @@ let
         ptmap
         camlp5
         sha
-        luv-0-5-12
+        luv
         extlib
       ]
     else
@@ -41,17 +42,10 @@ let
         extlib-1-7-7
       ];
 
-  defaultPatch = ''
-    substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
-      --replace '"neko"' '"${neko}/bin/neko"'
-  '';
-
   generic =
     {
       hash,
       version,
-      prePatch ? defaultPatch,
-      patches ? [ ],
     }:
     stdenv.mkDerivation {
       pname = "haxe";
@@ -63,7 +57,9 @@ let
         dune
       ]
       ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
-      ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
+      ++ lib.optional (lib.versionAtLeast version "4.1") (
+        if lib.versionAtLeast version "4.3" then mbedtls else mbedtls_2
+      )
       ++ ocamlDependencies version;
 
       src = fetchFromGitHub {
@@ -74,7 +70,10 @@ let
         inherit hash;
       };
 
-      inherit prePatch patches;
+      prePatch = ''
+        substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
+          --replace-fail '"neko"' '"${neko}/bin/neko"'
+      '';
 
       buildFlags = [
         "all"
@@ -160,8 +159,7 @@ in
     hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
   };
   haxe_4_3 = generic {
-    version = "4.3.6";
-    hash = "sha256-m/A0xxB3fw+syPmH1GPKKCcj0a2G/HMRKOu+FKrO5jQ=";
-    patches = [ ./extlib-1.8.0.patch ];
+    version = "4.3.7";
+    hash = "sha256-sQb7MCoH2dZOvNmDQ9P0yFYrSXYOMn4FS/jlyjth39Y=";
   };
 }
