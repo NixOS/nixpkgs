@@ -1358,4 +1358,162 @@ rec {
   writeFSharp = makeFSharpWriter { };
 
   writeFSharpBin = name: writeFSharp "/bin/${name}";
+
+  /**
+    Like writeScript but the first line is a shebang to YSH
+
+    Can be called with or without extra arguments.
+
+    :::{.example}
+    ## `pkgs.writers.writeYsh` without arguments
+
+    ```nix
+    writeYsh "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeYsh` with arguments
+
+    ```nix
+    writeYsh "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
+  writeYsh =
+    let
+      commands = rec {
+        interpreter = lib.getExe' pkgs.oils-for-unix "ysh";
+        check = "${interpreter} -n"; # syntax check only
+      };
+
+    in
+    name: argsOrScript:
+    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
+      makeScriptWriter (argsOrScript // commands) name
+    else
+      makeScriptWriter commands name argsOrScript;
+
+  /**
+    Like writeScriptBin but the first line is a shebang to YSH
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeYshBin` without arguments
+
+    ```nix
+    writeYshBin "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeYshBin` with arguments
+
+    ```nix
+    writeYshBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
+  writeYshBin = name: writeYsh "/bin/${name}";
+
+  /**
+    Like writeScript but the first line is a shebang to OSH
+
+    Can be called with or without extra arguments.
+
+    :::{.example}
+    ## `pkgs.writers.writeOsh` without arguments
+
+    ```nix
+    writeOsh "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeOsh` with arguments
+
+    ```nix
+    writeOsh "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
+  writeOsh =
+    let
+      commands = rec {
+        interpreter = lib.getExe' pkgs.oils-for-unix "osh";
+        check = "${interpreter} -n"; # syntax check only
+      };
+
+    in
+    name: argsOrScript:
+    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
+      makeScriptWriter (argsOrScript // commands) name
+    else
+      makeScriptWriter commands name argsOrScript;
+
+  /**
+    Like writeScriptBin but the first line is a shebang to OSH
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeOshBin` without arguments
+
+    ```nix
+    writeOshBin "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeOshBin` with arguments
+
+    ```nix
+    writeOshBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
+  writeOshBin = name: writeOsh "/bin/${name}";
 }
