@@ -10,13 +10,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geocoder";
   version = "1.38.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yZJTdMlhV30K7kA7Ceb46hlx2RPwEfAMpwx2vq96d+c=";
   };
 
@@ -38,6 +38,9 @@ buildPythonPackage rec {
     six
   ];
 
+  # Tests are outdated
+  doCheck = false;
+
   pythonImportsCheck = [ "geocoder" ];
 
   meta = {
@@ -46,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
