@@ -12,7 +12,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "gapi-ocaml";
-  version = if lib.versionAtLeast cryptokit.version "1.21" then "0.4.8" else "0.4.7";
+  version = if lib.versionAtLeast cryptokit.version "1.21" then "0.4.9" else "0.4.7";
 
   src = fetchFromGitHub {
     owner = "astrada";
@@ -21,7 +21,7 @@ buildDunePackage (finalAttrs: {
     hash =
       {
         "0.4.7" = "sha256-uQJfrgF0oafURlamHslt9hX9MP4vFeVqDhuX7T/kjiY=";
-        "0.4.8" = "sha256-RvHcse3ech8BwnR0Kd1oE5ycAdSBpeQ0IGAp9egFbBY=";
+        "0.4.9" = "sha256-UWoWWpCAKCNEwEFO4UBXrTO49QyxLXrulDHX6dGr0z4=";
       }
       ."${finalAttrs.version}";
   };
