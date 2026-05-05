@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./ect-gcc-15-O3-fix.patch
+  ];
+
   # devendor libpng
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
