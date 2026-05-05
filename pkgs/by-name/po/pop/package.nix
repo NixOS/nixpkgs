@@ -4,6 +4,7 @@
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
+  shellCompletionHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,6 +24,9 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    shellCompletionHook
   ];
 
   ldflags = [
@@ -34,10 +38,6 @@ buildGoModule (finalAttrs: {
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/pop man > pop.1
     installManPage pop.1
-    installShellCompletion --cmd pop \
-      --bash <($out/bin/pop completion bash) \
-      --fish <($out/bin/pop completion fish) \
-      --zsh <($out/bin/pop completion zsh)
   '';
 
   meta = {
