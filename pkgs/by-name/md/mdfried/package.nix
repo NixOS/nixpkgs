@@ -2,20 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  chafa,
+  glib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdfried";
-  version = "0.15.0";
+  version = "0.19.7";
 
   src = fetchFromGitHub {
     owner = "benjajaja";
     repo = "mdfried";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V++xkJBnTlqzcsw6BDkrqScIV+phzxyDqQXcV34L4ps=";
+    hash = "sha256-gCmKlbPO5ZVK3SqX40KlSGfef9ZniCsznkQU78A4H7o=";
   };
 
-  cargoHash = "sha256-qnsJkwAmBcakYcoqGdYRqfN6e46PG5IH6SAXLvy3mM8=";
+  cargoHash = "sha256-kPm78L/uS4mYBw9UWHo6a6a5ntUuCYZ81plMr44bwd8=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    chafa
+    glib
+  ];
 
   doCheck = true;
 
