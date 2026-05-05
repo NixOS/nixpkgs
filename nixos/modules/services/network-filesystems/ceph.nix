@@ -482,6 +482,7 @@ in
           mode = "0770";
         };
         "/var/lib/ceph".d = defaultConfig;
+        "/var/lib/ceph/mds".d = lib.mkIf (cfg.mds.enable) defaultConfig;
         "/var/lib/ceph/mgr".d = lib.mkIf (cfg.mgr.enable) defaultConfig;
         "/var/lib/ceph/mon".d = lib.mkIf (cfg.mon.enable) defaultConfig;
         "/var/lib/ceph/osd".d = lib.mkIf (cfg.osd.enable) defaultConfig;
