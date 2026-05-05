@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kobzol";
     repo = "cargo-wizard";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WLGE2ZuytjSridZwfUTtNQF5woeBbx5ZoHfB9eyvedI=";
   };
 
@@ -33,9 +33,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Cargo subcommand for configuring Cargo profile for best performance";
     homepage = "https://github.com/kobzol/cargo-wizard";
-    changelog = "https://github.com/kobzol/cargo-wizard/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/kobzol/cargo-wizard/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "cargo-wizard";
   };
 })
