@@ -1,6 +1,7 @@
 {
   autoreconfHook,
   fetchFromGitLab,
+  fetchpatch,
   lib,
   stdenv,
 }:
@@ -19,6 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-PuNE/lKsNNd4KDEcSsaz+IfP2hgT5M5VgLY1kVy1KCc=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/lely_industries/lely-core/-/commit/6ed995fa86d828957b636a11470f150830d877ec.patch";
+      hash = "sha256-Q4Sza0hs0EE4EZ0nbYAs+/qO2uWKGveZ0+Tgx8xvmEs=";
+    })
+  ];
 
   outputs = [
     "out"
