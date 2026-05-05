@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
-      --replace '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \
-      --replace ' ''${CSMITH_HOME}/runtime' " $out/include/${pname}-${version}" \
+      --replace '$CSMITH_HOME/runtime' $out/include/csmith-${version} \
+      --replace ' ''${CSMITH_HOME}/runtime' " $out/include/csmith-${version}" \
       --replace '$CSMITH_HOME/src/csmith' $out/bin/csmith
 
     substituteInPlace $out/bin/launchn.pl \
