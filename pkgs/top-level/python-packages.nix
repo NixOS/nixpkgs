@@ -8341,6 +8341,8 @@ self: super: with self; {
 
   kicad = toPythonModule (pkgs.kicad.override { python3 = python; }).src;
 
+  kicad-netlist-reader = callPackage ../development/python-modules/kicad-netlist-reader { };
+
   kicad-python = callPackage ../development/python-modules/kicad-python { };
 
   kicadcliwrapper = callPackage ../development/python-modules/kicadcliwrapper { };
