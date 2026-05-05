@@ -103,6 +103,7 @@ assert lib.assertMsg (
 
   confDir,
   stateDir,
+  logDir,
   storeDir,
 }:
 let
@@ -346,6 +347,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.mesonOption "store-dir" storeDir)
     (lib.mesonOption "state-dir" stateDir)
+    (lib.mesonOption "log-dir" logDir)
     (lib.mesonOption "sysconfdir" confDir)
   ]
   ++ lib.optionals hasDtraceSupport [
