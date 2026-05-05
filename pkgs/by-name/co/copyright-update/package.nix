@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "2025.0404";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-src";
+    name = "copyright-update-${version}-src";
     owner = "jaalto";
     repo = "project--copyright-update";
     rev = "release/${version}";
