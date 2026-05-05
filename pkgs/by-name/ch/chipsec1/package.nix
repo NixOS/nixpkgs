@@ -13,23 +13,19 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "chipsec";
-  version = "2.0.2";
+  version = "1.13.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
     tag = finalAttrs.version;
-    hash = "sha256-SrQIEcRJHabrFRV50UJKnGmtq5kDpVKqbdq0W2+0Dqc=";
+    hash = "sha256-TSw/1NdPGefWXRMleXTeLWDgRw/m+luIQ0lF8UlgfLs=";
   };
 
   patches = [
     # Prevent chipsec from trying to write to the nix store
     ./patches/log-path.diff
-
-    # See: https://github.com/chipsec/chipsec/issues/2685
-    # Remove when upstreamed
-    ./patches/namespace_packages.diff
   ];
 
   env = lib.optionalAttrs withDriver {
@@ -59,8 +55,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
+  # Otherwise chipsec tries and fails import "tpm_cmd"
+  postInstall = ''
+    cp -R chipsec/library/tpm $out/${python3.pkgs.python.sitePackages}/chipsec/library/tpm
+  ''
   # Allow the kernel module to be loaded manually
-  postInstall = lib.optionalString withDriver ''
+  + lib.optionalString withDriver ''
     pushd $out/${python3.pkgs.python.sitePackages}/chipsec/helper/linux/
       xz -k chipsec.ko
       install -Dm444 chipsec.ko.xz $out/lib/modules/${kernel.modDirVersion}/chipsec.ko.xz
