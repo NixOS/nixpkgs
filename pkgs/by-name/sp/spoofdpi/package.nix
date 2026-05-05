@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "SpoofDPI";
-  version = "1.2.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "xvzc";
     repo = "SpoofDPI";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ybSrJzlC2lNAsUMS+3mwadGcrAN0YV0UF/Huua+2G68=";
+    hash = "sha256-mdt6T4sBVf0pNsP+9NzFhQbcQZS7RGAz2mcMeLIpHVE=";
   };
 
-  vendorHash = "sha256-FcepbOIB3CvHmTPiGWXukPg41uueQQYdZeVKmzjRuwA=";
+  vendorHash = "sha256-KHP6497t4DFnYyTkcuTaCrpK6j14AwWjZeYDyEfjXBg=";
 
   meta = {
     homepage = "https://github.com/xvzc/SpoofDPI";
