@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.54a";
 
   src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
+    name = "dawncut-${version}.tar.gz";
     url = "https://geant4.kek.jp/~tanaka/src/dawncut_${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.taz";
