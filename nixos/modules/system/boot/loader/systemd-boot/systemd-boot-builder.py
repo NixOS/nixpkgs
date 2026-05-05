@@ -21,11 +21,12 @@ from pathlib import Path
 EFI_SYS_MOUNT_POINT = Path("@efiSysMountPoint@")
 BOOT_MOUNT_POINT = Path("@bootMountPoint@")
 LOADER_CONF = EFI_SYS_MOUNT_POINT / "loader/loader.conf"  # Always stored on the ESP
-NIXOS_DIR = Path(
-    "@nixosDir@".strip("/")
-)  # Path relative to the XBOOTLDR or ESP mount point
+NIXOS_DIR = Path("@nixosDir@".strip("/")) # Path relative to the XBOOTLDR or ESP mount point
 TIMEOUT = "@timeout@"
-EDITOR = "@editor@" == "1"  # noqa: PLR0133
+EDITOR = "@editor@" == "1" # noqa: PLR0133
+ENTRY_NAME_PREFIX = "@entryNamePrefix@"
+INCLUDE_DISTRO_NAME = bool("@includeDistroName@")
+AMBIGUOUS_DATE_FORMAT = bool("@ambiguousDateFormat@")
 CONSOLE_MODE = "@consoleMode@"
 DISTRO_NAME = "@distroName@"
 NIX = "@nix@"
@@ -371,14 +372,19 @@ def boot_file(
 
     kernel_params = " ".join([f"init={bootspec.init}"] + bootspec.kernelParams)
     build_time = int(system_dir(profile, generation, specialisation).stat().st_ctime)
-    build_date = datetime.datetime.fromtimestamp(build_time).strftime("%F")
+    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F' if AMBIGUOUS_DATE_FORMAT else '%Y-%b-%d')
 
     title = "{name}{profile}{specialisation}".format(
         name=DISTRO_NAME,
         profile=" [" + profile + "]" if profile else "",
         specialisation=" (%s)" % specialisation if specialisation else "",
     )
-    description = f"Generation {generation} {bootspec.label}, built on {build_date}"
+    label = bootspec.label
+    distro_name_prefix = f"{DISTRO_NAME} "
+    if not INCLUDE_DISTRO_NAME and label.startswith(distro_name_prefix):
+        label = label[len(distro_name_prefix):]
+
+    description = f"{ENTRY_NAME_PREFIX}{generation:>3} {label}, built on {build_date}"
     boot_entry = (
         [
             f"title {title}",
