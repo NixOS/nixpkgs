@@ -48,7 +48,7 @@ buildNpmPackage (finalAttrs: {
     description = "`elm make` in watch mode. Fast and reliable";
     homepage = "https://github.com/lydell/elm-watch";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Myxogastria0808 ];
     mainProgram = "elm-watch";
     platforms = lib.platforms.all;
   };
