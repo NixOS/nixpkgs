@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "gollama";
-  version = "v2.0.4";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "sammcj";
