@@ -1,0 +1,47 @@
+Author: lactose <lactose@allthingslinux.org>
+
+Fix for hardcoded versions. Also fills in package version in package.json
+
+Index: OscGoesBrrr/.npmrc
+===================================================================
+--- OscGoesBrrr.orig/.npmrc
++++ OscGoesBrrr/.npmrc
+@@ -1,2 +1,2 @@
+ engine-strict=true
+-use-node-version=24.14.0
++use-node-version=@NODE_VERSION@
+Index: OscGoesBrrr/.nvmrc
+===================================================================
+--- OscGoesBrrr.orig/.nvmrc
++++ OscGoesBrrr/.nvmrc
+@@ -1 +1 @@
+-24.14.0
++@NODE_VERSION@
+Index: OscGoesBrrr/package.json
+===================================================================
+--- OscGoesBrrr.orig/package.json
++++ OscGoesBrrr/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "OscGoesBrrr",
+-  "version": "0.0.0-dev",
++  "version": "@OGB_VERSION@",
+   "type": "module",
+   "description": "Haptics for VRChat",
+   "author": {
+@@ -19,7 +19,7 @@
+   "repository": "https://github.com/OscToys/OscGoesBrrr",
+   "license": "CC BY-NC-SA 4.0",
+   "engines": {
+-    "node": "24.14.0"
++    "node": "@NODE_VERSION@"
+   },
+   "devDependencies": {
+     "@emotion/cache": "^11.14.0",
+@@ -108,5 +108,5 @@
+   "optionalDependencies": {
+     "native-reg": "^1.1.1"
+   },
+-  "packageManager": "pnpm@10.30.3"
++  "packageManager": "pnpm@@PNPM_VERSION@"
+ }
