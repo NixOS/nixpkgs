@@ -250,7 +250,7 @@ in
       namecoin = 208;
       #lxd = 210; # unused
       #kibana = 211;# dynamically allocated as of 2021-09-03
-      xtreemfs = 212;
+      # xtreemfs = 212; # dropped in 26.05
       calibre-server = 213;
       #heapster = 214; #dynamically allocated as of 2021-09-17
       bepasty = 215;
@@ -585,7 +585,7 @@ in
       #gateone = 207; #removed 2025-08-21
       namecoin = 208;
       #kibana = 211;
-      xtreemfs = 212;
+      # xtreemfs = 212; # dropped in 26.05
       calibre-server = 213;
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
