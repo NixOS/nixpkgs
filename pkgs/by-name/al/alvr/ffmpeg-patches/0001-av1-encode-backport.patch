@@ -1,0 +1,4229 @@
+From a105b11a9d1d8be33cd9ba29da41314c1abf7c82 Mon Sep 17 00:00:00 2001
+From: Andreas Rheinhardt <andreas.rheinhardt@outlook.com>
+Date: Fri, 1 Jul 2022 11:44:36 +0200
+Subject: [PATCH] avcodec/cbs: Add specialization for
+ ff_cbs_(read|write)_unsigned()
+
+These functions allow not only to read and write unsigned values,
+but also to check ranges and to emit trace output which can be
+beautified when processing arrays (indices like "[i]" are replaced
+by their actual numbers).
+
+Yet lots of callers actually only need something simpler:
+Their range is only implicitly restricted by the amount
+of bits used and they are not part of arrays, hence don't
+need this beautification.
+
+This commit adds specializations for these callers;
+this is very beneficial size-wise (it reduced the size
+of .text by 23312 bytes here), as a call is now cheaper.
+
+Signed-off-by: Andreas Rheinhardt <andreas.rheinhardt@outlook.com>
+---
+ libavcodec/cbs.c          | 34 ++++++++++++++++++++++++++++++----
+ libavcodec/cbs_av1.c      | 28 +++++++++++++++++++---------
+ libavcodec/cbs_h2645.c    | 15 +++++++++++++--
+ libavcodec/cbs_internal.h | 11 ++++++++++-
+ libavcodec/cbs_mpeg2.c    | 15 +++++++++++++--
+ libavcodec/cbs_vp9.c      | 14 ++++++++++++--
+ 6 files changed, 97 insertions(+), 20 deletions(-)
+
+diff --git a/libavcodec/cbs.c b/libavcodec/cbs.c
+index 13a01bef5133..3ec8285e21ea 100644
+--- a/libavcodec/cbs.c
++++ b/libavcodec/cbs.c
+@@ -546,10 +546,13 @@ void ff_cbs_trace_syntax_element(CodedBitstreamContext *ctx, int position,
+            position, name, pad, bits, value);
+ }
+ 
+-int ff_cbs_read_unsigned(CodedBitstreamContext *ctx, GetBitContext *gbc,
+-                         int width, const char *name,
+-                         const int *subscripts, uint32_t *write_to,
+-                         uint32_t range_min, uint32_t range_max)
++static av_always_inline int cbs_read_unsigned(CodedBitstreamContext *ctx,
++                                              GetBitContext *gbc,
++                                              int width, const char *name,
++                                              const int *subscripts,
++                                              uint32_t *write_to,
++                                              uint32_t range_min,
++                                              uint32_t range_max)
+ {
+     uint32_t value;
+     int position;
+@@ -589,6 +592,22 @@ int ff_cbs_read_unsigned(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     return 0;
+ }
+ 
++int ff_cbs_read_unsigned(CodedBitstreamContext *ctx, GetBitContext *gbc,
++                         int width, const char *name,
++                         const int *subscripts, uint32_t *write_to,
++                         uint32_t range_min, uint32_t range_max)
++{
++    return cbs_read_unsigned(ctx, gbc, width, name, subscripts,
++                             write_to, range_min, range_max);
++}
++
++int ff_cbs_read_simple_unsigned(CodedBitstreamContext *ctx, GetBitContext *gbc,
++                                int width, const char *name, uint32_t *write_to)
++{
++    return cbs_read_unsigned(ctx, gbc, width, name, NULL,
++                             write_to, 0, UINT32_MAX);
++}
++
+ int ff_cbs_write_unsigned(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                           int width, const char *name,
+                           const int *subscripts, uint32_t value,
+@@ -625,6 +644,13 @@ int ff_cbs_write_unsigned(CodedBitstreamContext *ctx, PutBitContext *pbc,
+     return 0;
+ }
+ 
++int ff_cbs_write_simple_unsigned(CodedBitstreamContext *ctx, PutBitContext *pbc,
++                                 int width, const char *name, uint32_t value)
++{
++    return ff_cbs_write_unsigned(ctx, pbc, width, name, NULL,
++                                 value, 0, MAX_UINT_BITS(width));
++}
++
+ int ff_cbs_read_signed(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                        int width, const char *name,
+                        const int *subscripts, int32_t *write_to,
+diff --git a/libavcodec/cbs_av1.c b/libavcodec/cbs_av1.c
+index 8788fee09905..452e022b3680 100644
+--- a/libavcodec/cbs_av1.c
++++ b/libavcodec/cbs_av1.c
+@@ -412,9 +412,8 @@ static int cbs_av1_read_subexp(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     }
+ 
+     if (len < max_len) {
+-        err = ff_cbs_read_unsigned(ctx, gbc, range_bits,
+-                                   "subexp_bits", NULL, &value,
+-                                   0, MAX_UINT_BITS(range_bits));
++        err = ff_cbs_read_simple_unsigned(ctx, gbc, range_bits,
++                                          "subexp_bits", &value);
+         if (err < 0)
+             return err;
+ 
+@@ -476,10 +475,9 @@ static int cbs_av1_write_subexp(CodedBitstreamContext *ctx, PutBitContext *pbc,
+         return err;
+ 
+     if (len < max_len) {
+-        err = ff_cbs_write_unsigned(ctx, pbc, range_bits,
+-                                    "subexp_bits", NULL,
+-                                    value - range_offset,
+-                                    0, MAX_UINT_BITS(range_bits));
++        err = ff_cbs_write_simple_unsigned(ctx, pbc, range_bits,
++                                           "subexp_bits",
++                                           value - range_offset);
+         if (err < 0)
+             return err;
+ 
+@@ -546,8 +544,6 @@ static size_t cbs_av1_get_payload_bytes_left(GetBitContext *gbc)
+ 
+ #define SUBSCRIPTS(subs, ...) (subs > 0 ? ((int[subs + 1]){ subs, __VA_ARGS__ }) : NULL)
+ 
+-#define fb(width, name) \
+-        xf(width, name, current->name, 0, MAX_UINT_BITS(width), 0, )
+ #define fc(width, name, range_min, range_max) \
+         xf(width, name, current->name, range_min, range_max, 0, )
+ #define flag(name) fb(1, name)
+@@ -573,6 +569,13 @@ static size_t cbs_av1_get_payload_bytes_left(GetBitContext *gbc)
+ #define READWRITE read
+ #define RWContext GetBitContext
+ 
++#define fb(width, name) do { \
++        uint32_t value; \
++        CHECK(ff_cbs_read_simple_unsigned(ctx, rw, width, \
++                                          #name, &value)); \
++        current->name = value; \
++    } while (0)
++
+ #define xf(width, name, var, range_min, range_max, subs, ...) do { \
+         uint32_t value; \
+         CHECK(ff_cbs_read_unsigned(ctx, rw, width, #name, \
+@@ -645,6 +648,7 @@ static size_t cbs_av1_get_payload_bytes_left(GetBitContext *gbc)
+ #undef READ
+ #undef READWRITE
+ #undef RWContext
++#undef fb
+ #undef xf
+ #undef xsu
+ #undef uvlc
+@@ -661,6 +665,11 @@ static size_t cbs_av1_get_payload_bytes_left(GetBitContext *gbc)
+ #define READWRITE write
+ #define RWContext PutBitContext
+ 
++#define fb(width, name) do { \
++        CHECK(ff_cbs_write_simple_unsigned(ctx, rw, width, #name, \
++                                           current->name)); \
++    } while (0)
++
+ #define xf(width, name, var, range_min, range_max, subs, ...) do { \
+         CHECK(ff_cbs_write_unsigned(ctx, rw, width, #name, \
+                                     SUBSCRIPTS(subs, __VA_ARGS__), \
+@@ -723,6 +732,7 @@ static size_t cbs_av1_get_payload_bytes_left(GetBitContext *gbc)
+ #undef WRITE
+ #undef READWRITE
+ #undef RWContext
++#undef fb
+ #undef xf
+ #undef xsu
+ #undef uvlc
+diff --git a/libavcodec/cbs_h2645.c b/libavcodec/cbs_h2645.c
+index 21c8bc76d50b..318c997d9436 100644
+--- a/libavcodec/cbs_h2645.c
++++ b/libavcodec/cbs_h2645.c
+@@ -264,8 +264,6 @@ static int cbs_h265_payload_extension_present(GetBitContext *gbc, uint32_t paylo
+ 
+ #define u(width, name, range_min, range_max) \
+         xu(width, name, current->name, range_min, range_max, 0, )
+-#define ub(width, name) \
+-        xu(width, name, current->name, 0, MAX_UINT_BITS(width), 0, )
+ #define flag(name) ub(1, name)
+ #define ue(name, range_min, range_max) \
+         xue(name, current->name, range_min, range_max, 0, )
+@@ -301,6 +299,12 @@ static int cbs_h265_payload_extension_present(GetBitContext *gbc, uint32_t paylo
+ #define READWRITE read
+ #define RWContext GetBitContext
+ 
++#define ub(width, name) do { \
++        uint32_t value; \
++        CHECK(ff_cbs_read_simple_unsigned(ctx, rw, width, #name, \
++                                          &value)); \
++        current->name = value; \
++    } while (0)
+ #define xu(width, name, var, range_min, range_max, subs, ...) do { \
+         uint32_t value; \
+         CHECK(ff_cbs_read_unsigned(ctx, rw, width, #name, \
+@@ -379,6 +383,7 @@ static int cbs_h2645_read_more_rbsp_data(GetBitContext *gbc)
+ #undef READ
+ #undef READWRITE
+ #undef RWContext
++#undef ub
+ #undef xu
+ #undef xi
+ #undef xue
+@@ -394,6 +399,11 @@ static int cbs_h2645_read_more_rbsp_data(GetBitContext *gbc)
+ #define READWRITE write
+ #define RWContext PutBitContext
+ 
++#define ub(width, name) do { \
++        uint32_t value = current->name; \
++        CHECK(ff_cbs_write_simple_unsigned(ctx, rw, width, #name, \
++                                           value)); \
++    } while (0)
+ #define xu(width, name, var, range_min, range_max, subs, ...) do { \
+         uint32_t value = var; \
+         CHECK(ff_cbs_write_unsigned(ctx, rw, width, #name, \
+@@ -461,6 +471,7 @@ static int cbs_h2645_read_more_rbsp_data(GetBitContext *gbc)
+ #undef WRITE
+ #undef READWRITE
+ #undef RWContext
++#undef ub
+ #undef xu
+ #undef xi
+ #undef xue
+diff --git a/libavcodec/cbs_internal.h b/libavcodec/cbs_internal.h
+index b752d6468452..da84697a29f8 100644
+--- a/libavcodec/cbs_internal.h
++++ b/libavcodec/cbs_internal.h
+@@ -163,18 +163,27 @@ void ff_cbs_trace_syntax_element(CodedBitstreamContext *ctx, int position,
+ 
+ 
+ // Helper functions for read/write of common bitstream elements, including
+-// generation of trace output.
++// generation of trace output. The simple functions are equivalent to
++// their non-simple counterparts except that their range is unrestricted
++// (i.e. only limited by the amount of bits used) and they lack
++// the ability to use subscripts.
+ 
+ int ff_cbs_read_unsigned(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                          int width, const char *name,
+                          const int *subscripts, uint32_t *write_to,
+                          uint32_t range_min, uint32_t range_max);
+ 
++int ff_cbs_read_simple_unsigned(CodedBitstreamContext *ctx, GetBitContext *gbc,
++                                int width, const char *name, uint32_t *write_to);
++
+ int ff_cbs_write_unsigned(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                           int width, const char *name,
+                           const int *subscripts, uint32_t value,
+                           uint32_t range_min, uint32_t range_max);
+ 
++int ff_cbs_write_simple_unsigned(CodedBitstreamContext *ctx, PutBitContext *pbc,
++                                 int width, const char *name, uint32_t value);
++
+ int ff_cbs_read_signed(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                        int width, const char *name,
+                        const int *subscripts, int32_t *write_to,
+diff --git a/libavcodec/cbs_mpeg2.c b/libavcodec/cbs_mpeg2.c
+index 04b0c7f87ddb..37fc28a4e62b 100644
+--- a/libavcodec/cbs_mpeg2.c
++++ b/libavcodec/cbs_mpeg2.c
+@@ -40,8 +40,6 @@
+ 
+ #define SUBSCRIPTS(subs, ...) (subs > 0 ? ((int[subs + 1]){ subs, __VA_ARGS__ }) : NULL)
+ 
+-#define ui(width, name) \
+-        xui(width, name, current->name, 0, MAX_UINT_BITS(width), 0, )
+ #define uir(width, name) \
+         xui(width, name, current->name, 1, MAX_UINT_BITS(width), 0, )
+ #define uis(width, name, subs, ...) \
+@@ -65,6 +63,12 @@
+ #define READWRITE read
+ #define RWContext GetBitContext
+ 
++#define ui(width, name) do { \
++        uint32_t value; \
++        CHECK(ff_cbs_read_simple_unsigned(ctx, rw, width, #name, \
++                                          &value)); \
++        current->name = value; \
++    } while (0)
+ #define xuia(width, string, var, range_min, range_max, subs, ...) do { \
+         uint32_t value; \
+         CHECK(ff_cbs_read_unsigned(ctx, rw, width, string, \
+@@ -95,6 +99,7 @@
+ #undef READ
+ #undef READWRITE
+ #undef RWContext
++#undef ui
+ #undef xuia
+ #undef xsi
+ #undef nextbits
+@@ -105,6 +110,11 @@
+ #define READWRITE write
+ #define RWContext PutBitContext
+ 
++#define ui(width, name) do { \
++        CHECK(ff_cbs_write_simple_unsigned(ctx, rw, width, #name, \
++                                           current->name)); \
++    } while (0)
++
+ #define xuia(width, string, var, range_min, range_max, subs, ...) do { \
+         CHECK(ff_cbs_write_unsigned(ctx, rw, width, string, \
+                                     SUBSCRIPTS(subs, __VA_ARGS__), \
+@@ -134,6 +144,7 @@
+ #undef WRITE
+ #undef READWRITE
+ #undef RWContext
++#undef ui
+ #undef xuia
+ #undef xsi
+ #undef nextbits
+diff --git a/libavcodec/cbs_vp9.c b/libavcodec/cbs_vp9.c
+index 184fdcade6f8..b0d5bd8763fd 100644
+--- a/libavcodec/cbs_vp9.c
++++ b/libavcodec/cbs_vp9.c
+@@ -251,8 +251,6 @@ static int cbs_vp9_write_le(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ 
+ #define SUBSCRIPTS(subs, ...) (subs > 0 ? ((int[subs + 1]){ subs, __VA_ARGS__ }) : NULL)
+ 
+-#define f(width, name) \
+-        xf(width, name, current->name, 0, )
+ #define s(width, name) \
+         xs(width, name, current->name, 0, )
+ #define fs(width, name, subs, ...) \
+@@ -264,6 +262,12 @@ static int cbs_vp9_write_le(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ #define READWRITE read
+ #define RWContext GetBitContext
+ 
++#define f(width, name) do { \
++        uint32_t value; \
++        CHECK(ff_cbs_read_simple_unsigned(ctx, rw, width, #name, \
++                                          &value)); \
++        current->name = value; \
++    } while (0)
+ #define xf(width, name, var, subs, ...) do { \
+         uint32_t value; \
+         CHECK(ff_cbs_read_unsigned(ctx, rw, width, #name, \
+@@ -329,6 +333,7 @@ static int cbs_vp9_write_le(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ #undef READ
+ #undef READWRITE
+ #undef RWContext
++#undef f
+ #undef xf
+ #undef xs
+ #undef increment
+@@ -344,6 +349,10 @@ static int cbs_vp9_write_le(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ #define READWRITE write
+ #define RWContext PutBitContext
+ 
++#define f(width, name) do { \
++        CHECK(ff_cbs_write_simple_unsigned(ctx, rw, width, #name, \
++                                           current->name)); \
++    } while (0)
+ #define xf(width, name, var, subs, ...) do { \
+         CHECK(ff_cbs_write_unsigned(ctx, rw, width, #name, \
+                                     SUBSCRIPTS(subs, __VA_ARGS__), \
+@@ -396,6 +405,7 @@ static int cbs_vp9_write_le(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ #undef WRITE
+ #undef READWRITE
+ #undef RWContext
++#undef f
+ #undef xf
+ #undef xs
+ #undef increment
+From 95b5c8172968e942704cb4eaceddf8730d9e501c Mon Sep 17 00:00:00 2001
+From: James Almer <jamrial@gmail.com>
+Date: Thu, 21 Sep 2023 22:02:52 -0300
+Subject: [PATCH] avcodec/extract_extradata: use size_t as parameter type in
+ val_in_array()
+
+It only gets passed the return value of FF_ARRAY_ELEMS(), which is a size_t.
+
+Signed-off-by: James Almer <jamrial@gmail.com>
+---
+ libavcodec/extract_extradata_bsf.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/libavcodec/extract_extradata_bsf.c b/libavcodec/extract_extradata_bsf.c
+index efc843736b5a..baa629295fba 100644
+--- a/libavcodec/extract_extradata_bsf.c
++++ b/libavcodec/extract_extradata_bsf.c
+@@ -49,10 +49,9 @@ typedef struct ExtractExtradataContext {
+     int remove;
+ } ExtractExtradataContext;
+ 
+-static int val_in_array(const int *arr, int len, int val)
++static int val_in_array(const int *arr, size_t len, int val)
+ {
+-    int i;
+-    for (i = 0; i < len; i++)
++    for (size_t i = 0; i < len; i++)
+         if (arr[i] == val)
+             return 1;
+     return 0;
+@@ -177,7 +176,7 @@ static int extract_extradata_h2645(AVBSFContext *ctx, AVPacket *pkt,
+ 
+     int extradata_size = 0, filtered_size = 0;
+     const int *extradata_nal_types;
+-    int nb_extradata_nal_types;
++    size_t nb_extradata_nal_types;
+     int i, has_sps = 0, has_vps = 0, ret = 0;
+ 
+     if (ctx->par_in->codec_id == AV_CODEC_ID_VVC) {
+From abe16daea1b72323e3544cb6ec12bec010b6ba54 Mon Sep 17 00:00:00 2001
+From: Mark Thompson <sw@jkqxz.net>
+Date: Mon, 11 Sep 2023 15:52:26 +0800
+Subject: [PATCH] cbs: Make tracing more general
+
+Turn tracing into callbacks for each syntax element, with default
+callbacks to match current trace_headers behaviour for debug.  Move
+the construction of bit strings into the trace callback, which
+simplifies all of the read and write functions.
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+---
+ libavcodec/cbs.c               | 121 +++++++++----------
+ libavcodec/cbs.h               |  88 +++++++++++++-
+ libavcodec/cbs_av1.c           | 206 +++++++++------------------------
+ libavcodec/cbs_bsf.c           |   5 +
+ libavcodec/cbs_h2645.c         | 134 +++++++++------------
+ libavcodec/cbs_internal.h      |  85 +++++++++++++-
+ libavcodec/cbs_vp9.c           | 108 +++++------------
+ libavcodec/trace_headers_bsf.c |   2 +
+ 8 files changed, 373 insertions(+), 376 deletions(-)
+
+diff --git a/libavcodec/cbs.c b/libavcodec/cbs.c
+index 3ec8285e21ea..daf7f66427f4 100644
+--- a/libavcodec/cbs.c
++++ b/libavcodec/cbs.c
+@@ -117,8 +117,9 @@ av_cold int ff_cbs_init(CodedBitstreamContext **ctx_ptr,
+ 
+     ctx->decompose_unit_types = NULL;
+ 
+-    ctx->trace_enable = 0;
+-    ctx->trace_level  = AV_LOG_TRACE;
++    ctx->trace_enable  = 0;
++    ctx->trace_level   = AV_LOG_TRACE;
++    ctx->trace_context = ctx;
+ 
+     *ctx_ptr = ctx;
+     return 0;
+@@ -496,19 +497,27 @@ void ff_cbs_trace_header(CodedBitstreamContext *ctx,
+     av_log(ctx->log_ctx, ctx->trace_level, "%s\n", name);
+ }
+ 
+-void ff_cbs_trace_syntax_element(CodedBitstreamContext *ctx, int position,
+-                                 const char *str, const int *subscripts,
+-                                 const char *bits, int64_t value)
++void ff_cbs_trace_read_log(void *trace_context,
++                           GetBitContext *gbc, int length,
++                           const char *str, const int *subscripts,
++                           int64_t value)
+ {
++    CodedBitstreamContext *ctx = trace_context;
+     char name[256];
++    char bits[256];
+     size_t name_len, bits_len;
+     int pad, subs, i, j, k, n;
+-
+-    if (!ctx->trace_enable)
+-        return;
++    int position;
+ 
+     av_assert0(value >= INT_MIN && value <= UINT32_MAX);
+ 
++    position = get_bits_count(gbc);
++
++    av_assert0(length < 256);
++    for (i = 0; i < length; i++)
++        bits[i] = get_bits1(gbc) ? '1' : '0';
++    bits[length] = 0;
++
+     subs = subscripts ? subscripts[0] : 0;
+     n = 0;
+     for (i = j = 0; str[i];) {
+@@ -535,7 +544,7 @@ void ff_cbs_trace_syntax_element(CodedBitstreamContext *ctx, int position,
+     av_assert0(n == subs);
+ 
+     name_len = strlen(name);
+-    bits_len = strlen(bits);
++    bits_len = length;
+ 
+     if (name_len + bits_len > 60)
+         pad = bits_len + 2;
+@@ -546,6 +555,36 @@ void ff_cbs_trace_syntax_element(CodedBitstreamContext *ctx, int position,
+            position, name, pad, bits, value);
+ }
+ 
++void ff_cbs_trace_write_log(void *trace_context,
++                            PutBitContext *pbc, int length,
++                            const char *str, const int *subscripts,
++                            int64_t value)
++{
++    CodedBitstreamContext *ctx = trace_context;
++
++    // Ensure that the syntax element is written to the output buffer,
++    // make a GetBitContext pointed at the start position, then call the
++    // read log function which can read the bits back to log them.
++
++    GetBitContext gbc;
++    int position;
++
++    if (length > 0) {
++        PutBitContext flush;
++        flush = *pbc;
++        flush_put_bits(&flush);
++    }
++
++    position = put_bits_count(pbc);
++    av_assert0(position >= length);
++
++    init_get_bits(&gbc, pbc->buf, position);
++
++    skip_bits_long(&gbc, position - length);
++
++    ff_cbs_trace_read_log(ctx, &gbc, length, str, subscripts, value);
++}
++
+ static av_always_inline int cbs_read_unsigned(CodedBitstreamContext *ctx,
+                                               GetBitContext *gbc,
+                                               int width, const char *name,
+@@ -555,7 +594,8 @@ static av_always_inline int cbs_read_unsigned(CodedBitstreamContext *ctx,
+                                               uint32_t range_max)
+ {
+     uint32_t value;
+-    int position;
++
++    CBS_TRACE_READ_START();
+ 
+     av_assert0(width > 0 && width <= 32);
+ 
+@@ -565,21 +605,9 @@ static av_always_inline int cbs_read_unsigned(CodedBitstreamContext *ctx,
+         return AVERROR_INVALIDDATA;
+     }
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
+-
+     value = get_bits_long(gbc, width);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < width; i++)
+-            bits[i] = value >> (width - i - 1) & 1 ? '1' : '0';
+-        bits[i] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
+-                                    bits, value);
+-    }
++    CBS_TRACE_READ_END();
+ 
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -613,6 +641,8 @@ int ff_cbs_write_unsigned(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                           const int *subscripts, uint32_t value,
+                           uint32_t range_min, uint32_t range_max)
+ {
++    CBS_TRACE_WRITE_START();
++
+     av_assert0(width > 0 && width <= 32);
+ 
+     if (value < range_min || value > range_max) {
+@@ -625,22 +655,13 @@ int ff_cbs_write_unsigned(CodedBitstreamContext *ctx, PutBitContext *pbc,
+     if (put_bits_left(pbc) < width)
+         return AVERROR(ENOSPC);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < width; i++)
+-            bits[i] = value >> (width - i - 1) & 1 ? '1' : '0';
+-        bits[i] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, subscripts, bits, value);
+-    }
+-
+     if (width < 32)
+         put_bits(pbc, width, value);
+     else
+         put_bits32(pbc, value);
+ 
++    CBS_TRACE_WRITE_END();
++
+     return 0;
+ }
+ 
+@@ -657,7 +678,8 @@ int ff_cbs_read_signed(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                        int32_t range_min, int32_t range_max)
+ {
+     int32_t value;
+-    int position;
++
++    CBS_TRACE_READ_START();
+ 
+     av_assert0(width > 0 && width <= 32);
+ 
+@@ -667,21 +689,9 @@ int ff_cbs_read_signed(CodedBitstreamContext *ctx, GetBitContext *gbc,
+         return AVERROR_INVALIDDATA;
+     }
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
+-
+     value = get_sbits_long(gbc, width);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < width; i++)
+-            bits[i] = value & (1U << (width - i - 1)) ? '1' : '0';
+-        bits[i] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
+-                                    bits, value);
+-    }
++    CBS_TRACE_READ_END();
+ 
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -699,6 +709,8 @@ int ff_cbs_write_signed(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                         const int *subscripts, int32_t value,
+                         int32_t range_min, int32_t range_max)
+ {
++    CBS_TRACE_WRITE_START();
++
+     av_assert0(width > 0 && width <= 32);
+ 
+     if (value < range_min || value > range_max) {
+@@ -711,22 +723,13 @@ int ff_cbs_write_signed(CodedBitstreamContext *ctx, PutBitContext *pbc,
+     if (put_bits_left(pbc) < width)
+         return AVERROR(ENOSPC);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < width; i++)
+-            bits[i] = value & (1U << (width - i - 1)) ? '1' : '0';
+-        bits[i] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, subscripts, bits, value);
+-    }
+-
+     if (width < 32)
+         put_sbits(pbc, width, value);
+     else
+         put_bits32(pbc, value);
+ 
++    CBS_TRACE_WRITE_END();
++
+     return 0;
+ }
+ 
+diff --git a/libavcodec/cbs.h b/libavcodec/cbs.h
+index b4131db5fe27..ffb2797761bb 100644
+--- a/libavcodec/cbs.h
++++ b/libavcodec/cbs.h
+@@ -168,6 +168,51 @@ typedef struct CodedBitstreamFragment {
+     CodedBitstreamUnit *units;
+ } CodedBitstreamFragment;
+ 
++
++struct CodedBitstreamContext;
++struct GetBitContext;
++struct PutBitContext;
++
++/**
++ * Callback type for read tracing.
++ *
++ * @param ctx         User-set trace context.
++ * @param gbc         A GetBitContext set at the start of the syntax
++ *                    element.  This is a copy, the callee does not
++ *                    need to preserve it.
++ * @param length      Length in bits of the syntax element.
++ * @param name        String name of the syntax elements.
++ * @param subscripts  If the syntax element is an array, a pointer to
++ *                    an array of subscripts into the array.
++ * @param value       Parsed value of the syntax element.
++ */
++typedef void (*CBSTraceReadCallback)(void *trace_context,
++                                     struct GetBitContext *gbc,
++                                     int start_position,
++                                     const char *name,
++                                     const int *subscripts,
++                                     int64_t value);
++
++/**
++ * Callback type for write tracing.
++ *
++ * @param ctx         User-set trace context.
++ * @param pbc         A PutBitContext set at the end of the syntax
++ *                    element.  The user must not modify this, but may
++ *                    inspect it to determine state.
++ * @param length      Length in bits of the syntax element.
++ * @param name        String name of the syntax elements.
++ * @param subscripts  If the syntax element is an array, a pointer to
++ *                    an array of subscripts into the array.
++ * @param value       Written value of the syntax element.
++ */
++typedef void (*CBSTraceWriteCallback)(void *trace_context,
++                                      struct PutBitContext *pbc,
++                                      int start_position,
++                                      const char *name,
++                                      const int *subscripts,
++                                      int64_t value);
++
+ /**
+  * Context structure for coded bitstream operations.
+  */
+@@ -211,11 +256,29 @@ typedef struct CodedBitstreamContext {
+      */
+     int trace_enable;
+     /**
+-     * Log level to use for trace output.
++     * Log level to use for default trace output.
+      *
+      * From AV_LOG_*; defaults to AV_LOG_TRACE.
+      */
+     int trace_level;
++    /**
++     * User context pointer to pass to trace callbacks.
++     */
++    void *trace_context;
++    /**
++     * Callback for read tracing.
++     *
++     * If tracing is enabled then this is called once for each syntax
++     * element parsed.
++     */
++    CBSTraceReadCallback  trace_read_callback;
++    /**
++     * Callback for write tracing.
++     *
++     * If tracing is enabled then this is called once for each syntax
++     * element written.
++     */
++    CBSTraceWriteCallback trace_write_callback;
+ 
+     /**
+      * Write buffer. Used as intermediate buffer when writing units.
+@@ -450,4 +513,27 @@ void ff_cbs_discard_units(CodedBitstreamContext *ctx,
+                           enum AVDiscard skip,
+                           int flags);
+ 
++
++/**
++ * Helper function for read tracing which formats the syntax element
++ * and logs the result.
++ *
++ * Trace context should be set to the CodedBitstreamContext.
++ */
++void ff_cbs_trace_read_log(void *trace_context,
++                           struct GetBitContext *gbc, int length,
++                           const char *str, const int *subscripts,
++                           int64_t value);
++
++/**
++ * Helper function for write tracing which formats the syntax element
++ * and logs the result.
++ *
++ * Trace context should be set to the CodedBitstreamContext.
++ */
++void ff_cbs_trace_write_log(void *trace_context,
++                            struct PutBitContext *pbc, int length,
++                            const char *str, const int *subscripts,
++                            int64_t value);
++
+ #endif /* AVCODEC_CBS_H */
+diff --git a/libavcodec/cbs_av1.c b/libavcodec/cbs_av1.c
+index 7fb5bd8b42ea..6c478603f173 100644
+--- a/libavcodec/cbs_av1.c
++++ b/libavcodec/cbs_av1.c
+@@ -31,10 +31,8 @@ static int cbs_av1_read_uvlc(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                              uint32_t range_min, uint32_t range_max)
+ {
+     uint32_t zeroes, bits_value, value;
+-    int position;
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+     zeroes = 0;
+     while (1) {
+@@ -50,6 +48,9 @@ static int cbs_av1_read_uvlc(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     }
+ 
+     if (zeroes >= 32) {
++        // Note that the spec allows an arbitrarily large number of
++        // zero bits followed by a one bit in this case, but the
++        // libaom implementation does not support it.
+         value = MAX_UINT_BITS(32);
+     } else {
+         if (get_bits_left(gbc) < zeroes) {
+@@ -62,36 +63,7 @@ static int cbs_av1_read_uvlc(CodedBitstreamContext *ctx, GetBitContext *gbc,
+         value = bits_value + (UINT32_C(1) << zeroes) - 1;
+     }
+ 
+-    if (ctx->trace_enable) {
+-        char bits[65];
+-        int i, j, k;
+-
+-        if (zeroes >= 32) {
+-            while (zeroes > 32) {
+-                k = FFMIN(zeroes - 32, 32);
+-                for (i = 0; i < k; i++)
+-                    bits[i] = '0';
+-                bits[i] = 0;
+-                ff_cbs_trace_syntax_element(ctx, position, name,
+-                                            NULL, bits, 0);
+-                zeroes -= k;
+-                position += k;
+-            }
+-        }
+-
+-        for (i = 0; i < zeroes; i++)
+-            bits[i] = '0';
+-        bits[i++] = '1';
+-
+-        if (zeroes < 32) {
+-            for (j = 0; j < zeroes; j++)
+-                bits[i++] = (bits_value >> (zeroes - j - 1) & 1) ? '1' : '0';
+-        }
+-
+-        bits[i] = 0;
+-        ff_cbs_trace_syntax_element(ctx, position, name,
+-                                    NULL, bits, value);
+-    }
++    CBS_TRACE_READ_END_NO_SUBSCRIPTS();
+ 
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -109,7 +81,9 @@ static int cbs_av1_write_uvlc(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                               uint32_t range_min, uint32_t range_max)
+ {
+     uint32_t v;
+-    int position, zeroes;
++    int zeroes;
++
++    CBS_TRACE_WRITE_START();
+ 
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -118,28 +92,17 @@ static int cbs_av1_write_uvlc(CodedBitstreamContext *ctx, PutBitContext *pbc,
+         return AVERROR_INVALIDDATA;
+     }
+ 
+-    if (ctx->trace_enable)
+-        position = put_bits_count(pbc);
+-
+     zeroes = av_log2(value + 1);
+     v = value - (1U << zeroes) + 1;
++
++    if (put_bits_left(pbc) < 2 * zeroes + 1)
++        return AVERROR(ENOSPC);
++
+     put_bits(pbc, zeroes, 0);
+     put_bits(pbc, 1, 1);
+     put_bits(pbc, zeroes, v);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[65];
+-        int i, j;
+-        i = 0;
+-        for (j = 0; j < zeroes; j++)
+-            bits[i++] = '0';
+-        bits[i++] = '1';
+-        for (j = 0; j < zeroes; j++)
+-            bits[i++] = (v >> (zeroes - j - 1) & 1) ? '1' : '0';
+-        bits[i++] = 0;
+-        ff_cbs_trace_syntax_element(ctx, position, name, NULL,
+-                                    bits, value);
+-    }
++    CBS_TRACE_WRITE_END_NO_SUBSCRIPTS();
+ 
+     return 0;
+ }
+@@ -148,20 +111,19 @@ static int cbs_av1_read_leb128(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                                const char *name, uint64_t *write_to)
+ {
+     uint64_t value;
+-    int position, err, i;
++    uint32_t byte;
++    int i;
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+     value = 0;
+     for (i = 0; i < 8; i++) {
+-        int subscript[2] = { 1, i };
+-        uint32_t byte;
+-        err = ff_cbs_read_unsigned(ctx, gbc, 8, "leb128_byte[i]", subscript,
+-                                   &byte, 0x00, 0xff);
+-        if (err < 0)
+-            return err;
+-
++        if (get_bits_left(gbc) < 8) {
++            av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid leb128 at "
++                   "%s: bitstream ended.\n", name);
++            return AVERROR_INVALIDDATA;
++        }
++        byte = get_bits(gbc, 8);
+         value |= (uint64_t)(byte & 0x7f) << (i * 7);
+         if (!(byte & 0x80))
+             break;
+@@ -170,8 +132,7 @@ static int cbs_av1_read_leb128(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     if (value > UINT32_MAX)
+         return AVERROR_INVALIDDATA;
+ 
+-    if (ctx->trace_enable)
+-        ff_cbs_trace_syntax_element(ctx, position, name, NULL, "", value);
++    CBS_TRACE_READ_END_NO_SUBSCRIPTS();
+ 
+     *write_to = value;
+     return 0;
+@@ -180,29 +141,25 @@ static int cbs_av1_read_leb128(CodedBitstreamContext *ctx, GetBitContext *gbc,
+ static int cbs_av1_write_leb128(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                                 const char *name, uint64_t value)
+ {
+-    int position, err, len, i;
++    int len, i;
+     uint8_t byte;
+ 
+-    len = (av_log2(value) + 7) / 7;
++    CBS_TRACE_WRITE_START();
+ 
+-    if (ctx->trace_enable)
+-        position = put_bits_count(pbc);
++    len = (av_log2(value) + 7) / 7;
+ 
+     for (i = 0; i < len; i++) {
+-        int subscript[2] = { 1, i };
++        if (put_bits_left(pbc) < 8)
++            return AVERROR(ENOSPC);
+ 
+         byte = value >> (7 * i) & 0x7f;
+         if (i < len - 1)
+             byte |= 0x80;
+ 
+-        err = ff_cbs_write_unsigned(ctx, pbc, 8, "leb128_byte[i]", subscript,
+-                                    byte, 0x00, 0xff);
+-        if (err < 0)
+-            return err;
++        put_bits(pbc, 8, byte);
+     }
+ 
+-    if (ctx->trace_enable)
+-        ff_cbs_trace_syntax_element(ctx, position, name, NULL, "", value);
++    CBS_TRACE_WRITE_END_NO_SUBSCRIPTS();
+ 
+     return 0;
+ }
+@@ -212,12 +169,11 @@ static int cbs_av1_read_ns(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                            const int *subscripts, uint32_t *write_to)
+ {
+     uint32_t m, v, extra_bit, value;
+-    int position, w;
++    int w;
+ 
+-    av_assert0(n > 0);
++    CBS_TRACE_READ_START();
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    av_assert0(n > 0);
+ 
+     w = av_log2(n) + 1;
+     m = (1 << w) - n;
+@@ -240,18 +196,7 @@ static int cbs_av1_read_ns(CodedBitstreamContext *ctx, GetBitContext *gbc,
+         value = (v << 1) - m + extra_bit;
+     }
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < w - 1; i++)
+-            bits[i] = (v >> i & 1) ? '1' : '0';
+-        if (v >= m)
+-            bits[i++] = extra_bit ? '1' : '0';
+-        bits[i] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, position,
+-                                    name, subscripts, bits, value);
+-    }
++    CBS_TRACE_READ_END();
+ 
+     *write_to = value;
+     return 0;
+@@ -262,7 +207,8 @@ static int cbs_av1_write_ns(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                             const int *subscripts, uint32_t value)
+ {
+     uint32_t w, m, v, extra_bit;
+-    int position;
++
++    CBS_TRACE_WRITE_START();
+ 
+     if (value > n) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -271,9 +217,6 @@ static int cbs_av1_write_ns(CodedBitstreamContext *ctx, PutBitContext *pbc,
+         return AVERROR_INVALIDDATA;
+     }
+ 
+-    if (ctx->trace_enable)
+-        position = put_bits_count(pbc);
+-
+     w = av_log2(n) + 1;
+     m = (1 << w) - n;
+ 
+@@ -290,18 +233,7 @@ static int cbs_av1_write_ns(CodedBitstreamContext *ctx, PutBitContext *pbc,
+         put_bits(pbc, 1, extra_bit);
+     }
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < w - 1; i++)
+-            bits[i] = (v >> i & 1) ? '1' : '0';
+-        if (value >= m)
+-            bits[i++] = extra_bit ? '1' : '0';
+-        bits[i] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, position,
+-                                    name, subscripts, bits, value);
+-    }
++    CBS_TRACE_WRITE_END();
+ 
+     return 0;
+ }
+@@ -311,33 +243,24 @@ static int cbs_av1_read_increment(CodedBitstreamContext *ctx, GetBitContext *gbc
+                                   const char *name, uint32_t *write_to)
+ {
+     uint32_t value;
+-    int position, i;
+-    char bits[33];
+ 
+-    av_assert0(range_min <= range_max && range_max - range_min < sizeof(bits) - 1);
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+-    for (i = 0, value = range_min; value < range_max;) {
++    av_assert0(range_min <= range_max && range_max - range_min < 32);
++
++    for (value = range_min; value < range_max;) {
+         if (get_bits_left(gbc) < 1) {
+             av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid increment value at "
+                    "%s: bitstream ended.\n", name);
+             return AVERROR_INVALIDDATA;
+         }
+-        if (get_bits1(gbc)) {
+-            bits[i++] = '1';
++        if (get_bits1(gbc))
+             ++value;
+-        } else {
+-            bits[i++] = '0';
++        else
+             break;
+-        }
+     }
+ 
+-    if (ctx->trace_enable) {
+-        bits[i] = 0;
+-        ff_cbs_trace_syntax_element(ctx, position,
+-                                    name, NULL, bits, value);
+-    }
++    CBS_TRACE_READ_END_NO_SUBSCRIPTS();
+ 
+     *write_to = value;
+     return 0;
+@@ -349,6 +272,8 @@ static int cbs_av1_write_increment(CodedBitstreamContext *ctx, PutBitContext *pb
+ {
+     int len;
+ 
++    CBS_TRACE_WRITE_START();
++
+     av_assert0(range_min <= range_max && range_max - range_min < 32);
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -364,23 +289,11 @@ static int cbs_av1_write_increment(CodedBitstreamContext *ctx, PutBitContext *pb
+     if (put_bits_left(pbc) < len)
+         return AVERROR(ENOSPC);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < len; i++) {
+-            if (range_min + i == value)
+-                bits[i] = '0';
+-            else
+-                bits[i] = '1';
+-        }
+-        bits[i] = 0;
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, NULL, bits, value);
+-    }
+-
+     if (len > 0)
+         put_bits(pbc, len, (1 << len) - 1 - (value != range_max));
+ 
++    CBS_TRACE_WRITE_END_NO_SUBSCRIPTS();
++
+     return 0;
+ }
+ 
+@@ -388,12 +301,10 @@ static int cbs_av1_read_subexp(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                                uint32_t range_max, const char *name,
+                                const int *subscripts, uint32_t *write_to)
+ {
+-    uint32_t value;
+-    int position, err;
+-    uint32_t max_len, len, range_offset, range_bits;
++    uint32_t value, max_len, len, range_offset, range_bits;
++    int err;
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+     av_assert0(range_max > 0);
+     max_len = av_log2(range_max - 1) - 3;
+@@ -425,9 +336,7 @@ static int cbs_av1_read_subexp(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     }
+     value += range_offset;
+ 
+-    if (ctx->trace_enable)
+-        ff_cbs_trace_syntax_element(ctx, position,
+-                                    name, subscripts, "", value);
++    CBS_TRACE_READ_END_VALUE_ONLY();
+ 
+     *write_to = value;
+     return err;
+@@ -437,9 +346,11 @@ static int cbs_av1_write_subexp(CodedBitstreamContext *ctx, PutBitContext *pbc,
+                                 uint32_t range_max, const char *name,
+                                 const int *subscripts, uint32_t value)
+ {
+-    int position, err;
++    int err;
+     uint32_t max_len, len, range_offset, range_bits;
+ 
++    CBS_TRACE_WRITE_START();
++
+     if (value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+                "%"PRIu32", but must be in [0,%"PRIu32"].\n",
+@@ -447,9 +358,6 @@ static int cbs_av1_write_subexp(CodedBitstreamContext *ctx, PutBitContext *pbc,
+         return AVERROR_INVALIDDATA;
+     }
+ 
+-    if (ctx->trace_enable)
+-        position = put_bits_count(pbc);
+-
+     av_assert0(range_max > 0);
+     max_len = av_log2(range_max - 1) - 3;
+ 
+@@ -489,9 +397,7 @@ static int cbs_av1_write_subexp(CodedBitstreamContext *ctx, PutBitContext *pbc,
+             return err;
+     }
+ 
+-    if (ctx->trace_enable)
+-        ff_cbs_trace_syntax_element(ctx, position,
+-                                    name, subscripts, "", value);
++    CBS_TRACE_WRITE_END_VALUE_ONLY();
+ 
+     return err;
+ }
+diff --git a/libavcodec/cbs_bsf.c b/libavcodec/cbs_bsf.c
+index 069f6e99186a..b25285483bc7 100644
+--- a/libavcodec/cbs_bsf.c
++++ b/libavcodec/cbs_bsf.c
+@@ -123,6 +123,11 @@ int ff_cbs_bsf_generic_init(AVBSFContext *bsf, const CBSBSFType *type)
+     if (err < 0)
+         return err;
+ 
++    ctx->output->trace_enable = 1;
++    ctx->output->trace_level  = AV_LOG_TRACE;
++    ctx->output->trace_context = ctx->output;
++    ctx->output->trace_write_callback = ff_cbs_trace_write_log;
++
+     if (bsf->par_in->extradata) {
+         err = ff_cbs_read_extradata(ctx->input, frag, bsf->par_in);
+         if (err < 0) {
+diff --git a/libavcodec/cbs_h2645.c b/libavcodec/cbs_h2645.c
+index 318c997d9436..0a1c8ea42660 100644
+--- a/libavcodec/cbs_h2645.c
++++ b/libavcodec/cbs_h2645.c
+@@ -36,41 +36,38 @@ static int cbs_read_ue_golomb(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                               uint32_t *write_to,
+                               uint32_t range_min, uint32_t range_max)
+ {
+-    uint32_t value;
+-    int position, i, j;
+-    unsigned int k;
+-    char bits[65];
++    uint32_t leading_bits, value;
++    int max_length, leading_zeroes;
+ 
+-    position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+-    for (i = 0; i < 32; i++) {
+-        if (get_bits_left(gbc) < i + 1) {
++    max_length = FFMIN(get_bits_left(gbc), 32);
++
++    leading_bits = show_bits_long(gbc, max_length);
++    if (leading_bits == 0) {
++        if (max_length >= 32) {
++            av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid ue-golomb code at "
++                   "%s: more than 31 zeroes.\n", name);
++            return AVERROR_INVALIDDATA;
++        } else {
+             av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid ue-golomb code at "
+                    "%s: bitstream ended.\n", name);
+             return AVERROR_INVALIDDATA;
+         }
+-        k = get_bits1(gbc);
+-        bits[i] = k ? '1' : '0';
+-        if (k)
+-            break;
+     }
+-    if (i >= 32) {
++
++    leading_zeroes = max_length - 1 - av_log2(leading_bits);
++    skip_bits_long(gbc, leading_zeroes);
++
++    if (get_bits_left(gbc) < leading_zeroes + 1) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid ue-golomb code at "
+-               "%s: more than 31 zeroes.\n", name);
++               "%s: bitstream ended.\n", name);
+         return AVERROR_INVALIDDATA;
+     }
+-    value = 1;
+-    for (j = 0; j < i; j++) {
+-        k = get_bits1(gbc);
+-        bits[i + j + 1] = k ? '1' : '0';
+-        value = value << 1 | k;
+-    }
+-    bits[i + j + 1] = 0;
+-    --value;
+ 
+-    if (ctx->trace_enable)
+-        ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
+-                                    bits, value);
++    value = get_bits_long(gbc, leading_zeroes + 1) - 1;
++
++    CBS_TRACE_READ_END();
+ 
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -88,45 +85,44 @@ static int cbs_read_se_golomb(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                               int32_t *write_to,
+                               int32_t range_min, int32_t range_max)
+ {
++    uint32_t leading_bits, unsigned_value;
++    int max_length, leading_zeroes;
+     int32_t value;
+-    int position, i, j;
+-    unsigned int k;
+-    uint32_t v;
+-    char bits[65];
+ 
+-    position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+-    for (i = 0; i < 32; i++) {
+-        if (get_bits_left(gbc) < i + 1) {
++    max_length = FFMIN(get_bits_left(gbc), 32);
++
++    leading_bits = show_bits_long(gbc, max_length);
++    if (leading_bits == 0) {
++        if (max_length >= 32) {
++            av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid se-golomb code at "
++                   "%s: more than 31 zeroes.\n", name);
++            return AVERROR_INVALIDDATA;
++        } else {
+             av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid se-golomb code at "
+                    "%s: bitstream ended.\n", name);
+             return AVERROR_INVALIDDATA;
+         }
+-        k = get_bits1(gbc);
+-        bits[i] = k ? '1' : '0';
+-        if (k)
+-            break;
+     }
+-    if (i >= 32) {
++
++    leading_zeroes = max_length - 1 - av_log2(leading_bits);
++    skip_bits_long(gbc, leading_zeroes);
++
++    if (get_bits_left(gbc) < leading_zeroes + 1) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid se-golomb code at "
+-               "%s: more than 31 zeroes.\n", name);
++               "%s: bitstream ended.\n", name);
+         return AVERROR_INVALIDDATA;
+     }
+-    v = 1;
+-    for (j = 0; j < i; j++) {
+-        k = get_bits1(gbc);
+-        bits[i + j + 1] = k ? '1' : '0';
+-        v = v << 1 | k;
+-    }
+-    bits[i + j + 1] = 0;
+-    if (v & 1)
+-        value = -(int32_t)(v / 2);
++
++    unsigned_value = get_bits_long(gbc, leading_zeroes + 1);
++
++    if (unsigned_value & 1)
++        value = -(int32_t)(unsigned_value / 2);
+     else
+-        value = v / 2;
++        value = unsigned_value / 2;
+ 
+-    if (ctx->trace_enable)
+-        ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
+-                                    bits, value);
++    CBS_TRACE_READ_END();
+ 
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -146,6 +142,8 @@ static int cbs_write_ue_golomb(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ {
+     int len;
+ 
++    CBS_TRACE_WRITE_START();
++
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+                "%"PRIu32", but must be in [%"PRIu32",%"PRIu32"].\n",
+@@ -158,27 +156,14 @@ static int cbs_write_ue_golomb(CodedBitstreamContext *ctx, PutBitContext *pbc,
+     if (put_bits_left(pbc) < 2 * len + 1)
+         return AVERROR(ENOSPC);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[65];
+-        int i;
+-
+-        for (i = 0; i < len; i++)
+-            bits[i] = '0';
+-        bits[len] = '1';
+-        for (i = 0; i < len; i++)
+-            bits[len + i + 1] = (value + 1) >> (len - i - 1) & 1 ? '1' : '0';
+-        bits[len + len + 1] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, subscripts, bits, value);
+-    }
+-
+     put_bits(pbc, len, 0);
+     if (len + 1 < 32)
+         put_bits(pbc, len + 1, value + 1);
+     else
+         put_bits32(pbc, value + 1);
+ 
++    CBS_TRACE_WRITE_END();
++
+     return 0;
+ }
+ 
+@@ -190,6 +175,8 @@ static int cbs_write_se_golomb(CodedBitstreamContext *ctx, PutBitContext *pbc,
+     int len;
+     uint32_t uvalue;
+ 
++    CBS_TRACE_WRITE_START();
++
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+                "%"PRId32", but must be in [%"PRId32",%"PRId32"].\n",
+@@ -209,27 +196,14 @@ static int cbs_write_se_golomb(CodedBitstreamContext *ctx, PutBitContext *pbc,
+     if (put_bits_left(pbc) < 2 * len + 1)
+         return AVERROR(ENOSPC);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[65];
+-        int i;
+-
+-        for (i = 0; i < len; i++)
+-            bits[i] = '0';
+-        bits[len] = '1';
+-        for (i = 0; i < len; i++)
+-            bits[len + i + 1] = (uvalue + 1) >> (len - i - 1) & 1 ? '1' : '0';
+-        bits[len + len + 1] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, subscripts, bits, value);
+-    }
+-
+     put_bits(pbc, len, 0);
+     if (len + 1 < 32)
+         put_bits(pbc, len + 1, uvalue + 1);
+     else
+         put_bits32(pbc, uvalue + 1);
+ 
++    CBS_TRACE_WRITE_END();
++
+     return 0;
+ }
+ 
+diff --git a/libavcodec/cbs_internal.h b/libavcodec/cbs_internal.h
+index da84697a29f8..285deb40d516 100644
+--- a/libavcodec/cbs_internal.h
++++ b/libavcodec/cbs_internal.h
+@@ -157,10 +157,6 @@ typedef struct CodedBitstreamType {
+ void ff_cbs_trace_header(CodedBitstreamContext *ctx,
+                          const char *name);
+ 
+-void ff_cbs_trace_syntax_element(CodedBitstreamContext *ctx, int position,
+-                                 const char *name, const int *subscripts,
+-                                 const char *bitstring, int64_t value);
+-
+ 
+ // Helper functions for read/write of common bitstream elements, including
+ // generation of trace output. The simple functions are equivalent to
+@@ -206,6 +202,87 @@ int ff_cbs_write_signed(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ // range_min in the above functions.
+ #define MIN_INT_BITS(length) (-(INT64_C(1) << ((length) - 1)))
+ 
++
++// Start of a syntax element during read tracing.
++#define CBS_TRACE_READ_START() \
++    GetBitContext trace_start; \
++    do { \
++        if (ctx->trace_enable) \
++            trace_start = *gbc; \
++    } while (0)
++
++// End of a syntax element for tracing, make callback.
++#define CBS_TRACE_READ_END() \
++    do { \
++        if (ctx->trace_enable) { \
++            int start_position = get_bits_count(&trace_start); \
++            int end_position   = get_bits_count(gbc); \
++            av_assert0(start_position <= end_position); \
++            ctx->trace_read_callback(ctx->trace_context, &trace_start, \
++                                     end_position - start_position, \
++                                     name, subscripts, value); \
++        } \
++    } while (0)
++
++// End of a syntax element with no subscript entries.
++#define CBS_TRACE_READ_END_NO_SUBSCRIPTS() \
++    do { \
++        const int *subscripts = NULL; \
++        CBS_TRACE_READ_END(); \
++    } while (0)
++
++// End of a syntax element which is made up of subelements which
++// are aleady traced, so we are only showing the value.
++#define CBS_TRACE_READ_END_VALUE_ONLY() \
++    do { \
++        if (ctx->trace_enable) { \
++            ctx->trace_read_callback(ctx->trace_context, &trace_start, 0, \
++                                     name, subscripts, value); \
++        } \
++    } while (0)
++
++// Start of a syntax element during write tracing.
++#define CBS_TRACE_WRITE_START() \
++    int start_position; \
++    do { \
++        if (ctx->trace_enable) \
++            start_position = put_bits_count(pbc);; \
++    } while (0)
++
++// End of a syntax element for tracing, make callback.
++#define CBS_TRACE_WRITE_END() \
++    do { \
++        if (ctx->trace_enable) { \
++            int end_position   = put_bits_count(pbc); \
++            av_assert0(start_position <= end_position); \
++            ctx->trace_write_callback(ctx->trace_context, pbc, \
++                                      end_position - start_position, \
++                                      name, subscripts, value); \
++        } \
++    } while (0)
++
++// End of a syntax element with no subscript entries.
++#define CBS_TRACE_WRITE_END_NO_SUBSCRIPTS() \
++    do { \
++        const int *subscripts = NULL; \
++        CBS_TRACE_WRITE_END(); \
++    } while (0)
++
++// End of a syntax element which is made up of subelements which are
++// aleady traced, so we are only showing the value.  This forges a
++// PutBitContext to point to the position of the start of the syntax
++// element, but the other state doesn't matter because length is zero.
++#define CBS_TRACE_WRITE_END_VALUE_ONLY() \
++    do { \
++        if (ctx->trace_enable) { \
++            PutBitContext tmp; \
++            init_put_bits(&tmp, pbc->buf, start_position); \
++            skip_put_bits(&tmp, start_position); \
++            ctx->trace_write_callback(ctx->trace_context, &tmp, 0, \
++                                      name, subscripts, value); \
++        } \
++    } while (0)
++
+ #define TYPE_LIST(...) { __VA_ARGS__ }
+ #define CBS_UNIT_TYPE_POD(type_, structure) { \
+         .nb_unit_types  = 1, \
+diff --git a/libavcodec/cbs_vp9.c b/libavcodec/cbs_vp9.c
+index b0d5bd8763fd..816d06da04d4 100644
+--- a/libavcodec/cbs_vp9.c
++++ b/libavcodec/cbs_vp9.c
+@@ -28,11 +28,10 @@ static int cbs_vp9_read_s(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                           const int *subscripts, int32_t *write_to)
+ {
+     uint32_t magnitude;
+-    int position, sign;
++    int sign;
+     int32_t value;
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+     if (get_bits_left(gbc) < width + 1) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid signed value at "
+@@ -44,17 +43,7 @@ static int cbs_vp9_read_s(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     sign      = get_bits1(gbc);
+     value     = sign ? -(int32_t)magnitude : magnitude;
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < width; i++)
+-            bits[i] = magnitude >> (width - i - 1) & 1 ? '1' : '0';
+-        bits[i] = sign ? '1' : '0';
+-        bits[i + 1] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
+-                                    bits, value);
+-    }
++    CBS_TRACE_READ_END();
+ 
+     *write_to = value;
+     return 0;
+@@ -67,27 +56,19 @@ static int cbs_vp9_write_s(CodedBitstreamContext *ctx, PutBitContext *pbc,
+     uint32_t magnitude;
+     int sign;
+ 
++    CBS_TRACE_WRITE_START();
++
+     if (put_bits_left(pbc) < width + 1)
+         return AVERROR(ENOSPC);
+ 
+     sign      = value < 0;
+     magnitude = sign ? -value : value;
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (i = 0; i < width; i++)
+-            bits[i] = magnitude >> (width - i - 1) & 1 ? '1' : '0';
+-        bits[i] = sign ? '1' : '0';
+-        bits[i + 1] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, subscripts, bits, value);
+-    }
+-
+     put_bits(pbc, width, magnitude);
+     put_bits(pbc, 1, sign);
+ 
++    CBS_TRACE_WRITE_END();
++
+     return 0;
+ }
+ 
+@@ -96,32 +77,24 @@ static int cbs_vp9_read_increment(CodedBitstreamContext *ctx, GetBitContext *gbc
+                                   const char *name, uint32_t *write_to)
+ {
+     uint32_t value;
+-    int position, i;
+-    char bits[8];
+ 
+-    av_assert0(range_min <= range_max && range_max - range_min < sizeof(bits) - 1);
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    CBS_TRACE_READ_START();
+ 
+-    for (i = 0, value = range_min; value < range_max;) {
++    av_assert0(range_min <= range_max && range_max - range_min < 32);
++
++    for (value = range_min; value < range_max;) {
+         if (get_bits_left(gbc) < 1) {
+             av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid increment value at "
+                    "%s: bitstream ended.\n", name);
+             return AVERROR_INVALIDDATA;
+         }
+-        if (get_bits1(gbc)) {
+-            bits[i++] = '1';
++        if (get_bits1(gbc))
+             ++value;
+-        } else {
+-            bits[i++] = '0';
++        else
+             break;
+-        }
+     }
+ 
+-    if (ctx->trace_enable) {
+-        bits[i] = 0;
+-        ff_cbs_trace_syntax_element(ctx, position, name, NULL, bits, value);
+-    }
++    CBS_TRACE_READ_END_NO_SUBSCRIPTS();
+ 
+     *write_to = value;
+     return 0;
+@@ -133,6 +106,8 @@ static int cbs_vp9_write_increment(CodedBitstreamContext *ctx, PutBitContext *pb
+ {
+     int len;
+ 
++    CBS_TRACE_WRITE_START();
++
+     av_assert0(range_min <= range_max && range_max - range_min < 8);
+     if (value < range_min || value > range_max) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
+@@ -148,23 +123,11 @@ static int cbs_vp9_write_increment(CodedBitstreamContext *ctx, PutBitContext *pb
+     if (put_bits_left(pbc) < len)
+         return AVERROR(ENOSPC);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[8];
+-        int i;
+-        for (i = 0; i < len; i++) {
+-            if (range_min + i == value)
+-                bits[i] = '0';
+-            else
+-                bits[i] = '1';
+-        }
+-        bits[i] = 0;
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, NULL, bits, value);
+-    }
+-
+     if (len > 0)
+         put_bits(pbc, len, (1 << len) - 1 - (value != range_max));
+ 
++    CBS_TRACE_WRITE_END_NO_SUBSCRIPTS();
++
+     return 0;
+ }
+ 
+@@ -173,12 +136,11 @@ static int cbs_vp9_read_le(CodedBitstreamContext *ctx, GetBitContext *gbc,
+                            const int *subscripts, uint32_t *write_to)
+ {
+     uint32_t value;
+-    int position, b;
++    int b;
+ 
+-    av_assert0(width % 8 == 0);
++    CBS_TRACE_READ_START();
+ 
+-    if (ctx->trace_enable)
+-        position = get_bits_count(gbc);
++    av_assert0(width % 8 == 0);
+ 
+     if (get_bits_left(gbc) < width) {
+         av_log(ctx->log_ctx, AV_LOG_ERROR, "Invalid le value at "
+@@ -190,17 +152,7 @@ static int cbs_vp9_read_le(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     for (b = 0; b < width; b += 8)
+         value |= get_bits(gbc, 8) << b;
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (b = 0; b < width; b += 8)
+-            for (i = 0; i < 8; i++)
+-                bits[b + i] = value >> (b + i) & 1 ? '1' : '0';
+-        bits[b] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
+-                                    bits, value);
+-    }
++    CBS_TRACE_READ_END();
+ 
+     *write_to = value;
+     return 0;
+@@ -212,26 +164,18 @@ static int cbs_vp9_write_le(CodedBitstreamContext *ctx, PutBitContext *pbc,
+ {
+     int b;
+ 
++    CBS_TRACE_WRITE_START();
++
+     av_assert0(width % 8 == 0);
+ 
+     if (put_bits_left(pbc) < width)
+         return AVERROR(ENOSPC);
+ 
+-    if (ctx->trace_enable) {
+-        char bits[33];
+-        int i;
+-        for (b = 0; b < width; b += 8)
+-            for (i = 0; i < 8; i++)
+-                bits[b + i] = value >> (b + i) & 1 ? '1' : '0';
+-        bits[b] = 0;
+-
+-        ff_cbs_trace_syntax_element(ctx, put_bits_count(pbc),
+-                                    name, subscripts, bits, value);
+-    }
+-
+     for (b = 0; b < width; b += 8)
+         put_bits(pbc, 8, value >> b & 0xff);
+ 
++    CBS_TRACE_WRITE_END();
++
+     return 0;
+ }
+ 
+diff --git a/libavcodec/trace_headers_bsf.c b/libavcodec/trace_headers_bsf.c
+index 028b0a1e599a..8781f5f10012 100644
+--- a/libavcodec/trace_headers_bsf.c
++++ b/libavcodec/trace_headers_bsf.c
+@@ -44,6 +44,8 @@ static int trace_headers_init(AVBSFContext *bsf)
+ 
+     ctx->cbc->trace_enable = 1;
+     ctx->cbc->trace_level  = AV_LOG_INFO;
++    ctx->cbc->trace_context = ctx->cbc;
++    ctx->cbc->trace_read_callback = ff_cbs_trace_read_log;
+ 
+     if (bsf->par_in->extradata) {
+         CodedBitstreamFragment *frag = &ctx->fragment;
+From 695477a1c7d3dd5ad249442b0770ad0acd99dd87 Mon Sep 17 00:00:00 2001
+From: Fei Wang <fei.w.wang@intel.com>
+Date: Mon, 11 Sep 2023 15:52:27 +0800
+Subject: [PATCH] avcodec/cbs_av1: Allow specifying obu size byte length
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+---
+ libavcodec/cbs_av1.c | 30 +++++++++++++++++++++---------
+ libavcodec/cbs_av1.h |  1 +
+ 2 files changed, 22 insertions(+), 9 deletions(-)
+
+diff --git a/libavcodec/cbs_av1.c b/libavcodec/cbs_av1.c
+index 6c478603f173..4e687ace79d5 100644
+--- a/libavcodec/cbs_av1.c
++++ b/libavcodec/cbs_av1.c
+@@ -138,15 +138,19 @@ static int cbs_av1_read_leb128(CodedBitstreamContext *ctx, GetBitContext *gbc,
+     return 0;
+ }
+ 
++/** Minimum byte length will be used to indicate the len128 of value if byte_len is 0. */
+ static int cbs_av1_write_leb128(CodedBitstreamContext *ctx, PutBitContext *pbc,
+-                                const char *name, uint64_t value)
++                                const char *name, uint64_t value, uint8_t byte_len)
+ {
+     int len, i;
+     uint8_t byte;
+ 
+     CBS_TRACE_WRITE_START();
+ 
+-    len = (av_log2(value) + 7) / 7;
++    if (byte_len)
++        av_assert0(byte_len >= (av_log2(value) + 7) / 7);
++
++    len = byte_len ? byte_len : (av_log2(value) + 7) / 7;
+ 
+     for (i = 0; i < len; i++) {
+         if (put_bits_left(pbc) < 8)
+@@ -618,7 +622,7 @@ static size_t cbs_av1_get_payload_bytes_left(GetBitContext *gbc)
+     } while (0)
+ 
+ #define leb128(name) do { \
+-        CHECK(cbs_av1_write_leb128(ctx, rw, #name, current->name)); \
++        CHECK(cbs_av1_write_leb128(ctx, rw, #name, current->name, 0)); \
+     } while (0)
+ 
+ #define infer(name, value) do { \
+@@ -1002,9 +1006,14 @@ static int cbs_av1_write_obu(CodedBitstreamContext *ctx,
+ 
+     if (obu->header.obu_has_size_field) {
+         pbc_tmp = *pbc;
+-        // Add space for the size field to fill later.
+-        put_bits32(pbc, 0);
+-        put_bits32(pbc, 0);
++        if (obu->obu_size_byte_len) {
++            for (int i = 0; i < obu->obu_size_byte_len; i++)
++                put_bits(pbc, 8, 0);
++        } else {
++            // Add space for the size field to fill later.
++            put_bits32(pbc, 0);
++            put_bits32(pbc, 0);
++        }
+     }
+ 
+     td = NULL;
+@@ -1124,7 +1133,7 @@ static int cbs_av1_write_obu(CodedBitstreamContext *ctx,
+     end_pos   /= 8;
+ 
+     *pbc = pbc_tmp;
+-    err = cbs_av1_write_leb128(ctx, pbc, "obu_size", obu->obu_size);
++    err = cbs_av1_write_leb128(ctx, pbc, "obu_size", obu->obu_size, obu->obu_size_byte_len);
+     if (err < 0)
+         goto error;
+ 
+@@ -1141,8 +1150,11 @@ static int cbs_av1_write_obu(CodedBitstreamContext *ctx,
+     }
+ 
+     if (obu->obu_size > 0) {
+-        memmove(pbc->buf + data_pos,
+-                pbc->buf + start_pos, header_size);
++        if (!obu->obu_size_byte_len) {
++            obu->obu_size_byte_len = start_pos - data_pos;
++            memmove(pbc->buf + data_pos,
++                    pbc->buf + start_pos, header_size);
++        }
+         skip_put_bytes(pbc, header_size);
+ 
+         if (td) {
+diff --git a/libavcodec/cbs_av1.h b/libavcodec/cbs_av1.h
+index 64dfdce9c4eb..a9e2d2284fff 100644
+--- a/libavcodec/cbs_av1.h
++++ b/libavcodec/cbs_av1.h
+@@ -401,6 +401,7 @@ typedef struct AV1RawOBU {
+     AV1RawOBUHeader header;
+ 
+     size_t obu_size;
++    uint8_t obu_size_byte_len;
+ 
+     union {
+         AV1RawSequenceHeader sequence_header;
+
+From 6c3a5d625f917631d1c8bab31ed65ebe26d14f47 Mon Sep 17 00:00:00 2001
+From: Fei Wang <fei.w.wang@intel.com>
+Date: Mon, 11 Sep 2023 15:52:25 +0800
+Subject: [PATCH] avcodec/cbs_av1: Add tx mode enum values
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+---
+ libavcodec/av1.h                     | 7 +++++++
+ libavcodec/cbs_av1_syntax_template.c | 4 ++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/av1.h b/libavcodec/av1.h
+index 384f7cddc7eb..8704bc41c122 100644
+--- a/libavcodec/av1.h
++++ b/libavcodec/av1.h
+@@ -175,6 +175,13 @@ enum {
+     AV1_RESTORE_SWITCHABLE = 3,
+ };
+ 
++// TX mode (section 6.8.21)
++enum {
++    AV1_ONLY_4X4        = 0,
++    AV1_TX_MODE_LARGEST = 1,
++    AV1_TX_MODE_SELECT  = 2,
++};
++
+ // Sequence Headers are actually unbounded because one can use
+ // an arbitrary number of leading zeroes when encoding via uvlc.
+ // The following estimate is based around using the lowest number
+diff --git a/libavcodec/cbs_av1_syntax_template.c b/libavcodec/cbs_av1_syntax_template.c
+index 6f09c4e4104e..3be1f2d30f96 100644
+--- a/libavcodec/cbs_av1_syntax_template.c
++++ b/libavcodec/cbs_av1_syntax_template.c
+@@ -1028,9 +1028,9 @@ static int FUNC(read_tx_mode)(CodedBitstreamContext *ctx, RWContext *rw,
+     int err;
+ 
+     if (priv->coded_lossless)
+-        infer(tx_mode, 0);
++        infer(tx_mode, AV1_ONLY_4X4);
+     else
+-        increment(tx_mode, 1, 2);
++        increment(tx_mode, AV1_TX_MODE_LARGEST, AV1_TX_MODE_SELECT);
+ 
+     return 0;
+ }
+From 4a4400709ccfc026c19028f4b2d798eed9322f64 Mon Sep 17 00:00:00 2001
+From: Fei Wang <fei.w.wang@intel.com>
+Date: Mon, 11 Sep 2023 15:52:28 +0800
+Subject: [PATCH] lavc/vaapi_encode: Init pic at the beginning of API
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+---
+ libavcodec/vaapi_encode.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/libavcodec/vaapi_encode.c b/libavcodec/vaapi_encode.c
+index 0316fe5c1855..5ae63c9f2557 100644
+--- a/libavcodec/vaapi_encode.c
++++ b/libavcodec/vaapi_encode.c
+@@ -1205,7 +1205,7 @@ static int vaapi_encode_send_frame(AVCodecContext *avctx, AVFrame *frame)
+ int ff_vaapi_encode_receive_packet(AVCodecContext *avctx, AVPacket *pkt)
+ {
+     VAAPIEncodeContext *ctx = avctx->priv_data;
+-    VAAPIEncodePicture *pic;
++    VAAPIEncodePicture *pic = NULL;
+     AVFrame *frame = ctx->frame;
+     int err;
+ 
+@@ -1228,8 +1228,6 @@ int ff_vaapi_encode_receive_packet(AVCodecContext *avctx, AVPacket *pkt)
+     }
+ 
+     if (ctx->has_sync_buffer_func) {
+-        pic = NULL;
+-
+         if (av_fifo_can_write(ctx->encode_fifo)) {
+             err = vaapi_encode_pick_next(avctx, &pic);
+             if (!err) {
+@@ -1255,7 +1253,6 @@ int ff_vaapi_encode_receive_packet(AVCodecContext *avctx, AVPacket *pkt)
+         av_fifo_read(ctx->encode_fifo, &pic, 1);
+         ctx->encode_order = pic->encode_order + 1;
+     } else {
+-        pic = NULL;
+         err = vaapi_encode_pick_next(avctx, &pic);
+         if (err < 0)
+             return err;
+From 11b81838ae64095fcc130f4747a6adc8676a4998 Mon Sep 17 00:00:00 2001
+From: Fei Wang <fei.w.wang@intel.com>
+Date: Mon, 11 Sep 2023 15:52:29 +0800
+Subject: [PATCH] lavc/vaapi_encode: Extract set output pkt property function
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+---
+ libavcodec/vaapi_encode.c | 65 +++++++++++++++++++++++----------------
+ 1 file changed, 38 insertions(+), 27 deletions(-)
+
+diff --git a/libavcodec/vaapi_encode.c b/libavcodec/vaapi_encode.c
+index 5ae63c9f2557..46762342eb40 100644
+--- a/libavcodec/vaapi_encode.c
++++ b/libavcodec/vaapi_encode.c
+@@ -650,6 +650,41 @@ static int vaapi_encode_issue(AVCodecContext *avctx,
+     return err;
+ }
+ 
++static int vaapi_encode_set_output_property(AVCodecContext *avctx,
++                                            VAAPIEncodePicture *pic,
++                                            AVPacket *pkt)
++{
++    VAAPIEncodeContext *ctx = avctx->priv_data;
++
++    if (pic->type == PICTURE_TYPE_IDR)
++        pkt->flags |= AV_PKT_FLAG_KEY;
++
++    pkt->pts = pic->pts;
++    pkt->duration = pic->duration;
++
++    // for no-delay encoders this is handled in generic codec
++    if (avctx->codec->capabilities & AV_CODEC_CAP_DELAY &&
++        avctx->flags & AV_CODEC_FLAG_COPY_OPAQUE) {
++        pkt->opaque     = pic->opaque;
++        pkt->opaque_ref = pic->opaque_ref;
++        pic->opaque_ref = NULL;
++    }
++
++    if (ctx->output_delay == 0) {
++        pkt->dts = pkt->pts;
++    } else if (pic->encode_order < ctx->decode_delay) {
++        if (ctx->ts_ring[pic->encode_order] < INT64_MIN + ctx->dts_pts_diff)
++            pkt->dts = INT64_MIN;
++        else
++            pkt->dts = ctx->ts_ring[pic->encode_order] - ctx->dts_pts_diff;
++    } else {
++        pkt->dts = ctx->ts_ring[(pic->encode_order - ctx->decode_delay) %
++                                (3 * ctx->output_delay + ctx->async_depth)];
++    }
++
++    return 0;
++}
++
+ static int vaapi_encode_output(AVCodecContext *avctx,
+                                VAAPIEncodePicture *pic, AVPacket *pkt)
+ {
+@@ -691,12 +726,6 @@ static int vaapi_encode_output(AVCodecContext *avctx,
+         ptr += buf->size;
+     }
+ 
+-    if (pic->type == PICTURE_TYPE_IDR)
+-        pkt->flags |= AV_PKT_FLAG_KEY;
+-
+-    pkt->pts = pic->pts;
+-    pkt->duration = pic->duration;
+-
+     vas = vaUnmapBuffer(ctx->hwctx->display, pic->output_buffer);
+     if (vas != VA_STATUS_SUCCESS) {
+         av_log(avctx, AV_LOG_ERROR, "Failed to unmap output buffers: "
+@@ -705,14 +734,6 @@ static int vaapi_encode_output(AVCodecContext *avctx,
+         goto fail;
+     }
+ 
+-    // for no-delay encoders this is handled in generic codec
+-    if (avctx->codec->capabilities & AV_CODEC_CAP_DELAY &&
+-        avctx->flags & AV_CODEC_FLAG_COPY_OPAQUE) {
+-        pkt->opaque     = pic->opaque;
+-        pkt->opaque_ref = pic->opaque_ref;
+-        pic->opaque_ref = NULL;
+-    }
+-
+     av_buffer_unref(&pic->output_buffer_ref);
+     pic->output_buffer = VA_INVALID_ID;
+ 
+@@ -1273,19 +1294,9 @@ int ff_vaapi_encode_receive_packet(AVCodecContext *avctx, AVPacket *pkt)
+         return err;
+     }
+ 
+-    if (ctx->output_delay == 0) {
+-        pkt->dts = pkt->pts;
+-    } else if (pic->encode_order < ctx->decode_delay) {
+-        if (ctx->ts_ring[pic->encode_order] < INT64_MIN + ctx->dts_pts_diff)
+-            pkt->dts = INT64_MIN;
+-        else
+-            pkt->dts = ctx->ts_ring[pic->encode_order] - ctx->dts_pts_diff;
+-    } else {
+-        pkt->dts = ctx->ts_ring[(pic->encode_order - ctx->decode_delay) %
+-                                (3 * ctx->output_delay + ctx->async_depth)];
+-    }
+-    av_log(avctx, AV_LOG_DEBUG, "Output packet: pts %"PRId64" dts %"PRId64".\n",
+-           pkt->pts, pkt->dts);
++    vaapi_encode_set_output_property(avctx, pic, pkt);
++    av_log(avctx, AV_LOG_DEBUG, "Output packet: pts %"PRId64", dts %"PRId64", "
++           "size %d bytes.\n", pkt->pts, pkt->dts, pkt->size);
+ 
+     ctx->output_order = pic->encode_order;
+     vaapi_encode_clear_old(avctx);
+From 254c5a8134a177244fc0995c3b2998079a755848 Mon Sep 17 00:00:00 2001
+From: Fei Wang <fei.w.wang@intel.com>
+Date: Mon, 11 Sep 2023 15:52:30 +0800
+Subject: [PATCH] lavc/vaapi_encode: Separate reference frame into
+ previous/future list
+
+To support more reference frames from different directions.
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+---
+ libavcodec/vaapi_encode.c       | 112 +++++++++++++++++++++++++-------
+ libavcodec/vaapi_encode.h       |  15 +++--
+ libavcodec/vaapi_encode_h264.c  |  94 +++++++++++++--------------
+ libavcodec/vaapi_encode_h265.c  |  76 +++++++++++++---------
+ libavcodec/vaapi_encode_mpeg2.c |   6 +-
+ libavcodec/vaapi_encode_vp8.c   |   6 +-
+ libavcodec/vaapi_encode_vp9.c   |  26 ++++----
+ 7 files changed, 208 insertions(+), 127 deletions(-)
+
+diff --git a/libavcodec/vaapi_encode.c b/libavcodec/vaapi_encode.c
+index 46762342eb40..79036673e7a9 100644
+--- a/libavcodec/vaapi_encode.c
++++ b/libavcodec/vaapi_encode.c
+@@ -276,21 +276,34 @@ static int vaapi_encode_issue(AVCodecContext *avctx,
+     av_log(avctx, AV_LOG_DEBUG, "Issuing encode for pic %"PRId64"/%"PRId64" "
+            "as type %s.\n", pic->display_order, pic->encode_order,
+            picture_type_name[pic->type]);
+-    if (pic->nb_refs == 0) {
++    if (pic->nb_refs[0] == 0 && pic->nb_refs[1] == 0) {
+         av_log(avctx, AV_LOG_DEBUG, "No reference pictures.\n");
+     } else {
+-        av_log(avctx, AV_LOG_DEBUG, "Refers to:");
+-        for (i = 0; i < pic->nb_refs; i++) {
++        av_log(avctx, AV_LOG_DEBUG, "L0 refers to");
++        for (i = 0; i < pic->nb_refs[0]; i++) {
+             av_log(avctx, AV_LOG_DEBUG, " %"PRId64"/%"PRId64,
+-                   pic->refs[i]->display_order, pic->refs[i]->encode_order);
++                   pic->refs[0][i]->display_order, pic->refs[0][i]->encode_order);
+         }
+         av_log(avctx, AV_LOG_DEBUG, ".\n");
++
++        if (pic->nb_refs[1]) {
++            av_log(avctx, AV_LOG_DEBUG, "L1 refers to");
++            for (i = 0; i < pic->nb_refs[1]; i++) {
++                av_log(avctx, AV_LOG_DEBUG, " %"PRId64"/%"PRId64,
++                       pic->refs[1][i]->display_order, pic->refs[1][i]->encode_order);
++            }
++            av_log(avctx, AV_LOG_DEBUG, ".\n");
++        }
+     }
+ 
+     av_assert0(!pic->encode_issued);
+-    for (i = 0; i < pic->nb_refs; i++) {
+-        av_assert0(pic->refs[i]);
+-        av_assert0(pic->refs[i]->encode_issued);
++    for (i = 0; i < pic->nb_refs[0]; i++) {
++        av_assert0(pic->refs[0][i]);
++        av_assert0(pic->refs[0][i]->encode_issued);
++    }
++    for (i = 0; i < pic->nb_refs[1]; i++) {
++        av_assert0(pic->refs[1][i]);
++        av_assert0(pic->refs[1][i]->encode_issued);
+     }
+ 
+     av_log(avctx, AV_LOG_DEBUG, "Input surface is %#x.\n", pic->input_surface);
+@@ -832,8 +845,12 @@ static void vaapi_encode_add_ref(AVCodecContext *avctx,
+ 
+     if (is_ref) {
+         av_assert0(pic != target);
+-        av_assert0(pic->nb_refs < MAX_PICTURE_REFERENCES);
+-        pic->refs[pic->nb_refs++] = target;
++        av_assert0(pic->nb_refs[0] < MAX_PICTURE_REFERENCES &&
++                   pic->nb_refs[1] < MAX_PICTURE_REFERENCES);
++        if (target->display_order < pic->display_order)
++            pic->refs[0][pic->nb_refs[0]++] = target;
++        else
++            pic->refs[1][pic->nb_refs[1]++] = target;
+         ++refs;
+     }
+ 
+@@ -862,10 +879,16 @@ static void vaapi_encode_remove_refs(AVCodecContext *avctx,
+     if (pic->ref_removed[level])
+         return;
+ 
+-    for (i = 0; i < pic->nb_refs; i++) {
+-        av_assert0(pic->refs[i]);
+-        --pic->refs[i]->ref_count[level];
+-        av_assert0(pic->refs[i]->ref_count[level] >= 0);
++    for (i = 0; i < pic->nb_refs[0]; i++) {
++        av_assert0(pic->refs[0][i]);
++        --pic->refs[0][i]->ref_count[level];
++        av_assert0(pic->refs[0][i]->ref_count[level] >= 0);
++    }
++
++    for (i = 0; i < pic->nb_refs[1]; i++) {
++        av_assert0(pic->refs[1][i]);
++        --pic->refs[1][i]->ref_count[level];
++        av_assert0(pic->refs[1][i]->ref_count[level] >= 0);
+     }
+ 
+     for (i = 0; i < pic->nb_dpb_pics; i++) {
+@@ -910,7 +933,7 @@ static void vaapi_encode_set_b_pictures(AVCodecContext *avctx,
+             vaapi_encode_add_ref(avctx, pic, end,   1, 1, 0);
+             vaapi_encode_add_ref(avctx, pic, prev,  0, 0, 1);
+ 
+-            for (ref = end->refs[1]; ref; ref = ref->refs[1])
++            for (ref = end->refs[1][0]; ref; ref = ref->refs[1][0])
+                 vaapi_encode_add_ref(avctx, pic, ref, 0, 1, 0);
+         }
+         *last = prev;
+@@ -933,7 +956,7 @@ static void vaapi_encode_set_b_pictures(AVCodecContext *avctx,
+         vaapi_encode_add_ref(avctx, pic, end,   1, 1, 0);
+         vaapi_encode_add_ref(avctx, pic, prev,  0, 0, 1);
+ 
+-        for (ref = end->refs[1]; ref; ref = ref->refs[1])
++        for (ref = end->refs[1][0]; ref; ref = ref->refs[1][0])
+             vaapi_encode_add_ref(avctx, pic, ref, 0, 1, 0);
+ 
+         if (i > 1)
+@@ -947,11 +970,44 @@ static void vaapi_encode_set_b_pictures(AVCodecContext *avctx,
+     }
+ }
+ 
++static void vaapi_encode_add_next_prev(AVCodecContext *avctx,
++                                       VAAPIEncodePicture *pic)
++{
++    VAAPIEncodeContext *ctx = avctx->priv_data;
++    int i;
++
++    if (!pic)
++        return;
++
++    if (pic->type == PICTURE_TYPE_IDR) {
++        for (i = 0; i < ctx->nb_next_prev; i++) {
++            --ctx->next_prev[i]->ref_count[0];
++            ctx->next_prev[i] = NULL;
++        }
++        ctx->next_prev[0] = pic;
++        ++pic->ref_count[0];
++        ctx->nb_next_prev = 1;
++
++        return;
++    }
++
++    if (ctx->nb_next_prev < MAX_PICTURE_REFERENCES) {
++        ctx->next_prev[ctx->nb_next_prev++] = pic;
++        ++pic->ref_count[0];
++    } else {
++        --ctx->next_prev[0]->ref_count[0];
++        for (i = 0; i < MAX_PICTURE_REFERENCES - 1; i++)
++            ctx->next_prev[i] = ctx->next_prev[i + 1];
++        ctx->next_prev[i] = pic;
++        ++pic->ref_count[0];
++    }
++}
++
+ static int vaapi_encode_pick_next(AVCodecContext *avctx,
+                                   VAAPIEncodePicture **pic_out)
+ {
+     VAAPIEncodeContext *ctx = avctx->priv_data;
+-    VAAPIEncodePicture *pic = NULL, *next, *start;
++    VAAPIEncodePicture *pic = NULL, *prev = NULL, *next, *start;
+     int i, b_counter, closed_gop_end;
+ 
+     // If there are any B-frames already queued, the next one to encode
+@@ -962,11 +1018,18 @@ static int vaapi_encode_pick_next(AVCodecContext *avctx,
+             continue;
+         if (pic->type != PICTURE_TYPE_B)
+             continue;
+-        for (i = 0; i < pic->nb_refs; i++) {
+-            if (!pic->refs[i]->encode_issued)
++        for (i = 0; i < pic->nb_refs[0]; i++) {
++            if (!pic->refs[0][i]->encode_issued)
+                 break;
+         }
+-        if (i == pic->nb_refs)
++        if (i != pic->nb_refs[0])
++            continue;
++
++        for (i = 0; i < pic->nb_refs[1]; i++) {
++            if (!pic->refs[1][i]->encode_issued)
++                break;
++        }
++        if (i == pic->nb_refs[1])
+             break;
+     }
+ 
+@@ -1068,18 +1131,17 @@ static int vaapi_encode_pick_next(AVCodecContext *avctx,
+         vaapi_encode_add_ref(avctx, pic, start,
+                              pic->type == PICTURE_TYPE_P,
+                              b_counter > 0, 0);
+-        vaapi_encode_add_ref(avctx, pic, ctx->next_prev, 0, 0, 1);
++        vaapi_encode_add_ref(avctx, pic, ctx->next_prev[ctx->nb_next_prev - 1], 0, 0, 1);
+     }
+-    if (ctx->next_prev)
+-        --ctx->next_prev->ref_count[0];
+ 
+     if (b_counter > 0) {
+         vaapi_encode_set_b_pictures(avctx, start, pic, pic, 1,
+-                                    &ctx->next_prev);
++                                    &prev);
+     } else {
+-        ctx->next_prev = pic;
++        prev = pic;
+     }
+-    ++ctx->next_prev->ref_count[0];
++    vaapi_encode_add_next_prev(avctx, prev);
++
+     return 0;
+ }
+ 
+diff --git a/libavcodec/vaapi_encode.h b/libavcodec/vaapi_encode.h
+index bd25cd5c953a..977bc2d94634 100644
+--- a/libavcodec/vaapi_encode.h
++++ b/libavcodec/vaapi_encode.h
+@@ -49,6 +49,7 @@ enum {
+     // A.4.1: table A.6 allows at most 20 tile columns for any level.
+     MAX_TILE_COLS          = 20,
+     MAX_ASYNC_DEPTH        = 64,
++    MAX_REFERENCE_LIST_NUM = 2,
+ };
+ 
+ extern const AVCodecHWConfigInternal *const ff_vaapi_encode_hw_configs[];
+@@ -116,10 +117,11 @@ typedef struct VAAPIEncodePicture {
+     // but not if it isn't.
+     int                     nb_dpb_pics;
+     struct VAAPIEncodePicture *dpb[MAX_DPB_SIZE];
+-    // The reference pictures used in decoding this picture.  If they are
+-    // used by later pictures they will also appear in the DPB.
+-    int                     nb_refs;
+-    struct VAAPIEncodePicture *refs[MAX_PICTURE_REFERENCES];
++    // The reference pictures used in decoding this picture. If they are
++    // used by later pictures they will also appear in the DPB. ref[0][] for
++    // previous reference frames. ref[1][] for future reference frames.
++    int                     nb_refs[MAX_REFERENCE_LIST_NUM];
++    struct VAAPIEncodePicture *refs[MAX_REFERENCE_LIST_NUM][MAX_PICTURE_REFERENCES];
+     // The previous reference picture in encode order.  Must be in at least
+     // one of the reference list and DPB list.
+     struct VAAPIEncodePicture *prev;
+@@ -290,8 +292,9 @@ typedef struct VAAPIEncodeContext {
+     // Current encoding window, in display (input) order.
+     VAAPIEncodePicture *pic_start, *pic_end;
+     // The next picture to use as the previous reference picture in
+-    // encoding order.
+-    VAAPIEncodePicture *next_prev;
++    // encoding order. Order from small to large in encoding order.
++    VAAPIEncodePicture *next_prev[MAX_PICTURE_REFERENCES];
++    int                 nb_next_prev;
+ 
+     // Next input order index (display order).
+     int64_t         input_order;
+diff --git a/libavcodec/vaapi_encode_h264.c b/libavcodec/vaapi_encode_h264.c
+index 09e130011390..57b5ea2babf7 100644
+--- a/libavcodec/vaapi_encode_h264.c
++++ b/libavcodec/vaapi_encode_h264.c
+@@ -628,7 +628,7 @@ static int vaapi_encode_h264_init_picture_params(AVCodecContext *avctx,
+     VAAPIEncodePicture              *prev = pic->prev;
+     VAAPIEncodeH264Picture         *hprev = prev ? prev->priv_data : NULL;
+     VAEncPictureParameterBufferH264 *vpic = pic->codec_picture_params;
+-    int i;
++    int i, j = 0;
+ 
+     if (pic->type == PICTURE_TYPE_IDR) {
+         av_assert0(pic->display_order == pic->encode_order);
+@@ -729,24 +729,26 @@ static int vaapi_encode_h264_init_picture_params(AVCodecContext *avctx,
+         .TopFieldOrderCnt    = hpic->pic_order_cnt,
+         .BottomFieldOrderCnt = hpic->pic_order_cnt,
+     };
+-
+-    for (i = 0; i < pic->nb_refs; i++) {
+-        VAAPIEncodePicture      *ref = pic->refs[i];
+-        VAAPIEncodeH264Picture *href;
+-
+-        av_assert0(ref && ref->encode_order < pic->encode_order);
+-        href = ref->priv_data;
+-
+-        vpic->ReferenceFrames[i] = (VAPictureH264) {
+-            .picture_id          = ref->recon_surface,
+-            .frame_idx           = href->frame_num,
+-            .flags               = VA_PICTURE_H264_SHORT_TERM_REFERENCE,
+-            .TopFieldOrderCnt    = href->pic_order_cnt,
+-            .BottomFieldOrderCnt = href->pic_order_cnt,
+-        };
++    for (int k = 0; k < MAX_REFERENCE_LIST_NUM; k++) {
++        for (i = 0; i < pic->nb_refs[k]; i++) {
++            VAAPIEncodePicture      *ref = pic->refs[k][i];
++            VAAPIEncodeH264Picture *href;
++
++            av_assert0(ref && ref->encode_order < pic->encode_order);
++            href = ref->priv_data;
++
++            vpic->ReferenceFrames[j++] = (VAPictureH264) {
++                .picture_id          = ref->recon_surface,
++                .frame_idx           = href->frame_num,
++                .flags               = VA_PICTURE_H264_SHORT_TERM_REFERENCE,
++                .TopFieldOrderCnt    = href->pic_order_cnt,
++                .BottomFieldOrderCnt = href->pic_order_cnt,
++            };
++        }
+     }
+-    for (; i < FF_ARRAY_ELEMS(vpic->ReferenceFrames); i++) {
+-        vpic->ReferenceFrames[i] = (VAPictureH264) {
++
++    for (; j < FF_ARRAY_ELEMS(vpic->ReferenceFrames); j++) {
++        vpic->ReferenceFrames[j] = (VAPictureH264) {
+             .picture_id = VA_INVALID_ID,
+             .flags      = VA_PICTURE_H264_INVALID,
+         };
+@@ -948,17 +950,17 @@ static int vaapi_encode_h264_init_slice_params(AVCodecContext *avctx,
+ 
+         if (pic->type == PICTURE_TYPE_P) {
+             int need_rplm = 0;
+-            for (i = 0; i < pic->nb_refs; i++) {
+-                av_assert0(pic->refs[i]);
+-                if (pic->refs[i] != def_l0[i])
++            for (i = 0; i < pic->nb_refs[0]; i++) {
++                av_assert0(pic->refs[0][i]);
++                if (pic->refs[0][i] != def_l0[i])
+                     need_rplm = 1;
+             }
+ 
+             sh->ref_pic_list_modification_flag_l0 = need_rplm;
+             if (need_rplm) {
+                 int pic_num = hpic->frame_num;
+-                for (i = 0; i < pic->nb_refs; i++) {
+-                    href = pic->refs[i]->priv_data;
++                for (i = 0; i < pic->nb_refs[0]; i++) {
++                    href = pic->refs[0][i]->priv_data;
+                     av_assert0(href->frame_num != pic_num);
+                     if (href->frame_num < pic_num) {
+                         sh->rplm_l0[i].modification_of_pic_nums_idc = 0;
+@@ -977,28 +979,29 @@ static int vaapi_encode_h264_init_slice_params(AVCodecContext *avctx,
+         } else {
+             int need_rplm_l0 = 0, need_rplm_l1 = 0;
+             int n0 = 0, n1 = 0;
+-            for (i = 0; i < pic->nb_refs; i++) {
+-                av_assert0(pic->refs[i]);
+-                href = pic->refs[i]->priv_data;
+-                av_assert0(href->pic_order_cnt != hpic->pic_order_cnt);
+-                if (href->pic_order_cnt < hpic->pic_order_cnt) {
+-                    if (pic->refs[i] != def_l0[n0])
+-                        need_rplm_l0 = 1;
+-                    ++n0;
+-                } else {
+-                    if (pic->refs[i] != def_l1[n1])
+-                        need_rplm_l1 = 1;
+-                    ++n1;
+-                }
++            for (i = 0; i < pic->nb_refs[0]; i++) {
++                av_assert0(pic->refs[0][i]);
++                href = pic->refs[0][i]->priv_data;
++                av_assert0(href->pic_order_cnt < hpic->pic_order_cnt);
++                if (pic->refs[0][i] != def_l0[n0])
++                    need_rplm_l0 = 1;
++                ++n0;
++            }
++
++            for (i = 0; i < pic->nb_refs[1]; i++) {
++                av_assert0(pic->refs[1][i]);
++                href = pic->refs[1][i]->priv_data;
++                av_assert0(href->pic_order_cnt > hpic->pic_order_cnt);
++                if (pic->refs[1][i] != def_l1[n1])
++                    need_rplm_l1 = 1;
++                ++n1;
+             }
+ 
+             sh->ref_pic_list_modification_flag_l0 = need_rplm_l0;
+             if (need_rplm_l0) {
+                 int pic_num = hpic->frame_num;
+-                for (i = j = 0; i < pic->nb_refs; i++) {
+-                    href = pic->refs[i]->priv_data;
+-                    if (href->pic_order_cnt > hpic->pic_order_cnt)
+-                        continue;
++                for (i = j = 0; i < pic->nb_refs[0]; i++) {
++                    href = pic->refs[0][i]->priv_data;
+                     av_assert0(href->frame_num != pic_num);
+                     if (href->frame_num < pic_num) {
+                         sh->rplm_l0[j].modification_of_pic_nums_idc = 0;
+@@ -1019,10 +1022,8 @@ static int vaapi_encode_h264_init_slice_params(AVCodecContext *avctx,
+             sh->ref_pic_list_modification_flag_l1 = need_rplm_l1;
+             if (need_rplm_l1) {
+                 int pic_num = hpic->frame_num;
+-                for (i = j = 0; i < pic->nb_refs; i++) {
+-                    href = pic->refs[i]->priv_data;
+-                    if (href->pic_order_cnt < hpic->pic_order_cnt)
+-                        continue;
++                for (i = j = 0; i < pic->nb_refs[1]; i++) {
++                    href = pic->refs[1][i]->priv_data;
+                     av_assert0(href->frame_num != pic_num);
+                     if (href->frame_num < pic_num) {
+                         sh->rplm_l1[j].modification_of_pic_nums_idc = 0;
+@@ -1062,14 +1063,13 @@ static int vaapi_encode_h264_init_slice_params(AVCodecContext *avctx,
+         vslice->RefPicList1[i].flags      = VA_PICTURE_H264_INVALID;
+     }
+ 
+-    av_assert0(pic->nb_refs <= 2);
+-    if (pic->nb_refs >= 1) {
++    if (pic->nb_refs[0]) {
+         // Backward reference for P- or B-frame.
+         av_assert0(pic->type == PICTURE_TYPE_P ||
+                    pic->type == PICTURE_TYPE_B);
+         vslice->RefPicList0[0] = vpic->ReferenceFrames[0];
+     }
+-    if (pic->nb_refs >= 2) {
++    if (pic->nb_refs[1]) {
+         // Forward reference for B-frame.
+         av_assert0(pic->type == PICTURE_TYPE_B);
+         vslice->RefPicList1[0] = vpic->ReferenceFrames[1];
+diff --git a/libavcodec/vaapi_encode_h265.c b/libavcodec/vaapi_encode_h265.c
+index efa59aecf58c..239ef2359a08 100644
+--- a/libavcodec/vaapi_encode_h265.c
++++ b/libavcodec/vaapi_encode_h265.c
+@@ -764,7 +764,7 @@ static int vaapi_encode_h265_init_picture_params(AVCodecContext *avctx,
+     VAAPIEncodePicture              *prev = pic->prev;
+     VAAPIEncodeH265Picture         *hprev = prev ? prev->priv_data : NULL;
+     VAEncPictureParameterBufferHEVC *vpic = pic->codec_picture_params;
+-    int i;
++    int i, j = 0;
+ 
+     if (pic->type == PICTURE_TYPE_IDR) {
+         av_assert0(pic->display_order == pic->encode_order);
+@@ -789,8 +789,8 @@ static int vaapi_encode_h265_init_picture_params(AVCodecContext *avctx,
+             hpic->pic_type       = 1;
+         } else {
+             VAAPIEncodePicture *irap_ref;
+-            av_assert0(pic->refs[0] && pic->refs[1]);
+-            for (irap_ref = pic; irap_ref; irap_ref = irap_ref->refs[1]) {
++            av_assert0(pic->refs[0][0] && pic->refs[1][0]);
++            for (irap_ref = pic; irap_ref; irap_ref = irap_ref->refs[1][0]) {
+                 if (irap_ref->type == PICTURE_TYPE_I)
+                     break;
+             }
+@@ -915,24 +915,27 @@ static int vaapi_encode_h265_init_picture_params(AVCodecContext *avctx,
+         .flags         = 0,
+     };
+ 
+-    for (i = 0; i < pic->nb_refs; i++) {
+-        VAAPIEncodePicture      *ref = pic->refs[i];
+-        VAAPIEncodeH265Picture *href;
+-
+-        av_assert0(ref && ref->encode_order < pic->encode_order);
+-        href = ref->priv_data;
+-
+-        vpic->reference_frames[i] = (VAPictureHEVC) {
+-            .picture_id    = ref->recon_surface,
+-            .pic_order_cnt = href->pic_order_cnt,
+-            .flags = (ref->display_order < pic->display_order ?
+-                      VA_PICTURE_HEVC_RPS_ST_CURR_BEFORE : 0) |
+-                     (ref->display_order > pic->display_order ?
+-                      VA_PICTURE_HEVC_RPS_ST_CURR_AFTER  : 0),
+-        };
++    for (int k = 0; k < MAX_REFERENCE_LIST_NUM; k++) {
++        for (i = 0; i < pic->nb_refs[k]; i++) {
++            VAAPIEncodePicture      *ref = pic->refs[k][i];
++            VAAPIEncodeH265Picture *href;
++
++            av_assert0(ref && ref->encode_order < pic->encode_order);
++            href = ref->priv_data;
++
++            vpic->reference_frames[j++] = (VAPictureHEVC) {
++                .picture_id    = ref->recon_surface,
++                .pic_order_cnt = href->pic_order_cnt,
++                .flags = (ref->display_order < pic->display_order ?
++                          VA_PICTURE_HEVC_RPS_ST_CURR_BEFORE : 0) |
++                          (ref->display_order > pic->display_order ?
++                          VA_PICTURE_HEVC_RPS_ST_CURR_AFTER  : 0),
++            };
++        }
+     }
+-    for (; i < FF_ARRAY_ELEMS(vpic->reference_frames); i++) {
+-        vpic->reference_frames[i] = (VAPictureHEVC) {
++
++    for (; j < FF_ARRAY_ELEMS(vpic->reference_frames); j++) {
++        vpic->reference_frames[j] = (VAPictureHEVC) {
+             .picture_id = VA_INVALID_ID,
+             .flags      = VA_PICTURE_HEVC_INVALID,
+         };
+@@ -1016,21 +1019,33 @@ static int vaapi_encode_h265_init_slice_params(AVCodecContext *avctx,
+         memset(rps, 0, sizeof(*rps));
+ 
+         rps_pics = 0;
+-        for (i = 0; i < pic->nb_refs; i++) {
+-            strp = pic->refs[i]->priv_data;
+-            rps_poc[rps_pics]  = strp->pic_order_cnt;
+-            rps_used[rps_pics] = 1;
+-            ++rps_pics;
++        for (i = 0; i < MAX_REFERENCE_LIST_NUM; i++) {
++            for (j = 0; j < pic->nb_refs[i]; j++) {
++                strp = pic->refs[i][j]->priv_data;
++                rps_poc[rps_pics]  = strp->pic_order_cnt;
++                rps_used[rps_pics] = 1;
++                ++rps_pics;
++            }
+         }
++
+         for (i = 0; i < pic->nb_dpb_pics; i++) {
+             if (pic->dpb[i] == pic)
+                 continue;
+-            for (j = 0; j < pic->nb_refs; j++) {
+-                if (pic->dpb[i] == pic->refs[j])
++
++            for (j = 0; j < pic->nb_refs[0]; j++) {
++                if (pic->dpb[i] == pic->refs[0][j])
++                    break;
++            }
++            if (j < pic->nb_refs[0])
++                continue;
++
++            for (j = 0; j < pic->nb_refs[1]; j++) {
++                if (pic->dpb[i] == pic->refs[1][j])
+                     break;
+             }
+-            if (j < pic->nb_refs)
++            if (j < pic->nb_refs[1])
+                 continue;
++
+             strp = pic->dpb[i]->priv_data;
+             rps_poc[rps_pics]  = strp->pic_order_cnt;
+             rps_used[rps_pics] = 0;
+@@ -1155,8 +1170,7 @@ static int vaapi_encode_h265_init_slice_params(AVCodecContext *avctx,
+         vslice->ref_pic_list1[i].flags      = VA_PICTURE_HEVC_INVALID;
+     }
+ 
+-    av_assert0(pic->nb_refs <= 2);
+-    if (pic->nb_refs >= 1) {
++    if (pic->nb_refs[0]) {
+         // Backward reference for P- or B-frame.
+         av_assert0(pic->type == PICTURE_TYPE_P ||
+                    pic->type == PICTURE_TYPE_B);
+@@ -1165,7 +1179,7 @@ static int vaapi_encode_h265_init_slice_params(AVCodecContext *avctx,
+             // Reference for GPB B-frame, L0 == L1
+             vslice->ref_pic_list1[0] = vpic->reference_frames[0];
+     }
+-    if (pic->nb_refs >= 2) {
++    if (pic->nb_refs[1]) {
+         // Forward reference for B-frame.
+         av_assert0(pic->type == PICTURE_TYPE_B);
+         vslice->ref_pic_list1[0] = vpic->reference_frames[1];
+diff --git a/libavcodec/vaapi_encode_mpeg2.c b/libavcodec/vaapi_encode_mpeg2.c
+index 2edb0c35864f..d1904bf4f5a3 100644
+--- a/libavcodec/vaapi_encode_mpeg2.c
++++ b/libavcodec/vaapi_encode_mpeg2.c
+@@ -458,12 +458,12 @@ static int vaapi_encode_mpeg2_init_picture_params(AVCodecContext *avctx,
+         break;
+     case PICTURE_TYPE_P:
+         vpic->picture_type = VAEncPictureTypePredictive;
+-        vpic->forward_reference_picture = pic->refs[0]->recon_surface;
++        vpic->forward_reference_picture = pic->refs[0][0]->recon_surface;
+         break;
+     case PICTURE_TYPE_B:
+         vpic->picture_type = VAEncPictureTypeBidirectional;
+-        vpic->forward_reference_picture  = pic->refs[0]->recon_surface;
+-        vpic->backward_reference_picture = pic->refs[1]->recon_surface;
++        vpic->forward_reference_picture  = pic->refs[0][0]->recon_surface;
++        vpic->backward_reference_picture = pic->refs[1][0]->recon_surface;
+         break;
+     default:
+         av_assert0(0 && "invalid picture type");
+diff --git a/libavcodec/vaapi_encode_vp8.c b/libavcodec/vaapi_encode_vp8.c
+index ea8abb2418ab..8a557b967e60 100644
+--- a/libavcodec/vaapi_encode_vp8.c
++++ b/libavcodec/vaapi_encode_vp8.c
+@@ -86,7 +86,7 @@ static int vaapi_encode_vp8_init_picture_params(AVCodecContext *avctx,
+     switch (pic->type) {
+     case PICTURE_TYPE_IDR:
+     case PICTURE_TYPE_I:
+-        av_assert0(pic->nb_refs == 0);
++        av_assert0(pic->nb_refs[0] == 0 && pic->nb_refs[1] == 0);
+         vpic->ref_flags.bits.force_kf = 1;
+         vpic->ref_last_frame =
+         vpic->ref_gf_frame   =
+@@ -94,14 +94,14 @@ static int vaapi_encode_vp8_init_picture_params(AVCodecContext *avctx,
+             VA_INVALID_SURFACE;
+         break;
+     case PICTURE_TYPE_P:
+-        av_assert0(pic->nb_refs == 1);
++        av_assert0(!pic->nb_refs[1]);
+         vpic->ref_flags.bits.no_ref_last = 0;
+         vpic->ref_flags.bits.no_ref_gf   = 1;
+         vpic->ref_flags.bits.no_ref_arf  = 1;
+         vpic->ref_last_frame =
+         vpic->ref_gf_frame   =
+         vpic->ref_arf_frame  =
+-            pic->refs[0]->recon_surface;
++            pic->refs[0][0]->recon_surface;
+         break;
+     default:
+         av_assert0(0 && "invalid picture type");
+diff --git a/libavcodec/vaapi_encode_vp9.c b/libavcodec/vaapi_encode_vp9.c
+index 87429881f1cf..c2a8dec71b9d 100644
+--- a/libavcodec/vaapi_encode_vp9.c
++++ b/libavcodec/vaapi_encode_vp9.c
+@@ -96,15 +96,15 @@ static int vaapi_encode_vp9_init_picture_params(AVCodecContext *avctx,
+ 
+     switch (pic->type) {
+     case PICTURE_TYPE_IDR:
+-        av_assert0(pic->nb_refs == 0);
++        av_assert0(pic->nb_refs[0] == 0 && pic->nb_refs[1] == 0);
+         vpic->ref_flags.bits.force_kf = 1;
+         vpic->refresh_frame_flags = 0xff;
+         hpic->slot = 0;
+         break;
+     case PICTURE_TYPE_P:
+-        av_assert0(pic->nb_refs == 1);
++        av_assert0(!pic->nb_refs[1]);
+         {
+-            VAAPIEncodeVP9Picture *href = pic->refs[0]->priv_data;
++            VAAPIEncodeVP9Picture *href = pic->refs[0][0]->priv_data;
+             av_assert0(href->slot == 0 || href->slot == 1);
+ 
+             if (ctx->max_b_depth > 0) {
+@@ -120,10 +120,10 @@ static int vaapi_encode_vp9_init_picture_params(AVCodecContext *avctx,
+         }
+         break;
+     case PICTURE_TYPE_B:
+-        av_assert0(pic->nb_refs == 2);
++        av_assert0(pic->nb_refs[0] && pic->nb_refs[1]);
+         {
+-            VAAPIEncodeVP9Picture *href0 = pic->refs[0]->priv_data,
+-                                  *href1 = pic->refs[1]->priv_data;
++            VAAPIEncodeVP9Picture *href0 = pic->refs[0][0]->priv_data,
++                                  *href1 = pic->refs[1][0]->priv_data;
+             av_assert0(href0->slot < pic->b_depth + 1 &&
+                        href1->slot < pic->b_depth + 1);
+ 
+@@ -157,12 +157,14 @@ static int vaapi_encode_vp9_init_picture_params(AVCodecContext *avctx,
+     for (i = 0; i < FF_ARRAY_ELEMS(vpic->reference_frames); i++)
+         vpic->reference_frames[i] = VA_INVALID_SURFACE;
+ 
+-    for (i = 0; i < pic->nb_refs; i++) {
+-        VAAPIEncodePicture *ref_pic = pic->refs[i];
+-        int slot;
+-        slot = ((VAAPIEncodeVP9Picture*)ref_pic->priv_data)->slot;
+-        av_assert0(vpic->reference_frames[slot] == VA_INVALID_SURFACE);
+-        vpic->reference_frames[slot] = ref_pic->recon_surface;
++    for (i = 0; i < MAX_REFERENCE_LIST_NUM; i++) {
++        for (int j = 0; j < pic->nb_refs[i]; j++) {
++            VAAPIEncodePicture *ref_pic = pic->refs[i][j];
++            int slot;
++            slot = ((VAAPIEncodeVP9Picture*)ref_pic->priv_data)->slot;
++            av_assert0(vpic->reference_frames[slot] == VA_INVALID_SURFACE);
++            vpic->reference_frames[slot] = ref_pic->recon_surface;
++        }
+     }
+ 
+     vpic->pic_flags.bits.frame_type = (pic->type != PICTURE_TYPE_IDR);
+From 3be81e3b449febfb04596f3f187aae27f18d02f7 Mon Sep 17 00:00:00 2001
+From: Fei Wang <fei.w.wang@intel.com>
+Date: Mon, 11 Sep 2023 15:52:31 +0800
+Subject: [PATCH] lavc/vaapi_encode: Add VAAPI AV1 encoder
+
+Signed-off-by: Fei Wang <fei.w.wang@intel.com>
+Acked-by: Neal Gompa <ngompa13@gmail.com>
+---
+ configure                     |   3 +
+ doc/encoders.texi             |  14 +
+ libavcodec/Makefile           |   2 +
+ libavcodec/allcodecs.c        |   1 +
+ libavcodec/av1_levels.c       |  92 ++++
+ libavcodec/av1_levels.h       |  58 +++
+ libavcodec/vaapi_encode.c     | 198 +++++--
+ libavcodec/vaapi_encode.h     |  24 +
+ libavcodec/vaapi_encode_av1.c | 949 ++++++++++++++++++++++++++++++++++
+ 11 files changed, 1311 insertions(+), 33 deletions(-)
+ create mode 100644 libavcodec/av1_levels.c
+ create mode 100644 libavcodec/av1_levels.h
+ create mode 100644 libavcodec/vaapi_encode_av1.c
+
+diff --git a/configure b/configure
+index e40dcce09e4c..1ee840961721 100755
+--- a/configure
++++ b/configure
+@@ -3323,6 +3323,8 @@ av1_qsv_decoder_select="qsvdec"
+ av1_qsv_encoder_select="qsvenc"
+ av1_qsv_encoder_deps="libvpl"
+ av1_amf_encoder_deps="amf"
++av1_vaapi_encoder_deps="VAEncPictureParameterBufferAV1"
++av1_vaapi_encoder_select="cbs_av1 vaapi_encode"
+ 
+ # parsers
+ aac_parser_select="adts_header mpeg4audio"
+@@ -7108,6 +7110,7 @@ if enabled vaapi; then
+     check_type "va/va.h va/va_enc_jpeg.h" "VAEncPictureParameterBufferJPEG"
+     check_type "va/va.h va/va_enc_vp8.h"  "VAEncPictureParameterBufferVP8"
+     check_type "va/va.h va/va_enc_vp9.h"  "VAEncPictureParameterBufferVP9"
++    check_type "va/va.h va/va_enc_av1.h"  "VAEncPictureParameterBufferAV1"
+ fi
+ 
+ if enabled_all opencl libdrm ; then
+diff --git a/doc/encoders.texi b/doc/encoders.texi
+index 6f8f5e127e87..d7d9584a0cae 100644
+--- a/doc/encoders.texi
++++ b/doc/encoders.texi
+@@ -3995,6 +3995,20 @@ Average variable bitrate.
+ Each encoder also has its own specific options:
+ @table @option
+ 
++@item av1_vaapi
++@option{profile} sets the value of @emph{seq_profile}.
++@option{tier} sets the value of @emph{seq_tier}.
++@option{level} sets the value of @emph{seq_level_idx}.
++
++@table @option
++@item tiles
++Set the number of tiles to encode the input video with, as columns x rows.
++(default is auto, which means use minimal tile column/row number).
++@item tile_groups
++Set tile groups number. All the tiles will be distributed as evenly as possible to
++each tile group. (default is 1).
++@end table
++
+ @item h264_vaapi
+ @option{profile} sets the value of @emph{profile_idc} and the @emph{constraint_set*_flag}s.
+ @option{level} sets the value of @emph{level_idc}.
+diff --git a/libavcodec/Makefile b/libavcodec/Makefile
+index bf3b0a93f975..cae2e773a158 100644
+--- a/libavcodec/Makefile
++++ b/libavcodec/Makefile
+@@ -258,6 +258,7 @@ OBJS-$(CONFIG_AV1_MEDIACODEC_DECODER)  += mediacodecdec.o
+ OBJS-$(CONFIG_AV1_MEDIACODEC_ENCODER)  += mediacodecenc.o
+ OBJS-$(CONFIG_AV1_NVENC_ENCODER)       += nvenc_av1.o nvenc.o
+ OBJS-$(CONFIG_AV1_QSV_ENCODER)         += qsvenc_av1.o
++OBJS-$(CONFIG_AV1_VAAPI_ENCODER)       += vaapi_encode_av1.o av1_levels.o
+ OBJS-$(CONFIG_AVRN_DECODER)            += avrndec.o
+ OBJS-$(CONFIG_AVRP_DECODER)            += r210dec.o
+ OBJS-$(CONFIG_AVRP_ENCODER)            += r210enc.o
+@@ -1322,6 +1323,7 @@ TESTPROGS = avcodec                                                     \
+             jpeg2000dwt                                                 \
+             mathops                                                    \
+ 
++TESTPROGS-$(CONFIG_AV1_VAAPI_ENCODER)     += av1_levels
+ TESTPROGS-$(CONFIG_CABAC)                 += cabac
+ TESTPROGS-$(CONFIG_DCT)                   += avfft
+ TESTPROGS-$(CONFIG_FFT)                   += fft fft-fixed32
+diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
+index 6e95ca563691..5136a566f1b5 100644
+--- a/libavcodec/allcodecs.c
++++ b/libavcodec/allcodecs.c
+@@ -845,6 +845,7 @@ extern const FFCodec ff_av1_nvenc_encoder;
+ extern const FFCodec ff_av1_qsv_decoder;
+ extern const FFCodec ff_av1_qsv_encoder;
+ extern const FFCodec ff_av1_amf_encoder;
++extern const FFCodec ff_av1_vaapi_encoder;
+ extern const FFCodec ff_libopenh264_encoder;
+ extern const FFCodec ff_libopenh264_decoder;
+ extern const FFCodec ff_h264_amf_encoder;
+diff --git a/libavcodec/av1_levels.c b/libavcodec/av1_levels.c
+new file mode 100644
+index 000000000000..19b6ee173625
+--- /dev/null
++++ b/libavcodec/av1_levels.c
+@@ -0,0 +1,92 @@
++/*
++ * Copyright (c) 2023 Intel Corporation
++ *
++ * This file is part of FFmpeg.
++ *
++ * FFmpeg is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * FFmpeg is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with FFmpeg; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <stddef.h>
++#include "libavutil/macros.h"
++#include "av1_levels.h"
++
++/** ignore entries which named in spec but no details. Like level 2.2 and 7.0. */
++static const AV1LevelDescriptor av1_levels[] = {
++    // Name                      MaxVSize                           MainMbps              MaxTiles
++    // |  level_idx                 | MaxDisplayRate                    | HighMbps         | MaxTileCols
++    // |      |   MaxPicSize        |       |     MaxDecodeRate         |    |   MainCR    |   |
++    // |      |     |    MaxHSize   |       |           | MaxHeaderRate |    |     | HighCR|   |
++    // |      |     |        |      |       |           |       |       |    |     |  |    |   |
++    { "2.0",  0,   147456,  2048, 1152,   4423680,     5529600, 150,   1.5,     0, 2, 0,   8,  4 },
++    { "2.1",  1,   278784,  2816, 1584,   8363520,    10454400, 150,   3.0,     0, 2, 0,   8,  4 },
++    { "3.0",  4,   665856,  4352, 2448,  19975680,    24969600, 150,   6.0,     0, 2, 0,  16,  6 },
++    { "3.1",  5,  1065024,  5504, 3096,  31950720,    39938400, 150,  10.0,     0, 2, 0,  16,  6 },
++    { "4.0",  8,  2359296,  6144, 3456,  70778880,    77856768, 300,  12.0,  30.0, 4, 4,  32,  8 },
++    { "4.1",  9,  2359296,  6144, 3456,  141557760,  155713536, 300,  20.0,  50.0, 4, 4,  32,  8 },
++    { "5.0", 12,  8912896,  8192, 4352,  267386880,  273715200, 300,  30.0, 100.0, 6, 4,  64,  8 },
++    { "5.1", 13,  8912896,  8192, 4352,  534773760,  547430400, 300,  40.0, 160.0, 8, 4,  64,  8 },
++    { "5.2", 14,  8912896,  8192, 4352, 1069547520, 1094860800, 300,  60.0, 240.0, 8, 4,  64,  8 },
++    { "5.3", 15,  8912896,  8192, 4352, 1069547520, 1176502272, 300,  60.0, 240.0, 8, 4,  64,  8 },
++    { "6.0", 16, 35651584, 16384, 8704, 1069547520, 1176502272, 300,  60.0, 240.0, 8, 4, 128, 16 },
++    { "6.1", 17, 35651584, 16384, 8704, 2139095040, 2189721600, 300, 100.0, 480.0, 8, 4, 128, 16 },
++    { "6.2", 18, 35651584, 16384, 8704, 4278190080, 4379443200, 300, 160.0, 800.0, 8, 4, 128, 16 },
++    { "6.3", 19, 35651584, 16384, 8704, 4278190080, 4706009088, 300, 160.0, 800.0, 8, 4, 128, 16 },
++};
++
++const AV1LevelDescriptor *ff_av1_guess_level(int64_t bitrate,
++                                             int tier,
++                                             int width,
++                                             int height,
++                                             int tiles,
++                                             int tile_cols,
++                                             float fps)
++{
++    int pic_size;
++    uint64_t display_rate;
++    float max_br;
++
++    pic_size = width * height;
++    display_rate = (uint64_t)pic_size * fps;
++
++    for (int i = 0; i < FF_ARRAY_ELEMS(av1_levels); i++) {
++        const AV1LevelDescriptor *level = &av1_levels[i];
++        // Limitation: decode rate, header rate, compress rate, etc. are not considered.
++        if (pic_size > level->max_pic_size)
++            continue;
++        if (width > level->max_h_size)
++            continue;
++        if (height > level->max_v_size)
++            continue;
++        if (display_rate > level->max_display_rate)
++            continue;
++
++        if (tier)
++            max_br = level->high_mbps;
++        else
++            max_br = level->main_mbps;
++        if (!max_br)
++            continue;
++        if (bitrate > (int64_t)(1000000.0 * max_br))
++            continue;
++
++        if (tiles > level->max_tiles)
++            continue;
++        if (tile_cols > level->max_tile_cols)
++            continue;
++        return level;
++    }
++
++    return NULL;
++}
+diff --git a/libavcodec/av1_levels.h b/libavcodec/av1_levels.h
+new file mode 100644
+index 000000000000..164cb876ba10
+--- /dev/null
++++ b/libavcodec/av1_levels.h
+@@ -0,0 +1,58 @@
++/*
++ * Copyright (c) 2023 Intel Corporation
++ *
++ * This file is part of FFmpeg.
++ *
++ * FFmpeg is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * FFmpeg is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with FFmpeg; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#ifndef AVCODEC_AV1_LEVELS_H
++#define AVCODEC_AV1_LEVELS_H
++
++#include <stdint.h>
++
++typedef struct AV1LevelDescriptor {
++    char     name[4];
++    uint8_t  level_idx;
++
++    uint32_t max_pic_size;
++    uint32_t max_h_size;
++    uint32_t max_v_size;
++    uint64_t max_display_rate;
++    uint64_t max_decode_rate;
++
++    uint32_t max_header_rate;
++    float    main_mbps;
++    float    high_mbps;
++    uint32_t main_cr;
++    uint32_t high_cr;
++    uint32_t max_tiles;
++    uint32_t max_tile_cols;
++} AV1LevelDescriptor;
++
++/**
++ * Guess the level of a stream from some parameters.
++ *
++ * Unknown parameters may be zero, in which case they will be ignored.
++ */
++const AV1LevelDescriptor *ff_av1_guess_level(int64_t bitrate,
++                                             int tier,
++                                             int width,
++                                             int height,
++                                             int tile_rows,
++                                             int tile_cols,
++                                             float fps);
++
++#endif /* AVCODEC_AV1_LEVELS_H */
+diff --git a/libavcodec/vaapi_encode.c b/libavcodec/vaapi_encode.c
+index 79036673e7a9..e3820956d160 100644
+--- a/libavcodec/vaapi_encode.c
++++ b/libavcodec/vaapi_encode.c
+@@ -683,6 +683,11 @@ static int vaapi_encode_set_output_property(AVCodecContext *avctx,
+         pic->opaque_ref = NULL;
+     }
+ 
++    if (ctx->codec->flags & FLAG_TIMESTAMP_NO_DELAY) {
++        pkt->dts = pkt->pts;
++        return 0;
++    }
++
+     if (ctx->output_delay == 0) {
+         pkt->dts = pkt->pts;
+     } else if (pic->encode_order < ctx->decode_delay) {
+@@ -698,65 +703,160 @@ static int vaapi_encode_set_output_property(AVCodecContext *avctx,
+     return 0;
+ }
+ 
+-static int vaapi_encode_output(AVCodecContext *avctx,
+-                               VAAPIEncodePicture *pic, AVPacket *pkt)
++static int vaapi_encode_get_coded_buffer_size(AVCodecContext *avctx, VABufferID buf_id)
+ {
+     VAAPIEncodeContext *ctx = avctx->priv_data;
+     VACodedBufferSegment *buf_list, *buf;
++    int size = 0;
+     VAStatus vas;
+-    int total_size = 0;
+-    uint8_t *ptr;
+     int err;
+ 
+-    err = vaapi_encode_wait(avctx, pic);
+-    if (err < 0)
+-        return err;
+-
+-    buf_list = NULL;
+-    vas = vaMapBuffer(ctx->hwctx->display, pic->output_buffer,
++    vas = vaMapBuffer(ctx->hwctx->display, buf_id,
+                       (void**)&buf_list);
+     if (vas != VA_STATUS_SUCCESS) {
+         av_log(avctx, AV_LOG_ERROR, "Failed to map output buffers: "
+                "%d (%s).\n", vas, vaErrorStr(vas));
+         err = AVERROR(EIO);
+-        goto fail;
++        return err;
+     }
+ 
+     for (buf = buf_list; buf; buf = buf->next)
+-        total_size += buf->size;
++        size += buf->size;
+ 
+-    err = ff_get_encode_buffer(avctx, pkt, total_size, 0);
+-    ptr = pkt->data;
++    vas = vaUnmapBuffer(ctx->hwctx->display, buf_id);
++    if (vas != VA_STATUS_SUCCESS) {
++        av_log(avctx, AV_LOG_ERROR, "Failed to unmap output buffers: "
++               "%d (%s).\n", vas, vaErrorStr(vas));
++        err = AVERROR(EIO);
++        return err;
++    }
+ 
+-    if (err < 0)
+-        goto fail_mapped;
++    return size;
++}
++
++static int vaapi_encode_get_coded_buffer_data(AVCodecContext *avctx,
++                                              VABufferID buf_id, uint8_t **dst)
++{
++    VAAPIEncodeContext *ctx = avctx->priv_data;
++    VACodedBufferSegment *buf_list, *buf;
++    VAStatus vas;
++    int err;
++
++    vas = vaMapBuffer(ctx->hwctx->display, buf_id,
++                      (void**)&buf_list);
++    if (vas != VA_STATUS_SUCCESS) {
++        av_log(avctx, AV_LOG_ERROR, "Failed to map output buffers: "
++               "%d (%s).\n", vas, vaErrorStr(vas));
++        err = AVERROR(EIO);
++        return err;
++    }
+ 
+     for (buf = buf_list; buf; buf = buf->next) {
+         av_log(avctx, AV_LOG_DEBUG, "Output buffer: %u bytes "
+                "(status %08x).\n", buf->size, buf->status);
+ 
+-        memcpy(ptr, buf->buf, buf->size);
+-        ptr += buf->size;
++        memcpy(*dst, buf->buf, buf->size);
++        *dst += buf->size;
+     }
+ 
+-    vas = vaUnmapBuffer(ctx->hwctx->display, pic->output_buffer);
++    vas = vaUnmapBuffer(ctx->hwctx->display, buf_id);
+     if (vas != VA_STATUS_SUCCESS) {
+         av_log(avctx, AV_LOG_ERROR, "Failed to unmap output buffers: "
+                "%d (%s).\n", vas, vaErrorStr(vas));
+         err = AVERROR(EIO);
+-        goto fail;
++        return err;
++    }
++
++    return 0;
++}
++
++static int vaapi_encode_get_coded_data(AVCodecContext *avctx,
++                                       VAAPIEncodePicture *pic, AVPacket *pkt)
++{
++    VAAPIEncodeContext *ctx = avctx->priv_data;
++    VABufferID output_buffer_prev;
++    int total_size = 0;
++    uint8_t *ptr;
++    int ret;
++
++    if (ctx->coded_buffer_ref) {
++        output_buffer_prev = (VABufferID)(uintptr_t)ctx->coded_buffer_ref->data;
++        ret = vaapi_encode_get_coded_buffer_size(avctx, output_buffer_prev);
++        if (ret < 0)
++            goto end;
++        total_size += ret;
+     }
+ 
++    ret = vaapi_encode_get_coded_buffer_size(avctx, pic->output_buffer);
++    if (ret < 0)
++        goto end;
++    total_size += ret;
++
++    ret = ff_get_encode_buffer(avctx, pkt, total_size, 0);
++    if (ret < 0)
++        goto end;
++    ptr = pkt->data;
++
++    if (ctx->coded_buffer_ref) {
++        ret = vaapi_encode_get_coded_buffer_data(avctx, output_buffer_prev, &ptr);
++        if (ret < 0)
++            goto end;
++    }
++
++    ret = vaapi_encode_get_coded_buffer_data(avctx, pic->output_buffer, &ptr);
++    if (ret < 0)
++        goto end;
++
++end:
++    if (ctx->coded_buffer_ref) {
++        av_buffer_unref(&ctx->coded_buffer_ref);
++    }
+     av_buffer_unref(&pic->output_buffer_ref);
+     pic->output_buffer = VA_INVALID_ID;
+ 
++    return ret;
++}
++
++static int vaapi_encode_output(AVCodecContext *avctx,
++                               VAAPIEncodePicture *pic, AVPacket *pkt)
++{
++    VAAPIEncodeContext *ctx = avctx->priv_data;
++    AVPacket *pkt_ptr = pkt;
++    int err;
++
++    err = vaapi_encode_wait(avctx, pic);
++    if (err < 0)
++        return err;
++
++    if (pic->non_independent_frame) {
++        av_assert0(!ctx->coded_buffer_ref);
++        ctx->coded_buffer_ref = av_buffer_ref(pic->output_buffer_ref);
++
++        if (pic->tail_size) {
++            if (ctx->tail_pkt->size) {
++                err = AVERROR(AVERROR_BUG);
++                goto end;
++            }
++
++            err = ff_get_encode_buffer(avctx, ctx->tail_pkt, pic->tail_size, 0);
++            if (err < 0)
++                goto end;
++
++            memcpy(ctx->tail_pkt->data, pic->tail_data, pic->tail_size);
++            pkt_ptr = ctx->tail_pkt;
++        }
++    } else {
++        err = vaapi_encode_get_coded_data(avctx, pic, pkt);
++        if (err < 0)
++            goto end;
++    }
++
+     av_log(avctx, AV_LOG_DEBUG, "Output read for pic %"PRId64"/%"PRId64".\n",
+            pic->display_order, pic->encode_order);
+-    return 0;
+ 
+-fail_mapped:
+-    vaUnmapBuffer(ctx->hwctx->display, pic->output_buffer);
+-fail:
++    vaapi_encode_set_output_property(avctx, pic, pkt_ptr);
++
++end:
+     av_buffer_unref(&pic->output_buffer_ref);
+     pic->output_buffer = VA_INVALID_ID;
+     return err;
+@@ -1128,9 +1228,19 @@ static int vaapi_encode_pick_next(AVCodecContext *avctx,
+ 
+     vaapi_encode_add_ref(avctx, pic, pic, 0, 1, 0);
+     if (pic->type != PICTURE_TYPE_IDR) {
+-        vaapi_encode_add_ref(avctx, pic, start,
+-                             pic->type == PICTURE_TYPE_P,
+-                             b_counter > 0, 0);
++        // TODO: apply both previous and forward multi reference for all vaapi encoders.
++        // And L0/L1 reference frame number can be set dynamically through query
++        // VAConfigAttribEncMaxRefFrames attribute.
++        if (avctx->codec_id == AV_CODEC_ID_AV1) {
++            for (i = 0; i < ctx->nb_next_prev; i++)
++                vaapi_encode_add_ref(avctx, pic, ctx->next_prev[i],
++                                     pic->type == PICTURE_TYPE_P,
++                                     b_counter > 0, 0);
++        } else
++            vaapi_encode_add_ref(avctx, pic, start,
++                                 pic->type == PICTURE_TYPE_P,
++                                 b_counter > 0, 0);
++
+         vaapi_encode_add_ref(avctx, pic, ctx->next_prev[ctx->nb_next_prev - 1], 0, 0, 1);
+     }
+ 
+@@ -1292,6 +1402,19 @@ int ff_vaapi_encode_receive_packet(AVCodecContext *avctx, AVPacket *pkt)
+     AVFrame *frame = ctx->frame;
+     int err;
+ 
++start:
++    /** if no B frame before repeat P frame, sent repeat P frame out. */
++    if (ctx->tail_pkt->size) {
++        for (VAAPIEncodePicture *tmp = ctx->pic_start; tmp; tmp = tmp->next) {
++            if (tmp->type == PICTURE_TYPE_B && tmp->pts < ctx->tail_pkt->pts)
++                break;
++            else if (!tmp->next) {
++                av_packet_move_ref(pkt, ctx->tail_pkt);
++                goto end;
++            }
++        }
++    }
++
+     err = ff_encode_get_frame(avctx, frame);
+     if (err < 0 && err != AVERROR_EOF)
+         return err;
+@@ -1356,17 +1479,21 @@ int ff_vaapi_encode_receive_packet(AVCodecContext *avctx, AVPacket *pkt)
+         return err;
+     }
+ 
+-    vaapi_encode_set_output_property(avctx, pic, pkt);
+-    av_log(avctx, AV_LOG_DEBUG, "Output packet: pts %"PRId64", dts %"PRId64", "
+-           "size %d bytes.\n", pkt->pts, pkt->dts, pkt->size);
+-
+     ctx->output_order = pic->encode_order;
+     vaapi_encode_clear_old(avctx);
+ 
++    /** loop to get an available pkt in encoder flushing. */
++    if (ctx->end_of_stream && !pkt->size)
++        goto start;
++
++end:
++    if (pkt->size)
++        av_log(avctx, AV_LOG_DEBUG, "Output packet: pts %"PRId64", dts %"PRId64", "
++               "size %d bytes.\n", pkt->pts, pkt->dts, pkt->size);
++
+     return 0;
+ }
+ 
+-
+ static av_cold void vaapi_encode_add_global_param(AVCodecContext *avctx, int type,
+                                                   void *buffer, size_t size)
+ {
+@@ -2667,6 +2794,12 @@ av_cold int ff_vaapi_encode_init(AVCodecContext *avctx)
+     ctx->device = (AVHWDeviceContext*)ctx->device_ref->data;
+     ctx->hwctx = ctx->device->hwctx;
+ 
++    ctx->tail_pkt = av_packet_alloc();
++    if (!ctx->tail_pkt) {
++        err = AVERROR(ENOMEM);
++        goto fail;
++    }
++
+     err = vaapi_encode_profile_entrypoint(avctx);
+     if (err < 0)
+         goto fail;
+@@ -2859,6 +2992,7 @@ av_cold int ff_vaapi_encode_close(AVCodecContext *avctx)
+     }
+ 
+     av_frame_free(&ctx->frame);
++    av_packet_free(&ctx->tail_pkt);
+ 
+     av_freep(&ctx->codec_sequence_params);
+     av_freep(&ctx->codec_picture_params);
+diff --git a/libavcodec/vaapi_encode.h b/libavcodec/vaapi_encode.h
+index 977bc2d94634..d0d6cc2adf46 100644
+--- a/libavcodec/vaapi_encode.h
++++ b/libavcodec/vaapi_encode.h
+@@ -133,6 +133,17 @@ typedef struct VAAPIEncodePicture {
+ 
+     int          nb_slices;
+     VAAPIEncodeSlice *slices;
++
++    /**
++     * indicate if current frame is an independent frame that the coded data
++     * can be pushed to downstream directly. Coded of non-independent frame
++     * data will be concatenated into next independent frame.
++     */
++    int non_independent_frame;
++    /** Tail data of current pic, used only for repeat header of AV1. */
++    char tail_data[MAX_PARAM_BUFFER_SIZE];
++    /** Byte length of tail_data. */
++    size_t tail_size;
+ } VAAPIEncodePicture;
+ 
+ typedef struct VAAPIEncodeProfile {
+@@ -367,6 +378,16 @@ typedef struct VAAPIEncodeContext {
+     AVFifo          *encode_fifo;
+     // Max number of frame buffered in encoder.
+     int             async_depth;
++
++    /** Head data for current output pkt, used only for AV1. */
++    //void  *header_data;
++    //size_t header_data_size;
++
++    /** Buffered coded data of a pic if it is an non-independent frame. */
++    AVBufferRef     *coded_buffer_ref;
++
++    /** Tail data of a pic, now only used for av1 repeat frame header. */
++    AVPacket        *tail_pkt;
+ } VAAPIEncodeContext;
+ 
+ enum {
+@@ -383,6 +404,9 @@ enum {
+     // Codec supports non-IDR key pictures (that is, key pictures do
+     // not necessarily empty the DPB).
+     FLAG_NON_IDR_KEY_PICTURES  = 1 << 5,
++    // Codec output packet without timestamp delay, which means the
++    // output packet has same PTS and DTS.
++    FLAG_TIMESTAMP_NO_DELAY    = 1 << 6,
+ };
+ 
+ typedef struct VAAPIEncodeType {
+diff --git a/libavcodec/vaapi_encode_av1.c b/libavcodec/vaapi_encode_av1.c
+new file mode 100644
+index 000000000000..3ff1c47b532d
+--- /dev/null
++++ b/libavcodec/vaapi_encode_av1.c
+@@ -0,0 +1,949 @@
++/*
++ * Copyright (c) 2023 Intel Corporation
++ *
++ * This file is part of FFmpeg.
++ *
++ * FFmpeg is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * FFmpeg is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with FFmpeg; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <va/va.h>
++#include <va/va_enc_av1.h>
++
++#include "libavutil/pixdesc.h"
++#include "libavutil/opt.h"
++
++#include "cbs_av1.h"
++#include "put_bits.h"
++#include "codec_internal.h"
++#include "av1_levels.h"
++#include "vaapi_encode.h"
++
++#define AV1_MAX_QUANT 255
++
++typedef struct VAAPIEncodeAV1Picture {
++    int64_t last_idr_frame;
++    int slot;
++} VAAPIEncodeAV1Picture;
++
++typedef struct VAAPIEncodeAV1Context {
++    VAAPIEncodeContext common;
++    AV1RawOBU sh; /**< sequence header.*/
++    AV1RawOBU fh; /**< frame header.*/
++    CodedBitstreamContext *cbc;
++    CodedBitstreamFragment current_obu;
++    VAConfigAttribValEncAV1 attr;
++    VAConfigAttribValEncAV1Ext1 attr_ext1;
++    VAConfigAttribValEncAV1Ext2 attr_ext2;
++
++    char sh_data[MAX_PARAM_BUFFER_SIZE]; /**< coded sequence header data. */
++    size_t sh_data_len; /**< bit length of sh_data. */
++    char fh_data[MAX_PARAM_BUFFER_SIZE]; /**< coded frame header data. */
++    size_t fh_data_len; /**< bit length of fh_data. */
++
++    uint8_t uniform_tile;
++    uint8_t use_128x128_superblock;
++    int sb_cols;
++    int sb_rows;
++    int tile_cols_log2;
++    int tile_rows_log2;
++    int max_tile_width_sb;
++    int max_tile_height_sb;
++    uint8_t width_in_sbs_minus_1[AV1_MAX_TILE_COLS];
++    uint8_t height_in_sbs_minus_1[AV1_MAX_TILE_ROWS];
++
++    int min_log2_tile_cols;
++    int max_log2_tile_cols;
++    int min_log2_tile_rows;
++    int max_log2_tile_rows;
++
++    int q_idx_idr;
++    int q_idx_p;
++    int q_idx_b;
++
++    /** bit positions in current frame header */
++    int qindex_offset;
++    int loopfilter_offset;
++    int cdef_start_offset;
++    int cdef_param_size;
++
++    /** user options */
++    int profile;
++    int level;
++    int tier;
++    int tile_cols, tile_rows;
++    int tile_groups;
++} VAAPIEncodeAV1Context;
++
++static void vaapi_encode_av1_trace_write_log(void *ctx,
++                                             PutBitContext *pbc, int length,
++                                             const char *str, const int *subscripts,
++                                             int64_t value)
++{
++    VAAPIEncodeAV1Context *priv = ctx;
++    int position;
++
++    position = put_bits_count(pbc);
++    av_assert0(position >= length);
++
++    if (!strcmp(str, "base_q_idx"))
++        priv->qindex_offset = position - length;
++    else if (!strcmp(str, "loop_filter_level[0]"))
++        priv->loopfilter_offset = position - length;
++    else if (!strcmp(str, "cdef_damping_minus_3"))
++        priv->cdef_start_offset = position - length;
++    else if (!strcmp(str, "cdef_uv_sec_strength[i]"))
++        priv->cdef_param_size = position - priv->cdef_start_offset;
++}
++
++static av_cold int vaapi_encode_av1_get_encoder_caps(AVCodecContext *avctx)
++{
++    VAAPIEncodeContext *ctx = avctx->priv_data;
++    VAAPIEncodeAV1Context *priv = avctx->priv_data;
++
++    // Surfaces must be aligned to superblock boundaries.
++    ctx->surface_width  = FFALIGN(avctx->width,  priv->use_128x128_superblock ? 128 : 64);
++    ctx->surface_height = FFALIGN(avctx->height, priv->use_128x128_superblock ? 128 : 64);
++
++    return 0;
++}
++
++static av_cold int vaapi_encode_av1_configure(AVCodecContext *avctx)
++{
++    VAAPIEncodeContext     *ctx = avctx->priv_data;
++    VAAPIEncodeAV1Context *priv = avctx->priv_data;
++    int ret;
++
++    ret = ff_cbs_init(&priv->cbc, AV_CODEC_ID_AV1, avctx);
++    if (ret < 0)
++        return ret;
++    priv->cbc->trace_enable  = 1;
++    priv->cbc->trace_level   = AV_LOG_DEBUG;
++    priv->cbc->trace_context = ctx;
++    priv->cbc->trace_write_callback = vaapi_encode_av1_trace_write_log;
++
++    if (ctx->rc_mode->quality) {
++        priv->q_idx_p = av_clip(ctx->rc_quality, 0, AV1_MAX_QUANT);
++        if (fabs(avctx->i_quant_factor) > 0.0)
++            priv->q_idx_idr =
++                av_clip((fabs(avctx->i_quant_factor) * priv->q_idx_p  +
++                         avctx->i_quant_offset) + 0.5,
++                        0, AV1_MAX_QUANT);
++        else
++            priv->q_idx_idr = priv->q_idx_p;
++
++        if (fabs(avctx->b_quant_factor) > 0.0)
++            priv->q_idx_b =
++                av_clip((fabs(avctx->b_quant_factor) * priv->q_idx_p  +
++                         avctx->b_quant_offset) + 0.5,
++                        0, AV1_MAX_QUANT);
++        else
++            priv->q_idx_b = priv->q_idx_p;
++    } else {
++        /** Arbitrary value */
++        priv->q_idx_idr = priv->q_idx_p = priv->q_idx_b = 128;
++    }
++
++    return 0;
++}
++
++static int vaapi_encode_av1_add_obu(AVCodecContext *avctx,
++                                    CodedBitstreamFragment *au,
++                                    uint8_t type,
++                                    void *obu_unit)
++{
++    int ret;
++
++    ret = ff_cbs_insert_unit_content(au, -1,
++                                     type, obu_unit, NULL);
++    if (ret < 0) {
++        av_log(avctx, AV_LOG_ERROR, "Failed to add OBU unit: "
++               "type = %d.\n", type);
++        return ret;
++    }
++
++    return 0;
++}
++
++static int vaapi_encode_av1_write_obu(AVCodecContext *avctx,
++                                      char *data, size_t *data_len,
++                                      CodedBitstreamFragment *bs)
++{
++    VAAPIEncodeAV1Context *priv = avctx->priv_data;
++    int ret;
++
++    ret = ff_cbs_write_fragment_data(priv->cbc, bs);
++    if (ret < 0) {
++        av_log(avctx, AV_LOG_ERROR, "Failed to write packed header.\n");
++        return ret;
++    }
++
++    if ((size_t)8 * MAX_PARAM_BUFFER_SIZE < 8 * bs->data_size - bs->data_bit_padding) {
++        av_log(avctx, AV_LOG_ERROR, "Access unit too large: "
++               "%zu < %zu.\n", (size_t)8 * MAX_PARAM_BUFFER_SIZE,
++               8 * bs->data_size - bs->data_bit_padding);
++        return AVERROR(ENOSPC);
++    }
++
++    memcpy(data, bs->data, bs->data_size);
++    *data_len = 8 * bs->data_size - bs->data_bit_padding;
++
++    return 0;
++}
++
++static int tile_log2(int blkSize, int target) {
++    int k;
++    for (k = 0; (blkSize << k) < target; k++);
++    return k;
++}
++
++static int vaapi_encode_av1_set_tile(AVCodecContext *avctx)
++{
++    VAAPIEncodeAV1Context *priv = avctx->priv_data;
++    int mi_cols, mi_rows, sb_shift, sb_size;
++    int max_tile_area_sb, max_tile_area_sb_varied;
++    int tile_width_sb, tile_height_sb, widest_tile_sb;
++    int tile_cols, tile_rows;
++    int min_log2_tiles;
++    int i;
++
++    if (priv->tile_cols > AV1_MAX_TILE_COLS ||
++        priv->tile_rows > AV1_MAX_TILE_ROWS) {
++        av_log(avctx, AV_LOG_ERROR, "Invalid tile number %dx%d, should less than %dx%d.\n",
++               priv->tile_cols, priv->tile_rows, AV1_MAX_TILE_COLS, AV1_MAX_TILE_ROWS);
++        return AVERROR(EINVAL);
++    }
++
++    mi_cols = 2 * ((avctx->width + 7) >> 3);
++    mi_rows = 2 * ((avctx->height + 7) >> 3);
++    priv->sb_cols = priv->use_128x128_superblock ?
++                    ((mi_cols + 31) >> 5) : ((mi_cols + 15) >> 4);
++    priv->sb_rows = priv->use_128x128_superblock ?
++                    ((mi_rows + 31) >> 5) : ((mi_rows + 15) >> 4);
++    sb_shift = priv->use_128x128_superblock ? 5 : 4;
++    sb_size  = sb_shift + 2;
++    priv->max_tile_width_sb = AV1_MAX_TILE_WIDTH >> sb_size;
++    max_tile_area_sb = AV1_MAX_TILE_AREA  >> (2 * sb_size);
++
++    priv->min_log2_tile_cols = tile_log2(priv->max_tile_width_sb, priv->sb_cols);
++    priv->max_log2_tile_cols = tile_log2(1, FFMIN(priv->sb_cols, AV1_MAX_TILE_COLS));
++    priv->max_log2_tile_rows = tile_log2(1, FFMIN(priv->sb_rows, AV1_MAX_TILE_ROWS));
++    min_log2_tiles = FFMAX(priv->min_log2_tile_cols,
++                           tile_log2(max_tile_area_sb, priv->sb_rows * priv->sb_cols));
++
++    tile_cols = av_clip(priv->tile_cols, (priv->sb_cols + priv->max_tile_width_sb - 1) / priv->max_tile_width_sb, priv->sb_cols);
++
++    if (!priv->tile_cols)
++        priv->tile_cols = tile_cols;
++    else if (priv->tile_cols != tile_cols){
++        av_log(avctx, AV_LOG_ERROR, "Invalid tile cols %d, should be in range of %d~%d\n",
++               priv->tile_cols,
++               (priv->sb_cols + priv->max_tile_width_sb - 1) / priv->max_tile_width_sb,
++               priv->sb_cols);
++        return AVERROR(EINVAL);
++    }
++
++    priv->tile_cols_log2 = tile_log2(1, priv->tile_cols);
++    tile_width_sb = (priv->sb_cols + (1 << priv->tile_cols_log2) - 1) >>
++                    priv->tile_cols_log2;
++
++    if (priv->tile_rows > priv->sb_rows) {
++        av_log(avctx, AV_LOG_ERROR, "Invalid tile rows %d, should be less than %d.\n",
++               priv->tile_rows, priv->sb_rows);
++        return AVERROR(EINVAL);
++    }
++
++    /** Try user setting tile rows number first. */
++    tile_rows = priv->tile_rows ? priv->tile_rows : 1;
++    for (; tile_rows <= priv->sb_rows && tile_rows <= AV1_MAX_TILE_ROWS; tile_rows++) {
++        /** try uniformed tile. */
++        priv->tile_rows_log2 = tile_log2(1, tile_rows);
++        if ((priv->sb_cols + tile_width_sb - 1) / tile_width_sb == priv->tile_cols) {
++            for (i = 0; i < priv->tile_cols - 1; i++)
++                priv->width_in_sbs_minus_1[i] = tile_width_sb - 1;
++            priv->width_in_sbs_minus_1[i] = priv->sb_cols - (priv->tile_cols - 1) * tile_width_sb - 1;
++
++            tile_height_sb = (priv->sb_rows + (1 << priv->tile_rows_log2) - 1) >>
++                             priv->tile_rows_log2;
++
++            if ((priv->sb_rows + tile_height_sb - 1) / tile_height_sb == tile_rows &&
++                tile_height_sb <= max_tile_area_sb / tile_width_sb) {
++                for (i = 0; i < tile_rows - 1; i++)
++                    priv->height_in_sbs_minus_1[i] = tile_height_sb - 1;
++                priv->height_in_sbs_minus_1[i] = priv->sb_rows - (tile_rows - 1) * tile_height_sb - 1;
++
++                priv->uniform_tile = 1;
++                priv->min_log2_tile_rows = FFMAX(min_log2_tiles - priv->tile_cols_log2, 0);
++
++                break;
++            }
++        }
++
++        /** try non-uniformed tile. */
++        widest_tile_sb = 0;
++        for (i = 0; i < priv->tile_cols; i++) {
++            priv->width_in_sbs_minus_1[i] = (i + 1) * priv->sb_cols / priv->tile_cols - i * priv->sb_cols / priv->tile_cols - 1;
++            widest_tile_sb = FFMAX(widest_tile_sb, priv->width_in_sbs_minus_1[i] + 1);
++        }
++
++        if (min_log2_tiles)
++            max_tile_area_sb_varied = (priv->sb_rows * priv->sb_cols) >> (min_log2_tiles + 1);
++        else
++            max_tile_area_sb_varied = priv->sb_rows * priv->sb_cols;
++        priv->max_tile_height_sb = FFMAX(1, max_tile_area_sb_varied / widest_tile_sb);
++
++        if (tile_rows == av_clip(tile_rows, (priv->sb_rows + priv->max_tile_height_sb - 1) / priv->max_tile_height_sb, priv->sb_rows)) {
++            for (i = 0; i < tile_rows; i++)
++                priv->height_in_sbs_minus_1[i] = (i + 1) * priv->sb_rows / tile_rows - i * priv->sb_rows / tile_rows - 1;
++
++            break;
++        }
++
++        /** Return invalid parameter if explicit tile rows is set. */
++        if (priv->tile_rows) {
++            av_log(avctx, AV_LOG_ERROR, "Invalid tile rows %d.\n", priv->tile_rows);
++            return AVERROR(EINVAL);
++        }
++    }
++
++    priv->tile_rows = tile_rows;
++    av_log(avctx, AV_LOG_DEBUG, "Setting tile cols/rows to %d/%d.\n",
++           priv->tile_cols, priv->tile_rows);
++
++    /** check if tile cols/rows is supported by driver. */
++    if (priv->attr_ext2.bits.max_tile_num_minus1) {
++        if ((priv->tile_cols * priv->tile_rows - 1) > priv->attr_ext2.bits.max_tile_num_minus1) {
++            av_log(avctx, AV_LOG_ERROR, "Unsupported tile num %d * %d = %d by driver, "
++                   "should be at most %d.\n", priv->tile_cols, priv->tile_rows,
++                   priv->tile_cols * priv->tile_rows,
++                   priv->attr_ext2.bits.max_tile_num_minus1 + 1);
++            return AVERROR(EINVAL);
++        }
++    }
++
++    /** check if tile group numbers is valid. */
++    if (priv->tile_groups > priv->tile_cols * priv->tile_rows) {
++        av_log(avctx, AV_LOG_WARNING, "Invalid tile groups number %d, "
++        "correct to %d.\n", priv->tile_groups, priv->tile_cols * priv->tile_rows);
++        priv->tile_groups = priv->tile_cols * priv->tile_rows;
++    }
++
++    return 0;
++}
++
++static int vaapi_encode_av1_write_sequence_header(AVCodecContext *avctx,
++                                                  char *data, size_t *data_len)
++{
++    VAAPIEncodeAV1Context *priv = avctx->priv_data;
++
++    memcpy(data, &priv->sh_data, MAX_PARAM_BUFFER_SIZE * sizeof(char));
++    *data_len = priv->sh_data_len;
++
++    return 0;
++}
++
++static int vaapi_encode_av1_init_sequence_params(AVCodecContext *avctx)
++{
++    VAAPIEncodeContext               *ctx = avctx->priv_data;
++    VAAPIEncodeAV1Context           *priv = avctx->priv_data;
++    AV1RawOBU                     *sh_obu = &priv->sh;
++    AV1RawSequenceHeader              *sh = &sh_obu->obu.sequence_header;
++    VAEncSequenceParameterBufferAV1 *vseq = ctx->codec_sequence_params;
++    CodedBitstreamFragment           *obu = &priv->current_obu;
++    const AVPixFmtDescriptor *desc;
++    int ret;
++
++    memset(sh_obu, 0, sizeof(*sh_obu));
++    sh_obu->header.obu_type = AV1_OBU_SEQUENCE_HEADER;
++
++    desc = av_pix_fmt_desc_get(priv->common.input_frames->sw_format);
++    av_assert0(desc);
++
++    sh->seq_profile  = avctx->profile;
++    if (!sh->seq_force_screen_content_tools)
++        sh->seq_force_integer_mv = AV1_SELECT_INTEGER_MV;
++    sh->frame_width_bits_minus_1  = av_log2(avctx->width);
++    sh->frame_height_bits_minus_1 = av_log2(avctx->height);
++    sh->max_frame_width_minus_1   = avctx->width - 1;
++    sh->max_frame_height_minus_1  = avctx->height - 1;
++    sh->seq_tier[0]               = priv->tier;
++    /** enable order hint and reserve maximum 8 bits for it by default. */
++    sh->enable_order_hint         = 1;
++    sh->order_hint_bits_minus_1   = 7;
++
++    sh->color_config = (AV1RawColorConfig) {
++        .high_bitdepth                  = desc->comp[0].depth == 8 ? 0 : 1,
++        .color_primaries                = avctx->color_primaries,
++        .transfer_characteristics       = avctx->color_trc,
++        .matrix_coefficients            = avctx->colorspace,
++        .color_description_present_flag = (avctx->color_primaries != AVCOL_PRI_UNSPECIFIED ||
++                                           avctx->color_trc       != AVCOL_TRC_UNSPECIFIED ||
++                                           avctx->colorspace      != AVCOL_SPC_UNSPECIFIED),
++        .color_range                    = avctx->color_range == AVCOL_RANGE_JPEG,
++        .subsampling_x                  = desc->log2_chroma_w,
++        .subsampling_y                  = desc->log2_chroma_h,
++    };
++
++    switch (avctx->chroma_sample_location) {
++        case AVCHROMA_LOC_LEFT:
++            sh->color_config.chroma_sample_position = AV1_CSP_VERTICAL;
++            break;
++        case AVCHROMA_LOC_TOPLEFT:
++            sh->color_config.chroma_sample_position = AV1_CSP_COLOCATED;
++            break;
++        default:
++            sh->color_config.chroma_sample_position = AV1_CSP_UNKNOWN;
++            break;
++    }
++
++    if (avctx->level != FF_PROFILE_UNKNOWN) {
++        sh->seq_level_idx[0] = avctx->level;
++    } else {
++        const AV1LevelDescriptor *level;
++        float framerate;
++
++        if (avctx->framerate.num > 0 && avctx->framerate.den > 0)
++            framerate = avctx->framerate.num / avctx->framerate.den;
++        else
++            framerate = 0;
++
++        level = ff_av1_guess_level(avctx->bit_rate, priv->tier,
++                                   ctx->surface_width, ctx->surface_height,
++                                   priv->tile_rows * priv->tile_cols,
++                                   priv->tile_cols, framerate);
++        if (level) {
++            av_log(avctx, AV_LOG_VERBOSE, "Using level %s.\n", level->name);
++            sh->seq_level_idx[0] = level->level_idx;
++        } else {
++            av_log(avctx, AV_LOG_VERBOSE, "Stream will not conform to "
++                   "any normal level, using maximum parameters level by default.\n");
++            sh->seq_level_idx[0] = 31;
++            sh->seq_tier[0] = 1;
++        }
++    }
++    vseq->seq_profile             = sh->seq_profile;
++    vseq->seq_level_idx           = sh->seq_level_idx[0];
++    vseq->seq_tier                = sh->seq_tier[0];
++    vseq->order_hint_bits_minus_1 = sh->order_hint_bits_minus_1;
++    vseq->intra_period            = ctx->gop_size;
++    vseq->ip_period               = ctx->b_per_p + 1;
++
++    vseq->seq_fields.bits.enable_order_hint = sh->enable_order_hint;
++
++    if (!(ctx->va_rc_mode & VA_RC_CQP)) {
++        vseq->bits_per_second = ctx->va_bit_rate;
++        vseq->seq_fields.bits.enable_cdef = sh->enable_cdef = 1;
++    }
++
++    ret = vaapi_encode_av1_add_obu(avctx, obu, AV1_OBU_SEQUENCE_HEADER, &priv->sh);
++    if (ret < 0)
++        goto end;
++
++    ret = vaapi_encode_av1_write_obu(avctx, priv->sh_data, &priv->sh_data_len, obu);
++    if (ret < 0)
++        goto end;
++
++end:
++    ff_cbs_fragment_reset(obu);
++    return ret;
++}
++
++static int vaapi_encode_av1_init_picture_params(AVCodecContext *avctx,
++                                                VAAPIEncodePicture *pic)
++{
++    VAAPIEncodeContext              *ctx = avctx->priv_data;
++    VAAPIEncodeAV1Context          *priv = avctx->priv_data;
++    VAAPIEncodeAV1Picture          *hpic = pic->priv_data;
++    AV1RawOBU                    *fh_obu = &priv->fh;
++    AV1RawFrameHeader                *fh = &fh_obu->obu.frame.header;
++    VAEncPictureParameterBufferAV1 *vpic = pic->codec_picture_params;
++    CodedBitstreamFragment          *obu = &priv->current_obu;
++    VAAPIEncodePicture    *ref;
++    VAAPIEncodeAV1Picture *href;
++    int slot, i;
++    int ret;
++    static const int8_t default_loop_filter_ref_deltas[AV1_TOTAL_REFS_PER_FRAME] =
++        { 1, 0, 0, 0, -1, 0, -1, -1 };
++
++    memset(fh_obu, 0, sizeof(*fh_obu));
++    pic->nb_slices = priv->tile_groups;
++    pic->non_independent_frame = pic->encode_order < pic->display_order;
++    fh_obu->header.obu_type = AV1_OBU_FRAME_HEADER;
++    fh_obu->header.obu_has_size_field = 1;
++
++    switch (pic->type) {
++    case PICTURE_TYPE_IDR:
++        av_assert0(pic->nb_refs[0] == 0 || pic->nb_refs[1]);
++        fh->frame_type = AV1_FRAME_KEY;
++        fh->refresh_frame_flags = 0xFF;
++        fh->base_q_idx = priv->q_idx_idr;
++        hpic->slot = 0;
++        hpic->last_idr_frame = pic->display_order;
++        break;
++    case PICTURE_TYPE_P:
++        av_assert0(pic->nb_refs[0]);
++        fh->frame_type = AV1_FRAME_INTER;
++        fh->base_q_idx = priv->q_idx_p;
++        ref = pic->refs[0][pic->nb_refs[0] - 1];
++        href = ref->priv_data;
++        hpic->slot = !href->slot;
++        hpic->last_idr_frame = href->last_idr_frame;
++        fh->refresh_frame_flags = 1 << hpic->slot;
++
++        /** set the nearest frame in L0 as all reference frame. */
++        for (i = 0; i < AV1_REFS_PER_FRAME; i++) {
++            fh->ref_frame_idx[i] = href->slot;
++        }
++        fh->primary_ref_frame = href->slot;
++        fh->ref_order_hint[href->slot] = ref->display_order - href->last_idr_frame;
++        vpic->ref_frame_ctrl_l0.fields.search_idx0 = AV1_REF_FRAME_LAST;
++
++        /** set the 2nd nearest frame in L0 as Golden frame. */
++        if (pic->nb_refs[0] > 1) {
++            ref = pic->refs[0][pic->nb_refs[0] - 2];
++            href = ref->priv_data;
++            fh->ref_frame_idx[3] = href->slot;
++            fh->ref_order_hint[href->slot] = ref->display_order - href->last_idr_frame;
++            vpic->ref_frame_ctrl_l0.fields.search_idx1 = AV1_REF_FRAME_GOLDEN;
++        }
++        break;
++    case PICTURE_TYPE_B:
++        av_assert0(pic->nb_refs[0] && pic->nb_refs[1]);
++        fh->frame_type = AV1_FRAME_INTER;
++        fh->base_q_idx = priv->q_idx_b;
++        fh->refresh_frame_flags = 0x0;
++        fh->reference_select = 1;
++
++        /** B frame will not be referenced, disable its recon frame. */
++        vpic->picture_flags.bits.disable_frame_recon = 1;
++
++        /** Use LAST_FRAME and BWDREF_FRAME for reference. */
++        vpic->ref_frame_ctrl_l0.fields.search_idx0 = AV1_REF_FRAME_LAST;
++        vpic->ref_frame_ctrl_l1.fields.search_idx0 = AV1_REF_FRAME_BWDREF;
++
++        ref                            = pic->refs[0][pic->nb_refs[0] - 1];
++        href                           = ref->priv_data;
++        hpic->last_idr_frame           = href->last_idr_frame;
++        fh->primary_ref_frame          = href->slot;
++        fh->ref_order_hint[href->slot] = ref->display_order - href->last_idr_frame;
++        for (i = 0; i < AV1_REF_FRAME_GOLDEN; i++) {
++            fh->ref_frame_idx[i] = href->slot;
++        }
++
++        ref                            = pic->refs[1][pic->nb_refs[1] - 1];
++        href                           = ref->priv_data;
++        fh->ref_order_hint[href->slot] = ref->display_order - href->last_idr_frame;
++        for (i = AV1_REF_FRAME_GOLDEN; i < AV1_REFS_PER_FRAME; i++) {
++            fh->ref_frame_idx[i] = href->slot;
++        }
++        break;
++    default:
++        av_assert0(0 && "invalid picture type");
++    }
++
++    fh->show_frame                = pic->display_order <= pic->encode_order;
++    fh->showable_frame            = fh->frame_type != AV1_FRAME_KEY;
++    fh->frame_width_minus_1       = avctx->width - 1;
++    fh->frame_height_minus_1      = avctx->height - 1;
++    fh->render_width_minus_1      = fh->frame_width_minus_1;
++    fh->render_height_minus_1     = fh->frame_height_minus_1;
++    fh->order_hint                = pic->display_order - hpic->last_idr_frame;
++    fh->tile_cols                 = priv->tile_cols;
++    fh->tile_rows                 = priv->tile_rows;
++    fh->tile_cols_log2            = priv->tile_cols_log2;
++    fh->tile_rows_log2            = priv->tile_rows_log2;
++    fh->uniform_tile_spacing_flag = priv->uniform_tile;
++    fh->tile_size_bytes_minus1    = priv->attr_ext2.bits.tile_size_bytes_minus1;
++
++    /** ignore ONLY_4x4 mode for codedlossless is not fully implemented. */
++    if (priv->attr_ext2.bits.tx_mode_support & 0x04)
++        fh->tx_mode = AV1_TX_MODE_SELECT;
++    else if (priv->attr_ext2.bits.tx_mode_support & 0x02)
++        fh->tx_mode = AV1_TX_MODE_LARGEST;
++    else {
++        av_log(avctx, AV_LOG_ERROR, "No available tx mode found.\n");
++        return AVERROR(EINVAL);
++    }
++
++    for (i = 0; i < fh->tile_cols; i++)
++        fh->width_in_sbs_minus_1[i] = vpic->width_in_sbs_minus_1[i] = priv->width_in_sbs_minus_1[i];
++
++    for (i = 0; i < fh->tile_rows; i++)
++        fh->height_in_sbs_minus_1[i] = vpic->height_in_sbs_minus_1[i] = priv->height_in_sbs_minus_1[i];
++
++    memcpy(fh->loop_filter_ref_deltas, default_loop_filter_ref_deltas,
++           AV1_TOTAL_REFS_PER_FRAME * sizeof(int8_t));
++
++    if (fh->frame_type == AV1_FRAME_KEY && fh->show_frame) {
++        fh->error_resilient_mode = 1;
++    }
++
++    if (fh->frame_type == AV1_FRAME_KEY || fh->error_resilient_mode)
++        fh->primary_ref_frame = AV1_PRIMARY_REF_NONE;
++
++    vpic->base_qindex          = fh->base_q_idx;
++    vpic->frame_width_minus_1  = fh->frame_width_minus_1;
++    vpic->frame_height_minus_1 = fh->frame_height_minus_1;
++    vpic->primary_ref_frame    = fh->primary_ref_frame;
++    vpic->reconstructed_frame  = pic->recon_surface;
++    vpic->coded_buf            = pic->output_buffer;
++    vpic->tile_cols            = fh->tile_cols;
++    vpic->tile_rows            = fh->tile_rows;
++    vpic->order_hint           = fh->order_hint;
++#if VA_CHECK_VERSION(1, 15, 0)
++    vpic->refresh_frame_flags  = fh->refresh_frame_flags;
++#endif
++
++    vpic->picture_flags.bits.enable_frame_obu     = 0;
++    vpic->picture_flags.bits.frame_type           = fh->frame_type;
++    vpic->picture_flags.bits.reduced_tx_set       = fh->reduced_tx_set;
++    vpic->picture_flags.bits.error_resilient_mode = fh->error_resilient_mode;
++
++    /** let driver decide to use single or compound reference prediction mode. */
++    vpic->mode_control_flags.bits.reference_mode = fh->reference_select ? 2 : 0;
++    vpic->mode_control_flags.bits.tx_mode = fh->tx_mode;
++
++    vpic->tile_group_obu_hdr_info.bits.obu_has_size_field = 1;
++
++    /** set reference. */
++    for (i = 0; i < AV1_REFS_PER_FRAME; i++)
++        vpic->ref_frame_idx[i] = fh->ref_frame_idx[i];
++
++    for (i = 0; i < FF_ARRAY_ELEMS(vpic->reference_frames); i++)
++        vpic->reference_frames[i] = VA_INVALID_SURFACE;
++
++    for (i = 0; i < MAX_REFERENCE_LIST_NUM; i++) {
++        for (int j = 0; j < pic->nb_refs[i]; j++) {
++            VAAPIEncodePicture *ref_pic = pic->refs[i][j];
++
++            slot = ((VAAPIEncodeAV1Picture*)ref_pic->priv_data)->slot;
++            av_assert0(vpic->reference_frames[slot] == VA_INVALID_SURFACE);
++
++            vpic->reference_frames[slot] = ref_pic->recon_surface;
++        }
++    }
++
++    fh_obu->obu_size_byte_len = priv->attr_ext2.bits.obu_size_bytes_minus1 + 1;
++    ret = vaapi_encode_av1_add_obu(avctx, obu, AV1_OBU_FRAME_HEADER, &priv->fh);
++    if (ret < 0)
++        goto end;
++
++    ret = vaapi_encode_av1_write_obu(avctx, priv->fh_data, &priv->fh_data_len, obu);
++    if (ret < 0)
++        goto end;
++
++    if (!(ctx->va_rc_mode & VA_RC_CQP)) {
++        vpic->min_base_qindex = av_clip(avctx->qmin, 1, AV1_MAX_QUANT);
++        vpic->max_base_qindex = av_clip(avctx->qmax, 1, AV1_MAX_QUANT);
++
++        vpic->bit_offset_qindex              = priv->qindex_offset;
++        vpic->bit_offset_loopfilter_params   = priv->loopfilter_offset;
++        vpic->bit_offset_cdef_params         = priv->cdef_start_offset;
++        vpic->size_in_bits_cdef_params       = priv->cdef_param_size;
++        vpic->size_in_bits_frame_hdr_obu     = priv->fh_data_len;
++        vpic->byte_offset_frame_hdr_obu_size = (((pic->type == PICTURE_TYPE_IDR) ?
++                                               priv->sh_data_len / 8 : 0) +
++                                               (fh_obu->header.obu_extension_flag ?
++                                               2 : 1));
++    }
++
++end:
++    ff_cbs_fragment_reset(obu);
++    return ret;
++}
++
++static int vaapi_encode_av1_init_slice_params(AVCodecContext *avctx,
++                                              VAAPIEncodePicture *pic,
++                                              VAAPIEncodeSlice *slice)
++{
++    VAAPIEncodeAV1Context      *priv = avctx->priv_data;
++    VAEncTileGroupBufferAV1  *vslice = slice->codec_slice_params;
++    CodedBitstreamAV1Context  *cbctx = priv->cbc->priv_data;
++    int div;
++
++    /** Set tile group info. */
++    div = priv->tile_cols * priv->tile_rows / priv->tile_groups;
++    vslice->tg_start = slice->index * div;
++    if (slice->index == (priv->tile_groups - 1)) {
++        vslice->tg_end = priv->tile_cols * priv->tile_rows - 1;
++        cbctx->seen_frame_header = 0;
++    } else {
++        vslice->tg_end = (slice->index + 1) * div - 1;
++    }
++
++    return 0;
++}
++
++static int vaapi_encode_av1_write_picture_header(AVCodecContext *avctx,
++                                                 VAAPIEncodePicture *pic,
++                                                 char *data, size_t *data_len)
++{
++    VAAPIEncodeAV1Context     *priv = avctx->priv_data;
++    CodedBitstreamFragment     *obu = &priv->current_obu;
++    CodedBitstreamAV1Context *cbctx = priv->cbc->priv_data;
++    AV1RawOBU               *fh_obu = &priv->fh;
++    AV1RawFrameHeader       *rep_fh = &fh_obu->obu.frame_header;
++    VAAPIEncodeAV1Picture *href;
++    int ret = 0;
++
++    pic->tail_size = 0;
++    /** Pack repeat frame header. */
++    if (pic->display_order > pic->encode_order) {
++        memset(fh_obu, 0, sizeof(*fh_obu));
++        href = pic->refs[0][pic->nb_refs[0] - 1]->priv_data;
++        fh_obu->header.obu_type = AV1_OBU_FRAME_HEADER;
++        fh_obu->header.obu_has_size_field = 1;
++
++        rep_fh->show_existing_frame   = 1;
++        rep_fh->frame_to_show_map_idx = href->slot == 0;
++        rep_fh->frame_type            = AV1_FRAME_INTER;
++        rep_fh->frame_width_minus_1   = avctx->width - 1;
++        rep_fh->frame_height_minus_1  = avctx->height - 1;
++        rep_fh->render_width_minus_1  = rep_fh->frame_width_minus_1;
++        rep_fh->render_height_minus_1 = rep_fh->frame_height_minus_1;
++
++        cbctx->seen_frame_header = 0;
++
++        ret = vaapi_encode_av1_add_obu(avctx, obu, AV1_OBU_FRAME_HEADER, &priv->fh);
++        if (ret < 0)
++            goto end;
++
++        ret = vaapi_encode_av1_write_obu(avctx, pic->tail_data, &pic->tail_size, obu);
++        if (ret < 0)
++            goto end;
++
++        pic->tail_size /= 8;
++    }
++
++    memcpy(data, &priv->fh_data, MAX_PARAM_BUFFER_SIZE * sizeof(char));
++    *data_len = priv->fh_data_len;
++
++end:
++    ff_cbs_fragment_reset(obu);
++    return ret;
++}
++
++static const VAAPIEncodeProfile vaapi_encode_av1_profiles[] = {
++    { FF_PROFILE_AV1_MAIN,  8, 3, 1, 1, VAProfileAV1Profile0 },
++    { FF_PROFILE_AV1_MAIN, 10, 3, 1, 1, VAProfileAV1Profile0 },
++    { FF_PROFILE_UNKNOWN }
++};
++
++static const VAAPIEncodeType vaapi_encode_type_av1 = {
++    .profiles        = vaapi_encode_av1_profiles,
++    .flags           = FLAG_B_PICTURES | FLAG_TIMESTAMP_NO_DELAY,
++    .default_quality = 25,
++
++    .get_encoder_caps = &vaapi_encode_av1_get_encoder_caps,
++    .configure        = &vaapi_encode_av1_configure,
++
++    .sequence_header_type  = VAEncPackedHeaderSequence,
++    .sequence_params_size  = sizeof(VAEncSequenceParameterBufferAV1),
++    .init_sequence_params  = &vaapi_encode_av1_init_sequence_params,
++    .write_sequence_header = &vaapi_encode_av1_write_sequence_header,
++
++    .picture_priv_data_size = sizeof(VAAPIEncodeAV1Picture),
++    .picture_header_type    = VAEncPackedHeaderPicture,
++    .picture_params_size    = sizeof(VAEncPictureParameterBufferAV1),
++    .init_picture_params    = &vaapi_encode_av1_init_picture_params,
++    .write_picture_header   = &vaapi_encode_av1_write_picture_header,
++
++    .slice_params_size = sizeof(VAEncTileGroupBufferAV1),
++    .init_slice_params = &vaapi_encode_av1_init_slice_params,
++};
++
++static av_cold int vaapi_encode_av1_init(AVCodecContext *avctx)
++{
++    VAAPIEncodeContext      *ctx = avctx->priv_data;
++    VAAPIEncodeAV1Context  *priv = avctx->priv_data;
++    VAConfigAttrib attr;
++    VAStatus vas;
++    int ret;
++
++    ctx->codec = &vaapi_encode_type_av1;
++
++    ctx->desired_packed_headers =
++        VA_ENC_PACKED_HEADER_SEQUENCE |
++        VA_ENC_PACKED_HEADER_PICTURE;
++
++    if (avctx->profile == FF_PROFILE_UNKNOWN)
++        avctx->profile = priv->profile;
++    if (avctx->level == FF_PROFILE_UNKNOWN)
++        avctx->level = priv->level;
++
++    if (avctx->level != FF_PROFILE_UNKNOWN && avctx->level & ~0x1f) {
++        av_log(avctx, AV_LOG_ERROR, "Invalid level %d\n", avctx->level);
++        return AVERROR(EINVAL);
++    }
++
++    ret = ff_vaapi_encode_init(avctx);
++    if (ret < 0)
++        return ret;
++
++    attr.type = VAConfigAttribEncAV1;
++    vas = vaGetConfigAttributes(ctx->hwctx->display,
++                                ctx->va_profile,
++                                ctx->va_entrypoint,
++                                &attr, 1);
++    if (vas != VA_STATUS_SUCCESS) {
++        av_log(avctx, AV_LOG_ERROR, "Failed to query "
++               "config attribute: %d (%s).\n", vas, vaErrorStr(vas));
++        return AVERROR_EXTERNAL;
++    } else if (attr.value == VA_ATTRIB_NOT_SUPPORTED) {
++        priv->attr.value = 0;
++        av_log(avctx, AV_LOG_WARNING, "Attribute type:%d is not "
++               "supported.\n", attr.type);
++    } else {
++        priv->attr.value = attr.value;
++    }
++
++    attr.type = VAConfigAttribEncAV1Ext1;
++    vas = vaGetConfigAttributes(ctx->hwctx->display,
++                                ctx->va_profile,
++                                ctx->va_entrypoint,
++                                &attr, 1);
++    if (vas != VA_STATUS_SUCCESS) {
++        av_log(avctx, AV_LOG_ERROR, "Failed to query "
++               "config attribute: %d (%s).\n", vas, vaErrorStr(vas));
++        return AVERROR_EXTERNAL;
++    } else if (attr.value == VA_ATTRIB_NOT_SUPPORTED) {
++        priv->attr_ext1.value = 0;
++        av_log(avctx, AV_LOG_WARNING, "Attribute type:%d is not "
++               "supported.\n", attr.type);
++    } else {
++        priv->attr_ext1.value = attr.value;
++    }
++
++    /** This attr provides essential indicators, return error if not support. */
++    attr.type = VAConfigAttribEncAV1Ext2;
++    vas = vaGetConfigAttributes(ctx->hwctx->display,
++                                ctx->va_profile,
++                                ctx->va_entrypoint,
++                                &attr, 1);
++    if (vas != VA_STATUS_SUCCESS || attr.value == VA_ATTRIB_NOT_SUPPORTED) {
++        av_log(avctx, AV_LOG_ERROR, "Failed to query "
++               "config attribute: %d (%s).\n", vas, vaErrorStr(vas));
++        return AVERROR_EXTERNAL;
++    } else {
++        priv->attr_ext2.value = attr.value;
++    }
++
++    ret = vaapi_encode_av1_set_tile(avctx);
++    if (ret < 0)
++        return ret;
++
++    return 0;
++}
++
++static av_cold int vaapi_encode_av1_close(AVCodecContext *avctx)
++{
++    VAAPIEncodeAV1Context *priv = avctx->priv_data;
++
++    ff_cbs_fragment_free(&priv->current_obu);
++    ff_cbs_close(&priv->cbc);
++
++    return ff_vaapi_encode_close(avctx);
++}
++
++#define OFFSET(x) offsetof(VAAPIEncodeAV1Context, x)
++#define FLAGS (AV_OPT_FLAG_VIDEO_PARAM | AV_OPT_FLAG_ENCODING_PARAM)
++
++static const AVOption vaapi_encode_av1_options[] = {
++    VAAPI_ENCODE_COMMON_OPTIONS,
++    VAAPI_ENCODE_RC_OPTIONS,
++    { "profile", "Set profile (seq_profile)",
++      OFFSET(profile), AV_OPT_TYPE_INT,
++      { .i64 = FF_PROFILE_UNKNOWN }, FF_PROFILE_UNKNOWN, 0xff, FLAGS, "profile" },
++
++#define PROFILE(name, value)  name, NULL, 0, AV_OPT_TYPE_CONST, \
++    { .i64 = value }, 0, 0, FLAGS, "profile"
++    { PROFILE("main",               FF_PROFILE_AV1_MAIN) },
++    { PROFILE("high",               FF_PROFILE_AV1_HIGH) },
++    { PROFILE("professional",       FF_PROFILE_AV1_PROFESSIONAL) },
++#undef PROFILE
++
++    { "tier", "Set tier (seq_tier)",
++      OFFSET(tier), AV_OPT_TYPE_INT, { .i64 = 0 }, 0, 1, FLAGS, "tier" },
++    { "main", NULL, 0, AV_OPT_TYPE_CONST,
++      { .i64 = 0 }, 0, 0, FLAGS, "tier" },
++    { "high", NULL, 0, AV_OPT_TYPE_CONST,
++      { .i64 = 1 }, 0, 0, FLAGS, "tier" },
++    { "level", "Set level (seq_level_idx)",
++      OFFSET(level), AV_OPT_TYPE_INT,
++      { .i64 = FF_PROFILE_UNKNOWN }, FF_PROFILE_UNKNOWN, 0x1f, FLAGS, "level" },
++
++#define LEVEL(name, value) name, NULL, 0, AV_OPT_TYPE_CONST, \
++      { .i64 = value }, 0, 0, FLAGS, "level"
++    { LEVEL("2.0",  0) },
++    { LEVEL("2.1",  1) },
++    { LEVEL("3.0",  4) },
++    { LEVEL("3.1",  5) },
++    { LEVEL("4.0",  8) },
++    { LEVEL("4.1",  9) },
++    { LEVEL("5.0", 12) },
++    { LEVEL("5.1", 13) },
++    { LEVEL("5.2", 14) },
++    { LEVEL("5.3", 15) },
++    { LEVEL("6.0", 16) },
++    { LEVEL("6.1", 17) },
++    { LEVEL("6.2", 18) },
++    { LEVEL("6.3", 19) },
++#undef LEVEL
++
++    { "tiles", "Tile columns x rows (Use minimal tile column/row number automatically by default)",
++      OFFSET(tile_cols), AV_OPT_TYPE_IMAGE_SIZE, { .str = NULL }, 0, 0, FLAGS },
++    { "tile_groups", "Number of tile groups for encoding",
++      OFFSET(tile_groups), AV_OPT_TYPE_INT, { .i64 = 1 }, 1, AV1_MAX_TILE_ROWS * AV1_MAX_TILE_COLS, FLAGS },
++
++    { NULL },
++};
++
++static const FFCodecDefault vaapi_encode_av1_defaults[] = {
++    { "b",              "0"   },
++    { "bf",             "2"   },
++    { "g",              "120" },
++    { "qmin",           "1"   },
++    { "qmax",           "255" },
++    { NULL },
++};
++
++static const AVClass vaapi_encode_av1_class = {
++    .class_name = "av1_vaapi",
++    .item_name  = av_default_item_name,
++    .option     = vaapi_encode_av1_options,
++    .version    = LIBAVUTIL_VERSION_INT,
++};
++
++const FFCodec ff_av1_vaapi_encoder = {
++    .p.name         = "av1_vaapi",
++    CODEC_LONG_NAME("AV1 (VAAPI)"),
++    .p.type         = AVMEDIA_TYPE_VIDEO,
++    .p.id           = AV_CODEC_ID_AV1,
++    .priv_data_size = sizeof(VAAPIEncodeAV1Context),
++    .init           = &vaapi_encode_av1_init,
++    FF_CODEC_RECEIVE_PACKET_CB(&ff_vaapi_encode_receive_packet),
++    .close          = &vaapi_encode_av1_close,
++    .p.priv_class   = &vaapi_encode_av1_class,
++    .p.capabilities = AV_CODEC_CAP_DELAY | AV_CODEC_CAP_HARDWARE |
++                      AV_CODEC_CAP_DR1 | AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE,
++    .caps_internal  = FF_CODEC_CAP_NOT_INIT_THREADSAFE |
++                      FF_CODEC_CAP_INIT_CLEANUP,
++    .defaults       = vaapi_encode_av1_defaults,
++    .p.pix_fmts = (const enum AVPixelFormat[]) {
++        AV_PIX_FMT_VAAPI,
++        AV_PIX_FMT_NONE,
++    },
++    .hw_configs     = ff_vaapi_encode_hw_configs,
++    .p.wrapper_name = "vaapi",
++};

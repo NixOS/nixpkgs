@@ -1,0 +1,25 @@
+From d96227806cab0de91c4db6b808b842c5b1477ebd Mon Sep 17 00:00:00 2001
+From: David Rosca <nowrep@gmail.com>
+Date: Fri, 21 Jul 2023 21:55:56 +0200
+Subject: [PATCH] vaapi_encode_h265: Set vui_parameters_present_flag
+
+---
+ libavcodec/vaapi_encode_h265.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavcodec/vaapi_encode_h265.c b/libavcodec/vaapi_encode_h265.c
+index aa7e532f9a..91212dfb58 100644
+--- a/libavcodec/vaapi_encode_h265.c
++++ b/libavcodec/vaapi_encode_h265.c
+@@ -690,7 +690,7 @@ static int vaapi_encode_h265_init_sequence_params(AVCodecContext *avctx)
+             sps->log2_min_pcm_luma_coding_block_size_minus3 +
+             sps->log2_diff_max_min_pcm_luma_coding_block_size,
+ 
+-        .vui_parameters_present_flag = 0,
++        .vui_parameters_present_flag = 1,
+     };
+ 
+     *vpic = (VAEncPictureParameterBufferHEVC) {
+-- 
+2.41.0
+

@@ -1,0 +1,22 @@
+From 03823ac0c6a38bd6ba972539e3203a592579792f Mon Sep 17 00:00:00 2001
+From: Timo Rothenpieler <timo@rothenpieler.org>
+Date: Thu, 1 Jun 2023 23:24:43 +0200
+Subject: [PATCH] configure: use non-deprecated nvenc GUID for conftest
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 495493aa0e8a..ae56540f4eb0 100755
+--- a/configure
++++ b/configure
+@@ -7079,7 +7079,7 @@ enabled nvenc &&
+     test_cc -I$source_path <<EOF || disable nvenc
+ #include <ffnvcodec/nvEncodeAPI.h>
+ NV_ENCODE_API_FUNCTION_LIST flist;
+-void f(void) { struct { const GUID guid; } s[] = { { NV_ENC_PRESET_HQ_GUID } }; }
++void f(void) { struct { const GUID guid; } s[] = { { NV_ENC_CODEC_H264_GUID } }; }
+ int main(void) { return 0; }
+ EOF
+
