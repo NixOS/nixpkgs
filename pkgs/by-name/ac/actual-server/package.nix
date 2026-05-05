@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Patch all references to `git` to a no-op `true`. This neuter automatic
     # translation update.
-    substituteInPlace bin/package-browser \
+    substituteInPlace bin/package-browser bin/package-electron \
       --replace-fail "git" "true"
 
     # Allow `remove-untranslated-languages` to do its job.
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit (finalAttrs) offlineCache;
+    inherit (finalAttrs) offlineCache env;
     inherit translations;
     tests = nixosTests.actual;
     updateScript = ./update.sh;
