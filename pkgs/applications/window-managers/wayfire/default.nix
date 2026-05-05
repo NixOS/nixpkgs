@@ -22,18 +22,18 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   pango,
   libxcb-wm,
   yyjson,
 }:
 let
-  wlroots = wlroots_0_19;
+  wlroots = wlroots_0_20;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.10.1";
+  version = "0.11.0-unstable-2026-04-17";
 
   outputs = [
     "out"
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
-    rev = "v${finalAttrs.version}";
+    rev = "9a568ffd7a2af8780926da50f89908ec4f38bf3a";
     fetchSubmodules = true;
-    hash = "sha256-yiqtnsXxvC7vk22ZQ5OFt5uX40FCRGWpfZrax9GItAg=";
+    hash = "sha256-sIwBNBY0qN+4+a9KAS8WDGCNyrX5O0tKPPIT8ebLRqo=";
   };
 
   postPatch = ''
@@ -67,12 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libinput
     libjpeg
-    libxkbcommon
     libxml2
     vulkan-headers
-    wayland-protocols
     libxcb-wm
-    yyjson
   ];
 
   propagatedBuildInputs = [
@@ -81,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     cairo
     pango
+    yyjson
+    libxkbcommon
+    wayland-protocols
   ];
 
   nativeCheckInputs = [
