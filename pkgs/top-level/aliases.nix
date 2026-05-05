@@ -1475,6 +1475,7 @@ mapAliases {
   netsurf.nsgenbind = throw "'netsurf.nsgenbind' has been renamed to/replaced by 'nsgenbind'"; # Converted to throw 2025-10-27
   nettools = net-tools; # Added 2025-06-11
   networkmanager_strongswan = networkmanager-strongswan; # Added 2025-06-29
+  neverest = throw "'neverest' has been removed due to being unmaintained upstream and broken"; # Added 2026-05-05
   newlib-nanoCross = throw "'newlib-nanoCross' has been renamed to/replaced by 'newlib-nano'"; # Converted to throw 2025-10-27
   newlibCross = throw "'newlibCross' has been renamed to/replaced by 'newlib'"; # Converted to throw 2025-10-27
   newt-go = fosrl-newt; # Added 2025-06-24
