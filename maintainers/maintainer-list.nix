@@ -5524,6 +5524,11 @@
       { fingerprint = "1E3E C960 F2C0 9128 5398  A4A9 28B0 7544 198A DB06"; }
     ];
   };
+  cooukiez = {
+    name = "Ludwig";
+    github = "cooukiez";
+    githubId = "61082023";
+  };
   corbanr = {
     email = "corban@raunco.co";
     github = "CorbanR";
