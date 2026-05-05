@@ -6,10 +6,7 @@
   nodes.machine =
     { ... }:
     {
-      # we abuse run0 for a quick login as root as to not require setting up accounts and passwords
-      security.pam.services.systemd-run0 = {
-        updateWtmp = true; # enable lastlog
-      };
+      imports = [ ../common/user-account.nix ];
     };
 
   testScript = ''
@@ -23,8 +20,13 @@
 
     with subtest("Test lastlog entries are created by logins"):
       machine.wait_for_unit("multi-user.target")
-      machine.succeed("run0 --pty true") # perform full login
-      print(machine.succeed("lastlog2 --active --user root"))
+      machine.wait_until_tty_matches("1", "login: ")
+      machine.send_chars("alice\n")
+      machine.wait_until_tty_matches("1", "Password: ")
+      machine.send_chars("foobar\n")
+      machine.wait_until_succeeds("pgrep -u alice bash")
+      print(machine.succeed("lastlog2 --active --user alice"))
       machine.succeed("stat /var/lib/lastlog/lastlog2.db")
+      machine.send_chars("exit\n")
   '';
 }
