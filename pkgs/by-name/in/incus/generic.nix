@@ -14,6 +14,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   acl,
   buildPackages,
   cowsql,
@@ -51,6 +52,7 @@ let
       sphinxext-opengraph
     ]
   );
+  evaluatedPatches = if lib.isFunction patches then patches fetchpatch2 else patches;
 in
 
 buildGoModule (finalAttrs: {
@@ -75,7 +77,7 @@ buildGoModule (finalAttrs: {
     // (if (rev == null) then { tag = "v${version}"; } else { inherit rev; })
   );
 
-  patches = [ ./docs.patch ] ++ patches;
+  patches = [ ./docs.patch ] ++ evaluatedPatches;
 
   excludedPackages = [
     # statically compile these
