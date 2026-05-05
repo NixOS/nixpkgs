@@ -20,22 +20,25 @@
 let
   isFuse3 = lib.hasPrefix "3" version;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fuse";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "libfuse";
-    rev = "${pname}-${version}";
+    tag = "fuse-${version}";
     inherit hash;
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches =
     lib.optional (!isFuse3 && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64))
       (fetchpatch {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
-        sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
+        hash = "sha256-UsLE14P50Ell0xo3PESk5tIHH2HLalsaWiEubO9KdPE=";
       })
     ++ (
       if isFuse3 then
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
           ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch
           (fetchpatch {
             url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/fuse/files/fuse-2.9.9-closefrom-glibc-2-34.patch?id=8a970396fca7aca2d5a761b8e7a8242f1eef14c9";
-            sha256 = "sha256-ELYBW/wxRcSMssv7ejCObrpsJHtOPJcGq33B9yHQII4=";
+            hash = "sha256-KHF6jCCoUbz+5fNcWiUBKsr1gNerZ/RuXb2uXAMdGXI=";
           })
           ./fuse2-gettext-0.25.patch
         ]
@@ -145,4 +148,4 @@ stdenv.mkDerivation rec {
     ];
     outputsToInstall = [ "bin" ];
   };
-}
+})
