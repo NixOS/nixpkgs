@@ -278,6 +278,8 @@ if coq.rocqPackages ? mathcomp && version != "2.3.0" && version != "2.4.0" then
       ];
       preBuild = "cd ssreflect";
     };
+    fingroup = mc.finite-group;
+    character = mc.group-representation;
   }
 else
   mathcomp_ (if single then "single" else "all")

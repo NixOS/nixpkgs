@@ -10,9 +10,14 @@
   callPackage,
   enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit),
   pkgsCross,
-  x86_64PkgsCrossToolchain ? pkgsCross.gnu64,
-  aarch64PkgsCrossToolchain ? pkgsCross.aarch64-multiplatform,
-  riscv64PkgsCrossToolchain ? pkgsCross.riscv64,
+  x86_64PkgsCrossToolchain ? if stdenv.hostPlatform.isMusl then pkgsCross.musl64 else pkgsCross.gnu64,
+  aarch64PkgsCrossToolchain ?
+    if stdenv.hostPlatform.isMusl then
+      pkgsCross.aarch64-multiplatform-musl
+    else
+      pkgsCross.aarch64-multiplatform,
+  riscv64PkgsCrossToolchain ?
+    if stdenv.hostPlatform.isMusl then pkgsCross.riscv64-musl else pkgsCross.riscv64,
 }:
 
 # There's no support for `aarch64` or `riscv64` for freebsd nor for openbsd on nix.
