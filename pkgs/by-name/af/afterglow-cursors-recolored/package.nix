@@ -66,7 +66,8 @@ let
   };
 in
 
-lib.checkListOfEnum "afterglow-cursors-recolored: theme variants" availableThemeVariants themeVariants
+lib.checkListOfEnum "afterglow-cursors-recolored: theme variants" availableThemeVariants
+  themeVariants
   lib.checkListOfEnum
   "afterglow-cursors-recolored: catppuccin color variants"
   availableColorVariants.Catppuccin
