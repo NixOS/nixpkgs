@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "busylight-for-humans";
-  version = "0.45.3";
+  version = "0.48.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
     tag = "v${version}";
-    hash = "sha256-EP+2jWOrXQE8sZQYclMMbpfr+FmPHIbZ35NNbfCTnUk=";
+    hash = "sha256-5sQXW55P/iWhDWY6bGzN8IrWCJyrSvu2ObtIOolo2X0=";
   };
 
   build-system = [ hatchling ];
