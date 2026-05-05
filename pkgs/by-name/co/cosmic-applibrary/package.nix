@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-applibrary";
-  version = "1.0.11";
+  version = "1.0.12";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-applibrary";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-i0g3ApvMOppRz569rr9KzTWpM1kDZhNvi8T8gJGaX8Q=";
+    hash = "sha256-deE9xXvRSZWSEdKPJr1HuA/gVs0a22lAVRmUnhwpDJM=";
   };
 
-  cargoHash = "sha256-hDGibg/nrBvClYY3gxP2juI0nrUT7fRE+hfW4iqlbeU=";
+  cargoHash = "sha256-uR0wm2+zmcec3esfYwgq4pRqSHkZnd3O8XhgnANf/1Q=";
 
   nativeBuildInputs = [
     just
