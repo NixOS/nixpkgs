@@ -5,20 +5,21 @@
   setuptools,
   aiohttp,
   async-upnp-client,
+  zeroconf,
   pytestCheckHook,
   pytest-asyncio,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "wiim";
-  version = "0.1.1";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Linkplay2020";
     repo = "wiim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WJbnVJ7ZM4wZk3Y8zTRc3i24CyTA8Wz9EKYr5BNlx6o=";
+    hash = "sha256-buFGfM/qgZGjE3asv/5GBD4TfHj3lf/9Q9u/W9bOq3A=";
   };
 
   build-system = [ setuptools ];
@@ -26,11 +27,17 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     async-upnp-client
+    zeroconf
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+  ];
+
+  disabledTests = [
+    # ValueError: Device u is not managed by the controller
+    "test_async_join_group"
   ];
 
   pythonImportsCheck = [ "wiim" ];
