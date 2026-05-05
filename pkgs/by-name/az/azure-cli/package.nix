@@ -64,7 +64,7 @@ let
             inherit description;
             inherit (azure-cli.meta) platforms maintainers;
             homepage = "https://github.com/Azure/azure-cli-extensions";
-            changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
+            changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/azure-cli/HISTORY.rst";
             license = lib.licenses.mit;
             sourceProvenance = [ lib.sourceTypes.fromSource ];
           }
@@ -82,15 +82,13 @@ let
     self;
 
   # Update script for azure cli extensions. Currently only works for manual extensions.
-  extensionUpdateScript =
-    { pname }:
-    [
-      "${lib.getExe azure-cli.extensions-tool}"
-      "--cli-version"
-      "${azure-cli.version}"
-      "--extension"
-      "${pname}"
-    ];
+  extensionUpdateScript = [
+    "${lib.getExe azure-cli.extensions-tool}"
+    "--cli-version"
+    "${azure-cli.version}"
+    "--extension"
+    "azure-cli"
+  ];
 
   # Test that the Azure CLI can be built with the given extensions, and that
   # the extensions are recognized by the CLI and listed in the output.
@@ -419,7 +417,7 @@ py.pkgs.toPythonApplication (
         inherit (azure-cli) extensions-tool;
       };
 
-      generate-extensions = writeShellScriptBin "${pname}-update-extensions" ''
+      generate-extensions = writeShellScriptBin "azure-cli-update-extensions" ''
         ${lib.getExe azure-cli.extensions-tool} --cli-version ${azure-cli.version} --commit
       '';
 
