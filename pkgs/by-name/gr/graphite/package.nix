@@ -27,7 +27,6 @@
   libxcursor,
   libx11,
   libxcb,
-  nix-update-script,
 }:
 
 let
@@ -173,12 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   disallowedReferences = [ rustc ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--version-regex=(0-unstable-.*)"
-    ];
-  };
+  passthru.updateScript = ./update.nu;
 
   meta = {
     description = "Open source vector graphics editor and procedural design engine";
