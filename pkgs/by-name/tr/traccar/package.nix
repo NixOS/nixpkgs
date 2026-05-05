@@ -82,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.asl20;
     mainProgram = "traccar";
-    maintainers = with lib.maintainers; [ frederictobiasc ];
+    maintainers = with lib.maintainers; [
+      frederictobiasc
+      ungeskriptet
+    ];
   };
 })
