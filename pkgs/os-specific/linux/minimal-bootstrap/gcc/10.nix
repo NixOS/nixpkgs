@@ -112,13 +112,11 @@ bash.runCommand "${pname}-${version}"
     tar xf ${gmp}
     tar xf ${mpfr}
     tar xf ${mpc}
-    tar xf ${isl}
     cd gcc-${version}
 
     ln -s ../gmp-${gmpVersion} gmp
     ln -s ../mpfr-${mpfrVersion} mpfr
     ln -s ../mpc-${mpcVersion} mpc
-    ln -s ../isl-${islVersion} isl
 
     # Patch
     # doesn't recognise musl
@@ -157,7 +155,10 @@ bash.runCommand "${pname}-${version}"
       --disable-lto \
       --disable-multilib \
       --disable-nls \
-      --disable-plugin
+      --disable-plugin \
+      --without-isl \
+      --disable-libstdcxx-filesystem-ts \
+      --disable-shared
 
     # Build
     make -j $NIX_BUILD_CORES

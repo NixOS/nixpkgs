@@ -155,7 +155,9 @@ bash.runCommand "${pname}-${version}"
       --disable-libstdcxx-pch \
       --disable-lto \
       --disable-multilib \
-      --disable-nls
+      --disable-nls \
+      --disable-libsanitizer \
+      --disable-shared
 
     # Build
     make -j $NIX_BUILD_CORES

@@ -115,13 +115,11 @@ bash.runCommand "${pname}-${version}"
     tar xf ${gmp}
     tar xf ${mpfr}
     tar xf ${mpc}
-    tar xf ${isl}
     cd gcc-${version}
 
     ln -s ../gmp-${gmpVersion} gmp
     ln -s ../mpfr-${mpfrVersion} mpfr
     ln -s ../mpc-${mpcVersion} mpc
-    ln -s ../isl-${islVersion} isl
 
     # Configure
     export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
@@ -152,7 +150,10 @@ bash.runCommand "${pname}-${version}"
       --disable-multilib \
       --disable-nls \
       --disable-plugin \
-      --with-specs="%x{-dynamic-linker=${glibc}/lib/${linkerName}} %x{-L${glibc}/lib/} -B${glibc}/lib"
+      --with-specs="%x{-dynamic-linker=${glibc}/lib/${linkerName}} %x{-L${glibc}/lib/} -B${glibc}/lib" \
+      --without-isl \
+      --disable-libstdcxx-backtrace \
+      --disable-libstdcxx-filesystem-ts
 
     # Build
     make -j $NIX_BUILD_CORES
