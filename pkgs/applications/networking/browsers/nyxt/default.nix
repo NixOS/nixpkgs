@@ -3,8 +3,9 @@
   lib,
   testers,
   wrapGAppsHook3,
-  fetchzip,
+  fetchFromGitHub,
   sbcl,
+  sbclPackages,
   pkg-config,
   libfixposix,
   gobject-introspection,
@@ -29,16 +30,18 @@
   wl-clipboard,
   nix-update-script,
   nixosTests,
+  enchant_2,
+  electronSupport ? false,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "nyxt";
-  version = "3.12.0";
+  version = "4.0.0";
 
-  src = fetchzip {
-    url = "https://github.com/atlas-engineer/nyxt/releases/download/${finalAttrs.version}/nyxt-${finalAttrs.version}-source-with-submodules.tar.xz";
-    hash = "sha256-T5p3OaWp28rny81ggdE9iXffmuh6wt6XSuteTOT8FLI=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "atlas-engineer";
+    repo = "nyxt";
+    tag = finalAttrs.version;
+    hash = "sha256-4m8Obnv0hqNMZZ1luZzmlBRR1aZiRAr//bjQkFjI+CM=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -59,7 +62,54 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ];
+
+    enchant_2
+    sbclPackages.sqlite
+    sbclPackages.enchant
+  ]
+  ++ (with sbclPackages; [
+    alexandria
+    bordeaux-threads
+    calispel
+    cl-base64
+    cl-colors-ng
+    cl-gopher
+    cl-json
+    cl-ppcre
+    cl-ppcre-unicode
+    cl-prevalence
+    cl-qrencode
+    cl-tld
+    closer-mop
+    clss
+    dexador
+    flexi-streams
+    iolib
+    lass
+    local-time
+    log4cl
+    lparallel
+    nclasses
+    nfiles
+    nhooks
+    nkeymaps
+    parenscript
+    phos
+    plump
+    prompter
+    py-configparser
+    quri
+    serapeum
+    spinneret
+    str
+    trivia
+    trivial-arguments
+    trivial-clipboard
+    trivial-package-local-nicknames
+    trivial-types
+    unix-opts
+  ])
+  ++ lib.optionals electronSupport [ sbclPackages.cl-electron ];
 
   # for cffi
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [
@@ -85,8 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
   # don't refresh from git
   makeFlags = [
     "all"
-    "NYXT_SUBMODULES=false"
-  ];
+    "NYXT_SUBMODULES=true"
+  ]
+  ++ lib.optionals electronSupport [ "NYXT_RENDERER=electron" ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
