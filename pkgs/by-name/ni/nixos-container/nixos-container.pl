@@ -380,14 +380,6 @@ sub restartContainer {
     startContainer;
 }
 
-# Run a command in the container.
-sub runInContainer {
-    my @args = @_;
-    my $leader = getLeader;
-    exec($nsenter, "--all", "-t", $leader, "--", @args);
-    die "cannot run ‘nsenter’: $!\n";
-}
-
 sub evalAttribute {
     my ($attribute, $nixosF, $nixosConfigF, $extraArgs) = @_;
     run [
@@ -520,14 +512,14 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    runInContainer("@su@", "root", "-l");
+    exec("machinectl", "shell", "-q", "--", "root@" . $containerName);
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
     # Escape command.
     my $s = join(' ', map { s/'/'\\''/g; "'$_'" } @ARGV);
-    runInContainer("@su@", "root", "-l", "-c", "exec " . $s);
+    exec("systemd-run", "--quiet", "--pipe", "--wait", "-M", $containerName, "/bin/sh", "-l", "-c", $s);
 }
 
 elsif ($action eq "show-ip") {
