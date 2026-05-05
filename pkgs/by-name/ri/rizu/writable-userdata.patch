@@ -1,0 +1,61 @@
+diff --git a/conf.lua b/conf.lua
+index c196704e..c7113f4c 100644
+--- a/conf.lua
++++ b/conf.lua
+@@ -1,5 +1,5 @@
+ function love.conf(t)
+-	t.identity = nil
++	t.identity = "rizu"
+ 	t.appendidentity = true
+ 	t.console = true
+ 	t.accelerometerjoystick = true
+diff --git a/main.lua b/main.lua
+index 24e70d74..2556ddd9 100644
+--- a/main.lua
++++ b/main.lua
+@@ -117,7 +117,6 @@ pkg.export_love()
+ love.errhand = require("errhand")
+ 
+ local physfs = require("physfs")
+-physfs.setWriteDir(root)
+ 
+ if root == sourceBase then
+ 	assert(physfs.mount(root, "/", true))
+diff --git a/sphere/persistence/CacheModel/GameDatabase.lua b/sphere/persistence/CacheModel/GameDatabase.lua
+index 77108ebf..b13d39b4 100644
+--- a/sphere/persistence/CacheModel/GameDatabase.lua
++++ b/sphere/persistence/CacheModel/GameDatabase.lua
+@@ -28,7 +28,7 @@ end
+ function GameDatabase:load()
+ 	local db = self.db
+ 
+-	db:open("userdata/data.db")
++	db:open(love.filesystem.getSaveDirectory() .. "/data.db")
+ 	db:exec("PRAGMA busy_timeout = 10000")
+ 	db:exec("PRAGMA foreign_keys = ON")
+ 
+diff --git a/sphere/persistence/ConfigModel/init.lua b/sphere/persistence/ConfigModel/init.lua
+index b05b8044..8d53c4c4 100644
+--- a/sphere/persistence/ConfigModel/init.lua
++++ b/sphere/persistence/ConfigModel/init.lua
+@@ -18,7 +18,7 @@ local stbl = require("stbl")
+ ---@field configs sphere.Configs
+ local ConfigModel = class()
+ 
+-ConfigModel.userdataPath = "userdata"
++ConfigModel.userdataPath = ""
+ ConfigModel.configModelPath = "sphere/persistence/ConfigModel"
+ 
+ function ConfigModel:new()
+diff --git a/sphere/persistence/dirs.lua b/sphere/persistence/dirs.lua
+index b70c8dfe..d949f1e9 100644
+--- a/sphere/persistence/dirs.lua
++++ b/sphere/persistence/dirs.lua
+@@ -1,7 +1,6 @@
+ local dirs = {}
+ 
+ local dirs_list = {
+-	"userdata",
+ 	"userdata/pkg",
+ 	"userdata/skins",
+ 	"userdata/charts",
