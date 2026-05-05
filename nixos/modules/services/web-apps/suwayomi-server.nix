@@ -15,6 +15,14 @@ let
     ;
 
   format = pkgs.formats.hocon { };
+
+  configFile = format.generate "server.conf" cfg.settings;
+  isAtLeast2605 = lib.versionAtLeast config.system.stateVersion "26.05";
+  serverConf =
+    if isAtLeast2605 then
+      "${cfg.dataDir}/server.conf"
+    else
+      "${cfg.dataDir}/.local/share/Tachidesk/server.conf";
 in
 {
   options = {
@@ -153,6 +161,7 @@ in
           server.socksProxyHost = "yourproxyhost.com";
           server.socksProxyPort = "8080";
         };
+        apply = lib.filterAttrsRecursive (_: x: x != null);
       };
     };
   };
@@ -170,6 +179,11 @@ in
       }
     ];
 
+    services.suwayomi-server.settings = mkIf cfg.settings.server.basicAuthEnabled {
+      server.basicAuthPasswordFile = null;
+      server.basicAuthPassword = "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD";
+    };
+
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.port ];
 
     users.groups = mkIf (cfg.group == "suwayomi") {
@@ -179,65 +193,88 @@ in
     users.users = mkIf (cfg.user == "suwayomi") {
       suwayomi = {
         group = cfg.group;
-        # Need to set the user home because the package writes to ~/.local/Tachidesk
         home = cfg.dataDir;
         description = "Suwayomi Daemon user";
         isSystemUser = true;
       };
     };
 
-    systemd.tmpfiles.settings."10-suwayomi-server" = {
-      "${cfg.dataDir}/.local/share/Tachidesk".d = {
+    systemd.tmpfiles.settings = mkIf (!isAtLeast2605) {
+      "10-suwayomi-server"."${cfg.dataDir}/.local/share/Tachidesk".d = {
         mode = "0700";
         inherit (cfg) user group;
       };
     };
 
-    systemd.services.suwayomi-server =
-      let
-        configFile = format.generate "server.conf" (
-          lib.pipe cfg.settings [
-            (
-              settings:
-              lib.recursiveUpdate settings {
-                server.basicAuthPasswordFile = null;
-                server.basicAuthPassword =
-                  if settings.server.basicAuthEnabled then "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD" else null;
-              }
-            )
-            (lib.filterAttrsRecursive (_: x: x != null))
-          ]
-        );
-      in
-      {
-        description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
+    systemd.services.suwayomi-server = {
+      description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
 
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
-        script = ''
-          ${lib.optionalString cfg.settings.server.basicAuthEnabled ''
-            export TACHIDESK_SERVER_BASIC_AUTH_PASSWORD="$(<${cfg.settings.server.basicAuthPasswordFile})"
-          ''}
-          ${lib.getExe pkgs.envsubst} -i ${configFile} -o ${cfg.dataDir}/.local/share/Tachidesk/server.conf
-          ${lib.getExe cfg.package} -Dsuwayomi.tachidesk.config.server.rootDir=${cfg.dataDir}
+      environment = mkIf isAtLeast2605 {
+        JAVA_TOOL_OPTIONS = "-Dsuwayomi.tachidesk.config.server.rootDir=${cfg.dataDir}";
+      };
+
+      preStart =
+        (lib.optionalString cfg.settings.server.basicAuthEnabled ''
+          export TACHIDESK_SERVER_BASIC_AUTH_PASSWORD="$(cat "$CREDENTIALS_DIRECTORY/TACHIDESK_SERVER_BASIC_AUTH_PASSWORD")"
+        '')
+        + ''
+          ${lib.getExe pkgs.envsubst} -i ${configFile} -o ${serverConf}
         '';
 
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
+      serviceConfig = {
+        ExecStart = lib.getExe cfg.package;
+        Type = "simple";
+        Restart = "on-failure";
 
-          Type = "simple";
-          Restart = "on-failure";
+        StateDirectory = mkIf (cfg.dataDir == "/var/lib/suwayomi-server") "suwayomi-server";
+        LoadCredential = mkIf cfg.settings.server.basicAuthEnabled [
+          "TACHIDESK_SERVER_BASIC_AUTH_PASSWORD:${cfg.settings.server.basicAuthPasswordFile}"
+        ];
 
-          StateDirectory = mkIf (cfg.dataDir == "/var/lib/suwayomi-server") "suwayomi-server";
-        };
+        # Hardening
+        User = cfg.user;
+        Group = cfg.group;
+        CapabilityBoundingSet = "";
+        SystemCallFilter = [ "@system-service" ];
+
+        ReadOnlyPaths = [ configFile ];
+        ReadWritePaths = [ cfg.dataDir ];
+        NoNewPrivileges = true;
+        ProtectClock = true;
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        # java..
+        # MemoryDenyWriteExecute = true;
+        ProtectHostname = true;
+
+        ProtectSystem = "strict";
+        PrivateTmp = true;
+        ProtectHome = true;
+        PrivateDevices = true;
+        ProtectControlGroups = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectProc = "invisible";
       };
+    };
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ratcornu ];
+    maintainers = with lib.maintainers; [
+      ratcornu
+      nanoyaki
+    ];
     doc = ./suwayomi-server.md;
   };
 }
