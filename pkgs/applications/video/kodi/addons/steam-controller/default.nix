@@ -22,5 +22,6 @@ buildKodiBinaryAddon rec {
     description = "Binary addon for steam controller";
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];
+    license = lib.licenses.gpl2Only;
   };
 }

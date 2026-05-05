@@ -9,7 +9,7 @@
   protobuf,
   installShellFiles,
   makeBinaryWrapper,
-  librusty_v8 ? callPackage ./librusty_v8.nix { },
+  librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
   lld,
@@ -248,7 +248,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://deno.land/";
+    homepage = "https://deno.com/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
