@@ -240,10 +240,10 @@ in
             # but we redirect DNS requests before allowing local addresses, as
             # most network configurations have local IP addresses as DNS servers.
             ip daddr @excluded_destinations return
-            ip protocol udp udp dport 53 dnat to 127.0.0.1:${toString cfg.dnsPort} # route dns before allowing local addresses
+            ip protocol udp udp dport 53 counter dnat to 127.0.0.1:${toString cfg.dnsPort} # route dns before allowing local addresses
             ip daddr @reserved_subnets ip daddr != ${cfg.virtualAddrNetworkIPv4} return
 
-            ip protocol tcp dnat to 127.0.0.1:${toString cfg.transPort} # this rewrites the dest addr but not the interface!
+            ip protocol tcp counter dnat to 127.0.0.1:${toString cfg.transPort} # this rewrites the dest addr but not the interface!
           }
 
           chain tor_filter_output {
