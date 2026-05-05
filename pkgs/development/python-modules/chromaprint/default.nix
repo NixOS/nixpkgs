@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   m2r,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "chromaprint";
   version = "0.5";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

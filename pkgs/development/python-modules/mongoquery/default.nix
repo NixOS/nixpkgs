@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "mongoquery";
   version = "1.4.3";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

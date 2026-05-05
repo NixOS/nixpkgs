@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pooch";
   version = "1.8.2";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

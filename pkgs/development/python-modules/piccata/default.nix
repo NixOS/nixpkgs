@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytestCheckHook,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "piccata";
   version = "2.0.3";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";

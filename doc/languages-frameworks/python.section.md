@@ -48,7 +48,6 @@ Based on the packages defined in `pkgs/top-level/python-packages.nix` an
 attribute set is created for each available Python interpreter. The available
 sets are
 
-* `pkgs.python27Packages`
 * `pkgs.python3Packages`
 * `pkgs.python311Packages`
 * `pkgs.python312Packages`
@@ -60,9 +59,7 @@ sets are
 
 and the aliases
 
-* `pkgs.python2Packages` pointing to `pkgs.python27Packages`
 * `pkgs.python3Packages` pointing to `pkgs.python313Packages`
-* `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 * `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
 * `pkgs.pypy3Packages` pointing to `pkgs.pypy310Packages`
 * `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
@@ -575,9 +572,6 @@ In contrast to [`python.buildEnv`](#python.buildenv-function), [`python.withPack
 more advanced options such as `ignoreCollisions = true` or `postBuild`. If you
 need them, you have to use [`python.buildEnv`](#python.buildenv-function).
 
-Python 2 namespace packages may provide `__init__.py` that collide. In that case
-[`python.buildEnv`](#python.buildenv-function) should be used with `ignoreCollisions = true`.
-
 #### Setup hooks {#setup-hooks}
 
 The following are setup hooks specifically for Python packages. Most of these
@@ -629,10 +623,9 @@ buildPythonPackage.override { stdenv = customStdenv; } {
 
 Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python3` refers to the default
-interpreter, which is currently CPython 3.13. The attribute `python` refers to
-CPython 2.7 for backwards compatibility. It is also possible to refer to
-specific versions, e.g., `python313` refers to CPython 3.13, and `pypy` refers to
-the default PyPy interpreter.
+interpreter, which is currently CPython 3.13. It is also possible to refer to
+specific versions, e.g., `python313` refers to CPython 3.13, and `pypy` refers
+to the default PyPy interpreter.
 
 Python is used a lot, and in different ways. This affects also how it is
 packaged. In the case of Python on Nix, an important distinction is made between
@@ -649,7 +642,7 @@ The interpreters have several common attributes. One of these attributes is
 interpreter. E.g., the `toolz` package corresponding to the default interpreter
 is `python3.pkgs.toolz`, and the CPython 3.13 version is `python313.pkgs.toolz`.
 The main package set contains aliases to these package sets, e.g.
-`pythonPackages` refers to `python.pkgs` and `python313Packages` to
+`python3Packages` refers to `python3.pkgs` and `python313Packages` to
 `python313.pkgs`.
 
 #### Installing Python and packages {#installing-python-and-packages}
@@ -1920,9 +1913,8 @@ pkgs.mkShell rec {
 }
 ```
 
-In case the supplied venvShellHook is insufficient, or when Python 2 support is
-needed, you can define your own shell hook and adapt to your needs like in the
-following example:
+In case the supplied venvShellHook is insufficient, you can define your own
+shell hook and adapt to your needs like in the following example:
 
 ```nix
 with import <nixpkgs> { };
@@ -1935,8 +1927,6 @@ pkgs.mkShell rec {
   name = "impurePythonEnv";
   buildInputs = [
     pythonPackages.python
-    # Needed when using python 2.7
-    # pythonPackages.virtualenv
     # ...
   ];
 
@@ -1949,8 +1939,6 @@ pkgs.mkShell rec {
       echo "Skipping venv creation, '${venvDir}' already exists"
     else
       echo "Creating new venv environment in path: '${venvDir}'"
-      # Note that the module venv was only introduced in python 3, so for 2.7
-      # this needs to be replaced with a call to virtualenv
       ${pythonPackages.python.interpreter} -m venv "${venvDir}"
     fi
 

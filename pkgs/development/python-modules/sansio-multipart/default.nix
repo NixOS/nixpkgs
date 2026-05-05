@@ -1,15 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "sansio-multipart";
   version = "0.3";
-
-  disabled = isPy27;
 
   format = "setuptools";
 

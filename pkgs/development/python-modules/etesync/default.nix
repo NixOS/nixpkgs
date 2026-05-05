@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   appdirs,
   asn1crypto,
   cffi,
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   pname = "etesync";
   version = "0.12.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
