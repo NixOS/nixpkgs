@@ -10822,6 +10822,12 @@
     githubId = 58676303;
     name = "hhydraa";
   };
+  hideyosh1 = {
+    name = "Penelope Zhong";
+    github = "hideyosh1";
+    githubId = 64223175;
+    email = "penelope.zhong@proton.me";
+  };
   higebu = {
     name = "Yuya Kusakabe";
     email = "yuya.kusakabe@gmail.com";
