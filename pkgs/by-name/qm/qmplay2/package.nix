@@ -23,6 +23,7 @@
   taglib,
   vulkan-headers,
   vulkan-tools,
+  rubberband,
   # Configurable options
   qtVersion ? "6", # Can be 5 or 6
 }:
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-tools
   ]
   ++ lib.optionals (qtVersion == "6") [
+    rubberband
     qt6.qt5compat
     qt6.qtbase
     qt6.qtsvg
