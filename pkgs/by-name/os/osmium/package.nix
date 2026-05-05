@@ -24,14 +24,18 @@
   gtk3,
   libnotify,
   libpulseaudio,
+  writeShellApplication,
+  curl,
+  yq,
+  common-updater-scripts,
 }:
 
 stdenv.mkDerivation rec {
   pname = "osmium";
-  version = "0.0.19";
+  version = "0.0.19-alpha";
 
   src = fetchurl {
-    url = "https://updater.osmium.chat/Osmium-${version}-alpha-x64.tar.gz";
+    url = "https://updater.osmium.chat/Osmium-${version}-x64.tar.gz";
     hash = "sha256-Qwh6K2QlJJapqR0BkaA0LvwLEsqktnLzOnyJg+7sMFo=";
   };
 
@@ -96,6 +100,21 @@ stdenv.mkDerivation rec {
     ];
     mimeTypes = [ "x-scheme-handler/osmium" ];
     startupWMClass = "Osmium";
+  };
+
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-osmium";
+      runtimeInputs = [
+        curl
+        yq
+        common-updater-scripts
+      ];
+      text = ''
+        version="$(curl -s https://updater.osmium.chat/alpha-linux.yml | yq .version)"
+        update-source-version osmium "${version}"
+      '';
+    });
   };
 
   meta = {
