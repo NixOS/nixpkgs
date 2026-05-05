@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rapid note management for the terminal";
     homepage = "https://github.com/shashwatah/jot";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "jt";
   };
 })

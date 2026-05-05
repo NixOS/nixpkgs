@@ -55,6 +55,6 @@ buildGoModule rec {
     mainProgram = "zincsearch";
     homepage = "https://zincsearch-docs.zinc.dev/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 }

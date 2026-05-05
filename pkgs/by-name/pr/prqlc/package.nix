@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/prql/prql";
     changelog = "https://github.com/prql/prql/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

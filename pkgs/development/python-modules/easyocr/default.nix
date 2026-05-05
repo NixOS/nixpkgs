@@ -79,6 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/JaidedAI/EasyOCR";
     changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 }

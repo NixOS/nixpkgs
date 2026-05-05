@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     description = "Simple, standalone, and lightweight tool that can do health/status checking, written in Go";
     homepage = "https://github.com/megaease/easeprobe";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "easeprobe";
   };
 })

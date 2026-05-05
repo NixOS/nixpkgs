@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "Secure private tunnel to your local servers";
     homepage = "https://github.com/ntnj/tunwg";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "tunwg";
   };
 })

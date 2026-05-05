@@ -54,7 +54,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       diogotcorreia
-      dit7ya
     ];
   };
 }

@@ -29,7 +29,7 @@ buildNpmPackage rec {
     description = "Swagger 2.0 and OpenAPI 3.0 command-line tool";
     homepage = "https://apitools.dev/swagger-cli/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "swagger-cli";
   };
 }

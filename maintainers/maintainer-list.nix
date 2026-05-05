@@ -6934,12 +6934,6 @@
     githubId = 40633781;
     name = "Sergei S.";
   };
-  dit7ya = {
-    email = "7rat13@gmail.com";
-    github = "dit7ya";
-    githubId = 14034137;
-    name = "Mostly Void";
-  };
   ditsuke = {
     name = "Tushar";
     email = "hello@ditsuke.com";

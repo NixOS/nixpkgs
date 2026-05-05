@@ -116,7 +116,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      dit7ya
       chewblacka
       masrlinu
     ];

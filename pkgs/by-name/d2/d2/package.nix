@@ -71,7 +71,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/terrastruct/d2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
   };

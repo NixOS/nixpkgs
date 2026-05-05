@@ -27,6 +27,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/VirusTotal/vt-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "vt";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })
