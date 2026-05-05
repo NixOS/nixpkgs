@@ -1876,6 +1876,8 @@ self: super: with self; {
 
   basiciw = callPackage ../development/python-modules/basiciw { };
 
+  basicsr = callPackage ../development/python-modules/basicsr { };
+
   batchgenerators = callPackage ../development/python-modules/batchgenerators { };
 
   batchspawner = callPackage ../development/python-modules/batchspawner { };
@@ -3123,6 +3125,8 @@ self: super: with self; {
   compressed-rtf = callPackage ../development/python-modules/compressed-rtf { };
 
   compressed-tensors = callPackage ../development/python-modules/compressed-tensors { };
+
+  comtypes = callPackage ../development/python-modules/comtypes { };
 
   concord232 = callPackage ../development/python-modules/concord232 { };
 
@@ -5322,6 +5326,8 @@ self: super: with self; {
 
   facenet-pytorch = callPackage ../development/python-modules/facenet-pytorch { };
 
+  facexlib = callPackage ../development/python-modules/facexlib { };
+
   factory-boy = callPackage ../development/python-modules/factory-boy { };
 
   faicons = callPackage ../development/python-modules/faicons { };
@@ -6249,6 +6255,8 @@ self: super: with self; {
   gflags = callPackage ../development/python-modules/gflags { };
 
   gflanguages = callPackage ../development/python-modules/gflanguages { };
+
+  gfpgan = callPackage ../development/python-modules/gfpgan { };
 
   gfsubsets = callPackage ../development/python-modules/gfsubsets { };
 
@@ -8302,6 +8310,21 @@ self: super: with self; {
   keke = callPackage ../development/python-modules/keke { };
 
   keras = callPackage ../development/python-modules/keras { };
+
+  kerasWithCuda = keras.override {
+    tensorflow = tensorflowWithCuda;
+    torch = torchWithCuda;
+    tf-keras = (
+      tf-keras.override {
+        tensorflow = tensorflowWithCuda;
+      }
+    );
+    tf2onnx = (
+      tf2onnx.override {
+        tensorflow = tensorflowWithCuda;
+      }
+    );
+  };
 
   kerbad = callPackage ../development/python-modules/kerbad { };
 
@@ -11614,6 +11637,16 @@ self: super: with self; {
 
   opencv-python-headless = callPackage ../development/python-modules/opencv-python-headless { };
 
+  opencv-python-withCuda = mkPythonMetaPackage {
+    pname = "opencv-python";
+    inherit (opencv4Full) version;
+    dependencies = [ opencv4Full ];
+    optional-dependencies = opencv4Full.optional-dependencies or { };
+    meta = {
+      inherit (opencv4Full.meta) description homepage;
+    };
+  };
+
   opencv4 = toPythonModule (
     pkgs.opencv4.override {
       enablePython = true;
@@ -11671,6 +11704,8 @@ self: super: with self; {
       enablePython = true;
     }
   );
+
+  opennsfw2 = callPackage ../development/python-modules/opennsfw2 { };
 
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
 
@@ -13981,6 +14016,8 @@ self: super: with self; {
   pygount = callPackage ../development/python-modules/pygount { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
+
+  pygrabber = callPackage ../development/python-modules/pygrabber { };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { inherit (pkgs) graphviz; };
 
@@ -19670,6 +19707,10 @@ self: super: with self; {
   torchvision = callPackage ../development/python-modules/torchvision { };
 
   torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix { };
+
+  torchvisionWithCuda = callPackage ../development/python-modules/torchvision {
+    torch = torchWithCuda;
+  };
 
   torf = callPackage ../development/python-modules/torf { };
 
