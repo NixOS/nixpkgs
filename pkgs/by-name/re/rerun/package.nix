@@ -6,6 +6,7 @@
   arrow-cpp,
   # nativeBuildInputs
   binaryen,
+  cmake,
   lld,
   llvmPackages,
   pkg-config,
@@ -107,6 +108,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     (lib.getBin binaryen) # wasm-opt
 
+    cmake
+
     # @SomeoneSerge: Upstream suggests `mold`, but I didn't get it to work
     lld
 
@@ -115,6 +118,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustfmt
     nasm
   ];
+
+  # cmake is only used to build & install the C++ SDK in postInstall.
+  # The outer build is cargo-driven, so disable nix's cmake hook.
+  dontUseCmakeConfigure = true;
 
   # NOTE: Without setting these environment variables the web-viewer
   # preBuild step uses the nix wrapped CC which doesn't support
@@ -174,22 +181,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
-  postInstall = ''
-    # Install C++ SDK components
-    mkdir -p $dev/include
-    cp -r $src/rerun_cpp/src/* $dev/include/
+  postInstall =
+    # Install rerun_c static library (built from Rust above) into $out.
+    ''
+      install -Dm644 \
+        "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/librerun_c.a" \
+        "$out/lib/librerun_c.a"
+    ''
+    # Build & install the C++ SDK against the just-built rerun_c.
+    # See: https://github.com/rerun-io/rerun/blob/0.31.4/scripts/ci/bundle_and_upload_rerun_cpp.py#L82-L98
+    # This is necessary to make `rerun_sdkConfig.cmake` and `rerun_sdkTargets.cmake` available
+    + (
+      let
+        cmakeFlags = builtins.toString [
+          (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+          (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
+          (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+          (lib.cmakeFeature "RERUN_C_LIB" "${placeholder "out"}/lib/librerun_c.a")
+          (lib.cmakeBool "RERUN_DOWNLOAD_AND_BUILD_ARROW" false)
 
-    # Install rerun_c library (built from Rust)
-    if [ -f "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/librerun_c.a" ]; then
-      cp "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/librerun_c.a" $out/lib/
-    fi
+          # rerun_sdk is built as a STATIC library by default, in which case upstream's
+          # CMakeLists.txt requires installing rerun_c alongside it (otherwise downstream linking
+          # fails).
+          # CMake will install librerun_c.a into $dev/lib; the duplicate copy in $out/lib is
+          # hardlinked by nix-store.
+          (lib.cmakeBool "RERUN_INSTALL_RERUN_C" true)
+        ];
 
-    # Install CMake config files
-    mkdir -p $dev/lib/cmake/rerun_sdk
-    cp $src/rerun_cpp/CMakeLists.txt $dev/lib/cmake/rerun_sdk/
-    cp $src/rerun_cpp/Config.cmake.in $dev/lib/cmake/rerun_sdk/
-    cp $src/rerun_cpp/download_and_build_arrow.cmake $dev/lib/cmake/rerun_sdk/
-  '';
+        buildDir = "cpp-build";
+      in
+      ''
+        cmake -S "$src/rerun_cpp" -B ${buildDir} ${cmakeFlags}
+        cmake --build ${buildDir} -j"$NIX_BUILD_CORES" --target rerun_sdk
+        cmake --install ${buildDir}
+      ''
+    );
+  doCheck = false;
 
   nativeInstallCheckInputs = [
     versionCheckHook
