@@ -8,6 +8,7 @@
 
 let
   inherit (lib)
+    all
     any
     attrValues
     concatStringsSep
@@ -15,6 +16,7 @@ let
     hasInfix
     hasSuffix
     optionalAttrs
+    optionalString
     optionals
     literalExpression
     mapAttrs'
@@ -49,8 +51,13 @@ let
 
   tokenXorTokenFile =
     instance:
-    (instance.token == null && instance.tokenFile != null)
-    || (instance.token != null && instance.tokenFile == null);
+    builtins.length (
+      builtins.filter (x: x != null) [
+        instance.token
+        instance.tokenFile
+        instance.tokenCredentialFile
+      ]
+    ) == 1;
 in
 {
   meta.maintainers = [ ];
@@ -94,10 +101,31 @@ in
           tokenFile = mkOption {
             type = nullOr (either str path);
             default = null;
+            example = "/run/keys/gitea-runner.env";
             description = ''
               Path to an environment file, containing the `TOKEN` environment
               variable, that holds a token to register at the configured
               Gitea/Forgejo instance.
+
+              The file must be in systemd's `EnvironmentFile=` format, e.g. a
+              single line `TOKEN=<token>`.
+
+              For a file containing only the raw token, use
+              {option}`tokenCredentialFile` instead.
+            '';
+          };
+
+          tokenCredentialFile = mkOption {
+            type = nullOr path;
+            default = null;
+            example = "/run/secrets/forgejo-runner-token";
+            description = ''
+              Path to a file containing only the raw token to register at the
+              configured Gitea/Forgejo instance. The file is loaded via
+              systemd's `LoadCredential=` mechanism, so it only needs to be
+              readable by root at unit start.
+
+              Mutually exclusive with {option}`tokenFile`.
             '';
           };
 
@@ -171,8 +199,8 @@ in
   config = mkIf (cfg.instances != { }) {
     assertions = [
       {
-        assertion = any tokenXorTokenFile (attrValues cfg.instances);
-        message = "Instances of gitea-actions-runner can have `token` or `tokenFile`, not both.";
+        assertion = all tokenXorTokenFile (attrValues cfg.instances);
+        message = "Instances of gitea-actions-runner must set exactly one of `token`, `tokenFile`, or `tokenCredentialFile`.";
       }
       {
         assertion = wantsContainerRuntime -> hasDocker || hasPodman;
@@ -234,33 +262,38 @@ in
               RestartSec = 2;
 
               ExecStartPre = [
-                (pkgs.writeShellScript "gitea-register-runner-${name}" ''
-                  export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
-                  mkdir -vp "$INSTANCE_DIR"
-                  cd "$INSTANCE_DIR"
+                (pkgs.writeShellScript "gitea-register-runner-${name}" (
+                  (optionalString (instance.tokenCredentialFile != null) ''
+                    TOKEN="$(cat "$CREDENTIALS_DIRECTORY/token")"
+                  '')
+                  + ''
+                    export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
+                    mkdir -vp "$INSTANCE_DIR"
+                    cd "$INSTANCE_DIR"
 
-                  # force reregistration on changed labels
-                  export LABELS_FILE="$INSTANCE_DIR/.labels"
-                  export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
-                  export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
+                    # force reregistration on changed labels
+                    export LABELS_FILE="$INSTANCE_DIR/.labels"
+                    export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
+                    export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
-                  if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
-                    # remove existing registration file, so that changing the labels forces a re-registration
-                    rm -v "$INSTANCE_DIR/.runner" || true
+                    if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
+                      # remove existing registration file, so that changing the labels forces a re-registration
+                      rm -v "$INSTANCE_DIR/.runner" || true
 
-                    # perform the registration
-                    ${cfg.package}/bin/act_runner register --no-interactive \
-                      --instance ${escapeShellArg instance.url} \
-                      --token "$TOKEN" \
-                      --name ${escapeShellArg instance.name} \
-                      --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
-                      --config ${configFile}
+                      # perform the registration
+                      ${cfg.package}/bin/act_runner register --no-interactive \
+                        --instance ${escapeShellArg instance.url} \
+                        --token "$TOKEN" \
+                        --name ${escapeShellArg instance.name} \
+                        --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
+                        --config ${configFile}
 
-                    # and write back the configured labels
-                    echo "$LABELS_WANTED" > "$LABELS_FILE"
-                  fi
+                      # and write back the configured labels
+                      echo "$LABELS_WANTED" > "$LABELS_FILE"
+                    fi
 
-                '')
+                  ''
+                ))
               ];
               ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
               SupplementaryGroups =
@@ -273,6 +306,9 @@ in
             }
             // optionalAttrs (instance.tokenFile != null) {
               EnvironmentFile = instance.tokenFile;
+            }
+            // optionalAttrs (instance.tokenCredentialFile != null) {
+              LoadCredential = "token:${instance.tokenCredentialFile}";
             };
           };
       in
