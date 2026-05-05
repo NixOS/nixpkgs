@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious-plugins";
-    rev = "${pname}-${version}";
+    rev = "audacious-plugins-${version}";
     hash = "sha256-HfO59DOIYsEpBzUyaLYh/gXfz+zvH8lIY2yBVCn3wks=";
   };
 
