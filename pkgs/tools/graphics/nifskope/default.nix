@@ -70,8 +70,7 @@ stdenv.mkDerivation {
     cp ./install/linux-install/nifskope.desktop $out/share/applications
 
     substituteInPlace $out/share/applications/nifskope.desktop \
-      --replace 'Exec=nifskope' "Exec=$out/bin/NifSkope" \
-      --replace 'Icon=nifskope' "Icon=$out/share/pixmaps/nifskope.png"
+      --replace-fail 'Exec=nifskope' "Exec=NifSkope" \
 
     find $out/share -type f -exec chmod -x {} \;
 
