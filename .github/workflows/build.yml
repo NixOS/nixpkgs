@@ -34,21 +34,18 @@ jobs:
       matrix:
         include:
           - runner: ubuntu-24.04
-            name: x86_64-linux
-            systems: x86_64-linux
+            system: x86_64-linux
             builds: [shell, manual-nixos, lib-tests, tarball]
             desc: shell, docs, lib, tarball
           - runner: ubuntu-24.04-arm
-            name: aarch64-linux
-            systems: aarch64-linux
+            system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs]
             desc: shell, docs
           - runner: macos-14
-            name: darwin
-            systems: aarch64-darwin x86_64-darwin
+            system: aarch64-darwin
             builds: [shell]
             desc: shell
-    name: '${{ matrix.name }}: ${{ matrix.desc }}'
+    name: '${{ matrix.system }}: ${{ matrix.desc }}'
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     steps:
@@ -80,7 +77,9 @@ jobs:
 
       - name: Build shell
         if: contains(matrix.builds, 'shell')
-        run: echo "${{ matrix.systems }}" | xargs -n1 nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A shell --argstr system
+        env:
+          system: ${{ matrix.system }}
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A shell --argstr system "$system"
 
       - name: Build NixOS manual
         if: |
@@ -106,5 +105,5 @@ jobs:
           contains(fromJSON(inputs.baseBranch).type, 'primary')
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ${{ inputs.artifact-prefix }}nixos-manual-${{ matrix.name }}
+          name: ${{ inputs.artifact-prefix }}nixos-manual-${{ matrix.system }}
           path: nixos-manual
