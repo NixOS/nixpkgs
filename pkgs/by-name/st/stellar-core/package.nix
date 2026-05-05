@@ -79,15 +79,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Implements the Stellar Consensus Protocol, a federated consensus protocol";
-    homepage = "https://www.stellar.org/";
-    license = lib.licenses.asl20;
+    description = "Reference peer-to-peer agent that manages the Stellar network";
     longDescription = ''
-      Stellar-core is the backbone of the Stellar network. It maintains a
-      local copy of the ledger, communicating and staying in sync with other
-      instances of stellar-core on the network. Optionally, stellar-core can
-      store historical records of the ledger and participate in consensus.
+      Stellar-core is a replicated state machine that maintains a local copy of
+      the Stellar cryptographic ledger and processes transactions against it in
+      consensus with a set of peers. It implements the Stellar Consensus
+      Protocol, a federated consensus protocol.
     '';
+    homepage = "https://www.stellar.org/";
+    changelog = "https://github.com/stellar/stellar-core/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
     mainProgram = "stellar-core";
