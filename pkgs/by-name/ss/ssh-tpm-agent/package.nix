@@ -42,6 +42,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "SSH agent with support for TPM sealed keys for public key authentication";
     homepage = "https://github.com/Foxboron/ssh-tpm-agent";
+    changelog = "https://github.com/Foxboron/ssh-tpm-agent/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sgo ];
