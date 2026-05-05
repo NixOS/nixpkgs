@@ -1,0 +1,13 @@
+diff --git a/cmake/BinDiffDeps.cmake b/cmake/BinDiffDeps.cmake
+index 057b978..3db6749 100644
+--- a/cmake/BinDiffDeps.cmake
++++ b/cmake/BinDiffDeps.cmake
+@@ -29,6 +29,8 @@ if(NOT sqlite_POPULATED)
+ endif()
+ 
+ # Setup IDA SDK. Uses FindIdaSdk.cmake from BinExport
++if(BINEXPORT_ENABLE_IDAPRO)
+ find_package(IdaSdk)
++endif()
+ 
+ find_package(Protobuf 3.14 REQUIRED) # Make protobuf_generate_cpp available
