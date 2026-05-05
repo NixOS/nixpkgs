@@ -2,13 +2,13 @@
   buildGoModule,
   authentik,
   apiGoVendorHook,
-  vendorHash,
+  proxy,
 }:
 
 buildGoModule {
   pname = "authentik-radius-outpost";
   inherit (authentik) version src;
-  inherit vendorHash;
+  inherit (proxy) vendorHash;
 
   nativeBuildInputs = [ apiGoVendorHook ];
 

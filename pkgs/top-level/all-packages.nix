@@ -1410,7 +1410,7 @@ with pkgs;
 
   arpack-mpi = arpack.override { useMpi = true; };
 
-  authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
+  authentik-outposts = recurseIntoAttrs authentik.outposts;
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
 
