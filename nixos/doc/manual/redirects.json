@@ -2306,6 +2306,9 @@
   "sec-nixos-test-shell-access": [
     "index.html#sec-nixos-test-shell-access"
   ],
+  "sec-nixos-test-interactive-capabilities": [
+    "index.html#sec-nixos-test-interactive-capabilities"
+  ],
   "sec-nixos-test-ssh-access": [
     "index.html#sec-nixos-test-ssh-access"
   ],
