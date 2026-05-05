@@ -29,6 +29,9 @@
   versionCheckHook,
   wrapGAppsHook4,
   zlib,
+
+  # Patches to improve the user experience for the wrapper package.
+  withWrapperPatches ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./support-headless-cli.patch
+  ]
+  ++ lib.optionals withWrapperPatches [
+    ./report-url.patch
   ];
 
   strictDeps = true;
