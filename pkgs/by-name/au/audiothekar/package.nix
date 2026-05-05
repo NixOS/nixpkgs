@@ -33,7 +33,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   postInstall = ''
-    install -m 644 -D -t "$out/share/doc/${pname}" License.md
+    install -m 644 -D -t "$out/share/doc/audiothekar" License.md
   '';
 
   passthru = {
