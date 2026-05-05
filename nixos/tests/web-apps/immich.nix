@@ -17,6 +17,7 @@
       services.immich = {
         enable = true;
         environment.IMMICH_LOG_LEVEL = "verbose";
+        machine-learning.hsaGfxVersion = "11.0.0";
         settings = {
           backup.database = {
             enabled = true;
@@ -45,6 +46,7 @@
     machine.wait_for_open_port(2283) # Server
     machine.wait_for_open_port(3003) # Machine learning
     machine.succeed("curl --fail http://localhost:2283/")
+    machine.succeed("systemctl show immich-machine-learning.service -p Environment | grep HSA_OVERRIDE_GFX_VERSION=11.0.0")
 
     machine.succeed("""
       curl -f --json '{ "email": "test@example.com", "name": "Admin", "password": "admin" }' http://localhost:2283/api/auth/admin-sign-up

@@ -53,6 +53,22 @@ let
 
   postgresqlPackage =
     if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
+
+  machineLearningPackage =
+    if cfg.machine-learning.acceleration == "rocm" then
+      cfg.package.machine-learning.override {
+        python3 = pkgs.python3.override {
+          packageOverrides = _: pyPrev: {
+            onnxruntime = pyPrev.onnxruntime.override {
+              onnxruntime = pkgs.onnxruntime.override {
+                rocmSupport = true;
+              };
+            };
+          };
+        };
+      }
+    else
+      cfg.package.machine-learning;
 in
 {
   imports = [
@@ -198,6 +214,26 @@ in
         // {
           default = true;
         };
+      acceleration = mkOption {
+        type = types.nullOr (types.enum [ "rocm" ]);
+        default = null;
+        example = "rocm";
+        description = ''
+          Hardware acceleration backend for Immich machine learning.
+
+          When set to `rocm`, this sets `DEVICE=rocm` and runs Immich machine learning with a ROCm-enabled `onnxruntime`.
+        '';
+      };
+      hsaGfxVersion = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "11.0.0";
+        description = ''
+          Override what ROCm detects the GPU model as for Immich machine learning.
+
+          This sets `HSA_OVERRIDE_GFX_VERSION` when non-null. Leave this as `null` to preserve native ROCm gfx detection. For example, RX 7900 XTX users may need `"11.0.0"`.
+        '';
+      };
       environment = mkOption {
         type = types.submodule { freeformType = types.attrsOf types.str; };
         default = { };
@@ -383,6 +419,12 @@ in
       XDG_CACHE_HOME = "/var/cache/immich";
       IMMICH_HOST = "localhost";
       IMMICH_PORT = "3003";
+    }
+    // lib.optionalAttrs (cfg.machine-learning.acceleration == "rocm") {
+      DEVICE = "rocm";
+    }
+    // lib.optionalAttrs (cfg.machine-learning.hsaGfxVersion != null) {
+      HSA_OVERRIDE_GFX_VERSION = cfg.machine-learning.hsaGfxVersion;
     };
 
     systemd.slices.system-immich = {
@@ -428,7 +470,7 @@ in
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
-        ExecStart = lib.getExe cfg.package.machine-learning;
+        ExecStart = lib.getExe machineLearningPackage;
         Slice = "system-immich.slice";
         CacheDirectory = "immich";
         User = cfg.user;
