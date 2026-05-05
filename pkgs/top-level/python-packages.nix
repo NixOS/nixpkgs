@@ -17574,6 +17574,8 @@ self: super: with self; {
 
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk/default.nix { };
 
+  senzu = callPackage ../development/python-modules/senzu { };
+
   sepaxml = callPackage ../development/python-modules/sepaxml { };
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
