@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "args";
-  version = "6.4.9";
+  version = "6.4.15";
 
   src = fetchFromGitHub {
     owner = "Taywee";
     repo = "args";
     rev = finalAttrs.version;
-    sha256 = "sha256-+RzPVWFhA7tsiw04/i9OxqmoHVF5Whr9FC1isV8RrE0=";
+    sha256 = "sha256-My4tKDLPZM43AIxQ2Nlfty6FYlUwNwJmgUt3NXMymmQ=";
   };
 
   nativeBuildInputs = [ cmake ];
