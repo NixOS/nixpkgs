@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
         # Unity Hub binary dependencies
         libxrandr
         xdg-utils
+        p7zip
 
         # GTK filepicker
         gsettings-desktop-schemas
@@ -104,6 +105,12 @@ stdenv.mkDerivation rec {
         # Unity Editor 6000 specific dependencies
         harfbuzz
         vulkan-loader
+
+        # Unity Editor 2017 and 2018 specific dependencies
+        libcap
+        libGLU
+        gtk2
+        gnome2.GConf
 
         # Unity Bug Reporter specific dependencies
         libice
