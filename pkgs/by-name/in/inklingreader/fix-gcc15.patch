@@ -1,0 +1,26 @@
+diff --git a/src/gui/mainwindow.c b/src/gui/mainwindow.c
+index e228a27..6a76331 100644
+--- a/src/gui/mainwindow.c
++++ b/src/gui/mainwindow.c
+@@ -495,7 +495,7 @@ gui_mainwindow_file_dialog (GtkWidget* parent, GtkFileChooserAction action)
+  | This function applies the next step in time for the "play" feature.        |
+  '----------------------------------------------------------------------------*/
+ gboolean
+-gui_mainwindow_update_clock ()
++gui_mainwindow_update_clock (gpointer data)
+ {
+   double value = gtk_range_get_value (GTK_RANGE (clock_scale));
+   gtk_range_set_value (GTK_RANGE (clock_scale), value + 1);
+diff --git a/src/gui/mainwindow.h b/src/gui/mainwindow.h
+index d773f45..85afa64 100644
+--- a/src/gui/mainwindow.h
++++ b/src/gui/mainwindow.h
+@@ -141,7 +141,7 @@ void gui_mainwindow_backward ();
+ /**
+  * This function applies the next step in time for the "play" feature.
+  */
+-gboolean gui_mainwindow_update_clock ();
++gboolean gui_mainwindow_update_clock (gpointer data);
+ 
+ /**
+  * This callback funciton handles showing or hiding the "Settings" pane.
