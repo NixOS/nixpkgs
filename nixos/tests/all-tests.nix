@@ -1372,6 +1372,7 @@ in
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pykms = runTest ./pykms.nix;
+  qbit-manage = runTest ./qbit-manage.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
   qemu-vm-credentials-fwcfg = runTest {
