@@ -1,0 +1,14 @@
+{
+  "version": "888.26",
+  "platforms": {
+    "aarch64-linux": {
+      "hash": "sha256-5F0qMDqW7938y5O/yo/ZIA1SGzJaHp332rIyreAHPcs="
+    },
+    "x86_64-linux": {
+      "hash": "sha256-KuMfBupHrW5cEzM9aKzM3qN2K5qKk8jkGz77bkNFk98="
+    },
+    "aarch64-darwin": {
+      "hash": "sha256-Z0rd3Jbp8/cLE22/tiq3jM4LWIpHh+H7ezUQdSW30f4="
+    }
+  }
+}
