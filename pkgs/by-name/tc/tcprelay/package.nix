@@ -16,6 +16,7 @@ buildGoModule rec {
   };
 
   vendorHash = null;
+  __structuredAttrs = true;
 
   meta = with lib; {
     description = "TCP relay written in Go";
