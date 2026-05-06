@@ -2,7 +2,7 @@
   lib,
   buildDunePackage,
   lwd,
-  notty,
+  notty-community,
 }:
 
 buildDunePackage {
@@ -12,7 +12,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     lwd
-    notty
+    notty-community
   ];
 
   meta = {
