@@ -571,6 +571,24 @@ let
         '';
       };
 
+    jellyfin =
+      { pkgs, ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          apiKeyFile = pkgs.writeText "apikey" "FAKE_KEY";
+        };
+        # Jellyfin has no EASY way of spawning the service with an existing API key, so let's
+        # just check the exporter replies with something
+        exporterTest = ''
+          wait_for_unit("prometheus-jellyfin-exporter.service")
+          wait_for_open_port(9594)
+          succeed(
+            "curl -sSf http://localhost:9594/metrics | grep 'jellyfin'"
+          )
+        '';
+      };
+
     jitsi =
       { ... }:
       {
