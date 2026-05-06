@@ -1165,6 +1165,7 @@
   ./services/networking/create_ap.nix
   ./services/networking/croc.nix
   ./services/networking/dae.nix
+  ./services/networking/daed.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix
   ./services/networking/ddns-updater.nix
