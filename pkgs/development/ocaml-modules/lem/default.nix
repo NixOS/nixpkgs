@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-lem";
-  version = "2025-03-13";
+  version = "2026-05-01";
 
   src = fetchFromGitHub {
     owner = "rems-project";
     repo = "lem";
     rev = version;
-    hash = "sha256-ZV2OiFonMlNzqtsumMQ8jzY9/ATaZxiNHZ7JzOfGluY=";
+    hash = "sha256-nIxx2fWst4nTOon+fEy4DOWefjZs62qb6/8ywnwn+vE=";
   };
 
   nativeBuildInputs = [
