@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "EasyScreenCast";
     repo = "EasyScreenCast";
     rev = finalAttrs.version;
-    hash = "sha256-+DVuUClLhPEVN2VIBkJJI51V9TTS5Q9y6wflEGyt6AY=";
+    hash = "sha256-lmei80L3JOVCtm2L5uU3kBWCJlK+bn+V02LyimaqJ8k=";
   };
 
   patches = [
