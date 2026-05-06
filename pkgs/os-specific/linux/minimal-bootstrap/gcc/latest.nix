@@ -45,12 +45,6 @@ let
     url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.gz";
     hash = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
   };
-
-  islVersion = "0.24";
-  isl = fetchurl {
-    url = "https://gcc.gnu.org/pub/gcc/infrastructure/isl-${islVersion}.tar.bz2";
-    hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
-  };
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -109,13 +103,11 @@ bash.runCommand "${pname}-${version}"
     tar xf ${gmp}
     tar xf ${mpfr}
     tar xf ${mpc}
-    tar xf ${isl}
     cd gcc-${version}
 
     ln -s ../gmp-${gmpVersion} gmp
     ln -s ../mpfr-${mpfrVersion} mpfr
     ln -s ../mpc-${mpcVersion} mpc
-    ln -s ../isl-${islVersion} isl
 
     # Patch
     # force musl even if host triple is gnu
@@ -151,7 +143,9 @@ bash.runCommand "${pname}-${version}"
       --disable-lto \
       --disable-multilib \
       --disable-nls \
-      --disable-plugin
+      --disable-plugin \
+      --without-isl \
+      --disable-shared
 
     # Build
     make -j $NIX_BUILD_CORES
