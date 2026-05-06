@@ -954,6 +954,7 @@
   ./services/misc/rsync.nix
   ./services/misc/rumno.nix
   ./services/misc/safeeyes.nix
+  ./services/misc/scrobblex.nix
   ./services/misc/sdrplay.nix
   ./services/misc/seerr.nix
   ./services/misc/servarr/lidarr.nix

@@ -18580,6 +18580,12 @@
     githubId = 58110325;
     keys = [ { fingerprint = "3CAC 1D21 3D97 88FF 149A  E116 BB8B 30F5 A024 C31C"; } ];
   };
+  msaxena = {
+    email = "me@mayursaxena.com";
+    github = "MayurSaxena";
+    githubId = 7620384;
+    name = "Mayur Saxena";
+  };
   mschristiansen = {
     email = "mikkel@rheosystems.com";
     github = "mschristiansen";
