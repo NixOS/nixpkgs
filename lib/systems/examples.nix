@@ -316,21 +316,17 @@ rec {
 
   iphone64 = {
     config = "arm64-apple-ios";
-    # config = "aarch64-apple-darwin14";
     darwinSdkVersion = "14.3";
+    darwinMinVersion = "14";
     xcodeVer = "12.3";
-    xcodePlatform = "iPhoneOS";
-    useiOSPrebuilt = true;
+    # useiOSPrebuilt = true;
   };
 
   iphone64-simulator = {
-    config = "x86_64-apple-ios";
-    # config = "x86_64-apple-darwin14";
+    config = "aarch64-apple-ios-simulator";
     darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
-    xcodePlatform = "iPhoneSimulator";
-    darwinPlatform = "ios-simulator";
-    useiOSPrebuilt = true;
+    # useiOSPrebuilt = true;
   };
 
   aarch64-darwin = {
