@@ -2620,13 +2620,7 @@ with pkgs;
 
   keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
-  keybase = callPackage ../tools/security/keybase { };
-
-  kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
-
   kbdVlock = callPackage ../../pkgs/by-name/kb/kbd/package.nix { withVlock = true; };
-
-  keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
   krunvm = callPackage ../applications/virtualization/krunvm {
     inherit (darwin) sigtool;
@@ -2642,18 +2636,7 @@ with pkgs;
 
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
-  logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
-    # https://www.elastic.co/support/matrix#logstash-and-jvm
-    jre = jdk11_headless;
-  };
-  logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
-    enableUnfree = false;
-    # https://www.elastic.co/support/matrix#logstash-and-jvm
-    jre = jdk11_headless;
-  };
   logstash = logstash7;
-
-  logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
     lua = lua5_2_compat;
@@ -2677,20 +2660,9 @@ with pkgs;
     inherit (python3Packages) ansi2html;
   };
 
-  medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5.override { usev110Api = true; };
-  };
-
   mhonarc = perlPackages.MHonArc;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
-
-  netdata = callPackage ../tools/system/netdata {
-    protobuf = protobuf_21;
-  };
-  netdataCloud = netdata.override {
-    withCloudUi = true;
-  };
 
   nyxt = callPackage ../applications/networking/browsers/nyxt {
     sbcl = sbcl_2_4_6;
@@ -12127,9 +12099,7 @@ with pkgs;
 
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
-  ape = callPackage ../applications/misc/ape { };
-  attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
-  apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
+  apeClex = callPackage ../by-name/ap/ape/apeclex.nix { };
 
   # Unix tools
   unixtools = recurseIntoAttrs (callPackages ./unixtools.nix { });
