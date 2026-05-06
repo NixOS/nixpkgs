@@ -3,16 +3,20 @@
   stdenv,
   bluez,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  uv-build,
+
+  # dependencies
   bumble,
   dbus-fast,
-  fetchFromGitHub,
   pyobjc-core,
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  uv-build,
 }:
 
 buildPythonPackage (finalAttrs: {
