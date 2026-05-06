@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pykaleidescape";
-  version = "1.1.3";
+  version = "2022.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pykaleidescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IA6BefKBFMfatiaw+Ye8NdYZ6BDlR1z4L+YkZ4Iy3Wg=";
+    hash = "sha256-h5G7wV4Z+sf8Qq4GNFsp8DVDSgQgS0dLGf+DzK/egYM=";
   };
 
   build-system = [ setuptools ];
