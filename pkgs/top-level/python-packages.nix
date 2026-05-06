@@ -11048,6 +11048,8 @@ self: super: with self; {
 
   netio = callPackage ../development/python-modules/netio { };
 
+  netket = callPackage ../development/python-modules/netket { };
+
   netmap = callPackage ../development/python-modules/netmap { };
 
   netmiko = callPackage ../development/python-modules/netmiko { };
@@ -12715,6 +12717,8 @@ self: super: with self; {
   plugp100 = callPackage ../development/python-modules/plugp100 { };
 
   plugwise = callPackage ../development/python-modules/plugwise { };
+
+  plum-dispatch = callPackage ../development/python-modules/plum-dispatch { };
 
   plum-py = callPackage ../development/python-modules/plum-py { };
 
