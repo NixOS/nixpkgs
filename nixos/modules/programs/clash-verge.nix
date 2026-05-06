@@ -21,7 +21,16 @@
       defaultText = lib.literalExpression "pkgs.clash-verge-rev";
     };
     serviceMode = lib.mkEnableOption "Service Mode";
-    tunMode = lib.mkEnableOption "Setcap for TUN Mode. DNS settings won't work on this way";
+    tunMode = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to set capabilities for TUN Mode. DNS settings won't work this way.
+
+        When enabled, reverse path filtering will be set to loose instead of strict.
+      '';
+    };
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
     group = lib.mkOption {
       type = lib.types.str;
@@ -58,6 +67,8 @@
         capabilities = "cap_net_bind_service,cap_net_raw,cap_net_admin=+ep";
         source = "${lib.getExe cfg.package}";
       };
+
+      networking.firewall.checkReversePath = lib.mkIf cfg.tunMode "loose";
 
       systemd.services.clash-verge = lib.mkIf cfg.serviceMode {
         enable = true;
