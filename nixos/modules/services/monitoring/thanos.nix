@@ -814,13 +814,13 @@ in
         {
           assertion =
             !(
-              config.services.prometheus.globalConfig.external_labels == null
-              || config.services.prometheus.globalConfig.external_labels == { }
+              config.services.prometheus.settings.global.external_labels == null
+              || config.services.prometheus.settings.global.external_labels == { }
             );
           message =
             "services.thanos.sidecar requires uniquely identifying external labels "
             + "to be configured in the Prometheus server. "
-            + "Please set services.prometheus.globalConfig.external_labels.";
+            + "Please set services.prometheus.settings.global.external_labels.";
         }
       ];
       systemd.services.thanos-sidecar = {

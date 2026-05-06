@@ -11,7 +11,7 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
+          settings.global.scrape_interval = "2s";
 
           extraFlags = [ "--web.enable-remote-write-receiver" ];
         };
@@ -26,18 +26,21 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
 
-          remoteWrite = [ { url = "http://receiver:9090/api/v1/write"; } ];
+          settings = {
+            global.scrape_interval = "2s";
 
-          scrapeConfigs = [
-            {
-              job_name = "node";
-              static_configs = [
-                { targets = [ "node:${toString config.services.prometheus.exporters.node.port}" ]; }
-              ];
-            }
-          ];
+            remote_write = [ { url = "http://receiver:9090/api/v1/write"; } ];
+
+            scrape_configs = [
+              {
+                job_name = "node";
+                static_configs = [
+                  { targets = [ "node:${toString config.services.prometheus.exporters.node.port}" ]; }
+                ];
+              }
+            ];
+          };
         };
       };
 
