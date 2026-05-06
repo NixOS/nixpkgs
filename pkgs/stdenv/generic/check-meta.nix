@@ -615,14 +615,37 @@ let
                   cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
+
+          purlParts = attrs.meta.identifiers.purlParts or { };
+          purlPartsFormatted =
+            if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
+
+          # search for a PURL in the following order:
+          purl =
+            # 1) locally set through API
+            if purlPartsFormatted != null then purlPartsFormatted else null;
+
+          # search for a PURL in the following order:
+          purls =
+            # 1) locally overwritten through meta.identifiers.purls (e.g. extension of list)
+            attrs.meta.identifiers.purls or (
+              # 2) locally set through API
+              if purlPartsFormatted != null then [ purlPartsFormatted ] else [ ]
+            );
+
           v1 = {
-            inherit cpeParts possibleCPEs;
+            inherit
+              cpeParts
+              possibleCPEs
+              purls
+              ;
             ${if cpe != null then "cpe" else null} = cpe;
+            ${if purl != null then "purl" else null} = purl;
           };
         in
         v1
         // {
-          inherit v1;
+          inherit v1 purlParts;
         };
 
       # Expose the result of the checks for everyone to see.
