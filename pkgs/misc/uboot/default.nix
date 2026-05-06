@@ -668,6 +668,27 @@ in
     ];
   };
 
+  ubootPinephonePro = buildUBoot {
+    defconfig = "pinephone-pro-rk3399_defconfig";
+    env.BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [
+      "u-boot.itb"
+      "idbloader.img"
+    ];
+    extraMeta = {
+      platforms = [ "aarch64-linux" ];
+      longDescription = ''
+        Boot loader for the Pine64 PinePhone Pro.
+
+        Flashing instructions:
+        ```sh
+        dd if=idbloader.img of=<sdcard> conv=notrunc bs=512 seek=64
+        dd if=u-boot.itb of=<sdcard> conv=notrunc bs=512 seek=16384
+        ```
+      '';
+    };
+  };
+
   ubootQemuAarch64 = buildUBoot {
     defconfig = "qemu_arm64_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
