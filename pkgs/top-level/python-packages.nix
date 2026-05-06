@@ -2289,6 +2289,8 @@ self: super: with self; {
 
   braintree = callPackage ../development/python-modules/braintree { };
 
+  brainzutils = callPackage ../development/python-modules/brainzutils { };
+
   branca = callPackage ../development/python-modules/branca { };
 
   braq = callPackage ../development/python-modules/braq { };
@@ -3633,6 +3635,8 @@ self: super: with self; {
   datasalad = callPackage ../development/python-modules/datasalad { };
 
   dataset = callPackage ../development/python-modules/dataset { };
+
+  datasethoster = callPackage ../development/python-modules/datasethoster { };
 
   datasets = callPackage ../development/python-modules/datasets { };
 
@@ -5671,6 +5675,8 @@ self: super: with self; {
 
   flask-dance = callPackage ../development/python-modules/flask-dance { };
 
+  flask-debugtoolbar = callPackage ../development/python-modules/flask-debugtoolbar { };
+
   flask-dramatiq = callPackage ../development/python-modules/flask-dramatiq { };
 
   flask-elastic = callPackage ../development/python-modules/flask-elastic { };
@@ -5678,6 +5684,8 @@ self: super: with self; {
   flask-expects-json = callPackage ../development/python-modules/flask-expects-json { };
 
   flask-gravatar = callPackage ../development/python-modules/flask-gravatar { };
+
+  flask-htmx = callPackage ../development/python-modules/flask-htmx { };
 
   flask-httpauth = callPackage ../development/python-modules/flask-httpauth { };
 
@@ -9651,6 +9659,8 @@ self: super: with self; {
   };
 
   mayim = callPackage ../development/python-modules/mayim { };
+
+  mbdata = callPackage ../development/python-modules/mbdata { };
 
   mbddns = callPackage ../development/python-modules/mbddns { };
 

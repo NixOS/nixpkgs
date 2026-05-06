@@ -1,0 +1,22 @@
+diff --git a/listenbrainz/webserver/__init__.py b/listenbrainz/webserver/__init__.py
+index c9319b1..e3ab1bc 100644
+--- a/listenbrainz/webserver/__init__.py
++++ b/listenbrainz/webserver/__init__.py
+@@ -55,7 +55,7 @@ meb_conn = LocalProxy(_get_meb_conn)
+ 
+ def load_config(app):
+     # Load configuration files: If we're running under a docker deployment, wait until
+-    config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'config.py')
++    config_file = os.environ.get("LISTENBRAINZ_CONFIG_FILE", os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'config.py'))
+     if deploy_env:
+         print("Checking if consul template generated config file exists: %s" % config_file)
+         for i in range(CONSUL_CONFIG_FILE_RETRY_COUNT):
+@@ -257,7 +257,7 @@ def create_web_app(debug=None):
+     # Static files
+     import listenbrainz.webserver.static_manager
+     static_manager.read_manifest()
+-    app.static_folder = '/static'
++    app.static_folder = os.environ.get("LISTENBRAINZ_STATIC_ROOT", "/static")
+ 
+     from listenbrainz.webserver.views.index import index_bp
+     app.register_blueprint(index_bp)
