@@ -36,9 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/cocogitto/cocogitto/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Set of cli tools for the conventional commit and semver specifications";
     mainProgram = "cog";
-    homepage = "https://github.com/oknozor/cocogitto";
+    homepage = "https://docs.cocogitto.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gs-101 ];
   };
