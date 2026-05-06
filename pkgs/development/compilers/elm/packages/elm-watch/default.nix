@@ -32,6 +32,7 @@ buildNpmPackage (finalAttrs: {
     local moduleDir="$out/lib/node_modules/elm-watch"
     mkdir -p "$moduleDir"
 
+    npm prune --omit=dev
     cp -r build/. "$moduleDir/"
     cp -r node_modules "$moduleDir/"
 
@@ -50,6 +51,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Myxogastria0808 ];
     mainProgram = "elm-watch";
-    platforms = lib.platforms.all;
   };
 })
+
