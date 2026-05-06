@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xterm";
-  version = "409";
+  version = "410";
 
   src = fetchurl {
     urls = [
       "https://invisible-island.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-NJ3HVcSSmcpLjjqQ9yAd/0GHeh5qwWEp5DnXZJMkbEA=";
+    hash = "sha256-e6n7swPdPZXQbKJDYNAZBI2E5YItxv5yLNdzab2/Ix8=";
   };
 
   patches = [ ./sixel-256.support.patch ];
