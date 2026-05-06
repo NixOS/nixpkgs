@@ -201,7 +201,7 @@ lib.extendMkDerivation {
 
       urls_ =
         let
-          u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
+          u = lib.lists.filter lib.isString (map rewriteURL preRewriteUrls);
         in
         if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
