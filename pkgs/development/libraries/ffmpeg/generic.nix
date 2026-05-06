@@ -3,6 +3,7 @@
   config,
   stdenv,
   buildPackages,
+  darwin,
   removeReferencesTo,
   addDriverRunpath,
   pkg-config,
@@ -838,6 +839,7 @@ stdenv.mkDerivation (
       perl
       pkg-config
     ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ]
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
@@ -1046,6 +1048,11 @@ stdenv.mkDerivation (
         patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${
           lib.makeLibraryPath [ vulkan-loader ]
         }
+      ''
+      # Re-sign binaries and libraries on Darwin to ensure valid and deterministic signatures
+      + optionalString stdenv.hostPlatform.isDarwin ''
+        find "$bin" -type f -executable -exec codesign -f -s - {} +
+        find "$lib" -name "*.dylib" -exec codesign -f -s - {} +
       '';
 
     enableParallelBuilding = true;
