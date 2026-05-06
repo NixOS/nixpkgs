@@ -12,7 +12,20 @@
   pnpmConfigHook,
   makeDesktopItem,
   nix-update-script,
+  noto-fonts-cjk-sans,
+  writeText,
 }:
+
+let
+  pearFontsConf = writeText "pear-desktop-fonts.conf" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+      <dir>${noto-fonts-cjk-sans}/share/fonts</dir>
+    </fontconfig>
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pear-desktop";
   version = "3.11.0";
@@ -99,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${electron}/bin/electron $out/bin/pear-desktop \
       --add-flags $out/share/pear-desktop/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+      --set-default FONTCONFIG_FILE ${pearFontsConf} \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
@@ -116,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       aacebedo
       SuperSandro2000
+      LodWKobku
     ];
     mainProgram = "pear-desktop";
     platforms = [
