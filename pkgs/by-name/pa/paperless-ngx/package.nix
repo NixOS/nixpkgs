@@ -27,6 +27,7 @@
   symlinkJoin,
   nltk-data,
   lndir,
+  nix-update-script,
   extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
@@ -363,6 +364,12 @@ in {
       tesseract5
       ;
     tests = { inherit (nixosTests) paperless; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
