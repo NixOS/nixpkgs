@@ -3,12 +3,10 @@
   stdenv,
   fetchFromGitHub,
   fetchPypi,
-  node-gyp,
-  nodejs,
+  callPackage,
   nixosTests,
   gettext,
   python3,
-  giflib,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -16,14 +14,8 @@
   pngquant,
   qpdf,
   tesseract5,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  pnpm_10,
   poppler-utils,
   liberation_ttf,
-  xcbuild,
-  pango,
-  pkg-config,
   symlinkJoin,
   nltk-data,
   lndir,
@@ -31,8 +23,6 @@
   extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
-  pnpm = pnpm_10;
-
   defaultPythonPackageOverrides = final: prev: {
     django = prev.django_5;
 
@@ -80,74 +70,7 @@ let
     ];
   };
 in
-python.pkgs.buildPythonApplication (finalAttrs: let
-  frontend = stdenv.mkDerivation (feAttrs: {
-    pname = "paperless-ngx-frontend";
-    version = finalAttrs.version;
-
-    src = finalAttrs.src + "/src-ui";
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit pnpm;
-      inherit (feAttrs) pname version src;
-      fetcherVersion = 3;
-      hash = "sha256-HO+IDNB3NXWgvV0cvZ5zx46JuXv6Tgroz+YfVump5MA=";
-    };
-
-    nativeBuildInputs = [
-      node-gyp
-      nodejs
-      pkg-config
-      pnpmConfigHook
-      pnpm
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
-
-    buildInputs = [
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      giflib
-    ];
-
-    CYPRESS_INSTALL_BINARY = "0";
-    NG_CLI_ANALYTICS = "false";
-
-    buildPhase = ''
-      runHook preBuild
-
-      pushd node_modules/canvas
-      node-gyp rebuild
-      popd
-
-      # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
-      pnpm run build --configuration production | cat
-
-      runHook postBuild
-    '';
-
-    doCheck = true;
-    checkPhase = ''
-      runHook preCheck
-
-      pnpm run test | cat
-
-      runHook postCheck
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib/paperless-ui
-      mv ../src/documents/static/frontend $out/lib/paperless-ui/
-
-      runHook postInstall
-    '';
-  });
-in {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
   pyproject = true;
 
@@ -278,7 +201,7 @@ in {
 
       mkdir -p $out/lib/paperless-ngx/static/frontend
       cp -r {src,static,LICENSE} $out/lib/paperless-ngx
-      lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
+      lndir -silent ${finalAttrs.passthru.frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
       chmod +x $out/lib/paperless-ngx/src/manage.py
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
         --prefix PYTHONPATH : "${pythonPath}" \
@@ -356,8 +279,11 @@ in {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
+    frontend = callPackage ./frontend.nix {
+      inherit (finalAttrs) src version;
+      meta = removeAttrs finalAttrs.meta [ "mainProgram" ];
+    };
     inherit
-      frontend
       nltkDataDir
       path
       python
