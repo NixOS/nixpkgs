@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qiv";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchFromCodeberg {
     owner = "ciberandy";
     repo = "qiv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U++ZyJ0cVa5x/1Me7Em1W33jAYe3Q/TfMZgPj71ZaFA=";
+    hash = "sha256-5VnId+2RbtS1Aq036X2bby+R2SemqgoDBdEnWhXs2Qo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
