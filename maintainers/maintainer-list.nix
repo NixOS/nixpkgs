@@ -28281,6 +28281,13 @@
     githubId = 787843;
     keys = [ { fingerprint = "E631 8869 586F 99B4 F6E6  D785 5942 58F0 389D 2802"; } ];
   };
+  twicefoldampersands = {
+    name = "&&";
+    email = "twicefoldampersands@tutamail.com";
+    github = "twicefoldampersands";
+    githubId = 265906589;
+    keys = [ { fingerprint = "2607 5DDB 15E8 2415 1B89  4B0C 13E6 8B8C 55F6 850F"; } ];
+  };
   twitchy0 = {
     email = "code@nitinpassa.com";
     github = "twitchy0";
