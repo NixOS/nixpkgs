@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "4.0.0";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
     tag = "v${version}";
-    hash = "sha256-XLtLRIbiB+4AKKq5ekEeBv92qmBPKEJihh0b3lHMnsg=";
+    hash = "sha256-lfAG17R33YsU8HYbnM9te0H7YoVUUpB6TtqQrWbhR6Q=";
   };
 
   postPatch = ''
