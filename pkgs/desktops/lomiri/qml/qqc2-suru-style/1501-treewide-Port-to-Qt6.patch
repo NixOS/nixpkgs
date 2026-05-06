@@ -1,0 +1,470 @@
+From 0fe8ab74d3884a961ddf0e0d3424151647dd50d8 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 27 Apr 2026 21:54:50 +0200
+Subject: [PATCH 1/2] treewide: Port to Qt6
+
+Co-authored-by: Cyril Jacquet <cyril.jacquet@ferntech.eu>
+---
+ CMakeLists.txt                                |  47 ++++++
+ qqc2-suru/CMakeLists.txt                      | 145 ++++++++++++++++++
+ .../{ => qml-qt5}/impl/ElevationEffect.qml    |   0
+ qqc2-suru/qml-qt6/impl/ElevationEffect.qml    |  60 ++++++++
+ qqc2-suru/qquicksurustyle.cpp                 |  29 +++-
+ qqc2-suru/qquicksurustyle_p.h                 |  12 +-
+ qqc2-suru/qtquickcontrols2surustyleplugin.cpp |   4 +
+ qqc2-suru/suru.pri                            |  11 +-
+ suru.pro                                      |   6 +-
+ 9 files changed, 304 insertions(+), 10 deletions(-)
+ create mode 100644 CMakeLists.txt
+ create mode 100644 qqc2-suru/CMakeLists.txt
+ rename qqc2-suru/{ => qml-qt5}/impl/ElevationEffect.qml (100%)
+ create mode 100644 qqc2-suru/qml-qt6/impl/ElevationEffect.qml
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..b550184
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,47 @@
++cmake_minimum_required (VERSION 3.10)
++
++project (qqc2-suru-style
++    VERSION 0.20230630
++    LANGUAGES CXX
++)
++
++set (QT_MAJOR_VERSION "6" CACHE STRING "The Qt major version to target")
++
++if (QT_MAJOR_VERSION VERSION_LESS "6")
++    message (FATAL_ERROR "For targeting Qt versions < 6.0.0, please use QMake.")
++endif()
++
++# None specified in the QMake build, but Qt6 dictates at least C++17
++set (CMAKE_CXX_STANDARD 17)
++set (CMAKE_CXX_EXTENSIONS OFF)
++set (CMAKE_CXX_STANDARD_REQUIRED ON)
++
++include (GNUInstallDirs)
++
++find_package (QT NAMES Qt${QT_MAJOR_VERSION})
++
++list (APPEND REQUIRED_QT_COMPONENTS
++    Gui
++    QuickControls2
++    QuickTemplates2
++)
++if (QT_VERSION VERSION_GREATER_EQUAL "6.2")
++    list (APPEND REQUIRED_QT_COMPONENTS
++    )
++endif()
++if (QT_VERSION VERSION_GREATER_EQUAL "6.2.0")
++    list (APPEND REQUIRED_QT_COMPONENTS
++        GuiPrivate
++        QuickControls2Impl
++        QuickControls2ImplPrivate
++        QuickControls2Private
++        QuickTemplates2Private
++    )
++endif()
++
++find_package (Qt${QT_MAJOR_VERSION} REQUIRED COMPONENTS ${REQUIRED_QT_COMPONENTS})
++
++set (CMAKE_AUTOMOC ON)
++set (QT_IMPORTS_DIR "${CMAKE_INSTALL_LIBDIR}/qt${QT_MAJOR_VERSION}/qml")
++
++add_subdirectory (qqc2-suru)
+diff --git a/qqc2-suru/CMakeLists.txt b/qqc2-suru/CMakeLists.txt
+new file mode 100644
+index 0000000..a21df0f
+--- /dev/null
++++ b/qqc2-suru/CMakeLists.txt
+@@ -0,0 +1,145 @@
++project (qtquickcontrols2surustyleplugin)
++set (PLUGIN_URI "QtQuick.Controls.Suru")
++set (PLUGIN_VERSION "2.2")
++
++list (APPEND QML_IMPL
++    impl/CheckIndicator.qml
++    impl/CursorDelegate.qml
++    qml-qt${QT_MAJOR_VERSION}/impl/ElevationEffect.qml
++    impl/HighlightFocusRectangle.qml
++    impl/RadioIndicator.qml
++    impl/SwitchIndicator.qml
++)
++
++list (APPEND QML_MAIN
++    ApplicationWindow.qml
++    BusyIndicator.qml
++    Button.qml
++    CheckBox.qml
++    CheckDelegate.qml
++    ComboBox.qml
++    DelayButton.qml
++    Dial.qml
++    Dialog.qml
++    DialogButtonBox.qml
++    Drawer.qml
++    Frame.qml
++    GroupBox.qml
++    ItemDelegate.qml
++    Label.qml
++    Menu.qml
++    MenuItem.qml
++    MenuSeparator.qml
++    Page.qml
++    PageIndicator.qml
++    Pane.qml
++    Popup.qml
++    ProgressBar.qml
++    RadioButton.qml
++    RadioDelegate.qml
++    RangeSlider.qml
++    RoundButton.qml
++    ScrollBar.qml
++    ScrollIndicator.qml
++    Slider.qml
++    SpinBox.qml
++    StackView.qml
++    SwipeDelegate.qml
++    SwitchDelegate.qml
++    Switch.qml
++    TabBar.qml
++    TabButton.qml
++    TextArea.qml
++    TextField.qml
++    ToolBar.qml
++    ToolButton.qml
++    ToolSeparator.qml
++    ToolTip.qml
++    Tumbler.qml
++)
++
++list (APPEND PLUGIN_HEADERS
++    qquicksurustyle_p.h
++    qquicksurutheme_p.h
++    qquicksuruanimations.h
++    qquicksuruunits.h
++)
++
++list (APPEND PLUGIN_SOURCES
++    qquicksurustyle.cpp
++    qquicksurutheme.cpp
++    qquicksuruanimations.cpp
++    qquicksuruunits.cpp
++)
++
++list (APPEND PLUGIN_PUBLIC_QT_LINK_TARGETS
++    Qt::Gui
++    Qt::QuickControls2
++    Qt::QuickTemplates2
++)
++if (QT_VERSION VERSION_GREATER_EQUAL "6.2.0")
++    list (APPEND PLUGIN_PUBLIC_QT_LINK_TARGETS
++        Qt::GuiPrivate
++        Qt::QuickControls2Impl
++        Qt::QuickControls2ImplPrivate
++        Qt::QuickControls2Private
++        Qt::QuickTemplates2Private
++    )
++endif()
++
++string (REPLACE "." "/" PLUGIN_IMPORT_PATH "${PLUGIN_URI}")
++
++qt_add_qml_module(${PROJECT_NAME}
++    URI ${PLUGIN_URI}
++    VERSION ${PLUGIN_VERSION}
++    CLASS_NAME QtQuickControls2SuruStylePlugin
++    PLUGIN_TARGET ${PROJECT_NAME}
++    NO_GENERATE_PLUGIN_SOURCE
++    NO_PLUGIN_OPTIONAL
++    DEPENDENCIES
++        QtQuick.Controls/${PLUGIN_VERSION}
++    OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${PLUGIN_IMPORT_PATH}
++    SOURCES ${PLUGIN_SOURCES} ${PLUGIN_HEADERS}
++    QML_FILES ${QML_MAIN} ${QML_IMPL}
++    RESOURCES ${PROJECT_NAME}.qrc
++)
++
++target_sources (${PROJECT_NAME}
++    PRIVATE
++    qtquickcontrols2surustyleplugin.cpp
++)
++
++target_compile_definitions(${PROJECT_NAME}
++    PRIVATE
++    QT_NO_CAST_FROM_ASCII
++    QT_NO_CAST_TO_ASCII
++)
++
++target_link_libraries (${PROJECT_NAME}
++    PUBLIC
++    ${PLUGIN_PUBLIC_QT_LINK_TARGETS}
++)
++
++install (TARGETS ${PROJECT_NAME}
++    LIBRARY DESTINATION ${QT_IMPORTS_DIR}/${PLUGIN_IMPORT_PATH}
++)
++
++install (FILES
++    ${CMAKE_CURRENT_BINARY_DIR}/${PLUGIN_IMPORT_PATH}/qmldir
++    ${CMAKE_CURRENT_BINARY_DIR}/${PLUGIN_IMPORT_PATH}/${PROJECT_NAME}.qmltypes
++    DESTINATION ${QT_IMPORTS_DIR}/${PLUGIN_IMPORT_PATH}
++)
++
++install (FILES
++    ${QML_MAIN}
++    DESTINATION ${QT_IMPORTS_DIR}/${PLUGIN_IMPORT_PATH}
++)
++
++install (FILES
++    ${QML_IMPL}
++    DESTINATION ${QT_IMPORTS_DIR}/${PLUGIN_IMPORT_PATH}/impl
++)
++
++install (DIRECTORY assets
++    DESTINATION ${QT_IMPORTS_DIR}/${PLUGIN_IMPORT_PATH}/assets
++)
+diff --git a/qqc2-suru/impl/ElevationEffect.qml b/qqc2-suru/qml-qt5/impl/ElevationEffect.qml
+similarity index 100%
+rename from qqc2-suru/impl/ElevationEffect.qml
+rename to qqc2-suru/qml-qt5/impl/ElevationEffect.qml
+diff --git a/qqc2-suru/qml-qt6/impl/ElevationEffect.qml b/qqc2-suru/qml-qt6/impl/ElevationEffect.qml
+new file mode 100644
+index 0000000..03f046a
+--- /dev/null
++++ b/qqc2-suru/qml-qt6/impl/ElevationEffect.qml
+@@ -0,0 +1,60 @@
++/****************************************************************************
++**
++** Copyright (C) 2018 Stefano Verzegnassi <stefano@ubports.com>
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPLv3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or later as published by the Free
++** Software Foundation and appearing in the file LICENSE.GPL included in
++** the packaging of this file. Please review the following information to
++** ensure the GNU General Public License version 2.0 requirements will be
++** met: http://www.gnu.org/licenses/gpl-2.0.html.
++**
++****************************************************************************/
++
++import QtQuick 2.12
++import Qt5Compat.GraphicalEffects
++
++DropShadow {
++    property int elevation: 0
++
++    //cached: true
++
++  //  transparentBorder: true
++    verticalOffset: 2
++
++    enabled: elevation > 0
++
++    radius: (samples - 1) * 0.5
++    samples: {
++        switch(elevation) {
++        case 1:
++            return 0
++        case 2:
++            return 5
++        case 3:
++        default:
++            return 25
++        }
++    }
++
++    color: {
++        switch(elevation) {
++        case 1:
++            return "#56888888"
++        case 2:
++            return "#70888888"
++        case 3:
++        default:
++            return "#62888888"
++        }
++    }
++}
+diff --git a/qqc2-suru/qquicksurustyle.cpp b/qqc2-suru/qquicksurustyle.cpp
+index 03737c5..8c1b738 100644
+--- a/qqc2-suru/qquicksurustyle.cpp
++++ b/qqc2-suru/qquicksurustyle.cpp
+@@ -117,7 +117,9 @@ static QQuickSuruStyle::Theme qquicksuru_effective_theme(QQuickSuruStyle::Theme
+     return theme;
+ }
+ 
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++QQuickSuruStyle::QQuickSuruStyle(QObject *parent) : QQuickAttachedPropertyPropagator(parent),
++#elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+ QQuickSuruStyle::QQuickSuruStyle(QObject *parent) : QQuickAttachedObject(parent),
+ #else
+ QQuickSuruStyle::QQuickSuruStyle(QObject *parent) : QQuickStyleAttached(parent),
+@@ -145,6 +147,9 @@ QQuickSuruStyle::QQuickSuruStyle(QObject *parent) : QQuickStyleAttached(parent),
+     }
+ 
+     init();
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++    initialize();
++#endif
+ }
+ 
+ QQuickSuruStyle *QQuickSuruStyle::qmlAttachedProperties(QObject *object)
+@@ -188,7 +193,10 @@ void QQuickSuruStyle::inheritTheme(Theme theme)
+ 
+ void QQuickSuruStyle::propagateTheme()
+ {
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++    const auto styles = attachedChildren();
++    for (QQuickAttachedPropertyPropagator *child : styles) {
++#elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+     const auto styles = attachedChildren();
+     for (QQuickAttachedObject *child : styles) {
+ #else
+@@ -290,7 +298,10 @@ void QQuickSuruStyle::inheritPaletteColor(const QQuickSuruStyle::Theme &theme, c
+ 
+ void QQuickSuruStyle::propagatePaletteColor(const QQuickSuruStyle::Theme &theme, const QQuickSuruStyle::PaletteColor &paletteColor)
+ {
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++    const auto styles = attachedChildren();
++    for (QQuickAttachedPropertyPropagator *child : styles) {
++#elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+     const auto styles = attachedChildren();
+     for (QQuickAttachedObject *child : styles) {
+ #else
+@@ -390,7 +401,9 @@ QColor QQuickSuruStyle::tertiaryForegroundColor() const
+     return c;
+ }
+ 
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++void QQuickSuruStyle::attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent)
++#elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+ void QQuickSuruStyle::attachedParentChange(QQuickAttachedObject *newParent, QQuickAttachedObject *oldParent)
+ #else
+ void QQuickSuruStyle::parentStyleChange(QQuickStyleAttached *newParent, QQuickStyleAttached *oldParent)
+@@ -472,7 +485,9 @@ void QQuickSuruStyle::init()
+         globalsInitialized = true;
+     }
+ 
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++    // QQuickAttachedPropertyPropagator doesn't have explicit init() method, initialized automatically
++#elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+     QQuickAttachedObject::init(); // TODO: lazy init?
+ #else
+     QQuickStyleAttached::init(); // TODO: lazy init?
+@@ -510,7 +525,11 @@ bool QQuickSuruStyle::setPaletteColor(const QVariant &value, const QQuickSuruSty
+ 
+     QString name = QString::fromUtf8(toEnumKey<Theme>(theme)).toLower() + QString::fromUtf8(toEnumKey<PaletteColor>(paletteColor));
+ 
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++    if (value.metaType().id() == QMetaType::Int) {
++#else
+     if (value.type() == QVariant::Int) {
++#endif
+         int val = value.toInt();
+         if (val < Black || val > LightRed) {
+             qmlInfo(parent()) << "unknown Suru." << name << " value: " << val;
+diff --git a/qqc2-suru/qquicksurustyle_p.h b/qqc2-suru/qquicksurustyle_p.h
+index e8e47a0..68cfc05 100644
+--- a/qqc2-suru/qquicksurustyle_p.h
++++ b/qqc2-suru/qquicksurustyle_p.h
+@@ -28,7 +28,9 @@
+ #include "qquicksuruunits.h"
+ 
+ #include <QtGui/qcolor.h>
+-#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++#include <QtQuickControls2/qquickattachedpropertypropagator.h>
++#elif QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+ #include <QtQuickControls2Impl/private/qquickattachedobject_p.h>
+ #elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+ #include <QtQuickControls2/private/qquickattachedobject_p.h>
+@@ -49,7 +51,9 @@
+ class QQuickSuruAnimations;
+ class QQuickSuruUnits;
+ 
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++class QQuickSuruStyle : public QQuickAttachedPropertyPropagator
++#elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+ class QQuickSuruStyle : public QQuickAttachedObject
+ #else
+ class QQuickSuruStyle : public QQuickStyleAttached
+@@ -188,7 +192,9 @@ Q_SIGNALS:
+     void unitsChanged();
+ 
+ protected:
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++    void attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent) override;
++#elif QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+     void attachedParentChange(QQuickAttachedObject *newParent, QQuickAttachedObject *oldParent) override;
+ #else
+     void parentStyleChange(QQuickStyleAttached *newParent, QQuickStyleAttached *oldParent) override;
+diff --git a/qqc2-suru/qtquickcontrols2surustyleplugin.cpp b/qqc2-suru/qtquickcontrols2surustyleplugin.cpp
+index 49c36f3..b4d6f7f 100644
+--- a/qqc2-suru/qtquickcontrols2surustyleplugin.cpp
++++ b/qqc2-suru/qtquickcontrols2surustyleplugin.cpp
+@@ -28,6 +28,10 @@
+ #include "qquicksuruanimations.h"
+ #include "qquicksuruunits.h"
+ 
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++#include <QtQml/qqmlextensionplugin.h>
++#endif
++
+ #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+ #include <QQmlEngine>
+ #else
+diff --git a/qqc2-suru/suru.pri b/qqc2-suru/suru.pri
+index ea1edc0..7efdd9e 100644
+--- a/qqc2-suru/suru.pri
++++ b/qqc2-suru/suru.pri
+@@ -1,8 +1,17 @@
++# Qt5-specific QML files
++qmlfiles_qt5.base = $$PWD/qml-qt5
++qmlfiles_qt5.path = $$[QT_INSTALL_QML]/$$TARGETPATH
++qmlfiles_qt5.files = \
++    $$PWD/qml-qt5/impl/ElevationEffect.qml
++
++INSTALLS += qmlfiles_qt5
++
++# Shared QML files
++
+ # Internal implementation files
+ QML_FILES += \
+     $$PWD/impl/CheckIndicator.qml \
+     $$PWD/impl/CursorDelegate.qml \
+-    $$PWD/impl/ElevationEffect.qml \
+     $$PWD/impl/HighlightFocusRectangle.qml \
+     $$PWD/impl/RadioIndicator.qml \
+     $$PWD/impl/SwitchIndicator.qml
+diff --git a/suru.pro b/suru.pro
+index acad2c6..cc91d0d 100644
+--- a/suru.pro
++++ b/suru.pro
+@@ -1,3 +1,7 @@
+ TEMPLATE = subdirs
+-SUBDIRS += qqc2-suru/suru.pro
+ 
++greaterThan(QT_MAJOR_VERSION, 5) {
++    error("For targeting Qt versions >= 6.0.0, please use CMake.")
++}
++
++SUBDIRS += qqc2-suru/suru.pro
+-- 
+2.51.2
+

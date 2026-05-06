@@ -3,11 +3,22 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  cmake,
   qmake,
+  qtbase,
   qtdeclarative,
-  qtquickcontrols2,
+
+  # Qt5-only
+  qtgraphicaleffects ? null,
+  qtquickcontrols2 ? null,
+
+  # Qt6-only
+  qt5compat ? null,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qqc2-suru-style";
   version = "0.20230630";
@@ -19,16 +30,46 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kAgHsNWwUWxHg26bTMmlq8m9DR4+ob4pl/oUX7516hM=";
   };
 
-  # QMake can't find Qt modules from buildInputs
-  strictDeps = false;
-
-  nativeBuildInputs = [ qmake ];
-
-  buildInputs = [
-    qtdeclarative
-    qtquickcontrols2
+  patches = [
+    # https://gitlab.com/ubports/development/core/qqc2-suru-style/-/merge_requests/69
+    ./1501-treewide-Port-to-Qt6.patch
   ];
 
+  postPatch = ''
+    substituteInPlace qqc2-suru/suru.pri \
+      --replace-fail '$$[QT_INSTALL_QML]' "$out/${qtbase.qtQmlPrefix}"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_MAJOR_VERSION}/qml" \
+        '${qtbase.qtQmlPrefix}'
+  '';
+
+  # QMake can't find Qt modules from buildInputs
+  strictDeps = withQt6;
+
+  nativeBuildInputs = lib.optionals (!withQt6) [ qmake ] ++ lib.optionals withQt6 [ cmake ];
+
+  propagatedBuildInputs = [
+    qtdeclarative
+  ]
+  ++ lib.optionals (!withQt6) [
+    # Qt6: Deprecated, moved to core5compat
+    qtgraphicaleffects
+
+    # Qt6: Folded into qtdeclarative
+    qtquickcontrols2
+  ]
+  ++ lib.optionals withQt6 [
+    # Not ported away from qtgraphicaleffects yet
+    qt5compat
+  ];
+
+  cmakeFlags = [
+    (lib.strings.cmakeFeature "QT_VERSION_MAJOR" (lib.versions.major qtbase.version))
+  ];
+
+  # QML plugin
   dontWrapQtApps = true;
 
   passthru.updateScript = gitUpdater { };
