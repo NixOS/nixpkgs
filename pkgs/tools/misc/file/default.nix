@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Vendored patch because using fetchpatch is impossible for a package in
     # this part of the bootstrap chain.
     ./0001-PR-745-streamout-Don-t-flush-when-trying-to-set-nega.patch
+    # Fixes breakage of python3Packages.python-magic and xdg-utils
+    ./0002-PR-725-inliniac-Revert-previous-and-always-set-offse.patch
   ];
 
   strictDeps = true;
