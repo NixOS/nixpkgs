@@ -541,7 +541,7 @@ sub addGeneration {
 
         my $cfgName = readFile("$link/configuration-name");
 
-        my $date = strftime("%F", localtime(lstat($link)->mtime));
+        my $date = strftime("@timestampFormat@", localtime(lstat($link)->mtime));
         my $version =
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
@@ -592,7 +592,7 @@ sub addProfile {
             warn "skipping corrupt system profile entry ‘$link’\n";
             next;
         }
-        my $date = strftime("%F", localtime(lstat($link)->mtime));
+        my $date = strftime("@timestampFormat@", localtime(lstat($link)->mtime));
         my $version =
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
