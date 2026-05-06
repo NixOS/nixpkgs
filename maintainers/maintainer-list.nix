@@ -1955,12 +1955,6 @@
     githubId = 14838767;
     name = "Jacopo Scannella";
   };
-  antoinerg = {
-    email = "roygobeil.antoine@gmail.com";
-    github = "antoinerg";
-    githubId = 301546;
-    name = "Antoine Roy-Gobeil";
-  };
   anton-4 = {
     name = "Anton";
     github = "Anton-4";
