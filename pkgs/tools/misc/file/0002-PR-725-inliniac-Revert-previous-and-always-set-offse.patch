@@ -1,0 +1,35 @@
+From c54605718190ad8fe9c25cb475f1f32ca7cd54f7 Mon Sep 17 00:00:00 2001
+From: Christos Zoulas <christos@zoulas.com>
+Date: Sun, 12 Apr 2026 22:15:14 +0000
+Subject: [PATCH] PR/725: inliniac: Revert previous and always set offset.
+
+---
+ src/softmagic.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/softmagic.c b/src/softmagic.c
+index 9aaf8b3e..7cf7c798 100644
+--- a/src/softmagic.c
++++ b/src/softmagic.c
+@@ -32,7 +32,7 @@
+ #include "file.h"
+ 
+ #ifndef	lint
+-FILE_RCSID("@(#)$File: softmagic.c,v 1.362 2026/03/23 14:23:11 christos Exp $")
++FILE_RCSID("@(#)$File: softmagic.c,v 1.363 2026/04/12 22:15:14 christos Exp $")
+ #endif	/* lint */
+ 
+ #include "magic.h"
+@@ -1577,8 +1577,7 @@ normal:
+ 			ms->offset = offset;
+ 			ms->eoffset = 0;
+ 		} else {
+-			if (b->fd != -1)
+-				ms->offset = ms->eoffset + offset;
++			ms->offset = ms->eoffset + offset;
+ 		}
+ 	}
+ 	if ((ms->flags & MAGIC_DEBUG) != 0) {
+-- 
+2.51.2
+
