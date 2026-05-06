@@ -432,6 +432,10 @@ in
   cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   croc = runTest ./croc.nix;
   cross-seed = runTest ./cross-seed.nix;
+  crowdsec = import ./crowdsec/default.nix {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   cryptpad = runTest ./cryptpad.nix;
   cups-pdf = runTest ./cups-pdf.nix;
   curl-impersonate = runTest ./curl-impersonate.nix;
