@@ -6,6 +6,7 @@
 {
   stdenv,
   lib,
+  buildPackages,
   fetchzip,
   flex,
   bison,
@@ -53,7 +54,20 @@
   withLua ? false,
   lua5_3,
 }:
-
+let
+  # The `nativeBuildInputs` version of `mysql_config` emits headers and libraries for
+  # the build platform, not the host platform; `pkg-config` emits the correct versions.
+  fake_mysql_config = buildPackages.writeShellScriptBin "mysql_config" ''
+    if [ "$1" == "--include" ]; then
+      "$PKG_CONFIG" --cflags mysqlclient
+    elif [ "$1" == "--libs" ]; then
+      "$PKG_CONFIG" --libs mysqlclient
+    else
+      echo "fake_mysql_config: unsupported option: $1" >&2
+      exit 1
+    fi
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot";
   inherit version;
@@ -64,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
   ]
+  ++ lib.optional (withMySQL && lib.versionOlder version "2.4") fake_mysql_config
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   buildInputs = [
