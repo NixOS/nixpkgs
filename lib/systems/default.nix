@@ -621,6 +621,64 @@ let
             else
               null;
         };
+
+        nim = {
+          # See these locations for a known list of cpu/os idntifeiers:
+          # - https://nim-lang.org/docs/system.html#hostCPU
+          # - https://nim-lang.org/docs/system.html#hostOS
+          cpu =
+            if final.isAarch32 then
+              "arm"
+            else if final.isAarch64 then
+              "arm64"
+            else if final.isAlpha then
+              "alpha"
+            else if final.isAvr then
+              "avr"
+            else if final.isMips && final.is32Bit then
+              "mips"
+            else if final.isMips && final.is64Bit then
+              "mips64"
+            else if final.isMsp430 then
+              "msp430"
+            else if final.isPower && final.is32bit then
+              "powerpc"
+            else if final.isPower && final.is64bit then
+              "powerpc64"
+            else if final.isRiscV && final.is64bit then
+              "riscv64"
+            else if final.isSparc then
+              "sparc"
+            else if final.isx86_32 then
+              "i386"
+            else if final.isx86_64 then
+              "amd64"
+            else
+              null;
+          os =
+            if final.isAndroid then
+              "Android"
+            else if final.isDarwin then
+              "MacOSX"
+            else if final.isFreeBSD then
+              "FreeBSD"
+            else if final.isGenode then
+              "Genode"
+            else if final.isLinux then
+              "Linux"
+            else if final.isNetBSD then
+              "NetBSD"
+            else if final.isNone then
+              "Standalone"
+            else if final.isOpenBSD then
+              "OpenBSD"
+            else if final.isWindows then
+              "Windows"
+            else if final.isiOS then
+              "iOS"
+            else
+              null;
+        };
       };
     in
     assert final.useAndroidPrebuilt -> final.isAndroid;
