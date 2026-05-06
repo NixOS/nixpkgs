@@ -1,22 +1,21 @@
 {
   bats,
-  bash,
-  fetchFromGitHub,
-  lib,
-  resholve,
   coreutils,
+  fetchFromGitHub,
   getopt,
+  lib,
+  makeWrapper,
+  stdenvNoCC,
 }:
-let
-  version = "0.0.1";
-in
-resholve.mkDerivation {
+
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "locate-dominating-file";
-  inherit version;
+  version = "0.0.1";
+
   src = fetchFromGitHub {
     owner = "roman";
     repo = "locate-dominating-file";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gwh6fAw7BV7VFIkQN02QIhK47uxpYheMk64UeLyp2IY=";
   };
 
@@ -26,16 +25,15 @@ resholve.mkDerivation {
     done
   '';
 
-  buildInputs = [
-    getopt
-    coreutils
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     (bats.withLibraries (p: [
       p.bats-support
       p.bats-assert
     ]))
+    coreutils
+    getopt
   ];
 
   doCheck = true;
@@ -51,20 +49,20 @@ resholve.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp src/locate-dominating-file.sh $out/bin/locate-dominating-file
+    install -Dm0755 src/locate-dominating-file.sh $out/bin/locate-dominating-file
 
     runHook postInstall
   '';
 
-  solutions.default = {
-    scripts = [ "bin/locate-dominating-file" ];
-    interpreter = "${bash}/bin/bash";
-    inputs = [
-      coreutils
-      getopt
-    ];
-  };
+  postFixup = ''
+    wrapProgram $out/bin/locate-dominating-file \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          getopt
+        ]
+      }
+  '';
 
   meta = {
     homepage = "https://github.com/roman/locate-dominating-file";
@@ -74,4 +72,4 @@ resholve.mkDerivation {
     platforms = lib.platforms.all;
     mainProgram = "locate-dominating-file";
   };
-}
+})
