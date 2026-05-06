@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "coapthon3";
-  version = "1.0.2";
+  version = "1.01";
   format = "setuptools";
   disabled = isPy27;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Tanganelli";
     repo = "CoAPthon3";
     rev = version;
-    hash = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
+    hash = "sha256-t49e3vJMIkq8Vs5AFABcZgr3iE8sWS7QEEfz21vv5NY=";
   };
 
   propagatedBuildInputs = [ cachetools ];
