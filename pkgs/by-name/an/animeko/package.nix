@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  gradle,
+  gradle_9,
   autoPatchelfHook,
   jetbrains, # Required by upstream due to JCEF dependency
   fontconfig,
@@ -113,13 +113,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "5.3.2";
+  version = "5.4.3";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mDUl1RpTIFBHdYst6R16iVljiUNOYh6mNUtOLBSuOE0=";
+    hash = "sha256-RQlYUEHj80CXPZ998noy3Sbig/o6KjGggJzStu4TmkU=";
     fetchSubmodules = true;
   };
 
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   gradleUpdateTask = finalAttrs.gradleBuildTask;
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     inherit (finalAttrs) pname;
     pkg = finalAttrs.finalPackage;
     data = ./deps.json;
@@ -142,16 +142,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   env = {
-    JAVA_HOME = jetbrains.jdk-21;
+    JAVA_HOME = jetbrains.jdk;
     ANDROID_SDK_HOME = "$(pwd)";
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jetbrains.jdk-21}"
+    "-Dorg.gradle.java.home=${jetbrains.jdk}"
   ];
 
   nativeBuildInputs = [
-    gradle
+    gradle_9
     autoPatchelfHook
   ];
 
@@ -282,8 +282,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
     ];
-    # Mark broken due to a breaking change in JetBrains JCEF
-    # https://github.com/NixOS/nixpkgs/pull/485812#issuecomment-4211365591
-    broken = true;
   };
 })
