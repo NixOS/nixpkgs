@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   openssl,
+  dtc,
   pkgsCross,
   buildPackages,
 
@@ -61,6 +62,7 @@ let
         nativeBuildInputs = [
           pkgsCross.arm-embedded.stdenv.cc # For Cortex-M0 firmware in RK3399
           openssl # For fiptool
+          dtc # Needed by targets that use FDT_SOURCES
         ];
 
         # Make the new toolchain guessing (from 2.14+) happy
