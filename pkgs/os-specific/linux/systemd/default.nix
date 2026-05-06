@@ -316,7 +316,11 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
+      # pefile is only required to trigger a check in meson to actually build
+      # ukify. This module should never appear in the runtime closure of ukify.
+      # Instead the pefile from buildInputs should be used.
+      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
+      ++ lib.optional withUkify ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
