@@ -5817,6 +5817,10 @@ self: super: with self; {
 
   flowmc = callPackage ../development/python-modules/flowmc { };
 
+  flowsint-core = callPackage ../development/python-modules/flowsint-core { };
+
+  flowsint-types = callPackage ../development/python-modules/flowsint-types { };
+
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 
   fluent-pygments = callPackage ../development/python-modules/python-fluent/fluent-pygments.nix { };
@@ -16697,7 +16701,13 @@ self: super: with self; {
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
+  reconcrawl = callPackage ../development/python-modules/reconcrawl { };
+
   reconplogger = callPackage ../development/python-modules/reconplogger { };
+
+  reconspread = callPackage ../development/python-modules/reconspread { };
+
+  recontrack = callPackage ../development/python-modules/recontrack { };
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
