@@ -1572,6 +1572,10 @@ let
     `debDistros' sets.
   */
   diskImages = lib.mapAttrs (name: f: f { }) diskImageFuns;
+
+  windows = pkgs.callPackage ./windows {
+    inherit qemu-common customQemu;
+  };
 in
 {
   inherit
@@ -1606,6 +1610,7 @@ in
     runInLinuxVM
     stage1Init
     stage2Init
+    windows
     vmRunCommand
     ;
 }
