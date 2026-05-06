@@ -174,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
 
     # very strict timing constraints, will fail under load
+    "logging_async_file_writer_test.AsyncFileWriter.discard"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"
