@@ -28219,6 +28219,12 @@
     githubId = 303489;
     name = "Manuel Bärenz";
   };
+  turtley12 = {
+    email = "grant_trier@mines.edu";
+    github = "turtley12";
+    githubId = 76929530;
+    name = "Grant Trier";
+  };
   tuxinaut = {
     email = "trash4you@tuxinaut.de";
     github = "tuxinaut";
