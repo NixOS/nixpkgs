@@ -96,7 +96,7 @@ buildGoModule rec {
     make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector -Wno-unused-command-line-argument" \
       NOSTRIP=y \
       WEB_DIST=dist \
-      AppName=${pname} \
+      AppName=daed \
       VERSION=${version} \
       OUTPUT=$out/bin/daed \
       bundle
