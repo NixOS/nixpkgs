@@ -26440,6 +26440,12 @@
     githubId = 187109;
     name = "Bjarki Ágúst Guðmundsson";
   };
+  suree33 = {
+    email = "d@sur33.com";
+    github = "Suree33";
+    githubId = 42645594;
+    name = "Daiki Sato";
+  };
   surfaceflinger = {
     email = "nat@nekopon.pl";
     github = "surfaceflinger";
