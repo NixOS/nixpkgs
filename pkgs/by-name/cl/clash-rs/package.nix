@@ -6,25 +6,44 @@
   versionCheckHook,
   cmake,
   pkg-config,
+  nodejs,
+  fetchNpmDeps,
+  npmHooks,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.10.0";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r+9tFw4B/7g/4EEYnX0Zcv4jPeGbcVgdtpAcSyk/cxA=";
+    hash = "sha256-ncMJxVNHAgeXWhqZgWt3nth4BXqrrBaAEWmOVF/KsPg=";
   };
 
-  cargoHash = "sha256-D/TalJ0fBD4ZoHwU6uj5P0O6xFwinL9hE91bQhxC7s8=";
+  patches = [
+    # Remove the `npm ci` call in build.rs as it fails.
+    ./skip-npm-ci.patch
+  ];
+
+  cargoHash = "sha256-WI+wg6cu0cBFrZYyN3GXlfHOmo/cVo2uMLn1D5YTOCQ=";
+
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/clash-dashboard";
+    hash = "sha256-8fDeO7Yx+m2s0mzTO7MkQOQ0UYs8B2vFnNevHHZFghc=";
+  };
+
+  npmRoot = "clash-dashboard";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   nativeInstallCheckInputs = [
@@ -33,8 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
+    # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip, if_let_guard
     RUSTC_BOOTSTRAP = 1;
+    RUSTFLAGS = "-Zcrate-attr=feature(if_let_guard)";
   };
 
   buildFeatures = [ "plus" ];
