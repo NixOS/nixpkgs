@@ -1,0 +1,32 @@
+--- a/src/main.js	2026-02-25 17:42:18.951296809 +0300
++++ b/src/main.js	2026-02-25 17:42:33.037387482 +0300
+@@ -555,7 +555,7 @@
+             binaryPath = path.join(__dirname, "../binaries", binaryName)
+         } else {
+             // In production, use the resources path
+-            binaryPath = path.join(process.resourcesPath, "binaries", binaryName)
++            binaryPath = "SEANIME"
+         }
+ 
+         logStartupEvent("Using binary", `${binaryPath} (${process.arch})`)
+@@ -569,13 +569,13 @@
+         }
+ 
+         // Make binary executable (for macOS/Linux)
+-        if (process.platform !== "win32") {
+-            try {
+-                fs.chmodSync(binaryPath, "755")
+-            } catch (error) {
+-                console.error(`Failed to make binary executable: ${error}`)
+-            }
+-        }
++        // if (process.platform !== "win32") {
++        //     try {
++        //         fs.chmodSync(binaryPath, "755")
++        //     } catch (error) {
++        //         console.error(`Failed to make binary executable: ${error}`)
++        //     }
++        // }
+ 
+         // Arguments
+         const args = []
