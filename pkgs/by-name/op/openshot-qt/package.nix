@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openshot-qt";
-  version = "3.5.1-unstable-2026-04-22";
+  version = "3.5.1";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
