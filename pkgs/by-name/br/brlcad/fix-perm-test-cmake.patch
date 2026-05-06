@@ -1,0 +1,15 @@
+diff --git a/src/tclscripts/CMakeLists.txt b/src/tclscripts/CMakeLists.txt
+index 364d529ff0..7626e26e68 100644
+--- a/src/tclscripts/CMakeLists.txt
++++ b/src/tclscripts/CMakeLists.txt
+@@ -139,7 +139,9 @@ if(TARGET btclsh)
+   )
+   add_custom_target(TclIndexBld ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tclindexbld.sentinel)
+   distclean(${CMAKE_CURRENT_BINARY_DIR}/tclindexbld.sentinel)
+-  set_target_properties(perm_test PROPERTIES FOLDER "Compilation Utilities")
++  if(BUILD_TESTING)
++    set_target_properties(perm_test PROPERTIES FOLDER "Compilation Utilities")
++  endif()
+ 
+   foreach(ifile ${index_install_files})
+     # Install logic for index file.
