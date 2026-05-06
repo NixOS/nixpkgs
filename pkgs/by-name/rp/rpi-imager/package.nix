@@ -6,6 +6,7 @@
   fetchFromGitHub,
   gnutls,
   libarchive,
+  libusb1,
   libtasn1,
   liburing,
   nix-update-script,
@@ -22,23 +23,36 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "2.0.6";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YbPGxc6EWE3B+7MWgtwTDRdjin9FM7KpWfw38FqKXYA=";
+    hash = "sha256-8zsWoS27NlhvKeLFUhYhjIKhOC8/O2RPYnRSxbnOiL0=";
   };
 
-  patches = [ ./remove-vendoring.patch ];
-
   postPatch = ''
-    substituteInPlace debian/com.raspberrypi.rpi-imager.desktop \
-      --replace-fail "/usr/bin/" ""
+        substituteInPlace debian/com.raspberrypi.rpi-imager.desktop \
+          --replace-fail "/usr/bin/" ""
 
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail 'qt_add_lupdate(TS_FILES ''${TRANSLATIONS} SOURCE_TARGETS ''${PROJECT_NAME} OPTIONS -no-obsolete -locations none)' ""
+        substituteInPlace src/CMakeLists.txt \
+          --replace-fail 'qt_add_lupdate(TS_FILES ''${TRANSLATIONS} SOURCE_TARGETS ''${PROJECT_NAME} OPTIONS -no-obsolete -locations none)' "" \
+          --replace-fail 'include(dependencies/xz.cmake)' 'find_package(LibLZMA)' \
+          --replace-fail 'include(dependencies/zstd.cmake)' 'find_package(zstd)' \
+          --replace-fail 'include(dependencies/nghttp2.cmake)' "" \
+          --replace-fail 'include(dependencies/zlib.cmake)' 'find_package(ZLIB)' \
+          --replace-fail 'include(dependencies/libarchive.cmake)' 'find_package(LibArchive)' \
+          --replace-fail 'include(dependencies/curl.cmake)' \
+                       'find_package(CURL REQUIRED)
+    set(CURL_INCLUDE_DIR ''${CURL_INCLUDE_DIRS})' \
+          --replace-fail 'include(dependencies/libusb.cmake)' \
+                       'find_package(PkgConfig)
+    pkg_check_modules(LIBUSB libusb-1.0)
+    set(LIBUSB_INCLUDE_DIR ''${LIBUSB_INCLUDE_DIRS} CACHE PATH "" FORCE)
+    set(LIBUSB_LIBRARIES ''${LIBUSB_LINK_LIBRARIES} CACHE STRING "" FORCE)' \
+          --replace-fail 'add_dependencies(''${PROJECT_NAME} zlibstatic yescrypt usb-1.0-static)' \
+                         'add_dependencies(''${PROJECT_NAME} yescrypt)'
   '';
 
   preConfigure = ''
@@ -72,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     libarchive
     libtasn1
+    libusb1
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtsvg
