@@ -4,24 +4,24 @@
   fetchFromGitHub,
   bun,
   nodejs-slim,
+  nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "navbar-card";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "joseluis9595";
     repo = "lovelace-navbar-card";
-    tag = "v${version}";
-    hash = "sha256-lFsQPyIMhyVHCNwRiGXVu8bMvmlfCI7KTu2Hk90agIE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jyG0QGt8kC4M6iFBpV5mhH2AKYC2n/t80XqOwbmwLnE=";
   };
 
-  # Create node_modules as a separate derivation
   node_modules = stdenv.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
     nativeBuildInputs = [
       bun
@@ -57,14 +57,15 @@ let
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-3IGzPEUPVnlD/K8a3Mp53vBEkTdlvrEYNpWCA/rIBwc=";
-    outputHashAlgo = "sha256";
+    outputHash =
+      {
+        "x86_64-linux" = "sha256-F8nNDBl/BYhtwggaZd61oibYE4j5u7WPVjLG8P4UEcc=";
+        "aarch64-linux" = "sha256-pd9P82wwmoNdDTMa92SmA2KgwnFIbXtoitcGP+QfOyk=";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "navbar-card: unsupported platform ${stdenv.hostPlatform.system}");
     outputHashMode = "recursive";
   };
-
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   nativeBuildInputs = [
     bun
@@ -75,7 +76,7 @@ stdenv.mkDerivation {
     runHook preConfigure
 
     # Copy node_modules from the separate derivation
-    cp -R ${node_modules}/node_modules .
+    cp -R ${finalAttrs.node_modules}/node_modules .
 
     runHook postConfigure
   '';
@@ -98,13 +99,25 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.entrypoint = "navbar-card.js";
+  passthru = {
+    entrypoint = "navbar-card.js";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "node_modules"
+      ];
+    };
+  };
 
   meta = {
     description = "Navbar Card for Home Assistant's Lovelace UI - easily navigate through dashboards";
     homepage = "https://github.com/joseluis9595/lovelace-navbar-card";
-    changelog = "https://github.com/joseluis9595/lovelace-navbar-card/releases/tag/v${version}";
+    changelog = "https://github.com/joseluis9595/lovelace-navbar-card/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})
