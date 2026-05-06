@@ -1,2 +1,2 @@
-{ lib, fetchFromGitea }:
-lib.makeOverridable (args: fetchFromGitea ({ domain = "codeberg.org"; } // args))
+{ lib, fetchFromForgejo }:
+lib.makeOverridable (args: fetchFromForgejo ({ domain = "codeberg.org"; } // args))
