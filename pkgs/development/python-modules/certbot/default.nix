@@ -22,19 +22,19 @@
   writeShellScriptBin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot";
-  version = "5.4.0";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
-    tag = "v${version}";
-    hash = "sha256-Tu46Wybod89TiwsVccNuQcweWoeQE1wbH+pDWNC9+kE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hSRMxWQbGFFA5AA+M3wlvVckR+M9qaEIywLC5y6YH0A=";
   };
 
-  sourceRoot = "${src.name}/certbot";
+  sourceRoot = "${finalAttrs.src.name}/certbot";
 
   build-system = [ setuptools ];
 
@@ -87,9 +87,9 @@ buildPythonPackage rec {
     let
       pythonEnv = python.withPackages f;
     in
-    runCommand "certbot-with-plugins-${version}"
+    runCommand "certbot-with-plugins-${finalAttrs.version}"
       {
-        inherit pname version;
+        inherit (finalAttrs) pname version;
       }
       ''
         mkdir -p $out/bin
@@ -99,11 +99,11 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/certbot/certbot";
-    changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
+    changelog = "https://github.com/certbot/certbot/blob/${finalAttrs.src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = lib.platforms.unix;
     mainProgram = "certbot";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     license = with lib.licenses; [ asl20 ];
   };
-}
+})
