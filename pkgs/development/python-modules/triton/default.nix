@@ -103,6 +103,19 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "include(\''${PROJECT_SOURCE_DIR}/unittest/googletest.cmake)" ""\
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
     ''
+    # all substitutes are gated by apple/darwin in soure code
+    # seems like apple sdk versioning in nix vs theirs
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          'set(PYTHON_LDFLAGS "-undefined dynamic_lookup")' \
+          'set(PYTHON_LDFLAGS "LINKER:-undefined,dynamic_lookup")'
+
+      substituteInPlace lib/Instrumentation/CMakeLists.txt test/lib/Instrumentation/CMakeLists.txt \
+        --replace-fail \
+          '"$<$<PLATFORM_ID:Darwin>:-undefined dynamic_lookup>"' \
+          '"$<$<PLATFORM_ID:Darwin>:LINKER:-undefined,dynamic_lookup>"'
+    ''
 
     # triton will try dlopening libcublas.so at runtime
     + lib.optionalString cudaSupport ''
@@ -210,14 +223,20 @@ buildPythonPackage (finalAttrs: {
       pname = "triton-pytest";
       inherit (triton) version src;
 
-      requiredSystemFeatures = [ "cuda" ];
+      requiredSystemFeatures = [ ] ++ lib.optionals cudaSupport [ "cuda" ];
 
       nativeBuildInputs = [
-        (python.withPackages (ps: [
-          ps.scipy
-          ps.torchWithCuda
-          ps.triton-cuda
-        ]))
+        (python.withPackages (
+          ps:
+          [
+            ps.scipy
+          ]
+          ++ lib.optionals cudaSupport [
+            ps.torchWithCuda
+            ps.triton-cuda
+          ]
+        ))
+
       ];
 
       dontBuild = true;
@@ -387,7 +406,7 @@ buildPythonPackage (finalAttrs: {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/triton-lang/triton";
     changelog = "https://github.com/triton-lang/triton/releases/tag/${finalAttrs.src.tag}";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage

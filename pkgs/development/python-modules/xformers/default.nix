@@ -55,6 +55,12 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   postPatch = ''
     touch xformers/components/__init__.py
     touch xformers/components/attention/__init__.py
+
+    # https://github.com/facebookresearch/xformers/issues/1394
+    substituteInPlace tests/multiprocessing_utils.py \
+      --replace-fail \
+        "    torch._C._set_print_stack_traces_on_fatal_signal(True)" \
+        "    if hasattr(torch._C, \"_set_print_stack_traces_on_fatal_signal\"):"$'\n'"        torch._C._set_print_stack_traces_on_fatal_signal(True)"
   '';
 
   build-system = [

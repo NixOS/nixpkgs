@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -56,6 +57,8 @@ buildPythonPackage (finalAttrs: {
   pname = "unsloth";
   version = "2026.4.5";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.15";
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {

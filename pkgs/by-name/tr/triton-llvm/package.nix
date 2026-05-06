@@ -23,6 +23,8 @@
   buildDocs ? true,
   buildMan ? true,
   buildTests ? true,
+  # see llvm derivation
+  enablePFM ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch,
   llvmTargetsToBuild ? [ "NATIVE" ], # "NATIVE" resolves into x86 or aarch64 depending on stdenv
   llvmProjectsToBuild ? [
     # Required for building triton>=3.5.0
@@ -106,9 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxcrypt
     libedit
     libffi
-    libpfm
     mpfr
-  ];
+  ]
+  ++ lib.optionals enablePFM [ libpfm ];
 
   propagatedBuildInputs = [
     zlib
