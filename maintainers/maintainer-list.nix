@@ -6885,6 +6885,12 @@
     github = "DimitarNestorov";
     githubId = 8790386;
   };
+  dinga92 = {
+    name = "Richard Dinga";
+    email = "dinga92@gmail.com";
+    github = "dinga92";
+    githubId = 10049011;
+  };
   diniamo = {
     name = "diniamo";
     email = "diniamo53@gmail.com";
