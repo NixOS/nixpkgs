@@ -14,11 +14,11 @@
   crossguid,
   reproc,
   platform-folders,
-  ruby,
+  ruby_3_3,
   beamPackages,
   alsa-lib,
   rtmidi,
-  boost,
+  boost186,
   aubio,
   jack2,
   jack-example-tools,
@@ -35,7 +35,7 @@
 }@args:
 
 let
-  ruby = args.ruby.withPackages (ps: [
+  ruby = args.ruby_3_3.withPackages (ps: [
     ps.prime
     ps.racc
     ps.rake
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     ruby
     alsa-lib
     rtmidi
-    boost
+    boost186
     aubio
   ]
   ++ lib.optionals withTauWidget [
@@ -274,6 +274,5 @@ stdenv.mkDerivation (finalAttrs: {
       sohalt
     ];
     platforms = lib.platforms.linux;
-    broken = true;
   };
 })
