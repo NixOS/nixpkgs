@@ -19,6 +19,7 @@
   textlint-rule-max-comma,
   textlint-rule-no-start-duplicated-conjunction,
   textlint-rule-period-in-list-item,
+  textlint-rule-preset-ai-writing,
   textlint-rule-preset-ja-spacing,
   textlint-rule-preset-ja-technical-writing,
   textlint-rule-prh,
@@ -157,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
         textlint-rule-max-comma
         textlint-rule-no-start-duplicated-conjunction
         textlint-rule-period-in-list-item
+        textlint-rule-preset-ai-writing
         textlint-rule-preset-ja-spacing
         textlint-rule-preset-ja-technical-writing
         textlint-rule-prh

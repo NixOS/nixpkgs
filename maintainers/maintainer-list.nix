@@ -21076,6 +21076,12 @@
     name = "Michael Bergmeister";
     githubId = 53442728;
   };
+  paveg = {
+    email = "pavegy@gmail.com";
+    github = "paveg";
+    githubId = 12677991;
+    name = "Ryota Ikezawa";
+  };
   pawelchcki = {
     email = "pawel.chcki@gmail.com";
     github = "pawelchcki";
