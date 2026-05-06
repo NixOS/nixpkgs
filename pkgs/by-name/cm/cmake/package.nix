@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
+  callPackage, # for tests
   fetchurl,
   replaceVars,
   buildPackages,
   bzip2,
   curlMinimal,
   expat,
+  jq,
   libarchive,
   libuv,
   ncurses,
@@ -109,6 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals buildDocs [ texinfo ]
     ++ lib.optionals qt5UI [ wrapQtAppsHook ];
 
+  propagatedNativeBuildInputs =
+    # For boolean cmakeEntries attribute canonicalization.
+    lib.optional (!isMinimalBuild) jq;
+
   buildInputs =
     lib.optionals useSharedLibraries [
       bzip2
@@ -187,10 +193,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
-  passthru.updateScript = gitUpdater {
-    url = "https://gitlab.kitware.com/cmake/cmake.git";
-    rev-prefix = "v";
-    ignoredVersions = "-"; # -rc1 and friends
+  passthru = {
+    tests = {
+      setup-hook-tests = callPackage ./test/test-setup-hook.nix {
+        inherit lib stdenv;
+      };
+    };
+
+    updateScript = gitUpdater {
+      url = "https://gitlab.kitware.com/cmake/cmake.git";
+      rev-prefix = "v";
+      ignoredVersions = "-"; # -rc1 and friends
+    };
   };
 
   meta = {
