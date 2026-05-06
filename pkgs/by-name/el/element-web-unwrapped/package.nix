@@ -24,20 +24,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-web";
-  version = "1.12.14";
+  version = "1.12.17";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yy7CfMOMT1DBXHDHaDyAaOgp3s2KQIKA1A6zUhVOUhM=";
+    hash = "sha256-9YUdYVsv0k9Oc55aS3pOFttcJ/kNzyu75fyq4oV6wLo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     pname = "element";
     inherit (finalAttrs) version src;
     fetcherVersion = 3;
-    hash = "sha256-0yqWObZtRntsH7gk+OB8pMuWsrvCQ4L9173Qv0o5abk=";
+    hash = "sha256-aq5Z2n/rzOpgrqWvksU48kUQ4Qi5SaVHo4U54wZIAzg=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     faketty
   ];
+
+  preBuild = ''
+    substituteInPlace packages/module-api/node_modules/.bin/vite \
+      --replace-fail "/usr/bin/env node" "${nodejs}/bin/node"
+  '';
 
   # faketty is required to work around a bug in nx.
   # See: https://github.com/nrwl/nx/issues/22445
