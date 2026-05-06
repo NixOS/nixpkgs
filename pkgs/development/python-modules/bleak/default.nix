@@ -72,6 +72,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/hbldh/bleak/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ rhendric ];
   };
 })
