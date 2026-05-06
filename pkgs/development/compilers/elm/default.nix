@@ -66,6 +66,8 @@ lib.makeScope pkgs.newScope (
 
       elm-verify-examples = callPackage ./packages/elm-verify-examples { };
 
+      elm-watch = callPackage ./packages/elm-watch { };
+
       elm-xref = callPackage ./packages/elm-xref { };
 
       lamdera = callPackage ./packages/lamdera { };
