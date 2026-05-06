@@ -78,6 +78,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ rhendric ];
   };
 }
