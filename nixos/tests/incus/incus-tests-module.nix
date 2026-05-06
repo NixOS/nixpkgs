@@ -142,11 +142,11 @@ in
                       server.succeed("systemctl start incus")
 
                   with subtest("[${image_id}] CPU limits can be managed"):
-                      server.set_instance_config(instance_name, "limits.cpu 1", restart=True)
+                      server.set_instance_config(instance_name, "limits.cpu=1", restart=True)
                       server.wait_instance_exec_success(instance_name, "nproc | grep '^1$'", timeout=90)
 
                   with subtest("[${image_id}] CPU limits can be hotplug changed"):
-                      server.set_instance_config(instance_name, "limits.cpu 2")
+                      server.set_instance_config(instance_name, "limits.cpu=2")
                       server.wait_instance_exec_success(instance_name, "nproc | grep '^2$'", timeout=90)
 
                   with subtest("[${image_id}] exec has a valid path"):
@@ -196,7 +196,7 @@ in
 
                     # TODO troubleshoot VM hot memory resizing which was introduced in 6.12
                     with subtest("[${image_id}] memory limits can be hotplug changed"):
-                        server.set_instance_config(instance_name, "limits.memory 512MB")
+                        server.set_instance_config(instance_name, "limits.memory=512MB")
                         # can't use lsmem since it sees the host's memory size
                         server.wait_instance_exec_success(instance_name, "grep 'MemTotal:[[:space:]]*500000 kB' /proc/meminfo", timeout=1)
 
@@ -245,7 +245,7 @@ in
                     # python
                     ''
                       with subtest("[${image_id}] memory limits can be managed"):
-                          server.set_instance_config(instance_name, "limits.memory 384MB", restart=True)
+                          server.set_instance_config(instance_name, "limits.memory=384MB", restart=True)
                           lsmem = json.loads(server.instance_succeed(instance_name, "lsmem --json"))
                           memsize = lsmem["memory"][0]["size"]
                           assert memsize == "384M", f"failed to manage memory limit. {memsize} != 384M"

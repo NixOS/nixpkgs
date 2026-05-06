@@ -39,8 +39,8 @@ let
       dnsmasq
       e2fsprogs
       findutils
-      getent
       gawk
+      getent
       gnugrep
       gnused
       gnutar
@@ -50,32 +50,28 @@ let
       iptables
       iw
       kmod
+      lego
       libxfs
       lvm2
-      lz4
       lxcfs
+      lz4
       nftables
       qemu-utils
       qemu_kvm
       rsync
+      skopeo
       squashfs-tools-ng
       squashfsTools
       sshfs
       swtpm
       systemd
       thin-provisioning-tools
+      umoci
       util-linux
       virtiofsd
       xdelta
       xz
       zstd
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
-      skopeo
-      umoci
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
-      lego
     ]
     ++ lib.optionals config.security.apparmor.enable [
       apparmor-bin-utils
@@ -97,10 +93,6 @@ let
     ]
     ++ lib.optionals nvidiaEnabled [
       libnvidia-container
-    ]
-    ++ lib.optionals cfg.bucketSupport [
-      minio
-      minio-client
     ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
@@ -211,13 +203,6 @@ in
         default = cfg.package.client;
         defaultText = lib.literalExpression "config.virtualisation.incus.package.client";
         description = "The incus client package to use. This package is added to PATH.";
-      };
-
-      bucketSupport = lib.mkOption {
-        type = lib.types.bool;
-        description = "Enable bucket support using minio, which is an insecure and unmaintained S3 provider.";
-        default = if lib.versionAtLeast config.system.stateVersion "26.11" then false else null;
-        defaultText = lib.literalExpression ''if lib.versionAtLeast config.system.stateVersion "26.11" then false else null;'';
       };
 
       softDaemonRestart = lib.mkOption {
@@ -573,4 +558,10 @@ in
 
     virtualisation.lxc.lxcfs.enable = true;
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "virtualisation" "incus" "bucketSupport" ] ''
+      The option was only a temporary workaround to gate the insecure minio dependency until it could be dropped.
+    '')
+  ];
 }
