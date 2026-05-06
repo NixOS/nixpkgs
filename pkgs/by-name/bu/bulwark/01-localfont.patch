@@ -1,0 +1,31 @@
+diff --git a/app/layout.tsx b/app/layout.tsx
+index f23d8a2..81a8104 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -1,19 +1,19 @@
+ import type { Metadata } from "next";
+-import { Geist, Geist_Mono } from "next/font/google";
++import localFont from "next/font/local";
+ import { headers } from "next/headers";
+ import { getLocale } from "next-intl/server";
+ import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+ import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
+ import "./globals.css";
+ 
+-const geistSans = Geist({
+-  variable: "--font-geist-sans",
+-  subsets: ["latin"],
++const geistSans = localFont({
++  src: './fonts/Geist.ttf',
++  variable: "--font-geist-sans"
+ });
+ 
+-const geistMono = Geist_Mono({
+-  variable: "--font-geist-mono",
+-  subsets: ["latin"],
++const geistMono = localFont({
++  src: './fonts/Geist.ttf',
++  variable: "--font-geist-mono"
+ });
+ 
+ export async function generateMetadata(): Promise<Metadata> {
