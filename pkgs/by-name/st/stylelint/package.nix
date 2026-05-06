@@ -2,6 +2,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 buildNpmPackage rec {
   pname = "stylelint";
@@ -17,6 +18,8 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-RgXZgNEfx76XLrB4E8r/+a0Pi+82PVb/TOeUa0gFhTY=";
 
   dontNpmBuild = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Mighty CSS linter that helps you avoid errors and enforce conventions";
