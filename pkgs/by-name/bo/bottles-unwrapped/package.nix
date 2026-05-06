@@ -9,6 +9,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
+  fvs2,
   librsvg,
   gtk4,
   gtksourceview5,
@@ -86,7 +87,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       icoextract
       patool
       pathvalidate
-      fvs
       orjson
       pycairo
       pygobject3
@@ -108,6 +108,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gamescope
       mangohud
       vmtouch
+      fvs2
 
       # Undocumented (subprocess.Popen())
       lsb-release
