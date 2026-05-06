@@ -89,7 +89,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./writable.patch
     # https://gitlab.com/kicad/code/kicad/-/issues/15687
     ./runtime_stock_data_path.patch
-  ];
+  ]
+  ++ (
+    if stable && !testing then
+      [
+        # don't throw non-zero error codes when working with zipped stlZ files
+        # (upstreamed into Kicad 10: https://gitlab.com/kicad/code/kicad/-/merge_requests/2531)
+        ./uncompress.patch
+      ]
+    else
+      [ ]
+  );
 
   # tagged releases don't have "unknown"
   # kicad testing and nightlies use git describe --dirty

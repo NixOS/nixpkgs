@@ -5098,6 +5098,8 @@ self: super: with self; {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
+  error-helper = callPackage ../development/python-modules/error-helper { };
+
   es-client = callPackage ../development/python-modules/es-client { };
 
   escapism = callPackage ../development/python-modules/escapism { };
@@ -8339,9 +8341,15 @@ self: super: with self; {
 
   khanaa = callPackage ../development/python-modules/khanaa { };
 
+  kiauto = callPackage ../development/python-modules/kiauto {
+    kicad9Pkg = pkgs.kicad9;
+  };
+
   kicad = toPythonModule (pkgs.kicad.override { python3 = python; }).src;
 
   kicad-python = callPackage ../development/python-modules/kicad-python { };
+
+  kicad9 = toPythonModule (pkgs.kicad9.override { python3 = python; }).src;
 
   kicadcliwrapper = callPackage ../development/python-modules/kicadcliwrapper { };
 

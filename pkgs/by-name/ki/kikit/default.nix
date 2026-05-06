@@ -6,7 +6,7 @@
   bats,
   buildPythonApplication,
   callPackage,
-  kicad,
+  kicad9,
   numpy,
   click,
   markdown2,
@@ -47,7 +47,7 @@ buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = [
-    kicad
+    kicad9
     numpy
     click
     markdown2
