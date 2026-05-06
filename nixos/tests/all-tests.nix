@@ -1373,7 +1373,7 @@ in
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pykms = runTest ./pykms.nix;
   qbittorrent = runTest ./qbittorrent.nix;
-  qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
+  qboot = runTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix;
   qemu-vm-credentials-fwcfg = runTest {
     imports = [ ./qemu-vm-credentials.nix ];
     _module.args.mechanism = "fw_cfg";
