@@ -215,6 +215,28 @@ lib.makeScope pkgs.newScope (
       };
     };
 
+    gimp-xsanecli = pluginDerivation rec {
+      pname = "gimp-xsanecli";
+      version = "d4fa7e8afc";
+
+      src = builtins.fetchTarball {
+        url = "https://yingtongli.me/git/gimp-xsanecli/archive/d4fa7e8afcc5a86e00263d4d71e2279cf295ec02.tar.gz";
+        sha256 = "sha256:0zjslf63vhs1yl8qpc9103ifb11flpdh9cnn5nm8d5rnkgkjrj4j";
+      };
+
+      installPhase = ''
+        mkdir -p $out/${gimp.targetPluginDir}/${pname};
+        cp ${src}/* $out/${gimp.targetPluginDir}/${pname};
+      '';
+
+      meta = with lib; {
+        broken = gimp.majorVersion != "3.0";
+        description = "XSane scanner plugin for GIMP";
+        homepage = "https://yingtongli.me/git/gimp-xsanecli";
+        license = with licenses; [ gpl3Plus ];
+      };
+    };
+
     resynthesizer = pluginDerivation rec {
       /*
         menu:
