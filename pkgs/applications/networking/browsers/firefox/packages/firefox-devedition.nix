@@ -29,7 +29,7 @@ buildMozillaMach rec {
   '';
 
   meta = {
-    changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
+    changelog = "https://www.firefox.com/en-US/firefox/150.0beta/releasenotes/?redirect_source=mozilla-org";
     description = "Web browser built from Firefox Developer Edition source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [

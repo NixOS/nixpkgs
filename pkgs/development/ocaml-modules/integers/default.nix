@@ -22,7 +22,7 @@ buildDunePackage rec {
     description = "Various signed and unsigned integer types for OCaml";
     license = lib.licenses.mit;
     homepage = "https://github.com/ocamllabs/ocaml-integers";
-    changelog = "https://github.com/ocamllabs/ocaml-integers/raw/${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/yallop/ocaml-integers/${version}/CHANGES.md";
     maintainers = [ lib.maintainers.vbgl ];
   };
 }

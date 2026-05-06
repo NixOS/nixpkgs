@@ -125,7 +125,7 @@ let
       description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
-      changelog = "https://wiki.mercurial-scm.org/Release${lib.versions.majorMinor version}";
+      changelog = "https://mercurial-scm.org/relnotes/7.1";
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
         lukegb
