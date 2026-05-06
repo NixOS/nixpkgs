@@ -16,16 +16,16 @@
   valkey,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fakeredis";
-  version = "2.33.0";
+  version = "2.35.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
-    tag = "v${version}";
-    hash = "sha256-uvbvrziVdoa/ip8MbZG8GcpN1FoINxUV+SDVRmg78Qs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-euhWKXFERpRoXX7G81ffAygt5e1mt7uy9Y9zAGacu38=";
   };
 
   build-system = [ hatchling ];
@@ -84,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
-    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
