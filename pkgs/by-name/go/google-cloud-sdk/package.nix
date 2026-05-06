@@ -212,7 +212,7 @@ stdenv.mkDerivation rec {
     # This package contains vendored dependencies. All have free licenses.
     license = lib.licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    changelog = "https://cloud.google.com/sdk/docs/release-notes";
+    changelog = "https://docs.cloud.google.com/sdk/docs/release-notes";
     maintainers = with lib.maintainers; [
       iammrinal0
       marcusramberg

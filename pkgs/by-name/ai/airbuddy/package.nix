@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       AirBuddy lives in your Menu Bar and can also show battery information for your iPhone, iPad, Apple Watch, Mouse, Keyboard, and more.
     '';
     homepage = "https://v2.airbuddy.app";
-    changelog = "https://support.airbuddy.app/articles/airbuddy-2-changelog";
+    changelog = "https://support.airbuddy.app/articles/airbuddy-2-changelog/";
     license = with lib.licenses; [ unfree ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ stepbrobd ];

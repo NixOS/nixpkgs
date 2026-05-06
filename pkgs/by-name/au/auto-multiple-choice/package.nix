@@ -175,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
       For usage instructions, see documentation at the project's homepage.
     '';
     homepage = "https://www.auto-multiple-choice.net/";
-    changelog = "https://gitlab.com/jojo_boulix/auto-multiple-choice/-/blob/master/ChangeLog";
+    changelog = "https://gitlab.com/a10684/auto-multiple-choice/-/blob/master/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.thblt ];
     platforms = lib.platforms.all;

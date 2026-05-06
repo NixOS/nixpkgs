@@ -58,7 +58,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI application to receive notifications when a Docker image is updated on a Docker registry";
     homepage = "https://crazymax.dev/diun";
-    changelog = "https://crazymax.dev/diun/changelog";
+    changelog = "https://crazymax.dev/diun/changelog/";
     license = lib.licenses.mit;
     mainProgram = "diun";
     maintainers = with lib.maintainers; [ Sped0n ];

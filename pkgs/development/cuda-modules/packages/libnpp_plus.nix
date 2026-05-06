@@ -19,6 +19,6 @@ buildRedist {
       such as color conversion, image compression, filtering, thresholding, and image manipulation.
     '';
     homepage = "https://developer.nvidia.com/npp";
-    changelog = "https://docs.nvidia.com/cuda/nppplus/releasenotes";
+    changelog = "https://docs.nvidia.com/cuda/nppplus/releasenotes/";
   };
 }

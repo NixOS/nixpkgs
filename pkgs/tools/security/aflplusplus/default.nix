@@ -244,7 +244,7 @@ let
         and improvements from the community
       '';
       homepage = "https://aflplus.plus";
-      changelog = "https://aflplus.plus/docs/changelog";
+      changelog = "https://aflplus.plus/docs/changelog/";
       license = lib.licenses.asl20;
       platforms = [
         "x86_64-linux"

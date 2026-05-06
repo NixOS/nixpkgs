@@ -28,6 +28,6 @@ buildRedist {
       unstructured sparsity.
     '';
     homepage = "https://developer.nvidia.com/cusparse";
-    changelog = "https://docs.nvidia.com/cuda/cusparse";
+    changelog = "https://docs.nvidia.com/cuda/cusparse/";
   };
 }

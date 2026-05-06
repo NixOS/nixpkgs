@@ -37,7 +37,7 @@ buildRedist {
       cuBLASMp is compatible with 2D block-cyclic data layout and provides PBLAS-like C APIs.
     '';
     homepage = "https://docs.nvidia.com/cuda/cublasmp";
-    changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes";
+    changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes/";
     license = _cuda.lib.licenses.math_sdk_sla;
   };
 }

@@ -209,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
       also browse ISO/WIM/IMG/VHD(x)/EFI files in local disk and boot them.
       800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
-    changelog = "https://www.ventoy.net/doc_news.html";
+    changelog = "https://www.ventoy.net/en/doc_news.html";
     knownVulnerabilities = [
       ''
         Ventoy uses binary blobs which can't be trusted to be free of malware or compliant to their licenses.

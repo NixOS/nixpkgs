@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
-    changelog = "https://hex-rays.com/products/ida/news/";
+    changelog = "https://docs.hex-rays.com/release-notes";
     license = lib.licenses.unfree;
     mainProgram = "ida";
     maintainers = with lib.maintainers; [ msanft ];

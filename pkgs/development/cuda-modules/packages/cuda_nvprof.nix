@@ -38,6 +38,6 @@ buildRedist {
       profiling data is collected, and may also be saved for later viewing by either `nvprof` or the Visual Profiler.
     '';
     homepage = "https://docs.nvidia.com/cuda/profiler-users-guide#nvprof";
-    changelog = "https://docs.nvidia.com/cuda/profiler-users-guide#changelog";
+    changelog = "https://docs.nvidia.com/cuda/profiler-users-guide/";
   };
 }

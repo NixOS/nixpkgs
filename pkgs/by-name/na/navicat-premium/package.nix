@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.navicat.com/products/navicat-premium";
-    changelog = "https://www.navicat.com/products/navicat-premium-release-note";
+    changelog = "https://www.navicat.com/en/products/navicat-premium-release-note";
     description = "Database development tool that allows you to simultaneously connect to many databases";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;

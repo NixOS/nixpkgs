@@ -42,7 +42,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Decentralized, privacy-preserving, multi-party messaging protocol";
     homepage = "https://cwtch.im/";
-    changelog = "https://docs.cwtch.im/changelog";
+    changelog = "https://docs.cwtch.im/changelog/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.gmacon ];

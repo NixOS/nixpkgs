@@ -54,7 +54,7 @@ bundlerApp {
   };
 
   meta = {
-    changelog = "https://www.puppet.com/docs/puppet/latest/release_notes_facter.html";
+    changelog = "https://help.puppet.com/core//current/Content/PuppetCore/puppet_index.htm";
     description = "System inventory tool";
     homepage = "https://github.com/puppetlabs/facter";
     license = lib.licenses.asl20;

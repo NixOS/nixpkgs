@@ -31,7 +31,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "MariaDB Connector/J is used to connect applications developed in Java to MariaDB and MySQL databases";
     homepage = "https://mariadb.com/kb/en/about-mariadb-connector-j/";
-    changelog = "https://mariadb.com/kb/en/mariadb-connector-j-release-notes/";
+    changelog = "https://mariadb.com/docs/release-notes/connectors/java";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ anthonyroussel ];
     platforms = lib.platforms.all;

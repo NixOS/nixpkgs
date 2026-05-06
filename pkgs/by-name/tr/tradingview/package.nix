@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Charting platform for traders and investors";
     homepage = "https://www.tradingview.com/desktop/";
-    changelog = "https://www.tradingview.com/support/solutions/43000673888/";
+    changelog = "https://www.tradingview.com/support/solutions/43000673888-tradingview-desktop-releases-and-release-notes/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ prominentretail ];
