@@ -6723,6 +6723,11 @@
     github = "developer-guy";
     githubId = 16693043;
   };
+  DeveloperC286 = {
+    name = "DeveloperC286";
+    github = "DeveloperC286";
+    githubId = 65925405;
+  };
   devhell = {
     email = ''"^"@regexmail.net'';
     github = "devhell";
