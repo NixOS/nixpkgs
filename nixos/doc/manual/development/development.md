@@ -13,4 +13,5 @@ nixos-tests.chapter.md
 developing-the-test-driver.chapter.md
 testing-installer.chapter.md
 modular-services.md
+contracts.md
 ```

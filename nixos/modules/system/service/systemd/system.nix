@@ -69,10 +69,19 @@ let
     extraRootSpecialArgs = {
       systemdPackage = config.systemd.package;
     };
+    inherit (config) contracts;
+    upstreamContractTypes = config.contractTypes;
   };
 in
 {
   _class = "nixos";
+
+  # system.services type transitively imports `lib.contract.module`.
+  meta.buildDocsInSandbox = false;
+
+  imports = [
+    ../contracts-bridge.nix
+  ];
 
   # First half of the magic: mix systemd logic into the otherwise abstract services
   options = {

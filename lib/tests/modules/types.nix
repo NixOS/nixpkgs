@@ -518,6 +518,7 @@ in
       # json & toml
       assert json.description == "JSON value";
       assert toml.description == "TOML value";
+      assert (types.nestedAttrsOf types.int).description == "nested attribute set of signed integer";
       # done
       "ok";
   };

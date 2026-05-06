@@ -48,6 +48,7 @@
   ./config/xdg/sounds.nix
   ./config/xdg/terminal-exec.nix
   ./config/zram.nix
+  ./contracts/default.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
@@ -1993,6 +1994,7 @@
   ./tasks/stratis.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
+  ./testing/hardcoded-secret.nix
   ./testing/service-runner.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/appvm.nix
