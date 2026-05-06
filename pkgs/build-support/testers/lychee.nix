@@ -51,7 +51,7 @@ let
       passthru = {
         inherit lychee remap;
         config = {
-          include_fragments = true;
+          include_fragments = "full";
         }
         // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
           remap = mapAttrsToList (
