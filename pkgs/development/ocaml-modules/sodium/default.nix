@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.rixed ];
     broken = lib.versionAtLeast ocaml.version "5.0";
+    license = lib.licenses.isc;
   };
 }
