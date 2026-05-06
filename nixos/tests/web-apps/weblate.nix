@@ -56,7 +56,8 @@ in
       environment.etc."xdg/weblate".text = ''
         [weblate]
         url = https://${serverDomain}/api/
-        key = ${apiToken}
+        [keys]
+        https://${serverDomain}/api/ = ${apiToken}
       '';
 
       networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ "${serverDomain}" ];
