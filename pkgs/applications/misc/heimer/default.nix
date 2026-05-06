@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
