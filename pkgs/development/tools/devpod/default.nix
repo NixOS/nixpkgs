@@ -23,22 +23,25 @@
   webkitgtk_4_1,
 
   testers,
+  git,
+  cargo,
 }:
 
 let
-  version = "0.6.15";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
-    owner = "loft-sh";
+    owner = "skevetter";
     repo = "devpod";
     tag = "v${version}";
-    hash = "sha256-fLUJeEwNDyzMYUEYVQL9XGQv/VAxjH4IZ1SJa6jx4Mw=";
+    hash = "sha256-xARkzPN2DK6s3uN3O00fe2WLa/trKT229l6IeZKMIAc=";
   };
 
   meta = {
     description = "Codespaces but open-source, client-only and unopinionated: Works with any IDE and lets you use any cloud, kubernetes or just localhost docker";
     mainProgram = "devpod";
     homepage = "https://devpod.sh";
+    changelog = "https://github.com/skevetter/devpod/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.tomasajt ];
   };
@@ -47,7 +50,7 @@ let
     pname = "devpod";
     inherit version src meta;
 
-    vendorHash = null;
+    vendorHash = "sha256-PCOtZva7MnpPruMA8DKP8fFvi6TemRSbrfJ5wYr6lVc=";
 
     env.CGO_ENABLED = 0;
 
@@ -58,6 +61,16 @@ let
     excludedPackages = [ "./e2e" ];
 
     nativeBuildInputs = [ installShellFiles ];
+
+    nativeCheckInputs = [ git ];
+    checkFlags =
+      let
+        skippedTests = [
+          "TestStartOtherSuite/TestSSHTTY" # cant find grep/env
+          "TestRunEmulatedShell_KillExecutesRealBinary" # cant find kill
+        ];
+      in
+      [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
     postInstall = ''
       $out/bin/devpod completion bash >devpod.bash
@@ -81,22 +94,15 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/desktop/yarn.lock";
-      hash = "sha256-0Ov+Ik+th2IiuuqJyiO9t8vTyMqxDa9juEwbwHFaoi4=";
+      hash = "sha256-9hj1W1rzWAjUsLX79qLyy/If+7V4CiIJCB5cI6MjFUc=";
     };
 
     cargoRoot = "src-tauri";
     buildAndTestSubdir = "src-tauri";
 
-    cargoHash = "sha256-PSgBwa8sZ85W2kBrXkFVvnoYn5l1r3Jvn/LG8tITjbU=";
-
-    cargoPatches = [ ./cargo-lock.patch ];
+    cargoHash = "sha256-N/GzEhb4HhdOWZEeqaNz35lC3o/sbu9LqaOh02803K8=";
 
     patches = [
-      # don't create a .desktop file automatically registered to open the devpod:// URI scheme
-      # we edit the in-store .desktop file in postInstall to support opening the scheme,
-      # but users will have to configure the default handler manually
-      ./dont-auto-register-scheme.patch
-
       # disable the button that symlinks the `devpod-cli` binary to ~/.local/bin/devpod
       # and don't show popup where it prompts you to press the above mentioned button
       # we'll symlink it manually to $out/bin/devpod in postInstall
@@ -141,6 +147,10 @@ let
       webkitgtk_4_1
     ];
 
+    preBuild = ''
+      ln -sf ${lib.getExe devpod} src-tauri/bin/devpod-x86_64-unknown-linux-gnu
+    '';
+
     postInstall =
       lib.optionalString stdenv.hostPlatform.isDarwin ''
         # replace sidecar binary with symlink
@@ -164,10 +174,6 @@ let
         for dir in "$out"/share/icons/hicolor/*/apps; do
           mv "$dir/DevPod Desktop.png" "$dir/DevPod-Desktop.png"
         done
-      ''
-      + ''
-        # propagate the `devpod` command
-        ln -s ${lib.getExe devpod} "$out/bin/devpod"
       '';
 
     # we only want to wrap the main binary
