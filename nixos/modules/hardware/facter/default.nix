@@ -17,6 +17,7 @@
     ./keyboard.nix
     ./networking
     ./system.nix
+    ./trackpoint.nix
     ./virtualisation.nix
   ];
 
