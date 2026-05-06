@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vimdoc-language-server";
-  version = "0.1.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "barrettruth";
     repo = "vimdoc-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4Uy9RUauRf9IjfykjrLRviKaMNX2fpmSdA/bvkYqgQY=";
+    hash = "sha256-1y9f3sn4LMkzMecaKXK4f6XvJPy3rE8jbF+w4N6p4gI=";
   };
 
-  cargoHash = "sha256-319K2fD8ae+MWgvNhmhgrD6syCDkO2FMgXr8z45CMr4=";
+  cargoHash = "sha256-hugC3b6nqmpvo9xfkEm7DzsIzeu6cqFFkSXWiuZeDnU=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
