@@ -8684,6 +8684,12 @@
     github = "yaoshiu";
     githubId = 56054933;
   };
+  FazalAAli = {
+    email = "nix@fazali.dev";
+    github = "FazalAAli";
+    githubId = 37760883;
+    name = "Fazal Ali";
+  };
   fazzi = {
     email = "faaris.ansari@proton.me";
     github = "fxzzi";
