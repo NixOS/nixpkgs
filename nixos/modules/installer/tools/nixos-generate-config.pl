@@ -505,7 +505,7 @@ EOF
     # This should work for single and multi-device systems.
     # still needs subvolume support
     if ($fsType eq "bcachefs") {
-        my ($status, @info) = runCommand("bcachefs fs usage $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@bcachefs@ fs usage $rootDir$mountPoint");
         my $UUID = $info[0];
 
         if ($status == 0 && $UUID =~ /^Filesystem:[ \t\n]*([0-9a-z-]+)/) {
