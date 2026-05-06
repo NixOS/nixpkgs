@@ -21,13 +21,13 @@
 }:
 let
   pname = "gcc";
-  # Cannot use 10.5.0, see:
-  # https://gcc.gnu.org/bugzilla/show_bug.cgi?format=multiple&id=110716
-  version = "10.4.0";
+  # GCC 7.5: smallest C++98-host-buildable GCC that emits C++14, so it can
+  # still host the final gcc-latest / gcc-glibc build.
+  version = "7.5.0";
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-ySl9W818tD89/C/tU4npSMkxL9li72pM5FXP+WPr5PE=";
+    hash = "sha256-uBlG5/AfkFKKH3NSqwjMYCuczAXU5E2kvVAcWhie5mE=";
   };
 
   # last version to compile with gcc 4.6

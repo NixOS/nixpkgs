@@ -148,7 +148,7 @@ lib.makeScope
           gnutar = gnutar-musl;
         };
 
-        gcc10 = callPackage ./gcc/10.nix {
+        gcc10 = callPackage ./gcc/7.5.nix {
           gcc = gcc46-cxx;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
