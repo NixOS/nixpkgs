@@ -36,11 +36,11 @@ assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.9";
+  version = "2.5.19";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-3RerLpoE/XnTnYU/WZy8hSBi3bmrUqTd60F2/YswKWQ=";
+    hash = "sha256-ciqopCbdm0Tg0ZS3O/7jo+YX1lZ0zU0dBi5t8p8XiMY=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -86,8 +86,8 @@ stdenv.mkDerivation rec {
   freepgPatches = fetchFromGitLab {
     owner = "freepg";
     repo = "gnupg";
-    tag = "source-2.4.9-freepg";
-    hash = "sha256-wF+iR0OgnU8VI90NlFOXtN5aCRC0YY/X7sPiDXjJm5M=";
+    tag = "source-2.5.19-freepg";
+    hash = "sha256-3chtQlIV1DAgHSjIrPpiliLzDrrkrLP5KyRKisVI9Ts=";
   };
 
   patches = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     # in the patch file.
     ./static.patch
   ]
-  ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
+  ++ lib.map (v: "${freepgPatches}/master-freepg/" + v) [
     "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"
     "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
     "0004-tests-add-test-cases-for-import-without-uid.patch"
@@ -117,17 +117,21 @@ stdenv.mkDerivation rec {
     "0018-Avoid-simple-memory-dumps-via-ptrace.patch"
     "0019-Disallow-compressed-signatures-and-certificates.patch"
     "0020-ssh-agent-emulation-under-systemd-inject-SSH_AUTH_SO.patch"
-    "0021-gpg-Sync-compliance-mode-cleanup-with-master.patch"
     "0022-gpg-emit-RSA-pubkey-algorithm-when-in-compatibility-.patch"
     "0023-gpg-Reintroduce-openpgp-as-distinct-from-rfc4880.patch"
     "0024-gpg-Emit-LibrePGP-material-only-in-compliance-gnupg.patch"
     "0025-gpg-gpgconf-list-report-actual-compliance-mode.patch"
     "0026-gpg-Default-to-compliance-openpgp.patch"
     "0027-gpg-Fix-newlines-in-Cleartext-Signature-Framework-CS.patch"
+    "0028-Revert-Remove-the-default-keyserver.patch"
     "0029-Add-keyboxd-systemd-support.patch"
     "0033-Support-large-RSA-keygen-in-non-batch-mode.patch"
     "0034-gpg-Verify-Text-mode-Signatures-over-binary-Literal-.patch"
-    "0039-gpg-Do-not-use-a-default-when-asking-for-another-out.patch"
+    "0037-fix-up-version-reporting.patch"
+    "0040-Add-missing-test-files-to-EXTRA_DIST.patch"
+    "0041-skip-trust-packets-during-import-restore.patch"
+    "0042-compat-ignore-truncated-line.patch"
+    "0043-fail-on-unprintable-armor-headers.patch"
   ];
 
   postPatch =
@@ -139,10 +143,11 @@ stdenv.mkDerivation rec {
     # A significant difference between the two seems to be that keys.openpgp.org is verifying keys, while keyserver.ubuntu.com isn't: https://unix.stackexchange.com/a/694528
     # The keys.openpgp.org also has a great FAQ: https://keys.openpgp.org/about/faq
     ''
-      substituteInPlace configure configure.ac \
+      substituteInPlace dirmngr/server.c \
         --replace-fail "hkps://keyserver.ubuntu.com"  "hkps://keys.openpgp.org"
-      substituteInPlace doc/gnupg.info-1 doc/dirmngr.texi \
-        --replace-fail "https://keyserver.ubuntu.com" "https://keys.openpgp.org"
+
+      substituteInPlace dirmngr/server.c \
+        --replace-fail "hkp://keyserver.ubuntu.com"  "hkp://keys.openpgp.org"
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
