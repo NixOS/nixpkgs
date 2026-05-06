@@ -1,9 +1,10 @@
 {
+  cli11,
   lib,
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  qt5,
+  qt6,
   cmake,
   ninja,
   avahi,
@@ -33,10 +34,15 @@
   libpulseaudio,
   speechdSupport ? false,
   speechd-minimal,
-  microsoft-gsl,
   nlohmann_json,
   xar,
   makeBinaryWrapper,
+  postgresql,
+  spdlog,
+  utfcpp,
+  serverMysqlSupport ? false,
+  serverPostgresqlSupport ? true,
+  serverSqliteSupport ? true,
 }:
 
 let
@@ -54,18 +60,20 @@ let
           ninja
           pkg-config
           python3
-          qt5.wrapQtAppsHook
-          qt5.qttools
+          qt6.wrapQtAppsHook
+          qt6.qttools
           makeBinaryWrapper
         ]
         ++ (overrides.nativeBuildInputs or [ ]);
 
         buildInputs = [
           boost
+          cli11
           poco
           protobuf
-          microsoft-gsl
           nlohmann_json
+          spdlog
+          utfcpp
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi ]
         ++ (overrides.buildInputs or [ ]);
@@ -75,9 +83,12 @@ let
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
           "-D BUILD_NUMBER=${lib.versions.patch source.version}"
           "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
-          "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
           "-D warnings-as-errors=OFF" # protobuf 34.x `[[nodiscard]]` workaround https://github.com/mumble-voip/mumble/issues/7102
+          "-D use-timestamps=OFF"
+          "-D bundled-cli11=OFF"
+          "-D bundled-spdlog=OFF"
+          "-D bundled-utfcpp=OFF"
         ]
         ++ (overrides.cmakeFlags or [ ]);
 
@@ -107,7 +118,7 @@ let
 
       platforms = lib.platforms.darwin;
       nativeBuildInputs = [
-        qt5.qttools
+        qt6.qttools
       ];
 
       buildInputs = [
@@ -117,7 +128,7 @@ let
         libsndfile
         libvorbis
         speexdsp
-        qt5.qtsvg
+        qt6.qtsvg
         rnnoise
       ]
       ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
@@ -132,6 +143,7 @@ let
       cmakeFlags = [
         "-D server=OFF"
         "-D bundled-speex=OFF"
+        "-D bundled-rnnoise=OFF"
         "-D bundle-qt-translations=OFF"
         "-D update=OFF"
         "-D overlay-xcompile=OFF"
@@ -151,7 +163,6 @@ let
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
       patches = [
-        ./disable-overlay-build.patch
         ./fix-plugin-copy.patch
       ];
 
@@ -165,6 +176,7 @@ let
           --source-dir=$NIX_BUILD_TOP/source/ \
           --binary-dir=$out \
           --only-appbundle \
+          --no-overlay \
           --version "${source.version}"
 
         mkdir -p $out/Applications $out/bin
@@ -193,13 +205,20 @@ let
       cmakeFlags = [
         "-D client=OFF"
         (lib.cmakeBool "ice" iceSupport)
+        (lib.cmakeBool "enable-mysql" serverMysqlSupport)
+        (lib.cmakeBool "enable-postgresql" serverPostgresqlSupport)
+        (lib.cmakeBool "enable-sqlite" serverSqliteSupport)
       ]
       ++ lib.optionals iceSupport [
         "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
         "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
       ];
 
-      buildInputs = [ libcap ] ++ lib.optional iceSupport zeroc-ice;
+      buildInputs = [
+        libcap
+      ]
+      ++ lib.optional iceSupport zeroc-ice
+      ++ lib.optional serverPostgresqlSupport postgresql;
     } source;
 
   overlay =
@@ -216,14 +235,14 @@ let
     } source;
 
   source = rec {
-    version = "1.5.857";
+    version = "1.6.870";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       tag = "v${version}";
-      hash = "sha256-4ySak2nzT8p48waMgBc9kLrvFB8716e7p0G4trzuh1k=";
+      hash = "sha256-FpZbFY/RvQOEDQAXkm1f5Oy00UUG11Az7LJnWfoinOM=";
       fetchSubmodules = true;
     };
   };

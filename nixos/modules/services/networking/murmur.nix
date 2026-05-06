@@ -366,7 +366,7 @@ in
         Type = if forking then "forking" else "simple";
         PIDFile = lib.mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
+        ExecStart = "${cfg.package}/bin/mumble-server --ini /run/murmur/murmurd.ini";
         Restart = "always";
         LogsDirectory = lib.mkIf cfg.logToFile "murmur";
         LogsDirectoryMode = "0750";
