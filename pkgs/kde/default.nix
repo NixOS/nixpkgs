@@ -95,6 +95,7 @@ let
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
+        signon-plugin-oauth2 = self.callPackage ./third-party/signon-plugin-oauth2 { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
       }
     );
