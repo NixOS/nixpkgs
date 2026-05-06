@@ -6,6 +6,7 @@ from typing import Final, assert_never
 
 from . import nix, services
 from .constants import EXECUTABLE, WITH_SHELL_FILES
+from .elevate import ElevatorKind
 from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -163,18 +164,32 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="JSON output, only implemented for 'list-generations' right now",
     )
     main_parser.add_argument(
-        "--ask-sudo-password",
-        "-S",
-        action="store_true",
-        help="Asks for sudo password for remote activation, implies --sudo",
+        "--elevate",
+        choices=ElevatorKind.choices(),
+        default=None,
+        help="Privilege-elevation method for activation commands",
     )
     main_parser.add_argument(
-        "--sudo", action="store_true", help="Prefixes activation commands with sudo"
+        "--ask-elevate-password",
+        "-S",
+        action="store_true",
+        help="Prompt locally for the password to feed to the elevation "
+        "method, implies --elevate=sudo if --elevate is not given",
+    )
+    main_parser.add_argument(
+        "--sudo",
+        action="store_true",
+        help="Alias for '--elevate=sudo'",
+    )
+    main_parser.add_argument(
+        "--ask-sudo-password",
+        action="store_true",
+        help="Alias for '--elevate=sudo --ask-elevate-password'",
     )
     main_parser.add_argument(
         "--use-remote-sudo",
         action="store_true",
-        help="Deprecated, use '--sudo' instead",
+        help="Deprecated, use '--elevate=sudo' instead",
     )
     main_parser.add_argument("--no-ssh-tty", action="store_true", help="Deprecated")
     main_parser.add_argument(
@@ -245,15 +260,21 @@ def parse_args(
         args.action = Action.DRY_BUILD.value
 
     if args.ask_sudo_password:
-        args.sudo = True
+        args.ask_elevate_password = True
+
+    if args.use_remote_sudo:
+        parser_warn("--use-remote-sudo is deprecated, use --elevate=sudo instead")
+
+    args.elevator = ElevatorKind.resolve(
+        name=args.elevate,
+        sudo=args.sudo or args.use_remote_sudo or args.ask_sudo_password,
+        ask_password=args.ask_elevate_password,
+        warn=parser_warn,
+    )
 
     if args.install_grub:
         parser_warn("--install-grub is deprecated, use --install-bootloader instead")
         args.install_bootloader = True
-
-    if args.use_remote_sudo:
-        parser_warn("--use-remote-sudo is deprecated, use --sudo instead")
-        args.sudo = True
 
     if args.fast:
         parser_warn("--fast is deprecated, use --no-reexec instead")
@@ -321,7 +342,7 @@ def execute(argv: list[str]) -> None:
     args, grouped_nix_args = parse_args(argv)
 
     if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(args.upgrade_all, args.sudo)
+        nix.upgrade_channels(args.upgrade_all, args.elevator)
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
@@ -337,8 +358,12 @@ def execute(argv: list[str]) -> None:
         services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
-    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
-    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
+    target_host = Remote.from_arg(args.target_host)
+    build_host = Remote.from_arg(args.build_host, validate_opts=False)
+    args.elevator = args.elevator.with_prompted_password(
+        ask=args.ask_elevate_password,
+        host_label=target_host.host if target_host else "localhost",
+    )
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 

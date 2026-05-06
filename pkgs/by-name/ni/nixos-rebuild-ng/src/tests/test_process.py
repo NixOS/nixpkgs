@@ -3,28 +3,46 @@ from unittest.mock import patch
 
 from pytest import MonkeyPatch
 
+import nixos_rebuild.elevate as e
 import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
 
-def test_remote_shell_script() -> None:
-    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV}) == (
-        '''exec env -i PATH="${PATH-}" "$@"'''
-    )
-    assert p._remote_shell_script(
+def test_remote_env_shell_argv() -> None:
+    assert e._remote_env_shell_argv([], {"PATH": e.PRESERVE_ENV}, ["cmd"]) == [
+        "/bin/sh",
+        "-c",
+        '''exec /usr/bin/env -i PATH="${PATH-}" "$@"''',
+        "sh",
+        "cmd",
+    ]
+    assert e._remote_env_shell_argv(
+        ["sudo"],
         {
-            "PATH": p.PRESERVE_ENV,
-            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "PATH": e.PRESERVE_ENV,
+            "LOCALE_ARCHIVE": e.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": e.PRESERVE_ENV,
             "NIXOS_INSTALL_BOOTLOADER": "0",
-        }
-    ) == (
-        """exec env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
-        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'''
-    )
-    assert p._remote_shell_script({"PATH": p.PRESERVE_ENV, "FOO": "some value"}) == (
-        '''exec env -i PATH="${PATH-}" FOO='some value' "$@"'''
-    )
+        },
+        ["cmd", "arg"],
+    ) == [
+        "sudo",
+        "/bin/sh",
+        "-c",
+        """exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
+        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"''',
+        "sh",
+        "cmd",
+        "arg",
+    ]
+    assert e._remote_env_shell_argv(
+        [], {"PATH": e.PRESERVE_ENV, "FOO": "some value"}, []
+    ) == [
+        "/bin/sh",
+        "-c",
+        '''exec /usr/bin/env -i PATH="${PATH-}" FOO='some value' "$@"''',
+        "sh",
+    ]
 
 
 @patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
@@ -43,7 +61,7 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=False,
-        sudo=True,
+        elevate=e.SudoElevator(),
         env={"FOO": "bar"},
     )
     mock_run.assert_called_with(
@@ -67,7 +85,6 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=False,
-        sudo=False,
         append_local_env={"FOO": "bar"},
     )
     mock_run.assert_called_with(
@@ -89,7 +106,6 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=False,
-        sudo=False,
         env={"PATH": "/"},
         append_local_env={"FOO": "bar"},
     )
@@ -112,7 +128,7 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "some flags"],
         check=True,
-        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password", "ssh"),
+        remote=m.Remote("user@localhost", ["--ssh", "opt"], "ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -124,7 +140,7 @@ def test_run_wrapper(mock_run: Any) -> None:
             "--",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" "$@"'""",
+            """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
             "sh",
             "test",
             "--with",
@@ -140,9 +156,9 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=True,
-        sudo=True,
+        elevate=e.SudoElevator(password="password"),
         env={"FOO": "bar"},
-        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password", "ssh"),
+        remote=m.Remote("user@localhost", ["--ssh", "opt"], "ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -157,7 +173,7 @@ def test_run_wrapper(mock_run: Any) -> None:
             "--stdin",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" FOO=bar "$@"'""",
+            """'exec /usr/bin/env -i PATH="${PATH-}" FOO=bar "$@"'""",
             "sh",
             "test",
             "--with",
@@ -181,7 +197,7 @@ def test__kill_long_running_ssh_process(mock_run: Any) -> None:
             "build",
             "/nix/store/la0c8nmpr9xfclla0n4f3qq9iwgdrq4g-nixos-system-sankyuu-nixos-25.05.20250424.f771eb4.drv^*",
         ],
-        m.Remote("user@localhost", opts=[], sudo_password=None, store_type="ssh"),
+        m.Remote("user@localhost", opts=[], store_type="ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -204,21 +220,18 @@ def test__kill_long_running_ssh_process(mock_run: Any) -> None:
 
 def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setenv("NIX_SSHOPTS", "")
-    assert m.Remote.from_arg("user@localhost", None, False) == m.Remote(
+    assert m.Remote.from_arg("user@localhost", validate_opts=False) == m.Remote(
         "user@localhost",
         opts=[],
-        sudo_password=None,
         store_type="ssh",
     )
 
-    with patch("getpass.getpass", autospec=True, return_value="password"):
-        monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
-        assert m.Remote.from_arg("user@localhost", True, True) == m.Remote(
-            "user@localhost",
-            opts=["-f", "foo", "-b", "bar", "-t"],
-            sudo_password="password",
-            store_type="ssh",
-        )
+    monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
+    assert m.Remote.from_arg("user@localhost") == m.Remote(
+        "user@localhost",
+        opts=["-f", "foo", "-b", "bar", "-t"],
+        store_type="ssh",
+    )
 
 
 def test_ssh_host() -> None:
@@ -240,16 +253,92 @@ def test_ssh_host() -> None:
     }
 
     for host_input, expected in ssh_remotes.items():
-        remote = m.Remote.from_arg(host_input, None, False)
+        remote = m.Remote.from_arg(host_input, validate_opts=False)
         assert remote is not None
         assert remote.ssh_host() == expected
         assert remote.store_type == "ssh"
 
     for host_input, expected in ssh_ng_remotes.items():
-        remote = m.Remote.from_arg(host_input, None, False)
+        remote = m.Remote.from_arg(host_input, validate_opts=False)
         assert remote is not None
         assert remote.ssh_host() == expected
         assert remote.store_type == "ssh-ng"
+
+
+@patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_run_wrapper_run0(mock_run: Any) -> None:
+    p.run_wrapper(["cmd", "arg"], elevate=e.Run0Elevator())
+    mock_run.assert_called_with(
+        ["run0", "--", "cmd", "arg"],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+        input=None,
+    )
+
+    run0_script = (
+        "exec systemd-run --uid=0 --pipe --quiet --wait --collect "
+        "--service-type=exec --send-sighup "
+        '--setenv=PATH="${PATH-}" -- "$@"'
+    )
+
+    p.run_wrapper(
+        ["cmd", "arg"],
+        elevate=e.Run0Elevator(),
+        remote=m.Remote("user@host", [], "ssh"),
+    )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            *p.SSH_DEFAULT_OPTS,
+            "user@host",
+            "--",
+            "/bin/sh",
+            "-c",
+            p._quote_remote_arg(run0_script),
+            "sh",
+            "cmd",
+            "arg",
+        ],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+        input=None,
+    )
+
+    p.run_wrapper(
+        ["cmd"],
+        elevate=e.Run0Elevator().with_password("pw"),
+        remote=m.Remote("user@host", [], "ssh"),
+    )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            *p.SSH_DEFAULT_OPTS,
+            "user@host",
+            "--",
+            "/bin/sh",
+            "-c",
+            p._quote_remote_arg(e.Run0Elevator._AGENT_PICKER),
+            "sh",
+            # No toplevel bound, so the only candidate is PATH lookup.
+            "polkit-stdin-agent",
+            "--",
+            "/bin/sh",
+            "-c",
+            p._quote_remote_arg(run0_script),
+            "sh",
+            "cmd",
+        ],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+        input="pw\n",
+    )
 
 
 @patch("subprocess.run", autospec=True)
@@ -262,7 +351,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
         p.run_wrapper(
             ["test"],
             check=False,
-            sudo=True,
+            elevate=e.SudoElevator(),
         )
     mock_run.assert_called_with(
         [
@@ -287,8 +376,8 @@ def test_custom_sudo_args(mock_run: Any) -> None:
         p.run_wrapper(
             ["test"],
             check=False,
-            sudo=True,
-            remote=m.Remote("user@localhost", [], None, "ssh"),
+            elevate=e.SudoElevator(),
+            remote=m.Remote("user@localhost", [], "ssh"),
         )
     mock_run.assert_called_with(
         [
@@ -302,7 +391,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
             "--args",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" "$@"'""",
+            """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
             "sh",
             "test",
         ],
