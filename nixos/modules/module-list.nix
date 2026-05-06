@@ -1584,6 +1584,7 @@
   ./services/torrent/rqbit.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/torrentstream.nix
+  ./services/torrent/torrserver.nix
   ./services/torrent/transmission.nix
   ./services/tracing/tempo.nix
   ./services/ttys/getty.nix
