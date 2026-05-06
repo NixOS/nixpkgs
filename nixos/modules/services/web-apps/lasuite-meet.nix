@@ -13,6 +13,8 @@ let
     mkIf
     mkPackageOption
     mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
     types
     optional
     optionalString
@@ -77,12 +79,22 @@ let
   };
 in
 {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "lasuite-meet" "backendPackage" ]
+      [ "services" "lasuite-meet" "package" ]
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "lasuite-meet"
+      "frontendPackage"
+    ] "services.lasuite-mette.package.frotend should be used instead")
+  ];
+
   options.services.lasuite-meet = {
     enable = mkEnableOption "SuiteNumérique Meet";
 
-    backendPackage = mkPackageOption pkgs "lasuite-meet" { };
-
-    frontendPackage = mkPackageOption pkgs "lasuite-meet-frontend" { };
+    package = mkPackageOption pkgs "lasuite-meet" { };
 
     bind = mkOption {
       type = types.str;
@@ -295,7 +307,7 @@ in
       '';
       description = ''
         Configuration options of meet.
-        See https://github.com/suitenumerique/meet/blob/v${cfg.backendPackage.version}/docs/env.md
+        See https://github.com/suitenumerique/meet/blob/v${cfg.package.version}/docs/env.md
         `REDIS_URL` and `CELERY_BROKER_URL` are set if `services.lasuite-meet.redis.createLocally` is true.
         `DB_NAME` `DB_USER` and `DB_HOST` are set if `services.lasuite-meet.postgresql.createLocally` is true.
       '';
@@ -340,20 +352,20 @@ in
             )
           fi
         ''}
-        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
-          ${getExe cfg.backendPackage} migrate
-          echo -n "${cfg.backendPackage.version}" > .version
+        if [ "${cfg.package.version}" != "$(cat .version)" ]; then
+          ${getExe cfg.package} migrate
+          echo -n "${cfg.package.version}" > .version
         fi
       '';
 
       environment = pythonEnvironment;
 
       serviceConfig = {
-        BindReadOnlyPaths = "${cfg.backendPackage}/share/static:/var/lib/lasuite-meet/static";
+        BindReadOnlyPaths = "${cfg.package}/share/static:/var/lib/lasuite-meet/static";
 
         ExecStart = utils.escapeSystemdExecArgs (
           [
-            (lib.getExe' cfg.backendPackage "gunicorn")
+            (lib.getExe' cfg.package "gunicorn")
             "--bind=${cfg.bind}"
           ]
           ++ cfg.gunicorn.extraArgs
@@ -381,7 +393,7 @@ in
 
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
-          [ (lib.getExe' cfg.backendPackage "celery") ]
+          [ (lib.getExe' cfg.package "celery") ]
           ++ cfg.celery.extraArgs
           ++ [
             "--app=meet.celery_app"
@@ -418,7 +430,7 @@ in
       enable = true;
 
       virtualHosts.${cfg.domain} = {
-        root = cfg.frontendPackage;
+        root = cfg.package.frontend;
 
         extraConfig = ''
           error_page 404 = /index.html;
@@ -435,7 +447,7 @@ in
         };
 
         locations."/static" = {
-          root = "${cfg.backendPackage}/share";
+          root = "${cfg.package}/share";
         };
 
         locations."/livekit" = mkIf cfg.livekit.enable {
