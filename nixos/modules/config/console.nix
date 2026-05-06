@@ -143,7 +143,13 @@ in
           inherit (config.services.xserver) xkb;
         in
         lib.mkIf cfg.useXkbConfig (
-          pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
+          # `buildPackages.runCommand` so the assembly derivation is built on
+          # the build platform; the `ckbcomp` binary already comes from
+          # `buildPackages` and the output is an arch-independent text keymap.
+          # Identical to `pkgs.runCommand` for native builds (`buildPackages
+          # == pkgs`); fixes cross builds where the host-platform runner
+          # cannot execute on the build host.
+          pkgs.buildPackages.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
               ${
                 lib.optionalString (
