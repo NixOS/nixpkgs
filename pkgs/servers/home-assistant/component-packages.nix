@@ -2204,6 +2204,7 @@
       ps: with ps; [
         google-cloud-speech
         google-cloud-texttospeech
+        grpcio
       ];
     "google_drive" =
       ps: with ps; [
