@@ -18,7 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-bseDssSMerBlzlCvL3rD3X6ku5qDRYvI1wxq2W7As5k=";
   };
 
-  cargoHash = "sha256-SJm66CDrg6ZpIeKx27AnZAVs/Z25E/KmHYuZ9G4UwHQ=";
+  # Bump vendored `metrics` past 0.24.2 which fixes a borrow-checker error
+  # under newer rustc (https://github.com/rust-lang/rust/issues/141402).
+  cargoPatches = [ ./bump-metrics.patch ];
+
+  cargoHash = "sha256-EzuG3ev/6EqTGi0J0wppZz+cZJiH12WbBQLKOrTxTzs=";
 
   nativeBuildInputs = [
     pkg-config
