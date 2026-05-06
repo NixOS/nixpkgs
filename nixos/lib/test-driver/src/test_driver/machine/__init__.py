@@ -1495,6 +1495,17 @@ class NspawnMachine(BaseMachine):
         self.logger.info(f"kill NspawnMachine (pid {self.pid})")
         assert self.process is not None
         self.process.terminate()
+        # Wait for the wrapper to finish its context-manager cleanups
+        # (veth/bridge/netns teardown) before returning, so the driver's
+        # subsequent vlan teardown does not race against it.
+        try:
+            self.process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            self.logger.error(
+                f"NspawnMachine {self.name} (pid {self.pid}) did not exit after SIGTERM; sending SIGKILL"
+            )
+            self.process.kill()
+            self.process.wait()
         self.process = None
 
     def is_up(self) -> bool:
