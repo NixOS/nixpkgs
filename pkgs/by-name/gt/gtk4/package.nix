@@ -77,7 +77,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.20.3";
+  version = "4.22.4";
 
   outputs = [
     "out"
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KHPykDCIpmxxFz6i7YX/riZqZrlyw6SEK7svbxh+wVM=";
+    hash = "sha256-Ub2fYMfSOmZaVWxzZMIfsuTiglZrPn4JJFXo+RAzCJM=";
   };
 
   # TODO: make it unconditional on rebuild, drop on version >= 4.20.4
@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     sassc
     gi-docgen
+    shared-mime-info
     libxml2 # for xmllint
   ]
   ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
