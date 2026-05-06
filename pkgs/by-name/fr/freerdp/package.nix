@@ -70,13 +70,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.25.0";
+  version = "3.26.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = finalAttrs.version;
-    hash = "sha256-mJsTBxbHvzP9ttNbRHOHrCZO10PPPtHlIv8A7mOfQM0=";
+    tag = finalAttrs.version;
+    hash = "sha256-7yUqZXuUn3OFhlWrZyXmmh/aGOp0uRJ7XxaLl1fVnVQ=";
   };
 
   postPatch = ''
@@ -227,6 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://www.freerdp.com/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ deimelias ];
