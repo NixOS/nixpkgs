@@ -51,7 +51,6 @@ in
       incus = {
         enable = true;
         package = cfg.package;
-        bucketSupport = false;
 
         preseed = {
           networks = [
