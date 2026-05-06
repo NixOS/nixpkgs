@@ -36,7 +36,6 @@ in
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.blueman}/bin/blueman-applet";
         Restart = "on-failure";
       };
     };
