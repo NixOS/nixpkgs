@@ -38,8 +38,6 @@ buildPythonPackage (finalAttrs: {
     ament-xmllint
   ];
 
-  env.XML_CATALOG_FILES = ament-xmllint.rosPackageCatalog;
-
   meta = {
     description = "Python API to access the ament resource index";
     homepage = "https://github.com/ament/ament_index";
