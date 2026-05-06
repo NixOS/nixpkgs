@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "manifestoo-core";
-  version = "1.15.1";
+  version = "1.15.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "manifestoo_core";
-    hash = "sha256-QvdquUEwaHIX94m0/FVJ41/mmmQZz9Nj3F9ZepWgIFM=";
+    hash = "sha256-cneTeLVamKknBPSZSnd+6ks2D7W2HDv6PLqCeMZJ4Gg=";
   };
 
   nativeBuildInputs = [ hatch-vcs ];
