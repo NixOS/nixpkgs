@@ -2,6 +2,7 @@
   pname,
   version,
   src,
+  passthru,
   meta,
   appimageTools,
   makeWrapper,
@@ -18,6 +19,7 @@ appimageTools.wrapType2 {
     pname
     version
     src
+    passthru
     meta
     ;
 
