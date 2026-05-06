@@ -6,6 +6,9 @@
 }:
 let
   cfg = config.networking.modemmanager;
+
+  useNetworkManager = config.networking.networkmanager.enable;
+  useNetworkd = config.systemd.network.enable;
 in
 {
   meta = {
@@ -68,6 +71,9 @@ in
         pkgs.libqmi
         pkgs.libmbim
       ];
+
+      wantedBy = [ "network.target" ];
+      serviceConfig.KillMode = "mixed";
     };
 
     /*
@@ -79,15 +85,26 @@ in
       ResultActive=yes
     */
     security.polkit.enable = true;
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (
-          subject.isInGroup("networkmanager")
-          && action.id.indexOf("org.freedesktop.ModemManager") == 0
-          )
-            { return polkit.Result.YES; }
-      });
-    '';
+    security.polkit.extraConfig = lib.concatStrings [
+      (lib.optionalString useNetworkManager ''
+        polkit.addRule(function(action, subject) {
+          if (
+            subject.isInGroup("networkmanager")
+            && action.id.indexOf("org.freedesktop.ModemManager") == 0
+            )
+              { return polkit.Result.YES; }
+        });
+      '')
+      (lib.optionalString useNetworkd ''
+        polkit.addRule(function(action, subject) {
+          if (
+            subject.isInGroup("systemd-network")
+            && action.id.indexOf("org.freedesktop.ModemManager") == 0
+            )
+              { return polkit.Result.YES; }
+        });
+      '')
+    ];
 
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
