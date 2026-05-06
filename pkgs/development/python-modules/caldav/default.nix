@@ -16,6 +16,7 @@
   hatch-vcs,
   proxy-py,
   pyfakefs,
+  pytest-asyncio,
   python-dateutil,
   pyyaml,
   toPythonModule,
@@ -27,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.2.6";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-xtxWDlYESIwkow/YdjaUAkJ/x2jdUyhqfSRycJVLncY=";
+    hash = "sha256-I31ZUg1N1aX7z50HNDGYo/o17G7+Bdzx4UBK3UsVL/A=";
   };
 
   build-system = [
@@ -57,17 +58,13 @@ buildPythonPackage rec {
     manuel
     proxy-py
     pyfakefs
+    pytest-asyncio
     pytestCheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
     vobject
     writableTmpDirAsHomeHook
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
-  ];
-
-  disabledTests = [
-    # test contacts CalDAV servers on the internet
-    "test_rfc8764_test_conf"
   ];
 
   __darwinAllowLocalNetworking = true;
