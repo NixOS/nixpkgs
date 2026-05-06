@@ -24552,6 +24552,12 @@
     githubId = 11320;
     name = "Sergiu Ivanov";
   };
+  scottmckendry = {
+    name = "Scott McKendry";
+    email = "me@scottmckendry.tech";
+    github = "scottmckendry";
+    githubId = 39483124;
+  };
   scottstephens = {
     email = "stephens.js@gmail.com";
     github = "scottstephens";
