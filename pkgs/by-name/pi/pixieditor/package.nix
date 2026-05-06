@@ -45,13 +45,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "pixieditor";
-  version = "2.0.1.19";
+  version = "2.1.0.23";
 
   src = fetchFromGitHub {
     owner = "PixiEditor";
     repo = "PixiEditor";
     tag = finalAttrs.version;
-    hash = "sha256-gtbgcgTyPmx8wI0XaZ4pC0s7vR7qZBAQonUObQXAQpk=";
+    hash = "sha256-RRwZKfUgvNM5Z5L75Y/T9WyMiWmJVtp5HGR164DCW1o=";
     fetchSubmodules = true;
   };
 
@@ -63,10 +63,31 @@ buildDotnetModule (finalAttrs: {
     substituteInPlace ./src/PixiEditor/Models/ExceptionHandling/CrashReport.cs \
       --replace-fail 'ShellExecute(fileName,' 'ShellExecute("${placeholder "out"}/bin/pixieditor",';
 
+
     rm -rf ./src/PixiEditor.AnimationRenderer.FFmpeg/ThirdParty/{Linux,Macos,Windows}/*
     substituteInPlace ./src/PixiEditor.AnimationRenderer.FFmpeg/FFMpegRenderer.cs \
       --replace-fail 'new FFOptions() { BinaryFolder = binaryPath }' 'new FFOptions() { BinaryFolder = "${ffmpeg-headless}/bin" }' \
       --replace-fail 'MakeExecutableIfNeeded(binaryPath);' ' ';
+
+
+    # Replace the alpha with an stable so fetch-deps works, it will fail as soon as the lib gets bumpe upstream
+    substituteInPlace ./src/Directory.Build.props \
+      --replace-fail '11.3.12-cibuild0004211-alpha' '11.3.13';
+
+    substituteInPlace ./src/PixiDocks/Directory.Build.props \
+      --replace-fail '11.3.12-cibuild0004211-alpha' '11.3.13';
+
+    substituteInPlace ./samples/Directory.Build.props \
+      --replace-fail '11.3.12-cibuild0004211-alpha' '11.3.13';
+
+    substituteInPlace ./src/ColorPicker/src/ColorPicker.AvaloniaUI/ColorPicker.AvaloniaUI.csproj \
+      --replace-fail '11.3.12-cibuild0004211-alpha' '11.3.13';
+
+    substituteInPlace ./src/Drawie/src/Directory.Build.props \
+      --replace-fail '11.3.12-cibuild0004211-alpha' '11.3.13';
+
+    substituteInPlace ./tests/Directory.Build.props \
+      --replace-fail '11.3.12-cibuild0004211-alpha' '11.3.13';
   '';
 
   nativeBuildInputs = [
@@ -74,14 +95,6 @@ buildDotnetModule (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
-  ];
-
-  buildInputs = [
-    (fetchNupkg {
-      pname = "protobuf-net.protogen";
-      version = "3.2.52";
-      hash = "sha256-sKVCXtd5qD86D2FOgjMXh37P6IrcmqmaoJregAhLFGY=";
-    })
   ];
 
   nugetDeps = ./deps.json;
@@ -153,11 +166,6 @@ buildDotnetModule (finalAttrs: {
       extraConfig.SingleMainWindow = "true";
     })
   ];
-
-  postConfigure = ''
-    dotnet build -t:InstallProtogen \
-      src/PixiEditor.Extensions.CommonApi/PixiEditor.Extensions.CommonApi.csproj
-  '';
 
   postInstall = ''
     install -Dm644 ${appSettings} $out/lib/pixieditor/appsettings.json;
