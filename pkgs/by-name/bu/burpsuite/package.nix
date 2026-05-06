@@ -3,36 +3,25 @@
   buildFHSEnv,
   fetchurl,
   jdk,
+  iconName ? "community",
   makeDesktopItem,
-  proEdition ? false,
   unzip,
 }:
+assert lib.assertMsg (
+  iconName == "pro" || iconName == "community"
+) "iconName has to be either pro or community";
 
 let
-  version = "2026.3.2";
-
-  product =
-    if proEdition then
-      {
-        productName = "pro";
-        productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-oZGSP19ejP9amfXV89kNDQwxLekZCs7oGKaX/DDHSZM=";
-      }
-    else
-      {
-        productName = "community";
-        productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-PuV5XmgdBBkfPS0pc3xENtTUPMpemyHDDOTLVux24Xs=";
-      };
+  version = "2026.4";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger-cdn.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
-      "https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
+      "https://portswigger-cdn.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
     ];
-    hash = product.hash;
+    hash = "sha256-gH4L6wwdSn87zx9bmjI0k8aFqRPnp3LwFuBSJ6ppqNE=";
   };
 
   pname = "burpsuite";
@@ -41,7 +30,7 @@ let
     name = "burpsuite";
     exec = pname;
     icon = pname;
-    desktopName = product.productDesktop;
+    desktopName = "Burp Suite Desktop";
     comment = description;
     categories = [
       "Development"
@@ -88,7 +77,7 @@ buildFHSEnv {
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/64x64/apps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
@@ -103,9 +92,9 @@ buildFHSEnv {
       exploiting security vulnerabilities.
     '';
     homepage = "https://portswigger.net/burp/";
-    changelog =
-      "https://portswigger.net/burp/releases/professional-community-"
-      + lib.replaceStrings [ "." ] [ "-" ] version;
+    changelog = "https://portswigger.net/burp/releases/professional-community-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.unfree;
     platforms = jdk.meta.platforms;
