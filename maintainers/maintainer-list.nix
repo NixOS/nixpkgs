@@ -6813,6 +6813,12 @@
     githubId = 767083;
     name = "Derek Guenther";
   };
+  dhashs = {
+    email = "me@dha.sh";
+    github = "DhashS";
+    githubId = 4737200;
+    name = "Dhash Shrivathsa";
+  };
   dhkl = {
     email = "david@davidslab.com";
     github = "dhl";
