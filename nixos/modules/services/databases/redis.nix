@@ -139,7 +139,12 @@ in
   options = {
 
     services.redis = {
-      package = lib.mkPackageOption pkgs "redis" { };
+      package = lib.mkOption {
+        types = lib.types.packages;
+        default = pkgs.redis;
+        example = lib.literralExpression "pkgs.valkey";
+        description = "The redis package to use.";
+      };
 
       vmOverCommit =
         lib.mkEnableOption ''
