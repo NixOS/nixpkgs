@@ -4,7 +4,7 @@
 # Also generate an appropriate modules.dep.
 
 {
-  stdenvNoCC,
+  buildPackages,
   kernel,
   firmware,
   nukeReferences,
@@ -14,7 +14,13 @@
   extraFirmwarePaths ? [ ],
 }:
 
-stdenvNoCC.mkDerivation {
+# `buildPackages.stdenvNoCC.mkDerivation` so the assembly derivation is
+# built on the build platform; the script reads ELF metadata from kernel
+# modules and emits text (modules.dep, symbol info), which is
+# arch-independent. `kmod`/`nukeReferences` are listed as nativeBuildInputs
+# and will be auto-spliced to their build-platform variants in cross builds.
+# In native builds `buildPackages == self`, so the derivation is identical.
+buildPackages.stdenvNoCC.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
   nativeBuildInputs = [
