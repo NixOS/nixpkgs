@@ -98,6 +98,7 @@ let
       "dropAttrs"
       "dropDerivationAttrs"
       "keepAttrs"
+      "env"
     ]
     ++ dropAttrs
   ) keepAttrs;
@@ -162,6 +163,7 @@ let
     "COQPLUGININSTALL=$(OCAMLFIND_DESTDIR)"
   ];
   docdir-flags = [ "COQDOCINSTALL=$(out)/share/coq/${rocq-core.rocq-version}/user-contrib" ];
+  COQUSERCONTRIB = "$out/lib/coq/${rocq-core.rocq-version}/user-contrib";
 in
 
 stdenv.mkDerivation (
@@ -187,6 +189,15 @@ stdenv.mkDerivation (
         args.overrideBuildInputs or ([ rocq-core ] ++ (args.buildInputs or [ ]) ++ extraBuildInputs);
       inherit enableParallelBuilding;
 
+      env =
+        optionalAttrs setROCQBIN {
+          ROCQBIN = "${rocq-core}/bin/";
+        }
+        // optionalAttrs (args ? useMelquiondRemake) {
+          inherit COQUSERCONTRIB;
+        }
+        // (args.env or { });
+
       meta =
         (
           {
@@ -208,7 +219,6 @@ stdenv.mkDerivation (
         // (args.meta or { });
 
     }
-    // (optionalAttrs setROCQBIN { ROCQBIN = "${rocq-core}/bin/"; })
     // (optionalAttrs (!args ? installPhase && !args ? useMelquiondRemake) {
       installFlags = rocqlib-flags ++ docdir-flags ++ extraInstallFlags;
     })
@@ -226,8 +236,7 @@ stdenv.mkDerivation (
         runHook postInstall
       '';
     })
-    // (optionalAttrs (args ? useMelquiondRemake) rec {
-      COQUSERCONTRIB = "$out/lib/coq/${rocq-core.rocq-version}/user-contrib";
+    // (optionalAttrs (args ? useMelquiondRemake) {
       preConfigurePhases = [ "autoconf" ];
       configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
       buildPhase = "./remake -j$NIX_BUILD_CORES";
