@@ -10,11 +10,17 @@
   buildPackages,
   nix-update-script,
   versionCheckHook,
+  mkdocs,
+  python3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
   version = "0.40.0";
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
@@ -27,6 +33,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    mkdocs
+    python3.pkgs.mdx-breakless-lists
+    python3.pkgs.mdx-truly-sane-lists
+    python3.pkgs.mike
+    python3.pkgs.mkdocs-include-markdown-plugin
+    python3.pkgs.mkdocs-material
+    python3.pkgs.mkdocs-redirects
+    python3.pkgs.mkdocs-table-reader-plugin
   ];
 
   nativeCheckInputs = [
@@ -58,6 +72,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBSSH2_SYS_USE_PKG_CONFIG = "1";
   };
 
+  preBuild = ''
+    mkdocs build -d $name
+  '';
+
   postInstall =
     let
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
@@ -70,6 +88,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --bash <(COMPLETE=bash ${jj}) \
         --fish <(COMPLETE=fish ${jj}) \
         --zsh <(COMPLETE=zsh ${jj})
+    ''
+    + ''
+      mkdir -p $doc/share/doc
+      mv $name $doc/share/doc
     '';
 
   doInstallCheck = true;
