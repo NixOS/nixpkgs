@@ -5,6 +5,7 @@
   hatchling,
   bleak,
   bleak-retry-connector,
+  cryptography,
   epaper-dithering,
   numpy,
   pillow,
@@ -14,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-opendisplay";
-  version = "5.5.0";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenDisplay";
     repo = "py-opendisplay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pPV4Ir9GK++66qq5QGnwyjpBinK7EvI7C7HB14tFDXU=";
+    hash = "sha256-W58knlYitI9Rdk0lKFgRVfrDe0C9uzMo5O0/U3X3mJs=";
   };
 
   build-system = [ hatchling ];
@@ -29,6 +30,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     bleak
     bleak-retry-connector
+    cryptography
     epaper-dithering
     numpy
     pillow
