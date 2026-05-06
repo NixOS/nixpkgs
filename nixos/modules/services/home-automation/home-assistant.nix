@@ -70,7 +70,7 @@ let
   # Filter null values from the configuration, so that we can still advertise
   # optional options in the config attribute.
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) (
-    recursiveUpdate customLovelaceModulesResources (cfg.config or { })
+    recursiveUpdate (customLovelaceModulesResources // customThemesFrontend) (cfg.config or { })
   );
   configFile = renderYAMLFile "configuration.yaml" filteredConfig;
 
@@ -142,13 +142,28 @@ let
     paths = cfg.customLovelaceModules;
   };
 
-  # Create parts of the lovelace config that reference lovelave modules as resources
+  # Create parts of the lovelace config that reference lovelace modules as resources
   customLovelaceModulesResources = {
     lovelace.resources = map (card: {
       url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
       type = "module";
     }) cfg.customLovelaceModules;
   };
+
+  # Create a directory that holds all lovelace themes
+  customThemesDir = pkgs.buildEnv {
+    name = "home-assistant-custom-themes";
+    paths = cfg.customThemes;
+  };
+
+  # Auto-inject frontend.themes include directive when customThemes are used.
+  customThemesFrontend =
+    if cfg.customThemes != [ ] then
+      {
+        frontend.themes = "!include_dir_merge_named ${customThemesDir}/themes";
+      }
+    else
+      { };
 in
 {
   imports = [
@@ -320,6 +335,34 @@ in
 
         ::: {.note}
         Automatic loading only works with lovelace in `yaml` mode.
+        :::
+      '';
+    };
+
+    customThemes = mkOption {
+      type = types.listOf (
+        types.addCheck types.package (p: p.isHomeAssistantTheme or false)
+        // {
+          name = "home-assistant-theme";
+          description = "package that is a Home Assistant theme";
+        }
+      );
+      default = [ ];
+      example = literalExpression ''
+        with pkgs.home-assistant-custom-themes; [
+          material-you-theme
+        ];
+      '';
+      description = ''
+        List of custom themes to load.
+
+        Available themes can be found below `pkgs.home-assistant-custom-themes`.
+
+        ::: {.note}
+        If this list is non-empty, the module will automatically set
+        `frontend.themes` in {option}`services.home-assistant.config`.
+        Setting `frontend.themes` manually when `customThemes` is non-empty
+        is an error.
         :::
       '';
     };
@@ -628,6 +671,10 @@ in
         assertion = !(cfg.lovelaceConfig != null && cfg.lovelaceConfigFile != null);
         message = "Only one of `lovelaceConfig` or `lovelaceConfigFile` can be configured at the same time.";
       }
+      {
+        assertion = cfg.customThemes != [ ] -> !(hasAttrByPath [ "frontend" "themes" ] (cfg.config or { }));
+        message = "`services.home-assistant.customThemes` and `services.home-assistant.config.frontend.themes` cannot both be set. The module sets `frontend.themes` automatically when `customThemes` is non-empty.";
+      }
     ];
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
@@ -711,6 +758,7 @@ in
               ln -fns "''${paths[@]}" "${cfg.configDir}/custom_components/"
             done
           '';
+
           removeBlueprints = ''
             # remove blueprints symlinked in from below the /nix/store
             readarray -d "" blueprints < <(find "${cfg.configDir}/blueprints" -maxdepth 2 -type l -print0)
