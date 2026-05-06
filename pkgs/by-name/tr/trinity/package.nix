@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trinity";
-  version = "1.9-unstable-2026-04-11";
+  version = "1.9-unstable-2026-05-03";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
     repo = "trinity";
-    rev = "4ecfd4492750cc7a92e0ccba197a308c5456b564";
-    hash = "sha256-4n44ZqA7T9SoQdUwXa4LJIDwyU91rV0lRMGiQqxTn1c=";
+    rev = "546f576fae24427c84007fd392c824815a459e38";
+    hash = "sha256-J2h+g7TjXjfkIArbecdi1Y8ASJBK/UKE4C/tPlF6D3Q=";
   };
 
   postPatch = ''
