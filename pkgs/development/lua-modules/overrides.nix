@@ -690,6 +690,11 @@ in
       }
     ];
 
+    patches = [
+      # https://github.com/wahern/luaossl/pull/221
+      ./luaossl-lua55.patch
+    ];
+
     env = old.env // {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
     };
