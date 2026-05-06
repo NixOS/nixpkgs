@@ -10165,6 +10165,8 @@ self: super: with self; {
 
   mlflow = callPackage ../development/python-modules/mlflow { };
 
+  mlflow-skinny = callPackage ../development/python-modules/mlflow-skinny { };
+
   mlrose = callPackage ../development/python-modules/mlrose { };
 
   mlt = toPythonModule (
