@@ -17,18 +17,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pulumi";
-  version = "3.192.0";
+  version = "3.234.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rcDXC+xlUa67afuXvmEv8UNsYWBvQQ0P4httdtdcrh4=";
+    hash = "sha256-t1FMsAjLPBfMOLnaYwVJwNig+66w7xQ5teaejCBp1LU=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-BaFw8EnPd2GPA/p9wm8XpVy/iE8gqbteRnMQC8Z4NHQ=";
+  vendorHash = "sha256-Z93mygtsScrRqYrC9eF0blJQ3YTCwSIpFMohSt3tQWE=";
 
   sourceRoot = "${finalAttrs.src.name}/pkg";
 
@@ -101,6 +101,9 @@ buildGoModule (finalAttrs: {
         "TestAzureKeyVaultExistingKeyState"
         "TestAzureKeyVaultExistingState"
 
+        # Requires interactive AI flow assumptions that don't hold in the sandbox.
+        "TestRunNewYesWithAILanguage"
+
         # Requires pulumi-yaml
         "TestProjectNameDefaults"
         "TestProjectNameOverrides"
@@ -144,6 +147,10 @@ buildGoModule (finalAttrs: {
     updateScript = _experimental-update-script-combinators.sequence [
       (nix-update-script { })
       (nix-update-script {
+        attrPath = "pulumiPackages.pulumi-bun";
+        extraArgs = [ "--version=skip" ];
+      })
+      (nix-update-script {
         attrPath = "pulumiPackages.pulumi-go";
         extraArgs = [ "--version=skip" ];
       })
@@ -164,7 +171,12 @@ buildGoModule (finalAttrs: {
       };
 
       # Test building packages that reuse our version and src.
-      inherit (pulumiPackages) pulumi-go pulumi-nodejs pulumi-python;
+      inherit (pulumiPackages)
+        pulumi-bun
+        pulumi-go
+        pulumi-nodejs
+        pulumi-python
+        ;
       pythonPackage = python3Packages.pulumi;
       pythonPackageProtobuf5 =
         (python3Packages.overrideScope (
