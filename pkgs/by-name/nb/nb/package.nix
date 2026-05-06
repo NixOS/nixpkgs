@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nb";
-  version = "7.25.3";
+  version = "7.25.4";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     tag = finalAttrs.version;
-    hash = "sha256-liDNmc7pueIk0nFUkPjP8llXzV6dTpHMVkRSc0stEVk=";
+    hash = "sha256-zcNL1WI3UoYV5nXzU0yYh0GwTsUzkeclMcEjQlneSzw=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
