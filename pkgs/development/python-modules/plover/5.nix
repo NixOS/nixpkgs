@@ -79,7 +79,6 @@ buildPythonPackage (finalAttrs: {
     pyserial
     pyside6
     plover-stroke
-    qtbase
     readme-renderer
     requests-cache
     requests-futures
@@ -91,6 +90,10 @@ buildPythonPackage (finalAttrs: {
   ++ readme-renderer.optional-dependencies.md;
   nativeBuildInputs = [
     wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtbase
   ];
 
   nativeCheckInputs = [
