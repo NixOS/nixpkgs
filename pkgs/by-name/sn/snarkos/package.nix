@@ -9,16 +9,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";
-  version = "2.2.7";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "AleoHQ";
     repo = "snarkOS";
     rev = "v${version}";
-    sha256 = "sha256-+z9dgg5HdR+Gomug03gI1zdCU6t4SBHkl1Pxoq69wrc=";
+    sha256 = "sha256-P/ufTzTWUYAdqgyUI+sc1ZU5xTSQUUBWbWkyCm2QEsA=";
   };
 
-  cargoHash = "sha256-riUOxmuXDP5+BPSPu5+cLBP43bZxAqvVG/k5kvThSAs=";
+  cargoHash = "sha256-/5CJ6erw+h551/+bVuMBVy+I5UwNyNYhBf/j3SgOmQE=";
+
+  auditable = false;
 
   # buildAndTestSubdir = "cli";
 
@@ -32,15 +34,12 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
     OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     OPENSSL_DIR = "${lib.getDev openssl}";
-
-    # TODO check why rust compilation fails by including the rocksdb from nixpkgs
-    # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
-    # try to build RocksDB from source.
-    # ROCKSDB_INCLUDE_DIR="${rocksdb}/include";
-    # ROCKSDB_LIB_DIR="${rocksdb}/lib";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin
+  [
     curl
   ];
 
@@ -55,8 +54,6 @@ rustPlatform.buildRustPackage rec {
   # ];
 
   meta = {
-    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
-    broken = true;
     description = "Decentralized Operating System for Zero-Knowledge Applications";
     homepage = "https://snarkos.org";
     license = lib.licenses.asl20;
