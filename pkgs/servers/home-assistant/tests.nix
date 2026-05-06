@@ -11,13 +11,20 @@ let
     abode = getComponentDeps "camera";
     agent_dvr = getComponentDeps "camera";
     air_quality = getComponentDeps "camera" ++ getComponentDeps "conversation";
-    alexa = getComponentDeps "cloud" ++ getComponentDeps "frontend" ++ getComponentDeps "stream";
+    alexa = map getComponentDeps [
+      "cloud"
+      "frontend"
+      "stream"
+    ];
     android_ip_webcam = getComponentDeps "camera";
     anthropic = getComponentDeps "ai_task" ++ getComponentDeps "openai_conversation";
     assist_pipeline = getComponentDeps "frontend";
     automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
     axis = getComponentDeps "camera" ++ getComponentDeps "deconz";
     blink = getComponentDeps "camera";
+    bluetooth = getComponentDeps "switchbot";
+    braviatv = getComponentDeps "ssdp";
+    broadlink = getComponentDeps "radio_frequency";
     bthome = getComponentDeps "frontend";
     buienradar = getComponentDeps "camera";
     camera = getComponentDeps "conversation" ++ getComponentDeps "stream";
@@ -39,7 +46,7 @@ let
     ];
     emulated_kasa = getComponentDeps "camera" ++ getComponentDeps "conversation";
     environment_canada = getComponentDeps "camera";
-    esphome = getComponentDeps "camera";
+    esphome = getComponentDeps "camera" ++ getComponentDeps "radio_frequency";
     fan = getComponentDeps "conversation";
     fish_audio = getComponentDeps "tts";
     foscam = getComponentDeps "camera";
@@ -77,6 +84,7 @@ let
     image_processing = getComponentDeps "conversation";
     intelliclima = getComponentDeps "intellifire";
     intent = getComponentDeps "conversation";
+    kitchen_sink = getComponentDeps "radio_frequency";
     light = getComponentDeps "conversation";
     local_file = getComponentDeps "camera";
     locative = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
@@ -87,6 +95,11 @@ let
     lutron_caseta = getComponentDeps "frontend";
     mailgun = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     marytts = getComponentDeps "tts";
+    mastodon = map getComponentDeps [
+      "ffmpeg"
+      "stream"
+      "tts"
+    ];
     media_player = getComponentDeps "camera" ++ getComponentDeps "conversation";
     microsoft = getComponentDeps "tts";
     microsoft_face_detect = getComponentDeps "conversation";
@@ -113,6 +126,7 @@ let
     open_router = getComponentDeps "ai_task";
     openai_conversation = getComponentDeps "camera";
     openalpr_cloud = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    picotts = getComponentDeps "tts";
     prosegur = getComponentDeps "camera";
     prusalink = getComponentDeps "camera";
     push = getComponentDeps "camera";
@@ -149,6 +163,7 @@ let
     tts = getComponentDeps "conversation";
     tuya = getComponentDeps "camera";
     twilio = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
+    unifi_discovery = getComponentDeps "unifiprotect";
     unifiprotect = getComponentDeps "camera";
     universal = getComponentDeps "camera" ++ getComponentDeps "conversation";
     uvc = getComponentDeps "camera";
@@ -221,6 +236,14 @@ let
     ecovacs = [
       # Translation not found for vacuum
       "test_raise_segment_changed_issue"
+    ];
+    homeassistant_sky_connect = [
+      # 2026.5.0: after reload device is in loaded state instead of retry state
+      "test_usb_device_reactivity"
+    ];
+    homeassistant_connect_zbt2 = [
+      # 2026.5.0: after reload device is in loaded state instead of retry state
+      "test_usb_device_reactivity"
     ];
     roborock = [
       # Translation not found for vacuum

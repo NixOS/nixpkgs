@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.4.4";
+  version = "2026.5.0";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -34,8 +34,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "accuweather" =
@@ -44,7 +44,7 @@
       ];
     "acer_projector" =
       ps: with ps; [
-        pyserial
+        serialx
       ];
     "acmeda" =
       ps: with ps; [
@@ -159,8 +159,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "airtouch4" =
@@ -388,8 +388,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "arcam_fmj" =
@@ -488,7 +488,9 @@
       ];
     "aurora_abb_powerone" =
       ps: with ps; [
+        aiousbwatcher
         aurorapy
+        serialx
       ];
     "aussie_broadband" =
       ps: with ps; [
@@ -670,8 +672,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "blueprint" =
@@ -693,7 +695,7 @@
         bluetooth-data-tools
         dbus-fast
         habluetooth
-        pyserial
+        serialx
       ];
     "bluetooth_adapters" =
       ps: with ps; [
@@ -717,8 +719,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "bluetooth_le_tracker" =
@@ -743,8 +745,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "bmw_connected_drive" =
@@ -843,8 +845,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "bticino" =
@@ -907,8 +909,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ]; # missing inputs: pycasperglow
     "cast" =
@@ -1115,7 +1117,7 @@
         crownstone-cloud
         crownstone-sse
         crownstone-uart
-        pyserial
+        serialx
       ];
     "currencylayer" =
       ps: with ps; [
@@ -1203,10 +1205,10 @@
         psutil-home-assistant
         pymicro-vad
         pynacl
-        pyserial
         pyspeex-noise
         pyturbojpeg
         securetar
+        serialx
         sqlalchemy
         zeroconf
       ];
@@ -1229,6 +1231,11 @@
     "denon" =
       ps: with ps; [
       ];
+    "denon_rs232" =
+      ps: with ps; [
+        aiousbwatcher
+        serialx
+      ]; # missing inputs: denon-rs232
     "denonavr" =
       ps: with ps; [
         denonavr
@@ -1334,6 +1341,9 @@
     "door" =
       ps: with ps; [
       ];
+    "doorbell" =
+      ps: with ps; [
+      ];
     "doorbird" =
       ps: with ps; [
         doorbirdpy
@@ -1364,8 +1374,8 @@
         mutagen
         py-dormakaba-dkey
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "downloader" =
@@ -1381,13 +1391,21 @@
         dropmqttapi
         paho-mqtt
       ];
+    "dropbox" =
+      ps: with ps; [
+        aiohasupervisor
+        cronsim
+        securetar
+      ]; # missing inputs: python-dropbox-api
     "droplet" =
       ps: with ps; [
         pydroplet
       ];
     "dsmr" =
       ps: with ps; [
+        aiousbwatcher
         dsmr-parser
+        serialx
       ];
     "dsmr_reader" =
       ps: with ps; [
@@ -1400,6 +1418,9 @@
     "duckdns" =
       ps: with ps; [
       ];
+    "duco" =
+      ps: with ps; [
+      ]; # missing inputs: python-duco-client
     "dunehd" =
       ps: with ps; [
         pdunehd
@@ -1425,6 +1446,9 @@
       ps: with ps; [
         aioeafm
       ];
+    "earn_e_p1" =
+      ps: with ps; [
+      ]; # missing inputs: earn-e-p1
     "eastron" =
       ps: with ps; [
       ];
@@ -1595,7 +1619,7 @@
       ps: with ps; [
         aiousbwatcher
         enocean-async
-        pyserial
+        serialx
       ];
     "enphase_envoy" =
       ps: with ps; [
@@ -1652,8 +1676,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "escea" =
@@ -1683,8 +1707,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "essent" =
@@ -1722,10 +1746,22 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
+    "eurotronic_cometblue" =
+      ps: with ps; [
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        habluetooth
+        serialx
+      ]; # missing inputs: eurotronic-cometblue-ha
     "event" =
       ps: with ps; [
       ];
@@ -1873,8 +1909,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "fleetgo" =
@@ -2027,6 +2063,9 @@
         paho-mqtt
         python-fullykiosk
       ];
+    "fumis" =
+      ps: with ps; [
+      ]; # missing inputs: fumis
     "futurenow" =
       ps: with ps; [
         pyfnip
@@ -2071,8 +2110,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "gate" =
@@ -2284,8 +2323,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "govee_light_local" =
@@ -2477,7 +2516,6 @@
         aiousbwatcher
         ha-silabs-firmware-client
         psutil-home-assistant
-        pyserial
         serialx
         universal-silabs-flasher
       ];
@@ -2487,7 +2525,6 @@
         aiousbwatcher
         ha-silabs-firmware-client
         psutil-home-assistant
-        pyserial
         serialx
         universal-silabs-flasher
       ];
@@ -2496,7 +2533,6 @@
         aiohasupervisor
         aiousbwatcher
         ha-silabs-firmware-client
-        pyserial
         serialx
         universal-silabs-flasher
       ];
@@ -2506,7 +2542,6 @@
         aiousbwatcher
         ha-silabs-firmware-client
         psutil-home-assistant
-        pyserial
         serialx
         universal-silabs-flasher
       ];
@@ -2516,7 +2551,6 @@
         aiousbwatcher
         ha-silabs-firmware-client
         psutil-home-assistant
-        pyserial
         serialx
         universal-silabs-flasher
       ];
@@ -2560,9 +2594,9 @@
         mutagen
         pymicro-vad
         pyroute2
-        pyserial
         pyspeex-noise
         python-otbr-api
+        serialx
         zeroconf
       ];
     "homematic" =
@@ -2588,6 +2622,10 @@
     "honeywell" =
       ps: with ps; [
         aiosomecomfort
+      ];
+    "honeywell_string_lights" =
+      ps: with ps; [
+        rf-protocols
       ];
     "horizon" =
       ps: with ps; [
@@ -2641,8 +2679,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "huisbaasje" =
@@ -2690,8 +2728,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "huum" =
@@ -2750,8 +2788,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "icloud" =
@@ -2781,8 +2819,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "idrive_e2" =
@@ -2868,8 +2906,8 @@
         mutagen
         py-improv-ble-client
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "incomfort" =
@@ -2921,8 +2959,8 @@
         inkbird-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "input_boolean" =
@@ -2952,7 +2990,7 @@
         home-assistant-frontend
         insteon-frontend-home-assistant
         pyinsteon
-        pyserial
+        serialx
       ];
     "integration" =
       ps: with ps; [
@@ -3040,8 +3078,8 @@
         mutagen
         pymicro-vad
         pynecil
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "isal" =
@@ -3169,8 +3207,8 @@
         kegtron-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "kentuckypower" =
@@ -3204,10 +3242,13 @@
         mutagen
         pymicro-vad
         pymicrobot
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
+    "kiosker" =
+      ps: with ps; [
+      ]; # missing inputs: kiosker-python-api
     "kira" =
       ps: with ps; [
         pykira
@@ -3283,8 +3324,8 @@
         mutagen
         pykulersky
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "kwb" =
@@ -3325,8 +3366,8 @@
         mutagen
         pylamarzocco
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "lametric" =
@@ -3336,7 +3377,7 @@
     "landisgyr_heat_meter" =
       ps: with ps; [
         aiousbwatcher
-        pyserial
+        serialx
         ultraheat-api
       ];
     "lannouncer" =
@@ -3386,8 +3427,8 @@
         ld2410-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "leaone" =
@@ -3413,8 +3454,8 @@
         leaone-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "led_ble" =
@@ -3440,8 +3481,8 @@
         led-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "legrand" =
@@ -3755,8 +3796,8 @@
         medcom-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "media_extractor" =
@@ -3807,8 +3848,8 @@
         melnor-bluetooth
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "meraki" =
@@ -3926,8 +3967,8 @@
         moat-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "mobile_app" =
@@ -3960,7 +4001,7 @@
       ps: with ps; [
         aiousbwatcher
         phone-modem
-        pyserial
+        serialx
       ];
     "modern_forms" =
       ps: with ps; [
@@ -4017,8 +4058,8 @@
         mopeka-iot-ble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "motion" =
@@ -4052,8 +4093,8 @@
         motionblindsble
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "motioneye" =
@@ -4329,6 +4370,10 @@
       ps: with ps; [
         aionotion
       ];
+    "novy_cooker_hood" =
+      ps: with ps; [
+        rf-protocols
+      ];
     "nrgkick" =
       ps: with ps; [
         nrgkick-api
@@ -4430,6 +4475,9 @@
       ps: with ps; [
         pyombi
       ];
+    "omie" =
+      ps: with ps; [
+      ]; # missing inputs: pyomie
     "omnilogic" =
       ps: with ps; [
         omnilogic
@@ -4545,8 +4593,8 @@
         mutagen
         py-opendisplay
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "openerz" =
@@ -4600,8 +4648,7 @@
       ];
     "opnsense" =
       ps: with ps; [
-        pyopnsense
-      ];
+      ]; # missing inputs: aiopnsense
     "opower" =
       ps: with ps; [
         fnv-hash-fast
@@ -4636,8 +4683,8 @@
         mutagen
         oralb-ble
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "oru" =
@@ -4667,7 +4714,6 @@
         ifaddr
         psutil-home-assistant
         pyroute2
-        pyserial
         python-otbr-api
         serialx
         universal-silabs-flasher
@@ -4809,10 +4855,6 @@
     "picotts" =
       ps: with ps; [
       ];
-    "pilight" =
-      ps: with ps; [
-        pilight
-      ];
     "pinecil" =
       ps: with ps; [
       ];
@@ -4938,8 +4980,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "probe_plus" =
@@ -4965,8 +5007,8 @@
         mutagen
         pymicro-vad
         pyprobeplus
-        pyserial
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "profiler" =
@@ -5101,9 +5143,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
         qingping-ble
+        serialx
         zeroconf
       ];
     "qld_bushfire" =
@@ -5170,6 +5212,10 @@
         pycountry
         radios
       ];
+    "radio_frequency" =
+      ps: with ps; [
+        rf-protocols
+      ];
     "radiotherm" =
       ps: with ps; [
         radiotherm
@@ -5191,7 +5237,7 @@
       ps: with ps; [
         aioraven
         aiousbwatcher
-        pyserial
+        serialx
       ];
     "rainmachine" =
       ps: with ps; [
@@ -5222,9 +5268,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
         rapt-ble
+        serialx
         zeroconf
       ];
     "raspberry_pi" =
@@ -5333,7 +5379,9 @@
       ];
     "rfxtrx" =
       ps: with ps; [
+        aiousbwatcher
         pyrfxtrx
+        serialx
       ];
     "rhasspy" =
       ps: with ps; [
@@ -5396,7 +5444,7 @@
       ps: with ps; [
         aiousbwatcher
         momonga
-        pyserial
+        serialx
       ];
     "rova" =
       ps: with ps; [
@@ -5419,10 +5467,12 @@
     "russound_rio" =
       ps: with ps; [
         aiorussound
+        aiousbwatcher
+        serialx
       ];
     "russound_rnet" =
       ps: with ps; [
-        russound
+        aiorussound
       ];
     "ruuvi_gateway" =
       ps: with ps; [
@@ -5435,7 +5485,7 @@
         bluetooth-data-tools
         dbus-fast
         habluetooth
-        pyserial
+        serialx
       ];
     "ruuvitag_ble" =
       ps: with ps; [
@@ -5459,9 +5509,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
         ruuvitag-ble
+        serialx
         zeroconf
       ];
     "rympro" =
@@ -5587,9 +5637,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
         sensirion-ble
+        serialx
         zeroconf
       ];
     "sensor" =
@@ -5623,9 +5673,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
         sensorpro-ble
+        serialx
         zeroconf
       ];
     "sensorpush" =
@@ -5650,9 +5700,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
         sensorpush-ble
+        serialx
         zeroconf
       ];
     "sensorpush_cloud" =
@@ -5674,7 +5724,7 @@
       ];
     "serial" =
       ps: with ps; [
-        pyserial-asyncio-fast
+        serialx
       ];
     "serial_pm" =
       ps: with ps; [
@@ -5722,7 +5772,7 @@
         dbus-fast
         habluetooth
         ifaddr
-        pyserial
+        serialx
       ];
     "shodan" =
       ps: with ps; [
@@ -5911,9 +5961,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pysnooz
         pyspeex-noise
+        serialx
         zeroconf
       ];
     "solaredge" =
@@ -6157,9 +6207,9 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
         pyswitchbot
+        serialx
         zeroconf
       ];
     "switchbot_cloud" =
@@ -6291,6 +6341,11 @@
         python-telegram-bot
       ]
       ++ python-telegram-bot.optional-dependencies.socks;
+    "teleinfo" =
+      ps: with ps; [
+        aiousbwatcher
+        serialx
+      ]; # missing inputs: pyteleinfo
     "tellduslive" =
       ps: with ps; [
         tellduslive
@@ -6363,8 +6418,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         thermobeacon-ble
         zeroconf
       ];
@@ -6393,8 +6448,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         thermopro-ble
         zeroconf
       ];
@@ -6460,8 +6515,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         tilt-ble
         zeroconf
       ];
@@ -6502,7 +6557,7 @@
         bluetooth-data-tools
         dbus-fast
         habluetooth
-        pyserial
+        serialx
         togrill-bluetooth
       ];
     "tolo" =
@@ -6702,14 +6757,20 @@
     "unifi" =
       ps: with ps; [
         aiounifi
+        unifi-discovery
       ];
     "unifi_access" =
       ps: with ps; [
         py-unifi-access
+        unifi-discovery
       ];
     "unifi_direct" =
       ps: with ps; [
         unifi-ap
+      ];
+    "unifi_discovery" =
+      ps: with ps; [
+        unifi-discovery
       ];
     "unifiled" =
       ps: with ps; [
@@ -6767,7 +6828,7 @@
     "usb" =
       ps: with ps; [
         aiousbwatcher
-        pyserial
+        serialx
       ];
     "usgs_earthquakes_feed" =
       ps: with ps; [
@@ -6809,7 +6870,7 @@
     "velbus" =
       ps: with ps; [
         aiousbwatcher
-        pyserial
+        serialx
         velbus-aio
       ];
     "velux" =
@@ -6873,10 +6934,14 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         victron-ble-ha-parser
         zeroconf
+      ];
+    "victron_gx" =
+      ps: with ps; [
+        victron-mqtt
       ];
     "victron_remote_monitoring" =
       ps: with ps; [
@@ -6959,6 +7024,9 @@
       ];
     "waterfurnace" =
       ps: with ps; [
+        fnv-hash-fast
+        psutil-home-assistant
+        sqlalchemy
         waterfurnace
       ];
     "watergate" =
@@ -7170,8 +7238,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         xiaomi-ble
         zeroconf
       ];
@@ -7238,8 +7306,8 @@
         ifaddr
         mutagen
         pymicro-vad
-        pyserial
         pyspeex-noise
+        serialx
         yalexs-ble
         zeroconf
       ];
@@ -7327,7 +7395,6 @@
         aiohasupervisor
         aiousbwatcher
         ha-silabs-firmware-client
-        pyserial
         serialx
         universal-silabs-flasher
         zha
@@ -7365,7 +7432,7 @@
       ps: with ps; [
         aiohasupervisor
         aiousbwatcher
-        pyserial
+        serialx
         zwave-js-server-python
       ];
     "zwave_me" =
@@ -7503,6 +7570,7 @@
     "cert_expiry"
     "chacon_dio"
     "chess_com"
+    "citybikes"
     "clicksend_tts"
     "climate"
     "cloud"
@@ -7559,6 +7627,7 @@
     "dlna_dms"
     "dnsip"
     "door"
+    "doorbell"
     "doorbird"
     "dormakaba_dkey"
     "downloader"
@@ -7758,6 +7827,7 @@
     "homewizard"
     "homeworks"
     "honeywell"
+    "honeywell_string_lights"
     "hr_energy_qube"
     "html5"
     "http"
@@ -8007,6 +8077,7 @@
     "notify"
     "notify_events"
     "notion"
+    "novy_cooker_hood"
     "nrgkick"
     "nsw_fuel_station"
     "nsw_rural_fire_service_feed"
@@ -8050,7 +8121,6 @@
     "opentherm_gw"
     "openuv"
     "openweathermap"
-    "opnsense"
     "opower"
     "oralb"
     "orvibo"
@@ -8077,7 +8147,7 @@
     "philips_js"
     "pi_hole"
     "picnic"
-    "pilight"
+    "picotts"
     "ping"
     "pjlink"
     "plaato"
@@ -8128,6 +8198,7 @@
     "rachio"
     "radarr"
     "radio_browser"
+    "radio_frequency"
     "radiotherm"
     "rainbird"
     "rainforest_eagle"
@@ -8363,6 +8434,7 @@
     "ukraine_alarm"
     "unifi"
     "unifi_access"
+    "unifi_discovery"
     "unifiprotect"
     "universal"
     "upb"
@@ -8391,6 +8463,7 @@
     "vesync"
     "vicare"
     "victron_ble"
+    "victron_gx"
     "victron_remote_monitoring"
     "vilfo"
     "vivotek"
