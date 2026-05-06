@@ -6,18 +6,19 @@
   hatchling,
   pytestCheckHook,
   torch,
+  torch-einops-utils,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "hyper-connections";
-  version = "0.4.7";
+  version = "0.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "hyper-connections";
     tag = finalAttrs.version;
-    hash = "sha256-x1Yx9Fnow9154kFGLmjeCBLYJsbv6oJiC6Rk1XudqJQ=";
+    hash = "sha256-RDwnRtHUWilyqsDmdiV+kRg7BqTS1yghiu9RAM+MNjE=";
   };
 
   build-system = [ hatchling ];
@@ -25,6 +26,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     einops
     torch
+    torch-einops-utils
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
