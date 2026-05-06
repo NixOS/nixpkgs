@@ -7,6 +7,7 @@
   setuptools,
 
   # dependencies
+  click,
   filelock,
   fsspec,
   hf-xet,
@@ -37,19 +38,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.10.2";
+  version = "1.21.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q9N0QnxV8oJcxUsJzv4wX8Z6FkNdEfUH5BEVoZolsRY=";
+    hash = "sha256-xjImbt+oeVk3XpqmR1CVllBurNgYRwcYN69NdFmj13I=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
+    click
     filelock
     fsspec
     hf-xet
@@ -63,7 +69,6 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     all = [
-
     ];
     torch = [
       torch
