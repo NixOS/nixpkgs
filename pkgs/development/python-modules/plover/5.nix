@@ -30,6 +30,10 @@
   wrapQtAppsHook,
   hidapi,
   xkbcommon,
+  pyobjc-framework-Quartz,
+  pyobjc-framework-Cocoa,
+  appnope,
+  pyobjc-core,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -75,7 +79,6 @@ buildPythonPackage (finalAttrs: {
   ];
   dependencies = [
     appdirs
-    evdev
     hidapi
     packaging
     pkginfo
@@ -93,7 +96,14 @@ buildPythonPackage (finalAttrs: {
     xkbcommon
     xlib
   ]
-  ++ readme-renderer.optional-dependencies.md;
+  ++ readme-renderer.optional-dependencies.md
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ evdev ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    appnope
+    pyobjc-core
+    pyobjc-framework-Cocoa
+    pyobjc-framework-Quartz
+  ];
   nativeBuildInputs = [
     wrapQtAppsHook
   ];
@@ -134,6 +144,5 @@ buildPythonPackage (finalAttrs: {
     ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
