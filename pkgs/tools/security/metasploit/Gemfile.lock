@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: e80a8066cd4c7177d821c04c886e3d0d90478bed
-  ref: refs/tags/6.4.130
+  revision: 69fa9eb257ea532c8e0f6ecd545b7e1257d42899
+  ref: refs/tags/6.4.131
   specs:
-    metasploit-framework (6.4.130)
+    metasploit-framework (6.4.131)
       aarch64
       abbrev
       actionpack (~> 7.2.0)
@@ -44,6 +44,7 @@ GIT
       jsobfu
       json
       lru_redux
+      mcp (= 0.13.0)
       metasm
       metasploit-concern
       metasploit-credential (>= 6.0.21)
@@ -174,7 +175,7 @@ GEM
     arel-helpers (2.17.0)
       activerecord (>= 3.1.0)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1242.0)
+    aws-partitions (1.1245.0)
     aws-sdk-core (3.246.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -183,13 +184,13 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-ec2 (1.613.0)
+    aws-sdk-ec2 (1.614.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-ec2instanceconnect (1.70.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-iam (1.142.0)
+    aws-sdk-iam (1.143.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-kms (1.124.0)
@@ -210,7 +211,7 @@ GEM
     benchmark (0.5.0)
     bigdecimal (4.1.2)
     bindata (2.4.15)
-    bootsnap (1.24.1)
+    bootsnap (1.24.3)
       msgpack (~> 1.2)
     bson (5.2.0)
     builder (3.3.0)
@@ -290,7 +291,10 @@ GEM
     jmespath (1.6.2)
     jsobfu (0.4.2)
       rkelly-remix
-    json (2.19.4)
+    json (2.19.5)
+    json-schema (6.2.0)
+      addressable (~> 2.8)
+      bigdecimal (>= 3.1, < 5)
     little-plugger (1.1.4)
     logger (1.7.0)
     logging (2.4.0)
@@ -300,6 +304,8 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lru_redux (1.1.0)
+    mcp (0.13.0)
+      json-schema (>= 4.1)
     metasm (1.0.5)
     metasploit-concern (5.0.6)
       activemodel (>= 7.0, < 8.1)
@@ -353,7 +359,7 @@ GEM
     mqtt (0.7.0)
       logger
     msgpack (1.6.1)
-    multi_json (1.20.1)
+    multi_json (1.21.1)
     mustermann (3.1.1)
     mutex_m (0.3.0)
     nessus_rest (0.1.6)
