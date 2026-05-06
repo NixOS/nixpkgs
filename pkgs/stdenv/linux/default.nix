@@ -60,6 +60,8 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  mkStdenvDevShell,
+  mkBootstrapDevShell,
 
   bootstrapFiles ?
     let
@@ -116,6 +118,7 @@
         );
     in
     (config.replaceBootstrapFiles or lib.id) files,
+  ...
 }:
 
 assert crossSystem == localSystem;
@@ -159,6 +162,7 @@ let
       config
       localSystem
       bootstrapFiles
+      mkBootstrapDevShell
       ;
   };
 
@@ -706,7 +710,7 @@ in
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit config;
+        inherit config mkStdenvDevShell;
 
         preHook = commonPreHook;
 
@@ -878,6 +882,8 @@ in
             gcc = cc;
           };
       };
+
+      inherit mkStdenvDevShell;
     }
   )
 

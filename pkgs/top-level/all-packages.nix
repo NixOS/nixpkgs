@@ -169,6 +169,16 @@ with pkgs;
     # We don't want nix-env -q to enter this, because all of these are aliases.
     dontRecurseIntoAttrs (import ./pkg-config/defaultPkgConfigPackages.nix pkgs);
 
+  mkStdenvDevShell = callPackage ../stdenv/devShell.nix { shell = lib.getExe pkgs.bashInteractive; };
+
+  # get-env.sh uses features not supported by bash_2_05.
+  # People trying to debug a build failure with the devshell for
+  # minimal-bootstrap.bash should override mkBootstrapDevShell's shell argument
+  # with a path to their own system shell.
+  mkBootstrapDevShell = callPackage ../stdenv/devShell.nix {
+    shell = lib.getExe pkgs.minimal-bootstrap.bash;
+  };
+
   ### Nixpkgs maintainer tools
 
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
@@ -8514,6 +8524,7 @@ with pkgs;
         inherit (config) rewriteURL;
       };
       checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
+      devShell = mkBootstrapDevShell;
     }
   );
   minimal-bootstrap-sources =

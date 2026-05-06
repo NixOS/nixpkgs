@@ -13,7 +13,11 @@
 let
   # N.B. Keep in sync with default arg for stdenv/generic.
   defaultMkDerivationFromStdenv =
-    stdenv: (import ./generic/make-derivation.nix { inherit lib config; } stdenv).mkDerivation;
+    stdenv:
+    (import ./generic/make-derivation.nix {
+      inherit lib config;
+      inherit (pkgs) mkStdenvDevShell;
+    } stdenv).mkDerivation;
 
   # Low level function to help with overriding `mkDerivationFromStdenv`. One
   # gives it the old stdenv arguments and a "continuation" function, and

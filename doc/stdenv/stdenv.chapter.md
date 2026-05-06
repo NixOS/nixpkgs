@@ -1727,6 +1727,22 @@ This may cause problems with code that does advanced stack manipulation, and deb
 
 Pre-ARM v8.3 processors will ignore Pointer Authentication instructions, so code built with this flag will continue to work on older processors, though without any of the intended protections. If enabling this flag, it is recommended to ensure the resultant packages are tested against an ARM v8.3+ linux system with known-working Pointer Authentication support so that any breakage caused by this feature is actually detected.
 
+## Development Shells {#sec-devshells}
+
+Any package built with `stdenv` will have a `.devShell` attribute. This is a special attribute used by `nix develop` to enter a development shell for a package. However, you do not need `nix develop` to use a stdenv-produced development shell. It is also possible to `nix run` a package's `.devShell`, or manually run the `bin/setup` program in its default output.
+
+It is possible to change the shell used for a development shell to a different bash-compatible shell. For example, you can use a path to a shell installed locally on your system for the `shell` value. This is useful for debugging broken derivations on which the normal shell value depends. To do this, override `mkStdenvDevShell`. For example:
+
+```nix
+{
+  overlays = [
+    (final: prev: prev.mkStdenvDevShell.override { shell = "/run/current-system/sw/bin/bash"; })
+  ];
+}
+```
+
+To completely customize the development shell of a specific package, you can provide a `mkDevShell` argument to `mkDerivation`. `mkDevShell` should take a single named argument, `drvAttrs`, which will be the value of the final package derivation's `.drvAttrs` attribute. Its primary output should be a directory containing a `./bin/setup` executable, which `nix develop` runs to enter the shell, a `./env` file containing text that will be printed by `nix print-dev-env`, and a `./env.json` file containing text that will be printed by `nix print-dev-env --json`. The resulting development shell derivation should have `meta.mainProgram = "setup"`.
+
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
 [^footnote-stdenv-propagated-dependencies]: Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like [setup hooks](#ssec-setup-hooks) also are run as if it were a propagated dependency.
