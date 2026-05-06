@@ -124,7 +124,7 @@ in
           by default because it is not officially supported by NVIDIA and would not
           work with SLI.
 
-          Enabling this and using version 545 or newer of the proprietary NVIDIA
+          Enabling this and using version 535 or newer of the proprietary NVIDIA
           driver causes it to provide its own framebuffer device, which can cause
           Wayland compositors to work when they otherwise wouldn't.
         ''
