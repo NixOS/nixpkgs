@@ -1130,6 +1130,8 @@ self: super: with self; {
 
   async-stagger = callPackage ../development/python-modules/async-stagger { };
 
+  async-substrate-interface = callPackage ../development/python-modules/async-substrate-interface { };
+
   async-tiff = callPackage ../development/python-modules/async-tiff { };
 
   async-timeout = callPackage ../development/python-modules/async-timeout { };
@@ -2109,6 +2111,12 @@ self: super: with self; {
   bitstring = callPackage ../development/python-modules/bitstring { };
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
+
+  bittensor-cli = callPackage ../development/python-modules/bittensor-cli { };
+
+  bittensor-drand = callPackage ../development/python-modules/bittensor-drand { };
+
+  bittensor-wallet = callPackage ../development/python-modules/bittensor-wallet { };
 
   bitvavo-aio = callPackage ../development/python-modules/bitvavo-aio { };
 
@@ -3489,6 +3497,8 @@ self: super: with self; {
   cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
 
   cyrtranslit = callPackage ../development/python-modules/cyrtranslit { };
+
+  cyscale = callPackage ../development/python-modules/cyscale { };
 
   cysignals = callPackage ../development/python-modules/cysignals { };
 
