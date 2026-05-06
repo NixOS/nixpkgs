@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.13.0";
+  version = "2.14.0-dev11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     tag = "v${version}";
-    hash = "sha256-VnZf6YvvpOs9/9uJHJvcmF56Ra9hhsoqrVisDuf+C6w=";
+    hash = "sha256-4a8FRxKgKfVLoWky+tkPZ5oL2Ow1COWB2ulJxZi0YAY=";
   };
 
   buildInputs = [ rdkafka ];
