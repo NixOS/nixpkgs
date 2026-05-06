@@ -47,6 +47,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/inko \
       --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${stdenv.cc.targetPrefix}install_name_tool \
+      -change /libz.1.dylib "${lib.getLib libz}/lib/libz.1.dylib" \
+      "$out/bin/.inko-wrapped"
   '';
 
   postInstall = ''
