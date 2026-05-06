@@ -1302,6 +1302,8 @@ self: super: with self; {
 
   autopxd2 = callPackage ../development/python-modules/autopxd2 { };
 
+  autoskope-client = callPackage ../development/python-modules/autoskope-client { };
+
   autoslot = callPackage ../development/python-modules/autoslot { };
 
   av = callPackage ../development/python-modules/av { };
