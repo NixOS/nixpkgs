@@ -24,9 +24,6 @@
 
   withAppleEmojis ? false,
 }:
-assert lib.warnIf (commandLineArgs != "")
-  "`commandLineArgs` has been deprecated and will be removed in the future. Consider creating a wrapper script or a desktop entry with your desired flags."
-  true;
 let
   nodejs = nodejs_24;
   pnpm = pnpm_10_29_2;
@@ -353,6 +350,7 @@ stdenv.mkDerivation (finalAttrs: {
       iamanaws
       marcin-serwin
       teutat3s
+      ncfavier
     ];
     mainProgram = "signal-desktop";
     platforms = [
