@@ -6090,6 +6090,7 @@ with pkgs;
     electron-chromedriver_39
     electron-chromedriver_40
     electron-chromedriver_41
+    electron-chromedriver_42
     ;
 
   inherit
