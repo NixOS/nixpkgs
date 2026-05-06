@@ -34,6 +34,10 @@ in
     openFirewall = lib.mkEnableOption "opening UDP ports in the firewall" // {
       default = true;
     };
+
+    enableTaskbar = lib.mkEnableOption "the Warp taskbar user service" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -93,6 +97,8 @@ in
           Group = "root";
         };
     };
+
+    systemd.user.services.warp-taskbar.enable = cfg.enableTaskbar;
   };
 
   meta.maintainers = with lib.maintainers; [ treyfortmuller ];
