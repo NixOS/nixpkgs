@@ -21,16 +21,25 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
-  postInstall = ''
-    mkdir -p $out/bin
-    mv $out/confclerk $out/bin/
-  '';
+  postInstall =
+    if stdenv.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        mv $out/confclerk.app $out/Applications/
+        mkdir -p $out/bin
+        ln -s ../Applications/confclerk.app/Contents/MacOS/confclerk $out/bin/confclerk
+      ''
+    else
+      ''
+        mkdir -p $out/bin
+        mv $out/confclerk $out/bin/
+      '';
 
   meta = {
     description = "Offline conference schedule viewer";
     mainProgram = "confclerk";
     homepage = "http://www.toastfreeware.priv.at/confclerk";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
