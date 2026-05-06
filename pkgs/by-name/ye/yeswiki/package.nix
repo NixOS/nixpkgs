@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchurl,
   unzip,
@@ -25,4 +26,8 @@ stdenv.mkDerivation {
     cp -R . $out/
     runHook postInstall
   '';
+
+  meta = {
+    license = lib.licenses.agpl3Only;
+  };
 }
