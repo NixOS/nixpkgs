@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "millipixels";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitLab {
     owner = "Librem5";
     repo = "millipixels";
     rev = "v${finalAttrs.version}";
     domain = "source.puri.sm";
-    hash = "sha256-Sj14t6LeZWNONcgrwJxN4J1/85m1SLgmmcRnHQUULHI=";
+    hash = "sha256-SpxfMGy1s1v0PfHeXlkD/QN/naX8DPwIE0thdN49BTY=";
   };
   patches = [
     # fix for https://source.puri.sm/Librem5/millipixels/-/issues/87, can be removed with the next release (if there ever will be one)
