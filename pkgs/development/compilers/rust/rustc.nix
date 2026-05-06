@@ -142,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
       "--tools=rustc,rustdoc,rust-analyzer-proc-macro-srv"
       "--enable-rpath"
       "--enable-vendor"
+      # ignore the change tracking system, as we generate a new bootstrap.toml
+      # every time we build rust, so no need to track changes.
+      "--set=change-id=ignore"
       # For Nixpkgs it makes more sense to use stdenv's linker than
       # letting rustc build its own.
       "--disable-lld"
