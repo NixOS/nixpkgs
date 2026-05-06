@@ -727,8 +727,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.16.5";
-          hash = "sha256-ppWHZFQfC2bje1rNZh8Pu+BKQdAI60kpxRwUg8EfD8M=";
+          version = "1.18.2";
+          hash = "sha256-HZ4It+liYpnNRA4dBalv7HWQq7aXmmkvzjhCzKaTfBI=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
