@@ -2,7 +2,7 @@
 let
   version = "3.14.0";
   vendorHash = "sha256-fibx+Ky2cfP71tPzeiDybx+0f/+XvZbDXC7PAWQMRIY=";
-  nodeModulesHash = "sha256-8QhWOlEWkRPZA3uktm2hDSon+UCPPGznvn/4cXqyvTY=";
+  nodeModulesHash = "sha256-wQUOUB5uhWbdEP1nP02ihRZf3F1sEvQeZTDxOa5P1lQ=";
 in
 {
   inherit version vendorHash nodeModulesHash;
