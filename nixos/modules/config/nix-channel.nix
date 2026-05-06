@@ -6,7 +6,7 @@
   - ./nix.nix
   - ./nix-flakes.nix
 */
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   inherit (lib)
     mkIf
@@ -16,6 +16,17 @@ let
     ;
 
   cfg = config.nix;
+
+  channelsFilePlaintext = pkgs.writeTextFile {
+    name = "plaintext-channels-file";
+    text = builtins.concatStringsSep "\n" config.system.defaultChannels;
+  };
+
+  channelsFileBase64 = pkgs.runCommand "base64-encode-file" { nativeBuildInputs = [ pkgs.basez ]; } ''
+    base64 --input="${channelsFilePlaintext}" --output="$out"
+  '';
+
+  channelsFileEncodedContent = ''${builtins.readFile channelsFileBase64}'';
 
 in
 {
@@ -67,11 +78,13 @@ in
     };
 
     system = {
-      defaultChannel = mkOption {
+      defaultChannels = mkOption {
         internal = true;
-        type = types.str;
-        default = "https://channels.nixos.org/nixos-unstable";
-        description = "Default NixOS channel to which the root user is subscribed.";
+        type = types.listOf types.str;
+        default = [
+          "https://channels.nixos.org/nixos-unstable nixos"
+        ];
+        description = "Default NixOS channels to which the root user is subscribed.";
       };
     };
   };
@@ -95,7 +108,7 @@ in
     };
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
-      ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
+      ''f~ /root/.nix-channels - - - - ${channelsFileEncodedContent}''
     ];
 
     system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable) (
