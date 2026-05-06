@@ -4178,6 +4178,10 @@ self: super: with self; {
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
+  django-fernet-encrypted-fields =
+    callPackage ../development/python-modules/django-fernet-encrypted-fields
+      { };
+
   django-filer = callPackage ../development/python-modules/django-filer { };
 
   django-filingcabinet = callPackage ../development/python-modules/django-filingcabinet { };
