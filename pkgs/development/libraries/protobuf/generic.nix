@@ -82,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
       # entries in `linkarr_upb_AllExts` during test builds.
       # Context: https://github.com/protocolbuffers/protobuf/issues/21021
       ./fix-upb-linkarr-sentinel-init.patch
+
+      # Fix BoolKeys test on big-endian
+      # https://github.com/protocolbuffers/protobuf/pull/25862
+      ./fix-BoolKeys-test-on-be.patch
     ];
 
   postPatch =
