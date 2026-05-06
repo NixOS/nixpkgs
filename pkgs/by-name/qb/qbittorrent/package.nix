@@ -84,10 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Featureful free software BitTorrent client";
     homepage = "https://www.qbittorrent.org";
     changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${finalAttrs.version}/Changelog";
-    license = with lib.licenses; [
-      gpl2Only
-      gpl3Only
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl2Plus # code
+        gpl3Plus # assets
+      ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Anton-Latukha
