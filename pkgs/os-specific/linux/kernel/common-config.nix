@@ -323,6 +323,7 @@ let
       IPV6_SEG6_LWTUNNEL = yes;
       IPV6_SEG6_HMAC = yes;
       IPV6_SEG6_BPF = yes;
+      IPV6_SIT = module;
       NET_CLS_ACT = yes;
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
