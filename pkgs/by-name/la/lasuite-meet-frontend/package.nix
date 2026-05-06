@@ -7,13 +7,13 @@
 
 buildNpmPackage rec {
   pname = "lasuite-meet-frontend";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-baQVCnkEv5aUy4mKdiscPiiEvwYPfezF03i1HPX64oA=";
+    hash = "sha256-18DcrrEvqWR6caEVZYxQlSnKcxItEpNE+bMhtS4Aa0M=";
   };
 
   sourceRoot = "source/src/frontend";
@@ -21,7 +21,7 @@ buildNpmPackage rec {
   npmDeps = fetchNpmDeps {
     inherit version src;
     sourceRoot = "source/src/frontend";
-    hash = "sha256-iXiadLaXFKmph6psIss0/5FjQkmjnDnQMxAmtrqJn+0=";
+    hash = "sha256-LDH8aR+FSiIFYMDaQ3wNYAzv6VpHtH5X+DMHGBhPkm0=";
   };
 
   buildPhase = ''
@@ -39,6 +39,8 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Open source alternative to Google Meet and Zoom powered by LiveKit: HD video calls, screen sharing, and chat features. Built with Django and React";
