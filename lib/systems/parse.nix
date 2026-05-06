@@ -210,6 +210,13 @@ rec {
         arch = "armv8-a";
       };
 
+      xtensa = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "xtensa";
+        arch = "xtensa";
+      };
+
       i386 = {
         bits = 32;
         significantByte = littleEndian;
@@ -503,6 +510,8 @@ rec {
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = { };
+
+    esp32 = { };
 
     none = { };
     unknown = { };

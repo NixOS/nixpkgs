@@ -73,6 +73,7 @@ let
     "x86_64-netbsd"
 
     # none
+    "xtensa-none"
     "aarch64_be-none"
     "aarch64-none"
     "arm-none"
