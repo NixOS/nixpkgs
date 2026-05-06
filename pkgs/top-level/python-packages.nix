@@ -19356,6 +19356,8 @@ self: super: with self; {
 
   textual-fastdatatable = callPackage ../development/python-modules/textual-fastdatatable { };
 
+  textual-fspicker = callPackage ../development/python-modules/textual-fspicker { };
+
   textual-image = callPackage ../development/python-modules/textual-image { };
 
   textual-plotext = callPackage ../development/python-modules/textual-plotext { };
