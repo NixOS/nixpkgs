@@ -1,40 +1,43 @@
 {
   lib,
   stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  callPackage,
+  cups,
   fetchFromGitHub,
-  gradle_9,
-  jdk21,
+  file,
   fontconfig,
+  glib,
+  gradle_9,
+  gtk3,
+  jdk21,
+  lcms2,
+  libglvnd,
   libxinerama,
   libxrandr,
-  file,
-  gtk3,
-  glib,
-  cups,
-  lcms2,
-  alsa-lib,
-  makeDesktopItem,
-  copyDesktopItems,
-  libglvnd,
-  autoPatchelfHook,
   writeText,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "2.3.4";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20260201";
-    hash = "sha256-7n6/YgRzte2qsgQEfqppdpp5t8+xBjfOKjvNotAgJB0=";
+    tag = "r20260410";
+    hash = "sha256-hZZxGCkhxdJhLgzDykoD5iq0AXpvbpY4HZiqiGfuFmc=";
   };
 
   postPatch = ''
-    substituteInPlace desktopLibJvm/build.gradle.kts \
-      --replace-fail 'resources.srcDir(rootDir.resolve("desktopLibNative/build/bin/universal"))' "" \
-      --replace-fail 'resourcesTask.dependsOn(":desktopLibNative:''${Tasks.compileNativeUniversal}")' ""
+    substituteInPlace desktopApp/build.gradle.kts \
+      --replace-fail 'dependsOn(prepareBundledAppResources)' ""
+  '';
+
+  preBuild = ''
+    export ANDROID_USER_HOME="$TMPDIR/.android"
+    mkdir -p "$ANDROID_USER_HOME"
   '';
 
   gradleBuildTask = ":desktopApp:createReleaseDistributable";
@@ -52,12 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.JAVA_HOME = jdk21;
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk21}" ];
+  gradleFlags = [ "-Dorg.gradle.java.home=${finalAttrs.env.JAVA_HOME}" ];
 
   nativeBuildInputs = [
     gradle_9
     jdk21
-    copyDesktopItems
     autoPatchelfHook
   ];
 
@@ -76,29 +78,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "keyguard";
-      exec = "Keyguard";
-      icon = "keyguard";
-      desktopName = "Keyguard";
-    })
-  ];
-
   installPhase = ''
     runHook preInstall
 
     cp --recursive desktopApp/build/compose/binaries/main-release/app/Keyguard $out
-    install -D --mode=0644 $out/lib/Keyguard.png $out/share/icons/hicolor/512x512/apps/keyguard.png
+    install -Dm755 ${finalAttrs.passthru.sshAgent}/bin/keyguard-ssh-agent \
+      $out/lib/app/resources/keyguard-ssh-agent
+
+    install -Dm444 -t $out/share/applications/ desktopApp/flatpak/*.desktop
+    install -Dm444 desktopApp/flatpak/icon.svg $out/share/icons/hicolor/scalable/apps/com.artemchep.keyguard.svg
+    install -Dm444 -t $out/share/metainfo/ desktopApp/flatpak/*.metainfo.xml
 
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    sshAgent = callPackage ./ssh-agent.nix { inherit (finalAttrs) src version; };
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Alternative client for the Bitwarden platform, created to provide the best user experience possible";
     homepage = "https://github.com/AChep/keyguard-app";
+    changelog = "https://github.com/AChep/keyguard-app/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "Keyguard";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ ilkecan ];
