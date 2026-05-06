@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromCodeberg,
   fetchpatch,
   autoreconfHook,
   boost,
@@ -13,16 +13,18 @@
   xercesc,
   xml-security-c,
   xml-tooling-c,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shibboleth-sp";
   version = "3.0.4.1";
 
-  src = fetchgit {
-    url = "https://git.shibboleth.net/git/cpp-sp.git";
-    rev = finalAttrs.version;
-    sha256 = "1qb4dbz5gk10b9w1rf6f4vv7c2wb3a8bfzif6yiaq96ilqad7gdr";
+  src = fetchFromCodeberg {
+    owner = "Shibboleth";
+    repo = "cpp-sp";
+    tag = finalAttrs.version;
+    hash = "sha256-ub3TFKbRJKyiNy5+t5Aaiwt29ibOuBx4WiDMV/5qZOE=";
   };
 
   # Upgrade to Clang 19 (and thereby LLVM19) causes `std::char_traits` to now be present,
@@ -34,13 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "19") [
     (fetchpatch {
       name = "char-traits-ambig-1";
-      url = "https://git.shibboleth.net/view/?p=cpp-sp.git;a=blobdiff_plain;f=shibsp/util/IPRange.cpp;h=532cf9e94c915667c091d127c696979f63939eb5;hp=d6f00bc36ea25997817a2308314bcdbea572936f;hb=49cd05fa6d9935a45069fa555db7a26ca77d23db;hpb=293ff2ab6454b0946b3b03719efa132bff461f1f";
+      url = "https://codeberg.org/Shibboleth/cpp-sp/commit/49cd05fa6d9935a45069fa555db7a26ca77d23db.diff";
       hash = "sha256-ZF0jsZJoHaxaPPjVbT6Wlq+wjyPQLTnEKcUxONji/hE=";
     })
 
     (fetchpatch {
       name = "char-traits-ambig-2";
-      url = "https://git.shibboleth.net/view/?p=cpp-sp.git;a=blobdiff_plain;f=shibsp/util/IPRange.cpp;h=da954870eb03c7cd054ecc5c52a6c1f011787760;hp=354010d5f5e533262cb385ea16756df53fe0c241;hb=793663a67aaa4e9a4aa9172728d924f8cec45cf6;hpb=a43814935030930c49b7a08f5515b861906525c7";
+      url = "https://codeberg.org/Shibboleth/cpp-sp/commit/793663a67aaa4e9a4aa9172728d924f8cec45cf6.diff";
+      includes = [ "shibsp/util/IPRange.cpp" ];
       hash = "sha256-4iGwCGpGwAkriOwQmh5AgvHLX1o39NuQ2l4sAJbD2bc=";
     })
   ];
@@ -65,16 +68,19 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-xmltooling=${xml-tooling-c}"
     "--with-saml=${opensaml-cpp}"
     "--with-fastcgi"
+    "--with-boost=${boost.dev}"
     "CXXFLAGS=-std=c++14"
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://shibboleth.net/products/service-provider.html";
     description = "Enables SSO and Federation web applications written with any programming language or framework";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 })
