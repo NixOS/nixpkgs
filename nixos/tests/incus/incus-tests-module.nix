@@ -164,6 +164,7 @@ in
 
                   with subtest("[${image_id}] default configuration.nix is created on first boot"):
                       server.succeed(f"incus exec {instance_name} -- test -f /etc/nixos/configuration.nix")
+                      server.succeed(f"incus exec {instance_name} -- grep -q 'default incus configuration' /etc/nixos/configuration.nix")
 
                   with subtest("[${image_id}] configuration.nix create service does not overwrite existing config"):
                       server.succeed(f"incus exec {instance_name} -- systemctl restart incus-create-nixos-config.service")
