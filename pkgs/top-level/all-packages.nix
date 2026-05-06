@@ -9648,7 +9648,7 @@ with pkgs;
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+  klayout = callPackage ../applications/misc/klayout { withQt6 = true; };
 
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop

@@ -4,70 +4,85 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  libsForQt5,
+  qt6Packages,
   python3,
   python3Packages,
   ruby,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qttools,
-  qtxmlpatterns,
-  qmake,
   which,
   perl,
   libgit2,
   libpng,
   expat,
   curl,
+  zlib,
+  withQt6 ? true,
 }:
 
+let
+  qtPackages = if withQt6 then qt6Packages else libsForQt5;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "klayout";
-  version = "0.30.7";
+  version = "0.30.8";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W8ry1+wxVOUxg4hXMd0OpcaWcVr6wUBC3eGgDney2Xc=";
+    hash = "sha256-RjMH6hrc0jyCLgG1D6cztBp5Fb3W5HgTxVTfI2bxgCs=";
   };
 
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace src/klayout.pri --replace "-Wno-reserved-user-defined-literal" ""
-    patchShebangs .
+    patchShebangs --build .
   '';
 
   dontUseQmakeConfigure = true;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
-  nativeBuildInputs = [
-    (python3.withPackages (ps: [ ps.tomli ]))
-    installShellFiles
-    perl
-    ruby
-    which
-    wrapQtAppsHook
-    qmake
-    qtbase
-    qtmultimedia
-    qtsvg
-    qttools
-    qtxmlpatterns
-  ];
+  nativeBuildInputs =
+    with qtPackages;
+    [
+      (python3.withPackages (ps: [ ps.tomli ]))
+      installShellFiles
+      perl
+      ruby
+      which
+      wrapQtAppsHook
+      qmake
+      qtbase
+      qtmultimedia
+      qtsvg
+      qttools
+    ]
+    ++ lib.optionals withQt6 [
+      qt5compat
+    ]
+    ++ lib.optionals (!withQt6) [
+      qtxmlpatterns
+    ];
 
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    qtsvg
-    qttools
-    qtxmlpatterns
-    libgit2
-    libpng
-    expat
-    curl
-  ];
+  buildInputs =
+    with qtPackages;
+    [
+      qtbase
+      qtmultimedia
+      qtsvg
+      qttools
+      libgit2
+      libpng
+      expat
+      curl
+      zlib
+    ]
+    ++ lib.optionals withQt6 [
+      qt5compat
+    ]
+    ++ lib.optionals (!withQt6) [
+      qtxmlpatterns
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -107,7 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp "$out/Applications/klayout.app/Contents/MacOS/klayout"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  };
 
   # Installation is handled manually in buildPhase/postBuild via build.sh -prefix
   dontInstall = true;
