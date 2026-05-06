@@ -7,7 +7,7 @@
   dotmap,
   ecs-logging,
   elastic-transport,
-  elasticsearch8,
+  elasticsearch9,
   fetchFromGitHub,
   hatchling,
   mock,
@@ -19,7 +19,7 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "es-client";
   version = "9.0.2";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "untergeek";
     repo = "es_client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-83EBDmbZuOAVT2oYn98s6XTZrB38lx03nozAkBqHfgg=";
   };
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     dotmap
     ecs-logging
     elastic-transport
-    elasticsearch8
+    elasticsearch9
     pyyaml
     tiered-debug
     voluptuous
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for building Elasticsearch client objects";
     homepage = "https://github.com/untergeek/es_client";
-    changelog = "https://github.com/untergeek/es_client/releases/tag/${src.tag}";
+    changelog = "https://github.com/untergeek/es_client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

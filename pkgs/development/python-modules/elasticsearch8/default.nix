@@ -11,13 +11,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elasticsearch8";
   version = "8.19.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fv/pWzYCQbbVbvaCGQN6kK0PVnI2FNtUu+V9MwWEAvQ=";
   };
 
@@ -43,9 +43,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Official low-level client for Elasticsearch";
-    homepage = "https://github.com/elasticsearch/elasticsearch-py";
-    changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
+    homepage = "https://github.com/elastic/elasticsearch-py";
+    changelog = "https://github.com/elastic/elastic-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
