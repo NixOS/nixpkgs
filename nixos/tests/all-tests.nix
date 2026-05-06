@@ -239,6 +239,7 @@ in
   atuin = runTest ./atuin.nix;
   atuin-programs = runTest ./atuin-programs.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
+  audio-share = runTest ./audio-share.nix;
   audit = runTest ./audit.nix;
   audit-testsuite = runTest ./audit-testsuite.nix;
   auth-mysql = runTest ./auth-mysql.nix;
