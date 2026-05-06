@@ -4146,7 +4146,6 @@ with pkgs;
     })
     haxe_4_3
     haxe_4_1
-    haxe_4_0
     ;
 
   haxe = haxe_4_3;

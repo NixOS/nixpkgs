@@ -57,9 +57,7 @@ let
         dune
       ]
       ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
-      ++ lib.optional (lib.versionAtLeast version "4.1") (
-        if lib.versionAtLeast version "4.3" then mbedtls else mbedtls_2
-      )
+      ++ (if lib.versionAtLeast version "4.3" then [ mbedtls ] else [ mbedtls_2 ])
       ++ ocamlDependencies version;
 
       src = fetchFromGitHub {
@@ -150,10 +148,6 @@ let
     };
 in
 {
-  haxe_4_0 = generic {
-    version = "4.0.5";
-    hash = "sha256-Ck/py+tZS7dBu/uikhSLKBRNljpg2h5PARX0Btklozg=";
-  };
   haxe_4_1 = generic {
     version = "4.1.5";
     hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
