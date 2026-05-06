@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "runmd";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "broofa";
     repo = "runmd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NaHBoRp6VuQwobpew7b1us8t2vbVPR4OLe3p3suykOw=";
+    hash = "sha256-CPWY3GFRWlFtDtsZl77qOTuGDyokjkbG5q3jtyxPmDQ=";
   };
 
-  npmDepsHash = "sha256-0djcoEq1O6zubD8OTFNE0BrOebSiw4JAXxa6flbHLb0=";
+  npmDepsHash = "sha256-+JXM5vWaobLNZf/MJCsPcR0xmCGfPdJ56HH0Qan+KEQ=";
 
   dontNpmBuild = true;
 
