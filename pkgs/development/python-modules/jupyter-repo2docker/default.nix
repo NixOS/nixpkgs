@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2025.12.0";
+  version = "2026.04.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";
     tag = version;
-    hash = "sha256-9ZRew9DspRENxhqpWFTSdP8KcQQHA4vMMECLikt+nsw=";
+    hash = "sha256-6atgsiCbT1qwxoMaPaHgwP0tilQDVkH9QCjwpEAOzg4=";
   };
 
   build-system = [
