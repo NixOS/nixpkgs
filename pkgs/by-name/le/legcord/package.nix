@@ -14,6 +14,7 @@
   pipewire,
   libpulseaudio,
   nix-update-script,
+  jq,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     # legcord uses venmic, which is a shipped as a prebuilt node module
     # and needs to be patched
     autoPatchelfHook
+    jq
   ];
 
   buildInputs = [
@@ -54,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    jq '.desktopName = "Legcord"' package.json > package.json.tmp
+    mv package.json.tmp package.json
 
     pnpm build
 
