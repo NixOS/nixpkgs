@@ -1,0 +1,120 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 97c01239..6723c4df 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -340,15 +340,19 @@ if(NOT USE_SYSTEM_LWS)
+     # Disable -Werror for libwebsockets — newer GCC/Clang triggers warnings in upstream code
+     # First populate to get the source
+     FetchContent_Populate(libwebsockets)
+-    # Patch the CMakeLists.txt files to remove -Werror
+-    file(READ "${libwebsockets_SOURCE_DIR}/CMakeLists.txt" LWS_CMAKE_MAIN)
+-    string(REPLACE "-Werror" "" LWS_CMAKE_MAIN "${LWS_CMAKE_MAIN}")
+-    file(WRITE "${libwebsockets_SOURCE_DIR}/CMakeLists.txt" "${LWS_CMAKE_MAIN}")
+-    file(READ "${libwebsockets_SOURCE_DIR}/lib/CMakeLists.txt" LWS_CMAKE_LIB)
+-    string(REPLACE "-Werror" "" LWS_CMAKE_LIB "${LWS_CMAKE_LIB}")
+-    file(WRITE "${libwebsockets_SOURCE_DIR}/lib/CMakeLists.txt" "${LWS_CMAKE_LIB}")
+-    # Now add the subdirectory
+-    add_subdirectory(${libwebsockets_SOURCE_DIR} ${libwebsockets_BINARY_DIR})
++    # Patch the CMakeLists.txt files to remove -Werror (skip if source dir is read-only, e.g. Nix store)
++    if(IS_WRITABLE "${libwebsockets_SOURCE_DIR}/CMakeLists.txt")
++        file(READ "${libwebsockets_SOURCE_DIR}/CMakeLists.txt" LWS_CMAKE_MAIN)
++        string(REPLACE "-Werror" "" LWS_CMAKE_MAIN "${LWS_CMAKE_MAIN}")
++        file(WRITE "${libwebsockets_SOURCE_DIR}/CMakeLists.txt" "${LWS_CMAKE_MAIN}")
++        file(READ "${libwebsockets_SOURCE_DIR}/lib/CMakeLists.txt" LWS_CMAKE_LIB)
++        string(REPLACE "-Werror" "" LWS_CMAKE_LIB "${LWS_CMAKE_LIB}")
++        file(WRITE "${libwebsockets_SOURCE_DIR}/lib/CMakeLists.txt" "${LWS_CMAKE_LIB}")
++    else()
++        message(STATUS "libwebsockets source is read-only, skipping -Werror patch")
++    endif()
++    # Now add the subdirectory (EXCLUDE_FROM_ALL prevents installing lws headers, .pc files, etc.)
++    add_subdirectory(${libwebsockets_SOURCE_DIR} ${libwebsockets_BINARY_DIR} EXCLUDE_FROM_ALL)
+     message(STATUS "libwebsockets will be fetched (v${MIN_LWS_VERSION})")
+ endif()
+ 
+diff --git a/src/cpp/cli/CMakeLists.txt b/src/cpp/cli/CMakeLists.txt
+index a6753b95..1ca5df92 100644
+--- a/src/cpp/cli/CMakeLists.txt
++++ b/src/cpp/cli/CMakeLists.txt
+@@ -151,14 +151,16 @@ if(APPLE AND CMAKE_BUILD_TYPE STREQUAL "Release")
+     )
+ endif()
+ 
+-# Create symlink in standard bin path only if not installing to /usr
++# Create symlink in standard bin path for DESTDIR-based packaging (deb/rpm)
+ if(UNIX AND NOT APPLE AND NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+     install(CODE "
+-        file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
+-        execute_process(
+-            COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                ${CMAKE_INSTALL_PREFIX}/bin/lemonade
+-                \"\$ENV{DESTDIR}/usr/bin/lemonade\"
+-        )
++        if(NOT \"\$ENV{DESTDIR}\" STREQUAL \"\")
++            file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
++            execute_process(
++                COMMAND ${CMAKE_COMMAND} -E create_symlink
++                    ${CMAKE_INSTALL_PREFIX}/bin/lemonade
++                    \"\$ENV{DESTDIR}/usr/bin/lemonade\"
++            )
++        endif()
+     ")
+ endif()
+diff --git a/src/cpp/legacy-cli/CMakeLists.txt b/src/cpp/legacy-cli/CMakeLists.txt
+index 837caaac..4042be69 100644
+--- a/src/cpp/legacy-cli/CMakeLists.txt
++++ b/src/cpp/legacy-cli/CMakeLists.txt
+@@ -57,14 +57,16 @@ if(NOT APPLE)
+     install(TARGETS lemonade-server RUNTIME DESTINATION bin)
+ endif()
+ 
+-# Create symlink in standard bin path only if not installing to /usr
++# Create symlink in standard bin path for DESTDIR-based packaging (deb/rpm)
+ if(UNIX AND NOT APPLE AND NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+     install(CODE "
+-        file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
+-        execute_process(
+-            COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                ${CMAKE_INSTALL_PREFIX}/bin/lemonade-server
+-                \"\$ENV{DESTDIR}/usr/bin/lemonade-server\"
+-        )
++        if(NOT \"\$ENV{DESTDIR}\" STREQUAL \"\")
++            file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
++            execute_process(
++                COMMAND ${CMAKE_COMMAND} -E create_symlink
++                    ${CMAKE_INSTALL_PREFIX}/bin/lemonade-server
++                    \"\$ENV{DESTDIR}/usr/bin/lemonade-server\"
++            )
++        endif()
+     ")
+ endif()
+diff --git a/src/cpp/tray/CMakeLists.txt b/src/cpp/tray/CMakeLists.txt
+index e7758494..72b293a6 100644
+--- a/src/cpp/tray/CMakeLists.txt
++++ b/src/cpp/tray/CMakeLists.txt
+@@ -255,16 +255,18 @@ if(UNIX AND NOT APPLE AND _LINUX_TRAY_BUILD)
+ 
+     # No autostart desktop entry — Linux users start lemonade-tray manually
+ 
+-    # Symlink in /usr/bin if not installing to /usr
++    # Symlink in /usr/bin for DESTDIR-based packaging (deb/rpm)
+     if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+         install(CODE "
+-            file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
+-            file(RELATIVE_PATH _symlink_target \"/usr/bin\" \"${CMAKE_INSTALL_PREFIX}/bin/lemonade-tray\")
+-            execute_process(
+-                COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                    \"\${_symlink_target}\"
+-                    \"\$ENV{DESTDIR}/usr/bin/lemonade-tray\"
+-            )
++            if(NOT \"\$ENV{DESTDIR}\" STREQUAL \"\")
++                file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
++                file(RELATIVE_PATH _symlink_target \"/usr/bin\" \"${CMAKE_INSTALL_PREFIX}/bin/lemonade-tray\")
++                execute_process(
++                    COMMAND ${CMAKE_COMMAND} -E create_symlink
++                        \"\${_symlink_target}\"
++                        \"\$ENV{DESTDIR}/usr/bin/lemonade-tray\"
++                )
++            endif()
+         ")
+     endif()
+ endif()
