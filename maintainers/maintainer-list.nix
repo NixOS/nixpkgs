@@ -13878,6 +13878,12 @@
     githubId = 32744028;
     keys = [ { fingerprint = "7577 13A4 9609 0C2F 51C4  018C B5C8 89A2 F195 28F6"; } ];
   };
+  karol-broda = {
+    email = "nix@karolbroda.com";
+    github = "karol-broda";
+    githubId = 122811026;
+    name = "Karol Broda";
+  };
   karpfediem = {
     name = "Karpfen";
     github = "karpfediem";
@@ -15670,6 +15676,14 @@
     github = "lionello";
     githubId = 591860;
     name = "Lionello Lunesu";
+  };
+  liquidnya = {
+    name = "Alice ✨🌙 Luna";
+    github = "liquidnya";
+    githubId = 7364785;
+    email = "alice@liquidnya.dev";
+    matrix = "@liquidnya:matrix.org";
+    keys = [ { fingerprint = "7C2D E075 FA93 D61C C9A7  876F 7966 C19E 32F9 EF06"; } ];
   };
   lisanna-dettwyler = {
     email = "lisanna.dettwyler@gmail.com";
