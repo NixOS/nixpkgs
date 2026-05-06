@@ -9,39 +9,25 @@
   # dependencies
   aiohttp,
   alembic,
-  cachetools,
-  click,
-  cloudpickle,
   cryptography,
-  databricks-sdk,
   docker,
-  fastapi,
   flask,
   flask-cors,
-  gitpython,
   graphene,
   gunicorn,
   huey,
-  importlib-metadata,
-  jinja2,
-  markdown,
   matplotlib,
+  mlflow-skinny,
+  mlflow-tracing,
   numpy,
-  opentelemetry-api,
-  opentelemetry-proto,
-  opentelemetry-sdk,
-  packaging,
   pandas,
-  protobuf,
   pyarrow,
-  python-dotenv,
-  pyyaml,
-  requests,
   scikit-learn,
   scipy,
   skops,
   sqlalchemy,
   sqlparse,
+  starlette,
   uvicorn,
 
   # tests
@@ -61,13 +47,10 @@
   moto,
   opentelemetry-exporter-otlp,
   optuna,
-  pydantic,
   pyspark,
   pytestCheckHook,
   pytorch-lightning,
   sentence-transformers,
-  shap,
-  starlette,
   statsmodels,
   tensorflow,
   torch,
@@ -75,75 +58,50 @@
   xgboost,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mlflow";
-  version = "3.11.1";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    tag = "v${version}";
-    hash = "sha256-Oe6nBnnOz7MvGUNCcCGhHl6ZbyDfAhQ0LlfMBF4p6Hc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OxhM+KCem0sb9cwtyzrUD/MGfoiiCfgU47qipYRDaFk=";
   };
 
-  pythonRelaxDeps = [
-    "cryptography"
-    "gunicorn"
-    "importlib_metadata"
-    "packaging"
-    "protobuf"
-    "pytz"
-    "pyarrow"
-  ];
+  # ppyproject.release.toml is the one shipped in the Pypi package, so we use it too.
+  postPatch = ''
+    mv pyproject.release.toml pyproject.toml
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     alembic
-    cachetools
-    click
-    cloudpickle
     cryptography
-    databricks-sdk
     docker
-    fastapi
     flask
     flask-cors
-    gitpython
     graphene
     gunicorn
     huey
-    importlib-metadata
-    jinja2
-    markdown
     matplotlib
+    mlflow-skinny
+    mlflow-tracing
     numpy
-    opentelemetry-api
-    opentelemetry-proto
-    opentelemetry-sdk
-    packaging
     pandas
-    protobuf
     pyarrow
-    pydantic
-    python-dotenv
-    pyyaml
-    requests
     scikit-learn
     scipy
-    shap
     skops
     sqlalchemy
-    sqlparse
-    uvicorn
   ];
 
   pythonImportsCheck = [ "mlflow" ];
 
   nativeCheckInputs = [
-    aiohttp
     azure-core
     azure-storage-blob
     azure-storage-file
@@ -165,7 +123,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytorch-lightning
     sentence-transformers
-    starlette
     statsmodels
     tensorflow
     torch
@@ -208,8 +165,8 @@ buildPythonPackage rec {
     description = "Open source platform for the machine learning lifecycle";
     mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
-    changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mlflow/mlflow/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
