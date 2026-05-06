@@ -13,16 +13,16 @@ rustPlatform.buildRustPackage rec {
   # in nixpkgs!
   # For that, check the `<dependencies>` section of `appinfo/info.xml`
   # in the app (https://github.com/nextcloud/notify_push/blob/main/appinfo/info.xml)
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "notify_push";
     tag = "v${version}";
-    hash = "sha256-lBFxGt5ha5kefNrmZO2fmUD/KZLrcUURv5JJ3pmitPE=";
+    hash = "sha256-fcIC87e/gxhu1zTFSWjkWErebFe7tVVJqubjwqD+otM=";
   };
 
-  cargoHash = "sha256-VKai9y9GZjknata61IGcWSdYAAV4bJxz8YjeGVZpBPA=";
+  cargoHash = "sha256-g9UqNYPXzG7yGkhFn0c1dD75a4Qz76BcfDNKudpuNqM=";
 
   passthru = rec {
     app = fetchNextcloudApp {
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-VKai9y9GZjknata61IGcWSdYAAV4bJxz8YjeGVZpBPA=";
+      cargoHash = "sha256-g9UqNYPXzG7yGkhFn0c1dD75a4Qz76BcfDNKudpuNqM=";
 
       meta = meta // {
         mainProgram = "test_client";
