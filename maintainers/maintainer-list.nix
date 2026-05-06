@@ -4318,6 +4318,16 @@
     githubId = 48105979;
     name = "Caitlin Davitt";
   };
+  cakeforcat = {
+    email = "julia@cakeforcat.dev";
+    github = "cakeforcat";
+    githubId = 37912991;
+    name = "Julia Czarny";
+    keys = [
+      { fingerprint = "E0FD 0212 496B EDF5 84CD  6C24 0693 518A 0F87 5C13"; }
+      { fingerprint = "2D04 8CC2 E15E 2880 88F3  99B5 BDA0 DD2A DD58 843F"; }
+    ];
+  };
   calavera = {
     email = "david.calavera@gmail.com";
     github = "calavera";
