@@ -311,6 +311,9 @@ python.pkgs.buildPythonApplication rec {
     # Copy default blueprints without preserving permissions
     ./patches/default-blueprint-permissions.patch
 
+    # No scaring our users about not running in a docker or a venv
+    ./patches/pythonpath-is-a-venv.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
