@@ -1,5 +1,6 @@
 {
   buildGoModule,
+  fetchurl,
   fetchFromGitHub,
   gzip,
   iana-etc,
@@ -16,13 +17,23 @@
 }:
 let
   pname = "backrest";
-  version = "1.10.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-8WWs7XEVKAc/XmeL+dsw25azfLjUbHKp2MsB6Be14VE=";
+    hash = "sha256-yhhY0aWRwfpAGf3UpzYkRI848Y/kpiCjUyjt3udOmJI=";
+  };
+
+  inlang-plugin-message-format = fetchurl {
+    url = "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@4/dist/index.js";
+    hash = "sha256-lIZViAHAjrsBgiPFHCBEtsPCP8KowOeJSleIKzT+tso=";
+  };
+
+  inlang-plugin-m-function-matcher = fetchurl {
+    url = "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@2/dist/index.js";
+    hash = "sha256-hYYvYwV5O1a/2a/lNosJbmP7Kuqzi3eZwFFRe+NJnAs=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -36,11 +47,21 @@ let
       pnpm_9
     ];
 
+    postPatch = ''
+      substituteInPlace project.inlang/settings.json \
+        --replace-fail \
+          "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@4/dist/index.js" \
+          "${inlang-plugin-message-format}" \
+        --replace-fail \
+          "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@2/dist/index.js" \
+          "${inlang-plugin-m-function-matcher}"
+    '';
+
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_9;
       fetcherVersion = 3;
-      hash = "sha256-9wzPNZxLE0l/AJ8SyE0SkhkBImiibhqJgsG3UrGj3aA=";
+      hash = "sha256-6u+rhN0RwQunufZCJKiogImsmSTZR3tGxJZJhUI/x/0=";
     };
 
     buildPhase = ''
@@ -68,7 +89,8 @@ buildGoModule {
       internal/resticinstaller/resticinstaller.go
   '';
 
-  vendorHash = "sha256-cYqK/sddLI38K9bzCpnomcZOYbSRDBOEru4Y26rBLFw=";
+  vendorHash = "sha256-NC2VohNkU5MKUSguY83/j4Fb1CkZajw3gzHm4qnj5gM=";
+  proxyVendor = true;
 
   nativeBuildInputs = [
     gzip
@@ -106,9 +128,14 @@ buildGoModule {
     # Use restic from nixpkgs, otherwise download fails in sandbox
     export BACKREST_RESTIC_COMMAND="${restic}/bin/restic"
     export HOME=$(pwd)
+    ${gzip}/bin/gzip -c /dev/null > webui/dist/index.html.gz
   ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
+  '';
+
+  postCheck = ''
+    rm webui/dist/index.html.gz
   '';
 
   doCheck = true;
