@@ -54,9 +54,11 @@ let
       ];
     };
   };
+  useRocqPackages =
+    if builtins.isNull version then coq.rocqPackages ? iris else lib.versionAtLeast version "4.5.0";
 in
 # this is just a wrapper for rocqPackages.iris for Rocq >= 9.0
-if coq.rocqPackages ? iris then
+if useRocqPackages then
   coq.rocqPackages.iris.override {
     inherit version stdpp;
     inherit (coq.rocqPackages) rocq-core;

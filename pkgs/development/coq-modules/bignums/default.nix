@@ -52,9 +52,35 @@ let
       license = lib.licenses.lgpl2;
     };
   };
+  useRocqPackages =
+    if builtins.isNull version then
+      coq.rocqPackages ? bignums
+    else
+      lib.elem version [
+        "9.0.0+coq8.20"
+        "9.0.0+coq8.19"
+        "9.0.0+coq8.18"
+        "9.0.0+coq8.17"
+        "9.0.0+coq8.16"
+        "9.0.0+coq8.15"
+        "9.0.0+coq8.14"
+        "9.0.0+coq8.13"
+        "8.17.0"
+        "8.16.0"
+        "8.15.0"
+        "8.14.0"
+        "8.13.0"
+        "8.12.0"
+        "8.11.0"
+        "8.10.0"
+        "8.9.0"
+        "8.8.0"
+        "8.7.0"
+        "8.6.0"
+      ];
 in
 # this is just a wrapper for rocqPackages.bignums for Rocq >= 9.0
-if coq.rocqPackages ? bignums then
+if useRocqPackages then
   coq.rocqPackages.bignums.override {
     inherit version stdlib;
     inherit (coq.rocqPackages) rocq-core;
