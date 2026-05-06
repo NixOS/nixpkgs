@@ -8500,6 +8500,8 @@ self: super: with self; {
 
   langchain-perplexity = callPackage ../development/python-modules/langchain-perplexity { };
 
+  langchain-protocol = callPackage ../development/python-modules/langchain-protocol { };
+
   langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };

@@ -33,6 +33,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     wrapQtApp "$out/bin/veusz"
   '';
 
+  # vectorfield.vsz renders a PPM bitmap whose pixel values differ across Qt versions/platforms
+  patches = [ ./skip-vectorfield-test.patch ];
+
   # pyqt_setuptools.py uses the platlib path from sysconfig, but NixOS doesn't
   # really have a corresponding path, so patching the location of PyQt5 inplace
   postPatch = ''
