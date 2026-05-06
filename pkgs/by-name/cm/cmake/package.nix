@@ -7,6 +7,7 @@
   bzip2,
   curlMinimal,
   expat,
+  jq,
   libarchive,
   libuv,
   ncurses,
@@ -108,6 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals buildDocs [ texinfo ]
     ++ lib.optionals qt5UI [ wrapQtAppsHook ];
+
+  propagatedNativeBuildInputs =
+    # For boolean cmakeEntries attribute canonicalization.
+    lib.optional (!isMinimalBuild) jq;
 
   buildInputs =
     lib.optionals useSharedLibraries [
