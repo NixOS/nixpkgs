@@ -30131,6 +30131,12 @@
     github = "yzhou216";
     githubId = 50000936;
   };
+  yjymosheng = {
+    email = "yjymosheng@gmail.com";
+    github = "yjymosheng";
+    githubId = 125569725;
+    name = "yjymosheng";
+  };
   yl3dy = {
     email = "aleksandr.kiselyov@gmail.com";
     github = "yl3dy";

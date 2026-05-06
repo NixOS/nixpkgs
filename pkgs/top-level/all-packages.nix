@@ -10578,6 +10578,11 @@ with pkgs;
   code-cursor-fhsWithPackages = code-cursor.fhsWithPackages;
   kiro-fhs = kiro.fhs;
   kiro-fhsWithPackages = kiro.fhsWithPackages;
+  trae-cn-fhs = trae-cn.fhs.overrideAttrs (_: {
+    strictDeps = true;
+    __structuredAttrs = true;
+  });
+  trae-cn-fhsWithPackages = trae-cn.fhsWithPackages;
 
   whispers = with python3Packages; toPythonApplication whispers;
 
