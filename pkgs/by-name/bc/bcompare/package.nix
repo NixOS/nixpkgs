@@ -4,10 +4,13 @@
   bzip2,
   fetchurl,
   glibc,
+  gobject-introspection,
   kdePackages,
+  python3,
   stdenv,
   runtimeShell,
   unzip,
+  wrapGAppsHook3,
 }:
 
 let
@@ -32,53 +35,68 @@ let
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
-  linux = stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
-    unpackPhase = ''
-      ar x $src
-      tar xfz data.tar.gz
-    '';
+  linux =
+    let
+      python = python3.withPackages (
+        pp: with pp; [
+          pygobject3
+        ]
+      );
+    in
+    stdenv.mkDerivation {
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
+      unpackPhase = ''
+        ar x $src
+        tar xfz data.tar.gz
+      '';
 
-    installPhase = ''
-      mkdir -p $out/{bin,lib,share}
+      installPhase = ''
+        mkdir -p $out/{bin,lib,share}
 
-      cp -R usr/{bin,lib,share} $out/
+        cp -R usr/{bin,lib,share} $out/
 
-      # Remove library that refuses to be autoPatchelf'ed
-      #  - bcompare_ext_kde.amd64.so is linked with Qt4
-      #  - bcompare_ext_kde5.amd64.so is linked with Qt5
-      rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
-      rm $out/lib/beyondcompare/ext/bcompare_ext_kde5.amd64.so
+        # Remove library that refuses to be autoPatchelf'ed
+        #  - bcompare_ext_kde.amd64.so is linked with Qt4
+        #  - bcompare_ext_kde5.amd64.so is linked with Qt5
+        rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
+        rm $out/lib/beyondcompare/ext/bcompare_ext_kde5.amd64.so
 
-      substituteInPlace $out/bin/bcompare \
-        --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
-        --replace "ldd" "${glibc.bin}/bin/ldd" \
-        --replace "/bin/bash" "${runtimeShell}"
-    '';
+        substituteInPlace $out/bin/bcompare \
+          --replace-fail "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
+          --replace-fail "ldd" "${glibc.bin}/bin/ldd" \
+          --replace-fail "/bin/bash" "${runtimeShell}"
 
-    nativeBuildInputs = [ autoPatchelfHook ];
+        substituteInPlace $out/lib/beyondcompare/bcmount.sh \
+          --replace-fail "python3" "${python.interpreter}"
+      '';
 
-    buildInputs = [
-      (lib.getLib stdenv.cc.cc)
-      kdePackages.kio
-      kdePackages.kservice
-      kdePackages.ki18n
-      kdePackages.kcoreaddons
-      bzip2
-    ];
+      nativeBuildInputs = [
+        autoPatchelfHook
+        gobject-introspection
+        wrapGAppsHook3
+      ];
 
-    dontBuild = true;
-    dontConfigure = true;
-    dontWrapQtApps = true;
+      buildInputs = [
+        (lib.getLib stdenv.cc.cc)
+        kdePackages.kio
+        kdePackages.kservice
+        kdePackages.ki18n
+        kdePackages.kcoreaddons
+        bzip2
+      ];
 
-    __structuredAttrs = true;
-    strictDeps = true;
-  };
+      dontBuild = true;
+      dontConfigure = true;
+      dontWrapQtApps = true;
+
+      __structuredAttrs = true;
+      strictDeps = true;
+    };
 
   darwin = stdenv.mkDerivation {
     inherit
