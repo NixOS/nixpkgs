@@ -14011,13 +14011,6 @@
     github = "keller00";
     githubId = 8452750;
   };
-  kennyballou = {
-    email = "kb@devnulllabs.io";
-    github = "kennyballou";
-    githubId = 2186188;
-    name = "Kenny Ballou";
-    keys = [ { fingerprint = "932F 3E8E 1C0F 4A98 95D7  B8B8 B0CA A28A 0295 8308"; } ];
-  };
   kenran = {
     email = "johannes.maier@mailbox.org";
     github = "kenranunderscore";
