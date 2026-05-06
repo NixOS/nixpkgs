@@ -198,6 +198,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
     "--skip=tests::test_userspace_resolver"
+
+    # Failed repeatedly on Hydra for x86_64-linux. Flaky?
+    "--skip=uv_compat::tests::tty_reset_mode_restores_termios"
   ];
 
   __darwinAllowLocalNetworking = true;
