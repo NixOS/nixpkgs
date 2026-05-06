@@ -29900,6 +29900,12 @@
     githubId = 5629059;
     name = "Xavier Lambein";
   };
+  xmnlz = {
+    name = "xmnlz";
+    github = "xmnlz";
+    githubId = 63904972;
+    email = "lemmeq9+nixos@gmail.com";
+  };
   xnaveira = {
     email = "xnaveira@gmail.com";
     github = "xnaveira";
