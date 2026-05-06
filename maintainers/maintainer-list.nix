@@ -25220,6 +25220,12 @@
     github = "shymega";
     githubId = 1334592;
   };
+  shutdaun = {
+    name = "shutdaun";
+    email = "rostics@hotmail.com";
+    github = "shutdaun";
+    githubId = 274042840;
+  };
   siddarthkay = {
     email = "siddarthkay@gmail.com";
     github = "siddarthkay";
