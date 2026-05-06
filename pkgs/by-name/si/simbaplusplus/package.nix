@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(Z3_INCLUDE_DIRS “/usr/include”)' ""
   '';
 
+  # llvm-config --cxxflags exports -fno-exceptions, but z3's C++ headers require exception support.
+  env.NIX_CFLAGS_COMPILE = "-fexceptions";
+
   nativeBuildInputs = [
     cmake
   ];
