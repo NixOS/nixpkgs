@@ -13,14 +13,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-baQVCnkEv5aUy4mKdiscPiiEvwYPfezF03i1HPX64oA=";
+    hash = "sha256-18DcrrEvqWR6caEVZYxQlSnKcxItEpNE+bMhtS4Aa0M=";
   };
 
   sourceRoot = "source/src/backend";
@@ -115,6 +115,8 @@ python.pkgs.buildPythonApplication rec {
   passthru.tests = {
     login-and-create-room = nixosTests.lasuite-meet;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Open source alternative to Google Meet and Zoom powered by LiveKit: HD video calls, screen sharing, and chat features. Built with Django and React";
