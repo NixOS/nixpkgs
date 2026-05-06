@@ -1,3 +1,20 @@
+/**
+  # Example
+
+  Prettier with plugins and Vim Home Manager configuration
+
+  ```nix
+  pkgs.prettier.override {
+    plugins = with pkgs.prettier.plugins; [
+      prettier-plugin-php
+      prettier-plugin-pug
+      prettier-plugin-ruby
+      prettier-plugin-xml
+      # ...
+    ];
+  }
+  ```
+*/
 {
   fetchFromGitHub,
   lib,
@@ -6,9 +23,30 @@
   stdenv,
   versionCheckHook,
   yarn-berry,
+  pkgs,
   plugins ? [ ],
 }:
 let
+  /**
+    # Example
+
+    ```nix
+    exportRelativePathOf (builtins.fromJSON "./package.json")
+    =>
+    lib/node_modules/prettier-plugin-toml/./lib/index.cjs
+    ```
+
+    # Type
+
+    ```
+    exportRelativePathOf :: AttrSet => String
+    ```
+
+    # Arguments
+
+    packageJsonAttrs
+    : Attribute set with shape similar to `package.json` file
+  */
   ## Blame NodeJS
   exportRelativePathOf =
     let
@@ -46,10 +84,37 @@ let
       lib.attrByPath [ "prettier" "plugins" ] [ "null" ] packageJsonAttrs
     )) packageJsonAttrs;
 
+  /**
+    # Example
+
+    ```nix
+    nodeEntryPointOf pkgs.nodePackages.prettier-plugin-toml
+    =>
+    /nix/store/<NAR_HASH>-prettier-plugin-toml-<VERSION>/lib/node_modules/prettier-plugin-toml/./lib/index.cjs
+    ```
+
+    # Type
+
+    ```
+    nodeEntryPointOf :: AttrSet => String
+    ```
+
+    # Arguments
+
+    plugin
+    : Attribute set with `.packageName` and `.outPath` defined
+  */
   nodeEntryPointOf =
     plugin:
     let
-      pluginDir = "${plugin.outPath}/lib/node_modules/${plugin.pname}";
+      pluginDir =
+        let
+          possiblePackageJsonPaths = [
+            "${plugin.outPath}/lib/node_modules/${plugin.packageName}/package.json"
+            "${plugin.outPath}/package.json"
+          ];
+        in
+        builtins.dirOf (lib.head (lib.filter (x: builtins.pathExists x) possiblePackageJsonPaths));
 
       packageJsonAttrs = builtins.fromJSON (builtins.readFile "${pluginDir}/package.json");
 
@@ -64,10 +129,10 @@ let
       pathAbsoluteFallback
     else
       lib.warn ''
-        ${plugin.pname}: error context, tried finding entry point under;
+        ${plugin.packageName}: error context, tried finding entry point under;
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
-      '' throw "${plugin.pname}: does not provide parse-able entry point";
+      '' throw "${plugin.packageName}: does not provide parse-able entry point";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
@@ -99,11 +164,10 @@ stdenv.mkDerivation (finalAttrs: {
     yarn install --immutable
     yarn build --clean
 
-    mkdir -p $out/lib/node_modules
-    cp --recursive dist/prettier "$out/lib/node_modules/prettier"
+    cp --recursive dist/prettier "$out"
 
     makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
-      --add-flags "$out/lib/node_modules/prettier/bin/prettier.cjs"
+      --add-flags "$out/bin/prettier.cjs"
   ''
   + lib.optionalString (builtins.length plugins > 0) ''
     wrapProgram $out/bin/prettier --add-flags "${
@@ -116,8 +180,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    plugins = import ./plugins {
+      inherit
+        fetchFromGitHub
+        lib
+        nodejs
+        stdenv
+        ;
+      inherit (pkgs)
+        fetchYarnDeps
+        pnpm_9
+        rubyPackages_4_0
+        ruby_4_0
+        yarnBuildHook
+        yarnConfigHook
+        yarnInstallHook
+        ;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/prettier/prettier/blob/${finalAttrs.version}/CHANGELOG.md";
