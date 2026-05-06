@@ -20,7 +20,7 @@ buildNpmPackage rec {
 
   # Prevent tests from failing because they are fetching data at runtime.
   postPatch = ''
-    substituteInPlace package.json --replace '"_mocha"' '""'
+    substituteInPlace package.json --replace-fail '"_mocha"' '""'
   '';
 
   # Pointing $out to $out/lib/node_modules/@antora/lunr-extension simplifies

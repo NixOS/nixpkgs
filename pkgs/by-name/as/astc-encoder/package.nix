@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Set a fixed build year to display within help output (otherwise, it would be 1980)
   postPatch = ''
     substituteInPlace Source/cmake_core.cmake \
-      --replace 'string(TIMESTAMP astcencoder_YEAR "%Y")' 'set(astcencoder_YEAR "2023")'
+      --replace-fail 'string(TIMESTAMP astcencoder_YEAR "%Y")' 'set(astcencoder_YEAR "2023")'
   '';
 
   # Provide 'astcenc' link to main executable

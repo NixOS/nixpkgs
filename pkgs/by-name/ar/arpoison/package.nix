@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0krhszx3s0qwfg4rma5a51ak71nnd9xfs2ibggc3hwiz506s2x37";
   };
 
-  postPatch = "substituteInPlace Makefile --replace gcc cc";
+  postPatch = "substituteInPlace Makefile --replace-fail gcc cc";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man8

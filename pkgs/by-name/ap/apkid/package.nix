@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   postPatch = ''
     # We have dex support enabled in yara-python
     substituteInPlace setup.py \
-      --replace "yara-python-dex>=1.0.1" "yara-python"
+      --replace-fail "yara-python-dex>=1.0.1" "yara-python"
   '';
 
   build-system = with python3.pkgs; [ setuptools ];

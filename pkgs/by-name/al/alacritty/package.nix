@@ -94,7 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace alacritty/src/config/ui_config.rs \
-      --replace xdg-open ${xdg-utils}/bin/xdg-open
+      --replace-fail xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
   checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
