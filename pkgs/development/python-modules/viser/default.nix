@@ -54,14 +54,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "viser";
-  version = "1.0.26";
+  version = "1.0.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "viser-project";
     repo = "viser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qmHgjXBTJB0ka+QM+wmiUIXS+upeH3MxjAU9wHePWMY=";
+    hash = "sha256-qE9V6KjniKm3vBtf5ger6UHob4go0wTaJnmYtvYqvMc=";
   };
 
   postPatch = ''
@@ -81,7 +81,7 @@ buildPythonPackage (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = finalAttrs.src + "/src/viser/client/";
-    hash = "sha256-pV8xc+dQA8Z2EpQoIxzUlH2cZJoGKB03cP6GglGdn58=";
+    hash = "sha256-fAFN/JCUVSvRDGfq39E3V+dhqp1i6vFG/j8wKmOva4c=";
   };
 
   preBuild = ''
