@@ -45,6 +45,7 @@
   # Attributes inherit from specific versions
   version,
   src,
+  strictDeps ? false,
   ...
 }:
 
@@ -161,7 +162,7 @@ in
 stdenv.mkDerivation {
   pname = "boost";
 
-  inherit src version;
+  inherit src version strictDeps;
 
   patchFlags = [ ];
 

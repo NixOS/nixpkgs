@@ -35,7 +35,9 @@ stdenv.mkDerivation {
   patches =
     useBoost.boostBuildPatches or [ ]
     ++ lib.optional (
-      useBoost ? version && lib.versionAtLeast useBoost.version "1.81"
+      useBoost ? version
+      && lib.versionAtLeast useBoost.version "1.81"
+      && lib.versionOlder useBoost.version "1.91"
     ) ./fix-clang-target.patch;
 
   postPatch =
