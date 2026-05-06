@@ -21,16 +21,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.15.5";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7ft+GQLLPWgVFoo3m3pLDwgXRwa5idRFlhKjDLkQaw=";
+    hash = "sha256-ZGqm3mL7rgI83iK18J0W4TPcgsvPSKrOEgd1ydhcr1k=";
   };
 
-  cargoHash = "sha256-WneUROKV+uLX1d5TIOanO0jhHLsHHpFcXKUB6zdbSzA=";
+  cargoHash = "sha256-7qwZvWrrq5rSMkwu5x2l4FZoKnfd8mD1nosMsTg0+Bs=";
+
+  patches = [
+    ./0001-fix-missing-Duration-import.patch
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -173,6 +177,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # thread 'store::search_tests' (912386) panicked at tests/src/store/mod.rs:116:10:
     # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
     "store::search_tests"
+    # Missing or invalid store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "automation::automation_tests"
+    "cluster::broadcast::cluster_tests"
+    "cluster::stress::stress_tests"
+    "directory::directory_tests"
+    "smtp::inbound::basic::basic_commands"
+    "smtp::inbound::ehlo::ehlo"
+    "smtp::inbound::limits::limits"
+    "smtp::inbound::mail::mail"
+    "smtp::inbound::milter::milter_session"
+    "smtp::inbound::milter::mta_hook_session"
+    "smtp::inbound::rcpt::rcpt"
+    "smtp::inbound::rewrite::address_rewrite"
+    "smtp::inbound::sign::sign_and_seal"
+    "smtp::inbound::throttle::throttle_inbound"
+    "smtp::lookup::expressions::expressions"
+    "smtp::lookup::utils::strategies"
+    "smtp::management::report::manage_reports"
+    "smtp::outbound::dane::dane_test"
+    "smtp::outbound::dane::dane_verify"
+    "smtp::outbound::fallback_relay::fallback_relay"
+    "smtp::outbound::ip_lookup::ip_lookup_strategy"
+    "smtp::outbound::mta_sts::mta_sts_verify"
+    "smtp::outbound::throttle::throttle_outbound"
+    "smtp::outbound::tls::starttls_optional"
+    "smtp::queue::dsn::generate_dsn"
+    "smtp::queue::manager::queue_due"
+    "smtp::reporting::dmarc::report_dmarc"
+    "smtp::reporting::scheduler::report_scheduler"
+    "smtp::reporting::tls::report_tls"
+    "system::system_tests"
+    "telemetry::telemetry_tests"
   ] (test: "--skip=${test}");
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
