@@ -69,6 +69,7 @@ python.pkgs.buildPythonApplication rec {
     "django-appconf"
     "urllib3"
     "dateparser"
+    "requests"
   ];
 
   dependencies =
