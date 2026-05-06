@@ -1,4 +1,11 @@
 { lib, pkgs, ... }:
+let
+  clientTransPort = 8040;
+  clientDnsPort = 8053;
+  clientProxyPort = 3128;
+  routerTransPort = 7040;
+  routerDnsPort = 7053;
+in
 {
   name = "networking-tor";
   meta.maintainers = with lib.maintainers; [ deade1e ];
@@ -8,13 +15,17 @@
       { ... }:
       {
         networking.tor = {
-          transPort = 8040;
-          dnsPort = 8053;
+          transPort = clientTransPort;
+          dnsPort = clientDnsPort;
           client = {
             enable = true;
-            clearnetProxy.enable = true;
+            clearnetProxy = {
+              enable = true;
+              port = clientProxyPort;
+            };
           };
         };
+
         environment.systemPackages = with pkgs; [ dnsutils ];
       };
 
@@ -30,8 +41,8 @@
       { ... }:
       {
         networking.tor = {
-          transPort = 7040;
-          dnsPort = 7053;
+          transPort = routerTransPort;
+          dnsPort = routerDnsPort;
           router.enable = true;
         };
       };
@@ -41,10 +52,10 @@
     import re
 
     # Return packet counters found in Tor's output chain.
-    def get_output_pkts(node, tcp_port, dns_port):
+    def get_output_pkts(node, trans_port, dns_port):
       proxy_user = int(node.succeed("id -u squid"))
       proxy_re = rf'skuid {proxy_user} counter packets (\d+) bytes \d+ return'
-      tcp_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{tcp_port}'
+      tcp_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{trans_port}'
       dns_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{dns_port}'
       ruleset = node.succeed("nft list chain inet tor tor_nat_output")
       proxy = int(re.search(proxy_re, ruleset).group(1))
@@ -53,21 +64,27 @@
       return proxy, tcp, dns
 
     # Return packet counters found in Tor's prerouting chain.
-    def get_prerouting_pkts(node, tcp_port, dns_port):
-      tcp_re = rf'ip protocol tcp tcp flags syn counter packets (\d+) bytes \d+ redirect to :{tcp_port}'
+    def get_prerouting_pkts(node, trans_port, dns_port):
+      tcp_re = rf'ip protocol tcp tcp flags syn counter packets (\d+) bytes \d+ redirect to :{trans_port}'
       dns_re = rf'ip protocol udp udp dport 53 counter packets (\d+) bytes \d+ redirect to :{dns_port}'
       ruleset = node.succeed("nft list chain inet tor-router tor_nat_prerouting")
       tcp = int(re.search(tcp_re, ruleset).group(1))
       dns = int(re.search(dns_re, ruleset).group(1))
       return tcp, dns
 
+    CLIENT_TRANS_PORT = ${toString clientTransPort}
+    CLIENT_DNS_PORT = ${toString clientDnsPort}
+    CLIENT_PROXY_PORT = ${toString clientProxyPort}
+    ROUTER_TRANS_PORT = ${toString routerTransPort}
+    ROUTER_DNS_PORT = ${toString routerDnsPort}
+
     router.wait_for_unit("tor.service")
     router.succeed("nft list ruleset | grep tor_nat_prerouting")
     router.succeed("nft list ruleset | grep tor_filter_forward")
-    router.succeed("ss -tlpn | grep -F '0.0.0.0:7040'")
-    router.succeed("ss -ulpn | grep -F '0.0.0.0:7053'")
+    router.succeed(f"ss -tlpn | grep -F '0.0.0.0:{ROUTER_TRANS_PORT}'")
+    router.succeed(f"ss -ulpn | grep -F '0.0.0.0:{ROUTER_DNS_PORT}'")
 
-    tcp, dns = get_prerouting_pkts(router, 7040, 7053)
+    tcp, dns = get_prerouting_pkts(router, ROUTER_TRANS_PORT, ROUTER_DNS_PORT)
     assert tcp == 0 and dns == 0
 
     clearclient.wait_for_unit("multi-user.target")
@@ -77,12 +94,12 @@
     clearclient.succeed("nc -vz 1.1.1.1 80")
 
     # At this point we should have TCP packets but no DNS packets.
-    tcp, dns = get_prerouting_pkts(router, 7040, 7053)
+    tcp, dns = get_prerouting_pkts(router, ROUTER_TRANS_PORT, ROUTER_DNS_PORT)
     assert tcp > 0 and dns == 0
 
     # This should fail as without connectivity the Tor daemon cannot to resolve domains.
     clearclient.fail("nslookup -timeout=1 www.google.com 8.8.8.8")
-    tcp, dns = get_prerouting_pkts(router, 7040, 7053)
+    tcp, dns = get_prerouting_pkts(router, ROUTER_TRANS_PORT, ROUTER_DNS_PORT)
     assert tcp > 0 and dns > 0
 
     # Trying to resolve a .onion address instead should always succeed as the
@@ -93,8 +110,8 @@
     client.wait_for_unit("tor.service")
     client.succeed("nft list ruleset | grep tor_nat_output")
     client.succeed("nft list ruleset | grep tor_filter_output")
-    client.succeed("ss -tlpn | grep -F '127.0.0.1:8040'")
-    client.succeed("ss -ulpn | grep -F '127.0.0.1:8053'")
+    client.succeed(f"ss -tlpn | grep -F '127.0.0.1:{CLIENT_TRANS_PORT}'")
+    client.succeed(f"ss -ulpn | grep -F '127.0.0.1:{CLIENT_DNS_PORT}'")
 
     # This must fail as the dummy intf is not yet available
     client.fail("nc -vz 1.1.1.1 80")
@@ -112,11 +129,11 @@
 
     # Verify that there are zero TCP and zero DNS packets forwarded to Tor and
     # zero allowed proxy packets.
-    proxy, tcp, dns = get_output_pkts(client, 8040, 8053)
+    proxy, tcp, dns = get_output_pkts(client, CLIENT_TRANS_PORT, CLIENT_DNS_PORT)
     assert proxy == 0 and tcp == 0 and dns == 0
 
-    client.fail("curl --proxy http://127.0.0.1:3128 --max-time 1 http://1.1.1.1")
-    proxy, tcp, dns = get_output_pkts(client, 8040, 8053)
+    client.fail(f"curl --proxy http://127.0.0.1:{CLIENT_PROXY_PORT} --max-time 1 http://1.1.1.1")
+    proxy, tcp, dns = get_output_pkts(client, CLIENT_TRANS_PORT, CLIENT_DNS_PORT)
     assert proxy > 0 and tcp == 0 and dns == 0
 
     # Send one DNS request somewhere.
@@ -124,7 +141,7 @@
 
     # Ensure there are more than zero DNS packets and exactly zero TCP packets
     # being forwarded to the Tor daemon.
-    _, tcp, dns = get_output_pkts(client, 8040, 8053)
+    _, tcp, dns = get_output_pkts(client, CLIENT_TRANS_PORT, CLIENT_DNS_PORT)
     assert tcp == 0 and dns > 0
 
     # This should succeed even though there is no internet, as the packet
@@ -133,7 +150,7 @@
     client.succeed("nc -vz 1.1.1.1 80")
 
     # And then verify that this packet did go exactly through our TCP DNAT rule.
-    _, tcp, dns = get_output_pkts(client, 8040, 8053)
+    _, tcp, dns = get_output_pkts(client, CLIENT_TRANS_PORT, CLIENT_DNS_PORT)
     assert tcp > 0 and dns > 0
 
     # Try to resolve a .onion because why not.
