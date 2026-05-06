@@ -1,0 +1,14 @@
+--- a/build/config/linux/pkg-config.py
++++ b/build/config/linux/pkg-config.py
+@@ -96,8 +96,10 @@
+ 
+ def RewritePath(path, strip_prefix, sysroot):
+   """Rewrites a path by stripping the prefix and prepending the sysroot."""
+   if os.path.isabs(path) and not path.startswith(sysroot):
+-    if path.startswith(strip_prefix):
++    if strip_prefix and path.startswith(strip_prefix):
+       path = path[len(strip_prefix):]
++    elif path != '/usr' and not path.startswith('/usr/'):
++      return path
+     path = path.lstrip('/')
+     return os.path.join(sysroot, path)

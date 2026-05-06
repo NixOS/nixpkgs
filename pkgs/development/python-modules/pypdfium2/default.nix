@@ -6,7 +6,7 @@
   fetchFromGitHub,
   gitUpdater,
   setuptools-scm,
-  pdfium-binaries,
+  pdfium,
   numpy,
   pillow,
   pytestCheckHook,
@@ -56,20 +56,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pdfium-binaries
+    pdfium
   ];
 
-  preBuild = ''
-    getVersion() {
-      cat ${pdfium-binaries}/VERSION | grep $1 | sed 's/.*=//'
-    }
-    export GIVEN_FULLVER="$(getVersion MAJOR).$(getVersion MINOR).$(getVersion BUILD).$(getVersion PATCH)"
-  '';
-
   env = {
-    PDFIUM_PLATFORM = "system-search:${pdfium-binaries.version}";
-    PDFIUM_HEADERS = "${pdfium-binaries}/include";
-    PDFIUM_BINARY = "${pdfium-binaries}/lib/libpdfium${stdenv.targetPlatform.extensions.sharedLibrary}";
+    GIVEN_FULLVER = pdfium.fullVersion;
+    PDFIUM_PLATFORM = "system-search:${pdfium.version}";
+    PDFIUM_HEADERS = "${lib.getDev pdfium}/include/public";
+    PDFIUM_BINARY = "${lib.getLib pdfium}/lib/libpdfium${stdenv.targetPlatform.extensions.sharedLibrary}";
     CPP = "${stdenv.cc.targetPrefix}cpp";
   };
 

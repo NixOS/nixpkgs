@@ -1,6 +1,6 @@
 {
   stdenv,
-  pdfium-binaries,
+  pdfium,
 }:
 
 { version, src, ... }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace linux/CMakeLists.txt \
-      --replace-fail "\''${PDFIUM_DIR}/\''${PDFIUM_RELEASE}" "${pdfium-binaries}"
+      --replace-fail "\''${PDFIUM_DIR}/\''${PDFIUM_RELEASE}" "${pdfium}"
   '';
 
   installPhase = ''
