@@ -18257,6 +18257,12 @@
     githubId = 2597803;
     name = "Matthias Meschede";
   };
+  mmfallacy = {
+    name = "Michael M.";
+    github = "mmfallacy";
+    githubId = 31348500;
+    email = "nixpkgs@mnstrl.xyz";
+  };
   mmilata = {
     email = "martin@martinmilata.cz";
     github = "mmilata";
