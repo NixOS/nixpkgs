@@ -4,6 +4,7 @@
   autoreconfHook,
   buildEnv,
   fetchFromGitHub,
+  fetchpatch,
   perl,
   perlPackages,
   makeWrapper,
@@ -25,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./dont-check-users_groups.patch # needed for "make testdeps" to work in the build
     ./override-generated.patch
+    # Fix "Wide character in subroutine entry" crash on every request
+    # merged upstream
+    (fetchpatch {
+      url = "https://github.com/bestpractical/rt/commit/f8f03dd6e69dfbf4eb71e3ded0f793af4721a06d.patch";
+      hash = "sha256-Mk8ve8n5tgyyHT7RAt2o+QnUlcYNOu95lNjku6VgXS0=";
+    })
   ];
 
   nativeBuildInputs = [
