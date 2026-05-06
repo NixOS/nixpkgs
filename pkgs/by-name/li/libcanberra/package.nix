@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  enableParallelBuilding = true;
+
   passthru = lib.optionalAttrs (gtkSupport != null) {
     gtkModule = if gtkSupport == "gtk2" then "/lib/gtk-2.0" else "/lib/gtk-3.0/";
   };
