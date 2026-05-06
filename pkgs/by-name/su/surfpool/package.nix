@@ -19,18 +19,18 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfpool-cli";
-  version = "1.2.0";
+  version = "1.2.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "solana-foundation";
     repo = "surfpool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PGCzlnu7YxueQ16uae2818I9vXWdMRFRGaFzg2DIIgo=";
+    hash = "sha256-oO6K8OJXj2HQOExhT/6auCjfCOpUrSkHJJncztCjRWU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-ephKNAJ9PtTz/EN9dGFn6LnIySU0g/GNz8Jg9JDKTSI=";
+  cargoHash = "sha256-MLWXYVVmJXxUY6LRsi8LiVJbVAAvcA3wbT8eiz4pAaE=";
 
   postPatch = ''
     # instead of downloading the surfpool-web-ui at build time, we fetch it beforehand and use it

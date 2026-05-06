@@ -4,7 +4,6 @@
   coq,
   flocq,
   MenhirLib,
-  ocamlPackages,
   fetchpatch,
   makeWrapper,
   coq2html,
@@ -71,7 +70,7 @@ let
 
     strictDeps = true;
 
-    nativeBuildInputs = with ocamlPackages; [
+    nativeBuildInputs = with coq.ocamlPackages; [
       makeWrapper
       ocaml
       findlib
@@ -79,7 +78,7 @@ let
       coq
       coq2html
     ];
-    buildInputs = with ocamlPackages; [ menhirLib ];
+    buildInputs = with coq.ocamlPackages; [ menhirLib ];
     propagatedBuildInputs = [
       flocq
       MenhirLib
