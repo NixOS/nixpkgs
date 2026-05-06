@@ -508,6 +508,7 @@
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agents.nix
+  ./services/continuous-integration/forgejo-runner.nix
   ./services/continuous-integration/gitea-actions-runner.nix
   ./services/continuous-integration/github-runners.nix
   ./services/continuous-integration/gitlab-runner/runner.nix
