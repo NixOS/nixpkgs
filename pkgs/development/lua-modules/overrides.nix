@@ -1240,6 +1240,42 @@ in
     ];
   });
 
+  tomlua = final.toLuaModule (
+    lua.stdenv.mkDerivation (finalAttrs: {
+      pname = "tomlua";
+      version = "1.1.4";
+      __structuredAttrs = true;
+      strictDeps = true;
+      src = fetchFromGitHub {
+        owner = "BirdeeHub";
+        repo = "tomlua";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-kdvMDU6pkB/AEmUKlcKyNLMgWbLC6A4454UnA+WlDkM=";
+      };
+      propagatedBuildInputs = [ (finalAttrs.passthru.luaModule or lua) ];
+      env = {
+        LUA = (finalAttrs.passthru.luaModule or lua).interpreter;
+        LUA_INC = (finalAttrs.passthru.luaModule or lua) + "/include";
+        BINDIR = placeholder "out" + "/bin";
+        LIBDIR = placeholder "out" + "/lib/lua/" + (finalAttrs.passthru.luaModule or lua).luaversion;
+        LUADIR = placeholder "out" + "/share/lua/" + (finalAttrs.passthru.luaModule or lua).luaversion;
+        LIBFLAG =
+          if (finalAttrs.passthru.luaModule or lua).stdenv.isDarwin then
+            "-bundle -undefined dynamic_lookup"
+          else
+            "-shared";
+      };
+      meta = {
+        mainProgram = "tomlua";
+        maintainers = [ lib.maintainers.birdee ];
+        homepage = "https://github.com/BirdeeHub/tomlua";
+        changelog = "https://github.com/BirdeeHub/tomlua/releases/tag/${finalAttrs.src.tag}";
+        license = lib.licenses.mit;
+        description = "Speedy toml parsing for lua, implemented in C";
+      };
+    })
+  );
+
   tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {
     # Keep this package hermetic: provide the already-packaged tree-sitter
     # binary instead of using the LuaRocks backend that downloads from GitHub.
