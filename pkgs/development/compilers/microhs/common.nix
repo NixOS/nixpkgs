@@ -39,6 +39,7 @@ let
     # We delete them to be certain we are building from source
     postPatch = ''
       rm -r generated
+      cp ${./targets.conf} targets.conf
     '';
 
     doInstallCheck = true;
