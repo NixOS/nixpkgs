@@ -20,6 +20,7 @@
   pygments,
   pymdown-extensions,
   pyyaml,
+  pyzmq,
   ruff,
   starlette,
   tomlkit,
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     pygments
     pymdown-extensions
     pyyaml
+    pyzmq
     ruff
     starlette
     tomlkit
