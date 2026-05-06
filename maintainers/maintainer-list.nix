@@ -1541,6 +1541,12 @@
     githubId = 153175;
     name = "Andrew Marshall";
   };
+  ambiso = {
+    email = "ambisotopy@gmail.com";
+    github = "ambiso";
+    githubId = 3750466;
+    name = "Robin Leander Schröder";
+  };
   ambossmann = {
     email = "timogottszky+git@gmail.com";
     github = "Ambossmann";
