@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   version = "0.3.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dblatex/${pname}3-${version}.tar.bz2";
+    url = "mirror://sourceforge/dblatex/dblatex3-${version}.tar.bz2";
     sha256 = "0yd09nypswy3q4scri1dg7dr99d7gd6r2dwx0xm81l9f4y32gs0n";
   };
 
