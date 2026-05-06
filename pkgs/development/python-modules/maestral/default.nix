@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "maestral";
-  version = "1.9.6";
+  version = "1.9.6.dev1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mYFiQL4FumJWP2y1u5tIo1CZL027J8/EIYqJQde7G/c=";
+    hash = "sha256-8Oi5UJXzo+Ld/TF0NzHSAMfPPBo2ZZ3JYkNi23WWueg=";
   };
 
   build-system = [ setuptools ];
