@@ -254,6 +254,30 @@ in
       '';
     };
 
+    moduleStateVersions = mkOption {
+      type =
+        let
+          baseType = types.attrsOf types.ints.unsigned;
+          isStateVersionOption = x: lib.isOption x && x ? migrations;
+        in
+        types.addCheck baseType (
+          attrs:
+          builtins.all (
+            attrPath: isStateVersionOption (lib.attrByPath (lib.splitString "." attrPath) null options)
+          ) (builtins.attrNames attrs)
+        )
+        // {
+          description = "${baseType.description}, in which every attribute name is the path to an option created with mkStateVersionOption";
+        };
+      default = { };
+      internal = true;
+      description = ''
+        NixOS modules should set attributes on this option. Users should leave
+        it alone. Future tooling may use it to determine the consequences of
+        updating {option}`system.stateVersion`.
+      '';
+    };
+
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;
