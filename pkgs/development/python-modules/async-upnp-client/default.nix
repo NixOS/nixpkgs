@@ -19,16 +19,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "async-upnp-client";
-  version = "0.46.2";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    tag = version;
-    hash = "sha256-KJiEfu+JKDycBT14gFK4sBFCG3TN61DZEDth9y6CHp4=";
+    tag = finalAttrs.version;
+    hash = "sha256-64PF+3DEBOI1fu/jA43hrY4uxm0fas/2B2/o28Rhfao=";
   };
 
   build-system = [ setuptools ];
@@ -63,9 +63,9 @@ buildPythonPackage rec {
   meta = {
     description = "Asyncio UPnP Client library for Python";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
-    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "upnp-client";
   };
-}
+})
