@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  cmakeFlags = [ (lib.cmakeBool "BUILD_TESTING" finalAttrs.doInstallCheck) ];
+  cmakeFlags = [ (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck) ];
   installCheckInputs = [ ament-cmake-pytest ];
   installCheckTarget = "test";
 
