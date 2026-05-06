@@ -3,26 +3,26 @@
   alcotest-lwt,
   cachet-lwt,
   carton,
+  carton-lwt,
   digestif,
-  lwt,
 }:
 
 buildDunePackage {
-  pname = "carton-lwt";
+  pname = "carton-git-lwt";
 
   inherit (carton) version src;
 
   propagatedBuildInputs = [
     cachet-lwt
     carton
-    lwt
+    carton-lwt
+    digestif
   ];
 
   doCheck = true;
 
   checkInputs = [
     alcotest-lwt
-    digestif
   ];
 
   inherit (carton) meta;

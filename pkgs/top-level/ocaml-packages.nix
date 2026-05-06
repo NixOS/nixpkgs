@@ -231,15 +231,11 @@ let
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
-        carton = callPackage ../development/ocaml-modules/carton {
-          cmdliner = cmdliner_1;
-        };
+        carton = callPackage ../development/ocaml-modules/carton { };
 
-        carton-git = callPackage ../development/ocaml-modules/carton/git.nix { };
+        carton-git-lwt = callPackage ../development/ocaml-modules/carton/git-lwt.nix { };
 
-        carton-lwt = callPackage ../development/ocaml-modules/carton/lwt.nix {
-          git-binary = pkgs.git;
-        };
+        carton-lwt = callPackage ../development/ocaml-modules/carton/lwt.nix { };
 
         cbor = callPackage ../development/ocaml-modules/cbor { };
 
