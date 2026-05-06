@@ -22,26 +22,31 @@ let
   };
 
   openloco-objects = fetchurl {
-    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.5/objects.zip";
-    sha256 = "fe8943fabad8eb07cebab5354589abd7e798a705f7993bb4d9dab2122b4fe96e";
+    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.6/objects.zip";
+    sha256 = "4cea1ab77131650b5475b489445ce65c275b3a23b921456afda4d9c5c83e580c";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "openloco";
-  version = "25.11";
+  version = "25.12";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
     tag = "v${version}";
-    hash = "sha256-ohHTa5ow6wiq0GajqLcOwL9mnjocw+Od93SEaxCR2C0=";
+    hash = "sha256-kne9G+GKbfDJDAI4DDxWFQKK7zp2FhX/rL2ws7iqXKE=";
   };
 
   postPatch = ''
-    # the upstream build process determines the version tag from git; since we
-    # are not using a git checkout, we patch it manually
-    sed -i '/#define OPENLOCO_NAME "OpenLoco"/a#define OPENLOCO_VERSION_TAG "${version}"' src/OpenLoco/src/Version.cpp
+    # the upstream build process determines the version tag, branch
+    # and commit hash from git; since we are not using a git checkout,
+    # we patch it manually
+    sed -i '/#define OPENLOCO_NAME "OpenLoco"/a\
+    #define OPENLOCO_VERSION_TAG "${version}"\
+    #define OPENLOCO_BRANCH "master"\
+    #define OPENLOCO_COMMIT_SHA1_SHORT "b79ace0"'\
+      src/Version/include/OpenLoco/Version.hpp
 
     # prefetch sfl header sources
     grep -q 'GIT_TAG \+${sfl-src.tag}' thirdparty/CMakeLists.txt
