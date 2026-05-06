@@ -1,0 +1,53 @@
+From 6366823f4c6a1641543a0f3859afcafccf2e47af Mon Sep 17 00:00:00 2001
+From: Amaan Qureshi <git@amaanq.com>
+Date: Wed, 11 Mar 2026 23:34:26 -0400
+Subject: [PATCH] tests: fix undefined behavior in `bit_operations_tests`
+
+The `most_significant_one32`/`least_significant_one32` test loop
+started at `i = -1`, which produces a shift of `1U << -1`. This is
+undefined behavior per the C standard, as the shift count must be in
+`[0, bit_width)`. On x86 this happened to produce `0x80000000` due to
+masking the shift count to 5 bits, but on ppc64be it produces `0`,
+causing a spurious test failure.
+
+This commit starts the loop at `i = 0` instead. Testing the zero-input
+case is not meaningful here since `most_significant_one32(0)` itself
+invokes UB internally (`1 << top_bit(0)` where `top_bit` returns `-1`).
+I've also fixed the printf format strings to use `1U` instead of `1` to
+avoid signed overflow when `i = 31`.
+---
+ tests/bit_operations_tests.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tests/bit_operations_tests.c b/tests/bit_operations_tests.c
+index 53cd997..53f7892 100644
+--- a/tests/bit_operations_tests.c
++++ b/tests/bit_operations_tests.c
+@@ -257,22 +257,22 @@ int main(int argc, char *argv[])
+             printf("Test failed: parity 8 - %x %x %x\n", i, ax, bx);
+             exit(2);
+         }
+     }
+
+-    for (i = -1;  i < 32;  i++)
++    for (i = 0;  i < 32;  i++)
+     {
+         ax32 = most_significant_one32(1 << i);
+         if (ax32 != (1 << i))
+         {
+-            printf("Test failed: most significant one 32 - %x %" PRIx32 " %x\n", i, ax32, (1 << i));
++            printf("Test failed: most significant one 32 - %x %" PRIx32 " %x\n", i, ax32, (1U << i));
+             exit(2);
+         }
+         ax32 = least_significant_one32(1 << i);
+         if (ax32 != (1 << i))
+         {
+-            printf("Test failed: least significant one 32 - %x %" PRIx32 " %x\n", i, ax32, (1 << i));
++            printf("Test failed: least significant one 32 - %x %" PRIx32 " %x\n", i, ax32, (1U << i));
+             exit(2);
+         }
+     }
+
+     for (i = 0x80000000;  i < 0x800FFFFF;  i++)
+--
+2.53.0
