@@ -8,23 +8,24 @@
 
   # dependencies
   boto3,
-  mlflow,
+  mlflow-skinny,
 
   # tests
   pytestCheckHook,
   scikit-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sagemaker-mlflow";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-mlflow";
-    tag = "v${version}";
-    hash = "sha256-riCoUpao9QIrQMb7r9stJO/xTSsDfL+uNS664W5GRQc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QE40ZBW7N3GPC+eJqj5uzS3L+A6Wu2/LgHOiUsEXKMw=";
   };
 
   build-system = [
@@ -33,7 +34,7 @@ buildPythonPackage rec {
 
   dependencies = [
     boto3
-    mlflow
+    mlflow-skinny
   ];
 
   pythonImportsCheck = [ "sagemaker_mlflow" ];
@@ -64,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "MLFlow plugin for SageMaker";
     homepage = "https://github.com/aws/sagemaker-mlflow";
-    changelog = "https://github.com/aws/sagemaker-mlflow/releases/tag/v${version}";
+    changelog = "https://github.com/aws/sagemaker-mlflow/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
