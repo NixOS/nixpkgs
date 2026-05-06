@@ -90,6 +90,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/thenaterhood/gscreenshot";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    mainProgram = "gscreenshot";
     maintainers = [ lib.maintainers.davisrichard437 ];
   };
 })
