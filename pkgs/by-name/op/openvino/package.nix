@@ -15,6 +15,7 @@
   pkg-config,
   python3Packages,
   shellcheck,
+  darwin,
 
   # runtime
   flatbuffers,
@@ -71,16 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addDriverRunpath
-    autoPatchelfHook
     cmake
     git
     libarchive
-    patchelf
     pkg-config
     python
     scons'
     shellcheck
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    addDriverRunpath
+    autoPatchelfHook
+    patchelf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -106,9 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
-    (cmakeBool "ENABLE_INTEL_GPU" true)
-    (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
+    # On `aarch64-darwin`, we need `libopenvino_arm_cpu_plugin`.
+    # Without `openvino_intel_cpu_plugin`, it won't build.
+    # https://github.com/openvinotoolkit/openvino/blob/master/src/plugins/intel_cpu/CMakeLists.txt
+    (cmakeBool "ENABLE_INTEL_CPU" (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin))
+    (cmakeBool "ENABLE_INTEL_GPU" stdenv.hostPlatform.isLinux)
+    (cmakeBool "ENABLE_INTEL_NPU" (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux))
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -123,6 +133,13 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SYSTEM_PUGIXML" true)
     (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # dlopen fails without all that.
+    "-DCMAKE_MACOSX_RPATH=ON"
+    "-DCMAKE_INSTALL_NAME_DIR=@rpath"
+    "-DCMAKE_INSTALL_RPATH=@loader_path;@loader_path/../runtime/lib/arm64/Release"
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
   ];
 
   # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
@@ -131,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     flatbuffers
     gflags
-    level-zero
     libusb1
     libxml2
     ocl-icd
@@ -139,6 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     snappy
     onetbb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    level-zero
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -152,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/python
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # Link to OpenCL
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       addDriverRunpath "$lib"
@@ -172,6 +191,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with lib.licenses; [ asl20 ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
 })
