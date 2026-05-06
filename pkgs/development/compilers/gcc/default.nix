@@ -410,6 +410,8 @@ pipe
             "fortify"
             "format"
           ];
+      } // lib.optionalAttrs langCC {
+        cxxName = "g++";
       };
 
       enableParallelBuilding = true;

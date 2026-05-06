@@ -189,6 +189,7 @@ stdenv.mkDerivation (
     passthru = {
       inherit libllvm;
       isClang = true;
+      cxxName = "clang++";
       hardeningUnsupportedFlagsByTargetPlatform =
         targetPlatform:
         [ "fortify3" ]
