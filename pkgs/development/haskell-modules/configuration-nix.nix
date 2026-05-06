@@ -204,7 +204,7 @@ builtins.intersectAttrs super {
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck super.mysql;
+  mysql = dontCheck (addBuildTool pkgs.libmysqlclient.dev super.mysql);
 
   # CUDA needs help finding the SDK headers and libraries.
   cuda = overrideCabal (drv: {
@@ -679,6 +679,7 @@ builtins.intersectAttrs super {
       pkgs.postgresqlTestHook
     ])
     (dontCheckIf (!lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook))
+    (addTestToolDepend self.buildHaskellPackages.hspec-discover)
   ];
 
   # Test suite requires a running postgresql server,
@@ -701,34 +702,37 @@ builtins.intersectAttrs super {
   mattermost-api = dontCheck super.mattermost-api;
 
   # Expect to find sendmail(1) in $PATH.
-  mime-mail = appendConfigureFlag "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"" super.mime-mail;
+  mime-mail = appendConfigureFlag "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"" (
+    addTestToolDepend self.buildHaskellPackages.hspec-discover super.mime-mail
+  );
 
   # Help the test suite find system timezone data.
-  tz = addBuildDepends [ pkgs.tzdata ] super.tz;
-  tzdata = addBuildDepends [ pkgs.tzdata ] super.tzdata;
+  tz = addTestToolDepends [ pkgs.tzdata ] super.tz;
+  time-machine = addTestToolDepends [
+    pkgs.tzdata
+    self.buildHaskellPackages.hspec-discover
+  ] super.time-machine;
 
   # https://hydra.nixos.org/build/128665302/nixlog/3
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
   taffybar = lib.pipe super.taffybar [
-    (overrideCabal (drv: {
-      testDepends =
-        drv.testDepends or [ ]
-        ++ map lib.getBin [
-          pkgs.xorg-server
-          pkgs.xprop
-          pkgs.xrandr
-          pkgs.xdummy
-          pkgs.xterm
-          pkgs.dbus
-        ];
-      testFlags = drv.testFlags or [ ] ++ [
-        # TODO(@rvl): figure out why this doesn't work in Nixpkgs
-        "--skip=/python-dbusmock System services/"
-      ];
-    }))
     (self.generateOptparseApplicativeCompletions [ "taffybar" ])
+    (
+      with pkgs.buildPackages;
+      addTestToolDepends (
+        map lib.getBin [
+          dbus
+          glib
+          xdummy
+          xorg-server
+          xprop
+          xrandr
+          xterm
+        ]
+      )
+    )
   ];
 
   # Test suite requires running a docker container via testcontainers
@@ -854,10 +858,20 @@ builtins.intersectAttrs super {
   # The cabal files for these libraries do not list the required system dependencies.
   libjwt-typed = addExtraLibrary pkgs.libjwt super.libjwt-typed;
   miniball = addExtraLibrary pkgs.miniball super.miniball;
-  SDL-image = addExtraLibrary pkgs.SDL super.SDL-image;
-  SDL-ttf = addExtraLibrary pkgs.SDL super.SDL-ttf;
-  SDL-mixer = addExtraLibrary pkgs.SDL super.SDL-mixer;
-  SDL-gfx = addExtraLibrary pkgs.SDL super.SDL-gfx;
+  SDL = addBuildTool (lib.getDev pkgs.SDL) super.SDL;
+  SDL-image = addBuildTools (map lib.getDev [
+    pkgs.SDL
+    pkgs.SDL_image
+  ]) super.SDL-image;
+  SDL-ttf = addBuildTools (map lib.getDev [
+    pkgs.SDL
+    pkgs.SDL_ttf
+  ]) super.SDL-ttf;
+  SDL-mixer = addBuildTools (map lib.getDev [
+    pkgs.SDL
+    pkgs.SDL_mixer
+  ]) super.SDL-mixer;
+  SDL-gfx = addBuildTool (lib.getDev pkgs.buildPackages.SDL) super.SDL-gfx;
   SDL-mpeg = appendConfigureFlags [
     "--extra-lib-dirs=${pkgs.smpeg}/lib"
     "--extra-include-dirs=${pkgs.smpeg.dev}/include/smpeg"
@@ -1076,9 +1090,8 @@ builtins.intersectAttrs super {
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
-  smtlib-backends-process = overrideCabal (drv: {
-    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.z3 ];
-  }) super.smtlib-backends-process;
+  # TODO: https://github.com/NixOS/nixpkgs/pull/511229#discussion_r3109340140
+  smtlib-backends-process = addTestToolDepend pkgs.buildPackages.z3 super.smtlib-backends-process;
 
   # overrideCabal because the tests need to execute the built executable "fixpoint"
   liquid-fixpoint = overrideCabal (drv: {
@@ -1488,7 +1501,7 @@ builtins.intersectAttrs super {
     ];
     doCheck =
       drv.doCheck or true && lib.meta.availableOn pkgs.stdenv.buildPlatform pkgs.postgresqlTestHook;
-  }) super.relocant;
+  }) (addTestToolDepend self.buildHaskellPackages.hspec-discover super.relocant);
 
   # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
   haskell-pgmq = overrideCabal (drv: {
@@ -1769,7 +1782,7 @@ builtins.intersectAttrs super {
       sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
     ''
     + (drv.postPatch or "");
-  }) super.tophat;
+  }) (addTestToolDepend self.buildHaskellPackages.hspec-discover super.tophat);
 
   # Runtime dependencies and CLI completion
   nvfetcher = self.generateOptparseApplicativeCompletions [ "nvfetcher" ] (
@@ -2322,8 +2335,14 @@ builtins.intersectAttrs super {
         }
       );
 
-  # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
-  cpython = doJailbreak super.cpython;
+  # These need `python3` available to build. We grab it from `pkgconfig-depends` so it stays in sync.
+  cpython = overrideCabal (drv: {
+    buildTools = (drv.buildTools or [ ]) ++ drv.libraryPkgconfigDepends;
+    jailbreak = true; # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
+  }) super.cpython;
+  inline-python = overrideCabal (drv: {
+    buildTools = (drv.buildTools or [ ]) ++ drv.libraryPkgconfigDepends;
+  }) super.inline-python;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 
@@ -2341,6 +2360,316 @@ builtins.intersectAttrs super {
       );
     in
     super.iserv-proxy.overrideScope (_: overlay);
+
+  # When a build fails with one of
+  #   * Haskell pre-processor: could not execute: <tool>
+  #   * <tool>: createProcess: posix_spawnp: does not exist
+  # it's because the library lacks 'build-tool-depends: <tool>'.
+  # This sometimes ends up working anyway when doing native builds without `strictDeps` since:
+  #   a) if a pkg has 'build-depends: hspec-discover', cabal2nix will duplicate it
+  #   b) if a pkg has 'build-depends: hspec', its dependency 'hspec-discover' is propagated
+  inherit (lib.mapAttrs (_: addTestToolDepend self.buildHaskellPackages.hspec-discover) super)
+    FAI
+    Mantissa
+    ViennaRNAParser
+    acme-omitted
+    ad-delcont
+    aern2-mp
+    aern2-real
+    aeson-serialize
+    aeson-value-qq
+    agreeing
+    algebraic-graphs-io
+    antiprimes
+    ascii-progress
+    attoparsec-parsec
+    aws-xray-client
+    base32string
+    base58string
+    bbdb
+    bcp47
+    bcp47-orphans
+    bitcoin-types
+    bitmasks
+    bugsnag
+    bugsnag-wai
+    cache
+    cardano-coin-selection
+    chain-codes
+    circular
+    cisco-spark-api
+    classy-prelude-conduit
+    cold-widow
+    commonmark-wikilink
+    convert-units
+    cornelis
+    countable-inflections
+    currencies
+    currency-codes
+    currycarbon
+    cursor-fuzzy-time-gen
+    cursor-gen
+    data-default-generics
+    data-diverse
+    data-files-gen
+    data-msgpack
+    data-msgpack-types
+    data-prometheus
+    dataflower
+    derive-has-field
+    desert
+    diff-parse
+    dirichlet
+    distance-of-time
+    elf
+    elm-export
+    elynx-markov
+    elynx-nexus
+    elynx-seq
+    elynx-tree
+    envparse
+    errorcall-eq-instance
+    escaped
+    farmhash
+    format-numbers
+    friendly-time
+    frontmatter
+    fuzzy-time-gen
+    gdelt
+    generics-eot
+    genvalidity
+    genvalidity-aeson
+    genvalidity-bytestring
+    genvalidity-case-insensitive
+    genvalidity-containers
+    genvalidity-hspec
+    genvalidity-hspec-aeson
+    genvalidity-hspec-binary
+    genvalidity-hspec-cereal
+    genvalidity-hspec-optics
+    genvalidity-hspec-persistent
+    genvalidity-mergeless
+    genvalidity-path
+    genvalidity-persistent
+    genvalidity-property
+    genvalidity-scientific
+    genvalidity-text
+    genvalidity-time
+    genvalidity-typed-uuid
+    genvalidity-unordered-containers
+    genvalidity-uuid
+    genvalidity-vector
+    getopt-generics
+    gh-pocket-knife
+    git-freq
+    github-webhooks
+    github-workflow-commands
+    gjk
+    glpk-headers
+    goggles
+    google-oauth2-for-cli
+    graphite
+    gravatar
+    gridbox
+    gtk-largeTreeStore
+    haskell-debug-adapter
+    haskell-modbus
+    hdf5-lite
+    here
+    hexstring
+    hi-file-parser
+    hpc-threshold
+    hs-inspector
+    hspec-attoparsec
+    hspec-checkers
+    hspec-expectations-json
+    hspec-expectations-lens
+    hspec-hashable
+    hspec-junit-formatter
+    hspec-laws
+    hspec-multicheck
+    hspec-wai-json
+    html-validator-cli
+    hunspell-hs
+    hw-vector
+    idringen
+    ihp-postgres-parser
+    infer-license
+    interpolate
+    iri-orphans
+    isbn
+    json-stream
+    jsonl-conduit
+    jsonpatch
+    jump
+    karver
+    key-state
+    linear-grammar
+    list-duplicate
+    list-filter
+    list-predicate
+    load-env
+    logging-facade-journald
+    logsink
+    lsp-client
+    lucid-foundation
+    machination
+    mathista
+    matrix-market-attoparsec
+    mcmc
+    megaparsec-utils
+    microformats2-parser
+    miv
+    mixed-types-num
+    mnist-idx-conduit
+    monad-io-adapter
+    moving-averages
+    msu
+    nested-sets
+    network-uri-template
+    non-empty-text
+    normalize-imports
+    openapi3-code-generator
+    partialord
+    pava
+    paymill
+    persistent-parser
+    pipes-ordered-zip
+    plaid
+    plex
+    plot-light
+    ploton
+    port-utils
+    prefix-expression
+    pretty-relative-time
+    project-template
+    projectroot
+    prometheus-client
+    protobuf-simple
+    push-notify-apn
+    quickcheck-arbitrary-adt
+    railroad
+    red-black-tree
+    reddit-scrape
+    reflex-potatoes
+    reflex-test-host
+    req-oauth2
+    rio-orphans
+    ronn
+    rowdy
+    rowdy-yesod
+    rp-tree
+    say
+    scientist
+    scuttlebutt-types
+    search-algorithms
+    sequence-formats
+    sequenceTools
+    serial-test-generators
+    servant-named
+    servant-pagination
+    setop
+    simplex-basic
+    smarties
+    sortee
+    sorting-network
+    splitmix-distributions
+    sscript
+    stack-hpc-coveralls
+    state-codes
+    stitch
+    streaming-binary
+    string-conversions
+    string-similarity
+    strip-ansi-escape
+    t3-game
+    table-layout
+    taggy
+    tail
+    templater
+    text-regex-replace
+    text-rope-zipper
+    th-utilities
+    the-snip
+    timers-tick
+    tsne
+    ttn
+    tuple-append
+    type-machine
+    ulid
+    unionmount
+    update-repos
+    validity
+    validity-aeson
+    validity-case-insensitive
+    validity-path
+    vaultenv
+    vp-tree
+    wai-enforce-https
+    wai-make-assets
+    wai-middleware-slack-verify
+    wai-middleware-throttle
+    wai-request-params
+    woot
+    word-trie
+    yaml-marked
+    yes-precure5-command
+    yesod-auth-basic
+    yesod-auth-oauth2
+    yesod-paginator
+    yesod-persistent
+    yesod-routes-flow
+    yesod-session-persist
+    yi-rope
+    yield
+    yiyd
+    zim-parser
+    ;
+
+  inherit (lib.mapAttrs (_: addTestToolDepend self.buildHaskellPackages.HTF) super)
+    HPDF
+    HSmarty
+    Spock-worker
+    buffer-builder
+    dataurl
+    graph-core
+    large-hashable
+    list-t
+    multi-trie
+    superbuffer
+    text-utils
+    uniform-json
+    uniform-strings
+    ;
+
+  inherit (lib.mapAttrs (_: addTestToolDepend self.buildHaskellPackages.doctest-driver-gen) super)
+    simple-vec3
+    static-text
+    ;
+
+  inherit (lib.mapAttrs (_: addTestToolDepend self.buildHaskellPackages.tasty-discover) super)
+    registry-aeson
+    ;
+
+  inherit (lib.mapAttrs (_: addTestToolDepend self.buildHaskellPackages.cpphs) super)
+    bed-and-breakfast
+    ;
+
+  inherit (lib.mapAttrs (_: addTestToolDepend self.buildHaskellPackages.embeddock) super)
+    embeddock-example
+    ;
+
+  usa-holidays = lib.pipe super.usa-holidays [
+    (addTestToolDepend self.buildHaskellPackages.doctest-discover)
+    (addTestToolDepend self.buildHaskellPackages.hspec-discover)
+  ];
+
+  openai-hs = addBuildTool self.buildHaskellPackages.cpphs super.openai-hs;
+
+  rest-rewrite = lib.pipe super.rest-rewrite [
+    (addTestToolDepend pkgs.buildPackages.graphviz)
+    (addTestToolDepend pkgs.buildPackages.z3)
+  ];
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
