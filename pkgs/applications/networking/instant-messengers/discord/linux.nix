@@ -78,6 +78,9 @@
   # for example if a settings.json is linked declaratively (e.g., with home-manager).
   disableUpdates ? true,
   commandLineArgs ? "",
+  krispSrc ? null,
+  withKrisp ? withVencord || withEquicord || withMoonlight,
+  unzip,
 }:
 
 let
@@ -113,6 +116,12 @@ let
   );
 
   moduleVersions = lib.optionalAttrs isDistro (lib.mapAttrs (_: mod: mod.version) source.modules);
+
+  stagedModuleSrcs =
+    if krispSrc != null && withKrisp then
+      lib.removeAttrs moduleSrcs [ "discord_krisp" ]
+    else
+      moduleSrcs;
 
   libPath = lib.makeLibraryPath (
     [
@@ -173,7 +182,7 @@ let
     modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
     if [ ! -f "$modules_dir/installed.json" ]; then
       mkdir -p "$modules_dir"
-      for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
+      for m in ${lib.concatStringsSep " " (lib.attrNames stagedModuleSrcs)}; do
         ln -sfn "$store_modules/$m" "$modules_dir/$m"
       done
       echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
@@ -194,6 +203,46 @@ let
         substituteAllInPlace $out/bin/disable-breaking-updates.py
         chmod +x $out/bin/disable-breaking-updates.py
       '';
+
+  patchedKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "discord-krisp-patched"
+      {
+        nativeBuildInputs = lib.optionals isDistro [ brotli ] ++ [
+          unzip
+          (python3.withPackages (ps: [
+            ps.lief
+            ps.capstone
+          ]))
+        ];
+      }
+      ''
+        mkdir -p "$out"
+        ${
+          if isDistro then
+            ''brotli -d < ${krispSrc} | tar xf - --strip-components=1 -C "$out"''
+          else
+            ''unzip ${krispSrc} -d "$out"''
+        }
+        python3 ${./patch-krisp.py} "$out/discord_krisp.node"
+      ''
+  );
+
+  deployKrisp = lib.optionalAttrs (krispSrc != null && withKrisp) (
+    runCommand "deploy-krisp.py"
+      {
+        pythonInterpreter = "${python3.withPackages (ps: [ ps.watchdog ])}/bin/python3";
+        krispPath = "${patchedKrisp}";
+        discordVersion = version;
+        configDirName = lib.toLower binaryName;
+        meta.mainProgram = "deploy-krisp.py";
+      }
+      ''
+        mkdir -p "$out/bin"
+        cp ${./deploy-krisp.py} "$out/bin/deploy-krisp.py"
+        substituteAllInPlace "$out/bin/deploy-krisp.py"
+        chmod +x "$out/bin/deploy-krisp.py"
+      ''
+  );
 in
 assert lib.assertMsg (
   enabledDiscordModsCount <= 1
@@ -269,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.mapAttrsToList (name: src: ''
             mkdir -p $out/opt/${binaryName}/modules/${name}
             brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
-          '') moduleSrcs
+          '') stagedModuleSrcs
         )}
 
       ''
@@ -295,6 +344,9 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
         ${lib.strings.optionalString isDistro ''--run "${stageModules} $out/opt/${binaryName}/modules"''} \
+        ${
+          lib.strings.optionalString (krispSrc != null && withKrisp) "--run ${lib.getExe deployKrisp}"
+        } \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
@@ -365,6 +417,10 @@ stdenv.mkDerivation (finalAttrs: {
       withOpenASAR = self.override {
         withOpenASAR = true;
       };
+      withKrisp = self.override {
+        withKrisp = true;
+      };
     };
-  };
+  }
+  // lib.optionalAttrs (krispSrc != null && withKrisp) { inherit patchedKrisp; };
 })
