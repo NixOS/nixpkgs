@@ -1,0 +1,10 @@
+{
+ "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
+ "!version": 1,
+ "https://repo.maven.apache.org": {
+  "maven2/org/lz4#lz4-java/1.5.1": {
+   "jar": "sha256-JqVYBaKrcd7omY9iu6qtCtxxhSfs+PMiRG6IKGgZ9PM=",
+   "pom": "sha256-R8IrXQlK3hM6FO/S3j5tMLMmF5K1I3RIJs5o1YYE2NM="
+  }
+ }
+}
