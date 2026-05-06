@@ -9,61 +9,79 @@ import ./make-test-python.nix (
     name = "stash";
     meta.maintainers = pkgs.stash.meta.maintainers;
 
-    nodes.machine = {
-      services.stash = {
-        inherit dataDir;
-        enable = true;
+    nodes.machine =
+      { config, ... }:
+      {
+        imports = [
+          ../modules/testing/hardcodedSecret.nix
+        ];
 
-        username = "test";
-        passwordFile = pkgs.writeText "stash-password" "MyPassword";
+        services.stash = {
+          inherit dataDir;
+          enable = true;
 
-        jwtSecretKeyFile = pkgs.writeText "jwt_secret_key" "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        sessionStoreKeyFile = pkgs.writeText "session_store_key" "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+          username = "test";
+          passwordFile.provider = config.testing.hardcodedSecret."stash-password".secret;
 
-        plugins =
-          let
-            src = pkgs.fetchFromGitHub {
-              owner = "stashapp";
-              repo = "CommunityScripts";
-              rev = "9b6fac4934c2fac2ef0859ea68ebee5111fc5be5";
-              hash = "sha256-PO3J15vaA7SD4r/LyHlXjnpaeYAN9Q++O94bIWdz7OA=";
-            };
-          in
-          [
-            (pkgs.runCommand "stashNotes" { inherit src; } ''
-              mkdir -p $out/plugins
-              cp -r $src/plugins/stashNotes $out/plugins/stashNotes
-            '')
-            (pkgs.runCommand "Theme-Plex" { inherit src; } ''
-              mkdir -p $out/plugins
-              cp -r $src/themes/Theme-Plex $out/plugins/Theme-Plex
-            '')
-          ];
+          jwtSecretKeyFile.provider = config.testing.hardcodedSecret."jwt_secret_key".secret;
+          sessionStoreKeyFile.provider = config.testing.hardcodedSecret."session_store_key".secret;
 
-        mutableScrapers = true;
-        scrapers =
-          let
-            src = pkgs.fetchFromGitHub {
-              owner = "stashapp";
-              repo = "CommunityScrapers";
-              rev = "2ece82d17ddb0952c16842b0775274bcda598d81";
-              hash = "sha256-AEmnvM8Nikhue9LNF9dkbleYgabCvjKHtzFpMse4otM=";
-            };
-          in
-          [
-            (pkgs.runCommand "FTV" { inherit src; } ''
-              mkdir -p $out/scrapers/FTV
-              cp -r $src/scrapers/FTV.yml $out/scrapers/FTV
-            '')
-          ];
+          plugins =
+            let
+              src = pkgs.fetchFromGitHub {
+                owner = "stashapp";
+                repo = "CommunityScripts";
+                rev = "9b6fac4934c2fac2ef0859ea68ebee5111fc5be5";
+                hash = "sha256-PO3J15vaA7SD4r/LyHlXjnpaeYAN9Q++O94bIWdz7OA=";
+              };
+            in
+            [
+              (pkgs.runCommand "stashNotes" { inherit src; } ''
+                mkdir -p $out/plugins
+                cp -r $src/plugins/stashNotes $out/plugins/stashNotes
+              '')
+              (pkgs.runCommand "Theme-Plex" { inherit src; } ''
+                mkdir -p $out/plugins
+                cp -r $src/themes/Theme-Plex $out/plugins/Theme-Plex
+              '')
+            ];
 
-        settings = {
-          inherit host port;
+          mutableScrapers = true;
+          scrapers =
+            let
+              src = pkgs.fetchFromGitHub {
+                owner = "stashapp";
+                repo = "CommunityScrapers";
+                rev = "2ece82d17ddb0952c16842b0775274bcda598d81";
+                hash = "sha256-AEmnvM8Nikhue9LNF9dkbleYgabCvjKHtzFpMse4otM=";
+              };
+            in
+            [
+              (pkgs.runCommand "FTV" { inherit src; } ''
+                mkdir -p $out/scrapers/FTV
+                cp -r $src/scrapers/FTV.yml $out/scrapers/FTV
+              '')
+            ];
 
-          stash = [ { path = "/srv"; } ];
+          settings = {
+            inherit host port;
+
+            stash = [ { path = "/srv"; } ];
+          };
+        };
+        testing.hardcodedSecret."stash-password" = {
+          secret.consumer = config.services.stash.passwordFile;
+          content = "MyPassword";
+        };
+        testing.hardcodedSecret."jwt_secret_key" = {
+          secret.consumer = config.services.stash.jwtSecretKeyFile;
+          content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        };
+        testing.hardcodedSecret."session_store_key" = {
+          secret.consumer = config.services.stash.sessionStoreKeyFile;
+          content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
         };
       };
-    };
 
     testScript = ''
       machine.wait_for_unit("stash.service")
