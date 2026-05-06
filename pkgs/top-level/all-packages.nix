@@ -8549,6 +8549,7 @@ with pkgs;
     skim = callPackage ../by-name/nu/nushell-plugin-skim/package.nix { };
     semver = callPackage ../by-name/nu/nushell-plugin-semver/package.nix { };
     hcl = callPackage ../by-name/nu/nushell-plugin-hcl/package.nix { };
+    parquet = callPackage ../by-name/nu/nushell-plugin-parquet/package.nix { };
     desktop_notifications =
       callPackage ../by-name/nu/nushell-plugin-desktop_notifications/package.nix
         { };
