@@ -308,6 +308,8 @@ in
     inherit info;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
