@@ -16,13 +16,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "ca-certs";
-  version = "1.0.1";
+  version = "1.0.2";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs/releases/download/v${finalAttrs.version}/ca-certs-${finalAttrs.version}.tbz";
-    hash = "sha256-0818j1SLrs7yCNQlh3qBHYmOx9HZxL3qb3hlLHyDYcw=";
+    hash = "sha256-Uh8hgU/ZFrWW6agb9B8SISaRAuwciwyDoB6GxtiGPa0=";
   };
 
   propagatedBuildInputs = [
