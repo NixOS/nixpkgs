@@ -1,0 +1,18 @@
+diff --git a/browser/installer/package-manifest.in b/browser/installer/package-manifest.in
+index 64d9993530c3..8f107b65c5be 100644
+--- a/browser/installer/package-manifest.in
++++ b/browser/installer/package-manifest.in
+@@ -222,13 +222,10 @@
+ @RESPATH@/chrome/toolkit.manifest
+ #ifdef MOZ_GTK
+ @RESPATH@/browser/chrome/icons/default/default16.png
+-@RESPATH@/browser/chrome/icons/default/default22.png
+-@RESPATH@/browser/chrome/icons/default/default24.png
+ @RESPATH@/browser/chrome/icons/default/default32.png
+ @RESPATH@/browser/chrome/icons/default/default48.png
+ @RESPATH@/browser/chrome/icons/default/default64.png
+ @RESPATH@/browser/chrome/icons/default/default128.png
+-@RESPATH@/browser/chrome/icons/default/default256.png
+ #endif
+ 
+ ; [DevTools Startup Files]
