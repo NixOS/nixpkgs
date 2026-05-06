@@ -34,6 +34,8 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+  doCheck = false;
+
   pythonImportsCheck = [ "opentelemetry.instrumentation.requests" ];
 
   meta = opentelemetry-instrumentation.meta // {

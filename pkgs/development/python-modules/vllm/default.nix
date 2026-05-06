@@ -27,6 +27,8 @@
 
   # dependencies
   aioprometheus,
+  amd-aiter,
+  amd-quark,
   amdsmi,
   anthropic,
   bitsandbytes,
@@ -43,6 +45,7 @@
   grpcio-reflection,
   ijson,
   importlib-metadata,
+  kaldi-native-fbank,
   llguidance,
   lm-format-enforcer,
   mcp,
@@ -57,6 +60,7 @@
   opentelemetry-api,
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
+  opentelemetry-semantic-conventions-ai,
   outlines,
   pandas,
   partial-json-parser,
@@ -89,6 +93,9 @@
   cupy,
   flashinfer,
   nvidia-ml-py,
+  # rocm-only
+  pybind11,
+  bash,
 
   # optional-dependencies
   # audio
@@ -174,8 +181,8 @@ let
   triton-kernels = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
-    tag = "v3.5.0";
-    hash = "sha256-F6T0n37Lbs+B7UHNYzoIQHjNNv3TcMtoXjNrT8ZUlxY=";
+    tag = "v3.6.0";
+    hash = "sha256-JFSpQn+WsNnh7CAPlcpOcUp0nyKXNbJEANdXqmkt4Tc=";
   };
 
   # grep for GIT_TAG in the following file
@@ -335,14 +342,14 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.16.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7E67xVRlKmm+Hbp5nphhwH8SQC9LpCFNBfF2ZAOt79k=";
+    hash = "sha256-0gM52DDfLzkE4QXCGR3c3Jq4CQ1PrnDj4Ky0lsUJ2a8=";
   };
 
   patches = [
@@ -350,6 +357,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
     ./0006-drop-rocm-extra-reqs.patch
+    # QuACK and Cutlass DSL seem to be added only for FA4
+    # which in our case handles its own deps
+    ./0007-drop-quack-reqs.patch
   ];
 
   postPatch = ''
@@ -367,8 +377,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
       --replace-fail "torch ==" "torch >=" \
-      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools" \
-      --replace-fail "grpcio-tools==1.78.0" "grpcio"
+      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
 
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
@@ -444,6 +453,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
 
   dependencies = [
     aioprometheus
+    amd-quark
     anthropic
     bitsandbytes
     blake3
@@ -458,6 +468,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     grpcio-reflection
     ijson
     importlib-metadata
+    kaldi-native-fbank
     llguidance
     lm-format-enforcer
     mcp
@@ -472,6 +483,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     opentelemetry-api
     opentelemetry-exporter-otlp
     opentelemetry-sdk
+    opentelemetry-semantic-conventions-ai
     outlines
     pandas
     partial-json-parser
@@ -510,6 +522,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     nvidia-ml-py
   ]
   ++ lib.optionals rocmSupport [
+    amd-aiter
     rocmPackages.rocminfo
     amdsmi
     datasets
@@ -574,6 +587,22 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pythonRelaxDeps = true;
 
   pythonImportsCheck = [ "vllm" ];
+  makeWrapperArgs =
+    lib.optionals cudaSupport [
+      "--set"
+      "VLLM_NCCL_SO_PATH"
+      "${cudaPackages.nccl}/lib/libnccl.so"
+    ]
+    ++ lib.optionals rocmSupport [
+      "--set"
+      "HIP_DEVICE_LIB_PATH"
+      "${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
+
+      "--prefix"
+      "PATH"
+      ":"
+      "${rocmPackages.clr}/bin:${bash}/bin"
+    ];
 
   passthru = {
     # make internal dependency available to overlays

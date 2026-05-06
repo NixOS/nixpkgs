@@ -1,0 +1,12 @@
+diff --git a/requirements/cuda.txt b/requirements/cuda.txt
+index 22477dc82..84fe34730 100644
+--- a/requirements/cuda.txt
++++ b/requirements/cuda.txt
+@@ -14,7 +14,3 @@
+ # Cap nvidia-cudnn-frontend (transitive dep of flashinfer) due to
+ # breaking changes in 1.19.0
+ nvidia-cudnn-frontend>=1.13.0,<1.19.0
+-
+-# QuACK and Cutlass DSL for FA4 (cute-DSL implementation)
+-nvidia-cutlass-dsl>=4.4.0.dev1
+-quack-kernels>=0.2.7
