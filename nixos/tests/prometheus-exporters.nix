@@ -166,18 +166,16 @@ let
       };
 
     blackbox =
-      { pkgs, ... }:
+      { ... }:
       {
         exporterConfig = {
           enable = true;
-          configFile = pkgs.writeText "config.yml" (
-            builtins.toJSON {
-              modules.icmp_v6 = {
-                prober = "icmp";
-                icmp.preferred_ip_protocol = "ip6";
-              };
-            }
-          );
+          settings = {
+            modules.icmp_v6 = {
+              prober = "icmp";
+              icmp.preferred_ip_protocol = "ip6";
+            };
+          };
         };
         exporterTest = ''
           wait_for_unit("prometheus-blackbox-exporter.service")
