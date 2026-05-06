@@ -1527,6 +1527,7 @@
   ./services/security/pass-secret-service.nix
   ./services/security/physlock.nix
   ./services/security/pocket-id.nix
+  ./services/security/rauthy.nix
   ./services/security/reaction.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
