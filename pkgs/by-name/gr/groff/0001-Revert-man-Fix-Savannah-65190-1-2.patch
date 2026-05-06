@@ -1,0 +1,145 @@
+From 823e17e1ce3c8354dfb06d9647aa75b424d92f07 Mon Sep 17 00:00:00 2001
+From: Thiago Kenji Okada <thiagokokada@gmail.com>
+Date: Mon, 27 Apr 2026 19:53:15 +0100
+Subject: [PATCH] Revert "[man]: Fix Savannah #65190 (1/2)."
+
+This reverts commit 732b07d4998bec1cc942481e7cf4e7287050c40b.
+---
+ tmac/an.tmac | 67 ++++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 49 insertions(+), 18 deletions(-)
+
+diff --git a/tmac/an.tmac b/tmac/an.tmac
+index 9a885b120..68eea1793 100644
+--- a/tmac/an.tmac
++++ b/tmac/an.tmac
+@@ -90,8 +90,22 @@
+ .  nop \h'\\n[lss]u'\c
+ ..
+ .
+-.de1 an*bp
+-.  if \\n[.br] .br
++.\" Define alternate requests to handle continuous rendering.
++.\"
++.\" This .ne replacement avoids page breaks; instead, the page length is
++.\" increased to the necessary amount.
++.de an-ne
++.  ie \\n[.$] .nr an-amount (v;\\$*)
++.  el         .nr an-amount 1v
++.  if (\\n[an-amount] >= \\n[.t]) \
++.    pl +(\\n[an-amount]u - \\n[.t]u + 1v)
++.  rr an-amount
++..
++.
++.\" This .bp replacement for continuous rendering mode adjusts the page
++.\" length to the current position so that no empty lines are inserted.
++.de an-bp
++.  pl \\n[nl]u
+ ..
+ .
+ .\" We need an end-of-input macro to flush any pending output line and
+@@ -102,11 +116,21 @@
+ .  an*input-trap
+ .  if '\\n[.z]'an*paragraph-tag' .an*TP-trap
+ .  if \\n[cR] \{\
++.    \" We might have a pending output line that is not yet broken, and
++.    \" also be 1v from the bottom of the page.  If we break (or flush)
++.    \" the output line now, the page will get ejected afterward and
++.    \" troff will exit because we're in an end-of-input macro--our
++.    \" footer will never be output.  So, if that is the case, further
++.    \" extend the page length by 1v.
++.    if ((\\n[.p] - \\n[nl]) <= \\n[.V]) .pl +1v
++.    br
++.    pl +1v
+ .    sp 1v
+ .    an-footer
+ .    \" If we're processing multiple documents and have started a new
+ .    \" one, draw a line between this footer and the next header.
+ .    if !'\\n[.F]'' \{\
++.      pl +1v
+ .      nf
+ .      ti 0
+ .      nr an*rule-length (\\n[LL]u - 1n)
+@@ -119,11 +143,15 @@
+ .  \}
+ .  ds an*previous-page-ref-string \" empty
+ .  ch an-header
+-.  \" At the end of the last document, the file name becomes empty;
+-.  \" force the page length to match the vertical drawing position in
+-.  \" continuous rendering mode.
+-.  ie \\n[cR] .if '\\n[.F]'' .pl \\n[nl]u
+-.  el         .an*break-page-with-new-number
++.  an*break-page-with-new-number
++..
++.
++.\" Move macros into place for continuous rendering.
++.de an-set-up-continuous-rendering
++.  rn ne an-real-ne
++.  rn bp an-real-bp
++.  rn an-ne ne
++.  rn an-bp bp
+ ..
+ .
+ .de an*reset-text-parameters
+@@ -336,7 +364,7 @@
+ .    \" Clear the page header trap so it is not sprung with stale
+ .    \" information.
+ .    ch an-header
+-.    if !\\n[cR] .an*break-page-with-new-number
++.    an*break-page-with-new-number
+ .  \}
+ .  if \\n[C] .rr P
+ .
+@@ -488,9 +516,13 @@
+ ..
+ .
+ .\" Write the page header; can be redefined by man.local.
++.\"
++.\" In continuous rendering mode, we need to extend the page length to
++.\" accommodate the vertical size of our header (plus any spacing).
+ .if d PT .ig
+ .de1 PT
+-.  if !\\n[cR] .sp (.5i - .5m)
++.  ie \\n[cR] .pl +1v
++.  el         .sp (.5i - .5m)
+ .  \" Attach a bookmark to the page header on the first page of a new
+ .  \" man(7) document; a changed identifier or section indicates this.
+ .  if !'\\*[an*page-ref-string]'\\*[an*previous-page-ref-string]' \{\
+@@ -499,13 +531,17 @@
+ .    ds an*previous-page-ref-string "\\*[an*page-ref-string]
+ .  \}
+ .  tl '\\*[an-pageref]'\\*[an-extra3]'\\*[an-pageref]'
+-.  ie \\n[cR] .sp 1v
+-.  el         .sp .5i
++.  ie \\n[cR] \{\
++.    pl +1v
++.    sp 1v
++.  \}
++.  el .sp .5i
+ ..
+ .
+ .\" Write the page footer; can be redefined by man.local.
+ .if d BT .ig
+ .de1 BT
++.  if \\n[cR] .pl +1v
+ .  ie \\n[D] \{\
+ .    if o .tl '\\*[an*ifoot]'\\*[an-extra1]'\\*[an*ofoot]'
+ .    if e .tl '\\*[an*ofoot]'\\*[an-extra1]'\\*[an*ifoot]'
+@@ -1793,13 +1829,8 @@ contains unsupported escape sequence
+ .\}
+ .rm an*ident-style
+ .
+-.\" In continuous rendering mode, make page breaks less potent and the
+-.\" page length "infinite".
+-.if \n[cR] \{\
+-.  rn bp an*real-bp
+-.  rn an*bp bp
+-.  pl \n[.R]u/1v
+-.\}
++.if \n[cR] \
++.  an-set-up-continuous-rendering
+ .
+ .\" If rendering HTML, suppress headers and footers.
+ .nr an-suppress-header-and-footer 0
+-- 
+2.53.0
+
