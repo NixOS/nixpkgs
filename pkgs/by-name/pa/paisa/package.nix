@@ -4,7 +4,7 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs_22,
   versionCheckHook,
   node-gyp,
   python3,
@@ -23,7 +23,7 @@ let
   # paisa docker builds with nodejs 22, but we need node 20 so we can build
   # node-canvas from source (which currently fails with nodejs 22 due to some
   # deprecations in the v8 javascript engine and nan c++
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_20; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_22; };
 in
 buildGoModule (finalAttrs: {
   pname = "paisa";
