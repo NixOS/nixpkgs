@@ -17,7 +17,6 @@ import ../../make-test-python.nix (
 
     testScript = ''
       machine.wait_for_unit("caddy.service")
-      machine.wait_for_unit("phpfpm-rss-bridge.service")
       machine.wait_for_open_port(80)
 
       # check for successful feed download

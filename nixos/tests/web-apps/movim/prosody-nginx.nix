@@ -85,7 +85,6 @@ in
 
   testScript = # python
     ''
-      server.wait_for_unit("phpfpm-movim.service")
       server.wait_for_unit("nginx.service")
       server.wait_for_open_port(${toString movim.port})
       server.wait_for_open_port(80)

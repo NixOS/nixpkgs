@@ -233,8 +233,6 @@
 
   testScript = ''
     start_all()
-    castopod.wait_for_unit("castopod-setup.service")
-    castopod.wait_for_file("/run/phpfpm/castopod.sock")
     castopod.wait_for_unit("nginx.service")
     castopod.wait_for_open_port(80)
     castopod.wait_until_succeeds("curl -sS -f http://castopod.example.com")

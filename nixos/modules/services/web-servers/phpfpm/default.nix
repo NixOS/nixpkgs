@@ -66,6 +66,15 @@ let
           example = "${runtimeDir}/<name>.sock";
         };
 
+        socketActivation = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = ''
+            Let the socket be managed by systemd.
+          '';
+        };
+
         listen = mkOption {
           type = types.str;
           default = "";
@@ -272,17 +281,42 @@ in
 
     systemd.targets.phpfpm = {
       description = "PHP FastCGI Process manager pools target";
-      wantedBy = [ "multi-user.target" ];
     };
+
+    systemd.sockets = mapAttrs' (
+      pool: poolOpts:
+      nameValuePair "phpfpm-${pool}" {
+        description = "PHP FastCGI Process Manager socket for pool ${pool}";
+        documentation = [ "man:php-fpm(8)" ];
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          ListenStream = poolOpts.socket;
+          SocketUser = poolOpts.settings."listen.owner" or poolOpts.settings.user;
+          SocketGroup = poolOpts.settings."listen.group" or poolOpts.settings.group;
+          SocketMode = poolOpts.settings."listen.mode" or "0660";
+        }
+        // lib.optionalAttrs (poolOpts.settings ? "listen.allowed_clients") {
+          IPAddressDeny = "any";
+          IPAddressAllow = lib.splitString "," poolOpts.settings."listen.allowed_clients";
+        }
+        // lib.optionalAttrs (poolOpts.settings ? "listen.backlog") {
+          Backlog = poolOpts.settings."listen.backlog";
+        };
+      }
+    ) (lib.filterAttrs (_: poolOpts: poolOpts.socketActivation) cfg.pools);
 
     systemd.services = mapAttrs' (
       pool: poolOpts:
       nameValuePair "phpfpm-${pool}" {
         description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
-        wantedBy = [ "phpfpm.target" ];
+        wantedBy = [
+          "phpfpm.target"
+        ]
+        ++ (lib.optionals (!poolOpts.socketActivation) [ "multi-user.target" ]);
         partOf = [ "phpfpm.target" ];
         documentation = [ "man:php-fpm(8)" ];
+        environment.FPM_SOCKETS = lib.mkIf poolOpts.socketActivation "${poolOpts.socket}=3";
         serviceConfig =
           let
             cfgFile = fpmCfgFile pool poolOpts;
