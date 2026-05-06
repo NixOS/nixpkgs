@@ -1346,6 +1346,7 @@ in
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix { };
   refind = runTest ./refind.nix;
   renovate = runTest ./renovate.nix;
+  repath-studio = runTest ./repath-studio.nix;
   replace-dependencies = handleTest ./replace-dependencies { };
   reposilite = runTest ./reposilite.nix;
   restartByActivationScript = runTest ./restart-by-activation-script.nix;
