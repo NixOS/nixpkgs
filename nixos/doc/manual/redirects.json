@@ -298,6 +298,9 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-firefox-syncserver-database": [
+    "index.html#module-services-firefox-syncserver-database"
+  ],
   "module-services-firefox-syncserver-clients": [
     "index.html#module-services-firefox-syncserver-clients"
   ],

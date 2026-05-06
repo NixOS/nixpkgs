@@ -10285,6 +10285,13 @@ with pkgs;
     waylandSupport = true;
   };
 
+  syncstorage-rs-mysql = callPackage ../by-name/sy/syncstorage-rs/package.nix {
+    dbBackend = "mysql";
+  };
+  syncstorage-rs-pgsql = callPackage ../by-name/sy/syncstorage-rs/package.nix {
+    dbBackend = "postgresql";
+  };
+
   inherit
     (callPackages ../applications/networking/syncthing {
       inherit (darwin) autoSignDarwinBinariesHook;
