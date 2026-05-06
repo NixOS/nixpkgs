@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.8.8.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Va3scgMxcLhqP+s7x/iDneCPZQCF0iOIQAfTJENcvOI=";
+    hash = "sha256-kFtzSOJYzPQf4QtdOLPLtRHIQj5nTZMB+cE42yZRTmc=";
   };
 
   backend = buildDotnetModule {
@@ -31,18 +31,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # Future updates should check if migration restoration is needed for supported upgrade paths.
     ];
     postPatch = ''
-      substituteInPlace API/Services/DirectoryService.cs --subst-var out
+      substituteInPlace Kavita.Services/DirectoryService.cs --subst-var out
 
-      substituteInPlace API/Startup.cs API/Services/LocalizationService.cs API/Controllers/FallbackController.cs \
+      substituteInPlace Kavita.Server/Startup.cs Kavita.Services/LocalizationService.cs Kavita.Server/Controllers/FallbackController.cs \
         --subst-var-by webroot "${finalAttrs.frontend}/lib/node_modules/kavita-webui/dist/browser"
     '';
 
-    executables = [ "API" ];
+    #executables = [ "Kavita.Server/API" ];
 
-    projectFile = "API/API.csproj";
+    projectFile = "Kavita.Server/Kavita.Server.csproj";
     nugetDeps = ./nuget-deps.json;
-    dotnet-sdk = dotnetCorePackages.sdk_9_0;
-    dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+    dotnet-sdk = dotnetCorePackages.sdk_10_0;
+    dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
   };
 
   frontend = buildNpmPackage {
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-SqW9qeg0CKfVKYsDXmVsnVNmcH7YkaXtXpPjIqGL0i0=";
+    npmDepsHash = "sha256-Qa/lf0hH2KMDdRcBj8GW9cJGE3YZsP32z2kfTk6YNYc=";
   };
 
   dontBuild = true;
@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/lib/kavita
     ln -s $backend/lib/kavita-backend $out/lib/kavita/backend
     ln -s $frontend/lib/node_modules/kavita-webui/dist $out/lib/kavita/frontend
-    ln -s $backend/bin/API $out/bin/kavita
+    ln -s $backend/bin/Kavita.Server $out/bin/kavita
 
     runHook postInstall
   '';
