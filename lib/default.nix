@@ -81,6 +81,7 @@ let
       cli = callLibs ./cli.nix;
       gvariant = callLibs ./gvariant.nix;
       generators = callLibs ./generators.nix;
+      ron = callLibs ./ron.nix;
 
       # misc
       asserts = callLibs ./asserts.nix;
@@ -427,6 +428,7 @@ let
         unsafeDiscardOutputDependency
         ;
       inherit (self.generators) mkLuaInline;
+      inherit (self.ron) fromRON importRON toRON;
       inherit (self.meta)
         addMetaAttrs
         dontDistribute
