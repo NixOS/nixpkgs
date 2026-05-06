@@ -17,6 +17,17 @@ let
   version = "9.14";
   yarnHash = "sha256-j/5qoCrhC7xBPaS6NhZFFQtJ7ThL/wkFXoCtyreLHco=";
 
+  yarnVersion = "4.9.2";
+  yarn-berry = yarn-berry_4.overrideAttrs (old: {
+    version = yarnVersion;
+    src = fetchFromGitHub {
+      owner = "yarnpkg";
+      repo = "berry";
+      tag = "@yarnpkg/cli/${yarnVersion}";
+      hash = "sha256-MZB70hgPiQuHHLibhrGZ11vcvtZsCDkqR1NxSq8bXps=";
+    };
+  });
+
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
@@ -45,7 +56,7 @@ pythonPackages.buildPythonApplication rec {
   inherit pname version src;
   missingHashes = ./missing-hashes.json;
 
-  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit missingHashes;
     src = src + "/web";
     hash = yarnHash;
@@ -85,6 +96,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   dontYarnBerryInstallDeps = true;
+  yarnBerryCheckVersionHookPackageJson = "web/package.json";
   preBuild = ''
     # Adapted from pkg/pip/build.sh
     echo Creating required directories...
@@ -137,8 +149,9 @@ pythonPackages.buildPythonApplication rec {
     cython
     pip
     sphinx
-    yarn-berry_4
-    yarn-berry_4.yarnBerryConfigHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
+    yarn-berry.yarnBerryCheckVersionHook
     nodejs
   ];
 
