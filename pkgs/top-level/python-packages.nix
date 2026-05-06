@@ -18141,6 +18141,14 @@ self: super: with self; {
 
   solders = callPackage ../development/python-modules/solders { };
 
+  solentlabs-cable-modem-monitor-catalog =
+    callPackage ../development/python-modules/solentlabs-cable-modem-monitor-catalog
+      { };
+
+  solentlabs-cable-modem-monitor-core =
+    callPackage ../development/python-modules/solentlabs-cable-modem-monitor-core
+      { };
+
   solidpython2 = callPackage ../development/python-modules/solidpython2 { };
 
   solo-python = callPackage ../development/python-modules/solo-python { };
