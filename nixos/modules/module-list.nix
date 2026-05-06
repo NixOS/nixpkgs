@@ -1738,6 +1738,7 @@
   ./services/web-apps/opencloud.nix
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/openwebrx.nix
+  ./services/web-apps/otterwiki.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/pairdrop.nix
   ./services/web-apps/papra.nix
@@ -1813,6 +1814,7 @@
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/garage.nix
+  ./services/web-servers/gunicorn
   ./services/web-servers/h2o/default.nix
   ./services/web-servers/hitch/default.nix
   ./services/web-servers/jboss/default.nix
