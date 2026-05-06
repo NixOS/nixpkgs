@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular-sidecar";
-  version = "2026.1.1";
+  version = "2026.4.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
     tag = version;
-    hash = "sha256-8+KfFyGcwA99mSZi95uOqOqzcJUa1GXu0BYva+hJDOw=";
+    hash = "sha256-NdCIXud0e0l9irDTMnz0KVzJwYqRAOjptPLdlj7E7Vk=";
   };
 
   build-system = [ setuptools ];
