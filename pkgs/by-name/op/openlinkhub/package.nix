@@ -4,7 +4,7 @@
   fetchFromGitHub,
   udev,
   nix-update-script,
-  versionCheckHook,
+  pciutils,
 }:
 
 buildGoModule rec {
@@ -17,6 +17,11 @@ buildGoModule rec {
     tag = version;
     hash = "sha256-Jq31ZcJtl0ZmjNsMOiTTt2eZIIYn2DRVPE4Q5FTx6OM=";
   };
+
+  postPatch = ''
+    substituteInPlace src/systeminfo/systeminfo.go \
+      --replace-fail '"lspci"' '"${lib.getExe' pciutils "lspci"}"'
+  '';
 
   proxyVendor = true;
 
