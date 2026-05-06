@@ -495,13 +495,6 @@ let
                 }
                 .${cpu.name} or cpu.name;
               vendor_ = final.rust.platform.vendor;
-              abi_ =
-                # We're very explicit about the POWER ELF ABI w/ glibc in our parsing, while Rust is not.
-                # TODO: Somehow ensure that Rust actually *uses* the correct ABI, and not just a libc-based default.
-                if (lib.strings.hasPrefix "powerpc" cpu.name) && (lib.strings.hasPrefix "gnuabielfv" abi.name) then
-                  "gnu"
-                else
-                  abi.name;
 
               inferred =
                 if final.isWasi then
@@ -511,7 +504,7 @@ let
                   # users can set `rust.rustcTargetSpec` to override it.
                   "${cpu_}-wasip1"
                 else
-                  "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
+                  "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
             in
             # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
             args.rust.rustcTargetSpec or args.rustc.config or (
