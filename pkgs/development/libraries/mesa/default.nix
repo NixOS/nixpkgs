@@ -54,18 +54,15 @@
   # We enable as many drivers as possible here, to build cross tools
   # and support emulation use cases (emulated x86_64 on aarch64, etc)
   galliumDrivers ? [
-    "asahi" # Apple AGX
     "crocus" # Intel legacy
     "d3d12" # WSL emulated GPU (aka Dozen)
     "ethosu" # ARM Ethos NPU
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "i915" # Intel extra legacy
-    "iris" # new Intel (Broadwell+)
     "lima" # ARM Mali 4xx
     "llvmpipe" # software renderer
     "nouveau" # Nvidia
-    "panfrost" # ARM Mali Midgard and up (T/G series)
     "r300" # very old AMD
     "r600" # less old AMD
     "radeonsi" # new AMD (GCN+)
@@ -77,20 +74,29 @@
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
+  ]
+  # See platformOpenCLWorks
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform spirv-llvm-translator) [
+    "asahi" # Apple AGX
+    "iris" # new Intel (Broadwell+)
+    "panfrost" # ARM Mali Midgard and up (T/G series)
   ],
   vulkanDrivers ? [
     "amd" # AMD (aka RADV)
-    "asahi" # Apple AGX
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "gfxstream" # Android virtualized GPU
-    "imagination" # PowerVR Rogue (currently N/A)
     "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
-    "intel" # new Intel (aka ANV)
     "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
+    "swrast" # software renderer (aka Lavapipe)
+  ]
+  # See platformOpenCLWorks
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform spirv-llvm-translator) [
+    "asahi" # Apple AGX
+    "imagination" # PowerVR Rogue (currently N/A)
+    "intel" # new Intel (aka ANV)
     "nouveau" # Nouveau (aka NVK)
     "panfrost" # ARM Mali Midgard and up (T/G series)
-    "swrast" # software renderer (aka Lavapipe)
   ]
   ++
     lib.optionals
@@ -142,6 +148,9 @@ let
 
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  # See spirv-llvm-translator.meta.badPlatforms for details
+  platformOpenCLWorks = lib.meta.availableOn stdenv.hostPlatform spirv-llvm-translator;
+
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
 stdenv.mkDerivation {
@@ -169,9 +178,6 @@ stdenv.mkDerivation {
 
   outputs = [
     "out"
-    # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
-    # if the user didn't explicitly ask for it
-    "opencl"
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
     # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
     # case anything wants to use it at some point
@@ -185,6 +191,11 @@ stdenv.mkDerivation {
     # - for a cross build (needNativeCLC = true), we provide mesa with `*-clc`
     #   binaries, so it skips building & installing any new CLC files.
     "cross_tools"
+  ]
+  ++ lib.optionals platformOpenCLWorks [
+    # OpenCL drivers pull in ~1G of extra LLVM stuff, so don't install them
+    # if the user didn't explicitly ask for it
+    "opencl"
   ];
 
   # Keep build-ids so drivers can use them for caching, etc.
@@ -228,7 +239,7 @@ stdenv.mkDerivation {
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
     # Rusticl, new OpenCL frontend
-    (lib.mesonBool "gallium-rusticl" true)
+    (lib.mesonBool "gallium-rusticl" platformOpenCLWorks)
     (lib.mesonOption "gallium-rusticl-enable-drivers" "auto")
 
     # Enable more sensors in gallium-hud
@@ -249,10 +260,13 @@ stdenv.mkDerivation {
     (lib.mesonOption "video-codecs" "all")
   ]
   ++ lib.optionals (!needNativeCLC) [
-    # Build and install extra tools for cross
-    (lib.mesonOption "tools" "asahi,panfrost")
     (lib.mesonBool "install-mesa-clc" true)
     (lib.mesonBool "install-precomp-compiler" true)
+  ]
+  # These need OpenCL / libclc support
+  ++ lib.optionals (!needNativeCLC && platformOpenCLWorks) [
+    # Build and install extra tools for cross
+    (lib.mesonOption "tools" "asahi,panfrost")
   ]
   ++ lib.optionals needNativeCLC [
     (lib.mesonOption "mesa-clc" "system")
@@ -282,11 +296,9 @@ stdenv.mkDerivation {
     libxxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
-    llvmPackages.libclc
     llvmPackages.libllvm
     lm_sensors
     python3Packages.python # for shebang
-    spirv-llvm-translator
     udev
     vulkan-loader
     wayland
@@ -297,6 +309,10 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withValgrind [
     valgrind-light
+  ]
+  ++ lib.optionals platformOpenCLWorks [
+    llvmPackages.libclc
+    spirv-llvm-translator
   ];
 
   depsBuildBuild = [
@@ -348,10 +364,14 @@ stdenv.mkDerivation {
     moveToOutput bin/pco_clc $cross_tools
     moveToOutput bin/vtn_bindgen2 $cross_tools
 
+  ''
+  + lib.optionalString platformOpenCLWorks ''
     moveToOutput "lib/lib*OpenCL*" $opencl
     # Construct our own .icd file that contains an absolute path.
     mkdir -p $opencl/etc/OpenCL/vendors/
     echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
+  ''
+  + ''
 
     moveToOutput bin/spirv2dxil $spirv2dxil
     moveToOutput "lib/libspirv_to_dxil*" $spirv2dxil
@@ -386,7 +406,16 @@ stdenv.mkDerivation {
     jdupes --hard-links --link-soft --recurse "$out"
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so $opencl/lib/libRusticlOpenCL.so
+    patchelf --add-rpath ${vulkan-loader}/lib ${
+      lib.strings.concatStringsSep " " (
+        [
+          "$out/lib/libgallium*.so"
+        ]
+        ++ lib.optionals platformOpenCLWorks [
+          "$opencl/lib/libRusticlOpenCL.so"
+        ]
+      )
+    }
   '';
 
   passthru = {
