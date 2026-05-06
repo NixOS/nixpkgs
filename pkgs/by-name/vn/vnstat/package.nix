@@ -7,6 +7,7 @@
   ncurses,
   sqlite,
   check,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ check ];
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) vnstat; };
 
   meta = {
     description = "Console-based network statistics utility for Linux";
