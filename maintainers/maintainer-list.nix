@@ -18103,6 +18103,11 @@
     githubId = 48838244;
     name = "Mislav Zanic";
   };
+  misogihagi = {
+    github = "misogihagi";
+    githubId = 47350059;
+    name = "misogihagi";
+  };
   misterio77 = {
     email = "eu@misterio.me";
     github = "Misterio77";
@@ -18614,7 +18619,7 @@
     github = "msgilligan";
     githubId = 61612;
     name = "Sean Gilligan";
-    keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
+    keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
   };
   mshnwq = {
     email = "mshnwq.com@gmail.com";
