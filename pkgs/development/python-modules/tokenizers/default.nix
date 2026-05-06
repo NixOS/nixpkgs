@@ -74,29 +74,30 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tokenizers";
-  version = "0.22.2";
+  version = "0.23.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
-    tag = "v${version}";
-    hash = "sha256-krc+FUA5H3J7L4D1xyjyFMpjXMU8TEfwdfRT4+uvti8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tY1pzbcCRQVxk3Qxd4FjFZTQJicm7Iwa0qRgjUrR+rk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-anYZ7M5OvLOOHDy+sLuZlHQ/cNTk6xHksBHSHa75iY4=";
+    hash = "sha256-JUhjjDyWsl9+hsRYIfNMX68b1GU+F++KS1tHEl6OzHA=";
   };
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
   nativeBuildInputs = [
     cargo
@@ -136,9 +137,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Downloads data using the datasets module
+    "TestTrainFromIterators"
+    "TestUnigram"
     "test_encode_special_tokens"
     "test_splitting"
-    "TestTrainFromIterators"
 
     # Require downloading from huggingface
     # huggingface_hub.errors.LocalEntryNotFoundError
@@ -171,9 +173,9 @@ buildPythonPackage rec {
   meta = {
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     homepage = "https://github.com/huggingface/tokenizers";
-    changelog = "https://github.com/huggingface/tokenizers/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/tokenizers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.unix;
   };
-}
+})
