@@ -2696,7 +2696,7 @@
         "version": "40.9.3"
     },
     "41": {
-        "chrome": "146.0.7680.188",
+        "chrome": "146.0.7680.216",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2705,15 +2705,15 @@
                     "version": "0-unstable-2026-02-05"
                 }
             },
-            "version": "146.0.7680.188"
+            "version": "146.0.7680.216"
         },
         "chromium_npm_hash": "sha256-ByB1Ea5tduIJZXyydeBWsoS8OPABOgwHe+dNXRssdvc=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-EKShXS1zF3TWCNLj8gCxjXlr80rA99QGM9ip28kgQH0=",
+                    "hash": "sha256-US3KELmSThwFAYS73Wh8w/6F5JjjE3/QnJ32axIoS1U=",
                     "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "tag": "146.0.7680.188",
+                    "tag": "146.0.7680.216",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2752,10 +2752,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-x3XSMSq1GuSTwQuOqbg9hCaMCoKx8UPGMDtJu5y1qfA=",
+                    "hash": "sha256-z7ev2g8h3ne4RopyS7C+X9J5cR64QDXNU5VZ0pzoErI=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v41.3.0"
+                    "tag": "v41.5.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2785,8 +2785,8 @@
             },
             "src/third_party/angle": {
                 "args": {
-                    "hash": "sha256-u/2B+93xg1sMlg+R9zjAFXpyjgLCyzB7JY4bjLafFFE=",
-                    "rev": "d1100603964278cd89c5eb94707fbca242c788bf",
+                    "hash": "sha256-W820GLtq3Nyw75kNRXwZZNVQjKgT9TzCXA2zU2q2QeM=",
+                    "rev": "f27a667c64ebf41644efa31e66c52dce26824a4f",
                     "url": "https://chromium.googlesource.com/angle/angle.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2977,8 +2977,8 @@
             },
             "src/third_party/dawn": {
                 "args": {
-                    "hash": "sha256-ATTNb61RG7hS1mapDw0o4ZyBeny4ONI8ZjJLpmbQaKU=",
-                    "rev": "10fb89e3179bb7443e66911eb3c795c7aaf022e5",
+                    "hash": "sha256-Tjc7KNI4gqYgE7jg/pE2H4BpE00LQD4bgrw7pRm/ssI=",
+                    "rev": "a94afcc3f32ac522df1383bb80b78680c7b1de70",
                     "url": "https://dawn.googlesource.com/dawn.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3347,8 +3347,8 @@
             },
             "src/third_party/libaom/source/libaom": {
                 "args": {
-                    "hash": "sha256-hLddZzWBQZ/MEF5fcCiju5ibNPSb+zhahlxdLaczdsE=",
-                    "rev": "446588f90da2e3372a9352d3b2ba8ab3f342c8ce",
+                    "hash": "sha256-SkaXi8kd2WlwE/t+Mb9n60SWiUhQksJsSW/x/mgmMco=",
+                    "rev": "b5d2fb00c10392da233017c223b1a5662bc7bb0c",
                     "url": "https://aomedia.googlesource.com/aom.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3467,8 +3467,8 @@
             },
             "src/third_party/libvpx/source/libvpx": {
                 "args": {
-                    "hash": "sha256-/FtYzbcOgOlaaWCoJfYns5oye7DoRZx1/xew3lN7tAM=",
-                    "rev": "e83e25f791932202256479052f18bdd03a091147",
+                    "hash": "sha256-XxoaxHT0UjHY2M5YriB0iERQYdSAOA4lCiBxctmU1H4=",
+                    "rev": "d45dc9655773862fbdaef40c449b919e815ac878",
                     "url": "https://chromium.googlesource.com/webm/libvpx.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3628,8 +3628,8 @@
             },
             "src/third_party/pdfium": {
                 "args": {
-                    "hash": "sha256-/reVJqqKSGUX1INmwOPQabPodYwlbhlxTIO0pAlnJnY=",
-                    "rev": "9e6326d6112c90f525c5f85cd7e39318bc705317",
+                    "hash": "sha256-H2YIwVZByH1rsSScgEnzcRtHLwxfEBr00tgMBHX5yiM=",
+                    "rev": "436c484cff819ca5c12374a6c4896127f8bcf27e",
                     "url": "https://pdfium.googlesource.com/pdfium.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3724,8 +3724,8 @@
             },
             "src/third_party/skia": {
                 "args": {
-                    "hash": "sha256-2/Deen9OwDgDRrm5j7Rw27Z2JUX1thX7mnKWRLJbEvM=",
-                    "rev": "30d129c8800b5626c46fb83fa62db10b9b22b319",
+                    "hash": "sha256-Nj7Hgzdf0DCNsQAjGyiq1+lvDd9J78M5N1jdL1wa9HU=",
+                    "rev": "ef5f213b0436c53fdf59184d9536eb5ee5aa8084",
                     "url": "https://skia.googlesource.com/skia.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3999,8 +3999,8 @@
             },
             "src/third_party/webrtc": {
                 "args": {
-                    "hash": "sha256-2yynA/qNvjP6KN2jShDuwnaSMJ1xRduWP4xsbODPDOE=",
-                    "rev": "70d86bbfaeeadffb1193c2aad245edd23ef251ef",
+                    "hash": "sha256-m+ylEOjCbCdlQ9+6lEaFSUXig3x2kWFa8PNdOADRVEU=",
+                    "rev": "2964e45d0fc4552b6ffe8789061f8fd2a96dca38",
                     "url": "https://webrtc.googlesource.com/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4047,8 +4047,8 @@
             },
             "src/v8": {
                 "args": {
-                    "hash": "sha256-NFz9p4EWq46Tm+Y/hBXk4Vb0Ljy/s1BTbuiMH351IJs=",
-                    "rev": "f09a91282a26caa91d016c962d785d852cfdec36",
+                    "hash": "sha256-SRHjAvmBRo9SMgShF3Ma+1HcIBdWL+JKQk4QTjL+vp8=",
+                    "rev": "f9116f3bf9a50b0f7925daacfdc6fed503a9dbe2",
                     "url": "https://chromium.googlesource.com/v8/v8.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4057,7 +4057,7 @@
         "electron_yarn_hash": "sha256-tPI7O7xlvDjU5+krILVB6JhLpftMq4Bn8+KIKMjBVgA=",
         "modules": "145",
         "node": "24.15.0",
-        "version": "41.3.0"
+        "version": "41.5.0"
     },
     "42": {
         "chrome": "148.0.7778.96",
