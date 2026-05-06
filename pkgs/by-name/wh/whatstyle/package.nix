@@ -2,8 +2,12 @@
   lib,
   python3,
   fetchFromGitHub,
-  clang-unwrapped,
+  llvmPackages,
 }:
+
+let
+  inherit (llvmPackages) clang-unwrapped;
+in
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whatstyle";
