@@ -3053,6 +3053,8 @@ with pkgs;
 
   pakcs = callPackage ../development/compilers/pakcs { };
 
+  paperless-ngx-beta = callPackage ../by-name/pa/paperless-ngx/beta.nix { };
+
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   patchutils = callPackage ../tools/text/patchutils { };
