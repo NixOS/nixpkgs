@@ -8,6 +8,7 @@
   mkdocs,
   python3,
   python3Packages,
+  runtimeShell,
 }:
 
 buildGoModule (
@@ -71,6 +72,12 @@ buildGoModule (
 
     postPatch = ''
       sed -i 's# /bin/echo# echo#' Makefile
+      substituteInPlace \
+          cmd/subscribe_unix.go \
+          cmd/subscribe_darwin.go \
+        --replace \
+          'scriptLauncher = []string{"sh", "-c"}' \
+          'scriptLauncher = []string{"${runtimeShell}", "-c"}'
     '';
 
     preBuild = ''
