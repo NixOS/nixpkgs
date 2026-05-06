@@ -1,0 +1,31 @@
+diff --git a/M2/Macaulay2/packages/=distributed-packages b/M2/Macaulay2/packages/=distributed-packages
+--- a/M2/Macaulay2/packages/=distributed-packages
++++ b/M2/Macaulay2/packages/=distributed-packages
+@@ -254,7 +254,6 @@ Isomorphism
+ CodingTheory
+ WhitneyStratifications
+ JSON
+-ForeignFunctions
+ GeometricDecomposability
+ PseudomonomialPrimaryDecomposition
+ PolyominoIdeals
+@@ -265,7 +264,6 @@ A1BrouwerDegrees
+ QuadraticIdealExamplesByRoos
+ TerraciniLoci
+ MatrixSchubert
+-RInterface
+ OIGroebnerBases
+ PlaneCurveLinearSeries
+ Valuations
+diff --git a/M2/configure.ac b/M2/configure.ac
+--- a/M2/configure.ac
++++ b/M2/configure.ac
+@@ -1930,7 +1930,7 @@ complement() {
+     for i in $1
+     do 	case "$y" in
+ 	    *" $i "*) ;;
+-	    *) /bin/echo -n "$i " ;;
++	    *) env echo -n "$i " ;;
+ 	esac
+     done
+     echo

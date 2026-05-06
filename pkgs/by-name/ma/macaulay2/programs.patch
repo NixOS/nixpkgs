@@ -1,0 +1,40 @@
+diff --git a/M2/Macaulay2/m2/Makefile.in b/M2/Macaulay2/m2/Makefile.in
+--- a/M2/Macaulay2/m2/Makefile.in
++++ b/M2/Macaulay2/m2/Makefile.in
+@@ -4,7 +4,7 @@
+ all: initialize phase1
+ include ../../include/config.Makefile
+ VPATH = @srcdir@
+-srcdir = $(shell cd @srcdir@; /bin/pwd)
++srcdir = $(shell cd @srcdir@; env pwd)
+ 
+ USER ?= unknown-user
+ 
+@@ -81,7 +81,7 @@ gdb: .gdb-directories .gdbinit .gdb-files
+ clean::; rm -f .gdb-directories
+ .gdb-directories: ../../libraries/* Makefile
+ 	echo '# -*- sh -*-' >$@
+-	/bin/echo 'echo -- loading .gdb-directories\n' >>$@
++	env echo 'echo -- loading .gdb-directories\n' >>$@
+ 	for i in \
+ 		../../libraries/*/build/*/. \
+ 		../../libraries/ntl/build/*/src/. \
+@@ -92,15 +92,15 @@ clean::; rm -f .gdb-directories
+ 	   then echo directory $$i >>$@ ;\
+ 	   fi ;\
+ 	done
+-	/bin/echo 'echo -- loaded .gdb-directories\n' >>$@
++	env echo 'echo -- loaded .gdb-directories\n' >>$@
+ .gdbinit.$(USER):; touch $@
+ clean::; rm -f .gdbinit
+ .gdb-files: Makefile
+ 	echo '# -*- sh -*-' >$@
+-	/bin/echo 'echo -- loading .gdb-files\n' >>$@
++	env echo 'echo -- loading .gdb-files\n' >>$@
+ 	echo 'set environment LD_LIBRARY_PATH $(BUILTLIBPATH)/lib:$(LD_LIBRARY_PATH)' >>$@
+ 	echo 'file @pre_exec_prefix@/bin/M2@EXE@' >>$@
+-	/bin/echo 'echo -- loaded .gdb-files\n' >>$@
++	env echo 'echo -- loaded .gdb-files\n' >>$@
+ clean::; rm -f .gdb-files
+ profile: gmon.out; LD_LIBRARY_PATH="$(BUILTLIBPATH)/lib:$(LD_LIBRARY_PATH)" gprof @pre_exec_prefix@/bin/M2@EXE@ >profile
+ clean::; rm -f profile
