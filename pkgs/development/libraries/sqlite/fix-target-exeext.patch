@@ -1,0 +1,15 @@
+diff --git a/autosetup/sqlite-config.tcl b/autosetup/sqlite-config.tcl
+index 384275f..c30b052 100644
+--- a/autosetup/sqlite-config.tcl
++++ b/autosetup/sqlite-config.tcl
+@@ -1994,8 +1994,8 @@ proc sqlite-check-tcl {} {
+     proj-assert {"" ne $tclExecPrefix}
+     msg-result "AFTER4"
+     set tryThese [list \
+-                    $tclExecPrefix/bin/tclsh[get-define TCL_VERSION] \
+-                    $tclExecPrefix/bin/tclsh ]
++                    $tclExecPrefix/bin/tclsh[get-define TCL_VERSION][get-define TARGET_EXEEXT] \
++                    $tclExecPrefix/bin/tclsh[get-define TARGET_EXEEXT] ]
+     foreach trySh $tryThese {
+       if {[file-isexec $trySh]} {
+         set with_tclsh $trySh
