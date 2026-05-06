@@ -790,6 +790,7 @@
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
+  ./services/mail/simplelogin.nix
   ./services/mail/spamassassin.nix
   ./services/mail/stalwart.nix
   ./services/mail/sympa.nix

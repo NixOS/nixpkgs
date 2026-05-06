@@ -1489,6 +1489,8 @@ in
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = runTest ./silverbullet.nix;
   simple = runTest ./simple.nix;
+  simplelogin = runTest ./simplelogin/default.nix;
+  simplelogin-postfix = runTest ./simplelogin/postfix.nix;
   sing-box = runTest ./sing-box.nix;
   sks = runTest ./sks.nix;
   slimserver = runTest ./slimserver.nix;
