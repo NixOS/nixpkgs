@@ -130,24 +130,6 @@ def generate_restarter_hash(config: UpdaterConfig, root_path: Path) -> str:
     )
 
 
-def generate_jps_hash(config: UpdaterConfig, root_path: Path) -> str:
-    print("[*] Generating jps repo hash...")
-    jps_repo_nix = config.jetbrains_root / "source" / "jps_repo.nix"
-    return run_command(
-        [
-            "nurl",
-            "--expr",
-            f"""
-        (import {config.nixpkgs_root} {{}}).callPackage {jps_repo_nix} {{
-            jbr = (import {config.nixpkgs_root} {{}}).jetbrains.jdk-no-jcef;
-            src = {root_path};
-            jpsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-        }}
-    """,
-        ]
-    )
-
-
 def maven_out_path(jb_root: Path, name: str) -> Path:
     return jb_root / "source" / f"{name}_maven_artefacts.json"
 
@@ -168,7 +150,6 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
         )
         print(f"[!] Skipping update of {ide.name}.", file=sys.stderr)
         return False
-    jps_hash = generate_jps_hash(config, intellij_outpath)
     restarter_hash = generate_restarter_hash(config, intellij_outpath)
     repositories = jar_repositories(intellij_outpath)
     kjps_plugin_version, kjps_plugin_hash = kotlin_jps_plugin_info(intellij_outpath)
@@ -192,7 +173,6 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
                         buildType = "{variant}";
                         ideaHash = "{intellij_hash}";
                         androidHash = "{android_hash}";
-                        jpsHash = "{jps_hash}";
                         restarterHash = "{restarter_hash}";
                         mvnDeps = ../source/{variant}_maven_artefacts.json;
                         repositories = [

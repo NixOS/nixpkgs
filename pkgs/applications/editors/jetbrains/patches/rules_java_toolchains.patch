@@ -1,0 +1,130 @@
+--- a/toolchains/BUILD
++++ b/toolchains/BUILD
+@@ -199,114 +199,22 @@
+ 
+ alias(
+     name = "ijar",
+-    actual = ":ijar_prebuilt_binary_or_cc_binary",
+-)
+-
+-alias(
+-    name = "ijar_prebuilt_binary_or_cc_binary",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":ijar_prebuilt_binary_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":ijar_prebuilt_binary_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":ijar_prebuilt_binary_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": ":ijar_prebuilt_binary_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":ijar_prebuilt_binary_windows",
+-        "//conditions:default": "@remote_java_tools//:ijar_cc_binary",
+-    }),
+-)
+-
+-alias(
+-    name = "ijar_prebuilt_binary",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":ijar_prebuilt_binary_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":ijar_prebuilt_binary_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":ijar_prebuilt_binary_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": "ijar_prebuilt_binary_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":ijar_prebuilt_binary_windows",
+-    }),
++    actual = "@remote_java_tools//:ijar_cc_binary",
+ )
+ 
+ alias(
+     name = "singlejar",
+-    actual = ":singlejar_prebuilt_or_cc_binary",
+-)
+-
+-alias(
+-    name = "singlejar_prebuilt_or_cc_binary",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":prebuilt_singlejar_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":prebuilt_singlejar_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":prebuilt_singlejar_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": ":prebuilt_singlejar_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":prebuilt_singlejar_windows",
+-        "//conditions:default": "@remote_java_tools//:singlejar_cc_bin",
+-    }),
+-)
+-
+-alias(
+-    name = "prebuilt_singlejar",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":prebuilt_singlejar_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":prebuilt_singlejar_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":prebuilt_singlejar_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": ":prebuilt_singlejar_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":prebuilt_singlejar_windows",
+-    }),
++    actual = "@remote_java_tools//:singlejar_cc_bin",
+ )
+ 
+ alias(
+     name = "one_version",
+-    actual = ":one_version_prebuilt_or_cc_binary",
+-)
+-
+-alias(
+-    name = "one_version_prebuilt_or_cc_binary",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":prebuilt_one_version_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":prebuilt_one_version_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":prebuilt_one_version_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": ":prebuilt_one_version_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":prebuilt_one_version_windows",
+-        "//conditions:default": "@remote_java_tools//:one_version_cc_bin",
+-    }),
+-)
+-
+-alias(
+-    name = "prebuilt_one_version",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":prebuilt_one_version_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":prebuilt_one_version_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":prebuilt_one_version_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": ":prebuilt_one_version_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":prebuilt_one_version_windows",
+-    }),
++    actual = "@remote_java_tools//:one_version_cc_bin",
+ )
+ 
+ alias(
+     name = "turbine_direct",
+-    actual = ":turbine_direct_graal_or_java",
+-)
+-
+-alias(
+-    name = "turbine_direct_graal_or_java",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":turbine_direct_graal_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":turbine_direct_graal_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":turbine_direct_graal_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": ":turbine_direct_graal_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":turbine_direct_graal_windows",
+-        "//conditions:default": "@remote_java_tools//:TurbineDirect",
+-    }),
+-)
+-
+-alias(
+-    name = "turbine_direct_graal",
+-    actual = select({
+-        "@bazel_tools//src/conditions:darwin_arm64": ":turbine_direct_graal_darwin_arm64",
+-        "@bazel_tools//src/conditions:darwin_x86_64": ":turbine_direct_graal_darwin_x86_64",
+-        "@bazel_tools//src/conditions:linux_x86_64": ":turbine_direct_graal_linux",
+-        "@bazel_tools//src/conditions:linux_aarch64": ":turbine_direct_graal_linux_aarch64",
+-        "@bazel_tools//src/conditions:windows": ":turbine_direct_graal_windows",
+-    }),
++    actual = "@remote_java_tools//:TurbineDirect",
+ )
+ 
+ string_setting(
+@@ -387,7 +295,7 @@
+ 
+ default_java_toolchain(
+     name = "prebuilt_toolchain",
+-    configuration = PREBUILT_TOOLCHAIN_CONFIGURATION,
++    configuration = DEFAULT_TOOLCHAIN_CONFIGURATION,
+     toolchain_definition = False,
+ )
+ 

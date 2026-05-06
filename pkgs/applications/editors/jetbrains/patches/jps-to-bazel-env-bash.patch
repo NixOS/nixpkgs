@@ -1,0 +1,11 @@
+--- a/platform/build-scripts/bazel/jps-to-bazel.cmd
++++ b/platform/build-scripts/bazel/jps-to-bazel.cmd
+@@ -9,7 +9,7 @@
+ root="$script_dir/../../../.."
+ 
+ cd "$script_dir"
+-exec /bin/bash "$root/bazel.cmd" run //:jps-to-bazel -- "$@"
++exec bazel run @bazelRunArgs@ --registry=file://@registry@ --repository_cache=$root/repo_cache //:jps-to-bazel -- "$@"
+ :CMDSCRIPT
+ 
+ pushd "%~dp0"

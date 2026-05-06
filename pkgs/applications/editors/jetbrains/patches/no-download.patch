@@ -70,16 +70,16 @@
     * Set both properties if a .snap package should be produced.
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
-@@ -76,7 +76,7 @@
+@@ -70,7 +70,7 @@
          val distBinDir = targetPath.resolve("bin")
          val sourceBinDir = context.paths.communityHomeDir.resolve("bin/linux")
-         addNativeLauncher(distBinDir = distBinDir, targetPath = targetPath, arch = arch, context = context)
+         addNativeLauncher(distBinDir, targetPath, arch, context)
 -        copyFileToDir(NativeBinaryDownloader.getRestarter(context, OsFamily.LINUX, arch), distBinDir)
 +        copyFileToDir(sourceBinDir.resolve("${arch.dirName}/restarter"), distBinDir)
          copyFileToDir(sourceBinDir.resolve("${arch.dirName}/fsnotifier"), distBinDir)
-         generateBuildTxt(context = context, targetDirectory = targetPath)
-         copyDistFiles(context = context, newDir = targetPath, os = OsFamily.LINUX, arch = arch, libcImpl = targetLibcImpl)
-@@ -132,6 +132,8 @@
+         generateBuildTxt(targetPath, context)
+         copyDistFiles(targetPath, OsFamily.LINUX, arch, targetLibcImpl, context)
+@@ -125,6 +125,8 @@
            }
          }
        }
@@ -100,16 +100,16 @@
  }
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
-@@ -9,6 +9,8 @@
- import java.io.ByteArrayOutputStream
+@@ -10,6 +10,8 @@
  import java.io.DataOutputStream
- import java.util.*
+ import java.util.TreeMap
+ import java.util.TreeSet
 +import java.nio.file.Path
 +import kotlin.io.path.readText
 
  private const val MARKETPLACE_BROKEN_PLUGINS_URL = "https://plugins.jetbrains.com/files/brokenPlugins.json"
 
-@@ -19,7 +21,7 @@
+@@ -20,7 +22,7 @@
    val span = Span.current()
 
    val allBrokenPlugins = try {

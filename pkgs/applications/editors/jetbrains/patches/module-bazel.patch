@@ -1,0 +1,58 @@
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -11,6 +11,15 @@
+     url = "https://github.com/JetBrains/rules_kotlin/archive/30e89b8f9a246952e14eb6f56c2265a46bf4dc54.zip",
+ )
+ bazel_dep(name = "rules_java", version = "9.3.0")
++single_version_override(
++    module_name = "rules_java",
++    patch_strip = 1,
++    patches = [
++        "//build:rules_java_toolchains.patch",
++        "//build:rules_java_stub.patch",
++    ],
++)
++
+ bazel_dep(name = "rules_jvm", version = "0.0.1")
+ bazel_dep(name = "protobuf", version = "33.4")
+ single_version_override(
+@@ -60,29 +69,18 @@
+ 
+ http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+ 
+-bazel_dep(name = "toolchains_llvm", version = "1.6.0")
+-single_version_override(
+-    module_name = "toolchains_llvm",
+-    patch_strip = 1,
+-    patches = ["//build:toolchains_llvm-windows_support.patch"],  # Add Windows support, patch of https://github.com/bazel-contrib/toolchains_llvm/pull/642
+-)
+-
+-llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)  # `dev_dependency = True` to avoid leaking the extension in modules using that module, see https://github.com/bazel-contrib/toolchains_llvm/issues/569
+-llvm.toolchain(
+-    name = "llvm_toolchain",
+-    llvm_version = "20.1.3",
+-)
+-
+-# No sysroot is wired as this MODULE.bazel is public
+-
+-use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
+-
+-register_toolchains(
+-    "@llvm_toolchain//:all",
+-    dev_dependency = True,
+-)  # `dev_dependency = True` to avoid registering toolchains in modules using that module, see https://github.com/bazel-contrib/toolchains_llvm/issues/569
++bazel_dep(name = "llvm", version = "0.7.0")
++register_toolchains("@llvm//toolchain:all")
+ 
+ bazel_dep(name = "rules_python", version = "1.7.0")
++single_version_override(
++    module_name = "rules_python",
++    version = "1.7.0",
++    patch_strip = 1,
++    patches = [
++        "//build:rules_python_patch_host_python.patch",
++    ],
++)
+ 
+ kotlin_test_deps = use_repo_rule("//plugins/kotlin:kotlin_test_dependencies.bzl", "kotlin_test_deps")
+ kotlin_test_deps(name = "kotlin_test_deps")
