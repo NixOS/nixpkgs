@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clipper2";
-  version = "2.0.1";
+  version = "2.0.1_DLLs";
 
   src = fetchFromGitHub {
     owner = "AngusJohnson";
