@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.19.1";
+  version = "1.19.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MWX3hKrlajCaJ9jurnkj1T2i6PYJQwjH9bQo3uySXPk=";
+    hash = "sha256-y+s9vKnKbuPV6l0C9ehEwtYISi1dZiHj4GqisRxkW/0=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
