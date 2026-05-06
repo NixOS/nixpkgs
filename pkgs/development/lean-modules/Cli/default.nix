@@ -4,14 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildLakePackage {
+buildLakePackage (finalAttrs: {
   pname = "lean4-cli";
+  # nixpkgs-update: no auto update
   version = "4.29.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4-cli";
-    tag = "v4.29.0";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jCUl4sXVmwtYPuQecEUFH6mwFzPaQY7au4624EOiWjk=";
   };
 
@@ -33,4 +34,4 @@ buildLakePackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nadja-y ];
   };
-}
+})
