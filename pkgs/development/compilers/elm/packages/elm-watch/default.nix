@@ -53,4 +53,3 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "elm-watch";
   };
 })
-
