@@ -9,6 +9,7 @@
   libmicrohttpd,
   libosmscout,
   libpostal,
+  libtiff,
   marisa,
   osrm-backend,
   protobuf_21,
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     osrm-backend
     libmicrohttpd
     libpostal
+    libtiff
     sqlite
     marisa
     kyotocabinet
@@ -70,6 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     "SCOUT_FLAVOR=kirigami" # Choose to build the kirigami UI variant
     "CONFIG+=disable_mapnik" # Disable the optional mapnik backend
   ];
+
+  # valhalla 3.6 headers use std::ranges/std::views (C++20).
+  env.NIX_CFLAGS_COMPILE = "-std=c++20";
 
   meta = {
     description = "Maps server providing tiles, geocoder, and router";
