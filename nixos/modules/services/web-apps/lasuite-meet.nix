@@ -7,10 +7,12 @@
 }:
 let
   inherit (lib)
+    elem
     getExe
     mapAttrs
     mkEnableOption
     mkIf
+    mkMerge
     mkPackageOption
     mkOption
     mkRemovedOptionModule
@@ -95,6 +97,21 @@ in
     enable = mkEnableOption "SuiteNumérique Meet";
 
     package = mkPackageOption pkgs "lasuite-meet" { };
+
+    addons = mkOption {
+      type = types.listOf (
+        types.enum [
+          "outlook"
+        ]
+      );
+      default = [ ];
+      example = ''
+        [
+          "outlook"
+        ]
+      '';
+      description = "Addons to use and configure";
+    };
 
     bind = mkOption {
       type = types.str;
@@ -429,36 +446,97 @@ in
     services.nginx = mkIf cfg.enableNginx {
       enable = true;
 
-      virtualHosts.${cfg.domain} = {
-        root = cfg.package.frontend;
+      virtualHosts.${cfg.domain} = mkMerge [
+        {
+          root = cfg.package.frontend;
 
-        extraConfig = ''
-          error_page 404 = /index.html;
-        '';
-
-        locations."/api" = {
-          proxyPass = "http://${cfg.bind}";
-          recommendedProxySettings = true;
-        };
-
-        locations."/admin" = {
-          proxyPass = "http://${cfg.bind}";
-          recommendedProxySettings = true;
-        };
-
-        locations."/static" = {
-          root = "${cfg.package}/share";
-        };
-
-        locations."/livekit" = mkIf cfg.livekit.enable {
-          proxyPass = "http://localhost:${toString config.services.livekit.settings.port}";
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
           extraConfig = ''
-            rewrite ^/livekit/(.*)$ /$1 break;
+            error_page 404 = /index.html;
           '';
-        };
-      };
+
+          locations."/api" = {
+            proxyPass = "http://${cfg.bind}";
+            recommendedProxySettings = true;
+          };
+
+          locations."/admin" = {
+            proxyPass = "http://${cfg.bind}";
+            recommendedProxySettings = true;
+          };
+
+          locations."/static" = {
+            root = "${cfg.package}/share";
+          };
+        }
+        (mkIf cfg.livekit.enable {
+          locations."/livekit" = {
+            proxyPass = "http://localhost:${toString config.services.livekit.settings.port}";
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            extraConfig = ''
+              rewrite ^/livekit/(.*)$ /$1 break;
+            '';
+          };
+        })
+        (mkIf (elem "outlook" cfg.addons) {
+          locations."= /.well-known/windows-app-web-link" = {
+            alias = pkgs.writeText "lasuite-meet-winsows-app-web-link.json" ''
+              [{
+                "packageFamilyName" : "Visio_g3z6ba6vek6vg",
+                "paths" : [ "*" ]
+              }]
+            '';
+            extraConfig = ''
+              default_type application/json;
+              add_header Content-Disposition "attachment; filename=windows-app-web-link";
+            '';
+          };
+
+          locations."= /addons/outlook/manifest.xml" = {
+            alias = pkgs.stdenv.mkDerivation {
+              name = "lasuite-meet-manifest.xml";
+              buildCommand = ''
+                substitute ${cfg.package.addons.outlook}/manifest.xml $out \
+                  --replace-fail "__APP_NAME__" "LaSuite Meet" \
+                  --replace-fail "https://localhost:3000/" "https://${cfg.domain}/addons/outlook/"
+              '';
+            };
+            extraConfig = ''
+              add_header Access-Control-Allow-Origin "*";
+              add_header Cache-Control "no-cache, no-store, must-revalidate";
+              add_header X-Frame-Options "DENY";
+              add_header Content-Security-Policy "frame-ancestors 'none'";
+            '';
+          };
+
+          locations."/addons/outlook/" = {
+            alias = "${cfg.package.addons.outlook}/";
+            extraConfig = ''
+              error_page 404 =200 /index.html;
+              add_header Cache-Control "no-cache, no-store, must-revalidate";
+              add_header Pragma "no-cache" always;
+              add_header Expires 0 always;
+
+              set $ms_domains "https://*.live.com https://*.office.com https://*.microsoft.com https://*.office365.com https://*.sharepoint.com";
+
+              set $nonce $request_id;
+
+              set $csp "upgrade-insecure-requests; ";
+              set $csp "''${csp}frame-ancestors ''${ms_domains}; ";
+              set $csp "''${csp}script-src 'nonce-''${nonce}' 'strict-dynamic'; ";
+              set $csp "''${csp}connect-src 'self' ''${ms_domains}; ";
+              set $csp "''${csp}frame-src 'none'; ";
+              set $csp "''${csp}object-src 'none'; ";
+              set $csp "''${csp}base-uri 'none'; ";
+
+              add_header Content-Security-Policy $csp;
+
+              sub_filter 'NONCE_PLACEHOLDER' $nonce;
+              sub_filter_once off;
+            '';
+          };
+        })
+      ];
     };
   };
 
