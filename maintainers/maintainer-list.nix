@@ -9662,6 +9662,12 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
+  gdw2 = {
+    email = "gdwarner@gmail.com";
+    github = "gdw2";
+    githubId = 665024;
+    name = "Greg Warner";
+  };
   genga898 = {
     email = "genga898@gmail.com";
     github = "genga898";
