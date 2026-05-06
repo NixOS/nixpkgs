@@ -1,0 +1,22 @@
+diff --git a/src/rtapi/uspace_common.h b/src/rtapi/uspace_common.h
+index 88eb2c5dc4..f3f6ef9c4d 100644
+--- a/src/rtapi/uspace_common.h
++++ b/src/rtapi/uspace_common.h
+@@ -401,11 +401,16 @@ static int detect_env_override() {
+ }
+ 
+ static int detect_realtime() {
++    // first consider override...
++    int env_override = detect_env_override();
++    if (env_override) return env_override;
++
++    // ... then try to guess
+     struct stat st;
+     if ((stat(EMC2_BIN_DIR "/rtapi_app", &st) < 0)
+             || st.st_uid != 0 || !(st.st_mode & S_ISUID))
+         return 0;
+-    return detect_env_override() || detect_preempt_rt() || detect_rtai() || detect_xenomai();
++    return detect_preempt_rt() || detect_rtai() || detect_xenomai();
+ }
+ 
+ int rtapi_is_realtime() {
