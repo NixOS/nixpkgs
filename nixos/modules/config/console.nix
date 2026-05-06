@@ -28,17 +28,25 @@ let
     ${lib.optionalString (cfg.font != null) "FONT=${cfg.font}"}
   '';
 
+  # NB: systemd doesn't follow symlinks inside `/etc/kbd/keymaps`, but it will
+  # follow `/etc/kbd/keymaps` if it's a symlink itself. So we work around it by
+  # symlinking the top-level directories in `/share`, and removing the symlinks
+  # we don't need. This avoids the files in `/share/*/...` being symlinks.
   consoleEnv =
     kbd:
     pkgs.buildEnv {
       name = "console-env";
       paths = [ kbd ] ++ cfg.packages;
-      pathsToLink = [
-        "/share/consolefonts"
-        "/share/consoletrans"
-        "/share/keymaps"
-        "/share/unimaps"
-      ];
+      pathsToLink = [ "/share" ];
+      postBuild = ''
+        cd "$out/share"
+        for dir in *; do
+          case "$dir" in
+            consolefonts|consoletrans|keymaps|unimaps) ;;
+            *) rm -rf -- "$dir" ;;
+          esac
+        done
+      '';
     };
 in
 
