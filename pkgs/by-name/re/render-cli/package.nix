@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "render-cli";
-  version = "2.15.1";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "render-oss";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-a7yYSslRWa4d8TTAw128PukLBamqkpDr2oUUYBRgpCY=";
+    hash = "sha256-y9XlOMNwqdooj3LcNFIF9gov9KX+WtB8eU0NsjzVuUc=";
   };
 
   vendorHash = "sha256-K2RKcz5wAP0ZA5g5aDgSsEXKEEncFtO9qamgG3fW02Y=";
