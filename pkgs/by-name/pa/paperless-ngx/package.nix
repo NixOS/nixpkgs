@@ -63,10 +63,6 @@ python.pkgs.buildPythonApplication (
       poppler-utils
     ];
 
-    frontend = callPackage ./frontend.nix {
-      inherit (finalAttrs) src version;
-    };
-
     nltkDataDir = symlinkJoin {
       name = "paperless_ngx_nltk_data";
       paths = with nltk-data; [
@@ -207,7 +203,7 @@ python.pkgs.buildPythonApplication (
 
         mkdir -p $out/lib/paperless-ngx/static/frontend
         cp -r {src,static,LICENSE} $out/lib/paperless-ngx
-        lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
+        lndir -silent ${finalAttrs.passthru.frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
         chmod +x $out/lib/paperless-ngx/src/manage.py
         makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
           --prefix PYTHONPATH : "${pythonPath}" \
@@ -285,8 +281,10 @@ python.pkgs.buildPythonApplication (
     doCheck = !stdenv.hostPlatform.isDarwin;
 
     passthru = {
+      frontend = callPackage ./frontend.nix {
+        inherit (finalAttrs) src version;
+      };
       inherit
-        frontend
         nltkDataDir
         path
         python
