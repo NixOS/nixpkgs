@@ -58,6 +58,7 @@ lib.extendMkDerivation {
       meta ? { },
       useFetchCargoVendor ? true,
       cargoDeps ? null,
+      cargoHash ? null,
       cargoLock ? null,
       cargoVendorDir ? null,
       checkType ? buildType,
@@ -107,7 +108,7 @@ lib.extendMkDerivation {
           cargoDeps
         else if cargoLock != null then
           importCargoLock cargoLock
-        else if args.cargoHash or null == null then
+        else if cargoHash == null then
           throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
         else
           fetchCargoVendor (
@@ -126,11 +127,14 @@ lib.extendMkDerivation {
             // {
               ${if cargoDepsName != null then "name" else null} = cargoDepsName;
               patches = cargoPatches;
-              hash = args.cargoHash;
+              hash = finalAttrs.cargoHash;
             }
             // depsExtraArgs
           );
-      inherit buildAndTestSubdir;
+      inherit
+        buildAndTestSubdir
+        cargoHash
+        ;
 
       cargoBuildType = buildType;
 
