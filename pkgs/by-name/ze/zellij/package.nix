@@ -11,6 +11,7 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  webServerSupport ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -47,6 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     curl
     openssl
   ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "plugins_from_target"
+  ]
+  ++ lib.optionals webServerSupport [ "web_server_capability" ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
