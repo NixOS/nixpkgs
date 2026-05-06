@@ -1,0 +1,48 @@
+From 0ce09a927faa7acda1af985ca8f94800ef7b5d6c Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Wed, 6 May 2026 11:15:37 +0200
+Subject: [PATCH] Fix memory reuse bug in comsat
+
+getpwuid(3) may return a pointer to static memory, which may be
+overridden with a subsequent call to getpwent(3), getpwnam(3), or
+getpwuid(3).  Here, user can point to such static memory, and it's
+then passed back into getpwnam() via change_user.  When this happens,
+getpwnam() might overwrite that static memory before reading the name
+value, producing an undefined result.  The fix is to copy the name
+into memory that won't be overwritten in the getpwnam() call.
+
+I observed this happening with musl 1.2.5, resulting in test failures.
+
+I maintained consistency with the other surrounding code by not
+checking for allocation failure and only freeing allocated memory in
+the happy path.
+---
+ comsat/comsat.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/comsat/comsat.c b/comsat/comsat.c
+index 56bd60a25..30c5db135 100644
+--- a/comsat/comsat.c
++++ b/comsat/comsat.c
+@@ -612,7 +612,7 @@ main (int argc, char **argv)
+ 	  mu_error (_("cannot determine user name"));
+ 	  exit (EXIT_FAILURE);
+ 	}
+-      user = pw->pw_name;
++      user = strdup(pw->pw_name);
+ 
+       if (biffrc[0] == '.' && (biffrc[1] == '/' ||
+ 			       (biffrc[1] == '.' && biffrc[2] == '/')))
+@@ -629,6 +629,7 @@ main (int argc, char **argv)
+ 	}
+       
+       notify_user (user, test_mode, argv[0], argv[1]);
++      free (user);
+       exit (0);
+     }
+   
+
+base-commit: b6254c496de66346cd4e7c5a9ced188d86adee2a
+-- 
+2.53.0
+
