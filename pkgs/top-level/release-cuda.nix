@@ -21,6 +21,12 @@ in
     "aarch64-linux"
   ],
   variant ? "cuda",
+  # Optional override for `config.cudaCapabilities` used during evaluation.
+  # When non-null, scopes the build to the given GPU compute capabilities. Useful
+  # for narrow capability sets that wouldn't otherwise be covered by the default
+  # `config.cudaCapabilities` (which targets dGPU architectures), notably NVIDIA
+  # Jetson on aarch64-linux: Xavier (sm_72), Orin (sm_87), Thor (sm_110).
+  cudaCapabilities ? null,
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
@@ -30,6 +36,9 @@ in
 
       # Don't evaluate duplicate and/or deprecated attributes
       allowAliases = false;
+    }
+    // lib.optionalAttrs (cudaCapabilities != null) {
+      inherit cudaCapabilities;
     };
 
     __allowFileset = false;
