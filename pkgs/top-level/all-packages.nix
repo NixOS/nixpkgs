@@ -5274,20 +5274,22 @@ with pkgs;
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
-  electron-source = callPackage ../development/tools/electron { };
+  electron-source = callPackage ../development/tools/electron { strictDeps = true; };
 
-  inherit (callPackages ../development/tools/electron/binary { })
+  inherit (callPackages ../development/tools/electron/binary { strictDeps = true; })
     electron_38-bin
     electron_39-bin
     electron_40-bin
     electron_41-bin
+    electron_42-bin
     ;
 
-  inherit (callPackages ../development/tools/electron/chromedriver { })
+  inherit (callPackages ../development/tools/electron/chromedriver { strictDeps = true; })
     electron-chromedriver_38
     electron-chromedriver_39
     electron-chromedriver_40
     electron-chromedriver_41
+    electron-chromedriver_42
     ;
 
   inherit
@@ -5320,12 +5322,17 @@ with pkgs;
           src = electron-source.electron_41;
           bin = electron_41-bin;
         };
+        electron_42 = getElectronPkg {
+          src = electron-source.electron_42;
+          bin = electron_42-bin;
+        };
       }
     )
     electron_38
     electron_39
     electron_40
     electron_41
+    electron_42
     ;
   electron = electron_41;
   electron-bin = electron_41-bin;
