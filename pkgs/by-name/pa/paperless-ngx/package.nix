@@ -27,30 +27,35 @@
   symlinkJoin,
   nltk-data,
   lndir,
+  pythonPackageOverrides ? null,
 }:
 let
   pnpm = pnpm_10;
 
   python = python3.override {
     self = python;
-    packageOverrides = final: prev: {
-      django = prev.django_5;
+    packageOverrides =
+      if pythonPackageOverrides != null then
+        pythonPackageOverrides
+      else
+        final: prev: {
+          django = prev.django_5;
 
-      fido2 = prev.fido2.overridePythonAttrs {
-        version = "1.2.0";
+          fido2 = prev.fido2.overridePythonAttrs {
+            version = "1.2.0";
 
-        src = fetchPypi {
-          pname = "fido2";
-          version = "1.2.0";
-          hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
+            src = fetchPypi {
+              pname = "fido2";
+              version = "1.2.0";
+              hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
+            };
+
+            pytestFlags = [ ];
+          };
+
+          # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
+          ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
         };
-
-        pytestFlags = [ ];
-      };
-
-      # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
-      ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
-    };
   };
 in
 python.pkgs.buildPythonApplication (
