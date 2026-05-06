@@ -333,6 +333,9 @@ Write a text file to the Nix store.
 
 : Commands to run after generating the file.
 
+  `checkPhase` is deprecated.
+  Use `installCheckPhase` or `preInstallCheck`/`postInstallCheck` in `derivationArgs` instead.
+
   Default: `""`
 
 `meta` (Attribute set, _optional_)
@@ -366,6 +369,31 @@ Write a text file to the Nix store.
 : Extra arguments to pass to the underlying call to `stdenv.mkDerivation`.
 
   Default: `{}`
+
+  Additionally, the following attributes can be passed to `derivatoinArgs`:
+
+  `preInstall`, `postInstall` (String, _optional_)
+
+  : Commands to run before/after file generation.
+
+    `writeTextFile` places its file generation logic inside `installPhase`, surrounded by `runHook preInstall` and `runHook postInstall`.
+
+  : `installCheckPhase`
+
+    This is typically reserved for build helpers derived from `writeTextFile`.
+    Users can place additional checks inside `postInstallCheck` or `preInstallCheck`.
+
+    Default:
+    ```nix
+    ''
+      runHook preInstallCheck
+      runHook postInstallCheck
+    ''
+    ```
+
+  : `preInstallCheck`, `postInstallCheck`
+
+    Additional check commands to run at the beginning/end of `installCheckPhase`.
 
 The resulting store path will include some variation of the name, and it will be a file unless `destination` is used, in which case it will be a directory.
 

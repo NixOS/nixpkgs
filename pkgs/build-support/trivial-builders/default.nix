@@ -111,14 +111,36 @@ rec {
         text,
         executable ? false,
         destination ? "",
-        checkPhase ? "",
         meta ? { },
         passthru ? { },
         allowSubstitutes ? false,
         preferLocalBuild ? true,
         derivationArgs ? { },
         pos ? builtins.unsafeGetAttrPos "name" args,
+
+        # Deprecated arguments
+        checkPhase ? "",
       }@args:
+      let
+        getDeprecatedPhase =
+          warnVerNo: n: alt:
+          let
+            handle =
+              if lib.oldestSupportedReleaseIsAtLeast 2611 then
+                throw
+              else if lib.oldestSupportedReleaseIsAtLeast 2605 then
+                lib.warn
+              else
+                message: lib.id;
+            pos = lib.unsafeGetAttrPos n finalAttrs;
+          in
+          lib.optionalString (finalAttrs ? ${n} && finalAttrs.${n} != "" && finalAttrs.${n} != null) (
+            handle ''
+              writeTextFile: ${name}: Deprecated ${n} found at ${pos.file}:${toString pos.line}
+                Use ${alt} instead.
+            '' finalAttrs.${n}
+          );
+      in
       {
         inherit
           pos
@@ -139,7 +161,9 @@ rec {
           destination;
         passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
 
-        buildCommand = ''
+        installPhase = ''
+          runHook preInstall
+
           target=$out$destination
           mkdir -p "$(dirname "$target")"
 
@@ -153,7 +177,22 @@ rec {
             chmod +x "$target"
           fi
 
-          eval "$checkPhase"
+          runHook postInstall
+        '';
+
+        installCheckPhase = ''
+          runHook preInstallCheck
+          ${lib.replaceStrings [ "runHook preCheck" "runHook postCheck" ] [ "" "" ] (
+            getDeprecatedPhase 2605 "checkPhase" "installCheckPhase"
+          )}
+          runHook postInstallCheck
+        '';
+        preInstallCheck = getDeprecatedPhase 2605 "preCheck" "preInstallCheck";
+        postInstallCheck = getDeprecatedPhase 2605 "postCheck" "postInstallCheck";
+
+        buildCommand = ''
+          runPhase installPhase
+          runPhase installCheckPhase
         '';
 
         meta =
@@ -231,8 +270,10 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      derivationArgs.installCheckPhase = ''
+        runHook preInstallCheck
         ${stdenv.shellDryRun} "$target"
+        runHook postIntsallCheck
       '';
     };
 
@@ -248,8 +289,10 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      derivationArgs.installCheckPhase = ''
+        runHook preInstallCheck
         ${stdenv.shellDryRun} "$target"
+        runHook postIntsallCheck
       '';
       meta.mainProgram = name;
     };

@@ -5,8 +5,8 @@ in
 (writeShellScript "test-script" ''
   echo ${lib.escapeShellArg output}
 '').overrideAttrs
-  (old: {
-    checkPhase = old.checkPhase or "" + ''
+  {
+    postInstallCheck = ''
       expected=${lib.escapeShellArg output}
       got=$("$target")
       if [[ "$got" != "$expected" ]]; then
@@ -14,4 +14,4 @@ in
         exit 1
       fi
     '';
-  })
+  }

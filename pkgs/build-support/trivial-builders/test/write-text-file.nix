@@ -46,7 +46,7 @@ lib.recurseIntoAttrs {
     name = "weird-names";
     destination = "/etc/${veryWeirdName}";
     text = "passed!";
-    checkPhase = ''
+    derivationArgs.postInstallCheck = ''
       # intentionally hardcode everything here, to make sure
       # Nix does not mess with file paths
 
