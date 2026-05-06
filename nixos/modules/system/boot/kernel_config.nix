@@ -70,8 +70,10 @@ let
         ];
 
     in
+    # The intermediate format can't express an empty string, so emit a sentinel
+    # that generate-config.pl rewrites to CONFIG_<key>="".
     if (val == "") then
-      "\"\""
+      "__NIXPKGS_EMPTY_STRING__"
     else if val == "y" || val == "m" || val == "n" then
       val
     else if all isNumber (stringToCharacters val) then
