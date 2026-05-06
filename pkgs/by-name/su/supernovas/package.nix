@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "supernovas";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "smithsonian";
     repo = "supernovas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2M5gBtjCPdVpLU5YsUWVJoRH1YWMZ48ADHwwc3ZJRPk=";
+    hash = "sha256-sLGl9Lh7bpvxhQ568kmwOMgVxFhH2lDRY/ftX6Oqm2w=";
   };
 
   nativeBuildInputs = [
