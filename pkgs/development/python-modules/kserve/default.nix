@@ -24,6 +24,7 @@
   prometheus-client,
   protobuf,
   psutil,
+  pyasn,
   pydantic,
   python-dateutil,
   python-multipart,
@@ -106,6 +107,7 @@ buildPythonPackage (finalAttrs: {
     prometheus-client
     protobuf
     psutil
+    pyasn
     pydantic
     python-dateutil
     python-multipart
