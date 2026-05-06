@@ -19,7 +19,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.10";
+  version = "1.0.11";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
