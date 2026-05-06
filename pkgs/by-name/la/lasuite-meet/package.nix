@@ -1,15 +1,14 @@
 {
+  callPackage,
   lib,
   fetchFromGitHub,
-  fetchNpmDeps,
   nixosTests,
   python3,
   stdenv,
-  nodejs,
-  npmHooks,
 }:
 let
   version = "1.15.0";
+
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
@@ -17,39 +16,17 @@ let
     hash = "sha256-18DcrrEvqWR6caEVZYxQlSnKcxItEpNE+bMhtS4Aa0M=";
   };
 
-  mail-templates = stdenv.mkDerivation (finalAttrs: {
-    name = "lasuite-meet-${version}-mjml";
-    inherit src;
+  meta = {
+    homepage = "https://github.com/suitenumerique/meet";
+    changelog = "https://github.com/suitenumerique/meet/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ soyouzpanda ];
+    platforms = lib.platforms.all;
+  };
 
-    sourceRoot = "${finalAttrs.src.name}/src/mail";
-
-    postPatch = ''
-      substituteInPlace bin/html-to-plain-text bin/mjml-to-html \
-        --replace-fail \
-          '../backend/core/templates/mail' \
-          '${placeholder "out"}'
-
-      cp ${./package-lock.json} package-lock.json
-    '';
-
-    npmDeps = fetchNpmDeps {
-      name = "${finalAttrs.name}-npm-deps";
-      inherit version src;
-      inherit (finalAttrs) sourceRoot;
-      hash = "sha256-jjLzgGqCsMu6Smyfaam6coqOM9UW2zG88adSPVrWPEE=";
-
-      postPatch = "cp ${./package-lock.json} package-lock.json";
-    };
-    npmBuildScript = "build";
-
-    nativeBuildInputs = [
-      nodejs
-      npmHooks.npmBuildHook
-      npmHooks.npmConfigHook
-    ];
-
-    dontInstall = true;
-  });
+  mail = callPackage ./mail.nix { inherit src version meta; };
+  frontend = callPackage ./frontend.nix { inherit src version meta; };
+  outlook = callPackage ./addon-outlook.nix { inherit src version meta; };
 
   python = python3.override {
     self = python3;
@@ -159,20 +136,21 @@ python.pkgs.buildPythonApplication (finalAttrs: {
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
 
       mkdir -p $out/${python.sitePackages}/core/templates
-      ln -sv ${mail-templates}/ $out/${python.sitePackages}/core/templates/mail
+      ln -sv ${finalAttrs.passthru.mail}/ $out/${python.sitePackages}/core/templates/mail
     '';
 
-  passthru.tests = {
-    login-and-create-room = nixosTests.lasuite-meet;
+  passthru = {
+    inherit mail frontend;
+    addons = {
+      inherit outlook;
+    };
+    tests = {
+      login-and-create-room = nixosTests.lasuite-meet;
+    };
   };
 
-  meta = {
+  meta = meta // {
     description = "Open source alternative to Google Meet and Zoom powered by LiveKit: HD video calls, screen sharing, and chat features. Built with Django and React";
-    homepage = "https://github.com/suitenumerique/meet";
-    changelog = "https://github.com/suitenumerique/meet/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
     mainProgram = "meet";
-    platforms = lib.platforms.all;
   };
 })
