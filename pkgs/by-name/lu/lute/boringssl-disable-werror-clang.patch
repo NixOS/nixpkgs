@@ -1,0 +1,13 @@
+diff --git a/lute/CMakeLists.txt b/lute/CMakeLists.txt
+index 87a2486..e2b57d5 100644
+--- a/lute/CMakeLists.txt
++++ b/lute/CMakeLists.txt
+@@ -73,6 +73,8 @@ if (LUTE_ENABLE_SANITIZERS AND NOT MSVC)
+     target_compile_options(crypto PRIVATE -Wno-frame-larger-than)
+ endif()
+ 
++target_compile_options(crypto PRIVATE -Wno-error=character-conversion)
++
+ # curl setup
+ 
+ set(USE_LIBIDN2 OFF)

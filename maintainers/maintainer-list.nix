@@ -2875,6 +2875,12 @@
     name = "Fabian Möller";
     keys = [ { fingerprint = "6309 E212 29D4 DA30 AF24  BDED 754B 5C09 63C4 2C50"; } ];
   };
+  b5e596 = {
+    email = "bok-easiest-sequel@duck.com";
+    name = "b5e596";
+    github = "b5e596";
+    githubId = 275270624;
+  };
   babbaj = {
     name = "babbaj";
     email = "babbaj45@gmail.com";
