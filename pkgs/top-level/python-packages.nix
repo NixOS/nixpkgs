@@ -1190,6 +1190,8 @@ self: super: with self; {
 
   atom = callPackage ../development/python-modules/atom { };
 
+  atomic-red-team = callPackage ../development/python-modules/atomic-red-team { };
+
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
