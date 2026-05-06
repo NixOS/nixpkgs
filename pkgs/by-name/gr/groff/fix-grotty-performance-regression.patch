@@ -1,0 +1,85 @@
+diff --git i/src/devices/grotty/tty.cpp w/src/devices/grotty/tty.cpp
+index 8e69a3b59..bd8767985 100644
+--- i/src/devices/grotty/tty.cpp
++++ w/src/devices/grotty/tty.cpp
+@@ -211,7 +211,7 @@ public:
+   void change_fill_color(const environment * const);
+   void put_char(output_character);
+   void put_color(long, int);
+-  void begin_page(int) { }
++  void begin_page(int);
+   void end_page(int);
+   font *make_font(const char *);
+ };
+@@ -286,17 +286,13 @@ tty_printer::tty_printer() : cached_v(0)
+ 		   &dummy, 5);
+   (void) has_color(0, color::MAX_COLOR_VAL, color::MAX_COLOR_VAL,
+ 		   &dummy, 6);
+-  nlines = 66;
+-  lines = new tty_glyph *[nlines];
+-  for (int i = 0; i < nlines; i++)
+-    lines[i] = 0;
++  begin_page(0 /* dummy */);
+   is_continuously_underlining = false;
+ }
+ 
+ tty_printer::~tty_printer()
+ {
+   current_lineno = 0; // At this point, we've read all the input.
+-  delete[] lines;
+ }
+ 
+ void tty_printer::make_underline(int w)
+@@ -390,12 +386,14 @@ void tty_printer::add_char(output_character c, int w,
+     vpos = v / font::vert;
+     if (vpos > nlines) {
+       tty_glyph **old_lines = lines;
+-      lines = new tty_glyph *[vpos + 1];
++      // If we exceed the previous page length, double the size so that
++      // we don't thrash the allocator.  See Savannah #68145.
++      int new_nlines = nlines * 2;
++      lines = new tty_glyph *[new_nlines];
++      memset(lines, 0, new_nlines * sizeof(tty_glyph *));
+       memcpy(lines, old_lines, nlines * sizeof(tty_glyph *));
+-      for (int i = nlines; i <= vpos; i++)
+-	lines[i] = 0;
+       delete[] old_lines;
+-      nlines = vpos + 1;
++      nlines = new_nlines;
+     }
+     // Note that the first output line corresponds to groff
+     // position font::vert.
+@@ -758,6 +756,16 @@ void tty_printer::put_color(long color_index, int back)
+   }
+ }
+ 
++// We could make this 70 where ISO paper formats are used.
++const int default_lines_per_page = 66;
++
++void tty_printer::begin_page(int)
++{
++  nlines = default_lines_per_page;
++  lines = new tty_glyph *[nlines];
++  memset(lines, 0, nlines * sizeof(tty_glyph *));
++}
++
+ // The possible Unicode combinations for crossing characters.
+ //
+ // '  ' = 0, ' -' = 4, '- ' = 8, '--' = 12,
+@@ -944,6 +952,7 @@ void tty_printer::end_page(int page_length)
+     for (; last_line < lines_per_page; last_line++)
+       putchar('\n');
+   }
++  delete[] lines;
+ }
+ 
+ font *tty_printer::make_font(const char *nm)
+@@ -978,7 +987,7 @@ int main(int argc, char **argv)
+ {
+   program_name = argv[0];
+   static char stderr_buf[BUFSIZ];
+-  if (getenv("GROFF_NO_SGR"))
++  if (getenv("GROFF_NO_SGR") != 0 /* nullptr */)
+     use_overstriking_drawing_scheme = true;
+   setbuf(stderr, stderr_buf);
+   setlocale(LC_CTYPE, "");
