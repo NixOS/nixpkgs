@@ -49,7 +49,6 @@
   libgbm,
   nspr,
   nss,
-  openssl_1_1,
   pango,
   systemdLibs,
   libappindicator-gtk3,
@@ -231,17 +230,21 @@ stdenv.mkDerivation (finalAttrs: {
     nss
   ]
   # The new distro layout ships prebuilt `.node` modules:
-  # discord_dispatch is linked against openssl 1.1, discord_voice against libpulseaudio
-  ++ lib.optionals isDistro [
-    openssl_1_1
-    libpulseaudio
-  ];
+  # discord_dispatch is linked against openssl 1.1, discord_voice against libpulseaudio.
+  # Ignore the missing dependency on insecure openssl_1_1: discord_dispatch is
+  # effectively unused in practice.
+  ++ lib.optionals isDistro [ libpulseaudio ];
 
   strictDeps = true;
 
   dontUnpack = isDistro;
 
   inherit libPath;
+
+  autoPatchelfIgnoreMissingDeps = lib.optionals isDistro [
+    "libssl.so.1.1"
+    "libcrypto.so.1.1"
+  ];
 
   installPhase = ''
     runHook preInstall
