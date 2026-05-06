@@ -1,0 +1,23 @@
+[package]
+name = "json2x"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+anyhow = "1.0.102"
+serde_json = "1.0.149"
+
+[dependencies.clap]
+version = "4.6.1"
+features = ["derive", "unicode"]
+
+[dependencies.toml]
+version = "1.1.2"
+default-features = false
+features = ["display", "serde", "std"]
+
+[profile.release]
+lto = true
+panic = "abort"
+codegen-units = 1

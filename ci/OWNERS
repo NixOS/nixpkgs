@@ -73,6 +73,7 @@
 
 ## Format generators/serializers
 /pkgs/pkgs-lib                                   @Stunkymonkey @h7x4
+/pkgs/pkgs-lib/formats/json2x                    @Stunkymonkey @h7x4 @figsoda
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus
