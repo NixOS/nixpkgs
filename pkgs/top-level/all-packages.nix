@@ -4145,7 +4145,6 @@ with pkgs;
     (callPackage ../development/compilers/haxe {
     })
     haxe_4_3
-    haxe_4_1
     ;
 
   haxe = haxe_4_3;
