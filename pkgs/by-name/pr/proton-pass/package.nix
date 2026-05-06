@@ -51,7 +51,6 @@ let
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       massimogengarelli
-      sebtm
       shunueda
     ];
     platforms = builtins.attrNames passthru.sources;
