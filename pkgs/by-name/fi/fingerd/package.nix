@@ -2,10 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libcap,
   nix-update-script,
   nixosTests,
-  stdenv,
   versionCheckHook,
 }:
 
@@ -26,10 +24,6 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libcap
-  ];
-
   ldflags = [
     "-s"
     "-w"
@@ -39,12 +33,6 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";
-
-  # On Linux, does not run as root (avoids golang/go#1435 privilege drop issues);
-  # uses setcap CAP_NET_BIND_SERVICE for port 79 when needed. Run unprivileged.
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    setcap 'cap_net_bind_service=+ep' $out/bin/fingerd
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

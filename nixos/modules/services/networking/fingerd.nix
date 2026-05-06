@@ -7,6 +7,7 @@
 
 let
   cfg = config.services.fingerd;
+  fingerdExe = "${config.security.wrapperDir}/fingerd";
 in
 {
   meta.maintainers = with lib.maintainers; [ philocalyst ];
@@ -46,6 +47,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    security.wrappers.fingerd = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_bind_service+p";
+      source = lib.getExe cfg.package;
+    };
+
     systemd.services.fingerd = {
       description = "Finger daemon (Go implementation)";
       after = [ "network.target" ];
@@ -54,7 +62,7 @@ in
       serviceConfig = {
         ExecStart = lib.escapeShellArgs (
           [
-            (lib.getExe cfg.package)
+            fingerdExe
             "-listen"
             cfg.listen
             "-homes-dir"
@@ -69,8 +77,6 @@ in
 
         Restart = "always";
         DynamicUser = true;
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        NoNewPrivileges = true;
         ProtectHome = "read-only";
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
