@@ -19598,6 +19598,8 @@ self: super: with self; {
 
   torch-c-dlpack-ext = callPackage ../development/python-modules/torch-c-dlpack-ext { };
 
+  torch-einops-utils = callPackage ../development/python-modules/torch-einops-utils { };
+
   torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 
   # Required to test triton
