@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   makeWrapper,
   fetchurl,
   fetchzip,
@@ -92,7 +93,10 @@ let
   common = platform: {
     inherit pname version meta;
     src = fetcher version (get tags platform) (get hashes platform);
-    passthru.headers = headersFetcher version hashes.headers;
+    passthru = {
+      headers = headersFetcher version hashes.headers;
+    }
+    // (callPackage ../hooks { });
   };
 
   electronLibPath = lib.makeLibraryPath [

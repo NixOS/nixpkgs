@@ -8,7 +8,6 @@
   pnpmConfigHook,
   electron_41,
   python3,
-  makeWrapper,
   callPackage,
   fetchFromGitHub,
   jq,
@@ -110,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpmConfigHook
     pnpm
-    makeWrapper
     python3
     jq
   ]
@@ -119,6 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
+  ];
+
+  buildInputs = [
+    electron.electronWrapHook
   ];
 
   patches = [
@@ -269,6 +271,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  electronWrapperArgs = lib.optionalString (commandLineArgs != "") "--add-flags ${commandLineArgs}";
+
   installPhase = ''
     runHook preInstall
   ''
@@ -287,11 +291,6 @@ stdenv.mkDerivation (finalAttrs: {
     do
       install -Dm644 $icon $out/share/icons/hicolor/`basename ''${icon%.png}`/apps/signal-desktop.png
     done
-
-    makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
-      --add-flags "$out/share/signal-desktop/app.asar" \
-      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags ${lib.escapeShellArg commandLineArgs}
   ''
   + ''
     runHook postInstall

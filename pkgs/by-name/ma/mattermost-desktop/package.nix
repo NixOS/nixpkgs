@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildNpmPackage,
   electron_40,
-  makeWrapper,
   testers,
   mattermost-desktop,
   nix-update-script,
@@ -28,7 +27,9 @@ buildNpmPackage rec {
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    electron.electronWrapHook
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -73,11 +74,6 @@ buildNpmPackage rec {
       --replace-fail /build/source/$dist/ $out/bin/
 
     cp src/assets/linux/app_icon.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-
-    makeWrapper '${lib.getExe electron}' $out/bin/${pname} \
-      --set-default ELECTRON_IS_DEV 0 \
-      --add-flags $out/share/${pname}/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';
