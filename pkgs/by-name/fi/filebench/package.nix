@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   bison,
   flex,
@@ -9,11 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "filebench";
-  version = "1.4.9.1";
+  version = "1.5-alpha3-unstable-2020-02-20";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/filebench/filebench-${finalAttrs.version}.tar.gz";
-    sha256 = "13hmx67lsz367sn8lrvz1780mfczlbiz8v80gig9kpkpf009yksc";
+  src = fetchFromGitHub {
+    owner = "filebench";
+    repo = "filebench";
+    rev = "22620e602cbbebad90c0bd041896ebccf70dbf5f";
+    hash = "sha256-IVQSEUZOC+X3C994tnk0n3NI7yu2yPAWlPA7zdSbvlg=";
   };
 
   nativeBuildInputs = [
