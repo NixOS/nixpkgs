@@ -7,7 +7,7 @@
   python3,
   curl,
   jq,
-  p7zip,
+  _7zz,
   dsq,
 }:
 
@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     python3
     curl
     jq
-    p7zip
+    _7zz
   ];
 
   preCheck = ''
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    7z e testdata/taxi.csv.7z
+    7zz e testdata/taxi.csv.7z
     cp "$GOPATH/bin/dsq" .
     python3 scripts/test.py
 

@@ -6,7 +6,7 @@
   libnotify,
   makeWrapper,
   tor,
-  p7zip,
+  _7zz,
   bash,
   writeScript,
   libGL,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    p7zip
+    _7zz
   ];
 
   installPhase = ''
@@ -53,8 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     # with one from Nixpkgs.
     cp ${briar-tor} ./tor
     for arch in {aarch64,armhf,x86_64}; do
-      7z a tor_linux-$arch.zip tor
-      7z a $out/lib/briar-desktop.jar tor_linux-$arch.zip
+      7zz a tor_linux-$arch.zip tor
+      chmod +w $out/lib/briar-desktop.jar
+      7zz a $out/lib/briar-desktop.jar tor_linux-$arch.zip
     done
   '';
 

@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   curl,
-  p7zip,
+  _7zz,
   glibc,
   ncurses,
   openssl,
@@ -18,8 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-Y40oLjddunrd7ZF1JbCcgjSCn8jFTubq69jhAVxInXw=";
   };
 
+  # Work around the "unpacker appears to have produced no directories"
+  # case that happens when the archive doesn't have a subdirectory.
+  sourceRoot = ".";
+
   nativeBuildInputs = [
-    p7zip
+    _7zz
   ];
 
   buildInputs = [
@@ -27,11 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     openssl
   ];
-
-  unpackPhase = ''
-    mkdir -p $TMP/
-    7z x $src -o$TMP/
-  '';
 
   installPhase = ''
     mkdir -p $out/bin/

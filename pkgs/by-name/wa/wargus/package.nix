@@ -8,7 +8,7 @@
   runCommand,
   unzip,
   bchunk,
-  p7zip,
+  _7zz,
   cmake,
   pkg-config,
   makeWrapper,
@@ -35,7 +35,7 @@ let
         buildInputs = [
           unzip
           bchunk
-          p7zip
+          _7zz
         ];
         meta.license = lib.licenses.unfree;
       }
@@ -43,7 +43,7 @@ let
         unzip ${dataDownload} "Warcraft.II.Tides.of.Darkness/Warcraft II - Tides of Darkness (1995)/games/WarcrafD/cd/"{WC2BTDP.img,WC2BTDP.cue}
         bchunk "Warcraft.II.Tides.of.Darkness/Warcraft II - Tides of Darkness (1995)/games/WarcrafD/cd/"{WC2BTDP.img,WC2BTDP.cue} WC2BTDP
         rm -r Warcraft.II.Tides.of.Darkness
-        7z x WC2BTDP01.iso
+        7zz x WC2BTDP01.iso
         rm WC2BTDP*.{iso,cdr}
         cp -r DATA $out
       '';

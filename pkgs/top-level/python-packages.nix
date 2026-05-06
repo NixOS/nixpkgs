@@ -5261,7 +5261,7 @@ self: super: with self; {
   extractcode = callPackage ../development/python-modules/extractcode { };
 
   extractcode-7z = callPackage ../development/python-modules/extractcode/7z.nix {
-    inherit (pkgs) p7zip;
+    inherit (pkgs) _7zz;
   };
 
   extractcode-libarchive = callPackage ../development/python-modules/extractcode/libarchive.nix {

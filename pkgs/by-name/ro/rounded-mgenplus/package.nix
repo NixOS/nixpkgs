@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  p7zip,
+  _7zz,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,9 +14,13 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-7OpnZJc9k5NiOPHAbtJGMQvsMg9j81DCvbfo0f7uJcw=";
   };
 
+  # avoid automatic move to extracted subdir because the 7z archive has files
+  # and dirs at the root
   sourceRoot = ".";
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [
+    _7zz
+  ];
 
   installPhase = ''
     runHook preInstall

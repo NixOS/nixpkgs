@@ -17,7 +17,7 @@
   libx11,
   systemdLibs,
   openssl,
-  p7zip,
+  _7zz,
 }:
 let
   mpvForSVP = callPackage ./mpv.nix { };
@@ -67,7 +67,7 @@ let
     };
 
     nativeBuildInputs = [
-      p7zip
+      _7zz
     ];
     dontFixup = true;
 
@@ -85,7 +85,7 @@ let
     installPhase = ''
       mkdir -p $out/opt
       for f in "installer/"*.7z; do
-        7z -bd -bb0 -y x -o"$out/opt/" "$f" || true
+        7zz -bd -bb0 -y x -o"$out/opt/" "$f" || true
       done
 
       for SIZE in 32 48 64 128; do
