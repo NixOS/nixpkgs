@@ -5,6 +5,7 @@
   dtc,
   writers,
   python3,
+  ufdt,
 }:
 
 {
@@ -40,6 +41,7 @@
       name = "device-tree-overlays";
       nativeBuildInputs = [
         (python3.pythonOnBuildForHost.withPackages (ps: [ ps.libfdt ]))
+        ufdt
       ];
       buildCommand = ''
         python ${./apply_overlays.py} --source ${base} --destination $out --overlays ${writers.writeJSON "overlays.json" overlays'}
