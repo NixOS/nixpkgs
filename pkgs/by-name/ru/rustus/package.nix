@@ -19,7 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-ALnb6ICg+TZRuHayhozwJ5+imabgjBYX4W42ydhkzv0=";
   };
 
-  cargoHash = "sha256-df92+gp/DtdHwPxJF89zKHjmVWzfrjnD8wAlrPRyyxk=";
+  # Bump mobc 0.8.5 -> 0.9.0 to pull in metrics >= 0.24.2, which fixes a borrow-checker error under newer rustc
+  # (https://github.com/rust-lang/rust/issues/141402).
+  cargoPatches = [ ./bump-mobc.patch ];
+
+  cargoHash = "sha256-FyuUdskTEGiBs7qC7cv1u8d4BCZ2IEOduhAe3m4IDV0=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;
