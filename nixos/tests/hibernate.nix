@@ -10,7 +10,7 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 makeTest {
-  name = "hibernate";
+  name = "hibernate" + pkgs.lib.optionalString systemdStage1 "-systemd-stage-1";
 
   nodes = {
     machine =
