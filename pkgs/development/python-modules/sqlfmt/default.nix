@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -25,25 +24,22 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlfmt";
-  version = "0.29.0";
+  version = "0.30.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
-    tag = "v${version}";
-    hash = "sha256-AeG6ga+WaBVvCCkEJbIkaJQg4rEmBcyQNmgJHEYkhrI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/8BTH2nuqO+du6PsTPB59L21HvvAIZKDcG1kV9XHxsg=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "click"
-  ];
+  pythonRelaxDeps = [ "click" ];
+
   dependencies = [
     click
     jinja2
@@ -65,7 +61,7 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestPaths = [
     # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
@@ -74,11 +70,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Sqlfmt formats your dbt SQL files so you don't have to";
+    description = "Formatter for dbt SQL files";
     homepage = "https://github.com/tconbeer/sqlfmt";
-    changelog = "https://github.com/tconbeer/sqlfmt/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tconbeer/sqlfmt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pcboy ];
     mainProgram = "sqlfmt";
   };
-}
+})
