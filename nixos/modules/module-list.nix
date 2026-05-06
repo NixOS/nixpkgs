@@ -164,6 +164,7 @@
   ./programs/_1password.nix
   ./programs/alvr.nix
   ./programs/amnezia-vpn.nix
+  ./programs/antigravity.nix
   ./programs/appgate-sdp.nix
   ./programs/appimage.nix
   ./programs/arp-scan.nix
