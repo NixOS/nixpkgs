@@ -7739,6 +7739,10 @@ self: super: with self; {
 
   irm-kmi-api = callPackage ../development/python-modules/irm-kmi-api { };
 
+  ironcalc = callPackage ../by-name/ir/ironcalc/python.nix {
+    inherit (pkgs) ironcalc;
+  };
+
   isal = callPackage ../development/python-modules/isal { };
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };

@@ -1,0 +1,26 @@
+From 29add00f50083f14b52f8fd18ee1913dacbb3271 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Mon, 16 Mar 2026 14:16:24 +0530
+Subject: [PATCH] FIX: test message
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ base/src/test/user_model/test_to_from_bytes.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/base/src/test/user_model/test_to_from_bytes.rs b/base/src/test/user_model/test_to_from_bytes.rs
+index f9a9a2f..508a589 100644
+--- a/base/src/test/user_model/test_to_from_bytes.rs
++++ b/base/src/test/user_model/test_to_from_bytes.rs
+@@ -25,7 +25,7 @@ fn errors() {
+     let model_bytes = "Early in the morning, late in the century, Cricklewood Broadway.".as_bytes();
+     assert_eq!(
+         &UserModel::from_bytes(model_bytes, "en").unwrap_err(),
+-        "Error parsing workbook: invalid packing"
++        "Error parsing workbook: bitcode error"
+     );
+ }
+ 
+-- 
+2.53.0
+
