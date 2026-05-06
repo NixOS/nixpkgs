@@ -1,0 +1,26 @@
+diff --git a/app/render/videoparams.cpp b/app/render/videoparams.cpp
+index 742e01227..7cac394b3 100644
+--- a/app/render/videoparams.cpp
++++ b/app/render/videoparams.cpp
+@@ -226,7 +226,7 @@ QString VideoParams::GetFormatName(PixelFormat format)
+     break;
+   }
+ 
+-  return QCoreApplication::translate("VideoParams", "Unknown (0x%1)").arg(format, 0, 16);
++  return QCoreApplication::translate("VideoParams", "Unknown (0x%1)").arg(static_cast<int>(format), 0, 16);
+ }
+ 
+ int VideoParams::GetDividerForTargetResolution(int src_width, int src_height, int dst_width, int dst_height)
+diff --git a/app/ui/humanstrings.cpp b/app/ui/humanstrings.cpp
+index 6a52a9ccb..96e5c3fb3 100644
+--- a/app/ui/humanstrings.cpp
++++ b/app/ui/humanstrings.cpp
+@@ -60,7 +60,7 @@ QString HumanStrings::FormatToString(const SampleFormat &f)
+     break;
+   }
+ 
+-  return QCoreApplication::translate("AudioParams", "Unknown (0x%1)").arg(f, 1, 16);
++  return QCoreApplication::translate("AudioParams", "Unknown (0x%1)").arg(static_cast<int>(f), 1, 16);
+ }
+ 
+ }

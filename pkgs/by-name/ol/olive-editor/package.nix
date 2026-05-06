@@ -62,6 +62,10 @@ stdenv.mkDerivation {
     # https://github.com/KDAB/KDDockWidgets/pull/615
     # https://github.com/KDAB/KDDockWidgets/commit/f2b50fff29bd4b49acdfed3ed8fc42eb0a502032
     ./olive-editor-kddockwidgets-fix-build-with-qt-6_10.patch
+
+    # Fix QString::arg() with scope enums for qt-6.10.1+
+    # https://github.com/olive-editor/olive/pull/2401
+    ./olive-editor-fix-qstring-arg-scoped-enum.patch
   ];
 
   # https://github.com/olive-editor/olive/issues/2200
