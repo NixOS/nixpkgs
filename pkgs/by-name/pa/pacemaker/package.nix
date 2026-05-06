@@ -8,6 +8,8 @@
   corosync,
   dbus,
   fetchFromGitHub,
+  getopt,
+  gettext,
   glib,
   gnutls,
   libqb,
@@ -19,6 +21,7 @@
   pkg-config,
   python3,
   nixosTests,
+  versionCheckHook,
 
   # Pacemaker is compiled twice, once with forOCF = true to extract its
   # OCF definitions for use in the ocf-resource-agents derivation, then
@@ -35,15 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = "pacemaker";
-    rev = "Pacemaker-${finalAttrs.version}";
-    sha256 = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
+    tag = "Pacemaker-${finalAttrs.version}";
+    hash = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
+    gettext
+    getopt
     libtool
+    libxml2.dev
+    libxslt.dev
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -54,12 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnutls
     libqb
+    libtool
     libuuid
     libxml2.dev
     libxslt.dev
     pam
-    python3
   ];
+
+  strictDeps = true;
 
   preConfigure = ''
     ./autogen.sh --prefix="$out"
@@ -92,6 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out$out/* $out
     rm -r $out/nix
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = [ "${placeholder "out"}/sbin/pacemakerd" ];
+  versionCheckProgramArg = "--version";
 
   passthru.tests = {
     inherit (nixosTests) pacemaker;
