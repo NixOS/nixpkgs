@@ -11,19 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "resticprofile";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ezelvyroQG1EW3SU63OVHJ/T4qjN5DRllvPIXnei1Z4=";
+    hash = "sha256-VkE8xZiHRXTPikDA60vV6frTbokwcPtNryQdEKdngwI=";
   };
 
   postPatch = ''
-    substituteInPlace schedule_jobs.go \
-        --replace-fail "os.Executable()" "\"$out/bin/resticprofile\", nil"
-
     substituteInPlace shell/command.go \
         --replace-fail '"bash"' '"${lib.getExe bash}"'
 
@@ -32,7 +29,7 @@ buildGoModule (finalAttrs: {
 
   '';
 
-  vendorHash = "sha256-M9S6F/Csz7HnOq8PSWjpENKm1704kVx9zDts1ieraTE=";
+  vendorHash = "sha256-Dp/uRr4ARdiKSXZziQNnbJm+vsR2gYy0QmubwiIEMvM=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
@@ -56,6 +53,15 @@ buildGoModule (finalAttrs: {
     rm user/user_test.go # expects normal environment
     rm util/tempdir_test.go # expects normal environment
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # mount: fusermount: exec: "fusermount": executable file not found in $PATH
+        "TestMemFS"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   installPhase = ''
     runHook preInstall
@@ -85,7 +91,10 @@ buildGoModule (finalAttrs: {
       lgpl3 # bash shell completion
     ];
     mainProgram = "resticprofile";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      bbigras
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
