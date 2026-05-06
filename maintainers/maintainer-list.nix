@@ -25196,6 +25196,12 @@
     github = "shunueda";
     githubId = 62182668;
   };
+  shutdaun = {
+    name = "shutdaun";
+    email = "rostics@hotmail.com";
+    github = "shutdaun";
+    githubId = 274042840;
+  };
   shved = {
     name = "Yury Shvedov";
     email = "mestofel13@gmail.com";
@@ -25219,12 +25225,6 @@
     name = "Dom Rodriguez";
     github = "shymega";
     githubId = 1334592;
-  };
-  shutdaun = {
-    name = "shutdaun";
-    email = "rostics@hotmail.com";
-    github = "shutdaun";
-    githubId = 274042840;
   };
   siddarthkay = {
     email = "siddarthkay@gmail.com";
