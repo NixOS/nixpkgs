@@ -871,6 +871,19 @@ general. A number of other parameters can be overridden:
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
+- Extra arguments to be passed to `rustc` when this crate is a
+  proc-macro. Proc-macro crates are compiled as host dylibs that
+  `rustc` loads at compile time; flags such as `-Zsanitizer=address`,
+  `-Cpasses=sancov-module`, or `-Cinstrument-coverage` leave
+  unresolved runtime symbols in the dylib and break the build. Set
+  this attribute (e.g. to `[ ]`) to opt the proc-macro out while
+  still passing those flags via `extraRustcOpts` to other crates.
+  When `null` (the default), inherits `extraRustcOpts`:
+
+  ```nix
+  (myProcMacro { }).override { extraRustcOptsForProcMacro = [ ]; }
+  ```
+
 - The lint level cap passed to `rustc`. Defaults to `null`, which
   auto-resolves to `"allow"` (silences all lints) when `lints` is
   empty, or `"forbid"` (no cap) when `lints` is set. Because `rustc`
