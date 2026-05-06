@@ -153,7 +153,7 @@ let
       libdrm
       libepoxy
       libevent
-      libgcc.lib
+      libgcc
       libgcrypt
       libgpg-error
       libjpeg8
