@@ -2,6 +2,7 @@
   lib,
   fetchzip,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,14 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-dkvWRYli8vk+E0DkZ2NWCJKfSfdo4jEcGo0puQpFVVc=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m444 -t $out/share/fonts/truetype $src/static/TTF/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/static/OTF/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Fantastic new revival of ATF's classic Spartan, a geometric sans-serif that has no problem kicking its enemies in the chest";

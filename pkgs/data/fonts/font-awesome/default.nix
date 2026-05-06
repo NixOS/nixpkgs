@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 let
   font-awesome =
@@ -20,13 +21,7 @@ let
         inherit rev hash;
       };
 
-      installPhase = ''
-        runHook preInstall
-
-        install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
-
-        runHook postInstall
-      '';
+      nativeBuildInputs = [ installFonts ];
 
       meta = {
         description = "Font Awesome - OTF font";

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
   p7zip,
 }:
 
@@ -16,15 +17,10 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ p7zip ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -m 444 -D -t $out/share/fonts/${pname} ${pname}-*.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    installFonts
+    p7zip
+  ];
 
   meta = {
     description = "Japanese font based on Rounded M+ and Noto Sans Japanese";

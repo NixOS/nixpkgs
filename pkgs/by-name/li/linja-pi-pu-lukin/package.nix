@@ -1,27 +1,22 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "linja-pi-pu-lukin";
-  version = "unstable-2021-10-29";
+  version = "0-unstable-2022-04-03";
 
-  src = fetchurl {
-    url = "https://web.archive.org/web/20211029000000/https://jansa-tp.github.io/linja-pi-pu-lukin/PuLukin.otf";
-    hash = "sha256-Mf7P9fLGiG7L555Q3wRaI/PRv/TIs0njLq2IzIbc5Wo=";
+  src = fetchFromGitHub {
+    owner = "janSa-tp";
+    repo = "linja-pi-pu-lukin";
+    rev = "50e285e2e670a5e1be743bb93a4bf90590a437cc";
+    hash = "sha256-gUjmDBW4Av4B5hyoMIGgdBlFdoiRlyCNROvOVZ8/4BY=";
   };
 
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D $src $out/share/fonts/opentype/linja-pi-pu-lukin.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Sitelen pona font resembling the style found in Toki Pona: The Language of Good (lipu pu), by jan Sa";
