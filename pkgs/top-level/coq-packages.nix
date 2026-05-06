@@ -88,7 +88,6 @@ let
           lib
           stdenv
           ;
-        ocamlPackages = ocamlPackages_4_14;
       };
       ConCert = callPackage ../development/coq-modules/ConCert { };
       coq-bits = callPackage ../development/coq-modules/coq-bits { };
