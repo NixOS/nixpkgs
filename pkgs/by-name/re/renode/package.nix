@@ -182,7 +182,7 @@ buildDotnetModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://github.com/renode/renode/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/renode/renode/blob/v${version}/CHANGELOG.rst";
     description = "Virtual development framework for complex embedded systems";
     downloadPage = "https://github.com/renode/renode";
     homepage = "https://renode.io";

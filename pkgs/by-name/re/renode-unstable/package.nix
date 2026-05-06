@@ -32,6 +32,10 @@ renode.overrideAttrs (old: rec {
     mv src/Renode/Properties/AssemblyInfo.template src/Renode/Properties/AssemblyInfo.cs
   '';
 
+  meta = old.meta // {
+    changelog = "https://github.com/renode/renode/blob/${src.rev}/CHANGELOG.rst";
+  };
+
   passthru = old.passthru // {
     updateScript = ./update.sh;
   };
