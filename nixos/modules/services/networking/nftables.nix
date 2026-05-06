@@ -51,7 +51,7 @@ in
   options = {
     networking.nftables.enable = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = true;
       description = ''
         Whether to enable nftables and use nftables based firewall if enabled.
         nftables is a Linux-based packet filtering framework intended to
@@ -274,6 +274,10 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.optional (
+      config.networking.firewall.extraCommands != "" || config.networking.firewall.extraStopCommands != ""
+    ) "ip_tables specific option set while ip_tables is blacklisted";
+
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     # versionOlder for backportability, remove afterwards
