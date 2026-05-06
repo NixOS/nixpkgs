@@ -11861,6 +11861,8 @@ self: super: with self; {
     openvino-native = pkgs.openvino.override { python3Packages = self; };
   };
 
+  openwakeword = callPackage ../development/python-modules/openwakeword { };
+
   openwebifpy = callPackage ../development/python-modules/openwebifpy { };
 
   openwrt-luci-rpc = callPackage ../development/python-modules/openwrt-luci-rpc { };
