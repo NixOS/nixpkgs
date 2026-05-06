@@ -73,8 +73,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Google Cloud Datastore API client library";
-    homepage = "https://github.com/googleapis/python-datastore";
-    changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
+    homepage = "https://cloud.google.com/datastore";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-datastore-v${version}/packages/google-cloud-datastore/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
