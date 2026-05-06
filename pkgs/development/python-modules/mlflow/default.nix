@@ -128,6 +128,8 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/mlflow/mlflow";
     changelog = "https://github.com/mlflow/mlflow/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
 })
