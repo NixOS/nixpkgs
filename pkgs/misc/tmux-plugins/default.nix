@@ -1203,6 +1203,49 @@ in
       maintainers = with lib.maintainers; [ szaffarano ];
     };
   };
+
+  tmux-window-name = mkTmuxPlugin {
+    pluginName = "tmux-window-name";
+    version = "2024-03-08";
+    src = fetchFromGitHub {
+      owner = "ofirgall";
+      repo = "tmux-window-name";
+      rev = "34026b6f442ceb07628bf25ae1b04a0cd475e9ae";
+      sha256 = "sha256-BNgxLk/BkaQkGlB4g2WKVs39y4VHL1Y2TdTEoBy7yo0=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    rtpFilePath = "tmux_window_name.tmux";
+    postInstall = ''
+      script=$target/scripts/rename_session_windows.py
+
+      sed -i \
+        -e 's|^USR_BIN_REMOVER.*|USR_BIN_REMOVER = (r"^" + os.path.expanduser("~") + r"/.nix-profile/bin/(.+)( --.*)?", r"\\g<1>")|' \
+        -e 's|^\(\s*\)substitute_sets: List.*|\1substitute_sets: List[Tuple] = field(default_factory=lambda: [(os.path.expanduser("~") + r"/.nix-profile/bin/(.+) --.*", r"\\g<1>"), (r".+ipython([32])", r"ipython\\g<1>"), USR_BIN_REMOVER, (r"(bash) (.+)/(.+[ $])(.+)", r"\\g<3>\\g<4>")])|' \
+        -e 's|^\(\s*\)dir_programs: List.*|\1dir_programs: List[str] = field(default_factory=lambda: [os.path.expanduser("~") + "/.nix-profile/bin/" + p for p in ["vim", "vi", "git", "nvim"]])|' \
+        $script
+
+      for f in tmux_window_name.tmux scripts/rename_session_windows.py; do
+        wrapProgram $target/$f \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              (pkgs.python3.withPackages (
+                p: with p; [
+                  libtmux
+                  pip
+                ]
+              ))
+            ]
+          }
+      done
+    '';
+    meta = with lib; {
+      homepage = "https://github.com/ofirgall/tmux-window-name";
+      description = "Tmux plugin to name your windows smartly, like IDE's";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ndom91 ];
+    };
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
