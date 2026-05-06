@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       asl20
     ];
-    maintainers = [ ];
-    platforms = lib.platforms.aarch64;
+    maintainers = with lib.maintainers; [ sempiternal-aurora ];
+    platforms = [ "aarch64-linux" ];
   };
 })
