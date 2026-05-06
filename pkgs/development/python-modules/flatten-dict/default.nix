@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "flatten-dict";
-  version = "0.4.2";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ianlini";
     repo = "flatten-dict";
     rev = version;
-    hash = "sha256-uHenKoD4eLm9sMREVuV0BB/oUgh4NMiuj+IWd0hlxNQ=";
+    hash = "sha256-wzCuTnLOOeybhBPcyyPNPKWoJBHwaKkmARTzlg87wtU=";
   };
 
   nativeBuildInputs = [ poetry-core ];
