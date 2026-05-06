@@ -9337,6 +9337,12 @@
     githubId = 134872;
     name = "Sergei Lukianov";
   };
+  frostplexx = {
+    email = "daniel.inama02@gmail.com";
+    github = "frostplexx";
+    githubId = 62436912;
+    name = "Daniel Inama";
+  };
   fryuni = {
     name = "Luiz Ferraz";
     email = "luiz@lferraz.com";
