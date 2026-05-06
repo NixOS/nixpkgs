@@ -734,9 +734,39 @@ self: super: with self; {
     }
   );
 
+  ament-clang-format = callPackage ../development/python-modules/ament-clang-format { };
+
+  ament-clang-tidy = callPackage ../development/python-modules/ament-clang-tidy { };
+
+  ament-copyright = callPackage ../development/python-modules/ament-copyright { };
+
+  ament-cppcheck = callPackage ../development/python-modules/ament-cppcheck { };
+
+  ament-cpplint = callPackage ../development/python-modules/ament-cpplint { };
+
+  ament-flake8 = callPackage ../development/python-modules/ament-flake8 { };
+
   ament-index-python = callPackage ../development/python-modules/ament-index-python { };
 
+  ament-lint = callPackage ../development/python-modules/ament-lint { };
+
+  ament-lint-cmake = callPackage ../development/python-modules/ament-lint-cmake { };
+
+  ament-mypy = callPackage ../development/python-modules/ament-mypy { };
+
   ament-package = callPackage ../development/python-modules/ament-package { };
+
+  ament-pclint = callPackage ../development/python-modules/ament-pclint { };
+
+  ament-pep257 = callPackage ../development/python-modules/ament-pep257 { };
+
+  ament-pycodestyle = callPackage ../development/python-modules/ament-pycodestyle { };
+
+  ament-pyflakes = callPackage ../development/python-modules/ament-pyflakes { };
+
+  ament-uncrustify = callPackage ../development/python-modules/ament-uncrustify { };
+
+  ament-xmllint = callPackage ../development/python-modules/ament-xmllint { };
 
   amplitude-analytics = callPackage ../development/python-modules/amplitude-analytics { };
 
