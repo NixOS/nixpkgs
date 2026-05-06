@@ -33,6 +33,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
+  # `proxy_client::fetch_token_test` spins up a warp server during `cargo test`.
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
