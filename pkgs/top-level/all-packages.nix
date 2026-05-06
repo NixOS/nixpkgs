@@ -9093,10 +9093,6 @@ with pkgs;
 
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
-  cudatext-qt = callPackage ../applications/editors/cudatext { widgetset = "qt5"; };
-  cudatext-gtk = callPackage ../applications/editors/cudatext { widgetset = "gtk2"; };
-  cudatext = cudatext-qt;
-
   darcs = haskell.lib.compose.disableCabalFlag "library" (
     haskell.lib.compose.justStaticExecutables haskellPackages.darcs
   );

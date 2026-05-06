@@ -7,12 +7,12 @@
   fpc,
   libx11,
 
-  # GTK2/3
+  # GTK3
+  harfbuzz,
   pango,
   cairo,
   glib,
   atk,
-  gtk2,
   gtk3,
   gdk-pixbuf,
   python3,
@@ -26,7 +26,6 @@
 }:
 
 assert builtins.elem widgetset [
-  "gtk2"
   "gtk3"
   "qt5"
 ];
@@ -42,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
-  version = "1.202.1";
+  version = "1.234.0.4";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     tag = finalAttrs.version;
-    hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
+    hash = "sha256-4zzBc7tIP9y3OB3H/PfrlFAqmkkwPsGwE0BF+CgGl24=";
   };
 
   patches = [ ./proc_globdata.patch ];
@@ -70,15 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
   ]
-  ++ lib.optionals (lib.hasPrefix "gtk" widgetset) [
+  ++ lib.optionals (widgetset == "gtk3") [
+    harfbuzz
     pango
     cairo
     glib
     atk
     gdk-pixbuf
+    gtk3
   ]
-  ++ lib.optional (widgetset == "gtk2") gtk2
-  ++ lib.optional (widgetset == "gtk3") gtk3
   ++ lib.optional (widgetset == "qt5") libsForQt5.libqtpas;
 
   env.NIX_LDFLAGS = toString [
@@ -94,10 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
       '') deps
     )
     + ''
-      # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
-      substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
-        --replace GTK2_IME_CODE _GTK2_IME_CODE
-
       lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
         bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
         EncConv/encconv/encconv_package.lpk \
