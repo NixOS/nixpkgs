@@ -12,7 +12,7 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "6.3.10";
+      version = "6.7.8";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
