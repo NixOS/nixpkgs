@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.23.1";
+  version = "0.23.4";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-/vxEJPPgDdrtSHSWhJY1HjtQv7B+4gNzPQmu/tbhX0k=";
+    hash = "sha256-Lvp6KS3vX2yVh1xMQHTt6IQ7Xtu+R4DBrtNx7Fm+EaE=";
   };
 
   build-system = [
@@ -82,9 +82,7 @@ buildPythonPackage rec {
   disabledTests = [
     # fails on sandbox
     "test_colorize_file"
-    "test_repath_HOME_PATH_itself"
-    "test_repath_HOME_PATH_var"
-    "test_repath_HOME_PATH_var_brace"
+    "test_complete_path_tilde_subdir_trailing_sep"
 
     # flaky tests in test_integrations.py
     "test_script"
@@ -135,7 +133,7 @@ buildPythonPackage rec {
     sed -i -e 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
     sed -i -e 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/xintegration/test_integrations.py
 
-    for script in tests/xintegration/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
+    for script in conftest.py tests/xintegration/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
       sed -i -e 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
     done
     patchShebangs .
