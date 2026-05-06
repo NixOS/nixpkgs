@@ -42,7 +42,7 @@ let
   mysqlServerVersion = "9.7.0";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "mysql-shell-innovation";
+  pname = "mysql-shell";
   version = mysqlShellVersion;
 
   srcs = [
@@ -75,11 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     pkg-config
     cmake
     git
     bison
+    protobuf
     makeWrapper
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
