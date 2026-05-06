@@ -10,35 +10,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmk-udev-rules";
-  version = "0.27.13";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "qmk";
-    repo = "qmk_firmware";
-    tag = finalAttrs.version;
-    hash = "sha256-Zs508OQ0RYCg0f9wqR+VXUmVvhP/jCA3piwRq2ZpR84=";
+    repo = "qmk_udev";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sxwvyMniEXTnmHEs8ldsBjwReKUT5FlqYxcUULV0cpI=";
   };
-
-  dontBuild = true;
 
   nativeBuildInputs = [
     udevCheckHook
   ];
 
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   doInstallCheck = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D util/udev/50-qmk.rules $out/lib/udev/rules.d/50-qmk.rules
-
-    runHook postInstall
-  '';
-
   meta = {
-    homepage = "https://github.com/qmk/qmk_firmware";
-    description = "Official QMK udev rules list";
+    homepage = "https://github.com/qmk/qmk_udev";
+    description = "Official QMK udev rules and udev helper program";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      telometto
+    ];
   };
 })
