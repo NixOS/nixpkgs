@@ -43,7 +43,9 @@
 }:
 
 let
-  runtimePaths = [ file ] ++ optionalDeps ++ extraPackages;
+  pluginDeps = lib.concatMap (plugin: plugin.dependencies or [ ]) (lib.attrValues plugins);
+
+  runtimePaths = [ file ] ++ pluginDeps ++ optionalDeps ++ extraPackages;
 
   settingsFormat = formats.toml { };
 
