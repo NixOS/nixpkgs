@@ -13500,6 +13500,8 @@ self: super: with self; {
 
   pycasbin = callPackage ../development/python-modules/pycasbin { };
 
+  pycasperglow = callPackage ../development/python-modules/pycasperglow { };
+
   pycatch22 = callPackage ../development/python-modules/pycatch22 { };
 
   pycayennelpp = callPackage ../development/python-modules/pycayennelpp { };
