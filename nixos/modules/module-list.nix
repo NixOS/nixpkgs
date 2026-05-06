@@ -267,6 +267,7 @@
   ./programs/minipro.nix
   ./programs/miriway.nix
   ./programs/mosh.nix
+  ./programs/motus.nix
   ./programs/mouse-actions.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix
