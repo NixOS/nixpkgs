@@ -24,29 +24,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ecl";
-  version = "26.3.27";
+  version = "26.5.5";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    hash = "sha256-QW1XB78R0rPY0z1nkUGaeG5MxZrAzD7FBe5ZtRqfXJo=";
+    hash = "sha256-oBpbzajFtz5Z3aNJT9E+X+xdtqodrXgsPMO7V/FjNDU=";
   };
-
-  patches = [
-    # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/370
-    (fetchpatch {
-      name = "allocate-first_env-dynamically.patch";
-      url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/61a14dfc6681f674ae5673856c0749fdf4af6564.patch";
-      hash = "sha256-DOn0mtlW1Bl59LxqEQiE90ZJlXDSbTbxL0s8NNL882o=";
-      includes = [ "src/c/main.d" ];
-    })
-
-    # https://gitlab.com/embeddable-common-lisp/ecl/-/work_items/838
-    (fetchpatch {
-      name = "clang-miscompilation.patch";
-      url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/d39cc449f770c52cc4c8b297cf600d7bd53d172a.patch";
-      hash = "sha256-C+zVjAY/+hQ4Te62DQxIQsHu0AqewygmSEQpcmrA5EU=";
-    })
-  ];
 
   nativeBuildInputs = [
     libtool
