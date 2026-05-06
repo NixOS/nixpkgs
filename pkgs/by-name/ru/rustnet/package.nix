@@ -13,7 +13,7 @@
 }:
 let
   pname = "rustnet";
-  version = "1.2.0";
+  version = "1.3.0";
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   inherit pname version;
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     owner = "domcyrus";
     repo = "rustnet";
     tag = "v${version}";
-    hash = "sha256-ZTCcPTKlKnUNlD4Ayf5dV7Yi2BuKwJ/0IwO3YqlB6u8=";
+    hash = "sha256-E2ItYSnT3WRSgPb5B+HDAlAPPmSLdt8qnE+2TiXHPk8=";
   };
 
-  cargoHash = "sha256-5Zgo6Ypyrhy5IHC1IiWxgP4aOOdyBNEBBHWi0rsDji0=";
+  cargoHash = "sha256-B1IdFOKYNaLiq6t64mdR3zUUcvojevcV6/nqYGbsbAY=";
 
   nativeBuildInputs = [
     pkg-config
