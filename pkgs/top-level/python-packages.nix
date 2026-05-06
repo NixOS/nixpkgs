@@ -1089,6 +1089,8 @@ self: super: with self; {
     }
   );
 
+  ament-index-python = callPackage ../development/python-modules/ament-index-python { };
+
   ament-package = callPackage ../development/python-modules/ament-package { };
 
   amplitude-analytics = callPackage ../development/python-modules/amplitude-analytics { };
