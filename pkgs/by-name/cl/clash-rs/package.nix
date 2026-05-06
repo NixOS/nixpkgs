@@ -6,25 +6,46 @@
   versionCheckHook,
   cmake,
   pkg-config,
+  nodejs,
+  fetchNpmDeps,
+  npmHooks,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.10.0";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r+9tFw4B/7g/4EEYnX0Zcv4jPeGbcVgdtpAcSyk/cxA=";
+    hash = "sha256-EMciVzqaqEFjUM6gjVialv0mxOiJMgGWLA0ruxPH3hg=";
   };
 
-  cargoHash = "sha256-D/TalJ0fBD4ZoHwU6uj5P0O6xFwinL9hE91bQhxC7s8=";
+  cargoHash = "sha256-RNd96l4MS44E5gnRU5w0LRy/K08O7APfnBsJTWttg+w=";
+
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/clash-dashboard";
+    hash = "sha256-x1VkR3Cs/cyHFXJyYmgXMvcMHn4shTMIOToqRgrgFnE=";
+  };
+
+  npmRoot = "clash-dashboard";
+
+  makeCacheWritable = true;
+
+  preBuild = ''
+    # clash-lib/build.rs hardcodes the npm cache as $TMPDIR/npm-cache
+    ln -sf "$npm_config_cache" "$TMPDIR/npm-cache"
+  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   nativeInstallCheckInputs = [
