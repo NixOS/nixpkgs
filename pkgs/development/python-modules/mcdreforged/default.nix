@@ -1,25 +1,25 @@
 {
-  lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  setuptools,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
+  versionCheckHook,
+
   colorama,
   colorlog,
   packaging,
   parse,
+  pathspec,
   prompt-toolkit,
   psutil,
   requests,
   resolvelib,
   ruamel-yaml,
+  setuptools,
   typing-extensions,
-  pathspec,
-  pytestCheckHook,
-  versionCheckHook,
-  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mcdreforged";
   version = "2.15.7";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MCDReforged";
     repo = "MCDReforged";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e1JrDh8Zio+TCVCVvH8tBE/tY5ja3Nr3dCQRJwRqYh4=";
   };
 
@@ -38,13 +38,13 @@ buildPythonPackage rec {
     colorlog
     packaging
     parse
+    pathspec
     prompt-toolkit
     psutil
     requests
     resolvelib
     ruamel-yaml
     typing-extensions
-    pathspec
   ];
 
   nativeCheckInputs = [
@@ -52,14 +52,27 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  passthru.updateScript = nix-update-script { };
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail 'ruamel.yaml~=0.17,<0.19' 'ruamel.yaml==${ruamel-yaml.version}'
+  '';
 
   meta = {
-    description = "Rewritten version of MCDaemon, a python tool to control your Minecraft server";
+    changelog = "https://github.com/MCDReforged/MCDReforged/releases/tag/${finalAttrs.src.tag}";
+    longDescription = ''
+      MCDReforged (abbreviated as MCDR) is a tool which provides the
+      management ability of the Minecraft server using custom plugin
+      system.  It doesn't need to modify or mod the original Minecraft
+      server at all.
+
+      From in-game calculator, player high-light, to manipulate
+      scoreboard, manage structure file and backup / load backup, you
+      can implement these by using MCDR and related plugins.
+    '';
+    description = "Minecraft server control tool";
     homepage = "https://mcdreforged.com";
-    changelog = "https://github.com/MCDReforged/MCDReforged/releases/tag/v${version}";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "mcdreforged";
+    maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})
