@@ -1,86 +1,35 @@
 {
   lib,
-  fetchPypi,
+  stdenv,
+  buildGoModule,
   fetchFromGitHub,
-  python3,
-
-  withE2BE ? true,
+  olm,
+  withGoOlm ? false,
 }:
 
-let
-  tulir-telethon = python3.pkgs.telethon.overrideAttrs (
-    finalAttrs: previousAttrs: {
-      version = "1.99.0a6";
-      pname = "tulir_telethon";
-      src = fetchFromGitHub {
-        owner = "tulir";
-        repo = "Telethon";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-ulnA+xKbZDOTzXYmF9oBWNBNhgxSiF+mKx1ijoCyo/w=";
-      };
-      dontUsePytestCheck = true;
-    }
-  );
-in
-python3.pkgs.buildPythonApplication (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "mautrix-telegram";
-  version = "0.15.3";
-  pyproject = true;
+  version = "0.2604.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w3BqWyAJV/lZPoOFDzxhootpw451lYruwM9efwS6cEc=";
+    hash = "sha256-i/eIvsqLAst9nuhZL4a+SlMcqtwy8c0iWHwe+5dYVlI=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  vendorHash = "sha256-mQ6zvEK6YcR71zLGD1n9xZzXqiXtKIs43rxeP278Ln0=";
 
-  patches = [ ./0001-Re-add-entrypoint.patch ];
-
-  pythonRelaxDeps = [
-    "mautrix"
-    "ruamel.yaml"
+  ldflags = [
+    "-X"
+    "main.Tag=v${finalAttrs.version}"
   ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      ruamel-yaml
-      python-magic
-      commonmark
-      aiohttp
-      yarl
-      (mautrix.override { withOlm = withE2BE; })
-      tulir-telethon
-      asyncpg
-      mako
-      setuptools
-      # speedups
-      cryptg
-      aiodns
-      brotli
-      # qr_login
-      pillow
-      qrcode
-      # formattednumbers
-      phonenumbers
-      # metrics
-      prometheus-client
-      # sqlite
-      aiosqlite
-      # proxy support
-      pysocks
-    ]
-    ++ lib.optionals withE2BE [
-      # e2be
-      python-olm
-      pycryptodome
-      unpaddedbase64
-    ];
+  buildInputs = (lib.optional (!withGoOlm) olm) ++ [ stdenv.cc.cc.lib ];
 
-  # has no tests
   doCheck = false;
+
+  tags = lib.optional withGoOlm "goolm";
 
   meta = {
     homepage = "https://github.com/mautrix/telegram";
@@ -88,6 +37,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      bartoostveen
       nyanloutre
       nickcao
     ];
