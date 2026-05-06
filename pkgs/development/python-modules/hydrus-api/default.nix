@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "hydrus-api";
-  version = "5.1.1";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hydrus_api";
     inherit version;
-    hash = "sha256-oA3DbdX+MRZiInCKXurBdKlUFQ4jeU+jHr9NxMEHQmI=";
+    hash = "sha256-5MVyKiAHdjOOVHTyX6xdqRnvlSChAnm6hPzf1YVW2+8=";
   };
 
   build-system = [ poetry-core ];
