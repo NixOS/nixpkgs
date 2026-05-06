@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-i5vL9yjQQambG8m6RDByr7/j8+PhDdLsai3pDrH1A4Q=";
   };
 
+  patches = [
+    # unstable now has dramatiq 2.x, so this patch is required until
+    # https://github.com/Flared/dramatiq-abort/issues/37 has been resolved
+    ./0001-test-add-fail_fast_default-False-for-old-behavior-in.patch
+  ];
   build-system = [ setuptools ];
 
   dependencies = [

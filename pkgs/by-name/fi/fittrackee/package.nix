@@ -1,5 +1,5 @@
 {
-  fetchFromGitHub,
+  fetchFromCodeberg,
   lib,
   stdenv,
   postgresql,
@@ -8,42 +8,21 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
-  version = "0.11.2";
+  version = "1.2.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "SamR1";
+  src = fetchFromCodeberg {
+    owner = "FitTrackee";
     repo = "FitTrackee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A9gebHxNCpYUUIm7IjyySojIIyuTxfYCUeUufpUM1iA=";
+    hash = "sha256-GHr2TivOJcC0ZigoVznyImZrFtHSaqdHxcw4Pc1kw40=";
   };
 
   build-system = [
     python3Packages.poetry-core
   ];
 
-  # The upstream project changed the behavior of the CLI when --set-admin and --set-role are used together.
-  # Previously, it would raise an error, but now it issues a deprecation warning.
-  # This patch updates the test assertion to expect the new deprecation warning message.
-  # See upstream commit 6eda1b6119b3e41bdf8896e74b4a07d3c9e97609.
-  postPatch = ''
-    substituteInPlace fittrackee/tests/users/test_users_commands.py \
-      --replace '"--set-admin and --set-role can not be used together."' '"WARNING: --set-admin is deprecated. Please use --set-role option instead."'
-  '';
-
-  pythonRelaxDeps = [
-    "authlib"
-    "fitdecode"
-    "flask"
-    "flask-limiter"
-    "flask-migrate"
-    "nh3"
-    "lxml"
-    "pyopenssl"
-    "pytz"
-    "sqlalchemy"
-    "xmltodict"
-  ];
+  pythonRelaxDeps = true;
 
   dependencies =
     with python3Packages;
@@ -53,21 +32,31 @@ python3Packages.buildPythonApplication (finalAttrs: {
       click
       dramatiq
       dramatiq-abort
+      feedgenerator
       fitdecode
       flask
+      flask-babel
       flask-bcrypt
       flask-dramatiq
       flask-limiter
       flask-migrate
       flask-sqlalchemy
+      geoalchemy2
+      geopandas
       gpxpy
       gunicorn
       humanize
       jsonschema
+      lxml
+      mistune
       nh3
+      numpy
+      pandas
       psycopg2-binary
       pyjwt
       pyopenssl
+      pyproj
+      python-magic
       pytz
       shortuuid
       sqlalchemy
@@ -76,7 +65,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       xmltodict
     ]
     ++ dramatiq.optional-dependencies.redis
-    ++ flask-limiter.optional-dependencies.redis;
+    ++ flask-limiter.optional-dependencies.redis
+    ++ geoalchemy2.optional-dependencies.shapely
+    ++ staticmap3.optional-dependencies.filecache;
 
   pythonImportsCheck = [ "fittrackee" ];
 
@@ -84,7 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     freezegun
     postgresqlTestHook
-    postgresql
+    (postgresql.withPackages (ps: with ps; [ postgis ]))
     time-machine
   ];
 
@@ -93,6 +84,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postgresqlTestSetupPost = ''
+    echo "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" | PGUSER=postgres psql test_db
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
@@ -105,8 +97,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Self-hosted outdoor activity tracker";
-    homepage = "https://github.com/SamR1/FitTrackee";
-    changelog = "https://github.com/SamR1/FitTrackee/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://docs.fittrackee.org/en/index.html";
+    changelog = "https://codeberg.org/FitTrackee/FitTrackee/src/commit/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       tebriel
