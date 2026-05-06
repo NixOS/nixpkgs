@@ -1,0 +1,38 @@
+From: nixpkgs
+Subject: [PATCH] queryloaders: also scan .dylib modules on Darwin
+
+GLib's G_MODULE_SUFFIX is "so" on Darwin, but pixbuf loader packages can
+install modules as ".dylib". Scan both extensions so those loaders are
+included in loaders.cache.
+
+--- a/gdk-pixbuf/queryloaders.c
++++ b/gdk-pixbuf/queryloaders.c
+@@ -42,6 +42,11 @@
+ #endif
+ #define SOEXT_LEN (strlen (SOEXT))
+
++#ifdef __APPLE__
++#define SOEXT_ALT ".dylib"
++#define SOEXT_ALT_LEN (strlen (SOEXT_ALT))
++#endif
++
+ #ifdef G_OS_WIN32
+ #include <windows.h>
+ #endif
+@@ -446,8 +451,13 @@
+                         const char *dent;
+
+                         while ((dent = g_dir_read_name (dir))) {
+                                 gint len = strlen (dent);
+-                                if (len > SOEXT_LEN &&
+-                                    strcmp (dent + len - SOEXT_LEN, SOEXT) == 0) {
++                                if ((len > SOEXT_LEN &&
++                                     strcmp (dent + len - SOEXT_LEN, SOEXT) == 0)
++#ifdef __APPLE__
++                                    || (len > SOEXT_ALT_LEN &&
++                                        strcmp (dent + len - SOEXT_ALT_LEN, SOEXT_ALT) == 0)
++#endif
++                                    ) {
+                                         modules = g_list_prepend (modules,
+                                                                   g_strdup (dent));
+                                 }
