@@ -554,7 +554,10 @@ stdenvNoCC.mkDerivation {
     elif [ -e $ccPath/cpp${exeSuffix} ]; then
       wrap ${targetPrefix}cpp $wrapper $ccPath/cpp${exeSuffix}
     fi
+  ''
 
+  # This is used by C++20 modules support in cmake. We need to wrap it as well.
+  + optionalString isClang ''
     if [ -e $ccPath/clang-scan-deps${exeSuffix} ]; then
       wrap ${targetPrefix}clang-scan-deps ${./clang-scan-deps-wrapper.sh} $ccPath/clang-scan-deps${exeSuffix}
     fi
