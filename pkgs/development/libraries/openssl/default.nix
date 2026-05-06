@@ -378,8 +378,8 @@ let
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-      strictDeps = lib.versionAtLeast version "4.0";
-      __structuredAttrs = lib.versionAtLeast version "4.0";
+      strictDeps = true;
+      __structuredAttrs = true;
 
       meta = {
         homepage = "https://www.openssl.org/";
