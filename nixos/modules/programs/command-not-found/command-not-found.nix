@@ -62,7 +62,7 @@ in
     {
       programs.command-not-found = {
         enable = lib.mkDefault (builtins.pathExists cfg.dbPath);
-        dbPath = pkgs.path + "/programs.sqlite";
+        dbPath = lib.mkDefault (pkgs.path + "/programs.sqlite");
       };
     }
 
