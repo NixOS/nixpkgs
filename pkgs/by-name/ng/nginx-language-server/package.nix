@@ -34,9 +34,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "pydantic"
   ];
 
+  pythonRemoveDeps = [
+    # package is now called ngxparse, module name stayed crossplane
+    "crossplane"
+  ];
+
   dependencies = with pythonPackages; [
-    crossplane
     lsprotocol
+    ngxparse
     pydantic
     pygls
     typing-extensions
