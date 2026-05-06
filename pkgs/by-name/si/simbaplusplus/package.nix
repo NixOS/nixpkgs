@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   llvmPackages,
   z3,
@@ -11,28 +10,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simbaplusplus";
-  version = "0-unstable-2024-11-05";
+  version = "0-unstable-2025-11-05";
 
   src = fetchFromGitHub {
     owner = "pgarba";
     repo = "SiMBA-";
-    rev = "a030a187df0b650718b2aab18ccebc1f810e18b4";
-    hash = "sha256-h2in203bwfb7ArhoBN0PoWM6DZtxI4jSGQuSTTaBJ7A=";
+    rev = "cbef1fc868d5de1b659ed317db9e0a1cecf6462b";
+    hash = "sha256-GISI66DuNA7KYJ/trdSdx3CkjdqXn9mQs+EwVxSlgoE=";
   };
-
-  patches = [
-    # CMakeLists: minimum cmake version 3.5
-    (fetchpatch {
-      url = "https://github.com/pgarba/SiMBA-/commit/0d5dcaf0a0e85e342141a9c525cc8a10934c2f9d.patch?full_index=1";
-      hash = "sha256-rL/jzq4eoJI6j1aEK8vg6b2uqGjxN6P+8vsC8oYTxng=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail ' ''${LLVM_TOOLS_BINARY_DIR}/llvm-config' " ${lib.getDev llvmPackages.libllvm}/bin/llvm-config" \
       --replace-fail 'set(Z3_INCLUDE_DIRS “/usr/include”)' ""
   '';
+
+  # llvm-config --cxxflags exports -fno-exceptions, but z3's C++ headers require exception support.
+  env.NIX_CFLAGS_COMPILE = "-fexceptions";
 
   nativeBuildInputs = [
     cmake
