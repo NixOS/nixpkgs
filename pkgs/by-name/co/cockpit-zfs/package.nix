@@ -1,6 +1,7 @@
 {
   acl,
   bash,
+  buildPackages,
   cockpit,
   coreutils,
   fetchFromGitHub,
@@ -13,6 +14,7 @@
   makeWrapper,
   mbuffer,
   msmtp,
+  nix-update-script,
   nodejs,
   openssh,
   samba,
@@ -28,19 +30,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.12-2";
+  version = "1.2.16";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oeXSOxogfAazRsKfngq2+DOyo//wRJQSqm7gaCza4WY=";
+    hash = "sha256-d1wurTha4LIe01oogJZHfLdTvBnEsNG9sGO8CfyS+GE=";
   };
 
   missingHashes = ./missing-hashes.json;
 
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
+  # Use buildPackages for cross-compilation support
+  offlineCache = buildPackages.yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     hash = "sha256-YnR1SqBGnxEQaGUGMNTHHEGcOIhuGbWnqMdr4eRGXcA=";
   };
@@ -50,8 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     jq
     yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    buildPackages.yarn-berry.yarnBerryConfigHook
   ];
+
+  disallowedRequisites = [ finalAttrs.offlineCache ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.cockpitPath = [
     acl
@@ -82,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
-  patchPhase =
+  postPatch =
     let
       # houston-common-lib has @types/electron which pulls in electron.
       # Electron's postinstall downloads binaries, which fails in sandbox.
@@ -91,8 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
       houstonUiDir = "houston-common/houston-common-ui";
     in
     ''
-      runHook prePatch
-
       # Remove electron type dependency
       substituteInPlace ${houstonLibDir}/package.json \
         --replace-fail '"@types/electron": "^1.6.12",' ""
@@ -116,8 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "VueDevTools()," "" \
         --replace-fail "import dts from 'vite-plugin-dts'" ""
       sed -i '/dts({/,/})/d' ${houstonUiDir}/vite.config.ts
-
-      runHook postPatch
     '';
 
   buildPhase = ''
