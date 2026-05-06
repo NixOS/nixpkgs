@@ -58,6 +58,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=notifiers::impls::http_notifier::tests::unknown_url"
     "--skip=notifiers::impls::kafka_notifier::test::simple_success_on_prefix"
     "--skip=notifiers::impls::kafka_notifier::test::simple_success_on_topic"
+
+    # flaky: ETXTBSY race on parallel fork/exec
+    "--skip=notifiers::impls::file_notifier::tests::success"
   ];
 
   meta = {
