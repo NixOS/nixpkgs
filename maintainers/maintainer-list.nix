@@ -6112,6 +6112,11 @@
     github = "Daru-san";
     githubId = 135046711;
   };
+  darwin67 = {
+    github = "darwin67";
+    githubId = 5746693;
+    name = "Darwin";
+  };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";
     github = "das-g";
@@ -10833,6 +10838,11 @@
     github = "HigherOrderLogic";
     githubId = 73709188;
   };
+  highjeans = {
+    github = "highjeans";
+    githubId = 77588045;
+    name = "Vivan Waghela";
+  };
   hirenashah = {
     email = "hiren@hiren.io";
     github = "hirenashah";
@@ -13391,6 +13401,11 @@
     githubId = 5352661;
     name = "James Cleverley-Prance";
   };
+  jpwilliams = {
+    github = "jpwilliams";
+    githubId = 1736957;
+    name = "Jack Williams";
+  };
   jqueiroz = {
     email = "nixos@johnjq.com";
     github = "jqueiroz";
@@ -14187,6 +14202,11 @@
     github = "kiike";
     githubId = 464625;
     name = "Enric Morales";
+  };
+  kikos0 = {
+    github = "KiKoS0";
+    githubId = 22998716;
+    name = "Riadh Daghmoura";
   };
   kilianar = {
     email = "mail@kilianar.de";
