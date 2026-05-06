@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  gccStdenv,
+  callPackage,
   fetchurl,
   cln,
   pkg-config,
@@ -9,7 +11,7 @@
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "ginac";
   version = "1.8.10";
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [ "--disable-rpath" ];
+
+  passthru.tests.example = callPackage ./ginac-example-test.nix { ginac = finalAttrs.finalPackage; };
 
   meta = {
     description = "GiNaC C++ library for symbolic manipulations";
