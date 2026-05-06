@@ -2,50 +2,11 @@
   config,
   options,
   lib,
-  pkgs,
   ...
 }:
 let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
-
-  isConfig = x: builtins.isAttrs x || lib.isFunction x;
-
-  optCall = f: x: if lib.isFunction f then f x else f;
-
-  mergeConfig =
-    lhs_: rhs_:
-    let
-      lhs = optCall lhs_ { inherit lib pkgs; };
-      rhs = optCall rhs_ { inherit lib pkgs; };
-    in
-    lib.recursiveUpdate lhs rhs
-    // lib.optionalAttrs (lhs ? allowUnfreePackages) {
-      allowUnfreePackages = lhs.allowUnfreePackages ++ (lib.attrByPath [ "allowUnfreePackages" ] [ ] rhs);
-    }
-    // lib.optionalAttrs (lhs ? packageOverrides) {
-      packageOverrides =
-        pkgs:
-        optCall lhs.packageOverrides pkgs // optCall (lib.attrByPath [ "packageOverrides" ] { } rhs) pkgs;
-    }
-    // lib.optionalAttrs (lhs ? perlPackageOverrides) {
-      perlPackageOverrides =
-        pkgs:
-        optCall lhs.perlPackageOverrides pkgs
-        // optCall (lib.attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
-    };
-
-  configType = lib.mkOptionType {
-    name = "nixpkgs-config";
-    description = "nixpkgs config";
-    check =
-      x:
-      let
-        traceXIfNot = c: if c x then true else lib.traceSeqN 1 x false;
-      in
-      traceXIfNot isConfig;
-    merge = args: lib.foldr (def: mergeConfig def.value) { };
-  };
 
   overlayType = lib.mkOptionType {
     name = "nixpkgs-overlay";
@@ -73,6 +34,8 @@ let
     ++ lib.optional (opt.localSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.localSystem
     ++ lib.optional (opt.crossSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.crossSystem;
 
+  _configDefinitions = opt.config.definitionsWithLocations;
+
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
@@ -90,14 +53,15 @@ let
       in
       import ../../.. (
         {
-          inherit (cfg) config overlays;
+          inherit _configDefinitions;
+          inherit (cfg) overlays;
         }
         // systemArgs
       )
     else
       import ../../.. {
+        inherit _configDefinitions;
         inherit (cfg)
-          config
           overlays
           localSystem
           crossSystem
@@ -165,7 +129,15 @@ in
       example = lib.literalExpression ''
         { allowBroken = true; allowUnfree = true; }
       '';
-      type = configType;
+      type = lib.types.deferredModuleWith {
+        staticModules = [
+          { _module.args.docPrefix = "https://nixos.org/manual/nixpkgs/unstable/"; }
+          ../../../pkgs/top-level/config.nix
+        ];
+      };
+      # Returns pkgs.config instead of nixpkgs.config
+      # This shadows the deferredModule to make it look like a submodule
+      apply = _: finalPkgs.config;
       description = ''
         Global configuration for Nixpkgs.
         The complete list of [Nixpkgs configuration options](https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference) is in the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig).
@@ -406,7 +378,7 @@ in
           '';
         }
         {
-          assertion = opt.pkgs.isDefined -> cfg.config == { };
+          assertion = opt.pkgs.isDefined -> opt.config.highestPrio == (lib.mkOptionDefault null).priority;
           message = ''
             Your system configures nixpkgs with an externally created instance.
             `nixpkgs.config` options should be passed when creating the instance instead.
