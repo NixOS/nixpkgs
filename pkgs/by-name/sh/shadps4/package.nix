@@ -1,28 +1,27 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
+  makeWrapper,
 
   nixosTests,
   alsa-lib,
   boost,
+  cli11,
   cmake,
   cryptopp,
-  game-music-emu,
-  glslang,
   ffmpeg,
-  flac,
-  fluidsynth,
   fmt,
   half,
   jack2,
   libdecor,
-  libGL,
+  libpng,
   libpulseaudio,
   libunwind,
   libusb1,
-  libvorbis,
-  libxmp,
+  magic-enum,
+  miniz,
+  nlohmann_json,
   libgbm,
   libx11,
   libxcb,
@@ -32,14 +31,14 @@
   libxrandr,
   libxscrnsaver,
   libxtst,
-  magic-enum,
-  mpg123,
   pipewire,
   pkg-config,
   pugixml,
   rapidjson,
   renderdoc,
   robin-map,
+  sdl3,
+  sdl3-mixer,
   sndio,
   stb,
   toml11,
@@ -49,29 +48,38 @@
   vulkan-memory-allocator,
   xbyak,
   xxhash,
-  zlib-ng,
-  zydis,
+  zlib,
   nix-update-script,
 }:
 
-# relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
-    fetchSubmodules = true;
+    hash = "sha256-76rbxOf4grDWPVILy8nF35wQ6/NcxHQkmiQOB0u4oJo=";
 
-    leaveDotGit = true;
-    postFetch = ''
+    postCheckout = ''
       cd "$out"
+
       git rev-parse --short=8 HEAD > $out/COMMIT
       date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-      find "$out" -name .git -print0 | xargs -0 rm -rf
+
+      git -C externals submodule update --init --recursive \
+        glslang \
+        zydis \
+        sirit \
+        tracy \
+        ext-libusb \
+        discord-rpc \
+        hwinfo \
+        openal-soft \
+        dear_imgui \
+        LibAtrac9 \
+        aacdec/fdk-aac
     '';
   };
 
@@ -82,27 +90,26 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
       --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
       --replace-fail @GIT_DESC@ nixpkgs \
       --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
+
+    substituteInPlace src/core/libraries/np/trophy_ui.cpp \
+      --replace-fail "MIX_SetMasterGain" "MIX_SetMixerGain" \
+      --replace-fail "MIX_GetMasterGain" "MIX_GetMixerGain"
   '';
 
   buildInputs = [
     alsa-lib
     boost
+    cli11
     cryptopp
-    game-music-emu
-    glslang
     ffmpeg
-    flac
-    fluidsynth
     fmt
     half
     jack2
     libdecor
-    libGL
+    libpng
     libpulseaudio
     libunwind
     libusb1
-    libvorbis
-    libxmp
     libx11
     libxcb
     libxcursor
@@ -111,14 +118,17 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxscrnsaver
     libxtst
-    libgbm
     magic-enum
-    mpg123
+    miniz
+    libgbm
+    nlohmann_json
     pipewire
     pugixml
     rapidjson
     renderdoc
     robin-map
+    sdl3
+    sdl3-mixer
     sndio
     stb
     toml11
@@ -128,13 +138,13 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
     xbyak
     xxhash
-    zlib-ng
-    zydis
+    zlib
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
 
   cmakeFlags = [
@@ -152,6 +162,14 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
     install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadPS4.desktop
     install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadPS4.metainfo.xml
+
+    wrapProgram $out/bin/shadps4 \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpulseaudio
+          pipewire
+        ]
+      }
 
     runHook postInstall
   '';
