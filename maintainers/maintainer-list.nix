@@ -808,6 +808,13 @@
     githubId = 19290901;
     name = "Andrew Brooks";
   };
+  agentelement = {
+    email = "agentelement@agentelement.net";
+    github = "agentelement";
+    githubId = 38045210;
+    name = "AgentElement";
+    keys = [ { fingerprint = "D37E 581D AD71 2378 A622  5BC0 CD13 9E3B 4354 34F1"; } ];
+  };
   agilesteel = {
     email = "agilesteel@gmail.com";
     github = "agilesteel";
