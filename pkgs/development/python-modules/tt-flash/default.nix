@@ -2,12 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+
+  # build-system
   setuptools,
+
+  # dependencies
   pyyaml,
   tabulate,
   pyluwen,
   tt-tools-common,
+
+  # tests
+  pytestCheckHook,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "tt-flash";
@@ -26,6 +32,10 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "pyyaml"
+    "tabulate"
+  ];
   dependencies = [
     tabulate
     pyyaml
@@ -34,14 +44,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "tt_flash" ];
-  pythonRelaxDeps = [
-    "pyyaml"
-    "tabulate"
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = {
     description = "Tenstorrent Firmware Update Utility";
     homepage = "https://tenstorrent.com";
+    downloadPage = "https://github.com/tenstorrent/tt-flash";
+    changelog = "https://github.com/tenstorrent/tt-flash/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
   };
