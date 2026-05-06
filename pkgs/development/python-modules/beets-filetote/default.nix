@@ -13,27 +13,38 @@
   pytestCheckHook,
   beets-audible,
   mediafile,
-  pytest,
   reflink,
   toml,
   typeguard,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beets-filetote";
-  version = "1.1.1";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtronset";
     repo = "beets-filetote";
-    tag = "v${version}";
-    hash = "sha256-NsYBsP60SiCfQ63C4WMkshyreFqOSmx3LP5Gwq6ECF0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6pMKhsnUG25jbTKWbGiA0tp5QKAHwxPE3/4iVJz3SYk=";
   };
+
+  patches = [
+    # Fix test imports: add the source tree's beetsplug/ to beetsplug.__path__
+    # so relative imports resolve when loading filetote via importlib.
+    ./fix-test-imports.patch
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail "poetry-core<2.0.0" "poetry-core"
+
+    # Replace beetsplug/__init__.py with a namespace package extend_path.
+    # The upstream __init__.py turns beetsplug into a regular package, which
+    # shadows the beets namespace package and breaks all other beets plugins.
+    echo 'from pkgutil import extend_path; __path__ = extend_path(__path__, __name__)' \
+      > beetsplug/__init__.py
   '';
 
   build-system = [
@@ -61,26 +72,16 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlags = [
-    # This is the same as:
-    #   -r fEs
+  pytestFlagsArray = [
     "-rfEs"
-  ];
-
-  disabledTestPaths = [
-    "tests/test_cli_operation.py"
-    "tests/test_pruning.py"
-    "tests/test_version.py"
   ];
 
   meta = {
     description = "Beets plugin to move non-music files during the import process";
     homepage = "https://github.com/gtronset/beets-filetote";
-    changelog = "https://github.com/gtronset/beets-filetote/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gtronset/beets-filetote/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ dansbandit ];
     license = lib.licenses.mit;
     inherit (beets-minimal.meta) platforms;
-    # https://github.com/gtronset/beets-filetote/issues/211
-    broken = true;
   };
-}
+})
