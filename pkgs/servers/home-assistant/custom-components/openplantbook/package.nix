@@ -20,10 +20,10 @@ buildHomeAssistantComponent rec {
     hash = "sha256-Ym7bt+0s7eqlL3oDtppIGenoW1XvrSjKkV2flE0TzUo=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/openplantbook/manifest.json \
-      --replace-fail "==" ">="
-  '';
+  ignoreVersionRequirement = [
+    "json-timeseries"
+    "openplantbook-sdk"
+  ];
 
   dependencies = [
     json-timeseries
