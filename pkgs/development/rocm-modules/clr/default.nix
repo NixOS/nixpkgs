@@ -242,15 +242,17 @@ stdenv.mkDerivation (finalAttrs: {
       # "9-4-generic" - since only 942 is valid for 6.4 target it directly
       # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
       "942" # MI300A/X, MI325X
-      # "950" #  MI350X TODO: Expected in ROCm 7.x
+      "950" # MI350X, MI355X
       # "10-1-generic" # fine for all RDNA1 cards
       "1010"
       # "10-3-generic"
       "1030" # W6800, various Radeon cards
+      # 1100 through 1103 = RDNA3
       # "11-generic" # will handle 7600, hopefully ryzen AI series iGPUs
       "1100"
       "1101"
       "1102"
+      "1103" # RDNA3 iGPU like Radeon 780M
       "1150" # Strix Point
       "1151" # Strix Halo
       # "12-generic"
