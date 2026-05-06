@@ -6625,6 +6625,8 @@ self: super: with self; {
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
+  gplugins = callPackage ../development/python-modules/gplugins { };
+
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
 
   gps3 = callPackage ../development/python-modules/gps3 { };
