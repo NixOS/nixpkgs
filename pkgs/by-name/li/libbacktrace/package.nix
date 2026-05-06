@@ -10,20 +10,16 @@
 
 stdenv.mkDerivation {
   pname = "libbacktrace";
-  version = "0-unstable-2024-03-02";
+  version = "0-unstable-2025-11-06";
 
   src = fetchFromGitHub {
     owner = "ianlancetaylor";
     repo = "libbacktrace";
-    rev = "28824f2cc9069e3fdc39d3702acdf753e35c41b4";
-    sha256 = "1k1O1GT22hZAWPF8NYP0y4qe+e3pGfzT9Mz2TH+H/v4=";
+    rev = "b9e40069c0b47a722286b94eb5231f7f05c08713";
+    hash = "sha256-vi33Bhg2LT5uWN63PHkD8CaOjTXBwZhBwFFhaezJ0e4=";
   };
 
   patches = [
-    # Fix tests with shared library.
-    # https://github.com/ianlancetaylor/libbacktrace/pull/99
-    ./0001-libbacktrace-avoid-libtool-wrapping-tests.patch
-
     # Support multiple debug dirs.
     # https://github.com/ianlancetaylor/libbacktrace/pull/100
     ./0002-libbacktrace-Allow-configuring-debug-dir.patch
