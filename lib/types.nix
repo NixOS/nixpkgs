@@ -15,6 +15,7 @@ let
     isList
     isString
     isStorePath
+    sort
     throwIf
     toDerivation
     toList
@@ -22,6 +23,7 @@ let
     ;
   inherit (lib.lists)
     concatLists
+    concatMap
     count
     elemAt
     filter
@@ -66,6 +68,9 @@ let
     mergeDefinitions
     fixupOptionType
     mergeOptionDecls
+    defaultOrderPriority
+    defaultOverridePriority
+    mkOverride
     ;
   inherit (lib.fileset)
     isFileset
@@ -796,6 +801,167 @@ rec {
       description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
       emptyValue = { }; # no .value attr, meaning unset
       substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
+    };
+
+  attrListOf = elemType: attrListWith { inherit elemType; };
+
+  attrListWith =
+    {
+      elemType,
+      asAttrs ? false,
+      mergeAttrValues ? _name: values: values,
+    }:
+    mkOptionType rec {
+      name = "attrListOf";
+      description = "attribute list of ${
+        optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+      }";
+      descriptionClass = "composite";
+      check = {
+        __functor = _self: x: isList x || isAttrs x;
+        isV2MergeCoherent = true;
+      };
+      merge = {
+        __functor =
+          self: loc: defs:
+          (self.v2 { inherit loc defs; }).value;
+        v2 =
+          { loc, defs }:
+          let
+            # Peel order and override properties from a value in any nesting order.
+            # Returns { value, prio, overridePrio }.
+            # mkOrder is stripped (we consume it for sorting).
+            # mkOverride is preserved in value (mergeDefinitions strips it).
+            peelProperties =
+              value:
+              let
+                type = value._type or null;
+              in
+              if type == "order" then
+                let
+                  inner = peelProperties value.content;
+                in
+                {
+                  inherit (inner) value overridePrio;
+                  prio = value.priority;
+                }
+              else if type == "override" then
+                let
+                  inner = peelProperties value.content;
+                in
+                {
+                  inherit (inner) prio;
+                  overridePrio = value.priority;
+                  # Re-wrap mkOverride around the inner value (with mkOrder stripped)
+                  value = mkOverride value.priority inner.value;
+                }
+              else
+                {
+                  inherit value;
+                  prio = defaultOrderPriority;
+                  overridePrio = defaultOverridePriority;
+                };
+
+            # Extract { file, key, value, prio, overridePrio } from a single-key attrset,
+            # optionally wrapped in mkOrder at the element level (list format).
+            extractItem =
+              file: raw:
+              let
+                hasOrder = raw._type or null == "order";
+                item = if hasOrder then raw.content else raw;
+                key = head (attrNames item);
+                peeled = peelProperties item.${key};
+              in
+              if isAttrs item && length (attrNames item) == 1 then
+                peeled
+                // {
+                  inherit file key;
+                  prio = if hasOrder then raw.priority else peeled.prio;
+                }
+              else
+                throw "A definition for option `${showOption loc}' is not of type `${description}'. Each list element must be a single-key attribute set.";
+
+            # Convert a definition to a flat list of { file, key, value, prio, overridePrio }
+            defToItems =
+              def:
+              if isList def.value then
+                map (extractItem def.file) def.value
+              else
+                # isAttrs: properties are on the values directly
+                map (
+                  key:
+                  peelProperties def.value.${key}
+                  // {
+                    inherit (def) file;
+                    inherit key;
+                  }
+                ) (attrNames def.value);
+
+            allItems = concatMap defToItems defs;
+
+            # Per key, find the highest override priority (lowest number)
+            winningOverridePrio = foldl' (
+              acc: item:
+              let
+                prev = acc.${item.key} or defaultOverridePriority;
+              in
+              if item.overridePrio < prev then
+                acc // { ${item.key} = item.overridePrio; }
+              else
+                # minimize `//` operations
+                acc
+            ) { } allItems;
+
+            # Keep only items at the winning override priority for their key
+            items = sort (a: b: a.prio < b.prio) (
+              filter (
+                item: item.overridePrio == winningOverridePrio.${item.key} or defaultOverridePriority
+              ) allItems
+            );
+
+            evals = filter (e: e.eval.optionalValue ? value) (
+              map (item: {
+                inherit (item) key;
+                eval = mergeDefinitions (loc ++ [ item.key ]) elemType [
+                  {
+                    inherit (item) file value;
+                  }
+                ];
+              }) items
+            );
+
+            attrListValue = map (e: { ${e.key} = e.eval.optionalValue.value or e.eval.mergedValue; }) evals;
+          in
+          {
+            headError = checkDefsForError check loc defs;
+            value = if asAttrs then zipAttrsWith mergeAttrValues attrListValue else attrListValue;
+            valueMeta.attrList = map (e: e.eval.checkedAndMerged.valueMeta) evals;
+            /**
+              The ordered list representation, especially useful when asAttrs is set.
+            */
+            valueMeta.attrListValue = attrListValue;
+          };
+      };
+      emptyValue = {
+        value = if asAttrs then { } else [ ];
+      };
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" ]);
+      getSubModules = elemType.getSubModules;
+      substSubModules =
+        m:
+        attrListWith {
+          inherit asAttrs mergeAttrValues;
+          elemType = elemType.substSubModules m;
+        };
+      functor = elemTypeFunctor name { inherit elemType; } // {
+        type =
+          payload:
+          types.attrListWith {
+            inherit asAttrs mergeAttrValues;
+            inherit (payload) elemType;
+          };
+      };
+      nestedTypes.elemType = elemType;
     };
 
   attrsOf = elemType: attrsWith { inherit elemType; };
