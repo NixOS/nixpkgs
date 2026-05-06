@@ -816,8 +816,12 @@ in
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = import ./rancher {
-    inherit pkgs runTest;
+    inherit pkgs;
     inherit (pkgs) lib;
+    runTest = runTestOn [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     rancherDistro = "k3s";
   };
   kafka = handleTest ./kafka { };

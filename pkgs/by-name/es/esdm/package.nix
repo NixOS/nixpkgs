@@ -18,22 +18,31 @@
   # A brief explanation is given.
 
   # general options
-  selinux ? true, # enable selinux support
-  fips140 ? true, # enable FIPS 140 checksum support
+  selinux ? false, # enable selinux support
+  fips140 ? false, # enable FIPS 140 checksum support
   ais2031 ? true, # set the seeding strategy to be compliant with AIS 20/31
   sp80090c ? true, # set compliance with NIST SP800-90C
   cryptoBackend ? "botan", # set backend for hash and drbg operations
   linuxDevFiles ? true, # enable linux /dev/random and /dev/urandom support
   linuxGetRandom ? true, # enable linux getrandom support
   openSSLRandProvider ? true, # build ESDM provider for OpenSSL 3.x
-  maxThreads ? 1024, # number of RPC handler threads
+  maxThreads ? 64, # number of RPC handler threads
   validationHelpers ? true, # used to analyze entropy output from esdm_es
   numAuxPools ? 128, # use multiple hash pools for e.g. smartcard input
-  serverTermOnSignal ? false, # use select with timeout in server watch loop
+  auxHasFullEntropy ? false, # is already conditioned data inserted into aux pool?
+
+  # DRNG-related options
+  drngReseedThresholdBits ? lib.fromHexString "0xffffffff",
+  drngMaxReseedBits ? lib.fromHexString "0xffffffff",
 
   # entropy sources
   esJitterRng ? true, # enable support for the entropy source: jitter rng (running in user space)
   esJitterRngEntropyRate ? 256, # amount of entropy to account for jitter rng source
+  esJitterRngNtg1 ? false, # configures jitterentropy NTG.1 mode
+  esJitterRngAllCaches ? false, # use all caches in calculating size of memory buffer?
+  esJitterRngMaxMem ? -1, # set static maximum size of memory buffer, -1 disables it
+  esJitterRngHashLoopCount ? -1, # set increased hashloop count, -1 disables it
+  esJitterRngOsr ? 3, # set larger oversampling rate if necessary, (default 3)
   esJitterRngEntropyBlocks ? 128, # number of cached entropy blocks for jitterentropy
   esJitterRngKernel ? false, # enable support for the entropy source: jitter rng (running in kernel space)
   esJitterRngKernelEntropyRate ? 256, # amount of entropy to account for kernel jitter rng source
@@ -41,6 +50,8 @@
   esCPUEntropyRate ? 256, # amount of entropy to account for cpu rng source
   esKernel ? false, # enable support for the entropy source: kernel-based entropy
   esKernelEntropyRate ? 256, # amount of entropy to account for kernel-based source
+  esTPM2 ? true, # enable support for the entropy source: TPM-based entropy
+  esTPM2EntropyRate ? 256, # amount of entropy to account for TPM-based source
   esIRQ ? false, # enable support for the entropy source: interrupt-based entropy
   esIRQEntropyRate ? 256, # amount of entropy to account for interrupt-based source (only set irq XOR sched != 0)
   esSched ? false, # enable support for the entropy source: scheduler-based entropy
@@ -50,20 +61,20 @@
 
   # kernel seeding
   linuxKernelReseedInterval ? 60, # how often to push entropy into Linux kernel, iff seeder service is started
-  linuxKernelReseedEntropyRate ? 256, # how many bits to account on kernel (re-)seeding
+  linuxKernelReseedEntropyRate ? 512, # how many bits to account on kernel (re-)seeding
 }:
 
 assert cryptoBackend == "openssl" || cryptoBackend == "botan";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "esdm";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "esdm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-41vc5mB2MiQJu0HXFzSjiudlu1sRj2IP8FcFPQfu5uo=";
+    hash = "sha256-0s9YOqa+sn0rk5YoMWZczO1TB5/wpbFsdkaVWFf4ipI=";
   };
 
   nativeBuildInputs = [
@@ -89,13 +100,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "sp80090c" sp80090c)
     (lib.mesonEnable "node" true) # multiple DRNGs
     (lib.mesonEnable "systemd" true) # systemd notify and socket support
-    (lib.mesonOption "threading_max_threads" (toString maxThreads))
+    (lib.mesonOption "threading_max_worker_threads" (toString maxThreads))
     (lib.mesonOption "crypto_backend" cryptoBackend)
     (lib.mesonEnable "linux-devfiles" linuxDevFiles)
     (lib.mesonEnable "linux-getrandom" linuxGetRandom)
     (lib.mesonEnable "es_jent" esJitterRng)
     (lib.mesonOption "es_jent_entropy_rate" (toString esJitterRngEntropyRate))
     (lib.mesonOption "es_jent_entropy_blocks" (toString esJitterRngEntropyBlocks))
+    (lib.mesonEnable "es_jent_ntg1" esJitterRngNtg1)
+    (lib.mesonEnable "es_jent_all_caches" esJitterRngAllCaches)
+    (lib.mesonOption "es_jent_max_mem" (toString esJitterRngMaxMem))
+    (lib.mesonOption "es_jent_hash_loop_count" (toString esJitterRngHashLoopCount))
+    (lib.mesonOption "es_jent_osr" (toString esJitterRngOsr))
     (lib.mesonEnable "es_jent_kernel" esJitterRngKernel)
     (lib.mesonOption "es_jent_kernel_entropy_rate" (toString esJitterRngKernelEntropyRate))
     (lib.mesonEnable "es_cpu" esCPU)
@@ -108,13 +124,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "es_sched_entropy_rate" (toString esSchedEntropyRate))
     (lib.mesonEnable "es_hwrand" esHwrand)
     (lib.mesonOption "es_hwrand_entropy_rate" (toString esHwrandEntropyRate))
+    (lib.mesonEnable "es_tpm2" esTPM2)
+    (lib.mesonOption "es_tpm2_entropy_rate" (toString esTPM2EntropyRate))
     (lib.mesonEnable "selinux" selinux)
     (lib.mesonEnable "openssl-rand-provider" openSSLRandProvider)
     (lib.mesonOption "linux-reseed-interval" (toString linuxKernelReseedInterval))
     (lib.mesonOption "linux-reseed-entropy-count" (toString linuxKernelReseedEntropyRate))
     (lib.mesonEnable "validation-helpers" validationHelpers)
     (lib.mesonOption "num-aux-pools" (toString numAuxPools))
-    (lib.mesonBool "esdm-server-term-on-signal" serverTermOnSignal)
+    (lib.mesonEnable "aux-has-full-entropy" auxHasFullEntropy)
+    (lib.mesonOption "drng_reseed_threshold_bits" (toString drngReseedThresholdBits))
+    (lib.mesonOption "drng_max_reseed_bits" (toString drngMaxReseedBits))
   ];
 
   postFixup = lib.optionals fips140 ''
@@ -125,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
+
   mesonBuildType = "release";
 
   meta = {

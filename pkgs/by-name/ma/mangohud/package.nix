@@ -48,16 +48,16 @@ assert lib.assertMsg (mangoappSupport -> x11Support) "mangoappSupport requires x
 let
   # Derived from subprojects/imgui.wrap
   imgui = rec {
-    version = "1.89.9";
+    version = "1.91.6";
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
       tag = "v${version}";
-      hash = "sha256-0k9jKrJUrG9piHNFQaBBY3zgNIKM23ZA879NY+MNYTU=";
+      hash = "sha256-CLS26CRzzY4vUBgILjSQVvziHMyPGK4fwwcLZcOAzPw=";
     };
     patch = fetchurl {
-      url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
-      hash = "sha256-myEpDFl9dr+NTus/n/oCSxHZ6mxh6R1kjMyQtChD1YQ=";
+      url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-3/get_patch";
+      hash = "sha256-L3l3EUugfQZVmq+IkKkqTr0lGGWS1ER5VGBaryJEY00=";
     };
   };
 
@@ -78,32 +78,40 @@ let
 
   # Derived from subprojects/vulkan-headers.wrap
   vulkan-headers = rec {
-    version = "1.2.158";
+    version = "1.4.346";
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-Headers";
       tag = "v${version}";
-      hash = "sha256-5uyk2nMwV1MjXoa3hK/WUeGLwpINJJEvY16kc5DEaks=";
-    };
-    patch = fetchurl {
-      url = "https://wrapdb.mesonbuild.com/v2/vulkan-headers_${version}-2/get_patch";
-      hash = "sha256-hgNYz15z9FjNHoj4w4EW0SOrQh1c4uQSnsOOrt2CDhc=";
+      hash = "sha256-JTBW5CF5hlHWkhCjjRd08hpoAarB5W3FJbHzhQM4YFs=";
     };
   };
+
+  # Derived from subprojects/vulkan-headers.wrap
+  vulkan-utility-libraries = rec {
+    version = "1.4.346";
+    src = fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "Vulkan-Utility-Libraries";
+      tag = "v${version}";
+      hash = "sha256-FWZe6NdhLmI/3bm3OIK646vkWkIQ5xmBa4jlSVHSnDs=";
+    };
+  };
+
   libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   mangohud32 = pkgsi686Linux.mangohud;
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-BZ3R7D2zOlg69rx4y2FzzjpXuPOv913TOz9kSvRN+Wg=";
+    hash = "sha256-fzfSYyz2NMo61Yd7boRxdtbi/KTNbSos0qmHf2/mikk=";
   };
 
   outputs = [
@@ -119,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
       cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
       cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
+      cp -R --no-preserve=mode,ownership ${vulkan-utility-libraries.src} Vulkan-Utility-Libraries-${vulkan-utility-libraries.version}
     )
   '';
 
@@ -163,7 +172,8 @@ stdenv.mkDerivation (finalAttrs: {
       cd subprojects
       unzip ${imgui.patch}
       unzip ${implot.patch}
-      unzip ${vulkan-headers.patch}
+      cp -R --no-preserve=mode,ownership packagefiles/vulkan-headers/* Vulkan-Headers-${vulkan-headers.version}
+      cp -R --no-preserve=mode,ownership packagefiles/vulkan-utility-libraries/* ${vulkan-utility-libraries.src} Vulkan-Utility-Libraries-${vulkan-utility-libraries.version}
     )
   '';
 
