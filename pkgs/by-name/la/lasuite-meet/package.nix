@@ -1,29 +1,67 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  fetchNpmDeps,
   nixosTests,
+  python3,
+  stdenv,
+  nodejs,
+  npmHooks,
 }:
 let
+  version = "1.15.0";
+  src = fetchFromGitHub {
+    owner = "suitenumerique";
+    repo = "meet";
+    tag = "v${version}";
+    hash = "sha256-18DcrrEvqWR6caEVZYxQlSnKcxItEpNE+bMhtS4Aa0M=";
+  };
+
+  mail-templates = stdenv.mkDerivation (finalAttrs: {
+    name = "lasuite-meet-${version}-mjml";
+    inherit src;
+
+    sourceRoot = "${finalAttrs.src.name}/src/mail";
+
+    postPatch = ''
+      substituteInPlace bin/html-to-plain-text bin/mjml-to-html \
+        --replace-fail \
+          '../backend/core/templates/mail' \
+          '${placeholder "out"}'
+
+      cp ${./package-lock.json} package-lock.json
+    '';
+
+    npmDeps = fetchNpmDeps {
+      name = "${finalAttrs.name}-npm-deps";
+      inherit version src;
+      inherit (finalAttrs) sourceRoot;
+      hash = "sha256-jjLzgGqCsMu6Smyfaam6coqOM9UW2zG88adSPVrWPEE=";
+
+      postPatch = "cp ${./package-lock.json} package-lock.json";
+    };
+    npmBuildScript = "build";
+
+    nativeBuildInputs = [
+      nodejs
+      npmHooks.npmBuildHook
+      npmHooks.npmConfigHook
+    ];
+
+    dontInstall = true;
+  });
+
   python = python3.override {
     self = python3;
     packageOverrides = (self: super: { django = super.django_5; });
   };
 in
-
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lasuite-meet";
-  version = "1.14.0";
   pyproject = true;
+  inherit version src;
 
-  src = fetchFromGitHub {
-    owner = "suitenumerique";
-    repo = "meet";
-    tag = "v${version}";
-    hash = "sha256-baQVCnkEv5aUy4mKdiscPiiEvwYPfezF03i1HPX64oA=";
-  };
-
-  sourceRoot = "source/src/backend";
+  sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
     # Support configuration throught environment variables for SECURE_*
@@ -33,7 +71,16 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
-  '';
+  ''
+  # Otherwise fails with:
+  # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace impress/settings.py \
+      --replace-fail \
+        "gethostname()" \
+        "gethostname() + '.local'"
+  '');
+  __darwinAllowLocalNetworking = true;
 
   build-system = with python.pkgs; [ uv-build ];
 
@@ -95,7 +142,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
-      pythonPath = python.pkgs.makePythonPath dependencies;
+      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       mkdir -p $out/{bin,share}
@@ -110,6 +157,9 @@ python.pkgs.buildPythonApplication rec {
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
       makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
+
+      mkdir -p $out/${python.sitePackages}/core/templates
+      ln -sv ${mail-templates}/ $out/${python.sitePackages}/core/templates/mail
     '';
 
   passthru.tests = {
@@ -119,10 +169,10 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Open source alternative to Google Meet and Zoom powered by LiveKit: HD video calls, screen sharing, and chat features. Built with Django and React";
     homepage = "https://github.com/suitenumerique/meet";
-    changelog = "https://github.com/suitenumerique/meet/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/suitenumerique/meet/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
     mainProgram = "meet";
     platforms = lib.platforms.all;
   };
-}
+})
