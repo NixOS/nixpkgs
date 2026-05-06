@@ -69,17 +69,12 @@ let
   repository =
     with lib.types;
     submodule {
+      freeformType = settingsFormat.type;
       options = {
         path = lib.mkOption {
           type = str;
           description = ''
             Path to the repository
-          '';
-        };
-        label = lib.mkOption {
-          type = str;
-          description = ''
-            Label to the repository
           '';
         };
       };
@@ -119,7 +114,7 @@ let
           example = [
             {
               path = "ssh://user@backupserver/./sourcehostname.borg";
-              label = "backupserver";
+              encryption = "repokey-blake2";
             }
             {
               path = "/mnt/backup";
