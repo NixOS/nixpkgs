@@ -21,6 +21,7 @@
   disableGdbPlugin ? !enablePlugin,
   enableShared,
   enableDefaultPie,
+  enableDefaultStaticPie,
   targetPrefix,
 
   langC,
@@ -285,6 +286,11 @@ let
     ]
     ++ lib.optionals enableDefaultPie [
       "--enable-default-pie"
+    ]
+    ++ lib.optionals enableDefaultStaticPie [
+      # Conceptually similar to setting --enable-default-pie.
+      # static -> static-pie, skipped if -r or -shared or -no-pie are set.
+      "--with-specs=%{!r:%{!shared:%{!no-pie:%{static:%<static -static-pie}}}}"
     ]
     ++ lib.optionals langJit [
       "--enable-host-shared"
