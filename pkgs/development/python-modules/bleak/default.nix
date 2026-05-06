@@ -7,7 +7,7 @@
   pythonOlder,
 
   # build-system
-  poetry-core,
+  uv-build,
 
   # dependencies
   bumble,
@@ -24,18 +24,19 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "2.1.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
     tag = "v${version}";
-    hash = "sha256-zplCwm0LxDTbNvjWK6VYEFe0Azd2ginkoPZpV7Tpv20=";
+    hash = "sha256-I+nN3/KKF0PC9TO8SULXX1oOGUokYa2tlPVfEJ/0mbY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build" \
       --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
   ''
   # bleak checks BlueZ's version with a call to `bluetoothctl --version`
@@ -46,7 +47,7 @@ buildPythonPackage rec {
         '"${lib.getExe' bluez "bluetoothctl"}"'
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
   ]
