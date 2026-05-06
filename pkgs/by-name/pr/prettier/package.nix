@@ -5,7 +5,7 @@
   nodejs,
   stdenv,
   versionCheckHook,
-  yarn-berry,
+  yarn-berry_4,
   plugins ? [ ],
 }:
 let
@@ -68,6 +68,17 @@ let
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
+
+  yarnVersion = "4.9.2";
+  yarn-berry = yarn-berry_4.overrideAttrs (old: {
+    version = yarnVersion;
+    src = fetchFromGitHub {
+      owner = "yarnpkg";
+      repo = "berry";
+      tag = "@yarnpkg/cli/${yarnVersion}";
+      hash = "sha256-MZB70hgPiQuHHLibhrGZ11vcvtZsCDkqR1NxSq8bXps=";
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
