@@ -1,0 +1,29 @@
+From 872f2c8632dd985dad93de79c985111f188164c8 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 25 Mar 2026 19:35:38 +0530
+Subject: [PATCH 4/5] tests fix rule_id
+
+rule_id is not found for this class but rule_name exists with the
+expected value
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ tests/analytics_rules_v1_test.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/analytics_rules_v1_test.py b/tests/analytics_rules_v1_test.py
+index d222d99..d1021d8 100644
+--- a/tests/analytics_rules_v1_test.py
++++ b/tests/analytics_rules_v1_test.py
+@@ -45,7 +45,7 @@ def test_get_missing_analytics_rule(fake_analytics_rules: AnalyticsRulesV1) -> N
+     """Test that the AnalyticsRulesV1 object can get a missing analytics_rule."""
+     analytics_rule = fake_analytics_rules["company_analytics_rule"]
+ 
+-    assert analytics_rule.rule_id == "company_analytics_rule"
++    assert analytics_rule.rule_name == "company_analytics_rule"
+     assert_match_object(analytics_rule.api_call, fake_analytics_rules.api_call)
+     assert_object_lists_match(
+         analytics_rule.api_call.node_manager.nodes,
+-- 
+2.53.0
+
