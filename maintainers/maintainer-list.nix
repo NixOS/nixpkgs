@@ -25335,6 +25335,11 @@
     github = "Simarra";
     githubId = 14372987;
   };
+  Simon-Weij = {
+    name = "Simon";
+    github = "Simon-Weij";
+    githubId = 175155691;
+  };
   simonchatts = {
     email = "code@chatts.net";
     github = "simonchatts";
