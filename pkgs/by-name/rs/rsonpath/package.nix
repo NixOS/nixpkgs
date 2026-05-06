@@ -2,25 +2,20 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsonpath";
-  version = "0.9.1-unstable-2024-11-15";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "rsonquery";
     repo = "rsonpath";
-    rev = "979e6374a68747dfba7b87b61bbe77951f749659";
-    hash = "sha256-YQCbkdv7PRf5hVXAGUg6DrtaCLIyS9nUGXsl8XHpKZU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Lh58U5A4EeD+tQ3CZNE7YabwGIJ14Cv5dqbJ64JYNDk=";
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
-
-  cargoHash = "sha256-9pSn0f0VWsBg1z1UYGRtMb1z23htRm7qLmO80zvSjN8=";
+  cargoHash = "sha256-w1AODL95+O0jhzXvNrL9I+i2+jcZX3SvJDKrLWkI7c8=";
 
   cargoBuildFlags = [ "-p=rsonpath" ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
@@ -28,9 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Experimental JSONPath engine for querying massive streamed datasets";
     homepage = "https://github.com/v0ldek/rsonpath";
-    changelog = "https://github.com/v0ldek/rsonpath/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/v0ldek/rsonpath/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     mainProgram = "rq";
   };
 })

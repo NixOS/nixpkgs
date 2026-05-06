@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apify-fingerprint-datapoints";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "apify_fingerprint_datapoints";
     inherit (finalAttrs) version;
-    hash = "sha256-p0jWzyzuhT8CdkIeZh05jPcl5/RToagijhGjso2x2CU=";
+    hash = "sha256-JjFBwZ6byQqCHmtOK4RZJfF+C4+9U6iX/HFUa9UN9/E=";
   };
 
   build-system = [ hatchling ];

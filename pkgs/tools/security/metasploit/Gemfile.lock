@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 7ea8df5679ba6cb46799115c0090511e448c7cd4
-  ref: refs/tags/6.4.128
+  revision: e80a8066cd4c7177d821c04c886e3d0d90478bed
+  ref: refs/tags/6.4.130
   specs:
-    metasploit-framework (6.4.128)
+    metasploit-framework (6.4.130)
       aarch64
       abbrev
       actionpack (~> 7.2.0)
@@ -174,8 +174,8 @@ GEM
     arel-helpers (2.17.0)
       activerecord (>= 3.1.0)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1240.0)
-    aws-sdk-core (3.245.0)
+    aws-partitions (1.1242.0)
+    aws-sdk-core (3.246.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -183,7 +183,7 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-ec2 (1.612.0)
+    aws-sdk-ec2 (1.613.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-ec2instanceconnect (1.70.0)
@@ -192,10 +192,10 @@ GEM
     aws-sdk-iam (1.142.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-kms (1.123.0)
+    aws-sdk-kms (1.124.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.219.0)
+    aws-sdk-s3 (1.220.0)
       aws-sdk-core (~> 3, >= 3.244.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
@@ -210,7 +210,7 @@ GEM
     benchmark (0.5.0)
     bigdecimal (4.1.2)
     bindata (2.4.15)
-    bootsnap (1.23.0)
+    bootsnap (1.24.1)
       msgpack (~> 1.2)
     bson (5.2.0)
     builder (3.3.0)
@@ -281,7 +281,7 @@ GEM
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     io-console (0.8.2)
-    ipaddr (1.2.8)
+    ipaddr (1.2.9)
     irb (1.18.0)
       pp (>= 0.6.0)
       prism (>= 1.3.0)
@@ -359,7 +359,7 @@ GEM
     nessus_rest (0.1.6)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.6.3)
+    net-imap (0.6.4)
       date
       net-protocol
     net-ldap (0.20.0)
@@ -376,7 +376,7 @@ GEM
     network_interface (0.0.4)
     nexpose (7.3.0)
     nio4r (2.7.5)
-    nokogiri (1.19.2)
+    nokogiri (1.19.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     nori (2.7.1)
@@ -393,7 +393,7 @@ GEM
     ostruct (0.6.3)
     packetfu (2.0.0)
       pcaprub (~> 0.13.1)
-    parallel (2.0.1)
+    parallel (2.1.0)
     patch_finder (1.0.2)
     pcaprub (0.13.3)
     pdf-reader (2.15.1)
@@ -411,7 +411,7 @@ GEM
       date
       stringio
     public_suffix (7.0.5)
-    puma (8.0.0)
+    puma (8.0.1)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.23)
@@ -524,7 +524,7 @@ GEM
     ruby-macho (5.0.0)
     ruby-mysql (4.2.1)
     ruby-rc4 (0.1.5)
-    ruby_smb (3.3.17)
+    ruby_smb (3.3.19)
       bindata (= 2.4.15)
       openssl-ccm
       openssl-cmac
@@ -562,7 +562,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2026.1)
+    tzinfo-data (1.2026.2)
       tzinfo (>= 1.0.0)
     unix-crypt (1.3.2)
     uri (1.1.1)

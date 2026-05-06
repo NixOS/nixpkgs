@@ -24,5 +24,6 @@ buildHomeAssistantComponent rec {
     description = "Home Assistant integration for local MQTT Hildebrand Glow IHD";
     homepage = "https://github.com/megakid/ha_hildebrand_glow_ihd_mqtt";
     maintainers = with lib.maintainers; [ CodedNil ];
+    license = lib.licenses.unfree;
   };
 }

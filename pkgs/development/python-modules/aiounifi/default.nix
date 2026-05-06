@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
+  pyotp,
   pytest-aiohttp,
   pytest-asyncio,
   pytest-cov-stub,
@@ -17,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiounifi";
-  version = "89";
+  version = "90";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -26,12 +27,12 @@ buildPythonPackage (finalAttrs: {
     owner = "Kane610";
     repo = "aiounifi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SkvT2rwKbdQkuKunWzp439k4sTTBSLjEtYbR1cHhLKc=";
+    hash = "sha256-xM2x4SwVav2gsuG0G1hJjg4AcdsuCYf3O1fma++EYow=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==82.0.0" "setuptools" \
+      --replace-fail "setuptools==82.0.1" "setuptools" \
       --replace-fail "wheel==0.46.3" "wheel"
   '';
 
@@ -40,6 +41,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     orjson
+    pyotp
     segno
   ];
 

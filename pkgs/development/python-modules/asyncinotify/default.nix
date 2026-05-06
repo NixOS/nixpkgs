@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.4.0";
+  version = "4.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "absperf";
     repo = "asyncinotify";
     tag = "v${version}";
-    hash = "sha256-u83k/Wu6WA6lZxLpdPpp6Hi6gmJIgXAXh7q8OJvW2vk=";
+    hash = "sha256-NncqHS6JK9OYv/155PXYi0Sg4oX7p0WAGZ9wnvoYlgE=";
   };
 
   build-system = [ flit-core ];

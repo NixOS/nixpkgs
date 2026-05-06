@@ -25,7 +25,10 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: global.o:/build/nuweb-1.62/global.h:91: multiple definition of
   #     `current_sector'; main.o:/build/nuweb-1.62/global.h:91: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  # GCC 15 uses C23, which fails with the following error
+  # main.c:4:5: warning: old-style function definition [-Wold-style-definition]
+  #     4 | int main(argc, argv)
+  env.NIX_CFLAGS_COMPILE = "-fcommon -std=gnu17";
 
   buildPhase = ''
     make nuweb

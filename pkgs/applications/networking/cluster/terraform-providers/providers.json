@@ -200,11 +200,11 @@
     "vendorHash": "sha256-59bhibkok4w7dLTf96jZGk2di6TpR6IAqp0i3xmtlyI="
   },
   "cloudflare_cloudflare": {
-    "hash": "sha256-2hlL7N6jP7or3l0HczbRhnAmMYJ0XQTXl0f+sIFdlZc=",
+    "hash": "sha256-1qgPmsk6lSTuESBy/kSrm2f/BnvTcrKqj+IphsKfqEw=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v5.19.0",
+    "rev": "v5.19.1",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-Gkb493fesB/jOdvnQrwt4MrNKO+YlR3+9Mu5TiaG084="
   },
@@ -1004,11 +1004,11 @@
     "vendorHash": "sha256-/4mktOn7qjWIkpyqeEW4vzY0w0pG+0qx7KRYBkE1IkQ="
   },
   "okta_okta": {
-    "hash": "sha256-Ub41ML88NKsMC6q1C67DCBTrG9qD0cBhAkizZdIRRBc=",
+    "hash": "sha256-Skp7GSfQSTBLOFoGlU3/TmzMqyZ8j7qYzlyuBYzBiB4=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v6.9.0",
+    "rev": "v6.10.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-0NaqVCibwiK7WY6hIFGd2kB/okyh6ZsZ+BAe5mGP38A="
   },
@@ -1076,11 +1076,11 @@
     "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
   },
   "pagerduty_pagerduty": {
-    "hash": "sha256-JEV+nNJjEM7RlQ6RKEawftB/OHaf8vcNHDYKhkUJRw0=",
+    "hash": "sha256-ZbkCJIDZdqry5y4gv7wtkf2GFfvhUCsj5knICUidjZQ=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v3.32.3",
+    "rev": "v3.32.4",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1130,13 +1130,13 @@
     "vendorHash": "sha256-WpI4OZ7BUVgHwQY+7ct+K6CnwXFFuiRbI+iTFSJ8a5A="
   },
   "rootlyhq_rootly": {
-    "hash": "sha256-eu7GuDGBP0/08Ro7nCkMEjnhzKQ6IBZxyrX+SZr0fAk=",
+    "hash": "sha256-+rGnQRYkRm+2SrsT63jtKtLsWaMOAanYAaL3ryI+cqU=",
     "homepage": "https://registry.terraform.io/providers/rootlyhq/rootly",
     "owner": "rootlyhq",
     "repo": "terraform-provider-rootly",
-    "rev": "v5.11.1",
+    "rev": "v5.13.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-l/i6y+IX6xZOzQiFeC3nrW3ZjsxaVLfIyCMOLtnstMY="
+    "vendorHash": "sha256-E4hNi4xGV7xPoidkwo8L4q9bZeZ4WCVx/zHakPs5PCk="
   },
   "rundeck_rundeck": {
     "hash": "sha256-g8unbz8+UGLiAOJju6E2bLkygvZgHkv173PdMDefmrc=",

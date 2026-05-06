@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "18.11.1";
+  version = "18.11.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O/vaodFMt1HgGi4OVjVIfhie0j0bhbRQl1iEMrYfmn0=";
+    hash = "sha256-TWpIu6LxFX5ssijlYQA/dmAiPrB0nrHtlS2MWEk6C30=";
   };
 
   vendorHash = "sha256-xEvvYAVIwHwQDd38P2i6GcgFqf8FPnflWh5IEqmWQdE=";

@@ -6334,6 +6334,13 @@
     githubId = 223910;
     name = "Dhananjay Balan";
   };
+  dbe = {
+    email = "daniel@beecham.se";
+    github = "dbeecham";
+    githubId = 1388869;
+    name = "Daniel Beecham";
+    keys = [ { fingerprint = "0958 4E8B 7234 5847 EF27  02E9 C288 E1E2 1E76 BF58"; } ];
+  };
   dbeckwith = {
     email = "djbsnx@gmail.com";
     github = "dbeckwith";
@@ -10414,12 +10421,6 @@
     githubId = 2192042;
     name = "Colin King";
   };
-  hamburger1984 = {
-    email = "hamburger1984@gmail.com";
-    github = "hamburger1984";
-    githubId = 438976;
-    name = "Andreas Krohn";
-  };
   hamhut1066 = {
     email = "github@hamhut1066.com";
     github = "moredhel";
@@ -14302,6 +14303,11 @@
     github = "kisonecat";
     githubId = 148352;
     name = "Jim Fowler";
+  };
+  kitlangton = {
+    github = "kitlangton";
+    githubId = 7587245;
+    name = "Kit Langton";
   };
   kitsunoff = {
     github = "kitsunoff";
@@ -22468,6 +22474,14 @@
     name = "QuiNz-";
     github = "QuiNzX";
     githubId = 76129478;
+  };
+  quio = {
+    name = "Dominik Schwaiger";
+    email = "mail@dominik-schwaiger.ch";
+    matrix = "@quio:matrix.dominik-schwaiger.ch";
+    github = "quiode";
+    githubId = 51075975;
+    keys = [ { fingerprint = "D9FE 655C CD52 8F80 3D27  8F75 F7E7 E19B C69F 7DF5"; } ];
   };
   quodlibetor = {
     email = "quodlibetor@gmail.com";

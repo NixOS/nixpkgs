@@ -1,9 +1,9 @@
 ############################################################################
 # This file mainly provides the `mathcomp` derivation, which is            #
 # essentially a meta-package containing all core mathcomp libraries        #
-# (boot order fingroup algebra solvable field character). They can be      #
-# accessed individually through the passthrough attributes of mathcomp     #
-# bearing the same names (mathcomp.boot, etc).                             #
+# (boot order finite-group algebra solvable field group-representation).   #
+# They can be accessed individually through the passthrough attributes of  #
+# mathcomp bearing the same names (mathcomp.boot, etc).                    #
 ############################################################################
 # Compiling a custom version of mathcomp using `mathcomp.override`.        #
 # This is the replacement for the former `mathcomp_ config` function.      #
@@ -45,22 +45,30 @@ let
   packages = {
     "boot" = [ ];
     "order" = [ "boot" ];
-    "fingroup" = [ "boot" ];
+    "finite-group" = [ "boot" ];
     "algebra" = [
       "order"
-      "fingroup"
+      "finite-group"
     ];
     "solvable" = [ "algebra" ];
     "field" = [ "solvable" ];
-    "character" = [ "field" ];
-    "all" = [ "character" ];
+    "group-representation" = [ "field" ];
+    "all" = [ "group-representation" ];
   };
 
   mathcomp_ =
     package:
     let
       mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
-      pkgpath = if package == "single" then "." else package;
+      cdpkg =
+        if package == "single" then
+          "cd ."
+        else if package == "group-representation" then
+          "cd group_representation || cd character"
+        else if package == "finite-group" then
+          "cd finite_group || cd fingroup"
+        else
+          "cd ${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
         echo "all.v"  > Make
@@ -94,7 +102,7 @@ let
             fi
           ''
           + ''
-            cd ${pkgpath}
+            ${cdpkg}
           ''
           + lib.optionalString (package == "all") pkgallMake;
 
