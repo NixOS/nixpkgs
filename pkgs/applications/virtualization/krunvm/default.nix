@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "krunvm";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "krunvm";
     rev = "v${version}";
-    hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
+    hash = "sha256-peOaPivQKOwioh5skPNFiA3ptHv9pSsnjpy43cms8O8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-TMV9xCcqBQgPsUSzsTJAi4qsplTOSm3ilaUmtmdaGnE=";
+    hash = "sha256-MRcQ0Vnd3PJqE2q981JpXPjwMUKT4t+RcOvzWptK7PQ=";
   };
 
   nativeBuildInputs = [
