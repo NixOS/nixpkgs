@@ -10342,6 +10342,8 @@ self: super: with self; {
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
 
+  msgpack-numpy-opentensor = callPackage ../development/python-modules/msgpack-numpy-opentensor { };
+
   msgraph-core = callPackage ../development/python-modules/msgraph-core { };
 
   msgraph-sdk = callPackage ../development/python-modules/msgraph-sdk { };
