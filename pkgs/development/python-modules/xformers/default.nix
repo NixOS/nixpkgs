@@ -122,6 +122,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     scipy
     timm
     transformers
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     triton
   ];
 
@@ -147,7 +149,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     "tests/test_fwbw_overlap.py"
   ];
 
-  disabledTests =
+  disabledTests = [
+    # torch._C._set_print_stack_traces_on_fatal_signal removed in torch 2.11
+    "test_env_vars"
+  ] ++
     # The following tests fail without cudaSupport
     lib.optionals (!cudaSupport) [
       # AssertionError: Torch not compiled with CUDA enabled
