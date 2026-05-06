@@ -1,13 +1,15 @@
 {
   lib,
-  resholve,
   fetchurl,
-  gawk,
+  makeWrapper,
+  stdenvNoCC,
+
   bash,
   binutils,
   coreutils,
   file,
   findutils,
+  gawk,
   glibc,
   gnugrep,
   gnused,
@@ -19,14 +21,12 @@
   which,
 }:
 
-# resholve does not yet support `finalAttrs` call pattern hence `rec`
-# https://github.com/abathur/resholve/issues/107
-resholve.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unix-privesc-check";
   version = "1.4";
 
   src = fetchurl {
-    url = "https://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-${version}.tar.gz";
+    url = "https://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-${finalAttrs.version}.tar.gz";
     hash = "sha256-4fhef2n6ut0jdWo9dqDj2GSyHih2O2DOLmGBKQ0cGWk=";
   };
 
@@ -34,47 +34,37 @@ resholve.mkDerivation rec {
     ./unix-privesc-check.patch # https://github.com/NixOS/nixpkgs/pull/287629#issuecomment-1944428796
   ];
 
-  solutions = {
-    unix-privesc-check = {
-      scripts = [ "bin/unix-privesc-check" ];
-      interpreter = "${bash}/bin/bash";
-      inputs = [
-        gawk
-        bash
-        binutils # for strings command
-        coreutils
-        file
-        findutils # for xargs command
-        glibc # for ldd command
-        gnugrep
-        gnused
-        net-tools
-        openssh
-        postgresql # for psql command
-        ps
-        util-linux # for swapon command
-        which
-      ];
-      fake = {
-        external = [
-          "lanscan" # lanscan exists only for HP-UX OS
-          "mount" # Getting same error described in https://github.com/abathur/resholve/issues/29
-          "passwd" # Getting same error described in https://github.com/abathur/resholve/issues/29
-        ];
-      };
-      execer = [
-        "cannot:${glibc.bin}/bin/ldd"
-        "cannot:${postgresql}/bin/psql"
-        "cannot:${openssh}/bin/ssh-add"
-        "cannot:${util-linux.bin}/bin/swapon"
-      ];
-    };
-  };
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
+
     install -Dm 755 unix-privesc-check $out/bin/unix-privesc-check
+
     runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/unix-privesc-check \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          binutils # for strings command
+          coreutils
+          file
+          findutils # for xargs command
+          gawk
+          glibc # for ldd command
+          gnugrep
+          gnused
+          net-tools
+          openssh
+          postgresql # for psql command
+          ps
+          util-linux # for swapon command
+          which
+        ]
+      }
   '';
 
   meta = {
@@ -85,4 +75,4 @@ resholve.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})
