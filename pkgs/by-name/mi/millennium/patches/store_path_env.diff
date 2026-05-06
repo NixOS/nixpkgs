@@ -1,0 +1,31 @@
+diff --git a/src/sys/env.cc b/src/sys/env.cc
+index 72185291..e376e92b 100644
+--- a/src/sys/env.cc
++++ b/src/sys/env.cc
+@@ -158,6 +158,8 @@ void SetupEnvironmentVariables()
+ #else
+ #ifdef _WIN32
+     const auto shimsPath = SystemIO::GetInstallPath().string() + "/ext/data/shims";
++#elif DISTRO_NIX
++    const auto shimsPath = NIX_SHIMS;
+ #elif __linux__
+     const auto shimsPath = "/usr/share/millennium/shims";
+ #elif __APPLE__
+@@ -170,6 +172,8 @@ void SetupEnvironmentVariables()
+ #else
+ #ifdef _WIN32
+     const auto assetsPath = SystemIO::GetInstallPath().string() + "/ext/data/assets";
++#elif DISTRO_NIX
++    const auto assetsPath = NIX_ASSETS;
+ #elif __linux__
+     const auto assetsPath = "/usr/share/millennium/assets";
+ #elif __APPLE__
+@@ -216,7 +220,7 @@ void SetupEnvironmentVariables()
+ 
+     std::map<std::string, std::string> environment_unix = {
+         { "OPENSSL_CONF", "/dev/null" },
+-        { "MILLENNIUM_RUNTIME_PATH", customLdPreload != "" ? customLdPreload : "/usr/lib/millennium/libmillennium_x86.so"},
++        { "MILLENNIUM_RUNTIME_PATH", MILLENNIUM_RUNTIME_PATH},
+ 
+         { "LIBPYTHON_RUNTIME_PATH", LIBPYTHON_RUNTIME_PATH },
+ 

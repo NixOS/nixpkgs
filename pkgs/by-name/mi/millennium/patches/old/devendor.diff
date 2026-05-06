@@ -1,0 +1,382 @@
+diff --git a/scripts/cmake/bootstrap_deps.cmake b/scripts/cmake/bootstrap_deps.cmake
+index e501e2f9..35207912 100644
+--- a/scripts/cmake/bootstrap_deps.cmake
++++ b/scripts/cmake/bootstrap_deps.cmake
+@@ -1,180 +1,32 @@
+-set(CMAKE_POSITION_INDEPENDENT_CODE ON  CACHE BOOL     "Enable position independent code")
+-set(BUILD_SHARED_LIBS               OFF CACHE BOOL     "Build static libraries by default")
+-set(BUILD_STATIC_LIBS               ON  CACHE BOOL     "Build static libraries by default")
+-
+-set(BUILD_TESTS                     OFF CACHE BOOL     "Disable building tests")
+-set(BUILD_EXAMPLES                  OFF CACHE BOOL     "Disable building examples")
+-set(CMAKE_CXX_STANDARD_REQUIRED     ON  CACHE BOOL     "Enforce C++ standard")
+-set(CMAKE_C_STANDARD_REQUIRED       ON  CACHE BOOL     "Enforce C standard")
+-set(USE_INTERNAL_FPCONV             ON  CACHE BOOL     "Use internal strtod() / g_fmt() code for performance")
+-set(NGHTTP2_STATICLIB               ON  CACHE BOOL     "Use static nghttp2 library")
+-set(BUILD_CURL_EXE                  OFF CACHE BOOL     "" FORCE)
+-set(CURL_USE_LIBSSH2                OFF CACHE BOOL     "" FORCE)
+-set(CURL_STATICLIB                  ON  CACHE BOOL     "Build curl as static library")
+-set(CURL_USE_SECTRANSP              OFF CACHE BOOL     "Disable SecureTransport")
+-set(CURL_USE_MBEDTLS                OFF CACHE BOOL     "Disable mbedTLS")
+-set(CURL_USE_WOLFSSL                OFF CACHE BOOL     "Disable wolfSSL")
+-set(CURL_USE_BEARSSL                OFF CACHE BOOL     "Disable BearSSL")
+-set(CURL_DISABLE_INSTALL            ON  CACHE BOOL     "Disable curl install")
+-set(CURL_DISABLE_LDAP               ON  CACHE BOOL     "Disable LDAP")
+-set(CURL_DISABLE_LDAPS              ON  CACHE BOOL     "Disable LDAPS")
+-set(CURL_DISABLE_RTSP               ON  CACHE BOOL     "Disable RTSP")
+-set(CURL_DISABLE_PROXY              OFF CACHE BOOL     "Disable proxy support")
+-set(CURL_DISABLE_DICT               ON  CACHE BOOL     "Disable DICT")
+-set(CURL_DISABLE_TELNET             ON  CACHE BOOL     "Disable TELNET")
+-set(CURL_DISABLE_TFTP               ON  CACHE BOOL     "Disable TFTP")
+-set(CURL_DISABLE_POP3               ON  CACHE BOOL     "Disable POP3")
+-set(CURL_DISABLE_IMAP               ON  CACHE BOOL     "Disable IMAP")
+-set(CURL_DISABLE_SMTP               ON  CACHE BOOL     "Disable SMTP")
+-set(CURL_DISABLE_GOPHER             ON  CACHE BOOL     "Disable Gopher")
+-set(CURL_USE_LIBPSL 		        OFF CACHE BOOL     "Disable libpsl")
+-set(FMT_HEADER_ONLY                 ON  CACHE BOOL     "Use fmt as header-only library")
+-set(FMT_DOC                         OFF CACHE BOOL     "Disable building documentation in fmt")
+-set(FMT_TEST                        OFF CACHE BOOL     "Disable building tests in fmt")
+-set(FMT_INSTALL                     ON  CACHE BOOL     "Enable installation of fmt")
+-set(MULTIPLE_THREADS 		        OFF CACHE BOOL     "Disable multithreading support in lua cjson")
+-set(BUILD_CLI  			            OFF CACHE BOOL     "Disable building CLI in libgit2")
+-set(MZ_BZIP2                        OFF CACHE BOOL     "Disable bzip2 support in minizip-ng")
+-set(MZ_FETCH_LIBS                   OFF CACHE BOOL     "Disable fetching third-party libs in minizip-ng")
+-set(MZ_ZLIB                         ON  CACHE BOOL     "Enable zlib support in minizip-ng")
+-set(USE_BUNDLED_ZLIB 		        OFF CACHE BOOL     "Use bundled zlib in libgit2")
+-set(USE_COMPRESSION 		        OFF CACHE BOOL     "Disable compression support in libgit2")
+-set(ZLIB_COMPAT                     ON  CACHE BOOL     "Enable zlib compatibility mode in zlib-ng")
+-set(ZLIB_ALIASES                    ON  CACHE BOOL     "Enable zlib alias symbols in zlib-ng")
+-set(ZLIB_ENABLE_TESTS               OFF CACHE BOOL     "Disable building tests in zlib-ng")
+-set(ZLIBNG_ENABLE_TESTS 	        OFF CACHE BOOL     "Disable building tests in zlib-ng")
+-
+-if(WIN32)
+-    set(CURL_USE_SCHANNEL           ON  CACHE INTERNAL "" FORCE)
+-    set(CURL_WINDOWS_SSPI           ON  CACHE INTERNAL "" FORCE)
+-    set(CURL_USE_OPENSSL            OFF CACHE BOOL     "Use OpenSSL for TLS/SSL" FORCE)
+-else()
+-    set(CURL_USE_OPENSSL            ON  CACHE BOOL     "Use OpenSSL for TLS/SSL" FORCE)
+-    set(CURL_USE_SCHANNEL           OFF CACHE INTERNAL "" FORCE)
+-    set(CURL_WINDOWS_SSPI           OFF CACHE INTERNAL "" FORCE)
+-    set(REGEX_BACKEND               "builtin" CACHE STRING "Use builtin regex instead of PCRE" FORCE)
+-endif()
+-
+-
+-# Patch the minimum cmake version in a "submodule".
+-# Mingw decided they would force the new version of cmake which completely breaks older deps
+-# Only fix is a shim or fixing it up stream :shrug:
+-
+-function(millennium_process_package input_path)
+-    if(EXISTS "${input_path}/CMakeLists.txt")
+-        file(READ "${input_path}/CMakeLists.txt" CMAKELISTS_CONTENTS)
+-        string(REGEX REPLACE "cmake_minimum_required[ \t]*\\([ \t]*VERSION[^)]*\\)" "cmake_minimum_required(VERSION 3.21)" CMAKELISTS_CONTENTS "${CMAKELISTS_CONTENTS}")
+-        file(WRITE "${input_path}/CMakeLists.txt" "${CMAKELISTS_CONTENTS}")
+-    else()
+-        message(WARNING "Could not find ${input_path} to patch.")
+-    endif()
+-endfunction()
+-
+-message(STATUS "[Millennium] Fetching dependencies...")
+-
+-if(DISTRO_NIX)
+-    set(FETCHCONTENT_FULLY_DISCONNECTED ON)
+-
+-    FetchContent_Declare(zlib           SOURCE_DIR "${MILLENNIUM_BASE}/deps/zlib"                                 )
+-    FetchContent_Declare(luajit         SOURCE_DIR "${MILLENNIUM_BASE}/deps/luajit"         SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(lua_cjson      SOURCE_DIR "${MILLENNIUM_BASE}/deps/luajson"        SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(minhook        SOURCE_DIR "${MILLENNIUM_BASE}/deps/minhook"        SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(mini           SOURCE_DIR "${MILLENNIUM_BASE}/deps/mini"           SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(websocketpp    SOURCE_DIR "${MILLENNIUM_BASE}/deps/websocketpp"    SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(fmt            SOURCE_DIR "${MILLENNIUM_BASE}/deps/fmt"            SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(nlohmann_json  SOURCE_DIR "${MILLENNIUM_BASE}/deps/json"           SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(libgit2        SOURCE_DIR "${MILLENNIUM_BASE}/deps/libgit2"        SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(minizip_ng     SOURCE_DIR "${MILLENNIUM_BASE}/deps/minizip"        SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(curl           SOURCE_DIR "${MILLENNIUM_BASE}/deps/curl"           SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(incbin         SOURCE_DIR "${MILLENNIUM_BASE}/deps/incbin"         SOURCE_SUBDIR fakedir )
+-    FetchContent_Declare(asio           SOURCE_DIR "${MILLENNIUM_BASE}/deps/asio"           SOURCE_SUBDIR fakedir )
+-else()
+-    FetchContent_Declare(zlib          GIT_REPOSITORY https://github.com/zlib-ng/zlib-ng               GIT_TAG 2.2.5                                   GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(luajit        GIT_REPOSITORY https://github.com/SteamClientHomebrew/LuaJIT    GIT_TAG v2.1              SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(lua_cjson     GIT_REPOSITORY https://github.com/SteamClientHomebrew/LuaJSON   GIT_TAG master            SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(minhook       GIT_REPOSITORY https://github.com/TsudaKageyu/minhook           GIT_TAG v1.3.4            SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(mini          GIT_REPOSITORY https://github.com/metayeti/mINI                 GIT_TAG 0.9.18            SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(websocketpp   GIT_REPOSITORY https://github.com/zaphoyd/websocketpp           GIT_TAG 0.8.2             SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(fmt           GIT_REPOSITORY https://github.com/fmtlib/fmt                    GIT_TAG 12.0.0            SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(nlohmann_json GIT_REPOSITORY https://github.com/nlohmann/json                 GIT_TAG v3.12.0           SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(libgit2       GIT_REPOSITORY https://github.com/libgit2/libgit2               GIT_TAG v1.9.1            SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(minizip_ng    GIT_REPOSITORY https://github.com/zlib-ng/minizip-ng            GIT_TAG 4.0.10            SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(curl          GIT_REPOSITORY https://github.com/curl/curl                     GIT_TAG curl-8_13_0       SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(incbin        GIT_REPOSITORY https://github.com/graphitemaster/incbin         GIT_TAG main              SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-    FetchContent_Declare(asio          GIT_REPOSITORY https://github.com/chriskohlhoff/asio            GIT_TAG asio-1-30-0       SOURCE_SUBDIR fakedir GIT_SHALLOW TRUE GIT_PROGRESS TRUE)
+-endif()
+-
+-set(DEPENDENCIES zlib luajit incbin websocketpp fmt nlohmann_json minizip_ng libgit2 mINI lua_cjson curl asio)
+-
+-if(WIN32)
+-    list(APPEND DEPENDENCIES minhook)
+-endif()
+-
+-foreach(dep ${DEPENDENCIES})
+-    string(TIMESTAMP start_time "%s")
+-    FetchContent_MakeAvailable(${dep})
+-    string(TIMESTAMP end_time "%s")
+-    math(EXPR duration "${end_time} - ${start_time}")
+-    message(STATUS "[Millennium] ${dep} completed in ${duration} seconds")
+-endforeach()
+-
+-set(LUA_INCLUDE_DIR  luajit::header)
+-set(LUA_INCLUDE_DIRS luajit::header)
+-set(LUA_LIBRARY      luajit::lib   )
+-set(LUA_LIBRARIES    luajit::lib   )
+-
+-include_directories("${libgit2_SOURCE_DIR}/include")
+-include_directories("${minizip_ng_SOURCE_DIR}")
+-include_directories("${incbin_SOURCE_DIR}")
+-include_directories("${asio_SOURCE_DIR}/asio/include")
+-include_directories("${luajit_BINARY_DIR}")
+-include_directories("${luajit_SOURCE_DIR}/src")
+-include_directories("${CMAKE_SOURCE_DIR}/../hhx64/include")
+-
+-millennium_process_package("${luajit_SOURCE_DIR}")
+-millennium_process_package("${curl_SOURCE_DIR}")
+-millennium_process_package("${websocketpp_SOURCE_DIR}")
+-millennium_process_package("${fmt_SOURCE_DIR}")
+-millennium_process_package("${nlohmann_json_SOURCE_DIR}")
+-millennium_process_package("${libgit2_SOURCE_DIR}")
+-millennium_process_package("${minizip_ng_SOURCE_DIR}")
+-millennium_process_package("${mini_SOURCE_DIR}")
+-millennium_process_package("${lua_cjson_SOURCE_DIR}")
+-
+-if(WIN32)
+-    millennium_process_package("${minhook_SOURCE_DIR}/")
++# --- Discovery Phase (System Libraries) ---
++find_package(PkgConfig REQUIRED)
++find_package(ZLIB REQUIRED)
++find_package(fmt REQUIRED)
++find_package(nlohmann_json REQUIRED)
++find_package(CURL REQUIRED)
++
++# Use PkgConfig for libgit2 (fixes the namespace issue)
++pkg_check_modules(LIBGIT2 REQUIRED libgit2)
++
++# Asio is header-only in Nixpkgs
++find_path(ASIO_INCLUDE_DIR NAMES "asio.hpp")
++if(NOT ASIO_INCLUDE_DIR)
++    message(FATAL_ERROR "asio.hpp not found")
+ endif()
+ 
+-set(ZLIB_ROOT "${zlib_BINARY_DIR}")
+-set(ZLIB_FOUND TRUE)
+-if(WIN32)
+-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+-        set(ZLIB_LIBRARY "${zlib_BINARY_DIR}/zlibstaticd${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-    else()
+-        set(ZLIB_LIBRARY "${zlib_BINARY_DIR}/zlibstatic${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-    endif()
+-elseif(UNIX)
+-    set(ZLIB_LIBRARY "${zlib_BINARY_DIR}/libz${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-endif()
++pkg_check_modules(MINIZIP REQUIRED minizip-ng)
+ 
+-set(ZLIB_LIBRARIES "${ZLIB_LIBRARY}")
+-set(ZLIB_INCLUDE_DIRS "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}")
+-set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}")
++# --- Subdirectory Phase (Vendored Libraries) ---
++# We force the LUAJIT_DIR variable so the sub-project knows where its source is
++set(LUAJIT_DIR "${CMAKE_SOURCE_DIR}/deps/luajit")
+ 
+-add_subdirectory("${luajit_SOURCE_DIR}"        "${luajit_BINARY_DIR}"       )
+-add_subdirectory("${curl_SOURCE_DIR}"          "${curl_BINARY_DIR}"         )
+-add_subdirectory("${websocketpp_SOURCE_DIR}"   "${websocketpp_BINARY_DIR}"  )
+-add_subdirectory("${fmt_SOURCE_DIR}"           "${fmt_BINARY_DIR}"          )
+-add_subdirectory("${nlohmann_json_SOURCE_DIR}" "${nlohmann_json_BINARY_DIR}")
+-add_subdirectory("${libgit2_SOURCE_DIR}"       "${libgit2_BINARY_DIR}"      )
+-add_subdirectory("${minizip_ng_SOURCE_DIR}"    "${minizip_ng_BINARY_DIR}"   )
+-add_subdirectory("${mini_SOURCE_DIR}"          "${mini_BINARY_DIR}"         )
+-add_subdirectory("${lua_cjson_SOURCE_DIR}"     "${lua_cjson_BINARY_DIR}"    )
++# [CRITICAL] Force global visibility of LuaJIT headers so luajson can find "lua.h"
++include_directories("${CMAKE_SOURCE_DIR}/deps/luajit/src")
+ 
+-if(WIN32)
+-    add_subdirectory("${minhook_SOURCE_DIR}"       "${minhook_BINARY_DIR}"      )
+-endif()
++# Add the vendored subdirectories (populated via Nix postPatch)
++add_subdirectory(${CMAKE_SOURCE_DIR}/deps/luajit ${CMAKE_BINARY_DIR}/deps/luajit)
++add_subdirectory(${CMAKE_SOURCE_DIR}/deps/luajson ${CMAKE_BINARY_DIR}/deps/luajson)
+ 
+-add_dependencies(cjson luajit::lib luajit::header)
+-add_dependencies(luajit zlib)
+-add_dependencies(minizip zlib)
++# Add dependencies manually since we aren't using FetchContent to define them
++# This ensures LuaJSON builds AFTER LuaJIT is ready
++add_dependencies(cjson libluajit)
+\ No newline at end of file
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0cceb9ba..d912f59a 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -166,8 +166,9 @@ elseif(DISTRO_NIX)
+     set(default_python_path "${NIX_PYTHON}")
+     set(MILLENNIUM__PYTHON_ENV "${NIX_PYTHON}")
+     set(LIBPYTHON_RUNTIME_PATH "${NIX_PYTHON_LIB}")
++    set(NIX_PYTHON_INCLUDE "${NIX_PYTHON_INCLUDE}")
+ 
+-    include_directories("${NIX_PYTHON}/include/python3.11/")
++    include_directories("${NIX_PYTHON_INCLUDE}")
+     detect_aur_helper(MILLENNIUM__UPDATE_SCRIPT_PROMPT)
+     set(MILLENNIUM__UPDATE_SCRIPT_PROMPT "echo {}")
+ 
+@@ -228,7 +229,29 @@ elseif(UNIX AND NOT APPLE)
+     target_compile_options(Millennium PRIVATE -m32 -Wall -Wextra -Wpedantic -Werror)
+ endif()
+ 
+-target_link_libraries(Millennium luajit::lib libcurl minizip cjson libgit2package nlohmann_json fmt::fmt mINI)
++target_include_directories(Millennium PRIVATE 
++    ${ASIO_INCLUDE_DIR}
++    ${MINIZIP_INCLUDE_DIRS}
++    ${LIBGIT2_INCLUDE_DIRS}
++    ${CMAKE_SOURCE_DIR}/deps/mini/src
++    ${CMAKE_SOURCE_DIR}/deps/incbin
++    ${CMAKE_SOURCE_DIR}/deps/websocketpp
++    ${CMAKE_SOURCE_DIR}/deps/luajit/src
++    ${CMAKE_BINARY_DIR}/deps/luajit
++    ${CMAKE_SOURCE_DIR}/deps/luajson
++)
++
++target_link_libraries(Millennium 
++    PRIVATE 
++    ZLIB::ZLIB
++    fmt::fmt 
++    nlohmann_json::nlohmann_json 
++    ${LIBGIT2_LIBRARIES}
++    CURL::libcurl
++    ${MINIZIP_LIBRARIES}
++    libluajit 
++    cjson
++)
+ 
+ if(WIN32)
+     set(PYTHON_LIB "${MILLENNIUM_BASE}/src/vendor/python/lib64/python311.lib")
+@@ -254,10 +277,11 @@ elseif(UNIX)
+     target_link_options(Millennium PRIVATE -Wl,--no-undefined)
+ 
+     if(APPLE)
+-        target_link_libraries(Millennium "$ENV{HOME}/.pyenv/versions/3.11.8/lib/libpython3.11.dylib")
++        target_link_libraries(Millennium PRIVATE "$ENV{HOME}/.pyenv/versions/3.11.8/lib/libpython3.11.dylib")
+     elseif(DISTRO_NIX)
+-        target_link_libraries(Millennium "${NIX_PYTHON_LIB}")
++        # Added PRIVATE keyword here to match the earlier call
++        target_link_libraries(Millennium PRIVATE "${NIX_PYTHON_LIB}")
+     else()
+-        target_link_libraries(Millennium "/opt/python-i686-3.11.8/lib/libpython-3.11.8.so")
++        target_link_libraries(Millennium PRIVATE "/opt/python-i686-3.11.8/lib/libpython-3.11.8.so")
+     endif()
+-endif()
++endif()
+\ No newline at end of file
+diff --git a/src/hhx64/CMakeLists.txt b/src/hhx64/CMakeLists.txt
+index 9333f929..b1db66c9 100644
+--- a/src/hhx64/CMakeLists.txt
++++ b/src/hhx64/CMakeLists.txt
+@@ -1,67 +1,18 @@
+-cmake_minimum_required(VERSION 3.10)
+-message(STATUS "[hhx64] Using compiler: ${CMAKE_CXX_COMPILER}")
++cmake_minimum_required(VERSION 3.21)
+ 
+-include(FetchContent)
+ project(hhx64 CXX)
+-include(${MILLENNIUM_BASE}/scripts/cmake/millennium_version.cmake)
+-
+-string(TIMESTAMP CURRENT_YEAR "%Y")
+-set(VERSION_COMPANY      "Steam Homebrew")
+-set(VERSION_COPYRIGHT    "Steam Homebrew ${TIMESTAMP}")
+-set(VERSION_TRADEMARK1   "All Rights Reserved")
+-set(VERSION_DESCRIPTION  "A hook utility library for Millennium")
+-set(VERSION_FILENAME     "${MILLENNIUM_HOOK_HELPER_OUTPUT_NAME}")
+-set(VERSION_PRODUCT      "Millennium Webhelper Hook")
+-
+-set(VERSION_FILE "${CMAKE_BINARY_DIR}/${MILLENNIUM_HOOK_HELPER_OUTPUT_NAME}.rc")
+ 
+-if(WIN32)
+-    project(hhx64-log-viewer CXX)
+-    configure_file(${MILLENNIUM_BASE}/scripts/version.rc.in ${VERSION_FILE} @ONLY)
+-endif()
++include(${MILLENNIUM_BASE}/scripts/cmake/millennium_version.cmake)
+ 
+-set(CMAKE_C_STANDARD 99)
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ set(CMAKE_C_STANDARD_REQUIRED ON)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(BUILD_STATIC_LIBS ON)
+-set(ABSL_ENABLE_INSTALL ON)
+-set(ABSL_PROPAGATE_CXX_STD ON)
+-set(ABSL_MSVC_STATIC_RUNTIME ON)
+-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
+-
+-function(millennium_process_package input_path)
+-    if(EXISTS "${input_path}/CMakeLists.txt")
+-        file(READ "${input_path}/CMakeLists.txt" CMAKELISTS_CONTENTS)
+-        string(REGEX REPLACE "cmake_minimum_required[ \t]*\\([ \t]*VERSION[^)]*\\)" "cmake_minimum_required(VERSION 3.21)" CMAKELISTS_CONTENTS "${CMAKELISTS_CONTENTS}")
+-        file(WRITE "${input_path}/CMakeLists.txt" "${CMAKELISTS_CONTENTS}")
+-    else()
+-        message(WARNING "Could not find ${input_path} to patch.")
+-    endif()
+-endfunction()
+-if(DISTRO_NIX)
+-FetchContent_Declare(abseil SOURCE_DIR "${MILLENNIUM_BASE}/deps/abseil"     SOURCE_SUBDIR fakedir)
+-FetchContent_Declare(re2    SOURCE_DIR "${MILLENNIUM_BASE}/deps/re2"        SOURCE_SUBDIR fakedir)
+-else()
+-FetchContent_Declare(abseil GIT_REPOSITORY https://github.com/abseil/abseil-cpp GIT_TAG 20240722.0 SOURCE_SUBDIR fakedir)
+-FetchContent_Declare(re2    GIT_REPOSITORY https://github.com/google/re2        GIT_TAG 2025-11-05 SOURCE_SUBDIR fakedir)
+-endif()
+ 
+-FetchContent_MakeAvailable(abseil re2)
+-
+-millennium_process_package("${abseil_SOURCE_DIR}")
+-millennium_process_package("${re2_SOURCE_DIR}")
+-
+-add_subdirectory("${abseil_SOURCE_DIR}" "${abseil_BINARY_DIR}")
+-add_subdirectory("${re2_SOURCE_DIR}"    "${re2_BINARY_DIR}"   )
+-
+-if(WIN32)
+-    message(STATUS "[hhx64] fetching minhook...")
+-    FetchContent_Declare(minhook GIT_REPOSITORY https://github.com/TsudaKageyu/minhook GIT_TAG v1.3.4)
+-    FetchContent_MakeAvailable(minhook)
+-endif()
++find_package(absl REQUIRED)
++find_package(re2 REQUIRED)
+ 
+ include_directories("${MILLENNIUM_BASE}/src/include")
+ 
+@@ -77,17 +28,14 @@ set(SOURCE_FILES
+ 
+ if(WIN32)
+     list(APPEND SOURCE_FILES "${MILLENNIUM_BASE}/src/include/millennium/export.version.def")
+-    list(APPEND SOURCE_FILES "${VERSION_FILE}")
++    configure_file(${MILLENNIUM_BASE}/scripts/version.rc.in ${CMAKE_BINARY_DIR}/hhx64_version.rc @ONLY)
++    list(APPEND SOURCE_FILES "${CMAKE_BINARY_DIR}/hhx64_version.rc")
+ endif()
+ 
+ add_library(hhx64 SHARED ${SOURCE_FILES})
+ 
+-if(WIN32)
+-    add_executable(hhx64-log-viewer log_viewer.cc)
+-    target_link_libraries(hhx64 minhook wsock32)
+-endif()
++target_link_libraries(hhx64 re2::re2 absl::strings)
+ 
+-target_link_libraries(hhx64 re2)
+ set_target_properties(hhx64 PROPERTIES
+     PREFIX ""
+     OUTPUT_NAME "${MILLENNIUM_HOOK_HELPER_OUTPUT_NAME}"
+@@ -99,7 +47,8 @@ if(UNIX)
+     set_target_properties(hhx64 PROPERTIES POSITION_INDEPENDENT_CODE ON)
+ elseif(WIN32)
+     target_link_libraries(hhx64 version)
+-
++    
++    # MinHook logic for Windows only (omitted for Nix build correctness)
+     if(NOT GITHUB_ACTION_BUILD)
+         include(${MILLENNIUM_BASE}/scripts/cmake/find_steam_path.cmake)
+         find_steam_path(hhx64)

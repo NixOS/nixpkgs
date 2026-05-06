@@ -1,0 +1,73 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0cceb9ba..3a51cd4d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -166,8 +166,9 @@ elseif(DISTRO_NIX)
+     set(default_python_path "${NIX_PYTHON}")
+     set(MILLENNIUM__PYTHON_ENV "${NIX_PYTHON}")
+     set(LIBPYTHON_RUNTIME_PATH "${NIX_PYTHON_LIB}")
++    set(NIX_PYTHON_INCLUDE "${NIX_PYTHON_INCLUDE}")
+ 
+-    include_directories("${NIX_PYTHON}/include/python3.11/")
++    include_directories("${NIX_PYTHON_INCLUDE}")
+     detect_aur_helper(MILLENNIUM__UPDATE_SCRIPT_PROMPT)
+     set(MILLENNIUM__UPDATE_SCRIPT_PROMPT "echo {}")
+ 
+@@ -210,6 +211,9 @@ elseif(UNIX)
+     target_compile_definitions(Millennium PRIVATE MILLENNIUM__UPDATE_SCRIPT_PROMPT="${MILLENNIUM__UPDATE_SCRIPT_PROMPT}")
+     if(DISTRO_NIX)
+         target_compile_definitions(Millennium PRIVATE DISTRO_NIX)
++        target_compile_definitions(Millennium PRIVATE NIX_ASSETS="${NIX_ASSETS}")
++        target_compile_definitions(Millennium PRIVATE NIX_SHIMS="${NIX_SHIMS}")
++        target_compile_definitions(Millennium PRIVATE MILLENNIUM_RUNTIME_PATH="${MILLENNIUM_RUNTIME_PATH}")
+     endif()
+ endif()
+ 
+@@ -228,7 +232,29 @@ elseif(UNIX AND NOT APPLE)
+     target_compile_options(Millennium PRIVATE -m32 -Wall -Wextra -Wpedantic -Werror)
+ endif()
+ 
+-target_link_libraries(Millennium luajit::lib libcurl minizip cjson libgit2package nlohmann_json fmt::fmt mINI)
++target_include_directories(Millennium PRIVATE 
++    ${ASIO_INCLUDE_DIR}
++    ${MINIZIP_INCLUDE_DIRS}
++    ${LIBGIT2_INCLUDE_DIRS}
++    ${CMAKE_SOURCE_DIR}/deps/mini/src
++    ${CMAKE_SOURCE_DIR}/deps/incbin
++    ${CMAKE_SOURCE_DIR}/deps/websocketpp
++    ${CMAKE_SOURCE_DIR}/deps/luajit/src
++    ${CMAKE_BINARY_DIR}/deps/luajit
++    ${CMAKE_SOURCE_DIR}/deps/luajson
++)
++
++target_link_libraries(Millennium 
++    PRIVATE 
++    ZLIB::ZLIB
++    fmt::fmt 
++    nlohmann_json::nlohmann_json 
++    ${LIBGIT2_LIBRARIES}
++    CURL::libcurl
++    ${MINIZIP_LIBRARIES}
++    libluajit 
++    cjson
++)
+ 
+ if(WIN32)
+     set(PYTHON_LIB "${MILLENNIUM_BASE}/src/vendor/python/lib64/python311.lib")
+@@ -254,10 +280,11 @@ elseif(UNIX)
+     target_link_options(Millennium PRIVATE -Wl,--no-undefined)
+ 
+     if(APPLE)
+-        target_link_libraries(Millennium "$ENV{HOME}/.pyenv/versions/3.11.8/lib/libpython3.11.dylib")
++        target_link_libraries(Millennium PRIVATE "$ENV{HOME}/.pyenv/versions/3.11.8/lib/libpython3.11.dylib")
+     elseif(DISTRO_NIX)
+-        target_link_libraries(Millennium "${NIX_PYTHON_LIB}")
++        # Added PRIVATE keyword here to match the earlier call
++        target_link_libraries(Millennium PRIVATE "${NIX_PYTHON_LIB}")
+     else()
+-        target_link_libraries(Millennium "/opt/python-i686-3.11.8/lib/libpython-3.11.8.so")
++        target_link_libraries(Millennium PRIVATE "/opt/python-i686-3.11.8/lib/libpython-3.11.8.so")
+     endif()
+-endif()
++endif()
+\ No newline at end of file
