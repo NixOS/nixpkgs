@@ -21461,6 +21461,11 @@
     githubId = 627831;
     name = "Hoang Xuan Phu";
   };
+  phyrophone = {
+    name = "phyrophone";
+    github = "phyrophone";
+    githubId = 255566614;
+  };
   picnoir = {
     email = "felix@alternativebit.fr";
     matrix = "@picnoir:alternativebit.fr";
