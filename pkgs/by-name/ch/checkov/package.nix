@@ -204,9 +204,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     mainProgram = "checkov";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhdle14
-      fab
-    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -1833,13 +1833,6 @@
     githubId = 102513;
     keys = [ { fingerprint = "B7B7 582E 564E 789B FCB8  71AB 0C6D FE2F B234 534A"; } ];
   };
-  anhdle14 = {
-    name = "Le Anh Duc";
-    email = "anhdle14@icloud.com";
-    github = "anhdle14";
-    githubId = 9645992;
-    keys = [ { fingerprint = "AA4B 8EC3 F971 D350 482E  4E20 0299 AFF9 ECBB 5169"; } ];
-  };
   anhduy = {
     email = "vo@anhduy.io";
     github = "voanhduy1512";
