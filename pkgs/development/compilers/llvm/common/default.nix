@@ -295,6 +295,7 @@ makeScopeWithSplicing' {
         ]
         ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
           targetLlvmPackages.libunwind
+          targetLlvmPackages.llvm-libgcc
         ];
         extraBuildCommands = mkExtraBuildCommands cc;
         nixSupport.cc-cflags = [
@@ -426,7 +427,6 @@ makeScopeWithSplicing' {
       );
 
       compiler-rt-no-libc = callPackage ./compiler-rt {
-        doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
         stdenv =
           # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
           if stdenv.hostPlatform.isDarwin then
@@ -464,6 +464,12 @@ makeScopeWithSplicing' {
       };
 
       libunwind = callPackage ./libunwind {
+        stdenv = overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
+      };
+
+      llvm-libgcc = callPackage ./llvm-libgcc {
+        # Use the same bootstrap compiler as libunwind — has libc and
+        # compiler-rt crt files, but no libunwind/libgcc dependency.
         stdenv = overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
       };
 
