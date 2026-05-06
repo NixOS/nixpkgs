@@ -7,14 +7,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.4.4";
+  version = "3.5.0";
   pname = "laszip";
 
   src = fetchFromGitHub {
     owner = "LASzip";
     repo = "LASzip";
     tag = finalAttrs.version;
-    hash = "sha256-v/oLU69zqDW1o1HTlay7GDh1Kbmv1rarII2Fz5HWCqg=";
+    hash = "sha256-xZ8IFnqrGt47lN+C6/ibgbIWqpObDf4RHPaGMXw0WZ4=";
   };
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://laszip.org";
     changelog = "https://github.com/LASzip/LASzip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     platforms = lib.platforms.unix;
   };
 })
