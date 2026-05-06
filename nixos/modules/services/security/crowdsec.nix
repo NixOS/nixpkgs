@@ -513,7 +513,9 @@ in
         # cscli needs crowdsec on it's path in order to be able to run `cscli explain`
         export PATH="$PATH:${lib.makeBinPath [ cfg.package ]}"
                 sudo=exec
-        if [ "$USER" != "${cfg.user}" ]; then
+        if [[ "''${USER:-root}" == 'root' ]]; then
+          sudo='exec runuser -u ${cfg.user} --'
+        elif [[ "$USER" != "${cfg.user}" ]]; then
           ${
             if config.security.sudo.enable then
               "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user}'"

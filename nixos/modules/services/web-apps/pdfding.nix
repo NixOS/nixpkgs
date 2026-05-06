@@ -302,7 +302,9 @@ in
             set +a
             ${loadCreds}
             sudo=exec
-            if [[ "$USER" != ${cfg.user} ]]; then
+            if [[ "''${USER:-root}" == 'root' ]]; then
+              sudo='exec runuser -u ${cfg.user} --preserve-environment --'
+            elif [[ "$USER" != "${cfg.user}" ]]; then
               sudo='${config.security.wrapperDir}/sudo -E -u ${cfg.user}'
             fi
             ${cmd}

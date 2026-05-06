@@ -41,7 +41,9 @@ let
   artisanWrapper = pkgs.writeShellScriptBin "librenms-artisan" ''
     cd ${package}
     sudo=exec
-    if [[ "$USER" != ${cfg.user} ]]; then
+    if [[ "''${USER:-root}" == 'root' ]]; then
+      sudo='exec runuser -u ${cfg.user} --'
+    elif [[ "$USER" != "${cfg.user}" ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
     fi
     $sudo ${package}/artisan "$@"
@@ -50,8 +52,10 @@ let
   lnmsWrapper = pkgs.writeShellScriptBin "lnms" ''
     cd ${package}
     sudo=exec
-    if [[ "$USER" != ${cfg.user} ]]; then
-    sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
+    if [[ "''${USER:-root}" == 'root' ]]; then
+      sudo='exec runuser -u ${cfg.user} --'
+    elif [[ "$USER" != "${cfg.user}" ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
     fi
     $sudo ${package}/lnms "$@"
   '';

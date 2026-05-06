@@ -328,7 +328,9 @@ in
       (pkgs.writeScriptBin "pretalx-manage" ''
         cd ${cfg.settings.filesystem.data}
         sudo=exec
-        if [[ "$USER" != ${cfg.user} ]]; then
+        if [[ "''${USER:-root}" == 'root' ]]; then
+          sudo='exec runuser -u ${cfg.user} --preserve-environment --'
+        elif [[ "$USER" != "${cfg.user}" ]]; then
           sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env=PRETALX_CONFIG_FILE'
         fi
         set -a
