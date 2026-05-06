@@ -37,6 +37,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    "test_connect" # Attempts to test ioctl
+  ];
+
   meta = {
     changelog = "https://github.com/zigpy/zigpy-xbee/releases/tag/${version}";
     description = "Library which communicates with XBee radios for zigpy";
