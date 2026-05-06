@@ -31,15 +31,6 @@
 let
   pnpm = pnpm_10;
 
-  version = "2.20.15";
-
-  src = fetchFromGitHub {
-    owner = "paperless-ngx";
-    repo = "paperless-ngx";
-    tag = "v${version}";
-    hash = "sha256-Czh4Knel0IIHsTc3kEnp1153Kv+3721GRCbTYTkeCDg=";
-  };
-
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
@@ -73,15 +64,25 @@ let
     poppler-utils
   ];
 
-  frontend = stdenv.mkDerivation (finalAttrs: {
+  nltkDataDir = symlinkJoin {
+    name = "paperless_ngx_nltk_data";
+    paths = with nltk-data; [
+      punkt-tab
+      snowball-data
+      stopwords
+    ];
+  };
+in
+python.pkgs.buildPythonApplication (finalAttrs: let
+  frontend = stdenv.mkDerivation (feAttrs: {
     pname = "paperless-ngx-frontend";
-    inherit version;
+    version = finalAttrs.version;
 
-    src = src + "/src-ui";
+    src = finalAttrs.src + "/src-ui";
 
     pnpmDeps = fetchPnpmDeps {
       inherit pnpm;
-      inherit (finalAttrs) pname version src;
+      inherit (feAttrs) pname version src;
       fetcherVersion = 3;
       hash = "sha256-HO+IDNB3NXWgvV0cvZ5zx46JuXv6Tgroz+YfVump5MA=";
     };
@@ -139,21 +140,18 @@ let
       runHook postInstall
     '';
   });
-
-  nltkDataDir = symlinkJoin {
-    name = "paperless_ngx_nltk_data";
-    paths = with nltk-data; [
-      punkt-tab
-      snowball-data
-      stopwords
-    ];
-  };
-in
-python.pkgs.buildPythonApplication rec {
+in {
   pname = "paperless-ngx";
   pyproject = true;
 
-  inherit version src;
+  version = "2.20.15";
+
+  src = fetchFromGitHub {
+    owner = "paperless-ngx";
+    repo = "paperless-ngx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Czh4Knel0IIHsTc3kEnp1153Kv+3721GRCbTYTkeCDg=";
+  };
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
@@ -266,7 +264,7 @@ python.pkgs.buildPythonApplication rec {
 
   installPhase =
     let
-      pythonPath = python.pkgs.makePythonPath dependencies;
+      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       runHook preInstall
@@ -319,7 +317,7 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-    export PAPERLESS_NLTK_DIR=${passthru.nltkDataDir}
+    export PAPERLESS_NLTK_DIR=${finalAttrs.passthru.nltkDataDir}
     # Limit threads per worker based on NIX_BUILD_CORES, capped at 256
     # ocrmypdf has an internal limit of 256 jobs and will fail with more:
     # https://github.com/ocrmypdf/OCRmyPDF/blob/66308c281306302fac3470f587814c3b212d0c40/src/ocrmypdf/cli.py#L234
@@ -364,7 +362,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     mainProgram = "paperless-ngx";
@@ -374,4 +372,4 @@ python.pkgs.buildPythonApplication rec {
       erikarvstedt
     ];
   };
-}
+})
