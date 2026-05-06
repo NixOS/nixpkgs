@@ -54,9 +54,9 @@ in
     # Return packet counters found in Tor's output chain.
     def get_output_pkts(node, trans_port, dns_port):
       proxy_user = int(node.succeed("id -u squid"))
-      proxy_re = rf'skuid {proxy_user} counter packets (\d+) bytes \d+ return'
-      tcp_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{trans_port}'
-      dns_re = rf'counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{dns_port}'
+      proxy_re = rf'meta skuid {proxy_user} counter packets (\d+) bytes \d+ return'
+      tcp_re = rf'ip protocol tcp counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{trans_port}'
+      dns_re = rf'ip protocol udp udp dport 53 counter packets (\d+) bytes \d+ dnat ip to 127.0.0.1:{dns_port}'
       ruleset = node.succeed("nft list chain inet tor tor_nat_output")
       proxy = int(re.search(proxy_re, ruleset).group(1))
       tcp = int(re.search(tcp_re, ruleset).group(1))
