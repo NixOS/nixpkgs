@@ -271,17 +271,7 @@ with lib.maintainers;
   };
 
   forgejo = {
-    members = [
-      adamcstephens
-      bendlas
-      christoph-heiss
-      emilylange
-      marie
-      pyrox0
-      tebriel
-    ];
-    scope = "Maintain the Forgejo code forge, packages and modules.";
-    shortName = "Forgejo";
+    github = "forgejo";
   };
 
   formatter = {
