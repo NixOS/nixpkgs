@@ -2027,6 +2027,12 @@
     githubId = 25783780;
     name = "aos";
   };
+  apetrovic = {
+    email = "github.drapery867@simplelogin.com";
+    github = "apetrovic6";
+    githubId = 31852070;
+    name = "apetrovic";
+  };
   apeyroux = {
     email = "alex@px.io";
     github = "apeyroux";
