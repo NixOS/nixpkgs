@@ -12921,6 +12921,13 @@
     name = "João Moreira";
     keys = [ { fingerprint = "F457 0A3A 5F89 22F8 F572  E075 EF8B F2C8 C5F4 097D"; } ];
   };
+  joaosreis = {
+    email = "joaosreis@outlook.pt";
+    github = "joaosreis";
+    githubId = 3420596;
+    name = "João Santos Reis";
+    keys = [ { fingerprint = "9BEB F137 4CAC 96D6 A4ED  EC49 BA2E 05BD B7F8 C0EE"; } ];
+  };
   joaquintrinanes = {
     email = "hi@joaquint.io";
     github = "JoaquinTrinanes";
