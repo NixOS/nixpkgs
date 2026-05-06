@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "3.6.1";
+  version = "3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";
     tag = "v${version}";
-    hash = "sha256-SB/V5pV10pBaYyYTp/Ty3J+/NX9oT3u++ZWELCk1qkc=";
+    hash = "sha256-qajcypVYW35MdFQV+YSbt932YydNrbz90LnbWL2/SmA=";
   };
 
   patches = [
