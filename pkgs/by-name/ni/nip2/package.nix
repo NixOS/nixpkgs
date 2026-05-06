@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
+  autoreconfHook,
   pkg-config,
   glib,
   libxml2,
@@ -21,9 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nip2";
   version = "8.9.1";
 
-  src = fetchurl {
-    url = "https://github.com/libvips/nip2/releases/download/v${finalAttrs.version}/nip2-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-t14m6z+5lPqpiOjgdDbKwqSWXCyrCL7zlo6BeoZtds0=";
+  src = fetchFromGitHub {
+    owner = "libvips";
+    repo = "nip2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SemlINqrqzWa7/sU6KnWiDJW8FLSYVZnCDtJNE0wjhg=";
   };
 
   patches = [
@@ -40,11 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     bison
     flex
     pkg-config
     makeWrapper
+    glib
   ];
+
+  preAutoreconf = ''
+    glib-gettextize --force --copy
+  '';
 
   buildInputs = [
     glib
