@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
+  pyserial-asyncio-fast,
   setuptools,
   zigpy,
 }:
@@ -35,6 +36,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    pyserial-asyncio-fast
+  ];
+
+  disabledTests = [
+    "test_connect" # Attempts to test ioctl
   ];
 
   meta = {
