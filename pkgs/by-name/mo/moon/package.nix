@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  protobuf,
   rustPlatform,
   fetchFromGitHub,
   openssl,
@@ -14,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moon";
-  version = "1.41.8";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "moon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KPK1XE18A8vh5FlGIPizxWmEVPkJHcy6fvtFsOQlhok=";
+    hash = "sha256-DLZ4JNz3NlcZtlEn6kHYRym85lxLQ7TsQAhisrjqk98=";
   };
 
-  cargoHash = "sha256-U3Hq5zy1dvG/sJA08bBi2mwMbTP2E5LLIpx0rMq2U1A=";
+  cargoHash = "sha256-vWsUThZUzDD+K83DIou4xIsiSVp9FRm6dl8QrYD26Oc=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [
+    protobuf
     pkg-config
     installShellFiles
     writableTmpDirAsHomeHook
