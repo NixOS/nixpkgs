@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mergerfs";
-  version = "2.41.1";
+  version = "2.42.0";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = "mergerfs";
     rev = finalAttrs.version;
-    sha256 = "sha256-pXge+/5Ti4+e0aSbWLg6roIcg+3foAvSHP/Obd0EiE4=";
+    sha256 = "sha256-yDICW/iEExvUuuPV6EAd7KRcsHntkrsv9042NnZP/MU=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
