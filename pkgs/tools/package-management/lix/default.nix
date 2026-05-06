@@ -16,6 +16,7 @@
   editline,
   ncurses,
   clangStdenv,
+  nixos-anywhere,
   nixpkgs-review,
   nixpkgs-reviewFull,
   nil,
@@ -98,6 +99,10 @@ let
           # that `nix-eval-jobs` can be built against the correct `lix` version.
           lix = self.callPackage (callPackage ./common-lix.nix lix-args) {
             stdenv = lixStdenv;
+          };
+
+          nixos-anywhere = nixos-anywhere.override {
+            nix = self.lix;
           };
 
           nixpkgs-review = nixpkgs-review.override {

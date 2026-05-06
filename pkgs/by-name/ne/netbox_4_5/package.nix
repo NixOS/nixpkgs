@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  fetchpatch2,
   plugins ? _ps: [ ],
   nixosTests,
   nix-update-script,
@@ -16,18 +17,24 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.5.7";
+  version = "4.5.9";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-8oOlDtTVeKDlaWt3JDy9wc1oUTTJPSoHd5O3YxbE50g=";
+    hash = "sha256-S8/2ZLYhYKBEpz3EGTyQPAPexX4se3MnmaH5aStVEj0=";
   };
 
   patches = [
     ./custom-static-root.patch
+    # TODO: check if change is applied upstream before upgrading to NetBox v4.6
+    (fetchpatch2 {
+      name = "upgrade-django-tables2-v3.0.patch";
+      url = "https://github.com/netbox-community/netbox/commit/d57346d9f0eef8126eafcd5033ea43864faeaf0d.patch";
+      hash = "sha256-6/wdd8wDVT4eqDKMNx8tmoPTDvw8OE7atf9nzg3LZzk=";
+    })
   ];
 
   dependencies =
