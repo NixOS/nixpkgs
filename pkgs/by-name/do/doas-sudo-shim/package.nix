@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    helpTest = runCommand "${pname}-helpTest" { } ''
+    helpTest = runCommand "doas-sudo-shim-helpTest" { } ''
       ${doas-sudo-shim}/bin/sudo -h > $out
       grep -q "Execute a command as another user using doas(1)" $out
     '';

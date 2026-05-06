@@ -31,7 +31,7 @@ buildGoModule rec {
 
   npmDeps = fetchNpmDeps {
     inherit version src;
-    pname = "${pname}-webui";
+    pname = "dnote-webui";
     sourceRoot = "${src.name}/pkg/server/assets";
     hash = "sha256-yq55iO3Svqbjah9HdWfSicJISNEipxUkNDD1KJ7ZUhY=";
   };

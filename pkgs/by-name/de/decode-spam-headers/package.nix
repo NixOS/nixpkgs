@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "decode-spam-headers";
   version = "2022-09-22-unreleased";
 
@@ -26,11 +26,11 @@ python3Packages.buildPythonApplication rec {
   installPhase = ''
     install -D decode-spam-headers.py $out/bin/decode-spam-headers
 
-    mkdir -p $doc/share/doc/${pname}
+    mkdir -p $doc/share/doc/decode-spam-headers
     mv \
       README.md \
       img/ \
-      $doc/share/doc/${pname}
+      $doc/share/doc/decode-spam-headers
   '';
 
   propagatedBuildInputs = [

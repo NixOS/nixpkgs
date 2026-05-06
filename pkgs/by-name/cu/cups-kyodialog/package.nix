@@ -27,7 +27,7 @@ let
   kyodialog_version = "9.4";
   date = "20240521";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-kyodialog";
   version = "${kyodialog_version}-${date}";
 
@@ -98,18 +98,18 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
 
-    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
+    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/cups-kyodialog/copyright
   ''
   + lib.optionalString withQtGui ''
     install -D usr/bin/kyoPPDWrite_H $out/bin/kyoPPDWrite_H
     install -D usr/bin/kyodialog${kyodialog_version} $out/bin/kyodialog
 
-    install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/${pname}/icons/appicon_H.png
+    install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/cups-kyodialog/icons/appicon_H.png
 
     install -Dm444 usr/share/applications/kyodialog${kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
     substituteInPlace $out/share/applications/kyodialog.desktop \
       --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
-      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
+      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/cups-kyodialog/icons/appicon_H.png
   '';
 
   meta = {

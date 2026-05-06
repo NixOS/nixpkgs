@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D bin/* -t $out/bin/
-    install -D API README -t $out/share/doc/${pname}/
+    install -D API README -t $out/share/doc/cbftp/
 
     runHook postInstall
   '';

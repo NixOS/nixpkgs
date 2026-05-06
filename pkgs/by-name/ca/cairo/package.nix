@@ -30,7 +30,7 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   let
-    inherit (finalAttrs) pname version;
+    inherit (finalAttrs) version;
   in
   {
     pname = "cairo";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (
     src = fetchurl {
       url = "https://cairographics.org/${
         if lib.mod (builtins.fromJSON (lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"
-      }/${pname}-${version}.tar.xz";
+      }/cairo-${version}.tar.xz";
       hash = "sha256-RF7YIIpuSCPeEianTKMZ02AOg/Y2n5mxQmUAZZnDLMs=";
     };
 

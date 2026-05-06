@@ -27,7 +27,7 @@ let
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
-    pname = "${pname}-webui";
+    pname = "backrest-webui";
     src = "${src}/webui";
 
     nativeBuildInputs = [

@@ -104,7 +104,7 @@ buildNpmPackage {
   '';
 
   passthru.tests.help = testers.runCommand {
-    name = "${pname}-help-test";
+    name = "bruno-cli-help-test";
     nativeBuildInputs = [ bruno-cli ];
     script = ''
       bru --help && touch $out

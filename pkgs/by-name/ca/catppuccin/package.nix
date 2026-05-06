@@ -31,8 +31,6 @@ in
   themeList ? validThemes,
 }:
 let
-  pname = "catppuccin";
-
   validAccents = [
     "rosewater"
     "flamingo"
@@ -219,18 +217,18 @@ let
     };
   };
 in
-lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListOfEnum
-  "${pname}: accent"
+lib.checkListOfEnum "catppuccin: variant" validVariants [ variant ] lib.checkListOfEnum
+  "catppuccin: accent"
   validAccents
   [ accent ]
   lib.checkListOfEnum
-  "${pname}: themes"
+  "catppuccin: themes"
   validThemes
   themeList
 
   stdenvNoCC.mkDerivation
   {
-    inherit pname;
+    pname = "catppuccin";
     version = "0-unstable-2026-03-24";
 
     srcs = selectedSources;

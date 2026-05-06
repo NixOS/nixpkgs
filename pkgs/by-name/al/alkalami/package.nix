@@ -16,9 +16,9 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{doc/${pname},fonts/truetype}
+    mkdir -p $out/share/{doc/alkalami,fonts/truetype}
     mv *.ttf $out/share/fonts/truetype/
-    mv *.txt documentation $out/share/doc/${pname}/
+    mv *.txt documentation $out/share/doc/alkalami/
 
     runHook postInstall
   '';

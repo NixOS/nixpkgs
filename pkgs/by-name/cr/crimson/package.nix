@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -m444 -Dt $out/share/fonts/opentype "Desktop Fonts/OTF/"*.otf
-    install -m444 -Dt $out/share/doc/${pname}-${version}    README.md
+    install -m444 -Dt $out/share/doc/crimson-${version}    README.md
 
     runHook postInstall
   '';

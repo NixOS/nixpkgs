@@ -25,7 +25,7 @@ let
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
-    pname = "${pname}-web";
+    pname = "autobrr-web";
     inherit src version;
 
     nativeBuildInputs = [

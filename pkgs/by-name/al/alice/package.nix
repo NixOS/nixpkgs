@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchzip {
     url =
       with finalAttrs;
-      "https://github.com/cyrealtype/${pname}/releases/download/v${version}/${pname}-v${version}.zip";
+      "https://github.com/cyrealtype/Alice/releases/download/v${version}/Alice-v${version}.zip";
     stripRoot = false;
     hash = "sha256-p+tE3DECfJyBIPyafGZ8jDYQ1lPb+iAnEwLyaUy7DW0=";
   };

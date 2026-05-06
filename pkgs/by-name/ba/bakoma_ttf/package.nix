@@ -1,11 +1,14 @@
-{ stdenvNoCC, fetchurl }:
+{
+  stdenvNoCC,
+  fetchurl,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "bakoma-ttf";
   version = "2.2";
 
   src = fetchurl {
-    name = "${pname}.tar.bz2";
+    name = "bakoma-ttf.tar.bz2";
     url = "http://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
     hash = "sha256-dYaUMneFn1yC5lIMSLQSNmFRW16AdUXGqWBobzAbPsg=";
   };

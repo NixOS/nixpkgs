@@ -18,7 +18,7 @@ let
   };
 
   webAssets = buildNpmPackage {
-    pname = "${pname}-web";
+    pname = "discord-rich-presence-plex-web";
     inherit version src;
     sourceRoot = "${src.name}/web";
     npmDepsHash = "sha256-7cp4LeXUAiIHGvLfwsIWpdqjUzemlCKVCsBZxTnPlDk=";

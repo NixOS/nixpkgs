@@ -18,8 +18,8 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $out/share/fonts/truetype
     mv *.ttf $out/share/fonts/truetype/
-    mkdir -p $out/share/doc/${pname}-${version}
-    mv {*.html,*.txt,*.md} $out/share/doc/${pname}-${version}/
+    mkdir -p $out/share/doc/amiri-${version}
+    mv {*.html,*.txt,*.md} $out/share/doc/amiri-${version}/
 
     runHook postInstall
   '';

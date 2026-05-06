@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "2.2";
 
   src = fetchurl {
-    url = "http://kldp.net/baekmuk/release/865-${pname}-${version}.tar.gz";
+    url = "http://kldp.net/baekmuk/release/865-baekmuk-ttf-${version}.tar.gz";
     hash = "sha256-CKt9/7VdWIfMlCzjcPXjO3VqVfu06vC5DyRAcOjVGII=";
   };
 
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -m444 -Dt $out/share/fonts        ttf/*.ttf
-    install -m444 -Dt $out/share/doc/${pname}-${version}  COPYRIGHT*
+    install -m444 -Dt $out/share/doc/baekmuk-ttf-${version}  COPYRIGHT*
 
     runHook postInstall
   '';

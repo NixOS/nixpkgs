@@ -25,7 +25,7 @@ let
   };
 
   unwrapped = stdenvNoCC.mkDerivation {
-    pname = "${pname}-unwrapped";
+    pname = "aja-desktop-software-unwrapped";
     inherit version;
 
     src = fetchzip {
@@ -108,10 +108,10 @@ buildFHSEnv {
 
   extraInstallCommands = ''
     mkdir -p $out/libexec/aja-desktop
-    mv $out/bin/${pname} $out/libexec/aja-desktop/${pname}
+    mv $out/bin/aja-desktop-software $out/libexec/aja-desktop/aja-desktop-software
 
     for binary in controlpanel controlroom ajanmos systemtest; do
-      makeWrapper "$out/libexec/aja-desktop/${pname}" "$out/bin/aja-$binary" \
+      makeWrapper "$out/libexec/aja-desktop/aja-desktop-software" "$out/bin/aja-$binary" \
         --add-flags "$binary"
     done
   '';

@@ -7,7 +7,6 @@
 }:
 
 let
-  pname = "catppuccin-plymouth";
   validVariants = [
     "latte"
     "frappe"
@@ -15,10 +14,10 @@ let
     "mocha"
   ];
 in
-assert lib.assertOneOf "${pname}: color variant" variant validVariants;
+assert lib.assertOneOf "catppuccin-plymouth: color variant" variant validVariants;
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit pname;
+  pname = "catppuccin-plymouth";
   version = "0-unstable-2026-04-28";
 
   src = fetchFromGitHub {

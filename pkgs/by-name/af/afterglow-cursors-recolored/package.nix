@@ -10,8 +10,6 @@
 }:
 
 let
-  pname = "afterglow-cursors-recolored";
-
   availableThemeVariants = [
     "Catppuccin"
     "Dracula"
@@ -68,27 +66,28 @@ let
   };
 in
 
-lib.checkListOfEnum "${pname}: theme variants" availableThemeVariants themeVariants
+lib.checkListOfEnum "afterglow-cursors-recolored: theme variants" availableThemeVariants
+  themeVariants
   lib.checkListOfEnum
-  "${pname}: catppuccin color variants"
+  "afterglow-cursors-recolored: catppuccin color variants"
   availableColorVariants.Catppuccin
   catppuccinColorVariants
   lib.checkListOfEnum
-  "${pname}: dracula color variants"
+  "afterglow-cursors-recolored: dracula color variants"
   availableColorVariants.Dracula
   draculaColorVariants
   lib.checkListOfEnum
-  "${pname}: gruvbox color variants"
+  "afterglow-cursors-recolored: gruvbox color variants"
   availableColorVariants.Gruvbox
   gruvboxColorVariants
   lib.checkListOfEnum
-  "${pname}: original color variants"
+  "afterglow-cursors-recolored: original color variants"
   availableColorVariants.Original
   originalColorVariants
 
   stdenvNoCC.mkDerivation
   {
-    inherit pname;
+    pname = "afterglow-cursors-recolored";
     version = "0-unstable-2023-10-04";
 
     src = fetchFromGitHub {

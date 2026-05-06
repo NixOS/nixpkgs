@@ -17,7 +17,7 @@ let
   boost' = boost187;
 in
 stdenv.mkDerivation rec {
-  name = "${pname}-${lib.optionalString contribPlugins "full-"}${version}";
+  name = "codeblocks-${lib.optionalString contribPlugins "full-"}${version}";
   pname = "codeblocks";
   version = "25.03";
 

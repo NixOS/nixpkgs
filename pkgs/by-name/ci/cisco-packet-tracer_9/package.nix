@@ -64,7 +64,7 @@ appimageTools.wrapType2 rec {
       contents = appimageTools.extract { inherit pname version src; };
     in
     ''
-      mv $out/bin/${pname} $out/bin/packettracer9
+      mv $out/bin/cisco-packet-tracer-appimage $out/bin/packettracer9
 
       install -Dm444 ${contents}/CiscoPacketTracer-9.0.0.desktop $out/share/applications/cisco-packet-tracer-9.desktop
       install -Dm444 ${contents}/CiscoPacketTracerPtsa-9.0.0.desktop $out/share/applications/cisco-packet-tracer-ptsa-9.desktop
