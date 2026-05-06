@@ -1,0 +1,113 @@
+From 14bb08163b58b4402fc735e1caf484f81870cbb7 Mon Sep 17 00:00:00 2001
+From: Vlad Zahorodnii <vlad.zahorodnii@kde.org>
+Date: Wed, 28 Jan 2026 11:39:36 +0200
+Subject: [PATCH 1/2] core: Drop Activate request in LogindSession
+
+Apparently depending on the system configuration, the Activate request
+may fail even though the session is already active.
+
+In general, we don't support starting kwin in a specific VT, so the
+activate request isn't really necessary. Other compositors don't bother
+making the Activate() request too. So assume that the display manager
+sets things up for us as expected.
+
+(cherry picked from commit bc8bfb19ddc849193694ceda9d18de58b17e4c58)
+---
+ src/core/session_logind.cpp | 17 -----------------
+ 1 file changed, 17 deletions(-)
+
+diff --git a/src/core/session_logind.cpp b/src/core/session_logind.cpp
+index 5f6541c289b..dfadf0ec48b 100644
+--- a/src/core/session_logind.cpp
++++ b/src/core/session_logind.cpp
+@@ -95,17 +95,6 @@ static void releaseControl(const QString &sessionPath)
+     QDBusConnection::systemBus().asyncCall(message);
+ }
+ 
+-static bool activate(const QString &sessionPath)
+-{
+-    const QDBusMessage message = QDBusMessage::createMethodCall(s_serviceName, sessionPath,
+-                                                                s_sessionInterface,
+-                                                                QStringLiteral("Activate"));
+-
+-    const QDBusMessage reply = QDBusConnection::systemBus().call(message);
+-
+-    return reply.type() != QDBusMessage::ErrorMessage;
+-}
+-
+ std::unique_ptr<LogindSession> LogindSession::create()
+ {
+     if (!QDBusConnection::systemBus().interface()->isServiceRegistered(s_serviceName)) {
+@@ -118,12 +107,6 @@ std::unique_ptr<LogindSession> LogindSession::create()
+         return nullptr;
+     }
+ 
+-    if (!activate(sessionPath)) {
+-        qCWarning(KWIN_CORE, "Failed to activate %s session. Maybe another compositor is running?",
+-                  qPrintable(sessionPath));
+-        return nullptr;
+-    }
+-
+     if (!takeControl(sessionPath)) {
+         qCWarning(KWIN_CORE, "Failed to take control of %s session. Maybe another compositor is running?",
+                   qPrintable(sessionPath));
+-- 
+GitLab
+
+
+From 8431c80304f581eb2d4d119773bc6b09c9b9c045 Mon Sep 17 00:00:00 2001
+From: Vlad Zahorodnii <vlad.zahorodnii@kde.org>
+Date: Wed, 28 Jan 2026 11:43:56 +0200
+Subject: [PATCH 2/2] core: Drop Activate request in ConsoleKitSession
+
+Apparently depending on the system configuration, the Activate request
+may fail even though the session is already active.
+
+In general, we don't support starting kwin in a specific VT, so the
+activate request isn't really necessary. Other compositors don't bother
+making the Activate() request too. So assume that the display manager
+sets things up for us as expected.
+
+(cherry picked from commit 7fb47baf262f4cb5ea1198f9e8762630cec698f6)
+---
+ src/core/session_consolekit.cpp | 17 -----------------
+ 1 file changed, 17 deletions(-)
+
+diff --git a/src/core/session_consolekit.cpp b/src/core/session_consolekit.cpp
+index c0e8449f8a2..e75ed46ac54 100644
+--- a/src/core/session_consolekit.cpp
++++ b/src/core/session_consolekit.cpp
+@@ -97,17 +97,6 @@ static void releaseControl(const QString &sessionPath)
+     QDBusConnection::systemBus().asyncCall(message);
+ }
+ 
+-static bool activate(const QString &sessionPath)
+-{
+-    const QDBusMessage message = QDBusMessage::createMethodCall(s_serviceName, sessionPath,
+-                                                                s_sessionInterface,
+-                                                                QStringLiteral("Activate"));
+-
+-    const QDBusMessage reply = QDBusConnection::systemBus().call(message);
+-
+-    return reply.type() != QDBusMessage::ErrorMessage;
+-}
+-
+ std::unique_ptr<ConsoleKitSession> ConsoleKitSession::create()
+ {
+     if (!QDBusConnection::systemBus().interface()->isServiceRegistered(s_serviceName)) {
+@@ -120,12 +109,6 @@ std::unique_ptr<ConsoleKitSession> ConsoleKitSession::create()
+         return nullptr;
+     }
+ 
+-    if (!activate(sessionPath)) {
+-        qCWarning(KWIN_CORE, "Failed to activate %s session. Maybe another compositor is running?",
+-                  qPrintable(sessionPath));
+-        return nullptr;
+-    }
+-
+     if (!takeControl(sessionPath)) {
+         qCWarning(KWIN_CORE, "Failed to take control of %s session. Maybe another compositor is running?",
+                   qPrintable(sessionPath));
+-- 
+GitLab
+

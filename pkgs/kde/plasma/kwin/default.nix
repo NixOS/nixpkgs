@@ -17,7 +17,6 @@
   pipewire,
   krunner,
   python3,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kwin";
@@ -26,6 +25,7 @@ mkKdeDerivation {
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
+    ./0001-Drop-Activate-request-in-LogindSession.patch
   ];
 
   postPatch = ''
