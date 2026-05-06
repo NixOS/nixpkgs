@@ -54,6 +54,20 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  # AWS-LC's generated *-targets.cmake files hardcode _IMPORT_PREFIX to $out
+  # and set INTERFACE_INCLUDE_DIRECTORIES to "$out/include", but headers live
+  # in $dev/include under multi-output splitting. Clear the broken claim so
+  # consumers fall back to stdenv's normal include-path propagation via
+  # buildInputs (which correctly resolves to $dev/include).
+  postFixup = ''
+    for f in $out/lib/{crypto,ssl}/cmake/*/*-targets.cmake; do
+      substituteInPlace "$f" \
+        --replace-fail \
+          'INTERFACE_INCLUDE_DIRECTORIES "\$<\$<BOOL:1>:>;''${_IMPORT_PREFIX}/include"' \
+          'INTERFACE_INCLUDE_DIRECTORIES ""'
+    done
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   passthru = {
