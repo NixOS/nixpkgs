@@ -64,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
     cmake
+    git
     rustPlatform.bindgenHook
   ];
 
