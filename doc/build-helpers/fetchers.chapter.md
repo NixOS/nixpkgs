@@ -1027,3 +1027,39 @@ fetchItchIo {
   upload = "13371354";
 }
 ```
+
+## `fetchMavenArtifact` {#fetchmavenartifact}
+
+`fetchMavenArtifact` is a fetcher for downloading Artifacts from the [Maven project](https://maven.apache.org/). It accepts the following arguments:
+
+- `groupId`;
+- `artifactId`;
+- `version`;
+- `hash`;
+- `classifier` (optional);
+- `repos` (optional): Maven repositories to fetch the artifact from;
+- `url` (optional): URL pointing to the JAR file;
+- `urls` (optional): list of alternative URLs pointing to the JAR file;
+- `meta` (optional): the derivation's metadata.
+
+It also accepts any other argument that can be passed to `fetchurl`.
+
+Only one of `url` or `urls` can be specified.
+If neither is provided, `repos` defaults to the most common Maven repositories (see [here](../../pkgs/build-support/fetchmavenartifact/default.nix)).
+If `url` or `urls` is specified, it takes precedence over `repos`.
+
+Once the artifact is fetched, the `.jar` file is stored in the derivation's output directory at `$out/share/java/{fileName}`, where `{fileName}` is the JAR filename.
+It can be accessed programmatically through the `passthru.jar` attribute.
+
+```nix
+{ fetchMavenArtifact }:
+
+fetchMavenArtifact {
+  groupId = "org.apache.httpcomponents";
+  artifactId = "httpclient";
+  version = "4.3.6";
+  classifier = "jdk11";
+  hash = "sha256-eYONnq73PU+FLGOkgIMMOi1LWQ8Ks66BWkiUY+RxQAQ=";
+}
+```
+
