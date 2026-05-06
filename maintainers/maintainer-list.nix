@@ -6423,6 +6423,12 @@
     github = "deadbaed";
     githubId = 8809909;
   };
+  deade1e = {
+    name = "Francesco Pompo'";
+    email = "nix@francesco.cc";
+    github = "deade1e";
+    githubId = 6452799;
+  };
   dearrude = {
     name = "Ebrahim Nejati";
     email = "dearrude@tfwno.gf";
