@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "policy-sentry";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
     tag = version;
-    hash = "sha256-G7V3BqgJs9nyvhZ9xzNwP50yz+2SZfps/gsW6U8eisk=";
+    hash = "sha256-oR8/hrntE4XzZHdbde+NoKWdsLs9jJ3RLIv8YsoDFt4=";
   };
 
   pythonRelaxDeps = [ "beautifulsoup4" ];
