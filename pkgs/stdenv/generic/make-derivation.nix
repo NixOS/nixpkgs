@@ -13,7 +13,6 @@ stdenv:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
-    assertMsg
     attrNames
     concatLists
     concatMap
@@ -26,6 +25,7 @@ let
     getDev
     head
     foldl'
+    intersectAttrs
     isAttrs
     isBool
     isDerivation
@@ -163,6 +163,10 @@ let
     "trivialautovarinit"
     "zerocallusedregs"
   ];
+
+  concretizeFlagImplications =
+    flag: impliesFlags: list:
+    if elem flag list then (list ++ impliesFlags) else list;
 
   removedOrReplacedAttrNames = [
     "checkInputs"
@@ -396,7 +400,7 @@ let
           } requires __structuredAttrs if {dis,}allowedRequisites or {dis,}allowedReferences is set"
         else
           actualValue;
-      outputs' = outputs ++ optional separateDebugInfo' "debug";
+      outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
 
       noNonNativeDeps =
         (
@@ -411,25 +415,6 @@ let
         ) == [ ];
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
-      concretizeFlagImplications =
-        flag: impliesFlags: list:
-        if elem flag list then (list ++ impliesFlags) else list;
-
-      hardeningDisable' = unique (
-        pipe hardeningDisable [
-          # disabling fortify implies fortify3 should also be disabled
-          (concretizeFlagImplications "fortify" [ "fortify3" ])
-          # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
-          (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
-          # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
-          (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
-        ]
-      );
-      enabledHardeningOptions =
-        if elem "all" hardeningDisable' then
-          [ ]
-        else
-          subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = subtractLists knownHardeningFlags (
         hardeningEnable ++ remove "all" hardeningDisable
@@ -553,9 +538,8 @@ let
                 attrs.name + hostSuffix
               else
                 # we cannot coerce null to a string below
-                assert assertMsg (
-                  attrs ? version && attrs.version != null
-                ) "The `version` attribute cannot be null.";
+                assert
+                  (attrs ? version && attrs.version != null) || throw "The `version` attribute cannot be null.";
                 "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
             );
 
@@ -631,6 +615,22 @@ let
             else
               null
           } =
+            let
+              enabledHardeningOptions =
+                if elem "all" hardeningDisable then
+                  [ ]
+                else
+                  subtractLists (unique (
+                    pipe hardeningDisable [
+                      # disabling fortify implies fortify3 should also be disabled
+                      (concretizeFlagImplications "fortify" [ "fortify3" ])
+                      # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+                      (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+                      # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+                      (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
+                    ]
+                  )) (defaultHardeningFlags ++ hardeningEnable);
+            in
             concatStringsSep " " enabledHardeningOptions;
 
           # TODO: remove platform condition
@@ -836,22 +836,30 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
-          errors = lib.concatMapStringsSep "\n" (
-            name:
-            "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
-                lib.generators.toPretty { } derivationArg.${name}
-              }"
-          ) overlappingNames;
+          overlappingArgs = intersectAttrs env' derivationArg;
         in
-        assert assertMsg (isAttrs env && !isDerivation env)
-          "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
-        assert assertMsg (overlappingNames == [ ])
-          "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
+        assert
+          (isAttrs env && !isDerivation env)
+          || throw "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
+        assert
+          (overlappingArgs == { })
+          || throw (
+            let
+              errors = lib.concatMapStringsSep "\n" (
+                name:
+                "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
+                    lib.generators.toPretty { } derivationArg.${name}
+                  }"
+              ) (attrNames overlappingArgs);
+
+            in
+            "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}"
+          );
         mapAttrs (
           n: v:
-          assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
-            "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
+          assert
+            (isString v || isBool v || isInt v || isDerivation v)
+            || throw "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
           v
         ) env';
 
