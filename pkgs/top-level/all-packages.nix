@@ -2616,8 +2616,6 @@ with pkgs;
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
-  kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
-
   keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
   keybase = callPackage ../tools/security/keybase { };
@@ -2632,11 +2630,7 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
-
-  kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
-
-  ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
+  kronometer = kdePackages.callPackage ../tools/misc/kronometer { };
 
   limine-full = limine.override { enableAll = true; };
 
@@ -3239,7 +3233,7 @@ with pkgs;
     lua = lua5_4;
   };
 
-  rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
+  rsibreak = kdePackages.callPackage ../applications/misc/rsibreak { };
 
   rubocop = rubyPackages.rubocop;
 
@@ -5531,9 +5525,6 @@ with pkgs;
     ];
   };
 
-  # Does not actually depend on Qt 5
-  inherit (plasma5Packages) extra-cmake-modules;
-
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
@@ -5694,8 +5685,6 @@ with pkgs;
   };
 
   lit = with python3Packages; toPythonApplication lit;
-
-  massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
   maven3 = maven;
   inherit (maven) buildMaven;
@@ -7137,9 +7126,6 @@ with pkgs;
         ;
     }
   );
-
-  # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
-  plasma5Packages = libsForQt5;
 
   qtEnv = qt5.env;
 
@@ -9644,9 +9630,7 @@ with pkgs;
     ;
   k3s = k3s_1_35;
 
-  okteta = libsForQt5.callPackage ../applications/editors/okteta { };
-
-  k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
+  okteta = kdePackages.callPackage ../applications/editors/okteta { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
@@ -9696,8 +9680,6 @@ with pkgs;
   kubernetes-helmPlugins = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/helm/plugins { }
   );
-
-  kup = libsForQt5.callPackage ../applications/misc/kup { };
 
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
@@ -9794,7 +9776,7 @@ with pkgs;
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
-  minitube = libsForQt5.callPackage ../applications/video/minitube { };
+  minitube = kdePackages.callPackage ../applications/video/minitube { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
@@ -10093,13 +10075,12 @@ with pkgs;
   quasselClient = quassel.override {
     monolithic = false;
     client = true;
-    tag = "-client-kf5";
+    tag = "-client-qt5";
   };
 
   quasselDaemon = quassel.override {
     monolithic = false;
     enableDaemon = true;
-    withKDE = false;
     tag = "-daemon-qt5";
   };
 
@@ -11281,7 +11262,7 @@ with pkgs;
 
   blas-ilp64 = blas.override { isILP64 = true; };
 
-  labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
+  labplot = kdePackages.callPackage ../applications/science/math/labplot { };
 
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
@@ -12063,8 +12044,6 @@ with pkgs;
     discord-canary
     discord-development
     ;
-
-  tora = libsForQt5.callPackage ../development/tools/tora { };
 
   torcs-without-data = callPackage ../../pkgs/by-name/to/torcs/without-data.nix { };
 

@@ -5,7 +5,7 @@
   gnome-icon-theme,
   hicolor-icon-theme,
   pantheon,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -20,13 +20,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   propagatedBuildInputs = [
-    libsForQt5.breeze-icons
+    kdePackages.breeze-icons
     pantheon.elementary-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   postPatch = ''
     patchShebangs configure

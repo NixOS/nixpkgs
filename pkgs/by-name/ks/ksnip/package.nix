@@ -3,43 +3,37 @@
   lib,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
-  libsForQt5,
+  qt6,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ksnip";
-  version = "1.10.1";
+  version = "1.10.1-unstable-2026-02-27";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "ksnip";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-n7YwDXd73hyrzb6L8utZFuHh9HnjVtkU6CC4jfWPj/I=";
+    rev = "f50e2764d0d51af2fd06c9d70f1e5f1631726975";
+    hash = "sha256-XehTMbvSRHfwTy6+Rv2QavQfRs6lK1+sd04iOZZZH4c=";
   };
 
-  patches = [
-    # Fix build with latest kImageAnnotator
-    (fetchpatch {
-      url = "https://github.com/ksnip/ksnip/commit/76f4b381971eead6ff31b8bf3bb64bb5717469c3.patch";
-      hash = "sha256-JWoI974qDNZIzr/8oksI8m6g3XNWEaQRGsqSfvQrmao=";
-    })
+  cmakeFlags = [
+    "-DBUILD_WITH_QT6=ON"
+    "-DQT_FIND_PRIVATE_MODULES=ON"
   ];
 
   nativeBuildInputs = [
     cmake
-  ]
-  ++ (with libsForQt5; [
-    extra-cmake-modules
-    wrapQtAppsHook
-    qttools
-  ]);
+    kdePackages.extra-cmake-modules
+    qt6.wrapQtAppsHook
+    qt6.qttools
+  ];
 
-  buildInputs = with libsForQt5; [
-    kcolorpicker
-    kimageannotator
-    qtsvg
-    qtx11extras
+  buildInputs = [
+    kdePackages.kcolorpicker
+    kdePackages.kimageannotator
+    qt6.qtsvg
   ];
 
   meta = {

@@ -3,6 +3,8 @@
   fetchurl,
   kio-extras,
   cmake,
+  pkg-config,
+  extra-cmake-modules,
   libsForQt5,
   samba,
   libssh,
@@ -25,43 +27,47 @@ stdenv.mkDerivation rec {
     hash = "sha256-qar1jzuALINBu6HOuVBU+RUFnqRH9Z/8e5M8ynGxKsk=";
   };
 
-  nativeBuildInputs = with libsForQt5; [
+  nativeBuildInputs = [
     cmake
+    pkg-config
     extra-cmake-modules
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = with libsForQt5; [
-    qtbase
+  buildInputs =
+    with libsForQt5;
+    with libsForQt5.__internalKF5;
+    [
+      qtbase
 
-    kactivities
-    kactivities-stats
-    karchive
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    kdbusaddons
-    kdnssd
-    kdoctools
-    kdsoap
-    kguiaddons
-    ki18n
-    kio
-    # libkexiv2
-    phonon
-    solid
-    syntax-highlighting
+      kactivities
+      kactivities-stats
+      karchive
+      kconfig
+      kconfigwidgets
+      kcoreaddons
+      kdbusaddons
+      kdnssd
+      kdoctools
+      kdsoap
+      kguiaddons
+      ki18n
+      kio
+      # libkexiv2
+      # phonon
+      solid
+      syntax-highlighting
 
-    samba
-    libssh
-    libmtp
-    libimobiledevice
-    gperf
-    libtirpc
-    openexr
-    taglib
-    libappimage
-  ];
+      samba
+      libssh
+      libmtp
+      libimobiledevice
+      gperf
+      libtirpc
+      openexr
+      taglib
+      libappimage
+    ];
 
   meta = kio-extras.meta;
 }

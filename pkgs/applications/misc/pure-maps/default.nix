@@ -5,7 +5,6 @@
   cmake,
   qttools,
   wrapQtAppsHook,
-  kirigami2,
   qtquickcontrols2,
   qtlocation,
   qtsensors,
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    kirigami2
     qtquickcontrols2
     qtlocation
     qtsensors
@@ -47,7 +45,7 @@ stdenv.mkDerivation rec {
     s2geometry
   ];
 
-  cmakeFlags = [ "-DFLAVOR=kirigami" ];
+  cmakeFlags = [ "-DFLAVOR=qtcontrols" ];
 
   pythonPath = with python3.pkgs; [ gpxpy ];
 

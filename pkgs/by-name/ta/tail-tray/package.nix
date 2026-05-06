@@ -3,7 +3,6 @@
   fetchFromGitHub,
   davfs2,
   cmake,
-  extra-cmake-modules,
   stdenv,
   pkg-config,
   kdePackages,

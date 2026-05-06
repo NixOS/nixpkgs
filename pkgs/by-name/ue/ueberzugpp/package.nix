@@ -23,7 +23,7 @@
   enableOpencv ? stdenv.hostPlatform.isLinux,
   opencv,
   enableWayland ? stdenv.hostPlatform.isLinux,
-  extra-cmake-modules,
+  kdePackages,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
   ]
   ++ lib.optionals enableWayland [
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     wayland
     wayland-protocols
   ]

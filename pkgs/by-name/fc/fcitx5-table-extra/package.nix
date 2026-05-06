@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   gettext,
   libime,
   boost,
@@ -23,7 +24,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gettext
     libime
     fcitx5

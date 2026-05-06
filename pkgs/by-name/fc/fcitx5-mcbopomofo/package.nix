@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   gettext,
   json_c,
   icu,
@@ -26,11 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gettext
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     fcitx5
     fmt
     gtest

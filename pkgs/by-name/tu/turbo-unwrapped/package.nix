@@ -2,7 +2,7 @@
   lib,
   stdenv,
   capnproto,
-  extra-cmake-modules,
+  kdePackages,
   fetchFromGitHub,
   fontconfig,
   installShellFiles,
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     capnproto
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     installShellFiles
     pkg-config
     protobuf

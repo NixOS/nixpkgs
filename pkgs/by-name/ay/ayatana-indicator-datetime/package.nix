@@ -9,7 +9,7 @@
   dbus,
   dbus-test-runner,
   evolution-data-server,
-  extra-cmake-modules,
+  kdePackages,
   glib,
   gst_all_1,
   gtest,
@@ -93,11 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
     if enableLomiriFeatures then
       (
         [
-          extra-cmake-modules
+          kdePackages.extra-cmake-modules
           mkcal
         ]
         ++ (with libsForQt5; [
-          kcalendarcore
+          __internalKF5.kcalendarcore
           qtbase
         ])
         ++ (with lomiri; [

@@ -35,7 +35,7 @@ makeScopeWithSplicing' {
           attrs = {
             inherit config;
             inherit libsForQt5;
-            inherit (pkgs) lib fetchurl;
+            inherit (pkgs) lib fetchurl kdePackages;
           };
         in
         (lib.makeOverridable mkFrameworks attrs);
@@ -51,14 +51,14 @@ makeScopeWithSplicing' {
 
     in
     (noExtraAttrs (
-      kdeFrameworks
-      // qt5
+      qt5
       // {
 
         inherit
-          kdeFrameworks
           qt5
           ;
+
+        __internalKF5 = lib.dontRecurseIntoAttrs kdeFrameworks;
 
         ### LIBRARIES
 
@@ -72,33 +72,17 @@ makeScopeWithSplicing' {
 
         fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
-        futuresql = callPackage ../development/libraries/futuresql { };
-
         qgpgme = callPackage ../development/libraries/qgpgme { };
 
         grantlee = callPackage ../development/libraries/grantlee/5 { };
 
-        qtcurve = callPackage ../data/themes/qtcurve { };
-
         herqq = callPackage ../development/libraries/herqq { };
-
-        kdb = callPackage ../development/libraries/kdb { };
 
         kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 
-        kdiagram = callPackage ../development/libraries/kdiagram { };
-
         kdsoap = callPackage ../development/libraries/kdsoap { };
 
-        kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
-
         kimageannotator = callPackage ../development/libraries/kimageannotator { };
-
-        kproperty = callPackage ../development/libraries/kproperty { };
-
-        kquickimageedit = callPackage ../development/libraries/kquickimageedit/0.3.0.nix { };
-
-        kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
 
         ldutils = callPackage ../development/libraries/ldutils { };
 
@@ -122,25 +106,13 @@ makeScopeWithSplicing' {
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
-        libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
-
         mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
         maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
-        maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
-
         mlt = pkgs.mlt.override {
           qt = qt5;
         };
-
-        phonon = callPackage ../development/libraries/phonon { };
-
-        phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
-
-        phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
-
-        plasma-wayland-protocols = callPackage ../development/libraries/plasma-wayland-protocols { };
 
         polkit-qt = callPackage ../development/libraries/polkit-qt-1 { };
 
@@ -149,8 +121,6 @@ makeScopeWithSplicing' {
           qt5Support = true;
           suffix = "qt5";
         };
-
-        pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
         pyotherside = callPackage ../development/libraries/pyotherside { };
 
@@ -226,12 +196,27 @@ makeScopeWithSplicing' {
         xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
       }
       // lib.optionalAttrs config.allowAliases {
+        futuresql = throw "libsForQt5.futuresql has been removed"; # Added 2026-05-01
+        kdb = throw "libsForQt5.kdb has been removed"; # Added 2026-05-01
+        kdiagram = throw "libsForQt5.kdiagram has been removed"; # Added 2026-05-01
         kf5gpgmepp = throw ''
           'libsForQt5.kf5gpgmepp' has been removed because it has been unmaintained upstream since 2017.
           Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
         ''; # Added 2025-10-25
+        kirigami-addons = throw "libsForQt5.kirigami-addons has been removed"; # Added 2026-05-01
+        kproperty = throw "libsForQt5.kproperty has been removed"; # Added 2026-05-01
+        kquickimageedit = throw "libsForQt5.kquickimageedit has been removed"; # Added 2026-05-01
+        ktextaddons = throw "libsForQt5.ktextaddons has been removed"; # Added 2026-05-01
+        kuserfeedback = throw "libsForQt5.kuserfeedback has been removed"; # Added 2026-05-01
+        libqaccessibilityclient = throw "libsForQt5.libqaccessibilityclient has been removed"; # Added 2026-05-01
         mapbox-gl-native = throw "libsForQt5.mapbox-gl-native has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         maplibre-gl-native = throw "libsForQt5.maplibre-gl-native has been removed due to being broken and superseded by maplibre-native-qt"; # Added 2026-04-11
+        maui-core = throw "libsForQt5.maui-core has been removed"; # Added 2026-05-01
+        phonon = throw "libsForQt5.phonon has been removed"; # Added 2026-05-01
+        phonon-backend-gstreamer = throw "libsForQt5.phonon-backend-gstreamer has been removed"; # Added 2026-05-01
+        phonon-backend-vlc = throw "libsForQt5.phonon-backend-vlc has been removed"; # Added 2026-05-01
+        plasma-wayland-protocols = throw "libsForQt5.plasma-wayland-protocols has been removed"; # Added 2026-05-01
+        pulseaudio-qt = throw "libsForQt5.pulseaudio-qt has been removed";
       }
     ))
   );

@@ -1,11 +1,14 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
+  fetchpatch,
   cmake,
+  pkg-config,
   extra-cmake-modules,
   shared-mime-info,
+  bison,
+  flex,
   wrapQtAppsHook,
 
   qtbase,
@@ -33,7 +36,7 @@
   netcdf,
   cfitsio,
   libcerf,
-  # cantor,
+  cantor,
   zlib,
   lz4,
   readstat,
@@ -44,30 +47,33 @@
 
 stdenv.mkDerivation rec {
   pname = "labplot";
-  version = "2.10.1";
+  version = "2.12.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/labplot/labplot-${version}.tar.xz";
-    sha256 = "sha256-K24YFRfPtuDf/3uJXz6yDHzjWeZzLThUXgdXya6i2u8=";
+    hash = "sha256-4oFVv930DltvfEeRMTVW0eSBOARPIW8hDVFbn21sEGo=";
   };
 
-  cmakeFlags = [
-    # Disable Vector BLF since it depends on DBC parser which fails to be detected
-    "-DENABLE_VECTOR_BLF=OFF"
+  patches = [
+    # backport build fix
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://invent.kde.org/education/labplot/-/commit/c2db2ec28aa8958f7041ae5cd03ddae9f44e5aa3.diff";
+      hash = "sha256-0biKZXWMs5y1U9phAivEAbd2N4C/CiOKvk/QRAaPimo=";
+    })
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "matio-fix-compilation-for-latest-version-1.5.27.patch";
-      url = "https://github.com/KDE/labplot/commit/d6142308ffa492d9f7cea00fad3b4cd1babfd00c.patch";
-      hash = "sha256-qD5jj6GxBKbQezKJb1Z8HnwFO84WJBGQDawS/6o/wHE=";
-    })
+  cmakeFlags = [
+    "-DQT_FIND_PRIVATE_MODULES=ON"
   ];
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     extra-cmake-modules
     shared-mime-info
+    bison
+    flex
     wrapQtAppsHook
   ];
 
@@ -97,7 +103,7 @@ stdenv.mkDerivation rec {
     netcdf
     cfitsio
     libcerf
-    # cantor
+    cantor
     zlib
     lz4
     readstat

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fmt,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   fcitx5,
   sqlite,
@@ -23,11 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     fmt
     fcitx5
     sqlite

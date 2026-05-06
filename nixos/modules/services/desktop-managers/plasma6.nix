@@ -191,8 +191,8 @@ in
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
           let
-            kioPluginPath = "${pkgs.plasma5Packages.qtbase.qtPluginPrefix}/kf5/kio";
-            inherit (pkgs.plasma5Packages) kio;
+            kioPluginPath = "${pkgs.libsForQt5.qtbase.qtPluginPrefix}/kf5/kio";
+            inherit (pkgs.libsForQt5.__internalKF5) kio;
           in
           pkgs.runCommand "kio5-plugins-only" { } ''
             mkdir -p $out/${kioPluginPath}

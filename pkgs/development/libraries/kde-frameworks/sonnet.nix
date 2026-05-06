@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   aspell,
   hunspell,
@@ -9,7 +10,10 @@
 
 mkDerivation {
   pname = "sonnet";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     aspell
     hunspell

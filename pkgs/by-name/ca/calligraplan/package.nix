@@ -2,53 +2,57 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
-  qt5,
-  libsForQt5,
+  qt6,
+  kdePackages,
   cmake,
-  extra-cmake-modules,
+  shared-mime-info,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calligraplan";
-  version = "3.3.0";
+  version = "4.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "calligraplan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-szPdRxbzJ2+nmgp+1FwmKZwHEDV8EtbDW/3jsw4J6HI=";
+    hash = "sha256-OD719omgw+RZrFz6qWiFDFB4t6Lvvh2M2QXYAIh0H2I=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://invent.kde.org/office/calligraplan/-/commit/cdd85c895b487a8b3837bf8b864103997e0af544.patch";
-      hash = "sha256-IMoJvvszPuIdWedeU7PQw8ngYmMA7k//wXfT+mZQP88=";
-    })
-  ];
-
   buildInputs = [
-    qt5.qtbase
-    libsForQt5.kdbusaddons
-    libsForQt5.kguiaddons
-    libsForQt5.ki18n
-    libsForQt5.kiconthemes
-    libsForQt5.kitemviews
-    libsForQt5.kjobwidgets
-    libsForQt5.kio
-    libsForQt5.knotifications
-    libsForQt5.kparts
-    libsForQt5.kinit
-    libsForQt5.kdiagram
-    libsForQt5.qt5.qtx11extras
+    qt6.qtbase
+    kdePackages.karchive
+    kdePackages.kcalendarcore
+    kdePackages.kconfig
+    kdePackages.kconfigwidgets
+    kdePackages.kcoreaddons
+    kdePackages.kdbusaddons
+    kdePackages.kdiagram
+    kdePackages.kguiaddons
+    kdePackages.kholidays
+    kdePackages.ki18n
+    kdePackages.kiconthemes
+    kdePackages.kio
+    kdePackages.kitemmodels
+    kdePackages.kitemviews
+    kdePackages.kjobwidgets
+    kdePackages.knotifications
+    kdePackages.kparts
+    kdePackages.ktextwidgets
+    kdePackages.kwidgetsaddons
+    kdePackages.kwindowsystem
+    kdePackages.kxmlgui
+    kdePackages.plasma-activities
+    kdePackages.sonnet
   ];
 
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
+    shared-mime-info
   ];
 
   passthru = {

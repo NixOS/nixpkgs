@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   adwaita-icon-theme,
-  libsForQt5,
+  kdePackages,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -52,11 +52,12 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
 
     propagatedBuildInputs = [
       adwaita-icon-theme
-      libsForQt5.breeze-icons
+      kdePackages.breeze-icons
       hicolor-icon-theme
     ];
 
     dontDropIconThemeCache = true;
+    dontWrapQtApps = true;
 
     # These fixup steps are slow and unnecessary for this package.
     # Package may install almost 400 000 small files.

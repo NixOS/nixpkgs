@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   fcitx5,
   fcitx5-qt,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     pkg-config
   ];

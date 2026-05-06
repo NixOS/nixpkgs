@@ -2,18 +2,22 @@
   lib,
   stdenv,
   mkDerivation,
+  cmake,
+  pkg-config,
   extra-cmake-modules,
   wayland-scanner,
   qtbase,
   qtx11extras,
   wayland,
-  plasma-wayland-protocols,
+  kdePackages,
 }:
 
 mkDerivation {
   pname = "kguiaddons";
 
   nativeBuildInputs = [
+    cmake
+    pkg-config
     extra-cmake-modules
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -24,7 +28,7 @@ mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    plasma-wayland-protocols
+    kdePackages.plasma-wayland-protocols
   ];
   propagatedBuildInputs = [ qtbase ];
 

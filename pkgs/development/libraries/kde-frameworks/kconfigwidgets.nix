@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kauth,
   kcodecs,
@@ -15,6 +16,7 @@
 mkDerivation {
   pname = "kconfigwidgets";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
   ];
