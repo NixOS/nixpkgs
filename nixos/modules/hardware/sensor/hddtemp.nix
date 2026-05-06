@@ -14,11 +14,11 @@ let
 
     file=/var/lib/hddtemp/hddtemp.db
 
-    raw_drives=""
-    ${lib.concatStringsSep "\n" (map (drives: "raw_drives+=\"${drives} \"") cfg.drives)}
-    drives=""
-    for i in $raw_drives; do
-      drives+=" $(realpath $i)"
+    declare -a raw_drives
+    raw_drives=( ${lib.concatStringsSep " " (map (drives: "\"${drives}\"") cfg.drives)} )
+    declare -a drives
+    for i in "''${raw_drives[@]}"; do
+      drives+=( "$(realpath "$i")" )
     done
 
     cp ${pkgs.hddtemp}/share/hddtemp/hddtemp.db $file
@@ -28,12 +28,15 @@ let
       --daemon \
       --unit=${cfg.unit} \
       --file=$file \
-      $drives
+      "''${drives[@]}"
   '';
 
 in
 {
-  meta.maintainers = with lib.maintainers; [ peterhoeg ];
+  meta.maintainers = with lib.maintainers; [
+    peterhoeg
+    usovalx
+  ];
 
   ###### interface
 
