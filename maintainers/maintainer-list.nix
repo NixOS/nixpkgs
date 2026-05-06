@@ -18467,6 +18467,12 @@
     githubId = 2072185;
     name = "Marc Scholten";
   };
+  Mr-Stoneman = {
+    email = "mrstoneman@sten.rocks";
+    github = "Mr-Stoneman";
+    githubId = 72991726;
+    name = "Mr-Stoneman";
+  };
   mrbenjadmin = {
     email = "mrbenjadmin@gmail.com";
     github = "mrbenjadmin";
