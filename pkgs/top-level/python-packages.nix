@@ -6851,6 +6851,14 @@ self: super: with self; {
 
   gyp = callPackage ../development/python-modules/gyp { };
 
+  gz-math = callPackage ../development/python-modules/gz-math { };
+
+  gz-msgs = callPackage ../development/python-modules/gz-msgs { };
+
+  gz-sim = callPackage ../development/python-modules/gz-sim { };
+
+  gz-transport = callPackage ../development/python-modules/gz-transport { };
+
   h11 = callPackage ../development/python-modules/h11 { };
 
   h2 = callPackage ../development/python-modules/h2 { };
@@ -17487,6 +17495,8 @@ self: super: with self; {
   sdds = callPackage ../development/python-modules/sdds { };
 
   sdflit = callPackage ../development/python-modules/sdflit { };
+
+  sdformat = callPackage ../development/python-modules/sdformat { };
 
   sdjson = callPackage ../development/python-modules/sdjson { };
 

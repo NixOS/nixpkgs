@@ -1,0 +1,16 @@
+diff --git a/OgreMain/src/OgreSTBICodec.cpp b/OgreMain/src/OgreSTBICodec.cpp
+index 38ede5bed0..f70cc52ec5 100644
+--- a/OgreMain/src/OgreSTBICodec.cpp
++++ b/OgreMain/src/OgreSTBICodec.cpp
+@@ -189,9 +189,9 @@ namespace Ogre {
+                     const uint8 g = *pSrc++;
+                     const uint8 r = *pSrc++;
+ 
+-                    *pDst++ = r;
+-                    *pDst++ = g;
+                     *pDst++ = b;
++                    *pDst++ = g;
++                    *pDst++ = r;
+                     *pDst++ = 0xFF;
+                 }
+             }

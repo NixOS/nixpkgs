@@ -26848,6 +26848,11 @@
     githubId = 555003;
     name = "Taylor Everding";
   };
+  taylorhoward92 = {
+    github = "taylorhoward92";
+    githubId = 23712266;
+    name = "Taylor Howard";
+  };
   tazjin = {
     email = "mail@tazj.in";
     github = "tazjin";
