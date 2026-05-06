@@ -14,7 +14,6 @@
   cacert,
   writableTmpDirAsHomeHook,
   versionCheckHook,
-  nix-update-script,
   llvmPackages,
   makeWrapper,
   librusty_v8 ? callPackage ./librusty_v8.nix {
@@ -22,8 +21,8 @@
   },
 
   # Extension(s) Dependencies
-  python3,
   bash,
+  python3,
   # X11
   xdotool,
   wmctrl,
@@ -48,16 +47,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.28.0";
+  version = "1.33.1";
 
   src = fetchFromGitHub {
-    owner = "block";
+    owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/1TtsnNiLoTkvyeFR282qSpo+Jt3pvFxduJ7lyzsTXI=";
+    hash = "sha256-FBICGOfVs2jbOdLWSInqfTYBdnCcbcGWHwqY/b6v8eg=";
   };
 
-  cargoHash = "sha256-bhnbSjGqyWbQd5PjZ116JH91vjVy6R/+iBlNKL6debg=";
+  cargoHash = "sha256-fN0FKDYFkZrQQPWdUlemOaGzIAZhqFyskz9TEmG+X4o=";
 
   cargoBuildFlags = [
     "--bin"
@@ -129,6 +128,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Observer should be Some with both init project keys set
     "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
     "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
+    # Sandbox misses the temporary log path used by this streaming timeout test.
+    "--skip=providers::ollama::tests::test_stream_ollama_timeout_on_stall"
     # need API keys
     "--skip=providers::factory::tests::test_create_lead_worker_provider"
     "--skip=providers::factory::tests::test_create_regular_provider_without_lead_config"
@@ -177,11 +178,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM";
-    homepage = "https://github.com/block/goose";
+    homepage = "https://github.com/aaif-goose/goose";
+    changelog = "https://github.com/aaif-goose/goose/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "goose";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
