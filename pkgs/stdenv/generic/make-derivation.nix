@@ -13,6 +13,7 @@ stdenv:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
+    all
     assertMsg
     attrNames
     concatLists
@@ -398,17 +399,16 @@ let
           actualValue;
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
-      noNonNativeDeps =
-        (
-          depsBuildTarget
-          ++ depsBuildTargetPropagated
-          ++ depsHostHost
-          ++ depsHostHostPropagated
-          ++ buildInputs
-          ++ propagatedBuildInputs
-          ++ depsTargetTarget
-          ++ depsTargetTargetPropagated
-        ) == [ ];
+      noNonNativeDeps = all (list: list == [ ]) [
+        depsBuildTarget
+        depsBuildTargetPropagated
+        depsHostHost
+        depsHostHostPropagated
+        buildInputs
+        propagatedBuildInputs
+        depsTargetTarget
+        depsTargetTargetPropagated
+      ];
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
       concretizeFlagImplications =
@@ -466,14 +466,18 @@ let
       let
         doCheck = doCheck';
         doInstallCheck = doInstallCheck';
-        buildInputs' =
-          buildInputs ++ optionals doCheck checkInputs ++ optionals doInstallCheck installCheckInputs;
-        nativeBuildInputs' =
+        buildInputs' = concatLists [
+          buildInputs
+          (optionals doCheck checkInputs)
+          (optionals doInstallCheck installCheckInputs)
+        ];
+        nativeBuildInputs' = concatLists [
           nativeBuildInputs
-          ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
-          ++ optional isWindows ../../build-support/setup-hooks/win-dll-link.sh
-          ++ optionals doCheck nativeCheckInputs
-          ++ optionals doInstallCheck nativeInstallCheckInputs;
+          (optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh)
+          (optional isWindows ../../build-support/setup-hooks/win-dll-link.sh)
+          (optionals doCheck nativeCheckInputs)
+          (optionals doInstallCheck nativeInstallCheckInputs)
+        ];
 
         outputs = outputs';
 
@@ -649,14 +653,16 @@ let
               computedPropagatedSandboxProfile = concatMap (
                 input: input.__propagatedSandboxProfile or [ ]
               ) allPropagatedDependencies;
-              profiles = [
-                extraSandboxProfile
-              ]
-              ++ computedSandboxProfile
-              ++ computedPropagatedSandboxProfile
-              ++ [
-                propagatedSandboxProfile
-                sandboxProfile
+              profiles = concatLists [
+                [
+                  extraSandboxProfile
+                ]
+                computedSandboxProfile
+                computedPropagatedSandboxProfile
+                [
+                  propagatedSandboxProfile
+                  sandboxProfile
+                ]
               ];
             in
             # TODO: remove `unique` once nix has a list canonicalization primitive
@@ -679,16 +685,18 @@ let
                 concatMap (input: input.__propagatedImpureHostDeps or [ ]) allPropagatedDependencies
               );
             in
-            computedImpureHostDeps
-            ++ computedPropagatedImpureHostDeps
-            ++ __propagatedImpureHostDeps
-            ++ __impureHostDeps
-            ++ __extraImpureHostDeps
-            ++ [
-              "/dev/zero"
-              "/dev/random"
-              "/dev/urandom"
-              "/bin/sh"
+            concatLists [
+              computedImpureHostDeps
+              computedPropagatedImpureHostDeps
+              __propagatedImpureHostDeps
+              __impureHostDeps
+              __extraImpureHostDeps
+              [
+                "/dev/zero"
+                "/dev/random"
+                "/dev/urandom"
+                "/bin/sh"
+              ]
             ];
           ${if buildIsDarwin then "__propagatedImpureHostDeps" else null} =
             let
@@ -826,11 +834,12 @@ let
 
       meta = checkMeta.commonMeta {
         inherit validity attrs pos;
-        references =
-          attrs.nativeBuildInputs or [ ]
-          ++ attrs.buildInputs or [ ]
-          ++ attrs.propagatedNativeBuildInputs or [ ]
-          ++ attrs.propagatedBuildInputs or [ ];
+        references = concatLists [
+          (attrs.nativeBuildInputs or [ ])
+          (attrs.buildInputs or [ ])
+          (attrs.propagatedNativeBuildInputs or [ ])
+          (attrs.propagatedBuildInputs or [ ])
+        ];
       };
       validity = checkMeta.assertValidity { inherit meta attrs; };
 
