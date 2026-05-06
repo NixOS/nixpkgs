@@ -18635,9 +18635,12 @@ with self;
     preConfigure = ''
       # override broken prereq check
       substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
+      # Fix linker detection broken by exported LD (see nixpkgs#9f2a89f)
+      sed -i '1i export LD=${lib.getExe' stdenv.cc.bintools "${stdenv.cc.bintools.targetPrefix}ld"}' configure
     '';
     preBuild = ''
-      substituteInPlace apreq2-config --replace "dirname" "${pkgs.coreutils}/bin/dirname"
+      substituteInPlace apreq2-config --replace "dirname" "${pkgs.coreutils}/bin/dirname" \
+        --replace 'grep' '${pkgs.gnugrep}/bin/grep'
     '';
     installPhase = ''
       mkdir $out
