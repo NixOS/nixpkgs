@@ -25,11 +25,11 @@ in
 stdenv.mkDerivation (
   rec {
     pname = "libgpg-error";
-    version = "1.59";
+    version = "1.60";
 
     src = fetchurl {
       url = "mirror://gnupg/libgpg-error/libgpg-error-${version}.tar.bz2";
-      hash = "sha256-oZvFCH/ZcCbZPLS0XVFjjRolICpeH7w5BXmfQkz6YTQ=";
+      hash = "sha256-EbKnOOIS8+qw/oY3vDQdMYHKlk6XuyZU3pGqt9rkzgk=";
     };
 
     postPatch = ''
