@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  runCommand,
   fetchFromGitHub,
   rustPlatform,
+
   maturin,
   protobuf_30,
 }:
@@ -21,11 +21,11 @@ buildPythonPackage (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-QBGXbRiBk4WIQFopq1OccmUHgx5GzR/PKhMH4Ie+fyg=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/bind/${finalAttrs.pname}";
+  sourceRoot = "${finalAttrs.src.name}/bind/pyluwen";
 
   prePatch = ''
     chmod -R u+w ../../
@@ -49,6 +49,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Tenstorrent system interface library";
     homepage = "https://github.com/tenstorrent/luwen";
+    changelog = "https://github.com/tenstorrent/luwen/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
   };
