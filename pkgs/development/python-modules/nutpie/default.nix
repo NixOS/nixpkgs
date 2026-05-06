@@ -36,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   pname = "nutpie";
   version = "0.16.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
@@ -83,7 +84,11 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  disabledTests = [
+    # ValueError: Variable name 'a/b' cannot contain '/'.
+    "test_non_identifier_names"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # flaky (assert np.float64(0.0017554642626285276) > 0.01)
     "test_normalizing_flow"
   ];
