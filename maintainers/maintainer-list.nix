@@ -239,6 +239,11 @@
     githubId = 882455;
     name = "Elliot Cameron";
   };
+  _3w36zj6 = {
+    github = "3w36zj6";
+    githubId = 52315048;
+    name = "3w36zj6";
+  };
   _404wolf = {
     email = "wolfmermelstein@gmail.com";
     github = "404Wolf";
