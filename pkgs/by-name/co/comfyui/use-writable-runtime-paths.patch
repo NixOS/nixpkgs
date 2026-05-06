@@ -1,0 +1,58 @@
+diff --git a/comfy/cli_args.py b/comfy/cli_args.py
+index 810c90935..09d5bad61 100644
+--- a/comfy/cli_args.py
++++ b/comfy/cli_args.py
+@@ -42,7 +42,9 @@ parser.add_argument("--enable-cors-header", type=str, default=None, metavar="ORI
+ parser.add_argument("--enable-cors-header", type=str, default=None, metavar="ORIGIN", nargs="?", const="*", help="Enable CORS (Cross-Origin Resource Sharing) with optional origin or allow all with default '*'.")
+ parser.add_argument("--max-upload-size", type=float, default=100, help="Set the maximum upload size in MB.")
+ 
+-parser.add_argument("--base-directory", type=str, default=None, help="Set the ComfyUI base directory for models, custom_nodes, input, output, temp, and user directories.")
++xdg_data_home = os.environ.get("XDG_DATA_HOME") or os.path.expanduser("~/.local/share")
++comfyui_data_home = os.path.join(xdg_data_home, "comfyui")
++parser.add_argument("--base-directory", type=str, default=comfyui_data_home, help="Set the ComfyUI base directory for models, custom_nodes, input, output, temp, and user directories.")
+ parser.add_argument("--extra-model-paths-config", type=str, default=None, metavar="PATH", nargs='+', action='append', help="Load one or more extra_model_paths.yaml files.")
+ parser.add_argument("--output-directory", type=str, default=None, help="Set the ComfyUI output directory. Overrides --base-directory.")
+ parser.add_argument("--temp-directory", type=str, default=None, help="Set the ComfyUI temp directory (default is in the ComfyUI directory). Overrides --base-directory.")
+@@ -233,9 +235,7 @@ parser.add_argument(
+     help="Set the base URL for the ComfyUI API.  (default: https://api.comfy.org)",
+ )
+ 
+-database_default_path = os.path.abspath(
+-    os.path.join(os.path.dirname(__file__), "..", "user", "comfyui.db")
+-)
++database_default_path = os.path.join(comfyui_data_home, "user", "comfyui.db")
+ parser.add_argument("--database-url", type=str, default=f"sqlite:///{database_default_path}", help="Specify the database URL, e.g. for an in-memory database you can use 'sqlite:///:memory:'.")
+ parser.add_argument("--enable-assets", action="store_true", help="Enable the assets system (API routes, database synchronization, and background scanning).")
+ 
+diff --git a/folder_paths.py b/folder_paths.py
+index 2a7a7a996..8062cc1b6 100644
+--- a/folder_paths.py
++++ b/folder_paths.py
+@@ -40,7 +40,8 @@ folder_names_and_paths["upscale_models"] = ([os.path.join(models_dir, "upscale_
+ 
+ folder_names_and_paths["latent_upscale_models"] = ([os.path.join(models_dir, "latent_upscale_models")], supported_pt_extensions)
+ 
+-folder_names_and_paths["custom_nodes"] = ([os.path.join(base_path, "custom_nodes")], set())
++custom_nodes_directory = os.path.join(base_path, "custom_nodes")
++folder_names_and_paths["custom_nodes"] = ([custom_nodes_directory], set())
+ 
+ folder_names_and_paths["hypernetworks"] = ([os.path.join(models_dir, "hypernetworks")], supported_pt_extensions)
+ 
+@@ -101,11 +102,12 @@ def map_legacy(folder_name: str) -> str:
+               "clip": "text_encoders"}
+     return legacy.get(folder_name, folder_name)
+ 
+-if not os.path.exists(input_directory):
+-    try:
+-        os.makedirs(input_directory)
+-    except:
+-        logging.error("Failed to create input directory")
++for default_directory in (input_directory, custom_nodes_directory):
++    if not os.path.exists(default_directory):
++        try:
++            os.makedirs(default_directory)
++        except:
++            logging.error(f"Failed to create {default_directory}")
+ 
+ def set_output_directory(output_dir: str) -> None:
+     global output_directory

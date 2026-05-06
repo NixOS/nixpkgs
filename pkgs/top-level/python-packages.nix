@@ -3090,6 +3090,40 @@ self: super: with self; {
 
   cometx = callPackage ../development/python-modules/cometx { };
 
+  comfy-aimdo = callPackage ../development/python-modules/comfy-aimdo { };
+
+  comfy-kitchen = callPackage ../development/python-modules/comfy-kitchen { };
+
+  comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
+
+  comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
+
+  comfyui-manager = callPackage ../development/python-modules/comfyui-manager { };
+
+  comfyui-workflow-templates =
+    callPackage ../development/python-modules/comfyui-workflow-templates
+      { };
+
+  comfyui-workflow-templates-core =
+    callPackage ../development/python-modules/comfyui-workflow-templates-core
+      { };
+
+  comfyui-workflow-templates-media-api =
+    callPackage ../development/python-modules/comfyui-workflow-templates-media-api
+      { };
+
+  comfyui-workflow-templates-media-image =
+    callPackage ../development/python-modules/comfyui-workflow-templates-media-image
+      { };
+
+  comfyui-workflow-templates-media-other =
+    callPackage ../development/python-modules/comfyui-workflow-templates-media-other
+      { };
+
+  comfyui-workflow-templates-media-video =
+    callPackage ../development/python-modules/comfyui-workflow-templates-media-video
+      { };
+
   comicapi = callPackage ../development/python-modules/comicapi { };
 
   comicon = callPackage ../development/python-modules/comicon { };
@@ -18200,6 +18234,8 @@ self: super: with self; {
   spacy-transformers = callPackage ../development/python-modules/spacy-transformers { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };
+
+  spandrel = callPackage ../development/python-modules/spandrel { };
 
   spark-parser = callPackage ../development/python-modules/spark-parser { };
 
