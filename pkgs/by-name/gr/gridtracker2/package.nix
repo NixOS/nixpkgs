@@ -11,13 +11,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "gridtracker2";
-  version = "2.260323.0";
+  version = "2.260330.2";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3DUbKG7bMR2VpJPPsLNRLzYaStv5iTanECAT6DHMExo=";
+    hash = "sha256-4FQFTVVICkjb0hjFo3i2c0TRR0eefpzt5E2yT/FxNZo=";
   };
 
   npmDepsHash = "sha256-dJmrNP2AwIaQaCq0guG+OTogfcL8f97MAp6N7HAw5z8=";
@@ -56,14 +56,11 @@ buildNpmPackage (finalAttrs: {
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
-    # Disable code signing during build on macOS.
-    # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
-
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null # Disable code signing on macOS
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     npm exec electron-builder -- \
