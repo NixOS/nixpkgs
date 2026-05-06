@@ -1,0 +1,108 @@
+From f95b80e5d0889d7c52e4048737eb960cdaee1336 Mon Sep 17 00:00:00 2001
+From: nixpkgs <nix@nixpkgs>
+Date: Sat, 25 Apr 2026 20:16:19 +0300
+Subject: [PATCH] replace Liquid Glass NSGlassEffectView inheritance with
+ runtime ObjC dispatch for SDK 14 compatibility
+
+---
+ .../TilesPanelBackgroundView.swift            | 72 ++++++++++++++-----
+ 1 file changed, 53 insertions(+), 19 deletions(-)
+
+diff --git a/src/ui/main-window/TilesPanelBackgroundView.swift b/src/ui/main-window/TilesPanelBackgroundView.swift
+index badf899..00aa5b0 100644
+--- a/src/ui/main-window/TilesPanelBackgroundView.swift
++++ b/src/ui/main-window/TilesPanelBackgroundView.swift
+@@ -1,37 +1,71 @@
++// Liquid Glass (NSGlassEffectView) is macOS 26 SDK; we build against SDK 14,
++// so resolve the class and drive its setters via the ObjC runtime instead of
++// inheriting from NSGlassEffectView directly. The view contains an
++// NSGlassEffectView pinned edge-to-edge.
+ @available(macOS 26.0, *)
+-class LiquidGlassEffectView: NSGlassEffectView, EffectView {
+-    private typealias SetVariantType = @convention(c) (AnyObject, Selector, Int) -> Void
++class LiquidGlassEffectView: NSView, EffectView {
++    private typealias SetIntType = @convention(c) (AnyObject, Selector, Int) -> Void
++    private typealias SetCGFloatType = @convention(c) (AnyObject, Selector, CGFloat) -> Void
+     private static let setVariantSelector = NSSelectorFromString("set_variant:")
++    private static let setStyleSelector = NSSelectorFromString("setStyle:")
++    private static let setCornerRadiusSelector = NSSelectorFromString("setCornerRadius:")
++    private static let glassClass: AnyClass? = NSClassFromString("NSGlassEffectView")
++
++    private var glassView: NSView?
+ 
+     static func canUsePrivateLiquidGlassLook() -> Bool {
+-        let method = class_getInstanceMethod(object_getClass(NSGlassEffectView()), setVariantSelector)
+-        return method != nil
++        guard let cls = glassClass else { return false }
++        return class_getInstanceMethod(cls, setVariantSelector) != nil
+     }
+ 
+     convenience init(_ clear: Bool) {
+-        self.init()
+-        if clear {
+-            style = .clear
+-            safeSetVariant(3)
++        self.init(frame: .zero)
++        wantsLayer = true
++        // round the wrapper itself to match the inner glass view; otherwise the
++        // window draws into the rectangular corners outside the glass shape
++        layer!.masksToBounds = true
++        let glass: NSView
++        if let cls = Self.glassClass as? NSView.Type {
++            glass = cls.init(frame: .zero)
+         } else {
+-            style = .regular
++            glass = NSView(frame: .zero)
++        }
++        glass.translatesAutoresizingMaskIntoConstraints = false
++        addSubview(glass)
++        NSLayoutConstraint.activate([
++            glass.leadingAnchor.constraint(equalTo: leadingAnchor),
++            glass.trailingAnchor.constraint(equalTo: trailingAnchor),
++            glass.topAnchor.constraint(equalTo: topAnchor),
++            glass.bottomAnchor.constraint(equalTo: bottomAnchor),
++        ])
++        glassView = glass
++        // NSGlassEffectView.Style: regular = 0, clear = 1
++        Self.invokeIntSetter(glass, Self.setStyleSelector, clear ? 1 : 0)
++        if clear {
++            Self.invokeIntSetter(glass, Self.setVariantSelector, 3)
+         }
+         updateAppearance()
+-        wantsLayer = true
+-        // without this, there are weird shadows around the corners
+-        layer!.masksToBounds = true
+     }
+ 
+-    func safeSetVariant(_ value: Int) {
+-        if let method = class_getInstanceMethod(object_getClass(self), LiquidGlassEffectView.setVariantSelector) {
+-            let methodImplementation = method_getImplementation(method)
+-            let f = unsafeBitCast(methodImplementation, to: SetVariantType.self)
+-            f(self, LiquidGlassEffectView.setVariantSelector, value)
+-        }
++    private static func invokeIntSetter(_ target: AnyObject, _ sel: Selector, _ value: Int) {
++        guard let m = class_getInstanceMethod(object_getClass(target), sel) else { return }
++        let imp = method_getImplementation(m)
++        let f = unsafeBitCast(imp, to: SetIntType.self)
++        f(target, sel, value)
++    }
++
++    private static func invokeCGFloatSetter(_ target: AnyObject, _ sel: Selector, _ value: CGFloat) {
++        guard let m = class_getInstanceMethod(object_getClass(target), sel) else { return }
++        let imp = method_getImplementation(m)
++        let f = unsafeBitCast(imp, to: SetCGFloatType.self)
++        f(target, sel, value)
+     }
+ 
+     func updateAppearance() {
+-        cornerRadius = Appearance.windowCornerRadius
++        let radius = Appearance.windowCornerRadius
++        layer?.cornerRadius = radius
++        guard let glass = glassView else { return }
++        Self.invokeCGFloatSetter(glass, Self.setCornerRadiusSelector, radius)
+     }
+ }
+ 
+-- 
+2.53.0
+
