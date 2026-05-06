@@ -8750,6 +8750,7 @@ with pkgs;
     ubootRaspberryPi4_32bit
     ubootRaspberryPi4_64bit
     ubootRaspberryPiZero
+    ubootRock3C
     ubootRock4CPlus
     ubootRock5ModelB
     ubootRock64
