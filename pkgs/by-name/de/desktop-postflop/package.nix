@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   npmDist = buildNpmPackage {
-    name = "${pname}-${version}-dist";
+    name = "desktop-postflop-${version}-dist";
     inherit src;
 
     npmDepsHash = "sha256-HWZLicyKL2FHDjZQj9/CRwVi+uc/jHmVNxtlDuclf7s=";
