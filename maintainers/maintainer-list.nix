@@ -26286,6 +26286,12 @@
     githubId = 48666;
     name = "Matthew \"strager\" Glazar";
   };
+  StrangeGirlMurph = {
+    name = "Murphy";
+    github = "StrangeGirlMurph";
+    githubId = 62220780;
+    email = "git@murphy.science";
+  };
   strawbee = {
     email = "henigingames@gmail.com";
     github = "StillToad";
