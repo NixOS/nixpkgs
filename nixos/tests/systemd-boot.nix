@@ -122,6 +122,86 @@ in
     }
   );
 
+  entryFormatting = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-boot-entry-formatting";
+      meta.maintainers = with lib.maintainers; [ julienmalka ];
+
+      nodes.machine =
+        { ... }:
+        {
+          imports = [ common ];
+          boot.loader.systemd-boot.entryNamePrefix = "Gen ";
+          boot.loader.systemd-boot.includeDistroName = false;
+          boot.loader.systemd-boot.ambiguousDateFormat = false;
+        };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+        machine.succeed(
+            r"grep -Eq '^version Gen +1 [^,]+, built on [0-9]{4}-[A-Za-z]{3}-[0-9]{2}$' /boot/loader/entries/nixos-generation-1.conf"
+        )
+        machine.fail(
+            r"grep -Eq '^version Gen +1 NixOS ' /boot/loader/entries/nixos-generation-1.conf"
+        )
+      '';
+    }
+  );
+
+  ambiguousDateFormat = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-boot-entry-formatting";
+      meta.maintainers = with lib.maintainers; [ julienmalka ];
+
+      nodes.machine =
+        { ... }:
+        {
+          imports = [ common ];
+          boot.loader.systemd-boot.ambiguousDateFormat = true;
+        };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+        machine.succeed(
+            r"grep -Eq '^version Generation +1 [^,]+, built on [0-9]{4}-[0-9]{2}-[0-9]{2}$' /boot/loader/entries/nixos-generation-1.conf"
+        )
+      '';
+    }
+  );
+
+  unambiguousDateFormat = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-boot-entry-formatting";
+      meta.maintainers = with lib.maintainers; [ julienmalka ];
+
+      nodes.machine =
+        { ... }:
+        {
+          imports = [ common ];
+          boot.loader.systemd-boot.ambiguousDateFormat = false;
+        };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+        machine.succeed(
+            r"grep -Eq '^version Generation +1 [^,]+, built on [0-9]{4}-[A-Za-z]{3}-[0-9]{2}$' /boot/loader/entries/nixos-generation-1.conf"
+        )
+      '';
+    }
+  );
+
   # Test that systemd-boot works with secure boot
   secureBoot = runTest (
     { pkgs, lib, ... }:

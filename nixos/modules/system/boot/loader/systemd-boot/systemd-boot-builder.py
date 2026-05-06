@@ -22,6 +22,9 @@ LOADER_CONF = EFI_SYS_MOUNT_POINT / "loader/loader.conf"  # Always stored on the
 NIXOS_DIR = Path("@nixosDir@".strip("/")) # Path relative to the XBOOTLDR or ESP mount point
 TIMEOUT = "@timeout@"
 EDITOR = "@editor@" == "1" # noqa: PLR0133
+ENTRY_NAME_PREFIX = "@entryNamePrefix@"
+INCLUDE_DISTRO_NAME = bool("@includeDistroName@")
+AMBIGUOUS_DATE_FORMAT = bool("@ambiguousDateFormat@")
 CONSOLE_MODE = "@consoleMode@"
 BOOTSPEC_TOOLS = "@bootspecTools@"
 DISTRO_NAME = "@distroName@"
@@ -86,7 +89,7 @@ def system_dir(profile: str | None, generation: int, specialisation: str | None)
 
 BOOT_ENTRY = """title {title}
 sort-key {sort_key}
-version Generation {generation} {description}
+version {prefix}{generation} {description}
 linux {kernel}
 initrd {initrd}
 options {kernel_params}
@@ -209,16 +212,28 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
 
     kernel_params = kernel_params + " ".join(bootspec.kernelParams)
     build_time = int(system_dir(profile, generation, specialisation).stat().st_ctime)
-    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
+    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F' if AMBIGUOUS_DATE_FORMAT else '%Y-%b-%d')
+
+    label_prefix = f"{DISTRO_NAME} "
+    display_label = (
+        bootspec.label
+        if INCLUDE_DISTRO_NAME
+        else (
+            bootspec.label[len(label_prefix):]
+            if bootspec.label.startswith(label_prefix)
+            else bootspec.label
+        )
+    )
 
     with tmp_path.open("w") as f:
         f.write(BOOT_ENTRY.format(title=title,
                     sort_key=bootspec.sortKey,
-                    generation=generation,
+                    prefix=ENTRY_NAME_PREFIX,
+                    generation=f"{generation:>3}",
                     kernel=f"/{kernel}",
                     initrd=f"/{initrd}",
                     kernel_params=kernel_params,
-                    description=f"{bootspec.label}, built on {build_date}"))
+                    description=f"{display_label}, built on {build_date}"))
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
         if devicetree is not None:
