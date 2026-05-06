@@ -3,29 +3,12 @@
   fetchFromGitHub,
 
   python3Packages,
-
-  ament-cmake,
-  ament-cmake-export-definitions,
-  ament-cmake-export-include-directories,
-  ament-cmake-export-libraries,
-  ament-cmake-export-link-flags,
-  ament-cmake-export-targets,
-  ament-cmake-gen-version-h,
-  ament-cmake-include-directories,
-  ament-cmake-libraries,
-  ament-cmake-pytest,
-  ament-cmake-python,
-  ament-cmake-target-dependencies,
-  ament-cmake-test,
-  ament-cmake-version,
-  ament-lint-auto,
-  cmake,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xacro";
   version = "2.1.1";
-  pyproject = false; # build with CMake to get tests
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ros";
@@ -34,57 +17,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-xYFwVM5qpy2/cYKtcf/v5sSlL2e/taIC4IQ48ZiRxiw=";
   };
 
-  postPatch = ''
-    patchShebangs test/test-cmake.sh
-  '';
-
   build-system = [
-    cmake
     python3Packages.setuptools
-  ];
-
-  buildInputs = [
-    ament-cmake
-    ament-cmake-export-definitions
-    ament-cmake-export-include-directories
-    ament-cmake-export-libraries
-    ament-cmake-export-link-flags
-    ament-cmake-export-targets
-    ament-cmake-gen-version-h
-    ament-cmake-include-directories
-    ament-cmake-libraries
-    ament-cmake-python
-    ament-cmake-target-dependencies
-    ament-cmake-test
-    ament-cmake-version
-  ];
-
-  nativeCheckInputs = [
-    python3Packages.pytest
-  ];
-
-  checkInputs = [
-    python3Packages.ament-index-python
-    ament-lint-auto
-    ament-cmake-pytest
+    python3Packages.setuptools-scm
   ];
 
   dependencies = [
-    python3Packages.ament-package
-    python3Packages.catkin-pkg
     python3Packages.pyyaml
   ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doInstallCheck)
-  ];
-
-  preInstallCheck = ''
-    export PATH=$out/bin:$PATH
-    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
-  '';
-
-  installCheckTarget = "test";
 
   pythonImportsCheck = [ "xacro" ];
 
