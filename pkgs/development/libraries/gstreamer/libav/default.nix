@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-libav";
-  version = "1.26.11";
+  version = "1.28.2";
 
   outputs = [
     "out"
@@ -28,8 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
-    hash = "sha256-m7PSaB7w3pLRsanZVRhiNu4i5k83Lbm/wNIuLQ3xmGU=";
+    hash = "sha256-RbplU1hwqnwCYRnS6Qs13HYOHPb1C/+/6NcSI6MEOk4=";
   };
+
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -65,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {

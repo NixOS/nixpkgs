@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.26.11";
+  version = "1.28.2";
 
   outputs = [
     "bin"
@@ -52,13 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LgvRktBDjqYGpvdqlcjhZUIWdlb/7Cwrw6r27gg3+/Y=";
+    hash = "sha256-zlzUTU/+r9zD3dqgcrIXnAt8sav05sXRjUN1+KOf5JE=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
   nativeBuildInputs = [
     meson
@@ -144,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {
