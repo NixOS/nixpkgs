@@ -77,7 +77,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.12";
+  version = "2.13";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -86,7 +86,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-/e11kacSYPKdjVEKAo3x/CarzKhO3tiTsMjYWLzHbls=";
+    hash = "sha256-xjrQF+ZMintw8QwwxLn8YdaqtNIVfPhFyNNSpLobJuk=";
   };
 
   patches =
@@ -118,8 +118,8 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
       # https://github.com/NVIDIA/TransformerEngine/pull/2835
       (fetchpatch {
         name = "fix-jax-extension-build-with-mpi";
-        url = "https://github.com/GaetanLepage/TransformerEngine/commit/f68cd3cab34972a899ad0069e2c4ee806e8bc6fb.patch";
-        hash = "sha256-u0ljg1FwY0QjR+ETswpzWV+Sbv00JHI5CSrNQ/9zsuA=";
+        url = "https://github.com/NVIDIA/TransformerEngine/commit/2dd31bb849e83cce51c7d169db883862063d3a95.patch";
+        hash = "sha256-QSRMetseYPGGZCgGkS9rIj9nJdazCD4hv2IgPc+ClSM=";
       })
     ];
 
