@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "projectm-sdl-cpp";
-  version = "0-unstable-2026-01-20";
+  version = "2.0.0-pre1-unstable-2026-04-07";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "frontend-sdl-cpp";
-    rev = "7a07229428c51378f43843cf160bcddc21ef70ff";
-    hash = "sha256-hz1Au5Gn10Yi5f7d7UiQOHTCU00Ze5UoQ40jirg54Pc=";
+    rev = "86885bef2e2d7b7b0a6f13180309cf893b5bb5b0";
+    hash = "sha256-JCnvlX1pQeLsqI/74tBGKd2ONydABqulOZ8kghiDn8s=";
     fetchSubmodules = true;
   };
 
