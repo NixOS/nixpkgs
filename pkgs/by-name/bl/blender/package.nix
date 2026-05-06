@@ -1,5 +1,4 @@
 {
-  SDL,
   addDriverRunpath,
   alembic,
   apple-sdk_15,
@@ -14,8 +13,8 @@
   cudaSupport ? config.cudaSupport,
   dbus,
   embree,
-  fetchzip,
   fetchFromGitHub,
+  fetchzip,
   ffmpeg_7,
   fftw,
   fftwFloat,
@@ -26,16 +25,11 @@
   jackaudioSupport ? false,
   jemalloc,
   lib,
-  libGL,
-  libGLU,
-  libx11,
-  libxext,
-  libxi,
-  libxrender,
-  libxxf86vm,
   libdecor,
   libepoxy,
   libffi,
+  libGL,
+  libGLU,
   libharu,
   libjack2,
   libjpeg,
@@ -45,13 +39,18 @@
   libspnav,
   libtiff,
   libwebp,
+  libx11,
+  libxext,
+  libxi,
   libxkbcommon,
+  libxrender,
+  libxxf86vm,
   llvmPackages,
   makeWrapper,
   manifold,
   mesa,
   nix-update-script,
-  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
+  onetbb,
   openal,
   opencolorio,
   openexr,
@@ -60,6 +59,7 @@
   openjpeg,
   openpgl,
   opensubdiv,
+  openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openvdb,
   openxr-loader,
   pkg-config,
@@ -70,11 +70,11 @@
   rocmSupport ? config.rocmSupport,
   rubberband,
   runCommand,
+  SDL,
   shaderc,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
-  onetbb,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -181,7 +181,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
-    (lib.cmakeBool "WITH_SYSTEM_GLOG" true)
+    (lib.cmakeBool "WITH_CYCLES_PARALLEL_DEVICE_KERNEL_BUILD" true)
     (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
     (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
     (lib.cmakeBool "WITH_JACK" jackaudioSupport)
@@ -193,6 +193,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_PYTHON_INSTALL_NUMPY" false)
     (lib.cmakeBool "WITH_PYTHON_INSTALL_REQUESTS" false)
     (lib.cmakeBool "WITH_STRICT_BUILD_OPTIONS" true)
+    (lib.cmakeBool "WITH_SYSTEM_GLOG" true)
     (lib.cmakeBool "WITH_USD" openUsdSupport)
 
     # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
@@ -210,9 +211,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals waylandSupport [
     (lib.cmakeBool "WITH_GHOST_WAYLAND" true)
-    (lib.cmakeBool "WITH_GHOST_WAYLAND_DBUS" true)
     (lib.cmakeBool "WITH_GHOST_WAYLAND_DYNLOAD" false)
-    (lib.cmakeBool "WITH_GHOST_WAYLAND_LIBDECOR" true)
   ]
   ++ lib.optionals stdenv.cc.isClang [
     (lib.cmakeFeature "PYTHON_LINKFLAGS" "") # Clang doesn't support "-export-dynamic"
@@ -277,8 +276,9 @@ stdenv'.mkDerivation (finalAttrs: {
     openjpeg
     openpgl
     (opensubdiv.override { inherit cudaSupport; })
-    openvdb
     onetbb
+    openvdb
+    openxr-loader
     potrace
     pugixml
     python3
@@ -302,7 +302,6 @@ stdenv'.mkDerivation (finalAttrs: {
         libxrender
         libxxf86vm
         openal
-        openxr-loader
       ]
     else
       [
@@ -312,7 +311,6 @@ stdenv'.mkDerivation (finalAttrs: {
         apple-sdk_15
         brotli
         llvmPackages.openmp
-        openxr-loader
       ]
   )
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [ sse2neon ]
@@ -448,16 +446,14 @@ stdenv'.mkDerivation (finalAttrs: {
   meta = {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
-    # They comment two licenses: GPLv2 and Blender License, but they
-    # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
     license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
 
     platforms = [
+      "aarch64-darwin"
       "aarch64-linux"
       "x86_64-darwin"
       "x86_64-linux"
-      "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [
       amarshall
