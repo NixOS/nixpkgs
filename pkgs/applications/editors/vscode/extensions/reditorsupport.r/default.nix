@@ -1,13 +1,12 @@
 {
   lib,
   vscode-utils,
-  jq,
-  moreutils,
   languageserver ? rPackages.languageserver,
   R,
   radian,
-
   rPackages,
+  jq,
+  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -17,17 +16,18 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "2.8.8";
     hash = "sha256-mt2bes7aHcAHLMngSLW/zI3kSIzNKALqX+g0UXo84uI=";
   };
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
+  executableConfig = {
+    "r.rpath.mac".package = R;
+    "r.rpath.linux".package = R;
+    "r.rterm.mac".package = radian;
+    "r.rterm.linux".package = radian;
+  };
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."r.rpath.mac".default = "${lib.getExe' R "R"}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.rpath.linux".default = "${lib.getExe' R "R"}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.rterm.mac".default = "${lib.getExe radian}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.rterm.linux".default = "${lib.getExe radian}"' package.json | sponge package.json
-    jq '.contributes.configuration.properties."r.libPaths".default = [ "${languageserver}/library" ]' package.json | sponge package.json
+    ${lib.getExe jq} -e '
+      .contributes.configuration.properties."r.libPaths" =
+        [ "${languageserver}/library" ]
+    ' package.json | ${lib.getExe' moreutils "sponge"} package.json
   '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r/changelog";
