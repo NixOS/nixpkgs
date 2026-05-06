@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webdis";
-  version = "0.1.23";
+  version = "0.1.24";
 
   src = fetchFromGitHub {
     owner = "nicolasff";
     repo = "webdis";
     rev = finalAttrs.version;
-    hash = "sha256-eFUI3RDDrEI1bV+SfTVsIO6yjswK7tzgNsNepoo7DQ4=";
+    hash = "sha256-pyM9BiEQk1811dqUstb4fgORp5e2TOXqEsa9i4ux0mQ=";
   };
 
   buildInputs = [
