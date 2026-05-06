@@ -2249,6 +2249,9 @@
   "test-opt-meta.maintainers": [
     "index.html#test-opt-meta.maintainers"
   ],
+  "test-opt-meta.teams": [
+    "index.html#test-opt-meta.teams"
+  ],
   "test-opt-meta.platforms": [
     "index.html#test-opt-meta.platforms"
   ],
