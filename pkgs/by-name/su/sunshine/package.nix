@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchzip,
   autoPatchelfHook,
   autoAddDriverRunpath,
   makeWrapper,
@@ -29,6 +30,7 @@
   libcap,
   libgbm,
   curl,
+  pipewire,
   pcre,
   pcre2,
   python3,
@@ -42,6 +44,7 @@
   libva,
   libvdpau,
   libglvnd,
+  glslang,
   numactl,
   amf-headers,
   svt-av1,
@@ -60,16 +63,27 @@
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux;
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
+      jinja2
+      pip
+      setuptools
+    ]
+  );
+  ffmpegPrepared = fetchzip {
+    url = "https://github.com/LizardByte/build-deps/releases/download/v2026.221.143859/Linux-x86_64-ffmpeg.tar.gz";
+    hash = "sha256-NGKZ0EFqsa3+/M8vawqFTOuomZXm3SDYYyhvdvdY69Q=";
+  };
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
-  version = "2025.924.154138";
+  version = "2026.417.201619";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QrPfZqd9pgufohUjxlTpO6V0v7B41UrXHZaESsFjZ48=";
+    hash = "sha256-ClseenPm63lb8gX/egrlk5h/7HaKZ5EImIz7kzUU4wA=";
     fetchSubmodules = true;
   };
 
@@ -77,7 +91,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ui = buildNpmPackage {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-miRw5JGZ8L+CKnoZkCuVW+ptzFV3Dg21zuS9lqNeHro=";
+    npmDepsHash = "sha256-9NNyfMm36HCzVfhJni3fQfG7R59F9c1MV+uBp/F8a2s=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -103,7 +117,7 @@ stdenv'.mkDerivation (finalAttrs: {
   # FETCH_CONTENT_BOOST_USED prevents Simple-Web-Server from re-finding boost
   + ''
     substituteInPlace cmake/dependencies/Boost_Sunshine.cmake \
-      --replace-fail 'set(BOOST_VERSION "1.87.0")' 'set(BOOST_VERSION "${boost.version}")'
+      --replace-fail 'set(BOOST_VERSION "1.89.0")' 'set(BOOST_VERSION "${boost.version}")'
     echo 'set(FETCH_CONTENT_BOOST_USED TRUE)' >> cmake/dependencies/Boost_Sunshine.cmake
   ''
   # remove upstream dependency on systemd and udev
@@ -113,22 +127,25 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail 'find_package(Udev)' ""
 
     substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
+      --subst-var-by PROJECT_FQDN 'dev.lizardbyte.app.Sunshine' \
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
       --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
-      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+      --replace-fail '/usr/bin/env systemctl start --u app-dev.lizardbyte.app.Sunshine' 'sunshine'
 
-    substituteInPlace packaging/linux/sunshine.service.in \
+    substituteInPlace packaging/linux/app-dev.lizardbyte.app.Sunshine.service.in \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
+      --replace-fail '@SUNSHINE_SERVICE_START_COMMAND@' 'ExecStart='$out/bin/sunshine \
+      --replace-fail '@SUNSHINE_SERVICE_STOP_COMMAND@' "" \
       --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
   nativeBuildInputs = [
     cmake
+    glslang
     pkg-config
-    python3
+    pythonEnv
     makeWrapper
   ]
   ++ lib.optionals isLinux [
@@ -145,6 +162,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     curl
+    pipewire
     miniupnpc
     nlohmann_json
     openssl
@@ -184,6 +202,7 @@ stdenv'.mkDerivation (finalAttrs: {
     svt-av1
     libappindicator
     libnotify
+    vulkan-loader
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
@@ -213,6 +232,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals isLinux [
     (lib.cmakeBool "UDEV_FOUND" true)
     (lib.cmakeBool "SYSTEMD_FOUND" true)
+    (lib.cmakeFeature "FFMPEG_PREPARED_BINARIES" "${ffmpegPrepared}")
     (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
     (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
     (lib.cmakeFeature "SYSTEMD_MODULES_LOAD_DIR" "lib/modules-load.d")
