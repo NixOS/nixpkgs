@@ -35,11 +35,19 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
+  openVINOSupport ? false,
   openssl,
   llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
+  openvino,
+  intel-compute-runtime,
+  opencl-headers,
+  khronos-ocl-icd-loader,
+  onetbb,
+  opencl-clhpp,
+  autoPatchelfHook,
   ninja,
 }:
 
@@ -75,6 +83,15 @@ let
     vulkan-headers
     vulkan-loader
   ];
+
+  openVINOBuildInputs = [
+    openvino
+    onetbb.dev
+    intel-compute-runtime
+    opencl-headers
+    khronos-ocl-icd-loader
+    opencl-clhpp
+  ];
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
@@ -98,6 +115,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [ ];
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -110,6 +129,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
     autoAddDriverRunpath
+  ]
+  ++ optionals openVINOSupport [
+    openvino
+    autoPatchelfHook
   ];
 
   buildInputs =
@@ -118,6 +141,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
+    ++ optionals openVINOSupport openVINOBuildInputs
     ++ [ openssl ];
 
   npmRoot = "tools/server/webui";
@@ -130,6 +154,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '';
     hash = finalAttrs.npmDepsHash;
   };
+
+  preBuild = optionals openVINOSupport ''
+    addAutoPatchelfSearchPath ${openvino}/runtime/lib/
+  '';
+
+  prePatch = optionals openVINOSupport ''
+    substituteInPlace ggml/src/ggml-openvino/CMakeLists.txt \
+      --replace-fail '${"\${OpenVINO_DIR}"}/../3rdparty/tbb/lib/cmake/TBB/' "${onetbb.dev}/lib/cmake/TBB/"
+  '';
 
   preConfigure = ''
     prependToVar cmakeFlags "-DLLAMA_BUILD_COMMIT:STRING=$(cat COMMIT)"
@@ -153,6 +186,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_METAL" metalSupport)
     (cmakeBool "GGML_RPC" rpcSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
+    (cmakeBool "GGML_OPENVINO" openVINOSupport)
     (cmakeFeature "LLAMA_BUILD_NUMBER" finalAttrs.version)
   ]
   ++ optionals cudaSupport [
@@ -170,6 +204,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # This is done so we can move rpc-server out of bin because llama.cpp doesn't
     # install rpc-server in their install target.
     (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+  ]
+  ++ optionals openVINOSupport [
+    (cmakeFeature "OpenVINO_DIR" "${openvino}/runtime/cmake")
   ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
@@ -182,7 +219,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cp $src/include/llama.h $out/include/
 
   ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform && !openVINOSupport) ''
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
