@@ -1,7 +1,17 @@
-import ./generic.nix {
+{
+  fetchFromGitHub,
+  lib,
+}:
+
+rec {
   version = "14.22";
-  rev = "refs/tags/REL_14_22";
-  hash = "sha256-0vZEdsrj2WAdXFpZAli5sd0liAfvp9/Os93GjVTy7wk=";
+  src = fetchFromGitHub {
+    owner = "postgres";
+    repo = "postgres";
+    tag = "REL_14_22";
+    hash = "sha256-0vZEdsrj2WAdXFpZAli5sd0liAfvp9/Os93GjVTy7wk=";
+  };
+
   muslPatches = {
     disable-test-collate-icu-utf8 = {
       url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/disable-test-collate.icu.utf8.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
@@ -11,5 +21,12 @@ import ./generic.nix {
       url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/dont-use-locale-a-on-musl.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
       hash = "sha256-fk+y/SvyA4Tt8OIvDl7rje5dLs3Zw+Ln1oddyYzerOo=";
     };
+  };
+
+  meta = {
+    homepage = "https://www.postgresql.org";
+    description = "Powerful, open source object-relational database system";
+    changelog = "https://www.postgresql.org/docs/release/${version}/";
+    teams = [ lib.teams.postgres ];
   };
 }

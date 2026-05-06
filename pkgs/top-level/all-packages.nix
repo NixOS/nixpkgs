@@ -8153,6 +8153,7 @@ with pkgs;
   };
 
   inherit (import ../servers/sql/postgresql pkgs)
+    buildPostgresql
     postgresqlVersions
     postgresqlJitVersions
     libpq

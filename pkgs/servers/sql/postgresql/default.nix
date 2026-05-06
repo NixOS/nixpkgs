@@ -16,13 +16,16 @@ let
     postgresql_18 = ./18.nix;
   };
 
+  buildPostgresql =
+    args: self.callPackage (import ./generic.nix args) { inherit buildPostgresql self; };
+
   mkAttributes =
     jitSupport:
     self.lib.mapAttrs' (
       version: path:
       let
         attrName = if jitSupport then "${version}_jit" else version;
-        postgresql = import path { inherit self; };
+        postgresql = buildPostgresql (import path { inherit (self) fetchFromGitHub lib; });
         attrValue = if jitSupport then postgresql.withJIT else postgresql.withoutJIT;
       in
       self.lib.nameValuePair attrName attrValue
@@ -36,5 +39,5 @@ in
   postgresqlVersions = mkAttributes false;
   postgresqlJitVersions = mkAttributes true;
 
-  inherit libpq;
+  inherit buildPostgresql libpq;
 }
