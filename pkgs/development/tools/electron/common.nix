@@ -186,6 +186,9 @@ in
   + ''
     (
       cd electron
+      if YARN_IGNORE_PATH=1 yarn config get approvedGitRepositories >/dev/null 2>&1; then
+        printf '\napprovedGitRepositories: [ "**" ]\n' >> .yarnrc.yml
+      fi
       YARN_ENABLE_SCRIPTS=0 yarnBerryConfigHook
     )
     (
