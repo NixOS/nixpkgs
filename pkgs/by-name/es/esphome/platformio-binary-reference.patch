@@ -1,0 +1,13 @@
+diff --git a/esphome/platformio_api.py b/esphome/platformio_api.py
+index fc21977f..e5059f1d 100644
+--- a/esphome/platformio_api.py
++++ b/esphome/platformio_api.py
+@@ -63,7 +63,7 @@ def run_platformio_cli(*args, **kwargs) -> str | int:
+     os.environ.setdefault("PYTHONWARNINGS", "ignore::SyntaxWarning")
+     # Increase uv retry count to handle transient network errors (default is 3)
+     os.environ.setdefault("UV_HTTP_RETRIES", "10")
+-    cmd = [sys.executable, "-m", "esphome.platformio_runner"] + list(args)
++    cmd = ["platformio"] + list(args)
+
+     return run_external_process(*cmd, **kwargs)
+

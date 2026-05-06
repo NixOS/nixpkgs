@@ -1,0 +1,170 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  clr,
+  python3,
+  rocm-cmake,
+  sqlite,
+  boost,
+  fftw,
+  fftwFloat,
+  gtest,
+  openmp,
+  rocrand,
+  hiprand,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "rocfft${clr.gpuArchSuffix}";
+  version = "7.2.2";
+
+  src = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "rocm-libraries";
+    rev = "rocm-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/rocfft"
+      "shared"
+    ];
+    hash = "sha256-RjWMzLX0nBA8ClweJ8YgRTn+Nzt/VUkOoSw3jMQ3IWg=";
+  };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocfft";
+
+  nativeBuildInputs = [
+    cmake
+    clr
+    python3
+    rocm-cmake
+  ];
+
+  buildInputs = [
+    sqlite
+    hiprand
+  ];
+
+  patches = [
+    # Fixes build timeout due to no log output during rocfft_aot step
+    ./log-every-n-aot-jobs.patch
+  ];
+
+  cmakeFlags = [
+    "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
+    "-DHIP_PLATFORM=amd"
+    "-DBUILD_CLIENTS=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DUSE_HIPRAND=ON"
+    "-DROCFFT_KERNEL_CACHE_ENABLE=ON"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ];
+
+  passthru = {
+    test = stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-test";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "${finalAttrs.src.name}/projects/rocfft/clients/tests";
+
+      nativeBuildInputs = [
+        cmake
+        clr
+        rocm-cmake
+      ];
+
+      buildInputs = [
+        boost
+        fftw
+        fftwFloat
+        finalAttrs.finalPackage
+        gtest
+        openmp
+        rocrand
+        hiprand
+      ];
+
+      postInstall = ''
+        rm -r "$out/lib/fftw"
+        rmdir "$out/lib"
+      '';
+    };
+
+    benchmark = stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-benchmark";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "${finalAttrs.src.name}/projects/rocfft/clients/rider";
+
+      nativeBuildInputs = [
+        cmake
+        clr
+        rocm-cmake
+      ];
+
+      buildInputs = [
+        boost
+        finalAttrs.finalPackage
+        openmp
+        (python3.withPackages (
+          ps: with ps; [
+            pandas
+            scipy
+          ]
+        ))
+        rocrand
+      ];
+
+      postInstall = ''
+        cp -a ../../../scripts/perf "$out/bin"
+      '';
+    };
+
+    samples = stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-samples";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "${finalAttrs.src.name}/projects/rocfft/clients/samples";
+
+      nativeBuildInputs = [
+        cmake
+        clr
+        rocm-cmake
+      ];
+
+      buildInputs = [
+        boost
+        finalAttrs.finalPackage
+        openmp
+        rocrand
+      ];
+
+      installPhase = ''
+        runHook preInstall
+        mkdir "$out"
+        cp -a bin "$out"
+        runHook postInstall
+      '';
+    };
+
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
+  };
+
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = {
+    description = "FFT implementation for ROCm";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocfft";
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
+  };
+})

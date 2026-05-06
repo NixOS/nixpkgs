@@ -1,0 +1,30 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 96d4154..040409e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,14 +42,11 @@ else ()
+   set (CMAKE_BUILD_TYPE "Release")
+ endif ()
+ 
+-set (CONFIG_PREFIX "${CMAKE_INSTALL_PREFIX}")
+-
+-include (GNUInstallDirs)
+-set (CONFIG_BINDIR  "${CONFIG_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+-set (CONFIG_LIBDIR  "${CONFIG_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+-set (CONFIG_DATADIR "${CONFIG_PREFIX}/${CMAKE_INSTALL_DATADIR}")
+-set (CONFIG_MANDIR  "${CONFIG_PREFIX}/${CMAKE_INSTALL_MANDIR}")
+-
++include(GNUInstallDirs)
++set(CONFIG_BINDIR  "${CMAKE_INSTALL_BINDIR}")
++set(CONFIG_LIBDIR  "${CMAKE_INSTALL_LIBDIR}")
++set(CONFIG_DATADIR "${CMAKE_INSTALL_DATADIR}")
++set(CONFIG_MANDIR  "${CMAKE_INSTALL_MANDIR}")
+ 
+ # Enable JACK standalone build.
+ option (CONFIG_JACK "Enable JACK stand-alone build (default=yes)" 1)
+@@ -420,4 +417,4 @@ show_option ("  Pitch-shifting support (librubberband) . . . . . ." CONFIG_LIBRU
+ show_option ("  Pitch-shifting support (fftw3) . . . . . . . . . ." CONFIG_FFTW3)
+ show_option ("  OSC service support (liblo)  . . . . . . . . . . ." CONFIG_LIBLO)
+ show_option ("  Non/New Session Management (NSM) support . . . . ." CONFIG_NSM)
+-message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}\n")
++message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CMAKE_INSTALL_DIR}\n")

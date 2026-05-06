@@ -1,0 +1,49 @@
+Use modern CMake imported target for libgig to ensure proper RPATH propagation.
+
+The old-style link_directories()/link_libraries() pattern does not propagate
+library paths to the install RPATH, causing libgig.so to not be found at
+runtime when it is installed in a non-standard directory (e.g. lib/libgig/).
+
+Using IMPORTED_TARGET with pkg_check_modules creates a PkgConfig::GIG target
+that carries include dirs, library paths, and link flags, and CMake correctly
+propagates these to the install RPATH via target_link_libraries().
+
+Also set CMAKE_INSTALL_RPATH_USE_LINK_PATH in the GigPlayer scope, since the
+upstream code only sets it in src/CMakeLists.txt which does not apply to the
+sibling plugins/ directory.
+
+diff -ruN a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -550,7 +550,7 @@
+ 
+ # check for libgig
+ If(WANT_GIG)
+-	PKG_CHECK_MODULES(GIG gig)
++	PKG_CHECK_MODULES(GIG IMPORTED_TARGET gig)
+ 	IF(GIG_FOUND)
+ 		SET(LMMS_HAVE_GIG TRUE)
+ 		SET(STATUS_GIG "OK")
+diff -ruN a/plugins/GigPlayer/CMakeLists.txt b/plugins/GigPlayer/CMakeLists.txt
+--- a/plugins/GigPlayer/CMakeLists.txt
++++ b/plugins/GigPlayer/CMakeLists.txt
+@@ -1,17 +1,16 @@
+ if(LMMS_HAVE_GIG)
+ 	INCLUDE(BuildPlugin)
+-	include_directories(SYSTEM ${GIG_INCLUDE_DIRS})
+ 	SET(CMAKE_AUTOUIC ON)
++	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ 
+ 	# Required for not crashing loading files with libgig
+ 	add_compile_options("-fexceptions")
+ 
+-	link_directories(${GIG_LIBRARY_DIRS})
+-	link_libraries(${GIG_LIBRARIES})
+ 	build_plugin(gigplayer
+ 		GigPlayer.cpp GigPlayer.h PatchesDialog.cpp PatchesDialog.h PatchesDialog.ui
+ 		MOCFILES GigPlayer.h PatchesDialog.h
+ 		EMBEDDED_RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.png"
+ 	)
++	target_link_libraries(gigplayer PkgConfig::GIG)
+ 	target_link_libraries(gigplayer SampleRate::samplerate)
+ endif(LMMS_HAVE_GIG)

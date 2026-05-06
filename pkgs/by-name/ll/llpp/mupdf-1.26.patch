@@ -1,0 +1,25 @@
+From 3795c48b607f4fe98062e5a4a19310899398be42 Mon Sep 17 00:00:00 2001
+From: Florian Stecker <oss@florianstecker.net>
+Date: Thu, 12 Jun 2025 23:47:31 -0400
+Subject: [PATCH] Compatibility with libmupdf 1.26
+
+---
+ link.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/link.c b/link.c
+index ff635b2..9134726 100644
+--- a/link.c
++++ b/link.c
+@@ -2560,8 +2560,8 @@ ML (getfileannot (value ptr_v, value n_v))
+     pdf_obj *fs = pdf_dict_get (state.ctx,
+                                 pdf_annot_obj (state.ctx, slink->u.annot),
+                                 PDF_NAME (FS));
+-    pdf_embedded_file_params file_params;
+-    pdf_get_embedded_file_params (state.ctx, fs, &file_params);
+-    ret_v = caml_copy_string (file_params.filename);
++    pdf_filespec_params params;
++    pdf_get_filespec_params (state.ctx, fs, &params);
++    ret_v = caml_copy_string (params.filename);
+ 
+     unlock (__func__);

@@ -1,0 +1,93 @@
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  makeWrapper,
+  glib,
+  gtk2,
+  gtk3,
+  ant,
+  jdk,
+  libxtst,
+  coreutils,
+  gnugrep,
+  zulu,
+  preferGtk3 ? true,
+  preferZulu ? false,
+}:
+
+let
+  jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
+  gtk' = if preferGtk3 then gtk3 else gtk2;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "davmail";
+  version = "6.6.0";
+
+  src = fetchFromGitHub {
+    owner = "mguessan";
+    repo = "davmail";
+    tag = finalAttrs.version;
+    hash = "sha256-La6nrbAGeZlIhs0i5dm6pIcvn+V1wQjuqBza4w+Aa3A=";
+  };
+
+  buildPhase = ''
+    runHook preBuild
+
+    ant prepare-dist
+    sed -i -e '/^JAVA_OPTS/d' ./dist/davmail
+
+    runHook postBuild
+  '';
+
+  nativeBuildInputs = [
+    makeWrapper
+    ant
+  ];
+
+  buildInputs = [
+    jre'
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/davmail
+    cp -R ./dist/{lib,davmail{,.jar}} $out/share/davmail
+    chmod +x $out/share/davmail/davmail
+    makeWrapper $out/share/davmail/davmail $out/bin/davmail \
+      --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jre'
+          coreutils
+          gnugrep
+        ]
+      } \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          glib
+          gtk'
+          libxtst
+        ]
+      }
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
+    homepage = "https://davmail.sourceforge.net/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      doronbehar
+      shymega
+    ];
+    platforms = lib.platforms.all;
+    mainProgram = "davmail";
+  };
+})

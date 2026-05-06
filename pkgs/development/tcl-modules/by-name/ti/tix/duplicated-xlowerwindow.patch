@@ -1,0 +1,49 @@
+This is duplicated code from Tk.
+It causes errors during build since XLowerWindow is not only a function but also "defined" in tkIntXlibDecls.h.
+
+See
+https://github.com/tcltk/tk/blob/71dcaddc69769cbd3e2c4b5edb5810f974579527/generic/tkIntXlibDecls.h#L396
+and
+https://github.com/tcltk/tk/blob/71dcaddc69769cbd3e2c4b5edb5810f974579527/generic/tkIntXlibDecls.h#L1487
+
+--- a/unix/tixUnixWm.c	2005-03-25 13:15:53.000000000 -0700
++++ b/unix/tixUnixWm.c	2021-03-20 07:31:52.000000000 -0700
+@@ -24,38 +24,3 @@
+ {
+     return TCL_OK;
+ }
+-
+-#ifdef MAC_OSX_TK
+-#include "tkInt.h"
+-/*
+- *----------------------------------------------------------------------
+- *
+- * XLowerWindow --
+- *
+- *	Change the stacking order of a window.
+- *
+- * Results:
+- *	None.
+- *
+- * Side effects:
+- *	Changes the stacking order of the specified window.
+- *
+- *----------------------------------------------------------------------
+- */
+-
+-int 
+-XLowerWindow(
+-    Display* display,		/* Display. */
+-    Window window)		/* Window. */
+-{
+-    TkWindow *winPtr = *((TkWindow **) window);
+-    
+-    display->request++;
+-    if (Tk_IsTopLevel(winPtr) && !Tk_IsEmbedded(winPtr)) {
+-	TkWmRestackToplevel(winPtr, Below, NULL);
+-    } else {
+-    	/* TODO: this should generate damage */
+-    }
+-    return 0;
+-}
+-#endif

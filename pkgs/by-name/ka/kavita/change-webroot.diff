@@ -1,0 +1,97 @@
+diff --git a/API/Controllers/FallbackController.cs b/API/Controllers/FallbackController.cs
+index 9aff8202..f8b6c60f 100644
+--- a/API/Controllers/FallbackController.cs
++++ b/API/Controllers/FallbackController.cs
+@@ -1,4 +1,4 @@
+-﻿using System.IO;
++using System.IO;
+ using API.Services;
+ using Microsoft.AspNetCore.Authorization;
+ using Microsoft.AspNetCore.Mvc;
+@@ -27,7 +27,7 @@ public class FallbackController : Controller
+             return NotFound();
+         }
+ 
+-        return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
++        return PhysicalFile(Path.Combine("@webroot@", "index.html"), "text/HTML");
+     }
+ }
+ 
+diff --git a/API/Services/DirectoryService.cs b/API/Services/DirectoryService.cs
+index ecce1957..774b3169 100644
+--- a/API/Services/DirectoryService.cs
++++ b/API/Services/DirectoryService.cs
+@@ -1,4 +1,4 @@
+-﻿using System;
++using System;
+ using System.Collections.Generic;
+ using System.Collections.Immutable;
+ using System.IO;
+@@ -135,7 +135,7 @@ public class DirectoryService : IDirectoryService
+         ExistOrCreate(SiteThemeDirectory);
+         FaviconDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "config", "favicons");
+         ExistOrCreate(FaviconDirectory);
+-        LocalizationDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "I18N");
++        LocalizationDirectory = FileSystem.Path.Join("@out@/lib/kavita-backend", "I18N");
+         CustomizedTemplateDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "config", "templates");
+         ExistOrCreate(CustomizedTemplateDirectory);
+         TemplateDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "EmailTemplates");
+diff --git a/API/Services/LocalizationService.cs b/API/Services/LocalizationService.cs
+index 8abde664..2f207837 100644
+--- a/API/Services/LocalizationService.cs
++++ b/API/Services/LocalizationService.cs
+@@ -1,4 +1,4 @@
+-﻿using System;
++using System;
+ using System.Collections.Generic;
+ using System.Linq;
+ using System.Text.Json;
+@@ -57,9 +57,7 @@ public class LocalizationService : ILocalizationService
+         }
+         else
+         {
+-            _localizationDirectoryUi = directoryService.FileSystem.Path.Join(
+-                directoryService.FileSystem.Directory.GetCurrentDirectory(),
+-                "wwwroot", "assets/langs");
++            _localizationDirectoryUi = directoryService.FileSystem.Path.Join("@webroot@", "assets/langs");
+         }
+ 
+         _cacheOptions = new MemoryCacheEntryOptions()
+diff --git a/API/Startup.cs b/API/Startup.cs
+index fad79cee..073fcdee 100644
+--- a/API/Startup.cs
++++ b/API/Startup.cs
+@@ -36,6 +36,7 @@ using Microsoft.AspNetCore.StaticFiles;
+ using Microsoft.EntityFrameworkCore;
+ using Microsoft.Extensions.Configuration;
+ using Microsoft.Extensions.DependencyInjection;
++using Microsoft.Extensions.FileProviders;
+ using Microsoft.Extensions.Hosting;
+ using Microsoft.Extensions.Logging;
+ using Microsoft.Net.Http.Headers;
+@@ -353,8 +354,6 @@ public class Startup
+         app.UsePathBase(basePath);
+         if (!env.IsDevelopment())
+         {
+-            // We don't update the index.html in local as we don't serve from there
+-            UpdateBaseUrlInIndex(basePath);
+ 
+             // Update DB with what's in config
+             var dataContext = serviceProvider.GetRequiredService<DataContext>();
+@@ -399,6 +398,7 @@ public class Startup
+ 
+         app.UseStaticFiles(new StaticFileOptions
+         {
++            FileProvider = new PhysicalFileProvider("@webroot@"),
+             // bcmap files needed for PDF reader localizations (https://github.com/Kareadita/Kavita/issues/2970)
+             // ftl files are needed for PDF zoom options (https://github.com/Kareadita/Kavita/issues/3995)
+             ContentTypeProvider = new FileExtensionContentTypeProvider
+@@ -481,7 +481,7 @@ public class Startup
+         try
+         {
+             var htmlDoc = new HtmlDocument();
+-            var indexHtmlPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
++            var indexHtmlPath = Path.Combine("@webroot@", "index.html");
+             htmlDoc.Load(indexHtmlPath);
+ 
+             var baseNode = htmlDoc.DocumentNode.SelectSingleNode("/html/head/base");

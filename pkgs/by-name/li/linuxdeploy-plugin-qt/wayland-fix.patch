@@ -1,0 +1,11 @@
+--- a/src/deployers/PlatformPluginsDeployer.cpp
++++ b/src/deployers/PlatformPluginsDeployer.cpp
+@@ -30,7 +30,7 @@ bool PlatformPluginsDeployer::doDeploy() {
+
+             using namespace linuxdeploy::util::misc;
+             if (stringStartsWith(platformToDeploy, "libqwayland")) {
+-                if (!deployStandardQtPlugins({"wayland-decoration-client", "wayland-shell-integration"})) {
++                if (!deployStandardQtPlugins({"wayland-decoration-client", "wayland-graphics-integration-client", "wayland-shell-integration"})) {
+                     return false;
+                 }
+             }
