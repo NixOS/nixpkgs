@@ -25825,6 +25825,12 @@
     githubId = 6277322;
     name = "Wei Tang";
   };
+  sotormd = {
+    email = "sotormd@proton.me";
+    github = "sotormd";
+    githubId = 201147279;
+    name = "sotormd";
+  };
   soupglasses = {
     email = "sofi+git@mailbox.org";
     github = "soupglasses";
