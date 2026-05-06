@@ -2084,6 +2084,8 @@ mapAliases {
   typstfmt = throw "'typstfmt' has been removed due to lack of upstream maintenance, consider using 'typstyle' instead"; # Added 2025-10-26
   uade123 = throw "'uade123' has been renamed to/replaced by 'uade'"; # Converted to throw 2025-10-27
   uae = throw "'uae' has been removed due to lack of upstream maintenance. Consider using 'fsuae' instead."; # Added 2025-06-11
+  ubootRaspberryPi3_64bit = warnAlias "'ubootRaspberryPi3_64bit' has been renamed to/replaced by 'ubootRaspberryPiAarch64'" ubootRaspberryPiAarch64; # Added 2026-04-02
+  ubootRaspberryPi4_64bit = warnAlias "'ubootRaspberryPi4_64bit' has been renamed to/replaced by 'ubootRaspberryPiAarch64'" ubootRaspberryPiAarch64; # Added 2026-04-02
   ubuntu_font_family = throw "'ubuntu_font_family' has been renamed to/replaced by 'ubuntu-classic'"; # Converted to throw 2025-10-27
   udisks2 = udisks; # Added 2025-10-30
   ue4demos = throw "'ue4demos' has been removed because it is unmaintained"; # Added 2026-02-07
