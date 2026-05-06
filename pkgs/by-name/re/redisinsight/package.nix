@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
-  version = "2.70.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "RedisInsight";
     repo = "RedisInsight";
     rev = finalAttrs.version;
-    hash = "sha256-b97/hBhXqSFDzcyrQKu5Ebu1Ud3wpWEjyzUehj0PP9w=";
+    hash = "sha256-QV1xxpr8aMgkxWitJPVjXB/G2UaAYrV2wMM1FbltZpE=";
   };
 
   patches = [
@@ -42,21 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
   baseOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-base-offline-cache";
     inherit (finalAttrs) src patches;
-    hash = "sha256-m3relh3DZGReEi4dVOJcIXU9QVClisXw+f7K5i25x24=";
+    hash = "sha256-hU8/ycljmRxqQEx0neezQmJPaianJhL0IyVOJEfLy5o=";
   };
 
   innerOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-inner-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight";
-    hash = "sha256-rqmrETlc2XoZDM4GP1+qI4eK4oGmtpmc6TVvAam2+W8=";
+    hash = "sha256-s4JTgqXT+5P/C5e3/c30/VZHt8MRct3KViZOD1Fekqc=";
   };
 
   apiOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-api-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight/api";
-    hash = "sha256-KFtmq3iYAnsAi5ysvGCzBk9RHV7EE7SIPbzPza7vBdA=";
+    hash = "sha256-GsdKJjQltpHKDZmGRF60M1TLTbnwyHt9e5ayrXgbFOU=";
   };
 
   nativeBuildInputs = [
@@ -120,9 +120,13 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Generate defaults. Currently broken because it requires network access.
     # yarn --offline --cwd=redisinsight/api build:defaults
 
+    # Electron dist needs to be writable during the build.
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
     yarn --offline electron-builder \
       --dir \
-      -c.electronDist=${electron.dist} \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false # we've already rebuilt the native libs using the electron headers
 
