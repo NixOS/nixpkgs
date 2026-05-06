@@ -9,10 +9,10 @@
 
   # dependencies
   cloudpickle,
+  cronsim,
   fakeredis,
   opentelemetry-api,
-  opentelemetry-exporter-prometheus,
-  opentelemetry-instrumentation,
+  opentelemetry-sdk,
   prometheus-client,
   py-key-value-aio,
   python-json-logger,
@@ -20,18 +20,19 @@
   rich,
   typer,
   typing-extensions,
+  uncalled-for,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.17.1";
+  version = "0.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
     tag = finalAttrs.version;
-    hash = "sha256-p3FqIHulsBxI7oyiahEruARXBuA2QAYdQeVh83OFHbg=";
+    hash = "sha256-rMqXagU12Tfsv8uInaLjAJaGPjTpP4oz/X5iUrSnjIA=";
   };
 
   build-system = [
@@ -39,17 +40,11 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "fakeredis"
-    "opentelemetry-exporter-prometheus"
-    "opentelemetry-instrumentation"
-  ];
   dependencies = [
     cloudpickle
+    cronsim
     fakeredis
     opentelemetry-api
-    opentelemetry-exporter-prometheus
-    opentelemetry-instrumentation
     prometheus-client
     py-key-value-aio
     python-json-logger
@@ -57,15 +52,19 @@ buildPythonPackage (finalAttrs: {
     rich
     typer
     typing-extensions
+    uncalled-for
   ]
   ++ fakeredis.optional-dependencies.lua
   ++ py-key-value-aio.optional-dependencies.memory
   ++ py-key-value-aio.optional-dependencies.redis;
 
-  pythonImportsCheck = [ "docket" ];
+  optional-dependencies = {
+    metrics = [
+      opentelemetry-sdk
+    ];
+  };
 
-  # All tests require internet access
-  doCheck = false;
+  pythonImportsCheck = [ "docket" ];
 
   meta = {
     description = "Distributed background task system for Python";
