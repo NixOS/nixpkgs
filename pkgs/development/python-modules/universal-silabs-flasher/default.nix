@@ -8,12 +8,11 @@
   setuptools,
 
   # dependencies
+  aiohttp,
   bellows,
-  click,
   coloredlogs,
   crc,
   gpiod,
-  pyserial-asyncio-fast,
   tqdm,
   typing-extensions,
   zigpy,
@@ -26,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "1.0.3";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-6rdWi+un85YWSann2zHFFnWvAZF6V8wXBP1VunaiZMo=";
+    hash = "sha256-niNjHhOwy+5mgs4UY9bIBykmZ+7TifbYnMuG1LAV7PA=";
   };
 
   postPatch = ''
@@ -45,11 +44,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     bellows
-    click
     coloredlogs
     crc
-    pyserial-asyncio-fast
     tqdm
     typing-extensions
     zigpy
