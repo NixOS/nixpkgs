@@ -2005,6 +2005,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/ecs-agent.nix
   ./virtualisation/hyperv-guest.nix
+  ./virtualisation/hyperv-guest-gpu.nix
   ./virtualisation/incus-agent.nix
   ./virtualisation/incus.nix
   ./virtualisation/kvmgt.nix
