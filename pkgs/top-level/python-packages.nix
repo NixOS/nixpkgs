@@ -4160,6 +4160,8 @@ self: super: with self; {
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
+  django-dramatiq = callPackage ../development/python-modules/django-dramatiq { };
+
   django-dynamic-preferences =
     callPackage ../development/python-modules/django-dynamic-preferences
       { };
@@ -4175,6 +4177,10 @@ self: super: with self; {
   django-error-report-2 = callPackage ../development/python-modules/django-error-report-2 { };
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
+
+  django-fernet-encrypted-fields =
+    callPackage ../development/python-modules/django-fernet-encrypted-fields
+      { };
 
   django-filer = callPackage ../development/python-modules/django-filer { };
 
@@ -4472,6 +4478,10 @@ self: super: with self; {
   djangoql = callPackage ../development/python-modules/djangoql { };
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
+
+  djangorestframework-api-key =
+    callPackage ../development/python-modules/djangorestframework-api-key
+      { };
 
   djangorestframework-camel-case =
     callPackage ../development/python-modules/djangorestframework-camel-case
