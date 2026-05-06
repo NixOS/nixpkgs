@@ -52,6 +52,7 @@
   withQt ? true,
   qt6,
   libpcap' ? libpcap.override { withBluez = stdenv.hostPlatform.isLinux; },
+  withExtras ? stdenv.hostPlatform.isLinux,
 }:
 let
   isAppBundle = withQt && stdenv.hostPlatform.isDarwin;
@@ -184,6 +185,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     cmake --install . --prefix "''${!outputDev}" --component Development
+  ''
+  + lib.optionalString withExtras ''
+    ln -s $out/libexec/wireshark/extcap/* -t $out/bin/
   ''
   + lib.optionalString isAppBundle ''
     mkdir -p $out/Applications
