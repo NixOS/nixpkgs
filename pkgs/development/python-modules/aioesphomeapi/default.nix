@@ -26,15 +26,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "44.13.3";
+  version = "44.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PCCz12AAZuhDzqgJGhYpncr2ICN6xWefi/s9icbMSck=";
+    hash = "sha256-mKk4NO44mVTV5Fe8oDhQYcNp8V1OLsPt4xk+kztXwrM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=82.0.1" setuptools
+  '';
 
   build-system = [
     setuptools
