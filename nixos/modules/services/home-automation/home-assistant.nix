@@ -150,6 +150,120 @@ let
       type = "module";
     }) cfg.customLovelaceModules;
   };
+
+  componentsUsingBluetooth = [
+    # Components that require the AF_BLUETOOTH address family
+    "august"
+    "august_ble"
+    "airthings_ble"
+    "aranet"
+    "bluemaestro"
+    "bluetooth"
+    "bluetooth_adapters"
+    "bluetooth_le_tracker"
+    "bluetooth_tracker"
+    "bthome"
+    "default_config"
+    "eufylife_ble"
+    "esphome"
+    "fjaraskupan"
+    "gardena_bluetooth"
+    "govee_ble"
+    "homekit_controller"
+    "inkbird"
+    "improv_ble"
+    "keymitt_ble"
+    "ld2410_ble"
+    "leaone"
+    "led_ble"
+    "medcom_ble"
+    "melnor"
+    "moat"
+    "mopeka"
+    "motionblinds_ble"
+    "oralb"
+    "private_ble_device"
+    "qingping"
+    "rapt_ble"
+    "ruuvi_gateway"
+    "ruuvitag_ble"
+    "sensirion_ble"
+    "sensorpro"
+    "sensorpush"
+    "shelly"
+    "snooz"
+    "switchbot"
+    "thermobeacon"
+    "thermopro"
+    "tilt_ble"
+    "xiaomi_ble"
+    "yalexs_ble"
+  ];
+  componentsUsingPing = [
+    # Components that require the capset syscall for the ping wrapper
+    "ping"
+    "wake_on_lan"
+  ];
+  componentsUsingSerialDevices = [
+    # Components that require access to serial devices (/dev/tty*)
+    # List generated from home-assistant documentation:
+    #   git clone https://github.com/home-assistant/home-assistant.io/
+    #   cd source/_integrations
+    #   rg "/dev/tty" -l | cut -d'/' -f3 | cut -d'.' -f1 | sort
+    # And then extended by references found in the source code, these
+    # mostly the ones using config flows already.
+    "acer_projector"
+    "alarmdecoder"
+    "aurora_abb_powerone"
+    "blackbird"
+    "bryant_evolution"
+    "crownstone"
+    "deconz"
+    "dsmr"
+    "edl21"
+    "elkm1"
+    "elv"
+    "enocean"
+    "homeassistant_hardware"
+    "homeassistant_yellow"
+    "firmata"
+    "flexit"
+    "gpsd"
+    "insteon"
+    "kwb"
+    "lacrosse"
+    "landisgyr_heat_meter"
+    "modbus"
+    "modem_callerid"
+    "mysensors"
+    "nad"
+    "numato"
+    "nut"
+    "opentherm_gw"
+    "otbr"
+    "rainforst_raven"
+    "rflink"
+    "rfxtrx"
+    "scsgate"
+    "serial"
+    "serial_pm"
+    "sms"
+    "upb"
+    "usb"
+    "velbus"
+    "w800rf32"
+    "zha"
+    "zwave"
+    "zwave_js"
+
+    # Custom components, maintained manually.
+    "amshan"
+    "benqprojector"
+  ];
+  componentsUsingInputDevices = [
+    # Components that require access to input devices (/dev/input/*)
+    "keyboard_remote"
+  ];
 in
 {
   imports = [
@@ -820,119 +934,6 @@ in
               "CAP_NET_RAW"
             ]
           );
-          componentsUsingBluetooth = [
-            # Components that require the AF_BLUETOOTH address family
-            "august"
-            "august_ble"
-            "airthings_ble"
-            "aranet"
-            "bluemaestro"
-            "bluetooth"
-            "bluetooth_adapters"
-            "bluetooth_le_tracker"
-            "bluetooth_tracker"
-            "bthome"
-            "default_config"
-            "eufylife_ble"
-            "esphome"
-            "fjaraskupan"
-            "gardena_bluetooth"
-            "govee_ble"
-            "homekit_controller"
-            "inkbird"
-            "improv_ble"
-            "keymitt_ble"
-            "ld2410_ble"
-            "leaone"
-            "led_ble"
-            "medcom_ble"
-            "melnor"
-            "moat"
-            "mopeka"
-            "motionblinds_ble"
-            "oralb"
-            "private_ble_device"
-            "qingping"
-            "rapt_ble"
-            "ruuvi_gateway"
-            "ruuvitag_ble"
-            "sensirion_ble"
-            "sensorpro"
-            "sensorpush"
-            "shelly"
-            "snooz"
-            "switchbot"
-            "thermobeacon"
-            "thermopro"
-            "tilt_ble"
-            "xiaomi_ble"
-            "yalexs_ble"
-          ];
-          componentsUsingPing = [
-            # Components that require the capset syscall for the ping wrapper
-            "ping"
-            "wake_on_lan"
-          ];
-          componentsUsingSerialDevices = [
-            # Components that require access to serial devices (/dev/tty*)
-            # List generated from home-assistant documentation:
-            #   git clone https://github.com/home-assistant/home-assistant.io/
-            #   cd source/_integrations
-            #   rg "/dev/tty" -l | cut -d'/' -f3 | cut -d'.' -f1 | sort
-            # And then extended by references found in the source code, these
-            # mostly the ones using config flows already.
-            "acer_projector"
-            "alarmdecoder"
-            "aurora_abb_powerone"
-            "blackbird"
-            "bryant_evolution"
-            "crownstone"
-            "deconz"
-            "dsmr"
-            "edl21"
-            "elkm1"
-            "elv"
-            "enocean"
-            "homeassistant_hardware"
-            "homeassistant_yellow"
-            "firmata"
-            "flexit"
-            "gpsd"
-            "insteon"
-            "kwb"
-            "lacrosse"
-            "landisgyr_heat_meter"
-            "modbus"
-            "modem_callerid"
-            "mysensors"
-            "nad"
-            "numato"
-            "nut"
-            "opentherm_gw"
-            "otbr"
-            "rainforst_raven"
-            "rflink"
-            "rfxtrx"
-            "scsgate"
-            "serial"
-            "serial_pm"
-            "sms"
-            "upb"
-            "usb"
-            "velbus"
-            "w800rf32"
-            "zha"
-            "zwave"
-            "zwave_js"
-
-            # Custom components, maintained manually.
-            "amshan"
-            "benqprojector"
-          ];
-          componentsUsingInputDevices = [
-            # Components that require access to input devices (/dev/input/*)
-            "keyboard_remote"
-          ];
         in
         {
           ExecStart = escapeSystemdExecArgs (
