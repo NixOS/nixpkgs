@@ -20,16 +20,14 @@
   ],
 }:
 
-let
-  inherit ((import ./sources.nix).gwenhywfar) hash releaseId version;
-in
 stdenv.mkDerivation rec {
   pname = "gwenhywfar";
-  inherit version;
+  version = "5.14.1";
+  releaseId = "630";
 
   src = fetchurl {
     url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/gwenhywfar-${version}.tar.gz";
-    inherit hash;
+    hash = "sha256-iRb+qpnLlU+WPyy6jdLf/lfKz38oTa8A6rBxqtb+KrM=";
   };
 
   configureFlags = [

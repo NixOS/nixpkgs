@@ -6364,8 +6364,6 @@ with pkgs;
 
   gtksourceview5 = callPackage ../development/libraries/gtksourceview/5.x.nix { };
 
-  gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
-
   hamlib = hamlib_3;
 
   harfbuzzFull = harfbuzz.override {
