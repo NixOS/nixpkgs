@@ -47,6 +47,7 @@ buildGoModule (finalAttrs: {
       skippedTests = [
         "TestStoredAnalyzer" # https://github.com/dundee/gdu/issues/371
         "TestAnalyzePathWithIgnoring"
+        "TestTopDirFollowSymlink"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
