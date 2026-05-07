@@ -10,6 +10,8 @@ buildNpmPackage (finalAttrs: {
   pname = "elm-watch";
   version = "1.2.6";
 
+  inherit nodejs;
+
   src = fetchFromGitHub {
     owner = "lydell";
     repo = "elm-watch";
@@ -32,7 +34,7 @@ buildNpmPackage (finalAttrs: {
     local moduleDir="$out/lib/node_modules/elm-watch"
     mkdir -p "$moduleDir"
 
-    npm prune --omit=dev
+    npm prune --omit=dev ----ignore-scripts --no-save
     cp -r build/. "$moduleDir/"
     cp -r node_modules "$moduleDir/"
 
