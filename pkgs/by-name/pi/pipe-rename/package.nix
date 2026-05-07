@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rename your files using your favorite text editor";
     homepage = "https://github.com/marcusbuffett/pipe-rename";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "renamer";
   };
 })
