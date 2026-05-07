@@ -12700,13 +12700,16 @@ self: super: with self; {
 
   plotpy = callPackage ../development/python-modules/plotpy { };
 
+  # Use Plover 5 as Plover 4 depends on setuptool's pkg_resources to discover plugins,
+  # which the setuptools upstream deprecated at version 81.0.0 and removed at version 82.0.0
+  # Plover 5 has addressed this issue by switching to importlib.meta.distributions()
+  #
+  # NOTE:
   # Plover 5 moves from PyQt5 to PySide6,
   # which is a backward-incompatible change to graphical plugins.
-  # Use Plover 4 for now (2026-04-26),
-  # as the upstream still warns about this in every Plover 5 release,
   # List of unsupported plugins:
   # https://github.com/opensteno/plover_plugins_registry/blob/master/unsupported.json
-  plover = plover_4;
+  plover = plover_5;
 
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
 
