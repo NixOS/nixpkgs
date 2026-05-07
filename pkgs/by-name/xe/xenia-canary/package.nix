@@ -33,14 +33,14 @@ let
 in
 llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2026-05-03";
+  version = "0-unstable-2026-05-09";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "9467c77f0825f3f8156038ef1a03e27b6c727393";
-    hash = "sha256-hGr8KJcvLkluup5FN+MW7+ciuztgGO+SyTvKXYSHeIk=";
+    rev = "3e1bff213d2d59c2b36239b9668d3298d99ca3e5";
+    hash = "sha256-bQgC8wVONKTUpsqNz8FOD0ACRy7zbC9lnxtJqPU6P6o=";
   };
 
   dontConfigure = true;
@@ -114,7 +114,10 @@ llvmPackages_20.stdenv.mkDerivation {
     description = "Xbox 360 Emulator Research Project";
     homepage = "https://github.com/xenia-canary/xenia-canary";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tuxy ];
+    maintainers = with lib.maintainers; [
+      tuxy
+      reylak
+    ];
     mainProgram = "xenia_canary";
     platforms = [ "x86_64-linux" ];
   };
