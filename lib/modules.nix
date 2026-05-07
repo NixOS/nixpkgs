@@ -1432,16 +1432,18 @@ let
   filterOverrides = defs: (filterOverrides' defs).values;
 
   filterOverrides' =
-    defs:
     let
       getPrio =
         def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
-      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip =
         def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in
+    defs:
+    let
+      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
+    in
     {
-      values = map strip (filter (def: getPrio def == highestPrio) defs);
+      values = concatMap (def: if getPrio def == highestPrio then [ (strip def) ] else [ ]) defs;
       inherit highestPrio;
     };
 
