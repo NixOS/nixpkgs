@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  installFonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-    "woff2"
+    "webfont"
   ];
 
   src = fetchzip {
@@ -21,17 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-p+tE3DECfJyBIPyafGZ8jDYQ1lPb+iAnEwLyaUy7DW0=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/truetype fonts/ttf/*.ttf
-    install -m444 -Dt $out/share/fonts/opentype fonts/otf/*.otf
-    install -m444 -Dt $woff2/share/fonts/woff2 fonts/webfonts/*.woff2
-
-    runHook postInstall
-  '';
 
   meta = {
     description = "Open-source font by Ksenia Erulevich";
