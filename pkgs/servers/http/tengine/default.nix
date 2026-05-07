@@ -132,12 +132,10 @@ stdenv.mkDerivation rec {
   ++ map (mod: "--add-module=${mod.src}") modules;
 
   env.NIX_CFLAGS_COMPILE =
-    "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
-    + optionalString stdenv.hostPlatform.isDarwin " -Wno-error=deprecated-declarations";
+    "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough -Wno-unterminated-string-initialization"
+    + optionalString stdenv.hostPlatform.isDarwin " -Wno-error=deprecated-declarations -Wno-unused-but-set-variable";
 
   preConfigure = (lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
-
-  hardeningEnable = optional (!stdenv.hostPlatform.isDarwin) "pie";
 
   enableParallelBuilding = true;
 
@@ -150,12 +148,12 @@ stdenv.mkDerivation rec {
     tests = nixosTests.nginx-variants.tengine;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web server based on Nginx and has many advanced features, originated by Taobao";
     mainProgram = "nginx";
     homepage = "https://tengine.taobao.org";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

@@ -12,7 +12,7 @@ This process split into two sections and adheres to the versioning policy outlin
 * Prior to the breaking change window of the next release being closed:
   * `nixos-unstable`: Ensure k3s points to latest versioned release
   * `nixos-unstable`: Ensure release notes are up to date
-  * `nixos-unstable`: Remove k3s releases which will be end of life upstream prior to end-of-life for the next NixOS stable release are removed with proper deprecation notice (process listed below)
+  * `nixos-unstable`: Remove k3s releases which will be end of life upstream prior to end-of-life for the next NixOS stable release, with proper deprecation notice (process listed below)
 
 ### Post-Release
 
@@ -53,7 +53,7 @@ Package removal policy and timelines follow our reasoning in the [versioning doc
 Quick checklist for reviewers of the k3s package:
 
 * Is the version of the Go compiler pinned according to the go.mod file for the release?
-  * Update script will not pin nor change the go version.
+  * The update script will not pin nor change the Go version.
 * Do the K3s passthru.tests work for all architectures supported? (linux-x86_64, aarch64-linux)
   * For GitHub CI, [OfBorg](https://github.com/NixOS/ofborg) can be used to test all platforms.
   * For Local testing, the following can be run in nixpkgs root on the upgrade branch: `nix build .#k3s_1_29.passthru.tests.{etcd,single-node,multi-node}` (Replace "29" to the version tested)

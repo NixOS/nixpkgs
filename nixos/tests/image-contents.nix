@@ -19,7 +19,10 @@ let
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
         {
-          fileSystems."/".device = "/dev/disk/by-label/nixos";
+          fileSystems."/" = {
+            device = "/dev/disk/by-label/nixos";
+            fsType = "ext4";
+          };
           boot.loader.grub.device = "/dev/vda";
           boot.loader.timeout = 0;
           nixpkgs.pkgs = pkgs;
@@ -51,7 +54,6 @@ in
 makeEc2Test {
   name = "image-contents";
   inherit image;
-  userData = null;
   script = ''
     machine.start()
     # Test that if contents includes a file, it is copied to the target.

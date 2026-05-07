@@ -8,18 +8,23 @@
 
 crystal.buildCrystalPackage rec {
   pname = "lucky-cli";
-  version = "1.1.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "luckyframework";
     repo = "lucky_cli";
-    rev = "v${version}";
-    hash = "sha256-mDUx9cQoYpU9kSAls36kzNVYZ8a4aqHEMIWfzS41NBk=";
+    tag = "v${version}";
+    hash = "sha256-68As7PSRYwhJGcQwI4FgM9aN0nhNrEjcv+10jKnlXeA=";
   };
 
   # the integration tests will try to clone a remote repos
   postPatch = ''
     rm -rf spec/integration
+  '';
+
+  preConfigure = ''
+    substituteInPlace "./src/lucky_cli/version.cr" \
+      --replace-fail '`shards version #{__DIR__}`' '"${version}"'
   '';
 
   format = "crystal";
@@ -38,13 +43,13 @@ crystal.buildCrystalPackage rec {
       --prefix PATH : ${lib.makeBinPath [ crystal ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Crystal library for creating and running tasks. Also generates Lucky projects";
     homepage = "https://luckyframework.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "lucky";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = lib.versionOlder crystal.version "1.6.0";
   };
 }

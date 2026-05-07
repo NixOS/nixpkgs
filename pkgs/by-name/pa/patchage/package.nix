@@ -14,14 +14,14 @@
   wafHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "patchage";
   version = "1.0.6";
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "patchage";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LzN6RyF/VT4LUVeR0904BnLuNMFZjFTDu9oDIKYG2Yo=";
     fetchSubmodules = true;
   };
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.nico202 ];
     mainProgram = "patchage";
   };
-}
+})

@@ -6,7 +6,6 @@
   pytest-freezer,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "tempora";
   version = "5.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
@@ -47,12 +44,12 @@ buildPythonPackage rec {
     "tempora.utc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Objects and routines pertaining to date and time";
     mainProgram = "calc-prorate";
     homepage = "https://github.com/jaraco/tempora";
     changelog = "https://github.com/jaraco/tempora/blob/${src.tag}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

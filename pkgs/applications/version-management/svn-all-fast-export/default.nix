@@ -39,16 +39,16 @@ stdenv.mkDerivation {
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
   ];
 
-  NIX_LDFLAGS = "-lsvn_fs-1";
+  env.NIX_LDFLAGS = "-lsvn_fs-1";
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/svn-all-fast-export/svn2git";
     description = "Fast-import based converter for an svn repo to git repos";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.flokli ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.flokli ];
     mainProgram = "svn-all-fast-export";
   };
 }

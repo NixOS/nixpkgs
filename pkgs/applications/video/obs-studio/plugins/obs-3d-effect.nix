@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for OBS Studio adding 3D effect filter";
     homepage = "https://github.com/exeldro/obs-3d-effect";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
     inherit (obs-studio.meta) platforms;
   };
 }

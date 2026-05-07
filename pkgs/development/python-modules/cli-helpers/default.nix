@@ -2,28 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   configobj,
   mock,
   pytestCheckHook,
   pygments,
+  setuptools,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.14.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-YtEXENvrwvxGAAPeEhVogyXYY2hZBW1oizhBm9QEi8A=";
+    hash = "sha256-eY4HMfL01CV2fLEqOtlmvyi13nelZRZiBhu0pmvujzU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     configobj
     tabulate
   ]
@@ -37,9 +37,9 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     description = "Python helpers for common CLI tasks";
     longDescription = ''
       CLI Helpers is a Python package that makes it easy to perform common
@@ -62,7 +62,7 @@ buildPythonPackage rec {
       Read the documentation at http://cli-helpers.rtfd.io
     '';
     homepage = "https://cli-helpers.readthedocs.io/en/stable/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.kalbasit ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.kalbasit ];
   };
 }

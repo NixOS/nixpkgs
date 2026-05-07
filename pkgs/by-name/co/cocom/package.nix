@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cocom";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "LamdaLamdaLamda";
     repo = "cocom";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0sl4ivn95sr5pgw2z877gmhyfc4mk9xr457i5g2i4wqnf2jmy14j";
   };
 
@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "NTP client";
     homepage = "https://github.com/LamdaLamdaLamda/cocom";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cocom";
   };
-}
+})

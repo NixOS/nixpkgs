@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   inherit version patches;
 
   src = fetchurl {
-    url = "http://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
+    url = "https://cyberelk.net/tim/data/patchutils/stable/${pname}-${version}.tar.xz";
     inherit sha256;
   };
 
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 
   # tests fail when building in parallel
   enableParallelBuilding = false;
+
+  preConfigure = ''
+    export PERL=${perl.interpreter}
+  '';
 
   postInstall = ''
     for bin in $out/bin/{splitdiff,rediff,editdiff,dehtmldiff}; do
@@ -44,11 +48,13 @@ stdenv.mkDerivation rec {
       -exec sed -i '{}' -e 's|/bin/echo|echo|g' \;
   '';
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
     description = "Tools to manipulate patch files";
     homepage = "http://cyberelk.net/tim/software/patchutils";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }

@@ -1,27 +1,22 @@
 {
   lib,
   fetchFromGitHub,
-  fetchurl,
   python3Packages,
   installShellFiles,
   gitUpdater,
+  unicode-character-database,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "unicode";
-  version = "2.9";
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "unicode-paracode";
+  version = "3.2-unstable-2025-01-31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garabik";
     repo = "unicode";
-    rev = "v${version}";
-    sha256 = "sha256-FHAlZ5HID/FE9+YR7Dmc3Uh7E16QKORoD8g9jgTeQdY=";
-  };
-
-  ucdtxt = fetchurl {
-    url = "https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt";
-    sha256 = "sha256-/1jlgjvQlRZlZKAG5H0RETCBPc+L8jTvefpRqHDttI8=";
+    rev = "7df103ee988bbfe999f457e23cbc0e954dd0e813";
+    hash = "sha256-4u/tp+KQMfgo8zS4INB8MJBOLgHqMBj3Tk2yj7Sp3YU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -29,12 +24,24 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [ setuptools ];
 
   postFixup = ''
+    mkdir -p "$out/share/unicode"
+    ln -s "${unicode-character-database}/share/unicode/UnicodeData.txt" "$out/share/unicode/UnicodeData.txt"
+    # We want to keep /usr/share/unicode in the list for the Unihan files
     substituteInPlace "$out/bin/.unicode-wrapped" \
-      --replace-fail "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
+      --replace-fail "'/usr/share/unicode', " "'$out/share/unicode', '/usr/share/unicode', "
   '';
 
   postInstall = ''
     installManPage paracode.1 unicode.1
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    echo Testing: $out/bin/unicode --brief z
+    diff -u <(echo z U+007A LATIN SMALL LETTER Z) <($out/bin/unicode --brief z 2>&1) && echo Success
+
+    runHook postCheck
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
@@ -44,6 +51,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/garabik/unicode";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.woffs ];
+    mainProgram = "unicode";
     platforms = lib.platforms.all;
   };
-}
+})

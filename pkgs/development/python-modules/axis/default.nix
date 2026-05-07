@@ -1,7 +1,6 @@
 {
   lib,
-  async-timeout,
-  attrs,
+  aiohttp,
   buildPythonPackage,
   faust-cchardet,
   fetchFromGitHub,
@@ -14,31 +13,30 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "axis";
-  version = "65";
+  version = "69";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "axis";
-    tag = "v${version}";
-    hash = "sha256-65njqnnahpYhx5CShjWOuNlkckQbt8tMjKf8OUCrmbw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-igeDyGKG235ooe/QrHjbya9WTCzwC8GfMoCwtpaBlR8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel==0.46.1" "wheel"
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "wheel==0.47.0" "wheel"
   '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    async-timeout
-    attrs
+    aiohttp
     faust-cchardet
     httpx
     orjson
@@ -52,12 +50,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "axis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for communicating with devices from Axis Communications";
     homepage = "https://github.com/Kane610/axis";
-    changelog = "https://github.com/Kane610/axis/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Kane610/axis/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "axis";
   };
-}
+})

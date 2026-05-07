@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "testrail-api";
-  version = "1.13.4";
+  version = "1.13.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";
     tag = version;
-    hash = "sha256-0RrNqSuimXXBEkjmnRQiIXUDy6z2y9wKneWqBTi5FHY=";
+    hash = "sha256-xCarEmJM+liyh8T8qG8sqSLXMnFN49yZapbktIElSF0=";
   };
 
   build-system = [

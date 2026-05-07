@@ -13,16 +13,16 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quart-schema";
-  version = "0.21.0";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-schema";
-    tag = version;
-    hash = "sha256-FpjnhSTkjskCxT874ABrD3Zew4g4R977xaYvJhVTDxw=";
+    tag = finalAttrs.version;
+    hash = "sha256-xrCQNGxX9CC1fOy3CT40Sdvsd94KgE1k8B5UgIWZ8kY=";
   };
 
   build-system = [ pdm-backend ];
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

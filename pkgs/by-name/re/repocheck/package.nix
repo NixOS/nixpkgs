@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "repocheck";
   version = "1.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kynikos";
     repo = "repocheck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pCz+oAfDFyDeuXumfNzLTXnftM9+IG+lZzWSKtbZ9dg=";
   };
 
@@ -23,10 +23,10 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Check the status of code repositories under a root directory";
     mainProgram = "repocheck";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

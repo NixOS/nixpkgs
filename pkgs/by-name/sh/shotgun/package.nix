@@ -4,28 +4,27 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shotgun";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "neXromancers";
     repo = "shotgun";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sBstFz7cYfwVQpDZeC3wPjzbKU5zQzmnhiWNqiCda1k=";
   };
 
   cargoHash = "sha256-Hv/lQhxRJvvMB5LC5K7k9SmuUCfaVZJynWIz8QOeL9A=";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal X screenshot utility";
     homepage = "https://github.com/neXromancers/shotgun";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [
-      figsoda
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [
       lumi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "shotgun";
   };
-}
+})

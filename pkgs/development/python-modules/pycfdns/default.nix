@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pycfdns";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycfdns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for updating Cloudflare DNS A records";
     homepage = "https://github.com/ludeeus/pycfdns";
     changelog = "https://github.com/ludeeus/pycfdns/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -12,7 +12,10 @@
   udev,
   vulkan-loader,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -50,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
     vulkan-loader
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
@@ -92,6 +95,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Assets
       cc-by-nc-40
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 })

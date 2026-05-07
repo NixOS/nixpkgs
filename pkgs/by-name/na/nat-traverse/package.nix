@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nat-traverse";
   version = "0.7";
 
   src = fetchurl {
-    url = "https://www.speicherleck.de/iblech/nat-traverse/nat-traverse-${version}.tar.bz2";
+    url = "https://www.speicherleck.de/iblech/nat-traverse/nat-traverse-${finalAttrs.version}.tar.bz2";
     sha256 = "0knwnqsjwv7sa5wjb863ghabs7s269a73qwkmxpsbngjw9s0j2ih";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     gzip -c nat-traverse.1 > $out/share/man/man1/nat-traverse.1.gz
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NAT gateway traversal utility";
     longDescription = ''
       nat-traverse establishes direct connections between nodes which are
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
       nat-traverse works out-of-the-box.
     '';
     homepage = "https://www.speicherleck.de/iblech/nat-traverse/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.iblech ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.iblech ];
     mainProgram = "nat-traverse";
   };
-}
+})

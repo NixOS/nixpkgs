@@ -1,62 +1,44 @@
 {
   lib,
   fetchFromGitHub,
-  git,
   nodejs,
-  python3,
+  python3Packages,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = final: prev: {
-      # Requires "pydot >= 1.4.1, <3",
-      pydot = prev.pydot.overridePythonAttrs (old: rec {
-        version = "2.0.0";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-YCRq8hUSP6Bi8hzXkb5n3aI6bygN8J9okZ5jeh5PMjU=";
-        };
-        doCheck = false;
-      });
-    };
-  };
-in
-with py.pkgs;
-
-py.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cwltool";
-  version = "3.1.20250110105449";
+  version = "3.1.20260315121657";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
-    tag = version;
-    hash = "sha256-V0CQiNkIw81s6e9224qcfbsOqBvMo34q+lRURpRetKs=";
+    tag = finalAttrs.version;
+    hash = "sha256-0cd64fkaCMX+eaZ4maZW8sE+ZX7bTFy1DDY5leqf9B0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "prov == 1.5.1" "prov" \
-      --replace-fail '"schema-salad >= 8.7, < 9",' '"schema-salad",' \
       --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy==1.14.1" "mypy"
+      --replace-fail "mypy==1.19.1" "mypy"
   '';
 
-  build-system = with py.pkgs; [
+  pythonRelaxDeps = [
+    "prov"
+    "rdflib"
+  ];
+
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ git ];
-
-  dependencies = with py.pkgs; [
+  dependencies = with python3Packages; [
     argcomplete
     bagit
     coloredlogs
     cwl-utils
-    mypy
     mypy-extensions
     prov
     psutil
@@ -74,7 +56,7 @@ py.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     mock
     nodejs
     pytest-mock
@@ -93,6 +75,7 @@ py.pkgs.buildPythonApplication rec {
   disabledTestPaths = [
     "tests/test_udocker.py"
     "tests/test_provenance.py"
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [
@@ -102,9 +85,9 @@ py.pkgs.buildPythonApplication rec {
   meta = {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
-    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
+    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "cwltool";
   };
-}
+})

@@ -5,14 +5,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libx86emu";
   version = "3.7";
 
   src = fetchFromGitHub {
     owner = "wfeldt";
     repo = "libx86emu";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ilAmGlkMeuG0FlygMdE3NreFPJJF6g/26C8C5grvjrk=";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   postUnpack = "rm $sourceRoot/git2log";
   patchPhase = ''
     # VERSION is usually generated using Git
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
     substituteInPlace Makefile --replace "/usr" "/"
   '';
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   enableParallelBuilding = true;
 
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     "LIBDIR=/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "x86 emulation library";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/wfeldt/libx86emu";
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    platforms = lib.platforms.linux;
   };
-}
+})

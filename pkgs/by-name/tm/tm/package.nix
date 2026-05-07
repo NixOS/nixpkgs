@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation (finalAtts: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tm";
   version = "0.4.1";
 
   src = fetchurl {
-    url = "https://vicerveza.homeunix.net/~viric/soft/tm/tm-${finalAtts.version}.tar.gz";
+    url = "https://vicerveza.homeunix.net/~viric/soft/tm/tm-${finalAttrs.version}.tar.gz";
     hash = "sha256-OzibwDtpZK1f+lejRLiR/bz3ybJgSt2nI6hj+DZXxKA=";
   };
 

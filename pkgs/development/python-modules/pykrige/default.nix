@@ -5,6 +5,7 @@
 
   # build-system
   cython,
+  pentapy,
   setuptools,
   setuptools-scm,
 
@@ -21,25 +22,20 @@
 
 buildPythonPackage rec {
   pname = "pykrige";
-  version = "1.7.2";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "PyKrige";
     tag = "v${version}";
-    hash = "sha256-9f8SNlt4qiTlXgx2ica9Y8rmnYzQ5VarvFRfoZ9bSsY=";
+    hash = "sha256-zdszmT1LEfYBWzd+m2nITtl0lZHyU0fzszYxANQS6yU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1,<2.3; python_version >= '3.9'" "numpy>=2.0.0" \
-      --replace-fail "Cython>=3.0.10,<3.1.0" "Cython>=3.1.0,<4.0.0"
-  '';
 
   build-system = [
     cython
     numpy
+    pentapy
     scipy
     setuptools
     setuptools-scm
@@ -70,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GeoStat-Framework/PyKrige";
     changelog = "https://github.com/GeoStat-Framework/PyKrige/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.sikmir ];
+    teams = [ lib.teams.geospatial ];
   };
 }

@@ -7,14 +7,14 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcircle";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "libcircle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EfnoNL6wo6qQES6XzMtpTpYcsJ8V2gy32i26wiTldH0=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
-  meta = with lib; {
+  meta = {
     description = "API for distributing embarrassingly parallel workloads using self-stabilization";
     homepage = "http://hpc.github.io/libcircle/";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

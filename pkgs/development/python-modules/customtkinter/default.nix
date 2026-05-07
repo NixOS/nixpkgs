@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   tkinter,
@@ -16,7 +15,6 @@ in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TomSchimansky";

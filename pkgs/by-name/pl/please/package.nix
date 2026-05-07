@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "please";
   version = "0.5.5";
 
   src = fetchFromGitLab {
     owner = "edneville";
     repo = "please";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bQ91uCDA2HKuiBmHZ9QP4V6tM6c7hRvECqXzfC6EEnI=";
   };
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) please; };
 
-  meta = with lib; {
+  meta = {
     description = "Polite regex-first sudo alternative";
     longDescription = ''
       Delegate accurate least privilege access with ease. Express easily with a
@@ -46,9 +46,9 @@ rustPlatform.buildRustPackage rec {
       avoided, logic problems may exist but this codebase is relatively small.
     '';
     homepage = "https://www.usenix.org.uk/content/please.html";
-    changelog = "https://github.com/edneville/please/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
+    changelog = "https://github.com/edneville/please/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

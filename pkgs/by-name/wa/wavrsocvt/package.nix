@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     cp wavrsocvt $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert .wav files into sound files for Lego NXT brick";
     mainProgram = "wavrsocvt";
     longDescription = ''
@@ -35,8 +35,7 @@ stdenv.mkDerivation {
       You can then upload these with e.g. nxt-python.
     '';
     homepage = "https://bricxcc.sourceforge.net/";
-    license = licenses.mpl11;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mpl11;
+    platforms = with lib.platforms; linux;
   };
 }

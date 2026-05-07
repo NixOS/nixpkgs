@@ -5,7 +5,6 @@
   flit-core,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   sphinx,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage {
   pname = "breathe";
   version = "4.35.0-unstable-2025-01-16";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "breathe-doc";
@@ -39,6 +36,5 @@ buildPythonPackage {
     mainProgram = "breathe-apidoc";
     homepage = "https://github.com/breathe-doc/breathe";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.sphinx ];
   };
 }

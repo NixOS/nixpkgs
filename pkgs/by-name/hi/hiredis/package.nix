@@ -5,14 +5,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hiredis";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ZxUITm3OcbERcvaNqGQU46bEfV+jN6safPalG0TVfBg=";
   };
 
@@ -20,13 +20,15 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  PREFIX = "\${out}";
-  USE_SSL = 1;
+  env = {
+    PREFIX = "\${out}";
+    USE_SSL = 1;
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/redis/hiredis";
     description = "Minimalistic C client for Redis >= 1.2";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
-}
+})

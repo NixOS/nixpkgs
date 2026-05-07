@@ -55,6 +55,10 @@ in
                 llama-server = lib.getExe' llama-cpp "llama-server";
               in
               {
+                # more useful logging output
+                logLevel = "debug";
+                logToStdout = "both";
+
                 hooks.on_startup.preload = [
                   "smollm2"
                 ];
@@ -62,14 +66,14 @@ in
                 models = {
                   "smollm2" = {
                     ttl = 10;
-                    cmd = "${llama-server} --port \${PORT} -m ${smollm2-135m} --no-webui --temp 0.2 --top-k 9";
+                    cmd = "${llama-server} --port \${PORT} -m ${smollm2-135m} --alias smollm2 --no-webui --temp 0.2 --top-k 9";
                   };
                   "smollm2-group-1" = {
-                    cmd = "${llama-server} --port \${PORT} -m ${smollm2-135m} --no-webui --temp 0.2 --top-k 9 -c 1024";
+                    cmd = "${llama-server} --port \${PORT} -m ${smollm2-135m} --alias smollm2-group-1 --no-webui --temp 0.2 --top-k 9 -c 1024";
                   };
                   "smollm2-group-2" = {
                     proxy = "http://127.0.0.1:5802";
-                    cmd = "${llama-server} --port 5802 -m ${smollm2-135m} --no-webui --temp 0.2 --top-k 9 -c 1024";
+                    cmd = "${llama-server} --port 5802 -m ${smollm2-135m} --alias smollm2-group-2 --no-webui --temp 0.2 --top-k 9 -c 1024";
                   };
                 };
                 groups = {
@@ -115,7 +119,6 @@ in
           '-s',
           '--fail',
           '-H "Content-Type: application/json"',
-          '-H "Authorization: Bearer no-key"',
           "-d '{d}'".format(d=json.dumps(data))
         ]
         return json.loads(machine.succeed('curl {args} http://localhost:8080{route}'.format(args=" ".join(args), route=route)))
@@ -127,7 +130,8 @@ in
         machine.succeed('curl --fail http:/localhost:8080/ui/')
 
       with subtest('check is healthy'):
-        machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/health | grep "OK"')
+        response_healthy = machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/health')
+        assert 'OK' in response_healthy, '/health was not OK'
 
     ''
     + lib.optionalString useSmollm2-135m ''
@@ -135,10 +139,10 @@ in
       with subtest('check `/running` for preloaded smollm2'):
         machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/running | grep "smollm2"')
         running_response = get_json('/running')
-        assert len(running_response['running']) == 1
+        assert len(running_response['running']) == 1, f'running doesn\'t have one entry as expected: {running_response}'
         running_model = running_response['running'][0]
-        assert running_model['model'] == 'smollm2'
-        assert running_model['state'] == 'ready'
+        assert running_model['model'] == 'smollm2', f'running model is not smollm2: {running_response}'
+        assert running_model['state'] == 'ready', f'running smollm2 is not ready: {running_response}'
 
       with subtest('runs smollm2'):
         response = None
@@ -155,31 +159,30 @@ in
           response = post_json('/v1/chat/completions', data)
 
         with subtest('response is from smollm2'):
-          assert response['model'] == 'smollm2'
+          assert response['model'] == 'smollm2', f'response was not from smollm2: {response['model']}'
 
         with subtest('response contains at least one item in "choices"'):
-          assert len(response['choices']) >= 1
+          assert len(response['choices']) >= 1, f'response had no choices: {response}'
 
         assistant_choices = None
         with subtest('response contains at least one "assistant" message'):
           assistant_choices = [c for c in response['choices'] if c['message']['role'] == 'assistant']
-          assert len(assistant_choices) >= 1
+          assert len(assistant_choices) >= 1, f'response had no assistant message: {response}'
 
         with subtest('first message (lowercase) starts with "hello"'):
-          assert assistant_choices[0]['message']['content'].lower()[:5] == 'hello'
+          assert assistant_choices[0]['message']['content'].lower()[:5] == 'hello', f'response didn\'t start with hello: {response}'
 
         with subtest('check `/running` for just smollm2'):
           running_response = get_json('/running')
-          assert len(running_response['running']) == 1
+          assert len(running_response['running']) == 1, f'running doesn\'t have one entry as expected: {running_response}'
           running_model = running_response['running'][0]
-          assert running_model['model'] == 'smollm2'
-          assert running_model['state'] == 'ready'
+          assert running_model['model'] == 'smollm2', f'running model is not smollm2: {running_response}'
+          assert running_model['state'] == 'ready', f'running smollm2 is not ready: {running_response}'
 
       with subtest('check `/running` for smollm2 to timeout'):
-        machine.succeed('curl --silent --fail http://localhost:8080/running | grep "smollm2"')
         machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/running | grep -v "smollm2"', timeout=11)
         running_response = get_json('/running')
-        assert len(running_response['running']) == 0
+        assert len(running_response['running']) == 0, "smollm2 was still running after timeout"
 
       with subtest('runs smollm2-group-1 and smollm2-group-2'):
         response_1 = None
@@ -196,25 +199,25 @@ in
           response_1 = post_json('/v1/chat/completions', data)
 
         with subtest('response 1 is from smollm2-group-1'):
-          assert response_1['model'] == 'smollm2-group-1'
+          assert response_1['model'] == 'smollm2-group-1', f'response was not from smollm2-group-1: {response_1['model']}'
 
         with subtest('response 1 contains at least one item in "choices"'):
-          assert len(response['choices']) >= 1
+          assert len(response_1['choices']) >= 1, f'response had no choices: {response_1}'
 
         assistant_choices_1 = None
         with subtest('response 1 contains at least one "assistant" message'):
           assistant_choices_1 = [c for c in response_1['choices'] if c['message']['role'] == 'assistant']
-          assert len(assistant_choices_1) >= 1
+          assert len(assistant_choices_1) >= 1, f'response had no assistant message: {response_1}'
 
         with subtest('first message (lowercase) in response 1 starts with "hello"'):
-          assert assistant_choices_1[0]['message']['content'].lower()[:5] == 'hello'
+          assert assistant_choices_1[0]['message']['content'].lower()[:5] == 'hello', f'response didn\'t start with hello: {response_1}'
 
         with subtest('check `/running` for just smollm2-group-1'):
           running_response = get_json('/running')
-          assert len(running_response['running']) == 1
+          assert len(running_response['running']) == 1, f'running doesn\'t have one entry as expected: {running_response}'
           running_model = running_response['running'][0]
-          assert running_model['model'] == 'smollm2-group-1'
-          assert running_model['state'] == 'ready'
+          assert running_model['model'] == 'smollm2-group-1', f'running model is not smollm2-group-1: {running_response}'
+          assert running_model['state'] == 'ready', f'running smollm2-group-1 is not ready: {running_response}'
 
         response_2 = None
         with subtest('send request to smollm2-group-2'):
@@ -230,29 +233,29 @@ in
           response_2 = post_json('/v1/chat/completions', data)
 
         with subtest('response 2 is from smollm2-group-2'):
-          assert response_2['model'] == 'smollm2-group-2'
+          assert response_2['model'] == 'smollm2-group-2', f'response was not from smollm2-group-2: {response_2['model']}'
 
         with subtest('response 2 contains at least one item in "choices"'):
-          assert len(response['choices']) >= 1
+          assert len(response_2['choices']) >= 1, f'response had no choices: {response_2}'
 
         assistant_choices_2 = None
         with subtest('response 2 contains at least one "assistant" message'):
           assistant_choices_2 = [c for c in response_2['choices'] if c['message']['role'] == 'assistant']
-          assert len(assistant_choices_2) >= 1
+          assert len(assistant_choices_2) >= 1, f'response had no assistant message: {response_2}'
 
         with subtest('first message (lowercase) in response 1 starts with "hello"'):
-          assert assistant_choices_2[0]['message']['content'].lower()[:5] == 'hello'
+          assert assistant_choices_2[0]['message']['content'].lower()[:5] == 'hello', f'response didn\'t start with hello: {response_2}'
 
         with subtest('check `/running` for both smollm2-group-1 and smollm2-group-2'):
           running_response = get_json('/running')['running']
-          assert len(running_response) == 2
+          assert len(running_response) == 2, 'expected both in smollm2 group to be running'
           assert len([
             rm for rm in running_response
             if rm['state'] == 'ready' and rm['model'] == 'smollm2-group-1'
-          ]) == 1
+          ]) == 1, f'smollm2-group-1 not in running group and ready {running_response}'
           assert len([
             rm for rm in running_response
             if rm['state'] == 'ready' and rm['model'] == 'smollm2-group-2'
-          ]) == 1
+          ]) == 1, f'smollm2-group-2 not in running group and ready {running_response}'
     '';
 }

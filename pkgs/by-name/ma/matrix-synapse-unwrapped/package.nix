@@ -14,30 +14,30 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.138.0";
-  format = "pyproject";
+  version = "1.152.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-mzBX5cLXF52p3SIq4rSvERbjyD07wRKVxL4yGsYNUaw=";
+    hash = "sha256-cjc9vC3sfsFaxcxEpXAAAza9/p3fk/2oCa4oB1fWAdA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-aUZUg8+1UlDzsxJN87Bk/DjD5WFcvHGVBRf1rIXKOZ4=";
+    hash = "sha256-RwUsiS6JM5dmqquKVtyaBp67DYZys6Uecy0V6AabTk4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools_rust>=1.3,<=1.11.1" "setuptools_rust<=1.12,>=1.3"
-  '';
-
-  build-system = with python3Packages; [
-    poetry-core
-    setuptools-rust
-  ];
+  build-system =
+    with python3Packages;
+    [
+      poetry-core
+      setuptools-rust
+    ]
+    ++ [
+      rustPlatform.maturinBuildHook
+    ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -51,8 +51,6 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
-
-  pythonRemoveDeps = [ "setuptools_rust" ];
 
   dependencies =
     with python3Packages;
@@ -79,6 +77,8 @@ python3Packages.buildPythonApplication rec {
       pydantic
       pymacaroons
       pyopenssl
+      pyparsing
+      pyrsistent
       pyyaml
       service-identity
       signedjson
@@ -107,7 +107,7 @@ python3Packages.buildPythonApplication rec {
       authlib
     ];
     systemd = [
-      systemd
+      systemd-python
     ];
     url-preview = [
       lxml
@@ -134,7 +134,7 @@ python3Packages.buildPythonApplication rec {
     mock
     parameterized
   ])
-  ++ lib.filter (pkg: !pkg.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
+  ++ lib.filter (pkg: !pkg.meta.broken) (lib.concatAttrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

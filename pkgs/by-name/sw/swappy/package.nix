@@ -16,14 +16,14 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swappy";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "jtheoof";
     repo = "swappy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rPe567ajk/umfZ2HHm+pRxpbMOTyUmqd+22kwDSFMTc=";
   };
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wayland native snapshot editing tool, inspired by Snappy on macOS";
     homepage = "https://github.com/jtheoof/swappy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "swappy";
-    maintainers = [ maintainers.matthiasbeyer ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = lib.platforms.linux;
   };
-}
+})

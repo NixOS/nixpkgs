@@ -13,13 +13,13 @@
 
 let
   # Use unstable because it has improvements for finding python
-  version = "0.12-unstable-2025-08-19";
+  version = "0.12-unstable-2026-02-16";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "icestudio";
-    rev = "8bc0391117bd3639881ed947e49e4cd37c199a95";
-    hash = "sha256-GWG6FvBiowgiW7MWKxCOivmDbb5YveZR6Nn3foLifwY=";
+    rev = "3398b694f7d8eeda47fae37067a66f011ce22880";
+    hash = "sha256-OJQepq424ml86LHMfkexArwC7LWoXgJP1UEkqwSXtmY=";
   };
 
   collection = fetchurl {

@@ -24,10 +24,10 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/usr/share/icons $out/share
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Fully featured shielded wallet for Zcash";
     homepage = "https://www.zecwallet.co/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "zecwallet-lite";

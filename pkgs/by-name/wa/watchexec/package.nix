@@ -9,20 +9,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchexec";
-  version = "2.3.2";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "watchexec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BJRvz3rFLaOCNhOsEo0rSOgB9BCJ2LMB9XEw8RBWXXs=";
+    hash = "sha256-Dobb+l24nL01od+KET3PGgDzFaYr1LPhkPrbpA3G6y4=";
   };
 
-  cargoHash = "sha256-VtSRC4lyjMo2O9dNbVllcDEx08zQWJMQmQ/2bNMup6U=";
+  cargoHash = "sha256-ZwF5nNI2ESwgaH129MhcJPlhtmxqwhhQ9W49u9bilRk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "AppKit"
+    ];
+  };
 
   checkFlags = [
     "--skip=help"
@@ -41,7 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh completions/zsh
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(.+)"
+    ];
+  };
 
   meta = {
     description = "Executes commands in response to file modifications";

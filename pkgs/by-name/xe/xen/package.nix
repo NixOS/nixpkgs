@@ -2,7 +2,7 @@
   lib,
   stdenv,
   testers,
-  fetchgit,
+  fetchFromGitHub,
   fetchpatch,
   replaceVars,
 
@@ -173,7 +173,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xen";
-  version = "4.20.1";
+  version = "4.20.3";
 
   # This attribute can be overriden to correct the file paths in
   # `passthru` when building an unstable Xen.
@@ -186,28 +186,34 @@ stdenv.mkDerivation (finalAttrs: {
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
 
-    # XSA 472
+    # XSA #483
     (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa472-1.patch";
-      hash = "sha256-6k/X7KFno9uBG0mUtJxl7TMavaRs2Xlj9JlW9ai6p0k=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa472-2.patch";
-      hash = "sha256-BisdztU9Wa5nIGmHo4IikqYPHdEhBehHaNqj1IuBe6I=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa472-3.patch";
-      hash = "sha256-rikOofQeuLNMBkdQS3xzmwh7BlgMOTMSsQcAOEzNOso=";
+      url = "https://xenbits.xenproject.org/xsa/xsa483.patch";
+      hash = "sha256-pZkSQKAjEIa/EHlCa2hD+3kofzpVHtFxcdp/TiWu9i8=";
     })
 
-    # XSA 473
+    # XSA #484
     (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa473-1.patch";
-      hash = "sha256-594tTalWcGJSLj3++4QB/ADkHH1qJNrdvg7FG6kOuB8=";
+      url = "https://xenbits.xenproject.org/xsa/xsa484.patch";
+      hash = "sha256-6zkTBHKfpAK2poSycEFSb3pE9pDpZwBxAe5Jf862j+U=";
     })
+
+    # XSA #486
     (fetchpatch {
-      url = "https://xenbits.xen.org/xsa/xsa473-2.patch";
-      hash = "sha256-tGuIGxJFBXbckIruSUeTyrM6GabdIj6Pr3cVxeDvNNY=";
+      url = "https://xenbits.xenproject.org/xsa/xsa486.patch";
+      hash = "sha256-8EC1lv2JAYqchX5sHbO3NbP7haEyu1V0/72KwALG+BA=";
+    })
+
+    # XSA #488
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa488-4.20.patch";
+      hash = "sha256-QttKWdmWC6Zn5k2hd6RIMCpLWv71HB/A9mCbDP+i8to=";
+    })
+
+    # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
+    (fetchpatch {
+      url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
+      hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
     })
   ];
 
@@ -219,10 +225,11 @@ stdenv.mkDerivation (finalAttrs: {
     "boot"
   ];
 
-  src = fetchgit {
-    url = "https://xenbits.xenproject.org/git-http/xen.git";
-    rev = "08f043965a7b1047aabd6d81da6b031465f2d797";
-    hash = "sha256-a4dIJBY5aeznXPoI8nSipMgimmww7ejoQ1GE28Gq13o=";
+  src = fetchFromGitHub {
+    owner = "xen-project";
+    repo = "xen";
+    tag = "RELEASE-4.20.3";
+    hash = "sha256-+qTHIsDD2A5lVwmpJ7artnzdviT1XN05CYeu7JFxfqc=";
   };
 
   strictDeps = true;
@@ -334,7 +341,7 @@ stdenv.mkDerivation (finalAttrs: {
     # We also need to wrap pygrub, which lies in $out/libexec/xen/bin.
     ''
       wrapPythonPrograms
-      wrapPythonProgramsIn "$out/libexec/xen/bin" "$out $pythonPath"
+      wrapPythonProgramsIn "$out/libexec/xen/bin" "$out ''${pythonPath[*]}"
     '';
 
   postFixup = ''

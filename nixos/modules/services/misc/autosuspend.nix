@@ -37,6 +37,7 @@ let
 
   # Dependencies needed by specific checks
   dependenciesForChecks = {
+    "Ping" = [ pkgs.iputils ];
     "Smb" = pkgs.samba;
     "XIdleTime" = [
       pkgs.xprintidle
@@ -136,7 +137,7 @@ in
               '';
             };
             wakeup_cmd = mkOption {
-              default = ''sh -c 'echo 0 > /sys/class/rtc/rtc0/wakealarm && echo {timestamp:.0f} > /sys/class/rtc/rtc0/wakealarm' '';
+              default = "sh -c 'echo 0 > /sys/class/rtc/rtc0/wakealarm && echo {timestamp:.0f} > /sys/class/rtc/rtc0/wakealarm' ";
               type = with types; str;
               description = ''
                 The command to execute for scheduling a wake up of the system. The given string is
@@ -225,6 +226,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.checks != { };
+        message = "`services.autosuspend.checks` must contain at least one activity check.";
+      }
+    ];
+
     systemd.services.autosuspend = {
       description = "A daemon to suspend your server in case of inactivity";
       documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
@@ -232,17 +240,7 @@ in
       after = [ "network.target" ];
       path = flatten (attrValues (filterAttrs (n: _: hasCheck n) dependenciesForChecks));
       serviceConfig = {
-        ExecStart = ''${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} daemon'';
-      };
-    };
-
-    systemd.services.autosuspend-detect-suspend = {
-      description = "Notifies autosuspend about suspension";
-      documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
-      wantedBy = [ "sleep.target" ];
-      after = [ "sleep.target" ];
-      serviceConfig = {
-        ExecStart = ''${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} presuspend'';
+        ExecStart = "${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} daemon";
       };
     };
   };

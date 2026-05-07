@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pipeworld";
   version = "0-unstable-2023-02-05";
 
@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (finalPackages: {
       terminal emulator.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

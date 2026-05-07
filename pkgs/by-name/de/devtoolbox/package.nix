@@ -18,7 +18,7 @@
   appstream,
   libxml2,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "devtoolbox";
   version = "1.3.0";
   pyproject = false; # uses meson
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aleiepure";
     repo = "devtoolbox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ReF70pNMrMweEB4WAGQT++9TxTN4gV1olln7Y6YWCis=";
   };
 
@@ -128,4 +128,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   opentelemetry-instrumentation,
   opentelemetry-test-utils,
@@ -11,8 +10,6 @@ buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-util-http";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/util/opentelemetry-util-http";
 

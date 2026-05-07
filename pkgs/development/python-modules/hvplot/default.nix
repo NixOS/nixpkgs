@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   bokeh,
@@ -26,18 +27,19 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.11.3";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "hvplot";
     tag = "v${version}";
-    hash = "sha256-V1KJtv1FCGITHdgxRWq1LWEgmWOU0N0iW60Wk0O5gC8=";
+    hash = "sha256-hJ9lgpM3AVyDeFxobUKDNYO39NKEejSDywOgnHPEm2c=";
   };
 
   build-system = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -94,6 +96,6 @@ buildPythonPackage rec {
     homepage = "https://hvplot.pyviz.org";
     changelog = "https://github.com/holoviz/hvplot/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ locnide ];
   };
 }

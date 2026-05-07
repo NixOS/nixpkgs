@@ -31,10 +31,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "clip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Contrastive Language-Image Pretraining";
     homepage = "https://github.com/openai/CLIP";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

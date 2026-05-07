@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   autoreconfHook,
   fuse,
   git,
@@ -9,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "aefs";
-  version = "unstable-2015-05-06";
+  version = "0-unstable-2015-05-06";
 
   src = fetchFromGitHub {
     owner = "edolstra";
@@ -17,6 +18,11 @@ stdenv.mkDerivation {
     rev = "e7a9bf8cfa9166668fe1514cc1afd31fc4e10e9a";
     hash = "sha256-a3YQWxJ7+bYhf1W1kdIykV8U1R4dcDZJ7K3NvNxbF0s=";
   };
+
+  # fix build with c23
+  #   ../system/types.h:27:13: error: 'bool' cannot be defined via 'typedef'
+  #   input.c:228:31: error: expected identifier before 'true'
+  patches = [ ./fix-build-with-c23.patch ];
 
   # autoconf's AC_CHECK_HEADERS and AC_CHECK_LIBS fail to detect libfuse on
   # Darwin if FUSE_USE_VERSION isn't set at configure time.
@@ -35,10 +41,14 @@ stdenv.mkDerivation {
 
   buildInputs = [ fuse ];
 
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
+
   meta = {
     homepage = "https://github.com/edolstra/aefs";
     description = "Cryptographic filesystem implemented in userspace using FUSE";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;

@@ -26,14 +26,14 @@ assert builtins.elem gpuBackend [
   "rocm"
 ];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spla";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = "spla";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fNH1IOKV1Re8G7GH9Xfn3itR80eonTbEGKQRRD16/2k=";
   };
 
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
       --replace-fail "\''${_IMPORT_PREFIX}" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Specialized Parallel Linear Algebra, providing distributed GEMM functionality for specific matrix distributions with optional GPU acceleration";
     homepage = "https://github.com/eth-cscs/spla";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

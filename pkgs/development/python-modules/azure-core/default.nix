@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   aiodns,
   aiohttp,
   flask,
@@ -12,10 +11,9 @@
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-requests,
   opentelemetry-sdk,
-  pytest,
   pytest-asyncio,
   pytest-trio,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   requests,
   setuptools,
   six,
@@ -24,18 +22,16 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.35.0";
+  version = "1.38.0";
   pname = "azure-core";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     pname = "azure_core";
     inherit version;
-    hash = "sha256-wL5ShIlIXp7eWbaXHrY8HqrPg+9TABv+OQTkdelyvlw=";
+    hash = "sha256-gZTSaCJFo+TjFRpmfGhkZMN4b+15GLOU0DW9zWG7WZM=";
   };
 
   build-system = [ setuptools ];
@@ -58,13 +54,12 @@ buildPythonPackage rec {
     opentelemetry-instrumentation
     opentelemetry-instrumentation-requests
     opentelemetry-sdk
-    pytest
     pytest-trio
     pytest-asyncio
-    pytestCheckHook
+    pytest8_3CheckHook
     trio
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # test server needs to be available
   preCheck = ''
@@ -109,11 +104,11 @@ buildPythonPackage rec {
     "tests/test_tracing_live.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

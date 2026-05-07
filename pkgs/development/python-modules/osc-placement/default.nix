@@ -9,7 +9,6 @@
   oslo-utils,
   oslotest,
   pbr,
-  pythonOlder,
   setuptools,
   sphinxHook,
   stestr,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "osc-placement";
-  version = "4.7.0";
+  version = "4.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";
     tag = version;
-    hash = "sha256-OLvi/eIgEEUoZKxowU7On5m2OkRsCEsU/Me7rPruIdM=";
+    hash = "sha256-txxLtg3fDrkPqU0k/PlwvpJJBzVLtJXz82mhPWo+rKc=";
   };
 
   env.PBR_VERSION = version;

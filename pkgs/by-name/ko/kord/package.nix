@@ -8,17 +8,17 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kord";
   version = "0.6.1";
 
   # kord depends on nightly features
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   src = fetchFromGitHub {
     owner = "twitchax";
     repo = "kord";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
   };
 
@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  meta = with lib; {
+  meta = {
     description = "Music theory binary and library for Rust";
     homepage = "https://github.com/twitchax/kord";
-    maintainers = with maintainers; [ kidsan ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ kidsan ];
+    license = with lib.licenses; [ mit ];
   };
-}
+})

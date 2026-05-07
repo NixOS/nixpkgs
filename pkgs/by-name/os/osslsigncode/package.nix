@@ -9,15 +9,15 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osslsigncode";
-  version = "2.10";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = "osslsigncode";
-    rev = version;
-    sha256 = "sha256-UjjNXcHpPbyUz5CPsW+uVhZP0X9XGM3//IVv9VhmP7o=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-63SIyjG91i6ldA3NpOG5X5fT8vTRqNaXDtOE/ZStqFA=";
   };
 
   nativeBuildInputs = [
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mtrojnar/osslsigncode";
     description = "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
     mainProgram = "osslsigncode";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       mmahut
       prusnak
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "firefox-sync-client";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "Mikescher";
     repo = "firefox-sync-client";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tzYuYSifV/a9SPb5KyabhQ29ByXuAgQgi3t0VMHVSH8=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "ffsclient";
   };
-}
+})

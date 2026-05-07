@@ -8,16 +8,16 @@
   gsettings-desktop-schemas,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "trelby";
-  version = "2.4.15";
+  version = "2.4.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trelby";
     repo = "trelby";
-    tag = version;
-    hash = "sha256-CTasd+YlRHjYUVepZf2RDOuw1p0OdQfJENZamSmXXFw=";
+    tag = finalAttrs.version;
+    hash = "sha256-YblilPQXjlSgkBstewfiuW0DZCnJw4dk6vZfEhdBGbk=";
   };
 
   build-system = [
@@ -51,11 +51,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Free, multiplatform, feature-rich screenwriting program";
-    homepage = "www.trelby.org";
+    homepage = "https://www.trelby.org";
     downloadPage = "https://github.com/trelby/trelby";
     mainProgram = "trelby";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ isotoxal ];
   };
-}
+})

@@ -8,23 +8,24 @@
   pkg-config,
 
   boost,
-  fmt_11,
+  fmt,
   openssl,
   sv-lang,
   mimalloc,
 
   verible,
   verilator,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage {
   pname = "veridian";
-  version = "0-unstable-2024-12-25";
+  version = "0-unstable-2025-11-30";
 
   src = fetchFromGitHub {
     owner = "vivekmalneedi";
     repo = "veridian";
-    rev = "d094c9d2fa9745b2c4430eef052478c64d5dd3b6";
-    hash = "sha256-3KjUunXTqdesvgDSeQMoXL0LRGsGQXZJGDt+xLWGovM=";
+    rev = "0c5776a4a4e08fd00b90d91ad3cd2ec10315d2bd";
+    hash = "sha256-TQ1qyKQesk0eOArhvfGxOHtIwpyM7iUOgNI1VA1riPE=";
   };
 
   cargoHash = "sha256-qJQD9HjSrrHdppbLNgLnXCycgzbmPePydZve3A8zGtU=";
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     openssl
     sv-lang
     mimalloc
@@ -69,6 +70,16 @@ rustPlatform.buildRustPackage {
     RUSTFLAGS = "-C link-args=-lmimalloc";
     # this is needed so that veridian doesn't try to build the sv-lang package itself
     SLANG_INSTALL_PATH = sv-lang;
+  };
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        # Avoid using "nightly" tag: https://github.com/Mic92/nix-update/pull/430
+        "--version-regex=(0-unstable-.*)"
+      ];
+    };
   };
 
   meta = {

@@ -5,20 +5,20 @@
   autoreconfHook,
   automake,
   fftw,
-  ladspaH,
+  ladspa-header,
   libxml2,
   pkg-config,
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swh-plugins";
   version = "0.4.17";
 
   src = fetchFromGitHub {
     owner = "swh";
     repo = "ladspa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-eOtIhNcuItREUShI8JRlBVKfMfovpdfIYu+m37v4KLE=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     fftw
-    ladspaH
+    ladspa-header
     libxml2
   ];
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://plugin.org.uk/";
     description = "LADSPA format audio plugins";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
   };
-}
+})

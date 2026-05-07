@@ -19,6 +19,7 @@
   cargo,
   staticCompiler ? false,
   enableShared ? stdenv.targetPlatform.hasSharedLibraries,
+  enableDefaultPie ? stdenv.targetPlatform.hasSharedLibraries,
   enableLTO ? stdenv.hostPlatform.hasSharedLibraries,
   texinfo ? null,
   perl ? null, # optional, for texi2pod (then pod2man)
@@ -29,6 +30,7 @@
   which,
   patchelf,
   binutils,
+  autoconf269,
   isl ? null, # optional, for the Graphite optimization framework.
   zlib ? null,
   libucontext ? null,
@@ -130,6 +132,7 @@ let
     # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc${majorVersion}.cc.override)" | jq '.[]' --raw-output'
     inherit
       apple-sdk
+      autoconf269
       binutils
       buildPackages
       cargo
@@ -137,6 +140,7 @@ let
       darwin
       disableBootstrap
       disableGdbPlugin
+      enableDefaultPie
       enableLTO
       enableMultilib
       enablePlugin
@@ -232,7 +236,6 @@ pipe
 
       hardeningDisable = [
         "format"
-        "pie"
         "stackclashprotection"
       ];
 
@@ -289,12 +292,12 @@ pipe
           )
         )
       )
-      + optionalString targetPlatform.isAvr (''
+      + optionalString targetPlatform.isAvr ''
         makeFlagsArray+=(
            '-s' # workaround for hitting hydra log limit
            'LIMITS_H_TEST=false'
         )
-      '');
+      '';
 
       inherit
         noSysDirs
@@ -333,7 +336,7 @@ pipe
         assert profiledCompiler -> !disableBootstrap;
         let
           target =
-            optionalString (profiledCompiler) "profiled"
+            optionalString profiledCompiler "profiled"
             + optionalString (
               (lib.systems.equals targetPlatform hostPlatform)
               && (lib.systems.equals hostPlatform buildPlatform)
@@ -401,7 +404,7 @@ pipe
             !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")
           ) "shadowstack"
           ++ optional (!(targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
-          ++ optionals (langFortran) [
+          ++ optionals langFortran [
             "fortify"
             "format"
           ];
@@ -427,7 +430,7 @@ pipe
       dontMoveLib64 = true;
     }
   ))
-  ([
+  [
     (callPackage ./common/libgcc.nix {
       inherit
         version
@@ -442,4 +445,4 @@ pipe
         ;
     })
     (callPackage ./common/checksum.nix { inherit langC langCC; })
-  ])
+  ]

@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amply" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/willu47/amply";
     description = ''
       Allows you to load and manipulate AMPL/GLPK data as Python data structures
     '';
-    maintainers = with maintainers; [ ris ];
-    license = licenses.epl10;
+    maintainers = with lib.maintainers; [ ris ];
+    license = lib.licenses.epl10;
   };
 }

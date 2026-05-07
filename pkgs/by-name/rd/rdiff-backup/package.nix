@@ -9,13 +9,13 @@ let
   pypkgs = python3Packages;
 
 in
-pypkgs.buildPythonApplication rec {
+pypkgs.buildPythonApplication (finalAttrs: {
   pname = "rdiff-backup";
   version = "2.2.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0HeDVyZrxlE7t/daRXCymySydgNIu/YHur/DpvCUWM8";
   };
 
@@ -33,12 +33,12 @@ pypkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "rdiff_backup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup system trying to combine best a mirror and an incremental backup system";
     homepage = "https://rdiff-backup.net";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "rdiff-backup";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

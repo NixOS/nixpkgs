@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgourou";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitea {
     domain = "forge.soutade.fr";
     owner = "soutade";
     repo = "libgourou";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tkft/pe3lH07pmyVibTEutIIvconUWDH1ZVN3qV4sSY=";
+    hash = "sha256-WQOlanavMy1z3ze+c8d1a7ZkAU60/GjEFS5JJfyNHMg=";
   };
 
   postPatch = ''
@@ -57,12 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Adobe's ADEPT protocol for ePub/PDF DRM";
     homepage = "https://forge.soutade.fr/soutade/libgourou";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ autumnal ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ autumnal ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

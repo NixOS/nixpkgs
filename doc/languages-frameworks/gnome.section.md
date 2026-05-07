@@ -111,7 +111,7 @@ Fortunately, we have a [family of hooks]{#ssec-gnome-hooks-wrapgappshook} that a
 - [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4} for GTK 4 apps. Same as `wrapGAppsHook3` but replaces `gtk3` with `gtk4`.
 - [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook} for programs without a graphical interface. Same as the above but does not bring `gtk3` and `librsvg` into the closure.
 
-The hooks do the the following:
+The hooks do the following:
 
 - `wrapGApps*` hook itself will add the package’s `share` directory to `XDG_DATA_DIRS`.
 
@@ -128,6 +128,8 @@ The hooks do the the following:
 - []{#ssec-gnome-hooks-gobject-introspection} `gobject-introspection` setup hook populates `GI_TYPELIB_PATH` variable with `lib/girepository-1.0` directories of dependencies, which is then added to wrapper by `wrapGApps*` hook. It also adds `share` directories of dependencies to `XDG_DATA_DIRS`, which is intended to promote GIR files but it also [pollutes the closures](https://github.com/NixOS/nixpkgs/issues/32790) of packages using `wrapGApps*` hook.
 
 - []{#ssec-gnome-hooks-gst-grl-plugins} Setup hooks of `gst_all_1.gstreamer` and `grilo` will populate the `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH` variables, respectively, which will then be added to the wrapper by `wrapGApps*` hook.
+
+- []{#ssec-gnome-hooks-libglycin} `libglycin`'s [setup hook](#libglycin-setup-hook) will populate `XDG_DATA_DIRS` with the path to the loaders.
 
 You can also pass additional arguments to `makeWrapper` using `gappsWrapperArgs` in `preFixup` hook:
 

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "py2vega";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "py2vega";
     tag = version;
-    hash = "sha256-M6vrObEj4cB53nvEi1oQdVWABlqGwG3xc2unY44Yhuc=";
+    hash = "sha256-GU4mSOHsU/DPBdKFau6pOYQpaojXOfQIXrSG3skWr/I=";
   };
 
   pythonRelaxDeps = [ "gast" ];

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "duct-py";
-  version = "0.6.4";
+  version = "1.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "duct.py";
-    rev = version;
-    hash = "sha256-4ja/SQ9R/SbKlf3NqKxLi+Fl/4JI0Fl/zG9EmTZjWZc=";
+    tag = version;
+    hash = "sha256-i811nQB8CVJPYPR0Jdzpk64EXxrTMDIBpdDoUs9Xu/k=";
   };
 
   pythonImportsCheck = [ "duct" ];
@@ -28,10 +28,10 @@ buildPythonPackage rec {
     "test_full_env"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for running child processes";
     homepage = "https://github.com/oconnor663/duct.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zmitchell ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zmitchell ];
   };
 }

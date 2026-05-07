@@ -4,14 +4,14 @@
   nix-update-script,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ngrrram";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "wintermute-cell";
     repo = "ngrrram";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-65cbNsGQZSpxKV0lq/Z7TK7CODPTqayOiPStukFbo44=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Guanran928 ];
     mainProgram = "ngrrram";
   };
-}
+})

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   olm,
   openssl,
@@ -12,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.9.1";
+  version = "0.9.6.1";
 
   outputs = [
     "out"
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-R9ms3sYGdHaYKUMnZyBjw5KCik05k93vlvXMRtAXh5Y=";
+    hash = "sha256-ea7vOxmc4S7KizbwYp21NryW3BGh+Jn0HOR4qsA1roE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -54,11 +55,11 @@ stdenv.mkDerivation rec {
     rm $out/share/ndk-modules/Android.mk
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://quotient-im.github.io/libQuotient/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

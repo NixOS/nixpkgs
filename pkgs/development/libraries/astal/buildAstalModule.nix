@@ -15,7 +15,7 @@
   python3,
 }:
 let
-  cleanArgs = lib.flip builtins.removeAttrs [
+  cleanArgs = lib.flip removeAttrs [
     "name"
     "sourceRoot"
     "nativeBuildInputs"
@@ -65,7 +65,7 @@ let
         meta = {
           homepage = "https://aylur.github.io/astal/guide/libraries/${website-path}";
           license = lib.licenses.lgpl21;
-          maintainers = with lib.maintainers; [ perchun ];
+          maintainers = with lib.maintainers; [ PerchunPak ];
           platforms = [
             "aarch64-linux"
             "x86_64-linux"

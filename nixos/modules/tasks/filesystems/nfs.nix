@@ -60,10 +60,6 @@ let
     else
       pkgs.writeText "nfs.conf" nfsConfDeprecated;
 
-  requestKeyConfFile = pkgs.writeText "request-key.conf" ''
-    create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
-  '';
-
   cfg = config.services.nfs;
 
 in
@@ -162,7 +158,10 @@ in
         environment.etc = {
           "idmapd.conf".source = idmapdConfFile;
           "nfs.conf".source = nfsConfFile;
-          "request-key.conf".source = requestKeyConfFile;
+          "request-key.conf".text = ''
+            create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
+            create dns_resolver * * ${pkgs.keyutils}/bin/key.dns_resolver %k
+          '';
         };
 
         systemd.services.nfs-blkmap = {

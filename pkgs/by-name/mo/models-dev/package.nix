@@ -6,28 +6,19 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
-
 let
-  models-dev-node-modules-hash = {
-    "aarch64-darwin" = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
-    "aarch64-linux" = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
-    "x86_64-darwin" = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
-    "x86_64-linux" = "sha256-Uajwvce9EO1UwmpkGrViOrxlm2R/VnnMK8WAiOiQOhY=";
-  };
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2025-09-06";
+  version = "0-unstable-2026-04-29";
   src = fetchFromGitHub {
-    owner = "sst";
+    owner = "anomalyco";
     repo = "models.dev";
-    rev = "5ed40fe25f2ffd13c19936727a7763a982e0f924";
-    hash = "sha256-UsBsedOhLwW/8tfaxE7+d3dSY7YZB4M3YEGBhwNQHOM=";
+    rev = "e8b5a27723f124e195d60ff18dfe42735dd76aff";
+    hash = "sha256-lGryqSZf/baGL8HP1aKK8zQ5hr5UuyIaATmjcgGkCMI=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "models-dev-node_modules";
-    inherit (finalAttrs) version src;
+    pname = "${pname}-node_modules";
+    inherit version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -44,13 +35,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-
-       bun install \
-         --force \
-         --frozen-lockfile \
-         --no-progress \
-         --production
+      bun install \
+        --cpu="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
 
       runHook postBuild
     '';
@@ -58,46 +48,43 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/node_modules
-      cp -R ./node_modules $out
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';
 
-    # Required else we get errors that our fixed-output derivation references store paths
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = models-dev-node-modules-hash.${stdenvNoCC.hostPlatform.system};
+    outputHash = "sha256-eXgzhb/yhgw0B1WDrpaEmH5Tyya+/rye6kJVKdiV56w=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    node_modules
+    ;
 
   nativeBuildInputs = [ bun ];
-
-  patches = [
-    # In bun 1.2.13 (release-25.05) HTML entrypoints get content hashes
-    # appended → index.html becomes index-pq8vj7za.html in ./dist. So, we
-    # rename the index file back to index.html
-    ./post-build-rename-index-file.patch
-  ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/node_modules .
+    cp -R ${node_modules}/. .
 
     runHook postConfigure
-  '';
-
-  preBuild = ''
-    patchShebangs packages/web/script/build.ts
   '';
 
   buildPhase = ''
     runHook preBuild
 
     cd packages/web
-    bun run build
+    bun run ./script/build.ts
 
     runHook postBuild
   '';
@@ -112,12 +99,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version=branch"
+      "--subpackage"
+      "node_modules"
+    ];
   };
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/sst/models-dev";
+    homepage = "https://github.com/anomalyco/models.dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];

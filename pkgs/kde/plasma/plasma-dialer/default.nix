@@ -1,7 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
-  qtwayland,
+  qtbase,
   callaudiod,
   libphonenumber,
   protobuf,
@@ -11,13 +11,12 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    qtwayland
     callaudiod
     libphonenumber
     protobuf
   ];
 
   extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
+    "-DQtWaylandScanner_EXECUTABLE=${qtbase}/libexec/qtwaylandscanner"
   ];
 }

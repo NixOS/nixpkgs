@@ -83,7 +83,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [
     "pic"
-    "pie" # MBR gets too big with PIE
     "stackprotector"
     "fortify"
   ];
@@ -123,6 +122,11 @@ stdenv.mkDerivation {
   # Build "x86_64" EFI for x86_64
   ++ lib.optional stdenv.hostPlatform.isx86_64 "efi64";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   # Some tests require qemu, some others fail in a sandboxed environment
   doCheck = false;
 
@@ -136,10 +140,10 @@ stdenv.mkDerivation {
 
   passthru.tests.biosCdrom = nixosTests.boot.biosCdrom;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.syslinux.org/";
     description = "Lightweight bootloader";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = [
       "i686-linux"

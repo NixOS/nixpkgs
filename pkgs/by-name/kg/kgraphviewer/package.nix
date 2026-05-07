@@ -11,14 +11,16 @@
   graphviz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kgraphviewer";
   version = "2.4.3";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kgraphviewer/${version}/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/kgraphviewer/${finalAttrs.version}/kgraphviewer-${finalAttrs.version}.tar.xz";
     sha256 = "1h6pgg89gvxl8gw7wmkabyqqrzad5pxyv5lsmn1fl4ir8lcc5q2l";
   };
+
+  patches = [ ./cmake-minimum-required.patch ];
 
   buildInputs = [
     libsForQt5.qtbase
@@ -44,11 +46,11 @@ stdenv.mkDerivation rec {
     kwidgetsaddons
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphviz dot graph viewer for KDE";
     mainProgram = "kgraphviewer";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

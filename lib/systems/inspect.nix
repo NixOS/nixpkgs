@@ -229,6 +229,16 @@ rec {
         family = "m68k";
       };
     };
+    isArc = {
+      cpu = {
+        family = "arc";
+      };
+    };
+    isSh4 = {
+      cpu = {
+        family = "sh";
+      };
+    };
     isS390 = {
       cpu = {
         family = "s390";
@@ -337,8 +347,7 @@ rec {
       kernel = kernels.windows;
     };
     isCygwin = {
-      kernel = kernels.windows;
-      abi = abis.cygnus;
+      kernel = kernels.cygwin;
     };
     isMinGW = {
       kernel = kernels.windows;
@@ -432,12 +441,24 @@ rec {
       }
     ];
 
+    isUefi = [
+      { kernel = kernels.uefi; }
+    ];
+
     isElf = {
       kernel.execFormat = execFormats.elf;
     };
     isMacho = {
       kernel.execFormat = execFormats.macho;
     };
+    isPE = {
+      kernel.execFormat = execFormats.pe;
+    };
+
+    isEabi = {
+      abi.eabi = true;
+    };
+
   };
 
   # given two patterns, return a pattern which is their logical AND.

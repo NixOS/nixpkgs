@@ -6,7 +6,7 @@ lib:
   k3sCommit,
   k3sRepoSha256 ? lib.fakeHash,
   k3sVendorHash ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
+  # taken from ./scripts/version.sh VERSION_ROOT
   k3sRootVersion,
   k3sRootSha256 ? lib.fakeHash,
   # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
@@ -14,15 +14,27 @@ lib:
   chartVersions,
   # Air gap container images that are released as assets with every k3s release
   imagesVersions,
-  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
+  # taken from ./scripts/version.sh VERSION_CNIPLUGINS
   k3sCNIVersion,
   k3sCNISha256 ? lib.fakeHash,
   # taken from ./scripts/version.sh VERSION_CONTAINERD
   containerdVersion,
   containerdSha256 ? lib.fakeHash,
+  # taken from ./scripts/version.sh PKG_CONTAINERD_K3S
+  containerdPackage,
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion,
   updateScript ? null,
+  # taken from ./scripts/version.sh VERSION_FLANNEL
+  flannelVersion,
+  # taken from ./scripts/version.sh VERSION_FLANNEL_PLUGIN
+  flannelPluginVersion,
+  # taken from ./scripts/version.sh VERSION_KUBE_ROUTER
+  kubeRouterVersion,
+  # taken from ./scripts/version.sh VERSION_CRI_DOCKERD
+  criDockerdVersion,
+  # taken from ./scripts/version.sh VERSION_HELM_JOB
+  helmJobVersion,
 }@attrs:
 
 # builder.nix contains a "builder" expression that, given k3s version and hash
@@ -68,6 +80,7 @@ lib:
   socat,
   sqlite,
   stdenv,
+  shadow,
   systemdMinimal,
   util-linuxMinimal,
   yq-go,
@@ -108,32 +121,67 @@ let
     priority = 5;
   };
 
-  # https://github.com/k3s-io/k3s/blob/5fb370e53e0014dc96183b8ecb2c25a61e891e76/scripts/build#L19-L40
-  versionldflags = [
-    "-X github.com/k3s-io/k3s/pkg/version.Version=v${k3sVersion}"
-    "-X github.com/k3s-io/k3s/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
-    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
-    "-X k8s.io/client-go/pkg/version.gitVersion=v${k3sVersion}"
-    "-X k8s.io/client-go/pkg/version.gitCommit=${k3sCommit}"
-    "-X k8s.io/client-go/pkg/version.gitTreeState=clean"
-    "-X k8s.io/client-go/pkg/version.buildDate=1970-01-01T01:01:01Z"
-    "-X k8s.io/component-base/version.gitVersion=v${k3sVersion}"
-    "-X k8s.io/component-base/version.gitCommit=${k3sCommit}"
-    "-X k8s.io/component-base/version.gitTreeState=clean"
-    "-X k8s.io/component-base/version.buildDate=1970-01-01T01:01:01Z"
-    "-X github.com/kubernetes-sigs/cri-tools/pkg/version.Version=v${criCtlVersion}"
-    "-X github.com/containerd/containerd/version.Version=v${containerdVersion}"
-    "-X github.com/containerd/containerd/version.Package=github.com/k3s-io/containerd"
-  ];
+  # https://github.com/k3s-io/k3s/blob/fd48cd623340a4a6e3b2717dede368283cedec1a/scripts/build#L23-L59
+  versionldflags =
+    let
+      PKG = "github.com/k3s-io/k3s";
+      PKG_CONTAINERD = "github.com/containerd/containerd/v2";
+      PKG_CRICTL = "sigs.k8s.io/cri-tools/pkg";
+      PKG_K8S_BASE = "k8s.io/component-base";
+      PKG_K8S_CLIENT = "k8s.io/client-go/pkg";
+      PKG_CNI_PLUGINS = "github.com/containernetworking/plugins";
+      PKG_KUBE_ROUTER = "github.com/cloudnativelabs/kube-router/v2";
+      PKG_CRI_DOCKERD = "github.com/Mirantis/cri-dockerd";
+      PKG_ETCD = "go.etcd.io/etcd";
+      PKG_HELM_CONTROLLER = "github.com/k3s-io/helm-controller";
+      buildDate = "1970-01-01T01:01:01Z";
+    in
+    [
+      "-X ${PKG}/pkg/version.Version=${k3sVersion}"
+      "-X ${PKG}/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
+      "-X ${PKG}/pkg/version.UpstreamGolang=go${go.version}"
+
+      "-X ${PKG_K8S_CLIENT}/version.gitVersion=v${k3sVersion}"
+      "-X ${PKG_K8S_CLIENT}/version.gitCommit=${k3sCommit}"
+      "-X ${PKG_K8S_CLIENT}/version.gitTreeState=clean"
+      "-X ${PKG_K8S_CLIENT}/version.buildDate=${buildDate}"
+
+      "-X ${PKG_K8S_BASE}/version.gitVersion=v${k3sVersion}"
+      "-X ${PKG_K8S_BASE}/version.gitCommit=${k3sCommit}"
+      "-X ${PKG_K8S_BASE}/version.gitTreeState=clean"
+      "-X ${PKG_K8S_BASE}/version.buildDate=${buildDate}"
+
+      "-X ${PKG_CRICTL}/version.Version=${criCtlVersion}"
+
+      "-X ${PKG_CONTAINERD}/version.Version=${containerdVersion}"
+      "-X ${PKG_CONTAINERD}/version.Package=${containerdPackage}"
+
+      "-X ${PKG_CNI_PLUGINS}/pkg/utils/buildversion.BuildVersion=${k3sCNIVersion}"
+      "-X ${PKG_CNI_PLUGINS}/plugins/meta/flannel.Program=flannel"
+      "-X ${PKG_CNI_PLUGINS}/plugins/meta/flannel.Version=${flannelPluginVersion}+${flannelVersion}"
+      "-X ${PKG_CNI_PLUGINS}/plugins/meta/flannel.Commit=HEAD"
+      "-X ${PKG_CNI_PLUGINS}/plugins/meta/flannel.buildDate=${buildDate}"
+
+      "-X ${PKG_KUBE_ROUTER}/pkg/version.Version=${kubeRouterVersion}"
+      "-X ${PKG_KUBE_ROUTER}/pkg/version.BuildDate=${buildDate}"
+
+      "-X ${PKG_CRI_DOCKERD}/cmd/version.Version=${criDockerdVersion}"
+      "-X ${PKG_CRI_DOCKERD}/cmd/version.GitCommit=HEAD"
+      "-X ${PKG_CRI_DOCKERD}/cmd/version.BuildTime=${buildDate}"
+
+      "-X ${PKG_ETCD}/api/v3/version.GitSHA=HEAD"
+
+      "-X ${PKG_HELM_CONTROLLER}/pkg/controllers/chart.DefaultJobImage=rancher/klipper-helm:${helmJobVersion}"
+    ];
 
   # bundled into the k3s binary
   traefik = {
     chart = fetchurl chartVersions.traefik;
-    name = builtins.baseNameOf chartVersions.traefik.url;
+    name = baseNameOf chartVersions.traefik.url;
   };
   traefik-crd = {
     chart = fetchurl chartVersions.traefik-crd;
-    name = builtins.baseNameOf chartVersions.traefik-crd.url;
+    name = baseNameOf chartVersions.traefik-crd.url;
   };
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
@@ -202,8 +250,9 @@ let
 
     # Let killall expect "containerd-shim" in the Nix store
     substituteInPlace install.sh \
+      --replace-fail '"''${K3S_DATA_DIR}"' "" \
       --replace-fail '/data/[^/]*/bin/containerd-shim' \
-        '/nix/store/.*k3s-containerd.*/bin/containerd-shim'
+        '/nix/store/[^/]*k3s-containerd[^/]*/bin/containerd-shim'
 
     remove_matching_line() {
       line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
@@ -344,15 +393,19 @@ buildGoModule (finalAttrs: {
       --replace-fail '"$LDFLAGS $STATIC" -o' \
                 '"$LDFLAGS" -o'
 
-    # Upstream codegen fails with trimpath set. Removes "trimpath" for 'go generate':
+    # Add the -e flag to process "errornous" packages. We need to modify this because the upstream
+    # build-time version detection doesn't work with a vendor directory.
+    substituteInPlace scripts/version.sh \
+      --replace-fail \
+        "go list -mod=readonly -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1" \
+        "go list -mod=readonly -e -m -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' \$1"
 
-    substituteInPlace scripts/package-cli \
-      --replace-fail '"''${GO}" generate' \
-                'GOFLAGS="" \
-                 GOOS="${pkgsBuildBuild.go.GOOS}" \
-                 GOARCH="${pkgsBuildBuild.go.GOARCH}" \
-                 CC="${pkgsBuildBuild.stdenv.cc}/bin/cc" \
-                 "''${GO}" generate'
+    # Can't use curl during the build, we use our own go version anyway.
+    # Fails quiet as this line is only present starting from 1.35
+    substituteInPlace scripts/version.sh \
+      --replace-quiet \
+        'VERSION_GOLANG="go"$(curl -sL "https://raw.githubusercontent.com''${PKG_KUBERNETES_K3S/github.com/}/refs/tags/''${VERSION_K8S_K3S}/.go-version")' \
+        ""
   '';
 
   # Important utilities used by the kubelet, see
@@ -371,6 +424,7 @@ buildGoModule (finalAttrs: {
     conntrack-tools
     runc
     bash
+    shadow # kubelet wants 'getsubids' when using user namespaces
   ];
 
   k3sKillallDeps = [
@@ -416,8 +470,8 @@ buildGoModule (finalAttrs: {
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
 
     export ARCH=$GOARCH
-    export DRONE_TAG="v${k3sVersion}"
-    export DRONE_COMMIT="${k3sCommit}"
+    export TAG="v${k3sVersion}"
+    export GITHUB_SHA="${k3sCommit}"
     # use ./scripts/package-cli to run 'go generate' + 'go build'
 
     ./scripts/package-cli
@@ -446,7 +500,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit
@@ -460,14 +513,11 @@ buildGoModule (finalAttrs: {
       ;
     tests =
       let
-        mkTests =
-          version:
-          let
-            k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-          in
-          lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+        versionedPackage = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor k3sVersion);
       in
-      mkTests k3sVersion;
+      lib.mapAttrs (name: _: nixosTests.k3s.${name}.${versionedPackage}) (
+        lib.filterAttrs (n: _: n != "all") nixosTests.k3s
+      );
     imagesList = throw "k3s.imagesList was removed";
     airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
     airgapImagesAmd64 = throw "k3s.airgapImagesAmd64 was renamed to k3s.airgap-images-amd64-tar-zst";
@@ -476,5 +526,7 @@ buildGoModule (finalAttrs: {
   }
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
-  meta = baseMeta;
+  meta = baseMeta // {
+    mainProgram = "k3s";
+  };
 })

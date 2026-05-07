@@ -153,6 +153,9 @@ in
         // cfg.poolConfig;
       };
 
+      # Required for symphony
+      part-db.settings.APP_SHARE_DIR = "/var/lib/part-db/share";
+
       postgresql = mkIf cfg.enablePostgresql {
         enable = true;
         ensureUsers = [
@@ -173,13 +176,13 @@ in
           root = "${pkg}/public";
           locations = {
             "/" = {
-              tryFiles = "$uri $uri/ /index.php";
+              tryFiles = "$uri $uri/ /index.php?$query_string";
               index = "index.php";
               extraConfig = ''
                 sendfile off;
               '';
             };
-            "~ \.php$" = {
+            "~ \\.php$" = {
               extraConfig = ''
                 include ${config.services.nginx.package}/conf/fastcgi_params ;
                 fastcgi_param SCRIPT_FILENAME $request_filename;

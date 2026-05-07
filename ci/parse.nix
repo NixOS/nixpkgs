@@ -20,24 +20,22 @@ runCommand "nix-parse-${nix.name}"
   ''
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
+    nix-store --init
 
     cd "${nixpkgs}"
 
-    # Passes all files to nix-instantiate at once.
-    # Much faster, but will only show first error.
-    parse-all() {
-      find . -type f -iname '*.nix' | xargs -P $(nproc) nix-instantiate --parse >/dev/null 2>/dev/null
-    }
+    # This will only show the first parse error, not all of them. That's fine, because
+    # the other CI jobs will report in more detail. This job is about checking parsing
+    # across different implementations / versions, not about providing the best DX.
+    # Returning all parse errors requires significantly more resources.
 
-    # Passes each file separately to nix-instantiate with -n1.
-    # Much slower, but will show all errors.
-    parse-each() {
-      find . -type f -iname '*.nix' | xargs -n1 -P $(nproc) nix-instantiate --parse >/dev/null
+    find . -type f -iname '*.nix' | xargs -P $(nproc) nix-instantiate --parse 2>&1 >/dev/null | {
+      # Also fail on (deprecation) warnings printed to stderr.
+      if grep "warning"; then
+        echo "Failing due to warnings in stderr" >&2
+        exit 1
+      fi
     }
-
-    if ! parse-all; then
-      parse-each
-    fi
 
     touch $out
   ''

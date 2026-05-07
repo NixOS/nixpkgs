@@ -19,7 +19,6 @@
   sqlite,
   zstd,
   libcap,
-  apple-sdk_13,
   darwinMinVersionHook,
   openssl,
   #, libselinux
@@ -90,10 +89,6 @@ stdenv.mkDerivation rec {
     libcap
     audit
     systemd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-    (darwinMinVersionHook "13.0")
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -134,14 +129,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.rpm.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
     description = "RPM package manager";
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

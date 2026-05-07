@@ -26,17 +26,22 @@
   wrapGAppsHook3,
   xcb-imdkit,
   xdg-utils,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitwig-studio-unwrapped";
   version = "5.3.13";
 
   src = fetchurl {
-    name = "bitwig-studio-${version}.deb";
-    url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
+    name = "bitwig-studio-${finalAttrs.version}.deb";
+    url = "https://www.bitwig.com/dl/Bitwig%20Studio/${finalAttrs.version}/installer_linux/";
     hash = "sha256-tx+Dz9fTm4DIobwLa055ZOCMG+tU7vQl11NFnEKMAno=";
   };
 
@@ -64,10 +69,10 @@ stdenv.mkDerivation rec {
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
     libnghttp2
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libX11
-    xorg.libXtst
+    libxcb
+    libxcursor
+    libx11
+    libxtst
     libxkbcommon
     libudev-zero
     pango
@@ -75,8 +80,8 @@ stdenv.mkDerivation rec {
     (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
-    xorg.xcbutil
-    xorg.xcbutilwm
+    libxcb-util
+    libxcb-wm
     zlib
   ];
 
@@ -92,11 +97,7 @@ stdenv.mkDerivation rec {
     # Removing it will force it to use our version.
     rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
 
-    substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
-      $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
-
-      runHook postInstall
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -116,7 +117,7 @@ stdenv.mkDerivation rec {
         "''${gappsWrapperArgs[@]}" \
         --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
         --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
-        --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
+        --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath finalAttrs.buildInputs}"
     done
 
     find $out -type f -executable -name 'jspawnhelper' | \
@@ -142,4 +143,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

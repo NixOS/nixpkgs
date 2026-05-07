@@ -15,9 +15,9 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "coulr";
-  version = "2.1.0";
+  version = "2.2.0";
 
   pyproject = false;
   dontWrapGApps = true;
@@ -25,8 +25,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Coulr";
-    rev = version;
-    hash = "sha256-1xnL5AWl/rLQu3i9m6uxbS4QT+690hmEW8kYTwkg7Gw=";
+    tag = finalAttrs.version;
+    hash = "sha256-ATKD2PmNz8QRIqGHEuNNe8ZGjcvAU8qpqQtXWR2JBSA=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +62,10 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Color box to help developers and designers";
     homepage = "https://github.com/Huluti/Coulr";
-    changelog = "https://github.com/Huluti/Coulr/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Huluti/Coulr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jaredmontoya ];
     mainProgram = "coulr";
     platforms = lib.platforms.linux;
   };
-}
+})

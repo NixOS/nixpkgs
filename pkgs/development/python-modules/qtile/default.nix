@@ -2,73 +2,122 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  pkg-config,
+  wayland-scanner,
+
+  # dependencies
   cairocffi,
   dbus-fast,
-  glib,
   iwlib,
   libcst,
-  libdrm,
-  libinput,
-  libxkbcommon,
   mpd2,
-  pango,
-  pixman,
-  pkg-config,
   psutil,
   pulsectl-asyncio,
   pygobject3,
   pytz,
-  pywayland,
-  pywlroots,
   pyxdg,
-  setuptools,
-  setuptools-scm,
+  xcffib,
+  extraPackages ? [ ],
+
+  # buildInputs
+  cairo,
+  libinput,
+  libxcb-wm,
+  libxkbcommon,
   wayland,
   wlroots,
-  xcbutilcursor,
-  xcbutilwm,
-  xcffib,
-  xkbcommon,
+  # environment & pypaBuildFlags
+  libdrm,
+  pixman,
+  glib,
+  pango,
+  libxcb-cursor,
+
+  # propagatedBuildInputs
+  aiohttp,
+  cffi,
+  wayland-protocols,
+
+  # checkInputs
+  gtk3,
+  librsvg,
+
+  # nativeCheckInputs
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-xdist,
+  writableTmpDirAsHomeHook,
+  anyio,
+  fontconfig,
+  gdk-pixbuf,
+  gobject-introspection,
+  isort,
+  wxsvg,
+  xorg-server,
+  xterm,
+  xvfb,
+
+  # passthru.tests
   nixosTests,
-  extraPackages ? [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile";
-  version = "0.33.0";
+  version = "0.35.0";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile-extras`
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    tag = "v${version}";
-    hash = "sha256-npteZR48xN3G5gDsHt8c67zzc8Tom1YxnxbnDuKZHVg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5XHzlS/Knw/VmVtnM7wToJ/F12GAa2lwdWuXBJHXnZM=";
   };
 
   patches = [
-    ./fix-restart.patch # https://github.com/NixOS/nixpkgs/issues/139568
+    # https://github.com/qtile/qtile/pull/5889
+    ./fix-test-net.patch
   ];
-
-  postPatch = ''
-    substituteInPlace libqtile/pangocffi.py \
-      --replace-fail libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
-      --replace-fail libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
-      --replace-fail libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
-    substituteInPlace libqtile/backend/x11/xcursors.py \
-      --replace-fail libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
-    substituteInPlace libqtile/backend/wayland/cffi/build.py \
-        --replace-fail /usr/include/pixman-1 ${lib.getDev pixman}/include \
-        --replace-fail /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
     pkg-config
+    wayland-scanner
+  ];
+
+  env = {
+    "QTILE_CAIRO_PATH" = "${lib.getDev cairo}/include/cairo";
+    "QTILE_PIXMAN_PATH" = "${lib.getDev pixman}/include/pixman-1";
+    "QTILE_LIBDRM_PATH" = "${lib.getDev libdrm}/include/libdrm";
+    "QTILE_WLROOTS_PATH" =
+      "${lib.getDev wlroots}/include/wlroots-${lib.versions.majorMinor wlroots.version}";
+  };
+
+  pypaBuildFlags = [
+    "--config-setting=backend=wayland"
+    "--config-setting=GOBJECT=${lib.getLib glib}/lib/libgobject-2.0.so"
+    "--config-setting=PANGO=${lib.getLib pango}/lib/libpango-1.0.so"
+    "--config-setting=PANGOCAIRO=${lib.getLib pango}/lib/libpangocairo-1.0.so"
+    "--config-setting=XCBCURSOR=${lib.getLib libxcb-cursor}/lib/libxcb-cursor.so"
   ];
 
   dependencies = extraPackages ++ [
+    aiohttp
     (cairocffi.override { withXcffib = true; })
+    cffi
     dbus-fast
     iwlib
     libcst
@@ -77,22 +126,78 @@ buildPythonPackage rec {
     pulsectl-asyncio
     pygobject3
     pytz
-    pywayland
-    pywlroots
     pyxdg
     xcffib
-    xkbcommon
   ];
 
   buildInputs = [
+    cairo
     libinput
+    libxcb-wm
     libxkbcommon
     wayland
     wlroots
-    xcbutilwm
   ];
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    wayland-protocols
+  ];
+
+  pythonImportsCheck = [ "libqtile" ];
+
+  checkInputs = [
+    gtk3
+    librsvg
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-httpbin
+    pytest-xdist
+    writableTmpDirAsHomeHook
+    anyio
+    fontconfig
+    gdk-pixbuf
+    gobject-introspection
+    isort
+    wxsvg
+    xorg-server
+    xterm
+    xvfb
+  ];
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+  '';
+
+  disabledTests = [
+    # ModuleNotFoundError: No module named 'libqtile'
+    # known issue upstream: https://github.com/qtile/qtile/issues/5883
+    "test_identify_output"
+
+    # caused by dbus-fast trying to read '/var/lib/dbus/machine-id'
+    "test_defaults"
+    "test_device_actions"
+    "test_adapter_actions"
+    "test_statusnotifier_defaults"
+    "test_custom_symbols"
+    "test_statusnotifier_defaults_vertical_bar"
+    "test_default_show_battery"
+    "test_statusnotifier_icon_size"
+    "test_missing_adapter"
+    "test_statusnotifier_left_click"
+    "test_default_text"
+    "test_statusnotifier_left_click_vertical_bar"
+    "test_default_device"
+
+    # PermissionError: [Errno 13] Permission denied: '/var'
+    "test_thermal_zone_getting_value"
+
+    # Probably won't work in the Nix sandbox due to `xcffib.ConnectionException`
+    "test_urgent_hook_fire"
+  ];
+
   passthru = {
     tests.qtile = nixosTests.qtile;
     providedSessions = [ "qtile" ];
@@ -103,15 +208,16 @@ buildPythonPackage rec {
     install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.qtile.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
+      doronbehar
     ];
   };
-}
+})

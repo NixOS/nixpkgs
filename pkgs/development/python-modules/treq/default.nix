@@ -18,13 +18,13 @@
   httpbin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "treq";
   version = "25.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Jd3jpVroXsLyxWMyyZrvJVqxT5l9DQBVLr/xNTipgEo=";
   };
 
@@ -56,10 +56,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/twisted/treq";
     description = "Requests-like API built on top of twisted.web's Agent";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

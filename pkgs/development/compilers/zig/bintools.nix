@@ -4,7 +4,6 @@
   zig,
   runCommand,
   makeWrapper,
-  coreutils,
 }:
 let
   targetPrefix = lib.optionalString (
@@ -30,8 +29,7 @@ runCommand "zig-bintools-${zig.version}"
     for tool in ar objcopy ranlib ld.lld; do
       makeWrapper "$zig/bin/zig" "$out/bin/$tool" \
         --add-flags "$tool" \
-        --suffix PATH : "${lib.makeBinPath [ coreutils ]}" \
-        --run "export ZIG_GLOBAL_CACHE_DIR=\$(mktemp -d)"
+        --run "export ZIG_GLOBAL_CACHE_DIR=\$TMPDIR/zig-cache"
     done
 
     ln -s $out/bin/ld.lld $out/bin/ld

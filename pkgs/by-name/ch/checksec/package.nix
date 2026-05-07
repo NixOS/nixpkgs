@@ -9,42 +9,41 @@
   checksec,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "checksec";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "slimm609";
     repo = "checksec";
-    tag = version;
-    hash = "sha256-ZpDowTmnK23+ZocOY1pJMgMSn7FiQQGvMg/gSbiL1nw=";
+    tag = finalAttrs.version;
+    hash = "sha256-LsVK+ufSUGXWHpPk1iAFD6Lxh5hEp1WmTAy9hZMEiKk=";
   };
 
-  vendorHash = "sha256-7poHsEsRATljkqtfGxzqUbqhwSjVmiao2KoMVQ8LkD4=";
+  vendorHash = "sha256-GzSliyKxBfATA7BaHO/4HyReEwT7dYTpRuyjADNtJuc=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
     version = testers.testVersion {
       package = checksec;
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking security bits on executables";
     mainProgram = "checksec";
     homepage = "https://slimm609.github.io/checksec/";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thoughtpolice
-      globin
       sdht0
     ];
   };
-}
+})

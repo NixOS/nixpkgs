@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   # mhl.c:1031:58: error: pointer type mismatch in conditional expression []
   #  1031 |                 putstr((c1->c_flags & RTRIM) ? rtrim(cp) : cp);
-  NIX_CFLAGS_COMPILE = [ " -Wno-error=incompatible-pointer-types" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=incompatible-pointer-types" ];
 
   enableParallelBuilding = true;
 

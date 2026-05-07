@@ -3,15 +3,12 @@
   aioserial,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "phone-modem";
   version = "0.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "phone_modem";
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "phone_modem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for receiving caller ID and call rejection";
     homepage = "https://github.com/tkdrob/phone_modem";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

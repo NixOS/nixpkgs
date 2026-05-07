@@ -1,22 +1,50 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchCrate,
+  rust-cbindgen,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tun2proxy";
-  version = "0.7.15";
+  version = "0.7.20";
 
   src = fetchCrate {
     pname = "tun2proxy";
     inherit (finalAttrs) version;
-    hash = "sha256-Yyct1yGSXbZf49t4+8hP+V4ydyIi7zyff5IIqrTfJS0=";
+    hash = "sha256-nc12hjKOUGuxkNsbTMkHYv4HSLGwemx2VKv18u0rvn8=";
   };
 
-  cargoHash = "sha256-DhfUhjA8/+gmIe+91vVnK7Zca0x0r6lisTxPmg5yM8k=";
+  cargoHash = "sha256-iK5lUu6HWaNMA0I+sIpUr5pNwI05szctxzW6cPSyH3g=";
 
   env.GIT_HASH = "000000000000000000000000000000000000000000000000000";
+
+  nativeBuildInputs = [ rust-cbindgen ];
+
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
+
+  postBuild = ''
+    cbindgen --config cbindgen.toml -o target/tun2proxy.h
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D target/${stdenv.hostPlatform.rust.rustcTarget}/release/tun2proxy-bin -t $out/bin
+    install -D target/${stdenv.hostPlatform.rust.rustcTarget}/release/udpgw-server -t $out/bin
+
+    install -D target/tun2proxy.h -t $dev/include
+
+    install -D target/${stdenv.hostPlatform.rust.rustcTarget}/release/libtun2proxy.a -t $lib/lib
+    install -D target/${stdenv.hostPlatform.rust.rustcTarget}/release/libtun2proxy${stdenv.hostPlatform.extensions.library} -t $lib/lib
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://github.com/tun2proxy/tun2proxy";

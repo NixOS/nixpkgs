@@ -13,14 +13,14 @@
   gtk-layer-shell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nwg-launchers";
   version = "0.7.1.1";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-launchers";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+waoJHU/QrVH7o9qfwdvFTFJzTGLcV9CeYPn3XHEAkM=";
   };
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${swaylock}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK-based launchers: application grid, button bar, dmenu for sway and other window managers";
     homepage = "https://github.com/nwg-piotr/nwg-launchers";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

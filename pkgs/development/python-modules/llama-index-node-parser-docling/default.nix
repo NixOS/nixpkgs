@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-node-parser-docling";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_node_parser_docling";
     inherit version;
-    hash = "sha256-3D2X5sKAaweJG5w5qVeCEMgvKPZVUdI4/GsSwB9zfQ4=";
+    hash = "sha256-CxrHPdNq+7bVfwEbtKzStiqXRGXlOChoeN0ADIjZ7kE=";
   };
 
   build-system = [ hatchling ];

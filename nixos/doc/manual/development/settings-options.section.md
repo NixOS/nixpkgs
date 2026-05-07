@@ -207,6 +207,14 @@ have a predefined type and string generator already declared under
       you will want to either use an alternative validator
       or set `doCheck = false` in the format options.
 
+`pkgs.formats.hcl1` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with HCL1 JSON-specific attributes `type` and
+    `generate` as specified [below](#pkgs-formats-result). The output
+    is JSON formatted according to HCL1's canonical representation,
+    where nested attribute sets are wrapped in arrays.
+
 `pkgs.formats.libconfig` { *`generator`* ? `<derivation>`, *`validator`* ? `<derivation>` }
 
 :  A function taking an attribute set with values
@@ -357,6 +365,47 @@ have a predefined type and string generator already declared under
     `withHeader`
 
     :   Outputs the xml with header.
+
+`pkgs.formats.plist` { escape ? true }
+
+:   A function taking an attribute set with values
+
+    `escape`
+
+    :   Whether to escape XML special characters in string values and keys.
+
+    It returns a set with Property list (plist) specific attributes `type` and `generate` as specified [below](#pkgs-formats-result).
+
+`pkgs.formats.pythonVars` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with python variable specific attributes `type`, `lib`, and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    The `lib` attribute contains functions to be used in settings, for
+    generating special Python values:
+
+    `mkRaw pythonCode`
+
+    :   Outputs the given string as raw Python code
+
+    `_imports`
+
+    `_imports` is a special value you can set to specify additional modules to be
+    imported on top of the file.
+
+    `Example usage:`
+
+    ```nix
+      let
+        format = pkgs.formats.pythonVars { };
+      in {
+        _imports = [ "re" ];
+
+        conditional = format.lib.mkRaw "1 if True else 2";
+        function_result = format.lib.mkRaw "re.findall(r'\\bf[a-z]*', 'which foot or hand fell fastest')";
+      }
+    ```
 
 `pkgs.formats.cdn` { }
 

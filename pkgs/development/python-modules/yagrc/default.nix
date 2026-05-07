@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   grpcio,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "yagrc";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sparky8512";
     repo = "yagrc";
     tag = "v${version}";
-    hash = "sha256-nqUzDJfLsI8n8UjfCuOXRG6T8ibdN6fSGPPxm5RJhQk=";
+    hash = "sha256-7Bfelh4U/TyKkFzu/orBZ2BwI3CrXMgfzh9psTgF4vQ=";
   };
 
   build-system = [

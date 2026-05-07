@@ -1,0 +1,54 @@
+name: Comment
+
+on:
+  issue_comment:
+    types: [created]
+
+# This is used as fallback without app only.
+# This happens when testing in forks without setting up that app.
+permissions:
+  pull-requests: write # adding reactions to comments
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # The `bot` workflow reacts to comments with @NixOS/nixpkgs-merge-bot references, but might only
+  # pick up a comment after up to 10 minutes. To give the user instant feedback, this job adds
+  # a reaction to these comments.
+  react:
+    name: React with eyes
+    runs-on: ubuntu-slim
+    timeout-minutes: 2
+    if: contains(github.event.comment.body, '@NixOS/nixpkgs-merge-bot merge')
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            ci/github-script
+
+      # Use the GitHub App to make sure the reaction happens with the same user who will later merge.
+      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_APP_ID
+        id: app-token
+        with:
+          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
+
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
+          retries: 3
+          script: |
+            const { handleMergeComment } = require('./ci/github-script/merge.js')
+            const { body, node_id } = context.payload.comment
+
+            await handleMergeComment({
+              github,
+              body,
+              node_id,
+              reaction: 'EYES',
+            })

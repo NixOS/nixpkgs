@@ -11,6 +11,7 @@
   font ? "Noto Sans",
   fontSize ? "9",
   background ? null,
+  disableBackground ? false,
   loginBackground ? false,
   userIcon ? false,
   clockEnabled ? true,
@@ -34,7 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    kdePackages.qtsvg
+    # avoid .dev outputs propagation
+    kdePackages.qtsvg.out
   ];
 
   postPatch = ''
@@ -64,8 +66,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (background != null) ''
       substituteInPlace $configFile \
-        --replace-fail 'Background="backgrounds/wall.png"' 'Background="${background}"' \
-        --replace-fail 'CustomBackground="false"' 'CustomBackground="true"'
+        --replace-fail 'Background="backgrounds/wall.png"' 'Background="${background}"'
+    ''}
+
+    ${lib.optionalString disableBackground ''
+      substituteInPlace $configFile \
+        --replace-fail 'CustomBackground="true"' 'CustomBackground="false"'
     ''}
 
     ${lib.optionalString loginBackground ''
@@ -84,11 +90,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''}
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    mkdir -p $out/nix-support
-    echo ${kdePackages.qtsvg} >> $out/nix-support/propagated-user-env-packages
   '';
 
   meta = {

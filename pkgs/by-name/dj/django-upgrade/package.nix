@@ -5,16 +5,16 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "django-upgrade";
-  version = "1.28.0";
+  version = "1.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-upgrade";
-    tag = version;
-    hash = "sha256-GX8qIpkXD/XTxj5fp46xG+ZVEDnkuOeBJm4tS9uXC6Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-IiGwYq6TTNiNIx1jrzQlLiULWNZlam7onJJGFFJ/hVM=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -26,16 +26,14 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   pythonImportsCheck = [ "django_upgrade" ];
 
   meta = {
     description = "Automatically upgrade your Django projects";
     homepage = "https://github.com/adamchainz/django-upgrade";
-    changelog = "https://github.com/adamchainz/django-upgrade/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/adamchainz/django-upgrade/blob/${finalAttrs.version}/docs/changelog.rst";
     mainProgram = "django-upgrade";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kalekseev ];
   };
-}
+})

@@ -22,12 +22,12 @@ buildNpmPackage rec {
   # The prepack script runs the build script, which we'd rather do in the build phase.
   npmPackFlags = [ "--ignore-scripts" ];
 
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to share directories and files to mobile devices";
     homepage = "https://github.com/parvardegr/sharing";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ChaosAttractor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ChaosAttractor ];
   };
 }

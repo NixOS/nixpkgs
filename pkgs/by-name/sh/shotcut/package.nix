@@ -7,31 +7,33 @@
   frei0r,
   ladspaPlugins,
   gettext,
-  mlt,
   jack1,
   pkg-config,
   fftw,
   qt6,
+  qt6Packages,
   cmake,
   gitUpdater,
   ffmpeg,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "25.01.25";
+  version = "26.2.26";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YrnmhxD7Yf2LgdEaBU4mmRdvZdO6VQ6IAb4s+V9QvLM=";
+    hash = "sha256-dOkk2LGFtuCvec8NGoSIjAXQsCZcnx2fB3h6KWFeHj4=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -39,13 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     frei0r
     ladspaPlugins
     gettext
-    mlt
+    qt6Packages.mlt
     fftw
     qt6.qtbase
     qt6.qttools
     qt6.qtmultimedia
     qt6.qtcharts
     qt6.qtwayland
+    qt6.qtwebsockets
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
@@ -54,9 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-mlt-ffmpeg-path.patch {
-      inherit mlt ffmpeg;
+      inherit ffmpeg;
+      mlt = qt6Packages.mlt;
     })
   ];
+
+  dontWrapGApps = true;
 
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
@@ -65,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
       lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
     }"
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications $out/bin
@@ -90,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       woffs
       peti
+      nick-linux
     ];
     platforms = lib.platforms.unix;
     mainProgram = "shotcut";

@@ -1,7 +1,5 @@
 {
   stdenv,
-  nodejs,
-  buildNpmPackage,
   lib,
   fetchFromGitHub,
   meson,
@@ -23,11 +21,12 @@
   curl,
   libtins,
   mongosh,
+  usrsctp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open5gs";
-  version = "2.7.6";
+  version = "2.7.7";
 
   diameter = fetchFromGitHub {
     owner = "open5gs";
@@ -39,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   libtins = fetchFromGitHub {
     owner = "open5gs";
     repo = "libtins";
-    rev = "fb152ba63bd8d7d024d5f86e5fbd24a4cb3dd93d"; # r4.3
-    hash = "sha256-q++F1bvf739P82VpUf4TUygHjhYwOsaQzStJv8PN2Hc=";
+    rev = "bf22438172d269e6db70e27246dffd8e1f0b96e3"; # r4.5
+    hash = "sha256-BxSBNKI+jwI33lN+vmYCYSDAxsVDXS190byAzq6lB/A=";
   };
 
   mesonFlags = [
@@ -59,22 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "open5gs";
     repo = "open5gs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2k+S+OXfdskJPtDUFSxb/+2UZcUiOZzRSSGgsEJWolc=";
-  };
-
-  webui = buildNpmPackage {
-    pname = finalAttrs.pname + "-webui";
-    inherit (finalAttrs) src version meta;
-
-    sourceRoot = "${finalAttrs.src.name}/webui";
-
-    npmDepsHash = "sha256-IpqineYa15GBqoPDJ7RpaDsq+MQIIDcdq7yhwmH4Lzo=";
-
-    installPhase = ''
-      rm -rf node_modules
-      mkdir $out
-      cp -r * $out
-    '';
+    hash = "sha256-ZK4q6m/9v+us+6dWpi0k188KfFu1b6G9pGE4VGAe4+4=";
   };
 
   nativeBuildInputs = [
@@ -92,30 +76,24 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     libmicrohttpd
     libgcrypt
-    lksctp-tools
     libidn
     openssl
     curl
     libtins
     gnutls
     libnghttp2.dev
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    lksctp-tools
+  ]
+  ++ lib.optionals (!stdenv.isLinux) [
+    usrsctp
   ];
-
-  # For subproject
-  env = {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=array-bounds"
-      "-Wno-error=stringop-overflow"
-    ];
-  };
 
   preConfigure = ''
     cp -R --no-preserve=mode,ownership ${finalAttrs.diameter} subprojects/freeDiameter
     cp -R --no-preserve=mode,ownership ${finalAttrs.libtins} subprojects/libtins
     cp -R --no-preserve=mode,ownership ${finalAttrs.promc} subprojects/prometheus-client-c
-
-    rm -rf webui/*
-    cp -r ${finalAttrs.webui}/* webui/
   '';
 
   postInstall = ''

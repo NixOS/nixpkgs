@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terranix";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "mrVanDalo";
     repo = "terranix";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-1Pu2j5xsBTuoyga08ZVf+rKp3FOMmJh/0fXen/idOrA=";
   };
 
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NixOS like terraform-json generator";
     homepage = "https://terranix.org";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       mrVanDalo
       sshine
     ];
   };
-}
+})

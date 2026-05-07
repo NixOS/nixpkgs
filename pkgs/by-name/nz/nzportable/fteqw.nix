@@ -14,7 +14,14 @@
   zlib,
   gnutls,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxxf86dga,
+  libxscrnsaver,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   alsa-lib,
   libjpeg,
   libogg,
@@ -41,12 +48,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzp-fteqw";
-  version = "0-unstable-2024-09-11";
+  version = "0-unstable-2025-09-25";
 
   src = fetchFromGitHub {
     owner = "nzp-team";
     repo = "fteqw";
-    rev = "593345a7f03245fc45580ac252857e5db5105033";
+    rev = "f68a2b547d2dc4bf6886b922baa1bff487cc5038";
     hash = "sha256-ANDHh4PKh8fAvbBiiW47l1XeGOCes0Sg595+65NFG6w=";
   };
 
@@ -61,10 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXcursor
-    xorg.libXScrnSaver
+    libxcb
+    libx11
+    libxrandr
+    libxcursor
+    libxscrnsaver
     dbus
     fontconfig
     libjpeg
@@ -92,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FTE_TOOL_IMAGE" false)
     (lib.cmakeBool "FTE_TOOL_QTV" false)
     (lib.cmakeBool "FTE_TOOL_MASTER" false)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
   postInstall = ''
@@ -112,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
         addDriverRunpath.driverLink
 
         # gl/gl_vidlinuxglx.c
-        xorg.libX11
-        xorg.libXrandr
-        xorg.libXxf86vm
-        xorg.libXxf86dga
-        xorg.libXi
-        xorg.libXcursor
+        libx11
+        libxrandr
+        libxxf86vm
+        libxxf86dga
+        libxi
+        libxcursor
         libGL
 
         libvorbis

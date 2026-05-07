@@ -118,6 +118,14 @@ in
       '';
     };
 
+    macvendorURL = mkOption {
+      type = types.str;
+      default = "https://ftl.pi-hole.net/macvendor.db";
+      description = ''
+        URL from which to download the macvendor.db file.
+      '';
+    };
+
     pihole = mkOption {
       type = types.package;
       default = piholeScript;
@@ -178,7 +186,7 @@ in
     };
 
     queryLogDeleter = {
-      enable = mkEnableOption ("Pi-hole FTL DNS query log deleter");
+      enable = mkEnableOption "Pi-hole FTL DNS query log deleter";
 
       age = mkOption {
         type = types.int;
@@ -260,7 +268,7 @@ in
         files = {
           database = "${cfg.stateDirectory}/pihole-FTL.db";
           gravity = "${cfg.stateDirectory}/gravity.db";
-          macvendor = "${cfg.stateDirectory}/gravity.db";
+          macvendor = "${cfg.stateDirectory}/macvendor.db";
           log.ftl = "${cfg.logDirectory}/FTL.log";
           log.dnsmasq = "${cfg.logDirectory}/pihole.log";
           log.webserver = "${cfg.logDirectory}/webserver.log";

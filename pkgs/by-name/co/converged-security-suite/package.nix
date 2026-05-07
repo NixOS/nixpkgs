@@ -7,16 +7,16 @@
 buildGoModule (finalAttrs: {
   pname = "converged-security-suite";
 
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "9elements";
     repo = "converged-security-suite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/TsKKBrwiwPVyfmDvzouVRyAPLVPsLZFmIIzl0gJWL4=";
+    hash = "sha256-Y/fSkOvTy2EuLBzVWd/U4wSnnCQrHsDr2G8Wf4EzmTk=";
   };
 
-  vendorHash = "sha256-p1r6LS0h5NbUdGUHEPtZydXNOjyz7jXegmbFBl38MEI=";
+  vendorHash = "sha256-KAtkvlldLb+1vVcec3Q34UNxu1Kj/37bjy8yjPoP5NM=";
 
   subPackages = [
     "cmd/core/bg-prov"

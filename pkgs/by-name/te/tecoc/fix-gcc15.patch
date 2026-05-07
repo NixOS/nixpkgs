@@ -1,0 +1,101 @@
+diff --git a/src/popmac.c b/src/popmac.c
+index 91329da..46ccdea 100644
+--- a/src/popmac.c
++++ b/src/popmac.c
+@@ -38,7 +38,7 @@ DEFAULT PopMac()		/* restore environment after macro exit */
+ 		ZFree((voidptr)QRp->Start);
+ 	    }
+ 	}
+-	ZFree(MSp->QRgstr);
++	ZFree((voidptr)MSp->QRgstr);
+     }
+     --MStTop;
+ #if DEBUGGING
+diff --git a/src/readcs.c b/src/readcs.c
+index 9dd4458..135f240 100644
+--- a/src/readcs.c
++++ b/src/readcs.c
+@@ -488,7 +488,7 @@ VVOID ReadCS()
+ 			}
+ #if CURSES
+ 			if (ScroLn > 0 || skiprefresh)
+-			    dolf(HowFar);
++			    dolf();
+ 			if (ScroLn == 0 || skiprefresh)
+ #endif
+ 			    ZDspCh('*');
+@@ -537,7 +537,7 @@ VVOID ReadCS()
+ 			}
+ #if CURSES
+ 			if (ScroLn > 0 && !skiprefresh)
+-			    dobs(HowFar);
++			    dobs();
+ 			if (ScroLn == 0 || skiprefresh)
+ #endif
+ 			    ZDspCh('*');
+diff --git a/src/tecoc.h b/src/tecoc.h
+index 0debaa7..25a028b 100644
+--- a/src/tecoc.h
++++ b/src/tecoc.h
+@@ -684,7 +684,7 @@ VVOID	ZVrbos();	/* display verbose form of an error message */
+ DEFAULT	ZWrBfr();	/* write line to file */
+ #endif
+ #if CURSES
+-void Scope();
++void Scope(int bot);
+ void centre();
+ void dolf();
+ void dobs();
+diff --git a/src/zlinux.c b/src/zlinux.c
+index c2c120c..62eb0d4 100644
+--- a/src/zlinux.c
++++ b/src/zlinux.c
+@@ -103,7 +103,7 @@ static char tbuf[1024];		/* store TERMCAP entry here */
+ int	tputs();		/* send termcap string to a given function */
+ int	tgetent();		/* load a terminal capability buffer */
+ char 	*tgetstr();		/* get str value of a terminal capability */
+-static int vernum();		/* see bottom of this file */
++static int vernum(char *target);		/* see bottom of this file */
+ static	int SupGotCtC = 0;
+ static glob_t pglob;
+ static int globindex = 0;
+@@ -1479,7 +1479,7 @@ character is received when it is struck, and no echoing is performed.  Save
+ the terminal characteristics so when we exit we can reset them (in ZClnUp)
+ to what they were before we changed them.
+ *****************************************************************************/
+-static VVOID CntrlC()
++static VVOID CntrlC(int sig)
+ {
+     signal(SIGINT, SIG_IGN);
+     SupGotCtC = 0;
+@@ -1497,7 +1497,7 @@ static VVOID CntrlC()
+ /*
+  * sighup - what we do if we get a hang up?
+  */
+-static void sighup()
++static void sighup(int sig)
+ {
+ 	TAbort(EXIT_FAILURE);
+ }
+diff --git a/src/zport.h b/src/zport.h
+index f842ae2..eeb5315 100644
+--- a/src/zport.h
++++ b/src/zport.h
+@@ -192,7 +192,7 @@ just don't use prototypes in GNU C.
+ #if defined(VAX11C) || defined(__TURBOC__) || defined(__POWERC) || defined(ULTRIX)
+ #define USE_PROTOTYPES TRUE
+ #else
+-#define USE_PROTOTYPES FALSE
++#define USE_PROTOTYPES TRUE
+ #endif
+ 
+ /****************************************************************************
+@@ -533,7 +533,7 @@ EXTERN VVOID bcopy();
+ 
+ #elif defined(unix) || defined(AMIGA) || (defined(UNKNOWN) && !defined(__STDC__))
+ 
+-EXTERN VVOID ZCpyBl();
++EXTERN VVOID ZCpyBl(charptr dest, charptr source, SIZE_T len);
+ #define MEMMOVE(dest,source,len) ZCpyBl((dest),(source),(len))
+ 
+ #elif defined(__TURBOC__) || defined(__POWERC)

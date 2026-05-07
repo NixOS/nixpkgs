@@ -41,7 +41,7 @@ in
     };
 
     services.unifi.jrePackage = lib.mkPackageOption pkgs "jdk" {
-      default = "jdk17_headless";
+      default = "jdk25_headless";
       extraDescription = ''
         Check the UniFi controller release notes to ensure it is supported.
       '';
@@ -160,17 +160,14 @@ in
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cmd} start";
-        ExecStop = "${cmd} stop";
+        ExecStop = [
+          "${cmd} stop"
+          "${lib.getExe' pkgs.util-linux "waitpid"} -t 30 -e $MAINPID"
+        ];
         Restart = "always";
-        TimeoutSec = "5min";
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
-        # the stop command exits while the main process is still running, and unifi
-        # wants to manage its own child processes. this means we have to set KillSignal
-        # to something the main process ignores, otherwise every stop will have unifi.service
-        # fail with SIGTERM status.
-        KillSignal = "SIGCONT";
 
         # Hardening
         AmbientCapabilities = "";

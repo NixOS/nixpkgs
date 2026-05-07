@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kokkos";
-  version = "4.7.00";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "kokkos";
     repo = "kokkos";
     rev = finalAttrs.version;
-    hash = "sha256-KCGUv6SnTfKiWw0zzvKgiggANPCxSQY8bmqQT4xTMb8=";
+    hash = "sha256-yo+E8U06o7eu2U4AbXkHpo9uwjiIDE6NoP8TgUTkmuU=";
   };
 
   nativeBuildInputs = [
@@ -34,16 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "C++ Performance Portability Programming EcoSystem";
     homepage = "https://github.com/kokkos/kokkos";
     changelog = "https://github.com/kokkos/kokkos/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       llvm-exception
     ];
-    maintainers = with maintainers; [ Madouura ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

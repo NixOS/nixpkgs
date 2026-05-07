@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pyasuswrt";
   version = "0.1.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ollo69";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasuswrt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for communication with ASUSWRT routers via HTTP";
     homepage = "https://github.com/ollo69/pyasuswrt";
     changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

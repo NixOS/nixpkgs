@@ -93,8 +93,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python extension of Orfeo Toolbox";
     homepage = "https://github.com/orfeotoolbox/pyotb";
-    changelog = "https://github.com/orfeotoolbox/pyotb/tag/${version}";
+    changelog = "https://github.com/orfeotoolbox/pyotb/releases/tag/${version}";
     license = lib.licenses.asl20;
+    teams = [ lib.teams.geospatial ];
     maintainers = with lib.maintainers; [ daspk04 ];
   };
 }

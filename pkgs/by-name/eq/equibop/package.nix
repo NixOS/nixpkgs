@@ -1,48 +1,51 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
-  replaceVars,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  equicord,
-  electron,
-  libicns,
+  electron_40,
+  python3Packages,
   pipewire,
   libpulseaudio,
+  jq,
   autoPatchelfHook,
-  pnpm_10,
+  bun,
   nodejs,
-  nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
 }:
+let
+  electron = electron_40;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "2.1.6";
+  version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0OtCxz7g1xMmnkDke34deaS3dx5b8bGOC0Vbq6BIObg=";
+    hash = "sha256-4v0NKGmdbEdHyjz35l+QUnXvnVfLzIe1vLxOSmdgbYQ=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      patches
-      ;
-    fetcherVersion = 1;
-    hash = "sha256-MDqAncWdU2rIQAGF/wx2gWxDf74P3fp3w4nA8b6AITw=";
-  };
+  postPatch = ''
+    substituteInPlace scripts/build/build.mts \
+      --replace-fail 'gitHash = execSync("git rev-parse HEAD", { encoding: "utf-8" }).trim();' 'gitHash = "${finalAttrs.src.hash}"'
+
+    # disable auto updates
+    substituteInPlace src/main/updater.ts \
+      --replace-fail 'const isOutdated = autoUpdater.checkForUpdates().then(res => Boolean(res?.isUpdateAvailable));' 'const isOutdated = false;'
+  '';
+
+  node-modules = callPackage ./node-modules.nix { };
 
   nativeBuildInputs = [
+    bun
+    jq
     nodejs
-    pnpm_10.configHook
     # XXX: Equibop *does not* ship venmic as a prebuilt node module. The package
     # seems to build with or without this hook, but I (NotAShelf) don't have the
     # time to test the consequences of removing this hook. Please open a pull
@@ -60,30 +63,52 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches = [
-    ./disable_update_checking.patch
-  ];
+  configurePhase = ''
+    runHook preConfigure
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  };
+    cp -R ${finalAttrs.node-modules} node_modules
+
+    runHook postConfigure
+  '';
+
+  # electron builds must be writable to support electron fuses
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
+    then
+      echo "ERROR: electron version mismatch between package.json and nixpkgs"
+      exit 1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -r ${electron.dist}/Electron.app .
+    chmod -R u+w Electron.app
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm build
-    pnpm exec electron-builder \
+    bun run build
+
+    bun run compileArrpc
+
+    # can't run it via bunx / npx since fixupPhase was skipped for node_modules
+    node node_modules/electron-builder/out/cli/cli.js \
       --dir \
-      -c.asarUnpack="**/*.node" \
-      -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false
 
     runHook postBuild
   '';
 
   postBuild = ''
     pushd build
-    ${libicns}/bin/icns2png -x icon.icns
+    ${lib.getExe' python3Packages.icnsutil "icnsutil"} e icon.icns
     popd
   '';
 
@@ -92,10 +117,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/opt/Equibop
     cp -r dist/*unpacked/resources $out/opt/Equibop/
 
-    for file in build/icon_*x32.png; do
-      file_suffix=''${file//build\/icon_}
-      install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/equibop.png
+    for file in build/icon.icns.export/*.png; do
+      base=''${file##*/}
+      size=''${base/x*/}
+      install -Dm0644 $file $out/share/icons/hicolor/''${size}x''${size}/apps/equibop.png
     done
+
+    install -Dm0644 build/icon.svg $out/share/icons/hicolor/scalable/apps/equibop.svg
 
     runHook postInstall
   '';
@@ -103,7 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/equibop \
       --add-flags $out/opt/Equibop/resources/app.asar \
-      ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+      ${lib.optionalString withTTS ''
+        --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
+        --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
+      ''} \
       ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
@@ -129,8 +160,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
-    updateScript = nix-update-script { };
+    # fails to update node-modules FOD :/
+    # updateScript = nix-update-script {
+    #   extraArgs = [
+    #     "--subpackage"
+    #     "node-modules"
+    #   ];
+    # };
   };
 
   meta = {
@@ -138,8 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Equicord/Equibop";
     changelog = "https://github.com/Equicord/Equibop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [
-      lib.maintainers.NotAShelf
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      rexies
     ];
     mainProgram = "equibop";
     # I am not confident in my ability to support Darwin, please PR if this is important to you

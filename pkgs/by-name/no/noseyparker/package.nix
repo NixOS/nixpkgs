@@ -12,18 +12,25 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noseyparker";
   version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6GxkIxLEgbIgg4nSHvmRedm8PAPBwVxLQUnQzh3NonA=";
   };
 
   cargoHash = "sha256-hVBHIm/12WU6g45QMxxuGk41B0kwThk7A84fOxArvno=";
+
+  # Fix error: failed to run custom build command for `vectorscan-rs-sys v0.0.5`
+  # Failed to get C++ compiler version: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+  postPatch = ''
+    substituteInPlace $(find ../noseyparker-${finalAttrs.version}-vendor -name "vectorscan-rs-sys*")/build.rs \
+      --replace-fail 'Command::new("c++")' 'Command::new("${stdenv.cc.targetPrefix}c++")'
+  '';
 
   checkFlags = [
     # These tests expect access to network to clone and use GitHub API
@@ -56,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mkdir -p manpages
@@ -74,14 +81,13 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/noseyparker-cli";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Find secrets and sensitive information in textual data";
     mainProgram = "noseyparker";
     homepage = "https://github.com/praetorian-inc/noseyparker";
-    changelog = "https://github.com/praetorian-inc/noseyparker/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/praetorian-inc/noseyparker/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ _0x4A6F ];
   };
-}
+})

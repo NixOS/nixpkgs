@@ -61,10 +61,14 @@ let
           "remotes"
           "acl"
           "submission"
+          "dnskey-sync"
           "policy"
+          "external"
+          # mod-* is above
           "template"
           "zone"
           "include"
+          "clear"
         ];
       secsCheck =
         let
@@ -81,7 +85,7 @@ let
           # We output the config section in the upstream-mandated order.
           # Ordering is important due to forward-references not being allowed.
           # See definition of conf_export and 'const yp_item_t conf_schema'
-          # upstream for reference.  Last updated for 3.3.
+          # upstream for reference.  Last updated for 3.5.
           # When changing the set of sections, also update secAllow above.
           [ (sec_list_fa "id" nix_def "module") ]
           ++ map (sec_plain nix_def) [
@@ -101,7 +105,9 @@ let
             "remotes"
             "acl"
             "submission"
+            "dnskey-sync"
             "policy"
+            "external"
           ]
 
           # Export module sections before the template section.

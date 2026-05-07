@@ -5,13 +5,13 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-podcast";
   version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-Podcast";
     hash = "sha256-grNPVEVM2PlpYhBXe6sabFjWVB9+q+apIRjcHUxH52A=";
   };
@@ -32,12 +32,12 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_podcast" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tkem/mopidy-podcast";
     description = "Mopidy extension for browsing and playing podcasts";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [
-      maintainers.daneads
+      lib.maintainers.daneads
     ];
   };
-}
+})

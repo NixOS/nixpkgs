@@ -15,11 +15,7 @@ in
       package = lib.mkPackageOption pkgs "cloudflare-dyndns" { };
 
       apiTokenFile = lib.mkOption {
-        type = lib.types.pathWith {
-          absolute = true;
-          inStore = false;
-        };
-
+        type = lib.types.externalPath;
         description = ''
           The path to a file containing the CloudFlare API token.
         '';

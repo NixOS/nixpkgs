@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   autoconf,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation {
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     autoconf
   ];
 

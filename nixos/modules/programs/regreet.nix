@@ -40,9 +40,12 @@ in
 
     cageArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "-s" ];
+      default = [
+        "-s"
+        "-d"
+      ];
       example = lib.literalExpression ''
-        [ "-s" "-m" "last" ]
+        [ "-s" "-d" "-m" "last" ]
       '';
       description = ''
         Additional arguments to be passed to
@@ -156,7 +159,10 @@ in
 
     environment.etc = {
       "greetd/regreet.css" =
-        if lib.isPath cfg.extraCss then { source = cfg.extraCss; } else { text = cfg.extraCss; };
+        if lib.isPath cfg.extraCss || lib.isStorePath cfg.extraCss then
+          { source = cfg.extraCss; }
+        else
+          { text = cfg.extraCss; };
 
       "greetd/regreet.toml".source =
         if lib.isPath cfg.settings then

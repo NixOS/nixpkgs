@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "optimistix";
-  version = "0.0.10";
+  version = "0.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "optimistix";
     tag = "v${version}";
-    hash = "sha256-stVPHzv0XNd0I31N2Cj0QYrMmhImyx0cablqZfKBFrM=";
+    hash = "sha256-tTE/f1dYDpTmrqL1D7h7UyqT2gN9+Y1mNJZcjmdHtno=";
   };
 
   build-system = [ hatchling ];
@@ -53,16 +53,21 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlags = [
-    # Since jax 0.5.3:
-    # DeprecationWarning: shape requires ndarray or scalar arguments, got <class 'jax._src.api.ShapeDtypeStruct'> at position 0. In a future JAX release this will be an error.
-    "-Wignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # assert Array(False, dtype=bool)
     # +  where Array(False, dtype=bool) = tree_allclose(Array(0.12993518, dtype=float64), Array(0., dtype=float64, weak_type=True), atol=0.0001, rtol=0.0001)
     "test_least_squares"
+  ];
+
+  disabledTestPaths = [
+    # Require circular dependency diffrax
+    "tests/test_compat.py"
+    "tests/test_fixed_point.py"
+    "tests/test_lbfgs_linear_operator.py"
+    "tests/test_least_squares.py"
+    "tests/test_minimise.py"
+    "tests/test_misc.py"
+    "tests/test_root_find.py"
   ];
 
   meta = {

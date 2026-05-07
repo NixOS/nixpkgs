@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpeditor";
-  version = "7.0.1";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "cpeditor";
     repo = "cpeditor";
     tag = finalAttrs.version;
-    hash = "sha256-t7nn3sO45dOQq5OMWhaseO9XHicQ/1fjukXal5yPMgY";
+    hash = "sha256-zEK3137DjQmuc7Y4c/HF0n37bdokj9ci2/agSaG7nZE=";
     fetchSubmodules = true;
   };
 

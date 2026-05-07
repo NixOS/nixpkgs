@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libctl";
   version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "libctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "uOydBWYPXSBUi+4MM6FNx6B5l2to7Ny9Uc1MMTV9bGA=";
   };
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-shared" ];
 
-  meta = with lib; {
+  meta = {
     description = "Guile-based library for supporting flexible control files in scientific simulations";
     mainProgram = "gen-ctl-io";
     homepage = "https://github.com/NanoComp/libctl";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

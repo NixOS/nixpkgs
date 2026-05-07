@@ -13,7 +13,8 @@
   lv2,
   lv2lint,
   sord,
-  xorg,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,17 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     libvterm-neovim
     lv2
     sord
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     glew
     lv2lint
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Just-in-time FAUST embedded in an LV2 plugin";
     homepage = "https://git.open-music-kontrollers.ch/~hp/mephisto.lv2";
-    license = licenses.artistic2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.artistic2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 })

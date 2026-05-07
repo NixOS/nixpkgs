@@ -7,5 +7,7 @@ mkKdeDerivation {
   pname = "qrca";
 
   extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [ qtmultimedia ];
+  extraBuildInputs = [
+    qtmultimedia
+  ];
 }

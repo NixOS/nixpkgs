@@ -32,14 +32,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 themes based on Material color";
     homepage = "https://github.com/hosxy/Fcitx5-Material-Color";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       Cryolitia
       h7x4
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

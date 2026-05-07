@@ -2,29 +2,32 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   nodejs,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "custom-sidebar";
-  version = "10.5.2";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "elchininet";
     repo = "custom-sidebar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C3zjl4KP2l56Hn7MJjoB8D6KkJ3Ef6KpVZWWdDS5Hds=";
+    hash = "sha256-2CQcY5/Cb3IPuI7cL28t7iZCH3kD21equBW5BL6w8TU=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-FOaR+B8UammcStvNFo7PR++VCPzY+aXvWeSRXnoPkWM=";
+    fetcherVersion = 3;
+    hash = "sha256-gYNCjCeAt6LP4tZE4ufiQu7OG2ujWydm4etcGQxMxcU=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     nodejs
   ];
 

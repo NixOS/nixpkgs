@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "OpenSSL-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for pyopenssl";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

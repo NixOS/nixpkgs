@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jotdown";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "hellux";
     repo = "jotdown";
-    rev = version;
-    hash = "sha256-9gvTMcoKGdc6xYhGz1SQzTELUWeIK2VFbEwIVn/IjGs=";
+    rev = finalAttrs.version;
+    hash = "sha256-GUETWMWNAPfTcuu7LBgexgd1CWFbSyBwBZtFjMQ67Hk=";
   };
 
-  cargoHash = "sha256-x61oImdXsLD/lU4hNcrQ2rjH5hAvTMEDJn4H3cVG6X4=";
+  cargoHash = "sha256-yuzjyP1iy6pgUJev1dJPjU85A3W5n7G2B+Pa1R47KiQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal Djot CLI";
     mainProgram = "jotdown";
     homepage = "https://github.com/hellux/jotdown";
-    changelog = "https://github.com/hellux/jotdown/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/hellux/jotdown/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

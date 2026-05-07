@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "nuclear";
-  version = "2.4.0";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igrek51";
     repo = "nuclear";
     rev = version;
-    hash = "sha256-0jeRoWk1PRyIEoEhWsA/9FtMy7CcN4mZpLpC6FZyM/A=";
+    hash = "sha256-hoOvISKjl5XTxtv8I3BSkOI7oZFSL+yA3NiYceJGcIY=";
   };
 
   build-system = [ setuptools ];
@@ -41,10 +41,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "nuclear" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://igrek51.github.io/nuclear/";
     description = "Binding glue for CLI Python applications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ parras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ parras ];
   };
 }

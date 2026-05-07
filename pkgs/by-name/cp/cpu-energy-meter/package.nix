@@ -5,14 +5,14 @@
   libcap,
   udevCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-energy-meter";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "cpu-energy-meter";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-QW65Z8mRYLHcyLeOtNAHjwPNWAUP214wqIYclK+whFw=";
   };
 
@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/etc/udev/rules.d $src/debian/additional_files/59-msr.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for measuring energy consumption of Intel CPUs";
     homepage = "https://github.com/sosy-lab/cpu-energy-meter";
     changelog = "https://github.com/sosy-lab/cpu-energy-meter/blob/main/CHANGELOG.md";
-    maintainers = with maintainers; [ lorenzleutgeb ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ lorenzleutgeb ];
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     mainProgram = "cpu-energy-meter";
   };
-}
+})

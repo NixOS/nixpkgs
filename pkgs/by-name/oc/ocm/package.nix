@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,18 +8,18 @@
   ocm,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ocm";
-  version = "1.0.8";
+  version = "1.0.14";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
-    rev = "v${version}";
-    sha256 = "sha256-v+BWmdTDJm1oElP/XV59pHm7NlsFj2sDTymtT0xpXKY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Y3iaGIZHGaIB0vlN7qs0WQ6biCMX5YF4HHrBaA6+Amo=";
   };
 
-  vendorHash = "sha256-GOdRYVnFPS1ovFmU+9MEnwTNg1sa9/25AjzbcbBJrQ0=";
+  vendorHash = "sha256-nR/TRJPhbpmFTzRu1uByqzzh7d1TB/zRoW0BuAbrIeA=";
 
   # Strip the final binary.
   ldflags = [
@@ -38,7 +39,7 @@ buildGoModule rec {
     "-skip=^TestCLI$"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ocm \
       --bash <($out/bin/ocm completion bash) \
       --fish <($out/bin/ocm completion fish) \
@@ -50,14 +51,14 @@ buildGoModule rec {
     command = "ocm version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for the Red Hat OpenShift Cluster Manager";
     mainProgram = "ocm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/openshift-online/ocm-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       stehessel
       jfchevrette
     ];
   };
-}
+})

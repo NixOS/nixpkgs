@@ -7,7 +7,7 @@
   libnotify,
   makeWrapper,
   pkg-config,
-  libX11,
+  libx11,
   enableAlsaUtils ? true,
   alsa-utils,
   coreutils,
@@ -33,13 +33,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dwm-status";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     tag = finalAttrs.version;
-    hash = "sha256-982JFYZroskKppAOZjBWOFt624FfRjhXpYN57s/cM50=";
+    hash = "sha256-2E/I8xRo29jaPYupAd9udgjv/OdDNdtWkVp/SPRQkxY=";
   };
 
   nativeBuildInputs = [
@@ -50,10 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     gdk-pixbuf
     libnotify
-    libX11
+    libx11
   ];
 
-  cargoHash = "sha256-2/zzE6JzhqeBYLiRkx5ELaW150rk1bMTrpxSw/wxNes=";
+  cargoHash = "sha256-o6gzP0mo7+np5Ba22gPAHcPPXoFTYThNsMr6nNC/Zm4=";
 
   postInstall = lib.optionalString (bins != [ ]) ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"

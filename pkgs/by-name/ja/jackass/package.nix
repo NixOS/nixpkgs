@@ -5,6 +5,7 @@
   pkg-config,
   vst2-sdk,
   wine64,
+  nix-update-script,
   enableJackAssWine64 ? false,
 }:
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "VST plugin that provides JACK-MIDI support for VST hosts";
@@ -51,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
       applications. Set enableJackAssWine64 to true to enable this output.
     '';
     homepage = "https://github.com/falkTX/JackAss";
-    maintainers = with lib.maintainers; [ PowerUser64 ];
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
+    ];
     license = [ lib.licenses.mit ];
     platforms = lib.platforms.linux;
   };

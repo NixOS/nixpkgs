@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-notifications";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-notifications";
     tag = finalAttrs.version;
-    hash = "sha256-d3fJiYGAYF5e6XPuZ26Lrjj8tUiquunMLDLs9PdAYcA=";
+    hash = "sha256-rGs+MTt/Z+Gk3jSxU7tfNAUdypG/HJ4pDqvC+U722Eg=";
   };
 
   postPatch = ''

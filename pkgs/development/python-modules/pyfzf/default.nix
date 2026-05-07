@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   fzf,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyfzf";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nk412";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for fzf";
     homepage = "https://github.com/nk412/pyfzf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

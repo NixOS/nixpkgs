@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.23.0";
+  version = "4.29.1";
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wcB3HxSNukIOttjrfvDQB5IkmhYG9w/UMeOfCQ1+lvo=";
+    hash = "sha256-pdhRPjSic2H8zPJXLmyfN8umKDoafjmSo4OQSRxIbyE=";
   };
 
   postPatch =
@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
+    "-DINSTALL_CADICAL=OFF"
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
   ];
 
@@ -89,15 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
     changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       danielbritten
       jthulhu
+      nadja-y
     ];
     mainProgram = "lean";
   };

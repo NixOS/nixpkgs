@@ -11,13 +11,13 @@
   (
     finalAttrs: _: {
       pname = "chatterino7";
-      version = "7.5.3";
+      version = "7.5.5";
 
       src = fetchFromGitHub {
         owner = "SevenTV";
         repo = "chatterino7";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-tft0+vcE+LGPrlv4ZBgzmeF66Jf66iTjUr0pdF1vx24=";
+        hash = "sha256-GP6wZLYliTc2JnC5s4ddbxc9asz6Ntg/4LRH7X4QlOQ=";
         fetchSubmodules = true;
         leaveDotGit = true;
         postFetch = ''

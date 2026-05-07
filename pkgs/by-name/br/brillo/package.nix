@@ -8,14 +8,14 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brillo";
   version = "1.4.13";
 
   src = fetchFromGitLab {
     owner = "cameronnemo";
     repo = "brillo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+BUyM3FFnsk87NFaD9FBwdLqf6wsNhX+FDB7nqhgAmM=";
   };
 
@@ -41,15 +41,15 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-dist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backlight and Keyboard LED control tool";
     homepage = "https://gitlab.com/cameronnemo/brillo";
     mainProgram = "brillo";
     license = [
-      licenses.gpl3Only
-      licenses.bsd0
+      lib.licenses.gpl3Only
+      lib.licenses.bsd0
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.alexarice ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.alexarice ];
   };
-}
+})

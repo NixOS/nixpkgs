@@ -10,7 +10,6 @@
   molecule,
   packaging,
   pluggy,
-  pythonOlder,
   rich,
   setuptools,
   setuptools-scm,
@@ -23,14 +22,12 @@
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "25.9.0";
+  version = "26.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GlbSg7H7VIhDnqyUWXHb1mt3LtQ7LGandpIsuT05+/0=";
+    hash = "sha256-EuTJBQefZ2KK52VQbGl9K4p0SmXy1Mv1o7IssJ0Nr8Q=";
   };
 
   nativeBuildInputs = [
@@ -67,12 +64,12 @@ buildPythonPackage rec {
         HOME = "$(mktemp -d)";
       });
 
-  meta = with lib; {
+  meta = {
     description = "Aids in the development and testing of Ansible roles";
     homepage = "https://github.com/ansible-community/molecule";
     changelog = "https://github.com/ansible/molecule/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dawidd6 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "molecule";
   };
 }

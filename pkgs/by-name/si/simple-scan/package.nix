@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   meson,
   ninja,
   pkg-config,
@@ -20,20 +20,17 @@
   libxml2,
   sane-backends,
   vala,
-  gitUpdater,
+  gnome,
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simple-scan";
-  version = "48.1";
+  version = "49.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "simple-scan";
-    tag = version;
-    hash = "sha256-Y+uVAW0jpXJgadP6CjG8zeLgikFY2Pm0z4TZoyYK4+g=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/simple-scan/${lib.versions.major finalAttrs.version}/simple-scan-${finalAttrs.version}.tar.xz";
+    hash = "sha256-mujUFR7K+VhF65+ZtDbVecg48s8Cdj+6O8A3gCUb4zQ=";
   };
 
   nativeBuildInputs = [
@@ -64,9 +61,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gitUpdater {
-      # Ignore tags like 48.1-2, which actually does not introduce any changes.
-      ignoredVersions = "-";
+    updateScript = gnome.updateScript {
+      packageName = "simple-scan";
     };
   };
 
@@ -82,9 +78,9 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
-    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

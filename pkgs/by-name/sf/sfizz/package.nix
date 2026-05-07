@@ -4,7 +4,15 @@
   fetchFromGitHub,
   libjack2,
   libsndfile,
-  xorg,
+  libxcb-util,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
+  libxdmcp,
+  libxau,
+  libx11,
+  libxcb,
   freetype,
   libxkbcommon,
   cairo,
@@ -39,15 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libvorbis
     libopus
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.xcbutil
-    xorg.xcbutilcursor
-    xorg.xcbutilrenderutil
-    xorg.xcbutilkeysyms
-    xorg.xcbutilimage
+    libx11
+    libxcb
+    libxau
+    libxdmcp
+    libxcb-util
+    libxcb-cursor
+    libxcb-render-util
+    libxcb-keysyms
+    libxcb-image
     libxkbcommon
     cairo
     glib

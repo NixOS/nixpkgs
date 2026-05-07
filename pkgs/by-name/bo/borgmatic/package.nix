@@ -15,12 +15,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "2.0.7";
-  format = "pyproject";
+  version = "2.1.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HunKXVuDGTdH+CzIQbtkN0oRMocQ7gVh6Mf6L7wlhAY=";
+    hash = "sha256-T0+E6opyfr7zxfP44OlNuhqsdQyi7OdIXiE5r310LaU=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -31,13 +31,19 @@ python3Packages.buildPythonApplication rec {
       flexmock
       pytestCheckHook
       pytest-cov-stub
+      pytest-timeout
     ]
     ++ optional-dependencies.apprise;
 
   # - test_borgmatic_version_matches_news_version
-  # The file NEWS not available on the pypi source, and this test is useless
+  #   NEWS file not available on the pypi source
+  # - test_log_outputs_includes_error_output_in_exception
+  #   TOCTOU race in log_outputs(): process.poll() returns None in
+  #   raise_for_process_errors but non-None in the while-loop exit check,
+  #   so the error is never raised. Timing-dependent; fails on x86_64-darwin.
   disabledTests = [
     "test_borgmatic_version_matches_news_version"
+    "test_log_outputs_includes_error_output_in_exception"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -56,21 +62,23 @@ python3Packages.buildPythonApplication rec {
     apprise = [ python3Packages.apprise ];
   };
 
-  postInstall = ''
-    installShellCompletion --cmd borgmatic \
-      --bash <($out/bin/borgmatic --bash-completion)
-  ''
-  + lib.optionalString enableSystemd ''
-    mkdir -p $out/lib/systemd/system
-    cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
-    # there is another "sleep", so choose the one with the space after it
-    # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
-    substitute sample/systemd/borgmatic.service \
-               $out/lib/systemd/system/borgmatic.service \
-               --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
-               --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-               --replace "sleep " "${coreutils}/bin/sleep "
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd borgmatic \
+        --bash <($out/bin/borgmatic --bash-completion) \
+        --fish <($out/bin/borgmatic --fish-completion)
+    ''
+    + lib.optionalString enableSystemd ''
+      mkdir -p $out/lib/systemd/system
+      cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
+      # there is another "sleep", so choose the one with the space after it
+      # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
+      substitute sample/systemd/borgmatic.service \
+        $out/lib/systemd/system/borgmatic.service \
+        --replace-fail /root/.local/bin/borgmatic $out/bin/borgmatic \
+        --replace-fail systemd-inhibit ${systemd}/bin/systemd-inhibit \
+        --replace-fail "sleep " "${coreutils}/bin/sleep "
+    '';
 
   passthru.tests = {
     version = testers.testVersion { package = borgmatic; };

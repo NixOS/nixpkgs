@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   buildInputs = [ alsa-lib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hamiltron/py-simple-audio";
     description = "Simple audio playback Python extension - cross-platform, asynchronous, dependency-free";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucus16 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucus16 ];
   };
 }

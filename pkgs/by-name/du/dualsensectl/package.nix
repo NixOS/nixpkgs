@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/nowrep/dualsensectl/releases/tag/v${finalAttrs.version}";
     description = "Linux tool for controlling PS5 DualSense controller";
     homepage = "https://github.com/nowrep/dualsensectl";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "dualsensectl";
-    maintainers = with maintainers; [ azuwis ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ azuwis ];
+    platforms = lib.platforms.linux;
   };
 })

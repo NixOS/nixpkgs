@@ -6,12 +6,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlslib";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xlslib/xlslib-package-${version}.zip";
+    url = "mirror://sourceforge/xlslib/xlslib-package-${finalAttrs.version}.zip";
     sha256 = "1wx3jbpkz2rvgs45x6mwawamd1b2llb0vn29b5sr0rfxzx9d1985";
   };
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++/C library to construct Excel .xls files in code";
     homepage = "https://sourceforge.net/projects/xlslib/";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

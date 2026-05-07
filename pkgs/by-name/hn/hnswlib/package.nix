@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hnswlib";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "nmslib";
     repo = "hnswlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1KkAX42j/I06KO4wCnDsDifN1JiENqYKR5NNHBjyuVA=";
+    hash = "sha256-tYzx92eKRFcZ+RW5mcAw1SFT5aRHvdDr9oBsWj6xZbg=";
   };
 
   # this is a header-only library, so we don't need to build it
@@ -58,12 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++/python library for fast approximate nearest neighbors";
     homepage = "https://github.com/nmslib/hnswlib";
     changelog = "https://github.com/nmslib/hnswlib/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 })

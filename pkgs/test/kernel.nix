@@ -73,6 +73,7 @@ let
   };
 in
 
-lib.optional (failures != [ ]) (
-  throw "The following kernel unit tests failed: ${lib.generators.toPretty { } failures}"
-)
+lib.debug.throwTestFailures {
+  inherit failures;
+  description = "kernel unit tests";
+}

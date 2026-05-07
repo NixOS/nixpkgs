@@ -7,12 +7,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.49.2";
   pname = "httrack";
 
   src = fetchurl {
-    url = "https://mirror.httrack.com/httrack-${version}.tar.gz";
+    url = "https://mirror.httrack.com/httrack-${finalAttrs.version}.tar.gz";
     sha256 = "09a0gm67nml86qby1k1gh7rdxamnrnzwr6l9r5iiq94favjs0xrl";
   };
 
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use offline browser / website mirroring utility";
     homepage = "http://www.httrack.com";
-    license = licenses.gpl3;
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; unix;
   };
-}
+})

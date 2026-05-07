@@ -6,14 +6,14 @@
   dashing,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dashing";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "technosophos";
     repo = "dashing";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CcEgGPnJGrTXrgo82u5dxQTB/YjFBhHdsv7uggsHG1Y=";
   };
 
@@ -22,18 +22,18 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = dashing;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dash Generator Script for Any HTML";
     homepage = "https://github.com/technosophos/dashing";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "dashing";
   };
-}
+})

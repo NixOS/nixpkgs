@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pew";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "04anak82p4v9w0lgfs55s7diywxil6amq8c8bhli143ca8l2fcdq";
   };
 
@@ -31,12 +31,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pew" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/berdario/pew";
     description = "Tools to manage multiple virtualenvs written in pure python";
     mainProgram = "pew";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ berdario ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
-}
+})

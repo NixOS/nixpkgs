@@ -19,12 +19,12 @@ let
 in
 buildNpmPackage rec {
   pname = "antimatter-dimensions";
-  version = "0-unstable-2025-07-15";
+  version = "0-unstable-2025-11-20";
   src = fetchFromGitHub {
     owner = "IvarK";
     repo = "AntimatterDimensionsSourceCode";
-    rev = "01d29026a9d4a85193b563ab0a44b2b3cf02ad6e";
-    hash = "sha256-w66JgLo4SX0b63LjRd1XKDs7O/TpFFJYSbE+dOW1Unw=";
+    rev = "8ae221fcb07db667b3d04114c2b977175966611d";
+    hash = "sha256-IseAfEz+nSzY2XD15HbJWeLmYFMvAYO33bPItXJCy58=";
   };
   nativeBuildInputs = [
     copyDesktopItems

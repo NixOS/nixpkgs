@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nsh";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "nuta";
     repo = "nsh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1479wv8h5l2b0cwp27vpybq50nyvszhjxmn76n2bz3fchr0lrcbp";
   };
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line shell like fish, but POSIX compatible";
     mainProgram = "nsh";
     homepage = "https://github.com/nuta/nsh";
-    changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";
+    changelog = "https://github.com/nuta/nsh/raw/v${finalAttrs.version}/docs/changelog.md";
     license = [
       lib.licenses.cc0 # or
       lib.licenses.mit
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     shellPath = "/bin/nsh";
   };
-}
+})

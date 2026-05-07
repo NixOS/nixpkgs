@@ -29,19 +29,22 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  preCheck = ''
+    rm -rf src # cause pycache conflict
+  '';
+
   disabledTestPaths = [
     # Tests require internet access
-    "kiss_headers/__init__.py"
     "tests/test_serializer.py"
     "tests/test_with_http_request.py"
   ];
 
   pythonImportsCheck = [ "kiss_headers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for HTTP/1.1 style headers";
     homepage = "https://github.com/Ousret/kiss-headers";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

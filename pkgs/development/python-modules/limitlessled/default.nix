@@ -14,10 +14,10 @@ buildPythonPackage rec {
     sha256 = "0pd71wxqjvznx10brsj1sgy3420bz7awbzk9jlj422rrdxql754j";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Control LimitlessLED products";
     homepage = "https://github.com/happyleavesaoc/python-limitlessled/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephalon ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephalon ];
   };
 }

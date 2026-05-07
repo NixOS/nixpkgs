@@ -10,6 +10,7 @@
   # apparmor deps
   libapparmor,
   apparmor-bin-utils,
+  runtimeShellPackage,
 
   # testing
   perl,
@@ -39,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs = [ libapparmor ];
+  buildInputs = [
+    libapparmor
+    runtimeShellPackage
+  ];
 
   makeFlags = [
     "LANGS="
@@ -61,20 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "tests";
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [
-    # equality tests are broken on musl due to different priority values
-    # https://gitlab.com/apparmor/apparmor/-/issues/513
-    "-o equality"
-  ];
-
   postCheck = "popd";
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  checkInputs = [
+  nativeCheckInputs = [
     bashInteractive
     perl
     python3
   ];
+
+  strictDeps = true;
 
   meta = libapparmor.meta // {
     description = "Mandatory access control system - core library";

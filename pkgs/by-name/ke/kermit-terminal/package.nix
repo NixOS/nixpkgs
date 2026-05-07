@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/orhun/kermit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "kermit";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

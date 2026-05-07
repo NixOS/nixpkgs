@@ -274,7 +274,7 @@ in
               channel = mkOption {
                 default = 0;
                 example = 11;
-                type = types.int;
+                type = types.ints.unsigned;
                 description = ''
                   The channel to operate on. Use 0 to enable ACS (Automatic Channel Selection).
                   Beware that not every device supports ACS in which case {command}`hostapd`
@@ -571,7 +571,7 @@ in
                     options = {
                       logLevel = mkOption {
                         default = 2;
-                        type = types.int;
+                        type = types.ints.between 0 4;
                         description = ''
                           Levels (minimum value for logged events):
                           0 = verbose debugging
@@ -957,7 +957,7 @@ in
                                 vlanid = mkOption {
                                   default = null;
                                   example = 1;
-                                  type = types.nullOr types.int;
+                                  type = types.nullOr types.ints.unsigned;
                                   description = "If this attribute is given, all clients using this entry will get tagged with the given VLAN ID.";
                                 };
 
@@ -1334,25 +1334,20 @@ in
         # we check if wirelessInterfaces is empty as that means all interfaces implicit
         shouldWarn = wirelessEnabled && (wirelessInterfaces == [ ] || hasInterfaceConflict);
       in
-      if shouldWarn then
-        [
-          ''
-            Some wireless interface is configured for both for client and access point mode:
-            this is not allowed. Either specify `networking.wireless.interfaces` and exclude
-            those from `services.hostapd.radios` or make sure to not run the `wpa_supplicant`
-            and `hostapd` services simultaneously.
-          ''
-        ]
-      else
-        [ ];
+      lib.optional shouldWarn ''
+        Some wireless interface is configured for both for client and access point mode:
+        this is not allowed. Either specify `networking.wireless.interfaces` and exclude
+        those from `services.hostapd.radios` or make sure to not run the `wpa_supplicant`
+        and `hostapd` services simultaneously.
+      ''
+      ++ lib.optional config.networking.wireless.iwd.enable ''
+        hostapd and iwd do conflict,
+        use `networking.wireless.enable` in combination with `networking.wireless.interfaces` to avoid it.
+      '';
     assertions = [
       {
         assertion = cfg.radios != { };
         message = "At least one radio must be configured with hostapd!";
-      }
-      {
-        assertion = !config.networking.wireless.iwd.enable;
-        message = "hostapd and iwd conflict, use `networking.wireless.enable` in combination with `networking.wireless.interfaces`";
       }
     ]
     # Radio warnings
@@ -1368,13 +1363,13 @@ in
           # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
           {
             assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
-            message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
+            message = "hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.";
           }
           {
             assertion =
               (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities)
               -> radioCfg.channel != 0;
-            message = ''hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd'';
+            message = "hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd";
           }
         ]
         # BSS warnings
@@ -1396,42 +1391,42 @@ in
               }
               {
                 assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
-                message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
+                message = "hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.";
               }
               {
                 assertion = countWpaPasswordDefinitions <= 1;
-                message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
+                message = "hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)";
               }
               {
                 assertion =
                   auth.wpaPassword != null
                   -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
-                message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
+                message = "hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).";
               }
               {
                 assertion = auth.saePasswords == [ ] || auth.saePasswordsFile == null;
-                message = ''hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)'';
+                message = "hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)";
               }
               {
                 assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null);
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option";
               }
               {
                 assertion =
                   auth.mode == "wpa3-sae-transition"
                   -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null) && countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option";
               }
               {
                 assertion =
                   (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
+                message = "hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option";
               }
             ]
             ++ optionals (auth.saePasswords != [ ]) (
               imap1 (i: entry: {
                 assertion = (entry.password == null) != (entry.passwordFile == null);
-                message = ''hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`'';
+                message = "hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`";
               }) auth.saePasswords
             )
           ) radioCfg.networks

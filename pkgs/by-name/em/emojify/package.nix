@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emojify";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "mrowa44";
     repo = "emojify";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6cV+S8wTqJxPGsxiJ3hP6/CYPMWdF3qnz4ddL+F/oJU=";
   };
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Emoji on the command line";
     homepage = "https://github.com/mrowa44/emojify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     mainProgram = "emojify";
   };
-}
+})

@@ -2,7 +2,7 @@
 {
   name = "anuko-time-tracker";
   meta = {
-    maintainers = with pkgs.lib.maintainers; [ ];
+    maintainers = [ ];
   };
   nodes = {
     machine = {

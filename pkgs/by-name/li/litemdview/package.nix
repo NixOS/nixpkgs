@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gtkmm3,
   autoreconfHook,
   pkg-config,
@@ -12,8 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "litemdview";
   version = "0.0.32";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "g0tsu";
     repo = "litemdview";
     rev = "litemdview-${finalAttrs.version}";

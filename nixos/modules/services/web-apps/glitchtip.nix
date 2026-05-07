@@ -45,19 +45,6 @@ in
         default = "glitchtip";
       };
 
-      listenAddress = lib.mkOption {
-        type = lib.types.str;
-        description = "The address to listen on.";
-        default = "127.0.0.1";
-        example = "0.0.0.0";
-      };
-
-      port = lib.mkOption {
-        type = lib.types.port;
-        description = "The port to listen on.";
-        default = 8000;
-      };
-
       stateDir = lib.mkOption {
         type = lib.types.path;
         description = "State directory of glitchtip.";
@@ -66,7 +53,7 @@ in
 
       settings = lib.mkOption {
         description = ''
-          Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information.
+          Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information and required settings.
         '';
         default = { };
         defaultText = lib.literalExpression ''
@@ -74,8 +61,14 @@ in
             DEBUG = 0;
             DEBUG_TOOLBAR = 0;
             DATABASE_URL = lib.mkIf config.services.glitchtip.database.createLocally "postgresql://@/glitchtip";
+            GLITCHTIP_DOMAIN = lib.mkIf config.services.glitchtip.nginx.createLocally "https://''${config.services.glitchtip.nginx.domain}";
+            GLITCHTIP_VERSION = config.services.glitchtip.package.version;
+            GRANIAN_HOST = "127.0.0.1";
+            GRANIAN_PORT = 8000;
+            GRANIAN_STATIC_PATH_MOUNT = "''${config.services.glitchtip.package}/lib/glitchtip/static";
+            GRANIAN_WORKERS = 1;
+            PYTHONUNBUFFERED = 1;
             REDIS_URL = lib.mkIf config.services.glitchtip.redis.createLocally "unix://''${config.services.redis.servers.glitchtip.unixSocket}";
-            CELERY_BROKER_URL = lib.mkIf config.services.glitchtip.redis.createLocally "redis+socket://''${config.services.redis.servers.glitchtip.unixSocket}";
           }
         '';
         example = {
@@ -94,9 +87,28 @@ in
 
           options = {
             GLITCHTIP_DOMAIN = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.nullOr lib.types.str;
               description = "The URL under which GlitchTip is externally reachable.";
               example = "https://glitchtip.example.com";
+              default = null;
+            };
+
+            GLITCHTIP_ENABLE_MCP = lib.mkOption {
+              type = lib.types.bool;
+              description = "Whether to enable the MCP api.";
+              default = false;
+            };
+
+            GRANIAN_WORKERS = lib.mkOption {
+              type = lib.types.ints.positive;
+              description = "Number of granian workers to start";
+              default = 1;
+            };
+
+            ENABLE_OBSERVABILITY_API = lib.mkOption {
+              type = lib.types.bool;
+              description = "Whether to enable the Prometheus metrics endpoint.";
+              default = false;
             };
 
             ENABLE_USER_REGISTRATION = lib.mkOption {
@@ -132,49 +144,74 @@ in
       database.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
-          Whether to enable and configure a local PostgreSQL database server.
-        '';
+        description = "Whether to enable and configure a local PostgreSQL database server.";
+      };
+
+      nginx = {
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to enable and configure a local Nginx server.";
+        };
+
+        domain = lib.mkOption {
+          type = lib.types.str;
+          example = "glitchtip.example.com";
+          description = ''
+            Domain under which GlitchTip will be reachable.
+            In contrast to `settings.GLITCHTIP_DOMAIN` this option has no protocol.
+            It will also set `settings.GLITCHTIP_DOMAIN` with the `https://` protocol.
+          '';
+        };
       };
 
       redis.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
-          Whether to enable and configure a local Redis instance.
-        '';
-      };
-
-      gunicorn.extraArgs = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = "Extra arguments for gunicorn.";
-      };
-
-      celery.extraArgs = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = "Extra arguments for celery.";
+        description = "Whether to enable and configure a local Redis instance.";
       };
     };
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "glitchtip" "listenAddress" ]
+      [ "services" "glitchtip" "settings" "GRANIAN_HOST" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "glitchtip" "port" ]
+      [ "services" "glitchtip" "settings" "GRANIAN_PORT" ]
+    )
+    (lib.mkRemovedOptionModule [ "services" "glitchtip" "celery" "extraArgs" ]
+      "GlitchTip 6 migrated away from celery. Please check the upstream docs how to handle your usecase now."
+    )
+    (lib.mkRemovedOptionModule [ "services" "glitchtip" "gunicorn" "extraArgs" ]
+      "GlitchTip 6 migrated away from gunicorn. Please check the upstream docs how to handle your usecase now."
+    )
+  ];
 
   config = lib.mkIf cfg.enable {
     services.glitchtip.settings = {
       DEBUG = lib.mkDefault 0;
       DEBUG_TOOLBAR = lib.mkDefault 0;
-      PYTHONPATH = "${python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/glitchtip";
-      DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://@/glitchtip";
-      REDIS_URL = lib.mkIf cfg.redis.createLocally "unix://${config.services.redis.servers.glitchtip.unixSocket}";
-      CELERY_BROKER_URL = lib.mkIf cfg.redis.createLocally "redis+socket://${config.services.redis.servers.glitchtip.unixSocket}";
       GLITCHTIP_VERSION = pkg.version;
+      GRANIAN_HOST = lib.mkDefault "127.0.0.1";
+      GRANIAN_PORT = lib.mkDefault 8000;
+      GRANIAN_STATIC_PATH_MOUNT = "${pkg}/lib/glitchtip/static";
+      GRANIAN_WORKERS = lib.mkDefault 1;
+      PYTHONPATH = "${python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/glitchtip";
+      PYTHONUNBUFFERED = lib.mkDefault 1;
+    }
+    // lib.optionalAttrs cfg.database.createLocally { DATABASE_URL = "postgresql://@/glitchtip"; }
+    // lib.optionalAttrs cfg.nginx.createLocally { GLITCHTIP_DOMAIN = "https://${cfg.nginx.domain}"; }
+    // lib.optionalAttrs cfg.redis.createLocally {
+      REDIS_URL = "unix://${config.services.redis.servers.glitchtip.unixSocket}";
     };
 
     systemd.services =
       let
         commonService = {
           wantedBy = [ "multi-user.target" ];
-
           wants = [ "network-online.target" ];
           requires =
             lib.optional cfg.database.createLocally "postgresql.target"
@@ -235,34 +272,54 @@ in
       {
         glitchtip = commonService // {
           description = "GlitchTip";
+          environment =
+            environment
+            // lib.optionalAttrs (cfg.settings.ENABLE_OBSERVABILITY_API && cfg.settings.WORKERS > 1) {
+              PROMETHEUS_MULTIPROC_DIR = "/tmp/prometheus_multiproc";
+            };
+          bindsTo = [ "glitchtip-worker.service" ];
+          before = [ "glitchtip-worker.service" ];
 
           preStart = ''
             ${lib.getExe pkg} migrate
+            ${lib.getExe pkg} createcachetable
+            ${lib.getExe pkg} maintain_partitions
           '';
 
           serviceConfig = commonServiceConfig // {
             ExecStart = ''
-              ${lib.getExe python.pkgs.gunicorn} \
-                --bind=${cfg.listenAddress}:${toString cfg.port} \
-                ${lib.concatStringsSep " " cfg.gunicorn.extraArgs} \
-                glitchtip.wsgi
+              ${lib.getExe python.pkgs.granian} \
+                --interface ${if cfg.settings.GLITCHTIP_ENABLE_MCP then "asgi" else "asginl"} \
+                glitchtip.asgi:application \
+                --host ${cfg.settings.GRANIAN_HOST} \
+                --port ${toString cfg.settings.GRANIAN_PORT} \
+                --workers ${toString cfg.settings.GRANIAN_WORKERS} \
+                --no-ws
             '';
           };
         };
 
         glitchtip-worker = commonService // {
           description = "GlitchTip Job Runner";
-
+          environment = environment // {
+            IS_WORKER = "1";
+          };
           serviceConfig = commonServiceConfig // {
-            ExecStart = ''
-              ${lib.getExe python.pkgs.celery} \
-                -A glitchtip worker \
-                -B -s /run/glitchtip/celerybeat-schedule \
-                ${lib.concatStringsSep " " cfg.celery.extraArgs}
-            '';
+            ExecStart = "${lib.getExe pkg} runworker --scheduler";
           };
         };
       };
+
+    services.nginx = lib.mkIf cfg.nginx.createLocally {
+      enable = true;
+      virtualHosts.${cfg.nginx.domain} = {
+        forceSSL = lib.mkDefault true;
+        locations = {
+          "/".proxyPass = "http://${cfg.settings.GRANIAN_HOST}:${toString cfg.settings.GRANIAN_PORT}";
+          "/static/".root = "${pkg}/lib/glitchtip";
+        };
+      };
+    };
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
@@ -289,15 +346,13 @@ in
 
     systemd.tmpfiles.settings.glitchtip."${cfg.stateDir}/uploads".d = { inherit (cfg) user group; };
 
-    environment.systemPackages =
-      let
-        glitchtip-manage = pkgs.writeShellScriptBin "glitchtip-manage" ''
-          set -o allexport
-          ${lib.toShellVars environment}
-          ${lib.concatMapStringsSep "\n" (f: "source ${f}") cfg.environmentFiles}
-          ${config.security.wrapperDir}/sudo -E -u ${cfg.user} ${lib.getExe pkg} "$@"
-        '';
-      in
-      [ glitchtip-manage ];
+    environment.systemPackages = [
+      (pkgs.writeShellScriptBin "glitchtip-manage" ''
+        set -o allexport
+        ${lib.toShellVars environment}
+        ${lib.concatMapStringsSep "\n" (f: "source ${f}") cfg.environmentFiles}
+        ${config.security.wrapperDir}/sudo -E -u ${cfg.user} ${lib.getExe pkg} "$@"
+      '')
+    ];
   };
 }

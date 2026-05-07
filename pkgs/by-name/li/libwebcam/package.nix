@@ -8,12 +8,12 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwebcam";
   version = "0.2.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/source/${pname}-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/libwebcam/source/libwebcam-src-${finalAttrs.version}.tar.gz";
     sha256 = "0hcxv8di83fk41zjh0v592qm7c0v37a3m3n3lxavd643gff1k99w";
   };
 
@@ -30,14 +30,20 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./uvcdynctrl/CMakeLists.txt \
-      --replace "/lib/udev" "$out/lib/udev"
+      --replace-fail "/lib/udev" "$out/lib/udev" \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
 
     substituteInPlace ./uvcdynctrl/udev/scripts/uvcdynctrl \
-      --replace 'debug=0' 'debug=''${NIX_UVCDYNCTRL_UDEV_DEBUG:-0}' \
-      --replace 'uvcdynctrlpath=uvcdynctrl' "uvcdynctrlpath=$out/bin/uvcdynctrl"
+      --replace-fail 'debug=0' 'debug=''${NIX_UVCDYNCTRL_UDEV_DEBUG:-0}' \
+      --replace-fail 'uvcdynctrlpath=uvcdynctrl' "uvcdynctrlpath=$out/bin/uvcdynctrl"
 
     substituteInPlace ./uvcdynctrl/udev/rules/80-uvcdynctrl.rules \
-      --replace "/lib/udev" "$out/lib/udev"
+      --replace-fail "/lib/udev" "$out/lib/udev"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace libwebcam/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   preConfigure = ''
@@ -49,10 +55,10 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Webcam-tools package";
-    platforms = platforms.linux;
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ jraygauthier ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

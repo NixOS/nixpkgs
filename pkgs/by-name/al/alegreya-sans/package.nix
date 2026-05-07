@@ -1,28 +1,29 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alegreya-sans";
   version = "2.008";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "huertatipografica";
     repo = "Alegreya-Sans";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0xz5lq9fh0pj02ifazhddzh792qkxkz1z6ylj26d93wshc90jl5g";
   };
 
-  installPhase = ''
-    install -D -m 444 fonts/otf/* -t $out/share/fonts/otf
-    install -D -m 444 fonts/ttf/* -t $out/share/fonts/ttf
-    install -D -m 444 fonts/webfonts/*.woff -t $out/share/fonts/woff
-    install -D -m 444 fonts/webfonts/*.woff2 -t $out/share/fonts/woff2
-  '';
+  nativeBuildInputs = [ installFonts ];
 
-  meta = with lib; {
+  meta = {
     description = "Humanist sans serif family with a calligraphic feeling";
     longDescription = ''
       Alegreya Sans is a humanist sans serif family with a calligraphic feeling that conveys a dynamic and varied rhythm. This gives a pleasant feeling to readers of long texts.
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
       The Alegreya type system is a "super family", originally intended for literature, and includes sans and serif sister families.
     '';
     homepage = "https://www.huertatipografica.com/en/fonts/alegreya-sans-ht";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Thra11 ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Thra11 ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysecuritas";
   version = "0.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysecuritas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to access Securitas Direct Mobile API";
     homepage = "https://github.com/Cebeerre/pysecuritas";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pysecuritas";
   };
 }

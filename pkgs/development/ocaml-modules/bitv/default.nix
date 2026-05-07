@@ -4,7 +4,7 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bitv";
   version = "2.1";
   minimalOCamlVersion = "4.08";
@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "backtracking";
     repo = "bitv";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jlpVMqYOiKxoU6wuVeYlOC5wRtF4aakljKpop6dfu8w=";
   };
 
@@ -20,7 +20,7 @@ buildDunePackage rec {
     description = "Bit vector library for OCaml";
     license = lib.licenses.lgpl21;
     homepage = "https://github.com/backtracking/bitv";
-    changelog = "https://github.com/backtracking/bitv/releases/tag/${version}";
+    changelog = "https://github.com/backtracking/bitv/releases/tag/${finalAttrs.version}";
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

@@ -1,20 +1,12 @@
 diff --git a/src/MainWindow.vala b/src/MainWindow.vala
-index 14b0701..13638a5 100644
+index 8f407bf..32db5fb 100644
 --- a/src/MainWindow.vala
 +++ b/src/MainWindow.vala
-@@ -82,6 +82,7 @@ public class Feedback.MainWindow : Gtk.ApplicationWindow {
+@@ -124,6 +124,7 @@ public class Feedback.MainWindow : Gtk.ApplicationWindow {
              AppStream.PoolFlags.LOAD_FLATPAK |
              AppStream.PoolFlags.RESOLVE_ADDONS
          );
 +        appstream_pool.add_extra_data_location ("/run/current-system/sw/share/metainfo/", AppStream.FormatStyle.METAINFO);
- #else
-         appstream_pool.clear_metadata_locations ();
-         // flatpak's appstream files exists only inside they sandbox
-@@ -89,6 +90,7 @@ public class Feedback.MainWindow : Gtk.ApplicationWindow {
-         foreach (var app in app_entries) {
-             appstream_pool.add_metadata_location (appdata_dir.printf (app));
-         }
-+        appstream_pool.add_metadata_location ("/run/current-system/sw/share/metainfo/");
- #endif
  
-         try {
+         appstream_pool.load_async.begin (null, (obj, res) => {
+             try {

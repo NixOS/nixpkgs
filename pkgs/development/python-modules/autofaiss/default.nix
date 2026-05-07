@@ -8,7 +8,7 @@
 
   # dependencies
   embedding-reader,
-  faiss,
+  faiss-cpu,
   fire,
   fsspec,
   numpy,
@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "autofaiss";
-  version = "2.17.0";
+  version = "2.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "criteo";
     repo = "autofaiss";
     tag = version;
-    hash = "sha256-pey3wrW7CDLMiPPKnmYrcSJqGuy6ecA2SE9m3Jtt6DU=";
+    hash = "sha256-XuubpTxmyKdV9nWqLTljp5cNyIwLt2BKJYcBzwPNzD8=";
   };
 
   build-system = [
@@ -37,8 +37,6 @@ buildPythonPackage rec {
     # The `dataclasses` packages is a python2-only backport, unnecessary in
     # python3.
     "dataclasses"
-    # We call it faiss, not faiss-cpu.
-    "faiss-cpu"
   ];
 
   pythonRelaxDeps = [
@@ -55,7 +53,7 @@ buildPythonPackage rec {
 
   dependencies = [
     embedding-reader
-    faiss
+    faiss-cpu
     fire
     fsspec
     numpy

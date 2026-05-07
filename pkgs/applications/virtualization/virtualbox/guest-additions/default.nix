@@ -4,17 +4,23 @@
   callPackage,
   lib,
   dbus,
-  xorg,
+  kmod,
+  libxt,
+  libxrandr,
+  libxmu,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
   wayland,
-  libX11,
+  libx11,
 }:
 let
-  virtualboxVersion = "7.2.0";
+  virtualboxVersion = "7.2.8";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "4f2804ff27848ea772aee6b637bb1e10ee74ec2da117c257413e2d2c4f670ba0";
+  virtualboxSha256 = "0642ed4a12b7204cd30c0abbc2c10c1cc7ad55ce1756a01e86a16d4b6b066592";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -43,11 +49,11 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";
@@ -55,13 +61,15 @@ let
     }
     {
       name = "libX11.so";
-      pkg = libX11;
+      pkg = libx11;
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
+
+  hasVboxVideo = lib.versionOlder kernel.version "7.0";
 in
 stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
@@ -70,17 +78,23 @@ stdenv.mkDerivation {
   src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
 
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
-
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=implicit-function-declaration"
+    ];
+
+    KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
+  };
 
   nativeBuildInputs = [
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
+    kmod
   ]
   ++ kernel.moduleBuildDependencies;
 
@@ -101,12 +115,12 @@ stdenv.mkDerivation {
             stdenv.cc.cc
             stdenv.cc.libc
             zlib
-            xorg.libX11
-            xorg.libXt
-            xorg.libXext
-            xorg.libXmu
-            xorg.libXfixes
-            xorg.libXcursor
+            libx11
+            libxt
+            libxext
+            libxmu
+            libxfixes
+            libxcursor
           ]
         } $i
     done
@@ -121,7 +135,10 @@ stdenv.mkDerivation {
 
     # Install kernel modules.
     cd src/vboxguest-${virtualboxVersion}_NixOS
-    make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
+
+    INSTALL_TARGETS=(install-vboxguest install-vboxsf ${lib.optionalString hasVboxVideo "install-vboxvideo"})
+    make INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers ''${INSTALL_TARGETS[@]}
+
     cd ../..
 
     # Install binaries
@@ -139,6 +156,11 @@ stdenv.mkDerivation {
     # Additionally, 3d support seems to rely on VBoxOGL.so being symlinked from
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
+
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
 
     runHook postInstall
   '';
@@ -164,7 +186,6 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = [
-      lib.maintainers.sander
       lib.maintainers.friedrichaltheide
     ];
     platforms = [

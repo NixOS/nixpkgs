@@ -17,9 +17,9 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  meta = with lib; {
+  meta = {
     description = "Let's write Python 3 right now";
     homepage = "https://github.com/nandoflorestan/nine";
-    license = licenses.free;
+    license = lib.licenses.free;
   };
 }

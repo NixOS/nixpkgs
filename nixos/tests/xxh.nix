@@ -33,8 +33,8 @@ let
 in
 {
   name = "xxh";
-  meta = with lib.maintainers; {
-    maintainers = [ lom ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {

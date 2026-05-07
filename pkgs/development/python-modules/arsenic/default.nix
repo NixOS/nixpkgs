@@ -7,7 +7,6 @@
   fetchpatch,
   packaging,
   poetry-core,
-  pythonOlder,
   structlog,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "arsenic";
   version = "21.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "HENNGE";
@@ -56,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arsenic" ];
 
-  meta = with lib; {
+  meta = {
     description = "WebDriver implementation for asyncio and asyncio-compatible frameworks";
     homepage = "https://github.com/HENNGE/arsenic/";
     changelog = "https://github.com/HENNGE/arsenic/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

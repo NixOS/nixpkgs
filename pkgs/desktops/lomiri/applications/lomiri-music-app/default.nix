@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Default Music application for Ubuntu devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-music-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-music-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only

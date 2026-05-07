@@ -6,7 +6,9 @@
   cmake,
   ninja,
   makeWrapper,
-  xorg,
+  libxinerama,
+  libx11,
+  libice,
   libGLU,
   libGL,
   SDL2,
@@ -35,6 +37,12 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/astromenace/raw/5e6bc02d115a53007dc47ef8223d8eaa25607588/f/astromenace-gcc13.patch";
       hash = "sha256-pkmTVR86vS+KCICxAp+d7upNWVnSNxwdKmxnbtqIvgU=";
     })
+
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/viewizard/astromenace/commit/eb42ddb1e86a3e67787bfd5e33ff2afdd6307142.patch";
+      hash = "sha256-TQVcnDrKBFvcyYhWeeEQSRjuirtJ7wYFQV+f3bHikdA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -44,9 +52,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libICE
-    xorg.libX11
-    xorg.libXinerama
+    libice
+    libx11
+    libxinerama
     libGLU
     libGL
     SDL2
@@ -68,12 +76,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
     homepage = "https://www.viewizard.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "astromenace";
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

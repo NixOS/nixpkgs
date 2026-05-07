@@ -3,13 +3,13 @@
 A build helper is a function that produces derivations.
 
 :::{.warning}
-This is not to be confused with the [`builder` argument of the Nix `derivation` primitive](https://nixos.org/manual/nix/unstable/language/derivations.html), which refers to the executable that produces the build result, or [remote builder](https://nixos.org/manual/nix/stable/advanced-topics/distributed-builds.html), which refers to a remote  machine that could run such an executable.
+This is not to be confused with the [`builder` argument of the Nix `derivation` primitive](https://nixos.org/manual/nix/unstable/language/derivations.html), which refers to the executable that produces the build result, or [remote builder](https://nixos.org/manual/nix/stable/advanced-topics/distributed-builds.html), which refers to a remote machine that could run such an executable.
 :::
 
 Such a function is usually designed to abstract over a typical workflow for a given programming language or framework.
 This allows declaring a build recipe by setting a limited number of options relevant to the particular use case instead of using the `derivation` function directly.
 
-[`stdenv.mkDerivation`](#part-stdenv) is the most widely used build helper, and serves as a basis for many others.
+[`stdenv.mkDerivation`](#part-stdenv) is the most widely used build helper and serves as a basis for many others.
 In addition, it offers various options to customize parts of the builds.
 
 There is no uniform interface for build helpers.

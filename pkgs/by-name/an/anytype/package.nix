@@ -3,10 +3,13 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   pkg-config,
   anytype-heart,
   libsecret,
   electron,
+  go,
+  lsof,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
@@ -14,23 +17,26 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.49.2";
+  version = "0.54.11";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8+x2FmyR5x9Zrm3t71RSyxAKcJCvnR98+fqHXjBE7aU=";
+    hash = "sha256-HF7bP3Ry3djNQnFDl0v6x9hzMpSLMXyI6UBItgGT+DI=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "873b42df7320ebbbc80d7e2477914dac70363ef7";
-    hash = "sha256-Mr0KfXn9NO86QqgBhVjSs2przN/GtjuhJHJ9djo8Feg=";
+    rev = "afa12aeb0cea6c77ce38c3e3bfd082d532948a1c";
+    hash = "sha256-YpOkmm7vW97t19twfLNExRHQvLVcrC+oDtHjwJL9dx8=";
   };
 
-  npmDepsHash = "sha256-fuNTSZl+4DG/YL34f/+bYK26ruRFAc1hyHVAm256LiE=";
+  npmDepsHash = "sha256-/QWHJ2grw34LOEIDn93WDTEpQH001vVtuQgncR2SRYQ=";
+
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -38,6 +44,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    go
     copyDesktopItems
   ];
   buildInputs = [ libsecret ];
@@ -63,6 +70,7 @@ buildNpmPackage (finalAttrs: {
     done
 
     npm run build
+    npm run build:nmh
 
     runHook postBuild
   '';
@@ -93,6 +101,9 @@ buildNpmPackage (finalAttrs: {
       --add-flags $out/lib/anytype/ \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
+    wrapProgram $out/lib/anytype/dist/nativeMessagingHost \
+       --prefix PATH : ${lib.makeBinPath [ lsof ]}
+
     runHook postInstall
   '';
 
@@ -119,9 +130,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
-    changelog = "https://community.anytype.io/t/anytype-desktop-${
-      builtins.replaceStrings [ "." ] [ "-" ] (lib.versions.majorMinor finalAttrs.version)
-    }-0-released";
+    changelog = "https://github.com/anyproto/anytype-ts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [

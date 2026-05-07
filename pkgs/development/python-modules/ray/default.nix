@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   python,
   fetchPypi,
@@ -17,7 +16,6 @@
   protobuf,
   pyyaml,
   requests,
-  watchfiles,
 
   # optional-dependencies
   # cgraph
@@ -34,43 +32,52 @@
   aiohttp-cors,
   colorful,
   opencensus,
+  opentelemetry-exporter-prometheus,
+  opentelemetry-proto,
+  opentelemetry-sdk,
   prometheus-client,
   pydantic,
   py-spy,
   smart-open,
   virtualenv,
+  # llm
+  async-timeout,
+  hf-transfer,
+  jsonref,
+  meson,
+  ninja,
+  # nixl,
+  pybind11,
+  typer,
+  vllm,
   # observability
   memray,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  opentelemetry-exporter-otlp,
   # rllib
   dm-tree,
   gymnasium,
   lz4,
-  # ormsgpack,
+  ormsgpack,
   scipy,
-  typer,
-  rich,
   # serve
   fastapi,
   starlette,
   uvicorn,
+  watchfiles,
+  # serve-async-inference
+  celery,
   # serve-grpc
   pyopenssl,
   # tune
   tensorboardx,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.49.1";
-in
-buildPythonPackage rec {
-  inherit pname version;
+  version = "2.55.1";
   format = "wheel";
+  __structuredAttres = true;
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -78,45 +85,41 @@ buildPythonPackage rec {
       platforms = {
         aarch64-darwin = "macosx_12_0_arm64";
         aarch64-linux = "manylinux2014_aarch64";
-        x86_64-darwin = "macosx_12_0_x86_64";
         x86_64-linux = "manylinux2014_x86_64";
       };
       # ./pkgs/development/python-modules/ray/prefetch.sh
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-k4TScFnK+Go4y7y0Iqthto3oczN4S/GyJyLXT9ugHvY=";
-          cp311 = "sha256-yKA5RHwwSeM226+f8WcylDr/i959U3Y5C8W3HrCMuZY=";
-          cp312 = "sha256-SEBk/KAnMuC29KCdrQ0ftqvUykttm/fCareheiiHzQk=";
-          cp313 = "sha256-147zp65IgZ1kD8BQBr8qfKq0ixXFZ6U6ecAV89AFSz0=";
+          cp311 = "sha256-1TgtoYHAPuL1Au9Gzwrku8MBV7W9mmfXZR9qJyUoqFo=";
+          cp312 = "sha256-JjcF9rqynnYiqU+C2iX9f5zq12zfiaB6qyj3nN+PnZU=";
+          cp313 = "sha256-E4DgQ+tXzeabfpGZxvJVjO648PxByX0dXlDqBCEV8wI=";
+          cp314 = "sha256-FW7T5yrZW2RdIAbNcajd28yJtWv8AAJ/YiWt94vZy3Q=";
         };
         aarch64-linux = {
-          cp310 = "sha256-jzmr4eTqXk3eJWfn5697QffrU/apw9PRy4APt6NlIQQ=";
-          cp311 = "sha256-y2/eQS5jT5MzPGRrEInk0xhLx/y3/AKBiJGygagCQNI=";
-          cp312 = "sha256-z2O5FuOZwqTUhCSWEals7ig87zLlRBJhFaStPocsNOs=";
-          cp313 = "sha256-lOHFBoiXxjVG0J6iY6iETOFjxtgM4wsa863HU3CL5jw=";
-        };
-        x86_64-darwin = {
-          cp310 = "sha256-mQhrS7MgOL1jt1dWZ/3BQly3Ua/gQ07Q0Vjj0+4Mcm8=";
-          cp311 = "sha256-Wx4ACGFWodWJZk0ezOPUWJsInLqwnXuHgDYOWzSukHo=";
-          cp312 = "sha256-+TZd46mmYczwid+qwByLaLoAyYRDMw72eODAJIJyxyI=";
-          cp313 = "sha256-D7LijIDkWZ/+w6NOkmubASrRw1D0nNuNiJLderk7R4k=";
+          cp311 = "sha256-DqL2cKdyWDOtIzOoxGq2mGWtBsjl3p9laV4PjzUzHOw=";
+          cp312 = "sha256-JlQfabtVYH74M1uqx1su0S/yzgLVYxMhmyntoAMDkiE=";
+          cp313 = "sha256-tBXVkOBi8kiQfg/kKZSUPxFya3F4/PSxz1VGch+xpfg=";
+          cp314 = "sha256-TmGNYeGxS2/emlhhUfP9nUNbC4UEi5l7yqf0pTN0eys=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-+OEt19uCFahu9xg6LJwiECiA4OzQj5Sx0XrZ5gfko1k=";
-          cp311 = "sha256-lDJtsMg/fzkTUrE1s3qOynN8Gt3xiQKrGQvmuGCKgDk=";
-          cp312 = "sha256-96cVhV0XnB3Wri6LX4kZY4zeN5pbFXljoL100ReLi1o=";
-          cp313 = "sha256-XRnlaKjPvM8Si/NPnOSLy9EenwuU2xkEBPa+tVrkldI=";
+          cp311 = "sha256-AFP9W0APesViY6obvT1o+3k0Gwi43Gl8iHgtWsp7PtQ=";
+          cp312 = "sha256-E3+QBu7ijKq4JggDzKMU83u9o/yU/foxx3C10Bliatg=";
+          cp313 = "sha256-+YRKknLvLm61dxAlhmByz0I0z0x8waMeI1t95xEYZL4=";
+          cp314 = "sha256-sGIEXGTCvOOaUWYWJPcpLHu/MPKp2Hhieq4x1G2lcS0=";
         };
       };
     in
     fetchPypi {
-      inherit pname version format;
+      inherit (finalAttrs) pname version;
+      format = "wheel";
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
+      sha256 =
+        hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
+          or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -132,7 +135,6 @@ buildPythonPackage rec {
     protobuf
     pyyaml
     requests
-    watchfiles
   ];
 
   optional-dependencies = lib.fix (self: {
@@ -148,6 +150,8 @@ buildPythonPackage rec {
       ++ self.observability
       ++ self.rllib
       ++ self.serve
+      ++ self.serve-async-inference
+      ++ self.serve-grpc
       ++ self.train
       ++ self.tune
     );
@@ -167,6 +171,9 @@ buildPythonPackage rec {
       colorful
       grpcio
       opencensus
+      opentelemetry-exporter-prometheus
+      opentelemetry-proto
+      opentelemetry-sdk
       prometheus-client
       pydantic
       py-spy
@@ -174,22 +181,37 @@ buildPythonPackage rec {
       smart-open
       virtualenv
     ];
+    llm = lib.unique (
+      [
+        async-timeout
+        hf-transfer
+        jsonref
+        jsonschema
+        meson
+        ninja
+        # nixl
+        pybind11
+        typer
+        vllm
+      ]
+      ++ self.data
+      ++ self.serve
+      ++ vllm.optional-dependencies.audio
+    );
     observability = [
       memray
-      opentelemetry-api
-      opentelemetry-sdk
-      opentelemetry-exporter-otlp
     ];
-    rllib = [
-      dm-tree
-      gymnasium
-      lz4
-      # ormsgpack
-      pyyaml
-      scipy
-      typer
-      rich
-    ];
+    rllib = lib.unique (
+      [
+        dm-tree
+        gymnasium
+        lz4
+        ormsgpack
+        pyyaml
+        scipy
+      ]
+      ++ self.tune
+    );
     serve = lib.unique (
       [
         fastapi
@@ -200,6 +222,12 @@ buildPythonPackage rec {
       ]
       ++ self.default
     );
+    serve-async-inference = lib.unique (
+      [
+        celery
+      ]
+      ++ self.serve
+    );
     serve-grpc = lib.unique (
       [
         grpcio
@@ -207,13 +235,22 @@ buildPythonPackage rec {
       ]
       ++ self.serve
     );
-    train = self.tune;
+    train = lib.unique (
+      [
+        pydantic
+      ]
+      ++ self.tune
+    );
     tune = [
       fsspec
       pandas
       pyarrow
       requests
       tensorboardx
+
+      # `import ray.tune` fails without pydantic
+      # Reported upstream: https://github.com/ray-project/ray/issues/58280
+      pydantic
     ];
   });
 
@@ -226,15 +263,14 @@ buildPythonPackage rec {
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
-    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
+    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
   };
-}
+})

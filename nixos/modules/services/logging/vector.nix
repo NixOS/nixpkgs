@@ -74,7 +74,7 @@ in
         {
           ExecStart = "${lib.getExe cfg.package} --config ${
             if cfg.validateConfig then (validatedConfig conf) else conf
-          }  --graceful-shutdown-limit-secs ${builtins.toString cfg.gracefulShutdownLimitSecs}";
+          }  --graceful-shutdown-limit-secs ${toString cfg.gracefulShutdownLimitSecs}";
           DynamicUser = true;
           Restart = "always";
           StateDirectory = "vector";

@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "documize-community";
   version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Kv4BsFB08rkGRkePFIkjjuhK1TnLPS4m+PUlgKG5cTQ=";
   };
 
@@ -40,11 +40,11 @@ buildGoModule rec {
     mv $out/bin/edition $out/bin/documize
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
     mainProgram = "documize";
     homepage = "https://www.documize.com/";
   };
-}
+})

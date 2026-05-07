@@ -27,7 +27,10 @@ mkKdeDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [ ./nix-plugin.patch ];
+  patches = [
+    ./nix-plugin.patch
+    ./qt-6.10-fix.patch
+  ];
 
   extraNativeBuildInputs = [
     kpackage
@@ -52,6 +55,7 @@ mkKdeDerivation {
       ]
     ))
     (lib.cmakeFeature "Qt6_DIR" "${qtbase}/lib/cmake/Qt6")
+    "-DCMAKE_CXX_FLAGS=-Wno-error=stringop-overflow"
   ];
 
   postInstall = ''
@@ -63,11 +67,11 @@ mkKdeDerivation {
     cd -
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KDE wallpaper plugin integrating Wallpaper Engine";
     homepage = "https://github.com/catsout/wallpaper-engine-kde-plugin";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ macronova ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ macronova ];
     teams = [ ];
   };
 }

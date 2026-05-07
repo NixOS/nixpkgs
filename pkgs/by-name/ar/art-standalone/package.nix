@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  wolfssl,
   bionic-translation,
   python3,
   which,
@@ -23,28 +22,26 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "art-standalone";
-  version = "0-unstable-2025-07-09";
+  version = "0-unstable-2025-10-09";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "art_standalone";
-    rev = "1eee3dce3ba6f324bb7a32a170b2da14889af39d";
-    hash = "sha256-OAO0k/LkQ+MKqR4HkFXD18LSXQZNPogjjRot4UVoE5A=";
+    rev = "e78bf68917bcaaf58fef3960cd88793b3b7f39cc";
+    hash = "sha256-0r6Ap41AMSHhZpMJ5QoWiGGcHPj35et4kiA20xs9uLs=";
   };
 
   patches = [
     # Do not hardocde addr2line binary path
     ./no-hardcode-path-addr2line.patch
-
-    # Add support for pkg-config
-    # See: https://gitlab.com/android_translation_layer/art_standalone/-/merge_requests/37
-    ./pkg-config-support.patch
+    ./remove-wolfssljni.patch
   ];
 
   postPatch = ''
     chmod +x dalvik/dx/etc/{dx,dexmerger}
     patchShebangs .
-    sed -i "s|/bin/bash|${runtimeShell}|" build/core/config.mk build/core/main.mk
+    substituteInPlace build/core/config.mk build/core/main.mk \
+      --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
   enableParallelBuilding = true;
@@ -68,19 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     lz4
     openssl
-    (wolfssl.overrideAttrs (oldAttrs: {
-      configureFlags = oldAttrs.configureFlags ++ [
-        "--enable-jni"
-      ];
-      # Disable failing tests when jni enabled
-      postPatch = oldAttrs.postPatch or "" + ''
-        sed -i '/TEST_DECL(test_wolfSSL_Tls13_ECH)/d;
-                /TEST_DECL(test_wolfSSL_Tls13_ECH_HRR)/d;
-                /TEST_DECL(test_TLSX_CA_NAMES_bad_extension)/d' tests/api.c
-        sed -i '/quic/d' tests/include.am
-        sed -i '300,305d' tests/unit.c
-      '';
-    }))
     xz
     zlib
   ];
@@ -102,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/android_translation_layer/art_standalone";
     # No license specified yet
     license = lib.licenses.unfree;
-    platforms = lib.platforms.all;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ onny ];
   };
 })

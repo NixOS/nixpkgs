@@ -7,19 +7,20 @@
   git,
   jsonschema,
   pdm-backend,
+  pytest-gitconfig,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
     tag = version;
-    hash = "sha256-0koTrA1b3S1NO6w24S8eghWpYDkGEo61giRveQ7MZhM=";
+    hash = "sha256-AMMTAqsJfj2MltTgAxfvjUTVzi+ZFmx+J9pzhMp28Z4=";
   };
 
   build-system = [ pdm-backend ];
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     jsonschema
+    pytest-gitconfig
     pytestCheckHook
   ];
 

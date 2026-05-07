@@ -20,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "3.0.2";
+  version = "3.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "urwid";
     repo = "urwid";
     tag = version;
-    hash = "sha256-pMGNybuJZeCzZRZr0/+N87/z+ZtLmSaWW47MWDirTjQ=";
+    hash = "sha256-9ajcpyQTSASz8A4eM78vPjL+9Rk07Q30JmIrSx0Crpo=";
   };
 
   postPatch = ''
@@ -47,12 +45,10 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    curses = [ ];
     glib = [ pygobject3 ];
     tornado = [ tornado ];
-    trio = [
-      exceptiongroup
-      trio
-    ];
+    trio = [ trio ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
     twisted = [ twisted ];
     zmq = [ pyzmq ];
     serial = [ pyserial ];
@@ -63,7 +59,7 @@ buildPythonPackage rec {
     glibcLocales
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   env.LC_ALL = "en_US.UTF8";
 
@@ -81,12 +77,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urwid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured console (xterm et al.) user interface library";
     changelog = "https://github.com/urwid/urwid/releases/tag/${src.tag}";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

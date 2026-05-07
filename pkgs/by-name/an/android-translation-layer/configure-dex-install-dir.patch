@@ -1,10 +1,10 @@
 diff --git a/src/main-executable/main.c b/src/main-executable/main.c
-index d7cfbfe8..c542c71a 100644
+index 558bd994..2d341b4b 100644
 --- a/src/main-executable/main.c
 +++ b/src/main-executable/main.c
-@@ -311,6 +311,7 @@ static void open(GtkApplication *app, GFile **files, gint nfiles, const gchar *h
- 	} else {
- 		dex_install_dir = "DIDN'T_GET_SO_PATH_WITH_dladdr_SUS"; // in case we print this as part of some other error, it should be clear what the real cause is
+@@ -351,6 +351,7 @@ static void open(GtkApplication *app, GFile **files, gint nfiles, const gchar *h
+ 		fprintf(stderr, "error: couldn't find art install path\n");
+ 		exit(1);
  	}
 +	dex_install_dir = "@out@/lib/java/dex";
  

@@ -11,7 +11,7 @@ index 98475f7d..942d9eca 100644
      ],
      include_directories: top_include,
      install: get_option('installed_tests'), install_dir: installed_tests_execdir)
-@@ -82,7 +82,7 @@ foreach test : jasmine_tests
+@@ -90,7 +90,7 @@ foreach test : jasmine_tests
  
      test_description_subst = {
          'name': 'test@0@.js'.format(test),
@@ -20,16 +20,16 @@ index 98475f7d..942d9eca 100644
      }
      configure_file(configuration: test_description_subst,
          input: '../minijasmine.test.in',
-@@ -125,7 +125,7 @@ foreach test : dbus_tests
+@@ -122,7 +122,7 @@ foreach test : dbus_tests
  
-     dbus_test_description_subst = {
-         'name': 'test@0@.js'.format(test),
--        'installed_tests_execdir': prefix / installed_tests_execdir,
-+        'installed_tests_execdir': installed_tests_execdir,
-     }
-     configure_file(
-         configuration: dbus_test_description_subst,
-@@ -163,7 +163,7 @@ foreach test : modules_tests
+ dbus_test_description_subst = {
+     'name': 'testGDBus.js',
+-    'installed_tests_execdir': prefix / installed_tests_execdir,
++    'installed_tests_execdir': installed_tests_execdir,
+ }
+ configure_file(
+     configuration: dbus_test_description_subst,
+@@ -159,7 +159,7 @@ foreach test : modules_tests
  
      esm_test_description_subst = {
          'name': 'test@0@.js'.format(test),
@@ -42,7 +42,7 @@ diff --git a/installed-tests/meson.build b/installed-tests/meson.build
 index 7a7c48ab..52508c2c 100644
 --- a/installed-tests/meson.build
 +++ b/installed-tests/meson.build
-@@ -30,7 +30,7 @@ foreach test : simple_tests
+@@ -34,7 +34,7 @@ foreach test : simple_tests
  
      test_description_subst = {
          'name': 'test@0@.sh'.format(test),
@@ -51,7 +51,7 @@ index 7a7c48ab..52508c2c 100644
      }
      configure_file(configuration: test_description_subst,
          input: 'script.test.in', output: 'test@0@.sh.test'.format(test),
-@@ -85,7 +85,7 @@ foreach test : debugger_tests
+@@ -123,7 +123,7 @@ foreach test : debugger_tests
  
      test_description_subst = {
          'name': '@0@.debugger'.format(test),

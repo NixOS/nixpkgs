@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotty";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "sorenisanerd";
     repo = "gotty";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9J+8NZmdYg4mE8Jgs2bxcwcPyh4sVcOBYPnulVENdy0=";
   };
 
@@ -21,11 +21,11 @@ buildGoModule rec {
   # https://github.com/sorenisanerd/gotty/issues/13
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Share your terminal as a web application";
     mainProgram = "gotty";
     homepage = "https://github.com/sorenisanerd/gotty";
-    maintainers = with maintainers; [ prusnak ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
+    license = lib.licenses.mit;
   };
-}
+})

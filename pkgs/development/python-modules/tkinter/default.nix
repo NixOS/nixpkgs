@@ -1,14 +1,15 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   replaceVars,
   setuptools,
   python,
+  pythonAtLeast,
   pythonOlder,
   tcl,
   tclPackages,
   tk,
-  tkinter,
   xvfb-run,
 }:
 
@@ -20,14 +21,14 @@ buildPythonPackage {
   src = python.src;
 
   prePatch = ''
-    mkdir $NIX_BUILD_TOP/tkinter
+    python_src=$PWD
+    tkinter_src=$PWD/../tkinter
+    mkdir -p "$tkinter_src"
 
     # copy the module bits and pieces from the python source
-    cp -v  Modules/{_tkinter.c,tkinter.h} ../tkinter/
-    cp -rv Modules/clinic ../tkinter/
-    cp -rv Lib/tkinter ../tkinter/
-
-    pushd $NIX_BUILD_TOP/tkinter
+    cp -v  Modules/{_tkinter.c,tkinter.h} "$tkinter_src"
+    cp -rv Modules/clinic "$tkinter_src"
+    cp -rv Lib/tkinter "$tkinter_src"
 
     # install our custom pyproject.toml
     cp ${
@@ -35,13 +36,20 @@ buildPythonPackage {
         python_version = python.version;
         python_internal_dir = "${python}/include/${python.libPrefix}/internal";
       }
-    } ./pyproject.toml
+    } "$tkinter_src"/pyproject.toml
 
   ''
   + lib.optionalString (pythonOlder "3.13") ''
-    substituteInPlace "tkinter/tix.py" --replace-fail \
+    substituteInPlace "$tkinter_src/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
       "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
+  '';
+
+  # Adapted from https://github.com/python/cpython/pull/124542
+  patches = lib.optional (pythonOlder "3.12") ./fix-ttk-notebook-test.patch;
+
+  preConfigure = ''
+    cd "$tkinter_src"
   '';
 
   build-system = [ setuptools ];
@@ -64,24 +72,54 @@ buildPythonPackage {
     ];
   };
 
-  doCheck = false;
-
-  nativeCheckInputs = [ xvfb-run ];
+  nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux xvfb-run;
 
   preCheck = ''
-    cd $NIX_BUILD_TOP/Python-*/Lib
+    cd "$python_src"/Lib
     export HOME=$TMPDIR
+  ''
+  + lib.optionalString (pythonAtLeast "3.13" && pythonOlder "3.15") ''
+    # https://github.com/python/cpython/pull/143570
+    # wantobject resources are only supported via libregrtest
+    substituteInPlace \
+      test/test_tcl.py \
+      test/test_ttk/__init__.py \
+      test/test_tkinter/__init__.py \
+      test/test_tkinter/support.py \
+        --replace-fail \
+          "support.get_resource_value('wantobjects')" \
+          "0"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
-      python -m unittest test.test_tkinter
-
-    runHook postCheck
-  '';
-
-  passthru.tests.unittests = tkinter.overridePythonAttrs { doCheck = true; };
+  checkPhase =
+    let
+      testsNoGui = [
+        "test.test_tcl"
+        "test.test_ttk_textonly"
+      ];
+      testsGui =
+        if pythonOlder "3.12" then
+          [
+            "test.test_tk"
+            "test.test_ttk_guionly"
+          ]
+        else
+          [
+            "test.test_tkinter"
+            "test.test_ttk"
+          ];
+    in
+    ''
+      runHook preCheck
+      ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsNoGui}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
+        ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsGui}
+    ''
+    + ''
+      runHook postCheck
+    '';
 
   pythonImportsCheck = [ "tkinter" ];
 

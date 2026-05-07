@@ -16,16 +16,17 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "obspy";
-  version = "1.4.2";
+  version = "1.4.2-unstable-2025-08-21";
   pyproject = true;
 
+  # Applies a gcc fix that can't be applied as a patch due to other repo changes
   src = fetchFromGitHub {
     owner = "obspy";
     repo = "obspy";
-    tag = version;
-    hash = "sha256-QBV9FRvUUy8/5KK5RdAXXLB8SK9llFy1XRnQ9T5bgcU=";
+    rev = "75bac0c96aa04a0e233e72a7c89ebe97a3b48954";
+    hash = "sha256-B55tVae8NRZZclekTvnxiFUk/bVijk7GpaccPFh15Xc=";
   };
 
   build-system = [ setuptools ];
@@ -50,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python framework for seismological observatories";
     homepage = "https://www.obspy.org";
-    changelog = "https://github.com/obspy/obspy/releases/tag/${src.tag}";
+    changelog = "https://github.com/obspy/obspy/releases/tag/v1.4.2";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.ametrine ];
   };
-}
+})

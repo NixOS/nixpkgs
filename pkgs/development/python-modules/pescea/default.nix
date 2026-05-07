@@ -6,15 +6,12 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "pescea";
   version = "1.0.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lazdavila";
@@ -47,10 +44,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pescea" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Escea fireplaces";
     homepage = "https://github.com/lazdavila/pescea";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

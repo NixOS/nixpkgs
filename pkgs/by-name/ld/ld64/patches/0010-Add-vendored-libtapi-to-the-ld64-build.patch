@@ -50,9 +50,9 @@ index 0000000..9cd1dcc
 +llvm_dep = dependency(
 +    'llvm',
 +    modules : [
-+        'Demangle',
-+        'TargetParser',
-+        'TextAPI',
++        'demangle',
++        'targetparser',
++        'textapi',
 +    ],
 +    static : true,
 +    version : '>=19.1'

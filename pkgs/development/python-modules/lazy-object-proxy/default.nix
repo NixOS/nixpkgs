@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "python-lazy-object-proxy";
     tag = "v${version}";
-    hash = "sha256-iOftyGx5wLxIUwlmo1lY06MXqgxfZek6RR1S5UydOEs=";
+    hash = "sha256-80+QJlm2X2u0OGEkYbEsdg8OiAXLiBwrkVXOF9NBL+I=";
   };
 
   build-system = [ setuptools-scm ];
@@ -25,9 +25,9 @@ buildPythonPackage rec {
   # Broken tests. Seem to be fixed upstream according to Travis.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast and thorough lazy object proxy";
     homepage = "https://github.com/ionelmc/python-lazy-object-proxy";
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
   };
 }

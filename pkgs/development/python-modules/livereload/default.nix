@@ -36,6 +36,6 @@ buildPythonPackage rec {
     mainProgram = "livereload";
     homepage = "https://github.com/lepture/python-livereload";
     license = lib.licenses.bsd3;
-    maintainers = with lib; [ ];
+    maintainers = [ ];
   };
 }

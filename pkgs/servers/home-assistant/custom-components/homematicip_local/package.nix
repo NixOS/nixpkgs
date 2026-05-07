@@ -1,21 +1,26 @@
 {
   lib,
+  async-upnp-client,
   buildHomeAssistantComponent,
   fetchFromGitHub,
   aiohomematic,
+  aiohomematic-config,
+  aiohomematic-test-support,
   home-assistant,
+  pytest-homeassistant-custom-component,
+  pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "1.86.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-QGQVSx6yPfT178GAPPbfiOMuEJ6aPFc0SUp5vO9AYUQ=";
+    hash = "sha256-u3REMGuaQ+wQgDgiTvplBRMbzZJDUfcbyJm9tYOuYIw=";
   };
 
   postPatch = ''
@@ -27,6 +32,19 @@ buildHomeAssistantComponent rec {
 
   dependencies = [
     aiohomematic
+    aiohomematic-config
+  ];
+
+  nativeCheckInputs = [
+    aiohomematic-test-support
+    async-upnp-client
+    pytest-homeassistant-custom-component
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # custom_components.homematicip_local.support.InvalidConfig: C
+    "test_async_validate_config_and_get_system_information"
   ];
 
   meta = {

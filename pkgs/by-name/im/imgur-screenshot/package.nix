@@ -23,14 +23,14 @@ let
     xclip
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.0";
   pname = "imgur-screenshot";
 
   src = fetchFromGitHub {
     owner = "jomo";
     repo = "imgur-screenshot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0fkhvfraijbrw806pgij41bn1hc3r7l7l3snkicmshxj83lmsd5k";
   };
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/imgur-screenshot --prefix PATH ':' ${deps}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for easy screencapping and uploading to imgur";
     homepage = "https://github.com/jomo/imgur-screenshot/";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "imgur-screenshot";
   };
-}
+})

@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   toml,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "librouteros";
   version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "luqasz";
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "librouteros" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the MikroTik RouterOS API";
     homepage = "https://librouteros.readthedocs.io/";
     changelog = "https://github.com/luqasz/librouteros/blob/${version}/CHANGELOG.rst";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

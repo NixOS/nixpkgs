@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kickoff";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "j0ru";
     repo = "kickoff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V4MkVjg5Q8eAJ80V/4SvEIwjVy35/HVewaR1caYLguw=";
+    hash = "sha256-hDonn6as5TGoYOOFVzhWxOUKzqEQ66aFWz0O3gtBGS4=";
   };
 
-  cargoHash = "sha256-bkum6NOQL0LVsLvOmKljFHE86ZU3lLDR8+I3wL0Efmk=";
+  cargoHash = "sha256-DOkgKcLPZzZaC+2vWNZ4BoaR0HhoaaKYQS7IQUJtK44=";
 
   libPath = lib.makeLibraryPath [
     wayland
@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram "$out/bin/kickoff" --prefix LD_LIBRARY_PATH : "${finalAttrs.libPath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic program launcher";
     mainProgram = "kickoff";
     homepage = "https://github.com/j0ru/kickoff";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pyxels ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pyxels ];
+    platforms = lib.platforms.linux;
   };
 })

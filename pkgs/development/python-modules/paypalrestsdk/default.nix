@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   pyopenssl,
-  pythonOlder,
   requests,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "paypalrestsdk";
   version = "1.13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "paypalrestsdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python APIs to create, process and manage payment";
     homepage = "https://github.com/paypal/PayPal-Python-SDK";
     changelog = "https://github.com/paypal/PayPal-Python-SDK/blob/master/CHANGELOG.md";

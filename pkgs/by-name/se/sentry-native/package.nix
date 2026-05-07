@@ -8,15 +8,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sentry-native";
-  version = "0.10.1";
+  version = "0.13.7";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
-    tag = version;
-    hash = "sha256-99C4Nd2YdUElMpbKrNIBjicaWHR2MVqHUu5KryYAT/I=";
+    tag = finalAttrs.version;
+    hash = "sha256-TrczlrPn9b0i5uJmt0bd0XOuH+R8WXIV2WQxLRnFYgA=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/getsentry/sentry-native";
     description = "Sentry SDK for C, C++ and native applications";
-    changelog = "https://github.com/getsentry/sentry-native/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getsentry/sentry-native/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
       daniel-fahey
     ];
   };
-}
+})

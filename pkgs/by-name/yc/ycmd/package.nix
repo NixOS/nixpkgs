@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "0-unstable-2025-06-16";
+  version = "0-unstable-2025-10-24";
 
   # required for third_party directory creation
   src = fetchFromGitHub {
     owner = "ycm-core";
     repo = "ycmd";
-    rev = "9160b4eee67ea61c8501bad36d061bcec5340021";
+    rev = "7895484ad55e0cbd0686e882891d59661f183476";
     hash = "sha256-MSzYX1vXuhd4TNxUfHWaRu7O0r89az1XjZBIZ6B3gBk=";
     fetchSubmodules = true;
   };
@@ -50,7 +50,6 @@ stdenv.mkDerivation {
     ++ [
       jedi
       jedi-language-server
-      pybind11
     ];
 
   buildPhase = ''
@@ -121,7 +120,7 @@ stdenv.mkDerivation {
       --replace __file__ "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Code-completion and comprehension server";
     longDescription = ''
       Note if YouCompleteMe Vim plugin complains with;
@@ -130,17 +129,16 @@ stdenv.mkDerivation {
 
       ...  then set something similar to following in `programs.vim.extraConfig`;
 
-          let g:ycm_server_python_interpreter = "${python3.interpreter}"
+          let g:ycm_server_python_interpreter = "''${python3.interpreter}"
     '';
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
-      rasendubi
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       lnl7
       mel
       S0AndS0
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

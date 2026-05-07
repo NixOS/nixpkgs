@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   unittestCheckHook,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "medpy";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "loli";
@@ -52,11 +49,11 @@ buildPythonPackage rec {
     "medpy.utilities"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Medical image processing library";
     homepage = "https://loli.github.io/medpy";
     changelog = "https://github.com/loli/medpy/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

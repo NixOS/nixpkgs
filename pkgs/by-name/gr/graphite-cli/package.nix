@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchurl,
   git,
@@ -8,14 +9,14 @@
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.6.8";
+  version = "1.7.20";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-HkxhPx38FjwrwPGhXSWw21mizjuWblcPxWFLYUU7Oys=";
+    hash = "sha256-Xzq6+fsWRPoiPxtk1zNARCkIPBu64ipAKqPVU2dnV9E=";
   };
 
-  npmDepsHash = "sha256-28jOlUaVo8HN5HF1EvcPAu9qYJOsby5gt9rCGbIOMRU=";
+  npmDepsHash = "sha256-6JzVDgrV5kUKES7/z+0aU+Rs6VabdKhcfru38j3Jmcw=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -28,7 +29,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gt \
       --bash <($out/bin/gt completion) \
       --fish <(GT_PAGER= $out/bin/gt fish) \

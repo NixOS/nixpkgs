@@ -6,18 +6,18 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "naabu";
-  version = "2.3.5";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
-    tag = "v${version}";
-    hash = "sha256-UHjWO/uCfUF6xylfYLbwiMwpNwZvlNoVRzRhRFxfqck=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8UnZqSjN57rqSpAf3H77TruT7hXMkgUroBhC+VlkXYY=";
   };
 
-  vendorHash = "sha256-wl0BqZXd7NRNBY3SCLOwfwa3e91ar5JX6lxtkQChXHM=";
+  vendorHash = "sha256-HOCbtmb6gVsbErxeM2mXbqqALbz3EqK02ARxgyfZinc=";
 
   buildInputs = [ libpcap ];
 
@@ -43,9 +43,9 @@ buildGoModule rec {
       all ports that return a reply.
     '';
     homepage = "https://github.com/projectdiscovery/naabu";
-    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "naabu";
   };
-}
+})

@@ -10,7 +10,7 @@ in
 { pkgs, ... }:
 {
   name = "ejabberd";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
   nodes = {

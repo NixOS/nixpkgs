@@ -2,9 +2,10 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libre-baskerville";
   version = "1.000";
 
@@ -15,16 +16,13 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-1EXi1hxFpc7pFsLbEj1xs9LqjeIf3XBol/8HdKNROUU=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
-
-    runHook postInstall
+  postInstall = ''
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README.md FONTLOG.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Webfont family optimized for body text";
     longDescription = ''
       Libre Baskerville is a webfont family optimized for body text. It's Based
@@ -33,8 +31,8 @@ stdenvNoCC.mkDerivation rec {
       screen.
     '';
     homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ pancaek ];
+    platforms = lib.platforms.all;
   };
-}
+})

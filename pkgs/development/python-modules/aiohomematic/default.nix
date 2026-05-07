@@ -5,61 +5,59 @@
   fetchFromGitHub,
   freezegun,
   orjson,
+  pydantic,
   pydevccu,
   pytest-asyncio,
   pytest-socket,
+  pytest-xdist,
   pytestCheckHook,
   python-slugify,
+  pythonOlder,
   setuptools,
-  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2025.8.10";
+  version = "2026.4.6";
   pyproject = true;
+
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-ii+fvjn54IT376YzwljPz2tkx2bv8jojI4rNracCgwA=";
+    hash = "sha256-R7hQprIAK7Xs+XpmMecAGGrAYzfBk+fQo17tkByC0Kc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     orjson
+    pydantic
     python-slugify
-    voluptuous
   ];
 
   nativeCheckInputs = [
     freezegun
     pydevccu
     pytest-asyncio
+    pytest-xdist
     pytest-socket
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "aiohomematic" ];
 
-  disabledTests = [
-    # AssertionError: assert 548 == 555
-    "test_central_full"
-  ];
-
   meta = {
     description = "Module to interact with HomeMatic devices";
     homepage = "https://github.com/SukramJ/aiohomematic";
     changelog = "https://github.com/SukramJ/aiohomematic/blob/${src.tag}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      fab
+    ];
   };
 }

@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.cookiecutter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integration of Cookiecutter project templates into PyScaffold (see: https://github.com/cookiecutter/cookiecutter";
     homepage = "https://pypi.org/project/pyscaffoldext-cookiecutter/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

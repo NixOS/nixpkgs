@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "MPD (Music Player Daemon) client library written in pure Python";
     homepage = "https://gitlab.com/kaliko/python-musicpd";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
   };
 }

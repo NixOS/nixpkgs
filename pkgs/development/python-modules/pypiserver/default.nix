@@ -17,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "2.3.2";
+  version = "2.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pypiserver";
     repo = "pypiserver";
     tag = "v${version}";
-    hash = "sha256-ODwDYAEAqel31+kR/BE1yBfgOZOtPz3iaCLg/d6jbb4=";
+    hash = "sha256-nqoAT3g32srJ0c3sGNFQBznLsnymDPUfL7kcON+BP0k=";
   };
 
   postPatch = ''
@@ -57,7 +55,7 @@ buildPythonPackage rec {
     webtest
     build
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 
@@ -84,15 +82,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypiserver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal PyPI server for use with pip/easy_install";
     homepage = "https://github.com/pypiserver/pypiserver";
     changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       zlib
     ];
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with lib.maintainers; [ austinbutler ];
     mainProgram = "pypi-server";
   };
 }

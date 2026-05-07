@@ -27,9 +27,10 @@ buildPythonPackage rec {
 
   doCheck = false; # No such file or directory: './run_tests.py
 
-  meta = with lib; {
+  meta = {
     description = "Serialization and RPC framework";
     mainProgram = "avro";
     homepage = "https://pypi.python.org/pypi/avro3k/";
+    license = lib.licenses.asl20;
   };
 }

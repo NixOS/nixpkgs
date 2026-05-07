@@ -2,7 +2,6 @@
   lib,
   buildPythonApplication,
   fetchPypi,
-  pythonOlder,
 
   certifi,
   charset-normalizer,
@@ -24,8 +23,6 @@ buildPythonApplication rec {
   pname = "enochecker-test";
   version = "0.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
@@ -58,12 +55,12 @@ buildPythonApplication rec {
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Automatically test services/checker using the enochecker API";
     mainProgram = "enochecker_test";
     homepage = "https://github.com/enowars/enochecker_test";
     changelog = "https://github.com/enowars/enochecker_test/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fwc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fwc ];
   };
 }

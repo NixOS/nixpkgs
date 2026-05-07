@@ -20,7 +20,7 @@ python.pkgs.buildPythonPackage rec {
     matplotlib # needed for plotting memory usage
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for monitoring memory usage of a process";
     mainProgram = "mprof";
     longDescription = ''
@@ -28,6 +28,6 @@ python.pkgs.buildPythonPackage rec {
       well as line-by-line analysis of memory consumption for python programs.
     '';
     homepage = "https://pypi.python.org/pypi/memory_profiler";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -4,24 +4,26 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fscan";
-  version = "2.0.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "shadow1ng";
     repo = "fscan";
-    rev = version;
-    hash = "sha256-OFlwL7PXKOPKIW2YCirCGCXRCGIWYMmYHMmSU2he/tw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xc6SNmVPxBxcY7PH27562soejIrMXQtb09Djd0gONCo=";
   };
 
-  vendorHash = "sha256-+m87ReIUOqaTwuh/t0ow4dODG9/G21Gzw6+p/N9QOzU=";
+  vendorHash = "sha256-ihaGbm4iLjwvTzM278wuwom8LrmHB3WgmbfcJxtkbYc=";
 
-  meta = with lib; {
+  subPackages = [ "." ];
+
+  meta = {
     description = "Intranet comprehensive scanning tool";
     homepage = "https://github.com/shadow1ng/fscan";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Misaka13514 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Misaka13514 ];
     mainProgram = "fscan";
   };
-}
+})

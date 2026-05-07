@@ -128,7 +128,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    shamilton
     progrm_jarvis
   ];
 }

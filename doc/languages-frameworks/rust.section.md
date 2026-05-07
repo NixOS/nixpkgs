@@ -254,7 +254,7 @@ By default, it takes the `stdenv.hostPlatform.config` and replaces components
 where they are known to differ. But there are ways to customize the argument:
 
  - To choose a different target by name, define
-   `stdenv.hostPlatform.rust.rustcTarget` as that name (a string), and that
+   `stdenv.hostPlatform.rust.rustcTargetSpec` as that name (a string), and that
    name will be used instead.
 
    For example:
@@ -262,7 +262,7 @@ where they are known to differ. But there are ways to customize the argument:
    ```nix
    import <nixpkgs> {
      crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rust.rustcTarget = "thumbv7em-none-eabi";
+       rust.rustcTargetSpec = "thumbv7em-none-eabi";
      };
    }
    ```
@@ -274,22 +274,24 @@ where they are known to differ. But there are ways to customize the argument:
    ```
 
  - To pass a completely custom target, define
-   `stdenv.hostPlatform.rust.rustcTarget` with its name, and
-   `stdenv.hostPlatform.rust.platform` with the value.  The value will be
-   serialized to JSON in a file called
-   `${stdenv.hostPlatform.rust.rustcTarget}.json`, and the path of that file
-   will be used instead.
+   `stdenv.hostPlatform.rust.rustcTargetSpec` with the path to the custom
+   target specification JSON file.
+
+   Note that some tools like Cargo and some crates like `cc` make use of the
+   file name of the target JSON.  Therefore, do not use
+   `./path/to/target-spec.json` directly, because it will be renamed by Nix.
+   Instead, place it a directory and use `"${./path/to/dir}/target-spec.json"`.
+   The directory should contain only this one file, to avoid unrelated changes
+   causing unnecessary rebuilds.
 
    For example:
 
    ```nix
    import <nixpkgs> {
-     crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rust.rustcTarget = "thumb-crazy";
-       rust.platform = {
-         foo = "";
-         bar = "";
-       };
+     crossSystem = {
+       config = "mips64el-unknown-linux-gnuabi64";
+       # gcc = ...; # Config for C compiler omitted
+       rust.rustcTargetSpec = "${./rust}/mips64el_mips3-unknown-linux-gnuabi64.json";
      };
    }
    ```
@@ -297,11 +299,8 @@ where they are known to differ. But there are ways to customize the argument:
    will result in:
 
    ```shell
-   --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}
+   --target /nix/store/...-rust/mips64el_mips3-unknown-linux-gnuabi64.json
    ```
-
-Note that currently custom targets aren't compiled with `std`, so `cargo test`
-will fail. This can be ignored by adding `doCheck = false;` to your derivation.
 
 ### Running package tests {#running-package-tests}
 
@@ -737,6 +736,35 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+### Compiling `wasm32-wasip1` package {#compiling-wasm32-wasip1-package}
+
+```nix
+pkgsCross.wasi32.callPackage (
+  {
+    fetchFromGitHub,
+    rustPlatform,
+    lld,
+  }:
+  rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "zellij-harpoon";
+    version = "0.3.0";
+
+    src = fetchFromGitHub {
+      owner = "Nacho114";
+      repo = "harpoon";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-JmYcbzxIF6qZs2/RKuspHqNpyDibGp9CVQJj47y/BOQ=";
+    };
+
+    cargoHash = "sha256-lsv5Wssakni18jif++fPo3Z5WyBtvPsGpWwG3abR7jQ=";
+
+    # these two lines are currently required
+    env.RUSTFLAGS = "-C linker=wasm-ld";
+    nativeBuildInputs = [ lld ];
+  })
+) { }
+```
+
 ## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
 
 ### Simple operation {#simple-operation}
@@ -841,6 +869,38 @@ general. A number of other parameters can be overridden:
 
   ```nix
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
+  ```
+
+- The lint level cap passed to `rustc`. Defaults to `null`, which
+  auto-resolves to `"allow"` (silences all lints) when `lints` is
+  empty, or `"forbid"` (no cap) when `lints` is set. Because `rustc`
+  only honours the first `--cap-lints` it receives, this cannot be
+  changed via `extraRustcOpts`; use this attribute instead. Useful
+  when overriding the `rust` attribute to point at `clippy-driver`,
+  since clippy lints are also capped by this flag:
+
+  ```nix
+  (hello { }).override { capLints = "warn"; }
+  ```
+
+- Lint configuration mirroring Cargo.toml's `[lints]` table. Keys are
+  tool names (`rust`, `clippy`, `rustdoc`); values map lint names to
+  either a level string (`"allow"`, `"warn"`, `"deny"`, `"forbid"`) or
+  `{ level = "..."; priority = <int>; }`. Lower priorities are emitted
+  first so that more specific lints can override them. Setting a
+  non-empty `lints` raises the default `capLints` to `"forbid"` so the
+  lints actually apply:
+
+  ```nix
+  (hello { }).override {
+    lints.rust = {
+      unsafe_code = "forbid";
+      unused = {
+        level = "deny";
+        priority = -1;
+      };
+    };
+  }
   ```
 
 - Phases, just like in any other derivation, can be specified using

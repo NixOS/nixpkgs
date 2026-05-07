@@ -9,12 +9,12 @@
   libunistring,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bigloo";
   version = "4.6a";
 
   src = fetchurl {
-    url = "https://www-sop.inria.fr/mimosa/fp/Bigloo/download/bigloo-${version}.tar.gz";
+    url = "https://www-sop.inria.fr/mimosa/fp/Bigloo/download/bigloo-${finalAttrs.version}.tar.gz";
     hash = "sha256-lwXsPeAMwcUe52mYlIQaN3DAaodCFbRWNbiESuba8KY=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
       between Scheme and C# programs.
     '';
   };
-}
+})

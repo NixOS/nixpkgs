@@ -9,14 +9,14 @@
   ezjsonm,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "2.5.0";
   pname = "cow";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cow/releases/download/v${version}/cow-${version}.tbz";
+    url = "https://github.com/mirage/ocaml-cow/releases/download/v${finalAttrs.version}/cow-${finalAttrs.version}.tbz";
     hash = "sha256-8rNK+5oWUbi91gXvdz/66YQu5+iXp0Co8wk0Isv6b9Y=";
   };
 
@@ -36,7 +36,8 @@ buildDunePackage rec {
       Markdown, to name but a few! This library provides OCaml combinators
       for these web formats.
     '';
+    homepage = "https://mirage.github.io/ocaml-cow/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

@@ -8,7 +8,11 @@
   pkg-config,
   abiVersion ? "6",
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt,
+  # Disabled for static FreeBSD: libc++ headers come after C library headers,
+  # breaking C++ compilation. No current consumers need the C++ bindings.
+  withCxx ?
+    !stdenv.hostPlatform.useAndroidPrebuilt
+    && !(stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform.isStatic),
   mouseSupport ? false,
   gpm,
   withTermlib ? false,
@@ -18,12 +22,16 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.5";
+  version = "6.6";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
-    hash = "sha256-E22RvCaamleF5fnpgLx2q1dCj2BM4+WlqQzrx2eXHMY=";
+    urls = [
+      "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
+      # invisible-island.net may be firewall blocked on some networks
+      "https://invisible-mirror.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
+    ];
+    hash = "sha256-NVtMu+2ICwOBoExGYXt2VuNiWF1S6c+Epn4gCbdJ/xE=";
   };
 
   outputs = [
@@ -32,14 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
   setOutputFlags = false; # some aren't supported
-
-  patches = [
-    # linux-gnuabielfv{1,2} is not in ncurses' list of GNU-ish targets (or smth like that?).
-    # Causes some defines (_XOPEN_SOURCE=600, _DEFAULT_SOURCE) to not get set, so wcwidth is not exposed by system headers, which causes a FTBFS.
-    # Reported and fix submitted to upstream in https://lists.gnu.org/archive/html/bug-ncurses/2025-07/msg00040.html
-    # Backported to the 6.5 release (dropped some hunks for code that isn't in this release yet)
-    ./1001-ncurses-Support-gnuabielfv1-2.patch
-  ];
+  separateDebugInfo = false;
 
   postPatch = ''
     sed -i '1i #include <stdbool.h>' include/curses.h.in
@@ -57,14 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     (lib.withFeature (!enableStatic) "shared")
-    "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
     "--with-versioned-syms"
   ]
-  ++ lib.optional unicodeSupport "--enable-widec"
+  ++ lib.optional (!finalAttrs.separateDebugInfo) "--without-debug"
+  ++ lib.optional (unicodeSupport && abiVersion == "5") "--enable-widec"
+  ++ lib.optional (!unicodeSupport && abiVersion == "6") "--disable-widec"
   ++ lib.optional (!withCxx) "--without-cxx"
   ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
   ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
@@ -125,7 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  env = lib.optionalAttrs stdenv.hostPlatform.isSunOS {
+    CFLAGS = "-D_XOPEN_SOURCE_EXTENDED";
+  };
 
   strictDeps = true;
 
@@ -162,12 +166,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  postFixup =
+  postInstall =
     let
       abiVersion-extension =
         if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}";
     in
+    lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
+      rm "$out"/lib/*.a
     ''
+    + ''
       # Determine what suffixes our libraries have
       suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     ''
@@ -241,10 +248,6 @@ stdenv.mkDerivation (finalAttrs: {
       moveToOutput "bin/infocmp" "$out"
     '';
 
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
-    rm "$out"/lib/*.a
-  '';
-
   # I'm not very familiar with ncurses, but it looks like most of the
   # exec here will run hard-coded executables. There's one that is
   # dynamic, but it looks like it only comes from executing a terminfo
@@ -256,7 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
     execer cannot bin/{reset,tput,tset}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/ncurses/";
     description = "Free software emulation of curses in SVR4 and more";
     longDescription = ''
@@ -270,7 +273,7 @@ stdenv.mkDerivation (finalAttrs: {
       NetBSD as an external package. It should port easily to any
       ANSI/POSIX-conforming UNIX. It has even been ported to OS/2 Warp!
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     pkgConfigModules =
       let
         base = [
@@ -282,7 +285,8 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optional withCxx "ncurses++";
       in
       base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "ncurses_project" finalAttrs.version;
   };
 
   passthru = {

@@ -14,7 +14,6 @@ in
 {
   meta = {
     maintainers = with lib.maintainers; [
-      danbst
       anthonyroussel
     ];
   };
@@ -425,8 +424,8 @@ in
           "CATALINA_BASE=${cfg.baseDir}"
           "CATALINA_PID=/run/tomcat/tomcat.pid"
           "JAVA_HOME='${cfg.jdk}'"
-          "JAVA_OPTS='${builtins.toString cfg.javaOpts}'"
-          "CATALINA_OPTS='${builtins.toString cfg.catalinaOpts}'"
+          "JAVA_OPTS='${toString cfg.javaOpts}'"
+          "CATALINA_OPTS='${toString cfg.catalinaOpts}'"
         ]
         ++ cfg.extraEnvironment;
         ExecStart = "${tomcat}/bin/startup.sh";

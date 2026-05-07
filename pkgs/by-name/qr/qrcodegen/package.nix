@@ -38,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $out/lib/ libqrcodegen.a
     install -Dt $out/include/qrcodegen/ qrcodegen.h
 
+    mkdir -p $out/lib/pkgconfig
+    substitute ${./qrcodegen.pc} $out/lib/pkgconfig/qrcodegen.pc \
+      --subst-var out \
+      --subst-var pname \
+      --subst-var version
+
     runHook postInstall
   '';
 
@@ -45,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.nayuki.io/page/qr-code-generator-library";
     description = "High-quality QR Code generator library in many languages";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

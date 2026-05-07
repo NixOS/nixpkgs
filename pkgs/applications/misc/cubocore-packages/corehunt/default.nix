@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corehunt";
     homepage = "https://gitlab.com/cubocore/coreapps/corehunt";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

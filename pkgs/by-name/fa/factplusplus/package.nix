@@ -5,14 +5,14 @@
   jdk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "factplusplus";
   version = "1.6.5";
 
   src = fetchFromBitbucket {
     owner = "dtsarkov";
     repo = "factplusplus";
-    rev = "Release-${version}";
+    rev = "Release-${finalAttrs.version}";
     sha256 = "wzK1QJsNN0Q73NM+vjaE/vLuGf8J1Zu5ZPAkZNiKnME=";
   };
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tableaux-based reasoner for expressive Description Logics (DL)";
     homepage = "http://owl.cs.manchester.ac.uk/tools/fact/";
-    maintainers = [ maintainers.mgttlinger ];
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux ++ darwin ++ windows;
+    maintainers = [ lib.maintainers.mgttlinger ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
     broken = !stdenv.hostPlatform.isLinux;
     mainProgram = "FaCT++";
   };
-}
+})

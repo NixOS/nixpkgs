@@ -14,16 +14,16 @@
   libGL,
   nanosvg,
 
-  libX11,
+  libx11,
   libxkbcommon,
-  libXext,
-  libXrandr,
-  libXi,
-  libXScrnSaver,
-  libXinerama,
-  libXcursor,
-  libXpresent,
-  libXdmcp,
+  libxext,
+  libxrandr,
+  libxi,
+  libxscrnsaver,
+  libxinerama,
+  libxcursor,
+  libxpresent,
+  libxdmcp,
 
   wayland,
   wayland-protocols,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libGL
     freefont_ttf
     spice-protocol
@@ -75,14 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals xorgSupport [
     libxkbcommon
-    libXi
-    libXScrnSaver
-    libXinerama
-    libXcursor
-    libXpresent
-    libXext
-    libXrandr
-    libXdmcp
+    libxi
+    libxscrnsaver
+    libxinerama
+    libxcursor
+    libxpresent
+    libxext
+    libxrandr
+    libxdmcp
   ]
   ++ lib.optionals waylandSupport [
     libxkbcommon
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src/resources/lg-logo.png $out/share/pixmaps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM
@@ -127,9 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
       for legacy programs that require high performance graphics.
     '';
     homepage = "https://looking-glass.io/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "looking-glass-client";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       alexbakker
       babbaj
       j-brn

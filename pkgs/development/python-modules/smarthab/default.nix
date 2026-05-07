@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmarthab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Control devices in a SmartHab-powered home";
     homepage = "https://gitlab.com/outadoc/python-smarthab";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

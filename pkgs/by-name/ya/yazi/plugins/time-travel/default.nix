@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "time-travel.yazi";
-  version = "0-unstable-2025-02-14";
+  version = "0-unstable-2026-01-16";
 
   src = fetchFromGitHub {
     owner = "iynaix";
     repo = "time-travel.yazi";
-    rev = "7e0179e15a41a4a42b6d0b5fa6dd240c9b4cf0d2";
-    hash = "sha256-ZZgn5rsBzvZcnDWZfjMBPRg9QUz4FTq5UIPWfnwXHQs=";
+    rev = "aaec6e26e525bd146354a5137ec40f1f23257a4e";
+    hash = "sha256-/+KiuGUox763dMQvHl1l3+Ci3vL8NwRuKNu9pi3gjyE=";
   };
 
   meta = {

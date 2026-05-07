@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
+  callPackage,
   installShellFiles,
   qemu,
   darwin,
@@ -20,18 +20,13 @@
   jq,
 }:
 
+let
+  source = callPackage ./source.nix { };
+in
 buildGoModule (finalAttrs: {
-  pname = "lima";
-  version = "1.2.1";
+  pname = "lima" + lib.optionalString withAdditionalGuestAgents "-full";
 
-  src = fetchFromGitHub {
-    owner = "lima-vm";
-    repo = "lima";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-90fFsS5jidaovE2iqXfe4T2SgZJz6ScOwPPYxCsCk/k=";
-  };
-
-  vendorHash = "sha256-8S5tAL7GY7dxNdyC+WOrOZ+GfTKTSX84sG8WcSec2Os=";
+  inherit (source) version src vendorHash;
 
   nativeBuildInputs = [
     makeWrapper
@@ -97,7 +92,6 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/limactl";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   installCheckPhase = ''
@@ -159,17 +153,15 @@ buildGoModule (finalAttrs: {
         };
       };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--override-filename"
+        ./source.nix
+      ];
+    };
   };
 
-  meta = {
-    homepage = "https://github.com/lima-vm/lima";
+  meta = source.meta // {
     description = "Linux virtual machines with automatic file sharing and port forwarding";
-    changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhduy
-      kachick
-    ];
   };
 })

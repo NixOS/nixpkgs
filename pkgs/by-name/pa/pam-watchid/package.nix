@@ -11,7 +11,7 @@ swiftPackages.stdenv.mkDerivation {
   version = "2-unstable-2024-12-24";
 
   src = fetchFromGitHub {
-    owner = "Logicer16";
+    owner = "mostpinkest";
     repo = "pam-watchid";
     rev = "bb9c6ea62207dd9d41a08ca59c7a1f5d6fa07189";
     hash = "sha256-6SqSACoG7VkyYfz+xyU/L2J69RxHTTvzGexjGB2gDuY=";
@@ -30,7 +30,7 @@ swiftPackages.stdenv.mkDerivation {
 
   meta = {
     description = "PAM plugin module that allows the Apple Watch to be used for authentication";
-    homepage = "https://github.com/Logicer16/pam-watchid";
+    homepage = "https://github.com/mostpinkest/pam-watchid";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.samasaur ];
     platforms = lib.platforms.darwin;

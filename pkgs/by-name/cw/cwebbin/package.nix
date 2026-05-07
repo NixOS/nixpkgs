@@ -12,7 +12,7 @@ let
     sha256 = "1hdzxfzaibnjxjzgp6d2zay8nsarnfy9hfq55hz1bxzzl23n35aj";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cwebbin";
   version = "22p";
 
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1 $out/share/texmf/tex/generic $out/share/emacs $out/lib
   '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Literate Programming in C/C++";
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
     maintainers = [ ];
-    license = licenses.abstyles;
+    license = lib.licenses.abstyles;
   };
-}
+})

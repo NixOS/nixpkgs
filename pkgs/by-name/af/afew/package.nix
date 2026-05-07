@@ -7,13 +7,13 @@
   afew,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "afew";
   version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
   };
 
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

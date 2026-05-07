@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   icu,
-  clucene_core,
+  clucene-core,
 
   autoreconfHook,
   bzip2,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (
       icu
     ]
     ++ (lib.optionals stdenv.hostPlatform.isUnix [
-      clucene_core
+      clucene-core
       curl
     ])
     ++ (lib.optionals stdenv.hostPlatform.isWindows [

@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "lunarclient";
-  version = "3.4.9";
+  version = "3.6.8";
 
   src = fetchurl {
-    url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-lzJFzOpJDCp8G+dZEcfvORJTHI5tqpvOcXGwyrSN+raaZJcCYbqLJC30u8trsNV7vgjUzoJdnhLHhwsTQp4RpQ==";
+    url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}-ow.AppImage";
+    hash = "sha512-JiT9PNi4UT7oIKRw6xmTvFxjKvJrMqDqOebxpiaiFZy6OWgl3det22i8yYO/Wk4KucydJqg+aYQ+YOi1+yK5tA==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,17 +26,17 @@ appimageTools.wrapType2 rec {
       install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
       install -Dm444 ${contents}/lunarclient.png -t $out/share/pixmaps/
       substituteInPlace $out/share/applications/lunarclient.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient' \
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient'
     '';
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Free Minecraft client with mods, cosmetics, and performance boost";
     homepage = "https://www.lunarclient.com/";
-    license = with licenses; [ unfree ];
+    license = with lib.licenses; [ unfree ];
     mainProgram = "lunarclient";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Technical27
       surfaceflinger
     ];

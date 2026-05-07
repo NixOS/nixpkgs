@@ -8,21 +8,25 @@
   lib,
   python3,
   stdenv,
-  tbb,
+  onetbb,
   xcodebuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
-  version = "2.3.3";
+  version = "2.4.1";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/RenderKit/oidn/releases/download/v${finalAttrs.version}/oidn-${finalAttrs.version}.src.tar.gz";
-    sha256 = "sha256-JzAd47fYGLT6DeOep8Wag29VY9HOTpqf0OSv1v0kGQU=";
+    hash = "sha256-SM0Bn4qgeqRJAXr2MMjNjfWJVTcciERZxMHiyx4Z1hA=";
   };
 
-  patches = lib.optional cudaSupport ./cuda.patch;
+  strictDeps = true;
+
+  patches = lib.optionals cudaSupport [
+    ./cuda.patch
+  ];
 
   postPatch = ''
     # fix build failure with GCC14
@@ -35,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     ispc
   ]
-  ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   buildInputs = [
-    tbb
+    onetbb
   ]
 
   ++ lib.optionals cudaSupport [
@@ -49,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "OIDN_DEVICE_CUDA" cudaSupport)
-    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${tbb.dev}/include")
-    (lib.cmakeFeature "TBB_ROOT" "${tbb}")
+    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${lib.getDev onetbb}/include")
+    (lib.cmakeFeature "TBB_ROOT" "${onetbb}")
   ];
 
   meta = {

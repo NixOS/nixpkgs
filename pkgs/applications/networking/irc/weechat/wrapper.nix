@@ -19,7 +19,7 @@ let
         {
           # Do not include PHP by default, because it bloats the closure, doesn't
           # build on Darwin, and there are no official PHP scripts.
-          plugins = builtins.attrValues (builtins.removeAttrs availablePlugins [ "php" ]);
+          plugins = builtins.attrValues (removeAttrs availablePlugins [ "php" ]);
         },
     }:
 
@@ -110,7 +110,8 @@ let
         };
     in
     buildEnv {
-      name = "weechat-bin-env-${weechat.version}";
+      pname = "weechat-bin-env";
+      inherit (weechat) version;
       extraOutputsToInstall = lib.optionals installManPages [ "man" ];
       paths = [
         (mkWeechat "weechat")
@@ -122,7 +123,7 @@ let
           ln -sf ${weechat}/share $out/share
         '')
       ];
-      meta = builtins.removeAttrs weechat.meta [ "outputsToInstall" ];
+      meta = removeAttrs weechat.meta [ "outputsToInstall" ];
     };
 
 in

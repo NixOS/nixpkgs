@@ -26,18 +26,19 @@
   sphinx,
   autoreconfHook,
   nixosTests,
-  knot-resolver,
+  knot-resolver_5,
+  knot-resolver-manager_6,
   knot-dns,
   runCommandLocal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "knot-dns";
-  version = "3.4.8";
+  version = "3.5.4";
 
   src = fetchurl {
-    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "sha256-ZzCnPb/BLXnYAA/+ItNtBot0Z+dL7h6xIqxJNezqSfk=";
+    url = "https://secure.nic.cz/files/knot-dns/knot-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-SgvIkt+qWhUP8oVfCojyJnEkvCcYGOrporH22kh8NOQ=";
   };
 
   outputs = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
   # FIXME: sphinx is needed for now to get man-pages
   nativeBuildInputs = [
     pkg-config
+    protobufc # dnstap support
     autoreconfHook
     sphinx
   ];
@@ -94,8 +96,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-O2"
     "-DNDEBUG"
   ];
@@ -111,9 +114,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit knot-resolver;
+    inherit knot-resolver_5;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit knot-resolver-manager_6; # not very reliable on non-Linux yet
     inherit (nixosTests) knot kea;
     prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped
@@ -132,10 +136,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
-    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${version}";
-    license = lib.licenses.gpl3Plus;
+    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
     mainProgram = "knotd";
   };
-}
+})

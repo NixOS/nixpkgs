@@ -7,7 +7,10 @@
   cmake,
   fontconfig,
   libGL,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   wayland,
   versionCheckHook,
@@ -15,22 +18,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-lsp";
-  version = "1.13.0";
+  version = "1.16.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-xgGkgL2UyRBef57lA4dpVx3RcC7R+1Y2ejV8h6yzQCA=";
+    hash = "sha256-+REZRGPgdbBUDZaZ+3R2AKF56MouPIsjx8IVv1LUl50=";
   };
 
-  cargoHash = "sha256-TgI7MsWtI2mwXuTpaXLRmoNfghLoXqlM1/NIFKNU0Uc=";
+  cargoHash = "sha256-BP50c1GCAFTpRGqZDw3I5WtXabdN/2CcVhX2d1eXtck=";
 
   rpathLibs = [
     fontconfig
     libGL
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
+    libxcb
+    libx11
+    libxcursor
+    libxi
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
@@ -42,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     fontconfig
   ];
-  buildInputs = finalAttrs.rpathLibs ++ [ xorg.libxcb.dev ];
+  buildInputs = finalAttrs.rpathLibs ++ [ libxcb.dev ];
 
   # Tests requires `i_slint_backend_testing` which is only a dev dependency
   doCheck = false;

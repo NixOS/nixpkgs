@@ -1,29 +1,30 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "threatest";
-  version = "1.2.5";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "threatest";
-    tag = "v${version}";
-    hash = "sha256-rVRBrf/RTcHvKOLHNASzvij3fV+uQEuIVKb07CZ/cT0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BMx+6InL5FF2MH83C6UJ50CSm0Zd69Fs6uwFnunvmqs=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-EvVazz51sW8z+8XfZB0Xo42KuUT6Q9n2Y/0HvlF1bV4=";
+  vendorHash = "sha256-KfIs4LJHOaUKwc3ML/dMwSEkfRT3QW9Nlfla0KqkEyM=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd threatest \
       --bash <($out/bin/threatest completion bash) \
       --fish <($out/bin/threatest completion fish) \
@@ -34,8 +35,8 @@ buildGoModule rec {
     description = "Framework for end-to-end testing threat detection rules";
     mainProgram = "threatest";
     homepage = "https://github.com/DataDog/threatest";
-    changelog = "https://github.com/DataDog/threatest/releases/tag/v${version}";
+    changelog = "https://github.com/DataDog/threatest/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

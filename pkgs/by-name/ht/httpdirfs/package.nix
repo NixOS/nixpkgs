@@ -61,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "httpdirfs";
     maintainers = with lib.maintainers; [
-      sbruder
       schnusch
       anthonyroussel
     ];

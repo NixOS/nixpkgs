@@ -91,13 +91,16 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Install desktop file
     mkdir -p $out/share/applications
-    cp hildon/tuxpaint.xpm $out/share/pixmaps
     sed -e "s+Exec=tuxpaint+Exec=$out/bin/tuxpaint+" < src/tuxpaint.desktop > $out/share/applications/tuxpaint.desktop
 
     # Install stamps
     tar xzf ${stamps}
     cd tuxpaint-stamps-*
     make install-all PREFIX=$out
+
+    mkdir -p $out/share/icons/hicolor/32x32/apps
+    magick $out/share/pixmaps/tuxpaint.png -resize 32x32 $out/share/icons/hicolor/32x32/apps/tuxpaint.png
+    rm -r $out/share/pixmaps
 
     # Requirements for tuxpaint-import
     wrapProgram $out/bin/tuxpaint-import \

@@ -18,13 +18,7 @@ in
     services.ferretdb = {
       enable = lib.mkEnableOption "FerretDB, an Open Source MongoDB alternative";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        example = lib.literalExpression "pkgs.ferretdb";
-        default = pkgs.ferretdb;
-        defaultText = "pkgs.ferretdb";
-        description = "FerretDB package to use.";
-      };
+      package = lib.mkPackageOption pkgs "ferretdb" { };
 
       settings = lib.mkOption {
         type = lib.types.submodule {

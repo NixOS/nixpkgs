@@ -252,8 +252,8 @@ in
           --ostype ${if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
         VBoxManage modifyvm "$vmName" \
           --memory ${toString cfg.memorySize} \
-          ${lib.cli.toGNUCommandLineShell { } cfg.params}
-        VBoxManage storagectl "$vmName" ${lib.cli.toGNUCommandLineShell { } cfg.storageController}
+          ${lib.cli.toCommandLineShellGNU { } cfg.params}
+        VBoxManage storagectl "$vmName" ${lib.cli.toCommandLineShellGNU { } cfg.storageController}
         VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 0 --device 0 --type hdd \
           --medium disk.vdi
         ${lib.optionalString (cfg.extraDisk != null) ''

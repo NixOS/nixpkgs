@@ -3,35 +3,38 @@
   stdenv,
   fetchurl,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   python3,
   zlib,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   SDL2,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "golly";
-  version = "4.3";
+  version = "5.0";
 
   src = fetchurl {
-    hash = "sha256-UdJHgGPn7FDN4rYTgfPBAoYE5FGC43TP8OFBmYIqCB0=";
+    hash = "sha256-WDXN5CgVP5uEC6lKQ1nlyybrMC56wBoJfNf1pcgwNhE=";
     url = "mirror://sourceforge/project/golly/golly/golly-${finalAttrs.version}/golly-${finalAttrs.version}-src.tar.gz";
   };
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     python3
     zlib
     libGLU
     libGL
-    libX11
+    libx11
     SDL2
   ];
 
   nativeBuildInputs = [
-    (python3.withPackages (ps: [ ps.setuptools ]))
+    (python3.withPackages (ps: [
+      ps.setuptools
+      ps.distutils
+    ]))
     wrapGAppsHook3
   ];
 
@@ -62,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CXX=${stdenv.cc.targetPrefix}c++"
     "CXXC=${stdenv.cc.targetPrefix}c++"
     "LD=${stdenv.cc.targetPrefix}c++"
-    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   installPhase = ''

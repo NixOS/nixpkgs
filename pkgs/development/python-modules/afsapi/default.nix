@@ -3,32 +3,33 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  lxml,
+  hatchling,
+  hatch-vcs,
+  defusedxml,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "afsapi";
-  version = "0.2.8";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wlcrs";
     repo = "python-afsapi";
-    tag = version;
-    hash = "sha256-eE5BsXNtSU6YUhRn4/SKpMrqaYf8tyfLKdxxGOmNJ9I=";
+    tag = finalAttrs.version;
+    hash = "sha256-5gvA3rFyAlTx7oKrUq9q0lBuwatzMPvRhjy7GYnwdik=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    lxml
+    defusedxml
   ];
 
   doCheck = false; # Failed: async def functions are not natively supported.
@@ -42,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "afsapi" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/wlcrs/python-afsapi/releases/tag/${finalAttrs.version}";
     description = "Python implementation of the Frontier Silicon API";
     homepage = "https://github.com/wlcrs/python-afsapi";
-    changelog = "https://github.com/wlcrs/python-afsapi/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
-    repo = pname;
+    repo = "purple-mm-sms";
     rev = "v${version}";
     sha256 = "0917gjig35hmi6isqb62vhxd3lkc2nwdn13ym2gvzgcjfgjzjajr";
   };
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     modemmanager
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://source.puri.sm/Librem5/purple-mm-sms";
     description = "Libpurple plugin for sending and receiving SMS via Modemmanager";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

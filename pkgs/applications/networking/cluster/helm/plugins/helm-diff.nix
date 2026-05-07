@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "helm-diff";
-  version = "3.12.5";
+  version = "3.15.6";
 
   src = fetchFromGitHub {
     owner = "databus23";
     repo = "helm-diff";
     rev = "v${version}";
-    hash = "sha256-vylkjmQHnT69HqkSPGSpgEkP6eeknGq4BGr1eBEvTlw=";
+    hash = "sha256-DGJtvCQ3WGY/Aajrpn/QUQebjb0K9otyRtqCZa4iqMY=";
   };
 
-  vendorHash = "sha256-PPWL98qEdV/J96N0JsglxUsuT+yFiOg1t4DdiY++/OY=";
+  vendorHash = "sha256-psfNtI5rf5B/dQKPjPPwuG14Z/hsJWmuL5JiLuux6ng=";
 
   ldflags = [
     "-s"
@@ -35,10 +35,10 @@ buildGoModule rec {
     install -m644 -Dt $out/${pname} plugin.yaml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin that shows a diff";
     homepage = "https://github.com/databus23/helm-diff";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yurrriq ];
   };
 }

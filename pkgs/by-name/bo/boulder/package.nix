@@ -3,18 +3,18 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
-  boulder,
+  minica,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "boulder";
-  version = "2025-04-17";
+  version = "0.20260428.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
-    tag = "release-${version}";
+    tag = "v${finalAttrs.version}";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -22,12 +22,19 @@ buildGoModule rec {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-FXk+JZJ1azpgN6IQ9aYmpUEO1CGs9/3sog1NjrfB4d8=";
+    hash = "sha256-ky6geY8pIBhnpwQ4bbzQN0+EQgOfwlo8EQ0rTZdtNIA=";
   };
 
   vendorHash = null;
 
+  postPatch = ''
+    # We already built the application with custom settings. This fails, so we have to disable it.
+    substituteInPlace test/certs/generate.sh --replace-fail 'make build' ""
+  '';
+
   subPackages = [ "cmd/boulder" ];
+
+  excludedPackages = [ "test/integration" ];
 
   ldflags = [
     "-s"
@@ -36,13 +43,20 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=${version} +$(cat COMMIT)\""
+    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=${finalAttrs.version} +$(cat COMMIT)\""
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
   '';
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [ minica ];
 
   preCheck = ''
     # Test all targets.
     unset subPackages
+    # Generate integration test certificates, but skip webpki certificates that are hard to make without errors and are currently unneeded.
+    mkdir test/certs/webpki
+    bash test/certs/generate.sh
   '';
 
   # Tests that fail or require additional services.
@@ -58,6 +72,7 @@ buildGoModule rec {
     "TestAddPrecertificateIncomplete"
     "TestAddPrecertificateKeyHash"
     "TestAddPrecertificateNoOCSP"
+    "TestAddRateLimitOverride"
     "TestAddRegistration"
     "TestAddReplacementOrder"
     "TestAddSerial"
@@ -97,6 +112,7 @@ buildGoModule rec {
     "TestCountPendingAuthorizations2"
     "TestCountRegistrationsByIP"
     "TestCountRegistrationsByIPRange"
+    "TestCreateAndFetchRegistrations"
     "TestDbSettings"
     "TestDeactivateAccount"
     "TestDeactivateAuthorization"
@@ -110,6 +126,7 @@ buildGoModule rec {
     "TestEnforceJWSAuthType"
     "TestExactPublicSuffixCertLimit"
     "TestExtractJWK"
+    "TestExtractRequestTarget"
     "TestFQDNSetExists"
     "TestFQDNSetTimestampsForWindow"
     "TestFQDNSets"
@@ -249,6 +266,8 @@ buildGoModule rec {
     "TestRecheckCAAFail"
     "TestRecheckCAAInternalServerError"
     "TestRecheckCAASuccess"
+    "TestRecheckInvalidIdentifierType"
+    "TestRecheckSkipIPAddress"
     "TestRedisSource_BatchSetAndGet"
     "TestRedisSource_Ping"
     "TestRegistrationsPerIPOverrideUsage"
@@ -310,7 +329,7 @@ buildGoModule rec {
   ];
 
   checkFlags = [
-    "-skip ${lib.strings.concatStringsSep "|" disabledTests}"
+    "-skip ${lib.strings.concatStringsSep "|" finalAttrs.disabledTests}"
   ];
 
   postInstall = ''
@@ -321,8 +340,8 @@ buildGoModule rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      package = boulder;
-      inherit version;
+      package = finalAttrs.finalPackage;
+      version = finalAttrs.version;
     };
     updateScript = nix-update-script { };
   };
@@ -339,6 +358,6 @@ buildGoModule rec {
     '';
     license = lib.licenses.mpl20;
     mainProgram = "boulder";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})

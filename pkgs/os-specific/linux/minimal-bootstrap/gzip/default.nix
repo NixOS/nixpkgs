@@ -34,12 +34,12 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU zip compression program";
       homepage = "https://www.gnu.org/software/gzip";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
     };
   }
   ''
@@ -51,7 +51,8 @@ bash.runCommand "${pname}-${version}"
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib -Dstrlwr=unused"
-    bash ./configure --prefix=$out
+    bash ./configure --prefix=$out \
+      --disable-dependency-tracking
 
     # Build
     make

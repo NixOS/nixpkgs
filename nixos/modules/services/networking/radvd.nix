@@ -39,7 +39,7 @@ in
     package = mkPackageOption pkgs "radvd" { };
 
     debugLevel = mkOption {
-      type = types.int;
+      type = types.ints.between 0 5;
       default = 0;
       example = 5;
       description = ''

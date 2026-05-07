@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "polkascan";
-    repo = "py-sr25519-bindings";
-    rev = "9127501235bf291d7f14f00ec373d0a5000a32cb";
-    hash = "sha256-mxNmiFvMbV9WQhGNIQXxTkOcJHYs0vyOPM6Nd5367RE=";
+    owner = "JAMdotTech";
+    repo = "py-sr25519";
+    tag = "v${version}";
+    hash = "sha256-lia0hA3EayeJN4hf1dE5ezuitknIIQirnWwVjGtdMoo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-OSnPGRZwuAzcvu80GgTXdc740SfhDIsXrQZq9a/BCdE=";
+    hash = "sha256-+6uutjGp+JzJ4cFZYdWUBLSKXvt6doW1oZkhnMhW9J0=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -42,11 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sr25519" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for sr25519 library";
-    homepage = "https://github.com/polkascan/py-sr25519-bindings";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/JAMdotTech/py-sr25519";
+    changelog = "https://github.com/JAMdotTech/py-sr25519/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       onny
       stargate01
     ];

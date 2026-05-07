@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  arrow-cpp,
   # nativeBuildInputs
   binaryen,
   lld,
@@ -34,13 +35,21 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.24.1";
+  version = "0.31.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-unPgvQcYhshdx5NGCl/pLh8UdJ9T6B8Fd0s8G1NSBmE=";
+    hash = "sha256-gbN9aplPw+U4liGDU7Z0x+ySfxr+RlyriEkDsIA8gHA=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -49,10 +58,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-zdq8djnmH8srSd9sml7t6wsbxpTaT3x5/7hkDRgelbg=";
+  cargoHash = "sha256-N5JeZMbGy9FSiluE1MAtvg97dUq3ZoUZdABwORUlWlA=";
 
-  cargoBuildFlags = [ "--package rerun-cli" ];
-  cargoTestFlags = [ "--package rerun-cli" ];
+  cargoBuildFlags = [
+    "--package"
+    "rerun-cli"
+    "--package"
+    "rerun_c"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "rerun-cli"
+  ];
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "native_viewer"
@@ -69,19 +86,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Note that cargoBuildFeatures reference what buildFeatures is set to in stdenv.mkDerivation,
   # so that user can easily create an overlay to set cargoBuildFeatures to what he needs
   preBuild = ''
-    if [[ " $cargoBuildFeatures " == *" web_viewer "* ]]; then
-      # transform the environment variable that is a space separated list into a comma separated list
-      buildWebViewerFeatures=$(echo $buildWebViewerFeatures | tr ' ' ',')
+    if [[ " ''${cargoBuildFeatures[*]} " == *" web_viewer "* ]]; then
+      # join the bash array into a comma-separated list for cargo's --features flag
+      buildWebViewerFeaturesJoined=$(IFS=,; echo "''${buildWebViewerFeatures[*]}")
       # Create the features option only if there are features to pass
-      buildWebViewerFeaturesCargoOption=""
-      if [[ ! -z "$buildWebViewerFeatures" ]]; then
-        buildWebViewerFeaturesCargoOption="--features $buildWebViewerFeatures"
-        echo "Features passed to the web viewer build: $buildWebViewerFeatures"
+      buildWebViewerFeaturesCargoOption=()
+      if [[ -n "$buildWebViewerFeaturesJoined" ]]; then
+        buildWebViewerFeaturesCargoOption=("--features" "$buildWebViewerFeaturesJoined")
+        echo "Features passed to the web viewer build: $buildWebViewerFeaturesJoined"
       else
         echo "No features will be passed to the web viewer build"
       fi
       echo "Building the wasm web viewer for rerun's web_viewer feature"
-      cargo run -p re_dev_tools -- build-web-viewer --no-default-features $buildWebViewerFeaturesCargoOption --release -g
+      cargo run -p re_dev_tools -- build-web-viewer --no-default-features "''${buildWebViewerFeaturesCargoOption[@]}" --release -g
     else
       echo "web_viewer feature not enabled, skipping web viewer build."
     fi
@@ -128,6 +145,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
+  propagatedBuildInputs = [ arrow-cpp ];
+
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [
       libxkbcommon
@@ -143,7 +162,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     while IFS= read -r -d $'\0' path ; do
       elfHasDynamicSection "$path" || continue
-      for dep in $addDlopenRunpaths ; do
+      for dep in "''${addDlopenRunpaths[@]}" ; do
         patchelf "$path" --add-rpath "$dep"
       done
     done < <(
@@ -155,10 +174,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
+  postInstall = ''
+    # Install C++ SDK components
+    mkdir -p $dev/include
+    cp -r $src/rerun_cpp/src/* $dev/include/
+
+    # Install rerun_c library (built from Rust)
+    if [ -f "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/librerun_c.a" ]; then
+      cp "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/librerun_c.a" $out/lib/
+    fi
+
+    # Install CMake config files
+    mkdir -p $dev/lib/cmake/rerun_sdk
+    cp $src/rerun_cpp/CMakeLists.txt $dev/lib/cmake/rerun_sdk/
+    cp $src/rerun_cpp/Config.cmake.in $dev/lib/cmake/rerun_sdk/
+    cp $src/rerun_cpp/download_and_build_arrow.cmake $dev/lib/cmake/rerun_sdk/
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -169,7 +204,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate.  Built in Rust using egui";
+    description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate. Built in Rust using egui. Includes C++ SDK";
     homepage = "https://github.com/rerun-io/rerun";
     changelog = "https://github.com/rerun-io/rerun/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
@@ -177,8 +212,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      GaetanLepage
       SomeoneSerge
-      robwalt
     ];
     mainProgram = "rerun";
   };

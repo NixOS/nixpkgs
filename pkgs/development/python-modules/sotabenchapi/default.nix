@@ -47,6 +47,6 @@ buildPythonPackage {
     description = "Easily benchmark Machine Learning models on selected tasks and datasets";
     homepage = "https://pypi.org/project/sotabenchapi/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

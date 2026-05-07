@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Terminal app for desktop and mobile devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-terminal-app";

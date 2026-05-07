@@ -5,15 +5,15 @@
   rsync,
   nix-update-script,
 }:
-python3.pkgs.buildPythonApplication rec {
-  name = "ietf-cli";
+python3.pkgs.buildPythonApplication (finalAttrs: {
+  pname = "ietf-cli";
   version = "1.29";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "paulehoffman";
     repo = "ietf-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xpwUUyTq/8WOUjssNkXOvxBYPgL7pmVVPz6abKetVc8=";
   };
   buildInputs = [ rsync ];
@@ -36,4 +36,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ lilioid ];
     platforms = lib.lists.intersectLists python3.meta.platforms rsync.meta.platforms;
   };
-}
+})

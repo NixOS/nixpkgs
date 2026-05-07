@@ -19,7 +19,7 @@ let
   csr = runWithOpenSSL "matrix.csr" ''
     openssl req \
        -new -key ${key} \
-       -out $out -subj "/CN=localhost" \
+       -out $out -subj "/CN=localhost"
   '';
   cert = runWithOpenSSL "matrix_cert.pem" ''
     openssl x509 \
@@ -31,8 +31,8 @@ let
 in
 {
   name = "pantalaimon";
-  meta = with pkgs.lib; {
-    maintainers = teams.matrix.members;
+  meta = {
+    maintainers = pkgs.lib.teams.matrix.members;
   };
 
   nodes.machine =

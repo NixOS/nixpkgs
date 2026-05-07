@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
-    zig_0_13.hook
+    zig_0_13
     pkg-config
     wayland
     wayland-scanner

@@ -6,20 +6,22 @@
   nix-update-script,
   pkg-config,
   openssl,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.5.14";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PffZx2rkOdwwhZ4LYE6ZiAWa68oZT3Gly6Is9gRPWdw=";
+    hash = "sha256-XsN4UyIXkd0YVtO/q9EcFP/sBYkH9leISmbJZ93ef6E=";
   };
 
-  cargoHash = "sha256-FfTySXynezMs/Nkuai+jZCSJnIo5D3obh3LboYYGhVk=";
+  cargoHash = "sha256-KFNFioZ/5moC5FNXw+hA+NrPjsqu+3V8A5mtZ4FZUHw=";
 
   buildNoDefaultFeatures = true;
   # Would be cleaner with an "--all-features" option
@@ -27,6 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+    # When invoked in postInstall, alistral tries to write logfiles to its config dir on invocation, and fails if it can't find a writable one.
+    # The config dir falls back to a directory relative to $HOME on both Darwin and Linux, so setting a writable $HOME is enough.
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -37,6 +45,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd alistral \
+      --bash <($out/bin/alistral --generate bash) \
+      --fish <($out/bin/alistral --generate fish) \
+      --zsh <($out/bin/alistral --generate zsh)
+  '';
 
   meta = {
     homepage = "https://rustynova016.github.io/Alistral/";

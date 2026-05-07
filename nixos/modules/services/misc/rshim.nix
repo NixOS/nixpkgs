@@ -13,8 +13,8 @@ let
   ]
   ++ lib.optionals (cfg.backend != null) [ "--backend ${cfg.backend}" ]
   ++ lib.optionals (cfg.device != null) [ "--device ${cfg.device}" ]
-  ++ lib.optionals (cfg.index != null) [ "--index ${builtins.toString cfg.index}" ]
-  ++ [ "--log-level ${builtins.toString cfg.log-level}" ];
+  ++ lib.optionals (cfg.index != null) [ "--index ${toString cfg.index}" ]
+  ++ [ "--log-level ${toString cfg.log-level}" ];
 in
 {
   options.services.rshim = {
@@ -61,7 +61,7 @@ in
     };
 
     log-level = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.between 0 4;
       description = ''
         Specify the log level (0:none, 1:error, 2:warning, 3:notice, 4:debug).
       '';

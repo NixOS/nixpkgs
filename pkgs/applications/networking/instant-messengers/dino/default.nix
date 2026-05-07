@@ -30,20 +30,22 @@
   gstreamer,
   gst-plugins-base,
   gst-plugins-good,
-  gst-plugins-bad,
-  gst-vaapi,
   webrtc-audio-processing,
 }:
 
+# Upstream is very deliberate about which features are enabled per default or are automatically enabled.
+# Everything that is disabled per default has to been seen experimental and should not be enabled without strong reasoning.
+# see https://github.com/NixOS/nixpkgs/issues/469614#issuecomment-3649662176
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y3MGKpfhjmqnIvmt4mXnkmpjF/riXPDXyUiSrsceY6o=";
+    hash = "sha256-TgXPJP+Xm8LrO2d8yMu6aCCypuBRKNtYuZAb0dYfhng=";
   };
 
   postPatch = ''
@@ -82,23 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
     gstreamer
     gst-plugins-base
     gst-plugins-good # contains rtpbin, required for VP9
-    gst-plugins-bad # required for H264, MSDK
-    gst-vaapi # required for VAAPI
     webrtc-audio-processing
   ];
 
   doCheck = true;
 
-  mesonFlags = [
-    "-Dplugin-notification-sound=enabled"
-    "-Dplugin-rtp-h264=enabled"
-    "-Dplugin-rtp-msdk=enabled"
-    "-Dplugin-rtp-vaapi=enabled"
-    "-Dplugin-rtp-vp9=enabled"
-  ];
-
   # Undefined symbols for architecture arm64: "_gpg_strerror"
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lgpg-error";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lgpg-error";
+  };
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with
@@ -108,19 +102,19 @@ stdenv.mkDerivation (finalAttrs: {
   # will load
   #
   # See https://github.com/dino/dino/wiki/macOS
-  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cd "$out/lib/dino/plugins/"
     for f in *.dylib; do
       mv "$f" "$(basename "$f" .dylib).so"
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     mainProgram = "dino";
     homepage = "https://github.com/dino/dino";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 })

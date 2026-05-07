@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "trueseeing";
   version = "2.2.5";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = "trueseeing";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EDnE1BK/nl3nqkan4gmSsP7vqkuMNJ5+oN09ZnQzsy0=";
   };
 
@@ -48,9 +48,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Non-decompiling Android vulnerability scanner";
     homepage = "https://github.com/alterakey/trueseeing";
-    changelog = "https://github.com/alterakey/trueseeing/releases/tag/v${version}";
+    changelog = "https://github.com/alterakey/trueseeing/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.fab ];
     mainProgram = "trueseeing";
   };
-}
+})

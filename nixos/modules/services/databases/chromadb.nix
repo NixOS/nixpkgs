@@ -9,15 +9,15 @@ let
   cfg = config.services.chromadb;
   inherit (lib)
     mkEnableOption
+    mkPackageOption
     mkOption
     mkIf
     types
-    literalExpression
     ;
 in
 {
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   imports = [
     (lib.mkRemovedOptionModule [ "services" "chromadb" "logFile" ] ''
@@ -29,13 +29,7 @@ in
     services.chromadb = {
       enable = mkEnableOption "ChromaDB, an open-source AI application database.";
 
-      package = mkOption {
-        type = types.package;
-        example = literalExpression "pkgs.python3Packages.chromadb";
-        default = pkgs.python3Packages.chromadb;
-        defaultText = "pkgs.python3Packages.chromadb";
-        description = "ChromaDB package to use.";
-      };
+      package = mkPackageOption pkgs [ "python3Packages" "chromadb" ] { };
 
       host = mkOption {
         type = types.str;

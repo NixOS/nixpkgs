@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   homeserverUrl = "http://homeserver:8008";
 in
@@ -60,9 +60,8 @@ in
                 displayname = "Discord bridge bot";
                 avatar = "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC";
               };
-              # These will be generated automatically
-              as_token = "generate";
-              hs_token = "generate";
+              # Don't override as_token/hs_token - let them use the default placeholder
+              # which will trigger automatic generation
 
               database = {
                 type = "sqlite3";
@@ -86,6 +85,7 @@ in
 
         environment.systemPackages = [
           pkgs.nettools
+          pkgs.yq
         ];
       };
 
@@ -156,7 +156,45 @@ in
 
     with subtest("verify registration file was created"):
         homeserver.wait_until_succeeds("test -f /var/lib/mautrix-discord/discord-registration.yaml")
-        homeserver.succeed("ls -la /var/lib/mautrix-discord/")
+
+        # Verify tokens were generated and are not default values
+        config_as_token = homeserver.succeed("yq -r '.appservice.as_token' /var/lib/mautrix-discord/config.yaml").strip()
+        config_hs_token = homeserver.succeed("yq -r '.appservice.hs_token' /var/lib/mautrix-discord/config.yaml").strip()
+        reg_as_token = homeserver.succeed("yq -r '.as_token' /var/lib/mautrix-discord/discord-registration.yaml").strip()
+        reg_hs_token = homeserver.succeed("yq -r '.hs_token' /var/lib/mautrix-discord/discord-registration.yaml").strip()
+
+        print(f"Config as_token: {config_as_token[:20]}...")
+        print(f"Config hs_token: {config_hs_token[:20]}...")
+
+        # Verify tokens are not the default placeholder or "generate"
+        assert config_as_token not in ["This value is generated when generating the registration", "generate"], \
+            f"Config as_token was not replaced: {config_as_token}"
+        assert config_hs_token not in ["This value is generated when generating the registration", "generate"], \
+            f"Config hs_token was not replaced: {config_hs_token}"
+
+        # Verify tokens match between config and registration
+        assert config_as_token == reg_as_token, \
+            f"as_token mismatch: config={config_as_token[:20]}... vs reg={reg_as_token[:20]}..."
+        assert config_hs_token == reg_hs_token, \
+            f"hs_token mismatch: config={config_hs_token[:20]}... vs reg={reg_hs_token[:20]}..."
+
+        print("Tokens generated and synchronized correctly")
+
+    with subtest("verify tokens persist after service restart"):
+        # Restart the registration service to simulate rebuild
+        homeserver.succeed("systemctl restart mautrix-discord-registration.service")
+        homeserver.wait_for_unit("mautrix-discord-registration.service")
+
+        # Verify tokens were preserved
+        config_as_token_2 = homeserver.succeed("yq -r '.appservice.as_token' /var/lib/mautrix-discord/config.yaml").strip()
+        config_hs_token_2 = homeserver.succeed("yq -r '.appservice.hs_token' /var/lib/mautrix-discord/config.yaml").strip()
+
+        assert config_as_token_2 == config_as_token, \
+            f"as_token changed after restart: {config_as_token[:20]}... -> {config_as_token_2[:20]}..."
+        assert config_hs_token_2 == config_hs_token, \
+            f"hs_token changed after restart: {config_hs_token[:20]}... -> {config_hs_token_2[:20]}..."
+
+        print("Tokens persisted correctly after restart")
 
     with subtest("verify bridge connects to homeserver"):
         # Give the bridge a moment to connect

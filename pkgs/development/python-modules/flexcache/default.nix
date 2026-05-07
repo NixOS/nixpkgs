@@ -14,7 +14,6 @@
   # checks
   pytestCheckHook,
   pytest-mpl,
-  pytest-subtests,
 }:
 
 buildPythonPackage rec {
@@ -40,16 +39,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl
-    pytest-subtests
   ];
 
   pythonImportsCheck = [ "flexcache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Robust and extensible package to cache on disk the result of expensive calculations";
     homepage = "https://github.com/hgrecco/flexcache";
     changelog = "https://github.com/hgrecco/flexcache/blob/${src.rev}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

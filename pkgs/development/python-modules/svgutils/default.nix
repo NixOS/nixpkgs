@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svgutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tools to create and manipulate SVG files";
     homepage = "https://github.com/btel/svg_utils";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

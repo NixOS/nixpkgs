@@ -9,12 +9,12 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "djvulibre";
   version = "3.5.29";
 
   src = fetchurl {
-    url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/djvu/djvulibre-${finalAttrs.version}.tar.gz";
     hash = "sha256-07SwOuK9yoUWo2726ye3d/BSjJ7aJnRdmWKCSj/f7M8=";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Big set of CLI tools to make/modify/optimize/show/export DJVU files";
     homepage = "https://djvu.sourceforge.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Anton-Latukha ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ Anton-Latukha ];
+    platforms = lib.platforms.all;
   };
-}
+})

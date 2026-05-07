@@ -10,7 +10,7 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
-  libX11,
+  libx11,
   freetype,
   zlib,
   debug,
@@ -32,7 +32,7 @@ let
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-    libX11
+    libx11
     freetype
   ];
 
@@ -66,6 +66,9 @@ stdenv.mkDerivation {
     patchShebangs lang/compile_mo.sh
   '';
 
+  # remove once on O.I/ahead of upstream commit 15b3cb0
+  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-Wno-missing-noreturn";
+
   makeFlags = [
     "PREFIX=$(out)"
     "LANGUAGES=all"
@@ -96,7 +99,7 @@ stdenv.mkDerivation {
     isCurses = !tiles;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free, post apocalyptic, zombie infested rogue-like";
     mainProgram = "cataclysm-tiles";
     longDescription = ''
@@ -123,11 +126,11 @@ stdenv.mkDerivation {
       than their original form.
     '';
     homepage = "https://cataclysmdda.org/";
-    license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = with lib.maintainers; [
       mnacamura
       DeeUnderscore
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

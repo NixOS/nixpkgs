@@ -2,20 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "youtube-search";
-  version = "2.1.2";
+  version = "2.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-V0mm2Adv2mVVfJE2fw+rCTYpDs3qRXyDHJ8/BZGKOqI=";
+    inherit version;
+    pname = "youtube_search";
+    hash = "sha256-U5inzWXZt1qLrCfvaJ7ARKurPL+h8g0Z2wJ3ZZrHDZg=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -25,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "youtube_search" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for searching for youtube videos to avoid using their heavily rate-limited API";
     homepage = "https://github.com/joetats/youtube_search";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0hax ];
   };
 }

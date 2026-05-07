@@ -7,12 +7,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sslmate";
   version = "1.9.1";
 
   src = fetchurl {
-    url = "https://packages.sslmate.com/other/${pname}-${version}.tar.gz";
+    url = "https://packages.sslmate.com/other/sslmate-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-F5szGn1cbw7R3lHMocM7as1RS/uaBqKCsvOxA+rXDOc=";
   };
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${openssl.bin}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sslmate.com";
     maintainers = [ ];
     description = "Easy to buy, deploy, and manage your SSL certs";
     mainProgram = "sslmate";
-    platforms = platforms.unix;
-    license = licenses.mit; # X11
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit; # X11
   };
-}
+})

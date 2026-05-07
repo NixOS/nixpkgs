@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   cmake,
   gfortran,
   perl,
@@ -25,6 +26,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = versionHashes."${version}";
   };
+
+  patches = [
+    # Fix build with newer CMake versions
+    (fetchpatch {
+      url = "https://gitlab.com/libxc/libxc/-/commit/450202adb8a3d698841dca853f2999b1befd932e.patch";
+      sha256 = "sha256-XDt7+TzszSu+X6/PS+T8Q9BP76+bAXC9FzkA6ueo/OA=";
+    })
+  ];
 
   # Timeout increase has already been included upstream in master.
   # Check upon updates if this can be removed.
@@ -61,12 +70,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library of exchange-correlation functionals for density-functional theory";
     mainProgram = "xc-info";
     homepage = "https://www.tddft.org/programs/Libxc/";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ markuskowa ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
 }

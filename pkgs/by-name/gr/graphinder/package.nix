@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "graphinder";
   version = "2.0.0b4";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Escape-Technologies";
     repo = "graphinder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-emBWhEJxYRAw3WTd8t+lurnHX8SeCcLBHGH9B+Owuag=";
   };
 
@@ -48,9 +48,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to find GraphQL endpoints using subdomain enumeration";
     homepage = "https://github.com/Escape-Technologies/graphinder";
-    changelog = "https://github.com/Escape-Technologies/graphinder/releases/tag/${src.tag}";
+    changelog = "https://github.com/Escape-Technologies/graphinder/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "graphinder";
   };
-}
+})

@@ -10,7 +10,7 @@ let
   mkTestName =
     pkg: "${pkg.pname}_${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor pkg.version)}";
   redisPackages = {
-    inherit (pkgs) redis keydb valkey;
+    inherit (pkgs) redis valkey;
   };
   makeRedisTest =
     {
@@ -20,9 +20,10 @@ let
     makeTest {
       inherit name;
       meta.maintainers = [
+        lib.maintainers.das_j
         lib.maintainers.flokli
-      ]
-      ++ lib.teams.helsinki-systems.members;
+        lib.maintainers.helsinki-Jo
+      ];
 
       nodes = {
         machine =

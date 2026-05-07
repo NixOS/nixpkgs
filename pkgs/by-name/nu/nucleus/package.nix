@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   ninja,
   meson,
   pkg-config,
@@ -14,19 +14,18 @@
   nix-update-script,
 }:
 let
-  version = "1";
+  version = "2";
 in
 python3Packages.buildPythonApplication {
   pname = "nucleus";
   inherit version;
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lo-vely";
     repo = "nucleus";
     tag = "v${version}";
-    hash = "sha256-8y3sbtfq4hZuEwReduIkud91SOj9XrURrZRUs2M74mQ=";
+    hash = "sha256-VBKeHKmNYB2P3x+C7HOzXHjkuUqR6GWoHihAXxhV0wY=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +59,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Plus;
     mainProgram = "nucleus";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
   };
 }

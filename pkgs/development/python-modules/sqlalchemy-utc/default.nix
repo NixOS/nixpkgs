@@ -2,12 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   setuptools,
   sqlalchemy,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy-utc";
   version = "0.14.0";
   pyproject = true;
@@ -15,28 +15,38 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spoqa";
     repo = "sqlalchemy-utc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZtUuwUDgd/ngOQoWu8IgOldTbTGoFbv5Y0Hyha1KTrE=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    # https://github.com/spoqa/sqlalchemy-utc/pull/20
+    ./sqlalchemy2-compat.patch
+    # https://github.com/spoqa/sqlalchemy-utc/pull/21\
+    ./python314-compat.patch
+  ];
 
-  dependencies = [ sqlalchemy ];
+  build-system = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [
+    sqlalchemy
+  ];
 
-  pythonImportsCheck = [ "sqlalchemy_utc" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  disabledTests = [
-    # ArgumentError
-    "test_utcnow_timezone"
+  pythonImportsCheck = [
+    "sqlalchemy_utc"
   ];
 
   meta = {
     description = "SQLAlchemy type to store aware datetime values";
     homepage = "https://github.com/spoqa/sqlalchemy-utc";
-    changelog = "https://github.com/spoqa/sqlalchemy-utc/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/spoqa/sqlalchemy-utc/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -20,31 +20,27 @@
   zstd,
   gitUpdater,
   pkgsCross,
-  withVlock ? true,
+  withVlock ? false,
+  kbdVlock,
 }:
 
-stdenv.mkDerivation {
-  pname = "kbd";
-  version = "2.8.0-unstable-2025-08-12";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "kbd" + lib.optionalString withVlock "-vlock";
+  version = "2.9.0";
 
   __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git";
-    rev = "46295167a55643e941c8cdcfd2cb76bd138c851c";
-    hash = "sha256-m1aVfsEme/BnyJogOPvGcOrSJfli8B/TrGxOm4POt0w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uUECxFdm/UhoHKLHLFe6/ygCQ+4mrQOZExKl+ReaTNw=";
   };
 
-  # vlock is moved into its own output, since it depends on pam. This
-  # reduces closure size for most use cases.
   outputs = [
     "out"
     "dev"
     "scripts"
     "man"
-  ]
-  ++ lib.optionals withVlock [
-    "vlock"
   ];
 
   patches = [
@@ -112,10 +108,6 @@ stdenv.mkDerivation {
 
     moveToOutput bin/unicode_start $scripts
     moveToOutput bin/unicode_stop $scripts
-  ''
-  + lib.optionalString withVlock ''
-    moveToOutput bin/vlock $vlock
-    moveToOutput etc/pam.d/vlock $vlock
   '';
 
   outputChecks.out.disallowedRequisites = [
@@ -137,6 +129,8 @@ stdenv.mkDerivation {
         pkgsCross.${systemString}.kbd;
       inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
     };
+    # For backwards compatibility. Remove after 26.05.
+    vlock = kbdVlock;
   };
 
   meta = {
@@ -146,4 +140,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ davidak ];
   };
-}
+})

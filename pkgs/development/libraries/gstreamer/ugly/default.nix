@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-ugly";
-  version = "1.26.5";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PfxDQ1vpfhEIFrrG1gKw8gagOFRieWg9nSU3L/En21I=";
+    hash = "sha256-v5yfcu43SCXP1DhowoW8sBcA3yWEBp51169FX+SCRPg=";
   };
 
   nativeBuildInputs = [
@@ -93,6 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     tests = {
       lgplOnly = gst-plugins-ugly.override {
@@ -103,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gstreamer Ugly Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
@@ -112,8 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
       the plug-ins or the supporting libraries might not be how we'd
       like. The code might be widely known to present patent problems.
     '';
-    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

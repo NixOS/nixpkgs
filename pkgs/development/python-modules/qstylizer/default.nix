@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   pbr,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   version = "0.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "blambright";
     repo = "qstylizer";
@@ -31,7 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-Is/kYkSX9fOX+pLv5g1ns2OxeLpSkaCfO2jPIbiuIxA=";
   };
 
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   build-system = [
     pbr
@@ -54,6 +51,6 @@ buildPythonPackage rec {
     description = "Qt stylesheet generation utility for PyQt/PySide";
     homepage = "https://github.com/blambright/qstylizer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

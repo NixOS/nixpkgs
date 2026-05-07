@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "whatthepatch";
   version = "1.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cscorley";

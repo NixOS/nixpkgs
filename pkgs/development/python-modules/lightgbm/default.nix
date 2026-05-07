@@ -18,7 +18,7 @@
 
   # buildInputs
   llvmPackages,
-  boost,
+  boost187,
   ocl-icd,
   opencl-headers,
 
@@ -42,7 +42,10 @@
 assert gpuSupport -> !cudaSupport;
 assert cudaSupport -> !gpuSupport;
 
-buildPythonPackage rec {
+let
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   inherit (pkgs.lightgbm)
     pname
     version
@@ -51,7 +54,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
   };
 
@@ -73,7 +76,7 @@ buildPythonPackage rec {
   buildInputs =
     (lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ])
     ++ (lib.optionals gpuSupport [
-      boost
+      boost187
       ocl-icd
       opencl-headers
     ])
@@ -90,6 +93,13 @@ buildPythonPackage rec {
   cmakeFlags = [
     (lib.cmakeBool "USE_GPU" gpuSupport)
     (lib.cmakeBool "USE_CUDA" cudaSupport)
+    # Set in pyproject.toml for `cmake.args` in `[tool.scikit-build]`,
+    # but not set by our hooks.
+    (lib.cmakeBool "__BUILD_FOR_PYTHON" true)
+  ]
+  ++ lib.optionals cudaSupport [
+    # build fails otherwise
+    (lib.cmakeFeature "CMAKE_CUDA_STANDARD" "14")
   ];
 
   optional-dependencies = {
@@ -115,9 +125,12 @@ buildPythonPackage rec {
 
   meta = {
     description = "Fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
-    homepage = "https://github.com/Microsoft/LightGBM";
-    changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
+    homepage = "https://github.com/lightgbm-org/LightGBM";
+    changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh ];
+    maintainers = with lib.maintainers; [
+      flokli
+      teh
+    ];
   };
-}
+})

@@ -5,7 +5,7 @@
   meson,
   ninja,
   libdrm,
-  libX11,
+  libx11,
   libGL,
   libgbm,
   pkg-config,
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libdrm
-    libX11
+    libx11
     libGL
     libgbm
   ]
@@ -40,11 +40,11 @@ stdenv.mkDerivation {
     gst-plugins-base
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Example OpenGL app using KMS/GBM";
     homepage = "https://gitlab.freedesktop.org/mesa/kmscube";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

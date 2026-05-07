@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "norfair" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python library for adding real-time multi-object tracking to any detector";
     changelog = "https://github.com/tryolabs/norfair/releases/tag/${src.tag}";
     homepage = "https://github.com/tryolabs/norfair";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fleaz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fleaz ];
   };
 }

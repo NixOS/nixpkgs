@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -11,20 +12,17 @@ let
   documentationLink = "https://manual.calibre-ebook.com";
   generatedDocumentationLink = documentationLink + "/generated/en/calibre-server.html";
 
-  execFlags = (
-    lib.concatStringsSep " " (
-      lib.mapAttrsToList (k: v: "${k} ${toString v}") (
-        lib.filterAttrs (name: value: value != null) {
-          "--listen-on" = cfg.host;
-          "--port" = cfg.port;
-          "--auth-mode" = cfg.auth.mode;
-          "--userdb" = cfg.auth.userDb;
-        }
-      )
-      ++ [ (lib.optionalString (cfg.auth.enable == true) "--enable-auth") ]
-      ++ cfg.extraFlags
+  execFlags =
+    lib.mapAttrsToList (k: v: "--${k}=${toString v}") (
+      lib.filterAttrs (name: value: value != null) {
+        listen-on = cfg.host;
+        port = cfg.port;
+        auth-mode = cfg.auth.mode;
+        userdb = cfg.auth.userDb;
+      }
     )
-  );
+    ++ lib.optional cfg.auth.enable "--enable-auth"
+    ++ cfg.extraFlags;
 in
 
 {
@@ -150,12 +148,14 @@ in
       serviceConfig = {
         User = cfg.user;
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/calibre-server ${lib.concatStringsSep " " cfg.libraries} ${execFlags}";
+        ExecStart = utils.escapeSystemdExecArgs (
+          [ "${cfg.package}/bin/calibre-server" ] ++ execFlags ++ [ "--" ] ++ cfg.libraries
+        );
       };
 
     };
 
-    environment.systemPackages = [ pkgs.calibre ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users = lib.optionalAttrs (cfg.user == "calibre-server") {
       calibre-server = {
@@ -176,5 +176,5 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ gaelreyrol ];
+  meta.maintainers = [ ];
 }

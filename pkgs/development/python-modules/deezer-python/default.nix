@@ -5,26 +5,24 @@
   fetchFromGitHub,
   httpx,
   setuptools,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deezer-python";
-  version = "7.1.2";
+  version = "7.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";
-    tag = "v${version}";
-    hash = "sha256-sPg5jasIOtkpxteKxn8273VQh+OuL+V8/IE9S0lp5ys=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pCrPlEbt5Mx8qGjewR5+Z/W7rFEehqd7QRrtvPGyKJk=";
   };
 
   build-system = [ setuptools ];
@@ -33,6 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     environs
+    pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytest-vcr
@@ -48,11 +47,11 @@ buildPythonPackage rec {
     "test_with_language_header"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the Deezer API";
     homepage = "https://github.com/browniebroke/deezer-python";
-    changelog = "https://github.com/browniebroke/deezer-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ synthetica ];
+    changelog = "https://github.com/browniebroke/deezer-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

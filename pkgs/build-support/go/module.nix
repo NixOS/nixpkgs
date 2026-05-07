@@ -10,16 +10,12 @@ lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
   excludeDrvArgNames = [
     "overrideModAttrs"
-    # Compatibility layer to the directly-specified CGO_ENABLED.
-    # TODO(@ShamrockLee): Remove after Nixpkgs 25.05 branch-off
-    "CGO_ENABLED"
   ];
   extendDrvArgs =
     finalAttrs:
     {
       nativeBuildInputs ? [ ], # Native build inputs used for the derivation.
       passthru ? { },
-      patches ? [ ],
 
       # A function to override the `goModules` derivation.
       overrideModAttrs ? (finalAttrs: previousAttrs: { }),
@@ -28,8 +24,8 @@ lib.extendMkDerivation {
       modRoot ? "./",
 
       # The SRI hash of the vendored dependencies.
-      # If `vendorHash` is `null`, no dependencies are fetched and
-      # the build relies on the vendor folder within the source.
+      # If `null`, it means the project either has no external dependencies
+      # or the vendored dependencies are already present in the source tree.
       vendorHash ? throw (
         if args ? vendorSha256 then
           "buildGoModule: Expect vendorHash instead of vendorSha256"
@@ -226,31 +222,20 @@ lib.extendMkDerivation {
         GO111MODULE = "on";
         GOTOOLCHAIN = "local";
 
-        CGO_ENABLED =
-          args.env.CGO_ENABLED or (
-            if args ? CGO_ENABLED then
-              # Compatibility layer to the CGO_ENABLED attribute not specified as env.CGO_ENABLED
-              # TODO(@ShamrockLee): Remove and convert to
-              # CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED
-              # after the Nixpkgs 25.05 branch-off.
-              lib.warn
-                "${finalAttrs.finalPackage.meta.position}: buildGoModule: specify CGO_ENABLED with env.CGO_ENABLED instead."
-                args.CGO_ENABLED
-            else
-              go.CGO_ENABLED
-          );
-      };
+        CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
 
-      GOFLAGS =
-        GOFLAGS
-        ++
-          lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
-            "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-            (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
-        ++
-          lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
-            "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-            (lib.optional (!allowGoReference) "-trimpath");
+        GOFLAGS = toString (
+          GOFLAGS
+          ++
+            lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
+              "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+              (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
+          ++
+            lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
+              "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+              (lib.optional (!finalAttrs.allowGoReference) "-trimpath")
+        );
+      };
 
       inherit enableParallelBuilding;
 
@@ -266,6 +251,9 @@ lib.extendMkDerivation {
             export GOPATH="$TMPDIR/go"
             export GOPROXY=off
             export GOSUMDB=off
+            if [ -f "$NIX_CC_FOR_TARGET/nix-support/dynamic-linker" ]; then
+              export GO_LDSO=$(cat $NIX_CC_FOR_TARGET/nix-support/dynamic-linker)
+            fi
             cd "$modRoot"
           ''
           + lib.optionalString (finalAttrs.vendorHash != null) ''
@@ -282,13 +270,6 @@ lib.extendMkDerivation {
             }
           ''
           + ''
-
-            # currently pie is only enabled by default in pkgsMusl
-            # this will respect the `hardening{Disable,Enable}` flags if set
-            if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
-              export GOFLAGS="-buildmode=pie $GOFLAGS"
-            fi
-
             runHook postConfigure
           ''
         );
@@ -410,7 +391,8 @@ lib.extendMkDerivation {
 
       strictDeps = true;
 
-      disallowedReferences = lib.optional (!allowGoReference) go;
+      inherit allowGoReference;
+      disallowedReferences = lib.optional (!finalAttrs.allowGoReference) go;
 
       passthru = {
         inherit go;

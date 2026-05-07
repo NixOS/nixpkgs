@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "uplc";
-  version = "1.0.10";
+  version = "1.3.2";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "uplc";
     tag = version;
-    hash = "sha256-Owo4W4jChrdYnz11BbWQdm2SiwFwOJlqjYutuRyjpxs=";
+    hash = "sha256-E9uCt1SW8nlhvsgALd24aD5QWjTyM2aO1d7+GZ+IHrA=";
   };
 
   propagatedBuildInputs = [
@@ -50,11 +50,11 @@ buildPythonPackage rec {
     cbor2 = cbor2WithoutCExtensions;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of untyped plutus language core";
     homepage = "https://github.com/OpShin/uplc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aciceri ];
     mainProgram = "opshin";
   };
 }

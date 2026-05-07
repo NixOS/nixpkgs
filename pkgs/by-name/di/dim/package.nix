@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dim";
-  version = "0-unstable-2023-12-29";
+  version = "0-unstable-2025-09-21";
 
   src = fetchFromGitHub {
     owner = "Dusk-Labs";
     repo = "dim";
-    rev = "3ccb4ab05fc1d7dbd4ebbba9ff2de0ecc9139b27";
-    hash = "sha256-1mgbrDnIkIdWy78uj4EjjgwBQxw/rIS1LCFNscXXPbk=";
+    rev = "d9a4bd0b7e985398ee4f494bf6da8884ab84b8ef";
+    hash = "sha256-WktDQF2YqF/3TFnpUvz7lge8+w/W56aFjUG0v58ash4=";
   };
 
   frontend = buildNpmPackage {
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -s ${./package-lock.json} package-lock.json
     '';
 
-    npmDepsHash = "sha256-yYTRoxKnTF9y3RA4fuDlVYxv9d37Fc905TYVc/gPIRw=";
+    npmDepsHash = "sha256-fVcx5K4r5P/pokmW31IobHSYsshB7PJOHsk6BP5dA1Q=";
 
     installPhase = ''
       runHook preInstall
@@ -46,18 +46,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoPatches = [
-    # Upstream uses a 'ffpath' function to look for config directory and
-    # (ffmpeg) binaries in the same directory as the binary. Patch it to use
-    # the working dir and PATH instead.
-    ./relative-paths.diff
-
     # Bump the first‐party nightfall dependency to the latest Git
     # revision for FFmpeg >= 6 support.
     ./bump-nightfall.patch
-
-    # Bump the time dependency to fix build failure with rust 1.80+
-    # https://github.com/Dusk-Labs/dim/pull/614
-    ./bump-time.patch
 
     # Upstream has some unused imports that prevent things from compiling...
     # Remove for next release.
@@ -68,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
-  cargoHash = "sha256-T0v7pajg3UfRnVOx3ie6rOf+vJSW2l7yoCsJrtxIwcg=";
+  cargoHash = "sha256-NY7iw4Xq8jEBQIeJ8rqiMmIs3Z6YwfePGulpuIP5DJ0=";
 
   postPatch = ''
     substituteInPlace dim-core/src/lib.rs \
@@ -81,6 +72,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postConfigure = ''
     ln -ns $frontend ui/build
+  '';
+
+  preBuild = ''
+    export CARGO_TARGET_DIR=$(pwd)/target
   '';
 
   nativeBuildInputs = [

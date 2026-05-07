@@ -8,15 +8,10 @@
   runtimeShell,
 }:
 
-let
-  baseName = "bbswitch";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "bbswitch";
   version = "unstable-2021-11-29";
-  name = "${baseName}-${version}-${kernel.version}";
-
-in
-
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchFromGitHub {
     owner = "Bumblebee-Project";
@@ -62,7 +57,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for powering off hybrid GPUs";
     platforms = [
       "x86_64-linux"
@@ -70,6 +65,6 @@ stdenv.mkDerivation {
     ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

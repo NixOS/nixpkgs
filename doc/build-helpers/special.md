@@ -3,6 +3,7 @@
 This chapter describes several special build helpers.
 
 ```{=include=} sections
+special/buildenv.section.md
 special/fakenss.section.md
 special/fhs-environments.section.md
 special/makesetuphook.section.md

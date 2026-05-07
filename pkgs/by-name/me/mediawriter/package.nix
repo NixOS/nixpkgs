@@ -6,19 +6,19 @@
   cmake,
   fetchFromGitHub,
   qt6,
-  udisks2,
+  udisks,
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mediawriter";
-  version = "5.2.8";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "MediaWriter";
-    tag = version;
-    hash = "sha256-8nTWwBf8I4IENh0wColzPg3xjsXg3bubg6ZqNpfLE3c=";
+    tag = finalAttrs.version;
+    hash = "sha256-INq07MdWLq5qwBNWrrBRmtIpxsmnHcqPEUyRkIl3Qa4=";
   };
 
   nativeBuildInputs = [
@@ -32,16 +32,16 @@ stdenv.mkDerivation rec {
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtsvg
-    udisks2
+    udisks
     xz
   ];
 
   meta = {
     description = "Tool to write images files to portable media";
     homepage = "https://github.com/FedoraQt/MediaWriter";
-    changelog = "https://github.com/FedoraQt/MediaWriter/releases/tag/${version}";
+    changelog = "https://github.com/FedoraQt/MediaWriter/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mediawriter";
   };
-}
+})

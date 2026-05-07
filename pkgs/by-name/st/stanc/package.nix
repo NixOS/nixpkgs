@@ -6,19 +6,21 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
-  version = "2.36.0";
+  version = "2.38.0";
 
   minimalOCamlVersion = "4.12";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "stanc3";
-    rev = "v${version}";
-    hash = "sha256-IrpHV00Fn3Nxail4Xgv/8ezclKpyVuQa1F34kF07wwA=";
+    tag = "v${version}";
+    hash = "sha256-j05PMQKIqkM9UWJzSVnkYWe6d+iUnmFOh1W8pZ7Fdyk=";
   };
 
-  nativeBuildInputs = with ocamlPackages; [ menhir ];
+  nativeBuildInputs = with ocamlPackages; [
+    cmdliner
+    menhir
+  ];
 
   buildInputs = with ocamlPackages; [
     core_unix
@@ -26,13 +28,14 @@ ocamlPackages.buildDunePackage rec {
     ppx_deriving
     fmt
     yojson
+    cmdliner
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stan-dev/stanc3";
     description = "Stan compiler and utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 }

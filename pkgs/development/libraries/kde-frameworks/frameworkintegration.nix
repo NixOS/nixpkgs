@@ -12,7 +12,7 @@
   knotifications,
   kpackage,
   kwidgetsaddons,
-  libXcursor,
+  libxcursor,
   qtx11extras,
 }:
 
@@ -29,7 +29,7 @@ mkDerivation {
     knotifications
     kpackage
     kwidgetsaddons
-    libXcursor
+    libxcursor
     qtx11extras
   ];
   propagatedBuildInputs = [

@@ -2,10 +2,15 @@
   lib,
   stdenv,
   unzip,
-  src,
-  version,
-  postInstall ? "true",
+  fetchurl,
   findXMLCatalogs,
+  src ? fetchurl {
+    inherit hash url;
+  },
+  version,
+  hash ? "",
+  url ? "https://www.oasis-open.org/docbook/xml/${version}/docbook-xml-${version}.zip",
+  postInstall ? "true",
 }:
 
 stdenv.mkDerivation {

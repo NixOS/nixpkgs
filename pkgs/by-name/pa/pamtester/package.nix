@@ -6,12 +6,12 @@
   pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pamtester";
   version = "0.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pamtester/pamtester-${version}.tar.gz";
+    url = "mirror://sourceforge/pamtester/pamtester-${finalAttrs.version}.tar.gz";
     sha256 = "1mdj1wj0adcnx354fs17928yn2xfr1hj5mfraq282dagi873sqw3";
   };
 
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility program to test the PAM facility";
     mainProgram = "pamtester";
     homepage = "https://pamtester.sourceforge.net/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

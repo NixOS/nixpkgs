@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mutesync" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with mutesync buttons";
     homepage = "https://github.com/currentoor/pymutesync";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

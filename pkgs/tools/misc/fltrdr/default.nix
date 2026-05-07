@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i '/stdc++fs/d' CMakeLists.txt
+  '';
+
+  meta = {
     homepage = "https://octobanana.com/software/fltrdr";
     description = "TUI text reader for the terminal";
 
@@ -39,9 +43,9 @@ stdenv.mkDerivation rec {
       setting.
     '';
 
-    platforms = platforms.linux; # can only test linux
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "fltrdr";
   };
 }

@@ -8,14 +8,14 @@
   gtk4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "image-roll";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "weclaw1";
     repo = "image-roll";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
   };
 
@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 src/resources/com.github.weclaw1.ImageRoll.metainfo.xml -t $out/share/metainfo/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and fast GTK image viewer with basic image manipulation tools";
     mainProgram = "image-roll";
     homepage = "https://github.com/weclaw1/image-roll";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

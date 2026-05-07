@@ -52,7 +52,7 @@ in
 symlinkJoin {
   inherit pname version;
 
-  paths = (builtins.map makeIosevkaFont sets);
+  paths = (map makeIosevkaFont sets);
 
   meta = {
     inherit (src.meta) homepage;

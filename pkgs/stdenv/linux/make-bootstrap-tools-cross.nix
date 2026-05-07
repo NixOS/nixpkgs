@@ -43,6 +43,5 @@ lib.mapAttrs (n: make) (
     aarch64-unknown-linux-musl = aarch64-multiplatform-musl;
     armv6l-unknown-linux-musleabihf = muslpi;
     riscv64-unknown-linux-musl = riscv64-musl;
-    x86_64-unknown-linux-musl = musl64;
   }
 )

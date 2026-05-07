@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.5";
+  version = "9.6";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
+    sha256 = "sha256-DS3Fh4a6OtqZRHubgJewB7qnJXm10sYv85R6o/NePoU=";
   };
 
   postPatch =
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  DATADIR = "/share/${pname}";
+  env.DATADIR = "/share/${pname}";
 
   postInstall = lib.optionalString withGUI ''
     wrapProgram $out/bin/xhydra \
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vanhauser-thc/thc-hydra"; # https://www.thc.org/
     changelog = "https://github.com/vanhauser-thc/thc-hydra/raw/v${version}/CHANGES";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

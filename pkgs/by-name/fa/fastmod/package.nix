@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fastmod";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fastmod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-A/3vzfwaStoQ9gdNM8yjmL2J/pQjj6yb68WThiTF+1E=";
   };
 
@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility that makes sweeping changes to large, shared code bases";
     mainProgram = "fastmod";
     homepage = "https://github.com/facebookincubator/fastmod";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jduan ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jduan ];
   };
-}
+})

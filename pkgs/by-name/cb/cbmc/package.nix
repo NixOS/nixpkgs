@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.7.1";
+  version = "6.9.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-GUY4Evya0GQksl0R4b01UDSvoxUEOOeq4oOIblmoF5o=";
+    hash = "sha256-SMJBnzoyTwcwJa9L2X1iX2W4Z/Mwoirf8EXfoyG0dRI=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   srccadical =
     (cadical.override {
-      version = "2.0.0";
+      version = "3.0.0";
     }).src;
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/ls_parse.py $out/share/cbmc/ls_parse.py
     chmod +x $out/share/cbmc/ls_parse.py
     wrapProgram $out/bin/goto-cc \
-      --prefix PATH : "$out/share/cbmc" \
+      --prefix PATH : "$out/share/cbmc"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -91,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=unused-but-set-variable"
       # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
       "-Wno-error=c++20-extensions"
+      # fix "first argument in call to 'memset' is a pointer to non-trivially copyable type"
+      "-Wno-error=nontrivial-memcall"
     ]
   );
 
@@ -105,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/cbmc";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

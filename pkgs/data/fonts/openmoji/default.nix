@@ -42,13 +42,13 @@ assert lib.asserts.assertOneOf "buildMaximumColorFonts" buildMaximumColorFonts [
 
 stdenvNoCC.mkDerivation rec {
   pname = "openmoji";
-  version = "16.0.0";
+  version = "17.0.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
-    repo = pname;
+    repo = "openmoji";
     rev = version;
-    hash = "sha256-4dYtLaABu88z25Ud/cuOECajxSJWR01qcTIZNWN7Fhw=";
+    hash = "sha256-mE34l94C/jc7Fd4v7opMeneFZAou5w9KhjLSVxw0s/0=";
   };
 
   patches = [
@@ -95,13 +95,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [
+  meta = {
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = with lib.maintainers; [
       _999eagle
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     homepage = "https://openmoji.org/";
     downloadPage = "https://github.com/hfg-gmuend/openmoji/releases";
     description = "Open-source emojis for designers, developers and everyone else";

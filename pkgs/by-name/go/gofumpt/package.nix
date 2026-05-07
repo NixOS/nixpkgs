@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gofumpt";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "gofumpt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5+dc60PyU41NBKOmkp6IwhN+dPliaT38eUcyBNbPIbg=";
+    hash = "sha256-FaaXfvx63q+CkVGm3DyPrAykRVmpwyw+/2bBIAz8ab8=";
   };
 
-  vendorHash = "sha256-ziqhBWkfWQ0T+gLFqv352PtNcpyCTRFHBfV6iilVGLs=";
+  vendorHash = "sha256-tM9IKMdCAdKcQPzENWdeK9GtVD20IzZYGaoLGJPettw=";
 
   env.CGO_ENABLED = "0";
 

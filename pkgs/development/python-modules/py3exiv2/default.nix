@@ -5,15 +5,12 @@
   buildPythonPackage,
   exiv2,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py3exiv2";
   version = "0.12.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,11 +36,11 @@ buildPythonPackage rec {
   # Tests are not shipped
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python binding to the library exiv2";
     homepage = "https://launchpad.net/py3exiv2";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vinymeuh ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vinymeuh ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

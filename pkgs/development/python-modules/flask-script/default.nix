@@ -23,10 +23,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/smurfix/flask-script";
     description = "Scripting support for Flask";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

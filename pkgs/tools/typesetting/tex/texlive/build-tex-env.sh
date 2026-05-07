@@ -123,15 +123,13 @@ installtl_do_path_adjustments () {
     ln -s "$texmfdist" "$out"/share/texmf
 
     # generate other outputs
-    local otherOutput otherOutputName
-    local otherOutputs="$otherOutputs"
-    for otherOutputName in $outputs ; do
+    local otherOutputIdx=0 otherOutputName
+    for otherOutputName in "${!outputs[@]}" ; do
         if [[ $otherOutputName == out ]] ; then
             continue
         fi
-        otherOutput="${otherOutputs%% *}"
-        otherOutputs="${otherOutputs#* }"
-        ln -s "$otherOutput" "${!otherOutputName}"
+        ln -s "${otherOutputs[$otherOutputIdx]}" "${outputs[$otherOutputName]}"
+        ((otherOutputIdx++)) || true
     done
 }
 
@@ -153,7 +151,7 @@ installtl_do_postinst_stuff () {
 
     # make new files available
     tlutils_info "running mktexlsr $TEXMFSYSVAR $TEXMFSYSCONFIG"
-    mktexlsr "$TEXMFSYSVAR" "$TEXMFSYSCONFIG"
+    perl "$texmfdist"/scripts/texlive/mktexlsr.pl --sort "$TEXMFSYSVAR" "$TEXMFSYSCONFIG"
 
     # can be skipped if generating formats only
     if [[ -z $__formatsOf ]] ; then
@@ -164,7 +162,7 @@ installtl_do_postinst_stuff () {
         # tlmgr --no-execute-actions paper letter
         # install-tl: "rerun mktexlsr for updmap-sys and tlmgr paper updates"
         tlutils_info "re-running mktexlsr $TEXMFSYSVAR $TEXMFSYSCONFIG"
-        mktexlsr "$TEXMFSYSVAR" "$TEXMFSYSCONFIG"
+        perl "$texmfdist"/scripts/texlive/mktexlsr.pl --sort "$TEXMFSYSVAR" "$TEXMFSYSCONFIG"
 
         tlutils_update_context_cache
     fi

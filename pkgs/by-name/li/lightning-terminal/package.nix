@@ -23,12 +23,12 @@
 
 buildGoModule rec {
   pname = "lightning-terminal";
-  version = "0.15.1-alpha";
+  version = "0.16.0-alpha";
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lightning-terminal";
     tag = "v${version}";
-    hash = "sha256-aCZ1dzbj1SYBYQ6ysnk9MQs4V6ysljZYOYp0gOw0WFQ=";
+    hash = "sha256-lAWAyB6SAk23FS/smJyxl2yDayYLqzpNPI6bdPhRuK4=";
     leaveDotGit = true;
     # Populate values that require us to use git.
     postFetch = ''
@@ -41,7 +41,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-tjNF6Llsaba/IlhtrOU4ebzSRHGVy+LPzwhBsS5xJgQ=";
+  vendorHash = "sha256-b7AjCKUtjGr1L0+dFnPupKPM/DDj6LlBQ2T25kxCwdk=";
 
   buildInputs = [ lightning-app ];
   postUnpack = ''
@@ -95,7 +95,6 @@ buildGoModule rec {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/litcli";
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -172,7 +171,7 @@ buildGoModule rec {
     version = "0.0.1";
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/app/yarn.lock";
-      hash = "sha256-FYRWyZxTPo4YwN5AiXsuubZoCVRcOeCrsUU/+ON4gx4=";
+      hash = "sha256-3oeuCsdm9HcMlKBBWsROY7SKN1vw8H/IXtvkTLrO07I=";
     };
 
     # Remove this command from package.json. It requires Git and it is not

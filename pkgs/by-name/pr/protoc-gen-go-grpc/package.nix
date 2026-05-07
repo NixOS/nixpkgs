@@ -2,26 +2,32 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-gen-go-grpc";
-  version = "1.5.1";
+  version = "1.6.1";
   modRoot = "cmd/protoc-gen-go-grpc";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-go";
-    rev = "cmd/protoc-gen-go-grpc/v${version}";
-    hash = "sha256-PAUM0chkZCb4hGDQtCgHF3omPm0jP1sSDolx4EuOwXo=";
+    rev = "cmd/protoc-gen-go-grpc/v${finalAttrs.version}";
+    hash = "sha256-s6GZ9K0Wy18YF1RBL0RGDCbtCfAV2bskq6DNXwyorgg=";
   };
 
-  vendorHash = "sha256-yn6jo6Ku/bnbSX8FL0B/Uu3Knn59r1arjhsVUkZ0m9g=";
+  vendorHash = "sha256-+D3prb03c/Vgm+p3CxCZw14UMCvrDc1Cllzn1znZAE0=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+  passthru.updateScript = ./update.py;
 
   meta = {
     description = "Go language implementation of gRPC. HTTP/2 based RPC";
@@ -30,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "protoc-gen-go-grpc";
   };
-}
+})

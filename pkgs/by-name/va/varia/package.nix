@@ -13,16 +13,16 @@
   ffmpeg,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "varia";
-  version = "2025.7.19-1";
+  version = "2025.10.14-1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
-    tag = "v${version}";
-    hash = "sha256-gdHg1q33HMTpH3DFdMx6RAVvcOuu6Rcigt9HoUgPqDM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Spx9boNNeOXGr82uVKSpHCbimflKKjbjur+aKsNZFhY=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     aria2p
     yt-dlp
+    emoji-country-flag
   ];
 
   postInstall = ''
@@ -69,4 +70,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

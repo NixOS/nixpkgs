@@ -7,7 +7,7 @@
   libassuan,
   libgcrypt,
   perlPackages,
-  lockfileProgs,
+  lockfile-progs,
   gnupg,
   coreutils,
   # For the tests:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       cpio
       hexdump
       procps
-      lockfileProgs
+      lockfile-progs
     ]
     ++ (with perlPackages; [
       CryptOpenSSLRSA
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
       wrapPrograms = runtimeDeps: programs: lib.concatMapStrings (wrapMonkeysphere runtimeDeps) programs;
     in
     wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
-    + wrapPrograms [ gnupg lockfileProgs ] [ "monkeysphere" ]
+    + wrapPrograms [ gnupg lockfile-progs ] [ "monkeysphere" ]
     + ''
       # These 4 programs depend on the program name ($0):
       for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://web.monkeysphere.info/";
     description = "Leverage the OpenPGP web of trust for SSH and TLS authentication";
     longDescription = ''
@@ -134,8 +134,8 @@ stdenv.mkDerivation rec {
       TLS/SSL communications through the normal use of tools you are
       familiar with, such as your web browser0 or secure shell.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

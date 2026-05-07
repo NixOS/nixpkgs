@@ -5,7 +5,10 @@
   rpmextract,
   undmg,
   autoPatchelfHook,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxdamage,
+  libxkbfile,
   gtk3,
   nss,
   alsa-lib,
@@ -35,11 +38,11 @@ let
     }
     .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = with lib; {
+  meta = {
     description = "Simple and Convenient Messaging App for VK";
     homepage = "https://vk.com/messenger";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ ];
     platforms = [
       "i686-linux"
@@ -61,18 +64,15 @@ let
       autoPatchelfHook
       wrapGAppsHook3
     ];
-    buildInputs =
-      (with xorg; [
-        libXdamage
-        libXtst
-        libXScrnSaver
-        libxkbfile
-      ])
-      ++ [
-        gtk3
-        nss
-        alsa-lib
-      ];
+    buildInputs = [
+      libxdamage
+      libxtst
+      libxscrnsaver
+      libxkbfile
+      gtk3
+      nss
+      alsa-lib
+    ];
 
     runtimeDependencies = [
       (lib.getLib udev)

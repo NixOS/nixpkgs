@@ -10,7 +10,9 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     NotAShelf
+    mdaniels5757
     viperML
+    faukah
   ];
 
   options.programs.nh = {
@@ -74,12 +76,6 @@ in
         [ ];
 
     assertions = [
-      # Not strictly required but probably a good assertion to have
-      {
-        assertion = cfg.clean.enable -> cfg.enable;
-        message = "programs.nh.clean.enable requires programs.nh.enable";
-      }
-
       {
         assertion = (cfg.flake != null) -> !(lib.hasSuffix ".nix" cfg.flake);
         message = "nh.flake must be a directory, not a nix file";

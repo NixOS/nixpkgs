@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  fetchpatch,
   ncurses,
   boehmgc,
   gettext,
@@ -12,7 +11,7 @@
   graphicsSupport ? !stdenv.hostPlatform.isDarwin,
   imlib2,
   x11Support ? graphicsSupport,
-  libX11,
+  libx11,
   mouseSupport ? !stdenv.hostPlatform.isDarwin,
   gpm-ncurses,
   perl,
@@ -40,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "w3m";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchFromSourcehut {
     owner = "~rkta";
     repo = "w3m";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rz9tNkMg5xUqMpMdK2AQlKjCJlCjgLQOkj4A/eyPm0M=";
+    hash = "sha256-VJztcvcmmA8f5RJ+NEYjPE8CGEfCRRjQ+fuF0UpY+sA=";
   };
 
   env = {
@@ -66,11 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./RAND_egd.libressl.patch
-    (fetchpatch {
-      name = "https.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/https.patch?h=w3m-mouse&id=5b5f0fbb59f674575e87dd368fed834641c35f03";
-      sha256 = "08skvaha1hjyapsh8zw5dgfy433mw2hk7qy9yy9avn8rjqj7kjxk";
-    })
+    ./https.patch
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -94,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional sslSupport openssl
   ++ lib.optional mouseSupport gpm-ncurses
   ++ lib.optional graphicsSupport imlib2
-  ++ lib.optional x11Support libX11;
+  ++ lib.optional x11Support libx11;
 
   postInstall = lib.optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin
@@ -105,9 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--with-gc=${boehmgc.dev}"
+    # The code won't compile in c23 mode.
+    # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
+    "CFLAGS=-std=gnu17"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+    "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ]
   ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
   ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
@@ -116,6 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
     substituteInPlace ./configure --replace /usr /no-such-path
   '';
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   enableParallelBuilding = false;
 

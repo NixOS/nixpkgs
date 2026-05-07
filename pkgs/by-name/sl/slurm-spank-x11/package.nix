@@ -4,14 +4,14 @@
   fetchFromGitHub,
   slurm,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slurm-spank-x11";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "hautreux";
     repo = "slurm-spank-x11";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1dmsr7whxcxwnlvl1x4s3bqr5cr6q5ssb28vqi67w5hj4sshisry";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     install -m 755 x11.so $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hautreux/slurm-spank-x11";
     description = "Plugin for SLURM to allow for interactive X11 sessions";
     mainProgram = "slurm-spank-x11";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

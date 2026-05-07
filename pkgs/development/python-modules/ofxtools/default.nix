@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ofxtools";
   version = "0.9.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   # PyPI distribution does not include tests
   src = fetchFromGitHub {
@@ -28,10 +25,10 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/csingley/ofxtools";
     description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
     mainProgram = "ofxget";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

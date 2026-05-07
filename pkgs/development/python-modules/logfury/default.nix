@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
   testfixtures,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "logfury";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logfury" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that allows for responsible, low-boilerplate logging of method calls";
     homepage = "https://github.com/ppolewicz/logfury";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jwiegley ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jwiegley ];
   };
 }

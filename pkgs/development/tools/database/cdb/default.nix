@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://cr.yp.to/cdb.html";
     license = lib.licenses.publicDomain;
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

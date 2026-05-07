@@ -7,12 +7,12 @@ let
 in
 rec {
   openconnect = common {
-    version = "9.12-unstable-2025-01-14";
+    version = "9.12-unstable-2025-11-03";
     src = fetchFromGitLab {
       owner = "openconnect";
       repo = "openconnect";
-      rev = "f17fe20d337b400b476a73326de642a9f63b59c8";
-      hash = "sha256-OBEojqOf7cmGtDa9ToPaJUHrmBhq19/CyZ5agbP7WUw=";
+      rev = "0dcdff87db65daf692dc323732831391d595d98d";
+      hash = "sha256-AvowUEDkXvR+QkhJbZU759fZjIqj/mO8HjP2Ka3lH1U=";
     };
   };
 

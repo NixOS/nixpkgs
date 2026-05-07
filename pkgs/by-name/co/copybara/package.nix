@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  jdk21,
+  jdk21_headless,
   makeWrapper,
   git,
   gnused,
@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";
-  version = "20250901";
+  version = "20260420";
 
   src = fetchurl {
     url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
-    hash = "sha256-yewUQIfQIMQMX92l2Cth76zfsMErpfhSa3/pZ8FZEYA=";
+    hash = "sha256-0ddQZ5CtsV0trTi6+AhNA2KU9hQAedz47MpxvPK27cg=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    jdk21
+    jdk21_headless
   ];
 
   runtimeDeps = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/java/copybara.jar
 
     mkdir -p $out/bin
-    makeWrapper ${jdk21}/bin/java $out/bin/copybara \
+    makeWrapper ${jdk21_headless}/bin/java $out/bin/copybara \
       --add-flags "-jar $out/share/java/copybara.jar" \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/copybara";
     changelog = "https://github.com/google/copybara/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cameroncuttingedge ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "copybara";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

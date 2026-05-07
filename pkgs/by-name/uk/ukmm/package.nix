@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ukmm";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = "ukmm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NZN+T2N+N+oxrjBRvVbRWbB2KY5im9SN7gPHzfvovl8=";
+    hash = "sha256-nCyaPEa5wYRii9ehFwsLw390AcbjlrdKdGqxKhuk7CQ=";
   };
 
-  cargoHash = "sha256-eDYCF+bYh0T/SSrQKjCqZvSd28CSxvGkpHgmBCHLoig=";
+  cargoHash = "sha256-BzgFzEKsVCvNHaBv0fKgt3lGgDxwi560AkIrk4pSWHA=";
 
   nativeBuildInputs = [
     cmake
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
     "--push-state"
     "--no-as-needed"
     "-lEGL"
@@ -91,13 +91,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "New mod manager for The Legend of Zelda: Breath of the Wild";
     homepage = "https://github.com/NiceneNerd/ukmm";
     changelog = "https://github.com/NiceneNerd/ukmm/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "ukmm";
   };

@@ -36,11 +36,6 @@
   # optional-dependencies
   netcdf4,
   ase,
-  pytest,
-  pytest-cov,
-  invoke,
-  sphinx,
-  sphinx-rtd-theme,
   numba,
   vtk,
 
@@ -53,7 +48,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2025.6.14";
+  version = "2025.10.7";
   pyproject = true;
 
   disabled = pythonAtLeast "3.13";
@@ -62,7 +57,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     tag = "v${version}";
-    hash = "sha256-HMYYhXT5k/EjG1sIBq/53K9ogeSk8ZEJQBrDHCgz+SA=";
+    hash = "sha256-pbnWSmU2rtqUbjZBmzJz3HE1t5zZTJv7HSfrcVUFxmU=";
   };
 
   build-system = [ setuptools ];
@@ -97,17 +92,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     abinit = [ netcdf4 ];
     ase = [ ase ];
-    ci = [
-      pytest
-      pytest-cov
-      # pytest-split
-    ];
-    docs = [
-      invoke
-      sphinx
-      # sphinx_markdown_builder
-      sphinx-rtd-theme
-    ];
     electronic_structure = [
       # fdint
     ];
@@ -127,12 +111,16 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     # ensure tests can find these
     ''
       export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
+    ''
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
     '';
 
   disabledTests = [
@@ -147,25 +135,6 @@ buildPythonPackage rec {
     "test_mean_field"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fatal Python error: Aborted
-    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-    # https://github.com/materialsproject/pymatgen/issues/4452
-    "test_angle"
-    "test_as_dict_from_dict"
-    "test_attributes"
-    "test_basic"
-    "test_core_state_eigen"
-    "test_eos_func"
-    "test_get_info_cohps_to_neighbors"
-    "test_get_plot"
-    "test_get_point_group_operations"
-    "test_matplotlib_plots"
-    "test_ph_plot_w_gruneisen"
-    "test_plot"
-    "test_proj_bandstructure_plot"
-    "test_structure"
-    "test_structure_environments"
-
     # attempt to insert nil object from objects[1]
     "test_timer_10_2_7"
     "test_timer"
@@ -184,7 +153,7 @@ buildPythonPackage rec {
   meta = {
     description = "Robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
-    changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
+    changelog = "https://github.com/materialsproject/pymatgen/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };

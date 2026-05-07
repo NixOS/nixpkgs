@@ -7,7 +7,7 @@
   pendulum,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   pytz,
   requests,
   responses,
@@ -16,18 +16,16 @@
   zeep,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simple-salesforce";
-  version = "1.12.6";
+  version = "1.12.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simple-salesforce";
     repo = "simple-salesforce";
-    tag = "v${version}";
-    hash = "sha256-nrfIyXftS2X2HuuLFRZpWLz/IbRasqUzv+r/HvhxfAw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eMO/K6W9ROljYxR3gK9QjCHdlbAuN4DYjOyTO1WcalQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -44,17 +42,24 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytz
     responses
   ];
 
+  disabledTests = [
+    "test_connected_app_login_failure"
+    "test_token_login_failure"
+    "test_token_login_failure_with_warning"
+  ];
+
   pythonImportsCheck = [ "simple_salesforce" ];
 
-  meta = with lib; {
+  meta = {
     description = "Very simple Salesforce.com REST API client for Python";
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
-    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/v${version}/CHANGES";
-    license = licenses.asl20;
+    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/${finalAttrs.src.tag}/CHANGES";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

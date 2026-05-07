@@ -43,5 +43,11 @@ in
     server.wait_for_unit("mobilizon.service")
     server.wait_for_open_port(${toString port})
     server.succeed("curl --fail https://${mobilizonDomain}/")
+
+    # Verify ownership is set up correctly
+    owner = server.succeed("stat -c '%U' /var/lib/mobilizon/sitemap").rstrip()
+    assert owner == "mobilizon", f"unexpected owner: {owner}"
+    owner = server.succeed("stat -c '%U' /var/lib/mobilizon/uploads").rstrip()
+    assert owner == "mobilizon", f"unexpected owner: {owner}"
   '';
 }

@@ -6,7 +6,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nelua";
   version = "0-unstable-2025-06-24";
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace lualib/nelua/version.lua \
-      --replace "NELUA_GIT_HASH = nil" "NELUA_GIT_HASH = '${src.rev}'" \
-      --replace "NELUA_GIT_DATE = nil" "NELUA_GIT_DATE = '${lib.removePrefix "0-unstable-" version}'"
+      --replace "NELUA_GIT_HASH = nil" "NELUA_GIT_HASH = '${finalAttrs.src.rev}'" \
+      --replace "NELUA_GIT_DATE = nil" "NELUA_GIT_DATE = '${lib.removePrefix "0-unstable-" finalAttrs.version}'"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     hardcodeZeroVersion = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimal, efficient, statically-typed and meta-programmable systems programming language heavily inspired by Lua, which compiles to C and native code";
     homepage = "https://nelua.io/";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

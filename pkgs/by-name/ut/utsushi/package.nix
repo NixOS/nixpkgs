@@ -28,14 +28,14 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagescan";
   version = "3.65.0";
 
   src = fetchFromGitLab {
     owner = "utsushi";
     repo = "imagescan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
   };
 
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-3.65.0-sane-backends-1.1.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       sha256 = "sha256-AmMZ+/lrUMR7IU+S8MEn0Ji5pqOiD6izFJBsJ0tCCCw=";
     })
+    # original source: https://aur.archlinux.org/cgit/aur.git/plain/remove-boost-system.patch?h=imagescan&id=78b5d1fac2599ca7ef7d6e2c2a632e2ee70ed5c0
+    ./remove-boost.system.patch
   ];
 
   nativeBuildInputs = [
@@ -118,7 +120,7 @@ stdenv.mkDerivation rec {
     ln -s ${utsushi-networkscan}/libexec/utsushi/networkscan $out/libexec/utsushi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SANE utsushi backend for some Epson scanners";
     mainProgram = "utsushi";
     longDescription = ''
@@ -187,11 +189,11 @@ stdenv.mkDerivation rec {
       XP-970 Series
     '';
     homepage = "https://gitlab.com/utsushi/imagescan";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       wucke13
       maxwilson
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

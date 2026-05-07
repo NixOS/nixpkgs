@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.6.0";
 
   src = fetchFromGitHub {
-    owner = "agroal";
+    owner = "pgagroal";
     repo = "pgagroal";
     rev = finalAttrs.version;
     hash = "sha256-bgJvGJ35RdFopW88o+H1DLpG70anP197y6xrpRRrxUA=";
@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
-  meta = with lib; {
+  meta = {
     description = "High-performance connection pool for PostgreSQL";
     homepage = "https://agroal.github.io/pgagroal/";
-    changelog = "https://github.com/agroal/pgagroal/releases/tag/${finalAttrs.version}";
-    license = licenses.bsd3;
+    changelog = "https://github.com/pgagroal/pgagroal/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

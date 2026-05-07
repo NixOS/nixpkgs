@@ -1,29 +1,21 @@
 {
-  fetchFromGitHub,
   lib,
+  emmylua-ls,
   rustPlatform,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emmylua_doc_cli";
-  version = "0.13.0";
-
-  src = fetchFromGitHub {
-    owner = "EmmyLuaLs";
-    repo = "emmylua-analyzer-rust";
-    tag = finalAttrs.version;
-    hash = "sha256-93PlsVvlUravsnW7YBCii04jCEJPP+6U2vYbVBjcX8M=";
-  };
+  inherit (emmylua-ls) version src;
 
   buildAndTestSubdir = "crates/emmylua_doc_cli";
 
-  cargoHash = "sha256-SbsYlIVWDpBU2bxJqXUtOiMHkOoa8Up27X7rVKLLLm0=";
+  cargoHash = "sha256-JNirHIKXFsiLme5oByerHjB/3lumuAr2u3pNfxh4qa0=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/emmylua_doc_cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

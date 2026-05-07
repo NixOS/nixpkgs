@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -17,17 +16,15 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { }
-      ++ [
-        ./gyp-patches-set-fallback-value-for-CLT.patch
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
       ]
     else
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "22.19.0";
-  sha256 = "0272acfce50ce9ad060288321b1092719a7f19966f81419835410c59c09daa46";
+  version = "22.22.2";
+  sha256 = "b6bedd3a8cacd5df7df015a5088264b12c74a277ba60684cb9642ae8eb743132";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -61,10 +58,25 @@ buildNodejs {
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
 
-      # TODO: remove when included in a release
+      # TODO: remove this when included in a next release
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/499a5c345165f0d4a94b98d08f1ace7268781564.patch?full_index=1";
-        hash = "sha256-wF4+CytC1OB5egJGOfLm1USsYY12f9kADymVrxotezE=";
+        url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
+        hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
+        includes = [ "test/*" ];
+      })
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      # Fix builds with shared llhttp
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
+        hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
+      })
+      # update tests for nghttp2 1.65
+      ./deprecate-http2-priority-signaling.patch
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
+        hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
+        includes = [ "test/*" ];
       })
     ];
 }

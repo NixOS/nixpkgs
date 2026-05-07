@@ -11,18 +11,18 @@
   runme,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "runme";
-  version = "3.15.1";
+  version = "3.16.11";
 
   src = fetchFromGitHub {
     owner = "runmedev";
     repo = "runme";
-    rev = "v${version}";
-    hash = "sha256-qC5FoRpMSWFlPGQvM+wTvCF46TvJznZAQNle5fAOp9g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-c01mVr8JW+qghj7q5W3B1NsuH9hQUEq3hVHLT+9VM20=";
   };
 
-  vendorHash = "sha256-KF9yKm/b3VjZJIj9PXcm2UxdTE43YGsqgep8Us13GdI=";
+  vendorHash = "sha256-7F33MmGWIY1z2aw2mJ83XhcOrhT+olGwNmvdgGdxyME=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -41,12 +41,12 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X=github.com/runmedev/runme/v3/internal/version.BuildDate=1970-01-01T00:00:00Z"
-    "-X=github.com/runmedev/runme/v3/internal/version.BuildVersion=${version}"
-    "-X=github.com/runmedev/runme/v3/internal/version.Commit=${src.rev}"
+    "-X=github.com/runmedev/runme/v3/internal/version.BuildVersion=${finalAttrs.version}"
+    "-X=github.com/runmedev/runme/v3/internal/version.Commit=${finalAttrs.src.rev}"
   ];
 
   # checkFlags = [
-  #   "-ldflags=-X=github.com/runmedev/runme/v3/internal/version.BuildVersion=${version}"
+  #   "-ldflags=-X=github.com/runmedev/runme/v3/internal/version.BuildVersion=${finalAttrs.version}"
   # ];
 
   # tests fail to access /etc/bashrc on darwin
@@ -74,8 +74,8 @@ buildGoModule rec {
     description = "Execute commands inside your runbooks, docs, and READMEs";
     mainProgram = "runme";
     homepage = "https://runme.dev";
-    changelog = "https://github.com/runmedev/runme/releases/tag/v${version}";
+    changelog = "https://github.com/runmedev/runme/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ _7karni ];
   };
-}
+})

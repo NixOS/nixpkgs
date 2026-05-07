@@ -27,10 +27,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "unifiled" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Ubiquiti Unifi LED controller";
     homepage = "https://github.com/florisvdk/unifiled";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

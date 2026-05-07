@@ -9,7 +9,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytorchviz";
   version = "0.0.2-unstable-2024-12-30";
   pyproject = true;

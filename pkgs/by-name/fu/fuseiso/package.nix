@@ -55,7 +55,10 @@ stdenv.mkDerivation rec {
 
   # after autoreconfHook, glib and zlib are not found, so force link against
   # them
-  NIX_LDFLAGS = "-lglib-2.0 -lz";
+  env.NIX_LDFLAGS = toString [
+    "-lglib-2.0"
+    "-lz"
+  ];
 
   enableParallelBuilding = true;
 
@@ -63,11 +66,11 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/${pname} NEWS README
   '';
 
-  meta = with lib; {
+  meta = {
     description = "FUSE module to mount ISO filesystem images";
     homepage = "https://sourceforge.net/projects/fuseiso";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "fuseiso";
   };
 }

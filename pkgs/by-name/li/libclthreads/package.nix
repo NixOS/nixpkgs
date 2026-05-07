@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libclthreads";
   version = "2.4.2";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clthreads-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clthreads-${finalAttrs.version}.tar.bz2";
     sha256 = "0cbs1w89q8wfjrrhvxf6xk0y02nkjl5hd0yb692c8ma01i6b2nf6";
   };
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     ln $out/lib/libclthreads.so $out/lib/libclthreads.so.2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zita thread library";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
   };
-}
+})

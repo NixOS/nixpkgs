@@ -25,7 +25,7 @@
   doxygen,
   opencl-headers,
   ncurses,
-  msgpack,
+  msgpack-c,
   fftw,
   zeromq,
   ocl-icd,
@@ -73,6 +73,9 @@ let
       in
       ''
         cp ${mesonPatch}/meson.build .
+
+        substituteInPlace ccp4/library_utils.c \
+          --replace-fail "  int putenv ();" "  int putenv (char *);"
       '';
   };
   # This is the statically-linked, pre-built binary of mosflm. Compiling it ourselves turns out to be very difficult
@@ -83,19 +86,18 @@ let
       src =
         if stdenv.hostPlatform.isDarwin then
           fetchurl {
-            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+            url = "https://www.mrc-lmb.cam.ac.uk/harry/imosflm/ver${
               builtins.replaceStrings [ "." ] [ "" ] version
-            }/pre-built/mosflm-osx-64-noX11.zip";
-            sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
+            }/downloads/imosflm-${version}-osx-64.zip";
+            hash = "sha256-0sXgA3zSIjhy9+zTiv+K/51yZsIgGorMtKVjdRjW+AM=";
           }
         else
           fetchurl {
-            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+            url = "https://www.mrc-lmb.cam.ac.uk/harry/imosflm/ver${
               builtins.replaceStrings [ "." ] [ "" ] version
-            }/pre-built/mosflm-linux-64-noX11.zip";
-            hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
+            }/downloads/imosflm-${version}-linux-64.zip";
+            hash = "sha256-2we0K09W31LKgn9SHLGti50EA/zhbX+CWWuQGCSKW18=";
           };
-      mosflmBinary = if stdenv.hostPlatform.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
     in
     stdenv.mkDerivation {
       pname = "mosflm";
@@ -109,13 +111,11 @@ let
         makeWrapper
       ];
 
-      sourceRoot = ".";
-
       # mosflm statically links against its own libccp4, which as the syminfo.lib environment variable problem.
       # Here, we circumvent it by creating a little wrapper script that calls mosflm after setting the SYMINFO variable.
       installPhase = ''
         mkdir -p $out/bin
-        cp ${mosflmBinary} $out/bin/mosflm-raw
+        cp bin/mosflm $out/bin/mosflm-raw
         makeWrapper $out/bin/mosflm-raw $out/bin/mosflm --set SYMINFO ${libccp4}/share/syminfo.lib --add-flags -n
       '';
     };
@@ -140,7 +140,7 @@ let
     pname = "pinkindexer";
     version = "15caa21191e27e989b750b29566e4379bc5cd21a";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+      url = "https://gitlab.desy.de/thomas.white/pinkindexer/-/archive/${version}/pinkindexer-${version}.tar.gz";
       hash = "sha256-v/SCJiHAV05Lc905y/dE8uBXlW+lLX9wau4XORYdbQg=";
     };
 
@@ -168,12 +168,12 @@ let
     buildInputs = [ eigen ];
   };
 
-  hdf5-external-filter-plugins = stdenv.mkDerivation rec {
+  hdf5-external-filter-plugins = stdenv.mkDerivation {
     pname = "HDF5-External-Filter-Plugins";
     version = "0.1.0";
     src = fetchFromGitHub {
       owner = "nexusformat";
-      repo = pname;
+      repo = "HDF5-External-Filter-Plugins";
       rev = "49e3b65eca772bca77af13ba047d8b577673afba";
       hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
     };
@@ -184,6 +184,12 @@ let
         hash = "sha256-wnBEdL/MjEyRHPwaVtuhzY+DW1AFeaUQUmIXh+JaRHo=";
       })
     ];
+
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0.0)" \
+                       "cmake_minimum_required(VERSION 3.10)"
+    '';
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [
@@ -215,10 +221,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.11.1";
+  version = "0.12.0";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
+    sha256 = "sha256-H/caXhsIdgsiat3UTi1QMF9J22dtyEB6YEIn9f8wWB4=";
   };
   nativeBuildInputs = [
     meson
@@ -235,7 +241,7 @@ stdenv.mkDerivation rec {
     hdf5
     gsl
     ncurses
-    msgpack
+    msgpack-c
     fftw
     fdip
     zeromq
@@ -276,7 +282,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Data processing for serial crystallography";
     longDescription = ''
       CrystFEL is a suite of programs for processing (and simulating) Bragg diffraction data from "serial crystallography" experiments, often (but not always) performed using an X-ray Free-Electron Laser. Compared to rotation data, some of the particular characteristics of such data which call for a specialised software suite are:
@@ -288,9 +294,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.desy.de/~twhite/crystfel/";
     changelog = "https://www.desy.de/~twhite/crystfel/changes.html";
     downloadPage = "https://www.desy.de/~twhite/crystfel/download.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pmiddend ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pmiddend ];
+    platforms = lib.platforms.unix;
   };
 
 }

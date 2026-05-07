@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+  env.NIX_CFLAGS_COMPILE = "-std=gnu99";
 
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
@@ -93,6 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ sauricat ];
   };
 })

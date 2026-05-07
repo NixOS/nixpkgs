@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Rime Schema Repository";
     longDescription = ''
       This software is a collection of data packages used by Rime
@@ -43,8 +43,8 @@ stdenv.mkDerivation {
     homepage = "https://rime.im";
     # Note that individual packages in this collection
     # may be released under different licenses
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sifmelcara ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sifmelcara ];
   };
 }

@@ -22,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
+      --replace-fail 'CFLAGS=' 'CFLAGS=-std=gnu99 ' \
       --replace-fail 'pkg-config' "$PKG_CONFIG"
   '';
 

@@ -11,7 +11,6 @@
   pymongo,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools,
   sqlalchemy,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "filedepot";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "amol-";
@@ -35,9 +32,9 @@ buildPythonPackage rec {
 
   dependencies = [
     anyascii
+    legacy-cgi
     google-cloud-storage
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+  ];
 
   nativeCheckInputs = [
     flaky
@@ -63,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "depot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for storing files and attachments in web applications";
     homepage = "https://github.com/amol-/depot";
     changelog = "https://github.com/amol-/depot/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

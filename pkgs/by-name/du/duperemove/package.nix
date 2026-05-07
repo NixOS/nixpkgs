@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libbsd,
   libgcrypt,
-  xxHash,
+  xxhash,
   pkg-config,
   glib,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
@@ -14,14 +14,14 @@
   duperemove,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duperemove";
   version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
@@ -38,28 +38,28 @@ stdenv.mkDerivation rec {
     linuxHeaders
     sqlite
     util-linux
-    xxHash
+    xxhash
   ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=v${version}"
+    "VERSION=v${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = duperemove;
     command = "duperemove --version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for finding duplicated extents and submitting them for deduplication";
     homepage = "https://github.com/markfasheh/duperemove";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "duperemove";
   };
-}
+})

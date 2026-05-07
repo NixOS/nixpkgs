@@ -51,14 +51,14 @@ let
 
 in
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "xeus-cling";
   version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "xeus-cling";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-OfZU+z+p3/a36GntusBfwfFu3ssJW4Fu7SV3SMCoo1I=";
   };
 
@@ -94,6 +94,9 @@ clangStdenv.mkDerivation rec {
       --replace-fail "simplisticCastAs" "castAs"
     substituteInPlace src/xmime_internal.hpp \
       --replace-fail "code.str()" "code.str().str()"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4.3)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   dontStrip = debug;
@@ -106,4 +109,4 @@ clangStdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
-}
+})

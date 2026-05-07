@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   buildRubyGem,
   bundlerEnv,
   ruby_3_4,
@@ -12,30 +12,34 @@
   withLibvirt ? stdenv.hostPlatform.isLinux,
   openssl,
 }:
-
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.4.8";
-  url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  hash = "sha256-AVagvZKbVT4RWrCJdskhABTunRM9tBb5+jovYM/VF+0=";
+  version = "2.4.9";
+
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "vagrant";
+    rev = "v${version}";
+    hash = "sha256-8csEIkXI5LPf5aZUuKYKALgwtG/skXFvMBimbCerEPY=";
+  };
 
   ruby = ruby_3_4;
 
   deps = bundlerEnv rec {
-    name = "${pname}-${version}";
     pname = "vagrant";
     inherit version;
 
     inherit ruby;
+    gemdir = src;
     gemfile = writeText "Gemfile" "";
     lockfile = writeText "Gemfile.lock" "";
     gemset = lib.recursiveUpdate (import ./gemset.nix) (
       {
         vagrant = {
           source = {
-            type = "url";
-            inherit url hash;
+            type = "path";
+            path = src;
           };
           inherit version;
           dontCheckForBrokenSymlinks = true;
@@ -57,16 +61,14 @@ let
       done
     '';
   };
-
 in
 buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
-  inherit ruby version;
+  inherit ruby version src;
 
   doInstallCheck = true;
   dontBuild = false;
-  src = fetchurl { inherit url hash; };
 
   # Some reports indicate that some connection types, particularly
   # WinRM, suffer from "Digest initialization failed" errors. Adding
@@ -133,11 +135,11 @@ buildRubyGem rec {
     inherit ruby deps;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for building complete development environments";
     homepage = "https://www.vagrantup.com/";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ tylerjl ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ tylerjl ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

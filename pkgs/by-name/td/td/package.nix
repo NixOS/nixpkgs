@@ -11,15 +11,15 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "td";
 
-  meta = with lib; {
+  meta = {
     description = "CLI to manage data on Treasure Data, the Hadoop-based cloud data warehousing";
     homepage = "https://github.com/treasure-data/td";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       groodt
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "td";
   };
 }

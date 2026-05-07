@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tslib";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "libts";
     repo = "tslib";
     tag = finalAttrs.version;
-    hash = "sha256-2YJDADh/WCksAEIjngAdji98YGmwjpvxSBZkxAwFc7k=";
+    hash = "sha256-WrzOTZlceYnFXi5AI5vb+ZDSRoqUDk/yyCdBUWKn0sM=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "xeddsa";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-xeddsa";
     tag = "v${version}";
-    hash = "sha256-5s6ERazWnwYEc0d5e+eSdvOCTklBQVrjzvlNifC2zKU=";
+    hash = "sha256-FHZ9oo9Ps+98dWyPfu3RcmFqZ26zCmO3wNhw+hzuB+w=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Syndace/python-xeddsa/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

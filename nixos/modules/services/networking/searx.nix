@@ -13,7 +13,9 @@ let
 
   cfg = config.services.searx;
 
-  settingsFile = pkgs.writeText "settings.yml" (builtins.toJSON cfg.settings);
+  settingsFile = pkgs.writeText "settings.yml" (
+    builtins.toJSON (removeAttrs cfg.settings [ "redis" ])
+  );
 
   faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
   limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
@@ -52,6 +54,19 @@ in
         description = "Whether to enable Searx, the meta search engine.";
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the port in the firewall.
+          Enabling this option adds the port specified in {option}`services.settings.server.port` to {option}`networking.firewall.allowedTCPPorts`.
+
+          ::: {.note}
+          When this option is set to true, {option}`services.settings.server.port` must be set as well or an error will be thrown.
+          :::
+        '';
+      };
+
       domain = mkOption {
         type = types.str;
         description = ''
@@ -79,12 +94,22 @@ in
       };
 
       settings = mkOption {
-        type = types.submodule {
-          freeformType = settingType;
-          imports = [
-            (mkRenamedOptionModule [ "redis" ] [ "valkey" ])
-          ];
-        };
+        type = types.submodule (
+          { config, ... }:
+          {
+            options = {
+              valkey = lib.mkOption {
+                internal = true;
+                default = { };
+              };
+            };
+            config.valkey = lib.mkIf (config ? redis) (
+              lib.warn "Obsolete option `services.searx.settings.redis' is used. It was renamed to `services.searx.settings.valkey'" config.redis
+            );
+
+            freeformType = settingType;
+          }
+        );
         default = { };
         example = literalExpression ''
           {
@@ -232,6 +257,13 @@ in
   ];
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.openFirewall -> cfg.settings ? server.port;
+        message = "services.searx.settings.server.port must be set when openFirewall is enabled.";
+      }
+    ];
+
     environment = {
       etc = {
         "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
@@ -287,7 +319,9 @@ in
               ]
             )) "s"
           }://${cfg.domain}/";
-          valkey.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
+          valkey = lib.mkIf cfg.redisCreateLocally {
+            url = "unix://${config.services.redis.servers.searx.unixSocket}";
+          };
         };
       };
 
@@ -378,6 +412,8 @@ in
         isSystemUser = true;
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.server.port ]; };
   };
 
   meta.maintainers = with maintainers; [

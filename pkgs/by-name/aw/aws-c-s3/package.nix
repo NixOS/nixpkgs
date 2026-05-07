@@ -14,16 +14,16 @@
   s2n-tls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-s3";
   # nixpkgs-update: no auto update
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-s3";
-    rev = "v${version}";
-    hash = "sha256-g2w1igjv0N0o6+bewypJm2coHTvhYN2v8usdMN7TBI4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8yUwgiZ50BiItapeg0zIc5vr0+OFHvzIRrwWH4lQFBM=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 library implementation for communicating with the S3 service";
     homepage = "https://github.com/awslabs/aws-c-s3";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ r-burns ];
     mainProgram = "s3";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

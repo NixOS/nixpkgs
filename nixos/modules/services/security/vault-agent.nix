@@ -72,7 +72,7 @@ let
                           "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#configuration-file";
                     in
                     ''
-                      Free-form settings written directly to the `config.json` file.
+                      Free-form settings written directly to the {file}`config.json` file.
                       Refer to <${upstreamDocs}> for supported values.
 
                       ::: {.note}

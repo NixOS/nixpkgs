@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   libglvnd,
-  xorg,
+  libxinerama,
+  libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -20,9 +22,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libglvnd
-    xorg.libXinerama
-    xorg.libXext
-    xorg.libX11
+    libxinerama
+    libxext
+    libx11
   ];
 
   # The "linuxinstall" target won't work for us:
@@ -33,15 +35,15 @@ stdenv.mkDerivation {
     cp cnping.1 $out/share/man/man1/cnping.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal Graphical IPV4 Ping Tool";
     homepage = "https://github.com/cntools/cnping";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ]; # dual licensed, MIT-x11 & BSD-3-Clause
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "cnping";
   };
 }

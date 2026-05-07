@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jug";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "jug";
     tag = "v${version}";
-    hash = "sha256-zERCY9JxceBmhJbytfsm/6rDwipqQ1XjzY/2QFsEEEg=";
+    hash = "sha256-YjBhA+yEdMQ/4yYf25kkXwbvw+ta9Nb4CX8Rnr0du6k=";
   };
 
   build-system = [ setuptools ];
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jug" ];
 
-  meta = with lib; {
+  meta = {
     description = "Task-Based Parallelization Framework";
     homepage = "https://jug.readthedocs.io/";
     changelog = "https://github.com/luispedro/jug/blob/v${version}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ luispedro ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ luispedro ];
   };
 }

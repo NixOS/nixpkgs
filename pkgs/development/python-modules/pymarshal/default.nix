@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python data serialization library";
     homepage = "https://github.com/stargateaudio/pymarshal";
-    maintainers = with lib.maintainers; [ yuu ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
   };
 }

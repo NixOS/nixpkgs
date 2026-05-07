@@ -6,14 +6,14 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uri";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "cpp-netlib";
     repo = "uri";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
   };
 
@@ -41,6 +41,14 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
+  # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postBuild = "make doc";
 
   postInstall = ''
@@ -54,4 +62,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
   };
-}
+})

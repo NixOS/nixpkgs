@@ -6,25 +6,25 @@
   woodpecker-plugin-git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "woodpecker-plugin-git";
-  version = "2.6.5";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "plugin-git";
-    tag = version;
-    hash = "sha256-9eTkdhlgY7hDqzbgBeoW6mITYsEJFcnRcilruD6wzU4=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ib4Jdo8KT1DUncWi2oCJRBeEwqCNi98D9eXHrhYVo64=";
   };
 
-  vendorHash = "sha256-Zn2TYNyKvtmtEAlKmWBhjyzHiM0dwDT3E/LOtSzjFK0=";
+  vendorHash = "sha256-IPqtAwre3Fs6TvWdmuDkvD/abzZwtE5OKEGEkCtdCI8=";
 
   env.CGO_ENABLED = "0";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Checks fail because they require network access.
@@ -35,9 +35,12 @@ buildGoModule rec {
   meta = {
     description = "Woodpecker plugin for cloning Git repositories";
     homepage = "https://woodpecker-ci.org/";
-    changelog = "https://github.com/woodpecker-ci/plugin-git/releases/tag/${version}";
+    changelog = "https://github.com/woodpecker-ci/plugin-git/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "plugin-git";
-    maintainers = with lib.maintainers; [ ambroisie ];
+    maintainers = with lib.maintainers; [
+      ambroisie
+      marcusramberg
+    ];
   };
-}
+})

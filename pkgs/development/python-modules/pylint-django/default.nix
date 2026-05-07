@@ -9,21 +9,18 @@
   poetry-core,
   pylint-plugin-utils,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylint-django";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";
-    tag = "v${version}";
-    hash = "sha256-9b0Sbo6E036UmUmP/CVPrS9cxxKtkMMZtqJsI53g4sU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f0L/wYedLHtyi3/vro4n29oAY+axnQ5sBv545zD/Gvc=";
   };
 
   build-system = [ poetry-core ];
@@ -41,22 +38,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AttributeError: module 'pylint.interfaces' has no attribute 'IAstroidChecker'
-    "test_migrations_plugin"
-    "func_noerror_model_unicode_lambda"
-    "test_linter_should_be_pickleable_with_pylint_django_plugin_installed"
-    "func_noerror_model_fields"
-    "func_noerror_form_fields"
-  ];
-
   pythonImportsCheck = [ "pylint_django" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pylint plugin to analyze Django applications";
     homepage = "https://github.com/PyCQA/pylint-django";
-    changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kamadorueda ];
+    changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
-}
+})

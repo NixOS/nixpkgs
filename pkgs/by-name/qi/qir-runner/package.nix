@@ -9,14 +9,14 @@
   libxml2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qir-runner";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "qir-alliance";
     repo = "qir-runner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-k93I/DE8Jx0DbloBVNhKKay/L26H5TPX5yvkHKe/yBg=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     # which is not available when cross compiling
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

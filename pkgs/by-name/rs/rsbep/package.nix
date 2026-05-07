@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsbep";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ttsiodras";
     repo = "rsbep-backup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0is4jgil3wdqbvx9h66xcyzbqy84ndyydnnay2g9k81a4mcz4dns";
   };
 
@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     diff -u input output
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create resilient backups with Reed-Solomon error correction and byte-spreading";
     homepage = "https://www.thanassis.space/rsbep.html";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.erikarvstedt ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.erikarvstedt ];
   };
-}
+})

@@ -15,14 +15,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "saldl";
   version = "41";
 
   src = fetchFromGitHub {
     owner = "saldl";
     repo = "saldl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PAX2MUyBWWU8kGkaeoCJteidgszh7ipwDJbrLXzVsn0=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   wafConfigureFlags = [
-    "--saldl-version ${version}"
+    "--saldl-version ${finalAttrs.version}"
     "--no-werror"
   ];
 
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI downloader optimized for speed and early preview";
     homepage = "https://saldl.github.io";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ zowoq ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ zowoq ];
+    platforms = lib.platforms.all;
     mainProgram = "saldl";
   };
-}
+})

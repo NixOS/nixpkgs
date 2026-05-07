@@ -25,10 +25,6 @@ lib.packagesFromDirectoryRecursive {
 
   elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
 
-  emacs-application-framework = callPackage ./manual-packages/emacs-application-framework {
-    inherit (pkgs) git;
-  };
-
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
     inherit (pkgs)
       basedpyright
@@ -50,9 +46,6 @@ lib.packagesFromDirectoryRecursive {
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
   zstd = callPackage ./manual-packages/zstd { inherit (pkgs) zstd; };
-
-  # From old emacsPackages (pre emacsPackagesNg)
-  cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
 
   # camelCase aliases for some of the kebab-case expressions above
   colorThemeSolarized = self.color-theme-solarized;

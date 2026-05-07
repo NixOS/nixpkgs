@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     description = "KWin script that automatically adds/removes virtual desktops";
     homepage = "https://github.com/maurges/dynamic_workspaces";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

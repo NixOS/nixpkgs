@@ -47,10 +47,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CLI tool to convert local HTML files to PDF";
     homepage = "https://github.com/ilaborie/html2pdf";
     changelog = "https://github.com/ilaborie/html2pdf/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       kachick
     ];

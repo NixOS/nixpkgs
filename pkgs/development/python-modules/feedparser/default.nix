@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
   sgmllib3k,
 }:
@@ -13,33 +12,37 @@ buildPythonPackage rec {
   version = "6.0.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZPds6Qrj6O9dHt4PjTtQzia8znHdiuXoKxzS1KX5Qig=";
-  };
-
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ sgmllib3k ];
-
   __darwinAllowLocalNetworking = true;
 
+  src = fetchFromGitHub {
+    owner = "kurtmckee";
+    repo = "feedparser";
+    tag = "v${version}";
+    hash = "sha256-ZLn4Naf0CQG04iXfVJVimrBQ7TGBEPcEPCF3XMjX/Mo=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [ sgmllib3k ];
+
   checkPhase = ''
+    runHook preCheck
+
     # Tests are failing
     # AssertionError: unexpected '~' char in declaration
     rm tests/wellformed/sanitize/xml_declaration_unexpected_character.xml
     ${python.interpreter} -Wd tests/runtests.py
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "feedparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal feed parser";
     homepage = "https://github.com/kurtmckee/feedparser";
     changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

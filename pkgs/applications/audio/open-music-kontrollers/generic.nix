@@ -7,8 +7,8 @@
   ninja,
   lv2,
   sord,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   glew,
   lv2lint,
   pname,
@@ -40,19 +40,19 @@ stdenv.mkDerivation {
   buildInputs = [
     lv2
     sord
-    libX11
-    libXext
+    libx11
+    libxext
     glew
     lv2lint
   ]
   ++ additionalBuildInputs;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = description;
     homepage = "https://open-music-kontrollers.ch/lv2/${pname}:";
-    license = licenses.artistic2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.all;
+    license = lib.licenses.artistic2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.all;
   };
 }

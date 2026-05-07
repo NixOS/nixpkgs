@@ -1,8 +1,11 @@
 {
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   makeWrapper,
-  nix-update-script,
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix,
   serve,
   stdenv,
   xsel,
@@ -13,20 +16,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2025-08-04";
+  version = "0-unstable-2026-04-27";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "64374c6b9a53b68ae7921604a1fbe231d3e4f067";
-    hash = "sha256-5baBKXmOxS0BOKNedMSbmw21rDBONZwmim9hlXn5OzQ=";
+    rev = "4d0ad172bb02245d93abb3290a51e9743a880876";
+    hash = "sha256-Xkj2H5a5uTqGpOuLPo5BLM7vEGx5eaznX1w0CiNQFZA=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-4SK1ecjEnnaow5Z2biCPaHirpX6J/5cytQWWicPgmB0=";
+    hash = "sha256-3FyctNQ8pDvJ559SJvAJZjn49wptfB5Q5Takk51oqMQ=";
   };
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -39,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
 
@@ -48,8 +60,20 @@ stdenv.mkDerivation (finalAttrs: {
       --chdir $out
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru = {
+    updateScriptSrc = unstableGitUpdater { };
+    updateScriptDeps = writeShellApplication {
+      name = "update-dokieli-berry-deps";
+      runtimeInputs = [
+        nix
+        yarn-berry.yarn-berry-fetcher
+      ];
+      text = lib.strings.readFile ./updateDeps.sh;
+    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      finalAttrs.passthru.updateScriptSrc
+      (lib.getExe finalAttrs.passthru.updateScriptDeps)
+    ];
   };
 
   meta = {

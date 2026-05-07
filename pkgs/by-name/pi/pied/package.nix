@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   gst_all_1,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "pied";
   version = "0.3.1";
 
@@ -29,7 +29,7 @@ flutter327.buildFlutterApplication rec {
 
   postInstall = ''
     install -D flatpak/com.mikeasoft.pied.desktop -t $out/share/applications
-    install -D flatpak/com.mikeasoft.pied.png -t $out/share/pixmaps
+    install -D flatpak/com.mikeasoft.pied.png -t $out/share/icons/hicolor/256x256/apps
   '';
 
   meta = {

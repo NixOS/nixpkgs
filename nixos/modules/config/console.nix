@@ -9,7 +9,7 @@ let
 
   makeColor = i: lib.concatMapStringsSep "," (x: "0x" + lib.substring (2 * i) 2 x);
 
-  isUnicode = lib.hasSuffix "UTF-8" (lib.toUpper config.i18n.defaultLocale);
+  isUnicode = config.i18n.defaultCharset == "UTF-8" || cfg.useXkbConfig;
 
   optimizedKeymap =
     pkgs.runCommand "keymap"
@@ -139,7 +139,9 @@ in
   config = lib.mkMerge [
     {
       console.keyMap =
-        with config.services.xserver;
+        let
+          inherit (config.services.xserver) xkb;
+        in
         lib.mkIf cfg.useXkbConfig (
           pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
@@ -186,6 +188,9 @@ in
             # ...but only the keymaps if we don't
             "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) {
               source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps";
+            };
+            "/etc/kbd/consolefonts" = lib.mkIf (!cfg.earlySetup && cfg.font != null) {
+              source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/consolefonts";
             };
           };
           boot.initrd.systemd.additionalUpstreamUnits = [

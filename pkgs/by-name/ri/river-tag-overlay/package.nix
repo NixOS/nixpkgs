@@ -9,14 +9,14 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "river-tag-overlay";
   version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
     repo = "river-tag-overlay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hLyXdLi/ldvwPJ1oQQsH5wgflQJuXu6vhYw/qdKAV9E=";
   };
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pop-up showing tag status";
     homepage = "https://sr.ht/~leon_plickat/river-tag-overlay";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ edrex ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ edrex ];
+    platforms = lib.platforms.linux;
     mainProgram = "river-tag-overlay";
   };
-}
+})

@@ -11,22 +11,19 @@
   pycryptodome,
   pynacl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bip-utils";
-  version = "2.9.3";
+  version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ebellocchia";
     repo = "bip_utils";
     tag = "v${version}";
-    hash = "sha256-3G37n/mfI+3JVIkmJWzbB1qPPTE6NJJlFZWdE0fIIWA=";
+    hash = "sha256-84fhL8+/hIHnS7QpbgvPXw/WH2XZbsN895KI/XIKsKw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -46,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bip_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of BIP39, BIP32, BIP44, BIP49 and BIP84 for wallet seeds, keys and addresses generation";
     homepage = "https://github.com/ebellocchia/bip_utils";
-    changelog = "https://github.com/ebellocchia/bip_utils/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/ebellocchia/bip_utils/blob/${src.tag}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       prusnak
       stargate01
     ];

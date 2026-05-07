@@ -4,7 +4,6 @@
   fetchPypi,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   tinycss2,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "cssselect2";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssselect2" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS selectors for Python ElementTree";
     homepage = "https://github.com/Kozea/cssselect2";
     changelog = "https://github.com/Kozea/cssselect2/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

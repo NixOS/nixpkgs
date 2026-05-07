@@ -8,15 +8,15 @@
   pkg-config,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ktx-tools";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "KTX-Software";
-    rev = "v${version}";
-    hash = "sha256-bDdRdVFbVmN8fEGRLnPLOXsV6lfYU9Lg4nW0GuCj6AU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yBRLKa0h64vDBvaessh2FwP16d8+jvW6udbyZvOMzTQ=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KTX (Khronos Texture) Library and Tools";
     longDescription = ''
       KTX (Khronos Texture) is a lightweight container for textures for OpenGL®,
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
           formats and Zstd supercompression.
     '';
     homepage = "https://github.com/KhronosGroup/KTX-Software";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bonsairobo ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bonsairobo ];
+    platforms = lib.platforms.linux;
   };
-}
+})

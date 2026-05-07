@@ -9,12 +9,12 @@
   libcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntp";
   version = "4.2.8p18";
 
   src = fetchurl {
-    url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
+    url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor finalAttrs.version}/ntp-${finalAttrs.version}.tar.gz";
     hash = "sha256-z4TF8/saKVKElCYk2CP/+mNBROCWz8T5lprJjvX0aOU=";
   };
 
@@ -45,20 +45,18 @@ stdenv.mkDerivation rec {
     libcap
   ];
 
-  hardeningEnable = [ "pie" ];
-
   postInstall = ''
     rm -rf $out/share/doc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ntp.org/";
     description = "Implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
-    maintainers = with maintainers; [ thoughtpolice ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,13 +8,13 @@
 
 let
   pname = "mendeley";
-  version = "2.137.0";
+  version = "2.144.0";
 
   executableName = "${pname}-reference-manager";
 
   src = fetchurl {
     url = "https://static.mendeley.com/bin/desktop/mendeley-reference-manager-${version}-x86_64.AppImage";
-    hash = "sha256-jjwOtcyA1dKWXWVtUsVaXMUgDyBoTKACoZ0UGKH4uL4=";
+    hash = "sha256-27cUm1ChdzG9Qxo0ntUAVZMA685YFZ3nbsLkZfxR3pk=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -34,13 +34,13 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${executableName}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mendeley.com";
     description = "Reference manager and academic social network";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ atila ];
+    maintainers = [ ];
     mainProgram = "mendeley-reference-manager";
   };
 

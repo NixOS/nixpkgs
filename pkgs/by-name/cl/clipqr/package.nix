@@ -4,27 +4,27 @@
   fetchFromGitLab,
   lib,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxxf86vm,
   makeDesktopItem,
   libgbm,
   pkg-config,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clipqr";
   version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "imatt-foss";
     repo = "clipqr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iuA6RqclMm1CWaiM1kpOpgfYvKaYGOIwFQkLr/nCL5M=";
   };
 
@@ -37,13 +37,13 @@ buildGoModule rec {
 
   buildInputs = [
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
     libgbm
   ];
 
@@ -68,12 +68,12 @@ buildGoModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scan QR codes on screen and from camera, the result is in your clipboard";
-    license = licenses.mit;
-    maintainers = with maintainers; [ MatthieuBarthel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MatthieuBarthel ];
     homepage = "https://gitlab.com/imatt-foss/clipqr";
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "clipqr";
   };
-}
+})

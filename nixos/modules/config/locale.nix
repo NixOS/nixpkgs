@@ -96,6 +96,15 @@ in
     // lib.optionalAttrs (config.time.timeZone != null) {
       localtime.source = "/etc/zoneinfo/${config.time.timeZone}";
       localtime.mode = "direct-symlink";
+    }
+    // lib.optionalAttrs config.time.hardwareClockInLocalTime {
+      # Mirrors timedated
+      # https://github.com/systemd/systemd/blob/afaca649ad678031a46182b0cce667cbbbf47a6d/src/timedate/timedated.c#L325-L396
+      adjtime.text = ''
+        0.0 0 0
+        0
+        LOCAL
+      '';
     };
   };
 

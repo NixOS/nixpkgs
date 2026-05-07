@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
   withServer ? true, # the actual metrics server
   withVmAgent ? true, # Agent to collect metrics
@@ -13,16 +14,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.126.0";
+  version = "1.142.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QVeg/F7oPPgSRTi5jcfTj15bD/7fQoPopahpUP9b0UA=";
+    hash = "sha256-PI4P0CGMcYbkrT8Rrgl5P56yTC+r3tnZudvFySzNJeY=";
   };
 
   vendorHash = null;
+  env.CGO_ENABLED = 0;
 
   subPackages =
     lib.optionals withServer [
@@ -51,15 +53,15 @@ buildGoModule (finalAttrs: {
     # This appears to be some kind of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
 
-    # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+    # Relax go version to major.minor
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
+    sed -i -E 's/^(## explicit; go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
       --replace-fail "time.After(10 " "time.After(120 " \
       --replace-fail "time.NewTimer(30 " "time.NewTimer(120 " \
-      --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
+      --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)"
   '';
 
   ldflags = [
@@ -76,10 +78,8 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) victoriametrics;
-    };
-    updateScript = ./update.sh;
+    tests = lib.recurseIntoAttrs nixosTests.victoriametrics;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -88,7 +88,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp
-      ivan
       leona
       shawn8901
       ryan4yin

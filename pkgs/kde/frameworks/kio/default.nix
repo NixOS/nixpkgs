@@ -2,6 +2,7 @@
   mkKdeDerivation,
   qt5compat,
   qttools,
+  kauth,
   acl,
   attr,
 }:
@@ -16,6 +17,7 @@ mkKdeDerivation {
   extraBuildInputs = [
     qt5compat
     qttools
+    kauth
     acl
     attr
   ];

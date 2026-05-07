@@ -5,19 +5,19 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goose";
-  version = "3.25.0";
+  version = "3.27.1";
 
   src = fetchFromGitHub {
     owner = "pressly";
     repo = "goose";
-    rev = "v${version}";
-    hash = "sha256-ouyvxlnJQIMqRZt4nsR01+9p227FGBlHoCMAq6Ufh7A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dzeB5QXjQAyJlaM6I82C4gNoj7ELA4sgkfHkXADN9+Y=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-Cpw2xJWWW85LUS5K+KM2fCUISYwLFjsdk0gPRgIZKP4=";
+  vendorHash = "sha256-JsLpcV5SSBin6U7Kj5O0mhXNdIwyV+xdteEJBxW8zuY=";
 
   # skipping: end-to-end tests require a docker daemon
   postPatch = ''
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   checkFlags = [
@@ -43,11 +43,11 @@ buildGoModule rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Database migration tool which supports SQL migrations and Go functions";
     homepage = "https://pressly.github.io/goose/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "goose";
   };
-}
+})

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_37,
+  electron_41,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.5.3";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-LMYgWXzzVBaUBJnVacWPZPeNe1EasJjS5A0ouRlLxNo=";
+    hash = "sha256-kD04SMErq92k+F4/3v6bpoJf2lfaGM6bAn+bCa9ACbA=";
   };
 
-  npmDepsHash = "sha256-3OqiXbLeFnOx/tdv+A0fxtUZLYTaNuOAJwtF71cljFw=";
+  npmDepsHash = "sha256-497bL7l3OIAgkbXP3FkeFFpPz2VtRENrw6sQmJsnXBY=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,7 +46,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_37.dist} electron-dist
+    cp -r ${electron_41.dist} electron-dist
     chmod -R u+w electron-dist
   ''
   # Electron builder complains about symlink in electron-dist
@@ -61,7 +61,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_37.version} \
+        -c.electronVersion=${electron_41.version} \
         -c.mac.identity=null
 
     runHook postBuild
@@ -83,7 +83,7 @@ buildNpmPackage rec {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${lib.getExe electron_37}' "$out/bin/teams-for-linux" \
+    makeWrapper '${lib.getExe electron_41}' "$out/bin/teams-for-linux" \
       --prefix PATH : ${
         lib.makeBinPath [
           alsa-utils
@@ -91,7 +91,7 @@ buildNpmPackage rec {
         ]
       } \
       --add-flags "$out/share/teams-for-linux/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
@@ -106,7 +106,7 @@ buildNpmPackage rec {
   desktopItems = [
     (makeDesktopItem {
       name = "teams-for-linux";
-      exec = "teams-for-linux";
+      exec = "teams-for-linux %U";
       icon = "teams-for-linux";
       desktopName = "Microsoft Teams for Linux";
       comment = meta.description;
@@ -115,12 +115,11 @@ buildNpmPackage rec {
         "InstantMessaging"
         "Chat"
       ];
+      mimeTypes = [ "x-scheme-handler/msteams" ];
     })
   ];
 
   passthru.updateScript = nix-update-script { };
-
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
@@ -132,6 +131,7 @@ buildNpmPackage rec {
       qjoly
       chvp
       khaneliman
+      HarisDotParis
     ];
     platforms = with lib.platforms; darwin ++ linux;
   };

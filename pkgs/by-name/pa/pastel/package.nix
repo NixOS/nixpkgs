@@ -4,28 +4,28 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pastel";
-  version = "0.10.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "pastel";
-    rev = "v${version}";
-    sha256 = "sha256-kr2aLRd143ksVx42ZDO/NILydObinn3AwPCniXVVmY0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-0NrvZ9rOc3li430uYJjP2IkMeofeq4NkC7GvsYZeB2g=";
   };
 
-  cargoHash = "sha256-u+1KDcC2KGqvmOk6k7hOHE16TMvDg92eMOdNMQQszug=";
+  cargoHash = "sha256-FPaMBxrSrmHbq5b4Q9QxElD+jAhn22gvKP55QWwZ/mo=";
 
   meta = {
     description = "Command-line tool to generate, analyze, convert and manipulate colors";
     homepage = "https://github.com/sharkdp/pastel";
-    changelog = "https://github.com/sharkdp/pastel/releases/tag/v${version}";
+    changelog = "https://github.com/sharkdp/pastel/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pastel";
   };
-}
+})

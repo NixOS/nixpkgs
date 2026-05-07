@@ -9,7 +9,6 @@
   pybrowserid,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   hatchling,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pyfxa";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -54,11 +51,11 @@ buildPythonPackage rec {
     "fxa/tests/test_oauth.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Firefox Accounts client library";
     mainProgram = "fxa-client";
     homepage = "https://github.com/mozilla/PyFxA";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

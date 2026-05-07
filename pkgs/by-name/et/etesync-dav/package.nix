@@ -6,7 +6,7 @@
   fetchFromGitHub,
   radicale,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "etesync-dav";
   version = "0.35.1";
   pyproject = true;
@@ -14,9 +14,14 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etesync-dav";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y4BhU2kSn+RWqc5+pJQFhbwfat9cMWD0ED0EXJp25cY=";
   };
+
+  patches = [
+    # https://github.com/etesync/etesync-dav/pull/365
+    ./radicale-3-6-compat.patch
+  ];
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -46,9 +51,8 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "etesync-dav";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      thyol
       valodim
     ];
     broken = stdenv.hostPlatform.isDarwin; # pyobjc-framework-Cocoa is missing
   };
-}
+})

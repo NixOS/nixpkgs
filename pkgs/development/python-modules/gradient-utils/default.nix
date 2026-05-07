@@ -8,16 +8,13 @@
   poetry-core,
   prometheus-client,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "gradient-utils";
   version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Paperspace";
@@ -60,11 +57,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gradient_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utils and helpers library for Gradient";
     homepage = "https://github.com/Paperspace/gradient-utils";
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

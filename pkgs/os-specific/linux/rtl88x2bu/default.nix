@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2024-06-09";
+  version = "${kernel.version}-unstable-2025-12-04";
 
   src = fetchFromGitHub {
-    owner = "morrownr";
-    repo = "88x2bu-20210702";
-    rev = "62f3a86a2687fe98bd441e0aff5adf87d95c238a";
-    hash = "sha256-gQWk1nhtT0W2dY5uQitWabBGEDfZpmJAoJg+j2ndO00=";
+    owner = "RinCat";
+    repo = "RTL88x2BU-Linux-Driver";
+    rev = "825556e195ecde9ce8f5f4cbad9953f398c8598e";
+    hash = "sha256-MkvVCWyMOCBzCRufbKMuaaFOPhokZdFnXHYnrAwBe6M=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -36,11 +36,15 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek rtl88x2bu driver";
-    homepage = "https://github.com/morrownr/88x2bu-20210702";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ otavio ];
+    homepage = "https://github.com/RinCat/RTL88x2BU-Linux-Driver";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      otavio
+      claymorwan
+    ];
+    broken = kernel.kernelOlder "5.11";
   };
 }

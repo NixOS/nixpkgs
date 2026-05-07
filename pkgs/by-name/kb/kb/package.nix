@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kb";
   version = "0.1.8";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gnebbia";
     repo = "kb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X2yFQYH4nqI5CqPtKFHq3+V/itqTpUho9en4WEIRjQM=";
   };
 
@@ -54,9 +54,9 @@ python3.pkgs.buildPythonApplication rec {
       (e.g., images, pdf, videos and others).
     '';
     homepage = "https://github.com/gnebbia/kb";
-    changelog = "https://github.com/gnebbia/kb/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gnebbia/kb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wesleyjrz ];
     mainProgram = "kb";
   };
-}
+})

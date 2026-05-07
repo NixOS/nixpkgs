@@ -9,7 +9,7 @@
   makeMinimal,
   install,
 }:
-mkDerivation ({
+mkDerivation {
   path = "usr.bin/localedef";
 
   extraPaths = [
@@ -34,4 +34,4 @@ mkDerivation ({
   '';
 
   MK_TESTS = "no";
-})
+}

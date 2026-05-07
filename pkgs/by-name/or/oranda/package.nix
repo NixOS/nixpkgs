@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oranda";
   version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "oranda";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FVd8NQVtzlZsDY40ZMJDdaX+6Q5jUxZHUq2v+kDFVOk=";
   };
 
@@ -45,15 +45,15 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_CONF = "";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate beautiful landing pages for your developer tools";
     homepage = "https://github.com/axodotdev/oranda";
-    changelog = "https://github.com/axodotdev/oranda/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/axodotdev/oranda/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "oranda";
   };
-}
+})

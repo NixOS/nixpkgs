@@ -24,18 +24,34 @@ in
         "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
   };
 
+  hunks = testers.invalidateFetcherByDrvHash fetchpatch {
+    url = "https://github.com/openssh/openssh-portable/commit/35d5917652106aede47621bb3f64044604164043.patch";
+    stripLen = 1;
+    hunks = [
+      2
+      3
+      4
+      5
+      6
+      7
+    ];
+    sha256 =
+      if isFetchpatch2 then
+        "sha256-SXJALY4zC4y/ZV7uVglf+XB5cpC5tS4M8QDGlFRmcFM="
+      else
+        "sha256-MV7uGgA1ESMR7W6H5FjAIxKcpySdQjWB+L2zaHjd96M=";
+  };
+
   full = testers.invalidateFetcherByDrvHash fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
     relative = "test";
     stripLen = 1;
     extraPrefix = "foo/bar/";
     excludes = [ "foo/bar/bernoulli_no_atomic_mp.cpp" ];
+    # Should result in no change.
+    hunks = [ "1-" ];
     revert = true;
-    sha256 =
-      if isFetchpatch2 then
-        "sha256-+UKmEbr2rIAweCav/hR/7d4ZrYV84ht/domTrHtm8sM="
-      else
-        "sha256-+UKmEbr2rIAweCav/hR/7d4ZrYV84ht/domTrHtm8sM=";
+    sha256 = "sha256-+UKmEbr2rIAweCav/hR/7d4ZrYV84ht/domTrHtm8sM=";
   };
 
   decode = testers.invalidateFetcherByDrvHash fetchpatch {

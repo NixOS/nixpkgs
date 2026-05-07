@@ -218,7 +218,7 @@ in
           Type = "simple";
           Restart = "on-failure";
 
-          AmbientCapablities = [ ];
+          AmbientCapabilities = [ ];
           CapabilityBoundingSet = [ ];
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -359,5 +359,8 @@ in
     })
   ];
 
-  meta.maintainers = with lib.maintainers; [ oddlama ];
+  meta = {
+    doc = ./ente.md;
+    maintainers = with lib.maintainers; [ oddlama ];
+  };
 }

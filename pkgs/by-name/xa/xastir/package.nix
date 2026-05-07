@@ -10,7 +10,8 @@
   gnused,
   libgeotiff,
   libtiff,
-  xorg,
+  libxt,
+  libxpm,
   motif,
   pcre2,
   perl,
@@ -20,14 +21,14 @@
   libax25,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xastir";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "xastir";
     repo = "xastir";
-    tag = "Release-${version}";
+    tag = "Release-${finalAttrs.version}";
     hash = "sha256-bpT8F3xURo9jRxBrGGflmcLD6U7F+FTW+VAK1WCgqF4=";
   };
 
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     db
     libgeotiff
     libtiff
-    xorg.libXpm
-    xorg.libXt
+    libxpm
+    libxt
     motif
     pcre2
     perl
@@ -90,4 +91,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

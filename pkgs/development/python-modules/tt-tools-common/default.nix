@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchFromGitHub,
   setuptools,
   distro,
@@ -11,23 +10,26 @@
   rich,
   textual,
   requests,
+  tomli,
   tqdm,
   pydantic,
+  setuptools-scm,
 }:
 buildPythonPackage rec {
   pname = "tt-tools-common";
-  version = "1.4.25";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-tools-common";
     tag = "v${version}";
-    hash = "sha256-phal8KxfQqsGAIcKQTlSPZB04J158jZYlyamZr45vdU=";
+    hash = "sha256-xy1UxETmuuqDmZYf67+qx8Yr8tWQ6VKmjb3md8IaInE=";
   };
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   dependencies = [
@@ -38,6 +40,7 @@ buildPythonPackage rec {
     rich
     textual
     requests
+    tomli
     tqdm
     pydantic
   ];

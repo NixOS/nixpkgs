@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "MkDocs plugin and extension to create mindmaps from markdown using markmap";
     homepage = "https://github.com/markmap/mkdocs_markmap";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,21 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "aspy-refactor-imports";
-  version = "3.0.1";
+  version = "4.2.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "aspy.refactor_imports";
-    rev = "v${version}";
-    sha256 = "MlCM3zNTQZJ1RWrTQG0AN28RUepWINKCeLENykbu2nw=";
+    tag = "v${version}";
+    sha256 = "sha256-f5wZfisKz9WGdq6u0rd/zg2CfMwWvQeR8xZQNbD7KfU=";
   };
 
   pythonImportsCheck = [ "aspy.refactor_imports" ];
@@ -27,10 +25,10 @@ buildPythonPackage rec {
   # fails on darwin due to case-insensitive file system
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_application_directory_case" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for refactoring imports in python-like syntax";
     homepage = "https://github.com/asottile/aspy.refactor_imports";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

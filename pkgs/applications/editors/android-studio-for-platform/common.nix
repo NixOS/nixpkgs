@@ -25,12 +25,12 @@
   fontsConf,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   makeFontsConf,
   makeWrapper,
   ncurses5,
@@ -51,11 +51,11 @@
 }:
 
 let
-  drvName = "${pname}-${version}";
   filename = "asfp-${versionPrefix}-${version}-linux.deb";
 
   androidStudioForPlatform = stdenv.mkDerivation {
-    name = "${drvName}-unwrapped";
+    pname = "${pname}-unwrapped";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.google.com/android/asfp/${filename}";
@@ -107,14 +107,14 @@ let
             # Crash at startup without these
             fontconfig
             freetype
-            libXext
-            libXi
-            libXrender
-            libXtst
-            libX11
+            libxext
+            libxi
+            libxrender
+            libxtst
+            libx11
 
             # Support multiple monitors
-            libXrandr
+            libxrandr
 
             # For GTKLookAndFeel
             gtk2
@@ -145,7 +145,7 @@ let
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSEnv {
-    pname = "${drvName}-fhs-env";
+    pname = "${pname}-fhs-env";
     inherit version;
     multiPkgs = pkgs: [
       zlib
@@ -158,25 +158,26 @@ let
     '';
   };
 in
-runCommand drvName
+runCommand "${pname}-${version}"
   {
+    inherit pname version;
     startScript = ''
       #!${bash}/bin/bash
-      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudioForPlatform}/bin/studio.sh "$@"
+      ${lib.getExe fhsEnv} ${androidStudioForPlatform}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
     passthru = {
       unwrapped = androidStudioForPlatform;
     };
-    meta = with lib; {
+    meta = {
       description = "Official IDE for Android platform development";
       longDescription = ''
         Android Studio for Platform (ASfP) is the version of the Android Studio IDE
         for Android Open Source Project (AOSP) platform developers who build with the Soong build system.
       '';
       homepage = "https://developer.android.com/studio/platform.html";
-      license = with licenses; [
+      license = with lib.licenses; [
         asl20
         unfree
       ]; # The code is under Apache-2.0, but:
@@ -188,8 +189,8 @@ runCommand drvName
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ robbins ];
-      teams = [ teams.android ];
+      maintainers = with lib.maintainers; [ robbins ];
+      teams = [ lib.teams.android ];
       mainProgram = pname;
     };
   }

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp clipster $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight python clipboard manager";
     longDescription = ''
       Clipster was designed to try to add a good selection of useful features, while avoiding bad design decisions or becoming excessively large.
@@ -56,10 +56,10 @@ stdenv.mkDerivation rec {
       - Option to ignore clipboard updates form certain applications. (filter_classes)
       - Ability to delete items in clipboard history.
     '';
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://github.com/mrichar1/clipster";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.magnetophon ];
     mainProgram = "clipster";
   };
 }

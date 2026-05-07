@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "llm-grok";
-  version = "1.2.0";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Hiepler";
     repo = "llm-grok";
     tag = "v${version}";
-    hash = "sha256-YSpo7dsQ0/s+sS2DXeLq7zHBdktxCr0P96vr6PtEu9o=";
+    hash = "sha256-bvJKQZka/2Vkk66gARIwv3XwIs+gb5KNyCHNWH9doXA=";
   };
 
   build-system = [ setuptools ];

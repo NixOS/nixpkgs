@@ -20,7 +20,7 @@ let
   inherit (utils) escapeSystemdExecArgs;
   cfg = config.services.sunshine;
 
-  # ports used are offset from a single base port, see https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#port
+  # ports used are offset from a single base port, see https://docs.lizardbyte.dev/projects/sunshine/latest/md_docs_2configuration.html#port
   generatePorts = port: offsets: map (offset: port + offset) offsets;
   defaultPort = 47989;
 
@@ -60,7 +60,7 @@ in
       description = ''
         Settings to be rendered into the configuration file. If this is set, no configuration is possible from the web UI.
 
-        See <https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#configuration for syntax>.
+        See <https://docs.lizardbyte.dev/projects/sunshine/latest/md_docs_2configuration.html> for syntax.
       '';
       example = literalExpression ''
         {
@@ -73,7 +73,7 @@ in
           type = port;
           default = defaultPort;
           description = ''
-            Base port -- others used are offset from this one, see <https://docs.lizardbyte.dev/projects/sunshine/en/latest/about/advanced_usage.html#port> for details.
+            Base port -- others used are offset from this one, see <https://docs.lizardbyte.dev/projects/sunshine/latest/md_docs_2configuration.html#port> for details.
           '';
         };
       });

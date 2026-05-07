@@ -8,26 +8,29 @@
   rdkafka,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustus";
   version = "1.1.3";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "s3rius";
     repo = "rustus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ALnb6ICg+TZRuHayhozwJ5+imabgjBYX4W42ydhkzv0=";
   };
 
-  cargoHash = "sha256-df92+gp/DtdHwPxJF89zKHjmVWzfrjnD8wAlrPRyyxk=";
+  # Bump mobc 0.8.5 -> 0.9.0 to pull in metrics >= 0.24.2, which fixes a borrow-checker error under newer rustc
+  # (https://github.com/rust-lang/rust/issues/141402).
+  cargoPatches = [ ./bump-mobc.patch ];
 
-  env.OPENSSL_NO_VENDOR = 1;
+  cargoHash = "sha256-FyuUdskTEGiBs7qC7cv1u8d4BCZ2IEOduhAe3m4IDV0=";
 
-  # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING = 1;
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+
+    # needed to dynamically link rdkafka
+    CARGO_FEATURE_DYNAMIC_LINKING = 1;
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -55,6 +58,9 @@ rustPlatform.buildRustPackage {
     "--skip=notifiers::impls::http_notifier::tests::unknown_url"
     "--skip=notifiers::impls::kafka_notifier::test::simple_success_on_prefix"
     "--skip=notifiers::impls::kafka_notifier::test::simple_success_on_topic"
+
+    # flaky: ETXTBSY race on parallel fork/exec
+    "--skip=notifiers::impls::file_notifier::tests::success"
   ];
 
   meta = {
@@ -65,4 +71,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.all;
   };
-}
+})

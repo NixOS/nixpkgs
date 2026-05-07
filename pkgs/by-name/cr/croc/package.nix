@@ -3,23 +3,41 @@
   buildGoModule,
   fetchFromGitHub,
   callPackage,
+  installShellFiles,
   nixosTests,
+  stdenv,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "croc";
-  version = "10.2.4";
+  version = "10.4.2";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = "croc";
-    rev = "v${version}";
-    hash = "sha256-iC2Yki8RN+csvNvIQP65bAIN1Q0KR5DUIiZqEVZqG+o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JZV02QZAS4OhnFdEB/EKm2FL0o4VmNSJIWNBdmIIdrE=";
   };
 
-  vendorHash = "sha256-bFn2C5py2STLz8YBlnyK2XDBlgoBnXujeBizN9cDTI0=";
+  vendorHash = "sha256-/qPBHpCdEu1uBFFwE7uzmCcm4EL8TxUWdjiaFlUSxIU=";
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd croc \
+      --bash src/install/bash_autocomplete \
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    --fish <($out/bin/croc generate-fish-completion) \
+  ''
+  + ''
+    --zsh src/install/zsh_autocomplete
+  '';
 
   passthru = {
     tests = {
@@ -28,7 +46,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Easily and securely send things from one computer to another";
     longDescription = ''
       Croc is a command line tool written in Go that allows any two computers to
@@ -43,12 +66,13 @@ buildGoModule rec {
       - Does not require a server or port-forwarding
     '';
     homepage = "https://github.com/schollz/croc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/schollz/croc/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       equirosa
       SuperSandro2000
       ryan4yin
     ];
     mainProgram = "croc";
   };
-}
+})

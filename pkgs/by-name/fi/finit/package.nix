@@ -4,19 +4,24 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  libcap,
   libite,
   libuev,
+  shadow,
+  sysctl,
+  plymouth,
+  plymouthSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "finit";
-  version = "4.14";
+  version = "4.17";
 
   src = fetchFromGitHub {
-    owner = "troglobit";
+    owner = "finit-project";
     repo = "finit";
     tag = finalAttrs.version;
-    hash = "sha256-v4QHc6pX50z4j4UBpw7J2k78Pqt7n503qiDRDWyrhOc=";
+    hash = "sha256-sH4xZNMEuIS+r6rVQAKnsHtSyTe2B6gdYcmH9J8eSZ0=";
   };
 
   postPatch = ''
@@ -32,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libcap
     libite
     libuev
   ];
@@ -47,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/var"
 
     # tweak default plugin list
-    "--enable-modprobe-plugin=yes"
     "--enable-modules-load-plugin=yes"
     "--enable-hotplug-plugin=no"
 
@@ -56,12 +61,21 @@ stdenv.mkDerivation (finalAttrs: {
 
     # monitor kernel events, like ac power status
     "--with-keventd"
+  ]
+  ++ lib.optionals plymouthSupport [
+    "--enable-plymouth-plugin=yes"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-D_PATH_LOGIN=\"/run/current-system/sw/bin/login\""
-    "-DSYSCTL_PATH=\"/run/current-system/sw/bin/sysctl\""
-  ];
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-D_PATH_LOGIN=\"${shadow}/bin/login\""
+      "-DSYSCTL_PATH=\"${sysctl}/bin/sysctl\""
+    ]
+    ++ lib.optionals plymouthSupport [
+      "-DPLYMOUTH_PATH=\"${plymouth}/bin/plymouth\""
+      "-DPLYMOUTHD_PATH=\"${plymouth}/bin/plymouthd\""
+    ]
+  );
 
   meta = {
     description = "Fast init for Linux";

@@ -4,14 +4,14 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "benchmark";
   version = "1.7";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/Chris00/ocaml-benchmark/releases/download/v${version}/benchmark-${version}.tbz";
+    url = "https://github.com/Chris00/ocaml-benchmark/releases/download/v${finalAttrs.version}/benchmark-${finalAttrs.version}.tbz";
     hash = "sha256-Aij7vJzamNWQfjLeGgENlIp6Il8+Wc9hsahr4eDGs68=";
   };
 
@@ -23,8 +23,8 @@ buildDunePackage rec {
       your functions and to easily compare the results.  A statistical test
       is used to determine whether the results truly differ.
     '';
-    changelog = "https://raw.githubusercontent.com/Chris00/ocaml-benchmark/refs/tags/v${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/Chris00/ocaml-benchmark/refs/tags/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ momeemt ];
   };
-}
+})

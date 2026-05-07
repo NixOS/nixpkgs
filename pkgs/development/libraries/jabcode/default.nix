@@ -32,6 +32,13 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (subproject != "library") [ jabcode ];
 
+  postPatch = ''
+    substituteInPlace src/jabcode/Makefile src/jabcodeReader/Makefile src/jabcodeWriter/Makefile \
+      --replace-fail "CC 	= \$(PREFIX)gcc" ""
+    # remove bundled library binaries to force using system libraries
+    rm -rf src/jabcode/lib
+  '';
+
   preConfigure = "cd src/${subdir}";
 
   installPhase =
@@ -46,13 +53,12 @@ stdenv.mkDerivation {
         cp -RT bin $out/bin
       '';
 
-  meta = with lib; {
+  meta = {
     description = "High-capacity 2D color bar code (${subproject})";
     longDescription = "JAB Code (Just Another Bar Code) is a high-capacity 2D color bar code, which can encode more data than traditional black/white (QR) codes. This is the ${subproject} part.";
     homepage = "https://jabcode.org/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.xaverdh ];
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.xaverdh ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -4,20 +4,21 @@
   writeText,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 let
   # Requires an /etc/os-release file, so we override it with this.
-  osRelease = writeText "os-release" ''ID=NixOS'';
+  osRelease = writeText "os-release" "ID=NixOS";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openapv";
-  version = "0.2.0.3";
+  version = "0.2.1.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openapv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-igirdZL8dWAbO7vbrsIMZLaO91vYqeDwgq9M4fm/RpU=";
+    hash = "sha256-wxncN7j5p0GXpWhOx4Ix0oTgGK2sIrfJgQ45fFwmQBI=";
   };
 
   postPatch = ''
@@ -26,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/openapv/releases/tag/v${finalAttrs.version}";

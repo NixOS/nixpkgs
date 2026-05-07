@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubemq-community";
   version = "2.3.7";
   src = fetchFromGitHub {
     owner = "kubemq-io";
     repo = "kubemq-community";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-oAo/O3T3wtfCumT2kjoyXKfCFHijVzSmxhslaKaeF3Y=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doCheck = false; # grpc tests are flaky
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brianmcgee ];
   };
-}
+})

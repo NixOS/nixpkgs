@@ -9,11 +9,11 @@
   glib,
   gtk2,
   alsa-lib,
-  libSM,
-  libX11,
+  libsm,
+  libx11,
   gdk-pixbuf,
   pango,
-  libXinerama,
+  libxinerama,
   mpg123,
   runtimeShell,
 }:
@@ -26,11 +26,11 @@ let
     glib
     gtk2
     alsa-lib
-    libSM
-    libX11
+    libsm
+    libx11
     gdk-pixbuf
     pango
-    libXinerama
+    libxinerama
   ];
 
 in
@@ -39,12 +39,12 @@ stdenv.mkDerivation {
   version = "3.63x";
 
   src = fetchurl {
-    url = "http://www.carpeludum.com/download/Fusion363x.tar.gz";
+    url = "https://www.carpeludum.com/download/Fusion363x.tar.gz";
     sha256 = "14s6czy20h5khyy7q95hd7k77v17ssafv9l6lafkiysvj2nmw94g";
   };
 
   plugins = fetchurl {
-    url = "http://www.carpeludum.com/download/PluginsLinux.tar.gz";
+    url = "https://www.carpeludum.com/download/PluginsLinux.tar.gz";
     sha256 = "0d623cvh6n5ijj3wb64g93mxx2xbichsn7hj7brbb0ndw5cs70qj";
   };
 
@@ -99,12 +99,12 @@ stdenv.mkDerivation {
     chmod +x "$out/bin/kega-fusion"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
     homepage = "https://www.carpeludum.com/kega-fusion/";
     maintainers = [ ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
     platforms = [ "i686-linux" ];
     mainProgram = "kega-fusion";
   };

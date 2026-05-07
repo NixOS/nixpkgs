@@ -1,48 +1,58 @@
 {
   lib,
+  aiofiles,
+  aiosqlite,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  nose2,
-  msgpack,
   cbor2,
+  dbutils,
+  fetchFromGitHub,
+  msgpack,
+  pymysql,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "persist-queue";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-P/t0aQLTAj/QnrRol2Cf3ubHexZB8Z4vyNmNdEvfyEU=";
+  src = fetchFromGitHub {
+    owner = "peter-wangxu";
+    repo = "persist-queue";
+    tag = "v${version}";
+    hash = "sha256-8LtXTpwAk71sjxvZudwk+4P4ohlWC0zagr5F8PTkTwk=";
   };
 
-  disabled = pythonOlder "3.6";
+  build-system = [ setuptools ];
+
+  optional-dependencies = {
+    async = [
+      aiofiles
+      aiosqlite
+    ];
+    extra = [
+      cbor2
+      dbutils
+      msgpack
+      pymysql
+    ];
+  };
 
   nativeCheckInputs = [
-    nose2
-    msgpack
-    cbor2
-  ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    # Don't run MySQL tests, as they require a MySQL server running
-    rm persistqueue/tests/test_mysqlqueue.py
-
-    nose2
-
-    runHook postCheck
-  '';
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "persistqueue" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/peter-wangxu/persist-queue/releases/tag/${src.tag}";
     description = "Thread-safe disk based persistent queue in Python";
     homepage = "https://github.com/peter-wangxu/persist-queue";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ huantian ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ huantian ];
   };
 }

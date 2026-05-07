@@ -126,6 +126,7 @@ let
     with config.boot;
     [
       kernelPackages.kernel
+      (lib.getOutput "modules" kernelPackages.kernel)
       kernelPackages.${pkgs.zfs.kernelModuleAttribute}
     ]
   );
@@ -346,7 +347,7 @@ let
               --no-root-passwd \
               --system ${config.system.build.toplevel} \
               --substituters "" \
-              ${lib.optionalString includeChannel ''--channel ${channelSources}''}
+              ${lib.optionalString includeChannel "--channel ${channelSources}"}
 
             df -h
 

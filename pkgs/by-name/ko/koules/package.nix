@@ -7,23 +7,24 @@
   gccmakedep,
   imake,
   installShellFiles,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   makeDesktopItem,
+  imagemagick,
 }:
 
 let
   debian-extras = fetchzip {
-    url = "mirror://debian/pool/main/k/koules/koules_1.4-27.debian.tar.xz";
-    hash = "sha256-g0Z6C1YSZL6N2eYUuZgXkPDoOLc4e9jAFL3ivk3OAS8=";
+    url = "mirror://debian/pool/main/k/koules/koules_1.4-29.debian.tar.xz";
+    hash = "sha256-8AQGU3uAu1nCKeu4nqCDOL7FcSJeYvD1pmidEPLLekY=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "koules";
   version = "1.4";
 
   src = fetchurl {
-    url = "https://www.ucw.cz/~hubicka/koules/packages/${pname}${version}-src.tar.gz";
+    url = "https://www.ucw.cz/~hubicka/koules/packages/koules${finalAttrs.version}-src.tar.gz";
     hash = "sha256-w2+T/q/uvVmYO/RBACQOZ6hKi6yr1+5SjJMEbe/kohs=";
   };
 
@@ -32,10 +33,11 @@ stdenv.mkDerivation rec {
     gccmakedep
     installShellFiles
     copyDesktopItems
+    imagemagick
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   # Debian maintains lots of patches for koules. Let's include all of them.
@@ -60,7 +62,8 @@ stdenv.mkDerivation rec {
     install -Dm755 xkoules $out/bin/xkoules
     install -Dm755 koules.sndsrv.linux $out/lib/koules.sndsrv.linux
     install -m644 sounds/* $out/lib/
-    install -Dm644 Koules.xpm $out/share/pixmaps/koules.xpm
+    mkdir -p $out/share/icons/hicolor/32x32/apps
+    magick Koules.xpm -background none -extent 32x32-1 -gravity center $out/share/icons/hicolor/32x32/apps/koules.png
     installManPage xkoules.6
     runHook postInstall
   '';
@@ -79,12 +82,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ucw.cz/~hubicka/koules/English/";
     description = "Fast arcade game based on the fundamental law of body attraction";
     mainProgram = "xkoules";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.iblech ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.iblech ];
+    platforms = lib.platforms.linux;
   };
-}
+})

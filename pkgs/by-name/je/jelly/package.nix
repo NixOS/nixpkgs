@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "jelly";
   version = "0.1.31";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DennisMitchell";
@@ -25,12 +25,12 @@ python3Packages.buildPythonApplication {
   # the build to fail
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Recreational programming language inspired by J";
     mainProgram = "jelly";
     homepage = "https://github.com/DennisMitchell/jellylanguage";
-    license = licenses.mit;
-    maintainers = [ maintainers.tckmn ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.tckmn ];
+    platforms = lib.platforms.all;
   };
 }

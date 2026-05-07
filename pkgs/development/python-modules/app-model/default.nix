@@ -9,22 +9,19 @@
   pydantic,
   pydantic-compat,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "app-model";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "app-model";
-    tag = "v${version}";
-    hash = "sha256-T7aUwdne1rUzhVRotlxDvEBm3mi/frUQziZdLo53Lsg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zKaCxozT6OOPfrXMDic5d5DMb/I9tTiJFlX21Cc1yjY=";
   };
 
   build-system = [
@@ -44,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "app_model" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to implement generic application schema";
     homepage = "https://github.com/pyapp-kit/app-model";
-    changelog = "https://github.com/pyapp-kit/app-model/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pyapp-kit/app-model/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

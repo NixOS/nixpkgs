@@ -8,7 +8,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbmuxd";
   version = "1.1.1+date=2023-05-05";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   configureFlags = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libimobiledevice/usbmuxd";
     description = "Socket daemon to multiplex connections from and to iOS devices";
     longDescription = ''
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       a virtual network device. Multiple connections to different TCP ports can happen
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "usbmuxd";
   };
-}
+})

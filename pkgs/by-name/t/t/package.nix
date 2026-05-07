@@ -11,16 +11,14 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "t";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line power tool for Twitter";
     homepage = "http://sferik.github.io/t/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      offline
-      manveru
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "t";
   };
 }

@@ -15,12 +15,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-power-manager";
   version = "43.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major version}/gnome-power-manager-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major finalAttrs.version}/gnome-power-manager-${finalAttrs.version}.tar.xz";
     hash = "sha256-faq0i73bMOnfKrplDLYNBeZnyfiFrOagoeeVDgy90y8=";
   };
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-power-manager"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-power-manager";
     description = "View battery and power statistics provided by UPower";
     mainProgram = "gnome-power-statistics";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

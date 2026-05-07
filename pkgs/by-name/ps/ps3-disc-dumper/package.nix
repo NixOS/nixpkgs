@@ -10,18 +10,17 @@
 
 buildDotnetModule rec {
   pname = "ps3-disc-dumper";
-  version = "4.3.9";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
     tag = "v${version}";
-    hash = "sha256-F+FyCuxzg7oTF2iRxWygXeGnspHrZ3Za8HhCSKNgoR4=";
+    hash = "sha256-JF+qN4YR2thE/ByUjvDMDgMtPuD3jKZL0qGvPBCxYQ4=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
-  dotnetFlags = [ "-p:TargetFramework=net9.0" ];
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.sdk_10_0;
   dotnetRestoreFlags = [ "-p:Configuration=${buildType}" ];
   buildType = "Linux";
   projectFile = "UI.Avalonia/UI.Avalonia.csproj";

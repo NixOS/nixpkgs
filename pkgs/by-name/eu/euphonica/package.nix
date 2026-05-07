@@ -22,17 +22,18 @@
   sqlite,
   desktop-file-utils,
   libxml2,
+  libsecret,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "euphonica";
-  version = "0.96.4-beta";
+  version = "0.99.3-beta";
 
   src = fetchFromGitHub {
     owner = "htkhiem";
     repo = "euphonica";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iPkqTnC5Gg2hnzQ2Lul5aXF5QhYpHQ1MiilvNiKHFdc=";
+    hash = "sha256-C9OX8RzgUMdStBFq43sSl5vG7XccXTJjFvn0E2WQDuo=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AISBkWJ0ZZy2HdZCwW6S5DcD09nVJOmglsoevCaD/3g=";
+    hash = "sha256-3m0ObaRR/HlxPF9Z5Zg5fMQ17YVRCx6W3drI8XVwZP8=";
   };
 
   mesonBuildType = "release";
@@ -74,13 +75,17 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     sqlite
     libxml2
+    libsecret
   ];
 
   meta = {
     description = "MPD client with delusions of grandeur, made with Rust, GTK and Libadwaita";
     homepage = "https://github.com/htkhiem/euphonica";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ paperdigits ];
+    maintainers = with lib.maintainers; [
+      paperdigits
+      aaravrav
+    ];
     mainProgram = "euphonica";
     platforms = with lib.platforms; linux;
   };

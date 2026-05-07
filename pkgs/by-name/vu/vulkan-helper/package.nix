@@ -28,12 +28,11 @@ rustPlatform.buildRustPackage {
     addDriverRunpath $out/bin/vulkan-helper
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI app used to interface with basic Vulkan APIs";
     homepage = "https://github.com/imLinguin/vulkan-helper-rs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aidalgol ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "vulkan-helper";
   };
 }

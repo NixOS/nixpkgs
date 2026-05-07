@@ -12,7 +12,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "5.1";
 
   src = fetchurl {
-    url = "https://github.com/riot-ml/riot/releases/download/${version}/riot-${version}.tbz";
+    url = "https://github.com/leostera/riot/releases/download/${version}/riot-${version}.tbz";
     hash = "sha256-SsiDz53b9bMIT9Q3IwDdB3WKy98WSd9fiieU41qZpeE=";
   };
 
@@ -22,8 +22,8 @@ buildDunePackage rec {
 
   meta = {
     description = "Ergonomic, composable, efficient read/write streams";
-    homepage = "https://github.com/riot-ml/riot";
-    changelog = "https://github.com/riot-ml/riot/blob/${version}/CHANGES.md";
+    homepage = "https://github.com/leostera/riot";
+    changelog = "https://github.com/leostera/riot/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

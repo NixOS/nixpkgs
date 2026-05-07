@@ -5,11 +5,13 @@
   makeWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   autoPatchelfHook,
   cacert,
   llvmPackages,
   musl,
-  xorg,
+  libx11,
   jq,
   moreutils,
   nix-update-script,
@@ -17,24 +19,25 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.30.0";
+  version = "4.62.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-wncNdsQnmvZFf5sBw/sxDCF1SYuOIhj4bIeDpFj2FyI=";
+    hash = "sha256-o6ARRNObHtRqAD71j7L2HkpIalPwGWR+PyQQuHJBKZE=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       postPatch
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
-    hash = "sha256-w2AwYhn2+U+Kj8d9SXZssiH8tqSi9P3gSpLCR6L3T+A=";
+    hash = "sha256-Crtjchu17OFPWqd3L0AYCpA76YRN4jJc+vLVLo1WLe4=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -53,13 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     musl # not used, but requires extra work to remove
-    xorg.libX11 # for the clipboardy package
+    libx11 # for the clipboardy package
   ];
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     jq
     moreutils
   ]
@@ -71,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   # so I simply removed it
   postBuild = ''
     mv packages/vitest-pool-workers packages/~vitest-pool-workers
+
+    NODE_ENV="production" pnpm --filter unenv-preset run build
+    NODE_ENV="production" pnpm --filter workers-utils run build
     NODE_ENV="production" pnpm --filter workers-shared run build
     NODE_ENV="production" pnpm --filter miniflare run build
     NODE_ENV="production" pnpm --filter wrangler run build
@@ -85,11 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
   # - Update: Now we're copying everything over due to broken symlink errors
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/lib $out/lib/packages/wrangler
+    mkdir -p $out/{bin,lib}
     mv packages/~vitest-pool-workers packages/vitest-pool-workers
-    cp -r fixtures $out/lib
-    cp -r packages $out/lib
-    cp -r node_modules $out/lib
+    cp -r {fixtures,packages,node_modules} $out/lib
     cp -r tools $out/lib/tools
     rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin

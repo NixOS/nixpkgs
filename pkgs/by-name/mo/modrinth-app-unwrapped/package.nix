@@ -5,51 +5,113 @@
   cargo-tauri,
   desktop-file-utils,
   fetchFromGitHub,
+  gradle_9,
+  jdk17,
   makeBinaryWrapper,
+  makeShellWrapper,
   nix-update-script,
   nodejs,
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  replaceVars,
+  runCommand,
   rustPlatform,
   turbo,
   webkitgtk_4_1,
+  xcbuild,
 }:
 
 let
-  pnpm = pnpm_9;
+  gradle = gradle_9.override { java = jdk; };
+  jdk = jdk17;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.9.5";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1+Fmc8qyU3hCZmRNgp90nuvFgaB/GOH6SNc9AyWZYn0=";
+    hash = "sha256-47uokwYsEg5D0lyHdpqfvKlsuXZK0sm5YIWwNjVGsKQ=";
   };
 
-  cargoHash = "sha256-6hEnXzaL6PnME9s+T+MtmoTQmaux/0m/6xaQ99lwM2I=";
+  patches = [
+    # `packages/app-lib/build.rs` requires a Gradle executable, but our flags
+    # are injected through a bash function sourced by the stdenv :(
+    #
+    # So, re-implement said wrapper to have the same behavior when Gradle is ran in `build.rs`
+    (replaceVars ./gradle-from-path.patch {
+      # Yes, it has to be a shell wrapper
+      # https://github.com/NixOS/nixpkgs/issues/172583
+      gradle =
+        runCommand "gradle-exe-wrapper-${gradle.version}" { nativeBuildInputs = [ makeShellWrapper ]; }
+          ''
+            makeShellWrapper ${lib.getExe gradle} $out \
+              --add-flags "\''${NIX_GRADLEFLAGS_COMPILE:-}"
+          '';
+    })
 
-  pnpmDeps = pnpm.fetchDeps {
+    # `gradle.fetchDeps` doesn't seem to pick up a few integrations here
+    # Thankfully that's fine, since it's only for development
+    ./remove-spotless.patch
+  ];
+
+  cargoPatches = [
+    # Cidre 0.11.3 currently fails to build on darwin. Updating it to the latest version
+    # resolves this issue.
+    # Upstream PR is https://github.com/modrinth/code/pull/5862
+    ./update-cidre.patch
+  ];
+
+  # Let the app know about our actual version number
+  postPatch = ''
+    substituteInPlace {apps/app,packages/app-lib}/Cargo.toml apps/app-frontend/package.json \
+      --replace-fail '1.0.0-local' '${finalAttrs.version}'
+  '';
+
+  cargoHash = "sha256-GwangszzKTEYvflibPgkIyUkHlpfMgenD/mq3my5LIY=";
+
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-Q6e942R+3+511qFe4oehxdquw1TgaWMyOGOmP3me54o=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-Hk32LBD20F2LRgqNs8f1j3VdUxKoTPWs3yJvOghsEbI=";
   };
 
   nativeBuildInputs = [
     cacert # Required for turbo
     cargo-tauri.hook
     desktop-file-utils
+    gradle
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+    xcbuild
+  ];
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+
+  gradleFlags = [
+    "-Dfile.encoding=utf-8"
+    "--no-configuration-cache"
+  ];
+
+  dontUseGradleBuild = true;
+  dontUseGradleCheck = true;
 
   # Tests fail on other, unrelated packages in the monorepo
   cargoTestFlags = [
@@ -57,9 +119,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "theseus_gui"
   ];
 
+  # Required for mitmCache
+  __darwinAllowLocalNetworking = true;
+
   env = {
     TURBO_BINARY_PATH = lib.getExe turbo;
+    # Cidre requires a target version of at least 10.15
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.15";
   };
+
+  preGradleUpdate = ''
+    cd packages/app-lib/java
+  '';
+
+  # Required for the exe wrapper above
+  preBuild = ''
+    local nixGradleFlags=()
+    concatTo nixGradleFlags gradleFlags gradleFlagsArray
+    export NIX_GRADLEFLAGS_COMPILE="''${nixGradleFlags[@]}"
+
+    cp packages/app-lib/.env.prod packages/app-lib/.env
+  '';
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -90,12 +170,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gpl3Plus
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      hythera
+      encode42
+    ];
     mainProgram = "ModrinthApp";
-    platforms = with lib; platforms.linux ++ platforms.darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.
     # Darwin is the only exception
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
     broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # mitm cache
+    ];
   };
 })

@@ -8,12 +8,12 @@
   perl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goredo";
   version = "2.6.0";
 
   src = fetchurl {
-    url = "http://www.goredo.cypherpunks.ru/download/goredo-${version}.tar.zst";
+    url = "http://www.goredo.cypherpunks.ru/download/goredo-${finalAttrs.version}.tar.zst";
     hash = "sha256-XTL/otfCKC55TsUBBVors2kgFpOFh+6oekOOafOhcUs=";
   };
 
@@ -24,12 +24,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ zstd ];
 
-  nativeCheckInputs = lib.optionals doCheck [
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     python3
     perl
   ];
 
-  inherit (sharness) SHARNESS_TEST_SRCDIR;
+  env = {
+    inherit (sharness) SHARNESS_TEST_SRCDIR;
+  };
 
   vendorHash = null;
 
@@ -59,11 +61,11 @@ buildGoModule rec {
     "info"
   ];
 
-  meta = with lib; {
+  meta = {
     outputsToInstall = [ "out" ];
     description = "Makefile replacement that sucks less";
     homepage = "https://www.goredo.cypherpunks.ru";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.spacefrogg ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.spacefrogg ];
   };
-}
+})

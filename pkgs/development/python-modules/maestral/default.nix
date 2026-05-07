@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   makePythonPath,
-  pythonOlder,
   python,
   click,
   dbus-python,
@@ -29,18 +28,16 @@
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maestral";
-  version = "1.9.4";
+  version = "1.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
-    tag = "v${version}";
-    hash = "sha256-akh0COltpUU4Z4kfubg6A7k6W8ICoqVYkmFpMkTC8H8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mYFiQL4FumJWP2y1u5tIo1CZL027J8/EIYqJQde7G/c=";
   };
 
   build-system = [ setuptools ];
@@ -51,7 +48,6 @@ buildPythonPackage rec {
     dbus-python
     dropbox
     fasteners
-    importlib-metadata
     keyring
     keyrings-alt
     packaging
@@ -69,8 +65,14 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath dependencies}"
-    "--prefix PYTHONPATH : $out/${python.sitePackages}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (makePythonPath finalAttrs.finalPackage.dependencies)
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -117,16 +119,16 @@ buildPythonPackage rec {
 
   passthru.tests.maestral = nixosTests.maestral;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Dropbox client for macOS and Linux";
     mainProgram = "maestral";
     homepage = "https://maestral.app";
-    changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/samschott/maestral/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       natsukium
       peterhoeg
       sfrijters
     ];
   };
-}
+})

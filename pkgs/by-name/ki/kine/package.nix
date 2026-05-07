@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kine";
-  version = "0.14.0";
+  version = "0.14.16";
 
   src = fetchFromGitHub {
     owner = "k3s-io";
     repo = "kine";
-    rev = "v${version}";
-    hash = "sha256-/sI9ofYTqnEW5bzkrorWOhs4Z+U6+8yP0F+Za2s/MCE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WLH0aGs8Y8DKbhsjvtnp2sjEDP1F19V/tEtdfT+3FtM=";
   };
 
-  vendorHash = "sha256-1Dwu1b6y1ibGt7w6Iu3lKWItwVn9H/TQFbTL2z2rVoc=";
+  vendorHash = "sha256-RFqK2k1Gm89Oc3c+LAEE2FyOVIfEYIrEbUXQVHUWbrU=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/k3s-io/kine/pkg/version.Version=v${version}"
+    "-X github.com/k3s-io/kine/pkg/version.Version=v${finalAttrs.version}"
     "-X github.com/k3s-io/kine/pkg/version.GitCommit=unknown"
   ];
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "kine";
   };
-}
+})

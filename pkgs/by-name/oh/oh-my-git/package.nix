@@ -11,14 +11,14 @@
   godot3-export-templates,
   godot3-headless,
   libGLU,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libglvnd,
   libpulseaudio,
   perl,
@@ -48,14 +48,14 @@ stdenv.mkDerivation rec {
     gcc-unwrapped.lib
     git
     libGLU
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     libglvnd
     libpulseaudio
     perl
@@ -125,12 +125,12 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ohmygit.org/";
     description = "Interactive Git learning game";
     mainProgram = "oh-my-git";
-    license = with licenses; [ blueOak100 ];
+    license = with lib.licenses; [ blueOak100 ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

@@ -3,14 +3,14 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubefetch";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "jkulzer";
     repo = "kubefetch";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-1NbbQ9f81DbfvpGayhMYdOTOZrDg2hdZi+qUOr2mntY=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ wrmilling ];
     mainProgram = "kubefetch";
   };
-}
+})

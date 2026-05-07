@@ -30,6 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "French and Italian verb conjugator";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

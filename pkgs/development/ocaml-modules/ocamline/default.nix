@@ -17,10 +17,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ linenoise ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chrisnevers.github.io/ocamline/";
     description = "Command line interface for user input";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mgttlinger ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mgttlinger ];
   };
 }

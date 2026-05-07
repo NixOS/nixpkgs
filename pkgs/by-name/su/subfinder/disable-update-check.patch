@@ -1,5 +1,5 @@
---- a/v2/pkg/runner/options.go
-+++ b/v2/pkg/runner/options.go
+--- a/pkg/runner/options.go
++++ b/pkg/runner/options.go
 @@ -107,7 +107,7 @@ func ParseOptions() *Options {
  
  	flagSet.CreateGroup("update", "Update",

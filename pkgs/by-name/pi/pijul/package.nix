@@ -5,23 +5,26 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
+  dbus,
   libsodium,
   openssl,
-  xxHash,
+  xxhash,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pijul";
-  version = "1.0.0-beta.9";
+  version = "1.0.0-beta.11";
 
   src = fetchCrate {
-    inherit version pname;
-    hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
+    inherit (finalAttrs) version pname;
+    hash = "sha256-+rMMqo2LBYlCFQJv8WFCSEJgDUbMi8DnVDKXIWm3tIk=";
   };
 
-  cargoHash = "sha256-d2IlBtR3j6SF8AAagUQftCOqTqN70rDMlHkA9byxXyk=";
+  cargoHash = "sha256-IhArTiReUdj49bA+XseQpOiszK801xX5LdLj8vXD8rs=";
+
+  patches = [ ./fix-rand-0.9-sanakirja-imports.patch ];
 
   doCheck = false;
   nativeBuildInputs = [
@@ -29,9 +32,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
   buildInputs = [
+    dbus
     openssl
     libsodium
-    xxHash
+    xxhash
   ]
   ++ (lib.optionals gitImportSupport [ libgit2 ]);
 
@@ -44,15 +48,15 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/pijul completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [
       gal_bolle
       dywedir
       fabianhjr
     ];
     mainProgram = "pijul";
   };
-}
+})

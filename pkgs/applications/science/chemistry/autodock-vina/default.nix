@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.boost = boost';
 
-  meta = with lib; {
+  meta = {
     description = "One of the fastest and most widely used open-source docking engines";
     homepage = "https://vina.scripps.edu/";
     changelog = "https://github.com/ccsb-scripps/AutoDock-Vina/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
     mainProgram = "vina";
   };
 })

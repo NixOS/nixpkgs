@@ -12,13 +12,13 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmediainfo";
-  version = "25.07.1";
+  version = "26.01";
 
   src = fetchurl {
-    url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    hash = "sha256-jm6S8gzyynzoq6U60LWJqJovp9/T55cdOFAQms1JvtU=";
+    url = "https://mediaarea.net/download/source/libmediainfo/${finalAttrs.version}/libmediainfo_${finalAttrs.version}.tar.xz";
+    hash = "sha256-vNPSzBLPEIyg+60HVoswMlfnKv2P9z0Fz+a3qg5mocU=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     install -vD -m 644 libmediainfo.pc "$out/lib/pkgconfig/libmediainfo.pc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shared library for mediainfo";
     homepage = "https://mediaarea.net/";
     changelog = "https://mediaarea.net/MediaInfo/ChangeLog";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.devhell ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.devhell ];
   };
-}
+})

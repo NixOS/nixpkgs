@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) incron; };
 
-  meta = with lib; {
+  meta = {
     description = "Cron-like daemon which handles filesystem events";
     homepage = "https://github.com/ar-/incron";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.aanderse ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.aanderse ];
+    platforms = lib.platforms.linux;
   };
 }

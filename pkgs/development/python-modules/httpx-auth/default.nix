@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   time-machine,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "httpx-auth";
   version = "0.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Colin-b";
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Authentication classes to be used with httpx";
     homepage = "https://github.com/Colin-b/httpx_auth";
     changelog = "https://github.com/Colin-b/httpx_auth/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

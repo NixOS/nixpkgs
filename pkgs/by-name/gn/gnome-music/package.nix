@@ -29,15 +29,15 @@
   gsettings-desktop-schemas,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gnome-music";
-  version = "48.1";
+  version = "49.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-music/${lib.versions.major version}/gnome-music-${version}.tar.xz";
-    hash = "sha256-QL9XMC2l2zNraIVS7dAU2/vitEUEGWYAcpTGwrDAeN4=";
+    url = "mirror://gnome/sources/gnome-music/${lib.versions.major finalAttrs.version}/gnome-music-${finalAttrs.version}.tar.xz";
+    hash = "sha256-uoga4LVeNOYmn9LT342L+jxex+N7rIlFrseLf/IHvGc=";
   };
 
   nativeBuildInputs = [
@@ -100,12 +100,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gnome.updateScript { packageName = "gnome-music"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Music/";
     description = "Music player and management application for the GNOME desktop environment";
     mainProgram = "gnome-music";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -16,9 +16,9 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvisio";
-  version = "0.1.8";
+  version = "0.1.10";
 
   outputs = [
     "out"
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/libvisio/${pname}-${version}.tar.xz";
-    hash = "sha256-tAmP+/TcuecSE/oKzdvZKPJ77TDbLYAjSBOxXVPQQFs=";
+    url = "https://dev-www.libreoffice.org/src/libvisio/libvisio-${finalAttrs.version}.tar.xz";
+    hash = "sha256-np7/dREtTZLZImKtf8JZnCHib4/FulSQDv3IPAUB5HI=";
   };
 
   strictDeps = true;
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library providing ability to interpret and import visio diagrams into various applications";
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libvisio";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

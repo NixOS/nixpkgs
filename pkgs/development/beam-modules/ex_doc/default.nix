@@ -14,12 +14,12 @@
 
 let
   pname = "ex_doc";
-  version = "0.38.4";
+  version = "0.40.1";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-/gZczKm/IF5QQemrdcda9oKVIGDFSqdiu8YrBwT6Mtk=";
+    hash = "sha256-ZhsN2XI5WVy04ilNR/7NJo+C7F10lijsP+n3BGBNEkQ=";
   };
 in
 mixRelease {
@@ -37,7 +37,7 @@ mixRelease {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-TknrENa0Nb1Eobd4oTBl6TilPVEsw9+XjPdF3Ntq+DI=";
+    hash = "sha256-pMIm0lVMqkuiprp0XeVB+x4VTh+hQR3t8dk5OBmnIqA=";
   };
 
   passthru = {
@@ -50,14 +50,14 @@ mixRelease {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elixir-lang/ex_doc";
     description = ''
       ExDoc produces HTML and EPUB documentation for Elixir projects
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ex_doc";
-    maintainers = with maintainers; [ chiroptical ];
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
 }

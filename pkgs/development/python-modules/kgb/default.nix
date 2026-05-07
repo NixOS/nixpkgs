@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python function spy support for unit tests";
     homepage = "https://github.com/beanbaginc/kgb";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.0";
 
   src = fetchzip {
-    url = "https://github.com/sevmeyer/${pname}/releases/download/${version}/${pname}-${version}.zip";
+    url = "https://github.com/sevmeyer/mno16/releases/download/${version}/mno16-${version}.zip";
     stripRoot = false;
     hash = "sha256-xJQ9V7GlGUTEeYhqYFl/SemS6iqV0eW85YOn/tLgA+M=";
   };
@@ -19,9 +19,9 @@ stdenvNoCC.mkDerivation rec {
     cp fonts/*.ttf $out/share/fonts/truetype/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist monospaced font";
     homepage = "https://sev.dev/fonts/mno16";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

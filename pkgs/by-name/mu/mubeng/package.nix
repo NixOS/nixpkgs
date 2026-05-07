@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mubeng";
   version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "mubeng";
     repo = "mubeng";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Zd9Cl4sFf1neDHgydxp24k84JKTAkkLB9DKRfTnKHgc=";
   };
 
@@ -21,21 +21,20 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/mubeng/mubeng/common.Version=${version}"
+    "-X=github.com/mubeng/mubeng/common.Version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Proxy checker and IP rotator";
     homepage = "https://github.com/mubeng/mubeng";
-    changelog = "https://github.com/mubeng/mubeng/releases/tag/v${version}";
+    changelog = "https://github.com/mubeng/mubeng/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mubeng";
   };
-}
+})

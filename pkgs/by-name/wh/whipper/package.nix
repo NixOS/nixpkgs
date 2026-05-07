@@ -26,7 +26,7 @@ let
     util-linux
   ];
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "whipper";
   version = "0.10.0";
   pyproject = true;
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "00cq03cy5dyghmibsdsq5sdqv3bzkzhshsng74bpnb5lasxp3ia5";
   };
 
@@ -117,12 +117,12 @@ python3.pkgs.buildPythonApplication rec {
     command = "HOME=$TMPDIR whipper --version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/whipper-team/whipper";
     description = "CD ripper aiming for accuracy over speed";
-    maintainers = with maintainers; [ emily ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ emily ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "whipper";
   };
-}
+})

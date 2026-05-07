@@ -5,12 +5,12 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gen6dns";
   version = "1.3";
 
   src = fetchurl {
-    url = "https://www.hznet.de/tools/gen6dns-${version}.tar.gz";
+    url = "https://www.hznet.de/tools/gen6dns-${finalAttrs.version}.tar.gz";
     hash = "sha256-MhYfgzbGPmrhPx89EpObrEkxaII7uz4TbWXeEGF7Xws=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALL_DIR=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate static DNS records (AAAA and PTR) for hosts using Stateless Address Autoconfig (SLAAC)";
     homepage = "https://www.hznet.de/tools.html#gen6dns";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ majiir ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ majiir ];
+    platforms = lib.platforms.unix;
   };
-}
+})

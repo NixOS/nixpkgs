@@ -14,16 +14,22 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "microdnf";
   version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "microdnf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xWHE05CeX8I8YO0gqf5FDiqLexirwKdyCe4grclOVYc=";
   };
+
+  # inlined of https://github.com/rpm-software-management/microdnf/pull/151
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.5)" "cmake_minimum_required (VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -49,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "microdnf";
   };
-}
+})

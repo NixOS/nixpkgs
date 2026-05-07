@@ -4,28 +4,34 @@
   rustPlatform,
   versionCheckHook,
   nix-update-script,
+  python3,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zuban";
 
-  version = "0.0.21";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "zubanls";
     repo = "zuban";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-llAJwqJmOtauA7pi7dYZhVH0yFBNN65q2y8ecc9hAJY=";
+    hash = "sha256-s2u4or9qittXMt9layFEVrtYLhNgghZQd7VdupUpxqU=";
+    fetchSubmodules = true;
   };
+
+  postInstall = ''
+    mkdir -p $out/${python3.sitePackages}/zuban
+    cp -r third_party $out/${python3.sitePackages}/zuban/
+  '';
 
   buildAndTestSubdir = "crates/zuban";
 
-  cargoHash = "sha256-sZFc+kjerR7a6JzVb0zQXCfYuJVNnoYUihgLd3qrDLM=";
+  cargoHash = "sha256-0CynAjkY1Q6IZ8yyZWL8p/MySriahql2fc3qqsNvPeI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -39,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://zubanls.com/blog/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+      bew
       mcjocobe
     ];
     platforms = lib.platforms.all;

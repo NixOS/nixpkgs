@@ -26,16 +26,16 @@ in
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.45.0rc1";
+  version = "0.46.0";
   pyproject = true;
 
-  disabled = isPyPy || pythonAtLeast "3.14";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-wMTNtUuslCjopyfF6FAtfJAR0zuWjL8N8G16UKiplN0=";
+    hash = "sha256-mQFNfcOLmFYvYQGcgLi7G6iJDoTCm7hJfPh5hH9jPGc=";
   };
 
   build-system = [ setuptools ];

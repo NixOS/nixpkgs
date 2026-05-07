@@ -27,7 +27,7 @@ Alternatively, you can pass composeAndroidPackages to the `withSdk` passthrough:
 }
 ```
 
-These will export `ANDROID_SDK_ROOT` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
+These will export `ANDROID_HOME` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
 in the specified Android build environment.
 
 ## Deploying an Android SDK installation with plugins {#deploying-an-android-sdk-installation-with-plugins}

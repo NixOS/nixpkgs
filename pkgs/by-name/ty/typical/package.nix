@@ -4,20 +4,21 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typical";
-  version = "0.12.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "typical";
-    rev = "v${version}";
-    hash = "sha256-y7PWTzD9+rkC4wZYhecmDTa3AoWl4Tgh7QXbSK4Qq5Q=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gcaOQhEyCiU2kXWZRymGca0Mq+TOBGDR4v/5sFOaDz0=";
   };
 
-  cargoHash = "sha256-+SnwxmNQDj6acr2nEKJkNmR5PqnTIvyMApyZOmCld2U=";
+  cargoHash = "sha256-cRlxyh8a+lJLc/YkOYYXkCEi8D3KJHlm5a01rhWk3VQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,12 +28,6 @@ rustPlatform.buildRustPackage rec {
     export NO_COLOR=true
   '';
 
-  patches = [
-    # Related to https://github.com/stepchowfun/typical/pull/501
-    # Committing a slightly different patch because the upstream one doesn't apply cleanly
-    ./lifetime.patch
-  ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd typical \
       --bash <($out/bin/typical shell-completion bash) \
@@ -40,12 +35,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/typical shell-completion zsh)
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  meta = {
     description = "Data interchange with algebraic data types";
     mainProgram = "typical";
     homepage = "https://github.com/stepchowfun/typical";
-    changelog = "https://github.com/stepchowfun/typical/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/stepchowfun/typical/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

@@ -14,8 +14,8 @@
   jack2,
   alsa-lib,
   libpulseaudio,
-  libXpm,
-  libXrandr,
+  libxpm,
+  libxrandr,
   flac,
   libogg,
   libvorbis,
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giada";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = "giada";
     tag = finalAttrs.version;
-    hash = "sha256-f7Rtp/z7Z9P5TSI0UQbSuU4ukVrePKtSdihc1f3AAfo=";
+    hash = "sha256-MIGDaZLSwSIIZ2vXYuhGur0Ya1HX2yhrhafAawqU/+A=";
     fetchSubmodules = true;
   };
 
@@ -64,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     jack2
     libGL
-    libXpm
-    libXrandr
+    libxpm
+    libxrandr
     libogg
     libopus
     libpulseaudio

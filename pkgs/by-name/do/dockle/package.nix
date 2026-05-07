@@ -7,14 +7,14 @@
   lvm2,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dockle";
   version = "0.4.15";
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
     repo = "dockle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YoDgTKhXpN4UVF/+NDFxaEFwMj81RJaqfjr29t1UdLY=";
   };
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/goodwithtech/dockle/pkg.version=${version}"
+    "-X github.com/goodwithtech/dockle/pkg.version=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -41,13 +41,13 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/dockle --help
-    $out/bin/dockle --version | grep "dockle version ${version}"
+    $out/bin/dockle --version | grep "dockle version ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
   meta = {
     homepage = "https://containers.goodwith.tech";
-    changelog = "https://github.com/goodwithtech/dockle/releases/tag/v${version}";
+    changelog = "https://github.com/goodwithtech/dockle/releases/tag/v${finalAttrs.version}";
     description = "Container Image Linter for Security";
     mainProgram = "dockle";
     longDescription = ''
@@ -58,4 +58,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

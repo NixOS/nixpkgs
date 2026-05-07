@@ -1,10 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  dissect-apfs,
   dissect-archive,
   dissect-btrfs,
   dissect-cim,
   dissect-clfs,
+  dissect-cramfs,
   dissect-cstruct,
   dissect-esedb,
   dissect-etl,
@@ -30,23 +32,20 @@
   dissect-volume,
   dissect-xfs,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.19";
+  version = "3.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-eEiWKblhJPkZuxJvwJnHtxwvJ9uhXIkS56CeRtmEfkU=";
+    hash = "sha256-+Nq/7ftOD9/un9TYdrztbaUcBtDcfju36bkrDH57+ms=";
   };
 
   pythonRelaxDeps = true;
@@ -57,10 +56,12 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    dissect-apfs
     dissect-archive
     dissect-btrfs
     dissect-cim
     dissect-clfs
+    dissect-cramfs
     dissect-cstruct
     dissect-esedb
     dissect-etl
@@ -93,11 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect meta module";
     homepage = "https://github.com/fox-it/dissect";
     changelog = "https://github.com/fox-it/dissect/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

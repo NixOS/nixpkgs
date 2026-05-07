@@ -4,15 +4,12 @@
   buildPythonPackage,
   click,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "click-help-colors";
   version = "0.9.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_help_colors" ];
 
-  meta = with lib; {
+  meta = {
     description = "Colorization of help messages in Click";
     homepage = "https://github.com/click-contrib/click-help-colors";
     changelog = "https://github.com/click-contrib/click-help-colors/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

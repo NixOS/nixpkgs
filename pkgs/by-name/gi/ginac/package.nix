@@ -9,13 +9,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ginac";
-  version = "1.8.9";
+  version = "1.8.10";
 
   src = fetchurl {
-    url = "https://www.ginac.de/ginac-${version}.tar.bz2";
-    sha256 = "sha256-bP1Gz043NpDhLRa3cteu0PXEM9qMfs0kd/LnNkg7tDk=";
+    url = "https://www.ginac.de/ginac-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-bKwZc6UyXeC5vLjjkpiK6V+8N6pmwPHx07jmTAjOwbk=";
   };
 
   propagatedBuildInputs = [ cln ];
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-rpath" ];
 
-  meta = with lib; {
+  meta = {
     description = "GiNaC C++ library for symbolic manipulations";
     homepage = "https://www.ginac.de/";
-    maintainers = with maintainers; [ lovek323 ];
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    maintainers = [ ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
-}
+})

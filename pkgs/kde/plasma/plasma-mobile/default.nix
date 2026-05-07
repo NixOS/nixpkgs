@@ -13,6 +13,10 @@ mkKdeDerivation {
     qtsensors
     qtwayland
   ];
+
+  # FIXME: work around Qt 6.10 cmake API changes
+  cmakeFlags = [ "-DQT_FIND_PRIVATE_MODULES=1" ];
+
   postFixup = ''
     substituteInPlace "$out/share/wayland-sessions/plasma-mobile.desktop" \
       --replace-fail \

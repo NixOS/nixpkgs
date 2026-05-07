@@ -18,7 +18,6 @@
   pytest-cases,
   pytest-parallel,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   s3fs,
@@ -30,21 +29,23 @@
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-1NoJ2PA0ov9ZOWaZdlajV23UqTelRzfW7jESMsfOxkg=";
+    hash = "sha256-fDbgas4RG4cJRqrISWmrMUQUycQindlqF9/jA5R1TF8=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    "fsspec"
   ];
 
   dependencies = [
@@ -76,7 +77,7 @@ buildPythonPackage rec {
     pytest-parallel
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pins" ];
 
@@ -90,11 +91,11 @@ buildPythonPackage rec {
     "pins/tests/test_rsconnect_api.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to publishes data, models and other Python objects";
     homepage = "https://github.com/rstudio/pins-python";
     changelog = "https://github.com/rstudio/pins-python/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

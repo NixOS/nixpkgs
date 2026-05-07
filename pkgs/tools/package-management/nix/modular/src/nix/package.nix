@@ -7,6 +7,8 @@
   nix-main,
   nix-cmd,
 
+  mimalloc,
+
   # Configuration Options
 
   version,
@@ -23,6 +25,7 @@ mkMesonExecutable (finalAttrs: {
     nix-expr
     nix-main
     nix-cmd
+    mimalloc
   ];
 
   mesonFlags = [

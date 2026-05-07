@@ -7,13 +7,13 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bottle";
   version = "0.13.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eH54Mn4SsieTjeAiSDM9eIz+RZh+3Kc1+PiOA0csP0c=";
   };
 
@@ -42,12 +42,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bottlepy.org/";
     description = "Fast and simple micro-framework for small web-applications";
     mainProgram = "bottle.py";
     downloadPage = "https://github.com/bottlepy/bottle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
-}
+})

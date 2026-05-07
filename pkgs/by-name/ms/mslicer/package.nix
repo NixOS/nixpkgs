@@ -7,38 +7,59 @@
   rustPlatform,
   vulkan-loader,
   wayland,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mslicer";
-  version = "0.2.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "connorslade";
     repo = "mslicer";
     rev = finalAttrs.version;
-    hash = "sha256-37EOdMM/stMKwTTpQ0LWYZVUw2Y3CkoEGHWNthyQnSA=";
+    hash = "sha256-kDpV9UlqiqV+/h0PWk6fsOWumCHben4gkQk1mEXE5wk=";
   };
 
-  cargoHash = "sha256-nkNoyoMqcFLCuQ8TqRn4e5L2zbgjw615HIAuLVqg0vQ=";
+  cargoHash = "sha256-o1igInyC0N8TorQ/naKbRyTTdZiaSNquVy0i0jzNcAk=";
+
+  postPatch = ''
+    patchShebangs --build dist/msla_format/generate.sh
+  '';
 
   buildInputs = [
     libglvnd
     libxkbcommon
     vulkan-loader
     wayland
+    libxcursor
+    libxrandr
+    libxi
+    libx11
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
+    "--push-state"
     "--no-as-needed"
     "-lEGL"
     "-lvulkan"
     "-lwayland-client"
     "-lxkbcommon"
+    "-lX11"
+    "-lXcursor"
+    "-lXrandr"
+    "-lXi"
+    "--pop-state"
   ];
+
+  # Build all binaries (e.g. the cli `slicer`) -- not just the default `mslicer` GUI application:
+  cargoBuildFlags = [ "--workspace" ];
 
   strictDeps = true;
 

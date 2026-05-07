@@ -21,8 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-5TRJfI4irg2/ZxpfgzShXE08HWU2aWLR8zGbrZKpwbc=";
   };
 
-  pythonRelaxDeps = [ "colorlog" ];
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -38,6 +36,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/planbnet/livisi/releases/tag/${src.tag}";
     description = "Connection library for the abandoned Livisi Smart Home system";
     homepage = "https://github.com/planbnet/livisi";
     license = lib.licenses.asl20;

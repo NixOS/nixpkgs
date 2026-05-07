@@ -8,19 +8,27 @@
   pytestCheckHook,
   pytest-homeassistant-custom-component,
   pytest-freezer,
+  pytest-cov-stub,
+  home-assistant-frontend,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "amitfin";
   domain = "oref_alert";
-  version = "3.2.2";
+  version = "6.18.1";
 
   src = fetchFromGitHub {
     owner = "amitfin";
     repo = "oref_alert";
     tag = "v${version}";
-    hash = "sha256-YyE/t5onvpmbt4RE0YwqXBcZjkkmmLRFdfPdLpt+31k=";
+    hash = "sha256-Ev+5BhLkqxluPf86tDgoK/YQD22mMmBWm/LHaUamxX8=";
   };
+
+  # Do not publish cards, currently broken, attempting to write to nix store.
+  postPatch = ''
+    substituteInPlace custom_components/oref_alert/__init__.py \
+      --replace-fail 'version = await publish_cards(hass)' 'version = "1.0.0"'
+  '';
 
   dependencies = [
     aiofiles
@@ -30,10 +38,18 @@ buildHomeAssistantComponent rec {
 
   ignoreVersionRequirement = [ "shapely" ];
 
+  # These tests are broken with cards removed.
+  disabledTestPaths = [
+    "tests/test_custom_cards.py"
+    "tests/test_init.py"
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-homeassistant-custom-component
     pytest-freezer
+    pytest-cov-stub
+    home-assistant-frontend
   ];
 
   meta = {

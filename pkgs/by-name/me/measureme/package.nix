@@ -4,18 +4,21 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "measureme";
   version = "12.0.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "measureme";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pejgWzHtpEBylFzG1+/8zTV7qR6gf6UuTmuH9GNPoD0=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
+
+  # __cpuid is safe in newer Rust; suppress lint until upstream fixes it
+  env.RUSTFLAGS = "-A unused-unsafe";
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -23,10 +26,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Support crate for rustc's self-profiling feature";
     homepage = "https://github.com/rust-lang/measureme";
-    license = licenses.asl20;
-    maintainers = [ maintainers.t4ccer ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.t4ccer ];
   };
-}
+})

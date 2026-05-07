@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  asio,
+  asio_1_32_0,
   glib,
   jsoncpp,
   libcap_ng,
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
     ./v25-latest-linux-fix.patch
+    ./0001-handle-result-from-DcoKeyConfig_ParseFromString.patch
   ];
 
   postPatch = ''
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
   pythonPath = python3.withPackages (ps: [
     ps.dbus-python
     ps.pygobject3
-    ps.systemd
+    ps.systemd-python
   ]);
 
   nativeBuildInputs = [
@@ -81,7 +82,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    asio
+    # Depends on io_service
+    asio_1_32_0
     glib
     jsoncpp
     libcap_ng
@@ -101,7 +103,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "bash-completion" "enabled")
     (lib.mesonOption "test_programs" "disabled")
     (lib.mesonOption "unit_tests" "disabled")
-    (lib.mesonOption "asio_path" "${asio}")
+    (lib.mesonOption "asio_path" "${asio_1_32_0}")
     (lib.mesonOption "dbus_policy_dir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbus_system_service_dir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "systemd_system_unit_dir" "${placeholder "out"}/lib/systemd/system")
@@ -118,7 +120,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/libexec/openvpn3-linux" "$out ${pythonPath}"
   '';
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   passthru.updateScript = nix-update-script { };
 
@@ -128,7 +130,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenVPN/openvpn3-linux/";
     changelog = "https://github.com/OpenVPN/openvpn3-linux/releases/tag/v${version}";
     maintainers = with lib.maintainers; [
-      shamilton
       progrm_jarvis
     ];
     platforms = lib.platforms.linux;

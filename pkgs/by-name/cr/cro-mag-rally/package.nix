@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv Data ReadMe.txt $out/share/CroMagRally/
     install -Dm755 CroMagRally $out/bin/CroMagRally
     wrapProgram $out/bin/CroMagRally --chdir $out/share/CroMagRally
-    install -Dm644 ${finalAttrs.src}/packaging/io.jor.cromagrally.desktop $out/share/applications/cromagrally.desktop
-    install -Dm644 ${finalAttrs.src}/packaging/io.jor.cromagrally.png $out/share/pixmaps/io.jor.cromagrally.png
+    install -Dm644 ../packaging/io.jor.cromagrally.desktop $out/share/applications/cromagrally.desktop
+    install -Dm644 ../packaging/io.jor.cromagrally.png -t $out/share/icons/hicolor/256x256/apps/
 
     runHook postInstall
   '';

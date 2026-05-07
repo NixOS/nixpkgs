@@ -28,15 +28,15 @@ let
     hash = "sha256-fKa+R1TA1MJ7p3AsDc5lFlm9LKH6pcvyhI2BoAU8jBM=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libime";
-  version = "1.1.11";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
-    tag = version;
-    hash = "sha256-C9l7VBSUdSpnt+8ghdmLljZXHFswTyi/ItqeeYTjF4Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-q9OSY1q4MNlFqw6lRMrHO6QT9xP8Czz4b4M0BuIkp34=";
     fetchSubmodules = true;
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     fcitx5
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support generic input method implementation";
     homepage = "https://github.com/fcitx/libime";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
-}
+})

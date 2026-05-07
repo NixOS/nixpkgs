@@ -10,14 +10,14 @@
   fltk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "new-session-manager";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxaudio";
     repo = "new-session-manager";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5G2GlBuKjC/r1SMm78JKia7bMA97YcvUR5l6zBucemw=";
   };
 
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://new-session-manager.jackaudio.org/";
     description = "Session manager designed for audio applications";
-    maintainers = [ maintainers._6AA4FD ];
-    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers._6AA4FD ];
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

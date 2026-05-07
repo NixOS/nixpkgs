@@ -64,6 +64,7 @@ let
       eval = nixos-lib.evalTest {
         # Avoid evaluating a NixOS config prototype.
         config.node.type = types.deferredModule;
+        config.hostPkgs = pkgs;
         options._module.args = mkOption { internal = true; };
       };
     in
@@ -133,7 +134,7 @@ let
     inherit
       (evalModules {
         modules = [
-          (modules.importApply ../../modules/system/service/portable/service.nix {
+          (modules.importApply ../../../lib/services/service.nix {
             pkgs = throw "nixos docs / portableServiceOptions: Do not reference pkgs in docs";
           })
         ];

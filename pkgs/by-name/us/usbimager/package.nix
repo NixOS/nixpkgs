@@ -9,21 +9,21 @@
   withUdisks ? stdenv.hostPlatform.isLinux,
   udisks,
   glib,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbimager";
   version = "1.0.10";
 
   src = fetchFromGitLab {
     owner = "bztsrc";
     repo = "usbimager";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       udisks
       glib
     ]
-    ++ lib.optional (!withLibui) libX11
+    ++ lib.optional (!withLibui) libx11
     ++ lib.optional withLibui gtk3;
   # libui is bundled with the source of usbimager as a compiled static library
 
@@ -58,16 +58,16 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLibui "USE_LIBUI=yes"
   ++ lib.optional withUdisks "USE_UDISKS2=yes";
 
-  meta = with lib; {
+  meta = {
     description = "Very minimal GUI app that can write compressed disk images to USB drives";
     homepage = "https://gitlab.com/bztsrc/usbimager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vdot0x23 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vdot0x23 ];
     # windows and darwin could work, but untested
     # feel free add them if you have a machine to test
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "usbimager";
   };
-}
+})

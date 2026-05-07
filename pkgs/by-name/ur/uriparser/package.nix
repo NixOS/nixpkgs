@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uriparser";
-  version = "0.9.8";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "uriparser";
     repo = "uriparser";
     tag = "uriparser-${finalAttrs.version}";
-    hash = "sha256-U/AM8ULKGDfL3t+VUcn+t9sn4z/uc+pDjf2HHwHLI2M=";
+    hash = "sha256-tXEcJ6NAKVoFg/GLkldRcrSlXDcGpvjp7cguM9Xqcps=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "URIPARSER_BUILD_DOCS" false)
     (lib.cmakeBool "URIPARSER_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
+
+  doCheck = true;
 
   nativeCheckInputs = [ gtest ];
 

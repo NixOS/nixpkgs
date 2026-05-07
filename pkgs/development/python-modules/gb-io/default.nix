@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gb-io";
-  version = "0.3.5";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "althonos";
     repo = "gb-io.py";
     rev = "v${version}";
-    hash = "sha256-xpyfb5pTV8w7S7g2Tagl5N3jLO+IisP2KXuYN/RDDpY=";
+    hash = "sha256-6owaHSOVahgOG1gvN4Tox8c49qGzQ4lG1n8GKwEnCRk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-97aEuXdq9oEqYJs6sgQU5a0vAMJmWJzu2WGjOqzxZ4c=";
+    hash = "sha256-ZUvcbVwhV2P8AvsuVoaPWUW5G9VaEvx3mt4kub0xHRk=";
   };
 
   sourceRoot = src.name;
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gb_io" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/althonos/gb-io.py";
     description = "Python interface to gb-io, a fast GenBank parser written in Rust";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dlesl ];
   };
 }

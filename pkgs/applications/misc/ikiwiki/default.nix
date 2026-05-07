@@ -135,11 +135,11 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = "http://ikiwiki.info/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.wentasah ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.wentasah ];
   };
 }

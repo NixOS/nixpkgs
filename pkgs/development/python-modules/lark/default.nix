@@ -4,24 +4,28 @@
   fetchFromGitHub,
   regex,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.2.2";
-  format = "pyproject";
+  version = "1.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     tag = version;
-    hash = "sha256-02NX/2bHTYSVTDLLudJmEU2DcQNn0Ke+5ayilKLlwqA=";
+    hash = "sha256-JDtLSbVjypaHqamkknHDSql1GTMf1LA4TgJXqTn4Q20=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
-  propagatedBuildInputs = [ regex ];
+  dependencies = [ regex ];
 
   pythonImportsCheck = [
     "lark"
@@ -33,11 +37,11 @@ buildPythonPackage rec {
   # Js2py is needed for tests but it's unmaintained and insecure
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://lark-parser.readthedocs.io/";
-    changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/lark-parser/lark/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

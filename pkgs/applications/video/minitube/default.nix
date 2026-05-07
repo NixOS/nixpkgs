@@ -1,13 +1,14 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
+  qmake,
+  qttools,
+  wrapQtAppsHook,
   phonon,
   phonon-backend-vlc,
   qtbase,
-  qmake,
   qtdeclarative,
-  qttools,
   qtx11extras,
   mpv,
 
@@ -15,7 +16,7 @@
   withAPIKey ? "AIzaSyBQvZXseEVvgu5Ega_DI-AIJ55v0OsHmVY",
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "minitube";
   version = "3.9.3";
 
@@ -36,6 +37,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -49,7 +51,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "DEFINES+=APP_GOOGLE_API_KEY=${withAPIKey}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Stand-alone YouTube video player";
     longDescription = ''
       Watch YouTube videos in a new way: you type a keyword, Minitube gives
@@ -57,8 +59,8 @@ mkDerivation rec {
       website, it aims to create a new TV-like experience.
     '';
     homepage = "https://flavio.tordini.org/minitube";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "minitube";
   };

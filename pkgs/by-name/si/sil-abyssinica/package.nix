@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font for Ethiopian and Erythrean scripts (Amharic et al.)";
     homepage = "https://software.sil.org/abyssinica/";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ serge ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ serge ];
+    platforms = lib.platforms.all;
   };
 }

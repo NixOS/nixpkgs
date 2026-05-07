@@ -7,13 +7,14 @@
   python3Packages,
   unstableGitUpdater,
   fetchpatch2,
+  writableTmpDirAsHomeHook,
   extraLibs ? [ ],
 }:
 
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "3.35-unstable-2024-06-13";
+  version = "3.35-unstable-2025-06-24";
   pname = "i3pystatus";
   pyproject = true;
   build-system = [ python3Packages.setuptools ];
@@ -21,8 +22,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "enkore";
     repo = "i3pystatus";
-    rev = "f3c539ad78ad1c54fc36e8439bf3905a784ccb34";
-    hash = "sha256-3AGREY+elHQk8kaoFp8AHEzk2jNC/ICGYPh2hXo2G/w=";
+    rev = "e8e03934d95658c85fa9f594987dac0481ca26c9";
+    hash = "sha256-uAt6jxNAUR9txyPtHS4BRtu8Z5QaP6uqFg0sROf356c=";
   };
 
   patches = [
@@ -41,7 +42,10 @@ python3Packages.buildPythonApplication rec {
     libnotify
   ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   checkInputs = [ python3Packages.requests ];
 

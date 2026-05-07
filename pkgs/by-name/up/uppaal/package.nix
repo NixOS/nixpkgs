@@ -64,18 +64,19 @@ stdenvNoCC.mkDerivation rec {
     makeWrapper $out/lib/uppaal/uppaal $out/bin/uppaal \
       --set JAVA_HOME ${jdk17} \
       --set PATH $out/lib/uppaal:$PATH \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
+      --set _JAVA_AWT_WM_NONREPARENTING 1 # Java Swing renders a blank window on Wayland without this
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Integrated tool environment for modeling, validation and verification of real-time systems";
     homepage = "https://uppaal.org/";
-    license = licenses.unfreeRedistributable;
-    platforms = with platforms; linux ++ darwin ++ windows;
+    license = lib.licenses.unfreeRedistributable;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
     broken = !(stdenvNoCC.hostPlatform.isLinux && stdenvNoCC.hostPlatform.isx86_64);
-    maintainers = with maintainers; [ mortenmunk ];
+    maintainers = with lib.maintainers; [ mortenmunk ];
     mainProgram = "uppaal";
   };
 }

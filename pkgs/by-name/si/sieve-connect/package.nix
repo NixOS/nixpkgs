@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sieve-connect";
   version = "0.90";
 
   src = fetchFromGitHub {
     owner = "philpennock";
     repo = "sieve-connect";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ghvfa5ifa68b6imh85bkmy00r93c5f9hs6d039axb73gmma580p";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     # Fixes failing build when not building in git repo
     mkdir .git
     touch .git/HEAD
-    echo "${version}" > versionfile
+    echo "${finalAttrs.version}" > versionfile
     echo "$(date +%Y-%m-%d)" > datefile
   '';
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client for the MANAGESIEVE Protocol";
     longDescription = ''
       This is sieve-connect. A client for the ManageSieve protocol,
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
       implemented by timsieved in Cyrus IMAP.
     '';
     homepage = "https://github.com/philpennock/sieve-connect";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ das_j ];
     mainProgram = "sieve-connect";
   };
-}
+})

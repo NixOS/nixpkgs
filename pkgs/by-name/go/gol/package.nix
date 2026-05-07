@@ -8,16 +8,16 @@
 
 maven.buildMavenPackage rec {
   pname = "gol";
-  version = "1.0.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "clarisma";
     repo = "gol-tool";
     tag = version;
-    hash = "sha256-roFtoSpNByNVGkl7ESt5O6b4voVzX8Nbow1dI6Sqgss";
+    hash = "sha256-AnPm5Mooww9kAMWLnM36z8DVRGfIIEiqUE65tgNuKm8=";
   };
 
-  mvnHash = "sha256-lKmoftSkyyb/pIthrsJaZ3p9l5V5K3FdK6sOBoZyhe8";
+  mvnHash = "sha256-YD28YX0RKuxOEWuK12ToOnFFrUPqA9xZ+EmsCt1fDPI=";
   mvnParameters = "compile assembly:single -Dmaven.test.skip=true";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,7 +35,7 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility for creating and managing Geographic Object Libraries";
     longDescription = ''
       Use the GOL command-line utility to:
@@ -43,8 +43,8 @@ maven.buildMavenPackage rec {
       - perform GOQL queries and export the results in a variety of formats.
     '';
     homepage = "https://docs.geodesk.com/gol";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.starsep ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.starsep ];
+    platforms = lib.platforms.all;
   };
 }

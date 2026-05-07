@@ -6,7 +6,7 @@
   qcheck,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bencode";
   version = "2.0";
   minimalOCamlVersion = "4.02.0";
@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "rgrinberg";
     repo = "bencode";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sEMS9oBOPeFX1x7cHjbQhCD2QI5yqC+550pPqqMsVws=";
   };
 
@@ -27,8 +27,8 @@ buildDunePackage rec {
   meta = {
     description = "Bencode (.torrent file format) reader/writer in OCaml ";
     homepage = "https://github.com/rgrinberg/bencode";
-    changelog = "https://github.com/rgrinberg/bencode/blob/${version}/Changelog.md";
+    changelog = "https://github.com/rgrinberg/bencode/blob/${finalAttrs.version}/Changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ infinidoge ];
   };
-}
+})

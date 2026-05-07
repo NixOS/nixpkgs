@@ -10,29 +10,26 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.3.2";
+  version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
     tag = version;
-    hash = "sha256-LR3ZZD7TLpvCGVSx27tSxa7H2A06JBPBCH2yHGvqV84=";
+    hash = "sha256-h22y62f+pdoHYKqPeKNGFkVS7/IMWbxaAoDLomwAB40=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail "setuptools>=68.0,<80.10" "setuptools"
+      --replace-fail "setuptools>=68.0,<82.1" "setuptools"
   '';
 
   build-system = [ setuptools ];

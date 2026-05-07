@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   writeText,
   catboost,
   cloudpickle,
@@ -31,16 +30,14 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.48.0";
+  version = "0.50.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = "shap";
     tag = "v${version}";
-    hash = "sha256-eWZhyrFpEFlmTFPTHZng9V+uMRMXDVzFdgrqIzRQTws=";
+    hash = "sha256-sf9EYa15/5xEOtHSesuq97dFP4frtteoGSpHE8kGP9Q=";
   };
 
   postPatch = ''
@@ -65,6 +62,11 @@ buildPythonPackage rec {
     scipy
     slicer
     tqdm
+  ];
+
+  pythonRelaxDeps = [
+    "numba"
+    "llvmlite"
   ];
 
   optional-dependencies = {
@@ -147,12 +149,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
     changelog = "https://github.com/slundberg/shap/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       evax
       natsukium
     ];

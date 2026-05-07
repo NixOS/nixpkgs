@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "capnproto-java";
   version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto-java";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7uYtRHKsJvbE1b0HbNXGbRXpkUHHLjMDIWLlOUcQWDk=";
   };
 
@@ -23,15 +23,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cap'n Proto codegen plugin for Java";
     mainProgram = "capnpc-java";
     longDescription = "Only includes compiler plugin, the Java runtime/library that the generated code will link to must be built separately with Maven.";
     homepage = "https://dwrensha.github.io/capnproto-java/index.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      bhipple
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       solson
     ];
   };
-}
+})

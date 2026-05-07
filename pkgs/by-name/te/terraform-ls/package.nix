@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terraform-ls";
-  version = "0.37.0";
+  version = "0.38.6";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-ls";
-    rev = "v${version}";
-    hash = "sha256-oEOxkkpciFs2XwdTpp22vfGzfxWxo66BzajINXhLliA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pIZoTAWl6J2z/BHxrpyVjhyA54v9vM8r1Q1eCmBvUZs=";
   };
 
-  vendorHash = "sha256-CEivl34R3UptmiE+0oo69RGaU2sxL2fyQjqoL8cArDU=";
+  vendorHash = "sha256-MMmL/1yHMzNZSXmMVGawrhIi4fIluBgozWFMuiFEoBs=";
 
   ldflags = [
     "-s"
@@ -29,7 +29,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/terraform-ls --help
-    $out/bin/terraform-ls --version | grep "${version}"
+    $out/bin/terraform-ls --version | grep "${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -37,11 +37,11 @@ buildGoModule rec {
     description = "Terraform Language Server (official)";
     mainProgram = "terraform-ls";
     homepage = "https://github.com/hashicorp/terraform-ls";
-    changelog = "https://github.com/hashicorp/terraform-ls/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hashicorp/terraform-ls/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       mbaillie
       jk
     ];
   };
-}
+})

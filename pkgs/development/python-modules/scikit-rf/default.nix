@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
@@ -23,20 +22,19 @@
   pytestCheckHook,
   pytest-cov-stub,
   pytest-mock,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
     tag = "v${version}";
-    hash = "sha256-wQOphwG5/4Bfa+re3S0d7lS4CJlKRjrRqnFZKaTG70M=";
+    hash = "sha256-iOKTQOOJTsj6YIQaJVWFcp9HdUEj43aytpo7VzItxr8=";
   };
 
   build-system = [ setuptools ];
@@ -46,6 +44,8 @@ buildPythonPackage rec {
     scipy
     pandas
   ];
+
+  pythonRemoveDeps = [ "pre-commit" ];
 
   optional-dependencies = {
     plot = [ matplotlib ];
@@ -75,22 +75,26 @@ buildPythonPackage rec {
     networkx
     pytestCheckHook
     pytest-cov-stub
+    writableTmpDirAsHomeHook
   ];
 
-  # test_calibration.py generates a divide by zero error on darwin
-  # and fails on Linux after updates of dependenceis
-  # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths = [
-    "skrf/calibration/tests/test_calibration.py"
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+
+  disabledTests = [
+    # numpy.exceptions.VisibleDeprecationWarning: dtype(): align should be
+    #  passed as Python or NumPy boolean but got `align=0`
+    "test_constructor_from_pathlib"
+    "test_constructor_from_pickle"
+    "test_constructor_from_touchstone_special_encoding"
   ];
 
   pythonImportsCheck = [ "skrf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
     changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lugarun ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lugarun ];
   };
 }

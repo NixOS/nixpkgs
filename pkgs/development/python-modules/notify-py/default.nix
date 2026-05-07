@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   alsa-utils,
@@ -19,9 +18,7 @@
 buildPythonPackage rec {
   pname = "notify-py";
   version = "0.3.43";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms7m";
@@ -80,13 +77,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notifypy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform desktop notification library for Python";
     mainProgram = "notifypy";
     homepage = "https://github.com/ms7m/notify-py";
     changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       austinbutler
       dotlambda
     ];

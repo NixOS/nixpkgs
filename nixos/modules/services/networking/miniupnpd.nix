@@ -11,8 +11,8 @@ let
   cfg = config.services.miniupnpd;
   configFile = pkgs.writeText "miniupnpd.conf" ''
     ext_ifname=${cfg.externalInterface}
-    enable_natpmp=${if cfg.natpmp then "yes" else "no"}
-    enable_upnp=${if cfg.upnp then "yes" else "no"}
+    enable_natpmp=${boolToYesNo cfg.natpmp}
+    enable_upnp=${boolToYesNo cfg.upnp}
 
     ${concatMapStrings (range: ''
       listening_ip=${range}

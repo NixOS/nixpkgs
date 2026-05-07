@@ -12,20 +12,21 @@
   pango,
   udev,
   udevCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny-dfr";
-  version = "0.3.5";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "tiny-dfr";
-    tag = "v${version}";
-    hash = "sha256-G4OeYZH3VF6fKWxHYLTmwzQmQ4JupgYNH/6aJSgINvg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NwZ/uhVyI3NeI5CUsM42HUu6SpG0Lh8Mj66RY+ZuqBM=";
   };
 
-  cargoHash = "sha256-/PtoAc2ZNJfW5gegcFQAAlEmjSMysZ+QebVfHtW35Nk=";
+  cargoHash = "sha256-k9mXEKn+LqFJraLm2ahGGAbVUNeNPnEwt1wGEOXeSrc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -55,15 +56,19 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://github.com/AsahiLinux/tiny-dfr";
     description = "Most basic dynamic function row daemon possible";
     license = [
-      licenses.asl20
-      licenses.mit
+      lib.licenses.asl20
+      lib.licenses.mit
     ];
     mainProgram = "tiny-dfr";
-    maintainers = [ maintainers.qyliss ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.qyliss ];
+    platforms = lib.platforms.linux;
   };
-}
+})

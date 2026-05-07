@@ -11,7 +11,6 @@
   pkgs,
   buildImage,
   buildLayeredImage,
-  fakeNss,
   pullImage,
   shadowSetup,
   buildImageWithNixDb,
@@ -27,11 +26,37 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
+  nonRootShadowSetup =
+    {
+      user,
+      uid,
+      gid ? uid,
+    }:
+    with pkgs;
+    [
+      (writeTextDir "etc/shadow" ''
+        root:!x:::::::
+        ${user}:!:::::::
+      '')
+      (writeTextDir "etc/passwd" ''
+        root:x:0:0::/root:${runtimeShell}
+        ${user}:x:${toString uid}:${toString gid}::/home/${user}:
+      '')
+      (writeTextDir "etc/group" ''
+        root:x:0:
+        ${user}:x:${toString gid}:
+      '')
+      (writeTextDir "etc/gshadow" ''
+        root:x::
+        ${user}:x::
+      '')
+    ];
+
   nginxArguments =
     let
       nginxPort = "80";
       nginxConf = pkgs.writeText "nginx.conf" ''
-        user nobody nobody;
+        user nginx nginx;
         daemon off;
         error_log /dev/stdout info;
         pid /dev/null;
@@ -55,9 +80,12 @@ let
       name = "nginx-container";
       tag = "latest";
       contents = [
-        fakeNss
         pkgs.nginx
-      ];
+      ]
+      ++ nonRootShadowSetup {
+        uid = 999;
+        user = "nginx";
+      };
 
       extraCommands = ''
         mkdir -p tmp/nginx_client_body
@@ -77,6 +105,8 @@ let
           "${nginxPort}/tcp" = { };
         };
       };
+
+      meta.description = "Basic nginx docker image example";
     };
 
 in
@@ -88,9 +118,11 @@ rec {
     tag = "latest";
     copyToRoot = pkgs.buildEnv {
       name = "image-root";
-      paths = [ pkgs.bashInteractive ];
+      paths = [ pkgs.bash ];
       pathsToLink = [ "/bin" ];
     };
+
+    meta.description = "Basic example image";
   };
 
   # 2. service example, layered on another image
@@ -138,6 +170,8 @@ rec {
         Retries = 3;
       };
     };
+
+    meta.description = "Service example, layered on another image";
   };
 
   # 3. another service example
@@ -204,6 +238,8 @@ rec {
         "USER=nobody"
       ];
     };
+
+    meta.description = "nix example to play with the container nix store";
   };
 
   # 7. example of adding something on top of an image pull by our
@@ -541,7 +577,7 @@ rec {
     tag = "latest";
     compressor = "none";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   bashZstdCompressed = pkgs.dockerTools.buildImage {
@@ -549,20 +585,20 @@ rec {
     tag = "latest";
     compressor = "zstd";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
-    copyToRoot = pkgs.bashInteractive;
+    copyToRoot = pkgs.bash;
   };
 
   # buildLayeredImage without explicit tag
   bashNoTagLayered = pkgs.dockerTools.buildLayeredImage {
     name = "bash-no-tag-layered";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage without compression
@@ -570,7 +606,7 @@ rec {
     name = "bash-layered-uncompressed";
     tag = "latest";
     compressor = "none";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage with zstd compression
@@ -578,56 +614,28 @@ rec {
     name = "bash-layered-zstd";
     tag = "latest";
     compressor = "zstd";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # streamLayeredImage without explicit tag
   bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
-    contents = pkgs.bashInteractive;
+    contents = pkgs.bash;
   };
 
   # buildLayeredImage with non-root user
-  bashLayeredWithUser =
-    let
-      nonRootShadowSetup =
-        {
-          user,
-          uid,
-          gid ? uid,
-        }:
-        with pkgs;
-        [
-          (writeTextDir "etc/shadow" ''
-            root:!x:::::::
-            ${user}:!:::::::
-          '')
-          (writeTextDir "etc/passwd" ''
-            root:x:0:0::/root:${runtimeShell}
-            ${user}:x:${toString uid}:${toString gid}::/home/${user}:
-          '')
-          (writeTextDir "etc/group" ''
-            root:x:0:
-            ${user}:x:${toString gid}:
-          '')
-          (writeTextDir "etc/gshadow" ''
-            root:x::
-            ${user}:x::
-          '')
-        ];
-    in
-    pkgs.dockerTools.buildLayeredImage {
-      name = "bash-layered-with-user";
-      tag = "latest";
-      contents = [
-        pkgs.bash
-        pkgs.coreutils
-      ]
-      ++ nonRootShadowSetup {
-        uid = 999;
-        user = "somebody";
-      };
+  bashLayeredWithUser = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-with-user";
+    tag = "latest";
+    contents = [
+      pkgs.bash
+      pkgs.coreutils
+    ]
+    ++ nonRootShadowSetup {
+      uid = 999;
+      user = "somebody";
     };
+  };
 
   # basic example, with cross compilation
   cross =
@@ -699,7 +707,7 @@ rec {
               " --program-prefix=layeredImageWithFakeRootCommands-"
             ];
             doCheck = false;
-            versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+            versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
             meta = prevAttrs.meta // {
               mainProgram = "layeredImageWithFakeRootCommands-hello";
             };
@@ -795,6 +803,10 @@ rec {
           }
         )
       );
+      etcCmd = pkgs.writeScript "etc-cmd" ''
+        #!${pkgs.busybox}/bin/sh
+        ${pkgs.busybox}/bin/cat /etc/some-config-file
+      '';
     in
     pkgs.dockerTools.streamLayeredImage {
       name = "etc";
@@ -804,10 +816,7 @@ rec {
         mkdir -p /etc
         ${nixosCore.config.system.build.etcActivationCommands}
       '';
-      config.Cmd = pkgs.writeScript "etc-cmd" ''
-        #!${pkgs.busybox}/bin/sh
-        ${pkgs.busybox}/bin/cat /etc/some-config-file
-      '';
+      config.Cmd = [ etcCmd ];
     };
 
   # Example export of the bash image
@@ -832,7 +841,7 @@ rec {
     tag = "latest";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
     copyToRoot = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -841,7 +850,7 @@ rec {
     name = "layered-image-with-path";
     tag = "latest";
     contents = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -852,7 +861,7 @@ rec {
     architecture = "arm64";
     # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
     copyToRoot = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };
@@ -862,7 +871,7 @@ rec {
     tag = "latest";
     architecture = "arm64";
     contents = [
-      pkgs.bashInteractive
+      pkgs.bash
       ./test-dummy
     ];
   };

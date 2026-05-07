@@ -6,16 +6,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spotdl";
-  version = "4.4.2";
+  version = "4.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
-    tag = "v${version}";
-    hash = "sha256-guQ8fIA20wtCkB5CkU7zg/INE+g8/fvQfIs5TNteQGo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GKkkYA1Z6YsthIKE8Hf/vKRHU7kPCKabOh28i/JSSOc=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -26,11 +26,14 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       beautifulsoup4
+      datastar-py
       fastapi
+      jinja2
       mutagen
       platformdirs
       pydantic
       pykakasi
+      python-multipart
       python-slugify
       pytube
       rapidfuzz
@@ -50,8 +53,8 @@ python3Packages.buildPythonApplication rec {
     pyfakefs
     pytest-mock
     pytest-subprocess
-    pytest-vcr
     pytestCheckHook
+    vcrpy
     writableTmpDirAsHomeHook
   ];
 
@@ -65,6 +68,8 @@ python3Packages.buildPythonApplication rec {
     "tests/utils/test_m3u.py"
     "tests/utils/test_metadata.py"
     "tests/utils/test_search.py"
+    # TypeError: 'LocalPath' object is not subscriptable
+    "tests/utils/test_config.py"
   ];
 
   disabledTests = [
@@ -89,9 +94,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Download your Spotify playlists and songs along with album art and metadata";
     homepage = "https://github.com/spotDL/spotify-downloader";
-    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/${src.tag}";
+    changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "spotdl";
   };
-}
+})

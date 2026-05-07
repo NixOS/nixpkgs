@@ -43,7 +43,7 @@
   rubiks,
   blas,
   lapack,
-  flint3,
+  flint,
   gmp,
   mpfr,
   zlib,
@@ -60,7 +60,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
   runtimepath = (
-    lib.makeBinPath ([
+    lib.makeBinPath [
       "@sage-local@"
       "@sage-local@/build"
       pythonEnv
@@ -96,7 +96,7 @@ let
       lcalc
       rubiks
       less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
-    ])
+    ]
   );
 in
 writeTextFile rec {
@@ -167,7 +167,7 @@ writeTextFile rec {
         export LDFLAGS='${
           lib.concatStringsSep " " (
             map (pkg: "-L${pkg}/lib") [
-              flint3
+              flint
               gap
               glpk
               gmp
@@ -187,7 +187,7 @@ writeTextFile rec {
               singular
               gmp.dev
               glpk
-              flint3
+              flint
               gap
               mpfr.dev
             ]

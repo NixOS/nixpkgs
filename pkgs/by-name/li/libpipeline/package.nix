@@ -5,12 +5,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpipeline";
   version = "1.5.8";
 
   src = fetchurl {
-    url = "mirror://savannah/libpipeline/libpipeline-${version}.tar.gz";
+    url = "mirror://savannah/libpipeline/libpipeline-${finalAttrs.version}.tar.gz";
     hash = "sha256-GxIDyhUszWOYPD8hEvf+b6Wv1FMhjt5RU9GzHhG7hAU=";
   };
 
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libpipeline.nongnu.org";
     description = "C library for manipulating pipelines of subprocesses in a flexible and convenient way";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
-}
+})

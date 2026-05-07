@@ -18,7 +18,7 @@ let
 
   interfaceRoutes = i: i.ipv4.routes ++ optionals cfg.enableIPv6 i.ipv6.routes;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
+  dhcpStr = useDHCP: boolToYesNo (useDHCP == true || useDHCP == null);
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
@@ -347,7 +347,7 @@ in
                         driverOpt:
                         assertTrace (elem driverOpt (knownOptions ++ unknownOptions))
                           "The bond.driverOption `${driverOpt}` cannot be mapped to the list of known networkd bond options. Please add it to the mapping above the assert or to `unknownOptions` should it not exist in networkd."
-                      ) (mapAttrsToList (k: _: k) do);
+                      ) (attrNames do);
                       "";
                     # get those driverOptions that have been set
                     filterSystemdOptions = filterAttrs (sysDOpt: kOpts: any (kOpt: do ? ${kOpt}) kOpts.optNames);
@@ -392,6 +392,24 @@ in
               };
               networks."40-${macvlan.interface}" = {
                 macvlan = [ name ];
+              };
+            }
+          )
+        ))
+        (mkMerge (
+          flip mapAttrsToList cfg.ipvlans (
+            name: ipvlan: {
+              netdevs."40-${name}" = {
+                netdevConfig = {
+                  Name = name;
+                  Kind = "ipvlan";
+                };
+                ipvlanConfig =
+                  optionalAttrs (ipvlan.mode != null) { Mode = lib.toUpper ipvlan.mode; }
+                  // optionalAttrs (ipvlan.flags != null) { Flags = ipvlan.flags; };
+              };
+              networks."40-${ipvlan.interface}" = {
+                ipvlan = [ name ];
               };
             }
           )

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   ruamel-yaml,
   python-dateutil,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "strictyaml";
   version = "1.7.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "strictyaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Strict, typed YAML parser";
     homepage = "https://hitchdev.com/strictyaml/";
     changelog = "https://hitchdev.com/strictyaml/changelog/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

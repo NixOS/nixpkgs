@@ -6,7 +6,7 @@
   graphviz,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-big-picture";
   version = "1.3.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "git-big-picture";
     repo = "git-big-picture";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aBwSw7smeRkkXSPY02Cs+jFI1wvgj1JisUny+R8G59E=";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.nthorne ];
     mainProgram = "git-big-picture";
   };
-}
+})

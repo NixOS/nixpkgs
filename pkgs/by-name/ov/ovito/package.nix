@@ -15,25 +15,34 @@
   openssl,
   python3,
   qt6Packages,
+  imagemagick,
   copyDesktopItems,
+  nix-update-script,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovito";
-  version = "3.12.2";
+  version = "3.15.2";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
-    rev = "v${version}";
-    hash = "sha256-qpKQAO2f1TfspqjbCLA/3ERWdMeknKe0a54yd9PZbsA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A7TE84B63JG2X4iBUxQiahLSYTlu7y+x92NTii26pmg=";
     fetchSubmodules = true;
   };
-  patches = [ ./zstd.patch ];
+
+  postPatch = ''
+    substituteInPlace src/ovito/core/CMakeLists.txt \
+      --replace-fail " IF(OVITO_BUILD_CONDA)" " IF(TRUE)"
+  '';
 
   nativeBuildInputs = [
     cmake
     qt6Packages.wrapQtAppsHook
+    wrapGAppsHook3
+    imagemagick
     copyDesktopItems
   ];
 
@@ -54,6 +63,12 @@ stdenv.mkDerivation rec {
     # needed to run natively on wayland
     qt6Packages.qtwayland
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # manually create a desktop file
   desktopItems = [
@@ -78,21 +93,26 @@ stdenv.mkDerivation rec {
       };
     in
     ''
-      install -Dm644 ${icon} $out/share/pixmaps/ovito.png
+      mkdir -p $out/share/icons/hicolor/512x512/apps
+      magick ${icon} -resize 512x512 $out/share/icons/hicolor/512x512/apps/ovito.png
     '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Scientific visualization and analysis software for atomistic and particle simulation data";
     mainProgram = "ovito";
     homepage = "https://ovito.org";
-    license = with licenses; [
+    changelog = "https://docs.ovito.org/new_features.html";
+    license = with lib.licenses; [
       gpl3Only
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       twhitehead
       chn
+      chillcicada
     ];
     broken = stdenv.hostPlatform.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
   };
-}
+})

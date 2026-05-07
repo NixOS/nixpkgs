@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  version = "8.0.13";
+  version = "8.2.6";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -48,25 +48,24 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = stdenv.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-gJgjVmUbjIw/VG9B/Mp/0cNfE6UxluA/QLi7Lp3fq48=";
+        hash = "sha256-VjFKDwqBI42XQwL7/+eGLv6WlMSY6tYqC8qSy1laDfA=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-DR0RzV0CenrYTX86ttWUW4VItzqWYqAfCr/gcEDMlCg=";
+        hash = "sha256-jqpQ0gjoLfnv+kYqbFyyAKZbA3+hGK8BU/cBzhzqtCI=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${finalAttrs.version}.tgz";
-        hash = "sha256-Phd02vOrkdMjkWvANRwVFpaE/G5h5ZUVUL/MJ3M+3HU=";
+        hash = "sha256-Oba6gK0hrRyo29mJ1/6Bpgql9BR160LUJH/kB0AGLz0=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
-        hash = "sha256-YSicegbDaOIDMmMJL82nEyDNMptneRSSmkH1VVnkIRw=";
+        hash = "sha256-74MB0FzbRoZ3Wu4d3OORtfHNZ83GEXnC0h2rJGosTxs=";
       };
     };
     updateScript =
@@ -85,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
           text = ''
             # Get latest version string from Github
-            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
+            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.2")) | select(contains("rc") | not) | .[1:])')
 
             # Check if the new version is available for download, if not, exit
             curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
@@ -111,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.0/";
+    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.2/";
     description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
     license = with lib.licenses; [ sspl ];
@@ -121,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       This pre-compiled binary distribution package provides the MongoDB daemon (mongod) and the MongoDB Shard utility
       (mongos).
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

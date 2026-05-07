@@ -11,15 +11,15 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-town";
-  version = "21.5.0";
+  version = "22.7.1";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
-    tag = "v${version}";
-    hash = "sha256-H0WfUBrXPkqS2UnZpL6TyguzOa34KMetCwMKIvNKJ28=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MGiWqFWA4PMyGL7QqgcDWrgM/Wo8us8GMhdsrXBgWmg=";
   };
 
   vendorHash = null;
@@ -33,12 +33,12 @@ buildGoModule rec {
 
   ldflags =
     let
-      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}";
+      modulePath = "github.com/git-town/git-town/v${lib.versions.major finalAttrs.version}";
     in
     [
       "-s"
       "-w"
-      "-X ${modulePath}/src/cmd.version=v${version}"
+      "-X ${modulePath}/src/cmd.version=v${finalAttrs.version}"
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
@@ -61,6 +61,8 @@ buildGoModule rec {
         "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
+        "TestTestCommands/CreateChildBranch"
+        "TestTestCommands/CreateLocalBranchUsingGitTown"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -79,7 +81,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = git-town;
     command = "git-town --version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
@@ -92,4 +94,4 @@ buildGoModule rec {
     ];
     mainProgram = "git-town";
   };
-}
+})

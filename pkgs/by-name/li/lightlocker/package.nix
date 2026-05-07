@@ -10,10 +10,10 @@
   glib,
   intltool,
   dbus-glib,
-  libX11,
-  libXScrnSaver,
-  libXxf86vm,
-  libXext,
+  libx11,
+  libxscrnsaver,
+  libxxf86vm,
+  libxext,
   systemd,
   pantheon,
   wrapGAppsHook3,
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
     dbus-glib
     glib
     gtk3
-    libX11
-    libXScrnSaver
-    libXext
-    libXxf86vm
+    libx11
+    libxscrnsaver
+    libxext
+    libxxf86vm
     systemd
   ];
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/the-cavalry/light-locker";
     description = "Simple session-locker for LightDM";
     longDescription = ''
@@ -86,9 +86,9 @@ stdenv.mkDerivation rec {
       It relies on LightDM for locking and unlocking your session via
       ConsoleKit/UPower or logind/systemd.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ obadz ];
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ obadz ];
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 }

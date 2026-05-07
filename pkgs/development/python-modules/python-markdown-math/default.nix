@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ markdown ];
+  dependencies = [ markdown ];
 
   meta = {
     description = "Math extension for Python-Markdown";

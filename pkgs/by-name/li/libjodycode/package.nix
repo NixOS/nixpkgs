@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   jdupes,
   fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjodycode";
-  version = "4.0.1";
+  version = "4.1.2";
 
   outputs = [
     "out"
@@ -16,17 +16,18 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jbruchon";
     repo = "libjodycode";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9YdDw7xIuAArQtPYhDeT4AhSwi5fhVJeBl3R+J7PaCw=";
+    hash = "sha256-HqDNbZwWDebVnu1uj07N/ttwmvvz1qGk8s/Vrc3hJK4=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   env.PREFIX = placeholder "out";
+
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit jdupes;

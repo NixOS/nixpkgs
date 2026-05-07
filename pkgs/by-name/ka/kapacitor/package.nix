@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";
-      rev = "refs/tags/v${libflux_version}";
+      tag = "v${libflux_version}";
       hash = "sha256-v9MUR+PcxAus91FiHYrMN9MbNOTWewh7MT6/t/QWQcM=";
     };
     patches = [
@@ -73,7 +73,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "kapacitor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vxaLfJq0NFAJst0/AEhNJUl9dAaZY3blZAFthseMSX0=";
   };
 
@@ -81,7 +81,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  PKG_CONFIG_PATH = "${flux}/pkgconfig";
+  env.PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
   # Check that libflux is at the right version
   preBuild = ''
@@ -121,7 +121,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      offline
       totoroot
     ];
   };

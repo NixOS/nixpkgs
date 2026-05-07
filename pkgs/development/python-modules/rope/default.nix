@@ -6,7 +6,6 @@
   pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "rope";
   version = "1.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-rope";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
     "test_hint_parametrized_iterator"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
     changelog = "https://github.com/python-rope/rope/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

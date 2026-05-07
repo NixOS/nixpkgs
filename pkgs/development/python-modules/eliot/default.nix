@@ -25,7 +25,7 @@
   daemontools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eliot";
   version = "1.17.5";
   pyproject = true;
@@ -33,9 +33,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "itamarst";
     repo = "eliot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
   };
+
+  patches = [
+    # Upstream PR: https://github.com/itamarst/eliot/pull/520
+    ./python-3.14.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -65,9 +70,8 @@ buildPythonPackage rec {
   meta = {
     description = "Logging library that tells you why it happened";
     homepage = "https://eliot.readthedocs.io";
-    changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
+    changelog = "https://github.com/itamarst/eliot/blob/${finalAttrs.version}/docs/source/news.rst";
     mainProgram = "eliot-prettyprint";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dpausp ];
   };
-}
+})

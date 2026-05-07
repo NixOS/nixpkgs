@@ -8,14 +8,14 @@
   buildExamples ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "discord-rpc";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "discordapp";
     repo = "discord-rpc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "04cxhqdv5r92lrpnhxf8702a8iackdf3sfk1050z7pijbijiql2a";
   };
 
@@ -41,11 +41,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.2.0)" \
+      "cmake_minimum_required (VERSION 3.10.0)"
+  '';
+
+  meta = {
     description = "Official library to interface with the Discord client";
     homepage = "https://github.com/discordapp/discord-rpc";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

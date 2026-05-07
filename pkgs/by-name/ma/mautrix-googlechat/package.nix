@@ -68,12 +68,12 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mautrix/googlechat";
     description = "Matrix-Google Chat puppeting bridge";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ arcnmx ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ arcnmx ];
     mainProgram = "mautrix-googlechat";
   };
 }

@@ -5,22 +5,30 @@
   fetchFromGitHub,
 
   # build-system
+  cmake,
   ninja,
+  numpy,
+  pybind11,
   setuptools,
-  which,
+  setuptools-scm,
+  torch,
 
   # dependencies
   cloudpickle,
-  numpy,
   packaging,
+  pyvers,
   tensordict,
-  torch,
 
   # optional-dependencies
   # atari
   gymnasium,
+  # brax
+  brax,
+  jax,
   # checkpointing
   torchsnapshot,
+  # dm-control
+  dm-control,
   # gym-continuous
   mujoco,
   # llm
@@ -36,6 +44,9 @@
   sentencepiece,
   transformers,
   vllm,
+  # marl
+  pettingzoo,
+  vmas,
   # offline-data
   h5py,
   huggingface-hub,
@@ -62,35 +73,54 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.9.2";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    tag = "v${version}";
-    hash = "sha256-6rU5+J70T0E7+60jihsjwlLls8jJlxKi3nmrL0xm2c0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1S/A9zb6hlRYIV8Jf1lQ31TzxuA16lDiQHTu+Y6WSQk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
+
   build-system = [
+    cmake
     ninja
+    numpy
+    pybind11
     setuptools
-    which
+    setuptools-scm
+    torch
   ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
     numpy
     packaging
     tensordict
+    pyvers
     torch
   ];
 
   optional-dependencies = {
-    atari = gymnasium.optional-dependencies.atari;
+    atari = [
+      gymnasium
+    ]
+    ++ gymnasium.optional-dependencies.atari;
+    brax = [
+      brax
+      jax
+    ];
     checkpointing = [ torchsnapshot ];
+    dm-control = [ dm-control ];
     gym-continuous = [
       gymnasium
       mujoco
@@ -109,6 +139,11 @@ buildPythonPackage rec {
       transformers
       vllm
     ];
+    marl = [
+      # dm-meltingpot (unpackaged)
+      pettingzoo
+      vmas
+    ];
     offline-data = [
       h5py
       huggingface-hub
@@ -120,10 +155,18 @@ buildPythonPackage rec {
       torchvision
       tqdm
     ];
+    open-spiel = [
+      # open-spiel (unpackaged)
+    ];
+    procgen = [
+      # procgen (unpackaged)
+    ];
     rendering = [ moviepy ];
+    replay-buffer = [ torch ];
     utils = [
       git
       hydra-core
+      # hydra-submitit-launcher (unpackaged)
       tensorboard
       tqdm
       wandb
@@ -154,10 +197,10 @@ buildPythonPackage rec {
     scipy
     torchvision
   ]
-  ++ optional-dependencies.atari
-  ++ optional-dependencies.gym-continuous
-  ++ optional-dependencies.llm
-  ++ optional-dependencies.rendering;
+  ++ finalAttrs.passthru.optional-dependencies.atari
+  ++ finalAttrs.passthru.optional-dependencies.gym-continuous
+  ++ finalAttrs.passthru.optional-dependencies.llm
+  ++ finalAttrs.passthru.optional-dependencies.rendering;
 
   disabledTests = [
     # Require network
@@ -247,13 +290,16 @@ buildPythonPackage rec {
     # which is not the same as the test file we want to collect:
     #   /build/source/test/smoke_test.py
     "test/llm"
+
+    # Hang indefinitely
+    "test/services/test_services.py"
   ];
 
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/rl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

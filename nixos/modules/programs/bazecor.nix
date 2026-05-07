@@ -9,8 +9,6 @@ let
   cfg = config.programs.bazecor;
 in
 {
-  meta.maintainers = with lib.maintainers; [ amesgen ];
-
   options = {
     programs.bazecor = {
       enable = lib.mkEnableOption "Bazecor, the graphical configurator for Dygma Products";

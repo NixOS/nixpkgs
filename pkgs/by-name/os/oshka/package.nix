@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oshka";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "oshka";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fpWhqFK5h/U7DCC/SyhAlMyCMhjZHRLMlwakvlhOd3w=";
   };
 
@@ -20,17 +20,17 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/k1LoW/oshka/version.Version=${version}"
+    "-X github.com/k1LoW/oshka/version.Version=${finalAttrs.version}"
   ];
 
   # Tests requires a running Docker instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for extracting nested CI/CD supply chains and executing commands";
     mainProgram = "oshka";
     homepage = "https://github.com/k1LoW/oshka";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,7 +6,6 @@
   mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests-mock,
   requests-oauthlib,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "fitbit";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "orcasgit";
@@ -44,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fitbit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fitbit API Python Client Implementation";
     homepage = "https://github.com/orcasgit/python-fitbit";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -62,7 +62,8 @@ buildPythonPackage rec {
     sqlalchemy
     sqlglot
     sqlparse
-  ];
+  ]
+  ++ pyspark.optional-dependencies.connect;
 
   optional-dependencies.dev = [
     duckdb
@@ -127,6 +128,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "sql" ];
+
+  # python-update-script picks up an 11-year old 0.38 over the current version
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Better SQL in Jupyter";

@@ -5,7 +5,6 @@
   ifaddr,
   jsonschema,
   pyee,
-  pythonOlder,
   tornado,
   zeroconf,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "webthing";
   version = "0.15.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "WebThingsIO";
@@ -37,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webthing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of a Web Thing server";
     homepage = "https://github.com/WebThingsIO/webthing-python";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

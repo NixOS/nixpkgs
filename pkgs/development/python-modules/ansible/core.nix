@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   python,
   pythonOlder,
   installShellFiles,
@@ -30,24 +30,20 @@
   extraPackages ? _: [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-core";
-  # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
-  # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
-  version = "2.19.2";
+  version = "2.20.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    pname = "ansible_core";
-    inherit version;
-    hash = "sha256-h/y7xJLtFutq2wN5uuCtv2nzzoioRA5+iODc76n4pUw=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AU6LTKqtBMW2s+0a0HsMrkXDqaWbcEqbtG3dp/5bQOA=";
   };
 
-  # ansible_connection is already wrapped, so don't pass it through
-  # the python interpreter again, as it would break execution of
-  # connection plugins.
   postPatch = ''
     patchShebangs --build packaging/cli-doc/build.py
 
@@ -99,17 +95,21 @@ buildPythonPackage rec {
     installManPage man/*
   '';
 
+  postFixup = ''
+    patchPythonScript $out/${python.sitePackages}/ansible/cli/scripts/ansible_connection_cli_stub.py
+  '';
+
   # internal import errors, missing dependencies
   doCheck = false;
 
-  meta = with lib; {
-    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
+  meta = {
+    changelog = "https://github.com/ansible/ansible/blob/v${finalAttrs.version}/changelogs/CHANGELOG-v${lib.versions.majorMinor finalAttrs.version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       HarisDotParis
       robsliwi
     ];
   };
-}
+})

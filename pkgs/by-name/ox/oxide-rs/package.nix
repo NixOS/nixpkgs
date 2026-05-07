@@ -9,15 +9,15 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxide-rs";
-  version = "0.13.0+20250730.0.0";
+  version = "0.16.0+2026032500.0.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
-    rev = "v${version}";
-    hash = "sha256-baEXsDzM4y4HmUwjIqVBJm+8L+q+llq9g2o1kEZU3vI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0zlH7Gws7Cn161whwx4myBF1wTL46fFcr0mjPrvCTmQ=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_cmd_auth_debug_logging"
   ];
 
-  cargoHash = "sha256-radMOVLnHaV+5bUYanw5mswGM9A+xqNN/a4boe1jWDM=";
+  cargoHash = "sha256-x6jYTwrfdAKl42AleIYXxWLjnwi1IYMtWnfosueiHp0=";
 
   cargoBuildFlags = [
     "--package=oxide-cli"
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "oxide";
   };
-}
+})

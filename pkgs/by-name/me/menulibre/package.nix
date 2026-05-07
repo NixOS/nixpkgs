@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "menulibre";
   version = "2.4.0";
   format = "setuptools";
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bluesabre";
     repo = "menulibre";
-    tag = "menulibre-${version}";
+    tag = "menulibre-${finalAttrs.version}";
     hash = "sha256-IfsuOYP/H3r1GDWMVVSBfYvQS+01VJaAlZu+c05geWg=";
   };
 
@@ -54,12 +54,12 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Advanced menu editor with an easy-to-use interface";
     homepage = "https://bluesabre.org/projects/menulibre";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lelgenio ];
     mainProgram = "menulibre";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

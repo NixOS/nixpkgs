@@ -4,6 +4,7 @@
   fetchurl,
   kernel,
   kernelModuleMakeFlags,
+  nixosTests,
 }:
 
 let
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "${cfg.version}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://downloads.open-mesh.org/batman/releases/${pname}-${cfg.version}/${pname}-${cfg.version}.tar.gz";
+    url = "https://downloads.open-mesh.org/batman/releases/${pname}-${cfg.version}/${pname}-${cfg.version}.tar.gz";
     sha256 = cfg.sha256.${pname};
   };
 
@@ -30,6 +31,10 @@ stdenv.mkDerivation rec {
     sed -i -e "s,INSTALL_MOD_DIR=,INSTALL_MOD_PATH=$out INSTALL_MOD_DIR=," \
       -e /depmod/d Makefile
   '';
+
+  passthru.tests = {
+    systemd-networkd-batadv = nixosTests.systemd-networkd-batadv;
+  };
 
   meta = {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";

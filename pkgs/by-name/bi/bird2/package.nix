@@ -10,16 +10,16 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bird";
-  version = "2.17.1";
+  version = "2.18.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.nic.cz";
     owner = "labs";
     repo = "bird";
-    rev = "v${version}";
-    hash = "sha256-9Zg3UmNEW+Q26PMj3Z1XDbPFC5vatX8i7RQSUlKXlwg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tYICTipTzugtb7kv/zwsChM8v+zJ2TVsotEkJDcZCto=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ./dont-create-sysconfdir-2.patch
   ];
 
-  CPP = "${stdenv.cc.targetPrefix}cpp -E";
+  env.CPP = "${stdenv.cc.targetPrefix}cpp -E";
 
   configureFlags = [
     "--localstatedir=/var"
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.bird2;
 
   meta = {
-    changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";
+    changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${finalAttrs.version}/NEWS";
     description = "BIRD Internet Routing Daemon";
     homepage = "https://bird.network.cz";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ herbetom ];
     platforms = lib.platforms.linux;
   };
-}
+})

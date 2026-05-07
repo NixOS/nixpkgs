@@ -1,38 +1,45 @@
 {
   lib,
   buildPythonApplication,
-  fetchPypi,
+  fetchFromGitHub,
   libevdev,
   paramiko,
   pynput,
+  setuptools,
   screeninfo,
+  tkinter,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "remarkable-mouse";
-  version = "7.1.1";
-  format = "setuptools";
+  version = "unstable-2024-02-23";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-82P9tE3jiUlKBGZCiWDoL+9VJ06Bc+If+aMfcEEU90U=";
+  src = fetchFromGitHub {
+    owner = "Evidlo";
+    repo = "remarkable_mouse";
+    rev = "05142ef37a8b3f9e350156a14c2dec6844ed0ea8";
+    hash = "sha256-0X/7SIfSnlEL98fxJBAYrHAkRmdtymqA7xBmVoa5VIw=";
   };
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     screeninfo
     paramiko
     pynput
     libevdev
+    tkinter
   ];
 
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "remarkable_mouse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program to use a reMarkable as a graphics tablet";
     homepage = "https://github.com/evidlo/remarkable_mouse";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.nickhu ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.nickhu ];
   };
 }

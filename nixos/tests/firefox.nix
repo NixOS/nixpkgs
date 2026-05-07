@@ -46,7 +46,7 @@
 
 
       @contextmanager
-      def record_audio(machine: Machine):
+      def record_audio(machine: BaseMachine):
           """
           Perform actions while recording the
           machine audio output.
@@ -56,7 +56,7 @@
           machine.systemctl("stop audio-recorder")
 
 
-      def wait_for_sound(machine: Machine):
+      def wait_for_sound(machine: BaseMachine):
           """
           Wait until any sound has been emitted.
           """
@@ -91,7 +91,7 @@
                   "${exe} file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
               )
               wait_for_sound(machine)
-          machine.copy_from_vm("/tmp/record.wav")
+          machine.copy_from_machine("/tmp/record.wav")
 
       with subtest("Close sound test tab"):
           machine.execute("xdotool key ctrl+w")

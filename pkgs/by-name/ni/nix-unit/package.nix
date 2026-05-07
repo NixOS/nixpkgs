@@ -17,17 +17,17 @@ let
   # We pin the nix version to a known working one here as upgrades can likely break the build.
   # Since the nix language is rather stable we don't always need to have the latest and greatest for unit tests
   # On each update of nix unit we should re-evaluate what version we need.
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_34;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix-unit";
-  version = "2.30.0";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-unit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yQ7HqzfrG7B6Sq1iGBI7QJsbkI/07Ccz42bqWJW4NJA=";
+    hash = "sha256-vZfRXBDC9FTO2Vpz8TroVMqOYqp+hcVk6Nwx6+kRN1Q=";
   };
 
   buildInputs = [

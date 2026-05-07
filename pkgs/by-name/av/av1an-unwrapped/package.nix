@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  ffmpeg,
+  ffmpeg_7,
   libaom,
   nasm,
   nix-update-script,
@@ -13,14 +13,14 @@
   vapoursynth,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "av1an-unwrapped";
   version = "0.4.4";
 
   src = fetchFromGitHub {
-    owner = "master-of-zen";
+    owner = "rust-av";
     repo = "av1an";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YF+j349777pE+evvXWTo42DQn1CE0jlfKBEXUFTfcb8=";
   };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     # Avoids https://github.com/shssoichiro/ffmpeg-the-third/issues/63
     # https://github.com/master-of-zen/Av1an/pull/912
     (fetchpatch {
-      url = "https://github.com/master-of-zen/Av1an/commit/e6b29a5a624434eb0dc95b7e8aa31ccf624ccb9d.patch";
+      url = "https://github.com/rust-av/Av1an/commit/e6b29a5a624434eb0dc95b7e8aa31ccf624ccb9d.patch";
       hash = "sha256-nFE04hlTzApYafSzgl/XOUdchxEjKvxXy+SKr/d6+0Q=";
     })
   ];
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     vapoursynth
   ];
 
@@ -67,12 +67,12 @@ rustPlatform.buildRustPackage rec {
       Cross-platform command-line AV1 / VP9 / HEVC / H264 encoding framework with per scene quality encoding.
       It can increase your encoding speed and improve cpu utilization by running multiple encoder processes in parallel.
     '';
-    homepage = "https://github.com/master-of-zen/Av1an";
-    changelog = "https://github.com/master-of-zen/Av1an/releases/tag/${version}";
+    homepage = "https://github.com/rust-av/Av1an";
+    changelog = "https://github.com/rust-av/Av1an/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "av1an";
     # symbol index out of range file '/private/tmp/nix-build-av1an-unwrapped-0.4.4.drv-0/rustcz0anL2/librav1e-ca440893f9248a14.rlib' for architecture x86_64
     broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
-}
+})

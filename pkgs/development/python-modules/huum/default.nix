@@ -9,16 +9,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huum";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frwickst";
     repo = "pyhuum";
-    tag = version;
-    hash = "sha256-8wldXJAdo1PK4bKX0rKJjNwwTS5FSgr9RcwiyVhESb8=";
+    tag = finalAttrs.version;
+    hash = "sha256-PM1At/AqKZ0QIJWlQeeTYqnQqK1wOnd4eRLyd7MvFLk=";
   };
 
   build-system = [ poetry-core ];
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "huum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Huum saunas";
     homepage = "https://github.com/frwickst/pyhuum";
-    changelog = "https://github.com/frwickst/pyhuum/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frwickst/pyhuum/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

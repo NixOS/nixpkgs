@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "bosch-alarm-mode2";
-  version = "0.4.6";
+  version = "0.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mag1024";
     repo = "bosch-alarm-mode2";
     tag = "v${version}";
-    hash = "sha256-oTGkEguN4EFJI5+UhqxKBN1x2Ppf9wQ0AeYbiLi1fhk=";
+    hash = "sha256-XpLMPFi3e6iTtKGfVXN4VbnPyNLVjSFrodyFK+zelF4=";
   };
 
   build-system = [

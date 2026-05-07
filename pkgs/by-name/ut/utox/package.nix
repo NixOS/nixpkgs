@@ -9,14 +9,14 @@
   filter-audio,
   dbus,
   libvpx,
-  libX11,
+  libx11,
   openal,
   freetype,
   libv4l,
-  libXrender,
+  libxrender,
   fontconfig,
-  libXext,
-  libXft,
+  libxext,
+  libxft,
   libsodium,
   libopus,
 }:
@@ -38,14 +38,14 @@ stdenv.mkDerivation rec {
     libtoxcore
     dbus
     libvpx
-    libX11
+    libx11
     openal
     freetype
     libv4l
-    libXrender
+    libxrender
     fontconfig
-    libXext
-    libXft
+    libxext
+    libxft
     filter-audio
     libsodium
     libopus
@@ -61,15 +61,20 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [ check ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Tox client";
     mainProgram = "utox";
     homepage = "https://github.com/uTox/uTox";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

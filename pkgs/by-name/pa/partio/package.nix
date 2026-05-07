@@ -10,19 +10,20 @@
   zlib,
   swig,
   doxygen,
-  xorg,
+  libxmu,
+  libxi,
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "partio";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "partio";
-    tag = "v${version}";
-    hash = "sha256-p3mpxP0slHIQ75UtNAr5PcSOaSt9UyGR/MyOZ2GoXdU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uzMp3jj0HUB6vOjc/uvvT4Bmi6xp0qz4OYPG+bmlgaM=";
   };
 
   outputs = [
@@ -41,8 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     swig
-    xorg.libXi
-    xorg.libXmu
+    libxi
+    libxmu
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libglut
@@ -55,11 +56,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ (with python bindings) library for easily reading/writing/manipulating common animation particle formats such as PDB, BGEO, PTC";
     homepage = "https://github.com/wdas/partio";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.guibou ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.guibou ];
   };
-}
+})

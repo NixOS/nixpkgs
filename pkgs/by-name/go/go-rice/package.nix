@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-rice";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "GeertJohan";
     repo = "go.rice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-nJt2t6iTZn8B990SZwEC23pivZke1OKVwTI2GDN6m0o=";
   };
 
@@ -22,11 +22,11 @@ buildGoModule rec {
     "rice"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Go package that makes working with resources such as html, js, css, images, templates very easy";
     homepage = "https://github.com/GeertJohan/go.rice";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
     mainProgram = "rice";
   };
-}
+})

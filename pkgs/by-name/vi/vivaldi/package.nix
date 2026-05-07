@@ -4,21 +4,21 @@
   coreutils,
   fetchurl,
   zlib,
-  libX11,
-  libXext,
-  libSM,
-  libICE,
+  libx11,
+  libxext,
+  libsm,
+  libice,
   libxkbcommon,
   libxshmfence,
-  libXfixes,
-  libXt,
-  libXi,
-  libXcursor,
-  libXScrnSaver,
-  libXcomposite,
-  libXdamage,
-  libXtst,
-  libXrandr,
+  libxfixes,
+  libxt,
+  libxi,
+  libxcursor,
+  libxscrnsaver,
+  libxcomposite,
+  libxdamage,
+  libxtst,
+  libxrandr,
   alsa-lib,
   dbus,
   cups,
@@ -29,8 +29,8 @@
   libGL,
   freetype,
   fontconfig,
-  libXft,
-  libXrender,
+  libxft,
+  libxrender,
   libxcb,
   expat,
   libuuid,
@@ -47,6 +47,7 @@
   libdrm,
   libgbm,
   vulkan-loader,
+  addDriverRunpath,
   nss,
   nspr,
   patchelf,
@@ -66,7 +67,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.5.3735.74";
+  version = "7.9.3970.60";
 
   suffix =
     {
@@ -79,8 +80,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-sfVCPtup7yPscyWoSwKZka9FwfEZburae/Ss/3YLtV8=";
-        x86_64-linux = "sha256-aCghO64GVZjCqnmzj7GHpEhUk2Pld2VKS44G/+ElogU=";
+        aarch64-linux = "sha256-2ZI1M1G/l5wRd+vfcc189NWURyVQp05mTCtwk+cEYpU=";
+        x86_64-linux = "sha256-nZn51rotZ8s/tu86OXbBb7LMwqcZPhEvLtfqIOJM1qg=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -104,23 +105,23 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
     stdenv.cc.libc
     zlib
-    libX11
-    libXt
-    libXext
-    libSM
-    libICE
+    libx11
+    libxt
+    libxext
+    libsm
+    libice
     libxcb
     libxkbcommon
     libxshmfence
-    libXi
-    libXft
-    libXcursor
-    libXfixes
-    libXScrnSaver
-    libXcomposite
-    libXdamage
-    libXtst
-    libXrandr
+    libxi
+    libxft
+    libxcursor
+    libxfixes
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxtst
+    libxrandr
     atk
     at-spi2-atk
     at-spi2-core
@@ -137,7 +138,7 @@ stdenv.mkDerivation rec {
     qt6.qtwayland
     freetype
     fontconfig
-    libXrender
+    libxrender
     libuuid
     expat
     glib
@@ -202,15 +203,19 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out"/share/applications/*.desktop \
       --replace-fail vivaldi-stable vivaldi
     local d
-    for d in 16 22 24 32 48 64 128 256; do
+    for d in 16 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
       ln -s \
         "$out"/opt/vivaldi/product_logo_''${d}.png \
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
+    # replace bundled vulkan-loader with the NixOS-patched one to enable Vulkan ICD discovery
+    rm $out/opt/vivaldi/libvulkan.so.1
+    ln -s "${lib.getLib vulkan-loader}/lib/libvulkan.so.1" $out/opt/vivaldi/libvulkan.so.1
+
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
-      --prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
+      --prefix XDG_DATA_DIRS : "${addDriverRunpath.driverLink}/share:${gtk3}/share/gsettings-schemas/${gtk3.name}" \
       --prefix LD_LIBRARY_PATH : ${libPath} \
       --prefix PATH : ${coreutils}/bin \
       ''${qtWrapperArgs[@]}

@@ -9,22 +9,22 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nsis";
   version = "3.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}-src.tar.bz2";
+    url = "mirror://sourceforge/project/nsis/NSIS%203/${finalAttrs.version}/nsis-${finalAttrs.version}-src.tar.bz2";
     sha256 = "19e72062676ebdc67c11dc032ba80b979cdbffd3886c60b04bb442cdd401ff4b";
   };
   srcWinDistributable = fetchzip {
-    url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
+    url = "mirror://sourceforge/project/nsis/NSIS%203/${finalAttrs.version}/nsis-${finalAttrs.version}.zip";
     sha256 = "e574f335ab9d3ad73118f46615e5c9f2a52f3e4622ecbb7e5886badbc8601348";
   };
 
   postUnpack = ''
     mkdir -p $out/share/nsis
-    cp -avr ${srcWinDistributable}/{Contrib,Include,Plugins,Stubs} \
+    cp -avr ${finalAttrs.srcWinDistributable}/{Contrib,Include,Plugins,Stubs} \
       $out/share/nsis
     chmod -R u+w $out/share/nsis
   '';
@@ -32,14 +32,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ scons ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  CPPPATH = symlinkJoin {
-    name = "nsis-includes";
-    paths = [ zlib.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
-  };
+  env = {
+    CPPPATH = symlinkJoin {
+      name = "nsis-includes";
+      paths = [ zlib.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+    };
 
-  LIBPATH = symlinkJoin {
-    name = "nsis-libs";
-    paths = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+    LIBPATH = symlinkJoin {
+      name = "nsis-libs";
+      paths = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+    };
   };
 
   sconsFlags = [
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
     "SKIPUTILS=all"
     "SKIPMISC=all"
     "NSIS_CONFIG_CONST_DATA=no"
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "APPEND_LINKFLAGS=-liconv";
 
@@ -65,13 +67,13 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pombeirp ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pombeirp ];
     mainProgram = "makensis";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

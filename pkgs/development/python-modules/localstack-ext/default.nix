@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   setuptools-scm,
+  click,
   dill,
   dnslib,
   dnspython,
@@ -11,10 +12,13 @@
   pyaes,
   pyjwt,
   pyotp,
-  python-jose,
-  requests,
   python-dateutil,
+  python-jose,
+  pyyaml,
+  requests,
+  rich,
   tabulate,
+  semver,
 
   # use for testing promoted localstack
   pkgs,
@@ -22,13 +26,13 @@
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "4.7.0";
+  version = "4.12.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "localstack_ext";
     inherit version;
-    hash = "sha256-OLeCbAybP6SgHb2DNf8rXUrxt89mOiQfp2wxdh2A3F4=";
+    hash = "sha256-AQrG6iRTBarinrGgJeLr5OYguuN7KWyxRUYNMHz4mlE=";
   };
 
   build-system = [
@@ -43,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    click
     dill
     dnslib
     dnspython
@@ -52,8 +57,11 @@ buildPythonPackage rec {
     pyotp
     python-dateutil
     python-jose
+    pyyaml
     requests
+    rich
     tabulate
+    semver
   ]
   ++ python-jose.optional-dependencies.cryptography;
 

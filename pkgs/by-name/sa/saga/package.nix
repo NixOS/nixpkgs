@@ -1,80 +1,103 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  config,
   fetchurl,
-  # native
+
+  # nativeBuildInputs
   cmake,
-  desktopToDarwinBundle,
+  dos2unix,
   pkg-config,
   wrapGAppsHook3,
-  # not native
-  gdal,
-  wxGTK32,
-  proj,
-  libsForQt5,
+  # cuda-specific
+  cudaPackages,
+  # darwin-specific
+  desktopToDarwinBundle,
+
+  # buildInputs
   curl,
-  libiodbc,
-  xz,
-  libharu,
-  opencv,
-  vigra,
-  pdal,
-  libpq,
-  unixODBC,
-  poppler,
-  hdf5,
-  netcdf,
-  sqlite,
-  qhull,
-  giflib,
-  libsvm,
   fftw,
+  gdal,
+  giflib,
+  hdf5,
+  libharu,
+  libiodbc,
+  libpq,
+  libsForQt5,
+  libsvm,
+  opencv,
+  pdal,
+  proj,
+  qhull,
+  vigra,
+  wxwidgets_3_2,
+  xz,
+  # darwin-specific
+  netcdf,
+  poppler,
+  sqlite,
+  unixodbc,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "saga";
-  version = "9.9.1";
+  version = "9.12.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-InypyVCk08tsByKaIBRFWldwRz1AkNCgFD3DL4OG84w=";
+    url = "mirror://sourceforge/saga-gis/saga-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1q7/dBhmXSaj0bEGU8EAOJesR2sfnQPVK6DVL9TD3V0=";
   };
 
-  sourceRoot = "saga-${version}/saga-gis";
+  sourceRoot = "saga-${finalAttrs.version}/saga-gis";
+
+  postPatch = ''
+    dos2unix src/saga_core/saga_gui/res/org.saga_gis.saga_gui.desktop
+  '';
 
   nativeBuildInputs = [
     cmake
-    wrapGAppsHook3
+    dos2unix
     pkg-config
+    wrapGAppsHook3
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = [
     curl
-    libsForQt5.dxflib
     fftw
-    libsvm
-    hdf5
     gdal
-    wxGTK32
+    giflib
+    hdf5
+    libharu
+    libiodbc
+    libpq
+    libsForQt5.dxflib
+    libsvm
+    opencv
     pdal
     proj
-    libharu
-    opencv
-    vigra
-    libpq
-    libiodbc
-    xz
     qhull
-    giflib
+    vigra
+    wxwidgets_3_2
+    xz
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ]
   # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
   # for why the have additional buildInputs on darwin
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    unixODBC
-    poppler
     netcdf
+    poppler
     sqlite
+    unixodbc
   ];
 
   cmakeFlags = [
@@ -84,13 +107,12 @@ stdenv.mkDerivation rec {
   meta = {
     description = "System for Automated Geoscientific Analyses";
     homepage = "https://saga-gis.sourceforge.io";
-    changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
+    changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog%20${finalAttrs.version}/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      michelk
       mpickering
     ];
     teams = [ lib.teams.geospatial ];
     platforms = with lib.platforms; unix;
   };
-}
+})

@@ -1,15 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  yarn-berry_4,
   stdenv,
+  makeBinaryWrapper,
+  writableTmpDirAsHomeHook,
   nodejs,
-  makeWrapper,
+  bun,
 }:
 let
   pname = "swagger-typescript-api";
-  version = "13.2.8";
-  yarn-berry = yarn-berry_4;
+  version = "13.7.2";
+
+  node-modules-hash = {
+    "x86_64-linux" = "sha256-1Wy9RWNvMmxSY72Qcam/jCVwurGk4ms9PTR5tt6t03I=";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -17,27 +21,67 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "acacode";
     repo = "swagger-typescript-api";
-    rev = version;
-    hash = "sha256-3IPap3Ln8UheYD3/PE4y1ga1KXMNihm36bkMCKy6WuQ=";
+    rev = "v${version}";
+    hash = "sha256-2sAE3wD/vUjaxvlhfrBRSErB3PsjQfi4UAcc4tU0le4=";
+  };
+
+  node_modules = stdenv.mkDerivation {
+    inherit (finalAttrs) src version;
+    pname = "${pname}-node_modules";
+
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    dontConfigure = true;
+    # Prevent patchShebangs from rewriting node_modules/.bin shebangs to store
+    # paths, which would make this fixed-output derivation's output hash unstable.
+    dontPatchShebangs = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install --no-progress --frozen-lockfile --no-cache
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+
+    outputHash =
+      node-modules-hash.${stdenv.hostPlatform.system}
+        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux.");
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
-    makeWrapper
-    yarn-berry.yarnBerryConfigHook
-    yarn-berry
+    makeBinaryWrapper
     nodejs
+    bun
   ];
-
-  missingHashes = ./missing-hashes.json;
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-3vVaW9beLNuudq7RB8pnw6aMJ8nJ1YBFaYr1d9K/k5U=";
-  };
 
   buildPhase = ''
     runHook preBuild
 
-    yarn run build
+    cp -R ${finalAttrs.node_modules}/node_modules .
+    patchShebangs node_modules
+
+    bun run build
 
     runHook postBuild
   '';
@@ -48,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib
     cp -r {dist,templates,node_modules} $out/lib
 
-    makeWrapper ${nodejs}/bin/node $out/bin/${pname} \
-      --add-flags $out/lib/dist/cli.js \
+    makeBinaryWrapper ${nodejs}/bin/node $out/bin/${pname} \
+      --add-flags $out/lib/dist/cli.cjs \
       --set NODE_ENV production \
       --set NODE_PATH "$out/lib/node_modules"
 
@@ -60,9 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swagger-typescript-api";
     description = "Generate TypeScript API client and definitions for fetch or axios from an OpenAPI specification";
     homepage = "https://github.com/acacode/swagger-typescript-api";
-    changelog = "https://github.com/acacode/swagger-typescript-api/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/acacode/swagger-typescript-api/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ angelodlfrtr ];
   };
 })

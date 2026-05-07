@@ -12,12 +12,12 @@
   gtk3,
   lib,
   libGL,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   libdatrie,
   libjack2,
   libpsl,
@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gtk3
     libGL
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
     libdatrie
     libjack2
     libpsl
@@ -98,12 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp Standalone/ChowPhaserStereo  $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jatinchowdhury18/ChowPhaser";
     description = "Phaser effect based loosely on the Schulte Compact Phasing 'A'";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
     mainProgram = "ChowPhaserStereo";
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
   };
 })

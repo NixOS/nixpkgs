@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tmuxifier";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "jimeh";
     repo = "tmuxifier";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7TvJnvtZEo5h45PcSy3tJN09UblswV0mQbTaKjgLyqw=";
   };
 
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful session, window & pane management for Tmux";
     homepage = "https://github.com/jimeh/tmuxifier";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "tmuxifier";
-    maintainers = with maintainers; [ wigust ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ wigust ];
+    platforms = lib.platforms.unix;
   };
-}
+})

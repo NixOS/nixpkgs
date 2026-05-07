@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace ./Makefile \
-      --replace 'chmod 4555' '#chmod 4555' \
-      --replace 'pkg-config' "$PKG_CONFIG"
+      --replace-fail 'chmod 4555' '#chmod 4555' \
+      --replace-fail 'pkg-config' "$PKG_CONFIG"
   '';
 
   makeFlags = [

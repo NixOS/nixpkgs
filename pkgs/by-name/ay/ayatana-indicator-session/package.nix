@@ -14,7 +14,7 @@
   libayatana-common,
   librda,
   lomiri,
-  mate,
+  mate-settings-daemon,
   pkg-config,
   systemd,
   wrapGAppsHook3,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     # is there a better way to give it access to DE-specific schemas as needed?
     # https://github.com/AyatanaIndicators/ayatana-indicator-session/blob/88846bad7ee0aa8e0bb122816d06f9bc887eb464/src/service.c#L1387-L1413
     gnome-settings-daemon
-    mate.mate-settings-daemon
+    mate-settings-daemon
   ];
 
   nativeCheckInputs = [ dbus ];

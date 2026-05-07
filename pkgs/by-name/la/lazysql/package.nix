@@ -5,39 +5,39 @@
   fetchFromGitHub,
   testers,
   lazysql,
-  xorg ? null,
+  libx11,
   darwin ? null,
 }:
 
 buildGoModule rec {
   pname = "lazysql";
-  version = "0.4.1";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
     rev = "v${version}";
-    hash = "sha256-M6G0Bp9s1XhgZL9BZDzbJmUmE+UHidpsGIaNt1i7CGw=";
+    hash = "sha256-KRyR4MZK9/gXj3EaAN/JGtzcou8SR+JJ8ZMWGKBu9mU=";
   };
 
-  vendorHash = "sha256-NGwCTEh1/5dJWOCSe18FZYYu8v7Mj6MWVEWyNNA1T68=";
+  vendorHash = "sha256-FbAt/HsjoxqAKWQqqWN2xuyyTG2Ic4DcyEU4O0rjpQE=";
 
   ldflags = [
     "-X main.version=${version}"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   passthru.tests.version = testers.testVersion {
     package = lazysql;
     command = "lazysql --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform TUI database management tool written in Go";
     homepage = "https://github.com/jorgerojas26/lazysql";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "lazysql";
   };
 }

@@ -14,15 +14,15 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openswitcher";
   version = "0.13.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-eEn09e+ZED4DGEWTUou9CRgazngHIXZv51CLhX9YuBI=";
   };
 
@@ -73,12 +73,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Blackmagic Design mixer control application";
     downloadPage = "https://git.sr.ht/~martijnbraam/pyatem";
     homepage = "https://openswitcher.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "switcher-control";
   };
-}
+})

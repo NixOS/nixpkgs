@@ -30,10 +30,10 @@ buildDunePackage {
     yojson
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OCaml library implementing the Telegram bot API";
     homepage = "https://github.com/nv-vn/TelegraML/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

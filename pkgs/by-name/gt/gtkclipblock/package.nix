@@ -52,10 +52,10 @@ stdenv.mkDerivation {
 
   dontUseCmakeConfigure = true;
 
-  meta = with lib; {
+  meta = {
     description = "LD_PRELOAD hack to prevent GTK programs from interacting with the primary clipboard";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ uartman ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ uartman ];
     platforms = [ "x86_64-linux" ];
   };
 }

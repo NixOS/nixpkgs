@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-run-bin";
   version = "1.7.4";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-79DJ6j2sai1dTdcXf0qD97TCNZuGRSUobLGahoApMss=";
   };
 
@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
     description = "Build, cache, and run binaries scoped in Cargo.toml rather than installing globally. This acts similarly to npm run and gomodrun, and allows your teams to always be running the same tooling versions";
     mainProgram = "cargo-bin";
     homepage = "https://github.com/dustinblackman/cargo-run-bin";
-    changelog = "https://github.com/dustinblackman/cargo-run-bin/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dustinblackman/cargo-run-bin/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mightyiam
       matthiasbeyer
     ];
   };
-}
+})

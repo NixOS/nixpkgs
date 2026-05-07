@@ -9,11 +9,9 @@
   qtsvg,
   qtwayland,
   kimageformats,
-  libavif,
-  libheif,
-  libjxl,
   wrapGAppsHook3,
   wrapQtAppsHook,
+  geoclue2,
   glib-networking,
   webkitgtk_4_1,
   withWebkit ? true,
@@ -40,11 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     kimageformats
     qtwayland
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libavif
-    libheif
-    libjxl
-  ]
   ++ lib.optionals withWebkit [
     glib-networking
   ];
@@ -53,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix"
     "LD_LIBRARY_PATH"
     ":"
-    (lib.makeLibraryPath [ webkitgtk_4_1 ])
+    (lib.makeLibraryPath [
+      geoclue2
+      webkitgtk_4_1
+    ])
   ];
 
   dontUnpack = true;

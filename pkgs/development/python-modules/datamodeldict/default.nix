@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   xmltodict,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "datamodeldict";
   version = "0.9.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "DataModelDict";
@@ -26,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "DataModelDict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     homepage = "https://github.com/usnistgov/DataModelDict/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

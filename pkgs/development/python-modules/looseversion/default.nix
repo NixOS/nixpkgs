@@ -4,15 +4,12 @@
   fetchPypi,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "looseversion";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
@@ -27,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "looseversion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Version numbering for anarchists and software realists";
     homepage = "https://github.com/effigies/looseversion";
     changelog = "https://github.com/effigies/looseversion/blob/${version}/CHANGES.md";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ pelme ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ pelme ];
   };
 }

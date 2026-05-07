@@ -14,7 +14,6 @@ in
   name = "gocd-agent";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      grahamc
       swarren83
     ];
 

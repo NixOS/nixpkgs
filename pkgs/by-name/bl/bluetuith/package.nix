@@ -1,23 +1,24 @@
 {
   lib,
-  # Module requires Go 1.25, drop pin once buildGoModule uses Go >= 1.25.
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "bluetuith";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
-    owner = "darkhz";
+    owner = "bluetuith-org";
     repo = "bluetuith";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h7SMGI8wIiu4i2kcKRsmLHM4tu7ZZK0usBXh5zFu94E=";
+    hash = "sha256-jxN4FLefv+edlpBnwDN/pBxZ7sHkv2w+R2tUeNCI6Tw=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-baSiOHiB02hfqDt95ldeKwz+tJgunXheTvREznxPUSc=";
+
+  subPackages = [ "." ];
 
   env.CGO_ENABLED = 0;
 
@@ -37,13 +38,12 @@ buildGo125Module (finalAttrs: {
       manage Bluetooth-based networking/tethering (PANU/DUN) and remote control
       devices. The TUI has mouse support.
     '';
-    homepage = "https://github.com/darkhz/bluetuith";
-    changelog = "https://github.com/darkhz/bluetuith/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/bluetuith-org/bluetuith";
+    changelog = "https://github.com/bluetuith-org/bluetuith/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "bluetuith";
     maintainers = with lib.maintainers; [
-      pyrox0
       katexochen
     ];
   };

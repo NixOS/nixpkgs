@@ -13,17 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fileshelter";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "fileshelter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-21ANNJB7rbGAdlS7ELyGAEIjvK8biFlH27yVHrLKpwY=";
+    hash = "sha256-M6Asq3FWK7JpiLwxtNfuzeltO7iWxLOZIYg5lwJCByM=";
   };
 
   postPatch = ''
     sed -i '1i #include <algorithm>' src/fileshelter/ui/ShareCreateFormView.cpp
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'find_package(Boost REQUIRED COMPONENTS system program_options)' \
+      'find_package(Boost REQUIRED COMPONENTS program_options)'
   '';
 
   enableParallelBuilding = true;
@@ -41,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   postInstall = ''
     ln -s ${wt}/share/Wt/resources $out/share/fileshelter/docroot/resources

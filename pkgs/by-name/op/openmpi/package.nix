@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.8";
+  version = "5.0.10";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-UxMeGlfnJw9kVwf4sLZbpWBI9bWsP2j6q+0+sNcQ5Ek=";
+    sha256 = "sha256-Cs7MT8IY5d69vLikHRgsaw8dKTkwFe12OyqR1dc3TMY=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
           substituteInPlace configure \
             --replace-fail \
               ompi_cv_op_avx_check_${option}=yes \
-              ompi_cv_op_avx_check_${option}=${if val then "yes" else "no"}
+              ompi_cv_op_avx_check_${option}=${lib.boolToYesNo val}
         ''
       ))
       (lib.concatStringsSep "\n")
@@ -114,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.hostPlatform.isLinux "libnl" (lib.getDev libnl))
+    # From some reason, without this the darwin build fails with cyclic
+    # references between $dev and $out
     "--with-pmix=${lib.getDev pmix}"
     "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
@@ -123,8 +125,9 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
-    (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
-    (lib.withFeatureAs cudaSupport "cuda-libdir" "${cudaPackages.cuda_cudart.stubs}/lib")
+    # NOTE: Open MPI requires the header files specifically, which are in the `include` output.
+    (lib.withFeatureAs cudaSupport "cuda" (lib.getOutput "include" cudaPackages.cuda_cudart))
+    (lib.withFeatureAs cudaSupport "cuda-libdir" "${lib.getLib cudaPackages.cuda_cudart}/lib")
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
@@ -197,6 +200,10 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+      # Fortran .mod files end up in bin output.
+      # Force all headers into the dev output .
+      moveToOutput "include/" "''${!outputDev}"
 
       # The main wrapper that all the rest of the commonly used binaries are
       # symlinked to

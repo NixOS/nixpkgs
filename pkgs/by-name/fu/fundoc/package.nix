@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fundoc";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "daynin";
     repo = "fundoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8WWaYgfqGWrTV2EEeSPz1BN2ur7gsxFiHeDNMJdVDcw=";
   };
 
@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-17PzGHSwruHPRKjyiHWBMqHANR5ulb+/J5UoVsOrbyc=";
 
-  meta = with lib; {
+  meta = {
     description = "Language agnostic documentation generator";
     mainProgram = "fundoc";
     homepage = "https://github.com/daynin/fundoc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

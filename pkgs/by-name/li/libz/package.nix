@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sortix.org/libz/";
     description = "Clean fork of zlib";
     license = [ lib.licenses.zlib ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

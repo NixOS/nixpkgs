@@ -68,13 +68,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collectl";
-  version = "4.3.20.1";
+  version = "4.3.20.2";
 
   src = fetchFromGitHub {
     owner = "sharkcz";
     repo = "collectl";
     rev = finalAttrs.version;
-    hash = "sha256-OJGCuxWvoId1cQ5Ugiav5/T/NzddwhM+gG3s0BnYYz0=";
+    hash = "sha256-xIfimx7IbC5WHLCLPXGAhL9gkC4F+/JHDFYb0wwAK3I=";
   };
 
   strictDeps = true;

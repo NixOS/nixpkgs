@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   poetry-core,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "readmdict";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ffreemt";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "readmdict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read mdx/mdd files (repacking of readmdict from mdict-analysis)";
     mainProgram = "readmdict";
     homepage = "https://github.com/ffreemt/readmdict";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

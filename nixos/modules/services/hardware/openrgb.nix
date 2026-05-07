@@ -41,6 +41,11 @@ in
       description = "Set server port of openrgb.";
     };
 
+    startupProfile = lib.mkOption {
+      type = lib.types.nullOr (lib.types.str);
+      default = null;
+      description = "The profile file to load from \"/var/lib/OpenRGB\" at startup.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -54,14 +59,28 @@ in
     ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
 
     systemd.services.openrgb = {
-      description = "OpenRGB server daemon";
-      after = [ "network.target" ];
+      description = "OpenRGB SDK Server";
+      after = [
+        "network.target"
+        "lm_sensors.service"
+      ];
       wants = [ "dev-usb.device" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         StateDirectory = "OpenRGB";
         WorkingDirectory = "/var/lib/OpenRGB";
-        ExecStart = "${cfg.package}/bin/openrgb --server --server-port ${toString cfg.server.port}";
+        ExecStart = lib.escapeShellArgs (
+          [
+            (lib.getExe cfg.package)
+            "--server"
+            "--server-port"
+            cfg.server.port
+          ]
+          ++ lib.optionals (lib.isString cfg.startupProfile) [
+            "--profile"
+            cfg.startupProfile
+          ]
+        );
         Restart = "always";
       };
     };

@@ -7,8 +7,6 @@
   tk,
   addDriverRunpath,
 
-  apple-sdk_12,
-
   koboldLiteSupport ? true,
 
   config,
@@ -41,13 +39,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.98.1";
+  version = "1.110";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CJM97DRSIq2d3X6aR096+9QwBeI4kQNzxufdSoEydco=";
+    hash = "sha256-wizg/XkNjWUeF0heK1sQQhfKRlIYBKwJmQ8fIaZ2zdE=";
   };
 
   enableParallelBuilding = true;
@@ -55,7 +53,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
-  ];
+  ]
+  ++ lib.optionals vulkanSupport [ shaderc ];
+
+  postPatch = ''
+    nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
+    substituteInPlace "$PWD/Makefile" \
+      --replace-fail \
+        'CUBLASLD_FLAGS = -lcuda ' \
+        'CUBLASLD_FLAGS = '
+  '';
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
@@ -63,7 +70,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     tk
   ]
   ++ finalAttrs.pythonInputs
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
   ++ lib.optionals cublasSupport [
     cudaPackages.libcublas
     cudaPackages.cuda_nvcc
@@ -76,7 +82,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     vulkan-loader
-    shaderc
   ];
 
   pythonPath = finalAttrs.pythonInputs;
@@ -96,7 +101,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
-    cp *.embd "$out/bin"
+    cp embd_res/*.embd "$out/bin"
 
     ${lib.optionalString metalSupport ''
       cp *.metal "$out/bin"
@@ -111,7 +116,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "$pythonPath"
+    wrapPythonProgramsIn "$out/bin" "''${pythonPath[*]}"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
       --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';

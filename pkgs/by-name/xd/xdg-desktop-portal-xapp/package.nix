@@ -10,20 +10,20 @@
   glib,
   gtk3,
   gsettings-desktop-schemas,
-  mate,
-  xdg-desktop-portal,
+  mate-desktop,
   xapp,
+  xdg-desktop-portal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-xapp";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xdg-desktop-portal-xapp";
-    rev = version;
-    hash = "sha256-3EGim8GDlzVhgKiBHaOjV+apyEanFyfTqfJLegwlQHo=";
+    rev = finalAttrs.version;
+    hash = "sha256-5gJmWj15jUVGhCf8jOl/eXHVisFdegbbx6pqz6btNTM=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gsettings-desktop-schemas # org.gnome.system.location
-    mate.mate-desktop # org.mate.background
+    mate-desktop # org.mate.background
+    xapp # org.x.apps.portal
     xdg-desktop-portal
   ];
 
@@ -51,11 +52,11 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ xapp ]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend implementation for xdg-desktop-portal for Cinnamon, MATE, Xfce";
     homepage = "https://github.com/linuxmint/xdg-desktop-portal-xapp";
-    teams = [ teams.cinnamon ];
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    teams = [ lib.teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
   };
-}
+})

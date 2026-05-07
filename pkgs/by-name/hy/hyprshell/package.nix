@@ -4,23 +4,25 @@
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
-  gtk4,
   gtk4-layer-shell,
   hyprland,
+  gcc,
+  pixman,
+  libadwaita,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprshell";
-  version = "4.6.0";
+  version = "4.9.5";
 
   src = fetchFromGitHub {
     owner = "H3rmt";
     repo = "hyprshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lio5TLy4mtKfoH4kdFh+9l/j974UXF6DrxDWmvKj+Fo=";
+    hash = "sha256-dTZQ2e7Ie3CMiaDXZlSWnUHgMm375BIyVQ75LaNSDd8=";
   };
 
-  cargoHash = "sha256-uiyoVi3w3L2DnGlBeuBArYfpaSxDRCQG1sN5mWi+QGU=";
+  cargoHash = "sha256-8r+f+iNLICssybsL2D/SFrjguZA2wVLGjEgXZhsmIgU=";
 
   nativeBuildInputs = [
     wrapGAppsHook4
@@ -28,9 +30,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk4
+    libadwaita
     gtk4-layer-shell
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : '${lib.makeBinPath [ gcc ]}'
+      --prefix CPATH : '${
+        lib.makeIncludePath (
+          hyprland.buildInputs
+          ++ [
+            hyprland
+            pixman
+          ]
+        )
+      }'
+    )
+  '';
 
   meta = {
     description = "Modern GTK4-based window switcher and application launcher for Hyprland";

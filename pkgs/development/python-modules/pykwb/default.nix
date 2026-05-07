@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pykwb";
   version = "0.0.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykwb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with KWB Easyfire Pellet Central Heating Units";
     homepage = "https://github.com/bimbar/pykwb";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

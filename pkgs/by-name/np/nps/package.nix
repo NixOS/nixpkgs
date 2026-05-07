@@ -1,24 +1,27 @@
 {
   lib,
   nix,
+  nix-update-script,
   fetchFromGitHub,
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nps";
-  version = "0.2.9";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "OleMussmann";
     repo = "nps";
-    tag = "v${version}";
-    hash = "sha256-q/PkigsNAI7MCmeDFBMGuZJFXVL95pQCNOVhNvBH9dc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kOVpn13lJYeO/99e39c0wbe7qcKHyMj5v4prBtZ3N7s=";
   };
 
-  cargoHash = "sha256-MThyvhzZXRM4l0K8csLDldMVKiDxKZ5EIFATGVpGpVc=";
+  cargoHash = "sha256-dJA9fOU06txPAx5kMl7aGoFeKo7UXqB7X+viUfJqG/M=";
 
   nativeCheckInputs = [ nix ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cache the nix package list, query and sort results by relevance";
@@ -34,11 +37,14 @@ rustPlatform.buildRustPackage rec {
         direct    SEARCH_TERMbar (PACKAGE_NAME starts with SEARCH_TERM)
         exact     SEARCH_TERM (PACKAGE_NAME is exactly SEARCH_TERM)
     '';
-    changelog = "https://github.com/OleMussmann/nps/releases/tag/v${version}";
+    changelog = "https://github.com/OleMussmann/nps/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/OleMussmann/nps";
     license = lib.licenses.mit;
     mainProgram = "nps";
-    maintainers = with lib.maintainers; [ olemussmann ];
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+      olemussmann
+    ];
     platforms = lib.platforms.all;
   };
-}
+})

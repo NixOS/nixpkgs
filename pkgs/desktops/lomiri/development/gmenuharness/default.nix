@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -17,32 +16,24 @@
   qtbase,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmenuharness";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/gmenuharness";
     rev = finalAttrs.version;
-    hash = "sha256-MswB8cQvz3JvcJL2zj7szUOBzKRjxzJO7/x+87m7E7c=";
+    hash = "sha256-hPlCetQ+2gmRdOoVQg7dIndiTxPEKgf8JJtZlihyIYA=";
   };
 
   patches = [
-    # Remove when version > 0.1.4
-    (fetchpatch {
-      name = "0001-gmenuharness-Rename-type-attribute-from-x-canonical-type-to-x-lomiri-type.patch";
-      url = "https://gitlab.com/ubports/development/core/gmenuharness/-/commit/70e9ed85792a6ac1950faaf26391ce91e69486ab.patch";
-      hash = "sha256-jeue0qrl2JZCt/Yfj4jT210wsF/E+MlbtNT/yFTcw5I=";
-    })
+    # Remove when https://gitlab.com/ubports/development/core/gmenuharness/-/merge_requests/10 merged & in release
+    ./1001-gmenuharness-Fix-order-of-cmake_minimum_required-and-project.patch
   ];
-
-  postPatch = ''
-    # GTest needs C++17
-    # Remove when https://gitlab.com/ubports/development/core/gmenuharness/-/merge_requests/5 merged & in release
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'std=c++14' 'std=c++17'
-  '';
 
   strictDeps = true;
 
@@ -55,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake-extras
     glib
     lomiri-api
-    qtbase
   ];
 
   nativeCheckInputs = [
@@ -66,10 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     gtest
     libqtdbustest
+    qtbase
   ];
 
   cmakeFlags = [
-    "-Denable_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+    (lib.strings.cmakeBool "enable_tests" finalAttrs.finalPackage.doCheck)
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    (lib.strings.cmakeBool "ENABLE_QT6" withQt6)
   ];
 
   dontWrapQtApps = true;
@@ -91,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to test GMenuModel structures";
     homepage = "https://gitlab.com/ubports/development/core/gmenuharness";
-    license = licenses.gpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [
       "libgmenuharness"
     ];

@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_black" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to enable format checking with black";
     homepage = "https://github.com/shopkeep/pytest-black";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -4,21 +4,18 @@
   fetchPypi,
   llama-index-core,
   hatchling,
-  pythonOlder,
   tweepy,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-twitter";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_twitter";
     inherit version;
-    hash = "sha256-e4zYwopM7b1WiNINHU3DhnY1DPo7nMcIM/BymS1j0qQ=";
+    hash = "sha256-ws26RKK4xVT2388oFmRgtMq6VXwCc5kLOr7toEZFEyQ=";
   };
 
   build-system = [ hatchling ];
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.readers.twitter" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Readers Integration for Twitter";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/readers/llama-index-readers-twitter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

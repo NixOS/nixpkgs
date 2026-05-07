@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiowithings";
   version = "3.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
@@ -67,11 +64,11 @@ buildPythonPackage rec {
     "test_unexpected_server_response"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Withings";
     homepage = "https://github.com/joostlek/python-withings";
     changelog = "https://github.com/joostlek/python-withings/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

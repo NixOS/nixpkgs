@@ -14,7 +14,6 @@
   openssl,
   pkg-config,
   rustPlatform,
-  webkitgtk_4_0,
 }:
 
 let
@@ -75,7 +74,7 @@ rustPlatform.buildRustPackage {
     freetype
     libsoup_2_4
     gtk3
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   checkFlags = [
@@ -87,11 +86,13 @@ rustPlatform.buildRustPackage {
     mv $out/bin/app $out/bin/xplorer
   '';
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Customizable, modern file manager";
     homepage = "https://xplorer.space";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "xplorer";
   };
 }

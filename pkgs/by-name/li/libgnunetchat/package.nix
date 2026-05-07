@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -15,14 +16,21 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "libgnunetchat";
-  version = "0.5.3";
+  pname = "libgnunetchat";
+  version = "0.6.1";
 
   src = fetchgit {
-    url = "https://git.gnunet.org/libgnunetchat.git";
+    url = "https://git-www.taler.net/libgnunetchat.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DhXPYa8ya9cEbwa4btQTrpjfoTGhzBInWXXH4gmDAQw=";
+    hash = "sha256-FKFoIuGGPcYVRBrsqn1rnodRVCLAjLKlgZOs9v4H+8w=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/libgnunetchat/libgnunetchat-0.6.1-gnunet-0.26.2.patch?rev=6";
+      hash = "sha256-Q0FvZUXSnYwK+LsN9MoW7v+gPYmD7w4E+bXNDluhxfI=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -50,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     pkgConfigModules = [ "gnunetchat" ];
     description = "Library for secure, decentralized chat using GNUnet network services";
-    homepage = "https://git.gnunet.org/libgnunetchat.git";
+    homepage = "https://git-www.taler.net/libgnunetchat.git";
+    changelog = "https://git-www.taler.net/libgnunetchat.git/plain/ChangeLog?h=v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     teams = with lib.teams; [ ngi ];

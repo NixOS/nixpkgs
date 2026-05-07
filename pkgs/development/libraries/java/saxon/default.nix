@@ -74,16 +74,16 @@ let
           inherit updateScript;
         };
 
-        meta = with lib; {
+        meta = {
           inherit description license mainProgram;
           homepage =
             if versionAtLeast finalAttrs.version "11" then
               "https://www.saxonica.com/products/latest.xml"
             else
               "https://www.saxonica.com/products/archive.xml";
-          sourceProvenance = with sourceTypes; [ binaryBytecode ];
-          maintainers = with maintainers; [ rvl ];
-          platforms = platforms.all;
+          sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+          maintainers = with lib.maintainers; [ rvl ];
+          platforms = lib.platforms.all;
         };
       }
     );
@@ -130,7 +130,9 @@ in
     pname = "saxon";
     version = "6.5.3";
     src = fetchurl {
-      url = "mirror://sourceforge/saxon/saxon${dashify version}.zip";
+      url = "mirror://sourceforge/saxon/OldFiles/${version}/saxon${
+        builtins.replaceStrings [ "." ] [ "_" ] version
+      }.zip";
       hash = "sha256-Q28wzqyUCPBJ2C3a8acdG2lmeee8GeEAgg9z8oUfvlA=";
     };
     description = "XSLT 1.0 processor";
@@ -189,11 +191,11 @@ in
 
   saxon_12-he = common rec {
     pname = "saxon-he";
-    version = "12.8";
+    version = "12.9";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      hash = "sha256-K6hRrseSW4giCBgsSMk2IwIF1VjjNWNrvkZia9gANZg=";
+      hash = "sha256-8olb7zeUESxlChWL4nw5qG6IwXF+u44OiAZ9HwdjXRI=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 3.1, and XQuery 3.1";

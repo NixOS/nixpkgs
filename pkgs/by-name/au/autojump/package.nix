@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autojump";
   version = "22.5.3";
 
   src = fetchFromGitHub {
     owner = "wting";
     repo = "autojump";
-    rev = "release-v${version}";
+    rev = "release-v${finalAttrs.version}";
     sha256 = "1rgpsh70manr2dydna9da4x7p8ahii7dgdgwir5fka340n1wrcws";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "`cd' command that learns";
     mainProgram = "autojump";
     longDescription = ''
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
       Autojump supports tab-completion.
     '';
     homepage = "https://github.com/wting/autojump";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       yurrriq
     ];
   };
-}
+})

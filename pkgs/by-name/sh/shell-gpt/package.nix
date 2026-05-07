@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "shell-gpt";
   version = "1.4.5";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TheR1D";
     repo = "shell_gpt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-e0zKlbt508psiV1ryuE/JV0rWM/XZDhMChqReGHefig=";
   };
 
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     "typer"
     "instructor"
     "jinja2"
+    "openai"
   ];
 
   build-system = with python3.pkgs; [ hatchling ];
@@ -49,9 +50,12 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Access ChatGPT from your terminal";
     homepage = "https://github.com/TheR1D/shell_gpt";
-    changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${version}";
+    changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SohamG ];
+    maintainers = with lib.maintainers; [
+      SohamG
+      mio
+    ];
     mainProgram = "sgpt";
   };
-}
+})

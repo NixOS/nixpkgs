@@ -4,12 +4,12 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "boohu";
   version = "0.14.0";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/boohu/downloads/boohu-${version}.tar.gz";
+    url = "https://download.tuxfamily.org/boohu/downloads/boohu-${finalAttrs.version}.tar.gz";
     hash = "sha256-IB59C5/uuHP6LtKLypjpgHOo0MR9bFdCbudaRa+h7lI=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "New coffee-break roguelike game";
     mainProgram = "boohu";
     longDescription = ''
@@ -30,8 +30,8 @@ buildGoModule rec {
       simplified inventory.
     '';
     homepage = "https://download.tuxfamily.org/boohu/index.html";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

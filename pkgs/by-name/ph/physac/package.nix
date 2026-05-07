@@ -28,8 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     includedir=$out/include
 
     Name: physac
-    Description: ${finalAttrs.meta.description}
-    URL: ${finalAttrs.meta.homepage}
+    Description: 2D physics header-only library for raylib
+    URL: https://github.com/victorfisac/Physac
     Version: ${finalAttrs.version}
     Cflags: -I"{includedir}"
     EOF

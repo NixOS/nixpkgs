@@ -11,7 +11,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "flupe";
-    repo = pname;
+    repo = "generics";
     rev = "v${version}";
     sha256 = "sha256-B1eT6F0Dp2zto50ulf+K/KYMlMp8Pgc/tO9qkcqn+O8=";
   };
@@ -25,11 +25,11 @@ mkDerivation rec {
     rm tests.agda-lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for datatype-generic programming in Agda";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ turion ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ turion ];
   };
 }

@@ -8,17 +8,18 @@
   udev,
   udevCheckHook,
   acl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "joycond";
-  version = "unstable-2021-07-30";
+  version = "0-unstable-2026-03-02";
 
   src = fetchFromGitHub {
     owner = "DanielOgorchock";
     repo = "joycond";
-    rev = "f9a66914622514c13997c2bf7ec20fa98e9dfc1d";
-    sha256 = "sha256-quw7yBHDDZk1+6uHthsfMCej7g5uP0nIAqzvI6436B8=";
+    rev = "0df025ac5dc284b1f31172b6b252321ba788c4de";
+    sha256 = "sha256-2rHSQFQvpNZWZJQenZxPEVkbUFQvhRz1Om1AnnIio4M=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +50,14 @@ stdenv.mkDerivation {
       "/bin/setfacl"  "${acl}/bin/setfacl"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
     homepage = "https://github.com/DanielOgorchock/joycond";
     description = "Userspace daemon to combine joy-cons from the hid-nintendo kernel driver";
     mainProgram = "joycond";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ claymorwan ];
+    platforms = lib.platforms.linux;
   };
 }

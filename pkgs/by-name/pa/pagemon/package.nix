@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pagemon";
-  version = "0.02.05";
+  version = "0.02.06";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "pagemon";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-Crr1312wZ1IIwvODAUooZ0Lr75W0qdDQrr1sszaNHa4=";
+    hash = "sha256-nlgrPGctgP6F90LTkVXVZ1MVbkr8yDF/AI+yrvnU5Hs=";
   };
 
   buildInputs = [ ncurses ];

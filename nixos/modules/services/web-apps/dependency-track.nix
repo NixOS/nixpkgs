@@ -629,6 +629,9 @@ in
   };
 
   meta = {
-    maintainers = lib.teams.cyberus.members;
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
   };
 }

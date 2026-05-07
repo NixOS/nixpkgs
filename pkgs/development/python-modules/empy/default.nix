@@ -13,11 +13,11 @@ buildPythonPackage rec {
     hash = "sha256-hvFeHal0Pnmi6bLLrPGhPQt/sYNbYlTrJTyXi3Iof08=";
   };
   pythonImportsCheck = [ "em" ];
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alcyone.com/software/empy/";
     description = "Templating system for Python";
     mainProgram = "em.py";
-    maintainers = with maintainers; [ nkalupahana ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ nkalupahana ];
+    license = lib.licenses.bsd3;
   };
 }

@@ -28,12 +28,12 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jmoon018/PacVim";
     description = "Game that teaches you vim commands";
     mainProgram = "pacvim";
     maintainers = [ ];
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   setuptools,
   django-classy-tags,
   django-formtools,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-cms";
-  version = "5.0.2";
+  version = "5.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-cms";
     tag = version;
-    hash = "sha256-qv6eVs5jKJXQczEa6+H5n4+pw1JFTkb7XJD+0DBVFM0=";
+    hash = "sha256-pYxIW/GGBIKzsQs2QJiRkScDPzSf3YXC+HkDsfAgg/w=";
   };
 
   build-system = [ setuptools ];

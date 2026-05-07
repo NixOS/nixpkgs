@@ -7,7 +7,7 @@
   yodl,
   perl,
   groff,
-  util-linux,
+  util-linuxMinimal,
   texinfo,
   ncurses,
   pcre2,
@@ -16,13 +16,9 @@
   nixosTests,
 }:
 
-let
-  version = "5.9";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh";
-  inherit version;
+  version = "5.9";
   outputs = [
     "out"
     "doc"
@@ -31,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
+    url = "mirror://sourceforge/zsh/zsh-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-m40ezt1bXoH78ZGOh2dSp92UjgXBoNuhCrhjhC1FrNU=";
   };
 
@@ -67,6 +63,9 @@ stdenv.mkDerivation {
       hash = "sha256-bl1PG9Zk1wK+2mfbCBhD3OEpP8HQboqEO8sLFqX8DmA=";
       excludes = [ "ChangeLog" ];
     })
+    # autoconf 2.73 picks -std=gnu23, breaking the K&R sigsuspend probe and
+    # causing $(...) hangs. Drop with the next zsh release.
+    ./fix-sigsuspend-probe-c23.patch
   ]
   ++ lib.optionals stdenv.cc.isGNU [
     # Fixes compilation with gcc >= 14.
@@ -86,7 +85,7 @@ stdenv.mkDerivation {
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    util-linux
+    util-linuxMinimal
     yodl
   ];
 
@@ -162,9 +161,9 @@ stdenv.mkDerivation {
         }
         mv $out/etc/zshenv $out/etc/zshenv_zwc_is_used
 
-        rm $out/bin/zsh-${version}
+        rm $out/bin/zsh-${finalAttrs.version}
         mkdir -p $out/share/doc/
-        mv $out/share/zsh/htmldoc $out/share/doc/zsh-$version
+        mv $out/share/zsh/htmldoc $out/share/doc/zsh-${finalAttrs.version}
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
@@ -182,7 +181,7 @@ stdenv.mkDerivation {
       completion, shell functions (with autoloading), a history mechanism, and
       a host of other features.
     '';
-    license = "MIT-like";
+    license = lib.licenses.mit-modern;
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [
       pSub
@@ -198,4 +197,4 @@ stdenv.mkDerivation {
       inherit (nixosTests) oh-my-zsh;
     };
   };
-}
+})

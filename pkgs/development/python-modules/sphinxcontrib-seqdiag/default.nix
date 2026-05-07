@@ -3,7 +3,6 @@
   blockdiag,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   seqdiag,
   sphinx,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sphinxcontrib-seqdiag";
   version = "3.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx seqdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-seqdiag";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

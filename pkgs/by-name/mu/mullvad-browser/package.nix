@@ -21,11 +21,11 @@
   glib,
   gtk3,
   libxcb,
-  libX11,
-  libXext,
-  libXrender,
-  libXt,
-  libXtst,
+  libx11,
+  libxext,
+  libxrender,
+  libxt,
+  libxtst,
   libgbm,
   pango,
   pciutils,
@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg,
+  ffmpeg_7,
 
   audioSupport ? mediaSupport,
 
@@ -73,11 +73,11 @@ let
       glib
       gtk3
       libxcb
-      libX11
-      libXext
-      libXrender
-      libXt
-      libXtst
+      libx11
+      libxext
+      libxrender
+      libxt
+      libxtst
       libgbm
       pango
       pciutils
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg ]
+    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "14.5.6";
+  version = "15.0.11";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-oUbeteUlgQIzRezEQy9APDtXWX8RuOCtUXQAWlzqkyM=";
+      hash = "sha256-+skGid5BYrptv3aHLPogxew28DNFArV6kEDhCTxD2Ic=";
     };
   };
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
@@ -291,30 +291,31 @@ stdenv.mkDerivation rec {
     inherit sources;
     updateScript = callPackage ./update.nix {
       inherit pname version meta;
-      baseUrl = "https://cdn.mullvad.net/browser/";
+      baseUrl = "https://dist.torproject.org/mullvadbrowser/";
       name = "mullvad-browser";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
-    platforms = attrNames sources;
-    maintainers = with maintainers; [
+    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
       felschr
       panicgh
       sigmasquadron
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       lgpl21Plus
       lgpl3Plus
       free
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

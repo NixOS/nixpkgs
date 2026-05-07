@@ -1,15 +1,16 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   qtbase,
   qttools,
   ddcutil,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ddcui";
   version = "0.6.0";
 
@@ -25,6 +26,7 @@ mkDerivation rec {
     # file is not currently written to support PREFIX installations.
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -33,12 +35,12 @@ mkDerivation rec {
     ddcutil
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface for ddcutil - control monitor settings";
     mainProgram = "ddcui";
     homepage = "https://www.ddcutil.com/ddcui_main/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ nh2 ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ nh2 ];
+    platforms = with lib.platforms; linux;
   };
 }

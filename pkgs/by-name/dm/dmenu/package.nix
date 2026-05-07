@@ -3,9 +3,9 @@
   stdenv,
   fetchzip,
   fontconfig,
-  libX11,
-  libXinerama,
-  libXft,
+  libx11,
+  libxinerama,
+  libxft,
   writeText,
   # customization
   config,
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libX11
-    libXinerama
-    libXft
+    libx11
+    libxinerama
+    libxft
   ]
   ++ extraLibs;
 
@@ -61,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       pSub
-      globin
       qusic
       _0david0mp
     ];

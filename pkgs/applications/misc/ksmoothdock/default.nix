@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
   kactivities,
   qtbase,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "KSmoothDock";
   version = "6.3";
 
@@ -28,6 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -37,12 +39,11 @@ mkDerivation rec {
 
   cmakeDir = "../src";
 
-  meta = with lib; {
+  meta = {
     description = "Cool desktop panel for KDE Plasma 5";
     mainProgram = "ksmoothdock";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://dangvd.github.io/ksmoothdock/";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

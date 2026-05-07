@@ -22,13 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
   };
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
   nativeBuildInputs = [
     installShellFiles
-    zig.hook
+    zig
   ];
 
   postInstall = ''
@@ -38,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/orhun/linuxwave";
     description = "Generate music from the entropy of Linux";
-    changelog = "https://github.com/orhun/linuxwave/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/linuxwave/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ puiyq ];
     inherit (zig.meta) platforms;
     mainProgram = "linuxwave";
   };

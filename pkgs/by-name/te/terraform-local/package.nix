@@ -3,13 +3,13 @@
   python3Packages,
   fetchPypi,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "terraform_local";
   version = "0.24.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LPrrKDoXUwg/P1m+Gi4I0iUoaRNjNpTWlbBLupkTrpE=";
   };
 
@@ -27,10 +27,10 @@ python3Packages.buildPythonApplication rec {
   # There is no `pythonImportsCheck` because the package only outputs a binary: tflocal
   dontUsePythonImportsCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Terraform CLI wrapper to deploy your Terraform applications directly to LocalStack";
     homepage = "https://github.com/localstack/terraform-local";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shivaraj-bh ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
-}
+})

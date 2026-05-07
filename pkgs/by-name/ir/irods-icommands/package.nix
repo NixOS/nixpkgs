@@ -16,7 +16,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "irods";
     repo = "irods_client_icommands";
     tag = finalAttrs.version;
-    hash = "sha256-lo1eCI/CSzl7BJWdPo7KKVHfznkPN6GwsiQThUGuQdw=";
+    hash = "sha256-jR7AhWeXYuJKzZRmYQUjiKSwK6PaB4dLQO8GVZwJQXk=";
   };
 
   nativeBuildInputs = [

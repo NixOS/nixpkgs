@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "htmlhint";
-  version = "1.7.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "htmlhint";
     repo = "HTMLHint";
     rev = "v${version}";
-    hash = "sha256-aFydnJiRqGzBKZGX/AvRlxjf3sw+fBwKdGmydFjD/xk=";
+    hash = "sha256-jqlTtLC9tCGVU9w5xC3Lgr61SOo96yk2rIG0LjYGklw=";
   };
 
-  npmDepsHash = "sha256-h37yWpXWh9+cMlI36zucq2ZbYsQUaGuRQGJySKIeda0=";
+  npmDepsHash = "sha256-baMVZNwKwXVQCkIgaQizYe9vjYKJXggUXsGMZmSrwdY=";
 
   meta = {
     changelog = "https://github.com/htmlhint/HTMLHint/blob/${src.rev}/CHANGELOG.md";

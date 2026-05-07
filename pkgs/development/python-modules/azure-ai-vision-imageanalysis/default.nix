@@ -8,7 +8,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-ai-vision-imageanalysis";
   version = "39.0.0";
   pyproject = true;
@@ -16,11 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    tag = "azure-mgmt-containerservice_${version}";
+    tag = "azure-mgmt-containerservice_${finalAttrs.version}";
     hash = "sha256-zufXc8LR4STHi/jjV0bcLsifcHIif2m+3Q/KZlsSkRw=";
   };
 
-  sourceRoot = "${src.name}/sdk/vision/azure-ai-vision-imageanalysis";
+  sourceRoot = "${finalAttrs.src.name}/sdk/vision/azure-ai-vision-imageanalysis";
 
   build-system = [ setuptools ];
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

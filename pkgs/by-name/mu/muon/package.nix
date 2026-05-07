@@ -1,31 +1,36 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   fetchFromSourcehut,
-  fetchurl,
+  callPackage,
+  coreutils,
   curl,
   libarchive,
   libpkgconf,
   pkgconf,
-  python3,
   samurai,
-  scdoc,
   zlib,
   embedSamurai ? false,
+  # docs
   buildDocs ? true,
+  scdoc,
+  # tests
+  runTests ? false,
+  gettext,
+  muon,
+  nasm,
+  pkg-config,
+  python3,
+  writableTmpDirAsHomeHook,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
-  version = "0.4.0";
+  version = "0.5.0";
 
-  src = fetchFromSourcehut {
-    name = "muon-src";
-    owner = "~lattis";
-    repo = "muon";
-    tag = finalAttrs.version;
-    hash = "sha256-xTdyqK8t741raMhjjJBMbWnAorLMMdZ02TeMXK7O+Yw=";
-  };
+  srcs = builtins.attrValues (lib.filterAttrs (_: v: v.use or true) finalAttrs.passthru.srcsAttrs);
+
+  sourceRoot = "muon-src";
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" ];
 
@@ -34,8 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!embedSamurai) [ samurai ]
   ++ lib.optionals buildDocs [
-    (python3.withPackages (ps: [ ps.pyyaml ]))
     scdoc
+  ]
+  ++ lib.optionals (buildDocs || finalAttrs.doCheck) [
+    (python3.withPackages (ps: [ ps.pyyaml ]))
   ];
 
   buildInputs = [
@@ -47,80 +54,95 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  postUnpack =
-    let
-      # URLs manually extracted from subprojects directory
-      meson-docs-wrap = fetchurl {
-        name = "meson-docs-wrap";
-        url = "https://github.com/muon-build/meson-docs/archive/5bc0b250984722389419dccb529124aed7615583.tar.gz";
-        hash = "sha256-5MmmiZfadCuUJ2jy5Rxubwf4twX0jcpr+TPj5ssdSbM=";
-      };
+  postUnpack = ''
+    for src in $srcs; do
+      name=$(stripHash $src)
 
-      meson-tests-wrap = fetchurl {
-        name = "meson-tests-wrap";
-        url = "https://github.com/muon-build/meson-tests/archive/591b5a053f9aa15245ccbd1d334cf3f8031b1035.tar.gz";
-        hash = "sha256-6GXfcheZyB/S/xl/j7pj5EAWtsmx4N0fVhLPMJ2wC/w=";
-      };
-    in
-    ''
-      mkdir -p $sourceRoot/subprojects/meson-docs
-      pushd $sourceRoot/subprojects/meson-docs
-      ${lib.optionalString buildDocs "tar xvf ${meson-docs-wrap} --strip-components=1"}
-      popd
+      # skip the main project, only move subprojects
+      [ "$name" == "$sourceRoot" ] && continue
 
-      mkdir -p $sourceRoot/subprojects/meson-tests
-      pushd $sourceRoot/subprojects/meson-tests
-      tar xvf ${meson-tests-wrap} --strip-components=1
-      popd
-    '';
+      cp -r "$name" "$sourceRoot/subprojects/$name"
+      chmod +w -R "$sourceRoot/subprojects/$name"
+      rm "$sourceRoot/subprojects/$name.wrap"
+    done
+  '';
+
+  patches = [ ./darwin-clang.patch ];
 
   postPatch = ''
-    patchShebangs bootstrap.sh
+    find subprojects -name "*.py" -exec chmod +x {} \;
+    patchShebangs subprojects
   ''
-  + lib.optionalString buildDocs ''
-    patchShebangs subprojects/meson-docs/docs/genrefman.py
+  + lib.optionalString finalAttrs.doCheck ''
+    substituteInPlace \
+      "subprojects/meson-tests/common/14 configure file/test.py.in" \
+      "subprojects/meson-tests/common/274 customtarget exe for test/generate.py" \
+      "subprojects/meson-tests/native/8 external program shebang parsing/script.int.in" \
+        --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
+
+    substituteInPlace \
+      "subprojects/meson-tests/meson.build" \
+        --replace-fail "['common/66 vcstag', {'python': true}]," ""
   '';
 
-  # tests try to access "~"
-  postConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
+  enableParallelBuilding = true;
 
   buildPhase =
     let
       muonBool = lib.mesonBool;
       muonEnable = lib.mesonEnable;
+      muonOption = lib.mesonOption;
 
+      bootstrapFlags = lib.optionalString (!embedSamurai) "CFLAGS=\"$CFLAGS -DBOOTSTRAP_NO_SAMU\"";
+      # see `muon options -a` to see built-in options
       cmdlineForMuon = lib.concatStringsSep " " [
+        (muonOption "prefix" (placeholder "out"))
+        # don't let muon override stdenv C flags
+        (muonEnable "auto_features" true)
+        (muonOption "buildtype" "plain")
+        (muonOption "optimization" "plain")
+        (muonOption "wrap_mode" "nodownload")
+        # muon features
         (muonBool "static" stdenv.targetPlatform.isStatic)
-        (muonEnable "docs" buildDocs)
+        (muonEnable "man-pages" buildDocs)
+        (muonEnable "meson-docs" buildDocs)
+        (muonEnable "meson-tests" finalAttrs.doCheck)
         (muonEnable "samurai" embedSamurai)
+        (muonEnable "tracy" false)
+        (muonEnable "website" false)
       ];
       cmdlineForSamu = "-j$NIX_BUILD_CORES";
     in
     ''
       runHook preBuild
 
-      ${
-        lib.optionalString (!embedSamurai) "CFLAGS=\"$CFLAGS -DBOOTSTRAP_NO_SAMU\""
-      } ./bootstrap.sh stage-1
-
+      ${bootstrapFlags} ./bootstrap.sh stage-1
       ./stage-1/muon-bootstrap setup ${cmdlineForMuon} stage-2
       ${lib.optionalString embedSamurai "./stage-1/muon-bootstrap"} samu ${cmdlineForSamu} -C stage-2
-
-      ./stage-2/muon setup -Dprefix=$out ${cmdlineForMuon} stage-3
-      ${lib.optionalString embedSamurai "./stage-2/muon"} samu ${cmdlineForSamu} -C stage-3
 
       runHook postBuild
     '';
 
-  # tests are failing because they don't find Python
-  doCheck = false;
+  # tests only pass when samurai is embedded
+  doCheck = embedSamurai && runTests;
+
+  nativeCheckInputs = [
+    # "common/220 fs module"
+    writableTmpDirAsHomeHook
+    # "common/44 pkgconfig-gen"
+    pkg-config
+    # "frameworks/6 gettext"
+    gettext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # "nasm/*" tests
+    nasm
+  ];
 
   checkPhase = ''
     runHook preCheck
 
-    ./stage-3/muon -C stage-3 test
+    ./stage-2/muon -C stage-2 test -d dots -S -j$NIX_BUILD_CORES
 
     runHook postCheck
   '';
@@ -128,22 +150,55 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    stage-3/muon -C stage-3 install
+    stage-2/muon -C stage-2 install
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://muon.build/";
-    description = "Implementation of Meson build system in C99";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # typical `ar failure`
+  passthru.srcsAttrs = {
+    muon-src = fetchFromSourcehut {
+      name = "muon-src";
+      owner = "~lattis";
+      repo = "muon";
+      tag = finalAttrs.version;
+      hash = "sha256-bWEYWUD+GK8R3yVnDTnzFWmm4KAuVPI+1yMfCXWcG/A=";
+    };
+    meson-docs = fetchFromGitHub {
+      name = "meson-docs";
+      repo = "meson-docs";
+      owner = "muon-build";
+      rev = "1017b3413601044fb41ad04977445e68a80e8181";
+      hash = "sha256-aFpyJFIqybLNKhm/kyfCjYylj7DE6muI1+OUh4Cq4WY=";
+      passthru.use = buildDocs;
+    };
+    meson-tests = fetchFromGitHub {
+      name = "meson-tests";
+      repo = "meson-tests";
+      owner = "muon-build";
+      rev = "db92588773a24f67cda2f331b945825ca3a63fa7";
+      hash = "sha256-z4Fc1lr/m2MwIwhXJwoFWpzeNg+udzMxuw5Q/zVvpSM=";
+      passthru.use = finalAttrs.doCheck;
+    };
+  };
+
+  # tests are run here in package tests, rather than enabling doCheck by
+  # default, to reduce the number of required dependencies.
+  passthru.tests.test = (muon.overrideAttrs { pname = "muon-tests"; }).override {
+    buildDocs = false;
+    embedSamurai = true;
+    runTests = true;
+  };
+
+  passthru.updateScript = callPackage ./update.nix { };
+
+  meta = {
+    homepage = "https://muon.build";
+    description = "Implementation of the meson build system in C99";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "muon";
   };
 })
 # TODO LIST:
-# 1. automate sources acquisition (especially wraps)
-# 2. setup hook
-# 3. tests
+# 1. setup hook

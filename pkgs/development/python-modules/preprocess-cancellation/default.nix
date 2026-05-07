@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   shapely,
@@ -11,7 +10,6 @@
 buildPythonPackage rec {
   pname = "preprocess-cancellation";
   version = "0.2.1";
-  disabled = pythonOlder "3.6"; # >= 3.6
   pyproject = true;
 
   # No tests in PyPI
@@ -44,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "preprocess_cancellation" ];
 
-  meta = with lib; {
+  meta = {
     description = "Klipper GCode Preprocessor for Object Cancellation";
     homepage = "https://github.com/kageurufu/cancelobject-preprocessor";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

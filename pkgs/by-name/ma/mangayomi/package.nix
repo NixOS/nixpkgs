@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  flutter332,
+  flutter341,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
+  alsa-lib,
   mpv-unwrapped,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -13,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.35";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-XSXFo0+rLTUJ0p3F5+CvKD85OmrShb2xrpQK0F6fo2U=";
+    hash = "sha256-p2PjylbwOSCtJlPhT7sf1VOZfJx6y0CkNY6xIo2ij5I=";
   };
 
   metaCommon = {
@@ -27,7 +28,7 @@ let
     description = "Reading manga, novels, and watching animes";
     homepage = "https://github.com/kodjodevf/mangayomi";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 
@@ -36,14 +37,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-DDHBLQWscORg4+0CX5c2wmrhm2t7wOpotZFB+85w+EA=";
+    cargoHash = "sha256-lKEkTHLTX6RdTxC8bU3GQm0RD2RBy4rDHzBHIiks4eg=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter332.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -85,7 +86,7 @@ flutter332.buildFlutterApplication {
 
           buildAndTestSubdir = "rust";
 
-          cargoHash = "sha256-vYVg5ZALQDrolDtbbXm/epE5MmSKpRJbSU15VDiKh4U=";
+          cargoHash = "sha256-oJOM/Tb4QrezdtU8YTyr57JZp5FkDewgwXrBqwp6cp8=";
 
           passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
         };
@@ -117,11 +118,12 @@ flutter332.buildFlutterApplication {
       };
   };
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
+    alsa-lib
     mpv-unwrapped
     webkitgtk_4_1
   ];

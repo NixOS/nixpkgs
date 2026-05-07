@@ -14,16 +14,16 @@
   qtpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "napari-console";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari-console";
-    tag = "v${version}";
-    hash = "sha256-Hvo9YMDf7CjeGn1kT7m9Y5klH0cD/SWxDQOHkYspGpQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z1pyG31g+fvTNLbWc2W56zDf33HCx8PvPKwIIc/x2VA=";
   };
 
   build-system = [
@@ -31,6 +31,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "ipykernel"
+  ];
   dependencies = [
     ipykernel
     ipython
@@ -47,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

@@ -7,7 +7,6 @@
   pkg-config,
   ninja,
   gtest,
-
   curl,
   freetype,
   giflib,
@@ -15,10 +14,10 @@
   libpng,
   libwebp,
   libarchive,
-  libX11,
+  libx11,
   pixman,
   tinyxml-2,
-  xorg,
+  libxi,
   zlib,
   SDL2,
   SDL2_image,
@@ -38,7 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-jXjrA859hR46Cp5qi6Z1C+hLWCUR7yGlASOGlTveeW8=";
   };
-
+  patches = [
+    # From https://github.com/LibreSprite/LibreSprite/pull/565
+    ./cmake4.diff
+    # Remove Homebrew-specific brew invocation for libarchive on Darwin;
+    # Nix provides libarchive directly via buildInputs.
+    ./no-brew.patch
+  ];
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -54,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libwebp
     libarchive
-    libX11
+    libx11
     pixman
     tinyxml-2
     zlib
@@ -64,12 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     # no v8 due to missing libplatform and libbase
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    xorg.libXi
+    libxi
   ];
 
   cmakeFlags = [
     "-DWITH_DESKTOP_INTEGRATION=ON"
     "-DWITH_WEBP_SUPPORT=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
@@ -107,7 +113,5 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
-    # https://github.com/LibreSprite/LibreSprite/issues/308
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

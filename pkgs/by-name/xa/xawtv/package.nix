@@ -4,28 +4,28 @@
   fetchurl,
   ncurses,
   libjpeg,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   alsa-lib,
   aalib,
-  libXft,
+  libxft,
   xorgproto,
   libv4l,
-  libFS,
-  libXaw,
-  libXpm,
-  libXext,
-  libSM,
-  libICE,
+  libfs,
+  libxaw,
+  libxpm,
+  libxext,
+  libsm,
+  libice,
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xawtv";
   version = "3.107";
 
   src = fetchurl {
-    url = "https://linuxtv.org/downloads/xawtv/xawtv-${version}.tar.bz2";
+    url = "https://linuxtv.org/downloads/xawtv/xawtv-${finalAttrs.version}.tar.bz2";
     sha256 = "055p0wia0xsj073l8mg4ifa6m81dmv6p45qyh99brramq5iylfy5";
   };
 
@@ -33,24 +33,24 @@ stdenv.mkDerivation rec {
     ./0001-Fix-build-for-glibc-2.32.patch
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   buildInputs = [
     ncurses
     libjpeg
-    libX11
-    libXt
-    libXft
+    libx11
+    libxt
+    libxft
     xorgproto
-    libFS
+    libfs
     perl
     alsa-lib
     aalib
-    libXaw
-    libXpm
-    libXext
-    libSM
-    libICE
+    libxaw
+    libxpm
+    libxext
+    libsm
+    libice
     libv4l
   ];
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "TV application for Linux with apps and tools such as a teletext browser";
     license = lib.licenses.gpl2;
     homepage = "https://www.kraxel.org/blog/linux/xawtv/";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

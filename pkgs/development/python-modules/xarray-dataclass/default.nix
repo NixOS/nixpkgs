@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   pytestCheckHook,
   numpy,
@@ -10,7 +9,7 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xarray-dataclass";
   version = "3.0.0";
   pyproject = true;
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "xarray-dataclass";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NHJvrkoRhq5cPSBBMWzrWVn+3sPvveMRgTXc/NdLfuA=";
   };
 
@@ -38,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xarray_dataclass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Xarray data creation made easy by dataclass";
     homepage = "https://xarray-contrib.github.io/xarray-dataclass";
-    changelog = "https://github.com/xarray-contrib/xarray-dataclass/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/xarray-contrib/xarray-dataclass/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

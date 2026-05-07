@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  libX11,
-  libXinerama,
-  libXrandr,
-  libXpm,
-  libXft,
+  libx11,
+  libxinerama,
+  libxrandr,
+  libxpm,
+  libxft,
   imlib2,
 }:
 stdenv.mkDerivation {
@@ -35,11 +35,11 @@ stdenv.mkDerivation {
 
   buildInputs = [
     imlib2
-    libX11
-    libXinerama
-    libXrandr
-    libXpm
-    libXft
+    libx11
+    libxinerama
+    libxrandr
+    libxpm
+    libxft
   ];
 
   preConfigure = "substituteInPlace configure --replace '-lxft' '-lXft'";
@@ -50,11 +50,11 @@ stdenv.mkDerivation {
     "MANPREFIX=${placeholder "out"}/share/man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Window manager from scratch";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.balsoft ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.balsoft ];
+    platforms = lib.platforms.linux;
     mainProgram = "wmfs";
   };
 }

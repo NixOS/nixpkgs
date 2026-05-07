@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "waqiasync" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for http://aqicn.org";
     homepage = "https://github.com/andrey-git/waqi-async";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -4,7 +4,12 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libGL,
   nix-update-script,
 }:
@@ -25,12 +30,12 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libXinerama
-    xorg.libXxf86vm
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libX11
-    xorg.libXi
+    libxinerama
+    libxxf86vm
+    libxcursor
+    libxrandr
+    libx11
+    libxi
     libGL
   ];
 
@@ -50,6 +55,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/krillinai/KlicStudio/releases/tag/v${finalAttrs.version}";
     mainProgram = "krillinai-desktop";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

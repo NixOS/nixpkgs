@@ -25,24 +25,24 @@
   gtest,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
   libpng,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
+  openexr,
   opencv,
   pcre,
   systemd,
-  tbb_2022,
+  onetbb,
   webkitgtk_4_1,
-  wxGTK31,
-  xorg,
+  wxwidgets_3_1,
+  libx11,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
   wxGTK' =
-    (wxGTK31.override {
+    (wxwidgets_3_1.override {
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;
@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.02.01.60";
+  version = "02.05.00.67";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ttv0LwJ0GnDhmxofP7c3CJMawad8AhAToZFOvoK3Zow=";
+    hash = "sha256-jLaSUs6OmoD0yw1hOcJarYKfr1rbhB2TwRiBBU0utEI=";
   };
 
   nativeBuildInputs = [
@@ -94,17 +94,17 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gtk3
     hicolor-icon-theme
-    ilmbase
     libpng
     mpfr
     nlopt
     opencascade-occt_7_6
+    openexr
     openvdb
     pcre
-    tbb_2022
+    onetbb
     webkitgtk_4_1
     wxGTK'
-    xorg.libX11
+    libx11
     opencv
   ]
   ++ lib.optionals withSystemd [ systemd ]
@@ -117,6 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/dont-link-opencv-world-bambu.patch
     # Don't link osmesa
     ./patches/no-osmesa.patch
+    # Don't link cereal
+    ./patches/no-cereal.patch
+    # Cmake 4 support
+    ./patches/cmake.patch
   ];
 
   doCheck = true;
@@ -124,23 +128,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  # The build system uses custom logic - defined in
-  # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt
-  # library, which doesn't pick up the package in the nix store.  We
-  # additionally need to set the path via the NLOPT environment variable.
-  NLOPT = nlopt;
+  env = {
+    # The build system uses custom logic - defined in
+    # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt
+    # library, which doesn't pick up the package in the nix store.  We
+    # additionally need to set the path via the NLOPT environment variable.
+    NLOPT = nlopt;
 
-  NIX_CFLAGS_COMPILE = toString [
-    "-DBOOST_TIMER_ENABLE_DEPRECATED"
-    # Disable compiler warnings that clutter the build log.
-    # It seems to be a known issue for Eigen:
-    # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-    "-Wno-ignored-attributes"
-    "-I${opencv}/include/opencv4"
-  ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-DBOOST_TIMER_ENABLE_DEPRECATED"
+      # Disable compiler warnings that clutter the build log.
+      # It seems to be a known issue for Eigen:
+      # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
+      "-Wno-ignored-attributes"
+      "-I${opencv}/include/opencv4"
+    ];
 
-  # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev" + " -L${opencv}/lib -lopencv_imgcodecs";
+    # prusa-slicer uses dlopen on `libudev.so` at runtime
+    NIX_LDFLAGS = lib.optionalString withSystemd "-ludev" + " -L${opencv}/lib -lopencv_imgcodecs";
+  };
 
   # TODO: macOS
   prePatch = ''
@@ -190,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zhaofengli
       dsluijk
+      miniharinn
     ];
     mainProgram = "bambu-studio";
     platforms = lib.platforms.linux;

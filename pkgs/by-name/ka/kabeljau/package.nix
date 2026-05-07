@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   just,
   imagemagick,
   makeWrapper,
@@ -13,8 +13,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "kabeljau";
   version = "2.1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "kabeljau";
     rev = "v${version}";
@@ -39,11 +38,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Survive as a stray cat in an ncurses game";
     mainProgram = "kabeljau";
     homepage = "https://codeberg.org/annaaurora/kabeljau";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
   };
 }

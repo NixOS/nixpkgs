@@ -1,6 +1,7 @@
 {
   lib,
   clangStdenv,
+  callPackage,
   fetchFromGitHub,
 }:
 
@@ -21,23 +22,23 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "julec";
-  version = "0.1.6";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "jule";
     tag = "jule${finalAttrs.version}";
     name = "jule-${finalAttrs.version}";
-    hash = "sha256-y4v8FdQkB5Si3SYkchFG9fAU4ZhabAMcPkDcLEWW+6k=";
+    hash = "sha256-fwltqCmpCzWkCFGxGrhozW7LQmDwGT8nR9NO5s0nMfI=";
   };
 
   irSrc = fetchFromGitHub {
     owner = "julelang";
     repo = "julec-ir";
-    # revision determined by the upstream commit hash in julec-ir/README.md
-    rev = "aebbd12c0f89f6a04f856f3e23d5ea39741c3e0f";
+    # revision determined by the upstream commit hash
+    rev = "e4134d89f34588e9fb5cc5698f27b0471918e057";
     name = "jule-ir-${finalAttrs.version}";
-    hash = "sha256-7eDOYMmCEfW+0zZpESY1+ql3hWZZ/Q75lKT0nBQPktE=";
+    hash = "sha256-hdS/q2/V/N97fM0r6jrj2SEGWdx9pFivGE4K4l8iVag=";
   };
 
   dontConfigure = true;
@@ -61,7 +62,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     echo "Building ${finalAttrs.meta.mainProgram}-bootstrap v${finalAttrs.version} for ${clangStdenv.hostPlatform.system}..."
     mkdir -p bin
     ${clangStdenv.cc.targetPrefix}c++ ir.cpp \
-      --std=c++17 \
+      --std=c++20 \
       -Wno-everything \
       -fwrapv \
       -ffloat-store \
@@ -75,7 +76,11 @@ clangStdenv.mkDerivation (finalAttrs: {
       -o "bin/${finalAttrs.meta.mainProgram}-bootstrap"
 
     echo "Building ${finalAttrs.meta.mainProgram} v${finalAttrs.version} for ${clangStdenv.hostPlatform.system}..."
-    bin/${finalAttrs.meta.mainProgram}-bootstrap --opt L2 -p -o "bin/${finalAttrs.meta.mainProgram}" "src/${finalAttrs.meta.mainProgram}"
+    bin/${finalAttrs.meta.mainProgram}-bootstrap build \
+      -p \
+      --opt L2 \
+      -o "bin/${finalAttrs.meta.mainProgram}" \
+      "src/${finalAttrs.meta.mainProgram}"
 
     runHook postBuild
   '';
@@ -92,6 +97,12 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    # see doc/hooks/julec.section.md
+    hook = callPackage ./hook.nix { julec = finalAttrs.finalPackage; };
+    tests.hello-jule = callPackage ./test { julec = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Jule Programming Language Compiler";
@@ -111,7 +122,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "julec";
     maintainers = with lib.maintainers; [
-      adamperkowski
+      koi
       sebaguardian
     ];
   };

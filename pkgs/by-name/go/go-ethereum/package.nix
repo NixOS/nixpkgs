@@ -13,19 +13,19 @@ let
   ];
 
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-ethereum";
-  version = "1.16.2";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "go-ethereum";
-    rev = "v${version}";
-    hash = "sha256-12bmK9OYYIDBeN52dQElnDaOcWOzwvjpAZmzHH8IHvw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7otn9F+S4HJ2tWyn8w96NX3hWSLdApTwUL2zAyAW9Xw=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-i1PhF1DFdt2X4faxe5+iYsPIyco0Xb6stOzaCy6JIto=";
+  vendorHash = "sha256-rHTZmwy/ZHpsHNFh00mWXe6F8wEtL0JcLaehBwyvtJw=";
 
   doCheck = false;
 
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   # Move binaries to separate outputs and symlink them back to $out
   postInstall = lib.concatStringsSep "\n" (
-    builtins.map (
+    map (
       bin:
       "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/"
     ) bins
@@ -58,17 +58,17 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) geth; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       gpl3Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       asymmetric
       RaghavSood
     ];
     mainProgram = "geth";
   };
-}
+})

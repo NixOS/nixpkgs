@@ -42,7 +42,8 @@
           machine.wait_for_file("/run/user/${toString user.uid}/wayland-0")
 
       with subtest("Check that logging in has given the user ownership of devices"):
-          machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
+          # Change back to /dev/snd/timer after systemd-258.1
+          machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Wait for the Cinnamon shell"):
           # Correct output should be (true, '2')
@@ -56,7 +57,7 @@
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
 
       with subtest("Check if sessionPath option actually works"):
-          machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
+          machine.succeed("${eval "imports.gi.GIRepository.Repository.dup_default\\(\\).get_search_path\\(\\)"} | grep gpaste")
 
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/nemo-desktop)/environ"

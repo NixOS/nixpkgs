@@ -4,7 +4,6 @@
   fetchFromGitHub,
   enaml,
   pyqtgraph,
-  pyqt5,
   pythonocc-core,
   typing-extensions,
 }:
@@ -25,7 +24,6 @@ buildPythonPackage rec {
     enaml
     # Until https://github.com/inkcut/inkcut/issues/105 perhaps
     pyqtgraph
-    pyqt5
     pythonocc-core
     typing-extensions
   ];
@@ -40,10 +38,10 @@ buildPythonPackage rec {
     "enamlx.widgets"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frmdstryr/enamlx";
     description = "Additional Qt Widgets for Enaml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

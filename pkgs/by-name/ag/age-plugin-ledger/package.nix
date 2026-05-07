@@ -8,14 +8,14 @@
   rage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "age-plugin-ledger";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "Ledger-Donjon";
     repo = "age-plugin-ledger";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g5GbWXhaGEafiM3qkGlRXHcOzPZl2pbDWEBPg4gQWcg=";
   };
 
@@ -34,14 +34,14 @@ rustPlatform.buildRustPackage rec {
     rage
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Ledger Nano plugin for age";
     mainProgram = "age-plugin-ledger";
     homepage = "https://github.com/Ledger-Donjon/age-plugin-ledger";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ erdnaxe ];
+    maintainers = with lib.maintainers; [ erdnaxe ];
   };
-}
+})

@@ -29,8 +29,8 @@
   openssl,
   glfw,
   pkg-config,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   libmemcached,
 }:
 
@@ -53,6 +53,10 @@ stdenv.mkDerivation {
       sha256 = "9f06073ac17f26c2ef6298143bdd1babe7783c228f9667622aa6c91bb7ec7fa0";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 2.8)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -83,8 +87,8 @@ stdenv.mkDerivation {
     yajl
     glfw
     openssl
-    libpthreadstubs
-    libXdmcp
+    libpthread-stubs
+    libxdmcp
     libmemcached
     python3
   ];
@@ -115,7 +119,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       raskin
-      maggesi
     ];
     platforms = [ "x86_64-linux" ];
   };

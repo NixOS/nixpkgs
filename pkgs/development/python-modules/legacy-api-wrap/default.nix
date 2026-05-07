@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "legacy-api-wrap";
-  version = "1.4.1";
+  version = "1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flying-sheep";
     repo = "legacy-api-wrap";
     tag = "v${version}";
-    hash = "sha256-ySkhfUyRBd4QS3f46KlaA5NrHxHr+dlkgmD4fGk2KsA=";
+    hash = "sha256-UvOkVNtH3MbD+ExF0dQ+XAfDx9v7YD3GCNUsEaH7zzM=";
   };
 
   build-system = [

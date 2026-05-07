@@ -21,11 +21,11 @@ buildPythonPackage rec {
   # The tests require write access to $out
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CFFI binding for Hoedown, a markdown parsing library";
     mainProgram = "misaka";
     homepage = "https://misaka.61924.nl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

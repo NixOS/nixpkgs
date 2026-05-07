@@ -4,6 +4,7 @@
   fetchFromGitHub,
   brotli,
   cmake,
+  ctestCheckHook,
   giflib,
   gperftools,
   gtest,
@@ -30,7 +31,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.11.1";
+  version = "0.11.2";
 
   outputs = [
     "out"
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     tag = "v${version}";
-    hash = "sha256-ORwhKOp5Nog366UkLbuWpjz/6sJhxUO6+SkoJGH+3fE=";
+    hash = "sha256-L4/BY68ZBCpebQxryR7D1CxrsneYvw8B8EvW2mkF7bA=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -94,6 +95,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     brotli
     libhwy
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
 
   cmakeFlags = [
@@ -158,17 +163,43 @@ stdenv.mkDerivation rec {
         --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
     '';
 
-  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
+  env = lib.optionalAttrs stdenv.hostPlatform.isAarch32 {
+    CXXFLAGS = "-mfp16-format=ieee";
+  };
 
   # FIXME x86_64-darwin:
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
   doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
 
-  meta = with lib; {
+  disabledTests = lib.optionals stdenv.hostPlatform.isBigEndian [
+    # https://github.com/libjxl/libjxl/issues/3629
+    "DecodeTest.ProgressionTestLosslessAlpha"
+    "DecodeTest.FlushTestLosslessProgressiveAlpha"
+    "EncodeTest.FrameSettingsTest"
+    "JxlTest.RoundtripAlphaResampling"
+    "JxlTest.RoundtripAlphaResamplingOnlyAlpha"
+    "JxlTest.RoundtripAlpha16"
+    "JxlTest.RoundtripProgressive"
+    "JxlTest.RoundtripProgressiveLevel2Slow"
+    "ModularTest.RoundtripLossyDeltaPalette"
+    "ModularTest.RoundtripLossy"
+    "ModularTest.RoundtripLossy16"
+    "PassesTest.ProgressiveDownsample2DegradesCorrectlyGrayscale"
+    "PassesTest.ProgressiveDownsample2DegradesCorrectly"
+  ];
+
+  ctestFlags = lib.optionals stdenv.hostPlatform.isBigEndian [
+    # https://github.com/libjxl/libjxl/issues/3629
+    # These didn't seem to be accepted via disabledTests
+    "--exclude-regex"
+    ".*bitSqueeze.*"
+  ];
+
+  meta = {
     homepage = "https://github.com/libjxl/libjxl";
     description = "JPEG XL image format reference implementation";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nh2 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nh2 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -7,12 +7,13 @@
   alsa-lib,
   curl,
   freetype,
-  gtk3,
   libGL,
-  libX11,
-  libXext,
-  libXinerama,
-  webkitgtk_4_0,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,21 +28,24 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     python3
+    writableTmpDirAsHomeHook # silences build warnings
   ];
 
   buildInputs = [
     alsa-lib
     curl
     freetype
-    gtk3
     libGL
-    libX11
-    libXext
-    libXinerama
-    webkitgtk_4_0
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
   ];
 
   makeFlags = [
@@ -50,9 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     "CONFIG=Release"
   ];
 
-  # silences build warnings
-  HOME = "/build";
-
   postPatch = ''
     patchShebangs src/tunefish4/generate-lv2-ttl.py
   '';
@@ -60,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/{lv2,vst,vst3/Tunefish4.vst3}
+    mkdir -p $out/lib/{lv2,vst,vst3}
 
     pushd src/tunefish4/Builds/LinuxMakefile/build
     cp -r "Tunefish4.lv2" $out/lib/lv2
-    cp -r "Tunefish4.vst3/Contents/x86_64-linux"/* $out/lib/vst3/Tunefish4.vst3
+    cp -r "Tunefish4.vst3" $out/lib/vst3
     cp "Tunefish4.so" $out/lib/vst
     popd
 
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 })

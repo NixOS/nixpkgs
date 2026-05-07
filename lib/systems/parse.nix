@@ -24,6 +24,7 @@ let
     elem
     elemAt
     hasPrefix
+    head
     id
     length
     mapAttrs
@@ -42,17 +43,14 @@ let
     isLinux
     isPower64
     isWindows
+    isCygwin
     ;
 
   inherit (lib.types)
     enum
-    float
     isType
     mkOptionType
-    number
     setType
-    string
-    types
     ;
 
   setTypes =
@@ -71,7 +69,7 @@ let
     let
       found = match "(.*)e?abi.*" x;
     in
-    if found == null then x else elemAt found 0;
+    if found == null then x else head found;
 
 in
 
@@ -287,6 +285,12 @@ rec {
         family = "m68k";
       };
 
+      sh4 = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "sh";
+      };
+
       powerpc = {
         bits = 32;
         significantByte = bigEndian;
@@ -385,6 +389,12 @@ rec {
         family = "or1k";
       };
 
+      arc = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "arc";
+      };
+
       loongarch64 = {
         bits = 64;
         significantByte = littleEndian;
@@ -408,10 +418,8 @@ rec {
   gnuNetBSDDefaultExecFormat =
     cpu:
     if
-      (cpu.family == "arm" && cpu.bits == 32)
-      || (cpu.family == "sparc" && cpu.bits == 32)
-      || (cpu.family == "m68k" && cpu.bits == 32)
-      || (cpu.family == "x86" && cpu.bits == 32)
+      cpu.bits == 32
+      && (cpu.family == "arm" || cpu.family == "sparc" || cpu.family == "m68k" || cpu.family == "x86")
     then
       execFormats.aout
     else
@@ -436,7 +444,8 @@ rec {
   isCompatible =
     with cpuTypes;
     a: b:
-    any id [
+    b == a
+    || any id [
       # x86
       (b == i386 && isCompatible a i486)
       (b == i486 && isCompatible a i586)
@@ -452,19 +461,17 @@ rec {
       (b == armv5tel && isCompatible a armv6l)
 
       # ARMv6
-      (b == armv6l && isCompatible a armv6m)
-      (b == armv6m && isCompatible a armv7l)
+      (b == armv6m && isCompatible a armv6l)
+      (b == armv6l && isCompatible a armv7l)
 
       # ARMv7
       (b == armv7l && isCompatible a armv7a)
       (b == armv7l && isCompatible a armv7r)
-      (b == armv7l && isCompatible a armv7m)
+      (b == armv7m && isCompatible a armv7a)
+      (b == armv7m && isCompatible a armv7r)
 
       # ARMv8
-      (b == aarch64 && a == armv8a)
       (b == armv8a && isCompatible a aarch64)
-      (b == armv8r && isCompatible a armv8a)
-      (b == armv8m && isCompatible a armv8a)
 
       # PowerPC
       (b == powerpc && isCompatible a powerpc64)
@@ -474,17 +481,8 @@ rec {
       (b == mips && isCompatible a mips64)
       (b == mipsel && isCompatible a mips64el)
 
-      # RISCV
-      (b == riscv32 && isCompatible a riscv64)
-
       # SPARC
       (b == sparc && isCompatible a sparc64)
-
-      # WASM
-      (b == wasm32 && isCompatible a wasm64)
-
-      # identity
-      (b == a)
     ];
 
   ################################################################################
@@ -617,6 +615,10 @@ rec {
         execFormat = pe;
         families = { };
       };
+      cygwin = {
+        execFormat = pe;
+        families = { };
+      };
       ghcjs = {
         execFormat = unknown;
         families = { };
@@ -627,6 +629,10 @@ rec {
       };
       mmixware = {
         execFormat = unknown;
+        families = { };
+      };
+      uefi = {
+        execFormat = pe;
         families = { };
       };
     }
@@ -650,7 +656,6 @@ rec {
   types.abi = enum (attrValues abis);
 
   abis = setTypes types.openAbi {
-    cygnus = { };
     msvc = { };
 
     # Note: eabi is specific to ARM and PowerPC.
@@ -658,15 +663,19 @@ rec {
     # On ARM, this corresponds to ARMEABI.
     eabi = {
       float = "soft";
+      eabi = true;
     };
     eabihf = {
       float = "hard";
+      eabi = true;
     };
 
     # Other architectures should use ELF in embedded situations.
     elf = { };
 
-    androideabi = { };
+    androideabi = {
+      eabi = true;
+    };
     android = {
       assertions = [
         {
@@ -680,9 +689,11 @@ rec {
 
     gnueabi = {
       float = "soft";
+      eabi = true;
     };
     gnueabihf = {
       float = "hard";
+      eabi = true;
     };
     gnu = {
       assertions = [
@@ -726,17 +737,21 @@ rec {
 
     musleabi = {
       float = "soft";
+      eabi = true;
     };
     musleabihf = {
       float = "hard";
+      eabi = true;
     };
     musl = { };
 
     uclibceabi = {
       float = "soft";
+      eabi = true;
     };
     uclibceabihf = {
       float = "hard";
+      eabi = true;
     };
     uclibc = { };
 
@@ -773,9 +788,9 @@ rec {
     l:
     {
       "1" =
-        if elemAt l 0 == "avr" then
+        if head l == "avr" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = "none";
             abi = "unknown";
           }
@@ -783,31 +798,31 @@ rec {
           throw "system string '${lib.concatStringsSep "-" l}' with 1 component is ambiguous";
       "2" = # We only do 2-part hacks for things Nix already supports
         if elemAt l 1 == "cygwin" then
-          {
-            cpu = elemAt l 0;
-            kernel = "windows";
-            abi = "cygnus";
-          }
+          mkSkeletonFromList [
+            (head l)
+            "pc"
+            "cygwin"
+          ]
         # MSVC ought to be the default ABI so this case isn't needed. But then it
         # becomes difficult to handle the gnu* variants for Aarch32 correctly for
         # minGW. So it's easier to make gnu* the default for the MinGW, but
         # hack-in MSVC for the non-MinGW case right here.
         else if elemAt l 1 == "windows" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = "windows";
             abi = "msvc";
           }
         else if (elemAt l 1) == "elf" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             vendor = "unknown";
             kernel = "none";
             abi = elemAt l 1;
           }
         else
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = elemAt l 1;
           };
       "3" =
@@ -822,7 +837,7 @@ rec {
           ]
         then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             kernel = elemAt l 1;
             abi = elemAt l 2;
             vendor = "unknown";
@@ -835,6 +850,7 @@ rec {
             "mmixware"
             "ghcjs"
             "mingw32"
+            "uefi"
           ]
           || hasPrefix "freebsd" (elemAt l 2)
           || hasPrefix "netbsd" (elemAt l 2)
@@ -843,7 +859,7 @@ rec {
           || hasPrefix "wasm32" (elemAt l 0)
         then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             vendor = elemAt l 1;
             kernel =
               if elemAt l 2 == "mingw32" then
@@ -851,10 +867,17 @@ rec {
               else
                 elemAt l 2;
           }
+        # lots of tools expect a triplet for Cygwin, even though the vendor is just "pc"
+        else if elemAt l 2 == "cygwin" then
+          {
+            cpu = head l;
+            vendor = elemAt l 1;
+            kernel = "cygwin";
+          }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 3 components is ambiguous";
       "4" = {
-        cpu = elemAt l 0;
+        cpu = head l;
         vendor = elemAt l 1;
         kernel = elemAt l 2;
         abi = elemAt l 3;
@@ -891,7 +914,7 @@ rec {
             getVendor args.vendor
           else if isDarwin parsed then
             vendors.apple
-          else if isWindows parsed then
+          else if (isWindows parsed || isCygwin parsed) then
             vendors.pc
           else
             vendors.unknown;
@@ -908,9 +931,9 @@ rec {
           else if isLinux parsed || isWindows parsed then
             if isAarch32 parsed then
               if versionAtLeast (parsed.cpu.version or "0") "6" then abis.gnueabihf else abis.gnueabi
-            # Default ppc64 BE to ELFv2
+            # Default ppc64 BE to ELFv1
             else if isPower64 parsed && isBigEndian parsed then
-              abis.gnuabielfv2
+              abis.gnuabielfv1
             else
               abis.gnu
           else
@@ -933,12 +956,7 @@ rec {
       abi,
       ...
     }:
-    if abi == abis.cygnus then
-      "${cpu.name}-cygwin"
-    else if kernel.families ? darwin then
-      "${cpu.name}-darwin"
-    else
-      "${cpu.name}-${kernelName kernel}";
+    if kernel.families ? darwin then "${cpu.name}-darwin" else "${cpu.name}-${kernelName kernel}";
 
   tripleFromSystem =
     {
@@ -957,6 +975,41 @@ rec {
       cpuName = if kernel.families ? darwin then darwinArch cpu else cpu.name;
     in
     "${cpuName}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
+
+  # This is a function from parsed platforms (like stdenv.hostPlatform.parsed)
+  # to parsed platforms.
+  mkMuslSystem =
+    parsed:
+    # The following line guarantees that the output of this function
+    # is a well-formed platform with no missing fields.
+    (
+      x:
+      lib.trivial.pipe x [
+        (x: removeAttrs x [ "_type" ])
+        mkSystem
+      ]
+    )
+      (
+        parsed
+        // {
+          abi =
+            {
+              gnu = abis.musl;
+              gnueabi = abis.musleabi;
+              gnueabihf = abis.musleabihf;
+              gnuabin32 = abis.muslabin32;
+              gnuabi64 = abis.muslabi64;
+              gnuabielfv2 = abis.musl;
+              gnuabielfv1 = abis.musl;
+              # The following entries ensure that this function is idempotent.
+              musleabi = abis.musleabi;
+              musleabihf = abis.musleabihf;
+              muslabin32 = abis.muslabin32;
+              muslabi64 = abis.muslabi64;
+            }
+            .${parsed.abi.name} or abis.musl;
+        }
+      );
 
   ################################################################################
 

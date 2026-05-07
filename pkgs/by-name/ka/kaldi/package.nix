@@ -19,13 +19,13 @@
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaldi";
-  version = "0-unstable-2025-07-22";
+  version = "0-unstable-2025-09-22";
 
   src = fetchFromGitHub {
     owner = "kaldi-asr";
     repo = "kaldi";
-    rev = "f4007661023b98b8081fd875029f0dee62242fd1";
-    sha256 = "sha256-DTXS+QUQOjfkus7lsjUfiQ6ScDkrBM8gaiLRP9yueTQ=";
+    rev = "e02e35f0254bb033fab73d1df99fc34123e31d56";
+    sha256 = "sha256-ZnVSQTETrMeU+pkqy50ldAe8g1pbnG7VS1utcUy28ls=";
   };
 
   cmakeFlags = [
@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBLAS_LIBRARIES=-lblas"
     "-DLAPACK_LIBRARIES=-llapack"
     "-DFETCHCONTENT_SOURCE_DIR_OPENFST:PATH=${finalAttrs.passthru.sources.openfst}"
+    # Fix the build with CMake 4 (openfst does not contain cmake_minimum_required)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   buildInputs = [
@@ -71,9 +73,14 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "kkm000";
         repo = "openfst";
         rev = "338225416178ac36b8002d70387f5556e44c8d05";
-        hash = "sha256-y1E6bQgBfYt1Co02UutOyEM2FnETuUl144tHwypiX+M=";
-        # https://github.com/kkm000/openfst/issues/59
-        postFetch = ''(cd "$out"; patch -p1 < '${./gcc14.patch}')'';
+        hash = "sha256-9xsL78mkR40zkoRYWsH+iaPa5MYc4BzwslzxGKv4j4I=";
+        postFetch = ''
+          cd "$out"
+          # https://github.com/kkm000/openfst/issues/59
+          patch -p1 < ${./gcc14.patch}
+          # Patch for compiling openfst with gcc >= 15
+          patch -p1 < ${./fix-gcc15-copy-constructor.patch}
+        '';
       };
     };
 
@@ -91,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Speech Recognition Toolkit";
     homepage = "https://kaldi-asr.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.unix;
   };
 })

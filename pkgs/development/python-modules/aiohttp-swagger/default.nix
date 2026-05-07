@@ -6,7 +6,6 @@
   aiohttp,
   jinja2,
   markupsafe,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aiohttp-swagger";
   version = "1.0.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "cr0hn";

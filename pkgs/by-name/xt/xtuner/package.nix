@@ -5,7 +5,7 @@
   fetchpatch,
   pkg-config,
   cairo,
-  libX11,
+  libx11,
   libjack2,
   liblo,
   libsigcxx,
@@ -13,14 +13,14 @@
   fftwFloat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xtuner";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "XTuner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1i5chfnf3hcivwzni9z6cn9pb68qmwsx8bf4z7d29a5vig8kbhrv";
     fetchSubmodules = true;
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo
-    libX11
+    libx11
     libjack2
     liblo
     libsigcxx
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brummer10/XTuner";
     description = "Tuner for Jack Audio Connection Kit";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "xtuner";
   };
-}
+})

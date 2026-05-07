@@ -11,8 +11,6 @@
   cloudpickle,
   numpy,
   gym-notices,
-  importlib-metadata,
-  pythonOlder,
 
   # tests
   moviepy,
@@ -62,8 +60,7 @@ buildPythonPackage rec {
     cloudpickle
     numpy
     gym-notices
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   pythonImportsCheck = [ "gym" ];
 
@@ -100,6 +97,9 @@ buildPythonPackage rec {
     # The requested array has an inhomogeneous shape after 1 dimensions.
     # The detected shape was (2,) + inhomogeneous part
     "test_sample_contains"
+
+    # segfault
+    "test_record_video"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted

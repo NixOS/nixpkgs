@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "astral" ];
 
-  meta = with lib; {
+  meta = {
     description = "Calculations for the position of the sun and the moon";
     homepage = "https://github.com/sffjunkie/astral/";
     changelog = "https://github.com/sffjunkie/astral/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

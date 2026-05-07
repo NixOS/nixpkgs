@@ -10,89 +10,45 @@
   nix-update-script,
   testers,
   matrix-continuwuity,
-  enableBlurhashing ? true,
-  # upstream continuwuity enables jemalloc by default, so we follow suit
-  enableJemalloc ? true,
   rust-jemalloc-sys-unprefixed,
-  enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
   nixosTests,
 }:
 let
   rocksdb' =
     (rocksdb.override {
-      inherit enableLiburing;
       # rocksdb does not support prefixed jemalloc, which is required on darwin
-      enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
+      enableJemalloc = !stdenv.hostPlatform.isDarwin;
       jemalloc = rust-jemalloc-sys-unprefixed;
     }).overrideAttrs
       (
         final: old: {
-          version = "10.4.2";
+          version = "10.10.1";
           src = fetchFromGitea {
             domain = "forgejo.ellis.link";
             owner = "continuwuation";
             repo = "rocksdb";
-            rev = "10.4.fb";
-            hash = "sha256-/Hvy1yTH/0D5aa7bc+/uqFugCQq4InTdwlRw88vA5IY=";
+            rev = "10.10.fb";
+            hash = "sha256-1ef75IDMs5Hba4VWEyXPJb02JyShy5k4gJfzGDhopRk=";
           };
 
           patches = [ ];
-
-          cmakeFlags =
-            lib.subtractLists [
-              # no real reason to have snappy or zlib, no one uses this
-              (lib.cmakeBool "WITH_SNAPPY" true)
-              (lib.cmakeBool "ZLIB" true)
-              (lib.cmakeBool "WITH_ZLIB" true)
-              # we dont need to use ldb or sst_dump (core_tools)
-              (lib.cmakeBool "WITH_CORE_TOOLS" true)
-              # we dont need to build rocksdb tests
-              (lib.cmakeBool "WITH_TESTS" true)
-              # we use rust-rocksdb via C interface and dont need C++ RTTI
-              (lib.cmakeBool "USE_RTTI" true)
-              # this doesn't exist in RocksDB
-              (lib.cmakeBool "FORCE_SSE43" true)
-            ] old.cmakeFlags
-            ++ [
-              # no real reason to have snappy, no one uses this
-              (lib.cmakeBool "WITH_SNAPPY" false)
-              (lib.cmakeBool "ZLIB" false)
-              (lib.cmakeBool "WITH_ZLIB" false)
-              # we dont need to use ldb or sst_dump (core_tools)
-              (lib.cmakeBool "WITH_CORE_TOOLS" false)
-              # we dont need to build rocksdb tests
-              (lib.cmakeBool "WITH_TESTS" false)
-              # we use rust-rocksdb via C interface and dont need C++ RTTI
-              (lib.cmakeBool "USE_RTTI" false)
-              (lib.cmakeBool "WITH_TRACE_TOOLS" false)
-            ];
-          outputs = [ "out" ];
-
-          # We aren't building tools, the original package uses this to make sure rocksdb
-          # tools work as expected. Hence we override this and make it empty.
-          preInstall = "";
         }
       );
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.7";
+  version = "0.5.8";
 
-  # Switch back to fetchFromGitea once archive download errors are fixed
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u1k1r95qBoEizeILR5rrM5lDFz2a2NjUwM9TTi0HNjw=";
+    hash = "sha256-o7bZMSsdSt6VOrsuSMrS7fU9u/LrdD/579IMvsZH+ss=";
   };
 
-  # Patch to fix linking issue caused by resolv-conf which needs to be incorporated
-  # into continuwuity upstream.
-  cargoPatches = [ ./cargolock.patch ];
-
-  cargoHash = "sha256-1ECD8RZ918TM1IX3jkTDNhCR5Zye0a3ii0zeIPy8jlI=";
+  cargoHash = "sha256-QM4K5TmWWRTcrovAvvEbXEraI4C0vMSJ68Z/6kHhOr8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -102,41 +58,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     zstd
-  ]
-  ++ lib.optional enableJemalloc [
     rust-jemalloc-sys-unprefixed
-  ]
-  ++ lib.optional enableLiburing liburing;
+    liburing
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb'}/include";
     ROCKSDB_LIB_DIR = "${rocksdb'}/lib";
   };
-
-  buildNoDefaultFeatures = true;
-  # See https://forgejo.ellis.link/continuwuation/continuwuity/src/branch/main/Cargo.toml
-  # for available features.
-  # We enable all default features except jemalloc, blurhashing, and io_uring, which
-  # we guard behind our own (default-enabled) flags.
-  buildFeatures = [
-    "brotli_compression"
-    "direct_tls"
-    "element_hacks"
-    "gzip_compression"
-    "media_thumbnail"
-    "release_max_log_level"
-    "systemd"
-    "url_preview"
-    "zstd_compression"
-    "bindgen-runtime"
-  ]
-  ++ lib.optional enableBlurhashing "blurhashing"
-  ++ lib.optional enableJemalloc [
-    "jemalloc"
-    "jemalloc_conf"
-  ]
-  ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
@@ -158,6 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://forgejo.ellis.link/continuwuation/continuwuity/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      bartoostveen
       nyabinary
       snaki
     ];

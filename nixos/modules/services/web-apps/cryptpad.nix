@@ -75,12 +75,12 @@ in
             description = "Address on which the Node.js server should listen";
           };
           httpPort = mkOption {
-            type = types.int;
+            type = types.port;
             default = 3000;
             description = "Port on which the Node.js server should listen";
           };
           websocketPort = mkOption {
-            type = types.int;
+            type = types.port;
             default = 3003;
             description = "Port for the websocket that needs to be separate";
           };
@@ -134,7 +134,7 @@ in
       systemd.services.cryptpad = {
         description = "Cryptpad service";
         wantedBy = [ "multi-user.target" ];
-        after = [ "networking.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           BindReadOnlyPaths = [
             cryptpadConfigFile
@@ -186,8 +186,8 @@ in
           RestrictSUIDSGID = true;
           RuntimeDirectoryMode = "700";
           SocketBindAllow = [
-            "tcp:${builtins.toString cfg.settings.httpPort}"
-            "tcp:${builtins.toString cfg.settings.websocketPort}"
+            "tcp:${toString cfg.settings.httpPort}"
+            "tcp:${toString cfg.settings.websocketPort}"
           ];
           SocketBindDeny = [ "any" ];
           StateDirectoryMode = "0700";
@@ -277,13 +277,13 @@ in
               enableACME = lib.mkDefault true;
               forceSSL = true;
               locations."/" = {
-                proxyPass = "http://${cfg.settings.httpAddress}:${builtins.toString cfg.settings.httpPort}";
+                proxyPass = "http://${cfg.settings.httpAddress}:${toString cfg.settings.httpPort}";
                 extraConfig = ''
                   client_max_body_size 150m;
                 '';
               };
               locations."/cryptpad_websocket" = {
-                proxyPass = "http://${cfg.settings.httpAddress}:${builtins.toString cfg.settings.websocketPort}";
+                proxyPass = "http://${cfg.settings.httpAddress}:${toString cfg.settings.websocketPort}";
                 proxyWebsockets = true;
               };
             };

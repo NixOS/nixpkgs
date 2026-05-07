@@ -10,13 +10,13 @@
 buildKodiAddon rec {
   pname = "orftvthek";
   namespace = "plugin.video.orftvthek";
-  version = "1.0.2+matrix.1";
+  version = "1.0.3+matrix.1";
 
   src = fetchFromGitHub {
     owner = "s0faking";
     repo = namespace;
     rev = version;
-    sha256 = "sha256-bCVsR7lH0REJmG3OKU8mRRvw/PhSrLfhufmVBmw05+k=";
+    sha256 = "sha256-HWx1Uj/yOJ5Tggyd8EJHyBfpUAbtfk89XpWTKzl6Ie0=";
   };
 
   propagatedBuildInputs = [
@@ -26,10 +26,10 @@ buildKodiAddon rec {
     routing
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/s0faking/plugin.video.orftvthek";
     description = "Addon for accessing the Austrian ORF ON streaming service";
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

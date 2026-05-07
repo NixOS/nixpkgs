@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   perl,
@@ -14,11 +15,10 @@
   enableOpenSSL ? true,
   openssl,
   enableXXHash ? true,
-  xxHash,
+  xxhash,
   enableZstd ? true,
   zstd,
   nixosTests,
-  fakeroot,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
   patches = [
     # See: <https://github.com/RsyncProject/rsync/pull/790>
     ./fix-tests-in-darwin-sandbox.patch
+    # fix compilation with gcc15
+    (fetchpatch {
+      url = "https://github.com/RsyncProject/rsync/commit/a4b926dcdce96b0f2cc0dc7744e95747b233500a.patch";
+      hash = "sha256-UiEQJ+p2gtIDYNJqnxx4qKgItKIZzCpkHnvsgoxBmSE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -50,10 +55,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableZstd zstd
   ++ lib.optional enableLZ4 lz4
   ++ lib.optional enableOpenSSL openssl
-  ++ lib.optional enableXXHash xxHash;
-
-  # fakeroot doesn't work well on darwin anymore, apparently
-  checkInputs = lib.optionals (!stdenv.isDarwin) [ fakeroot ];
+  ++ lib.optional enableXXHash xxhash;
 
   configureFlags = [
     (lib.enableFeature enableLZ4 "lz4")
@@ -82,16 +84,15 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "rsync";
-    maintainers = with lib.maintainers; [
-      kampfschlaefer
-      ivan
+    maintainers = [
     ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.unix;
     identifiers.cpeParts = {
       vendor = "samba";
       inherit version;

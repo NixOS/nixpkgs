@@ -1,29 +1,63 @@
 {
   lib,
+  stdenv,
+  yq,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   iproute2,
   libbpf,
   nixosTests,
   withBpf ? false,
   withConfigValidation ? true,
   withShellColor ? false,
-  withWireguard ? true,
 }:
 
 let
+  version = "2.2.6";
+  src = fetchFromCodeberg {
+    owner = "routerkit";
+    repo = "ifstate";
+    tag = version;
+    hash = "sha256-23WFKJUFYw+BZFzHXR5Vjx7Dd33CXua2u+GZV/b1K9E=";
+  };
+  docs = stdenv.mkDerivation {
+    pname = "ifstate-docs";
+
+    inherit version src;
+
+    nativeBuildInputs = [ yq ];
+
+    buildInputs =
+      with python3Packages;
+      (
+        [
+          mkdocs-material
+          mike
+          mkdocs-glightbox
+          mkdocs-macros-plugin
+          mkdocs-minify-plugin
+        ]
+        ++ mkdocs-material.optional-dependencies.imaging
+      );
+
+    postPatch = ''
+      # git-revision-date requires a git repository
+      # privacy and social plugin require internet
+      yq -yi 'del(.plugins[] | select((type == "object" and (has("git-revision-date-localized") or has("social"))) or (type == "string" and . == "privacy")))' mkdocs.yaml
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+      mkdir -p $out
+      mkdocs build -d $out
+      runHook postBuild
+    '';
+  };
   self = python3Packages.buildPythonApplication rec {
     pname = "ifstate";
-    version = "2.0.0";
-    pyproject = true;
+    inherit version src;
 
-    src = fetchFromGitea {
-      domain = "codeberg.org";
-      owner = "liske";
-      repo = "ifstate";
-      tag = version;
-      hash = "sha256-YxLyiTVLN4nxc2ppqGGnYCGudbdPLSLV8EwDURtpO0U=";
-    };
+    pyproject = true;
 
     postPatch = ''
       substituteInPlace libifstate/routing/__init__.py \
@@ -46,8 +80,7 @@ let
         setproctitle
       ]
       ++ lib.optional withConfigValidation jsonschema
-      ++ lib.optional withShellColor pygments
-      ++ lib.optional withWireguard wgnlpy;
+      ++ lib.optional withShellColor pygments;
 
     pythonRemoveDeps = lib.optional (!withConfigValidation) "jsonschema";
 
@@ -66,11 +99,11 @@ let
           withBpf
           withConfigValidation
           withShellColor
-          withWireguard
           ;
       };
       # needed for access in schema validaten in module
       jsonschema = "${self}/${python3Packages.python.sitePackages}/libifstate/schema/2/ifstate.conf.schema.json";
+      inherit docs;
     };
 
     meta = {

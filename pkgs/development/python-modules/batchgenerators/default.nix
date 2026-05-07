@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "batchgenerators";
-  version = "0.25";
+  version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "batchgenerators";
-    rev = "v${version}";
-    hash = "sha256-L2mWH2t8PN9o1M67KDdl1Tj2ZZ02MY4icsJY2VNrj3A=";
+    tag = "v${version}";
+    hash = "sha256-lvsen2AFRwFjLMgxXBQ9/xxmCOBx2D2PBIl0KpOzR70=";
   };
 
   build-system = [ setuptools ];
@@ -57,10 +54,10 @@ buildPythonPackage rec {
     "batchgenerators.utilities"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "2D and 3D image data augmentation for deep learning";
     homepage = "https://github.com/MIC-DKFZ/batchgenerators";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

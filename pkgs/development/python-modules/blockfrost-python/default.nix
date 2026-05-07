@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blockfrost" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for the Blockfrost.io API";
     homepage = "https://github.com/blockfrost/blockfrost-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aciceri ];
   };
 }

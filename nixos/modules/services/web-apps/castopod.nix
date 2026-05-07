@@ -32,12 +32,7 @@ in
   options.services = {
     castopod = {
       enable = lib.mkEnableOption "Castopod, a hosting platform for podcasters";
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.castopod;
-        defaultText = lib.literalMD "pkgs.castopod";
-        description = "Which Castopod package to use.";
-      };
+      package = lib.mkPackageOption pkgs "castopod" { };
       dataDir = lib.mkOption {
         type = lib.types.path;
         default = "/var/lib/castopod";
@@ -241,7 +236,7 @@ in
           ${
             if (cfg.database.passwordFile != null) then
               ''
-                echo "database.default.password=$(cat "$CREDENTIALS_DIRECTORY/dbpasswordfile)" >> ${envFile}
+                echo "database.default.password=$(<"$CREDENTIALS_DIRECTORY/dbpasswordfile")" >> ${envFile}
               ''
             else
               ''

@@ -3,15 +3,15 @@ GEM
   specs:
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    csv (3.3.4)
+    csv (3.3.5)
     dotenv (3.1.8)
-    faraday (2.13.1)
+    faraday (2.14.0)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-net_http (3.4.0)
-      net-http (>= 0.5.0)
-    json (2.12.2)
+    faraday-net_http (3.4.2)
+      net-http (~> 0.5)
+    json (2.16.0)
     licensed (5.0.4)
       csv (~> 3.3)
       json (~> 2.6)
@@ -30,9 +30,9 @@ GEM
       thor (>= 0.19, < 2.0)
     logger (1.7.0)
     mini_portile2 (2.8.9)
-    net-http (0.6.0)
-      uri
-    nokogiri (1.18.8)
+    net-http (0.8.0)
+      uri (>= 0.11.1)
+    nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     octokit (9.2.0)
@@ -46,12 +46,12 @@ GEM
       nokogiri
     ruby-xxHash (0.4.0.2)
     rugged (1.9.0)
-    sawyer (0.9.2)
+    sawyer (0.9.3)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
-    thor (1.3.2)
+    thor (1.4.0)
     tomlrb (2.0.3)
-    uri (1.0.3)
+    uri (1.1.1)
 
 PLATFORMS
   ruby
@@ -60,4 +60,4 @@ DEPENDENCIES
   licensed
 
 BUNDLED WITH
-   2.6.6
+   2.7.2

@@ -10,7 +10,6 @@
   pytest-aiohttp,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -25,12 +24,12 @@ buildPythonPackage rec {
   pypriject = true;
 
   # https://github.com/vanstinator/raincloudy/issues/65
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "vanstinator";
     repo = "raincloudy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qCkBVirM09iA1sXiOB9FJns8bHjQq7rRk8XbRWrtBDI=";
   };
 
@@ -75,11 +74,11 @@ buildPythonPackage rec {
     "test_attributes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Melnor RainCloud Smart Garden Watering Irrigation Timer";
     homepage = "https://github.com/vanstinator/raincloudy";
     changelog = "https://github.com/vanstinator/raincloudy/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

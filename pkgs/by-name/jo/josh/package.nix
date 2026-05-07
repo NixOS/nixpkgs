@@ -10,13 +10,7 @@
 }:
 
 let
-  # josh-ui requires javascript dependencies, haven't tried to figure it out yet
-  cargoFlags = [
-    "--workspace"
-    "--exclude"
-    "josh-ui"
-  ];
-  version = "24.10.04";
+  version = "26.04.19";
 in
 
 rustPlatform.buildRustPackage {
@@ -27,10 +21,10 @@ rustPlatform.buildRustPackage {
     owner = "josh-project";
     repo = "josh";
     rev = "r${version}";
-    hash = "sha256-6rfNEWNeC0T/OXhCReaV5npcJjQoH6XhsZzHXGnnxOo=";
+    hash = "sha256-tWU7ZGs148fmCXJxUM1RiDIgJONMZnFXO7ksaqqoT9I=";
   };
 
-  cargoHash = "sha256-Kb0EKWae1sldDg+F3ccoztI3zbQ/BJjy+4ojnqiqKA4=";
+  cargoHash = "sha256-Ksl3dFeEpwhpiotNuM9/vg7aD2TUuHKvqUaZkbceCdY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,12 +36,18 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  cargoBuildFlags = cargoFlags;
-  cargoTestFlags = cargoFlags;
+  cargoBuildFlags = [ "--workspace" ];
+  # josh-proxy's inline tests need to interact with a specific test environment
+  cargoTestFlags = [
+    "--workspace"
+    "--exclude"
+    "josh-proxy"
+  ];
 
   # used to teach josh itself about its version number
   env.JOSH_VERSION = "r${version}";
 
+  # josh and josh-filter are used interactively, so git is likely already in PATH
   postInstall = ''
     wrapProgram "$out/bin/josh-proxy" --prefix PATH : "${git}/bin"
   '';
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage {
     description = "Just One Single History";
     homepage = "https://josh-project.github.io/josh/";
     downloadPage = "https://github.com/josh-project/josh";
-    changelog = "https://github.com/josh-project/josh/releases/tag/${version}";
+    changelog = "https://github.com/josh-project/josh/releases/tag/r${version}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.sternenseemann

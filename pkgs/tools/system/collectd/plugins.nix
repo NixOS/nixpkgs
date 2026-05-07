@@ -45,7 +45,6 @@
   # Defaults to `null` for all supported plugins (except xen, which is marked as
   # insecure), otherwise a list of plugin names for a custom build
   enabledPlugins ? null,
-  ...
 }:
 
 let
@@ -192,9 +191,7 @@ let
 
   buildInputs =
     if enabledPlugins == null then
-      builtins.concatMap pluginBuildInputs (
-        builtins.attrNames (builtins.removeAttrs plugins [ "xencpu" ])
-      )
+      builtins.concatMap pluginBuildInputs (builtins.attrNames (removeAttrs plugins [ "xencpu" ]))
     else
       builtins.concatMap pluginBuildInputs enabledPlugins;
 in

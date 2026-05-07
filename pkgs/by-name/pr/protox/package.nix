@@ -4,16 +4,16 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protox";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-7vXh4wedBskF9qtAVZn0mevzUoy7rlBCnxqzKU6NXwQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-3Bh+VDSsol2Pz3UVDSxx8KNJbzKParU/OoNcSNgVTJM=";
   };
 
-  cargoHash = "sha256-+F4R99YsWUjJukEtAEeH/N/J3YqnhJ/YcATfbPOFjuo=";
+  cargoHash = "sha256-Xcvl8c99M34sNd1R52M9eE2hh4lnbKL7vRHorlcJGss=";
 
   buildFeatures = [ "bin" ];
 
@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     description = "Rust implementation of the protobuf compiler";
     mainProgram = "protox";
     homepage = "https://github.com/andrewhickman/protox";
-    changelog = "https://github.com/andrewhickman/protox/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/andrewhickman/protox/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
-}
+})

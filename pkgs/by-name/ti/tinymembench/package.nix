@@ -21,12 +21,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ssvb/tinymembench";
     description = "Simple benchmark for memory throughput and latency";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "tinymembench";
-    maintainers = with maintainers; [ lorenz ];
+    maintainers = with lib.maintainers; [ lorenz ];
   };
 }

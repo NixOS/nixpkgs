@@ -2,7 +2,6 @@
   buildDunePackage,
   eio,
   linol,
-  yojson,
 }:
 
 buildDunePackage {
@@ -12,7 +11,6 @@ buildDunePackage {
   propagatedBuildInputs = [
     eio
     linol
-    yojson
   ];
 
   meta = linol.meta // {

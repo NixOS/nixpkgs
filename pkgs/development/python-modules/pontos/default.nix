@@ -10,7 +10,6 @@
   poetry-core,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   semver,
   shtab,
   rich,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "25.8.0";
+  version = "26.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
     tag = "v${version}";
-    hash = "sha256-47YlSTw7dGsNE1OntjdXdn4jAO4IUhLHMdeBVWkpadg=";
+    hash = "sha256-8IAAYT3ds+QB0+o9WWOGqKkHJHb7bbBAm5cHfSVXGVo=";
   };
 
   build-system = [ poetry-core ];
@@ -75,11 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pontos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
     changelog = "https://github.com/greenbone/pontos/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

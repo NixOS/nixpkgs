@@ -71,9 +71,10 @@ let
         stateDirectories = # sh
           ''
             # Symlinking in our state directories
-            rm -rf $out/{.env,cache} ${appDir}/{log,public/cache}
+            rm -rf $out/{.env,cache} ${appDir}/{log,public/cache,public/images}
             ln -s ${cfg.dataDir}/.env ${appDir}/.env
             ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
+            ln -s ${cfg.dataDir}/public/images ${appDir}/public/images
             ln -s ${cfg.logDir} ${appDir}/log
             ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
           '';
@@ -111,7 +112,7 @@ let
             inherit (cfg.precompressStaticFiles) brotli gzip;
 
             findTextFileNames = lib.concatStringsSep " -o " (
-              builtins.map (n: ''-iname "*.${n}"'') [
+              map (n: ''-iname "*.${n}"'') [
                 "css"
                 "ini"
                 "js"
@@ -129,7 +130,7 @@ let
                 echo -n "Precompressing static files with Brotli …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
                   | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe brotli.package} --keep --quality=${builtins.toString brotli.compressionLevel} --output={}.br {}
+                      ${lib.getExe brotli.package} --keep --quality=${toString brotli.compressionLevel} --output={}.br {}
                 echo " done."
               ''
             )
@@ -138,7 +139,7 @@ let
                 echo -n "Precompressing static files with Gzip …"
                 find ${appDir}/public -type f ${findTextFileNames} -print0 \
                   | xargs -0 -P$NIX_BUILD_CORES -n1 -I{} \
-                      ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} {} > {}.gz
+                      ${lib.getExe gzip.package} -c -${toString gzip.compressionLevel} {} > {}.gz
                 echo " done."
               ''
             )
@@ -653,7 +654,7 @@ in
                 "/ws/" = {
                   "proxy.preserve-host" = "ON";
                   "proxy.tunnel" = "ON";
-                  "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
+                  "proxy.reverse.url" = "http://${cfg.settings.DAEMON_INTERFACE}:${toString cfg.port}/";
                 };
                 "/" = {
                   "file.dir" = "${package}/share/php/movim/public";
@@ -764,7 +765,7 @@ in
                 };
                 "/ws/" = {
                   priority = 900;
-                  proxyPass = "http://${cfg.settings.DAEMON_INTERFACE}:${builtins.toString cfg.port}/";
+                  proxyPass = "http://${cfg.settings.DAEMON_INTERFACE}:${toString cfg.port}/";
                   proxyWebsockets = true;
                   recommendedProxySettings = true;
                   extraConfig = # nginx
@@ -867,8 +868,9 @@ in
           fi
 
           # Caches, logs
-          mkdir -p ${cfg.dataDir}/public/cache ${cfg.logDir} ${cfg.runtimeDir}/cache
+          mkdir -p ${cfg.dataDir}/public/{cache,images} ${cfg.logDir} ${cfg.runtimeDir}/cache
           chmod -R ug+rw ${cfg.dataDir}/public/cache
+          chmod -R ug+rw ${cfg.dataDir}/public/images
           chmod -R ug+rw ${cfg.logDir}
           chmod -R ug+rwx ${cfg.runtimeDir}/cache
 
@@ -922,7 +924,7 @@ in
         ++ lib.optional (webServerService != null) webServerService;
         environment = {
           PUBLIC_URL = "//${cfg.domain}";
-          WS_PORT = builtins.toString cfg.port;
+          WS_PORT = toString cfg.port;
         };
 
         serviceConfig = {
@@ -943,6 +945,10 @@ in
           mode = "0750";
         };
         "${dataDir}/public/cache".d = {
+          inherit user group;
+          mode = "0750";
+        };
+        "${dataDir}/public/images".d = {
           inherit user group;
           mode = "0750";
         };

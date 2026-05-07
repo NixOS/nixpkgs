@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "ed25519-blake2b";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,13 +19,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ed25519_blake2b" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ed25519 public-key signatures (BLAKE2b fork)";
     mainProgram = "edsig";
     homepage = "https://github.com/Matoking/python-ed25519-blake2b";
     changelog = "https://github.com/Matoking/python-ed25519-blake2b/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       onny
       stargate01
     ];

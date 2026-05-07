@@ -1,39 +1,20 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
+  buildNpmPackage,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "yaml-language-server";
-  version = "1.18.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-HBhoadWIebeuHZXSdnFiPMSmDla77yhrTNMdz8si88c=";
+    hash = "sha256-NCJsnA0m8DUeAUpQW83f8QUXzZ9DRHA7eOrVcj40RVk=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-2OVxvvijnfB8Bytgoaybyx4p66nD/aahtyjxLf8womE=";
-  };
-
-  nativeBuildInputs = [
-    nodejs
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
-  ];
-
-  # NodeJS is also needed here so that script interpreter get patched
-  buildInputs = [ nodejs ];
+  npmDepsHash = "sha256-DCEutA4DubP/iQIWMKjbepnhgd5L1GXnlzBokneqtWg=";
 
   strictDeps = true;
 

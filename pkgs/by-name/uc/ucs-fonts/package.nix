@@ -4,7 +4,8 @@
   fetchurl,
   bdftopcf,
   libfaketime,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
 }:
 
 stdenv.mkDerivation {
@@ -31,8 +32,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     bdftopcf
     libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
   ];
 
   buildPhase = ''
@@ -61,11 +62,11 @@ stdenv.mkDerivation {
     "bdf"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";
     description = "Unicode bitmap fonts";
-    license = licenses.publicDomain;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.all;
   };
 }

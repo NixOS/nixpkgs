@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "robin-hood-hashing";
   version = "3.11.5"; # pin
 
   src = fetchFromGitHub {
     owner = "martinus";
     repo = "robin-hood-hashing";
-    rev = version; # pin
+    rev = finalAttrs.version; # pin
     sha256 = "sha256-J4u9Q6cXF0SLHbomP42AAn5LSKBYeVgTooOhqxOIpuM=";
   };
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     "-DRH_STANDALONE_PROJECT=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Faster, more efficient replacement for std::unordered_map / std::unordered_set";
     homepage = "https://github.com/martinus/robin-hood-hashing";
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

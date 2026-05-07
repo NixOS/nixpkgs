@@ -8,15 +8,15 @@
   gtk3,
   libGL,
   libGLU,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   libtool,
   ncurses,
   pkg-config,
   readline,
   stdenv,
   wget,
-  wxGTK32,
+  wxwidgets_3_2,
   # Boolean flags
   enableSDL2 ? true,
   enableTerm ? true,
@@ -56,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableWx [
     gtk3
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals enableX11 [
     libGL
     libGLU
-    libX11
-    libXpm
+    libx11
+    libxpm
   ];
 
   configureFlags = [

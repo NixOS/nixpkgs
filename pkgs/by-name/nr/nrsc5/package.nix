@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nrsc5";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "theori-io";
     repo = "nrsc5";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-chLoCXbEQaIrSHLQAm0++NGNYuQNCseSCR37qjXwW04=";
+    hash = "sha256-xfgTUIaXt/nb5hNiwi4ws7pzeVGOW72LDSIXg+yLwkw=";
   };
 
   postUnpack = ''
@@ -61,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_FAAD2=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/theori-io/nrsc5";
     description = "HD-Radio decoder for RTL-SDR";
     platforms = lib.platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ markuskowa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ markuskowa ];
     mainProgram = "nrsc5";
   };
 })

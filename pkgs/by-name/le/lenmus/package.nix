@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -12,7 +13,7 @@
   libpng,
   pngpp,
   zlib,
-  wxGTK32,
+  wxwidgets_3_2,
   wxsqlite3,
   fluidsynth,
   fontconfig,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lenmus";
-  version = "6.0.1";
+  version = "6.0.1-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "lenmus";
     repo = "lenmus";
-    rev = "Release_${finalAttrs.version}";
-    hash = "sha256-qegOAc6vs2+6VViDHVjv0q+qjLZyTT7yPF3hFpTt5zE=";
+    rev = "113787fe4d755e7e406b5ea4bd2cfb9eae0e56a3";
+    hash = "sha256-tDvSgdeFx5xEjExnDhoXgvuvk7+oEPgbt4DJajckvLc=";
   };
 
   env = {
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     pngpp
     zlib
-    wxGTK32
+    wxwidgets_3_2
     wxsqlite3
     fluidsynth
     fontconfig

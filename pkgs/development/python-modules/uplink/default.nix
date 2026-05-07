@@ -14,7 +14,6 @@
   pytest-asyncio,
   pytest-twisted,
   twisted,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -50,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-twisted
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "uplink" ];
 

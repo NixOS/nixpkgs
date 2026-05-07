@@ -10,14 +10,14 @@
   avahi,
   gst_all_1,
   libxcb,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
+  libxxf86vm,
   libglvnd,
   zenity,
 }:
@@ -27,14 +27,14 @@ let
     curl
     avahi
     libxcb
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxxf86vm
     libglvnd
   ];
 
@@ -99,12 +99,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hexler.net/kodelife";
     description = "Real-time GPU shader editor";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ prusnak ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ prusnak ];
     platforms = [
       "aarch64-linux"
       "armv7l-linux"

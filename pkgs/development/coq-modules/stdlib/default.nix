@@ -35,7 +35,8 @@ let
     '';
     installPhase = ''
       echo installing nothing
-      touch $out
+      # Make an output directory rather than a file, so this is more friendly to buildEnv
+      mkdir $out
     '';
 
     meta = {

@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   pytest,
   pytestCheckHook,
@@ -16,17 +16,24 @@
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     tag = version;
-    hash = "sha256-3vBYOk/P78NOjAbs3fT6py5QOOK3fX+AKtO4j5vxZfk=";
+    hash = "sha256-TFTY6enuyzQx0U+qHVde71VHqVa0oEGbSJUwhMAsI7Q=";
   };
+
+  patches = [
+    # https://github.com/aklajnert/pytest-subprocess/pull/202
+    (fetchpatch {
+      name = "fix-test_any_matching_program.patch";
+      url = "https://github.com/aklajnert/pytest-subprocess/commit/14c571b9b72a7b7e429189a9455fc715e6f0dbce.patch";
+      hash = "sha256-xDj5KSyv+JXRuMoUKpIr5oDN9y8V14LApRXbzNi9HI8=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -42,13 +49,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pytestFlags = [ "-Wignore::DeprecationWarning" ];
-
-  meta = with lib; {
+  meta = {
     description = "Plugin to fake subprocess for pytest";
     homepage = "https://github.com/aklajnert/pytest-subprocess";
     changelog = "https://github.com/aklajnert/pytest-subprocess/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

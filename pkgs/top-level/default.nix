@@ -18,6 +18,25 @@
   or dot-files.
 */
 
+let
+  # We hoist this above the closure so that the same thunk is shared
+  # between multiple imports of Nixpkgs. This ensures that commands
+  # like `nix eval nixpkgs#legacyPackages.x86_64-darwin.pkgsStatic.hello`
+  # print only one warning, which would otherwise be spammy in common
+  # scenarios that instantiate many copies of Nixpkgs.
+  #
+  # Unfortunately, flakes’ handling of transitive dependencies mean
+  # that it’s still likely users will see multiple warnings, but
+  # there’s nothing we can do about that within the constraints of the
+  # Nix language.
+  x86_64DarwinDeprecationWarning =
+    pristineLib.warn
+      "Nixpkgs 26.05 will be the last release to support x86_64-darwin; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.05"
+      (x: x);
+
+  pristineLib = import ../../lib;
+in
+
 {
   # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
@@ -45,6 +64,11 @@
   # list it returns.
   stdenvStages ? import ../stdenv,
 
+  # Temporary parameter to unify nixpkgs/pkgs evaluation
+  # Internal, do not use this manually!
+  # Will be removed again within the next releases
+  _configDefinitions ? null,
+
   # Ignore unexpected args.
   ...
 }@args:
@@ -55,8 +79,6 @@ let # Rename the function arguments
 
 in
 let
-  pristineLib = import ../../lib;
-
   lib =
     if __allowFileset then
       pristineLib
@@ -79,17 +101,27 @@ let
   inherit (lib) throwIfNot;
 
   checked =
-    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list." lib.foldr
-      (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.")
-      (r: r)
-      overlays
-      throwIfNot
-      (lib.isList crossOverlays)
-      "The crossOverlays argument to nixpkgs must be a list."
-      lib.foldr
-      (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.")
-      (r: r)
-      crossOverlays;
+    (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
+      (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
+      (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
+      (
+        if
+          (
+            ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
+            && config.allowDeprecatedx86_64Darwin == false
+          )
+        then
+          x86_64DarwinDeprecationWarning
+        else
+          x:
+          x throwIfNot (lib.all lib.isFunction crossOverlays)
+            "All crossOverlays passed to nixpkgs must be functions."
+      )
+      (
+        throwIfNot (_configDefinitions == null || config0 == { })
+          "The `_configDefinitions` argument is an internal interface and must not be combined with `config`."
+      );
 
   localSystem = lib.systems.elaborate args.localSystem;
 
@@ -113,25 +145,38 @@ let
 
   # Allow both:
   # { /* the config */ } and
-  # { pkgs, ... } : { /* the config */ }
-  config1 = if lib.isFunction config0 then config0 { inherit pkgs; } else config0;
+  # { lib, pkgs, ... } : { /* the config */ }
+  config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-      (
-        { options, ... }:
-        {
-          _file = "nixpkgs.config";
-          config = config1;
-        }
-      )
-    ];
+    ]
+    ++ (
+      if _configDefinitions != null then
+        map (def: lib.modules.setDefaultModuleLocation def.file def.value) _configDefinitions
+      else
+        [
+          {
+            _file = "nixpkgs.config";
+            config = config1;
+          }
+        ]
+    );
     class = "nixpkgsConfig";
   };
 
   # take all the rest as-is
-  config = lib.showWarnings configEval.config.warnings configEval.config;
+  config =
+    let
+      failedAssertionsString = lib.concatMapStringsSep "\n" (x: "- ${x.message}") (
+        lib.filter (x: !x.assertion) configEval.config.assertions
+      );
+    in
+    if failedAssertionsString != "" then
+      throw "Failed assertions:\n${failedAssertionsString}"
+    else
+      lib.showWarnings configEval.config.warnings configEval.config;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than

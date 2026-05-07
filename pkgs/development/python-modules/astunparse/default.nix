@@ -24,9 +24,9 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is a factored out version of unparse found in the Python source distribution";
     homepage = "https://github.com/simonpercivall/astunparse";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -14,7 +14,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "jinja2-cli";
   version = "0.8.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mattrobenolt";
@@ -49,11 +49,11 @@ python3.pkgs.buildPythonApplication rec {
     yaml = [ pyyaml ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for Jinja2";
     homepage = "https://github.com/mattrobenolt/jinja2-cli";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
     mainProgram = "jinja2";
   };
 }

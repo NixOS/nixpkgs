@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   libsecret,
+  stdenv,
+  clang_20,
 }:
 
 buildNpmPackage {
@@ -19,7 +21,7 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-zXhWtPuiu+CRk712KskuHP4vglogJmFoCak6qWczPFM=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 

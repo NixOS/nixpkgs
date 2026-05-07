@@ -13,6 +13,7 @@ let
       makeBinaryWrapper,
       symlinkJoin,
       writeText,
+      acl,
       autoconf,
       automake,
       bison,
@@ -85,7 +86,7 @@ let
           }@innerArgs:
           let
             allArgs = args // prevArgs // innerArgs;
-            filteredArgs = builtins.removeAttrs allArgs [
+            filteredArgs = removeAttrs allArgs [
               "extensions"
               "extraConfig"
             ];
@@ -145,7 +146,7 @@ let
             '';
 
             phpWithExtensions = symlinkJoin {
-              name = "php-with-extensions-${version}";
+              pname = "php-with-extensions";
               inherit (php) version;
               nativeBuildInputs = [ makeBinaryWrapper ];
               passthru = php.passthru // {
@@ -248,6 +249,7 @@ let
 
             # Enable sapis
             ++ lib.optionals pearSupport [ libxml2.dev ]
+            ++ lib.optionals (fpmSupport && stdenv.hostPlatform.isLinux) [ acl ]
 
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
@@ -268,7 +270,10 @@ let
             # Enable sapis
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
-            ++ lib.optional fpmSupport "--enable-fpm"
+            ++ lib.optionals fpmSupport [
+              "--enable-fpm"
+              (lib.withFeature stdenv.hostPlatform.isLinux "fpm-acl")
+            ]
             ++ lib.optionals pearSupport [
               "--with-pear"
               "--enable-xml"
@@ -341,6 +346,10 @@ let
 
             substituteInPlace $dev/bin/phpize \
               --replace-fail "$out/lib" "$dev/lib"
+          ''
+          + lib.optionalString (lib.versionAtLeast version "8.5") ''
+            # PHP 8.5+ has lexbor built into core; dom needs its headers.
+            cp -r ext/lexbor/lexbor $dev/include/php/ext/lexbor/
           '';
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
@@ -373,14 +382,14 @@ let
                       jq
                     ]
                   }
-                  new_version=$(curl --silent "https://www.php.net/releases/active" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
+                  new_version=$(curl --silent "https://www.php.net/releases/active.php" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
                   update-source-version "$UPDATE_NIX_ATTR_PATH.unwrapped" "$new_version" "--file=$1"
                 '';
               in
               [
                 script
                 # Passed as an argument so that update.nix can ensure it does not become a store path.
-                (./. + "/${lib.versions.majorMinor version}.nix")
+                ./default.nix
               ];
             buildEnv = mkBuildEnv { } [ ];
             withExtensions = mkWithExtensions { } [ ];
@@ -405,13 +414,13 @@ let
             };
           };
 
-          meta = with lib; {
+          meta = {
             description = "HTML-embedded scripting language";
             homepage = "https://www.php.net/";
-            license = licenses.php301;
+            license = lib.licenses.php301;
             mainProgram = "php";
-            teams = [ teams.php ];
-            platforms = platforms.all;
+            teams = [ lib.teams.php ];
+            platforms = lib.platforms.all;
             outputsToInstall = [
               "out"
               "dev"

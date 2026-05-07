@@ -11,14 +11,14 @@
   cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "habitat";
   version = "1.6.1245";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-n2ylJSCXPnnPHadfZaRS/3vxtnvkXhiTzCyObK7hmEk=";
   };
 
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     "-p"
     "hab"
   ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -48,16 +48,16 @@ rustPlatform.buildRustPackage rec {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application automation framework";
     homepage = "https://www.habitat.sh";
-    changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/habitat-sh/habitat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rushmorem
       qjoly
     ];
     mainProgram = "hab";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

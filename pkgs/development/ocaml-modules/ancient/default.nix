@@ -3,14 +3,14 @@
   buildDunePackage,
   fetchurl,
 }:
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ancient";
   version = "0.10.0";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
-    url = "https://github.com/OCamlPro/ocaml-ancient/releases/download/${version}/ancient-${version}.tbz";
+    url = "https://github.com/OCamlPro/ocaml-ancient/releases/download/${finalAttrs.version}/ancient-${finalAttrs.version}.tbz";
     hash = "sha256-XeVUPrdg7QSV7V0Tz8Mkj5jvzKtYD9DON+tt9kkuCHM=";
   };
 
@@ -35,8 +35,8 @@ buildDunePackage rec {
       file in and see the structures.
     '';
     homepage = "https://github.com/OCamlPro/ocaml-ancient";
-    changelog = "https://raw.githubusercontent.com/OCamlPro/ocaml-ancient/refs/tags/${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/OCamlPro/ocaml-ancient/refs/tags/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ momeemt ];
   };
-}
+})

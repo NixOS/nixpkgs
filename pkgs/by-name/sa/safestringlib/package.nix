@@ -26,6 +26,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_UNITTESTS" true)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   patches = [

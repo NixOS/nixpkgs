@@ -9,6 +9,7 @@ let
   efi = config.boot.loader.efi;
   limineInstallConfig = pkgs.writeText "limine-install.json" (
     builtins.toJSON {
+      inherit (config.system.nixos) distroName;
       nixPath = config.nix.package;
       efiBootMgrPath = pkgs.efibootmgr;
       liminePath = cfg.package;
@@ -22,9 +23,10 @@ let
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
-      forceMbr = cfg.forceMbr;
+      force = cfg.force;
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
+      resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
       timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
@@ -42,6 +44,13 @@ in
   meta = {
     inherit (pkgs.limine.meta) maintainers;
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "boot" "loader" "limine" "forceMbr" ]
+      [ "boot" "loader" "limine" "force" ]
+    )
+  ];
 
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
@@ -88,6 +97,27 @@ in
       '';
       description = ''
         A string which is appended to the end of limine.conf. The config format can be found [here](https://github.com/limine-bootloader/limine/blob/trunk/CONFIG.md).
+      '';
+    };
+
+    resolution = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      example = "1920x1080x32";
+      description = ''
+        The framebuffer resolution to set when booting Linux entries.
+        This controls the GOP mode that Limine sets before handing off to the kernel,
+        which affects early boot graphics (e.g., simpledrm, efifb).
+
+        Format: `<width>x<height>` or `<width>x<height>x<bpp>`.
+        If bpp is omitted, defaults to 32.
+
+        Note: Refresh rate is not supported because the UEFI GOP protocol only
+        defines framebuffer dimensions and pixel format, not display timing.
+        Refresh rate is determined later by the GPU driver based on EDID.
+
+        This is distinct from {option}`boot.loader.limine.style.interface.resolution`
+        which only affects the Limine bootloader's own menu interface.
       '';
     };
 
@@ -169,9 +199,9 @@ in
       '';
     };
 
-    forceMbr = lib.mkEnableOption null // {
+    force = lib.mkEnableOption null // {
       description = ''
-        Force MBR detection to work even if the safety checks fail, use absolutely only if necessary!
+        Force installation even if the safety checks fail, use absolutely only if necessary!
       '';
     };
 
@@ -195,16 +225,22 @@ in
         '';
       };
 
-      createAndEnrollKeys = lib.mkEnableOption null // {
-        internal = true;
-        description = ''
-          Creates secure boot signing keys and enrolls them during bootloader installation.
+      autoGenerateKeys = lib.mkEnableOption null // {
+        description = "Generate keys automatically when none exists during bootloader installation";
+      };
 
-          ::: {.note}
-          This is used for automated nixos tests.
-          NOT INTENDED to be used on a real system.
-          :::
-        '';
+      autoEnrollKeys = {
+        enable = lib.mkEnableOption null // {
+          description = "Enroll automatically generated keys";
+        };
+        extraArgs = lib.mkOption {
+          default = [
+            "--microsoft"
+            "--firmware-builtin"
+          ];
+          type = lib.types.listOf lib.types.str;
+          description = "Extra arguments passed to sbctl";
+        };
       };
 
       sbctl = lib.mkPackageOption pkgs "sbctl" { };
@@ -222,10 +258,10 @@ in
       };
 
       wallpaperStyle = lib.mkOption {
-        default = "streched";
+        default = "stretched";
         type = lib.types.enum [
           "centered"
-          "streched"
+          "stretched"
           "tiled"
         ];
         description = ''
@@ -261,9 +297,25 @@ in
 
         brandingColor = lib.mkOption {
           default = null;
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.str;
           description = ''
-            Color index of the title at the top of the screen in the range of 0-7 (Limine defaults to 6 (cyan)).
+            Color of the title at the top of the screen in RRGGBB format (Limine defaults to #00AAAA (cyan)).
+          '';
+        };
+
+        helpColor = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the help text displayed beside keybinds in RRGGBB format (Limine defaults to #00AA00 (dark green)).
+          '';
+        };
+
+        helpColorBright = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the bright help text used for the auto-boot countdown digit in RRGGBB format (Limine defaults to #55FF55 (bright green)).
           '';
         };
 
@@ -368,7 +420,7 @@ in
     }
     (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
       boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "streched";
+      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
     })
     (lib.mkIf cfg.enable {
       assertions = [
@@ -419,6 +471,10 @@ in
           assertion = cfg.efiSupport;
           message = "Secure boot is only supported on EFI systems.";
         }
+        {
+          assertion = !cfg.enableEditor;
+          message = "Editor is unconditionally disabled by Limine.";
+        }
       ];
 
       boot.loader.limine.enrollConfig = true;
@@ -446,15 +502,24 @@ in
         };
 
         script = ''
-          cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
-          chmod +w /run/fwupd-efi/fwupd*.efi
-          ${lib.getExe cfg.secureBoot.sbctl} sign /run/fwupd-efi/fwupd*.efi
+          fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
+          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
         '';
       };
 
       services.fwupd.uefiCapsuleSettings = {
         DisableShimForSecureBoot = true;
       };
+    })
+    (lib.mkIf (cfg.enable && cfg.secureBoot.enable && cfg.secureBoot.autoEnrollKeys.enable) {
+      assertions = [
+        {
+          assertion = cfg.secureBoot.autoGenerateKeys;
+          message = "autoEnrollKeys doesn't do anything without autoGenerateKeys.";
+        }
+      ];
+
+      boot.loader.limine.secureBoot.autoGenerateKeys = true;
     })
   ];
 }

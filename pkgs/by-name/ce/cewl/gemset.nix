@@ -38,10 +38,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0qg107qpl8gwmqjxcqiz37a3xmsgp503h9n74y8vyq0jj63gcz8w";
+      sha256 = "0a27k4jcrx7pvb0p59fn1frh14iy087c2aygrdkmgwsrbshvqxpj";
       type = "gem";
     };
-    version = "3.2025.0701";
+    version = "3.2025.0924";
   };
   mini_exiftool = {
     dependencies = [
@@ -76,20 +76,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0rb306hbky6cxfyc8vrwpvl40fdapjvhsk62h08gg9wwbn3n8x4c";
+      sha256 = "1hcwwr2h8jnqqxmf8mfb52b0dchr7pm064ingflb78wa00qhgk6m";
       type = "gem";
     };
-    version = "1.18.8";
+    version = "1.18.10";
   };
   ostruct = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1h6gazp5837xbz1aqvq9x0a5ffpw32nhvknn931a4074k6i04wvd";
+      sha256 = "04nrir9wdpc4izqwqbysxyly8y7hsfr4fsv69rw91lfi9d5fv8lm";
       type = "gem";
     };
-    version = "0.6.2";
+    version = "0.6.3";
   };
   pstore = {
     groups = [ "default" ];
@@ -116,29 +116,29 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1jmbf6lf7pcyacpb939xjjpn1f84c3nw83dy3p1lwjx0l2ljfif7";
+      sha256 = "0hninnbvqd2pn40h863lbrn9p11gvdxp928izkag5ysx8b1s5q0r";
       type = "gem";
     };
-    version = "3.4.1";
+    version = "3.4.4";
   };
   rubyzip = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "05an0wz87vkmqwcwyh5rjiaavydfn5f4q1lixcsqkphzvj7chxw5";
+      sha256 = "0g2vx9bwl9lgn3w5zacl52ax57k4zqrsxg05ixf42986bww9kvf0";
       type = "gem";
     };
-    version = "2.4.1";
+    version = "3.2.2";
   };
   spider = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0fix7zhnvlfqg66bxwdpbsffbynzdnaifnxpakn07bjh3rdj75cx";
+      sha256 = "0v9pshmv9k19pld2a57c9zarab5gjdd239xa9b1qr0x8ndf2c3bb";
       type = "gem";
     };
-    version = "0.5.4";
+    version = "0.7.0";
   };
 }

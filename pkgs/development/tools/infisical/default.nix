@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official Infisical CLI";
     longDescription = ''
       Infisical is the open-source secret management platform:
@@ -82,10 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://infisical.com";
     changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "infisical";
-    maintainers = with maintainers; [ hausken ];
-    teams = [ teams.infisical ];
+    maintainers = with lib.maintainers; [ hausken ];
+    teams = [ lib.teams.infisical ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

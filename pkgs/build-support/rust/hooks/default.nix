@@ -75,7 +75,6 @@
 
   cargoSetupHook = makeSetupHook {
     name = "cargo-setup-hook.sh";
-    propagatedBuildInputs = [ ];
     substitutions = {
       defaultConfig = ../fetchcargo-default-config.toml;
 

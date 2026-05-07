@@ -38,6 +38,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/varlesh/material-cursors";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

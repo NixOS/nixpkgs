@@ -26,6 +26,7 @@ let
       cosmic-files
       config.services.displayManager.cosmic-greeter.package
       cosmic-idle
+      cosmic-initial-setup
       cosmic-launcher
       cosmic-notifications
       cosmic-osd
@@ -43,7 +44,7 @@ let
     ];
 in
 {
-  meta.maintainers = lib.teams.cosmic.members;
+  meta.teams = [ lib.teams.cosmic ];
 
   options = {
     services.desktopManager.cosmic = {
@@ -71,6 +72,8 @@ in
     environment.pathsToLink = [
       "/share/backgrounds"
       "/share/cosmic"
+      "/share/cosmic-layouts"
+      "/share/cosmic-themes"
     ];
     environment.systemPackages = utils.removePackagesByName (
       corePkgs
@@ -83,13 +86,17 @@ in
           cosmic-icons
           cosmic-player
           cosmic-randr
+          cosmic-reader
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers
+          glib
           hicolor-icon-theme
+          networkmanagerapplet
           playerctl
           pop-icon-theme
           pop-launcher
+          pulseaudio
           xdg-user-dirs
         ]
         ++ lib.optionals config.services.flatpak.enable [
@@ -103,6 +110,8 @@ in
     services.graphical-desktop.enable = true;
 
     xdg = {
+      # Required for cosmic-osd
+      sounds.enable = true;
       icons.fallbackCursorThemes = lib.mkDefault [ "Cosmic" ];
 
       portal = {

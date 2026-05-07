@@ -17,22 +17,24 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
+        (case (range "9.0" "9.1") "1.10.2")
         (case (range "9.0" "9.1") "1.10.0")
         (case (range "9.0" "9.1") "1.9.1")
       ] null;
+    release."1.10.2".sha256 = "sha256-Uzni9qrYQP45Tr+JkHs0BuRARwmWSMwA/iHhIzkolxc=";
     release."1.10.0".sha256 = "sha256-c52nS8I0tia7Q8lZTFJyHVPVabW9xv55m7w6B7y3+e8=";
     release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
     releaseRev = v: "v${v}";
 
     propagatedBuildInputs = [ rocq-elpi ];
 
-    meta = with lib; {
+    meta = {
       description = "High level commands to declare a hierarchy based on packed classes";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         cohencyril
         siraben
       ];
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in

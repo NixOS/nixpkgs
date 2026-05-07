@@ -4,12 +4,12 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "claws";
   version = "0.4.1";
 
   src = fetchFromGitHub {
-    rev = version;
+    rev = finalAttrs.version;
     owner = "thehowl";
     repo = "claws";
     hash = "sha256-3zzUBeYfu9x3vRGX1DionLnAs1e44tFj8Z1dpVwjdCg=";
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thehowl/claws";
     description = "Interactive command line client for testing websocket servers";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "claws";
   };
-}
+})

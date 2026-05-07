@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mako";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "mako";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O93KOXonfkgIKtlIZP4YlsEgXBcupNifoC/cN+ZAYEM=";
+    hash = "sha256-opCAkYVhp2zQNEi4NBiFfXsC0DdL0kZtaXS9/epzF10=";
   };
 
   strictDeps = true;
@@ -74,11 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lightweight Wayland notification daemon";
-    homepage = "https://wayland.emersion.fr/mako/";
+    homepage = "https://github.com/emersion/mako";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir
-      synthetica
     ];
     platforms = lib.platforms.linux;
     mainProgram = "mako";

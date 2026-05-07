@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   pytestCheckHook,
   flit-core,
@@ -11,20 +10,20 @@
 
 buildPythonPackage rec {
   pname = "installer";
-  version = "0.7.0";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "installer";
     rev = version;
-    hash = "sha256-thHghU+1Alpay5r9Dc3v7ATRFfYKV8l9qR0nbGOOX/A=";
+    hash = "sha256-zOnDOaH+9h78Z1667n1Cr8HIm8+OPn2Vc1Zl4XksiCM=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.13") [
-    # Fix compatibility with Python 3.13
-    # https://github.com/pypa/installer/pull/201
-    ./python313-compat.patch
+  patches = [
+    # Add -m flag to installer to correctly support cross
+    # https://github.com/pypa/installer/pull/258
+    ./cross.patch
   ];
 
   nativeBuildInputs = [ flit-core ];
@@ -37,7 +36,7 @@ buildPythonPackage rec {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
       inherit version;
-      format = "other";
+      pyproject = false;
 
       dontBuild = true;
       dontInstall = true;
@@ -50,12 +49,12 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Low-level library for installing a Python package from a wheel distribution";
     homepage = "https://github.com/pypa/installer";
     changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.cpcloud ];
-    teams = [ teams.python ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.cpcloud ];
+    teams = [ lib.teams.python ];
   };
 }

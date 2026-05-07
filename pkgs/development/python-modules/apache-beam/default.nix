@@ -17,21 +17,23 @@
   yapf,
 
   # dependencies
+  beartype,
   crcmod,
+  cryptography,
   dill,
+  envoy-data-plane,
   fastavro,
   fasteners,
   grpcio,
-  hdfs,
   httplib2,
   numpy,
   objsize,
   orjson,
+  pillow,
   proto-plus,
   protobuf,
   pyarrow,
   pydot,
-  pymilvus,
   pymongo,
   python-dateutil,
   pytz,
@@ -58,53 +60,39 @@
   sqlalchemy,
   tenacity,
   testcontainers,
+  which,
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.67.0";
+  version = "2.72.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
-    tag = "v${version}";
-    hash = "sha256-gHlbmPNtSKjYO4YPPtWnjul977APsHwe/2cq2UG4wuk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HlpaKDX/w6g6q8nOB8G83q4/ffgymk/XyTpwYVpbd2U=";
   };
 
-  sourceRoot = "${src.name}/sdks/python";
+  sourceRoot = "${finalAttrs.src.name}/sdks/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "==" ">=" \
-      --replace-fail ",<2.3.0" ""
+      --replace-fail "==" ">="
 
     substituteInPlace setup.py \
       --replace-fail "  copy_tests_from_docs()" ""
   '';
 
   pythonRelaxDeps = [
-    "grpcio"
+    "envoy-data-plane"
+    "httplib2"
     "jsonpickle"
-
-    # As of apache-beam v2.55.1, the requirement is cloudpickle~=2.2.1, but
-    # the current (2024-04-20) nixpkgs's pydot version is 3.0.0.
-    "cloudpickle"
-
-    # See https://github.com/NixOS/nixpkgs/issues/156957
-    "dill"
-
-    "numpy"
-
+    "objsize"
     "protobuf"
-
-    # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
-    # the current (2023-02-22) nixpkgs's pyarrow version is 11.0.0.
     "pyarrow"
-
-    "pydot"
-    "redis"
   ];
 
   build-system = [
@@ -121,21 +109,23 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    beartype
     crcmod
+    cryptography
     dill
+    envoy-data-plane
     fastavro
     fasteners
     grpcio
-    hdfs
     httplib2
     numpy
     objsize
     orjson
+    pillow
     proto-plus
     protobuf
     pyarrow
     pydot
-    pymilvus
     pymongo
     python-dateutil
     pytz
@@ -168,6 +158,7 @@ buildPythonPackage rec {
     sqlalchemy
     tenacity
     testcontainers
+    which
   ];
 
   # Make sure we're running the tests for the actually installed
@@ -194,6 +185,9 @@ buildPythonPackage rec {
     #     E   NameError: name 'MySqlContainer' is not defined
     #
     "apache_beam/io/external/xlang_jdbcio_it_test.py"
+
+    # AttributeError: '_TruncatingFileHandle' object has no attribute 'close'.
+    "apache_beam/ml/rag/ingestion/milvus_search_it_test.py"
 
     # These tests depend on the availability of specific servers backends.
     "apache_beam/runners/portability/flink_runner_test.py"
@@ -225,103 +219,6 @@ buildPythonPackage rec {
     "apache_beam/yaml/yaml_ml_test.py"
     "apache_beam/yaml/yaml_provider_unit_test.py"
 
-    # FIXME All those fails due to a single- AttributeError: 'MaybeReshuffle' object has no attribute 'side_inputs'
-    # Upstream issue https://github.com/apache/beam/issues/33854
-    "apache_beam/coders/row_coder_test.py"
-    "apache_beam/examples/avro_nyc_trips_test.py"
-    "apache_beam/examples/complete/autocomplete_test.py"
-    "apache_beam/examples/complete/estimate_pi_test.py"
-    "apache_beam/examples/complete/game/game_stats_test.py"
-    "apache_beam/examples/complete/game/hourly_team_score_test.py"
-    "apache_beam/examples/complete/game/leader_board_test.py"
-    "apache_beam/examples/complete/game/user_score_test.py"
-    "apache_beam/examples/complete/tfidf_test.py"
-    "apache_beam/examples/complete/top_wikipedia_sessions_test.py"
-    "apache_beam/examples/cookbook/bigquery_side_input_test.py"
-    "apache_beam/examples/cookbook/bigquery_tornadoes_test.py"
-    "apache_beam/examples/cookbook/coders_test.py"
-    "apache_beam/examples/cookbook/combiners_test.py"
-    "apache_beam/examples/cookbook/custom_ptransform_test.py"
-    "apache_beam/examples/cookbook/filters_test.py"
-    "apache_beam/examples/matrix_power_test.py"
-    "apache_beam/examples/snippets/snippets_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/approximatequantiles_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/approximateunique_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/batchelements_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/cogroupbykey_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/combineglobally_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/combineperkey_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/combinevalues_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/count_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/distinct_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/groupbykey_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/groupintobatches_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/latest_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/max_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/mean_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/min_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/sample_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/sum_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/tolist_test.py"
-    "apache_beam/examples/snippets/transforms/aggregation/top_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/filter_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/flatmap_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/keys_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/kvswap_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/map_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/pardo_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/partition_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/regex_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/tostring_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/values_test.py"
-    "apache_beam/examples/snippets/transforms/elementwise/withtimestamps_test.py"
-    "apache_beam/examples/snippets/transforms/other/create_test.py"
-    "apache_beam/examples/snippets/transforms/other/flatten_test.py"
-    "apache_beam/examples/snippets/transforms/other/window_test.py"
-    "apache_beam/examples/snippets/util_test.py"
-    "apache_beam/io/avroio_test.py"
-    "apache_beam/io/concat_source_test.py"
-    "apache_beam/io/filebasedsink_test.py"
-    "apache_beam/io/filebasedsource_test.py"
-    "apache_beam/io/fileio_test.py"
-    "apache_beam/io/mongodbio_test.py"
-    "apache_beam/io/parquetio_test.py"
-    "apache_beam/io/sources_test.py"
-    "apache_beam/io/textio_test.py"
-    "apache_beam/io/tfrecordio_test.py"
-    "apache_beam/metrics/metric_test.py"
-    "apache_beam/ml/inference/base_test.py"
-    "apache_beam/ml/inference/sklearn_inference_test.py"
-    "apache_beam/ml/inference/utils_test.py"
-    "apache_beam/ml/rag/chunking/base_test.py"
-    "apache_beam/ml/rag/ingestion/base_test.py"
-    "apache_beam/pipeline_test.py"
-    "apache_beam/runners/direct/direct_runner_test.py"
-    "apache_beam/runners/direct/sdf_direct_runner_test.py"
-    "apache_beam/runners/interactive/interactive_beam_test.py"
-    "apache_beam/runners/interactive/interactive_runner_test.py"
-    "apache_beam/runners/interactive/non_interactive_runner_test.py"
-    "apache_beam/runners/interactive/recording_manager_test.py"
-    "apache_beam/runners/portability/fn_api_runner/translations_test.py"
-    "apache_beam/runners/portability/fn_api_runner/trigger_manager_test.py"
-    "apache_beam/runners/portability/stager_test.py"
-    "apache_beam/testing/synthetic_pipeline_test.py"
-    "apache_beam/testing/test_stream_test.py"
-    "apache_beam/testing/util_test.py"
-    "apache_beam/transforms/combiners_test.py"
-    "apache_beam/transforms/core_test.py"
-    "apache_beam/transforms/create_test.py"
-    "apache_beam/transforms/deduplicate_test.py"
-    "apache_beam/transforms/periodicsequence_test.py"
-    "apache_beam/transforms/ptransform_test.py"
-    "apache_beam/transforms/sideinputs_test.py"
-    "apache_beam/transforms/stats_test.py"
-    "apache_beam/transforms/transforms_keyword_only_args_test.py"
-    "apache_beam/transforms/trigger_test.py"
-    "apache_beam/transforms/userstate_test.py"
-    "apache_beam/transforms/util_test.py"
-    "apache_beam/transforms/write_ptransform_test.py"
-
     # FIXME AttributeError: 'Namespace' object has no attribute 'test_pipeline_options'
     # Upstream issue https://github.com/apache/beam/issues/33853
     "apache_beam/runners/portability/prism_runner_test.py"
@@ -346,6 +243,55 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pip
+    "test_populate_requirements_cache_uses_find_links"
+
+    # AssertionError: Lists differ:
+    # ['pickled_main_session', 'submission_environment_dependencies.txt'] != ['pickled_main_session']
+    "test_main_session_staged_when_using_cloudpickle"
+
+    # TypeError: NoneType takes no arguments
+    "test_run_inference_with_rate_limiter"
+    "test_run_inference_with_rate_limiter_exceeded"
+
+    # RuntimeError: This pipeline runs with the pipeline option --update_compatibility_version=2.67.0 or earlier.
+    # When running with this option on SDKs 2.68.0 or later, you must ensure dill==0.3.1.1 is installed. Error
+    "test_reshuffle_custom_window_preserves_metadata_1"
+    "test_reshuffle_default_window_preserves_metadata_1"
+
+    # Dill version 0.3.1.1 is required when using pickle_library=dill.
+    # Other versions of dill are untested with Apache Beam.
+    "LocalCombineFnLifecycleTest_0_dill"
+    "LocalCombineFnLifecycleTest_2_dill"
+    "test_runner_overrides_default_pickler"
+
+    # Require internet access
+    "test_local_jar_fallback_to_google_maven_mirror"
+
+    # AssertionError: Lists differ
+    "test_default_resources"
+    "test_files_to_stage"
+    "test_main_session_not_staged_when_using_cloudpickle"
+    "test_no_main_session"
+    "test_populate_requirements_cache_with_local_files"
+    "test_requirements_cache_not_populated_when_cache_disabled"
+    "test_sdk_location_default"
+    "test_sdk_location_http"
+    "test_sdk_location_local_directory"
+    "test_sdk_location_local_source_file"
+    "test_sdk_location_local_wheel_file"
+    "test_sdk_location_remote_source_file"
+    "test_sdk_location_remote_wheel_file"
+    "test_with_extra_packages"
+    "test_with_jar_packages"
+    "test_with_main_session"
+    "test_with_pypi_requirements"
+    "test_with_requirements_file"
+    "test_with_requirements_file_and_cache"
+
+    # ValueError: SplitAtFraction test completed vacuously: no non-trivial split fractions found
+    "test_dynamic_work_rebalancing"
+
     # fixture 'self' not found
     "test_with_batched_input_exceeds_size_limit"
     "test_with_batched_input_splits_large_batch"
@@ -378,13 +324,56 @@ buildPythonPackage rec {
 
     # TypeError: Expected Iterator in return type annotatio
     "test_get_output_batch_type"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Could not determine schema for type hint Any.
+    # Did you mean to create a schema-aware PCollection? See https://s.apache.org/beam-python-schemas
+    "test_dataframes"
+    "test_dataframes_same_cell_twice"
+
+    # AssertionError: 'OptionalUnionType(unnamed: int | str | None)' not found in ('OptionalUnionType(unnamed: typing.Union[int, str, NoneType])', 'OptionalUnionType(unnamed: typing.Union[str, int, NoneType])')
+    "test_pformat_namedtuple_with_unnamed_fields"
+
+    # AssertionError: Lists differ:
+    # ['ref[26 chars]_Coder_FastPrimitivesCoder_3', 'ref_Coder_GlobalWindowCoder_2']
+    # != ['ref[26 chars]_Coder_GlobalWindowCoder_2', 'ref_Coder_VersionedCoder_v269_3']
+    "test_coder_version_tag_included_in_runner_api_key"
+
+    # AttributeError: 'int' object has no attribute 'upper' [while running 'Map(<lambda at core_test.py:555>)']
+    "test_typecheck_with_default"
+
+    # AssertionError: Any != <class 'int'> (or similar type mismatches)
+    "test_child_without_output_hints_infers_partial_types_from_dofn"
+    "test_combine_properly_pipeline_type_checks_using_decorator"
+    "test_combine_properly_pipeline_type_checks_without_decorator"
+    "test_filter_typehint"
+    "test_mean_globally_pipeline_checking_satisfied"
+    "test_mean_globally_runtime_checking_satisfied"
+    "test_pardo_type_inference"
+    "test_pipeline_inference"
+    "test_ptransform_override_type_hints"
+    "test_type_inference"
+
+    # AssertionError: TypeCheckError not raised
+    "test_inferred_bad_kv_type"
+
+    # RuntimeError: NotImplementedError [while running 'WithKeys(<lambda at...y:232>)/Map(<lambda at util.py:1193>)']
+    "test_co_group_by_key_on_unpickled"
+
+    # TypeError: object of type 'member_descriptor' has no len()
+    "test_convert_bare_types_fail"
+    # TypeError: Parameter to List hint must be a non-sequence, a type, or a TypeConstraint.
+    # ForwardRef('int') is an instance of ForwardRef
+    "test_forward_reference"
+    # TypeError: Unable to deterministically encode ...
+    "test_deterministic_key"
   ];
 
   meta = {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
-    changelog = "https://github.com/apache/beam/blob/release-${src.tag}/CHANGES.md";
+    changelog = "https://github.com/apache/beam/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

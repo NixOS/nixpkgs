@@ -1,21 +1,22 @@
 {
   lib,
   asciidoctor,
+  autoconf269,
   autoreconfHook,
   cairo,
   fetchFromGitHub,
   fontconfig,
   freetype,
   fribidi,
-  libSM,
-  libX11,
-  libXcursor,
-  libXft,
-  libXi,
-  libXinerama,
-  libXpm,
-  libXrandr,
-  libXt,
+  libsm,
+  libx11,
+  libxcursor,
+  libxft,
+  libxi,
+  libxinerama,
+  libxpm,
+  libxrandr,
+  libxt,
   libevent,
   libintl,
   libpng,
@@ -40,7 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-y1buTWO1vHzloh2e4EK1dkD0uQa7lIFUbNMkEe5x6Vo=";
   };
 
+  # Build fails with autoconf 2.73
   nativeBuildInputs = [
+    autoconf269
     autoreconfHook
     asciidoctor
     pkg-config
@@ -52,15 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     fribidi
-    libSM
-    libX11
-    libXcursor
-    libXft
-    libXi
-    libXinerama
-    libXpm
-    libXrandr
-    libXt
+    libsm
+    libx11
+    libxcursor
+    libxft
+    libxi
+    libxinerama
+    libxpm
+    libxrandr
+    libxt
     libevent
     libintl
     libpng
@@ -113,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/fvwmorg/fvwm3/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
-    inherit (libX11.meta) platforms;
+    maintainers = [ ];
+    inherit (libx11.meta) platforms;
   };
 })

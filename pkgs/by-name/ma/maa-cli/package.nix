@@ -12,15 +12,15 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "maa-cli";
-  version = "0.5.8";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "maa-cli";
-    rev = "v${version}";
-    hash = "sha256-kQw4s9EPKSaVPJRSiMXcW0KNUaXGaYrio/3z3ud0lLA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TLm8B1cQ00l9aRADYU3Qv7nA04kDaxsXX86qvsTRWwk=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ "git2" ];
 
-  cargoHash = "sha256-urw26D0aKXvW98LjrK9rYEeMsv4L6qVSlGaNptFw5M0=";
+  cargoHash = "sha256-pJlTcxF6nzV4HfMTs/gAzSUubDy2UlhzEIVeSWs6uX0=";
 
   # maa-cli would only search libMaaCore.so and resources in itself's path
   # https://github.com/MaaAssistantArknights/maa-cli/issues/67
@@ -65,12 +65,12 @@ rustPlatform.buildRustPackage rec {
     installManPage manpage/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI for MAA by Rust";
     homepage = "https://github.com/MaaAssistantArknights/maa-cli";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ Cryolitia ];
     mainProgram = "maa";
   };
-}
+})

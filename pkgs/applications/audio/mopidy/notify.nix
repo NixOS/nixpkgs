@@ -1,19 +1,20 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   pythonPackages,
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-notify";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "Mopidy-Notify";
-    hash = "sha256-8FT4O4k0wEsdHA1vJaOW9UamJ3QLyO47HwL5XcSU3Pc=";
+  src = fetchFromGitHub {
+    owner = "phijor";
+    repo = "mopidy-notify";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oAOJvonDDmtpmzgu8Y+BczuLYpfrVlwASIFOW7rhZ94=";
   };
 
   build-system = [
@@ -33,10 +34,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_notify" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/phijor/mopidy-notify";
     description = "Mopidy extension for showing desktop notifications on track change";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.nim65s ];
   };
-}
+})

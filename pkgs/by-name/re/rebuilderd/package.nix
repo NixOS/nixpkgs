@@ -100,7 +100,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.tests = {
@@ -113,7 +112,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Independent verification of binary packages - reproducible builds";
     homepage = "https://github.com/kpcyrd/rebuilderd";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "rebuilderd";
   };
 })

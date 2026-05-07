@@ -131,10 +131,11 @@ let
 
   envFile = pkgs.writeText "mastodon.env" (
     lib.concatMapStrings (s: s + "\n") (
-      (lib.concatLists (
+      lib.concatLists (
         lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
-      ))
+      )
     )
+
   );
 
   mastodonTootctl =
@@ -159,7 +160,7 @@ let
     name: processCfg:
     lib.nameValuePair "mastodon-sidekiq-${name}" (
       let
-        jobClassArgs = toString (builtins.map (c: "-q ${c}") processCfg.jobClasses);
+        jobClassArgs = toString (map (c: "-q ${c}") processCfg.jobClasses);
         jobClassLabel = toString ([ "" ] ++ processCfg.jobClasses);
         threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
       in
@@ -706,12 +707,7 @@ in
         };
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.mastodon;
-        defaultText = lib.literalExpression "pkgs.mastodon";
-        description = "Mastodon package to use.";
-      };
+      package = lib.mkPackageOption pkgs "mastodon" { };
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
@@ -841,6 +837,12 @@ in
                 ) cfg.sidekiqProcesses
               ));
             message = "There must be exactly one Sidekiq queue in services.mastodon.sidekiqProcesses with jobClass \"scheduler\".";
+          }
+          {
+            assertion =
+              databaseActuallyCreateLocally
+              -> lib.versionAtLeast config.services.postgresql.finalPackage.version "14";
+            message = "Mastodon requires at least PostgreSQL 14.";
           }
         ];
 

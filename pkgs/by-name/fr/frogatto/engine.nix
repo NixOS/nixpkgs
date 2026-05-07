@@ -58,11 +58,11 @@ stdenv.mkDerivation {
     cp -a anura $out/bin/frogatto
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anura-engine/anura";
     description = "Game engine used by Frogatto";
-    license = licenses.zlib;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

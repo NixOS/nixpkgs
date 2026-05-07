@@ -12,29 +12,26 @@
   psutil,
   zeroconf,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyvisa-py";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";
     tag = version;
-    hash = "sha256-bYxl7zJ36uorEasAKvPiVWLaG2ISQGBHrQZJcnkbfzU=";
+    hash = "sha256-fXLT3W48HQ744LkwZn784KKmUE8gxDCR+lkcL9xX45g=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyvisa
     typing-extensions
   ];
@@ -50,11 +47,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Module that implements the Virtual Instrument Software Architecture";
     homepage = "https://github.com/pyvisa/pyvisa-py";
     changelog = "https://github.com/pyvisa/pyvisa-py/blob/${src.tag}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
   };
 }

@@ -1,0 +1,23 @@
+diff --git a/lib/asset_processor.rb b/lib/asset_processor.rb
+index 06e8cadbb4..b3368d4912 100644
+--- a/lib/asset_processor.rb
++++ b/lib/asset_processor.rb
+@@ -1,7 +1,7 @@
+ # frozen_string_literal: true
+
+ class AssetProcessor
+-  PROCESSOR_PATH = "tmp/asset-processor.js"
++  PROCESSOR_PATH = "frontend/asset-processor.js"
+
+   @mutex = Mutex.new
+   @ctx_init = Mutex.new
+@@ -28,7 +28,9 @@ class AssetProcessor
+   end
+
+   def self.build_production_asset_processor
+-    File.write(PROCESSOR_PATH, build_asset_processor)
++    if (!Rails.env.production? or !File.file?(PROCESSOR_PATH))
++      File.write(PROCESSOR_PATH, build_asset_processor)
++    end
+     PROCESSOR_PATH
+   end

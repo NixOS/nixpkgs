@@ -26,7 +26,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -37,16 +36,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.9";
+  version = "5.1.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-UbCSGpvS8Jvpe8iV1rVplSoGykHSup9pVTd3odbPq6Y=";
+    hash = "sha256-YYRXGsdAsPk/0U8VTOBBTBs84xjskar1IczWOxoEFLQ=";
   };
 
   build-system = [
@@ -296,12 +293,21 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    antlr4-python3-runtime
+    aws-xray-sdk
+    docker
+    flask
+    flask-cors
     freezegun
+    graphql-core
+    joserfc
+    openapi-spec-validator
+    py-partiql-parser
+    pyparsing
     pytest-order
     pytest-xdist
     pytestCheckHook
-  ]
-  ++ optional-dependencies.server;
+  ];
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
@@ -383,14 +389,18 @@ buildPythonPackage rec {
     # botocore.exceptions.ParamValidationError: Parameter validation failed: Unknown parameter in input: "EnableWorkDocs", must be one of: [...]
     "tests/test_workspaces/test_workspaces.py"
 
-    # Requires sagemaker client
+    # Requires sagemaker which is broken on Python 3.14
     "other_langs/tests_sagemaker_client/test_model_training.py"
+    "other_langs/tests_sagemaker_client/test_pipeline_session.py"
+
+    # Requires cfn-lint which is broken on Python 3.14
+    "tests/test_cloudformation/test_validate.py"
   ];
 
   meta = {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
-    changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getmoto/moto/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };

@@ -9,14 +9,14 @@
   libz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitrs";
   version = "v0.3.6";
 
   src = fetchFromGitHub {
     owner = "mccurdyc";
     repo = "gitrs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+43XJroPNWmdUC6FDL84rZWrJm5fzuUXfpDkAMyVQQg=";
   };
 
@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage rec {
     libz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, opinionated, tool, written in Rust, for declaratively managing Git repos on your machine";
     homepage = "https://github.com/mccurdyc/gitrs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mccurdyc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mccurdyc ];
     mainProgram = "gitrs";
   };
-}
+})

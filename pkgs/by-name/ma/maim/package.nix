@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   zlib,
@@ -12,26 +11,28 @@
   libGLU,
   libGL,
   glm,
-  libX11,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libXcomposite,
+  libx11,
+  libxext,
+  libxfixes,
+  libxrandr,
+  libxcomposite,
   slop,
   icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maim";
-  version = "5.8.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "maim";
-    rev = "v${version}";
-    sha256 = "sha256-/tZqSJnKe8GiffSz9VIFKuxMktRld+hA4ZWP4TZQrlg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-bbjV3+41cxAlKCEd1/nvnZ19GhctWOr5Lu4X+Vg3EAk=";
   };
 
+  # TODO: drop -DCMAKE_POLICY_VERSION_MINIMUM once maim adds CMake 4 support
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.10" ];
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -44,38 +45,29 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     glm
-    libX11
-    libXext
-    libXfixes
-    libXrandr
-    libXcomposite
+    libx11
+    libxext
+    libxfixes
+    libxrandr
+    libxcomposite
     slop
     icu
-  ];
-
-  patches = [
-    # Use C++17 as required by icu
-    (fetchpatch {
-      name = "maim-c++-17.patch";
-      url = "https://github.com/naelstrof/maim/commit/e7fe09b6734baeb59081b8805be542c92178cf0f.patch";
-      sha256 = "0z9zvrr8msfli88jmhxm5knysi385s48j2w7zpacc7qhf4c5zh8c";
-    })
   ];
 
   doCheck = false;
 
   meta = {
     mainProgram = "maim";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Command-line screenshot utility";
     longDescription = ''
       maim (make image) takes screenshots of your desktop. It has options to
       take only a region, and relies on slop to query for regions. maim is
       supposed to be an improved scrot.
     '';
-    changelog = "https://github.com/naelstrof/maim/releases/tag/v${version}";
+    changelog = "https://github.com/naelstrof/maim/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

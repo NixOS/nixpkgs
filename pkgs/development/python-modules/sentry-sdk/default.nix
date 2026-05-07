@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -62,19 +63,20 @@
   pytest-xdist,
   pytest-watch,
   responses,
+  socksio,
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentry-sdk";
-  version = "2.34.1";
+  version = "2.59.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    tag = version;
-    hash = "sha256-RQnjvX3bDiB9csn/DsQ769EiVm7HY+B7x9V5jpvsOOA=";
+    tag = finalAttrs.version;
+    hash = "sha256-CNGo0jVVRvHm7mLKT8ciw6oIlY600BBwCAVOCR12F74=";
   };
 
   postPatch = ''
@@ -95,6 +97,7 @@ buildPythonPackage rec {
     anthropic = [ anthropic ];
     # TODO: arq
     asyncpg = [ asyncpg ];
+    asyncio = [ httpcore ] ++ httpcore.optional-dependencies.asyncio;
     beam = [ apache-beam ];
     bottle = [ bottle ];
     celery = [ celery ];
@@ -164,8 +167,10 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-watch
     pytestCheckHook
+    socksio
   ]
-  ++ optional-dependencies.http2;
+  ++ finalAttrs.finalPackage.optional-dependencies.asyncio
+  ++ finalAttrs.finalPackage.optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;
 
@@ -215,15 +220,21 @@ buildPythonPackage rec {
     # KeyError: 'sentry.release'
     "test_logs_attributes"
     "test_logger_with_all_attributes"
-  ];
+  ]
+  ++
+    lib.optionals (pythonAtLeast "3.14" && stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin)
+      [
+        # profiler_id not populated on darwin
+        "test_segment_span_has_profiler_id"
+      ];
 
   pythonImportsCheck = [ "sentry_sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    changelog = "https://github.com/getsentry/sentry-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/getsentry/sentry-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

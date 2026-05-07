@@ -41,11 +41,16 @@ stdenv.mkDerivation {
     chmod +x $out/bin/ttbin2mysports
   '';
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     homepage = "https://github.com/ryanbinns/ttwatch";
     description = "Linux TomTom GPS Watch Utilities";
-    maintainers = with maintainers; [ dotlambda ];
-    license = licenses.mit;
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux;
   };
 }

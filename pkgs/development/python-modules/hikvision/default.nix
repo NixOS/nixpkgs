@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "hikvision";
   version = "2.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fbradyirl";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hikvision.api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with Hikvision IP Cameras";
     homepage = "https://github.com/fbradyirl/hikvision";
     changelog = "https://github.com/fbradyirl/hikvision/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "126";
+  version = "127";
 
   outputs = [
     "bin"
@@ -55,19 +55,13 @@ stdenv.mkDerivation rec {
     owner = "polkit-org";
     repo = "polkit";
     rev = version;
-    hash = "sha256-ZSqgW//q5DFIsmY17U93mJcK/CHSCHphKTHsTxp40q8=";
+    hash = "sha256-YTugETy0rqu/bv53jV1UeGqSK79bRXR52EJNcTblvzo=";
   };
 
   patches = [
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
-
-    (fetchpatch {
-      name = "elogind.patch";
-      url = "https://github.com/polkit-org/polkit/commit/55ee1b70456eca8281dda9612c485c619122f202.patch";
-      hash = "sha256-XOsDyYFBDWxs0PGAgqm3OSUycKR8fYa2ySZqBl8EX7E=";
-    })
   ];
 
   depsBuildBuild = [
@@ -116,10 +110,10 @@ stdenv.mkDerivation rec {
     (python3.pythonOnBuildForHost.withPackages (
       pp: with pp; [
         dbus-python
-        (python-dbusmock.overridePythonAttrs (attrs: {
+        (python-dbusmock.override {
           # Avoid dependency cycle.
           doCheck = false;
-        }))
+        })
       ]
     ))
   ];
@@ -188,15 +182,15 @@ stdenv.mkDerivation rec {
     ! test -e "$DESTDIR"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/polkit-org/polkit";
     description = "Toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # mandatory libpolkit-gobject shared library
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    teams = [ teams.freedesktop ];
+    teams = [ lib.teams.freedesktop ];
   };
 }

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "mushroom";
-  version = "5.0.4";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "piitaya";
     repo = "lovelace-mushroom";
     rev = "v${version}";
-    hash = "sha256-joN/uUO7TSYu1iUJnk7N0cyZfbwgqvAJtX+zgr1L5HU=";
+    hash = "sha256-nAEpbf7FkWUxLVyG2zQw+LKA5umffgk6I5/9PyXh2lo=";
   };
 
-  npmDepsHash = "sha256-gFlxmDod9jblTAm2EzmUBTeRo8zQDtPwU+t+k5AdQXA=";
+  npmDepsHash = "sha256-x149dkRilon1PL+V0M9gwAjKUXu4g2adobAatRXj+YY=";
 
   installPhase = ''
     runHook preInstall
@@ -26,11 +26,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/piitaya/lovelace-mushroom/releases/tag/v${version}";
     description = "Mushroom Cards - Build a beautiful dashboard easily";
     homepage = "https://github.com/piitaya/lovelace-mushroom";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

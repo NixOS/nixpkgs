@@ -13,14 +13,14 @@
 
 let
   # These files can be found in Stockfish/src/evaluate.h
-  nnueBigFile = "nn-1c0000000000.nnue";
-  nnueBigHash = "sha256-HAAAAAAApn1imZnZMtDDc/dFDOQ80S0FYoaPTq+a4q0=";
+  nnueBigFile = "nn-9a0cc2a62c52.nnue";
+  nnueBigHash = "sha256-mgzCpixSClN6rTrG6QiowJiqkAidyny8h0zCGXYYvyM=";
   nnueBig = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
     hash = nnueBigHash;
   };
-  nnueSmallFile = "nn-37f18f62d772.nnue";
-  nnueSmallHash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
+  nnueSmallFile = "nn-47fc8b7fff06.nnue";
+  nnueSmallHash = "sha256-R/yLf/8GfSQEdJO4TkKrhVwPzrUFjAFsafjuXE7kvWk=";
   nnueSmall = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
     hash = nnueSmallHash;
@@ -28,13 +28,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
-  version = "2.10.0";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BtOPLqfE6SjCr8/HS5oev1j3R26+wkWw051gZwDyCM0=";
+    hash = "sha256-0ArTovfr9znjudo53W5hnnSZlzfEnAd7E+7DXTqtN6w=";
     fetchSubmodules = true;
   };
 
@@ -45,14 +45,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
   '';
 
-  cargoHash = "sha256-1Pk9vXo1ivE8H6ctS8PEsCEv/EKFxFtgnmrvik6Gwug=";
+  cargoHash = "sha256-mkioBmawYR5GvR0WSlaicGyXV4EVVVQuai5UF5+Thk8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
@@ -67,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       runtimeEnv = {
         PNAME = finalAttrs.pname;
-        PKG_FILE = builtins.toString ./package.nix;
+        PKG_FILE = toString ./package.nix;
         GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
         NNUE_BIG_FILE = nnueBigFile;
         NNUE_BIG_HASH = nnueBigHash;
@@ -79,11 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       tu-maurice
       thibaultd
     ];

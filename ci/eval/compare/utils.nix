@@ -22,7 +22,7 @@ rec {
       splittedPath = lib.splitString "." packagePlatformPath;
 
       # ["python312Packages" "numpy" "aarch64-linux"] -> ["python312Packages" "numpy"]
-      packagePath = lib.sublist 0 (lib.length splittedPath - 1) splittedPath;
+      packagePath = lib.init splittedPath;
 
       # "python312Packages.numpy"
       name = lib.concatStringsSep "." packagePath;
@@ -66,7 +66,7 @@ rec {
   */
   convertToPackagePlatformAttrs =
     packagePlatformPaths:
-    builtins.filter (x: x != null) (builtins.map convertToPackagePlatformAttr packagePlatformPaths);
+    builtins.filter (x: x != null) (map convertToPackagePlatformAttr packagePlatformPaths);
 
   /*
     Converts a list of `packagePlatformPath`s directly to a list of (unique) package names
@@ -91,7 +91,7 @@ rec {
     let
       packagePlatformAttrs = convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths);
     in
-    uniqueStrings (builtins.map (p: p.name) packagePlatformAttrs);
+    uniqueStrings (map (p: p.name) packagePlatformAttrs);
 
   /*
     Group a list of `packagePlatformAttr`s by platforms
@@ -149,6 +149,50 @@ rec {
         );
     in
     lib.genAttrs [ "linux" "darwin" ] filterKernel;
+
+  /*
+    Group an attrdiff-style mapping by a derived key such as platform or kernel.
+
+    Turns
+      {
+        added = [ "new-tool.aarch64-linux" "new-tool.x86_64-darwin" ];
+        changed = [ "updated-tool.x86_64-darwin" "shared-tool.x86_64-darwin" ];
+        removed = [ "removed-tool.aarch64-darwin" "shared-tool.aarch64-darwin" ];
+      }
+    into
+      {
+        aarch64-darwin = {
+          added = [ ];
+          changed = [ ];
+          removed = [ "removed-tool" "shared-tool" ];
+        };
+        aarch64-linux = {
+          added = [ "new-tool" ];
+          changed = [ ];
+          removed = [ ];
+        };
+        x86_64-darwin = {
+          added = [ "new-tool" ];
+          changed = [ "shared-tool" "updated-tool" ];
+          removed = [ ];
+        };
+      }
+    when used with `groupByPlatform`.
+  */
+  groupAttrdiffBy =
+    grouper: attrdiff:
+    let
+      groupedByKind = lib.mapAttrs (
+        _: packagePlatformPaths:
+        grouper (convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths))
+      ) attrdiff;
+      groups = uniqueStrings (lib.flatten (map builtins.attrNames (lib.attrValues groupedByKind)));
+    in
+    lib.genAttrs groups (group: lib.mapAttrs (_: byGroup: byGroup.${group} or [ ]) groupedByKind);
+
+  groupAttrdiffByPlatform = groupAttrdiffBy groupByPlatform;
+
+  groupAttrdiffByKernel = groupAttrdiffBy groupByKernel;
 
   /*
     Maps an attrs of `kernel - rebuild counts` mappings to an attrs of labels

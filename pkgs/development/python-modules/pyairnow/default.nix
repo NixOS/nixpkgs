@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyairnow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for EPA AirNow Air Quality API";
     homepage = "https://github.com/asymworks/pyairnow";
     changelog = "https://github.com/asymworks/pyairnow/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

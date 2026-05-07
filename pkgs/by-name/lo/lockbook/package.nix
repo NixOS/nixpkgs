@@ -4,19 +4,24 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nfs-utils ? null, # macOS doesn't need this
+  makeBinaryWrapper,
 }:
-rustPlatform.buildRustPackage rec {
+let
+  inherit (stdenv.hostPlatform) isLinux;
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook";
-  version = "0.9.27";
+  version = "26.4.13";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
-    tag = version;
-    hash = "sha256-D194oIp6EE0Ub0+4iw4SlTxoyJ9I8xZa67TTh241BvE=";
+    tag = finalAttrs.version;
+    hash = "sha256-KkYe07uEj/AO1rxsa4bwVsNO6iyjAFJwHeWAyMH8RPY=";
   };
 
-  cargoHash = "sha256-KTT4z9lSrxpbCAyEccFMdqrCJKNYhv/8Jb6HeKzJYHs=";
+  cargoHash = "sha256-/FLR2IXsxBEV9Z6GSJ0MTjIZjApNUN9J2ellKiKtL74=";
 
   doCheck = false; # there are no cli tests
   cargoBuildFlags = [
@@ -24,7 +29,16 @@ rustPlatform.buildRustPackage rec {
     "lockbook"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals isLinux [ makeBinaryWrapper ];
+
+  postFixup = lib.optionalString isLinux ''
+    wrapProgram $out/bin/lockbook \
+      --prefix PATH : "${lib.makeBinPath [ nfs-utils ]}"
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --bash --name lockbook.bash <($out/bin/lockbook completions bash)
     installShellCompletion --zsh --name _lockbook <($out/bin/lockbook completions zsh)
@@ -46,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lockbook/lockbook/releases";
     maintainers = [ lib.maintainers.parth ];
   };
-}
+})

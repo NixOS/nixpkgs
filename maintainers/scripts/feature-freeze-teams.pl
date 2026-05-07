@@ -1,11 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i perl -p perl -p perlPackages.JSON perlPackages.LWPUserAgent perlPackages.LWPProtocolHttps perlPackages.TermReadKey
+#!nix-shell -i perl -p perl -p perlPackages.JSON github-cli
 
 # This script generates a list of teams to ping for the Feature Freeze announcement on Discourse.
 # It's intended to be used by Release Managers before creating such posts.
 #
-# The script interactively reads a GitHub username and a corresponding GitHub Personal Access token.
-# This is required to access the GitHub Teams API so the token needs at least the read:org privilege.
+# The script uses the credentials from the GitHub CLI (gh)
+# This is required to access the GitHub Teams API so it needs at least the read:org privilege.
 
 ## no critic (InputOutput::RequireCheckedSyscalls, InputOutput::ProhibitBacktickOperators)
 use strict;
@@ -14,39 +14,21 @@ use Carp;
 use Cwd 'abs_path';
 use File::Basename;
 use JSON qw(decode_json);
-use LWP::UserAgent;
-use Term::ReadKey qw(ReadLine ReadMode);
 
 sub github_team_members {
-    my ($team_name, $username, $token) = @_;
+    my ($team_name) = @_;
     my @ret;
 
-    my $req = HTTP::Request->new('GET', "https://api.github.com/orgs/NixOS/teams/$team_name/members", [ 'Accept' => 'application/vnd.github.v3+json' ]);
-    $req->authorization_basic($username, $token);
-    my $response = LWP::UserAgent->new->request($req);
-
-    if ($response->is_success) {
-        my $content = decode_json($response->decoded_content);
-        foreach (@{$content}) {
-            push @ret, $_->{'login'};
-        }
-    } else {
-        print {*STDERR} "!! Requesting members of GitHub Team '$team_name' failed: " . $response->status_line;
+    my $content = decode_json(`gh api orgs/NixOS/teams/$team_name/members`);
+    foreach (@{$content}) {
+        push @ret, $_->{'login'};
     }
 
     return \@ret;
 }
 
-# Read GitHub credentials
-print {*STDERR} 'GitHub username: ';
-my $github_user = ReadLine(0);
-ReadMode('noecho');
-print {*STDERR} 'GitHub personal access token (no echo): ';
-my $github_token = ReadLine(0);
-ReadMode('restore');
-print {*STDERR} "\n";
-chomp $github_user;
-chomp $github_token;
+`gh auth status` or die "`gh` comes from `pkgs.github-cli`, or in one command:
+nix-shell -p github-cli --run 'gh auth login'\n";
 
 # Read nix output
 my $nix_version = `nix --version`;
@@ -60,7 +42,6 @@ if ($nix_version =~ m/2[.]3[.]/msx) {
 my $data = decode_json($out);
 
 # Process teams
-print {*STDERR} "\n";
 while (my ($team_nix_key, $team_config) = each %{$data}) {
     # Ignore teams that don't want to be or can't be pinged
     if (not defined $team_config->{enableFeatureFreezePing} or not $team_config->{enableFeatureFreezePing}) {
@@ -71,14 +52,12 @@ while (my ($team_nix_key, $team_config) = each %{$data}) {
         next;
     }
     #  Team name
-    print {*STDERR} "$team_config->{shortName}:";
+    print {*STDOUT} "$team_config->{shortName}:";
     # GitHub Teams
     my @github_members;
-    if (defined $team_config->{githubTeams}) {
-        foreach (@{$team_config->{githubTeams}}) {
-            print {*STDERR} " \@NixOS/${_}";
-            push @github_members, @{github_team_members($_, $github_user, $github_token)};
-        }
+    if (defined $team_config->{github}) {
+        print {*STDOUT} " \@NixOS/$team_config->{github}";
+        push @github_members, @{github_team_members($team_config->{github})};
     }
     my %github_members = map { $_ => 1 } @github_members;
     # Members
@@ -90,9 +69,11 @@ while (my ($team_nix_key, $team_config) = each %{$data}) {
             if (defined $github_members{$github_handle}) {
                 next;
             }
-            print {*STDERR} " \@$github_handle";
+            print {*STDOUT} " \@$github_handle";
         }
     }
 
-    print {*STDERR} "\n";
+    print {*STDOUT} "\n";
 }
+
+print {*STDOUT} "Everyone else: \@NixOS/nixpkgs-committers\n";

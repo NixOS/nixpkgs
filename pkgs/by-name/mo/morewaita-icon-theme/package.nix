@@ -2,19 +2,20 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  adwaita-icon-theme,
   gtk3,
   xdg-utils,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "morewaita-icon-theme";
-  version = "48.4";
+  version = "49";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c3wpxaANZL9SwYwUEHkW0bbv4VsdseuwORsC49kUSjg=";
+    hash = "sha256-DxZ7XnIIF3EKGMPXahD+aHp6lCLRmrnywn7+qWCVflo=";
   };
 
   postPatch = ''
@@ -24,6 +25,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gtk3
     xdg-utils
+  ];
+
+  propagatedBuildInputs = [
+    adwaita-icon-theme
   ];
 
   installPhase = ''
@@ -45,7 +50,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       pkosel
-      kachick
     ];
   };
 })

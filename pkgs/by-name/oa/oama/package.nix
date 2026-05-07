@@ -15,7 +15,6 @@ let
   overrides = {
     description = "OAuth credential MAnager";
     homepage = "https://github.com/pdobsan/oama";
-    maintainers = with lib.maintainers; [ aidalgol ];
 
     passthru.updateScript = ./update.sh;
 

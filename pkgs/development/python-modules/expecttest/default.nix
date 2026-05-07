@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "expecttest";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "expecttest";
-    rev = "683b09a352cc426851adc2e3a9f46e0ab25e4dee"; # no tags
-    hash = "sha256-e9/KxPN/w0mrFYgesRGqaiDQ6gor7BpX/5/B0NPtXLY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/BMaQD3ZgYiprRYZ/fIlW7mStyFGzsjqup62tegBP7Y=";
   };
 
   build-system = [ poetry-core ];
@@ -35,4 +35,4 @@ buildPythonPackage {
     homepage = "https://github.com/pytorch/expecttest";
     platforms = lib.platforms.unix;
   };
-}
+})

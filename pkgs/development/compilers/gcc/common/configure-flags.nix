@@ -20,6 +20,7 @@
   enablePlugin,
   disableGdbPlugin ? !enablePlugin,
   enableShared,
+  enableDefaultPie,
   targetPrefix,
 
   langC,
@@ -226,6 +227,9 @@ let
         ]
       else
         [ "--disable-multilib" ]
+        # SH targets need m4 and m4-nofpu variants (the kernel uses -m4-nofpu).
+        # An empty list disables -m4-nofpu entirely.
+        ++ lib.optional targetPlatform.isSh4 "--with-multilib-list=m4,m4-nofpu"
     )
     ++ lib.optional (!enableShared) "--disable-shared"
     ++ lib.singleton (lib.enableFeature enablePlugin "plugin")
@@ -258,7 +262,7 @@ let
     ++ lib.optional (
       lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
     ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
+    ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isCygwin) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long"
       "--enable-libssp"
@@ -278,6 +282,9 @@ let
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
+    ]
+    ++ lib.optionals enableDefaultPie [
+      "--enable-default-pie"
     ]
     ++ lib.optionals langJit [
       "--enable-host-shared"

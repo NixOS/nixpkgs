@@ -1,0 +1,149 @@
+From c27d6b2f66b26860ddd3811df7a5d02bc59a897c Mon Sep 17 00:00:00 2001
+From: eljamm <fedi.jamoussi@protonmail.ch>
+Date: Sun, 9 Nov 2025 20:48:07 +0100
+Subject: [PATCH] Get version with importlib instead of pkg_resource
+
+---
+ gdtoolkit/formatter/__main__.py | 4 ++--
+ gdtoolkit/gd2py/__main__.py     | 4 ++--
+ gdtoolkit/gdradon/__main__.py   | 4 ++--
+ gdtoolkit/linter/__main__.py    | 4 ++--
+ gdtoolkit/parser/__main__.py    | 4 ++--
+ gdtoolkit/parser/parser.py      | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/gdtoolkit/formatter/__main__.py b/gdtoolkit/formatter/__main__.py
+index f71d1e3..7a6b0e4 100644
+--- a/gdtoolkit/formatter/__main__.py
++++ b/gdtoolkit/formatter/__main__.py
+@@ -23,7 +23,7 @@ Examples:
+   echo 'tool' | gdformat -   # reads from STDIN
+ """
+ import sys
+-import pkg_resources
++from importlib.metadata import version as pkg_version
+ import difflib
+ from typing import List, Tuple
+ 
+@@ -50,7 +50,7 @@ def main():
+     arguments = docopt(
+         __doc__,
+         version="gdformat {}".format(
+-            pkg_resources.get_distribution("gdtoolkit").version
++            pkg_version("gdtoolkit")
+         ),
+     )
+ 
+diff --git a/gdtoolkit/gd2py/__main__.py b/gdtoolkit/gd2py/__main__.py
+index 47b85b2..bb69c7a 100644
+--- a/gdtoolkit/gd2py/__main__.py
++++ b/gdtoolkit/gd2py/__main__.py
+@@ -17,7 +17,7 @@ Examples:
+   gd2py ./addons/gut/gut.gd | radon cc -s -
+ """
+ import sys
+-import pkg_resources
++from importlib.metadata import version as pkg_version
+ 
+ from docopt import docopt
+ 
+@@ -28,7 +28,7 @@ def main():
+     sys.stdout.reconfigure(encoding="utf-8")
+     arguments = docopt(
+         __doc__,
+-        version="gd2py {}".format(pkg_resources.get_distribution("gdtoolkit").version),
++        version="gd2py {}".format(pkg_version("gdtoolkit")),
+     )
+     with open(arguments["<path>"], "r", encoding="utf-8") as fh:
+         print(convert_code(fh.read()))
+diff --git a/gdtoolkit/gdradon/__main__.py b/gdtoolkit/gdradon/__main__.py
+index d9a2567..289c26e 100644
+--- a/gdtoolkit/gdradon/__main__.py
++++ b/gdtoolkit/gdradon/__main__.py
+@@ -13,7 +13,7 @@ Examples:
+   gdradon cc file1.gd file2.gd path/
+ """
+ import sys
+-import pkg_resources
++from importlib.metadata import version as pkg_version
+ from typing import List
+ 
+ from docopt import docopt
+@@ -32,7 +32,7 @@ def main():
+     arguments = docopt(
+         __doc__,
+         version="gdradon {}".format(
+-            pkg_resources.get_distribution("gdtoolkit").version
++            pkg_version("gdtoolkit")
+         ),
+     )
+ 
+diff --git a/gdtoolkit/linter/__main__.py b/gdtoolkit/linter/__main__.py
+index 90a8b4d..136aa5e 100644
+--- a/gdtoolkit/linter/__main__.py
++++ b/gdtoolkit/linter/__main__.py
+@@ -16,7 +16,7 @@ Options:
+ """
+ import sys
+ import os
+-import pkg_resources
++from importlib.metadata import version as pkg_version
+ import logging
+ import pathlib
+ from typing import List, Optional
+@@ -43,7 +43,7 @@ CONFIG_FILE_NAME = "gdlintrc"
+ def main():
+     arguments = docopt(
+         __doc__,
+-        version="gdlint {}".format(pkg_resources.get_distribution("gdtoolkit").version),
++        version="gdlint {}".format(pkg_version("gdtoolkit")),
+     )
+ 
+     if arguments["--verbose"]:
+diff --git a/gdtoolkit/parser/__main__.py b/gdtoolkit/parser/__main__.py
+index 132dfc4..9914817 100644
+--- a/gdtoolkit/parser/__main__.py
++++ b/gdtoolkit/parser/__main__.py
+@@ -13,7 +13,7 @@ Options:
+   --version     Show version.
+ """
+ import sys
+-import pkg_resources
++from importlib.metadata import version as pkg_version
+ from typing import Dict
+ 
+ import lark
+@@ -30,7 +30,7 @@ def main():
+     arguments = docopt(
+         __doc__,
+         version="gdparse {}".format(
+-            pkg_resources.get_distribution("gdtoolkit").version
++            pkg_version("gdtoolkit")
+         ),
+     )
+     files = arguments["<file>"]
+diff --git a/gdtoolkit/parser/parser.py b/gdtoolkit/parser/parser.py
+index 37cc544..51021ec 100644
+--- a/gdtoolkit/parser/parser.py
++++ b/gdtoolkit/parser/parser.py
+@@ -6,7 +6,7 @@ and to get an intermediate representation as a Lark Tree.
+ import os
+ import pickle
+ import sys
+-import pkg_resources
++from importlib.metadata import version as pkg_version
+ 
+ from lark import Lark, Tree, indenter
+ from lark.grammar import Rule
+@@ -77,7 +77,7 @@ class Parser:
+         add_metadata: bool = False,
+         grammar_filename: str = "gdscript.lark",
+     ) -> Tree:
+-        version: str = pkg_resources.get_distribution("gdtoolkit").version
++        version: str = pkg_version("gdtoolkit")
+ 
+         tree: Tree = None
+         cache_filepath: str = (
+-- 
+2.50.1
+

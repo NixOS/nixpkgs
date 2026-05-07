@@ -9,13 +9,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glpng";
   version = "1.47";
 
   src = fetchFromRepoOrCz {
     repo = "glpng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mwh0E8OZKBf6UcRScAeco8dfQ4LJ+7TG0IPuRi3Mzfc=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://repo.or.cz/glpng.git/blob_plain/HEAD:/glpng.htm";
     description = "PNG loader library for OpenGL";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

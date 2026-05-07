@@ -1,4 +1,4 @@
-module.exports = async ({ github, core }, callback) => {
+module.exports = async ({ github, core, maxConcurrent = 1 }, callback) => {
   const Bottleneck = require('bottleneck')
 
   const stats = {
@@ -13,7 +13,7 @@ module.exports = async ({ github, core }, callback) => {
   //   https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api
   const allLimits = new Bottleneck({
     // Avoid concurrent requests
-    maxConcurrent: 1,
+    maxConcurrent,
     // Will be updated with first `updateReservoir()` call below.
     reservoir: 0,
   })

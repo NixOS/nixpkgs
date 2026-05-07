@@ -6,23 +6,23 @@
   gotrue-supabase,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "auth";
-  version = "2.179.0";
+  version = "2.188.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "auth";
-    rev = "v${version}";
-    hash = "sha256-wYQHdMLpeHFvh21z9cBadzR0CMETLvj81A3x4SRGw1c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3FR7fWrSocEOL7T0pzwt5XWC4jmXsQrCUQcBMfJZqBI=";
   };
 
-  vendorHash = "sha256-1SUih8uhHvxVf+gp5S4MJZctoxyUct3e/rRK/cZEfEI=";
+  vendorHash = "sha256-sUQsUCapnNlVMuCMsgC3Pq2Z4Ooz2XO0dRnF1aqPH2I=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/supabase/auth/internal/utilities.Version=${version}"
+    "-X github.com/supabase/auth/internal/utilities.Version=${finalAttrs.version}"
   ];
 
   # integration tests require network to connect to postgres database
@@ -31,15 +31,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = gotrue-supabase;
     command = "auth version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/supabase/auth";
     description = "JWT based API for managing users and issuing JWT tokens";
     mainProgram = "auth";
-    changelog = "https://github.com/supabase/auth/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    changelog = "https://github.com/supabase/auth/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

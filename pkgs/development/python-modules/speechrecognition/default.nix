@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cacert,
+  cohere,
   faster-whisper,
   flac,
   google-cloud-speech,
@@ -12,8 +13,8 @@
   openai,
   pocketsphinx,
   pyaudio,
+  pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   requests,
   respx,
   setuptools,
@@ -22,18 +23,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "speechrecognition";
-  version = "3.14.3";
+  version = "3.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
-    tag = version;
-    hash = "sha256-g//KKxPRe1pWVJo7GsRNIV59r0J7XJEoXvH0tGuV3Jk=";
+    tag = finalAttrs.version;
+    hash = "sha256-EIDhWx1s1B0DX4Vmd/a8hRnTBgdBx9ALOonOWFPgUOg=";
   };
 
   postPatch = ''
@@ -55,6 +54,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     assemblyai = [ requests ];
     audio = [ pyaudio ];
+    cohere = [ cohere ];
     faster-whisper = [ faster-whisper ];
     google-cloud = [ google-cloud-speech ];
     groq = [
@@ -70,15 +70,17 @@ buildPythonPackage rec {
       openai-whisper
       soundfile
     ];
+    # vosk = [ vosk ];
   };
 
   nativeCheckInputs = [
     groq
+    pytest-httpserver
     pytestCheckHook
     pocketsphinx
     respx
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -87,14 +89,19 @@ buildPythonPackage rec {
     "test_sphinx_keywords"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # vosk is not available in nixpkgs
+    "tests/recognizers/test_vosk.py"
+  ];
+
+  meta = {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
-    license = with licenses; [
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

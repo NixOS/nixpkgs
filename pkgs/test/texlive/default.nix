@@ -34,7 +34,7 @@ rec {
           nativeBuildInputs = [ texLive ] ++ attrs.nativeBuildInputs or [ ];
           text = builtins.toFile "${name}.tex" text;
         }
-        // builtins.removeAttrs attrs [
+        // removeAttrs attrs [
           "nativeBuildInputs"
           "text"
           "texLive"
@@ -461,6 +461,7 @@ rec {
         "bundledoc"
         "cachepic"
         "checklistings"
+        "dtxgen"
         "dvipos"
         "extractres"
         "fig4latex"
@@ -659,14 +660,17 @@ rec {
         # requires kpsewhich
         "memoize-extract.pl"
         "memoize-extract.py"
+        "git-latexdiff"
 
         # require other texlive binaries in PATH
         "allcm"
         "allec"
         "chkweb"
+        "dtxgen"
         "explcheck"
         "extractbb"
         "fontinst"
+        "git-latexdiff"
         "ht*"
         "installfont-tl"
         "kanji-config-updmap-sys"
@@ -679,9 +683,9 @@ rec {
         "pdftex-quiet"
         "pslatex"
         "rumakeindex"
+        "runtexfile"
         "texconfig"
         "texconfig-sys"
-        "texexec"
         "texlinks"
         "texmfstart"
         "typeoutfileinfo"
@@ -702,6 +706,7 @@ rec {
         "luatools"
         "make4ht"
         "pmxchords"
+        "runtexfile"
         "tex4ebook"
         "texblend"
         "texdoc"

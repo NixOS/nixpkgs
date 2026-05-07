@@ -9,6 +9,7 @@
   coreutils,
   acpica-tools,
   makeWrapper,
+  go,
   gnugrep,
   gnused,
   file,
@@ -16,7 +17,7 @@
 }:
 
 let
-  version = "25.06";
+  version = "26.03";
 
   commonMeta = {
     description = "Various coreboot-related tools";
@@ -46,7 +47,7 @@ let
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-D7W8LtL6eeaKiRYoxVkcjeZ2aMIEXCvNakVtexe0mG8=";
+          hash = "sha256-gaJ9AP7g0KxOzZfg1dyNatC8/pl83pypeq5Lg+Qp1ys=";
         };
 
         enableParallelBuilding = true;
@@ -109,6 +110,10 @@ let
       pname = "nvramtool";
       meta.description = "Read and write coreboot parameters and display information from the coreboot table in CMOS/NVRAM";
       meta.mainProgram = "nvramtool";
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
     };
     superiotool = generic {
       pname = "superiotool";
@@ -182,19 +187,36 @@ let
           }
       '';
     };
+    # buildGoModule for some reason does not generate a binary
+    intelp2m = generic {
+      pname = "intelp2m";
+      version = "2.5";
+      env = {
+        VERSION = "2.5-${version}";
+        GOCACHE = "/tmp/go-cache";
+      };
+      nativeBuildInputs = [ go ];
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 intelp2m $out/bin/intelp2m
+
+        runHook postInstall
+      '';
+      meta.description = "Convert the inteltool register dump to gpio.h with GPIO configuration for porting coreboot";
+    };
   };
 
 in
 utils
 // {
-  coreboot-utils =
-    (buildEnv {
-      name = "coreboot-utils-${version}";
-      paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
-      postBuild = "rm -rf $out/sbin";
-    })
-    // {
+  coreboot-utils = (
+    buildEnv {
+      pname = "coreboot-utils";
       inherit version;
       meta = commonMeta;
-    };
+      paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
+      postBuild = "rm -rf $out/sbin";
+    }
+  );
 }

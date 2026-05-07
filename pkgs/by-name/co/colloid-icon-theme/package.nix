@@ -44,13 +44,13 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-02-09";
+    version = "2025-07-19";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
-      rev = version;
-      hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
+      tag = version;
+      hash = "sha256-CzFEMY3oJE3sHdIMQQi9qizG8jKo72gR8FlVK0w0p74=";
     };
 
     nativeBuildInputs = [
@@ -77,8 +77,8 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
       runHook preInstall
 
       name= ./install.sh \
-        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + builtins.toString schemeVariants)} \
-        ${lib.optionalString (colorVariants != [ ]) ("--theme " + builtins.toString colorVariants)} \
+        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + toString schemeVariants)} \
+        ${lib.optionalString (colorVariants != [ ]) ("--theme " + toString colorVariants)} \
         --dest $out/share/icons
 
       jdupes --quiet --link-soft --recurse $out/share
@@ -86,13 +86,18 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
       runHook postInstall
     '';
 
+    # Drop dangling symlinks from the upstream icon set.
+    postFixup = ''
+      find $out/share/icons -xtype l -delete
+    '';
+
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Colloid icon theme";
       homepage = "https://github.com/vinceliuice/colloid-icon-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

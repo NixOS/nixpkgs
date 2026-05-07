@@ -8,7 +8,6 @@
   jq,
   nix-prefetch-github,
   yarn,
-  yarn2nix,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -29,11 +28,10 @@ stdenvNoCC.mkDerivation rec {
     jq
     nix-prefetch-github
     yarn
-    yarn2nix
   ];
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     description = "Utility to generate Nix expressions for Zammad's dependencies";
     platforms = lib.platforms.unix;
   };

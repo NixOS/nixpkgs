@@ -7,82 +7,93 @@
 
 let
   cfg = config.virtualisation.incus;
+
+  acmeHostDir = config.security.acme.certs."${cfg.useACMEHost}".directory;
+
   preseedFormat = pkgs.formats.yaml { };
 
   nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
 
-  serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
-    lib.makeBinPath (
-      with pkgs;
-      [
-        cfg.package
+  path =
+    with pkgs;
+    [
+      cfg.package
+      "/run/wrappers"
 
-        acl
-        attr
-        bash
-        btrfs-progs
-        cdrkit
-        coreutils
-        criu
-        dnsmasq
-        e2fsprogs
-        findutils
-        getent
-        gawk
-        gnugrep
-        gnused
-        gnutar
-        gptfdisk
-        gzip
-        iproute2
-        iptables
-        iw
-        kmod
-        libxfs
-        lvm2
-        lxcfs
-        minio
-        minio-client
-        nftables
-        qemu-utils
-        qemu_kvm
-        rsync
-        squashfs-tools-ng
-        squashfsTools
-        sshfs
-        swtpm
-        systemd
-        thin-provisioning-tools
-        util-linux
-        virtiofsd
-        xdelta
-        xz
-      ]
-      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
-        skopeo
-        umoci
-      ]
-      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
-        lego
-      ]
-      ++ lib.optionals config.security.apparmor.enable [
-        apparmor-bin-utils
+      # some qemu helpers not in bin
+      (linkFarm "incus-qemu-libexec" [
+        {
+          name = "bin";
+          path = "${qemu_kvm}/libexec";
+        }
+      ])
 
-        (writeShellScriptBin "apparmor_parser" ''
-          exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-        '')
-      ]
-      ++ lib.optionals config.services.ceph.client.enable [ ceph-client ]
-      ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
-      ++ lib.optionals config.boot.zfs.enabled [
-        config.boot.zfs.package
-        "${config.boot.zfs.package}/lib/udev"
-      ]
-      ++ lib.optionals nvidiaEnabled [
-        libnvidia-container
-      ]
-    )
-  }'';
+      acl
+      attr
+      bash
+      btrfs-progs
+      bzip2
+      cdrkit
+      coreutils
+      criu
+      dnsmasq
+      e2fsprogs
+      findutils
+      gawk
+      getent
+      gnugrep
+      gnused
+      gnutar
+      gptfdisk
+      gzip
+      iproute2
+      iptables
+      iw
+      kmod
+      lego
+      libxfs
+      lvm2
+      lxcfs
+      lz4
+      nftables
+      qemu-utils
+      qemu_kvm
+      rsync
+      skopeo
+      squashfs-tools-ng
+      squashfsTools
+      sshfs
+      swtpm
+      systemd
+      thin-provisioning-tools
+      umoci
+      util-linux
+      virtiofsd
+      xdelta
+      xz
+      zstd
+    ]
+    ++ lib.optionals config.security.apparmor.enable [
+      apparmor-bin-utils
+
+      (writeShellScriptBin "apparmor_parser" ''
+        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+      '')
+    ]
+    ++ lib.optionals config.services.ceph.client.enable [ ceph-client ]
+    ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
+    ++ lib.optionals config.boot.zfs.enabled [
+      config.boot.zfs.package
+      (linkFarm "incus-zfs-udev" [
+        {
+          name = "bin";
+          path = "${config.boot.zfs.package}/lib/udev";
+        }
+      ])
+    ]
+    ++ lib.optionals nvidiaEnabled [
+      libnvidia-container
+    ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
   OVMF2MB = pkgs.OVMF.override {
@@ -134,7 +145,7 @@ let
       INCUS_LXC_HOOK = "${cfg.lxcPackage}/share/lxc/hooks";
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
-      PATH = lib.mkForce serverBinPath;
+      INCUS_AGENT_PATH = "${cfg.package}/share/agent";
     }
     (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
   ];
@@ -162,7 +173,7 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 
   options = {
@@ -257,10 +268,10 @@ in
         };
       };
 
-      socketActivation = lib.mkEnableOption (''
+      socketActivation = lib.mkEnableOption ''
         socket-activation for starting incus.service. Enabling this option
         will stop incus.service from starting automatically on boot.
-      '');
+      '';
 
       startTimeout = lib.mkOption {
         type = lib.types.ints.unsigned;
@@ -278,6 +289,17 @@ in
 
         package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
+      useACMEHost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "incus.example.com";
+        description = ''
+          Host of an existing Let's Encrypt certificate to use for TLS.
+          *Note that this option does not create any certificates and it
+          doesn't add subdomains to existing ones – you will need to create
+          them manually using {option}`security.acme.certs`.*
+        '';
+      };
     };
   };
 
@@ -287,7 +309,7 @@ in
         assertion =
           !(
             config.networking.firewall.enable
-            && !config.networking.nftables.enable
+            && !(config.networking.nftables.enable || config.networking.firewall.backend == "nftables")
             && config.virtualisation.incus.enable
           );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
@@ -377,10 +399,14 @@ in
       '';
     };
 
+    security.acme.certs = lib.mkIf (cfg.useACMEHost != null) {
+      "${cfg.useACMEHost}".reloadServices = [ "incus.service" ];
+    };
+
     systemd.services.incus = {
       description = "Incus Container and Virtual Machine Management Daemon";
 
-      inherit environment;
+      inherit environment path;
 
       wantedBy = lib.mkIf (!cfg.socketActivation) [ "multi-user.target" ];
       after = [
@@ -388,7 +414,8 @@ in
         "lxcfs.service"
         "incus.socket"
       ]
-      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ]
+      ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
 
       requires = [
         "lxcfs.service"
@@ -396,7 +423,10 @@ in
       ]
       ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
-      wants = [ "network-online.target" ];
+      wants = [
+        "network-online.target"
+      ]
+      ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
@@ -413,13 +443,18 @@ in
         Restart = "on-failure";
         TimeoutStartSec = "${cfg.startTimeout}s";
         TimeoutStopSec = "30s";
+
+        BindReadOnlyPaths = lib.mkIf (cfg.useACMEHost != null) [
+          "${acmeHostDir}/fullchain.pem:/var/lib/incus/server.crt"
+          "${acmeHostDir}/key.pem:/var/lib/incus/server.key"
+        ];
       };
     };
 
     systemd.services.incus-user = {
       description = "Incus Container and Virtual Machine Management User Daemon";
 
-      inherit environment;
+      inherit environment path;
 
       after = [
         "incus.service"
@@ -440,7 +475,7 @@ in
     systemd.services.incus-startup = lib.mkIf cfg.softDaemonRestart {
       description = "Incus Instances Startup/Shutdown";
 
-      inherit environment;
+      inherit environment path;
 
       after = [
         "incus.service"
@@ -448,6 +483,9 @@ in
       ];
       requires = [ "incus.socket" ];
       wantedBy = config.systemd.services.incus.wantedBy;
+
+      # restarting this service will affect instances
+      restartIfChanged = false;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";
@@ -520,4 +558,10 @@ in
 
     virtualisation.lxc.lxcfs.enable = true;
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "virtualisation" "incus" "bucketSupport" ] ''
+      The option was only a temporary workaround to gate the insecure minio dependency until it could be dropped.
+    '')
+  ];
 }

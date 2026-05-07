@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   curtsies,
   cwcwidth,
   greenlet,
@@ -19,15 +20,23 @@
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.25";
+  version = "0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bpython";
     repo = "bpython";
     tag = "${version}-release";
-    hash = "sha256-p5+IQiHNRRazqr+WRdx3Yw+ImG25tdZGLXvMf7woD9w=";
+    hash = "sha256-NmWM0fdzS9n5FSnNJOCdS1JE5ZHrmJXqCuHa54rT8GU=";
   };
+
+  patches = [
+    # This should be removed in the next release.
+    (fetchpatch {
+      url = "https://github.com/bpython/bpython/commit/870e81cb5a6860f1ba15744c81b97f71467eedf9.patch";
+      hash = "sha256-z55EkLT51ulz/V3XgjP1cbQza9ztb5YHu1UlXlbaWTQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -60,7 +69,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "bpython" ];
 
@@ -68,12 +77,12 @@ buildPythonPackage rec {
     rev-suffix = "-release";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";
     description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       flokli
       dotlambda
     ];

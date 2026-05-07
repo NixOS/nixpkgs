@@ -29,7 +29,7 @@ in
   nodes.discourse =
     { nodes, ... }:
     {
-      virtualisation.memorySize = 2048;
+      virtualisation.memorySize = 4096;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
       virtualisation.writableStore = false;
@@ -85,7 +85,7 @@ in
     };
 
   nodes.client =
-    { nodes, ... }:
+    { config, nodes, ... }:
     {
       imports = [ common/user-account.nix ];
 
@@ -100,7 +100,14 @@ in
 
       services.dovecot2 = {
         enable = true;
-        protocols = [ "imap" ];
+        enablePAM = true;
+        settings = {
+          dovecot_config_version = "2.4.3";
+          dovecot_storage_version = config.services.dovecot2.package.version;
+          protocols.imap = true;
+          mail_driver = "maildir";
+          mail_path = "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
+        };
       };
 
       services.postfix = {
@@ -165,7 +172,7 @@ in
     };
 
   testScript =
-    { nodes }:
+    { nodes, ... }:
     let
       request = builtins.toJSON {
         title = "Private message";
@@ -188,7 +195,7 @@ in
       )
 
       client.wait_for_unit("postfix.service")
-      client.wait_for_unit("dovecot2.service")
+      client.wait_for_unit("dovecot.service")
 
       discourse.succeed(
           "sudo -u discourse discourse-rake api_key:create_master[master] >api_key",

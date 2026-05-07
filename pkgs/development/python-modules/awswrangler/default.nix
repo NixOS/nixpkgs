@@ -1,41 +1,38 @@
 {
-  sparqlwrapper,
+  lib,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
   gremlinpython,
+  hatchling,
   jsonpath-ng,
-  lib,
   moto,
   openpyxl,
   opensearch-py,
   pandas,
   pg8000,
-  poetry-core,
   progressbar2,
   pyarrow,
   pymysql,
   pyodbc,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   redshift-connector,
   requests-aws4auth,
   setuptools,
+  sparqlwrapper,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awswrangler";
-  version = "3.12.1";
+  version = "3.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
-    tag = version;
-    hash = "sha256-N4IqeAfW4PqgQcBFaFK/Ugbcsz8pLiFzkBr9SRm7AOs=";
+    tag = finalAttrs.version;
+    hash = "sha256-utxSM8S3uelwrLHrXx5NglOmqjS7YKnAPujNS7UhWf8=";
   };
 
   pythonRelaxDeps = [
@@ -43,7 +40,7 @@ buildPythonPackage rec {
     "pyarrow"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
@@ -83,11 +80,11 @@ buildPythonPackage rec {
     "tests/unit/test_moto.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
-    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcwitt ];
   };
-}
+})

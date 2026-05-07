@@ -134,8 +134,8 @@ in
       );
       default = { };
 
-      example = '''';
-      description = '''';
+      example = "";
+      description = "";
     };
 
     adminLogin = lib.mkOption {

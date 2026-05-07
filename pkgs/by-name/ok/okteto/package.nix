@@ -1,23 +1,25 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "okteto";
-  version = "3.11.0";
+  version = "3.18.0";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     tag = finalAttrs.version;
-    hash = "sha256-gzOymFkzz2MStbhLA1viJuHNbsBFDLqbhG0lIaxAC+w=";
+    hash = "sha256-s3p4JpMivznfUPBA0R+IPVtrOgwSAPsaXJKtYOpXNOk=";
   };
 
-  vendorHash = "sha256-wkuCUMzmYAWf8RjM6DkTTHaY7qEIjGNYiT4grtCbYs8=";
+  vendorHash = "sha256-ZZm9vaVS8kkrVo5NViQd5UpBm+XseNuN81F13D+UL1k=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -30,6 +32,7 @@ buildGoModule (finalAttrs: {
   excludedPackages = [
     "integration"
     "samples"
+    "tools"
   ];
 
   ldflags = [
@@ -44,9 +47,7 @@ buildGoModule (finalAttrs: {
     "static_build"
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags =
     let
@@ -65,7 +66,7 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd okteto \
       --bash <($out/bin/okteto completion bash) \
       --fish <($out/bin/okteto completion fish) \

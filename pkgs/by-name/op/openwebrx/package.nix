@@ -14,6 +14,7 @@
   sox,
   wsjtx,
   codecserver,
+  versionCheckHook,
 }:
 
 let
@@ -39,7 +40,6 @@ let
       homepage = "https://github.com/jketterl/js8py";
       description = "Library to decode the output of the js8 binary of JS8Call";
       license = lib.licenses.gpl3Only;
-      teams = with lib.teams; [ c3d2 ];
     };
   };
 
@@ -54,6 +54,12 @@ let
       hash = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
     };
 
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_minimum_required (VERSION 3.0)" \
+        "cmake_minimum_required (VERSION 3.10)"
+    '';
+
     nativeBuildInputs = [
       cmake
       pkg-config
@@ -67,12 +73,15 @@ let
       soapysdr-with-plugins
     ];
 
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgram = "${placeholder "out"}/bin/rtl_connector";
+    doInstallCheck = true;
+
     meta = {
       homepage = "https://github.com/jketterl/owrx_connector";
       description = "Set of connectors that are used by OpenWebRX to interface with SDR hardware";
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.unix;
-      teams = with lib.teams; [ c3d2 ];
     };
   };
 
@@ -113,6 +122,9 @@ python3Packages.buildPythonApplication rec {
     "test"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     inherit js8py owrx_connector;
   };
@@ -122,6 +134,5 @@ python3Packages.buildPythonApplication rec {
     description = "Simple DSP library and command-line tool for Software Defined Radio";
     mainProgram = "openwebrx";
     license = lib.licenses.gpl3Only;
-    teams = with lib.teams; [ c3d2 ];
   };
 }

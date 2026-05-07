@@ -15,24 +15,21 @@
   pdfminer-six,
   phonenumbers,
   python-magic,
-  pythonOlder,
   readabilipy,
   setuptools,
+  solders,
 }:
 
 buildPythonPackage rec {
   pname = "iocsearcher";
-  version = "2.4.8";
+  version = "2.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "malicialab";
     repo = "iocsearcher";
-    # https://github.com/malicialab/iocsearcher/issues/6
-    rev = "be29cb4090284155b49a358e7fe2d24371b6a981";
-    hash = "sha256-LMpFK1Z1KaKUCm/X9Sh+Gp9GNKrGWp7N4UjAOVkhmSU=";
+    tag = "v${version}";
+    hash = "sha256-XoBb3V/2ZMrGV+i0abt7+/xEFqv6f0y99scaw8aav04=";
   };
 
   build-system = [ setuptools ];
@@ -52,6 +49,7 @@ buildPythonPackage rec {
     phonenumbers
     python-magic
     readabilipy
+    solders
   ]
   ++ eth-hash.optional-dependencies.pycryptodome;
 
@@ -60,12 +58,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iocsearcher" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and command line tool for extracting indicators of compromise (IOCs)";
     homepage = "https://github.com/malicialab/iocsearcher";
     changelog = "https://github.com/malicialab/iocsearcher/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "iocsearcher";
   };
 }

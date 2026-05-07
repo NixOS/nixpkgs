@@ -41,13 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Packaged version of iLBC codec from the WebRTC project";
     homepage = "https://github.com/TimothyGu/libilbc";
     changelog = "https://github.com/TimothyGu/libilbc/blob/v${finalAttrs.version}/NEWS.md";
-    maintainers = with maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
     pkgConfigModules = [ "lilbc" ];
-    platforms = platforms.all;
-    license = licenses.bsd3;
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
   };
 })

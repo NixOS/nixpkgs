@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-B3YkYrVEg6UJ2ApaVook4N2XvrCboxDMUG5CN9I79Sg=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     runHook preInstall
@@ -24,12 +24,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny color picker for X11";
     homepage = "https://github.com/blblapco/xmcp";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xmcp";
   };
 }

@@ -8,26 +8,20 @@
   postgresql,
   yarn-berry_4,
   nodejs,
-  autoconf,
-  automake,
-  libtool,
-  libpng,
-  nasm,
-  pkg-config,
   stdenv,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.8";
-  yarnHash = "sha256-NvQlrDXn9sa4MpytFYPsC4bKO8Thx/MuqG8M6VIa2ig=";
+  version = "9.14";
+  yarnHash = "sha256-j/5qoCrhC7xBPaS6NhZFFQtJ7ThL/wkFXoCtyreLHco=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-gnVrMuxWV7lAol1gyONbhtuUL4EEOfOPkRUM2esMgi0=";
+    hash = "sha256-NQe1ZN8jQEJE5qSpL5MjgLwWLGrGXCIHaCd8zLpsx3s=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -58,7 +52,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   # from Dockerfile
-  CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
+  env.CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
 
   format = "setuptools";
 
@@ -217,8 +211,10 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = !postgresqlTestHook.meta.broken;
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
+  # for replication testing in regression tests for PostgreSql >= 17
+  env.postgresqlExtraSettings = "wal_level = logical";
   checkPhase = ''
     runHook preCheck
 
@@ -235,6 +231,18 @@ pythonPackages.buildPythonApplication rec {
     cp -v regression/test_config.json.in regression/test_config.json
     substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
     substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+
+    # test cases hardcode ports and host in subscription replication tests
+    for files in pgadmin/browser/server_groups/servers/databases/subscriptions/tests/17_plus/*
+    do
+      substituteInPlace $files --replace-quiet "5917" "5432"
+      substituteInPlace $files --replace-quiet "localhost" "$PGHOST"
+    done
+    for files in pgadmin/browser/server_groups/servers/databases/subscriptions/tests/18_plus/*
+    do
+      substituteInPlace $files --replace-quiet "5434" "5432"
+      substituteInPlace $files --replace-quiet "localhost" "$PGHOST"
+    done
 
     ## Browser test ##
     python regression/runtests.py --pkg browser --exclude ${skippedTests}

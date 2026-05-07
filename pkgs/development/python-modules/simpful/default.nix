@@ -6,7 +6,6 @@
   matplotlib,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   requests,
   scipy,
   seaborn,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "simpful";
   version = "2.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aresio";
@@ -45,16 +42,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "simpful" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for fuzzy logic";
     homepage = "https://github.com/aresio/simpful";
     changelog = "https://github.com/aresio/simpful/releases/tag/${version}";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

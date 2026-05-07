@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "circleci-cli";
-  version = "0.1.33128";
+  version = "0.1.35800";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = "circleci-cli";
-    rev = "v${version}";
-    sha256 = "sha256-8rh/cG0ottG65ogACjA5sdf9M3satR4S0iZctZwzqkE=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Mxeyij1S0mrVTBNFDgnlIFCHYik47sHtrgbc1cjObbM=";
   };
 
-  vendorHash = "sha256-RQK51VSag1AkJMa/rmWpSuuzhRqSG2a3+sNisp0q7lU=";
+  vendorHash = "sha256-vTYepN/srd5qb2o1O5KwcGBwvKmV1DLG3/4OdtKJpVk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,8 +25,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}"
-    "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Version=${finalAttrs.version}"
+    "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${finalAttrs.src.rev}"
     "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix"
   ];
 
@@ -38,15 +38,15 @@ buildGoModule rec {
       --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
   '';
 
-  meta = with lib; {
+  meta = {
     # Box blurb edited from the AUR package circleci-cli
     description = ''
       Command to enable you to reproduce the CircleCI environment locally and
       run jobs as if they were running on the hosted CirleCI application.
     '';
-    maintainers = with maintainers; [ synthetica ];
+    maintainers = [ ];
     mainProgram = "circleci";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://circleci.com/";
   };
-}
+})

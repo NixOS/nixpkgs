@@ -7,11 +7,17 @@
     machine1 =
       { pkgs, ... }:
       {
+        # needed for the cache
+        virtualisation.memorySize = 4096;
+
         services.lanraragi.enable = true;
       };
     machine2 =
       { pkgs, ... }:
       {
+        # needed for the cache
+        virtualisation.memorySize = 4096;
+
         services.lanraragi = {
           enable = true;
           passwordFile = pkgs.writeText "lrr-test-pass" ''

@@ -19,11 +19,11 @@ buildKodiBinaryAddon rec {
 
   extraBuildInputs = [ libGL ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-pvr/pvr.vdr.vnsi";
     description = "Kodi's VDR VNSI PVR client addon";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

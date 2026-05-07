@@ -10,6 +10,10 @@
   libaio,
   libbsd,
   libuuid,
+  nasm,
+  autoconf,
+  automake,
+  libtool,
   numactl,
   openssl,
   pkg-config,
@@ -24,29 +28,16 @@
   runtimeShell,
 }:
 
-let
-
-  # downgrade dpdk because spdk refuses newer versions at runtime
-  # url: https://github.com/spdk/spdk/blob/3e3577a090ed9a084b5909aadcc8bc5fe93c0017/lib/env_dpdk/pci_dpdk.c#L77
-  dpdk' = dpdk.overrideAttrs (oldAttrs: rec {
-    version = "25.03";
-    src = fetchurl {
-      url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-      sha256 = "sha256-akCnMTKChuvXloWxj/pZkua3cME4Q9Zf0NEVfPzP9j0=";
-    };
-  });
-
-in
 stdenv.mkDerivation rec {
   pname = "spdk";
 
-  version = "25.05";
+  version = "26.01";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     tag = "v${version}";
-    hash = "sha256-Js78FLkLN4GpJlgO+h4jIiEdThciBugbLTB6elFi2TI=";
+    hash = "sha256-E52VozjnoGnIC7viXrsualaaKXiUU9Fx8zGylTjBzX0=";
     fetchSubmodules = true;
   };
 
@@ -62,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cunit
-    dpdk'
+    dpdk
     fuse3
     jansson
     libaio
@@ -76,6 +67,10 @@ stdenv.mkDerivation rec {
     ncurses
     zlib
     zstd
+    nasm
+    autoconf
+    automake
+    libtool
   ];
 
   propagatedBuildInputs = [
@@ -84,16 +79,22 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    # Override pip install command to use hatchling directly without downloading dependencies
+    # Override uv pip install command to use hatchling directly without downloading dependencies
     substituteInPlace python/Makefile \
-      --replace-fail "setup_cmd = pip install --prefix=\$(CONFIG_PREFIX)" \
-                     "setup_cmd = python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
+      --replace-fail "uv pip install --prefix=\$(CONFIG_PREFIX)" \
+                     "python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
   '';
 
   enableParallelBuilding = true;
 
+  # Required for the vendored isa-l version to find nasm
+  preConfigure = ''
+    export AS=nasm
+  '';
+
   configureFlags = [
-    "--with-dpdk=${dpdk'}"
+    "--with-dpdk=${dpdk}"
+    "--with-crypto"
   ]
   ++ lib.optional (!stdenv.hostPlatform.isStatic) "--with-shared";
 
@@ -105,6 +106,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     unset patchelf
+
+    # Clean up rpaths to remove /build references to the vendored isa-l and isa-l_crypto libs
+    for f in $(find $out/lib $out/bin -executable -type f 2>/dev/null); do
+      if patchelf --print-rpath "$f" 2>/dev/null | grep /build; then
+        echo "Stripping rpath of $f"
+        newrp=$(patchelf --print-rpath "$f" | sed -r "s|/build[^:]*:||g")
+        patchelf --set-rpath "$newrp" "$f"
+      fi
+    done
 
     # SPDK scripts assume that they can read the includes also relative to the scripts.
     # Therefore we are not copying them into $out/share.
@@ -131,13 +141,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
 
-  passthru.dpdk = dpdk';
-
-  meta = with lib; {
+  meta = {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ ths-on ];
   };
 }

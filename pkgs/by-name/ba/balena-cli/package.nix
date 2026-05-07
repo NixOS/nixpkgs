@@ -3,59 +3,59 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs_24,
   versionCheckHook,
   node-gyp,
   python3,
   udev,
-  cctools,
-  apple-sdk_12,
+  xcbuild,
 }:
 
 let
   buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_20;
+    nodejs = nodejs_24;
   };
   node-gyp' = node-gyp.override {
-    nodejs = nodejs_20;
+    nodejs = nodejs_24;
   };
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "22.4.1";
+  version = "25.1.3";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-eUkH2rzYiNkMAB3NrDzd20nmeP12uJxTcFISE+6Ty7o=";
+    hash = "sha256-zDjSzjR5y4fQPMRVuddf3zTddFoaR4p1D6v/+BHQzZo=";
   };
 
-  npmDepsHash = "sha256-WEYhtsCOdupU7nYF7scy4QP3/PVcchJX9CRRWjSkBJQ=";
+  npmDepsHash = "sha256-VE4HY8gRlB6r+qS/56Tj0UackFxO35/MFSY2l4EH0kY=";
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
   makeCacheWritable = true;
 
   nativeBuildInputs = [
     node-gyp'
     python3
-    versionCheckHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
+    xcbuild
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_12
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
-  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  # Disabled on Darwin due to:
+  #
+  # https://github.com/NixOS/nix/issues/5748
+  #
+  # No matter whether $TMP and $HOME point to real writable directories, the
+  # Darwin sandbox tries to use /var/empty and fails.
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   versionCheckProgram = "${placeholder "out"}/bin/balena";
 
   meta = {

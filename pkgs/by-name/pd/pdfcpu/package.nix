@@ -4,17 +4,18 @@
   stdenv,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pdfcpu";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = "pdfcpu";
-    tag = "v${version}";
-    hash = "sha256-HTqaFl/ug/4sdchZBD4VQiXbD1L0/DVf2efZ3BV/vx4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qCSfcxeMM7HzJIaeZJxjUVc834NmigpDKaxFQ0oSdkg=";
     # Apparently upstream requires that the compiled executable will know the
     # commit hash and the date of the commit. This information is also presented
     # in the output of `pdfcpu version` which we use as a sanity check in the
@@ -37,18 +38,29 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-5qB3zXiee4yMFpV8Ia8jICZaw+8Zpxd2Fs7DZ/DW/Jg=";
+  vendorHash = "sha256-5+zHlHp/8Jp9TE87IUgJqQHDINNe7ah34jPW/n5ORz8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   # ldflags based on metadata from git and source
   preBuild = ''
     ldflags+=" -X main.commit=$(cat COMMIT)"
     ldflags+=" -X main.date=$(cat SOURCE_DATE)"
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd pdfcpu \
+      --zsh <($out/bin/pdfcpu completion zsh) \
+      --fish <($out/bin/pdfcpu completion fish) \
+      --bash <($out/bin/pdfcpu completion bash)
   '';
 
   # No tests
@@ -65,7 +77,7 @@ buildGoModule rec {
       if stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config"
     }"/pdfcpu
     versionOutput="$($out/bin/pdfcpu version)"
-    for part in ${version} $(cat COMMIT | cut -c1-8) $(cat SOURCE_DATE); do
+    for part in ${finalAttrs.version} $(cat COMMIT | cut -c1-8) $(cat SOURCE_DATE); do
       if [[ ! "$versionOutput" =~ "$part" ]]; then
           echo version output did not contain expected part $part . Output was:
           echo "$versionOutput"
@@ -76,11 +88,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/pdfcpu" ];
 
-  meta = with lib; {
+  meta = {
     description = "PDF processor written in Go";
     homepage = "https://pdfcpu.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "pdfcpu";
   };
-}
+})

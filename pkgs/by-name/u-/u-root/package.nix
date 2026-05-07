@@ -1,28 +1,26 @@
 {
   lib,
-  # Build fails with Go 1.25, with the following error:
-  # 'vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go:64:9: invalid array length -delta * delta (constant -256 of type int64)'
-  # Wait for upstream to update their vendored dependencies before unpinning.
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   coreutils,
   bash,
   nix-update-script,
+  u-root-cmds,
 
   linuxManualConfig,
   fetchurl,
   linux_latest,
 }:
 
-buildGo124Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "u-root";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "u-root";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8B2H3AwGo9friveBk4bijOph9bSSNR7PPKJYEuywgm4=";
+    hash = "sha256-QHLVkQJkgTSB9a/QLgl4SKrWje0OhtBpa56zGQK8m+o=";
   };
 
   vendorHash = null;
@@ -57,6 +55,7 @@ buildGo124Module (finalAttrs: {
       allowImportFromDerivation = true;
     };
     updateScript = nix-update-script { };
+    tests.u-root-cmds = u-root-cmds;
   };
 
   meta = {
@@ -65,6 +64,8 @@ buildGo124Module (finalAttrs: {
       u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go.
 
       The package exposes `u-root.kernel-amd64` passthru for a minimal and pre-configured kernel to be used locally with QEMU.
+
+      The u-root commands are available as `u-root-cmds`.
     '';
     homepage = "https://u-root.org/";
     downloadPage = "https://github.com/u-root/u-root";

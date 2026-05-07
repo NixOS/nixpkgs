@@ -14,17 +14,18 @@
   libGLU,
   libGL,
   pango,
-  xorg,
+  libxmu,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gtkglext";
   version = "unstable-2019-12-19";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "Archive";
-    repo = pname;
+    repo = "gtkglext";
     # build fixes
     # https://gitlab.gnome.org/Archive/gtkglext/merge_requests/1
     rev = "ad95fbab68398f81d7a5c895276903b0695887e2";
@@ -47,15 +48,15 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     pango
-    xorg.libX11
-    xorg.libXmu
+    libx11
+    libxmu
   ];
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://projects.gnome.org/gtkglext/";
     description = "GtkGLExt, an OpenGL extension to GTK";
     longDescription = ''
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
       Löf's GtkGLArea, GtkGLExt provides a GtkWidget API that enables
       OpenGL drawing for standard and custom GTK widgets.
     '';
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

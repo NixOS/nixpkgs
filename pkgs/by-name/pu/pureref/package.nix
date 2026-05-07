@@ -9,7 +9,7 @@
   dpkg,
 }:
 let
-  version = "2.0.3";
+  version = "2.1.2";
   deb =
     runCommand "PureRef-${version}_x64"
       {
@@ -19,7 +19,7 @@ let
           cacert
           dpkg
         ];
-        outputHash = "sha256-VdKu1YQa+//FbNWqgTPoUhY4pSekgVohI53D4i5hVkQ=";
+        outputHash = "sha256-aGHhesJ6JJQpuRbDgASjpY4e28WHaVSFNEgGZmG7U3g=";
         outputHashMode = "recursive";
       }
       ''
@@ -43,11 +43,11 @@ appimageTools.wrapType1 {
     wrapProgram $out/bin/PureRef --set QT_QPA_PLATFORM xcb
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reference Image Viewer";
     homepage = "https://www.pureref.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       elnudev
       husjon
     ];

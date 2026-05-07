@@ -21,12 +21,12 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-screenshot";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-screenshot/${lib.versions.major version}/gnome-screenshot-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-screenshot/${lib.versions.major finalAttrs.version}/gnome-screenshot-${finalAttrs.version}.tar.xz";
     hash = "sha256-Stt97JJkKPdCY9V5ZnPPFC5HILbnaPVGio0JM/mMlZc=";
   };
 
@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-screenshot";
     description = "Utility used in the GNOME desktop environment for taking screenshots";
     mainProgram = "gnome-screenshot";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -12,20 +12,23 @@
   dbus,
   gdk-pixbuf,
   nix-update-script,
+  wrapGAppsHook3,
+  gst_all_1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "museeks";
-  version = "0.23.0";
+  version = "0.23.4";
 
   src = fetchurl {
     url = "https://github.com/martpie/museeks/releases/download/${finalAttrs.version}/Museeks_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-CT/P6tVgS7KD401ZktJBz1rk9CAz6gCm5zefud+prqQ=";
+    hash = "sha256-2WkWBd4opWpCcjE+uWRbDC8RPQoVvflpxbWuuNF2Z54=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -37,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     glib
     (lib.getLib stdenv.cc.cc)
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ];
 
   installPhase = ''

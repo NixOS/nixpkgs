@@ -12,7 +12,7 @@
   sanic-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cloudevents";
   version = "1.12.0";
   pyproject = true;
@@ -20,18 +20,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudevents";
     repo = "sdk-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0WdCBwYz3XJWjUP0gf+IWdF4ZgPHFvUZFoQp9taqNz8=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ deprecation ];
 
   pythonImportsCheck = [ "cloudevents" ];
 
   nativeCheckInputs = [
-    deprecation
     flask
     pydantic
     pytestCheckHook
@@ -47,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python SDK for CloudEvents";
     homepage = "https://github.com/cloudevents/sdk-python";
-    changelog = "https://github.com/cloudevents/sdk-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/cloudevents/sdk-python/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

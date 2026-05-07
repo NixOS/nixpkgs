@@ -7,14 +7,14 @@
   biscuit-cli,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biscuit-cli";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "biscuit-auth";
     repo = "biscuit-cli";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-s4Y4MhM79Z+4VxB03+56OqRQJaSHj2VQEJcL6CsT+2k=";
   };
 
@@ -23,20 +23,17 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = biscuit-cli;
       command = "biscuit --version";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI to generate and inspect biscuit tokens";
     homepage = "https://www.biscuitsec.org/";
-    maintainers = with maintainers; [
-      shlevy
-      gaelreyrol
-    ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ shlevy ];
+    license = lib.licenses.bsd3;
     mainProgram = "biscuit";
   };
-}
+})

@@ -7,6 +7,8 @@
   nodejs,
   libgudev,
   systemdLibs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   openssl,
   nix-update-script,
@@ -18,26 +20,34 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool-gui";
-  version = "1.0.3";
+  version = "1.1.4-unstable-2026-04-16";
   src = fetchFromGitHub {
     owner = "OpenSiFli";
     repo = "sftool-gui";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-kjxUl9YrvTgJby+FvUbx5ugucK8NiBqzGBhTi9Zwd1s=";
+    rev = "e182a5973a4e23f8af078f3480a8b2416d7439b3";
+    hash = "sha256-6wYf0DNn5cjJTeuVfOB91RQP/E2YWr6PlGUnzZdwgNY=";
   };
 
-  cargoHash = "sha256-XAU3ru+TxUo99OQwcXNLJ8gzBOZUkC8UCAApz7M/QTM=";
+  patches = [
+    # We don't want tauri to bundle the built binaries as we only use them and not the
+    # bundled .deb, .appimage, and so on. Bundling the binaries would also require a signing
+    # key, which we don't have.
+    ./disable-bundling.patch
+  ];
+
+  cargoHash = "sha256-hwQJnhWgPqQ3ZudCsEEuWoygYDcUKXgWz15dHZ+vR6Q=";
   cargoRoot = "src-tauri";
 
-  pnpmDeps = pnpm.fetchDeps {
-    fetcherVersion = 2;
+  pnpmDeps = fetchPnpmDeps {
+    fetcherVersion = 3;
     inherit (finalAttrs) pname version src;
-    hash = "sha256-gamgu9koBf+JLDswi3eGXRZybF8UiYE8CoifpQCgLaI=";
+    hash = "sha256-DwDXfbwgt/OSNOQbzCBlathX9QDnbEsXZLsgB67LOEk=";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     nodejs
     pkg-config
   ]
@@ -69,7 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Download tool for the SiFli family of chips";
     homepage = "https://github.com/OpenSiFli/sftool-gui";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eihqnh ];
+    maintainers = [ ];
     mainProgram = "sftool";
   };
 })

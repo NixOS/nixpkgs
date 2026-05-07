@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aiontfy";
-  version = "0.5.5";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "aiontfy";
     tag = "v${version}";
-    hash = "sha256-mWpMMhAMb5q7gcbfqDHi4CFgQOgRAvmpFDW57qMkGkk=";
+    hash = "sha256-LDt8JapUQcojMWyW931zt3U4QMwQew4wOly2AyYvbkI=";
   };
 
   build-system = [

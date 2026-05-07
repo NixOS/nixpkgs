@@ -6,27 +6,27 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stu";
-  version = "0.7.4";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "stu";
-    rev = "v${version}";
-    hash = "sha256-To1x65UuYSdkjIghy0UOA70LULGZZcC5waxYh99qXbs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DLZQq/pLvRQizjTWbGHqDkOW1iKDICun54Ku1i+kOB0=";
   };
 
-  cargoHash = "sha256-YmEzjbGIvgpPlMJln42Q9m/v3HhfsjLMHvES/4S1928=";
+  cargoHash = "sha256-nbHSrILQT4541cPGUpqKmTLKnXnXYCAHBjkC4vIbT9g=";
 
   passthru.tests.version = testers.testVersion { package = stu; };
 
   meta = {
     description = "Terminal file explorer for S3 buckets";
-    changelog = "https://github.com/lusingander/stu/releases/tag/v${version}";
+    changelog = "https://github.com/lusingander/stu/releases/tag/v${finalAttrs.version}";
     homepage = "https://lusingander.github.io/stu/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Nebucatnetzer ];
     mainProgram = "stu";
   };
-}
+})

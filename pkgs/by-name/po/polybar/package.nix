@@ -3,9 +3,10 @@
   cairo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   libuv,
-  libXdmcp,
-  libpthreadstubs,
+  libxdmcp,
+  libpthread-stubs,
   libxcb,
   pcre,
   pkg-config,
@@ -14,11 +15,11 @@
   lib,
   stdenv,
   xcbproto,
-  xcbutil,
-  xcbutilcursor,
-  xcbutilimage,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-image,
+  libxcb-render-util,
+  libxcb-wm,
   xcbutilxrm,
   makeWrapper,
   removeReferencesTo,
@@ -64,17 +65,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libuv
-    libXdmcp
-    libpthreadstubs
+    libxdmcp
+    libpthread-stubs
     libxcb
     pcre
     python3
     xcbproto
-    xcbutil
-    xcbutilcursor
-    xcbutilimage
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-util
+    libxcb-cursor
+    libxcb-image
+    libxcb-render-util
+    libxcb-wm
     xcbutilxrm
   ]
   ++ lib.optional alsaSupport alsa-lib
@@ -88,12 +89,28 @@ stdenv.mkDerivation (finalAttrs: {
     i3
   ];
 
-  patches = [ ./remove-hardcoded-etc.diff ];
+  patches = [
+    # FIXME: remove after version update
+    (fetchpatch {
+      name = "gcc15-cstdint-fix.patch";
+      url = "https://github.com/polybar/polybar/commit/f99e0b1c7a5b094f5a04b14101899d0cb4ece69d.patch";
+      sha256 = "sha256-Mf9R4u1Kq4yqLqTFD5ZoLjrK+GmlvtSsEyRFRCiQ72U=";
+    })
+
+    ./remove-hardcoded-etc.diff
+  ];
 
   # Replace hardcoded /etc when copying and reading the default config.
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "/etc" $out
+    substituteInPlace CMakeLists.txt --replace-fail "/etc" $out
     substituteAllInPlace src/utils/file.cpp
+    # Fix gcc15 build: i3ipcpp forces -std=c++11 but the jsoncpp library was
+    # compiled with C++17 (JSONCPP_HAS_STRING_VIEW=1), causing ABI mismatch.
+    # The i3ipcpp code resolves operator[](const char*) but the library only
+    # exports operator[](std::string_view). Bump i3ipcpp to C++17 to match.
+    substituteInPlace lib/i3ipcpp/CMakeLists.txt --replace-fail \
+      "-std=c++11" \
+      "-std=c++17"
   '';
 
   postInstall = ''
@@ -104,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${i3}/bin"
   '');
 
-  meta = with lib; {
+  meta = {
     homepage = "https://polybar.github.io/";
     changelog = "https://github.com/polybar/polybar/releases/tag/${finalAttrs.version}";
     description = "Fast and easy-to-use tool for creating status bars";
@@ -113,13 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
       status bars for their desktop environment, without the need of
       having a black belt in shell scripting.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       afldcr
-      Br1ght0ne
       moni
     ];
     mainProgram = "polybar";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -16,14 +16,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appeditor";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "donadigo";
     repo = "appeditor";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-A0YasHw5osGrgUPiUPuRBnv1MR/Pth6jVHGEx/klOGY=";
   };
 
@@ -53,13 +53,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Edit the Pantheon desktop application menu";
     homepage = "https://github.com/donadigo/appeditor";
-    maintainers = with maintainers; [ xiorcale ];
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ xiorcale ];
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.donadigo.appeditor";
   };
-}
+})

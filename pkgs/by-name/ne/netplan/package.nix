@@ -12,14 +12,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netplan";
   version = "0.106.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wQ4gd9+9YU92WGRMjSiF/zLCGxhaSl8s22pH1jr+Mm0=";
   };
 
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
     "BASH_COMPLETIONS_DIR=share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Backend-agnostic network configuration in YAML";
     homepage = "https://netplan.io";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.linux;
     mainProgram = "netplan";
   };
-}
+})

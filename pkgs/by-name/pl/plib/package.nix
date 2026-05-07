@@ -7,20 +7,20 @@
   libGL,
   libglut,
   SDL,
-  libXi,
-  libSM,
-  libXmu,
-  libXext,
-  libX11,
+  libxi,
+  libsm,
+  libxmu,
+  libxext,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plib";
   version = "1.8.5";
 
   src = fetchurl {
     # XXX: The author doesn't use the orthodox SF way to store tarballs.
-    url = "https://plib.sourceforge.net/dist/${pname}-${version}.tar.gz";
+    url = "https://plib.sourceforge.net/dist/plib-${finalAttrs.version}.tar.gz";
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
 
@@ -37,20 +37,26 @@ stdenv.mkDerivation rec {
       url = "https://sources.debian.org/data/main/p/plib/1.8.5-13/debian/patches/08_CVE-2021-38714.patch";
       sha256 = "sha256-3f1wZn0QqK/hPWCg1KEzbB95IGoxBjLZoCOFlW98t5w=";
     })
+    ./darwin-ssgloadflt-uint.patch
   ];
 
-  propagatedBuildInputs = [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-sl"
+    "--disable-pw"
+  ];
+
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libGLU
     libGL
     libglut
     SDL
 
     # The following libs ought to be propagated build inputs of Mesa.
-    libXi
-    libSM
-    libXmu
-    libXext
-    libX11
+    libxi
+    libsm
+    libxmu
+    libxext
+    libx11
   ];
 
   meta = {
@@ -70,6 +76,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
 
     homepage = "https://plib.sourceforge.net/";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   numpy,
@@ -12,6 +13,7 @@
   # dependencies
   clarabel,
   cvxopt,
+  highspy,
   osqp,
   scipy,
   scs,
@@ -23,17 +25,27 @@
   useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.7.2";
+  version = "1.8.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    tag = "v${version}";
-    hash = "sha256-kt/PFPztYhz1pkj50z9FYJNWlHYpqlxsGa1WctBfBy0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MDKTuiePzqdIJlTRxbCOxoaEAisGx368iWbwKEB97QU=";
   };
+
+  patches = [
+    # Upstream PR: https://github.com/cvxpy/cvxpy/pull/3290
+    (fetchpatch {
+      name = "highs-1.14.0.patch";
+      url = "https://github.com/cvxpy/cvxpy/commit/89f8d337d927457c2e308de8295dd83f274e40e7.patch";
+      hash = "sha256-BO878Kz5ZH5FHkxZugzT+n6wjsoOReqCZWM2HDvFqAw=";
+    })
+  ];
 
   postPatch =
     # too tight tolerance in tests (AssertionError)
@@ -53,6 +65,7 @@ buildPythonPackage rec {
   dependencies = [
     clarabel
     cvxopt
+    highspy
     numpy
     osqp
     scipy
@@ -92,8 +105,8 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
-}
+})

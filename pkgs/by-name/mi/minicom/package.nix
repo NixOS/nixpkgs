@@ -10,7 +10,7 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minicom";
   version = "2.10";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "minicom-team";
     repo = "minicom";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-wC6VlMRwuhV1zQ26wNx7gijuze8E2CvnzpqOSIPzq2s=";
   };
 
@@ -57,16 +57,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modem control and terminal emulation program";
     homepage = "https://salsa.debian.org/minicom-team/minicom";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       Minicom is a menu driven communications program. It emulates ANSI
       and VT102 terminals. It has a dialing directory and auto zmodem
       download.
     '';
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
-}
+})

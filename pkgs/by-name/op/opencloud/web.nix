@@ -4,29 +4,32 @@
   fetchFromGitHub,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencloud-web";
-  version = "3.3.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QBIAy3S8pss6NhN7V+AovWMoYZmu0cHbi6E7lUugYzU=";
+    hash = "sha256-vou5J3n94Zn6WJIkLzZSMb4c1pnNn0YM4zC5qpIkfBA=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-KYSjgDrl/IC+xi/GN+DqB0H6q0HWT7sjzGk/YvfTmHA=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-NFlADq48pA/k9X0OeswbkQNieVaiDE7GqXEs6LgsraA=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildPhase = ''

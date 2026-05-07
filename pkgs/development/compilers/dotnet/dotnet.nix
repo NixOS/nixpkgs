@@ -1,67 +1,35 @@
 {
-  stdenvNoCC,
+  config,
   callPackage,
   lib,
-  fetchurl,
-  releaseManifestFile,
-  releaseInfoFile,
-  bootstrapSdkFile,
-  allowPrerelease ? false,
-  depsFile,
-  fallbackTargetPackages,
-  pkgsBuildHost,
+  channel,
+  dir ? ./. + ("/" + channel),
   buildDotnetSdk,
-}:
+  withVMR ? true,
+  ...
+}@attrs:
 
 let
-  inherit (lib.importJSON releaseInfoFile)
-    tarballHash
-    artifactsUrl
-    artifactsHash
-    bootstrapSdk
-    ;
+  binary = buildDotnetSdk (dir + "/releases.nix");
 
-  pkgs = callPackage ./stage1.nix {
-    inherit
-      releaseManifestFile
-      tarballHash
-      depsFile
-      fallbackTargetPackages
-      ;
-    bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
-      passthru = old.passthru or { } // {
-        artifacts = stdenvNoCC.mkDerivation {
-          name = lib.nameFromURL artifactsUrl ".tar.gz";
+  sourcePackages = lib.optionalAttrs withVMR (callPackage ./source (attrs // { inherit binary; }));
 
-          src = fetchurl {
-            url = artifactsUrl;
-            hash = artifactsHash;
-          };
+  pkgs =
+    lib.optionalAttrs config.allowAliases binary
+    // lib.mapAttrs' (k: v: lib.nameValuePair "${k}-bin" v) binary
+    // sourcePackages;
 
-          sourceRoot = ".";
-
-          installPhase = ''
-            mkdir -p $out
-            cp -r * $out/
-          '';
-        };
-      };
-    });
-  };
-
+  suffix = lib.replaceStrings [ "." ] [ "_" ] channel;
+  sdkAttr = "sdk_${suffix}" + lib.optionalString (!withVMR) "-bin";
 in
 pkgs
 // {
-  vmr = pkgs.vmr.overrideAttrs (old: {
-    passthru = old.passthru // {
-      updateScript = pkgsBuildHost.callPackage ./update.nix {
-        inherit
-          releaseManifestFile
-          releaseInfoFile
-          bootstrapSdkFile
-          allowPrerelease
-          ;
-      };
+  ${sdkAttr} = pkgs.${sdkAttr}.overrideAttrs (prev: {
+    passthru = prev.passthru or { } // {
+      updateScript = [
+        ./update.sh
+        channel
+      ];
     };
   });
 }

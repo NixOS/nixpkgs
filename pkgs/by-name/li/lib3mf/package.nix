@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/3MFConsortium/lib3mf/pull/421/commits/6d7b5709a4a1cf9bd55ae8b4ae999c9ca014f62c.patch?full_index=1";
       hash = "sha256-rGOyXZUZglRNMu1/oVhgSpRdi0pUa/wn5SFHCS9jVOY=";
     })
+    (fetchpatch {
+      name = "lib3mf-fix-cmake-4.patch";
+      url = "https://github.com/3MFConsortium/lib3mf/commit/01325a73de25d2ad49e992b5b6294beb32298c92.patch";
+      hash = "sha256-8vv2ydnDgvSKkGjpmk5ng1BGKK0okTMOeAoGwlKcziY=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -54,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=include/lib3mf"
+    "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include/lib3mf"
     "-DUSE_INCLUDED_ZLIB=OFF"
     "-DUSE_INCLUDED_LIBZIP=OFF"
     "-DUSE_INCLUDED_GTEST=OFF"
@@ -90,21 +95,31 @@ stdenv.mkDerivation (finalAttrs: {
 
     # functions are no longer in openssl, remove them from test cleanup function
     substituteInPlace Tests/CPP_Bindings/Source/UnitTest_EncryptionUtils.cpp \
-      --replace-warn "RAND_cleanup();" "" \
-      --replace-warn "EVP_cleanup();" "" \
-      --replace-warn "CRYPTO_cleanup_all_ex_data();" ""
+      --replace-fail "RAND_cleanup();" "" \
+      --replace-fail "EVP_cleanup();" "" \
+      --replace-fail "CRYPTO_cleanup_all_ex_data();" ""
+
+    # Fix CMake export
+    # ref https://github.com/3MFConsortium/lib3mf/pull/434
+    substituteInPlace cmake/lib3mfConfig.cmake \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/include" "$""{LIB3MF_ROOT_DIR}/include/lib3mf" \
+      --replace-fail "$""{LIB3MF_ROOT_DIR}/lib" "$out/lib"
+
+    # Use absolute CMAKE_INSTALL_INCLUDEDIR
+    substituteInPlace lib3mf.pc.in \
+      --replace-fail "includedir=$""{prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
   doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/3MFConsortium/lib3mf/releases/tag/${finalAttrs.src.tag}";
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.all;
   };
 })

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,19 +15,13 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-nn7TGeVm45t7QI8+eEREBTFg9aShYYKtdEYEwQwO2fQ=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Droid Sans Mono Slashed + Hasklig-style ligatures";
     homepage = "https://github.com/marnen/borg-sans-mono";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 }

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "elm-test";
-  version = "0.19.1-revision16";
+  version = "0.19.1-revision17";
 
   src = fetchFromGitHub {
     owner = "rtfeldman";
     repo = "node-test-runner";
     rev = version;
-    hash = "sha256-5XV5AxLJ3YdtlB3Px5tmFzP8H2BP8lkq9M01iUbbmPU=";
+    hash = "sha256-qmzmImTDH7CBFxEDtR+XydegnpuYiZuNF6eJ80I2fwM=";
   };
 
-  npmDepsHash = "sha256-+e21gMBiRQo1uUIvlIs5fzkyWW6+zWEi2HGdDsXxgaA=";
+  npmDepsHash = "sha256-Yy53mGzARXRnPDLWnUevbnSCMSch1ecsvROu5C96WBA=";
 
   postPatch = ''
     sed -i '/elm-tooling install/d' package.json

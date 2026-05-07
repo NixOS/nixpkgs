@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gdu";
-  version = "5.31.0";
+  version = "5.36.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MAkD4Mh7aXWc8Y4TkXH7NSDgPQugB7Gjhr4nfOr/X1U=";
+    hash = "sha256-jtIVfXCIuJPsw3ryJiMI9W0L2uMeCGKt/7dWCS519fI=";
   };
 
-  vendorHash = "sha256-aKhHC3sPRyi/l9BxeUgx+3TdYulb0cI9WxuPvbLoswg=";
+  vendorHash = "sha256-L3nuVoxr+LqBT/9TrwAxJEOxOr53KlXH8rWsFTt2SNc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,11 +42,14 @@ buildGoModule (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  checkFlags = [
-    # https://github.com/dundee/gdu/issues/371
-    "-skip=TestStoredAnalyzer"
-    "-skip=TestAnalyzePathWithIgnoring"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestStoredAnalyzer" # https://github.com/dundee/gdu/issues/371
+        "TestAnalyzePathWithIgnoring"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   doInstallCheck = true;
 

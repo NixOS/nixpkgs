@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   soapysdr,
   avahi,
@@ -28,18 +29,25 @@ stdenv.mkDerivation {
     avahi
   ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pothosware/SoapyRemote/commit/40c3ef9053b63885b7444ce7e9ef00d2c7964c9d.patch";
+      hash = "sha256-kEx4gge+AQW/LSUyo+aWXlqDzXjoxCfn3pi2mk5xsNI=";
+    })
+  ];
+
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [ "-include sys/select.h" ]
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pothosware/SoapyRemote";
     description = "SoapySDR plugin for remote access to SDRs";
-    license = licenses.boost;
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.unix;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.unix;
     mainProgram = "SoapySDRServer";
   };
 }

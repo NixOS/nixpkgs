@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   fontconfig,
-  libXft,
-  libXrender,
+  libxft,
+  libxrender,
 }:
 
 stdenv.mkDerivation {
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
+    libx11
     fontconfig
-    libXft
-    libXrender
+    libxft
+    libxrender
   ];
 
   makeFlags = [
@@ -31,11 +31,11 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple text widget for X resembling the watch(1) command";
-    license = licenses.mit;
-    maintainers = with maintainers; [ somasis ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ somasis ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "stw";
   };

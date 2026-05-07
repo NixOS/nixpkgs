@@ -2,21 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qt6,
-  poppler,
   libzip,
   pkg-config,
+  poppler,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kitsas";
-  version = "5.9";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
-    rev = "v${version}";
-    hash = "sha256-4FCfpUFfi+N207SEAKz8nLpVS8MxfmDwM6r6i5pyqEM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZU6b7Yl/dE0vk8UfyEVXtpt4ANnuKInvJ/RZYbIZj+Y=";
   };
 
   nativeBuildInputs = [
@@ -56,12 +56,13 @@ stdenv.mkDerivation rec {
       install -Dm644 ../kitsas.desktop -t $out/share/applications
     '';
 
-  meta = with lib; {
-    homepage = "https://github.com/artoh/kitupiikki";
+  meta = {
+    changelog = "https://github.com/artoh/kitupiikki/releases/tag/v${finalAttrs.version}";
     description = "Accounting tool suitable for Finnish associations and small business";
+    homepage = "https://github.com/artoh/kitupiikki";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "kitsas";
-    maintainers = with maintainers; [ gspia ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

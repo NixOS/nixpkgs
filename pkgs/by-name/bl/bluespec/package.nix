@@ -6,18 +6,19 @@
   autoconf,
   automake,
   fontconfig,
-  libX11,
+  libx11,
   perl,
   flex,
   bison,
   pkg-config,
   tcl,
   tk,
-  xorg,
+  libxft,
   yices, # bsc uses a patched version of yices
   zlib,
   ghc,
-  gmp-static,
+  gmp,
+  gmp-static ? gmp.override { withStatic = true; },
   iverilog,
   asciidoctor,
   texliveFull,
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "B-Lang-org";
     repo = "bsc";
-    rev = version;
+    tag = version;
     sha256 = "sha256-gA/vfAkkM2cuArN99JZVYEWTIJqg82HlC+BHNVS5Ot0=";
   };
 
@@ -146,11 +147,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = yices.buildInputs ++ [
     fontconfig
-    libX11 # tcltk
+    libx11 # tcltk
     tcl
     tk
     which
-    xorg.libXft
+    libxft
     zlib
   ];
 
@@ -176,12 +177,17 @@ stdenv.mkDerivation rec {
     cctools
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isClang) [
-      # wide_data.cxx:1750:15: error: variable length arrays in C++ are a Clang extension [-Werror,-Wvla-cxx-extension]
-      "-Wno-error"
-    ]
-  );
+  env =
+    lib.optionalAttrs (stdenv.cc.isClang) {
+      NIX_CFLAGS_COMPILE = toString [
+        # wide_data.cxx:1750:15: error: variable length arrays in C++ are a Clang extension [-Werror,-Wvla-cxx-extension]
+        "-Wno-error"
+      ];
+    }
+    // lib.optionalAttrs (withSuiteCheck && stdenv.hostPlatform.isLinux) {
+      # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+    };
 
   makeFlags = [
     "NO_DEPS_CHECKS=1" # skip the subrepo check (this deriviation uses yices-src instead of the subrepo)
@@ -233,11 +239,6 @@ stdenv.mkDerivation rec {
   # ```
 
   checkTarget = if withSuiteCheck then "checkparallel" else "check-smoke"; # this is the shortest check but "check-suite" tests much more
-
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString (
-    withSuiteCheck && stdenv.hostPlatform.isLinux
-  ) "${glibcLocales}/lib/locale/locale-archive";
 
   nativeCheckInputs = [
     gmp-static

@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "wlc";
-  version = "1.15";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0T8cMq5Mrv/Ygo6BfYho3sjFuu8dYZyUMtJc5gabuG4=";
+    hash = "sha256-vUmZVNPifouyEdLrm7WpHN1BIO2dX7jCcylv8i+X2CY=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -31,11 +31,11 @@ python3.pkgs.buildPythonPackage rec {
 
   pythonImportsCheck = [ "wlc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Weblate commandline client using Weblate's REST API";
     homepage = "https://github.com/WeblateOrg/wlc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ paperdigits ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "wlc";
   };
 }

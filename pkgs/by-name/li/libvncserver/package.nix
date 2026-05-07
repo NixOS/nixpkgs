@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libjpeg,
   openssl,
@@ -34,6 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fix generated pkg-config files
     ./pkgconfig.patch
+
+    (fetchpatch {
+      name = "libvncserver-fix-cmake-4.patch";
+      url = "https://github.com/LibVNC/libvncserver/commit/e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96.patch";
+      hash = "sha256-AAZ3H34+nLqQggb/sNSx2gIGK96m4zatHX3wpyjNLOA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -71,11 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = enableShared;
 
-  meta = with lib; {
+  meta = {
     description = "VNC server library";
     homepage = "https://libvnc.github.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
 })

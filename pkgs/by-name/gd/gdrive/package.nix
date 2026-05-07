@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gdrive";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "prasmussen";
     repo = "gdrive";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2dJmGFHfGSroucn4WgiV2NExBs5wtMDe2kX1jDBwbRs=";
   };
 
@@ -32,11 +32,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/prasmussen/gdrive";
     description = "Command line utility for interacting with Google Drive";
-    license = licenses.mit;
-    maintainers = [ maintainers.rzetterberg ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.rzetterberg ];
     mainProgram = "gdrive";
   };
-}
+})

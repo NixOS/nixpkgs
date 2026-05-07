@@ -33,6 +33,8 @@ buildDunePackage {
     yojson
   ];
 
+  dontStrip = true;
+
   meta = js_of_ocaml-compiler.meta // {
     description = "Compiler from OCaml bytecode to WebAssembly";
     mainProgram = "wasm_of_ocaml";

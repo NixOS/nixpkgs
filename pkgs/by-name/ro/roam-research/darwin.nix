@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Note-taking tool for networked thought";
     homepage = "https://roamresearch.com/";
     maintainers = with lib.maintainers; [ dbalan ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-darwin"
       "aarch64-darwin"

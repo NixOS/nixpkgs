@@ -26,11 +26,11 @@ let
 in
 builder rec {
   pname = "guile";
-  version = "3.0.10";
+  version = "3.0.11";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vXFoUX/VJjM0RtT3q4FlJ5JWNAlPvTcyLhfiuNjnY4g=";
+    sha256 = "sha256-gYx50jZlen+pb7NkE3zHtBs73uDWXGF0ygN2lVlXlGA=";
   };
 
   outputs = [
@@ -100,11 +100,16 @@ builder rec {
     sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
   });
 
-  # Explicitly link against libgcc_s, to work around the infamous
-  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-
-  # don't have "libgcc_s.so.1" on clang
-  LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+  env = {
+    # Fix build with gcc15
+    NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+  }
+  // lib.optionalAttrs (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) {
+    # Explicitly link against libgcc_s, to work around the infamous
+    # "libgcc_s.so.1 must be installed for pthread_cancel to work".
+    # don't have "libgcc_s.so.1" on clang
+    LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-libreadline-prefix=${lib.getDev readline}"
@@ -147,8 +152,12 @@ builder rec {
   doCheck = false;
   doInstallCheck = doCheck;
 
-  # In procedure bytevector-u8-ref: Argument 2 out of range
-  dontStrip = stdenv.hostPlatform.isDarwin;
+  # guile-3 uses ELF files to store bytecode. strip does not
+  # always handle them correctly and destroys the image:
+  # darwin: In procedure bytevector-u8-ref: Argument 2 out of range
+  # linux binutils-2.45: $ guile --version
+  # Pre-boot error; key: misc-error, args: ("load-thunk-from-memory" "missing DT_GUILE_ENTRY" () #f)Aborted
+  dontStrip = true;
 
   setupHook = ./setup-hook-3.0.sh;
 
@@ -170,7 +179,7 @@ builder rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
@@ -181,8 +190,8 @@ builder rec {
       system calls, networking support, multiple threads, dynamic linking, a
       foreign function call interface, and powerful string processing.
     '';
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

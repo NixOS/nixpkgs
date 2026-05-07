@@ -35,6 +35,7 @@
   rpcsvc-proto,
   bash,
   python3Packages,
+  pkgsHostTarget,
   nixosTests,
   libiconv,
   testers,
@@ -76,14 +77,15 @@ let
     }
     .${stdenv.hostPlatform.system}
       or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
+  isCross = !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.22.3";
+  version = "4.23.5";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-j9cJJimjWW2TXNdWfZNJeflCcpGOw6/9DMgHk07PIro=";
+    hash = "sha256-WTpD3dDVeQIjffp2iI97Ast/x3RxETacsx4SbbSDa58=";
   };
 
   outputs = [
@@ -96,7 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./4.x-no-persistent-install.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
-    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+    ./4.x-fix-systemd-detection.patch
+    (fetchpatch {
+      # workaround for https://bugzilla.samba.org/show_bug.cgi?id=14164
+      name = "build-find-pre-built-heimdal-build-tools-in-case-of-.patch";
+      url = "https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/fe5538114371b98c7350e6fffbfc0d1ac063719c/packages/network/samba/patches/samba-200-4.11-fix-ASN1-bso14164.patch";
+      hash = "sha256-0/c9TH5FZ4S1OoM04gwDBJoIN+10unjLSv7Hlwt9FEQ=";
+    })
     (fetchpatch {
       # workaround for https://github.com/NixOS/nixpkgs/issues/303436
       name = "samba-reproducible-builds.patch";
@@ -112,7 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3Packages.python
-    python3Packages.wrapPython
+    # Not `python3Packages.wrapPython` to workaround
+    # `python3Packages.wrapPython.__spliced.buildHost` having the wrong
+    # `pythonHost`. See https://github.com/NixOS/nixpkgs/issues/434307
+    pkgsHostTarget.python3Packages.wrapPython
     wafHook
     pkg-config
     bison
@@ -121,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl.pkgs.ParseYapp
     perl.pkgs.JSON
     libxslt
+    libtasn1 # Needed also natively for `asn1Parser` program
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
@@ -129,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isLinux [
     buildPackages.stdenv.cc
   ]
-  ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+  ++ optional isCross samba # asn1_compile/compile_et
   ++ optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
@@ -193,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs ./buildtools/bin
   ''
-  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  + lib.optionalString isCross ''
     substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
   '';
 
@@ -206,9 +218,17 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w answers
   '';
 
-  env.NIX_LDFLAGS = lib.optionalString (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   wafConfigureFlags = [
     "--with-static-modules=NONE"
@@ -255,16 +275,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--jobs 1"
   ];
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
-
   pythonPath = [
     python3Packages.dnspython
     python3Packages.markdown
     tdb
   ];
+
+  strictDeps = true;
+
+  hardeningDisable = [ "strictflexarrays1" ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -306,17 +325,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
-
-    # Samba does its own shebang patching, but uses build Python
-    find $out/bin -type f -executable | while read file; do
-      isScript "$file" || continue
-      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python3Packages.python}^' "$file"
-    done
   '';
 
-  disallowedReferences = lib.optionals (
-    buildPackages.python3Packages.python != python3Packages.python
-  ) [ buildPackages.python3Packages.python ];
+  disallowedReferences = lib.optionals isCross [
+    buildPackages.python3Packages.python
+    buildPackages.runtimeShellPackage
+  ];
 
   passthru.tests = {
     samba = nixosTests.samba;
@@ -330,13 +344,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.samba.org";
+    changelog = "https://www.samba.org/samba/history/samba-${finalAttrs.version}.html";
     description = "Standard Windows interoperability suite of programs for Linux and Unix";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     broken = enableGlusterFS;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with lib.maintainers; [ aneeshusa ];
     pkgConfigModules = [
       "ndr_krb5pac"
       "ndr_nbt"

@@ -69,27 +69,11 @@ import ../make-test-python.nix (
         )
         extraConfig
       ];
-
-    makeMysql =
-      mattermostConfig: extraConfig:
-      lib.mkMerge [
-        mattermostConfig
-        (
-          { pkgs, config, ... }:
-          {
-            services.mattermost.database = {
-              driver = lib.mkForce "mysql";
-              peerAuth = lib.mkForce true;
-            };
-          }
-        )
-        extraConfig
-      ];
   in
   {
     name = "mattermost";
 
-    nodes = rec {
+    nodes = {
       postgresMutable = makeMattermost {
         mutableConfig = true;
         preferNixConfig = false;
@@ -174,25 +158,6 @@ import ../make-test-python.nix (
           MM_SUPPORTSETTINGS_ABOUTLINK=https://nixos.org
         '';
       } { };
-
-      mysqlMutable = makeMysql postgresMutable { };
-      mysqlMostlyMutable = makeMysql postgresMostlyMutable { };
-      mysqlImmutable = makeMysql postgresImmutable {
-        # Let's try to use this on MySQL.
-        services.mattermost.database = {
-          peerAuth = lib.mkForce true;
-          user = lib.mkForce "mmuser";
-          name = lib.mkForce "mmuser";
-        };
-      };
-      mysqlEnvironmentFile = makeMysql postgresEnvironmentFile {
-        services.mattermost.environmentFile = lib.mkForce (
-          pkgs.writeText "mattermost-env" ''
-            MM_SQLSETTINGS_DATASOURCE=mattermost@unix(/run/mysqld/mysqld.sock)/mattermost?charset=utf8mb4,utf8&writeTimeout=30s
-            MM_SUPPORTSETTINGS_ABOUTLINK=https://nixos.org
-          ''
-        );
-      };
     };
 
     testScript =
@@ -566,22 +531,6 @@ import ../make-test-python.nix (
             node.shutdown()
             shutdown_queue.task_done()
         threading.Thread(target=shutdown_worker, daemon=True).start()
-
-        ${pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
-          # Only run the MySQL tests on x86_64 so we don't have to debug MySQL ARM issues.
-          run_mattermost_tests(
-            shutdown_queue,
-            "${nodes.mysqlMutable.system.build.toplevel}",
-            mysqlMutable,
-            "${nodes.mysqlMostlyMutable.system.build.toplevel}",
-            "${nodes.mysqlMostlyMutable.services.mattermost.pluginsBundle}",
-            mysqlMostlyMutable,
-            "${nodes.mysqlImmutable.system.build.toplevel}",
-            mysqlImmutable,
-            "${nodes.mysqlEnvironmentFile.system.build.toplevel}",
-            mysqlEnvironmentFile
-          )
-        ''}
 
         run_mattermost_tests(
           shutdown_queue,

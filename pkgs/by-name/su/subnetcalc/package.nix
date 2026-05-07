@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "subnetcalc";
-  version = "2.6.4";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "dreibh";
     repo = "subnetcalc";
     tag = "subnetcalc-${finalAttrs.version}";
-    hash = "sha256-FpDbU9kqen+NsJd8bSMUkTeq441+BXTKx/xKwcEBk10=";
+    hash = "sha256-Zv1qrox1Yg6qNg81QVXPZkB5lElaPICue+hc5muzI5Q=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       type, scope, interface ID, etc.).
     '';
     mainProgram = "subnetcalc";
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

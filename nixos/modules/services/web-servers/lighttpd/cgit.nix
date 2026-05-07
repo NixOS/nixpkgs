@@ -13,6 +13,7 @@ let
   configFile = pkgs.writeText "cgitrc" ''
     # default paths to static assets
     css=${pathPrefix}/cgit.css
+    js=${pathPrefix}/cgit.js
     logo=${pathPrefix}/cgit.png
     favicon=${pathPrefix}/favicon.ico
 
@@ -82,6 +83,7 @@ in
           )
           alias.url = (
               "${pathPrefix}/cgit.css" => "${pkgs.cgit}/cgit/cgit.css",
+              "${pathPrefix}/cgit.js" => "${pkgs.cgit}/cgit/cgit.js",
               "${pathPrefix}/cgit.png" => "${pkgs.cgit}/cgit/cgit.png",
               "${pathPrefix}"          => "${pkgs.cgit}/cgit/cgit.cgi"
           )

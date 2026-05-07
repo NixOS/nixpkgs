@@ -4,8 +4,9 @@
   fetchFromGitLab,
   gitUpdater,
   testers,
-  boost186,
+  boost,
   cmake,
+  ctestCheckHook,
   dbus,
   doxygen,
   graphviz,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cpp";
-  version = "5.0.4";
+  version = "5.0.6";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/dbus-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-ki4bnwRpvmB9yzt/Mn3MQs1Dr6Vrcs2D0tvCjvvfmq4=";
+    hash = "sha256-ehP+QW/tTR6tLHEiWGDbiYT9oAqlS346UaVTkJC5bSE=";
   };
 
   outputs = [
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186 # uses boost/asio/io_service.hpp
+    boost
     lomiri.cmake-extras
     dbus
     libxml2
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    ctestCheckHook
     dbus
   ];
 
@@ -86,6 +88,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # DBus, parallelism messes with communication
   enableParallelChecking = false;
+
+  disabledTests = [
+    # Flaky flaky flaky. Spams D-Bus with hundreds of requests, and if any is dropped, the test fails.
+    "async_execution_load_test"
+
+    # Possible memory corruption in Executor.TimeoutsAreHandledCorrectly
+    # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/10
+    "executor_test"
+  ];
 
   preFixup = ''
     moveToOutput libexec/examples $examples

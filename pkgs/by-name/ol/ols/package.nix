@@ -4,18 +4,17 @@
   makeBinaryWrapper,
   odin,
   stdenv,
-  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ols";
-  version = "0-unstable-2025-08-08";
+  version = "dev-2026-03";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "3e183972229782baefc269d8ca940a60caad83c1";
-    hash = "sha256-p5aHNWGNcHpB+uBBQ8Kh7mTbS6G2tRRXmM+Otb7NVHM=";
+    tag = finalAttrs.version;
+    hash = "sha256-QjkzR9Wnc+Poq7dxDlik9k1maEs8xiFuNbwRdv8nqyo=";
   };
 
   postPatch = ''
@@ -45,8 +44,6 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-
   meta = {
     inherit (odin.meta) platforms;
     description = "Language server for the Odin programming language";
@@ -54,7 +51,8 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       astavie
+      atomicptr
     ];
     mainProgram = "ols";
   };
-}
+})

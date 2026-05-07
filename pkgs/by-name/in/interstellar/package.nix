@@ -1,75 +1,110 @@
 {
-  copyDesktopItems,
-  flutter332,
-  fetchFromGitHub,
-  imagemagick,
   lib,
+  flutter341,
+  fetchFromGitHub,
+  fetchurl,
+  imagemagick,
+  alsa-lib,
   libass,
-  makeDesktopItem,
   mpv-unwrapped,
+  runCommand,
+  yq-go,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  dart,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter341.buildFlutterApplication (finalAttrs: {
   pname = "interstellar";
-  version = "0.9.3";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "interstellar-app";
     repo = "interstellar";
-    tag = "v${version}";
-    hash = "sha256-osZp2hk9ZoMxto5Sla4vWSWjTFB+syOwlFGTRHJjcVU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WprvuIN7yS5yLR4eUF/M9yG25ZU1Sf1I1myujclF4oM=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+  gitHashes = lib.importJSON ./git-hashes.json;
+
+  patches = [ ./emoji_builder.patch ];
+
+  postPatch = ''
+    substituteInPlace lib/src/widgets/emoji_picker/emoji_builder.dart \
+        --replace-fail "@compact.raw.json@" "${
+          fetchurl {
+            url = "https://raw.githubusercontent.com/milesj/emojibase/a5fc630a91ca42cddf3f4a66492965600fd3bce8/packages/data/en/compact.raw.json";
+            hash = "sha256-OivCYjiBEooRx3zni9jAr3lR0rzpoa3HX2l/a0UwDpE=";
+          }
+        }" \
+        --replace-fail "@messages.raw.json@" "${
+          fetchurl {
+            url = "https://raw.githubusercontent.com/milesj/emojibase/a5fc630a91ca42cddf3f4a66492965600fd3bce8/packages/data/en/messages.raw.json";
+            hash = "sha256-ZQWXZJ5jXxDNQHaOAsxApAt6oanvaEwZ6VXbDA0YeMs=";
+          }
+        }"
+    substituteInPlace lib/src/controller/database/database.dart \
+      --replace-fail "const Color.from(alpha: 1, red: 1, green: 1, blue: 1).value32bit" "0xFFFFFFFF" \
+      --replace-fail "const Color.from(alpha: 1, red: 0, green: 0, blue: 0).value32bit" "0xFF000000"
+  '';
+
+  nativeBuildInputs = [ imagemagick ];
+
   buildInputs = [
-    imagemagick
+    alsa-lib
     libass
     mpv-unwrapped
   ];
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
-
-  # temp turn off language locale gen
-  postPatch = ''
-    substituteInPlace pubspec.yaml --replace-fail "generate: true" "generate: false"
-  '';
-
-  # 1 - turn language locale gen back on
-  # 2 - set the app version (upstream does this in a github runner)
-  # 3 - run build_runner to make model .part files and language locale gen
+  # run build_runner to make model .part files and language locale gen
   preBuild = ''
-    substituteInPlace pubspec.yaml \
-      --replace-fail "generate: false" "generate: true" \
-      --replace-fail "version: 0.0.0" "version: ${version}"
-    packageRun build_runner build -d
+    packageRun build_runner build --delete-conflicting-outputs
   '';
-
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/interstellar/lib
-  '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "one.jwr.interstellar";
-      desktopName = "Interstellar";
-      exec = "interstellar";
-      icon = "Interstellar";
-      categories = [
-        "Network"
-        "News"
-      ];
-    })
-  ];
 
   postInstall = ''
     for size in 16 22 24 32 36 48 64 72 96 128 192 256 512 1024; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        magick $src/assets/icons/logo.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/Interstellar.png
+        magick $src/assets/icons/logo.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/interstellar.png
     done
+    install -D --mode=0644 linux/appimage/interstellar.desktop --target-directory $out/share/applications
   '';
+
+  extraWrapProgramArgs = ''
+    --prefix LD_LIBRARY_PATH : $out/app/${finalAttrs.pname}/lib
+  '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit (finalAttrs) src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "interstellar.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
 
   meta = {
     description = "App for Mbin/Lemmy/PieFed, connecting you to the fediverse";
@@ -79,4 +114,4 @@ flutter332.buildFlutterApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ JollyDevelopment ];
   };
-}
+})

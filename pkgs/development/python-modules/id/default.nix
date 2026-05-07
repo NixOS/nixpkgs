@@ -5,7 +5,6 @@
   flit-core,
   pretend,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "id";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "di";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "id" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for generating OIDC identities";
     homepage = "https://github.com/di/id";
     changelog = "https://github.com/di/id/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

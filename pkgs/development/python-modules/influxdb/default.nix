@@ -83,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "influxdb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
     changelog = "https://github.com/influxdata/influxdb-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

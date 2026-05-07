@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "crossfire-jxclient";
+  pname = "crossfire-jxclient";
   version = "2025-01";
 
   src = fetchgit {
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Java-based fullscreen client for the Crossfire free MMORPG";
     homepage = "http://crossfire.real-time.com/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ToxicFrog ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ToxicFrog ];
   };
 }

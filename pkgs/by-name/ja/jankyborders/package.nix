@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "JankyBorders";
-  version = "1.8.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "JankyBorders";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LG3I2Zp7GU9khrDTBRMO0+qhreVL+4rwAQRI+AbXbW0=";
+    hash = "sha256-31Er+cUQNJbZnXKC6KvlrBhOvyPAM7nP3BaxunAtvWg=";
   };
 
   nativeBuildInputs = [

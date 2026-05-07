@@ -3,29 +3,33 @@
   buildPythonPackage,
   aiodns,
   aiohttp,
+  cargo,
   cryptography,
   defusedxml,
   emoji,
-  fetchPypi,
+  fetchFromCodeberg,
   gnupg,
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
   replaceVars,
+  rustc,
   rustPlatform,
-  pythonOlder,
+  setuptools,
+  setuptools-rust,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.11.0";
+  version = "1.13.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hQxfOxlkpQdCWlGSdotZY6eHkJr6M3xkkRv4bR0urPM=";
+  src = fetchFromCodeberg {
+    owner = "poezio";
+    repo = "slixmpp";
+    tag = "slix-${version}";
+    hash = "sha256-hjM1OIFYpHV5SSN32858pyuwOvaAA0tFZWCZI+5n9u4=";
   };
 
   patches = [
@@ -34,14 +38,24 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-rust
+    setuptools-scm
   ];
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src;
-    hash = "sha256-z0X9s36n1p31boxoe6Er0Ieirinaehoucsi89oDAS0c=";
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
   dependencies = [
@@ -53,11 +67,11 @@ buildPythonPackage rec {
   optional-dependencies = {
     xep-0363 = [ aiohttp ];
     xep-0444-compliance = [ emoji ];
-    xep-0464 = [ cryptography ];
-    safer-xml-parserig = [ defusedxml ];
+    xep-0454 = [ cryptography ];
+    safer-xml-parsing = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # don't test against pure python version in the source tree
@@ -73,11 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slixmpp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
-    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

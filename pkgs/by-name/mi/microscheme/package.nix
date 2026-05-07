@@ -6,14 +6,14 @@
   unixtools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "microscheme";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "ryansuchocki";
     repo = "microscheme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "5qTWsBCfj5DCZ3f9W1bdo6WAc1DZqVxg8D7pwC95duQ=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ryansuchocki.github.io/microscheme/";
     description = "Scheme subset for Atmel microcontrollers";
     mainProgram = "microscheme";
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       Microscheme is a Scheme subset/variant designed for Atmel
       microcontrollers, especially as found on Arduino boards.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ardumont ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ardumont ];
   };
-}
+})

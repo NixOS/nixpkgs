@@ -140,13 +140,14 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = {
         HOME = cfg.dataDir;
+        PYTHONUNBUFFERED = "1"; # ensure stdout is logged to journal
       };
       serviceConfig = lib.mkMerge [
         {
           Type = "simple";
           ExecStart = ''
             ${cfg.package}/bin/libretranslate ${
-              lib.cli.toGNUCommandLineShell { } (
+              lib.cli.toCommandLineShellGNU { } (
                 cfg.extraArgs
                 // {
                   inherit (cfg) host port threads;

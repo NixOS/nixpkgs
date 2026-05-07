@@ -22,22 +22,23 @@
   vips,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libheif";
-  version = "1.19.8";
+  version = "1.21.2";
 
   outputs = [
     "bin"
     "out"
     "dev"
     "man"
+    "lib"
   ];
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
-    rev = "v${version}";
-    hash = "sha256-p+VkIJrX/aN2ohSiDmev+6fbS9Lc7Jh14YwW5vLIjJw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-odkJ0wZSGoZ7mX9fkaNREDpMvQuQA9HKaf3so1dYrbc=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,13 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix installation path for gdk-pixbuf module
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+  env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "lib"}/${gdk-pixbuf.moduleDir}";
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/heif.thumbnailer \
+      --replace-fail "TryExec=heif-thumbnailer" "TryExec=$bin/bin/heif-thumbnailer" \
+      --replace-fail "Exec=heif-thumbnailer" "Exec=$bin/bin/heif-thumbnailer"
+  '';
 
   # Wrong include path in .cmake.  It's a bit difficult to patch because of special characters.
   postFixup = ''
@@ -83,4 +90,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kuflierl ];
   };
-}
+})

@@ -7,13 +7,13 @@
   jdk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.2";
   pname = "visualvm";
 
   src = fetchzip {
-    url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${
-      builtins.replaceStrings [ "." ] [ "" ] version
+    url = "https://github.com/visualvm/visualvm.src/releases/download/${finalAttrs.version}/visualvm_${
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     sha256 = "sha256-xEqzSNM5Mkt9SQ+23Edb2NMN/o8koBjhQWTGuyZ/0m4=";
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cp -r . $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visual interface for viewing information about Java applications";
     mainProgram = "visualvm";
     longDescription = ''
@@ -50,14 +50,14 @@ stdenv.mkDerivation rec {
       SE platform.
     '';
     homepage = "https://visualvm.github.io";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       classpathException20
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       michalrus
       moaxcp
     ];
   };
-}
+})

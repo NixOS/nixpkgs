@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   setuptools,
   autobahn,
   twisted,
@@ -10,24 +9,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-transit-relay";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kS2DXaIbESZsdxEdybXlgAJj/AuY8KF5liJn30GBnow=";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole-transit-relay";
+    tag = finalAttrs.version;
+    hash = "sha256-UhV0M8Nl9Y850PQcJoDyIvIPRyBS8gyF2Ub9qF3aq0U=";
   };
-
-  patches = [
-    # TODO: drop when updating beyond version 0.4.0
-    (fetchpatch {
-      name = "stock-Twisted-testing-reactor-seems-to-work.patch";
-      url = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/commit/3abb80fd5e55bd0ba8ee66278ccf76be5f904622.patch";
-      hash = "sha256-qMaJ58kPWvEfnSZiFzxO6GlkBiyVMsgGDEa1deITZco=";
-    })
-  ];
 
   postPatch = ''
     # Passing the environment to twistd is necessary to preserve Python's site path.
@@ -40,7 +32,6 @@ buildPythonPackage rec {
 
   dependencies = [
     autobahn
-    setuptools # pkg_resources is referenced at runtime
     twisted
   ];
 
@@ -61,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Transit Relay server for Magic-Wormhole";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
-    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/${version}/NEWS.md";
+    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/${finalAttrs.src.rev}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})

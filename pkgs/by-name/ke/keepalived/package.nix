@@ -14,14 +14,14 @@
   withNetSnmp ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keepalived";
   version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "acassen";
     repo = "keepalived";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Xv/UGIeZhRHQO5lxkaWgHDUW+3qBi3wFU4+Us1A2uE0=";
   };
 
@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     "--enable-snmp"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://keepalived.org";
     description = "Routing software written in C";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.raitobezarius ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.raitobezarius ];
     mainProgram = "keepalived";
   };
-}
+})

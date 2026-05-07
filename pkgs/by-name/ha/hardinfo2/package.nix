@@ -25,8 +25,8 @@
   libsysprof-capture,
   libthai,
   libxkbcommon,
-  libXdmcp,
-  libXtst,
+  libxdmcp,
+  libxtst,
   pcre2,
   sqlite,
   util-linux,
@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hardinfo2";
-  version = "2.2.13";
+  version = "2.2.16";
 
   src = fetchFromGitHub {
     owner = "hardinfo2";
     repo = "hardinfo2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-HRP8xjiwhlNHjW4D8y74Pshpn7bksmN5j4jhfF6KOYo=";
+    hash = "sha256-n/Rf/XKsATx3OEzYSjl+2Yzk7WSiaBkbOveA9+xR6fc=";
   };
 
   patches = [
@@ -100,8 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     sqlite
     util-linux
-    libXdmcp
-    libXtst
+    libxdmcp
+    libxtst
     vulkan-headers
     wayland
   ];
@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.runtimeLibs}
 
       substituteInPlace $out/lib/systemd/system/hardinfo2.service \
-        --replace-fail "ExecStart=/usr/bin/hwinfo2_fetch_sysdata" "ExecStart=$out/hwinfo2_fetch_sysdata"
+        --replace-fail "ExecStart=/usr/bin/hwinfo2_fetch_sysdata" "ExecStart=$out/bin/hwinfo2_fetch_sysdata"
   '';
 
   # account for tags having a release- prefix

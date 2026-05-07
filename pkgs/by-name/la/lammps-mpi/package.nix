@@ -1,10 +1,10 @@
 {
+  lib,
   lammps,
   mpi,
-  lowPrio,
 }:
 
-lowPrio (
+lib.lowPrio (
   lammps.override {
     extraBuildInputs = [
       mpi

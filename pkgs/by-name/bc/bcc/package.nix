@@ -22,14 +22,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.35.0";
+  version = "0.36.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-eP/VEq7cPALi2oDKAZFQGQ3NExdmcBKyi6ddRZiYmbI=";
+    hash = "sha256-+XBFENCAKP8Z+5dviBervDXHOM2qY3lfDFsDKVjzMbM=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "bcc" ];
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/bcc/tools" "$out ''${pythonPath[*]}"
   '';
 
   outputs = [
@@ -123,17 +123,17 @@ python3Packages.buildPythonApplication rec {
     bpf = nixosTests.bpf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic Tracing Tools for Linux";
     homepage = "https://iovisor.github.io/bcc/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ragge
       mic92
       thoughtpolice
       martinetd
       ryan4yin
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

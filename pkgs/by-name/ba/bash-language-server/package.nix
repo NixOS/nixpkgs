@@ -3,12 +3,13 @@
   stdenvNoCC,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   makeBinaryWrapper,
   shellcheck,
   versionCheckHook,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
   version = "5.6.0";
@@ -21,20 +22,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   pnpmWorkspaces = [ "bash-language-server" ];
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 1;
-    hash = "sha256-NvyqPv5OKgZi3hW98Da8LhsYatmrzrPX8kLOfLr+BrI=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-6i+1V3ZkjiJ/IXDun3JfwmfDOiemxCmAXMzS/rGT6ZU=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     makeBinaryWrapper
     versionCheckHook
   ];
@@ -49,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preInstall = ''
     # remove unnecessary files
     rm node_modules/.modules.yaml
-    pnpm --ignore-scripts --prod prune
+    CI=true pnpm --ignore-scripts --prod prune
     rm -r node_modules/.pnpm/@mixmark-io*/node_modules/@mixmark-io/domino/{test,.yarn}
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645

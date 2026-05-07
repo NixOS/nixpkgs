@@ -5,7 +5,7 @@
   fetchPypi,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # native dependencies
   zlib,
@@ -25,15 +25,15 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller";
-  version = "6.15.0";
+  version = "6.18.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pI/EZE7kqiqio157UfSW+PvX7s9qIVBka78WE60HvC0=";
+    hash = "sha256-zcUHVCeDURytSFb85YL9w36fKWZcpZaInGY8g+yMbsk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   buildInputs = [ zlib.dev ];
 

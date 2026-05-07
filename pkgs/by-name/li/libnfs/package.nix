@@ -6,14 +6,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnfs";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libnfs";
-    rev = "libnfs-${version}";
+    rev = "libnfs-${finalAttrs.version}";
     sha256 = "sha256-rdxi5bPXHTICZQIj/CmHgZ/V70svnITJj/OSF4mmC3o=";
   };
 
@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "NFS client library";
     homepage = "https://github.com/sahlberg/libnfs";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2
       bsd2
       gpl3
     ];
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
-}
+})

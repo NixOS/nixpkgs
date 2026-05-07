@@ -20,19 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "video-trimmer";
-  version = "25.03";
+  version = "26.03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "video-trimmer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pJCXL0voOoc8KpYECYRWGefYMrsApNPST4wv8SQlH34=";
+    hash = "sha256-ro7yOl+OZ4IZxIkRMjYf4IqOxfCAB4PdIlWUEuymOc8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-3ycc4jXneGsz9Jp9Arzf224JPAKM+PxUkitWcIXre8Y=";
+    hash = "sha256-nYPVRTMY0XA3VDclid7+w6SMFl0i4Ra6HYKJtTTC1y0=";
   };
 
   postPatch = ''

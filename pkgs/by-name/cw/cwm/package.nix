@@ -2,15 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXinerama,
-  libXrandr,
-  libXft,
+  libx11,
+  libxinerama,
+  libxrandr,
+  libxft,
   bison,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "cwm";
   version = "7.4";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "cwm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L3u4mH2UH2pTHhSPVr5dUi94b9DheslkIWL6EgQ05yA=";
   };
 
@@ -29,23 +29,23 @@ stdenv.mkDerivation rec {
     bison
   ];
   buildInputs = [
-    libX11
-    libXinerama
-    libXrandr
-    libXft
+    libx11
+    libxinerama
+    libxrandr
+    libxft
   ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and efficient window manager for X11";
     homepage = "https://github.com/leahneukirchen/cwm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _0x4A6F
       mkf
     ];
-    license = licenses.isc;
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
     mainProgram = "cwm";
   };
-}
+})

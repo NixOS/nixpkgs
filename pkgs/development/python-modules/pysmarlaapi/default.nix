@@ -8,16 +8,16 @@
   pysignalr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmarlaapi";
-  version = "0.9.2";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Explicatis-GmbH";
     repo = "pysmarlaapi";
-    tag = version;
-    hash = "sha256-UNI0T9YVvtfPJJQIA04ofZ42ZvYo7Kli3+snY5RlVBU=";
+    tag = finalAttrs.version;
+    hash = "sha256-teRdxYe9thM22tZ09FHxOxxzy4gcfJBAylgpk34ISTk=";
   };
 
   build-system = [ flit-core ];
@@ -33,10 +33,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pysmarlaapi" ];
 
   meta = {
-    changelog = "https://github.com/Explicatis-GmbH/pysmarlaapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Explicatis-GmbH/pysmarlaapi/releases/tag/${finalAttrs.src.tag}";
     description = "Swing2Sleep Smarla API";
     homepage = "https://github.com/Explicatis-GmbH/pysmarlaapi";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -38,13 +38,13 @@ stdenv.mkDerivation {
     install -Dm755 {.,$out/bin}/Nanosaur
     wrapProgram $out/bin/Nanosaur --chdir "$out/share/Nanosaur"
     install -Dm644 $src/packaging/io.jor.nanosaur.desktop $out/share/applications/nanosaur.desktop
-    install -Dm644 $src/packaging/io.jor.nanosaur.png $out/share/pixmaps/nanosaur-desktopicon.png
+    install -Dm644 $src/packaging/io.jor.nanosaur.png -t $out/share/icons/hicolor/512x512/apps
     runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Port of Nanosaur, a 1998 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 1998 Macintosh game by Pangea Software.
@@ -52,9 +52,9 @@ stdenv.mkDerivation {
       And you get to shoot at T-Rexes with nukes.
     '';
     homepage = "https://github.com/jorio/Nanosaur";
-    license = licenses.cc-by-sa-40;
+    license = lib.licenses.cc-by-sa-40;
     mainProgram = "Nanosaur";
-    maintainers = with maintainers; [ lux ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lux ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ibis";
   version = "3.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dmulholl";
@@ -26,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ibis" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight template engine";
     homepage = "https://github.com/dmulholland/ibis";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     maintainers = [ ];
   };
 }

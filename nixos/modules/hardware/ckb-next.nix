@@ -37,7 +37,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/ckb-next-daemon ${
-          lib.optionalString (cfg.gid != null) "--gid=${builtins.toString cfg.gid}"
+          lib.optionalString (cfg.gid != null) "--gid=${toString cfg.gid}"
         }";
         Restart = "on-failure";
       };

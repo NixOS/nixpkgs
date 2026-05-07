@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdbusmenu-lxqt";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "libdbusmenu-lxqt";
     rev = version;
-    hash = "sha256-PqX8ShSu3CYN9XIRp6IjVmr/eKH+oLNhXvwiudUH660=";
+    hash = "sha256-5X73kRUtOYeqBEIw2ctUnwXnWKPHDaoT489yT5nugZw=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Qt implementation of the DBusMenu protocol";
     homepage = "https://github.com/lxqt/libdbusmenu-lxqt";
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

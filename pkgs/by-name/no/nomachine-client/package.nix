@@ -9,8 +9,8 @@
   libpulseaudio,
 }:
 let
-  versionMajor = "8.13";
-  versionMinor = "1";
+  versionMajor = "9.4";
+  versionMinor = "14";
   versionBuild_x86_64 = "1";
   versionBuild_i686 = "1";
 in
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
-        sha256 = "sha256-8rxlxdtGU8avpvYJr+bpnsy5v91sqtlij/MCGWrcanY=";
+        sha256 = "sha256-tLL8l/UgTiVzGs+mwJeRUlVA8lH72JVogBOEpaSr2AY=";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz";
-        sha256 = "sha256-Ekyxc4wODjqWhp0aINhaPGLy9lh6Rt9AmxIt1ulE8Go=";
+        sha256 = "sha256-pPvg8MCrpCsQiiglRxHHl9wVyndI9JTluX/mwah3wwQ=";
       }
     else
       throw "NoMachine client is not supported on ${stdenv.hostPlatform.system}";
@@ -93,17 +93,17 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "NoMachine remote desktop client (nxplayer)";
     homepage = "https://www.nomachine.com/";
     mainProgram = "nxplayer";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = {
-      fullName = "NoMachine 7 End-User License Agreement";
-      url = "https://www.nomachine.com/licensing-7";
+      fullName = "NoMachine End User License Agreement, version 9";
+      url = "https://www.nomachine.com/licensing/nomachine-end-user-license-agreement";
       free = false;
     };
-    maintainers = with maintainers; [ talyz ];
+    maintainers = with lib.maintainers; [ talyz ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

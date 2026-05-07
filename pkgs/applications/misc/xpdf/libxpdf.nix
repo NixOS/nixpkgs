@@ -54,8 +54,8 @@ stdenv.mkDerivation {
     cp -v xpdf/*.h $out/include
   '';
 
-  meta = with lib; {
-    platforms = platforms.unix;
-    license = licenses.gpl2Only;
+  meta = {
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
   };
 }

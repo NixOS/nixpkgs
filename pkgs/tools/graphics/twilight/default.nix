@@ -5,7 +5,7 @@
   libGL,
   libGLU,
   libglut,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,18 +23,18 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     libglut
-    libX11
+    libx11
   ];
 
   installPhase = ''
     install -Dm755 twilight $out/bin/twilight
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Redo of IRIX twilight backdrop in old school OpenGL";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "twilight";
   };

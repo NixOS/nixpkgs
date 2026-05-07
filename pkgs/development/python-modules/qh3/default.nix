@@ -2,6 +2,7 @@
   buildPythonPackage,
   cmake,
   cryptography,
+  dnspython,
   fetchFromGitHub,
   lib,
   pytest-asyncio,
@@ -13,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "qh3";
-  version = "1.5.4";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "qh3";
     tag = "v${version}";
-    hash = "sha256-VlqkZk+7803dzwMBFpsSSQUSVu5/1jKouwuK7jNuMGU=";
+    hash = "sha256-aXFevAz5B58ZnK/LImULpETQNNyRKH9vY1CoGh5mKxI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Dgx7CSH+XyVZSVHAcr65QULsY//rxgeQe5jYQQkSjHc=";
+    hash = "sha256-+J2MDFbynUWgyLcGYRMIvo0PW6Hy8+ka2H6HMaBIOl8=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cryptography
+    dnspython
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -59,9 +61,11 @@ buildPythonPackage rec {
     rm -r qh3
   '';
 
-  disabledTests = lib.optionals stdenv.buildPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # ConnectionError
     "test_connect_and_serve_ipv4"
+    "test_ech_accepted"
+    "test_grease_ech_no_rejection"
   ];
 
   meta = {

@@ -19,7 +19,7 @@
   ninja,
   pkg-config,
   sqlite,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 }:
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     openssl
     sqlite
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   mesonFlags = [

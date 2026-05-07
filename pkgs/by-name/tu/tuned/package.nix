@@ -10,6 +10,7 @@
   gobject-introspection,
   hdparm,
   iproute2,
+  kmod,
   nix-update-script,
   nixosTests,
   pkg-config,
@@ -19,12 +20,13 @@
   util-linux,
   versionCheckHook,
   virt-what,
+  wirelesstools,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuned";
-  version = "2.26.0";
+  version = "2.27.0";
 
   outputs = [
     "out"
@@ -36,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "redhat-performance";
     repo = "tuned";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tqr8o4rRhN75hXCdsIhFedfWvicmlIFuZjBNKLQgimQ=";
+    hash = "sha256-PlF2T+EpveFkKPMU/6ZMXDO0q8Efzol4HJ4CX0wsBoY=";
   };
 
   patches = [
@@ -111,8 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
       gawk
       hdparm
       iproute2
+      kmod
       util-linux
       virt-what
+      wirelesstools
     ])
   ];
 

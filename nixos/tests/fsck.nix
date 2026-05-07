@@ -27,10 +27,7 @@
 
       with subtest("root fs is fsckd"):
           machine.succeed("journalctl -b | grep '${
-            if systemdStage1 then
-              "fsck.*${builtins.baseNameOf rootDevice}.*clean"
-            else
-              "fsck.ext4.*${rootDevice}"
+            if systemdStage1 then "fsck.*${baseNameOf rootDevice}.*clean" else "fsck.ext4.*${rootDevice}"
           }'")
 
       with subtest("mnt fs is fsckd"):

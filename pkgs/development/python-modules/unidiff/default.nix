@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unidiff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified diff python parsing/metadata extraction library";
     mainProgram = "unidiff";
     homepage = "https://github.com/matiasb/python-unidiff";
     changelog = "https://github.com/matiasb/python-unidiff/raw/v${version}/HISTORY";
-    license = licenses.mit;
-    maintainers = [ maintainers.pbsds ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.pbsds ];
   };
 }

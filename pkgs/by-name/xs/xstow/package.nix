@@ -6,14 +6,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xstow";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "majorkingleo";
     repo = "xstow";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-c89+thw5N3Cgl1Ww+W7c3YsyhNJMLlreedvdWJFY3WY=";
   };
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Replacement of GNU Stow written in C++";
     homepage = "https://github.com/majorkingleo/xstow";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nzbr ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nzbr ];
+    platforms = lib.platforms.unix;
   };
-}
+})

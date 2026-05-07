@@ -5,13 +5,13 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wcslib";
-  version = "8.4";
+  version = "8.6";
 
   src = fetchurl {
-    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${pname}-${version}.tar.bz2";
-    hash = "sha256-lguERCbRSotTze7XgliqkojN7ZmncywGZ8ZPpqUBJtw=";
+    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-4DBCNgWhme8JD+dCvJAagtnms6d+AQ4hHN1tLNBnzVo=";
   };
 
   nativeBuildInputs = [ flex ];
@@ -41,10 +41,9 @@ stdenv.mkDerivation rec {
       standard library for this purpose in astronomy.
     '';
     maintainers = with lib.maintainers; [
-      hjones2199
       returntoreality
     ];
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

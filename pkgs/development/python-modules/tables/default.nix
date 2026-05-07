@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
-  pythonOlder,
   blosc2,
   bzip2,
   c-blosc,
@@ -13,6 +13,7 @@
   numpy,
   numexpr,
   packaging,
+  pkg-config,
   setuptools,
   sphinx,
   typing-extensions,
@@ -25,20 +26,31 @@
 buildPythonPackage rec {
   pname = "tables";
   version = "3.10.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JUSBKnGG+tuoMdbdNOtJzNeI1qg/TkwrQxuDW2eWyRA=";
   };
 
+  patches = [
+    # should be included in next release
+    (fetchpatch {
+      name = "numexpr-2.13.0-compat.patch";
+      url = "https://github.com/PyTables/PyTables/commit/41270019ce1ffd97ce8f23b21d635e00e12b0ccb.patch";
+      hash = "sha256-CaDBYKiABVtlM5e9ChCsf8dWOwEnMPOIXQ100JTnlnE=";
+    })
+  ];
+
   build-system = [
     blosc2
     cython
     setuptools
     sphinx
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   buildInputs = [
@@ -67,17 +79,21 @@ buildPythonPackage rec {
     substituteInPlace tables/__init__.py \
       --replace-fail 'find_library("blosc2")' '"${lib.getLib c-blosc}/lib/libblosc${stdenv.hostPlatform.extensions.sharedLibrary}"'  '';
 
+  env = {
+    HDF5_DIR = lib.getDev hdf5;
+  };
+
   # Regenerate C code with Cython
   preBuild = ''
     make distclean
   '';
 
-  setupPyBuildFlags = [
-    "--hdf5=${lib.getDev hdf5}"
-    "--lzo=${lib.getDev lzo}"
-    "--bzip2=${lib.getDev bzip2}"
-    "--blosc=${lib.getDev c-blosc}"
-    "--blosc2=${lib.getDev blosc2.c-blosc2}"
+  pypaBuildFlags = [
+    "--config-setting=--build-option=--hdf5=${lib.getDev hdf5}"
+    "--config-setting=--build-option=--lzo=${lib.getDev lzo}"
+    "--config-setting=--build-option=--bzip2=${lib.getDev bzip2}"
+    "--config-setting=--build-option=--blosc=${lib.getDev c-blosc}"
+    "--config-setting=--build-option=--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
   nativeCheckInputs = [ pytest ];
@@ -97,11 +113,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
     changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

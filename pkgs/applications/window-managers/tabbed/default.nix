@@ -3,8 +3,8 @@
   stdenv,
   fetchgit,
   xorgproto,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   customConfig ? null,
   patches ? [ ],
 }:
@@ -27,19 +27,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXft
+    libx11
+    libxft
   ];
 
   makeFlags = [ "CC:=$(CC)" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/tabbed";
     description = "Simple generic tabbed fronted to xembed aware applications";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

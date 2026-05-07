@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub }:
 
 rec {
-  version = "1.2.5";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ffmpeg";
     tag = "v${version}";
-    hash = "sha256-MWO8B/L/KHLuq/BIIIidsLbFwGIwt/xj+/M1zEp8Z/8=";
+    hash = "sha256-qGXuE+wHNuy24jeuGpvMlYIQw7N5g6tXMa7r0pwXVX0=";
   };
 
   meta = {
@@ -18,6 +18,7 @@ rec {
     maintainers = with lib.maintainers; [
       dandellion
       momeemt
+      juaningan
     ];
   };
 }

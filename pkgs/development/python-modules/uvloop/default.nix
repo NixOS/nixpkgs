@@ -2,8 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch,
 
   # build-system
@@ -21,29 +20,15 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.21.0";
+  version = "0.22.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-O/ErD9poRHgGp62Ee/pZFhMXcnXTW2ckse5XP6o3BOM=";
+  src = fetchFromGitHub {
+    owner = "MagicStack";
+    repo = "uvloop";
+    tag = "v${version}";
+    hash = "sha256-9NJugzxFycr1LLZXiDKbpeVcIvlCPHHIcYMp8jmffuE=";
   };
-
-  patches = [
-    # fix test failures on Python 3.13
-    # (remove on next update)
-    (fetchpatch {
-      url = "https://github.com/MagicStack/uvloop/commit/96b7ed31afaf02800d779a395591da6a2c8c50e1.patch";
-      hash = "sha256-Nbe3BuIuwlylll5fIYij+OiP90ZeFNI0GKHK9SwWRk8=";
-      excludes = [ ".github/workflows/tests.yml" ];
-    })
-    (fetchpatch {
-      url = "https://github.com/MagicStack/uvloop/commit/56807922f847ddac231a53d5b03eef70092b987c.patch";
-      hash = "sha256-X5Ob1t/CRy9csw2JrWvwS55G6qTqZhIuGLTy83O03GU=";
-    })
-  ];
 
   postPatch = ''
     rm -rf vendor
@@ -80,9 +65,13 @@ buildPythonPackage rec {
     "tests/test_base.py::TestBaseUV.test_call_at"
     # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)
     "tests/test_dns.py"
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    "tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"
+    # Asserts on exact wording of error message
+    "tests/test_tcp.py::Test_AIO_TCP::test_create_connection_open_con_addr"
+    # ConnectionAbortedError: SSL handshake is taking longer than 15.0 seconds
+    "tests/test_tcp.py::Test_AIO_TCPSSL::test_create_connection_ssl_1"
+    # Fails randomly on hydra
+    # https://github.com/MagicStack/uvloop/issues/709
+    "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # Segmentation fault
@@ -109,11 +98,11 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    changelog = "https://github.com/MagicStack/uvloop/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/MagicStack/uvloop/releases/tag/${src.tag}";
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

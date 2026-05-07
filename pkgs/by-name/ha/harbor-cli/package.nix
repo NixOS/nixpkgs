@@ -5,27 +5,31 @@
   fetchFromGitHub,
   testers,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "harbor-cli";
-  version = "0.0.11";
+  version = "0.0.19";
 
   src = fetchFromGitHub {
     owner = "goharbor";
     repo = "harbor-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mfy1v6uefaFI059o11/GKaiswXwJJKAH1w6kbzd2Vkk=";
+    hash = "sha256-X1+uke4X7JBN5kDrsVQ+oS6RkHG8fHt6lU6+9LPBNzk=";
   };
 
-  vendorHash = "sha256-/pBLFEGPewRNi/h5EyUueTyp5iTu2R5wLppiHSF3XxE=";
+  vendorHash = "sha256-1Aj3QHQcswOmzeazk3Fr8gSP1VTok2U/NK3mCPSPC6o=";
 
   excludedPackages = [
     "dagger"
     "doc"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
     "-s"
@@ -36,8 +40,6 @@ buildGoModule (finalAttrs: {
   doCheck = false; # Network required
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export HOME="$(mktemp -d)"
-
     installShellCompletion --cmd harbor \
       --bash <($out/bin/harbor completion bash) \
       --fish <($out/bin/harbor completion fish) \

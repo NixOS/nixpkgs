@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "rrooggiieerr";
   domain = "benqprojector";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-benqprojector";
     tag = version;
-    hash = "sha256-iAFmXL10QqudECsS9u9w7KBETzu9aWCg1EBbFR1ff+o=";
+    hash = "sha256-BiAqEVZSbroxw46thsU1psjP9JEEZaGRLWgpT/lQTHI=";
   };
 
   dependencies = [ benqprojector ];

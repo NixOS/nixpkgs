@@ -1,29 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   coloraide,
+  decorator,
   humanize,
   multimethod,
   platformdirs,
   rich,
   sqlparse,
   typing-extensions,
-  rgbxy ? null,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
+  freezegun,
+
+  # passthru
+  rgbxy,
 }:
-let
-  version = "0.8.0";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "rich-tables";
-  inherit version;
+  version = "0.9.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "rich_tables";
-    inherit version;
-    hash = "sha256-MN8QH6kLyogbcQ0VE9U034cwSFnaFDB2/Rnvy1DYyl4=";
+  src = fetchFromGitHub {
+    owner = "snejus";
+    repo = "rich-tables";
+    tag = finalAttrs.version;
+    hash = "sha256-6sXWrFP8TDBcFaGCymsZfHL8bfsRbj63VZCeY1H6h/Y=";
   };
 
   build-system = [
@@ -32,6 +42,7 @@ buildPythonPackage {
 
   dependencies = [
     coloraide
+    decorator
     humanize
     multimethod
     platformdirs
@@ -39,6 +50,13 @@ buildPythonPackage {
     sqlparse
     typing-extensions
   ];
+
+  nativeBuildInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    freezegun
+  ]
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.hue;
 
   optional-dependencies = {
     hue = [
@@ -63,4 +81,4 @@ buildPythonPackage {
     ];
     mainProgram = "table";
   };
-}
+})

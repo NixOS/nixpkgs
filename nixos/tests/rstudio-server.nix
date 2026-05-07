@@ -3,7 +3,6 @@
   name = "rstudio-server-test";
   meta.maintainers = with pkgs.lib.maintainers; [
     jbedo
-    cfhammill
   ];
 
   nodes.machine =

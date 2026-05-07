@@ -39,32 +39,42 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp311";
-      hash = "sha256-Yw9aGxuorpSsC0K8N1IeGXBcmlRURWV5+NKY5FC2/tw=";
+      hash = "sha256-lXMXyv8eawBqE1UXM3cN8jWidHBkviawJ0YP46WPWO4=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
-      platform = "manylinux2014_aarch64";
+      platform = "manylinux_2_27_aarch64";
       dist = "cp311";
-      hash = "sha256-iAQd0J4Bm4JnTZ9xZ7eWtIy1so3pVHLBosA2OxZtS/Y=";
+      hash = "sha256-GkpKVqgyrTDgHBQIWx+iRApV+kzggI5AXnNlDv+K+zE=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-LPPm/mNDtbV2TTWJPON16z5qhZBIty3I9wCv7CFai6Y=";
+      hash = "sha256-oWugDXI2YUWCfKOajISfn+4Rd9ZzjJ7f1ys6n+31zxg=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
-      platform = "manylinux2014_aarch64";
+      platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-M9ZGYPYVg1pg4M+Z656KMuz/1dIGYTV/RZEqHYFkMPE=";
+      hash = "sha256-6vGmGVqg60i0IMcfIrktGXeNlIAkl3yuRkEnnV9sH4E=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-dDC8RnptxbvBhvgcq5L0GhJy9aodFkbBu/rqkleD2oU=";
+      hash = "sha256-7QdNN5Z7zmHBuv3fndCoMCMGwS+QcAylrfo9CP3Uruc=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
-      platform = "manylinux2014_aarch64";
+      platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-w8IAegYZmwlYMZdsamZcEvylWs1+yEq0SI4a5Y7stJQ=";
+      hash = "sha256-dHnmfZ2Y1KD1JflPi4GIDcwFhjH23hGLkd6R2xtAle0=";
+    };
+    "3.14-x86_64-linux" = getSrcFromPypi {
+      platform = "manylinux_2_27_x86_64";
+      dist = "cp314";
+      hash = "sha256-96ahiBNJ3DnyRIGioBn/KUuUkJuAqIge/iHUW2pfaR0=";
+    };
+    "3.14-aarch64-linux" = getSrcFromPypi {
+      platform = "manylinux_2_27_aarch64";
+      dist = "cp314";
+      hash = "sha256-iIb8V5df7gG+FyX4mLaSkvYVtwgwrvXC+95jgzNha10=";
     };
   };
 in

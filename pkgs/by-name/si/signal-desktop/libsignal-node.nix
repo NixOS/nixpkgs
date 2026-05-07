@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   rustPlatform,
   fetchNpmDeps,
@@ -8,39 +9,29 @@
   gitMinimal,
   cmake,
   boringssl,
-  runCommand,
   fetchFromGitHub,
   python3,
   nodejs,
 }:
-let
-  # boring-sys expects the static libraries in build/ instead of lib/
-  boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
-    mkdir $out
-    cd $out
-    ln -s ${boringssl.out}/lib build
-    ln -s ${boringssl.dev}/include include
-  '';
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.78.3";
+  version = "0.92.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BRNgNE7BR4mlCKS4sydxx7rrfy+s4bTpQkX9GbEfhTg=";
+    hash = "sha256-gAXLt0e2k5PA6PgFRQa22oGuNLM7TGkOKQnYtFhn8I8=";
   };
 
-  cargoHash = "sha256-T8kSQFTvwAYZad9rQRK6vY8vEiilEKv1+fd/1EBlxjI=";
+  cargoHash = "sha256-TqYxkkzlbgrc7jkAubz3TsXhcU8Do5IFaLRqSPiZVR0=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-e/WyQlea46qTx7x45QuYdlaShezHV5vuB3ptB2DRCVE=";
+    hash = "sha256-c6Alk2tyloaPAP2Qfgurle0ziVs8vbxb2klKJZaGlaQ=";
   };
 
   nativeBuildInputs = [
@@ -53,8 +44,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npmHooks.npmConfigHook
     rustPlatform.bindgenHook
   ];
-  env.BORING_BSSL_PATH = "${boringssl-wrapper}";
-  env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+
+  env = {
+    BORING_BSSL_INCLUDE_PATH = "${boringssl.dev}/include";
+    BORING_BSSL_PATH = boringssl;
+    NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+  };
 
   patches = [
     # This is used to strip absolute paths of dependencies to avoid leaking info about build machine. Nix builders
@@ -62,24 +57,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./dont-strip-absolute-paths.patch
   ];
   postPatch = ''
-    substituteInPlace node/binding.gyp \
-      --replace-fail "'--out-dir', '<(PRODUCT_DIR)/'," \
-                     "'--out-dir', '$out/lib/<(NODE_OS_NAME)-<(target_arch)/'," \
-      --replace-fail "'target_name': 'libsignal_client_<(NODE_OS_NAME)_<(target_arch).node'," \
-                     "'target_name': '@signalapp+libsignal-client',"
-
     substituteInPlace node/build_node_bridge.py \
-      --replace-fail "dst_base = 'libsignal_client_%s_%s' % (node_os_name, node_arch)" \
-                     "dst_base = '@signalapp+libsignal-client'" \
+      --replace-fail "'prebuilds'" "'$out/lib'" \
       --replace-fail "objcopy = shutil.which('%s-linux-gnu-objcopy' % cargo_target.split('-')[0]) or 'objcopy'" \
                      "objcopy = os.getenv('OBJCOPY', 'objcopy')"
+  ''
+  + lib.optionalString boringssl.passthru.isShared ''
+    substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs \
+      --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
+      --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
   '';
 
   buildPhase = ''
     runHook preBuild
 
     pushd node
-    npx node-gyp rebuild
+    npm run build -- --copy-to-prebuilds --node-arch ${stdenv.hostPlatform.node.arch}
     popd
 
     runHook postBuild

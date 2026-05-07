@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/refs/heads/master/NEWS";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

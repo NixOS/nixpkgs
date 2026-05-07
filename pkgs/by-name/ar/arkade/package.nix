@@ -1,19 +1,20 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "arkade";
-  version = "0.11.46";
+  version = "0.11.93";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
-    rev = version;
-    hash = "sha256-hQLp0LA/VuwYzd+yPeH09WRXBWmxuW4gba85BwmCATU=";
+    tag = finalAttrs.version;
+    hash = "sha256-VWdWlUBSyRqHtApX2n/eBVBMw34zt+I2hi0Nmvx901o=";
   };
 
   env.CGO_ENABLED = 0;
@@ -38,26 +39,26 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/alexellis/arkade/pkg.GitCommit=ref/tags/${version}"
-    "-X github.com/alexellis/arkade/pkg.Version=${version}"
+    "-X github.com/alexellis/arkade/pkg.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/alexellis/arkade/pkg.Version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd arkade \
       --bash <($out/bin/arkade completion bash) \
       --zsh <($out/bin/arkade completion zsh) \
       --fish <($out/bin/arkade completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alexellis/arkade";
     description = "Open Source Kubernetes Marketplace";
     mainProgram = "arkade";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       welteki
       techknowlogick
       qjoly
     ];
   };
-}
+})

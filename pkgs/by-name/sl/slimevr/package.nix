@@ -7,6 +7,8 @@
   slimevr-server,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   cargo-tauri,
   wrapGAppsHook3,
@@ -18,34 +20,35 @@
   libayatana-appindicator,
   udevCheckHook,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slimevr";
-  version = "0.16.2";
+  version = "18.2.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
-    tag = "v${version}";
-    hash = "sha256-g0SDienJX7ZUbypeIAWSwjxgu40AFd3jVALuMhHj6mQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7QU+xQ72t722DOhrurI1XXpILLNnk8lE0yrD1P5XJbA=";
     # solarxr
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "gui/src-tauri";
 
-  cargoHash = "sha256-w2z+EQqkVGLmXQS+AzeJwkGG4ovpz9+ovmLOcUks734=";
+  cargoHash = "sha256-X5IgWZlkvsstMN3YS4r+NJl6RVfREfZqKUrfsrUPQuU=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    pname = "${pname}-pnpm-deps";
-    inherit version src;
-    fetcherVersion = 1;
-    hash = "sha256-b0oCOjxrUQqWmUR6IzTEO75pvJZB7MQD14DNbQm95sA=";
+  pnpmDeps = fetchPnpmDeps {
+    pname = "${finalAttrs.pname}-pnpm-deps";
+    inherit (finalAttrs) version src;
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-deVfRZcMFkOVWXmNUiixmd5WBfIFKxG2Gw3CfshspYo=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     cargo-tauri.hook
     pkg-config
     wrapGAppsHook3
@@ -69,7 +72,7 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Upstream code uses Git to find the program version.
     (replaceVars ./gui-no-git.patch {
-      version = src.rev;
+      version = finalAttrs.src.tag;
     })
     # By default, SlimeVR will give a big warning about our `JAVA_TOOL_OPTIONS` changes.
     ./no-java-tool-options-warning.patch
@@ -82,14 +85,14 @@ rustPlatform.buildRustPackage rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
     substituteInPlace gui/src-tauri/src/tray.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   # solarxr needs to be installed after compiling its Typescript files. This isn't
-  # done the first time, because `pnpm_9.configHook` ignores `package.json` scripts.
+  # done the first time, because `pnpmConfigHook` ignores `package.json` scripts.
   preBuild = ''
     pnpm --filter solarxr-protocol build
   '';
@@ -118,6 +121,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://slimevr.dev";
+    changelog = "https://github.com/SlimeVR/SlimeVR-Server/releases/tag/v${finalAttrs.version}";
     description = "App for facilitating full-body tracking in virtual reality";
     longDescription = ''
       App for SlimeVR ecosystem. It orchestrates communication between multiple sensors and integrations, like SteamVR.
@@ -143,10 +147,10 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       gale-username
-      imurx
+      loucass003
     ];
     platforms = with lib.platforms; darwin ++ linux;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "slimevr";
   };
-}
+})

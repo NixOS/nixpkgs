@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -29,11 +30,13 @@ buildNpmPackage rec {
     rm -f $out/lib/node_modules/${pname}/node_modules/.bin/rimraf
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Multiple git repository management tool";
     homepage = "https://mixu.net/gr/";
     license = lib.licenses.bsd3;
     mainProgram = "gr";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

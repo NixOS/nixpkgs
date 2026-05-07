@@ -1,26 +1,41 @@
 {
   lib,
+  bash,
+  replaceVars,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "0.33.0";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-sI+F+kI8ApE1cHpE3q/tSntaD/1c26jT5BLJ3BtzpBA=";
+    hash = "sha256-BP3I+/YUkgURIQBptHieuHPrdkiJ/H08arL2QZ3jhZ4=";
   };
 
   buildAndTestSubdir = "pyrefly";
-  cargoHash = "sha256-+93SQA0KrJsskXUMA9S5eaq0EIWVK1/ZoUbp6wQ7Cc4=";
+  cargoHash = "sha256-41EaxJ2VsIkAe9OsV5zUfkxGBxACxmWoM1Imqoah8mI=";
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  patches = [
+    (replaceVars ./fix-shebang.patch { bash = lib.getExe bash; })
+  ];
+
+  # redirect tests writing to /tmp
+  preCheck = ''
+    export TMPDIR=$(mktemp -d)
+  '';
 
   # requires unstable rust features
   env.RUSTC_BOOTSTRAP = 1;

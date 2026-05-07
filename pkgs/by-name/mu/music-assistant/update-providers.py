@@ -123,7 +123,9 @@ async def get_provider_manifests(version: str = "master") -> List:
         basedir = Path(os.path.join(tmp, f"server-{version}"))
         sys.path.append(str(basedir))
 
-        for fn in basedir.glob("**/manifest.json"):
+        for fn in basedir.glob("**/providers/*/manifest.json"):
+            if "_demo_" in str(fn):
+                continue
             try:
                 manifests.append(await ProviderManifest.parse(str(fn)))
             except MissingField as ex:
@@ -220,7 +222,7 @@ async def resolve_providers(manifests) -> Set:
 
             version = await get_package_version(attr)
             if version not in requirement.specifier:
-                errors.append(f"{requirement} not satisifed by version {version}")
+                errors.append(f"{requirement} not satisfied by version {version}")
         providers.add(provider)
     if errors:
         print("\n - ", end="")

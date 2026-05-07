@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upnp-router-control";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchzip {
     url = "https://launchpad.net/upnp-router-control/trunk/${finalAttrs.version}/+download/upnp-router-control-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+yJzULNdzBkUw2EbHXoAbR9B/P0d6n8T7ojlYIrKgto=";
+    hash = "sha256-2vm6Rnn+V3V54W2xYDlMh7iFKNWfxxnDexlZdwS+8RA=";
   };
 
   nativeBuildInputs = [

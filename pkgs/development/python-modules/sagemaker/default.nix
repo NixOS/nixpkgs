@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.251.1";
+  version = "2.256.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     tag = "v${version}";
-    hash = "sha256-6NiWEINVjIzLrHT504wvtFrU34YgyKISvSwozL4JptQ=";
+    hash = "sha256-Q5JeXWehj2TxP4SolNvn6B6lI8yxvUYzbardJvVfgaU=";
   };
 
   build-system = [
@@ -118,6 +118,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
     changelog = "https://github.com/aws/sagemaker-python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nequissimus ];
   };
 }

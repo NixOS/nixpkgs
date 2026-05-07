@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustical";
-  version = "0.9.3";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = "lennart-k";
     repo = "rustical";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2nKK+mVBbgaz0jgey54nAXeRQ2arVUvBUoTmQviL44k=";
+    hash = "sha256-KxECcpXjfqmirJBE1Rzh+KbngXACVUf2DTaKy7+XOSA=";
   };
 
-  cargoHash = "sha256-e87lVUXznWpbfp17bAYKMa6gIyBKGwwFWzXBdlNMPYU=";
+  cargoHash = "sha256-uP1lZarcwQhBKyASQIiNUs053EuxJy112P2e3hy2uZY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

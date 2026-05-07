@@ -1,24 +1,25 @@
 {
   lib,
-  flutter332,
+  flutter338,
   fetchFromGitHub,
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
   gitUpdater,
+  dart,
 }:
 
 let
-  version = "2.3.4";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-qmgM6h2HxvRwUv4UwkIBR3uYz2NiaWEgJWWjrpumQug=";
+    hash = "sha256-TmH8Hn6jwOIKsOHEoOJVeCOD+dp7OQKJhZV174F4JHU=";
   };
 in
-flutter332.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "butterfly";
   inherit version src;
 
@@ -26,7 +27,7 @@ flutter332.buildFlutterApplication {
 
   sourceRoot = "${src.name}/app";
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   postInstall = ''
     cp -r linux/debian/usr/share $out/share
@@ -43,14 +44,30 @@ flutter332.buildFlutterApplication {
           yq eval --output-format=json --prettyPrint $src/app/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater {
-        ignoredVersions = ".*(rc|beta).*";
-        rev-prefix = "v";
-      })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+      (
+        (gitUpdater {
+          ignoredVersions = ".*(rc|beta).*";
+          rev-prefix = "v";
+        })
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };
@@ -64,7 +81,7 @@ flutter332.buildFlutterApplication {
       cc-by-sa-40
       asl20
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

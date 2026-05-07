@@ -6,6 +6,7 @@
   pkg-config,
   stdenv,
   flac,
+  fmt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,9 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     flac
+    fmt
   ];
 
   strictDeps = true;
+
+  postPatch = ''
+    # Remove the bundled fmt directory
+    rm -rf 3rdparty/fmt
+
+    # Patch CMakeLists.txt to replace bundled fmt with provided library
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_bundled_fmtlib()' 'find_package(fmt REQUIRED)'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "USE_DEC_ADLMIDI" false)

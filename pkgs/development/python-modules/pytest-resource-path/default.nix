@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   colorama,
   pytest,
@@ -11,20 +10,15 @@
 
 buildPythonPackage rec {
   pname = "pytest-resource-path";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";
     repo = "pytest-resource-path";
     tag = "v${version}";
-    hash = "sha256-9OBO9b02RrXilXUucerQQMTaQIRXtbcKCHqwwp9tBto=";
+    hash = "sha256-f0jN6V6tQRbr/DHOKKTrFCb1EBUUxZAQRckMy2iiVqI=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -36,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_resource_path" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to provide path for uniform access to test resources";
     homepage = "https://github.com/yukihiko-shinoda/pytest-resource-path";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

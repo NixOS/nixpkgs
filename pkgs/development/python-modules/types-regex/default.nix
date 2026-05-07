@@ -5,24 +5,23 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-regex";
-  version = "2025.9.1.20250903";
+  version = "2026.2.28.20260301";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_regex";
-    inherit version;
-    hash = "sha256-IwEW9ktcCLBhCdlQCG5V/ICbiipdE+gCGKx880+arIQ=";
+    inherit (finalAttrs) version;
+    hash = "sha256-ZEwjHbPzaJCDIBcMFJBXMaeuX6vawPYPXW0S7N07yN0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "regex-stubs"
-  ];
+  pythonImportsCheck = [ "regex-stubs" ];
+
+  # Module has no tests
+  doCheck = false;
 
   meta = {
     description = "Typing stubs for regex";
@@ -30,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dwoffinden ];
   };
-}
+})

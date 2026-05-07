@@ -9,11 +9,11 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libticables2";
   version = "1.3.5";
   src = fetchurl {
-    url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/tilp/libticables2-${finalAttrs.version}.tar.bz2";
     sha256 = "08j5di0cgix9vcpdv7b8xhxdjkk9zz7fqfnv3l4apk3jdr8vcvqc";
   };
 
@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

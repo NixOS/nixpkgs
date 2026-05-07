@@ -6,12 +6,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starry";
   version = "2.0.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/ZUmMLEqlpqu+Ja/3XjFJf+OFZJCz7rp5MrQBEjwsXs=";
   };
 
@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Current stars history tells only half the story";
     homepage = "https://github.com/Canop/starry";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ ];
     mainProgram = "starry";
   };
-}
+})

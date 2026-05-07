@@ -8,31 +8,25 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-nuke";
-  version = "3.55.0";
+  version = "3.64.1";
 
   src = fetchFromGitHub {
     owner = "ekristen";
     repo = "aws-nuke";
-    tag = "v${version}";
-    hash = "sha256-wqUKI8FvQrSs0Lz6YXdieh6I5QccQEtXUMEOtB8angs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oDQcwj3CXud7iOC9UbfQQMcTv0Jp0bCMD8TgMSoG+xw=";
   };
 
-  vendorHash = "sha256-QbZuOnlN9GC1cMMoOrUcFxkJx8y4Iz+JpeBtkpv1s4s=";
-
-  overrideModAttrs = _: {
-    preBuild = ''
-      go generate ./...
-    '';
-  };
+  vendorHash = "sha256-NgnaGCyYe21F0T0NeLD0X0i/Q7lgXmiB5tKP0UJiht0=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ekristen/aws-nuke/v${lib.versions.major version}/pkg/common.SUMMARY=${version}"
+    "-X=github.com/ekristen/aws-nuke/v${lib.versions.major finalAttrs.version}/pkg/common.SUMMARY=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -52,8 +46,6 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   postInstallCheck = ''
     $out/bin/aws-nuke resource-types | grep "IAMUser"
   '';
@@ -63,12 +55,11 @@ buildGoModule rec {
   meta = {
     description = "Remove all the resources from an AWS account";
     homepage = "https://github.com/ekristen/aws-nuke";
-    changelog = "https://github.com/ekristen/aws-nuke/releases/tag/v${version}";
+    changelog = "https://github.com/ekristen/aws-nuke/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ grahamc ];
     mainProgram = "aws-nuke";
     # fork/exec exe/mockgen: exec format error
     # resources/autoscaling_mock_test.go:1: running "../mocks/generate_mocks.sh": exit status 1
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

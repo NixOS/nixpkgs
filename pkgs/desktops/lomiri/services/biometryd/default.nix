@@ -2,10 +2,10 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
-  # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
-  boost186,
+  boost,
   cmake,
   cmake-extras,
   dbus,
@@ -13,6 +13,7 @@
   gtest,
   libapparmor,
   libelf,
+  nlohmann_json,
   pkg-config,
   process-cpp,
   properties-cpp,
@@ -22,15 +23,20 @@
   validatePkgConfig,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
+  qtQmlPaths = listToQtVar qtbase.qtQmlPrefix [ qtdeclarative ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
-    hash = "sha256-derU7pKdNf6pwhskaW7gCLcU9ixBG3U0EI/qtANmmTs=";
+    hash = "sha256-3igUyiTI47I0lf5byypmHLigyopgEQQUYURiCb6HFeg=";
   };
 
   outputs = [
@@ -38,23 +44,33 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch = ''
-    # GTest needs C++17
-    # Remove when https://gitlab.com/ubports/development/core/biometryd/-/merge_requests/39 merged & in release
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'std=c++14' 'std=c++17'
+  patches = [
+    # Remove when version > 0.4.0
+    (fetchpatch {
+      name = "0001-biometryd-Fix-compatibility-with-Boost-1.87.patch";
+      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/8def6dfb18ee56971f0f64e3622af2a5a39ab0f6.patch";
+      hash = "sha256-PddZRML4Gc+s4aNeOyZwJJjmPSixMGFVFNcrO9dNDSI=";
+    })
+  ];
 
+  postPatch = ''
     # Substitute systemd's prefix in pkg-config call
     substituteInPlace data/CMakeLists.txt \
       --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # For our automatic pkg-config output patcher to work, prefix must be used here
     substituteInPlace data/biometryd.pc.in \
       --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
       --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
+
+    # Suffix our QML2_IMPORT_PATH
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail \
+        'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml;' \
+        'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml:${qtQmlPaths};'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
@@ -70,12 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186
+    boost
     cmake-extras
     dbus
     dbus-cpp
     libapparmor
     libelf
+    nlohmann_json
     process-cpp
     properties-cpp
     qtbase
@@ -90,14 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    # maybe-uninitialized warnings
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "ENABLE_WERROR" true)
     (lib.cmakeBool "WITH_HYBRIS" false)
   ];
 
   preBuild = ''
     # Generating plugins.qmltypes (also used in checkPhase?)
-    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
   '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -107,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mediates/multiplexes access to biometric devices";
     longDescription = ''
       biometryd mediates and multiplexes access to biometric devices present
@@ -115,11 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
       them for identification and verification of users.
     '';
     homepage = "https://gitlab.com/ubports/development/core/biometryd";
-    changelog = "https://gitlab.com/ubports/development/core/biometryd/-/${finalAttrs.version}/ChangeLog";
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
+    changelog = "https://gitlab.com/ubports/development/core/biometryd/-/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "biometryd";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "biometryd"
     ];

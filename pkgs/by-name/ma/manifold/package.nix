@@ -5,28 +5,26 @@
   cmake,
   clipper2,
   gtest,
-  glm,
-  tbb_2022,
+  onetbb,
   python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "manifold";
-  version = "3.2.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d/e4SKwfKqvLZgQu/Gfwsym9/XqEqQr7fWNSyLtCxzs=";
+    hash = "sha256-QcsyX1YwjqNaPAMJy6LtfHxocbBrqVGaRpZ2kxE4xXQ=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     gtest
-    glm
-    tbb_2022
+    onetbb
   ];
 
   propagatedBuildInputs = [ clipper2 ];
@@ -38,17 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMANIFOLD_PAR=TBB"
   ];
 
-  excludedTestPatterns = lib.optionals stdenv.isDarwin [
-    # https://github.com/elalish/manifold/issues/1306
-    "Manifold.Simplify"
+  excludedTestPatterns = [
   ];
   doCheck = true;
   checkPhase = ''
-    test/manifold_test --gtest_filter=-${builtins.concatStringsSep ":" finalAttrs.excludedTestPatterns}
+    test/manifold_test --gtest_filter=-${lib.escapeShellArg (builtins.concatStringsSep ":" finalAttrs.excludedTestPatterns)}
   '';
 
   passthru = {
-    tbb = tbb_2022;
     tests = {
       python = python3Packages.manifold3d;
     };

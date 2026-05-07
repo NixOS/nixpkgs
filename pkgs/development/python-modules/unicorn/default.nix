@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unicorn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "https://www.unicorn-engine.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       bennofs
       ris
     ];

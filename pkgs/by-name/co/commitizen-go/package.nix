@@ -8,7 +8,7 @@ buildGoModule rec {
   pname = "commitizen-go";
   version = "1.0.3";
 
-  # we can't obtain the commit hash when using fetchFromGithub
+  # we can't obtain the commit hash when using fetchFromGitHub
   commit_revision = "unspecified (nix build)";
 
   src = fetchFromGitHub {
@@ -29,11 +29,11 @@ buildGoModule rec {
     "-X 'github.com/lintingzhen/commitizen-go/cmd.version=${version}'"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to standardize git commit messages, golang version";
     homepage = "https://github.com/lintingzhen/commitizen-go";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seanrmurphy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seanrmurphy ];
     mainProgram = "commitizen-go";
   };
 }

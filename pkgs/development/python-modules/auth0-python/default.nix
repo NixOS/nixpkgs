@@ -12,23 +12,20 @@
   pyjwt,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.11.0";
+  version = "4.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-python";
     tag = version;
-    hash = "sha256-KJsuBDN0FppDxwjaskb7BkpjENyg5XE1J1yXwuyq+ZM=";
+    hash = "sha256-+3c4fj2lv+HFhl3bJ1p1qPq602AG4oMecqE+FMpvjhI=";
   };
 
   nativeBuildInputs = [
@@ -65,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "auth0" ];
 
-  meta = with lib; {
+  meta = {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
     changelog = "https://github.com/auth0/auth0-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

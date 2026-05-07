@@ -4,12 +4,16 @@
   writeShellScriptBin,
   fetchurl,
   ant,
-  jdk,
+  openjdk17,
   makeWrapper,
   stripJavaArchivesHook,
 }:
 
 let
+  # https://armedbear.common-lisp.dev/ lists OpenJDK 17 as the highest
+  # supported JDK.
+  jdk = openjdk17;
+
   fakeHostname = writeShellScriptBin "hostname" ''
     echo nix-builder.localdomain
   '';

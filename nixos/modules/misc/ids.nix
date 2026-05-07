@@ -31,7 +31,7 @@ in
       description = ''
         The user IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
     ids.gids = lib.mkOption {
@@ -39,7 +39,7 @@ in
       description = ''
         The group IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
   };
@@ -84,7 +84,7 @@ in
       tor = 35;
       cups = 36;
       foldingathome = 37;
-      sabnzbd = 38;
+      #sabnzbd = 38; # dropped in 26.05
       #kdm = 39; # dropped in 17.03
       #ghostone = 40; # dropped in 18.03
       git = 41;
@@ -250,7 +250,7 @@ in
       namecoin = 208;
       #lxd = 210; # unused
       #kibana = 211;# dynamically allocated as of 2021-09-03
-      xtreemfs = 212;
+      # xtreemfs = 212; # dropped in 26.05
       calibre-server = 213;
       #heapster = 214; #dynamically allocated as of 2021-09-17
       bepasty = 215;
@@ -570,7 +570,7 @@ in
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
-      sabnzbd = 194;
+      #sabnzbd = 194; # dropped in 26.05
       #grafana = 196; #unused
       #skydns = 197; #unused
       # ripple-rest = 198; # unused, removed 2017-08-12
@@ -585,7 +585,7 @@ in
       #gateone = 207; #removed 2025-08-21
       namecoin = 208;
       #kibana = 211;
-      xtreemfs = 212;
+      # xtreemfs = 212; # dropped in 26.05
       calibre-server = 213;
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
@@ -690,6 +690,7 @@ in
       rstudio-server = 324;
       localtimed = 325;
       automatic-timezoned = 326;
+      clock = 327;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

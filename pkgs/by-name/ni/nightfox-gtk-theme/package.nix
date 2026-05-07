@@ -35,14 +35,19 @@ let
     "yellow"
     "all"
   ];
-  tweakVariantList = [
-    "nord"
-    "carbon"
-    "black"
-    "float"
-    "outline"
-    "macos"
-  ];
+  tweakVariantList =
+    map (scheme: scheme + "fox") [
+      "carbon"
+      "dusk"
+      "nord"
+      "tera"
+    ]
+    ++ [
+      "black"
+      "float"
+      "outline"
+      "macos"
+    ];
   iconVariantList = [
     "Duskfox"
     "Duskfox-Alt"
@@ -70,13 +75,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2025-09-02";
+    version = "0-unstable-2025-10-23";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Nightfox-GTK-Theme";
-      rev = "9e5e876e2a4ca7f69f30cc453990b839232b0149";
-      hash = "sha256-gFrijAev9NuW6kjBNuDADPxwNebrJoUZ3eJCDAlwFrY=";
+      rev = "f0212f2aa0d3d6cc0b313020d2d0122f313eafc9";
+      hash = "sha256-KZR5vuMQnLa7AK77YB11BqgqwQHVVFfIe/rXzcocbwk=";
     };
 
     propagatedUserEnvPkgs = [ gtk-engine-murrine ];
@@ -115,6 +120,6 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ d3vil0p3r ];
+      maintainers = [ ];
     };
   }

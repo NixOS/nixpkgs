@@ -4,11 +4,11 @@
   pkgs ? import ../../.. { inherit system config; },
   lib ? pkgs.lib,
   kernelVersionsToTest ? [
-    "5.4"
     "5.10"
     "5.15"
     "6.1"
     "6.6"
+    "6.12"
     "latest"
   ],
 }:
@@ -67,7 +67,7 @@ lib.listToAttrs (
                 kernelPackages = pkgs."linuxPackages_${v'}";
                 inherit mkXfsFlags;
               }
-              // builtins.removeAttrs t [
+              // removeAttrs t [
                 "test"
                 "kernelFilter"
               ]

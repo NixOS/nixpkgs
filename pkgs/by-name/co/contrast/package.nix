@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "design";
     repo = "contrast";
-    rev = version;
+    tag = version;
     hash = "sha256-8A1qX1H0cET5AUvMoHC1/VyIQiaTysEY5RJRrVYvGng=";
   };
 

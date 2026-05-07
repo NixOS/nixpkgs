@@ -1,11 +1,13 @@
 {
   name,
+  package,
   plugin ? null,
   pluginOpts ? "",
 }:
 
 import ../make-test-python.nix (
   { pkgs, lib, ... }:
+
   {
     inherit name;
     meta = {
@@ -27,9 +29,10 @@ import ../make-test-python.nix (
         networking.firewall.allowedUDPPorts = [ 8488 ];
         services.shadowsocks = {
           enable = true;
+          package = package;
           encryptionMethod = "chacha20-ietf-poly1305";
           password = "pa$$w0rd";
-          localAddress = [ "0.0.0.0" ];
+          localAddress = "0.0.0.0";
           port = 8488;
           fastOpen = false;
           mode = "tcp_and_udp";
@@ -78,7 +81,7 @@ import ../make-test-python.nix (
     testScript = ''
       start_all()
 
-      server.wait_for_unit("shadowsocks-libev.service")
+      server.wait_for_unit("${lib.getName package}.service")
       server.wait_for_unit("nginx.service")
       client.wait_for_unit("shadowsocks-client.service")
 

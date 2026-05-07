@@ -2,7 +2,7 @@
   lib,
   autoreconfHook,
   fetchFromGitHub,
-  fltk,
+  fltk_1_3,
   libjpeg,
   libpng,
   libwebp,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    fltk
+    fltk_1_3
     which
   ];
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libwebp
     ssl
-    fltk
+    fltk_1_3
   ];
 
   outputs = [

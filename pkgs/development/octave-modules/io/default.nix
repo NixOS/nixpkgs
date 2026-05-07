@@ -9,11 +9,11 @@
 
 buildOctavePackage rec {
   pname = "io";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SqSEaLNpeTS/jIVOJ9uriCdgXp3U/jflaDQmXmEwum8=";
+    sha256 = "sha256-G49gAZ/lzir1YwEAPjBGRjNJ3VMxI+iXnsS0yev8f2s=";
   };
 
   buildInputs = [
@@ -30,7 +30,7 @@ buildOctavePackage rec {
       gpl3Plus
       bsd2
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Input/Output in external formats";
   };
 }

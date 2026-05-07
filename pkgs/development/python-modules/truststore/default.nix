@@ -6,23 +6,20 @@
   flit-core,
   httpx,
   pyopenssl,
-  pythonOlder,
   requests,
   trustme,
 }:
 
 buildPythonPackage rec {
   pname = "truststore";
-  version = "0.10.1";
+  version = "0.10.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = "truststore";
     tag = "v${version}";
-    hash = "sha256-oVFNR8qxEmCZdTGqzb9Gj3XIUwPy6YWV3YJPkIDA8Cw=";
+    hash = "sha256-EbwD2YyVA9W9cWEjYvypBJxs6Hbkb/tF2qU/sUNCt5g=";
   };
 
   build-system = [ flit-core ];
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "truststore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Verify certificates using native system trust stores";
     homepage = "https://github.com/sethmlarson/truststore";
     changelog = "https://github.com/sethmlarson/truststore/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

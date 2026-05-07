@@ -49,7 +49,7 @@ lib.checkListOfEnum "${pname}: theme variants"
   tweaks
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname;
     version = "0-unstable-2025-04-02";
 
@@ -81,10 +81,10 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook preInstall
 
       name= HOME="$TMPDIR" ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--size " + toString sizeVariants} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         --dest $out/share/themes
 
       jdupes --quiet --link-soft --recurse $out/share

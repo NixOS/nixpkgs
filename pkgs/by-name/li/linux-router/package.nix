@@ -39,15 +39,15 @@
   qrencode,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linux-router";
-  version = "0.7.6";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "garywill";
     repo = "linux-router";
-    tag = version;
-    hash = "sha256-iiIDWDPz8MBwsBcJAWVNeuGwaNJ7xh7gFfRqXTG4oGQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-tBrHuZKTf+7ABmE4FVYT9ny62CBa2A7va7OOFUsKJtM=";
   };
 
   nativeBuildInputs = [
@@ -106,10 +106,9 @@ stdenv.mkDerivation rec {
       - DNS proxy
       - Compatible with NetworkManager (automatically set interface as unmanaged)
     '';
-    changelog = "https://github.com/garywill/linux-router/releases/tag/${version}";
+    changelog = "https://github.com/garywill/linux-router/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ x3ro ];
     platforms = lib.platforms.linux;
     mainProgram = "lnxrouter";
   };
-}
+})

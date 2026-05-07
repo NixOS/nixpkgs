@@ -9,18 +9,18 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "nix-heuristic-gc";
-  version = "0.6.2";
+  version = "0.7.3";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "risicle";
     repo = "nix-heuristic-gc";
     tag = "v${version}";
-    hash = "sha256-FHA1/zlBUr81wSWL0Cd5DVsxUDuUpD3UuLde8UgxOzQ=";
+    hash = "sha256-aTwILsqqlV0DEm9AhDKd6HCB022BbebPH/VwzDgzS4E=";
   };
 
   # NIX_SYSTEM suggested at
   # https://github.com/NixOS/nixpkgs/issues/386184#issuecomment-2692433531
-  NIX_SYSTEM = nixVersions.nixComponents_2_30.nix-store.stdenv.hostPlatform.system;
+  env.NIX_SYSTEM = nixVersions.nixComponents_2_30.nix-store.stdenv.hostPlatform.system;
 
   buildInputs = [
     boost

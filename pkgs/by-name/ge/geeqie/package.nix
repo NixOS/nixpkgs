@@ -38,14 +38,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geeqie";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-k2FXj2ZKZzB5XpCcWzEv7Q1ozATfU3221XKcOFdWOGU=";
   };
 
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight GTK based image viewer";
     mainProgram = "geeqie";
 
@@ -176,14 +176,14 @@ stdenv.mkDerivation rec {
       initially based on GQview.
     '';
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.geeqie.org/";
 
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pSub
       markus1189
     ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
-}
+})

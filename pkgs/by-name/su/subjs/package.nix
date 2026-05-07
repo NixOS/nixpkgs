@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "subjs";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "lc";
     repo = "subjs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-csxFn3YUnuYjZ5/4jIi7DfuujB/gFjHogLaV4XK5kQU=";
   };
 
@@ -20,10 +20,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.AppVersion=${version}"
+    "-X main.AppVersion=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fetcher for Javascript files";
     mainProgram = "subjs";
     longDescription = ''
@@ -32,7 +32,7 @@ buildGoModule rec {
       secrets and more.
     '';
     homepage = "https://github.com/lc/subjs";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

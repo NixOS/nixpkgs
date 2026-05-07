@@ -5,20 +5,23 @@
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
+  nixosTests,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
 
 let
   pname = "autobrr";
-  version = "1.65.0";
+  version = "1.77.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-i6F0CMMT/Qn+IUjvJdTkNl+pjqdLwGp+LPbQkYpehuY=";
+    hash = "sha256-Rz2rPV1IigaaSwk18vldNQ1RRK9cUJPy4yYkL1KTURw=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -27,21 +30,23 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_10
       typescript
     ];
 
     sourceRoot = "${src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (autobrr-web)
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 1;
-      hash = "sha256-HH2+FHlDhxNKhYoO/m2nXV87fUqnoC/6L2s6hvkqnyM=";
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-BEsYcS0SiWLQyQc7CRadoQ146VAnq0zmHxdd838H6iI=";
     };
 
     postBuild = ''
@@ -53,22 +58,21 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit
-    autobrr-web
     pname
     version
     src
     ;
 
-  vendorHash = "sha256-dgBE80kZOvZdFJ4XP+E+d6IygtI6c1tL//IwhiBPmfY=";
+  vendorHash = "sha256-HjHRT/PAZdMM/2JWmNMK/I9Gc0ThTAFDSxWW/ATYxW8=";
 
   preBuild = ''
-    cp -r ${autobrr-web}/* web/dist
+    cp -r ${finalAttrs.passthru.autobrr-web}/* web/dist
   '';
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=${src.tag}"
   ];
 
@@ -82,20 +86,24 @@ buildGoModule rec {
   versionCheckProgram = "${placeholder "out"}/bin/autobrrctl";
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "autobrr-web"
-    ];
+  passthru = {
+    inherit autobrr-web;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "autobrr-web"
+      ];
+    };
+    tests.testService = nixosTests.autobrr;
   };
 
   meta = {
     description = "Modern, easy to use download automation for torrents and usenet";
     license = lib.licenses.gpl2Plus;
     homepage = "https://autobrr.com/";
-    changelog = "https://autobrr.com/release-notes/v${version}";
+    changelog = "https://autobrr.com/release-notes/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ av-gal ];
     mainProgram = "autobrr";
     platforms = with lib.platforms; darwin ++ freebsd ++ linux;
   };
-}
+})

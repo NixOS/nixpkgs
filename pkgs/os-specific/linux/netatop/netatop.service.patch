@@ -1,7 +1,0 @@
---- a/netatop.service
-+++ b/netatop.service
-@@ -11,3 +11,3 @@
- ExecStopPost=@kmod@/bin/rmmod netatop
--PIDFile=/var/run/netatop.pid
-+PIDFile=/run/netatop.pid
- RemainAfterExit=yes

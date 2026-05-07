@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   lib,
@@ -9,16 +10,17 @@
 
 buildNpmPackage rec {
   pname = "vacuum-tube";
-  version = "1.3.15";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "shy1132";
     repo = "VacuumTube";
     tag = "v${version}";
-    hash = "sha256-dwUmAMogBBzpMFsoF2OP0otMz1tH9Jo3fchjWqMWIV0=";
+    hash = "sha256-YTgVJ+vX5SLXtPee1Fp/Jr84o5wjbP+P4/Bly3GZxpc=";
   };
 
-  npmDepsHash = "sha256-Qi9oMV8nFSfXXbhNYRDRZgLx+kQ8JbdgM8BK3hiEH44=";
+  npmDepsHash = "sha256-9Eu6GO8mhn5/1EPPInv4ImWrIkQxVjLjJ/IZ8nHkWII=";
+  makeCacheWritable = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
@@ -68,5 +70,7 @@ buildNpmPackage rec {
     mainProgram = "VacuumTube";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ theCapypara ];
+    # https://github.com/NixOS/nixpkgs/pull/453698#issuecomment-3422020307
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

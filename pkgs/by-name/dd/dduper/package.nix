@@ -24,14 +24,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dduper";
   version = "0.04";
 
   src = fetchFromGitHub {
     owner = "lakshmipathi";
     repo = "dduper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "09ncdawxkffldadqhfblqlkdl05q2qmywxyg6p61fv3dr2f2v5wm";
   };
 
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     install -m755 ./dduper $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast block-level out-of-band BTRFS deduplication tool";
     mainProgram = "dduper";
     homepage = "https://github.com/Lakshmipathi/dduper";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ thesola10 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ thesola10 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

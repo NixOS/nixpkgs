@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchNpmDeps,
   fetchurl,
@@ -8,6 +9,8 @@
   nodejs,
   turbo,
   linkFarm,
+  installShellFiles,
+  nixosTests,
 }:
 
 let
@@ -25,13 +28,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "perses";
-  version = "0.51.1";
+  version = "0.53.1";
 
   src = fetchFromGitHub {
     owner = "perses";
     repo = "perses";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZijrDYG/HFPBOLEFqMDzoWhRoo/GiHr0dpjhKBJRAH8=";
+    hash = "sha256-Oxq+zweg1mpgxKXWBwnsanD66TcD+kOkt3WCTU2FqnQ=";
   };
 
   outputs = [
@@ -43,13 +46,14 @@ buildGoModule (finalAttrs: {
     npmHooks.npmConfigHook
     nodejs
     turbo
+    installShellFiles
   ];
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) version src;
     pname = "${finalAttrs.pname}-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-yBkdqOLAopEHcS4rbOUL3bLxy27l/gm60nICsL9zigk=";
+    hash = "sha256-yhqpwxWhnYBewDsYYP5R1n45dDTz6Wz3IJri77FBdO8=";
   };
 
   npmRoot = "ui";
@@ -59,7 +63,7 @@ buildGoModule (finalAttrs: {
     preBuild = null;
   };
 
-  vendorHash = "sha256-FfT3z48JaOiUTsVMmcbJdFJesO7cIMkYt/0gQ0jHh8I=";
+  vendorHash = "sha256-dAvDBJGpY4Dlx4D9hR6VSUt+ppJLJPNNu5smsyutSC8=";
 
   ldflags = [
     "-s"
@@ -93,7 +97,13 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     cp -r cue "$cue"
-  '';
+  ''
+  + (lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd percli \
+      --bash <($out/bin/percli completion bash) \
+      --zsh <($out/bin/percli completion zsh) \
+      --fish <($out/bin/percli completion fish)
+  '');
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -108,6 +118,8 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
+
+    tests.nixos = nixosTests.perses;
 
     inherit pluginsArchive;
   };

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tweag-credential-helper";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "credential-helper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Evsw7l6zeHz3pDRNME8TIpYHnTbjlqY5abndjRLiTas=";
+    hash = "sha256-7Aja88JAhBIL5m1I7GEVjHnVA1rAoAr/7JN8GVQ90w8=";
   };
 
   vendorHash = "sha256-LVXHCRgRop2wdNU/NG5FFVYf5iiQRSPoRSX7B7r2tuI=";

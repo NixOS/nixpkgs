@@ -4,14 +4,8 @@
 { lib }:
 
 let
-  inherit (builtins) head length typeOf;
-  inherit (lib.asserts) assertMsg;
-  inherit (lib.trivial)
-    oldestSupportedReleaseIsAtLeast
-    mergeAttrs
-    warn
-    warnIf
-    ;
+  inherit (builtins) head length;
+  inherit (lib.trivial) mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -44,7 +38,7 @@ rec {
     ;
 
   /**
-    Return an attribute from nested attribute sets.
+    Returns an attribute from nested attribute sets.
 
     Nix has an [attribute selection operator `.`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
@@ -111,7 +105,7 @@ rec {
     attrByPath' 0 set;
 
   /**
-    Return if an attribute from nested attribute set exists.
+    Returns if an attribute from nested attribute set exists.
 
     Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
 
@@ -132,7 +126,7 @@ rec {
 
     : A list of strings representing the attribute path to check from `set`
 
-    `e`
+    `set`
 
     : The nested attribute set to check
 
@@ -177,7 +171,7 @@ rec {
     hasAttrByPath' 0 e;
 
   /**
-    Return the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
+    Returns the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
 
     Can be used after [`mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) to apply a condition,
     although this will evaluate the predicate function on sibling attributes as well.
@@ -206,7 +200,7 @@ rec {
     # Type
 
     ```
-    attrsets.longestValidPathPrefix :: [String] -> Value -> [String]
+    longestValidPathPrefix :: [String] -> AttrSet -> [String]
     ```
 
     # Examples
@@ -357,7 +351,7 @@ rec {
     # Type
 
     ```
-    concatMapAttrs :: (String -> a -> AttrSet) -> AttrSet -> AttrSet
+    concatMapAttrs :: (String -> Any -> AttrSet) -> AttrSet -> AttrSet
     ```
 
     # Examples
@@ -504,7 +498,7 @@ rec {
     updates: value: go 0 true value updates;
 
   /**
-    Return the specified attributes from a set.
+    Returns the specified attributes from a set.
 
     # Inputs
 
@@ -519,7 +513,7 @@ rec {
     # Type
 
     ```
-    attrVals :: [String] -> AttrSet -> [Any]
+    attrVals :: [String] -> { [String] :: a } -> [a]
     ```
 
     # Examples
@@ -536,13 +530,13 @@ rec {
   attrVals = nameList: set: map (x: set.${x}) nameList;
 
   /**
-    Return the values of all attributes in the given set, sorted by
+    Returns the values of all attributes in the given set, sorted by
     attribute name.
 
     # Type
 
     ```
-    attrValues :: AttrSet -> [Any]
+    attrValues :: { [String] :: a } -> [a]
     ```
 
     # Examples
@@ -568,14 +562,14 @@ rec {
 
     : A list of attribute names to get out of `set`
 
-    `attrs`
+    `set`
 
     : The set to get the named attributes from
 
     # Type
 
     ```
-    getAttrs :: [String] -> AttrSet -> AttrSet
+    getAttrs :: [String] -> { [String] :: a } -> { [String] :: a }
     ```
 
     # Examples
@@ -608,7 +602,7 @@ rec {
     # Type
 
     ```
-    catAttrs :: String -> [AttrSet] -> [Any]
+    catAttrs :: String -> [{ [String] :: a }] -> [a]
     ```
 
     # Examples
@@ -651,7 +645,7 @@ rec {
     # Type
 
     ```
-    filterAttrs :: (String -> Any -> Bool) -> AttrSet -> AttrSet
+    filterAttrs :: (String -> a -> Bool) -> { [String] :: a } -> { [String] :: a }
     ```
 
     # Examples
@@ -720,10 +714,10 @@ rec {
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
 
-    Attention:
-
+    ::: {.note}
     There is a completely different function `lib.foldAttrs`
     which has nothing to do with this function, despite the similar name.
+    :::
 
     # Inputs
 
@@ -742,7 +736,7 @@ rec {
     # Type
 
     ```
-    foldlAttrs :: ( a -> String -> b -> a ) -> a -> { ... :: b } -> a
+    foldlAttrs :: ( a -> String -> b -> a ) -> a -> { [String] :: b } -> a
     ```
 
     # Examples
@@ -817,7 +811,7 @@ rec {
     # Type
 
     ```
-    foldAttrs :: (Any -> Any -> Any) -> Any -> [AttrSets] -> Any
+    foldAttrs :: (a -> b -> b) -> b -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -855,7 +849,7 @@ rec {
     # Type
 
     ```
-    collect :: (AttrSet -> Bool) -> AttrSet -> [x]
+    collect :: (AttrSet -> Bool) -> AttrSet -> [Any]
     ```
 
     # Examples
@@ -894,7 +888,7 @@ rec {
     # Type
 
     ```
-    cartesianProduct :: AttrSet -> [AttrSet]
+    cartesianProduct :: { [String] :: [a] } -> [{ [String] :: a }]
     ```
 
     # Examples
@@ -923,8 +917,8 @@ rec {
     ) [ { } ] (attrNames attrsOfLists);
 
   /**
-    Return the result of function f applied to the cartesian product of attribute set value combinations.
-    Equivalent to using cartesianProduct followed by map.
+    Return the result of function `f` applied to the cartesian product of attribute set value combinations.
+    Equivalent to using `cartesianProduct` followed by `map`.
 
     # Inputs
 
@@ -939,7 +933,7 @@ rec {
     # Type
 
     ```
-    mapCartesianProduct :: (AttrSet -> a) -> AttrSet -> [a]
+    mapCartesianProduct :: ({ [String] :: a } -> b) -> { [String] :: a } -> [b]
     ```
 
     # Examples
@@ -971,7 +965,7 @@ rec {
     # Type
 
     ```
-    nameValuePair :: String -> Any -> { name :: String; value :: Any; }
+    nameValuePair :: String -> a -> { name :: String; value :: a; }
     ```
 
     # Examples
@@ -1003,7 +997,7 @@ rec {
     # Type
 
     ```
-    mapAttrs :: (String -> Any -> Any) -> AttrSet -> AttrSet
+    mapAttrs :: (String -> a -> b) -> { [String] :: a } -> { [String] :: b }
     ```
 
     # Examples
@@ -1038,7 +1032,7 @@ rec {
     # Type
 
     ```
-    mapAttrs' :: (String -> Any -> { name :: String; value :: Any; }) -> AttrSet -> AttrSet
+    mapAttrs' :: (String -> a -> { name :: String; value :: b; }) -> { [String] :: a } -> { [String] :: b }
     ```
 
     # Examples
@@ -1072,7 +1066,7 @@ rec {
     # Type
 
     ```
-    mapAttrsToList :: (String -> a -> b) -> AttrSet -> [b]
+    mapAttrsToList :: (String -> a -> b) -> { [String] :: a } -> [b]
     ```
 
     # Examples
@@ -1118,7 +1112,7 @@ rec {
     # Type
 
     ```
-    attrsToList :: AttrSet -> [ { name :: String; value :: Any; } ]
+    attrsToList :: { [String] :: a } -> [{ name :: String; value :: a; }]
     ```
 
     # Examples
@@ -1332,7 +1326,7 @@ rec {
     # Type
 
     ```
-    genAttrs :: [ String ] -> (String -> Any) -> AttrSet
+    genAttrs :: [String] -> (String -> a) -> { [String] :: a }
     ```
 
     # Examples
@@ -1369,7 +1363,7 @@ rec {
     # Type
 
     ```
-    genAttrs' :: [ Any ] -> (Any -> { name :: String; value :: Any; }) -> AttrSet
+    genAttrs' :: [a] -> (a -> { name :: String; value :: b; }) -> { [String] :: b }
     ```
 
     # Examples
@@ -1503,7 +1497,7 @@ rec {
     # Type
 
     ```
-    zipAttrsWithNames :: [ String ] -> (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
+    zipAttrsWithNames :: [String] -> (String -> [a] -> b) -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -1527,7 +1521,7 @@ rec {
     );
 
   /**
-    Merge sets of attributes and use the function f to merge attribute values.
+    Merge sets of attributes and use the function `f` to merge attribute values.
     Like `lib.attrsets.zipAttrsWithNames` with all key names are passed for `names`.
 
     Implementation note: Common names appear multiple times in the list of
@@ -1538,7 +1532,7 @@ rec {
     # Type
 
     ```
-    zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
+    zipAttrsWith :: (String -> [a] -> b) -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -1563,7 +1557,7 @@ rec {
     # Type
 
     ```
-    zipAttrs :: [ AttrSet ] -> AttrSet
+    zipAttrs :: [{ [String] :: a }] -> { [String] :: [a] }
     ```
 
     # Examples
@@ -1594,7 +1588,7 @@ rec {
     # Type
 
     ```
-    mergeAttrsList :: [ Attrs ] -> Attrs
+    mergeAttrsList :: [AttrSet] -> AttrSet
     ```
 
     # Examples
@@ -1614,7 +1608,7 @@ rec {
     list:
     let
       # `binaryMerge start end` merges the elements at indices `index` of `list` such that `start <= index < end`
-      # Type: Int -> Int -> Attrs
+      # Type: Int -> Int -> AttrSet
       binaryMerge =
         start: end:
         # assert start < end; # Invariant
@@ -1633,31 +1627,48 @@ rec {
       binaryMerge 0 (length list);
 
   /**
-    Does the same as the update operator '//' except that attributes are
-    merged until the given predicate is verified.  The predicate should
-    accept 3 arguments which are the path to reach the attribute, a part of
-    the first attribute set and a part of the second attribute set.  When
-    the predicate is satisfied, the value of the first attribute set is
-    replaced by the value of the second attribute set.
+    Update `lhs` so that `rhs` wins for any given attribute path that occurs in both.
+
+    Unlike the `//` (update) operator, which operates on a single attribute set,
+    This function views its operands `lhs` and `rhs` as a mapping from attribute *paths*
+    to values.
+
+    The caller-provided function `pred` decides whether any given path is one of the following:
+
+    - `true`: a value in the mapping
+    - `false`: an attribute set whose purpose is to create the nesting structure.
 
     # Inputs
 
     `pred`
 
-    : Predicate, taking the path to the current attribute as a list of strings for attribute names, and the two values at that path from the original arguments.
+    : Predicate function (of type `List String -> Any -> Any -> Bool`)
+
+      Inputs:
+
+      - `path : List String`: the path to the current attribute as a list of strings for attribute names
+      - `lhsAtPath : Any`: the value at that path in `lhs`; same as `getAttrFromPath path lhs`
+      - `rhsAtPath : Any`: the value at that path in `rhs`; same as `getAttrFromPath path rhs`
+
+      Output:
+
+      - `true`: `path` points to a value in the mapping, and `rhsAtPath` will appear in the return value of `recursiveUpdateUntil`
+      - `false`: `path` is part of the nesting structure and will be an attrset in the return value of `recursiveUpdateUntil`
+
+      `pred` is only called for `path`s that extend prefixes for which `pred` returned `false`.
 
     `lhs`
 
-    : Left attribute set of the merge.
+    : Left attribute set of the update.
 
     `rhs`
 
-    : Right attribute set of the merge.
+    : Right attribute set of the update.
 
     # Type
 
     ```
-    recursiveUpdateUntil :: ( [ String ] -> AttrSet -> AttrSet -> Bool ) -> AttrSet -> AttrSet -> AttrSet
+    recursiveUpdateUntil :: ([String] -> AttrSet -> AttrSet -> Bool) -> AttrSet -> AttrSet -> AttrSet
     ```
 
     # Examples
@@ -1665,23 +1676,23 @@ rec {
     ## `lib.attrsets.recursiveUpdateUntil` usage example
 
     ```nix
-    recursiveUpdateUntil (path: l: r: path == ["foo"]) {
-      # first attribute set
+    recursiveUpdateUntil (path: lhs: rhs: path == ["foo"]) {
+      # left attribute set
       foo.bar = 1;
       foo.baz = 2;
       bar = 3;
     } {
-      #second attribute set
+      # right attribute set
       foo.bar = 1;
       foo.quz = 2;
       baz = 4;
     }
 
     => {
-      foo.bar = 1; # 'foo.*' from the second set
+      foo.bar = 1; # 'foo.*' from the 'right' set
       foo.quz = 2; #
-      bar = 3;     # 'bar' from the first set
-      baz = 4;     # 'baz' from the second set
+      bar = 3;     # 'bar' from the 'left' set
+      baz = 4;     # 'baz' from the 'right' set
     }
     ```
 
@@ -1693,9 +1704,9 @@ rec {
       f =
         attrPath:
         zipAttrsWith (
-          n: values:
+          name: values:
           let
-            here = attrPath ++ [ n ];
+            here = attrPath ++ [ name ];
           in
           if length values == 1 || pred here (elemAt values 1) (head values) then
             head values
@@ -1706,7 +1717,7 @@ rec {
     f [ ] [ rhs lhs ];
 
   /**
-    A recursive variant of the update operator ‘//’.  The recursion
+    A recursive variant of the update operator `//`.  The recursion
     stops when one of the attribute values is not an attribute set,
     in which case the right hand side value takes precedence over the
     left hand side value.
@@ -2149,7 +2160,7 @@ rec {
     chooseDevOutputs :: [Derivation] -> [Derivation]
     ```
   */
-  chooseDevOutputs = builtins.map getDev;
+  chooseDevOutputs = map getDev;
 
   /**
     Make various Nix tools consider the contents of the resulting
@@ -2188,7 +2199,7 @@ rec {
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
   /**
-    Undo the effect of recurseIntoAttrs.
+    Undo the effect of `recurseIntoAttrs`.
 
     # Inputs
 
@@ -2230,20 +2241,8 @@ rec {
       intersection = builtins.intersectAttrs x y;
       collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
       mask = builtins.mapAttrs (
-        name: value: builtins.throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
+        name: value: throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
       ) intersection;
     in
     (x // y) // mask;
-
-  # DEPRECATED
-  zipWithNames = warn "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
-
-  # DEPRECATED
-  zip = warn "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
-
-  # DEPRECATED
-  cartesianProductOfSets =
-    warnIf (oldestSupportedReleaseIsAtLeast 2405)
-      "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct."
-      cartesianProduct;
 }

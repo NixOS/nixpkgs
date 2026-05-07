@@ -52,12 +52,12 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://salmon-mail.readthedocs.org/";
     changelog = "https://github.com/moggers87/salmon/blob/${src.rev}/CHANGELOG.rst";
     description = "Pythonic mail application server";
     mainProgram = "salmon";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

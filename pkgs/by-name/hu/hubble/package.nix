@@ -1,21 +1,21 @@
 {
   stdenv,
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "hubble";
-  version = "1.17.2";
+  version = "1.19.3";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "hubble";
     tag = "v${version}";
-    hash = "sha256-ZkowUftSEGo+UjYM+kk3tQJc8QJgoJATeIKPwu2ikQ4=";
+    hash = "sha256-aqHFSb0q3WyBP8uPfA02vWKvMCiO9n4MYOL4o/twlIE=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,6 @@ buildGo124Module rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       humancalico
-      bryanasdev000
       FKouhai
     ];
     mainProgram = "hubble";

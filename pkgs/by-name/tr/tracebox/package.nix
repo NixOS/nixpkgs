@@ -9,14 +9,14 @@
   testers,
   tracebox,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tracebox";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "tracebox";
     repo = "tracebox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1KBJ4uXa1XpzEw23IjndZg+aGJXk3PVw8LYKAvxbxCA=";
     fetchSubmodules = true;
   };
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i configure.ac \
-      -e 's,$(git describe .*),${version},'
+      -e 's,$(git describe .*),${finalAttrs.version},'
   '';
 
   configureFlags = [
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     command = "tracebox -V";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.tracebox.org/";
     description = "Middlebox detection tool";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ck3d ];
+    platforms = lib.platforms.linux;
   };
-}
+})

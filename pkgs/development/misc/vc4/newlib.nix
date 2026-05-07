@@ -9,7 +9,9 @@
 }:
 
 stdenvNoLibc.mkDerivation {
-  name = "newlib";
+  pname = "vc4-newlib";
+  version = "0-unstable-2017-01-08";
+
   src = fetchFromGitHub {
     owner = "itszor";
     repo = "newlib-vc4";

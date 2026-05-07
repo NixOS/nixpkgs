@@ -6,11 +6,11 @@
   installShellFiles,
   jre,
 
-  libX11,
-  libXext,
-  libXcursor,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxcursor,
+  libxrandr,
+  libxxf86vm,
   libpulseaudio,
   libGL,
   glfw,
@@ -31,11 +31,11 @@ let
     (lib.getLib stdenv.cc.cc)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXext
-    libXcursor
-    libXrandr
-    libXxf86vm
+    libx11
+    libxext
+    libxcursor
+    libxrandr
+    libxxf86vm
 
     # lwjgl
     libpulseaudio
@@ -45,17 +45,15 @@ let
   ]
   ++ lib.optional textToSpeechSupport flite;
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "portablemc";
   version = "4.4.1";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "mindstorm38";
+    owner = "theorzr";
     repo = "portablemc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KE1qf6aIcDjwKzrdKDUmriWfAt+vuriew6ixHKm0xs8=";
   };
 
@@ -72,7 +70,7 @@ python3Packages.buildPythonApplication rec {
 
   # Note: Tests use networking, so we don't run them
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd portablemc \
         --bash <($out/bin/portablemc show completion bash) \
         --zsh <($out/bin/portablemc show completion zsh)
@@ -86,16 +84,16 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = "https://github.com/mindstorm38/portablemc";
+    homepage = "https://github.com/theorzr/portablemc";
     description = "Fast, reliable and cross-platform command-line Minecraft launcher and API for developers";
     longDescription = ''
       A fast, reliable and cross-platform command-line Minecraft launcher and API for developers.
       Including fast and easy installation of common mod loaders such as Fabric, Forge, NeoForge and Quilt.
       This launcher is compatible with the standard Minecraft directories.
     '';
-    changelog = "https://github.com/mindstorm38/portablemc/releases/tag/v${version}";
+    changelog = "https://github.com/theorzr/portablemc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     mainProgram = "portablemc";
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

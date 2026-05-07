@@ -4,7 +4,7 @@
   # The unwrapped libreoffice derivation
   unwrapped,
   makeWrapper,
-  xorg, # for lndir
+  lndir,
   runCommand,
   # For Emulating wrapGAppsHook3
   gsettings-desktop-schemas,
@@ -19,6 +19,7 @@
   extraMakeWrapperArgs ? [ ],
   dbusVerify ? stdenv.hostPlatform.isLinux,
   dbus,
+  unixodbc,
 }:
 
 let
@@ -28,6 +29,10 @@ let
 
   makeWrapperArgs = builtins.concatStringsSep " " (
     [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${lib.getLib unixodbc}/lib"
       "--set"
       "GDK_PIXBUF_MODULE_FILE"
       "${librsvg}/${gdk-pixbuf.moduleDir}.cache"
@@ -54,7 +59,7 @@ let
       "--prefix"
       "GST_PLUGIN_SYSTEM_PATH_1_0"
       ":"
-      "${lib.makeSearchPath "lib/girepository-1.0" unwrapped.gst_packages}"
+      "${lib.makeSearchPath "lib/gstreamer-1.0" unwrapped.gst_packages}"
       "--suffix"
       "PATH"
       ":"
@@ -67,13 +72,11 @@ let
       "--prefix"
       "QT_PLUGIN_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qtbase.qtPluginPrefix (
-        builtins.map lib.getBin unwrapped.qtPackages
-      )}"
+      "${lib.makeSearchPath unwrapped.qtbase.qtPluginPrefix (map lib.getBin unwrapped.qtPackages)}"
       "--prefix"
       "QML2_IMPORT_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qtbase.qtQmlPrefix (builtins.map lib.getBin unwrapped.qmlPackages)}"
+      "${lib.makeSearchPath unwrapped.qtbase.qtQmlPrefix (map lib.getBin unwrapped.qmlPackages)}"
     ]
     ++ [
       # Add dictionaries from all NIX_PROFILES
@@ -123,11 +126,11 @@ let
 in
 runCommand "${unwrapped.name}-wrapped"
   {
-    inherit (unwrapped) meta;
+    inherit (unwrapped) meta pname version;
     paths = [ unwrapped ];
     nativeBuildInputs = [
       makeWrapper
-      xorg.lndir
+      lndir
     ];
     passthru = {
       inherit unwrapped;

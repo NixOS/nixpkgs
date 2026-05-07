@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ glibcLocales ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   propagatedBuildInputs = [
     celery

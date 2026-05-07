@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,23 +8,23 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeone";
-  version = "1.11.2";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
-    rev = "v${version}";
-    hash = "sha256-TDT7qAwd9wewnfICEX+ZI4z9jma0L+SZcZJeQOuv9dc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PEGhLqBLDHLxa23+llB0LdaS/mGINyMzoCyPAsBU+vw=";
   };
 
-  vendorHash = "sha256-Wnnwp1GRlE1q8MSc23pOmSn9fKu5uHVzkivfuF2lnEk=";
+  vendorHash = "sha256-qXIlU1ZrJvJ0u8wSoBeESEfOMEGHkVg8kLMp/zlyfno=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X k8c.io/kubeone/pkg/cmd.version=${version}"
+    "-X k8c.io/kubeone/pkg/cmd.version=${finalAttrs.version}"
     "-X k8c.io/kubeone/pkg/cmd.date=unknown"
   ];
 
@@ -31,7 +32,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubeone \
       --bash <($out/bin/kubeone completion bash) \
       --zsh <($out/bin/kubeone completion zsh)
@@ -45,8 +46,8 @@ buildGoModule rec {
   meta = {
     description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments";
     homepage = "https://kubeone.io/";
-    changelog = "https://github.com/kubermatic/kubeone/releases/tag/v${version}";
+    changelog = "https://github.com/kubermatic/kubeone/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lblasc ];
   };
-}
+})

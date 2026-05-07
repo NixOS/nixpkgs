@@ -6,12 +6,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.6.5.640";
   pname = "fatsort";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fatsort/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/fatsort/fatsort-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-Yw7OVtnrOlVSSvCuw6reeFQ2DrqUkXKmz7R2jLj75C4=";
   };
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fatsort.sourceforge.net/";
     description = "Sorts FAT partition table, for devices that don't do sorting of files";
-    maintainers = [ maintainers.kovirobi ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.kovirobi ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "fatsort";
   };
-}
+})

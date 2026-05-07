@@ -3,7 +3,6 @@
   name = "caddy";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      Br1ght0ne
       stepbrobd
     ];
   };
@@ -74,7 +73,7 @@
           services.caddy = {
             package = pkgs.caddy.withPlugins {
               plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20241211194404-3865845790a7" ];
-              hash = "sha256-RrB0/qXL0mCvkxKaz8zhj5GWKEtOqItXP2ASYz7VdMU=";
+              hash = "sha256-Quib7+jFf2ElS4yvrJhuLiedX3lBNwxpEDskxxyVu+8=";
             };
             configFile = pkgs.writeText "Caddyfile" ''
               {

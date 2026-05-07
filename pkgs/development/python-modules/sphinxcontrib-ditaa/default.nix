@@ -9,12 +9,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-ditaa";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-V/LhOwWbOP3olYC+ypFqxsp0VrLXBsPd6p3UiQ5fW9M=";
+    inherit version;
+    pname = "sphinxcontrib_ditaa";
+    hash = "sha256-8O74Gyb4KxER/VlFQWwHKQQjiYNU1ch5n6eLneVHTCg=";
   };
 
   build-system = [ setuptools ];

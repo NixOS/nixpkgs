@@ -11,14 +11,14 @@
   eigen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lc0";
   version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "LeelaChessZero";
     repo = "lc0";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8watDDxSyZ5khYqpXPyjQso2MkOzfI6o2nt0vkuiEUI=";
     fetchSubmodules = true;
   };
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "-Dembed=false"
   ]
   # in version 31 this option will be required
-  ++ lib.optionals (lib.versionAtLeast version "0.31") [ "-Dnative_cuda=false" ];
+  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "0.31") [ "-Dnative_cuda=false" ];
 
   enableParallelBuilding = true;
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin;
   };
 
-}
+})

@@ -18,14 +18,14 @@
   libnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odp-dpdk";
   version = "1.46.0.0_DPDK_22.11";
 
   src = fetchFromGitHub {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
   };
 
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.abuibrahim ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.abuibrahim ];
   };
-}
+})

@@ -12,14 +12,14 @@
   atk,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-menu";
   version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-menu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3fN89HPwobMiijlvGJ80HexCBdsPLsEvAz9VH8dO4qc=";
   };
 
@@ -55,12 +55,12 @@ buildGoModule rec {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$out/share")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nwg-piotr/nwg-menu";
     description = "MenuStart plugin for nwg-panel";
     mainProgram = "nwg-menu";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ berbiche ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ berbiche ];
   };
-}
+})

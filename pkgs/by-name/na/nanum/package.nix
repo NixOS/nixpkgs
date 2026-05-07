@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "20200506";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/universe/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
+    url = "mirror://ubuntu/pool/universe/f/fonts-nanum/fonts-nanum_${version}.orig.tar.xz";
     hash = "sha256-FXgDdIGYFRJQo898sDrvhE5AjpyYhJ3YieGRhGqsrUs=";
   };
 
@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nanum Korean font set";
     homepage = "https://hangeul.naver.com/font";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ serge ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

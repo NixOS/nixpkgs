@@ -5,8 +5,6 @@
 
   pytestCheckHook,
 
-  pythonOlder,
-
   setuptools,
   cython,
 
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "editdistpy";
   version = "0.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mammothb";

@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchgit,
   qtbase,
   qmake,
@@ -8,6 +8,7 @@
   flex,
   bison,
   qtdeclarative,
+  wrapQtAppsHook,
 }:
 
 let
@@ -20,7 +21,7 @@ let
     fetchSubmodules = true;
   };
 
-  qtnproperty = mkDerivation {
+  qtnproperty = stdenv.mkDerivation {
     name = "qtnproperty";
     inherit src;
     sourceRoot = "${src.name}/Sources/utils/QtnProperty";
@@ -34,13 +35,14 @@ let
       qmake
       flex
       bison
+      wrapQtAppsHook
     ];
     postInstall = ''
       install -D bin-linux/QtnPEG $out/bin/QtnPEG
     '';
   };
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "awesomebump";
   inherit version;
 
@@ -52,7 +54,10 @@ mkDerivation {
     qtdeclarative
   ];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   preBuild = ''
     ln -sf ${qtnproperty}/bin/QtnPEG Sources/utils/QtnProperty/bin-linux/QtnPEG

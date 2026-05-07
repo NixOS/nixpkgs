@@ -6,7 +6,7 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-common";
   # nixpkgs-update: no auto update
   version = "0.12.4";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-common";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hKCIPZlLPyH7D3Derk2onyqTzWGUtCx+f2+EKtAKlwA=";
   };
 
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     let
       ignoreTests = [
         "promise_test_multiple_waiters"
+        # Flaky test https://github.com/NixOS/nixpkgs/issues/443233
+        "test_memory_usage_maxrss"
       ];
     in
     ''
@@ -50,16 +52,15 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS SDK for C common core";
     homepage = "https://github.com/awslabs/aws-c-common";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     # https://github.com/awslabs/aws-c-common/issues/1175
-    badPlatforms = platforms.bigEndian;
-    maintainers = with maintainers; [
-      orivej
+    badPlatforms = lib.platforms.bigEndian;
+    maintainers = with lib.maintainers; [
       r-burns
     ];
   };
-}
+})

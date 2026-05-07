@@ -24,19 +24,19 @@ let
 
   libset =
     toplib:
-    builtins.map (subsetname: {
+    map (subsetname: {
       subsetname = subsetname;
       functions = libDefPos [ ] toplib.${subsetname};
-    }) (builtins.map (x: x.name) libsets);
+    }) (map (x: x.name) libsets);
 
   flattenedLibSubset =
     { subsetname, functions }:
-    builtins.map (fn: {
+    map (fn: {
       name = "lib.${subsetname}.${fn.name}";
       value = fn.location;
     }) functions;
 
-  locatedlibsets = libs: builtins.map flattenedLibSubset (libset libs);
+  locatedlibsets = libs: map flattenedLibSubset (libset libs);
   removeFilenamePrefix =
     prefix: filename:
     let
@@ -46,7 +46,7 @@ let
     in
     substr;
 
-  removeNixpkgs = removeFilenamePrefix (builtins.toString nixpkgsPath);
+  removeNixpkgs = removeFilenamePrefix (toString nixpkgsPath);
 
   liblocations = builtins.filter (elem: elem.value != null) (lib.lists.flatten (locatedlibsets lib));
 
@@ -59,19 +59,19 @@ let
       };
     };
 
-  relativeLocs = (builtins.map fnLocationRelative liblocations);
+  relativeLocs = (map fnLocationRelative liblocations);
   sanitizeId = builtins.replaceStrings [ "'" ] [ "-prime" ];
 
   urlPrefix = "https://github.com/NixOS/nixpkgs/blob/${revision}";
   jsonLocs = builtins.listToAttrs (
-    builtins.map (
+    map (
       { name, value }:
       {
         name = sanitizeId name;
         value =
           let
-            text = "${value.file}:${builtins.toString value.line}";
-            target = "${urlPrefix}/${value.file}#L${builtins.toString value.line}";
+            text = "${value.file}:${toString value.line}";
+            target = "${urlPrefix}/${value.file}#L${toString value.line}";
           in
           "[${text}](${target}) in `<nixpkgs>`";
       }

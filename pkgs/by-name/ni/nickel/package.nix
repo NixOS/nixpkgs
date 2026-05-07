@@ -14,20 +14,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.13.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
-    owner = "tweag";
+    owner = "nickel-lang";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-YYDYVZ0rMO3bEHcBBSOup0gieg96hqT6XUqWM9h4yeI=";
+    hash = "sha256-G+ik4tMr+WsDpiEFYv80ruBR/SpeEg9agUWqgXrq7UI=";
   };
 
-  cargoHash = "sha256-hsyAa8rLd/usoArZKfO5+92nLh4/sq9X0fpJncN4Ik4=";
+  cargoHash = "sha256-E3UBkLxd7AC/Pk1Zgy+KvHTPXgATqIr7lZXPB8vlSWs=";
 
   cargoBuildFlags = [
-    "-p nickel-lang-cli"
-    "-p nickel-lang-lsp"
+    "--package"
+    "nickel-lang-cli"
+    "--package"
+    "nickel-lang-lsp"
   ];
 
   nativeBuildInputs = [
@@ -76,7 +78,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -92,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
+    changelog = "https://github.com/nickel-lang/nickel/blob/${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       felschr

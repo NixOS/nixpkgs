@@ -9,18 +9,19 @@
   rustPlatform,
   wrapGAppsHook4,
   graphene,
+  sqlite,
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snx-rs";
-  version = "4.8.0";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
-    tag = "v${version}";
-    hash = "sha256-D2WVmu+vECabVdnJtc7ihlj83Z/2m6kD8KZ9ot9dCRE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5kb/3S9KxLBMVDJ1hB7CnHhnYfY484J+5OQ3y6LgIZY=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     kdePackages.kstatusnotifieritem
     openssl
     graphene
+    sqlite
   ];
 
   checkFlags = [
@@ -47,20 +49,19 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  cargoHash = "sha256-+rTpuAe+6YdgCQr/+zJMaSYo4T+3Fkma0PSVjnsxAfg=";
+  cargoHash = "sha256-o+s4DJiSBx8NnKHWuclWPNEb4Ci4KgEFnzaLUcJ2ooI=";
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/snx-rs";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";
     homepage = "https://github.com/ancwrd1/snx-rs";
     license = lib.licenses.agpl3Plus;
-    changelog = "https://github.com/ancwrd1/snx-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ancwrd1/snx-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       shavyn
     ];
     mainProgram = "snx-rs";
   };
-}
+})

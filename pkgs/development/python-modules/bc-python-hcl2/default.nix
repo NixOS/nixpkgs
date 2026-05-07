@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lark,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "bc-python-hcl2";
   version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
@@ -30,15 +27,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hcl2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for HCL2 written in Python using Lark";
     longDescription = ''
       This parser only supports HCL2 and isn't backwards compatible with HCL v1.
       It can be used to parse any HCL2 config file such as Terraform.
     '';
     homepage = "https://github.com/bridgecrewio/python-hcl2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anhdle14 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anhdle14 ];
     mainProgram = "hcl2tojson";
   };
 }

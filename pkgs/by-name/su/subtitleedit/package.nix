@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
-  version = "4.0.13";
+  version = "4.0.15";
 
   src = fetchzip {
     url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${
       lib.replaceStrings [ "." ] [ "" ] version
     }.zip";
-    hash = "sha256-Oo/w+1cEQ3+Xoa9H9VrGCaLFWFI2ajdj9wn3Pk9WEUk=";
+    hash = "sha256-MI74IN0idWSF5TrNodhj2t4GW39VyyDNl2eDEuvfEl0=";
     stripRoot = false;
   };
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Subtitle editor";
     longDescription = ''
       With Subtitle Edit you can easily adjust a subtitle if it is out of sync with
@@ -92,9 +92,9 @@ stdenv.mkDerivation rec {
       or for translating subtitles.
     '';
     homepage = "https://nikse.dk/subtitleedit";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = [ ];
   };
 }

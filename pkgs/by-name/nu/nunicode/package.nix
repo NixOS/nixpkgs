@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromBitbucket {
     owner = "alekseyt";
     repo = "nunicode";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-6255YdX7eYSAj0EAE4RgX1m4XDNIF/Nc4ZCvXzTxpag=";
   };
 
@@ -44,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # avoid name-clash on case-insensitive filesystems
   cmakeBuildDir = "build-dir";
+
+  cmakeFlags = [
+    # fix compatibility with CMake (https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "4.0")
+  ];
 
   doCheck = true;
 

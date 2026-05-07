@@ -4,7 +4,12 @@
   fetchFromGitHub,
   makeWrapper,
   nx-libs,
-  xorg,
+  xrandr,
+  xinit,
+  xhost,
+  xdpyinfo,
+  xauth,
+  libxcvt,
   getopt,
   gnugrep,
   gawk,
@@ -20,14 +25,14 @@
   weston,
   xwayland,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x11docker";
-  version = "7.6.0-unstable-2024-04-04";
+  version = "7.8.0";
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
-    rev = "cb29a996597839239e482409b895353b1097ce3b";
-    sha256 = "sha256-NYMr2XZ4m6uvuIGO+nzX2ksxtVLJL4zy/JebxeAvqD4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mOxPNT6psRBTuTrMgASBTBr3dZzCSxanSkHKF84lmO8=";
   };
   nativeBuildInputs = [ makeWrapper ];
 
@@ -46,18 +51,18 @@ stdenv.mkDerivation rec {
           mount
           iproute2
           nx-libs
-          xorg.xdpyinfo
-          xorg.xhost
-          xorg.xinit
+          xdpyinfo
+          xhost
+          xinit
           python3
           jq
-          xorg.libxcvt
+          libxcvt
           wmctrl
           xdotool
           xclip
           xpra
-          xorg.xrandr
-          xorg.xauth
+          xrandr
+          xauth
           weston
           xwayland
         ]
@@ -72,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "x11docker";
   };
-}
+})

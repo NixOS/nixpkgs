@@ -22,7 +22,6 @@ let
     ${listenCfg}
     hostname ${cfg.hostName}
     ${tlsCfg}
-    db sqlite3 ${stateDir}/soju.db
     ${logCfg}
     http-origin ${concatStringsSep " " cfg.httpOrigins}
     accept-proxy-ip ${concatStringsSep " " cfg.acceptProxyIP}
@@ -151,8 +150,10 @@ in
         DynamicUser = true;
         Restart = "always";
         ExecStart = "${lib.getExe' cfg.package "soju"} -config ${cfg.configFile}";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
         StateDirectory = "soju";
         RuntimeDirectory = "soju";
+        WorkingDirectory = stateDir;
       };
     };
   };

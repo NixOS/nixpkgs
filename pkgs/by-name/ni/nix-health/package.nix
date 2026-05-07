@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-health";
   version = "0.4.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "nix_health";
     hash = "sha256-/I6LdcH61wgJOEv51J1jkWlD8BlSAaRR1e7gc5H9bQI=";
   };
@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Check the health of your Nix setup";
     homepage = "https://github.com/juspay/nix-health";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shivaraj-bh ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
     mainProgram = "nix-health";
   };
-}
+})

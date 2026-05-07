@@ -9,9 +9,6 @@
 mkKdeDerivation {
   pname = "itinerary";
 
-  # FIXME: this should really be fixed at ECM level somehow
-  patches = [ ./optional-runtime-dependencies.patch ];
-
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info

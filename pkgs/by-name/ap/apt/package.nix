@@ -25,23 +25,24 @@
   triehash,
   udev,
   w3m,
-  xxHash,
+  xxhash,
   xz,
   zstd,
   withDocs ? true,
   withNLS ? true,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "3.1.4";
+  version = "3.3.0";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
     rev = finalAttrs.version;
-    hash = "sha256-l0ZrtYUSX5CmzmtL+qXxvjGNNXG04RUuK9mu1/NJnq8=";
+    hash = "sha256-UvCdRQDXNwWqc4FDt4AFdPIX1oMUVpFYzbWGDqS7TvA=";
   };
 
   # cycle detection; lib can't be split
@@ -83,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     p11-kit
     udev
-    xxHash
+    xxhash
     xz
     zstd
   ]
@@ -101,13 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_DOC" withDocs)
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://salsa.debian.org/apt-team/apt";
     description = "Command-line package management tools used on Debian-based systems";
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${finalAttrs.version}/debian/changelog";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "apt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ VZstless ];
     platforms = lib.platforms.linux;
   };
 })

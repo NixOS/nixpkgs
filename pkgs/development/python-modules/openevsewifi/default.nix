@@ -6,7 +6,7 @@
   fetchpatch,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   requests,
   requests-mock,
 }:
@@ -14,9 +14,7 @@
 buildPythonPackage rec {
   pname = "openevsewifi";
   version = "1.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miniconfig";
@@ -35,6 +33,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     requests-mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   patches = [
@@ -46,17 +45,12 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytest-cov = "^2.8.1"' ""
-  '';
-
   pythonImportsCheck = [ "openevsewifi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for communicating with the wifi module from OpenEVSE";
     homepage = "https://github.com/miniconfig/python-openevse-wifi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

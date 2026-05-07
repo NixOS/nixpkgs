@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "llm-ollama";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "taketwo";
     repo = "llm-ollama";
     tag = version;
-    hash = "sha256-8ELjUpHaIC8BOcmyQNeyQDPxQ5vO4Pj6FFnHFhvP+r0=";
+    hash = "sha256-EzZHkFuqkpd/rtQI1dV/wl8KZWblgWnwUl4vP3y9D8M=";
   };
 
   build-system = [ setuptools ];

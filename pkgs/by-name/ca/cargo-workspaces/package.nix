@@ -8,16 +8,16 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-workspaces";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-5heOf74OUsnrG+vt9AdMXV7uRxqKYs0KRE7qm0irmC0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-/h7v5Wq7YsNMVzLHw3QQmcknbjARpI7HFPAUGX72wZ0=";
   };
 
-  cargoHash = "sha256-Is2ddCrg+dP0TSw3EUl057RA0L2VW4mPttg2eAtC0j4=";
+  cargoHash = "sha256-eaTLKQdz8Kyee7Bhub/OBueteeQ8jY36g4DgqctrToY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,13 +41,12 @@ rustPlatform.buildRustPackage rec {
       commands and more.
     '';
     homepage = "https://github.com/pksunkara/cargo-workspaces";
-    changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       macalinao
       matthiasbeyer
     ];
     mainProgram = "cargo-workspaces";
   };
-}
+})

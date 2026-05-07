@@ -15,7 +15,7 @@
   libpng,
   libtheora,
   libvorbis,
-  libX11,
+  libx11,
   python3,
   tcl,
   zlib,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_ttf
-    libX11
+    libx11
     alsa-lib
     freetype
     glew
@@ -71,22 +71,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Many thanks @mthuurne from OpenMSX project for providing support to
   # Nixpkgs! :)
-  TCL_CONFIG = "${tcl}/lib/";
+  env.TCL_CONFIG = "${tcl}/lib/";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openmsx.org";
     description = "MSX emulator that aims for perfection";
     longDescription = ''
       OpenMSX is an emulator for the MSX home computer system. Its goal is
       to emulate all aspects of the MSX with 100% accuracy.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       boost
       gpl2Plus
     ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "openmsx";
   };
 })

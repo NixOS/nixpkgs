@@ -5,13 +5,13 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "usbsdmux";
   version = "25.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/hDDEUvpdpUpg3ZVw8NWcDOLOtLu087Ki7FmGrDh9Gg=";
   };
 
@@ -46,4 +46,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; linux;
   };
-}
+})

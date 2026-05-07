@@ -40,7 +40,7 @@
       # logs should end up in the auditd audit log
       auditd.succeed("grep 'unit=systemd-journald' /var/log/audit/audit.log")
       # logs should not end up in kmesg
-      machine.fail("journalctl _TRANSPORT=kernel --grep 'unit=systemd-journald'")
+      auditd.fail("journalctl _TRANSPORT=kernel --grep 'unit=systemd-journald'")
 
 
     with subtest("journald audit"):

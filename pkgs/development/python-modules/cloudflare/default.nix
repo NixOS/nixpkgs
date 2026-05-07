@@ -8,7 +8,6 @@
   anyio,
   distro,
   sniffio,
-  pythonOlder,
   hatchling,
   hatch-fancy-pypi-readme,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "cloudflare";
   version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

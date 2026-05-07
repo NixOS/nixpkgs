@@ -69,14 +69,15 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libchamplain";
+      attrPath = "libchamplain_libsoup3";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libchamplain";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     description = "C library providing a ClutterActor to display maps";
 
@@ -88,10 +89,10 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-    teams = [
-      teams.gnome
-      teams.pantheon
+    teams = lib.optionals withLibsoup3 [
+      lib.teams.gnome
+      lib.teams.pantheon
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

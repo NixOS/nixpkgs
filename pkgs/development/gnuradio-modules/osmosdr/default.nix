@@ -1,11 +1,16 @@
 {
   lib,
-  stdenv,
   mkDerivation,
+  gnuradioAtLeast,
   fetchgit,
+  fetchpatch,
   gnuradio,
+
+  # native
   cmake,
   pkg-config,
+
+  # buildInputs
   logLib,
   libsndfile,
   mpir,
@@ -21,18 +26,27 @@
   libbladeRF,
   rtl-sdr,
   soapysdr-with-plugins,
-  gnuradioAtLeast,
+  features ? { },
 }:
 
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "gr-osmosdr";
   version = "0.2.6";
 
   src = fetchgit {
     url = "https://gitea.osmocom.org/sdr/gr-osmosdr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jCUzBY1pYiEtcRQ97t9F6uEMVYw2NU0eoB5Xc2H6pGQ=";
   };
+
+  patches = [
+    # Fixes build with boost 1.89, see:
+    # https://github.com/osmocom/gr-osmosdr/pull/29
+    (fetchpatch {
+      url = "https://github.com/osmocom/gr-osmosdr/commit/06249f1f0930aa553ef8877b50503b9f5c77b4a0.patch";
+      hash = "sha256-ofjuDvTT2PzRTR6UWchTQzmr9a83ka5TfUdlCBe4Is0=";
+    })
+  ];
 
   disabled = gnuradioAtLeast "3.11";
 
@@ -48,12 +62,8 @@ mkDerivation rec {
     fftwFloat
     gmp
     icu
-    airspy
-    hackrf
-    libbladeRF
-    rtl-sdr
-    soapysdr-with-plugins
   ]
+  ++ finalAttrs.finalPackage.passthru.enabledFeaturesDeps
   ++ lib.optionals (gnuradio.hasFeature "gr-blocks") [
     libsndfile
   ]
@@ -70,7 +80,8 @@ mkDerivation rec {
   ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then "-DENABLE_PYTHON=ON" else "-DENABLE_PYTHON=OFF")
-  ];
+  ]
+  ++ finalAttrs.finalPackage.passthru.enabledFeaturesCmakeFlags;
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -79,6 +90,25 @@ mkDerivation rec {
     python.pkgs.mako
     python
   ];
+  passthru = {
+    featuresDeps = {
+      # Other features don't have dependencies but can still be disabled in the
+      # `features` argument.
+      airspy = [ airspy ];
+      bladerf = [ libbladeRF ];
+      hackrf = [ hackrf ];
+      rtl = [ rtl-sdr ];
+      soapy = [ soapysdr-with-plugins ];
+    };
+    enabledFeaturesDeps = lib.pipe finalAttrs.finalPackage.passthru.featuresDeps [
+      (lib.filterAttrs (name: deps: features.${name} or true))
+      lib.attrValues
+      lib.flatten
+    ];
+    enabledFeaturesCmakeFlags = lib.mapAttrsToList (
+      feat: val: lib.cmakeBool "ENABLE_${lib.toUpper feat}" val
+    ) features;
+  };
 
   meta = {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";
@@ -87,4 +117,4 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.unix;
   };
-}
+})

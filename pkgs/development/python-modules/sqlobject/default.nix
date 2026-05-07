@@ -8,21 +8,18 @@
   pastedeploy,
   paste,
   pydispatcher,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.13.0";
+  version = "3.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlobject";
     repo = "sqlobject";
     tag = version;
-    hash = "sha256-KcpbGqNsR77kwbTLKwvwWpyLvF1UowIsKM7Kirs7Zw4=";
+    hash = "sha256-Qbb48z4DrD/M8e26+5NjPcA0b3gxHeAxj1X/jSrTwx0=";
   };
 
   build-system = [ setuptools ];
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlobject" ];
 
-  meta = with lib; {
+  meta = {
     description = "Object Relational Manager for providing an object interface to your database";
     homepage = "https://www.sqlobject.org/";
-    changelog = "https://github.com/sqlobject/sqlobject/blob/${version}/docs/News.rst";
-    license = licenses.lgpl21Only;
+    changelog = "https://github.com/sqlobject/sqlobject/blob/${src.tag}/docs/News.rst";
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

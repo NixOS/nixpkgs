@@ -6,14 +6,14 @@
   libarchive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genext2fs";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "bestouff";
     repo = "genext2fs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9LAU5XuCwwEhU985MzZ2X+YYibvyECULQSn9X2jdj5I=";
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     ./test.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bestouff/genext2fs";
     description = "Tool to generate ext2 filesystem images without requiring root privileges";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "genext2fs";
   };
-}
+})

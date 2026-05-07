@@ -103,7 +103,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Automated deployment of mutable components and services for Disnix";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.unix;
   };
 }

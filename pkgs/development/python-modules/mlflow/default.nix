@@ -7,6 +7,7 @@
   setuptools,
 
   # dependencies
+  aiohttp,
   alembic,
   cachetools,
   click,
@@ -16,30 +17,34 @@
   docker,
   fastapi,
   flask,
+  flask-cors,
   gitpython,
   graphene,
   gunicorn,
+  huey,
   importlib-metadata,
   jinja2,
   markdown,
   matplotlib,
   numpy,
   opentelemetry-api,
+  opentelemetry-proto,
   opentelemetry-sdk,
   packaging,
   pandas,
   protobuf,
   pyarrow,
+  python-dotenv,
   pyyaml,
   requests,
   scikit-learn,
   scipy,
+  skops,
   sqlalchemy,
   sqlparse,
   uvicorn,
 
   # tests
-  aiohttp,
   azure-core,
   azure-storage-blob,
   azure-storage-file,
@@ -72,19 +77,20 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "3.3.1";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-5zObSnGx7+cCrqRfvcnprQN05NqVBCeWcAZEE1Jpeuo=";
+    hash = "sha256-Oe6nBnnOz7MvGUNCcCGhHl6ZbyDfAhQ0LlfMBF4p6Hc=";
   };
 
   pythonRelaxDeps = [
+    "cryptography"
     "gunicorn"
-    "importlib-metadata"
+    "importlib_metadata"
     "packaging"
     "protobuf"
     "pytz"
@@ -94,6 +100,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     alembic
     cachetools
     click
@@ -103,26 +110,31 @@ buildPythonPackage rec {
     docker
     fastapi
     flask
+    flask-cors
     gitpython
     graphene
     gunicorn
+    huey
     importlib-metadata
     jinja2
     markdown
     matplotlib
     numpy
     opentelemetry-api
+    opentelemetry-proto
     opentelemetry-sdk
     packaging
     pandas
     protobuf
     pyarrow
     pydantic
+    python-dotenv
     pyyaml
     requests
     scikit-learn
     scipy
     shap
+    skops
     sqlalchemy
     sqlparse
     uvicorn
@@ -198,6 +210,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mlflow/mlflow";
     changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

@@ -1,0 +1,64 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  onnx,
+  optimum,
+  transformers,
+
+  # optional-dependencies
+  onnxruntime,
+  # onnxruntime-gpu, unpackaged
+  ruff,
+}:
+
+buildPythonPackage rec {
+  pname = "optimum-onnx";
+  version = "0.1.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "huggingface";
+    repo = "optimum-onnx";
+    tag = "v${version}";
+    hash = "sha256-Thx3QPLgi8w8znvMGSuCyRu/tUynCkQFywtKKv7UhuA=";
+  };
+
+  build-system = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "transformers"
+  ];
+  dependencies = [
+    onnx
+    optimum
+    transformers
+  ];
+
+  optional-dependencies = {
+    onnxruntime = [
+      onnxruntime
+    ];
+    # onnxruntime-gpu = [ onnxruntime-gpu ];
+  };
+
+  pythonImportsCheck = [ "optimum.onnxruntime" ];
+
+  # Almost all tests need internet access
+  doCheck = false;
+
+  meta = {
+    description = "Export your model to ONNX and run inference with ONNX Runtime";
+    homepage = "https://github.com/huggingface/optimum-onnx";
+    changelog = "https://github.com/huggingface/optimum-onnx/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+  };
+}

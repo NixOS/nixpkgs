@@ -86,11 +86,11 @@ let
   prepareConfigValue =
     v:
     if lib.isBool v then
-      (if v then "yes" else "no")
+      lib.boolToYesNo v
     else if lib.isList v then
       lib.concatStringsSep " " (map prepareConfigValue v)
     else
-      builtins.toString v;
+      toString v;
   prepareConfigText =
     conf:
     lib.concatLines (
@@ -100,6 +100,8 @@ in
 {
   options.security.auditd = {
     enable = lib.mkEnableOption "the Linux Audit daemon";
+
+    package = lib.mkPackageOption pkgs "auditd" { default = "audit"; };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -146,7 +148,7 @@ in
       defaultText = lib.literalExpression ''
         {
           af_unix = {
-            path = lib.getExe' pkgs.audit "audisp-af_unix";
+            path = lib.getExe' config.security.auditd.package "audisp-af_unix";
             args = [
               "0640"
               "/var/run/audispd_events"
@@ -155,15 +157,15 @@ in
             format = "binary";
           };
           remote = {
-            path = lib.getExe' pkgs.audit "audisp-remote";
+            path = lib.getExe' config.security.auditd.package "audisp-remote";
             settings = { };
           };
           filter = {
-            path = lib.getExe' pkgs.audit "audisp-filter";
+            path = lib.getExe' config.security.auditd.package "audisp-filter";
             args = [
               "allowlist"
               "/etc/audit/audisp-filter.conf"
-              (lib.getExe' pkgs.audit "audisp-syslog")
+              (lib.getExe' config.security.auditd.package "audisp-syslog")
               "LOG_USER"
               "LOG_INFO"
               "interpret"
@@ -171,7 +173,7 @@ in
             settings = { };
           };
           syslog = {
-            path = lib.getExe' pkgs.audit "audisp-syslog";
+            path = lib.getExe' config.security.auditd.package "audisp-syslog";
             args = [ "LOG_INFO" ];
           };
         }
@@ -226,24 +228,24 @@ in
 
     security.auditd.plugins = {
       af_unix = {
-        path = lib.getExe' pkgs.audit "audisp-af_unix";
+        path = lib.getExe' cfg.package "audisp-af_unix";
         args = [
           "0640"
-          "/var/run/audispd_events"
+          "/run/audit/audispd_events"
           "string"
         ];
         format = "binary";
       };
       remote = {
-        path = lib.getExe' pkgs.audit "audisp-remote";
+        path = lib.getExe' cfg.package "audisp-remote";
         settings = { };
       };
       filter = {
-        path = lib.getExe' pkgs.audit "audisp-filter";
+        path = lib.getExe' cfg.package "audisp-filter";
         args = [
           "allowlist"
           "/etc/audit/audisp-filter.conf"
-          (lib.getExe' pkgs.audit "audisp-syslog")
+          (lib.getExe' cfg.package "audisp-syslog")
           "LOG_USER"
           "LOG_INFO"
           "interpret"
@@ -251,46 +253,28 @@ in
         settings = { };
       };
       syslog = {
-        path = lib.getExe' pkgs.audit "audisp-syslog";
+        path = lib.getExe' cfg.package "audisp-syslog";
         args = [ "LOG_INFO" ];
       };
     };
 
-    systemd.services.auditd = {
-      description = "Security Audit Logging Service";
-      documentation = [ "man:auditd(8)" ];
-      wantedBy = [ "sysinit.target" ];
-      after = [
-        "local-fs.target"
-        "systemd-tmpfiles-setup.service"
-      ];
-      before = [
-        "sysinit.target"
-        "shutdown.target"
-      ];
-      conflicts = [ "shutdown.target" ];
+    systemd.packages = [ cfg.package.out ];
 
-      unitConfig = {
-        DefaultDependencies = false;
-        RefuseManualStop = true;
-        ConditionVirtualization = "!container";
-        ConditionKernelCommandLine = [
-          "!audit=0"
-          "!audit=off"
-        ];
-      };
+    systemd.services.auditd = {
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        # https://github.com/linux-audit/audit-userspace/pull/501
+        # set up audit directories using systemd service instead of tmpfiles
         LogsDirectory = "audit";
-        ExecStart = "${pkgs.audit}/bin/auditd -l -n -s nochange";
-        Restart = "on-failure";
-        # Do not restart for intentional exits. See EXIT CODES section in auditd(8).
-        RestartPreventExitStatus = "2 4 6";
-
-        # Upstream hardening settings
-        MemoryDenyWriteExecute = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
+        LogsDirectoryMode = "0700";
+        RuntimeDirectory = "audit";
+        RuntimeDirectoryMode = "0755";
+        ExecStart = [
+          # the upstream unit does not allow symlinks, so clear and rewrite the ExecStart
+          ""
+          "${lib.getExe' cfg.package "auditd"} -l -s nochange"
+        ];
       };
     };
   };

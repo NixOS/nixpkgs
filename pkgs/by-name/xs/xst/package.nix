@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   fontconfig,
-  libX11,
-  libXext,
-  libXft,
+  libx11,
+  libxext,
+  libxft,
   ncurses,
   pkg-config,
   nix-update-script,
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     fontconfig
-    libX11
-    libXext
-    libXft
+    libx11
+    libxext
+    libxft
     ncurses
   ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple terminal fork that can load config from Xresources";
     mainProgram = "xst";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vyp ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mutf8";
   version = "1.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "TkTech";
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mutf8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast MUTF-8 encoder & decoder";
     homepage = "https://github.com/TkTech/mutf8";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

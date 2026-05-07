@@ -436,6 +436,38 @@ let
             router.wait_until_succeeds("ping -c 1 192.168.1.3")
       '';
     };
+    ipvlan = {
+      name = "IPVLAN";
+      nodes.client = {
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+          ipvlans = {
+            ipvlan1.interface = "enp1s0";
+            ipvlan2.interface = "enp1s0";
+          };
+        };
+      };
+      testScript = ''
+        with subtest("Wait for networking to come up"):
+            client.wait_for_unit("network.target")
+
+        with subtest("Can move IPVLANs to separate network namespaces"):
+            client.succeed("ip netns add ns1 && ip link set dev ipvlan1 netns ns1")
+            client.succeed("ip netns add ns2 && ip link set dev ipvlan2 netns ns2")
+
+        with subtest("Can configure the IPVLAN interfaces"):
+            client.succeed("ip netns exec ns1 ip addr add 192.168.1.1/24 dev ipvlan1")
+            client.succeed("ip netns exec ns2 ip addr add 192.168.1.2/24 dev ipvlan2")
+            client.succeed("ip netns exec ns1 ip link set dev ipvlan1 up")
+            client.succeed("ip netns exec ns2 ip link set dev ipvlan2 up")
+
+        with subtest("IPVLAN interfaces can ping each other"):
+            client.succeed("ip netns exec ns1 ping -c 1 192.168.1.2")
+            client.succeed("ip netns exec ns2 ping -c 1 192.168.1.1")
+      '';
+    };
     fou = {
       name = "foo-over-udp";
       nodes.machine = clientConfig {
@@ -1053,6 +1085,7 @@ let
             }
           ];
           virtual = true;
+          virtualOwner = null;
           mtu = 1342;
           macAddress = "02:de:ad:be:ef:01";
         };
@@ -1070,13 +1103,14 @@ let
             }
           ];
           virtual = true;
+          virtualOwner = "root";
           mtu = 1343;
         };
       };
 
       testScript = ''
         targetList = """
-        tap0: tap persist user 0
+        tap0: tap persist
         tun0: tun persist user 0
         """.strip()
 
@@ -1101,6 +1135,10 @@ let
             machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
             machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
             assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
+        with subtest("Test virtualOwner are configured"):
+            for interface, expected_owner in [("tap0", "-1"), ("tun0", "0")]:
+                actual_owner = machine.succeed(f"cat /sys/class/net/{interface}/owner").strip()
+                assert expected_owner == actual_owner, f"{interface} owner: expect {expected_owner}, got {actual_owner}"
       '' # network-addresses-* only exist in scripted networking
       + lib.optionalString (!networkd) ''
         with subtest("Test interfaces' addresses clean up"):
@@ -1418,7 +1456,7 @@ let
         nodes.machine = {
           networking.useNetworkd = networkd;
           networking.bridges = lib.listToAttrs (
-            lib.flip builtins.map ifnames (name: {
+            lib.flip map ifnames (name: {
               inherit name;
               value.interfaces = [ ];
             })

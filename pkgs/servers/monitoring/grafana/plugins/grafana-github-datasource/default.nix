@@ -2,17 +2,17 @@
 
 grafanaPlugin {
   pname = "grafana-github-datasource";
-  version = "1.9.2";
+  version = "2.8.0";
   zipHash = {
-    x86_64-linux = "sha256-gh+vdZ8vkG/0OosqJSoh54Gi3JQGGm7YF0YgQCXr0LY=";
-    aarch64-linux = "sha256-OEDT5N/AyL3xocl1nesV9hCcfA/a8XBPBoaOH4UTo+M=";
-    x86_64-darwin = "sha256-5WrWvZriXjQIId52Y6THAVg7RfQFl1CT5qhKr/m0vVk=";
-    aarch64-darwin = "sha256-4IowlmyDGjxHBHvBD/eqZvouuOEvlad0nW8L0n8hf+g";
+    x86_64-linux = "sha256-hKElyWX4fcQtF3eyYVRuaJjvNWY9CV2bNoNkFLeJQLc=";
+    aarch64-linux = "sha256-+ygxJc+ovlqjcs68QD71JQepINTeauA41sKrJa6h8gc=";
+    x86_64-darwin = "sha256-ZrvBxCi6gyRFly0NtTPWUWzTbH3rp92Vy0C4n1hO/pA=";
+    aarch64-darwin = "sha256-s4q+k1gbOBCeMDpkTpui0egOxzoBjbKoX63pwVqmY6A=";
   };
-  meta = with lib; {
+  meta = {
     description = "Allows GitHub API data to be visually represented in Grafana dashboards";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

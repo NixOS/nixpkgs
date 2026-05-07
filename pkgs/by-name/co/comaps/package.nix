@@ -2,8 +2,9 @@
   lib,
   organicmaps,
   fetchurl,
-  fetchFromGitea,
+  fetchFromCodeberg,
   boost,
+  expat,
   gtest,
   glm,
   gflags,
@@ -15,33 +16,38 @@
   nix-update-script,
 }:
 let
-  mapRev = 250822;
+  # https://codeberg.org/comaps/comaps/src/branch/main/data/countries.txt
+  mapRev = 260321;
 
   worldMap = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/World.mwm";
-    hash = "sha256-OksUAix8yw0WQiJUwfMrjOCd/OwuRjdCOUjjGpnG2S8=";
+    hash = "sha256-pMmzPcWbS9drQzJCfiac2dfSMihiHDfhFyG5ux0pG54=";
   };
 
   worldCoasts = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/WorldCoasts.mwm";
-    hash = "sha256-1OvKZJ3T/YJu6t/qTYliIVkwsT8toBSqGHUpDEk9i2k=";
+    hash = "sha256-5LI6itC6LhprVfgGbT/HYy1lzZLZLUe2QoSil0/7kIc=";
   };
+
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
+      protobuf
+    ]
+  );
 in
 organicmaps.overrideAttrs (oldAttrs: rec {
   pname = "comaps";
-  version = "2025.08.31-15";
+  version = "2026.03.23-5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "comaps";
     repo = "comaps";
     tag = "v${version}";
-    hash = "sha256-uRShcyMevNb/UE5+l8UabiGSr9TccVWp5xVoqI7+Oh8=";
+    hash = "sha256-1bD0QiEZu6nB7wwBpfpEf+WypqbOd9XuXbq7FDTL7bw=";
     fetchSubmodules = true;
   };
 
   patches = [
-    ./remove-lto.patch
     ./use-vendored-protobuf.patch
 
     # Include missing editor_tests_support.
@@ -50,19 +56,22 @@ organicmaps.overrideAttrs (oldAttrs: rec {
 
   postPatch = (oldAttrs.postPatch or "") + ''
     rm -f 3party/boost/b2
+    substituteInPlace configure.sh \
+      --replace-fail "git submodule update --init --recursive --depth 1" ""
+
+    patchShebangs tools/unix/*
+    substituteInPlace tools/python/{categories/json_to_txt.py,generate_desktop_ui_strings.py} \
+      --replace-fail "/usr/bin/env python3" "${pythonEnv.interpreter}"
   '';
 
   nativeBuildInputs = (builtins.filter (x: x != python3) oldAttrs.nativeBuildInputs or [ ]) ++ [
-    (python3.withPackages (
-      ps: with ps; [
-        protobuf
-      ]
-    ))
+    pythonEnv
     optipng
   ];
 
   buildInputs = (oldAttrs.buildInputs or [ ]) ++ [
     boost
+    expat
     gtest
     gflags
     glm

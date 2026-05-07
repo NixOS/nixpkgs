@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "disk-filltest";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

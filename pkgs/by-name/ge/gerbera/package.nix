@@ -13,7 +13,9 @@
   spdlog,
   sqlite,
   zlib,
-  fmt_11,
+  fmt,
+  jsoncpp,
+  icu77,
   # options
   enableMysql ? false,
   libmysqlclient,
@@ -119,15 +121,15 @@ let
   inherit (lib) flatten;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gerbera";
-  version = "2.5.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
-    rev = "v${version}";
-    sha256 = "sha256-3X8/8ewqXy9tvy4S9frmPENhsYTwaW6SydtJeiyVH1I=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-dszd4WSTjOWwLNha0yq1gtC5kxCrJMhnnhKYaor8JyU=";
   };
 
   postPatch =
@@ -140,6 +142,7 @@ stdenv.mkDerivation rec {
     in
     ''
       ${mysqlPatch}
+      substituteInPlace CMakeLists.txt --replace-fail /usr/share/bash-completion/completions $out/share/bash-completion/completions
     '';
 
   cmakeFlags = [
@@ -161,7 +164,9 @@ stdenv.mkDerivation rec {
     spdlog
     sqlite
     zlib
-    fmt_11
+    fmt
+    jsoncpp
+    icu77
   ]
   ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
@@ -169,7 +174,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://docs.gerbera.io/";
-    changelog = "https://github.com/gerbera/gerbera/releases/tag/v${version}";
+    changelog = "https://github.com/gerbera/gerbera/releases/tag/v${finalAttrs.version}";
     description = "UPnP Media Server for 2024";
     longDescription = ''
       Gerbera is a Mediatomb fork.
@@ -181,4 +186,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "gerbera";
   };
-}
+})

@@ -21,8 +21,9 @@
   python3,
   readline,
   ruby,
+  versionCheckHook,
   vte,
-  xxHash,
+  xxhash,
   zlib,
   useX11 ? false,
   rubyBindings ? false,
@@ -32,43 +33,43 @@ let
   binaryninja = fetchFromGitHub {
     owner = "Vector35";
     repo = "binaryninja-api";
-    rev = "c40a5f04deec68d388b2072dc42b29141089f9ce"; # https://github.com/radareorg/radare2/blob/master/subprojects/binaryninja.wrap
-    hash = "sha256-IfuGgwVI51urQxhaYkYsE45NkScgxKmmEBV6Pllhwmo=";
+    rev = "ba13f6ec7d0ce9a18a03a1c895fb72d18e03014a"; # https://github.com/radareorg/radare2/blob/master/subprojects/binaryninja.wrap
+    hash = "sha256-ApBDmrepz27ioEjtqgdGzGF0tPkDghp7dA8L9eHHW6w=";
   };
 
   sdb = fetchFromGitHub {
-    owner = "radare";
+    owner = "radareorg";
     repo = "sdb";
-    tag = "2.2.0"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
-    hash = "sha256-S/aL3F6+Z/rqelfIJaZaBF1IxSmhA1qE9ahFvKARoaE=";
+    tag = "2.4.2"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
+    hash = "sha256-JN27SkDqHtX83d1CPUF9hbVKwE/dwhDgn5MlCX9RPrc=";
   };
 
   qjs = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "7238ee64dbc2fbdea044555cda8cda78785a93ed"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
-    hash = "sha256-1ZeLCTmbrlRrZB9El3L497gt3QUA5GIScrFVIBkxA88=";
+    rev = "3087a2ce5bcb66cc1fcd9f34d3e5ce3bd43a67d9"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
+    hash = "sha256-Z6DUe/W1+3SYPRPCiL3oNL5ovXCsW3dsFuGkA9WF3W4=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.0.2";
+  version = "6.1.4";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-uCMf+pNqyjRLeNJlE8Kk6PQCIRBjidO/XGHeNV/F1lA=";
+    hash = "sha256-3MwBtjR3XQMhbJHnD30OVedUEKcje5jDPszNynkGCT8=";
   };
 
   mesonFlags = [
-    (lib.mesonOption "use_sys_capstone" "true")
-    (lib.mesonOption "use_sys_lz4" "true")
-    (lib.mesonOption "use_sys_magic" "true")
-    (lib.mesonOption "use_sys_openssl" "true")
-    (lib.mesonOption "use_sys_xxhash" "true")
-    (lib.mesonOption "use_sys_zip" "true")
-    (lib.mesonOption "use_sys_zlib" "true")
+    (lib.mesonBool "use_sys_capstone" true)
+    (lib.mesonBool "use_sys_lz4" true)
+    (lib.mesonBool "use_sys_magic" true)
+    (lib.mesonBool "use_sys_openssl" true)
+    (lib.mesonBool "use_sys_xxhash" true)
+    (lib.mesonBool "use_sys_zip" true)
+    (lib.mesonBool "use_sys_zlib" true)
     (lib.mesonOption "r2_gittap" finalAttrs.version)
   ];
 
@@ -109,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     # radare2 exposes r_lib which depends on these libraries
     file # for its list of magic numbers (`libmagic`)
     libzip
-    xxHash
+    xxhash
   ];
 
   postUnpack = ''
@@ -132,6 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset";
@@ -163,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       mic92
       raskin
     ];
-    mainProgram = "radare2";
+    mainProgram = "r2";
     platforms = lib.platforms.unix;
   };
 })

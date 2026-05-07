@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -33,16 +34,16 @@
   fetchurl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plopp";
-  version = "25.07.1";
+  version = "26.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
-    tag = version;
-    hash = "sha256-SaUjRyPgh27YfV8Pvj0dA+e+oFcxqMo5LBJAbCy+svI=";
+    tag = finalAttrs.version;
+    hash = "sha256-nluNaOQKkXolGCgx3Pr0m5OQ6vZbWPfdN7kbNKaVU68=";
   };
 
   build-system = [
@@ -71,6 +72,12 @@ buildPythonPackage rec {
     scipp
     scipy
     xarray
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/scipp/plopp/issues/508
+    "test_move_cut"
+    "test_value_cuts"
   ];
 
   env = {
@@ -114,4 +121,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

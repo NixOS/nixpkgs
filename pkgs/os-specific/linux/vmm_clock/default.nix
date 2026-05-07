@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Experimental implementation of a kvmclock-derived clocksource for Linux guests under OpenBSD's hypervisor";
     homepage = "https://github.com/voutilad/vmm_clock";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qbit ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qbit ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

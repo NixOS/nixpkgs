@@ -11,7 +11,7 @@
   glib,
   hwdata,
   imagemagick,
-  libXrandr,
+  libxrandr,
   libdrm,
   libelf,
   libglvnd,
@@ -34,8 +34,10 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
-  xfce,
-  xorg,
+  xfconf,
+  libxext,
+  libxdmcp,
+  libxau,
   yyjson,
   zlib,
   zfs,
@@ -59,13 +61,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.52.0";
+  version = "2.62.1";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-Zylq4Ae1Ut2iB4qOnOtGkjDjuPxRyr221FVzOx3kdIE=";
+    hash = "sha256-lI3p0LPDg5EXQ60NIYkpv0sNeckUdZjJSsmc2XP1l0E=";
   };
 
   outputs = [
@@ -166,16 +168,16 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optionals x11Support [
           # At least one of them sould be present in X11 sessions for better display detection and faster WM detection.
           # The *randr ones provide multi monitor support The libxcb* ones usually have better performance.
-          libXrandr
+          libxrandr
           libxcb
           # Required by libxcb messages
-          xorg.libXau
-          xorg.libXdmcp
-          xorg.libXext
+          libxau
+          libxdmcp
+          libxext
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.
-          xfce.xfconf
+          xfconf
         ]
         ++ lib.optionals zfsSupport [
           # Needed for zpool module
@@ -257,7 +259,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

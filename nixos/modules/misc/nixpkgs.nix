@@ -2,47 +2,11 @@
   config,
   options,
   lib,
-  pkgs,
   ...
 }:
 let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
-
-  isConfig = x: builtins.isAttrs x || lib.isFunction x;
-
-  optCall = f: x: if lib.isFunction f then f x else f;
-
-  mergeConfig =
-    lhs_: rhs_:
-    let
-      lhs = optCall lhs_ { inherit pkgs; };
-      rhs = optCall rhs_ { inherit pkgs; };
-    in
-    lib.recursiveUpdate lhs rhs
-    // lib.optionalAttrs (lhs ? packageOverrides) {
-      packageOverrides =
-        pkgs:
-        optCall lhs.packageOverrides pkgs // optCall (lib.attrByPath [ "packageOverrides" ] { } rhs) pkgs;
-    }
-    // lib.optionalAttrs (lhs ? perlPackageOverrides) {
-      perlPackageOverrides =
-        pkgs:
-        optCall lhs.perlPackageOverrides pkgs
-        // optCall (lib.attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
-    };
-
-  configType = lib.mkOptionType {
-    name = "nixpkgs-config";
-    description = "nixpkgs config";
-    check =
-      x:
-      let
-        traceXIfNot = c: if c x then true else lib.traceSeqN 1 x false;
-      in
-      traceXIfNot isConfig;
-    merge = args: lib.foldr (def: mergeConfig def.value) { };
-  };
 
   overlayType = lib.mkOptionType {
     name = "nixpkgs-overlay";
@@ -70,6 +34,8 @@ let
     ++ lib.optional (opt.localSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.localSystem
     ++ lib.optional (opt.crossSystem.highestPrio < (lib.mkOptionDefault { }).priority) opt.crossSystem;
 
+  _configDefinitions = opt.config.definitionsWithLocations;
+
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
@@ -87,14 +53,15 @@ let
       in
       import ../../.. (
         {
-          inherit (cfg) config overlays;
+          inherit _configDefinitions;
+          inherit (cfg) overlays;
         }
         // systemArgs
       )
     else
       import ../../.. {
+        inherit _configDefinitions;
         inherit (cfg)
-          config
           overlays
           localSystem
           crossSystem
@@ -119,7 +86,7 @@ in
     pkgs = lib.mkOption {
       defaultText = lib.literalExpression ''
         import "''${nixos}/.." {
-          inherit (cfg) config overlays localSystem crossSystem;
+          inherit (config.nixpkgs) config overlays localSystem crossSystem;
         }
       '';
       type = pkgsType;
@@ -162,7 +129,15 @@ in
       example = lib.literalExpression ''
         { allowBroken = true; allowUnfree = true; }
       '';
-      type = configType;
+      type = lib.types.deferredModuleWith {
+        staticModules = [
+          { _module.args.docPrefix = "https://nixos.org/manual/nixpkgs/unstable/"; }
+          ../../../pkgs/top-level/config.nix
+        ];
+      };
+      # Returns pkgs.config instead of nixpkgs.config
+      # This shadows the deferredModule to make it look like a submodule
+      apply = _: finalPkgs.config;
       description = ''
         Global configuration for Nixpkgs.
         The complete list of [Nixpkgs configuration options](https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference) is in the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig).
@@ -228,7 +203,7 @@ in
           cfg.hostPlatform # make identical, so that `==` equality works; see https://github.com/NixOS/nixpkgs/issues/278001
         else
           elaborated;
-      defaultText = lib.literalExpression ''config.nixpkgs.hostPlatform'';
+      defaultText = lib.literalExpression "config.nixpkgs.hostPlatform";
       description = ''
         Specifies the platform on which NixOS should be built.
         By default, NixOS is built on the system where it runs, but you can
@@ -252,7 +227,7 @@ in
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = lib.literalExpression ''config.nixpkgs.system'';
+      defaultText = lib.literalExpression "config.nixpkgs.system";
       description = ''
         Systems with a recently generated `hardware-configuration.nix`
         do not need to specify this option, unless cross-compiling, in which case
@@ -355,7 +330,7 @@ in
         # which is somewhat costly for Nixpkgs. With an explicit priority, we only
         # evaluate the wrapper to find out that the priority is lower, and then we
         # don't need to evaluate `finalPkgs`.
-        lib.mkOverride lib.modules.defaultOverridePriority finalPkgs.__splicedPackages;
+        lib.mkOverride lib.modules.defaultOverridePriority finalPkgs;
     };
 
     assertions =
@@ -403,7 +378,7 @@ in
           '';
         }
         {
-          assertion = opt.pkgs.isDefined -> cfg.config == { };
+          assertion = opt.pkgs.isDefined -> opt.config.highestPrio == (lib.mkOptionDefault null).priority;
           message = ''
             Your system configures nixpkgs with an externally created instance.
             `nixpkgs.config` options should be passed when creating the instance instead.

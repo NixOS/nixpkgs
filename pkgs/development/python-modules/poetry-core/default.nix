@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   build,
   gitMinimal,
   pytest-cov-stub,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "2.1.3";
+  version = "2.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-core";
     tag = version;
-    hash = "sha256-CgaWlqjvBTN7GuerzmO5IiEdXxYH6pmTDj9IsNJlCBE=";
+    hash = "sha256-Rv6JCHsqu5rRvihGaUFcRk/NUT90bnIUM01QxUUkxh4=";
   };
 
   nativeCheckInputs = [

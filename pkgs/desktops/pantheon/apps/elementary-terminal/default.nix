@@ -8,26 +8,24 @@
   ninja,
   vala,
   desktop-file-utils,
-  gtk3,
-  granite,
-  libhandy,
-  libnotify,
-  vte,
+  gtk4,
+  granite7,
+  libadwaita,
+  vte-gtk4,
   libgee,
   pcre2,
-  wrapGAppsHook3,
-  xvfb-run,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "7.1.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
-    rev = version;
-    sha256 = "sha256-B/VEVS1dJQGJ8+gqgJ/mb3+r29ZPtCSSlur/CAr6BJg=";
+    tag = version;
+    hash = "sha256-IzLaM9FPMRGJKvlXktyrhDYSyP4LJ8yFW8/FmsmZjU4=";
   };
 
   nativeBuildInputs = [
@@ -36,34 +34,32 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook3
-    xvfb-run
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
-    libnotify
     pcre2
-    vte
+    vte-gtk4
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
     homepage = "https://github.com/elementary/terminal";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.terminal";
   };
 }

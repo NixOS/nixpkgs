@@ -12,7 +12,6 @@ let
     mkOption
     types
     concatStringsSep
-    singleton
     ;
 in
 {

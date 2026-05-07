@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     rm -rf libpng zlib zopfli
   '';
 
-  NIX_CFLAGS_LINK = "-lzopfli";
+  env.NIX_CFLAGS_LINK = "-lzopfli";
 
   installPhase = ''
     install -Dt $out/bin apngasm
@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Create highly optimized Animated PNG files from PNG/TGA images";
     mainProgram = "apngasm";
     homepage = "https://apngasm.sourceforge.net/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.zlib;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 
 }

@@ -7,9 +7,9 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "h2";
-  version = "2.3.232";
+  version = "2.4.240";
 
   outputs = [
     "out"
@@ -19,8 +19,8 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "h2database";
     repo = "h2database";
-    tag = "version-${version}";
-    hash = "sha256-voqQ4JqYkHRxVdxMGsHmKirQXMP7s44rTXeasWWW2Jw=";
+    tag = "version-${finalAttrs.version}";
+    hash = "sha256-Cy6MoumJBhhcYT6dCHWeOfmhjGRkdNvSONdIiZaf6uU=";
   };
 
   mvnParameters = "-f h2/pom.xml";
@@ -32,10 +32,10 @@ maven.buildMavenPackage rec {
 
   installPhase = ''
     mkdir -p $out/share/java
-    install -Dm644 h2/target/h2-${version}.jar $out/share/java
+    install -Dm644 h2/target/h2-${finalAttrs.version}.jar $out/share/java
 
     makeWrapper ${jre}/bin/java $out/bin/h2 \
-      --add-flags "-cp \"$out/share/java/h2-${version}.jar:\$H2DRIVERS:\$CLASSPATH\" org.h2.tools.Console"
+      --add-flags "-cp \"$out/share/java/h2-${finalAttrs.version}.jar:\$H2DRIVERS:\$CLASSPATH\" org.h2.tools.Console"
 
     mkdir -p $doc/share/doc/h2
     cp -r h2/src/docsrc/* $doc/share/doc/h2
@@ -60,4 +60,4 @@ maven.buildMavenPackage rec {
     ];
     mainProgram = "h2";
   };
-}
+})

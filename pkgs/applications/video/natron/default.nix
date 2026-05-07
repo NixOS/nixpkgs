@@ -12,7 +12,7 @@
   expat,
   extra-cmake-modules,
   glog,
-  libXdmcp,
+  libxdmcp,
   python312,
   wayland,
 }:
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     wayland
     glog
     ceres-solver
-    libXdmcp
+    libxdmcp
   ];
 
   postInstall = ''
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
       --set-default OCIO "$out/share/OpenColorIO-Configs/blender/config.ocio"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Node-graph based, open-source compositing software";
     longDescription = ''
       Node-graph based, open-source compositing software. Similar in
@@ -103,8 +103,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://natron.fr/";
     license = lib.licenses.gpl2;
-    maintainers = [ maintainers.puffnfresh ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.puffnfresh ];
+    platforms = lib.platforms.linux;
     # error: 'LogMessageVoidify' is not a member of 'google'
     broken = true;
   };

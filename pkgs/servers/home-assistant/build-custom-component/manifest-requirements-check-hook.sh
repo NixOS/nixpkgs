@@ -7,9 +7,12 @@ function manifestCheckPhase() {
     echo "Executing manifestCheckPhase"
     runHook preCheck
 
+    local -a ignoreVersionRequirementArray
+    concatTo ignoreVersionRequirementArray ignoreVersionRequirement
+
     args=""
     # shellcheck disable=SC2154
-    for package in "${ignoreVersionRequirement[@]}"; do
+    for package in "${ignoreVersionRequirementArray[@]}"; do
         args+=" --ignore-version-requirement ${package}"
     done
 

@@ -20,6 +20,7 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  pyyaml,
   requests,
   shapely,
   strenum,
@@ -29,14 +30,14 @@
 }:
 
 let
-  version = "7.1.1";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     tag = "v${version}";
-    hash = "sha256-zlcyvouvemHhbD1UcYbbbkmCkTVwarSTF9mCi0I/ZzY=";
+    hash = "sha256-3xsV7X5M6s1wXYrThFC2SdvWgXAt1Hlw4OGQB/bKCCY=";
   };
 
   lbox-clients = buildPythonPackage {
@@ -87,6 +88,7 @@ buildPythonPackage rec {
     tqdm
     geojson
     mypy
+    pyyaml
   ];
 
   optional-dependencies = {

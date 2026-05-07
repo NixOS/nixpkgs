@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-rtsp-server";
-  version = "1.26.5";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Mo3/JFdBloPypPBsoRnP0ivrYyzuGtaDBZEhMyU1PEQ=";
+    hash = "sha256-th1DBNjOqqoboTn7HOk18E8ac9fhgkPAoFsvsEMFQG8=";
   };
 
   nativeBuildInputs = [
@@ -62,18 +62,22 @@ stdenv.mkDerivation (finalAttrs: {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GStreamer RTSP server";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
       A library on top of GStreamer for building an RTSP server.
     '';
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bkchr ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bkchr ];
   };
 })

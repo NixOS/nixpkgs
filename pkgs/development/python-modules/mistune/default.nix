@@ -3,26 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mistune";
-  version = "3.1.3";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "mistune";
     tag = "v${version}";
-    hash = "sha256-aD+c41nuSmLUoYzK8adP0eLYRU0FihHEqG4e0b0GZ9k=";
+    hash = "sha256-rUEZNVuMT5+GsMakrkK6rshKSKtTTN72kK92AmQ8bl8=";
   };
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
 
   build-system = [ setuptools ];
 

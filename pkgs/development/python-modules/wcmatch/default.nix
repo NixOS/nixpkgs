@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "wcmatch";
   version = "10.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wcmatch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wilcard File Name matching library";
     homepage = "https://github.com/facelessuser/wcmatch";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

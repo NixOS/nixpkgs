@@ -14,25 +14,21 @@ let
   };
 
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bukubrow-host";
   version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "SamHH";
     repo = "bukubrow-host";
-    rev = "v${version}";
-    sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 
   cargoHash = "sha256-mCPJE9WW14NtahbMnDcE+0xXl5w25dzerPy3wv78l20=";
 
   buildInputs = [ sqlite ];
 
-  passAsFile = [
-    "firefoxManifest"
-    "chromeManifest"
-  ];
   firefoxManifest = builtins.toJSON (
     manifest
     // {
@@ -46,19 +42,25 @@ rustPlatform.buildRustPackage rec {
     }
   );
   postBuild = ''
-    substituteAll $firefoxManifestPath firefox.json
-    substituteAll $chromeManifestPath chrome.json
+    printf "%s" "$firefoxManifest" > firefox.json
+    substituteInPlace firefox.json \
+      --replace-fail "@out@" "$out"
+    printf "%s" "$chromeManifest" > chrome.json
+    substituteInPlace chrome.json \
+      --replace-fail "@out@" "$out"
   '';
   postInstall = ''
     install -Dm0644 firefox.json $out/lib/mozilla/native-messaging-hosts/com.samhh.bukubrow.json
     install -Dm0644 chrome.json $out/etc/chromium/native-messaging-hosts/com.samhh.bukubrow.json
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "bukubrow";
   };
-}
+})

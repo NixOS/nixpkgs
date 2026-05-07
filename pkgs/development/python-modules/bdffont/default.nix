@@ -1,33 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
   pytestCheckHook,
-  nix-update-script,
-  hatchling,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bdffont";
-  version = "0.0.32";
+  version = "0.0.36";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    pname = "bdffont";
-    inherit version;
-    hash = "sha256-5O1AlidPMhp0ztzBi/eHJToFSKMcx+EuQHltt/w4goQ=";
+  src = fetchFromGitHub {
+    owner = "TakWolf";
+    repo = "bdffont";
+    tag = finalAttrs.version;
+    hash = "sha256-PCx1uMjCa5d8odDGRi4BRaf1E1AP0oZUv0QYr24E6Yo=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bdffont" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/TakWolf/bdffont";
@@ -39,4 +34,4 @@ buildPythonPackage rec {
       h7x4
     ];
   };
-}
+})

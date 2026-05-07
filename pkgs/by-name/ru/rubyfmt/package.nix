@@ -14,17 +14,18 @@
   libxcrypt,
   libyaml,
   rust-jemalloc-sys-unprefixed,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rubyfmt";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "fables-tales";
     repo = "rubyfmt";
-    tag = "v${version}";
-    hash = "sha256-IIHPU6iwFwQ5cOAtOULpMSjexFtTelSd/LGLuazdmUo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wGvfmBm2GNXASXc//K2JOrn/iUdlbA5dDReNJ+NqjDM=";
     fetchSubmodules = true;
   };
 
@@ -61,13 +62,15 @@ rustPlatform.buildRustPackage rec {
     ./0003-ignore-warnings.patch
   ];
 
-  cargoHash = "sha256-8LgAHznxU30bbK8ivNamVD3Yi2pljgpqJg2WC0nxftk=";
+  cargoHash = "sha256-jJa/6TKwTTN3xOBuUy+YdwKOJbtYVrmlHgMyqPCVqVs=";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
 
   preFixup = ''
     mv $out/bin/rubyfmt{-main,}
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Ruby autoformatter";
@@ -77,4 +80,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "rubyfmt";
   };
-}
+})

@@ -5,19 +5,19 @@
   nodejs,
   faketty,
   openssl,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
 }:
 
 buildNpmPackage rec {
   pname = "ghostfolio";
-  version = "2.199.0";
+  version = "2.254.0";
 
   src = fetchFromGitHub {
     owner = "ghostfolio";
     repo = "ghostfolio";
     tag = version;
-    hash = "sha256-O21eeTKWwyD029ZuQBKpOE6Y+f9ufSfe70KjxjXQh9M=";
+    hash = "sha256-bcUr0tzq/X2pOmg7ZYj46+TQO9NBKmevm+C6PbyV/yc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -27,10 +27,10 @@ buildNpmPackage rec {
     '';
   };
 
-  npmDepsHash = "sha256-Bo8w+9TySugwAPfUqZHGKBe0hKwvOQIisfA3QENN//s=";
+  npmDepsHash = "sha256-Wa15OSsd2IXTO1OjZoiFsSF0UhrzvS6fsymvxyPm0s8=";
 
   nativeBuildInputs = [
-    prisma
+    prisma_6
     faketty
   ];
 
@@ -67,11 +67,11 @@ buildNpmPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
       ${lib.concatStringsSep " " (
         lib.mapAttrsToList (name: value: "--set ${name} ${lib.escapeShellArg value}") {
-          PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
-          PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
-          PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
-          PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
-          PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
+          PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
+          PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
+          PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
+          PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines_6 "introspection-engine";
+          PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
         }
       )}
 

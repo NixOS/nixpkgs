@@ -30,6 +30,14 @@ This setting has no tangible effect when running the build in a sandboxed deriva
 
 The default value is `build`.
 
+#### `cmakeBuildType` {#cmake-build-type}
+
+Build type of cmake output.
+
+Internally populates the `CMAKE_BUILD_TYPE` cmake flag.
+
+The default value is `Release`.
+
 #### `dontUseCmakeConfigure` {#dont-use-cmake-configure}
 
 When set to true, don't use the predefined `cmakeConfigurePhase`.

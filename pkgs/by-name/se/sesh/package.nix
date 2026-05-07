@@ -4,30 +4,39 @@
   buildGoModule,
   go-mockery,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sesh";
-  version = "2.17.1";
+  version = "2.26.1";
 
   nativeBuildInputs = [
     go-mockery
+    writableTmpDirAsHomeHook
   ];
+
   src = fetchFromGitHub {
     owner = "joshmedeski";
     repo = "sesh";
-    rev = "v${version}";
-    hash = "sha256-olt61AR/Tq8lLh65V0/+GDrWjCi9hrkNbHR9LOX7kY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-egh50ajgs2ngB9eALk4xq7W1n8OrTYeMBRsveisH2LQ=";
+  };
+
+  # NOTE: prevent crash when getting vendor deps/hash
+  overrideModAttrs = _: {
+    preBuild = "";
   };
 
   preBuild = ''
     mockery
   '';
-  vendorHash = "sha256-TLl8HZnsVvtx6jqusTETP0l3zTmzYmuV4NJIM958VcQ=";
+
+  vendorHash = "sha256-9IiDp/HaxXQAyNzuVBLiO+oIijBbdKBjssCmj8WV9V4=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -37,7 +46,7 @@ buildGoModule rec {
   meta = {
     description = "Smart session manager for the terminal";
     homepage = "https://github.com/joshmedeski/sesh";
-    changelog = "https://github.com/joshmedeski/sesh/releases/tag/${src.rev}";
+    changelog = "https://github.com/joshmedeski/sesh/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gwg313
@@ -46,4 +55,4 @@ buildGoModule rec {
     ];
     mainProgram = "sesh";
   };
-}
+})

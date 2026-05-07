@@ -18,7 +18,7 @@ rec {
           inherit (buildPlatform) system;
           inherit (meta) name;
         }
-        // (builtins.removeAttrs attrs [
+        // (removeAttrs attrs [
           "meta"
           "passthru"
         ])
@@ -57,7 +57,7 @@ rec {
           ''
             target=''${out}''${destination}
           ''
-          + lib.optionalString (builtins.dirOf destination == ".") ''
+          + lib.optionalString (dirOf destination == ".") ''
             mkdir -p ''${out}''${destinationDir}
           ''
           + ''
@@ -70,7 +70,7 @@ rec {
       ];
 
       PATH = lib.makeBinPath [ mescc-tools-extra ];
-      destinationDir = builtins.dirOf destination;
+      destinationDir = dirOf destination;
       inherit destination;
     };
 

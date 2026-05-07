@@ -6,15 +6,12 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aionut";
   version = "4.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bdraco";
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aionut" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio Network UPS Tools";
     homepage = "https://github.com/bdraco/aionut";
     changelog = "https://github.com/bdraco/aionut/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

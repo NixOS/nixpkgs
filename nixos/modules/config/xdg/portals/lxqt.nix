@@ -10,7 +10,7 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.lxqt.members;
+    teams = [ lib.teams.lxqt ];
   };
 
   options.xdg.portal.lxqt = {

@@ -12,26 +12,25 @@
   vulkan-loader,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+let
+  platformPaths = {
+    "aarch64-linux" = "bin/linuxarm64";
+    "i686-linux" = "bin";
+    "x86_64-linux" = "bin/linux64";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xrizer";
-  version = "0.3";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
-    tag = "v${version}";
-    hash = "sha256-o6/uGbczYp5t6trjFIltZAMSM61adn+BvNb1fBhBSsk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y/K+eXECUi9wGol0IUuIUI9hqhEN8GHaOO5i1xMFNQo=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "xrizer-fix-flaky-tests.patch";
-      url = "https://github.com/Supreeeme/xrizer/commit/f58d797e75a8d920982abeaeedee83877dd3c493.diff?full_index=1";
-      hash = "sha256-TI++ZY7QX1iaj3WT0woXApSY2Tairraao5kzF77ewYY=";
-    })
-  ];
-
-  cargoHash = "sha256-kXcnD98ZaqRAA3jQvIoWSRC37Uq8l5PUYEzubxfMuUI=";
+  cargoHash = "sha256-btGPIujawY5NPmx7hGBxW5ZYi2RvboyQpfw6fA3c3jE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -54,16 +53,10 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/lib/xrizer/$platformPath
-    ln -s "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
+    mv "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
   '';
 
-  platformPath =
-    {
-      "aarch64-linux" = "bin/linuxarm64";
-      "i686-linux" = "bin";
-      "x86_64-linux" = "bin/linux64";
-    }
-    ."${stdenv.hostPlatform.system}";
+  platformPath = platformPaths."${stdenv.hostPlatform.system}";
 
   passthru.updateScript = nix-update-script { };
 
@@ -72,10 +65,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Supreeeme/xrizer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-      "aarch64-linux"
-    ];
+    platforms = builtins.attrNames platformPaths;
   };
-}
+})

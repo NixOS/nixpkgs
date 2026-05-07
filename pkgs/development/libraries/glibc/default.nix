@@ -42,8 +42,6 @@ in
     # override the patches in `common.nix` -- so instead you should
     # write `patches = (previousAttrs.patches or []) ++ [ ... ]`.
 
-    NIX_NO_SELF_RPATH = true;
-
     postConfigure = ''
       # Hack: get rid of the `-static' flag set by the bootstrap stdenv.
       # This has to be done *after* `configure' because it builds some
@@ -58,17 +56,18 @@ in
       makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
     '';
 
-    # The pie, stackprotector and fortify hardening flags are autodetected by
+    # The stackprotector and fortify hardening flags are autodetected by
     # glibc and enabled by default if supported. Setting it for every gcc
     # invocation does not work.
     hardeningDisable = [
       "fortify"
-      "pie"
       "stackprotector"
       "strictflexarrays3"
     ];
 
     env = (previousAttrs.env or { }) // {
+      NIX_NO_SELF_RPATH = true;
+
       NIX_CFLAGS_COMPILE =
         (previousAttrs.env.NIX_CFLAGS_COMPILE or "")
         + lib.concatStringsSep " " (
@@ -120,7 +119,7 @@ in
       + (
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           ''
-            echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
+            echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../localedata/SUPPORTED
             # Don't install C.utf-8 into the archive, but into $out/lib/locale: on non-NixOS
             # systems with an empty /usr/lib/locale/locale-archive, glibc would fall back to
             # $libdir/locale/C.utf-8 instead of the locale archive of pkgs.glibc. See also #347965.
@@ -140,7 +139,7 @@ in
             # evaluating buildPackages.glibc when glibc hasn't come from stdenv
             # (e.g. on musl)." https://github.com/NixOS/nixpkgs/pull/259964
             ''
-              pushd ../glibc-2*/localedata
+              pushd ../localedata
               export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
               mkdir -p $NIX_BUILD_TOP/${pkgsBuildBuild.glibc}/lib/locale
               ${lib.getBin pkgsBuildBuild.glibc}/bin/localedef \
@@ -217,5 +216,6 @@ in
 
     meta = (previousAttrs.meta or { }) // {
       description = "GNU C Library";
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" previousAttrs.passthru.minorRelease;
     };
   })

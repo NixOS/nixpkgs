@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pyatag";
   version = "0.3.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatsNl";
@@ -37,11 +34,11 @@ buildPythonPackage rec {
   # nixpkgs-update: no auto update
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python module to talk to Atag One";
     homepage = "https://github.com/MatsNl/pyatag";
     changelog = "https://github.com/MatsNl/pyatag/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

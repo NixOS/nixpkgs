@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "id3";
   version = "0.81";
 
   src = fetchFromGitHub {
     owner = "squell";
     repo = "id3";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+h1wwgTB7CpbjyUAK+9BNRhmy83D+1I+cZ70E1m3ENk=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "id3";
   };
-}
+})

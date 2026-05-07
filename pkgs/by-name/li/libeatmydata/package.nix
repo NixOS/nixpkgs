@@ -7,14 +7,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libeatmydata";
   version = "131";
 
   src = fetchFromGitHub {
     owner = "stewartsmith";
     repo = "libeatmydata";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-0lrYDW51/KSr809whGwg9FYhzcLRfmoxipIgrK1zFCc=";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Small LD_PRELOAD library to disable fsync and friends";
     homepage = "https://www.flamingspork.com/projects/libeatmydata/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "eatmydata";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

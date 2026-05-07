@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "rfc-bibtex";
   version = "0.3.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "iluxonchik";
     repo = "rfc-bibtex";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bPCNQqiG50vWVFA6J2kyxftwsXunHTNBdSkoIRYkb0s=";
   };
 
@@ -27,11 +27,11 @@ python3.pkgs.buildPythonApplication rec {
     "rfc_bibtex"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/iluxonchik/rfc-bibtex/";
     description = "Generate Bibtex entries for IETF RFCs and Internet-Drafts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
     mainProgram = "rfcbibtex";
   };
-}
+})

@@ -22,7 +22,18 @@
   nss,
   pango,
   systemd,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   autoPatchelfHook,
   wrapGAppsHook3,
   runtimeShell,
@@ -66,18 +77,18 @@ stdenv.mkDerivation rec {
     nss
     pango
     systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxcb
     libdrm
     libgbm
   ];
@@ -132,21 +143,20 @@ stdenv.mkDerivation rec {
       --replace run_keybase $out/bin/keybase-gui
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.keybase.io/";
     description = "Keybase official GUI";
     mainProgram = "keybase-gui";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avaq
       rvolosatovs
       puffnfresh
       np
-      Br1ght0ne
       shofius
       ryand56
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
   };
 }

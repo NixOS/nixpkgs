@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   ttyd,
   buildGoModule,
   fetchFromGitHub,
@@ -8,18 +9,18 @@
   versionCheckHook,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clive";
-  version = "0.12.12";
+  version = "0.12.17";
 
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "clive";
-    tag = "v${version}";
-    hash = "sha256-gycxHlNbwPLpR/ATxAsQ68Fetp/hptOUsRc+D3P7x1k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-omHxs2hTzjddelPkJWj2sVmK9nI5bCELUS8EmEH7JXM=";
   };
 
-  vendorHash = "sha256-S2MR3eDfAiEz7boUetdPmOf0rQe7QrV6yO1RfMAEj4o=";
+  vendorHash = "sha256-M3cU2051lOzm9hXuVwC1eFI8Ftpmk32h/98dHUkRfts=";
   subPackages = [ "." ];
   buildInputs = [ ttyd ];
   nativeBuildInputs = [
@@ -28,11 +29,13 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/koki-develop/clive/cmd.version=${version}"
+    "-X github.com/koki-develop/clive/cmd.version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
     wrapProgram $out/bin/clive --prefix PATH : ${ttyd}/bin
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd clive \
       --bash <($out/bin/clive completion bash) \
       --fish <($out/bin/clive completion fish) \
@@ -40,7 +43,6 @@ buildGoModule rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doinstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -48,9 +50,9 @@ buildGoModule rec {
   meta = {
     description = "Automates terminal operations";
     homepage = "https://github.com/koki-develop/clive";
-    changelog = "https://github.com/koki-develop/clive/releases/tag/v${version}";
+    changelog = "https://github.com/koki-develop/clive/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misilelab ];
     mainProgram = "clive";
   };
-}
+})

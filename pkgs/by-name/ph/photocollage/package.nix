@@ -8,7 +8,7 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "photocollage";
   version = "1.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "PhotoCollage";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YEkQ5yVFCBBFg8IL5ExvZIi0moaG/c0LtsIkphuzuog=";
   };
 
@@ -62,4 +62,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "photocollage";
   };
-}
+})

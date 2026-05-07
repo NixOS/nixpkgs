@@ -30,11 +30,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "valetudo-map-card.js";
 
-  meta = with lib; {
+  meta = {
     description = "Display the map from a valetudo-enabled robot in a home assistant dashboard card";
     homepage = "https://github.com/Hypfer/lovelace-valetudo-map-card";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -100,10 +100,6 @@ let
             nixPackage = ncurses6;
             fileToCheckFor = "libtinfo.so.6";
           }
-          {
-            nixPackage = numactl;
-            fileToCheckFor = null;
-          }
         ];
       };
       x86_64-darwin = {
@@ -236,7 +232,7 @@ stdenv.mkDerivation {
   # of the bindist installer can find the libraries they expect.
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location.
-  ${libEnvVar} = libPath;
+  env.${libEnvVar} = libPath;
 
   postUnpack =
     # Verify our assumptions of which `libtinfo.so` (ncurses) version is used,
@@ -251,13 +247,13 @@ stdenv.mkDerivation {
           buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"'';
         in
         lib.concatStringsSep "\n" [
-          (''
+          ''
             shopt -u nullglob
             echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
             if ! test -e ${buildExeGlob}; then
               echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
             fi
-          '')
+          ''
           (lib.concatMapStringsSep "\n" (
             { fileToCheckFor, nixPackage }:
             lib.optionalString (fileToCheckFor != null) ''
@@ -324,6 +320,18 @@ stdenv.mkDerivation {
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
   preConfigure = lib.optionalString stdenv.targetPlatform.isAarch32 "LD=ld.gold";
+
+  # Patch shebangs in mk/ scripts that are executed during install.
+  # Without this, they may invoke the host /bin/sh, which is impurely
+  # mounted into the build environment by Nix.
+  #
+  # When /bin/sh is pulled from the host, its entire runtime closure is used.
+  # If that shell was built against an older glibc than the one in the sandbox,
+  # LD_LIBRARY_PATH can cause it to load incompatible libraries, resulting in
+  # glibc version mismatches
+  postConfigure = ''
+    patchShebangs mk/
+  '';
 
   # GHC has a patched config.sub and bindists' platforms should always work
   dontUpdateAutotoolsGnuConfigScripts = true;
@@ -432,13 +440,6 @@ stdenv.mkDerivation {
       "$out/bin/ghc-pkg" --package-db="$package_db" recache
     '';
 
-  # GHC cannot currently produce outputs that are ready for `-pie` linking.
-  # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-  # See:
-  # * https://github.com/NixOS/nixpkgs/issues/129247
-  # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-  hardeningDisable = [ "pie" ];
-
   doInstallCheck = true;
   installCheckPhase = ''
     # Sanity check, can ghc create executables?
@@ -469,7 +470,7 @@ stdenv.mkDerivation {
     hadrian = null;
   };
 
-  meta = rec {
+  meta = {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
@@ -485,5 +486,6 @@ stdenv.mkDerivation {
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     maintainers = lib.teams.haskell.members;
     broken = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -7,14 +7,14 @@
   util-linux,
   zfs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zpool-auto-expand-partitions";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "zpool-auto-expand-partitions";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-N1znZbJULEeNR4ABSrUtHHkmz08N+CZqX6Ni7jFzc4c=";
   };
 
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
     zfs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool that aims to expand all partitions in a specified zpool to fill the available space";
     homepage = "https://github.com/DeterminateSystems/zpool-auto-expand-partitions";
-    license = licenses.asl20;
-    teams = [ teams.determinatesystems ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.cole-h ];
     mainProgram = "zpool_part_disks";
   };
-}
+})

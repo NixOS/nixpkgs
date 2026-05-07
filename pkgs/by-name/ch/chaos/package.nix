@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chaos";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "chaos-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YjwxInBEPgovSk5EZzpeNhp4/FRWf6prZnNqcyyFFJg=";
   };
 
@@ -29,14 +29,12 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Tool to communicate with Chaos DNS API";
     homepage = "https://github.com/projectdiscovery/chaos-client";
-    changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "chaos";
   };
-}
+})

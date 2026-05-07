@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   rustPlatform,
   libcosmicAppHook,
   just,
@@ -12,6 +11,7 @@
   glib,
   libinput,
   pulseaudio,
+  pipewire,
   udev,
   xkeyboard_config,
   nix-update-script,
@@ -20,31 +20,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-applets";
-  version = "1.0.0-alpha.7";
+  version = "1.0.10";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-applets";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-DmU9Dlb8w3a8U+oSGwWARPh1SRbv/8TW7TO9SSvDe1U=";
+    hash = "sha256-+E7d8I9xKaTzJzVlJhPb23ak8M9wgjnB6rwYFdpnjcs=";
   };
 
-  cargoHash = "sha256-wWs3B5hh2DP93i+4gGDTi+7NT4bj8ULJ+fT95sXxUdg=";
-
-  patches = [
-    (fetchpatch2 {
-      name = "fix-bluetooth-dbus-spam.patch";
-      url = "https://github.com/pop-os/cosmic-applets/commit/b6bb982f2dace0a3d19c78b4b4247760a8010d5b.patch?full_index=1";
-      hash = "sha256-S5F9rqYrB38T9R6i/n/j3s79Xeh6BMmNkC+E2kTsus4=";
-    })
-  ];
+  cargoHash = "sha256-uxz6kMuxhDTehHxDcA43iO+zVHBofbtO6HZoWEf3E30=";
 
   nativeBuildInputs = [
     just
     pkg-config
     util-linuxMinimal
     libcosmicAppHook
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -52,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     libinput
     pulseaudio
+    pipewire
     udev
   ];
 
@@ -83,10 +77,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

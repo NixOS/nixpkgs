@@ -17,25 +17,24 @@
 }:
 
 let
-  version = "250321-57590c48b";
+  version = "251130-b3068414c";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
     rev = version;
-    hash = "sha256-tJA1Q8kcX4UYDCV+rmHyd5gfEU8WkoaqNfx1/0Iy3l8=";
+    hash = "sha256-8yg5CtvBtSKRaOUj9f+Db7rruXIVuF2cR50vZ+WUU6A=";
   };
 
-  libtensorflow = callPackage ./libtensorflow.nix { };
-  backend = callPackage ./backend.nix { inherit libtensorflow src version; };
+  backend = callPackage ./backend.nix { inherit src version; };
   frontend = callPackage ./frontend.nix { inherit src version; };
 
   fetchModel =
     { name, hash }:
     fetchzip {
       inherit hash;
-      url = "https://dl.photoprism.org/tensorflow/${name}.zip";
+      url = "https://dl.photoprism.app/tensorflow/${name}.zip";
       stripRoot = false;
     };
 
@@ -85,10 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
+    rm ${assets_path}/models
+    mkdir -p ${assets_path}/models
+    ln -s ${frontend}/assets/models/* ${assets_path}/models/
+
     # install tensorflow models
-    ln -s ${nasnet}/nasnet ${assets_path}
-    ln -s ${nsfw}/nsfw ${assets_path}
-    ln -s ${facenet}/facenet ${assets_path}
+    ln -s ${nasnet}/nasnet ${assets_path}/models/
+    ln -s ${nsfw}/nsfw ${assets_path}/models/
+    ln -s ${facenet}/facenet ${assets_path}/models/
 
     runHook postInstall
   '';
@@ -96,12 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   passthru.tests.photoprism = nixosTests.photoprism;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://photoprism.app";
     description = "Personal Photo Management powered by Go and Google TensorFlow";
-    inherit (libtensorflow.meta) platforms;
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ benesim ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ benesim ];
     mainProgram = "photoprism";
   };
 })

@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   hatchling,
+  async-timeout,
   psycopg,
   pyicu,
   python-dotenv,
@@ -11,16 +12,16 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nominatim";
-  version = "5.1.0";
+  version = "5.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
-    tag = "v${version}";
-    hash = "sha256-eMCXXPrUZvM4ju0mi1+f+LXhThCCCEH+HDz6lurw+Jo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jP/OkEuFdVdvA8Uztv/49FXm9dsExVDjw2l2gyMOSsg=";
   };
 
   postPatch = ''
@@ -33,11 +34,10 @@ buildPythonPackage rec {
     cd packaging/nominatim-api
   '';
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    async-timeout
     psycopg
     pyicu
     python-dotenv
@@ -59,4 +59,4 @@ buildPythonPackage rec {
       ngi
     ];
   };
-}
+})

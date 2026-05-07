@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "semantic-release";
-  version = "24.2.8";
+  version = "25.0.2";
 
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
     rev = "v${version}";
-    hash = "sha256-blPpIVL1bg8u7vnZo+XRvVPOv8UAmwtt7Rl1h3XC1L8=";
+    hash = "sha256-iucXpzB9Rd7HuAxg7ZYLuY8j7zRCYxjly5zhyFOmDak=";
   };
 
-  npmDepsHash = "sha256-XvZpyDEUMDj4TvjDsDhWiyJHiy+14mWgTghXeFP+vBM=";
+  npmDepsHash = "sha256-FrwwER5/QNBV7Ppby7bJMBV8bfgTCWjeORPv9/KjeNo=";
 
   dontNpmBuild = true;
 

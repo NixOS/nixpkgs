@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BlockchainCommons/bc-ur";
     description = "UR reference library in C++";
-    license = licenses.bsd2Patent;
-    maintainers = with maintainers; [ surfaceflinger ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2Patent;
+    maintainers = with lib.maintainers; [ surfaceflinger ];
+    platforms = lib.platforms.linux;
   };
 })

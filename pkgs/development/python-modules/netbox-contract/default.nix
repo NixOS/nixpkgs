@@ -9,9 +9,9 @@
   netbox,
   netaddr,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netbox-contract";
-  version = "2.4.1";
+  version = "2.4.5";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlebreuil";
     repo = "netbox-contract";
-    tag = "v${version}";
-    hash = "sha256-2pjApKMybZGzojRF3vH1Ti/Wkmg/tafhpzX+qDkLY8o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+6dw8vPDNItZRfExL0C5ul2XghoToMHotEAH90B3CmE=";
   };
 
   build-system = [ setuptools ];
@@ -45,9 +45,9 @@ buildPythonPackage rec {
   meta = {
     description = "Contract plugin for netbox";
     homepage = "https://github.com/mlebreuil/netbox-contract";
-    changelog = "https://github.com/mlebreuil/netbox-contract/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlebreuil/netbox-contract/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

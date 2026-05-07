@@ -5,6 +5,7 @@
   fetchFromGitHub,
   olm,
   libsignal-ffi,
+  zlib,
   versionCheckHook,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
@@ -19,13 +20,14 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.8.6";
+  version = "26.04";
+  tag = "v0.2604.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    tag = "v${version}";
-    hash = "sha256-62Z7Lasx0bzCAWLvHN7uCUqkMk6W80PR24mwfJU/n3Q=";
+    inherit tag;
+    hash = "sha256-DKJ8BiBu3lhBqeqjCsNNSwF+iSFd8QnJ4wDS7EGU/UM=";
   };
 
   buildInputs =
@@ -35,13 +37,21 @@ buildGoModule rec {
       # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
       # see https://github.com/mautrix/signal/issues/401
       libsignal-ffi
+      zlib
     ];
 
   tags = lib.optional withGoolm "goolm";
 
-  CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
+  env = lib.optionalAttrs withGoolm {
+    CGO_LDFLAGS = toString [ cppStdLib ];
+  };
 
-  vendorHash = "sha256-srvqflqleK2KIgesEZPNhSQh/IFmyTElJ7iUjBEmNq0=";
+  vendorHash = "sha256-rTDEB8OS0RbXNlKHrdtBPkti2PzjbuxaoAKa3uri5CM=";
+
+  ldflags = [
+    "-X"
+    "main.Tag=${tag}"
+  ];
 
   doCheck = true;
   preCheck = ''
@@ -59,13 +69,12 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mautrix/signal";
     description = "Matrix-Signal puppeting bridge";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       pentane
       ma27
       SchweGELBin

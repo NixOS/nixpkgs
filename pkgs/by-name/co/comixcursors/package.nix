@@ -116,10 +116,10 @@ stdenvNoCC.mkDerivation rec {
   # attributes are used to choose which variant(s) to have.
   outputsToInstall = [ ];
 
-  meta = with lib; {
+  meta = {
     description = "Comix Cursors mouse themes";
     longDescription = ''
-      There are many (${toString ((length outputs) - 1)}) variants of color,
+      There are many (${toString ((lib.length outputs) - 1)}) variants of color,
       opacity, edge thickness, and right- or left-handedness, for this cursor
       theme.  This package's derivation has an output for each of these
       variants, named following the upstream convention, and the attribute for
@@ -131,8 +131,8 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/limitland/comixcursors";
     changelog = "https://gitlab.com/limitland/comixcursors/-/blob/HEAD/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.DerickEddington ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.DerickEddington ];
+    platforms = lib.platforms.all;
   };
 }

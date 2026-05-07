@@ -27,7 +27,7 @@ php.buildComposerWithPlugin {
     homepage = "https://github.com/CycloneDX/cyclonedx-php-composer";
     license = lib.licenses.asl20;
     mainProgram = "composer";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
   fetchpatch2,
@@ -18,9 +17,7 @@ buildPythonPackage rec {
   pname = "pytest-forked";
   version = "1.6.0";
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
@@ -36,6 +33,8 @@ buildPythonPackage rec {
       url = "https://github.com/pytest-dev/pytest-forked/commit/b2742322d39ebda97d5170922520f3bb9c73f614.patch";
       hash = "sha256-tTRW0p3tOotQMtjjJ6RUKdynsAnKRz0RAV8gAUHiNNA=";
     })
+    # https://github.com/pytest-dev/pytest-forked/pull/96
+    ./pytest9-compat.patch
   ];
 
   nativeBuildInputs = [

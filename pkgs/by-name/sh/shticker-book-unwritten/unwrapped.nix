@@ -5,12 +5,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shticker-book-unwritten";
   version = "1.2.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     crateName = "shticker_book_unwritten";
     hash = "sha256-jI2uL8tMUmjZ5jPkCV2jb98qtKwi9Ti4NVCPfuO3iB4=";
   };
@@ -20,4 +20,4 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
-}
+})

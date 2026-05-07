@@ -6,7 +6,7 @@
   libgnomekbd,
   gdk-pixbuf,
   cairo,
-  xorg,
+  libxkbfile,
   meson,
   ninja,
   pkg-config,
@@ -17,14 +17,14 @@
   wrapGAppsHook3,
   file,
   inxi,
-  mate,
+  mate-panel,
   dbus,
   libdbusmenu-gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xapp";
-  version = "2.8.13";
+  version = "3.2.2";
 
   outputs = [
     "out"
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xapp";
-    rev = version;
-    hash = "sha256-CbMwkz+4+uADkfdZEqWCJvbJqkVcvQBmcRISjVb090Q=";
+    rev = finalAttrs.version;
+    hash = "sha256-xVGIrK7koqX6xKoanVHWQMBUusUjtvHzQg2OV0E0b78=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
     ))
     libgnomekbd
     gdk-pixbuf
-    xorg.libxkbfile
+    libxkbfile
     python3.pkgs.pygobject3 # for .pc file
-    mate.mate-panel # for gobject-introspection
+    mate-panel # for gobject-introspection
     dbus
     libdbusmenu-gtk3
   ];
@@ -96,11 +96,15 @@ stdenv.mkDerivation rec {
   # Fix gtk3 module target dir. Proper upstream solution should be using define_variable.
   env.PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
 
-  meta = with lib; {
+  preFixup = ''
+    wrapGApp $out/lib/xapps/xapp-sn-watcher
+  '';
+
+  meta = {
     homepage = "https://github.com/linuxmint/xapp";
     description = "Cross-desktop libraries and common resources";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

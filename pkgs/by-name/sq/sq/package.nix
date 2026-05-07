@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,18 +8,18 @@
   sq,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sq";
-  version = "0.48.5";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = "sq";
-    rev = "v${version}";
-    hash = "sha256-y7+UfwTbL0KTQgz4JX/q6QQqL0n8SO1qgKTrK9AFhO4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-K9bqV9iJADP3yHSay6ZUv+ohakbD5sIEDJusTGSoqec=";
   };
 
-  vendorHash = "sha256-MejUKPIhvjgV2+h81DJUSdBEMD0rvgDbTAvv3E2uTOk=";
+  vendorHash = "sha256-w08vGn2AxdZVQU/E/RPBipqFOuujnAjpvSluw/a8zjY=";
 
   proxyVendor = true;
 
@@ -30,10 +31,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${version}"
+    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sq \
       --bash <($out/bin/sq completion bash) \
       --fish <($out/bin/sq completion fish) \
@@ -43,16 +44,16 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = sq;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for data";
     mainProgram = "sq";
     homepage = "https://sq.io/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

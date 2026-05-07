@@ -5,7 +5,7 @@
   autoPatchelfHook,
   alsa-lib,
   gcc-unwrapped,
-  libX11,
+  libx11,
   libcxx,
   libdrm,
   libgbm,
@@ -33,11 +33,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mdk-sdk";
-  version = "0.34.0";
+  version = "0.35.1";
 
   src = fetchurl {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux.tar.xz";
-    hash = "sha256-qt17xZKuZIWmD8ck1IrHXa5i5tKElTYmbGQvqJTtTsY=";
+    hash = "sha256-qdsYWu0bRRhPTbOEeGBFhPdk3S2JpqroOz+gd3KMDts=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     gcc-unwrapped
-    libX11
+    libx11
     libcxx
     libdrm
     libgbm
@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     addDriverRunpath.driverLink
   ];
 
+  autoPatchelfIgnoreMissingDeps = [ "librockchip_mpp.so.1" ];
+
   installPhase = ''
     runHook preInstall
 
@@ -83,7 +85,7 @@ stdenv.mkDerivation rec {
     description = "Multimedia development kit";
     homepage = "https://github.com/wang-bin/mdk-sdk";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

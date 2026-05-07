@@ -19,6 +19,7 @@
   llvmPackages_19,
   llvmPackages_20,
   llvmPackages_21,
+  llvmPackages_22,
   makeWrapper,
   openssl,
   pcre2,
@@ -198,15 +199,16 @@ let
         "progress=1"
       ];
 
-      LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+      env = {
+        LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
-      FLAGS = [
-        "--single-module" # needed for deterministic builds
-      ];
+        # needed for deterministic builds
+        FLAGS = "--single-module";
 
-      # This makes sure we don't keep depending on the previous version of
-      # crystal used to build this one.
-      CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+        # This makes sure we don't keep depending on the previous version of
+        # crystal used to build this one.
+        CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+      };
 
       # We *have* to add `which` to the PATH or crystal is unable to build
       # stuff later if which is not available.
@@ -267,15 +269,14 @@ let
       };
       passthru.llvmPackages = llvmPackages;
 
-      meta = with lib; {
+      meta = {
         inherit (binary.meta) platforms;
         description = "Compiled language with Ruby like syntax and type inference";
         mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
-        license = licenses.asl20;
-        maintainers = with maintainers; [
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
           david50407
-          manveru
           peterhoeg
           donovanglover
         ];
@@ -325,5 +326,21 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_16;
+  crystal_1_18 = generic {
+    version = "1.18.2";
+    sha256 = "sha256-bwKs9bwD1WfS95DSxVY5AjT5Q61jOsfAH897tmiurng=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_21;
+    doCheck = false;
+  };
+
+  crystal_1_19 = generic {
+    version = "1.19.1";
+    sha256 = "sha256-vMS2GJb6c6RvflDSS2EWHsERJ0rvzZMVm50gaTXRs4Y=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal = crystal_1_19;
 }

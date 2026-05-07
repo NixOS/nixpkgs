@@ -88,7 +88,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Terminal user interface for Twitch";
     homepage = "https://github.com/krathalan/wtwitch";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.urandom ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "wtwitch";
   };

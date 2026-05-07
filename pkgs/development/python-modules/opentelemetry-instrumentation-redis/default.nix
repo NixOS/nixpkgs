@@ -7,7 +7,6 @@
   wrapt,
   redis,
   opentelemetry-test-utils,
-  pythonOlder,
   pytestCheckHook,
   fakeredis,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-redis";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-redis";
 

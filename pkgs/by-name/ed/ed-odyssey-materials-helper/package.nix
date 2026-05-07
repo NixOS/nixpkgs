@@ -2,11 +2,11 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gradle,
-  jdk24,
+  gradle_9,
+  jdk25,
   wrapGAppsHook3,
-  libXxf86vm,
-  libXtst,
+  libxxf86vm,
+  libxtst,
   libglvnd,
   glib,
   alsa-lib,
@@ -15,16 +15,20 @@
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
+  writeText,
 }:
+let
+  gradle = gradle_9;
+in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.247";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-rngE5GUAzbpaIPgl0DpCboLLTXFk2zYSM53YPOVWRyg=";
+    hash = "sha256-ljCN2tW7iH+kTiSXwUt+OsAhjYKlAy0W5x/JDmQeR6M=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +42,9 @@ stdenv.mkDerivation rec {
     # so this removes 1) the popup about it when you first start the program, 2) the option in the settings
     # and makes the program always know that it is set up
     ./remove-urlscheme-settings.patch
+
+    ./eula.patch # EULA doesn't apply to nixpkgs build, only the upstream build, don't show it
+    ./disable-broken-features.patch # some features require things not included in the source code, we'll disable/hide those
   ];
   postPatch = ''
     # oslib doesn't seem to do releases and hasn't had a change since 2021, so always use commit d6ee6549bb
@@ -47,14 +54,15 @@ stdenv.mkDerivation rec {
     substituteInPlace application/src/main/java/module-info.java \
       --replace-fail 'requires oslib.master.SNAPSHOT;' 'requires oslib.d6ee6549bb;'
 
-    # remove "new version available" popup
+    # remove "new version available" (not needed) and eddn question (eddn doesn't work in this build) popups
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
-      --replace-fail 'versionPopup();' ""
+      --replace-fail 'versionPopup();' "" \
+      --replace-fail 'eddnPopup();' ""
 
-    for f in build.gradle */build.gradle; do
-      substituteInPlace $f \
-        --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
-    done
+    substituteInPlace build.gradle bootstrap/build.gradle application/build.gradle \
+      --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
+
+    echo "This nixpkgs-packaged version of Elite Dangerous Odyssey Materials Helper doesn't upload any data." > application/src/main/resources/text/privacy.txt
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -63,18 +71,16 @@ stdenv.mkDerivation rec {
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jdk24}"
+    "-Dorg.gradle.java.home=${jdk25}"
     "--stacktrace"
   ];
 
+  gradleInitScript = writeText "empty-init-script.gradle" ""; # fixes build by making it possibly not reproducible, though it still seems to be
+
   gradleBuildTask = "application:jpackage";
 
-  env = {
-    EDDN_SOFTWARE_NAME = "EDO Materials Helper";
-  };
-
   preBuild = ''
-    # required to make EDDN_SOFTWARE_NAME work and for the program to know its own version
+    # required for the program to know its own version
     gradle $gradleFlags application:generateSecrets
   '';
 
@@ -96,9 +102,9 @@ stdenv.mkDerivation rec {
     makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          libXxf86vm
+          libxxf86vm
           glib
-          libXtst
+          libxtst
           libglvnd
           alsa-lib
           ffmpeg

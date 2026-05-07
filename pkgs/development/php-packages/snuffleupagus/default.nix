@@ -10,13 +10,13 @@
 
 buildPecl rec {
   pname = "snuffleupagus";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "snuffleupagus";
     rev = "v${version}";
-    hash = "sha256-W+EQXjvmDHih5YW/SjRcEdUELePUPKrNWB8vW9dLK/g=";
+    hash = "sha256-14Hci2/f1kSV/lCAlFTNrv/WLJxeh+Wyf0QF0+xoedc=";
   };
 
   buildInputs = [

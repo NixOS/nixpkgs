@@ -5,15 +5,36 @@
   curl,
   runCommandLocal,
   unzip,
-  appimage-run,
+  appimageTools,
   addDriverRunpath,
   dbus,
   libGLU,
-  xorg,
+  xkeyboard-config,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxxf86vm,
+  libxt,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   buildFHSEnv,
-  buildFHSEnvChroot,
   bash,
   writeText,
+  writeShellScript,
   ocl-icd,
   xkeyboard_config,
   glib,
@@ -35,10 +56,10 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "20.0.1";
+      version = "20.3.2";
 
       nativeBuildInputs = [
-        (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; })
+        appimageTools.appimage-exec
         addDriverRunpath
         copyDesktopItems
         unzip
@@ -47,7 +68,7 @@ let
       # Pretty sure, there are missing dependencies ...
       buildInputs = [
         libGLU
-        xorg.libXxf86vm
+        libxxf86vm
       ];
 
       src =
@@ -57,9 +78,9 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
-                "sha256-20ZmxkniX4rbKqxxjqGJOCSeZt6i+HN72Vm8HtsONUg="
+                "sha256-wUrx/cMIyMI+sYi8n8xHH4Q7c0MSAoGbpI0E1NtzcXg="
               else
-                "sha256-ZbiQdsm0zoVe0Riw8K6ZBRKd+v73OdplS0Db7P1DE6E=";
+                "sha256-q3/QFUFmTuToIhc+r9L5/DCqpRjbLfECVxhlburly7M=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -148,9 +169,26 @@ let
 
           mkdir -p $out
           test -e ${lib.escapeShellArg appimageName}
-          appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
+          appimage-exec.sh -x $out ${lib.escapeShellArg appimageName}
 
-          mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+          mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+
+          # Install udev rules for Blackmagic hardware (color panels, Speed Editor, Editor Keyboard)
+          mkdir -p $out/lib/udev/rules.d
+          cp $out/share/etc/udev/rules.d/99-BlackmagicDevices.rules $out/lib/udev/rules.d/
+          cp $out/share/etc/udev/rules.d/99-ResolveKeyboardHID.rules $out/lib/udev/rules.d/
+          # Generate catch-all rules for Blackmagic Design vendor ID (096e)
+          # USB device access (color panels, general hardware)
+          echo 'SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="096e", MODE="0666"' \
+            > $out/lib/udev/rules.d/99-DavinciPanel.rules
+          # hidraw access (Speed Editor jog wheel, Editor Keyboard, future HID devices)
+          echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="096e", MODE="0666"' \
+            >> $out/lib/udev/rules.d/99-DavinciPanel.rules
+
+          # Verify all three rules files are present
+          test -f $out/lib/udev/rules.d/99-BlackmagicDevices.rules
+          test -f $out/lib/udev/rules.d/99-ResolveKeyboardHID.rules
+          test -f $out/lib/udev/rules.d/99-DavinciPanel.rules
           runHook postInstall
         '';
 
@@ -186,8 +224,61 @@ let
             "Video"
             "Graphics"
           ];
+          startupWMClass = "resolve";
         })
-      ];
+        (makeDesktopItem {
+          name = "blackmagicraw-player";
+          desktopName = "Blackmagic RAW Player";
+          exec = "blackmagicraw-player %f";
+          icon = "blackmagicraw-player";
+          mimeTypes = [
+            "application/x-braw-clip"
+            "application/x-braw-sidecar"
+          ];
+          categories = [
+            "Video"
+            "AudioVideo"
+          ];
+        })
+        (makeDesktopItem {
+          name = "blackmagicraw-speedtest";
+          desktopName = "Blackmagic RAW Speed Test";
+          exec = "blackmagicraw-speedtest";
+          icon = "blackmagicraw-speedtest";
+          categories = [
+            "Video"
+            "AudioVideo"
+          ];
+        })
+        (makeDesktopItem {
+          name = "davinci-control-panels-setup";
+          desktopName = "DaVinci Control Panels Setup";
+          exec = "davinci-control-panels-setup";
+          icon = "davinci-control-panels-setup";
+          categories = [ "Settings" ];
+        })
+        (makeDesktopItem {
+          name = "davinci-fairlight-studio-utility";
+          desktopName = "Fairlight Studio Utility";
+          exec = "davinci-fairlight-studio-utility";
+          icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+          categories = [
+            "AudioVideo"
+            "Audio"
+          ];
+        })
+      ]
+      ++ lib.optional studioVariant (makeDesktopItem {
+        name = "davinci-remote-monitor";
+        desktopName = "DaVinci Remote Monitor";
+        exec = "davinci-remote-monitor";
+        icon = "davinci-remote-monitor";
+        comment = "DaVinci Remote Monitor";
+        categories = [
+          "AudioVideo"
+          "Video"
+        ];
+      });
     }
   );
 in
@@ -219,53 +310,113 @@ buildFHSEnv {
       opencl-headers
       python3
       python3.pkgs.numpy
+      libdrm # libdrm.so.2 needed by bundled Qt6 WebEngine (Control Panels Setup)
+      libxkbfile # libxkbfile.so.1 needed by bundled Qt6 WebEngine (Control Panels Setup)
+      krb5 # libgssapi_krb5.so.2 needed by bundled Qt6 (Control Panels Setup, Fairlight Studio Utility)
+      nss # libsmime3.so needed by bundled Qt6 (Control Panels Setup)
+      libxcb-cursor # libxcb-cursor.so needed by Qt6 xcb platform plugin (Fairlight Studio Utility)
       udev
       xdg-utils # xdg-open needed to open URLs
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXt
-      xorg.libXtst
-      xorg.libXxf86vm
-      xorg.libxcb
-      xorg.xcbutil
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.xkeyboardconfig
+      libice
+      libsm
+      libx11
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxinerama
+      libxrandr
+      libxrender
+      libxt
+      libxtst
+      libxxf86vm
+      libxcb
+      libxcb-util
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+      xkeyboard-config
       zlib
     ];
 
   extraPreBwrapCmds = lib.optionalString studioVariant ''
     mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
+    mkdir -p ~/.local/share/DaVinciResolve/Extras || exit 1
   '';
 
   extraBwrapArgs = lib.optionals studioVariant [
-    "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
+    ''--bind "$HOME"/.local/share/DaVinciResolve/license ${davinci}/.license''
+    ''--bind "$HOME"/.local/share/DaVinciResolve/Extras ${davinci}/Extras''
   ];
 
   runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
     export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${davinci}/libs
-    ${davinci}/bin/resolve
+    if [ $# -gt 0 ]; then
+      exec "$@"
+    else
+      exec ${davinci}/bin/resolve
+    fi
   ''}";
 
-  extraInstallCommands = ''
-    mkdir -p $out/share/applications $out/share/icons/hicolor/128x128/apps
-    ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
-    ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
-  '';
+  extraInstallCommands =
+    let
+      execName = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+      # Each wrapper re-enters the FHS environment and execs a different binary
+      mkWrapper =
+        name: bin:
+        writeShellScript name ''
+          exec "$(dirname "$0")/${execName}" ${bin} "$@"
+        '';
+      wrappers = {
+        "blackmagicraw-player" = "${davinci}/BlackmagicRAWPlayer/BlackmagicRAWPlayer";
+        "blackmagicraw-speedtest" = "${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest";
+        "davinci-control-panels-setup" =
+          ''"${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"'';
+        "davinci-fairlight-studio-utility" =
+          ''"${davinci}/Fairlight Studio Utility/Fairlight Studio Utility"'';
+      }
+      // lib.optionalAttrs studioVariant {
+        "davinci-remote-monitor" = ''"${davinci}/bin/DaVinci Remote Monitor"'';
+      };
+    in
+    ''
+      # Desktop files
+      mkdir -p $out/share/applications
+      ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
+
+      # Icons
+      mkdir -p $out/share/icons/hicolor/{128x128,256x256}/apps
+      ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
+      ln -s ${davinci}/graphics/DV_Panels.png $out/share/icons/hicolor/128x128/apps/davinci-control-panels-setup.png
+      ${lib.optionalString studioVariant ''
+        ln -s ${davinci}/graphics/Remote_Monitoring.png $out/share/icons/hicolor/128x128/apps/davinci-remote-monitor.png
+      ''}
+      ln -s ${davinci}/graphics/blackmagicraw-player_256x256_apps.png $out/share/icons/hicolor/256x256/apps/blackmagicraw-player.png
+      ln -s ${davinci}/graphics/blackmagicraw-speedtest_256x256_apps.png $out/share/icons/hicolor/256x256/apps/blackmagicraw-speedtest.png
+
+      # Wrapper scripts for additional programs
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (name: bin: ''
+          ln -s ${mkWrapper name bin} $out/bin/${name}
+        '') wrappers
+      )}
+
+      # MIME type definitions for .drp, .braw, etc.
+      mkdir -p $out/share/mime/packages
+      ln -s ${davinci}/share/resolve.xml $out/share/mime/packages/
+      ln -s ${davinci}/share/blackmagicraw.xml $out/share/mime/packages/
+
+      # Expose udev rules so NixOS can aggregate them from environment.systemPackages
+      mkdir -p $out/lib/udev/rules.d
+      ln -s ${davinci}/lib/udev/rules.d/99-BlackmagicDevices.rules $out/lib/udev/rules.d/
+      ln -s ${davinci}/lib/udev/rules.d/99-ResolveKeyboardHID.rules $out/lib/udev/rules.d/
+      ln -s ${davinci}/lib/udev/rules.d/99-DavinciPanel.rules $out/lib/udev/rules.d/
+    '';
 
   passthru = {
     inherit davinci;
@@ -296,18 +447,18 @@ buildFHSEnv {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       amarshall
-      jshcmpbll
-      orivej
       XBagon
+      toXel
+      cafkafk
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }

@@ -9,14 +9,14 @@ let
   buildComposerProjectOverride =
     finalAttrs:
     {
-      php ? finalAttrs.php or toplevel.php,
-      composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer,
-      composerLock ? finalAttrs.composerLock or null,
-      vendorHash ? finalAttrs.vendorHash or "",
-      composerNoDev ? finalAttrs.composerNoDev or true,
-      composerNoPlugins ? finalAttrs.composerNoPlugins or true,
-      composerNoScripts ? finalAttrs.composerNoScripts or true,
-      composerStrictValidation ? finalAttrs.composerStrictValidation or true,
+      php ? toplevel.php,
+      composer ? php.packages.composer,
+      composerLock ? null,
+      vendorHash ? "",
+      composerNoDev ? true,
+      composerNoPlugins ? true,
+      composerNoScripts ? true,
+      composerStrictValidation ? true,
       buildInputs ? [ ],
       nativeBuildInputs ? [ ],
       strictDeps ? true,
@@ -35,6 +35,9 @@ let
         doCheck
         doInstallCheck
         dontCheckForBrokenSymlinks
+        composerNoDev
+        composerNoPlugins
+        composerNoScripts
         ;
 
       nativeBuildInputs = nativeBuildInputs ++ [
@@ -104,8 +107,7 @@ let
       # Projects providing a lockfile from upstream can be automatically updated.
       passthru = passthru // {
         updateScript =
-          args.passthru.updateScript
-            or (if finalAttrs.composerVendor.composerLock == null then nix-update-script { } else null);
+          args.passthru.updateScript or (if composerLock == null then nix-update-script { } else null);
       };
 
       meta = meta // {

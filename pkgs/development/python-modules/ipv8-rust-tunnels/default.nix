@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "ipv8-rust-tunnels";
-  version = "0.1.34";
+  version = "0.1.44";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ipv8_rust_tunnels";
-    hash = "sha256-YXIfAXwcbWGq/CSMrTslpbkmj8AryzsinWK8kAWF90k=";
+    hash = "sha256-eHk8aCrcnyVGd3JRGQ950Bwryqt+TYx84MHAM2kWTis=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-C2LLiEpD0Gk39XSuwqQJ/l2olFL2HSktdZCJp5WG0pk=";
+    hash = "sha256-axWG5cJtNaoZl7cG+Zyo1k+eA8pXHDWFgHqpTmQNHlo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -26,10 +26,10 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A set of performance enhancements to the TunnelCommunity, the anonymization layer used in IPv8 and Tribler";
     homepage = "https://github.com/Tribler/ipv8-rust-tunnels";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mlaradji ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ mlaradji ];
   };
 }

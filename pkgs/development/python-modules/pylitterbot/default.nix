@@ -5,35 +5,32 @@
   buildPythonPackage,
   deepdiff,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
   pycognito,
   pyjwt,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytest-freezegun,
+  pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylitterbot";
-  version = "2024.2.4";
+  version = "2025.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
-    tag = "v${version}";
-    hash = "sha256-/GN2b4rlE6j60O5ZxH8I58qwcZewAYJu0EHwQ7mrdBY=";
+    tag = finalAttrs.version;
+    hash = "sha256-k10QYIdV8EFGR/366IZ6OaXbK+kEcaz3Awdwu116zHA=";
   };
 
-  pythonRelaxDeps = [ "deepdiff" ];
-
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    uv-dynamic-versioning
   ];
 
   dependencies = [
@@ -46,17 +43,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
+    pytest-cov-stub
     pytest-freezegun
+    pytest-timeout
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pylitterbot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modulefor controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
-    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

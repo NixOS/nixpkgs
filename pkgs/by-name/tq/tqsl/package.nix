@@ -9,17 +9,17 @@
   lmdb,
   curl,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tqsl";
-  version = "2.8.1";
+  version = "2.8.4";
 
   src = fetchurl {
-    url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/tHMt7TN8i7OMqpum1jCJFrxrQt3SD40ZraTryxX56Y=";
+    url = "https://www.arrl.org/files/file/LoTW%20Instructions/tqsl-${finalAttrs.version}.tar.gz";
+    hash = "sha256-bnGXKrH2c0Ng/50Rbzg4z3M6D/EuJ0mkYIThoU94QPw=";
   };
 
   nativeBuildInputs = [
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     lmdb
     curl
     sqlite
-    wxGTK32
+    wxwidgets_3_2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for using the ARRL Logbook of the World";
     mainProgram = "tqsl";
     homepage = "https://www.arrl.org/tqsl-download";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.dpflug ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

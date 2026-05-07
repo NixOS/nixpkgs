@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "vfkit";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "vfkit";
     rev = "v${version}";
-    hash = "sha256-+ds9GIa3q2ck4D3sjUHz7e9w00XgD6/jq4L8QkBpCJg=";
+    hash = "sha256-AHmCmDrddbPM8agM4jyKGKJ5aJSZ0hijM2suHJmRS3A=";
   };
 
-  vendorHash = "sha256-YvrcEPyAvuECUVgQoHKveMoFOeh4M3k5ngsP2w46+vY=";
+  vendorHash = "sha256-tXpjEMF4wwuP4w8asZPpeA8C5g+k4MjNRtbCBFFql2A=";
 
   subPackages = [ "cmd/vfkit" ];
 

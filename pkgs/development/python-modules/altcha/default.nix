@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "altcha";
-  version = "0.2.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "altcha-org";
     repo = "altcha-lib-py";
-    tag = "v${version}";
-    hash = "sha256-QZSj24dyfdgAeHSCWcmWKr35VWjGM3kQyh9o77bHOgY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k5vy6lalC3idiquXbDCwF+mObzja/QC3PRBGQJMZ6fA=";
   };
 
   build-system = [ setuptools ];
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

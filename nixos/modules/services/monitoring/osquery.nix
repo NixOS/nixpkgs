@@ -25,16 +25,19 @@ let
         ({ config_path = conf; } // cfg.flags)
     )
   );
-
+  osquery = cfg.package;
   osqueryi = pkgs.runCommand "osqueryi" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
     mkdir -p $out/bin
-    makeWrapper ${pkgs.osquery}/bin/osqueryi $out/bin/osqueryi \
+    makeWrapper ${osquery}/bin/osqueryi $out/bin/osqueryi \
       --add-flags "--flagfile ${flagfile} --disable-database"
   '';
+
 in
 {
   options.services.osquery = {
     enable = lib.mkEnableOption "osqueryd daemon";
+
+    package = lib.mkPackageOption pkgs "osquery" { };
 
     settings = lib.mkOption {
       default = { };
@@ -108,7 +111,7 @@ in
       ];
       description = "The osquery daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.osquery}/bin/osqueryd --flagfile ${flagfile}";
+        ExecStart = "${osquery}/bin/osqueryd --flagfile ${flagfile}";
         PIDFile = cfg.flags.pidfile;
         LogsDirectory = lib.mkIf (cfg.flags.logger_path == "/var/log/osquery") [ "osquery" ];
         StateDirectory = lib.mkIf (cfg.flags.database_path == "/var/lib/osquery/osquery.db") [ "osquery" ];
@@ -116,7 +119,7 @@ in
       };
       wantedBy = [ "multi-user.target" ];
     };
-    systemd.tmpfiles.settings."10-osquery".${dirname (cfg.flags.pidfile)}.d = {
+    systemd.tmpfiles.settings."10-osquery".${dirname cfg.flags.pidfile}.d = {
       user = "root";
       group = "root";
       mode = "0755";

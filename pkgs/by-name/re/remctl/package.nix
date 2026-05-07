@@ -25,7 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs tests
     sed -i '\,server/acl/localgroup,d' tests/TESTS
-    substituteInPlace configure.ac --replace "-Werror" ""
+
+    substituteInPlace Makefile.am \
+      --replace-fail "tests/data/acls/val\#id" "'tests/data/acls/val#id'"
   '';
 
   nativeBuildInputs = [
@@ -53,11 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "check-local";
 
-  meta = with lib; {
+  meta = {
     description = "Remote execution tool";
     homepage = "https://www.eyrie.org/~eagle/software/remctl";
     mainProgram = "remctl";
-    license = licenses.mit;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
 })

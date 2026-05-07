@@ -4,41 +4,45 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libsForQt5,
+  kdePackages,
   exiv2,
   mpv,
   opencv4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qimgv";
-  version = "1.0.3-unstable-2024-10-11";
+  version = "1.0.3-unstable-2026-01-19";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = "qimgv";
-    rev = "a4d475fae07847be7c106cb628fb97dad51ab920";
-    sha256 = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
+    rev = "3127a2d211b124ad4fcf853d01e6df9323bdfdc3";
+    sha256 = "sha256-avn02kdMyA5PZUSykxgIk1I78zHQ/WKd26tQO8lMOow=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   cmakeFlags = [
     "-DVIDEO_SUPPORT=ON"
+    "-DUSE_QT5=OFF"
+    "-DKDE_SUPPORT=ON"
   ];
 
   buildInputs = [
     exiv2
     mpv
     opencv4.cxxdev
-    libsForQt5.qtbase
-    libsForQt5.qtimageformats
-    libsForQt5.qtsvg
-    libsForQt5.qttools
+    kdePackages.qtbase
+    kdePackages.qtimageformats
+    kdePackages.qtsvg
+    kdePackages.qttools
+    kdePackages.kimageformats
+    kdePackages.kwindowsystem
   ];
 
   postPatch = ''
@@ -52,12 +56,12 @@ stdenv.mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
   ];
 
-  meta = with lib; {
-    description = "Qt5 image viewer with optional video support";
+  meta = {
+    description = "Qt6 image viewer with optional video support";
     mainProgram = "qimgv";
     homepage = "https://github.com/easymodo/qimgv";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ cole-h ];
   };
 }

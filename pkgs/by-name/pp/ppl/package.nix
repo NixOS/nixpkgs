@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
+    url = "https://mirror.metanet.ch/sage/spkg/upstream/ppl/ppl-${version}.tar.bz2";
     sha256 = "1wgxcbgmijgk11df43aiqfzv31r3bkxmgb4yl68g21194q60nird";
   };
 

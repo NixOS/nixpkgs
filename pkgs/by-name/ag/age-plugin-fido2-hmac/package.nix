@@ -22,34 +22,34 @@ let
     EOF
   '';
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-fido2-hmac";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "olastor";
     repo = "age-plugin-fido2-hmac";
-    tag = "v${version}";
-    hash = "sha256-f/Ld4bc+AWLkuVbL0zKEJNVqA8qJeRP/zF3jyHs3CQg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8DO62uISwleJB/NFH7U8xhfT5bcda+d+7U6LXvySsD0=";
   };
 
-  vendorHash = "sha256-pWa0PWBy32eIayKwB6Y6TeEBMt/GXpFzWJANUvvTie8=";
+  vendorHash = "sha256-3r/eTaa4kYRXqq7sUZzzGkgcF8lZbPZguoHb6W6t1T0=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   buildInputs = [ libfido2 ];
 
   postConfigure = lib.optional stdenv.hostPlatform.isDarwin darwin_configure;
 
-  meta = with lib; {
+  meta = {
     description = "Age plugin to encrypt files with fido2 tokens using the hmac-secret extension and non-discoverable credentials";
     homepage = "https://github.com/olastor/age-plugin-fido2-hmac/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "age-plugin-fido2-hmac";
   };
-}
+})

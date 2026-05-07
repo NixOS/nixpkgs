@@ -7,26 +7,32 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.31.3";
-  format = "pyproject";
+  version = "1.37.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ffmpeg_normalize";
-    hash = "sha256-sewDSBUX6gCZSIHeRtpx5fQGtOKN8OWZKrtCF2bgI9Y=";
+    hash = "sha256-zsfWqdGyEI8OT4/L0wTxkmdqcI6NEfr5SAc7+O7FYu4=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
     with python3Packages;
     [
       colorlog
       ffmpeg-progress-yield
+      mutagen
     ]
     ++ [ ffmpeg ];
+
+  postPatch = with python3Packages; ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+      'colorlog==6.7.0' \
+      'colorlog==${colorlog.version}'
+  '';
 
   checkPhase = ''
     runHook preCheck

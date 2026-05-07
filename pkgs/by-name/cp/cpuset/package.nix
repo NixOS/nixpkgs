@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cpuset";
   version = "1.6.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lpechacek";
     repo = "cpuset";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fW0SXNI10pb6FTn/2TOqxP9qlys0KL/H9m//NjslUaY=";
   };
 
@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python application that forms a wrapper around the standard Linux filesystem calls, to make using the cpusets facilities in the Linux kernel easier";
     homepage = "https://github.com/SUSE/cpuset";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "cset";
-    maintainers = with maintainers; [ wykurz ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ wykurz ];
+    platforms = lib.platforms.linux;
   };
-}
+})

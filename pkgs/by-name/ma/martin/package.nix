@@ -1,65 +1,96 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  buildNpmPackage,
+  rustPlatform,
   pkg-config,
   openssl,
+  postgresql,
+  postgresqlTestHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "martin";
-  version = "0.9.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
-    rev = "v${version}";
-    hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
+    tag = "martin-v${finalAttrs.version}";
+    hash = "sha256-wThCAR3SL454HyHAqbfGfUESPVTiOUMQDq37O/bjJbI=";
   };
 
-  cargoHash = "sha256-595VKHLajoNinyv12J9qUi55hOcOFRgUeLlzvSdjESs=";
+  patches = [ ./dont-build-webui.patch ];
+
+  cargoHash = "sha256-6hPZ3Db6ezPmtBT4XClERiV+MCFZgNLTnZTOeCgRln8=";
+
+  webui = buildNpmPackage {
+    pname = "martin-ui";
+    inherit (finalAttrs) version doCheck;
+
+    src = "${finalAttrs.src}/martin/martin-ui";
+
+    postPatch = ''
+      substituteInPlace src/App.tsx \
+        --replace-warn "./assets" "$src/src/assets"
+      ln -sf ${finalAttrs.src}/demo/frontend/public/favicon.ico public/_/assets/favicon.ico
+    '';
+
+    npmDepsHash = "sha256-ay8r+gvUVzza0GeJvrmtaEvppIc4wWjrqPGrK8oT+lA=";
+
+    buildPhase = ''
+      runHook preBuild
+      npm exec vite build
+      runHook postBuild
+    '';
+
+    checkPhase = ''
+      runHook preCheck
+      npm run test
+      runHook postCheck
+    '';
+
+    installPhase = ''
+      cp -r dist $out
+    '';
+  };
+
+  preBuild = ''
+    rm -rf martin/martin-ui/dist
+    cp -r ${finalAttrs.webui} martin/martin-ui/dist
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  checkFlags = [
-    "--skip function_source_schemas"
-    "--skip function_source_tile"
-    "--skip function_source_tilejson"
-    "--skip pg_get_function_tiles"
-    "--skip pg_get_function_source_ok_rewrite"
-    "--skip pg_get_function_source_ok"
-    "--skip pg_get_composite_source_tile_minmax_zoom_ok"
-    "--skip pg_get_function_source_query_params_ok"
-    "--skip pg_get_composite_source_tile_ok"
-    "--skip pg_get_catalog"
-    "--skip pg_get_composite_source_ok"
-    "--skip pg_get_health_returns_ok"
-    "--skip pg_get_table_source_ok"
-    "--skip pg_get_table_source_rewrite"
-    "--skip pg_null_functions"
-    "--skip utils::test_utils::tests::test_bad_os_str"
-    "--skip utils::test_utils::tests::test_get_env_str"
-    "--skip pg_get_table_source_multiple_geom_tile_ok"
-    "--skip pg_get_table_source_tile_minmax_zoom_ok"
-    "--skip pg_tables_feature_id"
-    "--skip pg_get_table_source_tile_ok"
-    "--skip table_source_schemas"
-    "--skip tables_srid_ok"
-    "--skip tables_tile_ok"
-    "--skip table_source"
-    "--skip tables_tilejson"
-    "--skip tables_multiple_geom_ok"
+  nativeCheckInputs = [
+    postgresql
+    postgresqlTestHook
   ];
 
-  meta = with lib; {
+  # Tests are time-consuming and moved to passthru.tests.withCheck.
+  doCheck = false;
+
+  checkFlags = [
+    # Requires docker
+    "--skip=test_nonexistent_tables_functions_generate_warning"
+  ];
+
+  passthru.tests = lib.optionalAttrs (!postgresqlTestHook.meta.broken) {
+    withCheck = finalAttrs.finalPackage.overrideAttrs {
+      doCheck = true;
+    };
+  };
+
+  meta = {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

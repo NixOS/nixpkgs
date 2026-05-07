@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -15,17 +14,15 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ftfy";
   version = "6.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "rspeer";
     repo = "python-ftfy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TmwDJeUDcF+uOB2X5tMmnf9liCI9rP6dYJVmJoaqszo=";
   };
 
@@ -44,12 +41,17 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";
+  disabledTests = [
+    # https://github.com/rspeer/python-ftfy/issues/226
+    "ftfy.formatting.monospaced_width"
+  ];
+
+  meta = {
+    changelog = "https://github.com/rspeer/python-ftfy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aborsu ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

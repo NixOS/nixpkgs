@@ -4,25 +4,31 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nakama";
-  version = "3.31.0";
+  version = "3.38.0";
 
   src = fetchFromGitHub {
     owner = "heroiclabs";
     repo = "nakama";
-    tag = "v${version}";
-    hash = "sha256-e31Mn4Ma+7vjOtwV13w79AshN9LCg2V0V3h9sSaad1U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sI+uTjP/ONLhYC3kqVlKNEqbrI8fABOHckrz0pg7Hi0=";
   };
 
   vendorHash = null;
 
   subPackages = [ "." ];
 
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail  'os.Getenv("NAKAMA_TELEMETRY") != "0"' \
+                      'os.Getenv("NAKAMA_TELEMETRY") == "1"'
+  '';
+
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -30,10 +36,10 @@ buildGoModule rec {
   meta = {
     description = "Distributed server for social and realtime games and apps";
     homepage = "https://heroiclabs.com/nakama/";
-    changelog = "https://github.com/heroiclabs/nakama/releases/tag/v${version}";
+    changelog = "https://github.com/heroiclabs/nakama/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.qxrein ];
     mainProgram = "nakama";
   };
-}
+})

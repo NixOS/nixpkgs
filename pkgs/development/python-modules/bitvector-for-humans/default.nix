@@ -32,10 +32,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitvector" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/JnyJny/bitvector";
     description = "This simple bit vector implementation aims to make addressing single bits a little less fiddly";
-    license = licenses.asl20;
-    teams = [ teams.helsinki-systems ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
   };
 }

@@ -15,19 +15,19 @@
   pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaylock-effects";
   version = "1.7.0.0";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "swaylock-effects";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cuFM+cbUmGfI1EZu7zOsQUj4rA4Uc4nUXcvIfttf9zE=";
   };
 
   postPatch = ''
-    sed -i "s/version: '1\.3',/version: '${version}',/" meson.build
+    sed -i "s/version: '1\.3',/version: '${finalAttrs.version}',/" meson.build
   '';
 
   strictDeps = true;
@@ -54,15 +54,15 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Screen locker for Wayland";
     longDescription = ''
       Swaylock, with fancy effects
     '';
     mainProgram = "swaylock";
-    inherit (src.meta) homepage;
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gnxlxnxx ];
+    inherit (finalAttrs.src.meta) homepage;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ gnxlxnxx ];
   };
-}
+})

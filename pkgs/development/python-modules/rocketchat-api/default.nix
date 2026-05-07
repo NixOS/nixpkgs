@@ -3,23 +3,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   packaging,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "rocketchat-api";
-  version = "1.35.2";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jadolg";
     repo = "rocketchat_API";
     tag = version;
-    hash = "sha256-U5r7SKCKneBgCSwCJRm+Tl/wPmMOrj93K5VVCO/OPCk=";
+    hash = "sha256-KatsV5MbZ7akD/nsNLEIwPecsaa9W8PplGCppe5rcZI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     packaging

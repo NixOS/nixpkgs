@@ -11,7 +11,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "sventorben";
     repo = "keycloak-restrict-client-auth";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nQ2AwXhSUu5RY/BbxXE2OXgEb7Zf6FfrGP5tfbgAXk8=";
   };
 
@@ -23,10 +23,10 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sventorben/keycloak-restrict-client-auth";
     description = "Keycloak authenticator to restrict authorization on clients";
-    license = licenses.mit;
-    maintainers = with maintainers; [ leona ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ leona ];
   };
 }

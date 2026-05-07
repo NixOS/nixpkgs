@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
-  version = "1.2";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZEy/b2ZWAZvDNbAu/FnpsPo8WsvSGADbdaSXU/gpdBk=";
+    hash = "sha256-b3zLZJ8lsPNK65d0NjwlP49/xAqaFUOw8dONGkuBpN4=";
   };
 
   # On macOS with a case-insensitive filesystem, "sdl.h" shadows <SDL.h>
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Widescreen Breakout clone";
     license = lib.licenses.gpl2Plus;
     mainProgram = "lbreakouthd";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (SDL2.meta) platforms;
   };
 })

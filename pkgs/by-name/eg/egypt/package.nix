@@ -10,7 +10,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchurl {
     sha256 = "0r0wj6v8z9fzlh9pb5617kyjdf92ppmlbzajaarrq729bbb6ln5m";
-    url = "https://www.gson.org/egypt/download/${pname}-${version}.tar.gz";
+    url = "https://www.gson.org/egypt/download/egypt-${version}.tar.gz";
   };
 
   outputs = [ "out" ];
@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for making call graphs of C programmes";
     mainProgram = "egypt";
     longDescription = ''
@@ -31,10 +31,10 @@ perlPackages.buildPerlPackage rec {
       together.
     '';
     homepage = "http://www.gson.org/egypt/";
-    license = with licenses; [
+    license = with lib.licenses; [
       artistic1
       gpl1Plus
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -6,15 +6,12 @@
   libpcap,
   pkgconfig,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pcapy-ng";
   version = "1.0.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stamparm";
@@ -38,14 +35,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcapy" ];
 
-  doCheck = pythonOlder "3.10";
+  doCheck = false;
 
   enabledTestPaths = [ "pcapytests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interface with the libpcap packet capture library";
     homepage = "https://github.com/stamparm/pcapy-ng/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

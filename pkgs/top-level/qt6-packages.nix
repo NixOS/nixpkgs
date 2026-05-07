@@ -67,6 +67,8 @@ makeScopeWithSplicing' {
       futuresql = callPackage ../development/libraries/futuresql { };
       kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
+      ktactilefeedback = kdePackages.callPackage ../development/libraries/ktactilefeedback { };
+
       libiodata = callPackage ../development/libraries/libiodata { };
 
       libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
@@ -75,6 +77,14 @@ makeScopeWithSplicing' {
 
       libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
+      libqtdbusmock = callPackage ../development/libraries/libqtdbusmock {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
+
+      libqtdbustest = callPackage ../development/libraries/libqtdbustest {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
+
       libquotient = callPackage ../development/libraries/libquotient { };
       mlt = pkgs.mlt.override {
         qt = qt6;
@@ -82,12 +92,14 @@ makeScopeWithSplicing' {
 
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
+      pyotherside = callPackage ../development/libraries/pyotherside { };
+
       qca = callPackage ../development/libraries/qca {
         inherit (qt6) qtbase qt5compat;
       };
       qcoro = callPackage ../development/libraries/qcoro { };
       qcustomplot = callPackage ../development/libraries/qcustomplot { };
-      qgpgme = callPackage ../development/libraries/gpgme { };
+      qgpgme = callPackage ../development/libraries/qgpgme { };
       qhotkey = callPackage ../development/libraries/qhotkey { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
@@ -118,10 +130,6 @@ makeScopeWithSplicing' {
 
       qtspell = callPackage ../development/libraries/qtspell { };
 
-      qwlroots = callPackage ../development/libraries/qwlroots {
-        wlroots = pkgs.wlroots_0_18;
-      };
-
       qwt = callPackage ../development/libraries/qwt/default.nix { };
 
       qxlsx = callPackage ../development/libraries/qxlsx { };
@@ -138,8 +146,7 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
-      # Not a library, but we do want it to be built for every qt version there
-      # is, to allow users to choose the right build if needed.
+      sddm-unwrapped = kdePackages.callPackage ../applications/display-managers/sddm/unwrapped.nix { };
       sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =
@@ -150,11 +157,17 @@ makeScopeWithSplicing' {
 
       timed = callPackage ../applications/system/timed { };
 
-      waylib = callPackage ../development/libraries/waylib { };
-
       wayqt = callPackage ../development/libraries/wayqt { };
-
-      xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      qwlroots = throw ''
+        'qt6Packages.qwlroots' has been removed because it has been merged into treeland upstream.
+        The upstream no longer provides it as a standalone development library.
+      ''; # Added 2025-02-07
+      waylib = throw ''
+        'qt6Packages.waylib' has been removed because it has been merged into treeland upstream.
+        The upstream no longer provides it as a standalone development library.
+      ''; # Added 2025-02-07
     }
   );
 }

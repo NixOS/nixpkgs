@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   incremental,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiolyric";
   version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
@@ -48,11 +45,11 @@ buildPythonPackage rec {
     "tests/test__version.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Honeywell Lyric Platform";
     homepage = "https://github.com/timmo001/aiolyric";
     changelog = "https://github.com/timmo001/aiolyric/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

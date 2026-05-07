@@ -15,24 +15,27 @@
   pytest-cov-stub,
 
   # reverse dependencies
+  music-assistant,
   music-assistant-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "music-assistant-models";
-  version = "1.1.51"; # Must be compatible with music-assistant-client package
+  # Must be compatible with music-assistant-client package
+  # nixpkgs-update: no auto update
+  version = "1.1.115";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "models";
-    tag = version;
-    hash = "sha256-vx0GlW99qDpSRDihP0dYhwgksPdCNj82SATo5TpITa4=";
+    tag = finalAttrs.version;
+    hash = "sha256-oEXL0B8JNH4PcltpES375ov7QGs+gtYKlMGr1B7BlKY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
@@ -52,14 +55,14 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit music-assistant-client;
+    inherit music-assistant music-assistant-client;
   };
 
   meta = {
-    description = "Models used by Music Assistant (shared by client and server";
+    description = "Models used by Music Assistant (shared by client and server)";
     homepage = "https://github.com/music-assistant/models";
-    changelog = "https://github.com/music-assistant/models/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/music-assistant/models/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

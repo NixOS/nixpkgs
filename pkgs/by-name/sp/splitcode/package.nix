@@ -7,18 +7,15 @@
   zlib,
   nix-update-script,
 }:
-let
-  version = "0.31.3";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splitcode";
-  inherit version;
+  version = "0.31.6";
 
   src = fetchFromGitHub {
     owner = "pachterlab";
     repo = "splitcode";
-    tag = "v${version}";
-    hash = "sha256-EEYjBo52jPCSnv5WSGsXhfZEjsBCHdGerVPOZfShXBU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-80XrLr6gk398a/JVSpb8j0i2pMEDKn0EnTiSw7cWS2c=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -41,7 +38,8 @@ stdenv.mkDerivation {
     description = "Tool for flexible, efficient parsing, interpreting, and editing of technical sequences in sequencing reads";
     homepage = "https://github.com/pachterlab/splitcode";
     license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
+    # also compiles on macos, but since it seems to return invalid results.
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zimward ];
     mainProgram = "splitcode";
     badPlatforms = [
@@ -49,4 +47,4 @@ stdenv.mkDerivation {
       "aarch64-linux"
     ];
   };
-}
+})

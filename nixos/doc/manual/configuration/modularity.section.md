@@ -113,7 +113,7 @@ Interactive exploration of the configuration is possible using `nix
   repl`, a read-eval-print loop for Nix expressions. A typical use:
 
 ```ShellSession
-$ nix repl '<nixpkgs/nixos>'
+$ nix repl -f '<nixpkgs/nixos>'
 
 nix-repl> config.networking.hostName
 "mandark"

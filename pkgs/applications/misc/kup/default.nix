@@ -15,20 +15,21 @@
   kconfig,
   kinit,
   kjobwidgets,
+  kcmutils,
   plasma-framework,
   libgit2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kup";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
-    repo = pname;
+    repo = "kup";
     owner = "system";
-    rev = "${pname}-${version}";
-    sha256 = "1s180y6vzkxxcjpfdvrm90251rkaf3swzkjwdlpm6m4vnggq0hvs";
+    rev = "kup-${version}";
+    hash = "sha256-G/GXmcQI1OBnCE7saPHeHDAMeL2WR6nVttMlKV2e01I=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +51,13 @@ stdenv.mkDerivation rec {
     kjobwidgets
     plasma-framework
     libgit2
+    kcmutils
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Backup tool for KDE";
     homepage = "https://apps.kde.org/kup";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.pwoelfel ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.pwoelfel ];
   };
 }

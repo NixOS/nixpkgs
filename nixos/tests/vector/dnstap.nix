@@ -369,8 +369,7 @@ in
           "journalctl -o cat -u vector.service | grep 'component_type=dnstap' | grep 'Listening... path=\"${dnstapSocket}\"'"
         )
 
-        machine.wait_for_file("${dnstapSocket}")
-        machine.succeed("test 770 -eq $(stat -c '%a' ${dnstapSocket})")
+        machine.wait_for_open_unix_socket("${dnstapSocket}")
 
       dnsclient.systemctl("start network-online.target")
       dnsclient.wait_for_unit("network-online.target")

@@ -1,6 +1,6 @@
-From b1df18da8735ed8c043e5e63753a6524cce620e1 Mon Sep 17 00:00:00 2001
+From 4c9e6a687162729f96a2de428aa19058c04efe2b Mon Sep 17 00:00:00 2001
 From: Chris Moultrie <tebriel@frodux.in>
-Date: Tue, 4 Mar 2025 08:20:58 -0500
+Date: Sat, 7 Mar 2026 10:51:40 -0500
 Subject: [PATCH 1/2] Define configs with env vars
 
 ---
@@ -12,19 +12,19 @@ Subject: [PATCH 1/2] Define configs with env vars
  5 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/app.php b/app.php
-index 9cdd14e5..c0b30b6e 100644
+index 9224796a..da5c2357 100644
 --- a/app.php
 +++ b/app.php
-@@ -12,7 +12,7 @@ use Slim\Views\Blade;
+@@ -12,7 +12,7 @@ use Slim\Factory\AppFactory;
  require_once __DIR__ . '/packages/autoload.php';
  
  // Load config files
 -require_once GROCY_DATAPATH . '/config.php';
 +require_once getenv('GROCY_CONFIG_FILE');
  require_once __DIR__ . '/config-dist.php'; // For not in own config defined values we use the default ones
- require_once __DIR__ . '/helpers/ConfigurationValidator.php';
  
-@@ -52,7 +52,7 @@ catch (EInvalidConfig $ex)
+ // Error reporting definitions
+@@ -51,7 +51,7 @@ catch (\Grocy\Helpers\EInvalidConfig $ex)
  }
  
  // Create data/viewcache folder if it doesn't exist
@@ -33,16 +33,16 @@ index 9cdd14e5..c0b30b6e 100644
  if (!file_exists($viewcachePath))
  {
  	mkdir($viewcachePath);
-@@ -85,7 +85,7 @@ $app = AppFactory::create();
+@@ -84,7 +84,7 @@ $app = AppFactory::create();
  $container = $app->getContainer();
  $container->set('view', function (Container $container)
  {
--	return new Blade(__DIR__ . '/views', GROCY_DATAPATH . '/viewcache');
-+	return new Blade(__DIR__ . '/views', getenv('GROCY_CACHE_DIR'));
+-	return new SlimBladeView(__DIR__ . '/views', GROCY_DATAPATH . '/viewcache');
++	return new SlimBladeView(__DIR__ . '/views', getenv('GROCY_CACHE_DIR'));
  });
  
  $container->set('UrlManager', function (Container $container)
-@@ -127,7 +127,7 @@ $errorMiddleware->setDefaultErrorHandler(
+@@ -126,7 +126,7 @@ $errorMiddleware->setDefaultErrorHandler(
  
  $app->add(new CorsMiddleware($app->getResponseFactory()));
  
@@ -65,7 +65,7 @@ index 5941e348..9283ba93 100644
  			$htmlPurifierConfig->set('Attr.EnableID', true);
  			$htmlPurifierConfig->set('HTML.SafeIframe', true);
 diff --git a/services/DatabaseService.php b/services/DatabaseService.php
-index c5914e49..c249a3bf 100644
+index 0b6672fb..94bb9412 100644
 --- a/services/DatabaseService.php
 +++ b/services/DatabaseService.php
 @@ -145,6 +145,6 @@ class DatabaseService
@@ -90,10 +90,10 @@ index 113a6478..61568bc6 100644
  		{
  			mkdir($this->StoragePath);
 diff --git a/services/StockService.php b/services/StockService.php
-index 2261db4e..cd438942 100644
+index da27dacc..ffe714ec 100644
 --- a/services/StockService.php
 +++ b/services/StockService.php
-@@ -1752,7 +1752,7 @@ class StockService extends BaseService
+@@ -1784,7 +1784,7 @@ class StockService extends BaseService
  
  		// User plugins take precedence
  		$standardPluginPath = __DIR__ . "/../plugins/$pluginName.php";
@@ -103,5 +103,5 @@ index 2261db4e..cd438942 100644
  		{
  			require_once $userPluginPath;
 -- 
-2.47.2
+2.51.2
 

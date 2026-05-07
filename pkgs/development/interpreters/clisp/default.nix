@@ -19,11 +19,11 @@
   readline,
   libffi,
   libffcall,
-  libX11,
-  libXau,
-  libXt,
-  libXpm,
-  libXext,
+  libx11,
+  libxau,
+  libxt,
+  libxpm,
+  libxext,
   xorgproto,
   coreutils,
   # build options
@@ -45,12 +45,12 @@
 assert
   x11Support
   -> (
-    libX11 != null
-    && libXau != null
-    && libXt != null
-    && libXpm != null
+    libx11 != null
+    && libxau != null
+    && libxt != null
+    && libxpm != null
     && xorgproto != null
-    && libXext != null
+    && libxext != null
   );
 
 let
@@ -86,12 +86,12 @@ stdenv.mkDerivation {
   ++ lib.optional (ffcallAvailable && (libffi != null)) libffi
   ++ lib.optional ffcallAvailable libffcall
   ++ lib.optionals x11Support [
-    libX11
-    libXau
-    libXt
-    libXpm
+    libx11
+    libxau
+    libxt
+    libxpm
     xorgproto
-    libXext
+    libxext
   ];
 
   # First, replace port 9090 (rather low, can be used)
@@ -113,7 +113,7 @@ stdenv.mkDerivation {
   ++ lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
   ++ lib.optional ffcallAvailable "--with-ffcall"
   ++ lib.optional (!ffcallAvailable) "--without-ffcall"
-  ++ builtins.map (x: " --with-module=" + x) withModules
+  ++ map (x: " --with-module=" + x) withModules
   ++ lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''
@@ -121,11 +121,6 @@ stdenv.mkDerivation {
     sed -i -re '/ cfree /d' -i modules/bindings/glibc/linux.lisp
     cd builddir
   '';
-
-  # ;; Loading file ../src/defmacro.lisp ...
-  # *** - handle_fault error2 ! address = 0x8 not in [0x1000000c0000,0x1000000c0000) !
-  # SIGSEGV cannot be cured. Fault address = 0x8.
-  hardeningDisable = [ "pie" ];
 
   doCheck = true;
 

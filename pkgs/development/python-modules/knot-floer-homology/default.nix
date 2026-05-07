@@ -37,6 +37,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/3-manifolds/knot_floer_homology/releases/tag/${src.tag}";
     homepage = "https://github.com/3-manifolds/knot_floer_homology";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }

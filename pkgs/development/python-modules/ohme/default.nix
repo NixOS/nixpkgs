@@ -3,22 +3,19 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ohme";
-  version = "1.5.2";
+  version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dan-r";
     repo = "ohmepy";
-    tag = "v${version}";
-    hash = "sha256-r3pu+HAQc8hXF2aMuWuE151Lz4rbrVti8YBrm4CS8z4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4Cz08MFtWJomWHQzTubD3s8kMfUt7aZwD7buwEN2yn8=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with the Ohme API";
     homepage = "https://github.com/dan-r/ohmepy";
-    changelog = "https://github.com/dan-r/ohmepy/releases/tag/v${version}";
+    changelog = "https://github.com/dan-r/ohmepy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

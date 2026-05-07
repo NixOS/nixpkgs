@@ -16,7 +16,7 @@ It should have the following properties:
 
 Non-goals are:
 - Efficient:
-  If the abstraction proves itself worthwhile but too slow, it can be still be optimized further.
+  If the abstraction proves itself worthwhile but too slow, it can still be optimized further.
 
 ## Tests
 
@@ -90,7 +90,7 @@ One of the following:
 - `"regular"`, `"symlink"`, `"unknown"` or any other non-`"directory"` string:
   A nested file with its file type.
   These specific strings are chosen to be compatible with `builtins.readDir` for a simpler implementation.
-  Distinguishing between different file types is not strictly necessary for the functionality this library,
+  Distinguishing between different file types is not strictly necessary for the functionality of this library,
   but it does allow nicer printing of file sets.
 
 - `null`:
@@ -127,7 +127,7 @@ Arguments:
 ### Empty file set without a base
 
 There is a special representation for an empty file set without a base path.
-This is used for return values that should be empty but when there's no base path that would makes sense.
+This is used for return values that should be empty but when there's no base path that would make sense.
 
 Arguments:
 - Alternative: This could also be represented using `_internalBase = /.` and `_internalTree = null`.

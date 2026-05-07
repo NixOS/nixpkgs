@@ -11,14 +11,14 @@
   raspa,
   raspa-data,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "raspa";
   version = "2.0.47";
 
   src = fetchFromGitHub {
     owner = "iRASPA";
     repo = "RASPA2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-i8Y+pejiOuyPNJto+/0CmRoAnMljCrnDFx8qDh4I/68=";
   };
 
@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     touch "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose classical molecular simulation package";
     homepage = "https://iraspa.org/raspa/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "simulate";
   };
-}
+})

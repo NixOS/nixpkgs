@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Python logging handlers with GELF (Graylog Extended Log Format) support";
     homepage = "https://github.com/keeprocking/pygelf";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -113,7 +113,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.brother.com/";
     description = "Brother MFCL5750DW CUPS driver";
     license = lib.licenses.unfree;
-    platforms = builtins.map (arch: "${arch}-linux") arches;
+    platforms = map (arch: "${arch}-linux") arches;
     maintainers = with lib.maintainers; [ qdlmcfresh ];
   };
 })

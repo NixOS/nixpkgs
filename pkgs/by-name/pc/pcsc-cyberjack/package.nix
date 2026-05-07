@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://support.reiner-sct.de/downloads/LINUX/V${version}_${suffix}/${pname}_${tarBall}.tar.bz2";
+    url = "https://support.reiner-sct.de/downloads/LINUX/V${version}_${suffix}/pcsc-cyberjack_${tarBall}.tar.bz2";
     sha256 = "sha256-rLfCgyRQcYdWcTdnxLPvUAgy1lLtUbNRELkQsR69Rno=";
   };
 
@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
 
   postInstall = "make -C tools/cjflash install";
 
-  meta = with lib; {
+  meta = {
     description = "REINER SCT cyberJack USB chipcard reader user space driver";
     mainProgram = "cjflash";
     homepage = "https://www.reiner-sct.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       aszlig
       flokli
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

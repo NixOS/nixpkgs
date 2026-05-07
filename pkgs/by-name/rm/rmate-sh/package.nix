@@ -7,14 +7,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rmate";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "aurora";
     repo = "rmate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fmK6h9bqZ0zO3HWfZvPdYuZ6i/0HZ1CA3FUnkS+E9ns=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Remote TextMate 2 implemented as shell script";
     longDescription = ''
       TextMate 2 has a nice feature where it is possible to edit
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       This is a rmate implementation in shell!
     '';
     homepage = "https://github.com/aurora/rmate";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pbsds ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "rmate";
   };
-}
+})

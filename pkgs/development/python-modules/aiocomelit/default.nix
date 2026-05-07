@@ -4,32 +4,31 @@
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
+  orjson,
   pint,
-  poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiocomelit";
-  version = "1.1.0";
+  version = "2.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiocomelit";
-    tag = "v${version}";
-    hash = "sha256-UTw20bDT2TBsnSy98Rl503C05W5e+8grVoD4bg4laPc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EB07sAGSyTpsCNH8xwOuHBYhQyajBnZBP+8WCLBq7i4=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     colorlog
+    orjson
     pint
   ];
 
@@ -40,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiocomelit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control Comelit Simplehome";
     homepage = "https://github.com/chemelli74/aiocomelit";
-    changelog = "https://github.com/chemelli74/aiocomelit/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/chemelli74/aiocomelit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

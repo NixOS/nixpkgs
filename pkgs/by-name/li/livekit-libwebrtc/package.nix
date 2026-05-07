@@ -1,7 +1,7 @@
 {
   stdenv,
   clang,
-  callPackage,
+  gclient2nix,
   lib,
   gn,
   fetchurl,
@@ -9,8 +9,6 @@
   xcbuild,
   python3,
   ninja,
-  apple-sdk_14,
-  darwinMinVersionHook,
   git,
   cpio,
   pkg-config,
@@ -29,12 +27,21 @@
   libxml2,
   libxslt,
   minizip,
-  ffmpeg_6,
-  writeShellScript,
+  ffmpeg_8,
+  libepoxy,
+  libgbm,
+  libGL,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
+  libxtst,
+  pipewire,
+  libx11,
+  libxi,
 }:
 let
-  sources = callPackage ./sources.nix { };
-
   platformMap = {
     "x86_64" = "x64";
     "i686" = "x86";
@@ -67,58 +74,59 @@ let
       libxml2
       libxslt
       minizip
-      ffmpeg_6
+      ffmpeg_8
       ;
   };
-  gclient2nix = python3.pkgs.callPackage ./gclient2nix.nix { };
 in
 stdenv.mkDerivation {
   pname = "livekit-libwebrtc";
-  version = "125-unstable-2025-03-24";
+  version = "137-unstable-2026-03-12";
 
-  src = "${sources}/src";
+  gclientDeps = gclient2nix.importGclientDeps ./sources.json;
+  sourceRoot = "src";
 
   patches = [
     # Adds missing dependencies to generated LICENSE
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/add_licenses.patch";
       hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
     })
     # Fixes the certificate chain, required for Let's Encrypt certs
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
-      hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
+      hash = "sha256-RBvRcJzoKItpEbqpe07YZe1D1ZVGS12EnDSISldGy+0=";
     })
     # Adds dependencies and features required by livekit
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
-      hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/add_deps.patch";
+      hash = "sha256-DwRtGdU5sppmiFsVuyhJoVCQrRl5JFmZJfxgUPhYXBg=";
     })
-    # Fixes "error: no matching member function for call to 'emplace'"
+    # Fix gcc-related errors
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/refs/heads/main/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
-      hash = "sha256-FOwlwOqgv5IEBCMogPACbXXxdNhGzpYcVfsolcwA7qU=";
-
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/force_gcc.patch";
+      hash = "sha256-1d73Pi1HkbunjYvp1NskUNE4xXbCmnh++rC6NrCJHbY=";
+      stripLen = 1;
+      extraPrefix = "build/";
+    })
+    # fix a gcc-related dav1d compile option
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/a4343fe9d88fcc96f8e88959c90d509abbd0307b/webrtc-sys/libwebrtc/patches/david_disable_gun_source_macro.patch";
+      hash = "sha256-RCZpeeSQHaxkL3dY2oFFXDjYeU0KHw7idQFONGge8+0=";
+      stripLen = 1;
       extraPrefix = "third_party/";
-      stripLen = 1;
     })
-    # Required for dynamically linking to ffmpeg libraries and exposing symbols
+    # Required for dynamically linking to ffmpeg libraries, exposing symbols,
+    # and hiding PipeWire symbols via version script (Linux only) to prevent
+    # SIGSEGV when ALSA's PipeWire plugin is loaded.
     ./0001-shared-libraries.patch
+    # Borrow a patch from chromium to prevent a build failure due to missing libclang libraries
+    ./chromium-129-rust.patch
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./0002-disable-narrowing-const-reference.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # GCC does not support C11 _Generic in C++ mode. Fixes boringssl build with GCC
-    (fetchpatch {
-      name = "fix-gcc-c11-generic-boringssl";
-
-      url = "https://github.com/google/boringssl/commit/c70190368c7040c37c1d655f0690bcde2b109a0d.patch";
-      hash = "sha256-xkmYulDOw5Ny5LOCl7rsheZSFbSF6md2NkZ3+azjFQk=";
-      stripLen = 1;
-      extraPrefix = "third_party/boringssl/src/";
-    })
-  ];
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    # Fix a broken build with pipewire 1.5+
+    # From https://github.com/Thaodan/tg_owt/commit/960b6b30a9c7e9e4451031c30f362fd01d2ce7c1
+    ./pipewire-1.5.patch
+  ]);
 
   postPatch = ''
     substituteInPlace .gn \
@@ -149,13 +157,24 @@ stdenv.mkDerivation {
           -delete
       fi
     done
+
+    # Trick the update_rust.py script into thinking we have *this specific* rust available.
+    # It isn't actually needed for the libwebrtc build, but GN will fail if it isn't there.
+    mkdir -p third_party/rust-toolchain
+    (python3 tools/rust/update_rust.py --print-package-version || true) \
+      | head -n 1 \
+      | sed 's/.* expected Rust version is \([^ ]*\) .*/rustc 1.0 1234 (\1 chromium)/' \
+      > third_party/rust-toolchain/VERSION
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p buildtools/linux64
     ln -sf ${lib.getExe gn} buildtools/linux64/gn
+    cp ${./libwebrtc.version} libwebrtc.version
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p buildtools/mac
     ln -sf ${lib.getExe gn} buildtools/mac/gn
     chmod +x build/toolchain/apple/linker_driver.py
     patchShebangs build/toolchain/apple/linker_driver.py
@@ -174,6 +193,7 @@ stdenv.mkDerivation {
       ) gnSystemLibraries
     ))
     ++ [
+      gclient2nix.gclientUnpackHook
       gn
       (python3.withPackages (ps: [ ps.setuptools ]))
       ninja
@@ -191,11 +211,19 @@ stdenv.mkDerivation {
     glib
     alsa-lib
     pulseaudio
-  ])
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-    (darwinMinVersionHook "12.3")
-  ];
+    libepoxy
+    libgbm
+    libGL
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
+    pipewire
+    libx11
+    libxi
+  ]);
 
   preConfigure = ''
     echo "generate_location_tags = true" >> build/config/gclient_args.gni
@@ -221,20 +249,23 @@ stdenv.mkDerivation {
     "is_component_build=true"
     "enable_stripping=true"
     "rtc_use_h264=true"
+    "rtc_use_h265=true"
     "use_custom_libcxx=false"
     "use_rtti=true"
   ]
   ++ (lib.optionals stdenv.hostPlatform.isLinux [
-    "use_goma=false"
-    "rtc_use_pipewire=false"
+    "rtc_use_pipewire=true"
     "symbol_level=0"
     "enable_iterator_debugging=false"
-    "rtc_use_x11=false"
+    "rtc_use_x11=true"
     "use_sysroot=false"
+    "use_custom_libcxx_for_host=false"
+    "use_libcxx_modules=false"
+    "use_llvm_libatomic=false"
     "is_clang=false"
   ])
   ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-    ''mac_deployment_target="12.3"''
+    ''mac_deployment_target="${stdenv.hostPlatform.darwinMinVersion}"''
     "rtc_enable_symbol_export=true"
     "rtc_enable_objc_symbol_export=true"
     "rtc_include_dav1d_in_internal_decoder_factory=true"
@@ -254,6 +285,7 @@ stdenv.mkDerivation {
     "pc:peer_connection"
     "sdk:videocapture_objc"
     "sdk:mac_framework_objc"
+    "desktop_capture_objc"
   ];
 
   postBuild =
@@ -272,10 +304,11 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     mkdir -p $dev/include
 
-    install -m0644 obj/webrtc.ninja args.gn LICENSE.md $dev
+    install -m0644 obj/webrtc.ninja obj/modules/desktop_capture/desktop_capture.ninja args.gn LICENSE.md $dev
 
     pushd ../..
     find . -name "*.h" -print | cpio -pd $dev/include
+    find . -name "*.inc" -print | cpio -pd $dev/include
     popd
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -300,11 +333,7 @@ stdenv.mkDerivation {
     install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$webrtc"
   '';
 
-  passthru.updateScript = writeShellScript "update-livekit-libwebrtc" ''
-    set -eou pipefail
-    cd pkgs/by-name/li/livekit-libwebrtc
-    ${lib.getExe gclient2nix} --main-source-path src https://github.com/webrtc-sdk/webrtc.git m114_release
-  '';
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "WebRTC library used by livekit";

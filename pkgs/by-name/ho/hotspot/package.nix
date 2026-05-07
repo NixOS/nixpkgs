@@ -16,14 +16,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hotspot";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-O2wp19scyHIwIY2AzKmPmorGXDH249/OhSg+KtzOYhI=";
     fetchSubmodules = true;
   };
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       $out/libexec/hotspot-perfparser
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI for Linux perf";
     mainProgram = "hotspot";
     longDescription = ''
@@ -96,15 +96,15 @@ stdenv.mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    changelog = "https://github.com/KDAB/hotspot/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/KDAB/hotspot/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       gpl2Only
       gpl3Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       nh2
       tmarkus
     ];
   };
-}
+})

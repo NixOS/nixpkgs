@@ -62,7 +62,7 @@
 #    KERNEL=="*", SUBSYSTEMS=="usb", MODE="0664", GROUP="usb"
 #  '';
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spice-gtk";
   version = "0.42";
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.xz";
+    url = "https://www.spice-space.org/download/gtk/spice-gtk-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-k4ARfxgRrR+qGBLLZgJHm2KQ1KDYzEQtREJ/f2wOelg=";
   };
 
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  env.PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   mesonFlags = [
     "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
@@ -170,7 +170,7 @@ stdenv.mkDerivation rec {
       --replace-fail ",--version-script=@0@'.format(spice_client_glib_syms_path)" "'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK 3 SPICE widget";
     longDescription = ''
       spice-gtk is a GTK 3 SPICE widget. It features glib-based
@@ -180,8 +180,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.spice-space.org/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.xeji ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.xeji ];
+    platforms = lib.platforms.unix;
   };
-}
+})

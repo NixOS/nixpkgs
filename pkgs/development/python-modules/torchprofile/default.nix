@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "General and accurate MACs / FLOPs profiler for PyTorch models";
     homepage = "https://github.com/zhijian-liu/torchprofile";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

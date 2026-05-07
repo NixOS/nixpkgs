@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bonk";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "elliot40404";
     repo = "bonk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sAMIteNkGRqmE7BQD/TNC01K3eQQTLKuc0jcxHxtKF8=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bonk";
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

@@ -1,30 +1,53 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  catch2_3,
   cmake,
+  ctestCheckHook,
+  libpng,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "niftyreg";
-  version = "1.3.9";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/nifty_reg-${version}/nifty_reg-${version}.tar.gz";
-    sha256 = "07v9v9s41lvw72wpb1jgh2nzanyc994779bd35p76vg8mzifmprl";
+  src = fetchFromGitHub {
+    owner = "KCL-BMEIS";
+    repo = "niftyreg";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BtAbcxqvZ5Kt2UMqtnx0aQg73ligQNTktKZjoa+GXvk=";
   };
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=narrowing" ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'message(FATAL_ERROR "Git not found. Please install Git to get the version information.")' 'set(''${PROJECT_NAME}_VERSION ${finalAttrs.src.tag})'
+  '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [
+    cmake
+    ctestCheckHook
+    catch2_3
+  ];
 
-  meta = with lib; {
-    homepage = "http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg";
+  buildInputs = [
+    libpng
+    zlib
+  ];
+
+  cmakeFlags = [ "-DBUILD_TESTING=ON" ];
+
+  doCheck = true;
+
+  # fails due to very slight numerical tolerance issue
+  ctestFlags = [ "--exclude-regex=Regression Deformation Field" ];
+
+  meta = {
+    homepage = "https://github.com/KCL-BMEIS/niftyreg";
     description = "Medical image registration software";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = [ "x86_64-linux" ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
-}
+})

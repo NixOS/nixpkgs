@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-command-source";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-command-source";
     rev = version;
-    sha256 = "sha256-yrzY4pHSupkkdRlx725oSVtQTH1Ci9zFolHN3i2Vm28=";
+    sha256 = "sha256-z5TKVA0WI/pqfca1VCXfDvYHxDG2EoD6PFCV7pSXe7c=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio plugin that provides a dummy source to execute arbitrary commands when a scene is switched";
     homepage = "https://github.com/norihiro/command-source";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
     inherit (obs-studio.meta) platforms;
   };
 }

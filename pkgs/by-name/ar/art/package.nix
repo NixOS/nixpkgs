@@ -12,17 +12,17 @@
   lerc,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
   pixman,
-  libpthreadstubs,
+  libpthread-stubs,
   gtkmm3,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   lcms2,
   libraw,
   libiptcdata,
-  fftw,
+  fftwSinglePrec,
   expat,
   pcre2,
   libsigcxx,
@@ -33,21 +33,28 @@
   exiftool,
   mimalloc,
   openexr,
-  ilmbase,
   opencolorio,
   color-transformation-language,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "art";
-  version = "1.25.9";
+  version = "1.26.4";
 
   src = fetchFromGitHub {
     owner = "artpixls";
     repo = "ART";
-    tag = version;
-    hash = "sha256-dg0msZ0aeyl4L7RqqGur9Lalu1QtE0igEc54WT5F+SQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-T7ri0fQz3OBLmr3BBQvYgSmAQaV/aMax6SOupAQDg5o=";
   };
+
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.9)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -64,16 +71,16 @@ stdenv.mkDerivation rec {
     lerc
     libxkbcommon
     libepoxy
-    libXtst
+    libxtst
     pixman
-    libpthreadstubs
+    libpthread-stubs
     gtkmm3
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
     lcms2
     libraw
     libiptcdata
-    fftw
+    fftwSinglePrec
     expat
     pcre2
     libsigcxx
@@ -84,7 +91,6 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     mimalloc
     openexr
-    ilmbase
     opencolorio
     color-transformation-language
   ];
@@ -97,19 +103,25 @@ stdenv.mkDerivation rec {
     "-DCTL_INCLUDE_DIR=${color-transformation-language}/include/CTL"
   ];
 
-  CMAKE_CXX_FLAGS = toString [
-    "-std=c++11"
-    "-Wno-deprecated-declarations"
-    "-Wno-unused-result"
-  ];
-  env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
+  env = {
+    CMAKE_CXX_FLAGS = toString [
+      "-std=c++11"
+      "-Wno-deprecated-declarations"
+      "-Wno-unused-result"
+    ];
+    # needed at least with gcc13 on aarch64-linux
+    CXXFLAGS = toString [
+      "-include"
+      "cstdint"
+    ];
+  };
 
   meta = {
     description = "Raw converter based on RawTherapee";
-    homepage = "https://art.pixls.us";
+    homepage = "https://artraweditor.github.io";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
-    mainProgram = "art";
+    mainProgram = "ART";
     platforms = lib.platforms.linux;
   };
-}
+})

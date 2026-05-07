@@ -2,25 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pandas,
   pyarrow,
   geoarrow-pyarrow,
+  geoarrow-types,
   setuptools-scm,
 }:
 buildPythonPackage rec {
   pname = "geoarrow-pandas";
-  version = "0.1.2";
+  version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    tag = "geoarrow-pandas-${version}";
-    hash = "sha256-Ni+GKTRhRDRHip1us3OZPuUhHQCNU7Nap865T/+CU8Y=";
+    tag = "geoarrow-types-${version}";
+    hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
   };
 
   sourceRoot = "${src.name}/geoarrow-pandas";
@@ -31,6 +29,7 @@ buildPythonPackage rec {
 
   dependencies = [
     geoarrow-pyarrow
+    geoarrow-types
     pandas
     pyarrow
   ];
@@ -41,13 +40,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geoarrow.pandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the GeoArrow specification";
     homepage = "https://github.com/geoarrow/geoarrow-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
     teams = [ lib.teams.geospatial ];
+    # its removal upstream is in question
+    # https://github.com/geoarrow/geoarrow-python/issues/75
+    # please unbreak it if the author decides to release a new version
+    broken = true;
   };
 }

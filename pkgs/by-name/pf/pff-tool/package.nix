@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command-line tools to process PFF files";
     homepage = "https://github.com/avranju/pff-tools";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     mainProgram = "pff-cli";
   };
 })

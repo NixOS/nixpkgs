@@ -50,7 +50,6 @@ in
     '';
 
   meta.maintainers = with lib.maintainers; [
-    srxl
     tmarkus
   ];
 }

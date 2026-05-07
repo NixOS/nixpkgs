@@ -1,12 +1,15 @@
 {
   config,
   lib,
-  pkgs,
   utils,
   ...
 }:
 {
   options.services.logind = {
+    enable = lib.mkEnableOption "the `systemd-logind` login service" // {
+      default = config.systemd.package.withLogind;
+      defaultText = lib.literalExpression "config.systemd.package.withLogind";
+    };
     settings.Login = lib.mkOption {
       description = ''
         Settings option for systemd-logind.
@@ -41,10 +44,9 @@
     };
   };
 
-  config = {
+  config = lib.mkIf config.services.logind.enable {
     systemd.additionalUpstreamSystemUnits = [
       "systemd-logind.service"
-      "autovt@.service"
       "systemd-user-sessions.service"
     ]
     ++ lib.optionals config.systemd.package.withImportd [
@@ -53,19 +55,14 @@
     ++ lib.optionals config.systemd.package.withMachined [
       "dbus-org.freedesktop.machine1.service"
     ]
-    ++ lib.optionals config.systemd.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-    ]
     ++ [
       "dbus-org.freedesktop.login1.service"
       "user@.service"
       "user-runtime-dir@.service"
     ];
 
-    environment.etc."systemd/logind.conf".text = ''
-      [Login]
-      ${utils.systemdUtils.lib.attrsToSection config.services.logind.settings.Login}
-    '';
+    environment.etc."systemd/logind.conf".text =
+      utils.systemdUtils.lib.settingsToSections config.services.logind.settings;
 
     # Restarting systemd-logind breaks X11
     # - upstream commit: https://cgit.freedesktop.org/xorg/xserver/commit/?id=dc48bd653c7e101

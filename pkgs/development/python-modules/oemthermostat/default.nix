@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "oemthermostat";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Cadair";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oemthermostat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with OpenEnergyMonitor thermostats";
     homepage = "https://github.com/Cadair/openenergymonitor_thermostat";
     changelog = "https://github.com/Cadair/openenergymonitor_thermostat/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

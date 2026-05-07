@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.8.4";
+  version = "0.8.5";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "agx";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9UBrexS7zNxFUB/K1I5ZO78OjGAshCAABZQyc0lBLlQ=";
+    hash = "sha256-m8jDn7gDrZOsdFl17IsIINgcpuHmmtNOCEEdQFwVj6g=";
   };
 
   depsBuildBuild = [
@@ -108,20 +108,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Theme based Haptic, Visual and Audio Feedback";
     homepage = "https://gitlab.freedesktop.org/agx/feedbackd/";
-    license = with licenses; [
+    license = with lib.licenses; [
       # feedbackd
       gpl3Plus
 
       # libfeedback library
       lgpl21Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pacman99
       Luflosi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

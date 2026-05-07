@@ -6,15 +6,15 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
-  name = "florist";
-  version = "24.2";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "florist";
+  version = "26.1";
 
   src = fetchFromGitHub {
     owner = "adacore";
     repo = "florist";
-    rev = "refs/heads/${version}";
-    hash = "sha256-EFGmcQfWpxEWfsAoQrHegTlizl6siE8obKx+fCpVwUQ=";
+    rev = "refs/heads/${finalAttrs.version}";
+    hash = "sha256-83bfO7RTVs3b7nEzjxnr2eRXggoMjTLIa9agwYKgP9g=";
   };
 
   configureFlags = [ "--enable-shared" ];
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lutzberger ];
     platforms = lib.platforms.linux;
   };
-}
+})

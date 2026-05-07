@@ -12,14 +12,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deadbeef-headerbar-gtk3-plugin";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "ddb_misc_headerbar_GTK3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
   };
 
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     description = "Plug-in that adds GTK 3 header bar to the DeaDBeeF music player";
     homepage = "https://github.com/saivert/ddb_misc_headerbar_GTK3";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.jtojnar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.jtojnar ];
+    platforms = lib.platforms.linux;
   };
-}
+})

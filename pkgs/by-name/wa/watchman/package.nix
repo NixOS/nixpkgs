@@ -11,7 +11,6 @@
   cargo,
   rustPlatform,
   ensureNewerSourcesForZipFilesHook,
-  removeReferencesTo,
 
   pcre2,
   openssl,
@@ -27,21 +26,17 @@
   cpptoml,
 
   gtest,
-
-  nix-update-script,
-
-  stateDir ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.04.21.00";
+  version = "2026.01.19.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZRrG7bgmh7hW7ihQISQP5pnWAVGhDLL93rCP7ZtUnA=";
+    hash = "sha256-Eh7IHYEavgVd2p+r1PzQrAdqPD5FlYiTp4TCon55byE=";
   };
 
   patches = [
@@ -56,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     ensureNewerSourcesForZipFilesHook
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -80,8 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # If we want to have one watchman per system, we need to have the state in
+    # $HOME for reliability in face of differing TMPDIR values.
+    # https://github.com/facebook/watchman/issues/1092
+    (lib.cmakeBool "WATCHMAN_USE_XDG_STATE_HOME" true)
 
-    (lib.cmakeFeature "WATCHMAN_STATE_DIR" stateDir)
     (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
   ];
 
@@ -95,12 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
-    cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
-  '';
 
-  postFixup = ''
-    # TODO: Do this in `fmt` rather than downstream.
-    remove-references-to -t ${folly.fmt.dev} $out/bin/*
+    cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
+
+    # The build system looks for `/usr/bin/python3`. It falls back
+    # gracefully if it’s not found, but let’s dodge the potential
+    # reproducibility risk for unsandboxed Darwin.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail /usr/bin /var/empty
+
   '';
 
   passthru.updateScript = ./update.sh;
@@ -112,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
     mainProgram = "watchman";
     platforms = lib.platforms.unix;

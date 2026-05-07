@@ -4,6 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
+  buildPackages,
   cairo,
   expat,
   flex,
@@ -15,9 +16,10 @@
   libtool,
   makeWrapper,
   pango,
+  runCommand,
   bash,
   bison,
-  xorg,
+  libxrender,
   python3,
   withXorg ? true,
 
@@ -28,16 +30,21 @@
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib)
+    optional
+    optionals
+    optionalString
+    optionalAttrs
+    ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphviz";
   version = "12.2.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Uxqg/7+LpSGX4lGH12uRBxukVw0IswFPfpb2EkLsaiI=";
   };
 
@@ -60,24 +67,40 @@ stdenv.mkDerivation rec {
     pango
     bash
   ]
-  ++ optionals withXorg (with xorg; [ libXrender ]);
+  ++ optionals withXorg [ libxrender ];
 
   hardeningDisable = [ "fortify" ];
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ]
-  ++ optional (xorg == null) "--without-x";
+    (lib.withFeature withXorg "x")
+  ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
-  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin) "-I${cairo.dev}/include/cairo";
+  env = optionalAttrs (withXorg && stdenv.hostPlatform.isDarwin) {
+    CPPFLAGS = "-I${cairo.dev}/include/cairo";
+  };
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 
   preAutoreconf = ''
     ./autogen.sh
+  '';
+
+  # Invoke `dot -c` even while cross compiling else lib/graphviz/config6 will not load at runtime.
+  postPatch = ''
+    substituteInPlace cmd/dot/Makefile.am --replace-fail \
+      'if test "x$(DESTDIR)" = "x" -a "x$(build)" = "x$(host)"; then if test -x $(bindir)/dot$(EXEEXT); then if test -x /sbin/ldconfig; then /sbin/ldconfig 2>/dev/null; fi; cd $(bindir); ./dot$(EXEEXT) -c; else cd $(bindir); ./dot_static$(EXEEXT) -c; fi; fi' \
+      '${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+        if test -x $(bindir)/dot$(EXEEXT); then \
+          cd $(bindir); ${stdenv.hostPlatform.emulator buildPackages} ./dot$(EXEEXT) -c; \
+        else \
+          cd $(bindir); ${stdenv.hostPlatform.emulator buildPackages} ./dot_static$(EXEEXT) -c; \
+        fi
+      ''}'
   '';
 
   postFixup = optionalString withXorg ''
@@ -101,16 +124,24 @@ stdenv.mkDerivation rec {
       fltk
       graphicsmagick
       ;
+    dot-can-load-plugins =
+      runCommand "dot-can-load-plugins"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          dot -P -o $out
+        '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";
-    license = licenses.epl10;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
       raskin
     ];
   };
-}
+})

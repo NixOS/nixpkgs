@@ -7,7 +7,7 @@
   dune-configurator,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bigstringaf";
   version = "0.10.0";
 
@@ -15,8 +15,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
-    repo = pname;
-    tag = version;
+    repo = "bigstringaf";
+    tag = finalAttrs.version;
     hash = "sha256-p1hdB3ArOd2UX7S6YvXCFbYjEiXdMDmBaC/lFQgua7Q=";
   };
 
@@ -39,9 +39,9 @@ buildDunePackage rec {
 
       So here they are. Go crazy.
     '';
-    changelog = "https://github.com/inhabitedtype/bigstringaf/releases/tag/${version}";
+    changelog = "https://github.com/inhabitedtype/bigstringaf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
   };
-}
+})

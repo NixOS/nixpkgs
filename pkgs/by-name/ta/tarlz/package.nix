@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tarlz";
-  version = "0.28.1";
+  version = "0.29";
   outputs = [
     "out"
     "man"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/tarlz/tarlz-${finalAttrs.version}.tar.lz";
-    sha256 = "sha256-qzySt/fxDJU5vHvmkfumSK8h1MieVdgexm12H43Ytak=";
+    sha256 = "sha256-fhJ/HhsbYspuNBf94y864EgbpYhvVqhVOiFbGdgcbBk=";
   };
 
   enableParallelBuilding = true;
@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # system clock issues
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/lzip/tarlz.html";
     description = "Massively parallel combined implementation of the tar archiver and the lzip compressor";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     mainProgram = "tarlz";
   };
 })

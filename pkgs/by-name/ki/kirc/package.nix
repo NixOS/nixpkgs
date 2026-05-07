@@ -4,22 +4,22 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kirc";
-  version = "0.3.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "mcpcpc";
     repo = "kirc";
-    rev = version;
-    hash = "sha256-LiJZnFQMnyBEqeyyyqM56XXoYjbZPCWLfLX9OB/f+YM=";
+    tag = finalAttrs.version;
+    hash = "sha256-0A2Es8/EAOMgxRNxT0P53E5QYeuYHv/p93UUeQxM5gc=";
   };
 
   dontConfigure = true;
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mcpcpc.github.io/kirc/";
     description = "Tiny IRC client written in C99";
     mainProgram = "kirc";
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       - Full support for all RFC 2812 commands.
       - Easy customized color scheme definition.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

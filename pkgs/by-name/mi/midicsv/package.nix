@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "midicsv";
   version = "1.1";
 
   src = fetchurl {
-    url = "https://www.fourmilab.ch/webtools/midicsv/midicsv-${version}.tar.gz";
+    url = "https://www.fourmilab.ch/webtools/midicsv/midicsv-${finalAttrs.version}.tar.gz";
     sha256 = "1vvhk2nf9ilfw0wchmxy8l13hbw9cnpz079nsx5srsy4nnd78nkw";
   };
 
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
       --replace gcc "${stdenv.cc.targetPrefix}cc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Losslessly translate MIDI to CSV and back";
     homepage = "https://www.fourmilab.ch/webtools/midicsv/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

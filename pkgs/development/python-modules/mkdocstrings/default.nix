@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   jinja2,
   markdown,
   markupsafe,
@@ -11,25 +10,24 @@
   pdm-backend,
   pymdown-extensions,
   pytestCheckHook,
-  pythonOlder,
   dirty-equals,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocstrings";
-  version = "0.30.0";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
-    tag = version;
-    hash = "sha256-tJErux/90zXaV0ViGJOQKMf1yYCxMhH1nMrQlXlHw/Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-FBDzTArJGKoJOmOLiYNTA9kshHWqD7zV1nR3sG4sOMk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ pdm-backend ];
@@ -41,9 +39,6 @@ buildPythonPackage rec {
     mkdocs
     mkdocs-autorefs
     pymdown-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -70,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
-    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

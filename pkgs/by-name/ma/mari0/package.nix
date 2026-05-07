@@ -10,7 +10,7 @@
   zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mari0";
   version = "1.6.2-unstable-2023-08-08";
 
@@ -44,16 +44,16 @@ stdenv.mkDerivation rec {
     zip -9 -r mari0.love ./*
     strip-nondeterminism --type zip mari0.love
     install -Dm444 -t $out/share/games/lovegames/ mari0.love
-    makeWrapper ${love}/bin/love $out/bin/mari0 \
+    makeWrapper ${lib.getExe love} $out/bin/mari0 \
       --add-flags $out/share/games/lovegames/mari0.love
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Crossover between Super Mario Bros. and Portal";
     mainProgram = "mari0";
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = love.meta.platforms;
+    license = lib.licenses.mit;
     downloadPage = "https://stabyourself.net/mari0/";
   };
 

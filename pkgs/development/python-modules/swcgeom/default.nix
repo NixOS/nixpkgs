@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "0.19.4";
+  version = "0.21.5";
 in
 buildPythonPackage rec {
   pname = "swcgeom";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "yzx9";
     repo = "swcgeom";
     tag = "v${version}";
-    hash = "sha256-emffSI4LO+5UU267d+qj/NCVvHmRpzikJ7jdCOtPFNo=";
+    hash = "sha256-QLo2tfoQFuoKee/e/t5l3bUwOtobV57Od9UvAze78FE=";
   };
 
   build-system = [

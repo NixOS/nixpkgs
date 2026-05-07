@@ -53,6 +53,6 @@ stdenv.mkDerivation {
       mpl20
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
   };
 }

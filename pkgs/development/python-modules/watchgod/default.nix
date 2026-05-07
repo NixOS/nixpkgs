@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watchgod" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, modern file watching and code reload in python";
     mainProgram = "watchgod";
     homepage = "https://github.com/samuelcolvin/watchgod";
-    license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

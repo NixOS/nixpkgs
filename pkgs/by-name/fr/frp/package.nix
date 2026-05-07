@@ -5,18 +5,18 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "frp";
-  version = "0.64.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = "frp";
-    rev = "v${version}";
-    hash = "sha256-DnuywtyBBIvyB29HYFSRiBcY+jNY8rK54roJMQdQNZA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GFvXdhX7kA43kppWWdL7KhummUCqpa1cQ7V2d9ISGfo=";
   };
 
-  vendorHash = "sha256-bSYwMevCTusvkcBFdWvYw+3E1H4GshoaiX8ilEWKmQk=";
+  vendorHash = "sha256-m5ECF0cgp2LfsTKey02MHz5TfqfzOCT5cU5trUfrOjY=";
 
   doCheck = false;
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     frp = nixosTests.frp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast reverse proxy";
     longDescription = ''
       frp is a fast reverse proxy to help you expose a local server behind a
@@ -38,7 +38,6 @@ buildGoModule rec {
       internal services by domain name. frp also has a P2P connect mode.
     '';
     homepage = "https://github.com/fatedier/frp";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.asl20;
   };
-}
+})

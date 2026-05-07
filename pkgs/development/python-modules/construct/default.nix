@@ -9,7 +9,6 @@
   lz4,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   setuptools,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "construct";
   version = "2.10.70";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "construct";
@@ -48,7 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "construct" ];
 
@@ -57,11 +54,11 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Powerful declarative parser (and builder) for binary data";
     homepage = "https://construct.readthedocs.org/";
     changelog = "https://github.com/construct/construct/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

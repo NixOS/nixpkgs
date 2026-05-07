@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.7.49.4";
+  version = "1.7.50.3";
 in
 stdenvNoCC.mkDerivation {
   pname = "grav";
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/getgrav/grav/releases/download/${version}/grav-admin-v${version}.zip";
-    hash = "sha256-ZOhZ5O5s8P4nqjSsLEu4RpyTfZ34YBi0itETwcRdIPQ=";
+    hash = "sha256-W4JuW5NEko38AbLrLOGWYsRvehPV7+tX2Hq1tTZ22EY=";
   };
 
   patches = [
@@ -34,10 +34,10 @@ stdenvNoCC.mkDerivation {
     grav = nixosTests.grav;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, simple, and flexible, file-based web platform";
     homepage = "https://getgrav.com";
-    maintainers = with maintainers; [ rycee ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ rycee ];
+    license = lib.licenses.mit;
   };
 }

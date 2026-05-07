@@ -17,11 +17,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "spoofer";
-  version = "1.4.12";
+  version = "1.4.13";
 
   src = fetchurl {
     url = "https://www.caida.org/projects/spoofer/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3ljCPmazKz0fHer2yN6baFLu425Dsr9ppdjr2Iv5YJ8=";
+    sha256 = "sha256-n3B2yAckbcm2kyv5QzBGh4nvKa0S/+EbGCxe0eyWG1U=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";
     longDescription = ''
@@ -52,9 +52,8 @@ stdenv.mkDerivation rec {
       deploying source address validation (e.g., network location,
       business type).
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "spoofer-prober";
   };
 }

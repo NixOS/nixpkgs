@@ -6,15 +6,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "exercism";
-  version = "3.5.7";
+  version = "3.5.8";
 
   src = fetchFromGitHub {
     owner = "exercism";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-DksutkeaI9F1lcCcEahX2eSi/DIy4ra1CcwqiUhpNfA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vYbOagP3RwqD2+x0Mvve66Xm88jeRVzHU7nsN432j6k=";
   };
 
   vendorHash = "sha256-xY3C3emqtPIKyxIN9aEkrLXhTxWNmo0EJXNZVtbtIvs=";
@@ -34,14 +34,14 @@ buildGoModule rec {
       --zsh shell/exercism_completion.zsh
   '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Go based command line tool for exercism.io";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.rbasso
-      maintainers.nobbz
+      lib.maintainers.rbasso
+      lib.maintainers.nobbz
     ];
     mainProgram = "exercism";
   };
-}
+})

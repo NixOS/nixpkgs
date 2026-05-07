@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plzip";
-  version = "1.12";
+  version = "1.13";
   outputs = [
     "out"
     "man"
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/plzip/plzip-${finalAttrs.version}.tar.lz";
-    hash = "sha256-RLvt4rLiOPBbmSEon5194ia3lYKmN2pdEOv8u4dxOoQ=";
+    hash = "sha256-f+AUG3Lq8ITYKq07FLOk2W3/C97698OJ91XYlIs2N8g=";
     # hash from release email
   };
 

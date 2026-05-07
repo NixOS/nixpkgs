@@ -16,16 +16,19 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2025.1.3.7"; # "Android Studio Narwhal 3 Feature Drop | 2025.1.3"
-    sha256Hash = "sha256-pet3uTmL4pQ/FxB2qKv+IZNx540gMC7hmfOaQ8iLQpQ=";
+    version = "2025.3.4.6"; # "Android Studio Panda 4 | 2025.3.4"
+    sha256Hash = "sha256-Mqf/CayqOLSNYciIK+5+ITAiqLoNHxbABzOA+stQn9M=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.6/android-studio-panda4-linux.tar.gz";
   };
   betaVersion = {
-    version = "2025.1.3.6"; # "Android Studio Narwhal 3 Feature Drop | 2025.1.3 RC 2"
-    sha256Hash = "sha256-S8KK/EGev0v03fVywIkD6Ym3LrciGKXJVorzyZ1ljdQ=";
+    version = "2025.3.4.5"; # "Android Studio Panda 4 | 2025.3.4 RC 1"
+    sha256Hash = "sha256-NiNq1j+rzPU4KsLKYymfi5/Vx2Bn3hK8I3OVIUFloX0=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.5/android-studio-panda4-rc1-linux.tar.gz";
   };
   latestVersion = {
-    version = "2025.1.4.4"; # "Android Studio Narwhal 4 Feature Drop | 2025.1.4 Canary 4"
-    sha256Hash = "sha256-Cp5oZiCJJDffZRAg7CPNNR82Mn6k4QpjQtqMiokFAws=";
+    version = "2026.1.1.2"; # "Android Studio Quail 1 | 2026.1.1 Canary 2"
+    sha256Hash = "sha256-jdbxyK7V4EJI5sCk31oo77lH6uXTM0QjljUgWn5Bl3M=";
+    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.1.1.2/android-studio-quail1-canary2-linux.tar.gz";
   };
 in
 {

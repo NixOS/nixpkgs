@@ -8,14 +8,14 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wibo";
   version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6YcraHBFWmm8TBfuFHbM9jGvUm9KvTOplJrFSTQkt70=";
   };
 
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
         meta.license = lib.licenses.unfree;
       };
     in
-    lib.optionalString doCheck ''
+    lib.optionalString finalAttrs.doCheck ''
       MWCIncludes=../test ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
       file test.o | grep "ELF 32-bit"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Quick-and-dirty wrapper to run 32-bit windows EXEs on linux";
     longDescription = ''
       A minimal, low-fuss wrapper that can run really simple command-line
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
       than WINE.
     '';
     homepage = "https://github.com/decompals/WiBo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ r-burns ];
     platforms = [ "i686-linux" ];
     mainProgram = "wibo";
   };
-}
+})

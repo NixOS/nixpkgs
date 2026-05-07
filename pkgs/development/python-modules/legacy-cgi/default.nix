@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "legacy-cgi";
-  version = "2.6.3";
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = "legacy-cgi";
     tag = "v${version}";
-    hash = "sha256-l2BuSlxAA31VlJ/Fhs4cGbidbXEt/zEH3BiWsuh29GM=";
+    hash = "sha256-2CCYRRWP8FP54AcLnehJ0Kj3F3U4cz8vnesSj5EakdA=";
   };
 
   build-system = [ hatchling ];

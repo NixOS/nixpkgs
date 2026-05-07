@@ -16,15 +16,15 @@
   libgbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stress-ng";
-  version = "0.19.03";
+  version = "0.21.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "stress-ng";
-    rev = "V${version}";
-    hash = "sha256-k0F/1tkoyalhSNsEQk+wHGHUCDBzOkmdv6VYubesGd4=";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-GC9FN8nHhBLS9E+7kN0aNAIo8VbUIPG26/bRUarsiIc=";
   };
 
   postPatch = ''
@@ -92,10 +92,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/ColinIanKing/stress-ng";
     downloadPage = "https://github.com/ColinIanKing/stress-ng/tags";
-    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${version}/debian/changelog";
+    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${finalAttrs.version}/debian/changelog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = with lib.maintainers; [
+      dbeley
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "stress-ng";
   };
-}
+})

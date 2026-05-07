@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,13 +9,13 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shopware-cli";
   version = "0.6.22";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-u5hFjDLGBXVvAp4WYWBb3HCzGDjkg9jj251LaV1zA8I=";
   };
 
@@ -29,7 +30,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Ckn6+DzHPX+UG5YxYqvkdaio/elRQssbDSR+zAfxzdE=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd shopware-cli \
       --bash <($out/bin/shopware-cli completion bash) \
       --zsh <($out/bin/shopware-cli completion zsh) \
@@ -44,7 +45,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'github.com/FriendsOfShopware/shopware-cli/cmd.version=${version}'"
+    "-X 'github.com/FriendsOfShopware/shopware-cli/cmd.version=${finalAttrs.version}'"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -53,8 +54,8 @@ buildGoModule rec {
     description = "Command line tool for Shopware 6";
     mainProgram = "shopware-cli";
     homepage = "https://github.com/FriendsOfShopware/shopware-cli";
-    changelog = "https://github.com/FriendsOfShopware/shopware-cli/releases/tag/${version}";
+    changelog = "https://github.com/FriendsOfShopware/shopware-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shyim ];
   };
-}
+})

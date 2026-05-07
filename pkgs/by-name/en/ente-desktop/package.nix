@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
-  electron_37,
+  electron_41,
   yarnConfigHook,
   copyDesktopItems,
   vips,
@@ -13,14 +13,20 @@
   autoPatchelfHook,
   makeDesktopItem,
   imagemagick,
+  wasm-pack,
+  rustPlatform,
+  cargo,
+  rustc,
+  wasm-bindgen-cli_0_2_108,
+  binaryen,
 }:
 let
-  electron = electron_37;
+  electron = electron_41;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-desktop";
-  version = "1.7.14";
+  version = "1.7.22";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -29,23 +35,35 @@ stdenv.mkDerivation (finalAttrs: {
     sparseCheckout = [
       "desktop"
       "web"
+      "rust"
     ];
     tag = "photosd-v${finalAttrs.version}";
-    hash = "sha256-UtKXg3SZxHo18VKuVP7W40SfZfa9ni+QJ7+GvGWptSA=";
+    hash = "sha256-iEPUlWe1dmXm0dkl12faKbfqffu8LCm8JTa+uVIBwrA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
+  cargoRoot = "../web/packages/wasm";
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      cargoRoot
+      ;
+    hash = "sha256-/FkAxi9KpW/Z6sdo7gfxvCmaAe0JzjubScrcGjbLD88=";
+  };
   offlineCache = fetchYarnDeps {
     name = "ente-desktop-${finalAttrs.version}-offline-cache";
     inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-6o5TaqlgEQWZjde5cthiSVLVy5JiCHXApn7uXBWmTo0=";
+    hash = "sha256-OnqrowsT0Yion563QD4RA5whN///q4RbkgMDWXs9icg=";
   };
   webOfflineCache = fetchYarnDeps {
     name = "ente-desktop-${finalAttrs.version}-web-offline-cache";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-gwOeznAp4nGu4spilkFl8Dbmdye3Wg8VnBLroSdUjUo=";
+    hash = "sha256-bWOwIa7SD0z2StoUg9HlQGTBq2xXltLgQ2ft8umjg/Y=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +73,14 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook # for onnxruntime
     copyDesktopItems
     imagemagick
+
+    wasm-pack
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    rustc.llvmPackages.lld
+    wasm-bindgen-cli_0_2_108
+    binaryen
   ];
 
   buildInputs = [
@@ -72,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pushd ../web
     offlineCache=$webOfflineCache yarnConfigHook
+    rm -rf node_modules/wasm-pack node_modules/.bin/wasm-pack
     popd
 
     cp -r ${electron.dist} ./electron_dist
@@ -142,8 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pinpox
       yuka
-      iedame
     ];
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -1,28 +1,27 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "didu";
   version = "2.5.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "didu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "szYWRN1NZbfpshipwMMJSWJw/NG4w7I+aqwtmqpT0R0=";
   };
 
   cargoHash = "sha256-NDri4VuTI/ZsY3ZvpWmu/2I5GpmldQaoUSzyjGlq9lE=";
 
-  meta = with lib; {
+  meta = {
     description = "Duration conversion between units";
     homepage = "https://codeberg.org/annaaurora/didu";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "didu";
   };
-}
+})

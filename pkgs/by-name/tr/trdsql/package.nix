@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "trdsql";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "trdsql";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MkjQAOIXnydEmOFnnYrvE2TF2I0GqSrSRUAjd+/hHwc=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/noborus/trdsql.Version=${version}"
+    "-X github.com/noborus/trdsql.Version=${finalAttrs.version}"
   ];
 
   # macOS panic: open /etc/protocols: operation not permitted
@@ -54,9 +54,9 @@ buildGoModule rec {
   meta = {
     description = "CLI tool for execute SQL queries on CSV, LTSV, JSON, YAML and TBLN with various output formats";
     homepage = "https://github.com/noborus/trdsql";
-    changelog = "https://github.com/noborus/trdsql/releases/tag/v${version}";
+    changelog = "https://github.com/noborus/trdsql/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     mainProgram = "trdsql";
   };
-}
+})

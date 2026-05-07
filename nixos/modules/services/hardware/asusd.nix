@@ -21,6 +21,11 @@ in
         supports multiple aura devices since version 6.0.0.
       ''
     )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "asusd"
+      "enableUserService"
+    ] "The asusd user service is no longer required.")
   ];
 
   options = {
@@ -50,14 +55,6 @@ in
         enable = lib.mkEnableOption "the asusd service for ASUS ROG laptops";
 
         package = lib.mkPackageOption pkgs "asusctl" { };
-
-        enableUserService = lib.mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            Activate the asusd-user service.
-          '';
-        };
 
         animeConfig = lib.mkOption {
           type = nullOr configType;
@@ -145,8 +142,6 @@ in
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
     services.supergfxd.enable = lib.mkDefault true;
-
-    systemd.user.services.asusd-user.enable = cfg.enableUserService;
   };
 
   meta.maintainers = pkgs.asusctl.meta.maintainers;

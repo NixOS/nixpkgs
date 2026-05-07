@@ -3,9 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  isPyPy,
   brotli,
   brotlicffi,
   starlette,
+  pythonOlder,
   zstandard,
   pytestCheckHook,
   httpx,
@@ -27,9 +29,10 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
-    brotli
-    brotlicffi
+    (if isPyPy then brotlicffi else brotli)
     starlette
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
     zstandard
   ];
 

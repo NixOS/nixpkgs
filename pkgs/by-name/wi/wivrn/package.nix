@@ -4,9 +4,9 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch,
   applyPatches,
   autoAddDriverRunpath,
+  android-tools,
   avahi,
   boost,
   cli11,
@@ -29,12 +29,11 @@
   libpulseaudio,
   librsvg,
   libva,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   makeDesktopItem,
   nix-update-script,
   nlohmann_json,
-  onnxruntime,
   opencomposite,
   openxr-loader,
   ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
@@ -42,24 +41,27 @@
   pkg-config,
   python3,
   qt6,
+  sdl2-compat,
   shaderc,
-  spdlog,
   systemd,
   udev,
   vulkan-headers,
   vulkan-loader,
   x264,
   xrizer,
+  # Only build the OpenXR client library. Useful for building the client library for a different architecture,
+  # e.g. 32-bit library while running 64-bit service on host, so 32-bit apps can connect to the runtime
+  clientLibOnly ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.8";
+  version = "26.2.3";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x9nZyLk0A9eiZ9V700lc4To1cVJ875ZYR0GeqQ7qNpg=";
+    hash = "sha256-pU7FYPp5wa0MK0ut/BfFlnUai8yMcylpWC0CoAExAio=";
   };
 
   monado = applyPatches {
@@ -67,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "5c137fe28b232fe460f9b03defa7749adc32ee48";
-      hash = "sha256-4P/ejRAitrYn8hXZPaDOcx27utfm+aVLjtqL6JxZYAg=";
+      rev = "723652b545a79609f9f04cb89fcbf807d9d6451a";
+      hash = "sha256-wGqvTI/X22apc8XCN3GCGQClHfBW5xk73mZnwWvHtyI=";
     };
 
     postPatch = ''
@@ -90,15 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  patches = [
-    # Needed to allow WiVRn in-stream GUI to launch Steam games
-    (fetchpatch {
-      name = "wivrn-allow-launching-steam-games.patch";
-      url = "https://github.com/WiVRn/WiVRn/commit/30ceab5b3082cbc545acf8bc8ca4a24279e6f738.diff";
-      hash = "sha256-BD6MhCET7hdjog8rkl7G2l7/zGfVATpNAhNie0efOlA=";
-    })
-  ];
-
   nativeBuildInputs = [
     cmake
     git
@@ -107,6 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     pkg-config
     python3
+  ]
+  ++ lib.optionals (!clientLibOnly) [
     qt6.wrapQtAppsHook
   ]
   ++ lib.optionals cudaSupport [
@@ -114,14 +109,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    avahi
-    boost
-    cli11
+    android-tools
     eigen
-    ffmpeg
     freetype
     glm
     harfbuzz
+    libGL
+    libx11
+    libxrandr
+    openxr-loader
+    shaderc
+    systemd
+    udev
+    vulkan-headers
+    vulkan-loader
+  ]
+  ++ lib.optionals (!clientLibOnly) [
+    avahi
+    boost
+    cli11
+    ffmpeg
     kdePackages.kcoreaddons
     kdePackages.ki18n
     kdePackages.kiconthemes
@@ -130,33 +137,34 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qqc2-desktop-style
     libarchive
     libdrm
-    libGL
     libnotify
     libpulseaudio
     librsvg
     libva
-    libX11
-    libXrandr
     nlohmann_json
-    openxr-loader
-    onnxruntime
     pipewire
     qt6.qtbase
     qt6.qtsvg
     qt6.qttools
-    shaderc
-    spdlog
-    systemd
-    udev
-    vulkan-headers
-    vulkan-loader
     x264
   ]
-  ++ lib.optionals cudaSupport [
+  ++ lib.optionals (cudaSupport && !clientLibOnly) [
     cudaPackages.cudatoolkit
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
+    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" (!clientLibOnly))
+    (lib.cmakeBool "WIVRN_BUILD_SERVER" (!clientLibOnly))
+    (lib.cmakeBool "WIVRN_BUILD_SERVER_LIBRARY" true)
+    (lib.cmakeBool "WIVRN_BUILD_WIVRNCTL" (!clientLibOnly))
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
+    (lib.cmakeBool "WIVRN_OPENXR_MANIFEST_ABI" clientLibOnly)
+    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
+  ]
+  ++ lib.optionals (!clientLibOnly) [
     (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
     (lib.cmakeBool "WIVRN_USE_VAAPI" true)
     (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
@@ -164,27 +172,28 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
     (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
     (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
-    (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
-    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
-    (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
-    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
-    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
     (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
-    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
   ]
-  ++ lib.optionals cudaSupport [
+  ++ lib.optionals (cudaSupport && !clientLibOnly) [
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
   ];
 
   dontWrapQtApps = true;
 
-  preFixup = ''
+  preFixup = lib.optional (!clientLibOnly) ''
+    wrapProgram "$out/bin/wivrn-server" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          sdl2-compat
+          udev
+        ]
+      }
     wrapQtApp "$out/bin/wivrn-dashboard" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]} \
+      --prefix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals (!clientLibOnly) [
     (makeDesktopItem {
       name = "WiVRn Server";
       desktopName = "WiVRn Server";

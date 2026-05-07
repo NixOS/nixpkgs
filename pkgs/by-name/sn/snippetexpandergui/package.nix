@@ -5,9 +5,9 @@
   wails,
   scdoc,
   installShellFiles,
-  xorg,
+  libx11,
   gtk3,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   snippetexpanderd,
   snippetexpanderx,
 }:
@@ -31,9 +31,9 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     gtk3
-    webkitgtk_4_0
+    # webkitgtk_4_0
     snippetexpanderd
     snippetexpanderx
   ];
@@ -68,10 +68,12 @@ buildGoModule rec {
   '';
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Your little expandable text snippet helper GUI";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpandergui";
   };

@@ -3,6 +3,7 @@
   stdenv,
   autoreconfHook,
   fetchFromGitLab,
+  fetchDebianPatch,
   fetchpatch,
   flac,
   libao,
@@ -46,6 +47,22 @@ stdenv.mkDerivation {
       name = "ncurses-6.3.patch";
       url = "https://gitlab.xiph.org/xiph/squishyball/uploads/5609ceaf85ebb6dc297c0efe61b9a1b7/0001-mincurses.c-use-ncurses-API-to-enter-raw-mode-ncurse.patch";
       sha256 = "06llp7cd77f4vvhz8qdld551dnlpjxf98j7rmp3i1x1kng4f0iy3";
+    })
+
+    (fetchDebianPatch {
+      pname = "squishyball";
+      version = "0.1~svn19085";
+      debianRevision = "8";
+      patch = "0006-Workaround-opaqueness-of-struct-term.patch";
+      hash = "sha256-7zXPsJxIpQI2Ro+GNIZEASxHFrRqSUiXjQl9/KeHSAk=";
+    })
+
+    (fetchDebianPatch {
+      pname = "squishyball";
+      version = "0.1~svn19085";
+      debianRevision = "8";
+      patch = "0007-ncurses-internals.patch";
+      hash = "sha256-GzYV0Oas1Amte0m5XCAUfEMRUTYI3UticCdASCn+s28=";
     })
   ];
 

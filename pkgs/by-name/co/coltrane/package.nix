@@ -4,7 +4,7 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "coltrane";
   gemdir = ./.;
   exes = [ "coltrane" ];

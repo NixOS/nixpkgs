@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "freediameter";
-  version = "1.5.0-unstable-2025-03-16";
+  version = "1.6.0-unstable-2025-10-18";
 
   src = fetchFromGitHub {
     owner = "freeDiameter";
     repo = "freeDiameter";
-    rev = "8e525acdfd439995f3e8e26d5a802fc4ad95d24c";
-    hash = "sha256-ai2R8scP++tdPh303RAl0qdIpehzFoyykAuAyl2w3MA=";
+    rev = "9d4bc47584bfeced9de708fe00f5629ac4689db5";
+    hash = "sha256-NHOsmRfdBXN59lGZAlDzwEqEkekZaux3shaGhP87Rdc=";
   };
 
   strictDeps = true;
@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

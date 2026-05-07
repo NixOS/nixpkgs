@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "aioharmony.harmonyclient"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Harmony-Libs/aioharmony";
     description = "Python library for interacting the Logitech Harmony devices";
     mainProgram = "aioharmony";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oro ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oro ];
   };
 }

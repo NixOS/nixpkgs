@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-mediaplayer-app";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-A1tAXQXDwVZ3ILFcJKCtbOm1iNxPFOXQIS6p7fPbqwM=";
   };
 
@@ -116,9 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Media Player application for Ubuntu Touch devices";
-    homepage = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    homepage = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only

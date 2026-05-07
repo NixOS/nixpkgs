@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libSM,
-  libXdmcp,
-  libpthreadstubs,
+  libsm,
+  libxdmcp,
+  libpthread-stubs,
   lxqt-build-tools,
   openbox,
   pcre,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obconf-qt";
-  version = "0.16.5";
+  version = "0.16.6";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "obconf-qt";
     rev = version;
-    hash = "sha256-C7s312DeLiustPBBY4OdjYvN7X6noktLA8LuhlOaVRo=";
+    hash = "sha256-Qd8vIfYjY/etv2IXEqQQM1ni0eS6Vuk/MnqtuLh4Mow=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libSM
-    libXdmcp
-    libpthreadstubs
+    libsm
+    libxdmcp
+    libpthread-stubs
     openbox
     pcre
     qtbase

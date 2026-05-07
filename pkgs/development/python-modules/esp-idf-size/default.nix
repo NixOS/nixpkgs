@@ -19,15 +19,20 @@
 
 buildPythonPackage rec {
   pname = "esp-idf-size";
-  version = "1.7.1";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esp-idf-size";
     tag = "v${version}";
-    hash = "sha256-dgvmrwnaipudKyNJ/xFAwvfjGmtDRnFbXxI2VuC/SKo=";
+    hash = "sha256-tiNk1yh8FPwLEKAw+h+Lp5n0aY/FpTwqZjtAQtZK6eY=";
   };
+
+  patches = [
+    # add back --ng flag as a stub to argparser for compat reason
+    ./1.x-compat.patch
+  ];
 
   build-system = [ setuptools ];
 

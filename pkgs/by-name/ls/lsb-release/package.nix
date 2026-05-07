@@ -7,7 +7,9 @@
 }:
 
 replaceVarsWith {
-  name = "lsb_release";
+  name = "lsb_release"; # Needed for lsb_release script name
+  pname = "lsb_release";
+  version = lib.trivial.release;
 
   src = ./lsb_release.sh;
 
@@ -18,11 +20,11 @@ replaceVarsWith {
     inherit coreutils getopt runtimeShell;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";
     mainProgram = "lsb_release";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = [ lib.licenses.mit ];
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

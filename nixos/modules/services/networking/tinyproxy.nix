@@ -5,24 +5,21 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.tinyproxy;
   mkValueStringTinyproxy =
-    with lib;
     v:
     if true == v then
       "yes"
     else if false == v then
       "no"
-    else if types.path.check v then
+    else if lib.types.path.check v then
       ''"${v}"''
     else
-      generators.mkValueStringDefault { } v;
+      lib.generators.mkValueStringDefault { } v;
   mkKeyValueTinyproxy =
     {
-      mkValueString ? mkValueStringDefault { },
+      mkValueString ? lib.mkValueStringDefault { },
     }:
     sep: k: v:
     if null == v then "" else "${lib.strings.escape [ sep ] k}${sep}${mkValueString v}";
@@ -42,12 +39,12 @@ in
 
   options = {
     services.tinyproxy = {
-      enable = mkEnableOption "Tinyproxy daemon";
-      package = mkPackageOption pkgs "tinyproxy" { };
-      settings = mkOption {
+      enable = lib.mkEnableOption "Tinyproxy daemon";
+      package = lib.mkPackageOption pkgs "tinyproxy" { };
+      settings = lib.mkOption {
         description = "Configuration for [tinyproxy](https://tinyproxy.github.io/).";
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             Port 8888;
             Listen 127.0.0.1;
@@ -57,34 +54,34 @@ in
             ReversePath = '"/example/" "http://www.example.com/"';
           }
         '';
-        type = types.submodule (
+        type = lib.types.submodule (
           { name, ... }:
           {
             freeformType = settingsFormat.type;
             options = {
-              Listen = mkOption {
-                type = types.str;
+              Listen = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = "127.0.0.1";
                 description = ''
                   Specify which address to listen to.
                 '';
               };
-              Port = mkOption {
-                type = types.port;
+              Port = lib.mkOption {
+                type = lib.types.port;
                 default = 8888;
                 description = ''
                   Specify which port to listen to.
                 '';
               };
-              Anonymous = mkOption {
-                type = types.listOf types.str;
+              Anonymous = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [ ];
                 description = ''
                   If an `Anonymous` keyword is present, then anonymous proxying is enabled. The headers listed with `Anonymous` are allowed through, while all others are denied. If no Anonymous keyword is present, then all headers are allowed through. You must include quotes around the headers.
                 '';
               };
-              Filter = mkOption {
-                type = types.nullOr types.path;
+              Filter = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = null;
                 description = ''
                   Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line.
@@ -96,7 +93,7 @@ in
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.tinyproxy = {
       description = "TinyProxy daemon";
       after = [ "network.target" ];
@@ -105,7 +102,7 @@ in
         User = "tinyproxy";
         Group = "tinyproxy";
         Type = "simple";
-        ExecStart = "${getExe cfg.package} -d -c ${configFile}";
+        ExecStart = "${lib.getExe cfg.package} -d -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";
@@ -119,5 +116,5 @@ in
     };
     users.groups.tinyproxy = { };
   };
-  meta.maintainers = with maintainers; [ tcheronneau ];
+  meta.maintainers = with lib.maintainers; [ tcheronneau ];
 }

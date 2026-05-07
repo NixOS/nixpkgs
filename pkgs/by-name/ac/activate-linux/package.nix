@@ -3,7 +3,14 @@
   fetchFromGitHub,
   lib,
   pkg-config,
-  xorg,
+  libxt,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libx11,
+  xorgproto,
   cairo,
   wayland,
   wayland-protocols,
@@ -31,14 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    xorg.libX11
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXt
-    xorg.xorgproto
+    libx11
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxt
+    xorgproto
     wayland
     wayland-protocols
     libconfig
@@ -56,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 res/icon.png $out/share/icons/hicolor/128x128/apps/activate-linux.png
     install -Dm444 res/activate-linux.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/activate-linux.desktop \
-      --replace 'Icon=icon' 'Icon=activate-linux'
+      --replace-fail 'Icon=icon' 'Icon=activate-linux'
 
     runHook postInstall
   '';

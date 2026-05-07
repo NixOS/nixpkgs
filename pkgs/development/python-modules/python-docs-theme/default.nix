@@ -7,9 +7,9 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-docs-theme";
-  version = "2025.9.1";
+  version = "2026.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
-    tag = version;
-    hash = "sha256-rO2L5M2TYU8+fJLDbu+EMqAy3vD7yNwd5b1fMZ8LNwg=";
+    tag = finalAttrs.version;
+    hash = "sha256-wfHon11V7fvK+PMWBY+MpxiPOyqIecRAu+rM4uONMzA=";
   };
 
   build-system = [ flit-core ];
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_docs_theme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx theme for CPython project";
     homepage = "https://github.com/python/python-docs-theme";
-    changelog = "https://github.com/python/python-docs-theme/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ kaction ];
+    changelog = "https://github.com/python/python-docs-theme/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

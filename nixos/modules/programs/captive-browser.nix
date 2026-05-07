@@ -27,15 +27,15 @@ let
     chromium:
     concatStringsSep " " [
       ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
-      ''${chromium}/bin/chromium''
-      ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
+      "${chromium}/bin/chromium"
+      "--user-data-dir=\${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive"
       ''--proxy-server="socks5://$PROXY"''
       ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
-      ''--no-first-run''
-      ''--new-window''
-      ''--incognito''
-      ''-no-default-browser-check''
-      ''http://cache.nixos.org/''
+      "--no-first-run"
+      "--new-window"
+      "--incognito"
+      "-no-default-browser-check"
+      "http://cache.nixos.org/"
     ];
 
   desktopItem = pkgs.makeDesktopItem {
@@ -142,19 +142,8 @@ in
         else if config.networking.useNetworkd then
           "${cfg.package}/bin/systemd-networkd-dns ${iface [ ]}"
         else
-          "${config.security.wrapperDir}/udhcpc --quit --now -f ${iface [ "-i" ]} -O dns --script ${pkgs.writeShellScript "udhcp-script" ''
-            if [ "$1" = bound ]; then
-              echo "$dns"
-            fi
-          ''}"
+          throw "programs.captive-browser.dhcp-dns must be set"
       );
-
-    security.wrappers.udhcpc = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_net_raw+p";
-      source = "${pkgs.busybox}/bin/udhcpc";
-    };
 
     security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
       owner = "root";

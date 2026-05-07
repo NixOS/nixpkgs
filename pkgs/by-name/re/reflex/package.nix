@@ -4,29 +4,29 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "reflex";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "cespare";
     repo = "reflex";
-    rev = "v${version}";
-    sha256 = "sha256-/2qVm2xpSFVspA16rkiIw/qckxzXQp/1EGOl0f9KljY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-qc33ppo+RdhztgCUKPSbVFWlz5FTCEExVHkUre+MR+o=";
   };
 
-  vendorHash = "sha256-JCtVYDHbhH2i7tGNK1jvgHCjU6gMMkNhQ2ZnlTeqtmA=";
+  vendorHash = "sha256-QCdhZmuxWUAwCwoLLWqEP6zoBBGh5OpDTz4uLIY0xAg=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small tool to watch a directory and rerun a command when certain files change";
     mainProgram = "reflex";
     homepage = "https://github.com/cespare/reflex";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nicknovitski ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nicknovitski ];
   };
-}
+})

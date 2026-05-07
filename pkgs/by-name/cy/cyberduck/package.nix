@@ -6,16 +6,15 @@
   makeBinaryWrapper,
   versionCheckHook,
   writeShellScript,
-  coreutils,
-  xcbuild,
+  re-plistbuddy,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cyberduck";
-  version = "9.1.2.42722";
+  version = "9.2.4.43667";
 
   src = fetchurl {
     url = "https://update.cyberduck.io/Cyberduck-${finalAttrs.version}.zip";
-    hash = "sha256-oGerVv6CteMl+MJ9AfGYmo6Iv6i7BFUCF+E3My6UH6I=";
+    hash = "sha256-fTJoNdgp6EWdloejk7XG2lJh1NErxFRmvx2fZiwvWuc=";
   };
   sourceRoot = ".";
 
@@ -36,8 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''
-    marketing_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1" | ${coreutils}/bin/tr -d '"')
-    build_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1")
+    marketing_version=$(${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleShortVersionString" "$1")
+    build_version=$(${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleVersion" "$1")
 
     echo $marketing_version.$build_version
   '';

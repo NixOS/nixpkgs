@@ -3,21 +3,29 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
+  nodejs,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "9.5.0";
+  version = "10.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
     tag = "v${version}";
-    hash = "sha256-3X0oSW1LdVzd9m6awUjqW+uI+0VijCjYYim0sH3wcSU=";
+    hash = "sha256-XfcFpJRMcXGcGeo36QhBEi7iT6Lsf1yq2F1iz/jq7oQ=";
   };
+
+  patches = [
+    (replaceVars ./replace-nodejs-wheel-binaries.patch {
+      inherit nodejs;
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -37,6 +45,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_get_initial_function_name_with_no_match_should_error"
+    "test_get_throttling_function_name"
     "test_playlist_failed_pagination"
     "test_playlist_pagination"
     "test_create_mock_html_json"

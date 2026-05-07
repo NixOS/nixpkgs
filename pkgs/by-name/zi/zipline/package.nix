@@ -3,9 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs_24,
   makeWrapper,
-  prisma-engines,
+  prisma-engines_6,
   ffmpeg,
   openssl,
   vips,
@@ -22,39 +24,25 @@ let
     NEXT_TELEMETRY_DISABLED = "1";
     FFMPEG_PATH = lib.getExe ffmpeg;
     FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
-    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
-    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
-    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
-    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
-    PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
+    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
+    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
+    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
+    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines_6 "introspection-engine";
+    PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
   };
 
-  vips' = vips.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = "8.17.1";
-      src = fetchFromGitHub {
-        inherit (prevAttrs.src) owner repo;
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-Sc2BWdQIgL/dI0zfbEQVCs3+1QBrLE7BsE3uFHe9C/c=";
-        postFetch = ''
-          rm -r $out/test/test-suite/images/
-        '';
-      };
-      outputs = lib.remove "devdoc" prevAttrs.outputs;
-      mesonFlags = lib.remove (lib.mesonBool "gtk_doc" true) prevAttrs.mesonFlags;
-    }
-  );
+  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.3.1";
+  version = "4.5.3";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tQRfgLU0Dvf3vhELsttprfzscvHUgI1u7k9RA4S4vqo=";
+    hash = "sha256-uZnN+kqtCGydrqnOVkhlNiCNSz4g2qLPiYTXpdmv/Mc=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -62,19 +50,21 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm';
     fetcherVersion = 2;
-    hash = "sha256-zbr57RVBKGpnL5u0evbQAKGyMftHXj6cuntYBHiUxiM=";
+    hash = "sha256-eoZi4JMN9PiiRRd/z/HjqSHX9ta33cL4+d1GMGxJ33U=";
   };
 
   buildInputs = [
     openssl
-    vips'
+    vips
   ];
 
   nativeBuildInputs = [
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm'
     nodejs_24
     makeWrapper
     # for sharp build:
@@ -83,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  env = environment;
+  env = environment // {
+    DATABASE_URL = "dummy";
+    NODE_PATH = "${node-gyp}/lib/node_modules";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -101,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    pnpm prune --prod
+    CI=true pnpm prune --prod
     find node_modules -xtype l -delete
 
     mkdir -p $out/{bin,share/zipline}
@@ -131,11 +124,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
-  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "DATABASE_URL" ];
   doInstallCheck = true;
 
   passthru = {
-    inherit prisma-engines;
+    prisma-engines = prisma-engines_6;
     tests = { inherit (nixosTests) zipline; };
     updateScript = nix-update-script { };
   };

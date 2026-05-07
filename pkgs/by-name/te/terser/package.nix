@@ -6,22 +6,22 @@
 
 buildNpmPackage rec {
   pname = "terser";
-  version = "5.38.0";
+  version = "5.46.1";
 
   src = fetchFromGitHub {
     owner = "terser";
     repo = "terser";
     rev = "v${version}";
-    hash = "sha256-iVl5L5qxpXkBfiW8OqsMr4iZ0UQiN4TSAYXz9d29bnA=";
+    hash = "sha256-Ob3bzaUrHfDaRy25eWmE3YEtZxhZGYp6TEMtDWbzgQs=";
   };
 
-  npmDepsHash = "sha256-84MWjkiv1/W+JyUtrjY9Rk0UIkZWIv07Q1qLSVYNcO4=";
+  npmDepsHash = "sha256-24z5w43ciXydl14XwC0XZ5kZX9HoXFQyWHYntQXMHy0=";
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript parser, mangler and compressor toolkit for ES6+";
     mainProgram = "terser";
     homepage = "https://terser.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ talyz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ talyz ];
   };
 }

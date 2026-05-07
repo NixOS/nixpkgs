@@ -53,9 +53,7 @@ let
     || (instance.token != null && instance.tokenFile == null);
 in
 {
-  meta.maintainers = with lib.maintainers; [
-    hexa
-  ];
+  meta.maintainers = [ ];
 
   options.services.gitea-actions-runner = with types; {
     package = mkPackageOption pkgs "gitea-actions-runner" { };
@@ -200,10 +198,10 @@ in
             after = [
               "network-online.target"
             ]
-            ++ optionals (wantsDocker) [
+            ++ optionals wantsDocker [
               "docker.service"
             ]
-            ++ optionals (wantsPodman) [
+            ++ optionals wantsPodman [
               "podman.service"
             ];
             wantedBy = [
@@ -213,7 +211,7 @@ in
               optionalAttrs (instance.token != null) {
                 TOKEN = "${instance.token}";
               }
-              // optionalAttrs (wantsPodman) {
+              // optionalAttrs wantsPodman {
                 DOCKER_HOST = "unix:///run/podman/podman.sock";
               }
               // {
@@ -266,10 +264,10 @@ in
               ];
               ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
               SupplementaryGroups =
-                optionals (wantsDocker) [
+                optionals wantsDocker [
                   "docker"
                 ]
-                ++ optionals (wantsPodman) [
+                ++ optionals wantsPodman [
                   "podman"
                 ];
             }

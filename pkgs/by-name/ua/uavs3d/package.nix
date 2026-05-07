@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uavs3d";
-  version = "1.1-unstable-2023-02-23";
+  version = "1.1-unstable-2025-12-13";
 
   src = fetchFromGitHub {
     owner = "uavs3";
     repo = "uavs3d";
-    rev = "1fd04917cff50fac72ae23e45f82ca6fd9130bd8";
-    hash = "sha256-ZSuFgTngOd4NbZnOnw4XVocv4nAR9HPkb6rP2SASLrM=";
+    rev = "0e20d2c291853f196c68922a264bcd8471d75b68";
+    hash = "sha256-SlCGLglBsU3ua406Bnf89c4X80F5B93piF2sAXqtRus=";
   };
 
   cmakeFlags = [
@@ -32,8 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.1)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
     tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
   };
 

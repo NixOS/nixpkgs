@@ -8,6 +8,7 @@
   runCommand,
   python3Packages,
   allowedPatterns,
+  formats,
 }:
 runCommand "allowed-patterns.json"
   {
@@ -19,7 +20,7 @@ runCommand "allowed-patterns.json"
         let
           prefix = "${builtins.storeDir}/";
           # Has to start with a letter: https://github.com/NixOS/nix/blob/516e7ddc41f39ff939b5d5b5dc71e590f24890d4/src/libstore/build/local-derivation-goal.cc#L568
-          exportName = ''references-${lib.strings.removePrefix prefix "${path}"}'';
+          exportName = "references-${lib.strings.removePrefix prefix "${path}"}";
           isStorePath = lib.isStorePath path && (lib.hasPrefix prefix "${path}");
         in
         lib.optionals isStorePath [
@@ -28,9 +29,10 @@ runCommand "allowed-patterns.json"
         ]
       ) allowedPatterns.${name}.paths
     ) (builtins.attrNames allowedPatterns);
-    env.storeDir = "${builtins.storeDir}/";
-    shallowConfig = builtins.toJSON allowedPatterns;
-    passAsFile = [ "shallowConfig" ];
+    env = {
+      storeDir = "${builtins.storeDir}/";
+      shallowConfigPath = (formats.json { }).generate "shallow-config.json" allowedPatterns;
+    };
   }
   ''
     python ${./scripts/nix_required_mounts_closure.py}

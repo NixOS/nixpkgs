@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "measurement";
   version = "4.0a8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = !isPy3k;
 
@@ -43,6 +43,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/coddingtonbear/python-measurement";
     changelog = "https://github.com/coddingtonbear/python-measurement/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

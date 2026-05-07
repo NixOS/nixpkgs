@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   poetry,
   poetry-core,
   pytest-mock,
@@ -12,27 +11,15 @@
 
 buildPythonPackage rec {
   pname = "poetry-plugin-export";
-  version = "1.9.0";
-  format = "pyproject";
+  version = "1.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-plugin-export";
     tag = version;
-    hash = "sha256-AP3/njzbLEi2s4pOUSLLLzqNprvxwLe9LSY7qh08EWc=";
+    hash = "sha256-KsvkM4hjG+jrdPVauXYdc6E87Gp7srMg/mJHpWRjaEs=";
   };
-
-  patches = [
-    # Remove after next release of poetry-plugin-export
-    (fetchpatch {
-      url = "https://github.com/python-poetry/poetry-plugin-export/commit/16637f194e86708913ec6e09064c713eb0715bb6.patch";
-      includes = [
-        "tests/test_exporter.py"
-        "tests/markers.py"
-      ];
-      hash = "sha256-ncz9kqp18+yeRXlhmLEcWfO1bDavjohhmVw6DwTy1hA=";
-    })
-  ];
 
   build-system = [
     poetry-core
@@ -48,10 +35,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/python-poetry/poetry-plugin-export/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/python-poetry/poetry-plugin-export/blob/${src.tag}/CHANGELOG.md";
     description = "Poetry plugin to export the dependencies to various formats";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/python-poetry/poetry-plugin-export";
     maintainers = [ ];
   };

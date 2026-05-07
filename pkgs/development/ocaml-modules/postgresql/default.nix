@@ -25,7 +25,7 @@ buildDunePackage rec {
   meta = {
     description = "Bindings to the PostgreSQL library";
     license = lib.licenses.lgpl21Plus;
-    changelog = "https://raw.githubusercontent.com/mmottl/postgresql-ocaml/refs/tags/${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/mmottl/postgresql-ocaml/refs/tags/${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ bcc32 ];
     homepage = "https://mmottl.github.io/postgresql-ocaml";
   };

@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcm2ps";
-  version = "8.14.17";
+  version = "8.14.18";
 
   src = fetchfossil {
     url = "https://chiselapp.com/user/moinejf/repository/abcm2ps";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YA36wfj7owKu/KyWgCj6U8EJEh831cFtQj4/JtH6kVg=";
+    hash = "sha256-2nmKjLEZ9dTk+oE16gBm9iheVlLvQFvcdc5FPcxaq6M=";
   };
 
   configureFlags = [

@@ -4,25 +4,26 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
+  libnotify,
   glfw,
   makeWrapper,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   gtk3,
   ffmpeg-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "midivisualizer";
-  version = "7.0";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "kosua20";
     repo = "MIDIVisualizer";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wfPSPH+E9cErVvfJZqHttFtjiUYJopM/u6w6NpRHifE=";
+    sha256 = "sha256-ljDdbpvXJXv7YPgxwXELee06NNOwqIBP8C/IbL7qBuk=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glfw
     ffmpeg-full
+    libnotify
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     gtk3
   ];
 
@@ -59,12 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
           --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Small MIDI visualizer tool, using OpenGL";
     mainProgram = "MIDIVisualizer";
     homepage = "https://github.com/kosua20/MIDIVisualizer";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ericdallo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = [ lib.maintainers.ericdallo ];
   };
 })

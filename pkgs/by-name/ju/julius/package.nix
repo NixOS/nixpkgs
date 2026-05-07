@@ -10,18 +10,20 @@
   libicns,
   imagemagick,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "julius";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "bvschaik";
     repo = "julius";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ppA/lCugFfzcbANuyWUvH3/1STNRdYOhRNR4tlfWEhc=";
   };
 
   patches = [
+    # This fixes the build with cmake 4
+    ./cmake4.patch
     # This fixes the darwin bundle generation, sets min. deployment version
     # and patches SDL2_mixer include
     ./darwin-fixes.patch
@@ -49,15 +51,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bvschaik/julius";
     description = "Open source re-implementation of Caesar III";
     mainProgram = "julius";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       Thra11
       matteopacini
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

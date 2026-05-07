@@ -96,6 +96,8 @@ let
         inherit wrappedRuby;
         gems = selected;
       };
+
+      meta.mainProgram = "ruby";
     };
 
 in

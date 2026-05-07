@@ -8,10 +8,10 @@
   libdrm,
   libpciaccess,
   libva,
-  libX11,
-  libXau,
-  libXdmcp,
-  libpthreadstubs,
+  libx11,
+  libxau,
+  libxdmcp,
+  libpthread-stubs,
   fetchpatch,
 }:
 
@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
     libdrm
     libva
     libpciaccess
-    libX11
-    libXau
-    libXdmcp
-    libpthreadstubs
+    libx11
+    libxau
+    libxdmcp
+    libpthread-stubs
   ];
   nativeCheckInputs = [ gtest ];
 
@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel Media SDK";
     mainProgram = "mfx-tracer-config";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       midchildan
       pjungkamp
     ];

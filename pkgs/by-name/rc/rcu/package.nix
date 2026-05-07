@@ -19,19 +19,20 @@
 }:
 
 let
+  # shiboken2 is broken on Python > 3.12
   python3Packages = python312Packages;
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.26";
+  version = "4.0.34";
 
-  format = "other";
+  pyproject = false;
 
   src =
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-yY3OFZVHxhVurfjSEeR+UUNHQdpc08jhgaDEvMWRsLA=";
+        hash = "sha256-9YhhsLqAcevjJmENWVWfA1ursPz3mgFz8mzLLSNlXVM=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in
@@ -174,14 +175,10 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     tests.version = testers.testVersion {
       package = rcu;
-      version =
-        let
-          versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-        in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${
-          lib.strings.substring versionSuffixPos 1 rcu.version
-        })";
     };
+
+    # Python stuff automatically adds an updateScript that just fails
+    updateScript = null;
   };
 
   meta = {
@@ -189,7 +186,9 @@ python3Packages.buildPythonApplication rec {
     description = "All-in-one offline/local management software for reMarkable e-paper tablets";
     homepage = "http://www.davisr.me/projects/rcu/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [
+      m0streng0
+    ];
     hydraPlatforms = [ ]; # requireFile used as src
   };
 }

@@ -4597,10 +4597,10 @@ index 0000000..93bc403
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/de.json b/frontend/src/lib/generated/i18n/de.json
 new file mode 100644
-index 0000000..111cdaf
+index 0000000..fa255a5
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/de.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Offline gehen ",
@@ -4772,6 +4772,8 @@ index 0000000..111cdaf
 +  "mods-list" : {
 +    "no-mods-filtered" : "Keine Mods entsprechen deinen Filtern",
 +    "no-mods-found" : "keine Mods gefunden ",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Alle anzeigen "
 +  },
 +  "profiles" : {
@@ -4915,10 +4917,10 @@ index 0000000..111cdaf
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/en.json b/frontend/src/lib/generated/i18n/en.json
 new file mode 100644
-index 0000000..b5ec7a7
+index 0000000..30e33be
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/en.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Go Offline",
@@ -5088,8 +5090,10 @@ index 0000000..b5ec7a7
 +    "search" : "Search mods"
 +  },
 +  "mods-list" : {
-+    "no-mods-filtered" : "No mods matching your filters",
++    "no-mods-filtered" : "No mods matching your search",
 +    "no-mods-found" : "No mods found",
++    "remove-search-filters" : "Remove search filters",
++    "remove-search-text" : "Remove search text",
 +    "show-all" : "Show all"
 +  },
 +  "profiles" : {
@@ -5233,10 +5237,10 @@ index 0000000..b5ec7a7
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/es.json b/frontend/src/lib/generated/i18n/es.json
 new file mode 100644
-index 0000000..c204d60
+index 0000000..a2a9cc4
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/es.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Desconectarse",
@@ -5408,6 +5412,8 @@ index 0000000..c204d60
 +  "mods-list" : {
 +    "no-mods-filtered" : "No hay mods que coincidan con tus filtros",
 +    "no-mods-found" : "No se han encontrado mods",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Mostrar todo"
 +  },
 +  "profiles" : {
@@ -5551,10 +5557,10 @@ index 0000000..c204d60
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/fr.json b/frontend/src/lib/generated/i18n/fr.json
 new file mode 100644
-index 0000000..ae9ee01
+index 0000000..bb1c128
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/fr.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Passer hors-ligne",
@@ -5726,6 +5732,8 @@ index 0000000..ae9ee01
 +  "mods-list" : {
 +    "no-mods-filtered" : "Aucun mod trouvés avec ces filtres",
 +    "no-mods-found" : "Aucuns mods trouvé",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Tout montrer"
 +  },
 +  "profiles" : {
@@ -5869,10 +5877,10 @@ index 0000000..ae9ee01
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/hu.json b/frontend/src/lib/generated/i18n/hu.json
 new file mode 100644
-index 0000000..9b04401
+index 0000000..623e0af
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/hu.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Válts Offline módba",
@@ -6044,6 +6052,8 @@ index 0000000..9b04401
 +  "mods-list" : {
 +    "no-mods-filtered" : "Nincsenek modok, amelyek megfelelnek a szűrőidnek.",
 +    "no-mods-found" : "Nincs található mod.",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Összes mutatása"
 +  },
 +  "profiles" : {
@@ -6187,10 +6197,10 @@ index 0000000..9b04401
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/index.ts b/frontend/src/lib/generated/i18n/index.ts
 new file mode 100644
-index 0000000..0685334
+index 0000000..f00e903
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/index.ts
-@@ -0,0 +1,36 @@
+@@ -0,0 +1,38 @@
 +/* eslint-disable */
 +import de from './de.json';
 +import en from './en.json';
@@ -6202,6 +6212,7 @@ index 0000000..0685334
 +import ko from './ko.json';
 +import lt from './lt.json';
 +import mt from './mt.json';
++import nl from './nl.json';
 +import pl from './pl.json';
 +import pt_BR from './pt-BR.json';
 +import ru from './ru.json';
@@ -6220,6 +6231,7 @@ index 0000000..0685334
 +  "ko": ko,
 +  "lt": lt,
 +  "mt": mt,
++  "nl": nl,
 +  "pl": pl,
 +  "pt-BR": pt_BR,
 +  "ru": ru,
@@ -6229,10 +6241,10 @@ index 0000000..0685334
 +};
 diff --git a/frontend/src/lib/generated/i18n/it.json b/frontend/src/lib/generated/i18n/it.json
 new file mode 100644
-index 0000000..5245bd1
+index 0000000..638a182
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/it.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Vai Offline",
@@ -6404,6 +6416,8 @@ index 0000000..5245bd1
 +  "mods-list" : {
 +    "no-mods-filtered" : "Nessuna mod corrisponde ai tuoi filtri",
 +    "no-mods-found" : "Nessuna mod trovata",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Mostra tutte"
 +  },
 +  "profiles" : {
@@ -6547,10 +6561,10 @@ index 0000000..5245bd1
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/ja.json b/frontend/src/lib/generated/i18n/ja.json
 new file mode 100644
-index 0000000..36a0d02
+index 0000000..c5d8734
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/ja.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "オフラインモードにする",
@@ -6722,6 +6736,8 @@ index 0000000..36a0d02
 +  "mods-list" : {
 +    "no-mods-filtered" : "検索に該当するModがありませんでした",
 +    "no-mods-found" : "該当Mod無し",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "全て表示する"
 +  },
 +  "profiles" : {
@@ -6865,10 +6881,10 @@ index 0000000..36a0d02
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/ko.json b/frontend/src/lib/generated/i18n/ko.json
 new file mode 100644
-index 0000000..2b1b7bd
+index 0000000..4aacc27
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/ko.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "오프라인으로 변경",
@@ -7040,6 +7056,8 @@ index 0000000..2b1b7bd
 +  "mods-list" : {
 +    "no-mods-filtered" : "필터 결과에 맞는 모드 없음",
 +    "no-mods-found" : "모드 없음",
++    "remove-search-filters" : "검색 필터 제거",
++    "remove-search-text" : "검색 텍스트 제거",
 +    "show-all" : "전부 보기"
 +  },
 +  "profiles" : {
@@ -7183,10 +7201,10 @@ index 0000000..2b1b7bd
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/lt.json b/frontend/src/lib/generated/i18n/lt.json
 new file mode 100644
-index 0000000..58f9854
+index 0000000..9273d83
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/lt.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Atsijunkite",
@@ -7358,6 +7376,8 @@ index 0000000..58f9854
 +  "mods-list" : {
 +    "no-mods-filtered" : null,
 +    "no-mods-found" : "Nerasta jokių modų",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Rodyti visus"
 +  },
 +  "profiles" : {
@@ -7501,10 +7521,10 @@ index 0000000..58f9854
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/mt.json b/frontend/src/lib/generated/i18n/mt.json
 new file mode 100644
-index 0000000..8abbb23
+index 0000000..03d5ab7
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/mt.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : null,
@@ -7676,6 +7696,8 @@ index 0000000..8abbb23
 +  "mods-list" : {
 +    "no-mods-filtered" : null,
 +    "no-mods-found" : null,
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : null
 +  },
 +  "profiles" : {
@@ -7817,12 +7839,332 @@ index 0000000..8abbb23
 +  }
 +}
 \ No newline at end of file
+diff --git a/frontend/src/lib/generated/i18n/nl.json b/frontend/src/lib/generated/i18n/nl.json
+new file mode 100644
+index 0000000..cd16dff
+--- /dev/null
++++ b/frontend/src/lib/generated/i18n/nl.json
+@@ -0,0 +1,313 @@
++{
++  "announcement" : {
++    "go-offline" : "Ga Offline",
++    "go-online" : "Ga Online",
++    "healthcheck" : "Kon ficsit.app niet bereiken. Controleer je internetverbinding of probeer offline modus. (Mod Manager Instellingen > Ga Offline)",
++    "offline" : "Je bent momenteel offline. Sommige functies zijn mogelijks onbeschikbaar. (Om terug te verbinden, gebruik Mod Manager Instellingen > Ga Online)"
++  },
++  "common" : {
++    "add" : "Toevoegen",
++    "cancel" : "Annuleer",
++    "close" : "Sluiten",
++    "delete" : "Verwijder",
++    "import" : "Importeer",
++    "loading" : "Laden...",
++    "rename" : "Hernoemen"
++  },
++  "error" : {
++    "failed_to_generate_debug" : "Er trad een probleem op met het generen van het debug bestand. Gelieve manueel je Satisfactory Mod Manager log bestanden te controleren voor meer informatie en raporteer dit op de Discord. Gebruik de onderstaande knop om de documentatie te openen om te bekijken hoe dit moet.",
++    "generate_debug_info" : "Genereer debug info",
++    "help" : "Lijkt dit niet te kloppen? Klik op de onderstaande knop en stuur het gegenereerde zip-bestand naar de <1>modding discord</1> in #help-using-mods.",
++    "invalid_installs" : "{invalidInstalls, plural, one {{invalidInstalls} ongeldige Satisfactory installatie gevonden} other {{invalidInstalls} ongeldige Satisfactory installaties gevonden}}",
++    "no_installs" : "Geen Satisfactory installatie gevonden",
++    "open_log_docs" : "Open de Logging Documentatie",
++    "open_modding_discord" : "Open de Modding Discord",
++    "open_modding_discord.must_generate_debug_first" : "Je moet eerst debug informatie genereren",
++    "reporting_directions" : "Lijkt dit niet te kloppen? Klik op de onderstaande knop om logbestanden te verzamelen en stuur het gegenereerde zip-bestand naar de modding Discord in #help-using-mods.",
++    "title" : "Er is iets fout gegaan"
++  },
++  "external-install-mod" : {
++    "already-installed" : "Reeds geïnstalleerd",
++    "error-loading" : "Fout bij het laden van mod-gegevens",
++    "in-queue" : "In wachtrij",
++    "install" : "Installeer",
++    "latest-version" : "Laatste versie",
++    "title" : "Installeer mod",
++    "version" : "Versie {version}"
++  },
++  "first_time_setup" : {
++    "acknowledge" : "Start!",
++    "change_later_hint" : "Verander deze instelling op eender welk moment in het \"Mod Manager Instellingen\" menu.",
++    "intro" : "Selecteer je voorkeuren om van start te gaan.",
++    "open_welcome_guide" : "Open de Welkomstgids ",
++    "option" : {
++      "language" : {
++        "title" : "Gebruik deze taal indien beschikbaar:"
++      },
++      "queue-auto-start" : {
++        "disabled" : "Wacht voor mij om op \"Toepassen\" te klikken",
++        "enabled" : "Pas wijzigingen onmiddellijk toe",
++        "title" : "Wanneer ik een mod toevoeg of verwijder, of van profiel verander..."
++      }
++    },
++    "title" : "Welkom bij de Satisfactory Mod Manager!"
++  },
++  "launch-button" : {
++    "apply-profile-change" : "{profile} toepassen",
++    "apply-queued" : "Pas {queued, plural, one {1 aanpassing} other {# aanpassingen}} toe",
++    "are-you-sure-warning" : "Ben je zeker dat je wilt starten?",
++    "cant-launch" : "SMM kan deze installatie niet starten",
++    "cant-launch-tooltip" : "De Mod Manager kan dit type installatie niet starten, maar beheert wel de mod-bestanden voor je. Start Satisfactory met je gebruikelijke game launcher.",
++    "changes-queued" : "Er zijn nog geen wijzigingen aangebracht in uw mod-bestanden. Klik op de onderstaande knop om de wijzigingen die u in de wachtrij hebt geplaatst toe te passen.\n\n(U bevindt zich in de wachtrij “Handmatig starten”-modus)",
++    "game-running" : "Je game launcher meldt dat de game al actief is (of nog bezig is met afsluiten).",
++    "incompatible-mods" : "{versionIncompatible, plural, one {{versionIncompatible} incompatibele mod zal niet laten laden, of de game doen crashen} other {{versionIncompatible}incompatibele mods zullen niet laten laden, of de game doen crashen}}",
++    "launch-in-progress" : "Aan het starten...",
++    "operation-in-progress" : "Er wordt al een handeling uitgevoerd.",
++    "play" : "Speel Satisfactory",
++    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Een mod dat {versionPossiblyCompatible, plural, one {is} other {zijn}} waarschijnlijk niet compatibel met je game } other {# mods die {versionPossiblyCompatible, plural, one {is} other {zijn}} waarschijnlijk niet compatibel met je game }}",
++    "profile-change-queued" : "Er zijn nog geen wijzigingen aangebracht in uw mod-bestanden. Klik op de onderstaande knop om het nieuwe profiel toe te passen.\n\n(U bevindt zich in de wachtrij “Handmatig starten”-modus)",
++    "ready" : "Je bent klaar om te beginnen!\n\nOpmerking: De Mod Manager heeft de mod-bestanden al voor je geïnstalleerd. Je kunt het spel starten met je gebruikelijke game launcher en de mods worden nog steeds geladen.",
++    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Een mod} other {# mods}} die {reportedIncompatible, plural, one {is} other {zijn}} als defect gemeld voor deze gameversie. Lees de {versionIncompatible, plural, one {mod zijn} other {mods hun}} beschrijving of compatibiliteit notities voor meer informatie",
++    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Een mod} other {# mods}} die {reportedPossiblyCompatible, plural, one {is} other {zijn}} als deels functioneel gemeld voor deze gameversie. Lees de {versionIncompatible, plural, one {mod zijn} other {mods hun}} beschrijving of compatibiliteit notities voor meer informatie",
++    "you-have-warning-mods" : "Je hebt:"
++  },
++  "left-bar" : {
++    "export" : "Exporteer",
++    "ficsit-app" : "ficsit.app (Mod-bibliotheek)",
++    "game-version" : "Selecteer Game Installatie",
++    "help" : "Help",
++    "install-invalid" : "Ongeldig",
++    "install-invalid-tooltip" : "Status: SMM kan deze installatie niet beheren",
++    "install-loading" : "Laden...",
++    "install-loading-tooltip" : "Status: Laden...",
++    "install-unknown" : "Onbekend",
++    "install-unknown-tooltip" : "Status: Er kon geen informatie over deze installatie worden verkregen",
++    "links" : "Links",
++    "manage-servers" : "Beheer Servers",
++    "mods-off" : "Mods uit",
++    "mods-on" : "Mods aan",
++    "other" : "Andere",
++    "profile" : "Profiel",
++    "queue-blocking-switching-tooltip" : "{number, plural, one {U hebt {number} actie in de wachtrij staan. Pas deze toe of annuleer ze voordat u van installatie of profiel wisselt.} other {U hebt {number} acties in de wachtrij staan. Pas deze toe of annuleer ze voordat u van installatie of profiel wisselt.}}",
++    "satisfactory-modding-discord" : "Satisfactory Modding Discord",
++    "smm-github" : "SMM GitHub",
++    "updates" : "Updates"
++  },
++  "mod-changelog" : {
++    "title" : "<1>{mod}</1> Wijzigingen"
++  },
++  "mod-details" : {
++    "change-version" : "Versie wijzigen",
++    "change-version-any" : "Alle",
++    "change-version-or-newer" : "of nieuwer",
++    "changelogs" : "Wijzigingen",
++    "compatibility" : "Compatibiliteit",
++    "compatibility-branch" : "Deze mod is geraporteerd als {state} op {branch}.",
++    "compatibility-unknown" : "Onbekend",
++    "compatibility-unknown-tooltip" : "Er is nog geen compatibiliteitsinformatie voor deze mod gemeld. Probeer het uit en neem contact met ons op via Discord, zodat we de informatie kunnen bijwerken!",
++    "contributors" : "Bijdragers <1>({authors})</1>",
++    "created" : "Aangemaakt",
++    "downloads" : "Totale downloads",
++    "installed-version" : "Geïnstalleerde versie",
++    "latest-version" : "Laatste versie",
++    "mod-author" : "Een mod door:",
++    "offline-mode" : "Offline modus is ingeschakeld. Wijzigingen en beschrijvingen zijn niet beschikbaar.",
++    "size" : "Grootte",
++    "updated" : "Bijgewerkt",
++    "view-on-ficsit-app" : "Bekijk op ficsit.app",
++    "views" : "Weergaven"
++  },
++  "mod-list-item" : {
++    "by-author" : "door",
++    "compatibility-note" : "Deze mod is geraporteerd als {state} op deze game versie.",
++    "compatibility-note-none" : "(Niet gespecificeerd)",
++    "compatibility-warning" : "Er zijn problemen gemeld met deze mod, maar je kunt hem toch proberen te installeren. Details:",
++    "dependency" : "Deze mod is al geïnstalleerd als een afhankelijkheid van een andere mod. Hij kan niet worden verwijderd zolang andere mods ervan afhankelijk zijn.",
++    "disable" : "Deze mod is ingeschakeld voor dit profiel. Klik om deze uit te schakelen, waardoor deze niet wordt geladen wanneer je het spel start, maar nog steeds deel uitmaakt van dit profiel.",
++    "disable-queued" : "Deze mod staat in de wachtrij om te worden uitgeschakeld. Klik om de actie te annuleren.",
++    "disabled-tooltip" : "Deze mod is uitgeschakeld. Klik op het pauze-icoontje om hem in te schakelen.",
++    "enable" : "Klik om deze mod in te schakelen.",
++    "enable-queued" : "Deze mod staat in de wachtrij om te worden ingeschakeld. Klik om de actie te annuleren.",
++    "favorite" : "Klik om deze mod aan je favorieten toe te voegen. Het toevoegen van een mod aan je favorieten heeft niets te maken met het al dan niet installeren ervan. Het is een manier om een mod bij te houden voor later, ongeacht welk profiel je hebt geselecteerd.",
++    "hidden" : "Deze mod is verborgen door de auteur.",
++    "install" : "Klik op deze mod te installeren.",
++    "no-tags" : "(geen beschikbaar)",
++    "not-installable" : "Je kan deze mod niet installeren. Reden:",
++    "queued" : "Deze mod staat al in de wachtrij voor een andere actie.",
++    "queued-install" : "Deze mod staat in de wachtrij om te worden geïnstalleerd. Klik om de actie te annuleren.",
++    "queued-uninstall" : "Deze mod staat in de wachtrij om te worden verwijderd. Klik om de actie te annuleren.",
++    "unavailable" : "Deze mod is niet langer beschikbaar op ficsit.app. Je wilt deze misschien verwijderen.",
++    "unfavorite" : "Klik op deze mod te verwijderen van je Favorieten.",
++    "uninstall" : "Deze mod is op dit profiel geïnstalleerd. Klik om deze mod te verwijderen.",
++    "wait" : "Wacht tot de huidige actie is voltooid."
++  },
++  "mod" : {
++    "compatibility-no-notes" : "(Geen verdere opmerkingen verstrekt)"
++  },
++  "mods-list-filter" : {
++    "filter" : {
++      "all" : "Alle mods",
++      "compatible" : "Compatiebel",
++      "dependency" : "Afhankelijkheid",
++      "disabled" : "Uitgeschakeld",
++      "enabled" : "Ingeschakeld",
++      "favorite" : "Favorieten",
++      "installed" : "Geïnstalleerd",
++      "not-installed" : "Niet geïnstalleerd",
++      "queued" : "In de wachtrij"
++    },
++    "order-by" : {
++      "downloads" : "Downloads",
++      "hotness" : "Trending",
++      "last-updated" : "Laatste bijgewerkt",
++      "name" : "Naam",
++      "popularity" : "Populariteit",
++      "views" : "Weergaven"
++    },
++    "search" : "Zoek mods"
++  },
++  "mods-list" : {
++    "no-mods-filtered" : "Er zijn geen mods die aan je filters voldoen.",
++    "no-mods-found" : "Geen mods gevonden",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
++    "show-all" : "Toon alle"
++  },
++  "profiles" : {
++    "add" : {
++      "profile-name" : "Profielnaam",
++      "profile-name-placeholder" : "Nieuwe Profielnaam",
++      "title" : "Profiel toevoegen"
++    },
++    "delete" : {
++      "profile-name" : "Profielnaam",
++      "title" : "Profiel verwijderen"
++    },
++    "import" : {
++      "profile-file" : "Profiel bestand",
++      "profile-name" : "Profielnaam",
++      "profile-name-placeholder" : "Nieuwe Profielnaam",
++      "profile-version-warning" : "Dit profiel is gemaakt met een nieuwere versie van het spel. Het is mogelijk dat het niet compatibel is met deze versie.",
++      "title" : "Profiel importeren"
++    },
++    "rename" : {
++      "new-profile" : "Nieuwe profielnaam",
++      "new-profile-placeholder" : "Nieuw Profiel",
++      "old-profile" : "Oude profielnaam",
++      "old-profile-placeholder" : "Oud Profiel",
++      "title" : "Profiel hernoemen"
++    }
++  },
++  "server-manager" : {
++    "add" : "Toevoegen",
++    "advanced-note" : "Let op: het kan zijn dat u bepaalde tekens in de gebruikersnaam en het wachtwoord moet escapen",
++    "advanced-path-placeholder" : "gebruikersnaam:wachtwoord@host:poort/pad",
++    "existing-servers" : {
++      "none-yet" : "Er zijn nog geen servers toegevoegd. Voeg er hieronder een toe!",
++      "title" : "Bestaande Servers Beheren"
++    },
++    "failed-to-connect" : "Kan geen verbinding maken met de server, klik om opnieuw te proberen",
++    "get-help" : "Hulp bij het verbinden met servers",
++    "host-placeholder" : "host",
++    "invalid" : "SMM kan deze installatie niet beheren",
++    "loading" : "Laden...",
++    "local-path-placeholder" : "C:\\Pad\\Naar\\Server",
++    "name-placeholder" : "Naam (standaard: {default})",
++    "new-server" : {
++      "title" : "Nieuwe Server Toevoegen"
++    },
++    "password-placeholder" : "wachtwoord",
++    "path-placeholder" : "pad",
++    "port-placeholder" : "poort (standaard: {default})",
++    "switch-to-advanced" : "Overschakelen naar geavanceerde modus",
++    "switch-to-simple" : "Overschakelen naar simpele modus",
++    "title" : "Dedicated Servers",
++    "username-placeholder" : "gebruikersnaam",
++    "validating" : "Valideren..."
++  },
++  "server-picker" : {
++    "failed-list-dir" : "Kan map niet weergeven",
++    "failed-valid-check" : "Kan niet controleren of het geselecteerde pad een geldige server is"
++  },
++  "settings" : {
++    "cache" : {
++      "cache-location" : "Cache-locatie",
++      "reset" : "Terug naar standaardinstellingen",
++      "save" : "Opslaan en verplaatsen",
++      "title" : "Wijzig download cache-locatie"
++    },
++    "change-cache-location" : "Wijzig cache-locatie",
++    "copy-mod-list" : "Mod-lijst kopiëren",
++    "debug" : "Debug",
++    "generate-debug-info" : "Genereer debug info",
++    "go-online-offline" : "Ga {offline, select, true {online} other {offline}}",
++    "language" : "Taal",
++    "launch-button" : "Startknop",
++    "launch-button.button" : "Knop",
++    "launch-button.cat" : "Nyan",
++    "launch-button.normal" : "Normaal",
++    "proxy" : {
++      "proxy" : "Proxy",
++      "remove" : "Proxy verwijderen",
++      "save" : "Opslaan en opnieuw opstarten",
++      "title" : "Proxy Instellen"
++    },
++    "queue" : "Wachtrij",
++    "queue.start-immediately" : "Start onmiddelijk",
++    "queue.start-manually" : "Handmatig starten",
++    "save-window-position" : "Vensterpositie opslaan",
++    "secret-settings" : "Geheime instellingen",
++    "set-proxy" : "Proxy instellen",
++    "settings" : "Instellingen",
++    "smm-debug-logging" : "SMM debug logging",
++    "start-view" : "Startweergave",
++    "start-view.compact" : "Compact",
++    "start-view.expanded" : "Uitgebreid",
++    "title" : "Mod Manager Instellingen",
++    "update-check" : "Controle op updates",
++    "update-check.ask" : "Vragen wanneer gevonden",
++    "update-check.on-exit" : "Bij sluiten",
++    "update-check.on-start" : "Bij starten"
++  },
++  "smm-update" : {
++    "downloading" : "Downloaden op de achtergrond",
++    "downloading-stats" : "Update downloaden: {current} / {total}, {speed}/s, {eta} resterend",
++    "title" : "SMM Update Beschikbaar - {version}"
++  },
++  "smm2_migration" : {
++    "feature" : {
++      "performance" : "Verbeterde prestaties",
++      "performance.description" : "Houd je efficiënt",
++      "platform_support" : "Native Linux Heroic, Steam Snap, Mac-ondersteuning",
++      "platform_support.description" : "Download een build van GitHub releases als je dat nog niet hebt gedaan!",
++      "profile_format" : "Nieuw profielformaat",
++      "profile_format.description" : "SMM2-profielen zijn niet compatibel met SMM3! Uw bestaande profielen zijn automatisch gemigreerd, maar u kunt geen profielen importeren die met SMM2 zijn gemaakt.",
++      "queue" : "Acties in de wachtrij plaatsen",
++      "queue.description" : "Voeg meerdere mod-downloads/verwijderingen tegelijk toe aan de wachtrij.",
++      "servers" : "Dedicated server beheer",
++      "servers.description" : "Beheer servers eenvoudig via het bestandssysteem, SFTP, FTP en SMB!",
++      "translation" : "Vertaalondersteuning",
++      "translation.description" : "Join onze Discord om SMM naar jouw taal te vertalen!",
++      "ui" : "Vernieuwde gebruikersinterface",
++      "ui.description" : "Een nieuw likje verf om Satisfactory 1.0 te vieren!"
++    },
++    "intro" : "We hebben veel verbeteringen aangebracht in deze versie. Hier zijn enkele hoogtepunten:",
++    "open_guide" : "Open de SMM3-documentatie",
++    "title" : "Welkom bij Satisfactory Mod Manager Versie 3!"
++  },
++  "updates" : {
++    "changelog" : "Wijzigingen",
++    "check-for-updates" : "Controleer op updates",
++    "checking-for-updates" : "Controleren op updates...",
++    "hide-ignored" : "Genegeerde updates verbergen",
++    "ignore" : "Negeer",
++    "mod-update-available" : "{updates, plural, one {{updates} mod update beschikbaar} other {{updates} mod updates beschikbaar}}",
++    "no-updates" : "Momenteel geen mod/SMM beschikbaar",
++    "show-ignored" : "Toon genegeerde updates",
++    "smm-update-available" : "SMM update beschikbaar",
++    "title" : "Updates",
++    "unignore" : "Niet negeren",
++    "update-all" : "Update Alle",
++    "update-selected" : "Update Geselecteerde"
++  }
++}
+\ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/pl.json b/frontend/src/lib/generated/i18n/pl.json
 new file mode 100644
-index 0000000..e4d1d46
+index 0000000..0b7dc61
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/pl.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Przejdź w Tryb Offline",
@@ -7992,8 +8334,10 @@ index 0000000..e4d1d46
 +    "search" : "Szukaj mody"
 +  },
 +  "mods-list" : {
-+    "no-mods-filtered" : "Żadne mody nie pasują do wybranych filtrów.",
++    "no-mods-filtered" : "Żadne mody nie pasują do kryteriów wyszukiwania.",
 +    "no-mods-found" : "Nie znaleziono modów.",
++    "remove-search-filters" : "Usuń filtry wyszukiwania",
++    "remove-search-text" : "Usuń kryteria wyszukiwania",
 +    "show-all" : "Pokaż wszystkie"
 +  },
 +  "profiles" : {
@@ -8137,10 +8481,10 @@ index 0000000..e4d1d46
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/pt-BR.json b/frontend/src/lib/generated/i18n/pt-BR.json
 new file mode 100644
-index 0000000..9800328
+index 0000000..65dc070
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/pt-BR.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Ficar Offline",
@@ -8312,6 +8656,8 @@ index 0000000..9800328
 +  "mods-list" : {
 +    "no-mods-filtered" : "Nenhum mod que corresponda aos seus filtros",
 +    "no-mods-found" : "Nenhum mod encontrado",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Mostrar tudo"
 +  },
 +  "profiles" : {
@@ -8455,10 +8801,10 @@ index 0000000..9800328
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/ru.json b/frontend/src/lib/generated/i18n/ru.json
 new file mode 100644
-index 0000000..3928afb
+index 0000000..650fd1c
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/ru.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "Перейти в офлайн",
@@ -8630,6 +8976,8 @@ index 0000000..3928afb
 +  "mods-list" : {
 +    "no-mods-filtered" : " Нет модов, соответствующих вашим фильтрам",
 +    "no-mods-found" : "Моды не найдены",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "Показать все"
 +  },
 +  "profiles" : {
@@ -8773,10 +9121,10 @@ index 0000000..3928afb
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/tr.json b/frontend/src/lib/generated/i18n/tr.json
 new file mode 100644
-index 0000000..8abbb23
+index 0000000..03d5ab7
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/tr.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : null,
@@ -8948,6 +9296,8 @@ index 0000000..8abbb23
 +  "mods-list" : {
 +    "no-mods-filtered" : null,
 +    "no-mods-found" : null,
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : null
 +  },
 +  "profiles" : {
@@ -9091,10 +9441,10 @@ index 0000000..8abbb23
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/zh-Hans.json b/frontend/src/lib/generated/i18n/zh-Hans.json
 new file mode 100644
-index 0000000..ee8f53b
+index 0000000..d9b69a1
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/zh-Hans.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "进入离线模式",
@@ -9266,6 +9616,8 @@ index 0000000..ee8f53b
 +  "mods-list" : {
 +    "no-mods-filtered" : "没有符合条件的模组",
 +    "no-mods-found" : "未找到模组",
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : "展示所有"
 +  },
 +  "profiles" : {
@@ -9409,16 +9761,16 @@ index 0000000..ee8f53b
 \ No newline at end of file
 diff --git a/frontend/src/lib/generated/i18n/zh-Hant.json b/frontend/src/lib/generated/i18n/zh-Hant.json
 new file mode 100644
-index 0000000..2977a11
+index 0000000..4ef7c49
 --- /dev/null
 +++ b/frontend/src/lib/generated/i18n/zh-Hant.json
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,313 @@
 +{
 +  "announcement" : {
 +    "go-offline" : "進入離線模式",
 +    "go-online" : "進入在線模式",
-+    "healthcheck" : null,
-+    "offline" : null
++    "healthcheck" : "無法連線到 ficsit.app。檢查您的網路連接或考慮使用離線模式。（模組管理器設定>進入離線模式）",
++    "offline" : "目前處於離線狀態。某些功能可能不可用。（若想重新連接，請使用 模組管理器設定>進入在線模式）"
 +  },
 +  "common" : {
 +    "add" : "添加",
@@ -9430,60 +9782,60 @@ index 0000000..2977a11
 +    "rename" : "重新命名"
 +  },
 +  "error" : {
-+    "failed_to_generate_debug" : null,
-+    "generate_debug_info" : null,
-+    "help" : null,
-+    "invalid_installs" : null,
-+    "no_installs" : null,
-+    "open_log_docs" : null,
-+    "open_modding_discord" : null,
-+    "open_modding_discord.must_generate_debug_first" : null,
-+    "reporting_directions" : null,
++    "failed_to_generate_debug" : "生成偵錯檔時出錯。請手動檢查你的滿意工廠模組管理器日誌檔以獲取更多資訊，並在 Discord 上報告。使用下面的按鈕打開文檔並瞭解如何操作。",
++    "generate_debug_info" : "生成偵錯資訊",
++    "help" : "似乎發生問題了？按下下面的按鈕，然後將生成的 zip 檔發送到 <1>modding Discord</1> 中的 #help-using-mods。",
++    "invalid_installs" : "{invalidInstalls, plural, other {發現 {invalidInstalls} 個無效的滿意工廠}}",
++    "no_installs" : "找不要已安裝的滿意工廠",
++    "open_log_docs" : "打開紀錄文件",
++    "open_modding_discord" : "打開 Modding Discord",
++    "open_modding_discord.must_generate_debug_first" : "你必須先生成偵錯資訊",
++    "reporting_directions" : "似乎發生問題了？點擊下面的按鈕收集日誌，然後將生成的 zip 檔發送到 Modding Discord 中的 #help-using-mods 上。",
 +    "title" : "出錯了！"
 +  },
 +  "external-install-mod" : {
 +    "already-installed" : "已安裝",
-+    "error-loading" : null,
-+    "in-queue" : null,
++    "error-loading" : "載入模組詳細資訊時出錯",
++    "in-queue" : "在隊列中",
 +    "install" : "安裝",
-+    "latest-version" : null,
++    "latest-version" : "最新版本",
 +    "title" : "安裝模組",
-+    "version" : null
++    "version" : "版本 {version}"
 +  },
 +  "first_time_setup" : {
 +    "acknowledge" : "開始使用！",
-+    "change_later_hint" : null,
-+    "intro" : null,
++    "change_later_hint" : "隨時都可以在\"模組管理器設定\"中修改這些設定",
++    "intro" : "在開始前，請選擇您的使用偏好",
 +    "open_welcome_guide" : "開啟歡迎指南",
 +    "option" : {
 +      "language" : {
-+        "title" : null
++        "title" : "使用下列可用的語言："
 +      },
 +      "queue-auto-start" : {
-+        "disabled" : null,
++        "disabled" : "等待我按下 \"套用\"",
 +        "enabled" : "立即套用變更",
-+        "title" : null
++        "title" : "當我新增、刪除一個模組，或是切換設定檔時..."
 +      }
 +    },
-+    "title" : null
++    "title" : "歡迎使用滿意工廠模組管理器！"
 +  },
 +  "launch-button" : {
 +    "apply-profile-change" : "套用 {profile}",
 +    "apply-queued" : "套用 {queued} 個更新",
-+    "are-you-sure-warning" : null,
-+    "cant-launch" : null,
-+    "cant-launch-tooltip" : null,
-+    "changes-queued" : null,
-+    "game-running" : null,
-+    "incompatible-mods" : null,
-+    "launch-in-progress" : null,
-+    "operation-in-progress" : null,
-+    "play" : null,
-+    "possibly-incompatible-mods" : null,
-+    "profile-change-queued" : null,
-+    "ready" : null,
-+    "reported-incompatible-mods" : null,
-+    "reported-possibly-compatible-mods" : null,
++    "are-you-sure-warning" : "您確定要啟動嗎？",
++    "cant-launch" : "SMM 無法啟動此遊戲",
++    "cant-launch-tooltip" : "模組管理器無法啟動該遊戲版本，但仍然會管理您的模組。您可以從遊戲啟動器正常啟動滿意工廠。",
++    "changes-queued" : "模組尚未進行變更。點擊下方套用按鈕以套用已選擇的變更。",
++    "game-running" : "遊戲啟動器顯示遊戲正在執行（或正在關閉）",
++    "incompatible-mods" : "{versionIncompatible, plural, other {{versionIncompatible} 個不相容的模組，遊戲可能無法載入或崩潰}}",
++    "launch-in-progress" : "正在啟動...",
++    "operation-in-progress" : "操作正在執行中",
++    "play" : "遊玩滿意工廠",
++    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, other {# 個模組可能與您的遊戲不相容}}",
++    "profile-change-queued" : "變更尚未套用，點擊套用按鈕以套用新設定",
++    "ready" : "準備就緒！\n\n注意： 模組管理器已經為您完成了模組的安裝。您可以使用遊戲啟動器啟動遊戲，模組仍會載入。",
++    "reported-incompatible-mods" : "{reportedIncompatible}個模組被回報可能不相容於這個遊戲版本，請閱讀{versionIncompatible}模組的描述或相容性說明。\n",
++    "reported-possibly-compatible-mods" : "{reportedIncompatible}個模組被回報在這個遊戲版本中無法使用，請閱讀{versionIncompatible}模組的描述或相容性說明。\n",
 +    "you-have-warning-mods" : "您有："
 +  },
 +  "left-bar" : {
@@ -9491,61 +9843,61 @@ index 0000000..2977a11
 +    "ficsit-app" : "ficsit.app（模組儲存庫）",
 +    "game-version" : "選擇已安裝遊戲",
 +    "help" : "幫助",
-+    "install-invalid" : null,
-+    "install-invalid-tooltip" : null,
-+    "install-loading" : null,
-+    "install-loading-tooltip" : null,
-+    "install-unknown" : null,
-+    "install-unknown-tooltip" : null,
-+    "links" : null,
-+    "manage-servers" : null,
-+    "mods-off" : null,
-+    "mods-on" : null,
-+    "other" : null,
++    "install-invalid" : "無效",
++    "install-invalid-tooltip" : "狀態：SMM無法管理這個遊戲版本",
++    "install-loading" : "載入中...",
++    "install-loading-tooltip" : "狀態：載入中...",
++    "install-unknown" : "未知",
++    "install-unknown-tooltip" : "狀態：無法取得有關此遊戲版本的訊息",
++    "links" : "連結",
++    "manage-servers" : "伺服器管理",
++    "mods-off" : "停用模組",
++    "mods-on" : "啟用模組",
++    "other" : "其他",
 +    "profile" : "設定檔",
-+    "queue-blocking-switching-tooltip" : null,
-+    "satisfactory-modding-discord" : null,
++    "queue-blocking-switching-tooltip" : "{number, plural, other {你有{number}個操作整在等待執行。在切換遊戲版本或設定檔前，請先套用或取消這些操作。}}",
++    "satisfactory-modding-discord" : "滿意工廠 Modding Discord",
 +    "smm-github" : "SMM GitHub",
-+    "updates" : null
++    "updates" : "更新"
 +  },
 +  "mod-changelog" : {
-+    "title" : null
++    "title" : "<1>{mod}</1>變更日誌"
 +  },
 +  "mod-details" : {
 +    "change-version" : "變更版本",
-+    "change-version-any" : null,
-+    "change-version-or-newer" : null,
++    "change-version-any" : "任意",
++    "change-version-or-newer" : "或更新",
 +    "changelogs" : "變更日誌",
-+    "compatibility" : null,
-+    "compatibility-branch" : null,
-+    "compatibility-unknown" : null,
-+    "compatibility-unknown-tooltip" : null,
-+    "contributors" : null,
-+    "created" : null,
-+    "downloads" : null,
-+    "installed-version" : null,
-+    "latest-version" : null,
-+    "mod-author" : null,
-+    "offline-mode" : null,
-+    "size" : null,
-+    "updated" : null,
-+    "view-on-ficsit-app" : null,
-+    "views" : null
++    "compatibility" : "相容性",
++    "compatibility-branch" : "這個模組在{branch}被回報為{state}",
++    "compatibility-unknown" : "未知",
++    "compatibility-unknown-tooltip" : "目前沒有已知的相容性資訊。請測試它並在 Discord 上聯絡我們，讓他們可以被更新！",
++    "contributors" : "貢獻者<1>（{authors}）</1>",
++    "created" : "創造於",
++    "downloads" : "下載量",
++    "installed-version" : "已安裝版本",
++    "latest-version" : "最新版本",
++    "mod-author" : "作者：",
++    "offline-mode" : "離線模式已啟用，更改日誌及描述不可用。",
++    "size" : "大小",
++    "updated" : "更新於",
++    "view-on-ficsit-app" : "在 ficsit.app 上查看",
++    "views" : "瀏覽量"
 +  },
 +  "mod-list-item" : {
-+    "by-author" : null,
-+    "compatibility-note" : null,
++    "by-author" : "by",
++    "compatibility-note" : "這個模組在當前遊戲版本中被回報為{state}",
 +    "compatibility-note-none" : "（無詳情）",
-+    "compatibility-warning" : null,
++    "compatibility-warning" : "這個模組被報告存在問題，但您依舊可以嘗試安裝它。詳細資料：",
 +    "dependency" : "此模組是其他模組的依賴。它不能單獨安裝或移除。",
-+    "disable" : null,
-+    "disable-queued" : null,
-+    "disabled-tooltip" : null,
-+    "enable" : null,
-+    "enable-queued" : null,
-+    "favorite" : null,
-+    "hidden" : null,
-+    "install" : null,
++    "disable" : "這個模組在此設定檔中被啟用。點擊以停用模組，啟動遊戲時將不載入此模組，但它仍然保留在此設定檔中。",
++    "disable-queued" : "此模組正在等待停用，點擊以取消操作。",
++    "disabled-tooltip" : "此模組已被停用，點擊暫停按鈕來啟用它。",
++    "enable" : "點擊啟用此模組。",
++    "enable-queued" : "此模組將被啟用，點擊以取消此操作。",
++    "favorite" : "點擊以添加到我的最愛，將模組標記為我的最愛僅為在當前設定檔中，與是否安裝無關。",
++    "hidden" : "此模組已被作者隱藏。",
++    "install" : "點擊以安裝此模組。",
 +    "no-tags" : null,
 +    "not-installable" : "無法安裝該模組。原因：",
 +    "queued" : null,
@@ -9584,6 +9936,8 @@ index 0000000..2977a11
 +  "mods-list" : {
 +    "no-mods-filtered" : null,
 +    "no-mods-found" : null,
++    "remove-search-filters" : null,
++    "remove-search-text" : null,
 +    "show-all" : null
 +  },
 +  "profiles" : {

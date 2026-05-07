@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-fuzz";
   version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "rust-fuzz";
     repo = "cargo-fuzz";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-wOzzPhAuCaJfp7uRZ1kPpzMIr03couRaIbbrjL0EyYo=";
   };
 
@@ -19,17 +19,16 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line helpers for fuzzing";
     mainProgram = "cargo-fuzz";
     homepage = "https://github.com/rust-fuzz/cargo-fuzz";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
-      ekleog
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

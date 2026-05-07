@@ -10,7 +10,7 @@
   libGL,
   libGLU,
   openal,
-  libXxf86vm,
+  libxxf86vm,
   SDL,
   makeDesktopItem,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     openal
-    libXxf86vm
+    libxxf86vm
     SDL
   ];
 
@@ -115,7 +115,7 @@ stdenv.mkDerivation {
       realism". This results in a very unique, enjoyable and addictive game.
     '';
     mainProgram = "urbanterror";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

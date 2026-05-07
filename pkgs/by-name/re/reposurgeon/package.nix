@@ -4,24 +4,32 @@
   buildGoModule,
   asciidoctor,
   ruby,
+  which,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "reposurgeon";
-  version = "4.26";
+  version = "5.3";
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/reposurgeon/reposurgeon-${version}.tar.xz";
-    sha256 = "sha256-FuL5pvIM468hEm6rUBKGW6+WlYv4DPHNnpwpRGzMwlY=";
+    url = "http://www.catb.org/~esr/reposurgeon/reposurgeon-${finalAttrs.version}.tar.xz";
+    hash = "sha256-XEPpZyBlTfLGtFQSCHND8OrIPB6ml8HDdg0DSvnmWh8=";
   };
 
-  vendorHash = "sha256-QpgRCnsOOZujE405dCe+PYg/zNkqnrfZFfbBFo7adjY=";
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "./repocutter -q docgen >cuttercommands.inc" 'echo "/* skipped */" >cuttercommands.inc' \
+      --replace-fail "./repotool docgen >toolcommands.inc" 'echo "/* skipped */" >toolcommands.inc'
+  '';
+
+  vendorHash = "sha256-4bNhAWkO84imCaBzjBxNCOzG2A/z4lhqvu51wF2GVUo=";
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [
     asciidoctor
     ruby
+    which
   ];
 
   postBuild = ''
@@ -40,4 +48,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dfoxfranke ];
     platforms = lib.platforms.all;
   };
-}
+})

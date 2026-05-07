@@ -8,18 +8,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcumgr-client";
-  version = "0.0.7";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "vouch-opensource";
     repo = "mcumgr-client";
-    rev = "v${version}";
-    hash = "sha256-P5ykIVdWAxuCblMe7kzjswEca/+MsqpizCGUHIpR4qc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IbjWJ4AEUxIvj3gSyz7w4q0DL1q2u0q2JO8O+I5qXnY=";
   };
 
-  cargoHash = "sha256-+n+Z/o+DvP2ltos8DP8nTyKbn/Zr3ln6cLyKJ+yWm1M=";
+  cargoHash = "sha256-V8o89jGqjxJPVIQIh6IbnahXVMktT2gZg/5H+Sr0ogQ=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for mcumgr commands";
     homepage = "https://github.com/vouch-opensource/mcumgr-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "mcumgr-client";
   };
-}
+})

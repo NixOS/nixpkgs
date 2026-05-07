@@ -6,21 +6,24 @@
   ninja,
   pkg-config,
   wayland,
-  libX11,
+  libx11,
   libGL,
 }:
 
 stdenv.mkDerivation {
   pname = "glpaper";
-  version = "unstable-2022-05-15";
+  version = "unstable-2024-08-07";
 
   src = fetchFromSourcehut {
     owner = "~scoopta";
     repo = "glpaper";
     vc = "hg";
-    rev = "f89e60b7941fb60f1069ed51af9c5bb4917aab35";
-    sha256 = "sha256-E7FKjt3NL0aAEibfaq+YS2IVvpjNjInA+Rs8SU63/3M=";
+    rev = "af9827d20bfe1956dd88fb2202b38ed0de705305";
+    sha256 = "sha256-zgvnWqsw243jZ9e6fG6L0hDfRRHwzmIdsxwnnWhimu0=";
   };
+
+  # nop() is used as a typed Wayland callback stub, which GCC 15 rejects as an error.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   nativeBuildInputs = [
     meson
@@ -29,16 +32,16 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     wayland
-    libX11 # required by libglvnd
+    libx11 # required by libglvnd
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wallpaper program for wlroots based Wayland compositors such as sway that allows you to render glsl shaders as your wallpaper";
     mainProgram = "glpaper";
     homepage = "https://hg.sr.ht/~scoopta/glpaper";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ccellado ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ccellado ];
   };
 }

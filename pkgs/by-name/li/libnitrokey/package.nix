@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix for CMake v4
+    # https://github.com/Nitrokey/libnitrokey/pull/226
+    ./cmake-v4.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -39,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Communicate with Nitrokey devices in a clean and easy manner";
     homepage = "https://github.com/Nitrokey/libnitrokey";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       panicgh
       raitobezarius
     ];

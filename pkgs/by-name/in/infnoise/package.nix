@@ -27,9 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  GIT_COMMIT = finalAttrs.src.rev;
-  GIT_VERSION = finalAttrs.version;
-  GIT_DATE = "2023-02-14";
+  env = {
+    GIT_COMMIT = finalAttrs.src.rev;
+    GIT_VERSION = finalAttrs.version;
+    GIT_DATE = "2023-02-14";
+  };
 
   buildInputs = [ libftdi ];
 
@@ -58,18 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/leetronics/infnoise";
     description = "Driver for the Infinite Noise TRNG";
     longDescription = ''
       The Infinite Noise TRNG is a USB key hardware true random number generator.
       It can either provide rng for userland applications, or provide rng for the OS entropy.
     '';
-    license = licenses.cc0;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       StijnDW
       zhaofengli
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

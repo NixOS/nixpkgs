@@ -11,6 +11,5 @@ requires-python = ">=@python_version@"
 [tool.setuptools]
 packages = ["tkinter"]
 ext-modules = [
-  { name = "_tkinter", sources = ["_tkinter.c"], libraries = ["tcl9.0", "tcl9tk9.0"], include-dirs = ["@python_internal_dir@/"] }
+  { name = "_tkinter", sources = ["_tkinter.c"], libraries = ["tcl", "tk"], include-dirs = ["@python_internal_dir@/"] }
 ]
-

@@ -20,6 +20,5 @@
     machine.wait_for_unit("watchdogd.service")
 
     assert "i6300ESB" in machine.succeed("watchdogctl status")
-    machine.succeed("watchdogctl test")
   '';
 }

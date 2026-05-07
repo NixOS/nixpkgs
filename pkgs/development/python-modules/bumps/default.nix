@@ -1,32 +1,31 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  versioningit,
-  numpy,
-  scipy,
-  h5py,
-  dill,
-  matplotlib,
-  blinker,
   aiohttp,
-  python,
+  blinker,
+  buildPythonPackage,
+  cloudpickle,
+  dill,
+  fetchPypi,
+  h5py,
+  matplotlib,
+  msgpack,
+  numpy,
   plotly,
   python-socketio,
+  python,
+  scipy,
+  setuptools,
+  versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "bumps";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YfnBA1rCD05B4XOS611qgi4ab3xKoYs108mwhj/I+sg=";
+    hash = "sha256-O5GUoyDlB0X2Z/O3JprN3omoOBDIhv0xrKfUSHTgGpM=";
   };
 
   pythonRemoveDeps = [
@@ -39,16 +38,18 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    numpy
-    scipy
-    h5py
-    dill
-    matplotlib
-    blinker
     aiohttp
-    python
+    blinker
+    cloudpickle
+    dill
+    h5py
+    matplotlib
+    msgpack
+    numpy
     plotly
+    python
     python-socketio
+    scipy
     # mpld3 # not packaged
   ];
 
@@ -57,12 +58,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bumps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data fitting with bayesian uncertainty analysis";
     mainProgram = "bumps";
     homepage = "https://bumps.readthedocs.io/";
     changelog = "https://github.com/bumps/bumps/releases/tag/v${version}";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ rprospero ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ rprospero ];
   };
 }

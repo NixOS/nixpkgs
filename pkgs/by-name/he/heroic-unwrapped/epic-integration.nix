@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-epic-integration";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "Etaash-mathamsetty";
     repo = "heroic-epic-integration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zn0MsaQd8Ro6eu8IQkMcLNGLVTUukwajkn8PRLfB+Yw=";
+    hash = "sha256-pRgs1w4bzm5Ao0zXfaNxBAR8+h7w4I+C+bm4nT7kIgU=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     description = "Wrapper process for games launched through Heroic Games Launcher";
     longDescription = ''
@@ -42,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Etaash-mathamsetty/heroic-epic-integration";
     changelog = "https://github.com/Etaash-mathamsetty/heroic-epic-integration/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aidalgol ];
+    maintainers = [ ];
   };
-
-  passthru.updateScript = gitUpdater { };
 })

@@ -8,22 +8,30 @@
   nix-update-script,
 }:
 let
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.pairs";
     tag = "v${version}";
-    hash = "sha256-RTY/uGviyHlO+ZmLwOC5BabKr+kRDAXGZNdS9fVRPWA=";
+    hash = "sha256-IfnFSusQMm6LujE1AmihK9wEF2RSGfKYwpV2fedg0fc=";
   };
 
   blink-pairs-lib = rustPlatform.buildRustPackage {
     pname = "blink-pairs";
     inherit version src;
 
-    cargoHash = "sha256-j+zk0UMjvaVgsdF5iaRVO4Puf/XtGu08Cs92jKPaM1g=";
+    cargoHash = "sha256-Cn9zRsQkBwaKbBD/JEpFMBOF6CBZTDx7fQa6Aoic4YU=";
 
-    env.RUSTC_BOOTSTRAP = 1;
+    env = {
+      RUSTC_BOOTSTRAP = 1;
+
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+    };
+
+    # NOTE: Disabled upstream too
+    doCheck = false;
 
     nativeBuildInputs = [
       pkg-config

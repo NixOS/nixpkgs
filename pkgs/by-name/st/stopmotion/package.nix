@@ -10,13 +10,13 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.0";
   pname = "stopmotion";
 
   src = fetchgit {
     url = "https://invent.kde.org/multimedia/stopmotion";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RsFqvAmTJBVg32bnY2eA9jWWnuHgv66rZiWMqa6sviw=";
   };
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Create stop-motion animation movies";
     homepage = "http://linuxstopmotion.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "stopmotion";
   };
-}
+})

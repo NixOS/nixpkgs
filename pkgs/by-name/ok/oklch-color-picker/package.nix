@@ -13,27 +13,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oklch-color-picker";
-  version = "2.2.1";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "eero-lehtinen";
     repo = "oklch-color-picker";
-    tag = "${finalAttrs.version}";
-    hash = "sha256-tPYxcZghGR1YZl1bwoDDIBmbTVGuksCpfgLYwG+k4Ws=";
+    tag = finalAttrs.version;
+    hash = "sha256-IwG3oUYArr6cHSa3fNukQ7CjasUMaVWX9JXChSHTnEs=";
   };
 
-  cargoHash = "sha256-tdIkvBYKfcbCYXhDbIwXNNbNb4X32uBwDh3mAyqt/IM=";
+  cargoHash = "sha256-Vs6bMHHHRdqSYjOzJuq2agmuXSjGRagIATVzQa3Z/M8=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   runtimeDependencies = [
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     libxkbcommon
-    libGL
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
 
@@ -47,6 +48,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/eero-lehtinen/oklch-color-picker/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ videl ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

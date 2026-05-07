@@ -4,25 +4,31 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   httpx,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whodap";
-  version = "0.1.13";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.1.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "whodap";
-    tag = version;
-    hash = "sha256-VSFtHjdG9pJAryGUgwI0NxxaW0JiXEHU7aVvXYxymtc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ybJiAWrAcs/9/8WutqsHvwsiWxR+tJL9wcQRaOiUZNQ=";
   };
 
-  propagatedBuildInputs = [ httpx ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "wheel==0.46.3" "wheel"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -36,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whodap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python RDAP utility for querying and parsing information about domain names";
     homepage = "https://github.com/pogzyb/whodap";
-    changelog = "https://github.com/pogzyb/whodap/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pogzyb/whodap/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

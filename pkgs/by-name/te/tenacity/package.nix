@@ -1,10 +1,10 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   ninja,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   pkg-config,
   python3,
@@ -31,7 +31,7 @@
   expat,
   libid3tag,
   libopus,
-  ffmpeg,
+  ffmpeg_7,
   soundtouch,
   pcre,
   portaudio,
@@ -39,9 +39,9 @@
   at-spi2-core,
   dbus,
   libepoxy,
-  libXdmcp,
-  libXtst,
-  libpthreadstubs,
+  libxdmcp,
+  libxtst,
+  libpthread-stubs,
   libselinux,
   libsepol,
   libxkbcommon,
@@ -52,14 +52,19 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tenacity";
   version = "1.3.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tenacityteam";
     repo = "tenacity";
     fetchSubmodules = true;
     rev = "v${finalAttrs.version}";
     hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";
   };
+
+  # https://codeberg.org/tenacityteam/tenacity/pulls/696
+  # can be removed at next version bump
+  patches = [
+    ./cstdlib.patch
+  ];
 
   postPatch = ''
     # GIT_DESCRIBE is used for the version string and can't be passed in
@@ -76,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     # looking only in a few specific directories.
     # Make sure it searches for our version of ffmpeg in the nix store.
     substituteInPlace libraries/lib-ffmpeg-support/FFmpegFunctions.cpp \
-      --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg}/lib
+      --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg_7}/lib
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -103,18 +108,20 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  # Tenacity only looks for ffmpeg at runtime, so we need to link it in manually.
-  # On darwin, these are ignored by the ffmpeg search even when linked.
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux (toString [
-    "-lavcodec"
-    "-lavdevice"
-    "-lavfilter"
-    "-lavformat"
-    "-lavutil"
-    "-lpostproc"
-    "-lswresample"
-    "-lswscale"
-  ]);
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # Tenacity only looks for ffmpeg at runtime, so we need to link it in manually.
+    # On darwin, these are ignored by the ffmpeg search even when linked.
+    NIX_LDFLAGS = toString [
+      "-lavcodec"
+      "-lavdevice"
+      "-lavfilter"
+      "-lavformat"
+      "-lavutil"
+      "-lpostproc"
+      "-lswresample"
+      "-lswscale"
+    ];
+  };
 
   nativeBuildInputs = [
     cmake
@@ -130,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     expat
-    ffmpeg
+    ffmpeg_7
     file
     flac
     glib
@@ -153,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     sratom
     suil
     twolame
-    wxGTK32
+    wxwidgets_3_2
     gtk3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -161,9 +168,9 @@ stdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     dbus
     libepoxy
-    libXdmcp
-    libXtst
-    libpthreadstubs
+    libxdmcp
+    libxtst
+    libpthread-stubs
     libxkbcommon
     libselinux
     libsepol

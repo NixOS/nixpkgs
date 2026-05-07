@@ -4,17 +4,19 @@
   fetchFromGitLab,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pricehist";
-  version = "1.4.7";
-  format = "pyproject";
+  version = "1.4.14";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "chrisberkhout";
     repo = "pricehist";
-    tag = version;
-    hash = "sha256-SBRJxNnA+nOxO6h97WZZHwhxoXeNtb5+rDayn4Hw6so=";
+    tag = finalAttrs.version;
+    hash = "sha256-BnyoSYVjs2odnOzSpvgMF860PDkz7tPNnM0s3Fep5G0=";
   };
+
+  pythonRelaxDeps = [ "lxml" ];
 
   dependencies = with python3Packages; [
     requests
@@ -39,4 +41,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     mainProgram = "pricehist";
   };
-}
+})

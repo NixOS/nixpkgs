@@ -1,0 +1,583 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/system_cmds/blob/main/system_cmds.xcodeproj/project.pbxproj
+
+
+# Project settings
+project('system_cmds', 'c', 'objc', version : '@version@')
+
+add_project_arguments(
+    '-D__FreeBSD__',
+    # Suppresses suffixing symbols with '$UNIX2003', which causes link failures.
+    '-D__DARWIN_ONLY_UNIX_CONFORMANCE=1',
+    # Make sure Darwin is correctly detected as macOS
+    '-DPLATFORM_MacOSX=1',
+    # Access private definitions
+    '-DPRIVATE=1',
+    # From bsd/sys/private_event.h in xnu
+    '-Dkqueue_id_t=uint64_t',
+    # These are not defined automatically by Clang. Not having them defined causes compilation failures.
+    '-DTARGET_OS_EXCLAVECORE=0',
+    '-DTARGET_OS_EXCLAVEKIT=0',
+    language : 'c',
+)
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+# Upstream uses awk to process `.gperf` files instead of gperf, which can’t process them.
+fake_gperf = find_program('awk', required : true)
+
+## Frameworks
+core_foundation = dependency('appleframeworks', modules : 'CoreFoundation')
+core_symbolication = dependency('appleframeworks', modules : 'CoreSymbolication')
+directory_service = dependency('appleframeworks', modules : 'DirectoryService')
+iokit = dependency('appleframeworks', modules : 'IOKit')
+open_directory = dependency('appleframeworks', modules : 'OpenDirectory')
+cfopen_directory = dependency('appleframeworks', modules : 'CFOpenDirectory')
+
+
+## Libraries
+dbm = cc.find_library('dbm')
+ncurses = dependency('ncurses')
+openbsm = cc.find_library('bsm')
+pam = cc.find_library('pam')
+util = cc.find_library('util')
+
+
+# Generators
+pgperf = generator(
+    fake_gperf,
+    arguments : [ '-f', meson.source_root() + '/getconf/fake-gperf.awk', '@INPUT@' ],
+    capture : true,
+    output : '@BASENAME@.gperf.c',
+)
+
+
+# Binaries
+executable(
+    'ac',
+    install : true,
+    sources : 'ac/ac.c',
+)
+install_man('ac/ac.8')
+
+executable(
+    'accton',
+    install : true,
+    sources : 'accton/accton.c',
+)
+install_man('accton/accton.8')
+
+executable(
+    'arch',
+    dependencies : [ core_foundation ],
+    install : true,
+    sources : 'arch/arch.c',
+)
+install_man(
+    'arch/arch.1',
+    'arch/machine.1',
+)
+
+executable(
+    'at',
+    c_args : [
+        '-DDAEMON_UID=1',
+        '-DDAEMON_GID=1',
+        '-DDEFAULT_AT_QUEUE=\'a\'',
+        '-DDEFAULT_BATCH_QUEUE=\'b\'',
+        '-DPERM_PATH="/usr/lib/cron"',
+    ],
+    install : true,
+    sources : [
+        'at/at.c',
+        'at/panic.c',
+        'at/parsetime.c',
+        'at/perm.c',
+    ],
+)
+install_man('at/at.1')
+
+executable(
+    'atrun',
+    c_args : [
+        '-DDAEMON_UID=1',
+        '-DDAEMON_GID=1',
+    ],
+    include_directories : 'at',
+    install : true,
+    sources : [
+        'atrun/atrun.c',
+        'atrun/gloadavg.c',
+    ]
+)
+install_man('atrun/atrun.8')
+
+executable(
+    'chkpasswd',
+    c_args : [ '-DUSE_PAM' ],
+    dependencies : [ core_foundation, open_directory, pam ],
+    install : true,
+    sources : [
+        'chkpasswd/file_passwd.c',
+        'chkpasswd/nis_passwd.c',
+        'chkpasswd/od_passwd.c',
+        'chkpasswd/pam_passwd.c',
+        'chkpasswd/passwd.c',
+        'chkpasswd/stringops.c'
+    ],
+)
+install_man('chkpasswd/chkpasswd.8')
+
+executable(
+    'chpass',
+    dependencies : [ core_foundation, cfopen_directory, open_directory ],
+    install : true,
+    sources : [
+        'chpass/chpass.c',
+        'chpass/edit.c',
+        'chpass/field.c',
+        'chpass/open_directory.c',
+        'chpass/table.c',
+        'chpass/util.c',
+    ]
+)
+install_man('chpass/chpass.1')
+
+executable(
+    'cpuctl',
+    install : true,
+    sources : 'cpuctl/cpuctl.c'
+)
+install_man('cpuctl/cpuctl.8')
+
+executable(
+    'dmesg',
+    install : true,
+    sources : 'dmesg/dmesg.c',
+)
+install_man('dmesg/dmesg.8')
+
+executable(
+    'dynamic_pager',
+    c_args : '-DNO_DIRECT_RPC',
+    install : true,
+    sources : 'dynamic_pager/dynamic_pager.c',
+)
+install_man('dynamic_pager/dynamic_pager.8')
+
+executable(
+    'fs_usage',
+    # Requires 'ktrace/session.h'
+    build_by_default : false,
+    c_args : [
+        '-DTARGET_OS_EXCLAVECORE=0',
+        '-DTARGET_OS_EXCLAVEKIT=0',
+    ],
+    # dependencies : [ libutil ],
+    install : false,
+    sources : 'fs_usage/fs_usage.c',
+)
+install_man('fs_usage/fs_usage.1')
+
+executable(
+    'gcore',
+    # Requires XPC private APIs
+    build_by_default : false,
+    install : false,
+    sources : [
+        'gcore/convert.c',
+        'gcore/corefile.c',
+        'gcore/dyld.c',
+        'gcore/dyld_shared_cache.c',
+        'gcore/gcore_framework.m',
+        'gcore/main.c',
+        'gcore/notes.c',
+        'gcore/sparse.c',
+        'gcore/threads.c',
+        'gcore/utils.c',
+        'gcore/vanilla.c',
+        'gcore/vm.c',
+    ]
+)
+# install_man('gcore/gcore-internal.1', 'gcore/gcore.1')
+
+executable(
+    'getconf',
+    c_args : '-DAPPLE_GETCONF_UNDERSCORE',
+    include_directories : 'getconf',
+    install : true,
+    sources : [
+        'getconf/getconf.c',
+        pgperf.process(
+            [
+                'getconf/confstr.gperf',
+                'getconf/limits.gperf',
+                'getconf/unsigned_limits.gperf',
+                'getconf/progenv.gperf',
+                'getconf/sysconf.gperf',
+                'getconf/pathconf.gperf',
+            ]
+       ),
+   ]
+)
+install_man('getconf/getconf.1')
+
+executable(
+    'getty',
+    install : true,
+    sources : [
+        'getty/chat.c',
+        'getty/init.c',
+        'getty/main.c',
+        'getty/subr.c',
+    ]
+)
+install_man(
+    'getty/getty.8',
+    'getty/gettytab.5',
+    'getty/ttys.5',
+)
+
+executable(
+    'hostinfo',
+    install : true,
+    sources : 'hostinfo/hostinfo.c',
+)
+install_man('hostinfo/hostinfo.8')
+
+executable(
+    'iosim',
+    dependencies : [ core_foundation, iokit ],
+    include_directories : 'at',
+    install : true,
+    sources : 'iosim/iosim.c',
+)
+install_man('iosim/iosim.1')
+
+executable(
+    'iostat',
+    dependencies : [ core_foundation, iokit ],
+    install : true,
+    sources : 'iostat/iostat.c',
+)
+install_man('iostat/iostat.8')
+
+executable(
+    'kpgo',
+    install : true,
+    sources : 'kpgo/kpgo.c',
+)
+# No man pages for `kpgo`
+
+executable(
+    'latency',
+    dependencies : [ util, ncurses ],
+    install : true,
+    sources : 'latency/latency.c',
+)
+install_man('latency/latency.1')
+
+executable(
+    'login',
+    # Requires SoftLinking/WeakLinking.h and end-point security entitlements
+    build_by_default : false,
+    c_args : '-DUSE_BSM_AUDIT=1',
+    dependencies : [ openbsm ],
+    install : false,
+    sources : [
+        'login/login.c',
+        'login/login_audit.c',
+    ]
+)
+# install_man('login/login.1')
+
+executable(
+    'lskq',
+    install : true,
+    sources : 'lskq/lskq.c',
+)
+install_man('lskq/lskq.1')
+
+executable(
+    'lsmp',
+    install : true,
+    sources : [
+        'lsmp/lsmp.c',
+        'lsmp/port_details.c',
+        'lsmp/task_details.c'
+    ]
+)
+install_man('lsmp/lsmp.1')
+
+executable(
+    'ltop',
+    install : true,
+    sources : 'ltop/ltop.c',
+)
+install_man('ltop/ltop.1')
+
+executable(
+    'mean',
+    install : true,
+    sources : 'mean/mean.c',
+)
+# No man pages for `mean`.
+
+executable(
+    'memory_pressure',
+    c_args : ['-include', 'stdint.h'],
+    install : true,
+    sources : 'memory_pressure/memory_pressure.c',
+)
+install_man('memory_pressure/memory_pressure.1')
+
+executable(
+    'mkfile',
+    install : true,
+    sources : 'mkfile/mkfile.c',
+)
+install_man('mkfile/mkfile.8')
+
+executable(
+    'mslutil',
+    install : true,
+    sources : 'mslutil/mslutil.c',
+)
+install_man('mslutil/mslutil.1')
+
+executable(
+    'newgrp',
+    install : true,
+    sources : 'newgrp/newgrp.c',
+)
+install_man('newgrp/newgrp.1')
+
+executable(
+    'nologin',
+    install : true,
+    sources : 'nologin/nologin.c',
+)
+install_man(
+    'nologin/nologin.5',
+    'nologin/nologin.8',
+)
+
+executable(
+    'nvram',
+    c_args : [
+        '-DTARGET_OS_BRIDGE=0',
+        '-DkIONVRAMDeletePropertyKeyWRet="IONVRAM-DELETEWRET-PROPERTY"',
+    ],
+    dependencies : [ core_foundation, iokit ],
+    install : true,
+    sources : 'nvram/nvram.c',
+)
+install_man('nvram/nvram.8')
+
+custom_target(
+    'pagesize',
+    command : [ 'cp', '@INPUT@', '@OUTPUT@' ],
+    install : true,
+    install_dir : get_option('bindir'),
+    install_mode : 'r-xr-xr-x',
+    input : 'pagesize/pagesize.sh',
+    output : 'pagesize',
+)
+install_man('pagesize/pagesize.1')
+
+executable(
+    'passwd',
+    dependencies : [ core_foundation, cfopen_directory, open_directory, pam ],
+    install : true,
+    sources : [
+        'passwd/file_passwd.c',
+        'passwd/nis_passwd.c',
+        'passwd/od_passwd.c',
+        'passwd/pam_passwd.c',
+        'passwd/passwd.c',
+    ]
+)
+install_man('passwd/passwd.1')
+
+executable(
+    'proc_uuid_policy',
+    install : true,
+    sources : 'proc_uuid_policy/proc_uuid_policy.c',
+)
+install_man('proc_uuid_policy/proc_uuid_policy.1')
+
+executable(
+    'purge',
+    install : true,
+    sources : 'purge/purge.c',
+)
+install_man('purge/purge.8')
+
+executable(
+    'pwd_mkdb',
+    c_args : [
+        '-D_PW_NAME_LEN=MAXLOGNAME',
+        '-D_PW_YPTOKEN="__YP!"',
+    ],
+    dependencies : [ dbm ],
+    install : true,
+    sources : [
+        'pwd_mkdb/pw_scan.c',
+        'pwd_mkdb/pwd_mkdb.c',
+    ]
+)
+install_man('pwd_mkdb/pwd_mkdb.8')
+
+executable(
+    'reboot',
+    # Requires IOKitUser kext APIs
+    build_by_default : false,
+    install : false,
+    sources : 'reboot/reboot.c',
+)
+# install_man('reboot/reboot.8')
+
+executable(
+    'sa',
+    c_args : '-DAHZV1',
+    dependencies : [ dbm ],
+    install : true,
+    sources : [
+        'sa/db.c',
+        'sa/main.c',
+        'sa/pdb.c',
+        'sa/usrdb.c',
+    ]
+)
+install_man('sa/sa.8')
+
+executable(
+    'sc_usage',
+    dependencies : [ncurses, util],
+    install : true,
+    sources : 'sc_usage/sc_usage.c',
+)
+install_man('sc_usage/sc_usage.1')
+
+executable('shutdown',
+    # Requires IOKitUser kext APIs
+    build_by_default : false,
+    install : false,
+    sources : 'shutdown/shutdown.c',
+)
+# install_man('shutdown/shutdown.8')
+
+executable(
+    'stackshot',
+    # Requires private entitlements
+    build_by_default : false,
+    install : false,
+    sources : 'stackshot/stackshot.c',
+)
+# No man pages for `stackshot`.
+
+executable(
+    'sync',
+    install : true,
+    sources : 'sync/sync.c',
+)
+# No man pages for `sync`.
+
+executable(
+    'sysctl',
+    install : true,
+    sources : 'sysctl/sysctl.c',
+)
+install_man(
+    'sysctl/sysctl.8',
+    'sysctl/sysctl.conf.5',
+)
+
+executable(
+    'taskpolicy',
+    install : true,
+    sources : 'taskpolicy/taskpolicy.c',
+)
+install_man('taskpolicy/taskpolicy.8')
+
+executable(
+    'vifs',
+    install : true,
+    sources : 'vifs/vifs.c',
+)
+install_man('vifs/vifs.8')
+
+executable(
+    'vipw',
+    install : true,
+    sources : [
+        'vipw/pw_util.c',
+        'vipw/vipw.c',
+    ],
+)
+install_man('vipw/vipw.8')
+
+executable('vm_purgeable_stat',
+    install : true,
+    sources : 'vm_purgeable_stat/vm_purgeable_stat.c',
+)
+install_man('vm_purgeable_stat/vm_purgeable_stat.1')
+
+executable(
+    'vm_stat',
+    install : true,
+    sources : 'vm_stat/vm_stat.c',
+)
+install_man('vm_stat/vm_stat.1')
+
+executable(
+    'wait4path',
+    install : true,
+    sources : 'wait4path/wait4path.c',
+)
+install_man('wait4path/wait4path.1')
+
+executable(
+    'wordexp-helper',
+    install : true,
+    sources : 'wordexp-helper/wordexp-helper.c',
+)
+# No man pages for `wordexp-helper`.
+
+executable(
+    'zdump',
+    c_args : [ '-DHAVE_LOCALTIME_RZ=0' ],
+    include_directories : 'zic',
+    install : true,
+    sources : 'zdump/zdump.c',
+)
+install_man('zdump/zdump.8')
+
+executable(
+    'zic',
+    install : true,
+    sources : 'zic/zic.c',
+)
+install_man('zic/zic.8')
+
+executable(
+    'zlog',
+    c_args : '-DKERN_NOT_FOUND=56',
+    dependencies : [ core_foundation, core_symbolication ],
+    install : true,
+    sources : [
+        'zlog/SymbolicationHelper.c',
+        'zlog/zlog.c',
+    ],
+)
+install_man('zlog/zlog.1')
+
+executable(
+    'zprint',
+    # Requires IOKitUser kext APIs
+    build_by_default : false,
+    install : false,
+    sources : 'zprint/zprint.c',
+)
+# install_man('zprint/zprint.1')

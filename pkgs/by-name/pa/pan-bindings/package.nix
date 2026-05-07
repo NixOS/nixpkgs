@@ -27,7 +27,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "pan-bindings";
+  pname = "pan-bindings";
 
   inherit src version;
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation {
     goDeps.go
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SCION PAN Bindings for C, C++, and Python";
     homepage = "https://github.com/lschulz/pan-bindings";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "pan-bindings";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

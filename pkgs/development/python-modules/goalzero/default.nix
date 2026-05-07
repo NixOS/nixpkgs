@@ -3,15 +3,12 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "goalzero";
   version = "0.2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goalzero" ];
 
-  meta = with lib; {
+  meta = {
     description = "Goal Zero Yeti REST Api Library";
     homepage = "https://github.com/tkdrob/goalzero";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

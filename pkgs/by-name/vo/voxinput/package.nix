@@ -6,7 +6,12 @@
   libpulseaudio,
   dotool,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libxkbcommon,
   wayland,
   lib,
@@ -17,16 +22,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "voxinput";
-  version = "0.6.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "richiejp";
     repo = "VoxInput";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fNlvCyjg4aOTRypKf/6nQeDyNYN+ojo1WekVPLhdyJQ=";
+    hash = "sha256-Zb3tz8YuS2VJWXbr8+yBuL89vlDXadFowSzWuZ5a0WI=";
   };
 
-  vendorHash = "sha256-HOXjD4mwvK3jcFmpZyvKB7WOfpCIDlUWJTJSTN7wFXM=";
+  vendorHash = "sha256-NMuHvhN1A6TQ18Z1H8k8Sy7Py9744Xv95MZz0QvExQY=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -38,12 +43,12 @@ buildGoModule (finalAttrs: {
     dotool
 
     libGL
-    xorg.libX11.dev
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXxf86vm
+    libx11.dev
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
     libxkbcommon
     wayland
   ];

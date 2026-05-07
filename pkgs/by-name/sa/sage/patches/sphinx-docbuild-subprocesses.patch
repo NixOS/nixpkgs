@@ -1,40 +1,8 @@
 diff --git a/src/sage_docbuild/builders.py b/src/sage_docbuild/builders.py
-index ab39d93c280..e6501c083d5 100644
+index 91035a01f1c..24f3d0c7c12 100644
 --- a/src/sage_docbuild/builders.py
 +++ b/src/sage_docbuild/builders.py
-@@ -106,31 +106,6 @@ def builder_helper(type):
-     """
-     Return a function which builds the documentation for
-     output type ``type``.
--
--    TESTS:
--
--    Check that :issue:`25161` has been resolved::
--
--        sage: from sage_docbuild.builders import DocBuilder
--        sage: from sage_docbuild.__main__ import setup_parser
--        sage: DocBuilder._options = setup_parser().parse_args([]) # builder_helper needs _options to be set
--
--        sage: import sage_docbuild.sphinxbuild
--        sage: def raiseBaseException():
--        ....:     raise BaseException("abort pool operation")
--        sage: original_runsphinx, sage_docbuild.sphinxbuild.runsphinx = sage_docbuild.sphinxbuild.runsphinx, raiseBaseException
--
--        sage: from sage.misc.temporary_file import tmp_dir
--        sage: os.environ['SAGE_DOC'] = tmp_dir()
--        sage: sage.env.var('SAGE_DOC') # random
--        sage: from sage_docbuild.builders import builder_helper, build_ref_doc
--        sage: from sage_docbuild.builders import _build_many as build_many
--        sage: helper = builder_helper("html")
--        sage: try:  # optional - sagemath_doc_html
--        ....:     build_many(build_ref_doc, [("docname", "en", "html", {})])
--        ....: except Exception as E:
--        ....:     "Non-exception during docbuild: abort pool operation" in str(E)
--        True
-     """
-     def f(self, *args, **kwds):
-         output_dir = self._output_dir(type)
-@@ -157,10 +132,9 @@ def builder_helper(type):
+@@ -130,10 +130,9 @@ def builder_helper(type):
          logger.debug(build_command)
  
          # Run Sphinx with Sage's special logger

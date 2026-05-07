@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt --replace-fail "/etc" "$out/etc/xdg"
   '';
 
+  patches = [
+    # fix for CMake v4
+    # https://github.com/patroclos/PAmix/pull/83
+    ./cmake-v4.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -42,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/patroclos/PAmix/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pamix";
   };
 })

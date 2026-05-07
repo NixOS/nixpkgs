@@ -10,6 +10,8 @@
   libnotify,
   libavif,
   kdePackages,
+  autoPatchelfHook,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +19,8 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     kdePackages.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs =
     (with kdePackages; [
@@ -38,6 +41,8 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional enableAvifSupport libavif;
 
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libpulseaudio ];
+
   preConfigure = ''
     if [[ -f "$src/GIT_HASH" ]]; then
       export GIT_HASH="$(cat $src/GIT_HASH)"
@@ -51,7 +56,11 @@ stdenv.mkDerivation {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p "$out/Applications"
-    mv bin/chatterino.app "$out/Applications/"
+    mkdir -p $out/Applications
+    mv $out/bin/chatterino.app $out/Applications
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ln -s $out/Applications/chatterino.app/Contents/MacOS/chatterino $out/bin/chatterino
   '';
 }

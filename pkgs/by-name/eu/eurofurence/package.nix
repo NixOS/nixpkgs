@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
       (
         { url, hash }:
         fetchzip {
-          name = builtins.baseNameOf url;
+          name = baseNameOf url;
           stripRoot = false;
           inherit url hash;
         }

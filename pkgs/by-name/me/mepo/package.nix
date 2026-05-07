@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    zig_0_14.hook
+    zig_0_14
     makeWrapper
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     for program in $out/bin/* ; do
       wrapProgram $program \
         --suffix PATH : $out/bin:${
-          lib.makeBinPath ([
+          lib.makeBinPath [
             busybox
             curl
             gpsd
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
             util-linux
             xwininfo
             zenity
-          ])
+          ]
         }
     done
   '';
