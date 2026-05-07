@@ -8,7 +8,7 @@
 
   # dependencies
   embedding-reader,
-  faiss,
+  faiss-cpu,
   fire,
   fsspec,
   numpy,
@@ -37,8 +37,6 @@ buildPythonPackage rec {
     # The `dataclasses` packages is a python2-only backport, unnecessary in
     # python3.
     "dataclasses"
-    # We call it faiss, not faiss-cpu.
-    "faiss-cpu"
   ];
 
   pythonRelaxDeps = [
@@ -55,7 +53,7 @@ buildPythonPackage rec {
 
   dependencies = [
     embedding-reader
-    faiss
+    faiss-cpu
     fire
     fsspec
     numpy

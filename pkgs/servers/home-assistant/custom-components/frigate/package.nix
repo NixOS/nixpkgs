@@ -19,18 +19,20 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.14.2";
+  version = "5.15.3";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-fgsYznTqJrEh4niyGfksnflRp1PpljrlzJBvs8gKn54=";
+    hash = "sha256-ZDTwC5dm9kAgT/pIHQAK56L2pjyf/PmOjDr0F+Fr+JA=";
   };
 
   patches = [
     # https://github.com/blakeblackshear/frigate-hass-integration/pull/1070
     ./service-to-action.patch
+    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1085
+    ./llmcontext-user-prompt.patch
   ];
 
   dependencies = [

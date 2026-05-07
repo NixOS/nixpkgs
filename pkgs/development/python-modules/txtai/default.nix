@@ -7,7 +7,7 @@
   setuptools,
 
   # dependencies
-  faiss,
+  faiss-cpu,
   torch,
   transformers,
   huggingface-hub,
@@ -251,13 +251,8 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [
-    # We call it faiss, not faiss-cpu.
-    "faiss-cpu"
-  ];
-
   dependencies = [
-    faiss
+    faiss-cpu
     huggingface-hub
     msgpack
     numpy

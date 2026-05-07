@@ -9,13 +9,13 @@
 
 let
   pname = "navbar-card";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "joseluis9595";
     repo = "lovelace-navbar-card";
     tag = "v${version}";
-    hash = "sha256-lFsQPyIMhyVHCNwRiGXVu8bMvmlfCI7KTu2Hk90agIE=";
+    hash = "sha256-ngKsH83nrDglRQBdQhJzMC8/TRV+uL21vi2ovsLEPuY=";
   };
 
   # Create node_modules as a separate derivation
@@ -57,7 +57,7 @@ let
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-3IGzPEUPVnlD/K8a3Mp53vBEkTdlvrEYNpWCA/rIBwc=";
+    outputHash = "sha256-F8nNDBl/BYhtwggaZd61oibYE4j5u7WPVjLG8P4UEcc=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

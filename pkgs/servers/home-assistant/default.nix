@@ -223,6 +223,15 @@ let
         doCheck = false;
       });
 
+      serialx = super.serialx.overridePythonAttrs (oldAttrs: {
+        # many components use the serialx[esphome] implicitly
+        dependencies = oldAttrs.dependencies or [ ] ++ oldAttrs.optional-dependencies.esphome;
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # network access, only runs with esphome extra
+          "test_connect_timeout_raises_timeout_error"
+        ];
+      });
+
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -253,7 +262,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.4.4";
+  hassVersion = "2026.5.0";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -274,13 +283,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-x2BF1N1LDZAnryOkGy/Pru+mlw3CaOgnrmdQMg0uo7k=";
+    hash = "sha256-RrXjrwl6BQzjilKluAM8oVihmZqLBpVLWN/OhaJY+1c=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-EPmX+3wAsvirvjDzQ0aUKGZbaNWh5mX+7iuCfZ2BUhI=";
+    hash = "sha256-SXsJqYETHp92ZC/I2jS2ZlerUVVTugFdbOhLCxoLJ9I=";
   };
 
   build-system = with python.pkgs; [
@@ -296,14 +305,14 @@ python.pkgs.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
-    # https://github.com/home-assistant/core/pull/165143
-    ./pyjwt-2.11.patch
-
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
     # Copy default blueprints without preserving permissions
     ./patches/default-blueprint-permissions.patch
+
+    # No scaring our users about not running in a docker or a venv
+    ./patches/pythonpath-is-a-venv.patch
 
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
@@ -418,6 +427,7 @@ python.pkgs.buildPythonApplication rec {
       "frontend"
       "hue"
       "mobile_app"
+      "radio_frequency"
     ];
 
   pytestFlags = [
@@ -460,7 +470,7 @@ python.pkgs.buildPythonApplication rec {
     export HOME="$TEMPDIR"
     export PYTHONASYNCIODEBUG=1
 
-    # the tests require the existance of a media dir
+    # the tests require the existence of a media dir
     mkdir "$NIX_BUILD_TOP"/media
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
