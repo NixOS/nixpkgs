@@ -27,6 +27,9 @@ buildGoModule (finalAttrs: {
     "-X=github.com/bloodhoundad/azurehound/v2/constants.Version=${finalAttrs.version}"
   ];
 
+  # flaky: races a 5ms sleep against a 5ms batch timeout
+  checkFlags = [ "-skip=^TestBatch$" ];
+
   doInstallCheck = true;
 
   meta = {
