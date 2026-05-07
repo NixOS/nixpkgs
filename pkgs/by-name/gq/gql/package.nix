@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/AmrDeveloper/GQL";
     changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "gitql";
   };
 })
