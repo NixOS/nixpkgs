@@ -173,7 +173,7 @@ in
       description = "ReFrame Remote Desktop";
     };
     users.groups.reframe = { };
-    environment.etc = builtins.mapAttrs' (
+    environment.etc = lib.mapAttrs' (
       name: value:
       lib.nameValuePair "reframe/${name}.conf" {
         mode = "0644";
