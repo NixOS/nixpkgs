@@ -11642,10 +11642,6 @@ with pkgs;
     python = null;
   };
 
-  pythia = callPackage ../development/libraries/physics/pythia {
-    hepmc = hepmc2;
-  };
-
   yoda-with-root = lowPrio (
     yoda.override {
       withRootSupport = true;

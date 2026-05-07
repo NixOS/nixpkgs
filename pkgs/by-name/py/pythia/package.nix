@@ -5,11 +5,15 @@
   boost,
   fastjet,
   fixDarwinDylibNames,
-  hepmc,
+  hepmc2,
   lhapdf,
   rsync,
   zlib,
 }:
+
+let
+  hepmc = hepmc2;
+in
 
 stdenv.mkDerivation rec {
   pname = "pythia";
