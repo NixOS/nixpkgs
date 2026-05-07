@@ -343,9 +343,7 @@ rec {
         description =
           "The ${name'} package to use." + (if extraDescription == "" then "" else " ") + extraDescription;
         type = with lib.types; (if nullable then nullOr else lib.id) package;
-      }
-      // optionalAttrs (example != null) {
-        example = literalExpression (
+        ${if example != null then "example" else null} = literalExpression (
           if isList example then "${pkgsText}.${showAttrPath example}" else example
         );
       }
