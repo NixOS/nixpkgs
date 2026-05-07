@@ -1,7 +1,7 @@
 {
   callPackage,
   lib,
-  jre_headless,
+  jre_minimal,
   fetchFromGitHub,
   fetchpatch,
   maven,
@@ -10,7 +10,26 @@
 }:
 
 let
-  jre = jre_headless;
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.compiler"
+      "java.datatransfer"
+      "java.desktop"
+      "java.instrument"
+      "java.logging"
+      "java.management"
+      "java.naming"
+      "java.net.http"
+      "java.prefs"
+      "java.scripting"
+      "java.security.jgss"
+      "java.sql"
+      "java.xml"
+      "jdk.compiler"
+      "jdk.unsupported"
+    ];
+  };
   version = "7.21.0";
   mainProgram = "openapi-generator-cli";
   this = maven.buildMavenPackage {
