@@ -5772,11 +5772,11 @@
     githubId = 28959268;
     keys = [ { fingerprint = "4779 D1D5 3C97 2EAE 34A5  ED3D D8AF C4BF 0567 0F9D"; } ];
   };
-  dariof4 = {
-    name = "dariof4";
-    email = "dazedtank@gmail.com";
-    github = "dariof4";
-    githubId = 9992814;
+  danrobi11 = {
+    name = "dan robi";
+    email = "danielrobidoux49@yahoo.ca";
+    github = "danrobi11";
+    githubId = 48020114;
   };
   darkalex = {
     email = "alex.j.tusa@gmail.com";
