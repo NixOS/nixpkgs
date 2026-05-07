@@ -23,8 +23,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pragtical";
-  version = "3.8.3";
-  pluginManagerVersion = "1.4.7.1";
+  version = "3.9.0";
+  pluginManagerRev = "ae9bd107783b1b8cbe7f0dec53b1b0b401f6ac91";
   linenoiseRev = "e78e236c8d85c078fdd9fc4e1f08716058aa1a42";
 
   src = fetchFromGitHub {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       substituteInPlace subprojects/ppm.wrap \
-        --replace-fail 'revision = head' 'revision = v${finalAttrs.pluginManagerVersion}'
+        --replace-fail 'revision = head' 'revision = ${finalAttrs.pluginManagerRev}'
       substituteInPlace subprojects/linenoise.wrap \
         --replace-fail 'revision = master' 'revision = ${finalAttrs.linenoiseRev}'
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
 
-    hash = "sha256-/rCDtUSBQaNsmzcIwWy+VBuMJHEbVXpn+a1Gz3bC6DU=";
+    hash = "sha256-hs4WFBqR9G+YsHw9/qaO0BCeIMqPEWOvFaeuN2W9hSQ=";
   };
 
   strictDeps = true;
