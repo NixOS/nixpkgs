@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "evolution-data-server";
-  version = "3.58.3";
+  version = "3.60.1";
 
   outputs = [
     "out"
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor finalAttrs.version}/evolution-data-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2hNtEZDZ6LCUmUUvYFjiTu5rd/RBqMdp90pSRRvzefE=";
+    hash = "sha256-M/ktO4gi66BMMTeWwHeMu2Who4Ry6FftxfmIVMyps0w=";
   };
 
   patches = [

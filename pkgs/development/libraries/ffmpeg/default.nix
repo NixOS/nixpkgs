@@ -30,8 +30,8 @@ let
     hash = "sha256-1w4OSlz88D2pnZVXQcI4uyX+triNK0NXzlsyt7GGSLU=";
   };
   v8 = {
-    version = "8.0.1";
-    hash = "sha256-eA5fP/uZqF5+jDDt4tHArGqyt7zbrLZ21v+Lchr8OS8=";
+    version = "8.1";
+    hash = "sha256-FdKhhCveEo5UodEoyUh3aBHABv3OT2VXmwBXE1ce3p0=";
   };
 in
 

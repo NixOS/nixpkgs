@@ -28,7 +28,6 @@ let
       systemdLibs,
       system-sendmail,
       valgrind,
-      xcbuild,
       writeShellScript,
       common-updater-scripts,
       curl,
@@ -240,8 +239,7 @@ let
             libtool
             pkg-config
             re2c
-          ]
-          ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+          ];
 
           buildInputs =
             # PCRE extension

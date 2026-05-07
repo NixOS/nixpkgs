@@ -34,6 +34,7 @@
     }
   ),
   sqlite,
+  temporal_capi,
   uvwasi,
   zlib,
   zstd,
@@ -135,12 +136,14 @@ let
   useSharedLief = lib.versionAtLeast version "25.6";
   useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedTemporal = majorVersion == "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps = {
     inherit
       brotli
       libuv
+      nghttp2
       nghttp3
       ngtcp2
       openssl
@@ -149,16 +152,6 @@ let
       ;
     cares = c-ares;
     http-parser = llhttp;
-    nghttp2 = nghttp2.overrideAttrs {
-      patches = [
-        (fetchpatch2 {
-          url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
-          hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
-          excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
-          revert = true;
-        })
-      ];
-    };
   }
   // (lib.optionalAttrs useSharedAdaAndSimd {
     inherit
@@ -169,6 +162,9 @@ let
   })
   // (lib.optionalAttrs useSharedSQLite {
     inherit sqlite;
+  })
+  // (lib.optionalAttrs useSharedTemporal {
+    inherit temporal_capi;
   })
   // (lib.optionalAttrs useSharedGtestAndHistogram {
     inherit gtest;
@@ -319,6 +315,7 @@ let
         # perspective).
         "--emulator=${emulator}"
       ]
+      ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
       ++ lib.concatMap (name: [
         "--shared-${name}"
@@ -512,6 +509,12 @@ let
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
+            # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+            # OpenSSL reports different errors
+            # https://github.com/nodejs/node/pull/62629
+            # patch does not apply
+            ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
+            ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
           )
         }"
       ];
@@ -678,7 +681,7 @@ let
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);
         mainProgram = "node";
-        knownVulnerabilities = lib.optional (lib.versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+        knownVulnerabilities = lib.optional (lib.versionOlder version "22") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
       };
 
       passthru.python = python; # to ensure nodeEnv uses the same version

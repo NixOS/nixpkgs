@@ -18,7 +18,7 @@ mkAppleDerivation (finalAttrs: {
     "dev"
   ];
 
-  xcodeHash = "sha256-IiTqhEJIZ8JYjlpBS7ITwYlp8ndU6cehus9TIr+5LYM=";
+  xcodeHash = "sha256-fg5N+TcpyRnAf2ZKFEL0iJRy+QGs++Jmt6M3SV3oyfU=";
 
   patches = [
     # Use gperf to implement module loading statically by looking up the module functions in the static binary.

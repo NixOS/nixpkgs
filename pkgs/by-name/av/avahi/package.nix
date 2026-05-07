@@ -222,6 +222,8 @@ stdenv.mkDerivation rec {
       ln -s avahi-compat-libdns_sd/dns_sd.h "$dev/include/dns_sd.h"
     '';
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     smoke-test = nixosTests.avahi;
     smoke-test-resolved = nixosTests.avahi-with-resolved;
