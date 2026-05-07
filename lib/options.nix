@@ -324,17 +324,18 @@ rec {
       name' = if isList name then last name else name;
       default' = toList default;
       defaultText = showAttrPath default';
-      defaultValue = attrByPath default' (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
       defaults =
         if default != null then
           {
-            default = defaultValue;
+            default = attrByPath default' (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
             defaultText = literalExpression "${pkgsText}.${defaultText}";
           }
-        else
-          optionalAttrs nullable {
+        else if nullable then
+          {
             default = null;
-          };
+          }
+        else
+          { };
     in
     mkOption (
       defaults
