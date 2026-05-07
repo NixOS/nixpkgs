@@ -1184,40 +1184,12 @@ let
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
     defsFinal' =
-      let
-        # Process mkMerge and mkIf properties.
-        defsNormalized = concatMap (
-          m:
-          map (
-            value:
-            if value._type or null == "definition" then
-              value
-            else
-              {
-                inherit (m) file;
-                inherit value;
-              }
-          ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
-        ) defs;
-
-        # Process mkOverride properties.
-        defsFiltered = filterOverrides' defsNormalized;
-
-        # Sort mkOrder properties.
-        defsSorted =
-          # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defsFiltered.values then
-            sortProperties defsFiltered.values
-          else
-            defsFiltered.values;
-      in
       # Fast path: the overwhelming majority of options have exactly one
       # definition whose value carries no property wrapper
       # (mkIf/mkMerge/mkOverride/mkOrder/definition). In that case the
-      # discharge/filter/sort pipeline above is a no-op but still allocates
-      # several intermediate lists and closures. Detect it up front and hand
-      # the original singleton straight to the type merge. The let-bindings
-      # above are lazy and thus never forced on this branch.
+      # discharge/filter/sort pipeline below is a no-op but still allocates
+      # several intermediate lists and closures. Detect it up front and hand the
+      # original singleton straight to the type merge.
       if
         length defs == 1
         && (
@@ -1234,6 +1206,33 @@ let
           highestPrio = defaultOverridePriority;
         }
       else
+        let
+          # Process mkMerge and mkIf properties.
+          defsNormalized = concatMap (
+            m:
+            map (
+              value:
+              if value._type or null == "definition" then
+                value
+              else
+                {
+                  inherit (m) file;
+                  inherit value;
+                }
+            ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+          ) defs;
+
+          # Process mkOverride properties.
+          defsFiltered = filterOverrides' defsNormalized;
+
+          # Sort mkOrder properties.
+          defsSorted =
+            # Avoid sorting if we don't have to.
+            if any (def: def.value._type or "" == "order") defsFiltered.values then
+              sortProperties defsFiltered.values
+            else
+              defsFiltered.values;
+        in
         {
           values = defsSorted;
           inherit (defsFiltered) highestPrio;
