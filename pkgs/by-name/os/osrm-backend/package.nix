@@ -4,34 +4,47 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  ninja,
   bzip2,
   libxml2,
   libzip,
   boost,
-  lua5_2_compat,
+  lua5_4,
   luabind,
   onetbb,
   expat,
+  libarchive,
+  fmt,
+  rapidjson,
+  sol2,
+  flatbuffers,
+  protozero,
+  vtzero,
+  libosmium,
   nixosTests,
 }:
 let
   lua = lua5_2_compat;
 in
 
+let
+  lua = lua5_4;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "osrm-backend";
-  version = "26.4.1";
+  version = "26.6.4";
 
   src = fetchFromGitHub {
     owner = "Project-OSRM";
     repo = "osrm-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/oJ+vhx1nQ0YVxOzQ9hMDVcXTPraCQ6q0KVjUYtpCLw=";
+    hash = "sha256-13Qwi/RNChWHoL4bbY2O3O73jYQZpzRJW4Omtp6t1SI=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    ninja
   ];
 
   buildInputs = [
@@ -40,16 +53,24 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     boost
     lua
-    luabind
+    (luabind.override { inherit lua; })
     onetbb
     expat
+    libarchive
+    fmt
+    rapidjson
+    sol2
+    flatbuffers
+    protozero
+    vtzero
+    libosmium
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=uninitialized"
-    # Needed with GCC 14
-    "-Wno-error=maybe-uninitialized"
+    # # Needed with GCC 12
+    # "-Wno-error=uninitialized"
+    # # Needed with GCC 14
+    # "-Wno-error=maybe-uninitialized"
   ];
 
   postInstall = ''
