@@ -15,10 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bitlbee-steam";
 
   src = fetchFromGitHub {
-    rev = "v${finalAttrs.version}";
     owner = "bitlbee";
     repo = "bitlbee-steam";
-    sha256 = "121r92mgwv445wwxzh35n19fs5k81ihr0j19k256ia5502b1xxaq";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WPUelgClqGiKmClIkGEMaBbtUrBlwN85L4Rs/qpIOYg=";
   };
 
   nativeBuildInputs = [
