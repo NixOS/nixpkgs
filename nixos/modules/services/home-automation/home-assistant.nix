@@ -1043,9 +1043,7 @@ in
           ];
           UMask = "0077";
         };
-      path = [
-        pkgs.unixtools.ping # needed for ping
-      ];
+      path = with pkgs; lib.optionals (any useComponent componentsUsingPing) [ unixtools.ping ];
     };
 
     systemd.targets.home-assistant = rec {
