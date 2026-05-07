@@ -135,11 +135,13 @@ let
       mathcomp-boot = self.mathcomp.boot;
       mathcomp-order = self.mathcomp.order;
       mathcomp-ssreflect = self.mathcomp.ssreflect;
-      mathcomp-fingroup = self.mathcomp.fingroup;
+      mathcomp-finite-group = self.mathcomp.finite-group;
+      mathcomp-fingroup = self.mathcomp.finite-group;
       mathcomp-algebra = self.mathcomp.algebra;
       mathcomp-solvable = self.mathcomp.solvable;
       mathcomp-field = self.mathcomp.field;
-      mathcomp-character = self.mathcomp.character;
+      mathcomp-group-representation = self.mathcomp.group-representation;
+      mathcomp-character = self.mathcomp.group-representation;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel { };
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics { };
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis { };

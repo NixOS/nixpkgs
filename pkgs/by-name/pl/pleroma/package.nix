@@ -201,7 +201,6 @@ beamPackages.mixRelease rec {
     maintainers = with lib.maintainers; [
       picnoir
       kloenk
-      yayayayaka
     ];
     platforms = lib.platforms.unix;
   };
