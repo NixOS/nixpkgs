@@ -37,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
+  # Source uses `bool` as a variable name, reserved in C23.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     description = "Steam protocol plugin for BitlBee";
 
