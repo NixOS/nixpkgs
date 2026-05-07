@@ -184,12 +184,18 @@ rec {
     :::
   */
   mkEnableOption =
+    let
+      type = lib.types.bool;
+    in
     name:
-    mkOption {
+    # We inline the call to mkOption for performance, since mkEnableOption is
+    # used everywhere
+    {
+      _type = "option";
       default = false;
       example = true;
       description = "Whether to enable ${name}.";
-      type = lib.types.bool;
+      inherit type;
     };
 
   /**
