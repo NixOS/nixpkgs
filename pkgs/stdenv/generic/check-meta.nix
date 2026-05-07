@@ -125,7 +125,11 @@ let
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
     let
-      anyHostPlatform = any (platformMatch hostPlatform);
+      inherit (hostPlatform) system;
+      # in almost all cases, meta.platforms is a simple list of strings, and we
+      # can just check if it contains the current system. we only run the more
+      # intensive platformMatch if necessary
+      anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
     in
     pkg:
     pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
