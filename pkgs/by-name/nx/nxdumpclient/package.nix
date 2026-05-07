@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A client program for dumping over USB with nxdumptool";
+    description = "Client program for dumping over USB with nxdumptool";
     homepage = "https://github.com/v1993/nxdumpclient";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ranidspace ];
