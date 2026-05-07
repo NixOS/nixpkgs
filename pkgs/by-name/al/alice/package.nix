@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "Alice";
+  pname = "alice";
   version = "2.003";
 
   outputs = [
@@ -15,9 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchzip {
-    url =
-      with finalAttrs;
-      "https://github.com/cyrealtype/${pname}/releases/download/v${version}/${pname}-v${version}.zip";
+    url = "https://github.com/cyrealtype/Alice/releases/download/v${finalAttrs.version}/Alice-v${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-p+tE3DECfJyBIPyafGZ8jDYQ1lPb+iAnEwLyaUy7DW0=";
   };
