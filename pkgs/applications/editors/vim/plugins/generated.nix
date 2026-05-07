@@ -7758,6 +7758,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  inlay-hints-nvim = buildVimPlugin {
+    pname = "inlay-hints.nvim";
+    version = "0.0.7";
+    src = fetchFromGitHub {
+      owner = "MysticalDevil";
+      repo = "inlay-hints.nvim";
+      tag = "v0.0.7";
+      hash = "sha256-136r1/SjBHcrKZZcFHZK7rFTcJHAReZqIzUrKsZStc4=";
+    };
+    meta.homepage = "https://github.com/MysticalDevil/inlay-hints.nvim";
+    meta.license = getLicenseFromSpdxId "Apache-2.0";
+    meta.hydraPlatforms = [ ];
+  };
+
   instant-nvim = buildVimPlugin {
     pname = "instant.nvim";
     version = "0-unstable-2022-06-25";
