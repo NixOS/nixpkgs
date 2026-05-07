@@ -3,6 +3,8 @@
   rustPlatform,
   fetchCrate,
   python3,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -10,7 +12,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.6.6";
 
   src = fetchCrate {
-    inherit (finalAttrs) pname version;
+    pname = "pipe-rename";
+    inherit (finalAttrs) version;
     hash = "sha256-eZldAhqmoIkNZaI6r31hI43KCPDDeWk3fKpY3/BaUQE=";
   };
 
@@ -28,9 +31,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patchShebangs tests/editors/env-editor.py
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Rename your files using your favorite text editor";
     homepage = "https://github.com/marcusbuffett/pipe-rename";
+    changelog = "https://github.com/marcusbuffett/pipe-rename/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "renamer";
