@@ -1,6 +1,6 @@
---- a/cmd/launch/launch.go	2026-04-18 00:29:59.134957259 +0200
-+++ b/cmd/launch/launch.go	2026-04-18 00:30:34.865320572 +0200
-@@ -548,11 +548,19 @@
+--- a/cmd/launch/launch.go
++++ b/cmd/launch/launch.go
+@@ -694,11 +694,19 @@
  	models, needsConfigure := c.resolveEditorLaunchModels(ctx, saved, req)
  
  	if needsConfigure {
@@ -24,11 +24,11 @@
  	} else if len(models) > 0 {
  		if err := c.ensureModelsReady(ctx, models[:1]); err != nil {
  			return err
-@@ -630,11 +638,19 @@
+@@ -911,11 +919,19 @@
  	}
  
  	if needsConfigure {
--		selected, err := c.selectSingleModelWithSelector(ctx, fmt.Sprintf("Select model for %s:", runner), target, DefaultSingleSelector)
+-		selected, err := c.selectSingleModelWithSelectorReady(ctx, fmt.Sprintf("Select model for %s:", runner), target, DefaultSingleSelector, !skipReadiness)
 -		if err != nil {
 -			return "", false, err
 +		if c.policy.Confirm == LaunchConfirmAutoApprove && target != "" {
@@ -38,19 +38,19 @@
 +				return "", false, err
 +			}
 +		} else {
-+			selected, err := c.selectSingleModelWithSelector(ctx, fmt.Sprintf("Select model for %s:", runner), target, DefaultSingleSelector)
++			selected, err := c.selectSingleModelWithSelectorReady(ctx, fmt.Sprintf("Select model for %s:", runner), target, DefaultSingleSelector, !skipReadiness)
 +			if err != nil {
 +				return "", false, err
 +			}
 +			target = selected
  		}
 -		target = selected
- 	} else if err := c.ensureModelsReady(ctx, []string{target}); err != nil {
- 		return "", false, err
- 	}
---- a/cmd/launch/launch_test.go	2026-04-18 00:29:59.135957270 +0200
-+++ b/cmd/launch/launch_test.go	2026-04-18 00:31:11.242690668 +0200
-@@ -2460,6 +2460,112 @@
+ 	} else if !skipReadiness {
+ 		if err := c.ensureModelsReady(ctx, []string{target}); err != nil {
+ 			return "", false, err
+--- a/cmd/launch/launch_test.go
++++ b/cmd/launch/launch_test.go
+@@ -3004,6 +3004,112 @@
  	}
  }
  
