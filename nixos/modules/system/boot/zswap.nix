@@ -154,7 +154,7 @@ in
         '';
       }
       {
-        assertion = config.swapDevices != [ ];
+        assertion = config.swapDevices != [ ] || config.services.swapspace.enable;
         message = ''
           Zswap requires at least one physical swap device to function as a backing store.
 
