@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "norgolith";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "NTBBloodbath";
     repo = "norgolith";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n9Obf2PoTQ8EyxF/i5YU9/AlN9IizWYW/sG89Z8qp1k=";
+    hash = "sha256-9Ezp2aK+O4TcINcnUdptejlrczIqr65nNWPmB+APrAI=";
   };
 
-  cargoHash = "sha256-1DOys3N42jlC/tc5D0Ixg+yXV/RRMIi4qcXzUwpl7XQ=";
+  cargoHash = "sha256-NwbiS83OUq/YodBea9ShZtSTyBtWy3wWyOLwoHb16V8=";
 
   nativeBuildInputs = [
     pkg-config
