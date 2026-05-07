@@ -1,9 +1,9 @@
 ############################################################################
 # This file mainly provides the `mathcomp` derivation, which is            #
 # essentially a meta-package containing all core mathcomp libraries        #
-# (ssreflect fingroup algebra solvable field character). They can be       #
-# accessed individually through the passthrough attributes of mathcomp     #
-# bearing the same names (mathcomp.ssreflect, etc).                        #
+# (ssreflect finite-group algebra solvable field group-representation).    #
+# They can be accessed individually through the passthrough attributes of  #
+# mathcomp bearing the same names (mathcomp.ssreflect, etc).               #
 ############################################################################
 # Compiling a custom version of mathcomp using `mathcomp.override`.        #
 # This is the replacement for the former `mathcomp_ config` function.      #
@@ -85,26 +85,34 @@ let
   packages = {
     "boot" = [ ];
     "order" = [ "boot" ];
-    "fingroup" = [ "boot" ];
+    "finite-group" = [ "boot" ];
     "ssreflect" = [
       "boot"
       "order"
     ];
     "algebra" = [
       "order"
-      "fingroup"
+      "finite-group"
     ];
     "solvable" = [ "algebra" ];
     "field" = [ "solvable" ];
-    "character" = [ "field" ];
-    "all" = [ "character" ];
+    "group-representation" = [ "field" ];
+    "all" = [ "group-representation" ];
   };
 
   mathcomp_ =
     package:
     let
       mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
-      pkgpath = if package == "single" then "." else package;
+      cdpkg =
+        if package == "single" then
+          "cd ."
+        else if package == "group-representation" then
+          "cd group_representation || cd character"
+        else if package == "finite-group" then
+          "cd finite_group || cd fingroup"
+        else
+          "cd ${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
         echo "all.v"  > Make
@@ -144,7 +152,7 @@ let
           + ''
             # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
             test -d mathcomp && cd mathcomp
-            cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
+            ${cdpkg} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
           ''
           + lib.optionalString (package == "all") pkgallMake;
 
@@ -242,6 +250,10 @@ let
           }
       );
     in
-    patched-derivation5;
+    patched-derivation5
+    // {
+      fingroup = patched-derivation5.finite-group;
+      character = patched-derivation5.group-representation;
+    };
 in
 mathcomp_ (if single then "single" else "all")
