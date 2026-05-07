@@ -508,13 +508,13 @@ rec {
   */
   mergeEqualOption =
     loc: defs:
-    if defs == [ ] then
-      abort "This case should never happen."
     # Returns early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
-    else if length defs == 1 then
+    if length defs == 1 then
       (head defs).value
+    else if defs == [ ] then
+      abort "This case should never happen."
     else
       (foldl' (
         first: def:
