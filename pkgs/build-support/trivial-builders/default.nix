@@ -126,7 +126,9 @@ rec {
           n: alt:
           let
             handle =
-              if lib.oldestSupportedReleaseIsAtLeast 2611 then
+              if finalAttrs.passthru.__getDeprecatedCheckPhase-forceThrow then
+                throw
+              else if lib.oldestSupportedReleaseIsAtLeast 2611 then
                 throw
               else if lib.oldestSupportedReleaseIsAtLeast 2605 then
                 lib.warn
@@ -136,7 +138,7 @@ rec {
           in
           lib.optionalString (finalAttrs ? ${n} && finalAttrs.${n} != "" && finalAttrs.${n} != null) (
             handle ''
-              writeTextFile: ${name}: Deprecated ${n} found at ${pos.file}:${toString pos.line}
+              ${finalAttrs.passthru.__getDeprecatedCheckPhase-constructorName}: ${name}: Deprecated ${n} found at ${pos.file}:${toString pos.line}
                 Use ${alt} instead.
             '' finalAttrs.${n}
           );
@@ -206,7 +208,17 @@ rec {
           }
           // meta
           // derivationArgs.meta or { };
-        passthru = passthru // derivationArgs.passthru or { };
+        passthru = {
+          # Configure the checkPhase copatibility layer.
+          # Enable us to test the error-throwing behaviour (and the corresponding mitigations) before turning it on globally.
+          # TODO(@ShamrockLee): Remove after throwing is turned on globally.
+          __getDeprecatedCheckPhase-forceThrow = false;
+          # Facilitate derived build helpers' access to the deprecated checkPhase
+          # TODO(@ShamrockLee) Remove after `checkPhase` is fully deprecated and no longer handled.
+          __getDeprecatedCheckPhase = getDeprecatedPhase "checkPhase" "installCheckPhase";
+        }
+        // passthru
+        // derivationArgs.passthru or { };
       }
       // removeAttrs derivationArgs [
         "passAsFile"
