@@ -48,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/eepnet/emissary/releases/tag/${finalAttrs.version}";
     description = "Rust implementation of the I2P protocol stack";
     homepage = "https://eepnet.github.io/emissary/";
+    changelog = "https://github.com/eepnet/emissary/releases";
     license = lib.licenses.mit; # https://github.com/eepnet/emissary/blob/master/LICENSE (found an apache2 as well but thats for https://github.com/eepnet/emissary/commit/c4a1c849ebfceba892adce53f512f1f099721de2)
     mainProgram = "emissary-cli";
     maintainers = [
