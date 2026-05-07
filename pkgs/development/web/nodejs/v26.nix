@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.0.0";
-  sha256 = "fcb5e5c06a5c2ec9e669801248657aafaa2291f8760dac7bfb639f878318c592";
+  version = "26.1.0";
+  sha256 = "779a1364889575d44e0215adc381806bbd0d9437557b59893e172f5b9d35a990";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -58,27 +58,6 @@ buildNodejs {
       ./use-nix-codesign.patch
 
       ./fix-temporal-integration-with-shared-icu.patch
-      # TODO: remove when included in a next release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/730fa6a16fa47406905b47540f3ab46ee10420c2.patch?full_index=1";
-        hash = "sha256-Ks9mT/7fcJ9nl8FWHq7HrVP+ZHF9AEOYV7xsN/NOWII=";
-      })
-
-      # Patch for nghttp2 1.69 support
-      # TODO: remove when included in a next release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
-        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
-        excludes = [ "tools/nix/*" ];
-      })
-
-      # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
-      # OpenSSL reports different errors
-      # https://github.com/nodejs/node/pull/62629
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/dd25d8f29d3ddadcf5a5ebfdf98ece55f9df96c6.patch?full_index=1";
-        hash = "sha256-6cxRN7TyWmJgUZt3jp2YXbVIjrDb2BNep5LxBOtT3Q0=";
-      })
     ]
     ++ gypPatches;
 }
