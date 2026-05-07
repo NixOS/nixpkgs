@@ -2884,10 +2884,6 @@ with pkgs;
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
-  ola = callPackage ../applications/misc/ola {
-    protobuf = protobuf_21;
-  };
-
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
