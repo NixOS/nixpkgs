@@ -12,16 +12,16 @@ with python3.pkgs;
 
 buildPythonPackage (finalAttrs: {
   pname = "mailman";
-  version = "3.3.9";
+  version = "3.3.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
+    hash = "sha256-DeR4/PMm8l2TGTjDdE5hxc1nWWtG5bHjuyq/mdVEVjI=";
   };
 
   build-system = with python3.pkgs; [
-    setuptools
+    pdm-backend
   ];
 
   dependencies = with python3.pkgs; [
@@ -71,6 +71,11 @@ buildPythonPackage (finalAttrs: {
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
       --replace /usr/bin/lynx ${lynx}/bin/lynx
+
+    # Backport of
+    # https://gitlab.com/mailman/mailman/-/commit/3a22537382d41ab3e46b859054547755963b069d.patch
+    substituteInPlace pyproject.toml \
+      --replace-fail '"nntplib;' '"standard-nntplib;'
   '';
 
   # Mailman assumes that those scripts in $out/bin are Python scripts. Wrapping
