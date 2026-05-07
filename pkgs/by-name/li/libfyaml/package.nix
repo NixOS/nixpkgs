@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/pantoniou/libfyaml/commit/0982fcefc6a16d4c8cb5b06747d3fc8e630de3ae.diff";
       hash = "sha256-aDubIn+et+1fWE7XU7a5AGZVacVFbAbC1PoSDrA6hXw=";
     })
+    # backport "Fix C11 atomics detection and buggy macros for C++ compatibility"
+    (fetchpatch {
+      url = "https://github.com/pantoniou/libfyaml/commit/1026d76850909dc9b1c5f95b8cd94e865a313fd5.diff";
+      hash = "sha256-0YfOqdqHdELFMqr52TDAC3BNFLkcuxvuJY5b9yZ7NFk=";
+    })
     (fetchpatch {
       url = "https://github.com/pantoniou/libfyaml/commit/9192deaac095f9881cc1e5756dede683f36b09d6.diff";
       hash = "sha256-cNL9wQtxIRg/ShZLJP4qHYNFRrYo9kRG+/U+3FiUeaI=";
