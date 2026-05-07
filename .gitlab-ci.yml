@@ -10,6 +10,8 @@ build_x86_64-linux:
   artifacts:
     paths:
       - nixpkgs.tar.xz
+  environment: production_linux
+  resource_group: production_linux
 
 build_aarch64-darwin:
   timeout: 10h
@@ -25,3 +27,6 @@ build_aarch64-darwin:
   artifacts:
     paths:
       - nixpkgs.tar.xz
+  environment: production_mac
+  resource_group: production_mac
+
