@@ -13,16 +13,14 @@
   zlib,
 }:
 
-let
-  inherit ((import ./sources.nix).aqbanking) hash releaseId version;
-in
 stdenv.mkDerivation rec {
   pname = "aqbanking";
-  inherit version;
+  version = "6.9.1";
+  releaseId = "652";
 
   src = fetchurl {
     url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/aqbanking-${version}.tar.gz";
-    inherit hash;
+    hash = "sha256-/JSivr+7T8JrmNyTyPo2qAJimM15lfeYIcSA2zVYf2s=";
   };
 
   # Set the include dir explicitly, this fixes a build error when building

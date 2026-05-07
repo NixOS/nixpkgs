@@ -5965,8 +5965,6 @@ with pkgs;
   # Not moved to aliases while we decide if we should split the package again.
   at-spi2-atk = at-spi2-core;
 
-  aqbanking = callPackage ../development/libraries/aqbanking { };
-
   aws-spend-summary = haskellPackages.aws-spend-summary.bin;
 
   inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
