@@ -6,6 +6,7 @@
 let
   inherit (lib)
     all
+    any
     collect
     concatLists
     concatMap
@@ -441,7 +442,7 @@ rec {
     else if all isAttrs list then
       foldl' lib.mergeAttrs { } list
     else if all isBool list then
-      foldl' lib."or" false list
+      any (x: x) list
     else if all isString list then
       lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then
