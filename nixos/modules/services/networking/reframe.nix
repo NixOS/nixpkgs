@@ -113,7 +113,7 @@ in
                   "cpu"
                   "gpu"
                 ];
-                default = true;
+                default = "cpu";
                 description = ''
                   Set to `gpu` to use GPU damage region detection, which may be more efficiency but may cause artifacts depending on GPU vendors.
                   Set to `cpu` to use CPU damage region detection if you get bugs with `gpu`.
