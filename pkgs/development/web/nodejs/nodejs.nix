@@ -23,16 +23,24 @@
   simdjson,
   simdutf,
   simdutf_6 ? (
-    simdutf.overrideAttrs {
-      version = "6.5.0";
+    simdutf.overrideAttrs (
+      {
+        version = "6.5.0";
 
-      src = fetchFromGitHub {
-        owner = "simdutf";
-        repo = "simdutf";
-        rev = "v6.5.0";
-        hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
-      };
-    }
+        src = fetchFromGitHub {
+          owner = "simdutf";
+          repo = "simdutf";
+          rev = "v6.5.0";
+          hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
+        };
+      }
+      // (lib.optionalAttrs stdenv.buildPlatform.isDarwin {
+        # Fix build on darwin
+        postPatch = ''
+          substituteInPlace tools/CMakeLists.txt --replace-fail '-Wl,--gc-sections' ""
+        '';
+      })
+    )
   ),
   sqlite,
   temporal_capi,
