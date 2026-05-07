@@ -516,18 +516,25 @@ rec {
     else if defs == [ ] then
       abort "This case should never happen."
     else
-      (foldl' (
-        first: def:
-        if def.value != first.value then
-          throw "The option `${showOption loc}' has conflicting definition values:${
-            showDefs [
-              first
-              def
-            ]
-          }\n${prioritySuggestion}"
-        else
-          first
-      ) (head defs) (tail defs)).value;
+      let
+        first = (head defs).value;
+      in
+      # Only fold to find the error if any of the values aren't equal
+      if all (def: def.value == first) (tail defs) then
+        first
+      else
+        (foldl' (
+          first: def:
+          if def.value != first.value then
+            throw "The option `${showOption loc}' has conflicting definition values:${
+              showDefs [
+                first
+                def
+              ]
+            }\n${prioritySuggestion}"
+          else
+            first
+        ) (head defs) (tail defs)).value;
 
   /**
     Extracts values of all `value` keys of the given list.
