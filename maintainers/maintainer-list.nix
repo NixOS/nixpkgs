@@ -7692,6 +7692,12 @@
     githubId = 22300113;
     name = "Eduardo Espadeiro";
   };
+  eduardofuncao = {
+    email = "eduardofuncao@hotmail.com";
+    github = "eduardofuncao";
+    githubId = 45571086;
+    name = "Eduardo Função";
+  };
   eduarrrd = {
     email = "e.bachmakov@gmail.com";
     github = "eduarrrd";
@@ -9330,6 +9336,12 @@
     github = "Frostman";
     githubId = 134872;
     name = "Sergei Lukianov";
+  };
+  frostplexx = {
+    email = "daniel.inama02@gmail.com";
+    github = "frostplexx";
+    githubId = 62436912;
+    name = "Daniel Inama";
   };
   fryuni = {
     name = "Luiz Ferraz";
@@ -20889,6 +20901,13 @@
     githubId = 686076;
     name = "Vitalii Voloshyn";
   };
+  panakotta00 = {
+    name = "Panakotta00";
+    github = "Panakotta00";
+    githubId = 16022267;
+    email = "panakotta00@gmail.com";
+    keys = [ { fingerprint = "ABF8 D539 0F8C F623 8F49  7338 BA6C E8AC 4B73 53B9"; } ];
+  };
   pancaek = {
     github = "pancaek";
     githubId = 20342389;
@@ -24336,6 +24355,12 @@
     githubId = 30531572;
     name = "Robert James Hernandez";
   };
+  sarowish = {
+    email = "berkeenercan@tutanota.com";
+    github = "sarowish";
+    githubId = 20581722;
+    name = "Berke Enercan";
+  };
   sarunint = {
     email = "nixpkgs@sarunint.com";
     github = "sarunint";
@@ -25818,6 +25843,12 @@
     github = "sorpaas";
     githubId = 6277322;
     name = "Wei Tang";
+  };
+  sotormd = {
+    email = "sotormd@proton.me";
+    github = "sotormd";
+    githubId = 201147279;
+    name = "sotormd";
   };
   soupglasses = {
     email = "sofi+git@mailbox.org";

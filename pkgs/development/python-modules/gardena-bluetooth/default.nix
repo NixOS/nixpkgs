@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gardena-bluetooth";
-  version = "2.7.0";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "gardena-bluetooth";
     tag = finalAttrs.version;
-    hash = "sha256-VqGcMz9tFXlrekwWQx2Wx1umbf/q3U9XkQKSkze2cCU=";
+    hash = "sha256-yl1I36p21lemKigijqks7cwOxWej+35bDB2D0KO3pa0=";
   };
 
   build-system = [ setuptools ];

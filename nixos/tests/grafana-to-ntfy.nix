@@ -148,10 +148,10 @@ in
 
     with subtest("Grafana alert arrives at ntfy"):
       machine.succeed(
-        "curl -sf http://127.0.0.1:${toString ports.grafana}/api/alertmanager/grafana/config/api/v1/receivers/test"
+        "curl -sf http://127.0.0.1:${toString ports.grafana}/apis/notifications.alerting.grafana.app/v1beta1/namespaces/default/receivers/-/test"
         " -u admin:admin"
         " -X POST -H 'Content-Type: application/json'"
-        """ -d '{"receivers": [{"name": "grafana-to-ntfy", "grafana_managed_receiver_configs": [{"uid": "cp_webhook", "name": "webhook", "type": "webhook", "disableResolveMessage": false, "settings": {"url": "http://127.0.0.1:${toString ports.grafana-to-ntfy}", "httpMethod": "POST"}}]}]}'"""
+        """ -d '{"alert": {"labels": {"alertname": "test-alert"}, "annotations": {}}, "integration": {"type": "webhook", "settings": {"url": "http://127.0.0.1:${toString ports.grafana-to-ntfy}", "httpMethod": "POST"}}}'"""
       )
       # grep ensures we wait for the Grafana message specifically (see above)
       resp = machine.wait_until_succeeds(
