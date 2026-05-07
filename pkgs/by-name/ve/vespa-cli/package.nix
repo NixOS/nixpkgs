@@ -9,14 +9,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "vespa-cli";
-  version = "8.679.50";
+  version = "8.685.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vespa-engine";
     repo = "vespa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4tABoAA96HoYghIno0qbieYbE4EJZRmFIFDnoOoMIaA=";
+    hash = "sha256-RRuUDeHYYCbEeeaUk+lz8rv+ZG3UD/OK3HrmmuOe5HI=";
   };
 
   # case-insensitive conflicts which produce platform `vendorHash` checksumm
