@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isx86_64 [
     # assert (np.float64(0.5555555555555556) == 1.0 ± 1.0e-06
     "test_fc_basis_set_o3"
   ];

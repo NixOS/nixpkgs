@@ -95,6 +95,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.CEF_PATH = "${cef}";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postInstall = ''
     mkdir -p $out/share/applications
     cp data/com.stremio.Stremio.desktop $out/share/applications/com.stremio.Stremio.desktop
@@ -130,10 +133,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Modern media center that gives you the freedom to watch everything you want";
     homepage = "https://www.stremio.com/";
-    license = with lib.licenses; [
-      gpl3Only
-      # server.js is unfree
-      unfree
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Only
+        unfree # server.js
+      ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      obfuscatedCode # server.js
     ];
     maintainers = with lib.maintainers; [ thunze ];
     platforms = lib.platforms.linux;
