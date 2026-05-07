@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "2.5.0";
+  version = "2.6.0";
 in
 stdenv.mkDerivation rec {
   pname = "nikto";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "sullo";
     repo = "nikto";
     rev = version;
-    sha256 = "sha256-lWiDbWc2BWAUgyaIm0tvZytja02WogYRoc7na4sHiNM=";
+    sha256 = "sha256-iHOdMlfcKhvQCsCjWge6K+0h8kkgXa0Uii9o3YRQP5w=";
   };
 
   # Nikto searches its configuration file based on its current path
@@ -29,8 +29,11 @@ stdenv.mkDerivation rec {
     # EXECDIR needs to be changed to the path where we copy the programs stuff
     # Forcing SSLeay is needed for SSL support (the auto mode doesn't seem to work otherwise)
     substituteInPlace program/nikto.conf.default \
-      --replace "# EXECDIR=/opt/nikto" "EXECDIR=$out/share" \
-      --replace "LW_SSL_ENGINE=auto" "LW_SSL_ENGINE=SSLeay"
+      --replace-fail "# EXECDIR=/opt/nikto" "EXECDIR=$out/share" \
+      --replace-fail "LW_SSL_ENGINE=auto" "LW_SSL_ENGINE=SSLeay"
+    # Disable update check which prompts you to do a git pull and is not applicable for nixpkg
+    substituteInPlace program/nikto.pl \
+      --replace-fail "check_updates()" ""
   '';
 
   nativeBuildInputs = [
@@ -41,6 +44,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     perlPackages.perl
     perlPackages.NetSSLeay
+    perlPackages.JSON
+    perlPackages.XMLWriter
   ];
 
   installPhase = ''
