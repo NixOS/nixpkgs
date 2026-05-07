@@ -119,6 +119,9 @@ let
       #include <${xnuHeaders}/include/netinet6/nd6.h>
       EOF
 
+      install -D -t "$out/include/netkey" \
+        '${xnuHeaders}/include/netkey/keysock_private.h'
+
       install -D -t "$out/include/os" \
         '${xnuHeaders}/Library/Frameworks/Kernel.framework/PrivateHeaders/os/atomic_private.h' \
         '${xnuHeaders}/Library/Frameworks/Kernel.framework/PrivateHeaders/os/atomic_private_arch.h' \
