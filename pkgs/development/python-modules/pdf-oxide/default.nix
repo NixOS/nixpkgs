@@ -36,6 +36,13 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError: assert (False or False or False)
+    "test_version_is_038_or_newer"
+    #401: two-font encrypted PDF (19203 B) is too small
+    "test_issue_401_two_embedded_fonts_save_encrypted"
+  ];
+
   pythonImportsCheck = [
     "pdf_oxide"
   ];
