@@ -30,8 +30,7 @@ buildNpmPackage rec {
     description = "NetBird Management Service Web UI Panel";
     homepage = "https://github.com/netbirdio/dashboard";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      patrickdag
+    maintainers = [
     ];
   };
 }
