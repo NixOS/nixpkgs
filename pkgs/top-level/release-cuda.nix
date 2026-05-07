@@ -21,6 +21,15 @@ in
     "aarch64-linux"
   ],
   variant ? "cuda",
+  cudaCapabilities ? {
+    "x86_64-linux" = [
+      "8.0"
+      "8.6"
+      "8.9"
+      "9.0"
+    ];
+    "aarch64-linux" = [ "8.7" ];
+  },
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
@@ -45,13 +54,30 @@ assert builtins.elem variant [
 
 let
   mkReleaseLib = import ./release-lib.nix;
+  matrix = lib.optionalAttrs (variant == "cuda") (
+    lib.mapAttrs (
+      _: caps:
+      lib.listToAttrs (
+        map (cap: {
+          name = cudaLib.mkRealArchitecture cap;
+          value = {
+            cudaCapabilities = [ cap ];
+            cudaForwardCompat = false;
+          };
+        }) caps
+      )
+    ) cudaCapabilities
+  );
   release-lib = mkReleaseLib (
-    { inherit supportedSystems nixpkgsArgs; } // lib.intersectAttrs (lib.functionArgs mkReleaseLib) args
+    {
+      inherit supportedSystems nixpkgsArgs matrix;
+    }
+    // lib.intersectAttrs (lib.functionArgs mkReleaseLib) args
   );
 
   inherit (release-lib)
     linux
-    mapTestOn
+    mapTestOnMatrix
     packagePlatforms
     pkgs
     ;
@@ -171,6 +197,6 @@ let
   # Explicitly specified platforms take precedence over the platforms
   # automatically inferred in autoPackagePlatforms
   allPackagePlatforms = lib.recursiveUpdate autoPackagePlatforms explicitPackagePlatforms;
-  jobs = mapTestOn allPackagePlatforms;
+  jobs = mapTestOnMatrix allPackagePlatforms;
 in
 jobs
