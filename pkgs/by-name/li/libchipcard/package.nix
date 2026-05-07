@@ -8,16 +8,14 @@
   zlib,
 }:
 
-let
-  inherit ((import ./sources.nix).libchipcard) hash releaseId version;
-in
 stdenv.mkDerivation rec {
   pname = "libchipcard";
-  inherit version;
+  version = "5.1.6";
+  releaseId = "382";
 
   src = fetchurl {
     url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/libchipcard-${version}.tar.gz";
-    inherit hash;
+    hash = "sha256-bAf1J0F/dWIHT5kBLaTRHrTbr9M/SeZrRCzNbjuM/SA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

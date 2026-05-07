@@ -6492,8 +6492,6 @@ with pkgs;
 
   libchamplain_libsoup3 = libchamplain.override { withLibsoup3 = true; };
 
-  libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
-
   libdbi-drivers-base = libdbi-drivers.override {
     withMysql = false;
     withSqlite = false;
