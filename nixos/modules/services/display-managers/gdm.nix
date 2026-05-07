@@ -44,6 +44,10 @@ let
   defaultSessionName = config.services.displayManager.defaultSession;
 
   setSessionScript = pkgs.callPackage ../x11/display-managers/account-service-util.nix { };
+
+  greeterEnvFile = pkgs.writeText "gdm-greeter-env" ''
+    DCONF_PROFILE=gdm
+  '';
 in
 
 {
@@ -256,15 +260,27 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /run/gdm/.config 0711 gdm gdm"
+      # GDM creates /run/gdm as root:root.  The greeter user needs to
+      # write to subdirectories (.config, .cache, .local) so we create
+      # them here with correct ownership.  All paths in the chain must
+      # be owned by the same user to avoid systemd-tmpfiles "unsafe
+      # path transition" errors.
+      "d /run/gdm/.config 0700 gdm-greeter gdm"
+      "d /run/gdm/.config/environment.d 0700 gdm-greeter gdm"
+      "f /run/gdm/.config/environment.d/10-dconf.conf 0644 gdm-greeter gdm - DCONF_PROFILE=gdm"
     ]
+    ++ lib.concatMap (i: [
+      "d /run/gdm-${toString i}/.config 0700 gdm-greeter-${toString i} gdm"
+      "d /run/gdm-${toString i}/.config/environment.d 0700 gdm-greeter-${toString i} gdm"
+      "f /run/gdm-${toString i}/.config/environment.d/10-dconf.conf 0644 gdm-greeter-${toString i} gdm - DCONF_PROFILE=gdm"
+    ]) [ 1 2 3 4 ]
     ++ lib.optionals config.services.pulseaudio.enable [
-      "d /run/gdm/.config/pulse 0711 gdm gdm"
+      "d /run/gdm/.config/pulse 0711 gdm-greeter gdm"
       "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
     ]
     ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
       # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
-      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
+      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm-greeter gdm - yes"
     ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
@@ -333,8 +349,14 @@ in
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm.databases =
-      lib.optionals (!cfg.autoSuspend) [
+    programs.dconf.profiles.gdm.databases = [
+      {
+        settings."org/gnome/desktop/session" = {
+          session-name = "gnome-login";
+        };
+      }
+    ]
+    ++ lib.optionals (!cfg.autoSuspend) [
         {
           settings."org/gnome/settings-daemon/plugins/power" = {
             sleep-inactive-ac-type = "nothing";
@@ -450,6 +472,13 @@ in
               control = "required";
               modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
               settings.conffile = "/etc/pam/environment";
+              settings.readenv = 0;
+            }
+            {
+              name = "env-greeter";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+              settings.envfile = greeterEnvFile;
               settings.readenv = 0;
             }
             {
