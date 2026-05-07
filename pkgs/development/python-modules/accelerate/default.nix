@@ -181,6 +181,9 @@ buildPythonPackage (finalAttrs: {
 
     # ImportError: cannot import name 'PretrainedConfig' from 'transformers.modeling_utils'
     "test_nested_hook"
+
+    # torch.mps does not have set_device attribute
+    "test_env_var_device"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
