@@ -22,7 +22,6 @@ deployAndroidPackage {
       [
         glibc
         libcxx
-        libGL
         libpulseaudio
         libtiff
         libuuid
@@ -78,10 +77,12 @@ deployAndroidPackage {
           lib.makeLibraryPath [
             pkgs.dbus
             pkgs.systemd
+            pkgs.libGL
           ]
         } \
         --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
-        --set QTCOMPOSE ${pkgs.libx11.out}/share/X11/locale
+        --set QTCOMPOSE ${pkgs.libx11.out}/share/X11/locale \
+        --set-default VK_ADD_DRIVER_FILES /run/opengl-driver/share/vulkan/icd.d
     '')
     + ''
       mkdir -p $out/bin

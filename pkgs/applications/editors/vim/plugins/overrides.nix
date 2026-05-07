@@ -3892,7 +3892,7 @@ assertNoAdditions {
     };
   });
 
-  run-nvim = super.run-nvim.overrideAttrs {
+  run-nvim = super.run-nvim.overrideAttrs (old: {
     dependencies = [
       self.telescope-nvim
     ];
@@ -3902,7 +3902,11 @@ assertNoAdditions {
       # Issue: https://github.com/NixOS/nixpkgs/issues/394939
       self.plenary-nvim
     ];
-  };
+
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
 
   rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];

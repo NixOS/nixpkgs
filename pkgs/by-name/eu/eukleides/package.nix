@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   bison,
   flex,
   makeWrapper,
@@ -32,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./gs-allowpstransparency.patch
     # fix curly brace escaping in eukleides.texi for newer texinfo compatiblity
     ./texinfo-escape.patch
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/georgesk/eukleides/-/raw/debian/1.5.4-6/debian/patches/fixes-for-gcc15.patch";
+      hash = "sha256-MVC2bkMGkkDqF/kg8MPvOYacUOXshaG2RZ0a9UVXLSI=";
+    })
   ];
 
   nativeBuildInputs = [

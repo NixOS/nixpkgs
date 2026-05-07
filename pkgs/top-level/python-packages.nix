@@ -858,6 +858,8 @@ self: super: with self; {
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
 
+  apex = callPackage ../development/python-modules/apex { };
+
   apeye = callPackage ../development/python-modules/apeye { };
 
   apeye-core = callPackage ../development/python-modules/apeye-core { };
@@ -13517,6 +13519,8 @@ self: super: with self; {
   pycarwings2 = callPackage ../development/python-modules/pycarwings2 { };
 
   pycasbin = callPackage ../development/python-modules/pycasbin { };
+
+  pycasperglow = callPackage ../development/python-modules/pycasperglow { };
 
   pycatch22 = callPackage ../development/python-modules/pycatch22 { };
 

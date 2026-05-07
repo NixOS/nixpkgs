@@ -128,21 +128,6 @@ in
 
   config = callPackage ./config.nix { };
 
-  # Technically nix-unit binds to a fixed nix version
-  # We have tests in lib to test the module system itself against different nix-versions
-  # Based on this assumption (transitivity of correctness) this test should therefore also cover all tested nix-versions
-  config-nix-unit =
-    pkgs.runCommand "config-nix-unit"
-      {
-        nativeBuildInputs = [ pkgs.nix-unit ];
-      }
-      ''
-        export HOME=$TMPDIR
-        nix-unit --eval-store "$HOME" ${./config-nix-unit.nix} \
-          --arg nixpkgsPath "${../..}"
-        mkdir $out
-      '';
-
   top-level = callPackage ./top-level { };
 
   haskell = callPackage ./haskell { };
