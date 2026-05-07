@@ -84,6 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ValveSoftware/gamescope/commit/4ce1a91fb219f570b0871071a2ec8ac97d90c0bc.diff";
       hash = "sha256-O358ScIIndfkc1S0A8g2jKvFWoCzcXB/g6lRJamqOI4=";
     })
+
+    # Backport upstream patch for wlroots fixing build with libinput 1.31
+    (fetchpatch {
+      url = "https://github.com/misyltoad/wlroots/compare/54e844748029d4874e14d0c086d50092c04c8899...c08d99437ec8bb56a703f04ad1ef199502c62d10.diff";
+      stripLen = 1;
+      extraPrefix = "subprojects/wlroots/";
+      hash = "sha256-q2zekWNn111lX8N938y8HjREvlNMtdCLJ4RveX9z8u8=";
+    })
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
