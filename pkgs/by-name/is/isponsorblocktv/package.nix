@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "isponsorblocktv";
-  version = "2.6.1";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmunozv04";
     repo = "iSponsorBlockTV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AGjLehhGYz8FyojSFmSYKLCkHAExtpQiukQnTNt1YoY=";
+    hash = "sha256-0ro6M6oR9PjwHbO31zUpGeTp9Au5drWvqm5YYIMbjsc=";
   };
 
   patches = [
