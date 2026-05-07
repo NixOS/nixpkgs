@@ -3276,10 +3276,6 @@ with pkgs;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
-  twitch-chat-downloader =
-    python3Packages.callPackage ../applications/misc/twitch-chat-downloader
-      { };
-
   uftraceFull = uftrace.override {
     withLuaJIT = true;
     withPython = true;

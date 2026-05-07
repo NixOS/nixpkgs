@@ -1,16 +1,13 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  iso8601,
-  progressbar2,
-  requests,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "twitch-chat-downloader";
   version = "2.5.5";
-  format = "setuptools";
+  pyproject = true;
 
   # NOTE: Using maintained fork because upstream has stopped working, and it has
   # not been updated in a while.
@@ -18,9 +15,11 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TheDrHax";
     repo = "twitch-chat-downloader";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9wIp0uttVBOdexOMb8VvpUEEdZ97SGSlZcFQ4jM/tqM=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   postPatch = ''
     # Update client ID for Twitch changes
@@ -29,7 +28,7 @@ buildPythonApplication rec {
       --replace-fail jzkbprff40iqj646a697cyrvl0zt2m6 kd1unb4b3q4t58fwlpcbzcbnm76a8fp
   '';
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     iso8601
     progressbar2
     requests
@@ -46,4 +45,4 @@ buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ assistant ];
   };
-}
+})
