@@ -3351,6 +3351,17 @@ with haskellLib;
   stripe-concepts = doJailbreak super.stripe-concepts;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
+
+  # 2026-05-08: fix `base64Decode` failing against botan 3.12.0, which now rejects
+  # a NULL output pointer in `botan_base64_decode`. Drop once upstream releases
+  # a botan-low containing the fix.
+  # https://github.com/haskell-cryptography/botan/pull/126
+  botan-low = appendPatch (pkgs.fetchpatch2 {
+    url = "https://github.com/haskell-cryptography/botan/commit/95c9befcdd9aaecae87396398afcb8c88e7550c4.patch";
+    relative = "botan-low";
+    excludes = [ "CHANGELOG.md" ];
+    hash = "sha256-EO/9KRLarGiE38iV1hf4a1eU6EtxQ46U0kPUgFsN5iQ=";
+  }) super.botan-low;
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
