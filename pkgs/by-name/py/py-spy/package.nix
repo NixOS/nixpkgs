@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-velwX7lcNQvwg3VAUTbgsOPLlA5fAcPiPvczrBBsMvs=";
 
-  buildFeatures = [ "unwind" ];
+  buildFeatures = lib.optional stdenv.hostPlatform.isLinux "unwind";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     python3
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-L${libunwind}/lib";
 
   checkFlags = [
     # assertion `left == right` failed
@@ -44,8 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/benfred/py-spy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lnl7 ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # https://github.com/benfred/py-spy/pull/330
-    broken = stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 })
