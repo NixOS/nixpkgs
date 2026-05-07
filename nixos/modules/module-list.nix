@@ -308,6 +308,7 @@
   ./programs/rog-control-center.nix
   ./programs/rush.nix
   ./programs/rust-motd.nix
+  ./programs/rustnet.nix
   ./programs/ryzen-monitor-ng.nix
   ./programs/schroot.nix
   ./programs/screen.nix
