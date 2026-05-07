@@ -9,6 +9,7 @@
   nixos-icons,
   buildPackages,
   customLogo ? "${nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png",
+  enableRelease ? true,
 }:
 
 let
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "ARCH=${stdenv.cc.targetPrefix}"
-    "RELEASE=1"
+    "RELEASE=${if enableRelease then "1" else "0"}"
     "CHAINLOADING=1"
   ]
   ++ lib.optional (customLogo != null) "LOGO=custom";
