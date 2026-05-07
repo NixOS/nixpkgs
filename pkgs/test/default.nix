@@ -139,7 +139,12 @@ in
       ''
         export HOME=$TMPDIR
         nix-unit --eval-store "$HOME" ${./config-nix-unit.nix} \
-          --arg nixpkgsPath "${../..}"
+          --arg nixpkgsPath "${
+            builtins.path {
+              path = pkgs.path;
+              name = "source";
+            }
+          }"
         mkdir $out
       '';
 
