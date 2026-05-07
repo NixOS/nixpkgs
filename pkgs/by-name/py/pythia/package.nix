@@ -15,15 +15,15 @@ let
   hepmc = hepmc2;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pythia";
   version = "8.317";
 
   src = fetchurl {
     url = "https://pythia.org/download/pythia83/pythia${
-      builtins.replaceStrings [ "." ] [ "" ] version
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.tgz";
-    sha256 = "sha256-GuVR0U2sSV3f5rNEeSA16+QQ/mxgBNRKM14Ozg50Wt8=";
+    hash = "sha256-GuVR0U2sSV3f5rNEeSA16+QQ/mxgBNRKM14Ozg50Wt8=";
   };
 
   nativeBuildInputs = [ rsync ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})
