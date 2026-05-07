@@ -25839,6 +25839,12 @@
     githubId = 13762043;
     matrix = "@sophie:nue.soopy.moe";
   };
+  sophimoo = {
+    name = "Sophie";
+    github = "sophimoo";
+    githubId = 166367617;
+    email = "sophimoo@protonmail.com";
+  };
   sophronesis = {
     email = "oleksandr.buzynnyi@gmail.com";
     github = "sophronesis";
