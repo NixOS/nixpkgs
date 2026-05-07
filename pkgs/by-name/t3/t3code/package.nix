@@ -43,15 +43,6 @@ stdenv.mkDerivation (
       dontConfigure = true;
       dontFixup = true;
 
-      postPatch = ''
-        for packageJson in \
-          packages/{contracts,shared}/package.json
-        do
-          substituteInPlace "$packageJson" \
-            --replace-fail '"prepare": "effect-language-service patch",' '"prepare": "true",'
-        done
-      '';
-
       buildPhase = ''
         runHook preBuild
 
@@ -75,13 +66,13 @@ stdenv.mkDerivation (
         runHook postInstall
       '';
 
-      outputHash = "sha256-MuP+L8PwV9gKbeiJXYtUpgyIAYPmq4G1FolP7uB9J3w=";
+      outputHash = "sha256-r91zExmtThVt2/9OLMl5M0QtvJvlhCdPX5+R0ID0GSM=";
       outputHashMode = "recursive";
     };
   in
   {
     pname = "t3code";
-    version = "0.0.21";
+    version = "0.0.22";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -89,7 +80,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-e0U9DkEh20w1xq4P9Fri3bx2ifCiDK4G/vVPHDP+lXs=";
+      hash = "sha256-ZSUmu3FT+wpCLwpUv3yrFWC4EzcVvev9cZQ/FyeLjqI=";
     };
 
     postPatch = ''
