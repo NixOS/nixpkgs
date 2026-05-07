@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "overhead";
     repo = "tcp-relay";
     rev = "v${version}";
-    hash = "sha256-CzaZycn6Z9wVIQ2GNX7MN8SJt17ANMmh4meeOl1yKMM=";
+    hash = "sha256-GmYIkUBPjxKDhVlrEIFX3s0DacIoOtQWM67gkXV1H/Q=";
   };
 
   vendorHash = null;
