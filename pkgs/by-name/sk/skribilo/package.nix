@@ -15,7 +15,7 @@
   emacs,
   enableLout ? stdenv.hostPlatform.isLinux,
   lout,
-  enablePloticus ? stdenv.hostPlatform.isLinux,
+  enablePloticus ? false,
   ploticus,
   enableTex ? true,
   texliveSmall,
