@@ -9,7 +9,7 @@ let
   iniFmt = pkgs.formats.ini { };
 in
 {
-  options.programs.reframe = {
+  options.services.reframe = {
     enable = lib.mkEnableOption "DRM/KMS based remote desktop for Linux that supports Wayland/NVIDIA/headless/login…";
     package = lib.mkPackageOption pkgs "reframe" { };
     configs = lib.mkOption {
