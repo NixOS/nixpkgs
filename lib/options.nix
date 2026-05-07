@@ -430,25 +430,26 @@ rec {
   */
   mergeDefaultOption =
     loc: defs:
-    let
-      list = getValues defs;
-    in
-    if length list == 1 then
-      head list
-    else if all isFunction list then
-      x: mergeDefaultOption loc (map (f: f x) list)
-    else if all isList list then
-      concatLists list
-    else if all isAttrs list then
-      foldl' lib.mergeAttrs { } list
-    else if all isBool list then
-      any (x: x) list
-    else if all isString list then
-      lib.concatStrings list
-    else if all isInt list && all (x: x == head list) list then
-      head list
+    if length defs == 1 then
+      (head defs).value
     else
-      throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
+      let
+        list = getValues defs;
+      in
+      if all isFunction list then
+        x: mergeDefaultOption loc (map (f: f x) list)
+      else if all isList list then
+        concatLists list
+      else if all isAttrs list then
+        foldl' lib.mergeAttrs { } list
+      else if all isBool list then
+        any (x: x) list
+      else if all isString list then
+        lib.concatStrings list
+      else if all (x: isInt x && x == head list) list then
+        head list
+      else
+        throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
   /**
     Require a single definition.
