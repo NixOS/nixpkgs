@@ -19,19 +19,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "obstore";
-  version = "0.9.1";
+  version = "0.9.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "obstore";
     tag = "py-v${finalAttrs.version}";
-    hash = "sha256-1zMIcr36VrNX3GT4k7w4sIhAwQSWUuuomf73fnCwueY=";
+    hash = "sha256-u2o0ymusn/pWrEn8kK/kiE95VcmMln6StkDPBam+6u0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-6kKTLU1YazLpE5V/LqCLC1m8futx8C/X3gkeg8yV3ac=";
+    hash = "sha256-ZOYTGklsla89I1K2sI46AWy2xGfSfBVmnBcbCdSLKkg=";
   };
 
   build-system = [
