@@ -49,10 +49,6 @@ in
 {
   meta.maintainers = teams.forgejo.members;
 
-  imports = [
-    (mkRenamedOptionModule [ "services" "forgejo-runner" ] [ "services" "forgejo" "runner" ])
-  ];
-
   options.services.forgejo.runner = with types; {
     package = mkPackageOption pkgs "forgejo-runner" { };
 
@@ -78,24 +74,43 @@ in
               };
 
               url = mkOption {
-                type = str;
+                type = nullOr str;
+                default = null;
                 example = "https://forge.example.com";
                 description = ''
                   Base URL of your Forgejo instance.
+
+                  Can also be specified in `settings.servier.connections`
                 '';
               };
 
-              tokenFile = mkOption {
+              registrationTokenFile = mkOption {
                 type = nullOr (either str path);
                 default = null;
                 description = ''
                   Path to a file containing only the token that will be used to register
-                  with the the configured Forgejo instance.
+                  on start with the the configured Forgejo instance.
+
+                  **Deprecated** Replaced by `settings.server.connections`
+
+                  <https://forgejo.org/docs/latest/admin/actions/registration/>
+                '';
+              };
+
+              credentials = lib.mkOption {
+                type = attrsOf lib.types.path;
+                default = { };
+                example = {
+                  WORKER1_TOKEN = "/run/keys/worker1";
+                };
+                description = ''
+                  Environment variables with absolute paths to credentials files to load
+                  on runner startup.
                 '';
               };
 
               labels = mkOption {
-                type = listOf str;
+                type = nullOr (listOf str);
                 example = literalExpression ''
                   [
                     # provide a debian base with nodejs for actions
@@ -170,7 +185,17 @@ in
         assertion = wantsContainerRuntime -> hasDocker || hasPodman;
         message = "Label configuration on forgejo.runner instance requires either docker or podman.";
       }
-    ];
+    ]
+    ++ (lib.foldlAttrs (
+      acc: _: instance:
+      acc
+      ++ [
+        {
+          assertion = instance.registrationTokenFile != null -> instance.url != null;
+          message = "forgejo.runner.instances.${instance.name}.registrationTokenFile requires `url` to be set.";
+        }
+      ]
+    ) [ ] cfg.instances);
 
     systemd.services =
       let
@@ -208,9 +233,16 @@ in
             serviceConfig = {
               MemoryDenyWriteExecute = !wantsHost;
 
-              LoadCredential = [ "TOKEN:${instance.tokenFile}" ];
+              LoadCredential =
+                lib.optionals (instance.registrationTokenFile != null) [
+                  "REGISTRATION_TOKEN:${instance.registrationTokenFile}"
+                ]
+                ++ lib.mapAttrsToList (name: value: "${name}:${value}") instance.credentials;
 
-              ExecStartPre = [
+              SupplementaryGroups = optionals wantsDocker [ "docker" ] ++ optionals wantsPodman [ "podman" ];
+              ExecPaths = lib.optionals wantsHost [ "/var/lib/forgejo-runner/${escapedName}" ];
+
+              ExecStartPre = lib.optionals (instance.registrationTokenFile != null) [
                 (lib.getExe (
                   pkgs.writeShellApplication {
                     name = "forgejo-register-runner-${escapedName}";
@@ -230,7 +262,7 @@ in
                         ${cfg.package}/bin/forgejo-runner register \
                           --no-interactive \
                           --instance ${escapeShellArg instance.url} \
-                          --token "$(cat "$CREDENTIALS_DIRECTORY/TOKEN")" \
+                          --token "$(cat "$CREDENTIALS_DIRECTORY/REGISTRATION_TOKEN")" \
                           --name ${escapeShellArg instance.name} \
                           --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
                           --config ${configFile}
@@ -241,9 +273,8 @@ in
                   }
                 ))
               ];
+
               ExecStart = lib.mkForce "${cfg.package}/bin/forgejo-runner daemon --config ${configFile}";
-              SupplementaryGroups = optionals wantsDocker [ "docker" ] ++ optionals wantsPodman [ "podman" ];
-              ExecPaths = lib.optionals wantsHost [ "/var/lib/forgejo-runner/${escapedName}" ];
             };
           };
       in

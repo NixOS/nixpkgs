@@ -72,7 +72,7 @@ let
                       # type ":host" does not depend on docker/podman/lxc
                       "native:host"
                     ];
-                    tokenFile = "/var/lib/forgejo/runner_token";
+                    registrationTokenFile = "/var/lib/forgejo/runner_token";
                   };
                 };
               };
