@@ -43,6 +43,8 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
     {
+      pname,
+      version,
       nativeBuildInputs ? [ ],
       passthru ? { },
 
@@ -85,8 +87,7 @@ lib.extendMkDerivation {
           null
         else
           (fetchLakeDeps {
-            name = finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
-            inherit (finalAttrs) src;
+            inherit (finalAttrs) src pname version;
             hash = lakeHash;
             sourceRoot = finalAttrs.sourceRoot or "";
             patches = finalAttrs.patches or [ ];
@@ -112,6 +113,7 @@ lib.extendMkDerivation {
     in
     {
       strictDeps = true;
+      __structuredAttrs = true;
 
       nativeBuildInputs = nativeBuildInputs ++ [
         lean4
@@ -226,6 +228,8 @@ lib.extendMkDerivation {
       };
 
       meta = meta // {
+        # Note: This conflates the platforms that the Lean compiler can run on (a package build system) and the platforms the Lean compiler
+        # can target (build host)
         platforms = meta.platforms or lean4.meta.platforms;
       };
     };
