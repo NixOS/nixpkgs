@@ -632,6 +632,28 @@ let
     : 3\. Function argument
   */
   unifyModuleSyntax =
+    let
+      attrsToRemove = [
+        "_class"
+        "_file"
+        "key"
+        "disabledModules"
+        "imports"
+        "options"
+        "config"
+        "meta"
+        "freeformType"
+      ];
+      shorthandAttrsToRemove = [
+        "_class"
+        "_file"
+        "key"
+        "disabledModules"
+        "require"
+        "imports"
+        "freeformType"
+      ];
+    in
     file: key: m:
     let
       addMeta =
@@ -655,17 +677,7 @@ let
     in
     if m ? config || m ? options then
       let
-        badAttrs = removeAttrs m [
-          "_class"
-          "_file"
-          "key"
-          "disabledModules"
-          "imports"
-          "options"
-          "config"
-          "meta"
-          "freeformType"
-        ];
+        badAttrs = removeAttrs m attrsToRemove;
       in
       if badAttrs != { } then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
@@ -688,17 +700,7 @@ let
         disabledModules = m.disabledModules or [ ];
         imports = m.require or [ ] ++ m.imports or [ ];
         options = { };
-        config = addFreeformType (
-          removeAttrs m [
-            "_class"
-            "_file"
-            "key"
-            "disabledModules"
-            "require"
-            "imports"
-            "freeformType"
-          ]
-        );
+        config = addFreeformType (removeAttrs m shorthandAttrsToRemove);
       };
 
   applyModuleArgsIfFunction =
