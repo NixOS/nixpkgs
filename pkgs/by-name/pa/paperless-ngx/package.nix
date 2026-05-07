@@ -78,6 +78,8 @@ python.pkgs.buildPythonApplication (
 
     version = "2.20.15";
 
+    __structuredAttrs = true;
+
     src = fetchFromGitHub {
       owner = "paperless-ngx";
       repo = "paperless-ngx";
