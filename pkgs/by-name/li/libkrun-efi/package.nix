@@ -132,6 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
       '$(LIBRARY_RELEASE_$(OS)):'
   '';
 
+  postInstall = ''
+    ln -s $out/lib/libkrun-efi.dylib $out/lib/libkrun.dylib
+  '';
+
   passthru = {
     tests.withoutGpu = libkrun-efi.override { withGpu = false; };
     updateScript = nix-update-script { };
