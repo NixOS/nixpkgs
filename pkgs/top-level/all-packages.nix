@@ -11638,10 +11638,6 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
-  hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
-    python = null;
-  };
-
   yoda-with-root = lowPrio (
     yoda.override {
       withRootSupport = true;

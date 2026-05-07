@@ -4,15 +4,17 @@
   fetchurl,
   cmake,
   coreutils,
-  python,
   root,
+  enablePython ? false,
+  python ? null,
 }:
+
+assert enablePython -> python != null;
 
 let
   pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
-  withPython = python != null;
   # ensure that root is built with the same python interpreter, as it links against numpy
-  root_py = if withPython then root.override { python3 = python; } else root;
+  root_py = if enablePython then root.override { python3 = python; } else root;
 in
 
 stdenv.mkDerivation rec {
@@ -27,12 +29,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
   ]
-  ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
+  ++ lib.optional enablePython python.pkgs.pythonImportsCheckHook;
 
   buildInputs = [
     root_py
   ]
-  ++ lib.optional withPython python;
+  ++ lib.optional enablePython python;
 
   # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
   preConfigure =
@@ -44,9 +46,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DHEPMC3_CXX_STANDARD=17"
-    "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
+    "-DHEPMC3_ENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
   ]
-  ++ lib.optionals withPython [
+  ++ lib.optionals enablePython [
     "-DHEPMC3_PYTHON_VERSIONS=${if python.isPy3k then "3.X" else "2.X"}"
     "-DHEPMC3_Python_SITEARCH${pythonVersion}=${placeholder "out"}/${python.sitePackages}"
   ];
