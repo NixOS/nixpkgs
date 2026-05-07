@@ -708,6 +708,7 @@ in
     package = pkgs.hadoop_3_3;
   };
   haproxy = runTest ./haproxy.nix;
+  happier-server = runTest ./happier-server.nix;
   harmonia = runTest ./harmonia.nix;
   haste-server = runTest ./haste-server.nix;
   hbase2 = runTest {
