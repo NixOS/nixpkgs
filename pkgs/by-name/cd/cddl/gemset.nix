@@ -14,10 +14,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1r9ay1kxn2yh9h0j2hr7iszz7cprpc7s6yjsv2k4inxndbsw5y4v";
+      sha256 = "08k659idrl977g1anlff32g9cp3rykjvk05n4nifr8jxzdczzv0r";
       type = "gem";
     };
-    version = "0.2.6";
+    version = "0.2.10";
   };
   base32 = {
     groups = [ "default" ];
@@ -38,6 +38,16 @@
       type = "gem";
     };
     version = "1.0.1";
+  };
+  base64 = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0yx9yn47a8lkfcjmigk79fykxvr80r4m1i35q82sxzynpbm7lcr7";
+      type = "gem";
+    };
+    version = "0.3.0";
   };
   cbor-canonical = {
     groups = [ "default" ];
@@ -72,20 +82,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1gxfs63jgvhdkfpm97mxpz14gxsvqds5pza8i175bmsqwvx3zn87";
+      sha256 = "1kjfyhavahayi5j358bn07885dxsmpihgww9c8qs6i9ap67lsy30";
       type = "gem";
     };
-    version = "0.9.5";
+    version = "0.11.8";
   };
   cbor-packed = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1dijyj7rivi39h34f32fx7k4xvngldf569i0372n1z6w01nv761l";
+      sha256 = "0sbbz0p17m77xqmh4fv4rwly1cj799hapdsg4h43kwsw8h0rnk8n";
       type = "gem";
     };
-    version = "0.1.5";
+    version = "0.2.2";
   };
   cddl = {
     dependencies = [
@@ -103,10 +113,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1811vvf73jjcxifq8h2cyp0b2z2qwhkplmrc2javx7gwrxlgb2p4";
+      sha256 = "196j6ghznk83wvwxxdf5fcz9w1hycr3z5whqk0jcx4x8d8mrskfm";
       type = "gem";
     };
-    version = "0.12.9";
+    version = "0.12.13";
   };
   colorize = {
     groups = [ "default" ];
@@ -174,9 +184,9 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0adc8qblz8ii668r3rksjx83p675iryh52rvdvysimx2hkbasj7d";
+      sha256 = "1nl3q5ai7ikaa5sjdbspfa4njbrdvf7898zkplmalln6y4r3y153";
       type = "gem";
     };
-    version = "1.6.12";
+    version = "1.6.18";
   };
 }
