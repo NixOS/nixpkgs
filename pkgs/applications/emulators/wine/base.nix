@@ -59,7 +59,7 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? stdenv.hostPlatform.isDarwin,
+  mingwSupport ? stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64,
   waylandSupport ? false,
   x11Support ? false,
   ffmpegSupport ? false,
@@ -267,6 +267,16 @@ stdenv.mkDerivation (
             lib.concatMapStringsSep " " (ps: "-W ${ps}") stagingPatches.disabledPatchsets
           }
         '';
+
+    # Fix dcomp test for aarch64
+    postPatch = lib.optionalString (useStaging && stdenv.hostPlatform.isAarch64) ''
+      if [ -f dlls/dcomp/tests/dcomp.c ]; then
+        substituteInPlace dlls/dcomp/tests/dcomp.c \
+          --replace-fail \
+            '#error "Unsupported architecture"' \
+            '__asm__ __volatile__("mov %0, sp" : "=r"(stack_pointer));'
+      fi
+    '';
 
     configureFlags =
       prevConfigFlags
