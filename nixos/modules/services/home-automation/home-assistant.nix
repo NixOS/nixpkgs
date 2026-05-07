@@ -1045,7 +1045,8 @@ in
         };
       path =
         with pkgs;
-        lib.optionals (useComponent "picotts") [ pkgs.picotts ]
+        lib.optionals (useComponent "go2rtc") [ pkgs.go2rtc ]
+        ++ lib.optionals (useComponent "picotts") [ pkgs.picotts ]
         ++ lib.optionals (any useComponent componentsUsingPing) [ unixtools.ping ];
     };
 
