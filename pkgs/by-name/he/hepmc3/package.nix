@@ -17,13 +17,13 @@ let
   root_py = if enablePython then root.override { python3 = python; } else root;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hepmc3";
   version = "3.3.1";
 
   src = fetchurl {
-    url = "https://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "sha256-CCQBYLDyjcMpOqTWHOZeLWfNWXrPb6ykOfLkZiX355M=";
+    url = "https://hepmc.web.cern.ch/hepmc/releases/HepMC3-${finalAttrs.version}.tar.gz";
+    hash = "sha256-CCQBYLDyjcMpOqTWHOZeLWfNWXrPb6ykOfLkZiX355M=";
   };
 
   nativeBuildInputs = [
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})
