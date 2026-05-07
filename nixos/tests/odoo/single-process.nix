@@ -4,8 +4,11 @@
   ...
 }:
 {
-  name = "odoo";
-  meta.maintainers = with lib.maintainers; [ mkg20001 ];
+  name = "odoo-single-process";
+  meta.maintainers = with lib.maintainers; [
+    mkg20001
+    xanderio
+  ];
 
   nodes.server = {
     services.nginx = {
