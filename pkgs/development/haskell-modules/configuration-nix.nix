@@ -134,6 +134,18 @@ builtins.intersectAttrs super {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  qhs = lib.pipe super.qhs [
+    # Package does not declare tool dependency hspec-discover
+    (addTestToolDepends [ self.hspec-discover ])
+    # tests depend on executable
+    (overrideCabal (drv: {
+      preCheck = ''
+        ${drv.preCheck or ""}
+        export PATH="$PWD/dist/build/qhs:$PATH"
+      '';
+    }))
+  ];
+
   # Test suite needs executable
   agda2lagda = overrideCabal (drv: {
     preCheck = ''
