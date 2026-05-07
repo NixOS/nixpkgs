@@ -41,6 +41,8 @@ buildPythonPackage rec {
     "affinegap"
   ];
 
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Cython implementation of the affine gap string distance";
     homepage = "https://github.com/dedupeio/affinegap";
