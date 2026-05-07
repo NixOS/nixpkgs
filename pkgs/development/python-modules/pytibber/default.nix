@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytibber";
-  version = "0.37.2";
+  version = "0.37.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = finalAttrs.version;
-    hash = "sha256-ZM9oXX6iEmsR20f2Jgg3fME1lm3egKun1GvNOZIKTV0=";
+    hash = "sha256-xXZLMLPlOYCDO1+b3/lL5O5NI5UA+4HX+YOMHLwCbig=";
   };
 
   build-system = [ setuptools ];

@@ -10,7 +10,7 @@
   # dependencies
   mashumaro,
   orjson,
-  pyserial-asyncio-fast,
+  serialx,
 
   # tests
   pytestCheckHook,
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiorussound";
-  version = "4.9.1";
+  version = "5.0.1";
   pyproject = true;
 
   # requires newer f-strings introduced in 3.12
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "noahhusby";
     repo = "aiorussound";
     tag = version;
-    hash = "sha256-vDGNb2eXvNLWzEs9ZI2vOk4+7RJQ/ISu9PCkIWCBJQw=";
+    hash = "sha256-TFRxeQQwgoI4O0k6A1pO622oEONOxANQDLr7SAkjuA0=";
   };
 
   build-system = [ poetry-core ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     mashumaro
     orjson
-    pyserial-asyncio-fast
+    serialx
   ];
 
   nativeCheckInputs = [
