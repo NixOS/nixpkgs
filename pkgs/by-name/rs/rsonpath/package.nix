@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,12 +22,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [ "-p=rsonpath" ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Experimental JSONPath engine for querying massive streamed datasets";
     homepage = "https://github.com/v0ldek/rsonpath";
-    changelog = "https://github.com/v0ldek/rsonpath/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/v0ldek/rsonpath/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbutter ];
+    maintainers = with lib.maintainers; [
+      tbutter
+      progrm_jarvis
+    ];
     mainProgram = "rq";
   };
 })

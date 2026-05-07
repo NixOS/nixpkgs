@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required (VERSION 2.6.3)" "cmake_minimum_required (VERSION 3.10)"
-    substituteInPlace {dcpp,dht,extra,}json/CMakeLists.txt \
+    substituteInPlace {dcpp,dht,extra,json}/CMakeLists.txt \
       --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required (VERSION 3.10)"
     substituteInPlace eiskaltdcpp-{cli,daemon}/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required (VERSION 3.10)"
