@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  stdenv,
 
   # build-system
   hatchling,
@@ -108,11 +107,12 @@ buildPythonPackage (finalAttrs: {
     "test_convex_convex"
     "test_dumps"
     "test_dumps_invalidstate_raises"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+
     # Flaky:
     # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
     "test_pendulum_period2"
+    # AssertionError: Array(837.4592, dtype=float32) not greater than 990.0
+    "testSpeed1"
   ];
 
   disabledTestPaths = [

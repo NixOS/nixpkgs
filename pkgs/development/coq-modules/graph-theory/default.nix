@@ -52,10 +52,12 @@ mkCoqDerivation {
     mathcomp.algebra
     mathcomp-finmap
     mathcomp.fingroup
-    mathcomp-algebra-tactics
     fourcolor
     stdlib
-  ];
+  ]
+  ++ lib.optional (
+    mathcomp.version != "dev" && lib.versions.isLe "2.5" mathcomp.version
+  ) mathcomp-algebra-tactics;
 
   meta = {
     description = "Library of formalized graph theory results in Coq";

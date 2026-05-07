@@ -22,13 +22,22 @@ let
           hash = "sha256-1KVy9s+zjlB4w7E45PMCWRxPus24bgBmmM3k2R9d+Jg=";
         };
       });
+      # 112/2907 tests fail with textual 8.2.5:
+      # textual.app.InvalidThemeError: Theme 'textual-ansi' has not been registered.
+      textual = prev.textual.overridePythonAttrs (old: rec {
+        version = "8.2.4";
+        src = old.src.override {
+          tag = "v${version}";
+          hash = "sha256-827cm9pcj1o1FYeaoWKCJ6dEyXeDop4kYd205cySTfg=";
+        };
+      });
     };
   };
   python3Packages = python.pkgs;
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.9.3";
+  version = "2.9.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3kMilvBmBhP57jPlDLc+S6kDuJjcOjMHEwh8W4hzEVw=";
+    hash = "sha256-TOA1ybK41f3+/I5gCaPlAd3yo9N399l6JumWnATbS00=";
   };
 
   build-system = with python3Packages; [

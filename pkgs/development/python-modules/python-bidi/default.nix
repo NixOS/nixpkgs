@@ -43,5 +43,9 @@ buildPythonPackage rec {
     mainProgram = "pybidi";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    license = lib.licenses.AND [
+      lib.licenses.lgpl3Only
+      lib.licenses.gpl3Only
+    ];
   };
 }

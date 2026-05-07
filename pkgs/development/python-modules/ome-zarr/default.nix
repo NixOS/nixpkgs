@@ -10,6 +10,7 @@
   # dependencies
   aiohttp,
   dask,
+  deprecated,
   fsspec,
   numpy,
   rangehttpserver,
@@ -25,14 +26,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ome-zarr";
-  version = "0.13.0";
+  version = "0.16.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bRksh6ZKqF6cL6XnWBsQRb4gRVxH/vutKtep6SyFo48=";
+    hash = "sha256-hrk+F1a1yJzaIb7G80sGdqeMb2POIAD2gLOfK57A22A=";
   };
 
   build-system = [
@@ -46,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     dask
+    deprecated
     fsspec
     numpy
     rangehttpserver

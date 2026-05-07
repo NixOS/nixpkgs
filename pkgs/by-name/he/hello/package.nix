@@ -14,6 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hello";
   version = "2.12.3";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
     hash = "sha256-DV9gFUOC/uELEUocNOeF2LH0kgc64tOm97FHaHs2aqA=";

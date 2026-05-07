@@ -1560,6 +1560,11 @@ lib.mapAttrs mkLicense (
       fullName = "W3C Software Notice and License";
     };
 
+    w3c-19980720 = {
+      spdxId = "W3C-19980720";
+      fullName = "W3C Software Notice and License (1998-07-20)";
+    };
+
     wadalab = {
       fullName = "Wadalab Font License";
       url = "https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab";

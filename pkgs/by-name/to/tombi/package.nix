@@ -9,19 +9,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tombi";
-  version = "0.9.24";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "tombi-toml";
     repo = "tombi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ucyBIq/47CoAZRRX9KmPfS6fTW1fdCLkC/M5mT2pNeA=";
+    hash = "sha256-Hs274ROPzyhVyvcvA7pDZ6+EELj4uUZylz94BoZNe6M=";
   };
 
   # Tests relies on the presence of network
   doCheck = false;
   cargoBuildFlags = [ "--package tombi-cli" ];
-  cargoHash = "sha256-kQB0vRj07lcX/Rzt+KTenD4NoK0BI0yc6D3V/ewT3Bk=";
+  cargoHash = "sha256-i7OeWuGLrDFjBhFjuygIZ35LbzENM39+cCwHJ98ECyQ=";
 
   postPatch = ''
     substituteInPlace Cargo.toml \

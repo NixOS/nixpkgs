@@ -4,6 +4,7 @@
   fetchFromGitHub,
   # Dependencies
   protobuf,
+  coturn,
   # Tests
   versionCheckHook,
   nix-update-script,
@@ -12,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turn-rs";
-  version = "4.0.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CtDlkHHOkU0mwNiyP9PNw/40szBNKeGYvVep9Z/aoDg=";
+    hash = "sha256-YZPKcLePLX+Mdu4J31VNofiX/qCLjcxydc4iVhonhkU=";
   };
 
-  cargoHash = "sha256-x45GDuhxqoB/DZvccdzxBoS/7nnFvHtjkRgfM/LOOE8=";
+  cargoHash = "sha256-vvhj0B/KYdOeddALh38MvAwrg8sIAIlEzTj0yFNEjFk=";
 
   # By default, no features are enabled
   # https://github.com/mycrl/turn-rs?tab=readme-ov-file#features-1
@@ -30,6 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     protobuf
   ];
+
+  # Fix coturn needed
+  nativeCheckInputs = [ coturn ];
+  env.COTURN_UCLIENT_PATH = lib.getExe' coturn "turnutils_uclient";
 
   nativeInstallCheckInputs = [
     versionCheckHook

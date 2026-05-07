@@ -54,25 +54,25 @@ let
   # Zoom versions are released at different times per platform and often with different versions.
   # We write them on three lines like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.7.5.75246";
-  versions.x86_64-darwin = "6.7.5.75246";
+  versions.aarch64-darwin = "7.0.0.77593";
+  versions.x86_64-darwin = "7.0.0.77593";
 
   # This is the fallback version so that evaluation can produce a meaningful result.
-  versions.x86_64-linux = "6.7.5.6891";
+  versions.x86_64-linux = "7.0.0.1666";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-oNeoW7WNq9ES4lJjc+zGrQs/yJ2E7DSsh33hEiU1RSE=";
+      hash = "sha256-YSUaM8YAJHigm4M9W34/bD164M8f/hbhtcmHyUwFN20=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-2D8Q0rRluBM0UpXL5QN3a67b0X1iIW67YWZvVqsl4Qg=";
+      hash = "sha256-jIKBCrnvF101WJm8Tcpi2R5jRsqRXH7NQVGkSTnAeMA=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-Qy4o3vbgiAjKUGWMFi8rNqyDAohG7TgwX69jKVWTWeY=";
+      hash = "sha256-aPQ44znQfxcjGnUpON5RRj3+SG+IDaBa/s0khwj/AIo=";
     };
   };
 
@@ -148,7 +148,6 @@ let
       maintainers = with lib.maintainers; [
         philiptaron
         ryan4yin
-        yarny
       ];
       mainProgram = "zoom";
     };
@@ -160,41 +159,37 @@ let
     pkgs:
     [
       pkgs.alsa-lib
-      pkgs.at-spi2-atk
-      pkgs.at-spi2-core
       pkgs.atk
       pkgs.cairo
-      pkgs.coreutils
       pkgs.cups
       pkgs.dbus
       pkgs.expat
       pkgs.fontconfig
       pkgs.freetype
-      pkgs.gdk-pixbuf
       pkgs.glib
-      pkgs.glib.dev
       pkgs.gtk3
+      pkgs.ibus
       pkgs.libGL
       pkgs.libGLU
+      pkgs.libatomic_ops
       pkgs.libdrm
       pkgs.libgbm
       pkgs.libkrb5
+      pkgs.libsm
+      pkgs.libxi
       pkgs.libxkbcommon
+      pkgs.libxslt
+      pkgs.mesa
+      pkgs.mesa-demos
       pkgs.nspr
       pkgs.nss
       pkgs.pango
       pkgs.pciutils
       pkgs.pipewire
-      pkgs.procps
-      pkgs.qt5.qt3d
-      pkgs.qt5.qtgamepad
-      pkgs.qt5.qtlottie
-      pkgs.qt5.qtmultimedia
-      pkgs.qt5.qtremoteobjects
-      pkgs.qt5.qtxmlpatterns
+      pkgs.qt6.qtbase
+      pkgs.qt6.qtdeclarative
       pkgs.stdenv.cc.cc
       pkgs.udev
-      pkgs.util-linux
       pkgs.wayland
       pkgs.libx11
       pkgs.libxcomposite
@@ -212,6 +207,7 @@ let
       pkgs.libxcb-render-util
       pkgs.libxcb-wm
       pkgs.zlib
+      pkgs.zstd
     ]
     ++ lib.optionals pulseaudioSupport [
       pkgs.libpulseaudio

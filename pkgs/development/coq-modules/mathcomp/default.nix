@@ -256,7 +256,7 @@ if coq.rocqPackages ? mathcomp && version != "2.3.0" && version != "2.4.0" then
         fetchzip
         hierarchy-builder
         ;
-      inherit (coq.rocqPackages) rocq-core;
+      inherit (coq.rocqPackages) rocq-core micromega-plugin;
     };
   in
   mc
