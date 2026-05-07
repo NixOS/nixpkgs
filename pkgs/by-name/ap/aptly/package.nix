@@ -38,6 +38,9 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     echo ${finalAttrs.version} > VERSION
   '';
+  excludedPackages = [
+    "system"
+  ];
 
   postInstall = ''
     installShellCompletion --bash --name aptly completion.d/aptly
