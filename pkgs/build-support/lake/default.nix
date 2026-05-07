@@ -68,12 +68,6 @@ lib.extendMkDerivation {
       ...
     }@args:
     let
-      lakeDeps' = args.lakeDeps or null;
-      lakeHash = args.lakeHash or null;
-      leanDeps = args.leanDeps or [ ];
-      overrideLakeDepsAttrs = args.overrideLakeDepsAttrs or (_: _: { });
-      buildTargets = args.buildTargets or [ ];
-      isLibrary = args.isLibrary or true;
       leanPackageName = args.leanPackageName or finalAttrs.pname;
 
       allLeanDeps = lib.unique (
@@ -81,8 +75,8 @@ lib.extendMkDerivation {
       );
 
       computedLakeDeps =
-        if lakeDeps' != null then
-          lakeDeps'
+        if lakeDeps != null then
+          lakeDeps
         else if lakeHash == null then
           null
         else
