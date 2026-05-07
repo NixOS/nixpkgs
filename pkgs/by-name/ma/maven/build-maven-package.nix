@@ -155,10 +155,14 @@ let
     );
 in
 fnOrAttrs:
-if !lib.isFunction fnOrAttrs then
-  buildMavenPackage fnOrAttrs
-else
-  let
-    finalAttrs = fnOrAttrs finalAttrs;
-  in
-  buildMavenPackage finalAttrs
+let
+  finalPackage =
+    if !lib.isFunction fnOrAttrs then
+      buildMavenPackage fnOrAttrs
+    else
+      let
+        finalAttrs = fnOrAttrs (finalAttrs // { inherit finalPackage; });
+      in
+      buildMavenPackage finalAttrs;
+in
+finalPackage
