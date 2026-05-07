@@ -196,8 +196,8 @@
     "version": "40"
   },
   "libiconv": {
-    "hash": "sha256-MboAwJvpO0ix7XsAuKUUxipv8ecxD2OjDgD5bQbygr8=",
-    "version": "113"
+    "hash": "sha256-iPPdwts6kALf2lGnYnXfMTuBa2lYrDt7rySiUmraJqs=",
+    "version": "115.100.1"
   },
   "libmalloc": {
     "hash": "sha256-kwJ6vfk1PzDdE0n3Ba+3hXLSf63YmMgPluxrEuvOpF0=",
