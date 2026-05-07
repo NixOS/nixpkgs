@@ -11,14 +11,18 @@
 buildHomeAssistantComponent rec {
   owner = "tolwi";
   domain = "ecoflow_cloud";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "tolwi";
     repo = "hassio-ecoflow-cloud";
     tag = "v${version}";
-    hash = "sha256-CVm5+zLWN/ayhHRNFUr4PLwedwf4GJXvLOFgrh2qxAc=";
+    hash = "sha256-vN+po7S+/QxAHnVHJ0EpQGoxXBmcKNMRTCOPdeZ0f90=";
   };
+
+  ignoreVersionRequirement = [
+    "protobuf"
+  ];
 
   dependencies = [
     jsonpath-ng
