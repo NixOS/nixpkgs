@@ -908,11 +908,12 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pycasperglow
         pymicro-vad
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: pycasperglow
+      ];
     "cast" =
       ps: with ps; [
         aiohasupervisor
@@ -7565,6 +7566,7 @@
     "cambridge_audio"
     "camera"
     "canary"
+    "casper_glow"
     "cast"
     "ccm15"
     "cert_expiry"
