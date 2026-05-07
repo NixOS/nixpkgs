@@ -12701,7 +12701,7 @@ self: super: with self; {
   plotpy = callPackage ../development/python-modules/plotpy { };
 
   # Plover 5 moves from PyQt5 to PySide6,
-  # which is a backward-incompatible change to praphical plugins.
+  # which is a backward-incompatible change to graphical plugins.
   # Use Plover 4 for now (2026-04-26),
   # as the upstream still warns about this in every Plover 5 release,
   # List of unsupported plugins:
