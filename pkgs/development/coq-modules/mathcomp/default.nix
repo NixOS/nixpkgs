@@ -273,8 +273,8 @@ if coq.rocqPackages ? mathcomp && version != "2.3.0" && version != "2.4.0" then
         ;
       pname = "mathcomp-ssreflect";
       propagatedBuildInputs = [
-        mc.boot
         mc.order
+        mc.finite-group
       ];
       preBuild = "cd ssreflect";
     };
