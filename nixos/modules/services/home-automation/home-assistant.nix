@@ -1043,7 +1043,10 @@ in
           ];
           UMask = "0077";
         };
-      path = with pkgs; lib.optionals (any useComponent componentsUsingPing) [ unixtools.ping ];
+      path =
+        with pkgs;
+        lib.optionals (useComponent "picotts") [ pkgs.picotts ]
+        ++ lib.optionals (any useComponent componentsUsingPing) [ unixtools.ping ];
     };
 
     systemd.targets.home-assistant = rec {
