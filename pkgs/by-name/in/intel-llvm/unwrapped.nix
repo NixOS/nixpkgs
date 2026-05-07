@@ -135,6 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeBuildType = "Release";
+  # This is to shave a little bit of size off of the final NAR.
+  # Saves about 0.5GiB
+  # Note that the sum of all outputs needs to stay under 4GiB to be cached by Hydra.
+  # To check:
+  #  nix path-info --json --json-format 2 .#intel-llvm.unwrapped{,.lib,.dev,.python} | jq '[.. | .narSize? // empty] | add'
+  stripDebugFlags = [ "--strip-unneeded" ];
 
   patches = [
     # Fix paths so the output can be split properly
