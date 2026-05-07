@@ -470,7 +470,7 @@ python.pkgs.buildPythonApplication rec {
     export HOME="$TEMPDIR"
     export PYTHONASYNCIODEBUG=1
 
-    # the tests require the existance of a media dir
+    # the tests require the existence of a media dir
     mkdir "$NIX_BUILD_TOP"/media
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
