@@ -1,14 +1,18 @@
 {
   lib,
+  callPackage,
   fetchFromGitHub,
   makeBinaryWrapper,
   nix-update-script,
   python3Packages,
+  withManager ? false,
 }:
 
 let
   appDependencies =
-    ps: with ps; [
+    ps:
+    with ps;
+    [
       aiohttp
       alembic
       av
@@ -17,7 +21,6 @@ let
       comfy-kitchen
       comfyui-embedded-docs
       comfyui-frontend-package
-      comfyui-manager
       comfyui-workflow-templates
       einops
       filelock
@@ -45,6 +48,9 @@ let
       tqdm
       transformers
       yarl
+    ]
+    ++ lib.optionals withManager [
+      ps.comfyui-manager
     ];
   pythonEnv = python3Packages.python.withPackages appDependencies;
 in
@@ -99,6 +105,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   passthru = {
     inherit pythonEnv;
     updateScript = nix-update-script { };
+  }
+  // lib.optionalAttrs (!withManager) {
+    tests.withManager = callPackage ./package.nix {
+      withManager = true;
+    };
   };
 
   meta = {
