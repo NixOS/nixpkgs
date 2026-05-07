@@ -24355,6 +24355,12 @@
     githubId = 30531572;
     name = "Robert James Hernandez";
   };
+  sarowish = {
+    email = "berkeenercan@tutanota.com";
+    github = "sarowish";
+    githubId = 20581722;
+    name = "Berke Enercan";
+  };
   sarunint = {
     email = "nixpkgs@sarunint.com";
     github = "sarunint";
