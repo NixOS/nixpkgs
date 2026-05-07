@@ -1499,23 +1499,21 @@ let
   mergeAttrDefinitionsWithPrio =
     opt:
     let
-      defsByAttr = zipAttrs (
-        concatLists (
-          concatMap (
-            { value, ... }@def:
-            map (mapAttrsToList (
-              k: value: {
-                ${k} = def // {
-                  inherit value;
-                };
-              }
-            )) (pushDownProperties value)
-          ) opt.definitionsWithLocations
-        )
+      defsByAttr = concatLists (
+        concatMap (
+          { value, ... }@def:
+          map (mapAttrsToList (
+            k: value: {
+              ${k} = def // {
+                inherit value;
+              };
+            }
+          )) (pushDownProperties value)
+        ) opt.definitionsWithLocations
       );
     in
     assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
-    mapAttrs (
+    zipAttrsWith (
       k: v:
       let
         merging = mergeDefinitions (opt.loc ++ [ k ]) opt.type.nestedTypes.elemType v;
