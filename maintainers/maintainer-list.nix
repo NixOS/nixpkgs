@@ -14045,6 +14045,12 @@
     githubId = 762421;
     name = "Pierre Thierry";
   };
+  kero0 = {
+    email = "kbakheat@gmail.com";
+    github = "kero0";
+    githubId = 44583148;
+    name = "Kirols Bakheat";
+  };
   keto = {
     github = "TheRealKeto";
     githubId = 24854941;
