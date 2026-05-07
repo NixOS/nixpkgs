@@ -16,13 +16,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "tfenv";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "tfutils";
     repo = "tfenv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bwY5QEXugogNrStT859lNOkPoQ+n3BQZGexErxl5nco=";
+    hash = "sha256-okFPGBZgKgkwxdou9RiERHphzBr5vQQsidoNzEWT7IM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
