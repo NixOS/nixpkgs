@@ -982,7 +982,8 @@ in
           UMask = "0077";
         };
       path =
-        lib.optional (useComponent "picotts") pkgs.picotts
+        lib.optional (useComponent "go2rtc") pkgs.go2rtc
+        ++ lib.optional (useComponent "picotts") pkgs.picotts
         ++ lib.optional (any useComponent componentsUsingPing) pkgs.unixtools.ping;
     };
 
