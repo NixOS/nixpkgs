@@ -180,6 +180,9 @@ let
     '';
 
     passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = finalAttrs: {
