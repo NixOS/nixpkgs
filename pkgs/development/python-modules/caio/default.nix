@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caio";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "caio";
     tag = finalAttrs.version;
-    hash = "sha256-F14uNUELzgAHbk0onY2MrXWRvifa3AeNkw2IFHcRDvo=";
+    hash = "sha256-IeyksrYpLMc9PJjpYeaOgLx26CeVMoR/3r2RX66ucDs=";
   };
 
   build-system = [ setuptools ];
