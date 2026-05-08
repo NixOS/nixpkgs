@@ -79,5 +79,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/{${finalAttrs.src.tag}}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })
