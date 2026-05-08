@@ -76,7 +76,7 @@ let
               pos = attrs.__stdenvPythonCompatPos or (builtins.unsafeGetAttrPos attrName attrs);
               msg = [
                 "${name}: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:"
-                "  buildPythonPackage.override { stdenv = customStdenv; } { }"
+                "    buildPythonPackage.override { stdenv = customStdenv; } { }"
               ]
               ++ lib.optionals (pos != null) [
                 "`stdenv` argument found at ${pos.file}:${toString pos.line}"

@@ -46,7 +46,7 @@ let
   stdenvDeprecationWarningPattern =
     lib.escapeRegex ''
       evaluation warning: python-package-stub: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
-                            buildPythonPackage.override { stdenv = customStdenv; } { }
+                              buildPythonPackage.override { stdenv = customStdenv; } { }
                           `stdenv` argument found at ${toString __curPos.file}:''
     + "[0-9]+\n";
 
