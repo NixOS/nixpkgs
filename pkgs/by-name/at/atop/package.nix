@@ -9,6 +9,7 @@
   findutils,
   systemd,
   python3,
+  python3Packages,
   nixosTests,
   # makes the package unfree via pynvml
   withAtopgpu ? false,
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals withAtopgpu [
-    python3.pkgs.wrapPython
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pythonPath = lib.optionals withAtopgpu [
-    python3.pkgs.pynvml
+    python3Packages.pynvml
   ];
 
   makeFlags = [
