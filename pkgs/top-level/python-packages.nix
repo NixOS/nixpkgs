@@ -7314,6 +7314,8 @@ self: super: with self; {
 
   hyprland-schema = callPackage ../development/python-modules/hyprland-schema { };
 
+  hyprland-socket = callPackage ../development/python-modules/hyprland-socket { };
+
   hyrule = callPackage ../development/python-modules/hyrule { };
 
   i-pi = callPackage ../development/python-modules/i-pi { };
