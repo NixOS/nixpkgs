@@ -7972,6 +7972,7 @@ with pkgs;
 
   mbedtls_2 = callPackage ../development/libraries/mbedtls/2.nix { };
   mbedtls = callPackage ../development/libraries/mbedtls/3.nix { };
+  mbedtls_4 = callPackage ../development/libraries/mbedtls/4.nix { };
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
 

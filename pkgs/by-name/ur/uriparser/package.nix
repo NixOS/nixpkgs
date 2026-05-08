@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uriparser";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "uriparser";
     repo = "uriparser";
     tag = "uriparser-${finalAttrs.version}";
-    hash = "sha256-k4hRy4kfsaxUNIITPNxzqVgl+AwiR1NpKcE9DtAbwxc=";
+    hash = "sha256-tXEcJ6NAKVoFg/GLkldRcrSlXDcGpvjp7cguM9Xqcps=";
   };
 
   nativeBuildInputs = [ cmake ];
