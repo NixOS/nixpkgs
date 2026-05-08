@@ -1446,12 +1446,6 @@ with pkgs;
 
   crystfel-headless = crystfel.override { withGui = false; };
 
-  amule-gui = amule.override {
-    monolithic = false;
-    client = true;
-    mainProgram = "amulegui";
-  };
-
   amule-web = amule.override {
     monolithic = false;
     httpServer = true;
