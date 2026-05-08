@@ -147,7 +147,6 @@ let
       lightly
       mailcommon
       mailimporter
-      mauikit
       mauikit-accounts
       mauikit-calendar
       mauikit-documents
@@ -155,7 +154,6 @@ let
       mauikit-imagetools
       mauikit-terminal
       mauikit-texteditor
-      mauiman
       mbox-importer
       messagelib
       oxygen-sounds

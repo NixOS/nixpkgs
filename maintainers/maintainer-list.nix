@@ -24355,6 +24355,12 @@
     githubId = 96694484;
     name = "Sandeep Patel";
   };
+  sandwoodjones = {
+    name = "Raul Rodrigues";
+    github = "SandWoodJones";
+    githubId = 35671374;
+    email = "sandwoodjones@gmail.com";
+  };
   sandydoo = {
     name = "Sander";
     github = "sandydoo";
