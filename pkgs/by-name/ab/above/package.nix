@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "above";
   version = "2.8.1";
   pyproject = true;
@@ -16,9 +16,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-wyXWGfthzJeHZoJe4OKe9k2BIwLae/aOUtiJpT4SfHw=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     colorama
     scapy
   ];
