@@ -468,6 +468,7 @@
   ./services/backup/syncoid.nix
   ./services/backup/tarsnap.nix
   ./services/backup/tsm.nix
+  ./services/backup/yrba.nix
   ./services/backup/zfs-replication.nix
   ./services/backup/znapzend.nix
   ./services/backup/zrepl.nix

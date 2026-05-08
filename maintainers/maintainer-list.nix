@@ -14975,6 +14975,13 @@
     github = "lilioid";
     githubId = 12398140;
   };
+  lilith-roth = {
+    name = "Lilith Roth";
+    email = "lilith@roth.systems";
+    matrix = "@lily_squeaks:matrix.roth.systems";
+    github = "lilith-roth";
+    githubId = 96540347;
+  };
   LilleAila = {
     name = "Olai";
     email = "olai@olai.dev";
