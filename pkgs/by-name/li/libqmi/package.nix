@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
-    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "gtk_doc" (stdenv.hostPlatform == stdenv.buildPlatform))
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "man" withMan)
     (lib.mesonBool "qrtr" withIntrospection)
