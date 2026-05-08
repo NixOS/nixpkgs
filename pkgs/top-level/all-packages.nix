@@ -1446,12 +1446,6 @@ with pkgs;
 
   crystfel-headless = crystfel.override { withGui = false; };
 
-  amule-daemon = amule.override {
-    monolithic = false;
-    enableDaemon = true;
-    mainProgram = "amuled";
-  };
-
   amule-gui = amule.override {
     monolithic = false;
     client = true;
