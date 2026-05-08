@@ -1,68 +1,11 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fontconfig,
-  freetype,
+  podofo,
   libidn,
-  libjpeg,
-  libpng,
-  libtiff,
-  libxml2,
-  openssl,
-  pkg-config,
-  zlib,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "podofo";
+podofo.overrideAttrs (prevAttrs: {
   version = "0.10.6";
-
-  src = fetchFromGitHub {
-    owner = "podofo";
-    repo = "podofo";
-    rev = finalAttrs.version;
+  src = prevAttrs.src.override {
     hash = "sha256-DlCKQYlsgTfnZACk6yTeoIiaOL5AtICcHjRd8jl0RkI=";
   };
-
-  outputs = [
-    "out"
-    "dev"
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-
-  buildInputs = [
-    fontconfig
-    freetype
-    libidn
-    libjpeg
-    libpng
-    libtiff
-    libxml2
-    openssl
-    zlib
-  ];
-
-  cmakeFlags = [
-    "-DPODOFO_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
-    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-  ];
-
-  meta = {
-    homepage = "https://github.com/podofo/podofo";
-    description = "Library to work with the PDF file format";
-    platforms = lib.platforms.all;
-    license = with lib.licenses; [
-      gpl2Plus
-      lgpl2Plus
-    ];
-    maintainers = with lib.maintainers; [
-      kuflierl
-    ];
-  };
+  buildInputs = prevAttrs.buildInputs ++ [ libidn ];
 })
