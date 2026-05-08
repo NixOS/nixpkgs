@@ -1,4 +1,5 @@
 // @ts-check
+const { classify } = require('../supportedBranches.js')
 const { getCommitDetailsForPR } = require('./get-pr-commit-details')
 
 /**
@@ -29,6 +30,27 @@ async function checkManualFileEdits({ github, context, core, repoPath, dry }) {
 
   if (pr.user.login.endsWith('[bot]')) {
     core.info('This is a bot, so these checks do not apply.')
+    return
+  }
+
+  const baseBranchType = classify(
+    pr.base.ref.replace(/^refs\/heads\//, ''),
+  ).type
+  const headBranchType = classify(
+    pr.head.ref.replace(/^refs\/heads\//, ''),
+  ).type
+
+  if (
+    baseBranchType.includes('development') &&
+    headBranchType.includes('development') &&
+    pr.base.repo.id === pr.head.repo?.id
+  ) {
+    // This matches, for example, PRs from NixOS:staging-next to NixOS:master, or vice versa.
+    // Ignore them: we should only care about PRs introducing *new* commits.
+    // We still want to run on PRs from, e.g., Someone:master to NixOS:master, though.
+    core.info(
+      'This PR is from one development branch to another. Skipping checks.',
+    )
     return
   }
 
