@@ -1481,13 +1481,13 @@
     "vendorHash": "sha256-rUYHapEVqRupLOPVbcAH8YP0cuXclMmYTQUkqeOwCN0="
   },
   "vultr_vultr": {
-    "hash": "sha256-gw4Eo4wrBDAycQyN7xGHe/w1VazTSgtIcAlBBrePrgs=",
+    "hash": "sha256-IKXby/v1oNjxwgzbFTSDQYEEWbV8v8qzB4ZC9ISEf5o=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.31.0",
+    "rev": "v2.31.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-bKf0QittBRoEbuz0JvmcyCyus1wPP3pacuYmq2RLV08="
+    "vendorHash": "sha256-XQcxOSvZKXyq+k8N5n1lMM1ThbWfDXBm1Hc+Rmagu7I="
   },
   "wgebis_mailgun": {
     "hash": "sha256-Li4eyqZ6huO5Q+XTcQ+HQCg8IOjhxGU9Z4Uw3TbMdAc=",
