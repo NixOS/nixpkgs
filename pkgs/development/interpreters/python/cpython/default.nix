@@ -427,7 +427,7 @@ stdenv.mkDerivation (finalAttrs: {
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
   ]
-  ++ optionals (pythonAtLeast "3.14") [
+  ++ optionals (pythonAtLeast "3.14" && pythonOlder "3.15") [
     # https://github.com/python/cpython/issues/146264
     # https://github.com/python/cpython/pull/146265
     ./3.14/hacl-static-ldeps-for-static-modules.patch

@@ -9,7 +9,7 @@ let
   iniFmt = pkgs.formats.ini { };
 in
 {
-  options.programs.reframe = {
+  options.services.reframe = {
     enable = lib.mkEnableOption "DRM/KMS based remote desktop for Linux that supports Wayland/NVIDIA/headless/login…";
     package = lib.mkPackageOption pkgs "reframe" { };
     configs = lib.mkOption {
@@ -113,7 +113,7 @@ in
                   "cpu"
                   "gpu"
                 ];
-                default = true;
+                default = "cpu";
                 description = ''
                   Set to `gpu` to use GPU damage region detection, which may be more efficiency but may cause artifacts depending on GPU vendors.
                   Set to `cpu` to use CPU damage region detection if you get bugs with `gpu`.
@@ -173,7 +173,7 @@ in
       description = "ReFrame Remote Desktop";
     };
     users.groups.reframe = { };
-    environment.etc = builtins.mapAttrs' (
+    environment.etc = lib.mapAttrs' (
       name: value:
       lib.nameValuePair "reframe/${name}.conf" {
         mode = "0644";

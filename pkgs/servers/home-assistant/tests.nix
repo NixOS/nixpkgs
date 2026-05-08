@@ -8,177 +8,87 @@ let
 
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    abode = getComponentDeps "camera";
-    agent_dvr = getComponentDeps "camera";
-    air_quality = getComponentDeps "camera" ++ getComponentDeps "conversation";
     alexa = map getComponentDeps [
       "cloud"
       "frontend"
       "stream"
     ];
-    android_ip_webcam = getComponentDeps "camera";
     anthropic = getComponentDeps "ai_task" ++ getComponentDeps "openai_conversation";
     assist_pipeline = getComponentDeps "frontend";
     automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
-    axis = getComponentDeps "camera" ++ getComponentDeps "deconz";
-    blink = getComponentDeps "camera";
+    axis = getComponentDeps "deconz";
     bluetooth = getComponentDeps "switchbot";
     braviatv = getComponentDeps "ssdp";
-    broadlink = getComponentDeps "radio_frequency";
     bthome = getComponentDeps "frontend";
-    buienradar = getComponentDeps "camera";
-    camera = getComponentDeps "conversation" ++ getComponentDeps "stream";
-    canary = getComponentDeps "camera";
-    climate = getComponentDeps "conversation";
-    color_extractor = getComponentDeps "camera" ++ getComponentDeps "conversation";
+    camera = getComponentDeps "stream";
     deconz = getComponentDeps "frontend";
-    demo = getComponentDeps "camera";
-    device_tracker = getComponentDeps "conversation";
-    dialogflow = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
-    dlib_face_detect = getComponentDeps "image_processing";
-    dlib_face_identify = getComponentDeps "image_processing";
-    doorbird = getComponentDeps "camera";
-    dremel_3d_printer = getComponentDeps "camera";
-    elevenlabs = getComponentDeps "tts";
     elkm1 = getComponentDeps "frontend";
-    emulated_hue = getComponentDeps "conversation" ++ [
+    emulated_hue = [
       defusedxml
     ];
-    emulated_kasa = getComponentDeps "camera" ++ getComponentDeps "conversation";
-    environment_canada = getComponentDeps "camera";
-    esphome = getComponentDeps "camera" ++ getComponentDeps "radio_frequency";
-    fan = getComponentDeps "conversation";
-    fish_audio = getComponentDeps "tts";
-    foscam = getComponentDeps "camera";
-    freebox = getComponentDeps "camera";
-    fully_kiosk = getComponentDeps "camera";
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
-    geofency = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     go2rtc = [
       tqdm
     ];
-    google_assistant = getComponentDeps "conversation";
-    google_assistant_sdk = getComponentDeps "conversation" ++ getComponentDeps "frontend";
-    google_cloud = getComponentDeps "tts";
+    google_assistant_sdk = getComponentDeps "frontend";
     google_drive = getComponentDeps "frontend";
     google_generative_ai_conversation = getComponentDeps "ai_task";
-    google_translate = getComponentDeps "tts";
     govee_ble = [
       ibeacon-ble
     ];
-    gpslogger = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
-    group = getComponentDeps "camera" ++ getComponentDeps "conversation";
     hassio = getComponentDeps "frontend" ++ getComponentDeps "homeassistant_yellow";
-    hikvision = getComponentDeps "camera";
-    homeassistant = getComponentDeps "camera" ++ getComponentDeps "conversation";
     homeassistant_connect_zbt2 = getComponentDeps "zha";
     homeassistant_hardware = getComponentDeps "otbr" ++ getComponentDeps "zha";
     homeassistant_sky_connect = getComponentDeps "zha";
     homeassistant_yellow = getComponentDeps "zha";
-    homekit = getComponentDeps "conversation" ++ getComponentDeps "frontend";
-    homekit_controller = getComponentDeps "camera";
+    homekit = getComponentDeps "frontend";
     http = getComponentDeps "cloud" ++ getComponentDeps "frontend";
-    humidifier = getComponentDeps "conversation";
-    hyperion = getComponentDeps "camera";
-    ifttt = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
-    image_processing = getComponentDeps "conversation";
     intelliclima = getComponentDeps "intellifire";
-    intent = getComponentDeps "conversation";
-    kitchen_sink = getComponentDeps "radio_frequency";
-    light = getComponentDeps "conversation";
-    local_file = getComponentDeps "camera";
-    locative = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     logbook = getComponentDeps "alexa";
     lovelace = getComponentDeps "frontend" ++ [
       pychromecast
     ];
     lutron_caseta = getComponentDeps "frontend";
-    mailgun = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
-    marytts = getComponentDeps "tts";
     mastodon = map getComponentDeps [
-      "ffmpeg"
       "stream"
-      "tts"
     ];
-    media_player = getComponentDeps "camera" ++ getComponentDeps "conversation";
-    microsoft = getComponentDeps "tts";
-    microsoft_face_detect = getComponentDeps "conversation";
-    microsoft_face_identify = getComponentDeps "conversation";
     miele = getComponentDeps "cloud";
-    mjpeg = getComponentDeps "camera";
     mobile_app = getComponentDeps "frontend";
     mopeka = getComponentDeps "switchbot";
-    motioneye = getComponentDeps "camera";
-    mqtt = getComponentDeps "camera";
-    nest = getComponentDeps "camera" ++ [
+    nest = [
       av
     ];
-    number = getComponentDeps "conversation";
-    ntfy = getComponentDeps "camera" ++ getComponentDeps "tts";
-    octoprint = getComponentDeps "camera";
     ollama = getComponentDeps "ai_task";
-    onboarding = getComponentDeps "tts" ++ [
+    onboarding = [
       pymetno
       radios
       rpi-bad-power
     ];
-    onvif = getComponentDeps "camera";
     open_router = getComponentDeps "ai_task";
-    openai_conversation = getComponentDeps "camera";
-    openalpr_cloud = getComponentDeps "camera" ++ getComponentDeps "conversation";
-    picotts = getComponentDeps "tts";
-    prosegur = getComponentDeps "camera";
-    prusalink = getComponentDeps "camera";
-    push = getComponentDeps "camera";
     raspberry_pi = [
       rpi-bad-power
     ];
     reolink = getComponentDeps "stream";
-    ring = getComponentDeps "camera";
-    roku = getComponentDeps "camera";
     rss_feed_template = [
       defusedxml
     ];
     script = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
-    sensor = getComponentDeps "camera" ++ getComponentDeps "conversation";
     shelly = getComponentDeps "frontend" ++ getComponentDeps "switchbot";
-    sighthound = getComponentDeps "conversation" ++ getComponentDeps "image_processing";
-    skybell = getComponentDeps "camera";
-    sleep_as_android = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     songpal = [
       isal
     ];
     sonos = getComponentDeps "frontend";
     swiss_public_transport = getComponentDeps "cookidoo";
-    switch = getComponentDeps "camera" ++ getComponentDeps "conversation";
-    switch_as_x = getComponentDeps "camera" ++ getComponentDeps "conversation";
-    synology_dsm = getComponentDeps "camera";
     system_log = [
       isal
     ];
-    tasmota = getComponentDeps "camera";
-    todo = getComponentDeps "conversation";
-    traccar = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
-    trafikverket_camera = getComponentDeps "camera";
-    tts = getComponentDeps "conversation";
-    tuya = getComponentDeps "camera";
-    twilio = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     unifi_discovery = getComponentDeps "unifiprotect";
-    unifiprotect = getComponentDeps "camera";
-    universal = getComponentDeps "camera" ++ getComponentDeps "conversation";
-    uvc = getComponentDeps "camera";
-    vivotek = getComponentDeps "camera";
-    voicerss = getComponentDeps "tts";
-    weather = getComponentDeps "conversation";
-    websocket_api = getComponentDeps "camera" ++ getComponentDeps "conversation";
     xiaomi_miio = [
       arrow
     ];
-    yandextts = getComponentDeps "tts";
     yolink = getComponentDeps "cloud";
     zeroconf = getComponentDeps "shelly";
     zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
-    zoneminder = getComponentDeps "camera";
     zwave_js = getComponentDeps "frontend";
   };
 

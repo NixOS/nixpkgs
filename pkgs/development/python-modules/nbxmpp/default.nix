@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "gajim";
     repo = "python-nbxmpp";
     tag = version;
-    hash = "sha256-eQYGOLV9P7zrqXB8dW8/CatBUT3xpl5h1TChKbY369g=";
+    hash = "sha256-OtJzCcaqcy2a46iNRcpknORgdTbzMtILocs5c6Akzrc=";
   };
 
   nativeBuildInputs = [
