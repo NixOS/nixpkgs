@@ -1240,6 +1240,22 @@ in
     ];
   });
 
+  tomlua = prev.tomlua.overrideAttrs (old: {
+    postConfigure = ''
+      chmod +w "$rockspecFilename"
+      echo "deploy = { wrap_bin_scripts = false, }" >> "$rockspecFilename"
+    '';
+    checkPhase = ''
+      runHook preCheck
+      runHook postCheck
+    '';
+    installCheckPhase = ''
+      runHook preInstallCheck
+      make test
+      runHook postInstallCheck
+    '';
+  });
+
   tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {
     # Keep this package hermetic: provide the already-packaged tree-sitter
     # binary instead of using the LuaRocks backend that downloads from GitHub.

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moosefs";
-  version = "4.59.0";
+  version = "4.59.1";
 
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-l4KtrGyV4qy9QFj1SL73n0tRKEATfgDfjTxES9ws+Zw=";
+    sha256 = "sha256-ASI3iwygGeF9HaoZaSMUIuELJ/pMzRwJL8VmOAXs8cM=";
   };
 
   nativeBuildInputs = [

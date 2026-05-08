@@ -29,178 +29,172 @@ let
     else
       alias;
 
-  deprecatedPlasma5Packages = {
-    inherit (plasma5Packages)
-      akonadi-calendar
-      akonadi-calendar-tools
-      akonadi-contacts
-      akonadi-import-wizard
-      akonadi-mime
-      akonadi-notes
-      akonadi-search
-      akonadiconsole
-      alligator
-      analitza
-      angelfish
-      applet-window-appmenu
-      applet-window-buttons
-      audiotube
-      aura-browser
-      baloo-widgets
-      bismuth
-      booth
-      buho
-      calendarsupport
-      calindori
-      cantor
-      clip
-      communicator
-      dolphin-plugins
-      eventviews
-      flatpak-kcm
-      ghostwriter
-      grantleetheme
-      incidenceeditor
-      index
-      isoimagewriter
-      juk
-      kaccounts-integration
-      kaccounts-providers
-      kalarm
-      kalgebra
-      kalk
-      kamoso
-      kasts
-      kbreakout
-      kcalutils
-      kclock
-      kde-inotify-survey
-      kde2-decoration
-      kdebugsettings
-      kdeconnect-kde
-      kdecoration
-      kdegraphics-mobipocket
-      kdegraphics-thumbnailers
-      kdenetwork-filesharing
-      kdepim-runtime
-      keysmith
-      kgeography
-      khotkeys
-      kidentitymanagement
-      kimap
-      kio-admin
-      kio-extras
-      kio-gdrive
-      kipi-plugins
-      kirigami-gallery
-      kldap
-      kmahjongg
-      kmail-account-wizard
-      kmailtransport
-      kmbox
-      kmime
-      kmousetool
-      knotes
-      koko
-      kolf
-      kongress
-      konqueror
-      konquest
-      kontactinterface
-      kopeninghours
-      kosmindoormap
-      kpat
-      kpimtextedit
-      kpipewire
-      kpmcore
-      kpublictransport
-      kqtquickcharts
-      krecorder
-      kreport
-      kruler
-      ksanecore
-      ksmtp
-      kspaceduel
-      ksudoku
-      ksystemstats
-      ktnef
-      ktrip
-      kweather
-      kzones
-      layer-shell-qt
-      libgravatar
-      libkcddb
-      libkdcraw
-      libkdegames
-      libkdepim
-      libkexiv2
-      libkgapi
-      libkipi
-      libkleo
-      libkmahjongg
-      libkomparediff2
-      libksane
-      libkscreen
-      libksieve
-      libksysguard
-      libktorrent
-      lightly
-      mailcommon
-      mailimporter
-      mauikit
-      mauikit-accounts
-      mauikit-calendar
-      mauikit-documents
-      mauikit-filebrowsing
-      mauikit-imagetools
-      mauikit-terminal
-      mauikit-texteditor
-      mauiman
-      mbox-importer
-      messagelib
-      oxygen-sounds
-      palapeli
-      parachute
-      partitionmanager
-      pim-data-exporter
-      pim-sieve-editor
-      pimcommon
-      plank-player
-      plasma-bigscreen
-      plasma-dialer
-      plasma-disks
-      plasma-firewall
-      plasma-phonebook
-      plasma-remotecontrollers
-      plasma-sdk
-      plasma-settings
-      plasma-welcome
-      plasmatube
-      polkit-kde-agent
-      print-manager
-      qmlkonsole
-      rocs
-      shelf
-      sierra-breeze-enhanced
-      soundkonverter
-      station
-      telly-skout
-      tokodon
-      umbrello
-      vvave
-      xwaylandvideobridge
-      ;
-
-    inherit (libsForQt5)
-      neochat # Added 2025-07-04
-      itinerary # Added 2025-07-04
-      libquotient # Added 2025-07-04
-      qtwebengine # Added 2026-01-15
-      qtwebview # Added 2026-04-03
-      ;
-
-    kexi = throw ""; # Added 2025-08-21
-  };
+  deprecatedPlasma5Packages = [
+    "akonadi-calendar"
+    "akonadi-calendar-tools"
+    "akonadi-contacts"
+    "akonadi-import-wizard"
+    "akonadi-mime"
+    "akonadi-notes"
+    "akonadi-search"
+    "akonadiconsole"
+    "alligator"
+    "analitza"
+    "angelfish"
+    "applet-window-appmenu"
+    "applet-window-buttons"
+    "audiotube"
+    "aura-browser"
+    "baloo-widgets"
+    "bismuth"
+    "booth"
+    "buho"
+    "calendarsupport"
+    "calindori"
+    "cantor"
+    "clip"
+    "communicator"
+    "dolphin-plugins"
+    "eventviews"
+    "flatpak-kcm"
+    "ghostwriter"
+    "grantleetheme"
+    "incidenceeditor"
+    "index"
+    "isoimagewriter"
+    "juk"
+    "kaccounts-integration"
+    "kaccounts-providers"
+    "kalarm"
+    "kalgebra"
+    "kalk"
+    "kamoso"
+    "kasts"
+    "kbreakout"
+    "kcalutils"
+    "kclock"
+    "kde-inotify-survey"
+    "kde2-decoration"
+    "kdebugsettings"
+    "kdeconnect-kde"
+    "kdecoration"
+    "kdegraphics-mobipocket"
+    "kdegraphics-thumbnailers"
+    "kdenetwork-filesharing"
+    "kdepim-runtime"
+    "keysmith"
+    "kgeography"
+    "khotkeys"
+    "kidentitymanagement"
+    "kimap"
+    "kio-admin"
+    "kio-extras"
+    "kio-gdrive"
+    "kipi-plugins"
+    "kirigami-gallery"
+    "kldap"
+    "kmahjongg"
+    "kmail-account-wizard"
+    "kmailtransport"
+    "kmbox"
+    "kmime"
+    "kmousetool"
+    "knotes"
+    "koko"
+    "kolf"
+    "kongress"
+    "konqueror"
+    "konquest"
+    "kontactinterface"
+    "kopeninghours"
+    "kosmindoormap"
+    "kpat"
+    "kpimtextedit"
+    "kpipewire"
+    "kpmcore"
+    "kpublictransport"
+    "kqtquickcharts"
+    "krecorder"
+    "kreport"
+    "kruler"
+    "ksanecore"
+    "ksmtp"
+    "kspaceduel"
+    "ksudoku"
+    "ksystemstats"
+    "ktnef"
+    "ktrip"
+    "kweather"
+    "kzones"
+    "layer-shell-qt"
+    "libgravatar"
+    "libkcddb"
+    "libkdcraw"
+    "libkdegames"
+    "libkdepim"
+    "libkexiv2"
+    "libkgapi"
+    "libkipi"
+    "libkleo"
+    "libkmahjongg"
+    "libkomparediff2"
+    "libksane"
+    "libkscreen"
+    "libksieve"
+    "libksysguard"
+    "libktorrent"
+    "lightly"
+    "mailcommon"
+    "mailimporter"
+    "mauikit"
+    "mauikit-accounts"
+    "mauikit-calendar"
+    "mauikit-documents"
+    "mauikit-filebrowsing"
+    "mauikit-imagetools"
+    "mauikit-terminal"
+    "mauikit-texteditor"
+    "mauiman"
+    "mbox-importer"
+    "messagelib"
+    "oxygen-sounds"
+    "palapeli"
+    "parachute"
+    "partitionmanager"
+    "pim-data-exporter"
+    "pim-sieve-editor"
+    "pimcommon"
+    "plank-player"
+    "plasma-bigscreen"
+    "plasma-dialer"
+    "plasma-disks"
+    "plasma-firewall"
+    "plasma-phonebook"
+    "plasma-remotecontrollers"
+    "plasma-sdk"
+    "plasma-settings"
+    "plasma-welcome"
+    "plasmatube"
+    "polkit-kde-agent"
+    "print-manager"
+    "qmlkonsole"
+    "rocs"
+    "shelf"
+    "sierra-breeze-enhanced"
+    "soundkonverter"
+    "station"
+    "telly-skout"
+    "tokodon"
+    "umbrello"
+    "vvave"
+    "xwaylandvideobridge"
+    "neochat" # Added 2025-07-04
+    "itinerary" # Added 2025-07-04
+    "libquotient" # Added 2025-07-04
+    "kexi" # Added 2025-08-21
+    "qtwebengine" # Added 2026-01-15
+    "qtwebview" # Added 2026-04-03
+  ];
 
   makePlasma5Throw =
     name:
@@ -221,7 +215,7 @@ let
   mapAliases =
     aliases: lib.mapAttrs (n: alias: removeRecurseForDerivations (checkInPkgs n alias)) aliases;
 
-  plasma5Throws = mapAliases (lib.mapAttrs (k: _: makePlasma5Throw k) deprecatedPlasma5Packages);
+  plasma5Throws = mapAliases (lib.genAttrs deprecatedPlasma5Packages makePlasma5Throw);
 
   warnAlias =
     msg: v:
@@ -371,6 +365,7 @@ mapAliases {
   bazel_6 = throw "bazel_6 has been removed as it will be EOL by the release of Nixpkgs 25.11"; # Added 2025-08-19
   bc-decaf = throw "'bc-decaf' has been moved to 'linphonePackages.bc-decaf'"; # Added 2025-09-20
   bc-soci = throw "'bc-soci' has been moved to 'linphonePackages.bc-soci'"; # Added 2025-09-20
+  bcompare4 = throw "'bcompare4' has been removed due to outdated KF5 dependencies"; # Added 2025-05-01
   bctoolbox = throw "'bctoolbox' has been moved to 'linphonePackages.bctoolbox'"; # Added 2025-09-20
   bcunit = throw "'bcunit' has been moved to 'linphonePackages.bcunit'"; # Added 2025-09-20
   beets-unstable = throw "beets-unstable has been removed in favor of beets since upstream is releasing versions frequently nowadays"; # Added 2025-10-16
@@ -592,6 +587,7 @@ mapAliases {
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   daq = throw "'daq' has been removed as it is unmaintained and broken. Snort2 has also been removed, which depended on this"; # Added 2025-05-21
+  darkly-qt5 = throw "'darkly-qt' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   daytona-bin = throw "'daytona-bin' has been removed, as it was unmaintained in nixpkgs"; # Added 2025-07-21
   dbench = throw "'dbench' has been removed as it is unmaintained for 14 years and broken"; # Added 2025-05-17
   dbus-sharp-1_0 = throw "'dbus-sharp-1_0' has been removed as it was unmaintained and had no dependents"; # Added 2025-08-25
@@ -642,6 +638,7 @@ mapAliases {
   dump1090 = throw "'dump1090' has been renamed to/replaced by 'dump1090-fa'"; # Converted to throw 2025-10-27
   dune_1 = throw "'dune_1' has been removed"; # Added 2025-11-13
   e17gtk = throw "'e17gtk' has been removed because it was archived upstream."; # Added 2026-01-15
+  e-search = throw "'e-search' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   eagle = throw "'eagle' has been removed because official support ends 2026-06-07. It depended on qt5 webengine, which was removed for its numerous security issues. For more details, see the autodesk announcement at https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Autodesk-EAGLE-Announcement-Next-steps-and-FAQ.html"; # Added 2026-04-26
   eask = throw "'eask' has been renamed to/replaced by 'eask-cli'"; # Converted to throw 2025-10-27
   easyloggingpp = throw "easyloggingpp has been removed, as it is deprecated upstream and does not build with CMake 4"; # Added 2025-09-17
@@ -693,6 +690,7 @@ mapAliases {
   eww-wayland = throw "'eww-wayland' has been renamed to/replaced by 'eww'"; # Converted to throw 2025-10-27
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # Added 2025-07-18
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+  fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   fastJson = warnAlias "'fastJson' has been renamed to 'libfastjson'" libfastjson; # Added 2026-02-08
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27
@@ -1007,6 +1005,8 @@ mapAliases {
   k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   k3s_1_31 = throw "'k3s_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2025-12-08
   k3s_1_32 = throw "'k3s_1_32' has been removed from nixpkgs as it has reached end of life"; # Added 2026-03-31
+  k4dirstat = throw "'k4dirstat' has been removed due to outdated KF5 dependencies; consider using 'qdirstat' instead."; # Added 2026-05-01
+  kaffeine = throw "'kaffeine' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   kak-lsp = throw "'kak-lsp' has been renamed to/replaced by 'kakoune-lsp'"; # Converted to throw 2025-10-27
   kanidm = throw "'kanidm' alias has been removed. You must use a versioned package, e.g. 'kanidm_1_x'."; # Added 2026-01-29
   kanidm_1_4 = throw "'kanidm_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
@@ -1023,11 +1023,14 @@ mapAliases {
   kchmviewer = throw "'kchmviewer' has been removed as it was unmaintained upstream since 2022 and depended on qt5 webengine. Consider switching to 'uchmviewer', a fork of 'kchmviewer'."; # Added 2026-02-10
   kcli = throw "kcli has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   kdeltacht = throw "'kdeltachat' has been removed as it depended on EOL qt5 webengine and was unmaintained"; # Added 2026-04-17
+  kdesvn = throw "'kdesvn' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   keepkey_agent = throw "'keepkey_agent' has been renamed to/replaced by 'keepkey-agent'"; # Converted to throw 2025-10-27
   keydb = throw "'keydb' has been removed as it was broken, vulnerable, and unmaintained upstream"; # Added 2025-11-08
+  kgraphviewer = throw "'kgraphviewer' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   kgx = throw "'kgx' has been renamed to/replaced by 'gnome-console'"; # Converted to throw 2025-10-27
   khd = throw "'khd' has been removed as it has been pulled upstream"; # Added 2025-12-18
   khoj = throw "khoj has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
+  kio-fuse = throw "'kio-fuse' has been removed, as Plasma 5 has reached end of life. Use 'kdePackages.kio-fuse' for Plasma 6."; # Added 2026-05-01
   kmplayer = throw "'kmplayer' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   knot-resolver = warnAlias "'knot-resolver' is currently aliased to 'knot-resolver_5'. This will change with the knot-resolver 6 being declared as stable. Please explicitly use the 'knot-resolver_5' or 'knot-resolver_6' package until then." knot-resolver_5; # Added 2025-11-30
   kodiGBM = throw "'kodiGBM' has been renamed to/replaced by 'kodi-gbm'"; # Converted to throw 2025-10-27
@@ -1037,9 +1040,13 @@ mapAliases {
   krb5Full = throw "'krb5Full' has been renamed to/replaced by 'krb5'"; # Converted to throw 2025-10-27
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
+  ksmoothdock = throw "'ksmoothdock' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
+  ktextaddons = throw "'ktextaddons' has been removed due to outdated KF5 dependencies. A Qt6 version is available at 'kdePackages.ktextaddons'."; # Added 2026-05-01
   kube3d = throw "'kube3d' has been renamed to/replaced by 'k3d'"; # Converted to throw 2025-10-27
   kubei = throw "'kubei' has been renamed to/replaced by 'kubeclarity'"; # Converted to throw 2025-10-27
   kubo-migrator-all-fs-repo-migrations = throw "'kubo-migrator-all-fs-repo-migrations' has been renamed to/replaced by 'kubo-fs-repo-migrations'"; # Converted to throw 2025-10-27
+  kup = throw "'kup' has been removed due to outdated KF5 dependencies. A Qt6 version is available at 'kdePackages.kup'."; # Added 2026-05-01
+  kwalletcli = throw "'kwalletcli' has been removed, as Plasma 5 has reached end of life"; # Added 2026-05-01
   kwm = throw "'kwm' has been removed since upstream is a 404"; # Added 2025-12-21
   ladspaH = warnAlias "'ladspaH' has been renamed to 'ladspa-header'" ladspa-header; # Added 2026-02-08
   languageMachines.frog = frog; # Added 2025-10-7
@@ -1348,6 +1355,7 @@ mapAliases {
   magma_2_6_2 = throw "'magma_2_6_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
   magma_2_7_2 = throw "'magma_2_7_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
   magpie = throw "'magpie' has been removed, no longer used by budgie-desktop."; # Added 2025-11-19
+  maia-icon-theme = throw "'maia-icon-theme' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   mailnag = throw "mailnag has been removed because it has been marked as broken since 2022."; # Added 2025-10-12
   mailnagWithPlugins = throw "mailnagWithPlugins has been removed because mailnag has been marked as broken since 2022."; # Added 2025-10-12
@@ -1359,6 +1367,7 @@ mapAliases {
   marwaita-peppermint = throw "'marwaita-peppermint' has been renamed to/replaced by 'marwaita-red'"; # Converted to throw 2025-10-27
   marwaita-pop_os = throw "'marwaita-pop_os' has been renamed to/replaced by 'marwaita-yellow'"; # Converted to throw 2025-10-27
   marwaita-ubuntu = throw "'marwaita-ubuntu' has been renamed to/replaced by 'marwaita-orange'"; # Converted to throw 2025-10-27
+  massif-visualizer = throw "'massif-visualizer' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   mastodon-bot = throw "'mastodon-bot' has been removed because it was archived by upstream in 2021."; # Added 2025-11-07
   material-kwin-decoration = throw "'material-kwin-decoration' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   mathlibtools = throw "mathlibtools has been removed as it was archived upstream in 2023"; # Added 2025-07-09
@@ -1669,6 +1678,7 @@ mapAliases {
   pinecone = throw "'pinecone' has been removed, as it is unmaintained and obsolete"; # Added 2026-03-31
   pinentry = throw "'pinentry' has been removed. Pick an appropriate variant like 'pinentry-curses' or 'pinentry-gnome3'"; # Converted to throw 2025-10-26
   pingvin-share = throw "'pingvin-share' has been removed as it was broken and archived upstream"; # Added 2025-11-08
+  pipecontrol = throw "'pipecontrol' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
   plant-it = throw "plant-it backend was discontinued in september 2025"; # Added 2026-01-30
   plant-it-frontend = throw "plant-it-frontend has been presented as being Android-only since the server-side was discontinued in september 2025"; # Added 2026-01-30
@@ -1677,6 +1687,7 @@ mapAliases {
   plasma-theme-switcher = throw "'plasma-theme-switcher' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   platformioPackages.platformio-chrootenv = platformio-chrootenv; # Added 2025-09-04
   platformioPackages.platformio-core = platformio-core; # Added 2025-09-04
+  playbar2 = throw "'playbar2' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
   PlistCpp = throw "'PlistCpp' has been renamed to/replaced by 'plistcpp'"; # Converted to throw 2025-10-27
   pltScheme = throw "'pltScheme' has been renamed to/replaced by 'racket'"; # Converted to throw 2025-10-27
@@ -1686,6 +1697,7 @@ mapAliases {
   pocket-updater-utility = throw "'pocket-updater-utility' has been renamed to/replaced by 'pupdate'"; # Converted to throw 2025-10-27
   podofo010 = throw "'podofo010' has been renamed to/replaced by 'podofo_0_10'"; # Converted to throw 2025-10-27
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18
+  polonium = throw "'polonium' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
   poppler_utils = throw "'poppler_utils' has been renamed to/replaced by 'poppler-utils'"; # Converted to throw 2025-10-27
   popura = throw "'popura' is abandoned upstream and in nixpkgs and has been removed"; # Added 2026-01-15
@@ -2061,6 +2073,7 @@ mapAliases {
   tomcat_connectors = throw "'tomcat_connectors' has been renamed to/replaced by 'apacheHttpdPackages.mod_jk'"; # Converted to throw 2025-10-27
   tooling-language-server = deputy; # Added 2025-06-22
   tor-browser-bundle-bin = throw "'tor-browser-bundle-bin' has been renamed to/replaced by 'tor-browser'"; # Converted to throw 2025-10-27
+  tora = throw "'tora' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   tracker = throw "'tracker' has been renamed to/replaced by 'tinysparql'"; # Converted to throw 2025-10-27
   tracker-miners = throw "'tracker-miners' has been renamed to/replaced by 'localsearch'"; # Converted to throw 2025-10-27
   transfig = throw "'transfig' has been renamed to/replaced by 'fig2dev'"; # Converted to throw 2025-10-27
