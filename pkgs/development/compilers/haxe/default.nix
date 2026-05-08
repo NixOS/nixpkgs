@@ -6,41 +6,23 @@
   ocaml-ng,
   dune,
   zlib,
-  pcre,
   pcre2,
   neko,
-  mbedtls_2,
   mbedtls,
 }:
 let
   ocamlDependencies =
-    version:
-    if lib.versionAtLeast version "4.3" then
-      with ocaml-ng.ocamlPackages;
-      [
-        ocaml
-        findlib
-        sedlex
-        xml-light
-        ptmap
-        camlp5
-        sha
-        luv
-        extlib
-      ]
-    else
-      with ocaml-ng.ocamlPackages_4_10;
-      [
-        ocaml
-        findlib
-        sedlex
-        xml-light
-        ptmap
-        camlp5
-        sha
-        luv-0-5-12
-        extlib-1-7-7
-      ];
+    version: with ocaml-ng.ocamlPackages; [
+      ocaml
+      findlib
+      sedlex
+      xml-light
+      ptmap
+      camlp5
+      sha
+      luv
+      extlib
+    ];
 
   generic =
     {
@@ -55,11 +37,9 @@ let
         zlib
         neko
         dune
+        pcre2
+        mbedtls
       ]
-      ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
-      ++ lib.optional (lib.versionAtLeast version "4.1") (
-        if lib.versionAtLeast version "4.3" then mbedtls else mbedtls_2
-      )
       ++ ocamlDependencies version;
 
       src = fetchFromGitHub {
@@ -150,14 +130,6 @@ let
     };
 in
 {
-  haxe_4_0 = generic {
-    version = "4.0.5";
-    hash = "sha256-Ck/py+tZS7dBu/uikhSLKBRNljpg2h5PARX0Btklozg=";
-  };
-  haxe_4_1 = generic {
-    version = "4.1.5";
-    hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
-  };
   haxe_4_3 = generic {
     version = "4.3.7";
     hash = "sha256-sQb7MCoH2dZOvNmDQ9P0yFYrSXYOMn4FS/jlyjth39Y=";
