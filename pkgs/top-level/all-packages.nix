@@ -7049,8 +7049,6 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
-  podofo = podofo_1_0;
-
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
   poppler_gi = lowPrio (
