@@ -136,7 +136,7 @@ in
       zpool = cfg.zpool;
       max_pool_percent = cfg.maxPoolPercent;
       accept_threshold_percent = cfg.acceptThresholdPercent;
-      shrinker_enabled = true;
+      shrinker_enabled = cfg.shrinkerEnabled;
     };
 
     assertions = [
