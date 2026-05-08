@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # K&R-style declarations in vendored mimetex break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   preBuild = ''
     substituteInPlace app/app.pro \
       --replace /usr/local/bin $out/bin \
