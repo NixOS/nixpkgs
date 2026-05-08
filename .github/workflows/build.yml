@@ -62,7 +62,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
         with:
           # Sandbox is disabled on MacOS by default.
           extra_nix_config: sandbox = true
