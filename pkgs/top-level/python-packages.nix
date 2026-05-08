@@ -7312,6 +7312,8 @@ self: super: with self; {
 
   hyppo = callPackage ../development/python-modules/hyppo { };
 
+  hyprland-schema = callPackage ../development/python-modules/hyprland-schema { };
+
   hyrule = callPackage ../development/python-modules/hyrule { };
 
   i-pi = callPackage ../development/python-modules/i-pi { };
