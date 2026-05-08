@@ -10,6 +10,7 @@
   c-ares,
   gtest,
   hdrhistogram_c,
+  libffiReal,
   libuv,
   lief,
   llhttp,
@@ -22,16 +23,24 @@
   simdjson,
   simdutf,
   simdutf_6 ? (
-    simdutf.overrideAttrs {
-      version = "6.5.0";
+    simdutf.overrideAttrs (
+      {
+        version = "6.5.0";
 
-      src = fetchFromGitHub {
-        owner = "simdutf";
-        repo = "simdutf";
-        rev = "v6.5.0";
-        hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
-      };
-    }
+        src = fetchFromGitHub {
+          owner = "simdutf";
+          repo = "simdutf";
+          rev = "v6.5.0";
+          hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
+        };
+      }
+      // (lib.optionalAttrs stdenv.buildPlatform.isDarwin {
+        # Fix build on darwin
+        postPatch = ''
+          substituteInPlace tools/CMakeLists.txt --replace-fail '-Wl,--gc-sections' ""
+        '';
+      })
+    )
   ),
   sqlite,
   temporal_capi,
@@ -129,6 +138,7 @@ let
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
   useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
+  useSharedFFI = lib.versionAtLeast version "26.1";
   useSharedGtestAndHistogram = lib.versionAtLeast version (
     if majorVersion == 24 then "24.14.0" else "25.4"
   );
@@ -169,6 +179,9 @@ let
   // (lib.optionalAttrs useSharedGtestAndHistogram {
     inherit gtest;
     hdr-histogram = hdrhistogram_c;
+  })
+  // (lib.optionalAttrs useSharedFFI {
+    ffi = libffiReal;
   })
   // (lib.optionalAttrs useSharedLief {
     inherit lief;
@@ -393,6 +406,7 @@ let
           "tooltest"
           "cctest"
         ]
+        ++ lib.optional useSharedFFI "build-ffi-tests"
         ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
           # There are some test failures on macOS before v20 that are not worth the
           # time to debug for a version that would be eventually removed in less
