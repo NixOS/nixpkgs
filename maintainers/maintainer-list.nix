@@ -7347,6 +7347,12 @@
     github = "dsluijk";
     githubId = 8537327;
   };
+  dsp = {
+    email = "nixos@experimentalworks.net";
+    github = "dsp";
+    githubId = 14013;
+    name = "David Soria Parra";
+  };
   dstathis = {
     email = "dylan.stephano-shachter@canonical.com";
     github = "dstathis";
