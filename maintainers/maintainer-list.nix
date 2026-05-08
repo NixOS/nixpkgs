@@ -14670,12 +14670,6 @@
     githubId = 83026656;
     name = "kraftnix";
   };
-  kragniz = {
-    email = "louis@kragniz.eu";
-    github = "kragniz";
-    githubId = 735008;
-    name = "Louis Taylor";
-  };
   kranurag7 = {
     email = "contact.anurag7@gmail.com";
     github = "kranurag7";

@@ -155,7 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Concise ChartPlotter/Navigator";
     maintainers = with lib.maintainers; [
-      kragniz
       lovesegfault
     ];
     platforms = lib.platforms.unix;

@@ -141,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
       hedgehog or hedgehogs after a player's or CPU turn is shown only when
       all movement on the battlefield has ceased).'';
     maintainers = with lib.maintainers; [
-      kragniz
       fpletz
     ];
     platforms = lib.platforms.linux;

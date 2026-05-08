@@ -76,7 +76,7 @@ stdenv.mkDerivation {
       OpenRW is an open source re-implementation of Rockstar Games' Grand Theft
       Auto III, a classic 3D action game first published in 2001.
     '';
-    maintainers = with lib.maintainers; [ kragniz ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "rwgame";
     badPlatforms = [

@@ -56,8 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cmocka.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      kragniz
+    maintainers = [
     ];
   };
 })
