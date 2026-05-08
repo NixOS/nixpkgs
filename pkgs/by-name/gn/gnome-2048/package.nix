@@ -1,38 +1,39 @@
 {
   lib,
-  stdenv,
+  rustPlatform,
   fetchurl,
-  fetchpatch,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   meson,
   vala,
   pkg-config,
   ninja,
   itstool,
-  clutter-gtk,
-  libgee,
-  libgnome-games-support,
   gnome,
-  gtk3,
+  gtk4,
+  libadwaita,
+  stdenv,
+  rustc,
+  cargo,
+  desktop-file-utils,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gnome-twenty-forty-eight";
-  version = "3.38.2";
+  pname = "gnome-2048";
+  version = "50.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-2048/${lib.versions.majorMinor finalAttrs.version}/gnome-2048-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4nNn9cCaATZYHTNfV5E6r1pfGA4ymcxcGjDYWD55rmg=";
+    url = "mirror://gnome/sources/gnome-2048/${lib.versions.major finalAttrs.version}/gnome-2048-${finalAttrs.version}.tar.xz";
+    hash = "sha256-bRXfaKYSjPDJnlmJCK+MZntzPcQAPvTSHUtMSkK9Lak=";
   };
 
-  patches = [
-    # Fix build with meson 0.61
-    # https://gitlab.gnome.org/GNOME/gnome-2048/-/merge_requests/21
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-2048/-/commit/194e22699f7166a016cd39ba26dd719aeecfc868.patch";
-      hash = "sha256-Qpn/OJJwblRm5Pi453aU2HwbrNjsf+ftmSnns/5qZ9E=";
-    })
-  ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-OcuhISJhm8uvcJjki86FSNiT5AoqUrILZaHcn1oZVtk=";
+  };
+
+  strictDeps = true;
+  __structuredArgs = true;
 
   nativeBuildInputs = [
     itstool
@@ -40,15 +41,24 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+    desktop-file-utils
   ];
 
   buildInputs = [
-    clutter-gtk
-    libgee
-    libgnome-games-support
-    gtk3
+    gtk4
+    libadwaita
   ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    rustPlatform.cargoCheckHook
+  ];
+
+  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
