@@ -395,7 +395,7 @@ def option_from_config(name: str, config_path: List[str]) -> str:
         return ""
     if isinstance(value, bool):
         value = bool_to_yes_no(value)
-    return f"{name}: {config(*config_path)}\n"
+    return f"{name}: {value}\n"
 
 
 def install_bootloader() -> None:

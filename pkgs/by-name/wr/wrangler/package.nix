@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   autoPatchelfHook,
@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.62.0";
+  version = "4.90.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-o6ARRNObHtRqAD71j7L2HkpIalPwGWR+PyQQuHJBKZE=";
+    hash = "sha256-M2m8dRhTjAYof3S7lVaFYP61p38LvXFSTxantCsUHtE=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       postPatch
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-Crtjchu17OFPWqd3L0AYCpA76YRN4jJc+vLVLo1WLe4=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-Bo9V3MJaDnKR7TZO4u0mDy9223n7/En8aAdYOgHyYxE=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     jq
     moreutils
   ]
@@ -73,15 +73,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it
-  postBuild = ''
-    mv packages/vitest-pool-workers packages/~vitest-pool-workers
+  postBuild =
+    let
+      extraDeps = [
+        "unenv-preset"
+        "workers-utils"
+        "local-explorer-ui"
+        "codemod"
+        "cli-shared-helpers"
+        "miniflare"
+        "wrangler"
+      ];
+    in
+    ''
+      mv packages/vitest-pool-workers packages/~vitest-pool-workers
 
-    NODE_ENV="production" pnpm --filter unenv-preset run build
-    NODE_ENV="production" pnpm --filter workers-utils run build
-    NODE_ENV="production" pnpm --filter workers-shared run build
-    NODE_ENV="production" pnpm --filter miniflare run build
-    NODE_ENV="production" pnpm --filter wrangler run build
-  '';
+      for pkg in ${toString extraDeps}; do
+        NODE_ENV="production" pnpm --filter "$pkg" run build
+      done
+    '';
 
   # I'm sure this is suboptimal but it seems to work. Points:
   # - when build is run in the original repo, no specific executable seems to be generated; you run the resulting build with pnpm run start
