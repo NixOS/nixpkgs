@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizip-ng";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "minizip-ng";
     rev = finalAttrs.version;
-    hash = "sha256-H6ttsVBs437lWMBsq5baVDb9e5I6Fh+xggFre/hxGKU=";
+    hash = "sha256-gpjM8Cqoe4kafXgl2wXhhCRx39WC94qJ1DIDyd2n0G8=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "MZ_OPENSSL" true)
+    (lib.cmakeBool "MZ_PPMD" false) # PPMD support requres internet access to make a git clone
     (lib.cmakeBool "MZ_LIBCOMP" false) # builds only on Darwin by default where it fails due to mising headers
     (lib.cmakeBool "MZ_BUILD_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "MZ_BUILD_UNIT_TESTS" finalAttrs.doCheck)
