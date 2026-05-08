@@ -22,10 +22,13 @@
   xcbuild,
   zip,
 
-  electron,
+  electron_39,
   git,
 }:
 
+let
+  electron = electron_39;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
   version = "0.10.15";
