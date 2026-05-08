@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "autobloody";
   version = "1.1.0";
   pyproject = true;
@@ -16,11 +16,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-iv2Al5FQMZNVrAxvrwYjglPBxEUUZ9Jn1wFd5B4b9WY=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3Packages; [
     hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     bloodyad
     neo4j
   ];
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # Tests require a test file which is not available in the current release
   doCheck = false;
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
