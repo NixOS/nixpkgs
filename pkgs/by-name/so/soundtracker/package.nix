@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-alsa"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   enableParallelBuilding = true;
 
   strictDeps = true;
