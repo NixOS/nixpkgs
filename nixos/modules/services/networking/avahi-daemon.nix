@@ -159,7 +159,7 @@ in
       description = ''
         Whether to enable wide-area service discovery.
 
-        This is currently disabled by default as a mitigation for `CVE-2024-52615`/`GHSA-x6vp-f33h-h32g`.
+        It is recommended to keep this options disabled as it exposes the system to `CVE-2024-52615`/`GHSA-x6vp-f33h-h32g`.
       '';
     };
 
