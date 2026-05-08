@@ -5571,7 +5571,6 @@ broken-packages:
   - sdl2-compositor # failure in job https://hydra.nixos.org/build/233198910 at 2023-09-02
   - sdl2-fps # failure in job https://hydra.nixos.org/build/233195346 at 2023-09-02
   - sdl2-image # failure in job https://hydra.nixos.org/build/233216837 at 2023-09-02
-  - sdl2-mixer # failure in job https://hydra.nixos.org/build/233228951 at 2023-09-02
   - sdp # failure in job https://hydra.nixos.org/build/233246702 at 2023-09-02
   - sdr # failure in job https://hydra.nixos.org/build/243807383 at 2024-01-01
   - seacat # failure in job https://hydra.nixos.org/build/233229959 at 2023-09-02
@@ -7120,7 +7119,6 @@ broken-packages:
   - vty-examples # failure in job https://hydra.nixos.org/build/233235872 at 2023-09-02
   - vty-menu # failure in job https://hydra.nixos.org/build/233232391 at 2023-09-02
   - vty-ui # failure in job https://hydra.nixos.org/build/233200900 at 2023-09-02
-  - vulkan-utils # failure in job https://hydra.nixos.org/build/307522991 at 2025-09-19
   - wacom-daemon # failure in job https://hydra.nixos.org/build/233213077 at 2023-09-02
   - waddle # failure in job https://hydra.nixos.org/build/233239973 at 2023-09-02
   - wai-control # failure in job https://hydra.nixos.org/build/295098171 at 2025-04-22
@@ -7309,7 +7307,6 @@ broken-packages:
   - xenstore # failure in job https://hydra.nixos.org/build/233234469 at 2023-09-02
   - xfconf # failure in job https://hydra.nixos.org/build/233234800 at 2023-09-02
   - xformat # failure in job https://hydra.nixos.org/build/233211918 at 2023-09-02
-  - xgboost-haskell # failure in job https://hydra.nixos.org/build/295098374 at 2025-04-22
   - xhaskell-library # failure in job https://hydra.nixos.org/build/233221178 at 2023-09-02
   - xhb # failure in job https://hydra.nixos.org/build/233204853 at 2023-09-02
   - xilinx-lava # failure in job https://hydra.nixos.org/build/233247659 at 2023-09-02
