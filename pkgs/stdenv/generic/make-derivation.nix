@@ -187,6 +187,13 @@ let
     "allowedImpureDLLs"
   ];
 
+  referenceCheckingAttrsToRemove = [
+    "allowedReferences"
+    "allowedRequisites"
+    "disallowedReferences"
+    "disallowedRequisites"
+  ];
+
   attrsToRemoveLast = [
     # Fixed-output derivations may not reference other paths, which means that
     # for a fixed-output derivation, the corresponding inputDerivation should
@@ -828,12 +835,7 @@ let
                     # that's "normal". Notably it symlinks to the source.
                     # So disable reference checking for the debug output
                     if separateDebugInfo' && name == "debug" then
-                      removeAttrs raw [
-                        "allowedReferences"
-                        "allowedRequisites"
-                        "disallowedReferences"
-                        "disallowedRequisites"
-                      ]
+                      removeAttrs raw referenceCheckingAttrsToRemove
                     else
                       raw;
                 }) outputs
