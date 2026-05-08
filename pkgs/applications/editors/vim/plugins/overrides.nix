@@ -314,7 +314,7 @@ assertNoAdditions {
     };
   });
 
-  barbar-nvim = super.barbar-nvim.overrideAttrs {
+  barbar-nvim = super.barbar-nvim.overrideAttrs (old: {
     # Optional integrations
     checkInputs = with self; [
       bufferline-nvim
@@ -322,7 +322,11 @@ assertNoAdditions {
     ];
     # E5108: Error executing lua ...implugin-barbar.nvim-2025-04-28/lua/bufferline/utils.lua:10: module 'barbar.utils.hl' not found:
     nvimSkipModules = [ "bufferline.utils" ];
-  };
+
+    meta = old.meta // {
+      license = lib.licenses.json;
+    };
+  });
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [
