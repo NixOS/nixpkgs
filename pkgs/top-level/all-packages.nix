@@ -4151,8 +4151,6 @@ with pkgs;
     (callPackage ../development/compilers/haxe {
     })
     haxe_4_3
-    haxe_4_1
-    haxe_4_0
     ;
 
   haxe = haxe_4_3;
@@ -6068,7 +6066,7 @@ with pkgs;
   ustream-ssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = openssl; };
 
   ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
-    ssl_implementation = mbedtls_2;
+    ssl_implementation = mbedtls;
   };
 
   # Make bdb5 the default as it is the last release under the custom
@@ -6792,7 +6790,6 @@ with pkgs;
     )
       haskellPackages.matterhorn;
 
-  mbedtls_2 = callPackage ../development/libraries/mbedtls/2.nix { };
   mbedtls = callPackage ../development/libraries/mbedtls/3.nix { };
   mbedtls_4 = callPackage ../development/libraries/mbedtls/4.nix { };
 
