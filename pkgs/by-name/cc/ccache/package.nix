@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.13.5";
+  version = "4.13.6";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-v8TgVoLIKhNgcmTLbgqAYuJLUHJEOh/yDVPig/LfPMk=";
+    hash = "sha256-A0n+DO6IznETsAFUNIpBkQI6A3UilgEUbuyP3sqKDTk=";
   };
 
   outputs = [
@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   disabledTests = [
-    "test.direct" # https://github.com/ccache/ccache/issues/1699
     "test.fileclone" # flaky on hydra, also seems to fail on zfs
     "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
   ]

@@ -71,8 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ gitMinimal ];
     pnpm = pnpm';
-    fetcherVersion = 2;
-    hash = "sha256-q0+6vkDZdcDXwsTxby2RuQUYTgEnxGx1CeXROSrG9lU=";
+    fetcherVersion = 3;
+    hash = "sha256-gP/0WeVp+Y8QgPmAmbFt+cInX6+4oxPIYlwFpSh2hPQ=";
   };
 
   nativeBuildInputs = [

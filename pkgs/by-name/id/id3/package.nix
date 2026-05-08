@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+h1wwgTB7CpbjyUAK+9BNRhmy83D+1I+cZ70E1m3ENk=";
   };
 
+  patches = [
+    # https://github.com/squell/id3/pull/35
+    ./fix-gcc15.patch
+  ];
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   makeFlags = [ "prefix=$(out)" ];

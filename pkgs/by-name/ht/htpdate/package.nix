@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.0.1";
+  version = "2.0.2";
   pname = "htpdate";
 
   src = fetchFromGitHub {
     owner = "twekkel";
     repo = "htpdate";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dl3xlwk2q1DdGrIQsbKwdYDjyhGxpYwQGcd9k91LkxA=";
+    sha256 = "sha256-aDir0e/itYxo0wgKIyT2chEVyXgz6nd2JOuyo7Yq/js=";
   };
 
   makeFlags = [

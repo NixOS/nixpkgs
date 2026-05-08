@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1vvhk2nf9ilfw0wchmxy8l13hbw9cnpz079nsx5srsy4nnd78nkw";
   };
 
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace /usr/local $out \

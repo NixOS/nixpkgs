@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,9 +21,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-uP1lZarcwQhBKyASQIiNUs053EuxJy112P2e3hy2uZY=";
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ openssl ];
 
   env.OPENSSL_NO_VENDOR = true;
+
+  passthru.tests = {
+    inherit (nixosTests) rustical;
+  };
 
   meta = {
     description = "Yet another calendar server aiming to be simple, fast and passwordless";

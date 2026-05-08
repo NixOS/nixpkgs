@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     nimHost = lib.warn "nimHost is deprecated, please use stdenv.hostPlatform.nim.os instead." stdenv.hostPlatform.nim.os;
-    nimTarget = lib.warn "nimTarget is deprecated, please use stdenv.hostPlatform.nim.cpu instead." stdenv.hostPlatform.cpu;
+    nimTarget = lib.warn "nimTarget is deprecated, please use stdenv.hostPlatform.nim.cpu instead." stdenv.hostPlatform.nim.cpu;
   };
 
   meta = {
