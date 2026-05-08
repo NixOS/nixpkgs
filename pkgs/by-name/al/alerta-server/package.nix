@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alerta-server";
   version = "9.0.1";
   format = "setuptools";
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-v4+0l5Sx9RTxmNFnKCoKrWFl1xu1JIRZ/kiI6zi/y0I=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     bcrypt
     blinker
     cryptography
