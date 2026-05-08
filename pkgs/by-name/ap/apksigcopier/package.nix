@@ -5,10 +5,10 @@
   fetchFromGitHub,
   installShellFiles,
   pandoc,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "apksigcopier";
   version = "1.1.1";
   pyproject = true;
@@ -25,11 +25,11 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
   ];
 
