@@ -187,6 +187,25 @@ let
     "allowedImpureDLLs"
   ];
 
+  attrsToRemoveLast = [
+    # Fixed-output derivations may not reference other paths, which means that
+    # for a fixed-output derivation, the corresponding inputDerivation should
+    # *not* be fixed-output. To achieve this we simply delete the attributes that
+    # would make it fixed-output.
+    "outputHashAlgo"
+    "outputHash"
+    "outputHashMode"
+
+    # inputDerivation produces the inputs; not the outputs, so any
+    # restrictions on what used to be the outputs don't serve a purpose
+    # anymore.
+    "allowedReferences"
+    "allowedRequisites"
+    "disallowedReferences"
+    "disallowedRequisites"
+    "outputChecks"
+  ];
+
   inherit (stdenv)
     hostPlatform
     buildPlatform
@@ -936,26 +955,6 @@ let
             || throw "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
           v
         ) env';
-
-      attrsToRemove = [
-        # Fixed-output derivations may not reference other paths, which means that
-        # for a fixed-output derivation, the corresponding inputDerivation should
-        # *not* be fixed-output. To achieve this we simply delete the attributes that
-        # would make it fixed-output.
-        "outputHashAlgo"
-        "outputHash"
-        "outputHashMode"
-
-        # inputDerivation produces the inputs; not the outputs, so any
-        # restrictions on what used to be the outputs don't serve a purpose
-        # anymore.
-        "allowedReferences"
-        "allowedRequisites"
-        "disallowedReferences"
-        "disallowedRequisites"
-        "outputChecks"
-      ];
-
     in
 
     extendDerivation validity.handled (
@@ -966,7 +965,7 @@ let
         # needed to enter a nix-shell with
         #   nix-build shell.nix -A inputDerivation
         inputDerivation = derivation (
-          removeAttrs derivationArg attrsToRemove
+          removeAttrs derivationArg attrsToRemoveLast
           // {
             # Add a name in case the original drv didn't have one
             name = "inputDerivation" + optionalString (derivationArg ? name) "-${derivationArg.name}";
