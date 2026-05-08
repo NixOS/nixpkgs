@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aab";
   version = "1.0.0-dev.5";
   pyproject = true;
@@ -22,9 +22,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ./allow-manually-setting-modtime.patch
   ];
 
-  build-system = [ python3.pkgs.poetry-core ];
+  build-system = [ python3Packages.poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     jsonschema
     whichcraft
     pyqt5
@@ -32,9 +32,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
-    python3.pkgs.pyqt5
-    python3.pkgs.pyqt6
+    python3Packages.pytestCheckHook
+    python3Packages.pyqt5
+    python3Packages.pyqt6
   ];
 
   pythonImportsCheck = [ "aab" ];
