@@ -6,7 +6,7 @@
   testers,
   cmake,
   doxygen,
-  extra-cmake-modules,
+  kdePackages,
   graphviz,
   libsForQt5,
   perl,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     doxygen
     graphviz
     perl
@@ -55,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = with libsForQt5; [
-    kcalendarcore
+    kdePackages.extra-cmake-modules
+    __internalKF5.kcalendarcore
     qtbase
     qtpim
     timed
