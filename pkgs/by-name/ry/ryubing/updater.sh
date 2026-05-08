@@ -6,7 +6,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 # If NEW_VERSION or COMMIT are not set, fetch the latest version
 if [ -z ${NEW_VERSION+x} ] && [ -z ${COMMIT+x} ]; then
-    RELEASE_DATA=$(curl -s "https://git.ryujinx.app/api/v4/projects/1/repository/tags?order_by=updated&sort=desc")
+    RELEASE_DATA=$(curl -s "https://git.ryujinx.app/api/v1/repos/projects/Ryubing/tags")
     if [ -z "$RELEASE_DATA" ] || [[ $RELEASE_DATA =~ "imposed ratelimits" ]]; then
         echo "failed to get release job data" >&2
         exit 1
@@ -27,7 +27,7 @@ fi
 cd ../../../..
 
 if [[ "${1-default}" != "--deps-only" ]]; then
-    SHA="$(nix-prefetch-git https://git.ryujinx.app/ryubing/ryujinx --rev "$NEW_VERSION" --quiet | jq -r '.sha256')"
+    SHA="$(nix-prefetch-git https://git.ryujinx.app/projects/Ryubing --rev "$NEW_VERSION" --quiet | jq -r '.sha256')"
     SRI=$(nix --experimental-features nix-command hash to-sri "sha256:$SHA")
     update-source-version ryubing "$NEW_VERSION" "$SRI"
 fi
