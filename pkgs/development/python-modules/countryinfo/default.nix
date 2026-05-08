@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "countryinfo";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "porimol";
     repo = "countryinfo";
     tag = "v${version}";
-    hash = "sha256-Y4nJnjXg8raJx2f00DFMktdcWoLO09wqTFK6Fc8RKSI=";
+    hash = "sha256-PE9XiVH6XE+OSySL5Lo0MPWyIEX8xgeHQB7MttMfmz8=";
   };
 
   build-system = [ poetry-core ];
