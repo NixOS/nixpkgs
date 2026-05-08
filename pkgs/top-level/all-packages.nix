@@ -1446,12 +1446,6 @@ with pkgs;
 
   crystfel-headless = crystfel.override { withGui = false; };
 
-  amule-web = amule.override {
-    monolithic = false;
-    httpServer = true;
-    mainProgram = "amuleweb";
-  };
-
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
