@@ -20,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
 
+  # thank you to the Arch Linux developers
+  patches = [ ./cmake.patch ];
+
   cmakeFlags = [
     # This prevents CMake from trying to download googletest during the build
     (lib.cmakeBool "ABC_SKIP_TESTS" true)
