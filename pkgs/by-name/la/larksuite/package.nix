@@ -132,6 +132,8 @@ let
 in
 stdenv.mkDerivation {
   inherit pname version;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src =
     sources.${stdenv.hostPlatform.system}
