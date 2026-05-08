@@ -33,6 +33,7 @@
   openssl,
   pango,
   python3,
+  python3Packages,
   stdenv,
   systemd,
   xdg-utils,
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python3
-    python3.pkgs.dbus-python
+    python3Packages.dbus-python
   ];
 
   nativeBuildInputs = [
