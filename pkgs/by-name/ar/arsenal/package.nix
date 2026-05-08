@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "arsenal";
   version = "1.2.7";
   pyproject = true;
@@ -17,11 +17,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     sha256 = "sha256-C8DEB/xojU7vGvmeBF+PBD6KWMaJgwa7PpRS5+YzQ6c=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     libtmux
     docutils
     pyfzf
