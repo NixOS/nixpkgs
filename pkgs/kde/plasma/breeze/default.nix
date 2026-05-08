@@ -10,6 +10,8 @@ mkKdeDerivation {
 
   outputs = [
     "out"
+    "lib"
+    "bin"
     "dev"
     "qt5"
   ];
@@ -42,12 +44,20 @@ mkKdeDerivation {
     "-DKF5Kirigami2_DIR=${libsForQt5.kirigami2.dev}/lib/cmake/KF5Kirigami2"
     "-DKF5WidgetsAddons_DIR=${libsForQt5.kwidgetsaddons.dev}/lib/cmake/KF5WidgetsAddons"
     "-DKF5WindowSystem_DIR=${libsForQt5.kwindowsystem.dev}/lib/cmake/KF5WindowSystem"
+
+    # Remove once the defaults are less silly
+    "-DKDE_INSTALL_DATADIR=${placeholder "out"}/share"
+    "-DKDE_INSTALL_ICONDIR=${placeholder "out"}/share/icons"
+    "-DKDE_INSTALL_WALLPAPERDIR=${placeholder "out"}/share/wallpapers"
+    "-DKDE_INSTALL_QTPLUGINDIR=${placeholder "lib"}/${qtbase.qtPluginPrefix}"
+    "-DKDE_INSTALL_PLUGINDIR=${placeholder "lib"}/${qtbase.qtPluginPrefix}"
+    "-DKDE_INSTALL_APPDIR=${placeholder "out"}/share/applications"
   ];
 
   # Move Qt5 plugin to Qt5 plugin path
   postInstall = ''
     mkdir -p $qt5/${libsForQt5.qtbase.qtPluginPrefix}/styles
-    mv $out/${qtbase.qtPluginPrefix}/styles/breeze5.so $qt5/${libsForQt5.qtbase.qtPluginPrefix}/styles
+    mv $lib/${qtbase.qtPluginPrefix}/styles/breeze5.so $qt5/${libsForQt5.qtbase.qtPluginPrefix}/styles
   '';
   meta.mainProgram = "breeze-settings6";
 }
