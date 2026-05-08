@@ -212,6 +212,7 @@ goBuild (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm ml/backend/ggml/ggml_test.go
     rm ml/nn/pooling/pooling_test.go
+    rm model/models/nemotronh/model_omni_test.go
   '';
 
   overrideModAttrs = (

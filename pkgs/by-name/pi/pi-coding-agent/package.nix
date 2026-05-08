@@ -81,7 +81,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Coding agent CLI with read, bash, edit, write tools and session management";
-    homepage = "https://shittycodingagent.ai/";
+    homepage = "https://pi.dev/";
     downloadPage = "https://www.npmjs.com/package/@mariozechner/pi-coding-agent";
     changelog = "https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/CHANGELOG.md";
     license = lib.licenses.mit;

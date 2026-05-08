@@ -12927,6 +12927,8 @@ self: super: with self; {
 
   price-parser = callPackage ../development/python-modules/price-parser { };
 
+  pricehist = callPackage ../development/python-modules/pricehist { };
+
   primecountpy = callPackage ../development/python-modules/primecountpy { };
 
   primepy = callPackage ../development/python-modules/primepy { };
@@ -15890,8 +15892,6 @@ self: super: with self; {
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
   python-matter-server = callPackage ../development/python-modules/python-matter-server { };
-
-  python-mbedtls = callPackage ../development/python-modules/python-mbedtls { };
 
   python-melcloud = callPackage ../development/python-modules/python-melcloud { };
 

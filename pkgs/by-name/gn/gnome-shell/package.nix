@@ -56,7 +56,6 @@
   gnome-clocks,
   gnome-settings-daemon,
   gnome-autoar,
-  gnome-tecla,
   bash-completion,
   lcms2,
   libgbm,
@@ -91,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
-      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
       unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
