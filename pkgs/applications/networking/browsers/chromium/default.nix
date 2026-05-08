@@ -91,6 +91,14 @@ let
           nodejs = pkgsBuildHost.nodejs_24;
         };
       }
+      // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "148") {
+        buildPackages = buildPackages // {
+          rustc = buildPackages.rustPackages_1_94.rustc;
+        };
+        pkgsBuildBuild = pkgsBuildBuild // {
+          rustc = pkgsBuildBuild.rustPackages_1_94.rustc;
+        };
+      }
     );
 
     browser = callPackage ./browser.nix {
