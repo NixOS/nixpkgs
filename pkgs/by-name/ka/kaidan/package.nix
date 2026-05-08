@@ -7,7 +7,6 @@
 
   # build
   cmake,
-  extra-cmake-modules,
   kdePackages,
   pkg-config,
   writableTmpDirAsHomeHook,
@@ -37,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     kdePackages.wrapQtAppsHook
     pkg-config
     writableTmpDirAsHomeHook

@@ -7,7 +7,7 @@
   gnome-icon-theme,
   papirus-icon-theme,
   hicolor-icon-theme,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   propagatedBuildInputs = [
-    libsForQt5.breeze-icons
+    kdePackages.breeze-icons
     gnome-icon-theme
     papirus-icon-theme
     hicolor-icon-theme

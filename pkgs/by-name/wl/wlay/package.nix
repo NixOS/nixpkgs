@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   glfw3,
   libx11,
   libxau,
@@ -30,12 +30,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     wayland-scanner
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     glfw3
     libx11
     libxau

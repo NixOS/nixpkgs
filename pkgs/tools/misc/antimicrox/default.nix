@@ -2,7 +2,7 @@
   lib,
   stdenv,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   pkg-config,
   itstool,
   udevCheckHook,
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     itstool
     udevCheckHook
