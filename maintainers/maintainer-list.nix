@@ -20131,9 +20131,6 @@
     github = "nukdokplex";
     githubId = 25458915;
     name = "Viktor Titov";
-    keys = [
-      { fingerprint = "7CE2 4C42 942D 58EA 99F6  F00A A47E 7374 3EF6 FCC4"; }
-    ];
   };
   nullcube = {
     email = "nullcub3@gmail.com";
