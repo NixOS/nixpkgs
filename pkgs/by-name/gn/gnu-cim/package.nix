@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gnu.org/software/cim/";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.all;
-    badPlatforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pbsds ];
   };
 })
