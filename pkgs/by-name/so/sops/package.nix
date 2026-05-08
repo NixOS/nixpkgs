@@ -12,16 +12,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "sops";
-  version = "3.12.2";
+  version = "3.13.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1VGaS0uhacxjNOP/USmFHlrewkGzRzrV6xamDXY8hgc=";
+    hash = "sha256-sJAK7iCVmjGAjQ0CBVsJI7L/GwHB9bvm354Cq3WQI1M=";
   };
 
-  vendorHash = "sha256-HgfJMTTWzQ4+59nuy/et3KxQaZEcfrjcWSr/iOOdpb0=";
+  vendorHash = "sha256-aBHZPh5ib2BOxoHQH6q8GD/EJOb2x1OBBePicwoI6Gc=";
 
   subPackages = [ "cmd/sops" ];
 
