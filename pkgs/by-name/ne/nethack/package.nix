@@ -7,6 +7,8 @@
   ncurses,
   gzip,
   less,
+  bash,
+  buildPackages,
   x11Mode ? false,
   qtMode ? false,
   libxaw,
@@ -140,6 +142,30 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e '/define CHDIR/d' \
         -e '/define ENHANCED_SYMBOLS/d' \
         -i include/config.h
+    sed \
+      -e 's,AR=.*,AR := $(AR) rcu,' \
+      -e 's,RANLIB=.*,RANLIB := $(RANLIB),' \
+      -i lib/lua-5.4.8/src/Makefile
+    sed \
+      -e 's,AR =.*,AR := $(AR),' \
+      -i sys/unix/Makefile.src
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+      # If we're cross-compiling, replace the paths to the data generation tools
+      # with the ones from the build platform's nethack package, since we can't
+      # run the ones we've built here.
+      ''
+        sed \
+          -e 's, ../util/makedefs,,' \
+          -e 's,\t../util/makedefs,\t${buildPackages.nethack}/libexec/nethack/makedefs,' \
+          -e 's,\t../util/dlb,\t${buildPackages.nethack}/libexec/nethack/dlb,' \
+          -e 's,../util/dlb cf nhdat,${buildPackages.nethack}/libexec/nethack/dlb cf nhdat,' \
+          -e 's,pkg-config,$(PKG_CONFIG),' \
+          -i sys/unix/Makefile.*
+        sed \
+          -e 's,pkg-config,$(PKG_CONFIG),' \
+          -i sys/unix/hints/linux.500
+      ''
+    }
   '';
 
   configurePhase = ''
@@ -163,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     cat <<EOF >$out/bin/nethack
-    #! ${stdenv.shell} -e
+    #! ${lib.getExe bash} -e
     PATH=${binPath}:\$PATH
 
     if [ ! -d ${userDir} ]; then
@@ -194,8 +220,12 @@ stdenv.mkDerivation (finalAttrs: {
     fi
     EOF
     chmod +x $out/bin/nethack
-    install -Dm 555 util/makedefs -t $out/libexec/nethack/
-    ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
+    ${lib.optionalString (!x11Mode && !qtMode && (stdenv.buildPlatform == stdenv.hostPlatform))
+      ''
+      install -Dm 555 util/makedefs -t $out/libexec/nethack/
+      install -Dm 555 util/dlb -t $out/libexec/nethack/
+      ''
+    }
   '';
 
   desktopItems = lib.optionals (x11Mode || qtMode) [
