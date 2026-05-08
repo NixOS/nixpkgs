@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     zlib
     bzip2
@@ -36,19 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-    "-DMZ_OPENSSL=ON"
-    "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DMZ_LIB_SUFFIX='-ng'"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "MZ_OPENSSL" true)
+    (lib.cmakeBool "MZ_LIBCOMP" false) # builds only on Darwin by default where it fails due to mising headers
+    (lib.cmakeBool "MZ_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "MZ_BUILD_UNIT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeFeature "MZ_LIB_SUFFIX" "-ng")
   ]
   ++ lib.optionals stdenv.hostPlatform.isi686 [
     # tests fail
-    "-DMZ_PKCRYPT=OFF"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # missing header file
-    "-DMZ_LIBCOMP=OFF"
+    (lib.cmakeBool "MZ_PKCRYPT" false)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
