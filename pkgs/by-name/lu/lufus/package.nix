@@ -8,13 +8,13 @@
 }:
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "lufus";
-  version = "1.0.0b1.1";
+  version = "1.0.0-stable-testing";
 
   src = fetchFromGitHub {
     owner = "Hog185";
     repo = "Lufus";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-3i0CnhGvLTXutz8CQoH5q4PwZ23lAwnUo8H5TRJx+KE=";
+    sha256 = "sha256-1nfEqKbrsJS+wfJLn1qfpivAXutp04J53HtxBchhC18=";
   };
 
   propagatedBuildInputs = with python313Packages; [
