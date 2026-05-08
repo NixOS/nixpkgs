@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "bubop";
-  version = "0.2.3";
+  version = "0.2.4a0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "bubop";
     tag = "v${version}";
-    hash = "sha256-NXA3UDOkCoj4dm3UO/X0w2Mpx4bw3yFO6oyOzsPgtrU=";
+    hash = "sha256-KHK84jDNPqp7lHs35Vo4jidNb5fqI3FVglGUHb2jq2g=";
   };
 
   postPatch = ''
