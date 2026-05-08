@@ -865,6 +865,12 @@ lib.mapAttrs mkLicense (
       fullName = "ISC License";
     };
 
+    json = {
+      spdxId = "JSON";
+      fullName = "JSON License";
+      free = false;
+    };
+
     databricks = {
       fullName = "Databricks License";
       url = "https://www.databricks.com/legal/db-license";
