@@ -11,7 +11,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
   version = "1.0.0b1.1";
 
   src = fetchFromGitHub {
-    owner = "Hog185";
+    owner = "Hogjects";
     repo = "Lufus";
     tag = "v${finalAttrs.version}";
     sha256 = "sha256-3i0CnhGvLTXutz8CQoH5q4PwZ23lAwnUo8H5TRJx+KE=";
@@ -65,7 +65,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "A rufus clone written in py and designed to work with linux";
-    homepage = "https://github.com/Hog185/Lufus";
+    homepage = "https://github.com/Hogjects/Lufus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Simon-Weij ];
     platforms = lib.platforms.linux;
