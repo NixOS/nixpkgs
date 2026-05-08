@@ -3,6 +3,7 @@
   stdenv,
   lib,
   python3,
+  python3Packages,
   nix-update-script,
   cmake,
 }:
@@ -29,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     python3
   ];
 
   nativeInstallCheckInputs = [
-    python3.pkgs.pytest
+    python3Packages.pytest
     cmake
   ];
 
