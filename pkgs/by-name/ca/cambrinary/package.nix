@@ -16,11 +16,11 @@ python3Packages.buildPythonApplication {
     hash = "sha256-wDcvpKAY/6lBjO5h3qKH3+Y2G2gm7spcKCXFMt/bAtE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     python3Packages.flit
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python3Packages.aiohttp
     python3Packages.beautifulsoup4
   ];
