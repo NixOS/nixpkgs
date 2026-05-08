@@ -81,7 +81,7 @@ in
     hash = "sha256-ziXSYQpflSKsj1P7t7goC1wCGZHpvZE3BoycYp2f+1Y=";
   };
   php85 = mkPhp {
-    version = "8.5.5";
-    hash = "sha256-7iYr7/YcQxll0flxkoVLNiCK3qw4mDw0mLs1AK6HKDw=";
+    version = "8.5.6";
+    hash = "sha256-RFckD2XwxZpiCSDWbNqxsSEApDHgOtn+vjixOhsllX8=";
   };
 }

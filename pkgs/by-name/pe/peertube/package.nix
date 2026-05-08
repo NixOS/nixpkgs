@@ -145,7 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.peertube = nixosTests.peertube;
+  passthru = {
+    nodejs = nodejs_24;
+    tests.peertube = nixosTests.peertube;
+  };
 
   meta = {
     description = "Free software to take back control of your videos";
