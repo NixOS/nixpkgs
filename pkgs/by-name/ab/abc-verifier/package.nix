@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abc-verifier";
-  version = "0.62";
+  version = "0.64";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
