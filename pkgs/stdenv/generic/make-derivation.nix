@@ -213,6 +213,12 @@ let
     "outputChecks"
   ];
 
+  defaultBuilderArgs = [
+    "-e"
+    ./source-stdenv.sh
+    ./default-builder.sh
+  ];
+
   inherit (stdenv)
     hostPlatform
     buildPlatform
@@ -635,11 +641,16 @@ let
 
           builder = attrs.realBuilder or stdenvShell;
           args =
-            attrs.args or [
-              "-e"
-              ./source-stdenv.sh
-              (attrs.builder or ./default-builder.sh)
-            ];
+            attrs.args or (
+              if attrs ? builder then
+                [
+                  "-e"
+                  ./source-stdenv.sh
+                  attrs.builder
+                ]
+              else
+                defaultBuilderArgs
+            );
           inherit stdenv;
 
           # The `system` attribute of a derivation has special meaning to Nix.
