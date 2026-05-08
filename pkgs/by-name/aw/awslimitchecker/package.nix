@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awslimitchecker";
   version = "12.0.0";
   pyproject = true;
@@ -21,9 +21,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ./version.patch
   ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     boto3
     botocore
     pytz
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     versionfinder
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     onetimepass
     pyotp
