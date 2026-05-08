@@ -194,6 +194,13 @@ let
     "disallowedRequisites"
   ];
 
+  argumentAttrsToRemove = [
+    "meta"
+    "passthru"
+    "pos"
+    "env"
+  ];
+
   attrsToRemoveLast = [
     # Fixed-output derivations may not reference other paths, which means that
     # for a fixed-output derivation, the corresponding inputDerivation should
@@ -917,12 +924,7 @@ let
         if attrs ? meta.mainProgram then env // { NIX_MAIN_PROGRAM = attrs.meta.mainProgram; } else env;
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs [
-          "meta"
-          "passthru"
-          "pos"
-          "env"
-        ]
+        removeAttrs attrs argumentAttrsToRemove
         // {
           ${if __structuredAttrs then "env" else null} = checkedEnv;
           cmakeFlags = makeCMakeFlags attrs;
