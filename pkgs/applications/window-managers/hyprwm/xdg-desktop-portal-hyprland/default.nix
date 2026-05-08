@@ -7,6 +7,7 @@
   pkg-config,
   wrapQtAppsHook,
   nix-update-script,
+  grim,
   hyprland,
   hyprland-protocols,
   hyprlang,
@@ -83,7 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${lib.makeBinPath [ (placeholder "out") ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          (placeholder "out")
+          grim
+        ]
+      }
   '';
 
   passthru = {
