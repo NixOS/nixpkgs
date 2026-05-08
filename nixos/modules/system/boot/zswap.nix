@@ -115,6 +115,22 @@ in
         on systems with limited memory.
       '';
     };
+
+    dynamicSwap = mkOption {
+      type = types.bool;
+      default = config.services.swapspace.enable;
+      defaultText = literalExpression "config.services.swapspace.enable";
+      visible = false;
+      description = ''
+        Zswap requires a swap device to work properly. By default, the zswap
+        module checks for an entry in 'swapDevices' to ensure this condition
+        is met. However, some setups add swap devices dynamically, such as with
+        GPT partition auto discovery or 'services.swapspace'.
+
+        Set this value to true to assert that a swap device will be added
+        dynamically, and bypass the check for a 'swapDevices' entry.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -161,7 +177,7 @@ in
         '';
       }
       {
-        assertion = config.swapDevices != [ ];
+        assertion = config.swapDevices != [ ] || cfg.dynamicSwap;
         message = ''
           Zswap requires at least one physical swap device to function as a backing store.
 
@@ -171,6 +187,9 @@ in
             device = "/var/lib/swapfile";
             size = 16 * 1024; # 16GB
           } ];
+
+          If swap devices will be added dynamically (eg. by GPT partition auto discovery),
+          set 'boot.zswap.dynamicSwap = true' to bypass this check.
         '';
       }
       {
