@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   readline,
+  gtest,
   cmake,
 }:
 
@@ -20,14 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
 
+  doCheck = true;
+  checkInputs = [ gtest ];
+
   # thank you to the Arch Linux developers
   patches = [ ./cmake.patch ];
 
   cmakeFlags = [
-    # This prevents CMake from trying to download googletest during the build
-    (lib.cmakeBool "ABC_SKIP_TESTS" true)
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-  ];
+  ]
+  # ABC CMake switches on definition not value
+  ++ lib.optional (!finalAttrs.doCheck) (lib.cmakeBool "ABC_SKIP_TESTS" true);
 
   installPhase = ''
     runHook preInstall
