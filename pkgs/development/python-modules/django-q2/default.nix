@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-q2";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-q2";
     repo = "django-q2";
     tag = "v${version}";
-    hash = "sha256-xqRm9vv/lD9HLX+ekdPgIGGwr5H7QZBATPx0CCjQAmw=";
+    hash = "sha256-VwB3pvDAGsMvcKblRnmCYHzvEBCz8E13Qov4LjWEqxc=";
   };
 
   build-system = [
