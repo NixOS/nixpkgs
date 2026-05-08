@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://lf16-larkversion.larksuitecdn.com/obj/lark-version-sg/967dd7e4/Lark-linux_x64-7.59.12.deb";
-      hash = "sha256-Oa5tCn2l4zJzafzoxLfAZVXu0zWILKv+DeWJsQRsZtI=";
+      url = "https://lf16-larkversion.larksuitecdn.com/obj/lark-version-sg/daf759d9/Lark-linux_x64-7.62.9.deb";
+      hash = "sha256-1mYsj7MGJMM38VQkT33ZWcptcKiZ1fImhfg4sweFSBo=";
     };
     aarch64-linux = fetchurl {
-      url = "https://lf16-larkversion.larksuitecdn.com/obj/lark-version-sg/2d8485bc/Lark-linux_arm64-7.59.12.deb";
-      hash = "sha256-q27De0fseQEj3C9X77Z5s8FUSxXJ7gmPbFy10UaH3Sc=";
+      url = "https://lf16-larkversion.larksuitecdn.com/obj/lark-version-sg/7309853c/Lark-linux_arm64-7.62.9.deb";
+      hash = "sha256-vifLnio6CFQfPw+gdrp0HtrKVANskPB258GxAIfp+mQ=";
     };
   };
 
@@ -127,7 +127,7 @@ let
   ];
 
   pname = "larksuite";
-  version = "7.59.12";
+  version = "7.62.9";
 
 in
 stdenv.mkDerivation {
