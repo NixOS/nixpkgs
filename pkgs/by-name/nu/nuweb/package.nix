@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
 
   pname = "nuweb";
-  version = "1.62";
+  version = "1.64";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/nuweb/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JVqPYkYPXBT0xLNWuW4DV6N6ZlKuBYQGT46frhnpU64=";
+    sha256 = "sha256-DEi0cbcyO8qUDXbIRS3JtYixezaPX/vxDddbF7hbGeA=";
   };
 
   buildInputs = [ texliveMedium ];
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
-  #   ld: global.o:/build/nuweb-1.62/global.h:91: multiple definition of
-  #     `current_sector'; main.o:/build/nuweb-1.62/global.h:91: first defined here
+  #   ld: global.o:/build/nuweb-1.64/global.h:91: multiple definition of
+  #     `current_sector'; main.o:/build/nuweb-1.64/global.h:91: first defined here
   # GCC 15 uses C23, which fails with the following error
   # main.c:4:5: warning: old-style function definition [-Wold-style-definition]
   #     4 | int main(argc, argv)
