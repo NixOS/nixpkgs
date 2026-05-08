@@ -290,6 +290,12 @@
     githubId = 92977828;
     name = "Mori Zen";
   };
+  _7591yj = {
+    email = "yeongjin.kim@proton.me";
+    github = "7591yj";
+    githubId = 77034308;
+    name = "Yeongjin Kim";
+  };
   _7karni = {
     email = "7karni@proton.me";
     name = "7karni";
@@ -20414,6 +20420,12 @@
     githubId = 31112680;
     name = "oidro";
   };
+  ojsef39 = {
+    name = "Josef Hofer";
+    github = "ojsef39";
+    email = "me+github@jhofer.de";
+    githubId = 43563019;
+  };
   ok-nick = {
     email = "nick.libraries@gmail.com";
     github = "ok-nick";
@@ -22759,6 +22771,13 @@
     name = "Lorenzo Miglietta";
     github = "ranfdev";
     githubId = 23294184;
+  };
+  ranidspace = {
+    name = "ranidspace";
+    email = "dev@ranid.space";
+    matrix = "@ranidspace:4d2.org";
+    github = "ranidspace";
+    githubId = 56847308;
   };
   raphaelr = {
     email = "raphael-git@tapesoftware.net";
@@ -30029,6 +30048,12 @@
     github = "yajo";
     githubId = 973709;
     name = "Jairo Llopis";
+  };
+  yamadashy = {
+    email = "koukun0120@gmail.com";
+    github = "yamadashy";
+    githubId = 5019072;
+    name = "Kazuki Yamada";
   };
   yamashitax = {
     email = "hello@yamashit.ax";

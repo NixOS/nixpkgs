@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "5.11.2";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     tag = "v${version}";
-    hash = "sha256-/5oJOSNP3vbmX7V8m6LLomNAvRzV2hM0vMCbwjFBmbg=";
+    hash = "sha256-/A+7u8mMZMiloHz0fnlQAQDe7DcrgFBU0IOaZJEdkKo=";
   };
 
   build-system = [

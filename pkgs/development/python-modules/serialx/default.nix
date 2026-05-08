@@ -1,9 +1,11 @@
 {
+  aioesphomeapi,
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
   lib,
   psutil,
+  pythonAtLeast,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
@@ -47,6 +49,10 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     typing-extensions
+  ];
+
+  optional-dependencies.esphome = lib.optionals (pythonAtLeast "3.14") [
+    aioesphomeapi
   ];
 
   pythonImportsCheck = [ "serialx" ];

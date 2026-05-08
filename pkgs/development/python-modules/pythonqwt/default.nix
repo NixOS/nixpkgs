@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pythonqwt";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PythonQwt";
     tag = "v${version}";
-    hash = "sha256-S67k5kfGqB6Ezr2XMlW3x/ya6MW6df2cFrGEqlsLOhk=";
+    hash = "sha256-LBn88lEOruLLdXcJ7dHfgMS1EahHQErIlZjFVNosvAU=";
   };
 
   build-system = [
