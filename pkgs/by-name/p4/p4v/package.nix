@@ -10,12 +10,12 @@ let
   # Upstream replaces minor versions, so use archived URLs.
   srcs = rec {
     x86_64-linux = fetchurl {
-      url = "https://web.archive.org/web/20240612193642id_/https://ftp.perforce.com/perforce/r24.2/bin.linux26x86_64/p4v.tgz";
-      sha256 = "sha256-HA99fHcmgli/vVnr0M8ZJEsaZ2ZLzpG3M8S77oDYJyE=";
+      url = "https://web.archive.org/web/20260414052921/https://filehost.perforce.com/perforce/r26.1/bin.linux26x86_64/p4v.tgz";
+      sha256 = "sha256-89Xz9dxAeLGOOr90K0CdlxjrfIf9vUmyZV3tzWspWdQ=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://web.archive.org/web/20240612194532id_/https://ftp.perforce.com/perforce/r24.2/bin.macosx12u/P4V.dmg";
-      sha256 = "sha256-PS7gfDdWspyL//YWLkrsGi5wh6SIeAry2yef1/V0d6o=";
+      url = "https://web.archive.org/web/20260414052748/https://filehost.perforce.com/perforce/r26.1/bin.macosx12u/P4V.dmg";
+      sha256 = "sha256-8MBLS6EQOVenxZ1Uv75kPzU8aO2AldmxkwOz+JcBRpY=";
     };
     # this is universal
     x86_64-darwin = aarch64-darwin;
@@ -29,7 +29,7 @@ let
 in
 mkDerivation {
   pname = "p4v";
-  version = "2024.2/2606884";
+  version = "2026.1/2933292";
 
   src =
     srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

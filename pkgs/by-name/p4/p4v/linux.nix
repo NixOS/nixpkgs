@@ -77,6 +77,10 @@ let
     # Don't wrap the Qt apps; upstream has its own wrapper scripts.
     dontWrapQtApps = true;
 
+    patches = [
+      ./libs.patch # Fixes issues with bundled libraries that we've stripped out
+    ];
+
     postPatch = ''
       rm -r lib/plugins lib/libQt6* lib/libssl* lib/libicu* lib/libcrypto*
     '';
