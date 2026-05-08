@@ -56,7 +56,6 @@
   stdenv,
   systemd,
   wayland,
-  xdg-utils,
   writeShellScript,
 
   # for custom command line arguments, e.g. "--use-gl=desktop"
@@ -125,7 +124,6 @@ let
     stdenv.cc.cc
     systemd
     wayland
-    xdg-utils
   ];
 
   pname = "larksuite";
@@ -178,24 +176,15 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/bytedance-lark.desktop \
       --replace-fail /usr/bin/bytedance-lark-stable $out/opt/bytedance/lark/bytedance-lark
 
-    # Remove bundled xdg utilities that don't work on NixOS
-    # This forces the system to use NixOS's xdg-utils which work correctly
-#    rm -f $out/opt/bytedance/lark/vulcan/xdg-mime
-#    rm -f $out/opt/bytedance/lark/vulcan/xdg-settings
-
-    # Wrap the actual Electron binaries (not upstream's shell scripts)
-    # - lark: main executable (Electron binary)
-    # - vulcan/vulcan: Electron browser used for rendering
-    # - video_conference_sdk: video meeting child process
-    # Note: bytedance-lark is kept as-is (upstream's shell script handles xdg-utils)
+    # Wrap with LD_LIBRARY_PATH in correct order:
+    # 1. Bundled libraries first (like upstream does)
+    # 2. Nix rpath for system libraries
+    # 3. OpenGL driver
     for executable in $out/opt/bytedance/lark/{lark,vulcan/vulcan,video_conference_sdk}; do
       wrapProgram $executable \
-        --set ELECTRON_DISABLE_SANDBOX 0 \
+        --set ELECTRON_DISABLE_SANDBOX 1 \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-#        --prefix LD_LIBRARY_PATH : ${rpath}:$out/opt/bytedance/lark:${addDriverRunpath.driverLink}/share \
-        ${lib.optionalString (
-          commandLineArgs != ""
-        ) "--add-flags ${lib.escapeShellArg commandLineArgs}"}
+        --prefix LD_LIBRARY_PATH : $out/opt/bytedance/lark:${rpath}:${addDriverRunpath.driverLink}/share
     done
 
     mkdir -p $out/share/icons/hicolor
