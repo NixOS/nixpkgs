@@ -2,10 +2,10 @@
   lib,
   fetchFromGitHub,
   jadx,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apkleaks";
   version = "2.6.3";
   pyproject = true;
@@ -17,9 +17,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-8P4LZsyq0mSVdE6QhnW3QaaA3UAg4UDBS3jSg7Kg/oY=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     jadx
     pyaxmlparser
     setuptools
