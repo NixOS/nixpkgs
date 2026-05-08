@@ -6,6 +6,8 @@
   git,
   writableTmpDirAsHomeHook,
   cacert,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,6 +30,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   checkFeatures = [ "no-e2e-tests" ];
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for submitting stacked Pull/Merge Requests from Jujutsu bookmarks";
