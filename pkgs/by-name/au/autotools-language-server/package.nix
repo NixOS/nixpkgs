@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "autotools-language-server";
   version = "0.0.23";
   pyproject = true;
@@ -17,16 +17,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   build-system = [
-    python3.pkgs.setuptools-generate
-    python3.pkgs.setuptools-scm
+    python3Packages.setuptools-generate
+    python3Packages.setuptools-scm
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     tree-sitter-make
     lsp-tree-sitter
   ];
   nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
+    python3Packages.pytestCheckHook
   ];
 
   meta = {
