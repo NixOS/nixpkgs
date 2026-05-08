@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   qt6,
   xercesc,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    e57inspector = nixosTests.e57inspector;
+  };
 
   meta = {
     description = "Cross-platform E57 file viewer to list and view stored point clouds, images and metadata";
