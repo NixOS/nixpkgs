@@ -38,8 +38,7 @@ stdenv.mkDerivation {
     homepage = "https://www.canon.com/";
     license = lib.licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with lib.maintainers; [
-      ewok
+    maintainers = [
     ];
   };
 }

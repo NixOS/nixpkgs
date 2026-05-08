@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "todofi.sh";
     homepage = "https://github.com/hugokernel/todofi.sh";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ewok ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

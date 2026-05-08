@@ -100,7 +100,7 @@ let
         "x86_64-linux"
         "i686-linux"
       ];
-      maintainers = with lib.maintainers; [ ewok ];
+      maintainers = [ ];
     };
 
     nativeBuildInputs = [ makeWrapper ];
