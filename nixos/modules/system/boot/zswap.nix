@@ -20,6 +20,12 @@ let
 
   # Check if kernel supports zsmalloc as zswap backend (>= 6.3)
   zsmallocSupported = versionAtLeast kernelVersion "6.3";
+
+  # Check if kernel supports zbud and z3fold backends (< 6.15)
+  zbudSupported = versionOlder kernelVersion "6.15";
+
+  # Check if kernel supports zpool abstraction and configuration (< 6.18)
+  zpoolSupported = versionOlder kernelVersion "6.18";
 in
 {
   options.boot.zswap = {
@@ -54,6 +60,7 @@ in
       type = types.enum [
         "zsmalloc"
         "zbud"
+        "z3fold"
       ];
       default = if zsmallocSupported then "zsmalloc" else "zbud";
       defaultText = literalExpression "if kernel >= 6.3 then \"zsmalloc\" else \"zbud\"";
@@ -62,7 +69,7 @@ in
         'zsmalloc' is strongly recommended for kernels >= 6.3 as it offers the best density.
         For older kernels, 'zbud' is the fallback.
 
-        Note: 'z3fold' was removed from Linux kernel 6.8 and later.
+        Note: 'zbud' and 'z3fold' were removed from Linux kernel 6.15 and later.
       '';
     };
 
@@ -115,11 +122,11 @@ in
     boot.kernelParams = [
       "zswap.enabled=1"
       "zswap.compressor=${cfg.compressor}"
-      "zswap.zpool=${cfg.zpool}"
       "zswap.max_pool_percent=${toString cfg.maxPoolPercent}"
       "zswap.accept_threshold_percent=${toString cfg.acceptThresholdPercent}"
       "zswap.shrinker_enabled=${if cfg.shrinkerEnabled then "1" else "0"}"
-    ];
+    ]
+    ++ optional zpoolSupported "zswap.zpool=${cfg.zpool}";
 
     # 2. Dependency management: ensure required modules are included in initrd or kernel
     # This ensures Zswap is ready early in the boot process (before swap is mounted)
@@ -133,11 +140,11 @@ in
     boot.kernel.sysfs.module.zswap.parameters = {
       enabled = true;
       compressor = cfg.compressor;
-      zpool = cfg.zpool;
       max_pool_percent = cfg.maxPoolPercent;
       accept_threshold_percent = cfg.acceptThresholdPercent;
       shrinker_enabled = cfg.shrinkerEnabled;
-    };
+    }
+    // optionalAttrs zpoolSupported { zpool = cfg.zpool; };
 
     assertions = [
       {
@@ -173,6 +180,15 @@ in
           Support for zsmalloc in Zswap was added in Linux 6.3.
 
           Please use 'zbud' instead: boot.zswap.zpool = "zbud";
+        '';
+      }
+      {
+        assertion = (cfg.zpool != "zsmalloc") -> zbudSupported;
+        message = ''
+          Zswap allocators 'zbud' and 'z3fold' are not supported on kernel version ${kernelVersion}.
+          Support for zbud and z3fold in Zswap was removed in Linux 6.15 in favor of zsmalloc.
+
+          Please use 'zsmalloc' instead: boot.zswap.zpool = "zsmalloc";
         '';
       }
     ];
