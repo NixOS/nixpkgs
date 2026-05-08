@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = lib.optional withJson "json";
 
   passthru.updateScript = nix-update-script {
-    version = "branch";
+    extraArgs = [ "--version=branch" ];
   };
 
   meta = {
