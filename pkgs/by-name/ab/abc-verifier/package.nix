@@ -26,11 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # This prevents CMake from trying to download googletest during the build
     (lib.cmakeBool "ABC_SKIP_TESTS" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 'abc' "$out/bin/abc"
+    cmake --install .
     runHook postInstall
   '';
 
