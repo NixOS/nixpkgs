@@ -4,23 +4,25 @@
   python3Packages,
   xhost,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exegol";
   version = "5.1.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ThePorgs";
     repo = "Exegol";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iyzTBZHOzr6CfZDqHvycdWZply/BXH7kESaO5pDLBMY=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
 
   pythonRelaxDeps = [
-    "rich"
     "argcomplete"
+    "requests"
+    "rich"
     "supabase"
   ];
 
@@ -41,7 +43,9 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ pyjwt.optional-dependencies.crypto
     ++ [ xhost ]
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) tzlocal;
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      tzlocal
+    ];
 
   doCheck = true;
 
@@ -58,7 +62,7 @@ python3Packages.buildPythonApplication rec {
       stylish macOS users and corporate Windows pros to UNIX-like power users.
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
-    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${src.tag}";
+    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Only
       {
@@ -76,4 +80,4 @@ python3Packages.buildPythonApplication rec {
       macbucheron
     ];
   };
-}
+})
