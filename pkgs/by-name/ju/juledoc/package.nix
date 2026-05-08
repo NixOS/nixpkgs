@@ -7,13 +7,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "juledoc";
-  version = "0.0.0-unstable-2026-02-02";
+  version = "0.0.0-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "juledoc";
-    rev = "e01e200293d134064c674f705c9babf6d23775e8";
-    hash = "sha256-JzIwIEd9kuVrBVo2H5bv3ROqpVUndBqLAZVYmoGbYuQ=";
+    rev = "d6ba549aeb82ea224e2cf07e0f0f3a2448dbd9db";
+    hash = "sha256-3n9VOoXIFEI9V6fzSD75PdwkijXruC7qWClOUlWd52I=";
   };
 
   nativeBuildInputs = [ julec.hook ];

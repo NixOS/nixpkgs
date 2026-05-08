@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ghostscript_headless ];
 
+  # gcc 15 defaults to C23 where bool is a keyword; u2ps does `typedef unsigned char bool;`
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     description = "Unicode text to postscript converter";
     homepage = "https://github.com/arsv/u2ps";
