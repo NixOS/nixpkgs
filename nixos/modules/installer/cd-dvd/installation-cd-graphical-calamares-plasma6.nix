@@ -7,7 +7,10 @@
 
   isoImage.edition = lib.mkDefault "plasma6";
 
-  services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6 = {
+    enable = true;
+    enableQt5Integration = false;
+  };
 
   # Automatically login as nixos.
   services.displayManager = {
