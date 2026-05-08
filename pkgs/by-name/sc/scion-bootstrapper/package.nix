@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "scion-bootstrapper";
-  version = "0.0.8-unstable-2024-11-28";
+  version = "0-unstable-2024-11-28";
 
   src = fetchFromGitHub {
     owner = "netsec-ethz";
