@@ -4,6 +4,7 @@
   fetchFromGitHub,
   libpng,
   python3,
+  python3Packages,
   libGLU,
   libGL,
   libsForQt5,
@@ -47,7 +48,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libpng
     python3
-    python3.pkgs.boost
+    python3Packages.boost
     libGLU
     libGL
     libsForQt5.qtbase
