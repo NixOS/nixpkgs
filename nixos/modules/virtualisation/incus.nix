@@ -44,8 +44,6 @@ let
         libxfs
         lvm2
         lxcfs
-        minio
-        minio-client
         nftables
         qemu-utils
         qemu_kvm
@@ -67,6 +65,10 @@ let
       ]
       ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
         lego
+      ]
+      ++ lib.optionals (lib.versionOlder cfg.package.version "7.0.0") [
+        minio
+        minio-client
       ]
       ++ lib.optionals config.security.apparmor.enable [
         apparmor-bin-utils

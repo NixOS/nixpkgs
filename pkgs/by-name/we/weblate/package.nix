@@ -189,5 +189,22 @@ python.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "weblate";
+    knownVulnerabilities = [
+      "CVE-2026-24126: 6.6 Medium https://github.com/NixOS/nixpkgs/issues/510510"
+      "CVE-2026-27457: 4.3 Medium https://github.com/NixOS/nixpkgs/issues/494757"
+      "CVE-2026-33212: 3.1 Low https://github.com/NixOS/nixpkgs/issues/510512"
+      "CVE-2026-33214: 4.3 Medium https://github.com/NixOS/nixpkgs/issues/510520"
+      "CVE-2026-33220: 6.8 Medium https://github.com/NixOS/nixpkgs/issues/510519"
+      "CVE-2026-33435: 8.1 High https://github.com/NixOS/nixpkgs/issues/510516"
+      "CVE-2026-33440: 5.0 Medium https://github.com/NixOS/nixpkgs/issues/510517"
+      "CVE-2026-34242: 7.7 High https://github.com/NixOS/nixpkgs/issues/510511"
+      "CVE-2026-34244: 5.0 Medium https://github.com/NixOS/nixpkgs/issues/510515"
+      "CVE-2026-34393: 8.8 High https://github.com/NixOS/nixpkgs/issues/510513"
+      "CVE-2026-39845: 4.1 Medium https://github.com/NixOS/nixpkgs/issues/510509"
+      "CVE-2026-40256: 5.0 Medium https://github.com/NixOS/nixpkgs/issues/510518"
+      "CVE-2026-41519: 4.2 Medium https://github.com/NixOS/nixpkgs/issues/518006"
+      "CVE-2026-44263: 4.3 Medium https://github.com/NixOS/nixpkgs/issues/518008"
+      "CVE-2026-44264: 4.3 Medium https://github.com/NixOS/nixpkgs/issues/518015"
+    ];
   };
 }
