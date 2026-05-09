@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitLab,
+  fetchpatch2,
   openldap,
   nixosTests,
   postgresql,
@@ -21,6 +22,20 @@ python.pkgs.buildPythonApplication rec {
     tag = version;
     hash = "sha256-hreEjMrD6mRapgrSDPRWcmqfLxfsOpK7dC8lHJkAY7Y=";
   };
+
+  patches = [
+    # Backport authlib 1.7 compatibility.
+    (fetchpatch2 {
+      url = "https://gitlab.com/yaal/canaille/-/commit/b356baa82109a7fdf61a8258572d199ffd3c9604.patch";
+      hash = "sha256-f5zJBtm9mJpWra5x4vr07eL9xe381lLFp3lfehc4Ypk=";
+    })
+    # Update OIDC tests for authlib 1.7 behavior.
+    (fetchpatch2 {
+      url = "https://gitlab.com/yaal/canaille/-/commit/c1b6d103ebf374cd6a21d9af8376c910c2d0d5d9.patch";
+      hash = "sha256-N9kxiKU6iwXq6cw6itZQHairSOgyDgwAVByj0NnxMqY=";
+      includes = [ "tests/oidc/*" ];
+    })
+  ];
 
   build-system = with python.pkgs; [
     hatchling
@@ -79,10 +94,18 @@ python.pkgs.buildPythonApplication rec {
     export SCHEMA="${openldap}/etc/schema"
   '';
 
+  # Cap xdist workers; concurrent slapd fixtures race the 10s bind window.
+  dontUsePytestXdist = true;
+  pytestFlags = [ "--numprocesses=4" ];
+
   disabledTests = [
     # Tries to use DNS resolution
     "test_send_new_email_error"
     "test_send_test_email_ssl"
+    # flaky: timing-sensitive intruder lockout retry window
+    "test_intruder_lockout_fail_second_attempt_then_succeed_in_third"
+    # requires external network for logo fetch
+    "test_mail_with_unreachable_external_logo"
   ];
 
   optional-dependencies = with python.pkgs; {
