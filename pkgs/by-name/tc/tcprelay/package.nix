@@ -2,16 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
+  finalAttrs ? { },
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "tcprelay";
   version = "0.1.0";
 
   src = fetchFromGitLab {
     owner = "overhead";
     repo = "tcp-relay";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GmYIkUBPjxKDhVlrEIFX3s0DacIoOtQWM67gkXV1H/Q=";
   };
 
@@ -20,6 +21,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "TCP relay written in Go";
+    homepage = "https://gitlab.com/overhead/tcp-relay";
+    changelog = "";
     license = licenses.mit;
     maintainers = with maintainers; [ shutdaun ];
     mainProgram = "tcprelay";
