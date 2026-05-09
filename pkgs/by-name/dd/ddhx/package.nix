@@ -31,5 +31,6 @@ buildDubPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.unix;
+    mainProgram = "ddhx";
   };
 })
