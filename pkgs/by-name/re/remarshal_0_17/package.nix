@@ -30,15 +30,17 @@ let
   });
   pythonPackages = python.pkgs;
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "remarshal";
   version = "0.17.1"; # last version with YAML 1.1 support, do not update
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
-    owner = "dbohdan";
+    owner = "remarshal-project";
     repo = "remarshal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2WxMh5P/8NvElymnMU3JzQU0P4DMXFF6j15OxLaS+VA=";
   };
 
@@ -62,11 +64,11 @@ pythonPackages.buildPythonApplication rec {
   # nixpkgs-update: no auto update
 
   meta = {
-    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
+    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/${finalAttrs.src.tag}";
     description = "Convert between TOML, YAML and JSON";
     license = lib.licenses.mit;
-    homepage = "https://github.com/dbohdan/remarshal";
+    homepage = "https://github.com/remarshal-project/remarshal";
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "remarshal";
   };
-}
+})
