@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stumpwm";
     repo = "stumpwm";
-    rev = "${finalAttrs.version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-Ba2HcAmNcZvnqU0jpLTxsBe8L+4aHbO/oM4Bp/IYEC0=";
   };
 
