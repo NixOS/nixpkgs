@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "immichFrame";
     repo = "immichFrame";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-b8hfzNZJz9XCRO4UfzwK5OsrgqV2F5wnZlRH7h3Eo9Q=";
   };
 
