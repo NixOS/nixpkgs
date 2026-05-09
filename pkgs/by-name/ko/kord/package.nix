@@ -35,6 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
+  # concat_idents feature gate was removed in rust 1.90; never invoked here.
+  postPatch = ''
+    substituteInPlace src/lib.rs --replace-fail '#![feature(concat_idents)]' ""
+  '';
+
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
