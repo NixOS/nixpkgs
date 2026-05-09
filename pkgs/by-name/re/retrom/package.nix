@@ -5,9 +5,9 @@
   cargo-tauri,
   pnpmConfigHook,
   fetchPnpmDeps,
-  pnpm_10, # used in upstream build toolchain
-  nodejs_24, # used in upstream build toolchain
-  faketty, # nx requires a TTY, see https://github.com/nrwl/nx/issues/22445
+  pnpm_10,
+  nodejs_24,
+  faketty,
   perl,
   protobuf_29,
   webkitgtk_4_1,
@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-MmWCpe7NzzT8W/Ic9y1VzGAp4rk0vxoOxbz5sRRlQs0=";
   };
 
-  # Cargo.lock has git dependencies
   cargoHash = "sha256-13VHe4LU3R8NKhcDedhUcnnF9fQd95C3E+moh2jPnis=";
 
   buildAndTestSubdir = "packages/client";

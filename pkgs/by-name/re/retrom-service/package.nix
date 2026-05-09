@@ -3,9 +3,9 @@
   pkg-config,
   rustPlatform,
   pnpmConfigHook,
-  pnpm_10, # used in upstream build toolchain
-  nodejs_24, # used in upstream build toolchain
-  faketty, # nx requires a TTY, see https://github.com/nrwl/nx/issues/22445
+  pnpm_10,
+  nodejs_24,
+  faketty,
   perl,
   protobuf_29,
   openssl,
