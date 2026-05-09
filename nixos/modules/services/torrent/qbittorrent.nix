@@ -11,7 +11,9 @@ let
   inherit (lib)
     literalExpression
     getExe
+    mkDefault
     mkEnableOption
+    mkMerge
     mkOption
     mkPackageOption
     mkIf
@@ -116,6 +118,20 @@ in
         }
         ];
         ```
+
+        ::: {.note}
+        When this option is non-empty, the module pre-seeds
+        `BitTorrent/Session/QueueingSystemEnabled = false` to match the
+        current qBittorrent upstream default. This prevents qBittorrent's
+        legacy-mode detection from silently overriding it for declarative
+        configurations. Users who want torrent queuing enabled must set it
+        explicitly:
+        ```nix
+        {
+          services.qbittorrent.serverConfig.BitTorrent.Session.QueueingSystemEnabled = true;
+        }
+        ```
+        :::
       '';
       example = literalExpression ''
         {
@@ -142,102 +158,113 @@ in
       ];
     };
   };
-  config = mkIf cfg.enable {
-    systemd = {
-      tmpfiles.settings = {
-        qbittorrent = {
-          "${cfg.profileDir}/qBittorrent/"."d" = {
-            mode = "755";
-            inherit (cfg) user group;
-          };
-          "${cfg.profileDir}/qBittorrent/config/"."d" = {
-            mode = "755";
-            inherit (cfg) user group;
+  config = mkIf cfg.enable (mkMerge [
+    # Mirror of upstream qBittorrent's changedDefaults[] table:
+    # https://github.com/qbittorrent/qBittorrent/blob/master/src/app/upgrade.cpp
+    # Currently contains only QueueingSystemEnabled. If upstream adds entries,
+    # this seed needs to be expanded.
+    # Context: https://github.com/NixOS/nixpkgs/issues/516998
+    (mkIf (cfg.serverConfig != { }) {
+      services.qbittorrent.serverConfig.BitTorrent.Session.QueueingSystemEnabled = mkDefault false;
+    })
+
+    {
+      systemd = {
+        tmpfiles.settings = {
+          qbittorrent = {
+            "${cfg.profileDir}/qBittorrent/"."d" = {
+              mode = "755";
+              inherit (cfg) user group;
+            };
+            "${cfg.profileDir}/qBittorrent/config/"."d" = {
+              mode = "755";
+              inherit (cfg) user group;
+            };
           };
         };
-      };
-      services.qbittorrent = {
-        description = "qbittorrent BitTorrent client";
-        wants = [ "network-online.target" ];
-        after = [
-          "local-fs.target"
-          "network-online.target"
-          "nss-lookup.target"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        restartTriggers = optionals (cfg.serverConfig != { }) [ configFile ];
-
-        serviceConfig = {
-          Type = "simple";
-          User = cfg.user;
-          Group = cfg.group;
-
-          # the config file has to be writable, so we have to do this weird dance
-          ExecStartPre = lib.mkIf (cfg.serverConfig != { }) ''
-            ${pkgs.coreutils}/bin/install -Dm600 ${configFile} "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"
-          '';
-
-          ExecStart = utils.escapeSystemdExecArgs (
-            [
-              (getExe cfg.package)
-              "--profile=${cfg.profileDir}"
-            ]
-            ++ optionals (cfg.webuiPort != null) [ "--webui-port=${toString cfg.webuiPort}" ]
-            ++ optionals (cfg.torrentingPort != null) [ "--torrenting-port=${toString cfg.torrentingPort}" ]
-            ++ cfg.extraArgs
-          );
-          TimeoutStopSec = 1800;
-
-          # https://github.com/qbittorrent/qBittorrent/pull/6806#discussion_r121478661
-          PrivateTmp = false;
-
-          PrivateNetwork = false;
-          RemoveIPC = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateUsers = true;
-          ProtectHome = "yes";
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          ProtectSystem = "full";
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_NETLINK"
+        services.qbittorrent = {
+          description = "qbittorrent BitTorrent client";
+          wants = [ "network-online.target" ];
+          after = [
+            "local-fs.target"
+            "network-online.target"
+            "nss-lookup.target"
           ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          SystemCallArchitectures = "native";
-          CapabilityBoundingSet = "";
-          SystemCallFilter = [ "@system-service" ];
+          wantedBy = [ "multi-user.target" ];
+          restartTriggers = optionals (cfg.serverConfig != { }) [ configFile ];
+
+          serviceConfig = {
+            Type = "simple";
+            User = cfg.user;
+            Group = cfg.group;
+
+            # the config file has to be writable, so we have to do this weird dance
+            ExecStartPre = lib.mkIf (cfg.serverConfig != { }) ''
+              ${pkgs.coreutils}/bin/install -Dm600 ${configFile} "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"
+            '';
+
+            ExecStart = utils.escapeSystemdExecArgs (
+              [
+                (getExe cfg.package)
+                "--profile=${cfg.profileDir}"
+              ]
+              ++ optionals (cfg.webuiPort != null) [ "--webui-port=${toString cfg.webuiPort}" ]
+              ++ optionals (cfg.torrentingPort != null) [ "--torrenting-port=${toString cfg.torrentingPort}" ]
+              ++ cfg.extraArgs
+            );
+            TimeoutStopSec = 1800;
+
+            # https://github.com/qbittorrent/qBittorrent/pull/6806#discussion_r121478661
+            PrivateTmp = false;
+
+            PrivateNetwork = false;
+            RemoveIPC = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateUsers = true;
+            ProtectHome = "yes";
+            ProtectProc = "invisible";
+            ProcSubset = "pid";
+            ProtectSystem = "full";
+            ProtectClock = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_NETLINK"
+            ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            SystemCallArchitectures = "native";
+            CapabilityBoundingSet = "";
+            SystemCallFilter = [ "@system-service" ];
+          };
         };
       };
-    };
 
-    users = {
-      users = mkIf (cfg.user == "qbittorrent") {
-        qbittorrent = {
-          inherit (cfg) group;
-          isSystemUser = true;
+      users = {
+        users = mkIf (cfg.user == "qbittorrent") {
+          qbittorrent = {
+            inherit (cfg) group;
+            isSystemUser = true;
+          };
         };
+        groups = mkIf (cfg.group == "qbittorrent") { qbittorrent = { }; };
       };
-      groups = mkIf (cfg.group == "qbittorrent") { qbittorrent = { }; };
-    };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall (
-      optionals (cfg.webuiPort != null) [ cfg.webuiPort ]
-      ++ optionals (cfg.torrentingPort != null) [ cfg.torrentingPort ]
-    );
-  };
+      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall (
+        optionals (cfg.webuiPort != null) [ cfg.webuiPort ]
+        ++ optionals (cfg.torrentingPort != null) [ cfg.torrentingPort ]
+      );
+    }
+  ]);
   meta.maintainers = with maintainers; [
     fsnkty
     undefined-landmark

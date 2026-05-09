@@ -65,6 +65,19 @@
           serverConfig.Preferences.WebUI.Port = "7171";
         };
       };
+
+      # Verify fix for https://github.com/NixOS/nixpkgs/issues/516998:
+      # A non-empty serverConfig must not cause qBittorrent to inject extra
+      # entries from its changedDefaults[] legacy table beyond what we seed.
+      specialisation.legacyDefaultsBlocked.configuration = {
+        services.qbittorrent = {
+          enable = true;
+          webuiPort = null;
+          serverConfig.LegalNotice.Accepted = true;
+          # QueueingSystemEnabled is intentionally NOT set here;
+          # the module seeds mkDefault false to block legacy injection.
+        };
+      };
     };
   };
 
@@ -77,6 +90,7 @@
       openPorts = "${simpleSpecPath}/openPorts";
       serverConfig = "${simpleSpecPath}/serverConfig";
       serverConfigChange = "${declarativeSpecPath}/serverConfigChange";
+      legacyDefaultsBlocked = "${declarativeSpecPath}/legacyDefaultsBlocked";
     in
     ''
       simple.start(allow_reboot=True)
@@ -189,5 +203,47 @@
       with subtest("changes in serverConfig are applied correctly"):
           declarative.succeed("${serverConfigChange}/bin/switch-to-configuration test")
           test_webui(declarative, 7171)
+
+      with subtest("legacy defaults are blocked when serverConfig is non-empty"):
+          # Differential test for https://github.com/NixOS/nixpkgs/issues/516998.
+          # The bug: qBittorrent detects a non-empty on-disk config at startup,
+          # activates "legacy mode", and injects changedDefaults[] values (e.g.
+          # QueueingSystemEnabled=true) regardless of the current upstream default.
+          # The fix: the module pre-seeds those values via mkDefault so qBittorrent
+          # sees them already present and does not inject legacy overrides.
+          #
+          # Baseline (fresh install): restart simple with a clean config so qBit
+          # writes only its current defaults with no legacy mode activated.
+          simple.stop_job("qbittorrent.service")
+          simple.succeed("rm -f /var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf")
+          simple.start_job("qbittorrent.service")
+          simple.wait_for_unit("qbittorrent.service")
+          simple.wait_until_succeeds(
+              "test -s /var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf"
+          )
+          fresh_conf = simple.succeed(
+              "cat /var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf"
+          )
+
+          # Declarative install: switch to a config that has a non-empty serverConfig
+          # (only LegalNotice.Accepted is set; QueueingSystemEnabled is intentionally
+          # absent so the module's mkDefault seed is the only source of that key).
+          declarative.succeed("${legacyDefaultsBlocked}/bin/switch-to-configuration test")
+          declarative.wait_for_unit("qbittorrent.service")
+          seeded_conf = declarative.succeed(
+              "cat /var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf"
+          )
+
+          # Differential assertion: the legacy-mode bug would make QueueingSystemEnabled
+          # appear as true only in seeded_conf (non-empty on-disk config path) but not
+          # in fresh_conf (fresh install, current defaults). Our seed must prevent that.
+          assert "QueueingSystemEnabled=true" not in fresh_conf, (
+              "Unexpected: fresh install wrote QueueingSystemEnabled=true\n"
+              f"fresh_conf:\n{fresh_conf}"
+          )
+          assert "QueueingSystemEnabled=true" not in seeded_conf, (
+              "Legacy mode was triggered: QueueingSystemEnabled was injected as true.\n"
+              f"fresh_conf:\n{fresh_conf}\n\nseeded_conf:\n{seeded_conf}"
+          )
     '';
 }
