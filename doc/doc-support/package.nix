@@ -109,6 +109,7 @@ stdenvNoCC.mkDerivation (
       nixos-render-docs manual html \
         --manpage-urls ./manpage-urls.json \
         --redirects ./redirects.json \
+        --nix-shell-command-hint 'nix-shell doc' \
         --revision ${nixpkgs.rev or "master"} \
         --stylesheet style.css \
         --stylesheet highlightjs/mono-blue.css \

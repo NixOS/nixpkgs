@@ -12,13 +12,15 @@ class RedirectsError(Exception):
         divergent_redirects: set[str] = None,
         identifiers_missing_current_outpath: set[str] = None,
         identifiers_without_redirects: set[str] = None,
-        orphan_identifiers: set[str] = None
+        orphan_identifiers: set[str] = None,
+        nix_shell_command_hint: str = None
     ):
         self.conflicting_anchors = conflicting_anchors or set()
         self.divergent_redirects = divergent_redirects or set()
         self.identifiers_missing_current_outpath = identifiers_missing_current_outpath or set()
         self.identifiers_without_redirects = identifiers_without_redirects or set()
         self.orphan_identifiers = orphan_identifiers or set()
+        self.nix_shell_command_hint = nix_shell_command_hint
 
     def __str__(self):
         error_messages = []
@@ -36,7 +38,7 @@ All historical content locations must correspond to exactly one identifier.
     - {"\n    - ".join(self.divergent_redirects)}
 
     It leads to inconsistent behavior depending on which redirect is applied.
-    Please update doc/redirects.json or nixos/doc/manual/redirects.json!""")
+    Please update the redirects file!""")
         if self.identifiers_missing_current_outpath:
             error_messages.append(f"""
 The first element of an identifier's redirects list must denote its current location.
@@ -44,7 +46,7 @@ The first element of an identifier's redirects list must denote its current loca
     - {"\n    - ".join(self.identifiers_missing_current_outpath)}
 
     If you moved content, add its new location as the first element of the redirects mapping.
-    Please update doc/redirects.json or nixos/doc/manual/redirects.json!""")
+    Please update the redirects file!""")
         if self.identifiers_without_redirects:
             error_messages.append(f"""
 Identifiers present in the source must have a mapping in the redirects file.
@@ -54,6 +56,12 @@ Identifiers present in the source must have a mapping in the redirects file.
 Keys of the redirects mapping must correspond to some identifier in the source.
     - {"\n    - ".join(self.orphan_identifiers)}""")
         if self.identifiers_without_redirects or self.orphan_identifiers or self.identifiers_missing_current_outpath:
+            nix_shell_hint = ""
+            if self.nix_shell_command_hint:
+                nix_shell_hint = f"""
+    NOTE: Run the nix-shell to make this command available.
+        $ {self.nix_shell_command_hint}
+"""
             error_messages.append(f"""
 This can happen when an identifier was added, renamed, or removed.
 
@@ -70,13 +78,7 @@ This can happen when an identifier was added, renamed, or removed.
 
     Removed content? Redirect to alternatives or relevant release notes.
         $ redirects remove-and-redirect <identifier> <target-identifier>
-
-    NOTE: Run the right nix-shell to make this command available.
-        Nixpkgs:
-        $ nix-shell doc
-        NixOS:
-        $ nix-shell nixos/doc/manual
-""")
+{nix_shell_hint}""")
         error_messages.append("NOTE: If your build passes locally and you see this message in CI, you probably need a rebase.")
         return "\n".join(error_messages)
 
@@ -85,6 +87,7 @@ This can happen when an identifier was added, renamed, or removed.
 class Redirects:
     _raw_redirects: dict[str, list[str]]
     _redirects_script: str
+    _nix_shell_command_hint: str | None = None
 
     _xref_targets: dict[str, XrefTarget] = field(default_factory=dict)
 
@@ -155,7 +158,8 @@ class Redirects:
                 divergent_redirects=divergent_redirects,
                 identifiers_missing_current_outpath=identifiers_missing_current_outpath,
                 identifiers_without_redirects=identifiers_without_redirects,
-                orphan_identifiers=orphan_identifiers
+                orphan_identifiers=orphan_identifiers,
+                nix_shell_command_hint=self._nix_shell_command_hint
             )
 
         self._xref_targets = xref_targets
