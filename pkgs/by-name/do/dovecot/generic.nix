@@ -4,6 +4,7 @@
   patches,
 }:
 {
+  autoreconfHook,
   stdenv,
   lib,
   fetchzip,
@@ -64,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ autoreconfHook ];
 
   buildInputs = [
     openssl
@@ -137,6 +139,12 @@ stdenv.mkDerivation (finalAttrs: {
   )
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac \
+    --replace-fail \
+      'NOPLUGIN_LDFLAGS="-no-undefined"' \
+      'NOPLUGIN_LDFLAGS="-undefined dynamic_lookup"'
   '';
 
   preBuild = lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.isDarwin) ''
@@ -203,7 +211,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
-    broken = lib.versionAtLeast version "2.4" && stdenv.hostPlatform.isDarwin; # fails to link openssl
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with lib.licenses; [
