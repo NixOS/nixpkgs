@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "JMBeresford";
     repo = "retrom";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
+
     hash = "sha256-sXduy81+C9yy33yw2u/FEGOTkrok2LcjGn710/EzIFY=";
   };
 
@@ -96,16 +97,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     supportedFeatures = [ "commit" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for the Retrom game library management service";
     homepage = "https://github.com/JMBeresford/retrom";
     changelog = "https://github.com/JMBeresford/retrom/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       concurac
     ];
-    # Upstream supports macOS and Windows but only Linux is tested in nixpkgs
-    platforms = platforms.linux;
+    # Upstream supports macOS and Windows but only Linux has so far been tested
+    platforms = lib.platforms.linux;
     mainProgram = "Retrom";
   };
 })

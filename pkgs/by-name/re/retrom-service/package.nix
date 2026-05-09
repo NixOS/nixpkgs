@@ -83,16 +83,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/retrom-service --set RETROM_WEB_DIR $out/share/retrom
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Server component of the Retrom game library management service";
     homepage = "https://github.com/JMBeresford/retrom";
     changelog = "https://github.com/JMBeresford/retrom/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       concurac
     ];
-    # Upstream supports macOS and Windows but only Linux is tested in nixpkgs
-    platforms = platforms.linux;
+    # Upstream supports macOS and Windows but only Linux has so far been tested
+    platforms = lib.platforms.linux;
     mainProgram = "retrom-service";
   };
 })

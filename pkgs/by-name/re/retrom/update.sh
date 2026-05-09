@@ -8,8 +8,7 @@ nixpkgs="$PWD"
 attrPath="retrom"
 file="pkgs/by-name/${attrPath:0:2}/$attrPath/package.nix"
 
-retromReleaseUrl="https://api.github.com/repos/JMBeresford/retrom/releases/latest"
-retromRelease=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} $retromReleaseUrl)
+retromRelease=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/JMBeresford/retrom/releases/latest)
 
 latestVersion=$(echo "$retromRelease" | jq -r ".tag_name")
 latestVersion="${latestVersion:1}" # remove first char 'v'
