@@ -18,7 +18,7 @@
   uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosonic";
   version = "0.31.1";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "aiosonic";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-f0MSUGdwq0If4LrZmMqYmdyycfTKroCfkkkX/l0v8QM=";
   };
 
@@ -124,8 +124,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python asyncio http client";
     homepage = "https://github.com/sonic182/aiosonic";
-    changelog = "https://github.com/sonic182/aiosonic/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sonic182/aiosonic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ geraldog ];
   };
-}
+})
