@@ -71,6 +71,8 @@ let
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/caido.desktop \
         -t $out/share/applications
+      substituteInPlace $out/share/applications/caido.desktop \
+        --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=caido-desktop %U"
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
       wrapProgram $out/bin/${pname} \
