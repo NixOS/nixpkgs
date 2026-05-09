@@ -292,7 +292,9 @@ async function handleMerge({
           `:heavy_check_mark: Enabled Auto Merge (#306934)`,
           '',
           '> [!TIP]',
-          '> Sometimes GitHub gets stuck after enabling Auto Merge. In this case, leaving another approval should trigger the merge.',
+          '> [Auto Merge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request) will queue this PR once required CI checks succeed.',
+          '> If CI fails instead, fixing it needs a new push, which disables Auto Merge and invalidates this command — comment `@NixOS/nixpkgs-merge-bot merge` again once CI is green.',
+          '> If GitHub gets stuck even though CI passed (it sometimes does), leaving another approval should kick off the merge.',
         ],
       }
     } catch (e) {
