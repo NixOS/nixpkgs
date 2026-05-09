@@ -143,6 +143,18 @@ in
         inherit (pythonOnBuildForHost.pkgs) installer;
       };
 
+  pypaMetadataHook = callPackage (
+    { makePythonHook, pyproject-metadata }:
+    makePythonHook {
+      name = "pypa-metadata-hook";
+      propagatedBuildInputs = [ pyproject-metadata ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        generateMetadata = ./generate-metadata.py;
+      };
+    } ./pypa-metadata-hook.sh
+  ) { };
+
   pytestCheckHook = callPackage (
     {
       makePythonHook,

@@ -16,6 +16,7 @@
   setuptools,
   pypaBuildHook,
   pypaInstallHook,
+  pypaMetadataHook,
   pythonCatchConflictsHook,
   pythonImportsCheckHook,
   pythonNamespacesHook,
@@ -193,6 +194,10 @@ lib.extendMkDerivation {
       # "other" : Provide your own buildPhase and installPhase.
       format ? null,
 
+      # Generate and install PEP 643 metadata from ``pyproject.toml``
+      # without using pypa build or install phases.
+      pypaMetadataOnly ? false,
+
       meta ? { },
 
       doCheck ? true,
@@ -224,7 +229,7 @@ lib.extendMkDerivation {
         else
           throw "${name} does not configure a `format`. To build with setuptools as before, set `pyproject = true` and `build-system = [ setuptools ]`.";
 
-      withDistOutput = withDistOutput' format';
+      withDistOutput = withDistOutput' format' && !pypaMetadataOnly;
 
       validatePythonMatches =
         let
@@ -323,10 +328,13 @@ lib.extendMkDerivation {
       ++ optionals (hasSuffix "zip" (finalAttrs.src.name or "")) [
         unzip
       ]
+      ++ optionals pypaMetadataOnly [
+        pypaMetadataHook
+      ]
       ++ optionals (format' == "setuptools") [
         setuptoolsBuildHook
       ]
-      ++ optionals (format' == "pyproject") [
+      ++ optionals (format' == "pyproject" && !pypaMetadataOnly) [
         (
           if isBootstrapPackage then
             pypaBuildHook.override {
@@ -336,6 +344,8 @@ lib.extendMkDerivation {
           else
             pypaBuildHook
         )
+      ]
+      ++ optionals (format' == "pyproject") [
         runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
@@ -347,7 +357,7 @@ lib.extendMkDerivation {
         eggBuildHook
         eggInstallHook
       ]
-      ++ optionals (format' != "other") [
+      ++ optionals (format' != "other" && !pypaMetadataOnly) [
         (
           if isBootstrapInstallPackage then
             pypaInstallHook.override {
