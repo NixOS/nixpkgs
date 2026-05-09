@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # K&R-style function-pointer declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   postPatch = ''
     # Two occurences of fprintf() with only two arguments, which should really
     # be fputs().
