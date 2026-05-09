@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mytetra";
-  version = "1.44.183";
+  version = "1.44.232";
 
   src = fetchFromGitHub {
     owner = "xintrea";
     repo = "mytetra_dev";
     rev = "v.${version}";
-    sha256 = "sha256-9fPioIws+9rzczCsbtOS/ra4eW5FZZeiKmDpqJqx3MQ=";
+    sha256 = "sha256-eku8bwFcQd0Hjffzg/GyiMzJ4S19PtviR0RIjQ+Ysdc=";
   };
 
   nativeBuildInputs = [
