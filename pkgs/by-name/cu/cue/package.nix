@@ -5,6 +5,7 @@
   stdenv,
   installShellFiles,
   testers,
+  tests,
   callPackage,
 }:
 
@@ -38,17 +39,27 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/cue completion zsh)
   '';
 
-  passthru = {
-    writeCueValidator = callPackage ./validator.nix { };
-    tests = {
-      test-001-all-good = callPackage ./tests/001-all-good.nix { };
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "cue version";
-        version = "v${finalAttrs.version}";
+  passthru =
+    let
+      cue = finalAttrs.finalPackage;
+      writeCueValidator = callPackage ./validator.nix { inherit cue; };
+    in
+    {
+      inherit writeCueValidator;
+
+      tests = {
+        validation = tests.cue-validation.override {
+          callPackage = (path: attrs: callPackage path (attrs // { inherit writeCueValidator; }));
+        };
+
+        test-001-all-good = callPackage ./tests/001-all-good.nix { inherit cue; };
+        version = testers.testVersion {
+          package = cue;
+          command = "cue version";
+          version = "v${finalAttrs.version}";
+        };
       };
     };
-  };
 
   meta = {
     description = "Data constraint language which aims to simplify tasks involving defining and using data";

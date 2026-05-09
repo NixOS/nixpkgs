@@ -26,18 +26,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "noctalia-qs";
-  version = "0.0.10";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia-qs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tscUYNjBfi52Uwu40epdAhoFztsmroKBEBvr22oCnv4=";
+    hash = "sha256-79JP2QTdvp1jg7HGxAW+xzhzhLnlKUi8yGXq9nDCeH0=";
   };
-
-  patches = [
-    ./0001-fix-unneccessary-reloads.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -74,11 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DISTRIBUTOR_DEBUGINFO_AVAILABLE" true)
     (lib.cmakeFeature "INSTALL_QML_PREFIX" qt6.qtbase.qtQmlPrefix)
     (lib.cmakeFeature "GIT_REVISION" "tag-v${finalAttrs.version}")
+    (lib.cmakeBool "NIX_STORE_DIR_SKIP_WATCH" true)
+    (lib.cmakeFeature "NIX_STORE_DIR" builtins.storeDir)
   ];
 
-  cmakeBuildType = "RelWithDebInfo";
-  separateDebugInfo = true;
-  dontStrip = false;
+  cmakeBuildType = "Release";
 
   passthru.updateScript = nix-update-script { };
 

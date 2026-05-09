@@ -443,8 +443,8 @@ in
       "sha256-dXNkOcMonYrBh4yzeubd+v3mW42s9XpmpfvgbtgoJgY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.3"
-      "sha256-GLcwrqtumSe73lggUbs4xR9Bmo9L2bscOsDtVT+2Jgg=";
+    buildMypyBoto3Package "ec2" "1.43.6"
+      "sha256-zYVu5tdGQ2oJjCZ//8x+DZowC/rdpvw7vpQiZixpevU=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
@@ -571,8 +571,8 @@ in
       "sha256-vMz4YKm78XMavlPUNiSVAYmAbyUBrJhUXbFrhxIvUJA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.0"
-      "sha256-37wgxUoswgRZGpTYplXtIjyBEwO57aEzlcTOwg8g/pg=";
+    buildMypyBoto3Package "glue" "1.43.5"
+      "sha256-oUIJxMN+MuPsZoXzU1unTvupMyddoWCu6l/w/zSLx7Y=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.0"
       "sha256-ciXs8g462XTc+GTyxuGDDEsoR9DMD+bOdSUFe0OLshM=";
@@ -590,8 +590,8 @@ in
       "sha256-nTKK7qqa2apyNM4/U2AphLGvoSqemVKfpAciilJ0pRE=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.43.0"
-      "sha256-xLN9980fWNie8P+lPG7rKbvIH3qsuioPnnwcB/HDnlc=";
+    buildMypyBoto3Package "guardduty" "1.43.6"
+      "sha256-G0b+n8/YssnJeC5vdQSf2wNYlYNXhZYWnNzDw6wjgc8=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.43.0"
@@ -610,8 +610,8 @@ in
       "sha256-9lzXp7Ug90MSZ7WdMiXoMnUiaAA9zCk/oS6gc0ulEMo=";
 
   mypy-boto3-imagebuilder =
-    buildMypyBoto3Package "imagebuilder" "1.43.0"
-      "sha256-HHmkU/o6zilpJMmpvE6hWmHw9hf2dJFFctNUjsjbGcA=";
+    buildMypyBoto3Package "imagebuilder" "1.43.5"
+      "sha256-fUllCFmyql6wfc5TijqwDavHvL8BDxprU0Yq+MG2nmY=";
 
   mypy-boto3-importexport =
     buildMypyBoto3Package "importexport" "1.43.0"
@@ -778,8 +778,8 @@ in
       "sha256-1kE3yNQBw8a1bYq3xMfAEfqW2p4FduGQ/uAJjI81xds=";
 
   mypy-boto3-lexv2-models =
-    buildMypyBoto3Package "lexv2-models" "1.43.0"
-      "sha256-oCXwBVVHNBIlBTn99cxrpkj/nUWNk4NReXsLKRvlwRo=";
+    buildMypyBoto3Package "lexv2-models" "1.43.5"
+      "sha256-CMdW9o3nNWkgsvP0lB9cBlpx8li5Tl9pZv0grrMLPus=";
 
   mypy-boto3-lexv2-runtime =
     buildMypyBoto3Package "lexv2-runtime" "1.43.0"
@@ -934,8 +934,8 @@ in
       "sha256-Igsngmg9PeJcyqX/Ih+fgzUuBotaf+2UWHK9RKEePL4=";
 
   mypy-boto3-mwaa =
-    buildMypyBoto3Package "mwaa" "1.43.0"
-      "sha256-w9AGeJrbRrTD31ANqKy6+MIQKenn05akYLfsXfnOw+w=";
+    buildMypyBoto3Package "mwaa" "1.43.5"
+      "sha256-TKqSy42P9Pmd9jbfsUadZT2qn4SRE8PPbad4gbUHUo0=";
 
   mypy-boto3-neptune =
     buildMypyBoto3Package "neptune" "1.43.0"
@@ -1150,16 +1150,16 @@ in
       "sha256-F1xhitFa4Eac9VlCpfqjCObUH+YvLz7TYDYfI/bPYbc=";
 
   mypy-boto3-route53resolver =
-    buildMypyBoto3Package "route53resolver" "1.43.0"
-      "sha256-z7x9WVUzjzg5bSL7cizhgvMgnmQJ68Fhu+d46XIOpDI=";
+    buildMypyBoto3Package "route53resolver" "1.43.6"
+      "sha256-/KAlBKNGLO+PLapddz4kSW3ymsGc7Bf/tlhiIV/K9Bs=";
 
   mypy-boto3-rum =
     buildMypyBoto3Package "rum" "1.43.0"
       "sha256-8or7NMBfeq9jZRzAu0Q1ShoTXTm8GCXR4kov0kaJCcE=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.43.0"
-      "sha256-O/sCex89+TFv9y/yn0stwNfWXtUDLYvPSJIiKZQihYg=";
+    buildMypyBoto3Package "s3" "1.43.5"
+      "sha256-umfbw9qCW2gYg52zgjci87EjBN0RbpTtOY63rehrD2I=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.43.0"
@@ -1170,8 +1170,8 @@ in
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.4"
-      "sha256-7ecv9s2OC88pdn9P4aPArynGQi3VG1CA6FhQcEXN3fo=";
+    buildMypyBoto3Package "sagemaker" "1.43.5"
+      "sha256-LQNQUR4kO95oyTH8xZDkZwj3gIaF+rHdR5VbtkXeaT4=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"
@@ -1218,8 +1218,8 @@ in
       "sha256-Jl7i/d+dPkKuOWhWJft4YaU5EQ2OMkNyhHwOHL1mayA=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.43.0"
-      "sha256-puy9WXT8LIhXkXQVCabuo9luvtTw59Jj/yz3UmOGJZ0=";
+    buildMypyBoto3Package "securityhub" "1.43.5"
+      "sha256-EHkWYodnoUT01mfovLF/+wA4IFy1Sn+H1f4vAitEMJE=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.43.0"

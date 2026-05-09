@@ -37,10 +37,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "krita-unwrapped";
 
-  version = "6.0.0";
+  version = "6.0.1";
   src = fetchurl {
     url = "mirror://kde/stable/krita/${finalAttrs.version}/krita-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kytodhJvfGKeQn7j0BIwDIKGsFoYQnc1S0FK9kGg8e0=";
+    hash = "sha256-COddFMgFJh/IIovsFt70cF9unPsBkecb0EzEwOGChIo=";
   };
 
   nativeBuildInputs = [

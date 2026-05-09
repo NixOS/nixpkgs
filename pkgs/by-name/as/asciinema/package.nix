@@ -1,36 +1,62 @@
 {
   lib,
-  python3Packages,
   fetchFromGitHub,
+  installShellFiles,
+  python3,
+  rustPlatform,
+  versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asciinema";
-  version = "2.4.0";
-  pyproject = true;
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-UegLwpJ+uc9cW3ozLQJsQBjIGD7+vzzwzQFRV5gmDmI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-03olFWB/6O7V/B9gz6QACMxugrIx560fpp81IGVWv58=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  cargoHash = "sha256-B6s3uUPGL8m076dl3P26j+frHWLi+wzED41BQ/rQAM8=";
 
-  postPatch = ''
-    substituteInPlace tests/pty_test.py \
-      --replace-fail "python3" "${python3Packages.python.interpreter}"
+  env.ASCIINEMA_GEN_DIR = "gendir";
+
+  strictDeps = true;
+
+  nativeCheckInputs = [ python3 ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage gendir/man/*
+    installShellCompletion --cmd asciinema \
+      --bash gendir/completion/asciinema.bash \
+      --fish gendir/completion/asciinema.fish \
+      --zsh gendir/completion/_asciinema
   '';
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
-    description = "Terminal session recorder and the best companion of asciinema.org";
     homepage = "https://asciinema.org/";
+    description = "Terminal session recorder and the best companion of asciinema.org";
+    longDescription = ''
+      asciinema is a suite of tools for recording, replaying, and sharing
+      terminal sessions. It is free and open-source software (FOSS), created
+      by Marcin Kulik.
+
+      Its typical use cases include creating tutorials, demonstrating
+      command-line tools, and sharing reproducible bug reports. It focuses on
+      simplicity and interoperability, which makes it a popular choice among
+      computer users working with the command-line, such as developers or
+      system administrators.
+    '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
-    platforms = lib.platforms.all;
     mainProgram = "asciinema";
+    maintainers = with lib.maintainers; [
+      jiriks74
+      llakala
+    ];
   };
 })

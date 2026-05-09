@@ -4,7 +4,7 @@
   cctools,
   darwin,
   dotnetCorePackages,
-  fetchFromGitLab,
+  fetchFromForgejo,
   libx11,
   libgdiplus,
   moltenvk,
@@ -34,10 +34,10 @@ buildDotnetModule rec {
   pname = "ryubing";
   version = "1.3.3";
 
-  src = fetchFromGitLab {
+  src = fetchFromForgejo {
     domain = "git.ryujinx.app";
-    owner = "Ryubing";
-    repo = "Ryujinx";
+    owner = "projects";
+    repo = "Ryubing";
     tag = version;
     hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
