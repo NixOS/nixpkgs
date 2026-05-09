@@ -8,14 +8,8 @@
   # nativeBuildInputs
   cmake,
   pkg-config,
-  wrapQtAppsHook,
   # Qt
-  qt5compat,
-  qtbase,
-  qtwayland,
-  qtsvg,
-  qttools,
-  qtwebengine,
+  qt6,
   # buildInputs
   graphviz,
   python3,
@@ -47,7 +41,7 @@ let
       cmake
       pkg-config
       python3
-      wrapQtAppsHook
+      qt6.wrapQtAppsHook
     ];
 
     propagatedBuildInputs = [
@@ -57,15 +51,15 @@ let
     buildInputs = [
       graphviz
       python3
-      qt5compat
-      qtbase
-      qtsvg
-      qttools
-      qtwebengine
+      qt6.qt5compat
+      qt6.qtbase
+      qt6.qtsvg
+      qt6.qttools
+      qt6.qtwebengine
       rizin
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
+      qt6.qtwayland
     ];
 
     cmakeFlags = [
@@ -83,7 +77,7 @@ let
     passthru = rec {
       plugins = rizin.plugins // {
         rz-ghidra = rizin.plugins.rz-ghidra.override {
-          inherit cutter qtbase qtsvg;
+          inherit cutter qt6;
           enableCutterPlugin = true;
         };
       };

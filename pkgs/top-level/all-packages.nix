@@ -5756,11 +5756,7 @@ with pkgs;
     // (config.radare or { })
   );
 
-  rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
-
   rizinPlugins = recurseIntoAttrs rizin.plugins;
-
-  cutter = qt6.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
   cutterPlugins = recurseIntoAttrs cutter.plugins;
 
