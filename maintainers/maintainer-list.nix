@@ -23052,6 +23052,13 @@
     githubId = 4196789;
     name = "Nathan Ringo";
   };
+  remidupre = {
+    email = "remi+nixpkgs@dupre.io";
+    github = "remi-dupre";
+    githubId = 1173464;
+    name = "Rémi Dupré";
+    keys = [ { fingerprint = "4762 C65B F8D8 6A33 65C1  D10A 4613 02CD 1249 4653"; } ];
+  };
   remix7531 = {
     email = "remix7531@mailbox.org";
     github = "remix7531";
