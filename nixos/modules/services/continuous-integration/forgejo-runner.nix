@@ -14,6 +14,7 @@ let
     attrValues
     concatLists
     filterAttrs
+    getExe
     hasInfix
     hasSuffix
     literalExpression
@@ -82,16 +83,7 @@ let
     builtins.isAttrs server && server ? connections;
 
   allConnections = concatLists (
-    mapAttrsToList (
-      instanceName: instance:
-      mapAttrsToList (connectionName: connection: {
-        inherit
-          instanceName
-          connectionName
-          connection
-          ;
-      }) instance.connections
-    ) enabledInstances
+    mapAttrsToList (_: instance: attrValues instance.connections) enabledInstances
   );
 
   mkConnectionSettings =
@@ -111,6 +103,151 @@ let
     // optionalAttrs (connection.tokenFile != null) {
       token_url = "file:$CREDENTIALS_DIRECTORY/${credentialName connectionName}";
     };
+
+  connectionOptions = {
+    options = {
+      url = mkOption {
+        type = types.str;
+        example = "https://codeberg.org/";
+        description = ''
+          Base URL of the Forgejo instance.
+        '';
+      };
+
+      uuid = mkOption {
+        type = types.str;
+        example = "33834eef-e758-48c4-a676-1745426747aa";
+        description = ''
+          UUID identifying this runner towards the Forgejo instance.
+        '';
+      };
+
+      token = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Plain runner token for this connection.
+
+          This is copied into the Nix store. Use
+          [](#opt-services.forgejo-runner.instances._name_.connections._name_.tokenFile)
+          for secrets.
+        '';
+      };
+
+      tokenFile = mkOption {
+        type = types.nullOr (types.either types.str types.path);
+        default = null;
+        description = ''
+          Path to a file containing the runner token for this connection.
+          The file is passed to the service with `LoadCredential`.
+        '';
+      };
+
+      labels = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = literalExpression ''
+          [
+            "debian-latest:docker://node:22-bookworm"
+            "ubuntu-latest:docker://node:22-bookworm"
+            "native:host"
+          ]
+        '';
+        description = ''
+          Labels used to map jobs to their runtime environment.
+
+          If empty, the runner falls back to labels declared in
+          `settings.runner.labels`.
+        '';
+      };
+
+      fetchInterval = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "30s";
+        description = ''
+          How often Forgejo Runner should ask this connection for pending jobs.
+        '';
+      };
+    };
+  };
+
+  instanceOptions =
+    { name, ... }:
+    {
+      options = {
+        enable = mkEnableOption "Forgejo Runner instance";
+
+        settings = mkOption {
+          description = ''
+            Configuration for `forgejo-runner daemon`.
+
+            The `server.connections` section is generated from the
+            [](#opt-services.forgejo-runner.instances._name_.connections)
+            option.
+
+            See <https://code.forgejo.org/forgejo/runner/src/branch/main/internal/pkg/config/config.example.yaml>
+            for an example configuration.
+          '';
+          type = types.submodule {
+            freeformType = settingsFormat.type;
+          };
+          default = {
+            runner.name = name;
+          };
+          defaultText = literalExpression ''
+            {
+              runner.name = "<instance name>";
+            }
+          '';
+          example = literalExpression ''
+            {
+              log.level = "info";
+              runner.capacity = 2;
+              container.network = "bridge";
+              cache.enabled = true;
+            }
+          '';
+        };
+
+        connections = mkOption {
+          default = { };
+          description = ''
+            Forgejo server connections for this runner instance.
+          '';
+          type = types.attrsOf (types.submodule connectionOptions);
+        };
+
+        hostPackages = mkOption {
+          type = types.listOf types.package;
+          default = with pkgs; [
+            bash
+            coreutils
+            curl
+            gawk
+            gitMinimal
+            gnused
+            nodejs
+            wget
+          ];
+          defaultText = literalExpression ''
+            with pkgs; [
+              bash
+              coreutils
+              curl
+              gawk
+              gitMinimal
+              gnused
+              nodejs
+              wget
+            ]
+          '';
+          description = ''
+            Packages available to actions when this runner has a host execution label.
+          '';
+        };
+      };
+    };
 in
 {
   meta.maintainers = lib.teams.forgejo.members;
@@ -123,155 +260,11 @@ in
       description = ''
         Forgejo Runner instances.
       '';
-      type = attrsOf (
-        submodule (
-          { name, ... }:
-          {
-            options = {
-              enable = mkEnableOption "Forgejo Runner instance";
-
-              settings = mkOption {
-                description = ''
-                  Configuration for `forgejo-runner daemon`.
-
-                  The `server.connections` section is generated from the
-                  [](#opt-services.forgejo-runner.instances._name_.connections)
-                  option.
-
-                  See <https://code.forgejo.org/forgejo/runner/src/branch/main/internal/pkg/config/config.example.yaml>
-                  for an example configuration.
-                '';
-                type = submodule {
-                  freeformType = settingsFormat.type;
-                };
-                default = {
-                  runner.name = name;
-                };
-                defaultText = literalExpression ''
-                  {
-                    runner.name = "<instance name>";
-                  }
-                '';
-                example = literalExpression ''
-                  {
-                    log.level = "info";
-                    runner.capacity = 2;
-                    container.network = "bridge";
-                    cache.enabled = true;
-                  }
-                '';
-              };
-
-              connections = mkOption {
-                default = { };
-                description = ''
-                  Forgejo server connections for this runner instance.
-                '';
-                type = attrsOf (submodule {
-                  options = {
-                    url = mkOption {
-                      type = str;
-                      example = "https://codeberg.org/";
-                      description = ''
-                        Base URL of the Forgejo instance.
-                      '';
-                    };
-
-                    uuid = mkOption {
-                      type = str;
-                      example = "33834eef-e758-48c4-a676-1745426747aa";
-                      description = ''
-                        UUID identifying this runner towards the Forgejo instance.
-                      '';
-                    };
-
-                    token = mkOption {
-                      type = nullOr str;
-                      default = null;
-                      description = ''
-                        Plain runner token for this connection.
-
-                        This is copied into the Nix store. Use
-                        [](#opt-services.forgejo-runner.instances._name_.connections._name_.tokenFile)
-                        for secrets.
-                      '';
-                    };
-
-                    tokenFile = mkOption {
-                      type = nullOr (either str path);
-                      default = null;
-                      description = ''
-                        Path to a file containing the runner token for this connection.
-                        The file is passed to the service with `LoadCredential`.
-                      '';
-                    };
-
-                    labels = mkOption {
-                      type = listOf str;
-                      default = [ ];
-                      example = literalExpression ''
-                        [
-                          "debian-latest:docker://node:22-bookworm"
-                          "ubuntu-latest:docker://node:22-bookworm"
-                          "native:host"
-                        ]
-                      '';
-                      description = ''
-                        Labels used to map jobs to their runtime environment.
-
-                        If empty, the runner falls back to labels declared in
-                        `settings.runner.labels`.
-                      '';
-                    };
-
-                    fetchInterval = mkOption {
-                      type = nullOr str;
-                      default = null;
-                      example = "30s";
-                      description = ''
-                        How often Forgejo Runner should ask this connection for pending jobs.
-                      '';
-                    };
-                  };
-                });
-              };
-
-              hostPackages = mkOption {
-                type = listOf package;
-                default = with pkgs; [
-                  bash
-                  coreutils
-                  curl
-                  gawk
-                  gitMinimal
-                  gnused
-                  nodejs
-                  wget
-                ];
-                defaultText = literalExpression ''
-                  with pkgs; [
-                    bash
-                    coreutils
-                    curl
-                    gawk
-                    gitMinimal
-                    gnused
-                    nodejs
-                    wget
-                  ]
-                '';
-                description = ''
-                  Packages available to actions when this runner has a host execution label.
-                '';
-              };
-            };
-          }
-        )
-      );
+      type = attrsOf (submodule instanceOptions);
     };
   };
 
-  config = mkIf (cfg.instances != { }) {
+  config = mkIf (enabledInstances != { }) {
     assertions = [
       {
         assertion = all (instance: !instance.enable || instance.connections != { }) (
@@ -280,7 +273,7 @@ in
         message = "Enabled instances of forgejo-runner must define at least one connection.";
       }
       {
-        assertion = all ({ connection, ... }: tokenXorTokenFile connection) allConnections;
+        assertion = all tokenXorTokenFile allConnections;
         message = "Connections of forgejo-runner instances must have `token` or `tokenFile`, not both.";
       }
       {
@@ -298,6 +291,7 @@ in
         mkRunnerService =
           name: instance:
           let
+            escapedName = escapeSystemdPath name;
             wantsDockerScheme = hasDockerScheme instance;
             wantsHost = hasHostScheme instance;
             wantsDocker = wantsDockerScheme && hasDocker;
@@ -307,7 +301,7 @@ in
             };
             configFile = settingsFormat.generate "forgejo-runner-${name}.yaml" settings;
           in
-          nameValuePair "forgejo-runner-${escapeSystemdPath name}" {
+          nameValuePair "forgejo-runner-${escapedName}" {
             inherit (instance) enable;
             description = "Forgejo Runner";
             wants = [ "network-online.target" ];
@@ -326,7 +320,7 @@ in
                 DOCKER_HOST = "unix:///run/podman/podman.sock";
               }
               // {
-                HOME = "/var/lib/forgejo-runner/${name}";
+                HOME = "/var/lib/forgejo-runner/${escapedName}";
               };
             path = [
               pkgs.coreutils
@@ -335,13 +329,13 @@ in
             serviceConfig = {
               DynamicUser = true;
               User = "forgejo-runner";
-              StateDirectory = "forgejo-runner";
-              WorkingDirectory = "-/var/lib/forgejo-runner/${name}";
+              StateDirectory = "forgejo-runner/${escapedName}";
+              WorkingDirectory = "-/var/lib/forgejo-runner/${escapedName}";
 
               Restart = "on-failure";
               RestartSec = 2;
 
-              ExecStart = "${cfg.package}/bin/forgejo-runner daemon --config ${configFile}";
+              ExecStart = "${getExe cfg.package} daemon --config ${configFile}";
               SupplementaryGroups =
                 optionals wantsDocker [
                   "docker"

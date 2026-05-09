@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   ...
 }:
 
@@ -8,6 +9,14 @@
   meta.maintainers = lib.teams.forgejo.members;
 
   nodes.machine = {
+    services.forgejo-runner.package = pkgs.writeShellScriptBin "forgejo-runner" ''
+      if [ "$1" = daemon ]; then
+        sleep infinity
+      else
+        echo "forgejo-runner test"
+      fi
+    '';
+
     virtualisation.podman = {
       enable = true;
       dockerSocket.enable = true;
@@ -40,11 +49,14 @@
 
   testScript = ''
     machine.wait_for_unit("multi-user.target")
+    machine.wait_for_unit("forgejo-runner-codeberg.service")
 
     unit = machine.succeed("systemctl cat forgejo-runner-codeberg.service")
     assert "LoadCredential=codeberg-token:/etc/forgejo-runner-token" in unit
     assert "DOCKER_HOST=unix:///run/podman/podman.sock" in unit
     assert "SupplementaryGroups=podman" in unit
+    assert "StateDirectory=forgejo-runner/codeberg" in unit
+    assert "WorkingDirectory=-/var/lib/forgejo-runner/codeberg" in unit
 
     config_path = machine.succeed(
         "systemctl show forgejo-runner-codeberg.service -p ExecStart --value "
