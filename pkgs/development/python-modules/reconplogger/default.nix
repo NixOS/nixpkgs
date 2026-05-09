@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "reconplogger";
-  version = "5.0.0";
+  version = "5.0.0.dev2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "reconplogger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/+nPLji8iGTBpWTCR83JRfxMltMYjP62KrB+HRTQQE8=";
+    hash = "sha256-OFPyh1QXjVYJ5GVzMofQM6ekt7DoqRUQ2fsrDdxhtP8=";
   };
 
   build-system = [ setuptools ];
