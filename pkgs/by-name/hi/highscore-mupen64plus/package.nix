@@ -7,6 +7,7 @@
   pkg-config,
   libhighscore,
   mupen64plus,
+  gliden64,
   unstableGitUpdater,
 }:
 
@@ -41,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater {
     hardcodeZeroVersion = true;
   };
+
+  postInstall = ''
+    mkdir -p $out/lib/mupen64plus
+    ln -sf ${mupen64plus}/lib/*.so* $out/lib/
+    ln -sf ${mupen64plus}/lib/mupen64plus/*.so* $out/lib/mupen64plus/
+    ln -sf ${gliden64}/lib/mupen64plus/*.so* $out/lib/mupen64plus/
+  '';
 
   meta = {
     description = "Port of Mupen64Plus to Highscore";
