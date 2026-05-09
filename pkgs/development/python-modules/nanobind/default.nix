@@ -8,7 +8,6 @@
   cmake,
   ninja,
   pathspec,
-  scikit-build-core,
 
   # dependencies
   eigen,
@@ -41,12 +40,11 @@ buildPythonPackage (finalAttrs: {
     cmake
     ninja
     pathspec
-    scikit-build-core
   ];
 
   dependencies = [ eigen ];
 
-  dontUseCmakeBuildDir = true;
+  pypaMetadataOnly = true;
 
   # nanobind check requires heavy dependencies such as tensorflow
   # which are less than ideal to be imported in children packages that
