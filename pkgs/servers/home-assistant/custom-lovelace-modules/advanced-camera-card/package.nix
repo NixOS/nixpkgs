@@ -20,12 +20,18 @@ stdenv.mkDerivation (finalAttrs: {
     leaveDotGit = true; # gitInfo plugin
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/dermotduffy/advanced-camera-card/blob/main/package.json#L201
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     name = "${finalAttrs.pname}-yarn-deps";
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-N5GL9//CS33ntGu8v6i9+S38BDsXDD7HvOask1JflJ8=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-4fdSeSxSjd8EjPmu7U3ftxB+OJJc2uuvM3Umr5iY/a8=";
   };
 
   nativeBuildInputs = [
