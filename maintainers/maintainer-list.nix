@@ -28401,6 +28401,11 @@
     githubId = 3742502;
     name = "Oscar Molnar";
   };
+  typechecks = {
+    github = "typechecks";
+    githubId = 282957152;
+    name = "typechecks";
+  };
   typedrat = {
     name = "Alexis Williams";
     email = "alexis@typedr.at";
@@ -28413,12 +28418,6 @@
     github = "typetetris";
     githubId = 1983821;
     name = "Eric Wolf";
-  };
-  typechecks = {
-    email = "282957152+typechecks@users.noreply.github.com";
-    github = "typechecks";
-    githubId = 282957152;
-    name = "typechecks";
   };
   u2x1 = {
     email = "u2x1@outlook.com";

@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "anitui";
   version = "0.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "typechecks";
     repo = "anitui";
