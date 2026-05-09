@@ -28,6 +28,10 @@ buildHomeAssistantComponent rec {
     mock
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
   disabledTestPaths = [
     # Integration tests require a valid Octopus Energy API Key
     # https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy/blob/develop/CONTRIBUTING.md#integration-tests
