@@ -199,6 +199,10 @@ let
     "xiaomi_ble"
     "yalexs_ble"
   ];
+  componentsUsingPacketCapture = [
+    "default_config" # includes dhcp
+    "dhcp"
+  ];
   componentsUsingPing = [
     # Components that require the capset syscall for the ping wrapper
     "ping"
@@ -922,6 +926,10 @@ in
               "CAP_NET_ADMIN"
               "CAP_NET_RAW"
             ]
+            ++ optionals (any useComponent componentsUsingPacketCapture) [
+              # Raw packet capture using AF_PACKET
+              "CAP_NET_RAW"
+            ]
             ++ optionals (useComponent "emulated_hue") [
               # Alexa looks for the service on port 80
               # https://www.home-assistant.io/integrations/emulated_hue
@@ -1010,6 +1018,9 @@ in
           ]
           ++ optionals (any useComponent componentsUsingBluetooth) [
             "AF_BLUETOOTH"
+          ]
+          ++ optionals (any useComponent componentsUsingPacketCapture) [
+            "AF_PACKET"
           ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
