@@ -1,5 +1,5 @@
 diff --git a/package-lock.json b/package-lock.json
-index 89dd54f..2f364e4 100644
+index 89dd54f..42394a0 100644
 --- a/package-lock.json
 +++ b/package-lock.json
 @@ -805,9 +805,10 @@
@@ -9,9 +9,9 @@ index 89dd54f..2f364e4 100644
 -      "version": "2.18.0",
 -      "resolved": "https://registry.npmjs.org/nan/-/nan-2.18.0.tgz",
 -      "integrity": "sha512-W7tfG7vMOGtD30sHoZSSc/JVYiyDPEyQVso/Zz+/uQd0B0L46gtC+pHha5FFMRpil6fm/AoEcRWyOVi4+E/f8w=="
-+      "version": "2.22.0",
-+      "resolved": "https://registry.npmjs.org/nan/-/nan-2.22.0.tgz",
-+      "integrity": "sha512-nbajikzWTMwsW+eSsNm3QwlOs7het9gGJU5dDZzRTQGk03vyBOauxgI4VakDzE0PtsGTmXPsXTbbjVhRwR5mpw==",
++      "version": "2.26.2",
++      "resolved": "https://registry.npmjs.org/nan/-/nan-2.26.2.tgz",
++      "integrity": "sha512-0tTvBTYkt3tdGw22nrAy50x7gpbGCCFH3AFcyS5WiUu7Eu4vWlri1woE6qHBSfy11vksDqkiwjOnlR7WV8G1Hw==",
 +      "license": "MIT"
      },
      "node_modules/node-fetch": {
