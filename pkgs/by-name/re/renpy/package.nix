@@ -86,7 +86,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
   # unstable version drops dependency on insecure package ecdsa
-  version = "8.5.2.26010301-unstable-2026-03-27";
+  version = "8.5.2.26010301";
 
   src = fetchFromGitHub {
     owner = "renpy";
