@@ -28271,6 +28271,12 @@
     githubId = 303489;
     name = "Manuel Bärenz";
   };
+  TurnrDev = {
+    email = "jaynicholasturner@gmail.com";
+    github = "TurnrDev";
+    githubId = 11667059;
+    name = "Jay Turner";
+  };
   tuxinaut = {
     email = "trash4you@tuxinaut.de";
     github = "tuxinaut";
