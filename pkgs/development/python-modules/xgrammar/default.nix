@@ -38,10 +38,6 @@ buildPythonPackage rec {
     hash = "sha256-mliAmFBY3eLnUP+2HCRGX36KPUjaxn0Eb+2aKyDwdaM=";
   };
 
-  patches = [
-    ./0001-fix-find-nanobind-from-python-module.patch
-  ];
-
   build-system = [
     cmake
     ninja
