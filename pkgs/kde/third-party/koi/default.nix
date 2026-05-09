@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Hide application to system tray
       - Toggle between LIGHT/DARK themes by clicking mouse wheel
     '';
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.linux;
     changelog = "https://github.com/baduhai/Koi/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/baduhai/Koi";
