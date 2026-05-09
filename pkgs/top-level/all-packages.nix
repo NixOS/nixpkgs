@@ -5542,10 +5542,6 @@ with pkgs;
 
   credstash = with python3Packages; toPythonApplication credstash;
 
-  creduce = callPackage ../development/tools/misc/creduce {
-    inherit (llvmPackages_18) llvm libclang;
-  };
-
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
