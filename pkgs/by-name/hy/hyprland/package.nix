@@ -43,6 +43,9 @@
   libxcursor,
   libxcb,
   xwayland,
+  glslang,
+  lcms2,
+  lua5_5,
   debug ? false,
   enableXWayland ? true,
   withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
@@ -81,19 +84,19 @@ let
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.54.3";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e+mVjQL3V+xoaH1c3YqAzRq9wwiuEYQTOgZlK0LwfYA=";
+    hash = "sha256-ZfsIYDDOjeAU8MxMyUitBAZgCgYAm1T8rTGbe8ujC/I=";
   };
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
-    substituteInPlace src/render/OpenGL.cpp \
+    substituteInPlace src/render/types.hpp \
       --replace-fail /usr $out
 
     # Remove extra @PREFIX@ to fix pkg-config paths
@@ -164,6 +167,9 @@ customStdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
+      glslang
+      lcms2
+      lua5_5
     ]
     (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
     (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])

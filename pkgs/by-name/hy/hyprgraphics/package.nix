@@ -15,17 +15,19 @@
   libwebp,
   pango,
   pixman,
+  libGL,
+  libdrm,
+  lcms2,
 }:
-
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MRD+Jr2bY11MzNDfenENhiK6pvN+nHygxdHoHbZ1HtE=";
+    hash = "sha256-48DubZbx8PDfuJkksNgi5aWFnX/Rq1OUaLsUvsdf2Bo=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +46,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     libwebp
     pango
     pixman
+    libGL
+    libdrm
+    lcms2
   ];
 
   outputs = [
