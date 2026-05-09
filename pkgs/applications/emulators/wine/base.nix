@@ -268,16 +268,6 @@ stdenv.mkDerivation (
           }
         '';
 
-    # Fix dcomp test for aarch64
-    postPatch = lib.optionalString (useStaging && stdenv.hostPlatform.isAarch64) ''
-      if [ -f dlls/dcomp/tests/dcomp.c ]; then
-        substituteInPlace dlls/dcomp/tests/dcomp.c \
-          --replace-fail \
-            '#error "Unsupported architecture"' \
-            '__asm__ __volatile__("mov %0, sp" : "=r"(stack_pointer));'
-      fi
-    '';
-
     configureFlags =
       prevConfigFlags
       ++ lib.optionals waylandSupport [ "--with-wayland" ]
