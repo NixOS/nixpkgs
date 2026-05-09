@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "aiosonic";
-  version = "0.30.1";
+  version = "0.31.1";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -29,14 +29,8 @@ buildPythonPackage rec {
     owner = "sonic182";
     repo = "aiosonic";
     tag = version;
-    hash = "sha256-VqtPl/dZmxjB7z9AjwBfmYmcxFae2NhWEnsw4l9+IYg=";
+    hash = "sha256-f0MSUGdwq0If4LrZmMqYmdyycfTKroCfkkkX/l0v8QM=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini --replace-fail \
-      "addopts = --black " \
-      "addopts = "
-  '';
 
   build-system = [ poetry-core ];
 
@@ -82,6 +76,11 @@ buildPythonPackage rec {
       "test_get_with_params_in_url"
       "test_get_with_params_tuple"
       "test_get_with_params"
+      "test_h2_client_level_flag"
+      "test_h2_connection_reused_across_requests"
+      "test_h2_custom_ssl_ctx_gets_alpn"
+      "test_h2_verify_false_applies_to_h2_ssl_context"
+      "test_h2_with_explicit_http2_flag"
       "test_keep_alive_cyclic_pool"
       "test_keep_alive_smart_pool"
       "test_max_conn_idle_ms"
@@ -102,6 +101,7 @@ buildPythonPackage rec {
       "test_put_patch"
       "test_read_chunks_by_text_method"
       "test_read_timeout"
+      "test_stream_request_body_h2"
       "test_simple_get"
       "test_timeouts_overriden"
       "test_wrapper_delete_http_serv"
@@ -122,10 +122,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/sonic182/aiosonic/blob/${src.tag}/CHANGELOG.md";
-    description = "Very fast Python asyncio http client";
-    license = lib.licenses.mit;
+    description = "Python asyncio http client";
     homepage = "https://github.com/sonic182/aiosonic";
+    changelog = "https://github.com/sonic182/aiosonic/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ geraldog ];
   };
 }
