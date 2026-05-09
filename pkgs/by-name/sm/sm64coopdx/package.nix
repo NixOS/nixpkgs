@@ -45,8 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
-    # Replace with `tag = "v${finalAttrs.version}";` in the next version. The upstream repository tagged the wrong commit.
-    rev = "6092488d1c4fc741b16a0789ef9c08ec0279333f";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BIdKKIp6q9Vp2DByXzT9CJzOszFhjriiWBEqFwUT28M=";
   };
 
