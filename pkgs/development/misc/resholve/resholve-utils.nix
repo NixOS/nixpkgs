@@ -219,50 +219,54 @@ rec {
         )}
       '';
     };
-  mkDerivation =
-    {
-      pname,
-      src,
-      version,
-      passthru ? { },
-      solutions,
-      postResholve ? "",
-      ...
-    }@attrs:
-    let
-      inherit stdenv;
+  /*
+    This uses nested derivations so we can:
+    - let project build however it needs in inner "unresholved" drv
+    - pass this drv through binlore to collect info on exec behavior
+      in any scripts and binaries in its output
+    - resholve with lore unresholved source and lore as inputs
 
-      /*
-        Knock out our special solutions arg, but otherwise
-        just build what the caller is giving us. We'll
-        actually resholve it separately below (after we
-        generate binlore for it).
-      */
-      unresholved = (
-        stdenv.mkDerivation (
-          (removeAttrs attrs [ "solutions" ])
-          // {
-            inherit version src;
-            pname = "${pname}-unresholved";
-          }
-        )
-      );
-    in
-    /*
-      resholve in a separate derivation; some concerns:
-      - we aren't keeping many of the user's args, so they
-        can't readily set LOGLEVEL and such...
-      - not sure how this affects multiple outputs
-    */
-    lib.extendDerivation true passthru (
+    some concerns:
+    - resholve drv isn't keeping many of the caller's args,
+      (to avoid re-triggering phases and such in outer build)
+      so they can't readily set LOGLEVEL and such...
+    - not sure how this affects multiple outputs
+  */
+  mkDerivation = lib.extendMkDerivation {
+    constructDrv = stdenv.mkDerivation;
+    excludeDrvArgNames = [
+      "postResholve"
+      "solutions"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pname,
+        src,
+        version,
+        passthru ? { },
+        solutions,
+        postResholve ? "",
+        ...
+      }@args:
+      {
+        pname = "${pname}-unresholved";
+        passthru = passthru // {
+          # needed to resholve in outer drv
+          inherit postResholve solutions;
+        };
+      };
+    transformDrv =
+      unresholved:
       stdenv.mkDerivation {
         src = unresholved;
-        inherit version pname;
+        pname = lib.removeSuffix "-unresholved" unresholved.pname;
+        inherit (unresholved) version;
         buildInputs = [ resholve ];
         disallowedReferences = [ resholve ];
 
-        # retain a reference to the base
         passthru = unresholved.passthru // {
+          # retain a reference to the base
           unresholved = unresholved;
           # fallback attr for update bot to query our src
           originalSrc = unresholved.src;
@@ -279,12 +283,12 @@ rec {
         # enable below for verbose debug info if needed
         # supports default python.logging levels
         # LOGLEVEL="INFO";
-        preFixup = phraseSolutions solutions unresholved;
+        preFixup = phraseSolutions unresholved.solutions unresholved;
 
-        postFixup = postResholve;
+        postFixup = unresholved.postResholve;
 
         # don't break the metadata...
         meta = unresholved.meta;
-      }
-    );
+      };
+  };
 }
