@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wtfutil";
-  version = "0.46.1";
+  version = "0.49.1";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = "wtf";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GLLTI/hxlkt3OvtTWRNdzQ9jzO4xzJV9RruiJUyWD5g=";
+    sha256 = "sha256-b7g/EWr8M99jc0BJcu+JTfifuWK/oeFsOi9vkI9RIA0=";
   };
 
-  vendorHash = "sha256-OSoQkBAx0kJKiKq0pRGrkkSowTynw/MJvYSdhd1Jt/k=";
+  vendorHash = "sha256-AjrpcP6K937HteHdIyXwEx5srTMWYq4v1Dmd5cch5Pc=";
   proxyVendor = true;
 
   doCheck = false;
@@ -35,7 +35,9 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    substituteInPlace flags/flags.go --replace-fail 'version := "dev"' 'version := "v${finalAttrs.version}"'
+    substituteInPlace flags/flags.go \
+      --replace-fail 'version := info.Main.Version' 'version := "v${finalAttrs.version}"' \
+      --replace-fail 'var official bool' 'official := true'
   '';
 
   postInstall = ''
