@@ -7,7 +7,14 @@
   pkg-config,
   libhighscore,
   mupen64plus,
+
+  # Emulation mode: Performance
   gliden64,
+
+  # Emulation mode: Accuracy
+  highscore-mupen64plus-rsp-parallel,
+  highscore-mupen64plus-video-parallel,
+
   unstableGitUpdater,
 }:
 
@@ -48,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf ${mupen64plus}/lib/*.so* $out/lib/
     ln -sf ${mupen64plus}/lib/mupen64plus/*.so* $out/lib/mupen64plus/
     ln -sf ${gliden64}/lib/mupen64plus/*.so* $out/lib/mupen64plus/
+    ln -sf ${highscore-mupen64plus-rsp-parallel}/lib/mupen64plus/*.so* $out/lib/mupen64plus/
+    ln -sf ${highscore-mupen64plus-video-parallel}/lib/mupen64plus/*.so* $out/lib/mupen64plus/
   '';
 
   meta = {
