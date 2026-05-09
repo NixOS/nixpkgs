@@ -40,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   sourceRoot = "${src.name}/";
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/actualbudget/actual/blob/master/package.json#L123
+    ./yarn-4.14-support.patch
+  ];
+
   nativeBuildInputs = [
     yarn-berry
     nodejs
@@ -98,8 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-WWnf7HgTdyWrrHZA43hPjv8Q1PO1ETMKkd0eSu0pQ3M=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-7Vlc9hPv7Sr2ZUw7fasl3xf7ZYU31oS4tWW46UBJ1F0=";
   };
 
   pname = "actual-server";
