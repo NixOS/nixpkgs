@@ -2,7 +2,6 @@ const { classify } = require('../supportedBranches.js')
 
 function runChecklist({
   committers,
-  events,
   files,
   pull_request,
   log,
@@ -28,18 +27,15 @@ function runChecklist({
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
 
   const approvals = new Set(
-    events
+    reviews
       .filter(
-        ({ event, state, commit_id }) =>
-          event === 'reviewed' &&
-          state === 'approved' &&
+        ({ state, commit }) =>
+          state === 'APPROVED' &&
           // Only approvals for the current head SHA count, otherwise authors could push
           // bad code between the approval and the merge.
-          commit_id === pull_request.head.sha,
+          commit?.oid === pull_request.head.sha,
       )
-      .map(({ user }) => user?.id)
-      // Some users have been deleted, so filter these out.
-      .filter(Boolean),
+      .map(({ user }) => user.id),
   )
 
   // A "changes requested" review from a committer blocks both the merge queue and
@@ -52,7 +48,6 @@ function runChecklist({
   const committerReviewState = new Map()
   for (const { user, state } of reviews) {
     if (
-      user &&
       committers.has(user.id) &&
       ['APPROVED', 'CHANGES_REQUESTED'].includes(state)
     ) {
@@ -150,6 +145,7 @@ async function handleMerge({
   dry,
   pull_request,
   events,
+  reviews,
   maintainers,
   getTeamMembers,
   getUser,
@@ -182,15 +178,6 @@ async function handleMerge({
       per_page: 100,
     })
   ).data.find(({ context }) => context === 'no PR failures')?.state
-
-  // Reviews are returned in chronological order; the latest review per user wins below.
-  // Dismissed reviews surface with state DISMISSED and comment-only follow-ups as
-  // COMMENTED, so both naturally drop out of the committer-blocking check.
-  const reviews = await github.paginate(github.rest.pulls.listReviews, {
-    ...context.repo,
-    pull_number,
-    per_page: 100,
-  })
 
   // Only look through comments *after* the latest (force) push.
   const lastPush = events.findLastIndex(
@@ -339,7 +326,6 @@ async function handleMerge({
 
     const { result, eligible, checklist } = runChecklist({
       committers,
-      events,
       files,
       pull_request,
       log,
@@ -411,7 +397,6 @@ async function handleMerge({
 
   const { result } = runChecklist({
     committers,
-    events,
     files,
     pull_request,
     log,
