@@ -2,10 +2,9 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
-  finalAttrs ? { },
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "tcprelay";
   version = "0.1.0";
 
@@ -28,4 +27,4 @@ buildGoModule {
     mainProgram = "tcprelay";
     platforms = platforms.all;
   };
-}
+})
