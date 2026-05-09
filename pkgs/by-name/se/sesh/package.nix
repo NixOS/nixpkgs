@@ -9,6 +9,7 @@
 buildGoModule (finalAttrs: {
   pname = "sesh";
   version = "2.26.1";
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     go-mockery
