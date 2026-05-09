@@ -10397,6 +10397,8 @@ self: super: with self; {
 
   mpris-api = callPackage ../development/python-modules/mpris-api { };
 
+  mpris-server = callPackage ../development/python-modules/mpris-server { };
+
   mprisify = callPackage ../development/python-modules/mprisify { };
 
   mpv = callPackage ../development/python-modules/mpv { inherit (pkgs) mpv; };
