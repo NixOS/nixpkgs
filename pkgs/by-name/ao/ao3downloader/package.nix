@@ -50,7 +50,7 @@ python312Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/nianeyna/ao3downloader/releases/tag/v${finalAttrs.version}";
     mainProgram = "ao3downloader";
     homepage = "https://nianeyna.dev/ao3downloader";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.samasaur ];
   };
 })
