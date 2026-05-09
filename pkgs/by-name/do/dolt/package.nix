@@ -3,32 +3,35 @@
   icu,
   lib,
   buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "dolt";
-  version = "1.86.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "dolthub";
     repo = "dolt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CXhdt9uIhdSEW3M21pL2WeT+zKPUxyYrU4fGTgMgun4=";
+    hash = "sha256-cNVlKVq0TohF39qaWzD3LQCx963+CpG6t83N/J21FW4=";
   };
 
   modRoot = "./go";
   subPackages = [ "cmd/dolt" ];
-  vendorHash = "sha256-JdpPKao8LOGzKzzLtfiYh3rUn1OLLcA7YIrztHwTLmU=";
+  vendorHash = "sha256-SbgjbR10VTMtPyGfTw/85/dTW74nW2HUw77slXEympc=";
   proxyVendor = true;
   doCheck = false;
 
   buildInputs = [ icu ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Relational database with version control and CLI a-la Git";
     mainProgram = "dolt";
     homepage = "https://github.com/dolthub/dolt";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ VZstless ];
   };
 })
