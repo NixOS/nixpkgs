@@ -11,6 +11,7 @@
   scikit-build-core,
 
   # dependencies
+  apache-tvm-ffi,
   mlx-lm,
   numpy,
   pydantic,
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.33";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-mliAmFBY3eLnUP+2HCRGX36KPUjaxn0Eb+2aKyDwdaM=";
+    hash = "sha256-jjJfhUi+pCKT2TvDRIPT92cuFo5xBvCDKBsOfg5mnwQ=";
   };
 
   build-system = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [
+    apache-tvm-ffi
     numpy
     pydantic
     torch
@@ -82,6 +84,7 @@ buildPythonPackage rec {
     "test_grammar_matcher_json_schema"
     "test_grammar_matcher_tag_dispatch"
     "test_regex_converter"
+    "test_serialize_compiled_grammar"
     "test_serialize_compiled_grammar_with_hf_tokenizer"
     "test_tokenizer_info"
 
@@ -95,7 +98,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires internet access
     "tests/python/test_structural_tag_converter.py"
-    "tests/python/test_structural_tag_for_model.py"
+    "tests/python/test_builtin_structural_tag_alignment.py"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];
