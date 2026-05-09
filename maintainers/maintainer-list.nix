@@ -28414,6 +28414,12 @@
     githubId = 1983821;
     name = "Eric Wolf";
   };
+  typechecks = {
+    email = "282957152+typechecks@users.noreply.github.com";
+    github = "typechecks";
+    githubId = 282957152;
+    name = "typechecks";
+  };
   u2x1 = {
     email = "u2x1@outlook.com";
     github = "u2x1";
