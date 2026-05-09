@@ -79,6 +79,8 @@ buildPythonPackage rec {
     # ERROR tests/utils/test_form.py::TestDispatcherForm::test_form1 - ModuleNotFoundError: No module named 'chromedriver_autoinstaller'
     # ERROR tests/utils/test_form.py::TestDispatcherForm::test_form_stripe - ModuleNotFoundError: No module named 'chromedriver_autoinstaller'
     "tests/utils/test_form.py"
+    # requires schedula[form] extras
+    "tests/utils/test_form_items.py"
   ];
 
   pythonImportsCheck = [ "schedula" ];
