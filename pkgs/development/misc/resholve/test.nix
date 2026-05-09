@@ -82,7 +82,7 @@ let
   ];
 in
 rec {
-  module1 = resholve.mkDerivation(finalAttrs: {
+  module1 = resholve.mkDerivation (finalAttrs: {
     pname = "testmod1";
     version = "unreleased";
 
