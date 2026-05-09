@@ -37,10 +37,10 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.09.2";
+  version = "25.09.3";
   rev = "3890e12c9e48c028c3f12aa58cb64bd9f8895e30";
 
-  srcHash = "sha256-0hLTQR7f7s58DUgAZbDeREMee6VrqAKHyhS1Hs/Em1A=";
+  srcHash = "sha256-vpAWrZAXqm775sn1I5unPb8L9cqaRqPrVEc4A8SxPOk=";
   cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
   yarnHash = "sha256-EmKeHORr/+qsDzAwtearMi7qodcCgjeAQcy+79HL7Vg=";
   pythonDeps =
@@ -58,7 +58,6 @@ let
       # aqt runtime deps
       beautifulsoup4
       flask
-      flask-cors
       jsonschema
       pip-system-certs
       pyqt6
