@@ -28966,12 +28966,6 @@
     githubId = 59029586;
     name = "Vitor Pavan";
   };
-  vizanto = {
-    email = "danny@prime.vc";
-    github = "vizanto";
-    githubId = 326263;
-    name = "Danny Wilson";
-  };
   vizid = {
     email = "mail@vizqq.cc";
     github = "ViZiD";
