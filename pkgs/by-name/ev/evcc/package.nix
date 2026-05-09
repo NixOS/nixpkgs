@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "0.306.2";
+  version = "0.306.3";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-XlSdAOuC+nwxRVa0nnsqGDPY57q58byLgLpTqEyImJ8=";
+    hash = "sha256-6j4GTAgC5xvLkaNaOQQBkjINI4Wg57IHVVUoDY/rfBo=";
   };
 
   vendorHash = "sha256-JBhx1K8E2BynsgjXBno+0OUpWF15Eyo9yBzofruBEck=";
@@ -97,9 +97,10 @@ buildGo126Module rec {
     let
       skippedTests = [
         # network access
-        "TestOctopusConfigParse"
-        "TestTemplates"
         "TestOcpp"
+        "TestOctopusConfigParse"
+        "TestSessionHandlerTimezoneFilter"
+        "TestTemplates"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];

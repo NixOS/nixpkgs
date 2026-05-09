@@ -11,7 +11,10 @@ in
   meta.maintainers = lib.teams.home-assistant.members;
 
   nodes.hass =
-    { pkgs, ... }:
+    {
+      pkgs,
+      ...
+    }:
     {
       services.postgresql = {
         enable = true;
@@ -23,6 +26,9 @@ in
           }
         ];
       };
+
+      # required for dbus activation in the bluetooth component
+      hardware.bluetooth.enable = true;
 
       services.home-assistant = {
         enable = true;
@@ -77,9 +83,30 @@ in
           # configure the recorder component to use the postgresql db
           recorder.db_url = "postgresql://@/hass";
 
-          # without these some components that are loaded anyway fail to find
-          # their dependencies
-          default_config = { };
+          # this is effecitvely default_config (2026.5.0), but with components
+          # skipped that would cause ERRORs in the sandbox
+          bluetooth = { };
+          cloud = { };
+          conversation = { };
+          dhcp = { };
+          energy = { };
+          file = { };
+          # Requires go2rtc service
+          # go2rtc = { };
+          history = { };
+          # Requires DNS and HTTP queries
+          # homeassistant_alerts = { };
+          logbook = { };
+          media_source = { };
+          mobile_app = { };
+          my = { };
+          ssdp = { };
+          stream = { };
+          sun = { };
+          usage_prediction = { };
+          usb = { };
+          webhook = { };
+          zeroconf = { };
 
           # include some popular integrations, that absolutely shouldn't break
           knx = { };
