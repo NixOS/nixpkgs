@@ -6,14 +6,14 @@
   imagemagick,
   libgbm,
   libdrm,
-  flutter338,
+  flutter341,
   pulseaudio,
   webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
 
   callPackage,
-  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter338; },
+  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter341; },
 
   targetFlutterPlatform ? "linux",
 }:
@@ -25,20 +25,20 @@ let
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   libwebrtc = fetchzip {
-    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.1.0/libwebrtc.zip";
-    sha256 = "sha256-lRfymTSfoNUtR5tSUiAptAvrrTwbB8p+SaYQeOevMzA=";
+    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.3.0/libwebrtc.zip";
+    sha256 = "sha256-lGvWAicdKbNdMZAQS9Qyxv737G/sBI/hKbge/Xw5bDM=";
   };
 in
-flutter338.buildFlutterApplication (
+flutter341.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.4.1";
+    version = "2.5.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-8Q+A5IZW6RjmnE+ovI7HYPZCi0oOoj9SU7o0VUPXxsM=";
+      hash = "sha256-8iMSfF5K/9bQot7Tzc2XuuiQnquLZmS0ucC5t2T/HEA=";
     };
 
     inherit pubspecLock;
