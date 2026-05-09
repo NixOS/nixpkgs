@@ -35,8 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     expat
     netsurf-buildsystem
-    libhubbub
     libparserutils
+  ];
+
+  propagatedBuildInputs = [
+    libhubbub
     libwapcaplet
   ];
 
