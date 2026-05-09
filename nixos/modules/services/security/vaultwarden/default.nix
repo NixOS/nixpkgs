@@ -323,7 +323,7 @@ in
       services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
         description = "Backup vaultwarden";
         environment = {
-          DATA_FOLDER = dataDir;
+          DATA_FOLDER = configEnv.DATA_FOLDER;
           BACKUP_FOLDER = cfg.backupDir;
         };
         path = [ pkgs.sqlite ];
