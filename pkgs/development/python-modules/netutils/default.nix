@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netutils";
-  version = "1.17.2";
+  version = ".1.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
