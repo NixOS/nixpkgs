@@ -23,6 +23,11 @@ stdenv.mkDerivation {
     hash = "sha256-RbxFqZegsCxnUaIIA5OfTzx1wflCPeF+enQt90VwMgA=";
   };
 
+  patches = [
+    # https://github.com/csmith-project/creduce/pull/290
+    ./fix-gcc15.patch
+  ];
+
   postPatch = ''
     substituteInPlace {clex,clang_delta,delta,unifdef,creduce,.}/CMakeLists.txt --replace-fail \
     "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
