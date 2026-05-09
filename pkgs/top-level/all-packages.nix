@@ -12176,4 +12176,6 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  helium-browser = callPackage ../applications/networking/browsers/helium-browser {};
 }

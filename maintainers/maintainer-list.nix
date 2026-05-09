@@ -30884,5 +30884,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  nilsritter = {
+    email = "ritter.nils@protonmail.com";
+    github = "Nils-Ritter";
+    githubId = 282257734;
+    name = "Nils Ritter";
+  };
   # keep-sorted end
 }
