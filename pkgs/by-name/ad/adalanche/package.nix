@@ -7,25 +7,32 @@
 
 buildGoModule (finalAttrs: {
   pname = "adalanche";
-  version = "2024.1.11";
+  version = "2025.2.6";
 
   src = fetchFromGitHub {
     owner = "lkarlslund";
     repo = "adalanche";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SJa2PQCXTYdv5jMucpJOD2gC7Qk2dNdINHW4ZvLXSLw=";
+    hash = "sha256-PEq0bIZTtaUoNUTPypq9OAzhwC2SM1KKtjfS9QZwo6c=";
   };
 
-  vendorHash = "sha256-3HulDSR6rWyxvImWBH1m5nfUwnUDQO9ALfyT2D8xmJc=";
+  vendorHash = "sha256-TTJ82l+oMGixQnpW0JxBndPuAuKe6TAjJnN0a1LPtSY=";
 
   buildInputs = [
     libpcap
   ];
 
+  # sonic dependency uses internal go APIs blocked in Go 1.23+
+  # See https://github.com/bytedance/sonic/issues/711
   ldflags = [
     "-s"
     "-w"
     "-X=github.com/lkarlslund/adalanche/modules/version.Version=${finalAttrs.version}"
+    "-checklinkname=0"
+  ];
+
+  checkFlags = [
+    "-skip=TestParseTestAQLQueries|TestParsePredefinedAQLQueries"
   ];
 
   meta = {
