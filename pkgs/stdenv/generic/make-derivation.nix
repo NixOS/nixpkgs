@@ -49,9 +49,6 @@ let
     seq
     ;
 
-  inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
-  inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
-
   /**
     This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
     that refers to the derivation's outputs.
@@ -301,8 +298,7 @@ let
   makeDerivationArgument =
 
     # `makeDerivationArgument` is responsible for the `mkDerivation` arguments that
-    # affect the actual derivation, excluding a few behaviors that are not
-    # essential, and specific to `mkDerivation`: `env`, `cmakeFlags`, `mesonFlags`.
+    # affect the actual derivation, excluding `env`.
     #
     # See also:
     #
@@ -830,7 +826,7 @@ let
     # produce derivations that use this stdenv and its shell.
     #
     # Internally, it delegates most of its behavior to `makeDerivationArgument`,
-    # except for the `env`, `cmakeFlags`, and `mesonFlags` attributes, as well
+    # except for the `env` attribute, as well
     # as the attributes `meta` and `passthru` that affect [package attributes],
     # and not the derivation itself.
     #
@@ -844,10 +840,6 @@ let
     #
     # * [package attributes]: https://nixos.org/manual/nix/stable/glossary#package-attribute-set
     {
-
-      # Configure Phase
-      cmakeFlags ? [ ],
-      mesonFlags ? [ ],
 
       meta ? { },
       passthru ? { },
@@ -893,8 +885,6 @@ let
         ]
         // {
           ${if __structuredAttrs then "env" else null} = checkedEnv;
-          cmakeFlags = makeCMakeFlags attrs;
-          mesonFlags = makeMesonFlags attrs;
         }
       );
 
