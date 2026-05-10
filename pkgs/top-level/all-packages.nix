@@ -5731,8 +5731,6 @@ with pkgs;
     _7zz = _7zz-rar;
   };
 
-  nwjs = callPackage ../development/tools/nwjs { };
-
   nwjs-sdk = callPackage ../development/tools/nwjs {
     sdk = true;
   };
