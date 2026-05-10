@@ -1761,9 +1761,10 @@
         bluetooth-auto-recovery
         bluetooth-data-tools
         dbus-fast
+        eurotronic-cometblue-ha
         habluetooth
         serialx
-      ]; # missing inputs: eurotronic-cometblue-ha
+      ];
     "event" =
       ps: with ps; [
       ];
@@ -7687,6 +7688,7 @@
     "esphome"
     "essent"
     "eufylife_ble"
+    "eurotronic_cometblue"
     "event"
     "everlights"
     "evil_genius_labs"
