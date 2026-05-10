@@ -12179,4 +12179,6 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  compact = callPackage ../development/compilers/compact { };
 }
