@@ -1451,7 +1451,8 @@
       ];
     "earn_e_p1" =
       ps: with ps; [
-      ]; # missing inputs: earn-e-p1
+        earn-e-p1
+      ];
     "eastron" =
       ps: with ps; [
       ];
@@ -7653,6 +7654,7 @@
     "dwd_weather_warnings"
     "dynalite"
     "eafm"
+    "earn_e_p1"
     "easyenergy"
     "ecobee"
     "ecoforest"
