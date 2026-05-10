@@ -15749,6 +15749,8 @@ self: super: with self; {
 
   python-dropbox-api = callPackage ../development/python-modules/python-dropbox-api { };
 
+  python-duco-client = callPackage ../development/python-modules/python-duco-client { };
+
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
   python-editor = callPackage ../development/python-modules/python-editor { };
