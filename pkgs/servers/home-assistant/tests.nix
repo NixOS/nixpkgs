@@ -152,10 +152,6 @@ let
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"
     ];
-    shell_command = [
-      # tries to retrieve file from github
-      "test_non_text_stdout_capture"
-    ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"
