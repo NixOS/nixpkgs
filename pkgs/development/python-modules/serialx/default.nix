@@ -65,6 +65,8 @@ buildPythonPackage (finalAttrs: {
     socat
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     # tries to access /sys/class/tty in sandbox
     "test_compat_tools_module"
