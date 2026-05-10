@@ -1397,8 +1397,9 @@
       ps: with ps; [
         aiohasupervisor
         cronsim
+        python-dropbox-api
         securetar
-      ]; # missing inputs: python-dropbox-api
+      ];
     "droplet" =
       ps: with ps; [
         pydroplet
@@ -7637,6 +7638,7 @@
     "downloader"
     "dremel_3d_printer"
     "drop_connect"
+    "dropbox"
     "droplet"
     "dsmr"
     "dsmr_reader"
