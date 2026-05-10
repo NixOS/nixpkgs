@@ -18,7 +18,7 @@
 
 buildPythonPackage {
   pname = "flask-dramatiq";
-  version = "0.6.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
