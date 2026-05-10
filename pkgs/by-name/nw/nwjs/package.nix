@@ -107,7 +107,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nwjs";
-  version = "0.102.1";
+  version = "0.111.1";
 
   src =
     let
@@ -117,8 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://dl.nwjs.io/v${finalAttrs.version}/nwjs-${flavor}v${finalAttrs.version}-linux-${bits}.tar.gz";
       hash =
         {
-          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
-          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
+          "sdk-x64" = "sha256-r1QvA7/1Kf1Jo6MabE1Ia8XGQ4kJXd0nBn7EDRE8Lig=";
+          "x64" = "sha256-fH9tLe7qAM2+kfIe37zjP/wmuataMm4KSopEMRHEdf8=";
         }
         ."${flavor + bits}";
     };
