@@ -39,6 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-O6d47H+vcSn9G6EIMpSshfL+cBJWZMYXHHKsu2n/huk=";
 
+  separateDebugInfo = true;
+
   nativeBuildInputs = [
     cmake
     just

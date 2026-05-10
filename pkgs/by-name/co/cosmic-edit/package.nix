@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-iWZRxn0puWwAibjbj/jdk4t6qgETEUJUv612RZSavMw=";
 
+  separateDebugInfo = true;
+
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
