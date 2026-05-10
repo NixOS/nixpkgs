@@ -1424,7 +1424,8 @@
       ];
     "duco" =
       ps: with ps; [
-      ]; # missing inputs: python-duco-client
+        python-duco-client
+      ];
     "dunehd" =
       ps: with ps; [
         pdunehd
@@ -7651,6 +7652,7 @@
     "dsmr"
     "dsmr_reader"
     "duckdns"
+    "duco"
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
