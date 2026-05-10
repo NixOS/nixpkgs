@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   hatchling,
-  pythonOlder,
   pytest,
   tappy,
   pytestCheckHook,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-tap";
   version = "3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-tap";

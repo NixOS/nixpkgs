@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ghalint";
-  version = "1.5.3";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "ghalint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zll71vSqSKIij/TUi4LnGtVqmLhK9UViFDkpnuEvmz8=";
+    hash = "sha256-u85vX9lg5JKUvRjFloE4KZUm/qs8RmjoY/hybtJk/kc=";
   };
 
-  vendorHash = "sha256-pCrVBgS7eLCYlfY6FyAGAeEhpV2dYQowtE/BoRUju0o=";
+  vendorHash = "sha256-n++Rq79KHyRVhIXIdN9IOADTGEG73Wl2SUq/YEo++WM=";
 
   subPackages = [ "cmd/ghalint" ];
 

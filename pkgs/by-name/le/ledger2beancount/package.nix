@@ -21,14 +21,14 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ledger2beancount";
   version = "2.7";
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "ledger2beancount";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-2LIP3ljK1HMAwjk2ueIf9pFL+UUnGDgx9GYNtRztdFY=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pablovsky ];
   };
-}
+})

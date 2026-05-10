@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-dateutil,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "kiwiki-client";
   version = "0.1.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "c7h";

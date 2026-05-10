@@ -6,7 +6,6 @@
   protobuf,
   pytestCheckHook,
   pycrypto,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage {
   pname = "pymumble";
   version = "unstable-2024-10-20";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tjni";

@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   c-ares,
+  cacert,
   curl,
   darwin,
   expat,
@@ -17,6 +18,7 @@
   openssl,
   stdenv,
   unzip,
+  writeShellScript,
   xercesc,
   zlib,
   acceptBroadcomEula ? false,
@@ -48,27 +50,47 @@ let
           ;
       };
     in
-    fetchurl {
+    stdenv.mkDerivation {
       name = fileName;
       url =
         (mkBaseUrl toolId)
         + "?p_p_id=SDK_AND_TOOL_DETAILS_INSTANCE_iwlk&p_p_lifecycle=2&p_p_resource_id=documentDownloadArtifact";
-      curlOptsList = [
-        "--json"
-        requestJson
-      ];
-      downloadToTemp = true;
-      nativeBuildInputs = [ jq ];
-      postFetch = ''
-        # Try again with the new URL
-        urls="$(jq -r 'if (.success == true) then .data.downloadUrl else error(. | tostring) end' < "$downloadedFile" || exit $?)" \
-          downloadToTemp="" \
-          curlOptsList="" \
-          curlOpts="" \
-          postFetch="" \
-          exec "$SHELL" "''${BASH_ARGV[@]}"
+      builder = writeShellScript "builder.sh" ''
+        curlVersion=$(${curl}/bin/curl -V | head -1 | cut -d' ' -f2)
+
+        curl=(
+          ${lib.getExe curl}
+          --location
+          --retry 3
+          --user-agent "curl/$curlVersion Nixpkgs/${lib.trivial.release}"
+          --cacert ${cacert}/etc/ssl/certs/ca-bundle.crt
+          $NIX_CURL_FLAGS
+        )
+
+        "''${curl[@]}" --json ${lib.escapeShellArg requestJson} --output details.json "$url"
+
+        echo "Details: $(<details.json)" >&2
+        url="$(jq -r 'if (.success == true) then .data.downloadUrl else error(. | tostring) end' < details.json || exit 1)"
+
+        echo "Redirect URL: $url" >&2
+        if [ -n "$url" ]; then
+          "''${curl[@]}" --output "$out" "$url"
+        else
+          echo "Couldn't get redirect URL, exiting." >&2
+          exit 1
+        fi
       '';
-      inherit hash;
+      nativeBuildInputs = [
+        curl
+        jq
+      ];
+      outputHashAlgo = "sha256";
+      outputHash = hash;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        # This variable allows the user to pass additional options to curl
+        "NIX_CURL_FLAGS"
+      ];
     };
 
   ovftoolSystems = {
@@ -95,7 +117,7 @@ let
     };
   });
 in
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovftool";
   inherit (ovftoolSystem) version;
 
@@ -109,7 +131,7 @@ stdenv.mkDerivation (final: {
         See the following URL for terms of using this software:
         ${mkBaseUrl ovftoolId}
 
-        Use `${final.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
+        Use `${finalAttrs.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
         and would like to use this package.
       '';
 

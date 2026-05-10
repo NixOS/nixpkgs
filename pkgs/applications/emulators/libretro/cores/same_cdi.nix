@@ -8,17 +8,17 @@
   mkLibretroCore,
   portaudio,
   python3,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "same_cdi";
-  version = "0-unstable-2025-01-31";
+  version = "0-unstable-2026-03-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "same_cdi";
-    rev = "7ee1d8e9cb4307b7cd44ee1dd757e9b3f48f41d5";
-    hash = "sha256-EGE3NuO0gpZ8MKPypH8rFwJiv4QsdKuIyLKVuKTcvws=";
+    rev = "2184aa6d87a31fb6c64534b9b7b2d26e36bae757";
+    hash = "sha256-8QJtAyVF6KQmWSzQ6t5s4qmSVT8CmRx5uulq4c3LDRo=";
   };
 
   patches = [
@@ -30,13 +30,22 @@ mkLibretroCore {
     })
   ];
 
+  postPatch = ''
+    # Fix sol2 compatibility with GCC 15 (construct -> emplace)
+    # https://github.com/ThePhD/sol2/issues/1657
+    sed -i 's/this->construct(std::forward<Args>(args)\.\.\.);/this->emplace(std::forward<Args>(args)...);/g' 3rdparty/sol2/sol/sol.hpp
+
+    # Fix missing cstdint include for uint8_t
+    sed -i '1i #include <cstdint>' src/lib/util/corestr.cpp
+  '';
+
   extraNativeBuildInputs = [ python3 ];
   extraBuildInputs = [
     alsa-lib
     libGL
     libGLU
     portaudio
-    xorg.libX11
+    libx11
   ];
 
   meta = {

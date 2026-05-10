@@ -61,7 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pango.org/";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      lovek323
       raskin
     ];
     teams = [ lib.teams.gnome ];

@@ -6,14 +6,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lyra";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "bfgroup";
     repo = "lyra";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-X8wJwSfOo7v2SKYrKJ4RhpEmOdEkS8lPHIqCxP46VF4=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.boost;
     maintainers = [ ];
   };
-}
+})

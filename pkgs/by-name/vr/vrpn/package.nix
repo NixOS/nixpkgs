@@ -8,14 +8,14 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vrpn";
   version = "07.36";
 
   src = fetchFromGitHub {
     owner = "vrpn";
     repo = "vrpn";
-    rev = "version_${version}";
+    rev = "version_${finalAttrs.version}";
     hash = "sha256-eXmj9Wqm+ytsnypC+MrOLnJg9zlri5y0puavamZqFmY=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
     maintainers = with lib.maintainers; [ ludo ];
   };
-}
+})

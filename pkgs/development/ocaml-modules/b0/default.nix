@@ -9,14 +9,14 @@
   cmdliner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "ocaml${ocaml.version}-b0";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/b0-${version}.tbz";
-    sha256 = "sha256-ty04JQcP4RCme/VQw0ko2IBebWWX5cBU6nRTTeV1I/I=";
+    url = "https://erratique.ch/software/b0/releases/b0-${finalAttrs.version}.tbz";
+    hash = "sha256-FscuTlKqZ7fGJk0+aln6lvNtF7Ghph64A4ZVqCUE9ZM=";
   };
 
   strictDeps = true;
@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.Julow ];
-    broken = !(lib.versionAtLeast ocaml.version "4.08");
+    broken = !lib.versionAtLeast ocaml.version "4.14";
   };
-}
+})

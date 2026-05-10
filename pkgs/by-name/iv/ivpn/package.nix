@@ -18,6 +18,8 @@ buildGoModule (finalAttrs: {
     hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
   };
 
+  __structuredAttrs = true;
+
   modRoot = "cli";
   vendorHash = "sha256-xZ1tMiv06fE2wtpDagKjHiVTPYWpj32hM6n/v9ZcgrE=";
 
@@ -42,8 +44,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      urandom
-      blenderfreaky
+      kilyanni
     ];
     mainProgram = "ivpn";
   };

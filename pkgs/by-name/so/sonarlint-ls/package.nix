@@ -16,17 +16,17 @@
 
 maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
-  version = "3.25.0.76263";
+  version = "4.15.0.78211";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonarlint-language-server";
     rev = version;
-    hash = "sha256-bnR6h2NRdGwmx04ydQIlE2VMe/C23YRqNxdbbb19yzE=";
+    hash = "sha256-0EFztL1hF1JaYc+6OUvmcPF9x5yA10Sy62f/Drmj4MU=";
   };
 
   mvnJdk = jdk17;
-  mvnHash = "sha256-Fk6JPMmzz7YnPWOdWKOXQ8z6bdYuXSgQdWBOaIlpd4A=";
+  mvnHash = "sha256-YG2eQnSCwg24DEp2CJ6awozTVcz8XBUmSSEb65UD7Rw=";
 
   # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [
@@ -39,6 +39,10 @@ maven.buildMavenPackage rec {
     !JavaMediumTests,
     !OpenNotebooksCacheTests"
   ];
+
+  preBuild = ''
+    echo -n "${version}" > src/main/resources/slls-version.txt
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -103,6 +107,9 @@ maven.buildMavenPackage rec {
     mainProgram = "sonarlint-ls";
     homepage = "https://github.com/SonarSource/sonarlint-language-server";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ tricktron ];
+    maintainers = with lib.maintainers; [
+      tricktron
+      cizordj
+    ];
   };
 }

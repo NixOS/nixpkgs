@@ -8,7 +8,7 @@ let
   self = python3Packages.buildPythonApplication {
     pname = "git-branchstack";
     version = "0.2.0";
-    format = "pyproject";
+    pyproject = true;
 
     src = fetchPypi {
       pname = "git-branchstack";

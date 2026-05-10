@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkgsStatic,
   byacc,
   ed,
@@ -42,6 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "man"
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/rakitzis/rc/commit/2bab312ea11cb77d2654a731357842971c0b5d18.patch";
+      hash = "sha256-LpnrsvJH/0CRS0bCgoZT2Dkac6AZH8DZIPU4MQ5MP0I=";
+    })
   ];
 
   # TODO: think on a less ugly fixup

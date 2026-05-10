@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -20,19 +19,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "home-assistant-intents";
-  version = "2025.12.2";
+  version = "2026.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "intents-package";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-7fav3h8/Eu4Q4I0deDWov5UP5aEyS/ypIGLvuQlGWCI=";
+    hash = "sha256-R6PPZSiDiFvB+lNxyuIHwMIgpQvVI0oqrucnw4jnYNU=";
   };
 
   build-system = [
@@ -63,10 +60,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${src.tag}";
+    changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${finalAttrs.src.tag}";
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/OHF-Voice/intents-package";
     license = lib.licenses.cc-by-40;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

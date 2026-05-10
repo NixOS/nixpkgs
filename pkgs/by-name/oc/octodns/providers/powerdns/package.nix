@@ -4,7 +4,6 @@
   fetchFromGitHub,
   octodns,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "octodns-powerdns";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "octodns";

@@ -11,7 +11,7 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "language-tools";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-hcLjvIi7EZQSr99OLHGWesziBc5HhkvD+dmGOTgOY/c=";
   };
 

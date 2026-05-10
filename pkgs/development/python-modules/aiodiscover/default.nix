@@ -1,7 +1,6 @@
 {
   lib,
   aiodns,
-  async-timeout,
   buildPythonPackage,
   cached-ipaddress,
   fetchFromGitHub,
@@ -12,7 +11,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +33,6 @@ buildPythonPackage rec {
     ifaddr
     netifaces
     pyroute2
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [

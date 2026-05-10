@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "starboard";
-  version = "0.15.29";
+  version = "0.15.37";
 
   __darwinAllowLocalNetworking = true; # for tests
 
@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "aquasecurity";
     repo = "starboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-co4+k+91T/M+f4zk4Q26SEoRRTKDsQpYZQY9AWOjv9o=";
+    hash = "sha256-WIgXKw+PWS1A+npYL99t0Du7BJESTvrUckWtCzq1VS4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-6SqghCM2dwNyosZo0wfMMHlgrgY+Ts+7lIN7+qSp0GI=";
+  vendorHash = "sha256-UpPhTP+JObPJJMpMKPDriRgA5DETkMUlsobPACOfeho=";
 
   nativeBuildInputs = [ installShellFiles ];
 

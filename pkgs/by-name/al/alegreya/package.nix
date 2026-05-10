@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alegreya";
   version = "2.008";
 
   src = fetchFromGitHub {
     owner = "huertatipografica";
     repo = "Alegreya";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1m5xr95y6qxxv2ryvhfck39d6q5hxsr51f530fshg53x48l2mpwr";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ Thra11 ];
   };
-}
+})

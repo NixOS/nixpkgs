@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools-dso";
-  version = "2.12.2";
+  version = "2.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "epics-base";
     repo = "setuptools_dso";
     tag = version;
-    hash = "sha256-YYm3mTA443vcD/4vHa7EgPzvDDzBic64NWWJDQYQHKs=";
+    hash = "sha256-M2Gca1QA9fuSvnzKLqY/RaN+NBRAiThl0tkdMbrhGVo=";
   };
 
   build-system = [ setuptools ];

@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  xorg,
+  libxcb-keysyms,
   python3,
   pkg-config,
   cairo,
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     cairo
     expat
     libxkbcommon
-    xorg.xcbutilkeysyms
+    libxcb-keysyms
   ];
 
   # For now, this is the only available featureset. This is also why the file is
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wmfocus";
     homepage = "https://github.com/svenstaro/wmfocus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -485,6 +485,7 @@ in
             PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
           };
           environment = env;
+          unitConfig.RequiresMountsFor = defaultServiceConfig.ReadWritePaths;
 
           preStart = ''
               # remove old papaerless-manage symlink

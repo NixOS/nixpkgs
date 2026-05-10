@@ -60,6 +60,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/grahamc/xmloscopy";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ grahamc ];
   };
 }

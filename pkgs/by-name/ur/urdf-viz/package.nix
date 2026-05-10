@@ -4,7 +4,11 @@
   rustPlatform,
   stdenv,
   libGL,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   lib,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -39,21 +43,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     stdenv.cc.cc.lib
     libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXi
+    libx11
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
   ];
 
   # Tell autopatchelf about the dependency that is linked through dlopen
   runtimeDependencies = [
     libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXi
+    libx11
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
   ];
 
   meta = {

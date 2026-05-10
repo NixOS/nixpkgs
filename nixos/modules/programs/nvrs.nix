@@ -10,7 +10,7 @@ let
   settingsFormat = pkgs.formats.toml { };
 in
 {
-  meta.maintainers = with lib.maintainers; [ adamperkowski ];
+  meta.maintainers = with lib.maintainers; [ koi ];
 
   options.programs.nvrs = {
     enable = lib.mkEnableOption "nvrs";

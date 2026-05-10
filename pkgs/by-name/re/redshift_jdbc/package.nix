@@ -4,7 +4,7 @@
   fetchMavenArtifact,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redshift-jdbc";
   version = "2.1.0.3";
 
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     artifactId = "redshift-jdbc42";
     groupId = "com.amazon.redshift";
     sha256 = "sha256-TO/JXh/pZ7tUZGfHqkzgZx18gLnISvnPVyGavzFv6vo=";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   installPhase = ''
     runHook preInstall
-    install -m444 -D $src/share/java/redshift-jdbc42-${version}.jar $out/share/java/redshift-jdbc42.jar
+    install -m444 -D $src/share/java/redshift-jdbc42-${finalAttrs.version}.jar $out/share/java/redshift-jdbc42.jar
     runHook postInstall
   '';
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sir4ur0n ];
   };
-}
+})

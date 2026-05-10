@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   tdlib,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "python-telegram";
   version = "0.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "alexander-akhmetov";

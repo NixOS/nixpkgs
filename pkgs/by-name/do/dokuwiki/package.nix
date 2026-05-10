@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
         localConfig ? null,
         pluginsConfig ? null,
         aclConfig ? null,
+        extraConfigs ? { },
         pname ? (p: "${p.pname}-combined"),
       }:
       let
@@ -76,6 +77,12 @@ stdenv.mkDerivation rec {
               ""
             ]
           );
+
+        configs = {
+          "local.php" = localConfig;
+          "plugins.local.php" = pluginsConfig;
+        }
+        // extraConfigs;
       in
       basePackage.overrideAttrs (prev: {
         pname = if builtins.isFunction pname then pname prev else pname;
@@ -87,8 +94,9 @@ stdenv.mkDerivation rec {
           ${lib.concatMapStringsSep "\n" (
             plugin: "cp -r ${toString plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}"
           ) plugins}
-          ${isNotEmpty localConfig "ln -sf ${localConfig} $out/share/dokuwiki/conf/local.php"}
-          ${isNotEmpty pluginsConfig "ln -sf ${pluginsConfig} $out/share/dokuwiki/conf/plugins.local.php"}
+          ${lib.concatMapAttrsStringSep "\n" (
+            name: path: "${isNotEmpty path "ln -sf ${path} $out/share/dokuwiki/conf/${name}"}"
+          ) configs}
           ${isNotEmpty aclConfig "ln -sf ${aclConfig} $out/share/dokuwiki/acl.auth.php"}
         '';
       });

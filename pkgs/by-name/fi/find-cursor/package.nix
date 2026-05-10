@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXdamage,
-  libXrender,
-  libXcomposite,
-  libXext,
+  libx11,
+  libxdamage,
+  libxrender,
+  libxcomposite,
+  libxext,
   installShellFiles,
   git,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "find-cursor";
   version = "1.8";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "find-cursor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/Dw4bOTCnpCbeI0YJ5DJ9Q2AGBognylUk7xYGn0KIA8=";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     git
   ];
   buildInputs = [
-    libX11
-    libXdamage
-    libXrender
-    libXcomposite
-    libXext
+    libx11
+    libxdamage
+    libxrender
+    libxcomposite
+    libxext
   ];
   preInstall = "mkdir -p $out/share/man/man1";
   installFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.yanganto ];
     mainProgram = "find-cursor";
   };
-}
+})

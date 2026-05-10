@@ -8,14 +8,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qcomicbook";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "stolowski";
     repo = "QComicBook";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1b769lp6gfwds4jb2g7ymhdm9c06zg57zpyz3zpdb40w07zfsjzv";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ greydot ];
   };
-}
+})

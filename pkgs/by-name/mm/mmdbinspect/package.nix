@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mmdbinspect";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "mmdbinspect";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3QEk8glTtUd1BACKNKNjli8cI8qsdGMeFb9fVVAbLSs=";
     fetchSubmodules = true;
   };
@@ -26,7 +26,7 @@ buildGoModule rec {
   meta = {
     description = "Look up records for one or more IPs/networks in one or more .mmdb databases";
     homepage = "https://github.com/maxmind/mmdbinspect";
-    changelog = "https://github.com/maxmind/mmdbinspect/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/maxmind/mmdbinspect/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "mmdbinspect";
   };
-}
+})

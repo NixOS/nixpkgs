@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rdap";
   version = "0.9.1";
   vendorHash = "sha256-8b1EAnR8PkEAw9yLBqPKFeANJit0OCJG+fssAGR/iTk=";
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "openrdap";
     repo = "rdap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-FiaUyhiwKXZ3xnFPmdxb8bpbm5eRRFNDL3duOGDnc/A=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X \"github.com/openrdap/rdap.version=OpenRDAP ${version}\""
+    "-X \"github.com/openrdap/rdap.version=OpenRDAP ${finalAttrs.version}\""
   ];
 
   meta = {
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sebastianblunt ];
     mainProgram = "rdap";
   };
-}
+})

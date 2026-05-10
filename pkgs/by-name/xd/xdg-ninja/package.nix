@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "xdg-ninja";
-  version = "0.2.0.2-unstable-2025-11-01";
+  version = "0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "xdg-ninja";
-    rev = "cb09ebd6479e276070a55fcffae9a5320bc52ed5";
-    hash = "sha256-VpMSMWwYD0GIPtAuSkdG417RxSx6XCRh09IMrLDOi6A=";
+    rev = "8d3c540111840b4765c7df5c79221508864c8366";
+    hash = "sha256-am8FF2C8BQOS0z6GT5MX2MIfSDNQX7vaeet2tLr05Sg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

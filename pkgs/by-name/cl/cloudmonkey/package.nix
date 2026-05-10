@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudmonkey";
   version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "cloudstack-cloudmonkey";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CdqKaKUVqeAujrWh7u0npZ6ON/nmL/8uIBIljAPPUv0=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     mainProgram = "cloudstack-cloudmonkey";
   };
 
-}
+})

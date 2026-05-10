@@ -9,18 +9,19 @@
   cpio,
   gawk,
   coreutils,
+  curl,
+  sqlite,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blast";
-  version = "2.14.1";
+  version = "2.17.0";
 
   src = fetchurl {
-    url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
-    sha256 = "sha256-cSwtvfD7E8wcLU9O9d0c5LBsO1fpbf6o8j5umfWxZQ4=";
+    url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${finalAttrs.version}/ncbi-blast-${finalAttrs.version}+-src.tar.gz";
+    sha256 = "sha256-UCBXqI6ZkONOYnWL4h6kdMwK1o1qY6LjeyNyrx5eoUc=";
   };
 
-  sourceRoot = "ncbi-blast-${version}+-src/c++";
+  sourceRoot = "ncbi-blast-${finalAttrs.version}+-src/c++";
 
   configureFlags = [
     # With flat Makefile we can use all_projects in order not to build extra.
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "--with-flat-makefile"
     "--without-makefile-auto-update"
     "--with-dll" # build dynamic libraries (static are default)
+    "--with-sqlite3=${sqlite.dev}"
   ];
 
   makeFlags = [ "all_projects=app/" ];
@@ -100,6 +102,7 @@ stdenv.mkDerivation rec {
     gawk
     zlib
     bzip2
+    sqlite
   ];
 
   strictDeps = true;
@@ -109,6 +112,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/get_species_taxids.sh \
         --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+
+    substituteInPlace $out/bin/update_blastdb.pl \
+        --replace-fail 'qw(/usr/local/bin /usr/bin)' 'qw(${lib.getBin curl}/bin)'
   '';
   patches = [ ./no_slash_bin.patch ];
 
@@ -118,13 +124,16 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences'';
+    description = "Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences";
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = lib.licenses.publicDomain;
 
     # Version 2.10.0 fails on Darwin
     # See https://github.com/NixOS/nixpkgs/pull/61430
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ luispedro ];
+    maintainers = with lib.maintainers; [
+      luispedro
+      mulatta
+    ];
   };
-}
+})

@@ -7,12 +7,12 @@
   validatePkgConfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "readosm";
   version = "1.1.0a";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/readosm-${version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/readosm-${finalAttrs.version}.tar.gz";
     hash = "sha256-23wFHSVs7H7NTDd1q5vIINpaS/cv/U6fQLkR15dw8UU=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

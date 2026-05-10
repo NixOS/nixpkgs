@@ -35,7 +35,7 @@ in
 buildPythonPackage {
   pname = "fschat";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lm-sys";

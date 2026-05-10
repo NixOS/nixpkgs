@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.5.4";
+  version = "7.6.1";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/powershell}
     cp -R * $out/share/powershell
     chmod +x $out/share/powershell/pwsh
-    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh \
+    wrapProgram $out/share/powershell/pwsh \
       --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath buildInputs}" \
-      --set TERM xterm \
       --set POWERSHELL_TELEMETRY_OPTOUT 1 \
       --set DOTNET_CLI_TELEMETRY_OPTOUT 1
+    cp $out/share/powershell/pwsh $out/bin/pwsh
 
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -96,19 +96,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-OqrdfKYvHk2+WRRbavJOkm1h+NqKR4K8U15QDBhBNfA=";
+        hash = "sha256-nhB49wsRxA4Q9LrRNU2xzcrzjNZ3X89A4HOOP1rGgH4=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-SzLUy4akPfuD1WAtApQpW/Ivr7+eB4XRqu+Bk4zakvg=";
+        hash = "sha256-c0mIExlOoNhJ1ZQjMu5uUWV+pm2gghaqEFB4jVxSt0E=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-zRagTBuZzay9wDN7D9DaUNvxqLToQ3vLTKkRjvcpIRo=";
+        hash = "sha256-tfh0qDK+wrp4zT5E/bywTBthRNnqtCuYgcuLlAC8xQQ=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-H9eYP+VsqeYjPxJpJe2yS/a2sz41a2mZbZJcTblOL+8=";
+        hash = "sha256-38lCKXZ5IWA/fD4csaxaqTFEivdJbM9ldyO2J4BXxBU=";
       };
     };
     tests.version = testers.testVersion {

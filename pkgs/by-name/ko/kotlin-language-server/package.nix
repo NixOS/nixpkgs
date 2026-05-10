@@ -8,11 +8,11 @@
   maven,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kotlin-language-server";
   version = "1.3.13";
   src = fetchzip {
-    url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
+    url = "https://github.com/fwcd/kotlin-language-server/releases/download/${finalAttrs.version}/server.zip";
     hash = "sha256-ypiOeXA+14Js31WPGJAdSjskQJR9sBPVWGecLkKHiN4=";
   };
 
@@ -50,10 +50,10 @@ stdenv.mkDerivation rec {
       using the Language Server Protocol Topics'';
     maintainers = with lib.maintainers; [ vtuan10 ];
     homepage = "https://github.com/fwcd/kotlin-language-server";
-    changelog = "https://github.com/fwcd/kotlin-language-server/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/fwcd/kotlin-language-server/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     mainProgram = "kotlin-language-server";
   };
-}
+})

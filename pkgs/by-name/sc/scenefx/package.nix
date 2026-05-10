@@ -15,7 +15,7 @@
   libGL,
   libgbm,
   libxcb,
-  xcbutilwm,
+  libxcb-wm,
   validatePkgConfig,
   testers,
   wayland-scanner,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libgbm
     libxcb
-    xcbutilwm
+    libxcb-wm
     pixman
     wayland
     wayland-protocols

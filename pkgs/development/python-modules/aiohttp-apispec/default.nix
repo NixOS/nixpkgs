@@ -8,7 +8,6 @@
   packaging,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   webargs,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aiohttp-apispec";
   version = "3.0.0b2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "maximdanilchenko";

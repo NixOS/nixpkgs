@@ -2,33 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   glibcLocales,
   installShellFiles,
   python3Packages,
   sphinxHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "khal";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
-    tag = "v${version}";
-    hash = "sha256-pbBdScyYQMdT2NjCk2dKPkR75Zcizzco2IkXpHkgPR8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ltb2c9p/kD0PtYnLxRIm/SNlg+W+Vca6JSA7BahZ9uQ=";
   };
-
-  patches = [
-    # https://github.com/pimutils/khal/pull/1418/
-    (fetchpatch {
-      name = "fix_calendar_popup";
-      url = "https://github.com/pimutils/khal/commit/3fadf020bb65c9c95bba46b5d3695c2565cceacd.patch";
-      hash = "sha256-KhqP0RLLOXm1d/4rCVAb5f7v0q7N0/U2iM23+TcnJhY=";
-    })
-  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -40,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     installShellFiles
     sphinxHook
     python3Packages.sphinx-rtd-theme
-    python3Packages.sphinxcontrib-newsfeed
+    python3Packages.sphinxfeed-lsaffre
   ];
 
   dependencies = with python3Packages; [
@@ -103,8 +93,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "CLI calendar application";
     homepage = "https://lostpackets.de/khal/";
-    changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
+    changelog = "https://github.com/pimutils/khal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ antonmosich ];
   };
-}
+})

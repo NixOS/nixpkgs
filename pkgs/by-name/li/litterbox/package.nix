@@ -7,12 +7,12 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "litterbox";
   version = "1.9";
 
   src = fetchzip {
-    url = "https://git.causal.agency/litterbox/snapshot/litterbox-${version}.tar.gz";
+    url = "https://git.causal.agency/litterbox/snapshot/litterbox-${finalAttrs.version}.tar.gz";
     hash = "sha256-w4qW7J5CKm+hXHsNNbl9roBslHD14JOe0Nj5WntETqM=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ajwhouse ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,14 +4,15 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fontawesomefree";
   version = "6.6.0";
   format = "wheel";
 
   # they only provide a wheel
   src = fetchPypi {
-    inherit pname version format;
+    inherit (finalAttrs) pname version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     hash = "sha256-WZtXRDHJvZLtX8BU0QRaB8QjNdo2wXiE8rk0dV7vkIk=";
@@ -28,4 +29,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ netali ];
   };
-}
+})

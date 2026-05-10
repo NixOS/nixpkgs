@@ -6,7 +6,6 @@
   mock,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   simplejson,
   twisted,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyutil";
   version = "3.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

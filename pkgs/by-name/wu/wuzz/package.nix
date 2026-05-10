@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wuzz";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "wuzz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     mainProgram = "wuzz";
   };
-}
+})

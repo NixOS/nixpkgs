@@ -37,14 +37,14 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coiled";
-  version = "1.130.0";
+  version = "1.134.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ue+iXpLpQwend/RAxJ0Xn9csXHrtCm0IaNexuFjT0s0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-frU9QzSYhEDrruxwSGuhX/VVCuQdI2cFg+G0QQmOHaU=";
   };
 
   build-system = [
@@ -92,4 +92,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ daspk04 ];
     mainProgram = "coiled";
   };
-}
+})

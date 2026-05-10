@@ -12,7 +12,7 @@ mkCoqDerivation {
     with lib.versions;
     lib.switch coq.version [
       {
-        case = range "8.10" "8.20";
+        case = range "8.10" "9.0";
         out = "1.1.3+coq${coq.coq-version}";
       }
       {
@@ -23,6 +23,7 @@ mkCoqDerivation {
   displayVersion = {
     paramcoq = "...";
   };
+  release."1.1.3+coq9.0".sha256 = "sha256-zibQ9nBadSElpyI8iMTDRW/mqtxmxClaVb24o5W6ajE=";
   release."1.1.3+coq8.20".sha256 = "sha256-34xDOz/2xO39fnQW6Zb9CI2EKFuJZjrAdOpMEmwuzY0=";
   release."1.1.3+coq8.19".sha256 = "sha256-5NVsdLXaoz6qrr5ra5YfoHeuK4pEf8JX/X9+SZA0U+U=";
   release."1.1.3+coq8.18".sha256 = "sha256-hNBaj9hB+OzwXsOX+TOXtDLjA5oP4EmEgseLwxFxW+I=";

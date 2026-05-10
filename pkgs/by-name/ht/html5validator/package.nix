@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "html5validator";
   version = "0.4.2";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "svenkreiss";
     repo = "html5validator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yvclqE4+2R9q/UJU9W95U1/xVJeNj+5eKvT6VQel9k8=";
   };
 
@@ -37,8 +37,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command line tool that tests files for HTML5 validity";
     mainProgram = "html5validator";
     homepage = "https://github.com/svenkreiss/html5validator";
-    changelog = "https://github.com/svenkreiss/html5validator/releases/tag/v${version}";
+    changelog = "https://github.com/svenkreiss/html5validator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phunehehe ];
   };
-}
+})

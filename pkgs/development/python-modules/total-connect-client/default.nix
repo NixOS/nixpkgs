@@ -5,7 +5,6 @@
   pycryptodome,
   pyjwt,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   requests-oauthlib,
   setuptools,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2025.5";
+  version = "2025.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     tag = version;
-    hash = "sha256-xVpR5gd185eZBoqUhVVcFGPbPFjCavwOZP7yFObzGic=";
+    hash = "sha256-ofbGW5OCKAFW+BXYvegHmFrnJKmRx/Ez86Na00bp9cw=";
   };
 
   build-system = [ setuptools ];

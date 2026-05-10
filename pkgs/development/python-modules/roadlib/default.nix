@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   pyjwt,
-  pythonOlder,
   setuptools,
   requests,
   sqlalchemy,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "roadlib";
   version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

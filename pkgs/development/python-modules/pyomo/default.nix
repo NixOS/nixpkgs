@@ -7,7 +7,6 @@
   ply,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   writableTmpDirAsHomeHook,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pyomo";
   version = "6.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     repo = "pyomo";

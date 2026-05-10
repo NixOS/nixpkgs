@@ -4,22 +4,22 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "netassert";
-  version = "2.1.0";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "netassert";
-    rev = "v${version}";
-    hash = "sha256-9uzidE/b+7UWNMAknxTdeWYKLEjWbV0V9hab18w+E10=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-swnTJwsWsTROO6E9LFNP9L9SbdT99yZpfNWPb8CVcBk=";
   };
-  vendorHash = "sha256-JuyE1pYlTIeG3IGOsvYgQN1lTAb7NWytkp/Ibh91QgA=";
+  vendorHash = "sha256-AmYhpc80jlJBhQbN+DUE9U8Oj550Vg+QS4Rci8KLMCk=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${src.rev}"
+    "-X main.version=${finalAttrs.src.rev}"
   ];
 
   postBuild = ''
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/controlplaneio/netassert";
-    changelog = "https://github.com/controlplaneio/netassert/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/controlplaneio/netassert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Command line utility to test network connectivity between kubernetes objects";
     longDescription = ''
       NetAssert is a command line utility to test network connectivity between kubernetes objects.
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jk ];
     mainProgram = "netassert";
   };
-}
+})

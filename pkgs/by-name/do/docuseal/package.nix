@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.2.0";
+  version = "2.4.4";
 
   bundler = bundler.override { ruby = ruby_3_4; };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-QKGIcLdyIeYcHXA3TRv7PS9V2mok3Y8UOuqCdnCpNfM=";
+    hash = "sha256-GjWR0jxVRTs5KNbFDEcgCbG/HTJlJGYpbKf8+0YBSmk=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     offlineCache = fetchYarnDeps {
       inherit (finalAttrs) src;
-      hash = "sha256-WypnmgUbt+qlJivg1oWX6dabD/1o0H6c3ODcv+S5Ptw=";
+      hash = "sha256-62nI/QUzlpI1VyZ6PWPz2kSp4S2GUIQDaf4jUwzyj24=";
     };
 
     nativeBuildInputs = [
@@ -86,14 +86,16 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  RAILS_ENV = "production";
-  BUNDLE_WITHOUT = "development:test";
+  env = {
+    RAILS_ENV = "production";
+    BUNDLE_WITHOUT = "development:test";
+  };
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/public/packs
-    cp -r ${finalAttrs.src}/* $out
+    cp -r ./* $out
     cp -r ${finalAttrs.docusealWeb}/* $out/public/packs
 
     bundle exec bootsnap precompile --gemfile app/ lib/

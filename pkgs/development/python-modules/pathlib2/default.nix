@@ -3,9 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  pythonOlder,
-  scandir ? null,
-  typing,
 }:
 
 buildPythonPackage rec {
@@ -20,10 +17,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     six
-  ]
-  ++ lib.optionals (pythonOlder "3.5") [
-    scandir
-    typing
   ];
 
   meta = {

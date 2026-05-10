@@ -26,15 +26,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gala";
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "gala";
-    tag = version;
-    hash = "sha256-Tb6+NfJ2/WRJb3R/W8oBJ5HIT8vwQUxiwqKul2hzlXY=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ih0ohyxDCTw3UHGHIP1JQSTi9mGBG5R6HIAJJRPERrQ=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.pantheon ];
     mainProgram = "gala";
   };
-}
+})

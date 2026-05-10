@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   pytest,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pytest-arraydiff";
   version = "0.6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

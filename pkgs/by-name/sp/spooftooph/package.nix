@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+
   makeFlags = [ "BIN=$(out)/bin" ];
 
   preInstall = ''
@@ -32,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "spooftooph";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
   };
 })

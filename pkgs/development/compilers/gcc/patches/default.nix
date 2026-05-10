@@ -72,10 +72,12 @@ optionals noSysDirs (
       "14" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
+        ./13/libsanitizer-fix-with-glibc-2.42.patch
       ];
       "13" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
+        ./13/libsanitizer-fix-with-glibc-2.42.patch
       ];
     }
     ."${majorVersion}" or [ ]
@@ -100,6 +102,9 @@ optionals noSysDirs (
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
+# http://gcc.gnu.org/PR120718 backport (will be inclkuded in 15.3.0) to
+# fix `highway-1.3.0` ICE on aarch64-linux.
+++ optional is15 ./15/aarch64-sve-rtx.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
@@ -164,7 +169,10 @@ optionals noSysDirs (
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin and aarch64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
-++ optional (is14 && stdenv.hostPlatform.isDarwin) ../patches/14/libgcc-darwin-detection.patch
+++ optional (
+  # this one would conflict with gcc-14-darwin-aarch64-support.patch
+  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+) ../patches/14/libgcc-darwin-detection.patch
 ++ optional (atLeast15 && stdenv.hostPlatform.isDarwin) ../patches/15/libgcc-darwin-detection.patch
 
 # Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist
@@ -244,3 +252,4 @@ optionals noSysDirs (
     hash = "sha256-8I2G4430gkYoWgUued4unqhk8ZCajHf1dcivAeuLZ0E=";
   })
 ]
+++ optional (targetPlatform.isMusl && targetPlatform.isx86_32) ./libssp-noshared-musl32.patch

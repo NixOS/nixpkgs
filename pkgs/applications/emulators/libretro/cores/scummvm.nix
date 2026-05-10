@@ -50,6 +50,9 @@ mkLibretroCore {
     cp -a ${libretro-deps-src}/* deps/libretro-deps
     chmod -R u+w deps/
 
+    # Fix conflicts with glibc index/rindex functions
+    sed -i 's/\bindex\b/faad_index/g; s/\brindex\b/faad_rindex/g' deps/libretro-deps/libfaad/libfaad/common.h
+
     patchShebangs ./scripts/*
   '';
 

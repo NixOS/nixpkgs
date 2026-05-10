@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "quinze";
+  pname = "quinze";
   version = "2018-09-22";
 
   src = fetchzip {

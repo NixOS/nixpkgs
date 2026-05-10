@@ -4,7 +4,6 @@
   gotestsum,
   which,
   postgresql,
-  mariadb,
   redis,
   curl,
   net-tools,
@@ -20,7 +19,6 @@ mattermost.overrideAttrs (
     nativeCheckInputs = [
       which
       postgresql
-      mariadb
       redis
       curl
       net-tools
@@ -113,11 +111,6 @@ mattermost.overrideAttrs (
         fi
       }
 
-      # Waits for MySQL to come up or down.
-      wait_mysql() {
-        wait_cmd mysql "$1" mysqladmin ping
-      }
-
       # Waits for Postgres to come up or down.
       wait_postgres() {
         wait_cmd postgres "$1" pg_isready -h localhost
@@ -126,33 +119,6 @@ mattermost.overrideAttrs (
       # Waits for Redis to come up or down.
       wait_redis() {
         wait_cmd redis "$1" redis-cli ping
-      }
-
-      # Starts MySQL.
-      start_mysql() {
-        echo "Starting MySQL at $MYSQL_HOME" >&2
-        mysqld &
-        mysql_pid=$!
-        echo "... PID $mysql_pid" >&2
-        wait_mysql up
-      }
-
-      # Stops MySQL.
-      stop_mysql() {
-        if [ "$mysql_pid" -gt 0 ]; then
-          echo "Terminating MySQL at $MYSQL_HOME (PID $mysql_pid)" >&2
-          mysqladmin --host=127.0.0.1 --user=root --password=mostest --wait-for-all-slaves --shutdown-timeout=30 shutdown
-          wait_mysql down
-          wait_cmd 'mysql pid' down kill -0 "$mysql_pid"
-
-          # Make sure the worker PID went down too (but it may be already gone).
-          local worker_pid="$(<"$MYSQL_HOME"/mysqld.pid || echo 0)"
-          if [ -n "$worker_pid" ] && [ $worker_pid -gt 0 ]; then
-            wait_cmd 'mysql workers' down kill -0 "$worker_pid"
-          fi
-
-          mysql_pid=0
-        fi
       }
 
       # Starts Postgres.
@@ -185,52 +151,6 @@ mattermost.overrideAttrs (
         wait_redis down
         redis_pid=0
       }
-
-      # Configure MySQL.
-      export MYSQL_HOME="$NIX_BUILD_TOP/.mysql"
-      mkdir -p "$MYSQL_HOME"
-      cat <<EOF >"$MYSQL_HOME/my.cnf"
-      [client]
-      port = 3306
-      default-character-set = utf8mb4
-      socket = $MYSQL_HOME/mysqld.sock
-
-      [mysqld]
-      skip-host-cache
-      skip-name-resolve
-      basedir = ${mariadb}
-      datadir = $MYSQL_HOME/
-      pid-file = $MYSQL_HOME/mysqld.pid
-      socket = $MYSQL_HOME/mysqld.sock
-      port = 3306
-      explicit_defaults_for_timestamp
-      collation-server = utf8mb4_general_ci
-      init-connect = 'SET NAMES utf8mb4'
-      character-set-server = utf8mb4
-      EOF
-
-      # Start MySQL.
-      mysql_install_db --skip-name-resolve --auth-root-authentication-method=normal
-      start_mysql
-
-      # Init MySQL.
-      cat <<EOF | mysql --defaults-file="$MYSQL_HOME/my.cnf" -u root -v
-      -- This is the admin password for tests; see the docker-compose:
-      -- https://github.com/mattermost/mattermost/blob/v${final.version}/server/docker-compose.yaml
-      create user if not exists 'mmuser' identified by 'mostest';
-      create database if not exists mattermost_test;
-      grant all privileges on *.* to 'mmuser' with grant option;
-
-      -- Also need to set up root (tests seem to override the user to root)
-      alter user 'root'@'127.0.0.1' identified by 'mostest';
-
-      flush privileges;
-      show grants for 'root'@'127.0.0.1';
-      show grants for 'mmuser';
-      EOF
-
-      # Need to change this so we use 127.0.0.1 in tests.
-      export TEST_DATABASE_MYSQL_DSN='root:mostest@tcp(127.0.0.1:3306)/mattermost_test?charset=utf8mb4&readTimeout=30s&writeTimeout=30s'
 
       # Start Postgres.
       export PGDATA="$NIX_BUILD_TOP/.postgres"
@@ -284,12 +204,6 @@ mattermost.overrideAttrs (
     '';
 
     postCheck = ''
-      # Clean up MySQL.
-      if [ -d "$MYSQL_HOME" ]; then
-        stop_mysql
-        rm -rf "$MYSQL_HOME"
-      fi
-
       # Clean up Postgres.
       if [ -d "$PGDATA" ]; then
         stop_postgres

@@ -110,12 +110,12 @@ let
     concatLines (
       forEach relevantSecrets (
         secret:
-        ''export ${secret}=$(< ${
+        "export ${secret}=$(< ${
           if cfg.settingsSecret.${secret} == null then
             "secrets/${secret}"
           else
             "\"$CREDENTIALS_DIRECTORY/${secret}\""
-        })''
+        })"
       )
     );
 

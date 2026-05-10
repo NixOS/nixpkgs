@@ -1,0 +1,26 @@
+From 815bf49134f9dc049080b0ec4eb2fd807c23086b Mon Sep 17 00:00:00 2001
+From: azban <me@azban.net>
+Date: Mon, 6 Apr 2026 19:49:19 -0600
+Subject: [PATCH 1/2] remove hard-coded vendor paths
+
+Hard-coded vendored sources is not compatible with fetchCargoVendor.
+
+Signed-off-by: azban <me@azban.net>
+---
+ .cargo/config.toml.in | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/.cargo/config.toml.in b/.cargo/config.toml.in
+index d7d8ff4d4..e69de29bb 100644
+--- a/.cargo/config.toml.in
++++ b/.cargo/config.toml.in
+@@ -1,6 +0,0 @@
+-[source.crates-io]
+-registry = "https://github.com/rust-lang/crates.io-index"
+-@rust_vendor_sources@
+-
+-[source.vendored-sources]
+-directory = "./vendor"
+-- 
+2.51.2
+

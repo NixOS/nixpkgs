@@ -6,7 +6,11 @@
   libpng,
   udunits,
   netcdf,
-  xorg,
+  libxt,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,12 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     netcdf
     udunits
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXaw
-    xorg.libXt
+    libice
+    libsm
+    libx11
+    libxaw
+    libxt
   ];
+
+  # K&R-style declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   meta = {
     description = "Visual browser for netCDF format files";

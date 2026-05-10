@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "pyzy";
-  version = "1.1-unstable-2023-02-28";
+  version = "1.1-unstable-2026-02-28";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "pyzy";
-    rev = "ec719d053bd491ec64fe68fe0d1699ca6039ad80";
-    hash = "sha256-wU7EgP/CPNhBx9N7mOu0WdnoLazzpQtbRxmBKrTUbKM=";
+    rev = "5ac51d833777a881e80f0b23d704345cf0feb0d0";
+    hash = "sha256-OiFdog34kjmgF2DCnA8LjlZseZPQ8iCYQD4HZKNnCVU=";
   };
 
   nativeBuildInputs = [

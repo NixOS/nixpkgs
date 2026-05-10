@@ -8,30 +8,19 @@
   buildPythonPackage,
   setuptools,
   toml,
-  unittestCheckHook,
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "exiv2";
-  version = "0.17.5";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
-    tag = version;
-    hash = "sha256-MQNovei1Y8EZTF8hEyIWLaL2NbQPCB6FGbVfDHIvNVo=";
+    tag = finalAttrs.version;
+    hash = "sha256-3r0qGsCkfe2sQuXiCipXzW0vF2JRg77L1IcOiLTPslM=";
   };
-
-  # FAIL: test_localisation (test_types.TestTypesModule.test_localisation)
-  # FAIL: test_TimeValue (test_value.TestValueModule.test_TimeValue)
-  postPatch = ''
-    substituteInPlace tests/test_value.py \
-      --replace-fail "def test_TimeValue(self):" "@unittest.skip('skipping')
-        def test_TimeValue(self):"
-    substituteInPlace tests/test_types.py \
-      --replace-fail "def test_localisation(self):" "@unittest.skip('skipping')
-        def test_localisation(self):"
-  '';
 
   build-system = [
     setuptools
@@ -45,20 +34,15 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "exiv2" ];
-  nativeCheckInputs = [ unittestCheckHook ];
-  unittestFlagsArray = [
-    "-s"
-    "tests"
-    "-v"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Low level Python interface to the Exiv2 C++ library";
     homepage = "https://github.com/jim-easterbrook/python-exiv2";
-    changelog = "https://python-exiv2.readthedocs.io/en/release-${version}/misc/changelog.html";
+    changelog = "https://github.com/jim-easterbrook/python-exiv2/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ zebreus ];
   };
-}
+})

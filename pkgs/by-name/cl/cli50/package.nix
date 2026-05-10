@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cli50";
   version = "8.0.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "cli50";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0gu31NPql8pFPN4jFbPwYkQmF/rbrAai6EY1ZVfXLew=";
   };
 
@@ -38,10 +38,10 @@ python3Packages.buildPythonApplication rec {
     description = "Mount directories into cs50/cli containers";
     homepage = "https://cs50.readthedocs.io/cli50/";
     downloadPage = "https://github.com/cs50/cli50";
-    changelog = "https://github.com/cs50/cli50/releases/tag/v${version}";
+    changelog = "https://github.com/cs50/cli50/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "cli50";
   };
-}
+})

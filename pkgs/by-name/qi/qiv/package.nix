@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   gtk3,
   file,
@@ -13,8 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "qiv";
   version = "3.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ciberandy";
     repo = "qiv";
     tag = "v${finalAttrs.version}";

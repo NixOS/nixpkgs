@@ -6,23 +6,22 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  pkg-config,
-  openssl,
   testers,
+  cacert,
 }:
 
 let
   canRun = stdenv.hostPlatform.emulatorAvailable buildPackages;
   lychee = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lychee${stdenv.hostPlatform.extensions.executable}";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lychee";
-  version = "0.21.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
-    tag = "lychee-v${version}";
+    tag = "lychee-v${finalAttrs.version}";
     leaveDotGit = true;
     postFetch = ''
       GIT_DATE=$(git -C $out/.git show -s --format=%cs)
@@ -32,17 +31,16 @@ rustPlatform.buildRustPackage rec {
           '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
       rm -rf $out/.git
     '';
-    hash = "sha256-Nt7LsnQkWQS0f2/lS8WNYkI+XbKUSHQ6bNf9FNjfk7A=";
+    hash = "sha256-Rfdys16a4N6B3NsmPsB3OpKjLGElFYvd4UtiRipy8iQ=";
   };
 
-  cargoHash = "sha256-1sqFjNil6KktpqrsXXgt3xtOz7eFQc2skkFHqmTMDg4=";
+  cargoHash = "sha256-5KL/PmBSU8xkOE9/w7uUBkJSOBPsj3Z4o/2VmzA/f3Q=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
   ];
 
-  buildInputs = [ openssl ];
+  nativeCheckInputs = [ cacert ];
 
   postFixup = lib.optionalString canRun ''
     ${lychee} --generate man > lychee.1
@@ -55,8 +53,6 @@ rustPlatform.buildRustPackage rec {
     "--bins"
     "--tests"
   ];
-
-  checkType = "debug"; # compilation fails otherwise
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -89,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
-    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
+    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -100,4 +96,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "lychee";
   };
-}
+})

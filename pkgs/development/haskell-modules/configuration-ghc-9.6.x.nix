@@ -64,9 +64,10 @@ in
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
   # Becomes a core package in GHC >= 9.10
-  os-string = doDistribute self.os-string_2_0_8;
+  os-string = doDistribute self.os-string_2_0_10;
 
-  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  # Become core packages in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-experimental = null;
   ghc-internal = null;
   # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
   ghc-toolchain = null;
@@ -201,6 +202,7 @@ in
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = addBuildDepend self.extra super.ghc-exactprint_1_7_1_0;
 
+  ghc-lib = doDistribute self.ghc-lib_9_8_5_20250214;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   haddock-library = doJailbreak super.haddock-library;

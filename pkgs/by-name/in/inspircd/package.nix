@@ -149,15 +149,15 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inspircd";
-  version = "4.9.0";
+  version = "4.10.1";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
-    rev = "v${version}";
-    sha256 = "sha256-DoXf0F7tjfQZRFMrVECrlRlJLt7PymjwHSg9+4RLH00=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-5KQcVa/ktA3mil7fuBUj/98bAY5CsrJzSSqRB9Zk0Kk=";
   };
 
   outputs = [
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     # this manually sets the flags instead of using configureFlags, because otherwise stdenv passes flags like --bindir, which make configure fail
     ./configure \
       --disable-auto-extras \
-      --distribution-label nixpkgs${version} \
+      --distribution-label nixpkgs${finalAttrs.version} \
       --disable-ownership \
       --binary-dir  ${placeholder "bin"}/bin \
       --config-dir  /etc/inspircd \
@@ -253,4 +253,4 @@ stdenv.mkDerivation rec {
     # in binary form. They can be built locally of course.
     hydraPlatforms = [ ];
   };
-}
+})

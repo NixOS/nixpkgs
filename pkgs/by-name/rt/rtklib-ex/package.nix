@@ -9,14 +9,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtklib-ex";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "rtklibexplorer";
     repo = "RTKLIB";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j00VEQvxOiAc3EQX3x2b3RxYkbtvCZ17ugnW6b6ChWU=";
   };
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open Source Program Package for GNSS Positioning";
     homepage = "https://rtkexplorer.com";
-    changelog = "https://github.com/rtklibexplorer/RTKLIB/releases/tag/${src.tag}";
+    changelog = "https://github.com/rtklibexplorer/RTKLIB/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.skaphi ];
     platforms = lib.platforms.linux;
   };
-}
+})

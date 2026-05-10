@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "charm";
   version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "charm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-RtUHJIMbodICEDIhjH/QZlAS7dxBsL/uNYA2IoObAg0=";
   };
 
@@ -20,15 +20,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Manage your charm account on the CLI";
     homepage = "https://github.com/charmbracelet/charm";
-    changelog = "https://github.com/charmbracelet/charm/releases/tag/v${version}";
+    changelog = "https://github.com/charmbracelet/charm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "charm";
   };
-}
+})

@@ -4,6 +4,7 @@
   autoreconfHook,
   buildEnv,
   fetchFromGitHub,
+  fetchpatch,
   perl,
   perlPackages,
   makeWrapper,
@@ -11,13 +12,13 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rt";
   version = "5.0.8";
 
   src = fetchFromGitHub {
     repo = "rt";
-    rev = "rt-${version}";
+    rev = "rt-${finalAttrs.version}";
     owner = "bestpractical";
     hash = "sha256-4/iC1PjLgLAp7XWTafe8HW3bTkDWWQxtSEIOs8wluzE=";
   };
@@ -25,6 +26,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-check-users_groups.patch # needed for "make testdeps" to work in the build
     ./override-generated.patch
+    # Fix "Wide character in subroutine entry" crash on every request
+    # merged upstream
+    (fetchpatch {
+      url = "https://github.com/bestpractical/rt/commit/f8f03dd6e69dfbf4eb71e3ded0f793af4721a06d.patch";
+      hash = "sha256-Mk8ve8n5tgyyHT7RAt2o+QnUlcYNOu95lNjku6VgXS0=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -133,7 +140,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    echo rt-${version} > .tag
+    echo rt-${finalAttrs.version} > .tag
   '';
   preConfigure = ''
     appendToVar configureFlags "--with-web-user=$UID"
@@ -178,4 +185,4 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = lib.platforms.unix;
   };
-}
+})

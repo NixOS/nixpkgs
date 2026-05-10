@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tenki";
   version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "ckaznable";
     repo = "tenki";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jd7D0iC3+s3w6uG0WqlvL9F4xQL+cQzsUvAIOc7ORgw=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "tenki";
   };
-}
+})

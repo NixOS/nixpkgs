@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   packaging,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "requirements-parser";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "madpah";

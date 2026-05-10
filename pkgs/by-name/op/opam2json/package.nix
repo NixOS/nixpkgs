@@ -5,21 +5,21 @@
   opam-installer,
   ocamlPackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opam2json";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "opam2json";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5pXfbUfpVABtKbii6aaI2EdAZTjHJ2QntEf0QD2O5AM=";
   };
 
   buildInputs = with ocamlPackages; [
     yojson
     opam-file-format
-    cmdliner
+    cmdliner_1
   ];
   nativeBuildInputs = with ocamlPackages; [
     ocaml
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     homepage = "https://github.com/tweag/opam2json";
   };
-}
+})

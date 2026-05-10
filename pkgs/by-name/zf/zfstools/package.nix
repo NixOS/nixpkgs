@@ -8,13 +8,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zfstools";
   version = "0.3.6";
 
   src = fetchFromGitHub {
     sha256 = "16lvw3xbmxp2pr8nixqn7lf4504zaaxvbbdnjkv4dggwd4lsdjyg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "zfstools";
     owner = "bdrewery";
   };
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
-    inherit (src.meta) homepage;
+    inherit (finalAttrs) version;
+    inherit (finalAttrs.src.meta) homepage;
     description = "OpenSolaris-compatible auto-snapshotting script for ZFS";
     longDescription = ''
       zfstools is an OpenSolaris-like and compatible auto snapshotting script
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

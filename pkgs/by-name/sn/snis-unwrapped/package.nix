@@ -8,7 +8,7 @@
   libbsd,
   libpng,
   libvorbis,
-  libX11,
+  libx11,
   sdl2-compat,
   makeWrapper,
   lua5_2,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbsd
     libpng
     libvorbis
-    libX11
+    libx11
     sdl2-compat
     lua5_2
     glew

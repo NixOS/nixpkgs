@@ -10,14 +10,14 @@
   avahi,
   jack2,
   libxcb,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
+  libxxf86vm,
   libglvnd,
   zenity,
 }:
@@ -28,14 +28,14 @@ let
     avahi
     jack2
     libxcb
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxxf86vm
     libglvnd
   ];
 
@@ -46,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "touchosc";
-  version = "1.4.5.238";
+  version = "1.4.9.248";
 
   suffix =
     {
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-ITuIQfBw5LIN3sc11G78Pd5Ca4KDqxPhc9ArpGKBNzo=";
-        armv7l-linux = "sha256-DF7jTVp5Xieop6Q/EVznQmDlFFA5qaizXAoNwCXs/Hc=";
-        x86_64-linux = "sha256-6KpdwGXbyYwT0VhwPS9yP0c6HXUjKkGGmvZDiwQvlBw=";
+        aarch64-linux = "sha256-IKk688XFTx1rHEF03uHZ3cN60GwwIlf/FK4mJ0c/PqM=";
+        armv7l-linux = "sha256-li1BLZ6/6OJzsCIN2T3V4vEVXfa9GH6PiFkm6lUl4Ec=";
+        x86_64-linux = "sha256-NM9v+wyLNnwNw4qY6jDPB9ig/GZfzzrDshMSmi/yvCM=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };

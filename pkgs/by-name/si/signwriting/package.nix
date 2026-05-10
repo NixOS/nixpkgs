@@ -4,8 +4,11 @@
   fetchurl,
 }:
 
-runCommand "signwriting-1.1.4"
+runCommand "signwriting"
   {
+    pname = "signwriting";
+    version = "1.1.4";
+
     src1 = fetchurl {
       url = "https://github.com/Slevinski/signwriting_2010_fonts/raw/61c8e7123a1168657b5d34d85266a637f67b9d2b/fonts/SignWriting%202010.ttf";
       name = "SignWriting_2010.ttf";

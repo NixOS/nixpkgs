@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -124,6 +125,10 @@ buildPythonPackage rec {
 
     # AttributeError: 'NoneType' object has no attribute 'plugin_manager'
     "test_missing_message"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TimeoutError: rope/autoimport is slow under Nix's fs isolation on darwin
+    "test_autoimport_code_actions_and_completions_for_notebook_document"
   ];
 
   pythonImportsCheck = [

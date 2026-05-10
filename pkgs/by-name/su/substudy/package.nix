@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "substudy";
   version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "emk";
     repo = "subtitles-rs";
-    rev = "substudy_v${version}";
+    rev = "substudy_v${finalAttrs.version}";
     hash = "sha256-ACYbSQKaOJ2hS8NbOAppfKo+Mk3CKg0OAwb56AH42Zs=";
   };
 
@@ -25,6 +25,11 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [ ffmpeg ];
 
   cargoBuildFlags = [ "-p substudy" ];
+
+  checkFlags = [
+    # flaky: relies on sqlite ms timestamps differing across 3 quick inserts
+    "--skip=cache::tests::test_cache"
+  ];
 
   preCheck = ''
     # That's to make sure the `test_ai_request_static`
@@ -44,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "substudy";
     maintainers = [ ];
   };
-}
+})

@@ -18,7 +18,6 @@
   pyarrow,
   pytestCheckHook,
   python-snappy,
-  pythonOlder,
   pythonAtLeast,
   pyyaml,
   networkx,
@@ -30,16 +29,14 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "2.0.8";
+  version = "2.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake";
     tag = version;
-    hash = "sha256-Mjf4CKLFrIti9pFP6HTt1D/iYw0WMowLIfMdfM7Db+E=";
+    hash = "sha256-DiALGrJP4vLWygzZprjYCFM+TYtMS7NVM3+MTyjzcs0=";
   };
 
   nativeBuildInputs = [

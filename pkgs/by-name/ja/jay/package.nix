@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   libGL,
@@ -9,29 +10,29 @@
   libgbm,
   pango,
   udev,
-  shaderc,
   libglvnd,
   vulkan-loader,
   autoPatchelfHook,
+  installShellFiles,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
-    rev = "v${version}";
-    sha256 = "sha256-mm2bXxl9TaKwmeCwFz3IKznqjsfY8RKEVU/RK4zd63U=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-JOt3xEONGDmLovk72hX0d3De01zTd51d2/J4HziBE9I=";
   };
 
-  cargoHash = "sha256-T7053eAH3IqkAxNZpYHdC6Z7JZtArrOqGMjoIccjemI=";
-
-  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  cargoHash = "sha256-wK9v3YwP067etFAu6Ca9Sts+QrD4uL48chbL6tZKFkk=";
 
   nativeBuildInputs = [
     autoPatchelfHook
+    installShellFiles
     pkgconf
   ];
 
@@ -42,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     pango
     udev
     libinput
-    shaderc
   ];
 
   runtimeDependencies = [
@@ -53,7 +53,19 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -D etc/jay.portal $out/share/xdg-desktop-portal/portals/jay.portal
     install -D etc/jay-portals.conf $out/share/xdg-desktop-portal/jay-portals.conf
+    install -D etc/jay.desktop $out/share/wayland-sessions/jay.desktop
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jay \
+      --bash <("$out/bin/jay" generate-completion bash) \
+      --zsh <("$out/bin/jay" generate-completion zsh) \
+      --fish <("$out/bin/jay" generate-completion fish)
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    providedSessions = [ "jay" ];
+  };
 
   meta = {
     description = "Wayland compositor written in Rust";
@@ -63,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "jay";
   };
-}
+})

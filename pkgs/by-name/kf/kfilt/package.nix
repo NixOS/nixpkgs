@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kfilt";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ryane";
     repo = "kfilt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2lPYrztj2SFnfQ10Y6xKtWq2wekqYT5lF4VPLjS1pXs=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ryane/kfilt/cmd.Version=${version}"
-    "-X github.com/ryane/kfilt/cmd.GitCommit=${src.rev}"
+    "-X github.com/ryane/kfilt/cmd.Version=${finalAttrs.version}"
+    "-X github.com/ryane/kfilt/cmd.GitCommit=${finalAttrs.src.rev}"
   ];
 
   meta = {
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ryane ];
   };
-}
+})

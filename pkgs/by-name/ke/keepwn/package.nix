@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "keepwn";
   version = "0.5";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "KeePwn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-z2+l7zOexcqbwkrdmB3EcYIjnGlproINF51Pcpp7Nz4=";
   };
 
@@ -41,9 +41,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to automate KeePass discovery and secret extraction";
     homepage = "https://github.com/Orange-Cyberdefense/KeePwn";
-    changelog = "https://github.com/Orange-Cyberdefense/KeePwn/releases/tag/${version}";
+    changelog = "https://github.com/Orange-Cyberdefense/KeePwn/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "keepwn";
   };
-}
+})

@@ -83,7 +83,7 @@ in
           type = types.int;
           default = 4;
           example = 6;
-          description = ''Number of waitress threads to start.'';
+          description = "Number of waitress threads to start.";
         };
 
         settings = mkOption {
@@ -94,13 +94,13 @@ in
                 type = types.str;
                 default = "szurubooru";
                 example = "Szuru";
-                description = ''Name shown in the website title and on the front page.'';
+                description = "Name shown in the website title and on the front page.";
               };
 
               domain = mkOption {
                 type = types.str;
                 example = "http://example.com";
-                description = ''Full URL to the homepage of this szurubooru site (with no trailing slash).'';
+                description = "Full URL to the homepage of this szurubooru site (with no trailing slash).";
               };
 
               # NOTE: this is not a real upstream option
@@ -119,7 +119,7 @@ in
                 ];
                 default = "no";
                 example = "yes";
-                description = ''Whether to delete thumbnails and source files on post delete.'';
+                description = "Whether to delete thumbnails and source files on post delete.";
               };
 
               smtp = {
@@ -127,21 +127,21 @@ in
                   type = types.nullOr types.str;
                   default = null;
                   example = "localhost";
-                  description = ''Host of the SMTP server used to send reset password.'';
+                  description = "Host of the SMTP server used to send reset password.";
                 };
 
                 port = mkOption {
                   type = types.nullOr types.port;
                   default = null;
                   example = 25;
-                  description = ''Port of the SMTP server.'';
+                  description = "Port of the SMTP server.";
                 };
 
                 user = mkOption {
                   type = types.nullOr types.str;
                   default = null;
                   example = "bot";
-                  description = ''User to connect to the SMTP server.'';
+                  description = "User to connect to the SMTP server.";
                 };
 
                 # NOTE: this is not a real upstream option
@@ -149,7 +149,7 @@ in
                   type = types.nullOr types.path;
                   default = null;
                   example = "/run/secrets/szurubooru-smtp-pass";
-                  description = ''File containing the password associated to the given user for the SMTP server.'';
+                  description = "File containing the password associated to the given user for the SMTP server.";
                 };
               };
 
@@ -158,7 +158,7 @@ in
                 default = "${cfg.server.settings.domain}/data/";
                 defaultText = lib.literalExpression ''"''${services.szurubooru.server.settings.domain}/data/"'';
                 example = "http://example.com/content/";
-                description = ''Full URL to the data endpoint.'';
+                description = "Full URL to the data endpoint.";
               };
 
               data_dir = mkOption {
@@ -166,21 +166,21 @@ in
                 default = "${cfg.dataDir}/data";
                 defaultText = lib.literalExpression ''"''${services.szurubooru.dataDir}/data"'';
                 example = "/srv/szurubooru/data";
-                description = ''Path to the static files.'';
+                description = "Path to the static files.";
               };
 
               debug = mkOption {
                 type = types.int;
                 default = 0;
                 example = 1;
-                description = ''Whether to generate server logs.'';
+                description = "Whether to generate server logs.";
               };
 
               show_sql = mkOption {
                 type = types.int;
                 default = 0;
                 example = 1;
-                description = ''Whether to show SQL in server logs.'';
+                description = "Whether to show SQL in server logs.";
               };
             };
           };
@@ -203,13 +203,13 @@ in
           type = types.str;
           default = "localhost";
           example = "192.168.1.2";
-          description = ''Host on which the PostgreSQL database runs.'';
+          description = "Host on which the PostgreSQL database runs.";
         };
 
         port = mkOption {
           type = types.port;
           default = 5432;
-          description = ''The port under which PostgreSQL listens to.'';
+          description = "The port under which PostgreSQL listens to.";
         };
 
         name = mkOption {
@@ -217,20 +217,20 @@ in
           default = cfg.database.user;
           defaultText = lib.literalExpression "szurubooru.database.name";
           example = "szuru";
-          description = ''Name of the PostgreSQL database.'';
+          description = "Name of the PostgreSQL database.";
         };
 
         user = mkOption {
           type = types.str;
           default = "szurubooru";
           example = "szuru";
-          description = ''PostgreSQL user.'';
+          description = "PostgreSQL user.";
         };
 
         passwordFile = mkOption {
           type = types.path;
           example = "/run/secrets/szurubooru-db-password";
-          description = ''A file containing the password for the PostgreSQL user.'';
+          description = "A file containing the password for the PostgreSQL user.";
         };
       };
     };

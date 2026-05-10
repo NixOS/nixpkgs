@@ -70,7 +70,7 @@ buildPythonPackage {
   dontBuild = true;
   doCheck = false;
 
-  format = "other";
+  pyproject = false;
 
   installPhase = ''
     mkdir -p $out/share $out/bin

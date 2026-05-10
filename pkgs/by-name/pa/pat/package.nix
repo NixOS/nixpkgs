@@ -7,18 +7,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pat";
-  version = "0.19.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "la5nta";
     repo = "pat";
-    rev = "v${version}";
-    hash = "sha256-hpbSjxePAXuqQAlNTAfknh+noZgdILtNG57OWVJO02M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AYaHslPYNSl/s0d7gBxmC7IRvDGEezxzbABJSgRFuPg=";
   };
 
-  vendorHash = "sha256-8XPnY99arnDDeGlzPv4sw6pwxXkSsxSzNFtz+IeKeq4=";
+  vendorHash = "sha256-HkCXbJJFOlcp0Q9XcM1HC64EDWe/rn/nMpdpNOpgYFM=";
 
   ldflags = [
     "-s"
@@ -48,4 +48,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "pat";
   };
-}
+})

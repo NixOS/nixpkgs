@@ -6,14 +6,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-packet-sd";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "packethost";
     repo = "prometheus-packet-sd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2k8AsmyhQNNZCzpVt6JdgvI8IFb5pRi4ic6Yn2NqHMM=";
   };
 
@@ -49,4 +49,4 @@ buildGoModule rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -4,15 +4,12 @@
   buildPythonPackage,
   click,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "click-help-colors";
   version = "0.9.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

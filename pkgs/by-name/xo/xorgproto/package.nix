@@ -12,19 +12,16 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorgproto";
-  version = "2024.1";
+  version = "2025.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/proto/xorgproto-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NyIl/UCBW4QjVH9diQxd68cuiLkQiPv7ExWMIElcy1k=";
+    hash = "sha256-VomMcWwFeN+KLYKMnD5cUoJ3cFwEhDgagZYP4aZ2aOg=";
   };
 
   patches = [
     # small fix for mingw
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/meson.patch?h=mingw-w64-xorgproto&id=7b817efc3144a50e6766817c4ca7242f8ce49307";
-      sha256 = "sha256-Izzz9In53W7CC++k1bLr78iSrmxpFm1cH8qcSpptoUQ=";
-    })
+    ./meson.patch
   ];
 
   strictDeps = true;
@@ -36,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  # adds support for printproto needed for libXp
+  # adds support for printproto needed for libxp
   mesonFlags = [ "-Dlegacy=true" ];
 
   passthru = {

@@ -11,7 +11,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flips";
   version = "198";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "git.disroot.org";
     owner = "Sir_Walrus";
     repo = "Flips";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zYGDcUbtzstk1sTKgX2Mna0rzH7z6Dic+OvjZLI1umI=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "flips";
   };
-}
+})

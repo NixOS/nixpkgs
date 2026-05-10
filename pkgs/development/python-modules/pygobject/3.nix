@@ -11,7 +11,6 @@
   ncurses,
   meson,
   ninja,
-  pythonOlder,
   gnome,
   python,
 }:
@@ -25,9 +24,7 @@ buildPythonPackage rec {
     "dev"
   ];
 
-  disabled = pythonOlder "3.9";
-
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";
@@ -53,6 +50,12 @@ buildPythonPackage rec {
     pycairo
     gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
+
+  # Fixes https://github.com/NixOS/nixpkgs/issues/378447
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+    export PKG_CONFIG_PATH=${lib.getDev python}/lib/pkgconfig:$PKG_CONFIG_PATH
+    export PKG_CONFIG_PATH_FOR_BUILD=${lib.getDev python}/lib/pkgconfig:$PKG_CONFIG_PATH_FOR_BUILD
+  '';
 
   mesonFlags = [
     # This is only used for figuring out what version of Python is in

@@ -10,16 +10,16 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ecdsa";
-  version = "0.19.1";
+  version = "0.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlsfuzzer";
     repo = "python-ecdsa";
-    tag = "python-ecdsa-${version}";
-    hash = "sha256-PjOjHQziQ9ohXH82Ocaowj/AtsXHMHDhatFPQNccyC8=";
+    tag = "python-ecdsa-${finalAttrs.version}";
+    hash = "sha256-u+EwAF/EnF33l/gy5y8eoA7aVeI/0cq9DDL9UUwgPFw=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/tlsfuzzer/python-ecdsa/blob/${src.tag}/NEWS";
+    changelog = "https://github.com/tlsfuzzer/python-ecdsa/blob/${finalAttrs.src.tag}/NEWS";
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
     license = lib.licenses.mit;
@@ -51,4 +51,4 @@ buildPythonPackage rec {
       "CVE-2024-23342"
     ];
   };
-}
+})

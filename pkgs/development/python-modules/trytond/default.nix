@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   defusedxml,
   lxml,
@@ -30,14 +29,12 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.8.1";
+  version = "7.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F2sb3JgbNjbmgS5o9vUCWOBgII4Vv2E8Ml6ijTQA8D8=";
+    hash = "sha256-9X7/+cP4rKUJcfj3wa3ONyMkpXaHz36hrIZxeGvOpp4=";
   };
 
   build-system = [ setuptools ];

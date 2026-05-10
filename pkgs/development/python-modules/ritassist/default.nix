@@ -4,7 +4,6 @@
   ciso8601,
   fetchPypi,
   geopy,
-  pythonOlder,
   requests,
   sseclient,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "ritassist";
   version = "0.9.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

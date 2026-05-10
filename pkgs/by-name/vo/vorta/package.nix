@@ -9,7 +9,7 @@
   makeFontsConf,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vorta";
   version = "0.11.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/60KVJGKNz3aouv5jzubFlz+AxPEbRDSv4ZO9MEi3V0=";
   };
 
@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/borgbase/vorta/releases/tag/v${version}";
+    changelog = "https://github.com/borgbase/vorta/releases/tag/v${finalAttrs.version}";
     description = "Desktop Backup Client for Borg";
     homepage = "https://vorta.borgbase.com/";
     license = lib.licenses.gpl3Only;
@@ -103,4 +103,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "vorta";
   };
-}
+})

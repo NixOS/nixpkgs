@@ -5,15 +5,12 @@
   aiohttp,
   async-timeout,
   xmltodict,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymetno";
   version = "0.13.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
@@ -38,6 +35,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     changelog = "https://github.com/Danielhiversen/pyMetno/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

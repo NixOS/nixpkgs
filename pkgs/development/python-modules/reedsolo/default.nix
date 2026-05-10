@@ -11,16 +11,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reedsolo";
   version = "1.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   # Pypi does not have the tests
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "reedsolomon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nzdD1oGXHSeGDD/3PpQQEZYGAwn9ahD2KNYGqpgADh0=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ yorickvp ];
   };
-}
+})

@@ -10,7 +10,7 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectre-cli";
   version = "unstable-2022-02-05";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
 
      # The default buildPhase wants to create a ´build´ dir so we rename the build script to stop conflicts.
      mv build build.sh
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     mainProgram = "spectre";
     platforms = lib.platforms.all;
   };
-}
+})

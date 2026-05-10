@@ -6,14 +6,14 @@
   lib,
 }:
 
-stdenv.mkDerivation (attrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Nuget";
   version = "6.6.1.2";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "linux-packaging-nuget";
-    rev = "upstream/${attrs.version}.bin";
+    rev = "upstream/${finalAttrs.version}.bin";
     hash = "sha256-9/dSeVshHbpYIgGE/8OzrB4towrWVB3UxDi8Esmbu7Y=";
   };
 
@@ -24,14 +24,14 @@ stdenv.mkDerivation (attrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/${attrs.pname}
-    cp -r . $out/lib/${attrs.pname}/
+    mkdir -p $out/lib/${finalAttrs.pname}
+    cp -r . $out/lib/${finalAttrs.pname}/
 
     mkdir -p $out/bin
     makeWrapper \
       "${mono}/bin/mono" \
       "$out/bin/nuget" \
-      --add-flags "$out/lib/${attrs.pname}/nuget.exe"
+      --add-flags "$out/lib/${finalAttrs.pname}/nuget.exe"
 
     runHook postInstall
   '';

@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/obob/pymatreader/";
     changelog = "https://gitlab.com/obob/pymatreader/-/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

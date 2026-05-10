@@ -6,9 +6,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "rkboot";
-
-  src = rkbin.src;
+  pname = "rkboot";
+  inherit (rkbin) src version;
 
   postPatch = ''
     substituteInPlace RKBOOT/*.ini --replace 'PATH=' 'PATH=rkboot/'

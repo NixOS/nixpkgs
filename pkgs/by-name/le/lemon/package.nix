@@ -8,13 +8,13 @@ let
 
   srcs = {
     lemon = fetchurl {
-      sha256 = "1c5pk2hz7j9hix5mpc38rwnm8dnlr2jqswf4lan6v78ccbyqzkjx";
-      url = "http://www.sqlite.org/src/raw/tool/lemon.c?name=680980c7935bfa1edec20c804c9e5ba4b1dd96f5";
+      hash = "sha256-TXVOEtRpOhLCyi4C3RMt0lHmMp/y2K5YdL8ND6WPrOY=";
+      url = "https://www.sqlite.org/src/raw/3fdc16b23f1ea0c91c049b518fc3f75c71843dbfe2b447fcb3cd92d9e4f219f8?at=lemon.c";
       name = "lemon.c";
     };
     lempar = fetchurl {
-      sha256 = "1ba13a6yh9j2cs1aw2fh4dxqvgf399gxq1gpp4sh8q0f2w6qiw3i";
-      url = "http://www.sqlite.org/src/raw/tool/lempar.c?name=01ca97f87610d1dac6d8cd96ab109ab1130e76dc";
+      hash = "sha256-TYKrUJHtpoljeRWZq4Y1rYLlu7LeM/HuUhe3LJZZkVo=";
+      url = "https://www.sqlite.org/src/raw/b57e1780bf8098dd4a9a5bba537f994276ea825a420f6165153e5894dc2dfb07?at=lempar.c";
       name = "lempar.c";
     };
   };
@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "lemon";
-  version = "1.69";
+  version = "1.0-unstable";
 
   dontUnpack = true;
 

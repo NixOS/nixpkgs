@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pass-file";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "dvogt23";
-    repo = pname;
-    rev = version;
+    repo = "pass-file";
+    tag = finalAttrs.version;
     hash = "sha256-18KvmcfLwelyk9RV/IMaj6O/nkQEQz84eUEB/mRaKE4=";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ taranarmo ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -56,7 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap -lseccomp";
+  env.NIX_LDFLAGS = toString [
+    "-lcrypt"
+    "-lssl"
+    "-lcrypto"
+    "-lpam"
+    "-lcap"
+    "-lseccomp"
+  ];
 
   enableParallelBuilding = true;
 

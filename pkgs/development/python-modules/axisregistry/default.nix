@@ -5,7 +5,6 @@
   fonttools,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "axisregistry";
   version = "0.4.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

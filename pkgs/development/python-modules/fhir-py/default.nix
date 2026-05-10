@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
   aiohttp,
   pytz,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "fhir-py";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "beda-software";

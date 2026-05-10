@@ -6,14 +6,14 @@
   fetchFromGitHub,
   kdePackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kdiskmark";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-b42PNUrG10RyGct6dPtdT89oO222tEovkSPoRcROfaQ=";
     fetchSubmodules = true;
   };
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "kdiskmark";
   };
-}
+})

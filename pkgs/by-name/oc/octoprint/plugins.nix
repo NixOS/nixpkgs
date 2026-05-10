@@ -513,7 +513,7 @@ in
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-STLViewer";
-      rev = "refs/tags/${version}";
+      tag = version;
       sha256 = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
     };
 

@@ -20,16 +20,16 @@
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "variety";
-  version = "0.8.13";
+  version = "0.9.0-b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    tag = version;
-    hash = "sha256-7CTJ3hWddbOX/UfZ1qX9rPNGTfkxQ4pxu23sq9ulgv4=";
+    tag = finalAttrs.version;
+    hash = "sha256-uDQZfWY0RuTsdD/IxpjzSTMMtNq632VAwAjB+CeUIbw=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,10 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ lib.optional appindicatorSupport libayatana-appindicator;
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-gettext
+  ];
 
   dependencies =
     with python3Packages;
@@ -77,15 +80,21 @@ python3Packages.buildPythonApplication rec {
   '';
 
   prePatch = ''
-    substituteInPlace variety_lib/varietyconfig.py \
-      --replace-fail "__variety_data_directory__ = \"../data\"" \
-                "__variety_data_directory__ = \"$out/share/variety\""
     substituteInPlace variety/VarietyWindow.py \
       --replace-fail '[script,' '["${runtimeShell}", script,' \
-      --replace-fail 'check_output(script)' 'check_output(["${runtimeShell}", script])'
+      --replace-fail 'check_output(script)' 'check_output(["${runtimeShell}", script])' \
+      --replace-fail 'os.stat(path).st_mode | stat.S_IEXEC' 'os.stat(path).st_mode | stat.S_IEXEC | stat.S_IWUSR'
     substituteInPlace data/variety-autostart.desktop.template \
       --replace-fail "/bin/bash" "${lib.getExe bash}" \
       --replace-fail "{VARIETY_PATH}" "variety"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/applications
+    intltool-merge --desktop-style po variety.desktop.in $out/share/applications/variety.desktop
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp variety/data/icons/scalable/apps/variety.svg $out/share/icons/hicolor/scalable/apps/variety.svg
   '';
 
   pythonImportsCheck = [ "variety" ];
@@ -110,6 +119,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       p3psi
       zfnmxt
+      willfish
     ];
   };
-}
+})

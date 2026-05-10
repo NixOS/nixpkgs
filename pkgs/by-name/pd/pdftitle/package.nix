@@ -8,7 +8,7 @@
   withOpenai ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdftitle";
   version = "0.20";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "metebalci";
     repo = "pdftitle";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-05SaAXYJ7l0ZldYufj0x9mYRwwGT7vlmq9a+ZF4pYiA=";
   };
 
@@ -35,9 +35,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Utility to extract the title from a PDF file";
     homepage = "https://github.com/metebalci/pdftitle";
-    changelog = "https://github.com/metebalci/pdftitle/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/metebalci/pdftitle/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dansbandit ];
     mainProgram = "pdftitle";
   };
-}
+})

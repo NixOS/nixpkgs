@@ -91,6 +91,8 @@ let
           "chromadb/test/db/test_migrations.py::test_migrations[sqlite]"
         ];
       });
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
     };
   };
 in
@@ -204,6 +206,9 @@ python.pkgs.buildPythonApplication rec {
     "test_get_reranker"
     "test_query_tool_success"
     "test_supported_rerankers_initialization"
+    # tree-sitter-language-pack 1.x.x raises LanguageNotFoundError for unknown
+    # languages here, while this test still expects LookupError.
+    "test_treesitter_chunker_parser_from_config_no_parser_found_error"
   ];
 
   passthru = {

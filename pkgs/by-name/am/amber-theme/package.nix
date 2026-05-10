@@ -11,14 +11,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amber-theme";
   version = "3.38-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "amber-theme";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-OrdBeAD+gdIu6u8ESE9PtqYadSuJ8nx1Z8fB4D9y4W4=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

@@ -5,18 +5,18 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gatus";
-  version = "5.33.1";
+  version = "5.35.0";
 
   src = fetchFromGitHub {
     owner = "TwiN";
     repo = "gatus";
-    rev = "v${version}";
-    hash = "sha256-m7dOgxk1EuyqIuVK4ZDimqZX015Osk5FF+0/SFAkp90=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-I1HjeJ4/yLLgcoIEOQCv3WQDNrpIAFhzDvVpz24T7gU=";
   };
 
-  vendorHash = "sha256-T4BPCDYR/f2rInLNytaVibE2hKWsIYqpJw9asY0TbvY=";
+  vendorHash = "sha256-PBy/0My0TdlolpagDSdt7r2dPPLJOVHEsU1xaV8RFjg=";
 
   subPackages = [ "." ];
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ undefined-moe ];
     mainProgram = "gatus";
   };
-}
+})

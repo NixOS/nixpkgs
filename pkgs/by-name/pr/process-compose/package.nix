@@ -10,13 +10,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "process-compose";
-  version = "1.85.0";
+  version = "1.110.0";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = "process-compose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8nNvlTl4qUtlNV2ebsObssYRPepPL//fe26y/wY93l4=";
+    hash = "sha256-kKb7CFjjvgmRTVgYKXM/EP/ti8OFhlFGcATqZcYHxOI=";
 
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -46,7 +46,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  vendorHash = "sha256-uZFwiYTkx9TE6T0UJ+EUF8zqP4/8vWYoN+frD6KvQC0=";
+  vendorHash = "sha256-dNSf2CJQRJAZiIimriYqlqwcaD1NQg7a1qFPMzEsrgw=";
 
   doCheck = false;
 

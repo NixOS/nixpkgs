@@ -5,14 +5,14 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "python-launcher";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "brettcannon";
     repo = "python-launcher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wRKTBvLLo0Vvvh1GtF9hOnUHNpOeX950y1U+8JYBGoE=";
   };
 
@@ -25,9 +25,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Implementation of the `py` command for Unix-based platforms";
     homepage = "https://github.com/brettcannon/python-launcher";
-    changelog = "https://github.com/brettcannon/python-launcher/releases/tag/v${version}";
+    changelog = "https://github.com/brettcannon/python-launcher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "py";
   };
-}
+})

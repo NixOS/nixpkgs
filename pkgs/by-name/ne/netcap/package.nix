@@ -40,22 +40,27 @@ buildGoModule (finalAttrs: {
   ];
 
   ldflags = [
-    "-s -w"
+    "-s"
+    "-w"
   ];
 
   tags = lib.optionals (!withDpi) [
     "nodpi"
   ];
 
-  CGO_LDFLAGS = lib.optionalString withDpi ''
-    -L${ndpi}/lib -lndpi
-    -L${libprotoident}/lib -lndpi
-  '';
+  env = lib.optionalAttrs withDpi {
+    CGO_LDFLAGS = toString [
+      "-L${ndpi}/lib"
+      "-lndpi"
+      "-L${libprotoident}/lib"
+      "-lndpi"
+    ];
 
-  CGO_CFLAGS = lib.optionalString withDpi ''
-    -I${ndpi}/include
-    -I${libprotoident}/include
-  '';
+    CGO_CFLAGS = toString [
+      "-I${ndpi}/include"
+      "-I${libprotoident}/include"
+    ];
+  };
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/net

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   # build inputs
   typing-extensions,
@@ -14,8 +13,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

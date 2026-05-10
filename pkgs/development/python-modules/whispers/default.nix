@@ -12,7 +12,6 @@
   lxml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semgrep,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "whispers";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.1";
 
   src = fetchFromGitHub {
     owner = "adeptex";

@@ -22,7 +22,7 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "roc-toolkit";
   version = "0.4.0";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "roc-streaming";
     repo = "roc-toolkit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-53irDq803dTg0YqtC1SOXmYNGypSMAEK+9HJ65pR5PA=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bgamari ];
     platforms = lib.platforms.unix;
   };
-}
+})

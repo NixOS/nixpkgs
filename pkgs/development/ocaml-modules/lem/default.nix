@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rems-project/lem";
     description = "Tool for lightweight executable mathematics";
     mainProgram = "lem";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = with lib.licenses; [
       bsd3
       gpl2

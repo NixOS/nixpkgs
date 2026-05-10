@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   starlette,
   trio,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "respx";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lundberg";

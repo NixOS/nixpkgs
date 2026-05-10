@@ -122,6 +122,13 @@ let
 
       cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
 
+      cl-project = super.cl-project.overrideLispAttrs {
+        # install skeleton.asd
+        postInstall = ''
+          cp -v skeleton/skeleton.asd $out/skeleton
+        '';
+      };
+
       lessp = build-asdf-system {
         pname = "lessp";
         version = "0.2-f8a9e4664";
@@ -239,7 +246,7 @@ let
         pname = "clx-truetype";
         version = "20160825-git";
         src = pkgs.fetchzip {
-          url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+          url = "https://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
           sha256 = "079hyp92cjkdfn6bhkxsrwnibiqbz4y4af6nl31lzw6nm91j5j37";
         };
         lispLibs = with self; [
@@ -472,7 +479,7 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "fukamachi";
           repo = "qlot";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
         };
 

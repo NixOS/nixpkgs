@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "google-cloud-bigtable-tool";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "cloud-bigtable-cbt-cli";
-    rev = "v.${version}";
+    rev = "v.${finalAttrs.version}";
     hash = "sha256-N5nbWMj7kLIdRiwBUWFz4Rat88Wx01i3hceMxAvSjaA=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ totoroot ];
     mainProgram = "cbt";
   };
-}
+})

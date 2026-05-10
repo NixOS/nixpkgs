@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-irregex";
-  version = "0.9.11";
+  version = "0.9.12";
 
   src = fetchzip {
     url = "https://synthcode.com/scheme/irregex/irregex-${finalAttrs.version}.tar.gz";
-    hash = "sha256-abBCMNsr6GTBOm+eQWuOX8JYx/qMA/V6TwGdYRjznWU=";
+    hash = "sha256-Iwt6mdgp5d0q2hweU2+9dPLs8j4Jd4GOdZvfvTe8Uvw=";
   };
 
   strictDeps = true;

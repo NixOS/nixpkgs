@@ -21,15 +21,15 @@
   itstool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xed-editor";
-  version = "3.8.7";
+  version = "3.8.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
-    rev = version;
-    hash = "sha256-Vl2yf4PlREvyAY/lRP+nB47GEuuyYeLnBARKhDEfG4M=";
+    rev = finalAttrs.version;
+    hash = "sha256-ZTrTCyyyUDbt+/kjb1+I/bOjwXcsYGYd5K9ebPjJTA8=";
   };
 
   patches = [
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "xed";
   };
-}
+})

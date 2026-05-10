@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emplace";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "tversteeg";
     repo = "emplace";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-FZ+lvf5HRSruUdmkm/Hqz0aRa95SjfIa43WQczRCGNg=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Plus;
     mainProgram = "emplace";
   };
-}
+})

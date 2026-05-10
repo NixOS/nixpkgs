@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zfind";
   version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "laktak";
     repo = "zfind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zp2YrrvghmXy0LPxCSkOxYwrmoGabTKCD5CiFl3XCOU=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "main.appVersion=${version}"
+    "main.appVersion=${finalAttrs.version}"
   ];
 
   meta = {
@@ -29,9 +29,9 @@ buildGoModule rec {
       It makes finding files easy with a filter syntax that is similar to an SQL-WHERE clause.
     '';
     homepage = "https://github.com/laktak/zfind";
-    changelog = "https://github.com/laktak/zfind/releases/tag/v${version}";
+    changelog = "https://github.com/laktak/zfind/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "zfind";
     maintainers = with lib.maintainers; [ eeedean ];
   };
-}
+})

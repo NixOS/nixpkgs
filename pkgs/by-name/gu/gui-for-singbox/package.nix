@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -18,13 +18,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.15.1";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-OMZrLceu/7QTyLCPPIIx4c+iyfZlVyOiDKLCTeXoEbE=";
+    hash = "sha256-IGsH8QHoj2CvrSEc9eIisxySXQkjPSDBXsCPOXqANVM=";
   };
 
   metaCommon = {
@@ -54,7 +54,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 2;
-      hash = "sha256-MA0CNF2MTCGvsxvEpRbTFu5Diap4XkIHKnxeROkgwnU=";
+      hash = "sha256-dWqwEnXPT+5N+36szm4AF1ChM9M6UJltct+EtQAofGQ=";
     };
 
     buildPhase = ''
@@ -80,7 +80,7 @@ let
   });
 in
 
-buildGoModule {
+buildGo126Module {
   inherit pname version src;
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
@@ -91,7 +91,7 @@ buildGoModule {
       --subst-var out
   '';
 
-  vendorHash = "sha256-A39CVQTWMmOGa/XwM+cZQBsqINiN2UoUYC9voQTL7aU=";
+  vendorHash = "sha256-EeIxt0BzSaZh1F38btUXN9kAvj12nlqEerVgWVGkiuk=";
 
   nativeBuildInputs = [
     autoPatchelfHook

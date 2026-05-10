@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "enter-tex";
-  version = "3.48.0";
+  version = "3.49.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "enter-tex";
     tag = finalAttrs.version;
-    hash = "sha256-OnkP4E1kNWuE9k7SQ/ujnxnFgVyAqIhqHAw04ZA0Tno=";
+    hash = "sha256-CRxWN4eeB9uDdLtRh3aXHoN+gSlXSPDftGHcPtjgAzU=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/gedit/enter-tex";
     description = "LaTeX editor for the GNOME desktop";
     maintainers = with lib.maintainers; [
-      manveru
       bobby285271
     ];
     license = lib.licenses.gpl3Plus;

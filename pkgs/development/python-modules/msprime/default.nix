@@ -9,7 +9,6 @@
   oldest-supported-numpy,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   tskit,
@@ -18,14 +17,12 @@
 
 buildPythonPackage rec {
   pname = "msprime";
-  version = "1.3.4";
+  version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0PlEo3pREx34zZZ5fyR5gXPEC6L/XAlFgdHKVvxRFzA=";
+    hash = "sha256-aKcgjq6jDKRzNlKHyDMHj2VK8eGGsk/AEF53F8k7uWc=";
   };
 
   postPatch = ''

@@ -9,14 +9,14 @@
   scdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yubikey-touch-detector";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aHR/y8rAKS+dMvRdB3oAmOiI7hTA6qlF4Z05OjwYOO4=";
   };
   vendorHash = "sha256-oHEcpu3QvcVC/YCtGtP7nNT9++BSU8BPT5pf8NdLrOo=";
@@ -56,4 +56,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "yubikey-touch-detector";
   };
-}
+})

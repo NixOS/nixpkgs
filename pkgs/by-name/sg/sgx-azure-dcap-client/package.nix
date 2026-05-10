@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   curl,
   nlohmann_json,
@@ -34,25 +33,20 @@ let
     })
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "azure-dcap-client";
-  version = "1.12.3";
+  version = "1.13.0-pre0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "azure-dcap-client";
-    rev = version;
-    hash = "sha256-zTDaICsSPXctgFRCZBiZwXV9dLk2pFL9kp5a8FkiTZA=";
+    rev = "839ac4a2acc11b90cb91a483fcfc0cf7ae6a75c7";
+    hash = "sha256-dVO5cSOcpkOuxql06exS4aLJgvtRg+Oi6k8HBIjwPlg=";
   };
 
   patches = [
-    # Fix gcc-13 build:
-    #   https://github.com/microsoft/Azure-DCAP-Client/pull/197
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/microsoft/Azure-DCAP-Client/commit/fbcae7b3c8f1155998248cf5b5f4c1df979483f5.patch";
-      hash = "sha256-ezEuQql3stn58N1ZPKMlhPpUOBkDpCcENpGwFAmWtHc=";
-    })
+    # missing `#include <cstdint>`
+    ./missing-includes.patch
   ];
 
   nativeBuildInputs = [
@@ -95,4 +89,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = [ lib.licenses.mit ];
   };
-}
+})

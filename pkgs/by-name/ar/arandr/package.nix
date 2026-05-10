@@ -18,7 +18,7 @@ let
     pygobject3
     ;
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "arandr";
   version = "0.1.11";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "arandr";
     repo = "arandr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
   };
 
@@ -39,10 +39,13 @@ buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
+  propagatedBuildInputs = [
+    xrandr
+  ];
+
   buildInputs = [
     gsettings-desktop-schemas
     gtk3
-    xrandr
   ];
 
   build-system = [ setuptools ];
@@ -72,7 +75,7 @@ buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://gitlab.com/arandr/arandr/-/blob/${src.tag}/ChangeLog";
+    changelog = "https://gitlab.com/arandr/arandr/-/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Simple visual front end for XRandR";
     homepage = "https://christian.amsuess.com/tools/arandr/";
     license = lib.licenses.gpl3Plus;
@@ -81,4 +84,4 @@ buildPythonApplication rec {
       gepbird
     ];
   };
-}
+})

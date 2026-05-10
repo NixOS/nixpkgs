@@ -58,14 +58,14 @@ let
     -DTPL_ENABLE_MPI=ON
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trilinos";
   version = "16.1.0";
 
   src = fetchFromGitHub {
     owner = "trilinos";
     repo = "Trilinos";
-    tag = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-9Yn79kt7JHS30lc+qImSbLOU3Cdb87S3xmlm3v9G1uo=";
   };
 
@@ -111,4 +111,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fbeffa ];
     platforms = lib.platforms.all;
   };
-}
+})

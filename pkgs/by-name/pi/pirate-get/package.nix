@@ -6,13 +6,13 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "pirate-get";
   version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VtnVyJqrdGXTqcyzpHCOMUI9G7/BkXzihDrBrsxl7Eg=";
   };
 
@@ -34,4 +34,4 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
   };
-}
+})

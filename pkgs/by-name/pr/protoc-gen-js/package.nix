@@ -1,5 +1,6 @@
 {
   stdenv,
+  gcc14Stdenv,
   lib,
   buildBazelPackage,
   bazel_7,
@@ -7,7 +8,17 @@
   cctools,
 }:
 
-buildBazelPackage rec {
+let
+  # fails to build with gcc15, see https://github.com/NixOS/nixpkgs/issues/475586
+  buildBazelPackage' =
+    if stdenv.cc.isGNU then
+      buildBazelPackage.override {
+        stdenv = gcc14Stdenv;
+      }
+    else
+      buildBazelPackage;
+in
+buildBazelPackage' rec {
   pname = "protoc-gen-js";
   version = "3.21.4";
 
@@ -29,14 +40,16 @@ buildBazelPackage rec {
   removeRulesCC = false;
   removeLocalConfigCC = false;
 
-  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
 
   fetchAttrs = {
     preInstall = ''
       rm -rv "$bazelOut/external/host_platform"
     '';
 
-    hash = "sha256-CekpXINZSr6Hysa4qrVkdchBla9pgBwRtqBiuUGPNq0=";
+    hash = "sha256-znkwUs984vbinz/BLo1uxQ+PvxkpXo719lJu4TD1Vmg=";
   };
 
   buildAttrs.installPhase = ''

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "extest";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "extest";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-qdTF4n3uhkl3WFT+7bAlwCjxBx3ggTN6i3WzFg+8Jrw=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.puffnfresh ];
   };
-}
+})

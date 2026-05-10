@@ -7,13 +7,13 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aerogramme";
   version = "0.3.0";
 
   src = fetchgit {
     url = "https://git.deuxfleurs.fr/Deuxfleurs/aerogramme/";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ER+P/XGqNzTLwDLK5EBZq/Dl29ZZKl2FdxDb+oLEJ8Y=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "aerogramme";
     platforms = lib.platforms.linux;
   };
-}
+})

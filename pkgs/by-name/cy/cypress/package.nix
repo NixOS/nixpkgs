@@ -12,7 +12,6 @@
   stdenv,
   udev,
   unzip,
-  xorg,
 }:
 
 let

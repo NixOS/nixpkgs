@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "rospo";
-  version = "0.15.1";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "ferama";
     repo = "rospo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UPOWpI1MohJbuAETvbWW1BZv/P4DY/QknSEY4LFa5Qo=";
+    hash = "sha256-nqlUsg/V9v/2hcsaoyuXXhsa7+M/QK9+oQxX9hp/A2k=";
   };
 
-  vendorHash = "sha256-KQYSsTiiFm3BwwjiUEL388FS/hnXRUCfRpnfBIUHTYM=";
+  vendorHash = "sha256-tIIEONPNnS7oF+MSKozaRW6MZq0gcH3KDG+aukCUG+c=";
 
   ldflags = [
     "-s"

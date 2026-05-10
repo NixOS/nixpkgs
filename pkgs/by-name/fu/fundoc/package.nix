@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fundoc";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "daynin";
     repo = "fundoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8WWaYgfqGWrTV2EEeSPz1BN2ur7gsxFiHeDNMJdVDcw=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

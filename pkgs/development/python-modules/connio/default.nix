@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   serialio,
   sockio,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "connio";
   version = "0.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";

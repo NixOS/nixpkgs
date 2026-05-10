@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   lxml,
   pytestCheckHook,
   text-unidecode,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "sepaxml";
   version = "2.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "raphaelm";

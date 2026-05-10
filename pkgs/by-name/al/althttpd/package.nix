@@ -3,16 +3,17 @@
   stdenv,
   fetchfossil,
   openssl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "althttpd";
-  version = "0-unstable-2023-08-12";
+  version = "0-unstable-2026-03-20";
 
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";
-    rev = "c0bdc68e6c56ef25";
-    hash = "sha256-VoDR5MlVlvar9wYA0kUhvDQVjxDwsZlqrNR3u4Tqw5c=";
+    rev = "a8fac0faaab1f43f";
+    hash = "sha256-Z4kZgCvqY7Kroc6A98s5UH4N8CEUzF+xmdXDRw2Lxtw=";
   };
 
   buildInputs = [ openssl ];
@@ -22,6 +23,8 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dm755 -t $out/bin althttpd
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Althttpd webserver";

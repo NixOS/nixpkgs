@@ -5,12 +5,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ditaa";
   version = "0.11.0";
 
   src = fetchurl {
-    url = "https://github.com/stathissideris/ditaa/releases/download/v${version}/ditaa-${version}-standalone.jar";
+    url = "https://github.com/stathissideris/ditaa/releases/download/v${finalAttrs.version}/ditaa-${finalAttrs.version}-standalone.jar";
     sha256 = "1acnl7khz8aasg230nbsx9dyf8716scgb5l3679cb2bdzxisl64l";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/lib
 
-    cp ${src} "$out/lib/ditaa.jar"
+    cp ${finalAttrs.src} "$out/lib/ditaa.jar"
 
     cat > "$out/bin/ditaa" << EOF
     #!${stdenv.shell}
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "ditaa";
   };
-}
+})

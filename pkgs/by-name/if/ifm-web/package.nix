@@ -7,10 +7,10 @@
   nixosTests,
 }:
 let
-  version = "4.0.2";
+  version = "4.1.1";
   src = fetchurl {
     url = "https://github.com/misterunknown/ifm/releases/download/v${version}/cdn.ifm.php";
-    hash = "sha256-37WbRM6D7JGmd//06zMhxMGIh8ioY8vRUmxX4OHgqBE=";
+    hash = "sha256-io4HOtOe4J8J9Il+64eboIIwBXLWyXdv2OIBVKW+qS0=";
   };
 
   serve_script = writeShellScript "ifm-serve" ''

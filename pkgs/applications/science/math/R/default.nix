@@ -4,9 +4,9 @@
   fetchurl,
   bzip2,
   gfortran,
-  libX11,
-  libXmu,
-  libXt,
+  libx11,
+  libxmu,
+  libxt,
   libjpeg,
   libpng,
   libtiff,
@@ -46,7 +46,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.2";
+  version = "4.5.3";
 
   src =
     let
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      hash = "sha256-DXH/cQbsac18Z+HpXtGjzuNViAkx8ut4xTABSp43nyA=";
+      hash = "sha256-qlwe1Ck8cnGsUT1lRnA1asDopq1eQr4BQ2XREVC1uPI=";
     };
 
   outputs = [
@@ -73,10 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     gfortran
-    libX11
-    libXmu
-    libXt
-    libXt
+    libx11
+    libxmu
+    libxt
+    libxt
     libjpeg
     libpng
     libtiff
@@ -157,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     --disable-R-framework
     --without-x
+    --without-static-cairo
     OBJC="clang"
     CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
     LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"

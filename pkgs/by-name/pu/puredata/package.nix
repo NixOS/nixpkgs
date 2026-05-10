@@ -14,12 +14,12 @@
   portmidi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "puredata";
   version = "0.55-2";
 
   src = fetchurl {
-    url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
+    url = "http://msp.ucsd.edu/Software/pd-${finalAttrs.version}.src.tar.gz";
     hash = "sha256-EIKX+NHdGQ346LtKSsNIeSrM9wT5ogUtk8uoybi7Wls=";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''Real-time graphical programming environment for audio, video, and graphical processing'';
+    description = "Real-time graphical programming environment for audio, video, and graphical processing";
     homepage = "http://puredata.info";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pd";
     changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };
-}
+})

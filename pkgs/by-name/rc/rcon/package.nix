@@ -10,14 +10,14 @@
   pcre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rcon";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "n0la";
     repo = "rcon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     mainProgram = "rcon";
   };
-}
+})

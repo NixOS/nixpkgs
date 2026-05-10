@@ -1,26 +1,30 @@
 import argparse
 import os
+import sys
 import time
+import warnings
 from pathlib import Path
 
 import ptpython.ipython
+from colorama import Fore, Style
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
-from test_driver.driver import Driver
+from test_driver.driver import Driver, load_driver_configuration
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
+    LogLevel,
     TerminalLogger,
     XMLLogger,
 )
 
 
 class EnvDefault(argparse.Action):
-    """An argpars Action that takes values from the specified
+    """An argparse Action that takes values from the specified
     environment variable as the flags default value.
     """
 
-    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
+    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):
         if not default and envvar:
             if envvar in os.environ:
                 if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
@@ -34,7 +38,7 @@ class EnvDefault(argparse.Action):
             required = False
         super().__init__(default=default, required=required, nargs=nargs, **kwargs)
 
-    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
+    def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, values)
 
 
@@ -52,12 +56,48 @@ def writeable_dir(arg: str) -> Path:
     return path
 
 
+def formatwarning(
+    message: Warning | str,
+    category: type[Warning],
+    filename: str,
+    lineno: int,
+    line: str | None = None,
+) -> str:
+    return (
+        Style.BRIGHT
+        + Fore.YELLOW
+        + f"??? Warning ({category.__name__}): "  # ty: ignore[unsupported-operator]
+        + Style.NORMAL
+        + str(message)
+        + "\n"
+        + f'    File "{filename}", line {lineno}\n'
+        + (f"      {line}\n" if line is not None else "")
+        + Style.RESET_ALL
+    )
+
+
+warnings.formatwarning = formatwarning  # ty:ignore[invalid-assignment]
+
+
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
-        "-K",
+        "-c",
+        "--config",
+        help="the test driver configuration file",
+        type=Path,
+        required=True,
+    )
+    arg_parser.add_argument(
         "--keep-vm-state",
-        help="re-use a VM state coming from a previous run",
+        help=argparse.SUPPRESS,
+        dest="keep_machine_state",
+        action="store_true",
+    )
+    arg_parser.add_argument(
+        "-K",
+        "--keep-machine-state",
+        help="re-use a machine state coming from a previous run",
         action="store_true",
     )
     arg_parser.add_argument(
@@ -71,34 +111,10 @@ def main() -> None:
         help="Enable interactive debugging breakpoints for sandboxed runs",
     )
     arg_parser.add_argument(
-        "--start-scripts",
-        metavar="START-SCRIPT",
-        action=EnvDefault,
-        envvar="startScripts",
-        nargs="*",
-        help="start scripts for participating virtual machines",
-    )
-    arg_parser.add_argument(
-        "--vlans",
-        metavar="VLAN",
-        action=EnvDefault,
-        envvar="vlans",
-        nargs="*",
-        help="vlans to span by the driver",
-    )
-    arg_parser.add_argument(
-        "--global-timeout",
-        type=int,
-        metavar="GLOBAL_TIMEOUT",
-        action=EnvDefault,
-        envvar="globalTimeout",
-        help="Timeout in seconds for the whole test",
-    )
-    arg_parser.add_argument(
         "-o",
         "--output_directory",
-        help="""The path to the directory where outputs copied from the VM will be placed.
-                By e.g. Machine.copy_from_vm or Machine.screenshot""",
+        help="""The path to the directory where outputs copied from the machine will be placed.
+                By e.g. NspawnMachine.copy_from_machine or QemuMachine.screenshot""",
         default=Path.cwd(),
         type=writeable_dir,
     )
@@ -107,20 +123,23 @@ def main() -> None:
         help="Enable JunitXML report generation to the given path",
         type=Path,
     )
+    log_level_map = {level.name.lower(): level for level in LogLevel}
     arg_parser.add_argument(
-        "testscript",
+        "--log-level",
+        metavar="LOG_LEVEL",
         action=EnvDefault,
-        envvar="testScript",
-        help="the test script to run",
-        type=Path,
-    )
-    arg_parser.add_argument(
-        "--dump-vsocks",
-        help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
-        type=int,
+        envvar="logLevel",
+        choices=log_level_map,
+        help="Set the log level",
     )
 
     args = arg_parser.parse_args()
+
+    if "--keep-vm-state" in sys.argv:
+        warnings.warn(
+            "The flag '--keep-vm-state' is deprecated. Use '--keep-machine-state' instead.",
+            DeprecationWarning,
+        )
 
     output_directory = args.output_directory.resolve()
     logger = CompositeLogger([TerminalLogger()])
@@ -131,46 +150,36 @@ def main() -> None:
     if args.junit_xml:
         logger.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
 
-    if not args.keep_vm_state:
-        logger.info("Machine state will be reset. To keep it, pass --keep-vm-state")
+    if args.log_level:
+        logger.set_log_level(log_level_map[args.log_level])
+
+    if not args.keep_machine_state:
+        logger.info(
+            "Machine state will be reset. To keep it, pass --keep-machine-state"
+        )
 
     debugger: DebugAbstract = DebugNop()
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
     with Driver(
-        args.start_scripts,
-        args.vlans,
-        args.testscript.read_text(),
-        output_directory,
-        logger,
-        args.keep_vm_state,
-        args.global_timeout,
+        config=load_driver_configuration(args.config),
+        out_dir=output_directory,
+        logger=logger,
+        keep_machine_state=args.keep_machine_state,
         debug=debugger,
     ) as driver:
-        if offset := args.dump_vsocks:
-            driver.dump_machine_ssh(offset)
+        if driver.config.enable_ssh_backdoor:
+            driver.dump_machine_ssh()
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,
-            )  # type:ignore
+            )
         else:
             tic = time.time()
             driver.run_tests()
             toc = time.time()
             logger.info(f"test script finished in {(toc - tic):.2f}s")
-
-
-def generate_driver_symbols() -> None:
-    """
-    This generates a file with symbols of the test-driver code that can be used
-    in user's test scripts. That list is then used by pyflakes to lint those
-    scripts.
-    """
-    d = Driver([], [], "", Path(), CompositeLogger([]))
-    test_symbols = d.test_symbols()
-    with open("driver-symbols", "w") as fp:
-        fp.write(",".join(test_symbols.keys()))

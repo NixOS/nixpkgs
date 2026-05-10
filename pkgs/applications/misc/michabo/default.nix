@@ -1,9 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   makeDesktopItem,
   fetchFromGitLab,
   qmake,
+  wrapQtAppsHook,
   # qt
   qtbase,
   qtwebsockets,
@@ -17,7 +18,7 @@ let
   };
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "michabo";
   version = "0.1";
 
@@ -31,6 +32,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

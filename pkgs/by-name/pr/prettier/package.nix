@@ -1,17 +1,3 @@
-/**
-  # Example
-
-  Prettier with plugins and Vim Home Manager configuration
-
-  ```nix
-  pkgs.prettier.override {
-    plugins = with pkgs.nodePackages; [
-      prettier-plugin-toml
-      # ...
-    ];
-  }
-  ```
-*/
 {
   fetchFromGitHub,
   lib,
@@ -23,26 +9,6 @@
   plugins ? [ ],
 }:
 let
-  /**
-    # Example
-
-    ```nix
-    exportRelativePathOf (builtins.fromJSON "./package.json")
-    =>
-    lib/node_modules/prettier-plugin-toml/./lib/index.cjs
-    ```
-
-    # Type
-
-    ```
-    exportRelativePathOf :: AttrSet => String
-    ```
-
-    # Arguments
-
-    packageJsonAttrs
-    : Attribute set with shape similar to `package.json` file
-  */
   ## Blame NodeJS
   exportRelativePathOf =
     let
@@ -80,26 +46,6 @@ let
       lib.attrByPath [ "prettier" "plugins" ] [ "null" ] packageJsonAttrs
     )) packageJsonAttrs;
 
-  /**
-    # Example
-
-    ```nix
-    nodeEntryPointOf pkgs.nodePackages.prettier-plugin-toml
-    =>
-    /nix/store/<NAR_HASH>-prettier-plugin-toml-<VERSION>/lib/node_modules/prettier-plugin-toml/./lib/index.cjs
-    ```
-
-    # Type
-
-    ```
-    nodeEntryPointOf :: AttrSet => String
-    ```
-
-    # Arguments
-
-    plugin
-    : Attribute set with `.pname` and `.outPath` defined
-  */
   nodeEntryPointOf =
     plugin:
     let
@@ -121,7 +67,7 @@ let
         ${plugin.pname}: error context, tried finding entry point under;
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
-      '' throw ''${plugin.pname}: does not provide parse-able entry point'';
+      '' throw "${plugin.pname}: does not provide parse-able entry point";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
@@ -134,11 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uMLRFBZP7/42R6nReONcb9/kVGCn3yGHLcLFajMZLmQ=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/prettier/prettier/blob/main/package.json#L265
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-dpxzbtWyXsHS6tH6DJ9OqSsUSc+YqYeAPJYb95Qy5wQ=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-+cDMrVwkTU5rYOQ7d2TqpsYx5F4JVZCpmf1vjOBhZ3M=";
   };
 
   nativeBuildInputs = [

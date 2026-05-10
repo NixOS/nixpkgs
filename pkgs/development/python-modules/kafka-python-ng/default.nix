@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools-scm,
   crc32c,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   version = "2.2.3";
   pname = "kafka-python-ng";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wbarnha";

@@ -3,9 +3,10 @@
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
+  stdenv,
 
-  waylandSupport ? true,
-  x11Support ? true,
+  waylandSupport ? (!stdenv.hostPlatform.isDarwin),
+  x11Support ? (!stdenv.hostPlatform.isDarwin),
 
   wl-clipboard,
   wtype,
@@ -13,7 +14,7 @@
   xsel,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rofimoji";
   version = "6.7.0";
   pyproject = true;
@@ -21,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8Y28jlmlKFyqT/OGn/jKjvivMc2U7TQvYmaTX1vCvXQ=";
   };
 
@@ -58,9 +59,9 @@ python3Packages.buildPythonApplication rec {
     description = "Simple emoji and character picker for rofi";
     mainProgram = "rofimoji";
     homepage = "https://github.com/fdw/rofimoji";
-    changelog = "https://github.com/fdw/rofimoji/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/fdw/rofimoji/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ justinlovinger ];
   };
-}
+})

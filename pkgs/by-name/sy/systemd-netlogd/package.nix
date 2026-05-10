@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Forwards messages from the journal to other hosts over the network";
     homepage = "https://github.com/systemd/systemd-netlogd";
-    changelog = "https://github.com/systemd/systemd-netlogd/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/systemd/systemd-netlogd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "systemd-netlogd";

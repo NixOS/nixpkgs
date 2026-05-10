@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   typing-extensions,
   uri-template,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "json-home-client";
   version = "1.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "plinss";

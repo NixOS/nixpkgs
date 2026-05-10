@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "toposort";
   version = "1.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

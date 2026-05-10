@@ -6,14 +6,14 @@
   check,
   subunit,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "orcania";
   version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = "orcania";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Cz3IE5UrfoWjMxQ/+iR1bLsYxf5DVN+7aJqLBcPjduA=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ johnazoidberg ];
   };
-}
+})

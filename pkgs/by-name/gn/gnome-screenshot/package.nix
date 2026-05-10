@@ -21,12 +21,12 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-screenshot";
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-screenshot/${lib.versions.major version}/gnome-screenshot-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-screenshot/${lib.versions.major finalAttrs.version}/gnome-screenshot-${finalAttrs.version}.tar.xz";
     hash = "sha256-Stt97JJkKPdCY9V5ZnPPFC5HILbnaPVGio0JM/mMlZc=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

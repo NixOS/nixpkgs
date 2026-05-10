@@ -16,7 +16,7 @@
   sqlite,
   # webkitgtk_4_0,
   libmanette,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libgee
     libmanette
     libsoup_2_4
-    libXtst
+    libxtst
     sqlite
     # webkitgtk_4_0
   ];

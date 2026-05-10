@@ -17,16 +17,16 @@
   # passthru
   omemo,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omemo";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-omemo";
-    tag = "v${version}";
-    hash = "sha256-uA8Nv8xT6ROlE9eM/Oz2j5HsYtvWzKEu7DSd/ws+WZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h1L/DdzssCwQzQDY32ACNcn/zmDsCz16x74+Qdyv6x4=";
   };
 
   build-system = [
@@ -72,9 +72,9 @@ buildPythonPackage rec {
       Multiple backends can be loaded and used at the same time, the library manages their coexistence transparently.
     '';
     homepage = "https://github.com/Syndace/python-omemo";
-    changelog = "https://github.com/Syndace/python-omemo/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Syndace/python-omemo/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ themadbit ];
   };
-}
+})

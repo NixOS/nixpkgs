@@ -13,9 +13,9 @@
   glib,
   gst_all_1,
   gtk3,
-  libSM,
-  libX11,
-  libXtst,
+  libsm,
+  libx11,
+  libxtst,
   libpng12,
   pango,
   zlib,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.42.0";
+  version = "9.50.1";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
         url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
-        sha256 = "sha256-QCEkxOP1nWtBHFS259Oyqo2beehgCeR7zZ6wqBZe00s=";
+        sha256 = "sha256-FdaUglemrnLC2uSmKDgrYLCPB7Uu/pzp+oA+Zj/9W/s=";
       }
     else
       throw "Platform not supported";
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
       cairo
       gdk-pixbuf
       alsa-lib
-      libX11
-      libXtst
-      libSM
+      libx11
+      libxtst
+      libsm
       libpng12
       gstreamer
       gst-plugins-base

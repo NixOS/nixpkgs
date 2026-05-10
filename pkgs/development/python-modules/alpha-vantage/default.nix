@@ -9,15 +9,12 @@
   requests,
   requests-mock,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "alpha-vantage";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RomelTorres";

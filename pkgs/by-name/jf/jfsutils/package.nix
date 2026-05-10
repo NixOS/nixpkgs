@@ -7,12 +7,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jfsutils";
   version = "1.1.15";
 
   src = fetchurl {
-    url = "mirror://sourceforge/jfs/jfsutils-${version}.tar.gz";
+    url = "mirror://sourceforge/jfs/jfsutils-${finalAttrs.version}.tar.gz";
     sha256 = "0kbsy2sk1jv4m82rxyl25gwrlkzvl3hzdga9gshkxkhm83v1aji4";
   };
 
@@ -46,11 +46,16 @@ stdenv.mkDerivation rec {
 
   # this required for wipefreespace
   postInstall = ''
-    mkdir -p $out/include
-    cp include/*.h $out/include
-    mkdir -p $out/lib
-    cp ./libfs/libfs.a $out/lib
+    install -Dm644 include/*.h -t ''${!outputDev}/include
+    install -Dm644 ./libfs/libfs.a -t ''${!outputLib}/lib
   '';
+
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
 
   meta = {
     description = "IBM JFS utilities";
@@ -58,4 +63,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

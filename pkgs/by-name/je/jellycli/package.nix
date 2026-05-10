@@ -6,14 +6,14 @@
   alsa-lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jellycli";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "tryffel";
     repo = "jellycli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1awzcxnf175a794rhzbmqxxjss77mfa1yrr0wgdxaivrlkibxjys";
   };
 
@@ -35,7 +35,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/tryffel/jellycli";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     mainProgram = "jellycli";
   };
-}
+})

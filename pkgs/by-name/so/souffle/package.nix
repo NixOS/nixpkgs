@@ -26,14 +26,14 @@ let
     python3
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "souffle";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "souffle-lang";
     repo = "souffle";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Umfeb1pGAeK5K3QDRD/labC6IJLsPPJ73ycsAV4yPNM=";
   };
 
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.upl;
   };
-}
+})

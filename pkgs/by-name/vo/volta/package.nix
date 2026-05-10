@@ -9,14 +9,14 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "volta";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "volta-cli";
     repo = "volta";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZI+3/Xbkg/JaZMLhrJEjaSwjs44fOaiRReM2DUTnkkc=";
   };
 
@@ -67,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fbrs ];
     mainProgram = "volta";
   };
-}
+})

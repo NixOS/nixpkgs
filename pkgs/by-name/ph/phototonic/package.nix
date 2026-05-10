@@ -7,14 +7,14 @@
   exiv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phototonic";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "oferkv";
     repo = "phototonic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BxJgTKblOKIwt88+PT7XZE0mk0t2B4SfsdXpQHttUTM=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
   };
-}
+})

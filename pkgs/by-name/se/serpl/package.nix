@@ -8,16 +8,15 @@
   ripgrep,
   versionCheckHook,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "serpl";
   version = "0.3.4";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+
   src = fetchFromGitHub {
     owner = "yassinebridi";
     repo = "serpl";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lEvUS1RlZ4CvervzyfODsFqRJAiA6PyLNUVWhSoPMDY=";
   };
 
@@ -53,4 +52,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "serpl";
   };
-}
+})

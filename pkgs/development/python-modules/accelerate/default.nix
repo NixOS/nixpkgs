@@ -25,22 +25,23 @@
   evaluate,
   parameterized,
   pytestCheckHook,
+  torchvision,
   transformers,
   config,
   cudatoolkit,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "accelerate";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
-    tag = "v${version}";
-    hash = "sha256-PwwaQSLOm+8Hd3trM1P+jRhYyoWM3QxOe5XT99haEmg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IfKePiU38fUd5HefaS7J1s8Mb6hVmldINemxAJY+83o=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -62,6 +63,7 @@ buildPythonPackage rec {
     evaluate
     parameterized
     pytestCheckHook
+    torchvision
     transformers
     writableTmpDirAsHomeHook
   ];
@@ -107,7 +109,20 @@ buildPythonPackage rec {
     "CheckpointTest"
     # TypeError: unsupported operand type(s) for /: 'NoneType' and 'int' (it seems cpuinfo doesn't work here)
     "test_mpi_multicpu_config_cmd"
+    # fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
+    "test_layerwise_upcasting_inference_0"
+    "test_compute_module_sizes"
+    "test_compute_module_total_buffer_size"
+    "test_load_checkpoint_in_model_dtype"
+    "test_set_module_tensor_sets_dtype"
   ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && (pythonAtLeast "3.14"))
+      [
+        # RuntimeError: There is no current event loop in thread 'MainThread'
+        "test_accelerate_test"
+      ]
   ++ lib.optionals (!config.cudaSupport) [
     # requires ptxas from cudatoolkit, which is unfree
     "test_dynamo_extract_model"
@@ -115,6 +130,11 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: 'accelerate-launch /nix/store/a7vhm7b74a7bmxc35j26s9iy1zfaqjs...
     "test_accelerate_test"
+
+    # torch.mps does not expose a module-level set_device; keep skipped until
+    # the upstream fix lands: https://github.com/huggingface/accelerate/pull/4028
+    "test_env_var_device"
+
     "test_init_trackers"
     "test_init_trackers"
     "test_log"
@@ -158,6 +178,9 @@ buildPythonPackage rec {
 
     # Illegal instruction (x86_64) / Trace/BPT Error 5 (aarch64)
     "test_can_pickle_dataloader"
+
+    # ImportError: cannot import name 'PretrainedConfig' from 'transformers.modeling_utils'
+    "test_nested_hook"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
@@ -179,9 +202,9 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://huggingface.co/docs/accelerate";
     description = "Simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision";
-    changelog = "https://github.com/huggingface/accelerate/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/accelerate/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "accelerate";
   };
-}
+})

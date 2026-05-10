@@ -5,14 +5,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dkh";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "psi4";
     repo = "dkh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1wb4qmb9f8rnrwnnw1gdhzx1fmhy628bxfrg56khxy3j5ljxkhck";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

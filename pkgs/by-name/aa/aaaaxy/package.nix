@@ -4,13 +4,13 @@
   buildGoModule,
   alsa-lib,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxxf86vm,
   go-licenses,
   pkg-config,
   zip,
@@ -20,14 +20,14 @@
   strip-nondeterminism,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aaaaxy";
   version = "1.6.301";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = "aaaaxy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MWJ1k7Ps9jZa+AVNrvqRGMr3Mb0jd54NxGGylDI8VXo=";
     fetchSubmodules = true;
   };
@@ -37,13 +37,13 @@ buildGoModule rec {
   buildInputs = [
     alsa-lib
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
   ];
 
   nativeBuildInputs = [
@@ -136,4 +136,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ Luflosi ];
     platforms = lib.platforms.linux;
   };
-}
+})

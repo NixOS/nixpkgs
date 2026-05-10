@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "enturclient";
   version = "0.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hfurubotten";

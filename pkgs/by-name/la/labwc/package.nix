@@ -23,19 +23,19 @@
   wayland-protocols,
   wayland-scanner,
   wlroots_0_19,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.9.2";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     tag = finalAttrs.version;
-    hash = "sha256-aKjebrUqksLoDhHa/maI871jq/2u6YbTaNd6+hJz8uE=";
+    hash = "sha256-7lq/lcaYSc+mJOTkjtwF0LjOAg4Uck3BwAc+2RIntYo=";
   };
 
   outputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_19
-    xcbutilwm
+    libxcb-wm
     xwayland
   ];
 

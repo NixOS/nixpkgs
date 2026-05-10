@@ -6,7 +6,7 @@
   setuptools,
 }:
 buildPythonPackage rec {
-  name = "aiocmd";
+  pname = "aiocmd";
   version = "0.1.5";
   src = fetchFromGitHub {
     owner = "KimiNewt";

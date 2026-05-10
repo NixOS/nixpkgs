@@ -17,12 +17,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "baobab";
   version = "49.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/baobab/${lib.versions.major version}/baobab-${version}.tar.xz";
+    url = "mirror://gnome/sources/baobab/${lib.versions.major finalAttrs.version}/baobab-${finalAttrs.version}.tar.xz";
     hash = "sha256-YkPJIAK+fpH13s0klhL6zipKEtN0Kv2IsIapS4dd/+A=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

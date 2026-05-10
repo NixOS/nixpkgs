@@ -15,14 +15,14 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaru";
   version = "25.10.3";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3cSVPObfmr62S6yTD2c8AO3s7lxb9KFVuYSydTIJ1jE=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ moni ];
   };
-}
+})

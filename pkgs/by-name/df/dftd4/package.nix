@@ -24,14 +24,14 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dftd4";
   version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "dftd4";
     repo = "dftd4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dixPCLH5dWkE2/7ghGEXJmX2/g1DN30dB4jX2d7fmio=";
   };
 
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

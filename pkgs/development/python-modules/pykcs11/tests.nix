@@ -9,7 +9,7 @@
 buildPythonPackage {
   pname = "pykcs11-tests";
   inherit (pykcs11) version;
-  format = "other";
+  pyproject = false;
 
   src = pykcs11.testout;
 

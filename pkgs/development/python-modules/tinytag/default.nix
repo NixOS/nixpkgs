@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tinytag";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinytag";
     repo = "tinytag";
-    tag = version;
-    hash = "sha256-rvfObqAFcJwNpp9cUZv6QjffykajVR+Re1WUSdXkAvo=";
+    tag = finalAttrs.version;
+    hash = "sha256-WrUpP2ItXUYsX5IB5K0YmG/N2mbAeaso6i0uUXkWHlY=";
   };
 
   build-system = [
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

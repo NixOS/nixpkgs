@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -32,23 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RzqF3UDC4MY85ex9TOD2L0Zd7T6mgiZ+ImJuJG+xtjo=";
+    hash = "sha256-N8FDoQDEfv0xGjtnKx+jNfRwxvJdb4ETvQnZuBvlccQ=";
   };
-
-  patches = [
-    # Fix compat with newer Mir
-    # Remove when version > 0.8.2
-    (fetchpatch {
-      url = "https://github.com/miracle-wm-org/miracle-wm/commit/3f3389bf49ad780d258d34109f87e73ef7c02344.patch";
-      hash = "sha256-dxrYfn/MhpCkgsmunMAl5TrPxY8FO0dqQf4LYcuiFGk=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -57,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   # Fix compat with newer Mir
   # https://github.com/miracle-wm-org/miracle-wm/commit/aaae6e64261d8a00c2a1df47e2eab99400382d69
-  # Remove when version > 0.8.2
+  # Remove when version > 0.8.3
   + ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'pkg_check_modules(MIRRENDERER REQUIRED mirrenderer' 'pkg_check_modules(MIRRENDERER mirrenderer'
@@ -146,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       See the user guide for info on how to use miracle-wm: https://wiki.miracle-wm.org/v${finalAttrs.version}/
     '';
-    homepage = "https://github.com/mattkae/miracle-wm";
+    homepage = "https://miracle-wm.org";
     changelog = "https://github.com/miracle-wm-org/miracle-wm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "miracle-wm";

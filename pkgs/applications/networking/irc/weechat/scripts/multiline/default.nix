@@ -40,6 +40,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Multi-line edit box";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

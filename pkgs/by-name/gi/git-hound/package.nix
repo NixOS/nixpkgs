@@ -5,14 +5,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-hound";
   version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "tillson";
     repo = "git-hound";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-W+rYDyRIw4jWWO4UZkUHFq/D/7ZXM+y5vdbclk6S0ro=";
   };
 
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "git-hound";
   };
-}
+})

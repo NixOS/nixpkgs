@@ -115,7 +115,7 @@ in
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
         ];
-        ExecStart = "${lib.getExe cfg.package} --port=${builtins.toString cfg.port} --fsdir=${cfg.dataDir} --config=${configFile} --verbose";
+        ExecStart = "${lib.getExe cfg.package} --port=${toString cfg.port} --fsdir=${cfg.dataDir} --config=${configFile} --verbose";
         Restart = "always";
         RestartSec = "3";
       };

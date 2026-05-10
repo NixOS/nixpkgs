@@ -1,6 +1,7 @@
 {
   stdenv,
   pkgs,
+  config,
   lib,
   fetchurl,
   gfortran,
@@ -12,7 +13,7 @@
   qhull,
   libsndfile,
   portaudio,
-  libX11,
+  libx11,
   graphicsmagick,
   pcre2,
   pkg-config,
@@ -22,6 +23,7 @@
   # Both are needed for discrete Fourier transform
   fftw,
   fftwSinglePrec,
+  fast-float,
   zlib,
   curl,
   rapidjson,
@@ -98,12 +100,12 @@ let
   allPkgs = pkgs;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "10.3.0";
+  version = "11.1.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-L8s43AYuRA8eBsBpu8qEDtRtzI+YPkc+FVj8w4OE7ms=";
+    sha256 = "sha256-wOfiyRvFcyVkMbLMmJKQub0ThR263VnQrHRxTxM0sOY=";
   };
 
   postPatch = ''
@@ -150,10 +152,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fast-float
   ];
   nativeBuildInputs = [
     perl
@@ -171,11 +176,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lobjc";
-
-  # See https://savannah.gnu.org/bugs/?50339
-  F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
+      NIX_LDFLAGS = "-lobjc";
+      # https://savannah.gnu.org/bugs/index.php?68042
+      NIX_CFLAGS_COMPILE = "-Wno-format-security";
+    }
+    // lib.optionalAttrs use64BitIdx {
+      # See https://savannah.gnu.org/bugs/?50339
+      F77_INTEGER_8_FLAG = "-fdefault-integer-8";
+    };
 
   configureFlags = [
     "--with-blas=blas"
@@ -203,6 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
     octavePackages = import ../../../top-level/octave-packages.nix {
       pkgs = allPkgs;
       inherit
+        config
         lib
         stdenv
         fetchurl

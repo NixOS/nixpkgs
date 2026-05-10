@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  ladspaH,
+  ladspa-header,
   lilv,
   lv2,
   pkg-config,
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost
-    ladspaH
+    ladspa-header
     lilv
     lv2
     serd

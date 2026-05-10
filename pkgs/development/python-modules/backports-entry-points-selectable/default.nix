@@ -2,17 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
-  importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "backports-entry-points-selectable";
   version = "1.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "backports.entry_points_selectable";
@@ -21,8 +17,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # no tests
   doCheck = false;

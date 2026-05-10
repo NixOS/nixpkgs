@@ -6,13 +6,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "closure-compiler";
-  version = "20250820";
+  version = "20260128";
 
   src = fetchurl {
-    url = "mirror://maven/com/google/javascript/closure-compiler/v${version}/closure-compiler-v${version}.jar";
-    sha256 = "sha256-Fx0kNU/+fc03j+Tfsw5Gc4WTkfTaEacLoE/awN1NgtI=";
+    url = "mirror://maven/com/google/javascript/closure-compiler/v${finalAttrs.version}/closure-compiler-v${finalAttrs.version}.jar";
+    sha256 = "sha256-GlloHdQBhil/++qld8+yyYpNmCACYxjW8QW0YtPTOVk=";
   };
 
   dontUnpack = true;
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/java $out/bin
-    cp ${src} $out/share/java/closure-compiler-v${version}.jar
+    cp ${finalAttrs.src} $out/share/java/closure-compiler-v${finalAttrs.version}.jar
     makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
-      --add-flags "-jar $out/share/java/closure-compiler-v${version}.jar"
+      --add-flags "-jar $out/share/java/closure-compiler-v${finalAttrs.version}.jar"
   '';
 
   meta = {
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -20,6 +20,7 @@ buildFishPlugin rec {
     homepage = "https://github.com/jorgebucaran/autopair.fish";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      figsoda
       kidonng
     ];
   };

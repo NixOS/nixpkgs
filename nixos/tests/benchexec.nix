@@ -18,7 +18,7 @@ in
     { ... }:
     let
       runexec = lib.getExe' pkgs.benchexec "runexec";
-      echo = builtins.toString pkgs.benchexec;
+      echo = toString pkgs.benchexec;
       test = lib.getExe (
         pkgs.writeShellApplication rec {
           name = "test";
@@ -32,7 +32,7 @@ in
     in
     ''
       start_all()
-      machine.wait_for_unit("multi-user.target")
+      benchexec.wait_for_unit("multi-user.target")
       benchexec.succeed(''''\
           systemd-run \
             --property='StandardOutput=file:${stdout}' \

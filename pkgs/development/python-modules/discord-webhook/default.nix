@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lovvskillz";
     repo = "python-discord-webhook";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-7nVvtXo1XjQExZSCF9VaYSCeEByJY2jn5KbVGTi33f0=";
   };
 

@@ -7,22 +7,16 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.2.4";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.2.6";
   pname = "nqptp";
 
   src = fetchFromGitHub {
     owner = "mikebrady";
     repo = "nqptp";
-    tag = version;
-    hash = "sha256-roTNcr3v2kzE6vQ5plAVtlw1+2yJplltOYsGGibtoZo=";
+    tag = finalAttrs.version;
+    hash = "sha256-bU7eTNnPhBA+XTW0SCps/iUCGuxObnv72/Lm+yKEgao=";
   };
-
-  patches = [
-    # these patches should be removed when > 1.2.4
-    ./remove-setcap.patch
-    ./systemd-service-capability.patch
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -49,4 +43,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

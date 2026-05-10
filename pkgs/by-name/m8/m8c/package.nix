@@ -3,31 +3,40 @@
   fetchFromGitHub,
   lib,
   pkg-config,
-  SDL2,
+  sdl3,
   libserialport,
+  cmake,
+  copyDesktopItems,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "m8c";
-  version = "1.7.10";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "laamaa";
     repo = "m8c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8QkvvTtFxQmDIqpyhZi/ORcB7YwENu+YafYtCZw0faE=";
+    hash = "sha256-cr5tat7JOFJ7y7AEinphgV/5T138gV6jidb87GooZ8U=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    copyDesktopItems
+  ];
 
   buildInputs = [
-    SDL2
+    sdl3
     libserialport
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform M8 tracker headless client";

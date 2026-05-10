@@ -3,20 +3,20 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "minilibx";
-  version = "0-unstable-2021-10-30";
+  version = "0-unstable-2026-04-16";
 
   src = fetchFromGitHub {
     owner = "42Paris";
     repo = "minilibx-linux";
-    rev = "7dc53a411a7d4ae286c60c6229bd1e395b0efb82";
-    hash = "sha256-aRYMpaPC7dC6EHmmXugvwcQnaizRCQZKFcQX0K2MLM4=";
+    rev = "a0ce07ba22460ee66e62b6c56d60b33946aeb13d";
+    hash = "sha256-LyFCmuGXAAv7O9jrmfeIVeYoi7d1Mdw6e8u2Z0/yO4s=";
   };
 
   outputs = [
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   dontConfigure = true;
@@ -41,6 +41,8 @@ stdenv.mkDerivation {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
   installPhase = ''
     runHook preInstall

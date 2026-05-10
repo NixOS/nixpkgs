@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   simpleeval,
   wcmatch,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pycasbin";
-  version = "2.2.0";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "casbin";
     repo = "pycasbin";
     tag = "v${version}";
-    hash = "sha256-JSaQq5BX+aXJ2iaCudzbCcMwNnf4INS/iWfMOua6fjw=";
+    hash = "sha256-jK6zmT5trj6qBcS6edXPmK8eHfqw58seraswEQQzhZ0=";
   };
 
   build-system = [ setuptools ];

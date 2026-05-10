@@ -15,14 +15,14 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vala-language-server";
   version = "0.48.7";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-language-server";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Vl5DjKBdpk03aPD+0xGoTwD9Slg1rREorqZGX5o10cY=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ andreasfelix ];
     platforms = lib.platforms.unix;
   };
-}
+})

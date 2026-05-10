@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mscerts";
-  version = "2025.8.29";
+  version = "2026.4.30";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = "mscerts";
-    tag = version;
-    hash = "sha256-K7U4dbhH3yWElSKRhU9mHU4W+Hdc6Vb9kf/TE4EJs8c=";
+    tag = finalAttrs.version;
+    hash = "sha256-S6YQt0PaY9OpFFrTcnHrak+8/x105Af7xLW5jln8GK0=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Makes the Microsoft Trusted Root Program's Certificate Trust Lists available in Python";
     homepage = "https://github.com/ralphje/mscerts";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

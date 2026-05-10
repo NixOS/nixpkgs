@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
 }:
 
@@ -8,8 +8,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uwu-colors";
   version = "0.4.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "q60";
     repo = "uwu_colors";
     tag = finalAttrs.version;

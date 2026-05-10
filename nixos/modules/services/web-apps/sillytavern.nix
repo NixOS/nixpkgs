@@ -39,8 +39,8 @@ in
 
       configFile = lib.mkOption {
         type = lib.types.path;
-        default = "${pkgs.sillytavern}/lib/node_modules/sillytavern/config.yaml";
-        defaultText = lib.literalExpression "\${pkgs.sillytavern}/lib/node_modules/sillytavern/config.yaml";
+        default = "${cfg.package}/lib/node_modules/sillytavern/config.yaml";
+        defaultText = lib.literalExpression "\${cfg.package}/lib/node_modules/sillytavern/config.yaml";
         description = ''
           Path to the SillyTavern configuration file.
         '';
@@ -99,17 +99,17 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       # required by sillytavern's extension manager
-      path = [ pkgs.git ];
+      path = [ pkgs.gitMinimal ];
       environment.XDG_DATA_HOME = "%S";
       serviceConfig = {
         Type = "simple";
         ExecStart =
           let
-            f = x: name: lib.optional (x != null) "--${name}=${builtins.toString x}";
+            f = x: name: lib.optional (x != null) "--${name}=${toString x}";
           in
           lib.concatStringsSep " " (
             [
-              "${lib.getExe pkgs.sillytavern}"
+              "${lib.getExe cfg.package}"
             ]
             ++ f cfg.port "port"
             ++ f cfg.listen "listen"
@@ -122,7 +122,7 @@ in
         Restart = "always";
         StateDirectory = "SillyTavern";
         BindPaths = [
-          "%S/SillyTavern/extensions:${pkgs.sillytavern}/lib/node_modules/sillytavern/public/scripts/extensions/third-party"
+          "%S/SillyTavern/extensions:${cfg.package}/lib/node_modules/sillytavern/public/scripts/extensions/third-party"
         ];
 
         # Security hardening

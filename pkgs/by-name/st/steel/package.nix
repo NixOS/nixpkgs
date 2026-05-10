@@ -17,18 +17,18 @@
   includeLSP ? true,
   includeForge ? true,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steel";
-  version = "0-unstable-2025-12-17";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "b7c2306320ea05649ebcac3af7ecaa7aa0c77117";
-    hash = "sha256-TjOTfka+ieAVHMjXymVDHlu29z6VoyB/7wYUGSiV/G4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GZ0VeoAwVGnK/Px5IvBGIHlpEsAh2do/QPuYtLexLt4=";
   };
 
-  cargoHash = "sha256-bXAgp83U48GsTAuki3tsoOK7X+UepKJIlS0bL5qMc8I=";
+  cargoHash = "sha256-Z5v+8bhIgBCB2pDB5AgX42vFiNkgqjU95gata0sLUrA=";
 
   nativeBuildInputs = [
     curl
@@ -91,6 +91,9 @@ rustPlatform.buildRustPackage {
 
   postFixup = ''
     wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"
+    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "$out/lib/steel"
+    wrapProgram $out/bin/forge --set-default STEEL_HOME "$out/lib/steel"
+    wrapProgram $out/bin/cargo-steel-lib --set-default STEEL_HOME "$out/lib/steel"
   '';
 
   env = {
@@ -100,7 +103,10 @@ rustPlatform.buildRustPackage {
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version-regex"
+      "^v(.*)"
+    ];
   };
 
   meta = {
@@ -115,4 +121,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

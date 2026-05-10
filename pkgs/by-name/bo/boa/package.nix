@@ -8,14 +8,14 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "boa";
   version = "0.20";
 
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "boa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-foCIzzFoEpcE6i0QrSbiob3YHIOeTpjwpAMtcPGL8Vg=";
     fetchSubmodules = true;
   };
@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
     description = "Embeddable and experimental Javascript engine written in Rust";
     mainProgram = "boa";
     homepage = "https://github.com/boa-dev/boa";
-    changelog = "https://github.com/boa-dev/boa/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/boa-dev/boa/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       unlicense
     ];
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

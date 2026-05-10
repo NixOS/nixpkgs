@@ -7,12 +7,12 @@
   mpir,
   cddlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gfan";
   version = "0.6.2";
 
   src = fetchurl {
-    url = "http://home.math.au.dk/jensen/software/gfan/gfan${version}.tar.gz";
+    url = "https://home.math.au.dk/jensen/software/gfan/gfan${finalAttrs.version}.tar.gz";
     sha256 = "02pihqb1lb76a0xbfwjzs1cd6ay3ldfxsm8dvsbl6qs3vkjxax56";
   };
 
@@ -35,7 +35,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
+  # This test assumes that our implementation of sort behaves identically to the
+  # one used during development, which is not necessarily the case; update the
+  # expected result to be sorted using our copy of sort.
+  postPatch = ''
+    sort testsuite/0008PolynomialSetUnion/output -o testsuite/0008PolynomialSetUnion/output
+    sort testsuite/0008PolynomialSetUnion/outputNew -o testsuite/0008PolynomialSetUnion/outputNew
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
 
     for f in $(find -name "*.h" -or -name "*.cpp"); do
@@ -53,6 +60,15 @@ stdenv.mkDerivation rec {
     mpir
     cddlib
   ];
+  hardeningDisable = [ "libcxxhardeningfast" ];
+
+  doCheck = true;
+  # The test runner still exits successfully when there are failed tests, so check
+  # stdout to see if anything failed.
+  checkPhase = ''
+    make check | tee "$TMPDIR/test.log"
+    ! grep -q "Failed tests:" "$TMPDIR/test.log"
+  '';
 
   meta = {
     description = "Software package for computing Gröbner fans and tropical varieties";
@@ -61,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "http://home.math.au.dk/jensen/software/gfan/gfan.html";
   };
-}
+})

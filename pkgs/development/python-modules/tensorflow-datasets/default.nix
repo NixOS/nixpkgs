@@ -13,6 +13,7 @@
   dm-tree,
   etils,
   immutabledict,
+  importlib-resources,
   numpy,
   promise,
   protobuf,
@@ -25,8 +26,6 @@
   toml,
   tqdm,
   wrapt,
-  pythonOlder,
-  importlib-resources,
 
   # tests
   apache-beam,
@@ -63,7 +62,7 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
   version = "4.9.9";
   pyproject = true;
@@ -71,7 +70,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
   };
 
@@ -86,6 +85,35 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch =
+    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+    ''
+      substituteInPlace tensorflow_datasets/core/dataset_info.py \
+        --replace-fail \
+          "elif field.label == field.LABEL_REPEATED:" \
+          "elif hasattr(field_value, 'extend'):"
+    ''
+    # mlcroissant 1.1.0 requires leaf fields to define `source` or `value`
+    + ''
+      substituteInPlace tensorflow_datasets/core/utils/croissant_utils_test.py \
+        --replace-fail \
+          "references=mlc.Source(field='splits/name')," \
+          "references=mlc.Source(field='splits/name'), source=mlc.Source(field='splits/name')," \
+        --replace-fail \
+          "references=mlc.Source(field='labels/label')," \
+          "references=mlc.Source(field='labels/label'), source=mlc.Source(field='labels/label'),"
+    ''
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    + ''
+      substituteInPlace tensorflow_datasets/datasets/smallnorb/smallnorb_dataset_builder.py \
+        --replace-fail \
+          "magic = int(np.frombuffer(s, dtype=int32_dtype, count=1))" \
+          "magic = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1)))" \
+        --replace-fail \
+          "ndim = int(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4))" \
+          "ndim = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4)))"
+    '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -94,6 +122,7 @@ buildPythonPackage rec {
     dm-tree
     etils
     immutabledict
+    importlib-resources
     numpy
     promise
     protobuf
@@ -108,10 +137,7 @@ buildPythonPackage rec {
     wrapt
   ]
   ++ etils.optional-dependencies.epath
-  ++ etils.optional-dependencies.etree
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ++ etils.optional-dependencies.etree;
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -223,8 +249,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

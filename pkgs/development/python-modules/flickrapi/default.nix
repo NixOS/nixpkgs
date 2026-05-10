@@ -8,7 +8,6 @@
   six,
   pytestCheckHook,
   responses,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "flickrapi";
   version = "2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sybrenstuvel";

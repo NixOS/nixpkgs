@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cassowary";
   version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "rogerwelin";
     repo = "cassowary";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-27sEexOGLQ42qWY+vCiPTt5XR66TSUvKsuGgtkbMgE4=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ hugoreeves ];
     mainProgram = "cassowary";
   };
-}
+})

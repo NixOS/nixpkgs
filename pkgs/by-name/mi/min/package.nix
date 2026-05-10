@@ -31,7 +31,7 @@ buildNimPackage (finalAttrs: {
       -exec sed 's|{\.passL:.*\.}|discard|g' -i {} \;
   '';
 
-  NIX_LDFLAGS = [ "-lpcre" ];
+  env.NIX_LDFLAGS = toString [ "-lpcre" ];
 
   meta = {
     description = "Functional, concatenative programming language with a minimalist syntax";

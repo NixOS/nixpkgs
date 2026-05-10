@@ -48,7 +48,7 @@ let
       Turns = [
         {
           Proto = "udp";
-          URI = "turn:${cfg.turnDomain}:${builtins.toString cfg.turnPort}";
+          URI = "turn:${cfg.turnDomain}:${toString cfg.turnPort}";
           Username = "netbird";
           Password = "netbird";
         }
@@ -79,7 +79,7 @@ let
     };
 
     HttpConfig = {
-      Address = "127.0.0.1:${builtins.toString cfg.port}";
+      Address = "127.0.0.1:${toString cfg.port}";
       IdpSignKeyRefreshEnabled = true;
       OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
     };
@@ -263,7 +263,7 @@ in
           StoreConfig = { Engine = "sqlite"; };
 
           HttpConfig = {
-            Address = "127.0.0.1:''${builtins.toString cfg.port}";
+            Address = "127.0.0.1:''${toString cfg.port}";
             IdpSignKeyRefreshEnabled = true;
             OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
           };
@@ -457,7 +457,7 @@ in
 
       virtualHosts.${cfg.domain} = {
         locations = {
-          "/api".proxyPass = "http://localhost:${builtins.toString cfg.port}";
+          "/api".proxyPass = "http://localhost:${toString cfg.port}";
 
           "/management.ManagementService/".extraConfig = ''
             # This is necessary so that grpc connections do not get closed early
@@ -466,7 +466,7 @@ in
 
             grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            grpc_pass grpc://localhost:${builtins.toString cfg.port};
+            grpc_pass grpc://localhost:${toString cfg.port};
             grpc_read_timeout 1d;
             grpc_send_timeout 1d;
             grpc_socket_keepalive on;

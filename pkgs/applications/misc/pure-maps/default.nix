@@ -1,10 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   qttools,
-  kirigami2,
+  wrapQtAppsHook,
   qtquickcontrols2,
   qtlocation,
   qtsensors,
@@ -15,7 +15,7 @@
   pyotherside,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pure-maps";
   version = "3.4.2";
 
@@ -32,10 +32,10 @@ mkDerivation rec {
     python3
     qttools
     python3.pkgs.wrapPython
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    kirigami2
     qtquickcontrols2
     qtlocation
     qtsensors
@@ -45,12 +45,12 @@ mkDerivation rec {
     s2geometry
   ];
 
-  cmakeFlags = [ "-DFLAVOR=kirigami" ];
+  cmakeFlags = [ "-DFLAVOR=qtcontrols" ];
 
   pythonPath = with python3.pkgs; [ gpxpy ];
 
   preInstall = ''
-    buildPythonPath "$pythonPath"
+    buildPythonPath "''${pythonPath[*]}"
     qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 

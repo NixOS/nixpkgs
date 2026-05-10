@@ -8,14 +8,14 @@
   ejson2env,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ejson2env";
   version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson2env";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-0DKKdu1b/gjwtKycdXrV3hzAeGmvK41MlZbltcEzj/g=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "ejson2env";
   };
-}
+})

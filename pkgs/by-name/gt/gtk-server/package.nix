@@ -9,12 +9,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-server";
   version = "2.4.6";
 
   src = fetchurl {
-    url = "https://www.gtk-server.org/stable/gtk-server-${version}.tar.gz";
+    url = "https://www.gtk-server.org/stable/gtk-server-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-sFL3y068oXDKgkEUcNnGVsNSPBdI1NzpsqdYJfmOQoA=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

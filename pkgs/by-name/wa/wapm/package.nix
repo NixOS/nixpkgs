@@ -7,14 +7,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wapm-cli";
   version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = "wapm-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-T7YEe8xg5iwI/npisW0m+6FLi+eaAQVgYNe6TvMlhAs=";
   };
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.lucperkins ];
   };
-}
+})

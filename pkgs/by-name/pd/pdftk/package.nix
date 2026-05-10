@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       raskin
-      averelld
     ];
     platforms = lib.platforms.unix;
     mainProgram = "pdftk";

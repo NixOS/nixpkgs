@@ -16,13 +16,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtracefs";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${version}.tar.gz";
-    hash = "sha256-rpZUa34HMnDMSsGGwtOriEEHDfnW8emRSHZxzRkY3c4=";
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${finalAttrs.version}.tar.gz";
+    hash = "sha256-uN4alsOmj7IFUL2IJSHbgBiztv2Sq0+MktQiRByvhK0=";
   };
 
   postPatch = ''
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wentasah ];
   };
-}
+})

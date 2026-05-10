@@ -5,12 +5,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "potrace";
   version = "1.16";
 
   src = fetchurl {
-    url = "https://potrace.sourceforge.net/download/${version}/potrace-${version}.tar.gz";
+    url = "https://potrace.sourceforge.net/download/${finalAttrs.version}/potrace-${finalAttrs.version}.tar.gz";
     sha256 = "1k3sxgjqq0jnpk9xxys05q32sl5hbf1lbk1gmfxcrmpdgnhli0my";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.pSub ];
     license = lib.licenses.gpl2;
   };
-}
+})

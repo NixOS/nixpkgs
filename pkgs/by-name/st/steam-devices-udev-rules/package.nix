@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "steam-devices-udev-rules";
-  version = "1.0.0.61-unstable-2025-12-16";
+  version = "1.0.0.61-unstable-2026-04-16";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "steam-devices";
-    rev = "daf01bc7e1e3d65987ab0f6e2c93707170a686b3";
-    hash = "sha256-3eYZzn4b4RMCa6r1a1fFQohNNb4+5HfRtz8AaLDcoHs=";
+    rev = "39e7bd00f7a322e5165fd8f416b31d23daf6d385";
+    hash = "sha256-QjFyzSwqwzPz06Wcj7in91tlhaxgw0DydLgsjC+i6Lo=";
   };
 
   nativeBuildInputs = [

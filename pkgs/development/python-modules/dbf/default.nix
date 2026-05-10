@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   aenum,
-  pythonOlder,
   python,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "dbf";
   version = "0.99.11";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

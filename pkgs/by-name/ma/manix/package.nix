@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "manix";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "manix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b/3NvY+puffiQFCQuhRMe81x2wm3vR01MR3iwe/gJkw=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "manix";
   };
-}
+})

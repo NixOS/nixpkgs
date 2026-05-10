@@ -5,14 +5,18 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gen6dns";
   version = "1.3";
 
   src = fetchurl {
-    url = "https://www.hznet.de/tools/gen6dns-${version}.tar.gz";
+    url = "https://www.hznet.de/tools/gen6dns-${finalAttrs.version}.tar.gz";
     hash = "sha256-MhYfgzbGPmrhPx89EpObrEkxaII7uz4TbWXeEGF7Xws=";
   };
+
+  patches = [
+    ./fix-gcc15.patch
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ majiir ];
     platforms = lib.platforms.unix;
   };
-}
+})

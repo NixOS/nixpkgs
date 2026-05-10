@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ffpb";
   version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "7eVqbLpMHS1sBw2vYS4cTtyVdnnknGtEI8190VlXflk=";
   };
 
@@ -29,4 +29,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ CaptainJawZ ];
     mainProgram = "ffpb";
   };
-}
+})

@@ -5,7 +5,6 @@
   django-redis,
   fetchFromGitHub,
   pymemcache,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-ratelimit";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jsocol";

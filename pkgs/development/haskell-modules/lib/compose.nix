@@ -482,10 +482,11 @@ rec {
     overrideCabal (drv: {
       src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";
 
-      # Revising and jailbreaking the cabal file has been handled in sdistTarball
+      # Revising, jailbreaking and patches have been handled in sdistTarball
       revision = null;
       editedCabalFile = null;
       jailbreak = false;
+      patches = [ ];
     }) pkg;
 
   /*

@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "IvanMalison";
+    owner = "colonelpanic8";
     repo = "quill-qr";
     rev = "v${version}";
     sha256 = "1kdsq6csmxfvs2wy31bc9r92l5pkmzlzkyqrangvrf4pbk3sk0r6";
@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Print QR codes for use with https://p5deo-6aaaa-aaaab-aaaxq-cai.raw.ic0.app";
     mainProgram = "quill-qr.sh";
-    homepage = "https://github.com/IvanMalison/quill-qr";
+    homepage = "https://github.com/colonelpanic8/quill-qr";
     maintainers = with lib.maintainers; [ imalison ];
     platforms = with lib.platforms; linux;
   };

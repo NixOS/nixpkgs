@@ -9,51 +9,50 @@
   freezegun,
   hatchling,
   hypothesis,
+  isort,
   pydantic,
-  pyright,
+  pytest,
   pytest-freezer,
   pytest-mock,
-  pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   time-machine,
-  toml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.28.0";
+  version = "0.32.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-f572H7jeolv9nONuRBtZR/pcVDs5oX/dOiEjXlJyiio=";
+    hash = "sha256-xnooMIm0UiNOWrZ4JZwbpFzliGsTF7b1DAXi1fxMb30=";
   };
 
   build-system = [ hatchling ];
+
+  buildInputs = [
+    pytest
+  ];
 
   dependencies = [
     asttokens
     executing
     rich
-    toml
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    toml
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     freezegun
     hypothesis
+    isort
     pydantic
-    pyright
     pytest-freezer
     pytest-mock
-    pytest-subtests
     pytest-xdist
     pytestCheckHook
     time-machine

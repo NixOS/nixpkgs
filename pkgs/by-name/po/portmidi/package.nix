@@ -7,15 +7,15 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "portmidi";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "portmidi";
     repo = "portmidi";
-    rev = "v${version}";
-    sha256 = "sha256-kmyjOsjLG56Qqrf6DqgOTpt4A4aCMvCI3koiUoKzwrE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j5m/ablSzsENVzE1ghvnu+uE4nB0V91SA/mrCx5gCNk=";
   };
 
   cmakeFlags = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
   };
-}
+})

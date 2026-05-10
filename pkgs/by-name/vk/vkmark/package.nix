@@ -13,7 +13,7 @@
   glm,
   assimp,
   libxcb,
-  xcbutilwm,
+  libxcb-wm,
   nix-update-script,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     assimp
     libxcb
-    xcbutilwm
+    libxcb-wm
     wayland
     wayland-protocols
   ];

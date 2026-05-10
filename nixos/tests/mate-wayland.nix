@@ -51,7 +51,7 @@
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ"
           machine.succeed(f"{cmd} | grep 'XDG_SESSION_TYPE' | grep 'wayland'")
           machine.succeed(f"{cmd} | grep 'XDG_SESSION_DESKTOP' | grep 'MATE'")
-          machine.succeed(f"{cmd} | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate.mate-panel-with-applets.pname}'")
+          machine.succeed(f"{cmd} | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate-panel-with-applets.pname}'")
           # From the nixos/mate module
           machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 

@@ -16,14 +16,14 @@
   gettext,
   libGL,
   libGLU,
-  libSM,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
+  libsm,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxxf86vm,
   libao,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libusb1,
   mbedtls,
@@ -86,14 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libGL
     libGLU
-    libSM
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXxf86vm
+    libsm
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxxf86vm
     libao
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
     libusb1
     mbedtls

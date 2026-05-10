@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-mod-graph-chart";
   version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "PaulXu-cn";
     repo = "go-mod-graph-chart";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vitUZXQyAj72ed9Gukr/sAT/iWWMhwsxjZhf2a9CM7I=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

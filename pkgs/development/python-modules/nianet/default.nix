@@ -6,7 +6,6 @@
   numpy,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   toml-adapt,
   tomli,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "nianet";
   version = "1.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SasoPavlic";

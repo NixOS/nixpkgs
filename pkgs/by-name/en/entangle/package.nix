@@ -35,7 +35,8 @@
   orc,
   udev,
   util-linux,
-  xorg,
+  libxtst,
+  libxdmcp,
   zstd,
 }:
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "entangle";
     repo = "entangle";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
   };
 
@@ -107,11 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     util-linux
     zstd
-  ]
-  ++ (with xorg; [
-    libXdmcp
-    libXtst
-  ]);
+    libxdmcp
+    libxtst
+  ];
 
   # Disable building of doc/reference since it requires network connection to render XML to HTML
   # Patch build script shebangs

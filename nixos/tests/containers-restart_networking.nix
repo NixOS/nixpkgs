@@ -55,24 +55,6 @@
           ];
         };
       };
-
-      specialisation.eth1-rstp.configuration = {
-        networking.bridges.br0 = {
-          interfaces = [ "eth1" ];
-          rstp = lib.mkForce true;
-        };
-
-        networking.interfaces = {
-          eth1.ipv4.addresses = lib.mkForce [ ];
-          eth1.ipv6.addresses = lib.mkForce [ ];
-          br0.ipv4.addresses = [
-            {
-              address = "192.168.1.2";
-              prefixLength = 24;
-            }
-          ];
-        };
-      };
     };
   };
 
@@ -99,19 +81,6 @@
             "ip l show eth1 |grep 'master br0' >&2",
             "grep eth1 /run/br0.interfaces >&2",
         )
-
-    #  activating rstp needs another service, therefore the bridge will restart and the container will lose its connectivity
-    # with subtest("Bridged configuration with STP"):
-    #     client.succeed("/run/booted-system/specialisation/eth1-rstp/bin/switch-to-configuration test >&2")
-    #     client.execute("ip -4 a >&2")
-    #     client.execute("ip l >&2")
-    #
-    #     client.succeed(
-    #         "ping 192.168.1.122 -c 1 -n >&2",
-    #         "nixos-container run webserver -- ping -c 1 -n 192.168.1.2 >&2",
-    #         "ip l show eth1 |grep 'master br0' >&2",
-    #         "grep eth1 /run/br0.interfaces >&2",
-    #     )
 
     with subtest("Reverting to initial configuration preserves connectivity"):
         client.succeed(

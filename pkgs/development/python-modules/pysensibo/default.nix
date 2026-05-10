@@ -4,18 +4,15 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysensibo";
   version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Otk5W3VTbOAeZOVnXvW8VSxU1nHa8zUvmvduRTdlwVs=";
   };
 
@@ -31,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with Sensibo";
     homepage = "https://github.com/andrey-git/pysensibo";
-    changelog = "https://github.com/andrey-git/pysensibo/releases/tag/${version}";
+    changelog = "https://github.com/andrey-git/pysensibo/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

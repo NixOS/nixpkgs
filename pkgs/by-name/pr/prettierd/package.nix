@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettierd";
-  version = "0.26.2";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "prettierd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KvFOvWQZBppvHbvUvGQu39j8aV/pQFwfuqjFQqdb7lI=";
+    hash = "sha256-8fy8ciPRd2ZRZ56vzz0quDNqpaAPfUFBN4fjVTdd2Cg=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Rf7km2WUODqWu8U8iiHNrb5dMamIm1XCsRnldO71j5A=";
+    hash = "sha256-PPi+nobxbVTC9G0Xwu5kcNH6zxtJXueYGuZkl3+XTIo=";
   };
 
   strictDeps = true;

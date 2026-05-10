@@ -22,6 +22,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    # install pre-compiled libtensorflowlite
     python ./script/copy_lib
   '';
 
@@ -46,8 +47,12 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    # elftools.common.exceptions.ELFError: Magic number does not match
-    broken = stdenv.hostPlatform.isDarwin;
+    broken =
+      # elftools.common.exceptions.ELFError: Magic number does not match
+      stdenv.hostPlatform.isDarwin
+      ||
+        # segfaults when calling into libtensorflowlite
+        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = "Alternative Python library for openWakeWord";
     homepage = "https://github.com/rhasspy/pyopen-wakeword";
     changelog = "https://github.com/rhasspy/pyopen-wakeword/blob/${src.tag}/CHANGELOG.md";

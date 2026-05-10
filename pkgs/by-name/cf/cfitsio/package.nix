@@ -11,24 +11,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.6.3";
+  version = "4.6.4";
 
   src = fetchFromGitHub {
     owner = "HEASARC";
     repo = "cfitsio";
     tag = "cfitsio-${finalAttrs.version}";
-    hash = "sha256-nKxX3YNRJZpmcP8/0O2pMsYjcH6vzAWMpqaHYO+HoUo=";
+    hash = "sha256-8AFPTr8j8f+x1h78IXOV8GHkDPWvI8w8aRxyke3Dras=";
   };
 
   outputs = [
     "bin"
     "dev"
     "out"
-    "doc"
-  ];
-
-  patches = [
-    ./cfitsio-pc-cmake.patch
   ];
 
   nativeBuildInputs = [
@@ -68,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Fixup installation
   # Remove installed test tools and benchmark
   postInstall = ''
-    install -Dm644 -t "$out/share/doc/${finalAttrs.pname}" ../docs/*.pdf
     rm "$out/bin/cookbook"
     rmdir "$out/bin"
     rm "$bin/bin/smem" "$bin/bin/speed"

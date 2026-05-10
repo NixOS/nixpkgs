@@ -9,14 +9,14 @@
   checksec,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "checksec";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "slimm609";
     repo = "checksec";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LsVK+ufSUGXWHpPk1iAFD6Lxh5hEp1WmTAy9hZMEiKk=";
   };
 
@@ -25,13 +25,13 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
     version = testers.testVersion {
       package = checksec;
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
@@ -46,4 +46,4 @@ buildGoModule rec {
       sdht0
     ];
   };
-}
+})

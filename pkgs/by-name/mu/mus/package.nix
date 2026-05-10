@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mus";
   version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~nbsp";
     repo = "mus";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-yvMV+lhU9Wtwrhw0RKRUNFNznvZP0zcnT6jqPaqzhUs=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nbsp ];
     mainProgram = "mus";
   };
-}
+})

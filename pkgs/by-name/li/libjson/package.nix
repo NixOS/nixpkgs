@@ -5,11 +5,11 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjson";
   version = "7.6.1";
   src = fetchurl {
-    url = "mirror://sourceforge/libjson/libjson_${version}.zip";
+    url = "mirror://sourceforge/libjson/libjson_${finalAttrs.version}.zip";
     sha256 = "0xkk5qc7kjcdwz9l04kmiz1nhmi7iszl3k165phf53h3a4wpl9h7";
   };
   patches = [ ./install-fix.patch ];
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "encpipe";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "encpipe";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YlEKSWzZuQyDi0mbwJh9Dfn4gKiOeqihSHPt4yY6YdY=";
     fetchSubmodules = true;
   };
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "encpipe";
   };
-}
+})

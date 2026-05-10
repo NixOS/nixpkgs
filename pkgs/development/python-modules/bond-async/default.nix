@@ -7,14 +7,11 @@
   orjson,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bond-async";
   version = "0.2.1";
-
-  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 

@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   fig2dev,
   readline,
-  libX11,
+  libx11,
   bluez,
   SDL2,
 }:
@@ -14,8 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "x11basic";
   version = "1.28-65";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "kollo";
     repo = "X11Basic";
     tag = finalAttrs.version;
@@ -37,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     readline
-    libX11
+    libx11
     SDL2
     bluez
   ];

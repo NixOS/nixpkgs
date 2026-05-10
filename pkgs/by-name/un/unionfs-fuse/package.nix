@@ -8,14 +8,14 @@
   fuse3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unionfs-fuse";
   version = "3.7";
 
   src = fetchFromGitHub {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wha1AMwJMbC5rZBE4ybeOmH7Dq4p5YdMJDCT/a3B6cI=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

@@ -1,23 +1,36 @@
 {
   lib,
+  libgbm,
+  libjxl,
+  libGL,
   fetchFromGitHub,
+  nix-update-script,
+  pango,
+  pkg-config,
   rustPlatform,
+  wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayshot";
-  version = "1.3.1";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "wayshot";
-    rev = version;
-    hash = "sha256-nUpIN4WTePtFZTmKAjv0tgj4VTdZeXjoQX6am9+M3ig=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RaOe00+Dy+zgdEkfF5hJrJ/lSA2vrsZWVoDsTc3uwpw=";
   };
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    pango
+    libgbm
+    libjxl
+    libGL
+    wayland
+  ];
+  cargoHash = "sha256-zuRl0WxS9MyyRsCpbFlVKN+5FasIbfkXutaM3Gmic04=";
 
-  cargoHash = "sha256-uKETDGi1n6VcdGCrjrnEM1sQ0vVjd/vCXMUn9Hby2m8=";
-
-  # tests are off as they are broken and pr for integration testing is still WIP
-  doCheck = false;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Native, blazing-fast screenshot tool for wlroots based compositors such as sway and river";
@@ -26,8 +39,9 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       dit7ya
       id3v1669
+      Subserial
     ];
     platforms = lib.platforms.linux;
     mainProgram = "wayshot";
   };
-}
+})

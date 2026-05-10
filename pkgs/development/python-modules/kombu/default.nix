@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.6.1";
+  version = "5.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "kombu";
     tag = "v${version}";
-    hash = "sha256-kywPcWhc+iMh4OOH8gobA6NFismRvihgNMcxxw+2p/4=";
+    hash = "sha256-J0cEQsMHKethrfDVDDvIjc/iZpoCYLH9INHtgKmH9Pk=";
   };
 
   build-system = [ setuptools ];
@@ -93,6 +93,8 @@ buildPythonPackage rec {
     "test_driver_version"
     # AssertionError: assert [call('WATCH'..., 'test-tag')] ==...
     "test_global_keyprefix_transaction"
+    # Broken on latest redis-py, see https://github.com/celery/kombu/issues/2362
+    "test_connparams_health_check_interval_supported"
   ];
 
   meta = {

@@ -10,21 +10,18 @@
   alembic,
   pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.18.1";
+  version = "0.18.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     tag = version;
-    hash = "sha256-F/+POYOb7PoUwLnQpM00zAPpbSXNeWJF2TZ4y260Pzw=";
+    hash = "sha256-kSsKud4/uL5ycPiuS+JPXJ6XH9ZgQ+kHOTC5RtG9C0I=";
   };
 
   build-system = [

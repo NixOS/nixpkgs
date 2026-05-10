@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   # build-system
   setuptools,
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   pname = "certomancer";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";

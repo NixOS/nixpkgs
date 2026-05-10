@@ -13,14 +13,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttr: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ivm";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "inko-lang";
     repo = "ivm";
-    tag = "v${finalAttr.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pqqUvHK6mPrK1Mir2ILANxtih9OrAKDJPE0nRWc5JOY=";
   };
 

@@ -8,14 +8,14 @@
   withGPerfTools ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sentencepiece";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "sentencepiece";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-q0JgMxoD9PLqr6zKmOdrK2A+9RXVDub6xy7NOapS+vs=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pashashocky ];
   };
-}
+})

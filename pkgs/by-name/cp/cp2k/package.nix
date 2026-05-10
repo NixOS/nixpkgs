@@ -129,14 +129,14 @@ let
   });
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cp2k";
   version = "2025.2";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vfl5rCoFeGtYuZ7LcsVsESjKxFbN5IYDvBSzOqsd64w=";
     fetchSubmodules = true;
   };
@@ -284,4 +284,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sheepforce ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

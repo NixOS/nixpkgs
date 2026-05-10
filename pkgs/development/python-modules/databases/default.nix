@@ -8,7 +8,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlalchemy,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "databases";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";

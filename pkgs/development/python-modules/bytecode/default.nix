@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools-scm,
 }:
@@ -10,8 +9,7 @@
 buildPythonPackage rec {
   pname = "bytecode";
   version = "0.17.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vstinner";

@@ -15,7 +15,7 @@
   lsof,
   makeBinaryWrapper,
   nix-update-script,
-  pinentry,
+  pinentry-curses,
   stdenvNoCC,
   util-linuxMinimal,
   versionCheckHook,
@@ -36,7 +36,7 @@ let
     gnupg
     libargon2
     lsof
-    pinentry
+    pinentry-curses
     util-linuxMinimal
   ];
 
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
-    pinentry
+    pinentry-curses
     zsh
   ];
 

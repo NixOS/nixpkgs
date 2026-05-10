@@ -7,16 +7,16 @@
 
 buildNpmPackage {
   pname = "coc-clangd";
-  version = "0-unstable-2025-11-18";
+  version = "0-unstable-2026-05-01";
 
   src = fetchFromGitHub {
     owner = "clangd";
     repo = "coc-clangd";
-    rev = "72a4edc5ec39c6d7c4fd5a49aee7d9f3f84b8b6e";
-    hash = "sha256-uNCN3+8KovQ/Grrv7k5YZz6tTCNUX+6EN1Gkm867LMc=";
+    rev = "1a9f68c7266621fd8cb5aa5863ec63927232fbfc";
+    hash = "sha256-FhJzJAf5jcdYCpPAKlJUNcVb0U8mkAiS5MoCTQpj/mM=";
   };
 
-  npmDepsHash = "sha256-cLW5pY3LaumtE2qyxMMP9WirCMdWq+gsSO+dZNhCc1g=";
+  npmDepsHash = "sha256-jPgvi+Wz39d56d0YQSF99HqZ3rYi97kfGv7r0IY5WbY=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
@@ -24,6 +24,6 @@ buildNpmPackage {
     description = "clangd extension for coc.nvim";
     homepage = "https://github.com/clangd/coc-clangd";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

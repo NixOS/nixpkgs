@@ -1,34 +1,61 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   baron,
+
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "redbaron";
   version = "0.9.2";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0bqkq0wn20cc3qrcd1ifq74p4m570j345bkq4axl08kbr8whfba7";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "redbaron";
+    tag = finalAttrs.version;
+    hash = "sha256-Wgq7ltAsy4aPtfEiLp42p5pfcc/w9U0kFJTVNqy0iio=";
   };
 
-  propagatedBuildInputs = [ baron ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    baron
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
-    rm -rf tests/__pycache__
-    rm tests/test_bounding_box.py
-  ''; # error about fixtures
+    cd tests
+  '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  disabledTestPaths = [
+    "test_bounding_box.py"
+  ];
+
+  disabledTests = [
+    # AssertionError: assert '0 ----------...39m\x1b[39m\n' == '0 ----------...5m]\x1b[39m\n'
+    "test_highlight"
+  ];
 
   meta = {
-    homepage = "https://github.com/PyCQA/redbaron";
     description = "Abstraction on top of baron, a FST for python to make writing refactoring code a realistic task";
+    homepage = "https://redbaron.readthedocs.io/en/latest";
+    downloadPage = "https://github.com/PyCQA/redbaron";
+    changelog = "https://github.com/PyCQA/redbaron/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

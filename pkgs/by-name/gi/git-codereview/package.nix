@@ -5,15 +5,15 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-codereview";
-  version = "1.17.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "review";
-    rev = "v${version}";
-    hash = "sha256-mcyijASjm4DeXsh5ZPLoYuRypCeIbp2FcSIDA0M+l2g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Y15K8j9bqBFbRkYJ2pdfKobpuTglWcm+QDkoTklzWa8=";
   };
 
   vendorHash = null;
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.edef ];
     mainProgram = "git-codereview";
   };
-}
+})

@@ -6,19 +6,19 @@
   risor,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "risor";
-  version = "1.8.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "risor-io";
     repo = "risor";
-    rev = "v${version}";
-    hash = "sha256-Vw0fslKtBGdL6BjzNYzGRneQ+jtNDvAymlUxNa0lKZ8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SXUaSJmtWul4LYRdoxv4lXBB4HHp62xrWbEchI691YY=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-yVvryqPB35Jc3MXIJyRlFhAHU8H8PmSs60EO/JABHDs=";
+  vendorHash = "sha256-WUvCzdDSsCan4K568k53oveYIzFQCxFi2B9gQEaeFEM=";
 
   subPackages = [
     "cmd/risor"
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -41,8 +41,8 @@ buildGoModule rec {
     description = "Fast and flexible scripting for Go developers and DevOps";
     mainProgram = "risor";
     homepage = "https://github.com/risor-io/risor";
-    changelog = "https://github.com/risor-io/risor/releases/tag/${src.rev}";
+    changelog = "https://github.com/risor-io/risor/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

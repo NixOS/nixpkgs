@@ -7,21 +7,16 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.4.4";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.4.6";
   pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
-    rev = "v${version}";
-    sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9/kFI38PG3AKsdDqEV/wEzSel9IlQQ/pvOyhU/N/aV0=";
   };
-
-  patches = [
-    ./dont-fail-ln.patch
-    ./do-link-so.patch
-  ];
 
   nativeBuildInputs = [ which ];
   buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
@@ -55,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Console utility and library for computing and verifying hash sums of files";
     license = lib.licenses.bsd0;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ andrewrk ];
+    maintainers = [ ];
   };
-}
+})

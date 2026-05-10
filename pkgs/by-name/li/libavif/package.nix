@@ -29,9 +29,9 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libavif";
-  version = "1.3.0";
+  version = "1.4.1";
 
   outputs = [
     "out"
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = "libavif";
-    rev = "v${version}";
-    hash = "sha256-0J56wpXa2AVh9JUp5UY2kzWijNE3i253RKhpG5oDFJE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-035SoxHfN121mp3LGwGykReCi1WJbl2/nZH8c/VwABU=";
   };
 
   postPatch = ''
@@ -120,9 +120,9 @@ stdenv.mkDerivation rec {
       (avifenc/avifdec).
     '';
     homepage = "https://github.com/AOMediaCodec/libavif";
-    changelog = "https://github.com/AOMediaCodec/libavif/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/AOMediaCodec/libavif/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ mkg20001 ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
   };
-}
+})

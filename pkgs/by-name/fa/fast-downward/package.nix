@@ -8,14 +8,14 @@
   cplex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fast-downward";
   version = "24.06.1";
 
   src = fetchFromGitHub {
     owner = "aibasel";
     repo = "downward";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "sha256-JwBdV44h6LAJeIjKHPouvb3ZleydAc55QiuaFGrFx1Y=";
   };
 
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/${python3.sitePackages}
     cp -r driver $out/${python3.sitePackages}
 
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    wrapPythonProgramsIn $out/libexec/fast-downward/translate "$out $pythonPath"
+    wrapPythonProgramsIn $out/bin "$out ''${pythonPath[*]}"
+    wrapPythonProgramsIn $out/libexec/fast-downward/translate "$out ''${pythonPath[*]}"
     # Because fast-downward calls `python translate.py` we need to return wrapped scripts back.
     for i in $out/libexec/fast-downward/translate/.*-wrapped; do
       name="$(basename "$i")"
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

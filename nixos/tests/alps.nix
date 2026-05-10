@@ -10,40 +10,49 @@ in
   };
 
   nodes = {
-    server = {
-      imports = [ ./common/user-account.nix ];
-      security.pki.certificateFiles = [
-        certs.ca.cert
-      ];
-      networking.extraHosts = ''
-        127.0.0.1 ${domain}
-      '';
-      networking.firewall.allowedTCPPorts = [
-        25
-        465
-        993
-      ];
-      services.postfix = {
-        enable = true;
-        enableSubmission = true;
-        enableSubmissions = true;
+    server =
+      { config, ... }:
+      {
+        imports = [ ./common/user-account.nix ];
+        security.pki.certificateFiles = [
+          certs.ca.cert
+        ];
+        networking.extraHosts = ''
+          127.0.0.1 ${domain}
+        '';
+        networking.firewall.allowedTCPPorts = [
+          25
+          465
+          993
+        ];
+        services.postfix = {
+          enable = true;
+          enableSubmission = true;
+          enableSubmissions = true;
 
-        settings.main = {
-          smtp_tls_CAfile = "${certs.ca.cert}";
-          smtpd_tls_chain_files = [
-            "${certs.${domain}.key}"
-            "${certs.${domain}.cert}"
-          ];
+          settings.main = {
+            smtp_tls_CAfile = "${certs.ca.cert}";
+            smtpd_tls_chain_files = [
+              "${certs.${domain}.key}"
+              "${certs.${domain}.cert}"
+            ];
+          };
+        };
+        services.dovecot2 = {
+          enable = true;
+          enablePAM = true;
+          settings = {
+            dovecot_config_version = "2.4.3";
+            dovecot_storage_version = config.services.dovecot2.package.version;
+            mail_driver = "maildir";
+            mail_path = "~/mail";
+            protocols.imap = true;
+            ssl_server_ca_file = "${certs.ca.cert}";
+            ssl_server_cert_file = "${certs.${domain}.cert}";
+            ssl_server_key_file = "${certs.${domain}.key}";
+          };
         };
       };
-      services.dovecot2 = {
-        enable = true;
-        enableImap = true;
-        sslCACert = "${certs.ca.cert}";
-        sslServerCert = "${certs.${domain}.cert}";
-        sslServerKey = "${certs.${domain}.key}";
-      };
-    };
 
     client =
       { nodes, config, ... }:
@@ -110,7 +119,7 @@ in
     ''
       server.start()
       server.wait_for_unit("postfix.service")
-      server.wait_for_unit("dovecot2.service")
+      server.wait_for_unit("dovecot.service")
       server.wait_for_open_port(465)
       server.wait_for_open_port(993)
 

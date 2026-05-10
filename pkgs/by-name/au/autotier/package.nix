@@ -13,7 +13,7 @@
   installShellFiles,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "autotier";
+  pname = "autotier";
   version = "1.2.0";
   src = fetchFromGitHub {
     owner = "45Drives";
@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-3+KOh7JvbujCMbMqnZ5SGopAuOKHitKq6XV6a/jkcog=";
     })
   ];
+
+  postPatch = ''
+    # Fix build with boost 1.89+ where boost_system stub library has been removed
+    substituteInPlace makefile --replace-fail "-lboost_system" ""
+  '';
 
   # Required by rocksdb after 10.7.5
   env.EXTRA_CFLAGS = "-std=c++20 -fno-char8_t";

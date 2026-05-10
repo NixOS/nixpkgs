@@ -184,14 +184,25 @@
                           ${lib.optionalString cfg.ephemeral "--ephemeral"}
                           ${lib.optionalString cfg.noDefaultLabels "--no-default-labels"}
                         )
-                        # If the token file contains a PAT (i.e., it starts with "ghp_" or "github_pat_"), we have to use the --pat option,
-                        # if it is not a PAT, we assume it contains a registration token and use the --token option
                         token=$(<"${newConfigTokenPath}")
-                        if [[ "$token" =~ ^ghp_* ]] || [[ "$token" =~ ^github_pat_* ]]; then
+                        case ${cfg.tokenType} in
+                        access)
                           args+=(--pat "$token")
-                        else
+                          ;;
+                        registration)
                           args+=(--token "$token")
-                        fi
+                          ;;
+                        auto)
+                          # If the token file contains a PAT (i.e., it starts with "ghp_" or "github_pat_"),
+                          # we have to use the --pat option, if it is not a PAT, we assume it contains a
+                          # registration token and use the --token option
+                          if [[ "$token" =~ ^gh[a-z]+_* ]] || [[ "$token" =~ ^github_pat_* ]]; then
+                            args+=(--pat "$token")
+                          else
+                            args+=(--token "$token")
+                          fi
+                          ;;
+                        esac
                         ${cfg.package}/bin/Runner.Listener configure "''${args[@]}"
                         # Move the automatically created _diag dir to the logs dir
                         mkdir -p  "$STATE_DIRECTORY/_diag"

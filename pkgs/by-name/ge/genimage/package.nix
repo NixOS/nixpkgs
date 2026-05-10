@@ -8,12 +8,12 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genimage";
   version = "19";
 
   src = fetchurl {
-    url = "https://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
+    url = "https://public.pengutronix.de/software/genimage/genimage-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-fsT8uGVmKosv8gKEgZBE/6hBN788oW+3SXASkbwB8Qg=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "genimage";
   };
-}
+})

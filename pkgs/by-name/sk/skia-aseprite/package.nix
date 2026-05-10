@@ -2,6 +2,7 @@
   aseprite,
   clangStdenv,
   expat,
+  cctools,
   fetchFromGitHub,
   fetchgit,
   fontconfig,
@@ -12,7 +13,7 @@
   libjpeg,
   libpng,
   libwebp,
-  libX11,
+  libx11,
   libgbm,
   ninja,
   python3,
@@ -38,12 +39,14 @@ clangStdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     python3
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    # Skia's build invokes `libtool -static` on Darwin to create `.a` archives.
+    cctools.libtool
   ];
 
   # Using substituteInPlace because no clean upstream backport for GCC 15 exists for this version of Skia, newer versions fix this with large refactorings.
   postPatch = ''
-    substituteInPlace include/private/SkSLProgramKind.h \
-      --replace-fail "#include <cinttypes>" "#include <cinttypes>
     #include <cstdint>"
     substituteInPlace src/sksl/transform/SkSLTransform.h \
       --replace-fail "#include <vector>" "#include <vector>
@@ -70,13 +73,15 @@ clangStdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     harfbuzzFull
-    libglvnd
     libjpeg
     libpng
     libwebp
-    libX11
-    libgbm
     zlib
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libglvnd
+    libx11
+    libgbm
   ];
 
   buildPhase = ''

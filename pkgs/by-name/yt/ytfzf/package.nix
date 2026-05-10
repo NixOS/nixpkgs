@@ -14,14 +14,14 @@
   yt-dlp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ytfzf";
   version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rwCVOdu9UfTArISt8ITQtLU4Gj2EZd07bcFKvxXQ7Bc=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "ytfzf";
   };
-}
+})

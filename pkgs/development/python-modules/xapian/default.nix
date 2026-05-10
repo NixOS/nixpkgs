@@ -13,11 +13,11 @@ in
 buildPythonPackage rec {
   pname = "xapian";
   inherit (xapian) version;
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-    hash = "sha256-ujteEICeV5rNEb0WV3nOP9KaiQTqN5aO9bV62Xw2GLo=";
+    hash = "sha256-o4zHukGIzAvSfcc2nwOQZ3IEcIehxU8bkzVdXpEDwwQ=";
   };
 
   configureFlags = [

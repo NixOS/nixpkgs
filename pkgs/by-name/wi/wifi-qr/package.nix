@@ -17,7 +17,7 @@
   gnugrep,
   file,
 }:
-stdenvNoCC.mkDerivation (finalAttr: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wifi-qr";
   version = "0.4";
 
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttr: {
   src = fetchFromGitHub {
     owner = "kokoye2007";
     repo = "wifi-qr";
-    tag = "v${finalAttr.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tE+9bFDgiFS1Jj+AAwTMKjMh5wS5/gkRSQaCBR/riYQ=";
   };
 

@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patatt";
-  version = "0.6.3";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mAgm9lKdJXbCZ8ofVk1b7wRstH5UIVu1mO1sS5stCig=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-97K+ihXyUfu8kMa3NKuRBlSnqdGENpzp53ttJuQ7nuo=";
   };
 
   build-system = with python3Packages; [
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
       yoctocell
     ];
   };
-}
+})

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomretro";
-  version = "5.8";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "bradharding";
     repo = "doomretro";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UCLIQEeKNJ0qTZQdzybdBxt/6catf8y3lnWKsjg2Mf8=";
+    hash = "sha256-tFRDfiHsRNrhmKHYpV88G2W5Ww7r8D9Neu/zbln0DGc=";
   };
 
   nativeBuildInputs = [

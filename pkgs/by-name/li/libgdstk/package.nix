@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgdstk";
-  version = "0.9.61";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "heitzmann";
     repo = "gdstk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-soU+6EbyOkHGvVq230twiRzywOskhkkXFr5akBpvgBw=";
+    hash = "sha256-YDTtjHhc3mXDWj6Tg9ud1h95g2sQ9no1RLd0/cKJxEU=";
   };
 
   nativeBuildInputs = [

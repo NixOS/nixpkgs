@@ -5,7 +5,6 @@
   poetry-core,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,12 +12,12 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.11";
+  disabled = pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "clbarnes";
     repo = "backports.strenum";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-j5tALFrLeZ8k+GwAaq0ocmcQWvdWkRUHbOVq5Du4mu0=";
   };
 

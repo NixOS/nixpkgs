@@ -9,11 +9,7 @@
   colorVariants ? [ ], # default: all
 }:
 
-let
-  pname = "vimix-icon-theme";
-
-in
-lib.checkListOfEnum "${pname}: color variants"
+lib.checkListOfEnum "vimix-icon-theme: color variants"
   [
     "standard"
     "Amethyst"
@@ -28,7 +24,7 @@ lib.checkListOfEnum "${pname}: color variants"
 
   stdenvNoCC.mkDerivation
   rec {
-    inherit pname;
+    pname = "vimix-icon-theme";
     version = "2025.02.10";
 
     src = fetchFromGitHub {

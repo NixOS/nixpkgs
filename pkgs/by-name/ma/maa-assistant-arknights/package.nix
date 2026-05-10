@@ -18,14 +18,14 @@ let
   fastdeploy = callPackage ./fastdeploy-ppocr.nix { };
   sources = lib.importJSON ./pin.json;
 in
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maa-assistant-arknights" + lib.optionalString isBeta "-beta";
   version = if isBeta then sources.beta.version else sources.stable.version;
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "MaaAssistantArknights";
-    rev = "v${finalAttr.version}";
+    rev = "v${finalAttrs.version}";
     hash = if isBeta then sources.beta.hash else sources.stable.hash;
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttr: {
     (lib.cmakeBool "INSTALL_PYTHON" true)
     (lib.cmakeBool "INSTALL_RESOURCE" true)
     (lib.cmakeBool "USE_MAADEPS" false)
-    (lib.cmakeFeature "MAA_VERSION" "v${finalAttr.version}")
+    (lib.cmakeFeature "MAA_VERSION" "v${finalAttrs.version}")
   ];
 
   passthru.updateScript = ./update.sh;
@@ -73,8 +73,8 @@ stdenv.mkDerivation (finalAttr: {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/${finalAttr.pname}
-    mv $out/{Python,resource} $out/share/${finalAttr.pname}
+    mkdir -p $out/share/${finalAttrs.pname}
+    mv $out/{Python,resource} $out/share/${finalAttrs.pname}
   '';
 
   meta = {

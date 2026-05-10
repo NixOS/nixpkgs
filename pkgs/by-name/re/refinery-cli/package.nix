@@ -6,13 +6,13 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "refinery-cli";
   version = "0.8.14";
 
   src = fetchCrate {
     pname = "refinery_cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-gHW+5WWzk1H2O5B2sWdl6QcOeUbNvbdZZBD10SmE1GA=";
   };
 
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage rec {
     description = "Run migrations for the Refinery ORM for Rust via the CLI";
     mainProgram = "refinery";
     homepage = "https://github.com/rust-db/refinery";
-    changelog = "https://github.com/rust-db/refinery/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/rust-db/refinery/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

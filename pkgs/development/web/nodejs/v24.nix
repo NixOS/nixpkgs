@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -24,9 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "24.12.0";
-  sha256 = "6d3e891a016b90f6c6a19ea5cbc9c90c57eef9198670ba93f04fa82af02574ae";
+  version = "24.14.1";
+  sha256 = "7822507713f202cf2a551899d250259643f477b671706db421a6fb55c4aa0991";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -58,6 +56,18 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove this when included in a next release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
+        hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
+        includes = [ "test/*" ];
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/59a522af24173b244cb86829de145d46b143a45c.patch?full_index=1";
+        hash = "sha256-mjxl4rIio8lgjvxqfKrVwdhOUHUUDH2PMh0n8BowXIQ=";
+        includes = [ "src/*" ];
+      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
@@ -71,7 +81,10 @@ buildNodejs {
     ++ lib.optionals stdenv.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # see: https://github.com/nodejs/node/issues/61025
-      ./sab-test-32bit.patch
+      # TODO: remove once included in an future upstream release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/f13d7bf69a7f1642fb5b1b624eff1a50ceb71849.patch?full_index=1";
+        hash = "sha256-4PZq1gG/K+FwAM06VIXYoSNJeOYe37kfKW0jqczeXbc=";
+      })
     ];
 }

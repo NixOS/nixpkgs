@@ -11,14 +11,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "partclone";
   version = "0.3.38";
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-lWnGi8giz7vzdBnuth55h0VMuNyCQaCclRqPJdm0I14=";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://partclone.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

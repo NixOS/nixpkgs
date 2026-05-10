@@ -37,7 +37,8 @@ in
 
       user = mkOption {
         type = types.str;
-        default = "nginx";
+        default = config.services.nginx.user;
+        defaultText = lib.literalExpression "config.services.nginx.user";
         description = ''
           User account under which both the service and the web-application run.
         '';
@@ -122,10 +123,10 @@ in
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
-        user = "nginx";
+        user = config.services.nginx.user;
         settings = mapAttrs (name: mkDefault) {
-          "listen.owner" = "nginx";
-          "listen.group" = "nginx";
+          "listen.owner" = config.services.nginx.user;
+          "listen.group" = config.services.nginx.group;
           "listen.mode" = "0600";
           "pm" = "dynamic";
           "pm.max_children" = 75;

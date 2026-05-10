@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "confluencepot";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "SIFalcon";
     repo = "confluencePot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jIbL6prOUII8o9FghIYa80BytJ9SSuyj/TZmAxwAbJk=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "confluencepot";
   };
-}
+})

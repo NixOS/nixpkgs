@@ -2,7 +2,6 @@
   lib,
   brotli,
   buildPythonPackage,
-  fetchFromGitHub,
   pkgconfig,
   pytestCheckHook,
   setuptools,
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

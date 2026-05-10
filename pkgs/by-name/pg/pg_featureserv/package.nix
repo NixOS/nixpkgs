@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pg_featureserv";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = "pg_featureserv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GsloUZFgrOrJc23vKv+8iSeyIEKblaukPSCpZGRtSL4=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/CrunchyData/pg_featureserv/conf.setVersion=${version}"
+    "-X github.com/CrunchyData/pg_featureserv/conf.setVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -50,4 +50,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

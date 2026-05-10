@@ -137,6 +137,22 @@ Users must still be careful about how they reference these paths.
     multiple option definitions are correctly merged together. The main use
     case is as the type of the `_module.freeformType` option.
 
+`types.optionDeclaration`
+
+:   The type of a module system option declaration, as created by `lib.mkOption`.
+    This allows an option to hold another option declaration as its value, which
+    can then be spliced into a module's `options` attrset. Note that this only
+    accepts option declarations, not evaluated options (i.e. options that have
+    been processed by `evalModules` and have a `value` field).
+
+    ::: {.warning}
+    Use of this type is a form of metaprogramming that makes modules harder
+    to reason about, since options and their types become dynamic values
+    rather than statically declared structure. Prefer conventional module
+    patterns where possible, and only reach for `types.optionDeclaration` when the
+    added complexity is justified.
+    :::
+
 `types.attrs`
 
 :   A free-form attribute set.
@@ -496,6 +512,20 @@ Composed types are types that take a type as parameter. `listOf
     function *`f`* which takes an argument of type *`from`* and return a
     value of type *`to`*. Can be used to preserve backwards compatibility
     of an option if its type was changed.
+
+`types.json`
+
+:   A type representing JSON-compatible values. This includes `null`, booleans,
+    integers, floats, strings, paths, attribute sets, and lists.
+    Attribute sets and lists can be arbitrarily nested and contain any JSON-compatible
+    values.
+
+`types.toml`
+
+:   A type representing TOML-compatible values. This includes booleans,
+    integers, floats, strings, paths, attribute sets, and lists.
+    Attribute sets and lists can be arbitrarily nested and contain any TOML-compatible
+    values.
 
 ## Submodule {#section-option-types-submodule}
 

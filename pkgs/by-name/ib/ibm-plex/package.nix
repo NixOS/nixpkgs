@@ -2,6 +2,8 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  symlinkJoin,
+  installFonts,
   families ? [ ],
 }:
 let
@@ -18,22 +20,28 @@ stdenvNoCC.mkDerivation {
   pname = "ibm-plex";
   inherit version;
 
-  srcs = map (
-    family:
-    fetchzip {
-      url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";
-      hash = availableFamilies.${family};
-    }
-  ) selectedFamilies;
+  src = symlinkJoin {
+    name = "ibm-plex-src";
+    paths = map (
+      family:
+      fetchzip {
+        url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";
+        hash = availableFamilies.${family};
+      }
+    ) selectedFamilies;
+    postBuild = ''
+      find "$out" \( -name hinted -or -name unhinted -or -name split \) -exec rm -fr {} +
+    '';
+  };
 
-  dontUnpack = true;
   sourceRoot = ".";
 
-  installPhase = ''
-    runHook preInstall
-    find $srcs -type f -name '*.otf' -exec install -Dm644 {} -t $out/share/fonts/opentype \;
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   passthru.updateScript = ./update.sh;
 
@@ -44,6 +52,7 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+      ners
       romildo
       ryanccn
     ];

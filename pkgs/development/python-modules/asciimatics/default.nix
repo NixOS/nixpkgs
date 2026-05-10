@@ -5,7 +5,6 @@
   pillow,
   pyfiglet,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   wcwidth,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "asciimatics";
   version = "1.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

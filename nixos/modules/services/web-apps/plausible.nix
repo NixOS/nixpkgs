@@ -330,6 +330,9 @@ in
     ];
   };
 
-  meta.maintainers = teams.cyberus.members;
+  meta.maintainers = with lib.maintainers; [
+    e1mo
+    xanderio
+  ];
   meta.doc = ./plausible.md;
 }

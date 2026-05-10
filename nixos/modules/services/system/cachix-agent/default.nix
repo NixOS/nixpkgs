@@ -8,7 +8,10 @@ let
   cfg = config.services.cachix-agent;
 in
 {
-  meta.maintainers = lib.teams.cachix.members;
+  meta.maintainers = with lib.maintainers; [
+    domenkozar
+    sandydoo
+  ];
 
   options.services.cachix-agent = {
     enable = lib.mkEnableOption "Cachix Deploy Agent: <https://docs.cachix.org/deploy/>";

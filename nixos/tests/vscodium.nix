@@ -41,7 +41,6 @@ let
         nodes."${name}" = machine;
 
         meta.maintainers = with lib.maintainers; [
-          synthetica
           turion
         ];
 
@@ -52,6 +51,8 @@ let
         enableOCR = true;
 
         testScript = ''
+          machine = ${name}
+
           @polling_condition
           def codium_running():
               machine.succeed('pgrep -x codium')

@@ -1,11 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-
-  # propagates
-  importlib-metadata,
 
   # tests
   editables,
@@ -17,19 +13,17 @@
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.4.6";
+  version = "2.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
     tag = version;
-    hash = "sha256-lR3ZxwPvyv/Ffez6cfz8Gzc6h4PeqmgsTGNEVv9K+tU=";
+    hash = "sha256-zh+JP1sX+ra3Z6oVgxOabwMmD/bQjokdb0MelZ0k1KQ=";
   };
 
   env.PDM_BUILD_SCM_VERSION = version;
-
-  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "pdm.backend" ];
 

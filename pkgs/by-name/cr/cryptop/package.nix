@@ -3,13 +3,13 @@
   python3Packages,
   fetchPypi,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cryptop";
   version = "0.2.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0akrrz735vjfrm78plwyg84vabj0x3qficq9xxmy9kr40fhdkzpb";
   };
 
@@ -28,4 +28,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     mainProgram = "cryptop";
   };
-}
+})

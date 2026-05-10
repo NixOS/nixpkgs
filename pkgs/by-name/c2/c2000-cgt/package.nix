@@ -12,11 +12,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "c2000-cgt";
-  version = "22.6.1.LTS";
+  version = "25.11.0.LTS";
 
   src = fetchurl {
     url = "https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/${finalAttrs.version}/ti_cgt_c2000_${finalAttrs.version}_linux-x64_installer.bin";
-    hash = "sha256-h+exdlyD7Bj3LZTDVME8jHesInaUUUUmFiIKJR+rM9o=";
+    hash = "sha256-vkxV7/D3I4Uf7q3KBwdjEq9rn4DTPNMUm1NSuMYQEbM=";
   };
 
   dontUnpack = true;

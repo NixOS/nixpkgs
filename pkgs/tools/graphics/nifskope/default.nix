@@ -61,9 +61,9 @@ stdenv.mkDerivation {
     runHook preInstall
 
     d=$out/share/nifskope
-    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $d/{shaders,lang}
+    mkdir -p $out/bin $out/share/applications $d/{shaders,lang}
     cp release/NifSkope $out/bin/
-    cp ./res/nifskope.png $out/share/pixmaps/
+    install -D ./res/nifskope.png -t $out/share/icons/hicolor/128x128/apps
     cp release/{nif.xml,kfm.xml,style.qss} $d/
     cp res/shaders/*.frag res/shaders/*.prog res/shaders/*.vert $d/shaders/
     cp ./res/lang/*.ts ./res/lang/*.tm $d/lang/

@@ -3,16 +3,18 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crabz";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = "crabz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GJHxo4WD/XMudwxOHdNwY1M+b/DFJMpU0uD3sOvO5YU=";
   };
 
@@ -20,15 +22,20 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";
-    changelog = "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sstadick/crabz/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "crabz";
   };
-}
+})

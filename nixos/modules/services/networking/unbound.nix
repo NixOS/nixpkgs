@@ -31,10 +31,10 @@ let
       throw (traceSeq v "services.unbound.settings: unexpected type");
 
   confNoServer = concatStringsSep "\n" (
-    (mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [ "" ]
+    (mapAttrsToList (toConf "") (removeAttrs cfg.settings [ "server" ])) ++ [ "" ]
   );
   confServer = concatStringsSep "\n" (
-    mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ])
+    mapAttrsToList (toConf "  ") (removeAttrs cfg.settings.server [ "define-tag" ])
   );
 
   confFileUnchecked = pkgs.writeText "unbound.conf" ''

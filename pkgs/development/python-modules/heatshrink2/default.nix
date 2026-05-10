@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "heatshrink2";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "pyheatshrink";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-gspMd3Fyxe2/GhZYdKjVcZXRlslay3jO4jZuVG79G44=";
+    hash = "sha256-2bCk9bS/6hjbBJ30fpTt750A3vAvq4HOXmbpxOLRuj4=";
   };
 
   pythonImportsCheck = [ "heatshrink2" ];

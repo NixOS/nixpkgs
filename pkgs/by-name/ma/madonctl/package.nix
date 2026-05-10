@@ -8,14 +8,14 @@
   madonctl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "madonctl";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "McKael";
     repo = "madonctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-R/es9QVTBpLiCojB/THWDkgQcxexyX/iH9fF3Q2tq54=";
   };
 
@@ -46,4 +46,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "madonctl";
   };
-}
+})

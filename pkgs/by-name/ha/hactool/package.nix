@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hactool";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "SciresM";
     repo = "hactool";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0305ngsnwm8npzgyhyifasi4l802xnfz19r0kbzzniirmcn4082d";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "hactool";
   };
-}
+})

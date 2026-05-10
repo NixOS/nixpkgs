@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.12.4";
+  version = "2.12.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-CHJahAgs+vQQzhIZjP+6suvbmRrGZI0H5UxoXg4I90o=";
+    hash = "sha256-9TRLtVNBw2WHQnS0XFHg16Q7FdpTf3e2nb5qE5rlLUA=";
   };
 
   patches = lib.optionals (lib.versionAtLeast python.version "3.14.1") [

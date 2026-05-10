@@ -32,15 +32,15 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiscamera";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = "tiscamera";
-    rev = "v-tiscamera-${version}";
-    hash = "sha256-33U/8CbqNWIRwfDHXCZSN466WEQj9fip+Z5EJ7kIwRM=";
+    rev = "v-tiscamera-${finalAttrs.version}";
+    hash = "sha256-3qAPUcP+Rh1aA1qNWq0NWMpJftinm32r52esikH804Y=";
   };
 
   postPatch = ''
@@ -112,19 +112,24 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
-  env.CXXFLAGS = "-include cstdint";
-
   doCheck = true;
 
   # gstreamer tests requires, besides gst-plugins-bad, plugins installed by this expression.
   checkPhase = "ctest --force-new-ctest-process -E gstreamer";
 
-  # wrapGAppsHook3: make sure we add ourselves to the introspection
-  # and gstreamer paths.
-  GI_TYPELIB_PATH = "${placeholder "out"}/lib/girepository-1.0";
-  GST_PLUGIN_SYSTEM_PATH_1_0 = "${placeholder "out"}/lib/gstreamer-1.0";
+  env = {
+    # wrapGAppsHook3: make sure we add ourselves to the introspection
+    # and gstreamer paths.
+    GI_TYPELIB_PATH = "${placeholder "out"}/lib/girepository-1.0";
+    GST_PLUGIN_SYSTEM_PATH_1_0 = "${placeholder "out"}/lib/gstreamer-1.0";
 
-  QT_PLUGIN_PATH = lib.optionalString withGui "${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}";
+    QT_PLUGIN_PATH = lib.optionalString withGui "${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}";
+
+    CXXFLAGS = toString [
+      "-include"
+      "cstdint"
+    ];
+  };
 
   dontWrapQtApps = true;
 
@@ -141,4 +146,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

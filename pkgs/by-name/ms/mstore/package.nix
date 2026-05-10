@@ -19,14 +19,14 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mstore";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mstore";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zfrxdrZ1Um52qTRNGJoqZNQuHhK3xM/mKfk0aBLrcjw=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

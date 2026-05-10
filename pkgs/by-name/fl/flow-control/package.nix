@@ -6,34 +6,32 @@
   callPackage,
 }:
 
-let
-  zig_hook = zig_0_15.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=ReleaseSafe --color off";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow-control";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "neurocyte";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-868FK3wr/fjXzrQJ4YVDBvzNuX818lufEx/K0fvJdWo=";
+    hash = "sha256-5+F0DKb4LXtcMXNutUSJuIe7cdBoFUoJhCs8vbm20jg=";
   };
-  postPatch = ''
-    ln -s ${
-      callPackage ./build.zig.zon.nix {
-        zig = zig_0_15;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
 
-  nativeBuildInputs = [
-    zig_hook
-  ];
+  deps = callPackage ./build.zig.zon.nix {
+    zig = zig_0_15;
+  };
+
+  nativeBuildInputs = [ zig_0_15 ];
 
   passthru.updateScript = ./update.sh;
+
+  dontSetZigDefaultFlags = true;
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+    "-Dcpu=baseline"
+    "-Doptimize=ReleaseFast"
+  ];
 
   env.VERSION = finalAttrs.version;
 

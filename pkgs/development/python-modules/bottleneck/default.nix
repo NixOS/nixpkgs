@@ -5,15 +5,12 @@
   numpy,
   pytestCheckHook,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bottleneck";
   version = "1.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

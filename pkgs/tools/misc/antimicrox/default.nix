@@ -1,18 +1,19 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   pkg-config,
-  SDL2,
-  qttools,
-  xorg,
-  fetchFromGitHub,
   itstool,
   udevCheckHook,
+  wrapQtAppsHook,
+  SDL2,
+  qttools,
+  libxtst,
+  fetchFromGitHub,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "antimicrox";
   version = "3.5.1";
 
@@ -25,15 +26,16 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     itstool
     udevCheckHook
+    wrapQtAppsHook
   ];
   buildInputs = [
     SDL2
     qttools
-    xorg.libXtst
+    libxtst
   ];
 
   postPatch = ''
@@ -46,7 +48,7 @@ mkDerivation rec {
   meta = {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
     inherit (src.meta) homepage;
-    maintainers = with lib.maintainers; [ sbruder ];
+    maintainers = [ ];
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux;
     mainProgram = "antimicrox";

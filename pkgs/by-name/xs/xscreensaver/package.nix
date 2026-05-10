@@ -11,19 +11,19 @@
   intltool,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXft,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXt,
-  libXxf86vm,
+  libx11,
+  libxext,
+  libxft,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxt,
+  libxxf86vm,
   libxml2,
   makeWrapper,
   pam,
   perlPackages,
-  xorg,
+  appres,
   pkg-config,
   systemd,
   forceInstallAllHacks ? true,
@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libGL
     libGLU
-    libX11
-    libXext
-    libXft
-    libXi
-    libXinerama
-    libXrandr
-    libXt
-    libXxf86vm
+    libx11
+    libxext
+    libxft
+    libxi
+    libxinerama
+    libxrandr
+    libxt
+    libxxf86vm
     libxml2
     pam
     perlPackages.LWPProtocolHttps
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeBinPath [
             coreutils
             perlPackages.perl
-            xorg.appres
+            appres
           ]
         }" \
         --prefix PERL5LIB ':' $PERL5LIB

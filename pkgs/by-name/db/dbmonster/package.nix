@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "dbmonster";
   version = "0-unstable-2022-09-17";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "90N45-d3v";

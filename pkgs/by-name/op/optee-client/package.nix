@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "optee-client";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "OP-TEE";
     repo = "optee_client";
     rev = finalAttrs.version;
-    hash = "sha256-hHEIn0WU4XfqwZbOdg9kwSDxDcvK7Tvxtelamfc3IRM=";
+    hash = "sha256-MZPT3GbAInFGL0OZH1aCDTdmd95LsI8RmpbtPE0fp4s=";
   };
 
   outputs = [

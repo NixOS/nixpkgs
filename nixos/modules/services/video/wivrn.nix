@@ -66,13 +66,17 @@ let
   serverExec = concatStringsSep " " (
     [
       serverPackageExe
-      "--systemd"
       enabledConfig
     ]
     ++ cfg.extraServerFlags
   );
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "wivrn" "defaultRuntime" ] ''
+      WiVRn now manages the active runtime itself, so this option has been removed.
+    '')
+  ];
   options = {
     services.wivrn = {
       enable = mkEnableOption "WiVRn, an OpenXR streaming application";
@@ -80,14 +84,6 @@ in
       package = mkPackageOption pkgs "wivrn" { };
 
       openFirewall = mkEnableOption "the default ports in the firewall for the WiVRn server";
-
-      defaultRuntime = mkEnableOption ''
-        WiVRn as the default OpenXR runtime on the system.
-        The config can be found at `/etc/xdg/openxr/1/active_runtime.json`.
-
-        Note that applications can bypass this option by setting an active
-        runtime in a writable XDG_CONFIG_DIRS location like `~/.config`
-      '';
 
       autoStart = mkEnableOption "starting the service by default";
 
@@ -107,6 +103,10 @@ in
       };
 
       steam = {
+        enable = lib.mkEnableOption "Steam support" // {
+          default = true;
+        };
+
         importOXRRuntimes = mkEnableOption ''
           Sets `PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES` system-wide to allow Steam to automatically discover the WiVRn server.
 
@@ -126,24 +126,29 @@ in
             Like upstream, the application option is a list including the application and it's flags. In the case of the NixOS module however, the first element of the list must be a package. The module will assert otherwise.
             The application can be set to a single package because it gets passed to lib.toList, though this will not allow for flags to be passed.
 
+            WiVRn has good default configurations and most options can be configured at runtime so it is recommended to leave this empty and try the defaults before attempting manual configuration.
+
             See <https://github.com/WiVRn/WiVRn/blob/master/docs/configuration.md>
           '';
           default = { };
           example = literalExpression ''
             {
-              scale = 0.5;
-              bitrate = 100000000;
-              encoders = [
+              # left eye, hardware; right eye, software; transparency, hardware
+              encoder = [
                 {
-                  encoder = "nvenc";
+                  encoder = "vulkan";
+                  codec = "h265";
+                }
+                {
+                  encoder = "x264";
                   codec = "h264";
-                  width = 1.0;
-                  height = 1.0;
-                  offset_x = 0.0;
-                  offset_y = 0.0;
+                }
+                {
+                  encoder = "vulkan";
+                  codec = "h265";
                 }
               ];
-              application = [ pkgs.wlx-overlay-s ];
+              application = [ pkgs.wayvr ];
             }
           '';
         };
@@ -206,12 +211,13 @@ in
                 RestrictSUIDSGID = true;
               }
           );
-          path = [ cfg.steam.package ];
+          # Needs Steam in the PATH to allow launching games from the headset
+          path = mkIf cfg.steam.enable [ cfg.steam.package ];
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [
             cfg.package
-            cfg.steam.package
-          ];
+          ]
+          ++ lib.optionals cfg.steam.enable [ cfg.steam.package ];
         };
       };
     };
@@ -242,9 +248,6 @@ in
         PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = "1";
       };
       pathsToLink = [ "/share/openxr" ];
-      etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
-        source = "${cfg.package}/share/openxr/1/openxr_wivrn.json";
-      };
     };
   };
   meta.maintainers = with maintainers; [ passivelemon ];

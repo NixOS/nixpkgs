@@ -15,14 +15,14 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pasystray";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
   };
 
@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://sources.debian.org/data/main/p/pasystray/0.8.1-1/debian/patches/0002-Require-X11-backend.patch";
       sha256 = "sha256-6njC3vqBPWFS1xAsa1katQ4C0KJdVkHAP1MCPiZ6ELM=";
+    })
+    # Fix build with GCC 15
+    # https://github.com/christophgysin/pasystray/pull/183.patch
+    (fetchpatch {
+      url = "https://github.com/christophgysin/pasystray/commit/9883809c7956471cf085ae90af4a9831c1234417.patch";
+      hash = "sha256-BQ10LddqE3XwUeRklZE3S3+KOjJ9BtfddaFswgUqZ5g=";
     })
   ];
 
@@ -67,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "pasystray";
   };
-}
+})

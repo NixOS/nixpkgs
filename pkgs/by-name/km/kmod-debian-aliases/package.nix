@@ -4,12 +4,12 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmod-debian-aliases.conf";
   version = "30+20230601-2";
 
   src = fetchurl {
-    url = "https://snapshot.debian.org/archive/debian/20231117T085632Z/pool/main/k/kmod/kmod_${version}.debian.tar.xz";
+    url = "https://snapshot.debian.org/archive/debian/20231117T085632Z/pool/main/k/kmod/kmod_${finalAttrs.version}.debian.tar.xz";
     hash = "sha256-xJMGKht8hu0aQjN9TER87Rv5EYkVMeDfX/jJ8+UjAqM=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
       lgpl21Plus
     ];
   };
-}
+})

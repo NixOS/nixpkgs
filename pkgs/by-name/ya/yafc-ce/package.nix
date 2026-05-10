@@ -12,13 +12,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "yafc-ce";
-  version = "2.16.0";
+  version = "2.18.1";
 
   src = fetchFromGitHub {
-    owner = "shpaass";
+    owner = "Yafc-CE";
     repo = "yafc-ce";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6+GGxEwn3tenmcukOZPTIZ7UZg/d9uudQP0qwU8mifY=";
+    hash = "sha256-MdaYAustOMFO2rim0o2FnEhFWINa9E1jEvIQS9SnEHY=";
   };
 
   projectFile = [
@@ -39,13 +39,6 @@ buildDotnetModule (finalAttrs: {
     SDL2_image
   ];
 
-  postPatch = ''
-    # Yafc finds the root by looking for a `.git` directory, but `.git` is
-    # removed by Nix to ensure reproducibility. `.github` is not.
-    substituteInPlace Yafc.I18n.Generator/SourceGenerator.cs \
-      --replace-fail 'rootDirectory, ".git"' 'rootDirectory, ".github"'
-  '';
-
   meta = {
     description = "Powerful Factorio calculator/analyser that works with mods, Community Edition";
     longDescription = ''
@@ -54,9 +47,9 @@ buildDotnetModule (finalAttrs: {
 
       YAFC Community Edition is an updated and actively-maintained version of the original YAFC.
     '';
-    homepage = "https://github.com/shpaass/yafc-ce";
-    downloadPage = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
-    changelog = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/Yafc-CE/yafc-ce";
+    downloadPage = "https://github.com/Yafc-CE/yafc-ce/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Yafc-CE/yafc-ce/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       diamond-deluxe

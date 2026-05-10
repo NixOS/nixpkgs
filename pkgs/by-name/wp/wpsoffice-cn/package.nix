@@ -19,10 +19,12 @@
   gtk3,
   libgbm,
   libusb1,
-  unixODBC,
+  unixodbc,
   libmysqlclient,
   libsForQt5,
-  xorg,
+  libxv,
+  libxtst,
+  libxdamage,
   # wpsoffice runtime dependencies
   cups,
   dbus,
@@ -143,11 +145,11 @@ else
       gtk3
       libgbm
       libusb1
-      unixODBC
+      unixodbc
       libsForQt5.qtbase
-      xorg.libXdamage
-      xorg.libXtst
-      xorg.libXv
+      libxdamage
+      libxtst
+      libxv
     ];
 
     dontWrapQtApps = true;

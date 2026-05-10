@@ -15,6 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cGYrG7A4Ffh51KyR+UpeWu7A40eqxI8g4LefBIs18kg=";
   };
 
+  postPatch = ''
+    substituteInPlace src/main.c \
+      --replace-fail "void refresh_screen()" "void refresh_screen(SDL_Surface *screen)"
+  '';
+
   buildInputs = [
     SDL
     SDL_mixer

@@ -6,7 +6,7 @@
   fetchpatch,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   requests,
   requests-mock,
 }:
@@ -14,9 +14,7 @@
 buildPythonPackage rec {
   pname = "openevsewifi";
   version = "1.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miniconfig";
@@ -35,6 +33,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     requests-mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   patches = [
@@ -45,11 +44,6 @@ buildPythonPackage rec {
       hash = "sha256-XGeyi/PchBju1ICgL/ZCDGCbWwIJmLAcHuKaj+kDsI0=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytest-cov = "^2.8.1"' ""
-  '';
 
   pythonImportsCheck = [ "openevsewifi" ];
 

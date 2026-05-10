@@ -3,15 +3,12 @@
   aliyun-python-sdk-core,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-dbfs";
   version = "2.0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gmailctl";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "mbrt";
     repo = "gmailctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-euYl7GKidkOFsSxrEnSBIdBNZOKuBBaS3LNQOZy9R9g=";
   };
 
@@ -41,4 +41,4 @@ buildGoModule rec {
       SuperSandro2000
     ];
   };
-}
+})

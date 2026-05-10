@@ -8,15 +8,15 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtpms";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "libtpms";
-    rev = "v${version}";
-    sha256 = "sha256-uj06cAhepTOFxSeiBY/UVP/rtBQHLvrODe4ljU6ALOE=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-UhEpq5f/FT5DmtzQBe/Si414mOq+D4glikgRNK60GKQ=";
   };
 
   hardeningDisable = [ "strictflexarrays3" ];
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.baloo ];
   };
-}
+})

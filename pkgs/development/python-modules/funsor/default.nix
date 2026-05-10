@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   version = "0.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "funsor";
@@ -51,6 +48,13 @@ buildPythonPackage rec {
       hash = "sha256-sTR+hbJtS0Th5sIqlvB2bReEC0wnEbnB7gAiZKiqjAQ=";
     })
   ];
+
+  # TypeError: clip() got an unexpected keyword argument 'a_max'
+  postPatch = ''
+    substituteInPlace funsor/jax/ops.py \
+      --replace-fail "a_max=" "max=" \
+      --replace-fail "a_min=" "min="
+  '';
 
   build-system = [ setuptools ];
 

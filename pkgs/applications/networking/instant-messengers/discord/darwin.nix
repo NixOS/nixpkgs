@@ -1,13 +1,13 @@
 {
   pname,
-  version,
-  src,
+  source,
   meta,
   stdenv,
   binaryName,
   desktopName,
   self,
   lib,
+  fetchurl,
   undmg,
   makeWrapper,
   writeScript,
@@ -32,6 +32,9 @@ let
     withMoonlight
   ];
   enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
+
+  inherit (source) version;
+  src = fetchurl { inherit (source) url hash; };
 
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
@@ -82,30 +85,31 @@ stdenv.mkDerivation {
 
   postInstall =
     lib.strings.optionalString withOpenASAR ''
-      cp -f ${openasar} $out/Applications/${desktopName}.app/Contents/Resources/app.asar
+      cp -f ${openasar} "$out/Applications/${desktopName}.app/Contents/Resources/app.asar"
     ''
     + lib.strings.optionalString withVencord ''
-      mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
-      mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
-      echo '{"name":"discord","main":"index.js"}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
-      echo 'require("${vencord}/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
+      mv "$out/Applications/${desktopName}.app/Contents/Resources/app.asar" "$out/Applications/${desktopName}.app/Contents/Resources/_app.asar"
+      mkdir "$out/Applications/${desktopName}.app/Contents/Resources/app.asar"
+      echo '{"name":"discord","main":"index.js"}' > "$out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json"
+      echo 'require("${vencord}/patcher.js")' > "$out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js"
     ''
     + lib.strings.optionalString withEquicord ''
-      mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
-      mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
-      echo '{"name":"discord","main":"index.js"}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
-      echo 'require("${equicord}/desktop/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
+      mv "$out/Applications/${desktopName}.app/Contents/Resources/app.asar" "$out/Applications/${desktopName}.app/Contents/Resources/_app.asar"
+      mkdir "$out/Applications/${desktopName}.app/Contents/Resources/app.asar"
+      echo '{"name":"discord","main":"index.js"}' > "$out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json"
+      echo 'require("${equicord}/desktop/patcher.js")' > "$out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js"
     ''
     + lib.strings.optionalString withMoonlight ''
-      mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
-      mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
-      echo '{"name":"discord","main":"injector.js","private": true}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
-      echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/injector.js
+      mv "$out/Applications/${desktopName}.app/Contents/Resources/app.asar" "$out/Applications/${desktopName}.app/Contents/Resources/_app.asar"
+      mkdir "$out/Applications/${desktopName}.app/Contents/Resources/app.asar"
+      echo '{"name":"discord","main":"injector.js","private": true}' > "$out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json"
+      echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > "$out/Applications/${desktopName}.app/Contents/Resources/app.asar/injector.js"
     '';
 
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
+    inherit source;
     updateScript = ./update.py;
 
     tests = {

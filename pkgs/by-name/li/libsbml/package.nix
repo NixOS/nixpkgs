@@ -10,14 +10,14 @@
   python ? null,
   withPython ? false,
 }:
-stdenv.mkDerivation (attrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsbml";
   version = "5.20.4";
 
   src = fetchFromGitHub {
     owner = "sbmlteam";
     repo = "libsbml";
-    rev = "v${attrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qWTN033YU4iWzt+mXQaP5W/6IF5nebF4PwNVkyL8wTg=";
   };
 

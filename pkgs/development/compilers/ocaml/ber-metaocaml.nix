@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ncurses,
-  libX11,
+  libx11,
   xorgproto,
   buildEnv,
   useX11 ? stdenv.hostPlatform.isx86,
@@ -11,7 +11,7 @@
 
 let
   x11deps = [
-    libX11
+    libx11
     xorgproto
   ];
   inherit (lib) optionals;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   metaocaml = fetchurl {
-    url = "http://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
+    url = "https://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
     sha256 = "sha256-vvq3xI4jSAsrXcDk97TPbFDYgO9NcQeN/yBcUbcb/y0=";
   };
 

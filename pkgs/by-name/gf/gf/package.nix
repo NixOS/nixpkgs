@@ -3,7 +3,7 @@
   stdenv,
   makeWrapper,
   fetchFromGitHub,
-  libX11,
+  libx11,
   pkg-config,
   gdb,
   freetype,
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "gf";
-  version = "0-unstable-2025-12-25";
+  version = "0-unstable-2026-05-03";
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
-    rev = "a8c0fb67756c043d63832c008e3ad12132b121cb";
-    hash = "sha256-OJE51lVkHWAgo7u/SX46s3pzQBeMW3zViiXJnB86bpo=";
+    rev = "46174e9b25850c9898ca0c2de90af31ad83122d7";
+    hash = "sha256-UnMpV9RCDsJEDBj4/gypzYFhR4IqEVKYKLpvrLlTGaA=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    libX11
+    libx11
     gdb
   ]
   ++ lib.optional freetypeSupport freetype;
@@ -39,14 +39,13 @@ stdenv.mkDerivation {
     ./build-use-optional-freetype-with-pkg-config.patch
   ];
 
-  postPatch = [
-    (lib.optionalString withExtensions ''
+  postPatch =
+    lib.optionalString withExtensions ''
       cp ./extensions_v5/extensions.cpp .
-    '')
-    (lib.optionalString (pluginsFile != null) ''
+    ''
+    + lib.optionalString (pluginsFile != null) ''
       cp ${pluginsFile} ./plugins.cpp
-    '')
-  ];
+    '';
 
   preConfigure = ''
     patchShebangs build.sh
@@ -77,6 +76,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "gf2";
-    maintainers = with lib.maintainers; [ _0xd61 ];
+    maintainers = [ ];
   };
 }

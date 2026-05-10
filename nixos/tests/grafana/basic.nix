@@ -2,7 +2,7 @@ import ../make-test-python.nix (
   { lib, pkgs, ... }:
 
   let
-    inherit (lib) mkMerge nameValuePair maintainers;
+    inherit (lib) mkMerge;
 
     baseGrafanaConf = {
       services.grafana = {
@@ -18,6 +18,7 @@ import ../make-test-python.nix (
           security = {
             admin_user = "testadmin";
             admin_password = "snakeoilpwd";
+            secret_key = "11111111111111111111";
           };
         };
       };

@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pysunspec2";
-  version = "1.3.3";
+  version = "1.3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sunspec";
     repo = "pysunspec2";
     tag = "v${version}";
-    hash = "sha256-mVx8Rt5GLyQ2ss0iJPi32Fhl9pD7hsXxW94p+8ri+w4=";
+    hash = "sha256-5iexVb6qXHmVczLydjXu+blGm9zwKGqUBLDUwl8HBrs=";
     fetchSubmodules = true;
   };
 

@@ -6,8 +6,8 @@
   cmake,
   pkg-config,
   libuv,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   libyaml,
   luajit,
   udev,
@@ -35,6 +35,11 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace {,{keyledsd/plugins,keyledsd,keyledsctl,libkeyleds}/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0)" "cmake_minimum_required (VERSION 3.10)"
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -44,8 +49,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libuv
-    libX11
-    libXi
+    libx11
+    libxi
     libyaml
     luajit
     udev

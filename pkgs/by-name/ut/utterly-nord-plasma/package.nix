@@ -16,12 +16,15 @@ stdenv.mkDerivation {
     hash = "sha256-moLgBFR+BgoiEBzV3y/LA6JZfLHrG1weL1+h8LN9ztA=";
   };
 
-  propagatedUserEnvPkgs = with kdePackages; [
-    breeze-icons
-    kdeclarative
+  dontWrapQtApps = true;
+
+  propagatedBuildInputs = with kdePackages; [
+    # avoid .dev outputs propagation
+    qt5compat.out
     kirigami
-    libplasma
-    plasma-workspace
+    libplasma.out
+    plasma5support.out
+    plasma-workspace.out
   ];
 
   installPhase = ''

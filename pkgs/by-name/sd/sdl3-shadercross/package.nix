@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3-shadercross";
-  version = "0-unstable-2025-12-24";
+  version = "0-unstable-2026-04-24";
 
   outputs = [
     "out"
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_shadercross";
-    rev = "feec623003c01a9fff5b30e114c38f550255b511";
-    hash = "sha256-AGfuUYUGbea3LDgGiwxq6XBMgLeatsdWDpciL4JeTWU=";
+    rev = "6b06e55c7c5d7e7a09a8a14f76e866dcfad5ab99";
+    hash = "sha256-DvgMnE0QedInYRdcZQuVOlasri79kVl0ACGvNC1cq8o=";
   };
 
   strictDeps = true;
@@ -42,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "SDLSHADERCROSS_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "SDLSHADERCROSS_STATIC" stdenv.hostPlatform.isStatic)
     (lib.cmakeBool "SDLSHADERCROSS_INSTALL" true)
     (lib.cmakeBool "SDLSHADERCROSS_TESTS" finalAttrs.finalPackage.doCheck)
   ];

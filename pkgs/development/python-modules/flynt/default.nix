@@ -1,31 +1,28 @@
 {
-  astor,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   lib,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
+  hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flynt";
-  version = "1.0.1";
+  version = "1.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ikamensh";
     repo = "flynt";
-    tag = version;
-    hash = "sha256-UHY4UDBHcP3ARikktIehSUD3Dx8A0xpOnfKWWrLCsOY=";
+    tag = finalAttrs.version;
+    hash = "sha256-SkkCA4fEHplt9HkEn+QOq4k9lW5qJeZzLZEbNEtKBSo=";
   };
 
-  build-system = [ hatchling ];
-
-  propagatedBuildInputs = [ astor ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -40,9 +37,9 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to automatically convert old string literal formatting to f-strings";
     homepage = "https://github.com/ikamensh/flynt";
-    changelog = "https://github.com/ikamensh/flynt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ikamensh/flynt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "flynt";
   };
-}
+})

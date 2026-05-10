@@ -5,7 +5,7 @@
   gitMinimal,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-aggregator";
   version = "4.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "git-aggregator";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sZYh3CN15WTCQ59W24ERJdP48EJt571cbkswLQ3JL2g=";
   };
 
@@ -48,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ bbjubjub ];
     mainProgram = "gitaggregate";
   };
-}
+})

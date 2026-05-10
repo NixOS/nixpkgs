@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "serpy";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -12,20 +12,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svgo";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "svg";
     repo = "svgo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eSttRNHxcZquIxrTogk+7YS7rhp083qnOwJI71cmO20=";
+    hash = "sha256-HYI3E14MN0XhREQMYkhLB1gZOBtrpjayC1RyVEhvkOU=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-DrIbnm0TWviCfylCI/12XYsx7YOIk7JFVV18Q4dImwU=";
+    hash = "sha256-oBWUTYlMa3wi7TYAOTXSNBbSMiAZI6APXZvPyQzoPbM=";
   };
 
   nativeBuildInputs = [

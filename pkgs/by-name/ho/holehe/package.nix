@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "holehe";
   version = "0-unstable-2023-05-18";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "megadose";

@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "soundsource";
-  version = "5.8.10";
+  version = "6.0.2";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20251119083726/https://cdn.rogueamoeba.com/soundsource/download/SoundSource.zip";
-    hash = "sha256-kIGpIxlX+qyiXeOWq9DjKLZL4fPZdgsro9P6SqrPQHo=";
+    url = "https://web.archive.org/web/20251220113913/https://cdn.rogueamoeba.com/soundsource/download/SoundSource.zip";
+    hash = "sha256-tzgGUYaY6mIZXs3xxGC3b3AoJ/DcaESYr49zcDS7+Fo=";
   };
 
   dontUnpack = true;

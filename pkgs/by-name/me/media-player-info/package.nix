@@ -10,7 +10,7 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "media-player-info";
   version = "26";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "media-player-info";
     repo = "media-player-info";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VoMr5Lxy6u/BA/9t65/S8AW41YU0FLp6eftYUVdoMjY=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ttuegel ];
     platforms = with lib.platforms; linux;
   };
-}
+})

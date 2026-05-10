@@ -7,15 +7,15 @@
   little_boxes,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "little_boxes";
-  version = "1.10.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "giodamelio";
     repo = "little_boxes";
-    rev = version;
-    hash = "sha256-Quh09K5meiA39ih/orJWF2WfkuZdymxub1dZvns/q3E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ejFo+BYoXf889G/iLuKITwY3ephkEMS6nLtfi3PozHQ=";
   };
 
   cargoVendorDir = "vendor";
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash $extrasPath/little_boxes.bash
     installShellCompletion --fish $extrasPath/little_boxes.fish
     installShellCompletion --zsh $extrasPath/_little_boxes
+    installShellCompletion --nushell $extrasPath/little_boxes.nu
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -55,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ giodamelio ];
     mainProgram = "little_boxes";
   };
-}
+})

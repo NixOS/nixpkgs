@@ -19,15 +19,20 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "25.3";
+  version = "26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     tag = "v${version}";
-    hash = "sha256-aayR9yXsC1Kt4PtlhhdnaPA5cqYuL4CV0UY1fvA/ntk=";
+    hash = "sha256-g66JJVPB+YQjN5IHSu/jqKVu5gS8Llb+mALJ9f5H2ds=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+  '';
 
   build-system = [ uv-build ];
 

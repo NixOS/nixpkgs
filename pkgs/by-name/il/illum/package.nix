@@ -10,14 +10,14 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "illum";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "jmesmon";
     repo = "illum";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "S4lUBeRnZlRUpIxFdN/bh979xvdS7roF6/6Dk0ZUrnM=";
     fetchSubmodules = true;
   };
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     mainProgram = "illum-d";
   };
-}
+})

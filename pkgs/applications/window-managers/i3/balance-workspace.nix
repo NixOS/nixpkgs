@@ -5,13 +5,13 @@
   i3ipc,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "i3-balance-workspace";
   version = "1.8.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-zJdn/Q6r60FQgfehtQfeDkmN0Rz3ZaqgNhiWvjyQFy0=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ euxane ];
     mainProgram = "i3_balance_workspace";
   };
-}
+})

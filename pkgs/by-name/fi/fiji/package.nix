@@ -12,12 +12,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fiji";
   version = "20250408-1717";
 
   src = fetchurl {
-    url = "https://downloads.imagej.net/fiji/archive/${version}/fiji-nojre.zip";
+    url = "https://downloads.imagej.net/fiji/archive/${finalAttrs.version}/fiji-nojre.zip";
     sha256 = "sha256-bqVrTBKII58E7WSlQfRPE0Dxd4h/oJALFvIOdAAFZoI=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,fiji,share/pixmaps}
+    mkdir -p $out/{bin,fiji,share/icons/hicolor/256x256/apps}
 
     cp -R * $out/fiji
     rm -f $out/fiji/jars/imagej-updater-*.jar
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME ${jdk11.home} \
       ''${gappsWrapperArgs[@]}
 
-    ln $out/fiji/images/icon.png $out/share/pixmaps/fiji.png
+    ln $out/fiji/images/icon.png $out/share/icons/hicolor/256x256/apps/fiji.png
 
     runHook postInstall
   '';
@@ -98,4 +98,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ davisrichard437 ];
   };
-}
+})

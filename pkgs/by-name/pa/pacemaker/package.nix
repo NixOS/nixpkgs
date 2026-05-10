@@ -28,14 +28,14 @@
   ocf-resource-agents,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pacemaker";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = "pacemaker";
-    rev = "Pacemaker-${version}";
+    rev = "Pacemaker-${finalAttrs.version}";
     sha256 = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
   };
 
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
       astro
     ];
   };
-}
+})

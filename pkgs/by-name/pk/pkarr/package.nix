@@ -3,18 +3,18 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pkarr";
-  version = "5.0.1";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "pubky";
     repo = "pkarr";
-    rev = "v${version}";
-    hash = "sha256-564JL7EG/RB2k2JdxAENpP5UZtKtaGlrZfeYOgsLBEY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-R8wUUWBPgXdQM9CwZS1lxyEC0YQaS5HU6dwKiCmQOaM=";
   };
 
-  cargoHash = "sha256-HG4cmKQleiWdYBrOgv1Aj/erWjZX5PMwIZpQSQc+sFU=";
+  cargoHash = "sha256-pUO+wIWLdSZSRGi/pAVE6+CB5gMG5jBvVXJ7g8WMb40=";
 
   meta = {
     description = "Public Key Addressable Resource Records (sovereign TLDs) ";
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "pkarr-server";
   };
-}
+})

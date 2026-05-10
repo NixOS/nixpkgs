@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail \
         "cmake_minimum_required (VERSION 2.8.11)" \
-        "cmake_minimum_required (VERSION 3.10)" \
+        "cmake_minimum_required (VERSION 3.10)"
   '';
 
   buildInputs = [ boost ];
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     bin/unit-hyperscan
-    ${lib.optionalString withStatic ''bin/unit-chimera''}
+    ${lib.optionalString withStatic "bin/unit-chimera"}
 
     runHook postCheck
   '';

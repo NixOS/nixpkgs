@@ -6,18 +6,18 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ianny";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "ianny";
-    rev = "v${version}";
-    hash = "sha256-XwwfBOx+5l5KjthL69nLpIVc7ilA4rKGBeRvE9BEQPU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CPtVk8sG3LcJBgmPc/kYZZXW0Lt2OPJGzkLKac+/1ZI=";
   };
 
-  cargoHash = "sha256-A5ZInR6gXvDPpa2azF1ZmVANzm3v1YAvxJjJ7h32J2A=";
+  cargoHash = "sha256-R8NEsGKaoYMssl1OkHXGV+1/oVPkZsbfdgLfRHp+ApA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus.dev ];
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ max-amb ];
     platforms = lib.platforms.linux;
   };
-}
+})

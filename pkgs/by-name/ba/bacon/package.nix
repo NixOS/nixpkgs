@@ -27,16 +27,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.20.3";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UMSYXrD2lDJS2HYiCzm22r40Y4EzAjgEmNhV8hvarTo=";
+    hash = "sha256-eHMpzFKweKGI0REPudyy4veFTXDZc+AX626ylSN2yvU=";
   };
 
-  cargoHash = "sha256-m+9Psm29zV4kOb2mpynR3S/EBajAqPU11iBO9kHlD9o=";
+  cargoHash = "sha256-nUO9xVQ51dNWB5fxDZBLlzOWNE5HDAh6xYa5OdBPr4M=";
 
   buildFeatures = lib.optionals withSound [
     "sound"
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Background rust code checker";
     mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
-    changelog = "https://github.com/Canop/bacon/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/bacon/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       FlorianFranzen

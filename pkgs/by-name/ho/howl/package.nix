@@ -8,17 +8,17 @@
   librsvg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "howl";
   version = "0.6";
 
   # Use the release tarball containing pre-downloaded dependencies sources
   src = fetchurl {
-    url = "https://github.com/howl-editor/howl/releases/download/${version}/howl-${version}.tgz";
+    url = "https://github.com/howl-editor/howl/releases/download/${finalAttrs.version}/howl-${finalAttrs.version}.tgz";
     sha256 = "1qc58l3rkr37cj6vhf8c7bnwbz93nscyraz7jxqwjq6k4gj0cjw3";
   };
 
-  sourceRoot = "howl-${version}/src";
+  sourceRoot = "howl-${finalAttrs.version}/src";
 
   # The Makefile uses "/usr/local" if not explicitly overridden
   installFlags = [ "PREFIX=$(out)" ];
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

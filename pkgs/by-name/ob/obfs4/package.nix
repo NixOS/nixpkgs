@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "obfs4";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -19,10 +19,10 @@ buildGoModule (finalAttrs: {
     # will collide with lyrebird Gtk3 program.
     repo = "lyrebird";
     tag = "lyrebird-${finalAttrs.version}";
-    hash = "sha256-h4ZhjyWRovoEFEFjjJBHBWc3kup60MNFvaYN6UPPxOE=";
+    hash = "sha256-KI9tGQomqSbiW8itxQ72rPwL67LVTmP110FrYVELr5w=";
   };
 
-  vendorHash = "sha256-isquplrmgtR8Mn5M+XNRdeGJHrAm7V7h1etVmVmN60I=";
+  vendorHash = "sha256-AlLRJieCiCLQPbqT+0J3Zxe73ryNB8MQkAyHsU+wr2A=";
 
   ldflags = [
     "-s"

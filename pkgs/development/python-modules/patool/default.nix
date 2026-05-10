@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "4.0.1";
+  version = "4.0.4";
   format = "setuptools";
 
   #pypi doesn't have test data
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "wummel";
     repo = "patool";
     tag = version;
-    hash = "sha256-KAOJi8vUP9kPa++dLEXf3mwrv1kmV7uDZmtvngPxQ90=";
+    hash = "sha256-65pOIVr18vxl20lp61yrVq2oNNnZdhXOHBddaDn7G2c=";
   };
 
   postPatch = ''

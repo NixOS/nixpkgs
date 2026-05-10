@@ -1,17 +1,22 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchurl,
   fetchpatch,
   buildPackages,
-}:
+}@args:
 
-stdenv.mkDerivation rec {
+let
+  stdenv = if args.stdenv.cc.isGNU then gcc14Stdenv else args.stdenv;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "procmail";
   version = "3.24";
 
   src = fetchurl {
-    url = "https://github.com/BuGlessRB/procmail/archive/refs/tags/v${version}.tar.gz";
+    url = "https://github.com/BuGlessRB/procmail/archive/refs/tags/v${finalAttrs.version}.tar.gz";
     sha256 = "UU6kMzOXg+ld+TIeeUdx5Ih7mCOsVf2yRpcCz2m9OYk=";
   };
 
@@ -62,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "adif-multitool";
   version = "0.1.20";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "flwyd";
     repo = "adif-multitool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qeAH8UTyEZn8As3wTjluONpjeT/5l9zicN5+8uwnbLo=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mafo ];
     mainProgram = "adifmt";
   };
-}
+})

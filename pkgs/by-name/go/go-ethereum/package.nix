@@ -13,19 +13,19 @@ let
   ];
 
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-ethereum";
-  version = "1.16.5";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "go-ethereum";
-    rev = "v${version}";
-    hash = "sha256-f9MBHO3oh1Nh+YI1E8cPPaNRj4T12063YLqTDrdZWWA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7otn9F+S4HJ2tWyn8w96NX3hWSLdApTwUL2zAyAW9Xw=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-6tGSyx4OXMXUjhIvLJo+vyRkNzHmwiikzrLL0cQPBLo=";
+  vendorHash = "sha256-rHTZmwy/ZHpsHNFh00mWXe6F8wEtL0JcLaehBwyvtJw=";
 
   doCheck = false;
 
@@ -71,4 +71,4 @@ buildGoModule rec {
     ];
     mainProgram = "geth";
   };
-}
+})

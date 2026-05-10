@@ -7,11 +7,11 @@
   zip,
   gettext,
   perl,
-  wxGTK32,
-  libXext,
-  libXi,
-  libXt,
-  libXtst,
+  wxwidgets_3_2,
+  libxext,
+  libxi,
+  libxt,
+  libxtst,
   xercesc,
   qrencode,
   libuuid,
@@ -23,14 +23,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pwsafe";
   version = "1.23.0"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = "pwsafe";
     repo = "pwsafe";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-54cwQZi93p32JxxLc2Mql2XbJPvwqA2Rfne5G+5i6eU=";
   };
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     gettext
     perl
     pkg-config
-    wxGTK32
+    wxwidgets_3_2
     zip
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     curl
     qrencode
     openssl
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
     file
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXext
-    libXi
-    libXt
-    libXtst
+    libxext
+    libxi
+    libxt
+    libxtst
     libuuid
     libyubikey
     yubikey-personalization
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater {
     allowedVersions = "^1\\.";
-    url = src.gitRepoUrl;
+    url = finalAttrs.src.gitRepoUrl;
   };
 
   meta = {
@@ -111,10 +111,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://pwsafe.org/";
     maintainers = with lib.maintainers; [
-      c0bw3b
       pjones
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.artistic2;
   };
-}
+})

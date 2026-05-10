@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "examine";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "examine";
     tag = finalAttrs.version;
-    hash = "sha256-9xYUJeAYqnDYZzjWM21HuSNDY+ZcUlTdj/g/MUH2A54=";
+    hash = "sha256-6U8reOzeqamX/MG/mWbso+kjuZQ6cK8j9XhuEtGZ1q4=";
   };
 
-  cargoHash = "sha256-BcBCPkahV6+xw+K+Vk4QjwX5QI1j4hNkD9YTyL24iRA=";
+  cargoHash = "sha256-V+ClzaG7LnkOl84j5mVGJPTLVfaVqxaSH7ufmjXdwyM=";
 
   nativeBuildInputs = [
     just

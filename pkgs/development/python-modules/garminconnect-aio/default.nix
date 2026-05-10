@@ -4,7 +4,6 @@
   brotlipy,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   yarl,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "garminconnect-aio";
   version = "0.1.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";

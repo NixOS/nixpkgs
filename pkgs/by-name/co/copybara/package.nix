@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";
-  version = "20251229";
+  version = "20260420";
 
   src = fetchurl {
     url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
-    hash = "sha256-H+3VHZ/RCM2rZPSwIpi8shFrtNJ5f+/HPLPnhadDttg=";
+    hash = "sha256-0ddQZ5CtsV0trTi6+AhNA2KU9hQAedz47MpxvPK27cg=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/copybara";
     changelog = "https://github.com/google/copybara/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cameroncuttingedge ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "copybara";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

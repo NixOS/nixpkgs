@@ -6,14 +6,14 @@
   luajit,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "river-luatile";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "river-luatile";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8/qHoNFoGH1nSdTwBkaQk+yyvJtrXADTA39gUAMeSv8=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pinpox ];
     mainProgram = "river-luatile";
   };
-}
+})

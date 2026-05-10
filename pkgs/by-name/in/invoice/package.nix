@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "invoice";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "invoice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WtQ4nF31uIoplY18GZNs41ZOCxmbIu71YpEGk8aTGww=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "invoice";
   };
-}
+})

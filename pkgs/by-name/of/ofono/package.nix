@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ofono";
-  version = "2.17";
+  version = "2.19";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/snapshot/ofono-${finalAttrs.version}.tar.gz";
-    hash = "sha256-VJhLJeC1pwXuAadKvYPel6Xb3RZG4vwDhhKefRVrt3Y=";
+    hash = "sha256-OFoEl4Ve5DCNYsDfQpO26tZQTUz1192v0oECsXvHTG8=";
   };
 
   patches = [ ./0001-Search-connectors-in-OFONO_PLUGIN_PATH.patch ];

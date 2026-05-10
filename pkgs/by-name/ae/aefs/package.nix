@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   autoreconfHook,
   fuse,
   git,
@@ -9,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "aefs";
-  version = "unstable-2015-05-06";
+  version = "0-unstable-2015-05-06";
 
   src = fetchFromGitHub {
     owner = "edolstra";
@@ -39,6 +40,10 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ fuse ];
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = {
     homepage = "https://github.com/edolstra/aefs";

@@ -21,15 +21,15 @@
   enableAvx512 ? stdenv.hostPlatform.avx512Support,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srsran";
-  version = "23.11";
+  version = "25_10";
 
   src = fetchFromGitHub {
     owner = "srsran";
     repo = "srsran";
-    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-3cQMZ75I4cyHpik2d/eBuzw7M4OgbKqroCddycw4uW8=";
+    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    sha256 = "sha256-DwQ4u17m8D5RqX3OIYSyeE5+51sLah1qchRcwlX5i0A=";
   };
 
   outputs = [
@@ -55,6 +55,17 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
+  # boost 1.89 removed the boost_system stub library
+  postPatch = ''
+    substituteInPlace cmake/modules/FindUHD.cmake --replace-fail \
+      'set(CMAKE_REQUIRED_LIBRARIES uhd boost_program_options boost_system)' \
+      'set(CMAKE_REQUIRED_LIBRARIES uhd boost_program_options)'
+    substituteInPlace lib/src/phy/rf/CMakeLists.txt --replace-fail \
+      '/usr/lib/x86_64-linux-gnu/libboost_system.so' ""
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'list(APPEND BOOST_REQUIRED_COMPONENTS "system")' ""
+  '';
+
   cmakeFlags = [
     "-DENABLE_WERROR=OFF"
     (lib.cmakeBool "ENABLE_LTE_RATES" enableLteRates)
@@ -75,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ hexagonal-sun ];
   };
-}
+})

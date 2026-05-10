@@ -11,11 +11,6 @@
     inherit hash;
   },
   patches ? [ ],
-  maintainers ? [
-    lib.maintainers.artturin
-    lib.maintainers.philiptaron
-    lib.maintainers.lovesegfault
-  ],
   teams ? [ lib.teams.nix ],
   self_attribute_name,
 }@args:
@@ -50,7 +45,6 @@ assert (hash == null) -> (src != null);
   meson,
   ninja,
   mdbook,
-  mdbook-linkcheck,
   nlohmann_json,
   nixosTests,
   openssl,
@@ -64,10 +58,7 @@ assert (hash == null) -> (src != null);
   xz,
   enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ?
-    lib.meta.availableOn stdenv.hostPlatform aws-c-common
-    && !enableStatic
-    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ? lib.meta.availableOn stdenv.hostPlatform aws-c-common,
   aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
@@ -124,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableDocumentation [
     (lib.getBin lowdown-unsandboxed)
     mdbook
-    mdbook-linkcheck
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linuxMinimal
@@ -174,17 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build tests
-  ''
-  # The ability to chmod the root filesystem only exist in filesystem namespacing capable Nix interpreters.
-  # At the time of writing, only Linux can do it.
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    # The build system produces $HOME during the install check phase
-    # and will fail when ran without build user separation.
-    # This will surface as a FIFO synchronization deadlock.
-    # To avoid this, the $HOME directory is barred from being mkdir()
-    # by the build system here.
-    # https://github.com/NixOS/nix/issues/11295
-    chmod 555 /
   '';
 
   preConfigure =
@@ -283,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://nixos.org/";
     license = lib.licenses.lgpl21Plus;
-    inherit maintainers teams;
+    inherit teams;
     platforms = lib.platforms.unix;
     # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
     # https://hydra.nixos.org/build/298175022

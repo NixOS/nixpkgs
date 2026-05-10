@@ -9,18 +9,18 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "star";
   version = "2.7.11b";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-4EoS9NOKUwfr6TDdjAqr4wGS9cqVX5GYptiOCQpmg9c=";
   };
 
-  sourceRoot = "${src.name}/source";
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail "-std=c++11" "-std=c++14"
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.arcadio ];
   };
-}
+})

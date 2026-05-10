@@ -2,45 +2,51 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
-  aioresponses,
+
+  # dependencies
   azure-core,
   azure-identity,
   isodate,
   msrest,
-  responses,
-  pytestCheckHook,
+
+  # tests
+  aioresponses,
   pytest-asyncio,
+  pytestCheckHook,
+  responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydo";
-  version = "0.23.0";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "pydo";
-    tag = "v${version}";
-    hash = "sha256-wmrth6n6vlYLMMiNYm6p5sS2keEFsnGm9sGjShSsLaA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-U6owPB+zTCT/5uoG3+BZcnmJqWammnih+jpo4DKUMcw=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    aioresponses
     azure-core
     azure-identity
     isodate
     msrest
-    responses
   ];
 
   pythonImportsCheck = [ "pydo" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    aioresponses
     pytest-asyncio
+    pytestCheckHook
+    responses
   ];
 
   # integration tests require hitting the live api with a
@@ -52,9 +58,9 @@ buildPythonPackage rec {
   meta = {
     description = "Official DigitalOcean Client based on the DO OpenAPIv3 specification";
     homepage = "https://github.com/digitalocean/pydo";
-    changelog = "https://github.com/digitalocean/pydo/releases/tag/v${version}";
+    changelog = "https://github.com/digitalocean/pydo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

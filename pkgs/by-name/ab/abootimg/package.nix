@@ -10,7 +10,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abootimg";
   version = "0.6";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cat <<EOF > version.h
-    #define VERSION_STR "${version}"
+    #define VERSION_STR "${finalAttrs.version}"
     EOF
   '';
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

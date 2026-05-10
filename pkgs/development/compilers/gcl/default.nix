@@ -9,14 +9,14 @@
   zlib,
   which,
   texinfo,
-  libX11,
+  libx11,
   xorgproto,
-  libXi,
+  libxi,
   gmp,
-  libXext,
-  libXt,
-  libXaw,
-  libXmu,
+  libxext,
+  libxt,
+  libxaw,
+  libxmu,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
     binutils
     emacs
     gmp
-    libX11
+    libx11
     xorgproto
-    libXi
-    libXext
-    libXt
-    libXaw
-    libXmu
+    libxi
+    libxext
+    libxt
+    libxaw
+    libxmu
     zlib
     which
     texinfo

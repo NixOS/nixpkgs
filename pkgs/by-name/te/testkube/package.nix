@@ -3,23 +3,23 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "testkube";
-  version = "2.2.6";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "kubeshop";
     repo = "testkube";
-    rev = "v${version}";
-    hash = "sha256-aAE3Mb39ddy9I4Ftzb5WKRlcIv7iTrZ8mRsjjyyZv9Y=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-rmSViKdYFNSgK5T6OyCQEiuY737S7NYqAGuR2/SHQLE=";
   };
 
-  vendorHash = "sha256-WaanaknTuCnjBjxIi39ZHTqh3C92rLQAPRFx0o7dwZY=";
+  vendorHash = "sha256-E1Ng1bHHXnFPJg/8VwJJpceZIxdbl4TwvWTMcd3sUMk=";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.builtBy=nixpkgs"
-    "-X main.commit=v${version}"
+    "-X main.commit=v${finalAttrs.version}"
     "-X main.date=1970-01-01-00:00:01"
   ];
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     mainProgram = "kubectl-testkube";
     maintainers = with lib.maintainers; [ mathstlouis ];
   };
-}
+})

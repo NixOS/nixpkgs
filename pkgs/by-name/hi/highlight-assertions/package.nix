@@ -4,21 +4,21 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "highlight-assertions";
   version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "thehamsta";
     repo = "highlight-assertions";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7r8tBJ6JFGUGUsTivzlO23hHiXISajjn2WF12mmbmMg=";
   };
 
   cargoHash = "sha256-egrxcnDVKKgk1sL5WNMIR2FPwQbjjMy20VWizcTBEtM=";
 
   # requires nightly features
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   meta = {
     description = "Tool for unit testing tree sitter highlights for nvim-treesitter";
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

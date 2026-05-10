@@ -2,38 +2,51 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  gtk3,
-  openssl,
+  gtk4,
+  libadwaita,
+  libsoup_3,
+  glib-networking,
   alsa-lib,
   pkg-config,
+  wrapGAppsHook4,
   ffmpeg,
-  dbus,
+  glib,
   libpulseaudio,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "songrec";
-  version = "0.4.3";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = "songrec";
-    rev = version;
-    hash = "sha256-pTonrxlYvfuLRKMXW0Lao4KCoNFlMzE9rH+hwpa60JY=";
+    rev = finalAttrs.version;
+    hash = "sha256-lCwFMBQ6IimNtXYMfTnFOpwOO2qbwijOEZ+oMsQKAP0=";
   };
 
-  cargoHash = "sha256-wSRn1JY067RVqGGdiox87+zRb2/2OMcvKLYZE1QUs/s=";
+  cargoHash = "sha256-BhDFGkvY6c8XbhJpFX1w8CSXK9IY/HiysNoooytFT9I=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook4
+  ];
 
   buildInputs = [
     alsa-lib
-    dbus
-    gtk3
-    openssl
-    ffmpeg
+    glib
+    glib-networking
+    gtk4
+    libadwaita
     libpulseaudio
+    libsoup_3
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
+    )
+  '';
 
   postInstall = ''
     mv packaging/rootfs/usr/share $out/share
@@ -42,9 +55,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Open-source Shazam client for Linux, written in Rust";
     homepage = "https://github.com/marin-m/SongRec";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tcbravo ];
     mainProgram = "songrec";
   };
-}
+})

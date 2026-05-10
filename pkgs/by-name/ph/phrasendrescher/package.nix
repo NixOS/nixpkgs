@@ -5,16 +5,22 @@
   openssl,
   libssh2,
   gpgme,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phrasendrescher";
   version = "1.2.2c";
 
   src = fetchurl {
-    url = "http://leidecker.info/projects/${pname}/${pname}-${version}.tar.gz";
+    url = "https://leidecker.info/projects/phrasendrescher/phrasendrescher-${finalAttrs.version}.tar.gz";
     sha256 = "18vg6h294219v14x5zqm8ddmq5amxlbz7pw81lcmpz8v678kwyph";
   };
+
+  patches = [
+    # gcc15
+    ./fix-prototypes.patch
+  ];
 
   postPatch = ''
     substituteInPlace configure \
@@ -29,6 +35,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-plugins" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-h";
+  doInstallCheck = true;
+
   meta = {
     description = "Modular and multi processing pass phrase cracking tool";
     homepage = "https://leidecker.info/projects/phrasendrescher/index.shtml";
@@ -37,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "pd";
   };
-}
+})

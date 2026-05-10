@@ -13,16 +13,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit-folium";
-  version = "0.25.3";
+  version = "0.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randyzwitch";
     repo = "streamlit-folium";
-    tag = "v${version}";
-    hash = "sha256-ACllvlT2zPyV7IS00LVgnf2u5jMChVJlDgNlWk0c9fo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VGL9gl61aL8nqebb0XXYEsEiUcvPO4LpufioVDRMFkA=";
   };
 
   postPatch = ''
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Streamlit Component for rendering Folium maps";
     homepage = "https://github.com/randyzwitch/streamlit-folium";
-    changelog = "https://github.com/randyzwitch/streamlit-folium/releases/tag/${src.tag}";
+    changelog = "https://github.com/randyzwitch/streamlit-folium/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -4,7 +4,6 @@
   fetchPypi,
   requests,
   requests-oauthlib,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "homeconnect";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -9,7 +9,7 @@
   gtkglext,
   libjpeg_turbo,
   libtheora,
-  libXmu,
+  libxmu,
   lua,
   libGLU,
   libGL,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     perl
     libjpeg_turbo
     libtheora
-    libXmu
+    libxmu
     libGLU
     libGL
   ];

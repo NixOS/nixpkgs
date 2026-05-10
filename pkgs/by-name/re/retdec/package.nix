@@ -115,7 +115,7 @@ let
     subprocess.check_call(['chmod', '-R', 'u+w', support_dir])
   '';
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "retdec";
 
   # If you update this you will also need to adjust the versions of the updated dependencies.
@@ -129,7 +129,7 @@ stdenv.mkDerivation (self: {
   src = fetchFromGitHub {
     owner = "avast";
     repo = "retdec";
-    tag = "v${self.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-H4e+aSgdBBbG6X6DzHGiDEIASPwBVNVsfHyeBTQLAKI=";
   };
 
@@ -161,10 +161,10 @@ stdenv.mkDerivation (self: {
     libxml2
     zlib
   ]
-  ++ lib.optional self.doInstallCheck gtest;
+  ++ lib.optional finalAttrs.doInstallCheck gtest;
 
   cmakeFlags = [
-    (lib.cmakeBool "RETDEC_TESTS" self.doInstallCheck) # build tests
+    (lib.cmakeBool "RETDEC_TESTS" finalAttrs.doInstallCheck) # build tests
     (lib.cmakeBool "RETDEC_DEV_TOOLS" buildDevTools) # build tools e.g. capstone2llvmir, retdectool
     (lib.cmakeBool "RETDEC_COMPILE_YARA" compileYaraPatterns) # build and install compiled patterns
   ]

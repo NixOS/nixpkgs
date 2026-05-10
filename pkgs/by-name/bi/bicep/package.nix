@@ -57,7 +57,6 @@ buildDotnetModule rec {
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
-    teams = [ lib.teams.stridtech ];
     mainProgram = "bicep";
   };
 }

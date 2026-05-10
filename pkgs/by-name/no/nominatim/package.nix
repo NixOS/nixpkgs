@@ -19,7 +19,7 @@ let
     hash = "sha256-/mY5Oq9WF0klXOv0xh0TqEJeMmuM5QQJ2IxANRZd4Ek=";
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nominatim";
   version = "5.2.0";
   pyproject = true;
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ao4oEPz5rtRQtPC2UcIHH1M+o914JraASf+hcB2SDKA=";
   };
 
@@ -82,4 +82,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "nominatim";
   };
-}
+})

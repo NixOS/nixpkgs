@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "sshwifty";
-  version = "0.4.2-beta-release";
+  version = "0.4.5-beta-release";
 
   src = fetchFromGitHub {
     owner = "nirui";
     repo = "sshwifty";
     tag = finalAttrs.version;
-    hash = "sha256-nx485HB0JqexcSdwhgbhoAwpK3Cg7tkgDrV3NM93pXk=";
+    hash = "sha256-b6DgDhnaeIT8HnE2+TNzI2XPmERwPdnv6U8cu0ZZmAc=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,10 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-5Y6hTsHSFOPhgLwEhMNOOCyLYNjp1Q5n8My3Q6lr7hQ=";
+    hash = "sha256-xfnG5ONEVA58ZHmFoG6x9bYxwHuAjq7VsqxifEH2nQk=";
   };
 
-  vendorHash = "sha256-4K0fxBBcv+ZSV0ocsoagjFAXRphA27xGO40pnewaKSU=";
+  vendorHash = "sha256-s9wjaxeuIBClyBwDSZvnSVxXh/RI6oOITU2cL3oNb5o=";
 
   preBuild = ''
     # Generate static pages
@@ -69,7 +69,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/nirui/sshwifty";
     changelog = "https://github.com/nirui/sshwifty/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "sshwifty";
   };

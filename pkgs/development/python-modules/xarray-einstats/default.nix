@@ -7,7 +7,6 @@
   numba,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   xarray,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "xarray-einstats";
   version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";

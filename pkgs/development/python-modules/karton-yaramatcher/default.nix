@@ -4,7 +4,6 @@
   fetchFromGitHub,
   karton-core,
   unittestCheckHook,
-  pythonOlder,
   yara-python,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "karton-yaramatcher";
   version = "1.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";

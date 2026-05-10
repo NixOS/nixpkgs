@@ -5,14 +5,14 @@
   stdlib-shims,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bdd";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "backtracking";
     repo = "ocaml-bdd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bhgKpo7gGkjbI75pzckfQulZnTstj6G5QcErLgIGneU=";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

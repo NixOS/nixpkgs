@@ -4,13 +4,13 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swc";
   version = "0.91.495";
 
   src = fetchCrate {
     pname = "swc_cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-th+VLeKdTqyAjyRer0GeGLprBX0XhYTd9F7kwBDrzLo=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
       kashw2
     ];
   };
-}
+})

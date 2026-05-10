@@ -3,24 +3,24 @@
   autoreconfHook,
   fetchFromGitHub,
   stdenv,
-  wxGTK31,
+  wxwidgets_3_1,
   withGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gambit-project";
-  version = "16.4.1";
+  version = "16.6.0";
 
   src = fetchFromGitHub {
     owner = "gambitproject";
     repo = "gambit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jRjL/rQ3k0zdTFCx1S/jdYpijcBx1aV8zsC8mz8aZ3A=";
+    hash = "sha256-4jtyFQVtde8ilTn5W/E6adQwX3fwC5T7EJU63mD2zM8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxGTK31;
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxwidgets_3_1;
 
-  buildInputs = lib.optional withGui wxGTK31;
+  buildInputs = lib.optional withGui wxwidgets_3_1;
 
   strictDeps = true;
 

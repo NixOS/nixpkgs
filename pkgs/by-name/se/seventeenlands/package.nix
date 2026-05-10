@@ -3,14 +3,14 @@
   lib,
   python3,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "seventeenlands";
-  version = "0.1.43";
+  version = "0.1.44";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oTF4dtMKhx2YR80goKTcyq2P0mxAKLE2Ze5HbMNvyGg=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-yz+HGovKIuu3Ou1jo+aNJPiNiERVZvsTtiy9tVhySwI=";
   };
 
   # No tests
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "seventeenlands" ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     python-dateutil
@@ -33,4 +33,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ sephi ];
     mainProgram = "seventeenlands";
   };
-}
+})

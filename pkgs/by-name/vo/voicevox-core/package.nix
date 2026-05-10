@@ -21,8 +21,11 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voicevox-core";
+
+  # Update only together with voicevox and voicevox-engine
+  # nixpkgs-update: no auto update
   version = "0.16.2";
-  modelVersion = "0.16.1";
+  passthru.modelVersion = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
@@ -37,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r --no-preserve=all ${openjtalk-src} ./openjtalk
     substitute ${./openjtalk.patch} ./openjtalk.patch \
       --replace-fail "@openjtalk_src@" "$(pwd)/openjtalk"
-    patch -d $cargoDepsCopy/open_jtalk-sys-* -p1 < ./openjtalk.patch
+    patch -d $cargoDepsCopy/*/open_jtalk-sys-* -p1 < ./openjtalk.patch
   '';
 
   cargoBuildFlags = [ "-p voicevox_core_c_api" ];
@@ -61,13 +64,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.models = stdenv.mkDerivation {
     pname = "voicevox-models";
-    version = finalAttrs.modelVersion;
+    version = finalAttrs.passthru.modelVersion;
 
     src = fetchFromGitHub {
       owner = "VOICEVOX";
       repo = "voicevox_vvm";
-      tag = finalAttrs.modelVersion;
-      hash = "sha256-OY+xuvNjgmH/bxhL61XJZ3JVOxyec6kifkoGD4eN7HA=";
+      tag = finalAttrs.passthru.modelVersion;
+      hash = "sha256-/NU9CZcb+gHXHeno3NLF0EgPLw+6f8XyiAE2b9XJmuE=";
     };
 
     nativeBuildInputs = [ python3 ];
@@ -77,6 +80,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       # convert multipart zip archive into single file
       python scripts/merge_vvm.py
+
+      # Exclude VOICEVOX Nemo models similar to upstream's CI, as voicevox-engine doesn't use them
+      rm vvms/n*
+
       mkdir -p "$out"
       cp vvms/* "$out"
 

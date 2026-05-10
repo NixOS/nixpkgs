@@ -15,7 +15,7 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crosswords";
   version = "0.3.15";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "crosswords";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-KcHcTjPoQNA5TBXnKgudjBTV/0JbeVMJ09XVAL7SizI=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Crossword player and editor for GNOME";
     homepage = "https://gitlab.gnome.org/jrb/crosswords";
-    changelog = "https://gitlab.gnome.org/jrb/crosswords/-/blob/${version}/NEWS.md?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/jrb/crosswords/-/blob/${finalAttrs.version}/NEWS.md?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     mainProgram = "crosswords";
     maintainers = with lib.maintainers; [
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

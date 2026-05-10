@@ -6,7 +6,6 @@
   geographiclib,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
 }:
 
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "geopy";
   version = "2.4.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geopy";

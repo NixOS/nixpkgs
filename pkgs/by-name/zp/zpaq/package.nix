@@ -5,14 +5,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zpaq";
   version = "7.15";
 
   src = fetchFromGitHub {
     owner = "zpaq";
     repo = "zpaq";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
   };
 
@@ -20,14 +20,20 @@ stdenv.mkDerivation rec {
     perl # for pod2man
   ];
 
-  CPPFLAGS = [
-    "-Dunix"
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DNOJIT";
-  CXXFLAGS = [
-    "-O3"
-    "-DNDEBUG"
-  ];
+  env = {
+    CPPFLAGS = toString (
+      [
+        "-Dunix"
+      ]
+      ++ lib.optionals (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) [
+        "-DNOJIT"
+      ]
+    );
+    CXXFLAGS = toString [
+      "-O3"
+      "-DNDEBUG"
+    ];
+  };
 
   enableParallelBuilding = true;
 
@@ -42,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "zpaq";
   };
-}
+})

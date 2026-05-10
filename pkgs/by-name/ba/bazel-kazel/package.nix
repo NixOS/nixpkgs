@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bazel-kazel";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "repo-infra";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Y9VOlFrFmJQCQuwf3UztHGuJqmq/lSibTbI3oGjtNuE=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "kazel";
   };
-}
+})

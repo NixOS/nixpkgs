@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nqc";
   version = "3.1.r6";
 
   src = fetchurl {
-    url = "https://bricxcc.sourceforge.net/nqc/release/nqc-${version}.tgz";
+    url = "https://bricxcc.sourceforge.net/nqc/release/nqc-${finalAttrs.version}.tgz";
     sha256 = "sha256-v9XmVPY5r3pYjP3vTSK9Xvz/9UexClbOvr3ljvK/52Y=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl10;
     maintainers = with lib.maintainers; [ christophcharles ];
   };
-}
+})

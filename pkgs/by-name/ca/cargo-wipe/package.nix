@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-wipe";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "mihai-dinculescu";
     repo = "cargo-wipe";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-r+JMM6KUqcqpLi1Js/2RI8FSoaA5f7yXJ1EuCJB1fyE=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ otavio ];
   };
-}
+})

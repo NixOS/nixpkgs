@@ -17,12 +17,12 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsoap";
   version = "${majorVersion}.108";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${version}.zip";
+    url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${finalAttrs.version}.zip";
     sha256 = "0x58bwlclk7frv03kg8bp0pm7zl784samvbzskrnr7dl5v866nvl";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
       veprbl
     ];
   };
-}
+})

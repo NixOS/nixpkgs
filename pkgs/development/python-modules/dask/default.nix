@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
+  util-linux,
 
   # build-system
   setuptools,
@@ -29,6 +31,7 @@
 
   # tests
   hypothesis,
+  psutil,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
@@ -39,22 +42,23 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask";
-  version = "2025.12.0";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
-    tag = version;
-    hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
+    tag = finalAttrs.version;
+    hash = "sha256-JfCiABGSCJKKSz2/r8fvpVwdQSZqvoQICe+lDvuNhoM=";
   };
 
-  # https://github.com/dask/dask/issues/12043
-  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
-    substituteInPlace dask/dataframe/dask_expr/tests/_util.py \
-      --replace-fail "except AttributeError:" "except (AttributeError, pickle.PicklingError):"
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace dask/tests/test_system.py \
+      --replace-fail \
+        '"taskset",' \
+        '"${lib.getExe' util-linux "taskset"}",'
   '';
 
   build-system = [
@@ -97,6 +101,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pyarrow
     pytest-asyncio
     pytest-cov-stub
@@ -107,12 +112,16 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ]
-  ++ optional-dependencies.array
-  ++ optional-dependencies.dataframe;
+  ++ finalAttrs.passthru.optional-dependencies.array
+  ++ finalAttrs.passthru.optional-dependencies.dataframe;
 
   pytestFlags = [
     # Rerun failed tests up to three times
     "--reruns=3"
+
+    # FutureWarning: The previous implementation of stack is deprecated and will be removed in a
+    # future version of pandas.
+    "-Wignore::FutureWarning"
   ];
 
   disabledTestMarks = [
@@ -120,8 +129,16 @@ buildPythonPackage rec {
     "network"
   ];
 
-  # https://github.com/dask/dask/issues/12042
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+  disabledTests = [
+    # https://github.com/dask/dask/issues/10931
+    "test_combine_first_all_nans"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeWarning: divide by zero encountered in det
+    "test_array_notimpl_function_dask"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/dask/dask/issues/12042
     "test_multiple_repartition_partition_size"
   ];
 
@@ -149,4 +166,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -33,6 +34,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioopenssl" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  patches = [
+    # compatibility with python3.14: set a asyncio event loop for the unit tetsts
+    (fetchpatch {
+      name = "fix-asyncio-event-loop.patch";
+      url = "https://github.com/theobori/aioopenssl/commit/47b1a1e5593fd8c3f4dedcdbc68c17e83d5c88ec.patch";
+      hash = "sha256-XdoeWS5wqmGDWRObVpjcRLyN7SF2IdVmSAUBD7U4dfI=";
+    })
+  ];
 
   # Tests that fail in when built in the Darwin sandbox.
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

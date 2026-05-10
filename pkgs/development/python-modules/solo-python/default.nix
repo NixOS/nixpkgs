@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit,
   click,
   cryptography,
@@ -14,23 +13,21 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "solo-python";
   version = "0.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = "solo-python";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
 
-  nativeBuildInputs = [ flit ];
+  build-system = [ flit ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cryptography
     ecdsa
@@ -65,4 +62,4 @@ buildPythonPackage rec {
     # https://github.com/solokeys/solo1-cli/issues/157
     broken = lib.versionAtLeast fido2.version "1.0.0";
   };
-}
+})

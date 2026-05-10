@@ -17,62 +17,52 @@
   gdk-pixbuf,
   libmediainfo,
   vmtouch,
-  gitUpdater,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rapid-photo-downloader";
-  version = "0.9.36";
+  version = "0.9.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "damonlynch";
     repo = "rapid-photo-downloader";
-    rev = "v${version}";
-    hash = "sha256-fFmIbqymYkg2Z1/x0mNsCNlDCOyqVg65CM4a67t+kPQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-De4qe3LZm8fe5mu3teQzeP74mdgetCPRJrBzq9fad2s=";
   };
 
   build-system = with python3Packages; [
-    setuptools
+    hatchling
+    hatch-argparse-manpage
+    hatch-gettext
   ];
 
-  dependencies =
-    with python3Packages;
-    [
-      ifuse
-      libimobiledevice
-      # Python dependencies
-      pyqt5
-      pygobject3
-      gphoto2
-      pyzmq
-      tornado
-      psutil
-      pyxdg
-      arrow
-      python-dateutil
-      easygui
-      babel
-      colour
-      pillow
-      pymediainfo
-      sortedcontainers
-      requests
-      colorlog
-      pyprind
-      setuptools
-      show-in-file-manager
-      tenacity
-    ]
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
-
-  postPatch = ''
-    # Drop broken version specifier
-    sed -i '/python_requires/d' setup.py
-    # Disable version check
-    substituteInPlace raphodo/constants.py \
-      --replace "disable_version_check = False" "disable_version_check = True"
-  '';
+  dependencies = with python3Packages; [
+    ifuse
+    libimobiledevice
+    # Python dependencies
+    arrow
+    babel
+    colour
+    gphoto2
+    packaging
+    pillow
+    psutil
+    pygobject3
+    pymediainfo
+    pyqt5
+    python-dateutil
+    pyxdg
+    pyzmq
+    show-in-file-manager
+    sortedcontainers
+    tenacity
+    tornado
+    # Optional dependencies
+    colorlog
+  ];
 
   nativeBuildInputs = [
     libsForQt5.wrapQtAppsHook
@@ -80,15 +70,6 @@ python3Packages.buildPythonApplication rec {
     intltool
     gobject-introspection
   ];
-
-  # Package has no generally usable unit tests.
-  # The included doctests expect specific, hardcoded hardware to be present.
-  # Instead, we just make sure the program runs enough to report its version.
-  checkPhase = ''
-    export XDG_DATA_HOME=$(mktemp -d)
-    export QT_QPA_PLATFORM=offscreen
-    $out/bin/rapid-photo-downloader --detailed-version
-  '';
 
   buildInputs = [
     gdk-pixbuf
@@ -103,11 +84,23 @@ python3Packages.buildPythonApplication rec {
     udisks
   ];
 
-  # NOTE: Check if strictDeps can be renabled
-  # at the time of writing this the dependency easygui fails to build
-  #       launching fails with:
-  #       "Namespace [Notify / GExiv2 / GUdev] not available"
-  strictDeps = false;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--detailed-version";
+  # Keep and setup environment such that the detailed version check
+  # can run successfully without a screen.
+  # Next to that, set the XDG_CACHE_HOME to stop generating errors
+  # about unwritable cache directories.
+  versionCheckKeepEnvironment = [
+    "QT_QPA_PLATFORM"
+    "XDG_CACHE_HOME"
+  ];
+  preVersionCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+    export XDG_CACHE_HOME=$(mktemp -d)
+  '';
+
+  strictDeps = true;
 
   preFixup = ''
     makeWrapperArgs+=(
@@ -125,9 +118,8 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-    ignoredVersions = "a.*";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
   };
 
   meta = {
@@ -138,4 +130,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ philipdb ];
   };
-}
+})

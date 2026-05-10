@@ -63,7 +63,7 @@ in
   ];
 
   meta = {
-    maintainers = lib.teams.podman.members;
+    teams = [ lib.teams.podman ];
   };
 
   options.virtualisation.podman = {
@@ -105,7 +105,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
+        **Deprecated**, please use {option}`hardware.nvidia-container-toolkit.enable` instead.
 
         Enable use of Nvidia GPUs from within podman containers.
       '';
@@ -123,7 +123,7 @@ in
       type = with types; listOf package;
       # keep the default in sync with the podman package
       default = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ];
-      defaultText = lib.literalExpression ''lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ]'';
+      defaultText = lib.literalExpression "lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.runc ]";
       example = lib.literalExpression ''
         [
           pkgs.gvisor

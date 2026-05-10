@@ -19,18 +19,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ticktick";
-  version = "6.0.40";
+  version = "8.0.10";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "${baseUrl}/linux/linux_deb_x64/ticktick-${finalAttrs.version}-amd64.deb";
-        hash = "sha256-0eBsD/qFCaK/Isu4XJVve+8TBssgLAsCCM1GHN23PIk=";
+        hash = "sha256-5zIhLpoqZM8+RC4YBhdDyMq2aEg31O8U6Q5gD8Bo9es=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "${baseUrl}/linux/linux_deb_arm64/ticktick-${finalAttrs.version}-arm64.deb";
-        hash = "sha256-USKmydiyeY8Iibe+ebcGcmwo7XJEw/EEf/OY4PsSrl8=";
+        hash = "sha256-R9dMGUiSXX/CRfVXoW3w2Gk1UfknfmNWoIqkhL/FRJs=";
       }
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";

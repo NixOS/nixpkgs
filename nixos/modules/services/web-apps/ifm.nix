@@ -53,6 +53,7 @@ in
       description = "Improved file manager, a single-file web based filemanager";
 
       after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       environment = {
@@ -65,7 +66,7 @@ in
         StandardOutput = "journal";
         BindPaths = "${cfg.dataDir}:/data";
         PrivateTmp = true;
-        ExecStart = "${lib.getExe pkgs.ifm-web} ${lib.escapeShellArg cfg.listenAddress} ${builtins.toString cfg.port} /data";
+        ExecStart = "${lib.getExe pkgs.ifm-web} ${lib.escapeShellArg cfg.listenAddress} ${toString cfg.port} /data";
       };
     };
   };

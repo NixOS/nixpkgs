@@ -4,18 +4,16 @@
   fetchFromGitHub,
   cmake,
 }:
-let
-  version = "12.9.3";
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "source-meta-json-schema";
-  inherit version;
+  version = "14.13.4";
 
   src = fetchFromGitHub {
     owner = "sourcemeta";
     repo = "jsonschema";
-    rev = "v${version}";
-    hash = "sha256-QfjCoYl+v/1El0IW11ZkKCLRN52GDFjpCGyclUyB9GM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-APrlrYG6QTJqrI6+TBUd34x6Di1fCm15FqDGWrukhkQ=";
   };
 
   nativeBuildInputs = [

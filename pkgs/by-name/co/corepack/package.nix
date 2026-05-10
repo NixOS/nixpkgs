@@ -3,22 +3,25 @@
   stdenvNoCC,
   cacert,
   yarn-berry,
-  nodejs,
+  nodejs-slim, # no need for npm
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
-  fetchpatch2,
+  writeScriptBin,
 }:
 
+let
+  nodejs = nodejs-slim;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
-  version = "0.34.4";
+  version = "0.34.7";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "corepack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AE2tDeDs1wzDdTrkG/ic2ydQC8G2wcaKD6s7ec7p+Ew=";
+    hash = "sha256-mAiYRDQ9nh4FN8nY0FKC38b1fKRVq0D4dojcAynezas=";
   };
 
   patches = [
@@ -26,6 +29,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # We can use the built-in SQLite module instead (and skip the installCheck phase on version of
     # Node.js that do not have built-in SQLite support).
     ./use-builtin-sqlite.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/nodejs/corepack/blob/main/package.json#L19
+    ./yarn-4.14-support.patch
   ];
 
   nativeBuildInputs = [
@@ -45,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patches
       src
       ;
-    hash = "sha256-Yzm3PtdbR9Tx2bisdzTw0XGD6rAc/KUCzmhjGuXdft4=";
+    hash = "sha256-WIXXaam6OoIQrAUiLtF/Fst3vYTFj3mqBr7UxhUcXMI=";
   };
 
   postPatch = ''
@@ -91,6 +98,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     cacert
     versionCheckHook
+    (writeScriptBin "corepack" "") # Some tests expect to find a `corepack` in the PATH
   ];
   # Built-in SQLite support is only available in Node.js 22+, and required to run the tests.
   preInstallCheck = lib.optional (lib.versionAtLeast nodejs.version "22") ''
@@ -98,6 +106,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     NOCK_ENV=replay yarn test --reporter tap --exclude tests/config.test.ts --exclude tests/Use.test.ts
   '';
   doInstallCheck = true;
+  # vitest needs to bind to `localhost` during installCheck; allow that in the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -2,8 +2,8 @@
 
 skawarePackages.buildPackage {
   pname = "nsss";
-  version = "0.2.1.0";
-  sha256 = "sha256-8iGjHBzuiB6ZKobf4pYzIlPHqfxl9g2IgpzI6JSEIPQ=";
+  version = "0.2.1.1";
+  sha256 = "sha256-pff2y8Gdey3ALVjiupwJ0I+iRZ/j3xh3815jnA8rEpI=";
 
   description = "Implementation of a subset of the pwd.h, group.h and shadow.h family of functions";
 

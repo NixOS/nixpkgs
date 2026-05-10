@@ -15,10 +15,14 @@
   nix-update-script,
 }:
 let
-  openjdk = openjdk21.override {
-    enableJavaFX = true;
-    openjfx_jdk = openjfx21.override { withWebKit = true; };
-  };
+  openjdk = openjdk21.override (
+    {
+      enableJavaFX = true;
+    }
+    // lib.optionalAttrs stdenv.isLinux {
+      openjfx_jdk = openjfx21.override { withWebKit = true; };
+    }
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluej";
@@ -103,8 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
       classpathException20
     ];
     mainProgram = "bluej";
-    maintainers = with lib.maintainers; [ weirdrock ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      weirdrock
+      eveeifyeve # Darwin
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
 })

@@ -288,15 +288,9 @@ in
 
     boot.extraSystemdUnitPaths = [ "/etc/systemd-mutable/system" ];
 
-    system.activationScripts.dysnomia = ''
-      mkdir -p /etc/systemd-mutable/system
-      if [ ! -f /etc/systemd-mutable/system/dysnomia.target ]
-      then
-          ( echo "[Unit]"
-            echo "Description=Services that are activated and deactivated by Dysnomia"
-            echo "After=final.target"
-          ) > /etc/systemd-mutable/system/dysnomia.target
-      fi
-    '';
+    systemd.targets.dysnomia = {
+      description = "Services that are activated and deactivated by Dysnomia";
+      after = "final.target";
+    };
   };
 }

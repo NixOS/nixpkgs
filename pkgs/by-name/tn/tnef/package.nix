@@ -2,19 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.4.18";
   pname = "tnef";
 
   src = fetchFromGitHub {
     owner = "verdammelt";
     repo = "tnef";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "104g48mcm00bgiyzas2vf86331w7bnw7h3bc11ib4lp7rz6zqfck";
   };
+
+  patches = [
+    # Fix gcc-15 build failure: https://github.com/verdammelt/tnef/pull/49
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://github.com/verdammelt/tnef/commit/86bfa75cfacbe71c8d5282fa0065981b4544c5ad.patch";
+      hash = "sha256-iWQop57riqwDLVi5Ba5s4f34lGXgvKO3ZMTgWbAoRIY=";
+    })
+  ];
 
   doCheck = true;
 
@@ -35,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "tnef";
   };
-}
+})

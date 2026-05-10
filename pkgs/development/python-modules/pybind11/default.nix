@@ -6,7 +6,6 @@
   cmake,
   ninja,
   scikit-build-core,
-  pybind11,
   boost,
   eigen,
   python,
@@ -14,6 +13,9 @@
   numpy,
   pytest,
   makeSetupHook,
+  # Build tests to verify cross-compilation works, but only when CPU bit
+  # depth matches (otherwise Python headers cause LONG_BIT mismatch errors)
+  buildTests ? stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
 }:
 let
   setupHook = makeSetupHook {
@@ -26,27 +28,25 @@ let
     };
   } ./setup-hook.sh;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybind11";
-  version = "3.0.1";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    tag = "v${version}";
-    hash = "sha256-ZiwNGsE1FOkhnWv/1ib1akhQ4FZvrXRCDnnBZoPp6r4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q609c2Q1n37OJ9fK0uDcniQZPO2PL+fnWdArV56qR64=";
   };
 
   build-system = [
     cmake
     ninja
-    pybind11.passthru.scikit-build-core-no-tests
+    finalAttrs.passthru.scikit-build-core-no-tests
   ];
 
-  buildInputs = [
-    # Used only for building tests - something we do even when cross
-    # compiling.
+  buildInputs = lib.optionals buildTests [
     catch2
     boost
     eigen
@@ -65,13 +65,11 @@ buildPythonPackage rec {
   ];
 
   cmakeFlags = [
-    # Always build tests, because even when cross compiling building the tests
-    # is another confirmation that everything is OK.
-    (lib.cmakeBool "BUILD_TESTING" true)
+    (lib.cmakeBool "BUILD_TESTING" buildTests)
 
     # Override the `PYBIND11_NOPYTHON = true` in `pyproject.toml`. This
     # is required to build the tests.
-    (lib.cmakeBool "PYBIND11_NOPYTHON" false)
+    (lib.cmakeBool "PYBIND11_NOPYTHON" (!buildTests))
   ];
 
   dontUseCmakeConfigure = true;
@@ -106,7 +104,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pybind/pybind11";
-    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/pybind/pybind11/blob/${finalAttrs.src.tag}/docs/changelog.md";
     description = "Seamless operability between C++11 and Python";
     mainProgram = "pybind11-config";
     longDescription = ''
@@ -120,4 +118,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})

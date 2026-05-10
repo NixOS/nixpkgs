@@ -18,7 +18,6 @@ bundlerApp {
     license = lib.licenses.mit;
     mainProgram = "cucumber";
     maintainers = with lib.maintainers; [
-      manveru
       nicknovitski
       anthonyroussel
     ];

@@ -13,8 +13,8 @@
   libxfce4util,
   xfconf,
   libwnck,
-  libX11,
-  libXmu,
+  libx11,
+  libxmu,
   gitUpdater,
 }:
 
@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxfce4util
     xfconf
     libwnck
-    libX11
-    libXmu
+    libx11
+    libxmu
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "xfce4-taskmanager-"; };

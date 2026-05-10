@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "timescaledb-parallel-copy";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-parallel-copy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vd+2KpURyVhcVf2ESHcyZLJCw+z+WbnTJX9Uy4ZAPoE=";
   };
 
@@ -45,4 +45,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

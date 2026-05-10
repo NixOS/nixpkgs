@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.17.0";
+  version = "5.2.18.0";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-bVXmpoM2ymLgqjv8+3syYhkIKSyW68eKzKhUWRfR1vY=";
+    hash = "sha256-VTuGHHNNdoDfbJ86GOR4a+Fy2s+NSXPH337+AZpLKuo=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329
-  NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
+  env.NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
 
   cmakeFlags = [
     "-DWITH_PERL5=OFF"

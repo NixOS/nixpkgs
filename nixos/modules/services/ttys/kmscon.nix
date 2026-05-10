@@ -17,23 +17,53 @@ let
 
   cfg = config.services.kmscon;
 
-  autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
+  gettyCfg = config.services.getty;
 
   configDir = pkgs.writeTextFile {
     name = "kmscon-config";
     destination = "/kmscon.conf";
     text = cfg.extraConfig;
   };
+
+  baseLoginOptions = "-p";
+
+  loginCmd =
+    enableAutologin:
+    "${gettyCfg.loginProgram} ${baseLoginOptions}${lib.optionalString enableAutologin " -f -- ${gettyCfg.autologinUser}"}";
+
+  loginScript = pkgs.writers.writeDash "kmscon-login" (
+    lib.optionalString (gettyCfg.autologinUser != null && gettyCfg.autologinOnce) ''
+      kms_tty=
+      active_tty_file=/sys/class/tty/tty0/active
+      if [ -f "$active_tty_file" ]; then
+        read -r kms_tty < "$active_tty_file"
+      fi
+
+      autologged="/run/kmscon.autologged"
+      if [ "$kms_tty" = tty1 ] && [ ! -f "$autologged" ]; then
+        touch "$autologged"
+        exec ${loginCmd true}
+      fi
+    ''
+    + "exec ${loginCmd (gettyCfg.autologinUser != null && !gettyCfg.autologinOnce)}"
+  );
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "kmscon" "autologinUser" ] ''
+      Autologin is now handled by the agetty module.
+
+      Check `services.getty.autologinUser` instead.
+    '')
+  ];
+
   options = {
     services.kmscon = {
       enable = mkEnableOption ''
-        kmscon as the virtual console instead of gettys.
-        kmscon is a kms/dri-based userspace virtual terminal implementation.
-        It supports a richer feature set than the standard linux console VT,
-        including full unicode support, and when the video card supports drm
-        should be much faster
+        Use kmscon instead of autovt.
+
+        Kmscon is a simple terminal emulator based on linux kernel mode setting (KMS).
+        It is an attempt to replace the in-kernel VT implementation with a userspace console.
       '';
 
       package = mkPackageOption pkgs "kmscon" { };
@@ -63,8 +93,13 @@ in
           nullOr (nonEmptyListOf fontType);
       };
 
-      useXkbConfig = mkEnableOption "" // {
-        description = "Whether to configure keymap from xserver keyboard settings.";
+      useXkbConfig = mkEnableOption "configure keymap from xserver keyboard settings.";
+
+      term = mkOption {
+        description = "Value for the TERM environment variable.";
+        type = types.nullOr types.str;
+        default = null;
+        example = "xterm-256color";
       };
 
       extraConfig = mkOption {
@@ -80,69 +115,75 @@ in
         default = "";
         example = "--term xterm-256color";
       };
-
-      autologinUser = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Username of the account that will be automatically logged in at the console.
-          If unspecified, a login prompt is shown as usual.
-        '';
-      };
     };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = gettyCfg.loginOptions == null;
+        message = "services.getty.loginOptions is not supported when services.kmscon is enabled.";
+      }
+    ];
+
+    environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
     systemd.services."kmsconvt@" = {
-      after = [
-        "systemd-logind.service"
-        "systemd-vconsole-setup.service"
-      ];
-      requires = [ "systemd-logind.service" ];
-
       serviceConfig.ExecStart = [
-        ""
-        ''
-          ${cfg.package}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
-        ''
+        "" # override upstream default with an empty ExecStart
+        (builtins.concatStringsSep " " (
+          [
+            "${cfg.package}/bin/kmscon"
+            "--configdir"
+            configDir
+            "--vt=%I"
+            "--no-switchvt"
+            "--login"
+          ]
+          ++ lib.optional (cfg.extraOptions != "") cfg.extraOptions
+          ++ [
+            "--"
+            loginScript
+          ]
+        ))
       ];
 
       restartIfChanged = false;
+      # logind spawns autovt@ttyN.service on VT switch; point it at kmscon
       aliases = [ "autovt@.service" ];
     };
 
-    systemd.suppressedSystemUnits = [ "autovt@.service" ];
+    # tty1 is special: logind does not spawn autovt@tty1, it expects a static
+    # pull-in via getty.target. With getty@ suppressed, we must replace it.
+    systemd.services."getty.target".wants = lib.mkIf (!config.services.displayManager.enable) [
+      "kmsconvt@tty1.service"
+    ];
 
-    systemd.services.systemd-vconsole-setup.enable = false;
-    systemd.services.reload-systemd-vconsole-setup.enable = false;
+    systemd.suppressedSystemUnits = [ "getty@.service" ];
 
-    services.kmscon.extraConfig =
-      let
-        xkb = optionals cfg.useXkbConfig (
-          lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
-            lib.filterAttrs (
-              n: v:
-              builtins.elem n [
-                "layout"
-                "model"
-                "options"
-                "variant"
-              ]
-              && v != ""
-            ) config.services.xserver.xkb
-          )
-        );
-        render = optionals cfg.hwRender [
-          "drm"
-          "hwaccel"
-        ];
-        fonts =
-          optional (cfg.fonts != null)
-            "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
-      in
-      lib.concatLines (xkb ++ render ++ fonts);
+    services.kmscon.extraConfig = lib.concatLines (
+      optionals cfg.useXkbConfig (
+        lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
+          lib.filterAttrs (
+            n: v:
+            builtins.elem n [
+              "layout"
+              "model"
+              "options"
+              "variant"
+            ]
+            && v != ""
+          ) config.services.xserver.xkb
+        )
+      )
+      ++ optionals cfg.hwRender [
+        "drm"
+        "hwaccel"
+      ]
+      ++ optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}"
+      ++ optional (cfg.term != null) "term=${cfg.term}"
+    );
 
     hardware.graphics.enable = mkIf cfg.hwRender true;
 
@@ -151,4 +192,9 @@ in
       packages = map (f: f.package) cfg.fonts;
     };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    hustlerone
+    ccicnce113424
+  ];
 }

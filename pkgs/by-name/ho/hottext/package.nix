@@ -19,7 +19,7 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  HOTTEXT_FONT_PATH = "${gentium-plus}/share/fonts/truetype/GentiumPlus-Regular.ttf";
+  env.HOTTEXT_FONT_PATH = "${gentium-plus}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
   desktopItem = makeDesktopItem {
     categories = [ "Utility" ];

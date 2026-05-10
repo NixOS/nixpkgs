@@ -13,7 +13,6 @@
   numpy,
   oldest-supported-numpy,
   python,
-  pythonOlder,
   setuptools-scm,
   stdenv,
   wheel,
@@ -30,7 +29,7 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.8";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "Unidata";

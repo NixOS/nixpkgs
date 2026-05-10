@@ -55,7 +55,7 @@ in
                 Due to hardening on the systemd unit the socket can never be created world readable/writable.
                 :::
               '';
-              apply = value: (builtins.fromTOML "v=0o${value}").v;
+              apply = value: (fromTOML "v=0o${value}").v;
             };
 
             log-level = mkOption {

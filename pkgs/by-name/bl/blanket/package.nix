@@ -16,14 +16,14 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "blanket";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "blanket";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LnHL/1DJXiKx9U+JkT4Wjx1vtTmKLpzZ8q6uLT5a2MY=";
   };
 
@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Listen to different sounds";
-    changelog = "https://github.com/rafaelmardojai/blanket/releases/tag/${version}";
+    changelog = "https://github.com/rafaelmardojai/blanket/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/rafaelmardojai/blanket";
     license = lib.licenses.gpl3Plus;
     mainProgram = "blanket";
@@ -73,4 +73,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
-}
+})

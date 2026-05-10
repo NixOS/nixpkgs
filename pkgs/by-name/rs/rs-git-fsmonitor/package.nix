@@ -6,14 +6,14 @@
   watchman,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-git-fsmonitor";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "jgavris";
     repo = "rs-git-fsmonitor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+5nR+/09HmFk3mq2B8NTeBT50aBG85yXEdeO6BhStVw=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nilscc ];
     mainProgram = "rs-git-fsmonitor";
   };
-}
+})

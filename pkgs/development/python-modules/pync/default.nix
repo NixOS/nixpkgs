@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/pync";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

@@ -7,7 +7,6 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   stdenv,
   urllib3,
@@ -15,10 +14,8 @@
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "2.3.4";
+  version = "2.3.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geventhttpclient";
@@ -26,7 +23,7 @@ buildPythonPackage rec {
     tag = version;
     # TODO: unvendor llhttp
     fetchSubmodules = true;
-    hash = "sha256-X85co03fMG7OSpkL02n3ektRNzu7oHChtwZzkspsSTk=";
+    hash = "sha256-vca2uCQ1S21xQmAXdpLhI0DFZYUSyKhSkvETa2VqbkA=";
   };
 
   build-system = [ setuptools ];

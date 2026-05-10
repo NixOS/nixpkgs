@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.101.1";
+  version = "0.102.2";
 
   serverSource_x64.url = "https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-x64.tar.xz";
-  serverSource_x64.hash = "sha256-Auo0ONEoEO69Fp7sHduRfeCOazqNofvWg7Mp8qNtvMM=";
+  serverSource_x64.hash = "sha256-2/Skk4I8CwttF5SEs8gPW6KyNxcrYcTuQBQ7irNL1lw=";
   serverSource_arm64.url = "https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-arm64.tar.xz";
-  serverSource_arm64.hash = "sha256-+RLRCTCfZyeN0t/uehdVxYS3qVAXYBmtUMTcztKMvhE=";
+  serverSource_arm64.hash = "sha256-MQlYci2Z45qSYGxgSTWN3P017GImUqkv24DBn8usDm8=";
 
   serverSource =
     if stdenv.hostPlatform.isx86_64 then

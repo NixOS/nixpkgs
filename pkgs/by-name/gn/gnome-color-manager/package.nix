@@ -21,12 +21,12 @@
   exiv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-color-manager";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-color-manager/${lib.versions.majorMinor version}/gnome-color-manager-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-color-manager/${lib.versions.majorMinor finalAttrs.version}/gnome-color-manager-${finalAttrs.version}.tar.xz";
     hash = "sha256-fDwXj6rPy/EdVt4izSZZRqfViqEOPNlowpOOL79Q/e4=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

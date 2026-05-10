@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bunnyfetch";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "bunnyfetch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6MnjCXc9/8twdf8PHKsVJY1yWYwUf5R01vtQFJbyy7M=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "bunnyfetch";
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gbinder-python";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "gbinder-python";
     tag = version;
-    hash = "sha256-z0hMAvwB+uttPcP+in+C3o1ujhFSiDXKktOajnsXhPI=";
+    hash = "sha256-bXuvGTzYifiCPDkcNvkgh+RAZfckcyR8weaRkgbfCyA=";
   };
 
   build-system = [

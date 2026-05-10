@@ -25,7 +25,6 @@
   python3Packages,
 
   # Mandatory dependencies
-  libcap,
   util-linux,
   kbd,
   kmod,
@@ -203,17 +202,17 @@ let
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1734643670";
+  releaseTimestamp = "1773777352";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258.2";
+  version = "260.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1iWeuNefDOIEUSTzxzvt+jfcs6sSMPhxQfdwp0mqUjQ=";
+    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -241,50 +240,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./0014-core-don-t-taint-on-unmerged-usr.patch
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
-    ./0017-meson.build-do-not-create-systemdstatedir.patch
 
     # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
     # if the install prefix is not /usr, but that does not work for us
     # because we include the config snippet manually
-    ./0018-meson-Don-t-link-ssh-dropins.patch
-
-    ./0019-install-unit_file_exists_full-follow-symlinks.patch
+    ./0017-meson-Don-t-link-ssh-dropins.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
-    # Patchset to build with musl by an upstream systemd contributor:
-    # https://github.com/systemd/systemd/pull/37788
-    # This is vendored here because of the lack of permanent patch urls for the unmerged PR
-    ./musl/0001-musl-meson-allow-to-choose-libc-implementation.patch
-    ./musl/0002-musl-meson-do-not-use-libcrypt-libxcrypt.patch
-    ./musl/0003-musl-meson-explicitly-link-with-libintl-when-necessa.patch
-    ./musl/0004-musl-meson-explicitly-set-_LARGEFILE64_SOURCE.patch
-    ./musl/0005-musl-meson-make-musl-not-define-wchar_t-in-their-hea.patch
-    ./musl/0006-musl-meson-check-existence-of-renameat2.patch
-    ./musl/0007-musl-meson-gracefully-disable-gshadow-idn-nss-and-ut.patch
-    ./musl/0008-musl-introduce-dummy-gshadow-header-file-for-userdb.patch
-    ./musl/0009-musl-add-fallback-parse_printf_format-implementation.patch
-    ./musl/0010-musl-introduce-GNU-specific-version-of-strerror_r.patch
-    ./musl/0011-musl-make-strptime-accept-z.patch
-    ./musl/0012-musl-make-strtoll-accept-strings-start-with-dot.patch
-    ./musl/0013-musl-introduce-strerrorname_np.patch
-    ./musl/0014-musl-introduce-dummy-functions-for-mallinfo-malloc_i.patch
-    ./musl/0015-musl-introduce-dummy-function-for-gnu_get_libc_versi.patch
-    ./musl/0016-musl-define-__THROW-when-not-defined.patch
-    ./musl/0017-musl-replace-sys-prctl.h-with-our-own-implementation.patch
-    ./musl/0018-musl-replace-netinet-if_ether.h-with-our-own-impleme.patch
-    ./musl/0019-musl-add-missing-FTW_CONTINUE-macro.patch
-    ./musl/0020-musl-add-several-missing-statx-macros.patch
-    ./musl/0021-musl-avoid-conflict-between-fcntl.h-and-our-forward..patch
-    ./musl/0022-musl-redefine-HOST_NAME_MAX-as-64.patch
-    ./musl/0023-musl-avoid-multiple-evaluations-in-CPU_ISSET_S-macro.patch
-    ./musl/0024-musl-core-there-is-one-less-usable-signal-when-built.patch
-    ./musl/0025-musl-build-path-fix-reading-DT_RUNPATH-or-DT_RPATH.patch
-    ./musl/0026-musl-format-util-use-llu-for-formatting-rlim_t.patch
-    ./musl/0027-musl-time-util-skip-tm.tm_wday-check.patch
-    ./musl/0028-musl-glob-util-filter-out-.-and-.-even-if-GLOB_ALTDI.patch
+    ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ];
 
   postPatch = ''
@@ -353,7 +316,11 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
+      # pefile is only required to trigger a check in meson to actually build
+      # ukify. This module should never appear in the runtime closure of ukify.
+      # Instead the pefile from buildInputs should be used.
+      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
+      ++ lib.optional withUkify ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -366,7 +333,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcrypt
-    (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
   ]
@@ -469,10 +435,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "system-uid-max" "999")
     (lib.mesonOption "system-gid-max" "999")
 
-    # SysVinit
-    (lib.mesonOption "sysvinit-path" "")
-    (lib.mesonOption "sysvrcnd-path" "")
-
     # Login
     (lib.mesonOption "sulogin-path" "${lib.getOutput "login" util-linux}/bin/sulogin")
     (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
@@ -480,6 +442,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
     (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+
+    # Swap
+    (lib.mesonOption "swapon-path" "${lib.getOutput "swap" util-linux}/sbin/swapon")
+    (lib.mesonOption "swapoff-path" "${lib.getOutput "swap" util-linux}/sbin/swapoff")
 
     # SSH
     (lib.mesonOption "sshconfdir" "")
@@ -536,9 +502,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
     (lib.mesonEnable "libcurl" wantCurl)
-    (lib.mesonEnable "libidn" false)
     (lib.mesonEnable "libidn2" withLibidn2)
-    (lib.mesonEnable "libiptc" false)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
     (lib.mesonEnable "sysupdated" withSysupdate)
@@ -591,6 +555,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
     (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
   ]
+  ++ lib.optionals withKexectools [
+    (lib.mesonOption "kexec-path" "${kexec-tools}/bin/kexec")
+  ]
   ++ lib.optionals withKmod [
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ]
@@ -621,19 +588,6 @@ stdenv.mkDerivation (finalAttrs: {
           ];
         }
         {
-          search = "/sbin/swapon";
-          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon";
-          where = [
-            "src/core/swap.c"
-            "src/basic/unit-def.h"
-          ];
-        }
-        {
-          search = "/sbin/swapoff";
-          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff";
-          where = [ "src/core/swap.c" ];
-        }
-        {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
           where = [
@@ -642,7 +596,6 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-run.xml"
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
-            "src/test/test-fileio.c"
             "src/test/test-load-fragment.c"
           ];
         }
@@ -651,23 +604,12 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "${coreutils}/bin/cat";
           where = [
             "test/test-execute/exec-noexecpaths-simple.service"
-            "src/journal/cat.c"
           ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
           where = [ "man/systemd-fsck@.service.xml" ];
-        }
-      ]
-      ++ lib.optionals withNspawn [
-        {
-          # we only need to patch getent when nspawn will actually be built/installed
-          # as of systemd 257.x, nspawn will not be installed on systemdLibs, so we don't need to patch it
-          # patching getent unconditionally here introduces infinite recursion on musl
-          search = "/usr/bin/getent";
-          replacement = "${getent}/bin/getent";
-          where = [ "src/nspawn/nspawn-setuid.c" ];
         }
       ]
       ++ lib.optionals withImportd [
@@ -681,7 +623,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "\\\"${gnutar}/bin/tar\\\"";
           where = [
             "src/import/export-tar.c"
-            "src/import/import-common.c"
             "src/import/import-tar.c"
           ];
           ignore = [
@@ -692,8 +633,10 @@ stdenv.mkDerivation (finalAttrs: {
             "src/import/export.c"
             "src/import/import.c"
             "src/import/importd.c"
-            # runs `tar` but also also creates a temporary directory with the string
+            # runs `tar` but also creates a temporary directory with the string
             "src/import/pull-tar.c"
+            # pull-oci.c has tar references handled in postPatch
+            "src/import/pull-oci.c"
             # tar referenced as file suffix
             "src/shared/import-util.c"
           ];
@@ -701,8 +644,8 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optionals withKmod [
         {
-          search = "/sbin/modprobe";
-          replacement = "${lib.getBin kmod}/sbin/modprobe";
+          search = "ExecStart=-modprobe";
+          replacement = "ExecStart=-${lib.getBin kmod}/bin/modprobe";
           where = [ "units/modprobe@.service" ];
         }
       ];
@@ -753,7 +696,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
-      substituteInPlace src/import/pull-tar.c \
+      substituteInPlace src/import/pull-tar.c src/import/pull-oci.c \
         --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
     '';
 
@@ -761,34 +704,15 @@ stdenv.mkDerivation (finalAttrs: {
   # warning messages
   postConfigure = ''
     substituteInPlace config.h \
-      --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
-      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH"
-      "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+  ];
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENTS_PATH"
-      "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
-
-      "-USYSTEMD_BINARY_PATH"
-      "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "-D__UAPI_DEF_ETHHDR=0"
-    ]
-  );
-
-  doCheck = true;
+  doCheck = false;
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''
@@ -896,6 +820,7 @@ stdenv.mkDerivation (finalAttrs: {
       withImportd
       withKmod
       withLocaled
+      withLogind
       withMachined
       withNetworkd
       withNspawn
@@ -957,7 +882,6 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-initrd-luks-empty-passphrase
             systemd-initrd-luks-password
             systemd-initrd-luks-tpm2
-            systemd-initrd-luks-unl0kr
             systemd-initrd-modprobe
             systemd-initrd-shutdown
             systemd-initrd-simple
@@ -981,6 +905,7 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-nspawn-configfile
             systemd-oomd
             systemd-portabled
+            systemd-pstore
             systemd-resolved
             systemd-shutdown
             systemd-sysupdate
@@ -1046,7 +971,10 @@ stdenv.mkDerivation (finalAttrs: {
       ofl
       publicDomain
     ];
-    teams = [ lib.teams.systemd ];
+    teams = [
+      lib.teams.systemd
+      lib.teams.security-review
+    ];
     pkgConfigModules = [
       "libsystemd"
       "libudev"
@@ -1062,5 +990,6 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
       lib.systems.inspect.platformPatterns.isStatic
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version;
   };
 })

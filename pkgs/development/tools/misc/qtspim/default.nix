@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     flex
   ];
   buildInputs = [ qtbase ];
-  QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
+  env.QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
 
   qmakeFlags = [
     "QtSpim.pro"

@@ -20,7 +20,7 @@ let
             enable = true;
             settings = {
               namespaces.outside.interfaces.eth1 = {
-                addresses = [ "2001:0db8:a::${builtins.toString id}/64" ];
+                addresses = [ "2001:0db8:a::${toString id}/64" ];
                 link = {
                   state = "up";
                   kind = "physical";
@@ -28,7 +28,7 @@ let
               };
               interfaces = {
                 wg0 = {
-                  addresses = [ "2001:0db8:b::${builtins.toString id}/64" ];
+                  addresses = [ "2001:0db8:b::${toString id}/64" ];
                   link = {
                     state = "up";
                     kind = "wireguard";
@@ -38,7 +38,7 @@ let
                     private_key = "!include ${pkgs.writeText "wg_priv.key" wgPriv}";
                     listen_port = 51820;
                     peers."${wgPeerPubKey}" = {
-                      endpoint = "[2001:0db8:a::${builtins.toString wgPeerId}]:51820";
+                      endpoint = "[2001:0db8:a::${toString wgPeerId}]:51820";
                       allowedips = [ "::/0" ];
                     };
                   };

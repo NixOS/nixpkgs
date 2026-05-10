@@ -17,7 +17,7 @@ let
     ;
 in
 {
-  meta.maintainers = lib.teams.secshell.members;
+  meta.maintainers = with lib.maintainers; [ felbinger ];
 
   options.services.part-db = {
     enable = mkEnableOption "PartDB";
@@ -153,6 +153,9 @@ in
         // cfg.poolConfig;
       };
 
+      # Required for symphony
+      part-db.settings.APP_SHARE_DIR = "/var/lib/part-db/share";
+
       postgresql = mkIf cfg.enablePostgresql {
         enable = true;
         ensureUsers = [
@@ -173,7 +176,7 @@ in
           root = "${pkg}/public";
           locations = {
             "/" = {
-              tryFiles = "$uri $uri/ /index.php";
+              tryFiles = "$uri $uri/ /index.php?$query_string";
               index = "index.php";
               extraConfig = ''
                 sendfile off;

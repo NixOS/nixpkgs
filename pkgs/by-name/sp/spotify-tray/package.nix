@@ -9,14 +9,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spotify-tray";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "tsmetana";
     repo = "spotify-tray";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-E86rA8cBjy/bI7sZHlT40o7i23PcONXT5GTHEfcaDf0=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "spotify-tray";
   };
-}
+})

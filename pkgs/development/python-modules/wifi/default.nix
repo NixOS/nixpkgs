@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pbkdf2,
   pytestCheckHook,
-  pythonOlder,
   wirelesstools,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
   };
-
-  disabled = pythonOlder "2.6";
 
   postPatch = ''
     substituteInPlace wifi/scan.py \

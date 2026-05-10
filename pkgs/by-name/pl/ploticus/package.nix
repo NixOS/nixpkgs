@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   zlib,
-  libX11,
+  libx11,
   libpng,
   libjpeg,
   gd,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     zlib
-    libX11
+    libx11
     libpng
     gd
     freetype

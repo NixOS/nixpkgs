@@ -1,6 +1,7 @@
 {
+  stdenv,
   rustPlatform,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   cargo-tauri,
@@ -12,6 +13,7 @@
   gtk3,
   librsvg,
   openssl,
+  glib-networking,
   autoPatchelfHook,
   lib,
   nix-update-script,
@@ -21,35 +23,34 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.96";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3PCdcSF9ocDqHzK9P/FJQwch5u5zVLQ3eDNSGJQGSKw=";
+    hash = "sha256-48POUgO6torvLJLXpVzDQLF5sZ2Ws+vhiI1x84+exAw=";
     fetchSubmodules = true;
   };
 
   postUnpack = ''
-    # pnpm.configHook has to write to ../.., as our sourceRoot is set to apps/readest-app
+    # pnpm.configHook has to write to ../.., as our sourceRoot is set to
+    # apps/readest-app
     chmod -R +w .
   '';
 
   sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
+  pnpmRoot = "../..";
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-Ea/J3W3L8vVDlIRY/szaCfcqunjiFU6yL+e8h4c5UHg=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-4CO0ouas6TAZDaL2J8zr9wR28QB/DVN4y1Cqe8m1FEg=";
   };
 
-  pnpmRoot = "../..";
-
-  cargoHash = "sha256-AwrA0KXLTSUhLxIJHKU1crVxUxImFOKDRStB48mZfcg=";
-
   cargoRoot = "../..";
+  cargoHash = "sha256-7wmqDGhtBHU9iOvLrsqGifCEuVdymdljlETkW7dThHA=";
 
   buildAndTestSubdir = "src-tauri";
 
@@ -61,13 +62,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/services/constants.ts \
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
+
+    mkdir -p src-tauri/plugins/tauri-plugin-turso/dist-js
+    cp -r ${finalAttrs.passthru.tursoPlugin} src-tauri/plugins/tauri-plugin-turso/dist-js
+    jq '.scripts.build = "true"' \
+      src-tauri/plugins/tauri-plugin-turso/package.json | \
+      sponge src-tauri/plugins/tauri-plugin-turso/package.json
   '';
 
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -80,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     librsvg
     openssl
+    glib-networking
     # TTS
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -90,15 +98,49 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = ''
     # set up pdfjs and simplecc
     pnpm setup-vendors
-  '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
-    )
+    # `tauri-plugin-turso` expects frontend files to exist before the build, else it fails with:
+    #
+    # > > tauri-plugin-turso-api@0.1.0 build /build/source/apps/readest-app/src-tauri/plugins/tauri-plugin-turso
+    # > > true
+    # >
+    # >   Error Unable to find your web assets, did you forget to build your web app?
+    #     Your frontendDist is set to "../out" (which is `/build/source/apps/readest-app/out`).
+    pnpm --filter @readest/readest-app build
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tursoPluginDeps = fetchPnpmDeps {
+    pname = "tauri-plugin-turso";
+    version = finalAttrs.version;
+    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-Jf/UaEaLUg/v9ZRInBCEfkDY4d6nwyAIegCMKZe0iAQ=";
+  };
+
+  passthru.tursoPlugin = stdenv.mkDerivation {
+    pname = "tauri-plugin-turso";
+    version = finalAttrs.version;
+    src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
+
+    nativeBuildInputs = [
+      pnpm_10
+      pnpmConfigHook
+      nodejs
+    ];
+
+    pnpmDeps = finalAttrs.passthru.tursoPluginDeps;
+
+    buildPhase = ''
+      pnpm build
+    '';
+
+    installPhase = ''
+      cp -r dist-js $out
+    '';
+  };
 
   meta = {
     description = "Modern, feature-rich ebook reader";
@@ -106,7 +148,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/readest/readest/releases/tag/v${finalAttrs.version}";
     mainProgram = "readest";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ eljamm ];
+    maintainers = with lib.maintainers; [
+      eljamm
+      kasifrasi
+    ];
     platforms = lib.platforms.linux;
   };
 })

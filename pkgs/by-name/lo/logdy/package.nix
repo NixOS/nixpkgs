@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "logdy";
   version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "logdyhq";
     repo = "logdy-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NV1vgHUeIH1k1E5hdO3fXrXl1+B30AUM2aexlxz5g8o=";
   };
 
@@ -67,4 +67,4 @@ buildGoModule rec {
     ];
     mainProgram = "logdy";
   };
-}
+})

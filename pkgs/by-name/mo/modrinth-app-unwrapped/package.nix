@@ -5,7 +5,7 @@
   cargo-tauri,
   desktop-file-utils,
   fetchFromGitHub,
-  gradle_8,
+  gradle_9,
   jdk17,
   makeBinaryWrapper,
   makeShellWrapper,
@@ -25,19 +25,19 @@
 }:
 
 let
-  gradle = gradle_8.override { java = jdk; };
+  gradle = gradle_9.override { java = jdk; };
   jdk = jdk17;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.10.23";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Or2KkcZnZCZOnUd++SmDgbUOwa6ZmRDaoo7gF3XvN6I=";
+    hash = "sha256-47uokwYsEg5D0lyHdpqfvKlsuXZK0sm5YIWwNjVGsKQ=";
   };
 
   patches = [
@@ -61,13 +61,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./remove-spotless.patch
   ];
 
+  cargoPatches = [
+    # Cidre 0.11.3 currently fails to build on darwin. Updating it to the latest version
+    # resolves this issue.
+    # Upstream PR is https://github.com/modrinth/code/pull/5862
+    ./update-cidre.patch
+  ];
+
   # Let the app know about our actual version number
   postPatch = ''
     substituteInPlace {apps/app,packages/app-lib}/Cargo.toml apps/app-frontend/package.json \
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-hWjoNwKA39YYhPSrQUNaM1nS+CtV9vff+aXpoQLPCOM=";
+  cargoHash = "sha256-GwangszzKTEYvflibPgkIyUkHlpfMgenD/mq3my5LIY=";
+
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
@@ -76,8 +84,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-jLuI8qNJgFkuBbKuBNKGuk/6v62iY7fNZX2t3U3olk0=";
+    fetcherVersion = 3;
+    hash = "sha256-Hk32LBD20F2LRgqNs8f1j3VdUxKoTPWs3yJvOghsEbI=";
   };
 
   nativeBuildInputs = [
@@ -116,6 +124,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     TURBO_BINARY_PATH = lib.getExe turbo;
+    # Cidre requires a target version of at least 10.15
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.15";
   };
 
   preGradleUpdate = ''
@@ -160,13 +170,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gpl3Plus
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      hythera
+      encode42
+    ];
     mainProgram = "ModrinthApp";
-    platforms = with lib; platforms.linux ++ platforms.darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.
     # Darwin is the only exception
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
-    broken = !stdenv.hostPlatform.isx86_64 || !stdenv.hostPlatform.isLinux;
+    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache

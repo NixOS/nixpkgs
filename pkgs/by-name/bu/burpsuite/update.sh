@@ -9,7 +9,7 @@ curl -s 'https://portswigger.net/burp/releases/data' | jq -r '
       [ .ResultSet.Results[]
         | select((.categories|sort) == (["Professional","Community"]|sort))
         | .builds[]
-        | select(.ProductPlatform == "Jar")
+        | select(.BuildCategoryPlatform == "Jar")
       ] as $all
       | ($all | max_by( (.Version // "") | split(".") | map(tonumber? // 0) ) | .Version) as $v
       | $all | map(select(.Version == $v))
@@ -17,8 +17,8 @@ curl -s 'https://portswigger.net/burp/releases/data' | jq -r '
 
 version=$(jq -r '.[0].Version' latest.json)
 
-comm_hex=$(jq -r '.[] | select(.ProductId=="community") .Sha256Checksum' latest.json)
-pro_hex=$(jq -r '.[] | select(.ProductId=="pro") .Sha256Checksum' latest.json)
+comm_hex=$(jq -r '.[] | select(.BuildCategoryId=="community") .Sha256Checksum' latest.json)
+pro_hex=$(jq -r '.[] | select(.BuildCategoryId=="pro") .Sha256Checksum' latest.json)
 
 comm_sri="sha256-$(printf %s "$comm_hex" | xxd -r -p | base64 -w0)"
 pro_sri="sha256-$(printf %s "$pro_hex" | xxd -r -p | base64 -w0)"

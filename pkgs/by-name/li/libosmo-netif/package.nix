@@ -8,19 +8,19 @@
   libosmocore,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libosmo-netif";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-netif";
-    rev = version;
-    hash = "sha256-0INgJV5fS6VdMsJqjlVc3lGMBdLP7cI+Ghc4WEh6AuU=";
+    rev = finalAttrs.version;
+    hash = "sha256-4VDXqi5tK3zaCDQgsWlN34m/odgE6xWXgNaKpG0SpnU=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

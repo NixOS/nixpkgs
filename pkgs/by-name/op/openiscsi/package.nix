@@ -16,14 +16,14 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "open-iscsi";
   version = "2.1.11";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-iscsi";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Xs2EiNSkRtAQPoagCAKl07VndYKDspGLchxMvsfvTi0=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
       zaninime
     ];
   };
-}
+})

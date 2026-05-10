@@ -10,14 +10,14 @@
   libicns,
   imagemagick,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "julius";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "bvschaik";
     repo = "julius";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ppA/lCugFfzcbANuyWUvH3/1STNRdYOhRNR4tlfWEhc=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

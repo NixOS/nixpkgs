@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.8";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/libsvgtiny-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/libs/releases/libsvgtiny-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-w1cifwLoP7KnaxK5ARkaCCIp2x8Ac2Lo8xx1RRDCoBw=";
   };
 

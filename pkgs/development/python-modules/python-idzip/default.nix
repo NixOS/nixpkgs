@@ -2,9 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-
-  pythonOlder,
 
   setuptools,
 
@@ -13,29 +10,17 @@
 
 buildPythonPackage rec {
   pname = "python-idzip";
-  version = "0.3.9";
+  version = "0.3.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bauman";
     repo = "python-idzip";
     tag = version;
-    hash = "sha256-ChzwC/Afn0qeo5anq4anIu2eI9i6XDnSvB7jAwY7rSw=";
+    hash = "sha256-LAai0yRenGhBRdgTKA/T0bBrL0Aq+idFHt0NDMSLHMk=";
   };
 
-  patches = [
-    # fix collision
-    # https://github.com/bauman/python-idzip/pull/23
-    (fetchpatch {
-      name = "fix-bin-folder-collisions.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/bauman/python-idzip/pull/23.patch";
-      hash = "sha256-4fPhLdY9MaH1aX6tqMT+NNNNDsyv87G0xBh4MC+5yQE=";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -60,7 +45,7 @@ buildPythonPackage rec {
     description = "Seekable, gzip compatible, compression format";
     mainProgram = "idzip";
     homepage = "https://github.com/bauman/python-idzip";
-    changelog = "https://github.com/bauman/python-idzip/releases/tag/${version}";
+    changelog = "https://github.com/bauman/python-idzip/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };

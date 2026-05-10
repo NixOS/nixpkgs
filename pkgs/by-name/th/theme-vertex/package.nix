@@ -7,14 +7,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "theme-vertex";
   version = "20170128";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "vertex-theme";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0c9mhrs95ahz37djrv176vn41ywvj26ilwmnr1h9171giv6hid98";
   };
 
@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Theme for GTK 3, GTK 2, Gnome-Shell, and Cinnamon";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

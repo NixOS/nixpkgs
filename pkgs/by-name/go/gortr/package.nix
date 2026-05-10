@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gortr";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "gortr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-W6+zCLPcORGcRJF0F6/LRPap4SNVn/oKGs21T4nSNO0=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ stv0g ];
   };
-}
+})

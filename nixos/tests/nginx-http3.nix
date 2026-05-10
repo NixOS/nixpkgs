@@ -6,7 +6,7 @@ let
 
 in
 builtins.listToAttrs (
-  builtins.map
+  map
     (nginxPackage: {
       name = pkgs.lib.getName nginxPackage;
       value = runTest {

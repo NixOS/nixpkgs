@@ -115,6 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
     substituteInPlace src/tss2-fapi/ifapi_config.c \
       --replace-fail 'SYSCONFDIR' '"/etc"'
+
+    # https://github.com/tpm2-software/tpm2-tss/pull/3041
+    substituteInPlace test/unit/tcti-libtpms.c \
+      --replace-fail 'check_expected_ptr(st);' 'check_expected(st);' \
+      --replace-fail 'check_expected_ptr(buf_len);' 'check_expected(buf_len);'
   ''
   # tcti tests rely on mocking function calls, which appears not to be supported
   # on clang
@@ -145,6 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Do not install the upstream udev rules, they rely on specific
     # users/groups which aren't guaranteed to exist on the system.
     rm -R $out/lib/udev
+
+    mkdir -p $out/etc/tpm2-tss
 
     # write fapi-config suitable for testing
     cat > $out/etc/tpm2-tss/fapi-config-test.json <<EOF

@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   qtbase,
   qt5,
   libGLU,
@@ -13,7 +14,7 @@
   SDL2 ? null,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "yabause";
   version = "0.9.15";
 
@@ -25,6 +26,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase

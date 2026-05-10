@@ -6,14 +6,14 @@
   vulkan-loader,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "memtest_vulkan";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "GpuZelenograd";
     repo = "memtest_vulkan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8tmQtycK7D5bol9v5VL8VkROZbSCndHo+uBvqqFTZjw=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
       stdenv.system == "aarch64-linux" # error: linker `aarch64-linux-gnu-gcc` not found
       || stdenv.hostPlatform.isDarwin; # Can't find Vulkan; might work though?
   };
-}
+})

@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jiq";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "fiatjaf";
     repo = "jiq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-txhttYngN+dofA3Yp3gZUZPRRZWGug9ysXq1Q0RP7ig=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     mainProgram = "jiq";
     maintainers = [ ];
   };
-}
+})

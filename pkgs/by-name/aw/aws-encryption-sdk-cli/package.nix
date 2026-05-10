@@ -3,46 +3,28 @@
   aws-encryption-sdk-cli,
   fetchPypi,
   nix-update-script,
-  python3,
+  python3Packages,
   testers,
 }:
 
-let
-  localPython = python3.override {
-    self = localPython;
-    packageOverrides = final: prev: {
-      urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
-        version = "1.26.18";
-        build-system = with final; [
-          setuptools
-        ];
-        postPatch = null;
-        src = prev.src.override {
-          inherit version;
-          hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
-        };
-      });
-    };
-  };
-in
-
-localPython.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aws-encryption-sdk-cli";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gORrscY+Bgmz2FrKdSBd56jP0yuEklytMeA3wr8tTZU=";
+    inherit (finalAttrs) version;
+    pname = "aws_encryption_sdk_cli";
+    hash = "sha256-FfLgR7gocZ0cLV7bxqvKNI+Fs7kQF0XhR3zf6tHXwOE=";
   };
 
   pythonRelaxDeps = [ "aws-encryption-sdk" ];
 
-  build-system = with localPython.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with localPython.pkgs; [
+  dependencies = with python3Packages; [
     attrs
     aws-encryption-sdk
     base64io
@@ -52,7 +34,7 @@ localPython.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  nativeCheckInputs = with localPython.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytest-mock
     pytest7CheckHook
@@ -78,10 +60,10 @@ localPython.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://aws-encryption-sdk-cli.readthedocs.io/";
-    changelog = "https://github.com/aws/aws-encryption-sdk-cli/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aws/aws-encryption-sdk-cli/blob/v${finalAttrs.version}/CHANGELOG.rst";
     description = "CLI wrapper around aws-encryption-sdk-python";
     license = lib.licenses.asl20;
     mainProgram = "aws-encryption-cli";
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

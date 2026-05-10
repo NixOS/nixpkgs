@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.43";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-gkCG2SIYCF89IFi6neslvZNFyoC6PrMM2Vda/a3mc0k=";
+    hash = "sha256-J0B/N4Bb7lRK4/BiILliy/Gw7FayM3liG+4NiskOq9U=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-bw0f6jlA09s7Ptd8+q8RHRFZgnyE+ecsfY30XdKlyRM=";
+    npmDepsHash = "sha256-jPGSJ+f5xuhnB4E9/FlgQkC37W6Yw2aGh8O8f8ajVC4=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -69,7 +69,7 @@ let
     '';
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -92,6 +92,7 @@ python3Packages.buildPythonApplication rec {
       aiocache
       aiofiles
       aiohttp
+      aiosqlite
       alembic
       anthropic
       apscheduler
@@ -106,13 +107,15 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      brotli
+      brotlicffi
       chardet
       chromadb
       cryptography
+      datasets_3
       ddgs
       docx2txt
       einops
-      extract-msg
       fake-useragent
       fastapi
       faster-whisper
@@ -123,45 +126,41 @@ python3Packages.buildPythonApplication rec {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
-      google-generativeai
       googleapis-common-protos
       httpx
-      iso-639
       itsdangerous
       langchain
       langchain-classic
       langchain-community
       langchain-text-splitters
-      langdetect
       ldap3
       loguru
       markdown
-      msoffcrypto-tool
       mcp
+      msoffcrypto-tool
       nltk
       onnxruntime
       openai
       opencv-python-headless
-      openpyxl
-      opensearch-py
       opentelemetry-api
-      opentelemetry-sdk
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
+      opentelemetry-instrumentation-aiohttp-client
       opentelemetry-instrumentation-fastapi
-      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-instrumentation-httpx
+      opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-redis
       opentelemetry-instrumentation-requests
-      opentelemetry-instrumentation-logging
-      opentelemetry-instrumentation-httpx
-      opentelemetry-instrumentation-aiohttp-client
+      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-sdk
+      openpyxl
+      opensearch-py
       pandas
-      passlib
       peewee
       peewee-migrate
-      pgvector
       pillow
       psutil
+      psycopg
       pyarrow
       pycrdt
       pydub
@@ -177,6 +176,7 @@ python3Packages.buildPythonApplication rec {
       python-pptx
       python-socketio
       pytube
+      pytz
       pyxlsb
       rank-bm25
       rapidocr-onnxruntime
@@ -186,30 +186,39 @@ python3Packages.buildPythonApplication rec {
       sentence-transformers
       sentencepiece
       soundfile
+      sqlalchemy
       starlette-compress
       starsessions
       tiktoken
       transformers
-      unstructured
       uvicorn
       validators
       xlrd
       youtube-transcript-api
     ]
+    ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
+    ++ sqlalchemy.optional-dependencies.asyncio
     ++ starsessions.optional-dependencies.redis;
 
-  optional-dependencies = with python3Packages; rec {
+  optional-dependencies = with python3Packages; {
     postgres = [
       pgvector
       psycopg2-binary
+    ];
+
+    mariadb = [
+      mariadb
+    ];
+
+    unstructured = [
+      unstructured
     ];
 
     all = [
       azure-search-documents
       colbert-ai
       elasticsearch
-      firecrawl-py
       gcp-storage-emulator
       moto
       oracledb
@@ -220,8 +229,10 @@ python3Packages.buildPythonApplication rec {
       qdrant-client
       weaviate-client
     ]
-    ++ moto.optional-dependencies.s3
-    ++ postgres;
+    ++ finalAttrs.passthru.optional-dependencies.mariadb
+    ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ finalAttrs.passthru.optional-dependencies.unstructured
+    ++ moto.optional-dependencies.s3;
   };
 
   pythonImportsCheck = [ "open_webui" ];
@@ -263,4 +274,4 @@ python3Packages.buildPythonApplication rec {
       codgician
     ];
   };
-}
+})

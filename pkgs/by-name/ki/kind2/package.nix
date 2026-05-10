@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kind2";
   version = "0.3.10";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-X2sjfYrSSym289jDJV3hNmcwyQCMnrabmGCUKD5wfdY=";
   };
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # requires nightly features
-  RUSTC_BOOTSTRAP = true;
+  env.RUSTC_BOOTSTRAP = true;
 
   meta = {
     description = "Functional programming language and proof assistant";
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

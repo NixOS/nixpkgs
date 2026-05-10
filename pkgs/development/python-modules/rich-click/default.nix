@@ -3,7 +3,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
   rich,
   setuptools,
   typing-extensions,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rich-click";
-  version = "1.8.9";
+  version = "1.9.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ewels";
     repo = "rich-click";
     tag = "v${version}";
-    hash = "sha256-uFb4Pcor9o4BPM/xx/sAKu9DoXvGO/RZg/3dVhbjgk0=";
+    hash = "sha256-HT82Dk3dYNMVU4lKJodKtn2KfEH7HUAORpa2RKSmg68=";
   };
 
   build-system = [ setuptools ];

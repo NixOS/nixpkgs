@@ -8,18 +8,17 @@
 }:
 
 let
-  version = "0.15.0";
-in
-crystal.buildCrystalPackage {
-  pname = "crystalline";
-  inherit version;
-
+  version = "0.17.1";
   src = fetchFromGitHub {
     owner = "elbywan";
     repo = "crystalline";
-    rev = "v${version}";
-    hash = "sha256-6ZAogEuOJH1QQ6NSJ+8KZUSFSgQAcvd4U9vWNAGix/M=";
+    tag = "v${version}";
+    hash = "sha256-SIfInDY6KhEwEPZckgobOrpKXBDDd0KhQt/IjdGBhWo=";
   };
+in
+crystal.buildCrystalPackage {
+  pname = "crystalline";
+  inherit version src;
 
   format = "crystal";
   shardsFile = ./shards.nix;
@@ -29,6 +28,13 @@ crystal.buildCrystalPackage {
     openssl
     makeWrapper
   ];
+  env.LLVM_CONFIG = lib.getExe' (lib.getDev llvmPackages.llvm) "llvm-config";
+
+  preConfigure = ''
+    substituteInPlace "./src/crystalline/main.cr" \
+      --replace-fail '`shards version #{__DIR__}`' '"${version}"' \
+      --replace-fail 'system("git rev-parse --short HEAD || echo unknown").stringify' '"${src.rev}"'
+  '';
 
   doCheck = false;
   doInstallCheck = false;
@@ -44,7 +50,11 @@ crystal.buildCrystalPackage {
   };
 
   postInstall = ''
-    wrapProgram "$out/bin/crystalline" --prefix PATH : '${lib.makeBinPath [ llvmPackages.llvm.dev ]}'
+    wrapProgram "$out/bin/crystalline" --prefix PATH : '${
+      lib.makeBinPath [
+        (lib.getDev llvmPackages.llvm)
+      ]
+    }'
   '';
 
   meta = {

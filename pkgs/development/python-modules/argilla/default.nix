@@ -41,7 +41,6 @@
   pytestCheckHook,
   python-jose,
   python-multipart,
-  pythonOlder,
   pyyaml,
   rich,
   schedule,
@@ -59,19 +58,17 @@
   typer,
   uvicorn,
   wrapt,
-# , flair
-# , setfit
-# , spacy-huggingface-hub
-# , span_marker
-# , trl
+  # , flair
+  # , setfit
+  # , spacy-huggingface-hub
+  # , span_marker
+  # , trl
 }:
 
 buildPythonPackage rec {
   pname = "argilla";
   version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "argilla-io";

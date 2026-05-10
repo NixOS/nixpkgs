@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.80.0";
+  version = "1.83.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable.1";
-    hash = "sha256-W1tckXXQ9PlqTW5S4ml0X5rcPXSCioubDaSkQxHQrMY=";
+    tag = "v${version}-stable";
+    hash = "sha256-oVQ0FHZmXDY7HU4AMEQ9xcl10mIbqja9/j2mdunTWI4=";
   };
 
   build-system = [ poetry-core ];
@@ -122,8 +122,14 @@ buildPythonPackage rec {
     "litellm_enterprise"
   ];
 
-  # Relax dependency check on openai, may not be needed in the future
-  pythonRelaxDeps = [ "openai" ];
+  pythonRelaxDeps = [
+    "aiohttp"
+    "click"
+    "importlib-metadata"
+    "jsonschema"
+    "openai"
+    "python-dotenv"
+  ];
 
   # access network
   doCheck = false;

@@ -1,16 +1,16 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   boost,
   qtbase,
   xz,
   qmake,
   pkg-config,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "QMediathekView";
   version = "0.2.1";
 
@@ -35,6 +35,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];

@@ -1,6 +1,6 @@
 { buildRedist }:
 buildRedist {
-  redistName = "cuda";
+  redistName = "nvpl";
   pname = "nvpl_blas";
 
   outputs = [

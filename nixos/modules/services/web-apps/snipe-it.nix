@@ -403,7 +403,7 @@ in
           locations = {
             "/" = {
               index = "index.php";
-              extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
+              extraConfig = "try_files $uri $uri/ /index.php?$query_string;";
             };
             "~ \\.php$" = {
               extraConfig = ''

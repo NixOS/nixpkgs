@@ -8,7 +8,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fuzzylite";
   version = "6.0-unstable-2025-08-30";
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
     description = "Fuzzy logic control library in C++";
     mainProgram = "fuzzylite";
     homepage = "https://fuzzylite.com";
-    changelog = "https://github.com/fuzzylite/fuzzylite/${src.rev}/release/CHANGELOG";
+    changelog = "https://github.com/fuzzylite/fuzzylite/${finalAttrs.src.rev}/release/CHANGELOG";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ azahi ];
     platforms = lib.platforms.all;
   };
-}
+})

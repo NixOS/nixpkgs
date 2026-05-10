@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hl-log-viewer";
-  version = "0.33.2";
+  version = "0.36.1";
 
   src = fetchFromGitHub {
     owner = "pamburus";
     repo = "hl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DJqOohJ+TKP4l+ySyOTRrBFZU3rn16kI4CGbFHm1rE4=";
+    hash = "sha256-28R9WcKcAzw966vYD32R9z7ZN/6WlzPjaCmuR3b7a90=";
   };
 
-  cargoHash = "sha256-c4cS5lx6aZ11YgXb6jqNkjn+tSwJC0lRvT10wvSanTE=";
+  cargoHash = "sha256-dQTc8pwO49Meq3jkIvardEIDYZ3r4Z41uZiAymT6RWM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

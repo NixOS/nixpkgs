@@ -3,7 +3,6 @@
 let
   inherit (lib)
     genAttrs
-    maintainers
     mkAliasOptionModule
     mkEnableOption
     mkIf
@@ -105,6 +104,6 @@ in
     });
   };
 
-  meta.maintainers = with maintainers; [ phaer ];
+  meta.maintainers = [ ];
 
 }

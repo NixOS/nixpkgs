@@ -17,7 +17,7 @@
 let
   jdk = jdk8;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adoptopenjdk-icedtea-web";
 
   version = "1.8.8";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
-    rev = "icedtea-web-${version}";
+    rev = "icedtea-web-${finalAttrs.version}";
     sha256 = "sha256-hpEVWG9ltNDL/0EFJjgQRRce+BLcCO4ZERULYZxyC1o=";
   };
 
@@ -62,8 +62,10 @@ stdenv.mkDerivation rec {
     touch $XDG_CONFIG_HOME/icedtea-web/deployment.properties
   '';
 
-  HOME = "/build";
-  XDG_CONFIG_HOME = "/build";
+  env = {
+    HOME = "/build";
+    XDG_CONFIG_HOME = "/build";
+  };
 
   configureFlags = [
     "--with-itw-libs=DISTRIBUTION"
@@ -86,6 +88,7 @@ stdenv.mkDerivation rec {
       based on the NetX project.
     '';
     homepage = "https://github.com/adoptopenjdk/icedtea-web";
+    license = lib.licenses.WITH lib.licenses.gpl2Only lib.licenses.classpathException20;
     platforms = lib.platforms.linux;
   };
-}
+})

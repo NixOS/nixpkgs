@@ -21,10 +21,6 @@ buildDunePackage {
     dune-rpc
   ];
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
-
   meta = {
     inherit (dune_3.meta) homepage;
     description = "API for writing dynamic Dune actions";

@@ -4,10 +4,8 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   numpy,
   lxml,
-  trimesh,
 
   # optional deps
   colorlog,
@@ -24,20 +22,19 @@
   scipy,
   pillow,
   mapbox-earcut,
+  embreex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trimesh";
-  version = "4.9.0";
+  version = "4.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mikedh";
     repo = "trimesh";
-    tag = version;
-    hash = "sha256-HOSmV55RRZkIk1YppWfYvSm0hURSKUsDeeWtVBrH7Rs=";
+    tag = finalAttrs.version;
+    hash = "sha256-Zef/BCheJWJNkK+ligeAMmuI3EX4uGfcNNbEJ9BNngY=";
   };
 
   build-system = [ setuptools ];
@@ -62,21 +59,37 @@ buildPythonPackage rec {
       pillow
       # vhacdx # not packaged
       mapbox-earcut
-      # embreex # not packaged
+    ]
+    ++ lib.optionals embreex.meta.available [
+      embreex
     ];
   };
 
   nativeCheckInputs = [
     lxml
     pytestCheckHook
+  ]
+  # embreex is maintained by trimesh devs
+  ++ lib.optionals embreex.meta.available [
+    embreex
+    rtree
   ];
 
   disabledTests = [
     # requires loading models which aren't part of the Pypi tarball
     "test_load"
+  ]
+  ++ lib.optionals embreex.meta.available [
+    # requires manifold3d
+    "test_contains_cavity"
   ];
 
-  enabledTestPaths = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [
+    "tests/test_minimal.py"
+  ]
+  ++ lib.optionals embreex.meta.available [
+    "tests/test_ray.py"
+  ];
 
   pythonImportsCheck = [
     "trimesh"
@@ -95,11 +108,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for loading and using triangular meshes";
     homepage = "https://trimesh.org/";
-    changelog = "https://github.com/mikedh/trimesh/releases/tag/${src.tag}";
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "trimesh";
     maintainers = with lib.maintainers; [
       pbsds
     ];
   };
-}
+})

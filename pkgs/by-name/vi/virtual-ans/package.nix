@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchzip,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   libGL,
   alsa-lib,
   SDL2,
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
-    libX11
-    libXi
+    libx11
+    libxi
     libGL
     alsa-lib
     SDL2

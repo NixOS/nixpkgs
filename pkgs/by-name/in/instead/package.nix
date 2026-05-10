@@ -47,7 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-d5BvzZCZ3P5CLptuCuJ4KxfEp4CDbtmIZDIbGDcyV3o=";
   };
 
-  NIX_LDFLAGS = "-llua -lgcc_s";
+  env.NIX_LDFLAGS = toString [
+    "-llua"
+    "-lgcc_s"
+  ];
 
   nativeBuildInputs = [
     pkg-config

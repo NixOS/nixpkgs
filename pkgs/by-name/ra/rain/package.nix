@@ -6,18 +6,18 @@
   rain,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rain";
-  version = "1.24.2";
+  version = "1.24.4";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "rain";
-    rev = "v${version}";
-    sha256 = "sha256-xCozToZJRJvebS9H5NH6rHQprgTM3cy0cssJNh9AQmI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-akckpNDlv9TuDVkFLEhsx61GYNMrjBE2cM/mXmVtrCA=";
   };
 
-  vendorHash = "sha256-Egh7NzjHHgQATezlqFOk6FjUwhvtM0MJqCUJTDeHZG0=";
+  vendorHash = "sha256-bREmqt9QDuPqhfTIIY1FBfOcNqGS8JXjlMqM99tBI9g=";
 
   subPackages = [ "cmd/rain" ];
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = rain;
     command = "rain --version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -39,4 +39,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jiegec ];
   };
-}
+})

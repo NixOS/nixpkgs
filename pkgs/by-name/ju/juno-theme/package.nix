@@ -5,25 +5,25 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "juno";
   version = "0.0.3";
 
   srcs = [
     (fetchurl {
-      url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno.tar.xz";
+      url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno.tar.xz";
       sha256 = "sha256-G/H5FZ6VSLHwtMtttRafvPFE2sd30FHbep/0i4dGfl8=";
     })
     (fetchurl {
-      url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-mirage.tar.xz";
+      url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno-mirage.tar.xz";
       sha256 = "sha256-VU8uNH6T9FyOWgIfsGCCihnX3uHfOy6dXsANWKRPQ1c=";
     })
     (fetchurl {
-      url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-ocean.tar.xz";
+      url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno-ocean.tar.xz";
       sha256 = "sha256-OeMXR0nE9aUmwAGfOAfbNP2Rgvv1u/2vj3LKb88mD1s=";
     })
     (fetchurl {
-      url = "https://github.com/gvolpe/Juno/releases/download/${version}/Juno-palenight.tar.xz";
+      url = "https://github.com/gvolpe/Juno/releases/download/${finalAttrs.version}/Juno-palenight.tar.xz";
       sha256 = "sha256-DP3fKXYxUHpsw0msfPAZB3UtEa6CCOfqsabAmsmWq44=";
     })
   ];
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.gvolpe ];
   };
-}
+})

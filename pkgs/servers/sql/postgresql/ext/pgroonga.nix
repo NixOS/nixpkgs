@@ -6,7 +6,7 @@
   pkg-config,
   postgresql,
   postgresqlBuildExtension,
-  xxHash,
+  xxhash,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
@@ -16,7 +16,7 @@ postgresqlBuildExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-PwUnjwqnmoWQ9kKZuKsAVzVBRyKvT+aexrm5eeRiRIQ=";
   };
 
@@ -24,7 +24,7 @@ postgresqlBuildExtension (finalAttrs: {
   buildInputs = [
     msgpack-c
     groonga
-    xxHash
+    xxhash
   ];
 
   makeFlags = [

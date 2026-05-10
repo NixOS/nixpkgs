@@ -9,19 +9,19 @@
 }:
 let
   pname = "sql-studio";
-  version = "0.1.46";
+  version = "0.1.51";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "sql-studio";
     tag = version;
-    hash = "sha256-xtW6tF3hc8GyxOMwE6GlZNBNEE/QsKJzyOvAYU6i6M0=";
+    hash = "sha256-LooRM7KlNmRHG5M18MLnV+hraQ1kRVEZp2GVYnwNScI=";
   };
 
   ui = buildNpmPackage {
     pname = "sql-studio-ui";
     inherit version src;
-    npmDepsHash = "sha256-1k054qLwvpSrWfBKXJRVVomCh1dMSEtjtwUTWCoAaEg=";
+    npmDepsHash = "sha256-4mDe8b5J1wrHz7OCClkE5WTbtfs3TMZB/vhiVuaHiyQ=";
     sourceRoot = "${src.name}/ui";
     installPhase = ''
       runHook preInstall
@@ -35,7 +35,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-RMI2pW89PzmxHgZ7ondwNyGE4yeWpf3T6NRNr2eUFjQ=";
+  cargoHash = "sha256-SJiPVvRYRkMHprGXtObNVSsO//2VNTpouCB+qcXlbjc=";
 
   nativeBuildInputs = [ pkg-config ];
 

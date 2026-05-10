@@ -7,13 +7,13 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "micronaut";
-  version = "4.10.0";
+  version = "4.10.9";
 
   src = fetchzip {
-    url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${version}/micronaut-cli-${version}.zip";
-    sha256 = "sha256-FYky14Lnl5B+zLgulFJdRdaDIQi+FhoUjce+LKYaMKE=";
+    url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${finalAttrs.version}/micronaut-cli-${finalAttrs.version}.zip";
+    hash = "sha256-/byUsXGPsIkVU7T0FENUkxx/TjkhzI+lX2Veo4JGOCw=";
   };
 
   nativeBuildInputs = [
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "mn";
   };
-}
+})

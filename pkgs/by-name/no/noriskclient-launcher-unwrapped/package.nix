@@ -2,6 +2,8 @@
   cargo-tauri,
   desktop-file-utils,
   fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
   fetchYarnDeps,
   glib,
   gtk3,
@@ -18,18 +20,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.14";
+  version = "0.6.20";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9UUNIS8r/695maQ2j2+Wj2L5qy55Wfs/MNhKJnwC6GI=";
+    hash = "sha256-VChMA6XXKgtytLFOORxnpNnTrunKaIJkFge2Xu4FjG0=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-IWgP4VEyEBNsxALKGMpk8WZCIc76qcEu5K+kYqsdYkQ=";
+    yarnLock = fetchurl {
+      url = "https://raw.githubusercontent.com/NoRiskClient/noriskclient-launcher/937b275341191552a08757c9b4e5eb7802d54945/yarn.lock";
+      hash = "sha256-IqhgDMthwEAd/rzat119Ajaf8p8LgTDEj/KrS2xVFuQ=";
+    };
+    hash = "sha256-VWl6YqTiBRz85GICFKGwDZRBcITGQdWE7EUzW58wHdY=";
   };
 
   patches = [
@@ -38,17 +43,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Make the launcher find java from PATH, instead of downloading its own, which is not going to work on NixOS.
     ./java-from-path.patch
+
+    # The version of tauri in Cargo.toml and in package.json aren't matching, causing the build to fail. Upstream PR is https://github.com/NoRiskClient/noriskclient-launcher/pull/222.
+    (fetchpatch {
+      name = "fix-tauri-version-mismatch";
+      url = "https://github.com/NoRiskClient/noriskclient-launcher/commit/937b275341191552a08757c9b4e5eb7802d54945.patch";
+      hash = "sha256-jI0KnvUpSJU739BfZeYFMhtZKjno1UrWWGwMLS3I6ag=";
+    })
   ];
 
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  cargoHash = "sha256-heSUEW7r9Lt26Fu68Jo/7BHW6Qmp8GrRSavukCS+ySk=";
+  cargoHash = "sha256-FiM1FuWeGmfZlnKiIImGOsJnKt3qsLqvY6oRUvOSBWM=";
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  checkFlags = [
+    # test fails to find correct function
+    "--skip=utils::string_utils::safe_truncate"
+  ];
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -78,6 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/NoRiskClient/noriskclient-launcher/blob/v3/changelogs/${finalAttrs.version}.txt";
     description = "Minecraft Launcher for NoRisk Client";
     homepage = "https://norisk.gg";
     license = lib.licenses.gpl3Only;

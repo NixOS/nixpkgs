@@ -10,7 +10,7 @@
 let
 
   pixart2svg = stdenvNoCC.mkDerivation {
-    name = "pixart2svg";
+    pname = "pixart2svg";
     version = "0-unstable-2021-07-18";
 
     src = fetchzip {
@@ -51,7 +51,7 @@ let
 
 in
 stdenvNoCC.mkDerivation {
-  name = "serenityos-emoji-font";
+  pname = "serenityos-emoji-font";
   version = "0-unstable-2025-05-31";
 
   src = fetchFromGitHub {

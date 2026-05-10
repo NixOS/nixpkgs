@@ -9,6 +9,15 @@ module.exports = async ({ github, context, core, dry }) => {
 
   const artifactClient = new DefaultArtifactClient()
 
+  // Detect if running in a fork (not NixOS/nixpkgs)
+  const isFork = context.repo.owner !== 'NixOS'
+
+  const orgId = (
+    await github.rest.orgs.get({
+      org: context.repo.owner,
+    })
+  ).data.id
+
   async function downloadMaintainerMap(branch) {
     let run
 
@@ -68,9 +77,18 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // We get here when none of the 10 commits we looked at contained a maintainer map.
     // For the master branch, we don't have any fallback options, so we error out.
-    // For other branches, we select a suitable fallback below.
-    if (branch === 'master') throw new Error('No maintainer map found.')
+    // In forks without merge-group history, return empty map to allow testing.
+    if (branch === 'master') {
+      if (isFork) {
+        core.warning(
+          'No maintainer map found. Using empty map (expected in forks without merge-group history).',
+        )
+        return {}
+      }
+      throw new Error('No maintainer map found.')
+    }
 
+    // For other branches, we select a suitable fallback below.
     const { stable, version } = classify(branch)
 
     const release = `release-${version}`
@@ -109,6 +127,11 @@ module.exports = async ({ github, context, core, dry }) => {
       return []
     }
 
+    // Forks don't have NixOS teams, return empty list
+    if (isFork) {
+      return []
+    }
+
     if (!members[team_slug]) {
       members[team_slug] = github.paginate(github.rest.teams.listMembersInOrg, {
         org: context.repo.owner,
@@ -133,9 +156,36 @@ module.exports = async ({ github, context, core, dry }) => {
           id,
         })
         .then((resp) => resp.data)
+        .catch((e) => {
+          // User may have deleted their account
+          if (e.status === 404) return null
+          throw e
+        })
     }
 
     return users[id]
+  }
+
+  // Same for teams
+  const teams = {}
+  function getTeam(id) {
+    if (!teams[id]) {
+      teams[id] = github
+        .request({
+          method: 'GET',
+          url: '/organizations/{orgId}/team/{id}',
+          orgId,
+          id,
+        })
+        .then((resp) => resp.data)
+        .catch((e) => {
+          // Team may have been deleted
+          if (e.status === 404) return null
+          throw e
+        })
+    }
+
+    return teams[id]
   }
 
   async function handlePullRequest({ item, stats, events }) {
@@ -145,22 +195,10 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // This API request is important for the merge-conflict label, because it triggers the
     // creation of a new test merge commit. This is needed to actually determine the state of a PR.
-    //
-    // NOTE (2025-12-15): Temporarily skipping mergeability checks here
-    // on GitHub’s request to measure the impact of the resulting ref
-    // writes on their internal metrics; merge conflicts resulting from
-    // changes to target branches will not have labels applied for the
-    // duration. The label should still be updated on pushes.
-    //
-    // TODO: Restore mergeability checks in some form after a few days
-    // or when we hear back from GitHub.
     const pull_request = (
       await github.rest.pulls.get({
         ...context.repo,
         pull_number,
-        // Undocumented parameter (as of 2025-12-15), added by GitHub
-        // for us; stability unclear.
-        skip_mergeability_checks: true,
       })
     ).data
 
@@ -182,17 +220,49 @@ module.exports = async ({ github, context, core, dry }) => {
     })
 
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
-    // Accounts could be deleted as well, so don't count them.
     const reviews = (
-      await github.paginate(github.rest.pulls.listReviews, {
-        ...context.repo,
-        pull_number,
-      })
-    ).filter(
+      await github.graphql(
+        `query($owner: String!, $repo: String!, $pr: Int!) {
+        repository(owner: $owner, name: $repo) {
+          pullRequest(number: $pr) {
+            # Unlikely that there's ever more than 100 reviews, so let's not bother,
+            # but once https://github.com/actions/github-script/issues/309 is resolved,
+            # it would be easy to enable pagination.
+            reviews(first: 100) {
+              nodes {
+                state
+                user: author {
+                  # Only get users, no bots
+                  ... on User {
+                    login
+                    # Set the id field in the resulting JSON to GraphQL's databaseId
+                    # databaseId in GraphQL-land is the same as id in REST-land
+                    id: databaseId
+                  }
+                }
+                onBehalfOf(first: 100) {
+                  nodes {
+                    slug
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`,
+        {
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          pr: pull_number,
+        },
+      )
+    ).repository.pullRequest.reviews.nodes.filter(
       (r) =>
-        r.user &&
-        !r.user.login.endsWith('[bot]') &&
-        r.user.type !== 'Bot' &&
+        // The `... on User` makes it such that .login only exists for users,
+        // but we still need to filter the others out.
+        // Accounts could be deleted as well, so don't count them.
+        r.user?.login &&
+        // Also exclude author reviews, can't request their review in any case
         r.user.id !== pull_request.user?.id,
     )
 
@@ -311,9 +381,40 @@ module.exports = async ({ github, context, core, dry }) => {
         expectedHash: artifact.digest,
       })
 
-      const evalLabels = JSON.parse(
+      const changedPaths = JSON.parse(
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
-      ).labels
+      )
+      const evalLabels = changedPaths.labels
+
+      // Fetch all PR commits to check their messages for package patterns
+      const prCommits = await github.paginate(github.rest.pulls.listCommits, {
+        ...context.repo,
+        pull_number,
+        per_page: 100,
+      })
+      const commitSubjects = prCommits.map(
+        (c) => c.commit.message.split('\n')[0],
+      )
+
+      // Label new package PRs: "packagename: init at X.Y.Z"
+      // Exclude NixOS module commits like "nixos/timekpr: init at 0.5.8"
+      const newPackagePattern = /^(?<!nixos\/)\S+: init at\b/
+      const hasNewPackages = changedPaths.attrdiff?.added?.length > 0
+      const commitsIndicateNewPackage = commitSubjects.some((msg) =>
+        newPackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (new)'] =
+        hasNewPackages && commitsIndicateNewPackage
+
+      // Label package update PRs: "packagename: X.Y.Z -> A.B.C"
+      // Matches versions like: 1.2.3, 0-unstable-2024-01-15, 1.3rc1, alpha, unstable
+      // Exclude NixOS module commits like "nixos/ncps: types.str -> types.path"
+      const updatePackagePattern =
+        /^(?<!nixos\/)\S+: [\w.-]*\d[\w.-]* (->|→) [\w.-]*\d[\w.-]*$/
+      const commitsIndicateUpdate = commitSubjects.some((msg) =>
+        updatePackagePattern.test(msg),
+      )
+      evalLabels['8.has: package (update)'] = commitsIndicateUpdate
 
       // TODO: Get "changed packages" information from list of changed by-name files
       // in addition to just the Eval results, to make this work for these packages
@@ -361,6 +462,16 @@ module.exports = async ({ github, context, core, dry }) => {
           if (e.code !== 'ENOENT') throw e
         }
 
+        let team_maintainers = []
+        try {
+          team_maintainers = Object.keys(
+            JSON.parse(await readFile(`${pull_number}/teams.json`, 'utf-8')),
+          ).map((id) => parseInt(id))
+        } catch (e) {
+          // Older artifacts don't have the teams.json, yet.
+          if (e.code !== 'ENOENT') throw e
+        }
+
         // We set this label earlier already, but the current PR state can be very different
         // after handleReviewers has requested reviews, so update it in this case to prevent
         // this label from flip-flopping.
@@ -373,14 +484,15 @@ module.exports = async ({ github, context, core, dry }) => {
           pull_request,
           reviews,
           // TODO: Use maintainer map instead of the artifact.
-          maintainers: Object.keys(
+          user_maintainers: Object.keys(
             JSON.parse(
               await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
             ),
           ).map((id) => parseInt(id)),
+          team_maintainers,
           owners,
-          getTeamMembers,
           getUser,
+          getTeam,
         })
       }
     }

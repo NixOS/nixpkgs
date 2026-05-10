@@ -6,14 +6,14 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "RAxML${lib.optionalString useMpi "-mpi"}";
   version = "8.2.13";
 
   src = fetchFromGitHub {
     owner = "stamatak";
     repo = "standard-RAxML";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-w+Eqi0GhVira1H6ZnMNeZGBMzDjiGT7JSFpQEVXONyk=";
   };
 
@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
       ''
         make -f Makefile.SSE3.PTHREADS.gcc
       '';
+
+  # Fix build with gcc15 (-std=gnu23)
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
   installPhase =
     if useMpi then
@@ -50,4 +53,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

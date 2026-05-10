@@ -2,28 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   configobj,
   mock,
   pytestCheckHook,
   pygments,
+  setuptools,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.14.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-YtEXENvrwvxGAAPeEhVogyXYY2hZBW1oizhBm9QEi8A=";
+    hash = "sha256-eY4HMfL01CV2fLEqOtlmvyi13nelZRZiBhu0pmvujzU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     configobj
     tabulate
   ]

@@ -10,13 +10,13 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-generators";
   version = "1.8.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-generators";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-wHmtB5H8AJTUaeGHw+0hsQ6nU4VyvVrP2P4NeCocRzY=";
   };
   strictDeps = true;
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nixos-generate";
     platforms = lib.platforms.unix;
   };
-}
+})

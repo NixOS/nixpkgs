@@ -1,83 +1,150 @@
 {
-  stdenv,
   lib,
-  buildNpmPackage,
+  stdenv,
+  bun,
   fetchFromGitHub,
-  makeWrapper,
-  nix-update-script,
   versionCheckHook,
-  libsecret,
-  nodejs,
-  perl,
-  pkg-config,
+  makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
-
-buildNpmPackage (finalAttrs: {
+let
   pname = "filen-cli";
-  version = "0.0.34";
+  version = "0.0.36";
 
   src = fetchFromGitHub {
     owner = "FilenCloudDienste";
     repo = "filen-cli";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-iISW9EAk8haWUCh9I8qHhrBKLqHeBUC8sWA0MnXqQSA=";
+    tag = "v${version}";
+    hash = "sha256-2FN9KygSGir/vtHdKXX0zUeug2O6tgAc1PBhzD9HPqY=";
   };
 
-  npmDepsHash = "sha256-0DpiUjUFc0ThzP6/qrSEebKDq2fnr/CpcmtPFaIVHhU=";
+  node_modules = stdenv.mkDerivation {
+    pname = "${pname}-node_modules";
+    inherit version src;
 
-  inherit nodejs;
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
 
-  env.npm_config_build_from_source = "true";
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
+      bun install \
+        --force \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --production
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/node_modules
+      cp -R ./node_modules $out
+
+      runHook postInstall
+    '';
+
+    dontFixup = true;
+
+    outputHash =
+      {
+        aarch64-darwin = "sha256-+nTCiCEXsEz7YqRZkHlP3CWL7e7OPdds33BTwfqTL5c=";
+        aarch64-linux = "sha256-uvL498mHFXwoZpeCwsup4Iyh4l5buVnqLRBMyGVRIlA=";
+        x86_64-darwin = "sha256-5nEB6JQLmHasxcIReoiLLLRdSiaT1CRAmGFVyqdd+VY=";
+        x86_64-linux = "sha256-Ky+ewpdd5nKvRzXwEAUgT7P/OW3v6fdb2r6SGxZ/JEc=";
+      }
+      .${stdenv.hostPlatform.system}
+        or (throw "${pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet.");
+
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+in
+stdenv.mkDerivation {
+  inherit pname version src;
 
   nativeBuildInputs = [
+    bun
     makeWrapper
-    pkg-config # for keytar
-  ]
-  ++ lib.optionals stdenv.buildPlatform.isDarwin [
-    # for utf-8-validate
-    # https://github.com/websockets/utf-8-validate/blob/1439ad4cdf99d421084ae3a5f81e2cf43199a690/binding.gyp#L17
-    perl
   ];
 
-  # for keytar
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
+  configurePhase = ''
+    runHook preConfigure
 
-  postPatch = ''
-    # The version string is substituted during publishing:
-    # https://github.com/FilenCloudDienste/filen-cli/blob/c7d5eb2a2cd6d514321992815f16475f6909af36/.github/workflows/build-and-publish.yml#L24
-    substituteInPlace package.json \
-      --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"' \
-      --replace-fail '\"--external:*keytar.node\" --external:keytar' \
-        '--loader:.node=copy'
+    cp -R ${node_modules}/node_modules .
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    bun build \
+      --compile \
+      --target=bun \
+      --minify \
+      --sourcemap src/index.ts \
+      --outfile dist/filen \
+      --define IS_RUNNING_AS_BINARY=true \
+      --define "VERSION=v${version}"
+
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/lib
-    install -T -m755 dist/bundle.js $out/lib/index.js
-    install -D -m755 dist/*.node $out/lib
-    install -D -m644 package.json $out/lib
-    makeWrapper "${lib.getExe nodejs}" $out/bin/filen \
-      --add-flags $out/lib/index.js
+
+    mkdir -p $out/bin
+    cp ./dist/filen $out/bin
+
+    wrapProgram $out/bin/filen \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/filen";
+  # strip removes the JS bundle from the binary
+  dontStrip = true;
 
-  # Writes $HOME/Library/Application Support on darwin
-  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
-  };
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  preVersionCheck = ''
+    cat > filen-version << EOF
+    #!/bin/sh
+    exec $out/bin/filen --skip-update "\$@"
+    EOF
+    chmod +x filen-version
+    versionCheckProgram="$(pwd)/filen-version"
+  '';
+
+  doInstallCheck = true;
 
   meta = {
     description = "CLI tool for interacting with the Filen cloud";
     homepage = "https://github.com/FilenCloudDienste/filen-cli";
-    changelog = "https://github.com/FilenCloudDienste/filen-cli/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/FilenCloudDienste/filen-cli/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ eilvelia ];
     mainProgram = "filen";
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
-})
+}

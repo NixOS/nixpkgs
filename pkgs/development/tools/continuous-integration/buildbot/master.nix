@@ -7,7 +7,6 @@
   # Tie withPlugins through the fixed point here, so it will receive an
   # overridden version properly
   buildbot,
-  pythonOlder,
   python,
   twisted,
   jinja2,
@@ -47,10 +46,10 @@
 let
   withPlugins =
     plugins:
-    buildPythonApplication {
+    buildPythonApplication rec {
       pname = "${buildbot.pname}-with-plugins";
       inherit (buildbot) version;
-      format = "other";
+      pyproject = false;
 
       dontUnpack = true;
       dontBuild = true;
@@ -69,6 +68,7 @@ let
       '';
 
       passthru = buildbot.passthru // {
+        inherit pyproject;
         withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
       };
     };
@@ -76,9 +76,7 @@ in
 buildPythonApplication rec {
   pname = "buildbot";
   version = "4.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buildbot";

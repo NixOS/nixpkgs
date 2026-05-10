@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   unstableGitUpdater,
   autoreconfHook,
   autoconf-archive,
@@ -24,19 +25,27 @@
 
 let
   pname = "libvmi";
-  version = "0.14.0-unstable-2025-12-17";
+  version = "0.14.0-unstable-2026-01-04";
   libVersion = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "libvmi";
     repo = "libvmi";
-    rev = "77a677aa6621927495f1954eded11e601937798b";
-    hash = "sha256-qwZEU41xhY/prgD72CBOKcQ4GqujXeMlUU+NDRJ9U3M=";
+    rev = "82bbee6c378da854d07887048b06dc4ee8e20d6a";
+    hash = "sha256-PGILZdVdY3MyfvYW8h4NGeB4XgwL02oKdl4RAR1OkqA=";
   };
 in
 
 stdenv.mkDerivation {
   inherit pname version src;
+
+  patches = [
+    # Compatibility with GCC 15
+    (fetchpatch {
+      url = "https://github.com/libvmi/libvmi/commit/9deb49d17e7e675158ed3b19d405792254e22bdf.patch";
+      hash = "sha256-stjbHogH6JpCu3hTR+UUJGzUeq1TOWZPc8ocjUA7t/g=";
+    })
+  ];
 
   outputs = [
     "out"

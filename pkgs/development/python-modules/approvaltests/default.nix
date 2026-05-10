@@ -20,21 +20,18 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "16.2.1";
+  version = "18.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-gu9Wa52yekUmFg1zlVtLSN18hUuqVOUCN7krUh0m1m0=";
+    hash = "sha256-2lz3TMI4/QoNVfnZga5Ro9rheixFpVJfNbvVLy0lnLA=";
   };
 
   postPatch = ''
-    test -f setup.py || mv setup/setup.py .
-    touch setup/__init__.py
-    substituteInPlace setup.py \
-      --replace-fail "from setup_utils" "from setup.setup_utils"
+    test -f setup.py || mv setup/setup.approvaltests.py setup.py
 
     patchShebangs internal_documentation/scripts
   '';

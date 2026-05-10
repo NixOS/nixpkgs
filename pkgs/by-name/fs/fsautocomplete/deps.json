@@ -76,8 +76,8 @@
   },
   {
     "pname": "fsharp-analyzers",
-    "version": "0.33.0",
-    "hash": "sha256-inPKPeLTaImrj4uiEy/vpru1cestNr/s/qgyRsgvwPc="
+    "version": "0.35.0",
+    "hash": "sha256-GxQR3Fq28cb+akNbzRTav9nhMtayN/0g2d1G6Ml+ck4="
   },
   {
     "pname": "FSharp.Analyzers.Build",
@@ -86,13 +86,13 @@
   },
   {
     "pname": "FSharp.Analyzers.SDK",
-    "version": "0.34.1",
-    "hash": "sha256-irU+Cx4ke47nSzOSozj7qPWa8a0RlMBb0mfIXzoxPiY="
+    "version": "0.35.0",
+    "hash": "sha256-JlwkutVgOUDZJ7PfzgXn6Pepr30Qd7M9FpcZwVXNGhc="
   },
   {
     "pname": "FSharp.Compiler.Service",
-    "version": "43.10.100",
-    "hash": "sha256-80hXILU4oYRtTOl3CeFt1MiquS2B/vbEI7YWcL4+8cQ="
+    "version": "43.10.101",
+    "hash": "sha256-5r9ulr3IVW74Z/RRZ24RhI6wSPdv4jUZHNBKRhRIWco="
   },
   {
     "pname": "FSharp.Control.AsyncSeq",
@@ -106,8 +106,8 @@
   },
   {
     "pname": "FSharp.Core",
-    "version": "10.0.100",
-    "hash": "sha256-stXiDuNoO0xYs82vm6CNWbTsxUErbWc1iSirUyiUdXA="
+    "version": "10.0.101",
+    "hash": "sha256-i7crdE0/u+/mFCD1rNFc/iT5TFr8Dae9dNpVRmbpSbY="
   },
   {
     "pname": "FSharp.Data.Adaptive",
@@ -206,8 +206,8 @@
   },
   {
     "pname": "Ionide.Analyzers",
-    "version": "0.14.10",
-    "hash": "sha256-aUo+WiX33PGJbyg+vbsMfjRYee3LQZNKEzie2OKrhcw="
+    "version": "0.14.11",
+    "hash": "sha256-aF2cKl5FcRNu0uV5WBq4IzzrJZfAfMb0jD8G3kMKAX8="
   },
   {
     "pname": "Ionide.KeepAChangelog.Tasks",

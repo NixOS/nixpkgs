@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cp437";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "keaston";
     repo = "cp437";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "18f4mnfnyviqclbhmbhix80k823481ypkwbp26qfvhnxdgzbggcc";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jb55 ];
     mainProgram = "cp437";
   };
-}
+})

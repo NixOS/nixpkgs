@@ -529,8 +529,8 @@ let
       src = fetchFromGitHub {
         owner = "nginx";
         repo = "njs";
-        rev = "0.8.9";
-        hash = "sha256-TalS9EJP+vB1o3BKaTvXXnudjKhNOcob3kDAyeKej3c=";
+        tag = "0.9.4";
+        hash = "sha256-Ee55QKaeZ0mYGKUroKr/AYGoOCakEonU483qkhmZdzU=";
       };
 
       # njs module sources have to be writable during nginx build, so we copy them
@@ -680,7 +680,7 @@ let
         name = "secure-token";
         owner = "kaltura";
         repo = "nginx-secure-token-module";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-qYTjGS9pykRqMFmNls52YKxEdXYhHw+18YC2zzdjEpU=";
       };
 
@@ -800,7 +800,10 @@ let
         description = "SPNEGO HTTP Authentication Module";
         homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
         license = with lib.licenses; [ bsd2 ];
-        teams = [ lib.teams.deshaw ];
+        maintainers = with lib.maintainers; [
+          de11n
+          despsyched
+        ];
       };
     };
 
@@ -978,7 +981,7 @@ let
         name = "video-thumbextractor";
         owner = "wandenberg";
         repo = "nginx-video-thumbextractor-module";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-F2cuzCbJdGYX0Zmz9MSXTB7x8+FBR6pPpXtLlDRCcj8=";
       };
 
@@ -995,34 +998,34 @@ let
       };
     };
 
-    vod = {
+    vod = rec {
       name = "vod";
+      version = "1.7.0";
+
       src = applyPatches {
         name = "vod";
         src = fetchFromGitHub {
-          owner = "kaltura";
+          owner = "dio-az";
           repo = "nginx-vod-module";
-          tag = "1.33";
-          hash = "sha256-hf4iprkdNP7lVlrm/7kMkrp/8440PuTZiL1hv/Icfm4=";
+          tag = "v${version}";
+          hash = "sha256-IcXbbmAs16F9qOEJWgH6XqP5sBMYszclGByVghj0eBM=";
         };
+
         postPatch = ''
           substituteInPlace vod/media_set.h \
             --replace-fail "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
-          substituteInPlace vod/subtitle/dfxp_format.c \
-            --replace-fail '(!ctxt->wellFormed && !ctxt->recovery))' '!ctxt->wellFormed)'
-          # https://github.com/kaltura/nginx-vod-module/pull/1593
-          substituteInPlace ngx_http_vod_module.c \
-            --replace-fail 'ngx_http_vod_exit_process()' 'ngx_http_vod_exit_process(ngx_cycle_t *cycle)'
         '';
       };
 
       inputs = [
-        ffmpeg_6-headless
+        ffmpeg-headless
         fdk_aac
         openssl
         libxml2
         libiconv
       ];
+
+      passthru.tests = nixosTests.frigate;
 
       meta = {
         description = "VOD packager";
@@ -1065,7 +1068,10 @@ let
         homepage = "https://github.com/evanmiller/mod_zip";
         license = with lib.licenses; [ bsd3 ];
         broken = stdenv.hostPlatform.isDarwin;
-        teams = [ lib.teams.apm ];
+        maintainers = with lib.maintainers; [
+          DutchGerman
+          friedow
+        ];
       };
     };
 

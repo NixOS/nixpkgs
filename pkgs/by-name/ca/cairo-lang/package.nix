@@ -6,18 +6,18 @@
   perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cairo";
-  version = "2.11.2";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
-    rev = "v${version}";
-    hash = "sha256-VOyqKeiPJ3/VOqcdQXC/rZnTriC2ScmAQ4IlouHjvpI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uWnFj2oMEQvzzpi1UDK7OQ/2bAm7zlEPHhJXV+gj6nU=";
   };
 
-  cargoHash = "sha256-e2Nire1TLcliq5KxoINJIZJdgohHRTXqIZPj1GNIe2A=";
+  cargoHash = "sha256-FrLjo+Zu8OvNZ69jjzqR1uK0hius7nwbwdlJJkkvTKI=";
 
   # openssl crate requires perl during build process
   nativeBuildInputs = [
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

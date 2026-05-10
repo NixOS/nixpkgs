@@ -13,13 +13,13 @@
 
 buildDunePackage rec {
   pname = "github";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-github";
     rev = version;
-    sha256 = "sha256-/IRoaGh4nYcdv4ir3LOS1d9UHLfWJ6DdPyFoFVCS+p4=";
+    sha256 = "sha256-nxHXOdZAvFe5/lKNw7tTJmY86xzfdFT+fW+lnKioyPM=";
   };
 
   duneVersion = "3";

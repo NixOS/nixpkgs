@@ -8,7 +8,7 @@
   libglvnd,
   surgescript,
   physfs,
-  xorg,
+  libx11,
   versionCheckHook,
   nix-update-script,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
     physfs
     surgescript
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [

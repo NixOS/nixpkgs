@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "darkman";
   version = "2.2.0";
 
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
     repo = "darkman";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Kpuuxxwn/huA5WwmnVGG0HowNBGyexDRpdUc3bNmB18=";
   };
 
@@ -56,4 +56,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "darkman";
   };
-}
+})

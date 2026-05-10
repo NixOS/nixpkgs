@@ -6,6 +6,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  pythonAtLeast,
   writableTmpDirAsHomeHook,
   pkgs,
 }:
@@ -15,15 +16,14 @@ in
 
 buildPythonPackage rec {
   pname = "icdiff";
-  version = "2.0.7";
+  version = "2.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeffkaufman";
     repo = "icdiff";
     tag = "release-${version}";
-    hash = "sha256-XOw/xhPGlzi1hAgzQ1EtioUM476A+lQWLlvvaxd9j08=";
-    leaveDotGit = true;
+    hash = "sha256-SbgUBWaNT8akYKXYef/94vqZqJannZv+TxfbCnHKQtw=";
   };
 
   patches = [ ./0001-Don-t-test-black-or-flake8.patch ];
@@ -39,13 +39,17 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  # Before the wheel gets created, fix up the shebangs.
+  preBuild = ''
+    patchShebangs test.sh icdiff git-icdiff
+  '';
+
   # Odd behavior in the sandbox
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck
 
-    patchShebangs test.sh
     ./test.sh ${python.interpreter}
 
     runHook postCheck

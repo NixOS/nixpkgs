@@ -14,7 +14,7 @@ let
     src = fetchFromGitHub {
       owner = "SagerNet";
       repo = "sing-geoip";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-nIrbiECK25GyuPEFqMvPdZUShC2JC1NI60Y10SsoWyY=";
     };
 
@@ -53,8 +53,6 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 geoip.db $out/share/sing-box/geoip.db
-    install -Dm644 geoip-cn.db $out/share/sing-box/geoip-cn.db
     install -Dm644 rule-set/* -t $out/share/sing-box/rule-set
 
     runHook postInstall

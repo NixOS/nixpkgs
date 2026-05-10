@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "robotframework-tidy";
   version = "4.18.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "MarketSquare";
     repo = "robotframework-tidy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WAuB+kTEZAG1uVEXVY1CdIDGeRRHo5AT1bHs8/wBBcc=";
   };
 
@@ -36,9 +36,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Code autoformatter for Robot Framework";
     homepage = "https://robotidy.readthedocs.io";
-    changelog = "https://github.com/MarketSquare/robotframework-tidy/blob/main/docs/releasenotes/${src.tag}.rst";
+    changelog = "https://github.com/MarketSquare/robotframework-tidy/blob/main/docs/releasenotes/${finalAttrs.src.tag}.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "robotidy";
   };
-}
+})

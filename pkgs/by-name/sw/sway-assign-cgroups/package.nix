@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sway-assign-cgroups";
   version = "0.4.1";
   src = fetchFromGitHub {
     owner = "alebastr";
     repo = "sway-systemd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs = with python3Packages; [
     dbus-next
@@ -48,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickhu ];
   };
-}
+})

@@ -4,15 +4,12 @@
   fetchFromGitHub,
   requests,
   requests-oauthlib,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "twitterapi";
   version = "2.8.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geduldig";

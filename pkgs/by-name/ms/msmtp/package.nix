@@ -158,7 +158,7 @@ let
 in
 if withScripts then
   symlinkJoin {
-    name = "msmtp-${version}";
+    pname = "msmtp";
     inherit version meta;
     paths = [
       binaries

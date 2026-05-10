@@ -5,14 +5,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovh-ttyrec";
   version = "1.1.7.1";
 
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "ovh-ttyrec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VTF9WLwAIWWn+W0sLQaoFBFro+pSXKwcTO6q6MW6JD8=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
       zimbatm
     ];
   };
-}
+})

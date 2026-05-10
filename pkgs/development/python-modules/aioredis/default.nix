@@ -7,15 +7,12 @@
   typing-extensions,
   hiredis,
   isPyPy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioredis";
   version = "2.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

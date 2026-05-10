@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-audit";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = "go-audit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VzxFhaeETmhjYWBLQil10OhV4k8w6EHfV0qnun73gb0=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "go-audit";
   };
-}
+})

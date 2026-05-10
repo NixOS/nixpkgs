@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication {
 
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "langfield";
     repo = "ki";

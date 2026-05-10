@@ -39,7 +39,7 @@ buildPythonPackage rec {
     homepage = "https://mpmath.org/";
     description = "Pure-Python library for multiprecision floating arithmetic";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

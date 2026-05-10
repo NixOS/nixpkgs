@@ -15,19 +15,25 @@
   python3,
   which,
   nodejs,
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -111,15 +117,6 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-  ]
-  ++ lib.optionals stdenv.cc.isClang [
-    # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
-    (fetchpatch2 {
-      url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch?full_index=1";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-zDIlHd8bBtrThkFnrcyA13mhXYIQt6sKsi6qAyQ34yo=";
-    })
   ];
 
   postPatch = ''
@@ -226,6 +223,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy
@@ -248,19 +246,19 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
-    libXScrnSaver
-    libXcursor
-    libXrandr
-    xorg.libpciaccess
-    libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    xrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libpciaccess
+    libxtst
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
-    libXi
-    xorg.libXext
+    libxi
+    libxext
 
     # Pipewire
     pipewire

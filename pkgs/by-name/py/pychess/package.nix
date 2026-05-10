@@ -11,7 +11,7 @@
   gtksourceview4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pychess";
   version = "1.1.0";
   pyproject = true;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pychess";
     repo = "pychess";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MSz5RiPpmlySjljhDlkvXtO6t3UO58zx+uGsV9R6F1A=";
   };
 
@@ -77,4 +77,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lgbishop ];
   };
-}
+})

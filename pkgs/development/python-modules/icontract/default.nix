@@ -9,23 +9,20 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.7.2";
+  version = "2.7.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";
     repo = "icontract";
     tag = "v${version}";
-    hash = "sha256-FRfDcjylYGWwYPgCipzS+NZYCSPATlQdWtavTo/NZY0=";
+    hash = "sha256-UYBskomnu53A9VCY7y7zAOQm40Y+INOqPK6IqZsk6h0=";
   };
 
   preCheck = ''

@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hwatch";
   version = "0.3.19";
 
   src = fetchFromGitHub {
     owner = "blacknon";
     repo = "hwatch";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-lMsBzMDMgpHxcQFtfZ4K7r2WRUaVR8Ry/kPvwfzPObI=";
   };
 
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd hwatch \
       --bash $src/completion/bash/hwatch-completion.bash \
       --fish $src/completion/fish/hwatch.fish \
-      --zsh $src/completion/zsh/_hwatch \
+      --zsh $src/completion/zsh/_hwatch
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
       execution results and can check this differences at after.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hamburger1984 ];
+    maintainers = [ ];
     mainProgram = "hwatch";
   };
-}
+})

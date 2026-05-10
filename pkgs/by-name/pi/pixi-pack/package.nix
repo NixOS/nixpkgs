@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi-pack";
-  version = "0.7.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "Quantco";
     repo = "pixi-pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zMrr/47oTej6uyiRpPRVlfUIFtl0wesCm+qN6Y7iUkE=";
+    hash = "sha256-j9b+wpVUvEU/0R3inMO12TUs65Avtn3NU11gEE4hxLM=";
   };
 
-  cargoHash = "sha256-FnKmUNCmLcTTYqagOYhJFp7d/qbc0OBCb8nT7ZKx3n0=";
+  cargoHash = "sha256-22fE8XFTt10mUGl1jYb8UgoxD/rBlX4dNkjKEgtgAR8=";
 
   buildInputs = [ openssl ];
 

@@ -1,0 +1,36 @@
+diff --git a/app/build.sh b/app/build.sh
+index de092bde16..2e58b687e7 100755
+--- a/app/build.sh
++++ b/app/build.sh
+@@ -644,11 +644,6 @@ if [ $BUILD_MAC == 1 ]; then
+ 		cp "$MAC_RUNTIME_PATH/../MacOS/XUL" "$CONTENTSDIR/MacOS/"
+ 	fi
+ 
+-	# Use our own updater, because Mozilla's requires updates signed by Mozilla
+-	cd "$CONTENTSDIR/MacOS"
+-	check_lfs_file "$CALLDIR/mac/updater.tar.xz"
+-	tar xf "$CALLDIR/mac/updater.tar.xz"
+-
+ 	# Modify Info.plist
+ 	perl -pi -e "s/\{\{VERSION\}\}/$VERSION/" "$CONTENTSDIR/Info.plist"
+ 	perl -pi -e "s/\{\{VERSION_NUMERIC\}\}/$VERSION_NUMERIC/" "$CONTENTSDIR/Info.plist"
+@@ -1027,11 +1022,6 @@ if [ $BUILD_LINUX == 1 ]; then
+ 		# Copy Ubuntu launcher files
+ 		cp "$CALLDIR/linux/zotero.desktop" "$APPDIR"
+ 		cp "$CALLDIR/linux/set_launcher_icon" "$APPDIR"
+-		
+-		# Use our own updater, because Mozilla's requires updates signed by Mozilla
+-		check_lfs_file "$CALLDIR/linux/updater.tar.xz"
+-		tar xf "$CALLDIR/linux/updater.tar.xz" --to-stdout updater-$arch > "$APPDIR/updater"
+-		chmod 755 "$APPDIR/updater"
+ 
+ 		# Copy app files
+ 		rsync -a "$base_dir/" "$APPDIR/"
+@@ -1041,6 +1031,7 @@ if [ $BUILD_LINUX == 1 ]; then
+ 		cp -RH "$CALLDIR/modules/zotero-libreoffice-integration/install" "$APPDIR/integration/libreoffice"
+ 		
+ 		# Copy icons
++		mkdir -p "$APPDIR/icons/"
+ 		cp "$CALLDIR/linux/icons/icon32.png" "$APPDIR/icons/"
+ 		cp "$CALLDIR/linux/icons/icon64.png" "$APPDIR/icons/"
+ 		cp "$CALLDIR/linux/icons/icon128.png" "$APPDIR/icons/"

@@ -8,12 +8,12 @@
   uthash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mhddfs";
   version = "0.1.39";
 
   src = fetchurl {
-    url = "https://mhddfs.uvw.ru/downloads/mhddfs_${version}.tar.gz";
+    url = "https://mhddfs.uvw.ru/downloads/mhddfs_${finalAttrs.version}.tar.gz";
     sha256 = "14ggmh91vv69fp2qpz0nxp0hprlw2wsijss2k2485hb0ci4cabvh";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.makefu ];
     mainProgram = "mhddfs";
   };
-}
+})

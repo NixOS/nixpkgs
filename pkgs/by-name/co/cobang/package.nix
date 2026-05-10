@@ -16,7 +16,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cobang";
   version = "2.3.1";
   pyproject = false; # Built with meson
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8qnF1w4zNYdH3QrzBnNjsPnOSMMD48H2tcTxPkemGEM=";
   };
 
@@ -79,4 +79,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "cobang";
     platforms = lib.platforms.linux;
   };
-}
+})

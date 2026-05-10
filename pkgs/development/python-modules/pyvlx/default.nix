@@ -1,34 +1,35 @@
 {
   lib,
   buildPythonPackage,
+  deprecated,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
-  typing-extensions,
+  setuptools-scm,
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvlx";
-  version = "0.2.26";
+  version = "0.2.33";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
-    tag = version;
-    hash = "sha256-JwgElt0FFSGs3v+04AKPwTTpxvn8YzihJeD/+llbSMI=";
+    tag = finalAttrs.version;
+    hash = "sha256-CdBpXga/OxkNILUPDe8bna0wbwNk7GLzYgZJeScJ948=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
+    deprecated
     pyyaml
-    typing-extensions
     zeroconf
   ];
 
@@ -43,8 +44,8 @@ buildPythonPackage rec {
       devices, e.g. Velux Windows.
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
-    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
+    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

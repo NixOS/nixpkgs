@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pylsl";
-  version = "1.17.6";
+  version = "1.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labstreaminglayer";
     repo = "pylsl";
     tag = "v${version}";
-    hash = "sha256-PEeTG+bQNEce9j0obDoaTYXMGp0MRUibbWVXM1IvGGY=";
+    hash = "sha256-H/ALvRtgv1Ms9VeTJvDRCpg0Q+/4Xjx/NS4whOGmtU8=";
   };
 
   postPatch = ''

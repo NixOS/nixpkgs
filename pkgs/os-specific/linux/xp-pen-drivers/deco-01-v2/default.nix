@@ -5,16 +5,15 @@
   libusb1,
   glibc,
   libGL,
-  xorg,
   makeWrapper,
   qtx11extras,
   wrapQtAppsHook,
   autoPatchelfHook,
-  libX11,
-  libXtst,
-  libXi,
-  libXrandr,
-  libXinerama,
+  libx11,
+  libxtst,
+  libxi,
+  libxrandr,
+  libxinerama,
 }:
 
 let
@@ -42,11 +41,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libusb1
-    libX11
-    libXtst
-    libXi
-    libXrandr
-    libXinerama
+    libx11
+    libxtst
+    libxi
+    libxrandr
+    libxinerama
     glibc
     libGL
     (lib.getLib stdenv.cc.cc)

@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "spearspray";
-  version = "2.0.0-unstable-2025-08-25";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {

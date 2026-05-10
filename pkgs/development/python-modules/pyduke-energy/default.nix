@@ -9,15 +9,12 @@
   pytest-timeout,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyduke-energy";
   version = "1.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mjmeli";

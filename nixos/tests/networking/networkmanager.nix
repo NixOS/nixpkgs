@@ -8,10 +8,34 @@ with import ../../lib/testing-python.nix { inherit system pkgs; };
 
 let
   lib = pkgs.lib;
+
+  # Generate EAP certificates on the fly (CA, server, and client certs)
+  eapCerts = pkgs.runCommand "eap-certs" { buildInputs = [ pkgs.openssl ]; } ''
+    mkdir -p $out
+
+    # Create CA certificate
+    openssl req -x509 -newkey rsa:2048 -days 365000 -nodes \
+      -keyout $out/ca.key -out $out/ca.cert \
+      -subj "/CN=ExampleCA"
+
+    # Create server certificate
+    openssl req -newkey rsa:2048 -nodes \
+      -keyout $out/server.key -out server.csr \
+      -subj "/CN=server.example.com"
+    openssl x509 -req -in server.csr -CA $out/ca.cert -CAkey $out/ca.key \
+      -days 365000 -set_serial 100 -out $out/server.cert
+
+    # Create client certificate
+    openssl req -newkey rsa:2048 -nodes \
+      -keyout $out/client1.key -out client1.csr \
+      -subj "/CN=client1.example.com"
+    openssl x509 -req -in client1.csr -CA $out/ca.cert -CAkey $out/ca.key \
+      -days 365000 -set_serial 101 -out $out/client1.cert
+  '';
+
   # this is intended as a client test since you shouldn't use NetworkManager for a router or server
   # so using systemd-networkd for the router vm is fine in these tests.
   router = import ./router.nix { networkd = true; };
-  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
   clientConfig =
     extraConfig:
     lib.recursiveUpdate {
@@ -178,6 +202,100 @@ let
         client.wait_for_unit("NetworkManager.service")
         client.wait_until_succeeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'")
         client.wait_until_succeeds("ping -c 1 fd00:1234:5678:1::23")
+      '';
+    };
+    eap =
+      let
+        toBase64Blob =
+          file:
+          "data:;base64,"
+          + builtins.readFile (
+            pkgs.runCommand "base64" { } ''
+              ${pkgs.coreutils}/bin/base64 -w0 ${file} > $out
+            ''
+          );
+      in
+      {
+        name = "eap / 802.1x with secrets in blob encoding";
+        nodes = {
+          router = import ./router-eap.nix { inherit eapCerts; };
+          client = clientConfig {
+            networking.networkmanager.ensureProfiles.profiles.default = {
+              ipv4.method = "auto";
+              "802-1x" = {
+                eap = "tls";
+                identity = "client1.example.com";
+                ca-cert = toBase64Blob "${eapCerts}/ca.cert";
+                client-cert = toBase64Blob "${eapCerts}/client1.cert";
+                private-key = toBase64Blob "${eapCerts}/client1.key";
+                private-key-password-flags = "4";
+              };
+            };
+            networking.wireless = {
+              # it is a bit unfortunate that wpa-supplicant is equated with
+              # `wireless` when it also works for wired connections
+              enable = lib.mkOverride 9 true;
+              driver = "wired";
+            };
+          };
+        };
+
+        testScript = ''
+          start_all()
+          client.wait_for_unit("NetworkManager.service")
+          router.wait_for_unit("freeradius.service")
+          router.wait_for_unit("hostapd.service")
+          router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"Sent Access-Accept\"")
+          router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"TLS-Client-Cert-Common-Name := \\\"client1.example.com\\\"\"")
+        '';
+      };
+    eapFiles = {
+      name = "eap / 802.1x with secrets in stored in files";
+      nodes = {
+        router = import ./router-eap.nix { inherit eapCerts; };
+        client = clientConfig {
+          environment.etc = {
+            "wpa_supplicant/ca.cert" = {
+              source = "${eapCerts}/ca.cert";
+              user = "wpa_supplicant";
+              mode = "0400";
+            };
+            "wpa_supplicant/client1.cert" = {
+              source = "${eapCerts}/client1.cert";
+              user = "wpa_supplicant";
+              mode = "0400";
+            };
+            "wpa_supplicant/client1.key" = {
+              source = "${eapCerts}/client1.key";
+              user = "wpa_supplicant";
+              mode = "0400";
+            };
+          };
+          networking.networkmanager.ensureProfiles.profiles.default = {
+            ipv4.method = "auto";
+            "802-1x" = {
+              eap = "tls";
+              identity = "client1.example.com";
+              ca-cert = "/etc/wpa_supplicant/ca.cert";
+              client-cert = "/etc/wpa_supplicant/client1.cert";
+              private-key = "/etc/wpa_supplicant/client1.key";
+              private-key-password-flags = "4";
+            };
+          };
+          networking.wireless = {
+            enable = lib.mkOverride 9 true;
+            driver = "wired";
+          };
+        };
+      };
+
+      testScript = ''
+        start_all()
+        client.wait_for_unit("NetworkManager.service")
+        router.wait_for_unit("freeradius.service")
+        router.wait_for_unit("hostapd.service")
+        router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"Sent Access-Accept\"")
+        router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"TLS-Client-Cert-Common-Name := \\\"client1.example.com\\\"\"")
       '';
     };
   };

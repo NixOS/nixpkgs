@@ -4,15 +4,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "grabserial";
   version = "2.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tbird20d";
     repo = "grabserial";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XHI5r4OkJUtMuH83jKvNttEpKpqARjxj9SDLzhSPxSc=";
   };
 
@@ -31,4 +31,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ vmandela ];
     platforms = lib.platforms.linux;
   };
-}
+})

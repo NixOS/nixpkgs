@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   zope-interface,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "repoze-sphinx-autointerface";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "repoze.sphinx.autointerface";

@@ -2,11 +2,41 @@
   lib,
   stdenv,
   fetchurl,
-  openssl,
+  fetchpatch2,
+  fetchFromGitHub,
   python,
-  zlib,
+  ada,
+  brotli,
+  c-ares,
+  gtest,
+  hdrhistogram_c,
   libuv,
+  lief,
+  llhttp,
+  merve,
+  nbytes,
+  nghttp2,
+  nghttp3,
+  ngtcp2,
+  openssl,
+  simdjson,
+  simdutf,
+  simdutf_6 ? (
+    simdutf.overrideAttrs {
+      version = "6.5.0";
+
+      src = fetchFromGitHub {
+        owner = "simdutf";
+        repo = "simdutf";
+        rev = "v6.5.0";
+        hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
+      };
+    }
+  ),
   sqlite,
+  uvwasi,
+  zlib,
+  zstd,
   icu,
   bash,
   ninja,
@@ -31,7 +61,6 @@
 }:
 
 {
-  enableNpm ? true,
   version,
   sha256,
   patches ? [ ],
@@ -42,7 +71,7 @@ let
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
 
-  pname = if enableNpm then "nodejs" else "nodejs-slim";
+  pname = "nodejs-slim";
 
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   emulator = stdenv.hostPlatform.emulator buildPackages;
@@ -98,18 +127,71 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
+  useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
+  useSharedGtestAndHistogram = lib.versionAtLeast version (
+    if majorVersion == 24 then "24.14.0" else "25.4"
+  );
+  useSharedNBytes = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.5");
+  useSharedLief = lib.versionAtLeast version "25.6";
+  useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps = {
-    inherit openssl zlib libuv;
+    inherit
+      brotli
+      libuv
+      nghttp3
+      ngtcp2
+      openssl
+      uvwasi
+      zlib
+      ;
+    cares = c-ares;
+    http-parser = llhttp;
+    nghttp2 = nghttp2.overrideAttrs {
+      patches = [
+        (fetchpatch2 {
+          url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
+          hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
+          excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
+          revert = true;
+        })
+      ];
+    };
   }
+  // (lib.optionalAttrs useSharedAdaAndSimd {
+    inherit
+      ada
+      simdjson
+      ;
+    simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
+  })
   // (lib.optionalAttrs useSharedSQLite {
     inherit sqlite;
+  })
+  // (lib.optionalAttrs useSharedGtestAndHistogram {
+    inherit gtest;
+    hdr-histogram = hdrhistogram_c;
+  })
+  // (lib.optionalAttrs useSharedLief {
+    inherit lief;
+  })
+  // (lib.optionalAttrs useSharedNBytes {
+    inherit nbytes;
+  })
+  // (lib.optionalAttrs useSharedMerve {
+    inherit merve;
+  })
+  // (lib.optionalAttrs useSharedZstd {
+    inherit zstd;
   });
 
   copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
     builtins.attrNames sharedLibDeps
   );
+
+  bundlesCorepack = !lib.versionAtLeast version "25.0.0";
 
   # Currently stdenv sets CC/LD/AR/etc environment variables to program names
   # instead of absolute paths. If we add cctools to nativeBuildInputs, that
@@ -182,13 +264,10 @@ let
       # wrappers over the corresponding JS scripts. There are some packages though
       # that use bash wrappers, e.g. polaris-web.
       buildInputs = [
-        zlib
-        libuv
-        openssl
-        icu
         bash
+        icu
       ]
-      ++ lib.optionals useSharedSQLite [ sqlite ];
+      ++ builtins.attrValues sharedLibDeps;
 
       nativeBuildInputs = [
         installShellFiles
@@ -214,7 +293,9 @@ let
       outputs = [
         "out"
         "libv8"
+        "npm"
       ]
+      ++ lib.optional bundlesCorepack "corepack"
       ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "dev" ];
       setOutputFlags = false;
       moveToDev = false;
@@ -239,7 +320,6 @@ let
         "--emulator=${emulator}"
       ]
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
-      ++ lib.optionals (!enableNpm) [ "--without-npm" ]
       ++ lib.concatMap (name: [
         "--shared-${name}"
         "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
@@ -282,22 +362,24 @@ let
 
       passthru.interpreterName = "nodejs";
 
-      passthru.pkgs = callPackage ../../node-packages/default.nix {
-        nodejs = self;
-      };
-
       setupHook = ./setup-hook.sh;
 
       pos = builtins.unsafeGetAttrPos "version" args;
 
       inherit patches;
 
-      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      postPatch = ''
+        substituteInPlace tools/install.py \
+          --replace-fail '  corepack_files(options, action)' "  oip=options.install_path;options.install_path='$corepack';corepack_files(options, action);options.install_path=oip" \
+          --replace-fail '  npm_files(options, action)' "  oip=options.install_path;options.install_path='$npm';npm_files(options, action);options.install_path=oip"
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         substituteInPlace test/parallel/test-macos-app-sandbox.js \
           --subst-var-by codesign '${darwin.sigtool}/bin/codesign'
       '';
 
       __darwinAllowLocalNetworking = true; # for tests
+      __structuredAttrs = true; # for outputChecks
 
       doCheck = canExecute;
 
@@ -434,6 +516,35 @@ let
         }"
       ];
 
+      outputChecks = {
+        out = {
+          disallowedReferences = [
+            "libv8"
+            "npm"
+          ]
+          ++ lib.optional bundlesCorepack "corepack";
+        };
+        corepack = {
+          disallowedReferences = [
+            "libv8"
+            "npm"
+          ];
+        };
+        libv8 = {
+          disallowedReferences = [
+            "out"
+            "npm"
+          ]
+          ++ lib.optional bundlesCorepack "corepack";
+        };
+        npm = {
+          disallowedReferences = [
+            "libv8"
+          ]
+          ++ lib.optional bundlesCorepack "corepack";
+        };
+      };
+
       sandboxProfile = ''
         (allow file-read*
           (literal "/Library/Keychains/System.keychain")
@@ -471,24 +582,14 @@ let
         ''
         + ''
 
-          HOST_PATH=$out/bin patchShebangs --host $out
-
           ${lib.optionalString canExecute ''
             $out/bin/node --completion-bash > node.bash
             installShellCompletion node.bash
           ''}
 
-          ${lib.optionalString enableNpm ''
-            mkdir -p $out/share/bash-completion/completions
-            ln -s $out/lib/node_modules/npm/lib/utils/completion.sh \
-              $out/share/bash-completion/completions/npm
-            for dir in "$out/lib/node_modules/npm/man/"*; do
-              mkdir -p $out/share/man/$(basename "$dir")
-              for page in "$dir"/*; do
-                ln -rs $page $out/share/man/$(basename "$dir")
-              done
-            done
-          ''}
+          mkdir -p $npm/share/bash-completion/completions
+          ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
+            $npm/share/bash-completion/completions/npm
 
           # install the missing headers for node-gyp
           # TODO: use propagatedBuildInputs instead of copying headers.
@@ -526,6 +627,17 @@ let
         + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
           cp -r $out/include $dev/include
         '';
+
+      postFixup = ''
+        HOST_PATH=$out/bin patchShebangs --host $out ${lib.optionalString bundlesCorepack "$corepack"} $npm
+
+        for dir in "$npm/lib/node_modules/npm/man/"*; do
+          mkdir -p $npm/share/man/$(basename "$dir")
+          for page in "$dir"/*; do
+            ln -rs $page $npm/share/man/$(basename "$dir")
+          done
+        done
+      '';
 
       passthru.tests = {
         version = testers.testVersion {

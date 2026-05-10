@@ -5,7 +5,7 @@
   ncurses,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "termtekst";
   version = "1.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "termtekst";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1gm7j5d49a60wm7px82b76f610i8pl8ccz4r6qsz90z4mp3lyw9b";
   };
 
@@ -42,4 +42,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

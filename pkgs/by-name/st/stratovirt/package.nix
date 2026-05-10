@@ -14,13 +14,13 @@
   libseccomp,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stratovirt";
   version = "2.4.0";
 
   src = fetchgit {
     url = "https://gitee.com/openeuler/stratovirt.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1Ex6ahKBoVRikSqrgHGYaBFzWkPFDm8bGVyB7KmO8tI=";
   };
 
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "stratovirt";
   };
-}
+})

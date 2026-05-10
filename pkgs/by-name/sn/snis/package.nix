@@ -5,7 +5,8 @@
   makeWrapper,
 }:
 buildEnv {
-  name = "snis-${snis-unwrapped.version}";
+  pname = "snis";
+  inherit (snis-unwrapped) version;
 
   nativeBuildInputs = [ makeWrapper ];
 

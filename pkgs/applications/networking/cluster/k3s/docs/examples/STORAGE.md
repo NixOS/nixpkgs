@@ -14,7 +14,7 @@ services.openiscsi = {
 };
 ```
 
-Longhorn container has trouble with NixOS path. Solution is to override PATH environment variable, such as:
+The Longhorn container has trouble with the NixOS path. Solution is to override PATH environment variable, such as:
 
 ```
 PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
@@ -42,7 +42,7 @@ metadata:
     policies.kyverno.io/category: Other
     policies.kyverno.io/description: >-
       Longhorn invokes executables on the host system, and needs
-      to be aware of the host systems PATH. This modifies all
+      to be aware of the host system's PATH. This modifies all
       deployments such that the PATH is explicitly set to support
       NixOS based systems.
 spec:

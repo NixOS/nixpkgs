@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencflite";
   version = "635.21.8";
 
   src = fetchFromGitHub {
     owner = "gerickson";
     repo = "opencflite";
-    rev = "opencflite-${version}";
+    rev = "opencflite-${finalAttrs.version}";
     hash = "sha256-ijyj4SFYQ0wZAFM2ehNnR9+yu5yDTSVW3VBycBT9l+A=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

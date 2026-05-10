@@ -24,14 +24,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "millipixels";
   version = "0.23.0";
 
   src = fetchFromGitLab {
     owner = "Librem5";
     repo = "millipixels";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     domain = "source.puri.sm";
     hash = "sha256-Sj14t6LeZWNONcgrwJxN4J1/85m1SLgmmcRnHQUULHI=";
   };
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _999eagle ];
     platforms = lib.platforms.linux;
   };
-}
+})

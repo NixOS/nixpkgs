@@ -10,13 +10,14 @@
 
 rustPlatform.buildRustPackage {
   pname = "mdbook-cmdrun";
-  version = "0.6.0-unstable-2024-04-15";
+  version = "0.7.3-unstable-2025-12-22";
 
+  # mdbook 0.5 upgrade: https://github.com/FauconFan/mdbook-cmdrun/pull/23
   src = fetchFromGitHub {
-    owner = "FauconFan";
+    owner = "roberth";
     repo = "mdbook-cmdrun";
-    rev = "d1fef67f100563c2a433b1f5dd5a71810db6b90d";
-    hash = "sha256-Q2h64XCyDxLmmCNC3wTw81pBotaMEUjY5y0Oq6q20cQ=";
+    rev = "3947c797d063352e0f983311c078430215cc1cca";
+    hash = "sha256-0RkyMJ8tsnGcSD0ksGTGAyliH6AihVl0HEesljEmTH8=";
   };
 
   nativeCheckInputs = [
@@ -26,7 +27,7 @@ rustPlatform.buildRustPackage {
     util-linux # used by tests/regression/shell/input.md
   ];
 
-  cargoHash = "sha256-C3Rg+WXHBA7KyUDFdhBz4mOm8CFH/f7UVA8KOLs9ClE=";
+  cargoHash = "sha256-oUlH+z50a1FtzDADXfGKSYjauZGTok0bVMq718HLglY=";
 
   meta = {
     description = "mdbook preprocessor to run arbitrary commands";

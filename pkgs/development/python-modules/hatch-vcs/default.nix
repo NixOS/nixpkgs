@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   gitMinimal,
   hatchling,
   setuptools-scm,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "hatch-vcs";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "hatch_vcs";

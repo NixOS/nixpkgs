@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndisc6";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "https://www.remlab.net/files/ndisc6/archive/ndisc6-${version}.tar.bz2";
+    url = "https://www.remlab.net/files/ndisc6/archive/ndisc6-${finalAttrs.version}.tar.bz2";
     sha256 = "07swyar1hl83zxmd7fqwb2q0c0slvrswkcfp3nz5lknrk15dmcdb";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
   };
-}
+})

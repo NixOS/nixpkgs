@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ko";
   version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = "ko";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o/Hin6GDFki1ynZ/rDQOhcNUTtQVvXZTAApxAaerRCU=";
   };
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/google/ko/pkg/commands.Version=${version}"
+    "-X github.com/google/ko/pkg/commands.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
@@ -65,7 +65,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/ko-build/ko";
-    changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
+    changelog = "https://github.com/ko-build/ko/releases/tag/v${finalAttrs.version}";
     description = "Build and deploy Go applications";
     mainProgram = "ko";
     longDescription = ''
@@ -82,4 +82,4 @@ buildGoModule rec {
       developer-guy
     ];
   };
-}
+})

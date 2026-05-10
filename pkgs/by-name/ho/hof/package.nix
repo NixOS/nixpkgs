@@ -6,16 +6,21 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hof";
   version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "hofstadter-io";
     repo = "hof";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-okc11mXqB/PaXd0vsRuIIL70qWSFprvsZJtE6PvCaIg=";
   };
+
+  patches = [
+    # https://github.com/hofstadter-io/hof/pull/411
+    ./go-testdeps-modulepath.patch
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,4 +46,4 @@ buildGoModule rec {
     # 'panic: open /etc/protocols: operation not permitted'
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -16,14 +16,14 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "khronos";
   version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = "khronos";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-2mO2ZMDxZ7sx2EVTN0tsAv8MisGxlK/1h61N+hOqyGI=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "io.github.lainsce.Khronos";
   };
-}
+})

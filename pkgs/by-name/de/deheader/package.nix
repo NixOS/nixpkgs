@@ -8,7 +8,7 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deheader";
   version = "1.11";
   outputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "esr";
     repo = "deheader";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RaWU6075PvgxbsH1+Lt/CEDAcl9Vx6kxcZAA/A/Af4o=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.linux;
   };
-}
+})

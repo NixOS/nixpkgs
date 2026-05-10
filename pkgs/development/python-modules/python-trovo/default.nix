@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
   requests,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "python-trovo";
   version = "0.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "python_trovo";

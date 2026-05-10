@@ -4,7 +4,6 @@
   fetchPypi,
   isPy27,
   pytestCheckHook,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [ "test_declaration_junk_chars" ];
+  disabledTests = [ "test_declaration_junk_chars" ];
 
   doCheck = false;
 

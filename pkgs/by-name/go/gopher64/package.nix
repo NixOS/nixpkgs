@@ -7,10 +7,10 @@
 
   bzip2,
   libGL,
-  libX11,
-  libXcursor,
+  libx11,
+  libxcursor,
   libxkbcommon,
-  libXi,
+  libxi,
   moltenvk,
   sdl3,
   wayland,
@@ -77,9 +77,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
 
     # for X11
-    libX11
-    libXcursor
-    libXi
+    libx11
+    libxcursor
+    libxi
 
     # for wayland
     wayland

@@ -7,15 +7,12 @@
   mkdocs,
   mkdocs-material,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-redoc-tag";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Blueswen";

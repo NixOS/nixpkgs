@@ -10,11 +10,11 @@
 buildPythonPackage rec {
   pname = "copier-template-tester";
   version = "2.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
-    repo = pname;
+    repo = "copier-template-tester";
     tag = version;
     hash = "sha256-n/39Gl4q24QKfVFaeeqqu0AQt2jRSRrcnEOFRHQ+SQE=";
   };

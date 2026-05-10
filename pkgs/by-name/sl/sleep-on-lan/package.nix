@@ -4,24 +4,24 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sleep-on-lan";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "SR-G";
     repo = "sleep-on-lan";
-    rev = "${version}-RELEASE";
+    rev = "${finalAttrs.version}-RELEASE";
     sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
   vendorHash = "sha256-JqDDG53khtDdMLVOscwqi0oGviF+3DMkv5tkHvp1gJc=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.BuildVersion=${version}"
+    "-X main.BuildVersion=${finalAttrs.version}"
     "-X main.BuildVersionLabel=nixpkgs"
   ];
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ devusb ];
     mainProgram = "sleep-on-lan";
   };
-}
+})

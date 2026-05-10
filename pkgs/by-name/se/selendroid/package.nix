@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://selendroid.io/";
     description = "Test automation for native or hybrid Android apps and the mobile web";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;

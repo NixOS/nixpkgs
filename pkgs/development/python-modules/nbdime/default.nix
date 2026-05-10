@@ -29,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "4.0.2";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2Cefj0sjbAslOyDWDEgxu2eEPtjb1uCfI06wEdNvG/I=";
+    hash = "sha256-YqtQp1goJSPEUBFEufMUIh27rtBAPBL9cPak/MUy7CQ=";
   };
 
   build-system = [
@@ -94,6 +94,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
     description = "Tools for diffing and merging of Jupyter notebooks";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

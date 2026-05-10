@@ -6,14 +6,14 @@
   vimcats,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vimcats";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "mrcjkb";
     repo = "vimcats";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BW1pU7NnW8yWePV0IQOUmcNa13NvV9lOZhfnEdQFBQQ=";
   };
 
@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage rec {
       It is a fork of lemmy-help that aims to support more recent LuaCATS features.
     '';
     homepage = "https://github.com/mrcjkb/vimcats";
-    changelog = "https://github.com/mrcjkb/vimcats/CHANGELOG.md";
+    changelog = "https://github.com/mrcjkb/vimcats/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ mrcjkb ];
     mainProgram = "vimcats";
   };
-}
+})

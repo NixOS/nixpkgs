@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "janusgraph";
   version = "1.1.0";
 
   src = fetchzip {
-    url = "https://github.com/JanusGraph/janusgraph/releases/download/v${version}/janusgraph-${version}.zip";
+    url = "https://github.com/JanusGraph/janusgraph/releases/download/v${finalAttrs.version}/janusgraph-${finalAttrs.version}.zip";
     sha256 = "sha256-gEtiY/FXNCtpVlohcTTuZ1V/EHr/trqYQKYUKy9wN4U=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.ners ];
   };
-}
+})

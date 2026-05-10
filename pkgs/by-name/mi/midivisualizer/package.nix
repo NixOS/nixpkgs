@@ -4,13 +4,13 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   libnotify,
   glfw,
   makeWrapper,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   gtk3,
   ffmpeg-full,
 }:
@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     gtk3
   ];
 

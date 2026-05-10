@@ -2,9 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
   pythonOlder,
-  defusedxml,
+
+  # build-system
+  flit-core,
+
+  # dependencies
   docutils,
   jinja2,
   markdown-it-py,
@@ -12,33 +15,39 @@
   pyyaml,
   sphinx,
   typing-extensions,
+
+  # tests
   beautifulsoup4,
+  defusedxml,
   pytest-param-files,
   pytest-regressions,
-  sphinx-pytest,
   pytestCheckHook,
+  sphinx-pytest,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "myst-parser";
-  version = "4.0.1";
+  version = "5.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "myst-parser";
-    tag = "v${version}";
-    hash = "sha256-/Prauz4zuJY39EK2BmgBbH1uwjF4K38e5X5hPYwRBl0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0lGejdGVVvZar3sPBbvThXzJML7PcR5+shyDHTTtVEY=";
   };
 
   build-system = [ flit-core ];
 
+  pythonRelaxDeps = [
+    "markdown-it-py"
+  ];
   dependencies = [
     docutils
     jinja2
-    mdit-py-plugins
     markdown-it-py
+    mdit-py-plugins
     pyyaml
     sphinx
     typing-extensions
@@ -49,30 +58,23 @@ buildPythonPackage rec {
     defusedxml
     pytest-param-files
     pytest-regressions
-    sphinx-pytest
     pytestCheckHook
+    sphinx-pytest
   ]
   ++ markdown-it-py.optional-dependencies.linkify;
 
-  disabledTests = [
-    # sphinx 8.2 compat
-    # https://github.com/executablebooks/MyST-Parser/issues/1030
-    "test_sphinx_directives"
-    "test_references_singlehtml"
-    "test_extended_syntaxes"
-    "test_fieldlist_extension"
-    "test_includes"
+  disabledTestPaths = [
+    # outdated sphinx fixtures
+    "tests/test_renderers/test_fixtures_sphinx.py"
   ];
 
   pythonImportsCheck = [ "myst_parser" ];
 
-  pythonRelaxDeps = [ "docutils" ];
-
   meta = {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
-    changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/v${version}/CHANGELOG.md";
+    changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ loicreynier ];
   };
-}
+})

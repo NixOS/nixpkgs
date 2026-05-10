@@ -14,7 +14,12 @@
   fontconfig,
   freetype,
   zlib,
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   # runtime dependencies
   cups,
   # runtime dependencies for GTK+ Look and Feel
@@ -96,12 +101,12 @@ let
         fontconfig
         freetype
         stdenv.cc.cc # libstdc++.so.6
-        xorg.libX11
-        xorg.libXext
-        xorg.libXi
-        xorg.libXrender
-        xorg.libXtst
-        xorg.libXxf86vm
+        libx11
+        libxext
+        libxi
+        libxrender
+        libxtst
+        libxxf86vm
         zlib
       ]
       ++ lib.optionals (stdenv.hostPlatform.isLinux && enableJavaFX) runtimeDependencies;

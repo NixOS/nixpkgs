@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   hatchling,
@@ -12,16 +11,14 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "intensity-normalization";
   version = "3.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
     pname = "intensity_normalization";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-d5f+Ug/ta9RQjk3JwHmVJQr8g93glzf7IcmLxLeA1tQ=";
   };
 
@@ -51,9 +48,9 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/jcreinhold/intensity-normalization";
     description = "MRI intensity normalization tools";
-    changelog = "https://github.com/jcreinhold/intensity-normalization/releases/tag/${version}";
+    changelog = "https://github.com/jcreinhold/intensity-normalization/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ bcdarwin ];
     license = lib.licenses.asl20;
     mainProgram = "intensity-normalize";
   };
-}
+})

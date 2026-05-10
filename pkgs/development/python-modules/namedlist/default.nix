@@ -4,15 +4,12 @@
   fetchPypi,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "namedlist";
   version = "1.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,6 +43,6 @@ buildPythonPackage rec {
     description = "Similar to namedtuple, but instances are mutable";
     homepage = "https://gitlab.com/ericvsmith/namedlist";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = [ ];
   };
 }

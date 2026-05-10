@@ -43,7 +43,6 @@ let
 in
 {
   name = "squid";
-  meta.maintainers = with lib.maintainers; [ cobalt ];
 
   node.pkgsReadOnly = false;
 

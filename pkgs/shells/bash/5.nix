@@ -73,6 +73,20 @@ lib.warnIf (withDocs != null)
     + ''
       -DNON_INTERACTIVE_LOGIN_SHELLS
       -DSSH_SOURCE_BASHRC
+    ''
+    # Bash's configure script assumes that CC and CC_FOR_BUILD have the
+    # same default -std=... flags. But at this moment, for cross llvm and FreeBSD, we
+    # have CC_FOR_BUILD that defaults to c23, and a CC that default to
+    # something older, perhaps c17. This breaks the build because of
+    # bash's faulty assumptions.
+    #
+    # To fix, we simply force the standard to be the higher for CC to
+    # match CC_FOR_BUILD.
+    #
+    # Once FreeBSD and other contexts are built with a newer version of clang,
+    # this hack should be removed.
+    + lib.optionalString stdenv.cc.isClang ''
+      -std=c23
     '';
 
     patchFlags = [ "-p0" ];
@@ -267,6 +281,7 @@ lib.warnIf (withDocs != null)
       # https://github.com/NixOS/nixpkgs/issues/333338
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = with lib.maintainers; [ infinisil ];
+      teams = [ lib.teams.security-review ];
       mainProgram = "bash";
       identifiers.cpeParts =
         let

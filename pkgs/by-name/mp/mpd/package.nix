@@ -197,13 +197,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpd";
-  version = "0.24.6";
+  version = "0.24.10";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "MPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KAyTDfe3bEFWwImNaTOgq0jAs49kH8H+8ZJPQipN4QA=";
+    sha256 = "sha256-qwBX5NG1h55HoNtHMyLfjDQhua1xCyONqd386+QB6IU=";
   };
 
   buildInputs = [
@@ -257,9 +257,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (builtins.elem "documentation" features_) "man";
 
-  CXXFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CXXFLAGS = toString [
+      "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
+    ];
+  };
 
   mesonFlags = [
     (lib.mesonBool "test" true)

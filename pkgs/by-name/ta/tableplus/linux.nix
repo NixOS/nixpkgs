@@ -11,7 +11,13 @@
   libxkbcommon,
   stdenv,
   wrapGAppsHook3,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
     libsecret
     libxkbcommon
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libxcb
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxrandr
+    libxrender
+    libxcb
   ];
 
   unpackPhase = ''

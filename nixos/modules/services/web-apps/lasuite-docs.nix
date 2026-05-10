@@ -17,6 +17,7 @@ let
     types
     optional
     optionalString
+    escapeShellArg
     ;
 
   cfg = config.services.lasuite-docs;
@@ -76,6 +77,20 @@ let
     SystemCallArchitectures = "native";
     UMask = "0077";
   };
+
+  # Convert environment variables to be used as systemd-run arguments
+  envArgs = lib.concatStringsSep " " (
+    lib.mapAttrsToList (name: value: "-E ${escapeShellArg "${name}=${value}"}") pythonEnvironment
+  );
+
+  # Easier usage of django manage.py stuff
+  manage = pkgs.writeShellScriptBin "lasuite-docs-manage" ''
+    exec ${lib.getExe' config.systemd.package "systemd-run"} \
+      -p User=${commonServiceConfig.User} -p DynamicUser=yes \
+      -p StateDirectory=${commonServiceConfig.StateDirectory} --working-directory=${commonServiceConfig.WorkingDirectory} \
+      --quiet --collect --pipe --pty \
+      ${envArgs} ${lib.getExe cfg.backendPackage} "$@"
+  '';
 in
 {
   options.services.lasuite-docs = {
@@ -346,6 +361,57 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ manage ];
+    systemd.services.lasuite-docs-postgresql-setup = mkIf cfg.postgresql.createLocally {
+      wantedBy = [ "lasuite-docs.target" ];
+      requiredBy = [ "lasuite-docs.service" ];
+      before = [ "lasuite-docs.service" ];
+      after = [ "postgresql-setup.service" ];
+
+      serviceConfig = {
+        Slice = "system-lasuite-docs.slice";
+        Type = "oneshot";
+        User = "postgres";
+
+        # lasuite-docs user cannot create a C function as it is unsafe.
+        ExecStart = ''
+          ${lib.getExe' config.services.postgresql.package "psql"} --port=${toString config.services.postgresql.settings.port} -d lasuite-docs -c "CREATE OR REPLACE FUNCTION public.immutable_unaccent(regdictionary, text) RETURNS text LANGUAGE c IMMUTABLE PARALLEL SAFE STRICT AS '$libdir/unaccent', 'unaccent_dict';"
+        '';
+
+        # hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = "0077";
+      };
+
+    };
+
     systemd.services.lasuite-docs = {
       description = "Docs from SuiteNumérique";
       after = [
@@ -469,6 +535,11 @@ in
           tryFiles = "$uri /docs/[id]/index.html";
         };
 
+        locations."~ '^/user-reconciliations/(active|inactive)/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/?$'" =
+          {
+            tryFiles = "$uri /user-reconciliations/$1/[id]/index.html";
+          };
+
         locations."/api" = {
           proxyPass = "http://${cfg.bind}";
           recommendedProxySettings = true;
@@ -477,6 +548,10 @@ in
         locations."/admin" = {
           proxyPass = "http://${cfg.bind}";
           recommendedProxySettings = true;
+        };
+
+        locations."/static/" = {
+          alias = "${cfg.backendPackage}/share/static/";
         };
 
         locations."/collaboration/ws/" = {

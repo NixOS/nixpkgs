@@ -17,7 +17,12 @@
   wayland-protocols,
   wayland-scanner,
   x11Support ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxinerama,
+  libxft,
+  libxdmcp,
+  libx11,
+  libpthread-stubs,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,12 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals x11Support [
-    xorg.libX11
-    xorg.libXinerama
-    xorg.libXft
-    xorg.libXdmcp
-    xorg.libpthreadstubs
-    xorg.libxcb
+    libx11
+    libxinerama
+    libxft
+    libxdmcp
+    libpthread-stubs
+    libxcb
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -8,7 +8,7 @@
   pkg-config,
   glib,
   gtk3,
-  libX11,
+  libx11,
   libxfce4ui,
   libxfce4util,
   xfce4-panel,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    libX11
+    libx11
     libxfce4ui
     libxfce4util
     xfce4-panel

@@ -8,16 +8,20 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencbm";
   version = "0.4.99.104";
 
   src = fetchFromGitHub {
     owner = "OpenCBM";
     repo = "OpenCBM";
-    rev = "v${version}";
-    sha256 = "sha256-5lj5F79Gbhrvi9dxKGobdyDyBLGcptAtxx9SANhLrKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5lj5F79Gbhrvi9dxKGobdyDyBLGcptAtxx9SANhLrKw=";
   };
+
+  patches = [
+    ./fix-dfu_bool.patch
+  ];
 
   makefile = "LINUX/Makefile";
   makeFlags = [
@@ -52,4 +56,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

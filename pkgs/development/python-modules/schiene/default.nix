@@ -3,7 +3,6 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "schiene";
   version = "0.26";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   asgiref,
   hatchling,
   opentelemetry-api,
@@ -15,8 +14,6 @@ buildPythonPackage {
   # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
   version = opentelemetry-instrumentation.version;
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/tests/opentelemetry-test-utils";
 

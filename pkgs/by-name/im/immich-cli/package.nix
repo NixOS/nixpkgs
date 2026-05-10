@@ -8,14 +8,13 @@
   versionCheckHook,
   pnpmConfigHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "immich-cli";
-  version = "2.2.105";
-  inherit (immich) src pnpmDeps;
+  inherit (immich) version src pnpmDeps;
 
   postPatch = ''
     local -r cli_version="$(jq -r .version cli/package.json)"
-    test "$cli_version" = ${version} \
+    test "$cli_version" = ${finalAttrs.version} \
       || (echo "error: update immich-cli version to $cli_version" && exit 1)
   '';
 
@@ -63,4 +62,4 @@ stdenv.mkDerivation rec {
     inherit (nodejs.meta) platforms;
     mainProgram = "immich";
   };
-}
+})

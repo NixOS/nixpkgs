@@ -17,7 +17,7 @@
   ldapSupport ? true,
   openldap,
   odbcSupport ? true,
-  unixODBC,
+  unixodbc,
   snmpSupport ? true,
   net-snmp,
   sshSupport ? true,
@@ -64,7 +64,7 @@ import ./versions.nix (
       (if lib.versionAtLeast version "7.4" then pcre2 else pcre)
       zlib
     ]
-    ++ optional odbcSupport unixODBC
+    ++ optional odbcSupport unixodbc
     ++ optional jabberSupport iksemel
     ++ optional ldapSupport openldap
     ++ optional snmpSupport net-snmp

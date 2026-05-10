@@ -12,14 +12,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libppd";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "OpenPrinting";
     repo = "libppd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8ofCv+tKgBk9GoGD4lmBPB/S4ABZ6cWGOk/KqDsEzNk=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
-}
+})

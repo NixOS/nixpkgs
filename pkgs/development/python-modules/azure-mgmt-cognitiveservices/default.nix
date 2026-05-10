@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
   msrest,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-cognitiveservices";
   version = "14.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_mgmt_cognitiveservices";

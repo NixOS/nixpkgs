@@ -12,14 +12,14 @@ let
     ps.pyusb
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fusee-interfacee-tk";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nh-server";
     repo = "fusee-interfacee-tk";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "0ngwbwsj999flprv14xvhk7lp51nprrvcnlbnbk6y4qx5casm5md";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kristian-brucaj ];
     license = lib.licenses.gpl2;
   };
-}
+})

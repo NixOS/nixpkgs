@@ -29,7 +29,7 @@
   wrapGAppsHook3,
   writeTextFile,
   xkeyboard_config,
-  xorg,
+  libxxf86vm,
   nixosTests,
   runCommand,
   buildEnv,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra-gtk3
     libpulseaudio
     libxkbfile
-    xorg.libXxf86vm
+    libxxf86vm
     polkit
     gdm
     gnome-panel

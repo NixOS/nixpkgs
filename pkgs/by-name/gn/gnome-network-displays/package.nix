@@ -19,6 +19,7 @@
   glib,
   networkmanager,
   json-glib,
+  glib-networking,
   libadwaita,
   libportal-gtk4,
   libpulseaudio,
@@ -29,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-network-displays";
-  version = "0.98.0";
+  version = "0.99.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-3M42vuzgtTFFQJBswGn4KP5XtSWuv0LlhREFiHxiu2c=";
+    sha256 = "sha256-Hs5KG8gix+v3JeiEe4zomYtH0ewXFaS03bnd1xaR7YU=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     networkmanager
     json-glib
+    # Not stricly required according to configure phase log, but putting it
+    # here adds gio modules to the GIO_EXTRA_MODULES environment variables - as
+    # required for TLS. See https://github.com/NixOS/nixpkgs/issues/502092
+    glib-networking
     libadwaita
     libportal-gtk4
     libpulseaudio
@@ -78,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     Hence, this is not necessarily an upstream issue, but could be something
     wrong with how our gst_all_1 depend on each other.
   */
-  CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   preConfigure = ''
     patchShebangs ./build-aux/meson/postinstall.py

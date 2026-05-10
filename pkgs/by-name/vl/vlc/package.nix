@@ -21,13 +21,13 @@
   gnutls,
   harfbuzz,
   libGL,
-  libSM,
-  libXext,
-  libXinerama,
-  libXpm,
+  libsm,
+  libxext,
+  libxinerama,
+  libxpm,
   libarchive,
   libass,
-  libbluray,
+  libbluray-full,
   libcaca,
   libcddb,
   libdc1394,
@@ -83,7 +83,7 @@
   wayland-scanner,
   wrapGAppsHook3,
   writeShellScript,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zlib,
 
   chromecastSupport ? true,
@@ -150,10 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     harfbuzz
     libGL
-    libSM
+    libsm
     libarchive
     libass
-    libbluray
+    libbluray-full
     libcaca
     libcddb
     libdc1394
@@ -193,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     systemdLibs
     taglib_1
-    xcbutilkeysyms
+    libxcb-keysyms
     zlib
   ]
   ++ optionals (!onlyLibVLC) [ live555 ]
@@ -203,9 +203,9 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
   ]
   ++ optionals skins2Support [
-    libXext
-    libXinerama
-    libXpm
+    libxext
+    libxinerama
+    libxpm
   ]
   ++ optionals waylandSupport [
     wayland
@@ -315,7 +315,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform media player and streaming server";
     homepage = "https://www.videolan.org/vlc/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ alois31 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "vlc";
   };

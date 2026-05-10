@@ -7,14 +7,14 @@
   immich-go,
   writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "immich-go";
   version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "simulot";
     repo = "immich-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-u+laNZ0/UncwH+3Ylk7g40DB99dAbQRrBNOVk80FrMc=";
 
     # Inspired by: https://github.com/NixOS/nixpkgs/blob/f2d7a289c5a5ece8521dd082b81ac7e4a57c2c5c/pkgs/applications/graphics/pdfcpu/default.nix#L20-L32
@@ -40,7 +40,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-extldflags=-static"
-    "-X github.com/simulot/immich-go/app.Version=${version}"
+    "-X github.com/simulot/immich-go/app.Version=${finalAttrs.version}"
   ];
 
   preBuild = ''
@@ -59,7 +59,7 @@ buildGoModule rec {
     tests.versionTest = testers.testVersion {
       package = immich-go;
       command = "immich-go --version";
-      version = version;
+      version = finalAttrs.version;
     };
   };
 
@@ -76,6 +76,6 @@ buildGoModule rec {
       diogotcorreia
       kai-tub
     ];
-    changelog = "https://github.com/simulot/immich-go/releases/tag/${src.tag}";
+    changelog = "https://github.com/simulot/immich-go/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

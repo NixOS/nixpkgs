@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "itemdb";
   version = "1.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     flit-core

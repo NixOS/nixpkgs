@@ -7,26 +7,26 @@
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "piv-agent";
-  version = "0.23.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "smlx";
     repo = "piv-agent";
-    rev = "v${version}";
-    hash = "sha256-NNgDkdsEN2LxgxTlH4rMkod2E0/BDkjcS8Pes2/ZFEs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fFnUWV+q9M0QS84N59DKMVQ+uTG8adZaUi1fPipwF/U=";
   };
 
-  vendorHash = "sha256-k1PMHUGu3I8tLFeeHjV2ZO9R/sHbbPzNa5u/HxzdlYc=";
+  vendorHash = "sha256-j8Sq8j99APyOmfgpqkaVTgawJ0ahToHQt71TMBoafm0=";
 
   subPackages = [ "cmd/piv-agent" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.shortCommit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.shortCommit=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "piv-agent";
   };
-}
+})

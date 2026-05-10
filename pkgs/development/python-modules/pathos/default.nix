@@ -6,21 +6,18 @@
   multiprocess,
   pox,
   ppft,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pathos";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = "pathos";
     tag = version;
-    hash = "sha256-oVqWrX40umazNw/ET/s3pKUwvh8ctgF9sS0U8WwFQkA=";
+    hash = "sha256-9ejrHHgSbDrbuq1bktyiKPJnQ1l52ug/lnJJbac7x4s=";
   };
 
   propagatedBuildInputs = [

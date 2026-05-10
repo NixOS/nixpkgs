@@ -11,12 +11,12 @@ let
   inherit (lib) optional optionalString;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmikmod";
   version = "3.3.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mikmod/libmikmod-${version}.tar.gz";
+    url = "mirror://sourceforge/mikmod/libmikmod-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-n8F5n36mqVx8WILemL6F/H0gugpKb8rK4RyMazgrsgc=";
   };
 
@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  NIX_LDFLAGS = optionalString stdenv.hostPlatform.isLinux "-lasound";
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_LDFLAGS = "-lasound";
+  };
 
   enableParallelBuilding = true;
 
@@ -42,8 +44,7 @@ stdenv.mkDerivation rec {
     mainProgram = "libmikmod-config";
     homepage = "https://mikmod.shlomifish.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      lovek323
+    maintainers = [
     ];
     platforms = lib.platforms.unix;
 
@@ -52,4 +53,4 @@ stdenv.mkDerivation rec {
       including MOD, S3M, IT and XM.
     '';
   };
-}
+})

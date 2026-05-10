@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-B3YkYrVEg6UJ2ApaVook4N2XvrCboxDMUG5CN9I79Sg=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     runHook preInstall

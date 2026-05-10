@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mqttui";
   version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
     repo = "mqttui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wKqIDKng4pfqDuYtqFRh3UIeZQ4QzzFlLkQn5MXcVlU=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal client for MQTT";
     homepage = "https://github.com/EdJoPaTo/mqttui";
-    changelog = "https://github.com/EdJoPaTo/mqttui/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/EdJoPaTo/mqttui/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "mqttui";
   };
-}
+})

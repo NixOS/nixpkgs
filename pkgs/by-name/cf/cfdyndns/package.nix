@@ -6,13 +6,13 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cfdyndns";
   version = "0.2.1";
   src = fetchFromGitHub {
     owner = "nrdxp";
     repo = "cfdyndns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OV1YRcZDzYy1FP1Bqp9m+Jxgu6Vc0aWpbAffNcdIW/4=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = with lib.platforms; linux;
   };
-}
+})

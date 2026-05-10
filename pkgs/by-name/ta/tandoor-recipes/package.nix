@@ -19,7 +19,7 @@ python.pkgs.buildPythonPackage {
 
   inherit (common) version src;
 
-  format = "other";
+  pyproject = false;
 
   patches = [
     ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
@@ -96,6 +96,8 @@ python.pkgs.buildPythonPackage {
     # Tests
     fido2
     litellm
+    requests-hardened
+    thefuzz
   ];
 
   configurePhase = ''

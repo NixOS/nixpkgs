@@ -129,9 +129,6 @@ let
             inherit hash;
           };
 
-          # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
-          NROFF = if docSupport then "${groff}/bin/nroff" else null;
-
           outputs = [ "out" ] ++ lib.optional docSupport "devdoc";
 
           strictDeps = true;
@@ -174,12 +171,17 @@ let
           ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
-          env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
-            # The ruby build system will use a bare `rust` command by default for its rust.
-            # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
-            # for cross-compilation output for the build target by default.
-            NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
-          };
+          env =
+            lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
+              # The ruby build system will use a bare `rust` command by default for its rust.
+              # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
+              # for cross-compilation output for the build target by default.
+              NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
+            }
+            // lib.optionalAttrs docSupport {
+              # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
+              NROFF = "${groff}/bin/nroff";
+            };
 
           enableParallelBuilding = true;
           # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
@@ -237,13 +239,9 @@ let
           ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3"
           ++ [
           ]
-          ++ ops stdenv.hostPlatform.isDarwin [
-            # on darwin, we have /usr/include/tk.h -- so the configure script detects
-            # that tk is installed
-            "--with-out-ext=tk"
-            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-            "--with-setjmp-type=setjmp"
-          ]
+          # on darwin, we have /usr/include/tk.h -- so the configure script detects
+          # that tk is installed
+          ++ lib.optional stdenv.hostPlatform.isDarwin "--with-out-ext=tk"
           ++ ops stdenv.hostPlatform.isFreeBSD [
             "rb_cv_gnu_qsort_r=no"
             "rb_cv_bsd_qsort_r=yes"
@@ -329,6 +327,8 @@ let
               $rbConfig $out/lib/libruby*
           '';
 
+          # TODO: this check got relaxed on darwin;
+          # see https://github.com/NixOS/nixpkgs/pull/499156#issuecomment-4221517043
           installCheckPhase = ''
             overriden_cc=$(CC=foo $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
             if [[ "$overriden_cc" != "foo" ]]; then
@@ -337,7 +337,9 @@ let
             fi
 
             fallback_cc=$(unset CC; $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
-            if [[ "$fallback_cc" != "$CC" ]]; then
+            if [[ ${
+              if stdenv.hostPlatform.isDarwin then ''! "$fallback_cc" =~ "$CC"'' else ''"$fallback_cc" != "$CC"''
+            } ]]; then
                echo "CC='$fallback_cc' should be '$CC' by default" >&2
                false
             fi
@@ -350,7 +352,6 @@ let
             description = "Object-oriented language for quick and easy programming";
             homepage = "https://www.ruby-lang.org/";
             license = lib.licenses.ruby;
-            maintainers = with lib.maintainers; [ manveru ];
             platforms = lib.platforms.all;
             mainProgram = "ruby";
             knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
@@ -404,14 +405,14 @@ in
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "8" "";
-    hash = "sha256-U8TdrUH7thifH17g21elHVS9H4f4dVs9aGBBVqNbBFs=";
+    version = rubyVersion "3" "4" "9" "";
+    hash = "sha256-e7TU9egHzCclHRTZ1ghtGCxbJYdRkeRKsVtwnNen3Zw=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 
   ruby_4_0 = generic {
-    version = rubyVersion "4" "0" "0" "";
-    hash = "sha256-LoOJyMByy2WMk6E3JzLZ6shAgsiLBldQ2x5SpaxjAnE=";
+    version = rubyVersion "4" "0" "3" "";
+    hash = "sha256-d5ZKzDcNXIN1uVAuW6bBPAPvkaueufUhyE+0K5yaaw8=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

@@ -6,7 +6,7 @@
   p7zip,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tochd";
   version = "0.13-unstable-2024-06-08";
   pyproject = true;
@@ -40,10 +40,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Convert game ISO and archives to CD/DVD CHD";
     homepage = "https://github.com/thingsiplay/tochd";
-    changelog = "https://github.com/thingsiplay/tochd/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/thingsiplay/tochd/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ keenanweaver ];
     mainProgram = "tochd";
   };
-}
+})

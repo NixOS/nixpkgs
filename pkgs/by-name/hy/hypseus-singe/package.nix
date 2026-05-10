@@ -15,18 +15,18 @@
   libmpeg2,
   libvorbis,
   libzip,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypseus-singe";
-  version = "2.11.6";
+  version = "2.11.7";
 
   src = fetchFromGitHub {
     owner = "DirtBagXon";
     repo = "hypseus-singe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fSqlpzA2NUY1Sk+OTj9SmeRfQ+nqY9iAa3vTwr4OV9Q=";
+    hash = "sha256-/Jt4w6LQ/EdZ1kmXlu08clDu+uYRL/UlgEyxa+BXooM=";
   };
 
   patches = [ ./use-shared-mpeg2.patch ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

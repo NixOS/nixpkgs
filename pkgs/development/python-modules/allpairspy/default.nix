@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "allpairspy";
   version = "2.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";

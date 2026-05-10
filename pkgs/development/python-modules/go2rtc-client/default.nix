@@ -57,6 +57,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "go2rtc_client" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Module for interacting with go2rtc";
     homepage = "https://github.com/home-assistant-libs/python-go2rtc-client";

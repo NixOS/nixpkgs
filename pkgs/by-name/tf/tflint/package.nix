@@ -12,16 +12,16 @@
 
 buildGo125Module (finalAttrs: {
   pname = "tflint";
-  version = "0.60.0";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = "tflint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hf4C8DaI+u7cAbOiQ6XvQLlF+Kl484TeJ1oJsvIw/wo=";
+    hash = "sha256-j2bP3McVCxtVEVQYs3mHWFtmUTKDIEd5aU4I/6W/Pns=";
   };
 
-  vendorHash = "sha256-aOa+FO3LA9S97wgbayAW3vY5ZCAqn72N8HxvVfThGY4=";
+  vendorHash = "sha256-R4NmHSyay0FGpOSMNPbXWxNJFH3lhyWxGeJsNefkBrc=";
 
   doCheck = false;
 

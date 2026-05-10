@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -14,7 +13,9 @@
   opencv,
   pcl,
   liblapack,
-  xorg,
+  libxt,
+  libsm,
+  libice,
   libusb1,
   yaml-cpp,
   libnabo,
@@ -40,14 +41,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.22.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-6kDjIfUgyaqrsVAWO6k0h1qIDN/idMOJJxLpqMQ6DFY=";
+    hash = "sha256-u9wswlFkGpPgJaBwSddnpv49wBAmkKRwWFO5jQ9/twA=";
   };
+
+  # Fix boost 1.89 compatibility
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "find_package(Boost COMPONENTS thread filesystem system program_options date_time chrono timer serialization REQUIRED)" \
+        "find_package(Boost COMPONENTS thread filesystem program_options date_time chrono timer serialization REQUIRED)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -61,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     opencv.cxxdev
     pcl'
     liblapack
-    xorg.libSM
-    xorg.libICE
-    xorg.libXt
+    libsm
+    libice
+    libxt
 
     ## Optional
     libusb1
@@ -85,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Configure environment variables
-  NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions";
+  env.NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions";
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${pcl'}/include/pcl-${lib.versions.majorMinor pcl'.version}")

@@ -6,7 +6,7 @@
   lz4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zfs_replicate";
   version = "4.0.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alunduil";
     repo = "zfs-replicate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VajMSoFZ4SQXpuF1Lo6S9IhxvspCfUwpNw5zg16uA3M=";
   };
 
@@ -52,9 +52,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "ZFS Snapshot Replication";
     homepage = "https://github.com/alunduil/zfs-replicate";
-    changelog = "https://github.com/alunduil/zfs-replicate/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/alunduil/zfs-replicate/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "zfs-replicate";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ alunduil ];
   };
-}
+})

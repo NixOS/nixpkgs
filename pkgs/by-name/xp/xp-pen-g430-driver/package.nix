@@ -4,8 +4,8 @@
   fetchzip,
   autoPatchelfHook,
   libusb1,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   qt5,
   libglvnd,
 }:
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libusb1
-    libX11
-    libXtst
+    libx11
+    libxtst
     qt5.qtbase
     libglvnd
     (lib.getLib stdenv.cc.cc)

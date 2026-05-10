@@ -7,14 +7,14 @@
   gtk4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gnvim-unwrapped";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "vhakulinen";
     repo = "gnvim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VyyHlyMW/9zYECobQwngFARQYqcoXmopyCHUwHolXfo=";
   };
 
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ minijackson ];
   };
-}
+})

@@ -51,7 +51,8 @@ bash.runCommand "${pname}-${version}"
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib -Dstrlwr=unused"
-    bash ./configure --prefix=$out
+    bash ./configure --prefix=$out \
+      --disable-dependency-tracking
 
     # Build
     make

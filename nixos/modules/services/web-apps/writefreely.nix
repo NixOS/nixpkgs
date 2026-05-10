@@ -15,7 +15,6 @@ let
     ;
   inherit (lib)
     optional
-    optionals
     optionalAttrs
     optionalString
     ;

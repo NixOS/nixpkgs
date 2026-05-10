@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "nixos-bgrt-plymouth";
+  pname = "nixos-bgrt-plymouth";
   version = "0-unstable-2024-10-25";
 
   src = fetchFromGitHub {

@@ -8,7 +8,7 @@
   manifest-tool,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "manifest-tool";
   version = "2.2.1";
   modRoot = "v2";
@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "estesp";
     repo = "manifest-tool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3Vzeq81zLfJLV1XcnQLixL9+acjIegjspquvMsgtuXg=";
     leaveDotGit = true;
     postFetch = ''
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
     "-linkmode=external"
@@ -62,4 +62,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tricktron ];
   };
-}
+})

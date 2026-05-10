@@ -11,25 +11,32 @@
 buildHomeAssistantComponent rec {
   owner = "pymitsubishi";
   domain = "mitsubishi";
-  version = "0.4.2";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "pymitsubishi";
     repo = "homeassistant-mitsubishi";
     tag = "v${version}";
-    hash = "sha256-c1KnFpRK5dH7ZGsDuJD6Awa0xhxYYZxC4zCjoRdpOns=";
+    hash = "sha256-qP2jLkDeiNMdTlHg0G8AryRb2v0ohGnkIoQWIWvbTbs=";
   };
 
   dependencies = [
     pymitsubishi
   ];
 
-  doCheck = false; # TODO: remove in the next release after 0.4.0
+  ignoreVersionRequirement = [ "pymitsubishi" ];
 
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
     pytest-homeassistant-custom-component
+  ];
+
+  disabledTests = [
+    # tests try to open sockets
+    "test_form_success"
+    "test_form_already_configured"
+    "test_form_with_options"
   ];
 
   meta = {

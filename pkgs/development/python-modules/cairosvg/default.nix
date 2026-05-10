@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "cairosvg";
-  version = "2.8.2";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "CairoSVG";
     tag = version;
-    hash = "sha256-KWUZA8pcHMnDEkAYZt3zDzPNynhGBuLZuagNPfHF8EA=";
+    hash = "sha256-WtMFOYaN/cRrL1Q4ma/UkR3kNFObNhp0Gm7i9NQAqz8=";
   };
 
   build-system = [ setuptools ];

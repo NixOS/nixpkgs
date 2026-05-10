@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  ecdsa,
+  cryptography,
   fetchFromGitHub,
   freezegun,
   hatch-regex-commit,
@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "python-xbox";
-  version = "0.1.2";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "python-xbox";
     tag = "v${version}";
-    hash = "sha256-YP8iK7uGycwKlWwAUmfk3qXI+c6cddg9nQ4NMQF7wDQ=";
+    hash = "sha256-5sYN7w/cemZPMt8awsoaUPo845oXiiUsIfl8GG85Umw=";
   };
 
   build-system = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    ecdsa
+    cryptography
     httpx
     ms-cv
     pydantic

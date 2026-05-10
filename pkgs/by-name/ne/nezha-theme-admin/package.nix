@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-admin";
-  version = "1.14.4";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "admin-frontend";
-    tag = "v${version}";
-    hash = "sha256-bQJGAw6q7yJoPDKOEqx35iTpyD/jGtATIjDi8C9D8dA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oZFIkeHkuSLlu++FwzCUet7tmBe5zhCP5MGHhU528DA=";
   };
 
   # TODO: Switch to the bun build function once available in nixpkgs
@@ -21,10 +21,8 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-ZXEBSrQsZ6e18LK/LFttEmZY4nK9+vrQ3ryw5xw/5YE=";
-
+  npmDepsHash = "sha256-2DkCVefxSfnlJkaEFZrjsWbwzddtqiNg1UUajRG5tLA=";
   npmPackFlags = [ "--ignore-scripts" ];
-
   npmBuildScript = "build-ignore-error";
 
   dontNpmInstall = true;
@@ -41,8 +39,8 @@ buildNpmPackage rec {
   meta = {
     description = "Nezha monitoring admin frontend";
     homepage = "https://github.com/nezhahq/admin-frontend";
-    changelog = "https://github.com/nezhahq/admin-frontend/releases/tag/v${version}";
+    changelog = "https://github.com/nezhahq/admin-frontend/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})

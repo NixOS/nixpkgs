@@ -7,16 +7,16 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dep-scan";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
-    tag = "v${version}";
-    hash = "sha256-velhNPw/sfiq+8ZP5jkRU0tAwowcVO/BkSn7KocqLQI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Drp9DIu4ORNDMqYnCU7CJYpD65RW0da1g4bUIXlPfBA=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -75,10 +75,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Security and risk audit tool based on known vulnerabilities, advisories, and license limitations for project dependencies";
     homepage = "https://github.com/owasp-dep-scan/dep-scan";
-    changelog = "https://github.com/owasp-dep-scan/dep-scan/releases/tag/v${version}";
+    changelog = "https://github.com/owasp-dep-scan/dep-scan/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     teams = [ lib.teams.ngi ];
     mainProgram = "dep-scan";
   };
-}
+})

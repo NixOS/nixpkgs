@@ -7,9 +7,10 @@
   meson,
   ninja,
   libevdev,
+  lua5_4,
   mtdev,
   udev,
-  wacomSupport ? true,
+  wacomSupport ? stdenv.hostPlatform.isLinux,
   libwacom,
   documentationSupport ? false,
   doxygen,
@@ -26,6 +27,8 @@
   nixosTests,
   wayland-scanner,
   udevCheckHook,
+  epoll-shim,
+  libudev-devd,
 }:
 
 let
@@ -51,7 +54,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.29.2";
+  version = "1.31.1";
 
   outputs = [
     "bin"
@@ -64,12 +67,8 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-oxDGUbZebxAmBd2j51qV9Jn8SXBjUX2NPRgkxbDz7Dk=";
+    hash = "sha256-9Ko97vJyo4a9NUF7omqHTwzVV02sJ2EqpDIh+nPeLwk=";
   };
-
-  patches = [
-    ./udev-absolute-path.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -85,6 +84,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libevdev
+    lua5_4
     mtdev
     (python3.withPackages (
       pp: with pp; [
@@ -94,6 +94,9 @@ stdenv.mkDerivation rec {
         setuptools
       ]
     ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    epoll-shim
   ]
   ++ lib.optionals wacomSupport [
     libwacom
@@ -106,9 +109,9 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  propagatedBuildInputs = [
-    udev
-  ];
+  propagatedBuildInputs =
+    lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optional stdenv.hostPlatform.isFreeBSD libudev-devd;
 
   nativeCheckInputs = [
     check
@@ -122,6 +125,9 @@ stdenv.mkDerivation rec {
     (mkFlag wacomSupport "libwacom")
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isBSD [
+    "-Depoll-dir=${epoll-shim}"
   ];
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
@@ -152,8 +158,8 @@ stdenv.mkDerivation rec {
     mainProgram = "libinput";
     homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = [ ];
     teams = [ lib.teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
     badPlatforms = [

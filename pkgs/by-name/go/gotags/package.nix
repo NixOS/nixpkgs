@@ -36,6 +36,6 @@ buildGoModule {
     mainProgram = "gotags";
     homepage = "https://github.com/jstemmer/gotags";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

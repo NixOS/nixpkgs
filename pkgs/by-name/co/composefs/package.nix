@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.8";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "composefs";
     repo = "composefs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-nuQ3R/0eDS58HmN+0iXcYT5EtkY3J257EdtLir5vm4c=";
@@ -96,8 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "File system for mounting container images";
-    homepage = "https://github.com/containers/composefs";
-    changelog = "https://github.com/containers/composefs/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/composefs/composefs";
+    changelog = "https://github.com/composefs/composefs/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2Only
       asl20

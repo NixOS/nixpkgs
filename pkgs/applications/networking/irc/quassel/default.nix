@@ -10,26 +10,15 @@
   fetchFromGitHub,
   cmake,
   makeWrapper,
+  wrapQtAppsHook,
   dconf,
-  mkDerivation,
   qtbase,
   boost,
   zlib,
   qtscript,
-  phonon,
   libdbusmenu,
   qca-qt5,
   openldap,
-
-  withKDE ? true, # enable KDE integration
-  extra-cmake-modules,
-  kconfigwidgets,
-  kcoreaddons,
-  knotifications,
-  knotifyconfig,
-  ktextwidgets,
-  kwidgetsaddons,
-  kxmlgui,
 }:
 
 let
@@ -39,13 +28,12 @@ in
 
 assert monolithic -> !client && !enableDaemon;
 assert client || enableDaemon -> !monolithic;
-assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [ ("-D" + feature + (if flag then "=ON" else "=OFF")) ];
 
 in
-(if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
+stdenv.mkDerivation rec {
   pname = "quassel${tag}";
   version = "0.14.0";
 
@@ -62,7 +50,8 @@ in
   nativeBuildInputs = [
     cmake
     makeWrapper
-  ];
+  ]
+  ++ lib.optional buildClient wrapQtAppsHook;
   buildInputs = [
     qtbase
     boost
@@ -75,17 +64,6 @@ in
   ]
   ++ lib.optionals buildClient [
     libdbusmenu
-    phonon
-  ]
-  ++ lib.optionals (buildClient && withKDE) [
-    extra-cmake-modules
-    kconfigwidgets
-    kcoreaddons
-    knotifications
-    knotifyconfig
-    ktextwidgets
-    kwidgetsaddons
-    kxmlgui
   ];
 
   cmakeFlags = [
@@ -96,8 +74,7 @@ in
   ++ edf monolithic "WANT_MONO"
   ++ edf enableDaemon "WANT_CORE"
   ++ edf enableDaemon "WITH_LDAP"
-  ++ edf client "WANT_QTCLIENT"
-  ++ edf withKDE "WITH_KDE";
+  ++ edf client "WANT_QTCLIENT";
 
   dontWrapQtApps = true;
 

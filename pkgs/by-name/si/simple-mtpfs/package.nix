@@ -8,14 +8,14 @@
   fuse,
   libmtp,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simple-mtpfs";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "phatina";
     repo = "simple-mtpfs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vAqi2owa4LJK7y7S7TwkPAqDxzyHrZZBTu0MBwMT0gI=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ laalsaas ];
     mainProgram = "simple-mtpfs";
   };
-}
+})

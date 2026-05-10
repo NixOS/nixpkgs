@@ -433,7 +433,7 @@ with self;
     propagatedBuildInputs = [
       async_ssl
       async_websocket
-      cohttp-async
+      cohttp-async_5_3
       ppx_jane
       uri-sexp
     ];
@@ -443,7 +443,7 @@ with self;
     pname = "cohttp_static_handler";
     hash = "sha256-RB/sUq1tL8A3m9YhHHx2LFqoExTX187VeZI9MRb1NeA=";
     meta.description = "Library for easily creating a cohttp handler for static files";
-    propagatedBuildInputs = [ cohttp-async ];
+    propagatedBuildInputs = [ cohttp-async_5_3 ];
   };
 
   content_security_policy = janePackage {
@@ -460,8 +460,8 @@ with self;
 
   core = janePackage {
     pname = "core";
-    version = "0.17.1";
-    hash = "sha256-XkABcvglVJLVnWJmvfr5eVywyclPSDqanVOLQNqdNtQ=";
+    version = "0.17.2";
+    hash = "sha256-KIpQ6W2gsuq44TtGPpIs/j1kwbSP3GMmIwvZAYMYtNo=";
     meta.description = "Industrial strength alternative to OCaml's standard library";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [

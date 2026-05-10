@@ -26,13 +26,13 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "faustlive";
   version = "2.5.17";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
     fetchSubmodules = true;
   };
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ magnetophon ];
   };
-}
+})

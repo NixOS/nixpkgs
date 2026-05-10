@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "inotify-simple";
-  version = "1.3.5";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "inotify_simple";
     inherit version;
-    sha256 = "0a61bh087cq5wfrvz680hg5pmykb9gmy26kwyn6ims2akkjgyh44";
+    hash = "sha256-8BC7vYKDvXGp9Ost6UdlgE7eJL1HMgsObvQTblQc3Cw=";
   };
+
+  build-system = [ setuptools ];
 
   # The package has no tests
   doCheck = false;

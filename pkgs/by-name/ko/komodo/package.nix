@@ -6,16 +6,21 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komodo";
   version = "1.19.5";
 
   src = fetchFromGitHub {
     owner = "moghtech";
     repo = "komodo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dLBgdcrIp5QM2TVIa86qX7m1c5n+qOIQJtqJPGvIZ+0=";
   };
+
+  # Temporary fix to get build to pass until https://github.com/moghtech/komodo/pull/1122
+  patches = [
+    ./rustc-1_9_2-fixes.patch
+  ];
 
   cargoHash = "sha256-jf/Jp28g3inGn5jQp3cACdhl//tbXTMc1vP1K3g/CyQ=";
 
@@ -47,9 +52,9 @@ rustPlatform.buildRustPackage rec {
       Komodo is composed of a single core and any amount of connected servers running the periphery application.
     '';
     homepage = "https://komo.do";
-    changelog = "https://github.com/moghtech/komodo/releases/tag/v${version}";
+    changelog = "https://github.com/moghtech/komodo/releases/tag/v${finalAttrs.version}";
     mainProgram = "komodo";
     maintainers = with lib.maintainers; [ r17x ];
     license = lib.licenses.gpl3;
   };
-}
+})

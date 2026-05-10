@@ -2,26 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron,
+  electron_39,
+  rustPlatform,
+  cargo,
+  rustc,
+  python3,
+  pkg-config,
+  openssl,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  removeReferencesTo,
 }:
+let
+  electron = electron_39;
+  pnpm = pnpm_10_29_2;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.7";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-W4XvYQ0O3Qnr9kRxTxt21UkU5dw66ww1qpIY3ph3elE=";
+    hash = "sha256-E29TJlp7nMokJbbi/YLuYf9qWmwvo/r4qQckKrVyumI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -30,17 +41,35 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-lcSecyT55hFtRFPK7xtPhSbXynGIOgKIfV5T5tDQzfA=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-NaKI2369TlF8DDMy6Q3RUqb2B2/T756Zd6gu4ATz/yc=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    hash = "sha256-gd/5f3yraTQI5bu1VE6HHsGDeKJLR1oTm2H+pg1PAOA=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm
     nodejs
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    python3
     makeWrapper
     copyDesktopItems
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -49,8 +78,28 @@ stdenv.mkDerivation (finalAttrs: {
     cp .env.example .env
   '';
 
+  postPatch = ''
+    # Workaround for https://github.com/electron/electron/issues/31121
+    substituteInPlace electron/main/utils/native-loader.ts \
+      --replace-fail 'process.resourcesPath' "'$out/share/splayer/resources'"
+  '';
+
   buildPhase = ''
     runHook preBuild
+
+    # After the pnpm configure, we need to build the binaries of all instances
+    # of better-sqlite3. It has a native part that it wants to build using a
+    # script which is disallowed.
+    # What's more, we need to use headers from electron to avoid ABI mismatches.
+    for f in $(find . -path '*/node_modules/better-sqlite3' -type d); do
+      (cd "$f" && (
+      npm run build-release --offline --nodedir="${electron.headers}"
+      rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
+      find build -type f -exec \
+        ${lib.getExe removeReferencesTo} \
+        -t "${electron.headers}" {} \;
+      ))
+    done
 
     pnpm build
 
@@ -109,9 +158,18 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple Netease Cloud Music player";
     homepage = "https://github.com/imsyy/SPlayer";
+    changelog = "https://github.com/imsyy/SPlayer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "splayer";
     platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      # public/wasm/ffmpeg.wasm
+      # source: https://github.com/apoint123/ffmpeg-audio-player
+      # native/ferrous-opencc-wasm/pkg/ferrous_opencc_wasm_bg.wasm
+      # source: native/ferrous-opencc-wasm
+      binaryBytecode
+    ];
   };
 })

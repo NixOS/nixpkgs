@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
-  version = "1.13.1";
+  version = "1.14.0";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fraunhoferhhi";
     repo = "vvenc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DPR1HmUYTjhKI+gTHERtxqThZ5oKKMoqYsfE709IrhA=";
+    hash = "sha256-MZVXxUXpcZ16de3CZDscLOlnqjHkGZ98muhYCDCcgvs=";
   };
 
   patches = [ ./unset-darwin-cmake-flags.patch ];

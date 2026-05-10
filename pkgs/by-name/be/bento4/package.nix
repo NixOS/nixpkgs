@@ -4,14 +4,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bento4";
   version = "1.6.0-641";
 
   src = fetchFromGitHub {
     owner = "axiomatic-systems";
     repo = "Bento4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Qy8D3cbCVHmLAaXtiF64rL2oRurXNCtd5Dsgt0W7WdY=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.unix;
   };
-}
+})

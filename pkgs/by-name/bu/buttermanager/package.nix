@@ -6,7 +6,7 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "buttermanager";
   version = "2.5.2";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "egara";
     repo = "buttermanager";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/U5IVJvYCw/YzBWjQ949YP9uoxsTNRJ5FO7rrI6Cvhs=";
   };
 
@@ -52,4 +52,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ t4ccer ];
     mainProgram = "buttermanager";
   };
-}
+})

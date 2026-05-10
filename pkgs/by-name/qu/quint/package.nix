@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   nodejs,
-  nodejs_20,
   makeWrapper,
   jre,
   fetchzip,
@@ -15,12 +14,13 @@
   gnugrep,
   nix-update,
   common-updater-scripts,
+  libiconv,
 }:
 
 let
-  version = "0.29.1";
-  apalacheVersion = "0.51.1";
-  evaluatorVersion = "0.3.0";
+  version = "0.32.0";
+  apalacheVersion = "0.56.1";
+  evaluatorVersion = "0.6.0";
 
   metaCommon = {
     description = "Formal specification language with TLA+ semantics";
@@ -34,19 +34,17 @@ let
     owner = "informalsystems";
     repo = "quint";
     tag = "v${version}";
-    hash = "sha256-lnvtyL4GKOyKdBDC5vevx5LgaiB7xTkfuN1rRTxKyv4=";
+    hash = "sha256-GTbphBmALx/gDc/iV/wtE1ovpK43VtCQoneN5AqUmvg=";
   };
 
   # Build the Quint CLI from source
   quint-cli = buildNpmPackage {
     pname = "quint-cli";
-    inherit version src;
-
-    nativeBuildInputs = [ nodejs_20 ];
+    inherit version src nodejs;
 
     sourceRoot = "${src.name}/quint";
 
-    npmDepsHash = "sha256-CBwovC7PTdjJHwL9lKRlJbl8rNjd9J3hVBFJz24+cbw=";
+    npmDepsHash = "sha256-6vKu9OTw68A92uhk1vHYDld5ixUln2tZav8pi55/l4c=";
 
     npmBuildScript = "compile";
 
@@ -78,7 +76,11 @@ let
     # Skip tests during build, as many rust tests rely on the Quint CLI
     doCheck = false;
 
-    cargoHash = "sha256-beWqUDaWWCbGL+V1LNtf35wZrIqWCCbFLYo5HCZF7FI=";
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
+
+    cargoHash = "sha256-aGVs/J+lAPHOsi01xShfZHBeUjd6eONpraNuMkaVfO8=";
 
     meta = metaCommon // {
       description = "Evaluator for the Quint formal specification language";
@@ -88,7 +90,7 @@ let
   # Download Apalache. It runs on the JVM, so no need to build it from source.
   apalacheDist = fetchzip {
     url = "https://github.com/apalache-mc/apalache/releases/download/v${apalacheVersion}/apalache.tgz";
-    hash = "sha256-xYQQH9XxPwf3+YmjiRs7XlW49LdHrEnMeuvd16Ir0B4=";
+    hash = "sha256-2Gy+wQOUyuauiGedDNPPHatwcphll3BuL3SD4D12XMI=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -135,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       })
       (writeShellScript "update" ''
         src=$(nix build --print-out-paths --no-link .#quint.src)
-        QUINT_EVALUATOR_VERSION=$(${lib.getExe gnugrep} -m1 "const QUINT_EVALUATOR_VERSION" $src/quint/src/quintRustWrapper.ts | sed -E "s/.*= 'v?([^']+)'.*/\1/")
+        QUINT_EVALUATOR_VERSION=$(${lib.getExe gnugrep} -m1 "const QUINT_EVALUATOR_VERSION" $src/quint/src/rust/binaryManager.ts | sed -E "s/.*= 'v?([^']+)'.*/\1/")
         ${lib.getExe nix-update} quint.quint-evaluator --version $QUINT_EVALUATOR_VERSION
         DEFAULT_APALACHE_VERSION_TAG=$(${lib.getExe gnugrep} "DEFAULT_APALACHE_VERSION_TAG" $src/quint/src/apalache.ts | sed -E "s/.*= '([^']+)'.*/\1/")
         ${lib.getExe' common-updater-scripts "update-source-version"} quint $DEFAULT_APALACHE_VERSION_TAG --version-key=apalacheVersion --source-key=apalacheDist --ignore-same-version --ignore-same-hash

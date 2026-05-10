@@ -1,8 +1,9 @@
 {
   hash,
   lts ? false,
-  patches ? [ ],
   nixUpdateExtraArgs ? [ ],
+  patches ? [ ],
+  rev ? null,
   vendorHash,
   version,
 }:
@@ -13,6 +14,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   acl,
   buildPackages,
   cowsql,
@@ -50,6 +52,7 @@ let
       sphinxext-opengraph
     ]
   );
+  evaluatedPatches = if lib.isFunction patches then patches fetchpatch2 else patches;
 in
 
 buildGoModule (finalAttrs: {
@@ -65,14 +68,16 @@ buildGoModule (finalAttrs: {
     "doc"
   ];
 
-  src = fetchFromGitHub {
-    owner = "lxc";
-    repo = "incus";
-    tag = "v${version}";
-    inherit hash;
-  };
+  src = fetchFromGitHub (
+    {
+      owner = "lxc";
+      repo = "incus";
+      inherit hash;
+    }
+    // (if (rev == null) then { tag = "v${version}"; } else { inherit rev; })
+  );
 
-  patches = [ ./docs.patch ] ++ patches;
+  patches = [ ./docs.patch ] ++ evaluatedPatches;
 
   excludedPackages = [
     # statically compile these
@@ -106,7 +111,14 @@ buildGoModule (finalAttrs: {
   tags = [ "libsqlite3" ];
 
   # required for go-cowsql.
-  CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
+  env.CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
+
+  # add our lxc location to incus's acceptable rootFsPaths
+  # this is necessary for tmpfs/tmpfs-overlay to work
+  postPatch = ''
+    substituteInPlace internal/server/device/disk.go \
+      --replace-fail '"/opt/incus/lib/lxc/rootfs/"' '"${lxc}/lib/lxc/rootfs/"'
+  '';
 
   postBuild = ''
     # build docs
@@ -151,32 +163,27 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  postInstall = ''
-    installShellCompletion --cmd incus \
-      --bash <($out/bin/incus completion bash) \
-      --fish <($out/bin/incus completion fish) \
-      --zsh <($out/bin/incus completion zsh)
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+      installShellCompletion --cmd incus \
+        --bash <($out/bin/incus completion bash) \
+        --fish <($out/bin/incus completion fish) \
+        --zsh <($out/bin/incus completion zsh)
+    ''
+    + ''
+      mkdir -p $agent_loader/bin $agent_loader/etc/systemd/system $agent_loader/lib/udev/rules.d
+      # the agent_loader output is used by virtualisation.incus.agent
+      cp internal/server/instance/drivers/agent-loader/incus-agent-linux $agent_loader/bin/incus-agent
+      cp internal/server/instance/drivers/agent-loader/incus-agent-setup-linux $agent_loader/bin/incus-agent-setup
+      chmod +x $agent_loader/bin/incus-agent{,-setup}
+      patchShebangs $agent_loader/bin/incus-agent{,-setup}
+      cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
+      cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
+      substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"
 
-    mkdir -p $agent_loader/bin $agent_loader/etc/systemd/system $agent_loader/lib/udev/rules.d
-  ''
-  + lib.optionalString (lib.versionOlder finalAttrs.version "6.18") ''
-    cp internal/server/instance/drivers/agent-loader/incus-agent{,-setup} $agent_loader/bin/
-  ''
-  + lib.optionalString (lib.versionAtLeast finalAttrs.version "6.18") ''
-    # the agent_loader output is used by virtualisation.incus.agent
-    cp internal/server/instance/drivers/agent-loader/incus-agent-linux $agent_loader/bin/incus-agent
-    cp internal/server/instance/drivers/agent-loader/incus-agent-setup-linux $agent_loader/bin/incus-agent-setup
-  ''
-  + ''
-    chmod +x $agent_loader/bin/incus-agent{,-setup}
-    patchShebangs $agent_loader/bin/incus-agent{,-setup}
-    cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
-    cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
-    substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"
-
-    mkdir $doc
-    cp -R doc/html $doc/
-  '';
+      mkdir $doc
+      cp -R doc/html $doc/
+    '';
 
   passthru = {
     client = callPackage ./client.nix {

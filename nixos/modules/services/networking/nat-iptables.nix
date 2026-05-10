@@ -88,13 +88,11 @@ let
       ${concatMapStrings (fwd: ''
         ${iptables} -w -t nat -A nixos-nat-pre \
           -i ${toString cfg.externalInterface} -p ${fwd.proto} \
-          ${
-            optionalString (externalIp != null) "-d ${externalIp}"
-          } --dport ${builtins.toString fwd.sourcePort} \
+          ${optionalString (externalIp != null) "-d ${externalIp}"} --dport ${toString fwd.sourcePort} \
           -j DNAT --to-destination ${fwd.destination}
         ${iptables} -w -t filter -A nixos-filter-forward \
           -i ${toString cfg.externalInterface} -p ${fwd.proto} \
-          --dport ${builtins.toString fwd.sourcePort} -j ACCEPT
+          --dport ${toString fwd.sourcePort} -j ACCEPT
 
         ${concatMapStrings (
           loopbackip:
@@ -112,14 +110,14 @@ let
             # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
             ${iptables} -w -t nat -A nixos-nat-out \
               -d ${loopbackip} -p ${fwd.proto} \
-              --dport ${builtins.toString fwd.sourcePort} \
+              --dport ${toString fwd.sourcePort} \
               -j DNAT --to-destination ${fwd.destination}
 
             # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
             ${concatMapStrings (range: ''
               ${iptables} -w -t nat -A nixos-nat-pre \
                 -d ${loopbackip} -p ${fwd.proto} -s '${range}' \
-                --dport ${builtins.toString fwd.sourcePort} \
+                --dport ${toString fwd.sourcePort} \
                 -j DNAT --to-destination ${fwd.destination}
               ${iptables} -w -t nat -A nixos-nat-post \
                 -d ${destinationIP} -p ${fwd.proto} \
@@ -132,7 +130,7 @@ let
             ${concatMapStrings (iface: ''
               ${iptables} -w -t nat -A nixos-nat-pre \
                 -d ${loopbackip} -p ${fwd.proto} -i '${iface}' \
-                --dport ${builtins.toString fwd.sourcePort} \
+                --dport ${toString fwd.sourcePort} \
                 -j DNAT --to-destination ${fwd.destination}
               ${iptables} -w -t nat -A nixos-nat-post \
                 -d ${destinationIP} -p ${fwd.proto} \

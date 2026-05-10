@@ -8,14 +8,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcftools";
   version = "0.1.17";
 
   src = fetchFromGitHub {
     repo = "vcftools";
     owner = "vcftools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-IiePgDpaL/6XOpQsOn90clB6ST7F/37sztmHrC7Ysbw=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     homepage = "https://vcftools.github.io/index.html";
     maintainers = [ lib.maintainers.rybern ];
   };
-}
+})

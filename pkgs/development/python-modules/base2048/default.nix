@@ -7,7 +7,6 @@
   frelatage,
   libiconv,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "base2048";
   version = "0.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ionite34";

@@ -79,6 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alkaline-ml/pmdarima";
     changelog = "https://github.com/alkaline-ml/pmdarima/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

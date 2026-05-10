@@ -28,7 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpng
-    libhwy
+    (libhwy.overrideAttrs rec {
+      version = "0.15.0";
+      src = fetchFromGitHub {
+        owner = "google";
+        repo = "highway";
+        rev = version;
+        hash = "sha256-v2HyyHtBydr7QiI83DW1yRv2kWjUOGxFT6mmdrN9XPo=";
+      };
+      patches = [ ];
+    })
     lcms2
     giflib
   ];

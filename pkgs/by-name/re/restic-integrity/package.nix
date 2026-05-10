@@ -4,7 +4,7 @@
   fetchFromGitea,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restic-integrity";
   version = "1.4.0";
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     domain = "git.nwex.de";
     owner = "networkException";
     repo = "restic-integrity";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Nii+rdz51+Acd+lZVpBispeFfVE8buxEGHvK2zMKbOM=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ networkexception ];
     mainProgram = "restic-integrity";
   };
-}
+})

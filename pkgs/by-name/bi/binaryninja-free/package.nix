@@ -12,10 +12,10 @@
   stdenv,
   unzip,
   wayland,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   libxml2,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -61,10 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     stdenv.cc.cc.lib
     wayland
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
   ];
 
   installPhase = ''

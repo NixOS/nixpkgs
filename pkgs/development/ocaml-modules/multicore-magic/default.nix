@@ -10,11 +10,11 @@
 
 buildDunePackage rec {
   pname = "multicore-magic";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/multicore-magic/releases/download/${version}/multicore-magic-${version}.tbz";
-    hash = "sha256-Adcgi9yfEhhygbBK04H6N9ozg3O6JJWrXrD1MxUcGV8=";
+    hash = "sha256-jY1wqCOq4c4EMDgIQqqIHErIONJFyvJ+0P8ld1CHF18=";
   };
 
   doCheck = true;

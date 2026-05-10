@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "49.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gsettings-desktop-schemas/${lib.versions.major version}/gsettings-desktop-schemas-${version}.tar.xz";
     hash = "sha256-d3p/g9XlqAdrm/gJyyQQGxsbqcIwI148PejhOWjtDmM=";
   };
 

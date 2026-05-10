@@ -13,14 +13,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mp3fs";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "khenriks";
     repo = "mp3fs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dF+DfkNKvYOucS6KjYR1MMGxayM+1HVS8mbmaavmgKM=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Luflosi ];
     mainProgram = "mp3fs";
   };
-}
+})

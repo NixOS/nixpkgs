@@ -6,17 +6,17 @@
   gtk2,
   cmake,
   pkg-config,
-  libXdamage,
+  libxdamage,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.4.2";
   pname = "xwinmosaic";
 
   src = fetchFromGitHub {
     owner = "soulthreads";
     repo = "xwinmosaic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "16qhrpgn84fz0q3nfvaz5sisc82zk6y7c0sbvbr69zfx5fwbs1rr";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk2
-    libXdamage
+    libxdamage
   ];
 
   postPatch = ''
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xwinmosaic";
   };
-}
+})

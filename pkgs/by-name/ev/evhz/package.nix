@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "evhz";
-  version = "unstable-2021-09-20";
+  version = "unstable-2025-10-09";
 
   src = fetchFromSourcehut {
     owner = "~iank";
     repo = "evhz";
-    rev = "35b7526e0655522bbdf92f6384f4e9dff74f38a0";
-    hash = "sha256-lC0CeN9YVhkSiooC59Dbom811jHvPDQcYl+KADUwVdQ=";
+    rev = "189e6c22a9acb01b6eea26659f6944e60f6cb3d8";
+    hash = "sha256-p2KH5wpw8PpsICutUnwrKmKPtQ/MauWb+DY55WIJPkE=";
   };
 
   buildPhase = "gcc -o evhz evhz.c";

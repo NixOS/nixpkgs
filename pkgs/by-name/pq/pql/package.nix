@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pql";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "runreveal";
     repo = "pql";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/112LQfIkya/9hzq3nxtpdSarHIshPw4mezNcKm4xyI=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "pql";
   };
-}
+})

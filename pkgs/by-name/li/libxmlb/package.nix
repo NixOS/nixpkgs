@@ -21,9 +21,9 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxmlb";
-  version = "0.3.24";
+  version = "0.3.25";
 
   outputs = [
     "out"
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libxmlb";
-    rev = version;
-    hash = "sha256-3Yxq0KZMV9GRmNjZ19eIqGq+UJS4PGyVPS6HBcMEbHo=";
+    rev = finalAttrs.version;
+    hash = "sha256-GBsaVJpnB6m1oItwD7t59BmoZcVQBU/sPz5fGGVzBG0=";
   };
 
   patches = [
@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library to help create and query binary XML blobs";
     mainProgram = "xb-tool";
@@ -93,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

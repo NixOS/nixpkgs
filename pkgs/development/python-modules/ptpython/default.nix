@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   appdirs,
   jedi,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "ptpython";
   version = "3.0.32";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

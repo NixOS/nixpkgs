@@ -10,7 +10,7 @@
 python3Packages.buildPythonApplication {
   pname = "nixpkgs-openjdk-updater";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = ./nixpkgs-openjdk-updater;
 

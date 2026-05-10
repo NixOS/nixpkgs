@@ -8,7 +8,7 @@
   jdk17,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ums";
   version = "13.2.1";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       };
     in
     fetchurl {
-      url = "mirror://sourceforge/project/unimediaserver/${version}/UMS-${version}-${arch}.tgz";
+      url = "mirror://sourceforge/project/unimediaserver/${finalAttrs.version}/UMS-${finalAttrs.version}-${arch}.tgz";
       hash = selectSystem {
         x86_64-linux = "sha256-MGi5S0jA9WVh7PuNei5hInUVZLcypJu8izwWJpDi42s=";
         aarch64-linux = "sha256-9x1M1rZxwg65RdMmxQ2geeF0yXrukQ3dQPXKfQ2GRIw=";
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "ums";
   };
-}
+})

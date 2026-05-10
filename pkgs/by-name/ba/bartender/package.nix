@@ -1,8 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
-  _7zz,
+  fetchzip,
   curl,
   cacert,
   xmlstarlet,
@@ -12,14 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bartender";
-  version = "5.3.7";
+  version = "6.4.1";
 
-  src = fetchurl {
-    name = "Bartender ${lib.versions.major finalAttrs.version}.dmg";
+  src = fetchzip {
     url = "https://www.macbartender.com/B2/updates/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
-    }/Bartender%20${lib.versions.major finalAttrs.version}.dmg";
-    hash = "sha256-8hOe8MTDGyxEZTv0QndjkD3BEJ6kOHcbeU0uhat/N1s=";
+    }/Bartender%20${lib.versions.major finalAttrs.version}.zip";
+    hash = "sha256-UtLTfRhL7JTYzQXf7kyYyGZXy1TLJ0ODk1nRs2pLfQ4=";
   };
 
   dontPatch = true;
@@ -27,15 +25,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  nativeBuildInputs = [ _7zz ];
-
-  sourceRoot = "Bartender ${lib.versions.major finalAttrs.version}.app";
+  appName = "Bartender ${lib.versions.major finalAttrs.version}.app";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications/${finalAttrs.sourceRoot}"
-    cp -R . "$out/Applications/${finalAttrs.sourceRoot}"
+    mkdir -p "$out/Applications/${finalAttrs.appName}"
+    cp -R . "$out/Applications/${finalAttrs.appName}"
 
     runHook postInstall
   '';

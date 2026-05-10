@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "assetfinder";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "tomnomnom";
     repo = "assetfinder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7+YF1VXBcFehKw9JzurmXNu8yeZPdqfQEuaqwtR4AuA=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     ];
     license = with lib.licenses; [ mit ];
   };
-}
+})

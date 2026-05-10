@@ -55,7 +55,25 @@
   twolame,
   wavpack,
   wayland,
-  xorg,
+  xkeyboard-config,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   xvidcore,
   zlib,
   zstd,
@@ -133,24 +151,24 @@ stdenv.mkDerivation (finalAttrs: {
     twolame
     wavpack
     wayland
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXtst
-    xorg.libxcb
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libice
+    libsm
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
+    libxcb
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
     xvidcore
     zlib
     zstd
@@ -172,8 +190,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/opt/viber/Viber $out/bin/viber \
       --set QT_QPA_PLATFORM "xcb" \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
-      --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
+      --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
       --set QML2_IMPORT_PATH "$out/opt/viber/qml"
 
     mv $out/usr/share $out/share

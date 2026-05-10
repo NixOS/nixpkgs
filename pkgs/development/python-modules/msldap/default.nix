@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   unicrypto,
   asyauth,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "msldap";
   version = "0.5.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     description = "Tool to list passwords and other secrets stored using the org.freedesktop.secrets dbus api";
     homepage = "https://gitlab.com/GrantMoyer/lssecret";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "lssecret";
   };

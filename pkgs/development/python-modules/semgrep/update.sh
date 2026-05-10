@@ -19,7 +19,7 @@ NIXPKGS_ROOT="$ROOT/../../../.."
 COMMON_FILE="$ROOT/common.nix"
 
 instantiateClean() {
-    nix-instantiate -A "$1" --eval --strict | cut -d\" -f2
+    nix-instantiate "$NIXPKGS_ROOT" -A "$1" --eval --strict | cut -d\" -f2
 }
 
 # get latest version
@@ -40,10 +40,25 @@ replace() {
 
 fetchgithub() {
     set +eo pipefail
-    nix-build -A "$1" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g'
+    nix-build "$NIXPKGS_ROOT" -A "$1" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g'
     set -eo pipefail
 }
-replace "$OLD_VERSION" "$NEW_VERSION" "$COMMON_FILE"
+
+if [[ "$OLD_VERSION" != "$NEW_VERSION" ]]; then
+    replace "$OLD_VERSION" "$NEW_VERSION" "$COMMON_FILE"
+fi
+
+echo "Fetching PyPI metadata for $NEW_VERSION"
+PYPI_JSON=$(curl -s "https://pypi.org/pypi/semgrep/$NEW_VERSION/json")
+
+# Update Python compatibility tag from any Linux wheel
+NEW_PYTHON_TAG=$(echo "$PYPI_JSON" | jq -r '.urls[].filename' | grep 'manylinux' | head -n 1 | sed -E 's/semgrep-.*-(.*)-none-.*\.whl/\1/')
+OLD_PYTHON_TAG=$(instantiateClean semgrep.passthru.common.pythonWheelTag)
+
+if [[ "$OLD_PYTHON_TAG" != "$NEW_PYTHON_TAG" ]]; then
+    echo "Updating Python wheel tag: $OLD_PYTHON_TAG -> $NEW_PYTHON_TAG"
+    replace "$OLD_PYTHON_TAG" "$NEW_PYTHON_TAG" "$COMMON_FILE"
+fi
 
 echo "Updating src"
 
@@ -60,24 +75,38 @@ echo "Updated src"
 
 update_core_platform() {
     SYSTEM=$1
+    PYPI_ARCH=$2
+    PYPI_DISTRO=$3
     echo "Updating core src $SYSTEM"
 
-    PLATFORM="$(instantiateClean "semgrep.passthru.common.core.$SYSTEM.platform")"
+    OLD_PLATFORM="$(instantiateClean "semgrep.passthru.common.core.$SYSTEM.platform")"
+    NEW_PLATFORM=$(echo "$PYPI_JSON" | jq -r '.urls[].filename' | grep "$PYPI_DISTRO" | grep "$PYPI_ARCH" | head -n 1 | sed -E 's/semgrep-.*-none-(.*)\.whl/\1/')
+
+    if [[ -z "$NEW_PLATFORM" ]]; then
+        echo "Error: Could not find platform tag for $SYSTEM ($PYPI_DISTRO, $PYPI_ARCH) on PyPI" >&2
+        exit 1
+    fi
+
+    if [[ "$OLD_PLATFORM" != "$NEW_PLATFORM" ]]; then
+        echo "Updating platform: $OLD_PLATFORM -> $NEW_PLATFORM"
+        replace "$OLD_PLATFORM" "$NEW_PLATFORM" "$COMMON_FILE"
+    fi
 
     OLD_HASH="$(instantiateClean "semgrep.passthru.common.core.$SYSTEM.hash")"
-    URL="$(nix-instantiate -A "semgrep.passthru.semgrep-core.src.url" --raw --eval --strict --argstr system "$SYSTEM")"
+    URL="$(nix-instantiate "$NIXPKGS_ROOT" -A "semgrep.passthru.semgrep-core.src.url" --raw --eval --strict --argstr system "$SYSTEM")"
     echo "Old core hash $OLD_HASH"
-    NEW_HASH="$(nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url $URL))"
+    NEW_HASH="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --type sha256 "$URL")")"
     echo "New core hash $NEW_HASH"
     replace "$OLD_HASH" "$NEW_HASH" "$COMMON_FILE"
 
     echo "Updated core src $SYSTEM"
 }
 
-update_core_platform "x86_64-linux"
-update_core_platform "aarch64-linux"
-update_core_platform "x86_64-darwin"
-update_core_platform "aarch64-darwin"
+# update_core_platform <nix-system> <pypi-arch> <pypi-distro>
+update_core_platform "x86_64-linux" "x86_64" "manylinux"
+update_core_platform "aarch64-linux" "aarch64" "manylinux"
+update_core_platform "x86_64-darwin" "x86_64" "macosx"
+update_core_platform "aarch64-darwin" "arm64" "macosx"
 
 OLD_PWD=$PWD
 TMPDIR="$(mktemp -d)"

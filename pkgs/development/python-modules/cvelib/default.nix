@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jsonschema,
   pytestCheckHook,
-  pythonOlder,
   requests,
   hatchling,
   testers,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "cvelib";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";

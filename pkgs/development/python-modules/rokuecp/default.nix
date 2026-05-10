@@ -12,7 +12,6 @@
   pytest-cov-stub,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
   yarl,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "rokuecp";
   version = "0.19.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ctalkington";

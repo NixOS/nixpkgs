@@ -14,18 +14,18 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ciel";
-  version = "3.9.10";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
-    tag = "v${version}";
-    hash = "sha256-WpP3rwiGXA5oeBZ3wQwSXPmRT5+zUOm2d1HTEdvnHFc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y6AM3tLACJscGSVh3WhEONSkDmXC2KFL3VKt8a7CdGU=";
   };
 
-  cargoHash = "sha256-zby+QrzX7M714y50j2ZyfXYRhWeAwZbbHZF8KsjS/Hc=";
+  cargoHash = "sha256-rgflNUoAOKzqXKMoSDbAgqV1tKbFgJUeH0K7RCVC1ME=";
 
   nativeBuildInputs = [
     pkg-config
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ciel";
   };
-}
+})

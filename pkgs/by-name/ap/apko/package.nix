@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "apko";
-  version = "0.30.31";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "apko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/XxG6UadYaeeusgH53NVFjuEriUxkf5A9h2wGdps0NQ=";
+    hash = "sha256-y1/tkLwVW/D6KDnoO/YtW88vA+O+qfbu53Ystx0zf2Y=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,11 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-+rgkyTmuD3OMil5vO9xDcAvNl19JfvqPz3zotDiGPCU=";
+  vendorHash = "sha256-xAXI1qGNOhPiDWc6KQX7ThDqs67XhP+O+ideQiMG6B8=";
+
+  excludedPackages = [
+    "internal/gen-jsonschema"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -61,7 +65,7 @@ buildGoModule (finalAttrs: {
 
   checkFlags = [
     # requires networking (apk.chainreg.biz and dl-cdn.alpinelinux.org)
-    "-skip=TestInitDB_ChainguardDiscovery|TestFetchPackage"
+    "-skip=TestInitDB_ChainguardDiscovery|TestFetchPackage|TestLock/apko-discover"
   ];
 
   postInstall =
@@ -92,7 +96,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       jk
       developer-guy
-      emilylange
     ];
   };
 })

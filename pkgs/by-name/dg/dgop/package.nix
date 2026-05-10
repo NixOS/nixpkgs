@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dgop";
-  version = "0.1.12";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";
     repo = "dgop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ei6JMAai5azTy4iYLGp6vDd+ADMej+ysrZhlRv491g4=";
+    hash = "sha256-kYEFJvJApcgVgFu6QpSoNk2t0hv7AlmBARc5HPe/n+s=";
   };
 
-  vendorHash = "sha256-MssJTtlKWzn+toNmE+QkXvLXtR7pR21cknXj89CSbwI=";
+  vendorHash = "sha256-OxcSnBIDwbPbsXRHDML/Yaxcc5caoKMIDVHLFXaoSsc=";
 
   ldflags = [
     "-w"
@@ -28,8 +28,6 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    mv $out/bin/{cli,dgop}
-
     installShellCompletion --cmd dgop \
       --bash <($out/bin/dgop completion bash) \
       --fish <($out/bin/dgop completion fish) \

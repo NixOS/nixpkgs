@@ -8,7 +8,10 @@
   fontconfig,
   tk,
   ncurses,
-  xorg,
+  libxt,
+  libxext,
+  libxaw,
+  libx11,
   file,
 }:
 
@@ -29,12 +32,12 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eli";
   version = "4.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/eli-project/Eli/Eli%20${finalAttrs.version}/eli-${finalAttrs.version}.tar.bz2";
     sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 
@@ -47,13 +50,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     fontconfig
-  ]
-  ++ (with xorg; [
-    libX11.dev
-    libXt.dev
-    libXaw.dev
-    libXext.dev
-  ]);
+    libx11.dev
+    libxt.dev
+    libxaw.dev
+    libxext.dev
+  ];
 
   nativeBuildInputs = [
     file
@@ -104,4 +105,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ timokau ];
     platforms = lib.platforms.linux;
   };
-}
+})

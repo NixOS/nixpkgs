@@ -47,7 +47,7 @@ in
     includeFileList = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      example = /path/to/fileList.txt;
+      example = "/path/to/fileList.txt";
       description = ''
         File containing newline-separated list of paths to include into the
         backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for
@@ -58,7 +58,7 @@ in
     excludeFileList = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      example = /path/to/fileList.txt;
+      example = "/path/to/fileList.txt";
       description = ''
         File containing newline-separated list of paths to exclude into the
         backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for

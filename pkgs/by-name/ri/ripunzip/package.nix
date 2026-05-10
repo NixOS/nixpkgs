@@ -9,14 +9,14 @@
   ripunzip,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripunzip";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ripunzip";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oujRw/4yKNNqLJLTN4wxaOllSUGMu077YgWZkD0DJ4M=";
   };
 
@@ -64,4 +64,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ lib.maintainers.lesuisse ];
   };
-}
+})

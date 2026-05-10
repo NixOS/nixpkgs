@@ -14,7 +14,8 @@
   libGLU,
   libGL,
   pango,
-  xorg,
+  libxmu,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -47,8 +48,8 @@ stdenv.mkDerivation {
     libGLU
     libGL
     pango
-    xorg.libX11
-    xorg.libXmu
+    libx11
+    libxmu
   ];
 
   preConfigure = ''

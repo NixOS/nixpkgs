@@ -8,14 +8,14 @@
   pari,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.1.1";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "lcalc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0CYrRGn5YQ07BaGu0Q5otnjwyh3sNq21EXp3M/KlRdw=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
   };
-}
+})

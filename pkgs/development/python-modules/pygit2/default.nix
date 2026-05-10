@@ -10,20 +10,17 @@
   libgit2,
   pycparser,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.19.0";
+  version = "1.19.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yl2285WnQWagGdd3iV+WvLIR7mDOC+QTKxOWA+AGbYM=";
+    hash = "sha256-MWX3hKrlajCaJ9jurnkj1T2i6PYJQwjH9bQo3uySXPk=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -53,7 +50,7 @@ buildPythonPackage rec {
 
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   pythonImportsCheck = [ "pygit2" ];
 

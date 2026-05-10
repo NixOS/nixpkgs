@@ -9,16 +9,18 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-credentials";
-  version = "1.0.4";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "alibabacloud_credentials";
-    inherit version;
-    hash = "sha256-K3GrMHRSZ6vVJNZPvgY/fgJknaKrbarx7sBXM7f5yPE=";
+    inherit (finalAttrs) version;
+    hash = "sha256-Nkwiq+8tJAslnOrfHOaAABfxmjNnKVU5VpKKHt0S52k=";
   };
+
+  pythonRelaxDeps = [ "aiofiles" ];
 
   build-system = [ setuptools ];
 
@@ -36,8 +38,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Aliyun Credentials Library for Python";
-    homepage = "https://pypi.org/project/alibabacloud-credentials/";
+    homepage = "https://github.com/aliyun/credentials-python";
+    changelog = "https://github.com/aliyun/credentials-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zeroconf,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pydeako";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "DeakoLights";

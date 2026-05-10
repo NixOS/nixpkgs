@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   packaging,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "htmltools";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-htmltools";
     tag = "v${version}";
-    hash = "sha256-ugtDYs5YaVo7Yy9EodyRrypHQUjmOIPpsyhwNnZkiko=";
+    hash = "sha256-psrTSy4NhhsZamB7lQDt+n6LUDiRcHD5+FFqTIIrnZc=";
   };
 
   build-system = [

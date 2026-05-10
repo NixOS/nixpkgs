@@ -29,6 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "procfd";
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
 })

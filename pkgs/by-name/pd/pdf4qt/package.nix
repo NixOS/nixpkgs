@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # `blend2d.h` moved to `blend2d/blend2d.h` in blend2d >= 0.21.2
-  NIX_CFLAGS_COMPILE = "-I${blend2d.dev}/include/blend2d";
+  env.NIX_CFLAGS_COMPILE = "-I${blend2d.dev}/include/blend2d";
 
   cmakeFlags = [
     (lib.cmakeBool "PDF4QT_INSTALL_TO_USR" false)

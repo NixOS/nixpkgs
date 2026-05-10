@@ -6,12 +6,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nspr";
   version = "4.38.2";
 
   src = fetchurl {
-    url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
+    url = "mirror://mozilla/nspr/releases/v${finalAttrs.version}/src/nspr-${finalAttrs.version}.tar.gz";
     hash = "sha256-5Akvrqt3vcmzLbERPkIVlI7naOJsRmbbO1pgs18skQU=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
-  HOST_CC = "cc";
+  env.HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.mpl20;
   };
-}
+})

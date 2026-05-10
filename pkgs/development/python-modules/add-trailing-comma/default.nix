@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tokenize-rt,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "add-trailing-comma";
   version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "asottile";

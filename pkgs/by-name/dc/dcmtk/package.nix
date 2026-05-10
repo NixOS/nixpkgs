@@ -12,14 +12,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dcmtk";
   version = "3.6.9";
 
   src = fetchFromGitHub {
     owner = "DCMTK";
     repo = "dcmtk";
-    tag = "DCMTK-${version}";
+    tag = "DCMTK-${finalAttrs.version}";
     hash = "sha256-mdI/YqM38WhnCbsylIlmqLLWC5/QR+a8Wn9CNcN7KXU=";
   };
 
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ iimog ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   python-dateutil,
   requests,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sunweg";
   version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rokam";

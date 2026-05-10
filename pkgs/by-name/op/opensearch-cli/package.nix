@@ -6,13 +6,13 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "opensearch-cli";
   version = "1.2.0";
   src = fetchFromGitHub {
     repo = "opensearch-cli";
     owner = "opensearch-project";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Ah64a9hpc2tnIXiwxg/slE6fUTAoHv9koNmlUHrVj/s=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
-}
+})

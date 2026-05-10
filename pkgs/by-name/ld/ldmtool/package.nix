@@ -17,14 +17,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldmtool";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "mdbooth";
     repo = "libldm";
-    rev = "libldm-${version}";
+    rev = "libldm-${finalAttrs.version}";
     sha256 = "1fy5wbmk8kwl86lzswq0d1z2j5y023qzfm2ppm8knzv9c47kniqk";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ldmtool";
   };
-}
+})

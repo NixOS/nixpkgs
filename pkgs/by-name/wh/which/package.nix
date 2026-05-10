@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/which/which-${finalAttrs.version}.tar.gz";
     hash = "sha256-osVYIm/E2eTOMxvS/Tw/F/lVEV0sAORHYYpO+ZeKKnM=";
   };
+  patches = [
+    ./gcc15.patch
+  ];
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -21,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
     url = "https://ftp.gnu.org/gnu/which/";
   };
+
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
 
   meta = {
     homepage = "https://www.gnu.org/software/which/";

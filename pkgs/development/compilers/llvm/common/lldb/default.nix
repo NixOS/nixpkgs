@@ -156,15 +156,24 @@ stdenv.mkDerivation (
       fi
     '';
 
-    postInstall = ''
-      wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/
+    postInstall =
+      let
+        # Needed after https://github.com/llvm/llvm-project/commit/5f0f0fcd62227fb864203acc1a57e3ebf7a254a3
+        packageJsonPath =
+          if lib.versionAtLeast release_version "22" then
+            "../tools/${vscodeExt.name}/extension/package.json"
+          else
+            "../tools/${vscodeExt.name}/package.json";
+      in
+      ''
+        wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/
 
-      # Editor support
-      # vscode:
-      install -D ../tools/${vscodeExt.name}/package.json $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/package.json
-      mkdir -p $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
-      ln -s $out/bin/*${vscodeExt.name} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
-    '';
+        # Editor support
+        # vscode:
+        install -D ${packageJsonPath} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/package.json
+        mkdir -p $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
+        ln -s $out/bin/*${vscodeExt.name} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
+      '';
 
     passthru.vscodeExtName = vscodeExt.name;
     passthru.vscodeExtPublisher = "llvm";

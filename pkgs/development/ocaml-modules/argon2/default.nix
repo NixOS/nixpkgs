@@ -9,14 +9,14 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "argon2";
   version = "1.0.2";
 
   minimalOCamlVersion = "4.02.3";
 
   src = fetchurl {
-    url = "https://github.com/Khady/ocaml-argon2/releases/download/${version}/argon2-${version}.tbz";
+    url = "https://github.com/Khady/ocaml-argon2/releases/download/${finalAttrs.version}/argon2-${finalAttrs.version}.tbz";
     hash = "sha256-NDsOV4kPT2SnSfNHDBAK+VKZgHDIKxW+dNJ/C5bQ8gU=";
   };
 
@@ -37,4 +37,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ naora ];
   };
-}
+})

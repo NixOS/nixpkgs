@@ -8,11 +8,12 @@
   openssl,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "1.7.0";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -20,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-4Vx5ATVdE8AoMWjDKKkwGOFVOwI0Qhyfr8MiAo+7MNw=";
+    hash = "sha256-yV+8P6V9QDDmIekJsa3kUt8Qv2Y/Zfeq2aqcQIGNubg=";
   };
 
-  cargoHash = "sha256-x1Pws9XbvwZqxJTJmPHQd6qbNLgkHxCK3YIZbRylk2M=";
+  cargoHash = "sha256-bqJ9beO+AZlz9GZkO5cAk45B4bxyfYq+pLMFWj8pWwg=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -54,11 +55,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # problematic test that hangs the build
     "--skip=reload_cfg::test::watch_single_file"
-
-    # some of the cli tests attempt to validate that the filesystem and build
-    # is securely configured, which is somewhat broken by the nix build sandbox
-    "--skip=cli_tests"
   ];
+
+  # some of the CLI tests attempt to validate that the filesystem and runtime
+  # environment are securely configured, which breaks inside the nix build
+  # sandbox. this does NOT affect downstream users of Arti.
+  env.ARTI_FS_DISABLE_PERMISSION_CHECKS = 1;
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -66,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    inherit (nixosTests) tor;
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
   };
 
@@ -78,6 +81,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ rapiteanu ];
+    maintainers = with lib.maintainers; [
+      rapiteanu
+      whispersofthedawn
+    ];
   };
 })

@@ -15,13 +15,13 @@
   flacSupport ? true,
   flac,
   opusSupport ? false,
-  opusTools,
+  opus-tools,
   wavpackSupport ? false,
   wavpack,
   #, musepackSupport ? false, TODO: mpcenc
   monkeysAudioSupport ? false,
-  monkeysAudio,
-#, aacSupport ? false, TODO: neroAacEnc
+  monkeys-audio,
+  #, aacSupport ? false, TODO: neroAacEnc
 }:
 
 let
@@ -29,18 +29,18 @@ let
     lib.optional mp3Support lame
     ++ lib.optional oggSupport vorbis-tools
     ++ lib.optional flacSupport flac
-    ++ lib.optional opusSupport opusTools
+    ++ lib.optional opusSupport opus-tools
     ++ lib.optional wavpackSupport wavpack
-    ++ lib.optional monkeysAudioSupport monkeysAudio
+    ++ lib.optional monkeysAudioSupport monkeys-audio
     ++ [ cdparanoia ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.0.1";
+  version = "3.0.2";
   pname = "asunder";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/asunder-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
+    hash = "sha256-txNB10bM9WqnexeFxq+BqmQdCErD00t4vrU3YYhItks=";
   };
 
   nativeBuildInputs = [

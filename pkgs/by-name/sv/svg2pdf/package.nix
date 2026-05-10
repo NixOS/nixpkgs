@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "svg2pdf";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "svg2pdf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A3lUX2q5D1Z5Q3sZOl2uvaOLTuLRdtJyR9tmfPkE7TI=";
   };
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Convert SVG files to PDFs";
     homepage = "https://github.com/typst/svg2pdf";
-    changelog = "https://github.com/typst/svg2pdf/releases/tag/${src.rev}";
+    changelog = "https://github.com/typst/svg2pdf/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
       asl20
       mit
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "svg2pdf";
   };
-}
+})

@@ -10,17 +10,17 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spicy";
-  version = "1.14.0";
+  version = "1.15.0";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "spicy";
-    tag = "v${version}";
-    hash = "sha256-Pc4BqQiaifB/kAbcaHYyTUeUE/HLlvg0qDSPdC/gMko=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vZSqUcJoFleZM9sqLdc/g2M+UQrns3kys4eHOfs4Cvk=";
     fetchSubmodules = true;
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tobim ];
     platforms = lib.platforms.unix;
   };
-}
+})

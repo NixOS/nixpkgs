@@ -9,14 +9,14 @@
   nix,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixci";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "srid";
     repo = "nixci";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0VvZFclqwAcKN95eusQ3lgV0pp1NRUDcVXpVUC0P4QI=";
   };
 
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "nixci";
   };
-}
+})

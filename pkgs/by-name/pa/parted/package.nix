@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
+  pkg-config,
   lvm2,
   libuuid,
   gettext,
@@ -16,23 +16,14 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "parted";
-  version = "3.6";
+  version = "3.7";
 
   src = fetchurl {
-    url = "mirror://gnu/parted/parted-${version}.tar.xz";
-    sha256 = "sha256-O0Pb4zzKD5oYYB66tWt4UrEo7Bo986mzDM3l5zNZ5hI=";
+    url = "mirror://gnu/parted/parted-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-AI3ldWGk88JaBkjmbtEeezC+STiJtkM0ptcPLBlR73s=";
   };
-
-  patches = [
-    # Fix the build against C23 compilers (like gcc-15):
-    (fetchpatch {
-      name = "c23.patch";
-      url = "https://git.savannah.gnu.org/gitweb/?p=parted.git;a=patch;h=16343bda6ce0d41edf43f8dac368db3bbb63d271";
-      hash = "sha256-8FgnwMrzMHPZNU+b/mRHCSu8sn6H7GhVLIhMUel40Hk=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -47,20 +38,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libuuid
-  ]
-  ++ lib.optional (readline != null) readline
-  ++ lib.optional (gettext != null) gettext
-  ++ lib.optional (lvm2 != null) lvm2;
+    readline
+    gettext
+    lvm2
+  ];
 
-  configureFlags =
-    (if (readline != null) then [ "--with-readline" ] else [ "--without-readline" ])
-    ++ lib.optional (lvm2 == null) "--disable-device-mapper"
-    ++ lib.optional enableStatic "--enable-static";
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  configureFlags = lib.optional enableStatic "--enable-static";
 
   enableParallelBuilding = true;
 
-  # Tests were previously failing due to Hydra running builds as uid 0.
-  # That should hopefully be fixed now.
   doCheck = !stdenv.hostPlatform.isMusl; # translation test
   nativeCheckInputs = [
     check
@@ -87,11 +76,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/parted/";
     license = lib.licenses.gpl3Plus;
 
-    maintainers = [
-      # Add your name here!
+    maintainers = with lib.maintainers; [
+      kybe236
     ];
 
     # GNU Parted requires libuuid, which is part of util-linux-ng.
     platforms = lib.platforms.linux;
   };
-}
+})

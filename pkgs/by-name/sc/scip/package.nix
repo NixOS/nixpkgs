@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
-  buildGo124Module,
+  buildGo125Module,
   fetchFromGitHub,
   libredirect,
   iana-etc,
   versionCheckHook,
 }:
 
-buildGo124Module (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "scip";
   version = "0.6.1";
 

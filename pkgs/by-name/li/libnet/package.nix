@@ -8,14 +8,14 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnet";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "sam-github";
     repo = "libnet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P3LaDMMNPyEnA8nO1Bm7H0mW/hVBr0cFdg+p2JmWcGI=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

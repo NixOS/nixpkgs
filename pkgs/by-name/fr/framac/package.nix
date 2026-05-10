@@ -138,5 +138,6 @@ stdenv.mkDerivation rec {
       amiddelk
     ];
     platforms = lib.platforms.unix;
+    broken = !lib.versionAtLeast ocamlPackages.ocaml.version "4.14";
   };
 }

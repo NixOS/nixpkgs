@@ -4,7 +4,6 @@
   boto3,
   certbot,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   inherit (certbot) src version;
-  disabled = pythonOlder "3.6";
 
   sourceRoot = "${src.name}/certbot-dns-route53";
 

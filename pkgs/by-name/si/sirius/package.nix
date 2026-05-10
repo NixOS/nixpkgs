@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
     "-include cstdint"
   ];

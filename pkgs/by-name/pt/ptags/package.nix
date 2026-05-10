@@ -6,14 +6,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ptags";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "ptags";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bxp38zWufqS6PZqhw8X5HR5zMRcwH58MuZaJmDRuiys=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pamplemousse ];
     license = lib.licenses.mit;
   };
-}
+})

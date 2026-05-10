@@ -10,14 +10,14 @@
 
 assert cudaSupport -> cudaPackages != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umpire";
   version = "2025.12.0";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "umpire";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9lGI5SKpDIIzZvsG/yKopfXS1PuHOQB9bwSuML2Xh/8=";
     fetchSubmodules = true;
   };
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.linux;
   };
-}
+})

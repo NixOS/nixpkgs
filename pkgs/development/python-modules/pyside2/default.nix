@@ -4,11 +4,9 @@
   lib,
   stdenv,
   cmake,
-  libxcrypt,
   ninja,
   qt5,
   shiboken2,
-  withWebengine ? false, # vulnerable, so omit by default
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
@@ -82,15 +80,7 @@ stdenv.mkDerivation rec {
       qtsvg
       qt3d
     ])
-    ++ lib.optionals withWebengine [
-      qt5.qtwebengine
-    ]
-    ++ (with python.pkgs; [ setuptools ])
-    ++ (lib.optionals (python.pythonOlder "3.9") [
-      # see similar issue: 202262
-      # libxcrypt is required for crypt.h for building older python modules
-      libxcrypt
-    ]);
+    ++ (with python.pkgs; [ setuptools ]);
 
   propagatedBuildInputs = [ shiboken2 ];
 

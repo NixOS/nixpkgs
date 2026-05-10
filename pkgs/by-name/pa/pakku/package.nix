@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pakku";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "juraj-hrivnak";
     repo = "Pakku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PVET+A9LVWnqLCXz3R9EP7gk6GOViSzhRLrXTjNFPaA=";
+    hash = "sha256-iCBD9al7TbueG2kwkI6qzZT2Rixm1OanNBz1MuLapXI=";
   };
 
   gradleBuildTask = "jvmJar";

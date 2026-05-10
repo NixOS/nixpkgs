@@ -8,6 +8,8 @@
   makeBinaryWrapper,
   ninja,
   stdenv,
+  # xcbuild is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv
+  stdenv' ? if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv,
   zlib,
 
   # These are deprecated and do nothing. They’re needed for compatibility and will
@@ -56,7 +58,7 @@ let
     sha256 = "sha256-nKxwWuSqr89lvI9Y3QAW5Mo7/iFfMNj/OOQVeA/FWnE=";
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "xcbuild";
 
   outputs = [
@@ -101,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Libraries/pbxbuild/Sources/Tool/ScriptResolver.cpp \
       --replace-fail "/bin/sh" "sh"
   ''
-  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  + lib.optionalString (!stdenv'.hostPlatform.isDarwin) ''
     # Fix build on gcc-13 due to missing includes
     sed -e '1i #include <cstdint>' -i \
       Libraries/libutil/Headers/libutil/Permissions.h \
@@ -112,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
   ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv'.hostPlatform.isDarwin ''
     # Apple Open Sourced LZFSE, but not libcompression, and it isn't
     # part of an impure framework we can add
     substituteInPlace Libraries/libcar/Sources/Rendition.cpp \

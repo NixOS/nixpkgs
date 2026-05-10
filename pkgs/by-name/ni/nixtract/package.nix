@@ -11,14 +11,14 @@
   nixtract,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixtract";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nixtract";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-36ciPNSlB1LU+UXP8MLakrBRRqbyiVFN8Jp/JbCe1OY=";
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nixtract";
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

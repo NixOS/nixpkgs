@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   unicode-emoji,
   unicode-character-database,
   unicode-idna,
@@ -16,30 +17,42 @@
   libpulseaudio,
   libwebp,
   libxcrypt,
+  mimalloc,
   openssl,
   python3,
   qt6Packages,
   woff2,
+  cargo,
   fast-float,
   ffmpeg,
+  fmt,
   fontconfig,
+  rustPlatform,
+  rustc,
   simdutf,
   skia,
   nixosTests,
   unstableGitUpdater,
   libtommath,
   sdl3,
+  icu78,
+  simdjson,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-12-03";
+  version = "0-unstable-2026-05-04";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "9b4d9966da96b7f6421b59eb0adfe90d484ee920";
-    hash = "sha256-dqTxW1ENc3k9pk8z2BFPsVJVren9ZkFovKKhNAcs1eo=";
+    rev = "90b790f8702a5d5c5a66ef02f8669da2838ca6e3";
+    hash = "sha256-BdJ24YtKMv8B6Vvequf9b5qr0S3FfFuphFo78mCIaN4=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-sbNYOdY56+waCVQHbGuvV5jT9EawV2IiGmL1e/O6ZRc=";
   };
 
   postPatch = ''
@@ -70,10 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    cargo
     cmake
     ninja
     pkg-config
     python3
+    rustPlatform.cargoSetupHook
+    rustc
     qt6Packages.wrapQtAppsHook
     libtommath
   ];
@@ -82,12 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
     curlFull
     fast-float
     ffmpeg
+    fmt
     fontconfig
     libavif
     angle # libEGL
     libjxl
     libwebp
     libxcrypt
+    mimalloc
     openssl
     qt6Packages.qtbase
     qt6Packages.qtmultimedia
@@ -100,8 +118,18 @@ stdenv.mkDerivation (finalAttrs: {
         # Remove when/if this gets upstreamed in skia.
         "extra_cflags+=[\"-DSKCMS_API=[[gnu::visibility(\\\"default\\\")]]\"]"
       ];
+      # Ladybird depends on the vcpkg-packaged version of skia,
+      # which includes this patch that exposes deprecated interfaces.
+      patches = prev.patches or [ ] ++ [
+        (fetchpatch {
+          url = "https://github.com/microsoft/vcpkg/raw/64e1fbee7d9f40eab5d112aaff648c4dcffe9e47/ports/skia/skpath-enable-edit-methods.patch";
+          hash = "sha256-r5+HqSjACINn8igXqBANQsq0K+fn+Ut8L2VRs40FkTM=";
+        })
+      ];
     }))
     woff2
+    icu78
+    simdjson
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
@@ -114,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable network operations
     "-DLADYBIRD_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
+    # Ladybird requires icu 78, but without this flag the default icu
+    # from other dependencies gets picked up instead.
+    (lib.cmakeFeature "ICU_ROOT" (toString icu78.dev))
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"

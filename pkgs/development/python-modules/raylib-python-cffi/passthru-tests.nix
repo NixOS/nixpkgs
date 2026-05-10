@@ -1,9 +1,9 @@
 {
-  src,
   raylib-python-cffi,
   writers,
 }:
 let
+  src = raylib-python-cffi.src;
   writeTest =
     name: path:
     writers.writePython3Bin name {

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   jinja2,
   ply,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1a74k8r21swmfwvgv4c014y6nbcyl229fspxw89ygsgb0j83xnar";
   };
-
-  disabled = pythonOlder "3.7";
 
   patchPhase = ''
     # The path to Icarus can still be overridden via an environment variable at runtime.

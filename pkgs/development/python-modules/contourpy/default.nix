@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 
   # build
   meson,
@@ -32,9 +31,7 @@ let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
     version = "1.3.3";
-    format = "pyproject";
-
-    disabled = pythonOlder "3.8";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "contourpy";

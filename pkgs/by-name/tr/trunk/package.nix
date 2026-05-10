@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trunk";
   version = "0.21.14";
 
   src = fetchFromGitHub {
     owner = "trunk-rs";
     repo = "trunk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0T8ZkBA1Zf4z2HXYeBwJ+2EGoUpxGrqSb4fS4CnL28A=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ctron ];
     license = with lib.licenses; [ asl20 ];
   };
-}
+})

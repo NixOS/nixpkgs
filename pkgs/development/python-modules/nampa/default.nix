@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   unstableGitUpdater,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage {
   pname = "nampa";
   version = "1.0-unstable-2024-12-18";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "thebabush";

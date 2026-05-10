@@ -6,15 +6,15 @@
   fetchFromGitHub,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
-  name = "tiddit";
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "tiddit";
   version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SciLifeLab";
     repo = "TIDDIT";
-    tag = "TIDDIT-${version}";
+    tag = "TIDDIT-${finalAttrs.version}";
     hash = "sha256-OeqVQJDw0fmSDWIGab2qtTJCzZxqLY2XzRqaTRuPIdI=";
   };
 
@@ -49,4 +49,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ apraga ];
     platforms = lib.platforms.unix;
   };
-}
+})

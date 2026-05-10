@@ -85,6 +85,7 @@
               # https://github.com/elementary/gala/pull/2140
               "${pkgs.pantheon.gnome-settings-daemon}/libexec/gsd-xsettings",
               "${pkgs.pantheon.pantheon-agent-polkit}/libexec/policykit-1-pantheon/io.elementary.desktop.agent-polkit",
+              "${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon",
               "${pkgs.pantheon.elementary-files}/libexec/io.elementary.files.xdg-desktop-portal"
           ]
           for i in pgrep_list:
@@ -100,6 +101,11 @@
           machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
           # Hopefully from gcr-ssh-agent.
           machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
+
+      with subtest("Ensure custom keyboard shortcuts can launch external apps via settings-daemon"):
+          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf ${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon)/environ"
+          machine.succeed(f"{cmd} | grep '^PATH=' | grep '/run/current-system/sw/bin'")
+          machine.succeed(f"{cmd} | grep '^XDG_DATA_DIRS=' | grep '/run/current-system/sw/share'")
 
       with subtest("Wait for elementary videos autostart"):
           machine.wait_until_succeeds("pgrep -xf /run/current-system/sw/bin/io.elementary.videos")

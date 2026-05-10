@@ -19,14 +19,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.18.0";
+  version = "1.18.1";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     tag = finalAttrs.version;
-    hash = "sha256-SKwrc0bOaSdxENUWMtErSCug7of9s/ZGLeKhTtUCbWY=";
+    hash = "sha256-Is7N5WUjYVDFz1VKrKQqa7n48gXf2JtvDHB5vXMjoZg=";
   };
 
   outputs = [

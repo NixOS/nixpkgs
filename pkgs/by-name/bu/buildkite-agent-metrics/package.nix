@@ -3,9 +3,9 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buildkite-agent-metrics";
-  version = "5.10.0";
+  version = "5.12.2";
 
   __darwinAllowLocalNetworking = true;
 
@@ -17,11 +17,14 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "buildkite-agent-metrics";
-    rev = "v${version}";
-    hash = "sha256-QE4IY1yU8X1zG+jf7eBWiSjN3HvDqr2Avhs3Bub+xB0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-O/6YGxX7sJEaqmMMzOPxkiIWJs1VRa+tgZ2w8UjfoKk=";
   };
 
-  vendorHash = "sha256-r088XQKYx0D0OVfz/nqhWL0LLCf4X13WqYikJKlLr3c=";
+  vendorHash = "sha256-2os2V1iyw1k6XwX2wLz0abMnu+X5p+Aqau7ajC3JIRc=";
+
+  # This is a Google Cloud Function and is not needed for compiling the binary
+  excludedPackages = [ "./cloud_function" ];
 
   postInstall = ''
     mkdir -p $lambda/bin
@@ -32,6 +35,5 @@ buildGoModule rec {
     description = "Command-line tool (and Lambda) for collecting Buildkite agent metrics";
     homepage = "https://github.com/buildkite/buildkite-agent-metrics";
     license = lib.licenses.mit;
-    teams = [ lib.teams.determinatesystems ];
   };
-}
+})

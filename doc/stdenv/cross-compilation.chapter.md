@@ -2,7 +2,9 @@
 
 ## Introduction {#sec-cross-intro}
 
-"Cross-compilation" means compiling a program on one machine for another type of machine. For example, a typical use of cross-compilation is to compile programs for embedded devices. These devices often don't have the computing power and memory to compile their own programs. One might think that cross-compilation is a fairly niche concern. However, there are significant advantages to rigorously distinguishing between build-time and run-time environments! Significant, because the benefits apply even when one is developing and deploying on the same machine. Nixpkgs is increasingly adopting the opinion that packages should be written with cross-compilation in mind, and Nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
+"Cross-compilation" means compiling a program on one machine for another type of machine. A typical use of cross-compilation is to compile programs for embedded devices that lack the computing power and memory to compile their own programs, but it is useful in many other contexts: producing trusted bootstrap artifacts on Hydra for platforms without physical build hardware, using fast machines (e.g. x86_64) to build for slower architectures popular in routers and switches (e.g. mips/powerpc), and rigorously distinguishing build-time from run-time environments even when developing and deploying on the same machine. Nixpkgs adopts the opinion that packages should be written with cross-compilation in mind, and Nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
+
+For a hands-on tutorial, see the [cross-compilation guide on nix.dev](https://nix.dev/tutorials/cross-compilation).
 
 This chapter will be organized in three parts. First, it will describe the basics of how to package software in a way that supports cross-compilation. Second, it will describe how to use Nixpkgs when cross-compiling. Third, it will describe the internal infrastructure supporting cross-compilation.
 
@@ -70,6 +72,8 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 : This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set). See `lib.systems.platforms` for examples—there's hopefully one in there that will work verbatim for each platform that is working. Please help us triage these flags and give them better homes!
 
+Using these attributes, the build process of a package can change depending on the situation.
+
 ### Theory of dependency categorization {#ssec-cross-dependency-categorization}
 
 ::: {.note}
@@ -130,6 +134,52 @@ software floating point emulation.  `libgcc` would be a "target→ *" dependency
 ### Cross packaging cookbook {#ssec-cross-cookbook}
 
 Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
+
+#### How do I test cross-compilation using emulation? {#cross-qa-emulation}
+
+Every elaborated platform exposes an `emulator` function on its `hostPlatform` attribute that returns the path to an emulator capable of running binaries for that platform. The dispatch is defined in `lib/systems/default.nix` and selects:
+
+- a no-op exec wrapper, when the build platform can already execute the host platform's binaries
+- `wine` for Windows targets
+- `qemu-user` for foreign Linux targets on a Linux builder
+- `wasmtime` for WASI
+- `nodejs-slim` for GHCJS
+- `mmix` for MMIX
+
+`emulator` is a function of the package set; `emulatorAvailable` is a predicate of the same shape that reports whether an emulator exists. Use them from a `nix` expression rather than invoking `qemu` by hand, for example inside a `checkPhase` or `passthru.tests` derivation:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  doCheck = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  checkPhase = ''
+    ${stdenv.hostPlatform.emulator buildPackages} ./my-binary --self-test
+  '';
+}
+```
+
+To run a cross-compiled binary outside the Nix sandbox, build it and invoke the emulator from a shell. This is also a quick way to verify the dispatch table above:
+
+```ShellSession
+$ nix-build '<nixpkgs>' -A pkgsCross.aarch64-multiplatform.hello # Should be available in cache.nixos.org
+```
+
+To get a path for an emulator, given a `crossSystem.config` (e.g with `aarch64-linux`):
+
+```ShellSession
+$ nix-instantiate --eval --strict -E \
+    '(import <nixpkgs> { crossSystem.config = "aarch64-unknown-linux-gnu"; }).stdenv.hostPlatform.emulator (import <nixpkgs> {})'
+"/nix/store/.../bin/qemu-aarch64"
+```
+
+And specifically for `aarch64-linux`, and many other platforms, you have all of them available in `qemu` package, meaning you can simply run:
+
+```ShellSession
+$ nix-shell -p qemu --run 'qemu-aarch64 ./result/bin/hello'
+Hello, world!
+```
+
+The same pattern works for other targets by substituting the `pkgsCross.*` attribute and the emulator package (e.g. `wine` for `pkgsCross.mingwW64`).
 
 #### My package fails to find a binutils command (`cc`/`ar`/`ld` etc.) {#cross-qa-fails-to-find-binutils}
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
@@ -235,13 +285,24 @@ One would think that `localSystem` and `crossSystem` overlap horribly with the t
 
 ### Implementation of dependencies {#ssec-cross-dependency-implementation}
 
-The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for `host → target` is called `deps<host><target>` (where `host`, and `target` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<host><target>` is automatically taken from `pkgs<host><target>`. (These `pkgs<host><target>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
+The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for `host → target` is called `deps<theirHost><theirTarget>` (where `theirHost`, and `theirTarget` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<theirHost><theirTarget>` is automatically taken from `pkgs<theirHost><theirTarget>`. (These `pkgs<theirHost><theirTarget>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.openssl` should be used at run-time.
 
-Now, for most of Nixpkgs's history, there were no `pkgs<host><target>` attributes, and most packages have not been refactored to use it explicitly. Prior to those, there were just `buildPackages`, `pkgs`, and `targetPackages`. Those are now redefined as aliases to `pkgsBuildHost`, `pkgsHostTarget`, and `pkgsTargetTarget`. It is acceptable, even recommended, to use them for libraries to show that the host platform is irrelevant.
+Adjacent package sets are defined as `pkgs<theirHost><theirTarget>` attributes, where "their" represents the new attribute set, and "our" represents the "current" package set. Below is a table of adjacent stages and their aliases. See [](#variables-specifying-dependencies) for usage examples.
 
-But before that, there was just `pkgs`, even though both `buildInputs` and `nativeBuildInputs` existed. \[Cross barely worked, and those were implemented with some hacks on `mkDerivation` to override dependencies.\] What this means is the vast majority of packages do not use any explicit package set to populate their dependencies, just using whatever `callPackage` gives them even if they do correctly sort their dependencies into the multiple lists described above. And indeed, asking that users both sort their dependencies, _and_ take them from the right attribute set, is both too onerous and redundant, so the recommended approach (for now) is to continue just categorizing by list and not using an explicit package set.
+| Adjacent package set                   | Their host platform | Their target platform |
+|----------------------------------------|---------------------|-----------------------|
+| `pkgsBuildBuild`                       | Our build platform  | Our build platform    |
+| `pkgsBuildHost` or `buildPackages`     | Our build platform  | Our host platform     |
+| `pkgsBuildTarget`                      | Our build platform  | Our target platform   |
+| `pkgsHostHost`                         | Our host platform   | Our host platform     |
+| `pkgsHostTarget` or `pkgs`             | Our host platform   | Our target platform   |
+| `pkgsTargetTarget` or `targetPackages` | Our target platform | Our target platform   |
 
-To make this work, we "splice" together the six `pkgsFooBar` package sets and have `callPackage` actually take its arguments from that. This is currently implemented in `pkgs/top-level/splice.nix`. `mkDerivation` then, for each dependency attribute, pulls the right derivation out from the splice. This splicing can be skipped when not cross-compiling as the package sets are the same, but still is a bit slow for cross-compiling. We'd like to do something better, but haven't come up with anything yet.
+Now, for most of Nixpkgs's history, there were no `pkgs<theirHost><theirTarget>` attributes, and most packages have not been refactored to use it explicitly. Prior to those, there were just `buildPackages`, `pkgs`, and `targetPackages`. Those are now redefined as aliases to `pkgsBuildHost`, `pkgsHostTarget`, and `pkgsTargetTarget`. It is acceptable, even recommended, to use them to show that only their host platform matters. That is, use `buildPackages` where any of `pkgsBuild*` would do, and `targetPackages` when any of `pkgsTarget*` would do (if we had more than just `pkgsTargetTarget`).
+
+But before that, there was just `pkgs`, even though both `buildInputs` and `nativeBuildInputs` existed. (Cross barely worked, and those were implemented with some hacks on `mkDerivation` to override dependencies.) What this means is the vast majority of packages do not use any explicit package set to populate their dependencies, just using whatever `callPackage` gives them even if they do correctly sort their dependencies into the multiple lists described above. And indeed, asking that users both sort their dependencies, _and_ take them from the right attribute set, is both too onerous and redundant, so the recommended approach (for now) is to continue just categorizing by list and not using an explicit package set.
+
+To make this work, we "splice" together the six `pkgs<theirHost><theirTarget>` package sets and have `callPackage` actually take its arguments from that. This is currently implemented in `pkgs/top-level/splice.nix`. `mkDerivation` then, for each dependency attribute, pulls the right derivation out from the splice. This splicing can be skipped when not cross-compiling as the package sets are the same, but still is a bit slow for cross-compiling. We'd like to do something better, but haven't come up with anything yet.
 
 ### Bootstrapping {#ssec-bootstrapping}
 

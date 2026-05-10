@@ -3,15 +3,12 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiobroadlink";
   version = "0.1.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

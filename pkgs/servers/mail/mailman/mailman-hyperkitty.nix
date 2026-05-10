@@ -7,15 +7,13 @@
 }:
 
 with python3.pkgs;
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mailman-hyperkitty";
   version = "1.2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+Nad+8bMtYKJbUCpppRXqhB1zdbvvFXTTHlwJLQLzDg=";
   };
 
@@ -49,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ qyliss ];
   };
-}
+})

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvidia-vaapi-driver";
-  version = "0.0.14";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "elFarto";
     repo = "nvidia-vaapi-driver";
     rev = "v${version}";
-    sha256 = "sha256-Nf2Qh+POkcKXjiHlmpfSCbY+vgT63bWIaMxQHHYtE04=";
+    sha256 = "sha256-9Gwr13j+JjU3BlN/8E3dKGmBj79rtR9rrZuOa1aYyYI=";
   };
 
   patches = [

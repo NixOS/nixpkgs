@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shellz";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "shellz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sUYDopSxaUPyrHev8XXobRoX6uxbdf5goJ75KYEPFNY=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "shellz";
   };
-}
+})

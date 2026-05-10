@@ -9,23 +9,25 @@
   pkg-config,
   libxml2,
   gettext,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {
   pname = "gdmap";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "sjohannes";
     repo = "gdmap";
-    tag = "v1.3.1";
-    sha256 = "sha256-dgZ+EDk7O+nuqrBsTPVW7BHufvkqLnWbXrIOOn7YlW4=";
+    tag = "v1.4.0";
+    sha256 = "sha256-yqrlxmMxtcJqUe9xgs01d1AAc2gkPBPsQbzQfffZET0=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk3

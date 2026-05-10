@@ -8,7 +8,7 @@
   freetype,
   fontconfig,
   fribidi,
-  libX11,
+  libx11,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quesoglc";
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     fribidi
-    libX11
+    libx11
   ];
 
   # required for cross builds

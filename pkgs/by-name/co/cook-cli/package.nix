@@ -8,18 +8,18 @@
   openssl,
   nodejs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
-  version = "0.19.1";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
-    rev = "v${version}";
-    hash = "sha256-CJDWhcnY/HjaJbBJCevH9ytp7oJ734M30DxJ/vCCO/I=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fg8qq4j9NbQvnduPRBwqp+GyQaHx2axqH39KeMZqy2k=";
   };
 
-  cargoHash = "sha256-rI/6niK/9QgRc4cWmDLPOc70PN1mRZLXdPym1R3d/Iw=";
+  cargoHash = "sha256-eU/iOb5gHEjWdALeVQr2K3JkD0qOwco3Vkm05HWKdIs=";
 
   # Build without the self-updating feature
   buildNoDefaultFeatures = true;
@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
   env.OPENSSL_NO_VENDOR = 1;
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    hash = "sha256-HxC9Tf+PZvvETuNqm1W3jaZx7SpYXlxZlI8FwGouK+s=";
+    inherit (finalAttrs) src;
+    hash = "sha256-tBOBa2plgJ0dG5eDD9Yc9YS+Dh6rhBdqU6JiZUjTUY4=";
   };
 
   preBuild = ''
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${version}";
+    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${finalAttrs.version}";
     description = "Suite of tools to create shopping lists and maintain recipes";
     homepage = "https://cooklang.org/";
     license = lib.licenses.mit;
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

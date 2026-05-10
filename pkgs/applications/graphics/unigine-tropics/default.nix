@@ -4,10 +4,10 @@
   fetchurl,
   makeWrapper,
   autoPatchelfHook,
-  libX11,
-  libXext,
-  libXrandr,
-  libXinerama,
+  libx11,
+  libxext,
+  libxrandr,
+  libxinerama,
   libglvnd,
   openal,
   glibc,
@@ -78,10 +78,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     stdenv.cc.cc
-    libX11
-    libXext
-    libXrandr
-    libXinerama
+    libx11
+    libxext
+    libxrandr
+    libxinerama
   ];
 
   dontUnpack = true;

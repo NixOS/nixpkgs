@@ -10,7 +10,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-identity";
-  version = "1.13.2";
+  version = "1.13.3";
   outputs = [
     "out"
     "dev"
@@ -19,10 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-cpp";
-    tag = "azure-identity_1.13.2";
-    hash = "sha256-864fU7BkVWXE0vVEYniXQUbrNRvLhhv6aR3wwdnjbQo=";
+    tag = "azure-identity_${finalAttrs.version}";
+    hash = "sha256-IGhJi8fnNY/NXnZ6ZGclJxG1gEx7BRj9setMaFUJZNQ=";
   };
-  sourceRoot = "source/sdk/identity/azure-identity";
+  sourceRoot = "${finalAttrs.src.name}/sdk/identity/azure-identity";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchDebianPatch,
   autoreconfHook,
   pkg-config,
   ncurses,
@@ -24,6 +25,16 @@ stdenv.mkDerivation {
     rev = "867b309eced9e02b63412855440cd4f5f7727431";
     sha256 = "sha256-VShg9Nzd8dzUNiqYnKcDzRgqjwar/8XRGEJCJL25aR0=";
   };
+
+  patches = [
+    (fetchDebianPatch {
+      pname = "yersinia";
+      version = "0.8.2";
+      debianRevision = "2.3";
+      patch = "fix-ftbfs.patch";
+      hash = "sha256-qoD627fcIGmlWT2Uz+85tgIf7KtD11gtUu1N+Ol4T/A=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

@@ -35,14 +35,17 @@
   enableSystemd ? false,
 }:
 
-stdenv.mkDerivation rec {
+let
+  system = "/run/current-system/sw";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "elogind";
   version = "255.5";
 
   src = fetchFromGitHub {
     owner = "elogind";
     repo = "elogind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4KZr/NiiGVwzdDROhiX3GEQTUyIGva6ezb+xC2U3bkg=";
   };
 
@@ -83,6 +86,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""
+  ''
+  + lib.optionalString (!enableSystemd) ''
+    substituteInPlace ./rules.d/71-seat.rules.in --replace-fail "{{BINDIR}}/udevadm" "${eudev}/bin/udevadm"
   '';
 
   patches = [
@@ -148,6 +154,9 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "sysconfdir" "${placeholder "out"}/etc")
+    (lib.mesonOption "halt-path" "${system}/bin/halt")
+    (lib.mesonOption "poweroff-path" "${system}/bin/poweroff")
+    (lib.mesonOption "reboot-path" "${system}/bin/reboot")
     (lib.mesonBool "utmp" (!stdenv.hostPlatform.isMusl))
     (lib.mesonEnable "xenctrl" false)
   ];
@@ -159,4 +168,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ nh2 ];
   };
-}
+})

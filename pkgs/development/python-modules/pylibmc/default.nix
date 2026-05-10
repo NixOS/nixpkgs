@@ -4,7 +4,6 @@
   cyrus_sasl,
   fetchPypi,
   libmemcached,
-  pythonOlder,
   zlib,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pylibmc";
   version = "1.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

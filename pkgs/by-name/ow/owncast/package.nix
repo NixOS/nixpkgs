@@ -5,32 +5,30 @@
   nixosTests,
   bash,
   which,
-  ffmpeg-full,
+  ffmpeg,
   makeBinaryWrapper,
 }:
 let
-  version = "0.2.3";
+  version = "0.2.5";
 in
 buildGoModule {
   pname = "owncast";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
-    rev = "v${version}";
-    hash = "sha256-JCIB4G3cOSkEEO/jcsj4mUP+HeQfgn0jX4OL8NX9/C0=";
+    tag = "v${version}";
+    hash = "sha256-REgo9RC1izb9vJ6ae66Wti9yfP8DrCGetf6O4rX3DPY=";
   };
-  vendorHash = "sha256-FuynEBoPS0p1bRgmaeCxn1RPqbYHcltZpQ9SE71xHEE=";
 
-  propagatedBuildInputs = [ ffmpeg-full ];
+  vendorHash = "sha256-T4nr4lNUEq6grZ21qumaOjIDIDoJK7Ql8j8WbCy2u3g=n";
+
+  subPackages = [ "." ];
+
+  propagatedBuildInputs = [ ffmpeg ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
-
-  # lefthook is included as a tool in go.mod for a pre-commit hook, but causes the build to fail
-  preBuild = ''
-    # Remove lefthook from tools section in go.mod
-    sed -i '/tool (/,/)/{ /[[:space:]]*github.com\/evilmartians\/lefthook[[:space:]]*$/d; }' go.mod
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/owncast \
@@ -38,7 +36,7 @@ buildGoModule {
         lib.makeBinPath [
           bash
           which
-          ffmpeg-full
+          ffmpeg
         ]
       }
   '';

@@ -12,14 +12,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websocat";
   version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "vi";
     repo = "websocat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v5+9cbKe3c12/SrW7mgN6tvQIiAuweqvMIl46Ce9f2A=";
   };
 
@@ -66,11 +66,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line client for WebSockets (like netcat/socat)";
     homepage = "https://github.com/vi/websocat";
-    changelog = "https://github.com/vi/websocat/releases/tag/v${version}";
+    changelog = "https://github.com/vi/websocat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thoughtpolice
     ];
     mainProgram = "websocat";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "awsrm";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jckuester";
     repo = "awsrm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KAujqYDtZbCBRO5WK9b9mxqe84ZllbBoO2tLnDH/bdo=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.version=${version}"
-      "-X ${t}.commit=${src.rev}"
+      "-X ${t}.version=${finalAttrs.version}"
+      "-X ${t}.commit=${finalAttrs.src.rev}"
       "-X ${t}.date=unknown"
     ];
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.markus1189 ];
     mainProgram = "awsrm";
   };
-}
+})

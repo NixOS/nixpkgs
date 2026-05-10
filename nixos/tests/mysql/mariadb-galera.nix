@@ -19,9 +19,12 @@ let
     }:
     makeTest {
       name = "${name}-galera-mariabackup";
-      meta = {
-        maintainers = with lib.maintainers; [ izorkin ] ++ lib.teams.helsinki-systems.members;
-      };
+      meta.maintainers = with lib.maintainers; [
+        conni2461
+        das_j
+        helsinki-Jo
+        izorkin
+      ];
 
       # The test creates a Galera cluster with 3 nodes and is checking if mariabackup-based SST works. The cluster is tested by creating a DB and an empty table on one node,
       # and checking the table's presence on the other node.

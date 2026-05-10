@@ -4,7 +4,6 @@
   fetchFromGitHub,
   georss-client,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "georss-qld-bushfire-alert-client";
   version = "0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

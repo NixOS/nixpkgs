@@ -8,16 +8,16 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-crispy-forms";
-  version = "2.5";
-  format = "pyproject";
+  version = "2.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "django-crispy-forms";
-    tag = version;
-    hash = "sha256-UZw860dOmQOAHcOPn5JO5OPe0kei4Mivy5FTh25Zo1s=";
+    tag = finalAttrs.version;
+    hash = "sha256-yU5xNlV3OFZUdO6zK1sG7mHGkNXLwZocEH8JhvAwyAc=";
   };
 
   propagatedBuildInputs = [
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

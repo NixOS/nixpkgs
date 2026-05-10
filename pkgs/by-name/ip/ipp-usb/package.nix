@@ -7,15 +7,15 @@
   fetchFromGitHub,
   ronn,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipp-usb";
-  version = "0.9.30";
+  version = "0.9.32";
 
   src = fetchFromGitHub {
     owner = "openprinting";
     repo = "ipp-usb";
-    rev = version;
-    sha256 = "sha256-LcThjiN/MRk4ISWWRT4g/eLvuhzM8pIDAcSlM5us3nQ=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-spXp9la5FV8J/cb/1IDQM29QqzFCDzgRKwPk1f3LgkM=";
   };
 
   postPatch = ''
@@ -58,4 +58,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd2;
   };
-}
+})

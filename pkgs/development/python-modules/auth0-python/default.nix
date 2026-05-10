@@ -12,7 +12,6 @@
   pyjwt,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   urllib3,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "auth0-python";
   version = "4.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "auth0";

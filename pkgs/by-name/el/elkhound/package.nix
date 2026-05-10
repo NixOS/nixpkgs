@@ -8,7 +8,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elkhound";
   version = "0-unstable-2020-04-13";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     bison
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "elkhound";
   };
-}
+})

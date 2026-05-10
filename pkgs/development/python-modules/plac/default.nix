@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plac";
   version = "1.4.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ialbert";
     repo = "plac";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GcPZ9Ufr2NU+95XZRVgB0+cKGAc17kIYxuxYvWiq//4=";
   };
 
@@ -40,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
-}
+})

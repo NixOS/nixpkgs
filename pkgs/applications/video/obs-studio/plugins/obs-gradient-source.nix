@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-gradient-source";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-gradient-source";
     rev = version;
-    sha256 = "sha256-5pll84UZYOTESrid2UuC1aWlaLrWf1LpXqlV09XKLug=";
+    sha256 = "sha256-Y9PTvaZr7ANwHhqgWsNIikRQLdKO8sA4OXI+mKyUnaM=";
   };
 
   nativeBuildInputs = [ cmake ];

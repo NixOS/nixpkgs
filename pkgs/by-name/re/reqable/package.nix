@@ -4,7 +4,7 @@
   fetchurl,
   dpkg,
   autoPatchelfHook,
-  makeBinaryWrapper,
+  wrapGAppsHook3,
   fontconfig,
   atk,
   cairo,
@@ -28,17 +28,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reqable";
-  version = "3.0.31";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/reqable/reqable-app/releases/download/${finalAttrs.version}/reqable-app-linux-x86_64.deb";
-    hash = "sha256-GNxSGw00nnM9bN46sL7G4KcXnJ3gDXv8Xf3N0qbL/ao=";
+    hash = "sha256-lJby2hewmjGpq2MwED/ZJbbGg7qt0aDwwqRVhoo/uys=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    makeBinaryWrapper
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -72,11 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    mkdir $out/bin
     makeWrapper $out/share/reqable/reqable $out/bin/reqable \
       --prefix LD_LIBRARY_PATH : $out/share/reqable/lib \
-      --set GIO_MODULE_DIR "${glib.out}/lib/gio/modules"
+      ''${gappsWrapperArgs[@]}
+
+    rm -r $out/share/pixmaps
   '';
 
   passthru.updateScript = nix-update-script { };

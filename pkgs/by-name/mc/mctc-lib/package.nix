@@ -19,14 +19,14 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mctc-lib";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mctc-lib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rlwUNeuLzgSWZXDKCFS/H82+oH23tEzhhILqC/ZV6PI=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

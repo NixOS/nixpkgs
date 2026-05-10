@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kt";
   version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "fgeller";
     repo = "kt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1UGsiMMmAyIQZ62hNIi0uzyX2uNL03EWupIazjznqDc=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "kt";
   };
-}
+})

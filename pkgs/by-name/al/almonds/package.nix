@@ -5,15 +5,15 @@
   ncurses,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "almonds";
   version = "1.25b";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tenchi2xh";
     repo = "Almonds";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0j8d8jizivnfx8lpc4w6sbqj5hq35nfz0vdg7ld80sc5cs7jr3ws";
   };
 
@@ -32,4 +32,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

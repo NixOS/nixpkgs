@@ -6,20 +6,17 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "automower-ble";
   version = "0.2.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "alistair23";
     repo = "AutoMower-BLE";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GawjNtk2mEBo9Xe1k1z0tk1RWU0N0JddeC6NZbnLpxc=";
   };
 
@@ -37,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to connect to Husqvarna Automower Connect";
     homepage = "https://github.com/alistair23/AutoMower-BLE";
-    changelog = "https://github.com/alistair23/AutoMower-BLE/releases/tag/${src.tag}";
+    changelog = "https://github.com/alistair23/AutoMower-BLE/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

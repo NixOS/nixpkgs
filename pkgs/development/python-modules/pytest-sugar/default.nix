@@ -5,7 +5,6 @@
   setuptools,
   termcolor,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,12 +12,16 @@ buildPythonPackage rec {
   version = "1.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-c7i2UWPr8Q+fZx76ue7T1W8g0spovag/pkdAqSwI9l0=";
   };
+
+  postPatch = ''
+    # pytest 9 compat
+    substituteInPlace test_sugar.py \
+      --replace-fail "startdir" "start_path"
+  '';
 
   build-system = [
     setuptools

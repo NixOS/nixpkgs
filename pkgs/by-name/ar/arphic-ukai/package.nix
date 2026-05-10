@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.2.20080216.2";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.bz2";
+    url = "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
     hash = "sha256-tJaNc1GfT4dH6FVI+4XSG2Zdob8bqQCnxJmXbmqK49I=";
   };
 

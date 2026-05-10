@@ -245,5 +245,5 @@ in
     })
   ];
 
-  meta.maintainers = lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [ yureka-wdz ];
 }

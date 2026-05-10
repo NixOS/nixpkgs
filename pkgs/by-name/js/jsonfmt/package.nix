@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jsonfmt";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "jsonfmt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CMBqqTGpqoErFPKn4lxMB9XrdlhZcY6qbRZZVUVMQj0=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -31,9 +31,9 @@ buildGoModule rec {
   meta = {
     description = "Formatter for JSON files";
     homepage = "https://github.com/caarlos0/jsonfmt";
-    changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${src.tag}";
+    changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "jsonfmt";
   };
-}
+})

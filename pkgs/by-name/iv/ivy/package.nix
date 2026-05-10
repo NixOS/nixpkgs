@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ivy";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "robpike";
     repo = "ivy";
-    hash = "sha256-/Q929ZXv3F6MZ+FdWKfbThNDT3JpvQw7WLGnbmitdOg=";
+    hash = "sha256-O+CQUS2EYPnRf8AbL2arhF7m5vhPUnDFXJsYst9/Eqg=";
   };
 
   vendorHash = null;
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ smasher164 ];
   };
-}
+})

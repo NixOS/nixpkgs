@@ -11,15 +11,15 @@
   donateLevel ? 0,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmrig";
-  version = "6.24.0";
+  version = "6.25.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
-    rev = "v${version}";
-    hash = "sha256-AbiTInOMHZ/YOUyl8IMU62ETZtbSTUqaP4vCJKAOCYM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-X34djxUeSDwopwsipgrdFFFUP+tQ/uCNvupYzbegkEE=";
   };
 
   patches = [
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kim0 ];
   };
-}
+})

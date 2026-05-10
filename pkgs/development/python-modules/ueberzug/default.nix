@@ -4,9 +4,9 @@
   buildPythonPackage,
   docopt,
   fetchPypi,
-  libX11,
-  libXext,
-  libXres,
+  libx11,
+  libxext,
+  libxres,
   meson-python,
   meson,
   pillow,
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXres
-    libXext
+    libx11
+    libxres
+    libxext
   ];
 
   dependencies = [

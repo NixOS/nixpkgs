@@ -57,22 +57,22 @@ let
     mpi-pytest = self.callPackage mpi-pytest.override { };
   });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firedrake";
-  version = "2025.10.2";
+  version = "2025.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
-    tag = version;
-    hash = "sha256-A0dr9A1fm74IzpYiVxzdo4jtELYH7JBeRMOD9uYJODQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-9AkyVM0dpjdQqpuOBN60lCKIZJR0HXpp0g1Am/xUwbI=";
   };
 
   # relax build-dependency petsc4py
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail \
-      "petsc4py==3.24.0" "petsc4py"
+      "petsc4py==3.24.5" "petsc4py"
   '';
 
   pythonRelaxDeps = [
@@ -183,4 +183,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

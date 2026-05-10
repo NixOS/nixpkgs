@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "micromdm";
   version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "micromdm";
     repo = "micromdm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b0ST2krDY4avvcdcpUInTH1On0cGKTsdwPpL9HbSPig=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ neverbehave ];
   };
-}
+})

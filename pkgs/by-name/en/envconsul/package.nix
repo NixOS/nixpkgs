@@ -6,14 +6,14 @@
   envconsul,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "envconsul";
   version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "envconsul";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7F+Zsvh13r38FTxgwKbHSaH9cdnnOl8A+nXSbW4XyXA=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = envconsul;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -36,4 +36,4 @@ buildGoModule rec {
     license = lib.licenses.mpl20;
     mainProgram = "envconsul";
   };
-}
+})

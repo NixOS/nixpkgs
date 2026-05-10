@@ -17,7 +17,6 @@ mkKdeDerivation {
       cryfs = lib.getExe' cryfs "cryfs";
       encfs = lib.getExe' encfs "encfs";
       encfsctl = lib.getExe' encfs "encfsctl";
-      fusermount = lib.getExe' fuse "fusermount";
       gocryptfs = lib.getExe' gocryptfs "gocryptfs";
       lsof = lib.getExe lsof;
     })

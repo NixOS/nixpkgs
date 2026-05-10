@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.0.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.0.2";
   pname = "htpdate";
 
   src = fetchFromGitHub {
     owner = "twekkel";
     repo = "htpdate";
-    rev = "v${version}";
-    sha256 = "sha256-dl3xlwk2q1DdGrIQsbKwdYDjyhGxpYwQGcd9k91LkxA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-aDir0e/itYxo0wgKIyT2chEVyXgz6nd2JOuyo7Yq/js=";
   };
 
   makeFlags = [
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ julienmalka ];
     mainProgram = "htpdate";
   };
-}
+})

@@ -11,15 +11,15 @@ python3.pkgs.buildPythonApplication rec {
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "mikr";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4LCZAEUQFPl4CBPeuqsodiAlwd8uBg+SudF5d+Vz4Gc=";
+    repo = "whatstyle";
+    tag = "v${version}";
+    hash = "sha256-4LCZAEUQFPl4CBPeuqsodiAlwd8uBg+SudF5d+Vz4Gc=";
   };
 
   # Fix references to previous version, to avoid confusion:
   postPatch = ''
-    substituteInPlace setup.py --replace 0.1.6 ${version}
-    substituteInPlace ${pname}.py --replace 0.1.6 ${version}
+    substituteInPlace setup.py --replace-fail 0.1.9 ${version}
+    substituteInPlace whatstyle.py --replace-fail 0.1.9 ${version}
   '';
 
   nativeCheckInputs = [

@@ -1,0 +1,24 @@
+From dc51d7d432eeb408551ae84c6b08d172efbf4649 Mon Sep 17 00:00:00 2001
+From: ppom <reaction@ppom.me>
+Date: Tue, 17 Feb 2026 12:00:00 +0100
+Subject: [PATCH] Add support for macOS
+
+---
+ src/concepts/plugin.rs | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/concepts/plugin.rs b/src/concepts/plugin.rs
+index c5bc330..8c3c142 100644
+--- a/src/concepts/plugin.rs
++++ b/src/concepts/plugin.rs
+@@ -1,5 +1,7 @@
+ use std::{collections::BTreeMap, io::Error, path, process::Stdio};
+ 
++#[cfg(target_os = "macos")]
++use std::os::darwin::fs::MetadataExt;
+ #[cfg(target_os = "freebsd")]
+ use std::os::freebsd::fs::MetadataExt;
+ #[cfg(target_os = "illumos")]
+-- 
+GitLab
+

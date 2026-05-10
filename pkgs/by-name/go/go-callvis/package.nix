@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-callvis";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ofabry";
     repo = "go-callvis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gCQjxJH03QAg6MZx5NJUJR6tKP02ThIa5BGN6A/0ejM=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ meain ];
   };
-}
+})

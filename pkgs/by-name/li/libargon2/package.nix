@@ -6,14 +6,14 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libargon2";
   version = "20190702";
 
   src = fetchFromGitHub {
     owner = "P-H-C";
     repo = "phc-winner-argon2";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
 
@@ -32,13 +32,18 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
     "PREFIX=${placeholder "out"}"
-    "ARGON2_VERSION=${version}"
+    "ARGON2_VERSION=${finalAttrs.version}"
     "LIBRARY_REL=lib"
     "PKGCONFIG_REL=lib"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
     "LIBRARIES=$(LIB_ST)"
     "LINKED_LIB_EXT="
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   meta = {
@@ -62,4 +67,4 @@ stdenv.mkDerivation rec {
     mainProgram = "argon2";
     platforms = lib.platforms.all;
   };
-}
+})

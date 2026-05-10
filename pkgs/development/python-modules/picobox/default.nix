@@ -6,7 +6,6 @@
   hatchling,
   hatch-vcs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "4.0.0";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";

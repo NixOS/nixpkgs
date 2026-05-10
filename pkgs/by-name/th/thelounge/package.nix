@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
+  nodejs-slim,
   yarn,
   fixup-yarn-lock,
   python3,
@@ -81,8 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    rm -r $out/lib/node_modules/thelounge/node_modules/sqlite3/build/
+    rm -rf node_modules/sqlite3/build-tmp-napi-v6/{Release/obj.target,node_sqlite3.target.mk}
   '';
+
+  disallowedReferences = [ nodejs-slim.src ];
 
   dontNpmPrune = true;
 

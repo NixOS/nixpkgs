@@ -9,14 +9,14 @@
   yajl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kore";
   version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "jorisvink";
     repo = "kore";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-p0M2P02xwww5EnT28VnEtj5b+/jkPW3YkJMuK79vp4k=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ johnmh ];
   };
-}
+})

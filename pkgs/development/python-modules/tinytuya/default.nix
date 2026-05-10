@@ -4,23 +4,20 @@
   colorama,
   cryptography,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tinytuya";
-  version = "1.17.4";
+  version = "1.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jasonacox";
     repo = "tinytuya";
     tag = "v${version}";
-    hash = "sha256-ojwopholSQPND246PJMmEFSdzyXEZjAIgzpIRfS3VBw=";
+    hash = "sha256-0tY2O8OQ6hYZKF/2I6DehYygtNfZCJKIZiyW0iI8VQc=";
   };
 
   build-system = [ setuptools ];

@@ -5,17 +5,17 @@
   fetchurl,
   m4,
   expat,
-  libX11,
-  libXt,
-  libXaw,
-  libXmu,
+  libx11,
+  libxt,
+  libxaw,
+  libxmu,
   bdftopcf,
   mkfontdir,
-  fontadobe100dpi,
-  fontadobeutopia100dpi,
-  fontbh100dpi,
-  fontbhlucidatypewriter100dpi,
-  fontbitstream100dpi,
+  font-adobe-100dpi,
+  font-adobe-utopia-100dpi,
+  font-bh-100dpi,
+  font-bh-lucidatypewriter-100dpi,
+  font-bitstream-100dpi,
   tcl,
   ncurses,
   openssl,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "${majorVersion}.${minorVersion}${versionSuffix}";
 
   src = fetchurl {
-    url = "http://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${finalAttrs.version}-src.tgz";
+    url = "https://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${finalAttrs.version}-src.tgz";
     hash = "sha256-hDju5ZeVzTv78ZYwUzabmqMK9rheTZJ7clTSTpkkM7E=";
   };
 
@@ -67,17 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     expat
-    libX11
-    libXt
-    libXaw
-    libXmu
+    libx11
+    libxt
+    libxaw
+    libxmu
     bdftopcf
     mkfontdir
-    fontadobe100dpi
-    fontadobeutopia100dpi
-    fontbh100dpi
-    fontbhlucidatypewriter100dpi
-    fontbitstream100dpi
+    font-adobe-100dpi
+    font-adobe-utopia-100dpi
+    font-bh-100dpi
+    font-bh-lucidatypewriter-100dpi
+    font-bitstream-100dpi
     tcl
     ncurses
     expat

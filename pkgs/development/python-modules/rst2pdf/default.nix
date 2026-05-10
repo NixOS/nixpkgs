@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "rst2pdf";
-  version = "0.103.1";
-  format = "pyproject";
+  version = "0.105";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P/6BbUsyda7iG4/90Isua+TXWQzYixifczy8aZbWN4Y=";
+    hash = "sha256-hX6HQQFOxQFfegCq+13Mu1Y3jvTB2lWoKNRLz1/zrNs=";
   };
 
   pythonRelaxDeps = [ "packaging" ];
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://rst2pdf.org/";
     changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

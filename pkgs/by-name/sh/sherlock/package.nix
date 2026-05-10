@@ -5,15 +5,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sherlock";
   version = "0.16.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MP/INeD/dkS0lwACa9g3JqROuOinfr3LKmxjHnVUOdk=";
   };
 
@@ -78,4 +78,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "sherlock";
     maintainers = with lib.maintainers; [ applePrincess ];
   };
-}
+})

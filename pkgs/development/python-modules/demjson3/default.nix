@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   python,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "demjson3";
   version = "3.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

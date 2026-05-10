@@ -3,27 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncio-dgram";
-  version = "2.2.0";
+  version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jsbronder";
     repo = "asyncio-dgram";
-    tag = "v${version}";
-    hash = "sha256-9aO3xFmoR74uZSzxBPRVvz0QSW15TAdWEszLBX8AUR4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-08XQHx+ArduVdkK5ZYq2lL2OWF9CvdSWcNLfc7ey2wI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -44,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python support for higher level Datagram";
     homepage = "https://github.com/jsbronder/asyncio-dgram";
-    changelog = "https://github.com/jsbronder/asyncio-dgram/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/jsbronder/asyncio-dgram/blob/${finalAttrs.src.tag}/ChangeLog";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

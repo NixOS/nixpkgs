@@ -3,7 +3,7 @@
   fetchurl,
   tcl,
   tk,
-  libX11,
+  libx11,
   zlib,
   makeWrapper,
   which,
@@ -31,7 +31,7 @@ tcl.mkTclDerivation rec {
   ];
   buildInputs = [
     tk
-    libX11
+    libx11
     zlib
   ];
 

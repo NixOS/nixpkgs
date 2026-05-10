@@ -49,7 +49,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/CtrlSpice/otel-desktop-viewer";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      gaelreyrol
       jkachmar
       lf-
     ];

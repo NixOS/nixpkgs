@@ -3,155 +3,108 @@
   curl,
   dbmate,
   fetchFromGitHub,
+  jq,
   lib,
-  minio,
-  minio-client,
+  makeWrapper,
+  nix-update-script,
+  nixosTests,
   python3,
+  writeShellScriptBin,
+  xz,
 }:
 
-let
+buildGoModule (finalAttrs: {
+  pname = "ncps";
+  version = "0.9.4";
 
-  # Start MinIO before running tests to enable S3 integration tests
-  minioPreCheck = ''
-    echo "🚀 Starting MinIO for S3 integration tests..."
-
-    # Create temporary directories for MinIO data and config
-    export MINIO_DATA_DIR=$(mktemp -d)
-    export HOME=$(mktemp -d)
-
-    # Configure MinIO credentials (must be set before starting MinIO)
-    export MINIO_ROOT_USER=admin
-    export MINIO_ROOT_PASSWORD=password
-    export MINIO_REGION=us-east-1
-
-    # Generate random free ports using python
-    # We bind to port 0, get the assigned port, and close the socket immediately.
-    # In a Nix sandbox, the race condition risk (port being stolen between check and use) is negligible.
-    export MINIO_PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-    export CONSOLE_PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-
-    # Export S3 test environment variables
-    export NCPS_TEST_S3_BUCKET="test-bucket"
-    export NCPS_TEST_S3_ENDPOINT="http://127.0.0.1:$MINIO_PORT"
-    export NCPS_TEST_S3_REGION="us-east-1"
-    export NCPS_TEST_S3_ACCESS_KEY_ID="test-access-key"
-    export NCPS_TEST_S3_SECRET_ACCESS_KEY="test-secret-key"
-
-    # Start MinIO server in background
-    minio server "$MINIO_DATA_DIR" \
-      --address "127.0.0.1:$MINIO_PORT" \
-      --console-address "127.0.0.1:$CONSOLE_PORT" &
-    export MINIO_PID=$!
-
-    # Wait for MinIO to be ready
-    echo "⏳ Waiting for MinIO to be ready..."
-    for i in {1..30}; do
-      if curl -sf "$NCPS_TEST_S3_ENDPOINT/minio/health/live"; then
-        echo "✅ MinIO is ready"
-        break
-      fi
-      if [ $i -eq 30 ]; then
-        echo "❌ MinIO failed to start"
-        kill $MINIO_PID 2>/dev/null || true
-        exit 1
-      fi
-      sleep 1
-    done
-
-    # Setup admin alias
-    mc alias set local "$NCPS_TEST_S3_ENDPOINT" "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
-
-    # Create test bucket
-    mc mb "local/$NCPS_TEST_S3_BUCKET" || true
-
-    # Create service account for tests
-    mc admin user svcacct add \
-      --access-key "$NCPS_TEST_S3_ACCESS_KEY_ID" \
-      --secret-key "$NCPS_TEST_S3_SECRET_ACCESS_KEY" \
-      local admin || true
-
-    echo "✅ MinIO configured for S3 integration tests"
-  '';
-
-  # Stop MinIO after tests complete
-  minioPostCheck = ''
-    echo "🛑 Stopping MinIO..."
-    if [ -n "$MINIO_PID" ]; then
-      kill $MINIO_PID 2>/dev/null || true
-      # Wait for MinIO to fully shut down
-      for i in {1..30}; do
-        if ! kill -0 $MINIO_PID 2>/dev/null; then
-          break
-        fi
-        sleep 0.5
-      done
-
-      # If it's still alive, force kill it
-      if kill -0 $MINIO_PID 2>/dev/null; then
-        echo "MinIO did not shut down gracefully, force killing..."
-        kill -9 $MINIO_PID 2>/dev/null || true
-        sleep 1 # Give a moment for the OS to clean up after SIGKILL
-      fi
-    fi
-    sleep 1
-    rm -rf "$MINIO_DATA_DIR" 2>/dev/null || true
-    echo "✅ MinIO stopped and cleaned up"
-  '';
-
-  finalAttrs = {
-    pname = "ncps";
-    version = "0.5.1";
-
-    src = fetchFromGitHub {
-      owner = "kalbasit";
-      repo = "ncps";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-dPCzfy29wjRL5eXaueM8qLtKMmsNcwTqtSDBNOJ4NMc=";
-    };
-
-    ldflags = [
-      "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
-    ];
-
-    vendorHash = "sha256-3YPKlz7+x7nYCqKmOroaiUyZGKIQMGFxcNyPnrA9Tio=";
-
-    doCheck = true;
-    checkFlags = [ "-race" ];
-
-    nativeBuildInputs = [
-      curl # used for checking MinIO health check
-      dbmate # used for testing
-      minio # S3-compatible storage for integration tests
-      minio-client # mc CLI for MinIO setup
-      python3 # used for generating the ports
-    ];
-
-    # pre and post checks
-    preCheck = ''
-      # Set up cleanup trap to ensure background processes are killed even if tests fail
-      cleanup() {
-        ${minioPostCheck}
-      }
-      trap cleanup EXIT
-
-      ${minioPreCheck}
-    '';
-
-    postInstall = ''
-      mkdir -p $out/share/ncps
-      cp -r db $out/share/ncps/db
-    '';
-
-    meta = {
-      description = "Nix binary cache proxy service";
-      homepage = "https://github.com/kalbasit/ncps";
-      license = lib.licenses.mit;
-      mainProgram = "ncps";
-      maintainers = with lib.maintainers; [
-        kalbasit
-        aciceri
-      ];
-    };
+  src = fetchFromGitHub {
+    owner = "kalbasit";
+    repo = "ncps";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VPcX9gLXnTrap6HHU+08QdTBbT2oaNA2C9WY0e/FVoc=";
   };
-in
-buildGoModule finalAttrs
+
+  vendorHash = "sha256-PpHSkD7+csPfUXoYRuKhBm1iBtTSwJhOxuW/4ayv9hY=";
+
+  ldflags = [
+    "-X github.com/kalbasit/ncps/pkg/ncps.Version=v${finalAttrs.version}"
+  ];
+
+  excludedPackages = [
+    "nix/dbmate-wrapper/src"
+    "nix/gen-db-wrappers/src"
+  ];
+
+  buildInputs = [ xz ];
+
+  nativeBuildInputs = [
+    makeWrapper # used for wrapping the binary so it can always find the xz binary
+    dbmate # used for testing
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/ncps
+    cp -r db $out/share/ncps/db
+
+    # ncps makes use of xz for decompression as it's 3-5x faster than
+    # using the native Go implementation of xz. By wrapping ncps, and
+    # setting the XZ_BINARY_PATH environment variable, we ensure that
+    # ncps can always find the xz binary. This environment variable is
+    # read by a flag in pkg/ncps and can be overriden by using calling
+    # ncps with the --xz-binary-path flag.
+    wrapProgram $out/bin/ncps --set XZ_BINARY_PATH ${lib.getExe' xz "xz"}
+
+    # Wrap the dbmate-wrapper and set the NCPS_DB_MIGRATIONS_DIR environment variable
+    makeWrapper ${finalAttrs.passthru.dbmate-wrapper}/bin/dbmate-wrapper \
+      $out/bin/dbmate-ncps \
+      --set NCPS_DB_MIGRATIONS_DIR $out/share/ncps/db/migrations
+  '';
+
+  doCheck = true;
+
+  checkFlags = [ "-race" ];
+
+  passthru = {
+    dbmate-wrapper = buildGoModule {
+      pname = "ncps-dbmate-wrapper";
+      inherit (finalAttrs) version;
+
+      src = "${finalAttrs.src}/nix/dbmate-wrapper/src";
+
+      vendorHash = null;
+
+      buildInputs = lib.singleton dbmate;
+      nativeBuildInputs = lib.singleton makeWrapper;
+
+      postInstall = ''
+        # the dbmate-wrapper needs access to the original dbmate executable, wrap it so it can find it correctly.
+        wrapProgram $out/bin/dbmate-wrapper --set DBMATE_BIN ${lib.getExe dbmate}
+      '';
+
+      subPackages = [ "." ];
+    };
+
+    tests = {
+      inherit (nixosTests)
+        ncps
+        ncps-custom-sqlite-directory
+        ncps-custom-storage-local
+        ncps-ha-pg-redis
+        ncps-ha-pg-redis-cdc
+        ;
+    };
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Nix binary cache proxy service";
+    homepage = "https://github.com/kalbasit/ncps";
+    license = lib.licenses.mit;
+    mainProgram = "ncps";
+    maintainers = with lib.maintainers; [
+      kalbasit
+      aciceri
+    ];
+  };
+})

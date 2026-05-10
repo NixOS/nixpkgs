@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jql";
-  version = "8.0.9";
+  version = "8.0.10";
 
   src = fetchFromGitHub {
     owner = "yamafaktory";
     repo = "jql";
     tag = "jql-v${finalAttrs.version}";
-    hash = "sha256-1gkKOOR2mIUKrbVb1BlFxVuskL6y7s6mrI99xTfjjTI=";
+    hash = "sha256-QKdLKib9cz5TjU3+tKaB+1jD9H7bYXidzruldTO6iuw=";
   };
 
-  cargoHash = "sha256-7pSvHZqvPW9SXwU0AtQHIjgHQCSKPzrBhNxLY5ZAcMw=";
+  cargoHash = "sha256-krhy+CLoQyXeYyLHuNYVleSPtEAFKrdf24zDBCGID2Q=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

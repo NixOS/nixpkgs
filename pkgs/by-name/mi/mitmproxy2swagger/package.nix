@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mitmproxy2swagger";
   version = "0.14.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alufers";
     repo = "mitmproxy2swagger";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bQ9zjRsMrC/B118iP2hevj2hhSFD7FTnsCe6lUMwYSI=";
   };
 
@@ -37,9 +37,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to automagically reverse-engineer REST APIs";
     homepage = "https://github.com/alufers/mitmproxy2swagger";
-    changelog = "https://github.com/alufers/mitmproxy2swagger/releases/tag/${version}";
+    changelog = "https://github.com/alufers/mitmproxy2swagger/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mitmproxy2swagger";
   };
-}
+})

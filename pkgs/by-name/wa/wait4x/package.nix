@@ -3,17 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+buildGoModule (finalAttrs: {
   pname = "wait4x";
   version = "3.6.0";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "wait4x";
     repo = "wait4x";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RiF5tcnzMteXaYmw4mfQdamwV1PAyNC8pUownJzfACs=";
   };
 
@@ -29,4 +26,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "wait4x";
   };
-}
+})

@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   makeFontsConf,
   appimageTools,
@@ -9,18 +9,22 @@
   qtmultimedia,
   qtwebsockets,
   qtimageformats,
+  wrapQtAppsHook,
   autoPatchelfHook,
   desktop-file-utils,
   imagemagick,
   twemoji-color-font,
-  xorg,
+  xkeyboard-config,
+  libxscrnsaver,
+  libxcursor,
+  libx11,
   libsodium,
   libopus,
   libGL,
   alsa-lib,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ripcord";
   version = "0.4.29";
 
@@ -41,26 +45,23 @@ mkDerivation rec {
     autoPatchelfHook
     desktop-file-utils
     imagemagick
+    wrapQtAppsHook
   ];
   buildInputs = [
     libsodium
     libopus
     libGL
     alsa-lib
-  ]
-  ++ [
     qtbase
     qtsvg
     qtmultimedia
     qtwebsockets
     qtimageformats
-  ]
-  ++ (with xorg; [
-    libX11
-    libXScrnSaver
-    libXcursor
-    xkeyboardconfig
-  ]);
+    libx11
+    libxscrnsaver
+    libxcursor
+    xkeyboard-config
+  ];
 
   fontsConf = makeFontsConf {
     fontDirectories = [ twemoji-color-font ];
@@ -89,8 +90,8 @@ mkDerivation rec {
     makeQtWrapper $out/Ripcord $out/bin/ripcord \
       --chdir "$out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
-      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
+      --prefix LD_LIBRARY_PATH ":" "${libxcursor}/lib" \
+      --prefix QT_XKB_CONFIG_ROOT ":" "${xkeyboard-config}/share/X11/xkb" \
       --set RIPCORD_ALLOW_UPDATES 0
 
     runHook postInstall

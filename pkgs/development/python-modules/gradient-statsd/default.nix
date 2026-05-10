@@ -9,15 +9,12 @@
   idna,
   requests,
   urllib3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gradient-statsd";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "gradient_statsd";

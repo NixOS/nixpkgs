@@ -149,19 +149,4 @@ rec {
       paramsToRenderedStrings prefixedAttrs (mapAttrs (_n: _v: p) prefixedAttrs);
   };
 
-  mkPostfixedAttrsOfParams = params: description: {
-    _type = "param";
-    option = mkOption {
-      type = types.attrsOf (types.submodule { options = paramsToOptions params; });
-      default = { };
-      description = description;
-    };
-    render =
-      postfix: attrs:
-      let
-        postfixedAttrs = mapAttrs' (name: nameValuePair "${name}-${postfix}") attrs;
-      in
-      paramsToRenderedStrings postfixedAttrs (mapAttrs (_n: _v: params) postfixedAttrs);
-  };
-
 }

@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "1.4.54";
+  version = "1.4.54-unstable-2025-08-16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-6qAjyqMVrugABHssAQuql3z1YHTAOSm5hARJuJXJJvo=";
+    rev = "1712b81a5b8d9d3abd5a85fbb089470f0bc38cdd";
+    hash = "sha256-BqhH6CqvWQvUllCh0JAIM/K+W3KtLIRe30WGJrqafoI=";
   };
 
   postPatch = ''

@@ -58,8 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gfxstream" withGfxstream)
   ];
 
-  CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
-  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+    "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+  };
 
   preConfigure = ''
     cd rutabaga_gfx/ffi

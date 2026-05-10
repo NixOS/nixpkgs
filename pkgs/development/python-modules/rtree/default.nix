@@ -6,7 +6,6 @@
   libspatialindex,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "rtree";
   version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Toblerity";

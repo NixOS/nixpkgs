@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bngblaster";
-  version = "0.9.26";
+  version = "0.9.34";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "bngblaster";
     rev = finalAttrs.version;
-    hash = "sha256-EZc+cageuhPSIwyHAW6JTbSGQwlHCl9YpUHzHZ0ygx0=";
+    hash = "sha256-XkJyNybA0/zjYaz5S1yr6IOVnBOqdXcqRu7bCGpv3CA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rtbrick/bngblaster/";
     changelog = "https://github.com/rtbrick/bngblaster/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ johannwagner ];
     badPlatforms = lib.platforms.darwin;
   };
 })

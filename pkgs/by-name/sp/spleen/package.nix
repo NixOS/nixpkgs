@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  xorg,
+  mkfontscale,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-i0fFbxpuuFj7z540UwVXQEsC+7NFXjjmT7hEc/0MNy8=";
   };
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   dontBuild = true;
 

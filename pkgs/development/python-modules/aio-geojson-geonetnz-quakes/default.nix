@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pytz,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-quakes";
   version = "0.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

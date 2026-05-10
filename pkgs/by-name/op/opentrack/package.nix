@@ -12,23 +12,24 @@
   opencv4,
   procps,
   eigen,
-  libXdmcp,
+  libxdmcp,
   libevdev,
   makeDesktopItem,
-  wineWowPackages,
+  wineWow64Packages,
   onnxruntime,
   nix-update-script,
+  v4l-utils,
   withWine ? stdenv.targetPlatform.isx86_64,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentrack";
-  version = "2024.1.1-unstable-2025-12-16";
+  version = "2026.1.0-unstable-2026-03-25";
 
   src = fetchFromGitHub {
     owner = "opentrack";
     repo = "opentrack";
-    rev = "32273718b42b80973671ed1883ff74645cf83ca0";
-    hash = "sha256-bNhMtxPL0VxpSP7/rYs5dCAAR1EKuBwfDggHo0OZOnA=";
+    rev = "ffd7eb0fab60b9c0b9998fb84e3c8653afdd573f";
+    hash = "sha256-ABvggZ53l8PNunFFOYLgpRliM0naz2o+YqKYbA1vd3s=";
   };
 
   aruco = callPackage ./aruco.nix { };
@@ -40,6 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
     meta.license = lib.licenses.free;
   };
 
+  fusion = fetchFromGitHub {
+    owner = "xioTechnologies";
+    repo = "Fusion";
+    tag = "v1.2.11";
+    hash = "sha256-9bqqP+6kfdRWIRnnP+R0lXSQs6OmZoNlbCjqiJeJjpk=";
+  };
+
+  patches = [
+    # calls `app.setDesktopFileName("opentrack");` - distros that don't wrap the binary apparently don't need this.
+    ./desktop-filename.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -49,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
   ]
-  ++ lib.optionals withWine [ wineWowPackages.stable ];
+  ++ lib.optionals withWine [ wineWow64Packages.stable ];
 
   buildInputs = [
     finalAttrs.aruco
     eigen
-    libXdmcp
+    libxdmcp
     libevdev
     onnxruntime
     opencv4
@@ -64,19 +77,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_AHRSFUSION" "${finalAttrs.fusion}")
+    (lib.cmakeFeature "OPENTRACK_COMMIT" "opentrack-${finalAttrs.version}")
     (lib.cmakeBool "SDK_WINE" withWine)
     (lib.cmakeFeature "SDK_ARUCO_LIBPATH" "${finalAttrs.aruco}/lib/libaruco.a")
     (lib.cmakeFeature "SDK_XPLANE" finalAttrs.xplaneSdk.outPath)
   ];
 
   postInstall = ''
-    install -Dt $out/share/icons/hicolor/256x256 $src/gui/images/opentrack.png
+    install -Dt $out/share/icons/hicolor/256x256/apps ../gui/images/opentrack.png
   '';
 
   # manually wrap just the main binary
   dontWrapQtApps = true;
   preFixup = ''
-    wrapQtApp $out/bin/opentrack
+    wrapQtApp $out/bin/opentrack \
+      --prefix PATH : ${lib.makeBinPath [ v4l-utils ]}
   '';
 
   desktopItems = [

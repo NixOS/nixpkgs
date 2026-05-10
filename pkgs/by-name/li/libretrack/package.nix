@@ -32,7 +32,7 @@ flutter329.buildFlutterApplication rec {
   ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   postInstall = ''
     substituteInPlace snap/gui/org.proninyaroslav.libretrack.desktop \

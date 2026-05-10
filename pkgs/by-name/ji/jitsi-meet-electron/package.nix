@@ -7,9 +7,9 @@
   makeDesktopItem,
   makeWrapper,
   libpng,
-  libX11,
-  libXi,
-  libXtst,
+  libx11,
+  libxi,
+  libxtst,
   zlib,
   electron,
 }:
@@ -35,9 +35,9 @@ buildNpmPackage rec {
   # robotjs node-gyp dependencies
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpng
-    libX11
-    libXi
-    libXtst
+    libx11
+    libxi
+    libxtst
     zlib
   ];
 
@@ -45,10 +45,12 @@ buildNpmPackage rec {
 
   makeCacheWritable = true;
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-
-  # disable code signing on Darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    # disable code signing on Darwin
+    CSC_IDENTITY_AUTO_DISCOVERY = "false";
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   preBuild = ''
     # remove some prebuilt binaries
@@ -73,8 +75,6 @@ buildNpmPackage rec {
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
   '';
-
-  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   installPhase = ''
     runHook preInstall

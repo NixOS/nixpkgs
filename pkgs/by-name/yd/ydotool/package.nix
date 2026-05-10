@@ -6,7 +6,7 @@
   cmake,
   scdoc,
   util-linux,
-  xorg,
+  xinput,
   nixosTests,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Daemon/ydotoold.c \
-      --replace "/usr/bin/xinput" "${xorg.xinput}/bin/xinput"
+      --replace "/usr/bin/xinput" "${xinput}/bin/xinput"
     substituteInPlace Daemon/ydotool.service.in \
       --replace "/usr/bin/kill" "${util-linux}/bin/kill"
   '';

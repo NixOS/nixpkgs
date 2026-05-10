@@ -6,13 +6,13 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "datefudge";
   version = "1.27";
 
   src = fetchgit {
-    url = "https://salsa.debian.org/debian/${pname}.git";
-    rev = "debian/${version}";
+    url = "https://salsa.debian.org/debian/datefudge.git";
+    rev = "debian/${finalAttrs.version}";
     hash = "sha256-BN/Ct1FRZjvpkRCPpRlXmjeRvrNnuJBXwwI1P2HCisc=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "datefudge";
   };
-}
+})

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pint,
   pydantic,
-  pythonOlder,
   pytz,
   requests,
   responses,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "stravalib";
   version = "2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "stravalib";

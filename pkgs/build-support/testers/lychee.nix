@@ -1,4 +1,5 @@
 deps@{
+  cacert,
   formats,
   lib,
   lychee,
@@ -40,7 +41,10 @@ let
     stdenv.mkDerivation (finalAttrs: {
       name = "lychee-link-check";
       inherit site;
-      nativeBuildInputs = [ finalAttrs.passthru.lychee ];
+      nativeBuildInputs = [
+        finalAttrs.passthru.lychee
+        cacert
+      ];
       configFile = (formats.toml { }).generate "lychee.toml" finalAttrs.passthru.config;
 
       # These can be overridden with overrideAttrs if needed.

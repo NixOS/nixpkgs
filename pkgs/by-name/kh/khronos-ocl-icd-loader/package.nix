@@ -7,14 +7,14 @@
   withTracing ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencl-icd-loader";
   version = "2025.07.22";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-ICD-Loader";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jwviNwX7C7b9lqIS4oZ4YLEFBfBdmQfXHxW3FPPYxYs=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

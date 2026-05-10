@@ -9,21 +9,23 @@
   xvfb-run,
   fontconfig,
   freetype,
-  xorg,
+  libxrender,
+  libxi,
+  libxcb,
   python3,
   git,
 }:
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seamly2d";
   version = "2025.8.4.217";
 
   src = fetchFromGitHub {
     owner = "FashionFreedom";
     repo = "Seamly2D";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PaGYpGZJGXPXJdfkS0siXGKxhSSdGCzDxAYdGv/lPvA=";
   };
 
@@ -37,9 +39,9 @@ stdenv.mkDerivation rec {
     libsForQt5.qtsvg
     libgbm
     freetype
-    xorg.libXi
-    xorg.libXrender
-    xorg.libxcb
+    libxi
+    libxrender
+    libxcb
   ];
 
   nativeBuildInputs = [
@@ -84,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ WhittlesJr ];
   };
-}
+})

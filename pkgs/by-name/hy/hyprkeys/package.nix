@@ -6,21 +6,21 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hyprkeys";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "Hyprkeys";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-u2NTSth9gminIEcbxgGm/2HHyzuwf/YPNQV4VzR14Kk=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -46,4 +46,4 @@ buildGoModule rec {
     ];
     mainProgram = "hyprkeys";
   };
-}
+})

@@ -21,6 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-uA04KHKLXW0lx1y5brpCDARLac4/C8VmVinVMkEtTdM=";
   };
 
+  # Override the overly strict `tool.pytest.ini_options.filterwarnings`
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"error"' '#"error"'
+  '';
+
   build-system = [
     setuptools
   ];

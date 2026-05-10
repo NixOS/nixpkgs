@@ -72,7 +72,7 @@
     server.wait_for_unit("multi-user.target")
     client.wait_for_unit("multi-user.target")
 
-    def copy_pems(machine: Machine, domain: str):
+    def copy_pems(machine: BaseMachine, domain: str):
       machine.succeed("mkdir /run/secrets")
       machine.copy_from_host(
         source=f"{tmpdir}/{domain}/cert.pem",

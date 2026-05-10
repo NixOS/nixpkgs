@@ -19,7 +19,7 @@ in
 buildPythonPackage rec {
   pname = "dnf4";
   version = "4.24.0";
-  format = "other";
+  pyproject = false;
 
   outputs = [
     "out"

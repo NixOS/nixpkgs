@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mountpoint-s3";
   version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uV0umUoJkYgmjWjv8GMnk5TRRbCCJS1ut3VV1HvkaAw=";
     fetchSubmodules = true;
   };
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lblasc ];
     platforms = lib.platforms.linux;
   };
-}
+})

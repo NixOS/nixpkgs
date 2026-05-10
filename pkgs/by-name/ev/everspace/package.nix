@@ -17,7 +17,17 @@
   openal,
 
   # Unreal Engine 4 Dependencies
-  xorg,
+  libxxf86vm,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libxau,
+  libx11,
+  libxcb,
 }:
 
 # Known issues:
@@ -51,17 +61,17 @@ stdenv.mkDerivation rec {
     libGL
 
     # ue4
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXau
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXxf86vm
-    xorg.libxcb
+    libx11
+    libxscrnsaver
+    libxau
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxxf86vm
+    libxcb
   ];
 
   unpackPhase = ''

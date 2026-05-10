@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXext,
-  libXfixes,
-  libXmu,
-  libXpm,
+  libx11,
+  libxext,
+  libxfixes,
+  libxmu,
+  libxpm,
   pkg-config,
 }:
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXfixes
-    libXmu
-    libXpm
+    libx11
+    libxext
+    libxfixes
+    libxmu
+    libxpm
   ];
 
   meta = {

@@ -16,22 +16,22 @@
 let
   isPython3 = enablePython && python.pythonAtLeast "3";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libredwg";
-  version = "0.13.3";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = "libredwg";
-    tag = version;
-    hash = "sha256-FlBHwNsqVSBE8dTDewoKkCbs8Jd/4d69MPpEFzg6Ruc=";
+    tag = finalAttrs.version;
+    hash = "sha256-FeDQCByFGKfHJDOPQA92GslXZ33nhGfB6/63t2TeugE=";
     fetchSubmodules = true;
   };
 
   postPatch =
     let
       printVersion = writeShellScript "print-version" ''
-        echo -n ${lib.escapeShellArg version}
+        echo -n ${lib.escapeShellArg finalAttrs.version}
       '';
     in
     ''
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

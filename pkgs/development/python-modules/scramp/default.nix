@@ -6,7 +6,6 @@
   hatchling,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   versioningit,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "scramp";
   version = "1.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tlocke";

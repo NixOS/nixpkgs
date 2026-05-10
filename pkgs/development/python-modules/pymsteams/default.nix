@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pymsteams";
   version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rveachkc";

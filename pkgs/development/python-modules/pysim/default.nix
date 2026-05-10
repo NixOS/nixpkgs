@@ -23,7 +23,7 @@
 buildPythonPackage {
   pname = "pysim";
   version = "unstable-2023-08-13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osmocom";

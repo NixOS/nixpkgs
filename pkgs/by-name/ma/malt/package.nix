@@ -8,14 +8,14 @@
   libunwind,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "malt";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "memtt";
     repo = "malt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-4lCAEk/b8APuOo+x/kGSTg7vFSBZf/VBuSMDM7o5sts=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ skohtv ];
     platforms = lib.platforms.linux;
   };
-}
+})

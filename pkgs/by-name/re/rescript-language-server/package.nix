@@ -6,9 +6,10 @@
   esbuild,
   nix-update-script,
   versionCheckHook,
-  rescript-editor-analysis,
+  vscode-extensions,
 }:
 let
+  inherit (vscode-extensions.chenglou92.rescript-vscode) rescript-editor-analysis;
   platformDir =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -28,7 +29,8 @@ buildNpmPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
-  npmDepsHash = "sha256-Qi41qDJ0WR0QWw7guhuz1imT51SqI7mORGjNbmZWnio";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-BUR/gln9yyKGa05FvxOF6vIcCz8BCQWGr/fzfmOPdj0=";
 
   strictDeps = true;
   nativeBuildInputs = [ esbuild ];
@@ -38,7 +40,7 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # https://github.com/rescript-lang/rescript-vscode/blob/1.62.0/package.json#L252
+    # https://github.com/rescript-lang/rescript-vscode/blob/1.72.0/package.json#L286
     esbuild src/cli.ts --bundle --sourcemap --outfile=out/cli.js --format=cjs --platform=node --loader:.node=file --minify
 
     runHook postBuild

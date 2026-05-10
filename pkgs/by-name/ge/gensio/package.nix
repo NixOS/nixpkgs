@@ -8,15 +8,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gensio";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = "gensio";
-    rev = "v${version}";
-    sha256 = "sha256-rgNolodA+fjnOYP1r5pwRYxngrHJ5/Lv1XUsTIlK5KQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-5gxBz6m0tyVESeYe5L6z6PZFhrzqVmQuUFYxtd8n9Jc=";
   };
 
   passthru = {
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     mainProgram = "gensiot";
     platforms = lib.platforms.unix;
   };
-}
+})

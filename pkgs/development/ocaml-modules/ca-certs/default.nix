@@ -14,14 +14,14 @@
   fmt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ca-certs";
   version = "1.0.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ca-certs/releases/download/v${version}/ca-certs-${version}.tbz";
+    url = "https://github.com/mirage/ca-certs/releases/download/v${finalAttrs.version}/ca-certs-${finalAttrs.version}.tbz";
     hash = "sha256-0818j1SLrs7yCNQlh3qBHYmOx9HZxL3qb3hlLHyDYcw=";
   };
 
@@ -48,4 +48,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     homepage = "https://github.com/mirage/ca-certs";
   };
-}
+})

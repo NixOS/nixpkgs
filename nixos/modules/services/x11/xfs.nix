@@ -43,7 +43,7 @@ in
       description = "X Font Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.xorg.xfs ];
+      path = [ pkgs.xfs ];
       script = "xfs -config ${configFile}";
     };
   };

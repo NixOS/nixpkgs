@@ -19,7 +19,7 @@ let
     };
   };
 in
-py.pkgs.buildPythonApplication rec {
+py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "prowler";
   version = "5.12.3";
   pyproject = true;
@@ -27,7 +27,7 @@ py.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6RPtld95MauhCmSLrgncr4+s16z0PfmiiC6eAph8ZmI=";
   };
 
@@ -98,9 +98,9 @@ py.pkgs.buildPythonApplication rec {
   meta = {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "prowler";
   };
-}
+})

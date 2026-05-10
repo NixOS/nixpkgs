@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "galerio";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "galerio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JR/YfMUs5IHBRr3uYqHXLNcr23YHyDvgH2y/1ip+2Y8=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "galerio";
   };
-}
+})

@@ -8,14 +8,14 @@
   versionCheckHook,
   nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lemurs";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "coastalwhite";
     repo = "lemurs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dtAmgzsUhn3AfafWbCaaog0S1teIy+8eYtaHBhvLfLI=";
   };
 
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "lemurs";
   };
-}
+})

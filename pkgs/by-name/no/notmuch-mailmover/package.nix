@@ -8,14 +8,14 @@
   installShellFiles,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "notmuch-mailmover";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "michaeladler";
     repo = "notmuch-mailmover";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fJljqNSPLM1JiyeGMNvub/4wk5L9+lVTqtgCdoe7S88=";
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

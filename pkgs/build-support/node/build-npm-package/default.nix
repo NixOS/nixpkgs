@@ -4,6 +4,7 @@
   fetchNpmDeps,
   buildPackages,
   nodejs,
+  nodejs-slim,
   cctools,
 }@topLevelArgs:
 
@@ -26,6 +27,9 @@ lib.extendMkDerivation {
       # The output hash of the dependencies for this project.
       # Can be calculated in advance with prefetch-npm-deps.
       npmDepsHash ? "",
+      # Fetcher format version for npmDeps. Set to 2 to enable packument caching
+      # for workspace support. Changing this will invalidate npmDepsHash.
+      npmDepsFetcherVersion ? 1,
       # Whether to force the usage of Git dependencies that have install scripts, but not a lockfile.
       # Use with care.
       forceGitDeps ? false,
@@ -66,6 +70,7 @@ lib.extendMkDerivation {
           ;
         name = "${name}-npm-deps";
         hash = npmDepsHash;
+        fetcherVersion = npmDepsFetcherVersion;
       },
       # Custom npmConfigHook
       npmConfigHook ? null,
@@ -85,6 +90,10 @@ lib.extendMkDerivation {
     {
       inherit npmDeps npmBuildScript;
 
+      env = (args.env or { }) // {
+        NIX_NPM_FETCHER_VERSION = npmDepsFetcherVersion;
+      };
+
       nativeBuildInputs =
         nativeBuildInputs
         ++ [
@@ -93,7 +102,7 @@ lib.extendMkDerivation {
           (if npmConfigHook != null then npmConfigHook else npmHooks.npmConfigHook)
           (if npmBuildHook != null then npmBuildHook else npmHooks.npmBuildHook)
           (if npmInstallHook != null then npmInstallHook else npmHooks.npmInstallHook)
-          nodejs.python
+          nodejs-slim.python
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
       buildInputs = buildInputs ++ [ nodejs ];

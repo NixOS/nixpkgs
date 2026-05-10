@@ -9,7 +9,6 @@ let
   inherit (lib) types;
   inherit (lib.attrsets)
     filterAttrs
-    mapAttrs
     mapAttrs'
     mapAttrsToList
     nameValuePair
@@ -31,10 +30,7 @@ let
 
   fwMarkFromHexOrNum =
     fwMark:
-    if (lib.hasPrefix "0x" fwMark) then
-      lib.fromHexString fwMark
-    else
-      (builtins.fromTOML "v=${fwMark}").v;
+    if (lib.hasPrefix "0x" fwMark) then lib.fromHexString fwMark else (fromTOML "v=${fwMark}").v;
 
   privateKeyCredential = interfaceName: escapeCredentialName "wireguard-${interfaceName}-private-key";
   presharedKeyCredential =

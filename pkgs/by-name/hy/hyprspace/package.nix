@@ -7,15 +7,15 @@
   nix,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hyprspace";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "hyprspace";
     repo = "hyprspace";
-    tag = "v${version}";
-    hash = "sha256-VOufAPhCbLzVxrj/XKwunJkxUx0EAovV4+adrQLwcoI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AsOgnnYZRoB/t2XwrTMD8XIHoy/bl6bqUvIT5e02uNo=";
   };
 
   env.CGO_ENABLED = "0";
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/hyprspace/hyprspace/cli.appVersion=${version}"
+    "-X github.com/hyprspace/hyprspace/cli.appVersion=${finalAttrs.version}"
   ];
 
   preBuild = ''
@@ -57,4 +57,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "hyprspace";
   };
-}
+})

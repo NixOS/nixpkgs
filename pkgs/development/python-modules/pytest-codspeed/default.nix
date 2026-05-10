@@ -24,14 +24,14 @@ in
 
 buildPythonPackage rec {
   pname = "pytest-codspeed";
-  version = "4.0.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "pytest-codspeed";
     tag = "v${version}";
-    hash = "sha256-5fdG7AEiLD3ZZzU/7zBK0+LDacTZooyDUo+FefcE4uQ=";
+    hash = "sha256-MrdMUTNXRatGNsfw7Ghp/PIXPnocEgEMBjAwML/tMos=";
   };
 
   postPatch = ''

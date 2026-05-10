@@ -1,6 +1,6 @@
 # K3s
 
-K3s is a simplified [Kubernetes](https://wiki.nixos.org/wiki/Kubernetes) version that bundles Kubernetes cluster components into a few small binaries optimized for Edge and IoT devices.
+K3s is a simplified [Kubernetes](https://wiki.nixos.org/wiki/Kubernetes) distribution that bundles Kubernetes cluster components into a few small binaries optimized for Edge and IoT devices.
 
 ## Usage
 
@@ -8,8 +8,8 @@ K3s is a simplified [Kubernetes](https://wiki.nixos.org/wiki/Kubernetes) version
 
 ## Configuration Examples
 
-* [Nvidia GPU Passthru](docs/examples/NVIDIA.md)
-* [Intel GPU Passthru](docs/examples/INTEL.md)
+* [Nvidia GPU Passthrough](docs/examples/NVIDIA.md)
+* [Intel GPU Passthrough](docs/examples/INTEL.md)
 * [Storage Examples](docs/examples/STORAGE.md)
 
 ## Cluster Maintenance and Troubleshooting

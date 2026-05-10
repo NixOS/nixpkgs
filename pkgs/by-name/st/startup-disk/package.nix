@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "davide125";
     repo = "startup-disk";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-258whEX6hKqfrk2aII15tuFEuB7NQUCNLEmi3OCOWV4=";
     domain = "gitlab.gnome.org";
   };
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     # Fix sudo crate's hardcoded /usr/bin/sudo
-    substituteInPlace $cargoDepsCopy/sudo-0.6.0/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/sudo-0.6.0/src/lib.rs \
       --replace-fail 'Command::new("/usr/bin/sudo")' 'Command::new("sudo")'
   '';
 

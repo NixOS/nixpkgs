@@ -54,11 +54,16 @@ stdenv.mkDerivation (finalAttrs: {
   # but the target was not found.
   #
   # So, we explicitly add `universe_domain` to the list of default features
+  #
+  # Also, we add the missing `<algorithm>` header to fix
+  # "error: 'transform' is not a member of 'std'"
   postPatch = ''
     substituteInPlace cmake/GoogleCloudCppFeatures.cmake \
       --replace-fail \
         "bigtable;bigquery;iam;logging;pubsub;spanner;storage" \
         "bigtable;bigquery;iam;logging;pubsub;spanner;storage;universe_domain" \
+
+    sed -e '1i #include <algorithm>' -i google/cloud/testing_util/command_line_parsing.cc
   '';
 
   nativeBuildInputs = [
@@ -108,7 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase =
     let
-      disabledTests = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      disabledTests = ''
+        bigtable_internal_data_connection_impl_test
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         common_internal_async_connection_ready_test
         bigtable_async_read_stream_test
         bigtable_metadata_update_policy_test

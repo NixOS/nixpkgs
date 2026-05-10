@@ -71,6 +71,7 @@ cat << EOF > "${WORKDIR}/1_${MINOR_VERSION}/versions.nix"
   pauseVersion = "${PAUSE_VERSION}";
   ccmVersion = "${CCM_VERSION}";
   dockerizedVersion = "${DOCKERIZED_VERSION}";
+  helmJobVersion = "${KLIPPERHELM_VERSION}";
   imagesVersions = with builtins; fromJSON (readFile ./images-versions.json);
 }
 EOF

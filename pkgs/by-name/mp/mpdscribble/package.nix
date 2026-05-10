@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -13,22 +12,18 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpdscribble";
-  version = "0.24";
+  version = "0.25";
 
   src = fetchurl {
-    url = "https://www.musicpd.org/download/mpdscribble/${version}/mpdscribble-${version}.tar.xz";
-    sha256 = "sha256-9rTLp0izuH5wUnC0kjyOI+lMLgD+3VC+sUaNvi+yqOc=";
+    url = "https://www.musicpd.org/download/mpdscribble/${finalAttrs.version}/mpdscribble-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-IPidlFv1F8TWi/d6d6NZ/bE4QqsSlejSHtp5vitbNc4=";
   };
 
-  # Fix build issue on darwin; to be removed after the next release
-  patches = [
-    (fetchpatch {
-      name = "remove-empty-static-lib.patch";
-      url = "https://github.com/MusicPlayerDaemon/mpdscribble/commit/0dbcea25c81f3fdc608f71ef71a9784679fee17f.patch";
-      sha256 = "sha256-3wLfQvbwx+OFrCl5vMV7Zps4e4iEYFhqPiVCo5hDqgw=";
-    })
+  mesonFlags = [
+    (lib.mesonOption "systemd_user_unit_dir" "etc/systemd/user")
+    (lib.mesonOption "systemd_system_unit_dir" "etc/systemd/system")
   ];
 
   postPatch = ''
@@ -52,8 +47,11 @@ stdenv.mkDerivation rec {
     description = "MPD client which submits info about tracks being played to a scrobbler";
     homepage = "https://www.musicpd.org/clients/mpdscribble/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.sohalt ];
+    maintainers = [
+      lib.maintainers.sohalt
+      lib.maintainers.kybe236
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "mpdscribble";
   };
-}
+})

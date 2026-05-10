@@ -5,9 +5,10 @@ let
 in
 {
   name = "iscsi";
-  meta = {
-    maintainers = lib.teams.deshaw.members ++ lib.teams.helsinki-systems.members;
-  };
+  meta.maintainers = with lib.maintainers; [
+    das_j
+    helsinki-Jo
+  ];
 
   nodes = {
     target =
@@ -141,6 +142,8 @@ in
           };
         };
 
+        # No SCSI support in systemd stage 1 at present.
+        boot.initrd.systemd.enable = false;
         boot.iscsi-initiator = {
           discoverPortal = "target";
           name = initiatorName;

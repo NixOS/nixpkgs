@@ -20,7 +20,7 @@
 assert
   variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5" || variant == "qt6";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
   version = "0.9.1";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "libportal";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CXI4rBr9wxLUX537d6SNNf8YFR/J6YdeROlFt3edeOU=";
   };
 
@@ -105,4 +105,4 @@ stdenv.mkDerivation rec {
     # needs memfd_create which is available on some unixes but not darwin
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
-}
+})

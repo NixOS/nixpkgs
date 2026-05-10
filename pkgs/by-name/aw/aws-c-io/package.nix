@@ -9,7 +9,7 @@
   s2n-tls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-io";
   # nixpkgs-update: no auto update
   version = "0.22.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-io";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NOEjXk4s/FV4CdmyXOr4Oh2y+pFNrUMP/Sy+X+fVQc4=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

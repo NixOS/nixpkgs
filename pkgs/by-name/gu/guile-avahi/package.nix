@@ -11,13 +11,13 @@
   guile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-avahi";
   version = "0.4.1";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/guile-avahi.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Yr+OiqaGv6DgsjxSoc4sAjy4OO/D+Q50vdSTPEeIrV8=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

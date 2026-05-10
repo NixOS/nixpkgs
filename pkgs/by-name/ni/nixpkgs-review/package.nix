@@ -20,16 +20,16 @@
   withGlow ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nixpkgs-review";
-  version = "3.6.0";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
-    tag = version;
-    hash = "sha256-SGykze7xkurdrqwMvXZU4E7VAuEcHCKqtlXAdaQrr1M=";
+    tag = finalAttrs.version;
+    hash = "sha256-AYizZ36di7DOtmaqMtWTvMVfe4DqJfCdhvxypweEArs=";
   };
 
   build-system = [
@@ -63,10 +63,16 @@ python3Packages.buildPythonApplication rec {
       ++ lib.optional withGlow glow;
     in
     [
-      "--prefix PATH : ${lib.makeBinPath binPath}"
-      "--set-default NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath binPath)
+      "--set-default"
+      "NIX_SSL_CERT_FILE"
+      "${cacert}/etc/ssl/certs/ca-bundle.crt"
       # we don't have any runtime deps but nixpkgs-review shells might inject unwanted dependencies
-      "--unset PYTHONPATH"
+      "--unset"
+      "PYTHONPATH"
     ];
 
   postInstall = lib.optionalString withAutocomplete ''
@@ -79,14 +85,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
+    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${finalAttrs.version}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = lib.licenses.mit;
     mainProgram = "nixpkgs-review";
     maintainers = with lib.maintainers; [
+      figsoda
       mdaniels5757
       mic92
     ];
   };
-}
+})

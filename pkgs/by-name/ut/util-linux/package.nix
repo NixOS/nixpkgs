@@ -35,16 +35,19 @@
   nixosTests,
 }:
 
+# lastlog requires PAM, or else it's broken.
+assert withLastlog -> pamSupport;
+
 let
   isMinimal = cryptsetupSupport == false && !nlsSupport && !ncursesSupport && !systemdSupport;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.2";
+  version = "2.42";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YGKh2JtXGmGTLm/AIR82BgxBg1aLge6GbPNjvOn2WD4=";
+    hash = "sha256-NFKyYLuqd11udJrDuyIRF4UAP8H0RJcAJcjaJt+nWOk=";
   };
 
   patches = [
@@ -52,13 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
-    # bits: only build when cpu_set_t is available
-    # Otherwise, the build fails on macOS
-    (fetchurl {
-      name = "bits-only-build-when-cpu_set_t-is-available.patch";
-      url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
-      hash = "sha256-G7Cdv8636wJEjgt9am7PaDI8bpSF8sO9bFWEIiAL25A=";
-    })
+
+    # Fix compile of 2.42+ on Darwin.
+    # https://lore.kernel.org/util-linux/CAEUYr6ZjVX1bd-xcBGtFN_ZYwQnXDYsw7d1-7sTpF2BbgfrR+g@mail.gmail.com/T/#u
+    ./include-correct-struct-statfs-header.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # Musl does not define AT_HANDLE_FID, hard-code it.
+    # https://github.com/util-linux/util-linux/pull/4203
+    ./fix-musl-nsenter.patch
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -202,7 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     moveToOutput "bin/lastlog2" "$lastlog"
     ln -svf "$lastlog/bin/"* $bin/bin/
-
   ''
   + lib.optionalString (withLastlog && systemdSupport) ''
     moveToOutput "lib/systemd/system/lastlog2-import.service" "$lastlog"
@@ -214,19 +218,20 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   passthru = {
-    updateScript = gitUpdater {
-      # No nicer place to find latest release.
-      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
-      rev-prefix = "v";
-      ignoredVersions = "(-rc).*";
-    };
-
     # encode upstream assumption to be used in man-db
     # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
     hasCol = stdenv.hostPlatform.libc == "glibc";
 
     tests = {
       inherit (nixosTests) pam-lastlog;
+    };
+  }
+  // lib.optionalAttrs (!isMinimal) {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
+      rev-prefix = "v";
+      ignoredVersions = "(-rc|-start|-devel).*";
     };
   };
 
@@ -245,6 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ numinit ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [
       "blkid"
@@ -254,5 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
       "uuid"
     ];
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
+
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kernel" finalAttrs.version;
   };
 })

@@ -148,7 +148,7 @@ let
   '';
 
   maybeString = prefix: x: optionalString (x != null) ''${prefix} "${x}"'';
-  maybeToString = prefix: x: optionalString (x != null) ''${prefix} ${toString x}'';
+  maybeToString = prefix: x: optionalString (x != null) "${prefix} ${toString x}";
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
   keyConfigFile = concatStrings (

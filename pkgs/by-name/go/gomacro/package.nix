@@ -25,5 +25,6 @@ buildGoModule {
     homepage = "https://github.com/cosmos72/gomacro";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ shofius ];
+    broken = true;
   };
 }

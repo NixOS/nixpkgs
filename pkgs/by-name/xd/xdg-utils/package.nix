@@ -297,7 +297,7 @@ let
   ];
 in
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-utils";
   version = "1.2.1";
 
@@ -305,7 +305,7 @@ stdenv.mkDerivation (self: {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
@@ -336,7 +336,7 @@ stdenv.mkDerivation (self: {
   passthru.tests.xdg-mime =
     runCommand "xdg-mime-test"
       {
-        nativeBuildInputs = [ self.finalPackage ];
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
         preferLocalBuild = true;
         xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
           "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [

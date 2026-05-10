@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "coq-tools";
-  version = "0.0.39";
+  version = "0.0.42";
   pyproject = true;
 
   src = fetchPypi {
     pname = "coq_tools";
     inherit version;
-    hash = "sha256-MPgu5inr2CMOU3qlF9v8QtqhkPuP/uIQrJYyfmpZBxE=";
+    hash = "sha256-d+SAGmZKUQo2ZKuC91r/2RHDvi5GCIKGTxcuau1kN0U=";
   };
 
   build-system = [ setuptools ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     description = "Tools for working with Coq proof assistant";
     homepage = "https://pypi.org/project/coq-tools/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ siraben ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

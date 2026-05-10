@@ -6,7 +6,7 @@
   makeBinaryWrapper,
   writableTmpDirAsHomeHook,
   libGL,
-  libX11,
+  libx11,
   libxkbcommon,
   libxcb,
   wayland,
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libGL
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libX11
+        libx11
         libxkbcommon
         wayland
       ];

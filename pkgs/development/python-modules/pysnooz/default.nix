@@ -13,7 +13,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   transitions,
 }:
 
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pysnooz";
   version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";

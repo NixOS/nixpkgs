@@ -24,24 +24,33 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "learn6502";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "JumpLink";
     repo = "Learn6502";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YWbq0r6OEZpg4l633Y/1+r1Ik42ldoBH1ZjszRKNjRY=";
+    hash = "sha256-MR4QslG1DnnYLLn7esXGit0HG1cW37ECUE2hgOegudw=";
   };
+
+  patches = [
+    ./get-yarn-from-path.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/JumpLink/Learn6502/blob/main/package.json#L36
+    ./yarn-4.14-support.patch
+  ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-5wwpB4iDw/J7nUnb/qdSP+M0LLmHVU4/Zr+Ohl6Q4vk=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-sxlKw7txvFs9dI76dTf/Ap/2ADNH74q6rGS5ly65ILo=";
   };
 
   nativeBuildInputs = [
     nodejs
+    yarn-berry
     yarn-berry.yarnBerryConfigHook
     meson
     ninja

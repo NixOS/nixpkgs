@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   grpcio,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "starlink-grpc-core";
-  version = "1.2.3";
+  version = "1.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sparky8512";
     repo = "starlink-grpc-tools";
     tag = "v${version}";
-    hash = "sha256-TXj8cU5abVIA81vEylYgZCIAUk31BppwRdHMl9kOEPQ=";
+    hash = "sha256-+KQ0zzgbqnzeQZXBTxnclJQbRioirK8Ym4EjJSQA3ZE=";
   };
 
   pypaBuildFlags = [ "packaging" ];

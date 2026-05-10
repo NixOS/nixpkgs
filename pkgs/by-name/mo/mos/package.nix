@@ -2,21 +2,21 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  undmg,
+  unzip,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mos";
-  version = "3.5.0";
+  version = "4.0.2";
 
   src = fetchurl {
-    url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}.dmg";
-    hash = "sha256-o2H4cfMudjoQHfKeV4ORiO9/szoomFP0IP6D6ecMAI4=";
+    url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}-20260308.2.zip";
+    hash = "sha256-1DBFRIRjR9Fcl5DtHeuwn3qZgQ+jWRujYFzjPqa3/dY=";
   };
   sourceRoot = ".";
 
   nativeBuildInputs = [
-    undmg
+    unzip
   ];
 
   installPhase = ''

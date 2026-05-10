@@ -14,14 +14,14 @@
 
 assert enableLTO -> stdenv.cc.isGNU;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dictu";
   version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "dictu-lang";
     repo = "dictu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Tahi2K8Q/KPc9MN7yWhkqp/MzXfzJzrGSsvnTCyI03U=";
   };
 
@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     sed -i src/CMakeLists.txt \
         -e 's/-flto/${lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation"}/'
   '';
+
+  # bcrypt magic value triggers gcc 15 -Wunterminated-string-initialization.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unterminated-string-initialization";
 
   cmakeFlags = [
     "-DBUILD_CLI=${if cliSupport then "ON" else "OFF"}"
@@ -93,4 +96,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dictu.x86_64-darwin
   };
-}
+})

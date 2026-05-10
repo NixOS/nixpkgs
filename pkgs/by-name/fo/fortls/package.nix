@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fortls";
   version = "3.2.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = "fortls";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cUZBr+dtTFbd68z6ts4quIPp9XYMikUBrCq+icrZ1KU=";
   };
 
@@ -57,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libebml";
   version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "Matroska-Org";
     repo = "libebml";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "sha256-PIVBePTWceMgiENdaL9lvXIL/RQIrtg7l0OG2tO0SU8=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

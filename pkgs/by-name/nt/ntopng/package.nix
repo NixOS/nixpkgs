@@ -23,17 +23,18 @@
   sqlite,
   which,
   zeromq,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntopng";
-  version = "6.2";
+  version = "6.6";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "ntopng";
     tag = finalAttrs.version;
-    hash = "sha256-8PG18mOV/6EcBpKt9kLyI40OLDnpnc2b4IUu9JbK/Co=";
+    hash = "sha256-BYJtsEuxmo6jzqCoC/A5vDAiFSGqy8XFyqooGDTZE40=";
     fetchSubmodules = true;
   };
 
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     git
     pkg-config
     which
+    cmake
   ];
 
   buildInputs = [
@@ -91,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doc/README.geolocation.md "$out/share/ntopng/doc/"
   '';
 
+  dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
 
   meta = {

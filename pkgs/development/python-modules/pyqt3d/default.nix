@@ -5,7 +5,6 @@
   pyqt5,
   pyqt-builder,
   python,
-  pythonOlder,
   qt3d,
   setuptools,
   sip,
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "pyqt3d";
   version = "5.15.7";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyQt3D";

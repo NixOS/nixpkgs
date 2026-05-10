@@ -4,39 +4,12 @@
 let
   inherit (lib)
     mkOption
-    mkOptionType
     types
     ;
 
-  maintainer = mkOptionType {
-    name = "maintainer";
-    check = email: lib.elem email (lib.attrValues lib.maintainers);
-    merge = loc: defs: {
-      # lib.last: Perhaps this could be merged instead, if "at most once per module"
-      # is a problem (see option description).
-      ${(lib.last defs).file} = (lib.last defs).value;
-    };
-  };
-
-  listOfMaintainers = types.listOf maintainer // {
-    merge =
-      loc: defs:
-      lib.zipAttrs (
-        lib.flatten (
-          lib.imap1 (
-            n: def:
-            lib.imap1 (
-              m: def':
-              maintainer.merge (loc ++ [ "[${toString n}-${toString m}]" ]) [
-                {
-                  inherit (def) file;
-                  value = def';
-                }
-              ]
-            ) def.value
-          ) defs
-        )
-      );
+  # The resulting value of this type shows where all values were defined
+  sourceList = types.listOf types.raw // {
+    merge = loc: defs: lib.listToAttrs (lib.map ({ file, value }: lib.nameValuePair file value) defs);
   };
 in
 {
@@ -44,14 +17,37 @@ in
   options = {
     meta = {
       maintainers = mkOption {
-        type = listOfMaintainers;
+        type =
+          let
+            allMaintainers = lib.attrValues lib.maintainers;
+          in
+          lib.types.addCheck sourceList (lib.all (v: lib.elem v allMaintainers))
+          // {
+            description = "list of lib.maintainers";
+          };
         default = [ ];
-        example = lib.literalExpression ''[ lib.maintainers.alice lib.maintainers.bob ]'';
+        example = lib.literalExpression "[ lib.maintainers.alice lib.maintainers.bob ]";
         description = ''
           List of maintainers of each module.
           This option should be defined at most once per module.
 
           The option value is not a list of maintainers, but an attribute set that maps module file names to lists of maintainers.
+        '';
+      };
+      teams = mkOption {
+        type =
+          let
+            allTeams = lib.attrValues lib.teams;
+          in
+          lib.types.addCheck sourceList (lib.all (v: lib.elem v allTeams))
+          // {
+            description = "list of lib.teams";
+          };
+        default = [ ];
+        example = lib.literalExpression "[ lib.teams.acme lib.teams.haskell ]";
+        description = ''
+          List of team maintainers of each module.
+          This option should be defined at most once per module.
         '';
       };
     };

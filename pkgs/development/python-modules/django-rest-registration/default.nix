@@ -7,7 +7,6 @@
   pytest-django,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyjwt,
   setuptools,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "apragacz";

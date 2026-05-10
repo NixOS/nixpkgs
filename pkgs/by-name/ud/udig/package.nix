@@ -5,7 +5,7 @@
   unzip,
   makeWrapper,
   jre8,
-  libXtst,
+  libxtst,
   gdal,
 }:
 let
@@ -58,7 +58,7 @@ let
         --prefix PATH : ${jre8}/bin \
         --prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
-            libXtst
+            libxtst
             gdal
           ]
         }

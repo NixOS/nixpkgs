@@ -5,14 +5,14 @@
   asciidoc-full,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rep";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "rep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "pqmISVm3rYGxRuwKieVpRwXE8ufWnBHEA6h2hrob51s=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.eraserhd ];
   };
-}
+})

@@ -4,17 +4,17 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsettingsd";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "derat";
     repo = "xsettingsd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CIYshZqJICuL8adKHIN4R6nudaqWOCK2UPrGhsKf9pE=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   # we end up with symlinked unit files if we don't move them around ourselves
   postFixup = ''
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xsettingsd";
   };
-}
+})

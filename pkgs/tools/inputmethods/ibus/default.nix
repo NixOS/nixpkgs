@@ -38,7 +38,7 @@
   nixosTests,
   versionCheckHook,
   nix-update-script,
-  libX11,
+  libx11,
   libOnly ? false,
 }:
 
@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3 # for pygobject overrides
     isocodes
     json-glib
-    libX11
+    libx11
     vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ]
   ++ lib.optionals (!libOnly) [

@@ -6,14 +6,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ninvaders";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "sf-refugees";
     repo = "ninvaders";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1wmwws1zsap4bfc2439p25vnja0hnsf57k293rdxw626gly06whi";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _1000101 ];
     platforms = lib.platforms.all;
   };
-}
+})

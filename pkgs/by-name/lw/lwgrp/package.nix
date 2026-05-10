@@ -6,14 +6,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lwgrp";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "lwgrp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZpxxcCqK+qdvnCvobeBV6htRF8wThiQgVFYgEigqmIE=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

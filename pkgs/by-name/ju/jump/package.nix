@@ -6,15 +6,15 @@
   stdenv,
   writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jump";
-  version = "0.51.0";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "gsamokovarov";
     repo = "jump";
-    rev = "v${version}";
-    hash = "sha256-nlCuotEiAX2+xx7T8jWZo2p4LNLhWXDdcU6DxJprgx0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/vMQIbpfnEzBhyCUgSd4XpeC9cEX/+AYIRDTOqgmCec=";
   };
 
   vendorHash = "sha256-nMUqZWdq//q/DNthvpKiYLq8f95O0QoItyX5w4vHzSA=";
@@ -51,4 +51,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "jump";
   };
-}
+})

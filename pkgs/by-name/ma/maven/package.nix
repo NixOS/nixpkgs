@@ -78,13 +78,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
+    changelog = "https://maven.apache.org/docs/${finalAttrs.version}/release-notes.html";
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ tricktron ];
+    maintainers = with lib.maintainers; [
+      tricktron
+      britter
+    ];
     teams = [ lib.teams.java ];
     inherit (jdk_headless.meta) platforms;
   };

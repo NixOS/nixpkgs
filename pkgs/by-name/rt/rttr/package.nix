@@ -6,14 +6,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rttr";
   version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "rttrorg";
     repo = "rttr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1yxad8sj40wi75hny8w6imrsx8wjasjmsipnlq559n4b6kl84ijp";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

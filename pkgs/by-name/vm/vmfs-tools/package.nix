@@ -10,7 +10,7 @@
   libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vmfs-tools";
   version = "0.2.5.20160116";
 
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
   };
-}
+})

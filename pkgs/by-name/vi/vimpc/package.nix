@@ -12,14 +12,14 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.09.2";
   pname = "vimpc";
 
   src = fetchFromGitHub {
     owner = "boysetsfrog";
     repo = "vimpc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0lswzkap2nm7v5h7ppb6a64cb35rajysd09nb204rxgrkij4m6nx";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "vimpc";
   };
-}
+})

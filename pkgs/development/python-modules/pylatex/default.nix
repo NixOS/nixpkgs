@@ -2,21 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   ordered-set,
   pytestCheckHook,
   matplotlib,
   quantities,
-  texlive,
+  texliveSmall,
 }:
 
 buildPythonPackage rec {
   pname = "pylatex";
   version = "1.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JelteF";
@@ -38,7 +35,12 @@ buildPythonPackage rec {
     pytestCheckHook
     matplotlib
     quantities
-    (texlive.combine { inherit (texlive) scheme-small lastpage collection-fontsrecommended; })
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        lastpage
+        collection-fontsrecommended
+      ]
+    ))
   ];
 
   meta = {

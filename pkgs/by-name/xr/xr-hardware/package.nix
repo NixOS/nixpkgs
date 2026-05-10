@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "monado/utilities";
     repo = "xr-hardware";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-w35/LoozCJz0ytHEHWsEdCaYYwyGU6sE13iMckVdOzY=";
   };
 

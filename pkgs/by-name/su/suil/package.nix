@@ -29,14 +29,14 @@ let
   inherit (lib) mesonEnable;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "suil";
   version = "0.10.20";
 
   src = fetchFromGitLab {
     owner = "lv2";
     repo = "suil";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rP8tq+zmHrAZeuNttakPPfraFXNvnwqbhtt+LtTNV/k=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

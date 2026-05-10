@@ -16,6 +16,7 @@
   keyutils,
   udevCheckHook,
   gettext,
+  versionCheckHook,
 
   # drbd-utils are compiled twice, once with forOCF = true to extract
   # its OCF definitions for use in the ocf-resource-agents derivation,
@@ -25,12 +26,12 @@
   ocf-resource-agents,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drbd";
   version = "9.33.0";
 
   src = fetchurl {
-    url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
+    url = "https://pkg.linbit.com/downloads/drbd/utils/drbd-utils-${finalAttrs.version}.tar.gz";
     hash = "sha256-Ij/gfQtkbpkbM7qepBRo+aZvkDVi59p2bdD8a06jPbk=";
   };
 
@@ -42,13 +43,15 @@ stdenv.mkDerivation rec {
     keyutils
     udevCheckHook
     gettext
+    perl
+    perlPackages.Po4a
   ];
 
   buildInputs = [
-    perl
-    perlPackages.Po4a
     gettext
   ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--libdir=${placeholder "out"}/lib"
@@ -113,6 +116,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = [ "${placeholder "out"}/bin/drbdadm" ];
+  versionCheckProgramArg = "--version";
 
   passthru.tests.drbd = nixosTests.drbd;
 
@@ -131,4 +137,4 @@ stdenv.mkDerivation rec {
       mirroring the content of block devices (hard disks, partitions, logical volumes etc.) between hosts.
     '';
   };
-}
+})

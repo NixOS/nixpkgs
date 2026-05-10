@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dockfmt";
   version = "unstable-2020-09-18";
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/jessfraz/dockfmt/version.VERSION=${version}"
+    "-X github.com/jessfraz/dockfmt/version.VERSION=${finalAttrs.version}"
   ];
 
   meta = {
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

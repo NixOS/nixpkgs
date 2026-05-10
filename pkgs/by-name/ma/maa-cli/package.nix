@@ -12,14 +12,14 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "maa-cli";
   version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "maa-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TLm8B1cQ00l9aRADYU3Qv7nA04kDaxsXX86qvsTRWwk=";
   };
 
@@ -73,4 +73,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Cryolitia ];
     mainProgram = "maa";
   };
-}
+})

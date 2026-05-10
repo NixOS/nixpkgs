@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   freezegun,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "itsdangerous";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

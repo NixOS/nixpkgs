@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -17,8 +16,6 @@ let
     pname = "packaging";
     version = "25.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;

@@ -5,14 +5,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amfora";
   version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner = "makeworld-the-better-one";
+    owner = "makew0rld";
     repo = "amfora";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6nY/wVqhSm+ZLA8ktrgmxoYiHK1r96aNbSf8+1YMXf8=";
   };
 
@@ -26,9 +26,9 @@ buildGoModule rec {
   meta = {
     description = "Fancy terminal browser for the Gemini protocol";
     mainProgram = "amfora";
-    homepage = "https://github.com/makeworld-the-better-one/amfora";
+    homepage = "https://github.com/makew0rld/amfora";
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ deifactor ];
-    changelog = "https://github.com/makeworld-the-better-one/amfora/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/makew0rld/amfora/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

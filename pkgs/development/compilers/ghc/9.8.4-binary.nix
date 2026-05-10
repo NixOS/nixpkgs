@@ -321,6 +321,18 @@ stdenv.mkDerivation {
   # fix for `configure: error: Your linker is affected by binutils #16177`
   preConfigure = lib.optionalString stdenv.targetPlatform.isAarch32 "LD=ld.gold";
 
+  # Patch shebangs in mk/ scripts that are executed during install.
+  # Without this, they may invoke the host /bin/sh, which is impurely
+  # mounted into the build environment by Nix.
+  #
+  # When /bin/sh is pulled from the host, its entire runtime closure is used.
+  # If that shell was built against an older glibc than the one in the sandbox,
+  # LD_LIBRARY_PATH can cause it to load incompatible libraries, resulting in
+  # glibc version mismatches
+  postConfigure = ''
+    patchShebangs mk/
+  '';
+
   # GHC has a patched config.sub and bindists' platforms should always work
   dontUpdateAutotoolsGnuConfigScripts = true;
 

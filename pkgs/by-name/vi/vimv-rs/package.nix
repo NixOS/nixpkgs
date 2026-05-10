@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vimv-rs";
   version = "3.1.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     crateName = "vimv";
     hash = "sha256-jbRsgEsRYF5hlvo0jEB4jhy5jzCAXNzOsNWWyh4XULQ=";
   };
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "vimv";
     maintainers = with lib.maintainers; [ zowoq ];
   };
-}
+})

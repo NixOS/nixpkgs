@@ -5,32 +5,40 @@
   cmake,
   boost,
   eigen,
+  gtest,
+  help2man,
   rapidjson,
   spdlog,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vowpal-wabbit";
-  version = "9.10.0";
+  version = "9.11.2";
 
   src = fetchFromGitHub {
     owner = "VowpalWabbit";
     repo = "vowpal_wabbit";
-    tag = version;
-    hash = "sha256-HKxhEB4ph2tOWgvYngYTcv0OCMISj3KqZpP2zsEUPs0=";
+    tag = finalAttrs.version;
+    hash = "sha256-A1Eqj843QidqVlADi6qEKFuw+T0h1FxkRwJ9oRTZgeU=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # https://github.com/VowpalWabbit/vowpal_wabbit/pull/4916
+    ./add-missing-includes.patch
+  ];
+
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "set(VW_CXX_STANDARD 11)" "set(VW_CXX_STANDARD 14)"
     # Avoid duplicate add RapidJSON
     substituteInPlace ext_libs/ext_libs.cmake \
       --replace-fail "add_library(RapidJSON INTERFACE)" ""
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    help2man
+  ];
 
   buildInputs = [
     boost
@@ -41,6 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DUSE_LATEST_STD=ON"
     "-DVW_INSTALL=ON"
     "-DBUILD_JAVA=OFF"
     "-DBUILD_PYTHON=OFF"
@@ -49,7 +58,17 @@ stdenv.mkDerivation rec {
     "-DSPDLOG_SYS_DEP=ON"
     "-DVW_BOOST_MATH_SYS_DEP=ON"
     "-DVW_EIGEN_SYS_DEP=ON"
+    "-DVW_GTEST_SYS_DEP=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_CTEST_ARGUMENTS=-E;SpanningTreeTest"
   ];
+
+  checkInputs = [
+    gtest
+  ];
+
+  doCheck = true;
 
   meta = {
     description = "Machine learning system focused on online reinforcement learning";
@@ -62,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jackgerrits ];
     platforms = lib.platforms.unix;
   };
-}
+})

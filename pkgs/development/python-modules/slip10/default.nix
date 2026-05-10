@@ -5,17 +5,16 @@
   poetry-core,
   base58,
   cryptography,
-  ecdsa,
 }:
 
 buildPythonPackage rec {
   pname = "slip10";
-  version = "1.0.1";
-  format = "pyproject";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ArNQrlV7WReRQosXVR+V16xX6SEfN969yBTJC0oSOlQ=";
+    hash = "sha256-0kjT3ybxI/CEdDOcRfDyZCVPdK6aVlcjSh1euR8MTVQ=";
   };
 
   build-system = [ poetry-core ];
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     base58
     cryptography
-    ecdsa
   ];
 
   pythonImportsCheck = [ "slip10" ];

@@ -122,6 +122,11 @@ stdenv.mkDerivation {
   # Build "x86_64" EFI for x86_64
   ++ lib.optional stdenv.hostPlatform.isx86_64 "efi64";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   # Some tests require qemu, some others fail in a sandboxed environment
   doCheck = false;
 

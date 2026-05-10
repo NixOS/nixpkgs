@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./0001-changes.patch ];
 
   nativeBuildInputs = [
-    zig_0_14.hook
+    zig_0_14
   ];
 
   zigBuildFlags = [ "--release=fast" ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libz
   ];
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${callPackage ./build.zig.zon.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 

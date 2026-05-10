@@ -6,12 +6,12 @@
   libxcrypt-legacy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nav";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${stdenv.hostPlatform.parsed.cpu.name}-unknown-linux-gnu.tar.gz";
+    url = "https://github.com/Jojo4GH/nav/releases/download/v${finalAttrs.version}/nav-${stdenv.hostPlatform.parsed.cpu.name}-unknown-linux-gnu.tar.gz";
     sha256 =
       {
         x86_64-linux = "sha256-LQdw8/V1KFNM6TY1rFt/RiZuiRQXM+8HNGkJXDrE/mw=";
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "nav";
   };
-}
+})

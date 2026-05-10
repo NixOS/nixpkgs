@@ -14,14 +14,14 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dbcsr";
   version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "dbcsr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-F6EvpsPAJJvmEZQKJDW2Mk4Yo8VsQCD4CE2IqxpjyN8=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cp2k/dbcsr";
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

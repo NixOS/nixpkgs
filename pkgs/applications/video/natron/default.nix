@@ -10,9 +10,9 @@
   cairo,
   ceres-solver,
   expat,
-  extra-cmake-modules,
+  kdePackages,
   glog,
-  libXdmcp,
+  libxdmcp,
   python312,
   wayland,
 }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     wayland
     glog
     ceres-solver
-    libXdmcp
+    libxdmcp
   ];
 
   postInstall = ''

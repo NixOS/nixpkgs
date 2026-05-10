@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  libX11,
-  libXinerama,
-  libXrandr,
-  libXpm,
-  libXft,
+  libx11,
+  libxinerama,
+  libxrandr,
+  libxpm,
+  libxft,
   imlib2,
 }:
 stdenv.mkDerivation {
@@ -35,11 +35,11 @@ stdenv.mkDerivation {
 
   buildInputs = [
     imlib2
-    libX11
-    libXinerama
-    libXrandr
-    libXpm
-    libXft
+    libx11
+    libxinerama
+    libxrandr
+    libxpm
+    libxft
   ];
 
   preConfigure = "substituteInPlace configure --replace '-lxft' '-lXft'";

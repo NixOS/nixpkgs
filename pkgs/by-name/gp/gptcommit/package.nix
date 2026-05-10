@@ -8,17 +8,14 @@
   openssl,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gptcommit";
   version = "0.5.17";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "zurawiki";
     repo = "gptcommit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MB78QsJA90Au0bCUXfkcjnvfPagTPZwFhFVqxix+Clw=";
   };
 
@@ -43,4 +40,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = with lib.platforms; all;
   };
-}
+})

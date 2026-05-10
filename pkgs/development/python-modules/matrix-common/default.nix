@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "matrix-common";
   version = "1.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "matrix_common";

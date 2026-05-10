@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-gen-entgrpc";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "contrib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kI+/qbWvOxcHKee7jEFBs5Bb+5MPGunAsB6d1j9fhp8=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     homepage = "https://entgo.io/";
     maintainers = [ ];
   };
-}
+})

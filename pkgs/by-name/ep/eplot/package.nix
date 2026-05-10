@@ -55,7 +55,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       bjornfor
-      shamilton
     ];
   };
 }

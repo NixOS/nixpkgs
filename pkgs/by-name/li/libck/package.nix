@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ck";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "concurrencykit";
     repo = "ck";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})

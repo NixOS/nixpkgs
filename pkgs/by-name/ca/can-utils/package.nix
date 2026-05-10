@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "can-utils";
   version = "2025.01";
 
   src = fetchFromGitHub {
     owner = "linux-can";
     repo = "can-utils";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wum0hqPj3rCHHubNsOnj89tvrRQxoXrGQvZFcMKAGME=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
       Luflosi
     ];
   };
-}
+})

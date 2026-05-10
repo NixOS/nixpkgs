@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gsctl";
   version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "giantswarm";
     repo = "gsctl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-eemPsrSFwgUR1Jz7283jjwMkoJR38QiaiilI9G0IQuo=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/giantswarm/gsctl/buildinfo.Version=${version}"
+    "-X github.com/giantswarm/gsctl/buildinfo.Version=${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [
@@ -47,4 +47,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ joesalisbury ];
     mainProgram = "gsctl";
   };
-}
+})

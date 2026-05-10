@@ -10,22 +10,22 @@
   yarnBuildHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lasuite-docs-frontend";
-  version = "4.1.0";
+  version = "4.8.6";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
-    tag = "v${version}";
-    hash = "sha256-vZkqHlZ1aDOXcrdyV8BXmI95AmMalXOuVLS9XWB/YxU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8xMHHyj9qUdrd5dFYVlN2bi7EVjcEqoBBxIifC8xk3k=";
   };
 
-  sourceRoot = "source/src/frontend";
+  sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/src/frontend/yarn.lock";
-    hash = "sha256-3yRKWIOPBRrOxBWUW3C5xFjb2dcA6c3cMOD8PZWjHNA=";
+    yarnLock = "${finalAttrs.src}/src/frontend/yarn.lock";
+    hash = "sha256-4jaKWepa3+SxEVS+gF5QrOeJaOpS8vzFXZyN9SxClUE=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,12 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Collaborative note taking, wiki and documentation platform that scales. Built with Django and React. Opensource alternative to Notion or Outline";
     homepage = "https://github.com/suitenumerique/docs";
-    changelog = "https://github.com/suitenumerique/docs/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     platforms = lib.platforms.all;
   };
-}
+})

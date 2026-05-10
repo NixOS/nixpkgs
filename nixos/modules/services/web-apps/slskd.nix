@@ -45,7 +45,7 @@ in
         example = lib.literalExpression ''
           {
             enableACME = true;
-            forceHttps = true;
+            forceSSL = true;
           }
         '';
         description = ''

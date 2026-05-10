@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "bottombar";
   version = "2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evalf";

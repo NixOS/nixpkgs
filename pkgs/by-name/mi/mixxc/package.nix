@@ -14,13 +14,13 @@
   enableX11 ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mixxc";
   version = "0.2.5";
 
   src = fetchCrate {
     pname = "mixxc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YVh6SOXCf4GHqDduXP7QupC48hcIMQtjIdGJYXNXQ1E=";
   };
 
@@ -64,4 +64,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mixxc";
     platforms = lib.platforms.linux;
   };
-}
+})

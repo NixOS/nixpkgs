@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/intive-DataScience/tbats";
     changelog = "https://github.com/intive-DataScience/tbats/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

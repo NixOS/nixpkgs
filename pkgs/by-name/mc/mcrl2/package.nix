@@ -7,30 +7,60 @@
   libGL,
   qt6,
   boost,
+  ninja,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
-  version = "202407";
-  build_nr = "1";
+  version = "202507";
+  build_nr = "0";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    hash = "sha256-VhP9BFSujxYMcQVu6P6k6yiH2UUhCB3P+Pj+9Ir7x6s=";
+    hash = "sha256-Ur7GGXbYvVmrEUq/CTRyuVNLDHKfFrYHJibo0JvYhyM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/mCRL2.app $out/Applications
+    mkdir $out/bin
+    makeWrapper "$out/Applications/mCRL2.app/Contents/MacOS/mCRL2" "$out/bin/mcrl2ide"
+  '';
+
+  postFixup = lib.optional stdenv.hostPlatform.isDarwin ''
+    APP_DIR="$out/Applications/mCRL2.app/Contents"
+    find "$APP_DIR/lib" -name "*.dylib" | while read lib; do
+      install_name_tool -id "@rpath/$(basename "$lib")" "$lib" || true
+      otool -L "$lib" | grep "$out" | awk '{print $1}' | while read old_path; do
+        install_name_tool -change "$old_path" "@rpath/$(basename "$old_path")" "$lib" || true
+      done
+    done
+    find "$APP_DIR/bin" -type f | while read bin; do
+      install_name_tool -add_rpath "@loader_path/../lib" "$bin" || true
+      otool -L "$bin" | grep "$out" | awk '{print $1}' | while read old_path; do
+        libname=$(basename "$old_path")
+        install_name_tool -change "$old_path" "@rpath/$libname" "$bin" || true
+      done
+    done
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
   buildInputs = [
     libGLU
     libGL
     qt6.qtbase
     boost
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   dontWrapQtApps = true;
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Toolset for model-checking concurrent systems and protocols";
     longDescription = ''
       A formal specification language with an associated toolset,

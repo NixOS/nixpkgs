@@ -7,12 +7,12 @@
   libgpg-error,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libksba";
   version = "1.6.7";
 
   src = fetchurl {
-    url = "mirror://gnupg/libksba/libksba-${version}.tar.bz2";
+    url = "mirror://gnupg/libksba/libksba-${finalAttrs.version}.tar.bz2";
     hash = "sha256-z3JRC467TrZpPu92V0nYNnegPHkpGjEQQKW/15uqt2M=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.lgpl3;
   };
-}
+})

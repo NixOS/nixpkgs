@@ -7,14 +7,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maxcso";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "unknownbrackets";
     repo = "maxcso";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6LjR1ZMZsi6toz9swPzNmSAlrUykwvVdYi1mR8Ctq5U=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     mainProgram = "maxcso";
   };
-}
+})

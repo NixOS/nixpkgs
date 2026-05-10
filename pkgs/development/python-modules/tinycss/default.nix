@@ -5,15 +5,12 @@
   cython,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tinycss";
   version = "0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   # Disable Cython tests
-  TINYCSS_SKIP_SPEEDUPS_TESTS = true;
+  env.TINYCSS_SKIP_SPEEDUPS_TESTS = true;
 
   pythonImportsCheck = [ "tinycss" ];
 

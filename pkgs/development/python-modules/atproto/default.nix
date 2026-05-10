@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   nix-update-script,
 
   # build-system
@@ -27,7 +26,7 @@
 buildPythonPackage rec {
   pname = "atproto";
   version = "0.0.65";
-  format = "pyproject";
+  pyproject = true;
 
   # use GitHub, pypi does not include tests
   src = fetchFromGitHub {
@@ -37,7 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-0NogKxYO+lCtNhK2ZWwRLQTV7rHU5Oz+lnE4awsoPsM=";
   };
 
-  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
   build-system = [
     poetry-core

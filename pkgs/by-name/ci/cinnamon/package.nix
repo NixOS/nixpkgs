@@ -22,8 +22,8 @@
   json-glib,
   libsecret,
   libstartup_notification,
-  libXtst,
-  libXdamage,
+  libxtst,
+  libxdamage,
   libgbm,
   muffin,
   networkmanager,
@@ -72,15 +72,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon";
-  version = "6.6.3";
+  version = "6.6.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
-    tag = version;
-    hash = "sha256-BPHHvcE0jmrOo5W4Egv1Hir8t4CSPJGH3oqv1VJ4AUQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-ByPn2VV40y+3/FW/KPIsLt43FhVxQAQldCK26KNKdjw=";
   };
 
   patches = [
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
     json-glib
     libsecret
     libstartup_notification
-    libXtst
-    libXdamage
+    libxtst
+    libxdamage
     libgbm
     muffin
     networkmanager
@@ -215,4 +215,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

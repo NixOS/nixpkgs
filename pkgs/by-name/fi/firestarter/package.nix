@@ -98,9 +98,9 @@ stdenv.mkDerivation rec {
       [ glibc.static ]
   );
 
-  NIX_LDFLAGS = lib.optionals withCuda [
-    "-L${cudatoolkit}/lib/stubs"
-  ];
+  env = lib.optionalAttrs withCuda {
+    NIX_LDFLAGS = "-L${cudatoolkit}/lib/stubs";
+  };
 
   cmakeFlags = [
     "-DFIRESTARTER_BUILD_HWLOC=OFF"

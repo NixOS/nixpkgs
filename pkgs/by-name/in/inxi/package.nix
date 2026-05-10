@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   perl,
   perlPackages,
   makeWrapper,
+  installShellFiles,
   ps,
   dnsutils, # dig is recommended for multiple categories
   withRecommends ? false, # Install (almost) all recommended tools (see --recommends)
@@ -25,7 +26,9 @@
   pciutils,
   withRecommendedDisplayInformationPrograms ? withRecommends,
   mesa-demos,
-  xorg,
+  xrandr,
+  xprop,
+  xdpyinfo,
 }:
 
 let
@@ -46,14 +49,12 @@ let
     upower
     pciutils
   ];
-  recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms (
-    [ mesa-demos ]
-    ++ (with xorg; [
-      xdpyinfo
-      xprop
-      xrandr
-    ])
-  );
+  recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms [
+    mesa-demos
+    xdpyinfo
+    xprop
+    xrandr
+  ];
   programs = [
     ps
     dnsutils
@@ -63,28 +64,37 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";
-  version = "3.3.39-1";
+  version = "3.3.40-1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "smxi";
     repo = "inxi";
     tag = finalAttrs.version;
-    hash = "sha256-IfwklyXMOuluQ6L96n7k31RHItE7GmmjExrPAGBjbUQ=";
+    hash = "sha256-GpXfLLJhM4L9TB8Qw38uaCCwtCmBYg9nrVC001kDckc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
   buildInputs = [ perl ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp inxi $out/bin/
+    runHook preInstall
+
+    installBin inxi
     wrapProgram $out/bin/inxi \
       --set PERL5LIB "${perlPackages.makePerlPath (with perlPackages; [ CpanelJSONXS ])}" \
       ${prefixPath programs}
-    mkdir -p $out/share/man/man1
-    cp inxi.1 $out/share/man/man1/
+    installManPage inxi.1
+
+    runHook postInstall
   '';
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     description = "Full featured CLI system information tool";

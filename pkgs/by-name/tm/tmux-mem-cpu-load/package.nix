@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tmux-mem-cpu-load";
   version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "thewtex";
     repo = "tmux-mem-cpu-load";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-g++6n6OD9FAw8CtXArKBgNwFf+3v+SBCHmbma7RpMBA=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "tmux-mem-cpu-load";
   };
-}
+})

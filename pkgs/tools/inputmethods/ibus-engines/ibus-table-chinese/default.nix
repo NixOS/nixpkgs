@@ -39,6 +39,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/mike-fabian/ibus-table-chinese";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pneumaticat ];
+    maintainers = [ ];
   };
 }

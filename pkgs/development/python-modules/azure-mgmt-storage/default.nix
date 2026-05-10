@@ -5,21 +5,18 @@
   azure-mgmt-common,
   azure-mgmt-core,
   isodate,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-storage";
-  version = "24.0.0";
+  version = "24.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_storage";
     inherit version;
-    hash = "sha256-sa4iXvh62oXynALkBhQKtYlShcpk3ivP5QtjHEgYozc=";
+    hash = "sha256-p/cGgWOzCOXx9xhUGsgBT3/5IZ2gRjv3NG7inZw0mTg=";
   };
 
   build-system = [ setuptools ];

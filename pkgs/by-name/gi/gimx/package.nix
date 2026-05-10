@@ -9,7 +9,8 @@
   libxml2,
   ncurses5,
   libmhash,
-  xorg,
+  libxi,
+  libx11,
 }:
 
 let
@@ -21,14 +22,14 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gimx";
   version = "8.0";
 
   src = fetchFromGitHub {
     owner = "matlo";
     repo = "GIMX";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-BcFLdQgEAi6Sxyb5/P9YAIkmeXNZXrKcOa/6g817xQg=";
   };
@@ -45,8 +46,8 @@ stdenv.mkDerivation rec {
     libxml2
     ncurses5
     libmhash
-    xorg.libX11
-    xorg.libXi
+    libx11
+    libxi
   ];
 
   installPhase = ''
@@ -73,4 +74,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   copyDesktopItems,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   libpng,
   makeDesktopItem,
   zlib,
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXpm
+    libx11
+    libxpm
     libpng
     zlib
   ];

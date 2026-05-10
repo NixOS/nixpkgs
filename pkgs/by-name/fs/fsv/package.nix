@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     libGLU
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   installPhase = ''
     runHook preInstall
 

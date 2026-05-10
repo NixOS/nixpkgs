@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "documize-community";
   version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Kv4BsFB08rkGRkePFIkjjuhK1TnLPS4m+PUlgKG5cTQ=";
   };
 
@@ -47,4 +47,4 @@ buildGoModule rec {
     mainProgram = "documize";
     homepage = "https://www.documize.com/";
   };
-}
+})

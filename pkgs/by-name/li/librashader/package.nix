@@ -8,20 +8,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librashader";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "SnowflakePowered";
     repo = "librashader";
     tag = "librashader-v${finalAttrs.version}";
-    hash = "sha256-Jv7orDUusmI+CHPFXO7ILZ2vH11OwdSMBQfJuMBrlvI=";
+    hash = "sha256-02ZWu5kllTmQsFqQFbT8ckzhWgWkjH5YsD6mf4j0ySg=";
   };
 
   patches = [
     ./patches/fix-optional-dep-syntax.patch
   ];
 
-  cargoHash = "sha256-BS4290tih96NWhcpmQeFUjYfM6NKlQP070jCIkyxTuE=";
+  cargoHash = "sha256-8F7Rl1sC3UW01HFGVp9nu83sUXrigB2URyOFSiQ6Fqs=";
 
   buildPhase = ''
     runHook preBuild

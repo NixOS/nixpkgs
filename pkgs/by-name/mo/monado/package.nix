@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   writeText,
   bluez,
   cjson,
@@ -12,8 +13,7 @@
   eigen,
   elfutils,
   glslang,
-  gst-plugins-base,
-  gstreamer,
+  gst_all_1,
   hidapi,
   libbsd,
   libdrm,
@@ -27,11 +27,11 @@
   libuv,
   libuvc,
   libv4l,
-  libXau,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXext,
-  libXrandr,
+  libxdmcp,
+  libxext,
+  libxrandr,
   nix-update-script,
   onnxruntime,
   opencv4,
@@ -74,6 +74,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hUSm76PV+FhvzhiYMUbGcNDQMK1TZCPYh1PNADJmdSU=";
   };
 
+  patches = [
+    # Resolves issues with wayvr
+    # See https://github.com/NixOS/nixpkgs/pull/489154#issuecomment-4018732528
+    (fetchpatch {
+      name = "monado-cylinder-aspectRatio.patch";
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/69834fe93b84640170f8efa54b4700e5e0dc03c1.diff";
+      hash = "sha256-6lD4j7CMQk52btfxD8hOm0GWZaOxSgc1jel9hyXqktA=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -94,8 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     eigen
     elfutils
-    gst-plugins-base
-    gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
     hidapi
     libbsd
     libdrm
@@ -109,11 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
     libuv
     libuvc
     libv4l
-    libXau
+    libxau
     libxcb
-    libXdmcp
-    libXext
-    libXrandr
+    libxdmcp
+    libxext
+    libxrandr
     onnxruntime
     opencv4
     openvr

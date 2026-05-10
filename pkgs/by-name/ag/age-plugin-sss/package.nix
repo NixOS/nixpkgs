@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-sss";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "olastor";
     repo = "age-plugin-sss";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QNu2Sp0CxYYXuMzf7X0mMYI677ICu5emOM4F9HlKhHA=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ arbel-arad ];
     mainProgram = "age-plugin-sss";
   };
-}
+})

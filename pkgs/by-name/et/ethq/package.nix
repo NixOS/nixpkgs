@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ethq";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "isc-projects";
     repo = "ethq";
-    tag = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "v${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-ye5ep9EM9Sq/NqNZHENPmFZefVBx1BGrPm3YEG1NcSc=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

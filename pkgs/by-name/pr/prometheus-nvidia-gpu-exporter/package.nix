@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-nvidia-gpu-exporter";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
     repo = "nvidia_gpu_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+sXlQQUs8tmxtaqKUCBTfEZlL8fqBlhzcDFbX8Catsk=";
   };
 
@@ -20,9 +20,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/prometheus/common/version.Version=${version}"
-    "-X=github.com/prometheus/common/version.Revision=${src.rev}"
-    "-X=github.com/prometheus/common/version.Branch=${src.rev}"
+    "-X=github.com/prometheus/common/version.Version=${finalAttrs.version}"
+    "-X=github.com/prometheus/common/version.Revision=${finalAttrs.src.rev}"
+    "-X=github.com/prometheus/common/version.Branch=${finalAttrs.src.rev}"
     "-X=github.com/prometheus/common/version.BuildUser=goreleaser"
     "-X=github.com/prometheus/common/version.BuildDate=1970-01-01T00:00:00Z"
   ];
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ck3d ];
     mainProgram = "nvidia_gpu_exporter";
   };
-}
+})

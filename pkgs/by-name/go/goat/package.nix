@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goat";
-  version = "0.2.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "blampe";
     repo = "goat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/m9qRTVrak+C4Df5y+36Ff7E0TdwHVbQEyrP+qfNF6E=";
+    hash = "sha256-aWfopBdr5YC/nksp4wi32OUPUR1vPp36FLlMVSMi4/8=";
   };
 
-  vendorHash = "sha256-24YllmSUzRcqWbJ8NLyhsJaoGG2+yE8/eXX6teJ1nV8=";
+  vendorHash = "sha256-RRjEFZLbfeiFUWjGZI4HSZ8PhVj1IMlU5D4Nb1sexoQ=";
 
   passthru.updateScript = nix-update-script { };
 

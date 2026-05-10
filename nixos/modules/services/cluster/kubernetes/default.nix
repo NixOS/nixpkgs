@@ -20,7 +20,7 @@ let
     };
 
     plugins."io.containerd.grpc.v1.cri" = {
-      sandbox_image = "pause:latest";
+      sandbox_image = "docker.io/library/pause:latest";
 
       cni = {
         bin_dir = "/opt/cni/bin";

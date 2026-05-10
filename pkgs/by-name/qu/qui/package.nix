@@ -1,8 +1,9 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   stdenvNoCC,
+  nixosTests,
   nix-update-script,
   nodejs,
   pnpm_9,
@@ -11,14 +12,14 @@
   typescript,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "qui";
-  version = "1.11.0";
+  version = "1.18.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ioyFTTJu2B0m+U+GgY/VOIesAZLQI3mRZ5ZBh77emFY=";
+    hash = "sha256-Rdg8fcoUY7WrNXj+LZyMXx6hFo8+OGrCLjhE3JD1y4o=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -42,8 +43,8 @@ buildGoModule (finalAttrs: {
         sourceRoot
         ;
       pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-6brOEC1UAxjIZB4pujhA624jKTTxfZQiiz/PzqooPeA=";
+      fetcherVersion = 3;
+      hash = "sha256-hCiIbVroyMhl2xT0WAGbmLSXfUH6RJHlC1g3isMlUJs=";
     };
 
     postBuild = ''
@@ -55,7 +56,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-clVC3xPV/vJpWogDs1a977osQgPyhvZ4CRnHnKEZMs0=";
+  vendorHash = "sha256-7MzKE3pBvoW/ajB6gHtBBS1M/NuQsRw3ZSNtCJzrEyI=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -72,11 +73,17 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "qui-web"
-    ];
+  # Required for tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "qui-web"
+      ];
+    };
+    tests.testService = nixosTests.qui;
   };
 
   meta = {
@@ -84,7 +91,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/autobrr/qui";
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ pta2002 ];
+    maintainers = with lib.maintainers; [
+      pta2002
+      tmarkus
+    ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;
   };

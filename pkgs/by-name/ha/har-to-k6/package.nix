@@ -8,18 +8,18 @@
 
 buildNpmPackage rec {
   pname = "har-to-k6";
-  version = "0.14.11";
+  version = "0.14.14";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "har-to-k6";
     tag = "v${version}";
-    hash = "sha256-ACt9MNxcEyfg7lkeFBK/KnssbI4jkER0Ua/llQWLpxU=";
+    hash = "sha256-03WhzmdmncM7YqavYnivzxD3oo48MAkrn/1qTcK8w7o=";
   };
 
   dontNpmBuild = true;
 
-  npmDepsHash = "sha256-RuK3CzcMkPt5MFEZpYBDtMMShHTT/115pRk1CmRkiek=";
+  npmDepsHash = "sha256-ZVBlHjDB5LbOWXuoz4IIQF0lqDGANxpPE1sAy9roxbo=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -9,6 +9,7 @@
 
   # dependencies
   jsonpatch,
+  langchain-protocol,
   langsmith,
   packaging,
   pydantic,
@@ -21,7 +22,6 @@
   blockbuster,
   freezegun,
   grandalf,
-  httpx,
   langchain-core,
   langchain-tests,
   numpy,
@@ -35,24 +35,25 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-core";
-  version = "1.2.5";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-gHIJO5O9AxtROdDuo2UhdkW6p3+4dOJaO6iKelA26gE=";
+    tag = "langchain-core==${finalAttrs.version}";
+    hash = "sha256-7ugQnVnq/yW/7NVtqkAB1C3+XjLN3m+GQFKtv5uXw9E=";
   };
 
-  sourceRoot = "${src.name}/libs/core";
+  sourceRoot = "${finalAttrs.src.name}/libs/core";
 
   build-system = [ hatchling ];
 
   dependencies = [
     jsonpatch
+    langchain-protocol
     langsmith
     packaging
     pydantic
@@ -121,6 +122,17 @@ buildPythonPackage rec {
     # AssertionError: assert [+ received] == [- snapshot]
     "test_graph_sequence_map"
     "test_representation_of_runnables"
+
+    # Requires network access
+    "test_discord_webhook"
+    "test_https_only_mode"
+    "test_ngrok_url"
+    "test_safe_url_returns_true"
+    "test_slack_webhook"
+    "test_valid_public_https_url"
+    "test_valid_public_http_url"
+    "test_valid_url_accepted"
+    "test_webhook_site"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Langchain-core the following tests due to the test comparing execution time with magic values.
@@ -136,11 +148,11 @@ buildPythonPackage rec {
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
       sarahec
     ];
   };
-}
+})

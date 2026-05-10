@@ -46,6 +46,11 @@
   # requiredOctavePackages are ALSO installed into octave.
   requiredOctavePackages ? [ ],
 
+  # Dependencies and `env` for octave package tests,
+  # which are run with .passthru.tests.testOctavePkgTests
+  nativeOctavePkgTestInputs ? [ ],
+  octavePkgTestEnv ? { },
+
   preBuild ? "",
 
   meta ? { },
@@ -74,7 +79,9 @@ let
   # itself, causing everything to fail.
   attrs' = removeAttrs attrs [
     "nativeBuildInputs"
+    "nativeOctavePkgTestInputs"
     "passthru"
+    "env"
   ];
 in
 stdenv.mkDerivation (
@@ -90,7 +97,9 @@ stdenv.mkDerivation (
     # packages are installed into octave during the environment building phase.
     isOctavePackage = true;
 
-    OCTAVE_HISTFILE = "/dev/null";
+    env = attrs.env or { } // {
+      OCTAVE_HISTFILE = "/dev/null";
+    };
 
     inherit src;
 
@@ -143,7 +152,9 @@ stdenv.mkDerivation (
         testOctaveBuildEnv = (octave.withPackages (os: [ finalAttrs.finalPackage ])).overrideAttrs (old: {
           name = "${finalAttrs.name}-pkg-install";
         });
-        testOctavePkgTests = callPackage ./run-pkg-test.nix { } finalAttrs.finalPackage;
+        testOctavePkgTests = callPackage ./run-pkg-test.nix {
+          inherit nativeOctavePkgTestInputs octavePkgTestEnv;
+        } finalAttrs.finalPackage;
       }
       // passthru.tests or { };
     };

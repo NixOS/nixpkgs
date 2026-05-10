@@ -8,14 +8,14 @@
   mplayer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gopro";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "KonradIT";
     repo = "gopro-linux";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0sb9vpiadrq8g4ag828h8mvq01fg0306j0wjwkxdmwfqync1128l";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "gopro";
   };
-}
+})

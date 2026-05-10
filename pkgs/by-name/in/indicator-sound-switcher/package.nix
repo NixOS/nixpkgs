@@ -15,7 +15,7 @@
   gdk-pixbuf,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "indicator-sound-switcher";
   version = "2.3.10.1";
   format = "setuptools";
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = "indicator-sound-switcher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Benhlhz81EgL6+pmjzyruKBOS6O7ce5PPmIIzk2Zong=";
   };
 
@@ -63,4 +63,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ alexnortung ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

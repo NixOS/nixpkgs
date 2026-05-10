@@ -15,14 +15,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpvpaper";
   version = "1.8";
 
   src = fetchFromGitHub {
     owner = "GhostNaN";
     repo = "mpvpaper";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JTlZSl8CZmWx7YTd0T58pwq10L1GKXNfAw0XlIsz7F8=";
   };
 
@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "mpvpaper";
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
   };
-}
+})

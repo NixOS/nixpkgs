@@ -4,15 +4,12 @@
   fetchPypi,
   django,
   python-ipware,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-ipware";
   version = "7.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

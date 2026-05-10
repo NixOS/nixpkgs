@@ -7,24 +7,25 @@
   proto-plus,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.22.0";
+  version = "1.24.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_os_config";
     inherit version;
-    hash = "sha256-15oxD2+hznRwqqCExw443AXZhTH0aPghs6Um5NM6cOQ=";
+    hash = "sha256-3fZOrEfA2pSD1XO33pq+1IpabL4nkxrpQ5aJn1mOAZI=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

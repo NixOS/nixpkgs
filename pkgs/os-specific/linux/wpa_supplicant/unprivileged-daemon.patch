@@ -1,22 +1,22 @@
-commit 4608dab78e6ac78be7ab625fb066861549daa37f
+commit 47cc80d3056f8a783ce1caabeb0a8b5379cba3d1
 Author: rnhmjoj <rnhmjoj@inventati.org>
-Date:   Wed Dec 31 01:43:26 2025 +0100
+Date:   Mon Feb 2 08:24:24 2026 +0100
 
     Fixes for running wpa_supplicant unprivileged
     
-    1. Change the dbus service user to "wpa_supplicant"
-    
-    2. Ensure appropriate group ownership and permissions on the client sockets.
+    1. Ensure appropriate group ownership and permissions on the client sockets.
        Motivation: clients communicate with the daemon by creating "client"
        sockets; by default this is owned by the user running the client,
        so it may be inaccessible by the daemon.
     
-    3. Move the "control" sockets under a subdirectory of /run/wpa_supplicant.
+    2. Move the "control" sockets under a subdirectory of /run/wpa_supplicant.
        Motivation: wpa_supplicant will try to adjust the ownership of the
        sockets directory, even if they are fine, and fail.
     
-    4. Move the "client" under a subdirectory of /run/wpa_supplicant instead
-       of tmp. Motivation: this allows to unshare /tmp
+    3. Move the "client" under a subdirectory of /run/wpa_supplicant instead
+       of tmp. Motivation: this allows to unshare /tmp.
+    
+    4. Extend the dbus policy to allow the wpa_supplicant user/group.
 
 diff --git a/src/common/wpa_ctrl.c b/src/common/wpa_ctrl.c
 index 7e197f094..6bfb09111 100644
@@ -47,38 +47,23 @@ index 7e197f094..6bfb09111 100644
  	/* Set group even if we do not have privileges to change owner */
  	lchown(ctrl->local.sun_path, -1, AID_WIFI);
 diff --git a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
-index e81b495f4..1ee5bc19a 100644
+index e81b495f4..c371dd11f 100644
 --- a/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
 +++ b/wpa_supplicant/dbus/dbus-wpa_supplicant.conf
-@@ -2,9 +2,15 @@
-  "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
-  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+@@ -4,7 +4,12 @@
  <busconfig>
--        <policy user="root">
-+        <policy user="wpa_supplicant">
+         <policy user="root">
                  <allow own="fi.w1.wpa_supplicant1"/>
 -
-+        </policy>
-+        <policy user="root">
 +                <allow send_destination="fi.w1.wpa_supplicant1"/>
 +                <allow send_interface="fi.w1.wpa_supplicant1"/>
 +                <allow receive_sender="fi.w1.wpa_supplicant1" receive_type="signal"/>
 +        </policy>
 +        <policy group="wpa_supplicant">
++                <allow own="fi.w1.wpa_supplicant1"/>
                  <allow send_destination="fi.w1.wpa_supplicant1"/>
                  <allow send_interface="fi.w1.wpa_supplicant1"/>
                  <allow receive_sender="fi.w1.wpa_supplicant1" receive_type="signal"/>
-diff --git a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
-index d97ff3921..367a7c670 100644
---- a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
-+++ b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
-@@ -1,5 +1,5 @@
- [D-BUS Service]
- Name=fi.w1.wpa_supplicant1
- Exec=@BINDIR@/wpa_supplicant -u
--User=root
-+User=wpa_supplicant
- SystemdService=wpa_supplicant.service
 diff --git a/wpa_supplicant/wpa_cli.c b/wpa_supplicant/wpa_cli.c
 index 03180a316..f5e22dee1 100644
 --- a/wpa_supplicant/wpa_cli.c

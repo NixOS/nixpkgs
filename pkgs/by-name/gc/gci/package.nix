@@ -1,9 +1,9 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
-buildGo124Module rec {
+buildGoModule rec {
   pname = "gci";
   version = "0.13.7";
 
@@ -21,5 +21,6 @@ buildGo124Module rec {
     homepage = "https://github.com/daixiang0/gci";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ krostar ];
+    broken = true;
   };
 }

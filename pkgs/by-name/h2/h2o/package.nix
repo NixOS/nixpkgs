@@ -7,6 +7,7 @@
   makeWrapper,
   ninja,
   perl,
+  perlPackages,
   brotli,
   openssl,
   libcap,
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0-rolling-2025-12-05";
+  version = "2.3.0-rolling-2026-04-30";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "df3d192f701e48864459fff80bc81135c339b7b0";
-    hash = "sha256-XArZFBkV0nnsh+QXmoZUttvB9vlz8+CrFWaQt8dR7n4=";
+    rev = "8cb324bd2d5efb1926d0b8408b1d367687e50cfa";
+    hash = "sha256-4GS2hQzBJXA0C9ClWGppocBdjO4BHDK2Balm0O8Ps/I=";
   };
 
   outputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     ninja
+    perlPackages.JSON
   ]
   ++ lib.optionals withMruby [
     bison
@@ -72,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
         --set "H2O_PERL" "${lib.getExe perl}" \
         --prefix "PATH" : "${lib.getBin openssl}/bin"
     done
+
+    wrapProgram "$out/bin/h2olog" \
+        --set "PERL5LIB" "$PERL5LIB"
   '';
 
   passthru = {

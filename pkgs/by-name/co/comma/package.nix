@@ -12,14 +12,14 @@
   buildPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comma";
   version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dNek1a8Yt3icWc8ZpVe1NGuG+eSoTDOmAAJbkYmMocU=";
   };
 
@@ -67,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "comma";
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

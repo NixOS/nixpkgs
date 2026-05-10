@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.0.1.2";
   pname = "discount";
 
   src = fetchFromGitHub {
     owner = "Orc";
     repo = "discount";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QZmbc3imBlQmFgTjtepEx2HqsfW93yqqUy0LN5WWKwM=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     mainProgram = "markdown";
     platforms = lib.platforms.unix;
   };
-}
+})

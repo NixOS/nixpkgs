@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gifgen";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lukechilds";
     repo = "gifgen";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ni9RL4LyMejmu8vm5HC8WSTqAPQMBQNRDOZ4ZfvrkSU=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "gifgen";
     platforms = lib.platforms.all;
   };
-}
+})

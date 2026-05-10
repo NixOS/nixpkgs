@@ -1,24 +1,40 @@
 {
   lib,
-  buildDotnetModule,
+  stdenv,
   dotnetCorePackages,
+  buildDotnetModule,
   fetchFromGitHub,
   glibcLocales,
   gtk4,
-  intltool,
+  glib,
   libadwaita,
+  intltool,
   wrapGAppsHook4,
+  nix-update-script,
+
+  # Darwin transitive deps
+  graphene,
+  gettext,
+  pango,
+  gdk-pixbuf,
+  cairo,
+  harfbuzz,
+  fribidi,
+  fontconfig,
+  freetype,
+  libthai,
+  pcre2,
+  libepoxy,
 }:
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "3.0.5";
-
+  version = "3.1.2";
   src = fetchFromGitHub {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    hash = "sha256-teBk3+t0iFaqOh0Bzpz6mAlQ/reEd84wZSVXnYIXAio=";
+    hash = "sha256-CTASSNMZneU0PQKsDZ/ZMwTkXdJNlVCafaDFqzmh2CM=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +44,24 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     gtk4
+    glib
     libadwaita
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # Transitive dylib deps that Pinta's NativeImportResolver dlopen's by bare name.
+    # These are not pulled in by wrapGAppsHook4's LD_LIBRARY_PATH on Darwin, so symlink is needed.
+    graphene
+    gettext
+    pango
+    gdk-pixbuf
+    cairo
+    harfbuzz
+    fribidi
+    fontconfig
+    freetype
+    libthai
+    pcre2
+    libepoxy
   ];
 
   buildInputs = runtimeDeps;
@@ -36,63 +69,74 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  # How-to update deps:
-  # $ nix-build -A pinta.fetch-deps
-  # $ ./result
-  # TODO: create update script
   nugetDeps = ./deps.json;
 
   projectFile = "Pinta";
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  env = lib.optionalAttrs (!stdenv.isDarwin) {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
-  # Do the autoreconf/Makefile job manually
-  # TODO: use upstream build system
+  dotnetFlags = [ "-p:BuildTranslations=true" ];
+
   postBuild = ''
-    # Substitute translation placeholders
-    intltool-merge -x po/ xdg/pinta.appdata.xml.in xdg/pinta.appdata.xml
-    intltool-merge -d po/ xdg/pinta.desktop.in xdg/pinta.desktop
-
-    # Build translations
-    dotnet build Pinta \
-      --no-restore \
-      -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true \
-      -target:CompileTranslations,PublishTranslations \
-      -p:BuildTranslations=true \
-      -p:PublishDir="$NIX_BUILD_TOP/source/publish"
+    intltool-merge -x po/ xdg/com.github.PintaProject.Pinta.metainfo.xml.in xdg/com.github.PintaProject.Pinta.metainfo.xml
+    intltool-merge -d po/ xdg/com.github.PintaProject.Pinta.desktop.in xdg/com.github.PintaProject.Pinta.desktop
   '';
 
   postFixup = ''
-    # Rename the binary
-    mv "$out/bin/Pinta" "$out/bin/pinta"
+    # Two-step rename needed on macOS: 'Pinta' is the same as 'pinta' on case-insensitive filesystems.
+    mv "$out/bin/Pinta" "$out/bin/pinta_tmp"
+    mv "$out/bin/pinta_tmp" "$out/bin/pinta"
 
-    # Copy runtime icons
-    for i in "Pinta.Resources/icons/hicolor/"*; do
-      res="$(basename $i)"
-      mkdir -p "$out/share/icons/hicolor/$res"
-      cp -rv "Pinta.Resources/icons/hicolor/$res/"* "$out/share/icons/hicolor/$res/"
-    done
-
-    # Install
+    # Use icons from the dotnet publish output (already at $out/lib/Pinta/icons/).
+    mkdir -p "$out/share/icons"
+    cp -r "$out/lib/Pinta/icons/." "$out/share/icons/"
+  ''
+  + lib.optionalString (!stdenv.isDarwin) ''
     dotnet build installer/linux/install.proj \
       -target:Install \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
       -p:SourceDir="$NIX_BUILD_TOP/source" \
-      -p:PublishDir="$NIX_BUILD_TOP/source/publish" \
+      -p:PublishDir="$out/lib/Pinta" \
       -p:InstallPrefix="$out"
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    # Symlink all dylibs from runtimeDeps into the assembly dir.
+    # GirCore and Pinta's own NativeImportResolver both search here by bare name.
+    for dir in ${lib.concatMapStringsSep " " (d: "${lib.getLib d}/lib") runtimeDeps}; do
+      for dylib in "$dir"/*.dylib; do
+        [ -e "$dylib" ] || continue
+        ln -sf "$dylib" "$out/lib/Pinta/$(basename "$dylib")"
+      done
+    done
+
+    APP="$out/Applications/Pinta.app/Contents"
+    mkdir -p "$APP/MacOS" "$APP/Resources"
+
+    cp "$NIX_BUILD_TOP/source/installer/macos/Info.plist" "$APP/Info.plist"
+    cp "$NIX_BUILD_TOP/source/installer/macos/pinta.icns" "$APP/Resources/pinta.icns"
+
+    ln -s "$out/bin/pinta" "$APP/MacOS/pinta"
+    ln -s "$out/share" "$APP/Resources/share"
+    ln -s "$out/lib"   "$APP/Resources/lib"
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://www.pinta-project.com/";
     description = "Drawing/editing program modeled after Paint.NET";
     changelog = "https://github.com/PintaProject/Pinta/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thiagokokada ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      thiagokokada
+      philocalyst
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "pinta";
   };
 }

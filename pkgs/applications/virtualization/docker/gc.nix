@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     mainProgram = "docker-gc";
     license = lib.licenses.asl20;
     homepage = "https://github.com/spotify/docker-gc";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = docker.meta.platforms;
   };
 }

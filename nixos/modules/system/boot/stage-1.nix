@@ -323,6 +323,7 @@ let
         postMountCommands
         preFailCommands
         kernelModules
+        stage1Greeting
         ;
 
       resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}") (
@@ -686,6 +687,15 @@ in
       '';
     };
 
+    boot.initrd.stage1Greeting = mkOption {
+      type = types.str;
+      default = "<<< ${config.system.nixos.distroName} Stage 1 >>>";
+      defaultText = literalExpression ''"<<< ''${config.system.nixos.distroName} Stage 1 >>>"'';
+      description = ''
+        The greeting message displayed during NixOS stage 1 boot.
+      '';
+    };
+
     boot.loader.supportsInitrdSecrets = mkOption {
       internal = true;
       default = false;
@@ -717,6 +727,10 @@ in
   };
 
   config = mkIf config.boot.initrd.enable {
+    warnings = lib.optional (!config.boot.initrd.systemd.enable) ''
+      Scripted initrd is deprecated and scheduled for removal in 26.11. See the NixOS 26.05 release notes.
+    '';
+
     assertions = [
       {
         assertion = !config.boot.initrd.systemd.enable -> any (fs: fs.mountPoint == "/") fileSystems;
@@ -776,6 +790,5 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
   ];
 }

@@ -66,7 +66,7 @@
       machine.succeed(f"curl --head {db_path} | grep \"HTTP/1.1 404 Not Found\"")
 
 
-      # Switch to NixOS 24.11 to check if the setup still functions the same
+      # Switch to NixOS 25.11 to check if the setup still functions the same
       # as before.
       stop_and_rm()
       machine.succeed("${oldVersion}/bin/switch-to-configuration test")
@@ -77,7 +77,7 @@
       machine.succeed(f"curl --head {db_path} | grep \"HTTP/1.1 200 OK\"")
 
 
-      # Switch to NixOS 24.11 with the MEDIA_ROOT already set to
+      # Switch to NixOS 25.11 with the MEDIA_ROOT already set to
       # /var/lib/tandoor-recipes/media.
       stop_and_rm()
       machine.succeed("${oldVersionOverrideMedia}/bin/switch-to-configuration test")

@@ -36,6 +36,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
+  postPatch = ''
+    substituteInPlace graphql-cohttp/src/graphql_websocket.ml \
+      --replace-fail "~flush:true ()" "~version:\`HTTP_1_1 ()"
+  '';
+
   meta = graphql.meta // {
     description = "Run GraphQL servers with “cohttp”";
   };

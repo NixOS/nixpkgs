@@ -5,13 +5,13 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libevdevc";
   version = "2.0.1";
   src = fetchFromGitHub {
     owner = "hugegreenbug";
     repo = "libevdevc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0ry30krfizh87yckmmv8n082ad91mqhhbbynx1lfidqzb6gdy2dd";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     homepage = "https://chromium.googlesource.com/chromiumos/platform/libevdev/";
     maintainers = with lib.maintainers; [ kcalvinalvin ];
   };
-}
+})

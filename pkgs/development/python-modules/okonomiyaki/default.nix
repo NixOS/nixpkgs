@@ -10,7 +10,6 @@
   mock,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testfixtures,
   zipfile2,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "okonomiyaki";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "enthought";
@@ -72,7 +69,7 @@ buildPythonPackage rec {
     description = "Experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
     homepage = "https://github.com/enthought/okonomiyaki";
     changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
   };
 }

@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fontfor";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "7sDream";
     repo = "fontfor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gJl9SPL/KeYFzKIjwWPVR1iVy6h/W7OP7xE7krhYaY8=";
   };
 
@@ -39,8 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "Find fonts which can show a specified character and preview them in browser";
     homepage = "https://github.com/7sDream/fontfor";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
     mainProgram = "fontfor";
   };
-}
+})

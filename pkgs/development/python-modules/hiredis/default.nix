@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -13,17 +12,15 @@
 
 buildPythonPackage rec {
   pname = "hiredis";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis-py";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-9KIbXmEk4K2xdGM7SUV64mcSEPGQdDez9mAb/920gZs=";
+    hash = "sha256-HqQICYjHpUX7/OsaWXJRFeeZDxKKuGJ1x5JiJ9eLmdw=";
   };
 
   build-system = [ setuptools ];

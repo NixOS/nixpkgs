@@ -14,14 +14,14 @@ let
   inherit (gdk-pixbuf) moduleDir;
   loadersPath = "${gdk-pixbuf.binaryDir}/webp-loaders.cache";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webp-pixbuf-loader";
   version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "aruiz";
     repo = "webp-pixbuf-loader";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-IJEweV2ACFp+Ua2ESrRUNApXWBg3NED60FDKijYO5TI=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.cwyc ];
     teams = [ lib.teams.gnome ];
   };
-}
+})

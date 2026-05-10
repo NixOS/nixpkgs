@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.4.5";
   pname = "theft";
 
   src = fetchFromGitHub {
     owner = "silentbicycle";
     repo = "theft";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})

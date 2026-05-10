@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zint${lib.optionalString withGUI "-qt"}";
-  version = "2.15.0";
+  version = "2.16.0";
 
   outputs = [
     "out"
@@ -24,14 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zint";
     repo = "zint";
     tag = finalAttrs.version;
-    hash = "sha256-+dXIU66HIS2mE0pa99UemMMFBGCYjupUX8P7q3G7Nis=";
+    hash = "sha256-5zVGtnm6QdehDL+R7ZNq7AdgUIOIySPWGlS6GbJK+/4=";
   };
-
-  patches = [
-    # Fix cmake file installation
-    # https://github.com/zint/zint/pull/8
-    ./fix-installation-of-cmake-files.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString withGUI ''
     install -Dm644 -t $out/share/applications $src/zint-qt.desktop
-    install -Dm644 -t $out/share/pixmaps $src/zint-qt.png
+    install -Dm644 -t $out/share/icons/hicolor/48x48/apps $src/zint-qt.png
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/frontend_qt/images/scalable/zint-qt.svg
   '';
 

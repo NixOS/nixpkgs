@@ -9,8 +9,6 @@
   packaging,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
   userpath,
   git,
 }:
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "pipx";
   version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pypa";
@@ -39,8 +35,7 @@ buildPythonPackage rec {
     packaging
     platformdirs
     userpath
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeBuildInputs = [
     installShellFiles

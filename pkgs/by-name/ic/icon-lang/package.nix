@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   withGraphics ? true,
 }:
 
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = lib.optionals withGraphics [
-    libX11
-    libXt
+    libx11
+    libxt
   ];
 
   configurePhase =

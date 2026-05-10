@@ -45,7 +45,9 @@ stdenv.mkDerivation rec {
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lintl";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lintl";
+  };
 
   doInstallCheck = true;
 

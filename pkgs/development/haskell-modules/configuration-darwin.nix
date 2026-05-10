@@ -134,8 +134,6 @@ self: super:
       + (oldAttrs.preCompileBuildDriver or "");
     }) super.llvm-hs;
 
-    sym = markBroken super.sym;
-
     yesod-core = super.yesod-core.overrideAttrs (drv: {
       # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
       # run tests that access localhost.
@@ -356,20 +354,6 @@ self: super:
     network = super.network.overrideAttrs (drv: {
       __darwinAllowLocalNetworking = true;
     });
-
-    # 2025-08-04: Some RNG tests fail only on Darwin
-    botan-low = overrideCabal (drv: {
-      testFlags =
-        drv.testFlags or [ ]
-        ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
-          # botan-low-rng-tests
-          "/rdrand/rngInit/"
-          "/rdrand/rngGet/"
-          "/rdrand/rngReseed/"
-          "/rdrand/rngReseedFromRNGCtx/"
-          "/rdrand/rngAddEntropy/"
-        ]);
-    }) super.botan-low;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin

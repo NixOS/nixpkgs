@@ -33,6 +33,6 @@ buildDunePackage rec {
     homepage = "https://smondet.gitlab.io/genspio-doc/";
     description = "Typed EDSL to generate POSIX Shell scripts";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.alexfmpe ];
+    maintainers = [ ];
   };
 }

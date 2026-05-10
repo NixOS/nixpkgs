@@ -40,23 +40,23 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.26.0";
+  version = "0.30.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${version}";
-    hash = "sha256-urOHHuPFce7Ms1EqjM4n72zx0APVrIQ1bLIkmrp/Dec=";
+    tag = "python-v${finalAttrs.version}";
+    hash = "sha256-k7eVUOnriR91DqVRJP7N9VG75bHAzbDB8bHFLFi5h1w=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-03p1mDsE//YafUGImB9xMqqUzKlBD9LCiV1RGP2L5lw=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-yux18lKMaNOmrmVOYNMo5MMNAO0at5g/0eEsjF97Pes=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -106,18 +106,37 @@ buildPythonPackage rec {
 
   disabledTestMarks = [ "slow" ];
 
-  disabledTests =
-    lib.optionals (pythonAtLeast "3.14") [
-      # TypeError: Converting Pydantic type to Arrow Type: unsupported type
-      # <class 'test_pydantic.test_optional_nested_model.<locals>.WALocation'>.
-      "test_optional_nested_model"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky (even when the sandbox is disabled):
-      # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
-      # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
-      "test_create_index_from_table"
-    ];
+  disabledTests = [
+    # Requires internet access
+    # RuntimeError: lance error: LanceError(IO): Generic S3 error
+    "test_bucket_without_dots_passes"
+
+    # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
+    "TestAsyncNamespaceConnection"
+    "TestNamespaceConnection"
+
+    # Failed: DID NOT RAISE <class 'Exception'>
+    "test_merge_insert"
+
+    # TypeError: FFILanceTableProvider.__datafusion_table_provider__() missing 1 required positional
+    # argument: 'session'
+    "test_sql_query"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Converting Pydantic type to Arrow Type: unsupported type
+    # <class 'test_pydantic.test_optional_nested_model.<locals>.WALocation'>.
+    "test_optional_nested_model"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky (even when the sandbox is disabled):
+    # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
+    # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
+    "test_create_index_from_table"
+  ]
+  ++ lib.optionals ((pythonAtLeast "3.14") && stdenv.hostPlatform.isDarwin) [
+    # Failed: DID NOT RAISE <class 'Exception'>
+    "test_merge_insert"
+  ];
 
   disabledTestPaths = [
     # touch the network
@@ -139,8 +158,8 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
-    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

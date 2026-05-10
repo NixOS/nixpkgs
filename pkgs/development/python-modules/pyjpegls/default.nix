@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "JPEG-LS for Python via CharLS C++ Library";
     homepage = "https://github.com/pydicom/pyjpegls";
-    changelog = "https://github.com/pydicom/pyjpegls/releases/tag/v${src.tag}";
+    changelog = "https://github.com/pydicom/pyjpegls/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

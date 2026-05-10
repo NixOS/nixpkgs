@@ -11,7 +11,6 @@
   psutil,
   pygments,
   python-dateutil,
-  pythonOlder,
   pytz,
   pyyaml,
   requests,
@@ -26,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "5.5.1";
+  version = "5.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = "exchangelib";
     tag = "v${version}";
-    hash = "sha256-HO88wM0yzETWS0eBnLABCjYHGE5wFpcjQgC8wsSumWA=";
+    hash = "sha256-tmJq0AZLuOic63ziIr173lbz6sDF/u75Y2ASYnHHDTM=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];

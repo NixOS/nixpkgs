@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgweather/${lib.versions.majorMinor version}/libgweather-${version}.tar.xz";
     hash = "sha256-cBdnd1PN99H9w1Xkv82x66g2l5Oo3yTSQUJ6k5y/QoM=";
   };
 

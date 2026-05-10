@@ -40,6 +40,11 @@
     "hash": "sha256-VPYsOGhVFSMtGyKEGOmP/m5c7KsK+2QeODkvD5p5D6M="
   },
   {
+    "pname": "Dapper",
+    "version": "2.1.66",
+    "hash": "sha256-e5n/wnAFGPDSe30oQQ0fanXrvFZYYa+qCDSTHtfQmPw="
+  },
+  {
     "pname": "Fare",
     "version": "2.1.1",
     "hash": "sha256-n9X3GE2qsT2wpmDymD1AyCYcOoY/c0+t+aIWLiaST70="

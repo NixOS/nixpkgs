@@ -1,4 +1,4 @@
-This directory contains the build expressions needed to build any of the jetbrains IDEs.
+This directory contains the build expressions needed to build any of the JetBrains IDEs.
 The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 
 ## Tests:
@@ -8,9 +8,9 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 ## How to use plugins:
  - Pass your IDE package and a list of plugin packages to `jetbrains.plugins.addPlugins`.
    E.g. `pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea [ ideavim ]`
- - The list has to contain contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
+ - The list has to contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
 
-Nixpkgs does not package Jetbrains plugins, however you can use third-party sources, such as
+Nixpkgs does not package JetBrains plugins, however you can use third-party sources, such as
 [nix-jetbrains-plugins](https://github.com/nix-community/nix-jetbrains-plugins).
 Note that some plugins may not work without modification, if they are packaged in a way that is incompatible with NixOS.
 You can try installing such plugins from within the IDE instead.
@@ -35,35 +35,37 @@ fetchurl {
 }
 ```
 
-## How to update stuff:
- - Run ./bin/update_bin.py, this will update binary IDEs, and automatically commit them
- - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Run ./source/update.py ./source/sources.json. This will update the source version to the latest available version.
-   - Run these commands respectively:
-     - `nix build .#jetbrains.idea-oss.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
-     - `nix build .#jetbrains.pycharm-oss.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
-   - Make sure the Kotlin version used is correct.
-     - Check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
-   - Do a test build
-   - If it succeeds, make a commit
-   - make a PR/merge
-   - If it fails, ping/message GenericNerdyUsername or the nixpkgs Jetbrains maintainer team
+## How to update IDEs:
+ - Run `./updater/main.py`.
+   This will update binary and source IDEs.
+   After this you can commit them.
+   - See `./updater/main.py --help` for additional flags.
+   - The IDEs have `passthru.updateScript` set up to run `./updater/main.py`.
+     The script then uses the `UPDATE_NIX_*` environment variables as documented.
+
+To keep things simple, the update script will search for the following markers and may replace any content between them:
+- `update-script-start: urls` / `update-script-end: urls`: URLs for binary IDEs
+- `update-script-start: version` / `update-script-end: version`: Version and build number for binary IDEs
+- `update-script-start: source-args` / `update-script-end: source-args`: Arguments for `mkJetBrainsSource` for source IDEs.
+
+Any comments or other manual changes between these markers will be removed when the script runs.
 
 ## How to add an IDE:
- - Make dummy entries in `bin/versions.json` (make sure to set the version to something older than the real one)
- - Run `bin/update_bin.py`
- - Add an entry in `ides.json`
- - Add an entry in `default.nix`
+ - Add a new derivation in `ides/`
+ - Add an entry to the URL templates in `updater/updateInfo.json`
+ - Add it to `default.nix`
 
 ### TODO:
+ - move PyCharm overrides to a common place outside of `default.nix`
+ - package `patchSharedLibs` from `default.nix` as a hook
+ - cleanup this TODO list, especially the following points, which have been here since 2023
  - replace `libxcrypt-legacy` with `libxcrypt` when supported
  - make `jetbrains-remote-dev.patch` cleaner
  - is extraLdPath needed for IDEA?
- - set meta.sourceProvenance for everything
  - from source builds:
    - remove timestamps in output `.jar` of `jps-bootstrap`
    - automated update scripts
-   - fetch `.jar` s from stuff built in nixpkgs when available
+   - fetch `.jar`s from stuff built in nixpkgs when available
      - what stuff built in nixpkgs provides `.jar`s we care about?
        - kotlin
    - make `configurePhase` respect `$NIX_BUILD_CORES`

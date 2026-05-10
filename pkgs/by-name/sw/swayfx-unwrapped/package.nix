@@ -24,7 +24,7 @@
   scdoc,
   scenefx,
   wayland-scanner,
-  xcbutilwm,
+  libxcb-wm,
   wlroots_0_19,
   testers,
   nixosTests,
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
   ]
-  ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
+  ++ lib.optionals finalAttrs.enableXWayland [ libxcb-wm ];
 
   mesonFlags =
     let

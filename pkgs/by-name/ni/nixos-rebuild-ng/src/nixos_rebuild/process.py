@@ -5,10 +5,11 @@ import os
 import re
 import shlex
 import subprocess
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from enum import Enum
 from ipaddress import AddressValueError, IPv6Address
-from typing import Final, Self, TypedDict, Unpack
+from typing import Final, Literal, Self, TextIO, TypedDict, Unpack, override
 
 from . import tmpdir
 
@@ -23,7 +24,21 @@ SSH_DEFAULT_OPTS: Final = [
     "ControlPersist=60",
 ]
 
-type Args = Sequence[str | bytes | os.PathLike[str] | os.PathLike[bytes]]
+
+class _Env(Enum):
+    PRESERVE_ENV = "PRESERVE"
+
+    @override
+    def __repr__(self) -> str:
+        return self.value
+
+
+PRESERVE_ENV: Final = _Env.PRESERVE_ENV
+
+
+type Arg = str | bytes | os.PathLike[str] | os.PathLike[bytes]
+type Args = Sequence[Arg]
+type EnvValue = str | Literal[_Env.PRESERVE_ENV]
 
 
 @dataclass(frozen=True)
@@ -31,6 +46,7 @@ class Remote:
     host: str
     opts: list[str]
     sudo_password: str | None
+    store_type: str
 
     @classmethod
     def from_arg(
@@ -42,13 +58,18 @@ class Remote:
         if not host:
             return None
 
+        try:
+            store_type, host = host.split("://", 1)
+        except ValueError:
+            store_type = "ssh"
+
         opts = shlex.split(os.getenv("NIX_SSHOPTS", ""))
         if validate_opts:
             cls._validate_opts(opts, ask_sudo_password)
         sudo_password = None
         if ask_sudo_password:
             sudo_password = getpass.getpass(f"[sudo] password for {host}: ")
-        return cls(host, opts, sudo_password)
+        return cls(host, opts, sudo_password, store_type)
 
     @staticmethod
     def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
@@ -85,8 +106,8 @@ class Remote:
 # Not exhaustive, but we can always extend it later.
 class RunKwargs(TypedDict, total=False):
     capture_output: bool
-    stderr: int | None
-    stdout: int | None
+    stderr: int | TextIO | None
+    stdout: int | TextIO | None
 
 
 def cleanup_ssh() -> None:
@@ -106,59 +127,92 @@ def run_wrapper(
     args: Args,
     *,
     check: bool = True,
-    extra_env: dict[str, str] | None = None,
+    env: Mapping[str, EnvValue] | None = None,
+    append_local_env: Mapping[str, str] | None = None,
     remote: Remote | None = None,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
-    env = None
     process_input = None
-    run_args = args
+    run_args: list[Arg] = list(args)
+    final_args: list[Arg]
+
+    normalized_env = _normalize_env(env)
+    resolved_env = _resolve_env_local(normalized_env)
 
     if remote:
-        if extra_env:
-            extra_env_args = [f"{env}={value}" for env, value in extra_env.items()]
-            args = ["env", *extra_env_args, *args]
+        remote_run_args: list[Arg] = [
+            "/bin/sh",
+            "-c",
+            _remote_shell_script(normalized_env),
+            "sh",
+            *run_args,
+        ]
+
         if sudo:
+            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
             if remote.sudo_password:
-                args = ["sudo", "--prompt=", "--stdin", *args]
+                remote_run_args = [
+                    "sudo",
+                    "--prompt=",
+                    "--stdin",
+                    *sudo_args,
+                    *remote_run_args,
+                ]
                 process_input = remote.sudo_password + "\n"
             else:
-                args = ["sudo", *args]
-        run_args = [
+                remote_run_args = ["sudo", *sudo_args, *remote_run_args]
+
+        ssh_args: list[Arg] = [
             "ssh",
             *remote.opts,
             *SSH_DEFAULT_OPTS,
             remote.ssh_host(),
             "--",
-            # SSH will join the parameters here and pass it to the shell, so we
-            # need to quote it to avoid issues.
-            # We can't use `shlex.join`, otherwise we will hit MAX_ARG_STRLEN
-            # limits when the command becomes too big.
-            *[shlex.quote(str(a)) for a in args],
+            *[_quote_remote_arg(a) for a in remote_run_args],
         ]
+        final_args = ssh_args
+        popen_env = None  # keep ssh's environment normal
+
     else:
-        if extra_env:
-            env = os.environ | extra_env
         if sudo:
-            run_args = ["sudo", *run_args]
+            # subprocess.run(env=...) would affect sudo, but sudo may drop env
+            # for the target command.
+            # So we inject env via `sudo env ... cmd`.
+            if env is not None and resolved_env:
+                run_args = _prefix_env_cmd(run_args, resolved_env)
+
+            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
+            final_args = ["sudo", *sudo_args, *run_args]
+
+            # No need to pass env to subprocess.run; keep sudo's own env
+            # default.
+            popen_env = None
+        else:
+            # Non-sudo local: we can fully control the environment with
+            # subprocess.run(env=...)
+            final_args = run_args
+            popen_env = None if env is None else resolved_env
 
     logger.debug(
-        "calling run with args=%r, kwargs=%r, extra_env=%r",
-        run_args,
+        "calling run with args=%r, kwargs=%r, env=%r, append_local_env=%r",
+        _sanitize_env_run_args(remote_run_args if remote else run_args),
         kwargs,
-        extra_env,
+        env,
+        append_local_env,
     )
+
+    if append_local_env:
+        popen_env = dict(os.environ) if popen_env is None else dict(popen_env)
+        popen_env.update(append_local_env)
 
     try:
         r = subprocess.run(
-            run_args,
+            final_args,
             check=check,
-            env=env,
+            env=popen_env,
             input=process_input,
-            # Hope nobody is using NixOS with non-UTF8 encodings, but
-            # "surrogateescape" should still work in those systems.
             text=True,
             errors="surrogateescape",
             **kwargs,
@@ -184,13 +238,94 @@ def run_wrapper(
         raise
 
 
-# SSH does not send the signals to the process when running without usage of
-# pseudo-TTY (that causes a whole other can of worms), so if the process is
-# long running (e.g.: a build) this will result in the underlying process
-# staying alive.
-# See: https://stackoverflow.com/a/44354466
-# Issue: https://github.com/NixOS/nixpkgs/issues/403269
+def _resolve_env(env: Mapping[str, EnvValue] | None) -> dict[str, str]:
+    normalized = _normalize_env(env)
+    return _resolve_env_local(normalized)
+
+
+def _normalize_env(env: Mapping[str, EnvValue] | None) -> dict[str, EnvValue]:
+    """
+    Normalize env mapping, but preserve some environment variables by default.
+    """
+    return {"PATH": PRESERVE_ENV, **(env or {})}
+
+
+def _resolve_env_local(env: dict[str, EnvValue]) -> dict[str, str]:
+    """
+    Resolve env mapping where values can be:
+      - PRESERVE_ENV: copy from current os.environ (if present)
+      - str: explicit value
+    """
+    result: dict[str, str] = {}
+
+    for k, v in env.items():
+        if v == PRESERVE_ENV:
+            cur = os.environ.get(k)
+            if cur is not None:
+                result[k] = cur
+        else:
+            result[k] = v
+    return result
+
+
+def _prefix_env_cmd(cmd: Sequence[Arg], resolved_env: dict[str, str]) -> list[Arg]:
+    """
+    Prefix a command with `env -i K=V ... -- <cmd...>` to set vars for the
+    command.
+    """
+    if not resolved_env:
+        return list(cmd)
+
+    assigns = [f"{k}={v}" for k, v in resolved_env.items()]
+    return ["env", "-i", *assigns, *cmd]
+
+
+def _remote_shell_script(env: Mapping[str, EnvValue]) -> str:
+    """
+    Build the POSIX shell wrapper used for remote execution over SSH.
+
+    SSH sends the remote command as a shell-interpreted command line, so we
+    need a wrapper to establish a clean environment before `exec`-ing the real
+    command. This wrapper is always run under `/bin/sh -c` so preserved
+    variables like `${PATH-}` do not depend on the remote user's login shell.
+    """
+    shell_assigns: list[str] = []
+    for k, v in env.items():
+        if v is PRESERVE_ENV:
+            shell_assigns.append(f'{k}="${{{k}-}}"')
+        else:
+            shell_assigns.append(f"{k}={shlex.quote(v)}")
+    return f'exec env -i {" ".join(shell_assigns)} "$@"'
+
+
+def _quote_remote_arg(arg: Arg) -> str:
+    return shlex.quote(str(arg))
+
+
+def _sanitize_env_run_args(run_args: list[Arg]) -> list[Arg]:
+    """
+    Sanitize long or sensitive environment variables from logs.
+    """
+    sanitized: list[Arg] = []
+    for value in run_args:
+        if isinstance(value, str) and value.startswith("PATH="):
+            sanitized.append("PATH=<PATH>")
+        elif isinstance(value, str | bytes | os.PathLike):
+            sanitized.append(value)
+        else:
+            sanitized.append(str(value))
+    return sanitized
+
+
 def _kill_long_running_ssh_process(args: Args, remote: Remote) -> None:
+    """
+    SSH does not send the signals to the process when running without usage of
+    pseudo-TTY (that causes a whole other can of worms), so if the process is
+    long running (e.g.: a build) this will result in the underlying process
+    staying alive.
+    See: https://stackoverflow.com/a/44354466
+    Issue: https://github.com/NixOS/nixpkgs/issues/403269
+    """
     logger.info("cleaning-up remote process, please wait...")
 
     # We need to escape both the shell and regex here (since pkill interprets

@@ -24,13 +24,13 @@ assert (
 
 stdenv.mkDerivation rec {
   pname = "simple-dftd3";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "dftd3";
     repo = "simple-dftd3";
     tag = "v${version}";
-    hash = "sha256-c4xctcMcPQ70ippqbwtinygmnZ5en6ZGF5/v0ZWtzys=";
+    hash = "sha256-h9KFqZOfH7c7hntfL/C5WG9HVof64O4U1BNCCOuQhpA=";
   };
 
   patches = [

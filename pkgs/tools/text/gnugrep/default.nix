@@ -80,11 +80,6 @@ stdenv.mkDerivation {
     export MKDIR_P="mkdir -p"
   '';
 
-  configureFlags =
-    # Work around build failure caused by the gnulib workaround for
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after GCC 15
-    lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
-
   enableParallelBuilding = true;
 
   # Fix reference to sh in bootstrap-tools, and invoke grep via
@@ -118,8 +113,12 @@ stdenv.mkDerivation {
       lib.maintainers.das_j
       lib.maintainers.m00wl
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "grep";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version // {
+      product = "grep";
+    };
   };
 
   passthru = {

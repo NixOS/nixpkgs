@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   uv-dynamic-versioning,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pypitoken";
   version = "7.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ewjoachim";

@@ -3,15 +3,12 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-libnmap";
   version = "0.7.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "savon-noir";

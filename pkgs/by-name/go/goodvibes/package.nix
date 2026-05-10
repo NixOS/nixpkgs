@@ -16,14 +16,14 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goodvibes";
   version = "0.8.3";
 
   src = fetchFromGitLab {
     owner = "goodvibes";
     repo = "goodvibes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Lh4FPH0Bdxg2J4IxsZPs8Zjc7Tcobb4bTpvJzVNIy0Y=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

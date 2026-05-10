@@ -30,7 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
     substituteInPlace libarchive/ffi.py --replace-fail \

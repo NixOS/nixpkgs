@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "undertime";
   version = "4.3.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "anarcat";
     repo = "undertime";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TOrsQIi+ZcUQUGhb+iX8seuwNfKrrBL2DIcLK9wyjn0=";
   };
 
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://gitlab.com/anarcat/undertime/-/raw/${version}/debian/changelog";
+    changelog = "https://gitlab.com/anarcat/undertime/-/raw/${finalAttrs.version}/debian/changelog";
     description = "Pick a meeting time across timezones from the commandline";
     homepage = "https://gitlab.com/anarcat/undertime";
     longDescription = ''
@@ -45,4 +45,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "undertime";
     maintainers = with lib.maintainers; [ dvn0 ];
   };
-}
+})

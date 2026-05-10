@@ -56,7 +56,7 @@ in
       description = ''
         Launch Hyprland with the UWSM (Universal Wayland Session Manager) session manager.
         This has improved systemd support and is recommended for most users.
-        This automatically starts appropiate targets like `graphical-session.target`,
+        This automatically starts appropriate targets like `graphical-session.target`,
         and `wayland-session@Hyprland.target`.
 
         ::: {.note}
@@ -89,6 +89,9 @@ in
           configPackages = lib.mkDefault [ cfg.package ];
         };
 
+        # To make the Hyprland session available in DM
+        services.displayManager.sessionPackages = [ cfg.package ];
+
         systemd = lib.mkIf cfg.systemd.setPath.enable {
           user.extraConfig = ''
             DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
@@ -98,18 +101,6 @@ in
 
       (lib.mkIf (cfg.withUWSM) {
         programs.uwsm.enable = true;
-        # Configure UWSM to launch Hyprland from a display manager like SDDM
-        programs.uwsm.waylandCompositors = {
-          hyprland = {
-            prettyName = "Hyprland";
-            comment = "Hyprland compositor managed by UWSM";
-            binPath = "/run/current-system/sw/bin/start-hyprland";
-          };
-        };
-      })
-      (lib.mkIf (!cfg.withUWSM) {
-        # To make a vanilla Hyprland session available in DM
-        services.displayManager.sessionPackages = [ cfg.package ];
       })
 
       (import ./wayland-session.nix {
@@ -139,5 +130,5 @@ in
     ] "Nvidia patches are no longer needed")
   ];
 
-  meta.maintainers = lib.teams.hyprland.members;
+  meta.teams = [ lib.teams.hyprland ];
 }

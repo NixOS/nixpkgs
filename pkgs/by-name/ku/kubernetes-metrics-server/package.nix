@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes-metrics-server";
   version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "metrics-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-e9iFOe2iZaKbYNUk0vuyzcGDCNxot34kRH06L5UQs4I=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eskytthe ];
   };
-}
+})

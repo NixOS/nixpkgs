@@ -1,9 +1,14 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
+  makeWrapper,
+  nodejs,
   guile,
+  guile-websocket,
+  guile-fibers,
+  guile-gnutls,
   pkg-config,
   texinfo,
   nix-update-script,
@@ -11,22 +16,40 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-hoot";
-  version = "0.7.0";
+  version = "0.8.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "spritely";
     repo = "hoot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mthEqyVsBrFhwz29VwatbFp4QgGmZ9sDoyTpRIEsOmI=";
+    hash = "sha256-b372dMUsDTa+hYrOwvj+/YcwVP52BCJxwSGRaqSSWZs=";
   };
 
   nativeBuildInputs = [
+    makeWrapper
     autoreconfHook
     guile
     pkg-config
     texinfo
+    nodejs
   ];
+  propagatedBuildInputs = [
+    guile-fibers
+    guile-websocket
+    guile-gnutls
+  ];
+
+  postInstall =
+    let
+      libs = [ "$out" ] ++ finalAttrs.propagatedBuildInputs;
+    in
+    ''
+      cp ./repl/repl.js $out/share/guile-hoot/0.8.0/repl/repl.js
+      wrapProgram $out/bin/hoot \
+        --prefix GUILE_LOAD_PATH : ${lib.makeSearchPath guile.siteDir libs} \
+        --prefix GUILE_LOAD_COMPILED_PATH : ${lib.makeSearchPath guile.siteCcacheDir libs}
+    '';
+
   buildInputs = [
     guile
   ];
@@ -42,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jinser ];
     platforms = lib.platforms.unix;
+    mainProgram = "hoot";
   };
 })

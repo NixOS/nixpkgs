@@ -25,9 +25,9 @@ assert cvc4Support -> cvc4 != null && cln != null && gmp != null;
 let
   pname = "solc";
 
-  version = "0.8.28";
-  linuxHash = "sha256-kosJ10stylGK5NUtsnMM7I+OfhR40TXPQDvnggOFLLc=";
-  darwinHash = "sha256-gVFbDlPeqiZtVJVFzKrApalubU6CAcd/ZzsscQl22eo=";
+  version = "0.8.33";
+  linuxHash = "sha256-sWCV0GOUW5GPNX1flk+UOrdwoHZHnx4MsZMGDDBxx6M=";
+  darwinHash = "sha256-gyQoBZHOOY1+JyKEa8EOzxd5sToyjvl7aHySzZxwgBo=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -63,15 +63,6 @@ let
           url = "https://github.com/ethereum/solidity/releases/download/v${version}/solidity_${version}.tar.gz";
           hash = linuxHash;
         };
-
-        # Fix build with GCC 14
-        # Submitted upstream: https://github.com/ethereum/solidity/pull/15685
-        postPatch = ''
-          substituteInPlace test/yulPhaser/Chromosome.cpp \
-            --replace-fail \
-              "BOOST_TEST(abs" \
-              "BOOST_TEST(fabs"
-        '';
 
         cmakeFlags = [
           "-DBoost_USE_STATIC_LIBS=OFF"

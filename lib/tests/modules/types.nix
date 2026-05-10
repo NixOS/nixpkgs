@@ -16,6 +16,19 @@ in
   options = {
     pathInStore = mkOption { type = types.lazyAttrsOf types.pathInStore; };
     externalPath = mkOption { type = types.lazyAttrsOf types.externalPath; };
+    # serializableValueWith
+    nullableValue = mkOption {
+      type = types.attrsOf (types.serializableValueWith { typeName = "VAL"; });
+    };
+    structuredValue = mkOption {
+      type = types.attrsOf (
+        types.serializableValueWith {
+          typeName = "VAL";
+          nullable = false;
+        }
+      );
+    };
+
     assertions = mkOption { };
   };
   config = {
@@ -34,6 +47,22 @@ in
     externalPath.bad5 = "./foo/bar";
     externalPath.ok1 = "/foo/bar";
     externalPath.ok2 = "/";
+
+    # serializableValueWith { nullable = true; }
+    nullableValue.null = null; # null
+    nullableValue.bool = true; # bool
+    nullableValue.int = 1; # int
+    nullableValue.float = 1.1; # float
+    nullableValue.str = "foo"; # str
+    nullableValue.path = ./.; # path
+    nullableValue.attrs = {
+      foo = 1;
+    };
+    nullableValue.list = [ { bar = [ 1 ]; } ]; # list
+    nullableValue.lambda = x: x; # Error
+
+    # serializableValueWith { nullable = false; }
+    structuredValue.null = null; # Error
 
     assertions =
       with lib.types;
@@ -486,6 +515,9 @@ in
       assert (unique { message = "custom"; } (listOf str)).description == "list of string";
       assert (unique { message = "test"; } (either int str)).description == "signed integer or string";
       assert (unique { message = "test"; } (listOf str)).description == "list of string";
+      # json & toml
+      assert json.description == "JSON value";
+      assert toml.description == "TOML value";
       # done
       "ok";
   };

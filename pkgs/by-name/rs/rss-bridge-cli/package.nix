@@ -27,6 +27,8 @@ in
   ${phpBin} ${rss-bridge}/index.php "$@"
 '').overrideAttrs
   (oldAttrs: {
+    pname = "rss-bridge-cli";
+
     version = rss-bridge.version;
 
     meta = {

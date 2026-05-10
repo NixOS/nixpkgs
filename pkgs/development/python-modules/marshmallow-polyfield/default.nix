@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   marshmallow,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "marshmallow-polyfield";
   version = "5.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Bachmann1234";

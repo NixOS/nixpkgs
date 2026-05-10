@@ -5,12 +5,12 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soxr";
   version = "0.1.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/soxr/soxr-${version}-Source.tar.xz";
+    url = "mirror://sourceforge/soxr/soxr-${finalAttrs.version}-Source.tar.xz";
     sha256 = "12aql6svkplxq5fjycar18863hcq84c5kx8g6f4rj0lcvigw24di";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
   };
-}
+})

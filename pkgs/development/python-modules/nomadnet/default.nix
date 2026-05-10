@@ -3,25 +3,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxmf,
-  pythonOlder,
+  msgpack,
   qrcode,
   rns,
   setuptools,
   urwid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nomadnet";
-  version = "0.9.1";
+  version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "NomadNet";
-    tag = version;
-    hash = "sha256-Rqs0x5KF3Nb/VMNBr6IriDWX7th4OrBj3x5tQhUIU3U=";
+    tag = finalAttrs.version;
+    hash = "sha256-uNchcz9kiLX2nUNRC2rTMv7my+19ylZrHTGWbonziFc=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     rns
     lxmf
+    msgpack
     urwid
     qrcode
   ];
@@ -41,9 +40,9 @@ buildPythonPackage rec {
   meta = {
     description = "Off-grid, resilient mesh communication";
     homepage = "https://github.com/markqvist/NomadNet";
-    changelog = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
+    changelog = "https://github.com/markqvist/NomadNet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nomadnet";
   };
-}
+})

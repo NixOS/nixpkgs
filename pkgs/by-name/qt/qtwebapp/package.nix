@@ -7,12 +7,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtwebapp";
-  version = "1.9.0";
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "fffaraz";
     repo = "QtWebApp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L6/M8klo7bDKKwKC2tCc9IqN0nYy+x2c5Es51LHD7z4=";
+    hash = "sha256-RbFgz2ed1eEVy44LX+milP4hPSeiabakU3TMvHYR7TU=";
   };
 
   sourceRoot = "source/QtWebApp";

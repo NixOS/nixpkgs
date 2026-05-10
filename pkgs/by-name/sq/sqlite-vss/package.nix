@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux gomp
   ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
-  SQLITE_VSS_CMAKE_VERSION = finalAttrs.version;
+  env.SQLITE_VSS_CMAKE_VERSION = finalAttrs.version;
 
   installPhase = ''
     runHook preInstall

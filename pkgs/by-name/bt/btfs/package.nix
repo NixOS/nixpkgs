@@ -11,16 +11,21 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btfs";
   version = "3.1";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "btfs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JuofC4TpbZ56qiUrHeoK607YHVbwqwLGMIdUpsTm9Ic=";
   };
+
+  patches = [
+    # https://github.com/johang/btfs/pull/103
+    ./disable-macfuse-extensions.patch
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -41,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
   };
-}
+})

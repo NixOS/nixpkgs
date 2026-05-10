@@ -10,7 +10,6 @@
   gnupg,
   pbr,
   pexpect,
-  pythonAtLeast,
   pytestCheckHook,
   setuptools,
   replaceVars,
@@ -20,13 +19,13 @@
 
 # Use the `pypass` top-level attribute, if you're interested in the
 # application
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypass";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+dAQiufpULdU26or4EKDqazQbOZjGRbhI/+ddo+spNo=";
   };
 
@@ -41,8 +40,7 @@ buildPythonPackage rec {
     })
   ];
 
-  # Remove enum34 requirement if Python >= 3.4
-  pythonRemoveDeps = lib.optionals (pythonAtLeast "3.4") [
+  pythonRemoveDeps = [
     "enum34"
   ];
 
@@ -84,4 +82,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

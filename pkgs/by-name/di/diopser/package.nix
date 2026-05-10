@@ -8,11 +8,11 @@
   libjack2,
   alsa-lib,
   freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
 }:
 
 let
@@ -84,11 +84,11 @@ stdenv.mkDerivation {
     libjack2
     alsa-lib
     freetype
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ];
 
   cmakeFlags = [

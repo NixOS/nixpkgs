@@ -19,7 +19,6 @@
 
   # tests
   pytestCheckHook,
-  pythonOlder,
   trio,
 
   # reverse dependencies
@@ -28,19 +27,19 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.50.0";
+  version = "0.52.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "starlette";
     tag = version;
-    hash = "sha256-8REOizYQQkyLZwV4/yRiNGmGV07V0NNky7gtiAdWa7o=";
+    hash = "sha256-XPAeRnh9a0A1/5VGZzzGQBhlBsih1VR8QmFdkxG5cQE=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ anyio ];
 
   optional-dependencies.full = [
     itsdangerous

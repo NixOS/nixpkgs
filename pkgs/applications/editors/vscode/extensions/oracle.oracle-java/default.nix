@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "oracle-java";
     publisher = "oracle";
-    version = "25.0.0";
-    hash = "sha256-e0DO+42+3CyMP3+25gj0kLDFK53vkv4UqD2pQhXmqng=";
+    version = "25.1.0";
+    hash = "sha256-HjDSlvG6khFJA/3ukjVCrPqbQiAKVhgP6KcCfC/jUrc=";
   };
 
   meta = {

@@ -4,8 +4,8 @@
   cctools,
   darwin,
   dotnetCorePackages,
-  fetchFromGitLab,
-  libX11,
+  fetchFromForgejo,
+  libx11,
   libgdiplus,
   moltenvk,
   ffmpeg,
@@ -17,12 +17,12 @@
   vulkan-loader,
   glew,
   libGL,
-  libICE,
-  libSM,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libice,
+  libsm,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   udev,
   SDL2,
   SDL2_mixer,
@@ -34,10 +34,10 @@ buildDotnetModule rec {
   pname = "ryubing";
   version = "1.3.3";
 
-  src = fetchFromGitLab {
+  src = fetchFromForgejo {
     domain = "git.ryujinx.app";
-    owner = "Ryubing";
-    repo = "Ryujinx";
+    owner = "projects";
+    repo = "Ryubing";
     tag = version;
     hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
@@ -59,7 +59,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   runtimeDeps = [
-    libX11
+    libx11
     libgdiplus
     SDL2_mixer
     openal
@@ -70,12 +70,12 @@ buildDotnetModule rec {
 
     # Avalonia UI
     glew
-    libICE
-    libSM
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libice
+    libsm
+    libxcursor
+    libxext
+    libxi
+    libxrandr
     gtk3
 
     # Headless executable
@@ -135,7 +135,8 @@ buildDotnetModule rec {
 
   meta = {
     homepage = "https://ryujinx.app";
-    changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
+    # historical changelog https://git.ryujinx.app/projects/Ryubing/wiki/Changelog
+    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${src.tag}";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,

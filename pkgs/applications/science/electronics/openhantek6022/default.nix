@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   cmake,
+  wrapQtAppsHook,
   qtbase,
   qttools,
   fftw,
@@ -11,7 +12,7 @@
   libglvnd,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openhantek6022";
   version = "3.4.0";
 
@@ -25,6 +26,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     makeWrapper
+    wrapQtAppsHook
   ];
   buildInputs = [
     fftw

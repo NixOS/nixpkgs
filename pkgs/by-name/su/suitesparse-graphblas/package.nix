@@ -6,9 +6,9 @@
   gnum4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "suitesparse-graphblas";
-  version = "10.3.0";
+  version = "10.3.1";
 
   outputs = [
     "out"
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DrTimothyAldenDavis";
     repo = "GraphBLAS";
-    rev = "v${version}";
-    hash = "sha256-wsvw/95eHF9KeduAgCfvNunRs86m4tiilxle26d1yJs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-m+sjfRdgIwH/FEaHkEp6fl5+fehNcBDLVc4f5H5Lslw=";
   };
 
   nativeBuildInputs = [
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = with lib.platforms; unix;
   };
-}
+})

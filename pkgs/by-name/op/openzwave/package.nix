@@ -46,8 +46,10 @@ stdenv.mkDerivation {
     "PREFIX=${placeholder "out"}"
   ];
 
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
-  FONTCONFIG_PATH = "${fontconfig.out}/etc/fonts/";
+  env = {
+    FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+    FONTCONFIG_PATH = "${fontconfig.out}/etc/fonts/";
+  };
 
   postPatch = ''
     substituteInPlace cpp/src/Options.cpp \

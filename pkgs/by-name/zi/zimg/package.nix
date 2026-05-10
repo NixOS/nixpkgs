@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zimg";
   version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "sekrit-twc";
     repo = "zimg";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "sha256-T+/wuTxPK+PLofqJm3dujGqGGXhpdGQLjAttTQPsgOI=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

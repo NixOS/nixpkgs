@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mindsdb-evaluator";
-  version = "0.0.20";
+  version = "0.0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mindsdb";
     repo = "mindsdb_evaluator";
     tag = "v${version}";
-    hash = "sha256-ZeJABMbyRdGrZGkWWXcjleOeDQBSicGR06hZAPUKvgI=";
+    hash = "sha256-eUdGtHLbI6T7HsUqkVkTp040pbq7qVzgaldQxPAzjTc=";
   };
 
   build-system = [ poetry-core ];
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Model evaluation for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/mindsdb_evaluator";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

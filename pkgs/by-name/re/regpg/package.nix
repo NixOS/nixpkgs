@@ -10,14 +10,14 @@
 let
   perlEnv = perl.withPackages (p: with p; [ TextMarkdown ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "regpg";
   version = "1.11";
 
   src = fetchFromGitHub {
     owner = "fanf2";
     repo = "regpg";
-    rev = "regpg-${version}";
+    rev = "regpg-${finalAttrs.version}";
     sha256 = "2ea99950804078190e1cc2a76d4740e3fdd5395a9043db3f3fe86bf2477d3a7d";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./Makefile \
       --replace 'util/markdown.pl' 'perl util/markdown.pl'
     substituteInPlace util/insert-here.pl \
-      --replace 'qx(git describe)' '"regpg-${version}"'
+      --replace 'qx(git describe)' '"regpg-${finalAttrs.version}"'
   '';
 
   dontConfigure = true;
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _0xC45 ];
   };
-}
+})

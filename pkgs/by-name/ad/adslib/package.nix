@@ -2,23 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "adslib";
-  version = "unstable-2020-08-28";
+  version = "0-unstable-2021-11-07";
 
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = "ADS";
-    rev = "c457b60d61d73325837ca50be2cc997c4792d481";
-    sha256 = "11r86xa8fr4z957hd0abn8x7182nz30a198d02y7gzpbhpi3z43k";
+    rev = "a894d4512a51f3ada026efbf9553e75ba9351e2e";
+    sha256 = "SEh4yneTM1dfbWRdWlb5gP/uSeoOeE3g7g/rJWSTba8=";
   };
 
   installPhase = ''
     mkdir -p $out/lib
     cp adslib.so $out/lib/adslib.so
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Beckhoff protocol to communicate with TwinCAT devices";

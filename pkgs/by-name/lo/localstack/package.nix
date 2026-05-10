@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "localstack";
-  version = "4.9.2";
+  version = "4.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
-    tag = "v${version}";
-    hash = "sha256-vyk86iuYI6dGUCtijauwT7p4hSWNXluz5cHHRm8zdOE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k5aIdfWm3Tvl/J0s1l0gTXJqnb4j5doJdIIaLLOJXg4=";
   };
 
   build-system = with python3.pkgs; [
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     apispec
+    asn1crypto
     boto3
     build
     cachetools
@@ -72,4 +73,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "localstack";
   };
-}
+})

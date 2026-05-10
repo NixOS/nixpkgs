@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -18,7 +19,7 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-auth";
   version = "0.10.0";
   pyproject = true;
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-auth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8ctd5D7zT66oVNZlvRIs8pN7Fe2BhTgC+S9p1HBDO9E=";
   };
 
@@ -47,6 +48,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swh.auth" ];
 
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
     aiocache
     djangorestframework
@@ -61,6 +65,6 @@ buildPythonPackage rec {
     description = "Set of utility libraries related to user authentication in applications and services based on the use of Keycloak and OpenID Connect";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-auth";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

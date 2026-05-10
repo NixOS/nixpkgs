@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "talentedhack";
   version = "1.86";
 
   src = fetchFromGitHub {
     owner = "jeremysalwen";
     repo = "talentedhack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0kwvayalysmk7y49jq0k16al252md8d45z58hphzsksmyz6148bx";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.michalrus ];
     platforms = lib.platforms.linux;
   };
-}
+})

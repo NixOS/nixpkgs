@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "swayws";
     homepage = "https://gitlab.com/w0lff/swayws";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.atila ];
+    maintainers = [ ];
   };
 }

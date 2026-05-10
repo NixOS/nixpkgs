@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "the_platinum_searcher";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "monochromegane";
     repo = "the_platinum_searcher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FNHlALFwMbajaHWOehdSFeQmvZSuCZLdqGqLZ7DF+pI=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     mainProgram = "pt";
     license = lib.licenses.mit;
   };
-}
+})

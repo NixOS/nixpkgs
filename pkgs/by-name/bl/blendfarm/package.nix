@@ -12,7 +12,7 @@
   darwin,
   fontconfig,
   libgdiplus,
-  libXrandr,
+  libxrandr,
   glib,
   writeShellScriptBin,
   blender,
@@ -89,7 +89,7 @@ buildDotnetModule rec {
     pcre
     libgdiplus
     glib
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 

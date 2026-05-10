@@ -1,14 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qmake,
   qtsvg,
   makeWrapper,
+  wrapQtAppsHook,
   xdg-utils,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mytetra";
   version = "1.44.183";
 
@@ -22,10 +23,14 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     makeWrapper
+    wrapQtAppsHook
   ];
   buildInputs = [ qtsvg ];
 
   hardeningDisable = [ "format" ];
+
+  # K&R-style declarations in vendored mimetex break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   preBuild = ''
     substituteInPlace app/app.pro \

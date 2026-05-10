@@ -490,3 +490,7 @@ div.appendix .variablelist .term {
   font-family: Roboto;
   src: url(Roboto.ttf);
 }
+
+.chapter {
+  content-visibility: auto;
+}

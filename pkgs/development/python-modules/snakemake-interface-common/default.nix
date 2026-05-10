@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-common";
-  version = "1.22.0";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-common";
     tag = "v${version}";
-    hash = "sha256-DxbB/UaBkLbG18CGHyDMo7dmRlVY2tD3BhO0MShbnq4=";
+    hash = "sha256-D3vktJmn1CifdiEg5UPGpBuuigEIb+ja4yklHZA6ytQ=";
   };
 
   build-system = [ setuptools ];

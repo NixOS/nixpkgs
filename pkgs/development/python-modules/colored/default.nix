@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "colored";
-  version = "2.3.1";
-  format = "pyproject";
+  version = "2.3.2";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "dslackw";
     repo = "colored";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PPaPw7pCZJeBz6h5omZ+kcRXsqi6ncLYGM7FNfZ0r4w=";
+    tag = version;
+    hash = "sha256-MnRWb9uQczkwikyorkS77PTpajCG6M/FZibm4ww+xC4=";
   };
 
   nativeBuildInputs = [ flit-core ];

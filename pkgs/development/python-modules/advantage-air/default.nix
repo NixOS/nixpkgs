@@ -3,15 +3,12 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "advantage-air";
   version = "0.4.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "advantage_air";

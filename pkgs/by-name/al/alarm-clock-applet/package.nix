@@ -11,14 +11,14 @@
   libayatana-appindicator,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alarm-clock-applet";
   version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "alarm-clock-applet";
     repo = "alarm-clock";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-10hkWWEsAUJnGeu35bR5d0RFKd9CKDZI7WGMzmEM3rI=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "alarm-clock-applet";
   };
-}
+})

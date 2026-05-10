@@ -4,20 +4,17 @@
   fetchFromGitHub,
   setuptools,
   capstone,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ropgadget";
   version = "7.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "JonathanSalwan";
     repo = "ROPgadget";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fKvXxz5SbrUynG/9pV6KMIxCVFU9l192oFJFB9HHBz0=";
   };
 
@@ -37,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bennofs ];
   };
-}
+})

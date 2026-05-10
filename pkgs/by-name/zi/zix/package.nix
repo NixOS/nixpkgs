@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zix";
   version = "0.6.2";
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "zix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1fdW014QKvTYHaEmDsivUVPzF/vZgnW3Srk6edp6G1o=";
   };
 
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight C99 portability and data structure library";
     homepage = "https://gitlab.com/drobilla/zix";
-    changelog = "https://gitlab.com/drobilla/zix/-/blob/${src.rev}/NEWS";
+    changelog = "https://gitlab.com/drobilla/zix/-/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

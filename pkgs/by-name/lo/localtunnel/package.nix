@@ -31,14 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/localtunnel/localtunnel/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "CLI for localtunnel";
     homepage = "https://localtunnel.me";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "lt";
   };
 })

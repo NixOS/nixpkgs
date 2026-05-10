@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsvpn";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "dsvpn";
-    rev = version;
-    sha256 = "1gbj3slwmq990qxsbsaxasi98alnnzv3adp6f8w8sxd4gi6qxhdh";
+    tag = finalAttrs.version;
+    hash = "sha256-hO1UVyAGZXqSaEJsCo/SQZkvvbfU6FCuOJWhLJ2CGhg=";
   };
 
   installPhase = ''
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "dsvpn";
   };
-}
+})

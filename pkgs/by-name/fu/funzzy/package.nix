@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "funzzy";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "cristianoliveira";
     repo = "funzzy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3EHZvgHlM3ldX6SEyqGf6MZIrDFOLXbKTZnJNczT570=";
   };
 
@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lightweight watcher";
     homepage = "https://github.com/cristianoliveira/funzzy";
-    changelog = "https://github.com/cristianoliveira/funzzy/releases/tag/${src.rev}";
+    changelog = "https://github.com/cristianoliveira/funzzy/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

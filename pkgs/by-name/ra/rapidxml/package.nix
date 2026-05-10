@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.zip";
+    url = "mirror://sourceforge/rapidxml/rapidxml-${version}.zip";
     sha256 = "0w9mbdgshr6sh6a5jr10lkdycjyvapbj7wxwz8hbp0a96y3biw63";
   };
 

@@ -139,7 +139,7 @@ in
           };
         in
         lib.pipe config.services.ceph.osd.daemons [
-          (builtins.map map-osd)
+          (map map-osd)
           builtins.listToAttrs
         ];
     };

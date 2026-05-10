@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pillow,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "vacuum-map-parser-base";
   version = "0.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "PiotrMachowski";

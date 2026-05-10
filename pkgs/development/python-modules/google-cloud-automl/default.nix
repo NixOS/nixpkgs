@@ -17,16 +17,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.17.0";
+  version = "2.19.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_automl";
     inherit version;
-    hash = "sha256-Fnd7X75kt2+HN665ZFQYv9+ST3wso1Dx/VViUyggfpw=";
+    hash = "sha256-xyZ7Wafv97FSB/5oaJ67P7kian4nL/E78nUL9ocUWM4=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

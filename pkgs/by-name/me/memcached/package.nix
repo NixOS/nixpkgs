@@ -7,13 +7,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.6.39";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.6.41";
   pname = "memcached";
 
   src = fetchurl {
-    url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-I+VQfpM7FUYxYdTF05IbDF80C1Qtbt1/bF4Xw08Ro2M=";
+    url = "https://memcached.org/files/memcached-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-4JcHPBVu7/nhJlWwVPRG1XN0z7pcEy3Nvn+sZOcoKGo=";
   };
 
   configureFlags = [
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     smoke-tests = nixosTests.memcached;
   };
-}
+})

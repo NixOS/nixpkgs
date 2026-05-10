@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nvdtools";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "nvdtools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uB7dfqGaoP9Xx04BykscIFQ2rckaMaj93gh5mhgMqfw=";
   };
 
@@ -25,8 +25,8 @@ buildGoModule rec {
   meta = {
     description = "Tools to work with the feeds (vulnerabilities, CPE dictionary etc.) distributed by National Vulnerability Database";
     homepage = "https://github.com/facebookincubator/nvdtools";
-    changelog = "https://github.com/facebookincubator/nvdtools/releases/tag/v${version}";
+    changelog = "https://github.com/facebookincubator/nvdtools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

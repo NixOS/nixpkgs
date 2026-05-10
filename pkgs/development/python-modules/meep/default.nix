@@ -17,7 +17,7 @@
   gsl,
   harminv,
   libctl,
-  libGDSII,
+  libgdsii,
   guile,
   mpb,
   python,
@@ -36,16 +36,16 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.31.0";
+  version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "meep";
     tag = "v${version}";
-    hash = "sha256-x5OMdV/LJfklcK1KlYS0pdotsXP/SYzF7AOW5DlJvq0=";
+    hash = "sha256-ih1SoCMnIihBy5qCiEh0tTMpCaD7Joo1/HLtE0tv9LY=";
   };
 
-  format = "other";
+  pyproject = false;
 
   # MPI is needed in nativeBuildInputs too, otherwise MPI libs will be missing
   # at runtime
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     hdf5-mpi
     harminv
     libctl
-    libGDSII
+    libgdsii
     guile
     gsl
     mpb

@@ -2,7 +2,6 @@
   lib,
   buildPythonApplication,
   fetchPypi,
-  pythonOlder,
 
   certifi,
   charset-normalizer,
@@ -24,8 +23,6 @@ buildPythonApplication rec {
   pname = "enochecker-test";
   version = "0.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;

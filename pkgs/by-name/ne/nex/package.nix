@@ -33,6 +33,6 @@ buildGoModule {
     mainProgram = "nex";
     homepage = "https://github.com/blynn/nex";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

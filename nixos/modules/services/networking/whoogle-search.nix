@@ -53,7 +53,7 @@ in
         ExecStart =
           "${lib.getExe pkgs.whoogle-search}"
           + " --host '${cfg.listenAddress}'"
-          + " --port '${builtins.toString cfg.port}'";
+          + " --port '${toString cfg.port}'";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         StateDirectory = "whoogle-search";
         StateDirectoryMode = "0750";

@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.3.8";
+  version = "0.3.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "fastbencode";
     tag = "v${version}";
-    hash = "sha256-vpo8OVhIm9/niMY6A878FRJ+zU98z9CJe/p5UxmvrLo=";
+    hash = "sha256-e+Ei+UIJ5sve6k3ApPJ2nswTgZLkzxZmpthK/f/rfCs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-N4diwjHZkJk+Tzu609ueRipfIXyNhXhLG7hpnG1gRa4=";
+    hash = "sha256-dqD/QF6/XCB9H/QkEobfIOo9S663fh9AHUuHqCoEcLM=";
   };
 
   nativeBuildInputs = [

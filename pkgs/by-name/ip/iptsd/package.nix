@@ -6,24 +6,26 @@
   meson,
   ninja,
   pkg-config,
+  cairomm,
   cli11,
   eigen,
   hidrd,
   inih,
   microsoft-gsl,
+  sdl2-compat,
   spdlog,
   systemd,
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iptsd";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "iptsd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2yYO1xb576IHaJquTrQtmAjJITGdW06I3eHD+HR88xI=";
   };
 
@@ -38,11 +40,13 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
+    cairomm
     cli11
     eigen
     hidrd
     inih
     microsoft-gsl
+    sdl2-compat
     spdlog
     systemd
   ];
@@ -63,12 +67,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dservice_manager=systemd"
     "-Dsample_config=false"
-    "-Ddebug_tools="
     "-Db_lto=false" # plugin needed to handle lto object -> undefined reference to ...
   ];
 
   meta = {
-    changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${version}";
+    changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${finalAttrs.version}";
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
     license = lib.licenses.gpl2Plus;
@@ -79,4 +82,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

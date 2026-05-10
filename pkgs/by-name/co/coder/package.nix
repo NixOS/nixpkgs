@@ -104,7 +104,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ghuntley
       kylecarbs
-      urandom
     ];
   };
 

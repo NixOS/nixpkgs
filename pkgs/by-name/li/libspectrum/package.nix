@@ -11,13 +11,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspectrum";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fuse-emulator/${pname}-${version}.tar.gz";
-    sha256 = "sha256-o1PLRumxooEGHYFjU+oBDQpv545qF6oLe3QnHKXkrPw=";
+    url = "mirror://sourceforge/fuse-emulator/libspectrum-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-rH7jqYEQjk85hikTe4Cd6L4w5qbglFNryNLhQxPMwKo=";
   };
 
   nativeBuildInputs = [
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

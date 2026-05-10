@@ -18,7 +18,13 @@
   gdk-pixbuf,
   curl,
   systemd,
-  xorg,
+  libxrender,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
   requireFile,
 }:
 
@@ -50,17 +56,17 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${
       lib.makeLibraryPath [
         stdenv.cc.cc
-        xorg.libXdamage
-        xorg.libXfixes
+        libxdamage
+        libxfixes
         gtk2
         glib
         stdenv.cc.libc
         "$out"
-        xorg.libXext
+        libxext
         pango
         udev
-        xorg.libX11
-        xorg.libXcomposite
+        libx11
+        libxcomposite
         alsa-lib
         atk
         nspr
@@ -71,7 +77,7 @@ stdenv.mkDerivation rec {
         freetype
         gnome2.GConf
         gdk-pixbuf
-        xorg.libXrender
+        libxrender
       ]
     }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" "$out/host/CoherentUI_Host"
 
@@ -79,8 +85,8 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         stdenv.cc.cc
         stdenv.cc.libc
-        xorg.libX11
-        xorg.libXcursor
+        libx11
+        libxcursor
         gtk2
         glib
         curl
@@ -93,9 +99,9 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           stdenv.cc.cc
           curl
-          xorg.libX11
+          libx11
           stdenv.cc.libc
-          xorg.libXcursor
+          libxcursor
           "$out"
         ]
       }:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" $f

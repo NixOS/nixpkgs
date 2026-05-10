@@ -14,19 +14,19 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "satty";
-  version = "0.20.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "gabm";
     repo = "Satty";
-    rev = "v${version}";
-    hash = "sha256-4RVah6yo4cJyE6qUbDJbcmFpi7xsKNpHJFrzSs1yJcg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pR3Mc5Eue4YcIMcrzkyDhZPpovRFa8TW1PjL/ysH/7s=";
   };
 
-  cargoHash = "sha256-RPj6ZVtDWPMt4jrmU750b7zLVHwqk+SWr2OskDAQFYI=";
+  cargoHash = "sha256-/WewpLpBmD4XnjwY7NmzbglYGNKmgMLjg1pvUdqEIwo=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "satty";
     platforms = lib.platforms.linux;
   };
-}
+})

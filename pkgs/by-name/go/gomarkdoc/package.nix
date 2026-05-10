@@ -6,14 +6,14 @@
   gomarkdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomarkdoc";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "princjef";
     repo = "gomarkdoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eMH+F1ZXAKHqnrvOJvCETm2NiDwY03IFHrDNYr3jaW8=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   passthru.tests = {
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ brpaz ];
     mainProgram = "gomarkdoc";
   };
-}
+})

@@ -7,7 +7,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tt-rss";
   version = "0-unstable-2025-11-01";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
     # see the code of Config::get_version(). you can check that the version in
     # the footer of the preferences pages is not UNKNOWN
-    echo "${version}" > $out/version_static.txt
+    echo "${finalAttrs.version}" > $out/version_static.txt
 
     runHook postInstall
   '';
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

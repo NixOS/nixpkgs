@@ -6,18 +6,18 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libre-graph-api-cpp-qt-client";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "libre-graph-api-cpp-qt-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wbdamPi2XSLWeprrYZtBUDH1A2gdp6/5geFZv+ZqSWk=";
   };
 
-  sourceRoot = "${src.name}/client";
+  sourceRoot = "${finalAttrs.src.name}/client";
 
   # cmake 4 compatibility
   postPatch = ''
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hellwolf ];
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
-    changelog = "https://github.com/owncloud/libre-graph-api-cpp-qt-client/releases/tag/v${version}";
+    changelog = "https://github.com/owncloud/libre-graph-api-cpp-qt-client/releases/tag/v${finalAttrs.version}";
   };
-}
+})

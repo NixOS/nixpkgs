@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     scdoc
-    zig.hook
+    zig
   ];
 
   postInstall = ''

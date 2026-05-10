@@ -10,14 +10,14 @@
   nlohmann_json,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openorbitaloptimizer";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "susilehtola";
     repo = "openorbitaloptimizer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-naZwe56c1wsng4L/Q1waPiACeEiEAMhvzr5XMwC1uoY=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

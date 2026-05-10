@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bedops";
   version = "2.4.42";
 
   src = fetchFromGitHub {
     owner = "bedops";
     repo = "bedops";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-IF2MWGpdnP8PKwLRboe5bxu8N+gV4qZ82BemJE/JCU0=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.x86_64;
   };
-}
+})

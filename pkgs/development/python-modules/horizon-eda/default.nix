@@ -4,7 +4,6 @@
   horizon-eda,
   pycairo,
   python,
-  pythonOlder,
 }:
 
 let
@@ -20,8 +19,6 @@ buildPythonPackage {
     ;
 
   pyproject = false;
-
-  disabled = pythonOlder "3.9";
 
   patches = [
     # Replaces osmesa with EGL_PLATFORM_SURFACELESS_MESA

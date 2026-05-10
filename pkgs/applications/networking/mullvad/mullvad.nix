@@ -12,9 +12,6 @@
   libmnl,
   libwg,
   darwin,
-  enableOpenvpn ? true,
-  openvpn-mullvad,
-  shadowsocks-rust,
   installShellFiles,
   writeShellScriptBin,
   versionCheckHook,
@@ -30,17 +27,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2025.14";
+  version = "2026.1";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-9HPOhhtbo7BocycuO7IgjyfWHXBh/5YQDNJ/VwKnKG0=";
+    hash = "sha256-gQpeCcSHxvdyWpzHESHHRkYaGlJxl1UwYawX+1rfHlI=";
   };
 
-  cargoHash = "sha256-PzUVwx72qkUDKCZ8hfpVT0bqnuakaitPedInn/EfW3o=";
+  cargoHash = "sha256-L07dNs9OBFFpwo3uOKoACqRIHY/MZv2ESYrequJGD3U=";
 
   cargoBuildFlags = [
     "-p mullvad-daemon --bin mullvad-daemon"
@@ -49,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     "-p mullvad-problem-report --bin mullvad-problem-report"
     "-p mullvad-exclude --bin mullvad-exclude"
     "-p tunnel-obfuscation --bin tunnel-obfuscation"
-    "-p talpid-openvpn-plugin --lib"
   ];
 
   checkFlags = [
@@ -87,24 +83,6 @@ rustPlatform.buildRustPackage rec {
       --fish $compdir/mullvad.fish
   '';
 
-  postFixup =
-    # Files necessary for OpenVPN tunnels to work.
-    lib.optionalString enableOpenvpn ''
-      mkdir -p $out/share/mullvad
-      cp dist-assets/ca.crt $out/share/mullvad
-      ln -s ${openvpn-mullvad}/bin/openvpn $out/share/mullvad
-      ln -s ${shadowsocks-rust}/bin/sslocal $out/share/mullvad
-    ''
-    +
-    # Set the directory where Mullvad will look for its resources by default to
-    # `$out/share`, so that we can avoid putting the files in `$out/bin` --
-    # Mullvad defaults to looking inside the directory its binary is located in
-    # for its resources.
-    ''
-      wrapProgram $out/bin/mullvad-daemon \
-        --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad"
-    '';
-
   __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [
@@ -114,7 +92,6 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     inherit libwg;
-    inherit openvpn-mullvad;
   };
 
   meta = {

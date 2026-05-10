@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pytransportnsw";
   version = "0.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "PyTransportNSW";

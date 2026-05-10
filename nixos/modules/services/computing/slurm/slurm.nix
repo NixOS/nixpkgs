@@ -3,6 +3,7 @@
   lib,
   options,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -83,6 +84,28 @@ in
             slurm to work properly (see `services.munge.password`).
           '';
         };
+
+        flags = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.oneOf [
+              lib.types.str
+              lib.types.bool
+              lib.types.float
+              lib.types.int
+            ]
+          );
+          default = { };
+          example = {
+            "i" = true;
+            "systemd" = true;
+            "L" = "/var/log/file with space.log";
+            "n" = 10;
+          };
+          description = ''
+            Flags passed to `slurmctld` daemon, see {manpage}`slurmctld(8)`.
+            Special characters are properly escaped.
+          '';
+        };
       };
 
       dbdserver = {
@@ -120,7 +143,7 @@ in
           type = lib.types.lines;
           default = "";
           description = ''
-            Extra configuration for `slurmdbd.conf` See also:
+            Extra configuration for {file}`slurmdbd.conf` See also:
             {manpage}`slurmdbd.conf(8)`.
           '';
         };
@@ -173,7 +196,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to provide a slurm.conf file.
+          Whether to provide a {file}`slurm.conf` file.
           Enable this option if you do not run a slurm daemon on this host
           (i.e. `server.enable` and `client.enable` are `false`)
           but you still want to run slurm commands from this host.
@@ -309,7 +332,7 @@ in
           default = "";
           type = lib.types.lines;
           description = ''
-            Extra configuration for that will be added to `mpi.conf`.
+            Extra configuration for that will be added to {file}`mpi.conf`.
           '';
         };
       };
@@ -318,7 +341,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Extra configuration that will be added to the end of `plugstack.conf`.
+          Extra configuration that will be added to the end of {file}`plugstack.conf`.
         '';
       };
 
@@ -326,7 +349,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Extra configuration for `cgroup.conf`. This file is
+          Extra configuration for {file}`cgroup.conf`. This file is
           used when `procTrackType=proctrack/cgroup`.
         '';
       };
@@ -336,9 +359,9 @@ in
         default = [ ];
         description = ''
           Slurm expects config files for plugins in the same path
-          as `slurm.conf`. Add extra nix store
+          as {file}`slurm.conf`. Add extra nix store
           paths that should be merged into same directory as
-          `slurm.conf`.
+          {file}`slurm.conf`.
         '';
       };
 
@@ -430,6 +453,8 @@ in
         users.groups.slurmrestd = lib.mkIf (cfg.rest.enable) { };
 
         systemd.services.slurmd = lib.mkIf (cfg.client.enable) {
+
+          environment.LD_LIBRARY_PATH = lib.mkIf config.hardware.nvidia.datacenter.enable "/run/opengl-driver/lib";
           path =
             with pkgs;
             [
@@ -484,7 +509,17 @@ in
 
           serviceConfig = {
             Type = "forking";
-            ExecStart = "${wrappedSlurm}/bin/slurmctld";
+            ExecStart =
+              let
+                isLong = optionName: builtins.stringLength optionName > 1;
+                flagFormat = optionName: {
+                  option = if isLong optionName then "--${optionName}" else "-${optionName}";
+                  sep = null;
+                  explicitBool = false;
+                };
+                cli = [ "${wrappedSlurm}/bin/slurmctld" ] ++ lib.cli.toCommandLine flagFormat cfg.server.flags;
+              in
+              utils.escapeSystemdExecArgs cli;
             PIDFile = "/run/slurmctld.pid";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };

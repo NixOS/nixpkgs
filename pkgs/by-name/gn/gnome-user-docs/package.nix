@@ -9,13 +9,13 @@
   yelp-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-user-docs";
-  version = "49.1";
+  version = "49.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-DlC4u0/OqpEoNnzTRY5e24YclieMGqmnOm7AQCt7xhc=";
+    url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major finalAttrs.version}/gnome-user-docs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-BkRI6t1cHxW8j+tQQYpjRxFO+BXcjRXQCiDcX0iuioA=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-user-docs";
     };
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.all;
   };
-}
+})

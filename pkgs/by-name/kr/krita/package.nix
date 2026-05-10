@@ -1,6 +1,4 @@
 {
-  lib,
-  libsForQt5,
   symlinkJoin,
   krita-plugin-gmic,
   binaryPlugins ? [
@@ -10,7 +8,7 @@
   krita-unwrapped,
 }:
 symlinkJoin {
-  name = lib.replaceStrings [ "-unwrapped" ] [ "" ] krita-unwrapped.name;
+  pname = "krita";
   inherit (krita-unwrapped)
     version
     buildInputs

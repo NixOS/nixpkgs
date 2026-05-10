@@ -8,14 +8,14 @@
   porsmo,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "porsmo";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ColorCookie-dev";
     repo = "porsmo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-bYPUSrGJKoNLFkIiGuXraYoaYn/HKSP8IiH3gtyWfmw=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ MoritzBoehme ];
     mainProgram = "porsmo";
   };
-}
+})

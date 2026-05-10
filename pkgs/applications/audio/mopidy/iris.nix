@@ -5,14 +5,14 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-iris";
   version = "3.70.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mopidy_iris";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-md/1blTTtjiAAb/jiLE2EfiSlIUwEga8U7OiuKa466k=";
   };
 
@@ -38,4 +38,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.rvolosatovs ];
   };
-}
+})

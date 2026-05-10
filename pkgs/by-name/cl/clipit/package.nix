@@ -13,7 +13,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clipit";
   version = "1.4.5";
 
@@ -69,10 +69,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight GTK Clipboard Manager";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "clipit";
     maintainers = with lib.maintainers; [ kamilchm ];
   };
-}
+})

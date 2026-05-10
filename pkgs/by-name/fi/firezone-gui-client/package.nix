@@ -43,8 +43,8 @@ let
       inherit pname version;
       pnpm = pnpm_9;
       src = "${src}/rust/gui-client";
-      fetcherVersion = 1;
-      hash = "sha256-ttbTYBuUv0vyiYzrFATF4x/zngsRXjuLPfL3qW2HEe4=";
+      fetcherVersion = 3;
+      hash = "sha256-akanXiWehhQRx6WHN75PjYvFxFiSsJ5dJaguJBTM9J0=";
     };
     pnpmRoot = "rust/gui-client";
 
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-TDP1Z4MeQaSER8MGnCEQfIhRsakaSCeJ7boUMBYkkI0=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -135,8 +135,6 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # Otherwise blank screen, see https://github.com/tauri-apps/tauri/issues/9304
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --prefix PATH ":" ${
         lib.makeBinPath [
           zenity

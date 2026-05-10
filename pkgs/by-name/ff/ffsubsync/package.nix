@@ -5,7 +5,7 @@
   ffmpeg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ffsubsync";
   version = "0.4.31";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-j9E4h2de2EOtYpuxKFbPOxZ5FBRO0EkbZhJdx5RiPn8=";
   };
 
@@ -54,4 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "ffsubsync";
   };
-}
+})

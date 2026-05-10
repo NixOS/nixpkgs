@@ -3,15 +3,15 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-who";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "sinclairtarget";
     repo = "git-who";
-    rev = "v${version}";
-    hash = "sha256-xpY5XIqlCscwJZhtqdYa1yhR9VWgD8FofDXdZ9+afA8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-105UUQBAB0/5d0xEoKOr7xwKvXy42RgyOHVFFArXHQ4=";
   };
 
   vendorHash = "sha256-e2P7szjtAn4EFTy+eGi/9cYf/Raw/7O+PbYEOD8i3Hs=";
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mcparland ];
   };
-}
+})

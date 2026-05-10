@@ -80,6 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ mit ];
     homepage = "https://febio.org/";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
   };
 })

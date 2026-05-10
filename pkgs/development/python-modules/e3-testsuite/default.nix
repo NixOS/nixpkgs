@@ -3,7 +3,6 @@
   buildPythonPackage,
   e3-core,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "e3-testsuite";
   version = "27.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "AdaCore";

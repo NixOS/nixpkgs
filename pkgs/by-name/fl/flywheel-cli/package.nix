@@ -23,19 +23,19 @@ let
     }
     .${system} or throwSystem;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flywheel-cli";
   version = "16.2.0";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/flywheel-dist/cli/${version}/fw-${os}_amd64-${version}.zip";
+    url = "https://storage.googleapis.com/flywheel-dist/cli/${finalAttrs.version}/fw-${os}_amd64-${finalAttrs.version}.zip";
     inherit sha256;
   };
 
   nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
-    unzip ${src}
+    unzip ${finalAttrs.src}
   '';
 
   installPhase = ''
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

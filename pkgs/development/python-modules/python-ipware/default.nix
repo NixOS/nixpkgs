@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   unittestCheckHook,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "python-ipware";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "un33k";

@@ -15,15 +15,15 @@
   go-md2man,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cri-o";
-  version = "1.34.3";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
-    rev = "v${version}";
-    hash = "sha256-2Avq1EzK+i+16yoPM7j6IlavDi2oUS5A1hOIdzVThEQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aP3qhD2d1x+VPDifkg9lXgVD38UcongyN6vHkn8oYos=";
   };
   vendorHash = null;
 
@@ -52,7 +52,14 @@ buildGoModule rec {
     glibc.static
   ];
 
-  BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
+  env.BUILDTAGS = toString [
+    "apparmor"
+    "seccomp"
+    "selinux"
+    "containers_image_openpgp"
+    "containers_image_ostree_stub"
+  ];
+
   buildPhase = ''
     runHook preBuild
     sed -i 's;\thack/;\tbash ./hack/;g' Makefile
@@ -87,4 +94,4 @@ buildGoModule rec {
     teams = [ lib.teams.podman ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,12 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   datasets,
   dill,
   fsspec,
   huggingface-hub,
-  importlib-metadata,
   multiprocess,
   numpy,
   packaging,
@@ -22,8 +20,6 @@ buildPythonPackage rec {
   pname = "evaluate";
   version = "0.4.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -46,8 +42,7 @@ buildPythonPackage rec {
     fsspec
     huggingface-hub
     packaging
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # most tests require internet access.
   doCheck = false;

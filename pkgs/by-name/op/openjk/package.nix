@@ -9,7 +9,7 @@
   zlib,
   libpng,
   libGL,
-  libX11,
+  libx11,
   SDL2,
   unstableGitUpdater,
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     zlib
     libpng
     libGL
-    libX11
+    libx11
     SDL2
   ];
 

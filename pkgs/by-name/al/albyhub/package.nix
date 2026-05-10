@@ -5,12 +5,10 @@
   fetchYarnDeps,
   fixup-yarn-lock,
   nodejs,
-  pkgs,
   yarn,
   stdenv,
   makeWrapper,
   callPackage,
-  go,
 }:
 
 let
@@ -23,16 +21,16 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "albyhub";
-  version = "1.21.0";
+  version = "1.21.6";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9NtXnEOHgzYM3QUwFKBJ90ZGghgU2/i+hATim4N/JSs=";
+    hash = "sha256-xjFEou+mDtEf7079en5ypoU5P0tf+looeHZS4j1jKzg=";
   };
 
-  vendorHash = "sha256-V3uWofAchbLgIadwH4IGyv2lr0cLSz2QCQ6ffhPP9n0=";
+  vendorHash = "sha256-NJeIEFc8oc5rMWAuvrgsnOi3j779mhwMKSALswRy+nE=";
   proxyVendor = true; # needed for secp256k1-zkp CGO bindings
 
   nativeBuildInputs = [
@@ -49,7 +47,7 @@ buildGoModule (finalAttrs: {
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/frontend/yarn.lock";
-    hash = "sha256-ikGH45JKheivNKwF7juC6rmwU51S3qiicDdYLzjgFJE=";
+    hash = "sha256-wdKm8Zk2iAPvH+EbQxvznctkqHgx8xl/Im37vHmHnoA=";
   };
 
   preBuild = ''

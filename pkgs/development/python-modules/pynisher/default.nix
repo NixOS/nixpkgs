@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   psutil,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pynisher";
   version = "1.0.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

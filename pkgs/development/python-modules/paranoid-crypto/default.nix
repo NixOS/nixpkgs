@@ -9,7 +9,6 @@
   protobuf,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   sympy,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage {
   pname = "paranoid-crypto";
   version = "unstable-20220819";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";

@@ -6,17 +6,12 @@
   m4,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "ecm";
   version = "7.0.6";
-  name = "${pname}-${version}";
-in
-
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
-    url = "https://gitlab.inria.fr/zimmerma/ecm/uploads/ad3e5019fef98819ceae58b78f4cce93/ecm-${version}.tar.gz";
+    url = "https://gitlab.inria.fr/zimmerma/ecm/uploads/ad3e5019fef98819ceae58b78f4cce93/ecm-${finalAttrs.version}.tar.gz";
     hash = "sha256-fSDs5hq2ogrYXywYBkyr133Eapb/iUtSINuxbkZm6KU=";
   };
 
@@ -49,4 +44,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.roconnor ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

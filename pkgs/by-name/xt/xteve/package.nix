@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xteve";
   version = "2.2.0.200";
 
   src = fetchFromGitHub {
     owner = "xteve-project";
     repo = "xTeVe";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hD4GudSkGZO41nR/CgcMg/SqKjpAO1yJDkfwa8AUges=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     mainProgram = "xteve";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

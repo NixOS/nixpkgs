@@ -106,14 +106,14 @@ let
     done
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hercules";
   version = "4.8";
 
   src = fetchFromGitHub {
     owner = "SDL-Hercules-390";
     repo = "hyperion";
-    rev = "Release_${version}";
+    rev = "Release_${finalAttrs.version}";
     hash = "sha256-3Go5m4/K8d4Vu7Yi8ULQpX83d44fu9XzmG/gClWeUKo=";
   };
 
@@ -158,4 +158,4 @@ stdenv.mkDerivation rec {
       vifino
     ];
   };
-}
+})

@@ -7,14 +7,14 @@
   buildPackages,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mdtsql";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "mdtsql";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D9suWLrVQOztz0rRjEo+pjxQlGWOOsk3EUbkN9yuriY=";
   };
 
@@ -41,9 +41,9 @@ buildGoModule rec {
   meta = {
     description = "Execute SQL to markdown table and convert to other format";
     homepage = "https://github.com/noborus/mdtsql";
-    changelog = "https://github.com/noborus/mdtsql/releases/tag/v${version}";
+    changelog = "https://github.com/noborus/mdtsql/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     mainProgram = "mdtsql";
   };
-}
+})

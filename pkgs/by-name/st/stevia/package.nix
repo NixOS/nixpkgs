@@ -22,17 +22,20 @@
   libxkbcommon,
   systemd,
   nix-update-script,
+  dconf,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stevia";
-  version = "0.51.0";
+  version = "0.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World/Phosh";
     repo = "stevia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dRygDUHXpXjEuwNNfgVy742jfIhT9erN7IcmaMImuYw=";
+    hash = "sha256-eCM2PSn0sDnL7iDbgt6phQsGmdeBfkVjOkxt42WxyXo=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   mesonFlags = [
@@ -67,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libhandy
     libxkbcommon
     systemd
+    dconf
   ];
 
   passthru.updateScript = nix-update-script { };

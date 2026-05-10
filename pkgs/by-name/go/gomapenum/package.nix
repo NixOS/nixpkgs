@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomapenum";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "GoMapEnum";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-a0JpHk5pUe+MkcmJl871JwkOfFDg3S4yOzFIeXCReLE=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

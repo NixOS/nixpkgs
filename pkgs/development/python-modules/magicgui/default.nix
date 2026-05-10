@@ -8,24 +8,24 @@
   napari, # a reverse-dependency, for tests
   psygnal,
   pyside2,
+  pyside6,
+  pyqt6,
+  pyqt5,
   pytestCheckHook,
-  pythonOlder,
   superqt,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "magicgui";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "magicgui";
     tag = "v${version}";
-    hash = "sha256-jpM5OpQ10cF+HBhAI9cI/gXdHMzYsgY9vtpfNq+5fIw=";
+    hash = "sha256-5etnug947C+Ewk1QLxsxEeaSa9djIlM/PGdNnJZiND8=";
   };
 
   build-system = [
@@ -36,10 +36,16 @@ buildPythonPackage rec {
   dependencies = [
     typing-extensions
     superqt
-    pyside2
     psygnal
     docstring-parser
   ];
+
+  optional-dependencies = {
+    pyside2 = [ pyside2 ];
+    pyside6 = [ pyside6 ];
+    pyqt6 = [ pyqt6 ];
+    pyqt5 = [ pyqt5 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 

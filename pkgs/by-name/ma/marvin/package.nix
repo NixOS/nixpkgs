@@ -11,21 +11,21 @@
   openjdk17,
   freetype,
   fontconfig,
-  libXi,
-  libX11,
-  libXext,
-  libXtst,
-  libXrender,
+  libxi,
+  libx11,
+  libxext,
+  libxtst,
+  libxrender,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marvin";
-  version = "25.3.5";
+  version = "25.5.0";
 
   src = fetchurl {
     name = "marvin-${finalAttrs.version}.deb";
-    url = "http://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
-    hash = "sha256-OiTHMGKAuHadoKQMTTPRcYl/zKL+bc0ts/UNsJlHn0Q=";
+    url = "https://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
+    hash = "sha256-+fTO6cEJL4QRFpLQ9CXZFt7Jg3otR3ZMWN5vH+3QXmA=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     fontconfig
-    libXi
-    libX11
-    libXext
-    libXtst
-    libXrender
+    libxi
+    libx11
+    libxext
+    libxtst
+    libxrender
   ];
 
   unpackPhase = ''
@@ -62,11 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
         }
     }
     cp -r opt $out
-    mkdir -p $out/bin $out/share/pixmaps $out/share/applications
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/{128x128,256x256}/apps
     for name in LicenseManager MarvinSketch MarvinView; do
       wrapBin $out/opt/chemaxon/marvinsuite/$name
-      ln -s {$out/opt/chemaxon/marvinsuite/.install4j,$out/share/pixmaps}/$name.png
     done
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/MarvinSketch.png $out/share/icons/hicolor/128x128/apps
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/MarvinView.png $out/share/icons/hicolor/128x128/apps
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/LicenseManager.png $out/share/icons/hicolor/256x256/apps
+
     for name in cxcalc cxtrain evaluate molconvert mview msketch; do
       wrapBin $out/opt/chemaxon/marvinsuite/bin/$name
     done

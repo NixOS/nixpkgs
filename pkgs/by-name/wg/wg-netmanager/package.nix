@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wg-netmanager";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "gin66";
     repo = "wg_netmanager";
-    rev = "wg_netmanager-v${version}";
+    rev = "wg_netmanager-v${finalAttrs.version}";
     sha256 = "sha256-Mr4+TW1yOePEHa7puz6mTRJ514LGQeiEwPW3NKupV/M=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "wg_netmanager";
   };
-}
+})

@@ -4,12 +4,12 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "just-formatter";
   version = "1.1.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HTv55WquFieWmkEKX5sbBOVyYxzjcB/NrMkxbQsff90=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ vuimuich ];
     mainProgram = "just-formatter";
   };
-}
+})

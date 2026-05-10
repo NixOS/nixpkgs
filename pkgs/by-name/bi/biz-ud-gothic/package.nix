@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
   nix-update-script,
 }:
 
@@ -17,13 +18,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-7PlIrQX1fnFHXm7mjfoOCVp3GSnLT2GlVZdSoZbh/s4=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  sourceRoot = "${finalAttrs.src.name}/fonts";
 
-    install -Dm444 fonts/ttf/*.ttf -t "$out/share/fonts/truetype/"
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru = {
     updateScript = nix-update-script { };

@@ -5,12 +5,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboil";
   version = "0.3.17";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/liboil-${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/download/liboil-${finalAttrs.version}.tar.gz";
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     mainProgram = "oil-bugreport";
     homepage = "https://liboil.freedesktop.org";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

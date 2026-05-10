@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Utility to list X resources for a widget written using a toolkit based on libXt";
+    description = "Utility to list X resources for a widget written using a toolkit based on libxt";
     homepage = "https://gitlab.freedesktop.org/xorg/app/listres";
     license = lib.licenses.x11;
     mainProgram = "listres";

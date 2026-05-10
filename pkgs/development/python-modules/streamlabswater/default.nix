@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "streamlabswater";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

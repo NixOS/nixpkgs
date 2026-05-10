@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cp210x-program";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VCTLabs";
     repo = "cp210x-program";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-IjKshP12WfFly9cPm6svD4qZW6cT8C7lOVrGenSqbfY=";
   };
 
@@ -36,4 +36,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "cp210x-program";
   };
-}
+})

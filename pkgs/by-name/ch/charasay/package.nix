@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "charasay";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "latipun7";
     repo = "charasay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NB2GDDFH9IW/c0acMojYHuzPrx0J3tjlDqjQa6ZRbN4=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ hmajid2301 ];
     mainProgram = "chara";
   };
-}
+})

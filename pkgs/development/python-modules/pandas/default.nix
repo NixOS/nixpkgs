@@ -3,10 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  cython,
+  cython_3_1,
   meson-python,
   meson,
   pkg-config,
@@ -38,6 +37,7 @@
   pymysql,
   pyqt5,
   pyreadstat,
+  pyxlsb,
   qtpy,
   s3fs,
   scipy,
@@ -66,8 +66,6 @@ let
     version = "2.3.3";
     pyproject = true;
 
-    disabled = pythonOlder "3.9";
-
     src = fetchFromGitHub {
       owner = "pandas-dev";
       repo = "pandas";
@@ -92,15 +90,14 @@ let
     '';
 
     build-system = [
-      cython
+      cython_3_1
       meson-python
       meson
       numpy
       pkg-config
       versioneer
       wheel
-    ]
-    ++ versioneer.optional-dependencies.toml;
+    ];
 
     enableParallelBuilding = true;
 
@@ -127,7 +124,7 @@ let
           excel = [
             odfpy
             openpyxl
-            # TODO: pyxlsb
+            pyxlsb
             xlrd
             xlsxwriter
           ];
