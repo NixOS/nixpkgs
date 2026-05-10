@@ -19899,6 +19899,12 @@
     name = "Alessio Caiazza";
     matrix = "@alessio:caiazza.info";
   };
+  nomadium = {
+    email = "miguel@miguel.cc";
+    github = "nomadium";
+    githubId = 79817;
+    name = "Miguel Landaeta";
+  };
   nomaterials = {
     email = "nomaterials@gmail.com";
     github = "no-materials";
