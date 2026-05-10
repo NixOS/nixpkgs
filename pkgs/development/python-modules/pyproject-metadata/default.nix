@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "PEP 621 metadata parsing";
     homepage = "https://github.com/FFY00/python-pyproject-metadata";
-    changelog = "https://github.com/FFY00/python-pyproject-metadata/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/pypa/pyproject-metadata/releases/tag/${version}";
     license = lib.licenses.mit;
   };
 }
