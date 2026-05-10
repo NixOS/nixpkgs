@@ -47,15 +47,37 @@ let
     in
     serviceConfigData // subServiceConfigData;
 
+  configDataSources =
+    service:
+    lib.mapAttrsToList (_: cfg: cfg.source) (
+      lib.filterAttrs (_: cfg: cfg.enable) (service.configData or { })
+    );
+
   makeUnits =
     unitType: prefix: service:
-    concatMapAttrs (unitName: unitModule: {
-      "${dash prefix unitName}" =
-        { ... }:
-        {
-          imports = [ unitModule ];
-        };
-    }) service.systemd.${unitType}
+    concatMapAttrs (
+      unitName: unitModule:
+      let
+        sources = configDataSources service;
+        extra = lib.optional (unitType == "services" && unitName == "" && sources != [ ]) (
+          { config, ... }:
+          {
+            # switch-to-configuration-ng does not fall back from reload to restart:
+            # X-Reload-Triggers on a unit without ExecReload= causes activation to
+            # exit with code 4. Use reloadTriggers only when ExecReload is declared.
+            reloadTriggers = lib.mkIf ((config.serviceConfig.ExecReload or null) != null) sources;
+            restartTriggers = lib.mkIf ((config.serviceConfig.ExecReload or null) == null) sources;
+          }
+        );
+      in
+      {
+        "${dash prefix unitName}" =
+          { ... }:
+          {
+            imports = [ unitModule ] ++ extra;
+          };
+      }
+    ) service.systemd.${unitType}
     // concatMapAttrs (
       subServiceName: subService: makeUnits unitType (dash prefix subServiceName) subService
     ) service.services;
