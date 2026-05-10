@@ -23,4 +23,5 @@ mkKdeDerivation {
     libqalculate
   ];
   meta.mainProgram = "step";
+  meta.broken = true;
 }
