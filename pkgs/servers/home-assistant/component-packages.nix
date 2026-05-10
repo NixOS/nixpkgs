@@ -4479,7 +4479,8 @@
       ];
     "omie" =
       ps: with ps; [
-      ]; # missing inputs: pyomie
+        pyomie
+      ];
     "omnilogic" =
       ps: with ps; [
         omnilogic
@@ -8100,6 +8101,7 @@
     "octoprint"
     "ohme"
     "ollama"
+    "omie"
     "omnilogic"
     "onboarding"
     "oncue"
