@@ -135,6 +135,32 @@ in
       '';
     };
 
+    firewall.trustBridge = mkOption {
+      type = types.bool;
+      default = cfg.dockerCompat;
+      defaultText = lib.literalExpression "config.virtualisation.podman.dockerCompat";
+      description = ''
+        Add the default podman bridge interface (typically `podman0`) to
+        {option}`networking.firewall.trustedInterfaces`.
+
+        Without this, container-to-host traffic arrives on the bridge
+        interface and is filtered by the host firewall — services bound on
+        the host that are intentionally exposed to the LAN/VPN via
+        per-interface allow-lists (e.g. `networking.firewall.interfaces.<wg
+        / lan>.allowedTCPPorts`) are silently unreachable from containers,
+        because the rules don't match the bridge interface. Trusting the
+        bridge fixes this without forcing every host service to also open
+        ports on the bridge interface explicitly.
+
+        Defaults to the value of {option}`virtualisation.podman.dockerCompat`:
+        users opting into docker emulation expect docker-like permissive
+        container-to-host networking, while users running podman in its
+        stricter native mode keep the host firewall in front of the bridge.
+
+        Has no effect when the firewall backend is `firewalld`.
+      '';
+    };
+
     autoPrune = {
       enable = mkOption {
         type = types.bool;
@@ -253,6 +279,7 @@ in
       # containers cannot reach aardvark-dns otherwise
       networking.firewall = lib.mkIf (config.networking.firewall.backend != "firewalld") {
         interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
+        trustedInterfaces = lib.optional cfg.firewall.trustBridge network_interface;
       };
 
       virtualisation.containers = {
